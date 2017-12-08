@@ -2746,7 +2746,7 @@ class CourseManager
 
         if ($adminGetsAllCourses && UserManager::is_admin($user_id)) {
             // get the whole courses list
-            $sql = "SELECT DISTINCT(course.code), course.id as real_id
+            $sql = "SELECT DISTINCT(course.code), course.id as real_id, course.title
                     FROM $tbl_course course 
                     INNER JOIN $tableCourseUrl url 
                     ON (course.id = url.c_id)
@@ -2769,7 +2769,8 @@ class CourseManager
                 if (!empty($withSpecialCourses)) {
                     $sql = "SELECT DISTINCT (course.code), 
                             course.id as real_id,
-                            course.category_code AS category
+                            course.category_code AS category,
+                            course.title
                             FROM $tbl_course_user course_rel_user
                             LEFT JOIN $tbl_course course
                             ON course.id = course_rel_user.c_id
@@ -2799,7 +2800,8 @@ class CourseManager
             $sql = "SELECT 
                         DISTINCT(course.code), 
                         course.id as real_id, 
-                        course.category_code AS category
+                        course.category_code AS category,
+                        course.title
                     FROM $tbl_course course
                     INNER JOIN $tbl_course_user cru 
                     ON (course.id = cru.c_id)

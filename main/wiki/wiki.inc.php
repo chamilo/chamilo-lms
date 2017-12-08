@@ -1328,7 +1328,8 @@ class Wiki
                     function goprint() {
                         var a = window.open('', '', 'width=800,height=600');
                         a.document.open("text/html");
-                        a.document.write(document.getElementById('wikicontent').innerHTML);
+                        a.document.write($('#wikicontent .panel-heading').html());
+                        a.document.write($('#wikicontent .panel-body').html());
                         a.document.close();
                         a.print();
                     }
@@ -1350,10 +1351,6 @@ class Wiki
                 'toolbar-wikistudent',
                 [$actionsLeft, $actionsRight]
             );
-
-            if (empty($title)) {
-                $pageTitle = get_lang('DefaultTitle');
-            }
 
             if (self::wiki_exist($title)) {
                 $pageTitle = $icon_assignment.'&nbsp;'.
@@ -1380,8 +1377,8 @@ class Wiki
                 get_lang('Progress').': '.($row['progress'] * 10).'%&nbsp;&nbsp;&nbsp;'.
                 get_lang('Rating').': '.$row['score'].'&nbsp;&nbsp;&nbsp;'.
                 get_lang('Words').': '.self::word_count($content);
-
-            echo Display::panel($pageWiki, $pageTitle, $footerWiki);
+            // wikicontent require to print wiki document
+            echo '<div id="wikicontent">'.Display::panel($pageWiki, $pageTitle, $footerWiki).'</div>';
         } //end filter visibility
     }
 

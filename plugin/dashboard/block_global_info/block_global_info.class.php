@@ -93,7 +93,7 @@ class BlockGlobalInfo extends Block
         $content = '<h4>'.get_lang('GlobalPlatformInformation').'</h4>';
         $data_table = null;
         if (!empty($global_data)) {
-            $data_table = '<table class="table table-bordered" width="95%">';
+            $data_table = '<table class="table table-bordered">';
             $i = 1;
             foreach ($global_data as $data) {
                 if ($i % 2 == 0) {
@@ -113,8 +113,6 @@ class BlockGlobalInfo extends Block
             $data_table .= get_lang('ThereIsNoInformationAboutThePlatform');
         }
         $content .= $data_table;
-
-        //$content .= '</div>';
 
         return $content;
     }

@@ -88,16 +88,6 @@ class Gradebook extends Model
     }
 
     /**
-     * @param array $params
-     *
-     * @return bool
-     */
-    public function update($params)
-    {
-        return parent::update($params);
-    }
-
-    /**
      * @param int $gradebook_id
      * @param array $skill_list
      * @param bool $deleteSkillNotInList

@@ -1959,6 +1959,7 @@ class Display
 
     /**
      * @param array $items
+     * @param string $class
      * @return null|string
      */
     public static function actions($items, $class = 'new_actions')

@@ -2,10 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class MaintenanceModePlugin
+ * Class NoSearchIndex
  */
-class MaintenanceModePlugin extends Plugin
+class NoSearchIndex extends Plugin
 {
+    public $addCourseTool = false;
+
     /**
      * @return $this
      */
@@ -16,7 +18,7 @@ class MaintenanceModePlugin extends Plugin
     }
 
     /**
-     * MaintenanceModePlugin constructor.
+     * NoSearchIndex constructor.
      */
     public function __construct()
     {

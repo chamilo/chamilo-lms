@@ -21,6 +21,14 @@ if (!$isStudent && !$isStudentBoss && !$isDRH) {
     exit;
 }
 
+$action = isset($_GET['a']) ? $_GET['a'] : '';
+switch ($action) {
+    case 'generate_custom_skill':
+        $certificate = new Certificate(0, api_get_user_id());
+        $certificate->generatePdfFromCustomCertificate();
+        break;
+}
+
 $skillTable = Database::get_main_table(TABLE_MAIN_SKILL);
 $skillRelUserTable = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
 $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);

@@ -671,15 +671,6 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * Update the option using the given params
-     * @param array $params data to be saved
-     */
-    public function update($params)
-    {
-        parent::update($params);
-    }
-
-    /**
      * Display a form with the options for the field_id given in REQUEST
      * @return void Prints output
      */

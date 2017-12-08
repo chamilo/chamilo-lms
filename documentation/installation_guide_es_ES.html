@@ -96,7 +96,7 @@ Chamilo es fundamentalmente un LMS que se ejecuta con:
 <p>
 Todo este software es software de código abierto y está disponible libremente.
 </p>
-<p>
+<div>
 Para ejecutar Chamilo LMS en su servidor, necesita instalar WAMP, LAMP o MAMP:
 <ul>
 <li>Para instalar WAMP (AMP en Windows), recomendamos el instalador <a href="http://www.apachefriends.org/en/xampp.html">XAMPP</a>.exe</li>
@@ -104,21 +104,25 @@ Para ejecutar Chamilo LMS en su servidor, necesita instalar WAMP, LAMP o MAMP:
 <li>Para instalar MAMP (AMP en Mac OS X), referirse al sitio web dedicado a <a href="http://www.mamp.info/en/index.html">MAMP</a></li>
 <li>Asegúrese de revisar la página Dependencias, si necesita saber los requisitos de una manera más precisa.</li>
 </ul>
-</p>
+</div>
 
 <h3><span style="font-weight: bold;">Servidor de Base de Datos MySQL</span></h3>
 
-<p>Usted necesitará un nombre de usuario y contraseña que le permita administrar y crear una base de datos.
+    <p>Usted necesitará un nombre de usuario y contraseña que le permita administrar <em>y borrar+crear una base de datos</em>.
     Por lo general, la configuración predeterminada en los equipos locales es permitir que usted conecte
     como root con una contraseña vacía. Se recomienda cambiar la contraseña y definir un usuario con acceso
     sólo a una base de datos específica. Por favor, consulte la documentación de MySQL o MariaDB con el fin de hacer esto. </p>
-<p>
+<span class="text-muted">
 Nota:Esto se ha simplificado en gran medida desde la versión 1.9, ya que antes era necesario elegir entre
     múltiples bases de datos y un modo obsoleto de una sola base de datos.
-</p>
+</span><br />
+<span class="text-muted">Si no tiene permisos para borrar y crear la base de datos seleccionada, la instalación de
+    Chamilo no funcionará porque, para mantener la base de datos limpia de todos restos de otras instalaciones,
+    intentará borrar (drop) la base de datos antes de volverla a crear. Eso se explica en cierto detalle en <a href="https://github.com/chamilo/chamilo-lms/issues/2172">este reporte</a></span><br />
 
-<h3><span style="font-weight: bold;">Redirecciones de Apache</span></h3>
-<p>
+
+    <h3><span style="font-weight: bold;">Redirecciones de Apache</span></h3>
+<div>
     Desde su versión 1.10, Chamilo requiere del servidor web que pueda gestionar redirecciones. Es algo muy comunes entre todos los sistemas web (ya sean CMS, LMS, ERP, etc) que permite, entre otras cosas, el uso inteligente y amigable de las URLs.<br />
     Si no usa Apache, debería consultar la sección "Configuraciones opcionales para Apache y Nginx" al fin de este documento.<br />
     Si usa Apache, configurar las redirecciones consta de dos pasos:
@@ -152,12 +156,12 @@ Nota:Esto se ha simplificado en gran medida desde la versión 1.9, ya que antes 
     </pre>
     <br />
     Una vez configurada esta parte (que quizás ya esté configurada por su proveedor), basta con reiniciar el servidor web para activar el cambio.
-</p>
+</div>
 
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="2._Installation_of_Chamilo_LMS"></a><span style="font-weight: bold;">2. Instalación de Chamilo LMS</span></h2>
 
-<>
+<div>
     Antes de inciar la instalación de Chamilo LMS, debe entender que, como proveemos Chamilo como
     un paquete de software libre, diversos proveedores (oficiales y no-oficiales) han podido
     desarrollar extensiones de Chamilo, las cuales han hecho posible la instalación de Chamilo
@@ -183,7 +187,7 @@ Esta guía solo cubre los dos últimos métodos. Para los demás, siempre podeis
   <li>Seguir el proceso de instalación web. Usted puede aceptar todos los valores
 predeterminados. Considere cambiar la contraseña de administrador y recuérdela.&nbsp;</li>
 </ul>
-</p>
+</div>
 
     <span class="text-muted">* Recomendammos definir un VirtualHost específico para esta instalación, si tiene las competencias para hacerlo.</span>
     <br /><br />
@@ -193,12 +197,11 @@ predeterminados. Considere cambiar la contraseña de administrador y recuérdela
     <a href="https://beeznest.com/blog/2013/01/15/answering-to-different-addresses-with-chamilo/">de este artículo para aprender como cambiar su archivo de configuración</a>.
 </span>
     <br /><br />
-
-    <p>
+<p>
 Los siguientes directorios necesitan tener permisos de lectura, escritura y ejecución en el servidor web. Esto por lo general no requiere ninguna acción específica en los servidores de Windows, pero se requiere un "chmod" bajo Linux y Mac. Consulte las siguientes instrucciones.
 </p>
 
-<p>
+<div>
 Remplace [chamilo] por el directorio en el cual está ubicado su Chamilo:
 <ul>
     <li>[chamilo]/app/</li>
@@ -214,7 +217,7 @@ activar  la definición de sub-idiomas:
     <span class="text-muted">Si encuentra una carpeta tests/ a la raíz de su paquete Chamilo, por favor borrelo.
     Se trata de una carpeta de trabajo de los desarrolladores, y no ha sido verificado para evitar riesgos de seguridad,
     por lo cual no debería *nunca* ser accesible a usuarios finales en un servidor de producción.</span>
-</p>
+</div>
 
 <p>
 En Linux, Mac OS X y sistemas operativos BSD  puede usar el comando "chmod 0775" para cambiar estos permisos (aunque nosotros recomendamos que busque la ayuda de un
@@ -228,18 +231,18 @@ del clic derecho en ellos).
 </p>
 
 <h3><strong> Configuración y seguridad después de la instalación</strong></h3>
-<p>
+<div>
 <ul>
   <li><strong>Proteger su directorio de configuración: </strong> asegurarse que nadie pueda sobreescribirlo. Usted puede encontrar el directorio de configuración en (carpeta de chamilo)/main/inc/conf. Hacerlo de solo lectura (windows/xwindows: clic derecho en el archivo para editar las propiedades. linux/bsd/macosx: usar el comando chmod 0555). El archivo de configuración es creado por el servidor web (Apache + PHP, normalmente), por lo tanto usted necesita ser administrador para cambiar sus permisos.</li>
   <li><strong>Configurar su instalación de Chamilo: </strong>
 en la sección de administración de Chamilo, usted puede usar las Opciones de Configuración de Chamilo para ajustar el comportamiento de su instalación.</li>
   <li>Consulte nuestra nueva <a href="security.html">guia de seguridad</a> para más información.</li>
 </ul>
-</p>
+</div>
 
 <h3>Configuración PHP</h3>
 
-<p>
+<div>
 Para obtener lo mejor de Chamilo, necesita ajustar la configuración de PHP. Considere: <br />
 
 <ul>
@@ -249,7 +252,7 @@ Para obtener lo mejor de Chamilo, necesita ajustar la configuración de PHP. Con
 
   <li>Nosotros recomendamos ajustar los siguiente valores (lo que sigue ";" son comentarios): </li>
 </ul>
-</p>
+</div>
 <div class="code">
 			  max_execution_time = 300 ;Tiempo máximo de ejecucion para cada script, en segundos<br />
 			  max_input_time = 600 ;Tiempo máximo que cada script que puede emplear para analizar los datos solicitados<br />
@@ -301,7 +304,6 @@ Para obtener lo mejor de Chamilo, necesita ajustar la configuración de PHP. Con
     <li>php5-curl</li>
     <li>php5-xsl</li>
 </ul>
-</p>
 
 <hr />
 <h2><a name="3._Upgrade_from_a_previous_version_of"></a>3. Actualizar desde una versión previa de Chamilo LMS (1.*) o Dok€os (&lt;2.0)</h2>
@@ -323,7 +325,7 @@ NOTA: Esta versión de Chamilo sólo se puede utilizar para actualizar desde ver
 </div>
 
 <h3>3.1 Actualizar desde Chamilo 1.11.x (actualización menor)</h3>
-<p>
+<div>
 Dado que se trata sólo de un cambio de versión menor previa de Chamilo 1.11.*, lo único que tiene que hacer es:
 <ul>
 <li>Revisar que no ha dejado alguna hoja de estilo personalizada o imagen (si es que tiene, asegúrese de guardar una copia de respaldo)</li>
@@ -332,7 +334,7 @@ Dado que se trata sólo de un cambio de versión menor previa de Chamilo 1.11.*,
 <li>Editar el archivo app/config/configuration.php: hacia el final del archivo, localizar el número de la versión (p.e. ‘1.9.4’) y cambiarlo por la nueva versión (p.e.‘1.9.8’)</li>
 <li>Ya está! Ningún otro procedimiento de actualización es requerido.</li>
 </ul>
-</p>
+</div>
 
 <h3>3.2 Actualizar desde Chamilo 1.9.x p 1.10.x</h3>
 <ul>
@@ -647,13 +649,13 @@ Podría necesitar modificar el ejemplo para tener algo como:</p>
 <p>
 Nota: Este paso requiere de un servidor dedicado o servidor virtual privado (VPS) porque los paquetes involucrados no están disponibles en la mayoría de soluciones de hosting compartido.
 </p>
-<p>
+<div>
 En Debian o Ubuntu 10.04 o superior, usted simplemente puede instalar el paquete php5-xapian y reiniciar su servidor web:
 <pre>
 sudo apt-get install php5-xapian
 sudo /etc/init.d/apache2 restart
 </pre>
-</p>
+</div>
 <p>
 A continuación, vaya a la página de administración -&gt; Ajustes de configuración -&gt; Buscar y habilitar la herramienta de búsqueda. Siga las recomendaciones de la página para obtener la suite completa de indexación instalada. Una vez que haya terminado, todos los documentos importados en su portal Chamilo en un formato reconocido serán indexados y buscados. En formación de administradores de Chamilo ( el cual puede preguntar a cualquier <a href="http://www.chamilo.org/en/providers">Proveedor Oficial de Chamilo</a>) incluyen una revisión completa de la función de búsqueda de texto completo.
 </p>
@@ -663,32 +665,32 @@ A continuación, vaya a la página de administración -&gt; Ajustes de configura
 <p>
 Nota: Este paso requiere un servidor dedicado o un servidor dedicado virtual ya que los paquetes involucrados no están disponibles en la mayoría de soluciones de hosting compartido. (Consulte con su proveedor):
 </p>
-<p>
+<div>
 En Debian o Ubuntu 11.10 y superior, instale LibreOffice.org v3 e iniciarlo como un servidor en segundo plano:
 <pre>
 sudo apt-get install libreoffice
 sudo soffice --accept="socket,host=127.0.0.1,port=2002,tcpNoDelay=1;urp;" --headless --nodefault --nofirststartwizard --nolockcheck --nologo --norestore &amp;
 </pre>
-</p>
+</div>
 <p>
 A continuación, vaya a la página de administración -&gt; Chamilo Rapid y establecer el host a "localhost" y el puerto a "2002". Guarde los cambios. Vaya a su curso, en la pantalla de herramientas de aprendizaje y verá que apareció un nuevo icono. Importar tu PPT. Esto debería funcionar. Otra possibilidad es lanzar soffice desde una instancia de "screen", sin el &amp; al final.
 </p>
-<p>
+<div>
 <em>Nota</em>: A veces, esto no se resuelve tan fácilmente. Usted probablemente tenga que solicitar la asistencia de algún administrador de sistemas con un poco de experiencia en  Java y PHP, o siempre podrá preguntar a uno de los proveedores oficiales de Chamilo para asistirle (pregunte por un contrato comercial garantizado).
 <em>Nota</em>: Si usa la versión 4 de LibreOffice, es importante notar que la versión 4.2 (disponible en Ubuntu 14.04) ha mostrado resultados considerablemente más exitosos al momento de convertir documentos que la versión 4.1 (disponible en Ubuntu 13.10), la cual tiene tendencia a colgarse durante las conversiones.
-</p>
+</div>
 
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="12._cron"></a>12. Configuración de tareas programadas</h2>
 <p>
 Desde Chamilo 1.8.8, algunas tareas necesitan ejecutarse con regularidad con el fin de obtener lo mejor de los recursos del servidor. Una de las tareas de este tipo (y el único en todo en el momento de Chamilo 1.8.8) es el envío de notificaciones de mensajería interna por e-mail, es decir, cuando usted recibe un correo electrónico de otra persona o de un grupo dentro de la mensajería interna del sistema de Chamilo, si se envían todos los e-mails inmediatamente,  puede que no llegue a recibir el correo a su ritmo, una vez al día o una vez a la semana. Para casos como este, como administrador de Chamilo, debe configurar un proceso cron en el servidor para comprobar la cola de mensajes de correo electrónico y enviarlo puntualmente.
 </p>
-<p>
+<div>
 Configurar una tarea de cron es fácil y hay varias maneras de hacerlo. Le recomendamos echar un vistazo a la documentación de Drupal para configurar el cron y definir su propio proceso de cron como:
 <pre>
 35 * * * * wget -O - -q -t 1 http://campus.example.com/main/cron/run.php
 </pre>
-</p>
+</div>
 <p>
 Asegúrese de revisar el run.php tal vez desee cambiar algunas algunas opciones de configuración.
 </p>
@@ -698,7 +700,7 @@ Asegúrese de revisar el run.php tal vez desee cambiar algunas algunas opciones 
 <p>
 Como Chamilo se hace más popular y atraviesa muchas fronteras ahora, es frecuente que los administradores quieran pedir cambiar el orden del nombre y apellido en los campos de las tablas, y también en qué campo se pondrá en primer lugar.
 </p>
-<p>
+<div>
 Esto fácilmente se puede modificar editando el archivo main/inc/lib/internationalization_database/name_order_conventions.php, buscando nuestro idioma y cambiando los campos. Es tan simple que se explica por sí mismo y se ve así:
 <pre>
 'simpl_chinese' =&gt; array( 'format' =&gt; 'title last_name first_name', 'sort_by' =&gt; 'last_name' ), // Eastern order
@@ -708,7 +710,7 @@ Siéntase libre de cambiar esto a
 'simpl_chinese' =&gt; array( 'format' =&gt; 'title first_name lastname', 'sort_by' =&gt; 'last_name' ), // Eastern order
 </pre>
 por ejemplo. El efecto debería ser inmediato.
-</p>
+</div>
 
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="14._alter_conf"></a>14. Configuraciones opcionales para Apache y Nginx</h2>
@@ -717,7 +719,7 @@ por ejemplo. El efecto debería ser inmediato.
     localizables por atacantes como los htaccess, se aconseja restringir las configuraciones a un solo archivo.
     A continuación se presentan dos ejemplos de configuración de modo que no se dependa de los archivos .htaccess.
 </p>
-<p>
+<div>
     Nginx: La configuración para nuestro sitio de ejemplo my.chamilo10.net (en el cual los archivos se han almacenado
     en /var/www/my.chamilo10.net/www) sería la siguiente, tomando como supuesto el uso de php5-fpm a través de sockets:
 <pre>
@@ -864,7 +866,7 @@ Apache2: La configuración para nuestro sitio de ejemplo my.chamilo.net sería l
   php_value session.cookie_httponly 1
 
 &lt;/VirtualHost&gt;
-</pre></p>
+</pre></div>
 
 <hr style="width: 100%; height: 2px;" />
 <p>
@@ -874,7 +876,6 @@ Apache2: La configuración para nuestro sitio de ejemplo my.chamilo.net sería l
   Correo: info@chamilo.org<br />
 </p>
 <hr />
-</div>
 
 <hr />
     <a href="http://validator.w3.org/check?uri=referer"><img src="//www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>

@@ -97,8 +97,9 @@ class PNGImageBaker
         // Read the magic bytes and verify
         $retval = substr($png, 0, 8);
         $ipos = 8;
-        if ($retval != "\x89PNG\x0d\x0a\x1a\x0a")
+        if ($retval != "\x89PNG\x0d\x0a\x1a\x0a") {
             throw new Exception('Is not a valid PNG image');
+        }
         // Loop through the chunks. Byte 0-3 is length, Byte 4-7 is type
         $chunkHeader = substr($png, $ipos, 8);
         $ipos = $ipos + 8;
@@ -110,13 +111,17 @@ class PNGImageBaker
                 $data = substr($png, $ipos, $chunk['size']);
                 $sections = explode("\0", $data);
                 print_r($sections);
-                if ($sections[0] == $key) $skip = true;
+                if ($sections[0] == $key) {
+                    $skip = true;
+                }
             }
             // Extract the data and the CRC
             $data = substr($png, $ipos, $chunk['size'] + 4);
             $ipos = $ipos + $chunk['size'] + 4;
             // Add in the header, data, and CRC
-            if (!$skip) $retval = $retval.$chunkHeader.$data;
+            if (!$skip) {
+                $retval = $retval.$chunkHeader.$data;
+            }
             // Read next chunk header
             $chunkHeader = substr($png, $ipos, 8);
             $ipos = $ipos + 8;

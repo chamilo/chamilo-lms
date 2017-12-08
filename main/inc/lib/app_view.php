@@ -3,6 +3,8 @@
 
 /**
  * Class View
+ * @deprecated use Template class
+ *
  */
 class View
 {

@@ -33,14 +33,11 @@ class CoursesController
      * render to courses_list view
      * @param string $action
      * @param string $message confirmation message(optional)
-     * @param string $action
      */
-    public function courses_list($action, $message = '')
+    public function courseList($action, $message = '')
     {
         $data = array();
-        $user_id = api_get_user_id();
-
-        $data['user_courses'] = $this->model->get_courses_of_user($user_id);
+        $data['user_courses'] = $this->model->get_courses_of_user(api_get_user_id());
         $data['user_course_categories'] = $this->model->get_user_course_categories();
         $data['courses_in_category'] = $this->model->get_courses_in_category();
         $data['action'] = $action;
@@ -60,19 +57,33 @@ class CoursesController
      * @param string    $message confirmation message(optional)
      * @param string    $error error message(optional)
      */
-    public function categories_list($action, $message = '', $error = '')
+    public function categoryList($action, $message = '', $error = '')
     {
+        api_block_anonymous_users();
+
         $data = array();
         $data['user_course_categories'] = $this->model->get_user_course_categories();
-        $data['action'] = $action;
-        $data['message'] = $message;
-        $data['error'] = $error;
 
-        // render to the view
-        $this->view->set_data($data);
-        $this->view->set_layout('catalog_layout');
-        $this->view->set_template('categories_list');
-        $this->view->render();
+        $stok = Security::get_token();
+        $actions = Display::url(
+            Display::return_icon('back.png', get_lang('Back'), '', '32'),
+            api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses'
+        );
+        $actions = Display::toolbarAction('toolbar-forum', [$actions]);
+
+        $form = new FormValidator(
+            'create_course_category',
+            'post',
+            api_get_path(WEB_CODE_PATH).'auth/courses.php?action=createcoursecategory'
+        );
+        $form->addHidden('sec_token', $stok);
+        $form->addText('title_course_category', get_lang('Name'));
+        $form->addButtonSave(get_lang('AddCategory'), 'create_course_category');
+
+        $tpl = new Template();
+        $tpl->assign('content', $form->returnForm());
+        $tpl->assign('actions', $actions);
+        $tpl->display_one_col_template();
     }
 
     /**
@@ -286,8 +297,8 @@ class CoursesController
                 )
             );
         }
-        $action = 'sortmycourses';
-        $this->courses_list($action);
+        header('Location: '.api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses');
+        exit;
     }
 
     /**
@@ -308,7 +319,7 @@ class CoursesController
             );
         }
         $action = 'sortmycourses';
-        $this->courses_list($action);
+        $this->courseList($action);
     }
 
     /**
@@ -327,7 +338,7 @@ class CoursesController
             );
         }
         $action = 'sortmycourses';
-        $this->courses_list($action);
+        $this->courseList($action);
     }
 
     /**
@@ -345,7 +356,7 @@ class CoursesController
             );
         }
         $action = 'sortmycourses';
-        $this->courses_list($action);
+        $this->courseList($action);
     }
 
     /**
@@ -363,7 +374,7 @@ class CoursesController
             );
         }
         $action = 'sortmycourses';
-        $this->courses_list($action);
+        $this->courseList($action);
     }
 
     /**
@@ -380,7 +391,7 @@ class CoursesController
             );
         }
         $action = 'sortmycourses';
-        $this->courses_list($action);
+        $this->courseList($action);
     }
 
     /**

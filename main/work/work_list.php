@@ -169,6 +169,8 @@ if (!api_is_invitee()) {
         </script>
     ';
 
+    $content .= getAllDocumentsFromWorkToString($workId, $courseInfo);
+
     $tableWork = Display::grid_html('results');
     $content .= Display::panel($tableWork);
 }

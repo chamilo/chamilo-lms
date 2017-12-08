@@ -161,7 +161,7 @@ switch ($action) {
 
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-upload'));
 
-Display :: display_header(null);
+Display::display_header(null);
 
 $documentsAddedInWork = getAllDocumentsFromWorkToString($workId, $courseInfo);
 

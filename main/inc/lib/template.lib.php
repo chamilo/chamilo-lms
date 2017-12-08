@@ -362,6 +362,15 @@ class Template
     /**
      * Displays an empty template
      */
+    public function displayBlankTemplateNoHeader()
+    {
+        $tpl = $this->get_template('layout/blank_no_header.tpl');
+        $this->display($tpl);
+    }
+
+    /**
+     * Displays an empty template
+     */
     public function display_no_layout_template()
     {
         $tpl = $this->get_template('layout/no_layout.tpl');

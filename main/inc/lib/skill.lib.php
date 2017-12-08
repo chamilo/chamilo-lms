@@ -1231,10 +1231,10 @@ class Skill extends Model
      * @param int $userId
      * @param int $courseId
      * @param int $sessionId
-     *
+     * @param bool $addTitle
      * @return array
      */
-    public function getUserSkillsTable($userId, $courseId = 0, $sessionId = 0)
+    public function getUserSkillsTable($userId, $courseId = 0, $sessionId = 0, $addTitle = true)
     {
         $skills = $this->getUserSkills($userId, true, $courseId, $sessionId);
 
@@ -1280,15 +1280,18 @@ class Skill extends Model
         }
         $allowLevels = api_get_configuration_value('skill_levels_names');
 
-        $tableResult = '<div class="table-responsive" >
-                <table class="table" >
-                    <thead>
-                        <tr>
-                            <th>'.get_lang('AchievedSkills').'</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <tr><td>';
+        $tableResult = '<div class="table-responsive">';
+        if ($addTitle) {
+            $tableResult .= '
+                    <table class="table" >
+                        <thead>
+                            <tr>
+                                <th>'.get_lang('AchievedSkills').'</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr><td>';
+        }
 
         if (!empty($skillParents)) {
             if (empty($allowLevels)) {
@@ -1354,11 +1357,14 @@ class Skill extends Model
             $tableResult .= get_lang('WithoutAchievedSkills');
         }
 
-        $tableResult .= '</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>';
+        if ($addTitle) {
+            $tableResult .= '</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                ';
+        }
+        $tableResult .= '</div>';
 
 
         return [

@@ -4,7 +4,7 @@
 /**
  * Container for the scormOrganization class
  * @package chamilo.learnpath.scorm
- * @author	Yannick Warnier <ywarnier@beeznest.org>
+ * @author    Yannick Warnier <ywarnier@beeznest.org>
  */
 
 /**
@@ -15,7 +15,7 @@ class scormOrganization
     public $identifier = '';
     public $structure = '';
     public $title = '';
-    public $items = array();
+    public $items = [];
     public $metadata;
 
     /**
@@ -32,10 +32,9 @@ class scormOrganization
             switch ($type) {
                 case 'db':
                     // TODO: Implement this way of metadata object creation.
-                    return false;
+                    break;
                 case 'manifest': // Do the same as the default.
                 default:
-                    // if ($first_item->type == XML_ELEMENT_NODE)
                     // this is already check prior to the call to this function.
                     $children = $element->childNodes;
                     foreach ($children as $child) {
@@ -90,14 +89,9 @@ class scormOrganization
                             }
                         }
                     }
-
-                    return true;
             }
-
             // End parsing using PHP5 DOMXML methods.
         }
-
-        return false;
     }
 
     /**

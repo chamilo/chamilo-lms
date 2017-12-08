@@ -15,6 +15,7 @@ class View
 
     /**
      * Constructor, init tool path for rendering
+     * @deprecated
      * @param string $toolname tool name (optional)
      * @param string $template_path
      */

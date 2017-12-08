@@ -2206,9 +2206,18 @@ class ImportCsv
 
             foreach ($items as $row) {
                 // Insert user
-                $insertUserInfo = api_get_user_info_from_username($row['Added_by']);
+                //$insertUserInfo = api_get_user_info_from_username($row['Added_by']);
+
+                // User about the post
+                $userId = UserManager::get_user_id_from_original_id(
+                    $row['Added_by'],
+                    $this->extraFieldIdNameList['user']
+                );
+
+                $insertUserInfo = api_get_user_info($userId);
+
                 if (empty($insertUserInfo)) {
-                    $this->logger->addInfo("User does '".$row['Added_by']."' not exists skip this entry.");
+                    $this->logger->addInfo("User: '".$row['Added_by']."' doesn't exists. Skip this entry.");
                     continue;
                 }
                 $insertUserInfo = api_get_user_entity($insertUserInfo['user_id']);

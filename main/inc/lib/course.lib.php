@@ -3130,7 +3130,7 @@ class CourseManager
                 $data .= $description->title;
                 $data .= '</div>';
                 $data .= '<div class="sectioncomment">';
-                $data .= $description->content;
+                $data .= Security::remove_XSS($description->content);
                 $data .= '</div>';
             }
         } else {

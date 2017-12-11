@@ -184,7 +184,7 @@ class Statistics
      * Count activities from track_e_default_table
      * @return int Number of activities counted
      */
-    public static function getNumberOfActivities()
+    public static function getNumberOfActivities($courseId = 0, $session = 0)
     {
         // Database table definitions
         $track_e_default = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
@@ -202,6 +202,12 @@ class Statistics
             $sql = "SELECT count(default_id) AS total_number_of_items
                     FROM $track_e_default, $table_user user
                     WHERE default_user_id = user.user_id ";
+        }
+
+        if (!empty($courseId)) {
+            $courseId = (int) $courseId;
+            $sql .= " AND c_id = $courseId";
+            $sql .= api_get_session_condition($sessionId);
         }
 
         if (isset($_GET['keyword'])) {
@@ -225,13 +231,18 @@ class Statistics
      * @param int $numberOfItems
      * @param int $column
      * @param string $direction
+     * @param int $courseId
+     * @param int $sessionId
+     *
      * @return array
      */
     public static function getActivitiesData(
         $from,
         $numberOfItems,
         $column,
-        $direction
+        $direction,
+        $courseId = 0,
+        $sessionId = 0
     ) {
         $track_e_default = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -284,6 +295,12 @@ class Statistics
                         default_value LIKE '%".$keyword."%') ";
         }
 
+        if (!empty($courseId)) {
+            $courseId = (int) $courseId;
+            $sql .= " AND c_id = $courseId";
+            $sql .= api_get_session_condition($sessionId);
+        }
+
         if (!empty($column) && !empty($direction)) {
             $sql .= " ORDER BY col$column $direction";
         } else {
@@ -317,9 +334,13 @@ class Statistics
             }
 
             if (!empty($row[5])) {
-                //course
+
+                // Course
                 if (!empty($row[3])) {
-                    $row[3] = Display::url($row[3], api_get_path(WEB_CODE_PATH).'admin/course_edit.php?id='.$row[3]);
+                    $row[3] = Display::url(
+                        $row[3],
+                        api_get_path(WEB_CODE_PATH).'admin/course_edit.php?id='.$row[3]
+                    );
                 } else {
                     $row[3] = '-';
                 }
@@ -337,8 +358,8 @@ class Statistics
                 // User id.
                 $row[5] = Display::url(
                     $row[5],
-                    api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$row[6],
-                    array('title' => get_lang('UserInfo'))
+                    api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$row[6],
+                    array('class' => 'ajax')
                 );
 
                 $row[6] = Tracking::get_ip_from_user_event(
@@ -780,9 +801,9 @@ class Statistics
         );
         $renderer = & $form->defaultRenderer();
         $renderer->setCustomElementTemplate('<span>{element}</span> ');
-        $form->addElement('hidden', 'report', 'activities');
-        $form->addElement('hidden', 'activities_direction', 'DESC');
-        $form->addElement('hidden', 'activities_column', '4');
+        $form->addHidden('report', 'activities');
+        $form->addHidden('activities_direction', 'DESC');
+        $form->addHidden('activities_column', '4');
         $form->addElement('text', 'keyword', get_lang('Keyword'));
         $form->addButtonSearch(get_lang('Search'), 'submit');
         echo '<div class="actions">';

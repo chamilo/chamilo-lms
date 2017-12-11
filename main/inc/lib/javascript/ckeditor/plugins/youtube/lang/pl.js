@@ -1,8 +1,8 @@
 CKEDITOR.plugins.setLang('youtube', 'pl', {
-	button : 'Załącznik wideo z Youtube',
-	title : 'Załącznik wideo z Youtube',
+	button : 'Załącznik wideo z YouTube',
+	title : 'Załącznik wideo z YouTube',
 	txtEmbed : 'Wklej kod do umieszczenia',
-	txtUrl : 'Wklej link URL do wideo',
+	txtUrl : 'Wklej adres URL do wideo z YouTube',
 	txtWidth : 'Szerokość',
 	txtHeight : 'Wysokość',
 	chkRelated : 'Pokaż sugerowane filmy po zakończeniu odtwarzania',
@@ -10,14 +10,15 @@ CKEDITOR.plugins.setLang('youtube', 'pl', {
 	chkPrivacy : 'Włącz rozszerzony tryb prywatności',
 	chkOlderCode : 'Użyj starego kodu',
 	chkAutoplay: 'Autoodtwarzanie',
-	noCode : 'Musisz wprowadzić kod lub link URL',
+	chkControls: 'Pokaż elementy sterujące odtwarzacza',
+	noCode : 'Musisz wprowadzić kod lub adres URL',
 	invalidEmbed : 'Wprowadzony kod nie jest poprawny',
-	invalidUrl : 'Wprowadzony link URL nie jest poprawny',
+	invalidUrl : 'Wprowadzony adres URL nie jest poprawny',
 	or : 'lub',
 	noWidth : 'Musisz wpisać szerokość',
 	invalidWidth : 'Wprowadzona szerokość nie jest poprawna',
 	noHeight : 'Musisz wprowadzić wysokość',
 	invalidHeight : 'Wprowadzona wysokość nie jest poprawna',
 	invalidTime : 'Musisz wprowadzić poprawny czas rozpoczęcia',
-	txtResponsive : 'Responsive video'
+	txtResponsive : 'El. responsywny (ignoruj szerokość i wysokość, dopasuj do szerokości)'
 });

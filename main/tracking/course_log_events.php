@@ -88,17 +88,16 @@ $column_model = array(
     ),
     array(
         'name' => 'col6',
-        'index' => 'col6',
+        'index' => '6',
         'width' => '50',
         'align' => 'left',
         'sortable' => 'false',
     ),
     array(
         'name' => 'col7',
-        'index' => 'col7',
+        'index' => '7',
         'width' => '50',
-        'align' => 'left',
-        'sortable' => 'false',
+        'align' => 'left'
     )
 );
 
@@ -106,13 +105,6 @@ $column_model = array(
 $extra_params['autowidth'] = 'true';
 // height auto
 $extra_params['height'] = 'auto';
-
-$action_links = '
-function action_formatter(cellvalue, options, rowObject) {
-    return \'<a href="course_log_tools.php?id_session=0&cidReq='.$course_code.'&gidReq=\'+options.rowId+\'">'.Display::return_icon('2rightarrow.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
-    '\';
-}';
-
 
 // Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();

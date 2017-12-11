@@ -220,7 +220,11 @@ define('LOG_CAREER_DELETE', 'career_deleted');
 define('LOG_USER_PERSONAL_DOC_DELETED', 'user_doc_deleted');
 define('LOG_WIKI_ACCESS', 'wiki_page_view');
 
+// All results from an exercise
 define('LOG_EXERCISE_RESULT_DELETE', 'exe_result_deleted');
+
+// Logs only the one attempt
+define('LOG_EXERCISE_ATTEMPT_DELETE', 'exe_attempt_deleted');
 define('LOG_LP_ATTEMPT_DELETE', 'lp_attempt_deleted');
 define('LOG_QUESTION_RESULT_DELETE', 'qst_attempt_deleted');
 
@@ -253,6 +257,7 @@ define('LOG_EXERCISE_ID', 'exercise_id');
 define('LOG_EXERCISE_AND_USER_ID', 'exercise_and_user_id');
 define('LOG_LP_ID', 'lp_id');
 define('LOG_EXERCISE_ATTEMPT_QUESTION_ID', 'exercise_a_q_id');
+define('LOG_EXERCISE_ATTEMPT', 'exe_id');
 
 define('LOG_WORK_DIR_DELETE', 'work_dir_delete');
 define('LOG_WORK_FILE_DELETE', 'work_file_delete');

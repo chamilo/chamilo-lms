@@ -251,6 +251,7 @@ class Statistics
         $column = intval($column);
         $from = intval($from);
         $numberOfItems = intval($numberOfItems);
+        $direction = strtoupper($direction);
 
         if (!in_array($direction, array('ASC', 'DESC'))) {
             $direction = 'DESC';
@@ -304,7 +305,7 @@ class Statistics
         if (!empty($column) && !empty($direction)) {
             $sql .= " ORDER BY col$column $direction";
         } else {
-            $sql .= " ORDER BY col5 DESC ";
+            $sql .= " ORDER BY col7 DESC ";
         }
         $sql .= " LIMIT $from, $numberOfItems ";
 
@@ -814,7 +815,7 @@ class Statistics
             'activities',
             array('Statistics', 'getNumberOfActivities'),
             array('Statistics', 'getActivitiesData'),
-            5,
+            7,
             50,
             'DESC'
         );

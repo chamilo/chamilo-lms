@@ -778,8 +778,8 @@ switch ($action) {
         $result = Statistics::getActivitiesData(
             $start,
             $limit,
-            $column,
-            $direction,
+            $sidx,
+            $sord,
             $courseId,
             $sessionId
         );

@@ -6059,6 +6059,80 @@ class DocumentManager
     }
 
     /**
+     * Create users shared folder for course
+     * @param int $userId
+     * @param array $courseInfo
+     * @param int $sessionId
+     */
+    public static function createUserSharedFolder($userId, array $courseInfo, $sessionId = 0)
+    {
+        $documentDirectory = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/document';
+        $userInfo = api_get_user_info($userId);
+
+        if (!$sessionId) {
+            //Create shared folder. Necessary for recycled courses.
+            if (!file_exists($documentDirectory.'/shared_folder')) {
+                create_unexisting_directory(
+                    $courseInfo,
+                    $userId,
+                    0,
+                    0,
+                    0,
+                    $documentDirectory,
+                    '/shared_folder',
+                    get_lang('UserFolders'),
+                    0
+                );
+            }
+            // Create dynamic user shared folder
+            if (!file_exists($documentDirectory.'/shared_folder/sf_user_'.$userId)) {
+                create_unexisting_directory(
+                    $courseInfo,
+                    $userId,
+                    0,
+                    0,
+                    0,
+                    $documentDirectory,
+                    '/shared_folder/sf_user_'.$userId,
+                    $userInfo['complete_name'],
+                    1
+                );
+            }
+
+            return;
+        }
+
+        // Create shared folder session.
+        if (!file_exists($documentDirectory.'/shared_folder_session_'.$sessionId)) {
+            create_unexisting_directory(
+                $courseInfo,
+                api_get_user_id(),
+                $sessionId,
+                0,
+                0,
+                $documentDirectory,
+                '/shared_folder_session_'.$sessionId,
+                get_lang('UserFolders').' ('.api_get_session_name($sessionId).')',
+                0
+            );
+        }
+        //Create dynamic user shared folder into a shared folder session
+        if (!file_exists($documentDirectory.'/shared_folder_session_'.$sessionId.'/sf_user_'.$userId)) {
+            create_unexisting_directory(
+                $courseInfo,
+                $userId,
+                $sessionId,
+                0,
+                0,
+                $documentDirectory,
+                '/shared_folder_session_'.$sessionId.'/sf_user_'.$userId,
+                $userInfo['complete_name'].'('.api_get_session_name($sessionId).')',
+                1
+            );
+        }
+    }
+
+    /**
      * Checks whether the user is into his shared folder or into a subfolder
      * @param int $user_id
      * @param string $path

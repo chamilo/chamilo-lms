@@ -245,12 +245,19 @@ switch ($action) {
         break;
     case 'get_user_course_report':
     case 'get_user_course_report_resumed':
+        $userNotAllowed = !api_is_student_boss() && !api_is_platform_admin(false, true);
+
+        if ($userNotAllowed) {
+            exit;
+        }
+
         $userId = api_get_user_id();
         $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
         $courseCodeList = array();
         $userIdList = array();
         $sessionIdList = [];
         $searchByGroups = false;
+
         if (api_is_drh()) {
             if (api_drh_can_access_all_session_content()) {
                 $userList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -278,6 +285,7 @@ switch ($action) {
                 if (!empty($userList)) {
                     $userIdList = array_keys($userList);
                 }
+
                 $courseList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
                 if (!empty($courseList)) {
                     $courseCodeList = array_keys($courseList);
@@ -337,14 +345,14 @@ switch ($action) {
 
             $searchByGroups = true;
         } elseif (api_is_platform_admin()) {
-            //get students with course or session
+            // Get students with course or session
             $userIdList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
                 'admin',
                 null,
                 false,
                 null,
                 null,
-                1,
+                null,
                 'asc',
                 null,
                 null,

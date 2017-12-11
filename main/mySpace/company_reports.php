@@ -4,9 +4,7 @@
  * Special report for corporate users
  * @package chamilo.reporting
  */
-/**
- * Code
- */
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 

@@ -105,6 +105,7 @@ $column_model = array(
 $extra_params['autowidth'] = 'true';
 // height auto
 $extra_params['height'] = 'auto';
+$actionLinks = '';
 
 // Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -118,7 +119,7 @@ $(function() {
     $column_model,
     $extra_params,
     array(),
-    $action_links,
+    $actionLinks,
     true
 ).'
 });
@@ -147,7 +148,7 @@ $form = new FormValidator(
     'get',
     api_get_self().'?'.api_get_cidreq(),
     '',
-    '',
+    [],
     FormValidator::LAYOUT_INLINE
 );
 $form->addHidden('report', 'activities');

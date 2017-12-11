@@ -184,7 +184,7 @@ class Statistics
      * Count activities from track_e_default_table
      * @return int Number of activities counted
      */
-    public static function getNumberOfActivities($courseId = 0, $session = 0)
+    public static function getNumberOfActivities($courseId = 0, $sessionId = 0)
     {
         // Database table definitions
         $track_e_default = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);

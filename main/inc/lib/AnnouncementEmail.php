@@ -282,7 +282,7 @@ class AnnouncementEmail
         $result = array();
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $id = $this->announcement('id');
-        $course_id = $this->course('id');
+        $course_id = $this->course('real_id');
         $sql = "SELECT * FROM $table 
                 WHERE c_id = $course_id AND announcement_id = $id ";
         $rs = Database::query($sql);
@@ -369,8 +369,7 @@ class AnnouncementEmail
     public function logMailSent()
     {
         $id = $this->announcement('id');
-        $course_id = $this->course('id');
-
+        $course_id = $this->course('real_id');
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $sql = "UPDATE $table SET 
                 email_sent = 1

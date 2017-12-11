@@ -2735,7 +2735,7 @@ function get_list_users_without_publication($task_id, $studentId = 0)
  */
 function display_list_users_without_publication($task_id, $studentId = null)
 {
-    global $origin;
+    $origin = api_get_origin();
     $table_header[] = array(get_lang('LastName'), true);
     $table_header[] = array(get_lang('FirstName'), true);
     $table_header[] = array(get_lang('Email'), true);
@@ -4819,7 +4819,7 @@ function getUploadDocumentType()
  */
 function updateSettings($courseInfo, $showScore, $studentDeleteOwnPublication)
 {
-    $showScore = intval($showScore);
+    $showScore = (int) $showScore;
     $courseId = api_get_course_int_id();
     $main_course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $table_course_setting = Database::get_course_table(TOOL_COURSE_SETTING);
@@ -4837,7 +4837,7 @@ function updateSettings($courseInfo, $showScore, $studentDeleteOwnPublication)
      * Course data are cached in session so we need to update both the database
      * and the session data
      */
-    $_course['show_score'] = $showScore;
+    $courseInfo['show_score'] = $showScore;
     Session::write('_course', $courseInfo);
 
     // changing the tool setting: is a student allowed to delete his/her own document
@@ -4852,8 +4852,8 @@ function updateSettings($courseInfo, $showScore, $studentDeleteOwnPublication)
     $number_of_setting = Database::num_rows($result);
 
     if ($number_of_setting == 1) {
-        $query = "UPDATE ".$table_course_setting." SET
-                  value='" . Database::escape_string($studentDeleteOwnPublication)."'
+        $query = "UPDATE $table_course_setting SET
+                  value = '" . Database::escape_string($studentDeleteOwnPublication)."'
                   WHERE variable = 'student_delete_own_publication' AND c_id = $courseId";
         Database::query($query);
     } else {
@@ -4871,9 +4871,13 @@ function updateSettings($courseInfo, $showScore, $studentDeleteOwnPublication)
 /**
  * @param int $item_id
  * @param array $course_info
+ * @return bool
  */
 function makeVisible($item_id, $course_info)
 {
+    if (empty($course_info) || empty($item_id)) {
+        return false;
+    }
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $course_id = $course_info['real_id'];
     $item_id = intval($item_id);
@@ -4882,14 +4886,21 @@ function makeVisible($item_id, $course_info)
             WHERE c_id = $course_id AND id = $item_id";
     Database::query($sql);
     api_item_property_update($course_info, 'work', $item_id, 'visible', api_get_user_id());
+
+    return true;
 }
 
 /**
  * @param int $item_id
  * @param array $course_info
+ * @return int
  */
 function makeInvisible($item_id, $course_info)
 {
+    if (empty($course_info) || empty($item_id)) {
+        return false;
+    }
+
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $item_id = intval($item_id);
     $course_id = $course_info['real_id'];
@@ -4904,6 +4915,8 @@ function makeInvisible($item_id, $course_info)
         'invisible',
         api_get_user_id()
     );
+
+    return true;
 }
 
 /**

@@ -20,6 +20,7 @@ require_once __DIR__.'/../inc/global.inc.php';
  * @param   integer View ID
  * @param   integer Current item ID
  * @param   integer New item ID
+ * @return  string
  */
 function initialize_item($lp_id, $user_id, $view_id, $next_item)
 {

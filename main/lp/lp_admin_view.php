@@ -146,7 +146,7 @@ if (isset($_POST['save_audio'])) {
             $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
             $sql = "UPDATE $tbl_lp_item 
                     SET audio = '".Database::escape_string($file)."'
-                    WHERE c_id = $course_id AND id = '".Database::escape_string($lp_item_id)."'";
+                    WHERE c_id = $course_id AND id = ".(int) $lp_item_id;
             Database::query($sql);
         }
     }

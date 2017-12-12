@@ -403,8 +403,8 @@ $mediaplayer = $_SESSION['oLP']->get_mediaplayer($_SESSION['oLP']->current, $aut
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 $show_audioplayer = false;
 // Getting all the information about the item.
-$sql = "SELECT audio FROM ".$tbl_lp_item."
-        WHERE c_id = $course_id AND lp_id = '".$_SESSION['oLP']->lp_id."'";
+$sql = "SELECT audio FROM $tbl_lp_item
+        WHERE c_id = $course_id AND lp_id = ".$_SESSION['oLP']->lp_id;
 $res_media = Database::query($sql);
 
 if (Database::num_rows($res_media) > 0) {

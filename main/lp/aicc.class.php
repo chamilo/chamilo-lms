@@ -765,7 +765,7 @@ class aicc extends learnpath
         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
         $_course = api_get_course_info(api_get_course_id());
 
-        $sql = "SELECT * FROM $tbl_lp WHERE c_id = ".$course_id." id=".$lp_id;
+        $sql = "SELECT * FROM $tbl_lp WHERE iid= $lp_id";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $LPname = $row['path'];

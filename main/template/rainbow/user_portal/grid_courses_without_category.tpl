@@ -3,7 +3,7 @@
         <div class="row">
             {% for item in courses %}
                 <div class="col-xs-12 col-sm-6 col-md-4">
-                    <div class="items">
+                    <div class="items {{ item.is_special_course ? 'session' : '' }}  ">
                         <div class="image">
                             {% if item.is_special_course %}
                                 <div class="pin">{{ item.icon }}</div>

@@ -7,9 +7,6 @@ use ChamiloSession as Session;
  * @package chamilo.tracking
  */
 
-$pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
-
-// Including the global initialization file
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
@@ -219,36 +216,7 @@ Display::display_header($nameTools, 'Tracking');
 
 /* MAIN CODE */
 
-$actionsLeft = Display::return_icon(
-    'user_na.png',
-    get_lang('StudentsTracking'),
-    array(),
-    ICON_SIZE_MEDIUM
-);
-$actionsLeft .= Display::url(
-    Display::return_icon('group.png', get_lang('GroupReporting'), array(), ICON_SIZE_MEDIUM),
-    'course_log_groups.php?'.api_get_cidreq()
-);
-$actionsLeft .= Display::url(
-    Display::return_icon('course.png', get_lang('CourseTracking'), array(), ICON_SIZE_MEDIUM),
-    'course_log_tools.php?'.api_get_cidreq()
-);
-
-$actionsLeft .= Display::url(
-    Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), ICON_SIZE_MEDIUM),
-    'course_log_resources.php?'.api_get_cidreq()
-);
-$actionsLeft .= Display::url(
-    Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), ICON_SIZE_MEDIUM),
-    api_get_path(WEB_CODE_PATH).'tracking/exams.php?'.api_get_cidreq()
-);
-
-if (!empty($sessionId)) {
-    $actionsLeft .= Display::url(
-        Display::return_icon('attendance_list.png', get_lang('Logins'), '', ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH).'attendance/index.php?'.api_get_cidreq().'&action=calendar_logins'
-    );
-}
+$actionsLeft = TrackingCourseLog::actionsLeft('users', $sessionId);
 
 $actionsRight = '<div class="pull-right">';
 $actionsRight .= '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
@@ -309,6 +277,7 @@ if ($session_id) {
         ICON_SIZE_SMALL
     ).' '.$courseInfo['name'];
 }
+
 $teacherList = CourseManager::getTeacherListFromCourseCodeToString(
     $courseInfo['code'],
     ',',
@@ -542,6 +511,7 @@ if (count($a_students) > 0) {
 }
 
 echo Display::panel($html, $titleSession);
+
 // Send the csv file if asked.
 if ($export_csv) {
     $csv_headers = [];

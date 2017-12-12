@@ -7,9 +7,6 @@ use ChamiloSession as Session;
  * @package chamilo.tracking
  */
 
-$pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
-
-// Including the global initialization file
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 

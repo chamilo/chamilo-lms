@@ -99,22 +99,7 @@ $nameTools = get_lang('Tracking');
 Display::display_header($nameTools, 'Tracking');
 
 echo '<div class="actions">';
-echo Display::url(
-    Display::return_icon('user.png', get_lang('StudentsTracking'), array(), ICON_SIZE_MEDIUM),
-    api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq()
-);
-
-echo Display::url(
-    Display::return_icon('group.png', get_lang('GroupReporting'), array(), ICON_SIZE_MEDIUM),
-    'course_log_groups.php?'.api_get_cidreq(true, false)
-);
-
-echo Display::url(
-    Display::return_icon('course.png', get_lang('CourseTracking'), array(), ICON_SIZE_MEDIUM),
-    api_get_path(WEB_CODE_PATH).'tracking/course_log_tools.php?'.api_get_cidreq()
-);
-
-echo Display::return_icon('tools_na.png', get_lang('ResourcesTracking'), array(), ICON_SIZE_MEDIUM);
+echo TrackingCourseLog::actionsLeft('resources', api_get_session_id());
 echo '<span style="float:right; padding-top:0px;">';
 echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
     Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).

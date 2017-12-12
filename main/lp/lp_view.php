@@ -299,8 +299,8 @@ if (!empty($_REQUEST['exeId']) &&
         $sql = "SELECT id FROM $TBL_LP_ITEM_VIEW
                 WHERE
                     c_id = $course_id AND
-                    lp_item_id = '$safe_item_id' AND
-                    lp_view_id = '".$_SESSION['oLP']->lp_view_id."'
+                    lp_item_id = $safe_item_id AND
+                    lp_view_id = ".$_SESSION['oLP']->lp_view_id."
                 ORDER BY id DESC
                 LIMIT 1";
         $res_last_attempt = Database::query($sql);
@@ -329,7 +329,7 @@ if (!empty($_REQUEST['exeId']) &&
                         status = '$status',
                         score = $score,
                         total_time = $mytime
-                    WHERE id='".$lp_item_view_id."' AND c_id = $course_id ";
+                    WHERE iid = $lp_item_view_id";
 
             if ($debug) {
                 error_log($sql);

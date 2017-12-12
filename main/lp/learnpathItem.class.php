@@ -612,7 +612,7 @@ class learnpathItem
 
         if ($checkdb) {
             $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-            $sql = "SELECT id FROM $tbl
+            $sql = "SELECT iid FROM $tbl
                     WHERE
                         c_id = $course_id AND
                         lp_item_id = ".$this->db_id." AND
@@ -3592,7 +3592,7 @@ class learnpathItem
         if (is_array($this->objectives) && count($this->objectives) > 0) {
             // Save objectives.
             $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-            $sql = "SELECT id
+            $sql = "SELECT iid
                     FROM $tbl
                     WHERE
                         c_id = $course_id AND
@@ -3614,7 +3614,7 @@ class learnpathItem
                     $iva_table = Database::get_course_table(
                         TABLE_LP_IV_OBJECTIVE
                     );
-                    $iva_sql = "SELECT id FROM $iva_table
+                    $iva_sql = "SELECT iid FROM $iva_table
                                 WHERE
                                     c_id = $course_id AND
                                     lp_iv_id = $lp_iv_id AND
@@ -3633,7 +3633,7 @@ class learnpathItem
                             "score_raw = '".Database::escape_string($objective[2])."',".
                             "score_min = '".Database::escape_string($objective[4])."',".
                             "score_max = '".Database::escape_string($objective[3])."' ".
-                            "WHERE c_id = $course_id AND id = $iva_id";
+                            "WHERE c_id = $course_id AND iid = $iva_id";
                         Database::query($ivau_sql);
                     } else {
                         // Insert new one.
@@ -3997,7 +3997,7 @@ class learnpathItem
             ) {
                 // Save interactions.
                 $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-                $sql = "SELECT id FROM $tbl
+                $sql = "SELECT iid FROM $tbl
                         WHERE
                             c_id = $course_id AND
                             lp_item_id = ".$this->db_id." AND
@@ -4031,7 +4031,7 @@ class learnpathItem
                         );
 
                         //also check for the interaction ID as it must be unique for this SCO view
-                        $iva_sql = "SELECT id FROM $iva_table
+                        $iva_sql = "SELECT iid FROM $iva_table
                                     WHERE
                                         c_id = $course_id AND
                                         lp_iv_id = $lp_iv_id AND
@@ -4071,7 +4071,7 @@ class learnpathItem
                                 $iva_table,
                                 $params,
                                 array(
-                                    'c_id = ? AND id = ?' => array(
+                                    'c_id = ? AND iid = ?' => array(
                                         $course_id,
                                         $iva_id
                                     )

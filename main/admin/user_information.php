@@ -263,8 +263,8 @@ if (api_get_setting('allow_social_tool') === 'true') {
 $sessions = SessionManager::get_sessions_by_user($userId, true);
 $personal_course_list = array();
 $courseToolInformationTotal = null;
+$sessionInformation = '';
 if (count($sessions) > 0) {
-    $sessionInformation = null;
     $header = array(
         array(get_lang('Code'), true),
         array(get_lang('Title'), true),
@@ -470,8 +470,7 @@ if (Database::num_rows($res) > 0) {
         $csvContent = array_merge($csvContent, $result['array']);
     }
 
-    $courseInformation = Display::page_subheader(get_lang('Courses'));
-    $courseInformation .= Display::return_sortable_table(
+    $courseInformation = Display::return_sortable_table(
         $header,
         $data,
         array(),
@@ -681,5 +680,11 @@ echo $sessionInformation;
 echo Display::page_subheader(get_lang('CourseList'));
 echo $courseInformation;
 echo $urlInformation;
+
+echo Tracking::displayUserSkills(
+    $user['user_id'],
+    0,
+    0
+);
 
 Display::display_footer();

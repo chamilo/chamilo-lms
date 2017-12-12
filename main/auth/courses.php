@@ -85,26 +85,26 @@ if (empty($nameTools)) {
 }
 
 // course description controller object
-$courses_controller = new CoursesController();
+$courseController = new CoursesController();
 
 // We are moving a course or category of the user up/down the list (=Sort My Courses).
 if (isset($_GET['move'])) {
     if (isset($_GET['course'])) {
-        $courses_controller->move_course(
+        $courseController->move_course(
             $_GET['move'],
             $_GET['course'],
             $_GET['category']
         );
     }
     if (isset($_GET['category']) && !isset($_GET['course'])) {
-        $courses_controller->move_category($_GET['move'], $_GET['category']);
+        $courseController->move_category($_GET['move'], $_GET['category']);
     }
 }
 
 // We are moving the course of the user to a different user defined course category (=Sort My Courses).
 if (isset($_POST['submit_change_course_category'])) {
     if ($ctok == $_POST['sec_token']) {
-        $courses_controller->change_course_category(
+        $courseController->change_course_category(
             $_POST['course_2_edit_category'],
             $_POST['course_categories']
         );
@@ -117,7 +117,7 @@ if (isset($_POST['submit_edit_course_category']) &&
     strlen(trim($_POST['title_course_category'])) > 0
 ) {
     if ($ctok == $_POST['sec_token']) {
-        $courses_controller->edit_course_category(
+        $courseController->edit_course_category(
             $_POST['title_course_category'],
             $_POST['edit_course_category']
         );
@@ -128,7 +128,7 @@ if (isset($_POST['submit_edit_course_category']) &&
 if ($action == 'deletecoursecategory' && isset($_GET['id'])) {
     if ($ctok == $_GET['sec_token']) {
         $get_id_cat = intval($_GET['id']);
-        $courses_controller->delete_course_category($get_id_cat);
+        $courseController->delete_course_category($get_id_cat);
     }
 }
 
@@ -138,14 +138,14 @@ if (isset($_POST['create_course_category']) &&
     strlen(trim($_POST['title_course_category'])) > 0
 ) {
     if ($ctok == $_POST['sec_token']) {
-        $courses_controller->addCourseCategory($_POST['title_course_category']);
+        $courseController->addCourseCategory($_POST['title_course_category']);
     }
 }
 
 // search courses
 if (isset($_REQUEST['search_course'])) {
     if ($ctok == $_REQUEST['sec_token']) {
-        $courses_controller->search_courses(
+        $courseController->search_courses(
             $searchTerm,
             null,
             null,
@@ -160,7 +160,7 @@ if (isset($_REQUEST['search_course'])) {
 // Subscribe user to course
 if (isset($_REQUEST['subscribe_course'])) {
     if ($ctok == $_GET['sec_token']) {
-        $courses_controller->subscribe_user(
+        $courseController->subscribe_user(
             $_GET['subscribe_course'],
             $searchTerm,
             $categoryCode
@@ -171,7 +171,7 @@ if (isset($_REQUEST['subscribe_course'])) {
 // We are unsubscribing from a course (=Unsubscribe from course).
 if (isset($_GET['unsubscribe'])) {
     if ($ctok == $_GET['sec_token']) {
-        $courses_controller->unsubscribe_user_from_course(
+        $courseController->unsubscribe_user_from_course(
             $_GET['unsubscribe'],
             $searchTerm,
             $categoryCode
@@ -182,12 +182,12 @@ if (isset($_GET['unsubscribe'])) {
 // We are unsubscribing from a course (=Unsubscribe from course).
 if (isset($_POST['unsubscribe'])) {
     if ($ctok == $_POST['sec_token']) {
-        $courses_controller->unsubscribe_user_from_course($_POST['unsubscribe']);
+        $courseController->unsubscribe_user_from_course($_POST['unsubscribe']);
     }
 }
 switch ($action) {
     case 'subscribe_user_with_password':
-        $courses_controller->subscribe_user(
+        $courseController->subscribe_user(
             isset($_POST['subscribe_user_with_password']) ? $_POST['subscribe_user_with_password'] : '',
             $searchTerm,
             isset($_POST['category_code']) ? $_POST['category_code'] : ''
@@ -196,13 +196,13 @@ switch ($action) {
         exit;
         break;
     case 'createcoursecategory':
-        $courses_controller->categories_list($action);
+        $courseController->categoryList($action);
         break;
     case 'deletecoursecategory':
-        $courses_controller->courses_list($action);
+        $courseController->courseList($action);
         break;
     case 'sortmycourses':
-        $courses_controller->courses_list($action);
+        $courseController->courseList($action);
         break;
     case 'subscribe':
         if (!$user_can_view_page) {
@@ -211,7 +211,7 @@ switch ($action) {
         header('Location: '.api_get_self());
         exit;
         /* if (!CoursesAndSessionsCatalog::is(CATALOG_SESSIONS)) {
-            $courses_controller->courses_categories(
+            $courseController->courses_categories(
                 $action,
                 $categoryCode,
                 null,
@@ -229,14 +229,14 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        $courses_controller->courses_categories($action);
+        $courseController->courses_categories($action);
         break;
     case 'display_courses':
         if (!$user_can_view_page) {
             api_not_allowed(true);
         }
 
-        $courses_controller->courses_categories(
+        $courseController->courses_categories(
             $action,
             $categoryCode,
             null,
@@ -250,7 +250,7 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        $courses_controller->sessionsList($action, $nameTools, $limit);
+        $courseController->sessionsList($action, $nameTools, $limit);
         break;
     case 'subscribe_to_session':
         if (!$user_can_view_page) {
@@ -331,13 +331,13 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        $courses_controller->sessionsListByCoursesTag($limit);
+        $courseController->sessionsListByCoursesTag($limit);
         break;
     case 'search_session':
         if (!$user_can_view_page) {
             api_not_allowed(true);
         }
 
-        $courses_controller->sessionListBySearch($limit);
+        $courseController->sessionListBySearch($limit);
         break;
 }

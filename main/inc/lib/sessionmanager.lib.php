@@ -5598,12 +5598,12 @@ class SessionManager
         $column = Database::escape_string($column);
         $userId = intval($userId);
 
-        $limitCondition = null;
-
+        $limitCondition = '';
         if (isset($from) && isset($numberItems)) {
             $from = intval($from);
             $numberItems = intval($numberItems);
             $limitCondition = "LIMIT $from, $numberItems";
+
         }
 
         $urlId = api_get_current_access_url_id();
@@ -5748,7 +5748,9 @@ class SessionManager
                 ";
 
         if ($getCount) {
+
             $result = Database::query($sql);
+
             $count = 0;
             if (Database::num_rows($result)) {
                 $rows = Database::fetch_array($result);
@@ -5761,7 +5763,6 @@ class SessionManager
             $column = str_replace('u.', '', $column);
             $sql .= " ORDER BY $column $direction ";
         }
-
         $sql .= $limitCondition;
         $result = Database::query($sql);
         $result = Database::store_result($result);

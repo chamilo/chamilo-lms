@@ -379,6 +379,13 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
         Database::query($sql);
         $sql = 'DELETE FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.$exe_id;
         Database::query($sql);
+
+        Event::addEvent(
+            LOG_EXERCISE_ATTEMPT_DELETE,
+            LOG_EXERCISE_ATTEMPT,
+            $exe_id,
+            api_get_utc_datetime()
+        );
         header('Location: exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exercise_id);
         exit;
     }

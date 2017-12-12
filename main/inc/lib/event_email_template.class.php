@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
+ * @deprecated
  * Class EventEmailTemplate
  */
 class EventEmailTemplate extends Model

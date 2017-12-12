@@ -1,19 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
+use Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Entity\Promotion;
+use Chamilo\CoreBundle\Entity\Session;
+use Doctrine\Common\Collections\Criteria;
+use Chamilo\CoreBundle\Entity\SessionRelUser;
+use Chamilo\CoreBundle\Entity\Repository\SessionRepository;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+
 /**
  * @author Bart Mollet, Julio Montoya lot of fixes
  * @package chamilo.admin
  */
-
-use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
-use Chamilo\CoreBundle\Entity\SequenceResource;
-use Chamilo\CoreBundle\Entity\Promotion;
-use Chamilo\CoreBundle\Entity\Session,
-    Doctrine\Common\Collections\Criteria,
-    Chamilo\CoreBundle\Entity\SessionRelUser,
-    Chamilo\CoreBundle\Entity\Repository\SessionRepository,
-    Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -57,7 +57,6 @@ $session = $sessionRepository->find($sessionId);
 $sessionCategory = $session->getCategory();
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
-
 $url_id = api_get_current_access_url_id();
 
 switch ($action) {

@@ -19,8 +19,6 @@ require_once 'block.class.php';
 // protect script
 api_block_anonymous_users();
 
-// defining constants
-
 // current section
 $this_section = SECTION_DASHBOARD;
 Session::erase('this_section'); //for hmtl editor repository
@@ -33,8 +31,7 @@ if (isset($_GET['action']) && in_array($_GET['action'], $actions)) {
 }
 
 // load styles from dashboard plugins
-$dashboar_plugin_styles = DashboardManager::get_links_for_styles_from_dashboard_plugins();
-$htmlHeadXtra[] = $dashboar_plugin_styles;
+$htmlHeadXtra[] = DashboardManager::get_links_for_styles_from_dashboard_plugins();
 
 // course description controller object
 $dashboard_controller = new DashboardController();

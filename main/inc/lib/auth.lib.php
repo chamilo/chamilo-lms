@@ -123,7 +123,6 @@ class Auth
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $TABLE_COURSE_FIELD = Database::get_main_table(TABLE_EXTRA_FIELD);
         $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-
         $extraFieldType = ExtraField::COURSE_FIELD_TYPE;
 
         // get course list auto-register
@@ -183,9 +182,9 @@ class Auth
         $newcategory = intval($newcategory);
         $current_user = api_get_user_id();
 
-        $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $max_sort_value = api_max_sort_value($newcategory, $current_user);
-        $sql = "UPDATE $TABLECOURSUSER SET
+        $sql = "UPDATE $table SET
                     user_course_cat='".$newcategory."',
                     sort='" . ($max_sort_value + 1)."'
                 WHERE
@@ -456,7 +455,9 @@ class Auth
             $row['registration_code'] = !empty($row['registration_code']);
             $count_users = count(CourseManager::get_user_list_from_course_code($row['code']));
             $count_connections_last_month = Tracking::get_course_connections_count(
-                    $row['id'], 0, api_get_utc_datetime(time() - (30 * 86400))
+                $row['id'],
+                0,
+                api_get_utc_datetime(time() - (30 * 86400))
             );
 
             $point_info = CourseManager::get_course_ranking($row['id'], 0);

@@ -70,11 +70,11 @@ $form = new FormValidator(
     null,
     array('enctype' => 'multipart/form-data')
 );
-$form->addElement('hidden', 'action', $allowed_action);
-$form->addElement('hidden', 'group_id', $group_id);
-$form->addElement('hidden', 'parent_id', $message_id);
-$form->addElement('hidden', 'message_id', $message_id);
-$form->addElement('hidden', 'token', $tok);
+$form->addHidden('action', $allowed_action);
+$form->addHidden('group_id', $group_id);
+$form->addHidden('parent_id', $message_id);
+$form->addHidden('message_id', $message_id);
+$form->addHidden('token', $tok);
 
 $tpl = new Template(get_lang('Groups'));
 
@@ -92,13 +92,11 @@ if (api_get_setting('allow_message_tool') === 'true') {
     $form->addElement(
         'label',
         get_lang('AttachmentFiles'),
-        '
-            <div id="link-more-attach">
-                <a class="btn btn-default" href="javascript://" onclick="return add_image_form()">
-                    ' . get_lang('AddOneMoreFile').'
-                </a>
-            </div>
-        '
+        '<div id="link-more-attach">
+            <a class="btn btn-default" href="javascript://" onclick="return add_image_form()">
+                ' . get_lang('AddOneMoreFile').'
+            </a>
+        </div>'
     );
 
     $form->addElement('label', null, '<div id="filepaths"></div>');
@@ -113,6 +111,7 @@ if (api_get_setting('allow_message_tool') === 'true') {
     $form->addButtonSend(get_lang('SendMessage'));
 
     $form->setDefaults(['content' => $message, 'title' => $subject]);
-    $form->display();
+    $tpl->assign('content', $form->returnForm());
 }
-$tpl->display_blank_template();
+
+$tpl->displayBlankTemplateNoHeader();

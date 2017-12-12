@@ -13,7 +13,6 @@ api_protect_course_script(true);
 require_once 'work.lib.php';
 
 $courseInfo = api_get_course_info();
-$course_id = $courseInfo['real_id'];
 $user_id = api_get_user_id();
 $sessionId = api_get_session_id();
 $groupId = api_get_group_id();

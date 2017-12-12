@@ -89,7 +89,6 @@ if (!empty($users)) {
     }
 }
 
-//$tpl->assign('user_list', $user_list);
 $tpl->assign('order_user_list', $ordered_user_list);
 $tpl->assign('total_search_skills', $count_skills);
 

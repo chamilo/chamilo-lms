@@ -172,7 +172,7 @@ $formAcquiredLevel = new FormValidator('acquired_level');
 $formAcquiredLevel->addSelect('acquired_level', get_lang('AcquiredLevel'), $acquiredLevel);
 $formAcquiredLevel->addHidden('user', $skillIssue->getUser()->getId());
 $formAcquiredLevel->addHidden('issue', $skillIssue->getId());
-$formAcquiredLevel->addButtonSend(get_lang('Save'));
+$formAcquiredLevel->addButtonSave(get_lang('Save'));
 
 if ($formAcquiredLevel->validate() && $allowComment) {
     $values = $formAcquiredLevel->exportValues();
@@ -182,6 +182,7 @@ if ($formAcquiredLevel->validate() && $allowComment) {
 
     $entityManager->persist($skillIssue);
     $entityManager->flush();
+    Display::addFlash(Display::return_message(get_lang('Saved')));
 
     header("Location: ".$skillIssue->getIssueUrl());
     exit;
@@ -213,6 +214,7 @@ if ($form->validate() && $allowComment) {
 
     $entityManager->persist($skillUserComment);
     $entityManager->flush();
+    Display::addFlash(Display::return_message(get_lang('Added')));
 
     header("Location: ".$skillIssue->getIssueUrl());
     exit;

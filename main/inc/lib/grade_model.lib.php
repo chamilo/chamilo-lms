@@ -232,11 +232,11 @@ class GradeModel extends Model
     }
 
     /**
-     * @param array $params
+     * @inheritdoc
      */
-    public function update($params)
+    public function update($params, $showQuery = false)
     {
-        parent::update($params);
+        parent::update($params, $showQuery);
 
         if (!empty($params['id'])) {
             foreach ($params['components'] as $component) {
@@ -318,12 +318,12 @@ class GradeModelComponents extends Model
 
     /**
      * @param array $params
-     * @param bool $show_query
+     * @param bool $showQuery
      * @return bool
      */
-    public function save($params, $show_query = false)
+    public function save($params, $showQuery = false)
     {
-	    $id = parent::save($params, $show_query);
+	    $id = parent::save($params, $showQuery);
 
         return $id;
     }

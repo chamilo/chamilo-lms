@@ -3,10 +3,7 @@
 
 use ChamiloSession as Session;
 
-//@todo this could be integrated in the inc/lib/model.lib.php + try to clean this file
 require_once __DIR__.'/../global.inc.php';
-
-$libpath = api_get_path(LIBRARY_PATH);
 
 // 1. Setting variables needed by jqgrid
 $action = $_GET['a'];
@@ -61,7 +58,8 @@ if (!in_array(
         'get_user_course_report',
         'get_sessions_tracking',
         'get_sessions',
-        'get_course_announcements'
+        'get_course_announcements',
+        'course_log_events'
     )
 ) && !isset($_REQUEST['from_course_session'])) {
     api_protect_admin_script(true);
@@ -228,6 +226,18 @@ if (!$sidx) {
 //@todo rework this
 
 switch ($action) {
+    case 'course_log_events':
+        $courseId = api_get_course_int_id();
+        if (empty($courseId)) {
+            exit;
+        }
+        $sessionId = api_get_session_id();
+
+        if (!api_is_allowed_to_edit()) {
+            exit;
+        }
+        $count = Statistics::getNumberOfActivities($courseId, $sessionId);
+        break;
     case 'get_programmed_announcements':
         $object = new ScheduledAnnouncement();
         $count = $object->get_count();
@@ -245,12 +255,19 @@ switch ($action) {
         break;
     case 'get_user_course_report':
     case 'get_user_course_report_resumed':
+        $userNotAllowed = !api_is_student_boss() && !api_is_platform_admin(false, true);
+
+        if ($userNotAllowed) {
+            exit;
+        }
+
         $userId = api_get_user_id();
         $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
         $courseCodeList = array();
         $userIdList = array();
         $sessionIdList = [];
         $searchByGroups = false;
+
         if (api_is_drh()) {
             if (api_drh_can_access_all_session_content()) {
                 $userList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -278,6 +295,7 @@ switch ($action) {
                 if (!empty($userList)) {
                     $userIdList = array_keys($userList);
                 }
+
                 $courseList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
                 if (!empty($courseList)) {
                     $courseCodeList = array_keys($courseList);
@@ -294,10 +312,10 @@ switch ($action) {
                 false,
                 false,
                 false,
-                0,
                 null,
-                0,
-                'ASC',
+                null,
+                null,
+                null,
                 1,
                 null,
                 api_is_student_boss() ? STUDENT_BOSS : COURSEMANAGER,
@@ -312,7 +330,7 @@ switch ($action) {
                 false,
                 null,
                 null,
-                1,
+                null,
                 'asc',
                 null,
                 null,
@@ -337,14 +355,14 @@ switch ($action) {
 
             $searchByGroups = true;
         } elseif (api_is_platform_admin()) {
-            //get students with course or session
+            // Get students with course or session
             $userIdList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
                 'admin',
                 null,
                 false,
                 null,
                 null,
-                1,
+                null,
                 'asc',
                 null,
                 null,
@@ -681,12 +699,10 @@ switch ($action) {
         $count = $obj->get_count_by_field_id($field_id);
         break;
     case 'get_timelines':
-        require_once $libpath.'timeline.lib.php';
         $obj = new Timeline();
         $count = $obj->get_count();
         break;
     case 'get_gradebooks':
-        require_once $libpath.'gradebook.lib.php';
         $obj = new Gradebook();
         $count = $obj->get_count();
         break;
@@ -756,6 +772,19 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit
 $columns = array();
 
 switch ($action) {
+    case 'course_log_events':
+        $columns = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+        $result = Statistics::getActivitiesData(
+            $start,
+            $limit,
+            $sidx,
+            $sord,
+            $courseId,
+            $sessionId
+        );
+
+        break;
     case 'get_programmed_announcements':
         $columns = array('subject', 'date', 'sent', 'actions');
         $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : 0;
@@ -2062,7 +2091,8 @@ $allowed_actions = array(
     'get_exercise_grade',
     'get_group_reporting',
     'get_course_announcements',
-    'get_programmed_announcements'
+    'get_programmed_announcements',
+    'course_log_events'
 );
 
 //5. Creating an obj to return a json

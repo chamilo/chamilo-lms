@@ -40,7 +40,6 @@ function handleRegions()
     }
 
     $plugin_obj = new AppPlugin();
-    $possible_plugins  = $plugin_obj->read_plugins_from_path();
     $installed_plugins = $plugin_obj->get_installed_plugins();
 
     echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
@@ -55,7 +54,6 @@ function handleRegions()
     echo '</tr>';
 
     /* We display all the possible plugins and the checkboxes */
-
     $plugin_region_list = array();
     $my_plugin_list = $plugin_obj->get_plugin_regions();
     foreach ($my_plugin_list as $plugin_item) {
@@ -81,9 +79,7 @@ function handleRegions()
             echo '<p>'.$plugin_info['comment'].'</p>';
             echo '</td><td>';
             $selected_plugins = $plugin_obj->get_areas_by_plugin($pluginName);
-
             $region_list = [];
-
             $isAdminPlugin = isset($plugin_info['is_admin_plugin']) && $plugin_info['is_admin_plugin'];
             $isCoursePlugin = isset($plugin_info['is_course_plugin']) && $plugin_info['is_course_plugin'];
 
@@ -97,6 +93,7 @@ function handleRegions()
                     $region_list['course_tool_plugin'] = 'course_tool_plugin';
                 }
             }
+
             echo Display::select(
                 'plugin_'.$pluginName.'[]',
                 $region_list,
@@ -166,39 +163,41 @@ function handlePlugins()
     foreach($my_plugin_list as $plugin_item) {
         $plugin_list[$plugin_item] = $plugin_item;
     }*/
-
+    $installed = '';
+    $notInstalled = '';
     foreach ($all_plugins as $pluginName) {
         $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
         if (file_exists($plugin_info_file)) {
             $plugin_info = array();
             require $plugin_info_file;
 
-            if (in_array($pluginName, $installed_plugins)) {
-                echo '<tr class="row_selected">';
-            } else {
-                echo '<tr>';
-            }
-            echo '<td>';
-            //Checkbox
-            if (in_array($pluginName, $installed_plugins)) {
-                echo '<input type="checkbox" name="plugin_'.$pluginName.'[]" checked="checked">';
+            $pluginRow = '';
 
-            } else {
-                echo '<input type="checkbox" name="plugin_'.$pluginName.'[]">';
-            }
-            echo '</td><td>';
-            echo '<h4>'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h4>';
-            echo '<p>'.$plugin_info['comment'].'</p>';
-            echo '<p>'.get_lang('Author').': '.$plugin_info['author'].'</p>';
-
-            echo '<div class="btn-group">';
             if (in_array($pluginName, $installed_plugins)) {
-                echo Display::url(
+                $pluginRow .= '<tr class="row_selected">';
+            } else {
+                $pluginRow .= '<tr>';
+            }
+            $pluginRow .= '<td>';
+            // Checkbox
+            if (in_array($pluginName, $installed_plugins)) {
+                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]" checked="checked">';
+            } else {
+                $pluginRow .= '<input type="checkbox" name="plugin_'.$pluginName.'[]">';
+            }
+            $pluginRow .= '</td><td>';
+            $pluginRow .= '<h4>'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h4>';
+            $pluginRow .= '<p>'.$plugin_info['comment'].'</p>';
+            $pluginRow .= '<p>'.get_lang('Author').': '.$plugin_info['author'].'</p>';
+
+            $pluginRow .= '<div class="btn-group">';
+            if (in_array($pluginName, $installed_plugins)) {
+                $pluginRow .= Display::url(
                     '<em class="fa fa-cogs"></em> '.get_lang('Configure'),
                     'configure_plugin.php?name='.$pluginName,
                     array('class' => 'btn btn-default')
                 );
-                echo Display::url(
+                $pluginRow .= Display::url(
                     '<em class="fa fa-th-large"></em> '.get_lang('Regions'),
                     'settings.php?category=Regions&name='.$pluginName,
                     array('class' => 'btn btn-default')
@@ -206,7 +205,7 @@ function handlePlugins()
             }
 
             if (file_exists(api_get_path(SYS_PLUGIN_PATH).$pluginName.'/readme.txt')) {
-                echo Display::url(
+                $pluginRow .= Display::url(
                     "<em class='fa fa-file-text-o'></em> readme.txt",
                     api_get_path(WEB_PLUGIN_PATH).$pluginName."/readme.txt",
                     [
@@ -220,7 +219,7 @@ function handlePlugins()
 
             $readmeFile = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/README.md';
             if (file_exists($readmeFile)) {
-                echo Display::url(
+                $pluginRow .= Display::url(
                     "<em class='fa fa-file-text-o'></em> README.md",
                     api_get_path(WEB_AJAX_PATH).'plugin.ajax.php?a=md_to_html&plugin='.$pluginName,
                     [
@@ -232,11 +231,19 @@ function handlePlugins()
                 );
             }
 
-            echo '</div>';
-            echo '</td></tr>';
-        }
+            $pluginRow .= '</div>';
+            $pluginRow .= '</td></tr>';
 
+            if (in_array($pluginName, $installed_plugins)) {
+                $installed .= $pluginRow;
+            } else {
+                $notInstalled .= $pluginRow;
+            }
+        }
     }
+
+    echo $installed;
+    echo $notInstalled;
     echo '</table>';
 
     echo '<div class="form-actions bottom_actions">';
@@ -660,10 +667,8 @@ function storeRegions()
 function storePlugins()
 {
     $appPlugin = new AppPlugin();
-
     // Get a list of all current 'Plugins' settings
     $plugin_list = $appPlugin->read_plugins_from_path();
-
     $installed_plugins = array();
 
     foreach ($plugin_list as $plugin) {

@@ -214,11 +214,11 @@ class Model
     /**
      * Updates the obj in the database. The $params['id'] must exist in order to update a record
      * @param array $params
-     *
+     * @param bool $showQuery
      * @return bool
      *
      */
-    public function update($params)
+    public function update($params, $showQuery = false)
     {
         $params = $this->clean_parameters($params);
 
@@ -244,7 +244,8 @@ class Model
                 $result = Database::update(
                     $this->table,
                     $params,
-                    array('id = ?' => $id)
+                    array('id = ?' => $id),
+                    $showQuery
                 );
                 if ($result) {
                     return true;

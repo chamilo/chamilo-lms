@@ -109,17 +109,35 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = '
 <script>
 $(function() {
-    '.Display::grid_js('group_users', $url, $columns, $column_model, $extra_params, array(), $action_links, true).'
+    '.Display::grid_js(
+        'group_users',
+        $url,
+        $columns,
+        $column_model,
+        $extra_params,
+        array(),
+        $action_links,
+        true
+    ).'
 });
 </script>';
 
 Display::display_header();
 
 echo '<div class="actions">';
-echo Display::url(Display::return_icon('user.png', get_lang('StudentsTracking'), array(), ICON_SIZE_MEDIUM), 'courseLog.php?'.api_get_cidreq(true, false));
+echo Display::url(
+    Display::return_icon('user.png', get_lang('StudentsTracking'), array(), ICON_SIZE_MEDIUM),
+    'courseLog.php?'.api_get_cidreq(true, false)
+);
 echo Display::url(Display::return_icon('group_na.png', get_lang('GroupReporting'), array(), ICON_SIZE_MEDIUM), '#');
-echo Display::url(Display::return_icon('course.png', get_lang('CourseTracking'), array(), ICON_SIZE_MEDIUM), 'course_log_tools.php?'.api_get_cidreq(true, false));
-echo Display::url(Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), ICON_SIZE_MEDIUM), 'course_log_resources.php?'.api_get_cidreq(true, false));
+echo Display::url(
+    Display::return_icon('course.png', get_lang('CourseTracking'), array(), ICON_SIZE_MEDIUM),
+    'course_log_tools.php?'.api_get_cidreq(true, false)
+);
+echo Display::url(
+    Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), ICON_SIZE_MEDIUM),
+    'course_log_resources.php?'.api_get_cidreq(true, false)
+);
 echo '</div>';
 
 echo Display::grid_html('group_users');

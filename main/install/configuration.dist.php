@@ -696,6 +696,11 @@ $_configuration['gradebook_badge_sidebar'] = [
 //$_configuration['allow_session_admin_read_careers'] = true;
 
 $_configuration['enable_add_file_link'] = true;
+// Send score in percentage in the exam result notification
+//$_configuration['send_notification_score_in_percentage'] = false;
+
+// Google translate key
+//$_configuration['translate_app_google_key'] = '';
 
 // ------ Custom DB changes
 // Add user activation by confirmation email

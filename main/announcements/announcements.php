@@ -22,11 +22,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script(true);
 api_protect_course_group(GroupManager::GROUP_TOOL_ANNOUNCEMENT);
 
-$ctok = Security::get_existing_token();
-$stok = Security::get_token();
+$token = Security::get_existing_token();
 
-$course_id = api_get_course_int_id();
-$_course = api_get_course_info_by_id($course_id);
+$courseId = api_get_course_int_id();
+$_course = api_get_course_info_by_id($courseId);
 $group_id = api_get_group_id();
 $sessionId = api_get_session_id();
 
@@ -76,7 +75,7 @@ if (!empty($group_id)) {
 
     if ($allowToEdit === false) {
         // Check if user is tutor group
-        $isTutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties, $course_id);
+        $isTutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties, $courseId);
         if ($isTutor) {
             $allowToEdit = true;
         }
@@ -113,14 +112,14 @@ switch ($action) {
                 $sortDirection = 'ASC';
             }
 
-            $announcementInfo = AnnouncementManager::get_by_id($course_id, $thisAnnouncementId);
+            $announcementInfo = AnnouncementManager::get_by_id($courseId, $thisAnnouncementId);
 
             $sql = "SELECT DISTINCT announcement.id, announcement.display_order
                     FROM $tbl_announcement announcement,
                     $tbl_item_property itemproperty
                     WHERE
-                        announcement.c_id =  $course_id AND
-                        itemproperty.c_id =  $course_id AND
+                        announcement.c_id =  $courseId AND
+                        itemproperty.c_id =  $courseId AND
                         itemproperty.ref = announcement.id AND
                         itemproperty.tool = '".TOOL_ANNOUNCEMENT."'  AND
                         itemproperty.visibility <> 2
@@ -134,10 +133,10 @@ switch ($action) {
                     $nextAnnouncementId = $announcementId;
                     $nextAnnouncementOrder = $announcementOrder;
                     $sql = "UPDATE $tbl_announcement SET display_order = '$nextAnnouncementOrder'
-                            WHERE c_id = $course_id AND id = $thisAnnouncementId";
+                            WHERE c_id = $courseId AND id = $thisAnnouncementId";
                     Database::query($sql);
                     $sql = "UPDATE $tbl_announcement  SET display_order = '$thisAnnouncementOrder'
-                            WHERE c_id = $course_id AND id =  $nextAnnouncementId";
+                            WHERE c_id = $courseId AND id =  $nextAnnouncementId";
 
                     Database::query($sql);
                     break;
@@ -275,7 +274,7 @@ switch ($action) {
         </script>';
 
         $count = AnnouncementManager::getAnnouncements(
-            $stok,
+            $token,
             $announcement_number,
             true
         );
@@ -466,7 +465,7 @@ switch ($action) {
             $announcement_to_modify = '';
         }
 
-        $announcementInfo = AnnouncementManager::get_by_id($course_id, $id);
+        $announcementInfo = AnnouncementManager::get_by_id($courseId, $id);
 
         if (isset($announcementInfo) && !empty($announcementInfo)) {
             $to = AnnouncementManager::load_edit_users('announcement', $id);
@@ -532,7 +531,7 @@ switch ($action) {
 
         $form->addElement('file', 'user_upload', get_lang('AddAnAttachment'));
         $form->addElement('textarea', 'file_comment', get_lang('FileComment'));
-        $form->addElement('hidden', 'sec_token', $stok);
+        $form->addElement('hidden', 'sec_token', $token);
 
         if (empty($sessionId)) {
             $form->addCheckBox('send_to_users_in_session', null, get_lang('SendToUsersInSessions'));
@@ -554,7 +553,7 @@ switch ($action) {
 
             if (isset($id) && $id) {
                 // there is an Id => the announcement already exists => update mode
-                if ($ctok == $_POST['sec_token']) {
+                if (Security::check_token('post')) {
                     $file_comment = $_POST['file_comment'];
                     $file = $_FILES['user_upload'];
 
@@ -590,7 +589,7 @@ switch ($action) {
                 }
             } else {
                 // Insert mode
-                if ($ctok == $_POST['sec_token']) {
+                if (Security::check_token('post')) {
                     $file = $_FILES['user_upload'];
                     $file_comment = $data['file_comment'];
 

@@ -2229,12 +2229,16 @@ class ImportCsv
                 );
 
                 if (empty($userId)) {
-                    if (empty($userInfo)) {
-                        $this->logger->addInfo("User does '".$row['External_user_id']."' not exists skip this entry.");
-                        continue;
-                    }
+                    $this->logger->addInfo("User does '".$row['External_user_id']."' not exists skip this entry.");
+                    continue;
                 }
+
                 $userInfo = api_get_user_entity($userId);
+
+                if (empty($userInfo)) {
+                    $this->logger->addInfo("Chamilo user does not found: #".$userId."' ");
+                    continue;
+                }
 
                 // Dates
                 $createdAt = $this->createDateTime($row['Added_On']);

@@ -113,7 +113,7 @@ class learnpathItem
                 $course_id = intval($course_id);
             }
             $sql = "SELECT * FROM $items_table
-                    WHERE c_id = $course_id AND id = $id";
+                    WHERE iid = $id";
             $res = Database::query($sql);
             if (Database::num_rows($res) < 1) {
                 $this->error = 'Could not find given learnpath item in learnpath_item table';
@@ -151,7 +151,7 @@ class learnpathItem
 
         // Load children list
         if (!empty($this->lp_id)) {
-            $sql = "SELECT id FROM $items_table
+            $sql = "SELECT iid FROM $items_table
                     WHERE
                         c_id = $course_id AND
                         lp_id = ".$this->lp_id." AND
@@ -159,7 +159,7 @@ class learnpathItem
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 while ($row = Database::fetch_assoc($res)) {
-                    $this->children[] = $row['id'];
+                    $this->children[] = $row['iid'];
                 }
             }
 
@@ -317,14 +317,14 @@ class learnpathItem
         Database::query($sql);
 
         $sql = "SELECT * FROM $lp_item
-                WHERE c_id = $course_id AND id = ".$this->db_id;
+                WHERE iid = ".$this->db_id;
         $res_sel = Database::query($sql);
         if (Database::num_rows($res_sel) < 1) {
             return false;
         }
 
         $sql = "DELETE FROM $lp_item
-                WHERE c_id = $course_id AND id = ".$this->db_id;
+                WHERE iid = ".$this->db_id;
         Database::query($sql);
         if (self::DEBUG > 0) {
             error_log('Deleting from lp_item: '.$sql);
@@ -1738,9 +1738,7 @@ class learnpathItem
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $course_id = api_get_course_int_id();
         $sql = "SELECT * FROM $lp_item
-                WHERE
-                    c_id = $course_id AND
-                    id='".intval($this->db_id)."'";
+                WHERE iid = ".intval($this->db_id);
         $res = Database::query($sql);
         $row = Database::fetch_array($res);
         return $row['terms'];
@@ -3269,9 +3267,7 @@ class learnpathItem
         $terms = Database::escape_string(api_htmlentities($new_terms_string, ENT_QUOTES, $charset));
         $sql = "UPDATE $lp_item
                 SET terms = '$terms'
-                WHERE
-                    c_id = $course_id AND
-                    id=".$this->get_id();
+                WHERE iid=".$this->get_id();
         Database::query($sql);
         // Save it to search engine.
         if (api_get_setting('search_enabled') == 'true') {
@@ -4186,9 +4182,7 @@ class learnpathItem
             $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
             $sql = "UPDATE $tbl_lp_item SET
                         audio = '".Database::escape_string($file_path)."'
-                    WHERE
-                        c_id = {$course_info['real_id']} AND
-                        id = '".intval($this->db_id)."'";
+                    WHERE iid = ".intval($this->db_id);
             Database::query($sql);
         }
 
@@ -4214,9 +4208,7 @@ class learnpathItem
             $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
             $sql = "UPDATE $tbl_lp_item SET
                         audio = '".Database::escape_string($file_path)."'
-                    WHERE
-                        c_id = {$course_info['real_id']} AND
-                        id = ".intval($this->db_id);
+                    WHERE iid = ".intval($this->db_id);
             Database::query($sql);
         }
         return $file_path;
@@ -4237,7 +4229,7 @@ class learnpathItem
         }
         $sql = "UPDATE $tbl_lp_item SET
                 audio = ''
-                WHERE c_id = $course_id AND id IN (".$this->db_id.")";
+                WHERE iid IN (".$this->db_id.")";
         Database::query($sql);
     }
 

@@ -19,8 +19,6 @@ api_protect_course_script();
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-$tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
 $isStudentView = (int) $_REQUEST['isStudentView'];
 $learnpath_id = (int) $_REQUEST['lp_id'];
@@ -47,7 +45,7 @@ if ($learnpath_id == 0) {
     $learnpath_id = $row['iid'];
 }
 
-$sql_query = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND iid = $learnpath_id";
+$sql_query = "SELECT * FROM $tbl_lp WHERE iid = $learnpath_id";
 
 $result = Database::query($sql_query);
 $therow = Database::fetch_array($result);

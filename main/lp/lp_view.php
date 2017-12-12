@@ -293,7 +293,7 @@ if (!empty($_REQUEST['exeId']) &&
 
         $sql = "UPDATE $TBL_LP_ITEM SET
                     max_score = '$max_score'
-                WHERE c_id = $course_id AND id = '".$safe_item_id."'";
+                WHERE iid = $safe_item_id";
         Database::query($sql);
 
         $sql = "SELECT id FROM $TBL_LP_ITEM_VIEW

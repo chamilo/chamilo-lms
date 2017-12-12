@@ -466,7 +466,7 @@ class scorm extends learnpath
 
                     // Now update previous item to change next_item_id.
                     $upd = "UPDATE $new_lp_item SET next_item_id = $item_id
-                            WHERE c_id = $courseId AND id = $previous";
+                            WHERE iid = $previous";
                     Database::query($upd);
                     // Update previous item id.
                     $previous = $item_id;

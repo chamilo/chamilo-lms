@@ -2261,6 +2261,7 @@ class ImportCsv
 
                 if (empty($post)) {
                     $post = new CarePost();
+                    $this->logger->addInfo("New post will be created no match for externalCareId = ".$row['External_care_id']);
                 }
 
                 $post
@@ -2278,6 +2279,9 @@ class ImportCsv
                 ;
                 $em->persist($post);
                 $em->flush();
+
+                $this->logger->addInfo("Post id saved #".$post->getId());
+
 
                 if (($counter % $batchSize) === 0) {
                     $em->flush();

@@ -520,7 +520,7 @@ class learnpathItem
                             FROM ' . $table_doc.'
                             WHERE
                                 c_id = ' . $course_id.' AND
-                                id = ' . $path;
+                                iid = ' . $path;
                     $res = Database::query($sql);
                     $row = Database::fetch_array($res);
                     $real_path = 'document'.$row['path'];
@@ -900,7 +900,6 @@ class learnpathItem
      */
     public function get_prevent_reinit()
     {
-        $course_id = api_get_course_int_id();
         if (self::DEBUG > 2) {
             error_log('learnpathItem::get_prevent_reinit()', 0);
         }
@@ -909,7 +908,7 @@ class learnpathItem
                 $table = Database::get_course_table(TABLE_LP_MAIN);
                 $sql = "SELECT prevent_reinit
                     FROM $table
-                    WHERE c_id = $course_id AND id = ".$this->lp_id;
+                    WHERE iid = ".$this->lp_id;
                 $res = Database::query($sql);
                 if (Database::num_rows($res) < 1) {
                     $this->error = "Could not find parent learnpath in lp table";
@@ -950,13 +949,12 @@ class learnpathItem
         if (self::DEBUG > 2) {
             error_log('learnpathItem::get_seriousgame_mode()', 0);
         }
-        $course_id = api_get_course_int_id();
         if (!isset($this->seriousgame_mode)) {
             if (!empty($this->lp_id)) {
                 $table = Database::get_course_table(TABLE_LP_MAIN);
                 $sql = "SELECT seriousgame_mode
                         FROM $table
-                        WHERE c_id = $course_id AND id = ".$this->lp_id;
+                        WHERE iid = ".$this->lp_id;
                 $res = Database::query($sql);
                 if (Database::num_rows($res) < 1) {
                     $this->error = "Could not find parent learnpath in learnpath table";
@@ -3506,8 +3504,7 @@ class learnpathItem
 
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = intval($this->lp_id);
-        $sql = "SELECT * FROM $lp_table
-                WHERE id = $lp_id AND c_id = $course_id";
+        $sql = "SELECT * FROM $lp_table WHERE iid = $lp_id";
         $res = Database::query($sql);
         $accumulateScormTime = 'false';
         if (Database::num_rows($res) > 0) {

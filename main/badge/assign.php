@@ -204,8 +204,14 @@ $form->addHidden('sub_skill_list', $subSkillListToString);
 $form->addHidden('user', $user->getId());
 $form->addHidden('id', $skillId);
 $form->addRule('skill', get_lang('ThisFieldIsRequired'), 'required');
-$form->addSelect('acquired_level', get_lang('AcquiredLevel'), $acquiredLevel);
-//$form->addRule('acquired_level', get_lang('ThisFieldIsRequired'), 'required');
+
+$showLevels = api_get_configuration_value('hide_skill_levels') === false;
+
+if ($showLevels) {
+    $form->addSelect('acquired_level', get_lang('AcquiredLevel'), $acquiredLevel);
+    //$form->addRule('acquired_level', get_lang('ThisFieldIsRequired'), 'required');
+}
+
 $form->addTextarea('argumentation', get_lang('Argumentation'), ['rows' => 6]);
 $form->addRule('argumentation', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule(
@@ -260,8 +266,12 @@ if ($form->validate()) {
     $skillUser = new SkillRelUser();
     $skillUser->setUser($user);
     $skillUser->setSkill($skill);
-    $level = $skillLevelRepo->find(intval($values['acquired_level']));
-    $skillUser->setAcquiredLevel($level);
+
+    if ($showLevels) {
+        $level = $skillLevelRepo->find(intval($values['acquired_level']));
+        $skillUser->setAcquiredLevel($level);
+    }
+
     $skillUser->setArgumentation($values['argumentation']);
     $skillUser->setArgumentationAuthorId(api_get_user_id());
     $skillUser->setAcquiredSkillAt(new DateTime());

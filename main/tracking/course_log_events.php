@@ -128,19 +128,8 @@ $(function() {
 Display::display_header();
 
 echo '<div class="actions">';
-echo Display::url(
-    Display::return_icon('user.png', get_lang('StudentsTracking'), array(), ICON_SIZE_MEDIUM),
-    'courseLog.php?'.api_get_cidreq(true, false)
-);
-echo Display::url(Display::return_icon('group.png', get_lang('GroupReporting'), array(), ICON_SIZE_MEDIUM), '#');
-echo Display::url(
-    Display::return_icon('course.png', get_lang('CourseTracking'), array(), ICON_SIZE_MEDIUM),
-    'course_log_tools.php?'.api_get_cidreq(true, false)
-);
-echo Display::url(
-    Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), ICON_SIZE_MEDIUM),
-    'course_log_resources.php?'.api_get_cidreq(true, false)
-);
+echo TrackingCourseLog::actionsLeft('logs', api_get_session_id());
+
 echo '</div>';
 
 $form = new FormValidator(

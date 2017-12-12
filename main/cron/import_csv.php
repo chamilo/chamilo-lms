@@ -2283,6 +2283,7 @@ class ImportCsv
                     ->setUser($userInfo)
                 ;
                 $em->persist($post);
+                $em->flush();
 
                 $this->logger->addInfo("Post id saved #".$post->getId());
 

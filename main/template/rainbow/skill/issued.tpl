@@ -39,10 +39,10 @@
             </p>
             <div class='col-md-12 text-center'>
                 <h5><b> {{ 'ShareWithYourFriends' | get_lang }} </b></h5>
-                <a href='http://www.facebook.com/sharer.php?u={{ _p.web }}badge/{{ issue_info.id }}' target='_new'>
+                <a href="http://www.facebook.com/sharer.php?u={{ _p.web }}badge/{{ issue_info.id }}" target="_new">
                     <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
                 </a>
-                <a href='https://twitter.com/home?status={{ 'IHaveObtainedSkillXOnY' | get_lang |format(skill_info.name, _s.site_name)}} - {{ _p.web }}badge/{{ issue_info.id }}' target='_new'>
+                <a href="https://twitter.com/home?status={{ 'IHaveObtainedSkillXOnY' | get_lang |format(skill_info.name, _s.site_name)}} - {{ _p.web }}badge/{{ issue_info.id }}" target="_new">
                     <em class='fa fa-twitter-square fa-3x text-light' aria-hidden='true'></em>
                 </a>
             </div>
@@ -67,23 +67,29 @@
                 {% endif %}
             </li>
         </ul>
+
+        {% if show_level %}
         <h4>{{ 'AcquiredLevel'|get_lang }}</h4>
         <ul class="fa-ul">
             <li>
                 <em class="fa-li fa fa-check-circle-o fa-fw"></em> {{ issue_info.acquired_level }}
             </li>
         </ul>
+        {% endif %}
 
         {% if allow_comment %}
-            <hr>
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <em class="fa fa-check-circle-o fa-fw" aria-hidden="true"></em> {{ 'ChangeAcquiredLevel'|get_lang }}
+            {% if show_level %}
+                <hr>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <em class="fa fa-check-circle-o fa-fw" aria-hidden="true"></em>
+                        {{ 'ChangeAcquiredLevel'|get_lang }}
+                    </div>
+                    <div class="panel-body">
+                        {{ acquired_level_form }}
+                    </div>
                 </div>
-                <div class="panel-body">
-                    {{ acquired_level_form }}
-                </div>
-            </div>
+            {% endif %}
             <hr>
             <div class="panel panel-info">
                 <div class="panel-heading">

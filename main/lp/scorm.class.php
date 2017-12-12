@@ -782,7 +782,6 @@ class scorm extends learnpath
      */
     public function set_proximity($proxy = '', $courseId = null)
     {
-        $courseId = empty($courseId) ? api_get_course_int_id() : intval($courseId);
         if ($this->debug > 0) {
             error_log('In scorm::set_proximity('.$proxy.') method');
         }
@@ -790,7 +789,7 @@ class scorm extends learnpath
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET content_local = '$proxy'
-                    WHERE c_id = ".$courseId." AND id = ".$lp;
+                    WHERE iid = $lp";
             $res = Database::query($sql);
             return $res;
         } else {
@@ -805,7 +804,6 @@ class scorm extends learnpath
      */
     public function set_theme($theme = '')
     {
-        $courseId = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('In scorm::set_theme('.$theme.') method');
         }
@@ -813,7 +811,7 @@ class scorm extends learnpath
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET theme = '$theme' 
-                    WHERE c_id = ".$courseId." AND id = ".$lp;
+                    WHERE iid = $lp";
             $res = Database::query($sql);
             return $res;
         } else {
@@ -824,11 +822,10 @@ class scorm extends learnpath
     /**
      * Sets the image setting in the database
      * @param string preview_image setting
-     * @param bool
+     * @return bool
      */
     public function set_preview_image($preview_image = '')
     {
-        $courseId = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('In scorm::set_theme('.$preview_image.') method', 0);
         }
@@ -836,7 +833,7 @@ class scorm extends learnpath
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' 
-                    WHERE c_id = ".$courseId." AND id = ".$lp;
+                    WHERE iid = $lp";
             $res = Database::query($sql);
             return $res;
         } else {
@@ -847,11 +844,10 @@ class scorm extends learnpath
     /**
      * Sets the author  setting in the database
      * @param string $author
-     * @param bool
+     * @return bool
      */
     public function set_author($author = '')
     {
-        $courseId = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('In scorm::set_author('.$author.') method', 0);
         }
@@ -859,7 +855,7 @@ class scorm extends learnpath
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET author = '$author' 
-                    WHERE c_id = ".$courseId." AND id = ".$lp;
+                    WHERE iid = ".$lp;
             $res = Database::query($sql);
             return $res;
         } else {
@@ -870,18 +866,17 @@ class scorm extends learnpath
     /**
      * Sets the content maker setting in the database
      * @param string    Proximity setting
+     * @return bool
      */
     public function set_maker($maker = '', $courseId = null)
     {
-        $courseId = empty($courseId) ? api_get_course_int_id() : intval($courseId);
         if ($this->debug > 0) {
             error_log('In scorm::set_maker method('.$maker.')', 0);
         }
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET content_maker = '$maker'
-                    WHERE c_id = ".$courseId." AND id = ".$lp;
+            $sql = "UPDATE $tbl_lp SET content_maker = '$maker' WHERE iid = $lp";
             $res = Database::query($sql);
             return $res;
         } else {
@@ -893,6 +888,7 @@ class scorm extends learnpath
      * Exports the current SCORM object's files as a zip.
      * Excerpts taken from learnpath_functions.inc.php::exportpath()
      * @param integer    Learnpath ID (optional, taken from object context if not defined)
+     * @return bool
      */
     public function export_zip($lp_id = null)
     {
@@ -914,10 +910,9 @@ class scorm extends learnpath
         //zip everything that is in the corresponding scorm dir
         //write the zip file somewhere (might be too big to return)
 
-        $courseId = api_get_course_int_id();
         $_course = api_get_course_info();
         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-        $sql = "SELECT * FROM $tbl_lp WHERE c_id = ".$courseId." AND id=".$lp_id;
+        $sql = "SELECT * FROM $tbl_lp WHERE iid = $lp_id";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $LPname = $row['path'];
@@ -1029,11 +1024,10 @@ class scorm extends learnpath
         }
 
         $this->cc = $courseInfo['code'];
-        $courseId = $courseInfo['real_id'];
 
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = intval($lp_id);
-        $sql = "SELECT * FROM $lp_table WHERE c_id = ".$courseId." AND id = '$lp_id'";
+        $sql = "SELECT * FROM $lp_table WHERE iid = $lp_id";
         if ($this->debug > 2) {
             error_log('New LP - scorm::reimport_manifest() '.__LINE__.' - Querying lp: '.$sql);
         }

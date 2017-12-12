@@ -3776,7 +3776,7 @@ class learnpath
         $course_id = api_get_course_int_id();
         $sessionId = api_get_session_id();
 
-        $sql = "SELECT id, view_count FROM $lp_view_table
+        $sql = "SELECT iid, view_count FROM $lp_view_table
         		WHERE
         		    c_id = $course_id AND
         		    lp_id = " . $this->get_id()." AND
@@ -3787,7 +3787,7 @@ class learnpath
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
-            $this->lp_view_id = $row['id'];
+            $this->lp_view_id = $row['iid'];
         } elseif (!api_is_invitee()) {
             // There is no database record, create one.
             $sql = "INSERT INTO $lp_view_table (c_id, lp_id, user_id, view_count, session_id) VALUES

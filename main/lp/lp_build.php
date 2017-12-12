@@ -39,15 +39,15 @@ $course_id = api_get_course_int_id();
 
 if ($learnpath_id == 0) {
     $is_new = true;
-    $sql = "SELECT id FROM $tbl_lp
+    $sql = "SELECT iid FROM $tbl_lp
             WHERE c_id = $course_id 
             ORDER BY id DESC LIMIT 0, 1";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
-    $learnpath_id = $row['id'];
+    $learnpath_id = $row['iid'];
 }
 
-$sql_query = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $learnpath_id";
+$sql_query = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND iid = $learnpath_id";
 
 $result = Database::query($sql_query);
 $therow = Database::fetch_array($result);

@@ -2523,7 +2523,7 @@ class learnpathItem
                                                 TABLE_LP_VIEW
                                             );
 
-                                            $sql = 'SELECT id FROM '.$lp_view.'
+                                            $sql = 'SELECT iid FROM '.$lp_view.'
                                                     WHERE
                                                         c_id = ' . $course_id.' AND
                                                         user_id = ' . $user_id.'  AND

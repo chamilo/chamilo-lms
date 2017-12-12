@@ -67,23 +67,29 @@
                 {% endif %}
             </li>
         </ul>
+
+        {% if show_level %}
         <h4>{{ 'AcquiredLevel'|get_lang }}</h4>
         <ul class="fa-ul">
             <li>
                 <em class="fa-li fa fa-check-circle-o fa-fw"></em> {{ issue_info.acquired_level }}
             </li>
         </ul>
+        {% endif %}
 
         {% if allow_comment %}
-            <hr>
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <em class="fa fa-check-circle-o fa-fw" aria-hidden="true"></em> {{ 'ChangeAcquiredLevel'|get_lang }}
+            {% if show_level %}
+                <hr>
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <em class="fa fa-check-circle-o fa-fw" aria-hidden="true"></em>
+                        {{ 'ChangeAcquiredLevel'|get_lang }}
+                    </div>
+                    <div class="panel-body">
+                        {{ acquired_level_form }}
+                    </div>
                 </div>
-                <div class="panel-body">
-                    {{ acquired_level_form }}
-                </div>
-            </div>
+            {% endif %}
             <hr>
             <div class="panel panel-info">
                 <div class="panel-heading">

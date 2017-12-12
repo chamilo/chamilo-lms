@@ -698,6 +698,9 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Send score in percentage in the exam result notification
 //$_configuration['send_notification_score_in_percentage'] = false;
 
+// Google translate key
+//$_configuration['translate_app_google_key'] = '';
+
 // ------ Custom DB changes
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

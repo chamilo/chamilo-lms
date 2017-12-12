@@ -702,7 +702,10 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Send score in percentage in the exam result notification
 //$_configuration['send_notification_score_in_percentage'] = false;
 
-// Google translate key
+// Google translate key (for the text2speech feature in the documents tool)
+// To get it, go to https://console.cloud.google.com/apis/library, create or
+// use your own project, then search for "speech" and follow the instructions
+// This service has a cost above 60 minutes of use.
 //$_configuration['translate_app_google_key'] = '';
 
 

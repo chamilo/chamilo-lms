@@ -1948,3 +1948,8 @@ blockquote p {
 .future_session a {
     color: #666 !important;
 }
+
+.course_section_title {
+    color: #162A83;
+    font-weight: bold;
+}

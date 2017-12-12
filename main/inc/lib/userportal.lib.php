@@ -1396,7 +1396,7 @@ class IndexManager
                 }
                 $this->tpl->assign('courses', $specialCourses);
                 // Ofaj
-                $specialCourseList = '<h4>'.get_lang('Mytools').'</h4><hr />';
+                $specialCourseList = '<h4 class="course_section_title">'.get_lang('Mytools').'</h4><hr />';
                 $specialCourseList .= $this->tpl->fetch(
                     $this->tpl->get_template($coursesWithoutCategoryTemplate)
                 );
@@ -1429,7 +1429,7 @@ class IndexManager
 
                 $listCourse = $this->tpl->fetch($this->tpl->get_template($coursesWithCategoryTemplate));
                 // ofaj
-                $listCourse .= '<h4>'.get_lang('MyCourses').'</h4><hr />';
+                $listCourse .= '<h4 class="course_section_title">'.get_lang('MyCourses').'</h4><hr />';
                 $listCourse .= $this->tpl->fetch($this->tpl->get_template($coursesWithoutCategoryTemplate));
             }
 
@@ -1759,6 +1759,13 @@ class IndexManager
                                 // Category
                                 if ($count > 0) {
                                     $session_box = Display::get_session_title_box($session_id);
+                                    // ofaj
+                                    $extraFieldValue = new ExtraFieldValue('session');
+                                    $imageField = $extraFieldValue->get_values_by_handler_and_field_variable(
+                                        $session_id,
+                                        'image'
+                                    );
+
                                     $sessionParams[0]['id'] = $session_id;
                                     $sessionParams[0]['date'] = $session_box['dates'];
                                     $sessionParams[0]['duration'] = isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
@@ -1769,8 +1776,10 @@ class IndexManager
                                     $sessionParams[0]['courses'] = $html_courses_session;
                                     $sessionParams[0]['show_simple_session_info'] = $showSimpleSessionInfo;
                                     $sessionParams[0]['coach_name'] = !empty($session_box['coach']) ? $session_box['coach'] : null;
+                                    // ofaj
                                     $sessionParams[0]['is_old'] = $markAsOld;
                                     $sessionParams[0]['is_future'] = $markAsFuture;
+                                    $sessionParams[0]['image'] = isset($imageField['value']) ? $imageField['value'] : null;
 
                                     $actions = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session_id;
                                     // Ofaj fix see BT#12325 1 session has 1 course
@@ -1872,7 +1881,7 @@ class IndexManager
                     // ofaj
                     $sessions_with_no_category = '';
                     if (!empty($listSession)) {
-                        $sessions_with_no_category .= '<h4>'. get_lang('MyCourses').'</h4><hr />';
+                        $sessions_with_no_category .= '<h4 class="course_section_title">'. get_lang('MyCourses').'</h4><hr />';
                     }
                     $sessions_with_no_category .= $this->tpl->fetch(
                         $this->tpl->get_template('/user_portal/grid_session.tpl')

@@ -48,6 +48,8 @@ if (!$user || !$skill) {
 
 Skill::isAllowed($user->getId());
 
+$showLevels = api_get_configuration_value('hide_skill_levels') === false;
+
 $userInfo = [
     'id' => $user->getId(),
     'complete_name' => $user->getCompleteName()
@@ -168,23 +170,26 @@ if ($profile) {
     }
 }
 
-$formAcquiredLevel = new FormValidator('acquired_level');
-$formAcquiredLevel->addSelect('acquired_level', get_lang('AcquiredLevel'), $acquiredLevel);
-$formAcquiredLevel->addHidden('user', $skillIssue->getUser()->getId());
-$formAcquiredLevel->addHidden('issue', $skillIssue->getId());
-$formAcquiredLevel->addButtonSend(get_lang('Save'));
+if ($showLevels) {
+    $formAcquiredLevel = new FormValidator('acquired_level');
+    $formAcquiredLevel->addSelect('acquired_level', get_lang('AcquiredLevel'), $acquiredLevel);
+    $formAcquiredLevel->addHidden('user', $skillIssue->getUser()->getId());
+    $formAcquiredLevel->addHidden('issue', $skillIssue->getId());
+    $formAcquiredLevel->addButtonSave(get_lang('Save'));
 
-if ($formAcquiredLevel->validate() && $allowComment) {
-    $values = $formAcquiredLevel->exportValues();
+    if ($formAcquiredLevel->validate() && $allowComment) {
+        $values = $formAcquiredLevel->exportValues();
 
-    $level = $skillLevelRepo->find(intval($values['acquired_level']));
-    $skillIssue->setAcquiredLevel($level);
+        $level = $skillLevelRepo->find(intval($values['acquired_level']));
+        $skillIssue->setAcquiredLevel($level);
 
-    $entityManager->persist($skillIssue);
-    $entityManager->flush();
+        $entityManager->persist($skillIssue);
+        $entityManager->flush();
+        Display::addFlash(Display::return_message(get_lang('Saved')));
 
-    header("Location: ".$skillIssue->getIssueUrl());
-    exit;
+        header("Location: ".$skillIssue->getIssueUrl());
+        exit;
+    }
 }
 
 $form = new FormValidator('comment');
@@ -273,9 +278,12 @@ $template->assign('issue_info', $skillIssueInfo);
 $template->assign('allow_comment', $allowComment);
 $template->assign('allow_download_export', $allowDownloadExport);
 $template->assign('comment_form', $form->returnForm());
-$template->assign('acquired_level_form', $formAcquiredLevel->returnForm());
+if ($showLevels) {
+    $template->assign('acquired_level_form', $formAcquiredLevel->returnForm());
+}
 $template->assign('badge_error', $badgeInfoError);
 $template->assign('personal_badge', $personalBadge);
+$template->assign('show_level', $showLevels);
 
 $content = $template->fetch(
     $template->get_template('skill/issued.tpl')

@@ -79,7 +79,7 @@
                     {{ row.date }}
                     </span>
                 </div>
-                <div class="sessions-items"> 
+                <div class="sessions-items">
                     {% for item in row.courses %}
                     <div class="courses">
                         <div class="row">

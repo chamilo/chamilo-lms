@@ -828,7 +828,7 @@ $userGroups = $userGroupManager->getNameListByUser(
                 $extraFieldValue = new ExtraFieldValue('user');
                 $value = $extraFieldValue->get_values_by_handler_and_field_variable($student_id, 'legal_accept');
                 $icon = Display::return_icon('accept_na.png');
-                if (isset($value['value'])) {
+                if (isset($value['value']) && !empty($value['value'])) {
                     list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
                     $icon = Display::return_icon('accept.png').' '.api_get_local_time($legalTime);
                     $icon .= ' '.Display::url(

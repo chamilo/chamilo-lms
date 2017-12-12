@@ -689,6 +689,10 @@ $_configuration['gradebook_badge_sidebar'] = [
         3 => 'Dimension',
     ]
 ];*/
+
+// Hide skill levels options
+//$_configuration['hide_skill_levels'] = false;
+
 // Hide the session list in Reporting tool. Useful when a course has too many sessions.
 //$_configuration['hide_reporting_session_list'] = false;
 
@@ -700,6 +704,7 @@ $_configuration['gradebook_badge_sidebar'] = [
 
 // Google translate key
 //$_configuration['translate_app_google_key'] = '';
+
 
 // ------ Custom DB changes
 // Add user activation by confirmation email

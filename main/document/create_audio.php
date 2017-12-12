@@ -141,9 +141,14 @@ $service = isset($_GET['service']) ? $_GET['service'] : 'pediaphon';
 Display:: display_header($nameTools, 'Doc');
 
 echo '<div class="actions">';
-echo '<a href="document.php?id='.$document_id.'">'.
-    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '',
-        ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="document.php?id='.$document_id.'">';
+echo Display::return_icon(
+    'back.png',
+    get_lang('BackTo').' '.get_lang('DocumentsOverview'),
+    '',
+    ICON_SIZE_MEDIUM
+);
+echo '</a>';
 
 echo '<a href="create_audio.php?'.api_get_cidreq().'&id='.$document_id.'&service=pediaphon">'.
     Display::return_icon('pediaphon.png', get_lang('Pediaphon'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -201,9 +206,9 @@ echo '</div>';
 <?php
 
 if (isset($_POST['text2voice_mode']) && $_POST['text2voice_mode'] == 'google') {
-    downloadMP3_google($filepath, $dir);
+    downloadAudioGoogle($filepath, $dir);
 } elseif (isset($_POST['text2voice_mode']) && $_POST['text2voice_mode'] == 'pediaphon') {
-    downloadMP3_pediaphon($filepath, $dir);
+    downloadAudioPediaphon($filepath, $dir);
 }
 
 $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
@@ -301,7 +306,7 @@ if ($service == 'pediaphon') {
     <?php
 }//end pediaphon
 
-Display:: display_footer();
+Display::display_footer();
 
 /**
  * This function save a post into a file mp3 from google services
@@ -311,7 +316,7 @@ Display:: display_footer();
  * @author Juan Carlos Raña Trabado <herodoto@telefonica.net>
  * @version january 2011, chamilo 1.8.8
  */
-function downloadMP3_google($filepath, $dir)
+function downloadAudioGoogle($filepath, $dir)
 {
     $location = 'create_audio.php?'.api_get_cidreq().'&id='.intval($_POST['id']).'&service=google';
 
@@ -404,7 +409,6 @@ function downloadMP3_google($filepath, $dir)
         $current_session_id
     );
     echo Display::return_message(get_lang('DocumentCreated'), 'confirm');
-    //return to location
     echo '<script>window.location.href="'.$location.'"</script>';
 }
 
@@ -416,7 +420,7 @@ function downloadMP3_google($filepath, $dir)
  * @author Juan Carlos Raña Trabado <herodoto@telefonica.net>
  * @version january 2011, chamilo 1.8.8
  */
-function downloadMP3_pediaphon($filepath, $dir)
+function downloadAudioPediaphon($filepath, $dir)
 {
     $location = 'create_audio.php?'.api_get_cidreq().'&id='.intval($_POST['id']).'&service=pediaphon';
     //security
@@ -460,8 +464,7 @@ function downloadMP3_pediaphon($filepath, $dir)
     $documentPath = $filepath.'/'.$audio_filename;
     $clean_text = api_replace_dangerous_char($clean_text);
 
-    //adding the file
-
+    // Adding the file
     if ($clean_lang == 'de') {
         $url_pediaphon = 'http://www.pediaphon.org/~bischoff/radiopedia/sprich_multivoice.cgi';
         $find_t2v = '/http\:\/\/www\.pediaphon\.org\/\~bischoff\/radiopedia\/mp3\/(.*)\.mp3\"/';

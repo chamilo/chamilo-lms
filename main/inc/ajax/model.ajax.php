@@ -124,7 +124,8 @@ $searchOperator = isset($_REQUEST['searchOper']) ? $_REQUEST['searchOper'] : fal
 $searchString = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] : false;
 $search = isset($_REQUEST['_search']) ? $_REQUEST['_search'] : false;
 $forceSearch = isset($_REQUEST['_force_search']) ? $_REQUEST['_force_search'] : false;
-$extra_fields = array();
+$extra_fields = [];
+$overwriteColumnHeaderExport = [];
 
 if (!empty($searchString)) {
     $search = 'true';
@@ -1230,10 +1231,15 @@ switch ($action) {
             'exe_date',
             'score'
         );
+
         $categoryList = TestCategory::getListOfCategoriesIDForTest($exerciseId, $courseId);
         if (!empty($categoryList)) {
             foreach ($categoryList as $categoryInfo) {
-                $columns[] = 'category_'.$categoryInfo['id'];
+                $label = 'category_'.$categoryInfo['id'];
+                $columns[] = $label;
+                if ($operation == 'excel') {
+                    $overwriteColumnHeaderExport[$label] = $categoryInfo['title'];
+                }
             }
         }
 
@@ -2110,16 +2116,22 @@ if (in_array($action, $allowed_actions)) {
             $column_names = $columns;
         }
 
-        //Headers
+        // Headers
         foreach ($column_names as $col) {
+            // Ovewrite titles
+            if (isset($overwriteColumnHeaderExport[$col])) {
+                $col = $overwriteColumnHeaderExport[$col];
+            }
             $array[0][] = $col;
         }
+
         foreach ($result as $row) {
             foreach ($columns as $col) {
                 $array[$j][] = strip_tags($row[$col]);
             }
             $j++;
         }
+
         $fileName = !empty($action) ? $action : 'company_report';
         if (!empty($exportFilename)) {
             $fileName = $exportFilename;

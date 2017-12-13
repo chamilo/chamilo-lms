@@ -7953,7 +7953,7 @@ $SpecificDate = "Date spécifique d'envoi";
 $BaseDate = "Envoi sur base des dates de début/fin de la session";
 $AfterOrBefore = "Avant ou après";
 $Before = "Avant le";
-$ScheduleAnnouncementDescription = "Ce formulair permet de programmer l'envoi automatique d'annonces aux étudiants qui réalisent le cours dans une session. Il existe deux types d'annonces programmées: l'envoi à une date spécifique: dans ce cas, on sélectionne un jour en particulier pour procéder à l'envoi du mail; et l'envoi sur base des dates de début ou de fin de la session: dans ce cas, il faut indiquer le nombre de jours de différence avec la date de début ou de fin, auquel l'e-mail doit être envoyé. Par exemple: 3 jours avant la fin de la session.";
+$ScheduleAnnouncementDescription = "Ce formulaire permet de programmer l'envoi automatique d'annonces aux étudiants qui réalisent le cours dans une session. Il existe deux types d'annonces programmées: l'envoi à une date spécifique: dans ce cas, on sélectionne un jour en particulier pour procéder à l'envoi du mail; et l'envoi sur base des dates de début ou de fin de la session: dans ce cas, il faut indiquer le nombre de jours de différence avec la date de début ou de fin, auquel l'e-mail doit être envoyé. Par exemple: 3 jours avant la fin de la session.";
 $MandatorySurveyNoAnswered = "Une enquête obligatoire est en attente de votre réponse. Pour entrer dans le cours, il est nécessaire de la compléter d'abord.";
 $ShowPreviousButton = "Montrer le bouton 'Précédent'";
 $AllTickets = "Tous les tickets";
@@ -8031,4 +8031,5 @@ $GoogleTranslateApiReturnedEmptyAnswer = "L'API de Google Translate utilisée po
 $LinkMeToStudent = "Me lier à l'apprenant";
 $LinkMeToStudentComment = "Sélectionnez l'apprenant auquel vous souhaitez être lié afin que les administrateurs puissent réviser et approuver votre requête. Merci de bien vouloir suivre les procédures administratives obligatoires avant votre sollicitude, afin que l'administrateur puisse accepter votre requête en toute légalité.";
 $RequestLinkToStudent = "Demander le lien avec cet apprenant";
+$SendManuallyPendingAnnouncements = "Envoyer manuellement les annonces en attente";
 ?>

@@ -8118,4 +8118,5 @@ $GoogleTranslateApiReturnedEmptyAnswer = "El API de Google Translate usado en es
 $LinkMeToStudent = "Vincularme al estudiante";
 $LinkMeToStudentComment = "Seleccione el estudiante con el cual desee solicitar su vinculación para que los administradores puedan revisar y aprobar su solicitud. Por favor siga el procedimiento administrativo necesario antes de solicitar su vinculación, para que los administradores tengan toda la información necesaria para aprobar su solicitud en toda legalidad.";
 $RequestLinkToStudent = "Vincularme con este estudiante";
+$SendManuallyPendingAnnouncements = "Enviar manualmente los anuncios pendientes";
 ?>

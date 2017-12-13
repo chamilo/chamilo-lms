@@ -8,7 +8,10 @@
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
-api_protect_admin_script();
+
+$allowCareer = api_get_configuration_value('allow_session_admin_read_careers');
+
+api_protect_admin_script($allowCareer);
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -74,15 +77,18 @@ $actionLeft .= Display::url(
     ),
     'careers.php'
 );
-$actionLeft .= Display::url(
-    Display::return_icon(
-        'promotion.png',
-        get_lang('Promotions'),
-        null,
-        ICON_SIZE_MEDIUM
-    ),
-    'promotions.php'
-);
+
+if (api_is_platform_admin()) {
+    $actionLeft .= Display::url(
+        Display::return_icon(
+            'promotion.png',
+            get_lang('Promotions'),
+            null,
+            ICON_SIZE_MEDIUM
+        ),
+        'promotions.php'
+    );
+}
 
 $actions = Display::toolbarAction('toolbar-career', array($actionLeft));
 $html .= $form->returnForm();

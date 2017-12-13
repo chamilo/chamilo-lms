@@ -280,7 +280,6 @@ if ($form->validate()) {
     $entityManager->persist($skillUser);
     $entityManager->flush();
 
-    // ofaj
     // Send email depending of children_auto_threshold
     $skillRelSkill = new SkillRelSkill();
     $skillModel = new \Skill();

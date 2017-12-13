@@ -115,12 +115,12 @@
     <h1 class="page-header">{{ 'SkillsAcquired' | get_lang }}</h1>
     <table class="table">
         <thead>
-        <tr>
-            <th>{{ 'Badge' | get_lang }}</th>
-            <th>{{ 'Skill' | get_lang }}</th>
-            <th>{{ 'Date' | get_lang }}</th>
-            <th>{{ 'Course' | get_lang }}</th>
-        </tr>
+            <tr>
+                <th>{{ 'Badge' | get_lang }}</th>
+                <th>{{ 'Skill' | get_lang }}</th>
+                <th>{{ 'Date' | get_lang }}</th>
+                <th>{{ 'Course' | get_lang }}</th>
+            </tr>
         </thead>
         <tbody>
         {% for row in rows %}

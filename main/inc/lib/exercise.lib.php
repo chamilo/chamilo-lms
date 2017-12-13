@@ -1676,6 +1676,7 @@ HOTSPOT;
      * @param null $extra_where_conditions
      * @param bool $get_count
      * @param string $courseCode
+     *
      * @return array
      */
     public static function get_exam_results_data(
@@ -2238,12 +2239,17 @@ HOTSPOT;
                         $category_list = [];
                         if ($is_allowedToEdit) {
                             $sessionName = '';
+                            $sessionStartAccessDate = '';
                             if (!empty($results[$i]['session_id'])) {
-                                $sessionName = api_get_session_name($results[$i]['session_id']);
+                                $sessionInfo = api_get_session_info($results[$i]['session_id']);
+                                if (!empty($sessionInfo)) {
+                                    $sessionName = $sessionInfo['name'];
+                                    $sessionStartAccessDate = api_get_local_time($sessionInfo['access_start_date']);
+                                }
                             }
+
                             $objExercise = new Exercise($course_id);
                             if ($showExerciseCategories) {
-                                $question_list = array();
                                 // Getting attempt info
                                 $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
                                 if (!empty($exercise_stat_info['data_tracking'])) {
@@ -2312,6 +2318,7 @@ HOTSPOT;
                                 $results[$i]['category_'.$categoryId] = self::show_score($result['score'], $result['total']);
                             }
                             $results[$i]['session'] = $sessionName;
+                            $results[$i]['session_access_start_date'] = $sessionStartAccessDate;
                             $results[$i]['status'] = $revisedLabel;
                             $results[$i]['score'] = $score;
                             $results[$i]['lp'] = $lp_name;
@@ -2352,8 +2359,9 @@ HOTSPOT;
                         null,
                         date_default_timezone_get()
                     );
-                    $hp_result = round(($hpresults[$i][4] / ($hpresults[$i][5] != 0 ? $hpresults[$i][5] : 1)) * 100, 2)
-                        .'% ('.$hpresults[$i][4].' / '.$hpresults[$i][5].')';
+                    $hp_result = round(($hpresults[$i][4] / ($hpresults[$i][5] != 0 ? $hpresults[$i][5] : 1)) * 100, 2);
+                    $hp_result .= '% ('.$hpresults[$i][4].' / '.$hpresults[$i][5].')';
+
                     if ($is_allowedToEdit) {
                         $list_info[] = array(
                             $hpresults[$i][0],

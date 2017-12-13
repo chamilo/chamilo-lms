@@ -554,8 +554,15 @@ switch ($action) {
         );
         break;
     case 'get_exercise_results_report':
-        $exerciseId = $_REQUEST['exercise_id'];
+        api_protect_admin_script();
+
+        $exerciseId = isset($_REQUEST['exercise_id']) ? $_REQUEST['exercise_id'] : 0;
         $courseId = isset($_REQUEST['course_id']) ? $_REQUEST['course_id'] : 0;
+
+        if (empty($exerciseId)) {
+            exit;
+        }
+
         if (!empty($courseId)) {
             $courseInfo = api_get_course_info_by_id($courseId);
         } else {
@@ -1217,20 +1224,24 @@ switch ($action) {
         );
         break;
     case 'get_exercise_results_report':
-        api_protect_admin_script();
-
         // Used inside ExerciseLib::get_exam_results_data()
         $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path']."/document";
+        $sessionId = api_get_session_id();
 
         $columns = array(
             'firstname',
             'lastname',
             'username',
             'session',
-            'start_date',
+            'session_access_start_date',
             'exe_date',
             'score'
         );
+
+        if ($operation == 'excel') {
+            $overwriteColumnHeaderExport['session_access_start_date'] = get_lang('SessionStartDate');
+            $overwriteColumnHeaderExport['exe_date'] = get_lang('StartDate');
+        }
 
         $categoryList = TestCategory::getListOfCategoriesIDForTest($exerciseId, $courseId);
         if (!empty($categoryList)) {
@@ -1244,7 +1255,6 @@ switch ($action) {
         }
 
         $columns[] = 'actions';
-
         $result = ExerciseLib::get_exam_results_data(
             $start,
             $limit,
@@ -1255,7 +1265,8 @@ switch ($action) {
             false,
             $courseInfo['code'],
             true,
-            true
+            true,
+            !empty($sessionId)
         );
         break;
     case 'get_hotpotatoes_exercise_results':

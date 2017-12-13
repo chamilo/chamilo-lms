@@ -498,7 +498,7 @@ class Template
         $this->assign('course_is_set', true);
         $this->course_id = $course['id'];
         $_c = array(
-            'id' => $course['id'],
+            'id' => $course['real_id'],
             'code' => $course['code'],
             'title' => $course['name'],
             'visibility' => $course['visibility'],

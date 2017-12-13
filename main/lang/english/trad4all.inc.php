@@ -8091,4 +8091,7 @@ $NotValidURL = "URL field format invalid. Example of expected format: http://dro
 $FileExtension = "File extension";
 $EventsReport = "Audit report";
 $GoogleTranslateApiReturnedEmptyAnswer = "The Google Translate API used by this feature returned and empty answer. Please check or ask your translate_app_google_key setting is set correctly, or kindly ask an administrator to do so.";
+$LinkMeToStudent = "Link me to student";
+$LinkMeToStudentComment = "Please select the student you want to request a link to, so the administrators can review and approve your request. Please note that proper administrative procedures should have been followed first to ensure the admin can legally accept your request.";
+$RequestLinkToStudent = "Request linking with student";
 ?>

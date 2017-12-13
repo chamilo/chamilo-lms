@@ -8115,4 +8115,7 @@ $NotValidURL = "Formato del campo URL no válido. Ejemplo del formato esperado: 
 $FileExtension = "Extensión de archivo";
 $EventsReport = "Reporte de auditoría";
 $GoogleTranslateApiReturnedEmptyAnswer = "El API de Google Translate usado en esta funcionalidad ha devuelto una respuesta vacía. Por favor, verifique que el parámetro de configuración translate_app_google_key de la plataforma ha sido configurado correctamente, o pida a una administrador hacerlo.";
+$LinkMeToStudent = "Vincularme al estudiante";
+$LinkMeToStudentComment = "Seleccione el estudiante con el cual desee solicitar su vinculación para que los administradores puedan revisar y aprobar su solicitud. Por favor siga el procedimiento administrativo necesario antes de solicitar su vinculación, para que los administradores tengan toda la información necesaria para aprobar su solicitud en toda legalidad.";
+$RequestLinkToStudent = "Vincularme con este estudiante";
 ?>

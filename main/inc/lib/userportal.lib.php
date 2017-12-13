@@ -929,7 +929,7 @@ class IndexManager
             $items[] = [
                 'class' => 'new-message-social',
                 'icon' => Display::return_icon('new-message.png', get_lang('Compose')),
-                'link' => api_get_path(WEB_PATH).'main/messages/new_message.php'.$link,
+                'link' => api_get_path(WEB_PATH).'main/messages/new_message.php',
                 'title' => get_lang('Compose')
             ];
 

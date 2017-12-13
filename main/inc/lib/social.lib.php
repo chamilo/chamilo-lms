@@ -228,9 +228,7 @@ class SocialManager extends UserManager
         $message_content = str_replace(array("\n", "\n\r"), '<br />', $message_content);
 
         $clean_message_content = Database::escape_string($message_content);
-
         $now = api_get_utc_datetime();
-
         $sql = 'SELECT COUNT(*) AS count FROM '.$tbl_message.'
                 WHERE
                     user_sender_id='.$user_id.' AND
@@ -252,11 +250,12 @@ class SocialManager extends UserManager
                 'parent_id' => 0,
                 'update_date' => $now
             ];
-            Database::insert($tbl_message, $params);
+            $messageId = Database::insert($tbl_message, $params);
 
             $senderInfo = api_get_user_info($user_id);
             $notification = new Notification();
             $notification->saveNotification(
+                $messageId,
                 Notification::NOTIFICATION_TYPE_INVITATION,
                 array($friend_id),
                 $message_title,

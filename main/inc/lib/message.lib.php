@@ -265,7 +265,7 @@ class MessageManager
      * @param array $file_comments about attachment files (optional)
      * @param int $group_id (optional)
      * @param int $parent_id (optional)
-     * @param int $edit_message_id id for updating the message (optional)
+     * @param int $editMessageId id for updating the message (optional)
      * @param int $topic_id (optional) the default value is the current user_id
      * @param int $sender_id
      * @param bool $directMessage
@@ -282,7 +282,7 @@ class MessageManager
         array $file_comments = [],
         $group_id = 0,
         $parent_id = 0,
-        $edit_message_id = 0,
+        $editMessageId = 0,
         $topic_id = 0,
         $sender_id = null,
         $directMessage = false,
@@ -290,11 +290,11 @@ class MessageManager
         $smsParameters = []
     ) {
         $table = Database::get_main_table(TABLE_MESSAGE);
-        $group_id = intval($group_id);
-        $receiver_user_id = intval($receiver_user_id);
-        $parent_id = intval($parent_id);
-        $edit_message_id = intval($edit_message_id);
-        $topic_id = intval($topic_id);
+        $group_id = (int) $group_id;
+        $receiver_user_id = (int) $receiver_user_id;
+        $parent_id = (int) $parent_id;
+        $editMessageId = (int) $editMessageId;
+        $topic_id = (int) $topic_id;
 
         if (!empty($receiver_user_id)) {
             $receiverUserInfo = api_get_user_info($receiver_user_id);
@@ -307,7 +307,7 @@ class MessageManager
 
         $user_sender_id = empty($sender_id) ? api_get_user_id() : (int) $sender_id;
         if (empty($user_sender_id)) {
-            Display::addFlash(Display::return_message(get_lang('UserDoesNotExist')));
+            Display::addFlash(Display::return_message(get_lang('UserDoesNotExist'), 'warning'));
             return false;
         }
 
@@ -345,20 +345,19 @@ class MessageManager
             return false;
         }
 
-        $inbox_last_id = null;
-        //Just in case we replace the and \n and \n\r while saving in the DB
-        //$content = str_replace(array("\n", "\n\r"), '<br />', $content);
+        // Just in case we replace the and \n and \n\r while saving in the DB
+        // $content = str_replace(array("\n", "\n\r"), '<br />', $content);
         $now = api_get_utc_datetime();
         if (!empty($receiver_user_id) || !empty($group_id)) {
             // message for user friend
             //@todo it's possible to edit a message? yes, only for groups
-            if ($edit_message_id) {
+            if (!empty($editMessageId)) {
                 $query = " UPDATE $table SET
                                 update_date = '".$now."',
                                 content = '".Database::escape_string($content)."'
-                           WHERE id = '$edit_message_id' ";
+                           WHERE id = '$editMessageId' ";
                 Database::query($query);
-                $inbox_last_id = $edit_message_id;
+                $messageId = $editMessageId;
             } else {
                 $params = [
                     'user_sender_id' => $user_sender_id,
@@ -371,7 +370,7 @@ class MessageManager
                     'parent_id' => $parent_id,
                     'update_date' => $now
                 ];
-                $inbox_last_id = Database::insert($table, $params);
+                $messageId = Database::insert($table, $params);
             }
 
             // Save attachment file for inbox messages
@@ -382,7 +381,7 @@ class MessageManager
                         self::saveMessageAttachmentFile(
                             $file_attach,
                             isset($file_comments[$i]) ? $file_comments[$i] : null,
-                            $inbox_last_id,
+                            $messageId,
                             null,
                             $receiver_user_id,
                             $group_id
@@ -441,6 +440,7 @@ class MessageManager
                     $type = Notification::NOTIFICATION_TYPE_DIRECT_MESSAGE;
                 }
                 $notification->saveNotification(
+                    $messageId,
                     $type,
                     array($receiver_user_id),
                     $subject,
@@ -453,7 +453,7 @@ class MessageManager
                 $usergroup = new UserGroup();
                 $group_info = $usergroup->get($group_id);
                 $group_info['topic_id'] = $topic_id;
-                $group_info['msg_id'] = $inbox_last_id;
+                $group_info['msg_id'] = $messageId;
 
                 $user_list = $usergroup->get_users_by_group(
                     $group_id,
@@ -474,6 +474,7 @@ class MessageManager
                     'user_info' => $sender_info,
                 );
                 $notification->saveNotification(
+                    $messageId,
                     Notification::NOTIFICATION_TYPE_GROUP,
                     $new_user_list,
                     $subject,
@@ -484,7 +485,7 @@ class MessageManager
                 );
             }
 
-            return $inbox_last_id;
+            return $messageId;
         }
 
         return false;

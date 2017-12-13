@@ -2750,12 +2750,14 @@ div#no-data-view div.controls {
 a:active{
     outline: none;
 }
+
 .skills-profiles, .skills-users, .skills-skills {
     margin-top: 10px;
     margin-bottom: 10px;
     padding:10px;
     border: 1px solid #ccc;
 }
+
 .skills-skills ul.holder,
 .skills-users ul.holder,
 .skills-profiles ul.holder
@@ -2763,6 +2765,109 @@ a:active{
     margin-bottom: 8px;
     border: 0px;
 }
+
+.skills_chart * {
+    margin: 0px;
+    padding: 0px;
+}
+
+.skills_chart ul {
+    padding-top: 20px;
+    position: relative;
+}
+
+.skills_chart li {
+    float: left;
+    text-align: center;
+    list-style-type: none;
+    padding: 20px 5px 0px 5px;
+    position: relative;
+}
+
+.skills_chart li::before, .skills_chart li::after {
+    content: '';
+    position: absolute;
+    top: 0px;
+    right: 50%;
+    border-top: 1px solid #f80;
+    width: 50%;
+    height: 20px;
+}
+
+.skills_chart li::after{
+    right: auto;
+    left: 50%;
+    border-left: 1px solid #f80;
+}
+
+.skills_chart li:only-child::before, .skills_chart li:only-child::after {
+    display: none;
+}
+
+.skills_chart li:only-child {
+    padding-top: 0;
+}
+
+.skills_chart li:first-child::before, .skills_chart li:last-child::after{
+    border: 0 none;
+}
+
+.skills_chart li:last-child::before{
+    border-right: 1px solid #f80;
+    -webkit-border-radius: 0 5px 0 0;
+    -moz-border-radius: 0 5px 0 0;
+    border-radius: 0 5px 0 0;
+}
+
+.skills_chart li:first-child::after{
+    border-radius: 5px 0 0 0;
+    -webkit-border-radius: 5px 0 0 0;
+    -moz-border-radius: 5px 0 0 0;
+}
+
+.skills_chart ul ul::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    border-left: 1px solid #f80;
+    width: 0;
+    height: 20px;
+}
+
+.skills_chart li a {
+    border: 1px solid #f80;
+    padding: 1em 0.75em;
+    text-decoration: none;
+    color: #333;
+    background-color: rgba(255,255,255,0.5);
+    font-family: arial, verdana, tahoma;
+    font-size: 0.85em;
+    display: inline-block;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-transition: all 500ms;
+    -moz-transition: all 500ms;
+    transition: all 500ms;
+}
+
+.skills_chart li a:hover {
+    border: 1px solid #fff;
+    color: #ddd;
+    background-color: rgba(255,128,0,0.7);
+    display: inline-block;
+}
+
+.skills_chart > ul > li > a {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.skills_chart > ul > li > ul > li > a {
+    width: 8em;
+}
+
 .send_msg_in_text {
     background: url("../../main/img/mail_send.png") no-repeat scroll right center transparent;
     height: 16px;

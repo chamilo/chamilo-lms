@@ -23,7 +23,6 @@ class DashboardController
 
     /**
      * Display blocks from dashboard plugin paths
-     * @param string $msg (optional)
      * render to dashboard.php view
      */
     public function display()

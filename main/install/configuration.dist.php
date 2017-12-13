@@ -689,6 +689,10 @@ $_configuration['gradebook_badge_sidebar'] = [
         3 => 'Dimension',
     ]
 ];*/
+
+// Hide skill levels options
+//$_configuration['hide_skill_levels'] = false;
+
 // Hide the session list in Reporting tool. Useful when a course has too many sessions.
 //$_configuration['hide_reporting_session_list'] = false;
 
@@ -700,6 +704,13 @@ $_configuration['gradebook_badge_sidebar'] = [
 
 // Send score in percentage in the exam result notification
 //$_configuration['send_notification_score_in_percentage'] = false;
+
+// Google translate key (for the text2speech feature in the documents tool)
+// To get it, go to https://console.cloud.google.com/apis/library, create or
+// use your own project, then search for "speech" and follow the instructions
+// This service has a cost above 60 minutes of use.
+//$_configuration['translate_app_google_key'] = '';
+
 
 // ------ Custom DB changes
 // Add user activation by confirmation email

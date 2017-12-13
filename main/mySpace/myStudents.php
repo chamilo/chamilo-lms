@@ -698,7 +698,7 @@ $userGroups = $userGroupManager->getNameListByUser(
                     'legal_accept'
                 );
                 $icon = Display::return_icon('accept_na.png');
-                if (isset($value['value'])) {
+                if (isset($value['value']) && !empty($value['value'])) {
                     list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
                     $icon = Display::return_icon('accept.png').' '.api_get_local_time($legalTime);
                     $icon .= ' '.Display::url(

@@ -293,14 +293,14 @@ if (!empty($_REQUEST['exeId']) &&
 
         $sql = "UPDATE $TBL_LP_ITEM SET
                     max_score = '$max_score'
-                WHERE c_id = $course_id AND id = '".$safe_item_id."'";
+                WHERE iid = $safe_item_id";
         Database::query($sql);
 
         $sql = "SELECT id FROM $TBL_LP_ITEM_VIEW
                 WHERE
                     c_id = $course_id AND
-                    lp_item_id = '$safe_item_id' AND
-                    lp_view_id = '".$_SESSION['oLP']->lp_view_id."'
+                    lp_item_id = $safe_item_id AND
+                    lp_view_id = ".$_SESSION['oLP']->lp_view_id."
                 ORDER BY id DESC
                 LIMIT 1";
         $res_last_attempt = Database::query($sql);
@@ -329,7 +329,7 @@ if (!empty($_REQUEST['exeId']) &&
                         status = '$status',
                         score = $score,
                         total_time = $mytime
-                    WHERE id='".$lp_item_view_id."' AND c_id = $course_id ";
+                    WHERE iid = $lp_item_view_id";
 
             if ($debug) {
                 error_log($sql);
@@ -403,8 +403,8 @@ $mediaplayer = $_SESSION['oLP']->get_mediaplayer($_SESSION['oLP']->current, $aut
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 $show_audioplayer = false;
 // Getting all the information about the item.
-$sql = "SELECT audio FROM ".$tbl_lp_item."
-        WHERE c_id = $course_id AND lp_id = '".$_SESSION['oLP']->lp_id."'";
+$sql = "SELECT audio FROM $tbl_lp_item
+        WHERE c_id = $course_id AND lp_id = ".$_SESSION['oLP']->lp_id;
 $res_media = Database::query($sql);
 
 if (Database::num_rows($res_media) > 0) {

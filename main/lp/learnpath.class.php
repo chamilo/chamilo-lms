@@ -44,7 +44,7 @@ class learnpath
     public $last; // item_id of last item viewed in the learning path.
     public $last_item_seen = 0; // In case we have already come in this learnpath, reuse the last item seen if authorized.
     public $license; // Which license this course has been given - not used yet on 20060522.
-    public $lp_id; // DB ID for this learnpath.
+    public $lp_id; // DB iid for this learnpath.
     public $lp_view_id; // DB ID for lp_view
     public $maker; // Which maker has conceived the content (ENI, Articulate, ...).
     public $message = '';
@@ -126,7 +126,7 @@ class learnpath
             // TODO: Make it flexible to use any course_code (still using env course code here).
             $lp_table = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "SELECT * FROM $lp_table
-                    WHERE id = '$lp_id' AND c_id = $course_id";
+                    WHERE iid = $lp_id";
             if ($this->debug > 2) {
                 error_log('New LP - learnpath::__construct() '.__LINE__.' - Querying lp: '.$sql, 0);
             }
@@ -194,8 +194,8 @@ class learnpath
                 $sql = "SELECT * FROM $lp_table
                         WHERE 
                             c_id = $course_id AND 
-                            lp_id = '$lp_id' AND 
-                            user_id = '$user_id' 
+                            lp_id = $lp_id AND 
+                            user_id = $user_id 
                             $session
                         ORDER BY view_count DESC";
                 $res = Database::query($sql);
@@ -248,10 +248,10 @@ class learnpath
 
                 $lp_item_id_list = array();
                 while ($row = Database::fetch_array($res)) {
-                    $lp_item_id_list[] = $row['id'];
+                    $lp_item_id_list[] = $row['iid'];
                     switch ($this->type) {
                         case 3: //aicc
-                            $oItem = new aiccItem('db', $row['id'], $course_id);
+                            $oItem = new aiccItem('db', $row['iid'], $course_id);
                             if (is_object($oItem)) {
                                 $my_item_id = $oItem->get_id();
                                 $oItem->set_lp_view($this->lp_view_id, $course_id);
@@ -270,7 +270,7 @@ class learnpath
                             }
                             break;
                         case 2:
-                            $oItem = new scormItem('db', $row['id'], $course_id);
+                            $oItem = new scormItem('db', $row['iid'], $course_id);
                             if (is_object($oItem)) {
                                 $my_item_id = $oItem->get_id();
                                 $oItem->set_lp_view($this->lp_view_id, $course_id);
@@ -288,7 +288,7 @@ class learnpath
                             if ($this->debug > 2) {
                                 error_log('New LP - learnpath::__construct() '.__LINE__.' - calling learnpathItem');
                             }
-                            $oItem = new learnpathItem($row['id'], $user_id, $course_id, $row);
+                            $oItem = new learnpathItem($row['iid'], $user_id, $course_id, $row);
 
                             if ($this->debug > 2) {
                                 error_log('New LP - learnpath::__construct() '.__LINE__.' - end calling learnpathItem');
@@ -321,11 +321,11 @@ class learnpath
                     }
 
                     // Setting the view in the item object.
-                    if (is_object($this->items[$row['id']])) {
-                        $this->items[$row['id']]->set_lp_view($this->lp_view_id, $course_id);
-                        if ($this->items[$row['id']]->get_type() == TOOL_HOTPOTATOES) {
-                            $this->items[$row['id']]->current_start_time = 0;
-                            $this->items[$row['id']]->current_stop_time = 0;
+                    if (is_object($this->items[$row['iid']])) {
+                        $this->items[$row['iid']]->set_lp_view($this->lp_view_id, $course_id);
+                        if ($this->items[$row['iid']]->get_type() == TOOL_HOTPOTATOES) {
+                            $this->items[$row['iid']]->current_start_time = 0;
+                            $this->items[$row['iid']]->current_stop_time = 0;
                         }
                     }
                 }
@@ -524,7 +524,7 @@ class learnpath
         if (empty($max_time_allowed)) {
             $max_time_allowed = 0;
         }
-        $sql = "SELECT COUNT(id) AS num
+        $sql = "SELECT COUNT(iid) AS num
                 FROM $tbl_lp_item
                 WHERE
                     c_id = $course_id AND
@@ -537,30 +537,30 @@ class learnpath
 
         if ($num > 0) {
             if (empty($previous)) {
-                $sql = "SELECT id, next_item_id, display_order
+                $sql = "SELECT iid, next_item_id, display_order
                         FROM $tbl_lp_item
                         WHERE
                             c_id = $course_id AND
                             lp_id = ".$this->get_id()." AND
-                            parent_item_id = ".$parent." AND
+                            parent_item_id = $parent AND
                             previous_item_id = 0 OR
-                            previous_item_id = ".$parent;
+                            previous_item_id = $parent";
                 $result = Database::query($sql);
                 $row = Database::fetch_array($result);
                 $tmp_previous = 0;
-                $next = $row['id'];
+                $next = $row['iid'];
                 $display_order = 0;
             } else {
                 $previous = (int) $previous;
-                $sql = "SELECT id, previous_item_id, next_item_id, display_order
+                $sql = "SELECT iid, previous_item_id, next_item_id, display_order
 						FROM $tbl_lp_item
                         WHERE
                             c_id = $course_id AND
                             lp_id = ".$this->get_id()." AND
-                            id = ".$previous;
+                            id = $previous";
                 $result = Database::query($sql);
                 $row = Database:: fetch_array($result);
-                $tmp_previous = $row['id'];
+                $tmp_previous = $row['iid'];
                 $next = $row['next_item_id'];
                 $display_order = $row['display_order'];
             }
@@ -645,15 +645,15 @@ class learnpath
                     WHERE
                         c_id = $course_id AND
                         lp_id = ".$this->get_id()." AND
-                        id <> " . $new_item_id." AND
-                        parent_item_id = " . $parent." AND
-                        display_order > " . $display_order;
+                        iid <> $new_item_id AND
+                        parent_item_id = $parent AND
+                        display_order > $display_order";
             Database::query($sql);
 
             // Update the item that should come after the new item.
             $sql = "UPDATE $tbl_lp_item
                     SET ref = $new_item_id
-                    WHERE c_id = $course_id AND id = $new_item_id";
+                    WHERE c_id = $course_id AND iid = $new_item_id";
             Database::query($sql);
 
             // Upload audio.
@@ -724,7 +724,7 @@ class learnpath
                 // Store the mp3 file in the lp_item table.
                 $sql = "UPDATE $tbl_lp_item SET
                           audio = '".Database::escape_string($file)."'
-                        WHERE id = '" . intval($new_item_id)."'";
+                        WHERE iid = '" . intval($new_item_id)."'";
                 Database::query($sql);
             }
         }
@@ -1077,11 +1077,11 @@ class learnpath
 
         // Proposed by Christophe (nickname: clefevre)
         $sql = "DELETE FROM $lp_item
-                WHERE c_id = ".$course_id." AND lp_id = ".$this->lp_id;
+                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
         Database::query($sql);
 
         $sql = "DELETE FROM $lp_view 
-                WHERE c_id = ".$course_id." AND lp_id = ".$this->lp_id;
+                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
         Database::query($sql);
 
         self::toggle_publish($this->lp_id, 'i');
@@ -1089,16 +1089,16 @@ class learnpath
         if ($this->type == 2 || $this->type == 3) {
             // This is a scorm learning path, delete the files as well.
             $sql = "SELECT path FROM $lp
-                    WHERE c_id = ".$course_id." AND id = ".$this->lp_id;
+                    WHERE iid = ".$this->lp_id;
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 $row = Database::fetch_array($res);
                 $path = $row['path'];
                 $sql = "SELECT id FROM $lp
                         WHERE 
-                            c_id = ".$course_id." AND
+                            c_id = $course_id AND
                             path = '$path' AND 
-                            id != ".$this->lp_id;
+                            iid != ".$this->lp_id;
                 $res = Database::query($sql);
                 if (Database::num_rows($res) > 0) {
                     // Another learning path uses this directory, so don't delete it.
@@ -1128,11 +1128,11 @@ class learnpath
         $link = 'lp/lp_controller.php?action=view&lp_id='.$this->lp_id;
         // Delete tools
         $sql = "DELETE FROM $tbl_tool
-                WHERE c_id = ".$course_id." AND (link LIKE '$link%' AND image='scormbuilder.gif')";
+                WHERE c_id = $course_id AND (link LIKE '$link%' AND image='scormbuilder.gif')";
         Database::query($sql);
 
         $sql = "DELETE FROM $lp 
-                WHERE c_id = ".$course_id." AND id = ".$this->lp_id;
+                WHERE iid = ".$this->lp_id;
         Database::query($sql);
         // Updates the display order of all lps.
         $this->update_display_order();
@@ -1182,9 +1182,9 @@ class learnpath
                 WHERE c_id = ".$course_id." AND parent_item_id = $id";
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res)) {
-            $num += $this->delete_children_items($row['id']);
+            $num += $this->delete_children_items($row['iid']);
             $sql = "DELETE FROM $lp_item 
-                    WHERE c_id = ".$course_id." AND id = ".$row['id'];
+                    WHERE c_id = ".$course_id." AND iid = ".$row['iid'];
             Database::query($sql);
             $num++;
         }
@@ -1211,7 +1211,7 @@ class learnpath
         }
         // First select item to get previous, next, and display order.
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $sql_sel = "SELECT * FROM $lp_item WHERE c_id = ".$course_id." AND id = $id";
+        $sql_sel = "SELECT * FROM $lp_item WHERE iid = $id";
         $res_sel = Database::query($sql_sel);
         if (Database::num_rows($res_sel) < 1) {
             return false;
@@ -1228,22 +1228,22 @@ class learnpath
             error_log('New LP - learnpath::delete_item() - deleted '.$num.' children of element '.$id, 0);
         }
         // Now delete the item.
-        $sql_del = "DELETE FROM $lp_item WHERE c_id = $course_id AND id = $id";
+        $sql_del = "DELETE FROM $lp_item WHERE iid = $id";
         if ($this->debug > 2) {
             error_log('New LP - Deleting item: '.$sql_del, 0);
         }
         Database::query($sql_del);
         // Now update surrounding items.
         $sql_upd = "UPDATE $lp_item SET next_item_id = $next
-                    WHERE c_id = ".$course_id." AND id = $previous";
+                    WHERE iid = $previous";
         Database::query($sql_upd);
         $sql_upd = "UPDATE $lp_item SET previous_item_id = $previous
-                    WHERE c_id = ".$course_id." AND id = $next";
+                    WHERE AND iid = $next";
         Database::query($sql_upd);
         // Now update all following items with new display order.
         $sql_all = "UPDATE $lp_item SET display_order = display_order-1
                     WHERE 
-                        c_id = ".$course_id." AND 
+                        c_id = $course_id AND 
                         lp_id = $lp AND 
                         parent_item_id = $parent AND 
                         display_order > $display";
@@ -1251,7 +1251,7 @@ class learnpath
 
         //Removing prerequisites since the item will not longer exist
         $sql_all = "UPDATE $lp_item SET prerequisite = '' 
-                    WHERE c_id = ".$course_id." AND prerequisite = $id";
+                    WHERE c_id = $course_id AND prerequisite = $id";
         Database::query($sql_all);
 
         // Remove from search engine if enabled.
@@ -1314,7 +1314,7 @@ class learnpath
 
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql = "SELECT * FROM $tbl_lp_item 
-                WHERE c_id = ".$course_id." AND id = ".$id;
+                WHERE iid = $id";
         $res_select = Database::query($sql);
         $row_select = Database::fetch_array($res_select);
         $audio_update_sql = '';
@@ -1392,7 +1392,7 @@ class learnpath
                         description = '".Database::escape_string($description)."'
                         ".$audio_update_sql.",
                         max_time_allowed = '".Database::escape_string($max_time_allowed)."'
-                    WHERE c_id = ".$course_id." AND id = ".$id;
+                    WHERE iid = $id";
             Database::query($sql);
         } else {
             $old_parent = $row_select['parent_item_id'];
@@ -1406,17 +1406,17 @@ class learnpath
             /* for the next and previous item it is like the current item doesn't exist anymore */
             if ($old_previous != 0) {
                 // Next
-                $sql = "UPDATE ".$tbl_lp_item."
-                        SET next_item_id = " . $old_next."
-                        WHERE c_id = ".$course_id." AND id = ".$old_previous;
+                $sql = "UPDATE $tbl_lp_item
+                        SET next_item_id = $old_next
+                        WHERE iid = $old_previous";
                 Database::query($sql);
             }
 
             if ($old_next != 0) {
                 // Previous
-                $sql = "UPDATE ".$tbl_lp_item."
-                        SET previous_item_id = " . $old_previous."
-                        WHERE c_id = ".$course_id." AND id = ".$old_next;
+                $sql = "UPDATE $tbl_lp_item
+                        SET previous_item_id = $old_previous
+                        WHERE iid = $old_next";
                 Database::query($sql);
             }
 
@@ -1425,10 +1425,10 @@ class learnpath
             $sql = "UPDATE $tbl_lp_item
                     SET display_order = display_order - 1
                     WHERE
-                        c_id = ".$course_id." AND
-                        display_order > ".$old_order." AND
+                        c_id = $course_id AND
+                        display_order > $old_order AND
                         lp_id = ".$this->lp_id." AND
-                        parent_item_id = ".$old_parent;
+                        parent_item_id = $old_parent";
             Database::query($sql);
             /* END -- virtually remove the current item id */
 
@@ -1436,12 +1436,12 @@ class learnpath
             if ($previous == 0) {
                 // Select the data of the item that should come after the current item.
                 $sql = "SELECT id, display_order
-                        FROM ".$tbl_lp_item."
+                        FROM $tbl_lp_item
                         WHERE
-                            c_id = ".$course_id." AND
+                            c_id = $course_id AND
                             lp_id = ".$this->lp_id." AND
-                            parent_item_id = ".$parent." AND
-                            previous_item_id = ".$previous;
+                            parent_item_id = $parent AND
+                            previous_item_id = $previous";
                 $res_select_old = Database::query($sql);
                 $row_select_old = Database::fetch_array($res_select_old);
 
@@ -1456,8 +1456,8 @@ class learnpath
             } else {
                 // Select the data of the item that should come before the current item.
                 $sql = "SELECT next_item_id, display_order
-                        FROM ".$tbl_lp_item."
-                        WHERE c_id = ".$course_id." AND id = ".$previous;
+                        FROM $tbl_lp_item
+                        WHERE iid = $previous";
                 $res_select_old = Database::query($sql);
                 $row_select_old = Database::fetch_array($res_select_old);
                 $new_next = $row_select_old['next_item_id'];
@@ -1470,54 +1470,54 @@ class learnpath
                     SET
                         title = '".Database::escape_string($title)."',
                         description = '".Database::escape_string($description)."',
-                        parent_item_id = ".$parent.",
-                        previous_item_id = ".$previous.",
-                        next_item_id = ".$new_next.",
-                        display_order = ".$new_order."
-                        ".$audio_update_sql."
-                    WHERE c_id = ".$course_id." AND id = ".$id;
+                        parent_item_id = $parent,
+                        previous_item_id = $previous,
+                        next_item_id = $new_next,
+                        display_order = $new_order
+                        $audio_update_sql
+                    WHERE iid = $id";
             Database::query($sql);
 
             if ($previous != 0) {
                 // Update the previous item's next_item_id.
-                $sql = "UPDATE ".$tbl_lp_item."
-                        SET next_item_id = ".$id."
-                        WHERE c_id = ".$course_id." AND id = ".$previous;
+                $sql = "UPDATE $tbl_lp_item
+                        SET next_item_id = $id
+                        WHERE iid = $previous";
                 Database::query($sql);
             }
 
             if ($new_next != 0) {
                 // Update the next item's previous_item_id.
-                $sql = "UPDATE ".$tbl_lp_item."
-                        SET previous_item_id = ".$id."
-                        WHERE c_id = ".$course_id." AND id = ".$new_next;
+                $sql = "UPDATE $tbl_lp_item
+                        SET previous_item_id = $id
+                        WHERE iid = $new_next";
                 Database::query($sql);
             }
 
             if ($old_prerequisite != $prerequisites) {
-                $sql = "UPDATE ".$tbl_lp_item."
-                        SET prerequisite = '".$prerequisites."'
-                        WHERE c_id = ".$course_id." AND id = ".$id;
+                $sql = "UPDATE $tbl_lp_item
+                        SET prerequisite = '$prerequisites'
+                        WHERE iid = $id";
                 Database::query($sql);
             }
 
             if ($old_max_time_allowed != $max_time_allowed) {
                 // update max time allowed
-                $sql = "UPDATE ".$tbl_lp_item."
-                        SET max_time_allowed = ".$max_time_allowed."
-                        WHERE c_id = ".$course_id." AND id = ".$id;
+                $sql = "UPDATE $tbl_lp_item
+                        SET max_time_allowed = $max_time_allowed
+                        WHERE iid = $id";
                 Database::query($sql);
             }
 
             // Update all the items with the same or a bigger display_order than the current item.
-            $sql = "UPDATE ".$tbl_lp_item."
+            $sql = "UPDATE $tbl_lp_item
                     SET display_order = display_order + 1
                     WHERE
-                       c_id = ".$course_id." AND
+                       c_id = $course_id AND
                        lp_id = ".$this->get_id()." AND
-                       id <> ".$id." AND
-                       parent_item_id = ".$parent." AND
-                       display_order >= ".$new_order;
+                       iid <> $id AND
+                       parent_item_id = $parent AND
+                       display_order >= $new_order";
             Database::query($sql);
         }
 
@@ -1579,7 +1579,7 @@ class learnpath
                     prerequisite = $prerequisite_id ,
                     prerequisite_min_score = $mastery_score ,
                     prerequisite_max_score = $max_score
-                 WHERE c_id = $course_id AND id = $id";
+                 WHERE iid = $id";
         Database::query($sql);
         // TODO: Update the item object (can be ignored for now because refreshed).
         return true;
@@ -1604,16 +1604,15 @@ class learnpath
 
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql_parent = "SELECT * FROM $lp_item
-                       WHERE c_id = ".$course_id." AND id = $id AND item_type='dir'";
+                       WHERE iid = $id AND item_type='dir'";
         $res_parent = Database::query($sql_parent);
         if (Database::num_rows($res_parent) > 0) {
             $row_parent = Database::fetch_array($res_parent);
             $parent = $row_parent['parent_item_id'];
             $sql = "SELECT * FROM $lp_item
                     WHERE
-                        c_id = ".$course_id." AND
                         parent_item_id = $parent AND
-                        id = $id AND
+                        iid = $id AND
                         item_type='dir'
                     ORDER BY display_order";
             $res_bros = Database::query($sql);
@@ -1648,13 +1647,13 @@ class learnpath
 
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql_parent = "SELECT * FROM $lp_item 
-                       WHERE c_id = $course_id AND id = $id";
+                       WHERE iid = $id";
         $res_parent = Database::query($sql_parent);
         if (Database::num_rows($res_parent) > 0) {
             $row_parent = Database::fetch_array($res_parent);
             $parent = $row_parent['parent_item_id'];
             $sql = "SELECT * FROM $lp_item 
-                    WHERE c_id = ".$course_id." AND parent_item_id = $parent
+                    WHERE c_id = $course_id AND parent_item_id = $parent
                     ORDER BY display_order";
             $res_bros = Database::query($sql);
             $list = [];
@@ -2236,12 +2235,11 @@ class learnpath
         $tbl_lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
         // Getting all the information about the item.
-        $sql = "SELECT * FROM $tbl_lp_item as lp
+        $sql = "SELECT * FROM $tbl_lp_item as lpi
                 INNER JOIN $tbl_lp_item_view as lp_view
-                ON (lp.id = lp_view.lp_item_id AND lp.c_id = lp_view.c_id)
+                ON (lpi.iid = lp_view.lp_item_id)
                 WHERE
-                    lp.id = '$lpItemId' AND
-                    lp.c_id = $course_id AND
+                    lpi.iid = $lpItemId AND
                     lp_view.c_id = $course_id";
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
@@ -2375,7 +2373,7 @@ class learnpath
         // Get current prerequisite
         $sql = "SELECT id, prerequisite, subscribe_users, publicated_on, expired_on
                 FROM $tbl_learnpath
-                WHERE c_id = ".$courseInfo['real_id']." AND id = $lp_id";
+                WHERE iid = $lp_id";
         $rs  = Database::query($sql);
         $now = time();
         if (Database::num_rows($rs) > 0) {
@@ -3079,11 +3077,10 @@ class learnpath
      */
     public static function get_type_static($lp_id = 0)
     {
-        $course_id = api_get_course_int_id();
         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = intval($lp_id);
         $sql = "SELECT lp_type FROM $tbl_lp
-                WHERE c_id = $course_id AND id = '".$lp_id."'";
+                WHERE iid = $lp_id";
         $res = Database::query($sql);
         if ($res === false) {
             return null;
@@ -3119,7 +3116,7 @@ class learnpath
         $parent = intval($parent);
 
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT id FROM $tbl_lp_item
+        $sql = "SELECT iid FROM $tbl_lp_item
                 WHERE c_id = $course_id AND lp_id = $lp AND parent_item_id = $parent
                 ORDER BY display_order";
 
@@ -3127,10 +3124,10 @@ class learnpath
         while ($row = Database::fetch_array($res)) {
             $sublist = self::get_flat_ordered_items_list(
                 $lp,
-                $row['id'],
+                $row['iid'],
                 $course_id
             );
-            $list[] = $row['id'];
+            $list[] = $row['iid'];
             foreach ($sublist as $item) {
                 $list[] = $item;
             }
@@ -3478,10 +3475,9 @@ class learnpath
                     li.parameters as liparams
         		FROM $lp_table l
                 INNER JOIN $lp_item_table li
-                ON (li.lp_id = l.id AND l.c_id = li.c_id)
+                ON (li.lp_id = l.iid)
         		WHERE 
-        		    li.id = $item_id AND
-        		    li.c_id = $course_id 
+        		    li.iid = $item_id 
         		";
         if ($this->debug > 2) {
             error_log('New LP - In learnpath::get_link() - selecting item '.$sql, 0);
@@ -3777,9 +3773,9 @@ class learnpath
         $course_id = api_get_course_int_id();
         $sessionId = api_get_session_id();
 
-        $sql = "SELECT id, view_count FROM $lp_view_table
+        $sql = "SELECT iid, view_count FROM $lp_view_table
         		WHERE
-        		    c_id = ".$course_id." AND
+        		    c_id = $course_id AND
         		    lp_id = " . $this->get_id()." AND
         		    user_id = " . $this->get_user_id()." AND
         		    session_id = $sessionId
@@ -3788,10 +3784,10 @@ class learnpath
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
-            $this->lp_view_id = $row['id'];
+            $this->lp_view_id = $row['iid'];
         } elseif (!api_is_invitee()) {
             // There is no database record, create one.
-            $sql = "INSERT INTO $lp_view_table (c_id, lp_id,user_id, view_count, session_id) VALUES
+            $sql = "INSERT INTO $lp_view_table (c_id, lp_id, user_id, view_count, session_id) VALUES
             		($course_id, ".$this->get_id().",".$this->get_user_id().", 1, $sessionId)";
             Database::query($sql);
             $id = Database::insert_id();
@@ -3885,9 +3881,8 @@ class learnpath
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql_sel = "SELECT *
                     FROM $tbl_lp_item
-                    WHERE 
-                        c_id = $course_id AND 
-                        id = $id
+                    WHERE  
+                        iid = $id
                     ";
         $res_sel = Database::query($sql_sel);
         // Check if elem exists.
@@ -3909,7 +3904,7 @@ class learnpath
                 }
                 if ($display > 1) {
                     $sql_sel2 = "SELECT * FROM $tbl_lp_item
-                                 WHERE c_id = ".$course_id." AND id = $previous";
+                                 WHERE iid = $previous";
 
                     if ($this->debug > 2) {
                         error_log('Selecting previous: '.$sql_sel2, 0);
@@ -3925,7 +3920,7 @@ class learnpath
                     if ($previous_previous != 0) {
                         $sql_upd2 = "UPDATE $tbl_lp_item SET
                                         next_item_id = $id
-                                    WHERE c_id = ".$course_id." AND id = $previous_previous";
+                                    WHERE iid = $previous_previous";
                         if ($this->debug > 2) {
                             error_log($sql_upd2, 0);
                         }
@@ -3937,7 +3932,7 @@ class learnpath
                                     next_item_id = $next,
                                     previous_item_id = $id,
                                     display_order = display_order +1
-                                    WHERE c_id = ".$course_id." AND id = $previous";
+                                    WHERE iid = $previous";
                         if ($this->debug > 2) {
                             error_log($sql_upd2, 0);
                         }
@@ -3959,7 +3954,7 @@ class learnpath
                     // Update next item (new previous item).
                     if ($next != 0) {
                         $sql_upd2 = "UPDATE $tbl_lp_item SET previous_item_id = $previous
-                                     WHERE c_id = ".$course_id." AND id = $next";
+                                     WHERE iid = $next";
                         if ($this->debug > 2) {
                             error_log($sql_upd2, 0);
                         }
@@ -3974,7 +3969,7 @@ class learnpath
                 }
                 if ($next != 0) {
                     $sql_sel2 = "SELECT * FROM $tbl_lp_item 
-                                 WHERE c_id = ".$course_id." AND id = $next";
+                                 WHERE iid = $next";
                     if ($this->debug > 2) {
                         error_log('Selecting next: '.$sql_sel2, 0);
                     }
@@ -3989,7 +3984,7 @@ class learnpath
                     if ($previous != 0) {
                         $sql_upd2 = "UPDATE $tbl_lp_item 
                                      SET next_item_id = $next
-                                     WHERE c_id = ".$course_id." AND id = $previous";
+                                     WHERE iid = $previous";
                         Database::query($sql_upd2);
                     }
                     // Update current item (switch with previous).
@@ -3998,7 +3993,7 @@ class learnpath
                                      previous_item_id = $next, 
                                      next_item_id = $next_next, 
                                      display_order = display_order + 1
-                                     WHERE c_id = ".$course_id." AND id = $id";
+                                     WHERE iid = $id";
                         Database::query($sql_upd2);
                     }
 
@@ -4008,7 +4003,7 @@ class learnpath
                                      previous_item_id = $previous, 
                                      next_item_id = $id, 
                                      display_order = display_order-1
-                                     WHERE c_id = ".$course_id." AND id = $next";
+                                     WHERE iid = $next";
                         Database::query($sql_upd2);
                     }
 
@@ -4016,7 +4011,7 @@ class learnpath
                     if ($next_next != 0) {
                         $sql_upd2 = "UPDATE $tbl_lp_item SET
                                      previous_item_id = $id
-                                     WHERE c_id = ".$course_id." AND id = $next_next";
+                                     WHERE iid = $next_next";
                         Database::query($sql_upd2);
                     }
                     $display = $display + 1;
@@ -4063,12 +4058,12 @@ class learnpath
             while ($row = Database::fetch_array($res)) {
                 if ($row['display_order'] != $i) { // If we find a gap in the order, we need to fix it.
                     $sql = "UPDATE $lp_table SET display_order = $i
-                            WHERE c_id = $courseId AND id = ".$row['id'];
+                            WHERE iid = ".$row['iid'];
                     Database::query($sql);
                 }
                 $row['display_order'] = $i;
-                $lps[$row['id']] = $row;
-                $lp_order[$i] = $row['id'];
+                $lps[$row['iid']] = $row;
+                $lp_order[$i] = $row['iid'];
                 $i++;
             }
         }
@@ -4076,10 +4071,10 @@ class learnpath
             $order = $lps[$lp_id]['display_order'];
             if ($order > 1) { // If it's the first element, no need to move up.
                 $sql = "UPDATE $lp_table SET display_order = $order
-                        WHERE c_id = $courseId AND id = ".$lp_order[$order - 1];
+                        WHERE iid = ".$lp_order[$order - 1];
                 Database::query($sql);
                 $sql = "UPDATE $lp_table SET display_order = ".($order - 1)."
-                        WHERE c_id = $courseId AND id = ".$lp_id;
+                        WHERE iid = $lp_id";
                 Database::query($sql);
             }
         }
@@ -4125,12 +4120,12 @@ class learnpath
                 if ($row['display_order'] != $i) {
                     // If we find a gap in the order, we need to fix it.
                     $sql = "UPDATE $lp_table SET display_order = $i
-                              WHERE c_id = ".$courseId." AND id = ".$row['id'];
+                              WHERE iid = ".$row['iid'];
                     Database::query($sql);
                 }
                 $row['display_order'] = $i;
-                $lps[$row['id']] = $row;
-                $lp_order[$i] = $row['id'];
+                $lps[$row['iid']] = $row;
+                $lp_order[$i] = $row['iid'];
                 $i++;
             }
         }
@@ -4138,10 +4133,10 @@ class learnpath
             $order = $lps[$lp_id]['display_order'];
             if ($order < $max) { // If it's the first element, no need to move up.
                 $sql = "UPDATE $lp_table SET display_order = $order
-                        WHERE c_id = ".$courseId." AND id = ".$lp_order[$order + 1];
+                        WHERE iid = ".$lp_order[$order + 1];
                 Database::query($sql);
                 $sql = "UPDATE $lp_table SET display_order = ".($order + 1)."
-                        WHERE c_id = ".$courseId." AND id = ".$lp_id;
+                        WHERE iid = $lp_id";
                 Database::query($sql);
             }
         }
@@ -4288,7 +4283,7 @@ class learnpath
      * to normal users.
      * Can be used as abstract
      * @param integer    Learnpath ID
-     * @param string $set_visibility    New visibility
+     * @param int   New visibility
      * @return bool
      */
     public static function toggle_visibility($lp_id, $set_visibility = 1)
@@ -4359,9 +4354,9 @@ class learnpath
     {
         $course_id = api_get_course_int_id();
         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = intval($lp_id);
+        $lp_id = (int) $lp_id;
         $sql = "SELECT * FROM $tbl_lp
-                WHERE c_id = $course_id AND id = $lp_id";
+                WHERE iid = $lp_id";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result);
@@ -4828,7 +4823,7 @@ class learnpath
                 $sql = "UPDATE $table SET
                             progress = $progress
                         WHERE
-                            c_id = ".$course_id." AND
+                            c_id = $course_id AND
                             lp_id = " . $this->get_id()." AND
                             user_id = " . $this->get_user_id()." ".$session_condition;
                 // Ignore errors as some tables might not have the progress field just yet.
@@ -4889,7 +4884,6 @@ class learnpath
             error_log('New LP - In learnpath::set_encoding()', 0);
         }
 
-        $course_id = api_get_course_int_id();
         $enc = api_refine_encoding_id($enc);
         if (empty($enc)) {
             $enc = api_get_system_encoding();
@@ -4899,7 +4893,7 @@ class learnpath
             if ($lp != 0) {
                 $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
                 $sql = "UPDATE $tbl_lp SET default_encoding = '$enc' 
-                        WHERE c_id = ".$course_id." AND id = ".$lp;
+                        WHERE iid = ".$lp;
                 $res = Database::query($sql);
                 return $res;
             }
@@ -4924,7 +4918,7 @@ class learnpath
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET js_lib = '$lib' 
-                    WHERE c_id = ".$course_id." AND id = ".$lp;
+                    WHERE iid = $lp";
             $res = Database::query($sql);
             return $res;
         } else {
@@ -4946,11 +4940,10 @@ class learnpath
             return false;
         $this->maker = $name;
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-        $course_id = api_get_course_int_id();
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET
                 content_maker = '".Database::escape_string($this->maker)."'
-                WHERE c_id = ".$course_id." AND id = '$lp_id'";
+                WHERE iid = $lp_id";
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new content_maker : '.$this->maker, 0);
         }
@@ -4977,7 +4970,7 @@ class learnpath
         $course_id = $this->course_info['real_id'];
         $sql = "UPDATE $lp_table SET
                 name = '".Database::escape_string($this->name)."'
-                WHERE c_id = ".$course_id." AND id = '$lp_id'";
+                WHERE iid = $lp_id";
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new name : '.$this->name, 0);
         }
@@ -5081,7 +5074,6 @@ class learnpath
      */
     public function set_theme($name = '')
     {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_theme()', 0);
         }
@@ -5089,7 +5081,7 @@ class learnpath
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET theme = '".Database::escape_string($this->theme)."'
-                WHERE c_id = ".$course_id." AND id = '$lp_id'";
+                WHERE iid = $lp_id";
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new theme : '.$this->theme, 0);
         }
@@ -5105,7 +5097,6 @@ class learnpath
      */
     public function set_preview_image($name = '')
     {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_preview_image()', 0);
         }
@@ -5115,7 +5106,7 @@ class learnpath
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET
                 preview_image = '".Database::escape_string($this->preview_image)."'
-                WHERE c_id = ".$course_id." AND id = '$lp_id'";
+                WHERE iid = $lp_id";
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new preview image : '.$this->preview_image, 0);
         }
@@ -5130,7 +5121,6 @@ class learnpath
      */
     public function set_author($name = '')
     {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_author()', 0);
         }
@@ -5138,7 +5128,7 @@ class learnpath
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET author = '".Database::escape_string($name)."'
-                WHERE c_id = ".$course_id." AND id = '$lp_id'";
+                WHERE iid = $lp_id";
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new preview author : '.$this->author, 0);
         }
@@ -5154,7 +5144,6 @@ class learnpath
      */
     public function set_hide_toc_frame($hide)
     {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_hide_toc_frame()', 0);
         }
@@ -5164,7 +5153,7 @@ class learnpath
             $lp_id = $this->get_id();
             $sql = "UPDATE $lp_table SET
                     hide_toc_frame = '".(int) $this->hide_toc_frame."'
-                    WHERE c_id = ".$course_id." AND id = '$lp_id'";
+                    WHERE iid = $lp_id";
             if ($this->debug > 2) {
                 error_log('New LP - lp updated with new preview hide_toc_frame : '.$this->author, 0);
             }
@@ -5183,7 +5172,6 @@ class learnpath
      */
     public function set_prerequisite($prerequisite)
     {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_prerequisite()', 0);
         }
@@ -5191,7 +5179,7 @@ class learnpath
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET prerequisite = '".$this->prerequisite."'
-                WHERE c_id = ".$course_id." AND id = '$lp_id'";
+                WHERE iid = $lp_id";
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new preview requisite : '.$this->requisite, 0);
         }
@@ -5206,7 +5194,6 @@ class learnpath
      */
     public function set_proximity($name = '')
     {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_proximity()', 0);
         }
@@ -5218,7 +5205,7 @@ class learnpath
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET
                     content_local = '".Database::escape_string($name)."'
-                WHERE c_id = ".$course_id." AND id = '$lp_id'";
+                WHERE iid = $lp_id";
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new proximity : '.$this->proximity, 0);
         }
@@ -5245,7 +5232,6 @@ class learnpath
      */
     public function set_use_max_score($use_max_score = 1)
     {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_use_max_score()', 0);
         }
@@ -5255,7 +5241,7 @@ class learnpath
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET
                     use_max_score = '".$this->use_max_score."'
-                WHERE c_id = ".$course_id." AND id = '$lp_id'";
+                WHERE iid = $lp_id";
 
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new use_max_score : '.$this->use_max_score, 0);
@@ -5282,8 +5268,7 @@ class learnpath
             ->getRepository('ChamiloCourseBundle:CLp')
             ->findOneBy(
                 [
-                    'id' => $this->get_id(),
-                    'cId' => api_get_course_int_id()
+                    'iid' => $this->get_id()
                 ]
             );
 
@@ -5321,8 +5306,7 @@ class learnpath
             ->getRepository('ChamiloCourseBundle:CLp')
             ->findOneBy(
                 [
-                    'id' => $this->get_id(),
-                    'cId' => api_get_course_int_id()
+                    'iid' => $this->get_id()
                 ]
             );
 
@@ -5348,7 +5332,6 @@ class learnpath
      */
     public function set_modified_on()
     {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_expired_on()', 0);
         }
@@ -5356,7 +5339,7 @@ class learnpath
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET modified_on = '".$this->modified_on."'
-                WHERE c_id = ".$course_id." AND id = '$lp_id'";
+                WHERE iid = $lp_id";
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new expired_on : '.$this->modified_on, 0);
         }
@@ -5483,13 +5466,12 @@ class learnpath
      */
     public function update_default_view_mode()
     {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::update_default_view_mode()', 0);
         }
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $sql = "SELECT * FROM $lp_table
-                WHERE c_id = ".$course_id." AND id = ".$this->get_id();
+                WHERE iid = ".$this->get_id();
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
@@ -5510,7 +5492,7 @@ class learnpath
                     break;
             }
             $sql = "UPDATE $lp_table SET default_view_mod = '$view_mode'
-                    WHERE c_id = ".$course_id." AND id = ".$this->get_id();
+                    WHERE iid = ".$this->get_id();
             Database::query($sql);
             $this->mode = $view_mode;
 
@@ -5529,13 +5511,12 @@ class learnpath
      */
     public function update_default_scorm_commit()
     {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::update_default_scorm_commit()', 0);
         }
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $sql = "SELECT * FROM $lp_table
-                WHERE c_id = ".$course_id." AND id = ".$this->get_id();
+                WHERE iid = ".$this->get_id();
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
@@ -5548,7 +5529,7 @@ class learnpath
                 $force_return = true;
             }
             $sql = "UPDATE $lp_table SET force_commit = $force
-                    WHERE c_id = ".$course_id." AND id = ".$this->get_id();
+                    WHERE iid = ".$this->get_id();
             Database::query($sql);
             $this->force_commit = $force_return;
 
@@ -5570,7 +5551,7 @@ class learnpath
         $course_id = api_get_course_int_id();
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
 
-        $sql = "SELECT * FROM $lp_table WHERE c_id = ".$course_id." ORDER BY display_order";
+        $sql = "SELECT * FROM $lp_table WHERE c_id = $course_id ORDER BY display_order";
         $res = Database::query($sql);
         if ($res === false) {
             return false;
@@ -5585,7 +5566,7 @@ class learnpath
                 if ($row['display_order'] != $i) {
                     // If we find a gap in the order, we need to fix it.
                     $sql = "UPDATE $lp_table SET display_order = $i
-                            WHERE c_id = ".$course_id." AND id = ".$row['id'];
+                            WHERE iid = ".$row['iid'];
                     Database::query($sql);
                 }
                 $i++;
@@ -5606,7 +5587,7 @@ class learnpath
         }
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $sql = "SELECT * FROM $lp_table
-                WHERE c_id = ".$course_id." AND id = ".$this->get_id();
+                WHERE iid = ".$this->get_id();
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
@@ -5617,7 +5598,7 @@ class learnpath
                 $force = 1;
             }
             $sql = "UPDATE $lp_table SET prevent_reinit = $force
-                    WHERE c_id = ".$course_id." AND id = ".$this->get_id();
+                    WHERE iid = ".$this->get_id();
             Database::query($sql);
             $this->prevent_reinit = $force;
             return $force;
@@ -5666,7 +5647,6 @@ class learnpath
      **/
     public function set_attempt_mode($mode)
     {
-        $course_id = api_get_course_int_id();
         switch ($mode) {
             case 'seriousgame':
                 $sg_mode = 1;
@@ -5691,7 +5671,7 @@ class learnpath
         $sql = "UPDATE $lp_table SET
                 prevent_reinit = $prevent_reinit ,
                 seriousgame_mode = $sg_mode
-                WHERE c_id = ".$course_id." AND id = ".$this->get_id();
+                WHERE iid = ".$this->get_id();
         $res = Database::query($sql);
         if ($res) {
             return true;
@@ -5737,13 +5717,12 @@ class learnpath
      **/
     public function set_seriousgame_mode()
     {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_seriousgame_mode()', 0);
         }
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $sql = "SELECT * FROM $lp_table 
-                WHERE c_id = ".$course_id." AND id = ".$this->get_id();
+                WHERE iid = ".$this->get_id();
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
@@ -5754,7 +5733,7 @@ class learnpath
                 $force = 1;
             }
             $sql = "UPDATE $lp_table SET seriousgame_mode = $force
-			        WHERE c_id = ".$course_id." AND id = ".$this->get_id();
+			        WHERE iid = ".$this->get_id();
             Database::query($sql);
             $this->seriousgame_mode = $force;
             return $force;
@@ -5772,13 +5751,12 @@ class learnpath
      */
     public function update_scorm_debug()
     {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::update_scorm_debug()', 0);
         }
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $sql = "SELECT * FROM $lp_table
-                WHERE c_id = ".$course_id." AND id = ".$this->get_id();
+                WHERE iid = ".$this->get_id();
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
@@ -5789,7 +5767,7 @@ class learnpath
                 $force = 1;
             }
             $sql = "UPDATE $lp_table SET debug = $force
-                    WHERE c_id = ".$course_id." AND id = ".$this->get_id();
+                    WHERE iid = ".$this->get_id();
             Database::query($sql);
             $this->scorm_debug = $force;
             return $force;
@@ -6904,9 +6882,7 @@ class learnpath
         if (is_numeric($item_id)) {
             $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
             $sql = "SELECT lp.* FROM $tbl_lp_item as lp
-                    WHERE 
-                        c_id = $course_id AND 
-                        lp.id = ".intval($item_id);
+                    WHERE lp.iid = ".intval($item_id);
             $result = Database::query($sql);
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $_SESSION['parent_item_id'] = $row['item_type'] == 'dir' ? $item_id : 0;
@@ -6966,7 +6942,7 @@ class learnpath
                     case TOOL_DOCUMENT:
                         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
                         $sql_doc = "SELECT path FROM ".$tbl_doc."
-                                    WHERE c_id = ".$course_id." AND id = ".intval($row['path']);
+                                    WHERE c_id = ".$course_id." AND iid = ".intval($row['path']);
                         $result = Database::query($sql_doc);
                         $path_file = Database::result($result, 0, 0);
                         $path_parts = pathinfo($path_file);
@@ -7011,7 +6987,7 @@ class learnpath
         if (is_numeric($item_id)) {
             $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
             $sql = "SELECT * FROM $tbl_lp_item
-                    WHERE c_id = ".$course_id." AND id = ".intval($item_id);
+                    WHERE iid = ".intval($item_id);
             $res = Database::query($sql);
             $row = Database::fetch_array($res);
             switch ($row['item_type']) {
@@ -7040,11 +7016,10 @@ class learnpath
                     $sql = "SELECT lp.*, doc.path as dir
                             FROM $tbl_lp_item as lp
                             LEFT JOIN $tbl_doc as doc
-                            ON (doc.id = lp.path AND lp.c_id = doc.c_id)
+                            ON (doc.iid = lp.path AND lp.c_id = doc.c_id)
                             WHERE
-                                lp.c_id = $course_id AND
                                 doc.c_id = $course_id AND
-                                lp.id = ".intval($item_id);
+                                lp.iid = ".intval($item_id);
                     $res_step = Database::query($sql);
                     $row_step = Database::fetch_array($res_step, 'ASSOC');
                     $return .= $this->display_manipulate(
@@ -7062,7 +7037,7 @@ class learnpath
                     if (ctype_digit($link_id)) {
                         $tbl_link = Database::get_course_table(TABLE_LINK);
                         $sql_select = 'SELECT url FROM '.$tbl_link.'
-                                       WHERE c_id = '.$course_id.' AND id = '.intval($link_id);
+                                       WHERE c_id = '.$course_id.' AND iid = '.intval($link_id);
                         $res_link = Database::query($sql_select);
                         $row_link = Database::fetch_array($res_link);
                         if (is_array($row_link)) {
@@ -7081,11 +7056,10 @@ class learnpath
                     $sql = "SELECT lp.*, doc.path as dir
                             FROM $tbl_lp_item as lp
                             LEFT JOIN $tbl_doc as doc
-                            ON (doc.id = lp.path AND lp.c_id = doc.c_id)
+                            ON (doc.iid = lp.path AND lp.c_id = doc.c_id)
                             WHERE
-                                lp.c_id = $course_id AND
                                 doc.c_id = $course_id AND
-                                lp.id = ".intval($item_id);
+                                lp.iid = ".intval($item_id);
                     $res_step = Database::query($sql);
                     $row_step = Database::fetch_array($res_step, 'ASSOC');
                     $return .= $this->display_manipulate(
@@ -7204,7 +7178,7 @@ class learnpath
         $return = '';
         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
         $sql_doc = "SELECT * FROM ".$tbl_doc."
-                    WHERE c_id = ".$course_id." AND id = ".$id;
+                    WHERE c_id = $course_id AND iid = $id";
         $res_doc = Database::query($sql_doc);
         $row_doc = Database::fetch_array($res_doc);
 
@@ -7237,7 +7211,7 @@ class learnpath
         } elseif (is_numeric($extra_info)) {
             $sql = "SELECT title, description
                     FROM $tbl_quiz
-                    WHERE c_id = $course_id AND id = ".$extra_info;
+                    WHERE c_id = $course_id AND iid = ".$extra_info;
 
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
@@ -7457,8 +7431,8 @@ class learnpath
                     WHERE
                         c_id = ".$course_id." AND
                         path LIKE '" . $uploadPath."/%/%htm%' AND
-                        id = " . (int) $extra_info."
-                    ORDER BY id ASC";
+                        iid = " . (int) $extra_info."
+                    ORDER BY iid ASC";
 
             $res_hot = Database::query($sql);
             $row = Database::fetch_array($res_hot);
@@ -7481,7 +7455,7 @@ class learnpath
         }
 
         $sql = "SELECT * FROM $tbl_lp_item
-                WHERE c_id = ".$course_id." AND lp_id = ".$this->lp_id;
+                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
         $result = Database::query($sql);
         $arrLP = [];
         while ($row = Database::fetch_array($result)) {
@@ -7593,9 +7567,11 @@ class learnpath
                 $arrHide = [];
                 for ($i = 0; $i < count($arrLP); $i++) {
                     if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dir') {
-                        if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
+                        if ($extra_info['previous_item_id'] == $arrLP[$i]['id']) {
                             $s_selected_position = $arrLP[$i]['id'];
-                        elseif ($action == 'add') $s_selected_position = 0;
+                        } elseif ($action == 'add') {
+                            $s_selected_position = 0;
+                        }
                         $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
                     }
                 }
@@ -7660,15 +7636,15 @@ class learnpath
             $parent = 0;
         }
 
-        $sql = "SELECT * FROM ".$tbl_lp_item."
+        $sql = "SELECT * FROM $tbl_lp_item
                 WHERE
-                    c_id = ".$course_id." AND
+                    c_id = $course_id AND
                     lp_id = " . $this->lp_id;
         $result = Database::query($sql);
         $arrLP = [];
         while ($row = Database::fetch_array($result)) {
             $arrLP[] = array(
-                'id' => $row['id'],
+                'id' => $row['iid'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
                 'path' => $row['path'],
@@ -7878,14 +7854,14 @@ class learnpath
             $parent = 0;
         }
 
-        $sql = "SELECT * FROM ".$tbl_lp_item."
-                WHERE c_id = ".$course_id." AND lp_id = ".$this->lp_id;
+        $sql = "SELECT * FROM $tbl_lp_item
+                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
         $result = Database::query($sql);
 
         $arrLP = [];
         while ($row = Database::fetch_array($result)) {
             $arrLP[] = array(
-                'id' => $row['id'],
+                'id' => $row['iid'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
                 'path' => $row['path'],
@@ -8106,11 +8082,10 @@ class learnpath
         }
 
         $id  = intval($id);
-        $sql = "SELECT * FROM ".$tbl_lp_item."
+        $sql = "SELECT * FROM $tbl_lp_item
                 WHERE
-                    c_id = ".$course_id." AND
                     lp_id = " . $this->lp_id." AND
-                    id != $id";
+                    iid != $id";
 
         if ($item_type == 'dir') {
             $sql .= " AND parent_item_id = 0";
@@ -8121,7 +8096,7 @@ class learnpath
 
         while ($row = Database::fetch_array($result)) {
             $arrLP[] = array(
-                'id' => $row['id'],
+                'id' => $row['iid'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
                 'path' => $row['path'],
@@ -8347,7 +8322,7 @@ class learnpath
         if ($action == 'add') {
             if (is_numeric($extra_info)) {
                 $sql_doc = "SELECT path FROM $tbl_doc 
-                            WHERE c_id = $course_id AND id = ".intval($extra_info);
+                            WHERE c_id = $course_id AND iid = ".intval($extra_info);
                 $result = Database::query($sql_doc);
                 $path_file = Database::result($result, 0, 0);
                 $path_parts = pathinfo($path_file);
@@ -8368,7 +8343,7 @@ class learnpath
             $sql = "SELECT path, title FROM $tbl_doc
                     WHERE
                         c_id = ".$course_id." AND
-                        id = " . intval($extra_info);
+                        iid = " . intval($extra_info);
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
             $item_title = $row['title'];
@@ -8393,6 +8368,7 @@ class learnpath
                 WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
         $result = Database::query($sql);
         $arrLP = [];
+
         while ($row = Database::fetch_array($result)) {
             $arrLP[] = array(
                 'id' => $row['id'],
@@ -8777,8 +8753,8 @@ class learnpath
             $parent = 0;
         }
 
-        $sql = "SELECT * FROM ".$tbl_lp_item."
-                WHERE c_id = ".$course_id." AND lp_id = ".$this->lp_id;
+        $sql = "SELECT * FROM $tbl_lp_item
+                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
         $result = Database::query($sql);
         $arrLP = [];
 
@@ -8989,12 +8965,12 @@ class learnpath
 
         $sql = "SELECT * FROM $tbl_lp_item 
                 WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
-
         $result = Database::query($sql);
         $arrLP = [];
+
         while ($row = Database::fetch_array($result)) {
             $arrLP[] = array(
-                'id' => $row['id'],
+                'id' => $row['iid'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
                 'path' => $row['path'],
@@ -9195,8 +9171,8 @@ class learnpath
 
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $item_id = intval($item_id);
-        $sql = "SELECT * FROM ".$tbl_lp_item." as lp
-                WHERE lp.c_id = ".$course_id." AND lp.id = ".$item_id;
+        $sql = "SELECT * FROM $tbl_lp_item 
+                WHERE iid = ".$item_id;
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
 
@@ -9294,7 +9270,7 @@ class learnpath
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql = "SELECT * FROM ".$tbl_lp_item."
                 WHERE 
-                    c_id = ".$course_id." AND 
+                    c_id = $course_id AND 
                     lp_id = ".$this->lp_id." AND 
                     parent_item_id = 0
                 ORDER BY display_order ASC";
@@ -9308,28 +9284,28 @@ class learnpath
                 }
                 $js_var = json_encode(get_lang('After').' '.$row_zero['title']);
                 $return .= 'child_name[0]['.$i.'] = '.$js_var.' ;'."\n";
-                $return .= 'child_value[0]['.$i++.'] = "'.$row_zero['id'].'";'."\n";
+                $return .= 'child_value[0]['.$i++.'] = "'.$row_zero['iid'].'";'."\n";
             }
         }
         $return .= "\n";
-        $sql = "SELECT * FROM ".$tbl_lp_item."
-                WHERE c_id = ".$course_id." AND lp_id = ".$this->lp_id;
+        $sql = "SELECT * FROM $tbl_lp_item
+                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res)) {
             $sql_parent = "SELECT * FROM ".$tbl_lp_item."
                            WHERE
                                 c_id = ".$course_id." AND
-                                parent_item_id = " . $row['id']."
+                                parent_item_id = " . $row['iid']."
                            ORDER BY display_order ASC";
             $res_parent = Database::query($sql_parent);
             $i = 0;
-            $return .= 'child_name['.$row['id'].'] = new Array();'."\n";
-            $return .= 'child_value['.$row['id'].'] = new Array();'."\n\n";
+            $return .= 'child_name['.$row['iid'].'] = new Array();'."\n";
+            $return .= 'child_value['.$row['iid'].'] = new Array();'."\n\n";
 
             while ($row_parent = Database::fetch_array($res_parent)) {
                 $js_var = json_encode(get_lang('After').' '.$row_parent['title']);
-                $return .= 'child_name['.$row['id'].']['.$i.'] =   '.$js_var.' ;'."\n";
-                $return .= 'child_value['.$row['id'].']['.$i++.'] = "'.$row_parent['id'].'";'."\n";
+                $return .= 'child_name['.$row['iid'].']['.$i.'] =   '.$js_var.' ;'."\n";
+                $return .= 'child_value['.$row['iid'].']['.$i++.'] = "'.$row_parent['iid'].'";'."\n";
             }
             $return .= "\n";
         }
@@ -9350,8 +9326,8 @@ class learnpath
         if (is_numeric($item_id)) {
             $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
-            $sql = "SELECT * FROM ".$tbl_lp_item."
-                    WHERE c_id = ".$course_id." AND id = ".$item_id;
+            $sql = "SELECT * FROM $tbl_lp_item
+                    WHERE iid = $item_id";
             $res = Database::query($sql);
             $row = Database::fetch_array($res);
 
@@ -9436,7 +9412,7 @@ class learnpath
         $item_id = intval($item_id);
         /* Current prerequisite */
         $sql = "SELECT * FROM $tbl_lp_item
-                WHERE c_id = $course_id AND id = ".$item_id;
+                WHERE iid = $item_id";
         $result = Database::query($sql);
         $row    = Database::fetch_array($result);
         $prerequisiteId = $row['prerequisite'];
@@ -9477,7 +9453,7 @@ class learnpath
                 $selectedMaxScore[$row['prerequisite']] = $row['prerequisite_max_score'];
             }
             $arrLP[] = array(
-                'id' => $row['id'],
+                'id' => $row['iid'],
                 'item_type' => $row['item_type'],
                 'title' => $row['title'],
                 'ref' => $row['ref'],
@@ -9583,7 +9559,7 @@ class learnpath
         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 
         // get current prerequisite
-        $sql = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $lp_id ";
+        $sql = "SELECT * FROM $tbl_lp WHERE iid = $lp_id ";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $prerequisiteId = $row['prerequisite'];
@@ -11221,7 +11197,7 @@ EOD;
             //Setting my lp_id to autolaunch = 1
             $attributes['autolaunch'] = 1;
             $where = array(
-                'id = ? AND session_id = ? AND c_id = ?' => array(
+                'iid = ? AND session_id = ? AND c_id = ?' => array(
                     $lp_id,
                     api_get_session_id(),
                     $course_id
@@ -11246,16 +11222,16 @@ EOD;
 
         // Get the max order of the items
         $sql = "SELECT max(display_order) AS display_order FROM $table_lp_item
-                WHERE c_id = $course_id AND lp_id = '".$this->lp_id."'";
+                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
         $rs_max_order = Database::query($sql);
         $row_max_order = Database::fetch_object($rs_max_order);
         $max_order = $row_max_order->display_order;
         // Get the previous item ID
-        $sql = "SELECT id as previous FROM $table_lp_item
+        $sql = "SELECT iid as previous FROM $table_lp_item
                 WHERE 
                     c_id = $course_id AND 
-                    lp_id = '".$this->lp_id."' AND 
-                    display_order = '".$max_order."' ";
+                    lp_id = ".$this->lp_id." AND 
+                    display_order = '$max_order' ";
         $rs_max = Database::query($sql);
         $row_max = Database::fetch_object($rs_max);
 
@@ -11337,12 +11313,12 @@ EOD;
         $lp_id = $this->get_id();
         //Cleaning prerequisites
         $sql = "UPDATE $tbl_lp_item SET prerequisite = ''
-                WHERE c_id = ".$course_id." AND lp_id = '$lp_id'";
+                WHERE c_id = $course_id AND lp_id = $lp_id";
         Database::query($sql);
 
         //Cleaning mastery score for exercises
         $sql = "UPDATE $tbl_lp_item SET mastery_score = ''
-                WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND item_type = 'quiz'";
+                WHERE c_id = $course_id AND lp_id = $lp_id AND item_type = 'quiz'";
         Database::query($sql);
     }
 
@@ -11370,12 +11346,12 @@ EOD;
                         if ($last_item_not_dir_type == 'quiz') {
                             // if previous is quiz, mark its max score as default score to be achieved
                             $sql = "UPDATE $tbl_lp_item SET mastery_score = '$last_item_not_dir_max'
-                                    WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND id = '$last_item_not_dir'";
+                                    WHERE c_id = $course_id AND lp_id = $lp_id AND iid = $last_item_not_dir";
                             Database::query($sql);
                         }
                         // now simply update the prerequisite to set it to the last non-chapter item
                         $sql = "UPDATE $tbl_lp_item SET prerequisite = '$last_item_not_dir'
-                                WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND id = '$current_item_id'";
+                                WHERE c_id = $course_id AND lp_id = $lp_id AND iid = $current_item_id";
                         Database::query($sql);
                         // record item as 'non-chapter' reference
                         $last_item_not_dir = $item->get_id();
@@ -11655,7 +11631,7 @@ EOD;
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET category_id = ".$this->categoryId."
-                WHERE c_id = $courseId AND id = $lp_id";
+                WHERE iid = $lp_id";
         Database::query($sql);
 
         return true;
@@ -11686,7 +11662,7 @@ EOD;
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET subscribe_users = ".$this->subscribeUsers."
-                WHERE c_id = ".$this->course_int_id." AND id = $lp_id";
+                WHERE iid = $lp_id";
         Database::query($sql);
 
         return true;
@@ -12264,7 +12240,7 @@ EOD;
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table 
                 SET accumulate_scorm_time = ".$this->accumulateScormTime."
-                WHERE c_id = ".$this->course_int_id." AND id = $lp_id";
+                WHERE iid = $lp_id";
         Database::query($sql);
 
         return true;
@@ -12360,7 +12336,7 @@ EOD;
                     ]);
             case TOOL_HOTPOTATOES: //lowercase because of strtolower above
                 $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-                $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE c_id = $course_id AND id=$id");
+                $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE c_id = $course_id AND iid=$id");
                 $myrow = Database::fetch_array($result);
                 $path = $myrow['path'];
 
@@ -12390,7 +12366,7 @@ EOD;
             case TOOL_DOCUMENT:
                 $document = $em
                     ->getRepository('ChamiloCourseBundle:CDocument')
-                    ->findOneBy(['cId' => $course_id, 'id' => $id]);
+                    ->findOneBy(['cId' => $course_id, 'iid' => $id]);
 
                 if (!$document) {
                     return '';
@@ -12455,7 +12431,7 @@ EOD;
         $id_in_path = intval($id_in_path);
 
         $sql_item = "SELECT item_type, title, ref FROM $tbl_lp_item
-                     WHERE c_id = $course_id AND lp_id = $learningPathId AND id = $id_in_path";
+                     WHERE c_id = $course_id AND lp_id = $learningPathId AND iid = $id_in_path";
         $res_item = Database::query($sql_item);
 
         if (Database::num_rows($res_item) < 1) {
@@ -12532,7 +12508,7 @@ EOD;
                 break;
             case 'hotpotatoes':
                 $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
-                $result = Database::query("SELECT * FROM $tbl_doc WHERE c_id = $course_id AND id = $id");
+                $result = Database::query("SELECT * FROM $tbl_doc WHERE c_id = $course_id AND iid = $id");
                 $myrow = Database::fetch_array($result);
                 $pathname = explode('/', $myrow['path']); // Making a correct name for the link.
                 $last = count($pathname) - 1; // Making a correct name for the link.

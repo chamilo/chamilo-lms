@@ -1345,7 +1345,7 @@ class Skill extends Model
                     $table .= '<td >';
 
                     //$table .= '<div style="'.$transparency.'">';
-                    $table .= '<div class="organigrama"> <ul><li>'.$label;
+                    $table .= '<div class="skills_chart"> <ul><li>'.$label;
                     $table .= $this->processVertex($vertex, $skills);
                     $table .= '</ul></li></div>';
                     $table .= '</td>';
@@ -2071,9 +2071,10 @@ class Skill extends Model
     /**
      * Get skills
      * @param int $userId
+     * @param int level
      * @return array
      */
-    public function getStudentSkills($userId)
+    public function getStudentSkills($userId, $level = 0)
     {
         $sql = "SELECT s.id, s.name, sru.acquired_skill_at
                 FROM {$this->table} s
@@ -2084,12 +2085,22 @@ class Skill extends Model
         $result = Database::query($sql);
 
         $skills = [];
-
         foreach ($result as $item) {
-            $skills[] = [
-                'name' => self::translateName($item['name']),
-                'acquired_skill_at' => $item['acquired_skill_at'],
-            ];
+            if (empty($level)) {
+                $skills[] = [
+                    'name' => self::translateName($item['name']),
+                    'acquired_skill_at' => $item['acquired_skill_at'],
+                ];
+            } else {
+                $parents = self::get_parents($item['id']);
+                // +2 because it takes into account the root
+                if (count($parents) == $level + 1) {
+                    $skills[] = [
+                        'name' => self::translateName($item['name']),
+                        'acquired_skill_at' => $item['acquired_skill_at'],
+                    ];
+                }
+            }
         }
 
         return $skills;

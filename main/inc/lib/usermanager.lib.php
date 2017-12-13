@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
+use Chamilo\CoreBundle\Entity\Repository\AccessUrlRepository;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use ChamiloSession as Session;
 
@@ -254,6 +255,17 @@ class UserManager
         $access_url_id = 1;
         if (api_get_multiple_access_url()) {
             $access_url_id = api_get_current_access_url_id();
+        } else {
+            // In some cases, the first access_url ID might be different from 1
+            // for example when using a DB cluster or hacking the DB manually.
+            // In this case, we want the first row, not necessarily "1".
+            $dbm = Database::getManager();
+            /** @var AccessUrlRepository $accessUrlRepository */
+            $accessUrlRepository = $dbm->getRepository('ChamiloCoreBundle:AccessUrl');
+            $accessUrl = $accessUrlRepository->getFirstId();
+            if (!empty($accessUrl[0]) && !empty($accessUrl[0][1])) {
+                $access_url_id = $accessUrl[0][1];
+            }
         }
 
         if (isset($_configuration[$access_url_id]) &&

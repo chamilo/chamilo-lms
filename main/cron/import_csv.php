@@ -25,6 +25,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 ini_set('memory_limit', -1);
 ini_set('max_execution_time', 0);
 ini_set('log_errors', '1');
+ini_set('display_errors', '1');
 
 /**
  * Class ImportCsv
@@ -2229,12 +2230,16 @@ class ImportCsv
                 );
 
                 if (empty($userId)) {
-                    if (empty($userInfo)) {
-                        $this->logger->addInfo("User does '".$row['External_user_id']."' not exists skip this entry.");
-                        continue;
-                    }
+                    $this->logger->addInfo("User does '".$row['External_user_id']."' not exists skip this entry.");
+                    continue;
                 }
+
                 $userInfo = api_get_user_entity($userId);
+
+                if (empty($userInfo)) {
+                    $this->logger->addInfo("Chamilo user does not found: #".$userId."' ");
+                    continue;
+                }
 
                 // Dates
                 $createdAt = $this->createDateTime($row['Added_On']);
@@ -2261,6 +2266,7 @@ class ImportCsv
 
                 if (empty($post)) {
                     $post = new CarePost();
+                    $this->logger->addInfo("New post will be created no match for externalCareId = ".$row['External_care_id']);
                 }
 
                 $post
@@ -2278,6 +2284,9 @@ class ImportCsv
                 ;
                 $em->persist($post);
                 $em->flush();
+
+                $this->logger->addInfo("Post id saved #".$post->getId());
+
 
                 if (($counter % $batchSize) === 0) {
                     $em->flush();
@@ -2302,8 +2311,11 @@ class ImportCsv
         }
 
         $date = DateTime::createFromFormat('j/m/Y', $string);
+        if ($date) {
+            return $date;
+        }
 
-        return $date;
+        return null;
     }
 
     /**

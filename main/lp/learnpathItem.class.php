@@ -113,7 +113,7 @@ class learnpathItem
                 $course_id = intval($course_id);
             }
             $sql = "SELECT * FROM $items_table
-                    WHERE c_id = $course_id AND id = $id";
+                    WHERE iid = $id";
             $res = Database::query($sql);
             if (Database::num_rows($res) < 1) {
                 $this->error = 'Could not find given learnpath item in learnpath_item table';
@@ -151,7 +151,7 @@ class learnpathItem
 
         // Load children list
         if (!empty($this->lp_id)) {
-            $sql = "SELECT id FROM $items_table
+            $sql = "SELECT iid FROM $items_table
                     WHERE
                         c_id = $course_id AND
                         lp_id = ".$this->lp_id." AND
@@ -159,7 +159,7 @@ class learnpathItem
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 while ($row = Database::fetch_assoc($res)) {
-                    $this->children[] = $row['id'];
+                    $this->children[] = $row['iid'];
                 }
             }
 
@@ -317,14 +317,14 @@ class learnpathItem
         Database::query($sql);
 
         $sql = "SELECT * FROM $lp_item
-                WHERE c_id = $course_id AND id = ".$this->db_id;
+                WHERE iid = ".$this->db_id;
         $res_sel = Database::query($sql);
         if (Database::num_rows($res_sel) < 1) {
             return false;
         }
 
         $sql = "DELETE FROM $lp_item
-                WHERE c_id = $course_id AND id = ".$this->db_id;
+                WHERE iid = ".$this->db_id;
         Database::query($sql);
         if (self::DEBUG > 0) {
             error_log('Deleting from lp_item: '.$sql);
@@ -520,7 +520,7 @@ class learnpathItem
                             FROM ' . $table_doc.'
                             WHERE
                                 c_id = ' . $course_id.' AND
-                                id = ' . $path;
+                                iid = ' . $path;
                     $res = Database::query($sql);
                     $row = Database::fetch_array($res);
                     $real_path = 'document'.$row['path'];
@@ -612,7 +612,7 @@ class learnpathItem
 
         if ($checkdb) {
             $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-            $sql = "SELECT id FROM $tbl
+            $sql = "SELECT iid FROM $tbl
                     WHERE
                         c_id = $course_id AND
                         lp_item_id = ".$this->db_id." AND
@@ -900,7 +900,6 @@ class learnpathItem
      */
     public function get_prevent_reinit()
     {
-        $course_id = api_get_course_int_id();
         if (self::DEBUG > 2) {
             error_log('learnpathItem::get_prevent_reinit()', 0);
         }
@@ -909,7 +908,7 @@ class learnpathItem
                 $table = Database::get_course_table(TABLE_LP_MAIN);
                 $sql = "SELECT prevent_reinit
                     FROM $table
-                    WHERE c_id = $course_id AND id = ".$this->lp_id;
+                    WHERE iid = ".$this->lp_id;
                 $res = Database::query($sql);
                 if (Database::num_rows($res) < 1) {
                     $this->error = "Could not find parent learnpath in lp table";
@@ -950,13 +949,12 @@ class learnpathItem
         if (self::DEBUG > 2) {
             error_log('learnpathItem::get_seriousgame_mode()', 0);
         }
-        $course_id = api_get_course_int_id();
         if (!isset($this->seriousgame_mode)) {
             if (!empty($this->lp_id)) {
                 $table = Database::get_course_table(TABLE_LP_MAIN);
                 $sql = "SELECT seriousgame_mode
                         FROM $table
-                        WHERE c_id = $course_id AND id = ".$this->lp_id;
+                        WHERE iid = ".$this->lp_id;
                 $res = Database::query($sql);
                 if (Database::num_rows($res) < 1) {
                     $this->error = "Could not find parent learnpath in learnpath table";
@@ -1740,9 +1738,7 @@ class learnpathItem
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $course_id = api_get_course_int_id();
         $sql = "SELECT * FROM $lp_item
-                WHERE
-                    c_id = $course_id AND
-                    id='".intval($this->db_id)."'";
+                WHERE iid = ".intval($this->db_id);
         $res = Database::query($sql);
         $row = Database::fetch_array($res);
         return $row['terms'];
@@ -2525,7 +2521,7 @@ class learnpathItem
                                                 TABLE_LP_VIEW
                                             );
 
-                                            $sql = 'SELECT id FROM '.$lp_view.'
+                                            $sql = 'SELECT iid FROM '.$lp_view.'
                                                     WHERE
                                                         c_id = ' . $course_id.' AND
                                                         user_id = ' . $user_id.'  AND
@@ -3271,9 +3267,7 @@ class learnpathItem
         $terms = Database::escape_string(api_htmlentities($new_terms_string, ENT_QUOTES, $charset));
         $sql = "UPDATE $lp_item
                 SET terms = '$terms'
-                WHERE
-                    c_id = $course_id AND
-                    id=".$this->get_id();
+                WHERE iid=".$this->get_id();
         Database::query($sql);
         // Save it to search engine.
         if (api_get_setting('search_enabled') == 'true') {
@@ -3506,8 +3500,7 @@ class learnpathItem
 
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = intval($this->lp_id);
-        $sql = "SELECT * FROM $lp_table
-                WHERE id = $lp_id AND c_id = $course_id";
+        $sql = "SELECT * FROM $lp_table WHERE iid = $lp_id";
         $res = Database::query($sql);
         $accumulateScormTime = 'false';
         if (Database::num_rows($res) > 0) {
@@ -3599,7 +3592,7 @@ class learnpathItem
         if (is_array($this->objectives) && count($this->objectives) > 0) {
             // Save objectives.
             $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-            $sql = "SELECT id
+            $sql = "SELECT iid
                     FROM $tbl
                     WHERE
                         c_id = $course_id AND
@@ -3621,7 +3614,7 @@ class learnpathItem
                     $iva_table = Database::get_course_table(
                         TABLE_LP_IV_OBJECTIVE
                     );
-                    $iva_sql = "SELECT id FROM $iva_table
+                    $iva_sql = "SELECT iid FROM $iva_table
                                 WHERE
                                     c_id = $course_id AND
                                     lp_iv_id = $lp_iv_id AND
@@ -3640,7 +3633,7 @@ class learnpathItem
                             "score_raw = '".Database::escape_string($objective[2])."',".
                             "score_min = '".Database::escape_string($objective[4])."',".
                             "score_max = '".Database::escape_string($objective[3])."' ".
-                            "WHERE c_id = $course_id AND id = $iva_id";
+                            "WHERE c_id = $course_id AND iid = $iva_id";
                         Database::query($ivau_sql);
                     } else {
                         // Insert new one.
@@ -4004,7 +3997,7 @@ class learnpathItem
             ) {
                 // Save interactions.
                 $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-                $sql = "SELECT id FROM $tbl
+                $sql = "SELECT iid FROM $tbl
                         WHERE
                             c_id = $course_id AND
                             lp_item_id = ".$this->db_id." AND
@@ -4038,7 +4031,7 @@ class learnpathItem
                         );
 
                         //also check for the interaction ID as it must be unique for this SCO view
-                        $iva_sql = "SELECT id FROM $iva_table
+                        $iva_sql = "SELECT iid FROM $iva_table
                                     WHERE
                                         c_id = $course_id AND
                                         lp_iv_id = $lp_iv_id AND
@@ -4078,7 +4071,7 @@ class learnpathItem
                                 $iva_table,
                                 $params,
                                 array(
-                                    'c_id = ? AND id = ?' => array(
+                                    'c_id = ? AND iid = ?' => array(
                                         $course_id,
                                         $iva_id
                                     )
@@ -4189,9 +4182,7 @@ class learnpathItem
             $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
             $sql = "UPDATE $tbl_lp_item SET
                         audio = '".Database::escape_string($file_path)."'
-                    WHERE
-                        c_id = {$course_info['real_id']} AND
-                        id = '".intval($this->db_id)."'";
+                    WHERE iid = ".intval($this->db_id);
             Database::query($sql);
         }
 
@@ -4217,9 +4208,7 @@ class learnpathItem
             $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
             $sql = "UPDATE $tbl_lp_item SET
                         audio = '".Database::escape_string($file_path)."'
-                    WHERE
-                        c_id = {$course_info['real_id']} AND
-                        id = ".intval($this->db_id);
+                    WHERE iid = ".intval($this->db_id);
             Database::query($sql);
         }
         return $file_path;
@@ -4240,7 +4229,7 @@ class learnpathItem
         }
         $sql = "UPDATE $tbl_lp_item SET
                 audio = ''
-                WHERE c_id = $course_id AND id IN (".$this->db_id.")";
+                WHERE iid IN (".$this->db_id.")";
         Database::query($sql);
     }
 

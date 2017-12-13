@@ -274,7 +274,7 @@ foreach ($userSkills as $index => $skillIssue) {
 
 $template = new Template(get_lang('IssuedBadgeInformation'));
 $template->assign('user_badges', $allUserBadges);
-
+$template->assign('show_level', api_get_configuration_value('hide_skill_levels') == false;
 
 $content = $template->fetch(
     $template->get_template('skill/issued_all.tpl')

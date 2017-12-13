@@ -58,10 +58,9 @@ class PDF
         $this->params['pdf_date'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_TIME_FORMAT_LONG);
         $this->params['pdf_date_only'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_FORMAT_LONG);
 
-
-        // Ofaj set custim paths to load ttfonts and font configuration
-        define('_MPDF_SYSTEM_TTFONTS_CONFIG',  api_get_path(LIBRARY_PATH).'mpdf/config.php');
-        define('_MPDF_SYSTEM_TTFONTS',  api_get_path(LIBRARY_PATH).'mpdf/ttfonts/');
+        // Ofaj set custom paths to load ttfonts and font configuration
+        define('_MPDF_SYSTEM_TTFONTS_CONFIG',  api_get_path(LIBRARY_PATH).'pdf_config.php');
+        define('_MPDF_SYSTEM_TTFONTS',  api_get_path(SYS_APP_PATH).'Resources/public/fonts/');
 
         $this->pdf = new mPDF(
             'UTF-8',

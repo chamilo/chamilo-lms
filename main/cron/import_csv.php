@@ -2283,6 +2283,7 @@ class ImportCsv
                     ->setParent($parent)
                     ->setTags($tags)
                     ->setUser($userInfo)
+                    ->setAttachment($row['Attachement'])
                 ;
                 $em->persist($post);
                 $em->flush();

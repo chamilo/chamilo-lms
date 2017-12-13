@@ -8033,4 +8033,5 @@ $LinkMeToStudentComment = "Sélectionnez l'apprenant auquel vous souhaitez être
 $RequestLinkToStudent = "Demander le lien avec cet apprenant";
 $SendManuallyPendingAnnouncements = "Envoyer manuellement les annonces en attente";
 $UserLinkingRequestRejected = "Demande de liaison refusée";
+$UserLinkRemoved = "Lien avec apprenant supprimé";
 ?>

@@ -8120,4 +8120,5 @@ $LinkMeToStudentComment = "Seleccione el estudiante con el cual desee solicitar 
 $RequestLinkToStudent = "Vincularme con este estudiante";
 $SendManuallyPendingAnnouncements = "Enviar manualmente los anuncios pendientes";
 $UserLinkingRequestRejected = "Solicitud de vinculación a estudiante rechazada";
+$UserLinkRemoved = "Vínculo con estudiante eliminado";
 ?>

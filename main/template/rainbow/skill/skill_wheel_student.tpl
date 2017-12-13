@@ -170,21 +170,19 @@
                             <figcaption class="avatar-author">{{ user_info.complete_name }}</figcaption>
                         </figure>
                         <p class="text-center">
-                            <a href="{{ _p.web_main }}social/skills_ranking.php" class="btn btn-default" target="_blank">{{ 'YourSkillRankingX'|get_lang|format(ranking) }}</a>
+                            <a href="{{ _p.web_main }}social/skills_ranking.php" class="btn btn-default" target="_blank">
+                                {{ 'YourSkillRankingX'|get_lang|format(ranking) }}
+                            </a>
                         </p>
                         <div class="text-center">
                             {% if skills is not empty %}
                                 {% for skill in skills %}
-                                    {% if skill.icon is empty %}
-                                        <img src="{{ 'badges.png'|icon(32) }}" width="32" height="32" alt="{{ skill.name }}" title="{{ skill.name }}">
-                                    {% else %}
-                                        <img src="{{ skill.web_icon_thumb_path }}" width="32" height="32" alt="{{ skill.name }}" title="{{ skill.name }}">
-                                    {% endif %}
+                                    {{ skill.img_small }}
                                 {% endfor %}
                             {% endif %}
 
                             {% for i in 1..(5 - ranking) %}
-                                <img src="{{ 'badges-default.png'|icon(32) }}" width="32" height="32">
+                                <img src="{{ 'badges-default.png'|icon(64) }}" width="64" height="64">
                             {% endfor %}
                         </div>
                     </div>

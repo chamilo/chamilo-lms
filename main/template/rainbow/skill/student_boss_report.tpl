@@ -24,12 +24,12 @@
 {% if rows %}
     <table class="table">
         <thead>
-        <tr>
-            <th>{{ 'Student' | get_lang }}</th>
-            <th>{{ 'SkillsAcquired' | get_lang }}</th>
-            <th>{{ 'Date' | get_lang }}</th>
-            <th>{{ 'Course' | get_lang }}</th>
-        </tr>
+            <tr>
+                <th>{{ 'Student' | get_lang }}</th>
+                <th>{{ 'SkillsAcquired' | get_lang }}</th>
+                <th>{{ 'Date' | get_lang }}</th>
+                <th>{{ 'Course' | get_lang }}</th>
+            </tr>
         </thead>
         <tbody>
         {% for row in rows %}

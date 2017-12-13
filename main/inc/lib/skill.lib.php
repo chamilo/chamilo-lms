@@ -1345,7 +1345,7 @@ class Skill extends Model
                     $table .= '<td >';
 
                     //$table .= '<div style="'.$transparency.'">';
-                    $table .= '<div class="organigrama"> <ul><li>'.$label;
+                    $table .= '<div class="skills_chart"> <ul><li>'.$label;
                     $table .= $this->processVertex($vertex, $skills);
                     $table .= '</ul></li></div>';
                     $table .= '</td>';

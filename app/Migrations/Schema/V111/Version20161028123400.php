@@ -18,6 +18,7 @@ class Version20161028123400 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
+        error_log('Version20161028123400');
         $iidColumn = $schema
             ->getTable('c_student_publication_comment')
             ->getColumn('iid');

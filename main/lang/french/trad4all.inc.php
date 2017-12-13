@@ -8032,4 +8032,5 @@ $LinkMeToStudent = "Me lier à l'apprenant";
 $LinkMeToStudentComment = "Sélectionnez l'apprenant auquel vous souhaitez être lié afin que les administrateurs puissent réviser et approuver votre requête. Merci de bien vouloir suivre les procédures administratives obligatoires avant votre sollicitude, afin que l'administrateur puisse accepter votre requête en toute légalité.";
 $RequestLinkToStudent = "Demander le lien avec cet apprenant";
 $SendManuallyPendingAnnouncements = "Envoyer manuellement les annonces en attente";
+$UserLinkingRequestRejected = "Demande de liaison refusée";
 ?>

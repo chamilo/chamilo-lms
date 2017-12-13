@@ -8095,4 +8095,5 @@ $LinkMeToStudent = "Link me to student";
 $LinkMeToStudentComment = "Please select the student you want to request a link to, so the administrators can review and approve your request. Please note that proper administrative procedures should have been followed first to ensure the admin can legally accept your request.";
 $RequestLinkToStudent = "Request linking with student";
 $SendManuallyPendingAnnouncements = "Send pending announcements manually";
+$UserLinkingRequestRejected = "User linking request rejected";
 ?>

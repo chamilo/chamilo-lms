@@ -77,7 +77,7 @@ class ScheduledAnnouncement extends Model
         $action .= '<a href="'.api_get_self().'?action=add&session_id='.$sessionId.'">'.
             Display::return_icon('add.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
         $action .= '<a href="scheduled_announcement.php?action=run&session_id='.$sessionId.'">'.
-            Display::return_icon('mail_send.png', get_lang('Send'), '', ICON_SIZE_MEDIUM).
+            Display::return_icon('tuning.png', get_lang('SendManuallyPendingAnnouncements'), '', ICON_SIZE_MEDIUM).
             '</a>';
 
         $action .= '</div>';

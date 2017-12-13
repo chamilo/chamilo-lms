@@ -215,7 +215,7 @@ if ($form->validate() && !empty($courseInfo)) {
         [
             'url' => '  ',
             'url_attributes' => ['id' => 'excel_export'],
-            'content' => Display::return_icon('export_excel.png')
+            'content' => Display::return_icon('export_excel.png', get_lang('ExportExcel'))
         ]
     ];
 

@@ -338,7 +338,7 @@ if ($allowSocial) {
     $social_right_content .= '<div class="row">';
     $social_right_content .= '<div class="col-md-12">';
     $social_right_content .= '<div class="actions">';
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.
+    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
         Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
     $social_right_content .= '</div>';
     $social_right_content .= '</div>';

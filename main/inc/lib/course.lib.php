@@ -5984,7 +5984,8 @@ class CourseManager
                         $result[] = array(
                             'disabled' => $user_disabled,
                             'value' => "GROUP:".$this_group['id'],
-                            'content' => "G: ".$this_group['name']." - ".$this_group['userNb']." ".$user_label
+                            // The space before "G" is needed in order to advmultiselect.php js puts groups first
+                            'content' => " G: ".$this_group['name']." - ".$this_group['userNb']." ".$user_label
                         );
                     }
                 }

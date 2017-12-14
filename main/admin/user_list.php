@@ -817,7 +817,7 @@ if (!empty($action)) {
                 $result = UrlManager::add_user_to_url($user_id, $urlId);
                 if ($result) {
                     $user_info = api_get_user_info($user_id);
-                    $message = get_lang('UserAdded').' '.$user_info['complete_name'].' ('.$user_info['username'].')';
+                    $message = get_lang('UserAdded').' '.$user_info['complete_name_with_username'];
                     $message = Display::return_message($message, 'confirmation');
                 }
                 break;

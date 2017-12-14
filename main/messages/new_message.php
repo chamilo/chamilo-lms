@@ -66,20 +66,21 @@ function show_compose_to_any($user_id)
 
 function show_compose_reply_to_message($message_id, $receiver_id)
 {
-    $table_message = Database::get_main_table(TABLE_MESSAGE);
+    $table = Database::get_main_table(TABLE_MESSAGE);
     $query = "SELECT user_sender_id
-              FROM $table_message
-              WHERE user_receiver_id = ".intval($receiver_id)." AND id='".intval($message_id)."';";
+              FROM $table
+              WHERE user_receiver_id = ".intval($receiver_id)." AND id = ".intval($message_id);
     $result = Database::query($query);
     $row = Database::fetch_array($result, 'ASSOC');
-    if (!isset($row['user_sender_id'])) {
+    $userInfo = api_get_user_info($row['user_sender_id']);
+    if (empty($row['user_sender_id']) || empty($userInfo)) {
         $html = get_lang('InvalidMessageId');
 
         return $html;
     }
-    $userInfo = api_get_user_info($row['user_sender_id']);
+
     $default['users'] = array($row['user_sender_id']);
-    $html = manageForm($default, null, $userInfo['complete_name']);
+    $html = manageForm($default, null, $userInfo['complete_name_with_username']);
 
     return $html;
 }
@@ -98,10 +99,10 @@ function show_compose_to_user($receiver_id)
 /**
  * @param $default
  * @param null $select_from_user_list
- * @param null $sent_to
+ * @param string $sent_to
  * @return string
  */
-function manageForm($default, $select_from_user_list = null, $sent_to = null)
+function manageForm($default, $select_from_user_list = null, $sent_to = '')
 {
     $group_id = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
     $message_id = isset($_GET['message_id']) ? intval($_GET['message_id']) : null;
@@ -169,8 +170,8 @@ function manageForm($default, $select_from_user_list = null, $sent_to = null)
     if (isset($_GET['re_id'])) {
         $message_reply_info = MessageManager::get_message_by_id($_GET['re_id']);
         $default['title'] = get_lang('MailSubjectReplyShort')." ".$message_reply_info['title'];
-        $form->addElement('hidden', 're_id', intval($_GET['re_id']));
-        $form->addElement('hidden', 'save_form', 'save_form');
+        $form->addHidden('re_id', intval($_GET['re_id']));
+        $form->addHidden('save_form', 'save_form');
 
         // Adding reply mail
         $user_reply_info = api_get_user_info($message_reply_info['user_sender_id']);
@@ -264,7 +265,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = null)
                     if ($res) {
                         $userInfo = api_get_user_info($userId);
                         Display::addFlash(Display::return_message(
-                            get_lang('MessageSentTo')."&nbsp;<b>".$userInfo['complete_name']."</b>",
+                            get_lang('MessageSentTo')."&nbsp;<b>".$userInfo['complete_name_with_username']."</b>",
                             'confirmation',
                             false
                         ));
@@ -275,6 +276,8 @@ function manageForm($default, $select_from_user_list = null, $sent_to = null)
             }
         }
         Security::clear_token();
+        header('Location: '.api_get_path(WEB_PATH).'main/messages/inbox.php');
+        exit;
     } else {
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');

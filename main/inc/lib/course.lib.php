@@ -2723,7 +2723,8 @@ class CourseManager
         $adminGetsAllCourses = false,
         $loadSpecialCourses = true,
         $skipCourseList = [],
-        $useUserLanguageFilterIfAvailable = true
+        $useUserLanguageFilterIfAvailable = true,
+        $showCoursesSessionWithDifferentKey = false
     ) {
         $user_id = intval($user_id);
         $urlId = api_get_current_access_url_id();
@@ -2832,10 +2833,15 @@ class CourseManager
         if ($include_sessions === true) {
             $sql = "SELECT DISTINCT (c.code), 
                         c.id as real_id, 
-                        c.category_code AS category
-                    FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." s,
-                    $tbl_course c
-                    WHERE user_id = $user_id AND s.c_id = c.id";
+                        c.category_code AS category,
+                        s.id as session_id,
+                        s.name as session_name
+                    FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." scu                     
+                    INNER JOIN $tbl_course c
+                    ON (scu.c_id = c.id)
+                    INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION)." s
+                    ON (s.id = scu.session_id)
+                    WHERE user_id = $user_id ";
             $r = Database::query($sql);
             while ($row = Database::fetch_array($r, 'ASSOC')) {
                 if (!empty($skipCourseList)) {
@@ -2843,8 +2849,13 @@ class CourseManager
                         continue;
                     }
                 }
-                if (!in_array($row['real_id'], $codes)) {
+
+                if ($showCoursesSessionWithDifferentKey) {
                     $course_list[] = $row;
+                } else {
+                    if (!in_array($row['real_id'], $codes)) {
+                        $course_list[] = $row;
+                    }
                 }
             }
         }

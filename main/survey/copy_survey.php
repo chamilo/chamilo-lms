@@ -4,9 +4,10 @@
  * @package chamilo.backup
  */
 
-// Setting the global file that gets the general configuration, the databases, the languages, ...
 require_once __DIR__.'/../inc/global.inc.php';
+
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
+
 api_protect_course_script(true);
 
 // Notice for unauthorized people.
@@ -15,73 +16,77 @@ if (!api_is_allowed_to_edit()) {
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array('url' => '../course_info/maintenance.php', 'name' => get_lang('Maintenance'));
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
+    'name' => get_lang('SurveyList')
+);
 
 // The section (for the tabs)
 $this_section = SECTION_COURSES;
 
-// Display the header
-Display::display_header(get_lang('CopySurvey'));
-echo Display::page_header(get_lang('CopySurvey'));
+$surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
 
-/* MAIN CODE */
-
-// If a CourseSelectForm is posted or we should copy all resources, then copy them
-if (Security::check_token('post')) {
-    // Clear token
-    Security::clear_token();
-    $surveyId = intval($_GET['survey_id']);
-    $arraySent = json_decode(Security::remove_XSS($_POST['destination_course']));
-    $courseId = $arraySent->courseId;
-    $sessionId = $arraySent->sessionId;
-    // Copy the survey to the target course
-    $surveyCopyId = SurveyManager::copySurveySession($surveyId, $courseId, $sessionId);
-    // Empty the copied survey
-    SurveyManager::emptySurveyFromId($surveyCopyId);
-    Display::display_confirmation_message(get_lang('SurveyCopied'));
+if (empty($surveyId)) {
+    api_not_allowed(true);
 }
 
-
-$survey = SurveyManager::get_survey($_GET['survey_id']);
-$courses = CourseManager::getAllCoursesArray();
-// Survey
-$options = array();
-$currentCourseId = api_get_course_int_id();
-$currentSessionId = api_get_session_id();
-$option = str_replace("&nbsp;", '', strip_tags($survey['title']));
-$options = array();
-foreach ($courses as $course) {
-    if (($course['id'] != $currentCourseId || $course['session_id'] != $currentSessionId) &&
-        (api_is_global_platform_admin() || (CourseManager::is_course_teacher(api_get_user_id(), $course['code'])
-                && $course['session_id'] == 0) || api_is_coach($course['session_id'], $course['id']))) {
-        $value = array("courseId" => $course['id'], "sessionId" => $course['session_id']);
-        if (isset($course['session_name'])) {
-            $options[json_encode($value)] = $course['title'].' ['.$course['session_name'].']';
-        } else {
-            $options[json_encode($value)] = $course['title'];
-        }
-    }
+$survey = SurveyManager::get_survey($surveyId);
+if (empty($survey)) {
+    api_not_allowed(true);
 }
 
-$form = new FormValidator('copy_survey', 'post', 'copy_survey.php?survey_id='.$_GET['survey_id'].api_get_cidreq());
-if (!$survey) {
-    Display::display_error_message(get_lang('NoSurveyAvailable'));
-}
-if (count($courses) < 1 || count($options) < 1) {
-    Display::display_error_message(get_lang('CourseListNotAvailable'));
-}
-if ($survey && count($courses) >= 1 && count($options) >= 1) {
-    $form->addElement('text', 'survey_title', get_lang('Survey'), array('value' => $option, 'disabled' => 'disabled'));
-    $form->addElement('select', 'destination_course', get_lang('SelectDestinationCourse'), $options);
-    $form->addButtonCopy(get_lang('CopySurvey'));
-}
+$surveyTitle = str_replace("&nbsp;", '', strip_tags($survey['title'].' ('.$survey['code'].') '));
 
+$form = new FormValidator('copy_survey', 'post', api_get_self().'?survey_id='.$surveyId.'&'.api_get_cidreq());
+$form->addElement(
+    'text',
+    'survey_title',
+    get_lang('Survey'),
+    array('value' => $surveyTitle, 'disabled' => 'disabled')
+);
+$form->addSelectAjax(
+    'destination_course',
+    get_lang('SelectDestinationCourse'),
+    null,
+    [
+        'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=get_my_courses_and_sessions&'.api_get_cidreq()
+    ]
+);
+
+$form->addButtonCopy(get_lang('CopySurvey'));
 
 // Add Security token
-$token = Security::get_token();
+$token = Security::get_existing_token();
 $form->addElement('hidden', 'sec_token');
 $form->setConstants(array('sec_token' => $token));
 
+
+// If a CourseSelectForm is posted or we should copy all resources, then copy them
+if ($form->validate() && Security::check_token('post')) {
+    // Clear token
+    Security::clear_token();
+    $values = $form->getSubmitValues();
+    $courseKey = $values['destination_course'];
+    $courseParts = explode('_', $courseKey);
+    $courseId = $courseParts[0];
+    $sessionId = $courseParts[1];
+
+    // Copy the survey to the target course
+    $surveyCopyId = SurveyManager::copySurveySession($surveyId, $courseId, $sessionId);
+    if ($surveyCopyId) {
+        // Empty the copied survey
+        SurveyManager::emptySurveyFromId($surveyCopyId);
+        Display::addFlash(Display::return_message(get_lang('SurveyCopied')));
+    } else {
+        Display::addFlash(Display::return_message(get_lang('ThereWasAnError'), 'warning'));
+    }
+
+    header('Location: '.api_get_self().'?'.api_get_cidreq().'&survey_id='.$surveyId);
+    exit;
+}
+
+Display::display_header(get_lang('CopySurvey'));
+echo Display::page_header(get_lang('CopySurvey'));
 $form->display();
 
 Display::display_footer();

@@ -2723,7 +2723,8 @@ class CourseManager
         $adminGetsAllCourses = false,
         $loadSpecialCourses = true,
         $skipCourseList = [],
-        $useUserLanguageFilterIfAvailable = true
+        $useUserLanguageFilterIfAvailable = true,
+        $showCoursesSessionWithDifferentKey = false
     ) {
         $user_id = intval($user_id);
         $urlId = api_get_current_access_url_id();
@@ -2832,10 +2833,15 @@ class CourseManager
         if ($include_sessions === true) {
             $sql = "SELECT DISTINCT (c.code), 
                         c.id as real_id, 
-                        c.category_code AS category
-                    FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." s,
-                    $tbl_course c
-                    WHERE user_id = $user_id AND s.c_id = c.id";
+                        c.category_code AS category,
+                        s.id as session_id,
+                        s.name as session_name
+                    FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." scu                     
+                    INNER JOIN $tbl_course c
+                    ON (scu.c_id = c.id)
+                    INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION)." s
+                    ON (s.id = scu.session_id)
+                    WHERE user_id = $user_id ";
             $r = Database::query($sql);
             while ($row = Database::fetch_array($r, 'ASSOC')) {
                 if (!empty($skipCourseList)) {
@@ -2843,8 +2849,13 @@ class CourseManager
                         continue;
                     }
                 }
-                if (!in_array($row['real_id'], $codes)) {
+
+                if ($showCoursesSessionWithDifferentKey) {
                     $course_list[] = $row;
+                } else {
+                    if (!in_array($row['real_id'], $codes)) {
+                        $course_list[] = $row;
+                    }
                 }
             }
         }
@@ -6547,44 +6558,5 @@ class CourseManager
         sort($categories);
 
         return $categories;
-    }
-
-    /**
-     * Returns an array assoc with info from course and session, of all courses, inside sessions and not inside.
-     * @return array
-     */
-    public static function getAllCoursesArray()
-    {
-        // Database table definitions
-        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
-        $sessionCourseTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-
-        //select all courses without sessions
-        $sql = "SELECT course.id id,course.title title,0 session_id, course.code code
-                FROM $courseTable course 
-                ORDER BY course.title ASC" ;
-        //select all courses inside sessions
-        $sql1 = "SELECT course.id id,course.title title,session.id session_id,session.name session_name, 
-                 course.code code
-                 FROM $courseTable course ,$sessionTable session, $sessionCourseTable sessioncourse 
-                 WHERE course.id=sessioncourse.c_id 
-                 AND session.id=sessioncourse.session_id ORDER BY session.name ASC, course.title ASC" ;
-        $data = [];
-        //input rows of all courses not inside sessions in a array $data
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            while ($row = Database::fetch_array($res, "ASSOC")) {
-                $data[] = $row;
-            }
-        }
-        //input rows of all courses inside sessions in a array $data
-        $res1 = Database::query($sql1);
-        if (Database::num_rows($res1) > 0) {
-            while ($row = Database::fetch_array($res1, "ASSOC")) {
-                $data[] = $row;
-            }
-        }
-        return $data;
     }
 }

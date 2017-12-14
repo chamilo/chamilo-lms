@@ -1,8 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.messages
  */
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
@@ -57,7 +59,7 @@ $message .= MessageManager::showMessageBox($messageId, $source);
 if (!empty($message)) {
     $social_right_content .= $message;
 } else {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 $tpl = new Template(get_lang('View'));
 // Block Social Avatar

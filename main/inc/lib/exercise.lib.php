@@ -2315,12 +2315,33 @@ HOTSPOT;
                             }
 
                             foreach ($category_list as $categoryId => $result) {
-                                $results[$i]['category_'.$categoryId] = self::show_score($result['score'], $result['total']);
+                                $scoreToDisplay = self::show_score($result['score'], $result['total']);
+                                $results[$i]['category_'.$categoryId] = $scoreToDisplay;
+                                $results[$i]['category_'.$categoryId.'_score_percentange'] = self::show_score(
+                                    $result['score'],
+                                    $result['total'],
+                                    true,
+                                    true,
+                                    true, // $show_only_percentage = false
+                                    true // hide % sign
+                                );
+                                $results[$i]['category_'.$categoryId.'_only_score'] = $result['score'];
+                                $results[$i]['category_'.$categoryId.'_total'] = $result['total'];
                             }
                             $results[$i]['session'] = $sessionName;
                             $results[$i]['session_access_start_date'] = $sessionStartAccessDate;
                             $results[$i]['status'] = $revisedLabel;
                             $results[$i]['score'] = $score;
+                            $results[$i]['score_percentange'] = self::show_score(
+                                $my_res,
+                                $my_total,
+                                true,
+                                true,
+                                true,
+                                true
+                            );
+                            $results[$i]['only_score'] = $my_res;
+                            $results[$i]['total'] = $my_total;
                             $results[$i]['lp'] = $lp_name;
                             $results[$i]['actions'] = $actions;
                             $list_info[] = $results[$i];
@@ -2399,6 +2420,7 @@ HOTSPOT;
      * @param bool $show_percentage show percentage or not
      * @param bool $use_platform_settings use or not the platform settings
      * @param bool $show_only_percentage
+     * @param bool $hidePercetangeSign hide "%" sign
      * @return  string  an html with the score modified
      */
     public static function show_score(
@@ -2406,7 +2428,8 @@ HOTSPOT;
         $weight,
         $show_percentage = true,
         $use_platform_settings = true,
-        $show_only_percentage = false
+        $show_only_percentage = false,
+        $hidePercetangeSign = false
     ) {
         if (is_null($score) && is_null($weight)) {
             return '-';
@@ -2434,10 +2457,13 @@ HOTSPOT;
 
         $html = '';
         if ($show_percentage) {
-            $parent = '('.$score.' / '.$weight.')';
-            $html = $percentage."%  $parent";
+            $percentageSign = '%';
+            if ($hidePercetangeSign) {
+                $percentageSign = '';
+            }
+            $html = $percentage."$percentageSign  ($score / $weight)";
             if ($show_only_percentage) {
-                $html = $percentage."% ";
+                $html = $percentage."$percentageSign ";
             }
         } else {
             $html = $score.' / '.$weight;

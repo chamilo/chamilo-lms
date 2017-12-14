@@ -7597,7 +7597,7 @@ class TrackingCourseLog
         );
 
         $eventsLink = Display::url(
-            Display::return_icon('changeme.png', get_lang('EventsReport'), array(), ICON_SIZE_MEDIUM),
+            Display::return_icon('security.png', get_lang('EventsReport'), array(), ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'tracking/course_log_events.php?'.api_get_cidreq()
         );
 
@@ -7651,7 +7651,7 @@ class TrackingCourseLog
                 break;
             case 'logs':
                 $eventsLink = Display::url(
-                    Display::return_icon('changeme_na.png', get_lang('EventsReport'), array(), ICON_SIZE_MEDIUM),
+                    Display::return_icon('security_na.png', get_lang('EventsReport'), array(), ICON_SIZE_MEDIUM),
                     '#'
                 );
                 break;

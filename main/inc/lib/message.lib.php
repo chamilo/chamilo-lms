@@ -165,8 +165,13 @@ class MessageManager
             }
 
             $userInfo = api_get_user_info($result[1]);
-            $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.
-                $result[2].'</a><br />'.$userInfo['complete_name_with_username'];
+            if (!empty($result[1]) && !empty($userInfo)) {
+                $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.$result[2].'</a><br />';
+                $message[1] .= $userInfo['complete_name_with_username'];
+            } else {
+                $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.$result[2].'</a><br />';
+                $message[1] .= get_lang('UserUnknow');
+            }
 
             $message[3] =
                 Display::url(
@@ -1117,9 +1122,9 @@ class MessageManager
         $content = Security::remove_XSS($row['content'], STUDENT, true);
 
         $name = get_lang('UnknownUser');
+        $fromUser = api_get_user_info($user_sender_id);
         $userImage = '';
-        if (!empty($user_sender_id)) {
-            $fromUser = api_get_user_info($user_sender_id);
+        if (!empty($user_sender_id) && !empty($fromUser)) {
             $name = $fromUser['complete_name_with_username'];
             $userImage = Display::img(
                 $fromUser['avatar_small'],

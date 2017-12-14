@@ -1117,17 +1117,17 @@ class MessageManager
         $from_user = api_get_user_info($user_sender_id);
         $name = $from_user['complete_name_with_username'];
         $message_content = Display::page_subheader(str_replace("\\", "", $title));
-        $user_image = '';
-        if (api_get_setting('allow_social_tool') == 'true') {
-            $user_image = Display::img(
-                $from_user['avatar_small'],
-                $name,
-                array('title' => $name, 'class' => 'img-responsive img-circle', 'style' => 'max-width:35px'),
-                false
-            );
-        }
 
-        $receiverUserInfo = api_get_user_info($row['user_receiver_id']);
+        $userImage = Display::img(
+            $fromUser['avatar_small'],
+            $name,
+            array('title' => $name, 'class' => 'img-responsive img-circle', 'style' => 'max-width:35px'),
+            false
+        );
+        $receiverUserInfo = [];
+        if (!empty($row['user_receiver_id'])) {
+            $receiverUserInfo = api_get_user_info($row['user_receiver_id']);
+        }
 
         $message_content .= '<tr>';
         if (api_get_setting('allow_social_tool') == 'true') {
@@ -1135,17 +1135,23 @@ class MessageManager
             if ($source == 'outbox') {
                 $message_content .= '<div class="col-md-12">';
                 $message_content .= '<ul class="list-message">';
-                $message_content .= '<li>'.$user_image.'</li>';
-                $message_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> ';
-                $message_content .= api_strtolower(get_lang('To')).'&nbsp;<b>'.$receiverUserInfo['complete_name_with_username'].'</b></li>';
+                $message_content .= '<li>'.$userImage.'</li>';
+                $message_content .= '<li>'.$name.'&nbsp;';
+                if (!empty($receiverUserInfo)) {
+                    $message_content .= api_strtolower(get_lang('To')).'&nbsp;<b>'.$receiverUserInfo['complete_name_with_username'].'</b></li>';
+                } else {
+                    $message_content .= api_strtolower(get_lang('To')).'&nbsp;<b>-</b></li>';
+                }
+
                 $message_content .= '<li>'.Display::dateToStringAgoAndLongDate($row['send_date']).'</li>';
                 $message_content .= '</ul>';
                 $message_content .= '</div>';
             } else {
                 $message_content .= '<div class="col-md-12">';
                 $message_content .= '<ul class="list-message">';
-                $message_content .= '<li>'.$user_image.'</li>';
-                $message_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> </li>';
+                $message_content .= '<li>'.$userImage.'</li>';
+                $message_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a>';
+
                 $message_content .= '<li>'.Display::dateToStringAgoAndLongDate($row['send_date']).'</li>';
                 $message_content .= '</ul>';
                 $message_content .= '</div>';
@@ -1154,7 +1160,7 @@ class MessageManager
         } else {
             if ($source == 'outbox') {
                 $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.
-                    $receiverUserInfo['complete_name'].'</b>';
+                    $receiverUserInfo['complete_name_with_username'].'</b>';
             } else {
                 $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.
                     get_lang('Me').'</b>';

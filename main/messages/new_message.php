@@ -69,10 +69,11 @@ function show_compose_reply_to_message($message_id, $receiver_id)
     $table = Database::get_main_table(TABLE_MESSAGE);
     $query = "SELECT user_sender_id
               FROM $table
-              WHERE user_receiver_id = ".intval($receiver_id)." AND id='".intval($message_id)."';";
+              WHERE user_receiver_id = ".intval($receiver_id)." AND id = ".intval($message_id);
     $result = Database::query($query);
     $row = Database::fetch_array($result, 'ASSOC');
-    if (!isset($row['user_sender_id'])) {
+
+    if (empty($row['user_sender_id'])) {
         $html = get_lang('InvalidMessageId');
 
         return $html;

@@ -168,17 +168,24 @@ class MessageManager
             if (!empty($result[1]) && !empty($userInfo)) {
                 $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.$result[2].'</a><br />';
                 $message[1] .= $userInfo['complete_name_with_username'];
+                $message[3] =
+                    Display::url(
+                        Display::returnFontAwesomeIcon('reply', 2),
+                        $newMessageLink.'?re_id='.$result[0],
+                        ['title' => get_lang('ReplyToMessage') ]
+                    );
             } else {
                 $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.$result[2].'</a><br />';
-                $message[1] .= get_lang('UserUnknow');
+                $message[1] .= get_lang('UnknownUser');
+                $message[3] =
+                    Display::url(
+                        Display::returnFontAwesomeIcon('reply', 2),
+                        '#',
+                        ['title' => get_lang('ReplyToMessage')]
+                    );
             }
 
-            $message[3] =
-                Display::url(
-                    Display::returnFontAwesomeIcon('reply', 2),
-                    $newMessageLink.'?re_id='.$result[0],
-                    ['title' => get_lang('ReplyToMessage') ]
-                ).
+            $message[3] .=
                 '&nbsp;&nbsp;'.
                 Display::url(
                     Display::returnFontAwesomeIcon('share', 2),

@@ -844,7 +844,8 @@ if ($form->validate()) {
                         MessageManager::send_message_simple(
                             $bossId,
                             $subjectEmail,
-                            $contentEmail
+                            $contentEmail,
+                            $user_id
                         );
                     }
                 }

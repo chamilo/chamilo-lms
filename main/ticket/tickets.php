@@ -236,7 +236,7 @@ if (!empty($projectId)) {
                 null,
                 ICON_SIZE_MEDIUM
             ),
-            api_get_path(WEB_CODE_PATH) . 'ticket/new_ticket.php?project_id=' . $projectId,
+            api_get_path(WEB_CODE_PATH) . 'ticket/new_ticket.php?project_id=' . $projectId.'&'.api_get_cidReq(),
             ['title' => get_lang('Add')]
         );
     }

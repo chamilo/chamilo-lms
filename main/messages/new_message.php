@@ -73,7 +73,8 @@ function show_compose_reply_to_message($message_id, $receiver_id)
     $result = Database::query($query);
     $row = Database::fetch_array($result, 'ASSOC');
 
-    if (empty($row['user_sender_id'])) {
+    $userInfo = api_get_user_info($row['user_sender_id']);
+    if (empty($row['user_sender_id']) || empty($userInfo)) {
         $html = get_lang('InvalidMessageId');
 
         return $html;

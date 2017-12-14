@@ -1116,9 +1116,9 @@ class MessageManager
         $content = Security::remove_XSS($row['content'], STUDENT, true);
 
         $name = get_lang('UnknownUser');
+        $fromUser = api_get_user_info($user_sender_id);
         $userImage = '';
-        if (!empty($user_sender_id)) {
-            $fromUser = api_get_user_info($user_sender_id);
+        if (!empty($user_sender_id) && !empty($fromUser)) {
             $name = $fromUser['complete_name_with_username'];
             $userImage = Display::img(
                 $fromUser['avatar_small'],

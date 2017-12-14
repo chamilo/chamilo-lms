@@ -5,6 +5,7 @@ use Chamilo\TicketBundle\Entity\Project;
 use Chamilo\TicketBundle\Entity\Status;
 use Chamilo\TicketBundle\Entity\Priority;
 use Chamilo\TicketBundle\Entity\Ticket;
+use \Database;
 
 /**
  * Class TicketManager
@@ -2172,29 +2173,48 @@ class TicketManager
     }
 
     /**
-     * @return string
+     * Returns a list of menu elements for the tickets system's configuration
+     * @param string $exclude The element to exclude from the list
+     * @return array
      */
-    public static function getSettingsMenu()
+    public static function getSettingsMenuItems($exclude = null)
     {
-        $items = [
-            [
-                'url' => 'projects.php',
-                'content' => get_lang('Projects')
-            ],
-            [
-                'url' => 'status.php',
-                'content' => get_lang('Status')
-            ],
-            [
-                'url' => 'priorities.php',
-                'content' => get_lang('Priority')
-            ]
+        $items = [];
+        $project = [
+            'icon' => 'career.png',
+            'url' => 'projects.php',
+            'content' => get_lang('Projects')
         ];
+        $status = [
+            'icon' => 'check-circle.png',
+            'url' => 'status.php',
+            'content' => get_lang('Status')
+        ];
+        $priority = [
+            'icon' => 'order-course.png',
+            'url' => 'priorities.php',
+            'content' => get_lang('Priority')
+        ];
+        switch ($exclude) {
+            case 'project':
+                $items = [$status, $priority];
+                break;
+            case 'status':
+                $items = [$project, $priority];
+                break;
+            case 'priority':
+                $items = [$project, $status];
+                break;
+            default:
+                $items = [$project, $status, $priority];
+                break;
+        }
 
-        echo Display::actions($items);
+        return $items;
     }
 
     /**
+     * Returns a list of strings representing the default statuses
      * @return array
      */
     public static function getDefaultStatusList()

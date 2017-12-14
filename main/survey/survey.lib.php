@@ -1946,7 +1946,10 @@ class SurveyManager
         $surveyData['code'] = self::generate_unique_code($surveyData['code']);
         $surveyData['c_id'] = $targetCourseId;
         $surveyData['session_id'] = $targetSessionId;
-        $surveyData['title'] = $surveyData['title'].' '.get_lang('Copy');
+        // Add a "Copy" suffix if copied inside the same course
+        if ($targetCourseId == $originalCourseId) {
+            $surveyData['title'] = $surveyData['title'].' '.get_lang('Copy');
+        }
         unset($surveyData['iid']);
         unset($surveyData['id']);
 

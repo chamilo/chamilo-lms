@@ -165,8 +165,13 @@ class MessageManager
             }
 
             $userInfo = api_get_user_info($result[1]);
-            $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.
-                $result[2].'</a><br />'.$userInfo['complete_name_with_username'];
+            if (!empty($result[1]) && !empty($userInfo)) {
+                $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.$result[2].'</a><br />';
+                $message[1] .= $userInfo['complete_name_with_username'];
+            } else {
+                $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.$result[2].'</a><br />';
+                $message[1] .= get_lang('UserUnknow');
+            }
 
             $message[3] =
                 Display::url(

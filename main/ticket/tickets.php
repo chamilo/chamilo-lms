@@ -256,7 +256,7 @@ if (!empty($projectId)) {
         $actionRight .= Display::url(
             Display::return_icon(
                 'settings.png',
-                get_lang('Categories'),
+                get_lang('Settings'),
                 null,
                 ICON_SIZE_MEDIUM
             ),

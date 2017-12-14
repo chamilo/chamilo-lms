@@ -264,7 +264,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '')
                     if ($res) {
                         $userInfo = api_get_user_info($userId);
                         Display::addFlash(Display::return_message(
-                            get_lang('MessageSentTo')."&nbsp;<b>".$userInfo['complete_name']."</b>",
+                            get_lang('MessageSentTo')."&nbsp;<b>".$userInfo['complete_name_with_username']."</b>",
                             'confirmation',
                             false
                         ));
@@ -275,6 +275,8 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '')
             }
         }
         Security::clear_token();
+        header('Location: '.api_get_path(WEB_PATH).'main/messages/inbox.php');
+        exit;
     } else {
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');

@@ -165,15 +165,27 @@ class MessageManager
             }
 
             $userInfo = api_get_user_info($result[1]);
-            $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.
-                $result[2].'</a><br />'.$userInfo['complete_name_with_username'];
+            if (!empty($result[1]) && !empty($userInfo)) {
+                $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.$result[2].'</a><br />';
+                $message[1] .= $userInfo['complete_name_with_username'];
+                $message[3] =
+                    Display::url(
+                        Display::returnFontAwesomeIcon('reply', 2),
+                        $newMessageLink.'?re_id='.$result[0],
+                        ['title' => get_lang('ReplyToMessage') ]
+                    );
+            } else {
+                $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.$result[2].'</a><br />';
+                $message[1] .= get_lang('UnknownUser');
+                $message[3] =
+                    Display::url(
+                        Display::returnFontAwesomeIcon('reply', 2),
+                        '#',
+                        ['title' => get_lang('ReplyToMessage')]
+                    );
+            }
 
-            $message[3] =
-                Display::url(
-                    Display::returnFontAwesomeIcon('reply', 2),
-                    $newMessageLink.'?re_id='.$result[0],
-                    ['title' => get_lang('ReplyToMessage') ]
-                ).
+            $message[3] .=
                 '&nbsp;&nbsp;'.
                 Display::url(
                     Display::returnFontAwesomeIcon('share', 2),
@@ -1114,20 +1126,26 @@ class MessageManager
 
         $title = Security::remove_XSS($row['title'], STUDENT, true);
         $content = Security::remove_XSS($row['content'], STUDENT, true);
-        $from_user = api_get_user_info($user_sender_id);
-        $name = $from_user['complete_name_with_username'];
-        $message_content = Display::page_subheader(str_replace("\\", "", $title));
-        $user_image = '';
-        if (api_get_setting('allow_social_tool') == 'true') {
-            $user_image = Display::img(
-                $from_user['avatar_small'],
+
+        $name = get_lang('UnknownUser');
+        $fromUser = api_get_user_info($user_sender_id);
+        $userImage = '';
+        if (!empty($user_sender_id) && !empty($fromUser)) {
+            $name = $fromUser['complete_name_with_username'];
+            $userImage = Display::img(
+                $fromUser['avatar_small'],
                 $name,
                 array('title' => $name, 'class' => 'img-responsive img-circle', 'style' => 'max-width:35px'),
                 false
             );
         }
 
-        $receiverUserInfo = api_get_user_info($row['user_receiver_id']);
+        $message_content = Display::page_subheader(str_replace("\\", "", $title));
+
+        $receiverUserInfo = [];
+        if (!empty($row['user_receiver_id'])) {
+            $receiverUserInfo = api_get_user_info($row['user_receiver_id']);
+        }
 
         $message_content .= '<tr>';
         if (api_get_setting('allow_social_tool') == 'true') {
@@ -1135,17 +1153,28 @@ class MessageManager
             if ($source == 'outbox') {
                 $message_content .= '<div class="col-md-12">';
                 $message_content .= '<ul class="list-message">';
-                $message_content .= '<li>'.$user_image.'</li>';
-                $message_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> ';
-                $message_content .= api_strtolower(get_lang('To')).'&nbsp;<b>'.$receiverUserInfo['complete_name_with_username'].'</b></li>';
+                $message_content .= '<li>'.$userImage.'</li>';
+                $message_content .= '<li>'.$name.'&nbsp;';
+                if (!empty($receiverUserInfo)) {
+                    $message_content .= api_strtolower(get_lang('To')).'&nbsp;<b>'.$receiverUserInfo['complete_name_with_username'].'</b></li>';
+                } else {
+                    $message_content .= api_strtolower(get_lang('To')).'&nbsp;<b>-</b></li>';
+                }
+
                 $message_content .= '<li>'.Display::dateToStringAgoAndLongDate($row['send_date']).'</li>';
                 $message_content .= '</ul>';
                 $message_content .= '</div>';
             } else {
                 $message_content .= '<div class="col-md-12">';
                 $message_content .= '<ul class="list-message">';
-                $message_content .= '<li>'.$user_image.'</li>';
-                $message_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> </li>';
+                if (!empty($user_sender_id)) {
+                    $message_content .= '<li>'.$userImage.'</li>';
+                    $message_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a>';
+                } else {
+                    $message_content .= '<li>'.$name;
+                }
+
+                $message_content .= '&nbsp;'.api_strtolower(get_lang('To')).'&nbsp;'.get_lang('Me');
                 $message_content .= '<li>'.Display::dateToStringAgoAndLongDate($row['send_date']).'</li>';
                 $message_content .= '</ul>';
                 $message_content .= '</div>';
@@ -1154,7 +1183,7 @@ class MessageManager
         } else {
             if ($source == 'outbox') {
                 $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.
-                    $receiverUserInfo['complete_name'].'</b>';
+                    $receiverUserInfo['complete_name_with_username'].'</b>';
             } else {
                 $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.
                     get_lang('Me').'</b>';
@@ -1178,38 +1207,13 @@ class MessageManager
             $message_content .= '<a href="outbox.php?'.$social_link.'">'.
                 Display::return_icon('back.png', get_lang('ReturnToOutbox')).'</a> &nbsp';
         } else {
-            /*$message_content .= '<a href="inbox.php?'.$social_link.'">'.
+            $message_content .= '<a href="inbox.php?'.$social_link.'">'.
                 Display::return_icon('back.png', get_lang('ReturnToInbox')).'</a> &nbsp';
-            */
-            // Ofaj
-            $newMessageLink = 'new_message.php';
-            $message_content .=
-                Display::url(
-                    Display::returnFontAwesomeIcon('inbox', 2),
-                    api_get_path(WEB_CODE_PATH).'messages/inbox.php',
-                    ['title' => get_lang('ReturnToInbox') ]
-                ).
-                '&nbsp;'.
-                Display::url(
-                    Display::returnFontAwesomeIcon('reply', 2),
-                    $newMessageLink.'?re_id='.$messageId,
-                    ['title' => get_lang('ReplyToMessage') ]
-                ).
-                '&nbsp;&nbsp;'.
-                Display::url(
-                    Display::returnFontAwesomeIcon('share', 2),
-                    $newMessageLink.'?forward_id='.$messageId,
-                    ['title' => get_lang('ForwardMessage') ]
-                );
-            /*$message_content .= '<a href="new_message.php?re_id='.$messageId.'&'.$social_link.'">'.
-                Display::return_icon('message_reply.png', get_lang('ReplyToMessage')).'</a> &nbsp';*/
+            $message_content .= '<a href="new_message.php?re_id='.$messageId.'&'.$social_link.'">'.
+                Display::return_icon('message_reply.png', get_lang('ReplyToMessage')).'</a> &nbsp';
         }
-
-        $message_content .=  '&nbsp;&nbsp;<a title="'.addslashes(get_lang('DeleteMessage')).'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" href="inbox.php?action=deleteone&id='.$messageId.'">'.
-                Display::returnFontAwesomeIcon('trash', 2).'</a>';
-
-        /*$message_content .= '<a href="inbox.php?action=deleteone&id='.$messageId.'&'.$social_link.'" >'.
-            Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp';*/
+        $message_content .= '<a href="inbox.php?action=deleteone&id='.$messageId.'&'.$social_link.'" >'.
+            Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp';
 
         $message_content .= '</div></td>
 		      <td width=10></td>

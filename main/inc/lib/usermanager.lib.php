@@ -581,10 +581,10 @@ class UserManager
                         MessageManager::send_message_simple(
                             $adminId,
                             $subject,
-                            $emailBody
+                            $emailBody,
+                            $userId
                         );
                     }
-
                 }
                 /* ENDS MANAGE EVENT WITH MAIL */
             }

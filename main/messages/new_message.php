@@ -3,16 +3,16 @@
 
 /**
  * @package chamilo.messages
-*/
+ */
 
 /**
-* This script shows a compose area (wysiwyg editor if supported, otherwise
-* a simple textarea) where the user can type a message.
-* There are three modes
-* - standard: type a message, select a user to send it to, press send
-* - reply on message (when pressing reply when viewing a message)
-* - send to specific user (when pressing send message in the who is online list)
-*/
+ * This script shows a compose area (wysiwyg editor if supported, otherwise
+ * a simple textarea) where the user can type a message.
+ * There are three modes
+ * - standard: type a message, select a user to send it to, press send
+ * - reply on message (when pressing reply when viewing a message)
+ * - send to specific user (when pressing send message in the who is online list)
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -53,8 +53,8 @@ function add_image_form() {
 $nameTools = get_lang('ComposeMessage');
 
 /**
-* Shows the compose area + a list of users to select from.
-*/
+ * Shows the compose area + a list of users to select from.
+ */
 function show_compose_to_any($user_id)
 {
     $default['user_list'] = 0;
@@ -66,20 +66,22 @@ function show_compose_to_any($user_id)
 
 function show_compose_reply_to_message($message_id, $receiver_id)
 {
-    $table_message = Database::get_main_table(TABLE_MESSAGE);
+    $table = Database::get_main_table(TABLE_MESSAGE);
     $query = "SELECT user_sender_id
-              FROM $table_message
-              WHERE user_receiver_id = ".intval($receiver_id)." AND id='".intval($message_id)."';";
+              FROM $table
+              WHERE user_receiver_id = ".intval($receiver_id)." AND id = ".intval($message_id);
     $result = Database::query($query);
     $row = Database::fetch_array($result, 'ASSOC');
-    if (!isset($row['user_sender_id'])) {
+
+    $userInfo = api_get_user_info($row['user_sender_id']);
+    if (empty($row['user_sender_id']) || empty($userInfo)) {
         $html = get_lang('InvalidMessageId');
 
         return $html;
     }
     $userInfo = api_get_user_info($row['user_sender_id']);
     $default['users'] = array($row['user_sender_id']);
-    $html = manageForm($default, null, $userInfo['complete_name']);
+    $html = manageForm($default, null, $userInfo['complete_name_with_username']);
 
     return $html;
 }
@@ -98,10 +100,10 @@ function show_compose_to_user($receiver_id)
 /**
  * @param $default
  * @param null $select_from_user_list
- * @param null $sent_to
+ * @param string $sent_to
  * @return string
  */
-function manageForm($default, $select_from_user_list = null, $sent_to = null)
+function manageForm($default, $select_from_user_list = null, $sent_to = '')
 {
     $group_id = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
     $message_id = isset($_GET['message_id']) ? intval($_GET['message_id']) : null;
@@ -145,7 +147,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = null)
                     ]
                 );
             } else {
-                $form->addElement('hidden','hidden_user',$default['users'][0],array('id'=>'hidden_user'));
+                $form->addElement('hidden', 'hidden_user', $default['users'][0], array('id' => 'hidden_user'));
             }
         }
     } else {
@@ -153,8 +155,8 @@ function manageForm($default, $select_from_user_list = null, $sent_to = null)
         $group_info = $userGroup->get($group_id);
 
         $form->addElement('label', get_lang('ToGroup'), api_xml_http_response_encode($group_info['name']));
-        $form->addElement('hidden','group_id',$group_id);
-        $form->addElement('hidden','parent_id',$message_id);
+        $form->addElement('hidden', 'group_id', $group_id);
+        $form->addElement('hidden', 'parent_id', $message_id);
     }
 
     $form->addText('title', get_lang('Subject'), true);
@@ -169,16 +171,16 @@ function manageForm($default, $select_from_user_list = null, $sent_to = null)
     if (isset($_GET['re_id'])) {
         $message_reply_info = MessageManager::get_message_by_id($_GET['re_id']);
         $default['title'] = get_lang('MailSubjectReplyShort')." ".$message_reply_info['title'];
-        $form->addElement('hidden', 're_id', intval($_GET['re_id']));
-        $form->addElement('hidden', 'save_form', 'save_form');
+        $form->addHidden('re_id', intval($_GET['re_id']));
+        $form->addHidden('save_form', 'save_form');
 
         // Adding reply mail
         $user_reply_info = api_get_user_info($message_reply_info['user_sender_id']);
         $default['content'] = '<p><br/></p>'.sprintf(
-            get_lang('XWroteY'),
-            $user_reply_info['complete_name'],
-            Security::filter_terms($message_reply_info['content'])
-        );
+                get_lang('XWroteY'),
+                $user_reply_info['complete_name'],
+                Security::filter_terms($message_reply_info['content'])
+            );
     }
 
     if (isset($_GET['forward_id'])) {
@@ -286,7 +288,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = null)
                     if ($res) {
                         $userInfo = api_get_user_info($userId);
                         Display::addFlash(Display::return_message(
-                            get_lang('MessageSentTo')."&nbsp;<b>".$userInfo['complete_name']."</b>",
+                            get_lang('MessageSentTo')."&nbsp;<b>".$userInfo['complete_name_with_username']."</b>",
                             'confirmation',
                             false
                         ));
@@ -297,6 +299,8 @@ function manageForm($default, $select_from_user_list = null, $sent_to = null)
             }
         }
         Security::clear_token();
+        header('Location: '.api_get_path(WEB_PATH).'main/messages/inbox.php');
+        exit;
     } else {
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
@@ -360,7 +364,7 @@ if ($allowSocial) {
     $social_right_content .= '<div class="row">';
     $social_right_content .= '<div class="col-md-12">';
     $social_right_content .= '<div class="actions">';
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.
+    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
         Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
     $social_right_content .= '</div>';
     $social_right_content .= '</div>';

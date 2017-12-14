@@ -7,14 +7,15 @@
 
 /**
  * Prints an HTML page with a table containing the gradebook data
- * @param	array 	Array containing the data to be printed in the table
- * @param	array	Table headers
- * @param	string	View to print as a title for the table
- * @param	string	Course name to print as title for the table
+ * @param    array    Array containing the data to be printed in the table
+ * @param    array    Table headers
+ * @param    string    View to print as a title for the table
+ * @param    string    Course name to print as title for the table
+ * @return string
  */
 function print_table($data_array, $header_names, $view, $coursename)
 {
-	$printdata = '<!DOCTYPE html
+    $printdata = '<!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'.api_get_language_isocode().'" lang="'.api_get_language_isocode().'">
@@ -25,10 +26,10 @@ function print_table($data_array, $header_names, $view, $coursename)
 
 <style type="text/css">
 body {
-	font-size: 12px;
-	color: #000;
-	margin: 10px;
-	padding: 0;
+    font-size: 12px;
+    color: #000;
+    margin: 10px;
+    padding: 0;
 }
 
 a:link {text-decoration: none; font-weight : bold; color : black;}
@@ -36,31 +37,31 @@ a:visited {text-decoration: none; font-weight : bold; color : black;}
 a:active {text-decoration: none; font-weight : bold;  color : black;}
 
 .data_table{
-  	border-collapse: collapse;
-	width: 100%;
-	padding: 5px;
-	border: 1px;
+    border-collapse: collapse;
+    width: 100%;
+    padding: 5px;
+    border: 1px;
 }
 .data_table th{
-  	padding: 5px;
-	vertical-align: top;
-  	border-top: 1px solid black;
-  	border-bottom: 1px solid black;
-  	border-right: 1px solid black;
-  	border-left: 1px solid black;
+    padding: 5px;
+    vertical-align: top;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
 }
 .data_table tr.row_odd{
-  	background-color: #fafafa;
+    background-color: #fafafa;
   }
 .data_table tr.row_even{
-  	background-color: #fff;
+    background-color: #fff;
 }
 .data_table td{
-  	padding: 5px;
-	  vertical-align: top;
-  	border-bottom: 1px solid black;
-  	border-right: 1px solid black;
-  	border-left: 1px solid black;
+    padding: 5px;
+      vertical-align: top;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
 }
 </style>
 </head>
@@ -98,13 +99,13 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
 function export_pdf_attendance($headers_table, $data_table, $headers_pdf, $footers_pdf, $title_pdf)
 {
     $mpdf = new mPDF('UTF-8', 'A4-L', '', '', 15, 10, 35, 20, 4, 2, 'L');
-	$mpdf->useOnlyCoreFonts = true;
-	$mpdf->mirrorMargins = 0;
-    // Use different Odd/Even headers and footers and mirror margins
+    $mpdf->useOnlyCoreFonts = true;
+    $mpdf->mirrorMargins = 0;
 
-	if (is_array($headers_pdf)) {
-		// preparing headers pdf
-		$header = '
+    // Use different Odd/Even headers and footers and mirror margins
+    if (is_array($headers_pdf)) {
+        // preparing headers pdf
+        $header = '
             <table width="100%"  cellspacing="1" cellpadding="1" border="0" class="strong">
             <tr>
                 <td ROWSPAN="3" style="text-align: left;" class="title">
@@ -159,7 +160,7 @@ function export_pdf_attendance($headers_table, $data_table, $headers_pdf, $foote
         $items_per_page = count($data_table);
     }
 
-	$count_pages = ceil(count($data_table) / $items_per_page);
+    $count_pages = ceil(count($data_table) / $items_per_page);
     $content_table = '';
     for ($x = 0; $x < $count_pages; $x++) {
         $content_table .= '<table width="100%" border="1" style="border-collapse:collapse">';
@@ -167,7 +168,6 @@ function export_pdf_attendance($headers_table, $data_table, $headers_pdf, $foote
         $content_table .= '<tr>';
         $i = 0;
         if (is_array($headers_table)) {
-
             foreach ($headers_table as $head_table) {
                 if (!empty($head_table[0])) {
                     $width = (!empty($head_table[1]) ? $head_table[1].'%' : '');
@@ -186,7 +186,7 @@ function export_pdf_attendance($headers_table, $data_table, $headers_pdf, $foote
             foreach ($data_table as $data) {
                 $content_table .= '<tr>';
                 $content_table .= '<td>'.($item < 10 ? '0'.$item : $item).'</td>';
-                foreach ($data as  $key => $content) {
+                foreach ($data as $key => $content) {
                     if (isset($content)) {
                         $key == 1 ? $align = 'align="left"' : $align = 'align="center"';
                         $content_table .= '<td '.$align.' style="padding:4px;" >'.$content.'</td>';
@@ -195,13 +195,17 @@ function export_pdf_attendance($headers_table, $data_table, $headers_pdf, $foote
                 $content_table .= '</tr>';
                 $i++;
                 $item++;
-                if ($i > $items_per_page) { break; }
+                if ($i > $items_per_page) {
+                    break;
+                }
             }
         } else {
             $content_table .= '<tr colspan="'.$i.'"><td>'.get_lang('Empty').'</td></tr>';
         }
         $content_table .= '</table>';
-        if ($x < ($count_pages - 1)) { $content_table .= '<pagebreak />'; }
+        if ($x < ($count_pages - 1)) {
+            $content_table .= '<pagebreak />';
+        }
     }
     $html = $content_table;
 
@@ -219,13 +223,12 @@ function export_pdf_attendance($headers_table, $data_table, $headers_pdf, $foote
     exit;
 }
 
-
 /**
  * This function get a content html for export inside a pdf file
- * @param	array	table headers
- * @param	array 	table body
- * @param	array	pdf headers
- * @param	array	pdf footers
+ * @param    array    table headers
+ * @param    array    table body
+ * @param    array    pdf headers
+ * @param    array    pdf footers
  * @return void
  */
 function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footers_pdf, $title_pdf)
@@ -293,7 +296,7 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
             foreach ($data_table as $data) {
                 $content_table .= '<tr>';
                 $content_table .= '<td>'.($item < 10 ? '0'.$item : $item).'</td>';
-                foreach ($data as  $key => $content) {
+                foreach ($data as $key => $content) {
                     if (isset($content)) {
                         $key == 1 ? $align = 'align="left"' : $align = 'align="center"';
                         $content_table .= '<td '.$align.' style="padding:4px;" >'.$content.'</td>';
@@ -302,13 +305,17 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
                 $content_table .= '</tr>';
                 $i++;
                 $item++;
-                if ($i > $items_per_page) { break; }
+                if ($i > $items_per_page) {
+                    break;
+                }
             }
         } else {
             $content_table .= '<tr colspan="'.$i.'"><td>'.get_lang('Empty').'</td></tr>';
         }
         $content_table .= '</table>';
-        if ($x < ($count_pages - 1)) { $content_table .= '<pagebreak />'; }
+        if ($x < ($count_pages - 1)) {
+            $content_table .= '<pagebreak />';
+        }
     }
     $pdf = new PDF();
     $pdf->set_custom_footer($footer);
@@ -320,17 +327,17 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
 
 /**
  * Exports the data as a table on a PDF page
- * @param	resource	The PDF object (ezpdf class) used to generate the file
- * @param	array		The data array
- * @param	array		Table headers
- * @param	string		Format (portrait or landscape)
+ * @param    resource    The PDF object (ezpdf class) used to generate the file
+ * @param    array        The data array
+ * @param    array        Table headers
+ * @param    string        Format (portrait or landscape)
  */
 function export_pdf($pdf, $newarray, $header_names, $format)
 {
-	$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
-	$pdf->ezSetCmMargins(0, 0, 0, 0);
-	$pdf->ezSetY(($format == 'portrait') ? '820' : '570');
-	$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
+    $pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
+    $pdf->ezSetCmMargins(0, 0, 0, 0);
+    $pdf->ezSetY(($format == 'portrait') ? '820' : '570');
+    $pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
     if ($format == 'portrait') {
         $pdf->line(40, 790, 540, 790);
         $pdf->line(40, 40, 540, 40);
@@ -346,5 +353,5 @@ function export_pdf($pdf, $newarray, $header_names, $format)
         'rowGap' => 3,
         'width' => (($format == 'portrait') ? '500' : '750'),
     ));
-	$pdf->ezStream();
+    $pdf->ezStream();
 }

@@ -107,7 +107,7 @@ switch ($action) {
                 $em->flush();
 
                 // Also hide the tool in all sessions
-                if ($allowEditionInSession && $requestedVisible == 0 && empty($sessionId)) {
+                if ($allowEditionInSession && empty($sessionId)) {
                     $criteria = [
                         'cId' => $course_id,
                         'name' => $tool->getName()
@@ -118,7 +118,7 @@ switch ($action) {
                     foreach ($tools as $toolItem) {
                         $toolSessionId = $toolItem->getSessionId();
                         if (!empty($toolSessionId)) {
-                            $toolItem->setVisibility(0);
+                            $toolItem->setVisibility($requestedVisible);
                             $em->persist($toolItem);
                         }
                     }
@@ -474,6 +474,7 @@ switch ($action) {
         $start = $limit * $page - $limit;
         $course_list = SessionManager::get_course_list_by_session_id($session_id);
         $count = 0;
+        $temp = [];
 
         foreach ($course_list as $item) {
             if (isset($course_id) && !empty($course_id)) {

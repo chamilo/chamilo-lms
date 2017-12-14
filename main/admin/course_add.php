@@ -23,26 +23,6 @@ $em = Database::getManager();
 $courseCategoriesRepo = $em->getRepository('ChamiloCoreBundle:CourseCategory');
 // Get all possible teachers.
 $accessUrlId = api_get_current_access_url_id();
-$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-$table_user = Database::get_main_table(TABLE_MAIN_USER);
-$sql = "SELECT user_id,lastname,firstname
-        FROM $table_user
-        WHERE status=1".$order_clause;
-// Filtering teachers when creating a course.
-if (api_is_multiple_url_enabled()) {
-    $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    $sql = "SELECT u.user_id,lastname,firstname
-            FROM $table_user as u
-            INNER JOIN $access_url_rel_user_table url_rel_user
-            ON (u.user_id=url_rel_user.user_id)
-            WHERE url_rel_user.access_url_id=".$accessUrlId." AND status=1".$order_clause;
-}
-
-$res = Database::query($sql);
-$teachers = array();
-while ($obj = Database::fetch_object($res)) {
-    $teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
-}
 
 // Build the form.
 $form = new FormValidator('update_course');
@@ -78,24 +58,6 @@ $form->addText(
 
 $form->applyFilter('visual_code', 'api_strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
-$form->addRule(
-    'visual_code',
-    get_lang('Max'),
-    'maxlength',
-    CourseManager::MAX_COURSE_LENGTH_CODE
-);
-
-$form->addElement(
-    'select',
-    'course_teachers',
-    get_lang('CourseTeachers'),
-    $teachers,
-    [
-        'id' => 'course_teachers',
-        'multiple' => 'multiple'
-    ]
-);
-$form->applyFilter('course_teachers', 'html_filter');
 
 $countCategories = $courseCategoriesRepo->countAllInAccessUrl($accessUrlId);
 
@@ -116,15 +78,35 @@ if ($countCategories >= 100) {
 
     /** @var CourseCategory $category */
     foreach ($categories as $category) {
-        $categoriesOptions[$category->getCode()] = $category->__toString();
+        $categoriesOptions[$category->getCode()] = (string) $category;
     }
-
     $form->addSelect(
         'category_code',
         get_lang('CourseFaculty'),
         $categoriesOptions
     );
 }
+
+$form->addRule(
+    'visual_code',
+    get_lang('Max'),
+    'maxlength',
+    CourseManager::MAX_COURSE_LENGTH_CODE
+);
+
+$currentTeacher = api_get_user_entity(api_get_user_id());
+
+$form->addSelectAjax(
+    'course_teachers',
+    get_lang('CourseTeachers'),
+    [$currentTeacher->getId() => $currentTeacher->getCompleteNameWithUsername()],
+    [
+        'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=teacher_to_basis_course',
+        'id' => 'course_teachers',
+        'multiple' => 'multiple'
+    ]
+);
+$form->applyFilter('course_teachers', 'html_filter');
 
 // Course department
 $form->addText(
@@ -229,7 +211,7 @@ if (isset($default_course_visibility)) {
 }
 $values['subscribe'] = 1;
 $values['unsubscribe'] = 0;
-$values['course_teachers'] = array(api_get_user_id());
+$values['course_teachers'] = [$currentTeacher->getId()];
 
 $form->setDefaults($values);
 

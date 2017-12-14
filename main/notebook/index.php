@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
  * @package chamilo.notebook
  * @author Christian Fasanando, initial version
@@ -38,12 +41,18 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 // Tool name
 if ($action === 'addnote') {
-	$tool = 'NoteAddNew';
-	$interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq(), 'name' => get_lang('ToolNotebook'));
+    $tool = 'NoteAddNew';
+    $interbreadcrumb[] = array(
+        'url' => 'index.php?'.api_get_cidreq(),
+        'name' => get_lang('ToolNotebook')
+    );
 }
 if ($action === 'editnote') {
-	$tool = 'ModifyNote';
-	$interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq(), 'name' => get_lang('ToolNotebook'));
+    $tool = 'ModifyNote';
+    $interbreadcrumb[] = array(
+        'url' => 'index.php?'.api_get_cidreq(),
+        'name' => get_lang('ToolNotebook')
+    );
 }
 
 // Displaying the header
@@ -63,7 +72,7 @@ if ($action === 'addnote') {
         exit;
     }
 
-	$_SESSION['notebook_view'] = 'creation_date';
+    Session::write('notebook_view', 'creation_date');
 
     $form = new FormValidator(
         'note',
@@ -99,7 +108,14 @@ if ($action === 'addnote') {
         NotebookManager::display_notes();
     } else {
         echo '<div class="actions">';
-        echo '<a href="index.php">'.Display::return_icon('back.png', get_lang('BackToNotesList'), '', ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="index.php">'.
+            Display::return_icon(
+                'back.png',
+                get_lang('BackToNotesList'),
+                '',
+                ICON_SIZE_MEDIUM
+            ).
+            '</a>';
         echo '</div>';
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
@@ -124,7 +140,12 @@ if ($action === 'addnote') {
     $form->addElement('header', '', get_lang('ModifyNote'));
     $form->addElement('hidden', 'notebook_id');
     $form->addElement('text', 'note_title', get_lang('NoteTitle'), array('size' => '100'));
-    $form->addElement('html_editor', 'note_comment', get_lang('NoteComment'), null, api_is_allowed_to_edit()
+    $form->addElement(
+        'html_editor',
+        'note_comment',
+        get_lang('NoteComment'),
+        null,
+        api_is_allowed_to_edit()
         ? array('ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300')
         : array('ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student')
     );
@@ -153,7 +174,13 @@ if ($action === 'addnote') {
     } else {
         echo '<div class="actions">';
         echo '<a href="index.php">'.
-            Display::return_icon('back.png', get_lang('BackToNotesList'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon(
+                'back.png',
+                get_lang('BackToNotesList'),
+                '',
+                ICON_SIZE_MEDIUM
+            ).
+            '</a>';
         echo '</div>';
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
@@ -168,34 +195,52 @@ if ($action === 'addnote') {
     }
 
     NotebookManager::display_notes();
-} elseif (
-    $action === 'changeview' && in_array($_GET['view'], array('creation_date', 'update_date', 'title'))) {
-
+} elseif ($action === 'changeview' &&
+    in_array($_GET['view'], array('creation_date', 'update_date', 'title'))
+) {
     // Action handling: changing the view (sorting order)
     switch ($_GET['view']) {
         case 'creation_date':
             if (!$_GET['direction'] || $_GET['direction'] == 'ASC') {
-                echo Display::return_message(get_lang('NotesSortedByCreationDateAsc'), 'confirmation');
+                echo Display::return_message(
+                    get_lang('NotesSortedByCreationDateAsc'),
+                    'confirmation'
+                );
             } else {
-                echo Display::return_message(get_lang('NotesSortedByCreationDateDESC'), 'confirmation');
+                echo Display::return_message(
+                    get_lang('NotesSortedByCreationDateDESC'),
+                    'confirmation'
+                );
             }
             break;
         case 'update_date':
             if (!$_GET['direction'] || $_GET['direction'] == 'ASC') {
-                echo Display::return_message(get_lang('NotesSortedByUpdateDateAsc'), 'confirmation');
+                echo Display::return_message(
+                    get_lang('NotesSortedByUpdateDateAsc'),
+                    'confirmation'
+                );
             } else {
-                echo Display::return_message(get_lang('NotesSortedByUpdateDateDESC'), 'confirmation');
+                echo Display::return_message(
+                    get_lang('NotesSortedByUpdateDateDESC'),
+                    'confirmation'
+                );
             }
             break;
         case 'title':
             if (!$_GET['direction'] || $_GET['direction'] == 'ASC') {
-                echo Display::return_message(get_lang('NotesSortedByTitleAsc'), 'confirmation');
+                echo Display::return_message(
+                    get_lang('NotesSortedByTitleAsc'),
+                    'confirmation'
+                );
             } else {
-                echo Display::return_message(get_lang('NotesSortedByTitleDESC'), 'confirmation');
+                echo Display::return_message(
+                    get_lang('NotesSortedByTitleDESC'),
+                    'confirmation'
+                );
             }
             break;
     }
-    $_SESSION['notebook_view'] = $_GET['view'];
+    Session::write('notebook_view', $_GET['view']);
     NotebookManager::display_notes();
 } else {
     NotebookManager::display_notes();

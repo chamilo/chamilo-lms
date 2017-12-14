@@ -14,13 +14,13 @@ use ChamiloSession as Session;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-if (empty($_user['user_id'])) {
+if (empty(api_get_user_id())) {
     api_not_allowed(true);
 }
 
-if (empty($_SESSION['origin_url'])) {
-    $origin_url = $_SERVER['HTTP_REFERER'];
-    Session::write('origin_url', $origin_url);
+$originUrl = Session::read('origin_url');
+if (empty($originUrl)) {
+    Session::write('origin_url', $_SERVER['HTTP_REFERER']);
 }
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
@@ -95,9 +95,9 @@ if ($form->validate()) {
             get_lang('Anonymous')
         );
     }
-    $orig = $_SESSION['origin_url'];
+    $orig = Session::read('origin_url');
     Session::erase('origin_url');
-    header('location:'.$orig);
+    header('Location:'.$orig);
     exit;
 }
 Display::display_header(get_lang('SendEmail'));

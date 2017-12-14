@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Question Pool
  * This script allows administrators to manage questions and add them into their exercises.
@@ -10,8 +12,6 @@
  * @author Julio Montoya adding support to query all questions from all session, courses, exercises
  * @author Modify by hubert borderiou 2011-10-21 Question's category
  */
-
-use ChamiloSession as Session;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -58,7 +58,7 @@ if (!empty($objExercise)) {
 }
 
 // message to be displayed if actions successful
-$displayMessage = "";
+$displayMessage = '';
 if ($is_allowedToEdit) {
     // Duplicating a Question
     if (!isset($_POST['recup']) && $question_copy != 0 && isset($fromExercise)) {
@@ -126,7 +126,7 @@ if ($is_allowedToEdit) {
         // Adds the question ID represented by $recup into the list of questions for the current exercise
         $objExercise->addToList($recup);
         Session::write('objExercise', $objExercise);
-    } else if (isset($_POST['recup']) && is_array($_POST['recup']) && $fromExercise) {
+    } elseif (isset($_POST['recup']) && is_array($_POST['recup']) && $fromExercise) {
         $list_recup = $_POST['recup'];
 
         foreach ($list_recup as $course_id => $question_data) {
@@ -171,12 +171,11 @@ if ($is_allowedToEdit) {
     }
 }
 
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array('url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']), 'name' => get_lang('ToolGradebook'));
+if (api_is_in_gradebook()) {
+    $interbreadcrumb[] = array(
+        'url' => Category::getUrl(),
+        'name' => get_lang('ToolGradebook')
+    );
 }
 
 // if admin of course
@@ -699,11 +698,40 @@ if ($fromExercise <= 0) {
 }
 // Display table
 $header = array(
-    array(get_lang('QuestionUpperCaseFirstLetter'), false, array("style"=>"text-align:center"), ''),
-    array(get_lang('Type'), false, array("style"=>"text-align:center"), array("style"=>"text-align:center"), ''),
-    array(get_lang('QuestionCategory'), false, array("style"=>"text-align:center"), array("style"=>"text-align:center"), ''),
-    array(get_lang('Difficulty'), false, array("style"=>"text-align:center"), array("style"=>"text-align:center"), ''),
-    array($actionLabel, false, array("style"=>"text-align:center"), array("style"=>"text-align:center"), '')
+    array(
+        get_lang('QuestionUpperCaseFirstLetter'),
+        false,
+        array("style" => "text-align:center"),
+        ''
+    ),
+    array(
+        get_lang('Type'),
+        false,
+        array("style" => "text-align:center"),
+        array("style" => "text-align:center"),
+        ''
+    ),
+    array(
+        get_lang('QuestionCategory'),
+        false,
+        array("style" => "text-align:center"),
+        array("style" => "text-align:center"),
+        ''
+    ),
+    array(
+        get_lang('Difficulty'),
+        false,
+        array("style" => "text-align:center"),
+        array("style" => "text-align:center"),
+        ''
+    ),
+    array(
+        $actionLabel,
+        false,
+        array("style" => "text-align:center"),
+        array("style" => "text-align:center"),
+        ''
+    )
 );
 
 $data = array();

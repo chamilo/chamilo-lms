@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @TODO: Improve description
  * @package chamilo.hookmanagement
@@ -48,7 +49,8 @@ class HookManagement implements HookManagementInterface
         } else {
             $this->insertHookIfNotExist($eventName, $observerClassName);
             // Check if exists hook call
-            $row = Database::select('id, enabled',
+            $row = Database::select(
+                'id, enabled',
                 $this->tables[TABLE_HOOK_CALL],
                 array(
                     'where' => array(
@@ -57,7 +59,8 @@ class HookManagement implements HookManagementInterface
                         'AND type = ? ' => $type,
                     ),
                 ),
-                'ASSOC');
+                'ASSOC'
+            );
 
             if (!empty($row) && is_array($row)) {
                 // Check if is hook call is active
@@ -74,7 +77,6 @@ class HookManagement implements HookManagementInterface
                 }
             }
         }
-
     }
 
     /**
@@ -116,8 +118,7 @@ class HookManagement implements HookManagementInterface
     public function orderHook($eventName, $type, $hookOrders)
     {
         foreach ($this->hookCalls[$eventName] as $observerClassName => $types) {
-            foreach ($hookOrders as $oldOrder => $newOrder)
-            {
+            foreach ($hookOrders as $oldOrder => $newOrder) {
                 $res = Database::update(
                     $this->tables[TABLE_HOOK_CALL],
                     array(
@@ -251,8 +252,7 @@ class HookManagement implements HookManagementInterface
             $this->hookObservers[$observerClassName] = $id;
         }
 
-        if (
-            isset($eventName) &&
+        if (isset($eventName) &&
             isset($observerClassName) &&
             !isset($this->hookCalls[$eventName][$observerClassName])
         ) {
@@ -285,7 +285,6 @@ class HookManagement implements HookManagementInterface
             $this->hookCalls[$eventName][$observerClassName][HOOK_EVENT_TYPE_PRE] = $id;
 
             // HOOK TYPE POST
-
             $row = Database::select(
                 'MAX(hook_order) as hook_order',
                 $this->tables[TABLE_HOOK_CALL],

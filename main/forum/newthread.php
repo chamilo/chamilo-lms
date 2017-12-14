@@ -41,20 +41,13 @@ require_once 'forumfunction.inc.php';
 
 // Are we in a lp ?
 $origin = api_get_origin();
-
 /* MAIN DISPLAY SECTION */
 $current_forum = get_forum_information($_GET['forum']);
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 
-/* Breadcrumbs */
-
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = Security::remove_XSS($_SESSION['gradebook']);
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']),
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
@@ -72,7 +65,7 @@ if (!api_is_allowed_to_edit(false, true) &&
 
 // 2. the forumcategory or forum is locked (locked <>0) and the user is not a course manager
 if (!api_is_allowed_to_edit(false, true) &&
-    (($current_forum_category['visibility'] && $current_forum_category['locked'] <> 0) OR $current_forum['locked'] <> 0)
+    (($current_forum_category['visibility'] && $current_forum_category['locked'] <> 0) || $current_forum['locked'] <> 0)
 ) {
     api_not_allowed();
 }
@@ -107,34 +100,51 @@ if (api_is_invitee()) {
 
 $groupId = api_get_group_id();
 if (!empty($groupId)) {
-    $groupProperties = GroupManager :: get_group_properties($groupId);
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.$cidreq, 'name' => get_lang('Groups'));
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.$cidreq, 'name' => get_lang('GroupSpace').' '.$groupProperties['name']);
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.intval($_GET['forum']), 'name' => $current_forum['forum_title']);
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.intval($_GET['forum']), 'name' => get_lang('NewTopic'));
+    $groupProperties = GroupManager::get_group_properties($groupId);
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.$cidreq,
+        'name' => get_lang('Groups'),
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.$cidreq,
+        'name' => get_lang('GroupSpace').' '.$groupProperties['name'],
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.intval($_GET['forum']),
+        'name' => $current_forum['forum_title'],
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.intval($_GET['forum']),
+        'name' => get_lang('NewTopic'),
+    );
 } else {
     $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.$cidreq, 'name' => $nameTools);
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?'.$cidreq.'&forumcategory='.$current_forum_category['cat_id'], 'name' => $current_forum_category['cat_title']);
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.intval($_GET['forum']), 'name' => $current_forum['forum_title']);
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?'.$cidreq.'&forumcategory='.$current_forum_category['cat_id'],
+        'name' => $current_forum_category['cat_title'],
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.intval($_GET['forum']),
+        'name' => $current_forum['forum_title'],
+    );
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewTopic'));
 }
 
-$htmlHeadXtra[] = <<<JS
+$htmlHeadXtra[] = "
     <script>
-    $(document).on('ready', function() {
-        $('#reply-add-attachment').on('click', function(e) {
-            e.preventDefault();
-
-            var newInputFile = $('<input>', {
-                type: 'file',
-                name: 'user_upload[]'
+        $(document).on('ready', function() {
+            $('#reply-add-attachment').on('click', function(e) {
+                e.preventDefault();
+    
+                var newInputFile = $('<input>', {
+                    type: 'file',
+                    name: 'user_upload[]'
+                });
+                $('[name=\"user_upload[]\"]').parent().append(newInputFile);
             });
-
-            $('[name="user_upload[]"]').parent().append(newInputFile);
         });
-    });
     </script>
-JS;
+";
 
 $form = show_add_post_form(
     $current_forum,

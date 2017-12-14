@@ -16,7 +16,6 @@ api_block_anonymous_users();
 GradebookUtils::block_students();
 
 $edit_cat = isset($_REQUEST['editcat']) ? intval($_REQUEST['editcat']) : '';
-
 $get_select_cat = intval($_GET['selectcat']);
 
 $catadd = new Category();
@@ -33,7 +32,7 @@ if ($_in_course) {
 
 $catadd->set_course_code(api_get_course_id());
 $form = new CatForm(
-    CatForm :: TYPE_ADD,
+    CatForm::TYPE_ADD,
     $catadd,
     'add_cat_form',
     null,
@@ -82,20 +81,20 @@ if ($form->validate()) {
         $cat->setIsRequirement(false);
     }
 
-    if (empty ($values['visible'])) {
+    if (empty($values['visible'])) {
         $visible = 0;
     } else {
         $visible = 1;
     }
     $cat->set_visible($visible);
     $result = $cat->add();
-    header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?addcat=&selectcat='.$cat->get_parent_id().'&'.api_get_cidreq());
+    header('Location: '.Category::getUrl().'addcat=&selectcat='.$cat->get_parent_id());
     exit;
 }
 
 if (!$_in_course) {
     $interbreadcrumb[] = array(
-        'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$get_select_cat.'&'.api_get_cidreq(),
+        'url' => Category::getUrl().'selectcat='.$get_select_cat,
         'name' => get_lang('Gradebook')
     );
 }

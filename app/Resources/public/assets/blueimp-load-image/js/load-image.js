@@ -61,9 +61,9 @@
   }
   // The check for URL.revokeObjectURL fixes an issue with Opera 12,
   // which provides URL.createObjectURL but doesn't properly implement it:
-  var urlAPI = (window.createObjectURL && window) ||
-                (window.URL && URL.revokeObjectURL && URL) ||
-                (window.webkitURL && webkitURL)
+  var urlAPI = ($.createObjectURL && $) ||
+                ($.URL && URL.revokeObjectURL && URL) ||
+                ($.webkitURL && webkitURL)
 
   function revokeHelper (img, options) {
     if (img._objectURL && !(options && options.noRevoke)) {
@@ -114,7 +114,7 @@
   // invokes the callback with the event object (load or error).
   // The result can be read via event.target.result:
   loadImage.readFile = function (file, callback, method) {
-    if (window.FileReader) {
+    if ($.FileReader) {
       var fileReader = new FileReader()
       fileReader.onload = fileReader.onerror = callback
       method = method || 'readAsDataURL'
@@ -135,4 +135,4 @@
   } else {
     $.loadImage = loadImage
   }
-}(window))
+}(typeof window !== 'undefined' && window || this))

@@ -10,7 +10,6 @@
  */
 
 // Flag to allow for anonymous user - needs to be set before global.inc.php
-
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -21,6 +20,7 @@ require_once __DIR__.'/../inc/global.inc.php';
  * @param   integer View ID
  * @param   integer Current item ID
  * @param   integer New item ID
+ * @return  string
  */
 function initialize_item($lp_id, $user_id, $view_id, $next_item)
 {
@@ -66,7 +66,6 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
         $mymax = "''";
     }
     $mymin = $mylpi->get_min();
-
     $mylesson_status = $mylpi->get_status();
     $mytotal_time = $mylpi->get_scorm_time('js', null, true);
     $mymastery_score = $mylpi->get_mastery_score();
@@ -84,13 +83,11 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
         $myistring = substr($myistring, 1);
     }
 
-	// Obtention des donnees d'objectifs
-	$mycoursedb = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
+    // Obtention des donnees d'objectifs
+    $mycoursedb = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
     $course_id = api_get_course_int_id();
-	$mylp_iv_id = $mylpi->db_item_view_id;
-
+    $mylp_iv_id = $mylpi->db_item_view_id;
     $phpobjectives = array();
-
     if (!empty($mylp_iv_id)) {
         $sql = "SELECT objective_id, status, score_raw, score_max, score_min
                 FROM $mycoursedb
@@ -101,7 +98,7 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
             $phpobjectives[] = $row;
         }
     }
-	$myobjectives = json_encode($phpobjectives);
+    $myobjectives = json_encode($phpobjectives);
 
     $return .=
             "olms.score=".$myscore.";".
@@ -172,4 +169,10 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
 
     return $return;
 }
-echo initialize_item($_POST['lid'], $_POST['uid'], $_POST['vid'], $_POST['iid']);
+
+echo initialize_item(
+    $_POST['lid'],
+    $_POST['uid'],
+    $_POST['vid'],
+    $_POST['iid']
+);

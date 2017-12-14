@@ -22,13 +22,13 @@ if (api_is_allowed_to_edit(null, true) ||
 ) {
     $groupId = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
     $form = new FormValidator(
-            'filter',
-            'post',
-            'index.php?action=attendance_sheet_list&'.api_get_cidreq().'&attendance_id='.$attendance_id,
-            null,
-            array(),
-            'inline'
-        );
+        'filter',
+        'post',
+        'index.php?action=attendance_sheet_list&'.api_get_cidreq().'&attendance_id='.$attendance_id,
+        null,
+        array(),
+        'inline'
+    );
 
     $values = array(
         'all' => get_lang('All'),
@@ -64,7 +64,10 @@ if (api_is_allowed_to_edit(null, true) ||
     }
 
     if (!$exists_attendance_today) {
-        echo Display::return_message(get_lang('ThereIsNoClassScheduledTodayTryPickingAnotherDay'), 'warning');
+        echo Display::return_message(
+            get_lang('ThereIsNoClassScheduledTodayTryPickingAnotherDay'),
+            'warning'
+        );
     }
 
     $form->addSelect(
@@ -103,7 +106,6 @@ if (api_is_allowed_to_edit(null, true) ||
     );
 
     if (!$is_locked_attendance || api_is_platform_admin()) {
-
         $actionsLeft = '<a style="float:left;" href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.'">'.
             Display::return_icon('attendance_calendar.png', get_lang('AttendanceCalendar'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a id="pdf_export" style="float:left;"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_pdf&attendance_id='.$attendance_id.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
@@ -126,7 +128,6 @@ if (api_is_allowed_to_edit(null, true) ||
     }
 
     $param_filter = '&filter='.Security::remove_XSS($default_filter).'&group_id='.$groupId;
-
     if (count($users_in_course) > 0) {
         ?>
         <script>
@@ -233,7 +234,10 @@ if (api_is_allowed_to_edit(null, true) ||
                             } else {
                                 $class = 'row_even';
                             }
-                            $username = api_htmlentities(sprintf(get_lang('LoginX'), $data['username']), ENT_QUOTES);
+                            $username = api_htmlentities(
+                                sprintf(get_lang('LoginX'), $data['username']),
+                                ENT_QUOTES
+                            );
                             ?>
                             <tr class="<?php echo $class ?>">
                                 <td><center><?php echo $i ?></center></td>
@@ -284,7 +288,6 @@ if (api_is_allowed_to_edit(null, true) ||
 
                         $result .= '<th>';
                         $result .= '<div class="date-attendance">'.$datetime.'&nbsp;';
-
                         if (api_is_allowed_to_edit(null, true)) {
                             $result .= '<span id="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin() ? $img_lock : '').'</span>';
                         }
@@ -358,7 +361,7 @@ if (api_is_allowed_to_edit(null, true) ||
                                     echo '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" '.$disabled.' '.$checked.' />';
                                     echo '<span class="anchor_'.$calendar['id'].'"></span>';
                                 } else {
-                                    echo $presence ? Display::return_icon('checkbox_on.gif', get_lang('Presence')) : Display::return_icon('checkbox_off.gif', get_lang('Presence'));
+                                    echo $presence ? Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Presence'), null, ICON_SIZE_TINY);
                                 }
                             } else {
                                 switch ($presence) {
@@ -400,7 +403,7 @@ if (api_is_allowed_to_edit(null, true) ||
                     <?php if (!$is_locked_attendance || api_is_platform_admin()) {
                         if (api_is_allowed_to_edit(null, true)) { ?>
                             <button type="submit" class="btn btn-primary"><?php echo get_lang('Save') ?></button>
-                        <?php }
+                    <?php }
                     } ?>
                     </div>
                 </div>
@@ -449,7 +452,7 @@ if (api_is_allowed_to_edit(null, true) ||
                 ?>
                 <tr class="<?php echo $class ?>">
                     <td>
-                        <?php echo $presence['presence'] ? Display::return_icon('checkbox_on.gif', get_lang('Presence')) : Display::return_icon('checkbox_off.gif', get_lang('Presence')) ?>
+                        <?php echo $presence['presence'] ? Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Presence'), null, ICON_SIZE_TINY) ?>
                         <?php echo "&nbsp; ".$presence['date_time'] ?>
                     </td>
                 </tr>

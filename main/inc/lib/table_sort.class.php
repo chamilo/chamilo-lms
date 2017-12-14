@@ -11,7 +11,7 @@ define('SORT_DATE', 3);
 define('SORT_IMAGE', 4);
 
 /**
- *	@package chamilo.library
+ * Class TableSort
  */
 class TableSort
 {
@@ -25,8 +25,12 @@ class TableSort
     * @return array The sorted dataset
     * @author bart.mollet@hogent.be
     */
-    public static function sort_table($data, $column = 0, $direction = SORT_ASC, $type = SORT_REGULAR)
-    {
+    public static function sort_table(
+        $data,
+        $column = 0,
+        $direction = SORT_ASC,
+        $type = SORT_REGULAR
+    ) {
         if (!is_array($data) || empty($data)) {
             return array();
         }
@@ -274,8 +278,12 @@ class TableSort
     {
         $is_image = true;
         foreach ($data as $index => & $row) {
-            $is_image &= strlen(trim(strip_tags($row[$column], '<img>'))) > 0; // at least one img-tag
-            $is_image &= strlen(trim(strip_tags($row[$column]))) == 0; // and no text outside attribute-values
+            if (isset($row[$column])) {
+                // at least one img-tag
+                $is_image &= strlen(trim(strip_tags($row[$column], '<img>'))) > 0;
+                // and no text outside attribute-values
+                $is_image &= strlen(trim(strip_tags($row[$column]))) == 0;
+            }
             if (!$is_image) {
                 break;
             }

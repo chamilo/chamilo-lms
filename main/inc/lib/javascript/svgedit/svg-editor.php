@@ -1,4 +1,7 @@
 <?php
+
+use ChamiloSession as Session;
+
 /**
  * Integrate svg-edit with Chamilo
  * @author Juan Carlos Raña Trabado
@@ -9,7 +12,8 @@ require_once '../../../../inc/global.inc.php';//hack for Chamilo
 
 api_protect_course_script();
 api_block_anonymous_users();
-if (!isset($_SESSION['draw_dir'])) {
+$drawDir = Session::read('draw_dir');
+if (empty($drawDir)) {
     die();
 }
 $svgEditPath = api_get_path(WEB_LIBRARY_PATH).'javascript/svgedit/';

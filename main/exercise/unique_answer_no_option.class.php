@@ -14,8 +14,8 @@ use ChamiloSession as Session;
  */
 class UniqueAnswerNoOption extends Question
 {
-	public static $typePicture = 'mcuao.png';
-	public static $explanationLangVar = 'UniqueAnswerNoOption';
+    public static $typePicture = 'mcuao.png';
+    public static $explanationLangVar = 'UniqueAnswerNoOption';
 
     /**
      * Constructor
@@ -35,7 +35,11 @@ class UniqueAnswerNoOption extends Question
         // getting the exercise list
         $obj_ex = Session::read('objExercise');
 
-        $editor_config = array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '125');
+        $editor_config = array(
+            'ToolbarSet' => 'TestProposedAnswer',
+            'Width' => '100%',
+            'Height' => '125'
+        );
         //this line define how many question by default appear when creating a choice question
         $nb_answers = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : 3; // The previous default value was 2. See task #1759.
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
@@ -397,19 +401,19 @@ class UniqueAnswerNoOption extends Question
         // sets the total weighting of the question
         $this->updateWeighting($questionWeighting);
         $this->save($exercise);
-	}
+    }
 
     /**
      * @inheritdoc
      */
-	public function return_header($exercise, $counter = null, $score = null)
+    public function return_header($exercise, $counter = null, $score = null)
     {
-	    $header = parent::return_header($exercise, $counter, $score);
-	    $header .= '<table class="'.$this->question_table_class.'">
-			<tr>
-				<th>'.get_lang("Choice").'</th>
-				<th>'.get_lang("ExpectedChoice").'</th>
-				<th>'.get_lang("Answer").'</th>';
+        $header = parent::return_header($exercise, $counter, $score);
+        $header .= '<table class="'.$this->question_table_class.'">
+            <tr>
+                <th>'.get_lang("Choice").'</th>
+                <th>'.get_lang("ExpectedChoice").'</th>
+                <th>'.get_lang("Answer").'</th>';
         $header .= '<th>'.get_lang("Comment").'</th>';
         $header .= '</tr>';
 

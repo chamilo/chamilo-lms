@@ -20,9 +20,11 @@ require_once api_get_path(SYS_PLUGIN_PATH).'sepe/src/wsse/soap-server-wsse.php';
 
 $ns = api_get_path(WEB_PLUGIN_PATH)."sepe/ws/ProveedorCentroTFWS.wsdl";
 $wsdl = api_get_path(SYS_PLUGIN_PATH)."sepe/ws/ProveedorCentroTFWS.wsdl";
-
 $serviceUrl = api_get_path(WEB_PLUGIN_PATH).'sepe/ws/service.php';
 
+/**
+ * Class CustomServer
+ */
 class CustomServer extends Zend\Soap\Server
 {
     /**
@@ -84,61 +86,63 @@ class CustomServer extends Zend\Soap\Server
     }
 }
 
-function authenticate($WSUser,$WSKey)
-{	
-	$tUser = Database::get_main_table(TABLE_MAIN_USER);
+function authenticate($WSUser, $WSKey)
+{
+    $tUser = Database::get_main_table(TABLE_MAIN_USER);
     $tApi = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
     $login = Database::escape_string($WSUser);
-    $sql = "SELECT u.user_id, u.status FROM $tUser u, $tApi a WHERE u.username='".$login."' and u.user_id = a.user_id AND a.api_service = 'dokeos' and a.api_key='".$WSKey."'";
-	$result = Database::query($sql);
-	
+    $sql = "SELECT u.user_id, u.status FROM $tUser u, $tApi a 
+            WHERE 
+                u.username='".$login."' AND  
+                u.user_id = a.user_id AND 
+                a.api_service = 'dokeos' AND 
+                a.api_key='".$WSKey."'";
+    $result = Database::query($sql);
+
     if (Database::num_rows($result) > 0) {
-		$row = Database::fetch_row($result);
-		if ($row[1] == '4') { //UserManager::is_admin($row[0])) {
+        $row = Database::fetch_row($result);
+        if ($row[1] == '4') { //UserManager::is_admin($row[0])) {
             return true;
         } else {
             return false;
         }
-	} else {
-		 return false;
-	}
+    } else {
+         return false;
+    }
 }
 
 $doc = new DOMDocument();
 $post = file_get_contents('php://input');
 if (!empty($post)) {
     $doc->loadXML($post);
-	
-	$WSUser = $doc->getElementsByTagName('Username')->item(0)->nodeValue;
-	$WSKey = $doc->getElementsByTagName('Password')->item(0)->nodeValue;
-	
+
+    $WSUser = $doc->getElementsByTagName('Username')->item(0)->nodeValue;
+    $WSKey = $doc->getElementsByTagName('Password')->item(0)->nodeValue;
+
     $s = new WSSESoapServer($doc);
-	
-	if (!empty($WSUser) && !empty($WSKey)) {
-		if (authenticate($WSUser,$WSKey)) {
-			// pointing to the current file here
-			$options = array(
-				'soap_version' => SOAP_1_1
-			);
-			$soap = new CustomServer($wsdl, $options);
-			$soap->setObject(new Sepe());
-		
-			if ($s->process()) {
-				$xml = $s->saveXML();
-				//header('Content-type: application/xml');
-				$soap->handle($xml);
-				exit;
-			} else {
-				error_log('not processed');
-			}
-		} else {
-			error_log('Claves incorrectas');
-		}
-	} else {
-		error_log('not processed');
-	}
-	
-    
+    if (!empty($WSUser) && !empty($WSKey)) {
+        if (authenticate($WSUser, $WSKey)) {
+            // pointing to the current file here
+            $options = array(
+                'soap_version' => SOAP_1_1
+            );
+            $soap = new CustomServer($wsdl, $options);
+            $soap->setObject(new Sepe());
+
+            if ($s->process()) {
+                $xml = $s->saveXML();
+                //header('Content-type: application/xml');
+                $soap->handle($xml);
+                exit;
+            } else {
+                error_log('not processed');
+            }
+        } else {
+            error_log('Claves incorrectas');
+        }
+    } else {
+        error_log('not processed');
+    }
 } else {
     $contents = file_get_contents($wsdl);
     header('Content-type: application/xml');

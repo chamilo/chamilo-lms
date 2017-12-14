@@ -167,7 +167,6 @@ if (!empty($_GET['action']) && $_GET['action'] == 'exportqti2' && !empty($_GET['
     unlink($temp_zip_file);
     unlink($temp_xml_file);
     rmdir($temp_zip_dir);
-    //DocumentManager::string_send_for_download($export,true,'qti2export_q'.$_GET['questionId'].'.xml');
     exit; //otherwise following clicks may become buggy
 }
 
@@ -279,13 +278,9 @@ if ($editQuestion || $modifyQuestion || $newQuestion || $modifyAnswers) {
     $nameTools = get_lang('QuestionManagement');
 }
 
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
@@ -293,7 +288,7 @@ if (!empty($gradebook) && $gradebook == 'view') {
 $interbreadcrumb[] = array("url" => "exercise.php", "name" => get_lang('Exercises'));
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
     $interbreadcrumb[] = [
-        "url" => "admin.php?exerciseId=".$objExercise->id,
+        "url" => "admin.php?exerciseId=".$objExercise->id.'&'.api_get_cidreq(),
         "name" => $objExercise->selectTitle(true),
     ];
 } else {
@@ -450,6 +445,7 @@ if ($newQuestion || $editQuestion) {
             echo '<div class="main-question">';
             echo Display::div($objQuestion->selectTitle(), array('class' => 'question_title'));
             ExerciseLib::showQuestion(
+                $objExercise,
                 $editQuestion,
                 false,
                 null,
@@ -458,7 +454,6 @@ if ($newQuestion || $editQuestion) {
                 true,
                 false,
                 true,
-                $objExercise->feedback_type,
                 true
             );
             echo '</div>';

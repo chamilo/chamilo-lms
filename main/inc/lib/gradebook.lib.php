@@ -88,21 +88,12 @@ class Gradebook extends Model
     }
 
     /**
-     * @param array $params
-     *
-     * @return bool
-     */
-    public function update($params)
-    {
-        return parent::update($params);
-    }
-
-    /**
      * @param int $gradebook_id
      * @param array $skill_list
+     * @param bool $deleteSkillNotInList
      * @return bool
      */
-    public function update_skills_to_gradebook(
+    public function updateSkillsToGradeBook(
         $gradebook_id,
         $skill_list,
         $deleteSkillNotInList = true
@@ -134,7 +125,7 @@ class Gradebook extends Model
                 $params = array();
                 $params['gradebook_id'] = $gradebook_id;
                 $params['skill_id'] = $skill_id;
-                if (!$skill_gradebook->exists_gradebook_skill($gradebook_id, $skill_id)) {
+                if (!$skill_gradebook->existsGradeBookSkill($gradebook_id, $skill_id)) {
                     $skill_gradebook->save($params);
                 }
             }
@@ -145,7 +136,7 @@ class Gradebook extends Model
         if ($deleteSkillNotInList) {
             if (!empty($skill_to_remove)) {
                 foreach ($skill_to_remove as $remove) {
-                    $skill_item = $skill_gradebook->get_skill_info(
+                    $skill_item = $skill_gradebook->getSkillInfo(
                         $remove,
                         $gradebook_id
                     );
@@ -162,7 +153,7 @@ class Gradebook extends Model
      * @todo the form should be auto generated
      * @param   string  url
      * @param   string  action add, edit
-     * @return  obj     form validator obj
+     * @return  FormValidator
      */
     public function show_skill_form($gradebook_id, $url, $header = null)
     {
@@ -191,7 +182,7 @@ class Gradebook extends Model
             )
         );
 
-        $selected_skills = self::get_skills_by_gradebook($gradebook_id);
+        $selected_skills = self::getSkillsByGradebook($gradebook_id);
         $clean_selected_skills = array();
         if (!empty($selected_skills)) {
             foreach ($selected_skills as $skill) {
@@ -209,7 +200,7 @@ class Gradebook extends Model
      * @param int $gradebook_id
      * @return array|resource
      */
-    public function get_skills_by_gradebook($gradebook_id)
+    public function getSkillsByGradebook($gradebook_id)
     {
         $gradebook_id = intval($gradebook_id);
         $sql = "SELECT skill.id, skill.name FROM {$this->table_skill} skill
@@ -228,6 +219,15 @@ class Gradebook extends Model
     public function display()
     {
         // action links
-        echo Display::grid_html('gradebooks');
+        echo self::returnGrid();
+    }
+
+    /**
+     * Displays the title + grid
+     */
+    public function returnGrid()
+    {
+        // action links
+        return Display::grid_html('gradebooks');
     }
 }

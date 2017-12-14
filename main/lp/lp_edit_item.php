@@ -13,7 +13,6 @@
 */
 
 $this_section = SECTION_COURSES;
-
 api_protect_course_script();
 
 /* Header and action code */
@@ -81,16 +80,9 @@ $therow = Database::fetch_array($result);
     Course admin section
     - all the functions not available for students - always available in this case (page only shown to admin)
 */
-
-/* SHOWING THE ADMIN TOOLS */
-
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
@@ -174,7 +166,9 @@ $res_doc = Database::query($sql_doc);
 $path_file = Database::result($res_doc, 0, 0);
 $path_parts = pathinfo($path_file);
 
-if (Database::num_rows($res_doc) > 0 && $path_parts['extension'] == 'html') {
+if (Database::num_rows($res_doc) > 0 &&
+    isset($path_parts['extension']) && $path_parts['extension'] == 'html'
+) {
     echo $_SESSION['oLP']->return_new_tree();
 
     // Show the template list

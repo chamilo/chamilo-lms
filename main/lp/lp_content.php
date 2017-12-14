@@ -33,7 +33,6 @@ if ($debug > 0) {
 }
 
 $list = $_SESSION['oLP']->get_toc();
-
 $dir = false;
 
 foreach ($list as $toc) {
@@ -91,13 +90,9 @@ if ($debug > 0) {
 }
 $_SESSION['oLP']->set_previous_item($lp_item_id);
 
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }

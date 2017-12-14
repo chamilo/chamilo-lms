@@ -111,10 +111,9 @@ class DashboardManager
      * display checkboxes for dashboard plugin list
      * @param string  $plugin_path
      *
-     * @return void
      */
-    public static function display_dashboard_plugin_checkboxes($plugin_path) {
-
+    public static function display_dashboard_plugin_checkboxes($plugin_path)
+    {
         $tbl_block = Database::get_main_table(TABLE_MAIN_BLOCK);
 
         $sql = "SELECT * FROM $tbl_block
@@ -313,8 +312,8 @@ class DashboardManager
 
     /**
      * get data about enabled dashboard block (stored insise block table)
-     * @param  string	$path plugin path
-     * @return array 	data
+     * @param  string $path plugin path
+     * @return array    data
      */
     public static function get_enabled_dashboard_blocks($path = '')
     {
@@ -339,32 +338,31 @@ class DashboardManager
     /**
      * display user dashboard list
      * @param int  User id
-     * @return void
      */
     public static function display_user_dashboard_list($user_id)
     {
         $enabled_dashboard_plugins = self::get_enabled_dashboard_blocks();
         $user_block_data = self::get_user_block_data($user_id);
-
+        $html = '';
         if (count($enabled_dashboard_plugins) > 0) {
-            echo '<div style="margin-top:20px">';
-            echo '<div><strong>'.get_lang('SelectBlockForDisplayingInsideBlocksDashboardView').'</strong></div><br />';
-            echo '<form name="dashboard_list" method="post" action="index.php?action=store_user_block">';
-            echo '<table class="data_table">';
-            echo '<tr>';
-            echo '<th width="5%">';
-            echo get_lang('Enabled');
-            echo '</th>';
-            echo '<th width="30%">';
-            echo get_lang('Name');
-            echo '</th>';
-            echo '<th width="40%">';
-            echo get_lang('Description');
-            echo '</th>';
-            echo '<th>';
-            echo get_lang('ColumnPosition');
-            echo '</th>';
-            echo '</tr>';
+            $html .= '<div style="margin-top:20px">';
+            $html .= '<div><strong>'.get_lang('SelectBlockForDisplayingInsideBlocksDashboardView').'</strong></div><br />';
+            $html .= '<form name="dashboard_list" method="post" action="index.php?action=store_user_block">';
+            $html .= '<table class="data_table">';
+            $html .= '<tr>';
+            $html .= '<th width="5%">';
+            $html .= get_lang('Enabled');
+            $html .= '</th>';
+            $html .= '<th width="30%">';
+            $html .= get_lang('Name');
+            $html .= '</th>';
+            $html .= '<th width="40%">';
+            $html .= get_lang('Description');
+            $html .= '</th>';
+            $html .= '<th>';
+            $html .= get_lang('ColumnPosition');
+            $html .= '</th>';
+            $html .= '</tr>';
 
             // We display all enabled plugins and the checkboxes
             foreach ($enabled_dashboard_plugins as $block) {
@@ -384,42 +382,42 @@ class DashboardManager
                         }
                     }
 
-                    echo '<tr>';
+                    $html .= '<tr>';
                     // checkboxes
-                    self::display_user_dashboard_list_checkboxes($user_id, $block['id']);
-                    echo '<td>'.$block['name'].'</td>';
-                    echo '<td>'.$block['description'].'</td>';
-                    echo '<td>
+                    $html .= self::display_user_dashboard_list_checkboxes($user_id, $block['id']);
+                    $html .= '<td>'.$block['name'].'</td>';
+                    $html .= '<td>'.$block['description'].'</td>';
+                    $html .= '<td>
                             <select class="selectpicker show-tick form-control" name="columns['.$block['id'].']">
                             <option value="1" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column'] == 1 ? 'selected' : '').' >1</option>
                             <option value="2" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column'] == 2 ? 'selected' : '').' >2</option>
                             </select>
                           </td>';
-                    echo '</tr>';
+                    $html .= '</tr>';
                 } else {
-                    echo Display::tag('tr', Display::tag('td', get_lang('Error').' '.$controller_class, array('colspan'=>'3')));
+                    $html .= Display::tag('tr', Display::tag('td', get_lang('Error').' '.$controller_class, array('colspan'=>'3')));
                 }
             }
 
-            echo '</table>';
-            echo '<div class="row"><div class="col-md-12">';
-            echo '<button class="btn btn-default" type="submit" name="submit_dashboard_list" value="'.get_lang('EnableDashboardBlock').'"><em class="fa fa-check-square"></em> '.
+            $html .= '</table>';
+            $html .= '<div class="row"><div class="col-md-12">';
+            $html .= '<button class="btn btn-default" type="submit" name="submit_dashboard_list" value="'.get_lang('EnableDashboardBlock').'"><em class="fa fa-check-square"></em> '.
                 get_lang('EnableDashboardBlock').'</button></form>';
-            echo '</div></div>';
+            $html .= '</div></div>';
         } else {
-            echo '<div style="margin-top:20px">'.get_lang('ThereAreNoEnabledDashboardPlugins').'</div>';
+            $html .= '<div style="margin-top:20px">'.get_lang('ThereAreNoEnabledDashboardPlugins').'</div>';
             if (api_is_platform_admin()) {
-                echo '<a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'.
+                $html .= '<a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'.
                     get_lang('ConfigureDashboardPlugin').'</a>';
             }
         }
+        return $html;
     }
 
     /**
      * display checkboxes for user dashboard list
      * @param int    User id
      * @param int    Block id
-     * @return void
      */
     public static function display_user_dashboard_list_checkboxes($user_id, $block_id)
     {
@@ -432,9 +430,10 @@ class DashboardManager
             $checked = "checked";
         }
 
-        echo "<td align=\"center\">";
-        echo '<input type="checkbox" name="enabled_blocks['.$block_id.']" value="true" '.$checked.'/>';
-        echo "</td>";
+        $html = "<td align=\"center\">";
+        $html .= '<input type="checkbox" name="enabled_blocks['.$block_id.']" value="true" '.$checked.'/>';
+        $html .= "</td>";
+        return $html;
     }
 
     /**
@@ -493,9 +492,9 @@ class DashboardManager
 
     /**
      * This function update extra user blocks data after closing a dashboard block
-     * @param int        User id
+     * @param int $user_id       User id
      * @param string    plugin path
-     * @param integer $user_id
+     *
      * @return bool
      */
     public static function close_user_block($user_id, $path)
@@ -525,8 +524,8 @@ class DashboardManager
      * get links for styles from dashboard plugins
      * @return string   links
      */
-    public static function get_links_for_styles_from_dashboard_plugins() {
-
+    public static function get_links_for_styles_from_dashboard_plugins()
+    {
         return '<link rel="stylesheet" href="'.api_get_path(WEB_PLUGIN_PATH).'dashboard/css/default.css" type="text/css" />'.PHP_EOL;
     }
 }

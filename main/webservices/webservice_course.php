@@ -4,7 +4,6 @@
  * @package chamilo.webservices
  */
 require_once __DIR__.'/../inc/global.inc.php';
-$libpath = api_get_path(LIBRARY_PATH);
 require_once __DIR__.'/webservice.php';
 
 /**
@@ -69,8 +68,11 @@ class WSCourse extends WS
      * Deletes multiple courses
      *
      * @param string API secret key
-     * @param array Array of courses with elements of the form array('course_id_field_name' => 'name_of_field', 'course_id_value' => 'value')
-     * @return array Array with elements like array('course_id_value' => 'value', 'result' => array('code' => 0, 'message' => 'Operation was successful')). Note that if the result array contains a code different
+     * @param array Array of courses with elements of the form
+     * array('course_id_field_name' => 'name_of_field', 'course_id_value' => 'value')
+     * @return array Array with elements like
+     * array('course_id_value' => 'value', 'result' => array('code' => 0, 'message' => 'Operation was successful')).
+     * Note that if the result array contains a code different
      * than 0, an error occured
      */
     public function DeleteCourses($secret_key, $courses)
@@ -232,7 +234,8 @@ class WSCourse extends WS
      *
      * @param string API secret key
      * @param array Courses to be created, with elements following the structure presented in CreateCourse
-     * @return array Array with elements of the form array('course_id_value' => 'original value sent', 'course_id_generated' => 'value_generated', 'result' => array('code' => 0, 'message' => 'Operation was successful'))
+     * @return array Array with elements of the form
+     * array('course_id_value' => 'original value sent', 'course_id_generated' => 'value_generated', 'result' => array('code' => 0, 'message' => 'Operation was successful'))
      */
     public function CreateCourses($secret_key, $courses)
     {
@@ -426,7 +429,8 @@ class WSCourse extends WS
      *
      * @param string API secret key
      * @param string A list of visibility filter we want to apply
-     * @return array An array with elements of the form ('id' => 'Course internal id', 'code' => 'Course code', 'title' => 'Course title', 'language' => 'Course language', 'visibility' => 'Course visibility',
+     * @return array An array with elements of the form
+     * ('id' => 'Course internal id', 'code' => 'Course code', 'title' => 'Course title', 'language' => 'Course language', 'visibility' => 'Course visibility',
      * 'category_name' => 'Name of the category of the course', 'number_students' => 'Number of students in the course', 'external_course_id' => 'External course id')
      */
     public function ListCourses(
@@ -483,7 +487,6 @@ class WSCourse extends WS
 
                 // Determining external course id - this code misses the external course id field name
                 // $course_tmp['external_course_id'] = CourseManager::get_course_extra_field_value($course_field_name, $course['code']);
-
 
                 $courses_result[] = $course_tmp;
             }
@@ -625,7 +628,8 @@ class WSCourse extends WS
      * @param string API secret key
      * @param string Course id field name
      * @param string Course id value
-     * @return array Returns an array with elements of the form ('course_desc_id' => 1, 'course_desc_title' => 'Title', 'course_desc_content' => 'Content')
+     * @return array Returns an array with elements of the form
+     * array('course_desc_id' => 1, 'course_desc_title' => 'Title', 'course_desc_content' => 'Content')
      */
     public function GetCourseDescriptions(
         $secret_key,
@@ -705,9 +709,7 @@ class WSCourse extends WS
                 $descriptions = CourseDescription::get_descriptions($course_id);
                 $exists = false;
                 foreach ($descriptions as $description) {
-                    if ($description->get_description_type(
-                        ) == $course_desc_id
-                    ) {
+                    if ($description->get_description_type() == $course_desc_id) {
                         $exists = true;
                     }
                 }

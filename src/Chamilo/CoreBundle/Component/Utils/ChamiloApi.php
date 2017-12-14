@@ -65,37 +65,47 @@ class ChamiloApi
 
     /**
      * Get the platform logo path
-     * @return null|string
+     * @param string $theme
+     * @param bool $getSysPath
+     * @return string
      */
-    public static function getWebPlatformLogoPath($theme = '')
+    public static function getPlatformLogoPath($theme = '', $getSysPath = false)
     {
         $theme = empty($theme) ? api_get_visual_theme() : $theme;
         $accessUrlId = api_get_current_access_url_id();
         $themeDir = \Template::getThemeDir($theme);
-        $customLogoPath = "$themeDir/images/header-logo-custom$accessUrlId.png";
+        $customLogoPath = $themeDir."images/header-logo-custom$accessUrlId.png";
 
         if (file_exists(api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPath")) {
+            if ($getSysPath) {
+                return api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPath";
+            }
             return api_get_path(WEB_CSS_PATH).$customLogoPath;
         }
 
-        $originalLogoPath = "$themeDir/images/header-logo.png";
+        $originalLogoPath = $themeDir."images/header-logo.png";
 
         if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPath)) {
+            if ($getSysPath) {
+                return api_get_path(SYS_CSS_PATH).$originalLogoPath;
+            }
             return api_get_path(WEB_CSS_PATH).$originalLogoPath;
         }
 
-        return null;
+        return '';
     }
 
     /**
      * Get the platform logo.
      * Return a <img> if the logo image exists. Otherwise return a <h2> with the institution name.
+     * @param string $theme
      * @param array $imageAttributes Optional.
+     * @param bool $getSysPath
      * @return string
      */
-    public static function getPlatformLogo($theme = '', $imageAttributes = [])
+    public static function getPlatformLogo($theme = '', $imageAttributes = [], $getSysPath = false)
     {
-        $logoPath = self::getWebPlatformLogoPath($theme);
+        $logoPath = self::getPlatformLogoPath($theme, $getSysPath);
         $institution = api_get_setting('Institution');
         $institutionUrl = api_get_setting('InstitutionUrl');
         $siteName = api_get_setting('siteName');
@@ -117,7 +127,7 @@ class ChamiloApi
                         $courseInfo['extLink']['url'],
                         ['class' => 'extLink']
                     );
-                } else if (!empty($courseInfo['extLink']['url'])) {
+                } elseif (!empty($courseInfo['extLink']['url'])) {
                     $headerLogo .= $courseInfo['extLink']['url'];
                 }
             }
@@ -192,5 +202,33 @@ class ChamiloApi
             }
         }
         return Session::read('_real_cid', 0);
+    }
+
+    /**
+     * Check if the current HTTP request is by AJAX
+     * @return bool
+     */
+    public static function isAjaxRequest()
+    {
+        $requestedWith = isset($_SERVER['HTTP_X_REQUESTED_WITH']) ? $_SERVER['HTTP_X_REQUESTED_WITH'] : null;
+
+        return $requestedWith === 'XMLHttpRequest';
+    }
+
+    /**
+     * Get a variable name for language file from a text
+     * @param string $text
+     * @param string $prefix
+     * @return string
+     */
+    public static function getLanguageVar($text, $prefix = '')
+    {
+        $text = api_replace_dangerous_char($text);
+        $text = str_replace(['-', ' '], '_', $text);
+        $text = preg_replace('/\_{1,}/', '_', $text);
+        //$text = str_replace('_', '', $text);
+        $text = api_underscore_to_camel_case($text);
+
+        return $prefix.$text;
     }
 }

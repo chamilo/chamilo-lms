@@ -2,12 +2,15 @@
 /* For licensing terms, see /license.txt */
 
 require_once 'main/inc/global.inc.php';
+
 $tool_name = get_lang('SystemAnnouncements');
 $visibility = SystemAnnouncementManager::getCurrentUserVisibility();
-if (!isset($_GET['id']) || empty($_GET['id'])) {
-    $content = SystemAnnouncementManager::displayAnnouncementsSlider($visibility, $_GET['id']);
+$id = isset($_GET['id']) ? $_GET['id'] : 0;
+
+if (empty($id)) {
+    $content = SystemAnnouncementManager::displayAnnouncementsSlider($visibility);
 } else {
-    $content = SystemAnnouncementManager::displayAnnouncement($_GET['id'], $visibility);
+    $content = SystemAnnouncementManager::displayAnnouncement($id, $visibility);
 }
 
 $tpl = new Template($tool_name);

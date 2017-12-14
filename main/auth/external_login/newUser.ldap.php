@@ -64,7 +64,7 @@ if ($ldap_user !== false) {
             $is_platformAdmin = true;
             Database::query("INSERT INTO admin values ('{$chamiloUser->getId()}')");
         }
-        Event::event_login($chamiloUser->getId());
+        Event::eventLogin($chamiloUser->getId());
 
         MessageManager::sendNotificationByRegisteredUser($chamiloUser);
     }

@@ -35,7 +35,7 @@ if ($isSender) {
 $idUserLocal = api_get_user_id();
 $userLocal = api_get_user_info($idUserLocal, true);
 $htmlHeadXtra[] = '<script type="text/javascript" src="'
-    . api_get_path(WEB_PATH) . 'web/assets/simpleWebRTC/latest-v2.js'
+    . api_get_path(WEB_PUBLIC_PATH).'assets/simpleWebRTC/latest-v2.js'
     . '"></script>' . "\n";
 
 $navigator = api_get_navigator();

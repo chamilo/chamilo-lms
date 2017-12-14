@@ -1,40 +1,37 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 use ChamiloSession as Session;
 
 /**
  * @package chamilo.main
  */
-
 define('CHAMILO_HOMEPAGE', true);
 define('CHAMILO_LOAD_WYSIWYG', false);
 
 /* Flag forcing the 'current course' reset, as we're not inside a course anymore. */
 // Maybe we should change this into an api function? an example: CourseManager::unset();
 $cidReset = true;
-
 require_once 'main/inc/global.inc.php';
-//require_once 'main/auth/external_login/facebook.inc.php';
+
+$allow = api_get_configuration_value('plugin_redirection_enabled');
+if ($allow) {
+    RedirectionPlugin::redirectUser(api_get_user_id());
+}
 
 // The section (for the tabs).
 $this_section = SECTION_CAMPUS;
-
 $header_title = null;
 if (!api_is_anonymous()) {
     $header_title = ' ';
 }
-
 $controller = new IndexManager($header_title);
-
 //Actions
 $loginFailed = isset($_GET['loginFailed']) ? true : isset($loginFailed);
-
 if (!empty($_GET['logout'])) {
     $redirect = !empty($_GET['no_redirect']) ? false : true;
-    $controller->logout($redirect);
+    // pass $logoutInfo defined in local.inc.php
+    $controller->logout($redirect, $logoutInfo);
 }
-
 /**
  * Registers in the track_e_default table (view in important activities in admin
  * interface) a possible attempted break in, sending auth data through get.
@@ -56,7 +53,6 @@ if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1) {
     session_destroy();
     die();
 }
-
 // Delete session item necessary to check for legal terms
 if (api_get_setting('allow_terms_conditions') === 'true') {
     Session::erase('term_and_condition');
@@ -69,7 +65,6 @@ if (!api_get_user_id() && CustomPages::enabled()) {
         CustomPages::display(CustomPages::INDEX_UNLOGGED);
     }
 }
-
 /**
  * @todo This piece of code should probably move to local.inc.php where the
  * actual login procedure is handled.
@@ -97,30 +92,24 @@ if (!empty($_POST['submitAuth'])) {
     }
 } else {
     // Only if login form was not sent because if the form is sent the user was already on the page.
-    Event::event_open();
+    Event::open();
 }
-
 if (api_get_setting('display_categories_on_homepage') === 'true') {
     $controller->tpl->assign('course_category_block', $controller->return_courses_in_categories());
 }
-
 $controller->set_login_form();
-
 //@todo move this inside the IndexManager
 if (!api_is_anonymous()) {
     $controller->tpl->assign('profile_block', $controller->return_profile_block());
     $controller->tpl->assign('user_image_block', $controller->return_user_image_block());
-
     if (api_is_platform_admin()) {
         $controller->tpl->assign('course_block', $controller->return_course_block());
     } else {
         $controller->tpl->assign('teacher_block', $controller->return_teacher_link());
     }
 }
-
 $hot_courses = '';
 $announcements_block = '';
-
 // Display the Site Use Cookie Warning Validation
 $useCookieValidation = api_get_setting('cookie_warning');
 if ($useCookieValidation === 'true') {
@@ -135,16 +124,13 @@ if ($useCookieValidation === 'true') {
         $controller->tpl->assign('displayCookieUsageWarning', true);
     }
 }
-
 // When loading a chamilo page do not include the hot courses and news
-
 if (!isset($_REQUEST['include'])) {
     if (api_get_setting('show_hot_courses') == 'true') {
         $hot_courses = $controller->return_hot_courses();
     }
     $announcements_block = $controller->return_announcements();
 }
-
 $controller->tpl->assign('hot_courses', $hot_courses);
 $controller->tpl->assign('announcements_block', $announcements_block);
 $controller->tpl->assign('home_page_block', $controller->return_home_page());
@@ -152,15 +138,12 @@ $controller->tpl->assign('navigation_course_links', $controller->return_navigati
 $controller->tpl->assign('notice_block', $controller->return_notice());
 //$controller->tpl->assign('main_navigation_block', $controller->return_navigation_links());
 $controller->tpl->assign('help_block', $controller->return_help());
-
 if (api_is_platform_admin() || api_is_drh()) {
-    $controller->tpl->assign('skills_block', $controller->return_skills_links());
+    $controller->tpl->assign('skills_block', $controller->returnSkillLinks());
 }
-
 if (api_is_anonymous()) {
     $controller->tpl->setLoginBodyClass();
 }
-
 // direct login to course
 if (isset($_GET['firstpage'])) {
     api_set_firstpage_parameter($_GET['firstpage']);
@@ -171,5 +154,5 @@ if (isset($_GET['firstpage'])) {
 } else {
     api_delete_firstpage_parameter();
 }
-
+$controller->setGradeBookDependencyBar(api_get_user_id());
 $controller->tpl->display_two_col_template();

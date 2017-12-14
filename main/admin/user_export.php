@@ -101,7 +101,7 @@ if ($form->validate()) {
                         cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
                     ORDER BY lastname,firstname";
         $filename = 'export_users_'.$course_code.'_'.api_get_local_time();
-    } else if (strlen($courseSessionCode) > 0) {
+    } elseif (strlen($courseSessionCode) > 0) {
         $sql .= " FROM $user_table u, $session_course_user_table scu
                     WHERE
                         u.user_id = scu.user_id AND

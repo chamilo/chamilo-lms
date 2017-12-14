@@ -11,7 +11,6 @@ header('Content-Type: application/json');
 require_once __DIR__.'/../inc/global.inc.php';
 
 $skillId = isset($_GET['id']) ? intval($_GET['id']) : 0;
-
 $objSkill = new Skill();
 $skill = $objSkill->get($skillId);
 

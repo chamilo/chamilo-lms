@@ -248,8 +248,12 @@ class Database
     public static function escape_string($string)
     {
         $string = self::getManager()->getConnection()->quote($string);
-
-        return trim($string, "'");
+        // The quote method from PDO also adds quotes around the string, which
+        // is not how the legacy mysql_real_escape_string() was used in
+        // Chamilo, so we need to remove the quotes around. Using trim will
+        // remove more than one quote if they are sequenced, generating
+        // broken queries and SQL injection risks
+        return substr($string, 1, -1);
     }
 
     /**
@@ -373,7 +377,6 @@ class Database
     public static function query($query)
     {
         $connection = self::getManager()->getConnection();
-
         if (api_get_setting('server_type') == 'test') {
             $result = $connection->executeQuery($query);
         } else {
@@ -429,7 +432,7 @@ class Database
      * @param array     $attributes
      * @param bool      $show_query
      *
-     * @return false|string
+     * @return false|int
      */
     public static function insert($table_name, $attributes, $show_query = false)
     {
@@ -452,7 +455,7 @@ class Database
             }
 
             if ($result) {
-                return self::getManager()->getConnection()->lastInsertId();
+                return (int) self::getManager()->getConnection()->lastInsertId();
             }
         }
 
@@ -526,10 +529,18 @@ class Database
      * @param array $conditions
      * @param string $type_result
      * @param string $option
+     * @param bool $debug
+     *
      * @return array
      */
-    public static function select($columns, $table_name, $conditions = array(), $type_result = 'all', $option = 'ASSOC')
-    {
+    public static function select(
+        $columns,
+        $table_name,
+        $conditions = array(),
+        $type_result = 'all',
+        $option = 'ASSOC',
+        $debug = false
+    ) {
         $conditions = self::parse_conditions($conditions);
 
         //@todo we could do a describe here to check the columns ...
@@ -544,6 +555,9 @@ class Database
         }
 
         $sql = "SELECT $clean_columns FROM $table_name $conditions";
+        if ($debug) {
+            var_dump($sql);
+        }
         $result = self::query($sql);
         $array = array();
 
@@ -697,7 +711,7 @@ class Database
      */
     public static function getDoctrineConfig($path)
     {
-        $isDevMode = false;
+        $isDevMode = true; // Forces doctrine to use ArrayCache instead of apc/xcache/memcache/redis
         $isSimpleMode = false; // related to annotations @Entity
         $cache = null;
         $path = !empty($path) ? $path : api_get_path(SYS_PATH);

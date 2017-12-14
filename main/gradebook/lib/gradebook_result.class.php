@@ -74,7 +74,7 @@ class GradeBookResult
     /**
      * Exports the complete report as an XLS file
      * @param array $data
-     * @return	boolean|null		False on error
+     * @return    boolean|null        False on error
      */
     public function exportCompleteReportXLS($data)
     {
@@ -89,7 +89,11 @@ class GradeBookResult
 
         //headers
         foreach ($data[0] as $header_col) {
-            $worksheet->SetCellValueByColumnAndRow($line, $column, html_entity_decode(strip_tags($header_col)));
+            $worksheet->SetCellValueByColumnAndRow(
+                $line,
+                $column,
+                html_entity_decode(strip_tags($header_col))
+            );
             $column++;
         }
         $line++;

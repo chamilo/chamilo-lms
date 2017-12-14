@@ -17,29 +17,43 @@ body { background: none;}
 </style>
 ";
 
-$message = null;
-
+$message = '';
 if (isset($_GET['error'])) {
     switch ($_GET['error']) {
         case 'document_deleted':
-            $message = Display::return_message(get_lang('DocumentHasBeenDeleted'), 'error');
+            $message = Display::return_message(
+                get_lang('DocumentHasBeenDeleted'),
+                'error'
+            );
             break;
         case 'prerequisites':
-            $message = Display::return_message(get_lang('LearnpathPrereqNotCompleted'), 'warning');
+            $message = Display::return_message(
+                get_lang('LearnpathPrereqNotCompleted'),
+                'warning'
+            );
             break;
         case 'document_not_found':
-            $message = Display::return_message(get_lang('FileNotFound'), 'warning');
+            $message = Display::return_message(
+                get_lang('FileNotFound'),
+                'warning'
+            );
             break;
         case 'reached_one_attempt':
-            $message = Display::return_message(get_lang('ReachedOneAttempt'), 'warning');
+            $message = Display::return_message(
+                get_lang('ReachedOneAttempt'),
+                'warning'
+            );
             break;
         case 'x_frames_options':
             $src = Session::read('x_frame_source');
             if (!empty($src)) {
-                $icon = '<em class="icon-play-sign icon-2x" aria-hidden="true"></em> ';
-
+                $icon = '<em class="icon-play-sign icon-2x" aria-hidden="true"></em>';
                 $message = Display::return_message(
-                    Display::url($icon.$src, $src, ['class' => 'btn generated', 'target' => '_blank']),
+                    Display::url(
+                        $icon.$src,
+                        $src,
+                        ['class' => 'btn generated', 'target' => '_blank']
+                    ),
                     'normal',
                     false
                 );
@@ -50,15 +64,9 @@ if (isset($_GET['error'])) {
             break;
     }
 } elseif (isset($_GET['msg']) && $_GET['msg'] == 'exerciseFinished') {
-    Display::addFlash(
-        Display::return_message(get_lang('ExerciseFinished'))
-    );
+    $message = Display::return_message(get_lang('ExerciseFinished'));
 }
 
-if (!empty($message)) {
-    Display::addFlash($message);
-}
-
-Display::display_reduced_header();
-Display::display_reduced_footer();
-?>
+$template = new Template();
+$template->assign('content', $message);
+$template->display_blank_template();

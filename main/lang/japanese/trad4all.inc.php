@@ -1830,4 +1830,5 @@ $Last = "最終";
 $Sent = "送信";
 $HideColumn = "列を非表示にする";
 $DisplayColumn = "列を表示する";
+$DearXComma = "%s へ、";
 ?>

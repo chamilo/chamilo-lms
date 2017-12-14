@@ -30,11 +30,11 @@ class UniqueAnswerImage extends UniqueAnswer
     public function createAnswersForm($form)
     {
         $objExercise = Session::read('objExercise');
-        $editorConfig = array(
-            'ToolbarSet' => 'TestFreeAnswer',
+        $editorConfig = [
+            'ToolbarSet' => 'TestProposedAnswer',
             'Width' => '100%',
             'Height' => '125'
-        );
+        ];
 
         //this line defines how many questions by default appear when creating a choice question
         // The previous default value was 2. See task #1759.
@@ -56,10 +56,10 @@ class UniqueAnswerImage extends UniqueAnswer
             <thead>
                 <tr style="text-align: center;">
                     <th width="10">' . get_lang('Number').'</th>
-                    <th>' . get_lang('True').'</th>
-                    <th>' . get_lang('Answer').'</th>
-                        ' . $commentTitle.'
-                        ' . $feedbackTitle.'
+                    <th>'.get_lang('True').'</th>
+                    <th>'.get_lang('Answer').'</th>
+                        '.$commentTitle.'
+                        '.$feedbackTitle.'
                     <th width="15">' . get_lang('Weighting').'</th>
                 </tr>
             </thead>
@@ -96,7 +96,8 @@ class UniqueAnswerImage extends UniqueAnswer
 
                 $question = Question::read($questionid);
                 $selectQuestion[$questionid] = 'Q'.$key.' :'.cut(
-                    $question->selectTitle(), 20
+                    $question->selectTitle(),
+                    20
                 );
             }
         }
@@ -140,7 +141,7 @@ class UniqueAnswerImage extends UniqueAnswer
                 $listDestination = $itemList[2];
                 $url = $itemList[3];
 
-                $try = 0;
+                $tryResult = 0;
                 if ($try != 0) {
                     $tryResult = 1;
                 }
@@ -191,7 +192,7 @@ class UniqueAnswerImage extends UniqueAnswer
             $answerNumber->freeze();
 
             $form->addElement('radio', 'correct', null, null, $i, 'class="checkbox"');
-            $form->addHtmlEditor('answer['.$i.']', null, null, true, $editorConfig);
+            $form->addHtmlEditor('answer['.$i.']', null, null, false, $editorConfig);
 
             $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
@@ -220,7 +221,8 @@ class UniqueAnswerImage extends UniqueAnswer
                     $selectQuestion
                 );
                 $group['url'.$i] = $form->createElement(
-                    'text', 'url'.$i,
+                    'text',
+                    'url'.$i,
                     get_lang('Other').': ',
                     array(
                         'class' => 'col-md-2',
@@ -317,7 +319,6 @@ class UniqueAnswerImage extends UniqueAnswer
               {
               $destinationStr.=$destination_id.';';
               } */
-
             $goodAnswer = $correct == $i ? true : false;
             if ($goodAnswer) {
                 $nbrGoodAnswers++;

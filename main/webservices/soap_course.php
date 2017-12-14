@@ -262,4 +262,3 @@ $s->register(
         'course_desc_content' => 'xsd:string'
     )
 );
-

@@ -15,9 +15,7 @@
  *
  * @package Wiki
  */
-/**
- * Code
- */
+
 define("DIFF_EQUAL", "=");
 define("DIFF_ADDED", "+");
 define("DIFF_DELETED", "-");
@@ -69,28 +67,21 @@ function diff(
 
     for ($i = 0; $i < $max; $i++) {
         // line changed
-        if (isset ($deleted[$i]) && isset($added[$i])) {
+        if (isset($deleted[$i]) && isset($added[$i])) {
             $output .= $format_line_function($i, DIFF_DELETED, $deleted[$i]);
             $output .= $format_line_function($i, DIFF_ADDED, $added[$i]);
-
-        } // line deleted
-        elseif (isset ($deleted[$i]) && !isset ($added[$i])) {
+        } elseif (isset($deleted[$i]) && !isset($added[$i])) {
+            // line deleted
             $output .= $format_line_function($i, DIFF_DELETED, $deleted[$i]);
-
-        } // line added
-        elseif (isset ($added[$i]) && !isset ($deleted[$i])) {
+        } elseif (isset($added[$i]) && !isset($deleted[$i])) {
+            // line added
             $output .= $format_line_function($i, DIFF_ADDED, $added[$i]);
-
-        } // line moved
-        elseif (isset ($moved[$i])) {
+        } elseif (isset($moved[$i])) {
+            // line moved
             $output .= $format_line_function($i, DIFF_MOVED, $newArr[$i]);
-
-        } // line unchanged
-        elseif ($show_equals) {
+        } elseif ($show_equals) {
+            // line unchanged
             $output .= $format_line_function($i, DIFF_EQUAL, $newArr[$i]);
-
-        } else {
-            // skip
         }
     }
 
@@ -168,20 +159,37 @@ function format_table_line($line, $type, $value, $skip_empty = false)
 
     switch ($type) {
         case DIFF_EQUAL:
-            //return '<tr><td>' . $line. '&nbsp;:&nbsp;' . '&nbsp;=</td><td><span class="diffEqual" >'                    . $value . '</span></td></tr>' . "\n"; //juan carlos comentado
-            return '<tr><td></td><td bgcolor="#FFFFFF">'.$value.'</td></tr>'."\n"; //juan carlos muestra solo color (no tambi�n la l�nea). Adem�s EN IEXPLORER VA BIEN PERO EN FIREFOX 3 la etiqueta span no muestra el color de fondo que est� definido en la hoja de estilos como background-color, aceptando s�lo la propiedad color pero esta solo da color al texto con lo cual los cambios quedan poco resaltados, adem�s los cambios de otros objetos que no sean texto no se indican por ej. a�adir una imagen, por esta raz�n doy el color de fondo al td directamente.
+            return '<tr><td></td><td bgcolor="#FFFFFF">'.$value.'</td></tr>'."\n";
+            //juan carlos muestra solo color (no tambi�n la l�nea).
+            // Adem�s EN IEXPLORER VA BIEN PERO EN FIREFOX 3 la etiqueta span no muestra el color de fondo que
+            // est� definido en la hoja de estilos como background-color, aceptando s�lo la propiedad color
+            // pero esta solo da color al texto con lo cual los cambios quedan poco resaltados, adem�s
+            // los cambios de otros objetos que no sean texto no se indican por ej. a�adir una imagen,
+            // por esta raz�n doy el color de fondo al td directamente.
             break;
         case DIFF_MOVED:
-            // return '<tr><td>' . $line. '&nbsp;:&nbsp;' . '&nbsp;M</td><td><span class="diffMoved" >'                    . $value . '</span></td></tr>' . "\n" //juan carlos comenta
-
-            return '<tr><td></td><td bgcolor="#FFFFAA">'.$value.'</td></tr>'."\n"; //juan carlos muestra solo color (no tambi�n la l�nea). Adem�s EN IEXPLORER VA BIEN PERO EN FIREFOX 3 la etiqueta span no muestra el color de fondo que est� definido en la hoja de estilos como background-color, aceptando s�lo la propiedad color pero esta solo da color al texto con lo cual los cambios quedan poco resaltados, adem�s los cambios de otros objetos que no sean texto no se indican por ej. a�adir una imagen, por esta raz�n doy el color de fondo al td directamente.
+            return '<tr><td></td><td bgcolor="#FFFFAA">'.$value.'</td></tr>'."\n";
+            //juan carlos muestra solo color (no tambi�n la l�nea). Adem�s EN IEXPLORER VA BIEN PERO EN FIREFOX 3
+            // la etiqueta span no muestra el color de fondo que est� definido en la hoja de estilos como
+            // background-color, aceptando s�lo la propiedad color pero esta solo da color al texto con lo cual
+            // los cambios quedan poco resaltados, adem�s los cambios de otros objetos que no sean texto no se indican
+            // por ej. a�adir una imagen, por esta raz�n doy el color de fondo al td directamente.
             break;
         case DIFF_ADDED:
-            // return '<tr><td>' . $line. '&nbsp;:&nbsp;' . '&nbsp;+</td><td><span class="diffAdded" >'                    . $value . '</span></td></tr>' . "\n" ; //juan carlos comentado
-            return '<tr><td></td><td bgcolor="#CCFFCC">'.$value.'</td></tr>'."\n"; //juan carlos muestra solo color (no tambi�n la l�nea). Adem�s EN IEXPLORER VA BIEN PERO EN FIREFOX 3 la etiqueta span no muestra el color de fondo que est� definido en la hoja de estilos como background-color, aceptando s�lo la propiedad color pero esta solo da color al texto con lo cual los cambios quedan poco resaltados, adem�s los cambios de otros objetos que no sean texto no se indican por ej. a�adir una imagen, por esta raz�n doy el color de fondo al td directamente.
+            return '<tr><td></td><td bgcolor="#CCFFCC">'.$value.'</td></tr>'."\n";
+            //juan carlos muestra solo color (no tambi�n la l�nea). Adem�s EN IEXPLORER VA BIEN
+            // PERO EN FIREFOX 3 la etiqueta span no muestra el color de fondo que est� definido en la
+            // hoja de estilos como background-color, aceptando s�lo la propiedad color pero esta solo
+            // da color al texto con lo cual los cambios quedan poco resaltados, adem�s los cambios de
+            // otros objetos que no sean texto no se indican por ej. a�adir una imagen, por esta raz�n
+            // doy el color de fondo al td directamente.
             break;
         case DIFF_DELETED:
-            // return '<tr><td>' . $line. '&nbsp;:&nbsp;' . '&nbsp;-</td><td><span class="diffDeleted" >'                    . $value . '</span></td></tr>' . "\n" ; //juan carlos comentado
-            return '<tr><td></td><td bgcolor="#FFAAAA">'.$value.'</td></tr>'."\n"; //juan carlos muestra solo color (no tambi�n la l�nea). Adem�s EN IEXPLORER VA BIEN PERO EN FIREFOX 3 la etiqueta span no muestra el color de fondo que est� definido en la hoja de estilos como background-color, aceptando s�lo la propiedad color pero esta solo da color al texto con lo cual los cambios quedan poco resaltados, adem�s los cambios de otros objetos que no sean texto no se indican por ej. a�adir una imagen, por esta raz�n doy el color de fondo al td directamente.
+            return '<tr><td></td><td bgcolor="#FFAAAA">'.$value.'</td></tr>'."\n";
+            //juan carlos muestra solo color (no tambi�n la l�nea). Adem�s EN IEXPLORER VA BIEN PERO EN FIREFOX 3
+        // la etiqueta span no muestra el color de fondo que est� definido en la hoja de estilos como background-color,
+        // aceptando s�lo la propiedad color pero esta solo da color al texto con lo cual los cambios quedan poco
+        // resaltados, adem�s los cambios de otros objetos que no sean texto no se indican por ej. a�adir una imagen,
+        // por esta raz�n doy el color de fondo al td directamente.
     }
 }

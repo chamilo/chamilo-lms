@@ -26,16 +26,21 @@ $(function() {
 
 </script>";
 
+if (api_get_setting('show_tabs', 'reporting') == 'false') {
+    api_not_allowed(true);
+}
+
 $user_id = api_get_user_id();
 $course_user_list = CourseManager::get_courses_list_by_user_id($user_id);
 $dates = $issues = '';
-
 $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
 $courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : null;
 
 if (!empty($course_user_list)) {
-    $items = MySpace::get_connections_from_course_list($user_id, $course_user_list);
-
+    $items = MySpace::get_connections_from_course_list(
+        $user_id,
+        $course_user_list
+    );
     $first = null;
     $last = null;
     $last_item = count($items);

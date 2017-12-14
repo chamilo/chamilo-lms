@@ -34,7 +34,7 @@ class BBBPlugin extends Plugin
     protected function __construct()
     {
         parent::__construct(
-            '2.5',
+            '2.6',
             'Julio Montoya, Yannick Warnier, Angel Fernando Quiroz Campos',
             [
                 'tool_enable' => 'boolean',
@@ -45,6 +45,16 @@ class BBBPlugin extends Plugin
                 'enable_conference_in_course_groups' => 'boolean',
                 'enable_global_conference_link' => 'boolean',
                 'max_users_limit' => 'text',
+                'global_conference_allow_roles' => [
+                    'type' => 'select',
+                    'options' => [
+                        PLATFORM_ADMIN => get_lang('Administrator'),
+                        COURSEMANAGER => get_lang('Teacher'),
+                        STUDENT => get_lang('Student'),
+                        STUDENT_BOSS => get_lang('StudentBoss')
+                    ],
+                    'attributes' => ['multiple' => 'multiple']
+                ]
             ]
         );
 
@@ -59,7 +69,6 @@ class BBBPlugin extends Plugin
     {
         if ($variable === 'bbb_enable_conference_in_groups') {
             if ($this->get('enable_conference_in_course_groups') === 'true') {
-
                 return true;
             } else {
                 return false;
@@ -124,14 +133,40 @@ class BBBPlugin extends Plugin
         $fieldTitle = 'MaxUsersInConferenceRoom';
         $fieldDefault = '0';
         $extraField = new ExtraField('course');
-        $fieldId = CourseManager::create_course_extra_field($fieldLabel, $fieldType, $fieldTitle, $fieldDefault);
+        $fieldId = CourseManager::create_course_extra_field(
+            $fieldLabel,
+            $fieldType,
+            $fieldTitle,
+            $fieldDefault
+        );
         $extraField->find($fieldId);
-        $extraField->update(['id' => $fieldId, 'variable' => 'plugin_bbb_course_users_limit', 'changeable' => 1, 'visible_to_self' => 1, 'visible_to_others' => 0]);
+        $extraField->update(
+            [
+                'id' => $fieldId,
+                'variable' => 'plugin_bbb_course_users_limit',
+                'changeable' => 1,
+                'visible_to_self' => 1,
+                'visible_to_others' => 0
+            ]
+        );
         $fieldLabel = 'plugin_bbb_session_users_limit';
         $extraField = new ExtraField('session');
-        $fieldId = SessionManager::create_session_extra_field($fieldLabel, $fieldType, $fieldTitle, $fieldDefault);
+        $fieldId = SessionManager::create_session_extra_field(
+            $fieldLabel,
+            $fieldType,
+            $fieldTitle,
+            $fieldDefault
+        );
         $extraField->find($fieldId);
-        $extraField->update(['id' => $fieldId, 'variable' => 'plugin_bbb_session_users_limit', 'changeable' => 1, 'visible_to_self' => 1, 'visible_to_others' => 0]);
+        $extraField->update(
+            [
+                'id' => $fieldId,
+                'variable' => 'plugin_bbb_session_users_limit',
+                'changeable' => 1,
+                'visible_to_self' => 1,
+                'visible_to_others' => 0
+            ]
+        );
 
         // Installing course settings
         $this->install_course_fields_in_all_courses();
@@ -157,6 +192,7 @@ class BBBPlugin extends Plugin
             'bbb_plugin_host',
             'bbb_plugin_salt',
             'max_users_limit',
+            'global_conference_allow_roles'
         ];
 
         foreach ($variables as $variable) {
@@ -164,12 +200,16 @@ class BBBPlugin extends Plugin
             Database::query($sql);
         }
         $extraField = new ExtraField('course');
-        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable('plugin_bbb_course_users_limit');
+        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
+            'plugin_bbb_course_users_limit'
+        );
         if (!empty($extraFieldInfo)) {
             $extraField->delete($extraFieldInfo['id']);
         }
         $extraField = new ExtraField('session');
-        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable('plugin_bbb_session_users_limit');
+        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
+            'plugin_bbb_session_users_limit'
+        );
         if (!empty($extraFieldInfo)) {
             $extraField->delete($extraFieldInfo['id']);
         }

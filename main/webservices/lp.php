@@ -5,7 +5,6 @@
  * @package chamilo.webservices
  */
 require_once __DIR__.'/../inc/global.inc.php';
-$libpath = api_get_path(LIBRARY_PATH);
 
 ini_set('memory_limit', -1);
 /*
@@ -324,7 +323,6 @@ function WSGetLpList($params)
         );
 
         if (empty($sessionId)) {
-
             if ($debug) error_log('Session not found');
             return 'Session not found';
         }

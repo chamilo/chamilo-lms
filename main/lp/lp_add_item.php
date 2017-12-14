@@ -85,14 +85,9 @@ $(function() {
 });
 </script>";
 
-/* SHOWING THE ADMIN TOOLS */
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
@@ -239,37 +234,61 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
     switch ($type) {
         case 'dir':
             echo $learnPath->display_manipulate($new_item_id, $_POST['type']);
-            echo Display::return_message(get_lang('NewChapterCreated'), 'confirmation');
+            echo Display::return_message(
+                get_lang('NewChapterCreated'),
+                'confirmation'
+            );
             break;
         case TOOL_LINK:
             echo $learnPath->display_manipulate($new_item_id, $type);
-            echo Display::return_message(get_lang('NewLinksCreated'), 'confirmation');
+            echo Display::return_message(
+                get_lang('NewLinksCreated'),
+                'confirmation'
+            );
             break;
         case TOOL_STUDENTPUBLICATION:
             echo $learnPath->display_manipulate($new_item_id, $type);
-            echo Display::return_message(get_lang('NewStudentPublicationCreated'), 'confirmation');
+            echo Display::return_message(
+                get_lang('NewStudentPublicationCreated'),
+                'confirmation'
+            );
             break;
         case TOOL_QUIZ:
             echo $learnPath->display_manipulate($new_item_id, $type);
-            echo Display::return_message(get_lang('NewExerciseCreated'), 'confirmation');
+            echo Display::return_message(
+                get_lang('NewExerciseCreated'),
+                'confirmation'
+            );
             break;
         case TOOL_DOCUMENT:
-            echo Display::return_message(get_lang('NewDocumentCreated'), 'confirmation');
+            echo Display::return_message(
+                get_lang('NewDocumentCreated'),
+                'confirmation'
+            );
             echo $learnPath->display_item($new_item_id);
             break;
         case TOOL_FORUM:
             echo $learnPath->display_manipulate($new_item_id, $type);
-            echo Display::return_message(get_lang('NewForumCreated'), 'confirmation');
+            echo Display::return_message(
+                get_lang('NewForumCreated'),
+                'confirmation'
+            );
             break;
         case 'thread':
             echo $learnPath->display_manipulate($new_item_id, $type);
-            echo Display::return_message(get_lang('NewThreadCreated'), 'confirmation');
+            echo Display::return_message(
+                get_lang('NewThreadCreated'),
+                'confirmation'
+            );
             break;
     }
 } else {
     switch ($type) {
         case 'dir':
-            echo $learnPath->display_item_form($type, get_lang('EnterDataNewChapter'));
+            echo $learnPath->display_item_form(
+                $type,
+                get_lang('EnterDataNewChapter')
+            );
             break;
         case TOOL_DOCUMENT:
             if (isset($_GET['file']) && is_numeric($_GET['file'])) {
@@ -282,7 +301,10 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
             echo $learnPath->display_hotpotatoes_form('add', 0, $_GET['file']);
             break;
         case TOOL_QUIZ:
-            echo Display::return_message(get_lang('ExerciseCantBeEditedAfterAddingToTheLP'), 'warning');
+            echo Display::return_message(
+                get_lang('ExerciseCantBeEditedAfterAddingToTheLP'),
+                'warning'
+            );
             echo $learnPath->display_quiz_form('add', 0, $_GET['file']);
             break;
         case TOOL_FORUM:

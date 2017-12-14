@@ -77,9 +77,13 @@ if ($allowTutors === 'true') {
             if ($result) {
                 Display::addFlash(
                     Display::return_message(
-                    get_lang('UserAdded').' '.api_get_person_name($user_info['firstname'], $user_info['lastname']),
-                    'confirm'
-                ));
+                        get_lang('UserAdded').' '.api_get_person_name(
+                            $user_info['firstname'],
+                            $user_info['lastname']
+                        ),
+                        'confirm'
+                    )
+                );
             }
             break;
         case 'delete':
@@ -120,70 +124,73 @@ if ($allowTutors === 'true') {
     }
     Display::display_header($tool_name);
 
-    echo Display::page_header(Display::return_icon('session.png', get_lang('Session')).' '.$session['name']);
+    echo Display::page_header(
+        Display::return_icon(
+            'session.png',
+            get_lang('Session')
+        ).' '.$session['name']
+    );
     echo Display::page_subheader(get_lang('GeneralProperties').$url);
 
     ?>
     <!-- General properties -->
     <table class="data_table">
     <tr>
-    	<td><?php echo get_lang('GeneralCoach'); ?> :</td>
-    	<td><?php echo api_get_person_name($session['firstname'], $session['lastname']).' ('.$session['username'].')' ?></td>
+        <td><?php echo get_lang('GeneralCoach'); ?> :</td>
+        <td><?php echo api_get_person_name($session['firstname'], $session['lastname']).' ('.$session['username'].')' ?></td>
     </tr>
     <?php if (!empty($session_category)) { ?>
     <tr>
-    	<td><?php echo get_lang('SessionCategory') ?></td>
-    	<td><?php echo $session_category; ?></td>
+        <td><?php echo get_lang('SessionCategory') ?></td>
+        <td><?php echo $session_category; ?></td>
     </tr>
     <?php } ?>
     <tr>
-    	<td><?php echo get_lang('Date'); ?> :</td>
-    	<td>
-    	<?php
-            if ($session['access_start_date'] == '00-00-0000' && $session['access_end_date'] == '00-00-0000') {
-                echo get_lang('NoTimeLimits');
+        <td><?php echo get_lang('Date'); ?> :</td>
+        <td>
+        <?php
+        if ($session['access_start_date'] == '00-00-0000' && $session['access_end_date'] == '00-00-0000') {
+            echo get_lang('NoTimeLimits');
+        } else {
+            if ($session['access_start_date'] != '00-00-0000') {
+                //$session['date_start'] = Display::tag('i', get_lang('NoTimeLimits'));
+                $session['access_start_date'] = get_lang('From').' '.$session['access_start_date'];
+            } else {
+                $session['access_start_date'] = '';
             }
-            else {
-                if ($session['access_start_date'] != '00-00-0000') {
-                    //$session['date_start'] = Display::tag('i', get_lang('NoTimeLimits'));
-                    $session['access_start_date'] = get_lang('From').' '.$session['access_start_date'];
-                } else {
-                    $session['access_start_date'] = '';
-                }
-                if ($session['access_end_date'] == '00-00-0000') {
-                    $session['access_end_date'] = '';
-                } else {
-                    $session['access_end_date'] = get_lang('Until').' '.$session['access_end_date'];
-                }
-                echo $session['access_start_date'].' '.$session['access_end_date'];
+            if ($session['access_end_date'] == '00-00-0000') {
+                $session['access_end_date'] = '';
+            } else {
+                $session['access_end_date'] = get_lang('Until').' '.$session['access_end_date'];
             }
-            ?>
-    	</td>
+            echo $session['access_start_date'].' '.$session['access_end_date'];
+        } ?>
+        </td>
     </tr>
     <!-- show nb_days_before and nb_days_after only if they are different from 0 -->
     <tr>
-    	<td>
-    		<?php echo api_ucfirst(get_lang('SessionCoachStartDate')) ?> :
-    	</td>
-    	<td>
-    		<?php echo intval($session['coach_access_start_date']) ?>
-    	</td>
+        <td>
+            <?php echo api_ucfirst(get_lang('SessionCoachStartDate')) ?> :
+        </td>
+        <td>
+            <?php echo intval($session['coach_access_start_date']) ?>
+        </td>
     </tr>
     <tr>
-    	<td>
-    		<?php echo api_ucfirst(get_lang('SessionCoachEndDate')) ?> :
-    	</td>
-    	<td>
-    		<?php echo intval($session['coach_session_access_end_date']) ?>
-    	</td>
+        <td>
+            <?php echo api_ucfirst(get_lang('SessionCoachEndDate')) ?> :
+        </td>
+        <td>
+            <?php echo intval($session['coach_session_access_end_date']) ?>
+        </td>
     </tr>
     <tr>
-    	<td>
-    		<?php echo api_ucfirst(get_lang('SessionVisibility')) ?> :
-    	</td>
-    	<td>
-    		<?php if ($session['visibility'] == 1) echo get_lang('ReadOnly'); elseif ($session['visibility'] == 2) echo get_lang('Visible'); elseif ($session['visibility'] == 3) echo api_ucfirst(get_lang('Invisible'))  ?>
-    	</td>
+        <td>
+            <?php echo api_ucfirst(get_lang('SessionVisibility')) ?> :
+        </td>
+        <td>
+            <?php if ($session['visibility'] == 1) echo get_lang('ReadOnly'); elseif ($session['visibility'] == 2) echo get_lang('Visible'); elseif ($session['visibility'] == 3) echo api_ucfirst(get_lang('Invisible'))  ?>
+        </td>
     </tr>
     <?php
 
@@ -216,14 +223,14 @@ if ($allowTutors === 'true') {
     if ($session['nbr_courses'] == 0) {
         echo '<tr>
             <td colspan="4">'.get_lang('NoCoursesForThisSession').'</td>
-    		</tr>';
+            </tr>';
     } else {
         // select the courses
         $sql = "SELECT c.id, code,title,visual_code, nbr_users
-    			FROM $tbl_course c,$tbl_session_rel_course sc
-    			WHERE c.id = sc.c_id
-    			AND	session_id='$id_session'
-    			ORDER BY title";
+                FROM $tbl_course c,$tbl_session_rel_course sc
+                WHERE c.id = sc.c_id
+                AND	session_id='$id_session'
+                ORDER BY title";
         $result = Database::query($sql);
         $courses = Database::store_result($result);
         foreach ($courses as $course) {
@@ -243,21 +250,21 @@ if ($allowTutors === 'true') {
             // Get coachs of the courses in session
 
             $sql = "SELECT user.lastname,user.firstname,user.username
-    		        FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
-    				WHERE
-    				    session_rcru.user_id = user.user_id AND
-    				    session_rcru.session_id = '".intval($id_session)."' AND
-    				    session_rcru.c_id ='".Database::escape_string($course['id'])."' AND
-    				    session_rcru.status=2";
+                    FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
+                    WHERE
+                        session_rcru.user_id = user.user_id AND
+                        session_rcru.session_id = '".intval($id_session)."' AND
+                        session_rcru.c_id ='".Database::escape_string($course['id'])."' AND
+                        session_rcru.status=2";
             $rs = Database::query($sql);
 
             $coachs = array();
             if (Database::num_rows($rs) > 0) {
                 while ($info_coach = Database::fetch_array($rs)) {
                     $coachs[] = api_get_person_name(
-                            $info_coach['firstname'],
-                            $info_coach['lastname']
-                        ).' ('.$info_coach['username'].')';
+                        $info_coach['firstname'],
+                        $info_coach['lastname']
+                    ).' ('.$info_coach['username'].')';
                 }
             } else {
                 $coach = get_lang('None');
@@ -273,12 +280,12 @@ if ($allowTutors === 'true') {
             //hide_course_breadcrumb the parameter has been added to hide the
             // name of the course, that appeared in the default $interbreadcrumb
             echo '
-    		<tr>
-    			<td>'.Display::url($course['title'].' ('.$course['visual_code'].')', api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$id_session), '</td>
-    			<td>'.$coach.'</td>
-    			<td>'.$course['nbr_users'].'</td>
+            <tr>
+                <td>'.Display::url($course['title'].' ('.$course['visual_code'].')', api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$id_session), '</td>
+                <td>'.$coach.'</td>
+                <td>'.$course['nbr_users'].'</td>
 
-    		</tr>';
+            </tr>';
         }
     }
     ?>
@@ -301,8 +308,8 @@ if ($allowTutors === 'true') {
 
     if ($session['nbr_users'] == 0) {
         echo '<tr>
-    			<td colspan="2">'.get_lang('NoUsersForThisSession').'</td>
-    		</tr>';
+                <td colspan="2">'.get_lang('NoUsersForThisSession').'</td>
+            </tr>';
     } else {
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 
@@ -366,4 +373,4 @@ if ($allowTutors === 'true') {
     api_not_allowed();
 }
 // footer
-Display :: display_footer();
+Display::display_footer();

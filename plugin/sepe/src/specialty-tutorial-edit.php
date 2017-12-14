@@ -1,18 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \ChamiloSession as Session;
+
 /**
  *    This script displays a specialty tutorial edit form.
  */
 
-use \ChamiloSession as Session;
 require_once '../config.php';
 
 $course_plugin = 'sepe';
 $plugin = SepePlugin::create();
 $_cid = 0;
 
-if ( !empty($_POST)) {
+if (!empty($_POST)) {
     $check = Security::check_token('post');
     if ($check) {
         $centerOrigin = Database::escape_string(trim($_POST['center_origin']));
@@ -29,14 +30,14 @@ if ( !empty($_POST)) {
         $newTutorial = intval($_POST['new_tutorial']);
         $starDate = $yearStart."-".$monthStart."-".$dayStart;
         $endDate = $yearEnd."-".$monthEnd."-".$dayEnd;
-    
+
         if (isset($newTutorial) && $newTutorial != 1) {
             $sql = "UPDATE $tableSepeParticipantsSpecialtyTutorials SET 
                         center_origin='".$centerOrigin."', 
                         center_code='".$centerCode."', 
                         start_date='".$starDate."', 
                         end_date='".$endDate."' 
-                    WHERE id = $tutorialId;";    
+                    WHERE id = $tutorialId;";
         } else {
             $sql = "INSERT INTO $tableSepeParticipantsSpecialtyTutorials (
                         participant_specialty_id, 
@@ -54,15 +55,15 @@ if ( !empty($_POST)) {
         }
         $res = Database::query($sql);
         if (!$res) {
-            error_log(Database::error());
             $_SESSION['sepe_message_error'] = $plugin->get_lang('NoSaveChange');
         } else {
             $_SESSION['sepe_message_info'] = $plugin->get_lang('SaveChange');
         }
-        
+
         session_write_close();
         $participantId = getParticipantId($specialtyId);
         header("Location: participant-specialty-edit.php?new_specialty=0&participant_id=".$participantId."&specialty_id=".$specialtyId."&action_id=".$actionId);
+        exit;
     } else {
         $tutorialId = intval($_POST['tutorial_id']);
         $actionId = intval($_POST['action_id']);
@@ -73,6 +74,7 @@ if ( !empty($_POST)) {
         $_SESSION['sepe_message_error'] = $plugin->get_lang('ProblemToken');
         session_write_close();
         header("Location: specialty-tutorial-edit.php?new_tutorial=".$newTutorial."&specialty_id=".$specialtyId."&tutorial_id=".$tutorialId."&action_id=".$actionId);
+        exit;
     }
 } else {
     $token = Security::get_token();
@@ -103,7 +105,7 @@ if (api_is_platform_admin()) {
         $info = getInfoSpecialtyTutorial(intval($_GET['tutorial_id']));
         $tpl->assign('info', $info);
         $tpl->assign('new_tutorial', '0');
-        if ($info['start_date'] != '0000-00-00' && $info['start_date'] != NULL) {
+        if ($info['start_date'] != '0000-00-00' && $info['start_date'] != null) {
             $tpl->assign('day_start', date("j", strtotime($info['start_date'])));
             $tpl->assign('month_start', date("n", strtotime($info['start_date'])));
             $tpl->assign('year_start', date("Y", strtotime($info['start_date'])));
@@ -113,7 +115,7 @@ if (api_is_platform_admin()) {
         } else {
             $startYear = date("Y");
         }
-        if ($info['end_date'] != '0000-00-00' && $info['end_date'] != NULL) {
+        if ($info['end_date'] != '0000-00-00' && $info['end_date'] != null) {
             $tpl->assign('day_end', date("j", strtotime($info['end_date'])));
             $tpl->assign('month_end', date("n", strtotime($info['end_date'])));
             $tpl->assign('year_end', date("Y", strtotime($info['end_date'])));
@@ -132,19 +134,19 @@ if (api_is_platform_admin()) {
     }
     $startYear -= 5;
     $endYear += 5;
-    $endRangeYear = (($startYear + 15) < $endYear) ? ($endYear+1):($startYear +15);
+    $endRangeYear = (($startYear + 15) < $endYear) ? ($endYear + 1) : ($startYear + 15);
     while ($startYear <= $endRangeYear) {
         $listYears[] = $startYear;
         $startYear++;
     }
     $tpl->assign('list_year', $listYears);
-    
+
     if (isset($_SESSION['sepe_message_info'])) {
-        $tpl->assign('message_info', $_SESSION['sepe_message_info']);    
+        $tpl->assign('message_info', $_SESSION['sepe_message_info']);
         unset($_SESSION['sepe_message_info']);
     }
     if (isset($_SESSION['sepe_message_error'])) {
-        $tpl->assign('message_error', $_SESSION['sepe_message_error']);    
+        $tpl->assign('message_error', $_SESSION['sepe_message_error']);
         unset($_SESSION['sepe_message_error']);
     }
     $tpl->assign('sec_token', $token);
@@ -154,5 +156,6 @@ if (api_is_platform_admin()) {
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 } else {
-    header('Location:' . api_get_path(WEB_PATH));
+    header('Location:'.api_get_path(WEB_PATH));
+    exit;
 }

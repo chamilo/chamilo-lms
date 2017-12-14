@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * API event handler functions for Scorm 1.1 and 1.2 and 1.3 (latter not fully supported)
  * This script is divided into three sections.
@@ -25,9 +27,9 @@ $use_anonymous = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$file = (empty($_SESSION['file']) ? '' : $_SESSION['file']);
+$file = Session::read('file');
 /** @var learnpath $oLP */
-$oLP = unserialize($_SESSION['lpobject']);
+$oLP = unserialize(Session::read('lpobject'));
 /** @var learnpathItem $oItem */
 $oItem = isset($oLP->items[$oLP->current]) ? $oLP->items[$oLP->current] : null;
 
@@ -72,8 +74,8 @@ function APIobject() {
 // SCORM
 var API = new APIobject(); //for scorm 1.2
 var api = API;
-var API_1484_11 = new APIobject();  //for scorm 1.3
-var api_1484_11 = API_1484_11;
+//var API_1484_11 = new APIobject();  //for scorm 1.3
+//var api_1484_11 = API_1484_11;
 
 // SCORM-specific Error codes
 var G_NoError = 0;
@@ -205,8 +207,9 @@ if (olms.score == 0 && olms.lms_item_type == 'sco' && olms.lesson_status == 'not
 olms.asset_timer = 0;
 olms.userfname = '<?php echo str_replace("'", "\\'", $user['firstname']); ?>';
 olms.userlname = '<?php echo str_replace("'", "\\'", $user['lastname']); ?>';
-
 olms.execute_stats = false;
+
+var courseUrl = '?cidReq='+olms.lms_course_code+'&id_session='+olms.lms_session_id;
 
 /**
  * Add the "addListeners" function to the "onload" event of the window and
@@ -293,7 +296,7 @@ function LMSInitialize() {
 
         $.ajax({
             type: "POST",
-            url: "lp_ajax_initialize.php",
+            url: "lp_ajax_initialize.php" + courseUrl,
             data: params,
             dataType: 'script',
             async: false,
@@ -458,7 +461,7 @@ function LMSGetValue(param) {
     } else if(param == 'cmi.core.student_name'){
         // ---- cmi.core.student_name
         <?php
-          $who = addslashes($user['complete_name']);
+          $who = addslashes($user['lastname']).', '.addslashes($user['firstname']);
           echo "result='$who';";
         ?>
     } else if(param == 'cmi.core.lesson_location'){
@@ -1363,8 +1366,11 @@ function update_progress_bar(nbr_complete, nbr_total, mode) {
 /**
  * Update the gamification values (number of stars and score)
  */
-function updateGamificationValues() {
-    var fetchValues = $.ajax('<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php', {
+function updateGamificationValues()
+{
+    var fetchValues = $.ajax(
+        '<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php' + courseUrl,
+        {
         dataType: 'json',
         data: {
             a: 'update_gamification'
@@ -1608,7 +1614,7 @@ function switch_item(current_item, next_item){
     }
 
     //(3) open the new item in the content_id frame
-    switch (next_item){
+    switch (next_item) {
         case 'next':
             next_item = olms.lms_next_item;
             olms.info_lms_item[0] = olms.info_lms_item[1];
@@ -1645,17 +1651,18 @@ function switch_item(current_item, next_item){
         xajax_start_timer();
     }
 
-    //(4) refresh the audio player if needed
+    // (4) refresh the audio player if needed
     $.ajax({
         type: "POST",
-        url: "lp_nav.php",
+        url: "lp_nav.php"+courseUrl,
         data: {
             lp_item: next_item
         },
         beforeSend: function() {
             $.each($('audio'), function () {
-                var player = new MediaElementPlayer($(this));
-                player.pause();
+                if (this.player && this.player !== undefined) {
+                    this.player.pause();
+                }
             });
         },
         success: function(tmp_data) {
@@ -1676,10 +1683,12 @@ function switch_item(current_item, next_item){
  * Hide or show the navigation buttons if the current item is the First or Last
  */
 var checkCurrentItemPosition = function(lpItemId) {
-    var currentItem = $.getJSON('<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php', {
-            a: 'check_item_position',
-            lp_item: lpItemId
-        }
+    var currentItem = $.getJSON(
+        '<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php' + courseUrl,
+    {
+        a: 'check_item_position',
+        lp_item: lpItemId
+    }
     ).done(function(parsedResponse,statusText,jqXhr) {
         var position = jqXhr.responseJSON;
         if (position == 'first') {
@@ -1703,7 +1712,8 @@ var checkCurrentItemPosition = function(lpItemId) {
  * Get a forum info when the learning path item has a associated forum
  */
 var loadForumThread = function(lpId, lpItemId) {
-    var loadForum = $.getJSON('<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php', {
+    var loadForum = $.getJSON(
+        '<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php' + courseUrl, {
             a: 'get_forum_thread',
             lp: lpId,
             lp_item: lpItemId
@@ -1815,13 +1825,12 @@ function xajax_save_item(
     params += '&userNavigatesAway='+userNavigatesAway;
     params += '&statusSignalReceived='+statusSignalReceived;
 
-    // console.info(session_time);
     if (olms.lms_lp_type == 1 || item_type == 'document' || item_type == 'asset') {
         logit_lms('xajax_save_item with params:' + params, 3);
         $.ajax({
             type:"POST",
             data: params,
-            url: "lp_ajax_save_item.php",
+            url: "lp_ajax_save_item.php" + courseUrl,
             dataType: "script",
             async: false
         });
@@ -1935,7 +1944,7 @@ function xajax_save_item_scorm(
     $.ajax({
         type:"POST",
         data: params,
-        url: "lp_ajax_save_item.php",
+        url: "lp_ajax_save_item.php" + courseUrl,
         dataType: "script",
         async: false
     });
@@ -1953,7 +1962,7 @@ function xajax_start_timer() {
     logit_lms('xajax_start_timer() called',3);
     $.ajax({
         type: "GET",
-        url: "lp_ajax_start_timer.php",
+        url: "lp_ajax_start_timer.php" + courseUrl,
         dataType: "script",
         async: false,
         success: function(time) {
@@ -1997,7 +2006,7 @@ function xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,ite
     $.ajax({
         type: "POST",
         data: params,
-        url: "lp_ajax_save_objectives.php",
+        url: "lp_ajax_save_objectives.php" + courseUrl,
         dataType: "script",
         async: false
     });
@@ -2027,7 +2036,7 @@ function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id
     $.ajax({
         type: "POST",
         data: params,
-        url: "lp_ajax_switch_item.php",
+        url: "lp_ajax_switch_item.php" + courseUrl,
         dataType: "script",
         async: false
     });
@@ -2056,7 +2065,7 @@ function xajax_switch_item_toc(lms_lp_id, lms_user_id, lms_view_id, lms_item_id,
     $.ajax({
         type: "POST",
         data: params,
-        url: "lp_ajax_switch_item_toc.php",
+        url: "lp_ajax_switch_item_toc.php" + courseUrl,
         dataType: "script",
         async: false
     });
@@ -2086,7 +2095,7 @@ function attach_glossary_into_scorm(type) {
     my_protocol = location.protocol;
     my_pathname=location.pathname;
     work_path = my_pathname.substr(0,my_pathname.indexOf('<?php echo api_get_path(REL_COURSE_PATH) ?>'));
-    var ajaxRequestUrl = '<?php echo api_get_path(WEB_CODE_PATH).'glossary/glossary_ajax_request.php'; ?>';
+    var ajaxRequestUrl = '<?php echo api_get_path(WEB_CODE_PATH).'glossary/glossary_ajax_request.php'; ?>' + courseUrl;
 
     if (type == 'automatic') {
         $.ajax({

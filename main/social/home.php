@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>
@@ -15,7 +17,7 @@ $user_id = api_get_user_id();
 $show_full_profile = true;
 // social tab
 $this_section = SECTION_SOCIAL;
-unset($_SESSION['this_section']);
+Session::erase('this_section');
 
 api_block_anonymous_users();
 
@@ -150,9 +152,13 @@ foreach ($results as $result) {
     } else {
         $result['count'] = $result['count'].' '.get_lang('Members');
     }
-    $result['name'] = '<div class="group-name">'.Display::url(
-            api_ucwords(cut($result['name'], 40, true)), $group_url)
-        .'</div><div class="count-username">'.Display::returnFontAwesomeIcon('user').$result['count'].'</div>';
+    $result['name'] = '<div class="group-name">'.
+        Display::url(
+            api_ucwords(cut($result['name'], 40, true)),
+            $group_url
+        )
+        .'</div><div class="count-username">'.
+        Display::returnFontAwesomeIcon('user').$result['count'].'</div>';
 
     $picture = $userGroup->get_picture_group(
         $id,

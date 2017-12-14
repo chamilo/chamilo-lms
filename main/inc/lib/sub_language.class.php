@@ -52,8 +52,9 @@ class SubLanguageManager
                 while (($file = readdir($dh)) !== false) {
                     if ($file[0] <> '.' && substr($file, -4, strlen($file)) == '.php') {
                         if ($only_main_name) {
-                            if ($file != '' && strpos($file, '.inc.php'))
+                            if ($file != '' && strpos($file, '.inc.php')) {
                                 $content_dir[] = substr($file, 0, strpos($file, '.inc.php'));
+                            }
                         } else {
                             $content_dir[] = $file;
                         }
@@ -392,7 +393,7 @@ class SubLanguageManager
      */
     public static function set_platform_language($language_id)
     {
-        if (empty($language_id) or (intval($language_id) != $language_id)) {
+        if (empty($language_id) || (intval($language_id) != $language_id)) {
             return false;
         }
         $language_id = intval($language_id);
@@ -429,7 +430,7 @@ class SubLanguageManager
         }
         $row = Database::fetch_array($res);
 
-        return $row['id'];
+        return (int) $row['id'];
     }
 
     /**

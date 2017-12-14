@@ -19,10 +19,12 @@ $this_section = SECTION_SOCIAL;
 $social_right_content = '';
 $whoisonline_list = '';
 $social_search = '';
+$userId = api_get_user_id();
 
 // This if statement prevents users accessing the who's online feature when it has been disabled.
-if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) ||
-    ((api_get_setting('showonline', 'users') == 'true' || api_get_setting('showonline', 'course') == 'true') && $_user['user_id'])
+if ((api_get_setting('showonline', 'world') == 'true' && !$userId) ||
+    ((api_get_setting('showonline', 'users') == 'true' ||
+        api_get_setting('showonline', 'course') == 'true') && $userId)
 ) {
     if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
         $user_list = who_is_online_in_this_course(
@@ -59,8 +61,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) ||
         }
     }
 } else {
-    api_not_allowed();
-    exit;
+    api_not_allowed(true);
 }
 
 $tpl = new Template(get_lang('UsersOnLineList'));

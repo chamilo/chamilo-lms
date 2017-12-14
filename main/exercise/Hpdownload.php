@@ -1,14 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	This script shows the list of exercises for administrators and students.
-*	@package chamilo.exercise
-* 	@author Istvan Mandak
-* 	@version $Id: Hpdownload.php 22201 2009-07-17 19:57:03Z cfasanando $
+ * This script shows the list of exercises for administrators and students.
+ * @package chamilo.exercise
+ * @author Istvan Mandak
+ * @version $Id: Hpdownload.php 22201 2009-07-17 19:57:03Z cfasanando $
 */
-/**
- * Code
- */
 session_cache_limiter('public');
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -23,14 +20,14 @@ $filename = basename($doc_url);
 //Event::event_download($doc_url);
 if (isset($_course['path'])) {
     $course_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-	$full_file_name = $course_path.Security::remove_XSS($doc_url);
+    $full_file_name = $course_path.Security::remove_XSS($doc_url);
 } else {
     $course_path = api_get_path(SYS_COURSE_PATH).$cid.'/document';
-	$full_file_name = $course_path.Security::remove_XSS($doc_url);
+    $full_file_name = $course_path.Security::remove_XSS($doc_url);
 }
 
 if (!is_file($full_file_name)) {
-	exit;
+    exit;
 }
 
 if (!Security::check_abs_path($full_file_name, $course_path.'/')) {
@@ -41,36 +38,36 @@ $extension = explode('.', $filename);
 $extension = strtolower($extension[sizeof($extension) - 1]);
 
 switch ($extension) {
-	case 'gz':
-		$content_type = 'application/x-gzip';
-		break;
-	case 'zip':
-		$content_type = 'application/zip';
-		break;
-	case 'pdf':
-		$content_type = 'application/pdf';
-		break;
-	case 'png':
-		$content_type = 'image/png';
-		break;
-	case 'gif':
-		$content_type = 'image/gif';
-		break;
-	case 'jpg':
-		$content_type = 'image/jpeg';
-		break;
-	case 'txt':
-		$content_type = 'text/plain';
-		break;
-	case 'htm':
-		$content_type = 'text/html';
-		break;
-	case 'html':
-		$content_type = 'text/html';
-		break;
-	default:
-		$content_type = 'application/octet-stream';
-		break;
+    case 'gz':
+        $content_type = 'application/x-gzip';
+        break;
+    case 'zip':
+        $content_type = 'application/zip';
+        break;
+    case 'pdf':
+        $content_type = 'application/pdf';
+        break;
+    case 'png':
+        $content_type = 'image/png';
+        break;
+    case 'gif':
+        $content_type = 'image/gif';
+        break;
+    case 'jpg':
+        $content_type = 'image/jpeg';
+        break;
+    case 'txt':
+        $content_type = 'text/plain';
+        break;
+    case 'htm':
+        $content_type = 'text/html';
+        break;
+    case 'html':
+        $content_type = 'text/html';
+        break;
+    default:
+        $content_type = 'application/octet-stream';
+        break;
 }
 
 header('Content-disposition: filename='.$filename);
@@ -79,38 +76,38 @@ header('Expires: '.gmdate('D, d M Y H:i:s', time() + 10).' GMT');
 header('Last-Modified: '.gmdate('D, d M Y H:i:s', time() + 10).' GMT');
 
 /*
-	Dynamic parsing section
-	is activated whenever a user views an html file
-	work in progress
-	- question: we could also parse per line,
-	perhaps this would be faster.
-	($file_content = file($full_file_name) returns file in array)
+    Dynamic parsing section
+    is activated whenever a user views an html file
+    work in progress
+    - question: we could also parse per line,
+    perhaps this would be faster.
+    ($file_content = file($full_file_name) returns file in array)
 */
 
 if ($content_type == 'text/html') {
-	$directory_name = dirname($full_file_name);
+    $directory_name = dirname($full_file_name);
     $coursePath = api_get_path(SYS_COURSE_PATH);
-	$dir = str_replace(array('\\', $coursePath.$_course['path'].'/document'), array('/', ''), $directory_name);
+    $dir = str_replace(array('\\', $coursePath.$_course['path'].'/document'), array('/', ''), $directory_name);
 
-	if ($dir[strlen($dir) - 1] != '/') {
-		$dir .= '/';
-	}
+    if ($dir[strlen($dir) - 1] != '/') {
+        $dir .= '/';
+    }
 
 
-	//Parse whole file at one
-	$fp = fopen($full_file_name, "r");
-	$file_content = fread($fp, filesize($full_file_name));
-	fclose($fp);
+    //Parse whole file at one
+    $fp = fopen($full_file_name, "r");
+    $file_content = fread($fp, filesize($full_file_name));
+    fclose($fp);
     $exercisePath = api_get_self();
-  	$exfile = explode('/', $exercisePath);
-  	$exfile = $exfile[sizeof($exfile) - 1];
-  	$exercisePath = substr($exercisePath, 0, strpos($exercisePath, $exfile));
+    $exfile = explode('/', $exercisePath);
+    $exfile = $exfile[sizeof($exfile) - 1];
+    $exercisePath = substr($exercisePath, 0, strpos($exercisePath, $exfile));
 
     $content = $file_content;
     $mit = "function Finish(){";
 
     $js_content = "var SaveScoreVariable = 0; // This variable included by Dokeos System\n".
-		"function mySaveScore() // This function included by Dokeos System\n".
+        "function mySaveScore() // This function included by Dokeos System\n".
 "{\n".
 "   if (SaveScoreVariable==0)\n".
 "		{\n".
@@ -133,18 +130,13 @@ if ($content_type == 'text/html') {
     $prehref = "javascript:void(0);";
     $posthref = api_get_path(WEB_CODE_PATH)."main/exercise/Hpdownload.php?doc_url=".$doc_url."&cid=".$cid."&uid=".$uid;
     $newcontent = str_replace($prehref, $posthref, $newcontent);
-
-
     $prehref = "class=\"GridNum\" onclick=";
     $posthref = "class=\"GridNum\" onMouseover=";
     $newcontent = str_replace($prehref, $posthref, $newcontent);
-
-
     header('Content-length: '.strlen($newcontent));
     // Dipsp.
     echo $newcontent;
-
-	exit();
+    exit();
 }
 
 //normal case, all non-html files

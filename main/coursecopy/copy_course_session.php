@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
@@ -170,8 +171,8 @@ function search_courses($id_session, $type)
             }
 
             $return .= '</select>';
-            $_SESSION['course_list'] = $temp_course_list;
-            $_SESSION['session_origin'] = $id_session;
+            Session::write('course_list', $temp_course_list);
+            Session::write('session_origin', $id_session);
 
             // Build select for destination sessions where is not included current session from select origin
             if (!empty($id_session)) {
@@ -204,10 +205,6 @@ function search_courses($id_session, $type)
             $xajax_response -> addAssign('ajax_list_courses_origin', 'innerHTML', api_utf8_encode($return));
             $xajax_response -> addAssign('ajax_list_courses_destination', 'innerHTML', api_utf8_encode($select_multiple_empty));
         } else {
-            //Left Select - Destination
-            $list_courses_origin = implode(',', $_SESSION['course_list']);
-            $session_origin = $_SESSION['session_origin'];
-
             // Search courses by id_session where course codes is include en courses list destination
             $sql = "SELECT c.code, c.visual_code, c.title, src.session_id
                     FROM $tbl_course c, $tbl_session_rel_course src
@@ -223,7 +220,8 @@ function search_courses($id_session, $type)
                 $return .= '<option value="'.$course['code'].'" title="'.@htmlspecialchars($course['title'].' ('.$course['visual_code'].')', ENT_QUOTES, api_get_system_encoding()).'">'.$course['title'].' ('.$course['visual_code'].')</option>';
             }
             $return .= '</select>';
-            $_SESSION['course_list_destination'] = $course_list_destination;
+
+            Session::write('course_list_destination', $course_list_destination);
 
             // Send response by ajax
             $xajax_response->addAssign(

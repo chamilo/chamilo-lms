@@ -1217,8 +1217,5 @@ class Browser
         {
             $this->_platform = self::PLATFORM_WINDOWS;
         }
-
     }
 }
-
-?>

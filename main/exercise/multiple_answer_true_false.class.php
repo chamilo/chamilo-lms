@@ -141,7 +141,7 @@ class MultipleAnswerTrueFalse extends Question
                 "answer[$i]",
                 get_lang('ThisFieldIsRequired'),
                 true,
-                true,
+                false,
                 ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
             );
 

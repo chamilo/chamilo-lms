@@ -199,10 +199,11 @@ class AnnouncementEmail
      * Sender info
      *
      * @param string $key
+     * @param int $userId
      *
      * @return array
      */
-    public function sender($key = '', $userId = '')
+    public function sender($key = '', $userId = 0)
     {
         $_user = api_get_user_info($userId);
 
@@ -281,7 +282,7 @@ class AnnouncementEmail
         $result = array();
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $id = $this->announcement('id');
-        $course_id = $this->course('id');
+        $course_id = $this->course('real_id');
         $sql = "SELECT * FROM $table 
                 WHERE c_id = $course_id AND announcement_id = $id ";
         $rs = Database::query($sql);
@@ -359,17 +360,16 @@ class AnnouncementEmail
             }
         }
 
-        $this->log_mail_sent();
+        $this->logMailSent();
     }
 
     /**
      * Store that emails where sent
      */
-    public function log_mail_sent()
+    public function logMailSent()
     {
         $id = $this->announcement('id');
-        $course_id = $this->course('id');
-
+        $course_id = $this->course('real_id');
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $sql = "UPDATE $table SET 
                 email_sent = 1

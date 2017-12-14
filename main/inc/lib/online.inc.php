@@ -4,14 +4,14 @@
 use ChamiloSession as Session;
 
 /**
-*	Code library for showing Who is online
-*
-*	@author Istvan Mandak, principal author
-*	@author Denes Nagy, principal author
-*	@author Bart Mollet
-*	@author Roan Embrechts, cleaning and bugfixing
-*	@package chamilo.whoisonline
-*/
+ * Code library for showing Who is online
+ *
+ * @author Istvan Mandak, principal author
+ * @author Denes Nagy, principal author
+ * @author Bart Mollet
+ * @author Roan Embrechts, cleaning and bugfixing
+ * @package chamilo.whoisonline
+ */
 
 /**
  * Insert a login reference for the current user into the track_e_online stats table.
@@ -22,10 +22,10 @@ use ChamiloSession as Session;
 
 function LoginCheck($uid)
 {
-    $_course = api_get_course_info();
     $uid = (int) $uid;
-    $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     if (!empty($uid)) {
+        $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+        $_course = api_get_course_info();
         $user_ip = '';
         if (!empty($_SERVER['REMOTE_ADDR'])) {
             $user_ip = Database::escape_string(api_get_real_ip());
@@ -90,6 +90,8 @@ function preventMultipleLogin($userId)
 
 /**
  * This function handles the logout and is called whenever there is a $_GET['logout']
+ * @param int $user_id
+ * @param bool $logout_redirect
  * @return void  Directly redirects the user or leaves him where he is, but doesn't return anything
  * @author Fernando P. García <fernando@develcuy.com>
  */
@@ -128,7 +130,7 @@ function online_logout($user_id = null, $logout_redirect = false)
         Database::query($sql);
     }
 
-    LoginDelete($user_id); //from inc/lib/online.inc.php - removes the "online" status
+    UserManager::loginDelete($user_id);
 
     //the following code enables the use of an external logout function.
     //example: define a $extAuthSource['ldap']['logout']="file.php" in configuration.php
@@ -149,27 +151,27 @@ function online_logout($user_id = null, $logout_redirect = false)
         }
     }
 
+    // After logout redirect to
+    $url = api_get_path(WEB_PATH).'index.php';
+
+    if ($logout_redirect && api_get_plugin_setting('azure_active_directory', 'enable') == 'true') {
+        $activeDirectoryPlugin = AzureActiveDirectory::create();
+        $azureLogout = $activeDirectoryPlugin->getUrl(AzureActiveDirectory::URL_TYPE_SIGNOUT);
+        if (!empty($azureLogout)) {
+            $url = $azureLogout;
+        }
+    }
+
     CourseChatUtils::exitChat($user_id);
     session_regenerate_id();
     Session::destroy();
+
     if ($logout_redirect) {
-        header("Location: ".api_get_path(WEB_PATH)."index.php");
+        header("Location: ".$url);
         exit;
     }
 }
 
-/**
- * Remove all login records from the track_e_online stats table, for the given user ID.
- * @param int User ID
- * @return void
- */
-function LoginDelete($user_id)
-{
-    $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-    $user_id = intval($user_id);
-    $query = "DELETE FROM ".$online_table." WHERE login_user_id = $user_id";
-    Database::query($query);
-}
 
 /**
  * @param int $user_id
@@ -217,8 +219,14 @@ function user_is_online($user_id)
  * @param bool $friends
  * @return  array|bool For each line, a list of user IDs and login dates, or FALSE on error or empty results
  */
-function who_is_online($from, $number_of_items, $column = null, $direction = null, $time_limit = null, $friends = false)
-{
+function who_is_online(
+    $from,
+    $number_of_items,
+    $column = null,
+    $direction = null,
+    $time_limit = null,
+    $friends = false
+) {
     // Time limit in seconds?
     if (empty($time_limit)) {
         $time_limit = api_get_setting('time_limit_whosonline');
@@ -315,11 +323,13 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
 
         return $users_online;
     } else {
-
         return false;
     }
 }
 
+/**
+ * @param string $time_limit
+ */
 function who_is_online_count($time_limit = null, $friends = false)
 {
     if (empty($time_limit)) {
@@ -327,15 +337,15 @@ function who_is_online_count($time_limit = null, $friends = false)
     } else {
         $time_limit = intval($time_limit);
     }
-	$track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-	$friend_user_table = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-	$table_user = Database::get_main_table(TABLE_MAIN_USER);
-	$online_time = time() - $time_limit * 60;
-	$current_date = api_get_utc_datetime($online_time);
+    $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+    $friend_user_table = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+    $table_user = Database::get_main_table(TABLE_MAIN_USER);
+    $online_time = time() - $time_limit * 60;
+    $current_date = api_get_utc_datetime($online_time);
 
-	if ($friends) {
-		// 	who friends from social network is online
-		$query = "SELECT DISTINCT count(login_user_id) as count
+    if ($friends) {
+        // 	who friends from social network is online
+        $query = "SELECT DISTINCT count(login_user_id) as count
 				  FROM $track_online_table INNER JOIN $friend_user_table
                   ON (friend_user_id = login_user_id)
 				  WHERE
@@ -343,20 +353,20 @@ function who_is_online_count($time_limit = null, $friends = false)
 				        friend_user_id <> '".api_get_user_id()."' AND
 				        relation_type='".USER_RELATION_TYPE_FRIEND."' AND
 				        user_id = '".api_get_user_id()."' ";
-	} else {
-		// All users online
-		$query = "SELECT count(login_id) as count
+    } else {
+        // All users online
+        $query = "SELECT count(login_id) as count
                   FROM $track_online_table track INNER JOIN $table_user u
                   ON (u.id=track.login_user_id)
                   WHERE u.status != ".ANONYMOUS." AND login_date >= '$current_date'  ";
-	}
+    }
 
-	if (api_get_multiple_access_url()) {
-		$access_url_id = api_get_current_access_url_id();
-		if ($access_url_id != -1) {
-			if ($friends) {
-				// 	friends from social network is online
-				$query = "SELECT DISTINCT count(login_user_id) as count
+    if (api_get_multiple_access_url()) {
+        $access_url_id = api_get_current_access_url_id();
+        if ($access_url_id != -1) {
+            if ($friends) {
+                // 	friends from social network is online
+                $query = "SELECT DISTINCT count(login_user_id) as count
 							FROM $track_online_table track
 							INNER JOIN $friend_user_table ON (friend_user_id = login_user_id)
 							WHERE
@@ -364,29 +374,30 @@ function who_is_online_count($time_limit = null, $friends = false)
 							    login_date >= '".$current_date."' AND
 							    friend_user_id <> '".api_get_user_id()."' AND
 							    relation_type='".USER_RELATION_TYPE_FRIEND."'  ";
-			} else {
-				// all users online
-				$query = "SELECT count(login_id) as count FROM $track_online_table  track
+            } else {
+                // all users online
+                $query = "SELECT count(login_id) as count FROM $track_online_table  track
                           INNER JOIN $table_user u ON (u.id=track.login_user_id)
 						  WHERE
 						    u.status != ".ANONYMOUS." AND
 						    track.access_url_id =  $access_url_id AND
 						    login_date >= '$current_date' ";
-			}
-		}
-	}
+            }
+        }
+    }
 
     // Dev purposes show all users online
     /*$table_user = Database::get_main_table(TABLE_MAIN_USER);
     $query = "SELECT count(*)  as count FROM ".$table_user;*/
 
-	$result = Database::query($query);
-	if (Database::num_rows($result) > 0) {
-		$row = Database::fetch_array($result);
-		return $row['count'];
-	} else {
-		return false;
-	}
+    $result = Database::query($query);
+    if (Database::num_rows($result) > 0) {
+        $row = Database::fetch_array($result);
+
+        return $row['count'];
+    } else {
+        return false;
+    }
 }
 
 
@@ -412,54 +423,110 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
     $online_time = time() - $time_limit * 60;
     $current_date = api_get_utc_datetime($online_time);
     $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+    $tableUser = Database::get_main_table(TABLE_MAIN_USER);
     $course_code = Database::escape_string($course_code);
     $courseInfo = api_get_course_info($course_code);
-	$courseId = $courseInfo['real_id'];
+    $courseId = $courseInfo['real_id'];
 
     $from = intval($from);
     $number_of_items = intval($number_of_items);
 
-	$query = "SELECT login_user_id, login_date FROM $track_online_table
-              WHERE login_user_id <> 2 AND c_id = $courseId AND login_date >= '$current_date'
+    $query = "SELECT o.login_user_id, o.login_date
+              FROM $track_online_table o INNER JOIN $tableUser u
+              ON (o.login_user_id = u.id)
+              WHERE
+                u.status <> '".ANONYMOUS."' AND 
+                o.c_id = $courseId AND 
+                o.login_date >= '$current_date'
               LIMIT $from, $number_of_items ";
 
-	$result = Database::query($query);
-	if ($result) {
-		$users_online = array();
-
-		while (list($login_user_id, $login_date) = Database::fetch_row($result)) {
+    $result = Database::query($query);
+    if ($result) {
+        $users_online = array();
+        while (list($login_user_id, $login_date) = Database::fetch_row($result)) {
             $users_online[] = $login_user_id;
-		}
-		return $users_online;
-	} else {
-		return false;
-	}
+        }
+        return $users_online;
+    } else {
+        return false;
+    }
 }
 
-function who_is_online_in_this_course_count($uid, $time_limit, $coursecode = null)
-{
-	if (empty($coursecode)) {
-		return false;
-	}
-	$track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-	$time_limit = Database::escape_string($time_limit);
+/**
+ * @param integer $uid
+ * @param string $time_limit
+ */
+function who_is_online_in_this_course_count(
+    $uid,
+    $time_limit,
+    $coursecode = null
+) {
+    if (empty($coursecode)) {
+        return false;
+    }
+    $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+    $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+
+    $time_limit = Database::escape_string($time_limit);
 
     $online_time = time() - $time_limit * 60;
     $current_date = api_get_utc_datetime($online_time);
-	$courseId = api_get_course_int_id($coursecode);
+    $courseId = api_get_course_int_id($coursecode);
 
-	if (empty($courseId)) {
-		return false;
-	}
+    if (empty($courseId)) {
+        return false;
+    }
 
-	$query = "SELECT count(login_user_id) as count
-              FROM $track_online_table
-              WHERE login_user_id <> 2 AND c_id = $courseId AND login_date >= '$current_date' ";
-	$result = Database::query($query);
-	if (Database::num_rows($result) > 0) {
-		$row = Database::fetch_array($result);
-		return $row['count'];
-	} else {
-		return false;
-	}
+    $query = "SELECT count(login_user_id) as count
+              FROM $track_online_table o INNER JOIN $tableUser u 
+              ON (login_user_id = u.id)
+              WHERE 
+                u.status <> '".ANONYMOUS."' AND
+                c_id = $courseId AND 
+                login_date >= '$current_date' ";
+    $result = Database::query($query);
+    if (Database::num_rows($result) > 0) {
+        $row = Database::fetch_array($result);
+
+        return $row['count'];
+    } else {
+        return false;
+    }
+}
+
+/**
+ * @param string $timeLimit
+ * @param int $sessionId
+ * @return bool
+ */
+function whoIsOnlineInThisSessionCount($timeLimit, $sessionId)
+{
+    if (!$sessionId) {
+        return 0;
+    }
+
+    $tblTrackOnline = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+    $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+
+    $timeLimit = Database::escape_string($timeLimit);
+
+    $online_time = time() - $timeLimit * 60;
+    $current_date = api_get_utc_datetime($online_time);
+
+    $query = "SELECT count(login_user_id) as count
+              FROM $tblTrackOnline o INNER JOIN $tableUser u 
+              ON (login_user_id = u.id)
+              WHERE 
+                    u.status <> '".ANONYMOUS."' AND 
+                    session_id = $sessionId AND 
+                    login_date >= '$current_date' ";
+    $result = Database::query($query);
+
+    if (Database::num_rows($result) > 0) {
+        $row = Database::fetch_assoc($result);
+
+        return $row['count'];
+    }
+
+    return 0;
 }

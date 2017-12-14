@@ -14,11 +14,11 @@ GradebookUtils::block_students();
 $selectCat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 
 $interbreadcrumb[] = array(
-    'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?',
+    'url' => Category::getUrl(),
     'name' => get_lang('Gradebook'),
 );
 $interbreadcrumb[] = array(
-    'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$selectCat,
+    'url' => Category::getUrl().'selectcat='.$selectCat,
     'name' => get_lang('Details')
 );
 $interbreadcrumb[] = array(
@@ -26,7 +26,7 @@ $interbreadcrumb[] = array(
     'name' => get_lang('GradebookQualifyLog')
 );
 $this_section = SECTION_COURSES;
-Display :: display_header('');
+Display::display_header('');
 echo '<div class="actions">';
 api_display_tool_title(get_lang('GradebookQualifyLog'));
 echo '</div>';

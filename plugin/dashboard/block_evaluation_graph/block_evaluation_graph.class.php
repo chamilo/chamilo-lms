@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use CpChart\Chart\Data as pData;
-use CpChart\Chart\Image as pImage;
-use CpChart\Chart\Cache as pCache;
+use CpChart\Data as pData;
+use CpChart\Image as pImage;
+use CpChart\Cache as pCache;
 
 /**
  * Class BlockEvaluationGraph
@@ -140,7 +140,7 @@ class BlockEvaluationGraph extends Block
                     $alllinks = $cats[0]->get_links(null, true);
                     $users = GradebookUtils::get_all_users($alleval, $alllinks);
                     $datagen = new FlatViewDataGenerator($users, $alleval, $alllinks);
-                    $evaluation_sumary = $datagen->get_evaluation_sumary_results();
+                    $evaluation_sumary = $datagen->getEvaluationSummaryResults();
                     if (!empty($evaluation_sumary)) {
                         $items = array_keys($evaluation_sumary);
                         $max = $min = $avg = array();
@@ -318,7 +318,7 @@ class BlockEvaluationGraph extends Block
                         $alllinks = $cats[0]->get_links(null, true);
                         $users = GradebookUtils::get_all_users($alleval, $alllinks);
                         $datagen = new FlatViewDataGenerator($users, $alleval, $alllinks);
-                        $evaluation_sumary = $datagen->get_evaluation_sumary_results();
+                        $evaluation_sumary = $datagen->getEvaluationSummaryResults();
                         if (!empty($evaluation_sumary)) {
                             $items = array_keys($evaluation_sumary);
                             $max = $min = $avg = array();

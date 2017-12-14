@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \ChamiloSession as Session;
+
 /**
  * This script displays a basic info about data center.
  */
-
-use \ChamiloSession as Session;
 
 require_once '../config.php';
 
@@ -15,7 +15,10 @@ $_cid = 0;
 if (api_is_platform_admin()) {
     $info = getInfoIdentificationData();
     $templateName = $plugin->get_lang('DataCenter');
-    $interbreadcrumb[] = array("url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe'));
+    $interbreadcrumb[] = array(
+        "url" => "/plugin/sepe/src/sepe-administration-menu.php",
+        "name" => $plugin->get_lang('MenuSepe'),
+    );
     $tpl = new Template($templateName);
 
     if (isset($_SESSION['sepe_message_info'])) {
@@ -32,5 +35,5 @@ if (api_is_platform_admin()) {
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 } else {
-    header('Location:' . api_get_path(WEB_PATH));
+    header('Location:'.api_get_path(WEB_PATH));
 }

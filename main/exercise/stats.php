@@ -5,11 +5,23 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 
-$exercise_id = isset($_GET['exerciseId']) && !empty($_GET['exerciseId']) ? intval($_GET['exerciseId']) : 0;
-$gradebook = isset($gradebook) ? $gradebook : null;
+api_protect_course_script(true, false, true);
 
+$showPage = false;
+
+if (api_is_platform_admin() || api_is_course_admin() ||
+    api_is_course_tutor() || api_is_session_general_coach() || api_is_allowed_to_edit(null, true)
+) {
+    $showPage = true;
+}
+
+if (!$showPage) {
+    api_not_allowed(true);
+}
+
+$exerciseId = isset($_GET['exerciseId']) && !empty($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : 0;
 $objExercise = new Exercise();
-$result = $objExercise->read($exercise_id);
+$result = $objExercise->read($exerciseId);
 
 if (!$result) {
     api_not_allowed(true);
@@ -33,7 +45,7 @@ if (empty($sessionId)) {
 $count_students = count($students);
 $question_list = $objExercise->get_validated_question_list();
 
-$data = array();
+$data = [];
 // Question title 	# of students who tool it 	Lowest score 	Average 	Highest score 	Maximum score
 $headers = array(
     get_lang('Question'),
@@ -47,25 +59,25 @@ $headers = array(
 
 if (!empty($question_list)) {
     foreach ($question_list as $question_id) {
-        $question_obj = Question::read($question_id);
+        $questionObj = Question::read($question_id);
 
         $exercise_stats = ExerciseLib::get_student_stats_by_question(
             $question_id,
-            $exercise_id,
+            $exerciseId,
             $courseCode,
             $sessionId
         );
 
         $count_users = ExerciseLib::get_number_students_question_with_answer_count(
             $question_id,
-            $exercise_id,
+            $exerciseId,
             $courseCode,
             $sessionId,
-            $question_obj->type
+            $questionObj->type
         );
 
-        $data[$question_id]['name'] = cut($question_obj->question, 100);
-        $data[$question_id]['type'] = $question_obj->get_question_type_name();
+        $data[$question_id]['name'] = cut($questionObj->question, 100);
+        $data[$question_id]['type'] = $questionObj->get_question_type_name();
         $percentange = 0;
         if ($count_students) {
             $percentange = $count_users / $count_students * 100;
@@ -79,7 +91,7 @@ if (!empty($question_list)) {
         $data[$question_id]['lowest_score'] = round($exercise_stats['min'], 2);
         $data[$question_id]['average_score'] = round($exercise_stats['average'], 2);
         $data[$question_id]['highest_score'] = round($exercise_stats['max'], 2);
-        $data[$question_id]['max_score'] = round($question_obj->weighting, 2);
+        $data[$question_id]['max_score'] = round($questionObj->weighting, 2);
     }
 }
 
@@ -105,7 +117,6 @@ foreach ($data as $row_table) {
 $content = $table->toHtml();
 
 // Format B
-
 $headers = array(
     get_lang('Question'),
     get_lang('Answer'),
@@ -118,10 +129,10 @@ $data = array();
 if (!empty($question_list)) {
     $id = 0;
     foreach ($question_list as $question_id) {
-        $question_obj = Question::read($question_id);
+        $questionObj = Question::read($question_id);
         $exercise_stats = ExerciseLib::get_student_stats_by_question(
             $question_id,
-            $exercise_id,
+            $exerciseId,
             $courseCode,
             $sessionId
         );
@@ -136,7 +147,7 @@ if (!empty($question_list)) {
             $real_answer_id = $answer->selectAutoId($answer_id);
 
             // Overwriting values depending of the question
-            switch ($question_obj->type) {
+            switch ($questionObj->type) {
                 case FILL_IN_BLANKS:
                     $answer_info_db = $answer_info;
                     $answer_info = substr($answer_info, 0, strpos($answer_info, '::'));
@@ -145,7 +156,7 @@ if (!empty($question_list)) {
                     $counter = 0;
                     foreach ($answers as $answer_item) {
                         if ($counter == 0) {
-                            $data[$id]['name'] = cut($question_obj->question, 100);
+                            $data[$id]['name'] = cut($questionObj->question, 100);
                         } else {
                             $data[$id]['name'] = '-';
                         }
@@ -157,7 +168,7 @@ if (!empty($question_list)) {
                         $data[$id]['answer'] = $answer_item;
                         $data[$id]['correct'] = '-';
 
-                        $count = ExerciseLib::getNumberStudentsFillBlanksAnwserCount($question_id, $exercise_id);
+                        $count = ExerciseLib::getNumberStudentsFillBlanksAnswerCount($question_id, $exerciseId);
                         $count = isset($count[$counter]) ? $count[$counter] : 0;
 
                         $percentage = 0;
@@ -178,7 +189,7 @@ if (!empty($question_list)) {
                 case MATCHING_DRAGGABLE:
                     if ($is_correct == 0) {
                         if ($answer_id == 1) {
-                            $data[$id]['name'] = cut($question_obj->question, 100);
+                            $data[$id]['name'] = cut($questionObj->question, 100);
                         } else {
                             $data[$id]['name'] = '-';
                         }
@@ -196,7 +207,7 @@ if (!empty($question_list)) {
                         $count = ExerciseLib::get_number_students_answer_count(
                             $answer_id,
                             $question_id,
-                            $exercise_id,
+                            $exerciseId,
                             $courseCode,
                             $sessionId,
                             MATCHING
@@ -214,7 +225,7 @@ if (!empty($question_list)) {
                     break;
                 case HOT_SPOT:
                     if ($answer_id == 1) {
-                        $data[$id]['name'] = cut($question_obj->question, 100);
+                        $data[$id]['name'] = cut($questionObj->question, 100);
                     } else {
                         $data[$id]['name'] = '-';
                     }
@@ -224,7 +235,7 @@ if (!empty($question_list)) {
                     $count = ExerciseLib::get_number_students_answer_hotspot_count(
                         $answer_id,
                         $question_id,
-                        $exercise_id,
+                        $exerciseId,
                         $courseCode,
                         $sessionId
                     );
@@ -240,7 +251,7 @@ if (!empty($question_list)) {
                     break;
                 default:
                     if ($answer_id == 1) {
-                        $data[$id]['name'] = cut($question_obj->question, 100);
+                        $data[$id]['name'] = cut($questionObj->question, 100);
                     } else {
                         $data[$id]['name'] = '-';
                     }
@@ -250,7 +261,7 @@ if (!empty($question_list)) {
                     $count = ExerciseLib::get_number_students_answer_count(
                         $real_answer_id,
                         $question_id,
-                        $exercise_id,
+                        $exerciseId,
                         $courseCode,
                         $sessionId
                     );
@@ -291,16 +302,16 @@ foreach ($data as $row_table) {
 $content .= $table->toHtml();
 
 $interbreadcrumb[] = array(
-    "url" => "exercise.php?gradebook=$gradebook&".api_get_cidreq(),
+    "url" => "exercise.php?".api_get_cidreq(),
     "name" => get_lang('Exercises'),
 );
 $interbreadcrumb[] = array(
-    "url" => "admin.php?exerciseId=$exercise_id&".api_get_cidreq(),
+    "url" => "admin.php?exerciseId=$exerciseId&".api_get_cidreq(),
     "name" => $objExercise->selectTitle(true),
 );
 
 $tpl = new Template(get_lang('ReportByQuestion'));
-$actions = '<a href="exercise_report.php?exerciseId='.intval($_GET['exerciseId']).'&'.api_get_cidreq().'">'.
+$actions = '<a href="exercise_report.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
     Display:: return_icon(
         'back.png',
         get_lang('GoBackToQuestionList'),

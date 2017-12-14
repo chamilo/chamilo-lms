@@ -40,6 +40,7 @@ function switchMe(editor, callback) {
 	var origToolbar =  editor.config.toolbar;
 	var origSmallToolbar = editor.config.smallToolbar;
 	var origMaximizedToolbar = editor.config.maximizedToolbar;
+	var origStartupOutlineBlocks = editor.config.startupOutlineBlocks;
 	var newToolbar;
 	if (origToolbar == origSmallToolbar) {
 		newToolbar = origMaximizedToolbar;
@@ -57,6 +58,7 @@ function switchMe(editor, callback) {
 	editor.destroy(true);
 
 	CKEDITOR.replace(id, {
+		startupOutlineBlocks: origStartupOutlineBlocks,
 		customConfig : origCustomConfig,
 		contentsCss : origContentCss,
 		toolbar_minToolbar: origMinToolbar,

@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
@@ -216,11 +217,13 @@ function searchCourses($idSession, $type)
                 $course['title'].' ('.$course['visual_code'].')</option>';
         }
         $return .= '</select>';
-        $_SESSION['course_list_destination'] = $course_list_destination;
+        Session::write('course_list_destination', $course_list_destination);
 
         // Send response by ajax
         $xajaxResponse->addAssign(
-            'ajax_list_courses_destination', 'innerHTML', api_utf8_encode($return)
+            'ajax_list_courses_destination',
+            'innerHTML',
+            api_utf8_encode($return)
         );
     }
     return $xajaxResponse;
@@ -278,22 +281,21 @@ Display::display_header($nameTools);
 if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
     (isset($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy')
 ) {
-
     $destinationCourse = $destinationSession = '';
     $originCourse = api_get_course_id();
     $originSession = api_get_session_id();
 
     if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
-
         $destinationCourse = $_POST['destination_course'];
         $destinationSession = $_POST['destination_session'];
         $course = CourseSelectForm::get_posted_course(
-            'copy_course', $originSession, $originCourse
+            'copy_course',
+            $originSession,
+            $originCourse
         );
 
         $cr = new CourseRestorer($course);
         $cr->restore($destinationCourse, $destinationSession);
-
         echo Display::return_message(get_lang('CopyFinished'), 'confirmation');
 
         displayForm();
@@ -329,11 +331,11 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
 
                 $cb = new CourseBuilder('', $courseInfo);
                 $course = $cb->build(
-                    $originSession, $courseCode
+                    $originSession,
+                    $courseCode
                 );
                 $cr = new CourseRestorer($course);
                 $cr->restore($courseDestination, $destinationSession);
-
                 echo Display::return_message(get_lang('CopyFinished'), 'confirmation');
             }
 

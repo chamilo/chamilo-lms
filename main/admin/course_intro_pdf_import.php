@@ -28,7 +28,12 @@ if ($_POST['formSent']) {
         $ext_import_file = substr($_FILES['import_file']['name'], (strrpos($_FILES['import_file']['name'], '.') + 1));
 
         if (!in_array($ext_import_file, $allowed_file_mimetype)) {
-            Display::addFlash(Display::return_message(get_lang('YouMustImportAZipFile'), 'error'));
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('YouMustImportAZipFile'),
+                    'error'
+                )
+            );
         } else {
             $errors = import_pdfs($subDir);
             if (count($errors) == 0) {
@@ -46,7 +51,13 @@ if (count($errors) != 0) {
     $error_message .= '</ul>';
     Display::addFlash(Display::return_message($error_message, 'normal', false));
 } elseif ($_POST['formSent']) {
-    Display::addFlash(Display::return_message('CourseIntroductionsAllImportesSuccessfully', 'confirmation', false));
+    Display::addFlash(
+        Display::return_message(
+            get_lang('CourseIntroductionsAllImportesSuccessfully'),
+            'confirmation',
+            false
+        )
+    );
 }
 
 Display::display_header($tool_name);
@@ -110,7 +121,13 @@ function import_pdfs($subDir = '/')
         if (count($course) > 0) {
             // Build file info because handle_uploaded_document() needs it (name, type, size, tmp_name)
             $fileSize = filesize($baseDir.$uploadPath.$file);
-            $docId = add_document($course, $subDir.'/'.$file, 'file', $fileSize, $parts[1].' '.substr($parts[2], 0, -4));
+            $docId = add_document(
+                $course,
+                $subDir.'/'.$file,
+                'file',
+                $fileSize,
+                $parts[1].' '.substr($parts[2], 0, -4)
+            );
             if ($docId > 0) {
                 if (!is_file($baseDir.$uploadPath.$file)) {
                     error_log($baseDir.$uploadPath.$file.' does not exists in '.__FILE__);
@@ -122,8 +139,17 @@ function import_pdfs($subDir = '/')
                     error_log('Destination '.api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$subDir.' is NOT writeable in '.__FILE__);
                 }
                 // Place each file in its folder in each course
-                rename($baseDir.$uploadPath.$file, api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$subDir.'/'.$file);
-                api_item_property_update($course, TOOL_DOCUMENT, $docId, 'DocumentAdded', api_get_user_id());
+                rename(
+                    $baseDir.$uploadPath.$file,
+                    api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$subDir.'/'.$file
+                );
+                api_item_property_update(
+                    $course,
+                    TOOL_DOCUMENT,
+                    $docId,
+                    'DocumentAdded',
+                    api_get_user_id()
+                );
                 // Redo visibility
                 api_set_default_visibility($docId, TOOL_DOCUMENT);
                 $errors[] = array('Line' => 0, 'Code' => $course['code'], 'Title' => $course['title']);

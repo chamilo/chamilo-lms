@@ -45,9 +45,9 @@ $isAdmin = UserManager::is_admin($user_id);
 if ($isAdmin) {
     $userStatus = PLATFORM_ADMIN;
     $tool_name = get_lang('AssignUsersToPlatformAdministrator');
-} else if ($user_info['status'] == SESSIONADMIN) {
+} elseif ($user_info['status'] == SESSIONADMIN) {
     $tool_name = get_lang('AssignUsersToSessionsAdministrator');
-} else if ($user_info['status'] == STUDENT_BOSS) {
+} elseif ($user_info['status'] == STUDENT_BOSS) {
     $tool_name = get_lang('AssignUsersToBoss');
 } else {
     $tool_name = get_lang('AssignUsersToHumanResourcesManager');
@@ -287,7 +287,7 @@ if (!empty($filters) && !empty($filterData)) {
 }
 
 if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
-    $user_list = $_POST['UsersList'];
+    $user_list = isset($_POST['UsersList']) ? $_POST['UsersList'] : null;
     switch ($userStatus) {
         case DRH:
             //no break;
@@ -391,12 +391,13 @@ if (!empty($conditions)) {
 
 if (api_is_multiple_url_enabled()) {
     $sql = "SELECT user.user_id, username, lastname, firstname
-            FROM $tbl_user user  LEFT JOIN $tbl_access_url_rel_user au 
+            FROM $tbl_user user  
+            LEFT JOIN $tbl_access_url_rel_user au 
             ON (au.user_id = user.user_id)
             WHERE
                 $without_assigned_users
                 user.user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND
-                status NOT IN(".DRH.", ".SESSIONADMIN.") $search_user AND
+                status NOT IN(".DRH.", ".SESSIONADMIN.", ".ANONYMOUS.") $search_user AND
                 access_url_id = ".api_get_current_access_url_id()."
                 $sqlConditions
             ORDER BY firstname";
@@ -406,7 +407,7 @@ if (api_is_multiple_url_enabled()) {
             WHERE
                 $without_assigned_users
                 user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND
-                status NOT IN(".DRH.", ".SESSIONADMIN.")
+                status NOT IN(".DRH.", ".SESSIONADMIN.", ".ANONYMOUS.")
                 $search_user
                 $sqlConditions
             ORDER BY firstname ";
@@ -423,11 +424,11 @@ $result = Database::query($sql);
                 <div id="ajax_list_users_multiple">
                     <select id="origin" class="form-control" name="NoAssignedUsersList[]" multiple="multiple" size="15">
                         <?php
-                            while ($enreg = Database::fetch_array($result)) {
-                                $person_name = api_get_person_name($enreg['firstname'], $enreg['lastname']); ?>
-                                <option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name, ENT_QUOTES).'"'; ?>>
-                                <?php echo $person_name.' ('.$enreg['username'].')'; ?>
-                                </option>
+                        while ($enreg = Database::fetch_array($result)) {
+                            $person_name = api_get_person_name($enreg['firstname'], $enreg['lastname']); ?>
+                            <option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name, ENT_QUOTES).'"'; ?>>
+                            <?php echo $person_name.' ('.$enreg['username'].')'; ?>
+                            </option>
                         <?php } ?>
                     </select>
                 </div>
@@ -451,19 +452,19 @@ $result = Database::query($sql);
             </div>
         <?php } else { ?>
             <div class="separate-action">
-                <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
+                <button id="add_user_button" class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
                 <em class="fa fa-chevron-right"></em>
             </button>
             </div>
             <div class="separate-action">
-                <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
+                <button id="remove_user_button" class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))">
                 <em class="fa fa-chevron-left"></em>
                 </button>
             </div>
         <?php } ?>
             <div class="separate-action">
         <?php
-        echo '<button class="btn btn-success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
+        echo '<button id="assign_user" class="btn btn-success" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
         ?>
             </div>
         </div>

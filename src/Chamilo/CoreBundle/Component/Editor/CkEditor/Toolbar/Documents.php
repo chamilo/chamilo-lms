@@ -118,6 +118,9 @@ class Documents extends Basic
                 'Underline',
                 'TextColor',
                 'BGColor',
+            ],
+            [
+                'ShowBlocks',
                 'Source',
             ],
             api_get_setting('enabled_wiris') === 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],

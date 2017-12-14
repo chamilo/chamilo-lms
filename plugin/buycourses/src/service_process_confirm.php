@@ -145,8 +145,24 @@ switch ($serviceSale['payment_type']) {
             exit;
         }
 
-        $form->addButton('confirm', $plugin->get_lang('ConfirmOrder'), 'check', 'success', 'default', null, ['id' => 'confirm']);
-        $form->addButton('cancel', $plugin->get_lang('CancelOrder'), 'times', 'danger', 'default', null, ['id' => 'cancel']);
+        $form->addButton(
+            'confirm',
+            $plugin->get_lang('ConfirmOrder'),
+            'check',
+            'success',
+            'default',
+            null,
+            ['id' => 'confirm']
+        );
+        $form->addButton(
+            'cancel',
+            $plugin->get_lang('CancelOrder'),
+            'times',
+            'danger',
+            'default',
+            null,
+            ['id' => 'cancel']
+        );
 
         $template = new Template();
 

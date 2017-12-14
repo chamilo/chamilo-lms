@@ -12,9 +12,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class NavbarController
+ * @package Chamilo\ThemeBundle\Controller
+ */
 class NavbarController extends Controller
 {
-
     /**
      * @return EventDispatcher
      */
@@ -78,7 +81,6 @@ class NavbarController extends Controller
 
     public function userAction()
     {
-
         if (!$this->getDispatcher()->hasListeners(ThemeEvents::THEME_NAVBAR_USER)) {
             return new Response();
         }
@@ -91,5 +93,4 @@ class NavbarController extends Controller
             )
         );
     }
-
 }

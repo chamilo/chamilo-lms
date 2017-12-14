@@ -285,7 +285,52 @@ if (api_get_setting('homepage_view') === 'activity' || api_get_setting('homepage
     require 'vertical_activity.php';
 }
 
-$content = '<div id="course_tools">'.$content.'</div>';
+// Get session-career diagram
+$diagram = '';
+$allow = api_get_configuration_value('allow_career_diagram');
+if ($allow === true) {
+    $htmlHeadXtra[] = api_get_js('jsplumb2.js');
+    $extra = new ExtraFieldValue('session');
+    $value = $extra->get_values_by_handler_and_field_variable(
+        api_get_session_id(),
+        'external_career_id'
+    );
+
+    if (!empty($value) && isset($value['value'])) {
+        $careerId = $value['value'];
+        $extraFieldValue = new ExtraFieldValue('career');
+        $item = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+            'external_career_id',
+            $careerId,
+            false,
+            false,
+            false
+        );
+
+        if (!empty($item) && isset($item['item_id'])) {
+            $careerId = $item['item_id'];
+            $career = new Career();
+            $careerInfo = $career->get($careerId);
+            if (!empty($careerInfo)) {
+                $extraFieldValue = new ExtraFieldValue('career');
+                $item = $extraFieldValue->get_values_by_handler_and_field_variable(
+                    $careerId,
+                    'career_diagram',
+                    false,
+                    false,
+                    false
+                );
+
+                if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
+                    $graph = unserialize($item['value']);
+                    $diagram = Career::renderDiagram($careerInfo, $graph);
+                }
+            }
+        }
+    }
+}
+
+$content = '<div id="course_tools">'.$diagram.$content.'</div>';
 
 $tpl = new Template(null);
 $tpl->assign('message', $show_message);

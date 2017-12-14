@@ -51,7 +51,7 @@ class ExerciseShowFunctions
             ?>
             <tr>
                 <td>
-                    <?php echo nl2br(Security::remove_XSS($answerHTML, COURSEMANAGERLOWSECURITY)); ?>
+                    <?php echo Security::remove_XSS($answerHTML, COURSEMANAGERLOWSECURITY); ?>
                 </td>
 
                 <?php
@@ -125,7 +125,7 @@ class ExerciseShowFunctions
 
         if (!empty($answer)) {
             echo '<tr><td>';
-            echo nl2br(Security::remove_XSS($answer));
+            echo Security::remove_XSS($answer);
             echo '</td></tr>';
         }
 
@@ -140,14 +140,23 @@ class ExerciseShowFunctions
     }
 
     /**
-    * @param $feedback_type
-    * @param $answer
-    * @param $id
-    * @param $questionId
-    * @param null $nano
-    * @param int $results_disabled
+     * @param $feedback_type
+     * @param $answer
+     * @param $id
+     * @param $questionId
+     * @param null $fileUrl
+     * @param int $results_disabled
+     * @param int $questionScore
      */
-    public static function display_oral_expression_answer($feedback_type, $answer, $id, $questionId, $fileUrl = null, $results_disabled = 0)
+    public static function display_oral_expression_answer(
+        $feedback_type,
+        $answer,
+        $id,
+        $questionId,
+        $fileUrl = null,
+        $results_disabled = 0,
+        $questionScore = 0
+    )
     {
         if (isset($fileUrl)) {
             echo '
@@ -159,9 +168,9 @@ class ExerciseShowFunctions
 
         if (empty($id)) {
             echo '<tr>';
-            echo Display::tag('td', nl2br(Security::remove_XSS($answer)), array('width'=>'55%'));
+            echo Display::tag('td', Security::remove_XSS($answer), array('width'=>'55%'));
             echo '</tr>';
-            if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            if (!$questionScore && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
                 echo '<tr>';
                 echo Display::tag('td', ExerciseLib::getNotCorrectedYetText(), array('width'=>'45%'));
                 echo '</tr>';
@@ -172,7 +181,7 @@ class ExerciseShowFunctions
             echo '<tr>';
             echo '<td>';
             if (!empty($answer)) {
-                echo nl2br(Security::remove_XSS($answer));
+                echo Security::remove_XSS($answer);
             }
             echo '</td>';
 
@@ -281,7 +290,7 @@ class ExerciseShowFunctions
      * @param boolean $ans Whether to show the answer comment or not
      * @param bool $resultsDisabled
      * @param bool $showTotalScoreAndUserChoices
-     *
+     * @param bool $export
      * @return void
      */
     public static function display_unique_or_multiple_answer(
@@ -295,8 +304,21 @@ class ExerciseShowFunctions
         $questionId,
         $ans,
         $resultsDisabled,
-        $showTotalScoreAndUserChoices
+        $showTotalScoreAndUserChoices,
+        $export = false
     ) {
+        if ($export) {
+            $answer = strip_tags_blacklist($answer, ['title', 'head']);
+            // Fix answers that contains this tags
+            $tags = [
+                '<html>',
+                '</html>',
+                '<body>',
+                '</body>'
+            ];
+            $answer = str_replace($tags, '', $answer);
+        }
+
         $hide_expected_answer = false;
         if ($feedback_type == 0 && ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ONLY)) {
             $hide_expected_answer = true;
@@ -312,19 +334,19 @@ class ExerciseShowFunctions
 
         $icon = in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION)) ? 'radio' : 'checkbox';
         $icon .= $studentChoice ? '_on' : '_off';
-        $icon .= '.gif';
+        $icon .= '.png';
         $iconAnswer = in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION)) ? 'radio' : 'checkbox';
         $iconAnswer .= $answerCorrect ? '_on' : '_off';
-        $iconAnswer .= '.gif';
+        $iconAnswer .= '.png';
 
         ?>
         <tr>
         <td width="5%">
-            <?php echo Display::return_icon($icon); ?>
+            <?php echo Display::return_icon($icon, null, null, ICON_SIZE_TINY); ?>
         </td>
         <td width="5%">
             <?php if (!$hide_expected_answer) {
-                echo Display::return_icon($iconAnswer);
+                echo Display::return_icon($iconAnswer, null, null, ICON_SIZE_TINY);
             } else {
                 echo "-";
             } ?>

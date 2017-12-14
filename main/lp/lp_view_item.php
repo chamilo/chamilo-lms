@@ -42,8 +42,6 @@ if (isset($_GET['lp_item_id'])) {
 }
 
 $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : 'fullpage';
-
-$_SESSION['whereami'] = 'lp/build';
 if (isset($_SESSION['oLP']) && isset($_GET['id'])) {
     $_SESSION['oLP'] -> current = intval($_GET['id']);
 }
@@ -52,12 +50,8 @@ $this_section = SECTION_COURSES;
 /* Constants and variables */
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-$tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
-
-$isStudentView  = (empty($_REQUEST['isStudentView']) ? 0 : (int) $_REQUEST['isStudentView']);
-$learnpath_id   = (int) $_REQUEST['lp_id'];
+$isStudentView = (empty($_REQUEST['isStudentView']) ? 0 : (int) $_REQUEST['isStudentView']);
+$learnpath_id = (int) $_REQUEST['lp_id'];
 
 if ((!$is_allowed_to_edit) || $isStudentView) {
     error_log('New LP - User not authorized in lp_view_item.php');
@@ -67,8 +61,7 @@ if ((!$is_allowed_to_edit) || $isStudentView) {
 // From here on, we are admin because of the previous condition, so don't check anymore.
 
 $course_id = api_get_course_int_id();
-$sql = "SELECT * FROM $tbl_lp 
-        WHERE c_id = $course_id AND id = $learnpath_id";
+$sql = "SELECT * FROM $tbl_lp WHERE iid = $learnpath_id";
 $result = Database::query($sql);
 $therow = Database::fetch_array($result);
 

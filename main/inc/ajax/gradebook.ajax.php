@@ -21,7 +21,25 @@ switch ($action) {
                 echo 0;
             }
         }
-        break;
+        break;/*
+    case 'generate_custom_report':
+        if (api_is_allowed_to_edit(null, true)) {
+            $allow = api_get_configuration_value('gradebook_custom_student_report');
+            if (!$allow) {
+                exit;
+            }
+            $form = new FormValidator(
+                'search',
+                'get',
+                api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq().'&action=generate_custom_report'
+            );
+            $form->addText('custom_course_id', get_lang('CourseId'));
+            $form->addDateRangePicker('range', get_lang('DateRange'));
+            $form->addHidden('action', 'generate_custom_report');
+            $form->addButtonSearch();
+            $form->display();
+        }
+        break;*/
     default:
         echo '';
         break;

@@ -26,14 +26,15 @@
     "README.md",
     "composer.json",
     "package.json",
-    "test.html"
+    "test.html",
+    "docs"
   ],
-  "version": "1.12.2",
-  "_release": "1.12.2",
+  "version": "1.12.4",
+  "_release": "1.12.4",
   "_resolution": {
     "type": "version",
-    "tag": "v1.12.2",
-    "commit": "4eb040b7097fd8eab8184e54efe973ce8468e9b2"
+    "tag": "v1.12.4",
+    "commit": "e1a7743e82eb16bce825ec58a8c95b2aceae6942"
   },
   "_source": "https://github.com/silviomoreto/bootstrap-select.git",
   "_target": "1.12.*",

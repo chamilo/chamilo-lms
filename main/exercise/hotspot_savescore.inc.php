@@ -25,8 +25,8 @@ if ($_GET['answerId'] == "0") {
     // user clicked ON a hotspot
     $hit = 1;
     $answerId = api_substr($_GET['answerId'], 22, 2);
-	// Save into session
-	$_SESSION['exerciseResult'][$questionId][$answerId] = $hit;
+    // Save into session
+    $_SESSION['exerciseResult'][$questionId][$answerId] = $hit;
 }
 //round-up the coordinates
 $coords = explode('/', $coordinates);

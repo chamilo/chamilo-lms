@@ -25,18 +25,34 @@ class Timeline extends Model
     );
     public $is_course_model = true;
 
-	public function __construct()
+    /**
+     * Timeline constructor.
+     */
+    public function __construct()
     {
         $this->table = Database::get_course_table(TABLE_TIMELINE);
-	}
+    }
 
     /**
      * Get the count of elements
+     * @return int
      */
     public function get_count()
     {
         $course_id = api_get_course_int_id();
-        $row = Database::select('count(*) as count', $this->table, array('where' => array('parent_id = ? AND c_id = ?' => array('0', $course_id))), 'first');
+        $row = Database::select(
+            'count(*) as count',
+            $this->table,
+            array(
+                'where' => array(
+                    'parent_id = ? AND c_id = ?' => array(
+                        '0',
+                        $course_id
+                    )
+                )
+            ),
+            'first'
+        );
         return $row['count'];
     }
 
@@ -46,26 +62,36 @@ class Timeline extends Model
      */
     public function get_all($where_conditions = array())
     {
-        return Database::select('*', $this->table, array('where'=>$where_conditions, 'order' =>'headline ASC'));
+        return Database::select(
+            '*',
+            $this->table,
+            array('where' => $where_conditions, 'order' => 'headline ASC')
+        );
     }
 
     /**
      * Displays the title + grid
      */
-	public function listing()
+    public function listing()
     {
-		// action links
-		$html = '<div class="actions">';
-        //$html .= '<a href="career_dashboard.php">'.Display::return_icon('back.png',get_lang('Back'),'','32').'</a>';
-		$html .= '<a href="'.api_get_self().'?action=add">'.Display::return_icon('add.png', get_lang('Add'), '', '32').'</a>';
-		$html .= '</div>';
+        // action links
+        $html = '<div class="actions">';
+        $html .= '<a href="'.api_get_self().'?action=add">'.
+            Display::return_icon('add.png', get_lang('Add'), '', '32').'</a>';
+        $html .= '</div>';
         $html .= Display::grid_html('timelines');
         return $html;
-	}
+    }
 
+    /**
+     * @return array
+     */
     public function get_status_list()
     {
-        return array(TIMELINE_STATUS_ACTIVE => get_lang('Active'), TIMELINE_STATUS_INACTIVE => get_lang('Inactive'));
+        return array(
+            TIMELINE_STATUS_ACTIVE => get_lang('Active'),
+            TIMELINE_STATUS_INACTIVE => get_lang('Inactive')
+        );
     }
 
     /**
@@ -88,7 +114,6 @@ class Timeline extends Model
         $form->addElement('hidden', 'id', $id);
 
         $form->addElement('text', 'headline', get_lang('Name'), array('size' => '70'));
-        //$form->addHtmlEditor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'Careers','Width' => '100%', 'Height' => '250'));
         $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
         if ($action == 'edit') {
@@ -107,10 +132,10 @@ class Timeline extends Model
         $defaults = $this->get($id);
 
         /*if (!empty($defaults['created_at'])) {
-        	$defaults['created_at'] = api_convert_and_format_date($defaults['created_at']);
+            $defaults['created_at'] = api_convert_and_format_date($defaults['created_at']);
         }
         if (!empty($defaults['updated_at'])) {
-        	$defaults['updated_at'] = api_convert_and_format_date($defaults['updated_at']);
+            $defaults['updated_at'] = api_convert_and_format_date($defaults['updated_at']);
         }*/
         $form->setDefaults($defaults);
 
@@ -126,7 +151,6 @@ class Timeline extends Model
      */
     public function return_item_form($url, $action)
     {
-
         $form = new FormValidator('item_form', 'post', $url);
         // Setting the form elements
         $header = get_lang('Add');
@@ -152,9 +176,6 @@ class Timeline extends Model
         $form->addRule('headline', get_lang('ThisFieldIsRequired'), 'required');
         $form->addRule('start_date', get_lang('ThisFieldIsRequired'), 'required');
 
-
-        //$form->addHtmlEditor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'Careers','Width' => '100%', 'Height' => '250'));
-
         if ($action == 'edit') {
             // Setting the defaults
             $defaults = $this->get($id);
@@ -162,19 +183,11 @@ class Timeline extends Model
         } else {
             $form->addButtonCreate(get_lang('Add'), 'submit');
         }
-
-        /*if (!empty($defaults['created_at'])) {
-        	$defaults['created_at'] = api_convert_and_format_date($defaults['created_at']);
-        }
-        if (!empty($defaults['updated_at'])) {
-        	$defaults['updated_at'] = api_convert_and_format_date($defaults['updated_at']);
-        }*/
         $form->setDefaults($defaults);
 
         // Setting the rules
         $form->addRule('headline', get_lang('ThisFieldIsRequired'), 'required');
         return $form;
-
     }
 
     /**
@@ -184,38 +197,53 @@ class Timeline extends Model
     public function save_item($params)
     {
         $params['c_id'] = api_get_course_int_id();
-	    $id = parent::save($params);
-	    if (!empty($id)) {
-	    	//event_system(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
-   		}
-   		return $id;
+        $id = parent::save($params);
+        if (!empty($id)) {
+            //event_system(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
+        }
+        return $id;
     }
 
     /**
      * @param array $params
      * @return bool
      */
-    public function save($params) {
+    public function save($params)
+    {
         $params['c_id'] = api_get_course_int_id();
         $params['parent_id'] = '0';
         $params['type'] = 'default';
-	    $id = parent::save($params);
-	    if (!empty($id)) {
-	    	//event_system(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
-   		}
-   		return $id;
+        $id = parent::save($params);
+        if (!empty($id)) {
+            //event_system(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
+        }
+        return $id;
     }
 
-    public function delete($id) {
-	    parent::delete($id);
-	    //event_system(LOG_CAREER_DELETE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
+    /**
+     * @param int $id
+     */
+    public function delete($id)
+    {
+        parent::delete($id);
+        //event_system(LOG_CAREER_DELETE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
     }
 
-    public function get_url($id) {
+    /**
+     * @param int $id
+     * @return string
+     */
+    public function get_url($id)
+    {
         return api_get_path(WEB_AJAX_PATH).'timeline.ajax.php?a=get_timeline_content&id='.intval($id);
     }
 
-    public function get_timeline_content($id) {
+    /**
+     * @param int $id
+     * @return array
+     */
+    public function get_timeline_content($id)
+    {
         $timeline = array();
         $course_id = api_get_course_int_id();
         $timeline['timeline'] = $this->process_item($this->get($id));
@@ -224,7 +252,8 @@ class Timeline extends Model
         return $timeline;
     }
 
-    function process_items($items) {
+    function process_items($items)
+    {
         foreach ($items as &$item) {
             $item = $this->process_item($item);
         }
@@ -234,7 +263,9 @@ class Timeline extends Model
         }
         return $new_array;
     }
-    function process_item($item) {
+
+    function process_item($item)
+    {
         $item['startDate'] = $item['start_date'];
         unset($item['start_date']);
         if (!empty($item['end_date'])) {
@@ -244,10 +275,11 @@ class Timeline extends Model
         }
         unset($item['end_date']);
         // Assets
-        $item['asset'] = array('media'     => $item['media'],
-                                'credit'    => $item['media_credit'],
-                                'caption'   => $item['media_caption'],
-         );
+        $item['asset'] = array(
+            'media' => $item['media'],
+            'credit' => $item['media_credit'],
+            'caption' => $item['media_caption'],
+        );
 
         //Cleaning items
         unset($item['id']);

@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
  * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php
  *
@@ -16,10 +19,6 @@ api_protect_course_script();
 /* Constants and variables */
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-$tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
-
 $isStudentView = isset($_REQUEST['isStudentView']) ? (int) $_REQUEST['isStudentView'] : null;
 $learnpath_id = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : null;
 $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
@@ -34,23 +33,20 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
 // Theme calls.
 $show_learn_path = true;
 /** @var learnpath $lp */
-$lp = $_SESSION['oLP'];
+$lp = Session::read('oLP');
 $lp_theme_css = $lp->get_theme();
 
-/* SHOWING THE ADMIN TOOLS */
-
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
 
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
+$interbreadcrumb[] = array(
+    'url' => 'lp_controller.php?action=list',
+    'name' => get_lang('LearningPaths')
+);
 $interbreadcrumb[] = array(
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id",
     'name' => stripslashes($lp->get_name()),
@@ -59,7 +55,6 @@ $interbreadcrumb[] = array(
     'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
     'name' => get_lang('NewStep'),
 );
-
 
 Display::display_header(get_lang('LearnpathPrerequisites'), 'Path');
 
@@ -95,7 +90,7 @@ echo '<div class="prerequisites">';
 $lpItem = new learnpathItem($_GET['id']);
 if (isset($is_success) && $is_success == true) {
     echo $lp->display_manipulate($_GET['id'], $lpItem->get_type());
-    echo Display::return_message(get_lang("PrerequisitesAdded"));
+    echo Display::return_message(get_lang('PrerequisitesAdded'));
 } else {
     echo $lp->display_manipulate($_GET['id'], $lpItem->get_type());
     echo $lp->display_item_prerequisites_form($_GET['id']);

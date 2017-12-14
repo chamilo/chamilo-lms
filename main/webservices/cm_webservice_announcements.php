@@ -5,7 +5,6 @@
  * @package chamilo.webservices
  */
 require_once __DIR__.'/../inc/global.inc.php';
-$libpath = api_get_path(LIBRARY_PATH);
 require_once __DIR__.'/cm_webservice.php';
 
 /**

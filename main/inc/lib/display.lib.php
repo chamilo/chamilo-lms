@@ -56,8 +56,11 @@ class Display
      * @param string Optional help file name
      * @param string $page_header
      */
-    public static function display_header($tool_name = '', $help = null, $page_header = null)
-    {
+    public static function display_header(
+        $tool_name = '',
+        $help = null,
+        $page_header = null
+    ) {
         $origin = api_get_origin();
         $showHeader = true;
         if (isset($origin) && $origin == 'learnpath') {
@@ -106,7 +109,12 @@ class Display
     public static function display_reduced_header()
     {
         global $show_learnpath, $tool_name;
-        self::$global_template = new Template($tool_name, false, false, $show_learnpath);
+        self::$global_template = new Template(
+            $tool_name,
+            false,
+            false,
+            $show_learnpath
+        );
         echo self::$global_template->show_header_template();
     }
 
@@ -117,7 +125,12 @@ class Display
     {
         global $tool_name, $show_learnpath;
         $disable_js_and_css_files = true;
-        self::$global_template = new Template($tool_name, false, false, $show_learnpath);
+        self::$global_template = new Template(
+            $tool_name,
+            false,
+            false,
+            $show_learnpath
+        );
     }
 
     /**
@@ -126,7 +139,12 @@ class Display
     public static function set_header()
     {
         global $show_learnpath, $tool_name;
-        self::$global_template = new Template($tool_name, false, false, $show_learnpath);
+        self::$global_template = new Template(
+            $tool_name,
+            false,
+            false,
+            $show_learnpath
+        );
     }
 
     /**
@@ -146,11 +164,6 @@ class Display
         echo '</body></html>';
     }
 
-    public static function page()
-    {
-        return new Page();
-    }
-
     /**
      * Displays the tool introduction of a tool.
      *
@@ -158,10 +171,12 @@ class Display
      * @param string $tool These are the constants that are used for indicating the tools.
      * @param array $editor_config Optional configuration settings for the online editor.
      * return: $tool return a string array list with the "define" in main_api.lib
-     * @return html code for adding an introduction
+     * @return string html code for adding an introduction
      */
-    public static function display_introduction_section($tool, $editor_config = null)
-    {
+    public static function display_introduction_section(
+        $tool,
+        $editor_config = null
+    ) {
         echo self::return_introduction_section($tool, $editor_config);
     }
 
@@ -170,9 +185,10 @@ class Display
      * @param array $editor_config
      * @return null
      */
-    public static function return_introduction_section($tool, $editor_config = null)
-    {
-        $is_allowed_to_edit = api_is_allowed_to_edit();
+    public static function return_introduction_section(
+        $tool,
+        $editor_config = null
+    ) {
         $moduleId = $tool;
         if (api_get_setting('enable_tool_introduction') == 'true' || $tool == TOOL_COURSE_HOMEPAGE) {
             $introduction_section = null;
@@ -212,7 +228,6 @@ class Display
         $form_actions = array(),
         $style = 'table'
     ) {
-        global $origin;
         $column = isset($sorting_options['column']) ? $sorting_options['column'] : 0;
         $default_items_per_page = isset($paging_options['per_page']) ? $paging_options['per_page'] : 20;
         $table = new SortableTableFromArray($content, $column, $default_items_per_page);
@@ -348,7 +363,6 @@ class Display
     ) {
         $column = 0;
         $default_items_per_page = isset($paging_options['per_page']) ? $paging_options['per_page'] : 20;
-
         $table = new SortableTableFromArray($content, $column, $default_items_per_page, $name);
         $table->total_number_of_items = intval($elementCount);
         if (is_array($query_vars)) {
@@ -442,8 +456,11 @@ class Display
      *
      * @return void
      */
-    public static function display_normal_message($message, $filter = true, $returnValue = false)
-    {
+    public static function display_normal_message(
+        $message,
+        $filter = true,
+        $returnValue = false
+    ) {
         $message = self::return_message($message, 'normal', $filter);
         if ($returnValue) {
             return $message;
@@ -458,8 +475,11 @@ class Display
      *
      * @deprecated use Display::addFlash(Display::return_message($message, 'warning'));
      */
-    public static function display_warning_message($message, $filter = true, $returnValue = false)
-    {
+    public static function display_warning_message(
+        $message,
+        $filter = true,
+        $returnValue = false
+    ) {
         $message = self::return_message($message, 'warning', $filter);
         if ($returnValue) {
             return $message;
@@ -474,8 +494,11 @@ class Display
      * @deprecated use Display::addFlash(Display::return_message($message, 'confirm'));
      * @return void
      */
-    public static function display_confirmation_message($message, $filter = true, $returnValue = false)
-    {
+    public static function display_confirmation_message(
+        $message,
+        $filter = true,
+        $returnValue = false
+    ) {
         $message = self::return_message($message, 'confirm', $filter);
         if ($returnValue) {
             return $message;
@@ -493,8 +516,11 @@ class Display
      *
      * @return void
      */
-    public static function display_error_message($message, $filter = true, $returnValue = false)
-    {
+    public static function display_error_message(
+        $message,
+        $filter = true,
+        $returnValue = false
+    ) {
         $message = self::return_message($message, 'error', $filter);
         if ($returnValue) {
             return $message;
@@ -508,8 +534,11 @@ class Display
      * @param string $type
      * @param bool $filter
      */
-    public static function return_message_and_translate($message, $type = 'normal', $filter = true)
-    {
+    public static function return_message_and_translate(
+        $message,
+        $type = 'normal',
+        $filter = true
+    ) {
         $message = get_lang($message);
         echo self::return_message($message, $type, $filter);
     }
@@ -521,14 +550,21 @@ class Display
      * @param   bool    $filter Whether to XSS-filter or not
      * @return  string  Message wrapped into an HTML div
      */
-    public static function return_message($message, $type = 'normal', $filter = true)
-    {
+    public static function return_message(
+        $message,
+        $type = 'normal',
+        $filter = true
+    ) {
         if (empty($message)) {
             return '';
         }
 
         if ($filter) {
-            $message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
+            $message = api_htmlentities(
+                $message,
+                ENT_QUOTES,
+                api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding()
+            );
         }
 
         $class = '';
@@ -560,8 +596,11 @@ class Display
      * @param string  optional, class from stylesheet
      * @return string encrypted mailto hyperlink
      */
-    public static function encrypted_mailto_link($email, $clickable_text = null, $style_class = '')
-    {
+    public static function encrypted_mailto_link(
+        $email,
+        $clickable_text = null,
+        $style_class = ''
+    ) {
         if (is_null($clickable_text)) {
             $clickable_text = $email;
         }
@@ -587,7 +626,11 @@ class Display
                 $i }).';';
             }
         } else {
-            $hclickable_text = @htmlspecialchars($clickable_text, ENT_QUOTES, api_get_system_encoding());
+            $hclickable_text = @htmlspecialchars(
+                $clickable_text,
+                ENT_QUOTES,
+                api_get_system_encoding()
+            );
         }
         // Return encrypted mailto hyperlink
         return '<a href="'.$hmail.'"'.$style_class.' class="clickable_email_link">'.$hclickable_text.'</a>';
@@ -602,8 +645,12 @@ class Display
      * @param string  optional, class from stylesheet
      * @return string encrypted mailto hyperlink
      */
-    public static function icon_mailto_link($email, $icon_file = "mail.png", $icon_size = 22, $style_class = '')
-    {
+    public static function icon_mailto_link(
+        $email,
+        $icon_file = "mail.png",
+        $icon_size = 22,
+        $style_class = ''
+    ) {
         // "mailto:" already present?
         if (substr($email, 0, 7) != 'mailto:') {
             $email = 'mailto:'.$email;
@@ -619,7 +666,12 @@ class Display
             $i }).';';
         }
         // icon html code
-        $icon_html_source = self::return_icon($icon_file, $hmail, '', $icon_size);
+        $icon_html_source = self::return_icon(
+            $icon_file,
+            $hmail,
+            '',
+            $icon_size
+        );
         // Return encrypted mailto hyperlink
 
         return '<a href="'.$hmail.'"'.$style_class.' class="clickable_email_link">'.$icon_html_source.'</a>';
@@ -627,18 +679,18 @@ class Display
 
     /**
      * Prints an <option>-list with all letters (A-Z).
-     * @param char $selected_letter The letter that should be selected
+     * @param string $selected_letter The letter that should be selected
      * @todo This is English language specific implementation.
      * It should be adapted for the other languages.
      * @return string
      */
-    public static function get_alphabet_options($selected_letter = '')
+    public static function get_alphabet_options($selectedLetter = '')
     {
         $result = '';
         for ($i = 65; $i <= 90; $i++) {
             $letter = chr($i);
             $result .= '<option value="'.$letter.'"';
-            if ($selected_letter == $letter) {
+            if ($selectedLetter == $letter) {
                 $result .= ' selected="selected"';
             }
             $result .= '>'.$letter.'</option>';
@@ -730,6 +782,12 @@ class Display
         $alternateCssPath = api_get_path(SYS_PUBLIC_PATH).'css/';
         $alternateWebCssPath = api_get_path(WEB_PUBLIC_PATH).'css/';
 
+        // Avoid issues with illegal string offset for legacy calls to this
+        // method with an empty string rather than null or an empty array
+        if (empty($additional_attributes)) {
+            $additional_attributes = [];
+        }
+
         $image = trim($image);
 
         if (isset($size)) {
@@ -739,14 +797,14 @@ class Display
         }
 
         $size_extra = $size.'/';
-
-        // Checking the img/ folder
         $icon = $w_code_path.'img/'.$image;
-
         $theme = 'themes/chamilo/icons/';
 
         if ($loadThemeIcon) {
             $theme = 'themes/'.api_get_visual_theme().'/icons/';
+            if (is_file($alternateCssPath.$theme.$image)) {
+                $icon = $alternateWebCssPath.$theme.$image;
+            }
             // Checking the theme icons folder example: app/Resources/public/css/themes/chamilo/icons/XXX
             if (is_file($alternateCssPath.$theme.$size_extra.$image)) {
                 $icon = $alternateWebCssPath.$theme.$size_extra.$image;
@@ -809,8 +867,12 @@ class Display
      * @return string
      * @author Julio Montoya 2010
      */
-    public static function img($image_path, $alt_text = '', $additional_attributes = null, $filterPath = true)
-    {
+    public static function img(
+        $image_path,
+        $alt_text = '',
+        $additional_attributes = null,
+        $filterPath = true
+    ) {
         if (empty($image_path)) {
             // For some reason, the call to img() happened without a proper
             // image. Log the error and return an empty string to avoid
@@ -973,7 +1035,11 @@ class Display
             } else {
                 $blank_item_text = Security::remove_XSS($blank_item_text);
             }
-            $html .= self::tag('option', '-- '.$blank_item_text.' --', array('value' => '-1'));
+            $html .= self::tag(
+                'option',
+                '-- '.$blank_item_text.' --',
+                array('value' => '-1')
+            );
         }
         if ($values) {
             foreach ($values as $key => $value) {
@@ -1021,8 +1087,13 @@ class Display
      *
      * @return string
      */
-    public static function tabs($headers, $items, $id = 'tabs', $attributes = array(), $ul_attributes = array())
-    {
+    public static function tabs(
+        $headers,
+        $items,
+        $id = 'tabs',
+        $attributes = array(),
+        $ul_attributes = array()
+    ) {
         if (empty($headers) || count($headers) == 0) {
             return '';
         }
@@ -1049,7 +1120,15 @@ class Display
             $lis .= self::tag('li', $item, $ul_attributes);
             $i++;
         }
-        $ul = self::tag('ul', $lis, ['class' => 'nav nav-tabs tabs-margin', 'role'=> 'tablist', 'id' => 'ul_'.$id]);
+        $ul = self::tag(
+            'ul',
+            $lis,
+            [
+                'class' => 'nav nav-tabs tabs-margin',
+                'role' => 'tablist',
+                'id' => 'ul_'.$id
+            ]
+        );
 
         $i = 1;
         $divs = '';
@@ -1103,13 +1182,18 @@ class Display
             $lis .= self::tag('li', $item, array('class' => $class));
             $i++;
         }
-        return self::tag('ul', $lis, array('class' => 'nav nav-tabs tabs-margin'));
+
+        return self::tag(
+            'ul',
+            $lis,
+            array('class' => 'nav nav-tabs tabs-margin')
+        );
     }
 
     /**
      * In order to display a grid using jqgrid you have to:
      * @example
-     * After your Display::display_header function you have to add the nex javascript code:     *
+     * After your Display::display_header function you have to add the nex javascript code:
      * <script>
      *   echo Display::grid_js('my_grid_name', $url,$columns, $column_model, $extra_params,array());
      *   // for more information of this function check the grid_js() function
@@ -1150,10 +1234,12 @@ class Display
      *
      * @param   string $div_id div id
      * @param   string $url url where the jqgrid will ask for data (if datatype = json)
-     * @param   array $column_names Visible columns (you should use get_lang). An array in which we place the names of the columns.
+     * @param   array $column_names Visible columns (you should use get_lang).
+     * An array in which we place the names of the columns.
      *                    This is the text that appears in the head of the grid (Header layer).
      *                    Example: colname   {name:'date',     index:'date',   width:120, align:'right'},
-     * @param   array $column_model the column model :  Array which describes the parameters of the columns.This is the most important part of the grid.
+     * @param   array $column_model the column model :  Array which describes the parameters of the columns.
+     * This is the most important part of the grid.
      *                    For a full description of all valid values see colModel API. See the url above.
      * @param   array $extra_params extra parameters
      * @param   array $data data that will be loaded
@@ -1182,13 +1268,11 @@ class Display
         //This line should only be used/modified in case of having characters
         // encoding problems - see #6159
         //$column_names = array_map("utf8_encode", $column_names);
-
-        $obj->colNames      = $column_names;
-        $obj->colModel      = $column_model;
-        $obj->pager         = '#'.$div_id.'_pager';
+        $obj->colNames = $column_names;
+        $obj->colModel = $column_model;
+        $obj->pager = '#'.$div_id.'_pager';
         $obj->datatype = 'json';
         $obj->viewrecords = 'true';
-
         $all_value = 10000000;
 
         // Default row quantity
@@ -1218,10 +1302,25 @@ class Display
         if (!empty($extra_params['rowList'])) {
             $obj->rowList = $extra_params['rowList'];
         }
-        //Sets how many records we want to view in the grid
+
+        // Sets how many records we want to view in the grid
         $obj->rowNum = 20;
         if (!empty($extra_params['rowNum'])) {
             $obj->rowNum = $extra_params['rowNum'];
+        } else {
+            // Try to load max rows from Session
+            $urlInfo = parse_url($url);
+            if (isset($urlInfo['query'])) {
+                parse_str($urlInfo['query'], $query);
+                if (isset($query['a'])) {
+                    $action = $query['a'];
+                    // This value is set in model.ajax.php
+                    $savedRows = Session::read('max_rows_'.$action);
+                    if (!empty($savedRows)) {
+                        $obj->rowNum = $savedRows;
+                    }
+                }
+            }
         }
 
         if (!empty($extra_params['viewrecords'])) {
@@ -1345,25 +1444,25 @@ class Display
      * if the user never entered the course before, he will not see notification
      * icons. This function takes session ID into account (if any) and only shows
      * the corresponding notifications.
-     * @param array $course_info Course information array, containing at least elements 'db' and 'k'
+     * @param array $courseInfo Course information array, containing at least elements 'db' and 'k'
      * @param bool $loadAjax
      * @return string   The HTML link to be shown next to the course
      */
-    public static function show_notification($course_info, $loadAjax = true)
+    public static function show_notification($courseInfo, $loadAjax = true)
     {
-        if (empty($course_info)) {
+        if (empty($courseInfo)) {
             return '';
         }
 
         $t_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
         $tool_edit_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $course_code = Database::escape_string($course_info['code']);
+        $course_code = Database::escape_string($courseInfo['code']);
 
         $user_id = api_get_user_id();
-        $course_id = (int) $course_info['real_id'];
-        $sessionId = (int) $course_info['id_session'];
-        $status = (int) $course_info['status'];
+        $course_id = (int) $courseInfo['real_id'];
+        $sessionId = (int) $courseInfo['id_session'];
+        $status = (int) $courseInfo['status'];
 
         $loadNotificationsByAjax = api_get_configuration_value('user_portal_load_notification_by_ajax');
 
@@ -1382,21 +1481,17 @@ class Display
                 WHERE
                     c_id = $course_id AND
                     access_user_id = '$user_id' AND
-                    access_session_id ='".$sessionId."'";
-        $resLastTrackInCourse = Database::query($sql);
+                    access_session_id ='".$sessionId."'
+                ORDER BY access_date DESC 
+                LIMIT 1
+                ";
+        $result = Database::query($sql);
 
-        $oldestTrackDate = $oldestTrackDateOrig = '3000-01-01 00:00:00';
-        while ($lastTrackInCourse = Database::fetch_array($resLastTrackInCourse)) {
-            $lastTrackInCourseDate[$lastTrackInCourse['access_tool']] = $lastTrackInCourse['access_date'];
-            if ($oldestTrackDate > $lastTrackInCourse['access_date']) {
-                $oldestTrackDate = $lastTrackInCourse['access_date'];
-            }
-        }
-
-        if ($oldestTrackDate == $oldestTrackDateOrig) {
-            //if there was no connexion to the course ever, then take the
-            // course creation date as a reference
-            $oldestTrackDate = $course_info['creation_date'];
+        // latest date by default is the creation date
+        $latestDate = $courseInfo['creation_date'];
+        if (Database::num_rows($result)) {
+            $row = Database::fetch_array($result, 'ASSOC');
+            $latestDate = $row['access_date'];
         }
 
         $sessionCondition = api_get_session_condition(
@@ -1418,26 +1513,28 @@ class Display
         $result = Database::query($sql);
         $tools = Database::store_result($result);
 
-        $group_ids = GroupManager::get_group_ids($course_info['real_id'], $user_id);
+        $group_ids = GroupManager::get_group_ids($courseInfo['real_id'], $user_id);
         $group_ids[] = 0; //add group 'everyone'
         $notifications = array();
         if ($tools) {
             foreach ($tools as $tool) {
                 $toolName = $tool['name'];
                 // Fix to get student publications
-                if ($toolName == 'student_publication') {
-                    $toolName = 'work';
+                $toolCondition = " tool = '$toolName' AND ";
+                if ($toolName == 'student_publication' || $toolName == 'work') {
+                    $toolCondition = " (tool = 'work' OR tool = 'student_publication') AND ";
                 }
+
                 $toolName = addslashes(Database::escape_string($toolName));
 
                 $sql = "SELECT * FROM $tool_edit_table 
                         WHERE
                             c_id = $course_id AND
-                            tool = '$toolName' AND
+                            $toolCondition
                             lastedit_type NOT LIKE '%Deleted%' AND
                             lastedit_type NOT LIKE '%deleted%' AND
                             lastedit_type NOT LIKE '%DocumentInvisible%' AND
-                            lastedit_date > '$oldestTrackDate' AND
+                            lastedit_date > '$latestDate' AND
                             lastedit_user_id != $user_id $sessionCondition AND
                             visibility != 2 AND
                             (to_user_id IN ('$user_id', '0') OR to_user_id IS NULL) AND
@@ -1445,7 +1542,9 @@ class Display
                         ORDER BY lastedit_date DESC
                         LIMIT 1";
                 $result = Database::query($sql);
-                $latestChange = Database::fetch_array($result);
+
+                $latestChange = Database::fetch_array($result, 'ASSOC');
+
                 if ($latestChange) {
                     $latestChange['link'] = $tool['link'];
                     $latestChange['image'] = $tool['image'];
@@ -1456,7 +1555,7 @@ class Display
         }
 
         // Show all tool icons where there is something new.
-        $return = '&nbsp;';
+        $return = '';
         foreach ($notifications as $notification) {
             $toolName = $notification['tool'];
             if (!(
@@ -1519,7 +1618,7 @@ class Display
                 '&ref='.$notification['ref'].
                 '&gidReq='.$notification['to_group_id'].
                 '&id_session='.$sessionId
-            ).'&nbsp;';
+            ).PHP_EOL;
         }
 
         return $return;
@@ -1570,7 +1669,9 @@ class Display
             ) {
                 if (isset($session_info['duration']) && !empty($session_info['duration'])) {
                     $daysLeft = SessionManager::getDayLeftInSession($session_info, api_get_user_id());
-                    $session['duration'] = sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft);
+                    $session['duration'] = $daysLeft >= 0
+                        ? sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft)
+                        : get_lang('YourSessionTimeHasExpired');
                 }
                 $active = true;
             } else {
@@ -1685,7 +1786,7 @@ class Display
             if ($filter) {
                 $second_title = Security::remove_XSS($second_title);
             }
-            $title .= "<small> $second_title<small>";
+            $title .= "<small> $second_title</small>";
         }
         return '<'.$size.' class="page-header">'.$title.'</'.$size.'>';
     }
@@ -1858,6 +1959,7 @@ class Display
 
     /**
      * @param array $items
+     * @param string $class
      * @return null|string
      */
     public static function actions($items, $class = 'new_actions')
@@ -1899,7 +2001,10 @@ class Display
             return $text;
         }
 
-        return self::span($text, array('class' => 'boot-tooltip', 'title' => strip_tags($tip)));
+        return self::span(
+            $text,
+            array('class' => 'boot-tooltip', 'title' => strip_tags($tip))
+        );
     }
 
     /**
@@ -2274,20 +2379,38 @@ class Display
      * @param string $content
      * @param string $title
      * @param string $footer
-     * @param string $style primary|success|info|warning|danger
+     * @param string $type primary|success|info|warning|danger
      * @param string $extra
+     * @param string $id
+     * @param string $customColor
      *
      * @return string
      */
-    public static function panel($content, $title = '', $footer = '', $style = '', $extra = '')
-    {
-        $title = !empty($title) ? '<div class="panel-heading"><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
-        $footer = !empty($footer) ? '<div class="panel-footer ">'.$footer.'</div>' : '';
-        $styles = ['primary', 'success', 'info', 'warning', 'danger'];
-        $style = !in_array($style, $styles) ? 'default' : $style;
+    public static function panel(
+        $content,
+        $title = '',
+        $footer = '',
+        $type = 'default',
+        $extra = '',
+        $id = '',
+        $customColor = ''
+    ) {
+        $headerStyle = '';
+        if (!empty($customColor)) {
+            $headerStyle = 'style = "color: white; background-color: '.$customColor.'" ';
+        }
+
+        $title = !empty($title) ? '<div class="panel-heading" '.$headerStyle.' ><h3 class="panel-title">'.$title.'</h3>'.$extra.'</div>' : '';
+        $footer = !empty($footer) ? '<div class="panel-footer">'.$footer.'</div>' : '';
+        $typeList = ['primary', 'success', 'info', 'warning', 'danger'];
+        $style = !in_array($type, $typeList) ? 'default' : $type;
+
+        if (!empty($id)) {
+            $id = " id = $id ";
+        }
 
         return '
-            <div class="panel panel-'.$style.'">
+            <div '.$id.' class="panel panel-'.$style.'">
                 '.$title.'
                 '.self::contentPanel($content).'
                 '.$footer.'
@@ -2434,6 +2557,7 @@ class Display
      * @param bool|true $open
      * @param bool|false $fullClickable
      * @return null|string
+     * @todo rework function to easy use
      */
     public static function panelCollapse(
         $title,
@@ -2500,7 +2624,8 @@ HTML;
 
         return self::tip(
             date_to_str_ago($dateTime),
-            api_get_local_time($dateTime)
+            api_convert_and_format_date($dateTime, DATE_TIME_FORMAT_LONG)
+            //api_get_local_time($dateTime)
         );
     }
 

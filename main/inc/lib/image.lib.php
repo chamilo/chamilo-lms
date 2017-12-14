@@ -24,7 +24,10 @@ class Image
             if (class_exists('Imagick')) {
                 $this->image_wrapper = new ImagickWrapper($path);
             } else {
-                echo Display::return_message('Class Imagick not found', 'warning');
+                echo Display::return_message(
+                    'Class Imagick not found',
+                    'warning'
+                );
                 exit;
             }
         }
@@ -39,13 +42,21 @@ class Image
             if ($width >= $max_size_for_picture) {
                 // scale height
                 $new_height = round($height * ($max_size_for_picture / $width));
-                $this->image_wrapper->resize($max_size_for_picture, $new_height, 0);
+                $this->image_wrapper->resize(
+                    $max_size_for_picture,
+                    $new_height,
+                    0
+                );
             }
         } else { // height > $width
             if ($height >= $max_size_for_picture) {
                 // scale width
                 $new_width = round($width * ($max_size_for_picture / $height));
-                 $this->image_wrapper->resize($new_width, $max_size_for_picture, 0);
+                $this->image_wrapper->resize(
+                    $new_width,
+                    $max_size_for_picture,
+                    0
+                );
             }
         }
     }
@@ -61,10 +72,23 @@ class Image
         $width = intval($cropParameters[2]);
         $height = intval($cropParameters[3]);
 
-        $image = $this->image_wrapper->crop($x, $y, $width, $height, $src_width, $src_height);
+        $image = $this->image_wrapper->crop(
+            $x,
+            $y,
+            $width,
+            $height,
+            $src_width,
+            $src_height
+        );
         return $image;
     }
 
+    /**
+     * @param string $file
+     * @param int $compress
+     * @param null $convert_file_to
+     * @return bool
+     */
     public function send_image(
         $file = '',
         $compress = -1,
@@ -77,11 +101,17 @@ class Image
         );
     }
 
+    /**
+     * @return array
+     */
     public function get_image_size()
     {
         return $this->image_wrapper->get_image_size();
     }
 
+    /**
+     * @return array
+     */
     public function get_image_info()
     {
         return $this->image_wrapper->get_image_info();
@@ -124,6 +154,9 @@ abstract class ImageWrapper
     abstract function crop($x, $y, $width, $height, $src_width, $src_height);
     abstract function send_image($file = '', $compress = -1, $convert_file_to = null);
 
+    /**
+     * @return array
+     */
     public function get_image_info()
     {
         return array(
@@ -155,6 +188,9 @@ class ImagickWrapper extends ImageWrapper
           parent::__construct($path);
     }
 
+    /**
+     *
+     */
     public function set_image_wrapper()
     {
         if ($this->debug) error_log('Image::set_image_wrapper loaded');
@@ -175,11 +211,10 @@ class ImagickWrapper extends ImageWrapper
 
     public function fill_image_info()
     {
-        $image_info      = $this->image->identifyImage();
-
-        $this->width     = $image_info['geometry']['width'];
-        $this->height    = $image_info['geometry']['height'];
-        $this->type      = strtolower($this->image->getImageFormat());
+        $image_info = $this->image->identifyImage();
+        $this->width = $image_info['geometry']['width'];
+        $this->height = $image_info['geometry']['height'];
+        $this->type = strtolower($this->image->getImageFormat());
 
         if (in_array($this->type, $this->allowed_extensions)) {
             $this->image_validated = true;
@@ -233,8 +268,11 @@ class ImagickWrapper extends ImageWrapper
         $this->height = $height;
     }
 
-    public function send_image($file = '', $compress = -1, $convert_file_to = null)
-    {
+    public function send_image(
+        $file = '',
+        $compress = -1,
+        $convert_file_to = null
+    ) {
         if (!$this->image_validated) {
             return false;
         }
@@ -288,6 +326,11 @@ class ImagickWrapper extends ImageWrapper
 class GDWrapper extends ImageWrapper
 {
     public $bg;
+
+    /**
+     * GDWrapper constructor.
+     * @param $path
+     */
     public function __construct($path)
     {
         parent::__construct($path);
@@ -323,6 +366,9 @@ class GDWrapper extends ImageWrapper
         }
     }
 
+    /**
+     * @return array
+     */
     public function get_image_size()
     {
         $return_array = array('width'=>0, 'height'=>0);
@@ -448,6 +494,12 @@ class GDWrapper extends ImageWrapper
         @imagedestroy($src);
     }
 
+    /**
+     * @param string $file
+     * @param int $compress
+     * @param null $convert_file_to
+     * @return bool|int
+     */
     public function send_image($file = '', $compress = -1, $convert_file_to = null)
     {
         if (!$this->image_validated) {
@@ -500,7 +552,7 @@ class GDWrapper extends ImageWrapper
     /**
      * Convert image to black & white
      */
-    function convert2bw()
+    public function convert2bw()
     {
         if (!$this->image_validated) {
             return false;
@@ -515,7 +567,16 @@ class GDWrapper extends ImageWrapper
         imagealphablending($dest_img, false);
         imagesavealpha($dest_img, true);
         imagecolortransparent($dest_img, $transparent);
-        imagecopy($dest_img, $this->bg, 0, 0, 0, 0, imagesx($this->bg), imagesx($this->bg));
+        imagecopy(
+            $dest_img,
+            $this->bg,
+            0,
+            0,
+            0,
+            0,
+            imagesx($this->bg),
+            imagesx($this->bg)
+        );
         imagefilter($dest_img, IMG_FILTER_GRAYSCALE);
         $this->bg = $dest_img;
 

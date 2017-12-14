@@ -3,14 +3,15 @@
 
 /**
  *  This tool allows platform admins to add classes by uploading a CSV file
- *  @todo Add some langvars to DLTT
- * 	@package chamilo.admin
+ * @todo Add some langvars to DLTT
+ * @package chamilo.admin
  */
 
 /**
  * Validates imported data.
  */
-function validate_data($classes) {
+function validate_data($classes)
+{
     $errors = array();
     $usergroup = new UserGroup();
     foreach ($classes as $index => $class) {

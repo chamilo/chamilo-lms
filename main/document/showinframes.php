@@ -101,7 +101,7 @@ if (!$is_allowed_to_edit && !$is_visible) {
 }
 
 $pathinfo = pathinfo($header_file);
-$jplayer_supported_files = array('mp4', 'ogv', 'flv', 'm4v');
+$jplayer_supported_files = array('mp4', 'ogv', 'flv', 'm4v', 'webm');
 $jplayer_supported = false;
 
 if (in_array(strtolower($pathinfo['extension']), $jplayer_supported_files)) {
@@ -156,7 +156,6 @@ if (empty($document_data['parents'])) {
 }
 
 $this_section = SECTION_COURSES;
-$_SESSION['whereami'] = 'document/view';
 $nameTools = get_lang('Documents');
 
 /**
@@ -173,6 +172,7 @@ $frameheight = 135;
 if ($is_courseAdmin) {
     $frameheight = 165;
 }
+
 $js_glossary_in_documents = '
   $.frameReady(function(){
    //  $("<div>I am a div courses</div>").prependTo("body");
@@ -180,12 +180,12 @@ $js_glossary_in_documents = '
   {
     load: [
         { type:"script", id:"_fr1", src:"'.api_get_jquery_web_path().'"},
-        { type:"script", id:"_fr7", src:"'.api_get_path(WEB_PATH).'web/assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
-        { type:"script", id:"_fr4", src:"'.api_get_path(WEB_PATH).'web/assets/jquery-ui/jquery-ui.min.js"},
-        { type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_PATH).'web/assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
-        { type:"stylesheet", id:"_fr6", src:"'.api_get_path(WEB_PATH).'web/assets/jquery-ui/themes/smoothness/theme.css"},
+        { type:"script", id:"_fr7", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
+        { type:"script", id:"_fr4", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/jquery-ui.min.js"},
+        { type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
+        { type:"stylesheet", id:"_fr6", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/theme.css"},
         { type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
-        { type:"script", id:"_fr3", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php"}
+        { type:"script", id:"_fr3", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"}
     ]
   });';
 
@@ -249,6 +249,9 @@ if ($jplayer_supported) {
     $extension = api_strtolower($pathinfo['extension']);
     if ($extension == 'mp4') {
         $extension = 'm4v';
+    }
+    if ($extension == 'webm') {
+        $extension = 'webmv';
     }
     $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
     $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skin/blue.monday/css/jplayer.blue.monday.css" type="text/css">';

@@ -14,8 +14,8 @@ $id_session = intval($_GET['id_session']);
 SessionManager::protectSession($id_session);
 
 // Database Table Definitions
-$tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
@@ -23,9 +23,9 @@ if (empty($id_session)) {
     api_not_allowed();
 }
 
-$page   = intval($_GET['page']);
-$action = $_REQUEST['action'];
-$sort   = in_array($_GET['sort'], array('title', 'nbr_users')) ? $_GET['sort'] : 'title';
+$page = isset($_GET['page']) ? intval($_GET['page']) : 0;
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+$sort = isset($_GET['sort']) && in_array($_GET['sort'], array('title', 'nbr_users')) ? $_GET['sort'] : 'title';
 
 $result = Database::query("SELECT name FROM $tbl_session WHERE id='$id_session'");
 
@@ -52,8 +52,8 @@ if ($action == 'delete') {
     exit();
 }
 
-$limit  = 20;
-$from   = $page * $limit;
+$limit = 20;
+$from = $page * $limit;
 
 $sql = "SELECT c.id, c.code, c.title, nbr_users
 		FROM $tbl_session_rel_course, $tbl_course c
@@ -64,7 +64,6 @@ $result = Database::query($sql);
 $Courses = Database::store_result($result);
 $tool_name = api_htmlentities($session_name, ENT_QUOTES, $charset).' : '.get_lang('CourseListInSession');
 
-//$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => "session_list.php", "name" => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".Security::remove_XSS($_REQUEST['id_session']), "name" => get_lang('SessionOverview'));
 

@@ -4,9 +4,9 @@
 use ChamiloSession as Session;
 
 /**
- *	This file allows creating audio files from a text.
+ * This file allows creating audio files from a text.
  *
- *	@package chamilo.document
+ * @package chamilo.document
  *
  * @author Juan Carlos Raña Trabado
  * @since 30/January/2011
@@ -14,7 +14,6 @@ use ChamiloSession as Session;
 */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$_SESSION['whereami'] = 'document/createpaint';
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('PhotoRetouching');
 $groupRights = Session::read('group_member_with_upload_rights');
@@ -43,14 +42,14 @@ $dir = $document_data['path'];
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 //path for pixlr save
-$_SESSION['paint_dir'] = Security::remove_XSS($dir);
-if ($_SESSION['paint_dir'] == '/') {
-    $_SESSION['paint_dir'] = '';
+$paintDir = Security::remove_XSS($dir);
+if ($paintDir == '/') {
+    $paintDir = '';
 }
-$_SESSION['paint_file'] = get_lang('NewImage');
+Session::write('paint_dir', $paintDir);
+Session::write('paint_file', get_lang('NewImage'));
 
 // Please, do not modify this dirname formatting
-
 if (strstr($dir, '..')) {
 	$dir = '/';
 }
@@ -116,17 +115,26 @@ if (isset ($group)) {
 
 // Interbreadcrumb for the current directory root path
 if (empty($document_data['parents'])) {
-	$interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
+    $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
 } else {
     foreach ($document_data['parents'] as $document_sub_data) {
-        $interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
+        $interbreadcrumb[] = array(
+            'url' => $document_sub_data['document_url'],
+            'name' => $document_sub_data['title']
+        );
     }
 }
 Display :: display_header($nameTools, 'Doc');
 
 echo '<div class="actions">';
 echo '<a href="document.php?id='.$document_id.'">'.
-    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon(
+        'back.png',
+        get_lang('BackTo').' '.get_lang('DocumentsOverview'),
+        '',
+        ICON_SIZE_MEDIUM
+    ).
+    '</a>';
 echo '</div>';
 
 // pixlr
@@ -141,7 +149,7 @@ $langpixlr = isset($pixlr_code_translation_table[$langpixlr]) ? $pixlredit_code_
 $loc = $langpixlr; // deprecated ?? TODO:check pixlr read user browser
 
 $exit_path = api_get_path(WEB_CODE_PATH).'document/exit_pixlr.php';
-$_SESSION['exit_pixlr'] = $document_data['path'];
+Session::write('exit_pixlr', $document_data['path']);
 $referrer = "Chamilo";
 $target_path = api_get_path(WEB_CODE_PATH).'document/save_pixlr.php';
 $target = $target_path;
@@ -164,7 +172,7 @@ if ($_SERVER['HTTP_HOST'] == "localhost") {
 } else {
     $credentials = "false";
 }
-$pixlr_url = api_get_protocol().'://pixlr.com/editor/?title='.$title.'&image='.$image.'&loc='.$loc.'&referrer='.$referrer.'&target='.$target.'&exit='.$exit_path.'&locktarget='.$locktarget.'&locktitle='.$locktitle.'&credentials='.$credentials;
+$pixlr_url = '//pixlr.com/editor/?title='.$title.'&image='.$image.'&loc='.$loc.'&referrer='.$referrer.'&target='.$target.'&exit='.$exit_path.'&locktarget='.$locktarget.'&locktitle='.$locktitle.'&credentials='.$credentials;
 ?>
 <script>
 

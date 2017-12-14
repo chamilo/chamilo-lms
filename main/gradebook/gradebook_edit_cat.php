@@ -80,12 +80,12 @@ if ($form->validate()) {
         $cat->setIsRequirement(false);
     }
     $cat->save();
-    header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?editcat=&selectcat='.$cat->get_parent_id().'&'.api_get_cidreq());
+    header('Location: '.Category::getUrl().'editcat=&selectcat='.$cat->get_parent_id());
     exit;
 }
 $selectcat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : '';
 $interbreadcrumb[] = array(
-    'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$selectcat.'&'.api_get_cidreq(),
+    'url' => Category::getUrl().'selectcat='.$selectcat,
     'name' => get_lang('Gradebook')
 );
 $this_section = SECTION_COURSES;

@@ -27,15 +27,20 @@ abstract class ChamiloForm
 
         $attributes = array('style' => 'width: 60%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;'));
         // $this->_form = new FormValidator($mode.'_instance', 'post', $returnurl, '', $attributes, true);
-        $this->_form = new FormValidator($mode.'_instance', 'post', $returnurl, '', $attributes);
+        $this->_form = new FormValidator(
+            $mode.'_instance',
+            'post',
+            $returnurl,
+            '',
+            $attributes
+        );
     }
 
     public abstract function definition();
     public abstract function validation($data, $files = null);
 
-    public function validate(
-
-    ) {
+    public function validate()
+    {
         return $this->_form->validate();
     }
 
@@ -44,7 +49,8 @@ abstract class ChamiloForm
         return $this->_form->display();
     }
 
-    public function definition_after_data() {
+    public function definition_after_data()
+    {
     }
 
     public function return_form()
@@ -348,9 +354,21 @@ class InstanceForm extends ChamiloForm
         $form->addElement('hidden', 'registeronly');
 
         $form->addHeader($plugin->get_lang('hostdefinition'));
-        $form->addText('sitename', [$plugin->get_lang('sitename'), $plugin->get_lang('SiteNameExample')]);
+        $form->addText(
+            'sitename',
+            [
+                $plugin->get_lang('sitename'),
+                $plugin->get_lang('SiteNameExample')
+            ]
+        );
         $form->applyFilter('sitename', 'trim');
-        $form->addText('institution', [$plugin->get_lang('institution'), $plugin->get_lang('InstitutionExample')]);
+        $form->addText(
+            'institution',
+            [
+                $plugin->get_lang('institution'),
+                $plugin->get_lang('InstitutionExample')
+            ]
+        );
         $form->applyFilter('institution', 'trim');
 
         // Host's name.
@@ -385,11 +403,21 @@ class InstanceForm extends ChamiloForm
         $form->addElement('header', $plugin->get_lang('dbgroup'));
 
         // Database host.
-        $form->addElement('text', 'db_host', $this->_plugin->get_lang('dbhost'), array('id' => 'id_vdbhost'));
+        $form->addElement(
+            'text',
+            'db_host',
+            $this->_plugin->get_lang('dbhost'),
+            array('id' => 'id_vdbhost')
+        );
         $form->applyFilter('db_host', 'trim');
 
         // Database login.
-        $form->addElement('text', 'db_user', $this->_plugin->get_lang('dbuser'), array('id' => 'id_vdbuser'));
+        $form->addElement(
+            'text',
+            'db_user',
+            $this->_plugin->get_lang('dbuser'),
+            array('id' => 'id_vdbuser')
+        );
         $form->applyFilter('db_user', 'trim');
 
         // Database password.
@@ -401,7 +429,12 @@ class InstanceForm extends ChamiloForm
         );
 
         // Database name.
-        $form->addText('main_database', [$plugin->get_lang('maindatabase'), $plugin->get_lang('DatabaseDescription')]);
+        $form->addText('main_database',
+            [
+                $plugin->get_lang('maindatabase'),
+                $plugin->get_lang('DatabaseDescription')
+            ]
+        );
 
         // Button for testing database connection.
         $form->addElement(
@@ -478,10 +511,19 @@ class InstanceForm extends ChamiloForm
             }
         }
 
-        $form->addButtonSave($this->_plugin->get_lang('savechanges'), 'submitbutton');
+        $form->addButtonSave(
+            $this->_plugin->get_lang('savechanges'),
+            'submitbutton'
+        );
 
         // Rules
-        $form->addRule('sitename', $this->_plugin->get_lang('sitenameinputerror'), 'required', null, 'client');
+        $form->addRule(
+            'sitename',
+            $this->_plugin->get_lang('sitenameinputerror'),
+            'required',
+            null,
+            'client'
+        );
         $form->addRule(
             'institution',
             $this->_plugin->get_lang('institutioninputerror'),
@@ -490,7 +532,13 @@ class InstanceForm extends ChamiloForm
             'client'
         );
 
-        $form->addRule('root_web', $this->_plugin->get_lang('rootwebinputerror'), 'required', null, 'client');
+        $form->addRule(
+            'root_web',
+            $this->_plugin->get_lang('rootwebinputerror'),
+            'required',
+            null,
+            'client'
+        );
         $form->addRule(
             'main_database',
             $this->_plugin->get_lang('databaseinputerror'),

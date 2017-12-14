@@ -30,8 +30,7 @@ if ($bbb->isGlobalConference()) {
     api_protect_course_script(true);
 }
 
-$message = null;
-
+$message = '';
 if ($conferenceManager) {
     switch ($action) {
         case 'add_to_calendar':
@@ -76,6 +75,7 @@ if ($conferenceManager) {
 
             Display::addFlash($message);
             header('Location: '.$bbb->getListingUrl());
+            exit;
             break;
         case 'end':
             $bbb->endMeeting($_GET['id']);
@@ -129,7 +129,14 @@ $maxUsers = $bbb->getMaxUsersLimit();
 $status = $bbb->isServerRunning();
 $meetingExists = $bbb->meetingExists($bbb->getCurrentVideoConferenceName());
 $showJoinButton = false;
-if (($meetingExists || $conferenceManager) && ($maxUsers == 0 || $maxUsers > $usersOnline)) {
+
+// Only conference manager can see the join button
+$userCanSeeJoinButton = $conferenceManager;
+if ($bbb->isGlobalConference() && $bbb->isGlobalConferencePerUserEnabled()) {
+    // Any user can see the "join button" BT#12620
+    $userCanSeeJoinButton = true;
+}
+if (($meetingExists || $userCanSeeJoinButton) && ($maxUsers == 0 || $maxUsers > $usersOnline)) {
     $showJoinButton = true;
 }
 $conferenceUrl = $bbb->getConferenceUrl();

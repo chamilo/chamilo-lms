@@ -205,7 +205,6 @@ function process_uploaded_file($uploaded_file, $show_output = true)
  *
  * So far only use for unzip_uploaded_document function.
  * If no output wanted on success, set to false.
- * @param string $comment
  * @return string path of the saved file
  */
 function handle_uploaded_document(
@@ -1121,6 +1120,16 @@ function unzip_uploaded_document(
 function clean_up_files_in_zip($p_event, &$p_header)
 {
     $originalStoredFileName = $p_header['stored_filename'];
+    $baseName = basename($originalStoredFileName);
+    // Skip files
+    $skipFiles = [
+        '__MACOSX',
+        '.Thumbs.db',
+        'Thumbs.db',
+    ];
+    if (in_array($baseName, $skipFiles)) {
+        return 0;
+    }
     $modifiedStoredFileName = clean_up_path($originalStoredFileName);
     $p_header['filename'] = str_replace($originalStoredFileName, $modifiedStoredFileName, $p_header['filename']);
 
@@ -1215,14 +1224,14 @@ function filter_extension(&$filename)
 /**
  * Adds a new document to the database
  *
- * @param array $_course
+ * @param array $courseInfo
  * @param string $path
- * @param string $filetype
- * @param int $filesize
+ * @param string $fileType
+ * @param int $fileSize
  * @param string $title
  * @param string $comment
  * @param int $readonly
- * @param bool $save_visibility
+ * @param bool $saveVisibility
  * @param int $group_id group.id
  * @param int $session_id Session ID, if any
  * @param int $userId creator id
@@ -1230,14 +1239,14 @@ function filter_extension(&$filename)
  * @return int id if inserted document
  */
 function add_document(
-    $_course,
+    $courseInfo,
     $path,
-    $filetype,
-    $filesize,
+    $fileType,
+    $fileSize,
     $title,
     $comment = null,
     $readonly = 0,
-    $save_visibility = true,
+    $saveVisibility = true,
     $group_id = null,
     $session_id = 0,
     $userId = 0
@@ -1246,30 +1255,29 @@ function add_document(
     $userId = empty($userId) ? api_get_user_id() : $userId;
 
     $readonly = intval($readonly);
-    $c_id = $_course['real_id'];
-    $table_document = Database::get_course_table(TABLE_DOCUMENT);
-
+    $c_id = $courseInfo['real_id'];
     $params = [
         'c_id' => $c_id,
         'path' => $path,
-        'filetype' => $filetype,
-        'size' => $filesize,
+        'filetype' => $fileType,
+        'size' => $fileSize,
         'title' => $title,
         'comment' => $comment,
         'readonly' => $readonly,
         'session_id' => $session_id,
     ];
-    $documentId = Database::insert($table_document, $params);
+    $table = Database::get_course_table(TABLE_DOCUMENT);
+    $documentId = Database::insert($table, $params);
     if ($documentId) {
-        $sql = "UPDATE $table_document SET id = iid WHERE iid = $documentId";
+        $sql = "UPDATE $table SET id = iid WHERE iid = $documentId";
         Database::query($sql);
 
-        if ($save_visibility) {
+        if ($saveVisibility) {
             api_set_default_visibility(
                 $documentId,
                 TOOL_DOCUMENT,
                 $group_id,
-                $_course,
+                $courseInfo,
                 $session_id,
                 $userId
             );
@@ -1335,12 +1343,11 @@ function item_property_update_on_folder($_course, $path, $user_id)
     $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
     // Get the time
-    $time = date('Y-m-d H:i:s', time());
+    $time = api_get_utc_datetime();
 
     // Det all paths in the given path
     // /folder/subfolder/subsubfolder/file
     // if file is updated, subsubfolder, subfolder and folder are updated
-
     $exploded_path = explode('/', $path);
     $course_id = api_get_course_int_id();
     $newpath = '';
@@ -1348,35 +1355,22 @@ function item_property_update_on_folder($_course, $path, $user_id)
         // We don't want a slash before our first slash
         if ($key != 0) {
             $newpath .= '/'.$value;
-
-            //echo 'path= '.$newpath.'<br />';
             // Select ID of given folder
             $folder_id = DocumentManager::get_document_id($_course, $newpath);
 
             if ($folder_id) {
                 $sql = "UPDATE $table SET
-				        lastedit_date='$time',lastedit_type='DocumentInFolderUpdated', lastedit_user_id='$user_id'
-						WHERE c_id = $course_id AND tool='".TOOL_DOCUMENT."' AND ref='$folder_id'";
+				        lastedit_date = '$time',
+				        lastedit_type = 'DocumentInFolderUpdated', 
+				        lastedit_user_id='$user_id'
+						WHERE 
+						    c_id = $course_id AND 
+						    tool='".TOOL_DOCUMENT."' AND 
+						    ref = '$folder_id'";
                 Database::query($sql);
             }
         }
     }
-}
-
-/**
- * Returns the directory depth of the file.
- *
- * @author	Olivier Cauberghe <olivier.cauberghe@ugent.be>
- * @param	path+filename eg: /main/document/document.php
- * @return	The directory depth
- */
-function get_levels($filename)
-{
-    $levels = explode('/', $filename);
-    if (empty($levels[count($levels) - 1])) {
-        unset($levels[count($levels) - 1]);
-    }
-    return count($levels);
 }
 
 /**
@@ -1506,8 +1500,8 @@ function create_unexisting_directory(
     $to_user_id,
     $base_work_dir,
     $desired_dir_name,
-    $title = null,
-    $visibility = null,
+    $title = '',
+    $visibility = '',
     $generateNewNameIfExists = false
 ) {
     $course_id = $_course['real_id'];
@@ -1566,7 +1560,6 @@ function create_unexisting_directory(
         );
 
         if ($result) {
-
             // Check if pathname already exists inside document table
             $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
             $sql = "SELECT id, path FROM $tbl_document
@@ -1751,31 +1744,6 @@ function replace_img_path_in_html_file($original_img_path, $new_img_path, $html_
 }
 
 /**
- * Creates a file containing an html redirection to a given url
- *
- * @author Hugues Peeters <hugues.peeters@claroline.net>
- * @param string $file_path
- * @param string $url
- * @return void
- */
-function create_link_file($file_path, $url)
-{
-    $file_content = '<html>'
-        .'<head>'
-        .'<meta http-equiv="refresh" content="1;url='.$url.'">'
-        .'</head>'
-        .'<body>'
-        .'</body>'
-        .'</html>';
-    if (file_exists($file_path)) {
-        if (!($fp = fopen($file_path, 'w'))) {
-            return false;
-        }
-        return fwrite($fp, $file_content);
-    }
-}
-
-/**
  * Checks the extension of a file, if it's .htm or .html
  * we use search_img_from_html to get all image paths in the file
  *
@@ -1902,7 +1870,7 @@ function add_all_documents_in_folder_to_database(
                     if ($documentId) {
                         $newFolderData = DocumentManager::get_document_data_by_id(
                             $documentId,
-                            $courseInfo,
+                            $courseInfo['code'],
                             false,
                             $sessionId
                         );

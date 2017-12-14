@@ -14,20 +14,15 @@ $current_course_tool = TOOL_GRADEBOOK;
 
 api_protect_course_script(true);
 api_block_anonymous_users();
-
-if (!api_is_allowed_to_edit()) {
-    header('Location: /index.php');
-    exit;
-}
+GradebookUtils::block_students();
 
 $my_selectcat = isset($_GET['selectcat']) ? intval($_GET['selectcat']) : '';
 
 if (empty($my_selectcat)) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 $course_id = GradebookUtils::get_course_id_by_link_id($my_selectcat);
-
 $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 $tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
@@ -93,7 +88,7 @@ $parent_cat = Category::load($parent_id);
 
 $my_category = array();
 $cat = new Category();
-$my_category = $cat->shows_all_information_an_category($my_selectcat);
+$my_category = $cat->showAllCategoryInfo($my_selectcat);
 
 $original_total = $my_category['weight'];
 $masked_total = $parent_cat[0]->get_weight();
@@ -106,14 +101,23 @@ foreach ($links as &$row) {
     $item_weight = $row['weight'];
     $sql = 'SELECT * FROM '.GradebookUtils::get_table_type_course($row['type']).'
             WHERE c_id = '.$course_id.' AND '.$table_evaluated[$row['type']][2].' = '.$row['ref_id'];
+
     $result = Database::query($sql);
     $resource_name = Database::fetch_array($result);
 
     if (isset($resource_name['lp_type'])) {
         $resource_name = $resource_name[4];
     } else {
-        $resource_name = $resource_name[3];
+        switch ($row['type']) {
+            case LINK_EXERCISE:
+                $resource_name = $resource_name['title'];
+                break;
+            default:
+                $resource_name = $resource_name[3];
+                break;
+        }
     }
+
     $row['resource_name'] = $resource_name;
 
     // Update only if value changed
@@ -128,12 +132,13 @@ foreach ($links as &$row) {
     }
 
     $output .= '<tr><td>'.GradebookUtils::build_type_icon_tag($row['type']).'</td>
-               <td> '.$resource_name.' '.Display::label(
+               <td> '.$resource_name.' '.
+        Display::label(
             $table_evaluated[$row['type']][3],
             'info'
         ).' </td>';
     $output .= '<td>
-                    <input type="hidden" name="link_'.$row['id'].'" value="'.$resource_name.'" />
+                    <input type="hidden" name="link_'.$row['id'].'" value="1" />
                     <input size="10" type="text" name="link['.$row['id'].']" value="'.$item_weight.'"/>
                </td></tr>';
 }
@@ -156,11 +161,9 @@ foreach ($evaluations as $evaluationRow) {
 
     $output .= '<tr>
                 <td>'.GradebookUtils::build_type_icon_tag('evalnotempty').'</td>
-                <td>'.$evaluationRow['name'].' '.Display::label(
-            get_lang('Evaluation')
-        ).'</td>';
+                <td>'.$evaluationRow['name'].' '.Display::label(get_lang('Evaluation')).'</td>';
     $output .= '<td>
-                    <input type="hidden" name="eval_'.$evaluationRow['id'].'" value="'.$evaluationRow['name'].'" />
+                    <input type="hidden" name="eval_'.$evaluationRow['id'].'" value="1" />
                     <input type="text" size="10" name="evaluation['.$evaluationRow['id'].']" value="'.$item_weight.'"/>
                 </td></tr>';
 }
@@ -224,27 +227,21 @@ if ($form->validate()) {
 
 // 	DISPLAY HEADERS AND MESSAGES
 if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
-    if (isset ($_GET['studentoverview'])) {
+    if (isset($_GET['studentoverview'])) {
         $interbreadcrumb[] = array(
-            'url' => Security::remove_XSS(
-                    $_SESSION['gradebook_dest']
-                ).'?selectcat='.$my_selectcat,
+            'url' => Category::getUrl().'selectcat='.$my_selectcat,
             'name' => get_lang('Gradebook'),
         );
         Display:: display_header(get_lang('FlatView'));
-    } elseif (isset ($_GET['search'])) {
+    } elseif (isset($_GET['search'])) {
         $interbreadcrumb[] = array(
-            'url' => Security::remove_XSS(
-                    $_SESSION['gradebook_dest']
-                ).'?selectcat='.$my_selectcat,
+            'url' => Category::getUrl().'selectcat='.$my_selectcat,
             'name' => get_lang('Gradebook'),
         );
         Display:: display_header(get_lang('SearchResults'));
     } else {
         $interbreadcrumb[] = array(
-            'url' => Security::remove_XSS(
-                    $_SESSION['gradebook_dest']
-                ).'?selectcat=1',
+            'url' => Category::getUrl().'selectcat=1',
             'name' => get_lang('Gradebook'),
         );
         $interbreadcrumb[] = array(
@@ -256,9 +253,7 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 }
 ?>
     <div class="actions">
-        <a href="<?php echo Security::remove_XSS(
-                $_SESSION['gradebook_dest']
-            ).'?'.$my_api_cidreq ?>&selectcat=<?php echo $my_selectcat ?>">
+        <a href="<?php echo Category::getUrl(); ?>selectcat=<?php echo $my_selectcat ?>">
             <?php echo Display::return_icon(
                 'back.png',
                 get_lang('FolderView'),

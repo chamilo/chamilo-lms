@@ -54,7 +54,7 @@ if (!empty($_REQUEST['path'])) {
 $origin = isset($origin) ? $origin : null;
 
 if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
-    if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
+    if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_session_general_coach()) {
         $load_extra_data = false;
         if (isset($_REQUEST['extra_data']) && $_REQUEST['extra_data'] == 1) {
             $load_extra_data = true;
@@ -71,7 +71,7 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
 $actions = null;
 if ($is_allowedToEdit && $origin != 'learnpath') {
     // the form
-    if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
+    if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_session_general_coach()) {
         $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&path='.$hotpotatoes_path.' ">'.
             Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
     }
@@ -153,7 +153,7 @@ $form->addElement('radio', 'export_format', null, get_lang('ExportAsCSV'), 'csv'
 //$form->addElement('radio', 'export_format', null, get_lang('ExportAsXLS'), 'xls', array('id' => 'export_format_xls_label'));
 //$form->addElement('checkbox', 'load_extra_data', null, get_lang('LoadExtraData'), '0', array('id' => 'export_format_xls_label'));
 $form->setDefaults(array('export_format' => 'csv'));
-$extra .= $form->return_form();
+$extra .= $form->returnForm();
 $extra .= '</div>';
 
 if ($is_allowedToEdit) {
@@ -290,10 +290,17 @@ function exportExcel() {
 
 $(function() {
 <?php
-    echo Display::grid_js('results', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
-
+    echo Display::grid_js(
+        'results',
+        $url,
+        $columns,
+        $column_model,
+        $extra_params,
+        array(),
+        $action_links,
+        true
+    );
     if ($is_allowedToEdit || $is_tutor) { ?>
-
         //setSearchSelect("status");
         //
         //view:true, del:false, add:false, edit:false, excel:true}

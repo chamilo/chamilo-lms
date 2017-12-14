@@ -4,9 +4,9 @@
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- *	This is the file manage library for Chamilo.
- *	Include/require it in your code to use its functionality.
- *	@package chamilo.library
+ * This is the file manage library for Chamilo.
+ * Include/require it in your code to use its functionality.
+ * @package chamilo.library
  */
 
 /**
@@ -66,7 +66,7 @@ function my_delete($file)
  * @author Amary <MasterNES@aol.com> (from Nexen.net)
  * @author Olivier Brouckaert <oli.brouckaert@skynet.be>
  *
- * @param string	$dir		directory to remove
+ * @param string $dir directory to remove
  */
 function removeDir($dir)
 {
@@ -130,40 +130,40 @@ function folder_is_empty($in_folder)
  * @return boolean true if succeed, false otherwise
  * @see rename() uses the check_name_exist() and php2phps() functions
  */
-function my_rename($file_path, $new_file_name) {
+function my_rename($file_path, $new_file_name)
+{
+    $save_dir = getcwd();
+    $path = dirname($file_path);
+    $old_file_name = basename($file_path);
+    $new_file_name = api_replace_dangerous_char($new_file_name);
 
-	$save_dir = getcwd();
-	$path = dirname($file_path);
-	$old_file_name = basename($file_path);
-	$new_file_name = api_replace_dangerous_char($new_file_name);
+    // If no extension, take the old one
+    if ((strpos($new_file_name, '.') === false) && ($dotpos = strrpos($old_file_name, '.'))) {
+        $new_file_name .= substr($old_file_name, $dotpos);
+    }
 
-	// If no extension, take the old one
-	if ((strpos($new_file_name, '.') === false) && ($dotpos = strrpos($old_file_name, '.'))) {
-		$new_file_name .= substr($old_file_name, $dotpos);
-	}
+    // Note: still possible: 'xx.yy' -rename-> '.yy' -rename-> 'zz'
+    // This is useful for folder names, where otherwise '.' would be sticky
 
-	// Note: still possible: 'xx.yy' -rename-> '.yy' -rename-> 'zz'
-	// This is useful for folder names, where otherwise '.' would be sticky
+    // Extension PHP is not allowed, change to PHPS
+    $new_file_name = php2phps($new_file_name);
 
-	// Extension PHP is not allowed, change to PHPS
-	$new_file_name = php2phps($new_file_name);
+    if ($new_file_name == $old_file_name) {
+        return $old_file_name;
+    }
 
-	if ($new_file_name == $old_file_name) {
-		return $old_file_name;
-	}
+    if (strtolower($new_file_name) != strtolower($old_file_name) && check_name_exist($path.'/'.$new_file_name)) {
+        return false;
+    }
+    // On a Windows server, it would be better not to do the above check
+    // because it succeeds for some new names resembling the old name.
+    // But on Unix/Linux the check must be done because rename overwrites.
 
-	if (strtolower($new_file_name) != strtolower($old_file_name) && check_name_exist($path.'/'.$new_file_name)) {
-		return false;
-	}
-	// On a Windows server, it would be better not to do the above check
-	// because it succeeds for some new names resembling the old name.
-	// But on Unix/Linux the check must be done because rename overwrites.
+    chdir($path);
+    $res = rename($old_file_name, $new_file_name) ? $new_file_name : false;
+    chdir($save_dir);
 
-	chdir($path);
-	$res = rename($old_file_name, $new_file_name) ? $new_file_name : false;
-	chdir($save_dir);
-
-	return $res;
+    return $res;
 }
 
 /**
@@ -214,14 +214,16 @@ function move($source, $target, $forceMove = true, $moveContent = false)
             if ($forceMove && !$isWindowsOS && $canExec) {
                 if ($moveContent) {
                     $base = basename($source);
-                    $out = []; $retVal = -1;
+                    $out = [];
+                    $retVal = -1;
                     exec('mv '.$source.'/* '.$target.'/'.$base, $out, $retVal);
                     if ($retVal !== 0) {
                         return false; // mv should return 0 on success
                     }
                     exec('rm -rf '.$source);
                 } else {
-                    $out = []; $retVal = -1;
+                    $out = [];
+                    $retVal = -1;
                     exec("mv $source $target", $out, $retVal);
                     if ($retVal !== 0) {
                         error_log("Chamilo error fileManage.lib.php: mv $source $target\n");
@@ -264,36 +266,51 @@ function copyDirTo($source, $destination, $move = true)
 }
 
 /**
- * Extracting extension of a filename
+ * Copy a directory and its directories (not files) to an other area
  *
- * @returns array
- * @param 	string	$filename 		filename
+ * @param string $source the path of the directory to move
+ * @param string $destination the path of the new area
+ * @return bool false on error
  */
-function getextension($filename)
+function copyDirWithoutFilesTo($source, $destination)
 {
-	$bouts = explode('.', $filename);
-	return array(array_pop($bouts), implode('.', $bouts));
+    $fs = new Filesystem();
+
+    if (!is_dir($source)) {
+        return false;
+    }
+
+    if (!$fs->exists($destination)) {
+        $fs->mkdir($destination);
+    }
+
+    $dirIterator = new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS);
+    $iterator = new RecursiveIteratorIterator($dirIterator, RecursiveIteratorIterator::SELF_FIRST);
+
+    /** @var \SplFileInfo $item */
+    foreach ($iterator as $item) {
+        if ($item->isFile()) {
+            continue;
+        }
+
+        $newDir = $destination.'/'.$item->getFilename();
+
+        if (!$fs->exists($newDir)) {
+            $fs->mkdir($destination.'/'.$item->getFilename());
+        }
+    }
+
+    return true;
 }
 
 /**
- * Calculation size of a directory
+ * Extracting extension of a filename
  *
- * @returns integer size
- * @param 	string	$root path of dir to measure
- * @param 	boolean $recursive if true , include subdirectory in total
+ * @returns array
+ * @param    string $filename filename
  */
-function dirsize($root, $recursive = true) {
-	$dir = @opendir($root);
-	$size = 0;
-	while ($file = @readdir($dir)) {
-		if (!in_array($file, array('.', '..'))) {
-			if (is_dir($root.'/'.$file)) {
-				$size += $recursive ? dirsize($root.'/'.$file) : 0;
-			} else {
-				$size += @filesize($root.'/'.$file);
-			}
-		}
-	}
-	@closedir($dir);
-	return $size;
+function getextension($filename)
+{
+    $bouts = explode('.', $filename);
+    return array(array_pop($bouts), implode('.', $bouts));
 }

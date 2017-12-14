@@ -21,7 +21,7 @@ use ChamiloSession as Session;
  */
 function get_tabs($courseId = null)
 {
-    $_course = api_get_course_info($courseId);
+    $courseInfo = api_get_course_info($courseId);
 
     $navigation = array();
 
@@ -49,9 +49,8 @@ function get_tabs($courseId = null)
     $navigation['mycourses']['icon'] = 'my-course.png';
 
     // My Profile
-    $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH)
-        .'auth/profile.php'
-        .(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '');
+    $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'
+        .(!empty($courseInfo['path']) ? '?coursePath='.$courseInfo['path'].'&amp;courseCode='.$courseInfo['official_code'] : '');
     $navigation['myprofile']['title'] = get_lang('ModifyProfile');
     $navigation['myprofile']['key'] = 'profile';
     $navigation['myprofile']['icon'] = 'profile.png';
@@ -65,7 +64,7 @@ function get_tabs($courseId = null)
     if (api_get_setting('gradebook_enable') == 'true') {
         $navigation['mygradebook']['url'] = api_get_path(WEB_CODE_PATH)
             .'gradebook/gradebook.php'
-            .(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '');
+            .(!empty($courseInfo['path']) ? '?coursePath='.$courseInfo['path'].'&amp;courseCode='.$courseInfo['official_code'] : '');
         $navigation['mygradebook']['title'] = get_lang('MyGradebook');
         $navigation['mygradebook']['key'] = 'gradebook';
         $navigation['mygradebook']['icon'] = 'gradebook.png';
@@ -118,13 +117,6 @@ function get_tabs($courseId = null)
         $navigation['dashboard']['icon'] = 'dashboard.png';
     }
 
-    // Reports
-    /*
-	if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
-        $navigation['reports']['url'] = api_get_path(WEB_CODE_PATH).'reports/index.php';
-        $navigation['reports']['title'] = get_lang('Reports');
-	}*/
-
     // Custom Tabs See BT#7180
     $customTabs = getCustomTabs();
     if (!empty($customTabs)) {
@@ -159,15 +151,25 @@ function get_tabs($courseId = null)
  */
 function getCustomTabs()
 {
+    $urlId = api_get_current_access_url_id();
     $tableSettingsCurrent = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $sql = "SELECT * FROM $tableSettingsCurrent
             WHERE 
                 variable = 'show_tabs' AND
-                subkey like 'custom_tab_%'";
+                subkey LIKE 'custom_tab_%' AND access_url = $urlId ";
     $result = Database::query($sql);
     $customTabs = array();
     while ($row = Database::fetch_assoc($result)) {
-        $customTabs[] = $row;
+        $shouldAdd = true;
+        if (strpos($row['subkey'], Plugin::TAB_FILTER_NO_STUDENT) !== false && api_is_student()) {
+            $shouldAdd = false;
+        } elseif (strpos($row['subkey'], Plugin::TAB_FILTER_ONLY_STUDENT) !== false && !api_is_student()) {
+            $shouldAdd = false;
+        }
+
+        if ($shouldAdd) {
+            $customTabs[] = $row;
+        }
     }
 
     return $customTabs;
@@ -198,14 +200,14 @@ function return_logo($theme = '')
  */
 function returnNotificationMenu()
 {
-    $_course = api_get_course_info();
+    $courseInfo = api_get_course_info();
     $course_id = 0;
-    if (!empty($_course)) {
-        $course_id = $_course['code'];
+    if (!empty($courseInfo)) {
+        $course_id = $courseInfo['code'];
     }
 
     $user_id = api_get_user_id();
-
+    $sessionId = api_get_session_id();
     $html = '';
 
     if ((api_get_setting('showonline', 'world') == 'true' && !$user_id) ||
@@ -213,7 +215,7 @@ function returnNotificationMenu()
         (api_get_setting('showonline', 'course') == 'true' && $user_id && $course_id)
     ) {
         $number = getOnlineUsersCount();
-        $number_online_in_course = getOnlineUsersInCourseCount($user_id, $_course);
+        $number_online_in_course = getOnlineUsersInCourseCount($user_id, $courseInfo);
 
         // Display the who's online of the platform
         if ($number &&
@@ -227,24 +229,24 @@ function returnNotificationMenu()
         }
 
         // Display the who's online for the course
-        if (
-            $number_online_in_course &&
+        if ($number_online_in_course &&
             (
-                is_array($_course) &&
-                api_get_setting('showonline', 'course') == 'true' && isset($_course['sysCode'])
+                is_array($courseInfo) &&
+                api_get_setting('showonline', 'course') == 'true' && isset($courseInfo['sysCode'])
             )
         ) {
-            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode']
+            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$courseInfo['sysCode']
                 .'" target="_self">'
                 .Display::return_icon('course.png', get_lang('UsersOnline').' '.get_lang('InThisCourse'), array(), ICON_SIZE_TINY)
                 .' '.$number_online_in_course.' </a></li>';
         }
 
-        if (isset($user_id) && api_get_session_id() != 0) {
-            $html .= '<li><a href="'.api_get_path(WEB_PATH)
-                .'whoisonlinesession.php?id_coach='.$user_id.'&amp;referer='.urlencode($_SERVER['REQUEST_URI'])
-                .'" target="_self">'
+        if (isset($user_id) && $sessionId != 0) {
+            $numberOnlineInSession = getOnlineUsersInSessionCount($sessionId);
+
+            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'" target="_self">'
                 .Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array(), ICON_SIZE_TINY)
+                .' '.$numberOnlineInSession
                 .'</a></li>';
         }
     }
@@ -347,7 +349,6 @@ function return_navigation_array()
             if (!empty($result) && $result['selected_value'] === 'installed') {
                 // Students
                 $url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php';
-
                 if (api_is_platform_admin() || api_is_drh() || api_is_teacher()) {
                     $url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/my_students.php';
                 }
@@ -367,34 +368,18 @@ function return_navigation_array()
             }
         }
 
-        // Reports
-        if (!empty($possible_tabs['reports'])) {
-            if (api_get_setting('show_tabs', 'reports') == 'true') {
-                if ((api_is_platform_admin() || api_is_drh() || api_is_session_admin())
-                        && Rights::hasRight('show_tabs:reports')
-                ) {
-                    $navigation['reports'] = $possible_tabs['reports'];
-                }
-            } else {
-                $menu_navigation['reports'] = $possible_tabs['reports'];
-            }
-        }
-
         // Custom tabs
         $customTabs = getCustomTabs();
-
         if (!empty($customTabs)) {
             foreach ($customTabs as $tab) {
                 if (api_get_setting($tab['variable'], $tab['subkey']) == 'true' &&
                     isset($possible_tabs[$tab['subkey']])
                 ) {
-                    $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH)
-                        .$possible_tabs[$tab['subkey']]['url'];
+                    $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH).$possible_tabs[$tab['subkey']]['url'];
                     $navigation[$tab['subkey']] = $possible_tabs[$tab['subkey']];
                 } else {
                     if (isset($possible_tabs[$tab['subkey']])) {
-                        $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH)
-                            .$possible_tabs[$tab['subkey']]['url'];
+                        $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH).$possible_tabs[$tab['subkey']]['url'];
                         $menu_navigation[$tab['subkey']] = $possible_tabs[$tab['subkey']];
                     }
                 }
@@ -584,17 +569,9 @@ function menuArray()
  */
 function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 {
-    /** @var \Chamilo\CoreBundle\Entity\Session $session */
-    $session = Database::getManager()
-        ->find('ChamiloCoreBundle:Session', api_get_session_id());
-    $_course = api_get_course_info();
+    $courseInfo = api_get_course_info();
     $user_id = api_get_user_id();
-    $course_id = 0;
-    if (!empty($_course)) {
-        $course_id = $_course['real_id'];
-    }
-
-    $additonalBlocks = '';
+    $additionalBlocks = '';
 
     /*  Plugins for banner section */
     $web_course_path = api_get_path(WEB_COURSE_PATH);
@@ -602,40 +579,66 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
     /* If the user is a coach he can see the users who are logged in its session */
     $navigation = array();
 
-    // part 1: Course Homepage. If we are in a course then the first breadcrumb is a link to the course homepage
-    // hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
-    $my_session_name = $session ? ' ('.cut($session->getName(), MAX_LENGTH_BREADCRUMB).')' : null;
+    $sessionId = api_get_session_id();
+    // part 1: Course Homepage. If we are in a course then the first breadcrumb
+    // is a link to the course homepage
+    if (!empty($courseInfo) && !isset($_GET['hide_course_breadcrumb'])) {
+        $sessionName = '';
+        if (!empty($sessionId)) {
+            /** @var \Chamilo\CoreBundle\Entity\Session $session */
+            $session = Database::getManager()->find('ChamiloCoreBundle:Session', $sessionId);
+            $sessionName = $session ? ' ('.cut($session->getName(), MAX_LENGTH_BREADCRUMB).')' : '';
+        }
 
-    if (!empty($_course) && !isset($_GET['hide_course_breadcrumb'])) {
-        $_course['name'] = api_htmlentities($_course['name']);
-        $course_title = cut($_course['name'], MAX_LENGTH_BREADCRUMB);
+        $courseInfo['name'] = api_htmlentities($courseInfo['name']);
+        $course_title = cut($courseInfo['name'], MAX_LENGTH_BREADCRUMB);
 
         switch (api_get_setting('breadcrumbs_course_homepage')) {
             case 'get_lang':
-                $itemTitle = Display::return_icon('home.png', get_lang('CourseHomepageLink'), [], ICON_SIZE_TINY);
+                $itemTitle = Display::return_icon(
+                    'home.png',
+                    get_lang('CourseHomepageLink'),
+                    [],
+                    ICON_SIZE_TINY
+                );
                 break;
             case 'course_code':
-                $itemTitle = Display::return_icon('home.png', $_course['official_code'], [], ICON_SIZE_TINY)
-                    .' '.$_course['official_code'];
+                $itemTitle = Display::return_icon(
+                    'home.png',
+                    $courseInfo['official_code'],
+                    [],
+                    ICON_SIZE_TINY
+                )
+                .' '.$courseInfo['official_code'];
                 break;
             case 'session_name_and_course_title':
                 //no break
             default:
-                $itemTitle = Display::return_icon('home.png', $_course['name'].$my_session_name, [], ICON_SIZE_TINY)
-                    .' '.$course_title.$my_session_name;
+                $itemTitle = Display::return_icon(
+                    'home.png',
+                    $courseInfo['name'].$sessionName,
+                    [],
+                    ICON_SIZE_TINY
+                )
+                .' '.$course_title.$sessionName;
 
-                if (
-                    $session && ($session->getDuration() && !api_is_allowed_to_edit())
-                ) {
+                if (!empty($sessionId) && ($session->getDuration() && !api_is_allowed_to_edit())) {
                     $daysLeft = SessionManager::getDayLeftInSession(
                         ['id' => $session->getId(), 'duration' => $session->getDuration()],
                         $user_id
                     );
 
-                    $additonalBlocks .= Display::return_message(
-                        sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft),
-                        'information'
-                    );
+                    if ($daysLeft >= 0) {
+                        $additionalBlocks .= Display::return_message(
+                            sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft),
+                            'information'
+                        );
+                    } else {
+                        $additionalBlocks .= Display::return_message(
+                            get_lang('YourSessionTimeHasExpired'),
+                            'warning'
+                        );
+                    }
                 }
                 break;
         }
@@ -647,7 +650,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
          * $navigation[] = $navigation_item_my_courses;
          */
         $navigation[] = [
-            'url' => $web_course_path.$_course['path'].'/index.php'.($session ? '?id_session='.$session->getId() : ''),
+            'url' => $web_course_path.$courseInfo['path'].'/index.php?id_session='.$sessionId,
             'title' => $itemTitle
         ];
     }
@@ -699,7 +702,6 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
     }
 
     $navigation_right = array();
-
     if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
         foreach ($interbreadcrumb as $breadcrumb_step) {
             if (isset($breadcrumb_step['type']) && $breadcrumb_step['type'] == 'right') {
@@ -742,7 +744,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 
     /* Part 4 . Show the teacher view/student view button at the right of the breadcrumb */
     $view_as_student_link = null;
-    if ($user_id && isset($course_id)) {
+    if ($user_id && !empty($courseInfo)) {
         if ((
                 api_is_course_admin() ||
                 api_is_platform_admin() ||
@@ -797,7 +799,11 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         if (!empty($navigation_right)) {
             foreach ($navigation_right as $item) {
                 $extra_class = isset($item['class']) ? $item['class'] : null;
-                $lis .= Display::tag('li', $item['title'], array('class' => $extra_class.' pull-right'));
+                $lis .= Display::tag(
+                    'li',
+                    $item['title'],
+                    array('class' => $extra_class.' pull-right')
+                );
             }
         }
 
@@ -806,7 +812,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         }
     }
 
-    return $html.$additonalBlocks;
+    return $html.$additionalBlocks;
 }
 
 /**
@@ -835,23 +841,23 @@ function getOnlineUsersCount()
 /**
  * Helper function to get the number of users online in a course, using cache if available
  * @param   int $userId The user ID
- * @param   array $_course The course details
+ * @param   array $courseInfo The course details
  * @return  int     The number of users currently online
  */
-function getOnlineUsersInCourseCount($userId, $_course)
+function getOnlineUsersInCourseCount($userId, $courseInfo)
 {
     $cacheAvailable = api_get_configuration_value('apc');
     $numberOnlineInCourse = 0;
-    if (!empty($_course['id'])) {
+    if (!empty($courseInfo['id'])) {
         if ($cacheAvailable === true) {
-            $apcVar = api_get_configuration_value('apc_prefix').'my_campus_whoisonline_count_simple_'.$_course['id'];
+            $apcVar = api_get_configuration_value('apc_prefix').'my_campus_whoisonline_count_simple_'.$courseInfo['id'];
             if (apcu_exists($apcVar)) {
                 $numberOnlineInCourse = apcu_fetch($apcVar);
             } else {
                 $numberOnlineInCourse = who_is_online_in_this_course_count(
                     $userId,
                     api_get_setting('time_limit_whosonline'),
-                    $_course['id']
+                    $courseInfo['id']
                 );
                 apcu_store(
                     $apcVar,
@@ -863,10 +869,45 @@ function getOnlineUsersInCourseCount($userId, $_course)
             $numberOnlineInCourse = who_is_online_in_this_course_count(
                 $userId,
                 api_get_setting('time_limit_whosonline'),
-                $_course['id']
+                $courseInfo['id']
             );
         }
     }
 
     return $numberOnlineInCourse;
+}
+
+/**
+ * Helper function to get the number of users online in a session, using cache if available
+ * @param int $sessionId The session ID
+ * @return int The number of users currently online
+ */
+function getOnlineUsersInSessionCount($sessionId)
+{
+    $cacheAvailable = api_get_configuration_value('apc');
+
+    if (!$sessionId) {
+        return 0;
+    }
+
+    if ($cacheAvailable === true) {
+        $apcVar = api_get_configuration_value('apc_prefix').'my_campus_whoisonline_session_count_simple_'.$sessionId;
+
+        if (apcu_exists($apcVar)) {
+            return apcu_fetch($apcVar);
+        }
+
+        $numberOnlineInCourse = whoIsOnlineInThisSessionCount(
+            api_get_setting('time_limit_whosonline'),
+            $sessionId
+        );
+        apcu_store($apcVar, $numberOnlineInCourse, 15);
+
+        return $numberOnlineInCourse;
+    }
+
+    return whoIsOnlineInThisSessionCount(
+        api_get_setting('time_limit_whosonline'),
+        $sessionId
+    );
 }

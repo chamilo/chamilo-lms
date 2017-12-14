@@ -253,4 +253,21 @@ class ScriptHandler
 
         return $res;
     }
+
+    /**
+     * Update the basis css files.
+     * Avoid use the ScriptHandler::dumpCssFiles
+     */
+    public static function updateCss()
+    {
+        $appCss = __DIR__.'/../../../../app/Resources/public/css/';
+        $newPath = __DIR__.'/../../../../web/css/';
+        $cssFiles = ['base.css', 'chat.css', 'editor.css', 'markdown.css', 'print.css', 'responsive.css', 'scorm.css'];
+
+        $fs = new Filesystem();
+
+        foreach ($cssFiles as $file) {
+            $fs->copy($appCss.$file, $newPath.$file, true);
+        }
+    }
 }

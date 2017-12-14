@@ -15,7 +15,7 @@ $this_section = SECTION_COURSES;
 
 // access restriction: only teachers are allowed here
 if (!api_is_allowed_to_edit(null, true)) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 // the breadcrumbs
@@ -28,10 +28,9 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 /**
  * This function displays the form to import the zip file with qti2
  */
-function ch_qti2_display_form()
+function displayForm()
 {
-    $name_tools = get_lang('ImportQtiQuiz');
-    $form  = '<div class="actions">';
+    $form = '<div class="actions">';
     $form .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?show=test&'.api_get_cidreq().'">'.
         Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).'</a>';
     $form .= '</div>';
@@ -42,7 +41,7 @@ function ch_qti2_display_form()
         null,
         array('enctype' => 'multipart/form-data')
     );
-    $formValidator->addElement('header', $name_tools);
+    $formValidator->addHeader(get_lang('ImportQtiQuiz'));
     $formValidator->addElement('file', 'userFile', get_lang('DownloadFile'));
     $formValidator->addButtonImport(get_lang('Upload'));
     $form .= $formValidator->returnForm();
@@ -54,7 +53,7 @@ function ch_qti2_display_form()
  * @param array $array_file ($_FILES)
  * @return string|array
  */
-function ch_qti2_import_file($array_file)
+function importFile($array_file)
 {
     $unzip = 0;
     $process = process_uploaded_file($array_file, false);
@@ -80,7 +79,7 @@ $message = null;
 // import file
 if ((api_is_allowed_to_edit(null, true))) {
     if (isset($_POST['submit'])) {
-        $imported = ch_qti2_import_file($_FILES['userFile']);
+        $imported = importFile($_FILES['userFile']);
 
         if (is_numeric($imported) && !empty($imported)) {
             header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$imported);
@@ -97,7 +96,7 @@ Display::display_header(get_lang('ImportQtiQuiz'), 'Exercises');
 echo $message;
 
 // display qti form
-ch_qti2_display_form();
+displayForm();
 
 // display the footer
 Display::display_footer();

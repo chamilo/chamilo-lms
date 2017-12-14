@@ -76,8 +76,6 @@ if ($geolocalization) {
 
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
-
-$libpath = api_get_path(LIBRARY_PATH);
 $noPHP_SELF = true;
 $tool_name = get_lang('ModifyUserInfo');
 
@@ -287,7 +285,12 @@ if (!$user_data['platform_admin']) {
     $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
     $group = array();
     $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
-    $group[] = $form->createElement('DateTimePicker', 'expiration_date', null, array('onchange' => 'javascript: enable_expiration_date();'));
+    $group[] = $form->createElement(
+        'DateTimePicker',
+        'expiration_date',
+        null,
+        array('onchange' => 'javascript: enable_expiration_date();')
+    );
     $form->addGroup($group, 'max_member_group', null, null, false);
 
     // Active account or inactive account
@@ -307,7 +310,7 @@ if ($studentBoss) {
     }
 }
 
-if ($studentBossList) {
+if (!empty($studentBossList)) {
     $studentBossList = array_column($studentBossList, 'boss_id');
 }
 
@@ -476,7 +479,28 @@ if ($error_drh) {
     Display::addFlash(Display::return_message(get_lang('StatusCanNotBeChangedToHumanResourcesManager'), 'error'));
 }
 
-$content = null;
+$actions = [
+    Display::url(
+        Display::return_icon(
+            'info.png',
+            get_lang('Information'),
+            array(),
+            ICON_SIZE_MEDIUM
+        ),
+        api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$user_id
+    ),
+    Display::url(
+        Display::return_icon(
+            'login_as.png',
+            get_lang('LoginAs'),
+            [],
+            ICON_SIZE_MEDIUM
+        ),
+        api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::getTokenFromSession()
+    )
+];
+
+$content = Display::toolbarAction('toolbar-user-information', [implode(PHP_EOL, $actions)]);
 
 $bigImage = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_BIG);
 $normalImage = UserManager::getUserPicture($user_id, USER_IMAGE_SIZE_ORIGINAL);

@@ -33,9 +33,12 @@ class aicc extends learnpath
     public $cstlist = array();
     public $orelist = array();
 
-    // Path between the scorm/ directory and the config files e.g. maritime_nav/maritime_nav. This is the path that will be used in the lp_path when importing a package.
+    // Path between the scorm/ directory and the config files
+    // e.g. maritime_nav/maritime_nav.
+    // This is the path that will be used in the lp_path when importing a package.
     public $subdir = '';
-    // Keeps the zipfile safe for the object's life so that we can use it if there is no title available.
+    // Keeps the zipfile safe for the object's life
+    // so that we can use it if there is no title available.
     public $zipname = '';
     // Keeps an index of the number of uses of the zipname so far.
     public $lastzipnameindex = 0;
@@ -50,7 +53,9 @@ class aicc extends learnpath
      */
     public function __construct($course_code = null, $resource_id = null, $user_id = null)
     {
-        if ($this->debug > 0) { error_log('In aicc::aicc()', 0); }
+        if ($this->debug > 0) {
+            error_log('In aicc::aicc()');
+        }
         if (!empty($course_code) && !empty($resource_id) && !empty($user_id)) {
             parent::__construct($course_code, $resource_id, $user_id);
         }
@@ -70,12 +75,15 @@ class aicc extends learnpath
 
     /**
      * Parses a set of AICC config files and puts everything into the $config array
-     * @param string Path to the config files dir on the system. If not defined, uses the base path of the course's scorm dir
+     * @param string Path to the config files dir on the system.
+     * If not defined, uses the base path of the course's scorm dir
      * @return array Structured array representing the config files' contents
      */
-    function parse_config_files($dir = '')
+    public function parse_config_files($dir = '')
     {
-        if ($this->debug > 0) {error_log('New LP - In aicc::parse_config_files('.$dir.')', 0); }
+        if ($this->debug > 0) {
+            error_log('New LP - In aicc::parse_config_files('.$dir.')', 0);
+        }
         if (empty($dir)) {
             // Get the path of the AICC config files dir.
             $dir = $this->subdir;
@@ -86,8 +94,9 @@ class aicc extends learnpath
             // Parse the Course Description File (.crs) - ini-type.
             $crs_file = $dir.'/'.$this->config_files['crs'];
             $crs_params = $this->parse_ini_file_quotes_safe($crs_file);
-            //echo '<pre>crs:'.print_r($crs_params, true).'</pre>';
-            if ($this->debug > 1) { error_log('New LP - In aicc::parse_config_files() - '.$crs_file.' has been parsed', 0); }
+            if ($this->debug > 1) {
+                error_log('New LP - In aicc::parse_config_files() - '.$crs_file.' has been parsed');
+            }
 
             // CRS distribute crs params into the aicc object.
             if (!empty($crs_params['course']['course_creator'])) {
@@ -133,8 +142,9 @@ class aicc extends learnpath
             // Parse the Descriptor File (.des) - csv-type.
             $des_file = $dir.'/'.$this->config_files['des'];
             $des_params = $this->parse_csv_file($des_file);
-            //echo '<pre>des:'.print_r($des_params, true).'</pre>';
-            if ($this->debug > 1) { error_log('New LP - In aicc::parse_config_files() - '.$des_file.' has been parsed', 0); }
+            if ($this->debug > 1) {
+                error_log('New LP - In aicc::parse_config_files() - '.$des_file.' has been parsed', 0);
+            }
             // Distribute des params into the aicc object.
             foreach ($des_params as $des) {
                 // One AU in AICC is equivalent to one SCO in SCORM (scormItem class).
@@ -145,8 +155,9 @@ class aicc extends learnpath
             // Parse the Assignable Unit File (.au) - csv-type.
             $au_file = $dir.'/'.$this->config_files['au'];
             $au_params = $this->parse_csv_file($au_file);
-            //echo '<pre>au:'.print_r($au_params, true).'</pre>';
-            if ($this->debug > 1) { error_log('New LP - In aicc::parse_config_files() - '.$au_file.' has been parsed', 0); }
+            if ($this->debug > 1) {
+                error_log('New LP - In aicc::parse_config_files() - '.$au_file.' has been parsed', 0);
+            }
             // Distribute au params into the aicc object.
             foreach ($au_params as $au) {
                 $oAu = new aiccItem('config', $au);
@@ -157,8 +168,9 @@ class aicc extends learnpath
             // Parse the Course Structure File (.cst) - csv-type.
             $cst_file = $dir.'/'.$this->config_files['cst'];
             $cst_params = $this->parse_csv_file($cst_file, ',', '"', true);
-            //echo '<pre>cst:'.print_r($cst_params, true).'</pre>';
-            if ($this->debug > 1) { error_log('New LP - In aicc::parse_config_files() - '.$cst_file.' has been parsed', 0); }
+            if ($this->debug > 1) {
+                error_log('New LP - In aicc::parse_config_files() - '.$cst_file.' has been parsed', 0);
+            }
             // Distribute cst params into the aicc object.
             foreach ($cst_params as $cst) {
                 $oCst = new aiccBlock('config', $cst);
@@ -170,8 +182,9 @@ class aicc extends learnpath
             if (!empty($this->config_files['ore'])) {
                 $ore_file = $dir.'/'.$this->config_files['ore'];
                 $ore_params = $this->parse_csv_file($ore_file, ',', '"', true);
-                //echo '<pre>ore:'.print_r($ore_params,true).'</pre>';
-                if ($this->debug > 1) { error_log('New LP - In aicc::parse_config_files() - '.$ore_file.' has been parsed', 0); }
+                if ($this->debug > 1) {
+                    error_log('New LP - In aicc::parse_config_files() - '.$ore_file.' has been parsed', 0);
+                }
                 // Distribute ore params into the aicc object.
                 foreach ($ore_params as $ore) {
                     $oOre = new aiccObjective('config', $ore);
@@ -183,8 +196,9 @@ class aicc extends learnpath
             if (!empty($this->config_files['pre'])) {
                 $pre_file = $dir.'/'.$this->config_files['pre'];
                 $pre_params = $this->parse_csv_file($pre_file);
-                //echo '<pre>pre:'.print_r($pre_params, true).'</pre>';
-                if ($this->debug > 1) { error_log('New LP - In aicc::parse_config_files() - '.$pre_file.' has been parsed', 0); }
+                if ($this->debug > 1) {
+                    error_log('New LP - In aicc::parse_config_files() - '.$pre_file.' has been parsed', 0);
+                }
                 // Distribute pre params into the aicc object.
                 foreach ($pre_params as $pre) {
                     // Place a constraint on the corresponding block or AU.
@@ -204,8 +218,9 @@ class aicc extends learnpath
             if (!empty($this->config_files['cmp'])) {
                 $cmp_file = $dir.'/'.$this->config_files['cmp'];
                 $cmp_params = $this->parse_csv_file($cmp_file);
-                //echo '<pre>cmp:'.print_r($cmp_params, true).'</pre>';
-                if ($this->debug > 1) { error_log('New LP - In aicc::parse_config_files() - '.$cmp_file.' has been parsed', 0); }
+                if ($this->debug > 1) {
+                    error_log('New LP - In aicc::parse_config_files() - '.$cmp_file.' has been parsed', 0);
+                }
                 // Distribute cmp params into the aicc object.
                 foreach ($cmp_params as $cmp) {
                     //$oCmp = new aiccCompletionRequirements('config', $cmp);
@@ -231,7 +246,9 @@ class aicc extends learnpath
             return false;
         }
 
-        if ($this->debug > 0) { error_log('New LP - In aicc::import_aicc('.$course_code.')', 0); }
+        if ($this->debug > 0) {
+            error_log('New LP - In aicc::import_aicc('.$course_code.')', 0);
+        }
 
         $new_lp = Database::get_course_table(TABLE_LP_MAIN);
         $new_lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -251,7 +268,9 @@ class aicc extends learnpath
                 "($course_id, 3, '".$this->course_title."', '".$this->course_id."','".$this->course_description."',".
                 "'".$this->subdir."', 0, 'embedded', '".$this->config_encoding."',".
                 "'aicc_api.php','".$this->course_creator."',$dsp)";
-        if ($this->debug > 2) { error_log('New LP - In import_aicc(), inserting path: '.$sql, 0); }
+        if ($this->debug > 2) {
+            error_log('New LP - In import_aicc(), inserting path: '.$sql, 0);
+        }
         Database::query($sql);
         $lp_id = Database::insert_id();
 
@@ -306,7 +325,9 @@ class aicc extends learnpath
                     "'$prereq', 0,'".(!empty($oAu->parameters) ? Database::escape_string($oAu->parameters) : '')."'".
                     ")";
             Database::query($sql_item);
-            if ($this->debug > 1) { error_log('New LP - In aicc::import_aicc() - inserting item : '.$sql_item.' : ', 0); }
+            if ($this->debug > 1) {
+                error_log('New LP - In aicc::import_aicc() - inserting item : '.$sql_item.' : ', 0);
+            }
             $item_id = Database::insert_id();
 
             if ($item_id) {
@@ -347,31 +368,46 @@ class aicc extends learnpath
      */
     public function import_package($zip_file_info, $current_dir = '')
     {
-        if ($this->debug > 0) { error_log('In aicc::import_package('.print_r($zip_file_info, true).',"'.$current_dir.'") method', 0); }
+        if ($this->debug > 0) {
+            error_log('In aicc::import_package('.print_r($zip_file_info, true).',"'.$current_dir.'") method', 0);
+        }
         //ini_set('error_log', 'E_ALL');
         $maxFilledSpace = 1000000000;
         $zip_file_path = $zip_file_info['tmp_name'];
         $zip_file_name = $zip_file_info['name'];
 
-        if ($this->debug > 0) { error_log('New LP - aicc::import_package() - Zip file path = '.$zip_file_path.', zip file name = '.$zip_file_name, 0); }
+        if ($this->debug > 0) {
+            error_log(
+                'New LP - aicc::import_package() - Zip file path = '.$zip_file_path.', zip file name = '.$zip_file_name,
+                0
+            );
+        }
         $course_rel_dir = api_get_course_path().'/scorm'; // Scorm dir web path starting from /courses
         $course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_rel_dir; // The absolute system path of this course.
         $current_dir = api_replace_dangerous_char(trim($current_dir)); // Current dir we are in, inside scorm/
-        if ($this->debug > 0) { error_log('New LP - aicc::import_package() - Current_dir = '.$current_dir, 0); }
+        if ($this->debug > 0) {
+            error_log('New LP - aicc::import_package() - Current_dir = '.$current_dir, 0);
+        }
 
-         //$uploaded_filename = $_FILES['userFile']['name'];
+        //$uploaded_filename = $_FILES['userFile']['name'];
         // Get the name of the zip file without the extension.
-        if ($this->debug > 0) { error_log('New LP - aicc::import_package() - Received zip file name: '.$zip_file_path, 0); }
+        if ($this->debug > 0) {
+            error_log('New LP - aicc::import_package() - Received zip file name: '.$zip_file_path, 0);
+        }
         $file_info = pathinfo($zip_file_name);
         $filename = $file_info['basename'];
         $extension = $file_info['extension'];
         $file_base_name = str_replace('.'.$extension, '', $filename); // Filename without its extension.
         $this->zipname = $file_base_name; // Save for later in case we don't have a title.
 
-        if ($this->debug > 0) { error_log('New LP - aicc::import_package() - Base file name is : '.$file_base_name, 0); }
+        if ($this->debug > 0) {
+            error_log('New LP - aicc::import_package() - Base file name is : '.$file_base_name, 0);
+        }
         $new_dir = api_replace_dangerous_char(trim($file_base_name));
         $this->subdir = $new_dir;
-        if ($this->debug > 0) { error_log('New LP - aicc::import_package() - Subdir is first set to : '.$this->subdir, 0); }
+        if ($this->debug > 0) {
+            error_log('New LP - aicc::import_package() - Subdir is first set to : '.$this->subdir, 0);
+        }
 
         /*
         if (check_name_exist($course_sys_dir.$current_dir.'/'.$new_dir)) {
@@ -393,7 +429,11 @@ class aicc extends learnpath
         foreach ($zipContentArray as $thisContent) {
             if (preg_match('~.(php.*|phtml)$~i', $thisContent['filename'])) {
                 // If a php file is found, do not authorize (security risk).
-                if ($this->debug > 1) {error_log('New LP - aicc::import_package() - Found unauthorized file: '.$thisContent['filename'], 0); }
+                if ($this->debug > 1) {
+                    error_log(
+                        'New LP - aicc::import_package() - Found unauthorized file: '.$thisContent['filename']
+                    );
+                }
                 Display::addFlash(
                     Display::return_message(get_lang('ZipNoPhp'))
                 );
@@ -401,13 +441,19 @@ class aicc extends learnpath
             } elseif (preg_match('?.*/aicc/$?', $thisContent['filename'])) {
                 // If a directory named 'aicc' is found, package type = aicc, but continue,
                 // because we need to find the right AICC files;
-                if ($this->debug > 1) { error_log('New LP - aicc::import_package() - Found aicc directory: '.$thisContent['filename'], 0); }
+                if ($this->debug > 1) {
+                    error_log('New LP - aicc::import_package() - Found aicc directory: '.$thisContent['filename']);
+                }
                 $package_type = 'aicc';
             } else {
                 // else, look for one of the files we're searching for (something.crs case insensitive).
                 $res = array();
                 if (preg_match('?^(.*)\.(crs|au|des|cst|ore|pre|cmp)$?i', $thisContent['filename'], $res)) {
-                    if ($this->debug > 1) { error_log('New LP - aicc::import_package() - Found AICC config file: '.$thisContent['filename'].'. Now splitting: '.$res[1].' and '.$res[2], 0); }
+                    if ($this->debug > 1) {
+                        error_log(
+                            'New LP - aicc::import_package() - Found AICC config file: '.$thisContent['filename'].'. Now splitting: '.$res[1].' and '.$res[2]
+                        );
+                    }
                     if ($thisContent['filename'] == basename($thisContent['filename'])) {
                         if ($this->debug > 2) { error_log('New LP - aicc::import_package() - '.$thisContent['filename'].' is at root level', 0); }
                         $at_root = true;
@@ -441,8 +487,12 @@ class aicc extends learnpath
             }
             $realFileSize += $thisContent['size'];
         }
-        if ($this->debug > 2) { error_log('New LP - aicc::import_package() - $files_found: '.print_r($files_found, true), 0); }
-        if ($this->debug > 1) { error_log('New LP - aicc::import_package() - Package type is now '.$package_type, 0); }
+        if ($this->debug > 2) {
+            error_log('New LP - aicc::import_package() - $files_found: '.print_r($files_found, true), 0);
+        }
+        if ($this->debug > 1) {
+            error_log('New LP - aicc::import_package() - Package type is now '.$package_type, 0);
+        }
         $mandatory = false;
         foreach ($files_found as $file_name => $file_exts) {
             $temp = (
@@ -452,7 +502,9 @@ class aicc extends learnpath
                 && !empty($files_found[$file_name]['cst'])
             );
             if ($temp) {
-                if ($this->debug > 1) { error_log('New LP - aicc::import_package() - Found all config files for '.$file_name, 0); }
+                if ($this->debug > 1) {
+                    error_log('New LP - aicc::import_package() - Found all config files for '.$file_name, 0);
+                }
                 $mandatory = true;
                 $package = $file_name;
                 // Store base config file name for reuse in parse_config_files().
@@ -464,8 +516,7 @@ class aicc extends learnpath
             }
         }
 
-        if ($package_type == '' || !$mandatory)
-        {
+        if ($package_type == '' || !$mandatory) {
             Display::addFlash(
                 Display::return_message(get_lang('FileError'))
             );
@@ -498,9 +549,13 @@ class aicc extends learnpath
             - parse & change relative html links
             - make sure the filenames are secure (filter funny characters or php extensions)
         */
-        if (is_dir($course_sys_dir.$new_dir) OR @mkdir($course_sys_dir.$new_dir, api_get_permissions_for_new_directories())) {
+        if (is_dir($course_sys_dir.$new_dir) ||
+            @mkdir($course_sys_dir.$new_dir, api_get_permissions_for_new_directories())
+        ) {
             // PHP method - slower...
-            if ($this->debug >= 1) { error_log('New LP - Changing dir to '.$course_sys_dir.$new_dir, 0); }
+            if ($this->debug >= 1) {
+                error_log('New LP - Changing dir to '.$course_sys_dir.$new_dir, 0);
+            }
             $saved_dir = getcwd();
             chdir($course_sys_dir.$new_dir);
             $unzippingState = $zipFile->extract();
@@ -518,12 +573,16 @@ class aicc extends learnpath
             }
             // Rename files, for example with \\ in it.
             if ($dir = @opendir($course_sys_dir.$new_dir)) {
-                if ($this->debug == 1) { error_log('New LP - Opened dir '.$course_sys_dir.$new_dir, 0); }
+                if ($this->debug == 1) {
+                    error_log('New LP - Opened dir '.$course_sys_dir.$new_dir, 0);
+                }
                 while ($file = readdir($dir)) {
                     if ($file != '.' && $file != '..') {
                         $filetype = 'file';
 
-                        if (is_dir($course_sys_dir.$new_dir.$file)) $filetype = 'folder';
+                        if (is_dir($course_sys_dir.$new_dir.$file)) {
+                            $filetype = 'folder';
+                        }
 
                         // TODO: RENAMING FILES CAN BE VERY DANGEROUS AICC-WISE, avoid that as much as possible!
                         //$safe_file = api_replace_dangerous_char($file, 'strict');
@@ -542,17 +601,16 @@ class aicc extends learnpath
                                         $mybasedir = $mybasedir.$mysubdir.'/';
                                         if (!is_dir($mybasedir)) {
                                             @mkdir($mybasedir, api_get_permissions_for_new_directories());
-                                            if ($this->debug == 1) { error_log('New LP - Dir '.$mybasedir.' doesnt exist. Creating.', 0); }
+                                            if ($this->debug == 1) {
+                                                error_log('New LP - Dir '.$mybasedir.' doesnt exist. Creating.');
+                                            }
                                         }
                                     }
                                 }
                             }
                             @rename($course_sys_dir.$new_dir.$file, $course_sys_dir.$new_dir.$safe_file);
                             if ($this->debug == 1) {
-                                error_log(
-                                    'New LP - Renaming '.$course_sys_dir.$new_dir.$file.' to '.$course_sys_dir.$new_dir.$safe_file,
-                                    0
-                                );
+                                error_log('New LP - Renaming '.$course_sys_dir.$new_dir.$file.' to '.$course_sys_dir.$new_dir.$safe_file);
                             }
                         }
                     }
@@ -573,10 +631,12 @@ class aicc extends learnpath
      * @param string $proxy Proximity setting
      * @return bool
      */
-    function set_proximity($proxy = '')
+    public function set_proximity($proxy = '')
     {
         $course_id = api_get_course_int_id();
-        if ($this->debug > 0) { error_log('In aicc::set_proximity('.$proxy.') method', 0); }
+        if ($this->debug > 0) {
+            error_log('In aicc::set_proximity('.$proxy.') method', 0);
+        }
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
@@ -593,10 +653,12 @@ class aicc extends learnpath
      * @param    string    Theme setting
      * @return bool
      */
-    function set_theme($theme = '')
+    public function set_theme($theme = '')
     {
         $course_id = api_get_course_int_id();
-        if ($this->debug > 0) { error_log('In aicc::set_theme('.$theme.') method', 0); }
+        if ($this->debug > 0) {
+            error_log('In aicc::set_theme('.$theme.') method', 0);
+        }
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
@@ -613,14 +675,17 @@ class aicc extends learnpath
      * @param    string $preview_image Theme setting
      * @return bool
      */
-    function set_preview_image($preview_image = '')
+    public function set_preview_image($preview_image = '')
     {
         $course_id = api_get_course_int_id();
-        if ($this->debug > 0) {error_log('In aicc::set_preview_image('.$preview_image.') method', 0); }
+        if ($this->debug > 0) {
+            error_log('In aicc::set_preview_image('.$preview_image.') method', 0);
+        }
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' WHERE c_id = ".$course_id." id = ".$lp;
+            $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' 
+                    WHERE c_id = ".$course_id." id = ".$lp;
             Database::query($sql);
             return true;
         } else {
@@ -633,14 +698,17 @@ class aicc extends learnpath
      * @param    string $author
      * @return true
      */
-    function set_author($author = '')
+    public function set_author($author = '')
     {
         $course_id = api_get_course_int_id();
-        if ($this->debug > 0) { error_log('In aicc::set_author('.$author.') method', 0); }
+        if ($this->debug > 0) {
+            error_log('In aicc::set_author('.$author.') method', 0);
+        }
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET author = '$author' WHERE c_id = ".$course_id." id = ".$lp;
+            $sql = "UPDATE $tbl_lp SET author = '$author' 
+                    WHERE c_id = ".$course_id." id = ".$lp;
             Database::query($sql);
             return true;
         } else {
@@ -653,14 +721,15 @@ class aicc extends learnpath
      * @param    string $maker
      * @return bool
      */
-    function set_maker($maker = '')
+    public function set_maker($maker = '')
     {
         $course_id = api_get_course_int_id();
         if ($this->debug > 0) { error_log('In aicc::set_maker method('.$maker.')', 0); }
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET content_maker = '$maker' WHERE c_id = ".$course_id." id = ".$lp;
+            $sql = "UPDATE $tbl_lp SET content_maker = '$maker' 
+                    WHERE c_id = ".$course_id." id = ".$lp;
             Database::query($sql);
             return true;
         } else {
@@ -673,9 +742,11 @@ class aicc extends learnpath
      * @param    integer    Learnpath ID (optional, taken from object context if not defined)
      * @return bool
      */
-    function export_zip($lp_id = null)
+    public function export_zip($lp_id = null)
     {
-        if ($this->debug > 0) { error_log('In aicc::export_zip method('.$lp_id.')', 0); }
+        if ($this->debug > 0) {
+            error_log('In aicc::export_zip method('.$lp_id.')', 0);
+        }
         if (empty($lp_id)) {
             if (!is_object($this)) {
                 return false;
@@ -694,7 +765,7 @@ class aicc extends learnpath
         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
         $_course = api_get_course_info(api_get_course_id());
 
-        $sql = "SELECT * FROM $tbl_lp WHERE c_id = ".$course_id." id=".$lp_id;
+        $sql = "SELECT * FROM $tbl_lp WHERE iid= $lp_id";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $LPname = $row['path'];
@@ -707,18 +778,14 @@ class aicc extends learnpath
         $zipfilename = $zipfoldername.'/'.$LPnamesafe.'.zip';
 
         // Get a temporary dir for creating the zip file.
-
-        //error_log('New LP - cleaning dir '.$zipfoldername, 0);
         removeDir($zipfoldername); //make sure the temp dir is cleared
         mkdir($zipfoldername, api_get_permissions_for_new_directories());
-        //error_log('New LP - made dir '.$zipfoldername, 0);
 
         // Create zipfile of given directory.
         $zip_folder = new PclZip($zipfilename);
         $zip_folder->create($scormfoldername.'/', PCLZIP_OPT_REMOVE_PATH, $scormfoldername.'/');
 
         //this file sending implies removing the default mime-type from php.ini
-        //DocumentManager::file_send_for_download($zipfilename, true, $LPnamesafe.".zip");
         DocumentManager::file_send_for_download($zipfilename, true);
 
         // Delete the temporary zip file and directory in fileManage.lib.php
@@ -733,7 +800,7 @@ class aicc extends learnpath
      * @param	string	Resource ID as used in resource array
      * @return string	The resource's path as declared in config file course.crs
      */
-    function get_res_path($id)
+    public function get_res_path($id)
     {
         if ($this->debug > 0) { error_log('In aicc::get_res_path('.$id.') method', 0); }
         $path = '';
@@ -749,7 +816,7 @@ class aicc extends learnpath
      * @param	string	Resource ID as used in resource array
      * @return string	The resource's type as declared in the assignable unit (.au) file
      */
-    function get_res_type($id)
+    public function get_res_type($id)
     {
         if ($this->debug > 0) { error_log('In aicc::get_res_type('.$id.') method', 0); }
         $type = '';
@@ -767,7 +834,7 @@ class aicc extends learnpath
      * Gets the default organisation's title
      * @return	string	The organization's title
      */
-    function get_title()
+    public function get_title()
     {
         if ($this->debug > 0) { error_log('In aicc::get_title() method', 0); }
         $title = '';
@@ -788,9 +855,11 @@ class aicc extends learnpath
      * updating the existing table... This will prove very useful in case initial data
      * from config files were not imported well enough.
      */
-    function reimport_aicc()
+    public function reimport_aicc()
     {
-        if ($this->debug > 0) { error_log('In aicc::reimport_aicc() method', 0); }
+        if ($this->debug > 0) {
+            error_log('In aicc::reimport_aicc() method', 0);
+        }
         //query current items list
         //get the identifiers
         //parse the config files
@@ -805,7 +874,7 @@ class aicc extends learnpath
      * @param	string	File path
      * @return	array	Structured array
      */
-    function parse_ini_file_quotes_safe($f)
+    public function parse_ini_file_quotes_safe($f)
     {
         $null = '';
         $r = $null;
@@ -858,7 +927,7 @@ class aicc extends learnpath
      * as containing only hard string data (no variables), provided in lower case
      * @return	array	Structured array
      */
-    function parse_ini_string_quotes_safe($s, $pure_strings = array())
+    public function parse_ini_string_quotes_safe($s, $pure_strings = array())
     {
         $null = '';
         $r = $null;
@@ -922,7 +991,7 @@ class aicc extends learnpath
      * @param	boolean	Might one field name happen more than once on the same line? (then split by comma in the values)
      * @return array	Simple structured array
      */
-    function parse_csv_file($f, $delim = ',', $enclosure = '"', $multiples = false)
+    public function parse_csv_file($f, $delim = ',', $enclosure = '"', $multiples = false)
     {
         $data = @file_get_contents($f);
         $data = api_convert_encoding($data, api_get_system_encoding(), $this->config_encoding);

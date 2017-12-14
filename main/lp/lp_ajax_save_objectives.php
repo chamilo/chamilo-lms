@@ -1,9 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * This script contains the server part of the xajax interaction process. The client part is located
- * in lp_api.php or other api's.
- * This is a first attempt at using xajax and AJAX in general, so the code might be a bit unsettling.
+ * This script contains the server part of the xajax interaction process.
+ * The client part is located in lp_api.php or other api's.
+ * This is a first attempt at using xajax and AJAX in general,
+ * so the code might be a bit unsettling.
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -30,7 +31,7 @@ function save_objectives($lp_id, $user_id, $view_id, $item_id, $objectives = arr
     $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
     $mylpi = & $mylp->items[$item_id];
     if (is_array($objectives) && count($objectives) > 0) {
-        foreach ($objectives as $index=>$objective) {
+        foreach ($objectives as $index => $objective) {
             $mylpi->add_objective($index, $objectives[$index]);
         }
         $mylpi->write_objectives_to_db();

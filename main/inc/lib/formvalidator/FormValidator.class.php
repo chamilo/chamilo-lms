@@ -99,7 +99,10 @@ class FormValidator extends HTML_QuickForm
         $renderer->setHeaderTemplate('<legend>{header}</legend>');
 
         //Set required field template
-        $this->setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
+        $this->setRequiredNote(
+            '<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>'
+        );
+
         $noteTemplate = <<<EOT
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-10">{requiredNote}</div>
@@ -142,7 +145,7 @@ EOT;
                     <!-- END label_2 -->
 
                     <!-- BEGIN error -->
-                        <span class="help-inline">{error}</span>
+                        <span class="help-inline help-block">{error}</span>
                     <!-- END error -->
                 </div>
                 <div class="col-sm-2">
@@ -468,16 +471,16 @@ EOT;
         );
     }
 
-
     /**
      * Returns a button with the primary color and a paper-plane icon
      * @param string $label Text appearing on the button
      * @param string $name Element name (for form treatment purposes)
      * @param bool $createElement Whether to use the create or add method
+     * @param array $attributes
      *
      * @return HTML_QuickForm_button
      */
-    public function addButtonSend($label, $name = 'submit', $createElement = false, $attributes = array())
+    public function addButtonSend($label, $name = 'submit', $createElement = false, $attributes = [])
     {
         return $this->addButton(
             $name,
@@ -514,7 +517,7 @@ EOT;
      * @param array $attributes Additional attributes
      * @return HTML_QuickForm_button
      */
-    public function addButtonNext($label, $name = 'submit', $attributes = array())
+    public function addButtonNext($label, $name = 'submit', $attributes = [])
     {
         return $this->addButton(
             $name,
@@ -726,7 +729,7 @@ EOT;
      *
      * @return HTML_QuickForm_checkbox
      */
-    public function addCheckBox($name, $label, $text = '', $attributes = array())
+    public function addCheckBox($name, $label, $text = '', $attributes = [])
     {
         return $this->addElement('checkbox', $name, $label, $text, $attributes);
     }
@@ -762,9 +765,9 @@ EOT;
      * @param array  $options
      * @param array  $attributes
      *
-     * @return HTML_QuickForm_radio
+     * @return HTML_QuickForm_group
      */
-    public function addRadio($name, $label, $options = array(), $attributes = array())
+    public function addRadio($name, $label, $options = [], $attributes = [])
     {
         $group = array();
         foreach ($options as $key => $value) {
@@ -782,7 +785,7 @@ EOT;
      *
      * @return HTML_QuickForm_select
      */
-    public function addSelect($name, $label, $options = array(), $attributes = array())
+    public function addSelect($name, $label, $options = [], $attributes = [])
     {
         return $this->addElement('select', $name, $label, $options, $attributes);
     }
@@ -857,19 +860,15 @@ EOT;
                 throw new Exception('If you use the crop functionality the element must have an id');
             }
             $this->addHtml('
-                <div class="form-group">
-                <label for="cropImage" id="'.$id.'_label_crop_image" class="col-sm-2 control-label"></label>
-                <div class="col-sm-8">
-                <div id="'.$id.'_crop_image" class="cropCanvas">
-                <img id="'.$id.'_preview_image">
-                </div>
-                <div>
-                <button class="btn btn-primary hidden" name="cropButton" id="'.$id.'_crop_button" >
-                    <em class="fa fa-crop"></em> '.
-                    get_lang('CropYourPicture').'
-                </button>
-                </div>
-                </div>
+                <div class="form-group" id="'.$id.'-form-group" style="display: none;">
+                    <div class="col-sm-offset-2 col-sm-8">
+                        <div id="'.$id.'_crop_image" class="cropCanvas thumbnail">
+                            <img id="'.$id.'_preview_image">
+                        </div>
+                        <button class="btn btn-primary" type="button" name="cropButton" id="'.$id.'_crop_button">
+                            <em class="fa fa-crop"></em> '.get_lang('CropYourPicture').'
+                        </button>
+                    </div>
                 </div>'
             );
             $this->addHidden($id.'_crop_result', '');
@@ -942,7 +941,9 @@ EOT;
 
         if ($geolocalization) {
             $gmapsApiKey = $gMapsPlugin->get('api_key');
-            $this->addHtml('<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key='.$gmapsApiKey.'" ></script>');
+            $this->addHtml(
+                '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key='.$gmapsApiKey.'" ></script>'
+            );
         }
         $this->addElement(
             'text',
@@ -953,133 +954,130 @@ EOT;
         $this->applyFilter($name, 'stripslashes');
         $this->applyFilter($name, 'trim');
         $this->addHtml('
-                            <div class="form-group">
-                                <label for="geolocalization_'.$name.'" class="col-sm-2 control-label"></label>
-                                <div class="col-sm-8">
-                                    <button class="null btn btn-default " id="geolocalization_'.$name.'" name="geolocalization_'.$name.'" type="submit"><em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'</button>
-                                    <button class="null btn btn-default " id="myLocation_'.$name.'" name="myLocation_'.$name.'" type="submit"><em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'</button>
-                                </div>
-                            </div>
-                        ');
-
-        $this->addHtml('
-                            <div class="form-group">
-                                <label for="map_'.$name.'" class="col-sm-2 control-label">
-                                    '.$label.' - '.get_lang('Map').'
-                                </label>
-                                <div class="col-sm-8">
-                                    <div name="map_'.$name.'" id="map_'.$name.'" style="width:100%; height:300px;">
-                                    </div>
-                                </div>
-                            </div>
-                        ');
-
-        $this->addHtml(
-            '<script>
-                $(document).ready(function() {
-
-                    if (typeof google === "object") {
-
-                        var address = $("#' . $name.'").val();
-                        initializeGeo'.$name.'(address, false);
-
-                        $("#geolocalization_'.$name.'").on("click", function() {
-                            var address = $("#'.$name.'").val();
-                            initializeGeo'.$name.'(address, false);
-                            return false;
-                        });
-
-                        $("#myLocation_'.$name.'").on("click", function() {
-                            myLocation'.$name.'();
-                            return false;
-                        });
-
-                        $("#'.$name.'").keypress(function (event) {
-                            if (event.which == 13) {
-                                $("#geolocalization_'.$name.'").click();
-                                return false;
-                            }
-                        });
-
-                    } else {
-                        $("#map_'.$name.'").html("<div class=\"alert alert-info\">'.get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap').'</div>");
-                    }
-
-                });
-
-                function myLocation'.$name.'() {
-                    if (navigator.geolocation) {
-                        var geoPosition = function(position) {
-                            var lat = position.coords.latitude;
-                            var lng = position.coords.longitude;
-                            var latLng = new google.maps.LatLng(lat, lng);
-                            initializeGeo'.$name.'(false, latLng)
-                        };
-
-                        var geoError = function(error) {
-                            alert("Geocode ' . get_lang('Error').': " + error);
-                        };
-
-                        var geoOptions = {
-                            enableHighAccuracy: true
-                        };
-
-                        navigator.geolocation.getCurrentPosition(geoPosition, geoError, geoOptions);
-                    }
-                }
-
-                function initializeGeo'.$name.'(address, latLng) {
-                    var geocoder = new google.maps.Geocoder();
-                    var latlng = new google.maps.LatLng(-34.397, 150.644);
-                    var myOptions = {
-                        zoom: 15,
-                        center: latlng,
-                        mapTypeControl: true,
-                        mapTypeControlOptions: {
-                            style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
-                        },
-                        navigationControl: true,
-                        mapTypeId: google.maps.MapTypeId.ROADMAP
-                    };
-
-                    map_'.$name.' = new google.maps.Map(document.getElementById("map_'.$name.'"), myOptions);
-
-                    var parameter = address ? { "address": address } : latLng ? { "latLng": latLng } : false;
-
-                    if (geocoder && parameter) {
-                        geocoder.geocode(parameter, function(results, status) {
-                            if (status == google.maps.GeocoderStatus.OK) {
-                                if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
-                                    map_'.$name.'.setCenter(results[0].geometry.location);
-                                    if (!address) {
-                                        $("#'.$name.'").val(results[0].formatted_address);
-                                    }
-                                    var infowindow = new google.maps.InfoWindow({
-                                        content: "<b>" + $("#'.$name.'").val() + "</b>",
-                                        size: new google.maps.Size(150, 50)
-                                    });
-
-                                    var marker = new google.maps.Marker({
-                                        position: results[0].geometry.location,
-                                        map: map_'.$name.',
-                                        title: $("#'.$name.'").val()
-                                    });
-                                    google.maps.event.addListener(marker, "click", function() {
-                                        infowindow.open(map_'.$name.', marker);
-                                    });
-                                } else {
-                                    alert("' . get_lang("NotFound").'");
-                                }
-
-                            } else {
-                                alert("Geocode ' . get_lang('Error').': '.get_lang("AddressField").' '.get_lang("NotFound").'");
-                            }
-                        });
-                    }
-                }
-            </script>
+            <div class="form-group">
+                <label for="geolocalization_'.$name.'" class="col-sm-2 control-label"></label>
+                <div class="col-sm-8">
+                    <button class="null btn btn-default " id="geolocalization_'.$name.'" name="geolocalization_'.$name.'" type="submit">
+                        <em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'
+                    </button>
+                    <button class="null btn btn-default " id="myLocation_'.$name.'" name="myLocation_'.$name.'" type="submit">
+                    <em class="fa fa-crosshairs"></em> 
+                    '.get_lang('MyLocation').'
+                    </button>
+                </div>
+            </div>
         ');
 
+        $this->addHtml('
+            <div class="form-group">
+                <label for="map_'.$name.'" class="col-sm-2 control-label">
+                    '.$label.' - '.get_lang('Map').'
+                </label>
+                <div class="col-sm-8">
+                    <div name="map_'.$name.'" id="map_'.$name.'" style="width:100%; height:300px;">
+                    </div>
+                </div>
+            </div>
+        ');
+
+        $this->addHtml('<script>
+            $(document).ready(function() {
+                if (typeof google === "object") {
+                    var address = $("#' . $name.'").val();
+                    initializeGeo'.$name.'(address, false);
+
+                    $("#geolocalization_'.$name.'").on("click", function() {
+                        var address = $("#'.$name.'").val();
+                        initializeGeo'.$name.'(address, false);
+                        return false;
+                    });
+
+                    $("#myLocation_'.$name.'").on("click", function() {
+                        myLocation'.$name.'();
+                        return false;
+                    });
+
+                    $("#'.$name.'").keypress(function (event) {
+                        if (event.which == 13) {
+                            $("#geolocalization_'.$name.'").click();
+                            return false;
+                        }
+                    });
+                } else {
+                    $("#map_'.$name.'").html("<div class=\"alert alert-info\">'.get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap').'</div>");
+                }
+            });
+
+            function myLocation'.$name.'() {
+                if (navigator.geolocation) {
+                    var geoPosition = function(position) {
+                        var lat = position.coords.latitude;
+                        var lng = position.coords.longitude;
+                        var latLng = new google.maps.LatLng(lat, lng);
+                        initializeGeo'.$name.'(false, latLng)
+                    };
+
+                    var geoError = function(error) {
+                        alert("Geocode ' . get_lang('Error').': " + error);
+                    };
+
+                    var geoOptions = {
+                        enableHighAccuracy: true
+                    };
+                    navigator.geolocation.getCurrentPosition(geoPosition, geoError, geoOptions);
+                }
+            }
+
+            function initializeGeo'.$name.'(address, latLng) {
+                var geocoder = new google.maps.Geocoder();
+                var latlng = new google.maps.LatLng(-34.397, 150.644);
+                var myOptions = {
+                    zoom: 15,
+                    center: latlng,
+                    mapTypeControl: true,
+                    mapTypeControlOptions: {
+                        style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+                    },
+                    navigationControl: true,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+
+                map_'.$name.' = new google.maps.Map(document.getElementById("map_'.$name.'"), myOptions);
+
+                var parameter = address ? { "address": address } : latLng ? { "latLng": latLng } : false;
+
+                if (geocoder && parameter) {
+                    geocoder.geocode(parameter, function(results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
+                                map_'.$name.'.setCenter(results[0].geometry.location);
+                                if (!address) {
+                                    $("#'.$name.'").val(results[0].formatted_address);
+                                }
+                                var infowindow = new google.maps.InfoWindow({
+                                    content: "<b>" + $("#'.$name.'").val() + "</b>",
+                                    size: new google.maps.Size(150, 50)
+                                });
+
+                                var marker = new google.maps.Marker({
+                                    position: results[0].geometry.location,
+                                    map: map_'.$name.',
+                                    title: $("#'.$name.'").val()
+                                });
+                                google.maps.event.addListener(marker, "click", function() {
+                                    infowindow.open(map_'.$name.', marker);
+                                });
+                            } else {
+                                alert("' . get_lang("NotFound").'");
+                            }
+                        } else {
+                            alert("Geocode ' . get_lang('Error').': '.get_lang("AddressField").' '.get_lang("NotFound").'");
+                        }
+                    });
+                }
+            }
+        </script>
+        ');
     }
 
     /**
@@ -1154,13 +1152,14 @@ EOT;
         // Add div-element which is to hold the progress bar
         $id = $this->getAttribute('id');
         if (isset($this->with_progress_bar) && $this->with_progress_bar) {
-            $icon = Display::return_icon('progress_bar.gif');
+            // Deprecated
+            // $icon = Display::return_icon('progress_bar.gif');
 
             // @todo improve UI
             $returnValue .= '<br />
 
             <div id="loading_div_'.$id.'" class="loading_div" style="display:none;margin-left:40%; margin-top:10px; height:50px;">
-                '.$icon.'
+                <div class="wobblebar-loader"></div>
             </div>
             ';
         }
@@ -1286,7 +1285,7 @@ EOT;
      * @param bool $required Optional. Is the form-element required (default=true)
      * @param array $attributes Optional. List of attributes for the form-element
      */
-    public function addUrl($name, $label, $required = true, $attributes = array())
+    public function addUrl($name, $label, $required = true, $attributes = [])
     {
         $this->addElement('url', $name, $label, $attributes);
         $this->applyFilter($name, 'trim');
@@ -1562,11 +1561,12 @@ EOT;
 
     /**
      * @param string $url
+     * @param string $urlToRedirect after upload redirect to this page
      */
-    public function addMultipleUpload($url)
+    public function addMultipleUpload($url, $urlToRedirect = '')
     {
         $inputName = 'input_file_upload';
-        $this->addMultipleUploadJavascript($url, $inputName);
+        $this->addMultipleUploadJavascript($url, $inputName, $urlToRedirect);
 
         $this->addHtml('
             <div class="description-upload">
@@ -1596,9 +1596,14 @@ EOT;
      *
      * @param string $url page that will handle the upload
      * @param string $inputName
+     * @param string $urlToRedirect
      */
-    private function addMultipleUploadJavascript($url, $inputName)
+    private function addMultipleUploadJavascript($url, $inputName, $urlToRedirect = '')
     {
+        $redirectCondition = '';
+        if (!empty($urlToRedirect)) {
+            $redirectCondition = "window.location.replace('$urlToRedirect'); ";
+        }
         $icon = Display::return_icon('file_txt.gif');
         $this->addHtml("
         <script>
@@ -1640,14 +1645,14 @@ EOT;
                 // which actually support image resizing, but fail to
                 // send Blob objects via XHR requests:
                 disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
-                previewMaxWidth: 100,
-                previewMaxHeight: 100,
+                previewMaxWidth: 50,
+                previewMaxHeight: 50,
                 previewCrop: true,
                 dropzone: $('#dropzone'),                                
             }).on('fileuploadadd', function (e, data) {
-                data.context = $('<div class=\"row\" style=\"margin-bottom:35px\" />').appendTo('#files');
+                data.context = $('<div class=\"row\" />').appendTo('#files');
                 $.each(data.files, function (index, file) {
-                    var node = $('<div class=\"col-sm-5\">').text(file.name);                    
+                    var node = $('<div class=\"col-sm-5 file_name\">').text(file.name);                    
                     node.appendTo(data.context);
                 });
             }).on('fileuploadprocessalways', function (e, data) {
@@ -1678,17 +1683,20 @@ EOT;
                 $.each(data.result.files, function (index, file) {
                     if (file.url) {
                         var link = $('<a>')
-                            .attr('target', '_blank')
+                            .attr({target: '_blank', class : 'panel-image'})
                             .prop('href', file.url);
-                        $(data.context.children()[index]).parent().wrap(link);                        
-                        var successMessage = $('<div class=\"col-sm-3\">').html($('<span class=\"alert alert-success\"/>').text('" . addslashes(get_lang('UplUploadSucceeded'))."'));
-                        $(data.context.children()[index]).parent().append(successMessage);
+                        $(data.context.children()[index]).parent().wrap(link);
+                        // Update file name with new one from Chamilo
+                        $(data.context.children()[index]).parent().find('.file_name').html(file.name);                        
+                        var successMessage = $('<div class=\"col-sm-3\">').html($('<span class=\"message-image-success\"/>').text('".addslashes(get_lang('UplUploadSucceeded'))."'));
+                        $(data.context.children()[index]).parent().append(successMessage);                    
                     } else if (file.error) {
-                        var error = $('<div class=\"col-sm-3\">').html($('<span class=\"alert alert-danger\"/>').text(file.error));
-                        $(data.context.children()[index]).parent().append(error);
+                        var error = $('<div class=\"col-sm-3\">').html($('<span class=\"message-image-danger\"/>').text(file.error));
+                        $(data.context.children()[index]).parent().append(error);                        
                     }
-                });
-                $('#dropzone').removeClass('hover');
+                });                
+                $('#dropzone').removeClass('hover');                
+                ".$redirectCondition."
             }).on('fileuploadfail', function (e, data) {
                 $.each(data.files, function (index) {
                     var failedMessage = '" . addslashes(get_lang('UplUploadFailed'))."';
@@ -1751,13 +1759,28 @@ EOT;
             }
         }
     }
+
+    /**
+     * Add an element with user ID and avatar to the form.
+     * It needs a Chamilo\UserBundle\Entity\User as value. The exported value is the Chamilo\UserBundle\Entity\User ID
+     * @see \UserAvatar
+     * @param string $name
+     * @param string $label
+     * @param string $imageSize Optional. Small, medium or large image
+     * @param string $subtitle Optional. The subtitle for the field
+     * @return \UserAvatar
+     */
+    public function addUserAvatar($name, $label, $imageSize = 'small', $subtitle = '')
+    {
+        return $this->addElement('UserAvatar', $name, $label, ['image_size' => $imageSize, 'sub_title' => $subtitle]);
+    }
 }
 
 /**
  * Cleans HTML text filter
- * @param string $html			HTML to clean
+ * @param string $html HTML to clean
  * @param int $mode (optional)
- * @return string				The cleaned HTML
+ * @return string The cleaned HTML
  */
 function html_filter($html, $mode = NO_HTML)
 {
@@ -1788,8 +1811,8 @@ function html_filter_student_fullpage($html)
 
 /**
  * Cleans mobile phone number text
- * @param string $mobilePhoneNumber     Mobile phone number to clean
- * @return string                       The cleaned mobile phone number
+ * @param string $mobilePhoneNumber Mobile phone number to clean
+ * @return string The cleaned mobile phone number
  */
 function mobile_phone_number_filter($mobilePhoneNumber)
 {

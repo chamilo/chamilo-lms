@@ -9,8 +9,5 @@
  * @package chamilo.plugin.clockworksms
  * @author  Imanol Losada <imanol.losada@beeznest.com>
  */
-/**
- * Queries
- */
 require_once __DIR__.'/config.php';
 ClockworksmsPlugin::create()->uninstall();

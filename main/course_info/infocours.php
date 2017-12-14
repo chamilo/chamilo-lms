@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	Code to display the course settings form (for the course admin)
- *	and activate the changes.
+ * Code to display the course settings form (for the course admin)
+ * and activate the changes.
  *
- *	See ./inc/conf/course_info.conf.php for settings
+ * See ./inc/conf/course_info.conf.php for settings
  * @todo Move $canBeEmpty from course_info.conf.php to config-settings
  * @todo Take those config settings into account in this script
  * @author Patrick Cool <patrick.cool@UGent.be>
@@ -53,48 +53,17 @@ if (api_get_setting('pdf_export_watermark_by_course') == 'true') {
         $show_delete_watermark_text_message = true;
     }
 }
-$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-$tbl_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
-$tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
-$sql = "SELECT tutor_name FROM $tbl_course WHERE id = $courseId";
-$q_tutor = Database::query($sql);
-$s_tutor = Database::result($q_tutor, 0, 'tutor_name');
-
-$target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
-$sql = "SELECT DISTINCT username, lastname, firstname
-        FROM $tbl_user as user, $tbl_course_user as course_rel_user
-        WHERE (course_rel_user.status='1') AND user.user_id=course_rel_user.user_id AND c_id ='".$courseId."'
-        ORDER BY ".$target_name." ASC";
-$q_result_titulars = Database::query($sql);
-
-if (Database::num_rows($q_result_titulars) == 0) {
-    $sql = "SELECT username, lastname, firstname FROM $tbl_user as user, $tbl_admin as admin
-            WHERE admin.user_id=user.user_id ORDER BY ".$target_name." ASC";
-    $q_result_titulars = Database::query($sql);
-}
-
-$a_profs[0] = '-- '.get_lang('NoManager').' --';
-while ($a_titulars = Database::fetch_array($q_result_titulars)) {
-    $s_username = $a_titulars['username'];
-    $s_lastname = $a_titulars['lastname'];
-    $s_firstname = $a_titulars['firstname'];
-
-    if (api_get_person_name($s_firstname, $s_lastname) == $s_tutor) {
-        $s_selected_tutor = api_get_person_name($s_firstname, $s_lastname);
-    }
-    $s_disabled_select_titular = '';
-    if (!api_is_course_admin()) {
-        $s_disabled_select_titular = 'disabled=disabled';
-    }
-    $a_profs[api_get_person_name($s_firstname, $s_lastname)] = api_get_person_name($s_lastname, $s_firstname).' ('.$s_username.')';
-}
-
-$categories = CourseCategory::getCategoriesCanBeAddedInCourse($_course['categoryCode']);
+$categories = CourseCategory::getCategoriesCanBeAddedInCourse(
+    $_course['categoryCode']
+);
 
 // Build the form
-$form = new FormValidator('update_course', 'post', api_get_self().'?'.api_get_cidreq());
+$form = new FormValidator(
+    'update_course',
+    'post',
+    api_get_self().'?'.api_get_cidreq()
+);
 
 $form->addHtml('<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">');
 
@@ -198,6 +167,16 @@ if (api_get_setting('allow_course_theme') == 'true') {
 }
 
 $form->addElement('label', get_lang('DocumentQuota'), format_file_size(DocumentManager::get_course_quota()));
+
+if (!empty(ExerciseLib::getScoreModels())) {
+    $models = ExerciseLib::getScoreModels();
+    $options = ['' => get_lang('None')];
+    foreach ($models['models'] as $item) {
+        $options[$item['id']] = get_lang($item['name']);
+    }
+    $form->addSelect('score_model_id', get_lang('ScoreModel'), $options);
+}
+
 $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
 $form->addHtml('
         </div>
@@ -332,13 +311,14 @@ $form->addGroup($group, '', array(get_lang("NewUserEmailAlert")));
 
 $group = array();
 $group[] = $form->createElement('radio', 'email_alert_students_on_new_homework', get_lang('NewHomeworkEmailAlert'), get_lang('NewHomeworkEmailAlertEnable'), 1);
+$group[] = $form->createElement('radio', 'email_alert_students_on_new_homework', null, get_lang('NewHomeworkEmailAlertToHrmEnable'), 2);
 $group[] = $form->createElement('radio', 'email_alert_students_on_new_homework', null, get_lang('NewHomeworkEmailAlertDisable'), 0);
 $form->addGroup($group, '', array(get_lang("NewHomeworkEmailAlert")));
 
 $group = array();
+$group[] = $form->createElement('radio', 'email_alert_manager_on_new_doc', get_lang('WorkEmailAlert'), get_lang('WorkEmailAlertActivate'), 1);
 $group[] = $form->createElement('radio', 'email_alert_manager_on_new_doc', null, get_lang('WorkEmailAlertActivateOnlyForTeachers'), 3);
 $group[] = $form->createElement('radio', 'email_alert_manager_on_new_doc', null, get_lang('WorkEmailAlertActivateOnlyForStudents'), 2);
-$group[] = $form->createElement('radio', 'email_alert_manager_on_new_doc', get_lang('WorkEmailAlert'), get_lang('WorkEmailAlertActivate'), 1);
 $group[] = $form->createElement('radio', 'email_alert_manager_on_new_doc', null, get_lang('WorkEmailAlertDeactivate'), 0);
 $form->addGroup($group, '', array(get_lang("WorkEmailAlert")));
 
@@ -347,18 +327,38 @@ $group[] = $form->createElement('radio', 'email_alert_on_new_doc_dropbox', get_l
 $group[] = $form->createElement('radio', 'email_alert_on_new_doc_dropbox', null, get_lang('DropboxEmailAlertDeactivate'), 0);
 $form->addGroup($group, '', array(get_lang("DropboxEmailAlert")));
 
+// Exercises notifications
+$emailAlerts = ExerciseLib::getNotificationSettings();
+$group = [];
+foreach ($emailAlerts as $itemId => $label) {
+    $group[] = $form->createElement(
+        'checkbox',
+        'email_alert_manager_on_new_quiz[]',
+        null,
+        $label,
+        ['value' => $itemId]
+    );
+}
+
+$form->addGroup($group, '', array(get_lang('Exercises')));
+
 $group = array();
+$group[] = $form->createElement(
+    'radio',
+    'email_to_teachers_on_new_work_feedback',
+    get_lang('EmailToTeachersWhenNewWorkFeedback'),
+    get_lang('Yes'),
+    1
+);
+$group[] = $form->createElement(
+    'radio',
+    'email_to_teachers_on_new_work_feedback',
+    null,
+    get_lang('No'),
+    2
+);
+$form->addGroup($group, '', array(get_lang("EmailToTeachersWhenNewWorkFeedback")));
 
-$group[] = $form->createElement('checkbox', 'email_alert_manager_on_new_quiz[]', null, get_lang('SendEmailToTeacherWhenStudentStartQuiz'), ['value' => 2]);
-// Default
-$group[] = $form->createElement('checkbox', 'email_alert_manager_on_new_quiz[]', null, get_lang('SendEmailToTeacherWhenStudentEndQuiz'), ['value' => 1]);
-
-$group[] = $form->createElement('checkbox', 'email_alert_manager_on_new_quiz[]', null, get_lang('SendEmailToTeacherWhenStudentEndQuizOnlyIfOpenQuestion'), ['value' => 3]);
-$group[] = $form->createElement('checkbox', 'email_alert_manager_on_new_quiz[]', null, get_lang('SendEmailToTeacherWhenStudentEndQuizOnlyIfOralQuestion'), ['value' => 4]);
-//$group[] = $form->createElement('checkbox', 'email_alert_manager_on_new_quiz[]', null, get_lang('QuizEmailAlertDeactivate'), ['value' => 0]);
-
-//$group[] = $form->createElement('checkbox', 'email_alert_manager_on_new_quiz[]', null, get_lang('QuizEmailSendToTeacherWhenStudentEndQuiz'), ['value' => 3]);
-$form->addGroup($group, '', array(get_lang("Exercises")));
 $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
 
 $form->addHtml('
@@ -667,6 +667,7 @@ $values['legal'] = $all_course_information['legal'];
 $values['activate_legal'] = $all_course_information['activate_legal'];
 
 $courseSettings = CourseManager::getCourseSettingVariables($appPlugin);
+
 foreach ($courseSettings as $setting) {
     $result = api_get_course_setting($setting);
     if ($result != '-1') {
@@ -791,7 +792,9 @@ if ($form->validate() && is_settings_editable()) {
 }
 
 if ($show_delete_watermark_text_message) {
-    Display::addFlash(Display::return_message(get_lang('FileDeleted'), 'normal'));
+    Display::addFlash(
+        Display::return_message(get_lang('FileDeleted'), 'normal')
+    );
 }
 
 /*	Header */

@@ -10,7 +10,6 @@
  */
 class HookNotificationTitle extends HookEvent implements HookNotificationTitleEventInterface
 {
-
     /**
      * Construct
      */

@@ -13,6 +13,8 @@ $_in_course = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
+ob_start();
+
 api_protect_course_script(true);
 
 $course_code = api_get_course_id();
@@ -20,7 +22,7 @@ $stud_id = api_get_user_id();
 $session_id = api_get_session_id();
 
 //make sure the destination for scripts is index.php instead of gradebook.php
-$_SESSION['gradebook_dest'] = 'index.php';
+Category::setUrl('index.php');
 
 $this_section = SECTION_COURSES;
 
@@ -120,13 +122,12 @@ if (empty($cats)) {
 $selectCat = (int) $cats[0]->get_id();
 $_GET['selectcat'] = $selectCat;
 
-if (isset($_GET['isStudentView'])) {
-    if ($selectCat > 0 && (isset($_SESSION['studentview']) && $_SESSION['studentview'] == 'true')) {
-        $interbreadcrumb[] = array(
-            'url' => 'index.php'.'?selectcat=0&isStudentView=true',
-            'name' => get_lang('ToolGradebook'),
-        );
-    }
+$isStudentView = api_is_student_view_active();
+if ($selectCat > 0 && $isStudentView) {
+    $interbreadcrumb[] = array(
+        'url' => 'index.php?selectcat=0&isStudentView=true',
+        'name' => get_lang('ToolGradebook'),
+    );
 }
 
 // ACTIONS
@@ -148,7 +149,7 @@ if (isset($_GET['createallcategories'])) {
             unset($cat);
         }
     }
-    header('Location: '.$_SESSION['gradebook_dest'].'?addallcat=&selectcat=0');
+    header('Location: '.Category::getUrl().'addallcat=&selectcat=0');
     exit;
 }
 
@@ -161,10 +162,10 @@ if (isset($_GET['visiblelog'])) {
 //move a category
 if (isset($_GET['movecat'])) {
     GradebookUtils::block_students();
-    $cats = Category :: load($_GET['movecat']);
+    $cats = Category::load($_GET['movecat']);
     if (!isset($_GET['targetcat'])) {
         $move_form = new CatForm(
-            CatForm :: TYPE_MOVE,
+            CatForm::TYPE_MOVE,
             $cats[0],
             'move_cat_form',
             null,
@@ -177,7 +178,7 @@ if (isset($_GET['movecat'])) {
             exit;
         }
     } else {
-        $targetcat = Category :: load($_GET['targetcat']);
+        $targetcat = Category::load($_GET['targetcat']);
         $course_to_crsind = ($cats[0]->get_course_code() != null && $targetcat[0]->get_course_code() == null);
 
         if (!($course_to_crsind && !isset($_GET['confirm']))) {
@@ -196,7 +197,7 @@ if (isset($_GET['moveeval'])) {
     $evals = Evaluation :: load($_GET['moveeval']);
     if (!isset($_GET['targetcat'])) {
         $move_form = new EvalForm(
-            EvalForm :: TYPE_MOVE,
+            EvalForm::TYPE_MOVE,
             $evals[0],
             null,
             'move_eval_form',
@@ -229,7 +230,7 @@ if (isset($_GET['movelink'])) {
     GradebookUtils::block_students();
     $link = LinkFactory :: load($_GET['movelink']);
     $move_form = new LinkForm(
-        LinkForm :: TYPE_MOVE,
+        LinkForm::TYPE_MOVE,
         null,
         $link[0],
         'move_link_form',
@@ -238,7 +239,7 @@ if (isset($_GET['movelink'])) {
     );
 
     if ($move_form->validate()) {
-        $targetcat = Category :: load($move_form->exportValue('move_cat'));
+        $targetcat = Category::load($move_form->exportValue('move_cat'));
         $link[0]->move_to_cat($targetcat[0]);
         unset($link);
         header('Location: '.api_get_self().'?linkmoved=&selectcat='.$selectCat);
@@ -411,14 +412,14 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 switch ($action) {
     case 'lock':
-        $category_to_lock = Category :: load($_GET['category_id']);
-        $category_to_lock[0]->lock_all_items(1);
+        $category_to_lock = Category::load($_GET['category_id']);
+        $category_to_lock[0]->lockAllItems(1);
         $confirmation_message = get_lang('GradebookLockedAlert');
         break;
     case 'unlock':
         if (api_is_platform_admin()) {
-            $category_to_lock = Category :: load($_GET['category_id']);
-            $category_to_lock[0]->lock_all_items(0);
+            $category_to_lock = Category::load($_GET['category_id']);
+            $category_to_lock[0]->lockAllItems(0);
             $confirmation_message = get_lang('EvaluationHasBeenUnLocked');
         }
         break;
@@ -569,29 +570,29 @@ if (isset ($move_form)) {
     Display::addFlash(Display::return_message($move_form->toHtml(), 'normal', false));
 }
 
+$viewTitle = '';
+
 // DISPLAY HEADERS AND MESSAGES
 if (!isset($_GET['exportpdf'])) {
-    if (isset ($_GET['studentoverview'])) {
+    if (isset($_GET['studentoverview'])) {
         $interbreadcrumb[] = array(
-            'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectCat,
+            'url' => Category::getUrl().'selectcat='.$selectCat,
             'name' => get_lang('ToolGradebook')
         );
-        Display :: display_header(get_lang('FlatView'));
+        $viewTitle = get_lang('FlatView');
     } elseif (isset($_GET['search'])) {
         $interbreadcrumb[] = array(
-            'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectCat,
+            'url' => Category::getUrl().'selectcat='.$selectCat,
             'name' => get_lang('ToolGradebook')
         );
-        Display :: display_header(get_lang('SearchResults'));
+        $viewTitle = get_lang('SearchResults');
     } elseif (!empty($selectCat)) {
         $interbreadcrumb[] = array(
             'url' => '#',
             'name' => get_lang('ToolGradebook')
         );
-
-        Display :: display_header('');
     } else {
-        Display :: display_header(get_lang('ToolGradebook'));
+        $viewTitle = get_lang('ToolGradebook');
     }
 }
 
@@ -753,7 +754,7 @@ if (!empty($selectCat)) {
     if ($show_message == '') {
         // Student
         if (!api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
-            $certificate = Category::register_user_certificate(
+            $certificate = Category::generateUserCertificate(
                 $selectCat,
                 $stud_id
             );
@@ -768,9 +769,7 @@ if (!empty($selectCat)) {
 
             $currentScore = Category::getCurrentScore(
                 $stud_id,
-                $selectCat,
-                $course_code,
-                $session_id,
+                $cats[0],
                 true
             );
             Category::registerCurrentScore($currentScore, $stud_id, $selectCat);
@@ -934,7 +933,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $exportToPdf = true;
                 }
 
-                $gradebooktable = new GradebookTable(
+                $gradebookTable = new GradebookTable(
                     $cat,
                     $allcat,
                     $alleval,
@@ -943,31 +942,39 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $exportToPdf
                 );
 
+
+                $model = ExerciseLib::getCourseScoreModel();
+
                 if (api_is_allowed_to_edit()) {
-                    $gradebooktable->td_attributes = [
+                    $gradebookTable->td_attributes = [
                         4 => 'class="text-center"'
                     ];
                 } else {
-                    $gradebooktable->td_attributes = [
-                        3 => 'class="text-right"',
-                        4 => 'class="text-center"',
-                        5 => 'class="text-center"',
-                        6 => 'class="text-center"',
-                        7 => 'class="text-center"'
-                    ];
+                    if (empty($model)) {
+                        $gradebookTable->td_attributes = [
+                            3 => 'class="text-right"',
+                            4 => 'class="text-center"',
+                            5 => 'class="text-center"',
+                            6 => 'class="text-center"',
+                            7 => 'class="text-center"'
+                        ];
+                    } else {
+                        $gradebookTable->td_attributes = [
+                            3 => 'class="text-right"',
+                            4 => 'class="text-center"'
+                        ];
+                    }
 
                     if ($action == 'export_table') {
-                        unset($gradebooktable->td_attributes[7]);
+                        unset($gradebookTable->td_attributes[7]);
                     }
                 }
 
-                $table = $gradebooktable->return_table();
-                $graph = $gradebooktable->getGraph();
+                $table = $gradebookTable->return_table();
+                $graph = $gradebookTable->getGraph();
 
                 if ($action == 'export_table') {
                     ob_clean();
-                    $sessionName = api_get_session_name(api_get_session_id());
-                    $sessionName = !empty($sessionName) ? " - $sessionName" : '';
                     $params = array(
                         'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['name']),
                         'course_code' => api_get_course_id(),
@@ -977,16 +984,11 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                         'student_info' => api_get_user_info(),
                         'show_grade_generated_date' => true,
                         'show_real_course_teachers' => false,
-                        'show_teacher_as_myself' => false
+                        'show_teacher_as_myself' => false,
+                        'orientation' => 'P'
                     );
 
                     $pdf = new PDF('A4', $params['orientation'], $params);
-
-                    $address = api_get_setting('institution_address');
-                    $phone = api_get_setting('administratorTelephone');
-                    $address = str_replace('\n', '<br />', $address);
-                    $pdf->custom_header = array('html' => "<h5  align='right'>$address <br />$phone</h5>");
-
                     $pdf->html_to_pdf_with_template(
                         $table.
                         $graph.
@@ -1004,4 +1006,10 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
 
 api_set_in_gradebook();
 
-Display :: display_footer();
+$contents = ob_get_contents();
+
+ob_end_clean();
+
+$view = new Template($viewTitle);
+$view->assign('content', $contents);
+$view->display_one_col_template();

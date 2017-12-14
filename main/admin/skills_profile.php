@@ -12,24 +12,19 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-
-if (api_get_setting('allow_skills_tool') != 'true') {
-    api_not_allowed();
-}
+Skill::isAllowed();
 
 $interbreadcrumb[] = array(
     'url' => 'index.php',
     "name" => get_lang('PlatformAdmin'),
 );
 
-$skill           = new Skill();
-$skill_profile   = new SkillProfile();
-$skill_rel_user  = new SkillRelUser();
+$skill = new Skill();
+$skill_profile = new SkillProfile();
+$skill_rel_user = new SkillRelUser();
 
 $url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php';
-
 $tpl = new Template(get_lang('Skills'));
-
 $form = new FormValidator('profile_search');
 
 $form->addElement('header', get_lang('SearchSkills'));
@@ -52,7 +47,6 @@ if ($form->validate()) {
         $skills = array_filter($skills);
         $skills = array_unique($skills);
         Session::write('skills', $skills);
-
     } else {
         $skills = Session::read('skills', []);
     }
@@ -62,14 +56,13 @@ if ($form->validate()) {
 
 $user_list = array();
 $count_skills = count($skills);
-
-$users = $skill_rel_user->get_user_by_skills($skills);
+$users = $skill_rel_user->getUserBySkills($skills);
 
 if (!empty($users)) {
     foreach ($users as $user) {
         $user_info = api_get_user_info($user['user_id']);
         $user_list[$user['user_id']]['user'] = $user_info;
-        $my_user_skills = $skill_rel_user->get_user_skills($user['user_id']);
+        $my_user_skills = $skill_rel_user->getUserSkills($user['user_id']);
         $user_skills = array();
         $found_counts = 0;
         foreach ($my_user_skills as $my_skill) {
@@ -96,7 +89,6 @@ if (!empty($users)) {
     }
 }
 
-//$tpl->assign('user_list', $user_list);
 $tpl->assign('order_user_list', $ordered_user_list);
 $tpl->assign('total_search_skills', $count_skills);
 
@@ -114,7 +106,7 @@ if (!empty($skills)) {
     }
 }
 
-$total_skills_to_search = $skill->get_skills_info($total_skills_to_search);
+$total_skills_to_search = $skill->getSkillsInfo($total_skills_to_search);
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
 
@@ -131,8 +123,8 @@ switch ($action) {
         break;
     case 'load_profile':
         $skill_profile = new SkillRelProfile();
-        $skills = $skill_profile->get_skills_by_profile($id);
-        $total_skills_to_search = $skill->get_skills_info($skills);
+        $skills = $skill_profile->getSkillsByProfile($id);
+        $total_skills_to_search = $skill->getSkillsInfo($skills);
         break;
 }
 

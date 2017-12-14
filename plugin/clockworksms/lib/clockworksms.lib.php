@@ -72,10 +72,15 @@ class Clockworksms implements SmsPluginLibraryInterface
     public function getMobilePhoneNumberById($userId)
     {
         $mobilePhoneNumberExtraField = new ExtraField('user');
-        $mobilePhoneNumberExtraField = $mobilePhoneNumberExtraField->get_handler_field_info_by_field_variable('mobile_phone_number');
+        $mobilePhoneNumberExtraField = $mobilePhoneNumberExtraField->get_handler_field_info_by_field_variable(
+            'mobile_phone_number'
+        );
 
         $mobilePhoneNumberExtraFieldValue = new ExtraFieldValue('user');
-        $mobilePhoneNumberExtraFieldValue = $mobilePhoneNumberExtraFieldValue->get_values_by_handler_and_field_id($userId, $mobilePhoneNumberExtraField['id']);
+        $mobilePhoneNumberExtraFieldValue = $mobilePhoneNumberExtraFieldValue->get_values_by_handler_and_field_id(
+            $userId,
+            $mobilePhoneNumberExtraField['id']
+        );
 
         return $mobilePhoneNumberExtraFieldValue['value'];
     }
@@ -96,61 +101,46 @@ class Clockworksms implements SmsPluginLibraryInterface
     {
         $trimmedKey = trim(CONFIG_SECURITY_API_KEY);
         if (!empty($trimmedKey)) {
-            $phoneExists = array_key_exists("mobilePhoneNumber", $additionalParameters);
+            $phoneExists = array_key_exists('mobilePhoneNumber', $additionalParameters);
             $to = $phoneExists ? $additionalParameters['mobilePhoneNumber'] : $this->getMobilePhoneNumberById($additionalParameters['userId']);
 
             $message = array(
-                "to" => $to,
-                "message" => $this->getSms($additionalParameters)
+                'to' => $to,
+                'message' => $this->getSms($additionalParameters)
             );
 
             if (!empty($message['message'])) {
-                $result = $this->api->send($message);
-
-                // Commented for future message logging / tracking purposes
-                /*if ($result["success"]) {
-                    echo "Message sent - ID: " . $result["id"];
-                } else {
-                    echo "Message failed - Error: " . $result["error_message"];
-                }*/
+                $this->api->send($message);
             }
-
         }
     }
 
     /**
      * buildSms (builds an SMS from a template and data)
-     * @param   object  ClockworksmsPlugin object
-     * @param   object  Template object
-     * @param   string  Template file name
-     * @param   string  Text key from lang file
-     * @param   array   Data to fill message variables (if any)
-     * @return  object  Template object with message property updated
+     * @param ClockworksmsPlugin $plugin
+     * @param Template $tpl
+     * @param string  Template file name
+     * @param string $messageKey Text key from lang file
+     * @param array $parameters  Data to fill message variables (if any)
+     * @return string
      */
-    public function buildSms($plugin, $tpl, $templateName, $messageKey, $parameters = null)
-    {
-        $result = Database::select(
-            'selected_value',
-            'settings_current',
-            array(
-                'where'=> array('variable = ?' => array('clockworksms_message'.$messageKey))
-            )
-        );
-
-        //if (empty($result)) {
-        if (0) {
-            $tpl->assign('message', '');
-        } else {
-            $templatePath = 'clockworksms/sms_templates/';
-            $content = $tpl->fetch($templatePath.$templateName);
-            $message = $plugin->get_lang($messageKey);
-            if ($parameters !== null) {
-                $message = vsprintf($message, $parameters);
-            }
-            $tpl->assign('message', $message);
+    public function buildSms(
+        $plugin,
+        $tpl,
+        $templateName,
+        $messageKey,
+        $parameters = []
+    ) {
+        // Send direct message with out using plugin get_lang
+        if (isset($parameters['direct_message'])) {
+            return $parameters['direct_message'];
         }
 
-        return $tpl->params['message'];
+        $message = $plugin->get_lang($messageKey);
+        if ($parameters !== null) {
+            $message = vsprintf($message, $parameters);
+        }
+        return $message;
     }
 
     /**
@@ -319,6 +309,15 @@ class Clockworksms implements SmsPluginLibraryInterface
                         api_get_setting('siteName'),
                         $additionalParameters['courseTitle']
                     )
+                );
+                break;
+            case SmsPlugin::CERTIFICATE_NOTIFICATION:
+                return $this->buildSms(
+                    $plugin,
+                    $tpl,
+                    'certificate_notification.tpl',
+                    '',
+                    $additionalParameters
                 );
                 break;
             // Message types to be implemented. Fill the array parameter with arguments.

@@ -108,14 +108,14 @@ class CkEditor extends Editor
         }
         /** @var \Chamilo\CoreBundle\Entity\SystemTemplate $template */
         $templateList = array();
-
-        $search = array('{CSS}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}');
+        $cssTheme = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/';
+        $search = array('{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}');
         $replace = array(
-            '',
+            $cssTheme,
             api_get_path(REL_CODE_PATH).'img/',
             api_get_path(REL_PATH),
-            //api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH),
-            //api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH)
+            api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH),
+            ''
         );
 
         foreach ($templates as $template) {
@@ -176,14 +176,14 @@ class CkEditor extends Editor
     {
         $entityManager = \Database::getManager();
         $systemTemplates = $entityManager->getRepository('ChamiloCoreBundle:SystemTemplate')->findAll();
-
-        $search = array('{CSS}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}');
+        $cssTheme = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/';
+        $search = array('{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}');
         $replace = array(
-            '',
+            $cssTheme,
             api_get_path(REL_CODE_PATH).'img/',
             api_get_path(REL_PATH),
             api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH),
-            api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH)
+            '',
         );
 
         $templateList = array();

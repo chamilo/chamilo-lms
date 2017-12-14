@@ -2103,7 +2103,6 @@ $ApprovalForNewAccount = "Naujos sąskaitos patvirtinimas";
 $ManageUser = "Valdyti vartotoją";
 $SubscribeUserToCourseAsTeacher = "Užregistruoti vartotojus šiame kurse kaip dėstytojus";
 $PasswordEncryptedForSecurity = "Your password is encrypted for security reasons. Thus, after pressing the link an e-mail will be sent to you again with your password.";
-$SystemUnableToSendEmailContact = "System unable to send email contact";
 $InLnk = "Paslėpti įrankiai ir nuorodos";
 $DelLk = "Ar tikrai norite ištrinti šią nuorodą?";
 $NameOfTheLink = "Nuorodos pavadinimas";

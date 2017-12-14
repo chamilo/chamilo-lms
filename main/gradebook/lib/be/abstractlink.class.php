@@ -28,6 +28,46 @@ abstract class AbstractLink implements GradebookItem
     public $studentList;
 
     /**
+     * @return bool
+     */
+    abstract function has_results();
+
+    /**
+     * @return string
+     */
+    abstract function get_link();
+
+    /**
+     * @return bool
+     */
+    abstract function is_valid_link();
+
+    /**
+     * @return string
+     */
+    abstract function get_type_name();
+
+    /**
+     * @return bool
+     */
+    abstract function needs_name_and_description();
+
+    /**
+     * @return bool
+     */
+    abstract function needs_max();
+
+    /**
+     * @return bool
+     */
+    abstract function needs_results();
+
+    /**
+     * @return bool
+     */
+    abstract function is_allowed_to_change_name();
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -224,10 +264,12 @@ abstract class AbstractLink implements GradebookItem
      * To keep consistency, do not call this method but LinkFactory::load instead.
      * @param integer $id
      * @param integer $type
+     * @param integer $ref_id
      * @param integer $user_id
      * @param string $course_code
      * @param integer $category_id
      * @param integer $visible
+     * @return array
      */
     public static function load(
         $id = null,
@@ -411,20 +453,20 @@ abstract class AbstractLink implements GradebookItem
     }
 
     /**
-     * @param int $idevaluation
+     * @param int $evaluationId
      */
-    public static function add_link_log($idevaluation, $nameLog = null)
+    public static function add_link_log($evaluationId, $nameLog = null)
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
-        $dateobject = self::load($idevaluation, null, null, null, null);
-        $current_date_server = api_get_utc_datetime();
+        $dateobject = self::load($evaluationId, null, null, null, null);
+        $now = api_get_utc_datetime();
         $arreval = get_object_vars($dateobject[0]);
         $description_log = isset($arreval['description']) ? $arreval['description'] : '';
         if (empty($nameLog)) {
             if (isset($_POST['name_link'])) {
                 $name_log = isset($_POST['name_link']) ? $_POST['name_link'] : $arreval['course_code'];
-            } elseif (isset($_POST['link_'.$idevaluation]) && $_POST['link_'.$idevaluation]) {
-                $name_log = $_POST['link_'.$idevaluation];
+            } elseif (isset($_POST['link_'.$evaluationId]) && $_POST['link_'.$evaluationId]) {
+                $name_log = $_POST['link_'.$evaluationId];
             } else {
                 $name_log = $arreval['course_code'];
             }
@@ -436,7 +478,7 @@ abstract class AbstractLink implements GradebookItem
             'id_linkeval_log' => $arreval['id'],
             'name' => $name_log,
             'description' => $description_log,
-            'created_at' => $current_date_server,
+            'created_at' => $now,
             'weight' => $arreval['weight'],
             'visible' => $arreval['visible'],
             'type' => 'Link',
@@ -451,8 +493,8 @@ abstract class AbstractLink implements GradebookItem
     public function delete()
     {
         $this->delete_linked_data();
-        $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        $sql = 'DELETE FROM '.$tbl_grade_links.'
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+        $sql = 'DELETE FROM '.$table.'
                 WHERE id = '.intval($this->id);
         Database::query($sql);
     }
@@ -468,11 +510,14 @@ abstract class AbstractLink implements GradebookItem
         // links can only be moved to categories inside this course
         $targets = array();
         $level = 0;
-
-        $crscats = Category::load(null, null, $this->get_course_code(), 0);
-        foreach ($crscats as $cat) {
+        $categories = Category::load(null, null, $this->get_course_code(), 0);
+        foreach ($categories as $cat) {
             $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
-            $targets = $this->add_target_subcategories($targets, $level + 1, $cat->get_id());
+            $targets = $this->addTargetSubcategories(
+                $targets,
+                $level + 1,
+                $cat->get_id()
+            );
         }
 
         return $targets;
@@ -480,14 +525,21 @@ abstract class AbstractLink implements GradebookItem
 
     /**
      * Internal function used by get_target_categories()
+     * @param array $targets
      * @param integer $level
+     * @param int $catid
+     * @return array
      */
-    private function add_target_subcategories($targets, $level, $catid)
+    private function addTargetSubcategories($targets, $level, $catid)
     {
         $subcats = Category::load(null, null, null, $catid);
         foreach ($subcats as $cat) {
             $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
-            $targets = $this->add_target_subcategories($targets, $level + 1, $cat->get_id());
+            $targets = $this->addTargetSubcategories(
+                $targets,
+                $level + 1,
+                $cat->get_id()
+            );
         }
         return $targets;
     }
@@ -511,6 +563,7 @@ abstract class AbstractLink implements GradebookItem
      * To keep consistency, do not call this method but LinkFactory::find_links instead.
      * @todo can be written more efficiently using a new (but very complex) sql query
      * @param string $name_mask
+     * @return array
      */
     public function find_links($name_mask, $selectcat)
     {
@@ -542,14 +595,6 @@ abstract class AbstractLink implements GradebookItem
         return 'link';
     }
 
-    abstract function has_results();
-    abstract function get_link();
-    abstract function is_valid_link();
-    abstract function get_type_name();
-    abstract function needs_name_and_description();
-    abstract function needs_max();
-    abstract function needs_results();
-    abstract function is_allowed_to_change_name();
 
     /* Seems to be not used anywhere */
     public function get_not_created_links()
@@ -622,6 +667,7 @@ abstract class AbstractLink implements GradebookItem
      * @param int $userId
      * @param array $studentList Array with user id and scores
      * Example: [1 => 5.00, 2 => 8.00]
+     * @return array
      */
     public static function getCurrentUserRanking($userId, $studentList)
     {

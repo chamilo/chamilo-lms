@@ -30,11 +30,11 @@ class scormItem extends learnpathItem
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormItem
      * object from database records or from the DOM element given as parameter
-     * @param	string	$type Type of construction needed ('db' or 'manifest', default = 'manifest')
-     * @param	mixed	$element Depending on the type given, DB id for the lp_item or reference to the DOM element
+     * @param    string $type Type of construction needed ('db' or 'manifest', default = 'manifest')
+     * @param    mixed $element Depending on the type given, DB id for the lp_item or reference to the DOM element
      * @param int $course_id
      */
-    public function __construct($type = 'manifest', &$element, $course_id = '')
+    public function __construct($type = 'manifest', &$element, $course_id = 0)
     {
         if (isset($element)) {
             // Parsing using PHP5 DOMXML methods.
@@ -43,7 +43,7 @@ class scormItem extends learnpathItem
                     parent::__construct($element, api_get_user_id(), $course_id);
                     $this->scorm_contact = false;
                     // TODO: Implement this way of metadata object creation.
-                    return false;
+                    break;
                 case 'manifest': // Do the same as the default.
                 default:
                     //if ($first_item->type == XML_ELEMENT_NODE) this is already check prior to the call to this function.
@@ -135,21 +135,17 @@ class scormItem extends learnpathItem
                             }
                         }
                     }
-
-                    return true;
             }
             // End parsing using PHP5 DOMXML methods.
         }
-
-        return false;
     }
 
     /**
      * Builds a flat list with the current item and calls itself recursively on all children
-     * @param	array	Reference to the array to complete with the current item
-     * @param	integer	Optional absolute order (pointer) of the item in this learning path
-     * @param	integer	Optional relative order of the item at this level
-     * @param	integer	Optional level. If not given, assumes it's level 0
+     * @param    array    Reference to the array to complete with the current item
+     * @param    integer    Optional absolute order (pointer) of the item in this learning path
+     * @param    integer    Optional relative order of the item at this level
+     * @param    integer    Optional level. If not given, assumes it's level 0
      */
     public function get_flat_list(&$list, &$abs_order, $rel_order = 1, $level = 0)
     {
@@ -181,7 +177,7 @@ class scormItem extends learnpathItem
 
     /**
      * Save function. Uses the parent save function and adds a layer for SCORM.
-     * @param	boolean	Save from URL params (1) or from object attributes (0)
+     * @param    boolean    Save from URL params (1) or from object attributes (0)
      */
     public function save($from_outside = true, $prereqs_complete = false)
     {

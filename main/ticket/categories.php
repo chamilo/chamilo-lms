@@ -10,19 +10,19 @@ use ChamiloSession as Session;
 
 // needed in order to load the plugin lang variables
 $course_plugin = 'ticket';
+$cidReset = true;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script(true);
 
 $toolName = get_lang('Categories');
-
-$libPath = api_get_path(LIBRARY_PATH);
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
 $user_id = api_get_user_id();
 $isAdmin = api_is_platform_admin();
 
 $this_section = 'tickets';
-unset($_SESSION['this_section']);
+Session::erase('this_section');
 
 $table = new SortableTable(
     'TicketCategories',
@@ -173,7 +173,7 @@ function modify_filter($id, $params, $row)
         );
     }
 
-	return $result;
+    return $result;
 }
 
 $table->set_header(0, '', false);

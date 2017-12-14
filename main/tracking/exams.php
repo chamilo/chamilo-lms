@@ -12,7 +12,7 @@ $toolTable = Database::get_course_table(TABLE_TOOL_LIST);
 $quizTable = Database::get_course_table(TABLE_QUIZ_TEST);
 
 $this_section = SECTION_TRACKING;
-$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin;
+$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_session_general_coach || $is_sessionAdmin;
 
 if (!$is_allowedToTrack) {
     api_not_allowed();
@@ -116,18 +116,8 @@ if (!$exportToXLS) {
             }
         }
     } else {
-        $actionsLeft .= Display::url(
-            Display::return_icon('user.png', get_lang('StudentsTracking'), array(), 32),
-            'courseLog.php?'.api_get_cidreq().'&studentlist=true'
-        );
-        $actionsLeft .= Display::url(
-            Display::return_icon('course.png', get_lang('CourseTracking'), array(), 32),
-            'courseLog.php?'.api_get_cidreq().'&studentlist=false'
-        );
-        $actionsLeft .= Display::url(
-            Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), 32),
-            'courseLog.php?'.api_get_cidreq().'&studentlist=resouces'
-        );
+        $actionsLeft = TrackingCourseLog::actionsLeft('exams', api_get_session_id());
+
         $actionsLeft .= Display::url(
             Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), array(), 32),
             api_get_self().'?'.api_get_cidreq().'&export=1&score='.$filter_score.'&exercise_id='.$exerciseId
@@ -246,11 +236,9 @@ if (!empty($courseList) && is_array($courseList)) {
 
             if (Database::num_rows($resultExercises) > 0) {
                 while ($exercise = Database::fetch_array($resultExercises, 'ASSOC')) {
-
                     $exerciseSessionId = $exercise['session_id'];
 
                     if (empty($exerciseSessionId)) {
-
                         if ($global) {
                             // If the exercise was created in the base course.
                             // Load all sessions.
@@ -280,7 +268,6 @@ if (!empty($courseList) && is_array($courseList)) {
                             $html .= $result['html'];
                             $export_array_global = array_merge($export_array_global, $result['export_array_global']);
                         } else {
-
                             if (empty($sessionId)) {
                                 // Load base course.
                                 $result = processStudentList(
@@ -293,12 +280,13 @@ if (!empty($courseList) && is_array($courseList)) {
                                 );
 
                                 $html .= $result['html'];
-                                $export_array_global = array_merge(
-                                    $export_array_global,
-                                    $result['export_array_global']
-                                );
+                                if (is_array($result['export_array_global'])) {
+                                    $export_array_global = array_merge(
+                                        $export_array_global,
+                                        $result['export_array_global']
+                                    );
+                                }
                             } else {
-
                                 $result = processStudentList(
                                     $filter_score,
                                     $global,
@@ -317,7 +305,6 @@ if (!empty($courseList) && is_array($courseList)) {
                         }
                     } else {
                         // If the exercise only exists in this session.
-
                         $result = processStudentList(
                             $filter_score,
                             $global,
@@ -370,7 +357,8 @@ if ($exportToXLS) {
  * @param $b
  * @return int
  */
-function sort_user($a, $b) {
+function sort_user($a, $b)
+{
     if (is_numeric($a['score']) && is_numeric($b['score'])) {
         if ($a['score'] < $b['score']) {
             return 1;
@@ -484,8 +472,7 @@ function export_complete_report_xls($filename, $array)
  */
 function processStudentList($filter_score, $global, $exercise, $courseInfo, $sessionId, $newSessionList)
 {
-    if (
-        (isset($exercise['id']) && empty($exercise['id'])) ||
+    if ((isset($exercise['id']) && empty($exercise['id'])) ||
         !isset($exercise['id'])
     ) {
         return array(
@@ -519,7 +506,6 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
     }
 
     $html = null;
-
     $totalStudents = count($students);
 
     if (!$global) {
@@ -548,8 +534,9 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
 
     $total_with_parameter_score = 0;
     $taken = 0;
-    $export_array_global = array();
-    $studentResult = array();
+    $export_array_global = [];
+    $studentResult = [];
+    $export_array = [];
 
     foreach ($students as $student) {
         $studentId = isset($student['user_id']) ? $student['user_id'] : $student['id_user'];

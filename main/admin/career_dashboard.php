@@ -8,9 +8,10 @@
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
-$libpath = api_get_path(LIBRARY_PATH);
 
-api_protect_admin_script();
+$allowCareer = api_get_configuration_value('allow_session_admin_read_careers');
+
+api_protect_admin_script($allowCareer);
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -27,8 +28,6 @@ $interbreadcrumb[] = array(
     'name' => get_lang('CareersAndPromotions')
 );
 $tpl = new Template(get_lang('CareersAndPromotions'));
-
-Display :: display_header(null);
 
 $html = null;
 $form = new FormValidator('filter_form', 'GET', api_get_self());
@@ -78,15 +77,18 @@ $actionLeft .= Display::url(
     ),
     'careers.php'
 );
-$actionLeft .= Display::url(
-    Display::return_icon(
-        'promotion.png',
-        get_lang('Promotions'),
-        null,
-        ICON_SIZE_MEDIUM
-    ),
-    'promotions.php'
-);
+
+if (api_is_platform_admin()) {
+    $actionLeft .= Display::url(
+        Display::return_icon(
+            'promotion.png',
+            get_lang('Promotions'),
+            null,
+            ICON_SIZE_MEDIUM
+        ),
+        'promotions.php'
+    );
+}
 
 $actions = Display::toolbarAction('toolbar-career', array($actionLeft));
 $html .= $form->returnForm();
@@ -150,5 +152,3 @@ $tpl->assign('form_filter', $html);
 $tpl->assign('data', $careers);
 $layout = $tpl->get_template('admin/career_dashboard.tpl');
 $tpl->display($layout);
-
-Display::display_footer();

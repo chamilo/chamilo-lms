@@ -184,7 +184,7 @@ class Template
 
         // Setting administrator variables
         $this->setAdministratorParams();
-        $this->setCSSEditor();
+        //$this->setCSSEditor();
 
         // Header and footer are showed by default
         $this->set_footer($show_footer);
@@ -202,7 +202,10 @@ class Template
         $this->assign('locale', api_get_language_isocode());
         $this->assign('login_class', null);
 
-        $this->setLoginForm();
+        $allow = api_get_configuration_value('show_language_selector_in_menu');
+        if ($allow) {
+            $this->assign('language_form', api_display_language_form());
+        }
 
         // Chamilo plugins
         if ($this->show_header) {
@@ -359,6 +362,15 @@ class Template
     /**
      * Displays an empty template
      */
+    public function displayBlankTemplateNoHeader()
+    {
+        $tpl = $this->get_template('layout/blank_no_header.tpl');
+        $this->display($tpl);
+    }
+
+    /**
+     * Displays an empty template
+     */
     public function display_no_layout_template()
     {
         $tpl = $this->get_template('layout/no_layout.tpl');
@@ -423,11 +435,10 @@ class Template
         $this->assign('show_toolbar', $show_toolbar);
 
         //Only if course is available
-        $show_course_shortcut        = null;
+        $show_course_shortcut = null;
         $show_course_navigation_menu = null;
 
         if (!empty($this->course_id) && $this->user_is_logged_in) {
-
             if (api_get_setting('show_toolshortcuts') != 'false') {
                 //Course toolbar
                 $show_course_shortcut = CourseHome::show_navigation_tool_shortcuts();
@@ -442,17 +453,39 @@ class Template
     }
 
     /**
+     * Returns the sub-folder and filename for the given tpl file.
+     * If template not found in overrides/ or custom template folder, the
+     * default template will be used.
      * @param string $name
      *
      * @return string
      */
     public function get_template($name)
     {
+        // Check if the tpl file is present in the main/template/overrides/ dir
+        // Overrides is a special directory meant for temporary template
+        // customization. It must be taken into account before anything else
+        $file = api_get_path(SYS_CODE_PATH).'template/overrides/'.$name;
+        if (is_readable($file)) {
+            return 'overrides/'.$name;
+        }
+        // If a template folder has been manually defined, search for the right
+        // file, and if not found, go for the same file in the default template
+        if ($this->templateFolder != 'default') {
+            // Avoid missing template error, use the default file.
+            $file = api_get_path(SYS_CODE_PATH).'template/'.$this->templateFolder.'/'.$name;
+            if (!file_exists($file)) {
+                return 'default/'.$name;
+            }
+        }
+
         return $this->templateFolder.'/'.$name;
     }
 
     /**
-     * Set course parameters
+     * Prepare the _c array for template files. The _c array contains
+     * information about the current course
+     * @return void
      */
     private function set_course_parameters()
     {
@@ -465,7 +498,7 @@ class Template
         $this->assign('course_is_set', true);
         $this->course_id = $course['id'];
         $_c = array(
-            'id' => $course['id'],
+            'id' => $course['real_id'],
             'code' => $course['code'],
             'title' => $course['name'],
             'visibility' => $course['visibility'],
@@ -480,7 +513,10 @@ class Template
     }
 
     /**
-     * Set user parameters
+     * Prepare the _u array for template files. The _u array contains
+     * information about the current user, as returned by
+     * api_get_user_info()
+     * @return void
      */
     private function set_user_parameters()
     {
@@ -504,9 +540,9 @@ class Template
     }
 
     /**
-     * Get theme dir
+     * Get CSS themes sub-directory
      * @param string $theme
-     * @return string
+     * @return string with a trailing slash, e.g. 'themes/chamilo_red/'
      */
     public static function getThemeDir($theme)
     {
@@ -524,20 +560,14 @@ class Template
     }
 
     /**
-     * Set system parameters
+     * Get an array of all the web paths available (e.g. 'web' => 'https://my.chamilo.site/')
+     * @return array
      */
-    public function set_system_parameters()
+    private function getWebPaths()
     {
-        $this->theme = api_get_visual_theme();
-        if (!empty($this->preview_theme)) {
-            $this->theme = $this->preview_theme;
-        }
-
-        $this->themeDir = self::getThemeDir($this->theme);
-
-        // Setting app paths/URLs
-        $_p = array(
+        return [
             'web' => api_get_path(WEB_PATH),
+            'web_url' => api_get_web_url(),
             'web_relative' => api_get_path(REL_PATH),
             'web_course' => api_get_path(WEB_COURSE_PATH),
             'web_main' => api_get_path(WEB_CODE_PATH),
@@ -552,8 +582,25 @@ class Template
             'web_query_vars' => api_htmlentities($_SERVER['QUERY_STRING']),
             'web_self_query_vars' => api_htmlentities($_SERVER['REQUEST_URI']),
             'web_cid_query' => api_get_cidreq(),
-        );
-        $this->assign('_p', $_p);
+        ];
+    }
+
+    /**
+     * Set system parameters from api_get_configuration into _s array for use in TPLs
+     * Also fills the _p array from getWebPaths()
+     * @uses self::getWebPaths()
+     */
+    public function set_system_parameters()
+    {
+        $this->theme = api_get_visual_theme();
+        if (!empty($this->preview_theme)) {
+            $this->theme = $this->preview_theme;
+        }
+
+        $this->themeDir = self::getThemeDir($this->theme);
+
+        // Setting app paths/URLs
+        $this->assign('_p', $this->getWebPaths());
 
         // Here we can add system parameters that can be use in any template
         $_s = array(
@@ -589,11 +636,12 @@ class Template
             'jquery.scrollbar/jquery.scrollbar.css',
             'bootstrap-daterangepicker/daterangepicker.css',
             'bootstrap-select/dist/css/bootstrap-select.min.css',
-            'select2/dist/css/select2.min.css'
+            'select2/dist/css/select2.min.css',
+            'flag-icon-css/css/flag-icon.min.css'
         ];
 
         foreach ($bowerCSSFiles as $file) {
-            $css[] = api_get_path(WEB_PATH).'web/assets/'.$file;
+            $css[] = api_get_path(WEB_PUBLIC_PATH).'assets/'.$file;
         }
 
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
@@ -640,12 +688,6 @@ class Template
             if (is_file(api_get_path(SYS_CSS_PATH).$this->themeDir.'learnpath.css')) {
                 $css[] = api_get_path(WEB_CSS_PATH).$this->themeDir.'learnpath.css';
             }
-        }
-
-        if (is_file(api_get_path(SYS_CSS_PATH).$this->themeDir.'editor.css')) {
-            $css[] = api_get_path(WEB_CSS_PATH).$this->themeDir.'editor.css';
-        } else {
-            $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'editor.css');
         }
 
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->themeDir.'default.css');
@@ -727,8 +769,7 @@ class Template
             $js_files[] = 'fontresize.js';
         }
 
-        $js_file_to_string = null;
-
+        $js_file_to_string = '';
         $bowerJsFiles = [
             'modernizr/modernizr.js',
             'jquery/dist/jquery.min.js',
@@ -752,7 +793,7 @@ class Template
         }
 
         if (api_get_setting('include_asciimathml_script') == 'true') {
-            $bowerJsFiles[] = 'MathJax/MathJax.js?config=TeX-AMS_HTML';
+            $bowerJsFiles[] = 'MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML';
         }
 
         if ($isoCode != 'en') {
@@ -761,7 +802,7 @@ class Template
         }
 
         foreach ($bowerJsFiles as $file) {
-            $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PATH).'web/assets/'.$file.'"></script>'."\n";
+            $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"></script>'."\n";
         }
 
         foreach ($js_files as $file) {
@@ -777,8 +818,9 @@ class Template
         if (!$disable_js_and_css_files) {
             $this->assign('js_file_to_string', $js_file_to_string);
 
+            $extra_headers = '<script>var _p = '.json_encode($this->getWebPaths(), JSON_PRETTY_PRINT).'</script>';
             //Adding jquery ui by default
-            $extra_headers = api_get_jquery_ui_js();
+            $extra_headers .= api_get_jquery_ui_js();
 
             //$extra_headers = '';
             if (isset($htmlHeadXtra) && $htmlHeadXtra) {
@@ -825,7 +867,6 @@ class Template
     {
         global $httpHeadXtra, $interbreadcrumb, $language_file, $_configuration, $this_section;
         $_course = api_get_course_info();
-        $help = $this->help;
         $nameTools = $this->title;
         $navigation = return_navigation_array();
         $this->menu_navigation = $navigation['menu_navigation'];
@@ -877,11 +918,10 @@ class Template
 
         $this->assign('title_string', $title_string);
 
-        //Setting the theme and CSS files
-        $css = $this->setCssFiles();
+        // Setting the theme and CSS files
+        $this->setCssFiles();
         $this->set_js_files();
-        $this->setCssCustomFiles($css);
-        //$this->set_js_files_post();
+        $this->setCssCustomFiles();
 
         $browser = api_browser_support('check_browser');
         if ($browser[0] == 'Internet Explorer' && $browser[1] >= '11') {
@@ -997,13 +1037,11 @@ class Template
             $this->assign('logout_link', api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id());
         }
 
-        //Profile link
+        // Profile link
         if (api_get_setting('allow_social_tool') == 'true') {
             $profile_url = api_get_path(WEB_CODE_PATH).'social/home.php';
-
         } else {
             $profile_url = api_get_path(WEB_CODE_PATH).'auth/profile.php';
-
         }
 
         $this->assign('profile_url', $profile_url);
@@ -1207,7 +1245,6 @@ class Template
     public function show_header_template()
     {
         $tpl = $this->get_template('layout/show_header.tpl');
-
         $this->display($tpl);
     }
 
@@ -1237,17 +1274,19 @@ class Template
     public function set_plugin_region($pluginRegion)
     {
         if (!empty($pluginRegion)) {
-            $regionContent = $this->plugin->load_region($pluginRegion, $this, $this->force_plugin_load);
+            $regionContent = $this->plugin->load_region(
+                $pluginRegion,
+                $this,
+                $this->force_plugin_load
+            );
 
             $pluginList = $this->plugin->get_installed_plugins();
             foreach ($pluginList as $plugin_name) {
-
                 // The plugin_info variable is available inside the plugin index
                 $pluginInfo = $this->plugin->getPluginInfo($plugin_name);
 
                 if (isset($pluginInfo['is_course_plugin']) && $pluginInfo['is_course_plugin']) {
                     $courseInfo = api_get_course_info();
-
                     if (!empty($courseInfo)) {
                         if (isset($pluginInfo['obj']) && $pluginInfo['obj'] instanceof Plugin) {
                             /** @var Plugin $plugin */
@@ -1333,11 +1372,10 @@ class Template
         global $loginFailed;
         $userId = api_get_user_id();
         if (!($userId) || api_is_anonymous($userId)) {
-
             // Only display if the user isn't logged in.
             $this->assign(
                 'login_language_form',
-                api_display_language_form(true)
+                api_display_language_form(true, true)
             );
             if ($setLoginForm) {
                 $this->assign('login_form', $this->displayLoginForm());
@@ -1372,6 +1410,12 @@ class Template
                     break;
                 case 'account_inactive':
                     $message = get_lang('AccountInactive');
+
+                    if (api_get_setting('allow_registration') === 'confirmation') {
+                        $message = get_lang('AccountNotConfirmed')
+                            .PHP_EOL
+                            .Display::url(get_lang('ReSendConfirmationMail'), api_get_path(WEB_PATH) . 'main/auth/resend_confirmation_mail.php');
+                    }
                     break;
                 case 'user_password_incorrect':
                     $message = get_lang('InvalidId');
@@ -1409,32 +1453,39 @@ class Template
             null,
             FormValidator::LAYOUT_BOX_NO_LABEL
         );
-
+        $params = [
+            'id' => 'login',
+            'autofocus' => 'autofocus',
+            'icon' => 'user fa-fw',
+            'placeholder' => get_lang('UserName'),
+        ];
+        $browserAutoCapitalize= false;
+        // Avoid showing the autocapitalize option if the browser doesn't
+        // support it: this attribute is against the HTML5 standard
+        if (api_browser_support('autocapitalize')) {
+            $browserAutoCapitalize = false;
+            $params['autocapitalize'] = 'none';
+        }
         $form->addText(
             'login',
             get_lang('UserName'),
             true,
-            array(
-                'id' => 'login',
-                'autofocus' => 'autofocus',
-                'icon' => 'user fa-fw',
-                'placeholder' => get_lang('UserName'),
-                'autocapitalize' => 'none'
-            )
+            $params
         );
-
+        $params = [
+            'id' => 'password',
+            'icon' => 'lock fa-fw',
+            'placeholder' => get_lang('Pass'),
+        ];
+        if ($browserAutoCapitalize) {
+            $params['autocapitalize'] = 'none';
+        }
         $form->addElement(
             'password',
             'password',
             get_lang('Pass'),
-            array(
-                'id' => 'password',
-                'icon' => 'lock fa-fw',
-                'placeholder' => get_lang('Pass'),
-                'autocapitalize' => 'none',
-            )
+            $params
         );
-
         // Captcha
         $captcha = api_get_setting('allow_captcha');
         $allowCaptcha = $captcha === 'true';
@@ -1458,21 +1509,42 @@ class Template
 
                 // Minimum options using all defaults (including defaults for Image_Text):
                 //$options = array('callback' => 'qfcaptcha_image.php');
-
                 $captcha_question = $form->addElement('CAPTCHA_Image', 'captcha_question', '', $options);
                 $form->addHtml(get_lang('ClickOnTheImageForANewOne'));
 
-                $form->addElement('text', 'captcha', get_lang('EnterTheLettersYouSee'));
-                $form->addRule('captcha', get_lang('EnterTheCharactersYouReadInTheImage'), 'required', null, 'client');
-                $form->addRule('captcha', get_lang('TheTextYouEnteredDoesNotMatchThePicture'), 'CAPTCHA', $captcha_question);
+                $form->addElement(
+                    'text',
+                    'captcha',
+                    get_lang('EnterTheLettersYouSee')
+                );
+                $form->addRule(
+                    'captcha',
+                    get_lang('EnterTheCharactersYouReadInTheImage'),
+                    'required',
+                    null,
+                    'client'
+                );
+                $form->addRule(
+                    'captcha',
+                    get_lang('TheTextYouEnteredDoesNotMatchThePicture'),
+                    'CAPTCHA',
+                    $captcha_question
+                );
             }
         }
 
-        $form->addButton('submitAuth', get_lang('LoginEnter'), null, 'primary', null, 'btn-block');
+        $form->addButton(
+            'submitAuth',
+            get_lang('LoginEnter'),
+            null,
+            'primary',
+            null,
+            'btn-block'
+        );
 
         $html = $form->returnForm();
         if (api_get_setting('openid_authentication') == 'true') {
-            include_once 'main/auth/openid/login.php';
+            include_once api_get_path(SYS_CODE_PATH).'auth/openid/login.php';
             $html .= '<div>'.openid_form().'</div>';
         }
 
@@ -1498,7 +1570,8 @@ class Template
      * Manage specific HTTP headers security
      * @return void (prints headers directly)
      */
-    private function addHTTPSecurityHeaders() {
+    private function addHTTPSecurityHeaders()
+    {
         // Implementation of HTTP headers security, as suggested and checked
         // by https://securityheaders.io/
         // Enable these settings in configuration.php to use them on your site

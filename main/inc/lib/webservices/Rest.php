@@ -8,6 +8,7 @@ use Chamilo\CourseBundle\Entity\Repository\CNotebookRepository;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\UserBundle\Entity\User;
+use Chamilo\CourseBundle\Entity\CNotebook;
 
 /**
  * Class RestApi
@@ -202,7 +203,7 @@ class Rest extends WebService
         foreach ($courses as $courseId) {
             /** @var Course $course */
             $course = Database::getManager()->find('ChamiloCoreBundle:Course', $courseId['real_id']);
-            $teachers = CourseManager::get_teacher_list_from_course_code_to_string($course->getCode());
+            $teachers = CourseManager::getTeacherListFromCourseCodeToString($course->getCode());
 
             $data[] = [
                 'id' => $course->getId(),
@@ -223,7 +224,7 @@ class Rest extends WebService
      */
     public function getCourseInfo()
     {
-        $teachers = CourseManager::get_teacher_list_from_course_code_to_string($this->course->getCode());
+        $teachers = CourseManager::getTeacherListFromCourseCodeToString($this->course->getCode());
         $tools = CourseHome::get_tools_category(
             TOOL_STUDENT_VIEW,
             $this->course->getId(),
@@ -238,7 +239,7 @@ class Rest extends WebService
             'urlPicture' => $this->course->getPicturePath(true),
             'teachers' => $teachers,
             'tools' => array_map(
-                function($tool) {
+                function ($tool) {
                     return ['type' => $tool['name']];
                 },
                 $tools
@@ -482,7 +483,7 @@ class Rest extends WebService
         $notebooks = $notebooksRepo->findByUser($this->user, $this->course, $this->session);
 
         return array_map(
-            function(\Chamilo\CourseBundle\Entity\CNotebook $notebook) {
+            function (CNotebook $notebook) {
                 return [
                     'id' => $notebook->getIid(),
                     'title' => $notebook->getTitle(),
@@ -687,13 +688,12 @@ class Rest extends WebService
         $sessionId = $this->session ? $this->session->getId() : 0;
         $categoriesTempList = learnpath::getCategories($this->course->getId());
 
-        $categoryNone = new \Chamilo\CourseBundle\Entity\CLpCategory();
+        $categoryNone = new CLpCategory();
         $categoryNone->setId(0);
         $categoryNone->setName(get_lang('WithOutCategory'));
         $categoryNone->setPosition(0);
 
         $categories = array_merge([$categoryNone], $categoriesTempList);
-
         $categoryData = array();
 
         /** @var CLpCategory $category */

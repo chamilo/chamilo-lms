@@ -1,18 +1,18 @@
 <?php
 /**
- * This script is a configuration file for the delivery tools plugin. You can use it as a master for other platform plugins (course plugins are slightly different).
- * These settings will be used in the administration interface for plugins (Chamilo configuration settings->Plugins)
+ * This plugin allows you to configure a footer note to plug some additional features. In a way, it works a bit like
+ * any block plugin to be added in a region
  * @package chamilo.plugin
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
-require_once __DIR__.'/lib/customfooter_plugin.class.php';
 
 /**
  * Plugin details (must be present)
  */
 
 /* Plugin config */
+$plugin_info = CustomFooterPlugin::create()->get_info();
 
 //the plugin title
 $plugin_info['title'] = 'Custom Footer';
@@ -35,7 +35,9 @@ $form = new FormValidator('customfooter_form');
 
 $plugininstance = CustomFooterPlugin::create();
 
-$config = api_get_settings_params(array('subkey = ? ' => 'customfooter', ' AND category = ? ' => 'Plugins'));
+$config = api_get_settings_params(
+    array('subkey = ? ' => 'customfooter', ' AND category = ? ' => 'Plugins')
+);
 $form_settings = [];
 
 foreach ($config as $fooid => $configrecord) {
@@ -48,9 +50,7 @@ foreach ($config as $fooid => $configrecord) {
 // A simple select.
 $form->addElement('text', 'footer_left', $plugininstance->get_lang('footerleft'));
 $form->addElement('text', 'footer_right', $plugininstance->get_lang('footerright'));
-
 $form->addButtonSave($plugininstance->get_lang('Save'));
-
 $form->setDefaults($form_settings);
 
 $plugin_info['settings_form'] = $form;

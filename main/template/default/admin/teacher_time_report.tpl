@@ -24,25 +24,8 @@ $(document).on('ready', function () {
 });
 </script>
 
-<div class="col-md-12">
-    <div class="actions">
-        <a href="{{ _p.web_main }}admin/teachers_time_by_session_report.php">
-            {{ 'session.png'|img(32, 'Sessions'|get_lang) }}
-        </a>
-        <div class="pull-right">
-            <a href="{{ _p.web_self ~ '?' ~ {'export':'pdf','from':selected_from,'until':selected_until,'course':selected_course,'session':selected_session,'teacher':selected_teacher } | url_encode }}">
-                {{ 'pdf.png' | img(32, 'ExportToPDF'|get_lang ) }}
-            </a>
-            <a href="{{ _p.web_self ~ '?' ~ {'export':'xls','from':selected_from,'until':selected_until,'course':selected_course,'session':selected_session,'teacher':selected_teacher } | url_encode }}">
-                {{ 'export_excel.png' | img(32, 'ExportExcel'|get_lang ) }}
-            </a>
-        </div>
-    </div>
-</div>
-
-<h1 class="page-header">{{ 'TeacherTimeReport' | get_lang }}</h1>
 {{ form }}
-<h2 class="page-header">{{ report_title }} <small>{{ report_sub_title }}</small></h2>
+<h3 class="page-header">{{ report_title }} <small>{{ report_sub_title }}</small></h3>
 
 <table class="table">
     <thead>
@@ -52,7 +35,7 @@ $(document).on('ready', function () {
                 <th>{{ 'Course' | get_lang }}</th>
             {% endif %}
             <th>{{ 'Coach' | get_lang }}</th>
-            <th>{{ 'TotalTime' | get_lang }}</th>
+            <th class="text-center">{{ 'TotalTime' | get_lang }}</th>
         </tr>
     </thead>
     <tbody>
@@ -63,7 +46,7 @@ $(document).on('ready', function () {
                     <td>{{ row.course.name }}</td>
                 {% endif %}
                 <td>{{ row.coach.complete_name }} ({{ row.coach.username}})</td>
-                <td>{{ row.totalTime }}</td>
+                <td class="text-center">{{ row.total_time }}</td>
             </tr>
         {% endfor %}
     </tbody>

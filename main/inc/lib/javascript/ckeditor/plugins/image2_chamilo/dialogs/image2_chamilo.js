@@ -496,12 +496,20 @@ CKEDITOR.dialog.add( 'image2_chamilo', function( editor ) {
 						children: [
 							{
 								id: 'align',
-								type: 'radio',
+								type: 'select',
 								items: [
 									[ commonLang.alignNone, 'none' ],
 									[ commonLang.alignLeft, 'left' ],
 									[ commonLang.alignCenter, 'center' ],
-									[ commonLang.alignRight, 'right' ]
+									[ commonLang.alignRight, 'right' ],
+                                    [ lang.alignBaseline, 'baseline'],
+                                    [ lang.alignTop, 'top'],
+									[ lang.alignBottom, 'bottom'],
+									[ lang.alignMiddle, 'middle'],
+									[ lang.alignSuper, 'super'],
+									[ lang.alignSub, 'sub'],
+									[ lang.alignTextTop, 'text-top'],
+									[ lang.alignTextBottom, 'text-bottom'],
 								],
 								label: commonLang.align,
 								setup: function( widget ) {

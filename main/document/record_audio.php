@@ -9,12 +9,8 @@ use ChamiloSession as Session;
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-
-$_SESSION['whereami'] = 'document/voicerecord';
 $this_section = SECTION_COURSES;
-
 $groupRights = Session::read('group_member_with_upload_rights');
-
 $nameTools = get_lang('VoiceRecord');
 
 api_protect_course_script();
@@ -47,7 +43,7 @@ $dir = $document_data['path'];
 //make some vars
 $wamidir = $dir;
 if ($wamidir == "/") {
-	$wamidir = "";
+    $wamidir = '';
 }
 $wamiurlplay = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$wamidir."/";
 $groupId = api_get_group_id();
@@ -109,7 +105,7 @@ if (!($is_allowed_to_edit || $groupRights ||
 Event::event_access_tool(TOOL_DOCUMENT);
 
 $display_dir = $dir;
-if (isset ($group)) {
+if (isset($group)) {
     $display_dir = explode('/', $dir);
     unset($display_dir[0]);
     unset($display_dir[1]);
@@ -142,6 +138,8 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'rtc/RecordR
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/recorder.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'wami-recorder/gui.js"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'swfobject/swfobject.js"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'swfobject/swfobject.js"></script>';
+$htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
 
 $actions = Display::toolbarButton(
     get_lang('BackTo').' '.get_lang('DocumentsOverview'),

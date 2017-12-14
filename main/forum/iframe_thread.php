@@ -51,7 +51,9 @@ $current_forum_category = get_forumcategory_information(
 
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
-if (!api_is_allowed_to_edit(false, true) && ($current_forum['visibility'] == 0 || $current_thread['visibility'] == 0)) {
+if (!api_is_allowed_to_edit(false, true) &&
+    ($current_forum['visibility'] == 0 || $current_thread['visibility'] == 0)
+) {
     api_not_allowed(false);
 }
 
@@ -62,12 +64,12 @@ $course_id = api_get_course_int_id();
 // We are getting all the information about the current forum and forum category.
 // Note pcool: I tried to use only one sql statement (and function) for this,
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
-
-$sql = "SELECT * FROM $table_posts posts, $table_users users
+$sql = "SELECT * FROM $table_posts posts 
+        INNER JOIN $table_users users
+        ON (posts.poster_id = users.user_id)
         WHERE
             posts.c_id = $course_id AND
-            posts.thread_id='".$current_thread['thread_id']."' AND
-            posts.poster_id=users.user_id
+            posts.thread_id='".$current_thread['thread_id']."'            
         ORDER BY posts.post_id ASC";
 $result = Database::query($sql);
 

@@ -78,10 +78,7 @@ class SequenceResourceManager
                         if (!empty($userId)) {
                             $itemSession['status'] = $itemSession['status'] && Category::userFinishedCourse(
                                 $userId,
-                                $category,
-                                null,
-                                $course->getCode(),
-                                $sessionRequired->getId()
+                                $category
                             );
                         }
                     }

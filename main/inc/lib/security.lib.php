@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\HTMLPurifier\Filter\AllowIframes;
 
 /**
@@ -118,6 +119,14 @@ class Security
     }
 
     /**
+     * @return string
+     */
+    public static function getTokenFromSession()
+    {
+        return Session::read('sec_token');
+    }
+
+    /**
      * This function checks that the token generated in get_token() has been kept (prevents
      * Cross-Site Request Forgeries attacks)
      * @param    string    The array in which to get the token ('get' or 'post')
@@ -125,27 +134,28 @@ class Security
      */
     public static function check_token($request_type = 'post')
     {
+        $sessionToken = Session::read('sec_token');
         switch ($request_type) {
             case 'request':
-                if (isset($_SESSION['sec_token']) && isset($_REQUEST['sec_token']) && $_SESSION['sec_token'] === $_REQUEST['sec_token']) {
+                if (!empty($sessionToken) && isset($_REQUEST['sec_token']) && $sessionToken === $_REQUEST['sec_token']) {
                     return true;
                 }
 
                 return false;
             case 'get':
-                if (isset($_SESSION['sec_token']) && isset($_GET['sec_token']) && $_SESSION['sec_token'] === $_GET['sec_token']) {
+                if (!empty($sessionToken) && isset($_GET['sec_token']) && $sessionToken === $_GET['sec_token']) {
                     return true;
                 }
 
                 return false;
             case 'post':
-                if (isset($_SESSION['sec_token']) && isset($_POST['sec_token']) && $_SESSION['sec_token'] === $_POST['sec_token']) {
+                if (!empty($sessionToken) && isset($_POST['sec_token']) && $sessionToken === $_POST['sec_token']) {
                     return true;
                 }
 
                 return false;
             default:
-                if (isset($_SESSION['sec_token']) && isset($request_type) && $_SESSION['sec_token'] === $request_type) {
+                if (!empty($sessionToken) && isset($request_type) && $sessionToken === $request_type) {
                     return true;
                 }
 
@@ -161,7 +171,10 @@ class Security
      */
     public static function check_ua()
     {
-        if (isset($_SESSION['sec_ua']) && $_SESSION['sec_ua'] === $_SERVER['HTTP_USER_AGENT'].$_SESSION['sec_ua_seed']) {
+        $security = Session::read('sec_ua');
+        $securitySeed = Session::read('sec_ua_seed');
+
+        if ($security === $_SERVER['HTTP_USER_AGENT'].$securitySeed) {
             return true;
         }
 
@@ -174,8 +187,7 @@ class Security
      */
     public static function clear_token()
     {
-        $_SESSION['sec_token'] = null;
-        unset($_SESSION['sec_token']);
+        Session::erase('sec_token');
     }
 
     /**
@@ -191,7 +203,7 @@ class Security
     {
         $token = md5(uniqid(rand(), true));
         $string = '<input type="hidden" name="sec_token" value="'.$token.'" />';
-        $_SESSION['sec_token'] = $token;
+        Session::write('sec_token', $token);
 
         return $string;
     }
@@ -208,7 +220,7 @@ class Security
     public static function get_token()
     {
         $token = md5(uniqid(rand(), true));
-        $_SESSION['sec_token'] = $token;
+        Session::write('sec_token', $token);
 
         return $token;
     }
@@ -218,11 +230,10 @@ class Security
      */
     public static function get_existing_token()
     {
-        if (isset($_SESSION['sec_token']) && !empty($_SESSION['sec_token'])) {
-
-            return $_SESSION['sec_token'];
+        $token = Session::read('sec_token');
+        if (!empty($token)) {
+            return $token;
         } else {
-
             return self::get_token();
         }
     }
@@ -234,8 +245,9 @@ class Security
      */
     public static function get_ua()
     {
-        $_SESSION['sec_ua_seed'] = uniqid(rand(), true);
-        $_SESSION['sec_ua'] = $_SERVER['HTTP_USER_AGENT'].$_SESSION['sec_ua_seed'];
+        $seed = uniqid(rand(), true);
+        Session::write('sec_ua_seed', $seed);
+        Session::write('sec_ua', $_SERVER['HTTP_USER_AGENT'].$seed);
     }
 
     /**
@@ -303,6 +315,7 @@ class Security
                 $config->set('Filter.Custom', array(new AllowIframes()));
             }
 
+
             // Shows _target attribute in anchors
             $config->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
 
@@ -342,6 +355,39 @@ class Security
                 'news' => true,
                 'data' => true,
             ));
+
+            // Allow <video> tag
+            //$config->set('HTML.Doctype', 'HTML 4.01 Transitional');
+            $config->set('HTML.SafeIframe', true);
+
+            // Set some HTML5 properties
+            $config->set('HTML.DefinitionID', 'html5-definitions'); // unqiue id
+            $config->set('HTML.DefinitionRev', 1);
+            if ($def = $config->maybeGetRawHTMLDefinition()) {
+                // http://developers.whatwg.org/the-video-element.html#the-video-element
+                $def->addElement(
+                    'video',
+                    'Block',
+                    'Optional: (source, Flow) | (Flow, source) | Flow',
+                    'Common',
+                    array(
+                        'src'      => 'URI',
+                        'type'     => 'Text',
+                        'width'    => 'Length',
+                        'height'   => 'Length',
+                        'poster'   => 'URI',
+                        'preload'  => 'Enum#auto,metadata,none',
+                        'controls' => 'Bool',
+                    )
+                );
+                $def->addElement(
+                    'source',
+                    'Block',
+                    'Flow',
+                    'Common',
+                    array('src' => 'URI', 'type' => 'Text',)
+                );
+            }
 
             $purifier[$user_status] = new HTMLPurifier($config);
         }

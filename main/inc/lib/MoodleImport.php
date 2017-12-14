@@ -24,12 +24,14 @@ class MoodleImport
 
         if (is_file($file) && is_readable($file)) {
             $package = new PclZip($file);
-            $packageContent = $package->listContent();
             $mainFileKey = 0;
-            foreach ($packageContent as $index => $value) {
-                if ($value['filename'] == 'moodle_backup.xml') {
-                    $mainFileKey = $index;
-                    break;
+            $packageContent = $package->listContent();
+            if (!empty($packageContent)) {
+                foreach ($packageContent as $index => $value) {
+                    if ($value['filename'] == 'moodle_backup.xml') {
+                        $mainFileKey = $index;
+                        break;
+                    }
                 }
             }
 
@@ -140,7 +142,11 @@ class MoodleImport
                                 // Create a Forum category based on Moodle forum type.
                                 $catForumValues['forum_category_title'] = $moduleValues['type'];
                                 $catForumValues['forum_category_comment'] = '';
-                                $catId = store_forumcategory($catForumValues, $courseInfo, false);
+                                $catId = store_forumcategory(
+                                    $catForumValues,
+                                    $courseInfo,
+                                    false
+                                );
                                 $forumValues = [];
                                 $forumValues['forum_title'] = $moduleValues['name'];
                                 $forumValues['forum_image'] = '';
@@ -198,15 +204,22 @@ class MoodleImport
 
                                 // Ok, we got the Quiz and create it, now its time to add the Questions
                                 foreach ($moduleValues['question_instances'] as $index => $question) {
-                                    $questionsValues = $this->readMainQuestionsXml($questionsXml, $question['questionid']);
+                                    $questionsValues = $this->readMainQuestionsXml(
+                                        $questionsXml,
+                                        $question['questionid']
+                                    );
                                     $moduleValues['question_instances'][$index] = $questionsValues;
                                     // Set Question Type from Moodle XML element <qtype>
                                     $qType = $moduleValues['question_instances'][$index]['qtype'];
                                     // Add the matched chamilo question type to the array
                                     $moduleValues['question_instances'][$index]['chamilo_qtype'] = $this->matchMoodleChamiloQuestionTypes($qType);
-                                    $questionInstance = Question::getInstance($moduleValues['question_instances'][$index]['chamilo_qtype']);
+                                    $questionInstance = Question::getInstance(
+                                        $moduleValues['question_instances'][$index]['chamilo_qtype']
+                                    );
                                     if ($questionInstance) {
-                                        $questionInstance->updateTitle($moduleValues['question_instances'][$index]['name']);
+                                        $questionInstance->updateTitle(
+                                            $moduleValues['question_instances'][$index]['name']
+                                        );
                                         $questionText = $moduleValues['question_instances'][$index]['questiontext'];
 
                                         // Replace the path from @@PLUGINFILE@@ to a correct chamilo path
@@ -226,7 +239,7 @@ class MoodleImport
 
                                         //Save normal question if NOT media
                                         if ($questionInstance->type != MEDIA_QUESTION) {
-                                            $questionInstance->save($exercise->id);
+                                            $questionInstance->save($exercise);
 
                                             // modify the exercise
                                             $exercise->addToList($questionInstance->id);
@@ -237,6 +250,7 @@ class MoodleImport
                                         $currentQuestion = $moduleValues['question_instances'][$index];
 
                                         $this->processAnswers(
+                                            $exercise,
                                             $questionList,
                                             $qType,
                                             $questionInstance,
@@ -252,7 +266,10 @@ class MoodleImport
                                 $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
                                 $filesXml = @file_get_contents($destinationDir.'/files.xml');
                                 $moduleValues = $this->readResourceModule($moduleXml);
-                                $mainFileModuleValues = $this->readMainFilesXml($filesXml, $moduleValues['contextid']);
+                                $mainFileModuleValues = $this->readMainFilesXml(
+                                    $filesXml,
+                                    $moduleValues['contextid']
+                                );
                                 $fileInfo = array_merge($moduleValues, $mainFileModuleValues, $currentItem);
                                 $currentResourceFilePath = $destinationDir.'/files/';
                                 $dirs = new RecursiveDirectoryIterator($currentResourceFilePath);
@@ -459,7 +476,9 @@ class MoodleImport
                         if (!$isThisItemThatIWant && $item->nodeName == 'contenthash') {
                             $currentItem['contenthash'] = $item->nodeValue;
                         }
-                        if ($item->nodeName == 'contextid' && intval($item->nodeValue) == intval($contextId) && !$isThisItemThatIWant) {
+                        if ($item->nodeName == 'contextid' &&
+                            intval($item->nodeValue) == intval($contextId) && !$isThisItemThatIWant
+                        ) {
                             $isThisItemThatIWant = true;
                             continue;
                         }
@@ -472,11 +491,15 @@ class MoodleImport
                             $currentItem['filesize'] = $item->nodeValue;
                         }
 
-                        if ($isThisItemThatIWant && $item->nodeName == 'mimetype' && $item->nodeValue == 'document/unknown') {
+                        if ($isThisItemThatIWant && $item->nodeName == 'mimetype' &&
+                            $item->nodeValue == 'document/unknown'
+                        ) {
                             break;
                         }
 
-                        if ($isThisItemThatIWant && $item->nodeName == 'mimetype' && $item->nodeValue !== 'document/unknown') {
+                        if ($isThisItemThatIWant && $item->nodeName == 'mimetype' &&
+                            $item->nodeValue !== 'document/unknown'
+                        ) {
                             $currentItem['mimetype'] = $item->nodeValue;
                             break 2;
                         }
@@ -639,15 +662,22 @@ class MoodleImport
     /**
      * Process Moodle Answers to Chamilo
      *
+     * @param Exercise $exercise
      * @param array $questionList
      * @param string $questionType
-     * @param object $questionInstance Question/Answer instance
+     * @param Question $questionInstance Question/Answer instance
      * @param array $currentQuestion
      * @param array $importedFiles
      * @return integer db response
      */
-    public function processAnswers($questionList, $questionType, $questionInstance, $currentQuestion, $importedFiles)
-    {
+    public function processAnswers(
+        $exercise,
+        $questionList,
+        $questionType,
+        $questionInstance,
+        $currentQuestion,
+        $importedFiles
+    ) {
         switch ($questionType) {
             case 'multichoice':
                 $objAnswer = new Answer($questionInstance->id);
@@ -666,7 +696,7 @@ class MoodleImport
                 $objAnswer->save();
                 // sets the total weighting of the question
                 $questionInstance->updateWeighting($questionWeighting);
-                $questionInstance->save();
+                $questionInstance->save($exercise);
 
                 return true;
                 break;
@@ -709,7 +739,7 @@ class MoodleImport
                 $questionInstance->updateDescription('');
                 // sets the total weighting of the question
                 $questionInstance->updateWeighting($questionWeighting);
-                $questionInstance->save();
+                $questionInstance->save($exercise);
                 $this->fixPathInText($importedFiles, $placeholder);
 
                 // saves the answers into the data base
@@ -746,7 +776,7 @@ class MoodleImport
 
                 // sets the total weighting of the question
                 $questionInstance->updateWeighting($questionWeighting);
-                $questionInstance->save();
+                $questionInstance->save($exercise);
                 // saves the answers into the database
                 $this->fixPathInText($importedFiles, $placeholder);
                 $objAnswer->createAnswer($placeholder, 0, '', 0, 1);
@@ -759,13 +789,13 @@ class MoodleImport
                 $questionWeighting = $currentQuestion['defaultmark'];
                 $questionInstance->updateWeighting($questionWeighting);
                 $questionInstance->updateDescription(get_lang('ThisQuestionIsNotSupportedYet'));
-                $questionInstance->save();
+                $questionInstance->save($exercise);
                 return false;
                 break;
             case 'essay':
                 $questionWeighting = $currentQuestion['defaultmark'];
                 $questionInstance->updateWeighting($questionWeighting);
-                $questionInstance->save();
+                $questionInstance->save($exercise);
                 return true;
                 break;
             case 'truefalse':
@@ -785,7 +815,7 @@ class MoodleImport
                 $objAnswer->save();
                 // sets the total weighting of the question
                 $questionInstance->updateWeighting($questionWeighting);
-                $questionInstance->save();
+                $questionInstance->save($exercise);
                 return false;
                 break;
             default:
@@ -804,8 +834,13 @@ class MoodleImport
      * @param array $importedFiles
      * @return integer db response
      */
-    public function processUniqueAnswer($objAnswer, $answerValues, $position, &$questionWeighting, $importedFiles)
-    {
+    public function processUniqueAnswer(
+        $objAnswer,
+        $answerValues,
+        $position,
+        &$questionWeighting,
+        $importedFiles
+    ) {
         $correct = intval($answerValues['fraction']) ? intval($answerValues['fraction']) : 0;
         $answer = $answerValues['answertext'];
         $comment = $answerValues['feedback'];
@@ -841,8 +876,13 @@ class MoodleImport
      *
      * @return integer db response
      */
-    public function processTrueFalse($objAnswer, $answerValues, $position, &$questionWeighting, $importedFiles)
-    {
+    public function processTrueFalse(
+        $objAnswer,
+        $answerValues,
+        $position,
+        &$questionWeighting,
+        $importedFiles
+    ) {
         $correct = intval($answerValues['fraction']) ? intval($answerValues['fraction']) : 0;
         $answer = $answerValues['answertext'];
         $comment = $answerValues['feedback'];
@@ -879,8 +919,14 @@ class MoodleImport
      * @return integer db response
      *
      */
-    public function processFillBlanks($objAnswer, $questionType, $answerValues, &$placeholder, $position, $importedFiles)
-    {
+    public function processFillBlanks(
+        $objAnswer,
+        $questionType,
+        $answerValues,
+        &$placeholder,
+        $position,
+        $importedFiles
+    ) {
         $coursePath = api_get_course_path();
 
         switch ($questionType) {

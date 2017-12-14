@@ -17,7 +17,6 @@ if (api_get_setting('allow_social_tool') != 'true') {
 
 $views = array('friends', 'mygroups');
 $user_id = intval($_GET['user_id']);
-
 $userGroup = new UserGroup();
 
 if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
@@ -52,9 +51,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
                     $friend['lastName']
                 );
                 $friend_html .= '<div id=div_'.$friend['friend_user_id'].' class="image_friend_network" ><span><center>';
-
                 $userPicture = UserManager::getUserPicture($friend['friend_user_id']);
-
                 $friend_html .= '<a href="profile.php?u='.$friend['friend_user_id'].'">';
                 $friend_html .= '<img src="'.$userPicture.'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" />';
                 $friend_html .= '</center></span>';
@@ -95,12 +92,12 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
                 );
                 if ($count_users_group == 1) {
                     $count_users_group = $count_users_group.' '.get_lang(
-                            'Member'
-                        );
+                        'Member'
+                    );
                 } else {
                     $count_users_group = $count_users_group.' '.get_lang(
-                            'Members'
-                        );
+                        'Members'
+                    );
                 }
                 $picture = $userGroup->get_picture_group(
                     $result['id'],

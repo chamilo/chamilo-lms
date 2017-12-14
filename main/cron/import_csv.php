@@ -4,6 +4,13 @@
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\PluginBundle\Entity\StudentFollowUp\CarePost;
+use Fhaculty\Graph\Graph;
+use Graphp\GraphViz\GraphViz;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Handler\NativeMailerHandler;
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Handler\BufferHandler;
 
 if (PHP_SAPI != 'cli') {
     die('Run this script through the command line or comment this line in the code');
@@ -18,6 +25,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 ini_set('memory_limit', -1);
 ini_set('max_execution_time', 0);
 ini_set('log_errors', '1');
+ini_set('display_errors', '1');
 
 /**
  * Class ImportCsv
@@ -30,9 +38,13 @@ class ImportCsv
     public $defaultLanguage = 'dutch';
     public $extraFieldIdNameList = array(
         'session' => 'external_session_id',
+        'session_career' => 'external_career_id',
         'course' => 'external_course_id',
         'user' => 'external_user_id',
         'calendar_event' => 'external_calendar_event_id',
+        'career' => 'external_career_id',
+        'career_urls' => 'career_urls',
+        'career_diagram' => 'career_diagram',
     );
     public $defaultAdminId = 1;
     public $defaultSessionVisibility = 1;
@@ -137,10 +149,13 @@ class ImportCsv
                         $method = 'importUnsubsessionsExtidStatic';
                     }
 
+                    if ($method == 'importCareersdiagram') {
+                        $method = 'importCareersDiagram';
+                    }
+
                     if ($method == 'importSubsessionsextidStatic') {
                         $method = 'importSubscribeUserToCourseSessionExtStatic';
                     }
-
                     if (method_exists($this, $method)) {
                         if ((
                                 $method == 'importSubscribeStatic' ||
@@ -186,6 +201,8 @@ class ImportCsv
                 'courseinsert-static',
                 'unsubscribe-static',
                 'care',
+                'careers',
+                'careersdiagram'
             );
 
             foreach ($sections as $section) {
@@ -198,7 +215,10 @@ class ImportCsv
                         $file = $fileInfo['file'];
 
                         echo 'File: '.$file.PHP_EOL;
+                        echo 'Method : '.$method.PHP_EOL;
+                        echo PHP_EOL;
                         $this->logger->addInfo("Reading file: $file");
+                        $this->logger->addInfo("Loading method $method ");
                         if ($method == 'importSessions') {
                             $this->$method(
                                 $file,
@@ -238,7 +258,10 @@ class ImportCsv
 
                         $file = $fileInfo['file'];
                         echo 'Static file: '.$file.PHP_EOL;
+                        echo 'Method : '.$method.PHP_EOL;
+                        echo PHP_EOL;
                         $this->logger->addInfo("Reading static file: $file");
+                        $this->logger->addInfo("Loading method $method ");
                         $this->$method(
                             $file,
                             true,
@@ -282,6 +305,12 @@ class ImportCsv
             'External session id'
         );
 
+        SessionManager::create_session_extra_field(
+            $this->extraFieldIdNameList['session_career'],
+            1,
+            'Career id'
+        );
+
         // Create calendar_event extra field extra_external_session_id
         $extraField = new ExtraField('calendar_event');
         $extraField->save(
@@ -289,6 +318,34 @@ class ImportCsv
                 'field_type' => ExtraField::FIELD_TYPE_TEXT,
                 'variable' => $this->extraFieldIdNameList['calendar_event'],
                 'display_text' => 'External calendar event id',
+            )
+        );
+
+        $extraField = new ExtraField('career');
+        $extraField->save(
+            array(
+                'visible_to_self' => 1,
+                'field_type' => ExtraField::FIELD_TYPE_TEXT,
+                'variable' => $this->extraFieldIdNameList['career'],
+                'display_text' => 'External career id',
+            )
+        );
+
+        $extraField->save(
+            array(
+                'visible_to_self' => 1,
+                'field_type' => ExtraField::FIELD_TYPE_TEXTAREA,
+                'variable' => $this->extraFieldIdNameList['career_diagram'],
+                'display_text' => 'Career diagram',
+            )
+        );
+
+        $extraField->save(
+            array(
+                'visible_to_self' => 1,
+                'field_type' => ExtraField::FIELD_TYPE_TEXTAREA,
+                'variable' => $this->extraFieldIdNameList['career_urls'],
+                'display_text' => 'Career urls',
             )
         );
     }
@@ -1104,11 +1161,12 @@ class ImportCsv
 
                     $emailBody = get_lang('Dear').' ((user_firstname)) <br />'.
                         sprintf(
-                        get_lang('YouHaveBeenSubscribedToCourseXTheStartDateXAndCommentX'),
-                        $courseTitle,
-                        $date,
-                        $event['comment']
-                    );
+                            get_lang('YouHaveBeenSubscribedToCourseXTheStartDateXAndCommentX'),
+                            $courseTitle,
+                            $date,
+                            $event['comment']
+                        )
+                    ;
 
                     $subject = sprintf(
                         get_lang('AgendaAvailableInCourseX'),
@@ -1116,8 +1174,8 @@ class ImportCsv
                     );
 
                     $coaches = SessionManager::getCoachesByCourseSession(
-                        $courseInfo['real_id'],
-                        $event['session_id']
+                        $event['session_id'],
+                        $courseInfo['real_id']
                     );
 
                     // Search if an announcement exists:
@@ -1175,34 +1233,78 @@ class ImportCsv
                         $report['mail_not_sent_because_date']++;
                     }
                 }
+
                 $content = '';
                 if ($update && isset($item['item_id'])) {
-                    //the event already exists, just update
-                    $eventResult = $agenda->editEvent(
-                        $item['item_id'],
-                        $event['start'],
-                        $event['end'],
-                        false,
-                        $event['title'],
-                        $content,
-                        array('everyone'), // $usersToSend
-                        array(), //$attachmentArray = array(),
-                        [], //$attachmentCommentList
-                        $eventComment,
-                        $color,
-                        false,
-                        false,
-                        $this->defaultAdminId
-                    );
+                    $eventInfo = $agenda->get_event($item['item_id']);
+                    if (empty($eventInfo)) {
+                        // Means that agenda external id exists but the event doesn't exist
+                        $this->logger->addInfo("external event id exists: $externalEventId");
+                        $this->logger->addInfo("but Chamilo event doesn't exists: ".$item['item_id']);
 
-                    if ($eventResult !== false) {
-                        $this->logger->addInfo(
-                            "Event updated #".$item['item_id']." External cal Id: (".$externalEventId.") $info"
+                        $eventId = $agenda->addEvent(
+                            $event['start'],
+                            $event['end'],
+                            false,
+                            $event['title'],
+                            $content,
+                            array('everyone'), // $usersToSend
+                            false, //$addAsAnnouncement = false
+                            null, //  $parentEventId
+                            array(), //$attachmentArray = array(),
+                            [], //$attachmentCommentList
+                            $eventComment,
+                            $color
                         );
+
+                        if (!empty($eventId)) {
+                            $this->logger->addInfo("Chamilo event created: ".$eventId);
+                            $extraFieldValueItem = $extraFieldValue->get_values_by_handler_and_field_id(
+                                $item['item_id'],
+                                $extraFieldInfo['id']
+                            );
+
+                            if (!empty($extraFieldValueItem) && isset($extraFieldValueItem['id'])) {
+                                $params = [
+                                    'id' => $extraFieldValueItem['id'],
+                                    'item_id' => $eventId
+                                ];
+                                $extraFieldValue->update($params);
+                                $this->logger->addInfo(
+                                    'Updating calendar extra field #'.$extraFieldValueItem['id'].' new item_id: '.$eventId.' old item_id: '.$item['item_id']
+                                );
+                            }
+                        } else {
+                            $this->logger->addInfo("Error while creating event external id: $externalEventId");
+                        }
                     } else {
-                        $this->logger->addInfo(
-                            "Error while updating event with external id: $externalEventId"
+                        // The event already exists, just update
+                        $eventResult = $agenda->editEvent(
+                            $item['item_id'],
+                            $event['start'],
+                            $event['end'],
+                            false,
+                            $event['title'],
+                            $content,
+                            array('everyone'), // $usersToSend
+                            array(), //$attachmentArray = array(),
+                            [], //$attachmentCommentList
+                            $eventComment,
+                            $color,
+                            false,
+                            false,
+                            $this->defaultAdminId
                         );
+
+                        if ($eventResult !== false) {
+                            $this->logger->addInfo(
+                                "Event updated #".$item['item_id']." External cal Id: (".$externalEventId.") $info"
+                            );
+                        } else {
+                            $this->logger->addInfo(
+                                "Error while updating event with external id: $externalEventId"
+                            );
+                        }
                     }
                 } else {
                     // New event. Create it.
@@ -1318,7 +1420,8 @@ class ImportCsv
                     // Update
                     $params = array(
                         'title' => $row['title'],
-                        'category_code' => $row['course_category']
+                        'category_code' => $row['course_category'],
+                        'visibility' => $row['visibility']
                     );
 
                     $result = CourseManager::update_attributes(
@@ -1913,7 +2016,10 @@ class ImportCsv
             true,
             $this->defaultAdminId,
             $this->logger,
-            array('SessionID' => 'extra_'.$this->extraFieldIdNameList['session']),
+            array(
+                'SessionID' => 'extra_'.$this->extraFieldIdNameList['session'],
+                'CareerId' => 'extra_'.$this->extraFieldIdNameList['session_career']
+            ),
             $this->extraFieldIdNameList['session'],
             $this->daysCoachAccessBeforeBeginning,
             $this->daysCoachAccessAfterBeginning,
@@ -2101,9 +2207,18 @@ class ImportCsv
 
             foreach ($items as $row) {
                 // Insert user
-                $insertUserInfo = api_get_user_info_from_username($row['Added_by']);
+                //$insertUserInfo = api_get_user_info_from_username($row['Added_by']);
+
+                // User about the post
+                $userId = UserManager::get_user_id_from_original_id(
+                    $row['Added_by'],
+                    $this->extraFieldIdNameList['user']
+                );
+
+                $insertUserInfo = api_get_user_info($userId);
+
                 if (empty($insertUserInfo)) {
-                    $this->logger->addInfo("User does '".$row['Added_by']."' not exists skip this entry.");
+                    $this->logger->addInfo("User: '".$row['Added_by']."' doesn't exists. Skip this entry.");
                     continue;
                 }
                 $insertUserInfo = api_get_user_entity($insertUserInfo['user_id']);
@@ -2115,12 +2230,16 @@ class ImportCsv
                 );
 
                 if (empty($userId)) {
-                    if (empty($userInfo)) {
-                        $this->logger->addInfo("User does '".$row['External_user_id']."' not exists skip this entry.");
-                        continue;
-                    }
+                    $this->logger->addInfo("User does '".$row['External_user_id']."' not exists skip this entry.");
+                    continue;
                 }
+
                 $userInfo = api_get_user_entity($userId);
+
+                if (empty($userInfo)) {
+                    $this->logger->addInfo("Chamilo user does not found: #".$userId."' ");
+                    continue;
+                }
 
                 // Dates
                 $createdAt = $this->createDateTime($row['Added_On']);
@@ -2147,11 +2266,14 @@ class ImportCsv
 
                 if (empty($post)) {
                     $post = new CarePost();
+                    $this->logger->addInfo("New post will be created no match for externalCareId = ".$row['External_care_id']);
                 }
+
+                $contentDecoded = base64_decode($row['Article']);
 
                 $post
                     ->setTitle($row['Title'])
-                    ->setContent($row['Article'])
+                    ->setContent($contentDecoded)
                     ->setExternalCareId($row['External_care_id'])
                     ->setCreatedAt($createdAt)
                     ->setUpdatedAt($updatedAt)
@@ -2161,9 +2283,13 @@ class ImportCsv
                     ->setParent($parent)
                     ->setTags($tags)
                     ->setUser($userInfo)
+                    ->setAttachment($row['Attachement'])
                 ;
                 $em->persist($post);
                 $em->flush();
+
+                $this->logger->addInfo("Post id saved #".$post->getId());
+
 
                 if (($counter % $batchSize) === 0) {
                     $em->flush();
@@ -2188,9 +2314,289 @@ class ImportCsv
         }
 
         $date = DateTime::createFromFormat('j/m/Y', $string);
+        if ($date) {
+            return $date;
+        }
 
-        return $date;
+        return null;
     }
+
+    /**
+     * @param $file
+     * @param bool $moveFile
+     * @param array $teacherBackup
+     * @param array $groupBackup
+     * @return bool
+     */
+    private function importCareers(
+        $file,
+        $moveFile = false,
+        &$teacherBackup = array(),
+        &$groupBackup = array()
+    ) {
+        $data = Import::csv_reader($file);
+
+        if (!empty($data)) {
+            $this->logger->addInfo(count($data)." records found.");
+            $extraFieldValue = new ExtraFieldValue('career');
+            $extraFieldName = $this->extraFieldIdNameList['career'];
+            $externalEventId = null;
+
+            $extraField = new ExtraField('career');
+            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
+                $extraFieldName
+            );
+
+            if (empty($extraFieldInfo)) {
+                return false;
+            }
+
+            foreach ($data as $row) {
+                foreach ($row as $key => $value) {
+                    $key = (string)trim($key);
+                    // Remove utf8 bom
+                    $key = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $key);
+                    $row[$key] = $value;
+                }
+
+                $itemId = $row['CareerId'];
+                $item = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                    $extraFieldName,
+                    $itemId,
+                    false,
+                    false,
+                    false
+                );
+
+                $career = new Career();
+                if (empty($item)) {
+                    $params = [
+                        'status' => 1,
+                        'name' => $row['CareerName']
+                    ];
+                    $careerId = $career->save($params);
+                    if ($careerId) {
+                        $params = [
+                            'item_id' => $careerId,
+                            'extra_'.$extraFieldName => $itemId,
+                        ];
+                        $links = isset($row['HLinks']) ? $row['HLinks'] : [];
+                        if (!empty($links)) {
+                            $extraFieldUrlName = $this->extraFieldIdNameList['career_urls'];
+                            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
+                                $extraFieldUrlName
+                            );
+                            if (!empty($extraFieldInfo)) {
+                                $params['extra_'.$extraFieldUrlName] = $links;
+                            }
+                        }
+                        $extraFieldValue->saveFieldValues($params);
+                    }
+                } else {
+                    if (isset($item['item_id'])) {
+                        $params = [
+                            'id' => $item['item_id'],
+                            'name' => $row['CareerName']
+                        ];
+                        $career->update($params);
+                        $links = isset($row['HLinks']) ? $row['HLinks'] : [];
+
+                        if (!empty($links)) {
+                            $extraFieldUrlName = $this->extraFieldIdNameList['career_urls'];
+                            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
+                                $extraFieldUrlName
+                            );
+                            if (!empty($extraFieldInfo)) {
+                                $params = [
+                                    'item_id' => $item['item_id'],
+                                    'extra_'.$extraFieldName => $itemId,
+                                    'extra_'.$extraFieldUrlName => $links
+                                ];
+                                $extraFieldValue->saveFieldValues($params);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @param $file
+     * @param bool $moveFile
+     * @param array $teacherBackup
+     * @param array $groupBackup
+     */
+    private function importCareersDiagram(
+        $file,
+        $moveFile = false,
+        &$teacherBackup = array(),
+        &$groupBackup = array()
+    ) {
+        $data = Import::csv_reader($file);
+
+        $extraFieldValue = new ExtraFieldValue('career');
+        $extraFieldName = $this->extraFieldIdNameList['career'];
+        $externalEventId = null;
+
+        $extraField = new ExtraField('career');
+        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
+            $extraFieldName
+        );
+
+        $careerDiagramExtraFieldName = $this->extraFieldIdNameList['career_diagram'];
+        $extraFieldDiagramInfo = $extraField->get_handler_field_info_by_field_variable(
+            $careerDiagramExtraFieldName
+        );
+
+        if (empty($extraFieldInfo) || empty($extraFieldDiagramInfo)) {
+            return false;
+        }
+
+        if (!empty($data)) {
+            $this->logger->addInfo(count($data)." records found.");
+            $values = [];
+            foreach ($data as $row) {
+                if (empty($row)) {
+                    continue;
+                }
+                foreach ($row as $key => $value) {
+                    $key = (string) trim($key);
+                    // Remove utf8 bom
+                    $key = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $key);
+                    $row[$key] = $value;
+                }
+                $values[$row['Column']][] = $row;
+            }
+
+            $careerList = [];
+            $careerNameList = [];
+            ksort($values);
+            $careerChamiloIdList = [];
+            // 1. First create all items
+            foreach ($values as $column => $rowList) {
+                foreach ($rowList as $row) {
+                    $careerId = $row['CareerId'];
+                    $item = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                        $extraFieldName,
+                        $careerId,
+                        false,
+                        false,
+                        false
+                    );
+
+                    $chamiloCareerName = '';
+                    if (empty($item)) {
+                        $this->logger->addInfo("Career not found: $careerId");
+                        continue;
+                    } else {
+                        if (isset($item['item_id'])) {
+                            $careerChamiloId = $item['item_id'];
+                            $career = new Career();
+                            $career = $career->find($careerChamiloId);
+                            $chamiloCareerName = $career['name'];
+                            $careerNameList[$careerId] = $chamiloCareerName;
+                            $careerChamiloIdList[$careerId] = $careerChamiloId;
+                        } else {
+                            continue;
+                        }
+                    }
+
+                    if (empty($chamiloCareerName)) {
+                        $this->logger->addInfo("Career not found: $careerId");
+                        continue;
+                    }
+
+                    if (isset($careerList[$careerId])) {
+                        $graph = $careerList[$careerId];
+                    } else {
+                        $graph = new Graph($careerId);
+                        $graph->setAttribute('graphviz.graph.rankdir', 'LR');
+                        $careerList[$careerId] = $graph;
+                    }
+
+                    $currentCourseId = (int) $row['CourseId'];
+                    $name = $row['CourseName'];
+                    $notes = $row['Notes'];
+                    $groupValue = $row['Group'];
+                    $rowValue = $row['Row'];
+                    $color = isset($row['DefinedColor']) ? $row['DefinedColor'] : '';
+                    $arrow = isset($row['DrawArrowFrom']) ? $row['DrawArrowFrom'] : '';
+                    $subGroup = isset($row['SubGroup']) ? $row['SubGroup'] : '';
+                    $connections = isset($row['Connections']) ? $row['Connections'] : '';
+                    $linkedElement = isset($row['LinkedElement']) ? $row['LinkedElement'] : '';
+
+                    if ($graph->hasVertex($currentCourseId)) {
+                        // Avoid double insertion
+                        continue;
+                    } else {
+                        $current = $graph->createVertex($currentCourseId);
+                        $current->setAttribute('graphviz.label', $name);
+                        $current->setAttribute('DefinedColor', $color);
+                        $current->setAttribute('Notes', $notes);
+                        $current->setAttribute('Row', $rowValue);
+                        $current->setAttribute('Group', $groupValue);
+                        $current->setAttribute('DrawArrowFrom', $arrow);
+                        $current->setAttribute('SubGroup', $subGroup);
+                        $current->setAttribute('Connections', $connections);
+                        $current->setAttribute('LinkedElement', $linkedElement);
+
+                        //$current->setAttribute('graphviz.color', 'blue');
+                        $current->setAttribute('graphviz.shape', 'box');
+                        $current->setGroup($column);
+                    }
+                }
+            }
+
+            // 2. Create connections
+            // $column start with 1 (depending in Column row)
+            foreach ($values as $column => $rowList) {
+                foreach ($rowList as $row) {
+                    $careerId = $row['CareerId'];
+                    if (isset($careerList[$careerId])) {
+                        $graph = $careerList[$careerId];
+                    } else {
+                        continue;
+                    }
+
+                    $currentCourseId = (int) $row['CourseId'];
+                    if ($graph->hasVertex($currentCourseId)) {
+                        $current = $graph->getVertex($currentCourseId);
+                    } else {
+                        continue;
+                    }
+
+                    if (isset($row['DependedOn']) && !empty($row['DependedOn'])) {
+                        $parentList = explode(',', $row['DependedOn']);
+                        foreach ($parentList as $parentId) {
+                            $parentId = (int) $parentId;
+                            if ($graph->hasVertex($parentId)) {
+                                /** @var Vertex $parent */
+                                $parent = $graph->getVertex($parentId);
+                                /*$parent->setAttribute('graphviz.color', 'red');
+                                $parent->setAttribute('graphviz.label', $name);
+                                $parent->setAttribute('graphviz.shape', 'square');*/
+                                $parent->createEdgeTo($current);
+                            }
+                        }
+                    }
+                }
+            }
+
+            /** @var Graph $graph */
+            foreach ($careerList as $id => $graph) {
+                if (isset($careerChamiloIdList[$id])) {
+                    $params = [
+                        'item_id' => $careerChamiloIdList[$id],
+                        'extra_'.$careerDiagramExtraFieldName => serialize($graph),
+                        'extra_'.$extraFieldName => $id,
+                    ];
+                    $extraFieldValue->saveFieldValues($params, true);
+                }
+            }
+        }
+    }
+
 
     /**
      * @param string $file
@@ -2451,14 +2857,7 @@ class ImportCsv
             Database::query($sql);
         }
     }
-
 }
-
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-use Monolog\Handler\NativeMailerHandler;
-use Monolog\Handler\RotatingFileHandler;
-use Monolog\Handler\BufferHandler;
 
 $logger = new Logger('cron');
 $emails = isset($_configuration['cron_notification_mails']) ? $_configuration['cron_notification_mails'] : null;

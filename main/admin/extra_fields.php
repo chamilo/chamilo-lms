@@ -25,7 +25,7 @@ $tool_name = null;
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 if (!in_array($extraFieldType, ExtraField::getValidExtraFieldTypes())) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 $check = Security::check_token('request');

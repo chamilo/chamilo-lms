@@ -33,7 +33,7 @@ if ($session_id == 0) {
         $session_id
     );
 } else {
-    $all_categories = Category::load_session_categories(null, $session_id);
+    $all_categories = Category::loadSessionCategories(null, $session_id);
 }
 $category = Category :: load($selectCat);
 $url = api_get_self().'?selectcat='.$selectCat.'&newtypeselected='.$typeSelected.'&course_code='.api_get_course_id().'&'.api_get_cidreq();
@@ -62,7 +62,7 @@ if (isset($typeSelected) && $typeSelected != '0') {
     $url = api_get_self().'?selectcat='.$selectCat.'&typeselected='.$typeSelected.'&course_code='.$courseCode.'&'.api_get_cidreq();
 
     $addform = new LinkAddEditForm(
-        LinkAddEditForm :: TYPE_ADD,
+        LinkAddEditForm::TYPE_ADD,
         $all_categories,
         $typeSelected,
         null,
@@ -134,14 +134,14 @@ if (isset($typeSelected) && $typeSelected != '0') {
             header('Location: gradebook_add_result.php?selecteval='.$link->get_ref_id().'&'.api_get_cidreq());
             exit;
         } else {
-            header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?linkadded=&selectcat='.$selectCat.'&'.api_get_cidreq());
+            header('Location: '.Category::getUrl().'linkadded=&selectcat='.$selectCat);
             exit;
         }
     }
 }
 
 $interbreadcrumb[] = array(
-    'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectCat.'&'.api_get_cidreq(),
+    'url' => Category::getUrl().'selectcat='.$selectCat,
     'name' => get_lang('Gradebook')
 );
 $this_section = SECTION_COURSES;

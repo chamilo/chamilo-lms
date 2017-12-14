@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
- * 	@author Juan Carlos Raña <herodoto@telefonica.net>
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @author Juan Carlos Raña <herodoto@telefonica.net>
  *
- * 	@package chamilo.wiki
+ * @package chamilo.wiki
  */
 
 require_once __DIR__.'/../inc/global.inc.php';

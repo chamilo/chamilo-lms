@@ -70,7 +70,7 @@ function save_data($skills)
             $oskill = new Skill();
             $skill_id = $oskill->add($skill);
             $parents[$saved_id] = $skill_id;
-		}
+        }
     }
 }
 
@@ -81,12 +81,12 @@ function save_data($skills)
  */
 function parse_csv_data($file)
 {
-	$skills = Import :: csvToArray($file);
-	foreach ($skills as $index => $skill) {
-		$skills[$index] = $skill;
-	}
+    $skills = Import::csvToArray($file);
+    foreach ($skills as $index => $skill) {
+        $skills[$index] = $skill;
+    }
 
-	return $skills;
+    return $skills;
 }
 
 /**
@@ -94,7 +94,7 @@ function parse_csv_data($file)
  */
 function element_start($parser, $data)
 {
-	$data = api_utf8_decode($data);
+    $data = api_utf8_decode($data);
     global $skill;
     global $current_tag;
     switch ($data) {
@@ -111,7 +111,7 @@ function element_start($parser, $data)
  */
 function element_end($parser, $data)
 {
-	$data = api_utf8_decode($data);
+    $data = api_utf8_decode($data);
     global $skill;
     global $skills;
     global $current_value;
@@ -130,9 +130,9 @@ function element_end($parser, $data)
  */
 function character_data($parser, $data)
 {
-	$data = trim(api_utf8_decode($data));
-	global $current_value;
-	$current_value = $data;
+    $data = trim(api_utf8_decode($data));
+    global $current_value;
+    $current_value = $data;
 }
 
 /**
@@ -154,7 +154,7 @@ function parse_xml_data($file)
     xml_parse($parser, api_utf8_encode_xml(file_get_contents($file)));
     xml_parser_free($parser);
 
-	return $skills;
+    return $skills;
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -180,7 +180,7 @@ if (!empty($_POST['formSent']) && $_FILES['import_file']['size'] !== 0) {
 
     if (in_array($ext_import_file, $allowed_file_mimetype)) {
         if (strcmp($file_type, 'csv') === 0 && $ext_import_file == $allowed_file_mimetype[0]) {
-            $skills	= parse_csv_data($_FILES['import_file']['tmp_name']);
+            $skills = parse_csv_data($_FILES['import_file']['tmp_name']);
             $errors = validate_data($skills);
             $error_kind_file = false;
         } elseif (strcmp($file_type, 'xml') === 0 && $ext_import_file == $allowed_file_mimetype[1]) {
@@ -249,37 +249,8 @@ if (!empty($see_message_import)) {
     echo Display::return_message($see_message_import, 'normal');
 }
 
-$toolbar = Display::url(
-    Display::return_icon(
-        'list_badges.png',
-        get_lang('ManageSkills'),
-        null,
-        ICON_SIZE_MEDIUM),
-    api_get_path(WEB_CODE_PATH).'admin/skill_list.php'
-    );
-
-$toolbar .= Display::url(
-    Display::return_icon(
-        'wheel_skill.png',
-        get_lang('SkillsWheel'),
-        null,
-        ICON_SIZE_MEDIUM),
-    api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php'
-    );
-
-$toolbar .= Display::url(
-    Display::return_icon(
-        'edit-skill.png',
-        get_lang('BadgesManagement'),
-        null,
-        ICON_SIZE_MEDIUM),
-    api_get_path(WEB_CODE_PATH).'admin/skill_badge_list.php'
-    );
-
-
-$actions = '<div class="actions">'.$toolbar.'</div>';
-
-echo $actions;
+$objSkill = new Skill();
+echo $objSkill->getToolBar();
 
 $form = new FormValidator('user_import', 'post', 'skills_import.php');
 $form->addElement('header', '', $tool_name);

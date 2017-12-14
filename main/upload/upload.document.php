@@ -47,9 +47,9 @@ api_display_tool_title($nameTools.$add_group_to_title);
  */
 //user has submitted a file
 if (isset($_FILES['user_upload'])) {
-	$upload_ok = process_uploaded_file($_FILES['user_upload']);
-	if ($upload_ok) {
-		//file got on the server without problems, now process it
+    $upload_ok = process_uploaded_file($_FILES['user_upload']);
+    if ($upload_ok) {
+        //file got on the server without problems, now process it
         $new_path = handle_uploaded_document(
             $_course,
             $_FILES['user_upload'],
@@ -61,21 +61,21 @@ if (isset($_FILES['user_upload'])) {
             $_POST['unzip'],
             $_POST['if_exists']
         );
-    	$new_comment = isset($_POST['comment']) ? Database::escape_string(trim($_POST['comment'])) : '';
-    	$new_title = isset($_POST['title']) ? Database::escape_string(trim($_POST['title'])) : '';
+        $new_comment = isset($_POST['comment']) ? Database::escape_string(trim($_POST['comment'])) : '';
+        $new_title = isset($_POST['title']) ? Database::escape_string(trim($_POST['title'])) : '';
 
-    	if ($new_path && ($new_comment || $new_title))
-    	if (($docid = DocumentManager::get_document_id($_course, $new_path))) {
-        	$table_document = Database::get_course_table(TABLE_DOCUMENT);
-        	$ct = '';
+        if ($new_path && ($new_comment || $new_title))
+        if (($docid = DocumentManager::get_document_id($_course, $new_path))) {
+            $table_document = Database::get_course_table(TABLE_DOCUMENT);
+            $ct = '';
             if ($new_comment) {
                 $ct .= ", comment='$new_comment'";
             }
             if ($new_title) {
                 $ct .= ", title='$new_title'";
             }
-        	Database::query("UPDATE $table_document SET".substr($ct, 1)." WHERE id = '$docid'");
-    	}
+            Database::query("UPDATE $table_document SET".substr($ct, 1)." WHERE id = '$docid'");
+        }
         //check for missing images in html files
         $missing_files = check_for_missing_files($base_work_dir.$_POST['curdirpath'].$new_path);
         if ($missing_files) {
@@ -102,7 +102,7 @@ if (isset($_POST['submit_image'])) {
             $_course,
             api_get_user_id(),
             api_get_session_id(),
-            $to_group_id,
+            api_get_group_id(),
             $to_user_id,
             $base_work_dir,
             $img_directory
@@ -133,7 +133,7 @@ if (isset($_POST['submit_image'])) {
 //they want to create a directory
 if (isset($_POST['create_dir']) && $_POST['dirname'] != '') {
     $added_slash = $path == '/' ? '' : '/';
-	$dir_name = $path.$added_slash.api_replace_dangerous_char($_POST['dirname']);
+    $dir_name = $path.$added_slash.api_replace_dangerous_char($_POST['dirname']);
     $created_dir = create_unexisting_directory(
         $_course,
         api_get_user_id(),
@@ -153,18 +153,19 @@ if (isset($_POST['create_dir']) && $_POST['dirname'] != '') {
 }
 
 if (isset($_GET['createdir'])) {
-	//create the form that asks for the directory name
-	$new_folder_text = '<form action="'.api_get_self().'" method="POST">';
-	$new_folder_text .= '<input type="hidden" name="curdirpath" value="'.$path.'"/>';
-	$new_folder_text .= get_lang('NewDir').' ';
-	$new_folder_text .= '<input type="text" name="dirname"/>';
-	$new_folder_text .= '<input type="submit" name="create_dir" value="'.get_lang('Ok').'"/>';
-	$new_folder_text .= '</form>';
-	//show the form
-	echo Display::return_message($new_folder_text, 'normal');
-} else {	//give them a link to create a directory
+    //create the form that asks for the directory name
+    $new_folder_text = '<form action="'.api_get_self().'" method="POST">';
+    $new_folder_text .= '<input type="hidden" name="curdirpath" value="'.$path.'"/>';
+    $new_folder_text .= get_lang('NewDir').' ';
+    $new_folder_text .= '<input type="text" name="dirname"/>';
+    $new_folder_text .= '<input type="submit" name="create_dir" value="'.get_lang('Ok').'"/>';
+    $new_folder_text .= '</form>';
+    //show the form
+    echo Display::return_message($new_folder_text, 'normal');
+} else {
+    //give them a link to create a directory
 ?>
-	<p>
+    <p>
         <a href="<?php echo api_get_self(); ?>?path=<?php echo $path; ?>&amp;createdir=1">
             <?php echo Display::return_icon('new_folder.gif'); ?>
             <?php echo(get_lang('CreateDir')); ?>

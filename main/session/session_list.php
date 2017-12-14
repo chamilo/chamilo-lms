@@ -91,14 +91,24 @@ if (!empty($courseId)) {
 
 if (isset($_REQUEST['keyword'])) {
     //Begin with see the searchOper param
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=s.name&searchString='.Security::remove_XSS($_REQUEST['keyword']).'&searchOper=bw';
+    $filter = new stdClass();
+    $filter->groupOp = 'OR';
+    $rule = new stdClass();
+    $rule->field = 'category_name';
+    $rule->op = 'in';
+    $rule->data = Security::remove_XSS($_REQUEST['keyword']);
+    $filter->rules[] = $rule;
+    $filter->groupOp = 'OR';
+
+    $filter = json_encode($filter);
+    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters='.$filter.'&searchField=s.name&searchString='.Security::remove_XSS($_REQUEST['keyword']).'&searchOper=in';
 }
 
 if (isset($_REQUEST['id_category'])) {
     $sessionCategory = SessionManager::get_session_category($_REQUEST['id_category']);
     if (!empty($sessionCategory)) {
         //Begin with see the searchOper param
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=sc.name&searchString='.Security::remove_XSS($sessionCategory['name']).'&searchOper=bw';
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=sc.name&searchString='.Security::remove_XSS($sessionCategory['name']).'&searchOper=in';
     }
 }
 
@@ -115,17 +125,21 @@ $extra_params['autowidth'] = 'true';
 // height auto
 $extra_params['height'] = 'auto';
 
-$extra_params['postData'] = array(
-    'filters' => array(
-        "groupOp" => "AND",
-        "rules" => $result['rules'],
-        /*array(
-            array( "field" => "display_start_date", "op" => "gt", "data" => ""),
-            array( "field" => "display_end_date", "op" => "gt", "data" => "")
-        ),*/
-        //'groups' => $groups
-    )
-);
+if (!isset($_GET['keyword'])) {
+    $extra_params['postData'] = array(
+        'filters' => array(
+            "groupOp" => "AND",
+            "rules" => $result['rules'],
+            /*array(
+                array( "field" => "display_start_date", "op" => "gt", "data" => ""),
+                array( "field" => "display_end_date", "op" => "gt", "data" => "")
+            ),*/
+            //'groups' => $groups
+        )
+    );
+}
+
+$hideSearch = api_get_configuration_value('hide_search_form_in_session_list');
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
@@ -220,7 +234,16 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
             }
 
             <?php
-            echo Display::grid_js('sessions', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+            echo Display::grid_js(
+                'sessions',
+                $url,
+                $columns,
+                $column_model,
+                $extra_params,
+                array(),
+                $action_links,
+                true
+            );
             ?>
 
             setSearchSelect("status");
@@ -271,8 +294,12 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
                 prmSearch
             );
 
+            <?php
             // Create the searching dialog.
-            grid.searchGrid(prmSearch);
+            if ($hideSearch !== true) {
+                echo 'grid.searchGrid(prmSearch);';
+            }
+            ?>
 
             // Fixes search table.
             var searchDialogAll = $("#fbox_"+grid[0].id);
@@ -311,9 +338,11 @@ if (api_is_platform_admin()) {
 }
 
 if ($list_type == 'complete') {
-    echo '<a href="'.api_get_self().'?list_type=simple">'.Display::return_icon('view_remove.png', get_lang('Simple'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_self().'?list_type=simple">'.
+        Display::return_icon('view_remove.png', get_lang('Simple'), '', ICON_SIZE_MEDIUM).'</a>';
 } else {
-    echo '<a href="'.api_get_self().'?list_type=complete">'.Display::return_icon('view_text.png', get_lang('Complete'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_self().'?list_type=complete">'.
+        Display::return_icon('view_text.png', get_lang('Complete'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 echo $actions;

@@ -14,6 +14,7 @@ $help_content = 'exercise_upload';
 require_once __DIR__.'/../inc/global.inc.php';
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+$debug = false;
 $origin = api_get_origin();
 if (!$is_allowed_to_edit) {
     api_not_allowed(true);
@@ -538,11 +539,10 @@ function lp_upload_quiz_action_handling()
             }
         }
 
-        if (isset($_SESSION['lpobject'])) {
-            if ($debug > 0) {
-                error_log('New LP - SESSION[lpobject] is defined', 0);
-            }
-            $oLP = unserialize($_SESSION['lpobject']);
+        $lpObject = Session::read('lpobject');
+
+        if (!empty($lpObject)) {
+            $oLP = unserialize($lpObject);
             if (is_object($oLP)) {
                 if ($debug > 0) {
                     error_log('New LP - oLP is object', 0);
@@ -555,7 +555,7 @@ function lp_upload_quiz_action_handling()
                     Session::erase('oLP');
                     Session::erase('lpobject');
                 } else {
-                    $_SESSION['oLP'] = $oLP;
+                    Session::write('oLP', $oLP);
                 }
             }
         }
@@ -564,9 +564,16 @@ function lp_upload_quiz_action_handling()
             $previous = $_SESSION['oLP']->select_previous_item_id();
             $parent = 0;
             // Add a Quiz as Lp Item
-            $_SESSION['oLP']->add_item($parent, $previous, TOOL_QUIZ, $quiz_id, $quizTitle, '');
+            $_SESSION['oLP']->add_item(
+                $parent,
+                $previous,
+                TOOL_QUIZ,
+                $quiz_id,
+                $quizTitle,
+                ''
+            );
             // Redirect to home page for add more content
-            header('location: ../lp/lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.intval($_GET['lp_id']));
+            header('Location: ../lp/lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.intval($_GET['lp_id']));
             exit;
         } else {
             //  header('location: exercise.php?' . api_get_cidreq());

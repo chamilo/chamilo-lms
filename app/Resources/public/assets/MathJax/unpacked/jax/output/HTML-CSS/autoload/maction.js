@@ -9,7 +9,7 @@
  *
  *  ---------------------------------------------------------------------
  *  
- *  Copyright (c) 2010-2015 The MathJax Consortium
+ *  Copyright (c) 2010-2017 The MathJax Consortium
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@
  */
 
 MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
-  var VERSION = "2.5.1";
+  var VERSION = "2.7.2";
   var MML = MathJax.ElementJax.mml,
       HTMLCSS = MathJax.OutputJax["HTML-CSS"];
   
@@ -92,25 +92,26 @@ MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready",function () {
     HTMLaction: {
       toggle: function (span,frame,selection) {
         this.selection = selection;
-        frame.onclick = span.childNodes[1].onclick = MathJax.Callback(["HTMLclick",this]);
-        frame.style.cursor = span.childNodes[1].style.cursor="pointer";
+        span.onclick = MathJax.Callback(["HTMLclick",this]);
+        frame.style.cursor = span.childNodes[1].style.cursor = "pointer";
       },
       
       statusline: function (span,frame,selection) {
-        frame.onmouseover = span.childNodes[1].onmouseover = MathJax.Callback(["HTMLsetStatus",this]);
-        frame.onmouseout  = span.childNodes[1].onmouseout  = MathJax.Callback(["HTMLclearStatus",this]);
-        frame.onmouseover.autoReset = frame.onmouseout.autoReset = true;
+        span.onmouseover = MathJax.Callback(["HTMLsetStatus",this]);
+        span.onmouseout  = MathJax.Callback(["HTMLclearStatus",this]);
+        span.onmouseover.autoReset = span.onmouseout.autoReset = true;
+        frame.style.cursor = span.childNodes[1].style.cursor = "default";
       },
       
       tooltip: function(span,frame,selection) {
         if (this.data[1] && this.data[1].isToken) {
-          frame.title = frame.alt = span.childNodes[1].title =
-            span.childNodes[1].alt = this.data[1].data.join("");
+          span.title = span.alt = this.data[1].data.join("");
         } else {
-          frame.onmouseover = span.childNodes[1].onmouseover = MathJax.Callback(["HTMLtooltipOver",this]);
-          frame.onmouseout  = span.childNodes[1].onmouseout  = MathJax.Callback(["HTMLtooltipOut",this]);
-          frame.onmouseover.autoReset = frame.onmouseout.autoReset = true;
+          span.onmouseover = MathJax.Callback(["HTMLtooltipOver",this]);
+          span.onmouseout  = MathJax.Callback(["HTMLtooltipOut",this]);
+          span.onmouseover.autoReset = span.onmouseout.autoReset = true;
         }
+        frame.style.cursor = span.childNodes[1].style.cursor = "default";
       }
     },
     

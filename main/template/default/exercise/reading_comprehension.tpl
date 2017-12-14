@@ -32,6 +32,11 @@
         -moz-text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
         -ms-text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
         text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        -webkit-transition: color .5s linear, text-shadow .5s linear;
+        -khtml-transition: color .5s linear, text-shadow .5s linear;
+        -moz-transition: color .5s linear, text-shadow .5s linear;
+        -ms-transition: color .5s linear, text-shadow .5s linear;
+        transition: color .5s linear, text-shadow .5s linear;
     }
     .question-reading-comprehension-text .text-highlight.active {
         color: #000;
@@ -40,6 +45,11 @@
         -moz-text-shadow: none;
         -ms-text-shadow: none;
         text-shadow: none;
+        -webkit-transition: color .5s linear, text-shadow .5s linear;
+        -khtml-transition: color .5s linear, text-shadow .5s linear;
+        -moz-transition: color .5s linear, text-shadow .5s linear;
+        -ms-transition: color .5s linear, text-shadow .5s linear;
+        transition: color .5s linear, text-shadow .5s linear;
     }
     .question-reading-comprehension-text .text-highlight.border {
         color: #bbb;
@@ -48,6 +58,11 @@
         -moz-text-shadow: none;
         -ms-text-shadow: none;
         text-shadow: none;
+        -webkit-transition: color .5s linear, text-shadow .5s linear;
+        -khtml-transition: color .5s linear, text-shadow .5s linear;
+        -moz-transition: color .5s linear, text-shadow .5s linear;
+        -ms-transition: color .5s linear, text-shadow .5s linear;
+        transition: color .5s linear, text-shadow .5s linear;
     }
     .question-reading-comprehension-text br {
         margin-bottom: 1em;

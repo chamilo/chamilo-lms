@@ -25,18 +25,107 @@ function confirmation() {
 	}
 }
 </script>";
+
 api_block_anonymous_users();
 
 if (!api_is_allowed_to_edit() && !api_is_student_boss()) {
     api_not_allowed(true);
 }
 
-$cat_id = isset($_GET['cat_id']) ? (int) $_GET['cat_id'] : null;
+$categoryId = isset($_GET['cat_id']) ? (int) $_GET['cat_id'] : 0;
 $action = isset($_GET['action']) && $_GET['action'] ? $_GET['action'] : null;
 $filterOfficialCode = isset($_POST['filter']) ? Security::remove_XSS($_POST['filter']) : null;
 $filterOfficialCodeGet = isset($_GET['filter']) ? Security::remove_XSS($_GET['filter']) : null;
 
+$url = api_get_self().'?'.api_get_cidreq().'&cat_id='.$categoryId.'&filter='.$filterOfficialCode;
+$courseInfo = api_get_course_info();
+
+$filter = api_get_setting('certificate_filter_by_official_code');
+$userList = array();
+$filterForm = null;
+$certificate_list = array();
+if ($filter === 'true') {
+    $options = UserManager::getOfficialCodeGrouped();
+    $options = array_merge(array('all' => get_lang('All')), $options);
+    $form = new FormValidator(
+        'official_code_filter',
+        'POST',
+        api_get_self().'?'.api_get_cidreq().'&cat_id='.$categoryId
+    );
+    $form->addElement('select', 'filter', get_lang('OfficialCode'), $options);
+    $form->addButton('submit', get_lang('Submit'));
+    $filterForm = '<br />'.$form->returnForm();
+
+    if ($form->validate()) {
+        $officialCode = $form->getSubmitValue('filter');
+        if ($officialCode == 'all') {
+            $certificate_list = GradebookUtils::get_list_users_certificates($categoryId);
+        } else {
+            $userList = UserManager::getUsersByOfficialCode($officialCode);
+            if (!empty($userList)) {
+                $certificate_list = GradebookUtils::get_list_users_certificates(
+                    $categoryId,
+                    $userList
+                );
+            }
+        }
+    } else {
+        $certificate_list = GradebookUtils::get_list_users_certificates($categoryId);
+    }
+} else {
+    $certificate_list = GradebookUtils::get_list_users_certificates($categoryId);
+}
+
+$content = '';
+
+$tags = Certificate::notificationTags();
+
 switch ($action) {
+    case 'send_notifications':
+        $currentUserInfo = api_get_user_info();
+        $message = isset($_POST['message']) ? $_POST['message'] : '';
+        $subject = get_lang('NotificationCertificateSubject');
+        if (!empty($originalMessage)) {
+            foreach ($certificate_list as $index => $value) {
+                $userInfo = api_get_user_info($value['user_id']);
+                if (empty($userInfo)) {
+                    continue;
+                }
+                $list = GradebookUtils::get_list_gradebook_certificates_by_user_id(
+                    $value['user_id'],
+                    $categoryId
+                );
+
+                foreach ($list as $valueCertificate) {
+                    Certificate::sendNotification(
+                        $subject,
+                        $message,
+                        $userInfo,
+                        $courseInfo,
+                        $valueCertificate
+                    );
+                }
+            }
+            Display::addFlash(Display::return_message(get_lang('Sent')));
+        }
+
+        header('Location: '.$url);
+        exit;
+        break;
+    case 'show_notification_form':
+        $form = new FormValidator('notification', 'post', $url.'&action=send_notifications');
+        $form->addHeader(get_lang('SendNotification'));
+        $form->addHtmlEditor('message', get_lang('Message'));
+        $form->addLabel(
+            get_lang('Tags'),
+            Display::return_message(implode('<br />', $tags), 'normal', false)
+        );
+        $form->addButtonSend(get_lang('Send'));
+        $form->setDefaults(
+            ['message' => nl2br(get_lang('NotificationCertificateTemplate'))]
+        );
+        $content = $form->returnForm();
+        break;
     case 'export_all_certificates':
         if (api_is_student_boss()) {
             $userGroup = new UserGroup();
@@ -48,7 +137,7 @@ switch ($action) {
             }
         }
 
-        Category::exportAllCertificates($cat_id, $userList);
+        Category::exportAllCertificates($categoryId, $userList);
         break;
     case 'generate_all_certificates':
         $userList = CourseManager::get_user_list_from_course_code(
@@ -61,19 +150,17 @@ switch ($action) {
                 if ($userInfo['status'] == INVITEE) {
                     continue;
                 }
-                Category::register_user_certificate($cat_id, $userInfo['user_id']);
+                Category::generateUserCertificate($categoryId, $userInfo['user_id']);
             }
         }
         break;
     case 'delete_all_certificates':
-        Category::deleteAllCertificates($cat_id);
+        Category::deleteAllCertificates($categoryId);
         break;
 }
 
-$course_code = api_get_course_id();
-
 $interbreadcrumb[] = array(
-    'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?',
+    'url' => Category::getUrl(),
     'name' => get_lang('Gradebook'),
 );
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('GradebookListOfStudentsCertificates'));
@@ -98,8 +185,12 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete') {
 $token = Security::get_token();
 echo Display::page_header(get_lang('GradebookListOfStudentsCertificates'));
 
+if (!empty($content)) {
+    echo $content;
+}
+
 //@todo replace all this code with something like get_total_weight()
-$cats = Category:: load($cat_id, null, null, null, null, null, false);
+$cats = Category::load($categoryId, null, null, null, null, null, false);
 
 if (!empty($cats)) {
     //with this fix the teacher only can view 1 gradebook
@@ -123,7 +214,7 @@ if (!empty($cats)) {
     $total_resource_weight = 0;
     if (!empty($datagen)) {
         $data_array = $datagen->get_data(
-            GradebookDataGenerator :: GDG_SORT_NAME,
+            0,
             0,
             null,
             true
@@ -142,59 +233,42 @@ if (!empty($cats)) {
     }
 
     if ($total_resource_weight != $total_weight) {
-        echo Display::return_message(get_lang('SumOfActivitiesWeightMustBeEqualToTotalWeight'), 'warning');
+        echo Display::return_message(
+            get_lang('SumOfActivitiesWeightMustBeEqualToTotalWeight'),
+            'warning'
+        );
     }
-}
-
-$filter = api_get_setting('certificate_filter_by_official_code');
-$userList = array();
-$filterForm = null;
-$certificate_list = array();
-if ($filter === 'true') {
-    echo '<br />';
-    $options = UserManager::getOfficialCodeGrouped();
-    $options = array_merge(array('all' => get_lang('All')), $options);
-    $form = new FormValidator(
-        'official_code_filter',
-        'POST',
-        api_get_self().'?'.api_get_cidreq().'&cat_id='.$cat_id
-    );
-    $form->addElement('select', 'filter', get_lang('OfficialCode'), $options);
-    $form->addButton('submit', get_lang('Submit'));
-    $filterForm = '<br />'.$form->returnForm();
-
-    if ($form->validate()) {
-        $officialCode = $form->getSubmitValue('filter');
-        if ($officialCode == 'all') {
-            $certificate_list = GradebookUtils::get_list_users_certificates($cat_id);
-        } else {
-            $userList = UserManager::getUsersByOfficialCode($officialCode);
-            if (!empty($userList)) {
-                $certificate_list = GradebookUtils::get_list_users_certificates(
-                    $cat_id,
-                    $userList
-                );
-            }
-        }
-    } else {
-        $certificate_list = GradebookUtils::get_list_users_certificates($cat_id);
-    }
-} else {
-    $certificate_list = GradebookUtils::get_list_users_certificates($cat_id);
 }
 
 echo '<div class="btn-group">';
-$url = api_get_self().'?action=generate_all_certificates'.'&'.api_get_cidreq().'&cat_id='.$cat_id.'&filter='.$filterOfficialCode;
-echo Display::url(get_lang('GenerateCertificates'), $url, array('class' => 'btn btn-default'));
 
-$url = api_get_self().'?action=delete_all_certificates'.'&'.api_get_cidreq().'&cat_id='.$cat_id.'&filter='.$filterOfficialCode;
-echo Display::url(get_lang('DeleteAllCertificates'), $url, array('class' => 'btn btn-default'));
+echo Display::url(
+    get_lang('GenerateCertificates'),
+    $url.'&action=generate_all_certificates',
+    array('class' => 'btn btn-default')
+);
+
+echo Display::url(
+    get_lang('DeleteAllCertificates'),
+    $url.'&action=delete_all_certificates',
+    array('class' => 'btn btn-default')
+);
 
 $hideCertificateExport = api_get_setting('hide_certificate_export_link');
 if (count($certificate_list) > 0 && $hideCertificateExport !== 'true') {
-    $url = api_get_self().'?action=export_all_certificates'.'&'.api_get_cidreq().'&cat_id='.$cat_id.'&filter='.$filterOfficialCode;
-    echo Display::url(get_lang('ExportAllCertificatesToPDF'), $url, array('class' => 'btn btn-default'));
+    echo Display::url(
+        get_lang('ExportAllCertificatesToPDF'),
+        $url.'&action=export_all_certificates',
+        array('class' => 'btn btn-default')
+    );
+
+    echo Display::url(
+        get_lang('SendCertificateNotifications'),
+        $url.'&action=show_notification_form',
+        array('class' => 'btn btn-default')
+    );
 }
+
 echo '</div>';
 
 echo $filterForm;
@@ -210,16 +284,23 @@ if (count($certificate_list) == 0) {
         echo '<tr><td>
             <table class="data_table">';
 
-        $list_certificate = GradebookUtils::get_list_gradebook_certificates_by_user_id($value['user_id'], $cat_id);
-        foreach ($list_certificate as $value_certificate) {
+        $list = GradebookUtils::get_list_gradebook_certificates_by_user_id(
+            $value['user_id'],
+            $categoryId
+        );
+        foreach ($list as $valueCertificate) {
             echo '<tr>';
-            echo '<td width="50%">'.get_lang('Score').' : '.$value_certificate['score_certificate'].'</td>';
-            echo '<td width="30%">'.get_lang('Date').' : '.api_convert_and_format_date($value_certificate['created_at']).'</td>';
+            echo '<td width="50%">'.get_lang('Score').' : '.$valueCertificate['score_certificate'].'</td>';
+            echo '<td width="30%">'.get_lang('Date').' : '.api_convert_and_format_date($valueCertificate['created_at']).'</td>';
             echo '<td width="20%">';
-            $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$value_certificate['id'];
-            $certificates = Display::url(get_lang('Certificate'), $url, array('target'=>'_blank', 'class' => 'btn btn-default'));
+            $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$valueCertificate['id'];
+            $certificates = Display::url(
+                get_lang('Certificate'),
+                $url,
+                array('target' => '_blank', 'class' => 'btn btn-default')
+            );
             echo $certificates;
-            echo '<a onclick="return confirmation();" href="gradebook_display_certificate.php?sec_token='.$token.'&'.api_get_cidreq().'&action=delete&cat_id='.$cat_id.'&certificate_id='.$value_certificate['id'].'">
+            echo '<a onclick="return confirmation();" href="gradebook_display_certificate.php?sec_token='.$token.'&'.api_get_cidreq().'&action=delete&cat_id='.$categoryId.'&certificate_id='.$valueCertificate['id'].'">
                     '.Display::return_icon('delete.png', get_lang('Delete')).'
                   </a>';
             echo '</td></tr>';

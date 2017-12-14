@@ -1,4 +1,4 @@
-{% if allowSkillsTool %}
+{% if allow_skill_tool %}
     <div class="btn-group">
         <a class="btn btn-default" href="{{ _p.web_main }}social/skills_wheel.php">
             {{ 'SkillsWheel' | get_lang }}
@@ -12,8 +12,10 @@
     <label>{{ 'Students' | get_lang }}</label>
     <select name="student" id="student">
         <option value="0">{{ 'Select' | get_lang }}</option>
-        {% for student in followedStudents %}
-            <option value="{{ student.user_id }}" {{ (student.user_id == selectedStudent) ? 'selected' : '' }}>{{ student.completeName }}</option>
+        {% for student in followed_students %}
+            <option value="{{ student.user_id }}" {{ (student.user_id == selected_student) ? 'selected' : '' }}>
+                {{ student.completeName }}
+            </option>
         {% endfor %}
     </select>
     <button type="submit" class="btn btn-primary">{{ 'Search' | get_lang }}</button>
@@ -30,18 +32,14 @@
             </tr>
         </thead>
         <tbody>
-            {% for row in rows %}
-                <tr>
-                    <td>{{ row.completeName }}</td>
-                    <td>{{ row.skillName }}</td>
-                    <td>{{ row.achievedAt }}</td>
-                    <td><img src="{{ row.courseImage }}" alt="{{ row.courseName }}"> {{ row.courseName }}</td>
-                </tr>
-            {% endfor %}
+        {% for row in rows %}
+            <tr>
+                <td>{{ row.complete_name }}</td>
+                <td>{{ row.skill_name }}</td>
+                <td>{{ row.achieved_at }}</td>
+                <td><img src="{{ row.course_image }}" alt="{{ row.course_name }}"> {{ row.course_name }}</td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
-{% else %}
-    <div class="alert alert-info">
-        {{ 'NoResults' | get_lang }}
-    </div>
 {% endif %}

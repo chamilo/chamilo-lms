@@ -11,18 +11,14 @@
  * @package chamilo.learnpath
  */
 
-$_SESSION['whereami'] = 'lp/build';
 $this_section = SECTION_COURSES;
 
 api_protect_course_script();
 
 /* Constants and variables */
-
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-$tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
 $isStudentView = (int) $_REQUEST['isStudentView'];
 $learnpath_id = (int) $_REQUEST['lp_id'];
@@ -41,32 +37,22 @@ $course_id = api_get_course_int_id();
 
 if ($learnpath_id == 0) {
     $is_new = true;
-    $sql = "SELECT id FROM $tbl_lp
+    $sql = "SELECT iid FROM $tbl_lp
             WHERE c_id = $course_id 
             ORDER BY id DESC LIMIT 0, 1";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
-    $learnpath_id = $row['id'];
+    $learnpath_id = $row['iid'];
 }
 
-$sql_query = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $learnpath_id";
+$sql_query = "SELECT * FROM $tbl_lp WHERE iid = $learnpath_id";
 
 $result = Database::query($sql_query);
 $therow = Database::fetch_array($result);
 
-/* SHOWING THE ADMIN TOOLS */
-
-if (!empty($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
-    $_SESSION['gradebook'] = Security::remove_XSS($_GET['gradebook']);
-    $gradebook = $_SESSION['gradebook'];
-} elseif (empty($_GET['gradebook'])) {
-    unset($_SESSION['gradebook']);
-    $gradebook = '';
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
@@ -117,20 +103,16 @@ if (isset($is_success) && $is_success === true) {
     if ($is_new) {
         echo Display::return_message(get_lang('LearnpathAdded'), 'normal', false);
     }
-    // Display::addFlash(Display::return_message(get_lang('LPCreatedAddChapterStep'), 'normal', false));
-    $gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : null;
-
     echo Display::page_subheader(get_lang('LearnPathAddedTitle'));
-
     echo '<ul id="lp_overview" class="thumbnails">';
     echo show_block(
-        'lp_controller.php?'.api_get_cidreq().'&gradebook='.$gradebook.'&action=add_item&type=step&lp_id='.$_SESSION['oLP']->lp_id,
+        'lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.$_SESSION['oLP']->lp_id,
         get_lang("NewStep"),
         get_lang('NewStepComment'),
         'tools.png'
     );
     echo show_block(
-        'lp_controller.php?'.api_get_cidreq().'&gradebook='.$gradebook.'&action=view&lp_id='.$_SESSION['oLP']->lp_id,
+        'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$_SESSION['oLP']->lp_id,
         get_lang("Display"),
         get_lang('DisplayComment'),
         'view.png'
@@ -140,8 +122,8 @@ if (isset($is_success) && $is_success === true) {
 echo '</div>';
 echo '</div>';
 
-
-function show_block($link, $title, $subtitle, $icon) {
+function show_block($link, $title, $subtitle, $icon)
+{
     $html = '<li class="col-md-4">';
     $html .= '<div class="thumbnail">';
     $html .= '<a href="'.$link.'" title="'.$title.'">';

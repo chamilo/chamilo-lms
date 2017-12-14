@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *  This file is responsible for passing requested documents to the browser.
- *  Many functions updated and moved to lib/document.lib.php
- *	@package chamilo.document
+ * This file is responsible for passing requested documents to the browser.
+ * Many functions updated and moved to lib/document.lib.php
+ * @package chamilo.document
  */
 
 session_cache_limiter('none');

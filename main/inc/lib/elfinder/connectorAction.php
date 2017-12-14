@@ -1,12 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once __DIR__.'/../../global.inc.php';
-
 use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Editor\Finder;
 
+require_once __DIR__.'/../../global.inc.php';
+
 error_reporting(-1);
+
 /** @var Connector $connector */
 $connector = new Connector();
 
@@ -22,7 +23,6 @@ if (empty($driverList)) {
 }
 
 $connector->setDriverList($driverList);
-
 $operations = $connector->getOperations();
 
 // Run elFinder

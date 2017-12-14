@@ -160,8 +160,14 @@ class Promotion extends Model
     {
         // Action links
         echo '<div class="actions" style="margin-bottom:20px">';
-        echo '<a href="career_dashboard.php">'.Display::return_icon('back.png',
-                get_lang('Back'), '', '32').'</a>';
+        echo '<a href="career_dashboard.php">'.
+            Display::return_icon(
+                'back.png',
+                get_lang('Back'),
+                '',
+                '32'
+            )
+            .'</a>';
         echo '<a href="'.api_get_self().'?action=add">'.
             Display::return_icon(
                 'new_promotion.png',

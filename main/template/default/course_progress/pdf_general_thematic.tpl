@@ -1,4 +1,3 @@
-
 <table style="margin-top: 30px;" class="full-width border-thin">
     <thead>
         <tr>

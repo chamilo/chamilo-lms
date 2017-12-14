@@ -500,6 +500,10 @@ class Version111 extends AbstractMigrationChamilo
             }
         }
 
+        $this->addSql(
+             'CREATE TABLE IF NOT EXISTS course_rel_user_catalogue (id int NOT NULL AUTO_INCREMENT, user_id int DEFAULT NULL, c_id int DEFAULT NULL, visible int NOT NULL, PRIMARY KEY (id), KEY (user_id), KEY (c_id), CONSTRAINT FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE, CONSTRAINT FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci'
+         );
+
         if ($schema->hasTable('course_rel_user_catalogue')) {
             $table = $schema->getTable('course_rel_user_catalogue');
 
@@ -532,7 +536,12 @@ class Version111 extends AbstractMigrationChamilo
             }
         }
 
-        $this->addSql('ALTER TABLE session_rel_course DROP category');
+        if ($schema->hasTable('session_rel_course')) {
+            $table = $schema->getTable('session_rel_course');
+            if ($table->hasColumn('category')) {
+                $this->addSql('ALTER TABLE session_rel_course DROP category');
+            }
+        }
     }
 
     /**

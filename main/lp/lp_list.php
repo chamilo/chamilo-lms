@@ -52,6 +52,8 @@ if (api_get_setting('search_enabled') === 'true') {
 }
 $current_session = api_get_session_id();
 
+$subscriptionSettings = learnpath::getSubscriptionSettings();
+
 /* Introduction section (editable by course admins) */
 $introductionSection = Display::return_introduction_section(
     TOOL_LEARNPATH,
@@ -87,34 +89,47 @@ if ($is_allowed_to_edit) {
                 break;
         }
     }
-    $actionLeft = null;
-
+    $actionLeft = '';
     if (!$current_session) {
         $actionLeft .= Display::url(
-            Display::return_icon('new_folder.png', get_lang('AddCategory'),
-                array(), ICON_SIZE_MEDIUM),
+            Display::return_icon(
+                'new_folder.png',
+                get_lang('AddCategory'),
+                array(),
+                ICON_SIZE_MEDIUM
+            ),
             api_get_self().'?'.api_get_cidreq().'&action=add_lp_category'
         );
     }
 
     $actionLeft .= Display::url(
-        Display::return_icon('new_learnpath.png',
-            get_lang('LearnpathAddLearnpath'), '', ICON_SIZE_MEDIUM),
+        Display::return_icon(
+            'new_learnpath.png',
+            get_lang('LearnpathAddLearnpath'),
+            '',
+            ICON_SIZE_MEDIUM
+        ),
         api_get_self().'?'.api_get_cidreq().'&action=add_lp'
     );
     $actionLeft .= Display::url(
-        Display::return_icon('import_scorm.png', get_lang('UploadScorm'), '',
-            ICON_SIZE_MEDIUM),
-        '../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='
-        .TOOL_LEARNPATH
+        Display::return_icon(
+            'import_scorm.png',
+            get_lang('UploadScorm'),
+            '',
+            ICON_SIZE_MEDIUM
+        ),
+        '../upload/index.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH
     );
 
     if (api_get_setting('service_ppt2lp', 'active') === 'true') {
         $actionLeft .= Display::url(
-            Display::return_icon('import_powerpoint.png',
-                get_lang('PowerPointConvert'), '', ICON_SIZE_MEDIUM),
-            '../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='
-            .TOOL_LEARNPATH
+            Display::return_icon(
+                'import_powerpoint.png',
+                get_lang('PowerPointConvert'),
+                '',
+                ICON_SIZE_MEDIUM
+            ),
+            '../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH
         );
     }
     $actions = Display::toolbarAction('actions-lp', array($actionLeft));
@@ -128,7 +143,6 @@ $categoryTest = new CLpCategory();
 $categoryTest->setId(0);
 $categoryTest->setName(get_lang('WithOutCategory'));
 $categoryTest->setPosition(0);
-
 $categories = array(
     $categoryTest
 );
@@ -140,7 +154,6 @@ if (!empty($categoriesTempList)) {
 $userId = api_get_user_id();
 $userInfo = api_get_user_info();
 $lpIsShown = false;
-
 $filteredCategoryId = $action === 'view_category' && !empty($_GET['id']) ? intval($_GET['id']) : 0;
 
 if ($filteredCategoryId) {
@@ -215,8 +228,7 @@ foreach ($categories as $item) {
             );
 
             // Check if the learnpath is visible for student.
-            if (
-                !$is_allowed_to_edit && $lpVisibility === false
+            if (!$is_allowed_to_edit && $lpVisibility === false
                 && ($isBlocked && $showBlockedPrerequisite === false)
             ) {
                 continue;
@@ -227,9 +239,8 @@ foreach ($categories as $item) {
                 $time_limits = false;
 
                 // This is an old LP (from a migration 1.8.7) so we do nothing
-                if (
-                    empty($details['created_on'])
-                    && empty($details['modified_on'])
+                if (empty($details['created_on']) &&
+                    empty($details['modified_on'])
                 ) {
                     $time_limits = false;
                 }
@@ -241,9 +252,8 @@ foreach ($categories as $item) {
 
                 if ($time_limits) {
                     // Check if start time
-                    if (
-                        !empty($details['publicated_on'])
-                        && !empty($details['expired_on'])
+                    if (!empty($details['publicated_on']) &&
+                        !empty($details['expired_on'])
                     ) {
                         $start_time = api_strtotime(
                             $details['publicated_on'],
@@ -287,8 +297,7 @@ foreach ($categories as $item) {
                 $oddclass = 'row_even';
             }
 
-            $url_start_lp = 'lp_controller.php?'.api_get_cidreq()
-                .'&action=view&lp_id='.$id;
+            $url_start_lp = 'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$id;
             $name = Security::remove_XSS($details['lp_name']);
             $extra = null;
 
@@ -324,9 +333,8 @@ foreach ($categories as $item) {
             }
 
             // Students can see the lp but is inactive
-            if (
-                !$is_allowed_to_edit && $lpVisibility == false
-                && $showBlockedPrerequisite == true
+            if (!$is_allowed_to_edit && $lpVisibility == false &&
+                $showBlockedPrerequisite == true
             ) {
                 $my_title = Display::tag(
                     'font',
@@ -433,9 +441,8 @@ foreach ($categories as $item) {
                     paths inside the session.
                     See http://support.chamilo.org/projects/chamilo-18/wiki/Tools_and_sessions).
                 */
-                if (
-                    !isset($details['subscribe_users'])
-                    || $details['subscribe_users'] != 1
+                if (!isset($details['subscribe_users']) ||
+                    $details['subscribe_users'] != 1
                 ) {
                     if ($details['lp_visibility'] == 0) {
                         $dsp_visible = Display::url(
@@ -516,8 +523,8 @@ foreach ($categories as $item) {
                                 ."&action=switch_attempt_mode&lp_id=$id"
                         );
                     }
-                    if ($details['seriousgame_mode'] == 0
-                        && $details['lp_prevent_reinit'] == 1
+                    if ($details['seriousgame_mode'] == 0 &&
+                        $details['lp_prevent_reinit'] == 1
                     ) {
                         // single mode | next = multiple
                         $dsp_reinit = Display::url(
@@ -529,8 +536,8 @@ foreach ($categories as $item) {
                                 ."&action=switch_attempt_mode&lp_id=$id"
                         );
                     }
-                    if ($details['seriousgame_mode'] == 0
-                        && $details['lp_prevent_reinit'] == 0
+                    if ($details['seriousgame_mode'] == 0 &&
+                        $details['lp_prevent_reinit'] == 0
                     ) {
                         // multiple mode | next = seriousgame
                         $dsp_reinit = Display::url(
@@ -662,21 +669,23 @@ foreach ($categories as $item) {
                 );
 
                 // Subscribe users
-                $subscribeUsers = null;
-                if ($details['subscribe_users'] == 1) {
+                $subscribeUsers = '';
+                if ($details['subscribe_users'] == 1 &&
+                    $subscriptionSettings['allow_add_users_to_lp']
+                ) {
                     $subscribeUsers = Display::url(
-                        Display::return_icon('user.png',
+                        Display::return_icon(
+                            'user.png',
                             get_lang('SubscribeUsersToLp')
                         ),
-                        api_get_path(WEB_CODE_PATH)
-                        ."lp/lp_subscribe_users.php?lp_id=$id&".api_get_cidreq()
+                        api_get_path(WEB_CODE_PATH)."lp/lp_subscribe_users.php?lp_id=$id&".api_get_cidreq()
                     );
                 }
 
                 /* Auto launch LP code */
                 if (api_get_course_setting('enable_lp_auto_launch') == 1) {
-                    if ($details['autolaunch'] == 1
-                        && $autolaunch_exists == false
+                    if ($details['autolaunch'] == 1 &&
+                        $autolaunch_exists == false
                     ) {
                         $autolaunch_exists = true;
                         $lp_auto_launch_icon = Display::url(
@@ -689,7 +698,8 @@ foreach ($categories as $item) {
                         );
                     } else {
                         $lp_auto_launch_icon = Display::url(
-                            Display::return_icon('launch_na.png',
+                            Display::return_icon(
+                                'launch_na.png',
                                 get_lang('EnableLPAutoLaunch')
                             ),
                             api_get_self().'?'.api_get_cidreq()
@@ -860,7 +870,7 @@ foreach ($categories as $item) {
             $item->getId(),
             $current_session
         ),
-        'category_is_published' => learnpath::categoryIsPusblished(
+        'category_is_published' => learnpath::categoryIsPublished(
             $item,
             $courseInfo['real_id']
         ),
@@ -869,6 +879,7 @@ foreach ($categories as $item) {
 }
 
 $template = new Template($nameTools);
+$template->assign('subscription_settings', $subscriptionSettings);
 $template->assign('is_allowed_to_edit', $is_allowed_to_edit);
 $template->assign('is_invitee', api_is_invitee());
 $template->assign('actions', $actions);

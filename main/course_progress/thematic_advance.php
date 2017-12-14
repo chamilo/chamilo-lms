@@ -12,7 +12,6 @@
 api_protect_course_script(true);
 
 if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
-
     $header_form = get_lang('NewThematicAdvance');
     if ($action === 'thematic_advance_edit') {
         $header_form = get_lang('EditThematicAdvance');
@@ -34,7 +33,7 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
     if (!empty($thematic_id)) {
         $form->addElement('hidden', 'thematic_id', $thematic_id);
     }
-    
+
     $radios = array();
     $radios[] = $form->createElement(
         'radio',
@@ -137,7 +136,6 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
     }
 
     $attendance_select_item_id = null;
-
     if (count($attendance_select) > 1) {
         $i = 1;
         foreach ($attendance_select as $key => $attendance_select_item) {
@@ -162,7 +160,6 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
     $default['duration_in_hours'] = 1;
 
     if (!empty($thematic_advance_data)) {
-
         // set default values
         $default['content'] = isset($thematic_advance_data['content']) ? $thematic_advance_data['content'] : null;
         $default['duration_in_hours'] = isset($thematic_advance_data['duration']) ? $thematic_advance_data['duration'] : 1;
@@ -225,8 +222,7 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
     }
 
     $form->display();
-
-} else if ($action == 'thematic_advance_list') {
+} elseif ($action == 'thematic_advance_list') {
     // thematic advance list
     echo '<div class="actions">';
     echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=thematic_details">'.

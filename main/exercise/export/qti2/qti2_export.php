@@ -22,7 +22,7 @@ require __DIR__.'/qti2_classes.php';
 class ImsAssessmentItem
 {
     public $question;
-    public $question_ident;
+    public $questionIdent;
     public $answer;
 
     /**
@@ -43,14 +43,14 @@ class ImsAssessmentItem
     * This opens the <item> block, with correct attributes.
     *
     */
-    function start_item()
+    public function start_item()
     {
         $categoryTitle = '';
         if (!empty($this->question->category)) {
             $category = new TestCategory();
             $category = $category->getCategory($this->question->category);
             if ($category) {
-                $categoryTitle = htmlspecialchars(formatExerciseQtiTitle($category->name));
+                $categoryTitle = htmlspecialchars(formatExerciseQtiText($category->name));
             }
         }
 
@@ -58,7 +58,7 @@ class ImsAssessmentItem
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 imsqti_v2p1.xsd"
                 identifier="'.$this->questionIdent.'"
-                title = "'.htmlspecialchars(formatExerciseQtiTitle($this->question->selectTitle())).'"
+                title = "'.htmlspecialchars(formatExerciseQtiText($this->question->selectTitle())).'"
                 category = "'.$categoryTitle.'"
         >'."\n";
 
@@ -69,7 +69,7 @@ class ImsAssessmentItem
     * End the XML flow, closing the </item> tag.
     *
     */
-    function end_item()
+    public function end_item()
     {
         return "</assessmentItem>\n";
     }
@@ -78,7 +78,7 @@ class ImsAssessmentItem
     * Start the itemBody
     *
     */
-    function start_item_body()
+    public function start_item_body()
     {
         return '  <itemBody>'."\n";
     }
@@ -87,7 +87,7 @@ class ImsAssessmentItem
     * End the itemBody part.
     *
     */
-    function end_item_body()
+    public function end_item_body()
     {
         return "  </itemBody>\n";
     }
@@ -96,7 +96,7 @@ class ImsAssessmentItem
     * add the response processing template used.
     *
     */
-    function add_response_processing()
+    public function add_response_processing()
     {
         return '  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_correct"/>'."\n";
     }
@@ -109,10 +109,9 @@ class ImsAssessmentItem
     * @param $standalone: Boolean stating if it should be exported as a stand-alone question
     * @return string string, the XML flow for an Item.
     */
-    function export($standalone = false)
+    public function export($standalone = false)
     {
         $head = $foot = '';
-
         if ($standalone) {
             $head = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>'."\n";
         }
@@ -124,7 +123,7 @@ class ImsAssessmentItem
 
         $res = $head
             .$this->start_item()
-            .$this->answer->imsExportResponsesDeclaration($this->questionIdent)
+            .$this->answer->imsExportResponsesDeclaration($this->questionIdent, $this->question)
             .$this->start_item_body()
             .$this->answer->imsExportResponses(
                 $this->questionIdent,
@@ -169,7 +168,7 @@ class ImsSection
         $this->exercise = $exe;
     }
 
-    function start_section()
+    public function start_section()
     {
         $out = '<section 
             ident = "EXO_' . $this->exercise->selectId().'" 
@@ -178,12 +177,12 @@ class ImsSection
         return $out;
     }
 
-    function end_section()
+    public function end_section()
     {
         return "</section>\n";
     }
 
-    function export_duration()
+    public function export_duration()
     {
         if ($max_time = $this->exercise->selectTimeLimit()) {
             // return exercise duration in ISO8601 format.
@@ -199,7 +198,7 @@ class ImsSection
      * Export the presentation (Exercise's description)
      * @author Amand Tihon <amand@alrj.org>
      */
-    function export_presentation()
+    public function export_presentation()
     {
         $out = "<presentation_material><flow_mat><material>\n"
              . "  <mattext><![CDATA[".formatExerciseQtiDescription($this->exercise->selectDescription())."]]></mattext>\n"
@@ -212,7 +211,7 @@ class ImsSection
      * Either sequential, through all questions, or random, with a selected number of questions.
      * @author Amand Tihon <amand@alrj.org>
      */
-    function export_ordering()
+    public function export_ordering()
     {
         $out = '';
         if ($n = $this->exercise->getShuffle()) {
@@ -235,7 +234,7 @@ class ImsSection
      * Export the questions, as a succession of <items>
      * @author Amand Tihon <amand@alrj.org>
      */
-    function export_questions()
+    public function export_questions()
     {
         $out = '';
         foreach ($this->exercise->selectQuestionList() as $q) {
@@ -251,7 +250,7 @@ class ImsSection
      * @return string string containing the XML flow
      * @author Amand Tihon <amand@alrj.org>
      */
-    function export($standalone)
+    public function export($standalone)
     {
         $head = $foot = '';
         if ($standalone) {
@@ -304,7 +303,7 @@ class ImsSection
 class ImsItem
 {
     public $question;
-    public $question_ident;
+    public $questionIdent;
     public $answer;
 
     /**
@@ -327,7 +326,7 @@ class ImsItem
     *
     * @author Amand Tihon <amand@alrj.org>
     */
-    function start_item()
+    public function start_item()
     {
         return '<item title="'.cleanAttribute(formatExerciseQtiDescription($this->question->selectTitle())).'" ident="'.$this->questionIdent.'">'."\n";
     }
@@ -337,7 +336,7 @@ class ImsItem
     *
     * @author Amand Tihon <amand@alrj.org>
     */
-    function end_item()
+    public function end_item()
     {
         return "</item>\n";
     }
@@ -350,7 +349,7 @@ class ImsItem
     *
     * @author Amand Tihon <amand@alrj.org>
     */
-    function start_presentation()
+    public function start_presentation()
     {
         return '<presentation label="'.$this->questionIdent.'"><flow>'."\n"
             . '<material><mattext>'.formatExerciseQtiDescription($this->question->selectDescription())."</mattext></material>\n";
@@ -361,7 +360,7 @@ class ImsItem
     *
     * @author Amand Tihon <amand@alrj.org>
     */
-    function end_presentation()
+    public function end_presentation()
     {
         return "</flow></presentation>\n";
     }
@@ -371,7 +370,7 @@ class ImsItem
     *
     * @author Amand Tihon <amand@alrj.org>
     */
-    function start_processing()
+    public function start_processing()
     {
         return '<resprocessing><outcomes><decvar vartype="Integer" defaultval="0" /></outcomes>'."\n";
     }
@@ -381,7 +380,7 @@ class ImsItem
     *
     * @author Amand Tihon <amand@alrj.org>
     */
-    function end_processing()
+    public function end_processing()
     {
         return "</resprocessing>\n";
     }
@@ -395,7 +394,7 @@ class ImsItem
     * @return string string, the XML flow for an Item.
     * @author Amand Tihon <amand@alrj.org>
     */
-    function export($standalone = False)
+    public function export($standalone = False)
     {
         global $charset;
         $head = $foot = "";
@@ -418,7 +417,7 @@ class ImsItem
             . $this->answer->imsExportFeedback($this->questionIdent)
             . $this->end_item()
             . $foot;
-        }
+    }
 }
 
 /**
@@ -450,7 +449,7 @@ function export_question_qti($questionId, $standalone = true)
 {
     $question = new Ims2Question();
     $qst = $question->read($questionId);
-    if (!$qst || $qst->type == FREE_ANSWER) {
+    if (!$qst) {
         return '';
     }
     $question->id = $qst->id;
@@ -480,7 +479,7 @@ function formatExerciseQtiDescription($text)
  * @param $text
  * @return string
  */
-function formatExerciseQtiTitle($text)
+function formatExerciseQtiText($text)
 {
     return htmlspecialchars($text);
 }

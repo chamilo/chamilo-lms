@@ -214,8 +214,8 @@ function display_move_form(
 /**
 * This function moves a file to a different category
 *
-* @param $id the id of the file we are moving
-* @param $target the id of the folder we are moving to
+* @param int $id the id of the file we are moving
+* @param int $target the id of the folder we are moving to
 * @param string $part are we moving a received file or a sent file?
 *
 * @return string string
@@ -309,20 +309,20 @@ function get_dropbox_category($id)
 }
 
 /**
-* This functions stores a new dropboxcategory
-*
-* @var  it might not seem very elegant if you create a category in sent
+ * This functions stores a new dropboxcategory
+ *
+ * @var  it might not seem very elegant if you create a category in sent
  * and in received with the same name that you get two entries in the
-*       dropbox_category table but it is the easiest solution. You get
-*       cat_name | received | sent | user_id
-*       test     |    1     |   0  |    237
-*       test     |    0     |   1  |    237
-*       more elegant would be
-*       test     |    1     |   1  |    237
-*
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @version march 2006
-*/
+ *       dropbox_category table but it is the easiest solution. You get
+ *       cat_name | received | sent | user_id
+ *       test     |    1     |   0  |    237
+ *       test     |    0     |   1  |    237
+ *       more elegant would be
+ *       test     |    1     |   1  |    237
+ *
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @version march 2006
+ */
 function store_addcategory()
 {
     $course_id = api_get_course_int_id();
@@ -492,7 +492,7 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
     $_user = api_get_user_info();
     $is_courseAdmin = api_is_course_admin();
     $is_courseTutor = api_is_course_tutor();
-    $origin = isset($_GET['origin']) ? $_GET['origin'] : null;
+    $origin = api_get_origin();
 
     $token = Security::get_token();
     $dropbox_person = new Dropbox_Person(
@@ -1087,25 +1087,25 @@ function store_add_dropbox($file = [], $work = null)
 
     Security::clear_token();
     Display::addFlash(Display::return_message(get_lang('FileUploadSucces')));
+
     return $result;
-
-
 }
 
 /**
-* Transforms the array containing all the feedback into something visually attractive.
-*
-* @param an array containing all the feedback about the given message.
-*
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @version march 2006
-*/
-function feedback($array) {
+ * Transforms the array containing all the feedback into something visually attractive.
+ *
+ * @param an array containing all the feedback about the given message.
+ *
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @version march 2006
+ */
+function feedback($array, $url)
+{
     $output = null;
     foreach ($array as $value) {
         $output .= format_feedback($value);
     }
-    $output .= feedback_form();
+    $output .= feedback_form($url);
     return $output;
 }
 
@@ -1129,21 +1129,32 @@ function format_feedback($feedback)
 
 /**
 * this function returns the code for the form for adding a new feedback message to a dropbox file.
+* @param $url  url string
 * @return string code
-*
+* 
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-function feedback_form()
+function feedback_form($url)
 {
-    $return = get_lang('AddNewFeedback').'<br />';
+    $return = '<div class="feeback-form">';
     $number_users_who_see_file = check_if_file_exist($_GET['id']);
     if ($number_users_who_see_file) {
         $token = Security::get_token();
-        $return .= '<textarea name="feedback" style="width: 80%; height: 80px;"></textarea>';
+        $return .= '<div class="form-group">';
         $return .= '<input type="hidden" name="sec_token" value="'.$token.'"/>';
-        $return .= '<br /><button type="submit" class="btn btn-primary" name="store_feedback" value="'.get_lang('Ok').'"
+        $return .= '<label class="col-sm-3 control-label">'.get_lang('AddNewFeedback');
+        $return .= '</label>';
+        $return .= '<div class="col-sm-6">';
+        $return .= '<textarea name="feedback" class="form-control" rows="4"></textarea>';
+        $return .= '</div>';
+        $return .= '<div class="col-sm-3">';
+        $return .= '<div class="pull-right"><a class="btn btn-default btn-sm" href="'.$url.'"><i class="fa fa-times" aria-hidden="true"></i></a></div>';
+        $return .= '<button type="submit" class="btn btn-primary btn-sm" name="store_feedback" value="'.get_lang('Ok').'"
                     onclick="javascript: document.form_dropbox.attributes.action.value = document.location;">'.get_lang('AddComment').'</button>';
+        $return .= '</div>';
+        $return .= '</div>';
+        $return .= '</div>';
     } else {
         $return .= get_lang('AllUsersHaveDeletedTheFileAndWillNotSeeFeedback');
     }
@@ -1156,12 +1167,14 @@ function user_can_download_file($id, $user_id)
     $id = intval($id);
     $user_id = intval($user_id);
 
-    $sql = "SELECT file_id FROM ".Database::get_course_table(TABLE_DROPBOX_PERSON)."
+    $sql = "SELECT file_id 
+            FROM ".Database::get_course_table(TABLE_DROPBOX_PERSON)."
             WHERE c_id = $course_id AND user_id = $user_id AND file_id = ".$id;
     $result = Database::query($sql);
     $number_users_who_see_file = Database::num_rows($result);
 
-    $sql = "SELECT file_id FROM ".Database::get_course_table(TABLE_DROPBOX_POST)."
+    $sql = "SELECT file_id 
+            FROM ".Database::get_course_table(TABLE_DROPBOX_POST)."
             WHERE c_id = $course_id AND dest_user_id = $user_id AND file_id = ".$id;
     $result = Database::query($sql);
     $count = Database::num_rows($result);
@@ -1175,12 +1188,14 @@ function check_if_file_exist($id)
 {
     $id = intval($id);
     $course_id = api_get_course_int_id();
-    $sql = "SELECT file_id FROM ".Database::get_course_table(TABLE_DROPBOX_PERSON)."
+    $sql = "SELECT file_id 
+            FROM ".Database::get_course_table(TABLE_DROPBOX_PERSON)."
             WHERE c_id = $course_id AND file_id = ".$id;
     $result = Database::query($sql);
     $number_users_who_see_file = Database::num_rows($result);
 
-    $sql = "SELECT file_id FROM ".Database::get_course_table(TABLE_DROPBOX_POST)."
+    $sql = "SELECT file_id 
+            FROM ".Database::get_course_table(TABLE_DROPBOX_POST)."
             WHERE c_id = $course_id AND file_id = ".$id;
     $result = Database::query($sql);
     $count = Database::num_rows($result);
@@ -1212,7 +1227,8 @@ function store_feedback()
 
         $id = Database::insert(Database::get_course_table(TABLE_DROPBOX_FEEDBACK), $params);
         if ($id) {
-            $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_FEEDBACK)." SET feedback_id = iid WHERE iid = $id";
+            $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_FEEDBACK)." 
+                    SET feedback_id = iid WHERE iid = $id";
             Database::query($sql);
         }
 
@@ -1286,13 +1302,14 @@ function zip_download($fileList)
 }
 
 /**
-* This is a callback function to decrypt the files in the zip file to their normal filename (as stored in the database)
-* @param array $p_event a variable of PCLZip
-* @param array $p_header a variable of PCLZip
-*
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @version march 2006
-*/
+ * This is a callback function to decrypt the files in the zip file
+ * to their normal filename (as stored in the database)
+ * @param array $p_event a variable of PCLZip
+ * @param array $p_header a variable of PCLZip
+ *
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @version march 2006
+ */
 function my_pre_add_callback($p_event, &$p_header)
 {
     $files = Session::read('dropbox_files_to_download');
@@ -1321,7 +1338,6 @@ function generate_html_overview($files, $dont_show_columns = array(), $make_link
 
     $counter = 0;
     foreach ($files as $value) {
-
         // Adding the header.
         if ($counter == 0) {
             $columns_array = array_keys($value);
@@ -1358,7 +1374,8 @@ function generate_html_overview($files, $dont_show_columns = array(), $make_link
 }
 
 /**
-* @desc This function retrieves the number of feedback messages on every document. This function might become obsolete when
+* @desc This function retrieves the number of feedback messages on every
+ * document. This function might become obsolete when
 *       the feedback becomes user individual.
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
@@ -1377,9 +1394,9 @@ function get_total_number_feedback($file_id = '')
     return $return;
 }
 
-
 /**
-* @desc this function checks if the key exists. If this is the case it returns the value, if not it returns 0
+* @desc this function checks if the key exists. If this is the case
+ * it returns the value, if not it returns 0
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */

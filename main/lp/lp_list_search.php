@@ -12,18 +12,13 @@
 
 require api_get_path(LIBRARY_PATH).'search/search_widget.php';
 require api_get_path(LIBRARY_PATH).'search/ChamiloQuery.php';
-require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
 Event::event_access_tool(TOOL_SEARCH);
 
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
@@ -65,7 +60,10 @@ foreach ($specific_fields as $specific_field) {
     if (!empty($_REQUEST['sf_'.$specific_field['code']])) {
         $values = $_REQUEST['sf_'.$specific_field['code']];
         if (in_array('__all__', $values)) {
-            $sf_terms_for_code = xapian_get_all_terms(1000, $specific_field['code']);
+            $sf_terms_for_code = xapian_get_all_terms(
+                1000,
+                $specific_field['code']
+            );
             foreach ($sf_terms_for_code as $term) {
                 if (!empty($term)) {
                     $term_array[] = chamilo_get_boolean_query($term['name']); // Here name includes prefix.
@@ -180,7 +178,6 @@ if (count($blocks) > 0) {
         }
     }
     $additional_parameters['operator'] = $op;
-
     $s->additional_parameters = $additional_parameters;
 
     if ($mode == 'default') {

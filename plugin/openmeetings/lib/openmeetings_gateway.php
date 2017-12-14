@@ -98,7 +98,6 @@ class OpenMeetingsGateway
             if ($err) {
                 error_log('Error: '.$err);
             } else {
-                //error_log('getSession returned '.$response. ' - Storing as sessionId');
                 $this->sessionId = $response;
 
                 $url = $this->getRestUrl("UserService")
@@ -157,7 +156,7 @@ class OpenMeetingsGateway
                 . "&isDemoRoom=false"
                 . "&demoTime=0"
                 . "&isModeratedRoom=".$this->var_to_str($isModeratedRoom));
-        //error_log($url);
+
         $result = $this->rest->call($url);
 
         if ($result->fault) {
@@ -167,8 +166,6 @@ class OpenMeetingsGateway
             if ($err) {
                 error_log('Error: '.$err);
             } else {
-                // echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
-                //error_log('Room updated successfully '.print_r($result,1));
                 return $result;
             }
         }
@@ -366,7 +363,6 @@ class OpenMeetingsGateway
             if ($err) {
                 error_log('Error: '.$err);
             } else {
-                //error_log('Creation of a new room succeeded: ID '.print_r($result,1));
                 return $result;
             }
         }
@@ -391,11 +387,9 @@ class OpenMeetingsGateway
         //    . "getRoomTypes?"
         //    . "SID=" . $this->sessionId;
         //$url = $this->getRestUrl('JabberService') . 'getAvailableRooms?SID=' . $this->sessionId;
-        //error_log(__FILE__.'+'.__LINE__.' Calling WS: '.$url);
         $result = $this->rest->call($url, "return");
         $rooms = array();
         foreach ($result as $room) {
-            //error_log(__FILE__.'+'.__LINE__.': one room found on remote: '.print_r($room,1));
             if ($room['externalRoomType'] == $type && count($room['currentusers']) > 0) {
                 $rooms[] = $room;
             }
@@ -420,7 +414,6 @@ class OpenMeetingsGateway
             . "getRoomById?"
             . "SID=".$this->sessionId
             . "&rooms_id=".$roomId;
-        //error_log(__FILE__.'+'.__LINE__.' Calling WS: '.$url);
         $result = $this->rest->call($url, "return");
         return $result;
     }

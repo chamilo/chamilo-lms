@@ -19,7 +19,7 @@
                                 <span class="category">{{ item.category }}</span>
                                 <div class="cribbon"></div>
                             {% endif %}
-                            
+
                             {% if item.edit_actions != '' %}
                                 <div class="admin-actions">
                                     {% if item.document == '' %}
@@ -48,56 +48,77 @@
                                 </h4>
                             </div>
                             <div class="block-author">
-                                {% for teacher in item.teachers %}
-                                    {% if item.teachers | length > 2 %}
-                                        <a href="{{ teacher.url }}" class="ajax"
-                                           data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                            <img src="{{ teacher.avatar }}"/>
-                                        </a>
-                                    {% else %}
-                                        <a href="{{ teacher.url }}" class="ajax"
-                                           data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                            <img src="{{ teacher.avatar }}"/>
-                                        </a>
-                                        <div class="teachers-details">
-                                            <h5>
-                                                <a href="{{ teacher.url }}" class="ajax"
-                                                   data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
-                                                    {{ teacher.firstname }} {{ teacher.lastname }}
-                                                </a>
-                                            </h5>
-                                            <p>{{ 'Teacher' | get_lang }}</p>
+                                {% if item.teachers | length > 6 %}
+                                    <a id="plist-{{ loop.index }}" data-trigger="focus" tabindex="0" role="button" class="btn btn-default panel_popover" data-toggle="popover" title="{{ 'CourseTeachers' | get_lang }}" data-html="true">
+                                        <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                                    </a>
+                                    <div id="popover-content-plist-{{ loop.index }}" class="hide">
+                                        {% for teacher in item.teachers %}
+                                        <div class="popover-teacher">
+                                            <a href="{{ teacher.url }}" class="ajax"
+                                               data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                                                <img src="{{ teacher.avatar }}"/>
+                                            </a>
+                                            <div class="teachers-details">
+                                                <h5>
+                                                    <a href="{{ teacher.url }}" class="ajax"
+                                                       data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                                                        {{ teacher.firstname }} {{ teacher.lastname }}
+                                                    </a>
+                                                </h5>
+                                            </div>
                                         </div>
-                                    {% endif %}
-                                {% endfor %}
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {% for teacher in item.teachers %}
+                                        {% if item.teachers | length <= 2 %}
+                                            <a href="{{ teacher.url }}" class="ajax"
+                                               data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                                                <img src="{{ teacher.avatar }}"/>
+                                            </a>
+                                            <div class="teachers-details">
+                                                <h5>
+                                                    <a href="{{ teacher.url }}" class="ajax"
+                                                       data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                                                        {{ teacher.firstname }} {{ teacher.lastname }}
+                                                    </a>
+                                                </h5>
+                                                <p>{{ 'Teacher' | get_lang }}</p>
+                                            </div>                                       
+                                        {% elseif item.teachers | length <= 6 %}
+                                            <a href="{{ teacher.url }}" class="ajax"
+                                               data-title="{{ teacher.firstname }} {{ teacher.lastname }}">
+                                                <img src="{{ teacher.avatar }}"/>
+                                            </a>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
                             </div>
-                            <div class="notifications">{{ item.notifications }}</div>
-
+                            {% if item.notifications %}
+                                <div class="notifications">{{ item.notifications }}</div>
+                            {% endif %}
                             {% if item.student_info %}
                                 {% if (item.student_info.progress is not null) and (item.student_info.score is not null) %}
                                     <div class="course-student-info">
                                         <div class="student-info">
-
                                             {% if (item.student_info.progress is not null) %}
-                                            {{ "StudentCourseProgressX" | get_lang | format(item.student_info.progress) }}
+                                                {{ "StudentCourseProgressX" | get_lang | format(item.student_info.progress) }}
                                             {% endif %}
 
                                             {% if (item.student_info.score is not null) %}
-                                            {{ "StudentCourseScoreX" | get_lang | format(item.student_info.score) }}
+                                                {{ "StudentCourseScoreX" | get_lang | format(item.student_info.score) }}
                                             {% endif %}
-
                                             {% if (item.student_info.certificate is not null) %}
                                                 <span title="{{ "StudentCourseCertificateX" | get_lang | format(item.student_info.certificate) }}">
                                                     <i class="fa fa-certificate" aria-hidden="true"></i>
                                                     {{ item.student_info.certificate }}
                                                 </span>
                                             {% endif %}
-
                                         </div>
                                     </div>
                                 {% endif %}
                             {% endif %}
-
                         </div>
                     </div>
                 </div>

@@ -1,18 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \ChamiloSession as Session;
+
 /**
  *    This script displays a participant specialty edit form.
  */
 
-use \ChamiloSession as Session;
 require_once '../config.php';
 
 $course_plugin = 'sepe';
 $plugin = SepePlugin::create();
 $_cid = 0;
 
-if ( !empty($_POST)) {
+if (!empty($_POST)) {
     $check = Security::check_token('post');
     if ($check) {
         $newSpecialty = intval($_POST['new_specialty']);
@@ -39,12 +40,12 @@ if ( !empty($_POST)) {
         $participantId = intval($_POST['participant_id']);
         $actionId = intval($_POST['action_id']);
         $specialtyId = intval($_POST['specialty_id']);
-        
+
         $registrationDate = $yearRegistration."-".$monthRegistration."-".$dayRegistration;
         $leavingDate = $yearLeaving."-".$monthLeaving."-".$dayLeaving;
         $startDate = $yearStart."-".$monthStart."-".$dayStart;
         $endDate = $yearEnd."-".$monthEnd."-".$dayEnd;
-        
+
         if (isset($newSpecialty) && $newSpecialty != 1) {
             $sql = "UPDATE $tableSepeParticipantsSpecialty SET 
                         specialty_origin = '".$specialtyOrigin."', 
@@ -59,7 +60,7 @@ if ( !empty($_POST)) {
                         final_result = '".$finalResult."', 
                         final_qualification = '".$finalQualification."', 
                         final_score = '".$finalScore."' 
-                    WHERE id = $specialtyId";    
+                    WHERE id = $specialtyId";
         } else {
             $sql = "INSERT INTO $tableSepeParticipantsSpecialty (
                         participant_id,
@@ -93,14 +94,13 @@ if ( !empty($_POST)) {
         }
         $res = Database::query($sql);
         if (!$res) {
-            echo Database::error();
             $_SESSION['sepe_message_error'] = $plugin->get_lang('NoSaveChange');
         } else {
             $_SESSION['sepe_message_info'] = $plugin->get_lang('SaveChange');
             if ($newSpecialty == "1") {
                 $specialtyId = Database::insert_id();
             }
-            
+
             $platformUserId = getUserPlatformFromParticipant($participantId);
             $insertLog = checkInsertNewLog($platformUserId, $actionId);
             if ($insertLog) {
@@ -120,7 +120,7 @@ if ( !empty($_POST)) {
                             '".date("Y-m-d H:i:s")."'
                             '".$leavingDateLog."'
                         );";
-                
+
             } else {
                 if ($finalResult == "1" || $finalResult == "2") {
                     $sql = "UPDATE $tableSepeLogParticipant 
@@ -142,6 +142,7 @@ if ( !empty($_POST)) {
         }
         session_write_close();
         header("Location: participant-specialty-edit.php?new_specialty=0&specialty_id=".$specialtyId."&participant_id=".$participantId."&action_id=".$actionId);
+        exit;
     } else {
         $newSpecialty = intval($_POST['new_specialty']);
         $participantId = intval($_POST['participant_id']);
@@ -152,6 +153,7 @@ if ( !empty($_POST)) {
         $_SESSION['sepe_message_error'] = $plugin->get_lang('ProblemToken');
         session_write_close();
         header("Location: participant-specialty-edit.php?new_specialty=".$newSpecialty."&specialty_id=".$specialtyId."&participant_id=".$participantId."&action_id=".$actionId);
+        exit;
     }
 } else {
     $token = Security::get_token();
@@ -183,7 +185,7 @@ if (api_is_platform_admin()) {
         $info = getInfoSpecialtyParticipant(intval($_GET['specialty_id']));
         $tpl->assign('info', $info);
         $tpl->assign('new_specialty', '0');
-        if ($info['registration_date'] != '0000-00-00' && $info['registration_date'] != NULL) {
+        if ($info['registration_date'] != '0000-00-00' && $info['registration_date'] != null) {
             $tpl->assign('day_registration', date("j", strtotime($info['registration_date'])));
             $tpl->assign('month_registration', date("n", strtotime($info['registration_date'])));
             $tpl->assign('year_registration', date("Y", strtotime($info['registration_date'])));
@@ -193,7 +195,7 @@ if (api_is_platform_admin()) {
         } else {
             $registrationYear = date("Y");
         }
-        if ($info['leaving_date'] != '0000-00-00' && $info['leaving_date'] != NULL) {
+        if ($info['leaving_date'] != '0000-00-00' && $info['leaving_date'] != null) {
             $tpl->assign('day_leaving', date("j", strtotime($info['leaving_date'])));
             $tpl->assign('month_leaving', date("n", strtotime($info['leaving_date'])));
             $tpl->assign('year_leaving', date("Y", strtotime($info['leaving_date'])));
@@ -203,7 +205,7 @@ if (api_is_platform_admin()) {
         } else {
             $leaveYear = date("Y");
         }
-        if ($info['start_date'] != '0000-00-00' && $info['start_date'] != NULL) {
+        if ($info['start_date'] != '0000-00-00' && $info['start_date'] != null) {
             $tpl->assign('day_start', date("j", strtotime($info['start_date'])));
             $tpl->assign('month_start', date("n", strtotime($info['start_date'])));
             $tpl->assign('year_start', date("Y", strtotime($info['start_date'])));
@@ -213,9 +215,9 @@ if (api_is_platform_admin()) {
         } else {
             $startYear = date("Y");
         }
-        if ($info['end_date'] != '0000-00-00' && $info['end_date'] != NULL) {
+        if ($info['end_date'] != '0000-00-00' && $info['end_date'] != null) {
             $tpl->assign('day_end', date("j", strtotime($info['end_date'])));
-            $tpl->assign('month_end', date("n",strtotime($info['end_date'])));
+            $tpl->assign('month_end', date("n", strtotime($info['end_date'])));
             $tpl->assign('year_end', date("Y", strtotime($info['end_date'])));
             $endYear = date("Y", strtotime($info['end_date']));
         } elseif (strpos($info['end_date'], '0000') === false) {
@@ -224,46 +226,46 @@ if (api_is_platform_admin()) {
             $endYear = date("Y");
         }
         $listSpecialtyTutorials = getListSpecialtyTutorial(intval($_GET['specialty_id']));
-        $tpl->assign('listSpecialtyTutorials', $listSpecialtyTutorials);    
+        $tpl->assign('listSpecialtyTutorials', $listSpecialtyTutorials);
     }
-    
-    
+
+
     $listYear = array();
     if ($registrationYear > $leaveYear) {
         $tmp = $registrationYear;
         $registrationYear = $leaveYear;
-        $leaveYear = $tmp;    
+        $leaveYear = $tmp;
     }
     $registrationYear -= 5;
     $leaveYear += 5;
-    $endRangeYear = (($registrationYear + 15) < $leaveYear) ? ($leaveYear+1):($registrationYear + 15);
+    $endRangeYear = (($registrationYear + 15) < $leaveYear) ? ($leaveYear + 1) : ($registrationYear + 15);
     while ($registrationYear <= $endRangeYear) {
         $listYear[] = $registrationYear;
         $registrationYear++;
     }
     $tpl->assign('list_year', $listYear);
-    
+
     $listYear = array();
     if ($startYear > $endYear) {
         $tmp = $startYear;
         $startYear = $endYear;
-        $endYear = $tmp;    
+        $endYear = $tmp;
     }
     $startYear -= 5;
     $endYear += 5;
-    $endRangeYear = (($startYear + 15) < $endYear) ? ($endYear+1):($startYear +15);
+    $endRangeYear = (($startYear + 15) < $endYear) ? ($endYear + 1) : ($startYear + 15);
     while ($startYear <= $endRangeYear) {
         $listYear[] = $startYear;
         $startYear++;
     }
     $tpl->assign('list_year_2', $listYear);
-    
+
     if (isset($_SESSION['sepe_message_info'])) {
-        $tpl->assign('message_info', $_SESSION['sepe_message_info']);    
+        $tpl->assign('message_info', $_SESSION['sepe_message_info']);
         unset($_SESSION['sepe_message_info']);
     }
     if (isset($_SESSION['sepe_message_error'])) {
-        $tpl->assign('message_error', $_SESSION['sepe_message_error']);    
+        $tpl->assign('message_error', $_SESSION['sepe_message_error']);
         unset($_SESSION['sepe_message_error']);
     }
     $tpl->assign('sec_token', $token);
@@ -272,5 +274,6 @@ if (api_is_platform_admin()) {
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 } else {
-    header('Location:' . api_get_path(WEB_PATH));
+    header('Location:'.api_get_path(WEB_PATH));
+    exit;
 }

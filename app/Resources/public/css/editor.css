@@ -234,7 +234,36 @@ blockquote p {
   color: #843534;
 }
 .img-responsive {
-  display: block;
   max-width: 100%;
   height: auto;
+}
+.img-va-baseline {
+    vertical-align: baseline;
+}
+.img-va-top {
+    vertical-align: top;
+}
+.img-va-bottom {
+    vertical-align: bottom;
+}
+.img-va-middle {
+    vertical-align: middle;
+}
+.img-va-super {
+    vertical-align: super;
+}
+.img-va-sub {
+    vertical-align: sub;
+}
+.img-va-text-top {
+    vertical-align: text-top;
+}
+.img-va-text-bottom {
+    vertical-align: text-bottom;
+}
+
+@media (max-width: 767px) {
+    .img-responsive {
+        display: block;
+    }
 }

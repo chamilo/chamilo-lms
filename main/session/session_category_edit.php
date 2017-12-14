@@ -4,6 +4,7 @@
  * Edition script for sessions categories
  * @package chamilo.admin
  */
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -82,7 +83,7 @@ if (!empty($return)) {
         <input type="hidden" name="formSent" value="1">
         <legend><?php echo $tool_name; ?> </legend>
         <div class="form-group">
-            <label class="col-sm-3 control-label"><?php echo get_lang('SessionName') ?></label>
+            <label class="col-sm-3 control-label"><?php echo get_lang('Name') ?></label>
             <div class="col-sm-6">
                 <input class="form-control" type="text" name="name" size="50" maxlength="50" value="<?php if ($formSent) echo api_htmlentities($name, ENT_QUOTES, $charset); else echo api_htmlentities($infos['name'], ENT_QUOTES, $charset); ?>">
             </div>
@@ -227,8 +228,8 @@ if (!empty($return)) {
         </div>
         <div class="form-group">
             <div class="col-sm-offset-3 col-sm-6">
-                <button class="btn btn-success" type="submit" value="<?php echo get_lang('ModifyThisSession') ?>">
-                    <?php echo get_lang('ModifyThisSession') ?>
+                <button class="btn btn-success" type="submit" value="<?php echo get_lang('Edit') ?>">
+                    <?php echo get_lang('Edit') ?>
                 </button>
             </div>
         </div>

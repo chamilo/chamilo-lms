@@ -15,7 +15,14 @@
                         <li class="item">
                             {{ user.complete_name }}
                         </li>
-                        {% if show_full_profile  %}
+                        {% if _u.is_admin == 1 %}
+                            <li class="item">
+                                <a href="{{ _p.web }}main/admin/user_edit.php?user_id={{ user.id }}">
+                                    <img src="{{ "edit.png" | icon }}" alt="{{ "Edit" | get_lang }}">
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if show_full_profile %}
                             <li class="item">
                                 <a href="{{ _p.web }}main/messages/new_message.php">
                                 <img src="{{ "instant_message.png" | icon }}" alt="{{ "Email" | get_lang }}">

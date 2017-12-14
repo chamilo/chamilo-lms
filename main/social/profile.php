@@ -29,7 +29,7 @@ $show_full_profile = true;
 //social tab
 $this_section = SECTION_SOCIAL;
 
-//Initialize blocks
+// Initialize blocks
 $social_extra_info_block = null;
 $social_course_block = null;
 $social_group_info_block = null;
@@ -64,7 +64,6 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
     $url .= empty($_SERVER['QUERY_STRING']) ? '' : '?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
     header('Location: '.$url);
     exit;
-
 } elseif (!empty($_POST['social_wall_new_msg']) && !empty($_POST['messageId'])) {
     $messageId = intval($_POST['messageId']);
     $messageContent = $_POST['social_wall_new_msg'];
@@ -81,7 +80,6 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
     $url .= empty($_SERVER['QUERY_STRING']) ? '' : '?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
     header('Location: '.$url);
     exit;
-
 } elseif (isset($_GET['messageId'])) {
     $messageId = intval($_GET['messageId']);
     $messageInfo = MessageManager::get_message_by_id($messageId);
@@ -96,7 +94,8 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
         }
     }
     api_not_allowed(true);
-} elseif (isset($_GET['u'])) { //I'm your friend? I can see your profile?
+} elseif (isset($_GET['u'])) {
+    //I'm your friend? I can see your profile?
     $user_id = intval($_GET['u']);
     if (api_is_anonymous($user_id, true)) {
         api_not_allowed(true);
@@ -118,7 +117,8 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
                     USER_RELATION_TYPE_PARENT,
                     USER_RELATION_TYPE_FRIEND,
                     USER_RELATION_TYPE_GOODFRIEND
-                ))) {
+                ))
+            ) {
                 $show_full_profile = true;
             }
             //checking the relationship between my friend and me
@@ -130,7 +130,8 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
                     USER_RELATION_TYPE_PARENT,
                     USER_RELATION_TYPE_FRIEND,
                     USER_RELATION_TYPE_GOODFRIEND
-                ))) {
+                ))
+            ) {
                 $show_full_profile = true;
             } else {
                 // im probably not a good friend
@@ -150,8 +151,6 @@ if ($user_info['user_id'] == api_get_user_id()) {
     $isSelfUser = false;
 }
 $userIsOnline = user_is_online($user_id);
-
-$libpath = api_get_path(LIBRARY_PATH);
 $ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
 $socialAjaxUrl = api_get_path(WEB_AJAX_PATH).'social.ajax.php';
 $javascriptDir = api_get_path(LIBRARY_PATH).'javascript/';
@@ -167,7 +166,7 @@ if (file_exists($timeAgoLocaleDir)) {
 }
 
 $htmlHeadXtra[] = '<script>
-$(document).ready(function (){
+$(document).ready(function(){
     var container = $("#wallMessages");
     container.jscroll({
         loadingHtml: "<div class=\"well_border\">' . get_lang('Loading').' </div>",
@@ -217,7 +216,10 @@ Session::write('social_user_id', (int) $user_id);
 
 // Setting some course info
 $my_user_id = isset($_GET['u']) ? intval($_GET['u']) : api_get_user_id();
-$personal_course_list = UserManager::get_personal_session_course_list($my_user_id, 50);
+$personal_course_list = UserManager::get_personal_session_course_list(
+    $my_user_id,
+    50
+);
 $course_list_code = array();
 $i = 1;
 $list = [];
@@ -262,7 +264,6 @@ $social_wall_block = $wallSocialAddPost;
 
 // Social Post Wall
 $posts = SocialManager::getWallMessagesByUser($my_user_id, $friendId);
-
 $social_post_wall_block = empty($posts) ? '<p>'.get_lang("NoPosts").'</p>' : $posts;
 
 $socialAutoExtendLink = Display::url(
@@ -276,7 +277,6 @@ $socialAutoExtendLink = Display::url(
 // Added a Jquery Function to return the Preview of OpenGraph URL Content
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
-
     var getUrl = $("[name=\'social_wall_new_msg_main\']");
     var matchUrl = /https?:\/\/w{0,3}\w*?\.(\w*?\.)?\w{2,3}\S*|www\.(\w*?\.)?\w*?\.\w{2,3}\S*|(\w*?\.)?\w*?\.\w{2,3}[\/\?]\S*/ ;
 
@@ -367,11 +367,13 @@ if ($show_full_profile) {
             } else {
                 switch ($extraFieldInfo['field_type']) {
                     case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
-                        $id_options = explode(';', $data);
+                        $id_options = explode('::', $data);
                         $value_options = array();
                         // get option display text from user_field_options table
                         foreach ($id_options as $id_option) {
-                            $sql = "SELECT display_text FROM $t_ufo WHERE id = '$id_option'";
+                            $sql = "SELECT display_text 
+                                    FROM $t_ufo 
+                                    WHERE id = '$id_option'";
                             $res_options = Database::query($sql);
                             $row_options = Database::fetch_row($res_options);
                             $value_options[] = $row_options[0];
@@ -412,6 +414,34 @@ if ($show_full_profile) {
                             .'</a>';
                         $extra_information_value .= '<li class="list-group-item">'.$data.'</li>';
                         break;
+                    case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
+                        $parsedData = explode('::', $data);
+
+                        if (!$parsedData) {
+                            break;
+                        }
+
+                        $objEfOption = new ExtraFieldOption('user');
+                        $optionInfo = $objEfOption->get($parsedData[0]);
+
+                        $extra_information_value .= '<li class="list-group-item">'
+                            .$optionInfo['display_text'].': '
+                            .$parsedData[1].'</li>';
+                        break;
+                    case ExtraField::FIELD_TYPE_TRIPLE_SELECT:
+                        $optionIds = explode(';', $data);
+                        $optionValues = array();
+
+                        foreach ($optionIds as $optionId) {
+                            $objEfOption = new ExtraFieldOption('user');
+                            $optionInfo = $objEfOption->get($optionId);
+
+                            $optionValues[] = $optionInfo['display_text'];
+                        }
+                        $extra_information_value .= '<li class="list-group-item">'
+                            .ucfirst($extraFieldInfo['display_text']).': '
+                            .implode(' ', $optionValues).'</li>';
+                        break;
                     default:
                         $extra_information_value .= '<li class="list-group-item">'.ucfirst($extraFieldInfo['display_text']).': '.$data.'</li>';
                         break;
@@ -421,9 +451,7 @@ if ($show_full_profile) {
 
         // if there are information to show
         if (!empty($extra_information_value)) {
-
             $extra_information_value = '<ul class="list-group">'.$extra_information_value.'</ul>';
-
             $extra_information .= Display::panelCollapse(
                 get_lang('ExtraInformation'),
                 $extra_information_value,
@@ -436,7 +464,6 @@ if ($show_full_profile) {
     }
 
     // If there are information to show Block Extra Information
-
     if (!empty($extra_information_value)) {
         $social_extra_info_block = $extra_information;
     }
@@ -647,7 +674,6 @@ if ($show_full_profile) {
 
     if (!empty($user_info['competences']) || !empty($user_info['diplomas'])
         || !empty($user_info['openarea']) || !empty($user_info['teach'])) {
-
         $more_info .= '<div><h3>'.get_lang('MoreInformation').'</h3></div>';
         if (!empty($user_info['competences'])) {
             $more_info .= '<br />';
@@ -706,4 +732,3 @@ $formModals = $formModalTpl->fetch($template);
 $tpl->assign('form_modals', $formModals);
 $social_layout = $tpl->get_template('social/profile.tpl');
 $tpl->display($social_layout);
-

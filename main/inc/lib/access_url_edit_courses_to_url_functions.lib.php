@@ -25,7 +25,7 @@ class Accessurleditcoursestourl
      * @return xajaxResponse A formatted, xajax answer block
      * @assert () === false
      */
-    function search_courses($needle, $id)
+    public function search_courses($needle, $id)
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $xajax_response = new xajaxResponse();

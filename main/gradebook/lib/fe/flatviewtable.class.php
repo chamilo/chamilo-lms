@@ -3,9 +3,9 @@
 
 set_time_limit(0);
 
-use CpChart\Chart\Cache as pCache;
-use CpChart\Chart\Data as pData;
-use CpChart\Chart\Image as pImage;
+use CpChart\Cache as pCache;
+use CpChart\Data as pData;
+use CpChart\Image as pImage;
 
 /**
  * Class FlatViewTable
@@ -52,7 +52,6 @@ class FlatViewTable extends SortableTable
         );
 
         $this->selectcat = $selectcat;
-
         $this->datagen = new FlatViewDataGenerator(
             $users,
             $evals,
@@ -361,10 +360,20 @@ class FlatViewTable extends SortableTable
                     . '?selectcat='.Security::remove_XSS($_GET['selectcat'])
                     . '&offset='.(($this->offset) - GRADEBOOK_ITEM_LIMIT)
                     . (isset($_GET['search']) ? '&search='.Security::remove_XSS($_GET['search']) : '').'">'
-                    . Display::return_icon('action_prev.png', get_lang('PreviousPage'), array(), 32)
+                    .Display::return_icon(
+                        'action_prev.png',
+                        get_lang('PreviousPage'),
+                        array(),
+                        ICON_SIZE_MEDIUM
+                    )
                     . '</a>';
             } else {
-                $header .= Display::return_icon('action_prev_na.png', get_lang('PreviousPage'), array(), 32);
+                $header .= Display::return_icon(
+                    'action_prev_na.png',
+                    get_lang('PreviousPage'),
+                    array(),
+                    ICON_SIZE_MEDIUM
+                );
             }
             $header .= ' ';
             // next X
@@ -376,10 +385,15 @@ class FlatViewTable extends SortableTable
                     . '?selectcat='.Security::remove_XSS($_GET['selectcat'])
                     . '&offset='.($this->offset + GRADEBOOK_ITEM_LIMIT)
                     . (isset($_GET['search']) ? '&search='.Security::remove_XSS($_GET['search']) : '').'">'
-                    . Display::return_icon('action_next.png', get_lang('NextPage'), array(), 32)
+                    . Display::return_icon('action_next.png', get_lang('NextPage'), array(), ICON_SIZE_MEDIUM)
                     . '</a>';
             } else {
-                $header .= Display::return_icon('action_next_na.png', get_lang('NextPage'), array(), 32);
+                $header .= Display::return_icon(
+                    'action_next_na.png',
+                    get_lang('NextPage'),
+                    array(),
+                    ICON_SIZE_MEDIUM
+                );
             }
             $header .= '</td>';
             $header .= '</tbody></table>';
@@ -461,11 +475,23 @@ class FlatViewTable extends SortableTable
             unset($user_row[0]);
             $userInfo = api_get_user_info($user_id);
             if ($is_western_name_order) {
-                $user_row[1] = $this->build_name_link($user_id, $userInfo['firstname']);
-                $user_row[2] = $this->build_name_link($user_id, $userInfo['lastname']);
+                $user_row[1] = $this->build_name_link(
+                    $user_id,
+                    $userInfo['firstname']
+                );
+                $user_row[2] = $this->build_name_link(
+                    $user_id,
+                    $userInfo['lastname']
+                );
             } else {
-                $user_row[1] = $this->build_name_link($user_id, $userInfo['lastname']);
-                $user_row[2] = $this->build_name_link($user_id, $userInfo['firstname']);
+                $user_row[1] = $this->build_name_link(
+                    $user_id,
+                    $userInfo['lastname']
+                );
+                $user_row[2] = $this->build_name_link(
+                    $user_id,
+                    $userInfo['firstname']
+                );
             }
             $user_row = array_values($user_row);
 

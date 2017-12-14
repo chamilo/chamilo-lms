@@ -2247,7 +2247,6 @@ $ApprovalForNewAccount = "Godkendelse af ny profil";
 $ManageUser = "Administrer deltagere";
 $SubscribeUserToCourseAsTeacher = "Tilmeld undervisere/kursusadministratorer";
 $PasswordEncryptedForSecurity = "Din adgangskode er krypteret af sikkerhedsmæssige årsager. Hvis du klikker på linket, vil du modtage en ny e-mail med din adgangskode.";
-$SystemUnableToSendEmailContact = "Systemet kunne ikke sende e-mailen";
 $UsernameMaxXCharacters = "Brugernavnet skal maks. være %s karakterer langt";
 $InLnk = "Ikke aktive funktioner og links";
 $DelLk = "Er du sikkert på, at du vil slettet dette link?";

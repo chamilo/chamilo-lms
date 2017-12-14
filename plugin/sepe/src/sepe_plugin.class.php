@@ -1,5 +1,6 @@
 <?php
 /* For license terms, see /license.txt */
+
 /**
  * Plugin class for the SEPE plugin
  * @package chamilo.plugin.sepe
@@ -24,11 +25,11 @@ class SepePlugin extends Plugin
     const TABLE_SEPE_LOG_PARTICIPANT = 'plugin_sepe_log_participant';
     const TABLE_SEPE_LOG_MOD_PARTICIPANT = 'plugin_sepe_log_mod_participant';
     const TABLE_SEPE_LOG = 'plugin_sepe_log';
-    
+
     public $isAdminPlugin = true;
+
     /**
-     *
-     * @return StaticPlugin
+     * @return SepePlugin
      */
     public static function create()
     {
@@ -39,19 +40,19 @@ class SepePlugin extends Plugin
     protected function __construct()
     {
         parent::__construct(
-            '2.0', 
+            '2.0',
             '
                 Jose Angel Ruiz - NoSoloRed (original author) <br>
                 Julio Montoya (SOAP integration)
-            ', 
+            ',
             array('sepe_enable' => 'boolean')
         );
     }
-    
+
     /**
      * This method creates the tables required to this plugin
      */
-    function install()
+    public function install()
     {
         $tablesToBeCompared = array(
             self::TABLE_SEPE_CENTER,
@@ -80,13 +81,13 @@ class SepePlugin extends Plugin
             return false;
         }
 
-        require_once api_get_path(SYS_PLUGIN_PATH) . 'sepe/database.php';
+        require_once api_get_path(SYS_PLUGIN_PATH).'sepe/database.php';
     }
-        
+
     /**
      * This method drops the plugin tables
      */
-    function uninstall()
+    public function uninstall()
     {
         $tablesToBeDeleted = array(
             self::TABLE_SEPE_CENTER,
@@ -115,17 +116,20 @@ class SepePlugin extends Plugin
         $this->manageTab(false);
     }
 
-    function update()
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function update()
     {
         $oldTableCenters = 'plugin_sepe_centros';
         $oldTableTutorsCompany = 'plugin_sepe_tutors_empresa';
         $oldTableCompetence = 'plugin_sepe_competencia_docente';
         $sql = "RENAME TABLE "
-                   . $oldTableCenters ." TO ". self::TABLE_SEPE_CENTERS .", "
-                   . $oldTableTutorsCompany ." TO ". self::TABLE_SEPE_TUTORS_COMPANY .", "
-                   . $oldTableCompetence ." TO ". self::TABLE_SEPE_TEACHING_COMPETENCE .";";
+                   . $oldTableCenters." TO ".self::TABLE_SEPE_CENTERS.", "
+                   . $oldTableTutorsCompany." TO ".self::TABLE_SEPE_TUTORS_COMPANY.", "
+                   . $oldTableCompetence." TO ".self::TABLE_SEPE_TEACHING_COMPETENCE.";";
         Database::query($sql);
-        
+
         $sepeCourseActionsTable = self::TABLE_SEPE_COURSE_ACTIONS;
         $sql = "ALTER TABLE ".$sepeCourseActionsTable." CHANGE `cod` `id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT";
         Database::query($sql);
@@ -133,7 +137,7 @@ class SepePlugin extends Plugin
         Database::query($sql);
         $sql = "ALTER TABLE ".$sepeCourseActionsTable." CHANGE `id_course` `course_id` INT( 10 ) UNSIGNED NOT NULL";
         Database::query($sql);
-        
+
         $sepeActionsTable = self::TABLE_SEPE_ACTIONS;
         $sql = "ALTER TABLE ".$sepeActionsTable." CHANGE `cod` `id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT";
         Database::query($sql);
@@ -171,7 +175,7 @@ class SepePlugin extends Plugin
         Database::query($sql);
         $sql = "ALTER TABLE ".$sepeActionsTable." CHANGE `CONTACTO_ACCION` `contact_action` LONGTEXT";
         Database::query($sql);
-                
+
         $sepeSpecialtyTable = self::TABLE_SEPE_SPECIALTY;
         $sql = "ALTER TABLE ".$sepeSpecialtyTable." CHANGE `cod` `id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT";
         Database::query($sql);
@@ -223,7 +227,7 @@ class SepePlugin extends Plugin
         Database::query($sql);
         $sql = "ALTER TABLE ".$sepeSpecialtyTable." CHANGE `NUMERO_ACTIVIDADES_EVALUACION` `evaluation_activity_count` INT( 10 ) UNSIGNED";
         Database::query($sql);
-        
+
         $sepeParticipantTable = self::TABLE_SEPE_PARTICIPANTS;
         $sql = "ALTER TABLE ".$sepeParticipantTable." CHANGE `cod` `id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT";
         Database::query($sql);
@@ -247,7 +251,7 @@ class SepePlugin extends Plugin
         Database::query($sql);
         $sql = "ALTER TABLE ".$sepeParticipantTable." CHANGE `CIF_EMPRESA` `company_fiscal_number` VARCHAR( 9 )";
         Database::query($sql);
-        
+
         $sepeCenterTable = self::TABLE_SEPE_CENTERS;
         $sql = "ALTER TABLE ".$sepeCenterTable." CHANGE `cod` `id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT";
         Database::query($sql);
@@ -255,7 +259,7 @@ class SepePlugin extends Plugin
         Database::query($sql);
         $sql = "ALTER TABLE ".$sepeCenterTable." CHANGE `CODIGO_CENTRO` `center_code` VARCHAR(16)";
         Database::query($sql);
-        
+
         $sepeSpecialtyClassroomTable = self::TABLE_SEPE_SPECIALTY_CLASSROOM;
         $sql = "ALTER TABLE ".$sepeSpecialtyClassroomTable." CHANGE `cod` `id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT";
         Database::query($sql);
@@ -263,7 +267,7 @@ class SepePlugin extends Plugin
         Database::query($sql);
         $sql = "ALTER TABLE ".$sepeSpecialtyClassroomTable." CHANGE `cod_centro` `center_id` INT( 10 ) UNSIGNED NOT NULL";
         Database::query($sql);
-        
+
         $sepeSpecialtyTutorsTable = self::TABLE_SEPE_SPECIALTY_TUTORS;
         $sql = "ALTER TABLE ".$sepeSpecialtyTutorsTable." CHANGE `cod` `id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT";
         Database::query($sql);
@@ -281,7 +285,7 @@ class SepePlugin extends Plugin
         Database::query($sql);
         $sql = "ALTER TABLE ".$sepeSpecialtyTutorsTable." CHANGE `FORMACION_MODALIDAD_TELEFORMACION` `training_teleforming` VARCHAR(2)";
         Database::query($sql);
-        
+
         $sepeTutorsTable = self::TABLE_SEPE_TUTORS;
         $sql = "ALTER TABLE ".$sepeTutorsTable." CHANGE `cod` `id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT";
         Database::query($sql);
@@ -303,7 +307,7 @@ class SepePlugin extends Plugin
         Database::query($sql);
         $sql = "ALTER TABLE ".$sepeTutorsTable." CHANGE `FORMACION_MODALIDAD_TELEFORMACION` `training_teleforming` VARCHAR(2)";
         Database::query($sql);
-        
+
         $sepeParticipantSpecialtyTable = self::TABLE_SEPE_PARTICIPANTS_SPECIALTY;
         $sql = "ALTER TABLE ".$sepeParticipantSpecialtyTable." CHANGE `cod` `id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT";
         Database::query($sql);
@@ -333,7 +337,7 @@ class SepePlugin extends Plugin
         Database::query($sql);
         $sql = "ALTER TABLE ".$sepeParticipantSpecialtyTable." CHANGE `PUNTUACION_FINAL` `final_score` VARCHAR(4)";
         Database::query($sql);
-        
+
         $sepeParticipantSpecialtyTutorialsTable = self::TABLE_SEPE_PARTICIPANTS_SPECIALTY_TUTORIALS;
         $sql = "ALTER TABLE ".$sepeParticipantSpecialtyTutorialsTable." CHANGE `cod` `id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT";
         Database::query($sql);
@@ -347,9 +351,9 @@ class SepePlugin extends Plugin
         Database::query($sql);
         $sql = "ALTER TABLE ".$sepeParticipantSpecialtyTutorialsTable." CHANGE `FECHA_FIN` `end_date` DATE";
         Database::query($sql);
-        
+
         $sepeTutorsCompanyTable = self::TABLE_SEPE_TUTORS_COMPANY;
-        
+
         $sql = "UPDATE ".$sepeTutorsCompanyTable." SET empresa='1' WHERE empresa='SI'";
         Database::query($sql);
         $sql = "UPDATE ".$sepeTutorsCompanyTable." SET empresa='0' WHERE empresa='NO'";
@@ -358,7 +362,7 @@ class SepePlugin extends Plugin
         Database::query($sql);
         $sql = "UPDATE ".$sepeTutorsCompanyTable." SET formacion='0' WHERE formacion='NO'";
         Database::query($sql);
-        
+
         $sql = "ALTER TABLE ".$sepeTutorsCompanyTable." CHANGE `cod` `id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT";
         Database::query($sql);
         $sql = "ALTER TABLE ".$sepeTutorsCompanyTable." CHANGE `alias` `alias` VARCHAR(255)";
@@ -373,13 +377,13 @@ class SepePlugin extends Plugin
         Database::query($sql);
         $sql = "ALTER TABLE ".$sepeTutorsCompanyTable." CHANGE `formacion` `training` VARCHAR(1)";
         Database::query($sql);
-                
+
         $sepeCompetenceTable = self::TABLE_SEPE_TEACHING_COMPETENCE;
         $sql = "ALTER TABLE ".$sepeCompetenceTable." CHANGE `cod` `id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT";
         Database::query($sql);
         $sql = "ALTER TABLE ".$sepeCompetenceTable." CHANGE `valor` `value` LONGTEXT";
         Database::query($sql);
-                
+
         $sepeLogParticipantTable = self::TABLE_SEPE_LOG_PARTICIPANT;
         $sql = "ALTER TABLE ".$sepeLogParticipantTable." CHANGE `cod` `id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT";
         Database::query($sql);
@@ -391,7 +395,7 @@ class SepePlugin extends Plugin
         Database::query($sql);
         $sql = "ALTER TABLE ".$sepeLogParticipantTable." CHANGE `fecha_baja` `leaving_date` DATE";
         Database::query($sql);
-        
+
         $sepeLogModParticipantTable = self::TABLE_SEPE_LOG_MOD_PARTICIPANT;
         $sql = "ALTER TABLE ".$sepeLogModParticipantTable." CHANGE `cod` `id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT";
         Database::query($sql);
@@ -401,7 +405,7 @@ class SepePlugin extends Plugin
         Database::query($sql);
         $sql = "ALTER TABLE ".$sepeLogModParticipantTable." CHANGE `fecha_mod` `change_date` DATE";
         Database::query($sql);
-        
+
         $sepeCenterTable = self::TABLE_SEPE_CENTER;
         $sql = "ALTER TABLE ".$sepeCenterTable." CHANGE `cod` `id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT";
         Database::query($sql);

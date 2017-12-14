@@ -27,6 +27,7 @@ $htmlHeadXtra[] = api_get_asset('fullcalendar/dist/locale-all.js');
 $htmlHeadXtra[] = api_get_asset('fullcalendar/dist/gcal.js');
 $htmlHeadXtra[] = api_get_css_asset('fullcalendar/dist/fullcalendar.min.css');
 $htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
+$htmlHeadXtra[] = api_get_asset('js-cookie/src/js.cookie.js');
 
 if (api_is_platform_admin() && ($type == 'admin' || $type == 'platform')) {
     $type = 'admin';
@@ -54,7 +55,11 @@ $courseId = api_get_course_int_id();
 
 if (!empty($group_id)) {
     $group_properties = GroupManager::get_group_properties($group_id);
-    $is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties);
+    $is_group_tutor = GroupManager::is_tutor_of_group(
+        api_get_user_id(),
+        $group_properties,
+        $courseId
+    );
     $interbreadcrumb[] = array(
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
         "name" => get_lang('Groups')
@@ -177,6 +182,37 @@ if ($type == 'course' && !empty($session_id)) {
     $type_label = get_lang('SessionCalendar');
 }
 
+$agendaColors = array_merge(
+    [
+        'platform' => 'red', //red
+        'course' => '#458B00', //green
+        'group' => '#A0522D', //siena
+        'session' => '#00496D', // kind of green
+        'other_session' => '#999', // kind of green
+        'personal' => 'steel blue', //steel blue
+        'student_publication' => '#FF8C00' //DarkOrange
+    ],
+    api_get_configuration_value('agenda_colors') ?: []
+);
+
+switch ($type_event_class) {
+    case 'admin_event':
+        $tpl->assign('type_event_color', $agendaColors['platform']);
+        break;
+    case 'course_event':
+        $tpl->assign('type_event_color', $agendaColors['course']);
+        break;
+    case 'group_event':
+        $tpl->assign('type_event_color', $agendaColors['group']);
+        break;
+    case 'session_event':
+        $tpl->assign('type_event_color', $agendaColors['session']);
+        break;
+    case 'personal_event':
+        $tpl->assign('type_event_color', $agendaColors['personal']);
+        break;
+}
+
 $tpl->assign('type_label', $type_label);
 $tpl->assign('type_event_class', $type_event_class);
 
@@ -247,6 +283,18 @@ if ($agenda->type === 'course') {
 
 $tpl->assign('form_add', $form->returnForm());
 $tpl->assign('legend_list', api_get_configuration_value('agenda_legend'));
+
+$onHoverInfo = api_get_configuration_value('agenda_on_hover_info');
+if (!empty($onHoverInfo)) {
+    $options = $onHoverInfo['options'];
+} else {
+    $options = [
+        'comment' => true,
+        'description' => true,
+    ];
+}
+$tpl->assign('on_hover_info', $options);
+
 $templateName = $tpl->get_template('agenda/month.tpl');
 $content = $tpl->fetch($templateName);
 $tpl->assign('content', $content);

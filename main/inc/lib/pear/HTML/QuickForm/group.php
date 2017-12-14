@@ -394,7 +394,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
     * @access public
     * @return void
     */
-    function accept(&$renderer, $required = false, $error = null)
+    public function accept(&$renderer, $required = false, $error = null)
     {
         $this->_createElementsIfNotExist();
         $renderer->startGroup($this, $required, $error);
@@ -404,6 +404,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
 
             if ($this->_appendName) {
                 $elementName = $element->getName();
+
                 if (isset($elementName)) {
                     $element->setName($name . '['. (strlen($elementName)? $elementName: $key) .']');
                 } else {
@@ -412,7 +413,6 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
             }
 
             $required = !$element->isFrozen() && in_array($element->getName(), $this->_required);
-
             $element->accept($renderer, $required);
 
             // restore the element's name
@@ -582,7 +582,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
                         <!-- END label_2 -->
 
                         <!-- BEGIN error -->
-                            <span class="help-inline">{error}</span>
+                            <span class="help-inline help-block">{error}</span>
                         <!-- END error -->
                     </div>
                     <div class="col-sm-'.$size[2].'">

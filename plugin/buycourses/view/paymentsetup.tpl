@@ -1,5 +1,3 @@
-<script type='text/javascript' src="../js/buycourses.js"></script>
-
 <link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
 
 <div class="panel panel-default">

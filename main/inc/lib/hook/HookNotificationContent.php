@@ -9,7 +9,6 @@
  */
 class HookNotificationContent extends HookEvent implements HookNotificationContentEventInterface
 {
-
     /**
      * Construct
      */

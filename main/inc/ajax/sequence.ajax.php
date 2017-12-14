@@ -1,10 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
 use Chamilo\CoreBundle\Entity\Sequence;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
+use Graphp\GraphViz\GraphViz;
 
 /**
  * Responses to AJAX calls
@@ -37,7 +39,7 @@ switch ($action) {
                 if ($sequence->hasGraph()) {
                     $graph = $sequence->getUnSerializeGraph();
                     $graph->setAttribute('graphviz.node.fontname', 'arial');
-                    $graphviz = new \Graphp\GraphViz\GraphViz();
+                    $graphviz = new GraphViz();
                     $graphImage = '';
                     try {
                         $graphImage = $graphviz->createImageHtml($graph);
@@ -145,7 +147,7 @@ switch ($action) {
                         }
 
                         if ($vertexFromTo && !$vertexToFrom) {
-                            $_SESSION['sr_vertex'] = true;
+                            Session::write('sr_vertex', true);
                             $vertex = $graph->getVertex($id);
                             $vertex->destroy();
                             $em->remove($sequenceResource);
@@ -170,7 +172,7 @@ switch ($action) {
                         }
 
                         if (!$vertexToFrom && !$vertexFromTo) {
-                            $_SESSION['sr_vertex'] = true;
+                            Session::write('sr_vertex', true);
                             $vertexTo = $graph->getVertex($id);
                             $vertexFrom = $graph->getVertex($vertexId);
                             if ($vertexTo->getVerticesEdgeFrom()->count() > 1) {
@@ -282,9 +284,9 @@ switch ($action) {
         if (empty($sequence)) {
             exit;
         }
-
-        if (isset($_SESSION['sr_vertex']) && $_SESSION['sr_vertex']) {
-            unset($_SESSION['sr_vertex']);
+        $vertexFromSession = Session::read('sr_vertex');
+        if ($vertexFromSession) {
+            Session::erase('sr_vertex');
             echo Display::return_message(get_lang('Saved'), 'success');
             break;
         }

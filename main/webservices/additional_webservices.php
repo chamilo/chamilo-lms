@@ -6,7 +6,6 @@
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-$libpath = api_get_path(LIBRARY_PATH);
 
 /**
  * Function to convert from ppt to png
@@ -146,7 +145,6 @@ function pptConverterGetCommandBaseParams()
     return $cmd;
 }
 
-
 $webPath = api_get_path(WEB_PATH);
 $webCodePath = api_get_path(WEB_CODE_PATH);
 $options = array(
@@ -154,6 +152,6 @@ $options = array(
     'location' => $webCodePath.'webservices/additional_webservices.php'
 );
 
-$soapServer = new SoapServer(NULL, $options);
+$soapServer = new SoapServer(null, $options);
 $soapServer->addFunction('wsConvertPpt');
 $soapServer->handle();

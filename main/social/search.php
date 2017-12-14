@@ -24,7 +24,7 @@ $interbreadcrumb[] = array(
 
 $query = isset($_GET['q']) ? Security::remove_XSS($_GET['q']) : null;
 $query_search_type = isset($_GET['search_type']) && in_array($_GET['search_type'], array('0', '1', '2')) ? $_GET['search_type'] : null;
-$extra_fields = UserManager::get_extra_filtrable_fields();
+$extra_fields = UserManager::getExtraFilterableFields();
 $query_vars = array('q' => $query, 'search_type' => $query_search_type);
 if (!empty($extra_fields)) {
     foreach ($extra_fields as $extra_field) {
@@ -94,12 +94,10 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
                              <em class="fa fa-user"></em> '.get_lang('SendInvitation').'</a>';
             }
 
-            $sendMessageUrl = api_get_path(WEB_AJAX_PATH)
-                . 'user_manager.ajax.php?'
-                . http_build_query([
-                    'a' => 'get_user_popup',
-                    'user_id' => $user_info['user_id']
-                ]);
+            $sendMessageUrl = api_get_path(WEB_AJAX_PATH). 'user_manager.ajax.php?'.http_build_query([
+                'a' => 'get_user_popup',
+                'user_id' => $user_info['user_id']
+            ]);
             $sendMessage = Display::toolbarButton(
                 get_lang('SendMessage'),
                 $sendMessageUrl,
@@ -156,7 +154,7 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
         $results,
         'search-friends',
         null,
-        'friends-acorderon',
+        'friends-accordion',
         'friends-collapse'
     );
 
@@ -228,7 +226,7 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
         $block_groups,
         'search-groups',
         null,
-        'groups-acorderon',
+        'groups-accordion',
         'groups-collapse'
     );
 }

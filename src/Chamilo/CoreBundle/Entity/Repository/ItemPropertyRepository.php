@@ -138,23 +138,6 @@ class ItemPropertyRepository extends EntityRepository
                 $item->setVisibility('1');
                 $em->persist($item); //$em is an instance of EntityManager
             }
-
-            //Adding users from this group to the item
-            /*$users = \GroupManager::getStudentsAndTutors($groupId);
-            $newUserList = array();
-            if (!empty($users)) {
-                foreach ($users as $user) {
-                    $newUserList[] = $user['user_id'];
-                }
-                $this->subscribeUsersToItem(
-                    $currentUser,
-                    'learnpath',
-                    $course,
-                    $session,
-                    $itemId,
-                    $newUserList
-                );
-            }*/
         }
 
         $em->flush();

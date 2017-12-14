@@ -16,11 +16,10 @@ if (empty($id) || empty($work)) {
 if ($work['active'] != 1) {
     api_not_allowed(true);
 }
-
-
 $work['title'] = isset($work['title']) ? Security::remove_XSS($work['title']) : '';
 $work['description'] = isset($work['description']) ? Security::remove_XSS($work['description']) : '';
 
+$htmlHeadXtra[] = '<script>'.ExerciseLib::getJsCode().'</script>';
 $interbreadcrumb[] = array(
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
     'name' => get_lang('StudentPublications'),
@@ -69,6 +68,12 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
             $url = api_get_path(WEB_CODE_PATH).'work/edit.php?id='.$my_folder_data['id'].'&item_id='.$work['id'].'&'.api_get_cidreq();
         } else {
             $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&'.api_get_cidreq();
+
+            $allowRedirect = api_get_configuration_value('allow_redirect_to_main_page_after_work_upload');
+            $urlToRedirect = '';
+            if ($allowRedirect) {
+                $url = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq();
+            }
         }
 
         switch ($action) {

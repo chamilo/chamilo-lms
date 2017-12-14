@@ -84,20 +84,7 @@ EOT;
     <title><?php echo custompages_get_lang('Registration'); ?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/custompages/css/vendor/bootstrap.min.css" rel="stylesheet">
-    <!--[if !IE 6]><!-->
-    <link rel="stylesheet" type="text/css" href="/custompages/style.css" />
-    <!--<![endif]-->
-    <!--[if IE 6]>
-    <link rel="stylesheet" type="text/css" href="/custompages/style-ie6.css" />
-    <![endif]-->
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
-    <!--[if lt IE 9]>
-    <script src="js/vendor/html5shiv.js"></script>
-    <script src="js/vendor/respond.min.js"></script>
-    <![endif]-->
-    <script type="text/javascript" src="<?php echo $rootWeb ?>web/assets/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="<?php echo $rootWeb ?>web/assets/jquery/dist/jquery.min.js"></script>
 </head>
 <body>
 <img id="backgroundimage" src="/custompages/images/page-background.png"">

@@ -21,24 +21,23 @@ $trackedExercise = $em
     ->getRepository('ChamiloCoreBundle:TrackEExercises')
     ->find(intval($_REQUEST['id']));
 
-if (
-    $trackedExercise->getExeUserId() != intval($_REQUEST['user']) ||
+if ($trackedExercise->getExeUserId() != intval($_REQUEST['user']) ||
     $trackedExercise->getExeExoId() != intval($_REQUEST['exercise'])
 ) {
     api_not_allowed(true);
     exit;
 }
 
-$attemps = $em->getRepository('ChamiloCoreBundle:TrackEAttempt')
+$attempts = $em->getRepository('ChamiloCoreBundle:TrackEAttempt')
     ->findBy([
         'exeId' => $trackedExercise->getExeId(),
         'userId' => $trackedExercise->getExeUserId()
     ]);
 
 $newResult = 0;
-
-foreach ($attemps as $attemp) {
-    $questionId = $attemp->getQuestionId();
+/** @var \Chamilo\CoreBundle\Entity\TrackEAttempt $attempt */
+foreach ($attempts as $attempt) {
+    $questionId = $attempt->getQuestionId();
 
     $question = $em->find('ChamiloCourseBundle:CQuizQuestion', $questionId);
 
@@ -52,20 +51,16 @@ foreach ($attemps as $attemp) {
     ]);
 
     $newMarks = 0;
-
     foreach ($answers as $answer) {
-        if ($answer->getId() != $attemp->getAnswer()) {
+        if ($answer->getId() != $attempt->getAnswer()) {
             continue;
         }
-
         $newMarks += $answer->getPonderation();
     }
 
     $newResult += $newMarks;
-
-    $attemp->setMarks($newMarks);
-
-    $em->merge($attemp);
+    $attempt->setMarks($newMarks);
+    $em->merge($attempt);
 }
 
 $trackedExercise->setExeResult($newResult);

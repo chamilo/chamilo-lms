@@ -330,12 +330,14 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     }
 
     if ($form_sent == 1) {
+        $notEmptyList = api_get_configuration_value('session_multiple_subscription_students_list_avoid_emptying');
+
         // Added a parameter to send emails when registering a user
         SessionManager::subscribe_users_to_session(
             $id_session,
             $UserList,
             null,
-            true
+            !$notEmptyList
         );
         header('Location: resume_session.php?id_session='.$id_session);
         exit;
@@ -504,7 +506,7 @@ if ($ajax_search) {
             LEFT JOIN $tbl_session_rel_user su
                 ON su.user_id = u.id
                 AND su.session_id = $id_session
-                AND v.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+                AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
             WHERE u.status <> ".DRH." AND u.status <> 6
             $order_clause
         ";

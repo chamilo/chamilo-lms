@@ -5,6 +5,7 @@
  * inside another script loading global.inc.php
  * @package chamilo.plugin.sepe
  */
+
 /**
  * Check if script can be called
  */
@@ -32,7 +33,7 @@ $sepeCenterTable->addColumn('url', \Doctrine\DBAL\Types\Type::STRING);
 $sepeCenterTable->addColumn('tracking_url', \Doctrine\DBAL\Types\Type::STRING);
 $sepeCenterTable->addColumn('phone', \Doctrine\DBAL\Types\Type::STRING);
 $sepeCenterTable->addColumn('mail', \Doctrine\DBAL\Types\Type::STRING);
-$sepeCenterTable->setPrimaryKey(array('d'));
+$sepeCenterTable->setPrimaryKey(array('id'));
 
 /* ========== PLUGIN_SEPE_ACTIONS ========== */
 $sepeActionsTable = $pluginSchema->createTable(SepePlugin::TABLE_SEPE_ACTIONS);
@@ -50,7 +51,7 @@ $sepeActionsTable->addColumn(
     'action_code',
     \Doctrine\DBAL\Types\Type::STRING,
     array('length' => 30)
-); 
+);
 $sepeActionsTable->addColumn(
     'situation',
     \Doctrine\DBAL\Types\Type::STRING,
@@ -87,12 +88,12 @@ $sepeActionsTable->addColumn(
     'financing_type',
     \Doctrine\DBAL\Types\Type::STRING,
     array('length' => 2)
-); 
+);
 $sepeActionsTable->addColumn(
     'attendees_count',
     \Doctrine\DBAL\Types\Type::INTEGER,
     array('unsigned' => true)
-);     
+);
 $sepeActionsTable->addColumn(
     'action_name',
     \Doctrine\DBAL\Types\Type::STRING,
@@ -108,7 +109,7 @@ $sepeActionsTable->setPrimaryKey(array('id'));
 $sepeSpecialtyTable = $pluginSchema->createTable(SepePlugin::TABLE_SEPE_SPECIALTY);
 $sepeSpecialtyTable->addColumn(
     'id',
-    \Doctrine\DBAL\Types\Type::INTEGER, 
+    \Doctrine\DBAL\Types\Type::INTEGER,
     array('autoincrement' => true, 'unsigned' => true)
 );
 $sepeSpecialtyTable->addColumn(
@@ -125,7 +126,7 @@ $sepeSpecialtyTable->addColumn(
     'professional_area',
     \Doctrine\DBAL\Types\Type::STRING,
     array('length' => 4)
-); 
+);
 $sepeSpecialtyTable->addColumn(
     'specialty_code',
     \Doctrine\DBAL\Types\Type::STRING,
@@ -235,7 +236,7 @@ $sepeSpecialtyTable->addForeignKeyConstraint(
 $sepeCentrosTable = $pluginSchema->createTable(SepePlugin::TABLE_SEPE_CENTERS);
 $sepeCentrosTable->addColumn(
     'id',
-    \Doctrine\DBAL\Types\Type::INTEGER, 
+    \Doctrine\DBAL\Types\Type::INTEGER,
     array('autoincrement' => true, 'unsigned' => true)
 );
 $sepeCentrosTable->addColumn(
@@ -248,15 +249,15 @@ $sepeCentrosTable->addColumn(
     \Doctrine\DBAL\Types\Type::STRING,
     array('length' => 16)
 );
-$sepeCentrosTable->setPrimaryKey(array('cod'));
+$sepeCentrosTable->setPrimaryKey(array('id'));
 
 /* ========== PLUGIN_SEPE_SPECIALTY_CLASSROOM ========== */
 $sepeSpecialtyClassroomTable = $pluginSchema->createTable(SepePlugin::TABLE_SEPE_SPECIALTY_CLASSROOM);
 $sepeSpecialtyClassroomTable->addColumn(
     'id',
-    \Doctrine\DBAL\Types\Type::INTEGER, 
+    \Doctrine\DBAL\Types\Type::INTEGER,
     array('autoincrement' => true, 'unsigned' => true)
-    );
+);
 $sepeSpecialtyClassroomTable->addColumn(
     'specialty_id',
     \Doctrine\DBAL\Types\Type::INTEGER,
@@ -267,7 +268,7 @@ $sepeSpecialtyClassroomTable->addColumn(
     \Doctrine\DBAL\Types\Type::INTEGER,
     array('unsigned' => true)
 );
-$sepeSpecialtyClassroomTable->setPrimaryKey(array('cod'));
+$sepeSpecialtyClassroomTable->setPrimaryKey(array('id'));
 $sepeSpecialtyClassroomTable->addForeignKeyConstraint(
     $sepeSpecialtyTable,
     array('specialty_id'),
@@ -275,11 +276,11 @@ $sepeSpecialtyClassroomTable->addForeignKeyConstraint(
     array('onDelete' => 'CASCADE')
 );
 
-/* ========== PLUGIN_SEPE_TUTORS ========== */        
+/* ========== PLUGIN_SEPE_TUTORS ========== */
 $sepeTutorsTable = $pluginSchema->createTable(SepePlugin::TABLE_SEPE_TUTORS);
 $sepeTutorsTable->addColumn(
     'id',
-    \Doctrine\DBAL\Types\Type::INTEGER, 
+    \Doctrine\DBAL\Types\Type::INTEGER,
     array('autoincrement' => true, 'unsigned' => true)
 );
 $sepeTutorsTable->addColumn(
@@ -328,12 +329,12 @@ $sepeTutorsTable->addColumn(
     array('length' => 2)
 );
 $sepeTutorsTable->setPrimaryKey(array('id'));
-        
-/* ========== PLUGIN_SEPE_SPECIALTY_TUTORS ========== */ 
+
+/* ========== PLUGIN_SEPE_SPECIALTY_TUTORS ========== */
 $sepeSpecialtyTutorsTable = $pluginSchema->createTable(SepePlugin::TABLE_SEPE_SPECIALTY_TUTORS);
 $sepeSpecialtyTutorsTable->addColumn(
     'id',
-    \Doctrine\DBAL\Types\Type::INTEGER, 
+    \Doctrine\DBAL\Types\Type::INTEGER,
     array('autoincrement' => true, 'unsigned' => true)
 );
 $sepeSpecialtyTutorsTable->addColumn(
@@ -377,13 +378,13 @@ $sepeSpecialtyTutorsTable->addForeignKeyConstraint(
     array('specialty_id'),
     array('id'),
     array('onDelete' => 'CASCADE')
-);      
+);
 
 /* ========== PLUGIN_SEPE_TUTORS_EMPRESA ========== */
 $sepeTutorsCompanyTable = $pluginSchema->createTable(SepePlugin::TABLE_SEPE_TUTORS_COMPANY);
 $sepeTutorsCompanyTable->addColumn(
     'id',
-    \Doctrine\DBAL\Types\Type::INTEGER, 
+    \Doctrine\DBAL\Types\Type::INTEGER,
     array('autoincrement' => true, 'unsigned' => true)
 );
 $sepeTutorsCompanyTable->addColumn(
@@ -416,13 +417,13 @@ $sepeTutorsCompanyTable->addColumn(
     \Doctrine\DBAL\Types\Type::STRING,
     array('length' => 2)
 );
-$sepeTutorsCompanyTable->setPrimaryKey(array('cod'));
+$sepeTutorsCompanyTable->setPrimaryKey(array('id'));
 
-/* ========== PLUGIN_SEPE_PARTICIPANTS ========== */ 
+/* ========== PLUGIN_SEPE_PARTICIPANTS ========== */
 $sepeParticipantsTable = $pluginSchema->createTable(SepePlugin::TABLE_SEPE_PARTICIPANTS);
 $sepeParticipantsTable->addColumn(
     'id',
-    \Doctrine\DBAL\Types\Type::INTEGER, 
+    \Doctrine\DBAL\Types\Type::INTEGER,
     array('autoincrement' => true, 'unsigned' => true)
 );
 $sepeParticipantsTable->addColumn(
@@ -481,25 +482,25 @@ $sepeParticipantsTable->addForeignKeyConstraint(
     array('action_id'),
     array('id'),
     array('onDelete' => 'CASCADE')
-);  
+);
 $sepeParticipantsTable->addForeignKeyConstraint(
     $sepeTutorsCompanyTable,
     array('company_tutor_id'),
     array('id'),
     array('onDelete' => 'CASCADE')
-);     
+);
 $sepeParticipantsTable->addForeignKeyConstraint(
     $sepeTutorsCompanyTable,
     array('training_tutor_id'),
     array('id'),
     array('onDelete' => 'CASCADE')
-);  
+);
 
-/* ========== PLUGIN_SEPE_PARTICIPANTS_SPECIALTY ========== */ 
+/* ========== PLUGIN_SEPE_PARTICIPANTS_SPECIALTY ========== */
 $sepeParticipantsSpecialtyTable = $pluginSchema->createTable(SepePlugin::TABLE_SEPE_PARTICIPANTS_SPECIALTY);
 $sepeParticipantsSpecialtyTable->addColumn(
     'id',
-    \Doctrine\DBAL\Types\Type::INTEGER, 
+    \Doctrine\DBAL\Types\Type::INTEGER,
     array('autoincrement' => true, 'unsigned' => true)
 );
 $sepeParticipantsSpecialtyTable->addColumn(
@@ -523,12 +524,12 @@ $sepeParticipantsSpecialtyTable->addColumn(
     array('length' => 14, 'notnull' => false)
 );
 $sepeParticipantsSpecialtyTable->addColumn(
-    'registration_date', 
+    'registration_date',
     \Doctrine\DBAL\Types\Type::DATE,
     array('notnull' => false)
 );
 $sepeParticipantsSpecialtyTable->addColumn(
-    'leaving_date', 
+    'leaving_date',
     \Doctrine\DBAL\Types\Type::DATE,
     array('notnull' => false)
 );
@@ -543,12 +544,12 @@ $sepeParticipantsSpecialtyTable->addColumn(
     array('length' => 16, 'notnull' => false)
 );
 $sepeParticipantsSpecialtyTable->addColumn(
-    'start_date', 
+    'start_date',
     \Doctrine\DBAL\Types\Type::DATE,
     array('notnull' => false)
 );
 $sepeParticipantsSpecialtyTable->addColumn(
-    'end_date', 
+    'end_date',
     \Doctrine\DBAL\Types\Type::DATE,
     array('notnull' => false)
 );
@@ -567,19 +568,21 @@ $sepeParticipantsSpecialtyTable->addColumn(
     \Doctrine\DBAL\Types\Type::STRING,
     array('length' => 4, 'notnull' => false)
 );
-$sepeParticipantsSpecialtyTable->setPrimaryKey(array('cod'));
+$sepeParticipantsSpecialtyTable->setPrimaryKey(array('id'));
 $sepeParticipantsSpecialtyTable->addForeignKeyConstraint(
     $sepeParticipantsTable,
     array('participant_id'),
     array('id'),
     array('onDelete' => 'CASCADE')
-);       
+);
 
-/* ========== PLUGIN_SEPE_PARTICIPANTS_SPECIALTY_TUTORIALS ========== */ 
-$sepeParticipantsSpecialtyTutorialsTable = $pluginSchema->createTable(SepePlugin::TABLE_SEPE_PARTICIPANTS_SPECIALTY_TUTORIALS);
+/* ========== PLUGIN_SEPE_PARTICIPANTS_SPECIALTY_TUTORIALS ========== */
+$sepeParticipantsSpecialtyTutorialsTable = $pluginSchema->createTable(
+    SepePlugin::TABLE_SEPE_PARTICIPANTS_SPECIALTY_TUTORIALS
+);
 $sepeParticipantsSpecialtyTutorialsTable->addColumn(
     'id',
-    \Doctrine\DBAL\Types\Type::INTEGER, 
+    \Doctrine\DBAL\Types\Type::INTEGER,
     array('autoincrement' => true, 'unsigned' => true)
 );
 $sepeParticipantsSpecialtyTutorialsTable->addColumn(
@@ -611,7 +614,7 @@ $sepeParticipantsSpecialtyTutorialsTable->addForeignKeyConstraint(
 $sepeCourseActionsTable = $pluginSchema->createTable(SepePlugin::TABLE_SEPE_COURSE_ACTIONS);
 $sepeCourseActionsTable->addColumn(
     'id',
-    \Doctrine\DBAL\Types\Type::INTEGER, 
+    \Doctrine\DBAL\Types\Type::INTEGER,
     array('autoincrement' => true, 'unsigned' => true)
 );
 $sepeCourseActionsTable->addColumn(
@@ -624,7 +627,7 @@ $sepeCourseActionsTable->addColumn(
     \Doctrine\DBAL\Types\Type::INTEGER,
     array('unsigned' => true)
 );
-$sepeCourseActionsTable->setPrimaryKey(array('cod'));
+$sepeCourseActionsTable->setPrimaryKey(array('id'));
 $sepeCourseActionsTable->addForeignKeyConstraint(
     $sepeActionsTable,
     array('action_id'),
@@ -636,7 +639,7 @@ $sepeCourseActionsTable->addForeignKeyConstraint(
 $sepeTeachingCompetenceTable = $pluginSchema->createTable(SepePlugin::TABLE_SEPE_TEACHING_COMPETENCE);
 $sepeTeachingCompetenceTable->addColumn(
     'id',
-    \Doctrine\DBAL\Types\Type::INTEGER, 
+    \Doctrine\DBAL\Types\Type::INTEGER,
     array('autoincrement' => true, 'unsigned' => true)
 );
 $sepeTeachingCompetenceTable->addColumn(
@@ -651,7 +654,7 @@ $sepeTeachingCompetenceTable->setPrimaryKey(array('id'));
 $sepeLogParticipantTable = $pluginSchema->createTable(SepePlugin::TABLE_SEPE_LOG_PARTICIPANT);
 $sepeLogParticipantTable->addColumn(
     'id',
-    \Doctrine\DBAL\Types\Type::INTEGER, 
+    \Doctrine\DBAL\Types\Type::INTEGER,
     array('autoincrement' => true, 'unsigned' => true)
 );
 $sepeLogParticipantTable->addColumn(
@@ -672,7 +675,7 @@ $sepeLogParticipantTable->setPrimaryKey(array('id'));
 $sepeLogModParticipantTable = $pluginSchema->createTable(SepePlugin::TABLE_SEPE_LOG_MOD_PARTICIPANT);
 $sepeLogModParticipantTable->addColumn(
     'id',
-    \Doctrine\DBAL\Types\Type::INTEGER, 
+    \Doctrine\DBAL\Types\Type::INTEGER,
     array('autoincrement' => true, 'unsigned' => true)
 );
 $sepeLogModParticipantTable->addColumn(
@@ -692,7 +695,7 @@ $sepeLogModParticipantTable->setPrimaryKey(array('id'));
 $sepeLogTable = $pluginSchema->createTable(SepePlugin::TABLE_SEPE_LOG);
 $sepeLogTable->addColumn(
     'id',
-    \Doctrine\DBAL\Types\Type::INTEGER, 
+    \Doctrine\DBAL\Types\Type::INTEGER,
     array('autoincrement' => true, 'unsigned' => true)
 );
 $sepeLogTable->addColumn(
@@ -717,21 +720,41 @@ foreach ($queries as $query) {
 //Insert data
 $sepeTeachingCompetenceTable = Database::get_main_table(SepePlugin::TABLE_SEPE_TEACHING_COMPETENCE);
 $competences = array(
-    array(1, '01', 'Certificado de profesionalidad de docencia de la formación profesional para el empleo regulado por Real Decreto 1697/2011, de 18 de noviembre.'),
+    array(
+        1,
+        '01',
+        'Certificado de profesionalidad de docencia de la formación profesional para el empleo regulado por Real Decreto 1697/2011, de 18 de noviembre.',
+    ),
     array(2, '02', 'Certificado de profesionalidad de formador ocupacional.'),
-    array(3, '03', 'Certificado de Aptitud Pedagógica o título profesional de Especialización Didáctica o Certificado de Cualificación Pedagógica.'),
-    array(4, '04', 'Máster Universitario habilitante para el ejercicio de las Profesiones reguladas de Profesor de Educación Secundaria Obligatoria y Bachillerato, Formación Profesional y Escuelas Oficiales de Idiomas.'),
-    array(5, '05', 'Curso de formación equivalente a la formación pedagógica y didáctica exigida para aquellas personas que, estando en posesion de una titulación declarada equivalente a efectos de docencia, no pueden realizar los estudios de máster, establecida en la disposición adicional primera del Real Decreto 1834/2008, de 8 de noviembre.'),
-    array(6, '06', 'Experiencia docente contrastada de al menos 600 horas de impartición de acciones formativas de formación profesional para el empleo o del sistema educativo en modalidad presencial, en los últimos diez años.')
+    array(
+        3,
+        '03',
+        'Certificado de Aptitud Pedagógica o título profesional de Especialización Didáctica o Certificado de Cualificación Pedagógica.',
+    ),
+    array(
+        4,
+        '04',
+        'Máster Universitario habilitante para el ejercicio de las Profesiones reguladas de Profesor de Educación Secundaria Obligatoria y Bachillerato, Formación Profesional y Escuelas Oficiales de Idiomas.',
+    ),
+    array(
+        5,
+        '05',
+        'Curso de formación equivalente a la formación pedagógica y didáctica exigida para aquellas personas que, estando en posesion de una titulación declarada equivalente a efectos de docencia, no pueden realizar los estudios de máster, establecida en la disposición adicional primera del Real Decreto 1834/2008, de 8 de noviembre.',
+    ),
+    array(
+        6,
+        '06',
+        'Experiencia docente contrastada de al menos 600 horas de impartición de acciones formativas de formación profesional para el empleo o del sistema educativo en modalidad presencial, en los últimos diez años.',
+    ),
 );
 
 foreach ($competences as $competence) {
     Database::insert(
         $sepeTeachingCompetenceTable,
         array(
-            'cod' => $competence[0],
+            'id' => $competence[0],
             'code' => $competence[1],
-            'value' => $competence[2]
+            'value' => $competence[2],
         )
     );
 }
@@ -740,10 +763,10 @@ $sepeTutorsCompanyTable = Database::get_main_table(SepePlugin::TABLE_SEPE_TUTORS
 Database::insert(
     $sepeTutorsCompanyTable,
     array(
-        'cod' => 1,
+        'id' => 1,
         'alias' => 'Sin tutor',
         'company' => 'SI',
-        'training' => 'SI'
+        'training' => 'SI',
     )
 );
 
@@ -752,7 +775,7 @@ $fieldlabel = 'sexo';
 $fieldtype = '3';
 $fieldtitle = 'Género';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 $sql = "INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES ('".$field_id."', 'Hombre', 'Hombre',1);";
 Database::query($sql);
 $sql = "INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES ('".$field_id."', 'Mujer', 'Mujer',2);";
@@ -764,28 +787,28 @@ $fieldlabel = 'edad';
 $fieldtype = '6';
 $fieldtitle = 'Fecha de nacimiento';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
 $fieldlabel = 'nivel_formativo';
 $fieldtype = '1';
 $fieldtitle = 'Nivel formativo';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
 $fieldlabel = 'situacion_laboral';
 $fieldtype = '1';
 $fieldtitle = 'Situación Laboral';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
 $fieldlabel = 'provincia_residencia';
 $fieldtype = '4';
 $fieldtitle = 'Provincia Residencia';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
 $provinces = 'Albacete;Alicante/Alacant;Almería;Araba/Álava;Asturias;Ávila;Badajoz;Balears, Illes;Barcelona;Bizkaia;Burgos;Cáceres;Cádiz;Cantabria;Castellón/Castelló;Ciudad Real;Córdoba;Coruña, A;Cuenca;Gipuzkoa;Girona;Granada;Guadalajara;Huelva;Huesca;Jaén;León;Lleida;Lugo;Madrid;Málaga;Murcia;Navarra;Ourense;Palencia;Palmas, Las;Pontevedr;Rioja, La;Salamanca;Santa Cruz de Tenerife;Segovia;Sevilla;Soria;Tarragona;Teruel;Toledo;Valencia/Valéncia;Valladolid;Zamora;Zaragoza;Ceuta;Melilla';
-$list_provinces = explode(';',$provinces);
+$list_provinces = explode(';', $provinces);
 $i = 1;
 foreach ($list_provinces as $value) {
     $sql = "INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES ('".$field_id."', '".$i."', '".$value."','".$i."');";
@@ -797,9 +820,9 @@ $fieldlabel = 'comunidad_residencia';
 $fieldtype = '4';
 $fieldtitle = 'Comunidad autonoma de residencia';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 $ccaa = ';Andalucía;Aragón;Asturias, Principado de;Balears, Illes;Canarias;Cantabria;Castilla y León;Castilla - La Mancha;Cataluña;Comunitat Valenciana;Extremadura;Galicia;Madrid, Comunidad de;Murcia, Región de;Navarra, Comunidad Foral de;País Vasco;Rioja, La;Ceuta;Melilla';
-$list_ccaa = explode(';',$ccaa);
+$list_ccaa = explode(';', $ccaa);
 $i = 1;
 foreach ($list_ccaa as $value) {
     $sql = "INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES ('".$field_id."', '".$i."', '".$value."','".$i."');";
@@ -812,9 +835,9 @@ $fieldtype = '4';
 $fieldtitle = 'Provincia Trabajo';
 $fielddefault = '';
 //$fieldoptions = ';Albacete;Alicante/Alacant;Almería;Araba/Álava;Asturias;Ávila;Badajoz;Balears, Illes;Barcelona;Bizkaia;Burgos;Cáceres;Cádiz;Cantabria;Castellón/Castelló;Ciudad Real;Córdoba;Coruña, A;Cuenca;Gipuzkoa;Girona;Granada;Guadalajara;Huelva;Huesca;Jaén;León;Lleida;Lugo;Madrid;Málaga;Murcia;Navarra;Ourense;Palencia;Palmas, Las;Pontevedr;Rioja, La;Salamanca;Santa Cruz de Tenerife;Segovia;Sevilla;Soria;Tarragona;Teruel;Toledo;Valencia/Valéncia;Valladolid;Zamora;Zaragoza;Ceuta;Melilla';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 $i = 1;
-foreach ($list_provincias as $value) {
+foreach ($list_provinces as $value) {
     $sql = "INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES ('".$field_id."', '".$i."', '".$value."','".$i."');";
     Database::query($sql);
     $i++;
@@ -825,7 +848,7 @@ $fieldtype = '4';
 $fieldtitle = 'Comunidad autonoma Trabajo';
 $fielddefault = '';
 //$fieldoptions = ';Andalucía;Aragón;Asturias, Principado de;Balears, Illes;Canarias;Cantabria;Castilla y León;Castilla - La Mancha;Cataluña;Comunitat Valenciana;Extremadura;Galicia;Madrid, Comunidad de;Murcia, Región de;Navarra, Comunidad Foral de;País Vasco;Rioja, La;Ceuta;Melilla';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 $i = 1;
 foreach ($list_ccaa as $value) {
     $sql = "INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES ('".$field_id."', '".$i."', '".$value."','".$i."');";
@@ -837,40 +860,40 @@ $fieldlabel = 'medio_conocimiento';
 $fieldtype = '2';
 $fieldtitle = 'Medio de conocimiento Acción formativa';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
 $fieldlabel = 'experiencia_anterior';
 $fieldtype = '2';
 $fieldtitle = 'Experiencia anterior en la realización de cursos on-line';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
 $fieldlabel = 'razones_teleformacion';
 $fieldtype = '2';
 $fieldtitle = 'Razones por la modalidad teleformación';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
 $fieldlabel = 'valoracion_modalidad';
 $fieldtype = '2';
 $fieldtitle = 'Valoración general sobre la modalidad';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
 $fieldlabel = 'categoria_profesional';
 $fieldtype = '1';
 $fieldtitle = 'Categoría profesional';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
 $fieldlabel = 'tamano_empresa';
 $fieldtype = '1';
 $fieldtitle = 'Tamaño de la empresa';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
 $fieldlabel = 'horario_accion_formativa';
 $fieldtype = '1';
 $fieldtitle = 'Horario de la acción formativa';
 $fielddefault = '';
-$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault);
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);

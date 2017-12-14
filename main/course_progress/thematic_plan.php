@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
 * View (MVC patter) for thematic plan
 * @author Christian Fasanando <christian1827@gmail.com>
@@ -26,8 +28,6 @@ if (!empty($thematic_simple_list)) {
     }
 }
 
-//$i = 1;
-
 echo Display::tag('h2', $thematic_data['title']);
 echo $thematic_data['content'];
 
@@ -38,7 +38,7 @@ if (isset($message) && $message == 'ok') {
 if ($action === 'thematic_plan_list') {
     $token = Security::get_token();
 
-    ChamiloSession::write('thematic_plan_token', $token);
+    Session::write('thematic_plan_token', $token);
 
     $form = new FormValidator(
         'thematic_plan_add',
@@ -107,7 +107,7 @@ if ($action === 'thematic_plan_list') {
     }
     if (!$error) {
         $token = md5(uniqid(rand(), true));
-        $_SESSION['thematic_plan_token'] = $token;
+        Session::write('thematic_plan_token', $token);
     }
 
     // display form
@@ -161,7 +161,13 @@ if ($action === 'thematic_plan_list') {
 
     // error messages
     if ($error) {
-        Display::addFlash(Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error', false));
+        Display::addFlash(
+            Display::return_message(
+                get_lang('FormHasErrorsPleaseComplete'),
+                'error',
+                false
+            )
+        );
     }
     $form->display();
 }

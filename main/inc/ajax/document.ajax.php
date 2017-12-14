@@ -12,7 +12,7 @@ switch ($action) {
         api_protect_course_script(true);
         $path = isset($_GET['path']) ? $_GET['path'] : '';
         $isAllowedToEdit = api_is_allowed_to_edit();
-        $size = get_total_folder_size($path, $isAllowedToEdit);
+        $size = DocumentManager::getTotalFolderSize($path, $isAllowedToEdit);
         echo format_file_size($size);
         break;
     case 'get_document_quota':
@@ -25,7 +25,7 @@ switch ($action) {
         );
 
         // Displaying the quota
-        echo DocumentManager::display_simple_quota(
+        echo DocumentManager::displaySimpleQuota(
             $course_quota,
             $already_consumed_space_course
         );
@@ -43,7 +43,9 @@ switch ($action) {
             } else {
                 exit;
             }
-        } elseif ($is_allowed_to_edit || DocumentManager::is_my_shared_folder(api_get_user_id(), $_POST['curdirpath'], api_get_session_id())) {
+        } elseif ($is_allowed_to_edit ||
+            DocumentManager::is_my_shared_folder(api_get_user_id(), $_POST['curdirpath'], api_get_session_id())
+        ) {
             // ??
         } else {
             // No course admin and no group member...
@@ -92,7 +94,7 @@ switch ($action) {
                 $result = DocumentManager::upload_document(
                     $globalFile,
                     $currentDirectory,
-                    $file['name'],
+                    '',
                     '', // comment
                     $unzip,
                     $defaultFileExistsOption,

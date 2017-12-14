@@ -93,9 +93,7 @@ class ChamiloSession extends System\Session
 
         session_name(self::NAME);
         session_start();
-
         $session = self::instance();
-
         if ($already_installed) {
             if (!isset($session['checkChamiloURL'])) {
                 $session['checkChamiloURL'] = api_get_path(WEB_PATH);
@@ -104,16 +102,13 @@ class ChamiloSession extends System\Session
             }
         }
 
-        /*if (!$session->has('starttime') && !$session->is_expired()) {
-            $session->write('starttime', time());
-        }*/
         // If the session time has expired, refresh the starttime value,
         //  so we're starting to count down from a later time
-        if ($session->has('starttime') && $session->is_expired()) {
-            $session->destroy();
+        if (self::has('starttime') && $session->is_expired()) {
+            self::destroy();
         } else {
             //error_log('Time not expired, extend session for a bit more');
-            $session->write('starttime', time());
+            self::write('starttime', time());
         }
     }
 

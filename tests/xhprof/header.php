@@ -11,7 +11,10 @@
  * in your php config also disable the .htaccess line about the tests/
  * directory.
  */
-if (extension_loaded('tideways')) {
+
+$isAjaxRequest = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
+
+if (extension_loaded('tideways') && !$isAjaxRequest) {
     //include_once __DIR__.'/xhprof_lib/utils/xhprof_lib.php';
     //include_once __DIR__.'/xhprof_lib/utils/xhprof_runs.php';
     tideways_enable(TIDEWAYS_FLAGS_NO_SPANS);

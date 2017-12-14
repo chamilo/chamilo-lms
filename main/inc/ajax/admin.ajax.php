@@ -3,7 +3,6 @@
 /**
  * Responses to AJAX calls
  */
-
 require_once __DIR__.'/../global.inc.php';
 
 api_protect_admin_script();
@@ -29,6 +28,8 @@ switch ($action) {
         }
         break;
     case 'version':
+        // Fix session block when loading admin/index.php and changing page
+        session_write_close();
         echo version_check();
         break;
     case 'get_extra_content':
@@ -112,16 +113,42 @@ function version_check()
  */
 function check_system_version()
 {
+    // Check if curl is available.
+    if (!in_array('curl', get_loaded_extensions())) {
+        return '<span style="color:red">'.get_lang('ImpossibleToContactVersionServerPleaseTryAgain').'</span>';
+    }
+
+    $url = 'https://version.chamilo.org';
+    $options = [
+        'verify' => false
+    ];
+
+    $urlValidated = false;
+
+    try {
+        $client = new GuzzleHttp\Client();
+        $res = $client->request('GET', $url, $options);
+        if ($res->getStatusCode() == '200' || $res->getStatusCode() == '301') {
+            $urlValidated = true;
+        }
+    } catch (Exception $e) {
+    }
+
     // the chamilo version of your installation
     $system_version = trim(api_get_configuration_value('system_version'));
 
-    if (ini_get('allow_url_fopen') == 1) {
+    if ($urlValidated) {
         // The number of courses
         $number_of_courses = Statistics::countCourses();
 
         // The number of users
         $number_of_users = Statistics::countUsers();
-        $number_of_active_users = Statistics::countUsers(null, null, null, true);
+        $number_of_active_users = Statistics::countUsers(
+            null,
+            null,
+            null,
+            true
+        );
 
         // The number of sessions
         $number_of_sessions = Statistics::countSessions();
@@ -152,90 +179,31 @@ function check_system_version()
             // or in the installed config file. The default value is 'chamilo'
             'packager' => $packager,
         );
+
         $version = null;
-        // version.php has been updated to include the version in an HTTP header
-        // called "X-Chamilo-Version", so that we don't have to worry about
-        // issues with the content not being returned by fread for some reason
-        $res = _http_request('version.chamilo.org', 80, '/version.php', $data, 5, null, true);
-        $lines = preg_split('/\r\n/', $res);
-        foreach ($lines as $line) {
-            $elements = preg_split('/:/', $line);
-            // extract the X-Chamilo-Version header from the version.php response
-            if (strcmp(trim($elements[0]), 'X-Chamilo-Version') === 0) {
-                $version = trim($elements[1]);
+        $client = new GuzzleHttp\Client();
+        $url .= '?';
+        foreach ($data as $k => $v) {
+            $url .= urlencode($k).'='.urlencode($v).'&';
+        }
+        $res = $client->request('GET', $url, $options);
+        if ($res->getStatusCode() == '200') {
+            $versionData = $res->getHeader('X-Chamilo-Version');
+            if (isset($versionData[0])) {
+                $version = trim($versionData[0]);
             }
         }
-        if (substr($res, 0, 5) != 'Error') {
-            if (empty($version)) {
-                $version_info = $res;
-            } else {
-                $version_info = $version;
-            }
 
-            if (version_compare($system_version, $version_info, '<')) {
-                $output = '<span style="color:red">'.get_lang('YourVersionNotUpToDate').'<br />
-                           '.get_lang('LatestVersionIs').' <b>Chamilo '.$version_info.'</b>.  <br />
-                           '.get_lang('YourVersionIs').' <b>Chamilo '.$system_version.'</b>.  <br />'.str_replace('http://www.chamilo.org', '<a href="http://www.chamilo.org">http://www.chamilo.org</a>', get_lang('PleaseVisitOurWebsite')).'</span>';
-            } else {
-                $output = '<span style="color:green">'.get_lang('VersionUpToDate').': Chamilo '.$version_info.'</span>';
-            }
+        if (version_compare($system_version, $version, '<')) {
+            $output = '<span style="color:red">'.get_lang('YourVersionNotUpToDate').'<br />
+                       '.get_lang('LatestVersionIs').' <b>Chamilo '.$version.'</b>.  <br />
+                       '.get_lang('YourVersionIs').' <b>Chamilo '.$system_version.'</b>.  <br />'.str_replace('http://www.chamilo.org', '<a href="http://www.chamilo.org">http://www.chamilo.org</a>', get_lang('PleaseVisitOurWebsite')).'</span>';
         } else {
-            $output = '<span style="color:red">'.get_lang('ImpossibleToContactVersionServerPleaseTryAgain').'</span>';
+            $output = '<span style="color:green">'.get_lang('VersionUpToDate').': Chamilo '.$version.'</span>';
         }
-    } else {
-        $output = '<span style="color:red">'.get_lang('AllowurlfopenIsSetToOff').'</span>';
-    }
-    return $output;
-}
 
-/**
- * Function to make an HTTP request through fsockopen (specialised for GET)
- * Derived from Jeremy Saintot: http://www.php.net/manual/en/function.fsockopen.php#101872
- * @param string $ip IP or hostname
- * @param int    $port Target port
- * @param string $uri URI (defaults to '/')
- * @param array  $getdata GET data
- * @param int    $timeout Timeout
- * @param bool   $req_hdr Include HTTP Request headers?
- * @param bool   $res_hdr Include HTTP Response headers?
- * @return string
- */
-function _http_request($ip, $port = 80, $uri = '/', $getdata = array(), $timeout = 5, $req_hdr = false, $res_hdr = false)
-{
-    $verb = 'GET';
-    $ret = '';
-    $getdata_str = count($getdata) ? '?' : '';
-
-    foreach ($getdata as $k => $v) {
-                $getdata_str .= urlencode($k).'='.urlencode($v).'&';
+        return $output;
     }
 
-    $crlf = "\r\n";
-    $req = $verb.' '.$uri.$getdata_str.' HTTP/1.1'.$crlf;
-    $req .= 'Host: '.$ip.$crlf;
-    $req .= 'User-Agent: Mozilla/5.0 Firefox/3.6.12'.$crlf;
-    $req .= 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'.$crlf;
-    $req .= 'Accept-Language: en-us,en;q=0.5'.$crlf;
-    $req .= 'Accept-Encoding: deflate'.$crlf;
-    $req .= 'Accept-Charset: utf-8;q=0.7,*;q=0.7'.$crlf;
-
-    $req .= $crlf;
-
-    if ($req_hdr) {
-        $ret .= $req;
-    }
-    if (($fp = @fsockopen($ip, $port, $errno, $errstr, $timeout)) == false) {
-        return "Error $errno: $errstr\n";
-    }
-
-    stream_set_timeout($fp, $timeout);
-    $r = fwrite($fp, $req);
-    $line = @fread($fp, 512);
-    $ret .= $line;
-    fclose($fp);
-
-    if (!$res_hdr) {
-        $ret = substr($ret, strpos($ret, "\r\n\r\n") + 4);
-    }
-    return trim($ret);
+    return '<span style="color:red">'.get_lang('ImpossibleToContactVersionServerPleaseTryAgain').'</span>';
 }

@@ -20,7 +20,6 @@ $tpl = new Template(get_lang('ThematicControl'));
 
 $toolbar = null;
 if (api_is_allowed_to_edit(null, true)) {
-    
     switch ($action) {
         case 'thematic_add':
         case 'thematic_import_select':
@@ -47,12 +46,16 @@ if (api_is_allowed_to_edit(null, true)) {
             break;
         default:
             $actionLeft = '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
-                Display::return_icon('new_course_progress.png', get_lang('NewThematicSection'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon(
+                    'new_course_progress.png',
+                    get_lang('NewThematicSection'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ).'</a>';
     }
-    
+
     $toolbar = Display::toolbarAction('thematic-bar', array($actionLeft));
 }
-
 
 if ($action == 'thematic_list') {
     $table = new SortableTable(
@@ -77,8 +80,16 @@ if ($action == 'thematic_list') {
     $table->display();
 
 } elseif ($action == 'thematic_details') {
-    if (isset($_GET['thematic_plan_save_message']) && $_GET['thematic_plan_save_message'] == 'ok') {
-        Display::addFlash(Display::return_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'), 'confirmation', false));
+    if (isset($_GET['thematic_plan_save_message']) &&
+        $_GET['thematic_plan_save_message'] == 'ok'
+    ) {
+        Display::addFlash(
+            Display::return_message(
+                get_lang('ThematicSectionHasBeenCreatedSuccessfull'),
+                'confirmation',
+                false
+            )
+        );
     }
 
     if (isset($last_id) && $last_id) {
@@ -99,12 +110,11 @@ if ($action == 'thematic_list') {
         $message = Display::return_message($text, 'info', false);
     }
     $list = [];
-    // Display thematic data
 
+    // Display thematic data
     if (!empty($thematic_data)) {
         // display progress
         foreach ($thematic_data as $thematic) {
-            
             $list['id'] = $thematic['id'];
             $list['id_course'] = $thematic['c_id'];
             $list['id_session'] = $thematic['session_id'];
@@ -112,7 +122,7 @@ if ($action == 'thematic_list') {
             $list['content'] = Security::remove_XSS($thematic['content'], STUDENT);
             $list['display_orden'] = $thematic['display_order'];
             $list['active'] = $thematic['active'];
-            
+
             $my_thematic_id = $thematic['id'];
 
             $session_star = '';
@@ -129,9 +139,14 @@ if ($action == 'thematic_list') {
             if (api_is_allowed_to_edit(null, true)) {
                 // Thematic title
                 $toolbarThematic = Display::url(
-                    Display::return_icon('cd.png', get_lang('Copy'), null, ICON_SIZE_TINY),
+                    Display::return_icon(
+                        'cd.png',
+                        get_lang('Copy'),
+                        null,
+                        ICON_SIZE_TINY
+                    ),
                     'index.php?'.api_get_cidreq().'&action=thematic_copy&thematic_id='.$my_thematic_id.$params.$url_token,
-                        array('class'=> 'btn btn-default')
+                    array('class'=> 'btn btn-default')
                 );
                 if (api_get_session_id() == 0) {
                     if ($thematic['display_order'] > 1) {
@@ -211,7 +226,13 @@ if ($action == 'thematic_list') {
     } else {
         $form->addText('title', get_lang('Title'), true, array('size' => '50'));
     }
-    $form->addHtmlEditor('content', get_lang('Content'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Height' => '150'));
+    $form->addHtmlEditor(
+        'content',
+        get_lang('Content'),
+        false,
+        false,
+        array('ToolbarSet' => 'TrainingDescription', 'Height' => '150')
+    );
     $form->addButtonSave(get_lang('Save'));
 
     $show_form = true;
@@ -235,7 +256,6 @@ if ($action == 'thematic_list') {
     }
     if ($show_form) {
         $html = $form->returnForm();
-        
     }
 } elseif ($action == 'thematic_import_select') {
     // Create form to upload csv file.

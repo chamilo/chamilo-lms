@@ -11,7 +11,7 @@ if (api_is_anonymous()) {
     $href_link = facebookGetLoginUrl();
     if (!empty($plugin_info['settings']['add_facebook_login_button_facebook_button_url'])) {
         $button_url = api_htmlentities($plugin_info['settings']['add_facebook_login_button_facebook_button_url']);
-    }    
+    }
     $_template['facebook_button_url'] = $button_url;
-    $_template['facebook_href_link'] = $href_link;    
+    $_template['facebook_href_link'] = $href_link;
 }

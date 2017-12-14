@@ -1,7 +1,8 @@
 {% if not categories is empty %}
     <div class="classic-courses">
         {% for category in categories %}
-            <div class="panel panel-default">
+            {% if category.courses %}
+                <div class="panel panel-default">
                 <div id="category-{{ category.id_category }}" class="panel-heading">
                     {{ category.title_category }}
                 </div>
@@ -70,7 +71,6 @@
                                             {% endfor %}
                                         {% endif %}
                                     </div>
-                                    
                                     {% if item.student_info %}
                                         {% if (item.student_info.progress is not null) and (item.student_info.score is not null) %}
                                         <div class="course-student-info">
@@ -90,13 +90,13 @@
                                         </div>
                                         {% endif %}
                                     {% endif %}
-
                                 </div>
                             </div>
                         </div>
                     {% endfor %}
                 </div>
             </div>
+            {% endif %}
         {% endfor %}
     </div>
 {% endif %}

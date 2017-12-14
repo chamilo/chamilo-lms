@@ -55,8 +55,10 @@ class GradeModel extends Model
     {
 		// action links
 		echo '<div class="actions" style="margin-bottom:20px">';
-        echo '<a href="grade_models.php">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
-		echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('add.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="grade_models.php">'.
+                Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
+		echo '<a href="'.api_get_self().'?action=add">'.
+                Display::return_icon('add.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
 		echo '</div>';
         echo Display::grid_html('grade_model');
 	}
@@ -230,11 +232,11 @@ class GradeModel extends Model
     }
 
     /**
-     * @param array $params
+     * @inheritdoc
      */
-    public function update($params)
+    public function update($params, $showQuery = false)
     {
-        parent::update($params);
+        parent::update($params, $showQuery);
 
         if (!empty($params['id'])) {
             foreach ($params['components'] as $component) {
@@ -316,12 +318,12 @@ class GradeModelComponents extends Model
 
     /**
      * @param array $params
-     * @param bool $show_query
+     * @param bool $showQuery
      * @return bool
      */
-    public function save($params, $show_query = false)
+    public function save($params, $showQuery = false)
     {
-	    $id = parent::save($params, $show_query);
+	    $id = parent::save($params, $showQuery);
 
         return $id;
     }

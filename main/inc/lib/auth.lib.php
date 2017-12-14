@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * Class Auth
@@ -56,7 +58,8 @@ class Auth
             $without_special_courses = ' AND course.id NOT IN ('.implode(',', $special_course_list).')';
         }
 
-        // Secondly we select the courses that are in a category (user_course_cat<>0) and sort these according to the sort of the category
+        // Secondly we select the courses that are in a category (user_course_cat<>0) and
+        // sort these according to the sort of the category
         $user_id = intval($user_id);
         $sql = "SELECT
                     course.code k,
@@ -120,7 +123,6 @@ class Auth
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $TABLE_COURSE_FIELD = Database::get_main_table(TABLE_EXTRA_FIELD);
         $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-
         $extraFieldType = ExtraField::COURSE_FIELD_TYPE;
 
         // get course list auto-register
@@ -180,9 +182,9 @@ class Auth
         $newcategory = intval($newcategory);
         $current_user = api_get_user_id();
 
-        $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $max_sort_value = api_max_sort_value($newcategory, $current_user);
-        $sql = "UPDATE $TABLECOURSUSER SET
+        $sql = "UPDATE $table SET
                     user_course_cat='".$newcategory."',
                     sort='" . ($max_sort_value + 1)."'
                 WHERE
@@ -453,7 +455,9 @@ class Auth
             $row['registration_code'] = !empty($row['registration_code']);
             $count_users = count(CourseManager::get_user_list_from_course_code($row['code']));
             $count_connections_last_month = Tracking::get_course_connections_count(
-                    $row['id'], 0, api_get_utc_datetime(time() - (30 * 86400))
+                $row['id'],
+                0,
+                api_get_utc_datetime(time() - (30 * 86400))
             );
 
             $point_info = CourseManager::get_course_ranking($row['id'], 0);
@@ -521,7 +525,7 @@ class Auth
      */
     public function store_course_category($category_title)
     {
-        $tucc = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
+        $table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
 
         // protect data
         $current_user_id = api_get_user_id();
@@ -529,22 +533,23 @@ class Auth
         $result = false;
 
         // step 1: we determine the max value of the user defined course categories
-        $sql = "SELECT sort FROM $tucc 
+        $sql = "SELECT sort FROM $table 
                 WHERE user_id='".$current_user_id."' 
                 ORDER BY sort DESC";
         $rs_sort = Database::query($sql);
         $maxsort = Database::fetch_array($rs_sort);
         $nextsort = $maxsort['sort'] + 1;
 
-        // step 2: we check if there is already a category with this name, if not we store it, else we give an error.
-        $sql = "SELECT * FROM $tucc 
+        // step 2: we check if there is already a category with this name,
+        // if not we store it, else we give an error.
+        $sql = "SELECT * FROM $table 
                 WHERE 
                     user_id='".$current_user_id."' AND 
                     title='" . $category_title."'
                 ORDER BY sort DESC";
         $rs = Database::query($sql);
         if (Database::num_rows($rs) == 0) {
-            $sql = "INSERT INTO $tucc (user_id, title,sort)
+            $sql = "INSERT INTO $table (user_id, title,sort)
                     VALUES ('".$current_user_id."', '".api_htmlentities($category_title, ENT_QUOTES, api_get_system_encoding())."', '".$nextsort."')";
             $resultQuery = Database::query($sql);
             if (Database::affected_rows($resultQuery)) {
@@ -600,8 +605,7 @@ class Auth
         $user_id = api_get_user_id();
         $all_course_information = CourseManager::get_course_information($course_code);
 
-        if (
-            $all_course_information['registration_code'] == '' ||
+        if ($all_course_information['registration_code'] == '' ||
             (
                 isset($_POST['course_registration_code']) &&
                 $_POST['course_registration_code'] == $all_course_information['registration_code']
@@ -620,7 +624,7 @@ class Auth
                         $all_course_information['real_id'],
                         $send_to_tutor_also = false
                     );
-                } else if ($send == 2) {
+                } elseif ($send == 2) {
                     CourseManager::email_to_tutor(
                         $user_id,
                         $all_course_information['real_id'],
@@ -642,9 +646,13 @@ class Auth
             $message = get_lang('CourseRequiresPassword').'<br />';
             $message .= $all_course_information['title'].' ('.$all_course_information['visual_code'].') ';
 
-            $action  = api_get_path(WEB_CODE_PATH)."auth/courses.php?action=subscribe_user_with_password&sec_token=".$_SESSION['sec_token'];
-            $form = new FormValidator('subscribe_user_with_password', 'post', $action);
-            $form->addElement('hidden', 'sec_token', $_SESSION['sec_token']);
+            $action  = api_get_path(WEB_CODE_PATH)."auth/courses.php?action=subscribe_user_with_password&sec_token=".Security::getTokenFromSession();
+            $form = new FormValidator(
+                'subscribe_user_with_password',
+                'post',
+                $action
+            );
+            $form->addElement('hidden', 'sec_token', Security::getTokenFromSession());
             $form->addElement('hidden', 'subscribe_user_with_password', $all_course_information['code']);
             $form->addElement('text', 'course_registration_code');
             $form->addButton('submit', get_lang('SubmitRegistrationCode'));
@@ -671,7 +679,7 @@ class Auth
         $qb->innerJoin(
             'ChamiloCoreBundle:AccessUrlRelSession',
             'ars',
-            \Doctrine\ORM\Query\Expr\Join::WITH,
+            Join::WITH,
             's = ars.sessionId'
         );
 
@@ -755,25 +763,25 @@ SQL;
             ->innerJoin(
                 'ChamiloCoreBundle:SessionRelCourse',
                 'src',
-                \Doctrine\ORM\Query\Expr\Join::WITH,
+                Join::WITH,
                 's.id = src.session'
             )
             ->innerJoin(
                 'ChamiloCoreBundle:ExtraFieldRelTag',
                 'frt',
-                \Doctrine\ORM\Query\Expr\Join::WITH,
+                Join::WITH,
                 'src.course = frt.itemId'
             )
             ->innerJoin(
                 'ChamiloCoreBundle:Tag',
                 't',
-                \Doctrine\ORM\Query\Expr\Join::WITH,
+                Join::WITH,
                 'frt.tagId = t.id'
             )
             ->innerJoin(
                 'ChamiloCoreBundle:ExtraField',
                 'f',
-                \Doctrine\ORM\Query\Expr\Join::WITH,
+                Join::WITH,
                 'frt.fieldId = f.id'
             )
             ->where(
@@ -809,9 +817,9 @@ SQL;
     {
         $sessionsToBrowse = [];
 
-        $criteria = Doctrine\Common\Collections\Criteria::create()
+        $criteria = Criteria::create()
             ->where(
-                Doctrine\Common\Collections\Criteria::expr()->contains('name', $queryTerm)
+                Criteria::expr()->contains('name', $queryTerm)
             )
             ->setFirstResult($limit['start'])
             ->setMaxResults($limit['length']);

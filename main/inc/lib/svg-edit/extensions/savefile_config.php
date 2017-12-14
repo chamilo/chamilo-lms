@@ -1,4 +1,7 @@
 <?php
+
+use ChamiloSession as Session;
+
 /*
  * filesave.php
  * To be used with ext-server_opensave.js for SVG-edit
@@ -18,13 +21,15 @@ require_once '../../../../../inc/global.inc.php';
 api_protect_course_script();
 api_block_anonymous_users();
 
-if(!isset($_POST['output_svg']) && !isset($_POST['output_png'])) {
+if (!isset($_POST['output_svg']) && !isset($_POST['output_png'])) {
     api_not_allowed();//from Chamilo
     die();
 }
 
 $file = '';
 $suffix = isset($_POST['output_svg']) ? 'svg' : 'png';
+
+$_course = api_get_course_info();
 
 if (isset($_POST['filename']) && strlen($_POST['filename']) > 0) {
     $file = $_POST['filename'];
@@ -50,8 +55,9 @@ $content = $contents;//from svg-edit
 $title = Database::escape_string(str_replace('_',' ',$filename));
 
 //get Chamilo variables
+$relativeUrlPath = Session::read('draw_dir');
 
-if (!isset($_SESSION['draw_dir']) && !isset($_SESSION['whereami'])) {
+if (empty($relativeUrlPath)) {
     api_not_allowed();//from Chamilo
     die();
 }
@@ -59,11 +65,8 @@ if (!isset($_SESSION['draw_dir']) && !isset($_SESSION['whereami'])) {
 $current_session_id = api_get_session_id();
 $groupId = api_get_group_id();
 $groupInfo = GroupManager::get_group_properties($groupId);
-
-$relativeUrlPath = $_SESSION['draw_dir'];
-$currentTool = $_SESSION['whereami'];
 $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-$saveDir = $dirBaseDocuments.$_SESSION['draw_dir'];
+$saveDir = $dirBaseDocuments.$relativeUrlPath;
 
 // a bit title security
 $filename = addslashes(trim($filename));
@@ -188,9 +191,8 @@ if ($currentTool == 'document/createdraw') {
 }
 
 //clean sessions and add messages and return to current document list
-unset($_SESSION['draw_dir']);
-unset($_SESSION['draw_file']);
-unset($_SESSION['whereami']);
+Session::erase('draw_dir');
+Session::erase('draw_file');
 
 if ($suffix != 'png') {
     if ($relativeUrlPath == '') {

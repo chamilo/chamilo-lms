@@ -1,22 +1,24 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This script is the Tickets plugin main entry point
  * @package chamilo.plugin.ticket
  */
+
+$cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script(true);
 
 $toolName = get_lang('Priorities');
-
-$libPath = api_get_path(LIBRARY_PATH);
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
 
 $this_section = 'tickets';
-unset($_SESSION['this_section']);
+Session::erase('this_section');
 
 $table = new SortableTable(
     'TicketProject',

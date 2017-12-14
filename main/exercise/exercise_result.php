@@ -29,10 +29,7 @@ if ($debug) {
     error_log('Entering exercise_result.php: '.print_r($_POST, 1));
 }
 
-// general parameters passed via POST/GET
-if (empty($origin)) {
-    $origin = Security::remove_XSS($_REQUEST['origin']);
-}
+$origin = api_get_origin();
 
 /** @var Exercise $objExercise */
 if (empty($objExercise)) {
@@ -56,13 +53,9 @@ if (empty($objExercise)) {
     api_not_allowed();
 }
 
-$gradebook = '';
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook'),
     );
 }
@@ -94,12 +87,12 @@ if ($origin != 'learnpath') {
 
 // I'm in a preview mode as course admin. Display the action menu.
 if (api_is_course_admin() && $origin != 'learnpath') {
-	echo '<div class="actions">';
-	echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
+    echo '<div class="actions">';
+    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
         Display::return_icon('back.png', get_lang('GoBackToQuestionList'), array(), 32).'</a>';
-	echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
+    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
         Display::return_icon('edit.png', get_lang('ModifyExercise'), array(), 32).'</a>';
-	echo '</div>';
+    echo '</div>';
 }
 
 $feedback_type = $objExercise->feedback_type;
@@ -118,13 +111,25 @@ if ($origin == 'learnpath') {
     <form method="GET" action="exercise.php?<?php echo api_get_cidreq() ?>">
     <input type="hidden" name="origin" value="<?php echo $origin; ?>" />
     <input type="hidden" name="learnpath_id" value="<?php echo $learnpath_id; ?>" />
-    <input type="hidden" name="learnpath_item_id" 		value="<?php echo $learnpath_item_id; ?>" />
+    <input type="hidden" name="learnpath_item_id" value="<?php echo $learnpath_item_id; ?>"/>
     <input type="hidden" name="learnpath_item_view_id"  value="<?php echo $learnpath_item_view_id; ?>" />
 <?php
 }
 
 $i = $total_score = $max_score = 0;
+
 $remainingMessage = '';
+$attemptButton = Display::toolbarButton(
+    get_lang('AnotherAttempt'),
+    api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&'.http_build_query([
+        'exerciseId' => $objExercise->id,
+        'learnpath_id' => $learnpath_id,
+        'learnpath_item_id' => $learnpath_item_id,
+        'learnpath_item_view_id' => $learnpath_item_view_id
+    ]),
+    'pencil-square-o',
+    'info'
+);
 
 // We check if the user attempts before sending to the exercise_result.php
 if ($objExercise->selectAttempts() > 0) {
@@ -151,20 +156,12 @@ if ($objExercise->selectAttempts() > 0) {
         $remainingAttempts = $objExercise->selectAttempts() - $attempt_count;
 
         if ($remainingAttempts) {
-            $attemptButton = Display::toolbarButton(
-                get_lang('AnotherAttempt'),
-                api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&'.http_build_query([
-                    'exerciseId' => $objExercise->id,
-                    'learnpath_id' => $learnpath_id,
-                    'learnpath_item_id' => $learnpath_item_id
-                ]),
-                'pencil-square-o',
-                'info'
-            );
             $attemptMessage = sprintf(get_lang('RemainingXAttempts'), $remainingAttempts);
             $remainingMessage = sprintf("<p>%s</p> %s", $attemptMessage, $attemptButton);
         }
     }
+} else {
+    $remainingMessage = "<p>$attemptButton</p>";
 }
 
 $total_score = 0;
@@ -208,7 +205,7 @@ if ($origin != 'learnpath') {
     }
     Display::display_footer();
 } else {
-	$lp_mode = isset($_SESSION['lp_mode']) ? $_SESSION['lp_mode'] : null;
+	$lp_mode = Session::read('lp_mode');
 	$url = '../lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->feedback_type.'#atoc_'.$learnpath_item_id;
 	$href = $lp_mode == 'fullscreen' ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
 
@@ -222,5 +219,6 @@ if ($origin != 'learnpath') {
     // Record the results in the learning path, using the SCORM interface (API)
     echo "<script>window.parent.API.void_save_asset('$total_score', '$max_score', 0, 'completed');</script>";
     echo '<script type="text/javascript">'.$href.'</script>';
-    echo '</body></html>';
+
+    Display::display_reduced_footer();
 }

@@ -83,6 +83,7 @@ class Result
      * @param $id result id
      * @param $user_id user id (student)
      * @param $evaluation_id evaluation where this is a result for
+     * @return array
      */
     public static function load($id = null, $user_id = null, $evaluation_id = null)
     {
@@ -97,7 +98,8 @@ class Result
             // Verified_if_exist_evaluation
             $sql = 'SELECT COUNT(*) AS count
                     FROM ' . $tbl_grade_results.'
-                    WHERE evaluation_id="' . Database::escape_string($evaluation_id).'";';
+                    WHERE evaluation_id="' . Database::escape_string($evaluation_id).'"';
+
             $result = Database::query($sql);
             $existEvaluation = Database::result($result, 0, 0);
 
@@ -176,6 +178,7 @@ class Result
             $paramcount++;
         }
         $sql .= ' ORDER BY u.lastname, u.firstname';
+
         $result = Database::query($sql);
         $allres = array();
         while ($data = Database::fetch_array($result)) {
@@ -220,7 +223,7 @@ class Result
     /**
      * insert log result
      */
-    public function add_result__log($userid, $evaluationid)
+    public function addResultLog($userid, $evaluationid)
     {
         if (isset($userid) && isset($evaluationid)) {
             $tbl_grade_results_log = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_LOG);
@@ -253,8 +256,8 @@ class Result
      */
     public function save()
     {
-        $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-        $sql = 'UPDATE '.$tbl_grade_results.'
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+        $sql = 'UPDATE '.$table.'
                 SET user_id = ' . $this->get_user_id()
             . ', evaluation_id = '.$this->get_evaluation_id()
             . ', score = ';
@@ -273,8 +276,8 @@ class Result
      */
     public function delete()
     {
-        $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-        $sql = 'DELETE FROM '.$tbl_grade_results.' WHERE id = '.$this->id;
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+        $sql = 'DELETE FROM '.$table.' WHERE id = '.$this->id;
         Database::query($sql);
     }
 }

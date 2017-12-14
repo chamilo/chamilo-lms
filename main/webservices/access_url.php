@@ -8,8 +8,6 @@ use Chamilo\UserBundle\Entity\User;
  * @package chamilo.webservices
  */
 require_once __DIR__.'/../inc/global.inc.php';
-$libpath = api_get_path(LIBRARY_PATH);
-
 $debug = true;
 
 define('WS_ERROR_SECRET_KEY', 1);
@@ -25,16 +23,32 @@ function return_error($code)
     $fault = null;
     switch ($code) {
         case WS_ERROR_SECRET_KEY:
-            $fault = new soap_fault('Server', '', 'Secret key is not correct or params are not correctly set');
+            $fault = new soap_fault(
+                'Server',
+                '',
+                'Secret key is not correct or params are not correctly set'
+            );
             break;
         case WS_ERROR_NOT_FOUND_RESULT:
-            $fault = new soap_fault('Server', '', 'No result was found for this query');
+            $fault = new soap_fault(
+                'Server',
+                '',
+                'No result was found for this query'
+            );
             break;
         case WS_ERROR_INVALID_INPUT:
-            $fault = new soap_fault('Server', '', 'The input variables are invalid o are not correctly set');
+            $fault = new soap_fault(
+                'Server',
+                '',
+                'The input variables are invalid o are not correctly set'
+            );
             break;
         case WS_ERROR_SETTING:
-            $fault = new soap_fault('Server', '', 'Please check the configuration for this webservice');
+            $fault = new soap_fault(
+                'Server',
+                '',
+                'Please check the configuration for this webservice'
+            );
             break;
     }
     return $fault;

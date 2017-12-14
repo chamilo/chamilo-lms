@@ -16,15 +16,25 @@ class ResultTable extends SortableTable
     private $iscourse;
 
     /**
-     * Constructor
+     * ResultTable constructor.
+     * @param string $evaluation
+     * @param array $results
+     * @param null|string $iscourse
+     * @param array $addparams
+     * @param bool $forprint
      */
-    public function __construct($evaluation, $results = array(), $iscourse, $addparams = null, $forprint = false)
-    {
+    public function __construct(
+        $evaluation,
+        $results = array(),
+        $iscourse,
+        $addparams = [],
+        $forprint = false
+    ) {
         parent:: __construct(
             'resultlist',
             null,
             null,
-            (api_is_western_name_order() xor api_sort_by_first_name()) ? 2 : 1
+            api_is_western_name_order() ? 1 : 2
         );
 
         $this->datagen = new ResultsDataGenerator($evaluation, $results, true);
@@ -71,9 +81,14 @@ class ResultTable extends SortableTable
     /**
      * Function used by SortableTable to generate the data to display
      */
-    public function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = null) {
-
-        $is_western_name_order = api_is_western_name_order();
+    public function get_table_data(
+        $from = 1,
+        $per_page = null,
+        $column = null,
+        $direction = null,
+        $sort = null
+    ) {
+        $isWesternNameOrder = api_is_western_name_order();
         $scoredisplay = ScoreDisplay::instance();
 
         // determine sorting type
@@ -82,21 +97,21 @@ class ResultTable extends SortableTable
         switch ($this->column) {
             // first name or last name
             case (0 + $col_adjust):
-                if ($is_western_name_order) {
+                if ($isWesternNameOrder) {
                     $sorting = ResultsDataGenerator::RDG_SORT_FIRSTNAME;
                 } else {
                     $sorting = ResultsDataGenerator::RDG_SORT_LASTNAME;
                 }
                 break;
-            // first name or last name
+                // first name or last name
             case (1 + $col_adjust):
-                if ($is_western_name_order) {
+                if ($isWesternNameOrder) {
                     $sorting = ResultsDataGenerator::RDG_SORT_LASTNAME;
                 } else {
                     $sorting = ResultsDataGenerator::RDG_SORT_FIRSTNAME;
                 }
                 break;
-            //Score
+                // Score
             case (2 + $col_adjust):
                 $sorting = ResultsDataGenerator::RDG_SORT_SCORE;
                 break;
@@ -120,7 +135,7 @@ class ResultTable extends SortableTable
             if ($this->iscourse == '1') {
                  $row[] = $item['result_id'];
             }
-            if ($is_western_name_order) {
+            if ($isWesternNameOrder) {
                 $row[] = $item['firstname'];
                 $row[] = $item['lastname'];
             } else {
@@ -128,8 +143,12 @@ class ResultTable extends SortableTable
                 $row[] = $item['firstname'];
             }
 
-            $row[] = Display::bar_progress($item['percentage_score'], false, $item['score']);
-            //$row[] =  Display::bar_progress($item['percentage_score'], true);
+            $row[] = Display::bar_progress(
+                $item['percentage_score'],
+                false,
+                $item['score']
+            );
+
             if ($scoredisplay->is_custom()) {
                 $row[] = $item['display'];
             }
@@ -142,6 +161,10 @@ class ResultTable extends SortableTable
         return $sortable_data;
     }
 
+    /**
+     * @param array $item
+     * @return string
+     */
     private function build_edit_column($item)
     {
         $locked_status = $this->evaluation->get_locked();

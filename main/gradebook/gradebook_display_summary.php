@@ -12,14 +12,11 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
 api_protect_course_script();
-
 set_time_limit(0);
 ini_set('max_execution_time', 0);
 api_block_anonymous_users();
 
-if (!api_is_allowed_to_edit()) {
-    api_not_allowed(true);
-}
+GradebookUtils::block_students();
 
 $cat_id = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : null;
 $action = isset($_GET['action']) && $_GET['action'] ? $_GET['action'] : null;
@@ -83,10 +80,10 @@ switch ($action) {
         if (!empty($pdfList)) {
             // Print certificates (without the common header/footer/watermark
             //  stuff) and return as one multiple-pages PDF
-            $address = api_get_setting('institution_address');
+            /*$address = api_get_setting('institution_address');
             $phone = api_get_setting('administratorTelephone');
             $address = str_replace('\n', '<br />', $address);
-            $pdf->custom_header = array('html' => "<h5 align='right'>$address <br />$phone</h5>");
+            $pdf->custom_header = array('html' => "<h5 align='right'>$address <br />$phone</h5>");*/
             //  stuff) and return as one multiple-pages PDF
             $pdf->html_to_pdf(
                 $pdfList,
@@ -111,15 +108,18 @@ switch ($action) {
 
 $course_code = api_get_course_id();
 
-$interbreadcrumb[] = array('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?', 'name' => get_lang('Gradebook'));
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('GradebookListOfStudentsReports'));
+$interbreadcrumb[] = array(
+    'url' => Category::getUrl(),
+    'name' => get_lang('Gradebook')
+);
+$interbreadcrumb[] = array(
+    'url' => '#',
+    'name' => get_lang('GradebookListOfStudentsReports')
+);
 
 $this_section = SECTION_COURSES;
-
 Display::display_header('');
-
 $token = Security::get_token();
-
 echo Display::page_header(get_lang('GradebookListOfStudentsReports'));
 
 echo '<div class="btn-group">';

@@ -23,19 +23,20 @@
   <li><a href="#3.Using-safe-browsers">Using safe browsers</a></li>
   <li><a href="#4.Moving-config-file">Moving your configuration file out of the web directory</a></li>
   <li><a href="#5.Files-permissions">Restricting files permissions</a></li>
+  <li><a href="#6.HSTS">HTTP Headers Security</a></li>
 </ol>
 
 <h2><a name="1.Disclosing-server-info"></a>1. Disclosing server info</h2>
 <p>
 It is considered a safer behaviour not to disclose server information from your Chamilo page. In order to avoid
     both web server and PHP information disclosure, you might want to take the following actions:
+</p>
 <ul>
 <li>Locate the <i>ServerTokens</i> setting inside your Apache configuration and set it to "Prod"</li>
 <li>Locate the <i>ServerSignature</i> setting inside your Apache configuration and set it to "Off"</li>
 <li>Locate the <i>expose_php</i> setting inside your PHP configuration and set it to "Off"</li>
 <li>Reload Apache</li>
 </ul>
-</p>
 
 <h2><a name="2.Keeping-up-to-date"></a>2. Keeping up to date</h2>
 <p>
@@ -62,31 +63,94 @@ access to your database if that one isn't well protected and many other stuff we
     move the configuration file out of your web directory. If your Chamilo installation is in /var/www/, move your
     configuration to /etc/chamilo/configuration.php, for example. Then create a new app/config/configuration.php
     file, open it, and write the following:</p>
-<p>
 <pre>
 &lt;?php
 require '/etc/chamilo/configuration.php';
 </pre>
-</p>
 <p>
 This will prevent direct access to your settings and make it seem totally the same to Chamilo.
 </p>
 
 <h2><a name="5.Files-permissions"></a>5. Restricting files permissions</h2>
-        Making all the Chamilo files world-writable will help you install quickly, and it solves many
+        <p>Making all the Chamilo files world-writable will help you install quickly, and it solves many
         issues for people without much admin experience. However, it's more
         secure to make a distinct user owner of all the chamilo files and folders,
         and only give read access to the web server to all files, and write access
-        only to the directories previously mentioned. This way, these files need
+            only to the directories previously mentioned.</p>
+    <p>This way, these files need
         only be readable and writable by the Apache process owner, not by the
         entire world. It would also be advisable to make all writable directory
         refuse the interpretation of PHP files (except for the root of the courses
-        directories). Don't hesitate to hire an experienced administrator to do that,
+        directories).</p>
+    <p>Don't hesitate to hire an experienced administrator to do that,
         it might be a bit more expensive now, but you'll be happy not to have to loose
-        all of your data to a hacker who attacked your site.</li>
+        all of your data to a hacker who attacked your site.</p>
+    <p>Only the following directories have required (or optional) write 
+        permissions from the web server:<br />
+        <ul>
+          <li>app/cache/</li>
+          <li>app/courses/</li>
+          <li>app/home/</li>
+          <li>app/logs/</li>
+          <li>app/upload/</li>
+          <li>main/default_course_document/images/</li>
+          <li>main/lang/ (optional, only for sublanguages)</li>
+          <li>web/css/ (optional, only for switching CSS through the web)</li>
+        </ul>
+        <br />
+        Because these directories have "write by the web server" permissions,
+        it is important to prevent the execution of PHP scripts from those
+        directories (because a specially-crafted attack could end up allowing
+        the upload of a PHP script to one of these). To do that, taking into
+        account we authorize overrides through .htaccess, we need to set
+        something that a .htaccess file cannot revert, and we need to set it
+        for each of those directories. This can be done as follows inside
+        your VirtualHost definition in Apache (you'll have to translate it for
+        Nginx configueations), where "/var/www/URL/" is the path of your VirtualHost web root:<br />
+        <pre>
+  <Directory /var/www/URL/app/cache>
+    php_admin_value engine Off
+  </Directory>
+  <Directory /var/www/URL/app/courses>
+    php_admin_value engine Off
+  </Directory>
+  <Directory /var/www/URL/app/home>
+    php_admin_value engine Off
+  </Directory>
+  <Directory /var/www/URL/app/logs>
+    php_admin_value engine Off
+  </Directory>
+  <Directory /var/www/URL/app/upload>
+    php_admin_value engine Off
+  </Directory>
+  <Directory /var/www/URL/main/default_course_document/images>
+    php_admin_value engine Off
+  </Directory>
+  <Directory /var/www/URL/main/lang>
+    php_admin_value engine Off
+  </Directory>
+  <Directory /var/www/URL/web/css>
+    php_admin_value engine Off
+  </Directory>
+        </pre>
 
 
-    <hr />
+<hr />
+<h2><a name="6.HSTS">HTTP Headers Security</a></h2>
+    <p>A relatively recent development in web security, HTTP headers can be modified either
+    from the web server or from the application (like Chamilo) to increase the security
+        of your visitors.</p>
+    <p>These implies several aspects, from simple to complex, to deal with, from stuff like
+    indicating which websites you say media or libraries can be loaded from, to adding
+    extra info about your SSL certificate to make sure a hacked certification authority
+        will not immediately make your certificate useless.</p>
+    <p>In Chamilo 1.11.6, we have added several parameters, together with recommendations,
+    to main/install/configuration.dist.php, that you are free to use or ignore,
+        depending on the level of security you want to achieve.</p>>
+    <p>To check your portal for possible improvements in terms of headers security,
+        we highly recommend the <a href="https://securityheaders.io/">securityheaders.io</a>
+        website. If you want to read more about CSP and all related headers
+        security techniques, check <a href="https://scotthelme.co.uk/">Scott Helme's blog</a>.
 <h2>Authors</h2>
 <ul>
 <li>Yannick Warnier, Zend Certified PHP Engineer, BeezNest Belgium SPRL,

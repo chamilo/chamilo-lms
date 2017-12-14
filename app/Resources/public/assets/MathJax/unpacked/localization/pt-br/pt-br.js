@@ -1,11 +1,8 @@
-/* -*- Mode: Javascript; indent-tabs-mode:nil; js-indent-level: 2 -*- */
-/* vim: set ts=2 et sw=2 tw=80: */
-
 /*************************************************************
  *
  *  MathJax/localization/pt-br/pt-br.js
  *
- *  Copyright (c) 2009-2015 The MathJax Consortium
+ *  Copyright (c) 2009-2016 The MathJax Consortium
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,27 +17,27 @@
  *  limitations under the License.
  *
  */
-
 MathJax.Localization.addTranslation("pt-br",null,{
   menuTitle: "portugu\u00EAs do Brasil",
-  version: "2.5.0",
+  version: "2.7.2",
   isLoaded: true,
   domains: {
     "_": {
-        version: "2.5.0",
+        version: "2.7.2",
         isLoaded: true,
         strings: {
           CookieConfig: "O MathJax encontrou um cookie com configura\u00E7\u00F5es de usu\u00E1rio que inclui c\u00F3digo a ser executado. Deseja execut\u00E1-lo?\n\n(Voc\u00EA deve pressionar Cancelar a n\u00E3o ser que voc\u00EA mesmo tenha criado o cookie.)",
-          MathProcessingError: "Erro no Processamento das F\u00F3rmulas",
-          MathError: "Erro nas F\u00F3rmulas",
+          MathProcessingError: "Erro no processamento das f\u00F3rmulas",
+          MathError: "Erro na f\u00F3rmula matem\u00E1tica",
           LoadFile: "Carregando %1",
           Loading: "Carregando",
           LoadFailed: "O arquivo n\u00E3o pode ser carregado: %1",
-          ProcessMath: "Processando F\u00F3rmula: %1%%",
+          ProcessMath: "Processando f\u00F3rmula: %1%%",
           Processing: "Processando",
           TypesetMath: "Realizando a Diagrama\u00E7\u00E3o das F\u00F3rmulas: %1%%",
           Typesetting: "Realizando a Diagrama\u00E7\u00E3o",
-          MathJaxNotSupported: "Seu navegador n\u00E3o suporta MathJax"
+          MathJaxNotSupported: "Seu navegador n\u00E3o suporta MathJax",
+          ErrorTips: "Dicas de depura\u00E7\u00E3o: use %%1, para inspecionar %%2 no console do navegador"
         }
     },
     "FontWarnings": {},

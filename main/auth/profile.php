@@ -69,15 +69,6 @@ function show_image(image,width,height) {
     height = parseInt(height) + 20;
     window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
 }
-
-function hide_icon_edit(element_html)  {
-    ident="#edit_image";
-    $(ident).hide();
-}
-function show_icon_edit(element_html) {
-    ident="#edit_image";
-    $(ident).show();
-}
 </script>';
 
 $jquery_ready_content = '';
@@ -102,7 +93,7 @@ $user_data = api_get_user_info(
     false,
     false,
     false,
-    false,
+    true,
     true
 );
 $array_list_key = UserManager::get_api_keys(api_get_user_id());
@@ -213,10 +204,17 @@ $form->applyFilter('phone', 'html_filter');
 if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
     $form->addFile(
         'picture',
-        ($user_data['picture_uri'] != '' ? get_lang('UpdateImage') : get_lang(
-            'AddImage'
-        )),
-        array('id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '1 / 1')
+        [
+            $user_data['picture_uri'] != '' ? get_lang('UpdateImage') : get_lang('AddImage'),
+            get_lang('OnlyImagesAllowed')
+        ],
+        [
+            'id' => 'picture',
+            'class' => 'picture-form',
+            'crop_image' => true,
+            'crop_ratio' => '1 / 1',
+            'accept' => 'image/*'
+        ]
     );
 
     $form->addProgress();
@@ -446,6 +444,12 @@ function check_user_email($email)
 $filtered_extension = false;
 
 if ($form->validate()) {
+    $hook = HookUpdateUser::create();
+
+    if ($hook) {
+        $hook->notifyUpdateUser(HOOK_EVENT_TYPE_PRE);
+    }
+
     $wrong_current_password = false;
     $user_data = $form->getSubmitValues(1);
     /** @var User $user */
@@ -705,10 +709,14 @@ if ($form->validate()) {
         false,
         false,
         false,
-        false,
+        true,
         true
     );
     Session::write('_user', $userInfo);
+
+    if ($hook) {
+        $hook->notifyUpdateUser(HOOK_EVENT_TYPE_POST);
+    }
 
     $url = api_get_self();
     header("Location: ".$url);
@@ -720,9 +728,7 @@ if ($form->validate()) {
 $actions = '';
 if (api_get_setting('allow_social_tool') !== 'true') {
     if (api_get_setting('extended_profile') === 'true') {
-        if (
-            api_get_setting('allow_message_tool') === 'true'
-        ) {
+        if (api_get_setting('allow_message_tool') === 'true') {
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
                 Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
@@ -766,6 +772,7 @@ if (api_get_setting('allow_social_tool') === 'true') {
     $tpl->assign('social_menu_block', $menu);
     $tpl->assign('social_right_content', $form->returnForm());
     $social_layout = $tpl->get_template('social/edit_profile.tpl');
+
     $tpl->display($social_layout);
 } else {
     $bigImage = UserManager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_BIG);

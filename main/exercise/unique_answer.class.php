@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
 
 /**
  * Class UniqueAnswer
@@ -104,7 +105,8 @@ class UniqueAnswer extends Question
                 }
                 $question = Question::read($questionid);
                 $select_question[$questionid] = 'Q'.$key.' :'.cut(
-                    $question->selectTitle(), 20
+                    $question->selectTitle(),
+                    20
                 );
             }
         }
@@ -213,7 +215,7 @@ class UniqueAnswer extends Question
                 'class="checkbox"'
             );
 
-            $form->addHtmlEditor('answer['.$i.']', null, null, true, $editor_config);
+            $form->addHtmlEditor('answer['.$i.']', null, null, false, $editor_config);
 
             $form->addRule(
                 'answer['.$i.']',
@@ -463,7 +465,7 @@ class UniqueAnswer extends Question
         $position = $row_max->max_position + 1;
 
         // Insert a new answer
-        $quizAnswer = new \Chamilo\CourseBundle\Entity\CQuizAnswer();
+        $quizAnswer = new CQuizAnswer();
         $quizAnswer
             ->setCId($course_id)
             ->setId($id)

@@ -1,9 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use ChamiloSession as Session;
+
 /**
- *	This file is responsible for passing requested documents to the browser.
+ * This file is responsible for passing requested documents to the browser.
  *
- *	@package chamilo.document
+ * @package chamilo.document
  */
 
 session_cache_limiter('none');
@@ -13,17 +16,15 @@ $this_section = SECTION_COURSES;
 
 // Protection
 api_protect_course_script();
-
 $_course = api_get_course_info();
 
 if (!isset($_course)) {
     api_not_allowed(true);
 }
 
+$obj = Session::read('oLP');
 // If LP obj exists
-if (isset($_SESSION['oLP'])) {
-    $obj = $_SESSION['oLP'];
-} else {
+if (empty($obj)) {
     api_not_allowed();
 }
 

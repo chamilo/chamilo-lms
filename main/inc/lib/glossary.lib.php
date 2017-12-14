@@ -355,21 +355,34 @@ class GlossaryManager
     }
 
     /**
+     * @return string
+     */
+    public static function getGlossaryView()
+    {
+        $view = Session::read('glossary_view');
+        if (empty($view)) {
+            $defaultView = api_get_configuration_value('default_glossary_view');
+            if (empty($defaultView)) {
+                $defaultView = 'table';
+            }
+            return $defaultView;
+        } else {
+            return $view;
+        }
+    }
+
+    /**
      * This is the main function that displays the list or the table with all
      * the glossary terms
-     * @param  string  View ('table' or 'list'). Optional parameter.
      * Defaults to 'table' and prefers glossary_view from the session by default.
      *
      * @return string
      */
-    public static function display_glossary($view = 'table')
+    public static function display_glossary()
     {
         // This function should always be called with the corresponding
         // parameter for view type. Meanwhile, use this cheap trick.
-        $view = Session::read('glossary_view');
-        if (empty($view)) {
-            Session::write('glossary_view', $view);
-        }
+        $view = self::getGlossaryView();
         // action links
         //echo '<div class="actions">';
         $actionsLeft = '';
@@ -378,15 +391,20 @@ class GlossaryManager
                 Display::return_icon('new_glossary_term.png', get_lang('TermAddNew'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
-        $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=export">'.
-            Display::return_icon('export_csv.png', get_lang('ExportGlossaryAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
+        if (!api_is_anonymous()) {
+            $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=export">'.
+                Display::return_icon('export_csv.png', get_lang('ExportGlossaryAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
+        }
+
         if (api_is_allowed_to_edit(null, true)) {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=import">'.
                 Display::return_icon('import_csv.png', get_lang('ImportGlossary'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
-        $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=export_to_pdf">'.
-            Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+        if (!api_is_anonymous()) {
+            $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=export_to_pdf">'.
+                Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+        }
 
         if (($view == 'table') || (!isset($view))) {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=list">'.
@@ -394,6 +412,13 @@ class GlossaryManager
         } else {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=table">'.
                 Display::return_icon('view_text.png', get_lang('TableView'), '', ICON_SIZE_MEDIUM).'</a>';
+        }
+
+        if (!api_is_anonymous()) {
+            $actionsLeft .= Display::url(
+                Display::return_icon('export_to_documents.png', get_lang('ExportToDocArea'), [], ICON_SIZE_MEDIUM),
+                api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'export_documents'])
+            );
         }
 
         /* BUILD SEARCH FORM */
@@ -503,10 +528,14 @@ class GlossaryManager
      *
      * @return array
      */
-    public static function get_glossary_data($from, $number_of_items, $column, $direction)
-    {
+    public static function get_glossary_data(
+        $from,
+        $number_of_items,
+        $column,
+        $direction
+    ) {
         $_user = api_get_user_info();
-        $view = Session::read('glossary_view');
+        $view = self::getGlossaryView();
 
         // Database table definition
         $t_glossary = Database::get_course_table(TABLE_GLOSSARY);
@@ -544,10 +573,12 @@ class GlossaryManager
 					glossary.description as col1,
 					$col2
 					glossary.session_id
-				FROM $t_glossary glossary, $t_item_propery ip
-				WHERE
-				    glossary.glossary_id = ip.ref AND
-					tool = '".TOOL_GLOSSARY."' $condition_session AND
+				FROM $t_glossary glossary 
+				INNER JOIN $t_item_propery ip
+				ON (glossary.glossary_id = ip.ref AND glossary.c_id = ip.c_id)
+				WHERE				    
+					tool = '".TOOL_GLOSSARY."' 
+					$condition_session AND
 					glossary.c_id = ".api_get_course_int_id()." AND
 					ip.c_id = ".api_get_course_int_id()."
 					$keywordCondition
@@ -566,6 +597,10 @@ class GlossaryManager
                 $array[1] = str_replace(array('<p>', '</p>'), array('', '<br />'), $data[1]);
             } else {
                 $array[1] = $data[1];
+            }
+
+            if (isset($_GET['action']) && $_GET['action'] == 'export') {
+                $array[1] = api_html_entity_decode($data[1]);
             }
 
             if (api_is_allowed_to_edit(null, true)) {
@@ -703,16 +738,56 @@ class GlossaryManager
             0,
             'ASC'
         );
-        $html = '<html><body>';
-        $html .= '<h2>'.get_lang('Glossary').'</h2><hr><br><br>';
-        foreach ($data as $item) {
-            $term = $item[0];
-            $description = $item[1];
-            $html .= '<h4>'.$term.'</h4><p>'.$description.'<p><hr>';
-        }
-        $html .= '</body></html>';
+        $template = new Template('', false, false, false, true, false, false);
+        $layout = $template->get_template('glossary/export_pdf.tpl');
+        $template->assign('items', $data);
+        $html = $template->fetch($layout);
         $courseCode = api_get_course_id();
         $pdf = new PDF();
         $pdf->content_to_pdf($html, '', get_lang('Glossary').'_'.$courseCode, $courseCode);
+    }
+
+    /**
+     * Generate a PDF with all glossary terms and move file to documents
+     * @return bool false if there's nothing in the glossary
+     */
+    public static function movePdfToDocuments()
+    {
+        $sessionId = api_get_session_id();
+        $courseId = api_get_course_int_id();
+        $data = self::get_glossary_data(
+            0,
+            self::get_number_glossary_terms($sessionId),
+            0,
+            'ASC'
+        );
+
+        if (!empty($data)) {
+            $template = new Template('', false, false, false, true, false, false);
+            $layout = $template->get_template('glossary/export_pdf.tpl');
+            $template->assign('items', $data);
+            $fileName = get_lang('Glossary').'-'.api_get_local_time();
+            $signatures = ['Drh', 'Teacher', 'Date'];
+
+            $pdf = new PDF(
+                'A4-P',
+                'P',
+                [
+                    'filename' => $fileName,
+                    'pdf_title' => $fileName,
+                    'add_signatures' => $signatures
+                ]
+            );
+            $pdf->exportFromHtmlToDocumentsArea(
+                $template->fetch($layout),
+                $fileName,
+                $courseId
+            );
+            return true;
+        } else {
+            Display::addFlash(Display::return_message(get_lang('NothingToAdd')));
+        }
+
+        return false;
     }
 }

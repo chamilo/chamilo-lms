@@ -82,8 +82,30 @@ if (!$culqiEnabled) {
     unset($paymentTypesOptions[BuyCoursesPlugin::PAYMENT_TYPE_CULQI]);
 }
 
-$form->addHtml(Display::return_message($plugin->get_lang('PleaseSelectThePaymentMethodBeforeConfirmYourOrder'), 'info'));
-$form->addRadio('payment_type', null, $paymentTypesOptions);
+$count = count($paymentTypesOptions);
+if ($count === 0) {
+    $form->addHtml($plugin->get_lang('NoPaymentOptionAvailable'));
+    $form->addHtml('<br />');
+    $form->addHtml('<br />');
+} elseif ($count === 1) {
+    $text = '';
+    // get the only array item
+    foreach ($paymentTypesOptions as $type => $value) {
+        $form->addHtml(sprintf($plugin->get_lang('XIsOnlyPaymentMethodAvailable'), $value));
+        $form->addHtml('<br />');
+        $form->addHtml('<br />');
+        $form->addHidden('payment_type', $type);
+    }
+} else {
+    $form->addHtml(
+        Display::return_message(
+            $plugin->get_lang('PleaseSelectThePaymentMethodBeforeConfirmYourOrder'),
+            'info'
+        )
+    );
+    $form->addRadio('payment_type', null, $paymentTypesOptions);
+}
+
 $form->addHidden('t', intval($_GET['t']));
 $form->addHidden('i', intval($_GET['i']));
 $form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success');

@@ -37,7 +37,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $user_list = array();
         foreach ($users as $user_data) {
             $username = $user_data['username'];
-            $user_id  = UserManager::get_user_id_from_username($username);
+            $user_id = UserManager::get_user_id_from_username($username);
             if ($user_id) {
                 $user_list[] = $user_id;
             }
@@ -53,7 +53,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
             foreach ($user_list as & $user_id) {
                 $user_info = api_get_user_info($user_id);
-                $user_id   = $user_info['complete_name'];
+                $user_id = $user_info['complete_name'];
             }
             $error_message = get_lang('UsersAdded').' : '.implode(', ', $user_list);
         }

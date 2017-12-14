@@ -1,42 +1,63 @@
-engines:
+version: "2"
+checks:
+  file-lines:
+    enabled: false
+
+plugins:
   fixme:
     enabled: true
     config:
       strings:
       - FIXME
       - BUG
-      - '@todo'
-      - todo
+
   phpcodesniffer:
     enabled: true
     config:
-    standard: "PSR1,PSR2"
+      standard: "PSR1,PSR2"
+      file_extensions: "php"
     checks:
       PSR1 Classes ClassDeclaration MissingNamespace:
         enabled: false
       PSR1 Files SideEffects FoundWithSymbols:
         enabled: false
 
+  phpmd:
+    enabled: true
+    config:
+      file_extensions: "php"
+
+    checks:
+      Naming/LongVariable:
+        enabled: false
+
+      Controversial/Superglobals:
+        enabled: false
+
+  sonar-php:
+    enabled: true
+
   duplication:
-    enabled: false
+    enabled: true
 
-ratings:
-  paths:
-  - '**.php'
-  - '**.js'
-  - '**.css'
-
-exclude_paths:
+exclude_patterns:
 - cli-config.php
 - app/cache/
 - app/logs/
 - app/config/
+- app/SymfonyRequirements.php
 - app/Migrations/
 - app/Resources/
 - main/admin/db.php
-- main/auth/cas/lib/CAS/
+- main/admin/ldap_synchro.php
+- main/auth/cas/lib/
 - main/auth/shibboleth
 - main/auth/openid
+- main/chat/emoji_strategy.php
+- main/default_course_document
+- main/document/Wami.swf
+- main/fonts/
+- main/inc/ajax/Wami.swf
 - main/inc/lib/browser/
 - main/inc/lib/freemindflashbrowser/
 - main/inc/lib/internationalization_database/
@@ -49,6 +70,7 @@ exclude_paths:
 - main/inc/lib/pear/
 - main/inc/lib/phpmailer/
 - main/inc/lib/phpseclib/
+- main/inc/lib/portfolio.class.php
 - main/inc/lib/svg-edit/
 - main/inc/lib/swfobject/
 - main/inc/lib/wami-recorder/
@@ -66,6 +88,7 @@ exclude_paths:
 - plugin/pens/lib
 - plugin/bbb/lib/bbb_api.php
 - plugin/ims_lti/OAuthSimple.php
+- plugin/sepe/src/wsse/
 - tests/
 - vendor/
 - web/

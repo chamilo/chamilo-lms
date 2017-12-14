@@ -18,6 +18,7 @@ class LinkFactory
      * @param string $course_code course code
      * @param int $category_id parent category
      * @param int $visible visible
+     * @return array
      */
     public static function load(
         $id = null,

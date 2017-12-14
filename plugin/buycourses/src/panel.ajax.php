@@ -26,12 +26,16 @@ switch ($action) {
         $sale = $plugin->getSale($saleId);
         $productType = ($sale['product_type'] == 1) ? get_lang('Course') : get_lang('Session');
         $paymentType = ($sale['payment_type'] == 1) ? 'Paypal' : $plugin->get_lang('BankTransfer');
-        $productInfo = ($sale['product_type'] == 1) ? api_get_course_info_by_id($sale['product_id']) : api_get_session_info($sale['product_id']);
+        $productInfo = ($sale['product_type'] == 1)
+            ? api_get_course_info_by_id($sale['product_id'])
+            : api_get_session_info($sale['product_id']);
         $currency = $plugin->getSelectedCurrency();
         if ($sale['product_type'] == 1) {
             $productImage = $productInfo['course_image_large'];
         } else {
-            $productImage = ($productInfo['image']) ? $productInfo['image'] : Template::get_icon_path('session_default.png');
+            $productImage = ($productInfo['image'])
+                ? $productInfo['image']
+                : Template::get_icon_path('session_default.png');
         }
 
         $userInfo = api_get_user_info($sale['user_id']);
@@ -43,7 +47,8 @@ switch ($action) {
         $html .= '<li><b>'.$plugin->get_lang('OrderPrice').':</b> '.$sale['price'].'</li>';
         $html .= '<li><b>'.$plugin->get_lang('CurrencyType').':</b> '.$currency['iso_code'].'</li>';
         $html .= '<li><b>'.$plugin->get_lang('ProductType').':</b> '.$productType.'</li>';
-        $html .= '<li><b>'.$plugin->get_lang('OrderDate').':</b> '.api_format_date($sale['date'], DATE_TIME_FORMAT_LONG_24H).'</li>';
+        $html .= '<li><b>'.$plugin->get_lang('OrderDate').':</b> '
+            .api_format_date($sale['date'], DATE_TIME_FORMAT_LONG_24H).'</li>';
         $html .= '<li><b>'.$plugin->get_lang('Buyer').':</b> '.$userInfo['complete_name'].'</li>';
         $html .= '<li><b>'.$plugin->get_lang('PaymentMethods').':</b> '.$paymentType.'</li>';
         $html .= '</ul>';
@@ -86,15 +91,27 @@ switch ($action) {
             $stats['canceled_total_amount'] = number_format($stats['canceled_total_amount'], 2);
         }
 
-        $html = '<div class="row">'
-        . '<p>'
-            . '<ul>'
-                . '<li>'.get_plugin_lang("PayoutsTotalCompleted", "BuyCoursesPlugin").' <b>'.$stats['completed_count'].'</b> - '.get_plugin_lang("TotalAmount", "BuyCoursesPlugin").' <b>'.$stats['completed_total_amount'].' '.$currency['iso_code'].'</b></li>'
-                . '<li>'.get_plugin_lang("PayoutsTotalPending", "BuyCoursesPlugin").' <b>'.$stats['pending_count'].'</b> - '.get_plugin_lang("TotalAmount", "BuyCoursesPlugin").' <b>'.$stats['pending_total_amount'].' '.$currency['iso_code'].'</b></li>'
-                . '<li>'.get_plugin_lang("PayoutsTotalCanceled", "BuyCoursesPlugin").' <b>'.$stats['canceled_count'].'</b> - '.get_plugin_lang("TotalAmount", "BuyCoursesPlugin").' <b>'.$stats['canceled_total_amount'].' '.$currency['iso_code'].'</b></li>'
-            . '</ul>'
-        . '</p>';
-        $html .= '</div>';
+        $html = '
+            <div class="row">
+                <p>
+                    <ul>
+                        <li>
+                            '.get_plugin_lang("PayoutsTotalCompleted", "BuyCoursesPlugin").'
+                            <b>'.$stats['completed_count'].'</b> - '.get_plugin_lang("TotalAmount", "BuyCoursesPlugin").'
+                            <b>'.$stats['completed_total_amount'].' '.$currency['iso_code'].'</b>
+                        </li>
+                        <li>'.get_plugin_lang("PayoutsTotalPending", "BuyCoursesPlugin").'
+                            <b>'.$stats['pending_count'].'</b> - '.get_plugin_lang("TotalAmount", "BuyCoursesPlugin").'
+                            <b>'.$stats['pending_total_amount'].' '.$currency['iso_code'].'</b>
+                        </li>
+                        <li>'.get_plugin_lang("PayoutsTotalCanceled", "BuyCoursesPlugin").'
+                            <b>'.$stats['canceled_count'].'</b> - '.get_plugin_lang("TotalAmount", "BuyCoursesPlugin").'
+                            <b>'.$stats['canceled_total_amount'].' '.$currency['iso_code'].'</b>
+                        </li>
+                    </ul>
+                </p>
+            </div>
+        ';
         echo $html;
         break;
     case 'processPayout':
@@ -128,16 +145,17 @@ switch ($action) {
         $isoCode = $currentCurrency['iso_code'];
 
         $html .= '<p>'.get_plugin_lang("VerifyTotalAmountToProceedPayout", "BuyCoursesPlugin").'</p>';
-        $html .= ''
-        . '<p>'
-            . '<ul>'
-                . '<li>'.get_plugin_lang("TotalAcounts", "BuyCoursesPlugin").' <b>'.$totalAccounts.'</b></li>'
-                . '<li>'.get_plugin_lang("TotalPayout", "BuyCoursesPlugin").' <b>'.$isoCode.' '.$totalPayout.'</b></li>'
-            . '</ul>'
-        . '</p>';
-        $html .= '<p>'.get_plugin_lang("CautionThisProcessCantBeCanceled", "BuyCoursesPlugin").'</p>';
-        $html .= '<br /><br />';
-        $html .= '<div id="spinner" class="text-center"></div>';
+        $html .= '
+            <p>
+                <ul>
+                    <li>'.get_plugin_lang("TotalAcounts", "BuyCoursesPlugin").' <b>'.$totalAccounts.'</b></li>
+                    <li>'.get_plugin_lang("TotalPayout", "BuyCoursesPlugin").' <b>'.$isoCode.' '.$totalPayout.'</b></li>
+                </ul>
+            </p>
+            <p>'.get_plugin_lang("CautionThisProcessCantBeCanceled", "BuyCoursesPlugin").'</p>
+            <br /><br />
+            <div id="spinner" class="text-center"></div>
+        ';
 
         echo $html;
         break;
@@ -182,7 +200,12 @@ switch ($action) {
             }
             echo Display::return_message(get_plugin_lang("PayoutSuccess", "BuyCoursesPlugin"), 'success', false);
         } else {
-            echo Display::return_message('<b>'.$result['L_SEVERITYCODE0'].' '.$result['L_ERRORCODE0'].'</b> - '.$result['L_SHORTMESSAGE0'].'<br /><ul><li>'.$result['L_LONGMESSAGE0'].'</li></ul>', 'error', false);
+            echo Display::return_message(
+                '<b>'.$result['L_SEVERITYCODE0'].' '.$result['L_ERRORCODE0'].'</b> - '
+                    .$result['L_SHORTMESSAGE0'].'<br /><ul><li>'.$result['L_LONGMESSAGE0'].'</li></ul>',
+                'error',
+                false
+            );
         }
         break;
 

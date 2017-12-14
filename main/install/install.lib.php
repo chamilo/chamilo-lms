@@ -64,8 +64,13 @@ function isAlreadyInstalledSystem()
  * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author  Yannick Warnier <yannick.warnier@dokeos.com>
  */
-function checkExtension($extensionName, $returnSuccess = 'Yes', $returnFailure = 'No', $optional = false, $enabledTerm = '')
-{
+function checkExtension(
+    $extensionName,
+    $returnSuccess = 'Yes',
+    $returnFailure = 'No',
+    $optional = false,
+    $enabledTerm = ''
+) {
     if (extension_loaded($extensionName)) {
         if (!empty($enabledTerm)) {
             $isEnabled = ini_get($enabledTerm);
@@ -99,8 +104,12 @@ function checkExtension($extensionName, $returnSuccess = 'Yes', $returnFailure =
  * @return  string  A label to show
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-function checkPhpSetting($phpSetting, $recommendedValue, $returnSuccess = false, $returnFailure = false)
-{
+function checkPhpSetting(
+    $phpSetting,
+    $recommendedValue,
+    $returnSuccess = false,
+    $returnFailure = false
+) {
     $currentPhpValue = getPhpSetting($phpSetting);
     if ($currentPhpValue == $recommendedValue) {
         return Display::label($currentPhpValue.' '.$returnSuccess, 'success');
@@ -245,7 +254,6 @@ function detect_browser_language()
     );
 
     $system_available_languages = & get_language_folder_list();
-
     $accept_languages = strtolower(str_replace('_', '-', $_SERVER['HTTP_ACCEPT_LANGUAGE']));
     foreach ($language_index as $code => $language) {
         if (strpos($accept_languages, $code) === 0) {
@@ -549,8 +557,13 @@ function get_config_param_from_db($param = '')
  *
  * @return EntityManager
  */
-function connectToDatabase($dbHostForm, $dbUsernameForm, $dbPassForm, $dbNameForm, $dbPortForm = 3306)
-{
+function connectToDatabase(
+    $dbHostForm,
+    $dbUsernameForm,
+    $dbPassForm,
+    $dbNameForm,
+    $dbPortForm = 3306
+) {
     $dbParams = array(
         'driver' => 'pdo_mysql',
         'host' => $dbHostForm,
@@ -594,8 +607,10 @@ function display_step_sequence()
 /**
  * Displays a drop down box for selection the preferred language.
  */
-function display_language_selection_box($name = 'language_list', $default_language = 'english')
-{
+function display_language_selection_box(
+    $name = 'language_list',
+    $default_language = 'english'
+) {
     // Reading language list.
     $language_list = get_language_folder_list();
 
@@ -650,7 +665,8 @@ function display_language_selection_box($name = 'language_list', $default_langua
  * can be done in the language of the user
  */
 function display_language_selection()
-{ ?>
+{
+    ?>
     <h2><?php get_lang('WelcomeToTheChamiloInstaller'); ?></h2>
     <div class="RequirementHeading">
         <h2><?php echo display_step_sequence(); ?>
@@ -910,9 +926,7 @@ function display_requirements(
 
     $perms_dir = array(0777, 0755, 0775, 0770, 0750, 0700);
     $perms_fil = array(0666, 0644, 0664, 0660, 0640, 0600);
-
     $course_test_was_created = false;
-
     $dir_perm_verified = 0777;
     foreach ($perms_dir as $perm) {
         $r = @mkdir($course_dir, $perm);
@@ -925,7 +939,6 @@ function display_requirements(
 
     $fil_perm_verified = 0666;
     $file_course_test_was_created = false;
-
     if (is_dir($course_dir)) {
         foreach ($perms_fil as $perm) {
             if ($file_course_test_was_created == true) {
@@ -951,7 +964,6 @@ function display_requirements(
     $file_perm = Display::label('0'.decoct($fil_perm_verified), 'info');
 
     $courseTestLabel = Display::label(get_lang('No'), 'important');
-
     if ($course_test_was_created && $file_course_test_was_created) {
         $courseTestLabel = Display::label(get_lang('Yes'), 'success');
     }
@@ -1048,7 +1060,6 @@ function display_requirements(
         // First, attempt to set writing permissions if we don't have them yet
         $perm = api_get_permissions_for_new_directories();
         $perm_file = api_get_permissions_for_new_files();
-
         $notWritable = array();
 
         $checked_writable = api_get_path(SYS_APP_PATH);
@@ -1211,13 +1222,11 @@ function display_license_agreement()
     <?php
 }
 
-
 /**
  * Get contact registration form
  */
 function get_contact_registration_form()
 {
-
     $html = '
    <div class="form-horizontal">
     <div class="panel panel-default">
@@ -1497,9 +1506,7 @@ function display_database_settings_form(
 
         </div>
     </div>
-
-        <?php
-
+    <?php
         $database_exists_text = '';
         $manager = null;
         try {
@@ -1554,7 +1561,8 @@ function display_database_settings_form(
     <?php
 }
 
-function panel($content = null, $title = null, $id = null, $style = null) {
+function panel($content = null, $title = null, $id = null, $style = null)
+{
     $html = '';
     if (empty($style)) {
         $style = 'default';
@@ -1644,9 +1652,7 @@ function display_configuration_settings_form(
     echo '<p>'.get_lang('ConfigSettingsInfo').' <strong>app/config/configuration.php</strong></p>';
 
     // Parameter 1: administrator's login
-
     $html = '';
-
     $html .= display_configuration_parameter($installType, get_lang('AdminLogin'), 'loginForm', $loginForm, $installType == 'update');
 
     // Parameter 2: administrator's password
@@ -1664,12 +1670,7 @@ function display_configuration_settings_form(
 
     //Parameter 6: administrator's telephone
     $html .= display_configuration_parameter($installType, get_lang('AdminPhone'), 'adminPhoneForm', $adminPhoneForm);
-
-
     echo panel($html, get_lang('Administrator'), 'administrator');
-
-
-    //echo '<table class="table">';
 
     //First parameter: language
     $html = '<div class="form-group">';
@@ -1684,12 +1685,9 @@ function display_configuration_settings_form(
     }
     $html .= "</div>";
 
-
     //Second parameter: Chamilo URL
     $html .= '<div class="form-group">';
     $html .= '<label class="col-sm-6 control-label">'.get_lang('ChamiloURL').get_lang('ThisFieldIsRequired').'</label>';
-
-
 
     if ($installType == 'update') {
         $html .= api_htmlentities($urlForm, ENT_QUOTES)."\n";
@@ -1701,14 +1699,28 @@ function display_configuration_settings_form(
     $html .= '</div>';
 
     //Parameter 9: campus name
-    $html .= display_configuration_parameter($installType, get_lang('CampusName'), 'campusForm', $campusForm);
+    $html .= display_configuration_parameter(
+        $installType,
+        get_lang('CampusName'),
+        'campusForm',
+        $campusForm
+    );
 
     //Parameter 10: institute (short) name
-    $html .= display_configuration_parameter($installType, get_lang('InstituteShortName'), 'institutionForm', $institutionForm);
+    $html .= display_configuration_parameter(
+        $installType,
+        get_lang('InstituteShortName'),
+        'institutionForm',
+        $institutionForm
+    );
 
     //Parameter 11: institute (short) name
-    $html .= display_configuration_parameter($installType, get_lang('InstituteURL'), 'institutionUrlForm', $institutionUrlForm);
-
+    $html .= display_configuration_parameter(
+        $installType,
+        get_lang('InstituteURL'),
+        'institutionUrlForm',
+        $institutionUrlForm
+    );
 
     $html .= '<div class="form-group">
             <label class="col-sm-6 control-label">' . get_lang("EncryptMethodUserPass").'</label>
@@ -1935,8 +1947,11 @@ function compare_setting_values($current_value, $wanted_value)
  * @param string $file
  * @return bool
  */
-function check_course_script_interpretation($course_dir, $course_attempt_name, $file = 'test.php')
-{
+function check_course_script_interpretation(
+    $course_dir,
+    $course_attempt_name,
+    $file = 'test.php'
+) {
     $output = false;
     //Write in file
     $file_name = $course_dir.'/'.$file;
@@ -3192,76 +3207,12 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
             if ($result) {
                 error_log('Migrations files were executed ('.date('Y-m-d H:i:s').')');
 
-                $connection->executeQuery("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE'");
+                fixPostGroupIds($connection);
 
-                // Fix post_group_id
-                $sql = "SELECT * FROM c_student_publication where (post_group_id <> 0 or post_group_id is not null)";
-                $statement = $connection->executeQuery($sql);
-                $result = $statement->fetchAll();
-                foreach ($result as $row) {
-                    $groupId = $row['post_group_id'];
-                    $courseId = $row['c_id'];
-                    $sessionId = $row['session_id'];
-                    $workIid = $row['iid'];
-                    $sql = "SELECT iid from c_group_info where c_id = $courseId and iid = $groupId";
-                    $statement = $connection->executeQuery($sql);
-                    $count = $statement->rowCount();
-                    if ($count == 0) {
-                        $sql = "SELECT iid from c_group_info where c_id = $courseId and id = $groupId";
-                        $statement = $connection->executeQuery($sql);
-                        $count = $statement->rowCount();
-                        if ($count > 0) {
-                            $rowGroup = $statement->fetch();
-                            $newGroupId = $rowGroup['iid'];
-                            if ($newGroupId) {
-                                $sqlUpdate = "UPDATE c_student_publication 
-                                              SET post_group_id = $newGroupId 
-                                              WHERE 
-                                                c_id = $courseId AND 
-                                                post_group_id = $groupId AND 
-                                                iid = $workIid
-                                              ";
-                                $connection->executeQuery($sqlUpdate);
-                            }
-                        }
-                    }
-                }
-
-                // Fix work documents that don't have c_item_property value
-                $sql = "SELECT * FROM c_student_publication WHERE parent_id IS NOT NULL";
-                $statement = $connection->executeQuery($sql);
-                $result = $statement->fetchAll();
-                foreach ($result as $row) {
-                    $groupId  = $row['post_group_id'];
-                    $courseId = $row['c_id'];
-                    $sessionId = $row['session_id'];
-                    $workId = $row['id'];
-                    $itemInfo = api_get_item_property_info(
-                        $courseId,
-                        'work',
-                        $workId,
-                        $sessionId
-                    );
-                    $courseInfo = api_get_course_info_by_id($courseId);
-                    if (empty($itemInfo)) {
-                        api_item_property_update(
-                            $courseInfo,
-                            'work',
-                            $workId,
-                            'visible',
-                            1,
-                            $groupId,
-                            null,
-                            null,
-                            null,
-                            $sessionId
-                        );
-                    }
-                }
                 $sql = "UPDATE settings_current SET selected_value = '1.11.0' WHERE variable = 'chamilo_database_version'";
                 $connection->executeQuery($sql);
-
                 if ($processFiles) {
+                    error_log('Update config files');
                     $fromVersionShort = '1.10';
                     include __DIR__.'/update-files-1.10.0-1.11.0.inc.php';
                     // Only updates the configuration.inc.php with the new version
@@ -3279,4 +3230,86 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
     echo '</div>';
 
     return true;
+}
+
+/**
+ * @param \Doctrine\DBAL\Connection $connection
+ */
+function fixPostGroupIds($connection)
+{
+    $connection->executeQuery("ALTER TABLE course_category MODIFY COLUMN auth_course_child VARCHAR(40) DEFAULT 'TRUE'");
+    error_log('Fix c_student_publication.post_group_id');
+
+    // Fix post_group_id
+    $sql = "SELECT * FROM c_student_publication 
+            WHERE (post_group_id <> 0 AND post_group_id is not null)";
+    $statement = $connection->executeQuery($sql);
+    $result = $statement->fetchAll();
+
+    foreach ($result as $row) {
+        $groupId = $row['post_group_id'];
+        $courseId = $row['c_id'];
+        $workIid = $row['iid'];
+        $sql = "SELECT iid from c_group_info 
+                WHERE c_id = $courseId AND id = $groupId";
+        $statement = $connection->executeQuery($sql);
+        $count = $statement->rowCount();
+        if ($count > 0) {
+            $rowGroup = $statement->fetch();
+            $newGroupId = $rowGroup['iid'];
+            if ($newGroupId == $groupId) {
+                continue;
+            }
+            if ($newGroupId) {
+                $sql = "UPDATE c_student_publication 
+                        SET post_group_id = $newGroupId 
+                        WHERE 
+                            c_id = $courseId AND
+                            iid = $workIid
+                        ";
+                $connection->executeQuery($sql);
+            }
+        }
+    }
+
+    error_log('End - Fix c_student_publication.post_group_id');
+
+    // Delete c_student_publication from any session that doesn't exist anymore
+    $sql = "DELETE FROM c_student_publication 
+            WHERE session_id NOT IN (SELECT id FROM session) AND (session_id <> 0 AND session_id is not null)";
+    $connection->executeQuery($sql);
+
+    error_log('Fix work documents');
+    // Fix work documents that don't have c_item_property value
+    $sql = "SELECT * FROM c_student_publication WHERE parent_id IS NOT NULL";
+    $statement = $connection->executeQuery($sql);
+    $result = $statement->fetchAll();
+    foreach ($result as $row) {
+        $groupId = $row['post_group_id'];
+        $courseId = $row['c_id'];
+        $sessionId = $row['session_id'];
+        $workId = $row['id'];
+        $itemInfo = api_get_item_property_info(
+            $courseId,
+            'work',
+            $workId,
+            $sessionId
+        );
+        $courseInfo = api_get_course_info_by_id($courseId);
+        if (empty($itemInfo)) {
+            api_item_property_update(
+                $courseInfo,
+                'work',
+                $workId,
+                'visible',
+                1,
+                $groupId,
+                null,
+                null,
+                null,
+                $sessionId
+            );
+        }
+    }
+    error_log('End - Fix work documents');
 }

@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This script is the Tickets plugin main entry point
  * @package chamilo.plugin.ticket
@@ -12,7 +14,6 @@ api_block_anonymous_users();
 
 $tool_name = get_lang('Ticket');
 
-$libPath = api_get_path(LIBRARY_PATH);
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
 $htmlHeadXtra[] = '<script>
 function load_history_ticket(div_course, ticket_id) {
@@ -51,7 +52,7 @@ function display_advanced_search_form () {
 </script>';
 
 $this_section = 'tickets';
-unset($_SESSION['this_section']);
+Session::erase('this_section');
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 $projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
@@ -127,9 +128,12 @@ if (empty($projectId)) {
 
 $currentUrl = api_get_self().'?project_id='.$projectId;
 $user_id = api_get_user_id();
+$isAllow = TicketManager::userIsAllowInProject(api_get_user_info(), $projectId);
 $isAdmin = api_is_platform_admin();
+$actionRight = '';
 
 Display::display_header(get_lang('MyTickets'));
+
 if (!empty($projectId)) {
     $getParameters = [];
     if ($isAdmin) {
@@ -137,8 +141,7 @@ if (!empty($projectId)) {
             'keyword',
             'keyword_status',
             'keyword_category',
-            'keyword_request_user',
-            'keyword_admin',
+            'keyword_assigned_to',
             'keyword_start_date',
             'keyword_unread',
             'Tickets_per_page',
@@ -177,7 +180,11 @@ if (!empty($projectId)) {
         $selectTypes[$type['category_id']] = $type['name'];
     }
 
-    $admins = UserManager::get_user_list_like(array('status' => '1'), array('username'), true);
+    $admins = UserManager::get_user_list_like(
+        array('status' => '1'),
+        array('username'),
+        true
+    );
     $selectAdmins = [
         0 => get_lang('Unassigned')
     ];
@@ -191,14 +198,6 @@ if (!empty($projectId)) {
     }
 
     $selectPriority = TicketManager::getPriorityList();
-    /*var_dump($priorities);
-    $selectPriority = [
-        '' => get_lang('All'),
-        TicketManager::PRIORITY_NORMAL => get_lang('PriorityNormal'),
-        TicketManager::PRIORITY_HIGH => get_lang('PriorityHigh'),
-        TicketManager::PRIORITY_LOW => get_lang('PriorityLow')
-    ];*/
-
     $selectStatusUnread = [
         '' => get_lang('StatusAll'),
         'yes' => get_lang('StatusUnread'),
@@ -217,52 +216,93 @@ if (!empty($projectId)) {
     $form->addText('keyword', get_lang('Keyword'), false);
     $form->addButtonSearch(get_lang('Search'), 'submit_simple');
     $form->addHidden('project_id', $projectId);
-    
+
     $advancedSearch = Display::url(
-        '<span id="img_plus_and_minus">&nbsp;'.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch'),
+        '<span id="img_plus_and_minus">&nbsp;'.
+        Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch'),
         'javascript://',
         array(
             'class' => 'btn btn-default advanced-parameters',
-            'onclick'=>'display_advanced_search_form();')
-        );
-    if (api_is_platform_admin()) {
-        
+            'onclick' => 'display_advanced_search_form();'
+        )
+    );
+
+    // Add link
+    if (api_get_setting('ticket_allow_student_add') == 'true' || api_is_platform_admin()) {
         $actionRight = Display::url(
             Display::return_icon(
                 'add.png',
                 get_lang('Add'),
                 null,
                 ICON_SIZE_MEDIUM
-                ),
-            api_get_path(WEB_CODE_PATH).'ticket/new_ticket.php?project_id='.$projectId,
+            ),
+            api_get_path(WEB_CODE_PATH) . 'ticket/new_ticket.php?project_id=' . $projectId,
             ['title' => get_lang('Add')]
-            );
-        
+        );
+    }
+
+    if (api_is_platform_admin()) {
         $actionRight .= Display::url(
             Display::return_icon(
                 'export_excel.png',
                 get_lang('Export'),
                 null,
                 ICON_SIZE_MEDIUM
-                ),
+            ),
             api_get_self().'?action=export'.$get_parameter.$get_parameter2.'&project_id='.$projectId,
             ['title' => get_lang('Export')]
-            );
-        
+        );
+
         $actionRight .= Display::url(
             Display::return_icon(
                 'settings.png',
                 get_lang('Categories'),
                 null,
                 ICON_SIZE_MEDIUM
-                ),
+            ),
             api_get_path(WEB_CODE_PATH).'ticket/settings.php',
             ['title' => get_lang('Settings')]
-            );
-        
+        );
     }
-    
-    echo Display::toolbarAction('toolbar-tickets', array(0 => $form->return_form(), 1 => $advancedSearch, 2 => $actionRight));
+
+    echo Display::toolbarAction(
+        'toolbar-tickets',
+        array(
+            $form->returnForm(),
+            $advancedSearch,
+            $actionRight
+        )
+    );
+
+    $ticketLabel = get_lang('AllTickets');
+    $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId;
+
+    if (!isset($_GET['keyword_assigned_to'])) {
+        $ticketLabel = get_lang('MyTickets');
+        $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId.'&keyword_assigned_to='.api_get_user_id();
+    }
+
+    $options = '';
+    if ($isAdmin) {
+        $options .= Display::url(
+            get_lang('Projects'),
+            api_get_path(WEB_CODE_PATH).'ticket/projects.php'
+        );
+    }
+
+    $options .= Display::url(
+        $ticketLabel,
+        $url
+    );
+
+    if ($isAllow) {
+        echo Display::toolbarAction(
+            'options',
+            array(
+                $options
+            )
+        );
+    }
 
     $advancedSearchForm = new FormValidator(
         'advanced_search',
@@ -280,11 +320,10 @@ if (!empty($projectId)) {
         $selectTypes,
         ['placeholder' => get_lang('Select')]
     );
-    //$advancedSearchForm->addText('keyword_request_user', get_lang('User'), false);
     $advancedSearchForm->addDateTimePicker('keyword_start_date_start', get_lang('Created'));
     $advancedSearchForm->addDateTimePicker('keyword_start_date_end', get_lang('Until'));
     $advancedSearchForm->addSelect(
-        'keyword_admin',
+        'keyword_assigned_to',
         get_lang('AssignedTo'),
         $selectAdmins,
         ['placeholder' => get_lang('All')]
@@ -301,18 +340,12 @@ if (!empty($projectId)) {
         $selectPriority,
         ['placeholder' => get_lang('All')]
     );
-    /*$advancedSearchForm->addSelect(
-        'keyword_unread',
-        get_lang('Status'),
-        $selectStatusUnread,
-        ['placeholder' => get_lang('All')]
-    );*/
     $advancedSearchForm->addText('keyword_course', get_lang('Course'), false);
     $advancedSearchForm->addButtonSearch(get_lang('AdvancedSearch'), 'submit_advanced');
     $advancedSearchForm->display();
 } else {
     if (api_get_setting('ticket_allow_student_add') === 'true') {
-        echo '<div class="actions" >';
+        echo '<div class="actions">';
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'ticket/new_ticket.php?project_id='.$projectId.'">'.
                 Display::return_icon('add.png', get_lang('Add'), '', '32').
              '</a>';
@@ -330,8 +363,10 @@ if ($isAdmin) {
     $table->set_header(6, get_lang('AssignedTo'), true);
     $table->set_header(7, get_lang('Message'), true);
 } else {
-    echo '<center><h1>'.get_lang('MyTickets').'</h1></center>';
-    echo '<center><p>'.get_lang('TicketMsgWelcome').'</p></center>';
+    if ($isAllow == false) {
+        echo Display::page_subheader(get_lang('MyTickets'));
+        echo Display::return_message(get_lang('TicketMsgWelcome'));
+    }
     $table->set_header(0, '#', true);
     $table->set_header(1, get_lang('Status'), false);
     $table->set_header(2, get_lang('Date'), true);

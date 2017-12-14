@@ -44,6 +44,7 @@ class Version20151214170800 extends AbstractMigrationChamilo
                 error_log("Migration: Image does not exists: $imagePath");
                 $imagePath = realpath($imagePath);
                 error_log("Hotspot realpath: $imagePath");
+                error_log("api_get_path: SYS_PATH: ".api_get_path(SYS_PATH));
                 continue;
             }
             $imageSize = getimagesize($imagePath);

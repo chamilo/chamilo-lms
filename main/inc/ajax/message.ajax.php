@@ -1,12 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\UserBundle\Entity\User;
+use Chamilo\UserBundle\Entity\Repository\UserRepository;
+
+$_dont_save_user_course_access = true;
+
 /**
  * Responses to AJAX calls
  */
-
-use Chamilo\UserBundle\Entity\User;
-use Chamilo\UserBundle\Entity\Repository\UserRepository;
 
 require_once __DIR__.'/../global.inc.php';
 
@@ -55,6 +57,29 @@ switch ($action) {
             exit;
         }
 
+        $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;
+        $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : 0;
+
+        // Add course info
+        if (!empty($courseId)) {
+            $courseInfo = api_get_course_info_by_id($courseId);
+            if (!empty($courseInfo)) {
+                if (empty($sessionId)) {
+                    $courseNotification = sprintf(get_lang('ThisEmailWasSentViaCourseX'), $courseInfo['title']);
+                } else {
+                    $sessionInfo = api_get_session_info($sessionId);
+                    if (!empty($sessionInfo)) {
+                        $courseNotification = sprintf(
+                            get_lang('ThisEmailWasSentViaCourseXInSessionX'),
+                            $courseInfo['title'],
+                            $sessionInfo['name']
+                        );
+                    }
+                }
+                $messageContent .= '<br /><br />'.$courseNotification;
+            }
+        }
+
         $result = MessageManager::send_message($_REQUEST['user_id'], $subject, $messageContent);
         if ($result) {
             echo Display::return_message(get_lang('MessageHasBeenSent'), 'confirmation');
@@ -75,8 +100,7 @@ switch ($action) {
         }
 
         /** @var UserRepository $repo */
-        $repo = Database::getManager()
-            ->getRepository('ChamiloUserBundle:User');
+        $repo = Database::getManager()->getRepository('ChamiloUserBundle:User');
 
         $users = $repo->findUsersToSendMessage(
             api_get_user_id(),
@@ -89,7 +113,7 @@ switch ($action) {
 
         /** @var User $user */
         foreach ($users as $user) {
-            $userName = $user->getCompleteName();
+            $userName = $user->getCompleteNameWithUsername();
 
             if ($showEmail) {
                 $userName .= " ({$user->getEmail()})";

@@ -1,3 +1,6 @@
 <FilesMatch "(?i)\.(php5|php4|php|php3|php2|phtml|pl|py|jsp|asp|sh|cgi)$">
-    deny from all
+    # Apache 2.2
+    #deny from all
+    # Apache 2.4
+    Require all denied
 </FilesMatch>

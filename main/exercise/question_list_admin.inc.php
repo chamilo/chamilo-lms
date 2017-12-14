@@ -27,121 +27,118 @@ if ($deleteQuestion) {
     // destruction of the Question object
     unset($objQuestionTmp);
 }
-$ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()
-    ."&exercise_id=".intval($exerciseId);
+$ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&exercise_id=".intval($exerciseId);
 ?>
-    <div id="dialog-confirm"
-         title="<?php echo get_lang("ConfirmYourChoice"); ?>"
-         style="display:none;">
-        <p>
-            <?php echo get_lang("AreYouSureToDelete"); ?>
-        </p>
-    </div>
+<div id="dialog-confirm"
+     title="<?php echo get_lang("ConfirmYourChoice"); ?>"
+     style="display:none;">
+    <p>
+        <?php echo get_lang("AreYouSureToDelete"); ?>
+    </p>
+</div>
 
-    <script>
-        $(function () {
-            $("#dialog:ui-dialog").dialog("destroy");
-            $("#dialog-confirm").dialog({
-                autoOpen: false,
-                show: "blind",
-                resizable: false,
-                height: 150,
-                modal: false
-            });
-
-            $(".opener").click(function () {
-                var targetUrl = $(this).attr("href");
-                $("#dialog-confirm").dialog({
-                    modal: true,
-                    buttons: {
-                        "<?php echo get_lang("Yes"); ?>": function () {
-                            location.href = targetUrl;
-                            $(this).dialog("close");
-
-                        },
-                        "<?php echo get_lang("No"); ?>": function () {
-                            $(this).dialog("close");
-                        }
-                    }
-                });
-                $("#dialog-confirm").dialog("open");
-                return false;
-            });
-
-            var stop = false;
-            $("#question_list h3").click(function (event) {
-                if (stop) {
-                    event.stopImmediatePropagation();
-                    event.preventDefault();
-                    stop = false;
-                }
-            });
-
-
-            /* We can add links in the accordion header */
-            $(".btn-actions .edition a.btn").click(function () {
-                //Avoid the redirecto when selecting the delete button
-                if (this.id.indexOf('delete') == -1) {
-                    newWind = window.open(this.href, "_self");
-                    newWind.focus();
-                    return false;
-                }
-            });
-
-            $("#question_list").accordion({
-                icons: null,
-                heightStyle: "content",
-                active: false, // all items closed by default
-                collapsible: true,
-                header: ".header_operations",
-                beforeActivate: function (e, ui) {
-                    var data = ui.newHeader.data();
-
-                    if (typeof data === 'undefined') {
-                        return;
-                    }
-
-                    var exerciseId = data.exercise || 0,
-                        questionId = data.question || 0;
-
-                    if (!questionId || !exerciseId) {
-                        return;
-                    }
-
-                    var $pnlQuestion = $('#pnl-question-' + questionId);
-
-                    if ($pnlQuestion.html().trim().length) {
-                        return;
-                    }
-
-                    $pnlQuestion.html('<span class="fa fa-spinner fa-spin fa-3x fa-fw" aria-hidden="true"></span>');
-
-                    $.get('<?php echo api_get_path(WEB_AJAX_PATH) ?>exercise.ajax.php?<?php echo api_get_cidreq() ?>', {
-                        a: 'show_question',
-                        exercise: exerciseId,
-                        question: questionId
-                    }, function (response) {
-                        $pnlQuestion.html(response)
-                    });
-                }
-            })
-                .sortable({
-                    cursor: "move", // works?
-                    update: function (event, ui) {
-                        var order = $(this).sortable("serialize") + "&a=update_question_order&exercise_id=<?php echo intval($_GET['exerciseId']); ?>";
-                        $.post("<?php echo $ajax_url ?>", order, function (reponse) {
-                            $("#message").html(reponse);
-                        });
-                    },
-                    axis: "y",
-                    placeholder: "ui-state-highlight", //defines the yellow highlight
-                    handle: ".moved", //only the class "moved"
-                    stop: function () {
-                        stop = true;
-                    }
-                });
+<script>
+    $(function () {
+        $("#dialog:ui-dialog").dialog("destroy");
+        $("#dialog-confirm").dialog({
+            autoOpen: false,
+            show: "blind",
+            resizable: false,
+            height: 150,
+            modal: false
         });
-    </script>
+
+        $(".opener").click(function () {
+            var targetUrl = $(this).attr("href");
+            $("#dialog-confirm").dialog({
+                modal: true,
+                buttons: {
+                    "<?php echo get_lang("Yes"); ?>": function () {
+                        location.href = targetUrl;
+                        $(this).dialog("close");
+
+                    },
+                    "<?php echo get_lang("No"); ?>": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+            $("#dialog-confirm").dialog("open");
+            return false;
+        });
+
+        var stop = false;
+        $("#question_list h3").click(function (event) {
+            if (stop) {
+                event.stopImmediatePropagation();
+                event.preventDefault();
+                stop = false;
+            }
+        });
+
+        /* We can add links in the accordion header */
+        $(".btn-actions .edition a.btn").click(function () {
+            //Avoid the redirecto when selecting the delete button
+            if (this.id.indexOf('delete') == -1) {
+                newWind = window.open(this.href, "_self");
+                newWind.focus();
+                return false;
+            }
+        });
+
+        $("#question_list").accordion({
+            icons: null,
+            heightStyle: "content",
+            active: false, // all items closed by default
+            collapsible: true,
+            header: ".header_operations",
+            beforeActivate: function (e, ui) {
+                var data = ui.newHeader.data();
+                if (typeof data === 'undefined') {
+                    return;
+                }
+
+                var exerciseId = data.exercise || 0,
+                    questionId = data.question || 0;
+
+                if (!questionId || !exerciseId) {
+                    return;
+                }
+
+                var $pnlQuestion = $('#pnl-question-' + questionId);
+
+                if ($pnlQuestion.html().trim().length) {
+                    return;
+                }
+
+                $pnlQuestion.html('<span class="fa fa-spinner fa-spin fa-3x fa-fw" aria-hidden="true"></span>');
+
+                $.get('<?php echo api_get_path(WEB_AJAX_PATH) ?>exercise.ajax.php?<?php echo api_get_cidreq() ?>', {
+                    a: 'show_question',
+                    exercise: exerciseId,
+                    question: questionId
+                }, function (response) {
+                    $pnlQuestion.html(response)
+                });
+            }
+        })
+        .sortable({
+            cursor: "move", // works?
+            update: function (event, ui) {
+                var order = $(this).sortable("serialize") + "&a=update_question_order&exercise_id=<?php echo $exerciseId; ?>";
+                $.post("<?php echo $ajax_url ?>", order, function (result) {
+                    $("#message").html(result);
+                });
+            },
+            axis: "y",
+            placeholder: "ui-state-highlight", //defines the yellow highlight
+            handle: ".moved", //only the class "moved"
+            stop: function () {
+                stop = true;
+            }
+        });
+    });
+</script>
 <?php
 
 //we filter the type of questions we can add

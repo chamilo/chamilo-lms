@@ -28,11 +28,13 @@ class ScormQuestion extends Question
      * @param int  $js_id The JavaScript ID for this question.
      * Due to the nature of interactions, we must have a natural sequence for
      * questions in the generated JavaScript.
-     * @param integer $js_id
      * @return string|array
      */
-    public static function export_question($questionId, $standalone = true, $js_id)
-    {
+    public static function export_question(
+        $questionId,
+        $standalone = true,
+        $js_id
+    ) {
         $question = new ScormQuestion();
         $qst = $question->read($questionId);
         if (!$qst) {
@@ -119,7 +121,11 @@ class ScormQuestion extends Question
         return true;
     }
 
-    function export()
+    /**
+     * @return array
+     * @throws Exception
+     */
+    public function export()
     {
         $html = $this->getQuestionHTML();
         $js = $this->getQuestionJS();
@@ -154,7 +160,7 @@ class ScormQuestion extends Question
     /**
      * Returns an HTML-formatted question
      */
-    function getQuestionHTML()
+    public function getQuestionHTML()
     {
         $title = $this->selectTitle();
         $description = $this->selectDescription();
@@ -209,14 +215,13 @@ class ScormAnswerMultipleChoice extends Answer
     /**
      * Return HTML code for possible answers
      */
-    function export()
+    public function export()
     {
         $js = '';
         $html = '<tr><td colspan="2"><table width="100%">';
         $type = $this->getQuestionType();
         $jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();';
         $jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;';
-
         $jstmpw .= 'questions_answers_correct['.$this->questionJSId.'] = new Array();';
 
         //not sure if we are going to export also the MULTIPLE_ANSWER_COMBINATION to SCORM
@@ -322,7 +327,7 @@ class ScormAnswerTrueFalse extends Answer
      *
      * @author Amand Tihon <amand@alrj.org>
      */
-    function export()
+    public function export()
     {
         $js = '';
         $html = '<tr><td colspan="2"><table width="100%">';
@@ -375,15 +380,13 @@ class ScormAnswerFillInBlanks extends Answer
      * As a side effect, it stores two lists in the class :
      * the missing words and their respective weightings.
      */
-    function export()
+    public function export()
     {
         global $charset;
         $js = '';
         $html = '<tr><td colspan="2"><table width="100%">';
         // get all enclosed answers
         $blankList = array();
-        // build replacement
-        $replacementList = array();
         foreach ($this->answer as $i => $answer) {
             $blankList[] = '['.$answer.']';
         }
@@ -451,7 +454,7 @@ class ScormAnswerMatching extends Answer
      * Export the question part as a matrix-choice, with only one possible answer per line.
      * @author Amand Tihon <amand@alrj.org>
      */
-    function export()
+    public function export()
     {
         $js = '';
         $html = '<tr><td colspan="2"><table width="100%">';
@@ -459,7 +462,6 @@ class ScormAnswerMatching extends Answer
         // - easiest display
         // - easiest randomisation if needed one day
         // (here I use array_values to change array keys from $code1 $code2 ... to 0 1 ...)
-
         // get max length of displayed array
 
         $nbrAnswers = $this->selectNbrAnswers();
@@ -555,7 +557,7 @@ class ScormAnswerFree extends Answer
      * the missing words and their respective weightings.
      *
      */
-    function export()
+    public function export()
     {
         $js = '';
         $identifier = 'question_'.$this->questionJSId.'_free';
@@ -588,6 +590,7 @@ class ScormAnswerFree extends Answer
         return array($js, $html);
     }
 }
+
 /**
  * This class handles the SCORM export of hotpot questions
  * @package chamilo.exercise.scorm
@@ -596,9 +599,9 @@ class ScormAnswerHotspot extends Answer
 {
     /**
      * Returns the javascript code that goes with HotSpot exercises
-     * @return string	The JavaScript code
+     * @return string    The JavaScript code
      */
-    function get_js_header()
+    public function get_js_header()
     {
         if ($this->standalone) {
             $header = '<script>';
@@ -626,6 +629,7 @@ class ScormAnswerHotspot extends Answer
 
         return $header;
     }
+
     /**
      * Export the text with missing words.
      *
@@ -633,7 +637,7 @@ class ScormAnswerHotspot extends Answer
      * the missing words and their respective weightings.
      *
      */
-    function export()
+    public function export()
     {
         $js = $this->get_js_header();
         $html = '<tr><td colspan="2"><table width="100%">';
@@ -715,7 +719,7 @@ class ScormAssessmentItem
      * This opens the <item> block, with correct attributes.
      *
      */
-    function start_page()
+    public function start_page()
     {
         $head = '';
         if ($this->standalone) {
@@ -731,7 +735,7 @@ class ScormAssessmentItem
      * End the XML flow, closing the </item> tag.
      *
      */
-    function end_page()
+    public function end_page()
     {
         if ($this->standalone) {
             return '</html>';
@@ -743,7 +747,7 @@ class ScormAssessmentItem
     /**
      * Start document header
      */
-    function start_header()
+    public function start_header()
     {
         if ($this->standalone) {
             return '<head>';
@@ -755,7 +759,7 @@ class ScormAssessmentItem
     /**
      * Print CSS inclusion
      */
-    function css()
+    public function css()
     {
         $css = '';
         if ($this->standalone) {
@@ -775,7 +779,7 @@ class ScormAssessmentItem
     /**
      * End document header
      */
-    function end_header()
+    public function end_header()
     {
         if ($this->standalone) {
             return '</head>';
@@ -934,21 +938,6 @@ class ScormSection
     public $standalone;
 
     /**
-     * Send a complete exercise in SCORM format, from its ID
-     *
-     * @param Exercise $exercise The exercise to export
-     * @param boolean $standalone Wether it should include XML tag and DTD line.
-     * @return string XML as a string, or an empty string if there's no exercise with given ID.
-     */
-    public static function export_exercise_to_scorm(Exercise $exercise, $standalone = true)
-    {
-        $ims = new ScormSection($exercise);
-        $xml = $ims->export($standalone);
-
-        return $xml;
-    }
-
-    /**
      * Constructor.
      * @param Exercise $exe The Exercise instance to export
      * @author Amand Tihon <amand@alrj.org>
@@ -956,6 +945,23 @@ class ScormSection
     public function __construct($exe)
     {
         $this->exercise = $exe;
+    }
+
+    /**
+     * Send a complete exercise in SCORM format, from its ID
+     *
+     * @param Exercise $exercise The exercise to export
+     * @param boolean $standalone Wether it should include XML tag and DTD line.
+     * @return string XML as a string, or an empty string if there's no exercise with given ID.
+     */
+    public static function export_exercise_to_scorm(
+        Exercise $exercise,
+        $standalone = true
+    ) {
+        $ims = new ScormSection($exercise);
+        $xml = $ims->export($standalone);
+
+        return $xml;
     }
 
     /**
@@ -1123,18 +1129,18 @@ class ScormSection
 
         list($js, $html) = $this->export_questions();
         $res = $this->start_page()
-            . $this->start_header()
-            . $this->css()
-            . $this->globalAssets()
-            . $this->start_js()
-            . $this->common_js()
-            . $js
-            . $this->end_js()
-            . $this->end_header()
-            . $this->start_body()
-            . $html
-            . $this->end_body()
-            . $this->end_page();
+            .$this->start_header()
+            .$this->css()
+            .$this->globalAssets()
+            .$this->start_js()
+            .$this->common_js()
+            .$js
+            .$this->end_js()
+            .$this->end_header()
+            .$this->start_body()
+            .$html
+            .$this->end_body()
+            .$this->end_page();
 
         return $res;
     }

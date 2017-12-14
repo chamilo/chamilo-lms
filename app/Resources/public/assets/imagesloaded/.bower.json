@@ -3,7 +3,7 @@
   "description": "JavaScript is all like _You images done yet or what?_",
   "main": "imagesloaded.js",
   "dependencies": {
-    "ev-emitter": "~1.0.0"
+    "ev-emitter": "^1.0.0"
   },
   "devDependencies": {
     "jquery": ">=1.9 <4.0",
@@ -33,12 +33,12 @@
     "images"
   ],
   "license": "MIT",
-  "version": "4.1.2",
-  "_release": "4.1.2",
+  "version": "4.1.3",
+  "_release": "4.1.3",
   "_resolution": {
     "type": "version",
-    "tag": "v4.1.2",
-    "commit": "60ce45d675567970993a52cb11763ba9b49aa5d0"
+    "tag": "v4.1.3",
+    "commit": "31b7f6bde34bb9714351f99c14d0839cd84221a4"
   },
   "_source": "https://github.com/desandro/imagesloaded.git",
   "_target": ">=3.0.0",

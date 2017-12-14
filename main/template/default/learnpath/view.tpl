@@ -1,128 +1,128 @@
 <div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' }}">
-        <div id="learning_path_left_zone" class="sidebar-scorm">
-            <div class="lp-view-zone-container">
-                <div id="scorm-info">
-                    <div id="panel-scorm" class="panel-body">
-                        <div class="image-avatar">
-                            {% if lp_author == '' %}
-                               <div class="text-center">
+    <div id="learning_path_left_zone" class="sidebar-scorm">
+        <div class="lp-view-zone-container">
+            <div id="scorm-info">
+                <div id="panel-scorm" class="panel-body">
+                    <div class="image-avatar">
+                        {% if lp_author == '' %}
+                           <div class="text-center">
+                                {{ lp_preview_image }}
+                            </div>
+                        {% else %}
+                            <div class="media">
+                                <div class="media-left">
                                     {{ lp_preview_image }}
                                 </div>
-                            {% else %}
-                                <div class="media">
-                                    <div class="media-left">
-                                        {{ lp_preview_image }}
-                                    </div>
-                                    <div class="media-body">
-                                        <div class="description-autor"> {{ lp_author }} </div>
-                                    </div>
+                                <div class="media-body">
+                                    <div class="description-autor"> {{ lp_author }} </div>
                                 </div>
-                            {% endif %}
-                        </div>
-
-                        {% if show_audio_player %}
-                            <div id="lp_media_file" class="audio-scorm">
-                                {{ media_player }}
                             </div>
                         {% endif %}
-                        {% if gamification_mode == 1 %}
-                            <!--- gamification -->
-                            <div id="scorm-gamification">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        {% if gamification_stars > 0 %}
-                                            {% for i in 1..gamification_stars %}
-                                                <em class="fa fa-star level"></em>
-                                            {% endfor %}
-                                        {% endif %}
+                    </div>
 
-                                        {% if gamification_stars < 4 %}
-                                            {% for i in 1..4 - gamification_stars %}
-                                                <em class="fa fa-star"></em>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                    <div class="col-xs-6 text-right">
-                                        {{ "XPoints"|get_lang|format(gamification_points) }}
-                                    </div>
+                    {% if show_audio_player %}
+                        <div id="lp_media_file" class="audio-scorm">
+                            {{ media_player }}
+                        </div>
+                    {% endif %}
+                    {% if gamification_mode == 1 %}
+                        <!--- gamification -->
+                        <div id="scorm-gamification">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    {% if gamification_stars > 0 %}
+                                        {% for i in 1..gamification_stars %}
+                                            <em class="fa fa-star level"></em>
+                                        {% endfor %}
+                                    {% endif %}
+
+                                    {% if gamification_stars < 4 %}
+                                        {% for i in 1..4 - gamification_stars %}
+                                            <em class="fa fa-star"></em>
+                                        {% endfor %}
+                                    {% endif %}
                                 </div>
-                                <div class="row">
-                                    <div class="col-xs-12 navegation-bar">
-                                        <div id="progress_bar">
-                                            {{ progress_bar }}
-                                        </div>
+                                <div class="col-xs-6 text-right">
+                                    {{ "XPoints"|get_lang|format(gamification_points) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 navegation-bar">
+                                    <div id="progress_bar">
+                                        {{ progress_bar }}
                                     </div>
                                 </div>
                             </div>
-                           <!--- end gamification -->
+                        </div>
+                       <!--- end gamification -->
+                    {% else %}
+                        <div id="progress_bar">
+                            {{ progress_bar }}
+                        </div>
+                    {% endif %}
+                    {{ teacher_toc_buttons }}
+                </div>
+            </div>
+        {# TOC layout #}
+        <div id="toc_id" class="scorm-body" name="toc_name">
+                {% include template ~ '/learnpath/scorm_list.tpl' %}
+            </div>
+        {# end TOC layout #}
+        </div>
+    </div>
+    {# end left zone #}
+    <div id="lp_navigation_elem" class="navegation-bar">
+        <a href="#" title = "{{ 'Expand'|get_lang }}" id="lp-view-expand-toggle" class="icon-toolbar expand" role="button">
+            {% if lp_mode == 'embedframe' %}
+                <span class="fa fa-compress" aria-hidden="true"></span>
+                <span class="sr-only">{{ 'Expand'|get_lang }}</span>
+            {% else %}
+                <span class="fa fa-expand" aria-hidden="true"></span>
+                <span class="sr-only">{{ 'Expand'|get_lang }}</span>
+            {% endif %}
+        </a>
+        <a id="home-course" title = "{{ 'Home'|get_lang }}" href="{{ button_home_url }}" class="icon-toolbar" target="_self" onclick="javascript: window.parent.API.save_asset();">
+            <em class="fa fa-home"></em> <span class="hidden-xs hidden-sm"></span>
+        </a>
+        {{ navigation_bar }}
+    </div>
+    {# <div id="hide_bar" class="scorm-toggle" style="display:inline-block; width: 25px; height: 1000px;"></div> #}
+    {# right zone #}
+    <div id="learning_path_right_zone" class="content-scorm">
+        <div class="lp-view-zone-container">
+            <div class="lp-view-tabs">
+                <div id="navTabsbar" class="nav-tabs-bar">
+                    <ul id="navTabs" class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#lp-view-content" title="{{ 'Lesson'|get_lang }}" aria-controls="lp-view-content" role="tab" data-toggle="tab">
+                                <span class="fa fa-book fa-2x fa-fw" aria-hidden="true"></span><span class="sr-only">{{ 'Lesson'|get_lang }}</span>
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#lp-view-forum" title="{{ 'Forum'|get_lang }}" aria-controls="lp-view-forum" role="tab" data-toggle="tab">
+                                <span class="fa fa-commenting-o fa-2x fa-fw" aria-hidden="true"></span><span class="sr-only">{{ 'Forum'|get_lang }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="lp-view-content">
+                        <div id="wrapper-iframe" style="width:100%; height:100%">
+                        {% if lp_mode == 'fullscreen' %}
+                            <iframe id="content_id_blank" name="content_name_blank" src="blank.php" style="width:100%; height:100%" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
                         {% else %}
-                            <div id="progress_bar">
-                                {{ progress_bar }}
-                            </div>
+                            <iframe id="content_id" name="content_name" src="{{ iframe_src }}" style="width:100%; height:100%" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
                         {% endif %}
-                        {{ teacher_toc_buttons }}
-                    </div>
-                </div>
-            {# TOC layout #}
-            <div id="toc_id" class="scorm-body" name="toc_name">
-                    {% include template ~ '/learnpath/scorm_list.tpl' %}
-                </div>
-            {# end TOC layout #}
-            </div>
-        </div>
-        {# end left zone #}
-        <div id="lp_navigation_elem" class="navegation-bar">
-            <a href="#" title = "{{ 'Expand'|get_lang }}" id="lp-view-expand-toggle" class="icon-toolbar expand" role="button">
-                {% if lp_mode == 'embedframe' %}
-                    <span class="fa fa-compress" aria-hidden="true"></span>
-                    <span class="sr-only">{{ 'Expand'|get_lang }}</span>
-                {% else %}
-                    <span class="fa fa-expand" aria-hidden="true"></span>
-                    <span class="sr-only">{{ 'Expand'|get_lang }}</span>
-                {% endif %}
-            </a>
-            <a id="home-course" title = "{{ 'Home'|get_lang }}" href="{{ button_home_url }}" class="icon-toolbar" target="_self" onclick="javascript: window.parent.API.save_asset();">
-                <em class="fa fa-home"></em> <span class="hidden-xs hidden-sm"></span>
-            </a>
-            {{ navigation_bar }}
-        </div>
-        {# <div id="hide_bar" class="scorm-toggle" style="display:inline-block; width: 25px; height: 1000px;"></div> #}
-        {# right zone #}
-        <div id="learning_path_right_zone" class="content-scorm">
-            <div class="lp-view-zone-container">
-                <div class="lp-view-tabs">
-                    <div id="navTabsbar" class="nav-tabs-bar">
-                        <ul id="navTabs" class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active">
-                                <a href="#lp-view-content" title="{{ 'Lesson'|get_lang }}" aria-controls="lp-view-content" role="tab" data-toggle="tab">
-                                    <span class="fa fa-book fa-2x fa-fw" aria-hidden="true"></span><span class="sr-only">{{ 'Lesson'|get_lang }}</span>
-                                </a>
-                            </li>
-                            <li role="presentation">
-                                <a href="#lp-view-forum" title="{{ 'Forum'|get_lang }}" aria-controls="lp-view-forum" role="tab" data-toggle="tab">
-                                    <span class="fa fa-commenting-o fa-2x fa-fw" aria-hidden="true"></span><span class="sr-only">{{ 'Forum'|get_lang }}</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="lp-view-content">
-                            <div id="wrapper-iframe" style="width:100%; height:100%">
-                            {% if lp_mode == 'fullscreen' %}
-                                <iframe id="content_id_blank" name="content_name_blank" src="blank.php" style="width:100%; height:100%" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
-                            {% else %}
-                                <iframe id="content_id" name="content_name" src="{{ iframe_src }}" style="width:100%; height:100%" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
-                            {% endif %}
-                            </div>
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="lp-view-forum">
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="lp-view-forum">
 
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        {# end right Zone #}
+    </div>
+    {# end right Zone #}
 </div>
 
 <script>
@@ -281,8 +281,9 @@
             })();
         {% endif %}
 
-        $('iframe#content_id')
-            .on('load', function () {
+        {% if disable_js_in_lp_view == 0 %}
+        $('iframe#content_id').on('load', function () {
+            if ('link' !== olms.lms_item_type) {
                 $.frameReady(function () {
                 }, 'top.content_name', {
                     load: [
@@ -292,10 +293,12 @@
                         {type: 'stylesheet', id: '_fr5', src: '{{ _p.web }}web/assets/jquery-ui/themes/smoothness/jquery-ui.min.css'},
                         {type: 'stylesheet', id: '_fr6', src: '{{ _p.web }}web/assets/jquery-ui/themes/smoothness/theme.css'},
                         {type: 'script', id: '_fr2', src: '{{ _p.web_lib }}javascript/jquery.highlight.js'},
-                        {type: 'script', id: '_fr3', src: '{{ _p.web_main }}glossary/glossary.js.php'}
+                        {type: 'script', id: '_fr3', src: '{{ _p.web_main }}glossary/glossary.js.php?{{ _p.web_cid_req }}'}
                     ]
                 });
-            });
+            }
+        });
+        {% endif %}
     });
 
     $(window).on('resize', function () {

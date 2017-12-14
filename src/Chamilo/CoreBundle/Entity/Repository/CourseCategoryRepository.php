@@ -29,7 +29,7 @@ class CourseCategoryRepository extends EntityRepository
             )
             ->where(
                 $qb->expr()->eq('a.accessUrlId', $accessUrl)
-            )
+            )->orderBy('c.treePos', 'ASC')
             ->getQuery();
 
         return $query->getResult();

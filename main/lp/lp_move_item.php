@@ -53,10 +53,6 @@ $_SESSION['oLP']->get_js_dropdown_array().
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-$tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
-
 $isStudentView = isset($_REQUEST['isStudentView']) ? (int) $_REQUEST['isStudentView'] : '';
 $learnpath_id = (int) $_REQUEST['lp_id'];
 $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : '';
@@ -68,8 +64,7 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
 // From here on, we are admin because of the previous condition, so don't check anymore.
 
 $course_id = api_get_course_int_id();
-$sql = "SELECT * FROM $tbl_lp
-        WHERE c_id = $course_id AND id = $learnpath_id";
+$sql = "SELECT * FROM $tbl_lp WHERE iid = $learnpath_id";
 
 $result = Database::query($sql);
 $therow = Database::fetch_array($result);
@@ -78,15 +73,10 @@ $therow = Database::fetch_array($result);
     Course admin section
     - all the functions not available for students - always available in this case (page only shown to admin)
 */
-/* SHOWING THE ADMIN TOOLS */
 
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
@@ -112,7 +102,7 @@ Display::display_header(get_lang('Move'), 'Path');
 
 $suredel = trim(get_lang('AreYouSureToDeleteJS'));
 ?>
-<script type='text/javascript'>
+<script>
 /* <![CDATA[ */
 function stripslashes(str) {
     str=str.replace(/\\'/g,'\'');
@@ -121,8 +111,7 @@ function stripslashes(str) {
     str=str.replace(/\\0/g,'\0');
     return str;
 }
-function confirmation(name)
-{
+function confirmation(name) {
     name=stripslashes(name);
     if (confirm("<?php echo $suredel; ?> " + name + " ?"))
     {

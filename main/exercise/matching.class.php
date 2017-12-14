@@ -63,7 +63,7 @@ class Matching extends Question
                 $nb_matches++;
                 $nb_options++;
             }
-        } else if (!empty($this->id)) {
+        } elseif (!empty($this->id)) {
             if (count($answer->nbrAnswers) > 0) {
                 $nb_matches = $nb_options = 0;
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {

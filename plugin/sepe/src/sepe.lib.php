@@ -4,8 +4,6 @@
  * @package chamilo.plugin.sepe
  */
 
-require_once 'sepe_plugin.class.php';
-
 $tableSepeCenter = Database::get_main_table(SepePlugin::TABLE_SEPE_CENTER);
 $tableSepeActions = Database::get_main_table(SepePlugin::TABLE_SEPE_ACTIONS);
 $tableSepeSpecialty = Database::get_main_table(SepePlugin::TABLE_SEPE_SPECIALTY);
@@ -52,7 +50,7 @@ function checkIdentificationData()
     $result = Database::query($sql);
     if (Database::affected_rows($result) > 0) {
         return true;
-    }else{
+    } else {
         return false;
     }
 }
@@ -78,7 +76,7 @@ function getCourseCode($actionId)
 {
     global $tableCourse;
     $courseId = getCourse($actionId);
-    $sql = "SELECT code FROM $tableCourse WHERE id = $courseId";    
+    $sql = "SELECT code FROM $tableCourse WHERE id = $courseId";
     $rs = Database::query($sql);
     $aux = Database::fetch_assoc($rs);
     return $aux['code'];
@@ -171,7 +169,7 @@ function list_tutor($specialtyId)
     return $row;
 }
 
-function getCentersList() 
+function getCentersList()
 {
     global $tableCenters;
     $sql = "SELECT * FROM $tableCenters;";
@@ -186,16 +184,16 @@ function getCentersList()
 function listTutorType($condition)
 {
     global $tableTutorCompany;
-       $sql = "SELECT * FROM $tableTutorCompany WHERE ".$condition." ORDER BY alias ASC, document_number ASC;";
+    $sql = "SELECT * FROM $tableTutorCompany WHERE ".$condition." ORDER BY alias ASC, document_number ASC;";
     $res = Database::query($sql);
     $aux = array();
     while ($row = Database::fetch_assoc($res)) {
         $tmp = array();
         $tmp['id'] = $row['id'];
         if (trim($row['alias']) != '') {
-            $tmp['alias'] = $row['alias'].' - '.$row['document_type'].' '.$row['document_number'].' '.$row['document_letter'];    
+            $tmp['alias'] = $row['alias'].' - '.$row['document_type'].' '.$row['document_number'].' '.$row['document_letter'];
         } else {
-            $tmp['alias'] = $row['document_type'].' '.$row['document_number'].' '.$row['document_letter'];    
+            $tmp['alias'] = $row['document_type'].' '.$row['document_number'].' '.$row['document_letter'];
         }
         $aux[] = $tmp;
     }
@@ -218,13 +216,13 @@ function getTutorsSpecialty($specialtyId)
     $res = Database::query($sql);
     $aux = array();
     while ($row = Database::fetch_assoc($res)) {
-        if (!in_array($row['id'],$tutorsList)) {
+        if (!in_array($row['id'], $tutorsList)) {
             $tutor = array();
             $tutor['id'] = $row['id'];
             if (trim($row['firstname']) != '' || trim($row['lastname']) != '') {
-                $tutor['data'] = $row['firstname'].' '.$row['lastname'].' ('.$row['document_type'].' '.$row['document_number'].' '.$row['document_letter'].' )';    
+                $tutor['data'] = $row['firstname'].' '.$row['lastname'].' ('.$row['document_type'].' '.$row['document_number'].' '.$row['document_letter'].' )';
             } else {
-                $tutor['data'] = $row['document_type'].' '.$row['document_number'].' '.$row['document_letter'];    
+                $tutor['data'] = $row['document_type'].' '.$row['document_number'].' '.$row['document_letter'];
             }
             $aux[] = $tutor;
         }
@@ -253,7 +251,7 @@ function getInfoSpecialtyTutor($tutorId)
     return $row;
 }
 
-function freeTeacherList($teacherList,$specialtyId,$platform_user_id)
+function freeTeacherList($teacherList, $specialtyId, $platform_user_id)
 {
     global $tableSepeSpecialtyTutors;
     global $tableSepeTutors;
@@ -492,7 +490,7 @@ function getSpecialtyTutorId($specialtyId, $tutorId)
     return $row['id'];
 }
 
-function checkInsertNewLog($platformUserId,$actionId)
+function checkInsertNewLog($platformUserId, $actionId)
 {
     global $tableSepeLogParticipant;
     $sql = "SELECT * FROM $tableSepeLogParticipant WHERE platform_user_id = $platformUserId AND action_id = $actionId";

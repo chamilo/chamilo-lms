@@ -52,7 +52,6 @@ $(document).ready(function() {
 
 </script>';
 
-$_SESSION['whereami'] = 'document/create';
 $this_section = SECTION_COURSES;
 $lib_path = api_get_path(LIBRARY_PATH);
 
@@ -101,7 +100,7 @@ if (empty($document_data)) {
 $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
 
 //Call from
-$call_from_tool = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : null;
+$call_from_tool = api_get_origin();
 $slide_id = isset($_GET['origin_opt']) ? Security::remove_XSS($_GET['origin_opt']) : null;
 $file_name = $doc;
 $group_document = false;
@@ -164,7 +163,10 @@ if (!$is_certificate_mode) {
         "name" => get_lang('Documents'),
     );
 } else {
-    $interbreadcrumb[] = array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
+    $interbreadcrumb[] = array(
+        'url' => Category::getUrl(),
+        'name' => get_lang('Gradebook')
+    );
 }
 
 if (empty($document_data['parents'])) {
@@ -325,8 +327,6 @@ if (file_exists($document_data['absolute_path'])) {
     }
 }
 
-/*	Display user interface */
-
 // Display the header
 $nameTools = get_lang('EditDocument').': '.Security::remove_XSS($document_data['title']);
 Display::display_header($nameTools, 'Doc');
@@ -350,6 +350,7 @@ if (!empty($sessionId)) {
 
 $owner_id = $document_info['insert_user_id'];
 $last_edit_date = $document_info['lastedit_date'];
+$createdDate = $document_info['insert_date'];
 $groupInfo = GroupManager::get_group_properties(api_get_group_id());
 
 if ($owner_id == api_get_user_id() ||
@@ -363,7 +364,13 @@ if ($owner_id == api_get_user_id() ||
     if ($is_certificate_mode) {
         $action .= '&curdirpath=/certificates&selectcat=1';
     }
-    $form = new FormValidator('formEdit', 'post', $action, null, array('class' => 'form-vertical'));
+    $form = new FormValidator(
+        'formEdit',
+        'post',
+        $action,
+        null,
+        array('class' => 'form-vertical')
+    );
 
     // Form title
     $form->addElement('header', $nameTools);
@@ -374,7 +381,12 @@ if ($owner_id == api_get_user_id() ||
     $form->addElement('hidden', 'showedit');
     $form->addElement('hidden', 'origin');
     $form->addElement('hidden', 'origin_opt');
-    $form->addText('title', get_lang('Title'), true, array('cols-size' => [2, 10, 0], 'autofocus'));
+    $form->addText(
+        'title',
+        get_lang('Title'),
+        true,
+        array('cols-size' => [2, 10, 0], 'autofocus')
+    );
 
     $defaults['title'] = $document_data['title'];
 
@@ -401,11 +413,19 @@ if ($owner_id == api_get_user_id() ||
         }
     }
 
+    if (!empty($createdDate)) {
+        $form->addLabel(get_lang('CreatedOn'), Display::dateToStringAgoAndLongDate($createdDate));
+    }
+
     if (!$group_document && !DocumentManager::is_my_shared_folder(api_get_user_id(), $currentDirPath, $sessionId)) {
-        // Updated on field
-        $display_date = date_to_str_ago($last_edit_date).
-            ' <span class="dropbox_date">'.api_format_date(api_get_local_time($last_edit_date)).'</span>';
-        $form->addElement('static', null, get_lang('UpdatedOn'), $display_date);
+        $form->addLabel(get_lang('UpdatedOn'), Display::dateToStringAgoAndLongDate($last_edit_date));
+    }
+
+    if (!empty($document_info['insert_user_id'])) {
+        $insertByUserInfo = api_get_user_info($document_info['insert_user_id']);
+        if (!empty($insertByUserInfo)) {
+            $form->addLabel(get_lang('Author'), $insertByUserInfo['complete_name_with_message_link']);
+        }
     }
 
     $form->addElement('textarea', 'comment', get_lang('Comment'), ['cols-size' => [2, 10, 0]]);
@@ -429,7 +449,7 @@ if ($owner_id == api_get_user_id() ||
     $defaults['commentPath'] = $file;
     $defaults['renameTo'] = $file_name;
     $defaults['comment'] = $document_data['comment'];
-    $defaults['origin'] = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : null;
+    $defaults['origin'] = api_get_origin();
     $defaults['origin_opt'] = isset($_GET['origin_opt']) ? Security::remove_XSS($_GET['origin_opt']) : null;
 
     $form->setDefaults($defaults);

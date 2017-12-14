@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * This is the text library for Chamilo.
  * It is loaded during the global initialization,
@@ -108,7 +109,8 @@ define('_PCRE_XML_ENCODING', '/<\?xml.*encoding=[\'"](.*?)[\'"].*\?>/m');
  * @return string                       Returns the detected encoding.
  * @todo The second parameter is to be eliminated. See api_detect_encoding_html().
  */
-function api_detect_encoding_xml($string, $default_encoding = null) {
+function api_detect_encoding_xml($string, $default_encoding = null)
+{
     if (preg_match(_PCRE_XML_ENCODING, $string, $matches)) {
         return api_refine_encoding_id($matches[1]);
     }
@@ -129,7 +131,8 @@ function api_detect_encoding_xml($string, $default_encoding = null) {
  * @param string $from_encoding (optional)  The encoding that text is being converted from. If it is omited, it is tried to be detected then.
  * @return string                           Returns the converted xml-text.
  */
-function api_convert_encoding_xml($string, $to_encoding, $from_encoding = null) {
+function api_convert_encoding_xml($string, $to_encoding, $from_encoding = null)
+{
     return _api_convert_encoding_xml($string, $to_encoding, $from_encoding);
 }
 
@@ -139,7 +142,8 @@ function api_convert_encoding_xml($string, $to_encoding, $from_encoding = null) 
  * @param string $from_encoding (optional)  The encoding that text is being converted from. If it is omited, it is tried to be detected then.
  * @return string                           Returns the converted xml-text.
  */
-function api_utf8_encode_xml($string, $from_encoding = null) {
+function api_utf8_encode_xml($string, $from_encoding = null)
+{
     return _api_convert_encoding_xml($string, 'UTF-8', $from_encoding);
 }
 
@@ -149,7 +153,8 @@ function api_utf8_encode_xml($string, $from_encoding = null) {
  * @param string $to_encoding (optional)    The encoding that text is being converted to. If it is omited, the platform character set is assumed.
  * @return string                           Returns the converted xml-text.
  */
-function api_utf8_decode_xml($string, $to_encoding = 'UTF-8') {
+function api_utf8_decode_xml($string, $to_encoding = 'UTF-8')
+{
     return _api_convert_encoding_xml($string, $to_encoding, 'UTF-8');
 }
 
@@ -160,7 +165,8 @@ function api_utf8_decode_xml($string, $to_encoding = 'UTF-8') {
  * @param string $from_encoding (optional)  The encoding that text is being converted from. If the value is empty, it is tried to be detected then.
  * @return string                           Returns the converted xml-text.
  */
-function _api_convert_encoding_xml(&$string, $to_encoding, $from_encoding) {
+function _api_convert_encoding_xml(&$string, $to_encoding, $from_encoding)
+{
     if (empty($from_encoding)) {
         $from_encoding = api_detect_encoding_xml($string);
     }
@@ -179,7 +185,16 @@ function _api_convert_encoding_xml(&$string, $to_encoding, $from_encoding) {
     }
     global $_api_encoding;
     $_api_encoding = api_refine_encoding_id($to_encoding);
-    return api_convert_encoding(preg_replace_callback(_PCRE_XML_ENCODING, '_api_convert_encoding_xml_callback', $string), $to_encoding, $from_encoding);
+
+    return api_convert_encoding(
+        preg_replace_callback(
+            _PCRE_XML_ENCODING,
+            '_api_convert_encoding_xml_callback',
+            $string
+        ),
+        $to_encoding,
+        $from_encoding
+    );
 }
 
 /**
@@ -187,7 +202,8 @@ function _api_convert_encoding_xml(&$string, $to_encoding, $from_encoding) {
  * @param array $matches    Input array of matches corresponding to the xml-declaration.
  * @return string           Returns the xml-declaration with modified encoding.
  */
-function _api_convert_encoding_xml_callback($matches) {
+function _api_convert_encoding_xml_callback($matches)
+{
     global $_api_encoding;
     return str_replace($matches[1], $_api_encoding, $matches[0]);
 }
@@ -199,7 +215,8 @@ function _api_convert_encoding_xml_callback($matches) {
  * @param string $html      The input html text.
  * @return bool             Returns TRUE when there is a formula found or FALSE otherwise.
  */
-function api_contains_asciimathml($html) {
+function api_contains_asciimathml($html)
+{
     if (!preg_match_all('/<span[^>]*class\s*=\s*[\'"](.*?)[\'"][^>]*>/mi', $html, $matches)) {
         return false;
     }
@@ -236,8 +253,8 @@ function api_contains_asciisvg($html)
 /**
  * Convers a string from camel case into underscore.
  * Works correctly with ASCII strings only, implementation for human-language strings is not necessary.
- * @param string $string                            The input string (ASCII)
- * @return string                                   The converted result string
+ * @param string $string The input string (ASCII)
+ * @return string The converted result string
  */
 function api_camel_case_to_underscore($string)
 {
@@ -247,9 +264,9 @@ function api_camel_case_to_underscore($string)
 /**
  * Converts a string with underscores into camel case.
  * Works correctly with ASCII strings only, implementation for human-language strings is not necessary.
- * @param string $string                            The input string (ASCII)
+ * @param string $string The input string (ASCII)
  * @param bool $capitalise_first_char (optional)    If true (default), the function capitalises the first char in the result string.
- * @return string                                   The converted result string
+ * @return string The converted result string
  */
 function api_underscore_to_camel_case($string, $capitalise_first_char = true)
 {
@@ -296,13 +313,14 @@ function api_trunc_str($text, $length = 30, $suffix = '...', $middle = false, $e
  *
  * @author Denes Nagy
  * @param  string variable - the variable to be revised
+ * @return string
  */
 function domesticate($input)
 {
     $input = stripslashes($input);
     $input = str_replace("'", "''", $input);
     $input = str_replace('"', "''", $input);
-    return ($input);
+    return $input;
 }
 
 /**
@@ -341,7 +359,8 @@ function domesticate($input)
  * @param array $matches Single Regex Match.
  * @return string HTML A element with URI address.
  */
-function _make_url_clickable_cb($matches) {
+function _make_url_clickable_cb($matches)
+{
     $url = $matches[2];
 
     if (')' == $matches[3] && strpos($url, '(')) {
@@ -360,8 +379,9 @@ function _make_url_clickable_cb($matches) {
     }
 
     $url = esc_url($url);
-    if (empty($url))
+    if (empty($url)) {
         return $matches[0];
+    }
 
     return $matches[1]."<a href=\"$url\" rel=\"nofollow\">$url</a>".$suffix;
 }
@@ -375,7 +395,7 @@ function _make_url_clickable_cb($matches) {
  *
  * @since wordpress 2.8.0
  * @uses wp_kses_bad_protocol() To only permit protocols in the URL set
- *		via $protocols or the common ones set in the function.
+ *        via $protocols or the common ones set in the function.
  *
  * @param string $url The URL to be cleaned.
  * @param array $protocols Optional. An array of acceptable protocols.
@@ -383,11 +403,12 @@ function _make_url_clickable_cb($matches) {
  * @param string $_context Private. Use esc_url_raw() for database usage.
  * @return string The cleaned $url after the 'clean_url' filter is applied.
  */
-function esc_url($url, $protocols = null, $_context = 'display') {
+function esc_url($url, $protocols = null, $_context = 'display')
+{
     //$original_url = $url;
-
-    if ('' == $url)
+    if ('' == $url) {
         return $url;
+    }
     $url = preg_replace('|[^a-z0-9-~+_.?#=!&;,/:%@$\|*\'()\\x80-\\xff]|i', '', $url);
     $strip = array('%0d', '%0a', '%0D', '%0A');
     $url = _deep_replace($strip, $url);
@@ -446,7 +467,8 @@ function esc_url($url, $protocols = null, $_context = 'display') {
  * @param string $subject The string being searched and replaced on, otherwise known as the haystack.
  * @return string The string with the replaced svalues.
  */
-function _deep_replace($search, $subject) {
+function _deep_replace($search, $subject)
+{
     $subject = (string) $subject;
 
     $count = 1;
@@ -456,7 +478,6 @@ function _deep_replace($search, $subject) {
 
     return $subject;
 }
-
 
 /**
  * Callback to convert URL match to HTML A element.
@@ -470,13 +491,15 @@ function _deep_replace($search, $subject) {
  * @param array $matches Single Regex Match.
  * @return string HTML A element with URL address.
  */
-function _make_web_ftp_clickable_cb($matches) {
+function _make_web_ftp_clickable_cb($matches)
+{
     $ret = '';
     $dest = $matches[2];
     $dest = 'http://'.$dest;
     $dest = esc_url($dest);
-    if (empty($dest))
+    if (empty($dest)) {
         return $matches[0];
+    }
 
     // removed trailing [.,;:)] from URL
     if (in_array(substr($dest, -1), array('.', ',', ';', ':', ')')) === true) {
@@ -498,7 +521,8 @@ function _make_web_ftp_clickable_cb($matches) {
  * @param array $matches Single Regex Match.
  * @return string HTML A element with email address.
  */
-function _make_email_clickable_cb($matches) {
+function _make_email_clickable_cb($matches)
+{
     $email = $matches[2].'@'.$matches[3];
     return $matches[1]."<a href=\"mailto:$email\">$email</a>";
 }
@@ -514,16 +538,17 @@ function _make_email_clickable_cb($matches) {
  * @param string $text Content to convert URIs.
  * @return string Content with converted URIs.
  */
-function make_clickable($text) {
+function make_clickable($text)
+{
     $r = '';
     $textarr = preg_split('/(<[^<>]+>)/', $text, -1, PREG_SPLIT_DELIM_CAPTURE); // split out HTML tags
     $nested_code_pre = 0; // Keep track of how many levels link is nested inside <pre> or <code>
     foreach ($textarr as $piece) {
-
-        if (preg_match('|^<code[\s>]|i', $piece) || preg_match('|^<pre[\s>]|i', $piece))
+        if (preg_match('|^<code[\s>]|i', $piece) || preg_match('|^<pre[\s>]|i', $piece)) {
             $nested_code_pre++;
-        elseif (('</code>' === strtolower($piece) || '</pre>' === strtolower($piece)) && $nested_code_pre)
+        } elseif (('</code>' === strtolower($piece) || '</pre>' === strtolower($piece)) && $nested_code_pre) {
             $nested_code_pre--;
+        }
 
         if ($nested_code_pre || empty($piece) || ($piece[0] === '<' && !preg_match('|^<\s*[\w]{1,20}+://|', $piece))) {
             $r .= $piece;
@@ -559,7 +584,6 @@ function make_clickable($text) {
             // Tell PCRE to spend more time optimizing since, when used on a page load, it will probably be used several times.
 
             $ret = preg_replace_callback($url_clickable, '_make_url_clickable_cb', $ret);
-
             $ret = preg_replace_callback('#([\s>])((www|ftp)\.[\w\\x80-\\xff\#$%&~/.\-;:=,?@\[\]+]+)#is', '_make_web_ftp_clickable_cb', $ret);
             $ret = preg_replace_callback('#([\s>])([.0-9a-z_+-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})#i', '_make_email_clickable_cb', $ret);
 
@@ -604,11 +628,10 @@ function make_clickable($text) {
  * @param int $goal The desired chunk length.
  * @return array Numeric array of chunks.
  */
-function _split_str_by_whitespace($string, $goal) {
+function _split_str_by_whitespace($string, $goal)
+{
     $chunks = array();
-
     $string_nullspace = strtr($string, "\r\n\t\v\f ", "\000\000\000\000\000\000");
-
     while ($goal < strlen($string_nullspace)) {
         $pos = strrpos(substr($string_nullspace, 0, $goal + 1), "\000");
 
@@ -639,7 +662,8 @@ function _split_str_by_whitespace($string, $goal) {
  * @param bool      Whether to embed in a <span title="...">...</span>
  * @return string
  * */
-function cut($text, $maxchar, $embed = false) {
+function cut($text, $maxchar, $embed = false)
+{
     if (api_strlen($text) > $maxchar) {
         if ($embed) {
             return '<p title="'.$text.'">'.api_substr($text, 0, $maxchar).'...</p>';
@@ -656,12 +680,12 @@ function cut($text, $maxchar, $embed = false) {
  * @param int       Decimal points 0=never, 1=if needed, 2=always
  * @return mixed    An integer or a float depends on the parameter
  */
-function float_format($number, $flag = 1) {
+function float_format($number, $flag = 1)
+{
     if (is_numeric($number)) {
         if (!$number) {
             $result = ($flag == 2 ? '0.'.str_repeat('0', EXERCISE_NUMBER_OF_DECIMALS) : '0');
         } else {
-
             if (floor($number) == $number) {
                 $result = number_format($number, ($flag == 2 ? EXERCISE_NUMBER_OF_DECIMALS : 0));
             } else {
@@ -677,7 +701,8 @@ function float_format($number, $flag = 1) {
  * Function to obtain last week timestamps
  * @return array    Times for every day inside week
  */
-function get_last_week() {
+function get_last_week()
+{
     $week = date('W');
     $year = date('Y');
 
@@ -700,10 +725,12 @@ function get_last_week() {
  * @param   string   Date in UTC (2010-01-01 12:12:12)
  * @return  int      Returns an integer with the week number of the year
  */
-function get_week_from_day($date) {
+function get_week_from_day($date)
+{
     if (!empty($date)) {
-       $time = api_strtotime($date, 'UTC');
-       return date('W', $time);
+        $time = api_strtotime($date, 'UTC');
+
+        return date('W', $time);
     } else {
         return date('W');
     }
@@ -782,7 +809,7 @@ function format_file_size($file_size)
 
 function return_datetime_from_array($array)
 {
-    $year	 = '0000';
+    $year = '0000';
     $month = $day = $hours = $minutes = $seconds = '00';
     if (isset($array['Y']) && (isset($array['F']) || isset($array['M'])) && isset($array['d']) && isset($array['H']) && isset($array['i'])) {
         $year = $array['Y'];
@@ -833,4 +860,28 @@ function underScoreToCamelCase($string, $capitalizeFirstCharacter = true)
     }
 
     return $str;
+}
+
+/**
+ * @param string $value
+ */
+function trim_value(& $value)
+{
+    $value = trim($value);
+}
+
+/**
+ *
+ * Strips only the given tags in the given HTML string.
+ * @param string $html
+ * @param array $tags
+ * @return string
+ */
+function strip_tags_blacklist($html, $tags)
+{
+    foreach ($tags as $tag) {
+        $regex = '#<\s*' . $tag . '[^>]*>.*?<\s*/\s*'. $tag . '>#msi';
+        $html = preg_replace($regex, '', $html);
+    }
+    return $html;
 }

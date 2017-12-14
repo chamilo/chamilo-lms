@@ -9,7 +9,6 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
-
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 
 api_protect_admin_script();
@@ -86,7 +85,6 @@ $paramsNoRole = 'field_id='.$field_id.'&type='.$extraField->type;
 $columns = array(get_lang('Name'), get_lang('Value'), get_lang('Order'), get_lang('Actions'));
 
 $htmlHeadXtra[] = '<script>
-
     function setHidden(obj) {
         var name = $(obj).attr("name");
         var hiddenName = "hidden_" + name;
@@ -117,9 +115,7 @@ $htmlHeadXtra[] = '<script>
     });
 </script>';
 
-// The header.
 Display::display_header($tool_name);
-
 echo Display::page_header($extraFieldInfo['display_text']);
 
 $obj = new ExtraFieldOption($type);
@@ -150,7 +146,9 @@ $options[0] = get_lang('SelectAnOption');
 ksort($options);
 $form->addElement('select', 'status', get_lang('SelectRole'), $options, array('onclick' => 'changeStatus(this)'));
 
-$checks = $app['orm.em']->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')->findBy(array('fieldId' => $field_id, 'roleId' => $roleId));
+$checks = $app['orm.em']->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')->findBy(
+    array('fieldId' => $field_id, 'roleId' => $roleId)
+);
 $includedFields = array();
 if (!empty($checks)) {
     foreach ($checks as $availableField) {
@@ -215,7 +213,7 @@ if ($form->validate()) {
 
                 if ($value == 1) {
                     if (empty($extraFieldOptionRelFieldOption)) {
-                        $extraFieldOptionRelFieldOption = new \ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption();
+                        $extraFieldOptionRelFieldOption = new \Chamilo\CoreBundle\Entity\ExtraFieldOptionRelFieldOption();
                         $extraFieldOptionRelFieldOption->setFieldId($field_id);
                         $extraFieldOptionRelFieldOption->setFieldOptionId($subItemId);
                         $extraFieldOptionRelFieldOption->setRelatedFieldOptionId($id);
@@ -223,7 +221,6 @@ if ($form->validate()) {
                         $app['orm.ems']['db_write']->persist($extraFieldOptionRelFieldOption);
                     }
                 } else {
-
                     if ($extraFieldOptionRelFieldOption) {
                         $app['orm.ems']['db_write']->remove($extraFieldOptionRelFieldOption);
                     }

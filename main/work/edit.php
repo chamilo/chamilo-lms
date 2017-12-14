@@ -129,20 +129,7 @@ $form = new FormValidator(
     array('enctype' => "multipart/form-data")
 );
 $form->addElement('header', $form_title);
-
 $show_progress_bar = false;
-/*
-if ($submitGroupWorkUrl) {
-    // For user coming from group space to publish his work
-    $realUrl = str_replace($_configuration['root_sys'], api_get_path(WEB_PATH), str_replace("\\", '/', realpath($submitGroupWorkUrl)));
-    $form->addElement('hidden', 'newWorkUrl', $submitGroupWorkUrl);
-    $text_document = $form->addElement('text', 'document', get_lang('Document'));
-    $defaults['document'] = '<a href="' . format_url($submitGroupWorkUrl) . '">' . $realUrl . '</a>';
-    $text_document->freeze();
-} elseif ($item_id && ($is_allowed_to_edit or $is_author)) {
-    $workUrl = $currentCourseRepositoryWeb . $workUrl;
-}*/
-
 $form->addElement('hidden', 'id', $work_id);
 $form->addElement('hidden', 'item_id', $item_id);
 $form->addText('title', get_lang('Title'), true, array('id' => 'file_upload'));
@@ -286,7 +273,7 @@ if ($form->validate()) {
         Security::clear_token();
     } else {
         // Bad token or can't add works
-        Display::addFlash(Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error'));
+        Display::addFlash(Display::return_message(get_lang('ImpossibleToSaveTheDocument'), 'error'));
     }
 
     $script = 'work_list.php';

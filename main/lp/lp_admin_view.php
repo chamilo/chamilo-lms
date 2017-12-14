@@ -33,26 +33,24 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
 
 $course_id = api_get_course_int_id();
 
-$sql_query = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $learnpath_id";
+$sql_query = "SELECT * FROM $tbl_lp 
+              WHERE iid = $learnpath_id";
 $result = Database::query($sql_query);
 $therow = Database::fetch_array($result);
 
-/* SHOWING THE ADMIN TOOLS */
-
-if (isset($_SESSION['gradebook'])) {
-    $gradebook = $_SESSION['gradebook'];
-}
-
-if (!empty($gradebook) && $gradebook == 'view') {
+if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(
-        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
     );
 }
 
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
 $interbreadcrumb[] = array(
-    'url' => api_get_self()."?action=build&lp_id=$learnpath_id",
+    'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
+    'name' => get_lang('LearningPaths')
+);
+$interbreadcrumb[] = array(
+    'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
     "name" => stripslashes("{$therow['name']}"),
 );
 $interbreadcrumb[] = array(
@@ -72,28 +70,30 @@ $lp_theme_css = $_SESSION['oLP']->get_theme();
 
 // POST action handling (uploading mp3, deleting mp3)
 if (isset($_POST['save_audio'])) {
-
     //Updating the lp.modified_on
     $_SESSION['oLP']->set_modified_on();
 
+    $lp_items_to_remove_audio = [];
+    $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
     // Deleting the audio fragments.
     foreach ($_POST as $key => $value) {
         if (substr($key, 0, 9) == 'removemp3') {
             $lp_items_to_remove_audio[] = str_ireplace('removemp3', '', $key);
             // Removing the audio from the learning path item.
-            $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
             $in = implode(',', $lp_items_to_remove_audio);
         }
     }
     if (count($lp_items_to_remove_audio) > 0) {
         $sql = "UPDATE $tbl_lp_item SET audio = '' 
-                WHERE c_id = $course_id AND id IN (".$in.")";
+                WHERE iid IN (".$in.")";
         $result = Database::query($sql);
     }
 
     // Uploading the audio files.
     foreach ($_FILES as $key => $value) {
-        if (substr($key, 0, 7) == 'mp3file' && !empty($_FILES[$key]['tmp_name'])) {
+        if (substr($key, 0, 7) == 'mp3file' &&
+            !empty($_FILES[$key]['tmp_name'])
+        ) {
             // The id of the learning path item.
             $lp_item_id = str_ireplace('mp3file', '', $key);
 
@@ -109,7 +109,6 @@ if (isset($_POST['save_audio'])) {
             $clean_name = api_replace_dangerous_char($file_name);
             // No "dangerous" files.
             $clean_name = disable_dangerous_file($clean_name);
-
             $check_file_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/audio/'.$clean_name;
 
             // If the file exists we generate a new name.
@@ -144,10 +143,10 @@ if (isset($_POST['save_audio'])) {
             $file = $file_components[count($file_components) - 1];
 
             // Store the mp3 file in the lp_item table.
-            $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-            $sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($file)."'
-                                 WHERE c_id = $course_id AND id = '".Database::escape_string($lp_item_id)."'";
-            Database::query($sql_insert_audio);
+            $sql = "UPDATE $tbl_lp_item 
+                    SET audio = '".Database::escape_string($file)."'
+                    WHERE iid = ".(int) $lp_item_id;
+            Database::query($sql);
         }
     }
     //echo Display::return_message(get_lang('ItemUpdated'), 'confirm');
@@ -168,69 +167,65 @@ $(function() {
     <?php
     if (!isset($_REQUEST['updateaudio'])) {
     ?>
-	$("#lp_item_list").sortable({
-		items: "li",
-		handle: ".moved", //only the class "moved"
-		cursor: "move",
-		placeholder: "ui-state-highlight" //defines the yellow highlight
-	});
+    $("#lp_item_list").sortable({
+        items: "li",
+        handle: ".moved", //only the class "moved"
+        cursor: "move",
+        placeholder: "ui-state-highlight" //defines the yellow highlight
+    });
 
-	$("#listSubmit").click(function () {
-		//Disable the submit button to prevent a double-click
-		$(this).attr("disabled","disabled");
-		//Initialize the variable that will contain the data to submit to the form
-		newOrderData= "";
-		//All direct descendants of the lp_item_list will have a parentId of 0
-		var parentId= 0;
+    $("#listSubmit").click(function () {
+        //Disable the submit button to prevent a double-click
+        $(this).attr("disabled","disabled");
+        //Initialize the variable that will contain the data to submit to the form
+        newOrderData= "";
+        //All direct descendants of the lp_item_list will have a parentId of 0
+        var parentId= 0;
 
-		//Walk through the direct descendants of the lp_item_list <ul>
-		$("#lp_item_list").children().each(function () {
+        //Walk through the direct descendants of the lp_item_list <ul>
+        $("#lp_item_list").children().each(function () {
+            /*Only process elements with an id attribute (in order to skip the blank,
+            unmovable <li> elements.*/
+            if ($(this).attr("id")) {
+                /*Build a string of data with the child's ID and parent ID,
+                 using the "|" as a delimiter between the two IDs and the "^"
+                 as a record delimiter (these delimiters were chosen in case the data
+                 involved includes more common delimiters like commas within the content)
+                */
+                newOrderData= newOrderData + $(this).attr("id") + "|" + "0" + "^";
 
-			/*Only process elements with an id attribute (in order to skip the blank,
-			unmovable <li> elements.*/
+                //Determine if this child is a containter
+                if ($(this).is(".li_container")) {
+                      //Process the child elements of the container
+                    processChildren($(this).attr("id"));
+                }
+            }
 
-			if ($(this).attr("id")) {
-					/*Build a string of data with the child's ID and parent ID,
-					 using the "|" as a delimiter between the two IDs and the "^"
-					 as a record delimiter (these delimiters were chosen in case the data
-					 involved includes more common delimiters like commas within the content)
-					*/
-					newOrderData= newOrderData + $(this).attr("id") + "|" + "0" + "^";
+        }); //end of lp_item_list children loop
 
-					//Determine if this child is a containter
-					if ($(this).is(".li_container")) {
-						  //Process the child elements of the container
-                        processChildren($(this).attr("id"));
-					}
-				}
-
-		}); //end of lp_item_list children loop
-
-		//Write the newOrderData string out to the listResults form element
-		//$("#listResults").val(newOrderData);
-		var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
-		$.post("<?php echo api_get_path(WEB_AJAX_PATH)?>lp.ajax.php", order, function(reponse){
+        //Write the newOrderData string out to the listResults form element
+        //$("#listResults").val(newOrderData);
+        var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
+        $.post("<?php echo api_get_path(WEB_AJAX_PATH)?>lp.ajax.php", order, function(reponse) {
             $("#message").html(reponse);
         });
 
-		 setTimeout(function() {
-		        $("#message").html('');
-		    }, 3000);
+        setTimeout(function() {
+            $("#message").html('');
+        }, 3000);
 
-		return false;
+        return false;
 
-	}); //end of lp_item_list event assignment
+    }); //end of lp_item_list event assignment
+    <?php } ?>
 
-	<?php } ?>
-	function processChildren(parentId) {
-		//Loop through the children of the UL element defined by the parentId
-		var ulParentID= "UL_" + parentId;
-		$("#" + ulParentID).children().each(function () {
-
-			/*Only process elements with an id attribute (in order to skip the blank,
-				unmovable <li> elements.*/
-
-			if ($(this).attr("id")) {
+    function processChildren(parentId) {
+        //Loop through the children of the UL element defined by the parentId
+        var ulParentID= "UL_" + parentId;
+        $("#" + ulParentID).children().each(function () {
+            /*Only process elements with an id attribute (in order to skip the blank,
+                unmovable <li> elements.*/
+            if ($(this).attr("id")) {
                 /*Build a string of data with the child's ID and parent ID,
                     using the "|" as a delimiter between the two IDs and the "^"
                     as a record delimiter (these delimiters were chosen in case the data
@@ -244,8 +239,8 @@ $(function() {
                     processChildren($(this).attr("id"));
                 }
             }
-		});  //end of children loop
-	} //end of processChildren function
+        });  //end of children loop
+    } //end of processChildren function
 });
 
 /* <![CDATA[ */
@@ -279,14 +274,20 @@ echo '<div class="col-md-8">';
 switch ($_GET['action']) {
     case 'edit_item':
         if (isset($is_success) && $is_success === true) {
-            echo Display::return_message(get_lang('LearnpathItemEdited'), 'confirm');
+            echo Display::return_message(
+                get_lang('LearnpathItemEdited'),
+                'confirm'
+            );
         } else {
             echo $_SESSION['oLP']->display_edit_item($_GET['id']);
         }
         break;
     case 'delete_item':
         if (isset($is_success) && $is_success === true) {
-            echo Display::return_message(get_lang('LearnpathItemDeleted'), 'confirm');
+            echo Display::return_message(
+                get_lang('LearnpathItemDeleted'),
+                'confirm'
+            );
         }
         break;
 }
@@ -298,5 +299,4 @@ if (!empty($_GET['updateaudio'])) {
 echo '</div>';
 echo '</div>';
 
-/* FOOTER */
 Display::display_footer();

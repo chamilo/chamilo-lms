@@ -123,7 +123,6 @@ if (isset($action) && $action == 'calendar_add') {
     echo '<ul class="list-group">';
     if (!empty($attendance_calendar)) {
         foreach ($attendance_calendar as $calendar) {
-
             echo '<li class="list-group-item">';
             if ((isset($action) && $action === 'calendar_edit') &&
                 (isset($calendar_id) && $calendar_id == $calendar['id'])
@@ -152,9 +151,15 @@ if (isset($action) && $action == 'calendar_add') {
                 echo Display::return_icon(
                     'lp_calendar_event.png',
                     get_lang('DateTime'),
-                        null,
-                        ICON_SIZE_MEDIUM
-                ).' '.substr($calendar['date_time'], 0, strlen($calendar['date_time']) - 3).'&nbsp;';
+                    null,
+                    ICON_SIZE_MEDIUM
+                ).' '.
+                substr(
+                    $calendar['date_time'],
+                    0,
+                    strlen($calendar['date_time']) - 3
+                ).
+                '&nbsp;';
 
                 if (isset($calendar['groups']) && !empty($calendar['groups'])) {
                     foreach ($calendar['groups'] as $group) {

@@ -12,7 +12,7 @@ api_protect_course_script(true);
 
 // Header
 $tool = TOOL_ATTENDANCE;
-Display :: display_header('');
+Display::display_header('');
 
 // Introduction section
 Display::display_introduction_section($tool);
@@ -24,4 +24,4 @@ Event::event_access_tool($tool);
 echo $content;
 
 // Footer
-Display :: display_footer();
+Display::display_footer();

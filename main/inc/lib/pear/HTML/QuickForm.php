@@ -1,6 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
-
 /**
  * Create, validate and process HTML forms
  *
@@ -31,9 +29,6 @@
  * @global array $GLOBALS['_HTML_QuickForm_registered_rules']
  */
 
-
-// {{{ error codes
-
 /**#@+
  * Error codes for HTML_QuickForm
  *
@@ -52,9 +47,6 @@ define('QUICKFORM_INVALID_ELEMENT_NAME', -6);
 define('QUICKFORM_INVALID_PROCESS', -7);
 define('QUICKFORM_DEPRECATED', -8);
 define('QUICKFORM_INVALID_DATASOURCE', -9);
-/**#@-*/
-
-// }}}
 
 /**
  * Class HTML_QuickForm
@@ -346,11 +338,10 @@ class HTML_QuickForm extends HTML_Common
     /**
      * Initializes default form values
      *
-     * @param     array    $defaultValues       values used to fill the form
-     * @param     mixed    $filter              (optional) filter(s) to apply to all default values
+     * @param     array $defaultValues values used to fill the form
+     * @param     mixed $filter (optional) filter(s) to apply to all default values
      * @since     1.0
      * @access    public
-     * @return    void
      */
     public function setDefaults($defaultValues = null, $filter = null)
     {
@@ -557,8 +548,8 @@ class HTML_QuickForm extends HTML_Common
     public function &addElement($element)
     {
         if (is_object($element) && is_subclass_of($element, 'html_quickform_element')) {
-           $elementObject = &$element;
-           $elementObject->onQuickFormEvent('updateValue', null, $this);
+            $elementObject = &$element;
+            $elementObject->onQuickFormEvent('updateValue', null, $this);
         } else {
             $args = func_get_args();
             $elementObject =& $this->_loadElement('addElement', $element, array_slice($args, 1));
@@ -598,6 +589,9 @@ class HTML_QuickForm extends HTML_Common
         return $elementObject;
     }
 
+    /**
+     * @return array
+     */
     public function getElements()
     {
         return $this->_elements;

@@ -76,11 +76,12 @@ class ExtraFieldValue extends Model
      * In order to save this function needs a item_id (user id, course id, etc)
      * This function is used with $extraField->addElements()
      * @param array $params array for the insertion into the *_field_values table
+     * @param bool $onlySubmittedFields Only save parameters in the $param array
      * @param bool $showQuery
      * @return mixed false on empty params, void otherwise
      * @assert (array()) === false
      */
-    public function saveFieldValues($params, $showQuery = false)
+    public function saveFieldValues($params, $onlySubmittedFields = false, $showQuery = false)
     {
         foreach ($params as $key => $value) {
             $found = strpos($key, '__persist__');
@@ -106,11 +107,23 @@ class ExtraFieldValue extends Model
 
         // Parse params.
         foreach ($extraFields as $fieldDetails) {
-            if ($fieldDetails['visible_to_self'] != 1 && !api_is_platform_admin(true, true)) {
+            $field_variable = $fieldDetails['variable'];
+
+            // if the field is not visible to the user in the end, we need to apply special rules
+            if ($fieldDetails['visible_to_self'] != 1) {
+                //only admins should be able to add those values
+                if (!api_is_platform_admin(true, true)) {
+                    // although if not admin but sent through a CLI script, we should accept it as well
+                    if (PHP_SAPI != 'cli') {
+                        continue; //not a CLI script, so don't write the value to DB
+                    }
+                }
+            }
+
+            if ($onlySubmittedFields && !isset($params['extra_'.$field_variable])) {
                 continue;
             }
 
-            $field_variable = $fieldDetails['variable'];
             if (isset($params['extra_'.$field_variable])) {
                 $value = $params['extra_'.$field_variable];
             } else {
@@ -124,6 +137,7 @@ class ExtraFieldValue extends Model
 
             $commentVariable = 'extra_'.$field_variable.'_comment';
             $comment = isset($params[$commentVariable]) ? $params[$commentVariable] : null;
+            $dirPermissions = api_get_permissions_for_new_directories();
 
             switch ($extraFieldInfo['field_type']) {
                 case ExtraField::FIELD_TYPE_TAG:
@@ -206,7 +220,6 @@ class ExtraFieldValue extends Model
                     $em->flush();
                     break;
                 case ExtraField::FIELD_TYPE_FILE_IMAGE:
-                    $dirPermissions = api_get_permissions_for_new_directories();
                     switch ($this->type) {
                         case 'course':
                             $fileDir = api_get_path(SYS_UPLOAD_PATH)."courses/";
@@ -220,6 +233,10 @@ class ExtraFieldValue extends Model
                             $fileDir = UserManager::getUserPathById($params['item_id'], 'system');
                             $fileDirStored = UserManager::getUserPathById($params['item_id'], 'last');
                             break;
+                        case 'work':
+                            $fileDir = api_get_path(SYS_UPLOAD_PATH).'work/';
+                            $fileDirStored = 'work/';
+                            break;
                     }
 
                     $fileName = ExtraField::FIELD_TYPE_FILE_IMAGE."_{$params['item_id']}.png";
@@ -228,7 +245,7 @@ class ExtraFieldValue extends Model
                         mkdir($fileDir, $dirPermissions, true);
                     }
 
-                    if ($value['error'] == 0) {
+                    if (isset($value['error']) && $value['error'] == 0) {
                         //Crop the image to adjust 16:9 ratio
                         $crop = new Image($value['tmp_name']);
                         $crop->crop($params['extra_'.$field_variable.'_crop_result']);
@@ -246,20 +263,22 @@ class ExtraFieldValue extends Model
                     }
                     break;
                 case ExtraField::FIELD_TYPE_FILE:
-                    $dirPermissions = api_get_permissions_for_new_directories();
-
                     switch ($this->type) {
                         case 'course':
-                            $fileDir = api_get_path(SYS_UPLOAD_PATH)."courses/";
+                            $fileDir = api_get_path(SYS_UPLOAD_PATH).'courses/';
                             $fileDirStored = "courses/";
                             break;
                         case 'session':
-                            $fileDir = api_get_path(SYS_UPLOAD_PATH)."sessions/";
+                            $fileDir = api_get_path(SYS_UPLOAD_PATH).'sessions/';
                             $fileDirStored = "sessions/";
                             break;
                         case 'user':
                             $fileDir = UserManager::getUserPathById($params['item_id'], 'system');
                             $fileDirStored = UserManager::getUserPathById($params['item_id'], 'last');
+                            break;
+                        case 'work':
+                            $fileDir = api_get_path(SYS_UPLOAD_PATH).'work/';
+                            $fileDirStored = "work/";
                             break;
                     }
 
@@ -269,7 +288,7 @@ class ExtraFieldValue extends Model
                         mkdir($fileDir, $dirPermissions, true);
                     }
 
-                    if ($value['error'] == 0) {
+                    if (isset($value['error']) && $value['error'] == 0) {
                         moveUploadedFile($value, $fileDir.$fileName);
 
                         $new_params = array(
@@ -310,7 +329,6 @@ class ExtraFieldValue extends Model
                         'value' => $value,
                         'comment' => $comment
                     );
-
                     self::save($newParams, $showQuery);
             }
         }
@@ -319,11 +337,11 @@ class ExtraFieldValue extends Model
     /**
      * Save values in the *_field_values table
      * @param array $params Structured array with the values to save
-     * @param boolean $show_query Whether to show the insert query (passed to the parent save() method)
+     * @param boolean $showQuery Whether to show the insert query (passed to the parent save() method)
      * @return mixed The result sent from the parent method
      * @assert (array()) === false
      */
-    public function save($params, $show_query = false)
+    public function save($params, $showQuery = false)
     {
         $extra_field = $this->getExtraField();
 
@@ -378,6 +396,8 @@ class ExtraFieldValue extends Model
                 case ExtraField::FIELD_TYPE_TEXTAREA:
                     break;
                 case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
+                    //no break
+                case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
                     if (is_array($value)) {
                         if (isset($value['extra_'.$extraFieldInfo['variable']]) &&
                             isset($value['extra_'.$extraFieldInfo['variable'].'_second'])
@@ -406,7 +426,7 @@ class ExtraFieldValue extends Model
             }
 
             $params['value'] = $value_to_insert;
-            $params['author_id'] = api_get_user_id();
+            //$params['author_id'] = api_get_user_id();
 
             // Insert
             if (empty($field_values)) {
@@ -463,10 +483,10 @@ class ExtraFieldValue extends Model
 
                         $params['value'] = $optionId;
                         if ($optionId) {
-                            return parent::save($params, $show_query);
+                            return parent::save($params, $showQuery);
                         }
                     } else {
-                        return parent::save($params, $show_query);
+                        return parent::save($params, $showQuery);
                     }
                 }
             } else {
@@ -522,7 +542,7 @@ class ExtraFieldValue extends Model
                 } else {
                     $params['id'] = $field_values['id'];
 
-                    return parent::update($params, $show_query);
+                    return parent::update($params, $showQuery);
                 }
             }
         }
@@ -575,6 +595,31 @@ class ExtraFieldValue extends Model
                             if (isset($extra_field_option_result[0])) {
                                 $result['value'] = $extra_field_option_result[0]['display_text'];
                             }
+                            break;
+                        case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
+                            $options = explode('::', $result['value']);
+
+                            $field_option = new ExtraFieldOption($this->type);
+                            $result = $field_option->get($options[0]);
+
+                            if (!empty($result)) {
+                                $result['value'] = $result['display_text']
+                                    .'&rarr;'
+                                    .$options[1];
+                            }
+                            break;
+                        case ExtraField::FIELD_TYPE_TRIPLE_SELECT:
+                            $optionIds = explode(';', $result['value']);
+                            $optionValues = [];
+
+                            foreach ($optionIds as $optionId) {
+                                $objEfOption = new ExtraFieldOption('user');
+                                $optionInfo = $objEfOption->get($optionId);
+
+                                $optionValues[] = $optionInfo['display_text'];
+                            }
+
+                            $result['value'] = implode(' / ', $optionValues);
                             break;
                     }
                 }
@@ -674,6 +719,35 @@ class ExtraFieldValue extends Model
                         }
                     }
                 }
+                if ($result['field_type'] == ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD) {
+                    if (!empty($result['value'])) {
+                        $options = explode('::', $result['value']);
+
+                        $field_option = new ExtraFieldOption($this->type);
+                        $result = $field_option->get($options[0]);
+
+                        if (!empty($result)) {
+                            $result['value'] = $result['display_text']
+                                .'&rarr;'
+                                .$options[1];
+                        }
+                    }
+                }
+                if ($result['field_type'] == ExtraField::FIELD_TYPE_TRIPLE_SELECT) {
+                    if (!empty($result['value'])) {
+                        $optionIds = explode(';', $result['value']);
+                        $optionValues = [];
+
+                        foreach ($optionIds as $optionId) {
+                            $objEfOption = new ExtraFieldOption('user');
+                            $optionInfo = $objEfOption->get($optionId);
+
+                            $optionValues[] = $optionInfo['display_text'];
+                        }
+
+                        $result['value'] = implode(' / ', $optionValues);
+                    }
+                }
             }
 
             return $result;
@@ -719,7 +793,6 @@ class ExtraFieldValue extends Model
             // (erroneously) be more than one row for an item
             $sql .= ' DESC';
         }
-
         $result = Database::query($sql);
         if ($result !== false && Database::num_rows($result)) {
             if ($all) {
@@ -799,7 +872,8 @@ class ExtraFieldValue extends Model
         $itemId = intval($itemId);
         $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
-        $sql = "SELECT s.value, sf.variable FROM {$this->table} s
+        $sql = "SELECT s.value, sf.variable, sf.field_type, sf.id 
+                FROM {$this->table} s
                 INNER JOIN {$this->table_handler_field} sf
                 ON (s.field_id = sf.id)
                 WHERE
@@ -875,6 +949,7 @@ class ExtraFieldValue extends Model
     {
         $field_id = intval($field_id);
         $item_id = intval($item_id);
+        $extraFieldType = $this->getExtraField()->getExtraFieldType();
 
         $sql = "DELETE FROM {$this->table}
                 WHERE

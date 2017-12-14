@@ -62,7 +62,6 @@ class Model
         // Database table definition
         $result = Database::delete($this->table, $params);
         if ($result != 1) {
-            
             return false;
         }
 
@@ -78,7 +77,7 @@ class Model
     {
         $clean_params = array();
         if (!empty($params)) {
-            foreach ($params as $key=>$value) {
+            foreach ($params as $key => $value) {
                 if (in_array($key, $this->columns)) {
                     $clean_params[$key] = $value;
                 }
@@ -143,6 +142,7 @@ class Model
 
     /**
      * Get the count of elements
+     * @return int
      */
     public function get_count()
     {
@@ -167,7 +167,7 @@ class Model
      * Saves an element into the DB
      * @param array $params
      * @param bool  $show_query Whether to show the query in logs or not (passed to Database::insert())
-     * @return bool
+     * @return bool|int
      *
      */
     public function save($params, $show_query = false)
@@ -214,11 +214,11 @@ class Model
     /**
      * Updates the obj in the database. The $params['id'] must exist in order to update a record
      * @param array $params
-     *
+     * @param bool $showQuery
      * @return bool
      *
      */
-    public function update($params)
+    public function update($params, $showQuery = false)
     {
         $params = $this->clean_parameters($params);
 
@@ -244,7 +244,8 @@ class Model
                 $result = Database::update(
                     $this->table,
                     $params,
-                    array('id = ?' => $id)
+                    array('id = ?' => $id),
+                    $showQuery
                 );
                 if ($result) {
                     return true;

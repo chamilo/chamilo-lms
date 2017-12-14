@@ -1,5 +1,9 @@
 <?php
 /* For license terms, see /license.txt */
+
+use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CoreBundle\Entity\Course;
+
 /**
  * Description of MsiLti
  *
@@ -9,8 +13,10 @@ class ImsLtiPlugin extends Plugin
 {
     const TABLE_TOOL = 'plugin_msi_lti_tool';
 
+    public $isAdminPlugin = true;
+
     /**
-     * Class cronstructor
+     * Class constructor
      */
     protected function __construct()
     {
@@ -25,7 +31,7 @@ class ImsLtiPlugin extends Plugin
     /**
      * Get the class instance
      * @staticvar MsiLtiPlugin $result
-     * @return MsiLtiPlugin
+     * @return ImsLtiPlugin
      */
     public static function create()
     {
@@ -139,16 +145,14 @@ class ImsLtiPlugin extends Plugin
 
     /**
      * Add the course tool
-     * @param \Chamilo\CoreBundle\Entity\Course $course
+     * @param Course $course
      * @param ImsLtiTool $tool
      */
-    public function addCourseTool(\Chamilo\CoreBundle\Entity\Course $course, ImsLtiTool $tool)
+    public function addCourseTool(Course $course, ImsLtiTool $tool)
     {
         $em = Database::getManager();
-
         $cToolId = AddCourse::generateToolId($course->getId());
-
-        $cTool = new \Chamilo\CourseBundle\Entity\CTool();
+        $cTool = new CTool();
         $cTool
             ->setId($cToolId)
             ->setCId($course->getId())
@@ -167,12 +171,15 @@ class ImsLtiPlugin extends Plugin
         $em->flush();
     }
 
+    /**
+     * @return string
+     */
     protected function getConfigExtraText()
     {
         $text = $this->get_lang('ImsLtiDescription');
         $text .= sprintf(
             $this->get_lang('ManageToolButton'),
-            api_get_path(WEB_PLUGIN_PATH).'ims_lti/list.php'
+            api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php'
         );
 
         return $text;

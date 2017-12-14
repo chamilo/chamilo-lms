@@ -19,10 +19,15 @@ $use_anonymous = true;
 // setting the global file that gets the general configuration, the databases, the languages, ...
 require_once __DIR__.'/../inc/global.inc.php';
 
-/*	Sessions */
+api_protect_course_script(true);
+api_protect_course_group(GroupManager::GROUP_TOOL_ANNOUNCEMENT);
 
-$ctok = Security::get_existing_token();
-$stok = Security::get_token();
+$token = Security::get_existing_token();
+
+$courseId = api_get_course_int_id();
+$_course = api_get_course_info_by_id($courseId);
+$group_id = api_get_group_id();
+$sessionId = api_get_session_id();
 
 $current_course_tool = TOOL_ANNOUNCEMENT;
 $this_section = SECTION_COURSES;
@@ -40,9 +45,6 @@ if (!empty($sessionId) && $drhHasAccessToSessionContent) {
     $allowToEdit = $allowToEdit || api_is_drh();
 }
 
-/* ACCESS RIGHTS */
-api_protect_course_script(true);
-
 // Configuration settings
 $display_announcement_list = true;
 $display_form = false;
@@ -59,15 +61,9 @@ $tbl_courses = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_sessions = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-$course_id = api_get_course_int_id();
-$_course = api_get_course_info_by_id($course_id);
-$group_id = api_get_group_id();
-$sessionId = api_get_session_id();
-
+$isTutor = false;
 if (!empty($group_id)) {
     $group_properties = GroupManager:: get_group_properties($group_id);
-
     $interbreadcrumb[] = array(
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
         "name" => get_lang('Groups'),
@@ -76,9 +72,15 @@ if (!empty($group_id)) {
         "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
         "name" => get_lang('GroupSpace').' '.$group_properties['name']
     );
-}
 
-api_protect_course_group(GroupManager::GROUP_TOOL_ANNOUNCEMENT);
+    if ($allowToEdit === false) {
+        // Check if user is tutor group
+        $isTutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_properties, $courseId);
+        if ($isTutor) {
+            $allowToEdit = true;
+        }
+    }
+}
 
 /*	Tracking	*/
 Event::event_access_tool(TOOL_ANNOUNCEMENT);
@@ -110,14 +112,14 @@ switch ($action) {
                 $sortDirection = 'ASC';
             }
 
-            $announcementInfo = AnnouncementManager::get_by_id($course_id, $thisAnnouncementId);
+            $announcementInfo = AnnouncementManager::get_by_id($courseId, $thisAnnouncementId);
 
             $sql = "SELECT DISTINCT announcement.id, announcement.display_order
                     FROM $tbl_announcement announcement,
                     $tbl_item_property itemproperty
                     WHERE
-                        announcement.c_id =  $course_id AND
-                        itemproperty.c_id =  $course_id AND
+                        announcement.c_id =  $courseId AND
+                        itemproperty.c_id =  $courseId AND
                         itemproperty.ref = announcement.id AND
                         itemproperty.tool = '".TOOL_ANNOUNCEMENT."'  AND
                         itemproperty.visibility <> 2
@@ -131,10 +133,10 @@ switch ($action) {
                     $nextAnnouncementId = $announcementId;
                     $nextAnnouncementOrder = $announcementOrder;
                     $sql = "UPDATE $tbl_announcement SET display_order = '$nextAnnouncementOrder'
-                            WHERE c_id = $course_id AND id = $thisAnnouncementId";
+                            WHERE c_id = $courseId AND id = $thisAnnouncementId";
                     Database::query($sql);
                     $sql = "UPDATE $tbl_announcement  SET display_order = '$thisAnnouncementOrder'
-                            WHERE c_id = $course_id AND id =  $nextAnnouncementId";
+                            WHERE c_id = $courseId AND id =  $nextAnnouncementId";
 
                     Database::query($sql);
                     break;
@@ -196,7 +198,12 @@ switch ($action) {
         // jqgrid will use this URL to do the selects
         $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_course_announcements&'.api_get_cidreq().'&title_to_search='.$keyword.'&user_id_to_search='.$userIdToSearch;
         $deleteUrl = api_get_path(WEB_AJAX_PATH).'announcement.ajax.php?a=delete_item&'.api_get_cidreq();
-        $columns = array(get_lang('Title'), get_lang('By'), get_lang('LastUpdateDate'), get_lang('Actions'));
+        $columns = array(
+            get_lang('Title'),
+            get_lang('By'),
+            get_lang('LastUpdateDate'),
+            get_lang('Actions')
+        );
 
         // Column config
         $columnModel = array(
@@ -215,8 +222,8 @@ switch ($action) {
                 'sortable' => 'false',
             ),
             array(
-                'name' => 'insert_date',
-                'index' => 'insert_date',
+                'name' => 'lastedit_date',
+                'index' => 'lastedit_date',
                 'width' => '200',
                 'align' => 'left',
                 'sortable' => 'false',
@@ -236,7 +243,7 @@ switch ($action) {
         // height auto
         $extra_params['height'] = 'auto';
         $editOptions = '';
-        if (api_is_allowed_to_edit()) {
+        if (api_is_allowed_to_edit() || $isTutor) {
             $extra_params['multiselect'] = true;
             $editOptions = '
             $("#announcements").jqGrid(
@@ -266,7 +273,11 @@ switch ($action) {
         });
         </script>';
 
-        $count = AnnouncementManager::getAnnouncements($stok, $announcement_number, true);
+        $count = AnnouncementManager::getAnnouncements(
+            $token,
+            $announcement_number,
+            true
+        );
 
         if (empty($count)) {
             $html = '';
@@ -297,7 +308,7 @@ switch ($action) {
             api_not_allowed();
         }
 
-        if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
+        if (!api_is_session_general_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
             AnnouncementManager::delete_announcement($_course, $id);
             Display::addFlash(Display::return_message(get_lang('AnnouncementDeleted')));
         }
@@ -306,9 +317,13 @@ switch ($action) {
         break;
     case 'delete_all':
         if (api_is_allowed_to_edit()) {
-            AnnouncementManager::delete_all_announcements($_course);
-            Display::addFlash(Display::return_message(get_lang('AnnouncementDeletedAll')));
-            header('Location: '.$homeUrl);
+            $allow = api_get_configuration_value('disable_delete_all_announcements');
+            if ($allow === false) {
+                AnnouncementManager::delete_all_announcements($_course);
+                Display::addFlash(Display::return_message(get_lang('AnnouncementDeletedAll')));
+
+            }
+            header('Location: ' . $homeUrl);
             exit;
         }
         break;
@@ -331,7 +346,7 @@ switch ($action) {
                     api_not_allowed();
                 }
 
-                if (!api_is_course_coach() ||
+                if (!api_is_session_general_coach() ||
                     api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $_GET['id'])
                 ) {
                     AnnouncementManager::change_visibility_announcement(
@@ -377,9 +392,12 @@ switch ($action) {
         );
 
         $nameTools = $form_name;
-        $form->addElement('header', $form_name);
-        $form->addButtonAdvancedSettings('choose_recipients', [get_lang('ChooseRecipients'), get_lang('AnnouncementChooseRecipientsDescription')]);
-        $form->addHtml('<div id="choose_recipients_options" style="display: none;">');
+        $form->addHeader($form_name);
+        $form->addButtonAdvancedSettings(
+            'choose_recipients',
+            [get_lang('ChooseRecipients'), get_lang('AnnouncementChooseRecipientsDescription')]
+        );
+        $form->addHtml('<div id="choose_recipients_options" style="display:none;">');
 
         $to = [];
         if (empty($group_id)) {
@@ -398,12 +416,14 @@ switch ($action) {
                 // we want to remind inactive users. The $_GET['since'] parameter
                 // determines which users have to be warned (i.e the users who have been inactive for x days or more
                 $since = isset($_GET['since']) ? intval($_GET['since']) : 6;
-                // getting the users who have to be reminded
-                $to = Tracking:: getInactiveStudentsInCourse(
+
+                // Getting the users who have to be reminded
+                $to = Tracking::getInactiveStudentsInCourse(
                     api_get_course_int_id(),
                     $since,
                     $sessionId
                 );
+
                 // setting the variables for the form elements: the users who need to receive the message
                 foreach ($to as &$user) {
                     $user = 'USER:'.$user;
@@ -433,10 +453,9 @@ switch ($action) {
                     );
                 }
             }
-
-            $element = CourseManager::addUserGroupMultiSelect($form, array());
+            $element = CourseManager::addUserGroupMultiSelect($form, []);
         } else {
-            $element = CourseManager::addGroupMultiSelect($form, $group_properties, array());
+            $element = CourseManager::addGroupMultiSelect($form, $group_properties, []);
         }
 
         $form->addHtml('</div>');
@@ -446,10 +465,10 @@ switch ($action) {
             $announcement_to_modify = '';
         }
 
-        $announcementInfo = AnnouncementManager::get_by_id($course_id, $id);
+        $announcementInfo = AnnouncementManager::get_by_id($courseId, $id);
 
         if (isset($announcementInfo) && !empty($announcementInfo)) {
-            $to = AnnouncementManager::load_edit_users("announcement", $id);
+            $to = AnnouncementManager::load_edit_users('announcement', $id);
 
             $defaults = array(
                 'title' => $announcementInfo['title'],
@@ -484,18 +503,24 @@ switch ($action) {
         }
 
         $defaults['email_ann'] = true;
-
-        $form->addElement('text', 'title', get_lang('EmailTitle'), array("onkeypress" => "return event.keyCode != 13;")); //do not submit on enter
+        $form->addElement(
+            'text',
+            'title',
+            get_lang('EmailTitle'),
+            array("onkeypress" => "return event.keyCode != 13;")
+        );
         $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
         $form->addElement('hidden', 'id');
-        $htmlTags = "<b>".get_lang('Tags')."</b><br /><br />";
-        $tags = AnnouncementManager::get_tags();
-
+        $htmlTags = '';
+        $tags = AnnouncementManager::getTags();
         foreach ($tags as $tag) {
             $htmlTags .= "<b>".$tag."</b><br />";
         }
+        $form->addButtonAdvancedSettings('tags', get_lang('Tags'));
+        $form->addElement('html', '<div id="tags_options" style="display:none">');
+        $form->addLabel('', Display::return_message($htmlTags, 'normal', false));
+        $form->addElement('html', '</div>');
 
-        $form->addLabel('', "<div class='alert alert-info'>".$htmlTags."</div>");
         $form->addHtmlEditor(
             'content',
             get_lang('Description'),
@@ -506,7 +531,7 @@ switch ($action) {
 
         $form->addElement('file', 'user_upload', get_lang('AddAnAttachment'));
         $form->addElement('textarea', 'file_comment', get_lang('FileComment'));
-        $form->addElement('hidden', 'sec_token', $stok);
+        $form->addElement('hidden', 'sec_token', $token);
 
         if (empty($sessionId)) {
             $form->addCheckBox('send_to_users_in_session', null, get_lang('SendToUsersInSessions'));
@@ -524,12 +549,11 @@ switch ($action) {
         if ($form->validate()) {
             $data = $form->getSubmitValues();
             $data['users'] = isset($data['users']) ? $data['users'] : ['everyone'];
-
             $sendToUsersInSession = isset($data['send_to_users_in_session']) ? true : false;
 
             if (isset($id) && $id) {
                 // there is an Id => the announcement already exists => update mode
-                if ($ctok == $_POST['sec_token']) {
+                if (Security::check_token('post')) {
                     $file_comment = $_POST['file_comment'];
                     $file = $_FILES['user_upload'];
 
@@ -565,7 +589,7 @@ switch ($action) {
                 }
             } else {
                 // Insert mode
-                if ($ctok == $_POST['sec_token']) {
+                if (Security::check_token('post')) {
                     $file = $_FILES['user_upload'];
                     $file_comment = $data['file_comment'];
 
@@ -635,14 +659,15 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
 // Actions
 $show_actions = false;
 $actionsLeft = '';
-if ($allowToEdit && (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
-) {
+if ($allowToEdit && (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')) {
     if (in_array($action, array('add', 'modify', 'view'))) {
         $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."'>".
-            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM)."</a>";
+            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).
+            "</a>";
     } else {
         $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."&action=add'>".
-            Display::return_icon('new_announce.png', get_lang('AddAnnouncement'), '', ICON_SIZE_MEDIUM)."</a>";
+            Display::return_icon('new_announce.png', get_lang('AddAnnouncement'), '', ICON_SIZE_MEDIUM).
+            "</a>";
     }
     $show_actions = true;
 } else {
@@ -652,16 +677,19 @@ if ($allowToEdit && (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
     }
 }
 
-if ($allowToEdit) {
-    if (api_get_group_id() == 0) {
-        if (!isset($_GET['action'])) {
-            $actionsLeft .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".
+if ($allowToEdit && api_get_group_id() == 0) {
+    $allow = api_get_configuration_value('disable_delete_all_announcements');
+    if ($allow === false) {
+        if (!isset($_GET['action']) ||
+            isset($_GET['action']) && $_GET['action'] == 'list'
+        ) {
+            $actionsLeft .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=delete_all\" onclick=\"javascript:if(!confirm('" . get_lang("ConfirmYourChoice") . "')) return false;\">" .
                 Display::return_icon(
                     'delete_announce.png',
                     get_lang('AnnouncementDeleteAll'),
                     '',
                     ICON_SIZE_MEDIUM
-                )."</a>";
+                ) . "</a>";
         }
     }
 }

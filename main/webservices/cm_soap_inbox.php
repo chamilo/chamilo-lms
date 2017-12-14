@@ -93,7 +93,6 @@ $s->register(
     '',
     '',
     'Retorna o conteudo do campo informado em field da mensagem de saida id. Os campos retornados sao: sender, title, date, status e content.'
-
 );
 
 $s->register(
@@ -111,5 +110,4 @@ $s->register(
     '',
     '',
     'Envia uma mensagem via rede social. Retorna o id da mensagem enviada.'
-
 );

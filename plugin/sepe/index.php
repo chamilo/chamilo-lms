@@ -6,5 +6,5 @@
  * @author Julio Montoya <gugli100@gmail.com>
  * @package chamilo.plugin.sepe
  */
-require_once __DIR__ . '/config.php';
-require_once __DIR__ . '/src/index.sepe.php';
+require_once __DIR__.'/config.php';
+require_once __DIR__.'/src/index.sepe.php';

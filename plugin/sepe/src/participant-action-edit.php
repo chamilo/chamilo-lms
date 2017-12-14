@@ -1,22 +1,23 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \ChamiloSession as Session;
+
 /**
  *    This script displays a participant edit form.
  */
 
-use \ChamiloSession as Session;
 require_once '../config.php';
 
 $course_plugin = 'sepe';
 $plugin = SepePlugin::create();
 $_cid = 0;
 
-if ( !empty($_POST)) {
+if (!empty($_POST)) {
     $check = Security::check_token('post');
     if ($check) {
-        $companyTutorId = (!empty($_POST['company_tutor_id']) ? intval($_POST['company_tutor_id']) : NULL);
-        $trainingTutorId = (!empty($_POST['training_tutor_id']) ? intval($_POST['training_tutor_id']) : NULL);
+        $companyTutorId = (!empty($_POST['company_tutor_id']) ? intval($_POST['company_tutor_id']) : null);
+        $trainingTutorId = (!empty($_POST['training_tutor_id']) ? intval($_POST['training_tutor_id']) : null);
         $tutorCompanyDocumentType = Database::escape_string(trim($_POST['tutor_company_document_type']));
         $tutorCompanyDocumentNumber = Database::escape_string(trim($_POST['tutor_company_document_number']));
         $tutorCompanyDocumentLetter = Database::escape_string(trim($_POST['tutor_company_document_letter']));
@@ -52,18 +53,20 @@ if ( !empty($_POST)) {
                         VALUES ('".$tutorCompanyAlias."','".$tutorCompanyDocumentType."','".$tutorCompanyDocumentNumber."','".$tutorCompanyDocumentLetter."','1');";
                 $rs = Database::query($sql);
                 if (!$rs) {
-                    echo Database::error();    
                 } else {
                     $companyTutorId = Database::insert_id();
                 }
             }
         }
-        
+
         if (isset($trainingTutorId) && $trainingTutorId == 0) {
             $sql = "SELECT * FROM $tableTutorCompany 
-                    WHERE document_type = '".$tutorTrainingDocumentType."' AND document_number = '".$tutorTrainingDocumentNumber."' AND document_letter = '".$tutorTrainingDocumentLetter."';";
+                    WHERE 
+                        document_type = '".$tutorTrainingDocumentType."' AND 
+                        document_number = '".$tutorTrainingDocumentNumber."' AND 
+                        document_letter = '".$tutorTrainingDocumentLetter."';";
             $rs = Database::query($sql);
-    
+
             if (Database::num_rows($rs) > 0) {
                 $row = Database::fetch_assoc($rs);
                 $trainingTutorId = $row['id'];
@@ -74,13 +77,12 @@ if ( !empty($_POST)) {
                         VALUES ('".$tutorTrainingAlias."','".$tutorTrainingDocumentType."','".$tutorTrainingDocumentNumber."','".$tutorTrainingDocumentLetter."','1');";
                 $rs = Database::query($sql);
                 if (!$rs) {
-                    echo Database::error();    
                 } else {
                     $trainingTutorId = Database::insert_id();
                 }
             }
         }
-        
+
         if (isset($newParticipant) && $newParticipant != 1) {
             $sql = "UPDATE $tableSepeParticipants SET 
                         platform_user_id = '".$platformUserId."', 
@@ -114,7 +116,6 @@ if ( !empty($_POST)) {
         }
         $res = Database::query($sql);
         if (!$res) {
-            error_log(Database::error());
             $_SESSION['sepe_message_error'] = $plugin->get_lang('NoSaveChange');
         } else {
             if ($newParticipant == 1) {
@@ -133,8 +134,8 @@ if ( !empty($_POST)) {
                 $sql = "UPDATE $tableSepeParticipants SET training_tutor_id = $trainingTutorId WHERE id = $participantId";
             }
             Database::query($sql);
-            
-            $insertLog = checkInsertNewLog($platformUserId,$actionId);
+
+            $insertLog = checkInsertNewLog($platformUserId, $actionId);
             if ($insertLog) {
                 $sql = "INSERT INTO $tableSepeLogParticipant (
                             platform_user_id, 
@@ -161,6 +162,7 @@ if ( !empty($_POST)) {
         }
         session_write_close();
         header("Location: participant-action-edit.php?new_participant=0&participant_id=".$participantId."&action_id=".$actionId);
+        exit;
     } else {
         $participantId = intval($_POST['participant_id']);
         $actionId = intval($_POST['action_id']);
@@ -170,6 +172,7 @@ if ( !empty($_POST)) {
         $_SESSION['sepe_message_error'] = $plugin->get_lang('ProblemToken');
         session_write_close();
         header("Location: participant-action-edit.php?new_participant=".$newParticipant."&participant_id=".$participantId."&action_id=".$actionId);
+        exit;
     }
 } else {
     $token = Security::get_token();
@@ -178,9 +181,18 @@ if ( !empty($_POST)) {
 if (api_is_platform_admin()) {
     $actionId = intval($_GET['action_id']);
     $courseId = getCourse($actionId);
-    $interbreadcrumb[] = array("url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe'));
-    $interbreadcrumb[] = array("url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList'));
-    $interbreadcrumb[] = array("url" => "formative-action.php?cid=".$courseId, "name" => $plugin->get_lang('FormativeAction'));
+    $interbreadcrumb[] = array(
+        "url" => "/plugin/sepe/src/sepe-administration-menu.php",
+        "name" => $plugin->get_lang('MenuSepe'),
+    );
+    $interbreadcrumb[] = array(
+        "url" => "formative-actions-list.php",
+        "name" => $plugin->get_lang('FormativesActionsList'),
+    );
+    $interbreadcrumb[] = array(
+        "url" => "formative-action.php?cid=".$courseId,
+        "name" => $plugin->get_lang('FormativeAction'),
+    );
     if (isset($_GET['new_participant']) && intval($_GET['new_participant']) == 1) {
         $templateName = $plugin->get_lang('NewParticipantAction');
         $tpl = new Template($templateName);
@@ -196,7 +208,7 @@ if (api_is_platform_admin()) {
         $tpl->assign('info', $info);
         $tpl->assign('new_participant', '0');
         $tpl->assign('participant_id', intval($_GET['participant_id']));
-        
+
         if ($info['platform_user_id'] != 0) {
             $infoUserPlatform = api_get_user_info($info['platform_user_id']);
             $tpl->assign('info_user_platform', $infoUserPlatform);
@@ -207,12 +219,12 @@ if (api_is_platform_admin()) {
     $courseCode = getCourseCode($actionId);
     $listStudentInfo = array();
     $listStudent = CourseManager::get_student_list_from_course_code($courseCode);
-    
+
     foreach ($listStudent as $value) {
         $sql = "SELECT 1 FROM $tableSepeParticipants WHERE platform_user_id = '".$value['user_id']."';";
         $res = Database::query($sql);
         if (Database::num_rows($res) == 0) {
-            $listStudentInfo[] = api_get_user_info($value['user_id']); 
+            $listStudentInfo[] = api_get_user_info($value['user_id']);
         }
     }
     $tpl->assign('listStudent', $listStudentInfo);
@@ -220,14 +232,14 @@ if (api_is_platform_admin()) {
     $listTutorCompany = listTutorType("company = '1'");
     $tpl->assign('list_tutor_company', $listTutorCompany);
     $listTutorTraining = array();
-    $listTutorTraining= listTutorType("training = '1'");
+    $listTutorTraining = listTutorType("training = '1'");
     $tpl->assign('list_tutor_training', $listTutorTraining);
     if (isset($_SESSION['sepe_message_info'])) {
-        $tpl->assign('message_info', $_SESSION['sepe_message_info']);    
+        $tpl->assign('message_info', $_SESSION['sepe_message_info']);
         unset($_SESSION['sepe_message_info']);
     }
     if (isset($_SESSION['sepe_message_error'])) {
-        $tpl->assign('message_error', $_SESSION['sepe_message_error']);    
+        $tpl->assign('message_error', $_SESSION['sepe_message_error']);
         unset($_SESSION['sepe_message_error']);
     }
     $tpl->assign('sec_token', $token);
@@ -236,5 +248,6 @@ if (api_is_platform_admin()) {
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 } else {
-    header('Location:' . api_get_path(WEB_PATH));
+    header('Location:'.api_get_path(WEB_PATH));
+    exit;
 }

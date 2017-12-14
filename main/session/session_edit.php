@@ -11,7 +11,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
-
 $formSent = 0;
 
 // Crop picture plugin for session images
@@ -55,7 +54,6 @@ if (!empty($sessionInfo['coach_access_end_date'])) {
 $id_coach = $sessionInfo['id_coach'];
 $tool_name = get_lang('EditSession');
 
-//$interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => "session_list.php", "name" => get_lang('SessionList'));
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id, "name" => get_lang('SessionOverview'));
 
@@ -71,15 +69,15 @@ $sql = "SELECT user_id,lastname,firstname,username
         WHERE status='1'".$order_clause;
 
 if (api_is_multiple_url_enabled()) {
-	$table_access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-	$access_url_id = api_get_current_access_url_id();
-	if ($access_url_id != -1) {
-		$sql = "SELECT DISTINCT u.user_id,lastname,firstname,username
-		        FROM $tbl_user u
+    $table_access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    $access_url_id = api_get_current_access_url_id();
+    if ($access_url_id != -1) {
+        $sql = "SELECT DISTINCT u.user_id,lastname,firstname,username
+                FROM $tbl_user u
                 INNER JOIN $table_access_url_rel_user url_rel_user
                 ON (url_rel_user.user_id = u.user_id)
-			    WHERE status='1' AND access_url_id = '$access_url_id' $order_clause";
-	}
+                WHERE status='1' AND access_url_id = '$access_url_id' $order_clause";
+    }
 }
 
 $result = Database::query($sql);
@@ -157,6 +155,7 @@ if ($form->validate()) {
     if ($params['access'] == 1) {
         $duration = null;
     }
+
     $description = $params['description'];
     $showDescription = isset($params['show_description']) ? 1 : 0;
     $sendSubscriptionNotification = isset($params['send_subscription_notification']);

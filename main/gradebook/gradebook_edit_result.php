@@ -8,17 +8,16 @@
 require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 GradebookUtils::block_students();
-$select_eval = Security::remove_XSS($_GET['selecteval']);
+
+$select_eval = (int) $_GET['selecteval'];
 if (empty($select_eval)) {
     api_not_allowed();
 }
 $resultedit = Result::load(null, null, $select_eval);
 $evaluation = Evaluation::load($select_eval);
-
 $evaluation[0]->check_lock_permissions();
-
 $edit_result_form = new EvalForm(
-    EvalForm :: TYPE_ALL_RESULTS_EDIT,
+    EvalForm::TYPE_ALL_RESULTS_EDIT,
     $evaluation[0],
     $resultedit,
     'edit_result_form',
@@ -48,7 +47,7 @@ if ($edit_result_form->validate()) {
 $table = $edit_result_form->toHtml();
 
 $interbreadcrumb[] = array(
-    'url' => $_SESSION['gradebook_dest'],
+    'url' => Category::getUrl(),
     'name' => get_lang('Gradebook')
 );
 $interbreadcrumb[] = array(

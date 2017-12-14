@@ -59,6 +59,9 @@ $form = new FormValidator('registration');
 $user_already_registered_show_terms = false;
 if (api_get_setting('allow_terms_conditions') == 'true') {
     $user_already_registered_show_terms = isset($_SESSION['term_and_condition']['user_id']);
+    if (api_is_anonymous() === true) {
+        $user_already_registered_show_terms = false;
+    }
 }
 
 $sessionPremiumChecker = Session::read('SessionIsPremium');
@@ -398,6 +401,7 @@ $defaults['status'] = STUDENT;
 $defaults['extra_mail_notify_invitation'] = 1;
 $defaults['extra_mail_notify_message'] = 1;
 $defaults['extra_mail_notify_group_message'] = 1;
+
 $form->setDefaults($defaults);
 $content = null;
 
@@ -474,6 +478,8 @@ if (!CustomPages::enabled()) {
     }
 }
 
+$showTerms = false;
+
 // Terms and conditions
 if (api_get_setting('allow_terms_conditions') == 'true') {
     if (!api_is_platform_admin()) {
@@ -520,9 +526,39 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
         $preview = LegalManager::show_last_condition($term_preview);
         $form->addElement('label', null, $preview);
     }
+    $showTerms = true;
 }
 
-$form->addButtonCreate(get_lang('RegisterUser'));
+$allowDoubleValidation = api_get_configuration_value('allow_double_validation_in_registration');
+
+if ($allowDoubleValidation && $showTerms == false) {
+    $htmlHeadXtra[] = '<script>
+        $(document).ready(function() {
+            $("#pre_validation").click(function() {
+                $(this).hide();
+                $("#final_button").show();
+            });
+        });
+    </script>';
+
+    $form->addLabel(
+        null,
+        Display::url(
+            get_lang('Ok'),
+            'javascript:void',
+            ['class' => 'btn btn-default', 'id' => 'pre_validation']
+        )
+    );
+    $form->addHtml('<div id="final_button" style="display: none">');
+    $form->addLabel(
+        null,
+        Display::return_message(get_lang('DoubleValidationMessage'), 'info', false)
+    );
+    $form->addButton('submit', get_lang('RegisterUser'), '', 'primary');
+    $form->addHtml('</div>');
+} else {
+    $form->addButtonNext(get_lang('RegisterUser'));
+}
 
 $course_code_redirect = Session::read('course_redirect');
 $sessionToRedirect = Session::read('session_redirect');
@@ -752,6 +788,26 @@ if ($form->validate()) {
                 echo $content;
                 Display::display_footer();
                 exit;
+            } else if (api_get_setting('allow_registration') === 'confirmation') {
+                $TABLE_USER = Database::get_main_table(TABLE_MAIN_USER);
+                // 1. set account inactive
+                $sql = "UPDATE $TABLE_USER SET active='0' WHERE user_id = ".$user_id;
+                Database::query($sql);
+
+                // 2. Send mail to the user
+                /** @var \Chamilo\UserBundle\Entity\User $thisUser */
+                $thisUser = Database::getManager()->getRepository('ChamiloUserBundle:User')->find($user_id);
+
+                UserManager::sendUserConfirmationMail($thisUser);
+
+                // 3. exit the page
+                unset($user_id);
+
+                Display::display_header(get_lang('ConfirmationForNewAccount', null, $values['language']));
+                echo Display::page_header(get_lang('YouNeedConfirmYourAccountViaEmailToAccessThePlatform', null, $values['language']));
+                echo $content;
+                Display::display_footer();
+                exit;
             }
         }
     }
@@ -771,7 +827,7 @@ if ($form->validate()) {
                 );
 
                 $bossList = UserManager::getStudentBossList($user_id);
-                if ($bossList) {
+                if (!empty($bossList)) {
                     $bossList = array_column($bossList, 'boss_id');
                     $currentUserInfo = api_get_user_info($user_id);
                     foreach ($bossList as $bossId) {
@@ -788,7 +844,8 @@ if ($form->validate()) {
                         MessageManager::send_message_simple(
                             $bossId,
                             $subjectEmail,
-                            $contentEmail
+                            $contentEmail,
+                            $user_id
                         );
                     }
                 }
@@ -812,7 +869,7 @@ if ($form->validate()) {
     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
 
     // Stats
-    Event::event_login($user_id);
+    Event::eventLogin($user_id);
 
     // last user login date is now
     $user_last_login_datetime = 0; // used as a unix timestamp it will correspond to : 1 1 1970
@@ -929,7 +986,7 @@ if ($form->validate()) {
     Session::erase('session_redirect');
     Session::erase('only_one_course_session_redirect');
 
-    if (CustomPages::enabled()) {
+    if (CustomPages::enabled() && CustomPages::exists(CustomPages::REGISTRATION_FEEDBACK)) {
         CustomPages::display(
             CustomPages::REGISTRATION_FEEDBACK,
             array('info' => $text_after_registration)
@@ -944,7 +1001,7 @@ if ($form->validate()) {
     }
 } else {
     // Custom pages
-    if (CustomPages::enabled()) {
+    if (CustomPages::enabled() && CustomPages::exists(CustomPages::REGISTRATION)) {
         CustomPages::display(
             CustomPages::REGISTRATION,
             array('form' => $form)

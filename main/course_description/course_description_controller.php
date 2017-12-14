@@ -133,7 +133,6 @@ class CourseDescriptionController
                 $this->view->render();
             }
         } else {
-
             $data['default_description_titles'] = $course_description->get_default_description_title();
             $data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
             $data['default_description_icon'] = $course_description->get_default_description_icon();

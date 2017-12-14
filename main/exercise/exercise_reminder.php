@@ -16,19 +16,8 @@ $this_section = SECTION_COURSES;
 /* ACCESS RIGHTS  */
 // notice for unauthorized people.
 api_protect_course_script(true);
+$origin = api_get_origin();
 
-if ($debug > 0) {
-    error_log('Entered exercise_result.php: '.print_r($_POST, 1));
-}
-
-// general parameters passed via POST/GET
-if (empty($origin)) {
-    if (!empty($_REQUEST['origin'])) {
-        $origin = Security::remove_XSS($_REQUEST['origin']);
-    } else {
-        $origin = '';
-    }
-}
 if (empty($learnpath_id)) {
     if (!empty($_REQUEST['learnpath_id'])) {
         $learnpath_id = intval($_REQUEST['learnpath_id']);
@@ -94,12 +83,17 @@ if ($time_control) {
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
     $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
-    $htmlHeadXtra[] = $objExercise->show_time_control_js($time_left);
+    $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
 }
 
-if (isset($_SESSION['exe_id'])) {
-    $exe_id = intval($_SESSION['exe_id']);
+$exe_id = 0;
+if (isset($_GET['exe_id'])) {
+    $exe_id = (int) $_GET['exe_id'];
+    Session::write('exe_id', $exe_id);
 }
+
+$exe_id = (int) Session::read('exe_id');
+
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
 if (!empty($exercise_stat_info['data_tracking'])) {
     $question_list = explode(',', $exercise_stat_info['data_tracking']);
@@ -124,8 +118,10 @@ if ($origin != 'learnpath') {
 // I'm in a preview mode as course admin. Display the action menu.
 if (api_is_course_admin() && $origin != 'learnpath') {
     echo '<div class="actions">';
-    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'), array(), 32).'</a>';
-    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon('edit.png', get_lang('ModifyExercise'), array(), 32).'</a>';
+    echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
+        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), array(), 32).'</a>';
+    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
+        Display::return_icon('edit.png', get_lang('ModifyExercise'), array(), 32).'</a>';
     echo '</div>';
 }
 echo Display::page_header(get_lang('QuestionsToReview'));
@@ -136,11 +132,11 @@ if ($time_control) {
 
 echo Display::div('', array('id'=>'message'));
 echo '<script>
-    lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
+    var lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
 
     function final_submit() {
         //Normal inputs
-        window.location = "exercise_result.php?origin='.$origin.'&exe_id='.$exe_id.'&" + lp_data;
+        window.location = "exercise_result.php?'.api_get_cidreq().'&exe_id='.$exe_id.'&" + lp_data;
     }
 
     function review_questions() {
@@ -156,7 +152,7 @@ echo '<script>
             $("#message").addClass("warning-message");
             $("#message").html("'.addslashes(get_lang('SelectAQuestionToReview')).'");
         }
-        window.location = "exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&reminder=2&origin='.$origin.'&" + lp_data;
+        window.location = "exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&reminder=2&" + lp_data;
     }
 
     function save_remind_item(obj, question_id) {
@@ -167,7 +163,7 @@ echo '<script>
             action = "delete";
         }
         $.ajax({
-            url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=add_question_to_reminder",
+            url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=add_question_to_reminder",
             data: "question_id="+question_id+"&exe_id='.$exe_id.'&action="+action,
             success: function(return_value) {
             }
@@ -207,7 +203,6 @@ $counter = 0;
 foreach ($question_list as $questionId) {
     // destruction of the Question object
     unset($objQuestionTmp);
-
     // creates a temporary Question object
     $objQuestionTmp = Question:: read($questionId);
     $quesId = $objQuestionTmp->selectId();
@@ -244,20 +239,20 @@ foreach ($question_list as $questionId) {
 
 echo Display::div($table, array('class'=>'question-check-test'));
 
-$exercise_actions = Display::url(
+$exerciseActions = Display::url(
+    get_lang('ReviewQuestions'),
+    'javascript://',
+    array('onclick'=>'review_questions();', 'class'=>'btn btn-success')
+);
+
+$exerciseActions .= '&nbsp;'.Display::url(
     get_lang('EndTest'),
     'javascript://',
     array('onclick' => 'final_submit();', 'class' => 'btn btn-warning')
 );
-$exercise_actions .= '&nbsp;'.
-    Display::url(
-        get_lang('ReviewQuestions'),
-        'javascript://',
-        array('onclick'=>'review_questions();', 'class'=>'btn btn-success')
-    );
 
 echo Display::div('', array('class'=>'clear'));
-echo Display::div($exercise_actions, array('class'=>'form-actions'));
+echo Display::div($exerciseActions, array('class'=>'form-actions'));
 
 if ($origin != 'learnpath') {
     // We are not in learnpath tool

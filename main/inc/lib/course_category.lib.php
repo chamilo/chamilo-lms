@@ -87,7 +87,6 @@ class CourseCategory
                 ORDER BY t1.tree_pos";
 
         $result = Database::query($sql);
-
         $categories = Database::store_result($result);
 
         return $categories;
@@ -354,8 +353,9 @@ class CourseCategory
 
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $categoryCode = Database::escape_string($categoryCode);
-        $sql = "SELECT code, parent_id FROM $tbl_category
-            WHERE code = '$categoryCode'";
+        $sql = "SELECT code, parent_id 
+                FROM $tbl_category
+                WHERE code = '$categoryCode'";
 
         $result = Database::query($sql);
         $children = [];
@@ -453,7 +453,7 @@ class CourseCategory
                         get_lang('OpenNode'),
                         null,
                         ICON_SIZE_SMALL
-                    ).' '.$category['name'],
+                    ).' '.$category['name'].' ('.$category['code'].')',
                     $url
                 );
                 $content = array(
@@ -472,7 +472,7 @@ class CourseCategory
 
             return $table->toHtml();
         } else {
-            return Display::return_message(get_lang("NoCategories"), 'warning');
+            return Display::return_message(get_lang('NoCategories'), 'warning');
         }
     }
 
@@ -609,7 +609,10 @@ class CourseCategory
             $without_special_courses = ' AND course.id NOT IN ("'.implode('","', $specialCourseList).'")';
         }
 
-        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
+        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition(
+            'course',
+            true
+        );
 
         $categoryFilter = '';
         if ($categoryCode === 'ALL') {
@@ -642,9 +645,6 @@ class CourseCategory
                     $without_special_courses
                     $visibilityCondition
             ";
-
-
-
         return Database::num_rows(Database::query($sql));
     }
 
@@ -663,7 +663,10 @@ class CourseCategory
         if (!empty($specialCourseList)) {
             $without_special_courses = ' AND course.id NOT IN ("'.implode('","', $specialCourseList).'")';
         }
-        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
+        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition(
+            'course',
+            true
+        );
 
         if (!empty($random_value)) {
             $random_value = intval($random_value);
@@ -683,7 +686,8 @@ class CourseCategory
                 $result = Database::query($sql);
                 list($num_records) = Database::fetch_row($result);
 
-                $sql = "SELECT course.id FROM $tbl_course course
+                $sql = "SELECT course.id, course.id as real_id 
+                        FROM $tbl_course course
                         INNER JOIN $tbl_url_rel_course as url_rel_course
                         ON (url_rel_course.c_id = course.id)
                         WHERE
@@ -694,7 +698,7 @@ class CourseCategory
                         ORDER BY RAND()
                         LIMIT 0, $random_value";
             } else {
-                $sql = "SELECT id FROM $tbl_course course
+                $sql = "SELECT id, id as real_id FROM $tbl_course course
                         WHERE 
                             RAND()*$num_records< $random_value 
                             $without_special_courses 
@@ -715,12 +719,12 @@ class CourseCategory
             if ($id_in === null) {
                 return [];
             }
-            $sql = "SELECT * FROM $tbl_course WHERE id IN($id_in)";
+            $sql = "SELECT *, id as real_id FROM $tbl_course WHERE id IN($id_in)";
         } else {
             $limitFilter = self::getLimitFilterFromArray($limit);
             $category_code = Database::escape_string($category_code);
             if (empty($category_code) || $category_code == "ALL") {
-                $sql = "SELECT * FROM $tbl_course
+                $sql = "SELECT *, id as real_id FROM $tbl_course
                     WHERE
                         1=1
                         $without_special_courses
@@ -730,7 +734,7 @@ class CourseCategory
                 if ($category_code == 'NONE') {
                     $category_code = '';
                 }
-                $sql = "SELECT * FROM $tbl_course
+                $sql = "SELECT *, id as real_id FROM $tbl_course
                         WHERE
                             category_code='$category_code'
                             $without_special_courses
@@ -743,7 +747,7 @@ class CourseCategory
                 $url_access_id = api_get_current_access_url_id();
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 if ($category_code != "ALL") {
-                    $sql = "SELECT * FROM $tbl_course as course
+                    $sql = "SELECT *, course.id real_id FROM $tbl_course as course
                             INNER JOIN $tbl_url_rel_course as url_rel_course
                             ON (url_rel_course.c_id = course.id)
                             WHERE
@@ -753,7 +757,7 @@ class CourseCategory
                                 $visibilityCondition
                             ORDER BY title $limitFilter";
                 } else {
-                    $sql = "SELECT * FROM $tbl_course as course
+                    $sql = "SELECT *, course.id real_id FROM $tbl_course as course
                             INNER JOIN $tbl_url_rel_course as url_rel_course
                             ON (url_rel_course.c_id = course.id)
                             WHERE
@@ -781,7 +785,7 @@ class CourseCategory
             }
             $point_info = CourseManager::get_course_ranking($row['id'], 0);
             $courses[] = array(
-                'real_id' => $row['id'],
+                'real_id' => $row['real_id'],
                 'point_info' => $point_info,
                 'code' => $row['code'],
                 'directory' => $row['directory'],
@@ -810,8 +814,12 @@ class CourseCategory
      * @param string $parentCode the parent category of the categories added (default=null for root category)
      * @param string $padding the indent param (you shouldn't indicate something here)
      */
-    public static function setCategoriesInForm($element, $defaultCode = null, $parentCode = null, $padding = null)
-    {
+    public static function setCategoriesInForm(
+        $element,
+        $defaultCode = null,
+        $parentCode = null,
+        $padding = null
+    ) {
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
@@ -833,7 +841,12 @@ class CourseCategory
 
             $element->addOption($option, $cat['code'], $params);
             if ($cat['auth_cat_child'] == 'TRUE') {
-                self::setCategoriesInForm($element, $defaultCode, $cat['code'], $padding.' - ');
+                self::setCategoriesInForm(
+                    $element,
+                    $defaultCode,
+                    $cat['code'],
+                    $padding.' - '
+                );
             }
         }
     }
@@ -875,7 +888,6 @@ class CourseCategory
         }
 
         $tableCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
-
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
         $conditions = " INNER JOIN $table a ON (c.id = a.course_category_id)";
         $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
@@ -970,7 +982,12 @@ class CourseCategory
         if ($pageBottom > 1) {
             $pageDiv .= self::getPageNumberItem(1, $pageLength);
             if ($pageBottom > 2) {
-                $pageDiv .= self::getPageNumberItem($pageBottom - 1, $pageLength, null, '...');
+                $pageDiv .= self::getPageNumberItem(
+                    $pageBottom - 1,
+                    $pageLength,
+                    null,
+                    '...'
+                );
             }
         }
 
@@ -981,13 +998,22 @@ class CourseCategory
             } else {
                 $pageItemAttributes = [];
             }
-            $pageDiv .= self::getPageNumberItem($i, $pageLength, $pageItemAttributes);
+            $pageDiv .= self::getPageNumberItem(
+                $i,
+                $pageLength,
+                $pageItemAttributes
+            );
         }
 
         // Check if current page is the last page
         if ($pageTop < $pageTotal) {
             if ($pageTop < ($pageTotal - 1)) {
-                $pageDiv .= self::getPageNumberItem($pageTop + 1, $pageLength, null, '...');
+                $pageDiv .= self::getPageNumberItem(
+                    $pageTop + 1,
+                    $pageLength,
+                    null,
+                    '...'
+                );
             }
             $pageDiv .= self::getPageNumberItem($pageTotal, $pageLength);
         }
@@ -1025,7 +1051,6 @@ class CourseCategory
 
         $categoryCodeRequest = isset($_REQUEST['category_code']) ? Security::remove_XSS($_REQUEST['category_code']) : null;
         $categoryCode = isset($categoryCode) ? Security::remove_XSS($categoryCode) : $categoryCodeRequest;
-
         $hiddenLinksRequest = isset($_REQUEST['hidden_links']) ? Security::remove_XSS($_REQUEST['hidden_links']) : null;
         $hiddenLinks = isset($hiddenLinks) ? Security::remove_XSS($hiddenLinksRequest) : $categoryCodeRequest;
 
@@ -1043,7 +1068,7 @@ class CourseCategory
                 $pageUrl .=
                     '&search_term='.$searchTerm.
                     '&search_course=1'.
-                    '&sec_token='.$_SESSION['sec_token'];
+                    '&sec_token='.Security::getTokenFromSession();
                 break;
             case 'display_courses':
                 // No break
@@ -1129,5 +1154,63 @@ class CourseCategory
         }
 
         return $nameTools;
+    }
+
+    /**
+     * Save image for a course category
+     * @param int $categoryId Course category ID
+     * @param array $fileData File data from $_FILES
+     */
+    public static function saveImage($categoryId, $fileData)
+    {
+        $categoryInfo = self::getCategoryById($categoryId);
+        if (empty($categoryInfo)) {
+            return;
+        }
+
+        if (!empty($fileData['error'])) {
+            return;
+        }
+
+        $extension = getextension($fileData['name']);
+
+        $dirName = 'course_category/';
+        $fileDir = api_get_path(SYS_UPLOAD_PATH).$dirName;
+        $fileName = "cc_$categoryId.{$extension[0]}";
+
+        if (!file_exists($fileDir)) {
+            mkdir($fileDir, api_get_permissions_for_new_directories(), true);
+        }
+
+        $image = new Image($fileData['tmp_name']);
+        $image->send_image($fileDir.$fileName);
+
+        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        Database::update(
+            $table,
+            ['image' => $dirName.$fileName],
+            ['id = ?' => $categoryId]
+        );
+    }
+
+    /**
+     * @param $categoryId
+     * @param string $description
+     *
+     * @return string
+     */
+    public static function saveDescription($categoryId, $description)
+    {
+        $categoryInfo = self::getCategoryById($categoryId);
+        if (empty($categoryInfo)) {
+            return false;
+        }
+        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        Database::update(
+            $table,
+            ['description' => $description],
+            ['id = ?' => $categoryId]
+        );
+        return true;
     }
 }

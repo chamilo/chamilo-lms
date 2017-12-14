@@ -20,6 +20,7 @@ class Version20170522120000 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
+        error_log('Version20170522120000');
         $trackEAttempt = $schema->getTable('track_e_attempt');
         if ($trackEAttempt->hasColumn('course_code')) {
             $this->addSql("ALTER TABLE track_e_attempt DROP COLUMN course_code");

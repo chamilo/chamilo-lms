@@ -1,4 +1,3 @@
-
 <nav id="menubar" class="navbar navbar-default">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -36,18 +35,25 @@
                         });
                     });
                 </script>
-                
+
                 <ul class="nav navbar-nav navbar-right">
                     <li id="count_message_li" class="hidden">
                         <a href="{{ message_url }}">
                             <span id="count_message" class="badge badge-warning"></span>
                         </a>
                     </li>
+
+                    {% if language_form %}
+                    <li class="dropdown language">
+                    {{ language_form }}
+                    </li>
+                    {% endif %}
+
                     {% if _u.status != 6 %}
                         <li class="dropdown avatar-user">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                aria-expanded="false">
-                                
+
                                 <img class="img-circle" src="{{ _u.avatar_small }}" alt="{{ _u.complete_name }}"/>
                                 <span class="username-movil">{{ _u.complete_name }}</span>
                                 <span class="caret"></span>

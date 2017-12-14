@@ -2,7 +2,7 @@
 {{ message }}
 {{ flash_messages }}
 {% if data is not empty %}
-{% set tutor =  false | api_convert_and_format_date(true) %}
+{% set tutor =  false|api_is_allowed_to_edit(true) %}
 <div id="course-progress" class="thematic">
     <div class="row">
         <div class="col-md-12">

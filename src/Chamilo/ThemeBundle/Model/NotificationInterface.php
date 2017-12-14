@@ -1,13 +1,11 @@
 <?php
-/**
- * NotificationInterface.php
- * avanzu-admin
- * Date: 23.02.14
- */
 
 namespace Chamilo\ThemeBundle\Model;
 
-
+/**
+ * Interface NotificationInterface
+ * @package Chamilo\ThemeBundle\Model
+ */
 interface NotificationInterface
 {
     public function getMessage();

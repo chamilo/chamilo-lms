@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 /**
@@ -95,10 +94,10 @@ switch ($action) {
                 get_lang('List'),
                 null,
                 ICON_SIZE_MEDIUM
-                ),
+            ),
             $listAction,
             ['title' => get_lang('List')]
-            );
+        );
         break;
     case 'edit':
         $tpl->assign('form', $formToDisplay);
@@ -108,10 +107,10 @@ switch ($action) {
                 get_lang('List'),
                 null,
                 ICON_SIZE_MEDIUM
-                ),
+            ),
             $listAction,
             ['title' => get_lang('List')]
-            );
+        );
 
         if ($form->validate()) {
             $values = $form->exportValues();
@@ -130,10 +129,10 @@ switch ($action) {
                 get_lang('List'),
                 null,
                 ICON_SIZE_MEDIUM
-                ),
+            ),
             $listAction,
             ['title' => get_lang('List')]
-            );
+        );
         $em->remove($item);
         $em->flush();
         header('Location: '.$listAction);
@@ -147,10 +146,10 @@ switch ($action) {
                 get_lang('Add'),
                 null,
                 ICON_SIZE_MEDIUM
-                ),
+            ),
             api_get_self().'?action=add',
             ['title' => get_lang('Add')]
-            );
+        );
 }
 
 $tpl->assign('list', $list);

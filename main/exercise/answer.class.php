@@ -48,8 +48,9 @@ class Answer
      * @author Olivier Brouckaert
      * @param int $questionId that answers belong to
      * @param int $course_id
+     * @param Exercise $exercise
      */
-    public function __construct($questionId, $course_id = null)
+    public function __construct($questionId, $course_id = null, $exercise = null)
     {
         $this->questionId = intval($questionId);
         $this->answer = array();
@@ -72,10 +73,14 @@ class Answer
         $this->course = $courseInfo;
         $this->course_id = $courseInfo['real_id'];
 
-        // fills arrays
-        $objExercise = new Exercise($this->course_id);
-        $exerciseId = isset($_REQUEST['exerciseId']) ? $_REQUEST['exerciseId'] : null;
-        $objExercise->read($exerciseId);
+        if (empty($exercise)) {
+            // fills arrays
+            $objExercise = new Exercise($this->course_id);
+            $exerciseId = isset($_REQUEST['exerciseId']) ? $_REQUEST['exerciseId'] : null;
+            $objExercise->read($exerciseId);
+        } else {
+            $objExercise = $exercise;
+        }
 
         if ($objExercise->random_answers == '1' && $this->getQuestionType() != CALCULATED_ANSWER) {
             $this->readOrderedBy('rand()', ''); // randomize answers
@@ -836,13 +841,13 @@ class Answer
                 foreach ($temp as $index => $answer) {
                     if ($this->course['id'] != $course_info['id']) {
                         // check resources inside html from ckeditor tool and copy correct urls into recipient course
-                        $answer['answer'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                        $answer['answer'] = DocumentManager::replaceUrlWithNewCourseCode(
                             $answer['answer'],
                             $this->course['id'],
                             $course_info['id']
                         );
 
-                        $answer['comment'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                        $answer['comment'] = DocumentManager::replaceUrlWithNewCourseCode(
                             $answer['comment'],
                             $this->course['id'],
                             $course_info['id']
@@ -882,12 +887,12 @@ class Answer
             } else {
                 for ($i = 1; $i <= $this->nbrAnswers; $i++) {
                     if ($this->course['id'] != $course_info['id']) {
-                        $this->answer[$i] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                        $this->answer[$i] = DocumentManager::replaceUrlWithNewCourseCode(
                             $this->answer[$i],
                             $this->course['id'],
                             $course_info['id']
                         );
-                        $this->comment[$i] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                        $this->comment[$i] = DocumentManager::replaceUrlWithNewCourseCode(
                             $this->comment[$i],
                             $this->course['id'],
                             $course_info['id']

@@ -23,7 +23,7 @@ if (isset($params['waminame']) && isset($params['wamidir']) && isset($params['wa
     die();
 }
 
-if ($wamiuserid != api_get_user_id() || api_get_user_id() == 0 || $wamiuserid == 0) {
+if (empty($wamiuserid)) {
     api_not_allowed();
     die();
 }
@@ -58,14 +58,14 @@ if (!is_dir($saveDir)) {
 
 //avoid duplicates
 $waminame_to_save = $waminame;
-$waminame_noex = basename($waminame, ".wav");
-if (file_exists($saveDir.'/'.$waminame_noex.'.'.$ext)) {
-    $i = 1;
-    while (file_exists($saveDir.'/'.$waminame_noex.'_'.$i.'.'.$ext)) {
-        $i++;
-    }
-    $waminame_to_save = $waminame_noex.'_'.$i.'.'.$ext;
-}
+//$waminame_noex = basename($waminame, ".wav");
+//if (file_exists($saveDir.'/'.$waminame_noex.'.'.$ext)) {
+//    $i = 1;
+//    while (file_exists($saveDir.'/'.$waminame_noex.'_'.$i.'.'.$ext)) {
+//        $i++;
+//    }
+//    $waminame_to_save = $waminame_noex.'_'.$i.'.'.$ext;
+//}
 
 $documentPath = $saveDir.'/'.$waminame_to_save;
 

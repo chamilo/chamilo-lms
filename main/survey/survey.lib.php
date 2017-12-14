@@ -1865,4 +1865,159 @@ class SurveyManager
         header('Location: '.api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?'.$urlParams.'&'.api_get_cidreq());
         exit;
     }
+
+    /**
+     * This function empty surveys (invitations and answers)
+     *
+     * @param int $surveyId id of the survey to empty
+     * @return true
+     */
+    public static function emptySurveyFromId($surveyId)
+    {
+        // Database table definitions
+        $surveyInvitationTable = Database:: get_course_table(TABLE_SURVEY_INVITATION);
+        $surveyAnswerTable = Database:: get_course_table(TABLE_SURVEY_ANSWER);
+        $surveyTable = Database:: get_course_table(TABLE_SURVEY);
+        $surveyId = intval($surveyId);
+        $surveyData = self::getSurveyArrayFromId($surveyId);
+        $surveyCode = $surveyData['code'];
+        $courseId = intval($surveyData['c_id']);
+        $sessionId = intval($surveyData['session_id']);
+
+        $sql = "DELETE FROM $surveyInvitationTable 
+                WHERE session_id =$sessionId AND c_id =$courseId AND survey_code ='$surveyCode'";
+        Database::query($sql);
+
+        $sql = "DELETE FROM $surveyAnswerTable WHERE survey_id=$surveyId";
+        Database::query($sql);
+
+        $sql = "UPDATE $surveyTable SET invited=0, answered=0 WHERE survey_id=$surveyId";
+        Database::query($sql);
+
+        return true;
+    }
+
+    /**
+     * This function copy survey specifying course id and session id where will be copied
+     *
+     * @param int $surveyId
+     * @param int $courseId
+     * @param int $sessionId
+     *
+     * @return bool when fails or return the new survey id
+     */
+    public static function copySurveySession($surveyId, $courseId, $sessionId)
+    {
+        // Database table definitions
+        $surveyTable = Database::get_course_table(TABLE_SURVEY);
+        $surveyQuestionGroupTable = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
+        $surveyQuestionTable = Database::get_course_table(TABLE_SURVEY_QUESTION);
+        $surveyOptionsTable = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+        $surveyId = intval($surveyId);
+        $courseId = intval($courseId);
+        $sessionId = intval($sessionId);
+
+        $surveyData = self::getSurveyArrayFromId($surveyId);
+        if (empty($surveyData)) {
+            return true;
+        }
+
+        $params = $surveyData;
+        $params['code'] = self::generate_unique_code($params['code']);
+        $params['c_id'] = $courseId;
+        unset($params['survey_id']);
+        $params['session_id'] = $sessionId;
+        $params['title'] = $params['title'] . ' ' . get_lang('Copy');
+        unset($params['iid']);
+        Database::insert($surveyTable, $params);
+
+        $newSurveyId = Database::insert_id();
+        $sql = "UPDATE $surveyTable SET survey_id =$newSurveyId WHERE iid =$newSurveyId";
+        Database::query($sql);
+
+        $sql = "SELECT * FROM $surveyQuestionGroupTable WHERE survey_id=$surveyId";
+        $res = Database::query($sql);
+        while ($row = Database::fetch_array($res, 'ASSOC')) {
+            $params = array(
+                'c_id' => $courseId,
+                'name' => $row['name'],
+                'description' => $row['description'],
+                'survey_id' => $newSurveyId
+            );
+            $insertId = Database::insert($surveyQuestionGroupTable, $params);
+
+            $sql = "UPDATE $surveyQuestionGroupTable SET id = iid WHERE iid = $insertId";
+            Database::query($sql);
+
+            $group_id[$row['id']] = $insertId;
+        }
+
+        // Get questions
+        $sql = "SELECT * FROM $surveyQuestionTable WHERE survey_id=$surveyId";
+        $res = Database::query($sql);
+        while ($row = Database::fetch_array($res, 'ASSOC')) {
+            $params = array(
+                'c_id' => $courseId,
+                'survey_id' => $newSurveyId,
+                'survey_question' => $row['survey_question'],
+                'survey_question_comment' => $row['survey_question_comment'],
+                'type' => $row['type'],
+                'display' => $row['display'],
+                'sort' => $row['sort'],
+                'shared_question_id' => $row['shared_question_id'],
+                'max_value' => $row['max_value'],
+                'survey_group_pri' => $row['survey_group_pri'],
+                'survey_group_sec1' => $row['survey_group_sec1'],
+                'survey_group_sec2' => $row['survey_group_sec2']
+            );
+            $insertId = Database::insert($surveyQuestionTable, $params);
+            $sql = "UPDATE $surveyQuestionTable SET question_id = iid WHERE iid =$insertId";
+            Database::query($sql);
+
+            $question_id[$row['question_id']] = $insertId;
+        }
+
+        // Get questions options
+        $sql = "SELECT * FROM $surveyOptionsTable WHERE survey_id=$surveyId";
+
+        $res = Database::query($sql);
+        while ($row = Database::fetch_array($res, 'ASSOC')) {
+            $params = array(
+                'c_id' => $courseId,
+                'question_id' => $question_id[$row['question_id']],
+                'survey_id' => $newSurveyId,
+                'option_text' => $row['option_text'],
+                'sort' => $row['sort'],
+                'value' => $row['value']
+            );
+            $insertId = Database::insert($surveyOptionsTable, $params);
+
+            $sql = "UPDATE $surveyOptionsTable SET question_option_id = $insertId WHERE iid = $insertId";
+            Database::query($sql);
+        }
+
+        return $newSurveyId;
+    }
+
+    /**
+     * Retrieves all the survey information as array
+     *
+     * @param integer $survey_id the id of the survey
+     *
+     * @return array
+     */
+    public static function getSurveyArrayFromId($surveyId)
+    {
+        $surveyId=intval($surveyId);
+        // Table definition
+        $surveyTable = Database:: get_course_table(TABLE_SURVEY);
+
+        $sql = "SELECT * FROM $surveyTable WHERE survey_id=$surveyId";
+        $result = Database::query($sql);
+        $return = array();
+        if (Database::num_rows($result) > 0) {
+            $return = Database::fetch_array($result, 'ASSOC');
+            return $return;
+        }
+    }
 }

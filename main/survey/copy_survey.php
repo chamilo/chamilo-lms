@@ -30,46 +30,52 @@ echo Display::page_header(get_lang('CopySurvey'));
 if (Security::check_token('post')) {
     // Clear token
     Security::clear_token();
-    $surveyId = intval($_POST['surveys']);
-    $courseId = Security::remove_XSS($_POST['destination_course']);
-    $surveyCopyId = SurveyManager::copy_survey($surveyId, null, $courseId);
+    $surveyId = intval($_GET['survey_id']);
+    $arraySent = json_decode(Security::remove_XSS($_POST['destination_course']));
+    $courseId = $arraySent->courseId;
+    $sessionId = $arraySent->sessionId;
     // Copy the survey to the target course
-    SurveyManager::empty_survey($surveyCopyId, $courseId);
+    $surveyCopyId = SurveyManager::copySurveySession($surveyId, $courseId, $sessionId);
     // Empty the copied survey
-    echo Display::return_message(get_lang('SurveyCopied'), 'confirm');
+    SurveyManager::emptySurveyFromId($surveyCopyId);
+    Display::display_confirmation_message(get_lang('SurveyCopied'));
 }
 
-$surveys = SurveyManager::get_surveys(api_get_course_id(), api_get_session_id());
-$courses = CourseManager::get_courses_list();
-$form = new FormValidator(
-    'copy_survey',
-    'post',
-    'copy_survey.php?'.api_get_cidreq()
-);
-if (!$surveys) {
-    echo Display::return_message(get_lang('NoSurveyAvailable'), 'error');
-}
-if (count($courses) <= 1) {
-    echo Display::return_message(get_lang('CourseListNotAvailable'), 'error');
-}
-if ($surveys && count($courses) > 1) {
-    // Surveys select
-    $options = array();
-    foreach ($surveys as $survey) {
-        $options[$survey['survey_id']] = $survey['title'];
-    }
-    $form->addElement('select', 'surveys', get_lang('SelectSurvey'), $options);
-    // All-courses-but-current select
-    $currentCourseId = api_get_course_int_id();
-    $options = array();
-    foreach ($courses as $course) {
-        if ($course['id'] != $currentCourseId) {
-            $options[$course['id']] = $course['title'];
+
+$survey = SurveyManager::get_survey($_GET['survey_id']);
+$courses = CourseManager::getAllCoursesArray();
+// Survey
+$options = array();
+$currentCourseId = api_get_course_int_id();
+$currentSessionId = api_get_session_id();
+$option = str_replace("&nbsp;", '', strip_tags($survey['title']));
+$options = array();
+foreach ($courses as $course) {
+    if (($course['id'] != $currentCourseId || $course['session_id'] != $currentSessionId) &&
+        (api_is_global_platform_admin() || (CourseManager::is_course_teacher(api_get_user_id(), $course['code'])
+                && $course['session_id'] == 0) || api_is_coach($course['session_id'], $course['id']))) {
+        $value = array("courseId" => $course['id'], "sessionId" => $course['session_id']);
+        if (isset($course['session_name'])) {
+            $options[json_encode($value)] = $course['title'].' ['.$course['session_name'].']';
+        } else {
+            $options[json_encode($value)] = $course['title'];
         }
     }
+}
+
+$form = new FormValidator('copy_survey', 'post', 'copy_survey.php?survey_id='.$_GET['survey_id'].api_get_cidreq());
+if (!$survey) {
+    Display::display_error_message(get_lang('NoSurveyAvailable'));
+}
+if (count($courses) < 1 || count($options) < 1) {
+    Display::display_error_message(get_lang('CourseListNotAvailable'));
+}
+if ($survey && count($courses) >= 1 && count($options) >= 1) {
+    $form->addElement('text', 'survey_title', get_lang('Survey'), array('value' => $option, 'disabled' => 'disabled'));
     $form->addElement('select', 'destination_course', get_lang('SelectDestinationCourse'), $options);
     $form->addButtonCopy(get_lang('CopySurvey'));
 }
+
 
 // Add Security token
 $token = Security::get_token();

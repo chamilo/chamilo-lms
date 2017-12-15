@@ -21,8 +21,15 @@ echo Display::url(
     Display::return_icon('back.png', get_lang('Tickets'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'ticket/tickets.php'
 );
+$sections = TicketManager::getSettingsMenuItems();
+foreach ($sections as $item) {
+    echo Display::url(
+        Display::return_icon($item['icon'], $item['content'], [], ICON_SIZE_MEDIUM),
+        $item['url']
+    );
+}
 echo '</div>';
 
-echo TicketManager::getSettingsMenu();
+
 
 Display::display_footer();

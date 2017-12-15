@@ -2564,7 +2564,7 @@ class DocumentManager
             $orig_course_info_path = $orig_course_info['path'];
         }
 
-        $destination_course_code = CourseManager::get_course_id_from_path($destination_course_directory);
+        $destination_course_code = CourseManager::getCourseCodeFromDirectory($destination_course_directory);
         $destination_course_info = api_get_course_info($destination_course_code);
         $dest_course_path = api_get_path(SYS_COURSE_PATH).$destination_course_directory.'/';
         $dest_course_path_rel = api_get_path(REL_COURSE_PATH).$destination_course_directory.'/';

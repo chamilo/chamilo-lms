@@ -158,34 +158,31 @@ if (!empty($logout) || !empty($cidReset)) {
     ];
 }
 
-//this fixes some problems with generic functionalities like
-//My Agenda & What's New icons linking to courses
-// $cidReq can be set in the index.php file of a course-area
-$cidReq = isset($cidReq) ? Database::escape_string($cidReq) : '';
-// $cidReq can be set in URL-parameter
-$cidReq = isset($_GET["cidReq"]) ? Database::escape_string($_GET["cidReq"]) : $cidReq;
-$cidReset = isset($cidReset) ? Database::escape_string($cidReset) : '';
+$courseCodeFromSession = api_get_course_id();
 
-// $cidReset can be set in URL-parameter
-$cidReset = (
-    isset($_GET['cidReq']) &&
-    ((isset($_SESSION['_cid']) && $_GET['cidReq'] != $_SESSION['_cid']) || (!isset($_SESSION['_cid'])))
-) ? Database::escape_string($_GET["cidReq"]) : $cidReset;
+// $cidReq can be set in URL-parameter
+$cidReq = isset($_GET['cidReq']) ? Database::escape_string($_GET['cidReq']) : '';
+$cidReset = isset($cidReset) ? (boolean) $cidReset : false;
 
 // $cDir is a special url param sent from a redirection from /courses/[DIR]/index.php...
 // It replaces cidReq in some opportunities
-$cDir = (!empty($_GET['cDir']) ? $_GET['cDir'] : null);
+$cDir = isset($_GET['cDir']) && !empty($_GET['cDir']) ? $_GET['cDir'] : '';
 
 // if there is a cDir parameter in the URL and $cidReq could not be determined
-if (isset($cDir) && empty($cidReq)) {
-    $c = CourseManager::get_course_id_from_path($cDir);
-    if ($c) {
-        $cidReq = $c;
+if (!empty($cDir) && empty($cidReq)) {
+    $courseCode = CourseManager::getCourseCodeFromDirectory($cDir);
+    if (!empty($courseCode)) {
+        $cidReq = $courseCode;
     }
-    if (empty($cidReset)) {
-        if (!isset($_SESSION['_cid']) OR (isset($_SESSION['_cid']) && $cidReq != $_SESSION['_cid'])) {
-            $cidReset = $cidReq;
-        }
+}
+
+if (empty($cidReq) && !empty($courseCodeFromSession)) {
+    $cidReq = $courseCodeFromSession;
+}
+
+if (empty($cidReset)) {
+    if ($courseCodeFromSession != $cidReq) {
+        $cidReset = true;
     }
 }
 
@@ -198,7 +195,6 @@ $login = isset($_POST["login"]) ? $_POST["login"] : '';
 $logging_in = false;
 
 /*  MAIN CODE  */
-
 if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
     // uid is in session => login already done, continue with this value
     $_user['user_id'] = $_SESSION['_user']['user_id'];
@@ -670,7 +666,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 // Redirect to master server
                 $osso->ask_master();
             } elseif (isset($_REQUEST['sso_cookie'])) {
-
                 // Here we are going to check the origin of
                 // what the call says should be used for
                 // authentication, and ensure  we know it
@@ -834,7 +829,6 @@ if (isset($use_anonymous) && $use_anonymous) {
 }
 
 // if the requested course is different from the course in session
-
 if (!empty($cidReq) && (!isset($_SESSION['_cid']) ||
     (isset($_SESSION['_cid']) && $cidReq != $_SESSION['_cid']))
 ) {
@@ -962,6 +956,7 @@ if (!empty($sessionIdFromGet) && !empty($cidReq)) {
         }
     }
 } else {
+    $cidReset = true;
     Session::erase('session_name');
     Session::erase('id_session');
 
@@ -973,7 +968,7 @@ if (!empty($sessionIdFromGet) && !empty($cidReq)) {
 }
 
 /*  COURSE INIT */
-if (isset($cidReset) && $cidReset) {
+if ($cidReset) {
     // Course session data refresh requested or empty data
     if ($cidReq) {
         $_course = api_get_course_info($cidReq);
@@ -1091,7 +1086,7 @@ $is_courseAdmin = false;
 $is_courseTutor = false;
 $is_courseMember = false;
 
-if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
+if ((isset($uidReset) && $uidReset) || $cidReset) {
     if (isset($_cid) && $_cid) {
         $my_user_id = isset($user_id) ? intval($user_id) : 0;
         $variable = 'accept_legal_'.$my_user_id.'_'.$_course['real_id'].'_'.$session_id;
@@ -1189,7 +1184,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     }
 
     if (isset($user_id) && $user_id && isset($_real_cid) && $_real_cid) {
-        //Check if user is subscribed in a course
+        // Check if user is subscribed in a course
         $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $sql = "SELECT * FROM $course_user_table
                 WHERE
@@ -1201,7 +1196,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
         $cuData = null;
         if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
             $cuData = Database::fetch_array($result, 'ASSOC');
-
             $is_courseAdmin = (bool) ($cuData['status'] == 1);
             $is_courseTutor = (bool) ($cuData['is_tutor'] == 1);
             $is_courseMember = true;
@@ -1209,6 +1203,12 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 
         // We are in a session course? Check session permissions
         if (!empty($session_id)) {
+            if (!empty($session_id) && !empty($_course)) {
+                if (!SessionManager::relation_session_course_exist($session_id, $_course['real_id'])) {
+                    api_not_allowed(true);
+                }
+            }
+
             // I'm not the teacher of the course
             if ($is_courseAdmin == false) {
                 // This user has no status related to this course
@@ -1523,7 +1523,7 @@ if ((isset($cas_login) && $cas_login && exist_firstpage_parameter()) ||
     api_delete_firstpage_parameter(); // delete the cookie
 
     if (!isset($_SESSION['request_uri'])) {
-        if (CourseManager::get_course_id_from_path($redirectCourseDir)) {
+        if (CourseManager::getCourseCodeFromDirectory($redirectCourseDir)) {
             $_SESSION['noredirection'] = false;
             $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH).$redirectCourseDir.'/';
         }
@@ -1531,7 +1531,7 @@ if ((isset($cas_login) && $cas_login && exist_firstpage_parameter()) ||
 } elseif (api_user_is_login() && exist_firstpage_parameter()) {
     $redirectCourseDir = api_get_firstpage_parameter();
     api_delete_firstpage_parameter(); // delete the cookie
-    if (CourseManager::get_course_id_from_path($redirectCourseDir)) {
+    if (CourseManager::getCourseCodeFromDirectory($redirectCourseDir)) {
         $_SESSION['noredirection'] = false;
         $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH).$redirectCourseDir.'/';
     }

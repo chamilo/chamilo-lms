@@ -4572,7 +4572,7 @@ function api_get_language_from_type($lang_type)
                 $cidReq = isset($_GET["cidReq"]) ? Database::escape_string($_GET["cidReq"]) : null;
                 $cDir = (!empty($_GET['cDir']) ? $_GET['cDir'] : null);
                 if (empty($cidReq) && !empty($cDir)) {
-                    $c = CourseManager::get_course_id_from_path($cDir);
+                    $c = CourseManager::getCourseCodeFromDirectory($cDir);
                     if ($c) {
                         $cidReq = $c;
                     }

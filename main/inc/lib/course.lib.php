@@ -2869,7 +2869,7 @@ class CourseManager
      *
      * @return  string  Course code, or false if not found
      */
-    public static function get_course_id_from_path($path)
+    public static function getCourseCodeFromDirectory($path)
     {
         $path = Database::escape_string(str_replace('.', '', str_replace('/', '', $path)));
         $res = Database::query("SELECT code FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."

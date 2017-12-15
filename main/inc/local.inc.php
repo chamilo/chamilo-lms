@@ -912,7 +912,8 @@ if (!isset($_SESSION['login_as'])) {
     $save_course_access = true;
     $_course = Session::read('_course');
     if ($_course && isset($_course['real_id'])) {
-        // The value  $_dont_save_user_course_access should be added before the call of global.inc.php see the main/inc/chat.ajax.php file
+        // The value  $_dont_save_user_course_access should be added before
+        // the call of global.inc.php see the main/inc/chat.ajax.php file
         // Disables the updates in the TRACK_E_COURSE_ACCESS table
         if (isset($_dont_save_user_course_access) && $_dont_save_user_course_access == true) {
             $save_course_access = false;
@@ -921,6 +922,54 @@ if (!isset($_SESSION['login_as'])) {
             Event::courseLogout($logoutInfo);
         }
     }
+}
+
+$sessionIdFromGet = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+// if a session id has been given in url, we store the session if course was set:
+if (!empty($sessionIdFromGet) && !empty($cidReq)) {
+    $sessionIdFromSession = api_get_session_id();
+    $checkFromDatabase = false;
+    // User change from session id
+    if ($sessionIdFromGet != $sessionIdFromSession) {
+        $cidReset = true;
+        $checkFromDatabase = true;
+        Session::erase('session_name');
+        Session::erase('id_session');
+
+        // Deleting session from $_SESSION means also deleting $_SESSION['_course'] and group info
+        Session::erase('_real_cid');
+        Session::erase('_cid');
+        Session::erase('_course');
+        Session::erase('_gid');
+    }
+
+    if ($checkFromDatabase) {
+        $sessionInfo = api_get_session_info($_GET['id_session']);
+        if (!empty($sessionInfo)) {
+            Session::write('session_name', $sessionInfo['name']);
+            Session::write('id_session', $sessionInfo['id']);
+        } else {
+            $cidReset = true;
+            Session::erase('session_name');
+            Session::erase('id_session');
+
+            // Deleting session from $_SESSION means also deleting $_SESSION['_course'] and group info
+            Session::erase('_real_cid');
+            Session::erase('_cid');
+            Session::erase('_course');
+            Session::erase('_gid');
+            api_not_allowed(true);
+        }
+    }
+} else {
+    Session::erase('session_name');
+    Session::erase('id_session');
+
+    // Deleting session from $_SESSION means also deleting $_SESSION['_course'] and group info
+    Session::erase('_real_cid');
+    Session::erase('_cid');
+    Session::erase('_course');
+    Session::erase('_gid');
 }
 
 /*  COURSE INIT */
@@ -937,29 +986,6 @@ if (isset($cidReset) && $cidReset) {
             Session::write('_real_cid', $_real_cid);
             Session::write('_cid', $_cid);
             Session::write('_course', $_course);
-
-            // if a session id has been given in url, we store the session
-
-            // Database Table Definitions
-            $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-            $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-            $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
-            if (!empty($_GET['id_session'])) {
-                $sql = 'SELECT name FROM '.$tbl_session.'
-                        WHERE id="'.intval($_GET['id_session']).'"';
-                $rs = Database::query($sql);
-                if (Database::num_rows($rs)) {
-                    list($_SESSION['session_name']) = Database::fetch_array($rs);
-                    $_SESSION['id_session'] = intval($_GET['id_session']);
-                } else {
-                    api_not_allowed(true);
-                }
-
-            } else {
-                Session::erase('session_name');
-                Session::erase('id_session');
-            }
 
             if (!empty($_GET['gidReq'])) {
                 $_SESSION['_gid'] = intval($_GET['gidReq']);
@@ -1001,12 +1027,6 @@ if (isset($cidReset) && $cidReset) {
             }
         }
 
-        // Deleting session info.
-        if (api_get_session_id()) {
-            Session::erase('id_session');
-            Session::erase('session_name');
-        }
-
         if (api_get_group_id()) {
             Session::erase('_gid');
         }
@@ -1036,20 +1056,6 @@ if (isset($cidReset) && $cidReset) {
     } else {
         $_cid = $_SESSION['_cid'];
         $_course = $_SESSION['_course'];
-
-        // these lines are useful for tracking. Indeed we can have lost the id_session and not the cid.
-        // Moreover, if we want to track a course with another session it can be usefull
-        if (!empty($_GET['id_session']) && is_numeric($_GET['id_session'])) {
-            $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-            $sql = 'SELECT name FROM '.$tbl_session.' WHERE id="'.intval($_GET['id_session']).'"';
-            $rs = Database::query($sql);
-            if (Database::num_rows($rs)) {
-                list($_SESSION['session_name']) = Database::fetch_array($rs);
-                $_SESSION['id_session'] = intval($_GET['id_session']);
-            } else {
-                api_not_allowed(true);
-            }
-        }
 
         if (!empty($_REQUEST['gidReq'])) {
             $_SESSION['_gid'] = intval($_REQUEST['gidReq']);
@@ -1228,11 +1234,11 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 
                 // Am I a session admin?
                 if (isset($row) && isset($row[0]) && $row[0]['session_admin_id'] == $user_id) {
-                    $is_courseMember     = false;
-                    $is_courseTutor      = false;
-                    $is_courseAdmin      = false;
+                    $is_courseMember = false;
+                    $is_courseTutor = false;
+                    $is_courseAdmin = false;
                     $is_session_general_coach = false;
-                    $is_sessionAdmin     = true;
+                    $is_sessionAdmin = true;
                 } else {
                     // Am I a session coach for this session?
                     $sql = "SELECT session.id, session.id_coach 
@@ -1536,8 +1542,8 @@ Event::eventCourseLoginUpdate(
     api_get_user_id(),
     api_get_session_id()
 );
-
 Redirect::session_request_uri($logging_in, $user_id);
+
 
 if (!ChamiloApi::isAjaxRequest() && api_get_configuration_value('allow_mandatory_survey')) {
     SurveyManager::protectByMandatory();

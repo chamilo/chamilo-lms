@@ -3579,7 +3579,7 @@ class Exercise
                                     exe_id = '".$exeId."' AND
                                     question_id= '".$questionId."'";
                         $result = Database::query($sql);
-                        $choice = Database::result($result, 0, "answer");
+                        $choice = Database::result($result, 0, 'answer');
 
                         $studentChoice = $choice == $answerAutoId ? 1 : 0;
                         if ($studentChoice) {
@@ -3597,7 +3597,7 @@ class Exercise
                 // for multiple answers
                 case MULTIPLE_ANSWER_TRUE_FALSE:
                     if ($from_database) {
-                        $choice = array();
+                        $choice = [];
                         $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
                                 WHERE
                                     exe_id = $exeId AND
@@ -3605,8 +3605,7 @@ class Exercise
 
                         $result = Database::query($sql);
                         while ($row = Database::fetch_array($result)) {
-                            $ind = $row['answer'];
-                            $values = explode(':', $ind);
+                            $values = explode(':', $row['answer']);
                             $my_answer_id = isset($values[0]) ? $values[0] : '';
                             $option = isset($values[1]) ? $values[1] : '';
                             $choice[$my_answer_id] = $option;
@@ -3636,13 +3635,12 @@ class Exercise
                     break;
                 case MULTIPLE_ANSWER: //2
                     if ($from_database) {
-                        $choice = array();
+                        $choice = [];
                         $sql = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
                                 WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
                         $resultans = Database::query($sql);
                         while ($row = Database::fetch_array($resultans)) {
-                            $ind = $row['answer'];
-                            $choice[$ind] = 1;
+                            $choice[$row['answer']] = 1;
                         }
 
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
@@ -3667,13 +3665,12 @@ class Exercise
                     break;
                 case GLOBAL_MULTIPLE_ANSWER:
                     if ($from_database) {
-                        $choice = array();
+                        $choice = [];
                         $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
                                 WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
                         $resultans = Database::query($sql);
                         while ($row = Database::fetch_array($resultans)) {
-                            $ind = $row['answer'];
-                            $choice[$ind] = 1;
+                            $choice[$row['answer']] = 1;
                         }
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
                         $real_answers[$answerId] = (bool) $studentChoice;
@@ -3694,12 +3691,12 @@ class Exercise
                     break;
                 case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:
                     if ($from_database) {
+                        $choice = [];
                         $sql = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
                                 WHERE exe_id = $exeId AND question_id= ".$questionId;
                         $resultans = Database::query($sql);
                         while ($row = Database::fetch_array($resultans)) {
-                            $ind = $row['answer'];
-                            $result = explode(':', $ind);
+                            $result = explode(':', $row['answer']);
                             if (isset($result[0])) {
                                 $my_answer_id = isset($result[0]) ? $result[0] : '';
                                 $option = isset($result[1]) ? $result[1] : '';
@@ -3728,16 +3725,15 @@ class Exercise
                     break;
                 case MULTIPLE_ANSWER_COMBINATION:
                     if ($from_database) {
+                        $choice = [];
                         $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
                                 WHERE exe_id = $exeId AND question_id= $questionId";
                         $resultans = Database::query($sql);
                         while ($row = Database::fetch_array($resultans)) {
-                            $ind = $row['answer'];
-                            $choice[$ind] = 1;
+                            $choice[$row['answer']] = 1;
                         }
 
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
-
                         if ($answerCorrect == 1) {
                             if ($studentChoice) {
                                 $real_answers[$answerId] = true;
@@ -3753,7 +3749,6 @@ class Exercise
                         }
                     } else {
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
-
                         if ($answerCorrect == 1) {
                             if ($studentChoice) {
                                 $real_answers[$answerId] = true;

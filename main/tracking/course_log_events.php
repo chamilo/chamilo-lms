@@ -45,14 +45,14 @@ $column_model = array(
     array(
         'name' => 'col0',
         'index' => 'col0',
-        'width' => '50',
+        'width' => '70',
         'align' => 'left',
         'sortable' => 'false'
     ),
     array(
         'name' => 'col1',
         'index' => 'col1',
-        'width' => '60',
+        'width' => '50',
         'align' => 'left',
         'sortable' => 'false',
     ),
@@ -105,6 +105,11 @@ $column_model = array(
 $extra_params['autowidth'] = 'true';
 // height auto
 $extra_params['height'] = 'auto';
+
+// Order by date
+$extra_params['sortorder'] = 'desc';
+$extra_params['sortname'] = 'col7';
+
 $actionLinks = '';
 
 // Add the JS needed to use the jqgrid

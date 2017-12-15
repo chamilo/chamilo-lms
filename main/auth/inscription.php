@@ -439,43 +439,43 @@ if (!CustomPages::enabled()) {
     if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_registered_show_terms) {
         $tool_name = get_lang('TermsAndConditions');
     }
+}
 
-    $home = api_get_path(SYS_APP_PATH).'home/';
-    if (api_is_multiple_url_enabled()) {
-        $access_url_id = api_get_current_access_url_id();
-        if ($access_url_id != -1) {
-            $url_info = api_get_access_url($access_url_id);
-            $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
-            $clean_url = api_replace_dangerous_char($url);
-            $clean_url = str_replace('/', '-', $clean_url);
-            $clean_url .= '/';
-            $home_old  = api_get_path(SYS_APP_PATH).'home/';
-            $home = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
-        }
+$home = api_get_path(SYS_APP_PATH).'home/';
+if (api_is_multiple_url_enabled()) {
+    $access_url_id = api_get_current_access_url_id();
+    if ($access_url_id != -1) {
+        $url_info = api_get_access_url($access_url_id);
+        $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
+        $clean_url = api_replace_dangerous_char($url);
+        $clean_url = str_replace('/', '-', $clean_url);
+        $clean_url .= '/';
+        $home_old  = api_get_path(SYS_APP_PATH).'home/';
+        $home = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
     }
+}
 
-    if (file_exists($home.'register_top_'.$user_selected_language.'.html')) {
-        $home_top_temp = @(string) file_get_contents($home.'register_top_'.$user_selected_language.'.html');
-        $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
-        $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-        if (!empty($open)) {
-            $content = '<div class="well_border">'.$open.'</div>';
-        }
+if (file_exists($home.'register_top_'.$user_selected_language.'.html')) {
+    $home_top_temp = @(string) file_get_contents($home.'register_top_'.$user_selected_language.'.html');
+    $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
+    $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+    if (!empty($open)) {
+        $content = '<div class="well_border">'.$open.'</div>';
     }
+}
 
-    // Forbidden to self-register
-    if ($isNotAllowedHere) {
-        api_not_allowed(true, get_lang('RegistrationDisabled'));
-    }
+// Forbidden to self-register
+if ($isNotAllowedHere) {
+    api_not_allowed(true, get_lang('RegistrationDisabled'));
+}
 
-    if (api_get_setting('allow_registration') === 'approval') {
-        $content .= Display::return_message(get_lang('YourAccountHasToBeApproved'));
-    }
+if (api_get_setting('allow_registration') === 'approval') {
+    $content .= Display::return_message(get_lang('YourAccountHasToBeApproved'));
+}
 
-    //if openid was not found
-    if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
-        $content .= Display::return_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));
-    }
+//if openid was not found
+if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
+    $content .= Display::return_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));
 }
 
 $showTerms = false;
@@ -1004,7 +1004,7 @@ if ($form->validate()) {
     if (CustomPages::enabled() && CustomPages::exists(CustomPages::REGISTRATION)) {
         CustomPages::display(
             CustomPages::REGISTRATION,
-            array('form' => $form)
+            array('form' => $form, 'content' => $content)
         );
     } else {
         if (!api_is_anonymous()) {

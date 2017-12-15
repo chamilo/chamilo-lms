@@ -851,6 +851,9 @@ class TicketManager
                       ticket.message LIKE '%$keyword%' OR
                       ticket.keyword LIKE '%$keyword%' OR
                       ticket.source LIKE '%$keyword%' OR
+                      cat.name LIKE '%$keyword%' OR
+                      status.name LIKE '%$keyword%' OR
+                      priority.name LIKE '%$keyword%' OR
                       ticket.personal_email LIKE '%$keyword%'                          
             )";
         }
@@ -864,10 +867,12 @@ class TicketManager
             'keyword_priority' => 'ticket.priority_id'
         ];
 
-        foreach ($keywords as $keyword => $sqlLabel) {
+        foreach ($keywords as $keyword => $label) {
             if (isset($_GET[$keyword])) {
                 $data = Database::escape_string(trim($_GET[$keyword]));
-                $sql .= " AND $sqlLabel = '$data' ";
+                if (!empty($data)) {
+                    $sql .= " AND $label = '$data' ";
+                }
             }
         }
 

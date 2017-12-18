@@ -64,6 +64,8 @@ if (api_get_configuration_value('deny_delete_users')) {
     $deleteUserAvailable = false;
 }
 
+trimVariables();
+
 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=get_user_courses';
 $urlSession = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=get_user_sessions';
 $extraField = new ExtraField('user');
@@ -192,6 +194,27 @@ function load_calendar(user_id, month, year) {
 </script>';
 
 $this_section = SECTION_PLATFORM_ADMIN;
+
+/**
+ * Trim variable values to avoid trailing spaces
+ */
+function trimVariables()
+{
+    $filterVariables = [
+        'keyword',
+        'keyword_firstname',
+        'keyword_lastname',
+        'keyword_username',
+        'keyword_email',
+        'keyword_officialcode',
+    ];
+
+    foreach ($filterVariables as $variable) {
+        if (isset($_GET[$variable])) {
+            $_GET[$variable] = trim($_GET[$variable]);
+        }
+    }
+}
 
 /**
  * Prepares the shared SQL query for the user table.
@@ -817,7 +840,7 @@ if (!empty($action)) {
                 $result = UrlManager::add_user_to_url($user_id, $urlId);
                 if ($result) {
                     $user_info = api_get_user_info($user_id);
-                    $message = get_lang('UserAdded').' '.$user_info['complete_name'].' ('.$user_info['username'].')';
+                    $message = get_lang('UserAdded').' '.$user_info['complete_name_with_username'];
                     $message = Display::return_message($message, 'confirmation');
                 }
                 break;

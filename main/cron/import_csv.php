@@ -2269,9 +2269,11 @@ class ImportCsv
                     $this->logger->addInfo("New post will be created no match for externalCareId = ".$row['External_care_id']);
                 }
 
+                $contentDecoded = base64_decode($row['Article']);
+
                 $post
                     ->setTitle($row['Title'])
-                    ->setContent($row['Article'])
+                    ->setContent($contentDecoded)
                     ->setExternalCareId($row['External_care_id'])
                     ->setCreatedAt($createdAt)
                     ->setUpdatedAt($updatedAt)
@@ -2281,6 +2283,7 @@ class ImportCsv
                     ->setParent($parent)
                     ->setTags($tags)
                     ->setUser($userInfo)
+                    ->setAttachment($row['Attachement'])
                 ;
                 $em->persist($post);
                 $em->flush();

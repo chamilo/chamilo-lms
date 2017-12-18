@@ -37,10 +37,11 @@ switch ($action) {
         }
         break;
     case 'get_user_courses':
+        // Only search my courses
         if (api_is_platform_admin() || api_is_session_admin()) {
-            $user_id = intval($_POST['user_id']);
+            $userId = intval($_REQUEST['user_id']);
             $list = CourseManager::get_courses_list_by_user_id(
-                $user_id,
+                $userId,
                 false
             );
             if (!empty($list)) {
@@ -50,6 +51,55 @@ switch ($action) {
                 }
             } else {
                 echo get_lang('UserHasNoCourse');
+            }
+        }
+        break;
+    case 'get_my_courses_and_sessions':
+        // Search my courses and sessions allowed for admin, session admin, teachers
+        $currentCourseId = api_get_course_int_id();
+        $currentSessionId = api_get_session_id();
+        if (api_is_platform_admin() || api_is_session_admin() || api_is_allowed_to_edit()) {
+            $list = CourseManager::get_courses_list_by_user_id(
+                api_get_user_id(),
+                true,
+                false,
+                false,
+                [],
+                true,
+                true
+            );
+
+            if (empty($list)) {
+                echo json_encode([]);
+                break;
+            }
+
+            $courseList = [];
+            if (!empty($list)) {
+                foreach ($list as $course) {
+                    $courseInfo = api_get_course_info_by_id($course['real_id']);
+                    $sessionId = 0;
+                    if (isset($course['session_id']) && !empty($course['session_id'])) {
+                        $sessionId = $course['session_id'];
+                    }
+
+                    $sessionName = '';
+                    if (isset($course['session_name']) && !empty($course['session_name'])) {
+                        $sessionName = ' ('.$course['session_name'].')';
+                    }
+
+                    // Skip current course/course session
+                    if ($currentCourseId == $courseInfo['real_id'] && $sessionId == $currentSessionId) {
+                        continue;
+                    }
+
+                    $courseList['items'][] = [
+                        'id' => $courseInfo['real_id'].'_'.$sessionId,
+                        'text' => $courseInfo['title'].$sessionName
+                    ];
+                }
+
+                echo json_encode($courseList);
             }
         }
         break;

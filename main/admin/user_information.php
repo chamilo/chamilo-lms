@@ -42,6 +42,9 @@ $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdm
 $interbreadcrumb[] = array("url" => 'user_list.php', "name" => get_lang('UserList'));
 
 $userId = $user['user_id'];
+
+$currentUrl = api_get_self().'?user_id='.$userId;
+
 $tool_name = $userEntity->getCompleteName();
 $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -133,7 +136,7 @@ if (!empty($studentBossList)) {
     $row = 1;
     foreach ($studentBossList as $studentBossId) {
         $studentBoss = api_get_user_info($studentBossId['boss_id']);
-        $table->setCellContents($row, 0, $studentBoss['complete_name_with_username']);
+        $table->setCellContents($row, 0, $studentBoss['complete_name_with_message_link']);
         $csvContent[] = array($studentBoss['complete_name_with_username']);
         $row++;
     }
@@ -317,7 +320,7 @@ if (count($sessions) > 0) {
                 Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>';
 
             if ($my_course['status'] == STUDENT) {
-                $tools .= '<a href="user_information.php?action=unsubscribeSessionCourse&course_code='.$courseInfo['code'].'&user_id='.$userId.'&id_session='.$id_session.'">'.
+                $tools .= '<a href="user_information.php?action=unsubscribe_session_course&course_id='.$courseInfo['real_id'].'&user_id='.$userId.'&id_session='.$id_session.'">'.
                     Display::return_icon('delete.png', get_lang('Delete')).'</a>';
             }
 
@@ -430,9 +433,9 @@ if (Database::num_rows($res) > 0) {
             '<a href="'.$courseInfo['course_public_url'].'">'.
             Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>'.
             '<a href="course_edit.php?id='.$course->c_id.'">'.
-            Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+            Display::return_icon('edit.png', get_lang('Edit')).'</a>';
         if ($course->status == STUDENT) {
-            $tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$courseCode.'&user_id='.$userId.'">'.
+            $tools .= '<a href="user_information.php?action=unsubscribe&course_id='.$courseInfo['real_id'].'&user_id='.$userId.'">'.
                 Display::return_icon('delete.png', get_lang('Delete')).'</a>';
         }
 
@@ -538,16 +541,15 @@ if (isset($_GET['action'])) {
             }
             break;
         case 'unsubscribe':
-            $courseCode = empty($_GET['course_code']) ? '' : intval($_GET['course_code']);
-            $sessionId = empty($_GET['id_session']) ? 0 : intval($_GET['id_session']);
-            $courseInfo = api_get_course_info($courseCode);
-
+            $courseId = !empty($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
+            $sessionId = !empty($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+            $courseInfo = api_get_course_info_by_id($courseId);
             if (empty($courseInfo)) {
                 break;
             }
 
             if (CourseManager::getUserInCourseStatus($userId, $courseInfo['real_id']) == STUDENT) {
-                CourseManager::unsubscribe_user($userId, $courseCode, $sessionId);
+                CourseManager::unsubscribe_user($userId, $courseInfo['code'], $sessionId);
                 Display::addFlash(Display::return_message(get_lang('UserUnsubscribed')));
             } else {
                 Display::addFlash(Display::return_message(
@@ -556,17 +558,22 @@ if (isset($_GET['action'])) {
                     false
                 ));
             }
+            header('Location: '.$currentUrl);
+            exit;
             break;
-        case 'unsubscribeSessionCourse':
+        case 'unsubscribe_session_course':
             $userId = empty($_GET['user_id']) ? 0 : intval($_GET['user_id']);
-            $courseCode = empty($_GET['course_code']) ? '' : intval($_GET['course_code']);
-            $sessionId = empty($_GET['id_session']) ? 0 : intval($_GET['id_session']);
+            $courseId = !empty($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
+            $sessionId = !empty($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+
             SessionManager::removeUsersFromCourseSession(
                 array($userId),
                 $sessionId,
-                api_get_course_info($courseCode)
+                api_get_course_info_by_id($courseId)
             );
             Display::addFlash(Display::return_message(get_lang('UserUnsubscribed')));
+            header('Location: '.$currentUrl);
+            exit;
             break;
         case 'export':
             Export::arrayToCsv(

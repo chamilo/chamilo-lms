@@ -466,11 +466,14 @@ if ($form->validate()) {
 
         $extraFieldValue = new ExtraFieldValue('user');
         $extraFieldValue->saveFieldValues($user);
+        $userInfo = api_get_user_info($user_id);
+        $message = get_lang('UserUpdated').': '.Display::url(
+            $userInfo['complete_name_with_username'],
+            api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id
+        );
 
-        $tok = Security::get_token();
-
-        Display::addFlash(Display::return_message(get_lang('UserUpdated')));
-        header('Location: user_list.php?sec_token='.$tok);
+        Display::addFlash(Display::return_message($message, 'normal', false));
+        header('Location: user_list.php');
         exit();
     }
 }

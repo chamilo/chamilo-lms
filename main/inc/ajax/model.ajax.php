@@ -554,8 +554,15 @@ switch ($action) {
         );
         break;
     case 'get_exercise_results_report':
-        $exerciseId = $_REQUEST['exercise_id'];
+        api_protect_admin_script();
+
+        $exerciseId = isset($_REQUEST['exercise_id']) ? $_REQUEST['exercise_id'] : 0;
         $courseId = isset($_REQUEST['course_id']) ? $_REQUEST['course_id'] : 0;
+
+        if (empty($exerciseId)) {
+            exit;
+        }
+
         if (!empty($courseId)) {
             $courseInfo = api_get_course_info_by_id($courseId);
         } else {
@@ -1217,33 +1224,62 @@ switch ($action) {
         );
         break;
     case 'get_exercise_results_report':
-        api_protect_admin_script();
-
         // Used inside ExerciseLib::get_exam_results_data()
         $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path']."/document";
+        $sessionId = api_get_session_id();
 
         $columns = array(
             'firstname',
             'lastname',
             'username',
             'session',
-            'start_date',
+            'session_access_start_date',
             'exe_date',
             'score'
         );
 
+        if ($operation == 'excel') {
+            $columns = array(
+                'firstname',
+                'lastname',
+                'username',
+                'session',
+                'session_access_start_date',
+                'exe_date',
+                'score_percentage',
+                'only_score',
+                'total'
+            );
+            $overwriteColumnHeaderExport['session_access_start_date'] = get_lang('SessionStartDate');
+            $overwriteColumnHeaderExport['exe_date'] = get_lang('StartDate');
+            $overwriteColumnHeaderExport['score_percentage'] = get_lang('Score');
+            $overwriteColumnHeaderExport['only_score'] = get_lang('Score');
+            $overwriteColumnHeaderExport['total'] = get_lang('Score');
+        }
+
         $categoryList = TestCategory::getListOfCategoriesIDForTest($exerciseId, $courseId);
+
         if (!empty($categoryList)) {
             foreach ($categoryList as $categoryInfo) {
                 $label = 'category_'.$categoryInfo['id'];
-                $columns[] = $label;
+
                 if ($operation == 'excel') {
+                    $columns[] = $label.'_score_percentage';
+                    $columns[] = $label.'_only_score';
+                    $columns[] = $label.'_total';
                     $overwriteColumnHeaderExport[$label] = $categoryInfo['title'];
+                    $overwriteColumnHeaderExport[$label.'_score_percentage'] = $categoryInfo['title'];
+                    $overwriteColumnHeaderExport[$label.'_only_score'] = $categoryInfo['title'];
+                    $overwriteColumnHeaderExport[$label.'_total'] = $categoryInfo['title'];
+                } else {
+                    $columns[] = $label;
                 }
             }
         }
 
-        $columns[] = 'actions';
+        if ($operation !== 'excel') {
+            $columns[] = 'actions';
+        }
 
         $result = ExerciseLib::get_exam_results_data(
             $start,
@@ -1255,7 +1291,8 @@ switch ($action) {
             false,
             $courseInfo['code'],
             true,
-            true
+            true,
+            !empty($sessionId)
         );
         break;
     case 'get_hotpotatoes_exercise_results':

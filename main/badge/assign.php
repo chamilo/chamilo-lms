@@ -59,9 +59,36 @@ if (empty($skillLevels)) {
 
 }
 $skillIdFromGet = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
-$currentLevel = isset($_REQUEST['current']) ? (int) str_replace('assign_skill_sub_skill_id_', '', $_REQUEST['current']) : 0;
+$currentValue = isset($_REQUEST['current_value']) ? (int) $_REQUEST['current_value'] : 0;
+$currentLevel = isset($_REQUEST['current']) ? (int) str_replace('sub_skill_id_', '', $_REQUEST['current']) : 0;
+
 $subSkillList = isset($_REQUEST['sub_skill_list']) ? explode(',', $_REQUEST['sub_skill_list']) : [];
 $subSkillList = array_unique($subSkillList);
+
+if (!empty($subSkillList)) {
+    // Compare asked skill with current level
+    $correctLevel = false;
+    if (isset($subSkillList[$currentLevel]) && $subSkillList[$currentLevel] == $currentValue) {
+        $correctLevel = true;
+    }
+
+    // Level is wrong probably user change the level. Fix the subSkillList array
+    if (!$correctLevel) {
+        $newSubSkillList = [];
+        $counter = 0;
+        foreach ($subSkillList as $subSkillId) {
+            if ($counter == $currentLevel) {
+                $subSkillId = $currentValue;
+            }
+            $newSubSkillList[$counter] = $subSkillId;
+            if ($counter == $currentLevel) {
+                break;
+            }
+            $counter++;
+        }
+        $subSkillList = $newSubSkillList;
+    }
+}
 
 if (!empty($currentLevel)) {
     $level = $currentLevel + 1;
@@ -381,23 +408,23 @@ if (api_is_drh()) {
     );
 }
 
-$url = api_get_path(WEB_CODE_PATH).'badge/assign.php?user='.$userId.'&id=';
+$url = api_get_path(WEB_CODE_PATH).'badge/assign.php?user='.$userId;
 
 $disableSelect = '';
 if ($disableList) {
     foreach ($disableList as $name) {
-        $disableSelect .= "$('#".$name."').prop('disabled', true);";
-        $disableSelect .= "$('#".$name."').selectpicker('refresh');";
+        //$disableSelect .= "$('#".$name."').prop('disabled', true);";
+        //$disableSelect .= "$('#".$name."').selectpicker('refresh');";
     }
 }
 
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
     $("#skill").on("change", function() {
-        $(location).attr("href", "'. $url.'"+$(this).val());
+        $(location).attr("href", "'. $url.'&id="+$(this).val());
     });
     $(".sub_skill").on("change", function() {
-        $(location).attr("href", "'.$url.'&id='.$skillIdFromGet.'&current="+$(this).attr("id")+"&sub_skill_list='.$subSkillListToString.',"+$(this).val());
+        $(location).attr("href", "'.$url.'&id='.$skillIdFromGet.'&current_value="+$(this).val()+"&current="+$(this).attr("id")+"&sub_skill_list='.$subSkillListToString.',"+$(this).val());
     });
     '.$disableSelect.'
 });

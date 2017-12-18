@@ -5,6 +5,7 @@ use Chamilo\TicketBundle\Entity\Project;
 use Chamilo\TicketBundle\Entity\Status;
 use Chamilo\TicketBundle\Entity\Priority;
 use Chamilo\TicketBundle\Entity\Ticket;
+use Chamilo\TicketBundle\Entity\MessageAttachment;
 
 /**
  * Class TicketManager
@@ -430,32 +431,32 @@ class TicketManager
             $helpDeskMessage =
                 '<table>
                         <tr>
-                            <td width="100px"><b>' . get_lang('User').'</b></td>
-                            <td width="400px">' . $currentUserInfo['complete_name'].'</td>
+                            <td width="100px"><b>'.get_lang('User').'</b></td>
+                            <td width="400px">'.$currentUserInfo['complete_name'].'</td>
                         </tr>
                         <tr>
-                            <td width="100px"><b>' . get_lang('Username').'</b></td>
-                            <td width="400px">' . $currentUserInfo['username'].'</td>
+                            <td width="100px"><b>'.get_lang('Username').'</b></td>
+                            <td width="400px">'.$currentUserInfo['username'].'</td>
                         </tr>
                         <tr>
-                            <td width="100px"><b>' . get_lang('Email').'</b></td>
-                            <td width="400px">' . $currentUserInfo['email'].'</td>
+                            <td width="100px"><b>'.get_lang('Email').'</b></td>
+                            <td width="400px">'.$currentUserInfo['email'].'</td>
                         </tr>
                         <tr>
-                            <td width="100px"><b>' . get_lang('Phone').'</b></td>
-                            <td width="400px">' . $currentUserInfo['phone'].'</td>
+                            <td width="100px"><b>'.get_lang('Phone').'</b></td>
+                            <td width="400px">'.$currentUserInfo['phone'].'</td>
                         </tr>
                         <tr>
-                            <td width="100px"><b>' . get_lang('Date').'</b></td>
-                            <td width="400px">' . api_convert_and_format_date($now, DATE_TIME_FORMAT_LONG).'</td>
+                            <td width="100px"><b>'.get_lang('Date').'</b></td>
+                            <td width="400px">'.api_convert_and_format_date($now, DATE_TIME_FORMAT_LONG).'</td>
                         </tr>
                         <tr>
-                            <td width="100px"><b>' . get_lang('Title').'</b></td>
-                            <td width="400px">' . $subject.'</td>
+                            <td width="100px"><b>'.get_lang('Title').'</b></td>
+                            <td width="400px">'.$subject.'</td>
                         </tr>
                         <tr>
-                            <td width="100px"><b>' . get_lang('Description').'</b></td>
-                            <td width="400px">' . $content.'</td>
+                            <td width="100px"><b>'.get_lang('Description').'</b></td>
+                            <td width="400px">'.$content.'</td>
                         </tr>
                     </table>';
 
@@ -480,7 +481,7 @@ class TicketManager
                     $admins = UserManager::get_all_administrators();
                     foreach ($admins as $userId => $data) {
                         if ($data['active']) {
-                            self::send_message_simple(
+                            MessageManager::send_message_simple(
                                 $userId,
                                 $warningSubject,
                                 $helpDeskMessage
@@ -850,6 +851,9 @@ class TicketManager
                       ticket.message LIKE '%$keyword%' OR
                       ticket.keyword LIKE '%$keyword%' OR
                       ticket.source LIKE '%$keyword%' OR
+                      cat.name LIKE '%$keyword%' OR
+                      status.name LIKE '%$keyword%' OR
+                      priority.name LIKE '%$keyword%' OR
                       ticket.personal_email LIKE '%$keyword%'                          
             )";
         }
@@ -863,10 +867,12 @@ class TicketManager
             'keyword_priority' => 'ticket.priority_id'
         ];
 
-        foreach ($keywords as $keyword => $sqlLabel) {
+        foreach ($keywords as $keyword => $label) {
             if (isset($_GET[$keyword])) {
                 $data = Database::escape_string(trim($_GET[$keyword]));
-                $sql .= " AND $sqlLabel = '$data' ";
+                if (!empty($data)) {
+                    $sql .= " AND $label = '$data' ";
+                }
             }
         }
 
@@ -939,7 +945,12 @@ class TicketManager
             $row['start_date'] = Display::dateToStringAgoAndLongDate($row['start_date']);
             $row['sys_lastedit_datetime'] = Display::dateToStringAgoAndLongDate($row['sys_lastedit_datetime']);
 
-            $icon = Display::return_icon($img_source, get_lang('Info')).'<a href="ticket_details.php?ticket_id='.$row['id'].'">'.$row['code'].'</a>';
+            $icon = Display::return_icon(
+                $img_source,
+                get_lang('Info')
+            );
+
+            $icon .= '<a href="ticket_details.php?ticket_id='.$row['id'].'">'.$row['code'].'</a>';
 
             if ($isAdmin) {
                 $ticket = array(
@@ -1064,12 +1075,15 @@ class TicketManager
         }
         if ($keyword_course != '') {
             $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-            $sql .= " AND ticket.course_id IN ( ";
-            $sql .= "SELECT id
-                     FROM $course_table
-                     WHERE (title LIKE '%$keyword_course%'
-                     OR code LIKE '%$keyword_course%'
-                     OR visual_code LIKE '%$keyword_course%' )) ";
+            $sql .= " AND ticket.course_id IN (  
+                        SELECT id
+                        FROM $course_table
+                        WHERE (
+                            title LIKE '%$keyword_course%' OR 
+                            code LIKE '%$keyword_course%' OR 
+                            visual_code LIKE '%$keyword_course%'
+                        )
+                   ) ";
         }
 
         $res = Database::query($sql);
@@ -1080,7 +1094,7 @@ class TicketManager
 
     /**
      * @param int $id
-     * @return \Chamilo\TicketBundle\Entity\MessageAttachment
+     * @return MessageAttachment
      */
     public static function getTicketMessageAttachment($id)
     {
@@ -2167,29 +2181,48 @@ class TicketManager
     }
 
     /**
-     * @return string
+     * Returns a list of menu elements for the tickets system's configuration
+     * @param string $exclude The element to exclude from the list
+     * @return array
      */
-    public static function getSettingsMenu()
+    public static function getSettingsMenuItems($exclude = null)
     {
-        $items = [
-            [
-                'url' => 'projects.php',
-                'content' => get_lang('Projects')
-            ],
-            [
-                'url' => 'status.php',
-                'content' => get_lang('Status')
-            ],
-            [
-                'url' => 'priorities.php',
-                'content' => get_lang('Priority')
-            ]
+        $items = [];
+        $project = [
+            'icon' => 'career.png',
+            'url' => 'projects.php',
+            'content' => get_lang('Projects')
         ];
+        $status = [
+            'icon' => 'check-circle.png',
+            'url' => 'status.php',
+            'content' => get_lang('Status')
+        ];
+        $priority = [
+            'icon' => 'order-course.png',
+            'url' => 'priorities.php',
+            'content' => get_lang('Priority')
+        ];
+        switch ($exclude) {
+            case 'project':
+                $items = [$status, $priority];
+                break;
+            case 'status':
+                $items = [$project, $priority];
+                break;
+            case 'priority':
+                $items = [$project, $status];
+                break;
+            default:
+                $items = [$project, $status, $priority];
+                break;
+        }
 
-        echo Display::actions($items);
+        return $items;
     }
 
     /**
+     * Returns a list of strings representing the default statuses
      * @return array
      */
     public static function getDefaultStatusList()

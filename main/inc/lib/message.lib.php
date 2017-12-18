@@ -165,15 +165,27 @@ class MessageManager
             }
 
             $userInfo = api_get_user_info($result[1]);
-            $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.
-                $result[2].'</a><br />'.$userInfo['complete_name_with_username'];
+            if (!empty($result[1]) && !empty($userInfo)) {
+                $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.$result[2].'</a><br />';
+                $message[1] .= $userInfo['complete_name_with_username'];
+                $message[3] =
+                    Display::url(
+                        Display::returnFontAwesomeIcon('reply', 2),
+                        $newMessageLink.'?re_id='.$result[0],
+                        ['title' => get_lang('ReplyToMessage') ]
+                    );
+            } else {
+                $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.$result[2].'</a><br />';
+                $message[1] .= get_lang('UnknownUser');
+                $message[3] =
+                    Display::url(
+                        Display::returnFontAwesomeIcon('reply', 2),
+                        '#',
+                        ['title' => get_lang('ReplyToMessage')]
+                    );
+            }
 
-            $message[3] =
-                Display::url(
-                    Display::returnFontAwesomeIcon('reply', 2),
-                    $newMessageLink.'?re_id='.$result[0],
-                    ['title' => get_lang('ReplyToMessage') ]
-                ).
+            $message[3] .=
                 '&nbsp;&nbsp;'.
                 Display::url(
                     Display::returnFontAwesomeIcon('share', 2),
@@ -265,7 +277,7 @@ class MessageManager
      * @param array $file_comments about attachment files (optional)
      * @param int $group_id (optional)
      * @param int $parent_id (optional)
-     * @param int $edit_message_id id for updating the message (optional)
+     * @param int $editMessageId id for updating the message (optional)
      * @param int $topic_id (optional) the default value is the current user_id
      * @param int $sender_id
      * @param bool $directMessage
@@ -282,7 +294,7 @@ class MessageManager
         array $file_comments = [],
         $group_id = 0,
         $parent_id = 0,
-        $edit_message_id = 0,
+        $editMessageId = 0,
         $topic_id = 0,
         $sender_id = null,
         $directMessage = false,
@@ -290,11 +302,11 @@ class MessageManager
         $smsParameters = []
     ) {
         $table = Database::get_main_table(TABLE_MESSAGE);
-        $group_id = intval($group_id);
-        $receiver_user_id = intval($receiver_user_id);
-        $parent_id = intval($parent_id);
-        $edit_message_id = intval($edit_message_id);
-        $topic_id = intval($topic_id);
+        $group_id = (int) $group_id;
+        $receiver_user_id = (int) $receiver_user_id;
+        $parent_id = (int) $parent_id;
+        $editMessageId = (int) $editMessageId;
+        $topic_id = (int) $topic_id;
 
         if (!empty($receiver_user_id)) {
             $receiverUserInfo = api_get_user_info($receiver_user_id);
@@ -307,7 +319,7 @@ class MessageManager
 
         $user_sender_id = empty($sender_id) ? api_get_user_id() : (int) $sender_id;
         if (empty($user_sender_id)) {
-            Display::addFlash(Display::return_message(get_lang('UserDoesNotExist')));
+            Display::addFlash(Display::return_message(get_lang('UserDoesNotExist'), 'warning'));
             return false;
         }
 
@@ -345,20 +357,19 @@ class MessageManager
             return false;
         }
 
-        $inbox_last_id = null;
-        //Just in case we replace the and \n and \n\r while saving in the DB
-        //$content = str_replace(array("\n", "\n\r"), '<br />', $content);
+        // Just in case we replace the and \n and \n\r while saving in the DB
+        // $content = str_replace(array("\n", "\n\r"), '<br />', $content);
         $now = api_get_utc_datetime();
         if (!empty($receiver_user_id) || !empty($group_id)) {
             // message for user friend
             //@todo it's possible to edit a message? yes, only for groups
-            if ($edit_message_id) {
+            if (!empty($editMessageId)) {
                 $query = " UPDATE $table SET
                                 update_date = '".$now."',
                                 content = '".Database::escape_string($content)."'
-                           WHERE id = '$edit_message_id' ";
+                           WHERE id = '$editMessageId' ";
                 Database::query($query);
-                $inbox_last_id = $edit_message_id;
+                $messageId = $editMessageId;
             } else {
                 $params = [
                     'user_sender_id' => $user_sender_id,
@@ -371,7 +382,7 @@ class MessageManager
                     'parent_id' => $parent_id,
                     'update_date' => $now
                 ];
-                $inbox_last_id = Database::insert($table, $params);
+                $messageId = Database::insert($table, $params);
             }
 
             // Save attachment file for inbox messages
@@ -382,7 +393,7 @@ class MessageManager
                         self::saveMessageAttachmentFile(
                             $file_attach,
                             isset($file_comments[$i]) ? $file_comments[$i] : null,
-                            $inbox_last_id,
+                            $messageId,
                             null,
                             $receiver_user_id,
                             $group_id
@@ -441,6 +452,7 @@ class MessageManager
                     $type = Notification::NOTIFICATION_TYPE_DIRECT_MESSAGE;
                 }
                 $notification->saveNotification(
+                    $messageId,
                     $type,
                     array($receiver_user_id),
                     $subject,
@@ -453,7 +465,7 @@ class MessageManager
                 $usergroup = new UserGroup();
                 $group_info = $usergroup->get($group_id);
                 $group_info['topic_id'] = $topic_id;
-                $group_info['msg_id'] = $inbox_last_id;
+                $group_info['msg_id'] = $messageId;
 
                 $user_list = $usergroup->get_users_by_group(
                     $group_id,
@@ -474,6 +486,7 @@ class MessageManager
                     'user_info' => $sender_info,
                 );
                 $notification->saveNotification(
+                    $messageId,
                     Notification::NOTIFICATION_TYPE_GROUP,
                     $new_user_list,
                     $subject,
@@ -484,7 +497,7 @@ class MessageManager
                 );
             }
 
-            return $inbox_last_id;
+            return $messageId;
         }
 
         return false;
@@ -1114,20 +1127,26 @@ class MessageManager
 
         $title = Security::remove_XSS($row['title'], STUDENT, true);
         $content = Security::remove_XSS($row['content'], STUDENT, true);
-        $from_user = api_get_user_info($user_sender_id);
-        $name = $from_user['complete_name_with_username'];
-        $message_content = Display::page_subheader(str_replace("\\", "", $title));
-        $user_image = '';
-        if (api_get_setting('allow_social_tool') == 'true') {
-            $user_image = Display::img(
-                $from_user['avatar_small'],
+
+        $name = get_lang('UnknownUser');
+        $fromUser = api_get_user_info($user_sender_id);
+        $userImage = '';
+        if (!empty($user_sender_id) && !empty($fromUser)) {
+            $name = $fromUser['complete_name_with_username'];
+            $userImage = Display::img(
+                $fromUser['avatar_small'],
                 $name,
                 array('title' => $name, 'class' => 'img-responsive img-circle', 'style' => 'max-width:35px'),
                 false
             );
         }
 
-        $receiverUserInfo = api_get_user_info($row['user_receiver_id']);
+        $message_content = Display::page_subheader(str_replace("\\", "", $title));
+
+        $receiverUserInfo = [];
+        if (!empty($row['user_receiver_id'])) {
+            $receiverUserInfo = api_get_user_info($row['user_receiver_id']);
+        }
 
         $message_content .= '<tr>';
         if (api_get_setting('allow_social_tool') == 'true') {
@@ -1135,17 +1154,28 @@ class MessageManager
             if ($source == 'outbox') {
                 $message_content .= '<div class="col-md-12">';
                 $message_content .= '<ul class="list-message">';
-                $message_content .= '<li>'.$user_image.'</li>';
-                $message_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> ';
-                $message_content .= api_strtolower(get_lang('To')).'&nbsp;<b>'.$receiverUserInfo['complete_name_with_username'].'</b></li>';
+                $message_content .= '<li>'.$userImage.'</li>';
+                $message_content .= '<li>'.$name.'&nbsp;';
+                if (!empty($receiverUserInfo)) {
+                    $message_content .= api_strtolower(get_lang('To')).'&nbsp;<b>'.$receiverUserInfo['complete_name_with_username'].'</b></li>';
+                } else {
+                    $message_content .= api_strtolower(get_lang('To')).'&nbsp;<b>-</b></li>';
+                }
+
                 $message_content .= '<li>'.Display::dateToStringAgoAndLongDate($row['send_date']).'</li>';
                 $message_content .= '</ul>';
                 $message_content .= '</div>';
             } else {
                 $message_content .= '<div class="col-md-12">';
                 $message_content .= '<ul class="list-message">';
-                $message_content .= '<li>'.$user_image.'</li>';
-                $message_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> </li>';
+                if (!empty($user_sender_id)) {
+                    $message_content .= '<li>'.$userImage.'</li>';
+                    $message_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a>';
+                } else {
+                    $message_content .= '<li>'.$name;
+                }
+
+                $message_content .= '&nbsp;'.api_strtolower(get_lang('To')).'&nbsp;'.get_lang('Me');
                 $message_content .= '<li>'.Display::dateToStringAgoAndLongDate($row['send_date']).'</li>';
                 $message_content .= '</ul>';
                 $message_content .= '</div>';
@@ -1154,7 +1184,7 @@ class MessageManager
         } else {
             if ($source == 'outbox') {
                 $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.
-                    $receiverUserInfo['complete_name'].'</b>';
+                    $receiverUserInfo['complete_name_with_username'].'</b>';
             } else {
                 $message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.
                     get_lang('Me').'</b>';

@@ -749,6 +749,7 @@ class GlossaryManager
 
     /**
      * Generate a PDF with all glossary terms and move file to documents
+     * @return bool false if there's nothing in the glossary
      */
     public static function movePdfToDocuments()
     {
@@ -760,25 +761,33 @@ class GlossaryManager
             0,
             'ASC'
         );
-        $template = new Template('', false, false, false, true, false, false);
-        $layout = $template->get_template('glossary/export_pdf.tpl');
-        $template->assign('items', $data);
-        $fileName = get_lang('Glossary').'-'.api_get_local_time();
-        $signatures = ['Drh', 'Teacher', 'Date'];
 
-        $pdf = new PDF(
-            'A4-P',
-            'P',
-            [
-                'filename' => $fileName,
-                'pdf_title' => $fileName,
-                'add_signatures' => $signatures
-            ]
-        );
-        $pdf->exportFromHtmlToDocumentsArea(
-            $template->fetch($layout),
-            $fileName,
-            $courseId
-        );
+        if (!empty($data)) {
+            $template = new Template('', false, false, false, true, false, false);
+            $layout = $template->get_template('glossary/export_pdf.tpl');
+            $template->assign('items', $data);
+            $fileName = get_lang('Glossary').'-'.api_get_local_time();
+            $signatures = ['Drh', 'Teacher', 'Date'];
+
+            $pdf = new PDF(
+                'A4-P',
+                'P',
+                [
+                    'filename' => $fileName,
+                    'pdf_title' => $fileName,
+                    'add_signatures' => $signatures
+                ]
+            );
+            $pdf->exportFromHtmlToDocumentsArea(
+                $template->fetch($layout),
+                $fileName,
+                $courseId
+            );
+            return true;
+        } else {
+            Display::addFlash(Display::return_message(get_lang('NothingToAdd')));
+        }
+
+        return false;
     }
 }

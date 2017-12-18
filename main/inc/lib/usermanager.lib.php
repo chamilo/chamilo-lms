@@ -568,10 +568,10 @@ class UserManager
                         MessageManager::send_message_simple(
                             $adminId,
                             $subject,
-                            $emailBody
+                            $emailBody,
+                            $userId
                         );
                     }
-
                 }
                 /* ENDS MANAGE EVENT WITH MAIL */
             }
@@ -4704,15 +4704,17 @@ class UserManager
     /**
      * Remove the requests for assign a user to a HRM
      * @param User $hrmId
+     * @param array $usersId List of user IDs from whom to remove all relations requests with HRM
      */
-    public static function clearHrmRequestsForUser(User $hrmId)
+    public static function clearHrmRequestsForUser(User $hrmId, $usersId)
     {
+        $users = implode(', ', $usersId);
         Database::getManager()
             ->createQuery('
                 DELETE FROM ChamiloCoreBundle:UserRelUser uru
-                WHERE uru.friendUserId = :hrm_id AND uru.relationType = :relation_type
+                WHERE uru.friendUserId = :hrm_id AND uru.relationType = :relation_type AND uru.userId IN (:users_ids)
             ')
-            ->execute(['hrm_id' => $hrmId, 'relation_type' => USER_RELATION_TYPE_HRM_REQUEST]);
+            ->execute(['hrm_id' => $hrmId, 'relation_type' => USER_RELATION_TYPE_HRM_REQUEST, 'users_ids' => $users]);
     }
 
     /**
@@ -4782,11 +4784,19 @@ class UserManager
         if (is_array($subscribedUsersId)) {
             foreach ($subscribedUsersId as $subscribedUserId) {
                 $subscribedUserId = intval($subscribedUserId);
-                $sql = "INSERT IGNORE INTO $userRelUserTable (user_id, friend_user_id, relation_type)
-                        VALUES ($subscribedUserId, $userId, $relationType)";
-
+                $sql = "SELECT id FROM $userRelUserTable
+                        WHERE user_id = $subscribedUserId
+                        AND friend_user_id = $userId
+                        AND relation_type = $relationType";
                 $result = Database::query($sql);
-                $affectedRows = Database::affected_rows($result);
+                $num = Database::num_rows($result);
+                if ($num === 0) {
+                    $date = api_get_utc_datetime();
+                    $sql = "INSERT INTO $userRelUserTable (user_id, friend_user_id, relation_type, last_edit)
+                        VALUES ($subscribedUserId, $userId, $relationType, '$date')";
+                    $result = Database::query($sql);
+                    $affectedRows += Database::affected_rows($result);
+                }
             }
         }
 

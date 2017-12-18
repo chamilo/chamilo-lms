@@ -391,7 +391,6 @@ if ($form->validate()) {
     $addTeacherToSessionCourses = isset($course['add_teachers_to_sessions_courses']) && !empty($course['add_teachers_to_sessions_courses']) ? 1 : 0;
 
     // Updating teachers
-
     if ($addTeacherToSessionCourses) {
         // Updating session coaches
         $sessionCoaches = $course['session_coaches'];
@@ -441,9 +440,9 @@ if ($form->validate()) {
         Database::query($sql);
     }
 
-    $course_id = $courseInfo['real_id'];
-
-    Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
+    $courseInfo = api_get_course_info($courseInfo['code']);
+    $message = Display::url($courseInfo['title'], $courseInfo['course_public_url']);
+    Display::addFlash(Display::return_message(get_lang('ItemUpdated').': '.$message, 'info', false));
     if ($visual_code_is_used) {
         Display::addFlash(Display::return_message($warn));
         header('Location: course_list.php');

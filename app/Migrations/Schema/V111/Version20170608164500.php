@@ -21,6 +21,7 @@ class Version20170608164500 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
+        error_log('Version20170608164500');
         $schema
             ->getTable('c_quiz_question')
             ->getColumn('type')

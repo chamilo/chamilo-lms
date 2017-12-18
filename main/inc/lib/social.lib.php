@@ -228,9 +228,7 @@ class SocialManager extends UserManager
         $message_content = str_replace(array("\n", "\n\r"), '<br />', $message_content);
 
         $clean_message_content = Database::escape_string($message_content);
-
         $now = api_get_utc_datetime();
-
         $sql = 'SELECT COUNT(*) AS count FROM '.$tbl_message.'
                 WHERE
                     user_sender_id='.$user_id.' AND
@@ -252,11 +250,12 @@ class SocialManager extends UserManager
                 'parent_id' => 0,
                 'update_date' => $now
             ];
-            Database::insert($tbl_message, $params);
+            $messageId = Database::insert($tbl_message, $params);
 
             $senderInfo = api_get_user_info($user_id);
             $notification = new Notification();
             $notification->saveNotification(
+                $messageId,
                 Notification::NOTIFICATION_TYPE_INVITATION,
                 array($friend_id),
                 $message_title,
@@ -897,8 +896,8 @@ class SocialManager extends UserManager
             $active = $show == 'messages' ? 'active' : null;
             $links .= '
                 <li class="messages-icon ' . $active.'">
-                    <a href="' . api_get_path(WEB_CODE_PATH).'messages/inbox.php?f=social">
-                        ' . $messagesIcon.' '.get_lang('Messages').$count_unread_message.'
+                    <a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">
+                        '.$messagesIcon.' '.get_lang('Messages').$count_unread_message.'
                     </a>
                 </li>';
 
@@ -982,53 +981,53 @@ class SocialManager extends UserManager
             // My own profile
             if ($show_full_profile && $user_id == intval(api_get_user_id())) {
                 $links .= '
-                    <li class="home-icon ' . $active.'">
-                        <a href="' . api_get_path(WEB_CODE_PATH).'social/home.php">
-                            ' . $homeIcon.' '.get_lang('Home').'
+                    <li class="home-icon '.$active.'">
+                        <a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">
+                            '.$homeIcon.' '.get_lang('Home').'
                         </a>
                     </li>
-                    <li class="messages-icon ' . $active.'">
-                        <a href="' . api_get_path(WEB_CODE_PATH).'messages/inbox.php?f=social">
-                            ' . $messagesIcon.' '.get_lang('Messages').$count_unread_message.'
+                    <li class="messages-icon '.$active.'">
+                        <a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">
+                            '.$messagesIcon.' '.get_lang('Messages').$count_unread_message.'
                         </a>
                     </li>';
                 $active = $show == 'invitations' ? 'active' : null;
                 $links .= '
-                    <li class="invitations-icon' . $active.'">
-                        <a href="' . api_get_path(WEB_CODE_PATH).'social/invitations.php">
-                            ' . $invitationsIcon.' '.get_lang('Invitations').$total_invitations.'
+                    <li class="invitations-icon'.$active.'">
+                        <a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">
+                            '.$invitationsIcon.' '.get_lang('Invitations').$total_invitations.'
                         </a>
                     </li>';
 
                 $links .= '
                     <li class="shared-profile-icon active">
-                        <a href="' . api_get_path(WEB_CODE_PATH).'social/profile.php">
-                            ' . $sharedProfileIcon.' '.get_lang('ViewMySharedProfile').'
+                        <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php">
+                            '.$sharedProfileIcon.' '.get_lang('ViewMySharedProfile').'
                         </a>
                     </li>
                     <li class="friends-icon">
-                        <a href="' . api_get_path(WEB_CODE_PATH).'social/friends.php">
-                            ' . $friendsIcon.' '.get_lang('Friends').'
+                        <a href="'.api_get_path(WEB_CODE_PATH).'social/friends.php">
+                            '.$friendsIcon.' '.get_lang('Friends').'
                         </a>
                     </li>
                     <li class="browse-groups-icon">
-                        <a href="' . api_get_path(WEB_CODE_PATH).'social/groups.php">
-                            ' . $groupsIcon.' '.get_lang('SocialGroups').'
+                        <a href="'.api_get_path(WEB_CODE_PATH).'social/groups.php">
+                            '.$groupsIcon.' '.get_lang('SocialGroups').'
                         </a>
                     </li>';
                 $active = $show == 'search' ? 'active' : null;
                 $links .= '
-                    <li class="search-icon ' . $active.'">
-                        <a href="' . api_get_path(WEB_CODE_PATH).'social/search.php">
-                            ' . $searchIcon.' '.get_lang('Search').'
+                    <li class="search-icon '.$active.'">
+                        <a href="'.api_get_path(WEB_CODE_PATH).'social/search.php">
+                            '.$searchIcon.' '.get_lang('Search').'
                         </a>
                     </li>';
                 $active = $show == 'myfiles' ? 'active' : null;
 
                 $myFiles = '
-                    <li class="myfiles-icon ' . $active.'">
-                     <a href="' . api_get_path(WEB_CODE_PATH).'social/myfiles.php">
-                            ' . $filesIcon.' '.get_lang('MyFiles').'
+                    <li class="myfiles-icon '.$active.'">
+                     <a href="'.api_get_path(WEB_CODE_PATH).'social/myfiles.php">
+                            '.$filesIcon.' '.get_lang('MyFiles').'
                         </a>
                     </li>';
 

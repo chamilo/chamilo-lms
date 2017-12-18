@@ -1676,6 +1676,9 @@ HOTSPOT;
      * @param null $extra_where_conditions
      * @param bool $get_count
      * @param string $courseCode
+     * @param bool $showSessionField
+     * @param bool $showExerciseCategories
+     *
      * @return array
      */
     public static function get_exam_results_data(
@@ -1938,7 +1941,7 @@ HOTSPOT;
             }
         }
 
-        $list_info = array();
+        $listInfo = array();
 
         // Simple exercises
         if (empty($hotpotatoe_where)) {
@@ -2238,12 +2241,17 @@ HOTSPOT;
                         $category_list = [];
                         if ($is_allowedToEdit) {
                             $sessionName = '';
+                            $sessionStartAccessDate = '';
                             if (!empty($results[$i]['session_id'])) {
-                                $sessionName = api_get_session_name($results[$i]['session_id']);
+                                $sessionInfo = api_get_session_info($results[$i]['session_id']);
+                                if (!empty($sessionInfo)) {
+                                    $sessionName = $sessionInfo['name'];
+                                    $sessionStartAccessDate = api_get_local_time($sessionInfo['access_start_date']);
+                                }
                             }
+
                             $objExercise = new Exercise($course_id);
                             if ($showExerciseCategories) {
-                                $question_list = array();
                                 // Getting attempt info
                                 $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
                                 if (!empty($exercise_stat_info['data_tracking'])) {
@@ -2309,19 +2317,41 @@ HOTSPOT;
                             }
 
                             foreach ($category_list as $categoryId => $result) {
-                                $results[$i]['category_'.$categoryId] = self::show_score($result['score'], $result['total']);
+                                $scoreToDisplay = self::show_score($result['score'], $result['total']);
+                                $results[$i]['category_'.$categoryId] = $scoreToDisplay;
+                                $results[$i]['category_'.$categoryId.'_score_percentage'] = self::show_score(
+                                    $result['score'],
+                                    $result['total'],
+                                    true,
+                                    true,
+                                    true, // $show_only_percentage = false
+                                    true // hide % sign
+                                );
+                                $results[$i]['category_'.$categoryId.'_only_score'] = $result['score'];
+                                $results[$i]['category_'.$categoryId.'_total'] = $result['total'];
                             }
                             $results[$i]['session'] = $sessionName;
+                            $results[$i]['session_access_start_date'] = $sessionStartAccessDate;
                             $results[$i]['status'] = $revisedLabel;
                             $results[$i]['score'] = $score;
+                            $results[$i]['score_percentage'] = self::show_score(
+                                $my_res,
+                                $my_total,
+                                true,
+                                true,
+                                true,
+                                true
+                            );
+                            $results[$i]['only_score'] = $my_res;
+                            $results[$i]['total'] = $my_total;
                             $results[$i]['lp'] = $lp_name;
                             $results[$i]['actions'] = $actions;
-                            $list_info[] = $results[$i];
+                            $listInfo[] = $results[$i];
                         } else {
                             $results[$i]['status'] = $revisedLabel;
                             $results[$i]['score'] = $score;
                             $results[$i]['actions'] = $actions;
-                            $list_info[] = $results[$i];
+                            $listInfo[] = $results[$i];
                         }
                     }
                 }
@@ -2352,10 +2382,11 @@ HOTSPOT;
                         null,
                         date_default_timezone_get()
                     );
-                    $hp_result = round(($hpresults[$i][4] / ($hpresults[$i][5] != 0 ? $hpresults[$i][5] : 1)) * 100, 2)
-                        .'% ('.$hpresults[$i][4].' / '.$hpresults[$i][5].')';
+                    $hp_result = round(($hpresults[$i][4] / ($hpresults[$i][5] != 0 ? $hpresults[$i][5] : 1)) * 100, 2);
+                    $hp_result .= '% ('.$hpresults[$i][4].' / '.$hpresults[$i][5].')';
+
                     if ($is_allowedToEdit) {
-                        $list_info[] = array(
+                        $listInfo[] = array(
                             $hpresults[$i][0],
                             $hpresults[$i][1],
                             $hpresults[$i][2],
@@ -2367,7 +2398,7 @@ HOTSPOT;
                             '-'
                         );
                     } else {
-                        $list_info[] = array(
+                        $listInfo[] = array(
                             $hp_title,
                             '-',
                             $hp_date,
@@ -2379,7 +2410,7 @@ HOTSPOT;
             }
         }
 
-        return $list_info;
+        return $listInfo;
     }
 
     /**
@@ -2391,6 +2422,7 @@ HOTSPOT;
      * @param bool $show_percentage show percentage or not
      * @param bool $use_platform_settings use or not the platform settings
      * @param bool $show_only_percentage
+     * @param bool $hidePercetangeSign hide "%" sign
      * @return  string  an html with the score modified
      */
     public static function show_score(
@@ -2398,7 +2430,8 @@ HOTSPOT;
         $weight,
         $show_percentage = true,
         $use_platform_settings = true,
-        $show_only_percentage = false
+        $show_only_percentage = false,
+        $hidePercetangeSign = false
     ) {
         if (is_null($score) && is_null($weight)) {
             return '-';
@@ -2426,10 +2459,13 @@ HOTSPOT;
 
         $html = '';
         if ($show_percentage) {
-            $parent = '('.$score.' / '.$weight.')';
-            $html = $percentage."%  $parent";
+            $percentageSign = '%';
+            if ($hidePercetangeSign) {
+                $percentageSign = '';
+            }
+            $html = $percentage."$percentageSign  ($score / $weight)";
             if ($show_only_percentage) {
-                $html = $percentage."% ";
+                $html = $percentage."$percentageSign ";
             }
         } else {
             $html = $score.' / '.$weight;

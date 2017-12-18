@@ -78,13 +78,13 @@ if (!empty($question_list)) {
 
         $data[$question_id]['name'] = cut($questionObj->question, 100);
         $data[$question_id]['type'] = $questionObj->get_question_type_name();
-        $percentange = 0;
+        $percentage = 0;
         if ($count_students) {
-            $percentange = $count_users / $count_students * 100;
+            $percentage = $count_users / $count_students * 100;
         }
 
         $data[$question_id]['students_who_try_exercise'] = Display::bar_progress(
-            $percentange,
+            $percentage,
             false,
             $count_users.' / '.$count_students
         );

@@ -270,6 +270,25 @@ QFAMS.moveSelection = function (qfamsName, selectLeft, selectRight, selectHidden
     // Set the appropriate items as 'selected in the hidden select.
     // These are the values that will actually be posted with the form.
     QFAMS.updateHidden(selectHidden, selectRight);
+
+    // Order alphabetically
+
+    //var sourceId = $(source).attr('id');
+    var targetId = $(target).attr('id');
+    var options = $('#' + targetId +' option');
+
+    var arr = options.map(function(_, o) { return { t: $(o).text(), v: o.value }; }).get();
+    arr.sort(function (o1, o2) {
+        //return o1.t > o2.t ? 1 : o1.t < o2.t ? -1 : 0;
+        // Ignore case
+        var t1 = o1.t.toLowerCase(), t2 = o2.t.toLowerCase();
+        return t1 > t2 ? 1 : t1 < t2 ? -1 : 0;
+    });
+
+    options.each(function(i, o) {
+        o.value = arr[i].v;
+        $(o).text(arr[i].t);
+    });
 };
 
 /**

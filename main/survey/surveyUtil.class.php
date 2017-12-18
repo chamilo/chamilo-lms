@@ -2821,6 +2821,10 @@ class SurveyUtil
                 );
             }
             $return .= Display::url(
+                Display::return_icon('backup.png', get_lang('CopySurvey'), '', ICON_SIZE_SMALL),
+                'copy_survey.php?survey_id='.$survey_id.'&'.api_get_cidreq()
+            );
+            $return .= Display::url(
                 Display::return_icon('copy.png', get_lang('DuplicateSurvey'), '', ICON_SIZE_SMALL),
                 'survey_list.php?action=copy_survey&survey_id='.$survey_id.'&'.api_get_cidreq()
             );

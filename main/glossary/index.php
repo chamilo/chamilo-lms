@@ -387,6 +387,8 @@ switch ($action) {
         break;
     case 'export_documents':
         GlossaryManager::movePdfToDocuments();
+        header('Location: '.$currentUrl);
+        exit;
         break;
     default:
         $tool_name = get_lang('List');

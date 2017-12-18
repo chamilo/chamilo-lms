@@ -368,6 +368,7 @@ if (!empty($sessionId)) {
 
 $owner_id = $document_info['insert_user_id'];
 $last_edit_date = $document_info['lastedit_date'];
+$createdDate = $document_info['insert_date'];
 $groupInfo = GroupManager::get_group_properties(api_get_group_id());
 
 if ($owner_id == api_get_user_id() ||
@@ -429,6 +430,10 @@ if ($owner_id == api_get_user_id() ||
         if (empty($readonly) && $readonly == 0) {
             $form->addHtmlEditor('content', '', true, true, $editorConfig);
         }
+    }
+
+    if (!empty($createdDate)) {
+        $form->addLabel(get_lang('CreatedOn'), Display::dateToStringAgoAndLongDate($createdDate));
     }
 
     if ($file_type != 'link') {

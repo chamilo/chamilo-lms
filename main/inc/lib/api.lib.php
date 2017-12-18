@@ -1474,7 +1474,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
     // Send message link
     $sendMessage = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$user_id;
     $result['complete_name_with_message_link'] = Display::url(
-        $result['complete_name'],
+        $result['complete_name_with_username'],
         $sendMessage,
         ['class' => 'ajax']
     );
@@ -4572,7 +4572,7 @@ function api_get_language_from_type($lang_type)
                 $cidReq = isset($_GET["cidReq"]) ? Database::escape_string($_GET["cidReq"]) : null;
                 $cDir = (!empty($_GET['cDir']) ? $_GET['cDir'] : null);
                 if (empty($cidReq) && !empty($cDir)) {
-                    $c = CourseManager::get_course_id_from_path($cDir);
+                    $c = CourseManager::getCourseCodeFromDirectory($cDir);
                     if ($c) {
                         $cidReq = $c;
                     }

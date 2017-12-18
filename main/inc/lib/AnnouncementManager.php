@@ -1694,14 +1694,8 @@ class AnnouncementManager
         $displayed = [];
         $results = [];
         $actionUrl = api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq();
-        $emailIcon = Display::return_icon(
-            'email.png',
-            get_lang('AnnounceSentByEmail')
-        );
-        $attachmentIcon = Display::return_icon(
-            'attachment.gif',
-            get_lang('Attachment')
-        );
+        $emailIcon = '<i class="fa fa-envelope-o" title="'.get_lang('AnnounceSentByEmail').'"></i>';
+        $attachmentIcon = '<i class="fa fa-paperclip" title="'.get_lang('Attachment').'"></i>';
 
         $editIcon = Display::return_icon(
             'edit.png',

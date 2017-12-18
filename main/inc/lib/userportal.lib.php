@@ -920,20 +920,16 @@ class IndexManager
             $total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
             $cant_msg = Display::badge($number_of_new_messages);
 
-            $link = '';
-            if (api_get_setting('allow_social_tool') == 'true') {
-                $link = '?f=social';
-            }
             $items[] = [
                 'class' => 'inbox-message-social',
                 'icon' => Display::return_icon('inbox.png', get_lang('Inbox')),
-                'link' => api_get_path(WEB_PATH).'main/messages/inbox.php'.$link,
+                'link' => api_get_path(WEB_PATH).'main/messages/inbox.php',
                 'title' => get_lang('Inbox').$cant_msg
             ];
             $items[] = [
                 'class' => 'new-message-social',
                 'icon' => Display::return_icon('new-message.png', get_lang('Compose')),
-                'link' => api_get_path(WEB_PATH).'main/messages/new_message.php'.$link,
+                'link' => api_get_path(WEB_PATH).'main/messages/new_message.php',
                 'title' => get_lang('Compose')
             ];
 

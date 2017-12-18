@@ -288,7 +288,7 @@ if (api_is_in_gradebook()) {
 $interbreadcrumb[] = array("url" => "exercise.php", "name" => get_lang('Exercises'));
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
     $interbreadcrumb[] = [
-        "url" => "admin.php?exerciseId=".$objExercise->id,
+        "url" => "admin.php?exerciseId=".$objExercise->id.'&'.api_get_cidreq(),
         "name" => $objExercise->selectTitle(true),
     ];
 } else {

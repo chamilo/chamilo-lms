@@ -737,12 +737,7 @@ if ($form->validate()) {
             /* If the account has to be approved then we set the account to inactive,
             sent a mail to the platform admin and exit the page.*/
             if (api_get_setting('allow_registration') === 'approval') {
-                $TABLE_USER = Database::get_main_table(TABLE_MAIN_USER);
-                // 1. set account inactive
-                $sql = "UPDATE $TABLE_USER SET active='0' WHERE user_id = ".$user_id;
-                Database::query($sql);
-
-                // 2. Send mail to all platform admin
+                // 1. Send mail to all platform admin
                 $emailsubject = get_lang('ApprovalForNewAccount', null, $values['language']).': '.$values['username'];
                 $emailbody = get_lang('ApprovalForNewAccount', null, $values['language'])."\n";
                 $emailbody .= get_lang('UserName', null, $values['language']).': '.$values['username']."\n";
@@ -780,6 +775,10 @@ if ($form->validate()) {
                     );
                 }
 
+                // 2. set account inactive
+                $sql = "UPDATE $TABLE_USER SET active='0' WHERE user_id = ".$user_id;
+                Database::query($sql);
+
                 // 3. exit the page
                 unset($user_id);
 
@@ -788,23 +787,22 @@ if ($form->validate()) {
                 echo $content;
                 Display::display_footer();
                 exit;
-            } else if (api_get_setting('allow_registration') === 'confirmation') {
+            } elseif (api_get_setting('allow_registration') === 'confirmation') {
                 $TABLE_USER = Database::get_main_table(TABLE_MAIN_USER);
-                // 1. set account inactive
+
+                // 1. Send mail to the user
+                $thisUser = api_get_user_entity($user_id);
+                UserManager::sendUserConfirmationMail($thisUser);
+
+                // 2. set account inactive
                 $sql = "UPDATE $TABLE_USER SET active='0' WHERE user_id = ".$user_id;
                 Database::query($sql);
-
-                // 2. Send mail to the user
-                /** @var \Chamilo\UserBundle\Entity\User $thisUser */
-                $thisUser = Database::getManager()->getRepository('ChamiloUserBundle:User')->find($user_id);
-
-                UserManager::sendUserConfirmationMail($thisUser);
 
                 // 3. exit the page
                 unset($user_id);
 
                 Display::display_header(get_lang('ConfirmationForNewAccount', null, $values['language']));
-                echo Display::page_header(get_lang('YouNeedConfirmYourAccountViaEmailToAccessThePlatform', null, $values['language']));
+                echo Display::page_header(get_lang('YouNeedConfirmYourAccountViaEmailToAccessThePlatform'));
                 echo $content;
                 Display::display_footer();
                 exit;
@@ -938,7 +936,7 @@ if ($form->validate()) {
         } else {
             if (api_get_setting('allow_students_to_browse_courses') == 'true') {
                 $form_data['action'] = 'courses.php?action=subscribe';
-                $form_data['message'] = '<p>'.get_lang('NowGoChooseYourCourses', null, $_user['language']).".</p>";
+                $form_data['message'] = '<p>'.get_lang('NowGoChooseYourCourses').".</p>";
             } else {
                 $form_data['action'] = api_get_path(WEB_PATH).'user_portal.php';
             }

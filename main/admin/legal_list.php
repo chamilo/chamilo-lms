@@ -18,8 +18,8 @@ $parameters['sec_token'] = Security::get_token();
 
 // action menu
 echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/legal_add.php">'.
-    Display::return_icon('edit.gif', get_lang('EditTermsAndConditions'), '').get_lang('EditTermsAndConditions').'</a>&nbsp;&nbsp;';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/legal_add.php">';
+echo Display::return_icon('edit.png', get_lang('EditTermsAndConditions')).get_lang('EditTermsAndConditions').'</a>&nbsp;&nbsp;';
 echo '</div>';
 
 $legal_count = LegalManager::count();

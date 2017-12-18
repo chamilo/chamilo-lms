@@ -79,7 +79,7 @@ if ($allowCaptcha) {
             //'output' => 'gif'
         )
     );
-    
+
     $captcha_question = $form->addElement(
         'CAPTCHA_Image',
         'captcha_question',
@@ -87,10 +87,10 @@ if ($allowCaptcha) {
         $options
     );
     $form->addElement('static', null, null, get_lang('ClickOnTheImageForANewOne'));
-    
+
     $form->addElement('text', 'captcha', get_lang('EnterTheLettersYouSee'), array('size' => 40));
     $form->addRule('captcha', get_lang('EnterTheCharactersYouReadInTheImage'), 'required', null, 'client');
-    
+
     $form->addRule('captcha', get_lang('TheTextYouEnteredDoesNotMatchThePicture'), 'CAPTCHA', $captcha_question);
 }
 
@@ -149,8 +149,7 @@ if ($form->validate()) {
     $userResetPasswordSetting = api_get_setting('user_reset_password');
 
     if ($userResetPasswordSetting === 'true') {
-        $userObj = Database::getManager()->getRepository('ChamiloUserBundle:User')->find($user['uid']);
-
+        $userObj = api_get_user_entity($user['uid']);
         Login::sendResetEmail($userObj, true);
 
         if (CustomPages::enabled() && CustomPages::exists(CustomPages::INDEX_UNLOGGED)) {

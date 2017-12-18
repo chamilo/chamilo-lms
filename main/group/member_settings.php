@@ -129,7 +129,12 @@ $form = new FormValidator(
 );
 $form->addElement('hidden', 'action');
 $form->addElement('hidden', 'max_student', $current_group['max_student']);
-$complete_user_list = GroupManager::fill_groups_list($current_group);
+
+$complete_user_list = CourseManager::get_user_list_from_course_code(
+    api_get_course_id(),
+    api_get_session_id()
+);
+
 $subscribedTutors = GroupManager::getTutors($current_group);
 if ($subscribedTutors) {
     $subscribedTutors = array_column($subscribedTutors, 'user_id');

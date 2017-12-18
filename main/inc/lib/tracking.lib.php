@@ -42,13 +42,14 @@ class Tracking
         $sord = 'desc',
         $where_condition = array()
     ) {
+        $course_id = (int) $course_id;
+        $sessionId = (int) $sessionId;
+
         if (empty($course_id)) {
             return null;
         }
         $course_info = api_get_course_info_by_id($course_id);
-        $sessionId = (int) $sessionId;
         $table_group = Database::get_course_table(TABLE_GROUP);
-        $course_id = intval($course_id);
 
         $select = ' * ';
         if ($type == 'count') {
@@ -79,6 +80,7 @@ class Tracking
         if (!empty($result)) {
             foreach ($result as $group) {
                 $users = GroupManager::get_users($group['id'], true);
+
                 $time = 0;
                 $avg_student_score = 0;
                 $avg_student_progress = 0;

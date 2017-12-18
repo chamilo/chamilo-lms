@@ -116,7 +116,7 @@ if (api_is_allowed_to_edit(false, true)) {
                 if (is_array($_POST['group'])) {
                     foreach ($_POST['group'] as $myGroupId) {
                         $groupInfo = GroupManager::get_group_properties($myGroupId);
-                        GroupManager :: unsubscribe_all_users($groupInfo);
+                        GroupManager::unsubscribe_all_users($groupInfo);
                     }
 
                     Display::addFlash(Display::return_message(get_lang('SelectedGroupsEmptied')));
@@ -128,7 +128,7 @@ if (api_is_allowed_to_edit(false, true)) {
                 if (is_array($_POST['group'])) {
                     foreach ($_POST['group'] as $myGroupId) {
                         $groupInfo = GroupManager::get_group_properties($myGroupId);
-                        GroupManager:: fill_groups($groupInfo);
+                        GroupManager::fillGroupWithUsers($groupInfo);
                     }
                     Display::addFlash(Display::return_message(get_lang('SelectedGroupsFilled')));
                     header("Location: $currentUrl");
@@ -142,21 +142,21 @@ if (api_is_allowed_to_edit(false, true)) {
     if (isset($_GET['action'])) {
         switch ($_GET['action']) {
             case 'swap_cat_order':
-                GroupManager :: swap_category_order($my_get_id1, $my_get_id2);
+                GroupManager::swap_category_order($my_get_id1, $my_get_id2);
                 Display::addFlash(Display::return_message(get_lang('CategoryOrderChanged')));
                 header("Location: $currentUrl");
                 exit;
                 break;
             case 'delete_one':
                 $groupInfo = GroupManager::get_group_properties($my_get_id);
-                GroupManager :: delete_groups($groupInfo);
+                GroupManager::delete_groups($groupInfo);
                 Display::addFlash(Display::return_message(get_lang('GroupDel')));
                 header("Location: $currentUrl");
                 exit;
                 break;
             case 'fill_one':
                 $groupInfo = GroupManager::get_group_properties($my_get_id);
-                GroupManager :: fill_groups($groupInfo);
+                GroupManager::fillGroupWithUsers($groupInfo);
                 Display::addFlash(Display::return_message(get_lang('GroupFilledGroups')));
                 header("Location: $currentUrl");
                 exit;

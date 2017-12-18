@@ -127,7 +127,7 @@ if ($form->validate() && !empty($courseInfo)) {
         foreach ($categoryList as $categoryInfo) {
             $columnModel[] = array(
                 'name' => 'category_'.$categoryInfo['id'],
-                'index' => 'exe_result',
+                'index' => 'category_'.$categoryInfo['id'],
                 'width' => '50',
                 'align' => 'center',
                 'search' => 'true',

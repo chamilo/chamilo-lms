@@ -3,6 +3,7 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
@@ -213,7 +214,6 @@ class CLpCategory
             $categoryUser->setUser($user);
 
             return $this->hasUser($categoryUser);
-
         }
 
         return false;

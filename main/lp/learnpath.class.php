@@ -4589,7 +4589,7 @@ class learnpath
 
             // Subscribed groups to a LP
             $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
-                'learnpath_category',
+                TOOL_LEARNPATH_CATEGORY,
                 $category->getId(),
                 $course,
                 $session

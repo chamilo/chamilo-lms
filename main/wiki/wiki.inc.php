@@ -2485,9 +2485,7 @@ class Wiki
 
         mpdf-->'.$content_pdf;
 
-        $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_setting(
-                'stylesheets'
-            ).'/print.css';
+        $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_setting('stylesheets').'/print.css';
         if (file_exists($css_file)) {
             $css = @file_get_contents($css_file);
         } else {

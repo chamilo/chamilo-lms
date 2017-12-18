@@ -39,25 +39,24 @@ class LearnpathList
     public function __construct(
         $user_id,
         $course_code = '',
-        $session_id = null,
+        $session_id = 0,
         $order_by = null,
         $check_publication_dates = false,
         $categoryId = null,
         $ignoreCategoryFilter = false
     ) {
         $course_info = api_get_course_info($course_code);
-        $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
-
-        $this->course_code = $course_code;
-        $this->user_id = $user_id;
 
         if (empty($course_info['real_id'])) {
             return false;
         }
+
+        $this->course_code = $course_info['code'];
+        $this->user_id = $user_id;
         $course_id = $course_info['real_id'];
 
         // Condition for the session.
-        if (isset($session_id)) {
+        if (!empty($session_id)) {
             $session_id = intval($session_id);
         } else {
             $session_id = api_get_session_id();
@@ -69,6 +68,8 @@ class LearnpathList
             true,
             'lp.sessionId'
         );
+
+        $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
 
         $order = "ORDER BY lp.displayOrder ASC, lp.name ASC";
         if (isset($order_by)) {

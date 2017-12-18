@@ -241,6 +241,6 @@ class StudentFollowUpPlugin extends Plugin
      */
     public static function getPageSize()
     {
-        return 2;
+        return 20;
     }
 }

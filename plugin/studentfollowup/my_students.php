@@ -62,7 +62,6 @@ if (!empty($userList) || api_is_platform_admin()) {
         if (is_array($keyword)) {
             foreach ($keyword as $key) {
                 $key = trim($key);
-                //$key = api_replace_dangerous_char($key);
                 if (empty($key)) {
                     continue;
                 }
@@ -77,12 +76,11 @@ if (!empty($userList) || api_is_platform_admin()) {
                 ->setParameter('keyword', "%$keyword%")
             ;
         }
-
     }
 
     $query = $qb->getQuery();
-    $items = new Paginator($query, $fetchJoinCollection = true);
-    $totalItems = count($items);
+    $items = new Paginator($query);
+    $totalItems = $items->count();
     $pagesCount = ceil($totalItems / $pageSize);
 }
 
@@ -93,9 +91,9 @@ if ($totalItems > 1) {
     for ($i = 0; $i < $pagesCount; $i++) {
         $newPage = $i + 1;
         if ($currentPage == $newPage) {
-            $pagination .= '<li class="active"><a href="'.$url.'&page='.$newPage.'">'.$newPage.'</a></li>';
+            $pagination .= '<li class="active"><a href="'.$url.'page='.$newPage.'">'.$newPage.'</a></li>';
         } else {
-            $pagination .= '<li><a href="'.$url.'&page='.$newPage.'">'.$newPage.'</a></li>';
+            $pagination .= '<li><a href="'.$url.'page='.$newPage.'">'.$newPage.'</a></li>';
         }
     }
     $pagination .= '</ul>';

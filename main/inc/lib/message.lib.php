@@ -296,7 +296,7 @@ class MessageManager
         $parent_id = 0,
         $editMessageId = 0,
         $topic_id = 0,
-        $sender_id = null,
+        $sender_id = 0,
         $directMessage = false,
         $forwardId = 0,
         $smsParameters = []
@@ -519,7 +519,7 @@ class MessageManager
         $receiver_user_id,
         $subject,
         $message,
-        $sender_id = null,
+        $sender_id = 0,
         $sendCopyToDrhUsers = false,
         $directMessage = false,
         $smsParameters = [],

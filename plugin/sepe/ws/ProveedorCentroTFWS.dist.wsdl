@@ -46,7 +46,7 @@
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element maxOccurs="1" minOccurs="1" ref="entsal:ID_ACCION"/>
-					</xsd:sequence>				
+					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
 			<xsd:element name="obtenerAccionResponse">
@@ -70,7 +70,7 @@
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element maxOccurs="1" minOccurs="1" ref="entsal:ID_ACCION"/>
-					</xsd:sequence>				
+					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
 			<xsd:element name="eliminarAccionResponse">
@@ -79,7 +79,7 @@
 						<xsd:element maxOccurs="1" minOccurs="1" ref="salida:RESPUESTA_ELIMINAR_ACCION"/>
 					</xsd:sequence>
 				</xsd:complexType>
-			</xsd:element>						
+			</xsd:element>
 		</xsd:schema>
     <xsd:schema targetNamespace="http://entsal.bean.domain.common.proveedorcentro.meyss.spee.es" xmlns="http://entsal.bean.domain.common.proveedorcentro.meyss.spee.es">
 			<xsd:simpleType name="tipo_fecha">
@@ -146,7 +146,7 @@
 					<xsd:pattern value="^\w([.]?(\w|[!#$&apos;*+\-/=?\^_`{|}~]))*@(\w|[.\-]){1,254}[.](\w){2,6}$"/>
 				</xsd:restriction>
 			</xsd:simpleType>
-			
+
 			<xsd:element name="DATOS_IDENTIFICATIVOS">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -166,7 +166,7 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			
+
 			<xsd:element name="ID_ACCION">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -186,8 +186,8 @@
 						</xsd:element>
 					</xsd:sequence>
 				</xsd:complexType>
-			</xsd:element>		
-			
+			</xsd:element>
+
 			<xsd:element name="ACCION_FORMATIVA">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -254,7 +254,7 @@
 								<xsd:restriction base="xsd:string">
 									<xsd:length value="2"/>
 								</xsd:restriction>
-							</xsd:simpleType>	
+							</xsd:simpleType>
 						</xsd:element>
 						<xsd:element maxOccurs="1" minOccurs="1" name="NUMERO_ASISTENTES" nillable="false" type="xsd:int"/>
 						<xsd:element maxOccurs="1" minOccurs="1" name="DESCRIPCION_ACCION" nillable="false">
@@ -358,7 +358,7 @@
 															<xsd:length value="2"/>
 														</xsd:restriction>
 													</xsd:simpleType>
-												</xsd:element>												
+												</xsd:element>
 												<xsd:element maxOccurs="1" minOccurs="1" name="DATOS_DURACION" nillable="false">
 													<xsd:complexType>
 														<xsd:sequence>
@@ -587,7 +587,7 @@
 															</xsd:element>
 														</xsd:sequence>
 													</xsd:complexType>
-												</xsd:element>												
+												</xsd:element>
 												<xsd:element maxOccurs="1" minOccurs="1" name="ESPECIALIDADES_PARTICIPANTE">
 													<xsd:complexType>
 														<xsd:sequence>
@@ -644,7 +644,7 @@
 																									</xsd:complexType>
 																								</xsd:element>
 																								<xsd:element maxOccurs="1" minOccurs="1" name="FECHA_INICIO" nillable="false" type="tipo_fecha"/>
-																								<xsd:element maxOccurs="1" minOccurs="1" name="FECHA_FIN" nillable="false" type="tipo_fecha"/>																								
+																								<xsd:element maxOccurs="1" minOccurs="1" name="FECHA_FIN" nillable="false" type="tipo_fecha"/>
 																							</xsd:sequence>
 																						</xsd:complexType>
 																					</xsd:element>
@@ -653,7 +653,7 @@
 																		</xsd:element>
 																		<xsd:element maxOccurs="1" minOccurs="1" name="EVALUACION_FINAL">
 																			<xsd:complexType>
-																				<xsd:sequence>																		
+																				<xsd:sequence>
 																					<xsd:element maxOccurs="1" minOccurs="0" name="CENTRO_PRESENCIAL_EVALUACION" nillable="false">
 																						<xsd:complexType>
 																							<xsd:sequence>
@@ -669,7 +669,7 @@
 																						</xsd:complexType>
 																					</xsd:element>
 																					<xsd:element maxOccurs="1" minOccurs="0" name="FECHA_INICIO" nillable="false" type="tipo_fecha"/>
-																					<xsd:element maxOccurs="1" minOccurs="0" name="FECHA_FIN" nillable="false" type="tipo_fecha"/>																						
+																					<xsd:element maxOccurs="1" minOccurs="0" name="FECHA_FIN" nillable="false" type="tipo_fecha"/>
 																				</xsd:sequence>
 																			</xsd:complexType>
 																		</xsd:element>
@@ -710,7 +710,7 @@
 						</xsd:element>
 					</xsd:sequence>
 				</xsd:complexType>
-			</xsd:element>				
+			</xsd:element>
 	</xsd:schema>
     <xsd:schema targetNamespace="http://salida.bean.domain.common.proveedorcentro.meyss.spee.es" xmlns="http://salida.bean.domain.common.proveedorcentro.meyss.spee.es">
 			<xsd:import namespace="http://entsal.bean.domain.common.proveedorcentro.meyss.spee.es"/>
@@ -719,7 +719,7 @@
 					<xsd:length value="250"/>
 				</xsd:restriction>
 			</xsd:simpleType>
-				
+
 			<xsd:element name="RESPUESTA_DATOS_CENTRO">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -739,26 +739,26 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-			
+
 			<xsd:element name="RESPUESTA_OBT_LISTA_ACCIONES">
 				<xsd:complexType>
-					<xsd:sequence>			
+					<xsd:sequence>
 						<xsd:element maxOccurs="1" minOccurs="1" name="CODIGO_RETORNO" nillable="false" type="entsal:codigo_retorno"/>
 						<xsd:element maxOccurs="1" minOccurs="1" name="ETIQUETA_ERROR" nillable="true" type="mensaje_error"/>
 						<xsd:element maxOccurs="unbounded" minOccurs="0" ref="entsal:ID_ACCION"/>
 					</xsd:sequence>
 				</xsd:complexType>
-			</xsd:element>			
-			
+			</xsd:element>
+
 			<xsd:element name="RESPUESTA_ELIMINAR_ACCION">
 				<xsd:complexType>
-					<xsd:sequence>			
+					<xsd:sequence>
 						<xsd:element maxOccurs="1" minOccurs="1" name="CODIGO_RETORNO" nillable="false" type="entsal:codigo_retorno"/>
 						<xsd:element maxOccurs="1" minOccurs="1" name="ETIQUETA_ERROR" nillable="true" type="mensaje_error"/>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
-						
+
 		</xsd:schema>
   </wsdl:types>
   <wsdl:message name="obtenerDatosCentroMessageRequest">
@@ -907,7 +907,7 @@
   </wsdl:binding>
   <wsdl:service name="ProveedorCentroTFWS">
     <wsdl:port binding="impl:ProveedorCentroEndPointSoapBinding" name="ProveedorCentroEndPoint">
-      <soap:address location="http://personal-domain.com/plugin/sepe/ws/service.php"/>
+      <soap:address location="http://change-this-url.com/plugin/sepe/ws/service.php"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

@@ -118,8 +118,8 @@ class Tracking
                 }
 
                 $countUsers = count($users);
-                $averageProgress = empty($countUsers) ? 0 : $avg_student_progress / $countUsers;
-                $averageScore = empty($countUsers) ? 0 : $avg_student_score / $countUsers;
+                $averageProgress = empty($countUsers) ? 0 : round($avg_student_progress / $countUsers, 2);
+                $averageScore = empty($countUsers) ? 0 : round($avg_student_score / $countUsers, 2);
 
                 $group_item = array(
                     'id' => $group['id'],

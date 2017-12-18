@@ -19,6 +19,13 @@
                             </a>
                         {% endif %}
                     {% endif %}
+
+                    {% if post.attachment %}
+                        <a href="{{ post_url }}&action=download&post_id={{ post.id }}" class="btn btn-default">
+                            {{ 'Download' | get_lang }}
+                        </a>
+                    {% endif %}
+
                     {#{% if type == 'all' %}#}
                         {#{% if related_posts %}#}
                             {#<h3>Related</h3>#}

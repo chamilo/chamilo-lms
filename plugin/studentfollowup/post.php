@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Doctrine\Common\Collections\Criteria;
+use Gaufrette\Adapter\Ftp as FtpAdapter;
+use Gaufrette\Filesystem;
 use Chamilo\PluginBundle\Entity\StudentFollowUp\CarePost;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -11,6 +13,7 @@ $plugin = StudentFollowUpPlugin::create();
 $currentUserId = api_get_user_id();
 $studentId = isset($_GET['student_id']) ? (int) $_GET['student_id'] : api_get_user_id();
 $postId = isset($_GET['post_id']) ? (int) $_GET['post_id'] : 1;
+$action = isset($_GET['action']) ? $_GET['action'] : '';
 
 if (empty($studentId)) {
     api_not_allowed(true);
@@ -48,6 +51,34 @@ $post = $query->getOneOrNullResult();
 // Get related posts (post with same parent)
 $relatedPosts = [];
 if ($post) {
+    if ($action == 'download') {
+        $attachment = $post->getAttachment();
+        $attachmentUrlData = parse_url($attachment);
+        if (!empty($attachment) && !empty($attachmentUrlData)) {
+            $adapter = new FtpAdapter(
+                '/',
+                $attachmentUrlData['host'],
+                [
+                    'port' => 21,
+                    'username' => isset($attachmentUrlData['user']) ? $attachmentUrlData['user'] : '',
+                    'password' => isset($attachmentUrlData['pass']) ? $attachmentUrlData['pass'] : '',
+                    'passive' => true,
+                    'create' => false, // Whether to create the remote directory if it does not exist
+                    'mode' => FTP_BINARY, // Or FTP_TEXT
+                    'ssl' => false,
+                ]
+            );
+            $filesystem = new Filesystem($adapter);
+            if ($filesystem->has($attachmentUrlData['path'])) {
+                echo $filesystem->get($attachmentUrlData['path']);
+            } else {
+                api_not_allowed(true);
+            }
+        } else {
+            api_not_allowed(true);
+        }
+    }
+
     $qb = $em->createQueryBuilder();
     $criteria = Criteria::create();
 

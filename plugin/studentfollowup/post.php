@@ -70,7 +70,17 @@ if ($post) {
             );
             $filesystem = new Filesystem($adapter);
             if ($filesystem->has($attachmentUrlData['path'])) {
-                echo $filesystem->get($attachmentUrlData['path']);
+                $contentType = DocumentManager::file_get_mime_type($attachmentUrlData['path']);
+                $response = new \Symfony\Component\HttpFoundation\Response();
+                $response->headers->set('Cache-Control', 'private');
+                $response->headers->set('Content-type', $contentType);
+                $response->headers->set('Content-Disposition', 'attachment; filename="'.basename($attachmentUrlData['path']) . '";');
+                //$response->headers->set('Content-length', filesize($filename));
+                // Send headers before outputting anything
+                $response->sendHeaders();
+                $response->setContent($filesystem->read($attachmentUrlData['path']));
+                $response->send();
+                exit;
             } else {
                 api_not_allowed(true);
             }

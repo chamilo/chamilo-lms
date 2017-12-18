@@ -150,7 +150,7 @@ if ($form->validate()) {
 
     if ($userResetPasswordSetting === 'true') {
         $userObj = api_get_user_entity($user['uid']);
-        Login::sendResetEmail($userObj, true);
+        Login::sendResetEmail($userObj);
 
         if (CustomPages::enabled() && CustomPages::exists(CustomPages::INDEX_UNLOGGED)) {
             CustomPages::display(

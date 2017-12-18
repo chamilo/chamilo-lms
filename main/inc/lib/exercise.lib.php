@@ -1676,6 +1676,8 @@ HOTSPOT;
      * @param null $extra_where_conditions
      * @param bool $get_count
      * @param string $courseCode
+     * @param bool $showSessionField
+     * @param bool $showExerciseCategories
      *
      * @return array
      */
@@ -1939,7 +1941,7 @@ HOTSPOT;
             }
         }
 
-        $list_info = array();
+        $listInfo = array();
 
         // Simple exercises
         if (empty($hotpotatoe_where)) {
@@ -2317,7 +2319,7 @@ HOTSPOT;
                             foreach ($category_list as $categoryId => $result) {
                                 $scoreToDisplay = self::show_score($result['score'], $result['total']);
                                 $results[$i]['category_'.$categoryId] = $scoreToDisplay;
-                                $results[$i]['category_'.$categoryId.'_score_percentange'] = self::show_score(
+                                $results[$i]['category_'.$categoryId.'_score_percentage'] = self::show_score(
                                     $result['score'],
                                     $result['total'],
                                     true,
@@ -2332,7 +2334,7 @@ HOTSPOT;
                             $results[$i]['session_access_start_date'] = $sessionStartAccessDate;
                             $results[$i]['status'] = $revisedLabel;
                             $results[$i]['score'] = $score;
-                            $results[$i]['score_percentange'] = self::show_score(
+                            $results[$i]['score_percentage'] = self::show_score(
                                 $my_res,
                                 $my_total,
                                 true,
@@ -2344,12 +2346,12 @@ HOTSPOT;
                             $results[$i]['total'] = $my_total;
                             $results[$i]['lp'] = $lp_name;
                             $results[$i]['actions'] = $actions;
-                            $list_info[] = $results[$i];
+                            $listInfo[] = $results[$i];
                         } else {
                             $results[$i]['status'] = $revisedLabel;
                             $results[$i]['score'] = $score;
                             $results[$i]['actions'] = $actions;
-                            $list_info[] = $results[$i];
+                            $listInfo[] = $results[$i];
                         }
                     }
                 }
@@ -2384,7 +2386,7 @@ HOTSPOT;
                     $hp_result .= '% ('.$hpresults[$i][4].' / '.$hpresults[$i][5].')';
 
                     if ($is_allowedToEdit) {
-                        $list_info[] = array(
+                        $listInfo[] = array(
                             $hpresults[$i][0],
                             $hpresults[$i][1],
                             $hpresults[$i][2],
@@ -2396,7 +2398,7 @@ HOTSPOT;
                             '-'
                         );
                     } else {
-                        $list_info[] = array(
+                        $listInfo[] = array(
                             $hp_title,
                             '-',
                             $hp_date,
@@ -2408,7 +2410,7 @@ HOTSPOT;
             }
         }
 
-        return $list_info;
+        return $listInfo;
     }
 
     /**

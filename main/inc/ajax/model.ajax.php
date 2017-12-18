@@ -1246,31 +1246,33 @@ switch ($action) {
                 'session',
                 'session_access_start_date',
                 'exe_date',
-                'score_percentange',
+                'score_percentage',
                 'only_score',
                 'total'
             );
             $overwriteColumnHeaderExport['session_access_start_date'] = get_lang('SessionStartDate');
             $overwriteColumnHeaderExport['exe_date'] = get_lang('StartDate');
-            $overwriteColumnHeaderExport['score_percentange'] = get_lang('Score');
+            $overwriteColumnHeaderExport['score_percentage'] = get_lang('Score');
             $overwriteColumnHeaderExport['only_score'] = get_lang('Score');
             $overwriteColumnHeaderExport['total'] = get_lang('Score');
         }
 
         $categoryList = TestCategory::getListOfCategoriesIDForTest($exerciseId, $courseId);
+
         if (!empty($categoryList)) {
             foreach ($categoryList as $categoryInfo) {
                 $label = 'category_'.$categoryInfo['id'];
-                //$columns[] = $label;
-                $columns[] = $label.'_score_percentange';
-                $columns[] = $label.'_only_score';
-                $columns[] = $label.'_total';
 
                 if ($operation == 'excel') {
+                    $columns[] = $label.'_score_percentage';
+                    $columns[] = $label.'_only_score';
+                    $columns[] = $label.'_total';
                     $overwriteColumnHeaderExport[$label] = $categoryInfo['title'];
-                    $overwriteColumnHeaderExport[$label.'_score_percentange'] = $categoryInfo['title'];
+                    $overwriteColumnHeaderExport[$label.'_score_percentage'] = $categoryInfo['title'];
                     $overwriteColumnHeaderExport[$label.'_only_score'] = $categoryInfo['title'];
                     $overwriteColumnHeaderExport[$label.'_total'] = $categoryInfo['title'];
+                } else {
+                    $columns[] = $label;
                 }
             }
         }
@@ -1278,6 +1280,7 @@ switch ($action) {
         if ($operation !== 'excel') {
             $columns[] = 'actions';
         }
+
         $result = ExerciseLib::get_exam_results_data(
             $start,
             $limit,

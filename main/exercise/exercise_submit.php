@@ -679,7 +679,7 @@ if ($formSent && isset($_POST)) {
                         $learnpath_item_view_id
                     );
                     if ($attempt_count >= $objExercise->selectAttempts()) {
-                        echo Display :: return_message(
+                        echo Display::return_message(
                             sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()),
                             'warning',
                             false
@@ -687,7 +687,7 @@ if ($formSent && isset($_POST)) {
                         if ($origin != 'learnpath') {
                             //so we are not in learnpath tool
                             echo '</div>'; //End glossary div
-                            Display :: display_footer();
+                            Display::display_footer();
                         } else {
                             echo '</body></html>';
                         }
@@ -809,7 +809,7 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
         );
     }
 
-    Display :: display_header(null, 'Exercises');
+    Display::display_header(null, 'Exercises');
 } else {
     $htmlHeadXtra[] = "
     <style>
@@ -878,7 +878,7 @@ if ($limit_time_exists) {
                 'warning'
             );
             if ($origin != 'learnpath') {
-                Display :: display_footer();
+                Display::display_footer();
             }
             exit;
         } else {
@@ -1305,7 +1305,6 @@ if (!empty($error)) {
         }
 
         $user_choice = null;
-
         if (isset($attempt_list[$questionId])) {
             $user_choice = $attempt_list[$questionId];
         } elseif ($objExercise->saveCorrectAnswers) {

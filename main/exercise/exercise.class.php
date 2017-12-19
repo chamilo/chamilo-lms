@@ -49,7 +49,7 @@ class Exercise
     public $edit_exercise_in_lp = false;
     public $is_gradebook_locked = false;
     public $exercise_was_added_in_lp = false;
-    public $lpList = array();
+    public $lpList = [];
     public $force_edit_exercise_in_lp = false;
     public $categories;
     public $categories_grouping = true;
@@ -95,7 +95,7 @@ class Exercise
         $this->random = 0;
         $this->random_answers = 0;
         $this->active = 1;
-        $this->questionList = array();
+        $this->questionList = [];
         $this->timeLimit = 0;
         $this->end_time = '';
         $this->start_time = '';
@@ -605,8 +605,8 @@ class Exercise
         $limit,
         $sidx,
         $sord,
-        $whereCondition = array(),
-        $extraFields = array()
+        $whereCondition = [],
+        $extraFields = []
     ) {
         if (!empty($this->id)) {
             $category_list = TestCategory::getListOfCategoriesNameForTest(
@@ -641,7 +641,7 @@ class Exercise
             }
             $sql .= $limitCondition;
             $result = Database::query($sql);
-            $questions = array();
+            $questions = [];
             if (Database::num_rows($result)) {
                 if (!empty($extraFields)) {
                     $extraFieldValue = new ExtraFieldValue('question');
@@ -669,14 +669,17 @@ class Exercise
 
                     $questionType = Display::tag(
                         'div',
-                        Display::return_icon($typeImg, $typeExpl, array(), ICON_SIZE_MEDIUM).$question_media
+                        Display::return_icon($typeImg, $typeExpl, [], ICON_SIZE_MEDIUM).$question_media
                     );
 
                     $question = array(
                         'id' => $question['iid'],
                         'question' => $objQuestionTmp->selectTitle(),
                         'type' => $questionType,
-                        'category' => Display::tag('div', '<a href="#" style="padding:0px; margin:0px;">'.$category_labels.'</a>'),
+                        'category' => Display::tag(
+                            'div',
+                            '<a href="#" style="padding:0px; margin:0px;">'.$category_labels.'</a>'
+                        ),
                         'score' => $objQuestionTmp->selectWeighting(),
                         'level' => $objQuestionTmp->level
                     );
@@ -745,7 +748,7 @@ class Exercise
                     e.exercice_id = '".$this->id."'
                 ORDER BY q.question";
         $result = Database::query($sql);
-        $list = array();
+        $list = [];
         if (Database::num_rows($result)) {
             $list = Database::store_result($result, 'ASSOC');
         }
@@ -758,7 +761,7 @@ class Exercise
      */
     private function getQuestionOrderedList()
     {
-        $questionList = array();
+        $questionList = [];
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
@@ -789,7 +792,7 @@ class Exercise
 
         // Fills the array with the question ID for this exercise
         // the key of the array is the question position
-        $temp_question_list = array();
+        $temp_question_list = [];
         $counter = 1;
         while ($new_object = Database::fetch_object($result)) {
             // Correct order.
@@ -829,7 +832,7 @@ class Exercise
         $randomizeQuestions = false
     ) {
         $addAll = true;
-        $categoryCountArray = array();
+        $categoryCountArray = [];
 
         // Getting how many questions will be selected per category.
         if (!empty($categoriesAddedInExercise)) {
@@ -1054,11 +1057,11 @@ class Exercise
                 break;
         }
 
-        $result['question_list'] = isset($question_list) ? $question_list : array();
-        $result['category_with_questions_list'] = isset($questions_by_category) ? $questions_by_category : array();
+        $result['question_list'] = isset($question_list) ? $question_list : [];
+        $result['category_with_questions_list'] = isset($questions_by_category) ? $questions_by_category : [];
         // Adding category info in the category list with question list:
         if (!empty($questions_by_category)) {
-            $newCategoryList = array();
+            $newCategoryList = [];
             foreach ($questions_by_category as $categoryId => $questionList) {
                 $cat = new TestCategory();
                 $cat = $cat->getCategory($categoryId);
@@ -1216,7 +1219,7 @@ class Exercise
                     e.exercice_id = '".Database::escape_string($this->id)."'
                     $randomLimit ";
         $result = Database::query($sql);
-        $questionList = array();
+        $questionList = [];
         while ($row = Database::fetch_object($result)) {
             $questionList[] = $row->question_id;
         }
@@ -1931,7 +1934,7 @@ class Exercise
             //Can't modify a DirectFeedback question
             if ($this->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_DIRECT) {
                 // feedback type
-                $radios_feedback = array();
+                $radios_feedback = [];
                 $radios_feedback[] = $form->createElement(
                     'radio',
                     'exerciseFeedbackType',
@@ -1979,7 +1982,7 @@ class Exercise
                 );
 
                 // Type of results display on the final page
-                $radios_results_disabled = array();
+                $radios_results_disabled = [];
                 $radios_results_disabled[] = $form->createElement(
                     'radio',
                     'results_disabled',
@@ -2021,7 +2024,7 @@ class Exercise
                 );
 
                 // Type of questions disposition on page
-                $radios = array();
+                $radios = [];
                 $radios[] = $form->createElement(
                     'radio',
                     'exerciseType',
@@ -2050,7 +2053,7 @@ class Exercise
                 // if is Direct feedback but has not questions we can allow to modify the question type
                 if ($this->selectNbrQuestions() == 0) {
                     // feedback type
-                    $radios_feedback = array();
+                    $radios_feedback = [];
                     $radios_feedback[] = $form->createElement(
                         'radio',
                         'exerciseFeedbackType',
@@ -2085,7 +2088,7 @@ class Exercise
                     );
 
                     //$form->addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
-                    $radios_results_disabled = array();
+                    $radios_results_disabled = [];
                     $radios_results_disabled[] = $form->createElement(
                         'radio',
                         'results_disabled',
@@ -2113,7 +2116,7 @@ class Exercise
                     $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'), '');
 
                     // Type of questions disposition on page
-                    $radios = array();
+                    $radios = [];
                     $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'), '1');
                     $radios[] = $form->createElement(
                         'radio',
@@ -2465,7 +2468,7 @@ class Exercise
                 get_lang('UpdateTitleInLps')
             );
 
-            $defaults = array();
+            $defaults = [];
             if (api_get_setting('search_enabled') === 'true') {
                 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
@@ -2483,7 +2486,7 @@ class Exercise
                     );
                     $values = get_specific_field_values_list($filter, array('value'));
                     if (!empty($values)) {
-                        $arr_str_values = array();
+                        $arr_str_values = [];
                         foreach ($values as $value) {
                             $arr_str_values[] = $value['value'];
                         }
@@ -3052,7 +3055,7 @@ class Exercise
         $sql_track = 'SELECT * FROM '.$track_exercises.$condition;
 
         $result = Database::query($sql_track);
-        $new_array = array();
+        $new_array = [];
         if (Database::num_rows($result) > 0) {
             $new_array = Database::fetch_array($result, 'ASSOC');
             $new_array['num_exe'] = Database::num_rows($result);
@@ -3078,7 +3081,7 @@ class Exercise
         $safe_lp_id = 0,
         $safe_lp_item_id = 0,
         $safe_lp_item_view_id = 0,
-        $questionList = array(),
+        $questionList = [],
         $weight = 0
     ) {
         $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
@@ -3518,12 +3521,12 @@ class Exercise
                 WHERE c_id = $course_id AND question_id = $questionId";
         $res_answer = Database::query($sql);
 
-        $answerMatching = array();
+        $answerMatching = [];
         while ($real_answer = Database::fetch_array($res_answer)) {
             $answerMatching[$real_answer['id_auto']] = $real_answer['answer'];
         }
 
-        $real_answers = array();
+        $real_answers = [];
         $quiz_question_options = Question::readQuestionOption(
             $questionId,
             $course_id
@@ -3531,7 +3534,7 @@ class Exercise
 
         $organs_at_risk_hit = 0;
         $questionScore = 0;
-        $answer_correct_array = array();
+        $answer_correct_array = [];
         $orderedHotspots = [];
 
         if ($answerType == HOT_SPOT || $answerType == ANNOTATION) {
@@ -3544,7 +3547,6 @@ class Exercise
                 ['hotspotAnswerId' => 'ASC']
             );
         }
-
         if ($debug) {
             error_log('Start answer loop ');
         }
@@ -3804,7 +3806,7 @@ class Exercise
                         $answer = '';
                         $j = 0;
                         //initialise answer tags
-                        $user_tags = $correct_tags = $real_text = array();
+                        $user_tags = $correct_tags = $real_text = [];
                         // the loop will stop at the end of the text
                         while (1) {
                             // quits the loop if there are no more blanks (detect '[')
@@ -3854,7 +3856,7 @@ class Exercise
                         }
                         $answer = '';
                         $real_correct_tags = $correct_tags;
-                        $chosen_list = array();
+                        $chosen_list = [];
 
                         for ($i = 0; $i < count($real_correct_tags); $i++) {
                             if ($i == 0) {
@@ -4001,7 +4003,7 @@ class Exercise
                     $answer = '';
                     $j = 0;
                     //initialise answer tags
-                    $userTags = $correctTags = $realText = array();
+                    $userTags = $correctTags = $realText = [];
                     // the loop will stop at the end of the text
                     while (1) {
                         // quits the loop if there are no more blanks (detect '[')
@@ -4173,7 +4175,7 @@ class Exercise
                                 ";
                         $res_answer = Database::query($sql);
                         // Getting the real answer
-                        $real_list = array();
+                        $real_list = [];
                         while ($real_answer = Database::fetch_array($res_answer)) {
                             $real_list[$real_answer['id_auto']] = $real_answer['answer'];
                         }
@@ -6131,7 +6133,7 @@ class Exercise
      */
     public function get_exercise_result($exe_id)
     {
-        $result = array();
+        $result = [];
         $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($exe_id);
 
         if (!empty($track_exercise_info)) {
@@ -6147,7 +6149,7 @@ class Exercise
                     $questionId,
                     '',
                     'exercise_show',
-                    array(),
+                    [],
                     false,
                     true,
                     false,
@@ -6428,7 +6430,7 @@ class Exercise
      */
     private function setMediaList($questionList)
     {
-        $mediaList = array();
+        $mediaList = [];
         if (!empty($questionList)) {
             foreach ($questionList as $questionId) {
                 $objQuestionTmp = Question::read($questionId, $this->course_id);
@@ -6571,7 +6573,7 @@ class Exercise
         $question_list,
         $expand_media_questions = false
     ) {
-        $new_question_list = array();
+        $new_question_list = [];
         if (!empty($question_list)) {
             $media_questions = $this->getMediaList();
 
@@ -6620,7 +6622,7 @@ class Exercise
      */
     public function get_validated_question_list()
     {
-        $result = array();
+        $result = [];
         $isRandomByCategory = $this->isRandomByCat();
         if ($isRandomByCategory == 0) {
             if ($this->isRandom()) {
@@ -6635,7 +6637,7 @@ class Exercise
                 // we have to choice $objExercise->random question in each array values of $tabCategoryQuestions
                 // key of $tabCategoryQuestions are the categopy id (0 for not in a category)
                 // value is the array of question id of this category
-                $questionList = array();
+                $questionList = [];
                 $tabCategoryQuestions = TestCategory::getQuestionsByCat($this->id);
                 $isRandomByCategory = $this->selectRandomByCat();
                 // We sort categories based on the term between [] in the head
@@ -6691,7 +6693,7 @@ class Exercise
 
     public function transform_question_list_with_medias($question_list, $expand_media_questions = false)
     {
-        $new_question_list = array();
+        $new_question_list = [];
         if (!empty($question_list)) {
             $media_questions = $this->getMediaList();
             $media_active = $this->mediaIsActivated($media_questions);
@@ -6906,7 +6908,7 @@ class Exercise
             $sql = "SELECT * FROM $table
                     WHERE exercise_id = {$this->id} AND c_id = {$this->course_id} ";
             $result = Database::query($sql);
-            $list = array();
+            $list = [];
             if (Database::num_rows($result)) {
                 while ($row = Database::fetch_array($result, 'ASSOC')) {
                     $list[$row['category_id']] = $row;
@@ -7042,7 +7044,7 @@ class Exercise
     public function progressExercisePaginationBarWithCategories(
         $categories,
         $current,
-        $conditions = array(),
+        $conditions = [],
         $link = null
     ) {
         $html = null;
@@ -7072,7 +7074,7 @@ class Exercise
             // categories
             if ($useRootAsCategoryTitle) {
                 // The new categories list starts empty
-                $newCategoryList = array();
+                $newCategoryList = [];
                 foreach ($categories as $category) {
                     $rootElement = $category['root'];
 
@@ -7299,7 +7301,7 @@ class Exercise
         $remindList,
         $i,
         $current_question,
-        $questions_in_media = array(),
+        $questions_in_media = [],
         $last_question_in_media = false,
         $realQuestionList,
         $generateJS = true
@@ -7502,7 +7504,7 @@ class Exercise
                   e.exercice_id	= ".intval($this->id);
 
         $result = Database::query($sql);
-        $categoriesInExercise = array();
+        $categoriesInExercise = [];
         if (Database::num_rows($result)) {
             $categoriesInExercise = Database::store_result($result, 'ASSOC');
         }
@@ -7522,7 +7524,7 @@ class Exercise
         // test is randomQuestions - see field random of test
         if ($this->random > 0 && $this->randomByCat == 0) {
             $numberRandomQuestions = $this->random;
-            $questionScoreList = array();
+            $questionScoreList = [];
             foreach ($questionList as $questionId) {
                 $tmpobj_question = Question::read($questionId);
                 if (is_object($tmpobj_question)) {
@@ -7539,11 +7541,11 @@ class Exercise
             // test is random by category
             // get the $numberRandomQuestions best score question of each category
             $numberRandomQuestions = $this->random;
-            $tab_categories_scores = array();
+            $tab_categories_scores = [];
             foreach ($questionList as $questionId) {
                 $question_category_id = TestCategory::getCategoryForQuestion($questionId);
                 if (!is_array($tab_categories_scores[$question_category_id])) {
-                    $tab_categories_scores[$question_category_id] = array();
+                    $tab_categories_scores[$question_category_id] = [];
                 }
                 $tmpobj_question = Question::read($questionId);
                 if (is_object($tmpobj_question)) {
@@ -7627,7 +7629,7 @@ class Exercise
 
         $result = Database::query($sql);
 
-        $rows = array();
+        $rows = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $rows[] = $row;
         }
@@ -7645,7 +7647,7 @@ class Exercise
     public function getExerciseAndResult($courseId, $sessionId, $quizId = [])
     {
         if (empty($quizId)) {
-            return array();
+            return [];
         }
 
         $sessionId = intval($sessionId);
@@ -7674,7 +7676,7 @@ class Exercise
             $sql = sprintf($sql, $courseId, $ids);
         }
         $result = Database::query($sql);
-        $rows = array();
+        $rows = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $rows[] = $row;
         }
@@ -7703,8 +7705,8 @@ class Exercise
             return null;
         }
 
-        $data_tracking  = $exercise_stat_info['data_tracking'];
-        $data_tracking  = explode(',', $data_tracking);
+        $data_tracking = $exercise_stat_info['data_tracking'];
+        $data_tracking = explode(',', $data_tracking);
 
         // if this is the final question do nothing.
         if ($currentQuestion == count($data_tracking)) {
@@ -7714,7 +7716,7 @@ class Exercise
         $currentQuestion = $currentQuestion - 1;
 
         if (!empty($result['question_list'])) {
-            $answeredQuestions = array();
+            $answeredQuestions = [];
             foreach ($result['question_list'] as $question) {
                 if (!empty($question['answer'])) {
                     $answeredQuestions[] = $question['question_id'];

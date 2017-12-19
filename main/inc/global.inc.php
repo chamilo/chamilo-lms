@@ -56,7 +56,6 @@ if (!isset($GLOBALS['_configuration'])) {
 }
 
 // Include the main Chamilo platform library file.
-
 require_once $_configuration['root_sys'].'main/inc/lib/api.lib.php';
 $passwordEncryption = api_get_configuration_value('password_encryption');
 

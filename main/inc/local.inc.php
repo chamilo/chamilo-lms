@@ -184,6 +184,8 @@ if (empty($cidReset)) {
     if ($courseCodeFromSession != $cidReq) {
         $cidReset = true;
     }
+} else {
+    $cidReq = null;
 }
 
 $gidReset = isset($gidReset) ? $gidReset : '';
@@ -920,43 +922,12 @@ if (!isset($_SESSION['login_as'])) {
 
 $sessionIdFromGet = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 // if a session id has been given in url, we store the session if course was set:
-if (!empty($sessionIdFromGet) && !empty($cidReq)) {
-    $sessionIdFromSession = api_get_session_id();
-    $checkFromDatabase = false;
-    // User change from session id
-    if ($sessionIdFromGet != $sessionIdFromSession) {
-        $cidReset = true;
-        $checkFromDatabase = true;
-        Session::erase('session_name');
-        Session::erase('id_session');
-
-        // Deleting session from $_SESSION means also deleting $_SESSION['_course'] and group info
-        Session::erase('_real_cid');
-        Session::erase('_cid');
-        Session::erase('_course');
-        Session::erase('_gid');
-    }
-
-    if ($checkFromDatabase) {
-        $sessionInfo = api_get_session_info($_GET['id_session']);
-        if (!empty($sessionInfo)) {
-            Session::write('session_name', $sessionInfo['name']);
-            Session::write('id_session', $sessionInfo['id']);
-        } else {
-            $cidReset = true;
-            Session::erase('session_name');
-            Session::erase('id_session');
-
-            // Deleting session from $_SESSION means also deleting $_SESSION['_course'] and group info
-            Session::erase('_real_cid');
-            Session::erase('_cid');
-            Session::erase('_course');
-            Session::erase('_gid');
-            api_not_allowed(true);
-        }
-    }
-} else {
+$sessionIdFromSession = api_get_session_id();
+$checkFromDatabase = false;
+// User change from session id
+if (!empty($sessionIdFromGet) && $sessionIdFromGet != $sessionIdFromSession) {
     $cidReset = true;
+    $checkFromDatabase = true;
     Session::erase('session_name');
     Session::erase('id_session');
 
@@ -965,6 +936,25 @@ if (!empty($sessionIdFromGet) && !empty($cidReq)) {
     Session::erase('_cid');
     Session::erase('_course');
     Session::erase('_gid');
+}
+
+if ($checkFromDatabase && !empty($sessionIdFromGet)) {
+    $sessionInfo = api_get_session_info($sessionIdFromGet);
+    if (!empty($sessionInfo)) {
+        Session::write('session_name', $sessionInfo['name']);
+        Session::write('id_session', $sessionInfo['id']);
+    } else {
+        $cidReset = true;
+        Session::erase('session_name');
+        Session::erase('id_session');
+
+        // Deleting session from $_SESSION means also deleting $_SESSION['_course'] and group info
+        Session::erase('_real_cid');
+        Session::erase('_cid');
+        Session::erase('_course');
+        Session::erase('_gid');
+        api_not_allowed(true);
+    }
 }
 
 /*  COURSE INIT */
@@ -1009,6 +999,8 @@ if ($cidReset) {
         Session::erase('_cid');
         Session::erase('_real_cid');
         Session::erase('_course');
+        Session::erase('session_name');
+        Session::erase('id_session');
 
         if (!empty($_SESSION)) {
             foreach ($_SESSION as $key => $session_item) {
@@ -1543,7 +1535,6 @@ Event::eventCourseLoginUpdate(
     api_get_session_id()
 );
 Redirect::session_request_uri($logging_in, $user_id);
-
 
 if (!ChamiloApi::isAjaxRequest() && api_get_configuration_value('allow_mandatory_survey')) {
     SurveyManager::protectByMandatory();

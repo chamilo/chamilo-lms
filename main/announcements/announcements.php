@@ -395,7 +395,7 @@ switch ($action) {
         $form->addHeader($form_name);
         $form->addButtonAdvancedSettings(
             'choose_recipients',
-            [get_lang('ChooseRecipients'), get_lang('AnnouncementChooseRecipientsDescription')]
+            [get_lang('ChooseRecipients')]
         );
         $form->addHtml('<div id="choose_recipients_options" style="display:none;">');
 
@@ -531,7 +531,7 @@ switch ($action) {
 
         $form->addElement('file', 'user_upload', get_lang('AddAnAttachment'));
         $form->addElement('textarea', 'file_comment', get_lang('FileComment'));
-        $form->addElement('hidden', 'sec_token', $token);
+        $form->addHidden('sec_token', $token);
 
         if (empty($sessionId)) {
             $form->addCheckBox('send_to_users_in_session', null, get_lang('SendToUsersInSessions'));
@@ -548,7 +548,7 @@ switch ($action) {
 
         if ($form->validate()) {
             $data = $form->getSubmitValues();
-            $data['users'] = isset($data['users']) ? $data['users'] : ['everyone'];
+            $data['users'] = isset($data['users']) ? $data['users'] : [];
             $sendToUsersInSession = isset($data['send_to_users_in_session']) ? true : false;
 
             if (isset($id) && $id) {

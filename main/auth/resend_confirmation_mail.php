@@ -11,19 +11,13 @@ $form->addButtonSend(get_lang('Send'));
 
 if ($form->validate()) {
     $values = $form->exportValues();
+    $user = UserManager::getManager()->findUserByUsername($values['user']);
 
-    /** @var \Chamilo\UserBundle\Entity\User $thisUser */
-    $thisUser = Database::getManager()->getRepository('ChamiloUserBundle:User')->findBy(['username' => $values['user']]);
-
-    UserManager::sendUserConfirmationMail($thisUser);
-    Display::addFlash(Display::return_message(get_lang('EmailSent')));
+    UserManager::sendUserConfirmationMail($user);
     header('Location: '.api_get_path(WEB_PATH));
     exit;
 }
 
 $tpl = new Template(null);
-$tpl->assign('form', $form->toHtml());
-$content = $tpl->get_template('auth/resend_confirmation_mail.tpl');
-$tpl->assign('content', $tpl->fetch($content));
+$tpl->assign('content', $form->toHtml());
 $tpl->display_one_col_template();
-

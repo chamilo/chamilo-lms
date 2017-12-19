@@ -189,8 +189,6 @@ if (CustomPages::enabled() && CustomPages::exists(CustomPages::LOST_PASSWORD)) {
     exit;
 }
 
-$controller = new IndexManager($tool_name);
-$controller->set_login_form();
-$controller->tpl->assign('form', $form->returnForm());
-$template = $controller->tpl->get_template('auth/lost_password.tpl');
-$controller->tpl->display($template);
+$tpl = new Template(null);
+$tpl->assign('content', $form->toHtml());
+$tpl->display_one_col_template();

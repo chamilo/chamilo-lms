@@ -1924,7 +1924,6 @@ HOTSPOT;
         }
 
         $listInfo = array();
-
         // Simple exercises
         if (empty($hotpotatoe_where)) {
             $column = !empty($column) ? Database::escape_string($column) : null;
@@ -1944,7 +1943,6 @@ HOTSPOT;
 
             $group_list = GroupManager::get_group_list(null, $courseInfo);
             $clean_group_list = array();
-
             if (!empty($group_list)) {
                 foreach ($group_list as $group) {
                     $clean_group_list[$group['id']] = $group['name'];
@@ -2025,7 +2023,7 @@ HOTSPOT;
                     }
 
                     // Add all groups by user
-                    $group_name_list = null;
+                    $group_name_list = '';
                     if ($is_empty_sql_inner_join_tbl_user) {
                         $group_list = GroupManager::get_group_ids(
                             api_get_course_int_id(),
@@ -2033,7 +2031,9 @@ HOTSPOT;
                         );
 
                         foreach ($group_list as $id) {
-                            $group_name_list .= $clean_group_list[$id].'<br/>';
+                            if (isset($clean_group_list[$id])) {
+                                $group_name_list .= $clean_group_list[$id].'<br/>';
+                            }
                         }
                         $results[$i]['group_name'] = $group_name_list;
                     }

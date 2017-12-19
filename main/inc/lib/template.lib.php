@@ -1101,9 +1101,8 @@ class Template
             header(
                 'X-Powered-By: '.$_configuration['software_name'].' '.substr($_configuration['system_version'], 0, 1)
             );
+            self::addHTTPSecurityHeaders();
         }
-
-        self::addHTTPSecurityHeaders();
 
         $socialMeta = '';
         $metaTitle = api_get_setting('meta_title');

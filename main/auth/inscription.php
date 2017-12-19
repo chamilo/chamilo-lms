@@ -434,7 +434,7 @@ if (!CustomPages::enabled()) {
         }
     }
 
-    $tool_name = get_lang('Registration', null, (!empty($_POST['language']) ? $_POST['language'] : $_user['language']));
+    $tool_name = get_lang('Registration');
 
     if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_registered_show_terms) {
         $tool_name = get_lang('TermsAndConditions');
@@ -738,26 +738,26 @@ if ($form->validate()) {
             sent a mail to the platform admin and exit the page.*/
             if (api_get_setting('allow_registration') === 'approval') {
                 // 1. Send mail to all platform admin
-                $emailsubject = get_lang('ApprovalForNewAccount', null, $values['language']).': '.$values['username'];
-                $emailbody = get_lang('ApprovalForNewAccount', null, $values['language'])."\n";
-                $emailbody .= get_lang('UserName', null, $values['language']).': '.$values['username']."\n";
+                $emailsubject = get_lang('ApprovalForNewAccount').': '.$values['username'];
+                $emailbody = get_lang('ApprovalForNewAccount')."\n";
+                $emailbody .= get_lang('UserName').': '.$values['username']."\n";
 
                 if (api_is_western_name_order()) {
-                    $emailbody .= get_lang('FirstName', null, $values['language']).': '.$values['firstname']."\n";
-                    $emailbody .= get_lang('LastName', null, $values['language']).': '.$values['lastname']."\n";
+                    $emailbody .= get_lang('FirstName').': '.$values['firstname']."\n";
+                    $emailbody .= get_lang('LastName').': '.$values['lastname']."\n";
                 } else {
-                    $emailbody .= get_lang('LastName', null, $values['language']).': '.$values['lastname']."\n";
-                    $emailbody .= get_lang('FirstName', null, $values['language']).': '.$values['firstname']."\n";
+                    $emailbody .= get_lang('LastName').': '.$values['lastname']."\n";
+                    $emailbody .= get_lang('FirstName').': '.$values['firstname']."\n";
                 }
-                $emailbody .= get_lang('Email', null, $values['language']).': '.$values['email']."\n";
-                $emailbody .= get_lang('Status', null, $values['language']).': '.$values['status']."\n\n";
+                $emailbody .= get_lang('Email').': '.$values['email']."\n";
+                $emailbody .= get_lang('Status').': '.$values['status']."\n\n";
 
                 $url_edit = Display::url(
                     api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id,
                     api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id
                 );
 
-                $emailbody .= get_lang('ManageUser', null, $values['language']).": $url_edit";
+                $emailbody .= get_lang('ManageUser').": $url_edit";
 
                 $admins = UserManager::get_all_administrators();
                 foreach ($admins as $admin_info) {
@@ -801,7 +801,7 @@ if ($form->validate()) {
                 // 3. exit the page
                 unset($user_id);
 
-                Display::display_header(get_lang('ConfirmationForNewAccount', null, $values['language']));
+                Display::display_header(get_lang('ConfirmationForNewAccount'));
                 echo Display::page_header(get_lang('YouNeedConfirmYourAccountViaEmailToAccessThePlatform'));
                 echo $content;
                 Display::display_footer();
@@ -875,14 +875,14 @@ if ($form->validate()) {
     $recipient_name = api_get_person_name($values['firstname'], $values['lastname']);
     $text_after_registration =
         '<p>'.
-        get_lang('Dear', null, $_user['language']).' '.
+        get_lang('Dear').' '.
         stripslashes(Security::remove_XSS($recipient_name)).',<br /><br />'.
         get_lang('PersonalSettings').".</p>";
 
     $form_data = array(
         'button' => Display::button(
             'next',
-            get_lang('Next', null, $_user['language']),
+            get_lang('Next'),
             array('class' => 'btn btn-primary btn-large')
         ),
         'message' => '',
@@ -906,30 +906,30 @@ if ($form->validate()) {
         }
     } else {
         if (!empty($values['email'])) {
-            $text_after_registration .= '<p>'.get_lang('MailHasBeenSent', null, $_user['language']).'.</p>';
+            $text_after_registration .= '<p>'.get_lang('MailHasBeenSent').'.</p>';
         }
 
         if ($is_allowedCreateCourse) {
             if ($usersCanCreateCourse) {
-                $form_data['message'] = '<p>'.get_lang('NowGoCreateYourCourse', null, $_user['language'])."</p>";
+                $form_data['message'] = '<p>'.get_lang('NowGoCreateYourCourse')."</p>";
             }
             $form_data['action'] = api_get_path(WEB_CODE_PATH).'create_course/add_course.php';
 
             if (api_get_setting('course_validation') === 'true') {
                 $form_data['button'] = Display::button(
                     'next',
-                    get_lang('CreateCourseRequest', null, $_user['language']),
+                    get_lang('CreateCourseRequest'),
                     array('class' => 'btn btn-primary btn-large')
                 );
             } else {
                 $form_data['button'] = Display::button(
                     'next',
-                    get_lang('CourseCreate', null, $_user['language']),
+                    get_lang('CourseCreate'),
                     array('class' => 'btn btn-primary btn-large')
                 );
                 $form_data['go_button'] = '&nbsp;&nbsp;<a href="'.api_get_path(WEB_PATH).'index.php'.'">'.
                     Display::span(
-                        get_lang('Next', null, $_user['language']),
+                        get_lang('Next'),
                         array('class' => 'btn btn-primary btn-large')
                     ).'</a>';
             }
@@ -942,7 +942,7 @@ if ($form->validate()) {
             }
             $form_data['button'] = Display::button(
                 'next',
-                get_lang('Next', null, $_user['language']),
+                get_lang('Next'),
                 array('class' => 'btn btn-primary btn-large')
             );
         }

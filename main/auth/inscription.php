@@ -59,9 +59,9 @@ $form = new FormValidator('registration');
 $user_already_registered_show_terms = false;
 if (api_get_setting('allow_terms_conditions') == 'true') {
     $user_already_registered_show_terms = isset($_SESSION['term_and_condition']['user_id']);
-    if (api_is_anonymous() === true) {
+    /*if (api_is_anonymous() === true) {
         $user_already_registered_show_terms = false;
-    }
+    }*/
 }
 
 $sessionPremiumChecker = Session::read('SessionIsPremium');
@@ -511,8 +511,8 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
     }
 
     // Version and language
-    $form->addElement('hidden', 'legal_accept_type', $term_preview['version'].':'.$term_preview['language_id']);
-    $form->addElement('hidden', 'legal_info', $term_preview['id'].':'.$term_preview['language_id']);
+    $form->addHidden('legal_accept_type', $term_preview['version'].':'.$term_preview['language_id']);
+    $form->addHidden('legal_info', $term_preview['id'].':'.$term_preview['language_id']);
 
     if ($term_preview['type'] == 1) {
         $form->addElement(

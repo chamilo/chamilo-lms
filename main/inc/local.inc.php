@@ -872,7 +872,6 @@ if (isset($uidReset) && $uidReset) {
 
         if (Database::num_rows($result) > 0) {
             // Extracting the user data
-
             $uData = Database::fetch_array($result);
             $_user = _api_format_user($uData, false);
             $is_platformAdmin = (bool) (!is_null($uData['is_admin']));

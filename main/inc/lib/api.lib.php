@@ -6217,10 +6217,10 @@ function api_get_tools_lists($my_tool = null)
  * @param int user id
  * @return bool true if we pass false otherwise
  */
-function api_check_term_condition($user_id)
+function api_check_term_condition($userId)
 {
     if (api_get_setting('allow_terms_conditions') == 'true') {
-        //check if exists terms and conditions
+        // Check if exists terms and conditions
         if (LegalManager::count() == 0) {
 
             return true;
@@ -6228,13 +6228,13 @@ function api_check_term_condition($user_id)
 
         $extraFieldValue = new ExtraFieldValue('user');
         $data = $extraFieldValue->get_values_by_handler_and_field_variable(
-            $user_id,
+            $userId,
             'legal_accept'
         );
 
-        if (!empty($data) && isset($data['value'])) {
-            $rowv = $data['value'];
-            $user_conditions = explode(':', $rowv);
+        if (!empty($data) && isset($data['value']) && !empty($data['value'])) {
+            $result = $data['value'];
+            $user_conditions = explode(':', $result);
             $version = $user_conditions[0];
             $lang_id = $user_conditions[1];
             $real_version = LegalManager::get_last_version($lang_id);

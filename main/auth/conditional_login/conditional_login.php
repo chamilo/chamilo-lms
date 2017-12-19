@@ -13,7 +13,8 @@ use ChamiloSession as Session;
 */
 /**
  * Please implements the functions of the $login_conditions array.
- * Each of these function will take a user array (user_id, username, password (crypted), auth_source, active, expiration_date)
+ * Each of these function will take a user array
+ * (user_id, username, password (crypted), auth_source, active, expiration_date)
  */
 $login_conditions = array();
 
@@ -64,7 +65,6 @@ function check_platform_legal_conditions($user)
             return true;
         }
     } else {
-
         // No validation user can pass
         return true;
     }

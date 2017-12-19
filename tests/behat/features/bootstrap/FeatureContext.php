@@ -134,21 +134,11 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @Given /^I am in course "([^"]*)"$/
-     * @Todo redefine function to be different from I am on course TEMP homepage
-     */
-    public function iAmInCourse($argument)
-    {
-        $this->visit('/main/course_home/course_home.php?cDir=' . $argument);
-        $this->assertElementNotOnPage('.alert-danger');
-    }
-
-    /**
      * @Given /^I am on course "([^"]*)" homepage$/
      */
     public function iAmOnCourseXHomepage($argument)
     {
-        $this->visit('/main/course_home/course_home.php?cDir=' . $argument);
+        $this->visit('/courses/'.$argument.'/index.php');
         $this->assertElementNotOnPage('.alert-danger');
     }
 

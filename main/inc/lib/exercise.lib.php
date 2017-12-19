@@ -59,7 +59,6 @@ class ExerciseLib
         $answerType = $objQuestionTmp->selectType();
         $pictureName = $objQuestionTmp->getPictureFilename();
         $s = '';
-
         if ($answerType != HOT_SPOT &&
             $answerType != HOT_SPOT_DELINEATION &&
             $answerType != ANNOTATION
@@ -955,7 +954,6 @@ class ExerciseLib
                             }
 
                             $lines_count++;
-
                             if (($lines_count - 1) == $num_suggestions) {
                                 while (isset($select_items[$lines_count])) {
                                     $s .= Display::tag('b', $select_items[$lines_count]['letter']);
@@ -980,7 +978,7 @@ class ExerciseLib
 
                             $s .= <<<HTML
                             <tr>
-                                <td widht="45%">
+                                <td width="45%">
                                     <div id="window_{$windowId}" class="window window_left_question window{$questionId}_question">
                                         <strong>$lines_count.</strong> $parsed_answer
                                     </div>

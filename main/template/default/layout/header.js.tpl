@@ -72,10 +72,9 @@
     };
 {% endif %}
 
-
 function doneResizing() {
-    var widhtWindow = $(window).width();
-    if ((widhtWindow>=1024) && (widhtWindow>=768)) {
+    var widthWindow = $(window).width();
+    if ((widthWindow>=1024) && (widthWindow>=768)) {
         $("#profileCollapse").addClass("in");
         $("#courseCollapse").addClass("in");
         $("#skillsCollapse").addClass("in");

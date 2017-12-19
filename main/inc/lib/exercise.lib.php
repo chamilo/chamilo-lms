@@ -37,7 +37,7 @@ class ExerciseLib
         $current_item = '',
         $show_title = true,
         $freeze = false,
-        $user_choice = array(),
+        $user_choice = [],
         $show_comment = false,
         $show_answers = false
     ) {
@@ -109,7 +109,7 @@ class ExerciseLib
             // because the match between the suggestions and the answers cannot be
             // done easily (suggestions and answers are in the same table), so we
             // have to go through answers first (elems with "correct" value to 0).
-            $select_items = array();
+            $select_items = [];
             //This will contain the number of answers on the left side. We call them
             // suggestions here, for the sake of comprehensions, while the ones
             // on the right side are called answers
@@ -188,7 +188,7 @@ class ExerciseLib
                 // Add nanog
                 if (api_get_setting('enable_record_audio') == 'true') {
                     //@todo pass this as a parameter
-                    global $exercise_stat_info, $exerciseId, $exe_id;
+                    global $exercise_stat_info, $exerciseId;
 
                     if (!empty($exercise_stat_info)) {
                         $objQuestionTmp->initFile(
@@ -212,7 +212,6 @@ class ExerciseLib
                 $form = new FormValidator('free_choice_'.$questionId);
                 $config = ['ToolbarSet' => 'TestFreeAnswer'];
 
-                //$form->addButtonAdvancedSettings('hide_description_'.$questionId, get_lang('AddDescription'));
                 $form->addHtml('<div id="'.'hide_description_'.$questionId.'_options" style="display: none;">');
                 $form->addHtmlEditor(
                     "choice[".$questionId."]",
@@ -540,8 +539,7 @@ class ExerciseLib
                         break;
                     case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:
                         $s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
-
-                        $my_choice = array();
+                        $my_choice = [];
                         if (!empty($user_choice_array)) {
                             foreach ($user_choice_array as $item) {
                                 $item = explode(':', $item);
@@ -874,15 +872,10 @@ class ExerciseLib
                         break;
                     case DRAGGABLE:
                         if ($answerCorrect) {
-                            $parsed_answer = $answer;
-                            /*$lines_count = '';
-                            $data = $objAnswerTmp->getAnswerByAutoId($numAnswer);
-                            $data = $objAnswerTmp->getAnswerByAutoId($data['correct']);
-                            $lines_count = $data['answer'];*/
                             $windowId = $questionId.'_'.$lines_count;
                             $s .= '<li class="touch-items" id="'.$windowId.'">';
                             $s .= Display::div(
-                                $parsed_answer,
+                                $answer,
                                 [
                                     'id' => "window_$windowId",
                                     'class' => "window{$questionId}_question_draggable exercise-draggable-answer-option"
@@ -963,7 +956,6 @@ class ExerciseLib
                             }
 
                             $matching_correct_answer++;
-
                             $s .= '</li>';
                         }
                         break;
@@ -971,16 +963,14 @@ class ExerciseLib
                         if ($answerId == 1) {
                             echo $objAnswerTmp->getJs();
                         }
-
                         if ($answerCorrect != 0) {
-                            $parsed_answer = $answer;
                             $windowId = "{$questionId}_{$lines_count}";
-
                             $s .= <<<HTML
                             <tr>
                                 <td width="45%">
                                     <div id="window_{$windowId}" class="window window_left_question window{$questionId}_question">
-                                        <strong>$lines_count.</strong> $parsed_answer
+                                        <strong>$lines_count.</strong> 
+                                        $answer
                                     </div>
                                 </td>
                                 <td width="10%">
@@ -992,16 +982,17 @@ HTML;
 
                             if ($user_choice) {
                                 foreach ($user_choice as $chosen) {
-                                    if ($answerCorrect != $chosen['answer']) {
-                                        continue;
+                                    if ($numAnswer == $chosen['position']) {
+                                        $selectedValue = $chosen['answer'];
+                                        break;
                                     }
-                                    $selectedValue = $chosen['answer'];
                                 }
                             }
 
-                            foreach ($select_items as $key => $select_item) {
-                                $draggableSelectOptions[$select_item['id']] = $select_item['letter'];
+                            foreach ($select_items as $key => $selectItem) {
+                                $draggableSelectOptions[$selectItem['id']] = $selectItem['letter'];
                             }
+
 
                             foreach ($draggableSelectOptions as $value => $text) {
                                 if ($value == $selectedValue) {
@@ -1046,11 +1037,7 @@ HTML;
                                 }
                             }
 
-                            $s .= <<<HTML
-                            </td>
-                            <td width="45%">
-HTML;
-
+                            $s .= '</td><td width="45%">';
                             if (isset($select_items[$lines_count])) {
                                 $s .= <<<HTML
                                 <div id="window_{$windowId}_answer" class="window window_right_question">
@@ -1081,7 +1068,7 @@ HTML;
                         }
                         break;
                 }
-            }    // end for()
+            } // end for()
 
             if ($show_comment) {
                 $s .= '</table>';
@@ -1105,7 +1092,6 @@ HTML;
                 $s .= "</div>"; //clearfix
                 $counterAnswer = 1;
                 $s .= $isVertical ? '' : '<div class="row">';
-
                 for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                     $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                     $windowId = $questionId.'_'.$counterAnswer;
@@ -1117,7 +1103,6 @@ HTML;
                             </div>
                         ';
                         $s .= $isVertical ? '</div>' : '';
-
                         $counterAnswer++;
                     }
                 }
@@ -1141,7 +1126,6 @@ HTML;
             if ($origin == 'export') {
                 return $s;
             }
-
             echo $s;
         } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
             global $exerciseId, $exe_id;

@@ -21,25 +21,25 @@ class Version20160610142700 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema)
     {
-        $dataList = $this
-            ->connection
-            ->executeQuery("
-                SELECT id FROM extra_field
-                WHERE variable = 'skype' AND extra_field_type = 1 
-            ")
-            ->fetchAll();
+        $connection = $this->connection;
+        $sql = "SELECT id FROM extra_field WHERE variable = 'skype' AND extra_field_type = 1";
+        $result = $connection->executeQuery($sql)->fetchAll();
 
-        if (empty($dataList)) {
+        if (empty($result)) {
             $this->addSql("
                 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at)
-                VALUES (1, 1, 'skype', 'Skype', 1, 1, now())
+                VALUES (1, 1, 'skype', 'Skype', 1, 1, NOW())
             ");
         }
 
-        $this->addSql("
+        $sql = "SELECT id FROM extra_field WHERE variable = 'skype' AND extra_field_type = 1";
+        $result = $connection->executeQuery($sql)->fetchAll();
+        if (empty($result)) {
+            $this->addSql("
             INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible, changeable, created_at)
-            VALUES (1, 1, 'linkedin_url', 'LinkedInUrl', 1, 1, now())
-        ");
+            VALUES (1, 1, 'linkedin_url', 'LinkedInUrl', 1, 1, NOW())"
+            );
+        }
 
         $this->addSettingCurrent(
             'allow_show_skype_account',

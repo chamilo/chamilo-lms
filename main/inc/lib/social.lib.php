@@ -290,8 +290,8 @@ class SocialManager extends UserManager
      */
     public static function get_message_number_invitation_by_user_id($user_receiver_id)
     {
-        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
-        $sql = 'SELECT COUNT(*) as count_message_in_box FROM '.$tbl_message.'
+        $table = Database::get_main_table(TABLE_MESSAGE);
+        $sql = 'SELECT COUNT(*) as count_message_in_box FROM '.$table.'
                 WHERE
                     user_receiver_id='.intval($user_receiver_id).' AND
                     msg_status='.MESSAGE_STATUS_INVITATION_PENDING;
@@ -308,8 +308,8 @@ class SocialManager extends UserManager
      */
     public static function getCountMessagesSent($sender_id)
     {
-        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
-        $sql = 'SELECT COUNT(*) FROM '.$tbl_message.'
+        $table = Database::get_main_table(TABLE_MESSAGE);
+        $sql = 'SELECT COUNT(*) FROM '.$table.'
                 WHERE
                     user_sender_id='.intval($sender_id).' AND
                     msg_status < 5';
@@ -326,8 +326,8 @@ class SocialManager extends UserManager
      */
     public static function getCountMessagesReceived($receiver_id)
     {
-        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
-        $sql = 'SELECT COUNT(*) FROM '.$tbl_message.'
+        $table = Database::get_main_table(TABLE_MESSAGE);
+        $sql = 'SELECT COUNT(*) FROM '.$table.'
                 WHERE
                     user_receiver_id='.intval($receiver_id).' AND
                     msg_status < 4';
@@ -348,9 +348,9 @@ class SocialManager extends UserManager
             return 0;
         }
 
-        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
+        $table = Database::get_main_table(TABLE_MESSAGE);
         $sql = 'SELECT COUNT(*) 
-                FROM '.$tbl_message.'
+                FROM '.$table.'
                 WHERE
                     user_sender_id='.intval($userId).' AND
                     (msg_status = '.MESSAGE_STATUS_WALL.' OR 
@@ -375,9 +375,9 @@ class SocialManager extends UserManager
             return [];
         }
 
-        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
+        $table = Database::get_main_table(TABLE_MESSAGE);
         $sql = 'SELECT user_sender_id, send_date, title, content
-                FROM '.$tbl_message.'
+                FROM '.$table.'
                 WHERE
                     user_receiver_id = '.intval($userId).' AND
                     msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
@@ -460,8 +460,8 @@ class SocialManager extends UserManager
             return false;
         }
 
-        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
-        $sql = "UPDATE $tbl_message
+        $table = Database::get_main_table(TABLE_MESSAGE);
+        $sql = "UPDATE $table
                 SET msg_status = ".MESSAGE_STATUS_INVITATION_ACCEPTED."
                 WHERE
                     user_sender_id = ".((int) $user_send_id)." AND
@@ -486,8 +486,8 @@ class SocialManager extends UserManager
         if (empty($user_send_id) || empty($user_receiver_id)) {
             return false;
         }
-        $tbl_message = Database::get_main_table(TABLE_MESSAGE);
-        $sql = 'DELETE FROM '.$tbl_message.'
+        $table = Database::get_main_table(TABLE_MESSAGE);
+        $sql = 'DELETE FROM '.$table.'
                 WHERE
                     user_sender_id =  '.((int) $user_send_id).' AND
                     user_receiver_id='.((int) $user_receiver_id).' AND
@@ -507,9 +507,9 @@ class SocialManager extends UserManager
      */
     public static function qualify_friend($id_friend_qualify, $type_qualify)
     {
-        $tbl_user_friend = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+        $table = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $user_id = api_get_user_id();
-        $sql = 'UPDATE '.$tbl_user_friend.' SET relation_type='.((int) $type_qualify).'
+        $sql = 'UPDATE '.$table.' SET relation_type='.((int) $type_qualify).'
                 WHERE user_id = '.((int) $user_id).' AND friend_user_id='.(int) $id_friend_qualify;
         Database::query($sql);
     }
@@ -684,8 +684,6 @@ class SocialManager extends UserManager
         }
 
         $result .= '</li>';
-
-
         $session = '';
         if (!empty($my_course['session_name']) && !empty($my_course['id_session'])) {
             // Request for the name of the general coach
@@ -857,7 +855,7 @@ class SocialManager extends UserManager
         );
 
         // get count unread message and total invitations
-        $count_unread_message = MessageManager::get_number_of_messages(true);
+        $count_unread_message = MessageManager::getNumberOfMessages(true);
         $count_unread_message = !empty($count_unread_message) ? Display::badge($count_unread_message) : null;
 
         $number_of_new_messages_of_friend = self::get_message_number_invitation_by_user_id(api_get_user_id());

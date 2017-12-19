@@ -106,7 +106,7 @@ class Chat extends Model
 
     /**
      * Starts a chat session and returns JSON array of status and chat history
-     * @return void (prints output in JSON format)
+     * @return bool (prints output in JSON format)
      */
     public function startSession()
     {
@@ -119,7 +119,7 @@ class Chat extends Model
             'items' => $chats
         );
         echo json_encode($return);
-        exit;
+        return true;
     }
 
     /**

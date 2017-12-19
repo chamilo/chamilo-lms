@@ -24,7 +24,7 @@ switch ($action) {
         $count_unread_message = 0;
         if (api_get_setting('allow_message_tool') == 'true') {
             // get count unread message and total invitations
-            $count_unread_message = MessageManager::get_number_of_messages(true);
+            $count_unread_message = MessageManager::getNumberOfMessages(true);
         }
 
         if (api_get_setting('allow_social_tool') == 'true') {
@@ -44,8 +44,6 @@ switch ($action) {
             }
             $total_invitations = intval($number_of_new_messages_of_friend) + $group_pending_invitations + intval($count_unread_message);
         }
-        //$total_invitations = !empty($total_invitations) ? Display::badge($total_invitations) : '';
-
         echo $total_invitations;
         break;
     case 'send_message':

@@ -1387,7 +1387,7 @@ class TicketManager
     /**
      * @return mixed
      */
-    public static function get_number_of_messages()
+    public static function getNumberOfMessages()
     {
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_messages = Database::get_main_table(

@@ -16,7 +16,6 @@ if (api_get_setting('allow_global_chat') == 'false') {
 if (api_is_anonymous()) {
     exit;
 }
-
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 // Course Chat
@@ -45,7 +44,6 @@ if ($chat->isChatBlockedByExercises()) {
     $chat->setUserStatus(0);
     exit;
 }
-
 switch ($action) {
     case 'chatheartbeat':
         $chat->heartbeat();

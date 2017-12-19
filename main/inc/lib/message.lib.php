@@ -70,7 +70,7 @@ class MessageManager
      * @param bool $unread
      * @return int
      */
-    public static function get_number_of_messages($unread = false)
+    public static function getNumberOfMessages($unread = false)
     {
         $table = Database::get_main_table(TABLE_MESSAGE);
         if ($unread) {
@@ -1055,7 +1055,7 @@ class MessageManager
      * @param void
      * @return integer
      */
-    public static function get_number_of_messages_sent()
+    public static function getNumberOfMessagesSent()
     {
         $table = Database::get_main_table(TABLE_MESSAGE);
         $keyword = Session::read('message_sent_search_keyword');
@@ -1829,7 +1829,7 @@ class MessageManager
         // display sortable table with messages of the current user
         $table = new SortableTable(
             'message_inbox',
-            array('MessageManager', 'get_number_of_messages'),
+            array('MessageManager', 'getNumberOfMessages'),
             array('MessageManager', 'get_message_data'),
             3,
             20,
@@ -1894,7 +1894,7 @@ class MessageManager
         // display sortable table with messages of the current user
         $table = new SortableTable(
             'message_outbox',
-            array('MessageManager', 'get_number_of_messages_sent'),
+            array('MessageManager', 'getNumberOfMessagesSent'),
             array('MessageManager', 'get_message_data_sent'),
             3,
             20,

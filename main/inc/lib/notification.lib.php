@@ -371,9 +371,9 @@ class Notification extends Model
         $newMessageText = $linkToNewMessage = '';
         $showEmail = api_get_configuration_value('show_user_email_in_notification');
         $senderInfoName = '';
-        if (!empty($senderInfo)) {
+        if (!empty($senderInfo) && isset($senderInfo['complete_name'])) {
             $senderInfoName = $senderInfo['complete_name'];
-            if ($showEmail) {
+            if ($showEmail && isset($senderInfo['complete_name_with_email_forced'])) {
                 $senderInfoName = $senderInfo['complete_name_with_email_forced'];
             }
         }

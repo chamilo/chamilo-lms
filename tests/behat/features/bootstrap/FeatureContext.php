@@ -143,6 +143,14 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * @Given /^I am on course "([^"]*)" homepage in session "([^"]*)"$/
+     */
+    public function iAmOnCourseXHomepageInSessionY($courseArgument, $sessionArgument)
+    {
+        $this->visit('/courses/'.$courseArgument.'/index.php?id_session='.$sessionArgument);
+    }
+
+    /**
      * @Given /^I am a "([^"]*)" user$/
      */
     public function iAmAXUser($argument)

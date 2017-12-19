@@ -1,4 +1,4 @@
-Feature: Session tool
+Feature: Session management tool
   In order to use the session tool
   The admin should be able to create a session
 

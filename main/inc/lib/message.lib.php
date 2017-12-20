@@ -112,12 +112,12 @@ class MessageManager
         $column,
         $direction
     ) {
-        $from = intval($from);
-        $number_of_items = intval($number_of_items);
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
 
         //forcing this order
         if (!isset($direction)) {
-            $column = 3;
+            $column = 2;
             $direction = 'DESC';
         } else {
             $column = intval($column);
@@ -134,13 +134,12 @@ class MessageManager
         }
 
         $table = Database::get_main_table(TABLE_MESSAGE);
-
         $sql = "SELECT 
                     id as col0, 
-                    user_sender_id as col1, 
-                    title as col2, 
-                    send_date as col3, 
-                    msg_status as col4
+                    title as col1, 
+                    send_date as col2, 
+                    msg_status as col3,
+                    user_sender_id
                 FROM $table
                 WHERE
                     user_receiver_id=".api_get_user_id()." AND
@@ -149,33 +148,37 @@ class MessageManager
                 ORDER BY col$column $direction
                 LIMIT $from, $number_of_items";
 
-        $sql_result = Database::query($sql);
-        $message_list = array();
-
+        $result = Database::query($sql);
+        $message_list = [];
         $newMessageLink = api_get_path(WEB_CODE_PATH).'messages/new_message.php';
-        while ($result = Database::fetch_row($sql_result)) {
-            $message[0] = $result[0];
-            $result[2] = Security::remove_XSS($result[2], STUDENT, true);
-            $result[2] = cut($result[2], 80, true);
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $messageId = $row['col0'];
+            $title = $row['col1'];
+            $sendDate = $row['col2'];
+            $status = $row['col3'];
+            $senderId = $row['user_sender_id'];
 
-            if ($result[4] == 1) {
+            $title = Security::remove_XSS($title, STUDENT, true);
+            $title = cut($title, 80, true);
+
+            if ($status == 1) {
                 $class = 'class = "unread"';
             } else {
                 $class = 'class = "read"';
             }
 
-            $userInfo = api_get_user_info($result[1]);
-            if (!empty($result[1]) && !empty($userInfo)) {
-                $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.$result[2].'</a><br />';
+            $userInfo = api_get_user_info($senderId);
+            if (!empty($senderId) && !empty($userInfo)) {
+                $message[1] = '<a '.$class.' href="view_message.php?id='.$messageId.'">'.$title.'</a><br />';
                 $message[1] .= $userInfo['complete_name_with_username'];
                 $message[3] =
                     Display::url(
                         Display::returnFontAwesomeIcon('reply', 2),
-                        $newMessageLink.'?re_id='.$result[0],
+                        $newMessageLink.'?re_id='.$messageId,
                         ['title' => get_lang('ReplyToMessage') ]
                     );
             } else {
-                $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.$result[2].'</a><br />';
+                $message[1] = '<a '.$class.' href="view_message.php?id='.$messageId.'">'.$title.'</a><br />';
                 $message[1] .= get_lang('UnknownUser');
                 $message[3] =
                     Display::url(
@@ -185,17 +188,17 @@ class MessageManager
                     );
             }
 
+            $message[0] = $messageId;
+            $message[2] = api_convert_and_format_date($sendDate, DATE_TIME_FORMAT_LONG);
             $message[3] .=
                 '&nbsp;&nbsp;'.
                 Display::url(
                     Display::returnFontAwesomeIcon('share', 2),
-                    $newMessageLink.'?forward_id='.$result[0],
+                    $newMessageLink.'?forward_id='.$messageId,
                     ['title' => get_lang('ForwardMessage') ]
                 ).
-                '&nbsp;&nbsp;<a title="'.addslashes(get_lang('DeleteMessage')).'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" href="inbox.php?action=deleteone&id='.$result[0].'">'.
+                '&nbsp;&nbsp;<a title="'.addslashes(get_lang('DeleteMessage')).'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" href="inbox.php?action=deleteone&id='.$messageId.'">'.
                 Display::returnFontAwesomeIcon('trash', 2).'</a>';
-
-            $message[2] = api_convert_and_format_date($result[3], DATE_TIME_FORMAT_LONG); //date stays the same
             foreach ($message as $key => $value) {
                 $message[$key] = api_xml_http_response_encode($value);
             }
@@ -982,7 +985,7 @@ class MessageManager
         $from = intval($from);
         $number_of_items = intval($number_of_items);
         if (!isset($direction)) {
-            $column = 3;
+            $column = 2;
             $direction = 'DESC';
         } else {
             $column = intval($column);
@@ -1001,47 +1004,51 @@ class MessageManager
 
         $sql = "SELECT
                     id as col0, 
-                    user_sender_id as col1, 
-                    title as col2, 
-                    send_date as col3, 
-                    user_receiver_id as col4, 
-                    msg_status as col5
+                    title as col1, 
+                    send_date as col2, 
+                    user_receiver_id, 
+                    msg_status,
+                    user_sender_id
                 FROM $table
                 WHERE
-                    user_sender_id=".api_get_user_id()." AND
-                    msg_status=" . MESSAGE_STATUS_OUTBOX."
+                    user_sender_id = ".api_get_user_id()." AND
+                    msg_status = ".MESSAGE_STATUS_OUTBOX."
                     $keywordCondition
                 ORDER BY col$column $direction
                 LIMIT $from, $number_of_items";
-        $sql_result = Database::query($sql);
+        $result = Database::query($sql);
         $i = 0;
-        $message_list = array();
-        while ($result = Database::fetch_row($sql_result)) {
+        $message_list = [];
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $messageId = $row['col0'];
+            $title = $row['col1'];
+            $sendDate = $row['col2'];
+            $status = $row['msg_status'];
+            $senderId = $row['user_sender_id'];
+
             if ($request === true) {
-                $message[0] = '<input type="checkbox" value='.$result[0].' name="out[]">';
+                $message[0] = '<input type="checkbox" value='.$messageId.' name="out[]">';
             } else {
-                $message[0] = ($result[0]);
+                $message[0] = $messageId;
             }
+
             $class = 'class = "read"';
-            $result[2] = Security::remove_XSS($result[2]);
-            $userInfo = api_get_user_info($result[4]);
+            $title = Security::remove_XSS($title);
+            $userInfo = api_get_user_info($senderId);
             if ($request === true) {
-                $message[1] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.$userInfo['complete_name_with_username'].'</a>';
-                $message[2] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.str_replace("\\", "", $result[2]).'</a>';
+                $message[1] = '<a onclick="show_sent_message('.$messageId.')" href="javascript:void(0)">'.$userInfo['complete_name_with_username'].'</a>';
+                $message[2] = '<a onclick="show_sent_message('.$messageId.')" href="javascript:void(0)">'.str_replace("\\", "", $title).'</a>';
                 //date stays the same
-                $message[3] = api_convert_and_format_date($result[3], DATE_TIME_FORMAT_LONG);
-                $message[4] = '&nbsp;&nbsp;<a title="'.addslashes(get_lang('DeleteMessage')).'" onclick="delete_one_message_outbox('.$result[0].')" href="javascript:void(0)"  >'.
+                $message[3] = api_convert_and_format_date($sendDate, DATE_TIME_FORMAT_LONG);
+                $message[4] = '&nbsp;&nbsp;<a title="'.addslashes(get_lang('DeleteMessage')).'" onclick="delete_one_message_outbox('.$messageId.')" href="javascript:void(0)"  >'.
                     Display::returnFontAwesomeIcon('trash', 2).'</a>';
             } else {
-                $message[1] = '<a '.$class.' onclick="show_sent_message('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].'">'.$result[2].'</a><br />'.$userInfo['complete_name_with_username'];
-                $message[2] = api_convert_and_format_date($result[3], DATE_TIME_FORMAT_LONG); //date stays the same
-                $message[3] = '<a title="'.addslashes(get_lang('DeleteMessage')).'" href="outbox.php?action=deleteone&id='.$result[0].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" >'.
+                $message[1] = '<a '.$class.' onclick="show_sent_message('.$messageId.')" href="../messages/view_message.php?id_send='.$messageId.'">'.$title.'</a><br />'.$userInfo['complete_name_with_username'];
+                $message[2] = api_convert_and_format_date($sendDate, DATE_TIME_FORMAT_LONG);
+                $message[3] = '<a title="'.addslashes(get_lang('DeleteMessage')).'" href="outbox.php?action=deleteone&id='.$messageId.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" >'.
                     Display::returnFontAwesomeIcon('trash', 2).'</a>';
             }
 
-            foreach ($message as $key => $value) {
-                $message[$key] = $value;
-            }
             $message_list[] = $message;
             $i++;
         }
@@ -1068,8 +1075,8 @@ class MessageManager
         $sql = "SELECT COUNT(id) as number_messages 
                 FROM $table
                 WHERE
-                  msg_status=".MESSAGE_STATUS_OUTBOX." AND
-                  user_sender_id=" . api_get_user_id()."
+                  msg_status = ".MESSAGE_STATUS_OUTBOX." AND
+                  user_sender_id = ".api_get_user_id()."
                   $keywordCondition
                 ";
         $result = Database::query($sql);
@@ -1831,7 +1838,7 @@ class MessageManager
             'message_inbox',
             array('MessageManager', 'getNumberOfMessages'),
             array('MessageManager', 'get_message_data'),
-            3,
+            2,
             20,
             'DESC'
         );
@@ -1896,7 +1903,7 @@ class MessageManager
             'message_outbox',
             array('MessageManager', 'getNumberOfMessagesSent'),
             array('MessageManager', 'get_message_data_sent'),
-            3,
+            2,
             20,
             'DESC'
         );

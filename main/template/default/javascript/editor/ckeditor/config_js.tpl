@@ -112,3 +112,10 @@ CKEDITOR.editorConfig = function (config) {
     config.contentsCss = '{{ cssEditor }}';
     config.customConfig = '{{ _p.web_main ~ 'inc/lib/javascript/ckeditor/config_js.php'}}';
 };
+
+// Sets default target to "_blank" in link plugin
+CKEDITOR.on('dialogDefinition', function (ev) {
+    if (ev.data.name == 'link'){
+        ev.data.definition.getContents('target').get('linkTargetType')['default']='_blank';
+    }
+});

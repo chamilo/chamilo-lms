@@ -19,6 +19,7 @@ Feature: Session management tool
       | name | Session1 |
     And I fill in select2 input "#coach_username" with id "1" and value "admin"
     And I press "submit"
+    Then wait for the page to be loaded
     Then I should see "Add courses to this session (Session1)"
     Then I select "TEMP (TEMP)" from "NoSessionCoursesList[]"
     And I press "add_course"

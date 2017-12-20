@@ -50,7 +50,7 @@ class Answer
      * @param int $course_id
      * @param Exercise $exercise
      */
-    public function __construct($questionId, $course_id = null, $exercise = null)
+    public function __construct($questionId, $course_id = 0, $exercise = null)
     {
         $this->questionId = intval($questionId);
         $this->answer = array();
@@ -582,8 +582,10 @@ class Answer
      * @param string $weighting
      * @param string $position
      * @param string $destination
-     * @param string $hotspot_coordinates
-     * @param string $hotspot_type
+     * @param string $hotSpotCoordinates
+     * @param string $hotSpotType
+     *
+     * @return CQuizAnswer
      */
     public function updateAnswers(
         $iid,
@@ -593,25 +595,31 @@ class Answer
         $weighting,
         $position,
         $destination,
-        $hotspot_coordinates,
-        $hotspot_type
+        $hotSpotCoordinates,
+        $hotSpotType
     ) {
         $em = Database::getManager();
 
         /** @var CQuizAnswer $quizAnswer */
         $quizAnswer = $em->find('ChamiloCourseBundle:CQuizAnswer', $iid);
-        $quizAnswer
-            ->setAnswer($answer)
-            ->setComment($comment)
-            ->setCorrect($correct)
-            ->setPonderation($weighting)
-            ->setPosition($position)
-            ->setDestination($destination)
-            ->setHotspotCoordinates($hotspot_coordinates)
-            ->setHotspotType($hotspot_type);
+        if ($quizAnswer) {
+            $quizAnswer
+                ->setAnswer($answer)
+                ->setComment($comment)
+                ->setCorrect($correct)
+                ->setPonderation($weighting)
+                ->setPosition($position)
+                ->setDestination($destination)
+                ->setHotspotCoordinates($hotSpotCoordinates)
+                ->setHotspotType($hotSpotType);
 
-        $em->merge($quizAnswer);
-        $em->flush();
+            $em->merge($quizAnswer);
+            $em->flush();
+
+            return $quizAnswer;
+        }
+
+        return false;
     }
 
     /**
@@ -623,9 +631,9 @@ class Answer
     {
         $answerTable = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $em = Database::getManager();
-        $questionId = intval($this->questionId);
+        $questionId = (int) $this->questionId;
 
-        $c_id = $this->course['real_id'];
+        $courseId = $this->course['real_id'];
         $correctList = [];
         $answerList = [];
 
@@ -638,14 +646,16 @@ class Answer
             $hotspot_coordinates = isset($this->new_hotspot_coordinates[$i]) ? $this->new_hotspot_coordinates[$i] : '';
             $hotspot_type = isset($this->new_hotspot_type[$i]) ? $this->new_hotspot_type[$i] : '';
             $destination = isset($this->new_destination[$i]) ? $this->new_destination[$i] : '';
+
             $autoId = $this->selectAutoId($i);
             $iid = isset($this->iid[$i]) ? $this->iid[$i] : 0;
+            $questionType = $this->getQuestionType();
 
             if (!isset($this->position[$i])) {
                 $quizAnswer = new CQuizAnswer();
                 $quizAnswer
                     ->setIdAuto($autoId)
-                    ->setCId($c_id)
+                    ->setCId($courseId)
                     ->setQuestionId($questionId)
                     ->setAnswer($answer)
                     ->setCorrect($correct)
@@ -661,6 +671,7 @@ class Answer
 
                 $iid = $quizAnswer->getIid();
 
+
                 if ($iid) {
                     $quizAnswer
                         ->setId($iid)
@@ -669,12 +680,7 @@ class Answer
                     $em->merge($quizAnswer);
                     $em->flush();
 
-                    $questionType = $this->getQuestionType();
-
-                    if (in_array(
-                        $questionType,
-                        [MATCHING, MATCHING_DRAGGABLE]
-                    )) {
+                    if (in_array($questionType, [MATCHING, MATCHING_DRAGGABLE])) {
                         $answer = new Answer($this->questionId);
                         $answer->read();
                         $correctAnswerId = $answer->selectAnswerIdByPosition($correct);
@@ -696,7 +702,6 @@ class Answer
                 // https://support.chamilo.org/issues/6558
                 // function updateAnswers already escape_string, error if we do it twice.
                 // Feed function updateAnswers with none escaped strings
-
                 $this->updateAnswers(
                     $iid,
                     $this->new_answer[$i],
@@ -719,20 +724,39 @@ class Answer
 
         $questionType = self::getQuestionType();
 
-        if ($questionType == DRAGGABLE) {
-            foreach ($this->new_correct as $value => $status) {
-                if (!empty($status)) {
-                    $correct = $answerList[$status];
-                    $myAutoId = $answerList[$value];
-
-                    $sql = "UPDATE $answerTable
+        switch ($questionType) {
+            case MATCHING_DRAGGABLE:
+                foreach ($this->new_correct as $value => $status) {
+                    if (!empty($status)) {
+                        if (isset($answerList[$status])) {
+                            $correct = $answerList[$status];
+                        } else {
+                            $correct = $status;
+                        }
+                        $myAutoId = $answerList[$value];
+                        $sql = "UPDATE $answerTable
                             SET correct = '$correct'
                             WHERE
                                 id_auto = $myAutoId
                             ";
-                    Database::query($sql);
+                        Database::query($sql);
+                    }
                 }
-            }
+                break;
+            case DRAGGABLE:
+                foreach ($this->new_correct as $value => $status) {
+                    if (!empty($status)) {
+                        $correct = $answerList[$status];
+                        $myAutoId = $answerList[$value];
+                        $sql = "UPDATE $answerTable
+                            SET correct = '$correct'
+                            WHERE
+                                id_auto = $myAutoId
+                            ";
+                        Database::query($sql);
+                    }
+                }
+                break;
         }
 
         if (count($this->position) > $this->new_nbrAnswers) {
@@ -940,7 +964,7 @@ class Answer
             if (in_array($newQuestion->type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
                 $onlyAnswersFlip = array_flip($onlyAnswers);
                 foreach ($correctAnswers as $answer_id => $correct_answer) {
-                    $params = array();
+                    $params = [];
                     if (isset($allAnswers[$correct_answer]) &&
                         isset($onlyAnswersFlip[$allAnswers[$correct_answer]])
                     ) {

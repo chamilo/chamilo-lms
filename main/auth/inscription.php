@@ -776,8 +776,7 @@ if ($form->validate()) {
                 }
 
                 // 2. set account inactive
-                $sql = "UPDATE $TABLE_USER SET active='0' WHERE user_id = ".$user_id;
-                Database::query($sql);
+                Usermanager::disable($user_id);
 
                 // 3. exit the page
                 unset($user_id);
@@ -788,15 +787,12 @@ if ($form->validate()) {
                 Display::display_footer();
                 exit;
             } elseif (api_get_setting('allow_registration') === 'confirmation') {
-                $TABLE_USER = Database::get_main_table(TABLE_MAIN_USER);
-
                 // 1. Send mail to the user
                 $thisUser = api_get_user_entity($user_id);
                 UserManager::sendUserConfirmationMail($thisUser);
 
                 // 2. set account inactive
-                $sql = "UPDATE $TABLE_USER SET active='0' WHERE user_id = ".$user_id;
-                Database::query($sql);
+                Usermanager::disable($user_id);
 
                 // 3. exit the page
                 unset($user_id);

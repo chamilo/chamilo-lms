@@ -78,7 +78,7 @@ $edit_link = '';
 if ($is_allowed_to_edit && $objExercise->sessionId == $sessionId) {
     $edit_link = Display::url(
         Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),
-        api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$objExercise->id
+        api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
     );
 }
 $iconExercise = Display::return_icon('test-quiz.png', null, array(), ICON_SIZE_MEDIUM);

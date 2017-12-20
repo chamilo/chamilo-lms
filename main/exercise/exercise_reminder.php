@@ -217,7 +217,7 @@ foreach ($question_list as $questionId) {
     $label_attributes['for'] = $check_id;
     $label_attributes['class'] = "checkbox";
     $checkbox = Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes);
-    $url = 'exercise_submit.php?exerciseId='.$objExercise->id.'&num='.$counter.'&reminder=1';
+    $url = 'exercise_submit.php?exerciseId='.$objExercise->id.'&num='.$counter.'&reminder=1&'.api_get_cidreq();
 
     $counter++;
     if ($objExercise->type == ONE_PER_PAGE) {

@@ -246,7 +246,7 @@ if (!$inATest) {
                             [],
                             ICON_SIZE_TINY
                         ),
-                        api_get_self().'?'.api_get_cidreq()
+                        api_get_self().'?'.api_get_cidreq().'&'
                             .http_build_query([
                                 'exerciseId' => $exerciseId,
                                 'deleteQuestion' => $id

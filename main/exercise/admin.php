@@ -205,7 +205,7 @@ if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
         if ($editQuestion) {
             // question not found
             if (!$objQuestion = Question::read($editQuestion)) {
-                api_not_allowed();
+                api_not_allowed(true);
             }
             // saves the object into the session
             Session::write('objQuestion', $objQuestion);
@@ -250,7 +250,7 @@ if (!empty($clone_question) && !empty($objExercise->id)) {
     $old_question_obj = Question::read($clone_question);
     $old_question_obj->question = $old_question_obj->question.' - '.get_lang('Copy');
 
-    $new_id = $old_question_obj->duplicate();
+    $new_id = $old_question_obj->duplicate(api_get_course_info());
     $new_question_obj = Question::read($new_id);
     $new_question_obj->addToList($exerciseId);
 
@@ -285,7 +285,7 @@ if (api_is_in_gradebook()) {
     );
 }
 
-$interbreadcrumb[] = array("url" => "exercise.php", "name" => get_lang('Exercises'));
+$interbreadcrumb[] = array("url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises'));
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
     $interbreadcrumb[] = [
         "url" => "admin.php?exerciseId=".$objExercise->id.'&'.api_get_cidreq(),

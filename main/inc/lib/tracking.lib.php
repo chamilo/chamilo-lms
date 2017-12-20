@@ -48,18 +48,16 @@ class Tracking
         if (empty($course_id)) {
             return null;
         }
-        $course_info = api_get_course_info_by_id($course_id);
-
-
+        $courseInfo = api_get_course_info_by_id($course_id);
         if ($type == 'count') {
-            return GroupManager::get_group_list(null, $course_info, null, $sessionId, true);
+            return GroupManager::get_group_list(null, $courseInfo, null, $sessionId, true);
         }
 
-        $groupList = GroupManager::get_group_list(null, $course_info, null, $sessionId);
+        $groupList = GroupManager::get_group_list(null, $courseInfo, null, $sessionId);
         $parsedResult = array();
         if (!empty($groupList)) {
             foreach ($groupList as $group) {
-                $users = GroupManager::get_users($group['id'], true);
+                $users = GroupManager::get_users($group['id'], true, null, null, false, $courseInfo['real_id']);
                 $time = 0;
                 $avg_student_score = 0;
                 $avg_student_progress = 0;
@@ -69,29 +67,29 @@ class Tracking
                 foreach ($users as $user_data) {
                     $time += self::get_time_spent_on_the_course(
                         $user_data['user_id'],
-                        $course_info['real_id'],
+                        $courseInfo['real_id'],
                         $sessionId
                     );
                     $avg_student_score += self::get_avg_student_score(
                         $user_data['user_id'],
-                        $course_info['code'],
+                        $courseInfo['code'],
                         array(),
                         $sessionId
                     );
                     $avg_student_progress += self::get_avg_student_progress(
                         $user_data['user_id'],
-                        $course_info['code'],
+                        $courseInfo['code'],
                         array(),
                         $sessionId
                     );
                     $work += self::count_student_assignments(
                         $user_data['user_id'],
-                        $course_info['code'],
+                        $courseInfo['code'],
                         $sessionId
                     );
                     $messages += self::count_student_messages(
                         $user_data['user_id'],
-                        $course_info['code'],
+                        $courseInfo['code'],
                         $sessionId
                     );
                 }

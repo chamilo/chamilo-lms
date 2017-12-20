@@ -49,36 +49,16 @@ class Tracking
             return null;
         }
         $course_info = api_get_course_info_by_id($course_id);
-        $table_group = Database::get_course_table(TABLE_GROUP);
 
-        $select = ' * ';
-        if ($type == 'count') {
-            $select = ' count(id) as count ';
-        }
-
-        if (empty($sessionId)) {
-            $default_where = array('c_id = ? AND (session_id = 0 or session_id IS NULL)' => array($course_id));
-        } else {
-            $default_where = array('c_id = ? AND session_id = ? ' => array($course_id, $sessionId));
-        }
-
-        $result = Database::select(
-            $select,
-            $table_group,
-            array(
-                'limit' => " $start, $limit",
-                'where' => $default_where,
-                'order' => "$sidx $sord",
-            )
-        );
 
         if ($type == 'count') {
-            return $result[0]['count'];
+            return GroupManager::get_group_list(null, $course_info, null, $sessionId, true);
         }
 
+        $groupList = GroupManager::get_group_list(null, $course_info, null, $sessionId);
         $parsedResult = array();
-        if (!empty($result)) {
-            foreach ($result as $group) {
+        if (!empty($groupList)) {
+            foreach ($groupList as $group) {
                 $users = GroupManager::get_users($group['id'], true);
                 $time = 0;
                 $avg_student_score = 0;

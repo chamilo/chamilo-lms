@@ -78,15 +78,17 @@ class GroupManager
      * @param int $categoryId The id of the category from which the groups are
      * requested
      * @param array $course_info Default is current course
-     * @param int $status
+     * @param int $status group status
      * @param int $sessionId
+     * @param bool $getCount
      * @return array An array with all information about the groups.
      */
     public static function get_group_list(
         $categoryId = null,
         $course_info = [],
         $status = null,
-        $sessionId = 0
+        $sessionId = 0,
+        $getCount = false
     ) {
         $course_info = empty($course_info) ? api_get_course_info() : $course_info;
         if (empty($course_info)) {
@@ -96,8 +98,7 @@ class GroupManager
         $course_id = $course_info['real_id'];
         $table_group = Database::get_course_table(TABLE_GROUP);
 
-        $sql = "SELECT 
-                    g.id,
+        $select = " g.id,
                     g.iid,
                     g.name,
                     g.description,
@@ -107,7 +108,13 @@ class GroupManager
                     g.self_registration_allowed,
                     g.self_unregistration_allowed,
                     g.session_id,
-                    g.status
+                    g.status";
+        if ($getCount) {
+            $select = " DISTINCT count(g.iid) as count ";
+        }
+
+        $sql = "SELECT 
+                $select    
                 FROM $table_group g
                 WHERE 1 = 1 ";
 
@@ -132,10 +139,15 @@ class GroupManager
         }
         $sql .= "ORDER BY UPPER(g.name)";
 
-        $groupList = Database::query($sql);
+        $result = Database::query($sql);
+
+        if ($getCount) {
+            $row = Database::fetch_array($result);
+            return $row['count'];
+        }
 
         $groups = array();
-        while ($thisGroup = Database::fetch_array($groupList)) {
+        while ($thisGroup = Database::fetch_array($result)) {
             $thisGroup['number_of_members'] = count(self::get_subscribed_users($thisGroup));
             if ($thisGroup['session_id'] != 0) {
                 $sql = 'SELECT name FROM '.Database::get_main_table(TABLE_MAIN_SESSION).'

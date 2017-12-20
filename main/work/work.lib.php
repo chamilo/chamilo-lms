@@ -3843,11 +3843,10 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
  */
 function sendAlertToUsers($workId, $courseInfo, $session_id)
 {
-    $user_list = array();
-    //$workData = get_work_assignment_by_id($workId, $courseInfo['real_id']);
+    $user_list = [];
     $workData = get_work_data_by_id($workId, $courseInfo['real_id'], $session_id);
-    //last value is to check this is not "just" an edit
-    //YW Tis part serve to send a e-mail to the tutors when a new file is sent
+    // last value is to check this is not "just" an edit
+    // YW Tis part serve to send a e-mail to the tutors when a new file is sent
     $send = api_get_course_setting('email_alert_manager_on_new_doc');
 
     if ($send == SEND_EMAIL_EVERYONE || $send == SEND_EMAIL_TEACHERS) {
@@ -3906,13 +3905,22 @@ function sendAlertToUsers($workId, $courseInfo, $session_id)
             $to_user_id = $user_data['user_id'];
             $user_info = api_get_user_info($to_user_id);
             $message = get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$courseInfo['name']."\n";
-            $message .= get_lang('UserName')." : ".api_get_person_name($user_info['firstname'], $user_info['lastname'])."\n";
+            $message .= get_lang('UserName')." : ".$user_info['complete_name']."\n";
             $message .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
             $url = api_get_path(WEB_CODE_PATH)."work/work.php?cidReq=".$courseInfo['code']."&id_session=".$session_id."&id=".$workData['id'];
             $message .= get_lang('WorkName')." : ".$workData['title']."\n\n".'<a href="'.$url.'">'.get_lang('DownloadLink')."</a>\n";
             //$message .= $url;
-            MessageManager::send_message_simple($to_user_id, $subject, $message);
-            api_mail_html(
+            MessageManager::send_message_simple(
+                $to_user_id,
+                $subject,
+                $message,
+                0,
+                false,
+                false,
+                [],
+                false
+            );
+            /*api_mail_html(
                 api_get_person_name(
                     $user_info['firstname'].' '.$user_info['lastname'],
                     null,
@@ -3923,7 +3931,7 @@ function sendAlertToUsers($workId, $courseInfo, $session_id)
                 $message,
                 $senderName,
                 $senderEmail
-            );
+            );*/
         }
     }
 }
@@ -3972,11 +3980,21 @@ function processWorkForm(
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
     $courseId = $courseInfo['real_id'];
-    $groupId = intval($groupId);
-    $sessionId = intval($sessionId);
-    $userId = intval($userId);
+    $groupId = (int) $groupId;
+    $sessionId = (int) $sessionId;
+    $userId = (int) $userId;
 
-    $title = $values['title'].$values['extension'];
+    $extension = '';
+    if (isset($values['extension'])) {
+        $extension = $values['extension'];
+    } else {
+        $fileInfo = pathinfo($values['title']);
+        if (isset($fileInfo['extension']) && !empty($fileInfo['extension'])) {
+            $extension = '.'.$fileInfo['extension'];
+        }
+    }
+
+    $title = $values['title'].$extension;
     $description = $values['description'];
     $contains_file = isset($values['contains_file']) && !empty($values['contains_file']) ? intval($values['contains_file']) : 0;
 

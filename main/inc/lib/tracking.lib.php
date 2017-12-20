@@ -76,7 +76,7 @@ class Tracking
             return $result[0]['count'];
         }
 
-        $parsed_result = array();
+        $parsedResult = array();
         if (!empty($result)) {
             foreach ($result as $group) {
                 $users = GroupManager::get_users($group['id'], true);
@@ -120,7 +120,7 @@ class Tracking
                 $averageProgress = empty($countUsers) ? 0 : round($avg_student_progress / $countUsers, 2);
                 $averageScore = empty($countUsers) ? 0 : round($avg_student_score / $countUsers, 2);
 
-                $group_item = array(
+                $groupItem = array(
                     'id' => $group['id'],
                     'name' => $group['name'],
                     'time' => api_time_to_hms($time),
@@ -129,11 +129,11 @@ class Tracking
                     'works' => $work,
                     'messages' => $messages,
                 );
-                $parsed_result[] = $group_item;
+                $parsedResult[] = $groupItem;
             }
         }
 
-        return $parsed_result;
+        return $parsedResult;
     }
 
     /**
@@ -2559,18 +2559,17 @@ class Tracking
         }
 
         $conditionToString = implode('AND', $conditions);
-        $sql = "
-            SELECT lp_id, view_count, progress 
-            FROM $lpViewTable lp_view
-            WHERE
-                $conditionToString
-                $groupBy
-            ORDER BY view_count DESC
-        ";
+        $sql = "SELECT lp_id, view_count, progress 
+                FROM $lpViewTable lp_view
+                WHERE
+                    $conditionToString
+                    $groupBy
+                ORDER BY view_count DESC";
+
         $result = Database::query($sql);
 
-        $progress = array();
-        $viewCount = array();
+        $progress = [];
+        $viewCount = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             if (!isset($viewCount[$row['lp_id']])) {
                 $progress[$row['lp_id']] = $row['progress'];
@@ -3737,14 +3736,12 @@ class Tracking
             $student_id = intval($student_id);
             $conditions[] = " ip.insert_user_id = '$student_id' ";
         }
-        if (isset($session_id)) {
-            $session_id = intval($session_id);
-            $conditions[] = " pub.session_id = $session_id ";
-        }
 
         $conditions[] = ' pub.active <> 2 ';
+        $conditionToString = implode(' AND ', $conditions);
 
-        $conditionToString = implode('AND', $conditions);
+        $sessionCondition = api_get_session_condition($session_id, true, false, 'pub.session_id');
+        $conditionToString .= $sessionCondition;
 
         $sql = "SELECT count(ip.tool) as count
                 FROM $tbl_item_property ip
@@ -3754,6 +3751,7 @@ class Tracking
                     ip.tool='work' AND
                     $conditionToString";
         $rs = Database::query($sql);
+
         $row = Database::fetch_array($rs, 'ASSOC');
 
         return $row['count'];

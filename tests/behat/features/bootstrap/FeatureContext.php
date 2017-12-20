@@ -29,20 +29,6 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @Given /^I am a session administrator$/
-     */
-    public function iAmASessionAdministrator()
-    {
-        $this->visit('/index.php?logout=logout');
-        $this->iAmOnHomepage();
-        $this->fillFields(new \Behat\Gherkin\Node\TableNode([
-            ['login', 'amaurichard'],
-            ['password', 'amaurichard']
-        ]));
-        $this->pressButton('submitAuth');
-    }
-
-    /**
      * @Given /^I am a teacher$/
      */
     public function iAmATeacher()
@@ -52,17 +38,6 @@ class FeatureContext extends MinkContext
         $this->fillField('login', 'mmosquera');
         $this->fillField('password', 'mmosquera');
         $this->pressButton('submitAuth');
-    }
-
-    /**
-     * @Given /^I am a teacher in course "([^"]*)"$/
-     * @Todo implement
-     */
-    public function iAmATeacherInCourse($course)
-    {
-        //$sql = "SELECT * FROM course_rel_user WHERE c_id = X AND user_id = ";
-        //$result = ...
-        //if ($result !== false) { ... }
     }
 
     /**
@@ -136,18 +111,18 @@ class FeatureContext extends MinkContext
     /**
      * @Given /^I am on course "([^"]*)" homepage$/
      */
-    public function iAmOnCourseXHomepage($argument)
+    public function iAmOnCourseXHomepage($courseCode)
     {
-        $this->visit('/courses/'.$argument.'/index.php');
+        $this->visit('/courses/'.$courseCode.'/index.php');
         $this->assertElementNotOnPage('.alert-danger');
     }
 
     /**
      * @Given /^I am on course "([^"]*)" homepage in session "([^"]*)"$/
      */
-    public function iAmOnCourseXHomepageInSessionY($courseArgument, $sessionArgument)
+    public function iAmOnCourseXHomepageInSessionY($courseCode, $sessionName)
     {
-        $this->visit('/courses/'.$courseArgument.'/index.php?id_session='.$sessionArgument);
+        $this->visit('/main/course_home/redirect.php?cidReq='.$courseCode.'&session_name='.$sessionName);
     }
 
     /**

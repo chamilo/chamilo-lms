@@ -49,5 +49,5 @@ cd tests/behat
 To run an specific feature:
 
 ```
-../../vendor/behat/behat/bin/behat course.feature
+../../vendor/behat/behat/bin/behat features/course.feature
 ```

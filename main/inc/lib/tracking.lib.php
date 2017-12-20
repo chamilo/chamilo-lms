@@ -33,8 +33,8 @@ class Tracking
      */
     public static function get_group_reporting(
         $course_id,
-        $sessionId = null,
-        $group_id = null,
+        $sessionId = 0,
+        $group_id = 0,
         $type = 'all',
         $start = 0,
         $limit = 1000,
@@ -80,7 +80,6 @@ class Tracking
         if (!empty($result)) {
             foreach ($result as $group) {
                 $users = GroupManager::get_users($group['id'], true);
-
                 $time = 0;
                 $avg_student_score = 0;
                 $avg_student_progress = 0;
@@ -90,7 +89,7 @@ class Tracking
                 foreach ($users as $user_data) {
                     $time += self::get_time_spent_on_the_course(
                         $user_data['user_id'],
-                        $course_info['code'],
+                        $course_info['real_id'],
                         $sessionId
                     );
                     $avg_student_score += self::get_avg_student_score(

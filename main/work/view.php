@@ -165,8 +165,10 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
         $tpl->assign('work', $work);
         $tpl->assign('comments', $comments);
 
-        if (isset($work['contains_file'])) {
-            if (isset($work['download_url'])) {
+        $actions = '';
+
+        if (isset($work['contains_file']) && !empty($work['contains_file'])) {
+            if (isset($work['download_url']) && !empty($work['download_url'])) {
                 $actions = Display::url(
                     Display::return_icon(
                         'save.png',
@@ -176,42 +178,43 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                     ),
                     $work['download_url']
                 );
+            }
+        }
 
-                if (!empty($work['url_correction'])) {
-                    $actions .= Display::url(
-                        Display::return_icon(
-                            'check-circle.png',
-                            get_lang('Correction'),
-                            null,
-                            ICON_SIZE_MEDIUM
-                        ),
-                        $work['download_url'].'&correction=1'
-                    );
-                    if (api_is_allowed_to_edit()) {
-                        $actions .= Display::url(
-                            Display::return_icon(
-                                'delete.png',
-                                get_lang('Delete').': '.get_lang('Correction'),
-                                null,
-                                ICON_SIZE_MEDIUM
-                            ),
-                            api_get_self().'?action=delete_correction&id='.$id.'&'.api_get_cidreq()
-                        );
-                    }
-                }
-
-                $tpl->assign(
-                    'actions',
-                    Display::toolbarAction('toolbar', [$actions])
+        if (isset($work['url_correction']) && !empty($work['url_correction']) && !empty($work['download_url'])) {
+            $actions .= Display::url(
+                Display::return_icon(
+                    'check-circle.png',
+                    get_lang('Correction'),
+                    null,
+                    ICON_SIZE_MEDIUM
+                ),
+                $work['download_url'].'&correction=1'
+            );
+            if (api_is_allowed_to_edit()) {
+                $actions .= Display::url(
+                    Display::return_icon(
+                        'delete.png',
+                        get_lang('Delete').': '.get_lang('Correction'),
+                        null,
+                        ICON_SIZE_MEDIUM
+                    ),
+                    api_get_self().'?action=delete_correction&id='.$id.'&'.api_get_cidreq()
                 );
             }
+        }
+
+        if (!empty($actions)) {
+            $tpl->assign(
+                'actions',
+                Display::toolbarAction('toolbar', [$actions])
+            );
         }
 
         if (api_is_allowed_to_session_edit()) {
             $tpl->assign('form', $commentForm);
         }
         $tpl->assign('is_allowed_to_edit', api_is_allowed_to_edit());
-
         $template = $tpl->get_template('work/view.tpl');
         $content = $tpl->fetch($template);
         $tpl->assign('content', $content);

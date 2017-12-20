@@ -16,4 +16,3 @@ $template->assign('course_condition', api_get_cidreq());
 
 header('Content-type: application/x-javascript');
 $template->display($template->get_template('javascript/editor/ckeditor/config_js.tpl'));
-

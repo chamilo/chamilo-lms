@@ -211,7 +211,7 @@ class GradebookDataGenerator
     /**
      * Get best result of an item
      * @param GradebookItem $item
-     * @return string
+     * @return array
      */
     private function buildBestResultColumn(GradebookItem $item)
     {
@@ -243,7 +243,7 @@ class GradebookDataGenerator
     /**
      * @param GradebookItem $item
      *
-     * @return string
+     * @return array
      */
     private function buildAverageResultColumn(GradebookItem $item)
     {
@@ -272,12 +272,13 @@ class GradebookDataGenerator
      * @param int $userId
      * @param int $userCount
      *
-     * @return string
+     * @return array
      */
     private function buildRankingColumn(GradebookItem $item, $userId = null, $userCount = 0)
     {
         $score = $item->calc_score($userId, 'ranking');
         $score[1] = $userCount;
+
 
         $scoreDisplay = null;
         if (isset($score[0])) {
@@ -285,14 +286,16 @@ class GradebookDataGenerator
             $scoreDisplay = $scoreDisplay->display_score(
                 $score,
                 SCORE_DIV,
-                SCORE_BOTH
+                SCORE_BOTH,
+                false,
+                true
             );
         }
 
-        return array(
+        return [
             'display' => $scoreDisplay,
             'score' => $score
-        );
+        ];
     }
 
     /**

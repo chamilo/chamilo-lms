@@ -284,11 +284,16 @@ class ScoreDisplay
      * Formats a number depending of the number of decimals
      *
      * @param float $score
+     * @param bool $ignoreDecimals
      * @return float the score formatted
      */
-    public function format_score($score)
+    public function format_score($score, $ignoreDecimals = false)
     {
-        return api_number_format($score, $this->get_number_decimals());
+        $decimals = $this->get_number_decimals();
+        if ($ignoreDecimals) {
+            $decimals = 0;
+        }
+        return api_number_format($score, $decimals);
     }
 
     /**
@@ -301,6 +306,7 @@ class ScoreDisplay
      * SCORE_BOTH, SCORE_ONLY_DEFAULT, SCORE_ONLY_CUSTOM (default: SCORE_BOTH)
      * (only taken into account if custom score display is enabled and for course/platform admin)
      * @param bool $disableColor
+     * @param bool $ignoreDecimals
      *
      * @return string
      */
@@ -308,7 +314,8 @@ class ScoreDisplay
         $score,
         $type = SCORE_DIV_PERCENT,
         $what = SCORE_BOTH,
-        $disableColor = false
+        $disableColor = false,
+        $ignoreDecimals = false
     ) {
         $my_score = $score == 0 ? 1 : $score;
 
@@ -319,15 +326,15 @@ class ScoreDisplay
         }
 
         if ($type == SCORE_SIMPLE) {
-            $simple_score = $this->format_score($my_score[0]);
-            return $simple_score;
+            $simpleScore = $this->format_score($my_score[0]);
+            return $simpleScore;
         }
 
         if ($this->custom_enabled && isset($this->custom_display_conv)) {
-            $display = $this->display_default($my_score, $type);
+            $display = $this->display_default($my_score, $type, $ignoreDecimals);
         } else {
             // if no custom display set, use default display
-            $display = $this->display_default($my_score, $type);
+            $display = $this->display_default($my_score, $type, $ignoreDecimals);
         }
         if ($this->coloring_enabled && $disableColor == false) {
             $my_score_denom = isset($score[1]) && !empty($score[1]) && $score[1] > 0 ? $score[1] : 1;
@@ -348,13 +355,14 @@ class ScoreDisplay
     /**
      * @param $score
      * @param integer $type
+     * @param bool $ignoreDecimals
      * @return string
      */
-    private function display_default($score, $type)
+    private function display_default($score, $type, $ignoreDecimals = false)
     {
         switch ($type) {
             case SCORE_DIV:                            // X / Y
-                return $this->display_as_div($score);
+                return $this->display_as_div($score, $ignoreDecimals);
             case SCORE_PERCENT:                        // XX %
                 return $this->display_as_percent($score);
             case SCORE_DIV_PERCENT:                    // X / Y (XX %)
@@ -438,16 +446,17 @@ class ScoreDisplay
     /**
      * Returns 10.00 / 10.00 for array("100", "100");
      * @param array $score
+     * @param bool $ignoreDecimals
      *
      * @return string
      */
-    private function display_as_div($score)
+    private function display_as_div($score, $ignoreDecimals = false)
     {
         if ($score == 1) {
             return '0 / 0';
         } else {
-            $score[0] = isset($score[0]) ? $this->format_score($score[0]) : 0;
-            $score[1] = isset($score[1]) ? $this->format_score($score[1]) : 0;
+            $score[0] = isset($score[0]) ? $this->format_score($score[0], $ignoreDecimals) : 0;
+            $score[1] = isset($score[1]) ? $this->format_score($score[1], $ignoreDecimals) : 0;
             return  $score[0].' / '.$score[1];
         }
     }

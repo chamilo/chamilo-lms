@@ -12,10 +12,6 @@ $current_course_tool = TOOL_BLOGS;
 
 $this_section = SECTION_COURSES;
 
-$blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
-
-/* 		ACCESS RIGHTS	 */
-// notice for unauthorized people.
 api_protect_course_script(true);
 
 //	 ONLY USERS REGISTERED IN THE COURSE
@@ -23,22 +19,25 @@ if ((!api_is_allowed_in_course() || !api_is_allowed_in_course()) && !api_is_allo
     api_not_allowed(true); //print headers/footers
 }
 
+$origin = api_get_origin();
+$action = isset($_GET['action']) ? $_GET['action'] : '';
+
 if (api_is_allowed_to_edit()) {
-    $nameTools = get_lang("blog_management");
+    $nameTools = get_lang('blog_management');
 
     // showing the header if we are not in the learning path, if we are in
     // the learning path, we do not include the banner so we have to explicitly
     // include the stylesheet, which is normally done in the header
-    if (empty($_GET['origin']) || $_GET['origin'] != 'learnpath') {
+    if ($origin != 'learnpath') {
         $interbreadcrumb[] = array(
             'url' => 'blog_admin.php?'.api_get_cidreq(),
             'name' => $nameTools,
         );
         $my_url = '';
-        if (isset($_GET['action']) && $_GET['action'] == 'add') {
+        if ($action == 'add') {
             $current_section = get_lang('AddBlog');
             $my_url = 'action=add';
-        } elseif (isset($_GET['action']) && $_GET['action'] == 'edit') {
+        } elseif ($action == 'edit') {
             $current_section = get_lang('EditBlog');
             $my_url = 'action=edit&amp;blog_id='.Security::remove_XSS($_GET['blog_id']);
         }

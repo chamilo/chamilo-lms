@@ -105,15 +105,13 @@ class Blog
         $tbl_blogs = Database::get_course_table(TABLE_BLOGS);
         $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
         $tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
-        $title = Database::escape_string($title);
-        $subtitle = Database::escape_string($subtitle);
 
         //verified if exist blog
         $sql = "SELECT COUNT(*) as count FROM $tbl_blogs
                 WHERE
                     c_id = $course_id AND
-                    blog_name = '$title' AND
-                    blog_subtitle = '$subtitle'";
+                    blog_name = '".Database::escape_string($title)."' AND
+                    blog_subtitle = '".Database::escape_string($subtitle)."'  ";
         $res = Database::query($sql);
         $info_count = Database::result($res, 0, 0);
 
@@ -161,11 +159,19 @@ class Blog
             }
 
             // Put it on course homepage
-            $sql = "INSERT INTO $tbl_tool (c_id, name, link, image, visibility, admin, address, added_tool, session_id, target)
-                    VALUES ($course_id, '$title', 'blog/blog.php?blog_id=$this_blog_id','blog.gif','1','0','pastillegris.gif',0,'$session_id', '')";
-            Database::query($sql);
-
-            $toolId = Database::insert_id();
+            $params = [
+                'c_id' => $course_id,
+                'name' => $title,
+                'link' => 'blog/blog.php?blog_id=$this_blog_id',
+                'image' => 'blog.gif',
+                'visibility' => '1',
+                'admin' => '0',
+                'address' => 'pastillegris.gif',
+                'added_tool' => 0,
+                'session_id' => $session_id,
+                'target' => ''
+            ];
+            $toolId = Database::insert($tbl_tool, $params);
             if ($toolId) {
                 $sql = "UPDATE $tbl_tool SET id = iid WHERE iid = $toolId";
                 Database::query($sql);
@@ -1643,10 +1649,10 @@ class Blog
             global $color2;
 
             $html .= '<div class="actions">';
-            $html .= '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$blog_id.'&do=add">';
+            $html .= '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$blog_id.'&do=add&'.api_get_cidreq().'">';
             $html .= Display::return_icon('blog_newtasks.gif', get_lang('AddTasks'));
             $html .= get_lang('AddTasks').'</a> ';
-            $html .= '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$blog_id.'&do=assign">';
+            $html .= '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$blog_id.'&do=assign&'.api_get_cidreq().'">';
             $html .= Display::return_icon('blog_task.gif', get_lang('AssignTasks'));
             $html .= get_lang('AssignTasks').'</a>';
             $html .= Display::url(
@@ -1685,9 +1691,9 @@ class Blog
             while ($task = Database::fetch_array($result)) {
                 $counter++;
                 $css_class = (($counter % 2) == 0) ? "row_odd" : "row_even";
-                $delete_icon = ($task['system_task'] == '1') ? "delete_na.png" : "delete.png";
-                $delete_title = ($task['system_task'] == '1') ? get_lang('DeleteSystemTask') : get_lang('DeleteTask');
-                $delete_link = ($task['system_task'] == '1') ? '#' : api_get_self().'?action=manage_tasks&blog_id='.$task['blog_id'].'&do=delete&task_id='.$task['task_id'];
+                $delete_icon = $task['system_task'] == '1' ? "delete_na.png" : "delete.png";
+                $delete_title = $task['system_task'] == '1' ? get_lang('DeleteSystemTask') : get_lang('DeleteTask');
+                $delete_link = $task['system_task'] == '1' ? '#' : api_get_self().'?action=manage_tasks&blog_id='.$task['blog_id'].'&do=delete&task_id='.$task['task_id'].'&'.api_get_cidreq();
                 $delete_confirm = ($task['system_task'] == '1') ? '' : 'onclick="javascript:if(!confirm(\''.addslashes(
                         api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)
                     ).'\')) return false;"';
@@ -1697,7 +1703,7 @@ class Blog
                 $html .= '<td>'.Security::remove_XSS($task['description']).'</td>';
                 $html .= '<td><span style="background-color: #'.$task['color'].'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>';
                 $html .= '<td width="50">';
-                $html .= '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$task['blog_id'].'&do=edit&task_id='.$task['task_id'].'">';
+                $html .= '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$task['blog_id'].'&do=edit&task_id='.$task['task_id'].'&'.api_get_cidreq().'">';
                 $html .= Display::return_icon('edit.png', get_lang('EditTask'));
                 $html .= "</a>";
                 $html .= '<a href="'.$delete_link.'"';
@@ -1723,7 +1729,6 @@ class Blog
      */
     public static function displayAssignedTasksList($blog_id)
     {
-        // Init
         $tbl_users = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_blogs_tasks = Database::get_course_table(TABLE_BLOGS_TASKS);
         $tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
@@ -1761,8 +1766,7 @@ class Blog
             $css_class = (($counter % 2) == 0) ? "row_odd" : "row_even";
             $delete_icon = ($assignment['system_task'] == '1') ? "delete_na.png" : "delete.png";
             $delete_title = ($assignment['system_task'] == '1') ? get_lang('DeleteSystemTask') : get_lang('DeleteTask');
-            $delete_link = ($assignment['system_task'] == '1') ? '#' : api_get_self(
-                ).'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=delete&task_id='.$assignment['task_id'];
+            $delete_link = ($assignment['system_task'] == '1') ? '#' : api_get_self().'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=delete&task_id='.$assignment['task_id'].'&'.api_get_cidreq();
             $delete_confirm = ($assignment['system_task'] == '1') ? '' : 'onclick="javascript:if(!confirm(\''.addslashes(
                     api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)
                 ).'\')) return false;"';
@@ -1779,13 +1783,11 @@ class Blog
             $return .= '<td>'.stripslashes($assignment['description']).'</td>';
             $return .= '<td>'.$assignment['target_date'].'</td>';
             $return .= '<td width="50">';
-            $return .= '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=edit_assignment&task_id='.$assignment['task_id'].'&user_id='.$assignment['user_id'].'">';
+            $return .= '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=edit_assignment&task_id='.$assignment['task_id'].'&user_id='.$assignment['user_id'].'&'.api_get_cidreq().'">';
             $return .= Display::return_icon('edit.png', get_lang('EditTask'));
             $return .= "</a>";
-            $return .= '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=delete_assignment&task_id='.$assignment['task_id'].'&user_id='.$assignment['user_id'].'" ';
-            $return .= 'onclick="javascript:if(!confirm(\''.addslashes(
-                    api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)
-                ).'\')) return false;"';
+            $return .= '<a href="'.api_get_self().'?action=manage_tasks&blog_id='.$assignment['blog_id'].'&do=delete_assignment&task_id='.$assignment['task_id'].'&user_id='.$assignment['user_id'].'&'.api_get_cidreq().'" ';
+            $return .= 'onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)).'\')) return false;"';
             $return .= Display::return_icon($delete_icon, $delete_title);
             $return .= "</a>";
             $return .= '</td>';
@@ -2425,12 +2427,15 @@ class Blog
                     );
                     $row[] = $a_infosUser["firstname"];
                 }
-                $row[] = Display::icon_mailto_link($a_infosUser["email"]);
+                $row[] = Display::icon_mailto_link($a_infosUser['email']);
 
-                //Link to register users
-                if ($a_infosUser["user_id"] != api_get_user_id()) {
-                    $row[] = "<a class=\"btn btn-primary \" href=\"".api_get_self()."?action=manage_members&blog_id=$blog_id&register=yes&user_id=".$a_infosUser["user_id"]."\">".
-                        get_lang('Register')."</a>";
+                // Link to register users
+                if ($a_infosUser['user_id'] != api_get_user_id()) {
+                    $row[] = Display::url(
+                        get_lang('Register'),
+                        api_get_self()."?action=manage_members&blog_id=$blog_id&register=yes&user_id=".$a_infosUser["user_id"].'&'.api_get_cidreq(),
+                        ['class' => 'btn btn-primary']
+                    );
                 } else {
                     $row[] = '';
                 }
@@ -2441,11 +2446,11 @@ class Blog
         // Display
         $query_vars['action'] = 'manage_members';
         $query_vars['blog_id'] = $blog_id;
-        $html .= '<form class="form-inline" method="post" action="blog.php?action=manage_members&blog_id='.$blog_id.'">';
+        $html .= '<form class="form-inline" method="post" action="blog.php?action=manage_members&blog_id='.$blog_id.'&'.api_get_cidreq().'">';
         $html .= Display::return_sortable_table($column_header, $user_data, null, null, $query_vars);
-        $link = '';
-        $link .= isset ($_GET['action']) ? 'action='.Security::remove_XSS($_GET['action']).'&' : '';
-        $link .= "blog_id=$blog_id&";
+
+        $link = isset($_GET['action']) ? 'action='.Security::remove_XSS($_GET['action']).'&' : '';
+        $link .= "blog_id=$blog_id&".api_get_cidreq();
 
         $html .= '<a class="btn btn-default" href="blog.php?'.$link.'selectall=subscribe">'.get_lang('SelectAll').'</a> - ';
         $html .= '<a class="btn btn-default" href="blog.php?'.$link.'">'.get_lang('UnSelectAll').'</a> ';
@@ -2552,24 +2557,24 @@ class Blog
             //Link to register users
 
             if ($myrow["user_id"] != $_user['user_id']) {
-                $row[] = "<a class=\"btn btn-primary\" href=\"".api_get_self(
-                    )."?action=manage_members&blog_id=$blog_id&unregister=yes&user_id=".$myrow['user_id']."\">".get_lang(
-                        'UnRegister'
-                    )."</a>";
+                $row[] = Display::url(
+                    get_lang('UnRegister'),
+                    api_get_self()."?action=manage_members&blog_id=$blog_id&unregister=yes&user_id=".$myrow['user_id'].'&'.api_get_cidreq(),
+                    ['class' => 'btn btn-primary']
+                );
             } else {
                 $row[] = '';
             }
-
             $user_data[] = $row;
         }
 
         $query_vars['action'] = 'manage_members';
         $query_vars['blog_id'] = $blog_id;
-        $html .= '<form class="form-inline" method="post" action="blog.php?action=manage_members&blog_id='.$blog_id.'">';
+        $html .= '<form class="form-inline" method="post" action="blog.php?action=manage_members&blog_id='.$blog_id.'&'.api_get_cidreq().'">';
         $html .= Display::return_sortable_table($column_header, $user_data, null, null, $query_vars);
-        $link = '';
-        $link .= isset ($_GET['action']) ? 'action='.Security::remove_XSS($_GET['action']).'&' : '';
-        $link .= "blog_id=$blog_id&";
+
+        $link = isset($_GET['action']) ? 'action='.Security::remove_XSS($_GET['action']).'&' : '';
+        $link .= "blog_id=$blog_id&".api_get_cidreq();
 
         $html .= '<a class="btn btn-default" href="blog.php?'.$link.'selectall=unsubscribe">'.get_lang('SelectAll').'</a> - ';
         $html .= '<a class="btn btn-default" href="blog.php?'.$link.'">'.get_lang('UnSelectAll').'</a> ';

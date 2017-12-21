@@ -111,14 +111,14 @@ if (isset($_POST['assign_task_edit_submit'])) {
     );
 }
 if (!empty($_POST['register'])) {
-    if (is_array($_POST['user'])) {
+    if (isset($_POST['user']) && is_array($_POST['user'])) {
         foreach ($_POST['user'] as $index => $user_id) {
             Blog::subscribeUser((int) $_GET['blog_id'], $user_id);
         }
     }
 }
 if (!empty($_POST['unregister'])) {
-    if (is_array($_POST['user'])) {
+    if (isset($_POST['user']) && is_array($_POST['user'])) {
         foreach ($_POST['user'] as $index => $user_id) {
             Blog::unsubscribeUser($_GET['blog_id'], $user_id);
         }

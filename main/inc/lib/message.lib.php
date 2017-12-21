@@ -126,6 +126,10 @@ class MessageManager
             }
         }
 
+        if (!in_array($column, [0, 1, 2])) {
+            $column = 2;
+        }
+
         $keyword = Session::read('message_search_keyword');
         $keywordCondition = '';
         if (!empty($keyword)) {
@@ -992,6 +996,10 @@ class MessageManager
             if (!in_array($direction, array('ASC', 'DESC'))) {
                 $direction = 'ASC';
             }
+        }
+
+        if (!in_array($column, [0, 1, 2])) {
+            $column = 2;
         }
         $table = Database::get_main_table(TABLE_MESSAGE);
         $request = api_is_xml_http_request();

@@ -64,8 +64,6 @@ class bbb
 
         $bbb_host = !empty($host) ? $host : $this->plugin->get('host');
         $bbb_salt = !empty($salt) ? $salt : $this->plugin->get('salt');
-
-        $this->logoutUrl = $this->getListingUrl();
         $this->table = Database::get_main_table('plugin_bbb_meeting');
         $this->enableGlobalConference = $this->plugin->get('enable_global_conference') === 'true' ? true : false;
         $this->isGlobalConference = (bool) $isGlobalConference;
@@ -111,8 +109,6 @@ class bbb
             } else {
                 $this->userCompleteName = $userInfo['complete_name'];
             }
-
-
             $this->salt = $bbb_salt;
             $info = parse_url($bbb_host);
             $this->url = $bbb_host.'/bigbluebutton/';
@@ -127,6 +123,7 @@ class bbb
 
             $this->api = new BigBlueButtonBN();
             $this->pluginEnabled = true;
+            $this->logoutUrl = $this->getListingUrl();
         }
     }
 

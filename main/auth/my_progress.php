@@ -26,7 +26,7 @@ $(function() {
 
 </script>";
 
-if (api_get_setting('show_tabs', 'reporting') == 'false') {
+if (api_get_configuration_value('block_my_progress_page')) {
     api_not_allowed(true);
 }
 

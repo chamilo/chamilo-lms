@@ -708,6 +708,9 @@ $_configuration['gradebook_badge_sidebar'] = [
 // This service has a cost above 60 minutes of use.
 //$_configuration['translate_app_google_key'] = '';
 
+// Block access to any user to "my progress" page
+//$_configuration['block_my_progress_page'] = false;
+
 
 // ------ Custom DB changes
 // Add user activation by confirmation email

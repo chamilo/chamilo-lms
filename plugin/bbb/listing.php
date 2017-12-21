@@ -1,4 +1,6 @@
 <?php
+/* For license terms, see /license.txt */
+
 /**
  * This script initiates a video conference session, calling the BigBlueButton API
  * @package chamilo.plugin.bigbluebutton
@@ -19,9 +21,9 @@ $tpl = new Template($tool_name);
 
 $isGlobal = isset($_GET['global']) ? true : false;
 $isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id'] : false;
+$action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $bbb = new bbb('', '', $isGlobal, $isGlobalPerUser);
-$action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $conferenceManager = $bbb->isConferenceManager();
 if ($bbb->isGlobalConference()) {

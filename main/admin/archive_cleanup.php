@@ -32,27 +32,23 @@ $form = new FormValidator(
 $form->addButtonSend(get_lang('ArchiveDirCleanupProceedButton'));
 
 if ($form->validate()) {
+    if (function_exists('opcache_reset')) {
+        opcache_reset();
+    }
+
     $archive_path = api_get_path(SYS_ARCHIVE_PATH);
     $htaccess = @file_get_contents($archive_path.'.htaccess');
     $result = rmdirr($archive_path, true, true);
     try {
         \Chamilo\CoreBundle\Composer\ScriptHandler::dumpCssFiles();
+        Display::addFlash(Display::return_message(get_lang('ArchiveDirCleanupSucceeded')));
     } catch (Exception $e) {
+        Display::addFlash(Display::return_message(get_lang('ArchiveDirCleanupFailed'), 'error'));
         error_log($e->getMessage());
     }
 
     if (!empty($htaccess)) {
         @file_put_contents($archive_path.'/.htaccess', $htaccess);
-    }
-
-    if (function_exists('opcache_reset')) {
-        opcache_reset();
-    }
-
-    if ($result) {
-        Display::addFlash(Display::return_message(get_lang('ArchiveDirCleanupSucceeded')));
-    } else {
-        Display::addFlash(Display::return_message(get_lang('ArchiveDirCleanupFailed'), 'error'));
     }
 
     header('Location: '.api_get_self());

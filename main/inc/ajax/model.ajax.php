@@ -1228,28 +1228,49 @@ switch ($action) {
         $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path']."/document";
         $sessionId = api_get_session_id();
 
-        $columns = array(
+        $columns = [
             'firstname',
             'lastname',
-            'username',
-            'session',
-            'session_access_start_date',
-            'exe_date',
-            'score'
-        );
+            'username'
+        ];
+        $extraFieldsToAdd = [];
+        $extraFields = api_get_configuration_value('exercise_category_report_user_extra_fields');
+        if (!empty($extraFields) && isset($extraFields['fields'])) {
+            $extraField = new ExtraField('user');
+            foreach ($extraFields['fields'] as $variable) {
+                $info = $extraField->get_handler_field_info_by_field_variable($variable);
+                if ($info) {
+                    $extraFieldsToAdd[] = $variable;
+                }
+            }
+        }
+        if (!empty($extraFieldsToAdd)) {
+            $columns = array_merge($columns, $extraFieldsToAdd);
+        }
+
+        $columns[] = 'session';
+        $columns[] = 'session_access_start_date';
+        $columns[] = 'exe_date';
+        $columns[] = 'score';
 
         if ($operation == 'excel') {
-            $columns = array(
+            $columns = [
                 'firstname',
                 'lastname',
-                'username',
-                'session',
-                'session_access_start_date',
-                'exe_date',
-                'score_percentage',
-                'only_score',
-                'total'
-            );
+                'username'
+            ];
+
+            if (!empty($extraFieldsToAdd)) {
+                $columns = array_merge($columns, $extraFieldsToAdd);
+            }
+
+            $columns[] = 'session';
+            $columns[] = 'session_access_start_date';
+            $columns[] = 'exe_date';
+            $columns[] = 'score_percentage';
+            $columns[] = 'only_score';
+            $columns[] = 'total';
+
             $overwriteColumnHeaderExport['session_access_start_date'] = get_lang('SessionStartDate');
             $overwriteColumnHeaderExport['exe_date'] = get_lang('StartDate');
             $overwriteColumnHeaderExport['score_percentage'] = get_lang('Score');
@@ -1262,7 +1283,6 @@ switch ($action) {
         if (!empty($categoryList)) {
             foreach ($categoryList as $categoryInfo) {
                 $label = 'category_'.$categoryInfo['id'];
-
                 if ($operation == 'excel') {
                     $columns[] = $label.'_score_percentage';
                     $columns[] = $label.'_only_score';
@@ -1292,7 +1312,7 @@ switch ($action) {
             $courseInfo['code'],
             true,
             true,
-            !empty($sessionId)
+            $extraFieldsToAdd
         );
         break;
     case 'get_hotpotatoes_exercise_results':

@@ -711,6 +711,9 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Block access to any user to "my progress" page
 //$_configuration['block_my_progress_page'] = false;
 
+// Add user extra fields in report: main/mySpace/exercise_category_report.php
+//$_configuration['exercise_category_report_user_extra_fields'] = ['fields' => ['skype', 'rssfeeds']];
+
 
 // ------ Custom DB changes
 // Add user activation by confirmation email

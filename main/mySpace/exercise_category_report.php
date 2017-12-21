@@ -82,6 +82,8 @@ $form->addButtonSearch(get_lang('Search'));
 Display::display_header($nameTools);
 $form->display();
 
+$extraFields = api_get_configuration_value('exercise_category_report_user_extra_fields');
+
 if ($form->validate() && !empty($courseInfo)) {
     $values = $form->getSubmitValues();
     $exerciseId = isset($values['exercise_id']) ? $values['exercise_id'] : 0;
@@ -93,12 +95,23 @@ if ($form->validate() && !empty($courseInfo)) {
     $columns = [
         get_lang('FirstName'),
         get_lang('LastName'),
-        get_lang('LoginName'),
-        get_lang('Session'),
-        get_lang('SessionStartDate'),
-        get_lang('StartDate'),
-        get_lang('Score')
+        get_lang('LoginName')
     ];
+
+    if (!empty($extraFields) && isset($extraFields['fields'])) {
+        $extraField = new ExtraField('user');
+        foreach ($extraFields['fields'] as $variable) {
+            $info = $extraField->get_handler_field_info_by_field_variable($variable);
+            if ($info) {
+                $columns[] = $info['display_text'];
+            }
+        }
+    }
+
+    $columns[] = get_lang('Session');
+    $columns[] = get_lang('SessionStartDate');
+    $columns[] = get_lang('StartDate');
+    $columns[] = get_lang('Score');
 
     if (!empty($categoryList)) {
         foreach ($categoryList as $categoryInfo) {
@@ -109,18 +122,64 @@ if ($form->validate() && !empty($courseInfo)) {
 
     $columnModel = [
         ['name' => 'firstname', 'index' => 'firstname', 'width' => '50', 'align' => 'left', 'search' => 'true'],
-        ['name' => 'lastname', 'index' => 'lastname', 'width' => '50', 'align' => 'left', 'formatter' => 'action_formatter', 'search' => 'true'],
-        ['name' => 'login', 'index' => 'username', 'width' => '40', 'align' => 'left', 'search' => 'true', 'hidden' => 'true'],
-        ['name' => 'session', 'index' => 'session', 'width' => '40', 'align' => 'left', 'search' => 'false'],
         [
-            'name' => 'session_access_start_date',
-            'index' => 'session_access_start_date',
+            'name' => 'lastname',
+            'index' => 'lastname',
             'width' => '50',
-            'align' => 'center',
+            'align' => 'left',
+            'formatter' => 'action_formatter',
             'search' => 'true',
         ],
-        ['name' => 'exe_date', 'index' => 'exe_date', 'width' => '60', 'align' => 'left', 'search' => 'true'],
-        ['name' => 'score', 'index' => 'exe_result', 'width' => '50', 'align' => 'center', 'search' => 'true'],
+        [
+            'name' => 'login',
+            'index' => 'username',
+            'width' => '40',
+            'align' => 'left',
+            'search' => 'true',
+            'hidden' => 'true',
+        ],
+    ];
+
+    if (!empty($extraFields) && isset($extraFields['fields'])) {
+        $extraField = new ExtraField('user');
+        foreach ($extraFields['fields'] as $variable) {
+            $columnModel[] = [
+                'name' => $variable,
+                'index' => $variable,
+                'width' => '40',
+                'align' => 'left',
+                'search' => 'false',
+            ];
+        }
+    }
+
+    $columnModel[] = [
+        'name' => 'session',
+        'index' => 'session',
+        'width' => '40',
+        'align' => 'left',
+        'search' => 'false',
+    ];
+    $columnModel[] = [
+        'name' => 'session_access_start_date',
+        'index' => 'session_access_start_date',
+        'width' => '50',
+        'align' => 'center',
+        'search' => 'true',
+    ];
+    $columnModel[] = [
+        'name' => 'exe_date',
+        'index' => 'exe_date',
+        'width' => '60',
+        'align' => 'left',
+        'search' => 'true',
+    ];
+    $columnModel[] = [
+        'name' => 'score',
+        'index' => 'exe_result',
+        'width' => '50',
+        'align' => 'center',
+        'search' => 'true',
     ];
 
     if (!empty($categoryList)) {

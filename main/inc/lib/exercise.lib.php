@@ -1660,6 +1660,7 @@ HOTSPOT;
      * @param string $courseCode
      * @param bool $showSessionField
      * @param bool $showExerciseCategories
+     * @param array $userExtraFieldsToAdd
      *
      * @return array
      */
@@ -1673,7 +1674,8 @@ HOTSPOT;
         $get_count = false,
         $courseCode = null,
         $showSessionField = false,
-        $showExerciseCategories = false
+        $showExerciseCategories = false,
+        $userExtraFieldsToAdd = []
     ) {
         //@todo replace all this globals
         global $documentPath, $filter;
@@ -1954,7 +1956,7 @@ HOTSPOT;
             $oldIds = array_column($lp_list, 'lp_old_id', 'iid');
 
             if (is_array($results)) {
-                $users_array_id = array();
+                $users_array_id = [];
                 $from_gradebook = false;
                 if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
                     $from_gradebook = true;
@@ -2045,24 +2047,18 @@ HOTSPOT;
                     $dt = api_convert_and_format_date($results[$i]['exe_weighting']);
 
                     // we filter the results if we have the permission to
+                    $result_disabled = 0;
                     if (isset($results[$i]['results_disabled'])) {
                         $result_disabled = intval(
                             $results[$i]['results_disabled']
                         );
-                    } else {
-                        $result_disabled = 0;
                     }
-
                     if ($result_disabled == 0) {
                         $my_res = $results[$i]['exe_result'];
                         $my_total = $results[$i]['exe_weighting'];
 
-                        $results[$i]['start_date'] = api_get_local_time(
-                            $results[$i]['start_date']
-                        );
-                        $results[$i]['exe_date'] = api_get_local_time(
-                            $results[$i]['exe_date']
-                        );
+                        $results[$i]['start_date'] = api_get_local_time($results[$i]['start_date']);
+                        $results[$i]['exe_date'] = api_get_local_time($results[$i]['exe_date']);
 
                         if (!$results[$i]['propagate_neg'] && $my_res < 0) {
                             $my_res = 0;
@@ -2218,6 +2214,20 @@ HOTSPOT;
                             $actions .= $attempt_link;
                         }
                         $actions .= '</div>';
+
+                        if (!empty($userExtraFieldsToAdd)) {
+                            foreach ($userExtraFieldsToAdd as $variable) {
+                                $extraFieldValue = new ExtraFieldValue('user');
+                                $values = $extraFieldValue->get_values_by_handler_and_field_variable(
+                                    $results[$i]['user_id'],
+                                    $variable
+                                );
+                                if (isset($values['value'])) {
+                                    $results[$i][$variable] = $values['value'];
+                                }
+                            }
+                        }
+
                         $exeId = $results[$i]['exe_id'];
                         $results[$i]['id'] = $exeId;
                         $category_list = [];

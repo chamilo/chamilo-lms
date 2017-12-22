@@ -300,11 +300,9 @@ if (!empty($coaches)) {
     $html .= $coaches;
 }
 
-if (!api_get_configuration_value('hide_reporting_session_list') &&
-    (api_is_platform_admin(true) || api_is_session_general_coach())
-) {
+$showReporting = api_get_configuration_value('hide_reporting_session_list') === false;
+if ($showReporting) {
     $sessionList = SessionManager::get_session_by_course($courseInfo['real_id']);
-
     if (!empty($sessionList)) {
         $html .= Display::page_subheader2(get_lang('SessionList'));
         $icon = Display::return_icon(

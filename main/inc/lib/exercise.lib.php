@@ -132,8 +132,8 @@ class ExerciseLib
                 $x = 1;
                 //mark letters for each answer
                 $letter = 'A';
-                $answer_matching = array();
-                $cpt1 = array();
+                $answer_matching = [];
+                $cpt1 = [];
                 for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                     $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                     $numAnswer = $objAnswerTmp->selectAutoId($answerId);
@@ -292,8 +292,6 @@ class ExerciseLib
                     $objQuestionTmp->selectDescription()
                 );
                 $hidingClass = 'hide-reading-answers';
-            }
-            if ($answerType == READING_COMPREHENSION) {
                 $s .= Display::div(
                     $objQuestionTmp->selectTitle(),
                     ['class' => 'question_title '.$hidingClass]
@@ -305,7 +303,7 @@ class ExerciseLib
                 $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                 $numAnswer = $objAnswerTmp->selectAutoId($answerId);
                 $comment = $objAnswerTmp->selectComment($answerId);
-                $attributes = array();
+                $attributes = [];
 
                 switch ($answerType) {
                     case UNIQUE_ANSWER:
@@ -592,16 +590,16 @@ class ExerciseLib
                         $listAnswerInfo = FillBlanks::getAnswerInfo($answer);
 
                         // Correct answers
-                        $correctAnswerList = $listAnswerInfo['tabwords'];
+                        $correctAnswerList = $listAnswerInfo['words'];
 
                         // Student's answer
-                        $studentAnswerList = array();
+                        $studentAnswerList = [];
                         if (isset($user_choice[0]['answer'])) {
                             $arrayStudentAnswer = FillBlanks::getAnswerInfo(
                                 $user_choice[0]['answer'],
                                 true
                             );
-                            $studentAnswerList = $arrayStudentAnswer['studentanswer'];
+                            $studentAnswerList = $arrayStudentAnswer['student_answer'];
                         }
 
                         // If the question must be shown with the answer (in page exercise/admin.php) for teacher preview
@@ -613,18 +611,18 @@ class ExerciseLib
 
                         if (!empty($correctAnswerList) && !empty($studentAnswerList)) {
                             $answer = '';
-                            for ($i = 0; $i < count($listAnswerInfo['commonwords']) - 1; $i++) {
+                            for ($i = 0; $i < count($listAnswerInfo['common_words']) - 1; $i++) {
                                 // display the common word
-                                $answer .= $listAnswerInfo['commonwords'][$i];
+                                $answer .= $listAnswerInfo['common_words'][$i];
                                 // display the blank word
-                                $correctItem = $listAnswerInfo['tabwords'][$i];
+                                $correctItem = $listAnswerInfo['words'][$i];
                                 if (isset($studentAnswerList[$i])) {
                                     // If student already started this test and answered this question,
                                     // fill the blank with his previous answers
                                     // may be "" if student viewed the question, but did not fill the blanks
                                     $correctItem = $studentAnswerList[$i];
                                 }
-                                $attributes['style'] = "width:".$listAnswerInfo['tabinputsize'][$i]."px";
+                                $attributes['style'] = "width:".$listAnswerInfo['input_size'][$i]."px";
                                 $answer .= FillBlanks::getFillTheBlankHtml(
                                     $current_item,
                                     $questionId,
@@ -637,15 +635,15 @@ class ExerciseLib
                                 );
                             }
                             // display the last common word
-                            $answer .= $listAnswerInfo['commonwords'][$i];
+                            $answer .= $listAnswerInfo['common_words'][$i];
                         } else {
                             // display empty [input] with the right width for student to fill it
                             $answer = '';
-                            for ($i = 0; $i < count($listAnswerInfo['commonwords']) - 1; $i++) {
+                            for ($i = 0; $i < count($listAnswerInfo['common_words']) - 1; $i++) {
                                 // display the common words
-                                $answer .= $listAnswerInfo['commonwords'][$i];
+                                $answer .= $listAnswerInfo['common_words'][$i];
                                 // display the blank word
-                                $attributes["style"] = "width:".$listAnswerInfo['tabinputsize'][$i]."px";
+                                $attributes['style'] = "width:".$listAnswerInfo['input_size'][$i]."px";
                                 $answer .= FillBlanks::getFillTheBlankHtml(
                                     $current_item,
                                     $questionId,
@@ -658,7 +656,7 @@ class ExerciseLib
                                 );
                             }
                             // display the last common word
-                            $answer .= $listAnswerInfo['commonwords'][$i];
+                            $answer .= $listAnswerInfo['common_words'][$i];
                         }
                         $s .= $answer;
                         break;
@@ -3946,25 +3944,23 @@ EOT;
     /**
      * Display the exercise results
      * @param Exercise $objExercise
-     * @param int $exe_id
+     * @param int $exeId
      * @param bool $save_user_result save users results (true) or just show the results (false)
      * @param string $remainingMessage
      */
     public static function displayQuestionListByAttempt(
         $objExercise,
-        $exe_id,
+        $exeId,
         $save_user_result = false,
         $remainingMessage = ''
     ) {
         $origin = api_get_origin();
 
         // Getting attempt info
-        $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id(
-            $exe_id
-        );
+        $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
 
         // Getting question list
-        $question_list = array();
+        $question_list = [];
         if (!empty($exercise_stat_info['data_tracking'])) {
             $question_list = explode(',', $exercise_stat_info['data_tracking']);
         } else {
@@ -4078,6 +4074,7 @@ EOT;
         $exerciseResult = null;
         $exerciseResultCoordinates = null;
         $delineationResults = null;
+
         if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
             $loadChoiceFromSession = true;
             $fromDatabase = false;
@@ -4091,9 +4088,8 @@ EOT;
         // Loop over all question to show results for each of them, one by one
         if (!empty($question_list)) {
             foreach ($question_list as $questionId) {
-                // creates a temporary Question object
+                // Creates a temporary Question object
                 $objQuestionTmp = Question::read($questionId);
-
                 // This variable came from exercise_submit_modal.php
                 ob_start();
                 $choice = null;
@@ -4105,7 +4101,7 @@ EOT;
 
                 // We're inside *one* question. Go through each possible answer for this question
                 $result = $objExercise->manage_answer(
-                    $exe_id,
+                    $exeId,
                     $questionId,
                     $choice,
                     'exercise_result',
@@ -4169,17 +4165,16 @@ EOT;
                     $category_list['none']['total'] += $my_total_weight;
                 }
 
-                if ($objExercise->selectPropagateNeg() == 0 &&
-                    $my_total_score < 0
-                ) {
+                if ($objExercise->selectPropagateNeg() == 0 && $my_total_score < 0) {
                     $my_total_score = 0;
                 }
 
                 $comnt = null;
                 if ($show_results) {
-                    $comnt = Event::get_comments($exe_id, $questionId);
+                    $comnt = Event::get_comments($exeId, $questionId);
+
                     $teacherAudio = ExerciseLib::getOralFeedbackAudio(
-                        $exe_id,
+                        $exeId,
                         $questionId,
                         api_get_user_id()
                     );
@@ -4197,6 +4192,7 @@ EOT;
                     }
                 }
 
+                $score = [];
                 if ($show_results) {
                     $score = [
                         'result' => self::show_score(
@@ -4208,10 +4204,8 @@ EOT;
                         'pass' => $my_total_score >= $my_total_weight ? true : false,
                         'score' => $my_total_score,
                         'weight' => $my_total_weight,
-                        'comments' => $comnt,
+                        'comments' => $comnt
                     ];
-                } else {
-                    $score = [];
                 }
 
                 if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
@@ -4238,7 +4232,10 @@ EOT;
                     $question_content .= '</div>';
                 }
                 if (!$show_only_score) {
-                    $exercise_content .= Display::div(Display::panel($question_content),array('class' => 'question-panel'));
+                    $exercise_content .= Display::div(
+                        Display::panel($question_content),
+                        ['class' => 'question-panel']
+                    );
                 }
             } // end foreach() block that loops over all questions
         }
@@ -4258,10 +4255,10 @@ EOT;
 
         if (!empty($category_list) && ($show_results || $show_only_score)) {
             // Adding total
-            $category_list['total'] = array(
+            $category_list['total'] = [
                 'score' => $total_score,
                 'total' => $total_weight
-            );
+            ];
             echo TestCategory::get_stats_table_by_attempt(
                 $objExercise->id,
                 $category_list
@@ -4323,7 +4320,7 @@ EOT;
                     'end',
                     $question_list_answers,
                     $origin,
-                    $exe_id,
+                    $exeId,
                     $total_score,
                     $total_weight
                 );

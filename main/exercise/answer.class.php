@@ -345,6 +345,7 @@ class Answer
     /**
      * return array answer by id else return a bool
      * @param integer $auto_id
+     * @return array
      */
     public function selectAnswerByAutoId($auto_id)
     {
@@ -492,7 +493,7 @@ class Answer
      *
      * @author Olivier Brouckaert
      * @param - integer $id - answer ID
-     * @param integer $id
+
      * @return integer - answer weighting
      */
     public function selectWeighting($id)

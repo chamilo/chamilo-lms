@@ -270,10 +270,10 @@ switch ($action) {
             $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
 
             // Attempt id.
-            $exe_id = $_REQUEST['exe_id'];
+            $exeId = $_REQUEST['exe_id'];
 
             if ($debug) {
-                error_log("exe_id = $exe_id");
+                error_log("exe_id = $exeId");
                 error_log("type = $type");
                 error_log("choice = ".print_r($choice, 1)." ");
                 error_log("hot_spot_coordinates = ".print_r($hot_spot_coordinates, 1));
@@ -303,18 +303,18 @@ switch ($action) {
             }
 
             // Getting information of the current exercise.
-            $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+            $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
             $exercise_id = $exercise_stat_info['exe_exo_id'];
-            $attemptList = array();
+            $attemptList = [];
 
             // First time here we create an attempt (getting the exe_id).
             if (!empty($exercise_stat_info)) {
                 // We know the user we get the exe_id.
-                $exe_id = $exercise_stat_info['exe_id'];
+                $exeId = $exercise_stat_info['exe_id'];
                 $total_score = $exercise_stat_info['exe_result'];
 
                 // Getting the list of attempts
-                $attemptList = Event::getAllExerciseEventByExeId($exe_id);
+                $attemptList = Event::getAllExerciseEventByExeId($exeId);
             }
 
             // Updating Reminder algorithm.
@@ -341,7 +341,7 @@ switch ($action) {
             }
 
             // No exe id? Can't save answer.
-            if (empty($exe_id)) {
+            if (empty($exeId)) {
                 // Fires an error.
                 echo 'error';
                 if ($debug) {
@@ -350,7 +350,7 @@ switch ($action) {
                 exit;
             }
 
-            Session::write('exe_id', $exe_id);
+            Session::write('exe_id', $exeId);
 
             // Getting the total weight if the request is simple
             $total_weight = 0;
@@ -383,9 +383,7 @@ switch ($action) {
                 $objQuestionTmp = Question::read($my_question_id, $course_id);
 
                 // Getting free choice data.
-                if (($objQuestionTmp->type == FREE_ANSWER || $objQuestionTmp->type == ORAL_EXPRESSION) &&
-                    $type == 'all'
-                ) {
+                if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION]) && $type == 'all') {
                     $my_choice = isset($_REQUEST['free_choice'][$my_question_id]) && !empty($_REQUEST['free_choice'][$my_question_id])
                         ? $_REQUEST['free_choice'][$my_question_id]
                         : null;
@@ -402,20 +400,19 @@ switch ($action) {
                 ) {
                     $hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];
                 }
-
                 if ($type == 'simple') {
                     // Getting old attempt in order to decrees the total score.
                     $old_result = $objExercise->manage_answer(
-                        $exe_id,
+                        $exeId,
                         $my_question_id,
                         null,
                         'exercise_show',
-                        array(),
+                        [],
                         false,
                         true,
                         false,
                         $objExercise->selectPropagateNeg(),
-                        array()
+                        []
                     );
 
                     // Removing old score.
@@ -425,10 +422,10 @@ switch ($action) {
                 // Deleting old attempt
                 if (isset($attemptList) && !empty($attemptList[$my_question_id])) {
                     if ($debug) {
-                        error_log("delete_attempt  exe_id : $exe_id, my_question_id: $my_question_id");
+                        error_log("delete_attempt  exe_id : $exeId, my_question_id: $my_question_id");
                     }
                     Event::delete_attempt(
-                        $exe_id,
+                        $exeId,
                         api_get_user_id(),
                         $course_id,
                         $session_id,
@@ -436,7 +433,7 @@ switch ($action) {
                     );
                     if ($objQuestionTmp->type == HOT_SPOT) {
                         Event::delete_attempt_hotspot(
-                            $exe_id,
+                            $exeId,
                             api_get_user_id(),
                             $course_id,
                             $session_id,
@@ -453,7 +450,7 @@ switch ($action) {
 
                 // We're inside *one* question. Go through each possible answer for this question
                 $result = $objExercise->manage_answer(
-                    $exe_id,
+                    $exeId,
                     $my_question_id,
                     $my_choice,
                     'exercise_result',
@@ -477,7 +474,7 @@ switch ($action) {
                 $now = time();
 
                 if ($type == 'all') {
-                    $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
+                    $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
                 }
 
                 $key = ExerciseLib::get_time_control_key(
@@ -501,7 +498,7 @@ switch ($action) {
                 $_SESSION['duration_time'][$key] = time();
 
                 Event::updateEventExercise(
-                    $exe_id,
+                    $exeId,
                     $objExercise->selectId(),
                     $total_score,
                     $total_weight,

@@ -326,7 +326,7 @@ class ScoreDisplay
         }
 
         if ($type == SCORE_SIMPLE) {
-            $simpleScore = $this->format_score($my_score[0]);
+            $simpleScore = $this->format_score($my_score[0], $ignoreDecimals);
             return $simpleScore;
         }
 

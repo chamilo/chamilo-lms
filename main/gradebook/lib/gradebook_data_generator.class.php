@@ -148,7 +148,6 @@ class GradebookDataGenerator
                     $ranking = $this->buildRankingColumn($item, $userId, $userCount);
                     $row['ranking'] = $ranking['display'];
                     $row['ranking_score'] = $ranking['score'];
-
                     $row[] = $item;
                 }
             } else {
@@ -196,6 +195,7 @@ class GradebookDataGenerator
                     $score,
                     SCORE_DIV,
                     SCORE_BOTH,
+                    true,
                     true
                 );
                 if ($invalidateResults) {
@@ -278,8 +278,6 @@ class GradebookDataGenerator
     {
         $score = $item->calc_score($userId, 'ranking');
         $score[1] = $userCount;
-
-
         $scoreDisplay = null;
         if (isset($score[0])) {
             $scoreDisplay = ScoreDisplay::instance();

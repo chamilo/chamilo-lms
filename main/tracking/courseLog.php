@@ -91,7 +91,7 @@ $columnsToHideFromSetting = api_get_configuration_value('course_log_hide_columns
 $columnsToHide = empty($columnsToHideFromSetting) ? array(0, 8, 9, 10, 11) : $columnsToHideFromSetting;
 $columnsToHide = json_encode($columnsToHide);
 
-$csv_content = array();
+$csv_content = [];
 // Scripts for reporting array hide/show columns
 $js = "<script>
     // hide column and display the button to unhide it
@@ -124,21 +124,14 @@ $js = "<script>
     $(document).ready( function() {
         init_hide();
         var columnsToHide = ".$columnsToHide.";
-        columnsToHide.forEach(function(id) {
-            foldup(id);
-        });
+        if (columnsToHide) {
+            columnsToHide.forEach(function(id) {
+                foldup(id);
+            });
+        }
     })
 </script>";
-
-$htmlHeadXtra[] = "<style type='text/css'>
-    .secLine {background-color : #E6E6E6;}
-    .content {padding-left : 15px;padding-right : 15px; }
-    .specialLink{color : #0000FF;}
-    div#reporting_table table th {
-      vertical-align:top;
-    }
-</style>";
-$htmlHeadXtra[] .= $js;
+$htmlHeadXtra[] = $js;
 
 // Database table definitions.
 //@todo remove this calls
@@ -245,9 +238,9 @@ $form_search = new FormValidator(
     array(),
     FormValidator::LAYOUT_INLINE
 );
-$form_search->addElement('hidden', 'from', Security::remove_XSS($from));
-$form_search->addElement('hidden', 'session_id', $sessionId);
-$form_search->addElement('hidden', 'id_session', $sessionId);
+$form_search->addHidden('from', Security::remove_XSS($from));
+$form_search->addHidden('session_id', $sessionId);
+$form_search->addHidden('id_session', $sessionId);
 $form_search->addElement('text', 'user_keyword');
 $form_search->addButtonSearch(get_lang('SearchUsers'));
 echo Display::toolbarAction(

@@ -198,7 +198,7 @@ $_configuration['system_stable'] = NEW_VERSION_STABLE;
 // 'french' => array('format' => 'title last_name first_name', 'sort_by' => 'last_name')
 //);
 // Course log - Default columns to hide
-//$_configuration['course_log_hide_columns'] = array(1, 9);
+//$_configuration['course_log_hide_columns'] = ['columns' => [1, 9]];
 // Unoconv binary file
 //$_configuration['unoconv.binaries'] = '/usr/bin/unoconv';
 // Proxy settings for access external services

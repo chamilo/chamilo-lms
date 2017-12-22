@@ -14,14 +14,14 @@ services:
     - mysql
 
 sudo: required
-dist: trusty
+dist: xenial
 cache:
   directories:
     - $HOME/.composer/cache/files
 
 php:
   #- 5.4 // Removed because of Chash dependencies on PHP 5.5
-  - 5.5
+  #- 5.5 // Removed because official support ended in 2016
   - 5.6
   - 7.0
   - 7.1

@@ -1519,13 +1519,14 @@ class Display
         if ($tools) {
             foreach ($tools as $tool) {
                 $toolName = $tool['name'];
+                $toolName = Database::escape_string($toolName);
                 // Fix to get student publications
                 $toolCondition = " tool = '$toolName' AND ";
                 if ($toolName == 'student_publication' || $toolName == 'work') {
                     $toolCondition = " (tool = 'work' OR tool = 'student_publication') AND ";
                 }
 
-                $toolName = addslashes(Database::escape_string($toolName));
+                $toolName = addslashes($toolName);
 
                 $sql = "SELECT * FROM $tool_edit_table 
                         WHERE

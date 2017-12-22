@@ -3,9 +3,9 @@ language: php
 addons:
     apt:
         packages:
-        - apache2
+        #- apache2
         - postfix
-        - libapache2-mod-fastcgi
+        #- libapache2-mod-fastcgi
         - libappindicator1
         - fonts-liberation
     chrome: stable
@@ -33,6 +33,8 @@ env:
     - CHAMILO_VERSION=1.11.x
 
 before_install:
+  - sudo apt-get update
+  - sudo apt-get install apache2 libapache2-mod-fastcgi
   # Fix travis error https://github.com/travis-ci/travis-ci/issues/8607
   - sudo rm -vf /etc/apt/sources.list.d/*riak*
   # Get Chrome

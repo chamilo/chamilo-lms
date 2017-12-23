@@ -107,7 +107,7 @@
         "jeroendesloovere/vcard": "^1.2",
         "knplabs/doctrine-behaviors": "~1.1",
         "jimmiw/php-time-ago": "^0.4.14",
-        "phpoffice/phpword": "^0.12.1|dev-master",
+        "phpoffice/phpword": "^0.13.0",
         "facebook/php-sdk-v4": "~5.0",
         "kigkonsult/icalcreator": "2.22.5",
         "essence/essence": "2.6.1",

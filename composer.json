@@ -96,7 +96,7 @@
         "patchwork/utf8": "~1.2",
         "ddeboer/data-import": "@stable",
         "phpoffice/phpexcel": "~1.8",
-        "webit/eval-math": "dev-master",
+        "webit/eval-math": "1.0.1",
         "clue/graph": "~0.9.0",
         "graphp/graphviz": "~0.2.0",
         "graphp/algorithms": "~0.8.0",

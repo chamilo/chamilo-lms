@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\UserBundle\Entity\User as UserEntity;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 
 $cidReset = true;
@@ -16,7 +16,7 @@ if (!isset($_REQUEST['u'])) {
 
 $em = Database::getManager();
 $relationsRepo = $em->getRepository('ChamiloCoreBundle:UserRelUser');
-/** @var User $user */
+/** @var UserEntity $user */
 $user = UserManager::getManager()->find($_REQUEST['u']);
 
 if (!$user) {
@@ -29,7 +29,7 @@ $hrmOptions = [];
 
 /** @var UserRelUser $subscribedUser */
 foreach ($subscribedUsers as $subscribedUser) {
-    /** @var User $hrm */
+    /** @var UserEntity $hrm */
     $hrm = UserManager::getManager()->find($subscribedUser->getFriendUserId());
 
     if (!$hrm) {
@@ -64,7 +64,7 @@ if ($form->validate()) {
     $values = $form->exportValues();
 
     foreach ($values['hrm'] as $hrmId) {
-        /** @var User $hrm */
+        /** @var UserEntity $hrm */
         $hrm = UserManager::getManager()->find($hrmId);
 
         if (!$hrm) {

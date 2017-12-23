@@ -112,7 +112,7 @@
         "kigkonsult/icalcreator": "2.22.5",
         "essence/essence": "2.6.1",
         "chamilo/pclzip": "^2.8",
-        "chamilo/chash": "dev-master",
+        "chamilo/chash": "0.1.0",
         "paragonie/random-lib": "2.0.0",
         "ocramius/proxy-manager": "~1.0|2.0.*",
         "culqi/culqi-php": "v1.3.3",

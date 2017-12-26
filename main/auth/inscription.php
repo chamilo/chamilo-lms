@@ -131,6 +131,7 @@ $form = new FormValidator('registration');
 $user_already_registered_show_terms = false;
 if (api_get_setting('allow_terms_conditions') == 'true') {
     $user_already_registered_show_terms = isset($_SESSION['term_and_condition']['user_id']);
+    // Ofaj change
     if (api_is_anonymous() === true) {
         $user_already_registered_show_terms = false;
     }

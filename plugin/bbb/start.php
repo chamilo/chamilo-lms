@@ -1,10 +1,12 @@
 <?php
+/* For license terms, see /license.txt */
+
 /**
  * This script initiates a video conference session, calling the BigBlueButton API
  * @package chamilo.plugin.bigbluebutton
  */
 
-require __DIR__.'/../../vendor/autoload.php';
+require_once __DIR__.'/../../vendor/autoload.php';
 
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 require_once __DIR__.'/config.php';
@@ -18,6 +20,13 @@ $salt = '';
 $isGlobal = isset($_GET['global']) ? true : false;
 $isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id'] : false;
 $bbb = new bbb('', '', $isGlobal, $isGlobalPerUser);
+
+$conferenceManager = $bbb->isConferenceManager();
+if ($bbb->isGlobalConference()) {
+    api_block_anonymous_users();
+} else {
+    api_protect_course_script(true);
+}
 
 if ($bbb->pluginEnabled) {
     if ($bbb->isServerRunning()) {
@@ -55,9 +64,15 @@ if ($bbb->pluginEnabled) {
             }
 
             $meetingInfo = $bbb->findMeetingByName($meetingParams['meeting_name']);
+            if (!empty($meetingInfo)) {
+                $bbb->saveParticipant($meetingInfo['id'], api_get_user_id());
+                $bbb->redirectToBBB($url);
+            } else {
+                $url = $bbb->getListingUrl();
+                header('Location: '.$url);
+                exit;
+            }
 
-            $bbb->saveParticipant($meetingInfo['id'], api_get_user_id());
-            $bbb->redirectToBBB($url);
         } else {
             $url = $bbb->getListingUrl();
             header('Location: '.$url);

@@ -129,10 +129,6 @@ $(document).ready(function() {
 var chamilo_xajax_handler = window.oxajax;
 </script>';
 
-if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_frame() == 1) {
-    $htmlHeadXtra[] = '';
-}
-
 // Impress js
 if ($_SESSION['oLP']->mode == 'impress') {
     $lp_id = $_SESSION['oLP']->get_id();
@@ -380,7 +376,7 @@ $_SESSION['loaded_lp_view'] = true;
 $display_none = '';
 $margin_left = '340px';
 
-//Media player code
+// Media player code
 $display_mode = $_SESSION['oLP']->mode;
 $scorm_css_header = true;
 $lp_theme_css = $_SESSION['oLP']->get_theme();
@@ -514,7 +510,6 @@ $template->assign('jquery_ui_js_web_path', api_get_jquery_ui_js_web_path());
 $template->assign('jquery_ui_css_web_path', api_get_jquery_ui_css_web_path());
 $template->assign('is_allowed_to_edit', $is_allowed_to_edit);
 $template->assign('gamification_mode', $gamificationMode);
-//$template->assign('breadcrumb', $breadcrumb);
 $template->assign('button_home_url', $buttonHomeUrl);
 $template->assign('button_home_text', $buttonHomeText);
 $template->assign('navigation_bar', $navigation_bar);
@@ -523,7 +518,6 @@ $template->assign('show_audio_player', $show_audioplayer);
 $template->assign('media_player', $mediaplayer);
 $template->assign('toc_list', $get_toc_list);
 $template->assign('teacher_toc_buttons', $get_teacher_buttons);
-
 $template->assign('iframe_src', $src);
 $template->assign('navigation_bar_bottom', $navigation_bar_bottom);
 

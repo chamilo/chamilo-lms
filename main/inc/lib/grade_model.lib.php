@@ -51,17 +51,17 @@ class GradeModel extends Model
     /**
      * Displays the title + grid
      */
-	public function display()
+    public function display()
     {
-		// action links
-		echo '<div class="actions" style="margin-bottom:20px">';
+        // action links
+        echo '<div class="actions" style="margin-bottom:20px">';
         echo '<a href="grade_models.php">'.
                 Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
-		echo '<a href="'.api_get_self().'?action=add">'.
+        echo '<a href="'.api_get_self().'?action=add">'.
                 Display::return_icon('add.png', get_lang('Add'), '', ICON_SIZE_MEDIUM).'</a>';
-		echo '</div>';
+        echo '</div>';
         echo Display::grid_html('grade_model');
-	}
+    }
 
     /**
      * Returns a Form validator Obj
@@ -81,10 +81,10 @@ class GradeModel extends Model
         if ($action == 'edit') {
             $header = get_lang('Modify');
         }
-
-        $form->addElement('header', $header);
         $id = isset($_GET['id']) ? intval($_GET['id']) : '';
-        $form->addElement('hidden', 'id', $id);
+
+        $form->addHeader($header);
+        $form->addHidden('id', $id);
         $form->addText('name', get_lang('Name'));
         $form->addHtmlEditor(
             'description',
@@ -281,7 +281,6 @@ class GradeModel extends Model
             }
             $form->addElement('select', $name, get_lang('GradeModel'), $grade_model_options);
             $default_platform_setting = api_get_setting('gradebook_default_grade_model_id');
-
             $default = -1;
 
             if ($default_platform_setting == -1) {

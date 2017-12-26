@@ -477,14 +477,14 @@ class MessageManager
                 $user_list = $usergroup->get_users_by_group(
                     $group_id,
                     false,
-                    array(),
+                    [],
                     0,
                     1000
                 );
 
                 // Adding more sense to the message group
                 $subject = sprintf(get_lang('ThereIsANewMessageInTheGroupX'), $group_info['name']);
-                $new_user_list = array();
+                $new_user_list = [];
                 foreach ($user_list as $user_data) {
                     $new_user_list[] = $user_data['id'];
                 }
@@ -886,7 +886,7 @@ class MessageManager
                     msg_status NOT IN ('".MESSAGE_STATUS_OUTBOX."', '".MESSAGE_STATUS_DELETED."')
                 ORDER BY id";
         $rs = Database::query($sql);
-        $data = array();
+        $data = [];
         if (Database::num_rows($rs) > 0) {
             while ($row = Database::fetch_array($rs, 'ASSOC')) {
                 $data[] = $row;
@@ -915,8 +915,8 @@ class MessageManager
                 ORDER BY id ";
 
         $rs = Database::query($sql);
-        $data = array();
-        $parents = array();
+        $data = [];
+        $parents = [];
         if (Database::num_rows($rs) > 0) {
             while ($row = Database::fetch_array($rs, 'ASSOC')) {
                 if ($message_id == $row['parent_id'] || in_array($row['parent_id'], $parents)) {
@@ -963,7 +963,7 @@ class MessageManager
                     $condition_group_id
                 ORDER BY send_date DESC $condition_limit ";
         $rs = Database::query($sql);
-        $data = array();
+        $data = [];
         if (Database::num_rows($rs) > 0) {
             while ($row = Database::fetch_array($rs)) {
                 $data[$row['id']] = $row;
@@ -1275,7 +1275,7 @@ class MessageManager
 
         if (is_array($rows) && count($rows) > 0) {
             // prepare array for topics with its items
-            $topics = array();
+            $topics = [];
             $x = 0;
             foreach ($rows as $index => $value) {
                 if (empty($value['parent_id'])) {
@@ -1283,7 +1283,7 @@ class MessageManager
                 }
             }
 
-            $new_topics = array();
+            $new_topics = [];
 
             foreach ($topics as $id => $value) {
                 $rows = null;
@@ -1297,7 +1297,7 @@ class MessageManager
                 $new_topics[$id] = $value;
             }
 
-            $array_html = array();
+            $array_html = [];
             foreach ($new_topics as $index => $topic) {
                 $html = '';
                 // topics
@@ -1338,10 +1338,10 @@ class MessageManager
                 $date = '';
                 if ($topic['send_date'] != $topic['update_date']) {
                     if (!empty($topic['update_date'])) {
-                        $date .= '<i class="fa fa-calendar"></i> '.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']);
+                        $date .= '<i class="fa fa-calendar"></i> '.get_lang('LastUpdate').' '.Display::dateToStringAgoAndLongDate($topic['update_date']);
                     }
                 } else {
-                    $date .= '<i class="fa fa-calendar"></i> '.get_lang('Created').' '.date_to_str_ago($topic['send_date']);
+                    $date .= '<i class="fa fa-calendar"></i> '.get_lang('Created').' '.Display::dateToStringAgoAndLongDate($topic['send_date']);
                 }
                 $html .= '<div class="date">'.$label.' - '.$date.$actions.'</div>';
                 $html .= '</div>';
@@ -1363,7 +1363,7 @@ class MessageManager
             // grids for items and topics  with paginations
             $html_messages .= Display::return_sortable_grid(
                 'topics',
-                array(),
+                [],
                 $array_html,
                 array(
                     'hide_navigation' => false,
@@ -1432,15 +1432,7 @@ class MessageManager
                 'items_page_nr' => $items_page_nr,
                 'topic_id' => $main_message['id']
             ]);
-            if (api_is_platform_admin()) {
-                $links .= Display::url(
-                    Display::returnFontAwesomeIcon('trash'),
-                    'group_topics.php?action=delete&id='.$group_id.'&topic_id='.$topic_id,
-                    [
-                        'class' => 'btn btn-default'
-                    ]
-                );
-            }
+
             $links .= Display::url(
                 Display::returnFontAwesomeIcon('pencil'),
                 $urlEdit,
@@ -1475,6 +1467,17 @@ class MessageManager
                 'data-size' => 'lg'
             ]
         );
+
+        if (api_is_platform_admin()) {
+            $links .= Display::url(
+                Display::returnFontAwesomeIcon('trash'),
+                'group_topics.php?action=delete&id='.$group_id.'&topic_id='.$topic_id,
+                [
+                    'class' => 'btn btn-default'
+                ]
+            );
+        }
+
         $links .= '</div>';
         $links .= '</div>';
 
@@ -1493,13 +1496,13 @@ class MessageManager
             if (!empty($main_message['update_date'])) {
                 $date = '<div class="date"> '.
                     Display::returnFontAwesomeIcon('calendar').' '.get_lang('LastUpdate').' '.
-                    date_to_str_ago($main_message['update_date']).
+                    Display::dateToStringAgoAndLongDate($main_message['update_date']).
                     '</div>';
             }
         } else {
             $date = '<div class="date"> '.
                 Display::returnFontAwesomeIcon('calendar').' '.get_lang('Created').' '.
-                date_to_str_ago($main_message['send_date']).
+                Display::dateToStringAgoAndLongDate($main_message['send_date']).
                 '</div>';
         }
         $attachment = '<div class="message-attach">'.(!empty($files_attachments) ? implode('<br />', $files_attachments) : '').'</div>';
@@ -1524,7 +1527,7 @@ class MessageManager
 
         if (is_array($rows) && count($rows) > 0) {
             $topics = $rows;
-            $array_html_items = array();
+            $array_html_items = [];
             foreach ($topics as $index => $topic) {
                 if (empty($topic['id'])) {
                     continue;
@@ -1553,19 +1556,22 @@ class MessageManager
                 $user_link = '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp</a>';
                 $html_items .= '<div class="row">';
                 $html_items .= '<div class="col-md-2">';
-                $html_items .= '<div class="avatar-author"><img width="60px" src="'.$userPicture.'" alt="'.$name.'" class="img-responsive img-circle" title="'.$name.'" /></div>';
+                $html_items .= '<div class="avatar-author">';
+                $html_items .= '<img width="60px" src="'.$userPicture.'" alt="'.$name.'" class="img-responsive img-circle" title="'.$name.'" /></div>';
                 $html_items .= '</div>';
 
                 $date = '';
                 if ($topic['send_date'] != $topic['update_date']) {
                     if (!empty($topic['update_date'])) {
                         $date = '<div class="date"> '.
-                            Display::returnFontAwesomeIcon('calendar').' '.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).
+                            Display::returnFontAwesomeIcon('calendar').' '.
+                            get_lang('LastUpdate').' '.Display::dateToStringAgoAndLongDate($topic['update_date']).
                         '</div>';
                     }
                 } else {
                     $date = '<div class="date"> '.
-                            Display::returnFontAwesomeIcon('calendar').get_lang('Created').' '.date_to_str_ago($topic['send_date']).
+                        Display::returnFontAwesomeIcon('calendar').
+                        get_lang('Created').' '.Display::dateToStringAgoAndLongDate($topic['send_date']).
                     '</div>';
                 }
                 $attachment = '<div class="message-attach">'.(!empty($files_attachments) ? implode('<br />', $files_attachments) : '').'</div>';
@@ -1604,7 +1610,7 @@ class MessageManager
             if (!empty($array_html_items)) {
                 $html .= Display::return_sortable_grid(
                     'items_'.$topic['id'],
-                    array(),
+                    [],
                     $array_html_items,
                     $options,
                     $query_vars,
@@ -1626,13 +1632,13 @@ class MessageManager
      */
     public static function calculate_children($rows, $first_seed)
     {
-        $rows_with_children = array();
+        $rows_with_children = [];
         foreach ($rows as $row) {
             $rows_with_children[$row["id"]] = $row;
             $rows_with_children[$row["parent_id"]]["children"][] = $row["id"];
         }
         $rows = $rows_with_children;
-        $sorted_rows = array(0 => array());
+        $sorted_rows = array(0 => []);
         self::message_recursive_sort($rows, $sorted_rows, $first_seed);
         unset($sorted_rows[0]);
 
@@ -1685,14 +1691,13 @@ class MessageManager
      */
     public static function get_links_message_attachment_files($messageId, $type = '')
     {
-        $tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
+        $table = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
         $messageId = intval($messageId);
 
         // get file attachments by message id
-        $links_attach_file = array();
+        $links_attach_file = [];
         if (!empty($messageId)) {
-
-            $sql = "SELECT * FROM $tbl_message_attach
+            $sql = "SELECT * FROM $table
                     WHERE message_id = '$messageId'";
 
             $rs_file = Database::query($sql);
@@ -1727,7 +1732,7 @@ class MessageManager
                     id = '$messageId' AND 
                     msg_status <> '".MESSAGE_STATUS_DELETED."' ";
         $res = Database::query($sql);
-        $item = array();
+        $item = [];
         if (Database::num_rows($res) > 0) {
             $item = Database::fetch_array($res, 'ASSOC');
         }
@@ -1761,7 +1766,7 @@ class MessageManager
      * @param array $params
      * @return string
      */
-    public static function generate_invitation_form($id, $params = array())
+    public static function generate_invitation_form($id, $params = [])
     {
         $form = new FormValidator('send_invitation');
         $form->addTextarea(

@@ -102,14 +102,14 @@ class SocialManager extends UserManager
      */
     public static function getCountFriends($userId)
     {
-        $tbl_my_friend = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+        $table = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $userId = (int) $userId;
         if (empty($userId)) {
             return 0;
         }
 
         $sql = 'SELECT count(friend_user_id) count
-                FROM '.$tbl_my_friend.'
+                FROM '.$table.'
                 WHERE
                     relation_type NOT IN ('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.') AND
                     friend_user_id<>'.($userId).' AND

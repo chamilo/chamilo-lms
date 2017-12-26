@@ -1510,7 +1510,7 @@ class TicketManager
             } else {
                 $row['assignuser'] = get_lang('Unassign');
             }
-            $row['assigned_date'] = date_to_str_ago($row['assigned_date']);
+            $row['assigned_date'] = Display::dateToStringAgoAndLongDate($row['assigned_date']);
             $insertuser = api_get_user_info($row['sys_insert_user_id']);
             $row['insertuser'] = '<a href="'.$webpath.'main/admin/user_information.php?user_id='.$row['sys_insert_user_id'].'"  target="_blank">'.
                 $insertuser['username'].'</a>';

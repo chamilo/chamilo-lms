@@ -13,9 +13,9 @@ class CourseCategory
      */
     public static function getCategoryById($categoryId)
     {
-        $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $categoryId = intval($categoryId);
-        $sql = "SELECT * FROM $tbl_category WHERE id = $categoryId";
+        $sql = "SELECT * FROM $table WHERE id = $categoryId";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             return Database::fetch_array($result, 'ASSOC');
@@ -31,9 +31,9 @@ class CourseCategory
      */
     public static function getCategory($category)
     {
-        $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $category = Database::escape_string($category);
-        $sql = "SELECT * FROM $tbl_category WHERE code ='$category'";
+        $sql = "SELECT * FROM $table WHERE code ='$category'";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             return Database::fetch_array($result, 'ASSOC');
@@ -102,19 +102,19 @@ class CourseCategory
      */
     public static function addNode($code, $name, $canHaveCourses, $parent_id)
     {
-        $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $code = trim($code);
         $name = trim($name);
         $parent_id = trim($parent_id);
 
         $code = CourseManager::generate_course_code($code);
-        $sql = "SELECT 1 FROM $tbl_category
+        $sql = "SELECT 1 FROM $table
                 WHERE code = '".Database::escape_string($code)."'";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             return false;
         }
-        $result = Database::query("SELECT MAX(tree_pos) AS maxTreePos FROM $tbl_category");
+        $result = Database::query("SELECT MAX(tree_pos) AS maxTreePos FROM $table");
         $row = Database::fetch_array($result);
         $tree_pos = $row['maxTreePos'] + 1;
 
@@ -128,7 +128,7 @@ class CourseCategory
             'auth_cat_child' => 'TRUE'
         ];
 
-        $categoryId = Database::insert($tbl_category, $params);
+        $categoryId = Database::insert($table, $params);
 
         self::updateParentCategoryChildrenCount($parent_id, 1);
         self::addToUrl($categoryId);
@@ -143,11 +143,11 @@ class CourseCategory
      */
     public static function updateParentCategoryChildrenCount($categoryId, $delta = 1)
     {
-        $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $categoryId = Database::escape_string($categoryId);
         $delta = intval($delta);
         // First get to the highest level possible in the tree
-        $result = Database::query("SELECT parent_id FROM $tbl_category WHERE code = '$categoryId'");
+        $result = Database::query("SELECT parent_id FROM $table WHERE code = '$categoryId'");
         $row = Database::fetch_array($result);
         if ($row !== false and $row['parent_id'] != 0) {
             // if a parent was found, enter there to see if he's got one more parent
@@ -156,10 +156,10 @@ class CourseCategory
         // Now we're at the top, get back down to update each child
         //$children_count = courseCategoryChildrenCount($categoryId);
         if ($delta >= 0) {
-            $sql = "UPDATE $tbl_category SET children_count = (children_count + $delta)
+            $sql = "UPDATE $table SET children_count = (children_count + $delta)
                 WHERE code = '$categoryId'";
         } else {
-            $sql = "UPDATE $tbl_category SET children_count = (children_count - ".abs($delta).")
+            $sql = "UPDATE $table SET children_count = (children_count - ".abs($delta).")
                 WHERE code = '$categoryId'";
         }
         Database::query($sql);
@@ -244,7 +244,7 @@ class CourseCategory
      */
     public static function moveNodeUp($code, $tree_pos, $parent_id)
     {
-        $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $code = Database::escape_string($code);
         $tree_pos = intval($tree_pos);
         $parent_id = Database::escape_string($parent_id);
@@ -255,7 +255,7 @@ class CourseCategory
         }
 
         $sql = "SELECT code,tree_pos
-                FROM $tbl_category
+                FROM $table
                 WHERE
                     tree_pos < $tree_pos
                     $parentIdCondition
@@ -265,7 +265,7 @@ class CourseCategory
         $result = Database::query($sql);
         if (!$row = Database::fetch_array($result)) {
             $sql = "SELECT code, tree_pos
-                    FROM $tbl_category
+                    FROM $table
                     WHERE
                         tree_pos > $tree_pos
                         $parentIdCondition
@@ -277,12 +277,12 @@ class CourseCategory
             }
         }
 
-        $sql = "UPDATE $tbl_category
+        $sql = "UPDATE $table
                 SET tree_pos ='".$row['tree_pos']."'
                 WHERE code='$code'";
         Database::query($sql);
 
-        $sql = "UPDATE $tbl_category
+        $sql = "UPDATE $table
                 SET tree_pos = '$tree_pos'
                 WHERE code= '".$row['code']."'";
         Database::query($sql);
@@ -298,19 +298,19 @@ class CourseCategory
      */
     public static function courseCategoryChildrenCount($categoryId)
     {
-        $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $categoryId = intval($categoryId);
         $count = 0;
         if (empty($categoryId)) {
             return 0;
         }
-        $sql = "SELECT id, code FROM $tbl_category 
+        $sql = "SELECT id, code FROM $table 
                 WHERE parent_id = $categoryId";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             $count += self::courseCategoryChildrenCount($row['id']);
         }
-        $sql = "UPDATE $tbl_category SET 
+        $sql = "UPDATE $table SET 
                     children_count = $count 
                 WHERE id = $categoryId";
         Database::query($sql);
@@ -325,9 +325,9 @@ class CourseCategory
      */
     public static function getChildren($categoryCode)
     {
-        $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $categoryCode = Database::escape_string($categoryCode);
-        $sql = "SELECT code, id FROM $tbl_category 
+        $sql = "SELECT code, id FROM $table 
                 WHERE parent_id = '$categoryCode'";
         $result = Database::query($sql);
         $children = [];
@@ -351,10 +351,10 @@ class CourseCategory
             return [];
         }
 
-        $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $categoryCode = Database::escape_string($categoryCode);
         $sql = "SELECT code, parent_id 
-                FROM $tbl_category
+                FROM $table
                 WHERE code = '$categoryCode'";
 
         $result = Database::query($sql);
@@ -481,8 +481,8 @@ class CourseCategory
      */
     public static function getCategoriesToDisplayInHomePage()
     {
-        $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT name FROM $tbl_category
+        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $sql = "SELECT name FROM $table
                 WHERE parent_id IS NULL
                 ORDER BY tree_pos";
 

@@ -162,7 +162,7 @@ class Blog
             $params = [
                 'c_id' => $course_id,
                 'name' => $title,
-                'link' => 'blog/blog.php?blog_id=$this_blog_id',
+                'link' => 'blog/blog.php?blog_id='.$this_blog_id,
                 'image' => 'blog.gif',
                 'visibility' => '1',
                 'admin' => '0',

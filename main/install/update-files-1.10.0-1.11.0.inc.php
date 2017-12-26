@@ -44,6 +44,23 @@ if (defined('SYSTEM_INSTALLATION')) {
         @rrmdir($skypePluginPath);
     }
 
+    // Some entities have been removed in 1.11. Delete the corresponding files
+    $entitiesToRemove = [
+        api_get_path(SYS_PATH).'src/CoreBundle/Entity/Groups.php',
+        api_get_path(SYS_PATH).'src/CoreBundle/Entity/GroupRelGroup.php',
+        api_get_path(SYS_PATH).'src/CoreBundle/Entity/GroupRelTag.php',
+        api_get_path(SYS_PATH).'src/CoreBundle/Entity/GroupRelUser.php'
+    ];
+    foreach ($entitiesToRemove as $entity) {
+        if (file_exists($entity)) {
+            $success = unlink($entity);
+            if (!$success) {
+                error_log('Could not delete '.$entity.', probably due to permissions. Please delete manually to avoid entities inconsistencies');
+            }
+        }
+    }
+
+
     if ($debug) {
         error_log('Folders cleaned up');
     }

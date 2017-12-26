@@ -1434,7 +1434,8 @@ class IndexManager
 
             // Declared listSession variable
             $listSession = [];
-            $session_now = time();
+            // Get timestamp in UTC to compare to DB values (in UTC by convention)
+            $session_now = strtotime(api_get_utc_datetime(time()));
             if (is_array($session_categories)) {
                 foreach ($session_categories as $session_category) {
                     $session_category_id = $session_category['session_category']['id'];

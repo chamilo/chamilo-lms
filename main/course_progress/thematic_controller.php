@@ -68,6 +68,7 @@ class ThematicController
                                     $action = 'thematic_details';
                                     $thematic_id = null;
                                 }
+                                Display::addFlash(Display::return_message(get_lang('Updated')));
                             }
                         } else {
                             $error = true;
@@ -94,6 +95,7 @@ class ThematicController
                         if (api_is_allowed_to_edit(null, true)) {
                             $thematic_ids = $_POST['id'];
                             $thematic->delete($thematic_ids);
+                            Display::addFlash(Display::return_message(get_lang('Deleted')));
                         }
                         $action = 'thematic_details';
                     }
@@ -103,6 +105,7 @@ class ThematicController
                     if (isset($thematic_id)) {
                         if (api_is_allowed_to_edit(null, true)) {
                             $thematic->delete($thematic_id);
+                            Display::addFlash(Display::return_message(get_lang('Deleted')));
                         }
                         $thematic_id = null;
                         $action = 'thematic_details';
@@ -543,6 +546,7 @@ class ThematicController
                     if (api_is_allowed_to_edit(null, true)) {
                         $thematic->thematic_advance_destroy($thematic_advance_id);
                     }
+                    Display::addFlash(Display::return_message(get_lang('Deleted')));
                     header('Location: index.php');
                     exit;
                 }

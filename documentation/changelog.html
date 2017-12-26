@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="../web/assets/bootstrap/dist/css/bootstrap.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+    <script src="../web/assets/jquery/dist/jquery.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -32,8 +33,34 @@
         </div><!--/.nav-collapse -->
     </div>
 </nav>
+<style>
+    .version h1 {
+        padding-top: 60px;
 
-<div class="container">
+    }
+
+</style>
+
+<script>
+    $(document).ready(function() {
+        var versionList = '';
+        $('.version').each(function( index ) {
+
+            var version = $(this).attr('aria-label');
+            var title = $(this).find('h1').text();
+
+            var link = $("<a/>", {
+                text: title,
+                "title": title,
+                "href": "#"+version
+            });
+            $("#index").append('<br/>').append(link);
+        });
+
+    });
+</script>
+
+<div class="container"><div class="row"><div class="col-md-12">
 
 <ul class="breadcrumb">
     <li>
@@ -68,8 +95,7 @@
     be seen for confidentiality reasons, but the code change is public and can
     be reviewed by anyone <a href="https://github.com/chamilo/chamilo-lms/commits">on Github</a>.</i>
 </p>
-<p>&nbsp;</p>
-
+    <div id="index"></div>
     <div class="version" aria-role="article" aria-label="1.11.6">
     <a name="1.11.6"></a>
 
@@ -1125,7 +1151,6 @@
 
     <h3>Web services</h3>
     <ul aria-role="log" aria-live="off">
-
     </ul>
 
     <h3>Removals</h3>
@@ -1164,8 +1189,8 @@
     </ul>
     </div>
 
+    <div class="version" aria-role="article" aria-label="1.11.4">
     <a name="1.11.4"></a>
-
     <h1>Chamilo 1.11.4 - Uyuni, 31st of May 2017</h1>
     <h3>Release notes - summary</h3>
     <p>Chamilo 1.11.4 is a minor, bugfix release of the 1.11.x branch, with a large number of bugfixes on top of 1.11.2.</p>
@@ -2415,10 +2440,10 @@
         <li>Encoding issues when importing accentuated characters from MS-Office-generated .xlsx files (for example when importing exercises). This isn't really a Chamilo issue, but since some users might have issues with that, we've decided to report it to avoid any surprise.</li>
         <li>The text-to-speech providers are not supporting a free option anymore, making this feature non-functional - see <a href="https://github.com/chamilo/chamilo-lms/issues/1956">#1956</a></li>
     </ul>
+    </div>
 
-
+    <div class="version" aria-role="article" aria-label="1.11.2">
     <a name="1.11.2"></a>
-
     <h1>Chamilo 1.11.2 - Bari, 1st of November 2016</h1>
     <h3>Release notes - summary</h3>
     <p>Chamilo 1.11.2 is a minor, bugfix release of the 1.11.x branch, with a few bugfixes on top of 1.11.0.</p>
@@ -2524,10 +2549,10 @@
         <li>The Xapian search module is broken. We'll fix that soon, but not a lot of people use it</li>
         <li>Encoding issues when importing accentuated characters from MS-Office-generated .xlsx files (for example when importing exercises). This isn't really a Chamilo issue, but since some users might have issues with that, we've decided to report it to avoid any surprise.</li>
     </ul>
+    </div>
 
-
+    <div class="version" aria-role="article" aria-label="1.11.0">
     <a name="1.11.0"></a>
-
     <h1>Chamilo 1.11.0 - Lecce, 17th of October 2016</h1>
     <h3>Release notes - summary</h3>
     <p>Chamilo 1.11.0 is a major release of the 1.11.x branch. It is meant as a transition between 1.10 and 2.0 versions.</p>
@@ -3971,8 +3996,10 @@
         <li>Encoding issues when importing accentuated characters from MS-Office-generated .xlsx files (for example when importing exercises). This isn't really a Chamilo issue, but since some users might have issues with that, we've decided to report it to avoid any surprise.</li>
     </ul>
 
-    <a name="1.10.8"></a>
+    </div>
 
+    <div class="version" aria-role="article" aria-label="1.10.8">
+    <a name="1.10.8"></a>
     <h1>Chamilo 1.10.8 - Vilcashuamán, 22nd of July 2016</h1>
     <h3>Release notes - summary</h3>
     <p>Chamilo 1.10.8 is a minor, bugfix release of the 1.10.x branch, with a few new features and bugfixes on top of 1.10.6.</p>
@@ -4085,10 +4112,10 @@
         <li>The Xapian search module is broken. We'll fix that soon, but not a lot of people use it</li>
         <li>Encoding issues when importing accentuated characters from MS-Office-generated .xlsx files (for example when importing exercises). This isn't really a Chamilo issue, but since some users might have issues with that, we've decided to report it to avoid any surprise.</li>
     </ul>
+    </div>
 
-
+    <div class="version" aria-role="article" aria-label="1.10.6">
     <a name="1.10.6"></a>
-
     <h1>Chamilo 1.10.6 - Zacatecas, 24th of May 2016</h1>
     <h3>Release notes - summary</h3>
     <p>Chamilo 1.10.6 is a minor, bugfix release of the 1.10.x branch, with a few new features and bugfixes on top of 1.10.4.</p>
@@ -4311,9 +4338,10 @@
         <li>The Xapian search module is broken. We'll fix that soon, but not a lot of people use it</li>
         <li>Encoding issues when importing accentuated characters from MS-Office-generated .xlsx files (for example when importing exercises). This isn't really a Chamilo issue, but since some users might have issues with that, we've decided to report it to avoid any surprise.</li>
     </ul>
+    </div>
 
+    <div class="version" aria-role="article" aria-label="1.10.4">
     <a name="1.10.4"></a>
-
     <h1>Chamilo 1.10.4 - Bath, 22th of March 2016</h1>
     <h3>Release notes - summary</h3>
     <p>Chamilo 1.10.4 is a minor, bugfix release of the 1.10.x branch, with a few new features and bugfixes on top of 1.10.2.</p>
@@ -4642,9 +4670,10 @@
         <li>IMS/QTI import/export has issues</li>
         <li>In Internet Explorer 9, learning paths might not show other pages than the first to be opened. We lacked computers with IE9 at the time of release of 1.10.4. Guaranteeing IE9 support will likely require additional services. See <a href="https://support.chamilo.org/issues/8075">the corresponding bug report</a></li>
     </ul>
+    </div>
 
+    <div class="version" aria-role="article" aria-label="1.10.2">
     <a  name="1.10.2"></a>
-
     <h1>Chamilo 1.10.2 - Alsted, 22nd of December 2015</h1>
     <h3>Release notes - summary</h3>
     <p>Chamilo 1.10.2 is a minor, bugfix version of the 1.10.x branch, with a few new features and  bugfixes on top of 1.10.0. Notably, this version enables the migration from 1.9.x to 1.10.2 (many bugs were reported in the migration from 1.9.x to 1.10.0, which were fixed within the 2 months to this minor version).</p>
@@ -4871,8 +4900,9 @@
         <li>When returning to a sentence-ordering question type from a further question in a test, the previously-selected order does not appear (but is saved as the student initially answeres)</li>
         <li>IMS/QTI import/export has issues</li>
     </ul>
+    </div>
 
-
+    <div class="version" aria-role="article" aria-label="1.10.0">
 <a  name="1.10.0"></a>
 
 <h1>Chamilo 1.10.0 - San Juan, 16th of October 2015</h1>
@@ -5842,7 +5872,9 @@
 <ul>
   <li>The hotspot question type is broken due to changes in the underlying Chamilo code. Given the fact this question type is developed in Flash and none of the developers at the time of release had Adobe CS available (proprietary technology that requires compilation) we have been unable to update the corresponding Flash code. Work is under way to provide the same feature using only HTML5, but it is likely to appear in a corrective version for 1.10.0. If you have an urgent need for this feature, please contact an official provider to get this sorted: providers@chamilo.org</li>
 </ul>
+    </div>
 
+    <div class="version" aria-role="article" aria-label="1.9.10.2">
 <a  name="1.9.10.2"></a>
 
 <h1>Chamilo 1.9.10.2 - Sipán, 19th of March, 2015</h1>
@@ -5913,8 +5945,10 @@
   <li>(<a href="https://github.com/chamilo/chamilo-lms/commit/2fd2c2b7a4284204138662bd432a7301c625579d">2fd2c2b7</a> - <a href="https://task.beeznest.com/issues/9022">BT#9022</a>) Add certificate path to the web service. Add 'add_gradebook_certificates_cron_task_enabled' configuration parameter</li>
 </ul>
 
-<a  name="1.9.10"></a>
+    </div>
 
+    <div class="version" aria-role="article" aria-label="1.9.10">
+<a  name="1.9.10"></a>
 <h1>Chamilo 1.9.10 - Huánuco, 25th of January, 2015</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.10 is a new minor version of the 1.9.x branch, with many bugfixes and a few interesting new features (as such, you can just overwrite previous files to upgrade from 1.9.8, 1.9.8.1 or 1.9.8.2 to 1.9.10).</p>
@@ -6280,17 +6314,23 @@ All security issues are published and patches are attached on <a href="https://s
 <ul>
   <li>No removal worth mentioning in this version</li>
 </ul>
+    </div>
 
+    <div class="version" aria-role="article" aria-label="1.9.8.2">
 <a  name="1.9.8.2"></a>
 
 <h1>Chamilo 1.9.8.2 - 21st of June, 2014</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.8.2 is a very little patch version with one bugfix regarding the learning paths tool. Considering the fact that 1.9.8 is planned for the long term, we'd hate to have such a minor patch left on the side for a year or so. This will be packaged and promoted as 1.9.8, but the folder inside the 1.9.8 will be called 1.9.8.2, with a change to this changelog file and a one-line change to main/newscorm/learnpathItem.class.php (as such, you can update just this file to upgrade from 1.9.8.1 to 1.9.8.2. See <a href="https://github.com/chamilo/chamilo-lms/commit/642a80e9e838f98f25135fbb64795e4f3df86260">the code change</a> for detais.</p>
+    </div>
 
+    <div class="version" aria-role="article" aria-label="1.9.8.1">
 <h1>Chamilo 1.9.8.1 - 18th of June, 2014</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.8.1 is a patch version with one security patch on top of 1.9.8 (in the included library for FCKeditor). Please check <a href="https://support.chamilo.org/projects/chamilo-18/wiki/Security_issues">our security issues page</a> for more information.</p>
+    </div>
 
+    <div class="version" aria-role="article" aria-label="1.9.8.0">
 <h1>Chamilo 1.9.8 - Thon, 15th of June, 2014</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.8 is a minor stable version with a series of improvements on top of 1.9.6.<br />
@@ -6796,13 +6836,17 @@ Stylesheets have been considerably changed in version 1.9.8, which might require
       If you have custom_tabs in this table (select * from settings_current where variable='show_tabs' AND subkey like 'custom_tab_%'), please add them through the homepage edition screen.</li>
     <li>(#7180) Remove custom_tab_* feature </li>
 </ul>
+    </div>
 
+    <div class="version" aria-role="article" aria-label="1.9.6.1">
 <a  name="1.9.6.1"></a>
 
 <h1>Chamilo 1.9.6.1 - 22th of May, 2014</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.6.1 is a patch version with security patches on top of 1.9.6. Please check <a href="https://support.chamilo.org/projects/chamilo-18/wiki/Security_issues">our security issues page</a> for more information.</p>
+</div>
 
+<div class="version" aria-role="article" aria-label="1.9.6.0">
 <h1>Chamilo 1.9.6 - Rochefort, 4th of June, 2013</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.6 is a minor stable version with security patches and a series of improvements on top of 1.9.4.</p>
@@ -6940,7 +6984,9 @@ Stylesheets have been considerably changed in version 1.9.8, which might require
 <ul>
   <li>Removed Dok€os prefixes from services in user_info.soap.php</li>
 </ul>
+    </div>
 
+    <div class="version" aria-role="article" aria-label="1.9.4">
 <a  name="1.9.4"></a>
 
 <h1>Chamilo 1.9.4 - Puebla, 18th of January, 2013</h1>
@@ -7211,7 +7257,9 @@ Stylesheets have been considerably changed in version 1.9.8, which might require
   <li>Added session-box-text and session-item elements to improve styling</li>
   <li>Modified #main_content to #top_main_content to avoid double #main_content id on the same page</li>
 </ul>
+    </div>
 
+    <div class="version" aria-role="article" aria-label="1.9.2">
 <a  name="1.9.2"></a>
 
 <h1>Chamilo 1.9.2 - Hanga Roa, 27th of September, 2012</h1>
@@ -7308,7 +7356,9 @@ Stylesheets have been considerably changed in version 1.9.8, which might require
   <li>Users: Problem accessing the course groups (#5537)</li>
   <li>Social network: An user could not modify its own official code, even if configured to be possible (#5538)</li>
 </ul>
+    </div>
 
+    <div class="version" aria-role="article" aria-label="1.9.0">
 <a  name="1.9.0"></a>
 
 <h1>Chamilo 1.9.0 - Vogüé, 31st of July, 2012</h1>
@@ -7811,7 +7861,9 @@ Due to the move to HTML5, it is very likely that any older stylesheet will have 
   <li>Removed the RED5 installation guide from the documentation directory: the supported BigBlueButton videoconference system provides its own installation manual, linked from the Chamilo admin guide.</li>
   <li>Removed the "Use document title" option - now we force users to use a document title - this avoids many issues with documents names - see #3781</li>
 </ul>
+    </div>
 
+<div class="version" aria-role="article" aria-label="1.8.8.6">
 <a  name="1.8.8.6"></a>
 
 <h1>Chamilo 1.8.8.6 - Rottweil, 20th of July 2012</h1>
@@ -7828,7 +7880,9 @@ Due to the move to HTML5, it is very likely that any older stylesheet will have 
   <li>Fixed an unauthorized file deletion in dropbox by logged in users - #5202</li>
   <li>Fixed XSS unfiltered input in dropbox - #5202</li>
 </ul>
+</div>
 
+    <div class="version" aria-role="article" aria-label="1.8.8.4">
 <a  name="1.8.8.4"></a>
 
 <h1>Chamilo 1.8.8.4 - La Molina, August 2011</h1>
@@ -8016,7 +8070,9 @@ This version of Chamilo only includes a few minor new features:
     <li>Jquery-ui updated from version 1.8.7 to 1.8.16</li>
     <li>bxslider library added to view Announcements</li>
 </ul>
+    </div>
 
+    <div class="version" aria-role="article" aria-label="1.8.8.2">
 <a  name="1.8.8.2"></a>
 
 <h1>Chamilo 1.8.8.2 - Bellavista, May 2011</h1>
@@ -8076,7 +8132,9 @@ This version of Chamilo only includes a few minor new features:
 <ul>
   <li>Changed "alumno" to "estudiante" globally for Spanish language (#2235)</li>
 </ul>
+    </div>
 
+    <div class="version" aria-role="article" aria-label="1.8.8">
   <a  name="1.8.8"></a>
 
 <h1>Chamilo 1.8.8 - Miraflores, May 2011</h1>
@@ -8338,6 +8396,9 @@ providers (see our website, <i>Support</i> tab).
   <li>Thickbox UI was changed to improved usability</li>
 </ul>
 
+    </div>
+
+    <div class="version" aria-role="article" aria-label="1.8.7.1">
 <a  name="1.8.7.1"></a>
 
 <h1>Chamilo 1.8.7.1 - Palmas</h1>
@@ -8438,6 +8499,9 @@ providers (see our website, <i>Support</i> tab).
   <li>main/online folder has been removed (deprecated)</li>
 </ul>
 
+    </div>
+
+    <div class="version" aria-role="article" aria-label="1.8.7">
 <a  name="1.8.7"></a>
 
 <h1>Chamilo 1.8.7 - Istanbul</h1>
@@ -8541,7 +8605,9 @@ providers (see our website, <i>Support</i> tab).
   <li>Security: fixed several possible SQL injections in links edition</li>
 </ul>
 <br />
+    </div>
 
+    <div class="version" aria-role="article" aria-label="1.8.6.2">
 <a  name="1.8.6.2"></a>
 
 <h1>Chamilo 1.8.6.2  <span style="font-style: italic;">Salto</span> - January 2010</h1>
@@ -8638,7 +8704,9 @@ providers (see our website, <i>Support</i> tab).
   <li>message_for_group_form_inc.php in social tool moved to the inc/ajax library</li>
   <li>main/social/select_options.php moved to inc/ajax library</li>
 </ul>
+    </div>
 
+    <div class="version" aria-role="article" aria-label="1.8.6.1">
 <a  name="1.8.6.1"></a>
 <p>
     Chamilo was initially a fork of the Dokeos project, which was a 2004 fork of the Claroline project.
@@ -8694,7 +8762,9 @@ providers (see our website, <i>Support</i> tab).
   <li>The whole main/inc/lib/fckeditor/editor/filemanager/browser/default/connectors/ directory should be removed for security reasons</li>
 </ul>
 <br />
+    </div>
 
+    <div class="version" aria-role="article" aria-label="1.8.6">
 <a  name="1.8.6"></a>
 
 <h1>Dokeos 1.8.6 <span style="font-style: italic;">Svalbard</span> - June 2009</h1>
@@ -8893,157 +8963,207 @@ providers (see our website, <i>Support</i> tab).
   <li>The whole main/inc/lib/xajax/tests/ should be removed</li>
 </ul>
 <br />
+    </div>
+    <div class="version" aria-role="article" aria-label="1.8.5">
+        <a name="1.8.5"></a>
 
-<a  name="1.8.5"></a>
+        <h1>Dokeos 1.8.5 <span style="font-style: italic;">Valparaiso</span>, June 2008</h1>
 
-<h1>Dokeos 1.8.5 <span style="font-style: italic;">Valparaiso</span>, June 2008</h1>
+        <h3>Release notes - summary</h3>
+        <p>Dokeos 1.8.5 is a major debugging release but includes interesting new features as well.&nbsp;</p>
+        <h3>New Features</h3>
 
-<h3>Release notes - summary</h3>
-<p>Dokeos 1.8.5 is a major debugging release but includes interesting new features as well.&nbsp;</p>
-<h3>New Features</h3>
-
-<ul>
-    <li>Considerable security improvements - 2 major and 1 minor security patches have been applied since the latest stable version</li>
-    <li>SCORM export improvement (now generates SCORM 1.2 compliant packages and transforms Dokeos quizzes into SCO items, using interactions as a bonus)</li>
-    <li>Possibility to filter extension of submitted files all around Dokeos</li>
-    <li>OpenID authentication support</li>
-    <li>Possibility to import Word documents</li>
-    <li>Possibility to import docx and pptx documents (new MS-Office format)</li>
-    <li>Grades, evaluations and success certificates available thanks to the integration of the gradebook extension. Activating this module will clash with a gradebook extension installation made previously</li>
-    <li>Coloured icons added to courses list in administration panel to show access permissions</li>
-    <li>Logout button now shows the username of the current user</li>
-    <li>Student view re-activated and fully-functional</li>
-    <li>Searching the forum is now possible so you can use the forum as a knowledge base. The search results are highlighted throughout the forum and you can search on multiple words also. </li>
-    <li>Group members are now displayed in a sortable table</li>
-    <li>Possibility to export survey results in XLS format</li>
-    <li>Documents, Works and Dropbox tools usability has been improved in many ways</li>
-    <li>In the agenda, you can display the X upcoming events (can be configured by the platform admin)</li>
-    <li>The course agenda now has a month view like the my agenda</li>
-    <li>In the user list of the platform administration you can now quickly see for what courses the user is subscribed by hovering over the courses icon</li>
-    <li>The platform system announcements can now be sent through email also</li>
-    <li>User fields have been added globally, allowing you to add user data like birthdate, mother tongue, city or whatever data you want to ask your users</li>
-    <li>LDAP
         <ul>
-            <li>The LDAP code has changed. If you had some customisations there, you might want to save them and re-apply them after the upgrade</li>
-            <li>Functions renamed to respect coding conventions and use ldap_ namespace</li>
-            <li>Most parameters moved to the administration panel. You will need to configure the administration panel with the settings that were previously in ldap_var.inc.php</li>
-            <li>Added non-anonymous mode (just add a login and a password in the configuration panel)</li>
-            <li>Added search domain configuration through panel</li>
-            <li>Added customizable field-check for student-teacher switch</li>
-            <li>The installation guide has been updated to help you find your way through the new LDAP configuration panel</li>
-            <li>You still need to activate LDAP by uncommenting two lines in configuration.php</li>
+            <li>Considerable security improvements - 2 major and 1 minor security patches have been applied since the
+                latest stable version
+            </li>
+            <li>SCORM export improvement (now generates SCORM 1.2 compliant packages and transforms Dokeos quizzes into
+                SCO items, using interactions as a bonus)
+            </li>
+            <li>Possibility to filter extension of submitted files all around Dokeos</li>
+            <li>OpenID authentication support</li>
+            <li>Possibility to import Word documents</li>
+            <li>Possibility to import docx and pptx documents (new MS-Office format)</li>
+            <li>Grades, evaluations and success certificates available thanks to the integration of the gradebook
+                extension. Activating this module will clash with a gradebook extension installation made previously
+            </li>
+            <li>Coloured icons added to courses list in administration panel to show access permissions</li>
+            <li>Logout button now shows the username of the current user</li>
+            <li>Student view re-activated and fully-functional</li>
+            <li>Searching the forum is now possible so you can use the forum as a knowledge base. The search results are
+                highlighted throughout the forum and you can search on multiple words also.
+            </li>
+            <li>Group members are now displayed in a sortable table</li>
+            <li>Possibility to export survey results in XLS format</li>
+            <li>Documents, Works and Dropbox tools usability has been improved in many ways</li>
+            <li>In the agenda, you can display the X upcoming events (can be configured by the platform admin)</li>
+            <li>The course agenda now has a month view like the my agenda</li>
+            <li>In the user list of the platform administration you can now quickly see for what courses the user is
+                subscribed by hovering over the courses icon
+            </li>
+            <li>The platform system announcements can now be sent through email also</li>
+            <li>User fields have been added globally, allowing you to add user data like birthdate, mother tongue, city
+                or whatever data you want to ask your users
+            </li>
+            <li>LDAP
+                <ul>
+                    <li>The LDAP code has changed. If you had some customisations there, you might want to save them and
+                        re-apply them after the upgrade
+                    </li>
+                    <li>Functions renamed to respect coding conventions and use ldap_ namespace</li>
+                    <li>Most parameters moved to the administration panel. You will need to configure the administration
+                        panel with the settings that were previously in ldap_var.inc.php
+                    </li>
+                    <li>Added non-anonymous mode (just add a login and a password in the configuration panel)</li>
+                    <li>Added search domain configuration through panel</li>
+                    <li>Added customizable field-check for student-teacher switch</li>
+                    <li>The installation guide has been updated to help you find your way through the new LDAP
+                        configuration panel
+                    </li>
+                    <li>You still need to activate LDAP by uncommenting two lines in configuration.php</li>
+                </ul>
+            </li>
+            <li>New stylesheets can be added through the platform administration interface</li>
+            <li>Notification by email has been improved in the forum. You can now indicate that you want to be informed
+                of messages on the forum level or on the thread level, even if you did not participate in the discussion
+                yet.
+            </li>
+            <li>The platform administrator can decide to display the courses that are not open on the login page. When
+                these courses are displayed on the campus startpage then the user that is logged in can quickly
+                subscribe to this course.
+            </li>
+            <li>When creating a new group you can decide to create a public or private forum or no forum at all. These
+                are group category settings.
+            </li>
+            <li>Group forum is also displayed in the group space</li>
+            <li>Surveys that are not based on invitation but open to all (or certain) members of the course are now
+                available
+            </li>
+            <li>Agenda
+                <ul>
+                    <li>iCal import and export of course events, with a choice of public, private or confidential
+                        markers
+                    </li>
+                    <li>Repetitive course events can be created (and exported to iCal). Repetitions types supported are:
+                        daily, weekly, monthly by date (e.g. the 5th of each month) and yearly by date
+                    </li>
+                </ul>
+            </li>
+            <li>Document templates have been greatly improved to speed-up custom course content creation</li>
+            <li>Audiorecorder (depending on streaming server) now records sounds in the document/audio directory, making
+                them easily reusable by the course admin
+            </li>
+            <li>Audiorecorder is not loaded by default (took too long) and you can load it with a simple click</li>
+            <li>W3C - Compliance with XHTML 1.0 Transitional has been improved</li>
+            <li>Tracking - A new page to display access details by user is available under the Reporting tab, in the
+                user details in a course
+            </li>
+            <li>Removed header from learning path tool. It was taking too much space and was not flexible enough for CSS
+                styling
+            </li>
+            <li>Improved speed of 1.6 to 1.8 migration by adding indexes</li>
         </ul>
-    </li>
-    <li>New stylesheets can be added through the platform administration interface</li>
-    <li>Notification by email has been improved in the forum. You can now indicate that you want to be informed of messages on the forum level or on the thread level, even if you did not participate in the discussion yet. </li>
-    <li>The platform administrator can decide to display the courses that are not open on the login page. When these courses are displayed on the campus startpage then the user that is logged in can quickly subscribe to this course.</li>
-    <li>When creating a new group you can decide to create a public or private forum or no forum at all. These are group category settings.</li>
-    <li>Group forum is also displayed in the group space</li>
-    <li>Surveys that are not based on invitation but open to all (or certain) members of the course are now available</li>
-    <li>Agenda
+        <br/>
+        <h3>Debugging</h3>
         <ul>
-            <li>iCal import and export of course events, with a choice of public, private or confidential markers</li>
-            <li>Repetitive course events can be created (and exported to iCal). Repetitions types supported are: daily, weekly, monthly by date (e.g. the 5th of each month) and yearly by date</li>
+            <li>Prerequisites management in learning paths fixed (includes quizzes, hotpotatoes and SCORM)</li>
+            <li>Various minor bugs fixed in the learning path tool (scoring, copy, re-ordering)</li>
+            <li>Various minor bugs fixed in the session handling</li>
+            <li>Fixes to the survey tool (date management, questions order in export)</li>
+            <li>Fixes to the calendar tool (access by students)</li>
+            <li>Fixes to the announcement tool (access by students)</li>
+            <li>Fixes to the group tool (default group settings)</li>
+            <li>Bugfix: complete export in survey tool displayed the question of all the surveys and not only those of
+                the selected survey
+            </li>
+            <li>Bugfix: registering a new user resulted in the language field of the user being empty which resulted in
+                an english profile by default. This has now been changed to the platform language.
+            </li>
+            <li>Performance improvement in the user list of the platform administration</li>
+            <li>Bugfix: group tutors were not migrated from 1.6 to 1.8</li>
+            <li>SCORM export: fixes in export method</li>
+            <li>Documentation is now fully XHTML 1.0 Transitional compliant</li>
+            <li>Fix FCKeditor Flash upload lack of usability and problems with IE</li>
         </ul>
-    </li>
-    <li>Document templates have been greatly improved to speed-up custom course content creation</li>
-    <li>Audiorecorder (depending on streaming server) now records sounds in the document/audio directory, making them easily reusable by the course admin</li>
-    <li>Audiorecorder is not loaded by default (took too long) and you can load it with a simple click</li>
-    <li>W3C - Compliance with XHTML 1.0 Transitional has been improved</li>
-    <li>Tracking - A new page to display access details by user is available under the Reporting tab, in the user details in a course</li>
-    <li>Removed header from learning path tool. It was taking too much space and was not flexible enough for CSS styling</li>
-    <li>Improved speed of 1.6 to 1.8 migration by adding indexes</li>
-    </ul>
-<br />
-<h3>Debugging</h3>
-<ul>
-    <li>Prerequisites management in learning paths fixed (includes quizzes, hotpotatoes and SCORM)</li>
-    <li>Various minor bugs fixed in the learning path tool (scoring, copy, re-ordering)</li>
-    <li>Various minor bugs fixed in the session handling</li>
-    <li>Fixes to the survey tool (date management, questions order in export)</li>
-    <li>Fixes to the calendar tool (access by students)</li>
-    <li>Fixes to the announcement tool (access by students)</li>
-    <li>Fixes to the group tool (default group settings)</li>
-    <li>Bugfix: complete export in survey tool displayed the question of all the surveys and not only those of the selected survey</li>
-    <li>Bugfix: registering a new user resulted in the language field of the user being empty which resulted in an english profile by default. This has now been changed to the platform language. </li>
-    <li>Performance improvement in the user list of the platform administration </li>
-    <li>Bugfix: group tutors were not migrated from 1.6 to 1.8</li>
-    <li>SCORM export: fixes in export method</li>
-    <li>Documentation is now fully XHTML 1.0 Transitional compliant</li>
-    <li>Fix FCKeditor Flash upload lack of usability and problems with IE</li>
-</ul>
-<br />
-<h3>Known issues</h3>
-<ul>
-    <li>Audiorecorder takes a few seconds to write the audio file back to the document directory, so the page shouldn't be changed too quickly after recording a sound track</li>
-    <li>When migrating from 1.6 to 1.8, some SCORM learning paths might need to be re-imported, which means their tracking is lost</li>
-</ul>
+        <br/>
+        <h3>Known issues</h3>
+        <ul>
+            <li>Audiorecorder takes a few seconds to write the audio file back to the document directory, so the page
+                shouldn't be changed too quickly after recording a sound track
+            </li>
+            <li>When migrating from 1.6 to 1.8, some SCORM learning paths might need to be re-imported, which means
+                their tracking is lost
+            </li>
+        </ul>
+    </div>
+    <div class="version" aria-role="article" aria-label="1.8.4">
+        <a name="1.8.4"></a>
+        <h1>Dokeos 1.8.4 - September 2007</h1>
 
-<a  name="1.8.4"></a>
+        <h3>Release notes - summary</h3>
+        <p>Dokeos
+            1.8.4 is both a features and debuggingmajor release.</p>
+        <h3>New Features</h3>
+        <ul>
+            <li>Templates. See <a href="http://www.dokeos.com/templates.php">http://www.dokeos.com/templates.php</a>
+            </li>
+            <li>Wide Hotspots tests to allow real-life situations simulation</li>
+            <li>Flash video import and streaming</li>
+            <li>Installation guide renewed. See&nbsp;<a href="http://www.dokeos.com/doc/installation_guide.html">http://www.dokeos.com/doc/installation_guide.html</a>
+            </li>
+            <li>Added animated Mr Dokeos character : <a href="http://www.dokeos.com/mrdokeos.php">http://www.dokeos.com/mrdokeos.php</a>
+            </li>
+            <li>English and Dutch teacher manual added</li>
+            <li>Assignments form now fills automatically with document title and user name</li>
+            <li>Document authoring space now bigger</li>
+            <li>IMS/QTI export of tests</li>
+            <li>Export of media (images, Flash, Audio) and tests in SCORM export</li>
+            <li>Agenda default time management for an event improved</li>
+            <li>Oogie PowerPoint converter setup simplified</li>
+            <li>Improved support for other character sets (enabling better support for
+                UTF-8 and russian and asian fonts)
+            </li>
+        </ul>
+        <br/>
+        <h3>Debugging</h3>
 
-<h1>Dokeos 1.8.4 - September 2007</h1>
+        <ul>
+            <li>Upgrade script improved : now possible to upgrade direct from 1.6 to 1.8.4.</li>
+            <li>Blogs user rights</li>
+            <li>FCK Editor image import</li>
+            <li>Videoconferencing slides now include Documents directory of course</li>
+            <li>SCORM content can be displayed Full Screen</li>
+            <li>SCORM interactions now properly running</li>
+            <li>Hotspots tests redesigned and bigger hotspots zone</li>
+            <li>Alphabetical sorting of lists fixed</li>
+            <li>Excel export in reporting now removes HTML tags</li>
+            <li>My profile page display layout</li>
+            <li>Import HotPotatoes tests scoring</li>
+            <li>Images gallery in Documents bad display</li>
+            <li>Agenda default date now more relevant</li>
+            <li>Tests random questions order option clarified</li>
+            <li>Templates editing and media removal now easier</li>
+            <li>Apostrophe bug in Learning path Build mode</li>
+            <li>Table of contents wider in Learning path</li>
+            <li>Audio player now autostarts</li>
+            <li>Spelling mistakes in French and English</li>
+            <li>Group features now related to group, not generic</li>
+            <li>Blogs SQL errors fixed</li>
+            <li>Introduction images were missing in tests reporting</li>
+            <li>SCORM export now working</li>
+            <li>My agenda Personal events editor bug fixed</li>
+            <li>Oogie PowerPoint import installation easier</li>
+            <li>Time spent on platform tracking improved</li>
+            <li>Course Backup/restore bugs fixed</li>
+            <li>Course copy bugs fixed</li>
+            <li>Default visibility status of learning paths fixed</li>
+            <li>Images gallery display reordering</li>
+            <li>Agenda default time management for an event improved</li>
+            <li>Groups display alphabetical sorting fixed</li>
+        </ul>
+    </div>
 
-<h3>Release notes - summary</h3>
-<p>Dokeos
-1.8.4 is both a features and debuggingmajor release.</p>
-<h3>New Features</h3>
-<ul>
-  <li>Templates. See <a href="http://www.dokeos.com/templates.php">http://www.dokeos.com/templates.php</a></li>
-  <li>Wide Hotspots tests to allow real-life situations simulation</li>
-  <li>Flash video import and streaming</li>
-  <li>Installation guide renewed. See&nbsp;<a href="http://www.dokeos.com/doc/installation_guide.html">http://www.dokeos.com/doc/installation_guide.html</a></li>
-  <li>Added animated Mr Dokeos character : <a href="http://www.dokeos.com/mrdokeos.php">http://www.dokeos.com/mrdokeos.php</a></li>
-  <li>English and Dutch teacher manual added</li>
-  <li>Assignments form now fills automatically with document title and user name</li>
-  <li>Document authoring space now bigger</li>
-  <li>IMS/QTI export of tests</li>
-  <li>Export of media (images, Flash, Audio) and tests in SCORM export</li>
-  <li>Agenda default time management for an event improved</li>
-  <li>Oogie PowerPoint converter setup simplified</li>
-  <li>Improved support for other character sets (enabling better support for
-UTF-8 and russian and asian fonts)</li>
-
-</ul>
-
-<br />
-
-<h3>Debugging</h3>
-
-<ul>
-  <li>Upgrade script improved : now possible to upgrade direct from 1.6 to 1.8.4.</li>
-  <li>Blogs user rights</li>
-  <li>FCK Editor image import</li>
-  <li>Videoconferencing slides now include Documents directory of course</li>
-  <li>SCORM content can be displayed Full Screen</li>
-  <li>SCORM interactions now properly running</li>
-  <li>Hotspots tests redesigned and bigger hotspots zone</li>
-  <li>Alphabetical sorting of lists fixed</li>
-  <li>Excel export in reporting now removes HTML tags</li>
-  <li>My profile page display layout</li>
-  <li>Import HotPotatoes tests scoring</li>
-  <li>Images gallery in Documents bad display</li>
-  <li>Agenda default date now more relevant</li>
-  <li>Tests random questions order option clarified</li>
-  <li>Templates editing and media removal now easier</li>
-  <li>Apostrophe bug in Learning path Build mode</li>
-  <li>Table of contents wider in Learning path</li>
-  <li>Audio player now autostarts</li>
-  <li>Spelling mistakes in French and English</li>
-  <li>Group features now related to group, not generic</li>
-  <li>Blogs SQL errors fixed</li>
-  <li>Introduction images were missing in tests reporting</li>
-  <li>SCORM export now working</li>
-  <li>My agenda Personal events editor bug fixed</li>
-  <li>Oogie PowerPoint import installation easier</li>
-  <li>Time spent on platform tracking improved</li>
-  <li>Course Backup/restore bugs fixed</li>
-  <li>Course copy bugs fixed</li>
-  <li>Default visibility status of learning paths fixed</li>
-  <li>Images gallery display reordering</li>
-  <li>Agenda default time management for an event improved</li>
-  <li>Groups display alphabetical sorting fixed</li>
-</ul>
-
+    <div class="version" aria-role="article" aria-label="1.8.0">
 <a name="1.8"></a>
 
 <h1>Dokeos 1.8 - May 2007</h1>
@@ -9076,14 +9196,16 @@ a simple videoconferencing interface.</p>
       <li>Version check: be informed when a new Dokeos release is available.  </li>
       <li>Platform Statistics so you can boast with your campus. </li>
 </ul>
+    </div>
 
-<a name="1.6.5"></a>
-
-<h1>Dokeos 1.6.5 - July 2006 </h1>
-
-<h3>Release notes - summary</h3>
-
-<p>Security Release. 1 bug has been fixed.<br />
+    <div class="version" aria-role="article" aria-label="1.6.5">
+        <a name="1.6.5"></a>
+        <h1>Dokeos 1.6.5 - July 2006 </h1>
+        <h3>Release notes - summary</h3>
+        <p>Security Release. 1 bug has been fixed.<br/>
+        </p>
+    </div>
+    <div class="version" aria-role="article" aria-label="1.6.4">
 <a name="1.6.4"></a>
 
 <h1>Dokeos 1.6.4 April 2006 </h1>
@@ -9091,7 +9213,9 @@ a simple videoconferencing interface.</p>
 <h3>Release notes - summary</h3>
 
 <p>Bugfix release. 2 bugs have been fixed. One security hole has been fixed <br />
-
+</p>
+    </div>
+    <div class="version" aria-role="article" aria-label="1.6.3">
 <a name="1.6.3"></a>
 
 <h1>Dokeos 1.6.3 February 2006 </h1>
@@ -9099,7 +9223,8 @@ a simple videoconferencing interface.</p>
 <h3>Release notes - summary</h3>
 
 <p>Bugfix release. 44 bugs have been fixed.<br />
-
+    </div>
+    <div class="version" aria-role="article" aria-label="1.6.2">
 <a name="1.6.2"></a>
 
 <h1>Dokeos 1.6.2 - September 2005</h1>
@@ -9108,7 +9233,8 @@ a simple videoconferencing interface.</p>
 
 <p>Bugfix release. 14 bugs have been fixed.<br />
 
-
+    </div>
+    <div class="version" aria-role="article" aria-label="1.6.1">
 <a name="1.6.1"></a>
 
 <h1>Dokeos 1.6.1 - August 2005</h1>
@@ -9116,7 +9242,8 @@ a simple videoconferencing interface.</p>
 <h3>Release notes - summary</h3>
 
 <p>Bugfix release. 31 bugs have been fixed.<br />
-
+    </div>
+    <div class="version" aria-role="article" aria-label="1.6.0">
 <a name="1.6"></a>
 
 <h1>Dokeos 1.6 - July 2005</h1>
@@ -9129,10 +9256,7 @@ a simple videoconferencing interface.</p>
     "register globals" does not have be on anymore.<br />
 
 <h3>New Features</h3>
-
-
-
-<ul>
+    <ul>
       <li>Campus home page can be edited online</li>
       <li> Improved translations, made with the new Dokeos translation tool</li>
       <li> Language switch - when you enter the portal, you can choose your language.</li>
@@ -9153,47 +9277,51 @@ a simple videoconferencing interface.</p>
         some features, IEEE LOM Metadata support in documents and groups, import of
         Hotpotatoes, connection with QuestionMark (this last one will be available
         as plugin).</li>
+    </ul>
+    </div>
+    <div class="version" aria-role="article" aria-label="1.5.5">
+    <a name="1.5.5"></a>
 
-</ul>
+    <h1>Dokeos 1.5.5 - 2004</h1>
 
-<a name="1.5.5"></a>
-
-<h1>Dokeos 1.5.5 - 2004</h1>
-
-<ul>
-      <li> Learning path : Scorm content import tool</li>
-      <li> WYSIWYG editor : create content on the fly</li>
-      <li> Table of contents : structure content on the fly</li>
-      <li> Dropbox : peer2peer content sharing management</li>
-      <li> Links categories : structure links catalogue</li>
-      <li> New navigation : one click to tool</li>
-      <li> Events since my last visit : be informed of what has changed since your last login</li>
-      <li> My agenda : synthetic weekly view of all the events related to you</li>
-      <li> Add a picture to my profile : see who is who</li>
-      <li> Security : privacy and anti-cracking protection</li>
-      <li> 5 more languages : russian, catalan, vietnamese, brazilian, thai and a revised chinese</li>
-      <li> New chat tool : real-time textual discussion</li>
-      <li> Audio &amp; video conference : real-time live broadcasting of events + textual interaction with ore than 200 people.</li>
-      <li> Announcements to some users or some groups only</li>
-      <li> Time-based learning management : add resources to time line in Agenda</li>
-      <li> Audio &amp; video in Tests tool : create listening comprehensions, situation-based questions on the fly</li>
-      <li> Forum thread/flat view : see discussions in more detail</li>
-      <li> Forum email notification : get an email when your forum topic is active</li>
-      <li> Language revision : dokeos vocabulary has been generalised to be adapted to different types of organisations and not only universities</li>
-</ul>
-
-<a name="1.4.2"></a>
+    <ul>
+          <li> Learning path : Scorm content import tool</li>
+          <li> WYSIWYG editor : create content on the fly</li>
+          <li> Table of contents : structure content on the fly</li>
+          <li> Dropbox : peer2peer content sharing management</li>
+          <li> Links categories : structure links catalogue</li>
+          <li> New navigation : one click to tool</li>
+          <li> Events since my last visit : be informed of what has changed since your last login</li>
+          <li> My agenda : synthetic weekly view of all the events related to you</li>
+          <li> Add a picture to my profile : see who is who</li>
+          <li> Security : privacy and anti-cracking protection</li>
+          <li> 5 more languages : russian, catalan, vietnamese, brazilian, thai and a revised chinese</li>
+          <li> New chat tool : real-time textual discussion</li>
+          <li> Audio &amp; video conference : real-time live broadcasting of events + textual interaction with ore than 200 people.</li>
+          <li> Announcements to some users or some groups only</li>
+          <li> Time-based learning management : add resources to time line in Agenda</li>
+          <li> Audio &amp; video in Tests tool : create listening comprehensions, situation-based questions on the fly</li>
+          <li> Forum thread/flat view : see discussions in more detail</li>
+          <li> Forum email notification : get an email when your forum topic is active</li>
+          <li> Language revision : dokeos vocabulary has been generalised to be adapted to different types of organisations and not only universities</li>
+    </ul>
+    </div>
+    <div class="version" aria-role="article" aria-label="1.4.2">
+    <a name="1.4.2"></a>
     <h1>Claroline 1.4.2 - 2003</h1>
     <ul>
         <li>No feature is added to Claroline 1.4.2. This release is basically stressed on stability increase and bugs fixing.</li>
     </ul>
-
-<a name="1.4.1"></a>
+    </div>
+    <div class="version" aria-role="article" aria-label="1.4.1">
+    <a name="1.4.1"></a>
     <h1>Claroline 1.4.1 - 2003</h1>
     <ul>
         <li>No feature is added to Claroline 1.4.2. This release is basically stressed on stability increase and bugs fixing.</li>
     </ul>
-<a name="1.4"></a>
+    </div>
+    <div class="version" aria-role="article" aria-label="1.4.0">
+    <a name="1.4"></a>
     <h1>Claroline 1.4 - 2003</h1>
     The main Claroline improvements are hidden behind the screen.
     We have totally recoded the Claroline Kernel to be more
@@ -9238,16 +9366,17 @@ a simple videoconferencing interface.</p>
         <li>TRACKING. The ezBoo statistics tool has been removed.
             and a complete tracking system is implemented recording
             every user's action on the platform.</li>
-
     </ul>
-
-<a name="1.3.1"></a>
+    </div>
+    <div class="version" aria-role="article" aria-label="1.3.1">
+    <a name="1.3.1"></a>
     <h1>Claroline 1.3.1 - 2003</h1>
     <ul>
         <li>No feature is added to Claroline 1.3.1. This release is basically stressed on stability increase and bugs fixing.</li>
     </ul>
-
-<a name="1.3.0"></a>
+    </div>
+    <div class="version" aria-role="article" aria-label="1.3.0">
+    <a name="1.3.0"></a>
     <h1>Claroline 1.3.0 - 2003</h1>
     <ul>
         <li>LANGUAGE. New languages added. Claroline is now in 12 languages :
@@ -9270,7 +9399,8 @@ a simple videoconferencing interface.</p>
         <li>ADMIN SECTION. The new PHPMyAdmin 2.3 has been included and admin tools
             completely rewritten.</li>
     </ul>
-
+    </div>
+    <div class="version" aria-role="article" aria-label="1.2.0">
     <a name="1.2.0"></a>
     <h1>Claroline 1.2.0 - 2002</h1>
     <ul>
@@ -9299,8 +9429,7 @@ a simple videoconferencing interface.</p>
             them to a developper, check state of progress and inform users that their
             todo is taken into account, at what stage and by who.</li>
     </ul>
-</div>
-<div>
+
     <h2>Syntax and terminology</h2>
     <p>To ensure a quality report, we are using a specific syntax and terms for this changelog, provided below:</p>
     <h3>Versions</h3>
@@ -9336,60 +9465,62 @@ a simple videoconferencing interface.</p>
     <h3>Tools terminology</h3>
     <p>
         We use a short terminology to try and group all changes applying to the same tool. We use the singular version. The names we use for these tools are:
-        <ul>
-            <li>Admin</li>
-            <li>Announcement</li>
-            <li>Attendance</li>
-            <li>Blog</li>
-            <li>Calendar</li>
-            <li>Chat</li>
-            <li>Description</li>
-            <li>Course Progress</li>
-            <li>Cron</li>
-            <li>Dashboard</li>
-            <li>Document</li>
-            <li>Dropbox</li>
-            <li>Quiz (not exercise)</li>
-            <li>Extra Fields</li>
-            <li>Forum</li>
-            <li>Glossary</li>
-            <li>Gradebook</li>
-            <li>Group</li>
-            <li>Help</li>
-            <li>Install (includes upgrade stuff)</li>
-            <li>Language</li>
-            <li>Link</li>
-            <li>Learnpath (for LP or Learning Paths)</li>
-            <li>Maintenance</li>
-            <li>Message</li>
-            <li>Notebook</li>
-            <li>Search (for fulltext search)</li>
-            <li>Session</li>
-            <li>Skill</li>
-            <li>Social (for social network)</li>
-            <li>SSO (for Single Sign On methods)</li>
-            <li>Survey</li>
-            <li>System: stuff that have mostly to do with hosting and finetuning at server level</li>
-            <li>Template</li>
-            <li>Ticket</li>
-            <li>Tracking</li>
-            <li>User</li>
-            <li>Webservice</li>
-            <li>Wiki</li>
-            <li>Work</li>
-        </ul>
+    <ul>
+        <li>Admin</li>
+        <li>Announcement</li>
+        <li>Attendance</li>
+        <li>Blog</li>
+        <li>Calendar</li>
+        <li>Chat</li>
+        <li>Description</li>
+        <li>Course Progress</li>
+        <li>Cron</li>
+        <li>Dashboard</li>
+        <li>Document</li>
+        <li>Dropbox</li>
+        <li>Quiz (not exercise)</li>
+        <li>Extra Fields</li>
+        <li>Forum</li>
+        <li>Glossary</li>
+        <li>Gradebook</li>
+        <li>Group</li>
+        <li>Help</li>
+        <li>Install (includes upgrade stuff)</li>
+        <li>Language</li>
+        <li>Link</li>
+        <li>Learnpath (for LP or Learning Paths)</li>
+        <li>Maintenance</li>
+        <li>Message</li>
+        <li>Notebook</li>
+        <li>Search (for fulltext search)</li>
+        <li>Session</li>
+        <li>Skill</li>
+        <li>Social (for social network)</li>
+        <li>SSO (for Single Sign On methods)</li>
+        <li>Survey</li>
+        <li>System: stuff that have mostly to do with hosting and finetuning at server level</li>
+        <li>Template</li>
+        <li>Ticket</li>
+        <li>Tracking</li>
+        <li>User</li>
+        <li>Webservice</li>
+        <li>Wiki</li>
+        <li>Work</li>
+    </ul>
     </p>
     <h3>Hashtags</h3>
     <p>
         In some very specific cases, this changelog might contain references to specific topics, like compliance to
         a standard or a law. In this case, we will use the "(#hashtag)" format. Here is a list of topics you might find:
-        <ul>
-            <li>(#legal-compliance): indicates that this feature helps Chamilo provide information to comply with some law (can be in any country)</li>
-            <li>(#scorm): indicates that this feature relates to the SCORM standard</li>
-            <li>(#fresh-users): indicates that this feature helps prevent drama with fresh users lacking experience and prone to error</li>
-        </ul>
+    <ul>
+        <li>(#legal-compliance): indicates that this feature helps Chamilo provide information to comply with some law (can be in any country)</li>
+        <li>(#scorm): indicates that this feature relates to the SCORM standard</li>
+        <li>(#fresh-users): indicates that this feature helps prevent drama with fresh users lacking experience and prone to error</li>
+    </ul>
     </p>
-</div>
+    </div>
+</div></div></div>
+
 <hr />
     <a href="http://validator.w3.org/check?uri=referer"><img src="//www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>
     <a href="http://jigsaw.w3.org/css-validator/">

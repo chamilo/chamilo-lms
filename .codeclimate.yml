@@ -2,6 +2,12 @@ version: "2"
 checks:
   file-lines:
     enabled: false
+  method-complexity:
+    enabled: false
+  complex-logic:
+    enabled: false
+  method-lines:
+    enabled: false
 
 plugins:
   fixme:
@@ -35,10 +41,10 @@ plugins:
         enabled: false
 
   sonar-php:
-    enabled: true
+    enabled: false
 
   duplication:
-    enabled: true
+    enabled: false
 
 exclude_patterns:
 - cli-config.php
@@ -83,6 +89,7 @@ exclude_patterns:
 - plugin/buycourses/src/Requests/
 - plugin/buycourses/src/Requests.php
 - plugin/buycourses/src/paypalfunctions.php
+- plugin/vchamilo/cli/
 - plugin/kannelsms/vendor/
 - plugin/clockworksms/vendor/
 - plugin/pens/lib

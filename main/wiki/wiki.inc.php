@@ -4050,14 +4050,12 @@ class Wiki
             self::check_emailcue($id, 'D', $dtime, $message_author);
 
             header(
-                'Location: index.php?action=discuss&title='.api_htmlentities(
-                    urlencode($page)
-                ).'&'.api_get_cidreq()
+                'Location: index.php?action=discuss&title='.api_htmlentities(urlencode($page)).'&'.api_get_cidreq()
             );
             exit;
         }
 
-        //mode assignment: previous to show  page type
+        // mode assignment: previous to show  page type
         $icon_assignment = null;
         if ($row['assignment'] == 1) {
             $icon_assignment = Display::return_icon(
@@ -4078,7 +4076,6 @@ class Wiki
         $countWPost = null;
         $avg_WPost_score = null;
 
-
         // Show title and form to discuss if page exist
         if ($id != '') {
             // Show discussion to students if isn't hidden.
@@ -4093,10 +4090,7 @@ class Wiki
                 // discussion action: protecting (locking) the discussion
                 $addlock_disc = null;
                 $lock_unlock_disc = null;
-                if (api_is_allowed_to_edit(
-                        false,
-                        true
-                    ) || api_is_platform_admin()) {
+                if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
                     if (self::check_addlock_discuss() == 1) {
                         $addlock_disc = Display::return_icon(
                             'unlock.png',
@@ -4116,7 +4110,7 @@ class Wiki
                     }
                 }
                 echo '<span style="float:right">';
-                echo '<a href="index.php?action=discuss&actionpage='.$lock_unlock_disc.'&title='.api_htmlentities(
+                echo '<a href="index.php?'.api_get_cidreq().'&action=discuss&actionpage='.$lock_unlock_disc.'&title='.api_htmlentities(
                         urlencode($page)
                     ).'">'.$addlock_disc.'</a>';
                 echo '</span>';
@@ -4145,7 +4139,7 @@ class Wiki
                     }
                 }
                 echo '<span style="float:right">';
-                echo '<a href="index.php?action=discuss&actionpage='.$hide_show_disc.'&title='.api_htmlentities(
+                echo '<a href="index.php?'.api_get_cidreq().'&action=discuss&actionpage='.$hide_show_disc.'&title='.api_htmlentities(
                         urlencode($page)
                     ).'">'.$visibility_disc.'</a>';
                 echo '</span>';
@@ -4174,7 +4168,7 @@ class Wiki
                 }
 
                 echo '<span style="float:right">';
-                echo '<a href="index.php?action=discuss&actionpage='.$lock_unlock_rating_disc.'&title='.api_htmlentities(
+                echo '<a href="index.php?'.api_get_cidreq().'&action=discuss&actionpage='.$lock_unlock_rating_disc.'&title='.api_htmlentities(
                         urlencode($page)
                     ).'">'.$ratinglock_disc.'</a>';
                 echo '</span>';
@@ -4198,7 +4192,7 @@ class Wiki
                     $lock_unlock_notify_disc = 'locknotifydisc';
                 }
                 echo '<span style="float:right">';
-                echo '<a href="index.php?action=discuss&actionpage='.$lock_unlock_notify_disc.'&title='.api_htmlentities(
+                echo '<a href="index.php?'.api_get_cidreq().'&action=discuss&actionpage='.$lock_unlock_notify_disc.'&title='.api_htmlentities(
                         urlencode($page)
                     ).'">'.$notify_disc.'</a>';
                 echo '</span>';
@@ -4206,18 +4200,12 @@ class Wiki
                         $row['title']
                     );
                 if ($lastuserinfo !== false) {
-                    echo ' ('.get_lang(
-                            'MostRecentVersionBy'
-                        ).' '.UserManager::getUserProfileLink(
-                            $lastuserinfo
-                        ).' '.$lastversiondate.$countWPost.')'.$avg_WPost_score.' '; //TODO: read average score
+                    echo ' ('.get_lang('MostRecentVersionBy').' '.
+                        UserManager::getUserProfileLink($lastuserinfo).' '.$lastversiondate.$countWPost.')'.$avg_WPost_score.' '; //TODO: read average score
                 }
 
                 echo '</div>';
-                if ($row['addlock_disc'] == 1 || api_is_allowed_to_edit(
-                        false,
-                        true
-                    ) || api_is_platform_admin()) {
+                if ($row['addlock_disc'] == 1 || api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
                     //show comments but students can't add theirs
                     ?>
                     <div class="panel panel-default">
@@ -4229,32 +4217,24 @@ class Wiki
                                         class="col-sm-2 control-label">
                                         <?php echo get_lang('Comments'); ?>:</label>
                                     <div class="col-sm-10">
-                                        <?php echo '<input type="hidden" name="wpost_id" value="'.md5(
-                                                uniqid(rand(), true)
-                                            ).'">'; //prevent double post ?>
+                                        <?php echo '<input type="hidden" name="wpost_id" value="'.md5(uniqid(rand(), true)).'">'; //prevent double post ?>
                                         <textarea class="form-control"
                                                   name="comment" cols="80"
                                                   rows="5"
-                                                  id="comment"></textarea>
+                                                  id="comment">
+                                        </textarea>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <?php
                                     //check if rating is allowed
-                                    if ($row['ratinglock_disc'] == 1 || api_is_allowed_to_edit(
-                                            false,
-                                            true
-                                        ) || api_is_platform_admin()) {
+                                    if ($row['ratinglock_disc'] == 1 || api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
                                         ?>
                                         <label
-                                            class="col-sm-2 control-label"><?php echo get_lang(
-                                                'Rating'
-                                            ); ?>:</label>
+                                            class="col-sm-2 control-label"><?php echo get_lang('Rating'); ?>:</label>
                                         <div class="col-sm-10">
-                                            <select name="rating" id="rating"
-                                                    class="selectpicker">
-                                                <option value="-" selected>-
-                                                </option>
+                                            <select name="rating" id="rating" class="selectpicker">
+                                                <option value="-" selected>-</option>
                                                 <option value="0">0</option>
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
@@ -4270,16 +4250,16 @@ class Wiki
                                         </div>
                                         <?php
                                     } else {
-                                        echo '<input type=hidden name="rating" value="-">'; // must pass a default value to avoid rate automatically
+                                        echo '<input type=hidden name="rating" value="-">';
+                                        // must pass a default value to avoid rate automatically
                                     }
                                     ?>
 
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-offset-2 col-sm-10">
-                                        <?php echo '<button class="btn btn-default" type="submit" name="Submit"> '.get_lang(
-                                                'Send'
-                                            ).'</button>'; ?>
+                                        <?php echo '<button class="btn btn-default" type="submit" name="Submit"> '.
+                                            get_lang('Send').'</button>'; ?>
                                     </div>
                                 </div>
                         </div>
@@ -4316,25 +4296,18 @@ class Wiki
                 $result3 = Database::query($sql);
                 $countWPost_score = Database::num_rows($result3);
 
-                echo ' - '.get_lang(
-                        'NumCommentsScore'
-                    ).': '.$countWPost_score; //
+                echo ' - '.get_lang('NumCommentsScore').': '.$countWPost_score;
 
                 if ($countWPost_score != 0) {
-                    $avg_WPost_score = round(
-                            $row2['sumWPost'] / $countWPost_score,
-                            2
-                        ).' / 10';
+                    $avg_WPost_score = round($row2['sumWPost'] / $countWPost_score, 2).' / 10';
                 } else {
                     $avg_WPost_score = $countWPost_score;
                 }
 
-                echo ' - '.get_lang(
-                        'RatingMedia'
-                    ).': '.$avg_WPost_score; // average rating
+                echo ' - '.get_lang('RatingMedia').': '.$avg_WPost_score; // average rating
 
                 $sql = 'UPDATE '.$tbl_wiki.' SET
-                        score="'.Database::escape_string($avg_WPost_score).'"
+                        score = "'.Database::escape_string($avg_WPost_score).'"
                         WHERE
                             c_id = '.$course_id.' AND
                             reflink="'.Database::escape_string($page).'" AND
@@ -4352,11 +4325,7 @@ class Wiki
                     }
 
                     $name = $userinfo['complete_name'];
-                    $author_photo = '<img src="'.$userinfo['avatar'].'" alt="'.api_htmlentities(
-                            $name
-                        ).'"  width="40" height="50" align="top"  title="'.api_htmlentities(
-                            $name
-                        ).'"  />';
+                    $author_photo = '<img src="'.$userinfo['avatar'].'" alt="'.api_htmlentities($name).'"  width="40" height="50" align="top"  title="'.api_htmlentities($name).'"  />';
 
                     // stars
                     $p_score = $row['p_score'];

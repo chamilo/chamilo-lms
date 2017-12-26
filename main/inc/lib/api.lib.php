@@ -4341,36 +4341,6 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
 
     $currentLanguageId = api_get_language_id($user_selected_language);
     $currentLanguageInfo = api_get_language_info($currentLanguageId);
-
-    $original_languages = $language_list['name'];
-    $folder = $language_list['folder']; // This line is probably no longer needed.
-    /*$html = '<script>
-    $(document).ready(function() {
-        $("#language_list").change(function() {
-            jumpMenu("parent",this,0);
-        });
-    });
-
-    function jumpMenu(targ,selObj,restore){ // v3.0
-        eval(targ+".location=\'"+selObj.options[selObj.selectedIndex].value+"\'");
-        if (restore) selObj.selectedIndex=0;
-    }
-    </script>';*/
-    //$html .= '<form id="lang_form" name="lang_form" method="post" action="'.api_get_self().'">';
-    //$html .= '<label style="display: none;" for="language_list">'.get_lang('Language').'</label>';
-    /*$html .= '<select id="language_list" class="selectpicker show-tick form-control" name="language_list" >';
-
-    foreach ($original_languages as $key => $value) {
-        if ($folder[$key] == $user_selected_language) {
-            $option_end = ' selected="selected" >';
-        } else {
-            $option_end = '>';
-        }
-        $html .= '<option value="'.api_get_self().'?language='.$folder[$key].'"'.$option_end;
-        //echo substr($value, 0, 16); // Cut string to keep 800x600 aspect.
-        $html .= $value.'</option>';
-    }
-    $html .= '</select>';*/
     $countryCode = languageToCountryIsoCode($currentLanguageInfo['isocode']);
     $url = api_get_self();
     if ($showAsButton) {

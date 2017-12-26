@@ -459,13 +459,13 @@ class DisplayGradebook
                     }
 
                     // Right icons
-                    $actionsRight = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&amp;cidReq='.$catobj->get_course_code().'&id_session='.$catobj->get_session_id().'">'.
+                    $actionsRight = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&cidReq='.$catobj->get_course_code().'&id_session='.$catobj->get_session_id().'">'.
                         Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM).'</a>';
                     $actionsRight .= '<a href="../document/document.php?curdirpath=/certificates&'.$my_api_cidreq.'&origin=gradebook&selectcat='.$catobj->get_id().'">'.
                             Display::return_icon('certificate.png', get_lang('AttachCertificate'), '', ICON_SIZE_MEDIUM).'</a>';
 
                     if (empty($categories)) {
-                        $actionsRight .= '<a href="gradebook_edit_all.php?id_session='.api_get_session_id().'&amp;'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'">'.
+                        $actionsRight .= '<a href="gradebook_edit_all.php?id_session='.api_get_session_id().'&'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'">'.
                             Display::return_icon('percentage.png', get_lang('EditAllWeights'), '', ICON_SIZE_MEDIUM).'</a>';
                     }
                     $score_display_custom = api_get_setting('gradebook_score_display_custom');
@@ -508,7 +508,7 @@ class DisplayGradebook
 
             $min_certification = intval($catobj->getCertificateMinScore() > 0) ? $catobj->getCertificateMinScore() : 0;
             $min_certification = get_lang('CertificateMinScore').' : '.$min_certification;
-            $edit_icon = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&amp;cidReq='.$catobj->get_course_code().'&id_session='.$catobj->get_session_id().'">'.
+            $edit_icon = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&cidReq='.$catobj->get_course_code().'&id_session='.$catobj->get_session_id().'">'.
                 Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
 
             $msg = $weight.' - '.$min_certification.$edit_icon;
@@ -571,8 +571,8 @@ class DisplayGradebook
     }
 
     /**
-     * @param $userId
-     * @param $categoryId
+     * @param int $userId
+     * @param int $categoryId
      * @return string
      */
     public static function display_header_user($userId, $categoryId)
@@ -614,8 +614,7 @@ class DisplayGradebook
         $info .= '<div class="thumbnail"><img src="'.$user['avatar'].'" /></div>';
         $info .= '</div>';
         $info .= '<div class="col-md-6">';
-        $info .= get_lang('Name').' :  <a target="_blank" href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$userId.'"> '.
-            $user['complete_name'].'</a><br />';
+        $info .= get_lang('Name').' :  '.$user['complete_name_with_message_link'].'<br />';
 
         if (api_get_setting('show_email_addresses') == 'true') {
             $info .= get_lang('Email').' : <a href="mailto:'.$user['email'].'">'.$user['email'].'</a><br />';

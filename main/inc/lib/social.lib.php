@@ -522,7 +522,7 @@ class SocialManager extends UserManager
      * @author  Yannick Warnier
      * @since   Dokeos 1.8.6.1
      */
-    public static function get_user_feeds($user, $limit = 5)
+    public static function getUserRssFeed($user, $limit = 5)
     {
         $feed = UserManager::get_extra_user_data_by_field($user, 'rssfeeds');
 
@@ -534,37 +534,39 @@ class SocialManager extends UserManager
             return '';
         }
         $res = '';
-
         foreach ($feeds as $url) {
             if (empty($url)) {
                 continue;
             }
-            $channel = Reader::import($url);
-
-            $i = 1;
-            if (!empty($channel)) {
-                $icon_rss = '';
-                if (!empty($feed)) {
-                    $icon_rss = Display::url(
-                        Display::return_icon('social_rss.png', '', array(), 22),
-                        Security::remove_XSS($feed['rssfeeds']),
-                        array('target' => '_blank')
-                    );
-                }
-
-                $res .= '<h3 class="title-rss">'.$icon_rss.' '.$channel->getTitle().'</h3>';
-                $res .= '<div class="rss-items">';
-                /** @var Rss $item */
-                foreach ($channel as $item) {
-                    if ($limit >= 0 and $i > $limit) {
-                        break;
+            try {
+                $channel = Reader::import($url);
+                $i = 1;
+                if (!empty($channel)) {
+                    $iconRss = '';
+                    if (!empty($feed)) {
+                        $iconRss = Display::url(
+                            Display::return_icon('social_rss.png', '', array(), 22),
+                            Security::remove_XSS($feed['rssfeeds']),
+                            array('target' => '_blank')
+                        );
                     }
-                    $res .= '<h4 class="rss-title"><a href="'.$item->getLink().'">'.$item->getTitle().'</a></h4>';
-                    $res .= '<div class="rss-date">'.api_get_local_time($item->getDateCreated()).'</div>';
-                    $res .= '<div class="rss-content"><p>'.$item->getDescription().'</p></div>';
-                    $i++;
+
+                    $res .= '<h3 class="title-rss">'.$iconRss.' '.$channel->getTitle().'</h3>';
+                    $res .= '<div class="rss-items">';
+                    /** @var Rss $item */
+                    foreach ($channel as $item) {
+                        if ($limit >= 0 and $i > $limit) {
+                            break;
+                        }
+                        $res .= '<h4 class="rss-title"><a href="'.$item->getLink().'">'.$item->getTitle().'</a></h4>';
+                        $res .= '<div class="rss-date">'.api_get_local_time($item->getDateCreated()).'</div>';
+                        $res .= '<div class="rss-content"><p>'.$item->getDescription().'</p></div>';
+                        $i++;
+                    }
+                    $res .= '</div>';
                 }
-                $res .= '</div>';
+            } catch (Exception $e) {
+                error_log($e->getMessage());
             }
         }
 
@@ -577,7 +579,7 @@ class SocialManager extends UserManager
      * @param int  $userId
      * @param string $subject
      * @param string $content
-     *
+     * @return bool
      */
     public static function sendInvitationToUser($userId, $subject = '', $content = '')
     {

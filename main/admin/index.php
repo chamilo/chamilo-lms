@@ -109,7 +109,9 @@ if (api_is_platform_admin()) {
     }
     $items[] = array('url' => 'extra_fields.php?type=user', 'label' => get_lang('ManageUserFields'));
     $items[] = array('url'=>'usergroups.php', 'label' => get_lang('Classes'));
-    $items[] = ['url' => 'user_linking_requests.php', 'label' => get_lang('UserLinkingRequests')];
+    if (api_get_configuration_value('show_link_request_hrm_user')) {
+        $items[] = ['url' => 'user_linking_requests.php', 'label' => get_lang('UserLinkingRequests')];
+    }
 } elseif (api_is_session_admin() && api_get_configuration_value('limit_session_admin_role')) {
     $items = array(
         array('url' => 'user_list.php', 'label' => get_lang('UserList')),

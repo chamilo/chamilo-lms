@@ -35,10 +35,10 @@ plugins:
         enabled: false
 
   sonar-php:
-    enabled: true
+    enabled: false
 
   duplication:
-    enabled: true
+    enabled: false
 
 exclude_patterns:
 - cli-config.php

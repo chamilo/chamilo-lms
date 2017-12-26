@@ -2,12 +2,12 @@ version: "2"
 checks:
   file-lines:
     enabled: false
-   method-complexity:
+  method-complexity:
     enabled: false
-   complex-logic:
+  complex-logic:
     enabled: false
-   method-lines:
-     enabled: false
+  method-lines:
+    enabled: false
 
 plugins:
   fixme:

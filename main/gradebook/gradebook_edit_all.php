@@ -7,7 +7,6 @@
  * @author Julio Montoya - fixes in order to use gradebook models + some code cleaning
  */
 
-$cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GRADEBOOK;
@@ -16,7 +15,7 @@ api_protect_course_script(true);
 api_block_anonymous_users();
 GradebookUtils::block_students();
 
-$my_selectcat = isset($_GET['selectcat']) ? intval($_GET['selectcat']) : '';
+$my_selectcat = isset($_GET['selectcat']) ? intval($_GET['selectcat']) : 0;
 
 if (empty($my_selectcat)) {
     api_not_allowed(true);
@@ -168,7 +167,6 @@ foreach ($evaluations as $evaluationRow) {
                 </td></tr>';
 }
 
-$my_api_cidreq = api_get_cidreq();
 $currentUrl = api_get_self().'?'.api_get_cidreq().'&selectcat='.$my_selectcat;
 
 $form = new FormValidator('auto_weight', 'post', $currentUrl);
@@ -219,8 +217,9 @@ if ($form->validate()) {
             $weightToApply
         );
     }
+    Display::addFlash(Display::return_message(get_lang('GradebookWeightUpdated')));
 
-    header('Location:'.$currentUrl);
+    header('Location: '.$currentUrl);
     exit;
 }
 
@@ -274,8 +273,7 @@ $warning_message = sprintf(get_lang('TotalWeightMustBeX'), $original_total);
 echo Display::return_message($warning_message, 'warning', false);
 
 ?>
-<form method="post"
-      action="gradebook_edit_all.php?<?php echo $my_api_cidreq ?>&selectcat=<?php echo $my_selectcat ?>">
+<form method="post" action="<?php echo $currentUrl; ?>">
     <table class="data_table">
         <tr class="row_odd">
             <th style="width: 35px;"><?php echo get_lang('Type'); ?></th>

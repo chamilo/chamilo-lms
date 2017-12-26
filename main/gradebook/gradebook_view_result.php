@@ -226,7 +226,7 @@ if (isset($_GET['import'])) {
 
 if (isset($_GET['export'])) {
     $interbreadcrumb[] = array(
-        'url' => 'gradebook_view_result.php?selecteval='.$select_eval,
+        'url' => 'gradebook_view_result.php?selecteval='.$select_eval.'&'.api_get_cidreq(),
         'name' => get_lang('ViewResult'),
     );
     $locked_status = $eval[0]->get_locked();
@@ -234,12 +234,12 @@ if (isset($_GET['export'])) {
         DataForm :: TYPE_EXPORT,
         'export_result_form',
         null,
-        api_get_self().'?export=&selecteval='.$select_eval,
+        api_get_self().'?export=&selecteval='.$select_eval.'&'.api_get_cidreq(),
         '_blank',
         $locked_status
     );
     if (!$export_result_form->validate()) {
-        Display :: display_header(get_lang('Export'));
+        Display::display_header(get_lang('Export'));
     }
 
     if ($export_result_form->validate()) {
@@ -399,7 +399,7 @@ if (isset($_GET['export'])) {
 }
 
 if (isset($_GET['resultdelete'])) {
-    $result = Result :: load($_GET['resultdelete']);
+    $result = Result::load($_GET['resultdelete']);
     $result[0]->delete();
     Display::addFlash(Display::return_message(get_lang('ResultDeleted')));
     header('Location: gradebook_view_result.php?selecteval='.$select_eval.'&'.api_get_cidreq());

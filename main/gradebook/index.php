@@ -213,7 +213,7 @@ if (isset($_GET['moveeval'])) {
         }
     } else {
         $targetcat = Category::load($_GET['targetcat']);
-        $course_to_crsind = ($evals[0]->get_course_code() != null && $targetcat[0]->get_course_code() == null);
+        $course_to_crsind = $evals[0]->get_course_code() != null && $targetcat[0]->get_course_code() == null;
 
         if (!($course_to_crsind && !isset($_GET['confirm']))) {
             $evals[0]->move_to_cat($targetcat[0]);
@@ -235,14 +235,14 @@ if (isset($_GET['movelink'])) {
         $link[0],
         'move_link_form',
         null,
-        api_get_self().'?movelink='.$_GET['movelink'].'&selectcat='.$selectCat
+        api_get_self().'?movelink='.$_GET['movelink'].'&selectcat='.$selectCat.'&'.api_get_cidreq()
     );
 
     if ($move_form->validate()) {
         $targetcat = Category::load($move_form->exportValue('move_cat'));
         $link[0]->move_to_cat($targetcat[0]);
         unset($link);
-        header('Location: '.api_get_self().'?linkmoved=&selectcat='.$selectCat);
+        header('Location: '.api_get_self().'?linkmoved=&selectcat='.$selectCat.'&'.api_get_cidreq());
         exit;
     }
 }

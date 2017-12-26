@@ -124,7 +124,7 @@ class UserTable extends SortableTable
             // evaluation
             case 'E':
                 return '&nbsp;'
-                . '<a href="gradebook_view_result.php?selecteval='.$item->get_id().'">'
+                . '<a href="gradebook_view_result.php?selecteval='.$item->get_id().'&'.api_get_cidreq().'">'
                 . $item->get_name()
                 . '</a>';
             // link

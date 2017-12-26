@@ -2598,14 +2598,19 @@ class Blog
      * The blog admin can thus select what a certain user can do in the current blog
      *
      * @param int $blog_id
+     * @return string
      */
     public static function displayUserRightsForm($blog_id)
     {
+        ob_start();
         echo '<legend>'.get_lang('RightsManager').'</legend>';
         echo '<br />';
 
         // Integration of patricks permissions system.
         require_once api_get_path(SYS_CODE_PATH).'permissions/blog_permissions.inc.php';
+        $content = ob_get_contents();
+        ob_get_clean();
+        return $content;
     }
 
     /**

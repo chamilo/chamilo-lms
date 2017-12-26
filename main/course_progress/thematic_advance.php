@@ -217,6 +217,8 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
                 'thematic_id' => $values['thematic_id']
             ]);
 
+        Display::addFlash(Display::return_message(get_lang('Updated')));
+
         header('Location: '.api_get_path(WEB_CODE_PATH).$redirectUrlParams);
         exit;
     }

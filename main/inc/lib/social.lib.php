@@ -28,12 +28,12 @@ class SocialManager extends UserManager
      */
     public static function show_list_type_friends()
     {
-        $friend_relation_list = array();
         $table = Database::get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
         $sql = 'SELECT id, title FROM '.$table.'
                 WHERE id<>6 
                 ORDER BY id ASC';
         $result = Database::query($sql);
+        $friend_relation_list = array();
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $friend_relation_list[] = $row;
         }

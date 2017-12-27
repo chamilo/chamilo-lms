@@ -29,8 +29,8 @@ class AppPlugin
         'course_tool_plugin'
     );
 
-    public $installedPluginListName = array();
-    public $installedPluginListObject = array();
+    public $installedPluginListName = [];
+    public $installedPluginListObject = [];
 
     /**
      * Constructor
@@ -47,7 +47,7 @@ class AppPlugin
     {
         /* We scan the plugin directory. Each folder is a potential plugin. */
         $pluginPath = api_get_path(SYS_PLUGIN_PATH);
-        $plugins = array();
+        $plugins = [];
         $handle = @opendir($pluginPath);
         while (false !== ($file = readdir($handle))) {
             if ($file != '.' && $file != '..' && is_dir(api_get_path(SYS_PLUGIN_PATH).$file)) {
@@ -65,7 +65,7 @@ class AppPlugin
      */
     public function get_installed_plugins_by_region()
     {
-        $plugins = array();
+        $plugins = [];
         /* We retrieve all the active plugins. */
         $result = api_get_settings('Plugins');
         if (!empty($result)) {
@@ -106,7 +106,7 @@ class AppPlugin
     public function setInstalledPluginListObject()
     {
         $pluginListName = $this->getInstalledPluginListName();
-        $pluginList = array();
+        $pluginList = [];
         if (!empty($pluginListName)) {
             foreach ($pluginListName as $pluginName) {
                 $pluginInfo = $this->getPluginInfo($pluginName);
@@ -123,7 +123,7 @@ class AppPlugin
      */
     public function get_installed_plugins()
     {
-        $installedPlugins = array();
+        $installedPlugins = [];
         $plugins = api_get_settings_params(
             array(
                 "variable = ? AND selected_value = ? AND category = ? " => array('status', 'installed', 'Plugins')
@@ -208,7 +208,7 @@ class AppPlugin
     public function get_areas_by_plugin($pluginName)
     {
         $result = api_get_settings('Plugins');
-        $areas = array();
+        $areas = [];
         foreach ($result as $row) {
             if ($pluginName == $row['selected_value']) {
                 $areas[] = $row['variable'];
@@ -369,7 +369,7 @@ class AppPlugin
                     if (isset($_template)) {
                         $_template['plugin_info'] = $plugin_info;
                     } else {
-                        $_template = array();
+                        $_template = [];
                         $_template['plugin_info'] = $plugin_info;
                     }
 
@@ -377,7 +377,7 @@ class AppPlugin
                     $template->assign($plugin_name, $_template);
 
                     // Loading the Twig template plugin files if exists
-                    $template_list = array();
+                    $template_list = [];
                     if (isset($plugin_info) && isset($plugin_info['templates'])) {
                         $template_list = $plugin_info['templates'];
                     }
@@ -415,7 +415,7 @@ class AppPlugin
         } else {
             $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/plugin.php";
 
-            $plugin_info = array();
+            $plugin_info = [];
             if (file_exists($plugin_file)) {
                 require $plugin_file;
             }
@@ -433,7 +433,7 @@ class AppPlugin
                 )
             );
 
-            $settings_filtered = array();
+            $settings_filtered = [];
             foreach ($plugin_settings as $item) {
                 if (!empty($item['selected_value'])) {
                     if (@unserialize($item['selected_value']) !== false) {
@@ -576,7 +576,7 @@ class AppPlugin
                         <div class="panel-body">
                 ');
 
-                $groups = array();
+                $groups = [];
                 foreach ($obj->course_settings as $setting) {
                     if ($obj->validateCourseSetting($setting['name']) === false) {
                         continue;
@@ -621,7 +621,7 @@ class AppPlugin
     {
         $pluginList = $this->getInstalledPluginListObject();
         /** @var Plugin $obj */
-        $courseSettings = array();
+        $courseSettings = [];
         if (!empty($pluginList)) {
             foreach ($pluginList as $obj) {
                 $pluginCourseSetting = $obj->getCourseSettings();
@@ -644,8 +644,7 @@ class AppPlugin
         /** @var Plugin $obj */
         foreach ($pluginList as $obj) {
             $settings = $obj->getCourseSettings();
-
-            $subValues = array();
+            $subValues = [];
             if (!empty($settings)) {
                 foreach ($settings as $v) {
                     if (isset($values[$v])) {

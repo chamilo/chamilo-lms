@@ -64,6 +64,7 @@ class ScheduledAnnouncement extends Model
     /**
      * Displays the title + grid
      * @param int $sessionId
+     * @return string
      */
     public function getGrid($sessionId)
     {
@@ -203,10 +204,10 @@ class ScheduledAnnouncement extends Model
             "]
         );
 
-        $form->addElement('html', '<div id="specific_date">');
+        $form->addHtml('<div id="specific_date">');
         $form->addDateTimePicker('date', get_lang('Date'));
-        $form->addElement('html', '</div>');
-        $form->addElement('html', '<div id="options" style="display:none">');
+        $form->addHtml('</div>');
+        $form->addHtml('<div id="options" style="display:none">');
 
         $startDate = $sessionInfo['access_start_date'];
         $endDate = $sessionInfo['access_end_date'];
@@ -237,8 +238,7 @@ class ScheduledAnnouncement extends Model
             $form->addSelect('base_date', get_lang('BaseDate'), $options);
         }
 
-        $form->addElement('html', '</div>');
-
+        $form->addHtml('</div>');
         $form->addText('subject', get_lang('Subject'));
         $form->addHtmlEditor('message', get_lang('Message'));
         $this->setTagsInForm($form);

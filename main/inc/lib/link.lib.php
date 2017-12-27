@@ -94,7 +94,7 @@ class Link extends Model
         if (!empty($id)) {
             // iid
             $sql = "UPDATE ".$this->table." SET id = iid WHERE iid = $id";
-            Database:: query($sql);
+            Database::query($sql);
 
             api_item_property_update(
                 $course_info,
@@ -459,7 +459,7 @@ class Link extends Model
             if (Database:: num_rows($res) > 0) {
                 $row = Database::fetch_array($res);
                 $di = new ChamiloIndexer();
-                $di->remove_document((int) $row['search_did']);
+                $di->remove_document($row['search_did']);
             }
             $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
             $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
@@ -679,7 +679,7 @@ class Link extends Model
                 $di = new ChamiloIndexer();
                 isset ($_POST['language']) ? $lang = Database:: escape_string($_POST['language']) : $lang = 'english';
                 $di->connectDb(null, null, $lang);
-                $di->remove_document((int) $se_ref['search_did']);
+                $di->remove_document($se_ref['search_did']);
                 $di->addChunk($ic_slide);
 
                 // Index and return search engine document id.
@@ -727,11 +727,12 @@ class Link extends Model
 
     /**
      * @param int $id
+     * @param array $values
      * @return bool
      */
     public static function editCategory($id, $values)
     {
-        $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
+        $table = Database::get_course_table(TABLE_LINK_CATEGORY);
         $course_id = api_get_course_int_id();
         $id = intval($id);
 
@@ -741,7 +742,7 @@ class Link extends Model
             'description' => $values['description']
         ];
         Database::update(
-            $tbl_categories,
+            $table,
             $params,
             ['c_id = ? AND id = ?' => [$course_id, $id]]
         );
@@ -1196,11 +1197,11 @@ class Link extends Model
                 ).'</a>';
         } else {
             $tools .= Display:: return_icon(
-                    'down_na.png',
-                    get_lang('Down'),
-                    array(),
-                    ICON_SIZE_SMALL
-                ).'</a>';
+                'down_na.png',
+                get_lang('Down'),
+                array(),
+                ICON_SIZE_SMALL
+            ).'</a>';
         }
 
         $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=deletecategory&id='.$categoryId."&category_id=$categoryId\"
@@ -1292,6 +1293,7 @@ class Link extends Model
      * CSV file import functions
      * @author René Haentjens , Ghent University
      * @param string $catname
+     * @return int
      */
     public static function get_cat($catname)
     {
@@ -1409,7 +1411,6 @@ class Link extends Model
     public static function import_link($linkdata)
     {
         // url, category_id, title, description, ...
-
         // Field names used in the uploaded file
         $known_fields = array(
             'url',
@@ -1429,9 +1430,7 @@ class Link extends Model
         );
 
         // All other fields are added to description, as "name:value".
-
         // Only one hide_field is assumed to be present, <> is removed from value.
-
         if (!($url = trim($linkdata['url'])) || !($title = trim($linkdata['title']))) {
             return 0; // 0 = fail
         }

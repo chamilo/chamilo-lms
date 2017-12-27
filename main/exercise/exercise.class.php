@@ -2814,7 +2814,7 @@ class Exercise
                 $di = new ChamiloIndexer();
                 isset($_POST['language']) ? $lang = Database::escape_string($_POST['language']) : $lang = 'english';
                 $di->connectDb(null, null, $lang);
-                $di->remove_document((int) $se_ref['search_did']);
+                $di->remove_document($se_ref['search_did']);
                 $di->addChunk($ic_slide);
 
                 //index and return search engine document id
@@ -2849,7 +2849,7 @@ class Exercise
             if (Database::num_rows($res) > 0) {
                 $row = Database::fetch_array($res);
                 $di = new ChamiloIndexer();
-                $di->remove_document((int) $row['search_did']);
+                $di->remove_document($row['search_did']);
                 unset($di);
                 $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
                 foreach ($this->questionList as $question_i) {

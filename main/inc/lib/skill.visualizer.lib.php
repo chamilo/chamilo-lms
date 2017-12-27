@@ -35,6 +35,11 @@ class SkillVisualizer
         $this->center_x = intval($this->offset_x + $this->canvas_x / 2 - $this->block_size / 2);
     }
 
+    /**
+     * @param $skill
+     * @param $position
+     * @param $class
+     */
     public function prepare_skill_box($skill, $position, $class)
     {
         $block_id = $skill['id'];
@@ -59,7 +64,6 @@ class SkillVisualizer
             //$this->html .= Display::url(Display::return_icon('add.png', get_lang('Add'), array(), ICON_SIZE_SMALL), '#', array('id'=>'edit_block_'.$block_id,'class'=>'edit_block'));
             //$this->html .= Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL), '#', array('id=>"edit_block_'.$block_id,'class'=>'edit_block'));
             //$this->html .= Display::url(Display::return_icon('up.png', get_lang('Close'), array(), ICON_SIZE_SMALL), '#', array('id'=>'close_block_'.$block_id,'class'=>'close_block'));
-
             //$this->html .= Display::url(Display::return_icon('down.png', get_lang('Open'), array(), ICON_SIZE_SMALL), '#', array('id'=>'open_block_'.$block_id,'class'=>'open_block'));
         }
         $this->html .= '</div>';

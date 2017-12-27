@@ -1253,7 +1253,7 @@ class DocumentManager
             if (Database::num_rows($res) > 0) {
                 $row2 = Database::fetch_array($res);
                 $di = new ChamiloIndexer();
-                $di->remove_document((int) $row2['search_did']);
+                $di->remove_document($row2['search_did']);
             }
             $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
             $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_DOCUMENT, $document_id);

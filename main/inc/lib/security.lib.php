@@ -167,7 +167,7 @@ class Security
     /**
      * Checks the user agent of the client as recorder by get_ua() to prevent
      * most session hijacking attacks.
-     * @return	bool	True if the user agent is the same, false otherwise
+     * @return    bool    True if the user agent is the same, false otherwise
      */
     public static function check_ua()
     {
@@ -197,7 +197,7 @@ class Security
      * the one that sent this form in knowingly (this form hasn't been generated from
      * another website visited by the user at the same time).
      * Check the token with check_token()
-     * @return	string	Hidden-type input ready to insert into a form
+     * @return    string    Hidden-type input ready to insert into a form
      */
     public static function get_HTML_token()
     {
@@ -215,7 +215,7 @@ class Security
      * the one that sent this form in knowingly (this form hasn't been generated from
      * another website visited by the user at the same time).
      * Check the token with check_token()
-     * @return	string	Token
+     * @return    string    Token
      */
     public static function get_token()
     {
@@ -438,9 +438,11 @@ class Security
     }
 
     /**
-     * This method provides specific protection (against XSS and other kinds of attacks) for static images (icons) used by the system.
-     * Image paths are supposed to be given by programmers - people who know what they do, anyway, this method encourages
-     * a safe practice for generating icon paths, without using heavy solutions based on HTMLPurifier for example.
+     * This method provides specific protection (against XSS and other kinds of attacks)
+     * for static images (icons) used by the system.
+     * Image paths are supposed to be given by programmers - people who know what they do, anyway,
+     * this method encourages a safe practice for generating icon paths, without using heavy solutions
+     * based on HTMLPurifier for example.
      * @param string $img_path The input path of the image, it could be relative or absolute URL.
      * @return string Returns sanitized image path or an empty string when the image path is not secure.
      * @author Ivan Tcholakov, March 2011

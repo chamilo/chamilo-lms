@@ -26,7 +26,7 @@ class DashboardManager
 
         /* We scan the plugin directory. Each folder is a potential plugin. */
         $dashboard_pluginpath = api_get_path(SYS_PLUGIN_PATH).'dashboard/';
-        $possibleplugins = self::getPossibleDashboardPluginsPath();
+        $possiblePlugins = self::getPossibleDashboardPluginsPath();
 
         $table_cols = array('name', 'version', 'description');
         echo Display::page_subheader(get_lang('DashboardPlugins'));
@@ -42,7 +42,7 @@ class DashboardManager
         $disabled_blocks_data = self::get_block_data_without_plugin();
 
         // We display all the possible enabled or disabled plugins
-        foreach ($possibleplugins as $testplugin) {
+        foreach ($possiblePlugins as $testplugin) {
             $plugin_info_file = $dashboard_pluginpath.$testplugin."/$testplugin.info";
             if (file_exists($plugin_info_file) && is_readable($plugin_info_file)) {
                 $plugin_info = api_parse_info_file($plugin_info_file);
@@ -143,14 +143,14 @@ class DashboardManager
 
         // get all plugins path inside plugin directory
         $dashboard_pluginpath = api_get_path(SYS_PLUGIN_PATH).'dashboard/';
-        $possibleplugins = self::getPossibleDashboardPluginsPath();
+        $possiblePlugins = self::getPossibleDashboardPluginsPath();
 
-        if (count($possibleplugins) > 0) {
-            $selected_plugins = array_intersect(array_keys($plugin_paths), $possibleplugins);
-            $not_selected_plugins = array_diff($possibleplugins, array_keys($plugin_paths));
+        if (count($possiblePlugins) > 0) {
+            $selected_plugins = array_intersect(array_keys($plugin_paths), $possiblePlugins);
+            $not_selected_plugins = array_diff($possiblePlugins, array_keys($plugin_paths));
 
             // get blocks id from not selected path
-            $not_selected_blocks_id = array();
+            $not_selected_blocks_id = [];
             foreach ($not_selected_plugins as $plugin) {
                 $block_data = self::get_enabled_dashboard_blocks($plugin);
                 if (!empty($block_data[$plugin])) {
@@ -176,8 +176,8 @@ class DashboardManager
                     }
 
                     // get columns and blocks id for updating extra user data
-                    $columns = array();
-                    $user_blocks_id = array();
+                    $columns = [];
+                    $user_blocks_id = [];
                     foreach ($user_block_data as $data) {
                         $user_blocks_id[$data['block_id']] = true;
                         $columns[$data['block_id']] = $data['column'];
@@ -214,7 +214,7 @@ class DashboardManager
                     } else {
                         // insert
                         $plugin_info_file = $dashboard_pluginpath.$testplugin."/$testplugin.info";
-                        $plugin_info = array();
+                        $plugin_info = [];
                         if (file_exists($plugin_info_file)) {
                             $plugin_info = api_parse_info_file($plugin_info_file);
                         }
@@ -258,7 +258,7 @@ class DashboardManager
     {
         // get all plugins path inside plugin directory
         /* We scan the plugin directory. Each folder is a potential plugin. */
-        $possiblePlugins = array();
+        $possiblePlugins = [];
         $dashboard_pluginpath = api_get_path(SYS_PLUGIN_PATH).'dashboard/';
         $handle = @opendir($dashboard_pluginpath);
         while (false !== ($file = readdir($handle))) {
@@ -278,14 +278,14 @@ class DashboardManager
     public static function get_block_data_without_plugin()
     {
         $tbl_block = Database::get_main_table(TABLE_MAIN_BLOCK);
-        $possibleplugins = self::getPossibleDashboardPluginsPath();
+        $possiblePlugins = self::getPossibleDashboardPluginsPath();
 
         // We check if plugin exists inside directory for updating active field
         $sql = "SELECT * FROM $tbl_block";
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
             while ($row = Database::fetch_array($rs)) {
-                if (!in_array($row['path'], $possibleplugins)) {
+                if (!in_array($row['path'], $possiblePlugins)) {
                     $active = 0;
                 } else {
                     $active = 1;
@@ -298,7 +298,7 @@ class DashboardManager
         }
 
         // get disabled block data
-        $block_data = array();
+        $block_data = [];
         $sql = "SELECT * FROM $tbl_block WHERE active = 0";
         $rs_block = Database::query($sql);
         if (Database::num_rows($rs_block) > 0) {
@@ -326,7 +326,7 @@ class DashboardManager
 
         $sql = "SELECT * FROM $tbl_block WHERE active = 1 $condition_path ";
         $rs  = Database::query($sql);
-        $block_data = array();
+        $block_data = [];
         if (Database::num_rows($rs) > 0) {
             while ($row = Database::fetch_array($rs)) {
                 $block_data[$row['path']] = $row;
@@ -446,14 +446,14 @@ class DashboardManager
      */
     public static function store_user_blocks($user_id, $enabled_blocks, $columns)
     {
-        $selected_blocks_id = array();
+        $selected_blocks_id = [];
         if (is_array($enabled_blocks) && count($enabled_blocks) > 0) {
             $selected_blocks_id = array_keys($enabled_blocks);
         }
 
         // build data for storing inside extra user field
         $fname = 'dashboard';
-        $fvalue = array();
+        $fvalue = [];
         foreach ($selected_blocks_id as $block_id) {
             $fvalue[] = $block_id.':'.$columns[$block_id];
         }
@@ -477,7 +477,7 @@ class DashboardManager
         $field_variable = 'dashboard';
         $extra_user_data = UserManager::get_extra_user_data_by_field($user_id, $field_variable);
         $extra_user_data = explode(';', $extra_user_data[$field_variable]);
-        $data = array();
+        $data = [];
         foreach ($extra_user_data as $extra) {
             $split_extra = explode(':', $extra);
             if (!empty($split_extra)) {
@@ -507,8 +507,8 @@ class DashboardManager
         }
 
         // get columns and blocks id for updating extra user data
-        $columns = array();
-        $user_blocks_id = array();
+        $columns = [];
+        $user_blocks_id = [];
         foreach ($user_block_data as $data) {
             $user_blocks_id[$data['block_id']] = true;
             $columns[$data['block_id']] = $data['column'];
@@ -524,7 +524,7 @@ class DashboardManager
      * get links for styles from dashboard plugins
      * @return string   links
      */
-    public static function get_links_for_styles_from_dashboard_plugins()
+    public static function getStyleSheet()
     {
         return '<link rel="stylesheet" href="'.api_get_path(WEB_PLUGIN_PATH).'dashboard/css/default.css" type="text/css" />'.PHP_EOL;
     }

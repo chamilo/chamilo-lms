@@ -226,7 +226,7 @@ class Plugin
 
             switch ($type) {
                 case 'html':
-                    $result->addElement('html', $this->get_lang($name));
+                    $result->addHtml($this->get_lang($name));
                     break;
                 case 'wysiwyg':
                     $result->addHtmlEditor($name, $this->get_lang($name), false);
@@ -872,7 +872,11 @@ class Plugin
     {
         $settings = api_get_settings_params_simple(
             array(
-                "subkey = ? AND category = ? AND type = ? AND variable = 'status' " => array($this->get_name(), 'Plugins', 'setting')
+                "subkey = ? AND category = ? AND type = ? AND variable = 'status' " => array(
+                    $this->get_name(),
+                    'Plugins',
+                    'setting',
+                )
             )
         );
         if (is_array($settings) && isset($settings['selected_value']) && $settings['selected_value'] == 'installed') {

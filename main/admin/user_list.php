@@ -22,31 +22,19 @@ if (isset($_GET['user_id']) && $action == 'login_as') {
         $result = UserManager::loginAsUser($_GET['user_id']);
         if ($result) {
             $userInfo = api_get_user_info();
-            $firstname = $userInfo['firstname'];
-            $lastname = $userInfo['lastname'];
             $userId = $userInfo['id'];
+            $message = sprintf(
+                get_lang('AttemptingToLoginAs'),
+                $userInfo['complete_name_with_username'],
+                '',
+                $userId
+            );
 
-            if (api_is_western_name_order()) {
-                $message = sprintf(
-                    get_lang('AttemptingToLoginAs'),
-                    $firstname,
-                    $lastname,
-                    $userId
-                );
-            } else {
-                $message = sprintf(
-                    get_lang('AttemptingToLoginAs'),
-                    $lastname,
-                    $firstname,
-                    $userId
-                );
-            }
-
-            $target_url = api_get_path(WEB_PATH)."user_portal.php";
-            $message .= '<br />'.
-                sprintf(get_lang('LoginSuccessfulGoToX'), '<a href="'.$target_url.'">'.$target_url.'</a>');
+            $url = api_get_path(WEB_PATH).'user_portal.php';
+            $goTo = sprintf(get_lang('LoginSuccessfulGoToX'), Display::url($url, $url));
             Display::display_header(get_lang('UserList'));
             echo Display::return_message($message, 'normal', false);
+            echo Display::return_message($goTo, 'normal', false);
             Display::display_footer();
             exit;
         } else {

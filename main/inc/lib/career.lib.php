@@ -36,7 +36,7 @@ class Career extends Model
         $row = Database::select(
             'count(*) as count',
             $this->table,
-            array(),
+            [],
             'first'
         );
         return $row['count'];
@@ -120,9 +120,9 @@ class Career extends Model
             $header = get_lang('Modify');
         }
 
-        $form->addElement('header', $header);
         $id = isset($_GET['id']) ? intval($_GET['id']) : '';
-        $form->addElement('hidden', 'id', $id);
+        $form->addHeader($header);
+        $form->addHidden('id', $id);
         $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
         $form->addHtmlEditor(
             'description',
@@ -214,9 +214,9 @@ class Career extends Model
      */
     public function get_status($career_id)
     {
-        $TBL_CAREER = Database::get_main_table(TABLE_CAREER);
+        $table = Database::get_main_table(TABLE_CAREER);
         $career_id = intval($career_id);
-        $sql = "SELECT status FROM $TBL_CAREER WHERE id = '$career_id'";
+        $sql = "SELECT status FROM $table WHERE id = '$career_id'";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             $data = Database::fetch_array($result);
@@ -296,9 +296,6 @@ class Career extends Model
         if (!($graph instanceof Graph)) {
             return '';
         }
-
-        $debug = false;
-
         // Getting max column
         $maxColumn = 0;
         foreach ($graph->getVertices() as $vertex) {

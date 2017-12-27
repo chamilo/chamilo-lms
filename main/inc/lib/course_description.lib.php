@@ -238,7 +238,7 @@ class CourseDescription
             );
         }
 
-        return ($last_id > 0) ? 1 : 0;
+        return $last_id > 0 ? 1 : 0;
     }
 
     /**
@@ -304,7 +304,7 @@ class CourseDescription
         );
 
         if ($this->id > 0) {
-            //insert into item_property
+            // Insert into item_property
             api_item_property_update(
                 api_get_course_info(),
                 TOOL_COURSE_DESCRIPTION,
@@ -375,7 +375,7 @@ class CourseDescription
      */
     public function get_default_description_title()
     {
-        $default_description_titles = array();
+        $default_description_titles = [];
         $default_description_titles[1] = get_lang('GeneralDescription');
         $default_description_titles[2] = get_lang('Objectives');
         $default_description_titles[3] = get_lang('Topics');
@@ -394,7 +394,7 @@ class CourseDescription
      */
     public function get_default_description_title_editable()
     {
-        $default_description_title_editable = array();
+        $default_description_title_editable = [];
         $default_description_title_editable[1] = true;
         $default_description_title_editable[2] = true;
         $default_description_title_editable[3] = true;
@@ -413,7 +413,7 @@ class CourseDescription
      */
     public function get_default_description_icon()
     {
-        $default_description_icon = array();
+        $default_description_icon = [];
         $default_description_icon[1] = 'info.png';
         $default_description_icon[2] = 'objective.png';
         $default_description_icon[3] = 'topics.png';
@@ -433,7 +433,7 @@ class CourseDescription
      */
     public function get_default_question()
     {
-        $question = array();
+        $question = [];
         $question[1] = get_lang('GeneralDescriptionQuestions');
         $question[2] = get_lang('ObjectivesQuestions');
         $question[3] = get_lang('TopicsQuestions');
@@ -452,7 +452,7 @@ class CourseDescription
      */
     public function get_default_information()
     {
-        $information = array();
+        $information = [];
         $information[1] = get_lang('GeneralDescriptionInformation');
         $information[2] = get_lang('ObjectivesInformation');
         $information[3] = get_lang('TopicsInformation');

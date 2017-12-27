@@ -38,7 +38,12 @@ class ExerciseShowFunctions
         $originalStudentAnswer = '',
         $showTotalScoreAndUserChoices
     ) {
-        $answerHTML = FillBlanks::getHtmlDisplayForAnswer($answer, $feedbackType, $resultsDisabled, $showTotalScoreAndUserChoices);
+        $answerHTML = FillBlanks::getHtmlDisplayForAnswer(
+            $answer,
+            $feedbackType,
+            $resultsDisabled,
+            $showTotalScoreAndUserChoices
+        );
         if (strpos($originalStudentAnswer, 'font color') !== false) {
             $answerHTML = $originalStudentAnswer;
         }
@@ -156,8 +161,7 @@ class ExerciseShowFunctions
         $fileUrl = null,
         $results_disabled = 0,
         $questionScore = 0
-    )
-    {
+    ) {
         if (isset($fileUrl)) {
             echo '
                 <tr>

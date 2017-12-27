@@ -72,7 +72,9 @@ exclude_patterns:
 - main/inc/lib/mimetex/
 - main/inc/lib/nanogong/
 - main/inc/lib/nusoap/
+- main/inc/lib/opengraph/*
 - main/inc/lib/ppt2png/
+- main/inc/lib/phpseclib
 - main/inc/lib/pear/
 - main/inc/lib/phpmailer/
 - main/inc/lib/phpseclib/

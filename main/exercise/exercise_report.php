@@ -178,12 +178,9 @@ if (isset($_REQUEST['comments']) &&
 
     for ($i = 0; $i < $loop_in_track; $i++) {
         $my_marks = isset($_POST['marks_'.$array_content_id_exe[$i]]) ? $_POST['marks_'.$array_content_id_exe[$i]] : '';
-
-        $contain_comments = $_POST['comments_'.$array_content_id_exe[$i]];
-        if (isset($contain_comments)) {
+        $my_comments = '';
+        if (isset($_POST['comments_'.$array_content_id_exe[$i]])) {
             $my_comments = $_POST['comments_'.$array_content_id_exe[$i]];
-        } else {
-            $my_comments = '';
         }
         $my_questionid = intval($array_content_id_exe[$i]);
 
@@ -221,7 +218,6 @@ if (isset($_REQUEST['comments']) &&
     $sql = "UPDATE $TBL_TRACK_EXERCISES
             SET exe_result = '".floatval($tot)."'
             WHERE exe_id = ".$id;
-
     Database::query($sql);
 
     if (isset($_POST['send_notification'])) {
@@ -246,7 +242,7 @@ if (isset($_REQUEST['comments']) &&
     }
 
     // Updating LP score here
-    if (in_array($origin, array('tracking_course', 'user_course', 'correct_exercise_in_lp', 'tracking'))) {
+    if (!empty($lp_id) && !empty($lpItemId)) {
         $statusCondition = '';
         $item = new learnpathItem($lpItemId, api_get_user_id(), api_get_course_int_id());
         if ($item) {
@@ -270,7 +266,6 @@ if (isset($_REQUEST['comments']) &&
                     $passed = true;
                 }
             }*/
-
             if ($passed == false) {
                 if (!empty($objExerciseTmp->pass_percentage)) {
                     $passed = ExerciseLib::isSuccessExerciseResult(
@@ -296,15 +291,16 @@ if (isset($_REQUEST['comments']) &&
                 $statusCondition
                 WHERE c_id = ".$course_id." AND id = ".$lp_item_view_id;
         Database::query($sql);
-
-
         if ($origin == 'tracking_course') {
             //Redirect to the course detail in lp
-            header('location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?course='.Security::remove_XSS($_GET['course']));
+            header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?course='.Security::remove_XSS($_GET['course']));
             exit;
         } else {
             // Redirect to the reporting
-            header('Location: '.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?origin='.$origin.'&student='.$student_id.'&details=true&course='.api_get_course_id().'&session_id='.$session_id);
+            header(
+                'Location: '.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?origin='.$origin.'&student='.$student_id.'&details=true&course='.api_get_course_id(
+                ).'&session_id='.$session_id
+            );
             exit;
         }
     }
@@ -795,7 +791,7 @@ $extra_params['height'] = 'auto';
         * initiate datepicker
         */
         $(function() {
-            $( "#datepicker_start" ).datepicker({
+            $("#datepicker_start").datepicker({
                 defaultDate: "",
                 changeMonth: false,
                 numberOfMonths: 1

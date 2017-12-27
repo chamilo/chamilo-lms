@@ -31,7 +31,7 @@ if (isset($_GET['action']) && in_array($_GET['action'], $actions)) {
 }
 
 // load styles from dashboard plugins
-$htmlHeadXtra[] = DashboardManager::get_links_for_styles_from_dashboard_plugins();
+$htmlHeadXtra[] = DashboardManager::getStyleSheet();
 
 // course description controller object
 $dashboard_controller = new DashboardController();

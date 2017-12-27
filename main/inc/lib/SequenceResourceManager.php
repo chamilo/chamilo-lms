@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Entity\SequenceResource;
 
 /**
  * SequenceResourceManager class
@@ -42,10 +42,7 @@ class SequenceResourceManager
     {
         $sequenceList = [];
         $entityManager = Database::getManager();
-
-        $gradebookCategoryRepo = $entityManager->getRepository(
-            'ChamiloCoreBundle:GradebookCategory'
-        );
+        $gradebookCategoryRepo = $entityManager->getRepository('ChamiloCoreBundle:GradebookCategory');
 
         foreach ($sequences as $sequenceId => $sequence) {
             $item = [
@@ -83,10 +80,8 @@ class SequenceResourceManager
                         }
                     }
                 }
-
                 $item['requirements'][$sessionRequired->getId()] = $itemSession;
             }
-
             $sequenceList[$sequenceId] = $item;
         }
 

@@ -1177,7 +1177,7 @@ abstract class Question
 
                 //TODO: index answers, see also form validation on question_admin.inc.php
 
-                $di->remove_document((int) $se_ref['search_did']);
+                $di->remove_document($se_ref['search_did']);
                 $di->addChunk($ic_slide);
 
                 //index and return search engine document id

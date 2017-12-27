@@ -35,7 +35,8 @@ class CourseHome
                     $condition_display_tools = ' WHERE a.c_id = '.$course_id.' AND a.link=t.link AND (t.position="basic" OR a.name = "'.TOOL_TRACKING.'") ';
                 }
 
-                $sql = "SELECT a.*, t.image img, t.row, t.column  FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
+                $sql = "SELECT a.*, t.image img, t.row, t.column  
+                        FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
                         $condition_display_tools ORDER BY t.row, t.column";
                 break;
             case 'External':
@@ -52,12 +53,16 @@ class CourseHome
                 }
                 break;
             case 'courseAdmin':
-                $sql = "SELECT a.*, t.image img, t.row, t.column  FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
-                        WHERE a.c_id = $course_id AND admin=1 AND a.link=t.link ORDER BY t.row, t.column";
+                $sql = "SELECT a.*, t.image img, t.row, t.column  
+                        FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
+                        WHERE a.c_id = $course_id AND admin=1 AND a.link=t.link 
+                        ORDER BY t.row, t.column";
                 break;
 
             case 'platformAdmin':
-                $sql = "SELECT *, image img FROM $TBL_ACCUEIL WHERE c_id = $course_id AND visibility = 2 ORDER BY id";
+                $sql = "SELECT *, image img FROM $TBL_ACCUEIL 
+                        WHERE c_id = $course_id AND visibility = 2 
+                        ORDER BY id";
         }
         $result = Database::query($sql);
 
@@ -729,15 +734,14 @@ class CourseHome
 
                     // Get blog members
                     if ($is_platform_admin) {
-                        $sql_blogs = "SELECT * FROM $tbl_blogs_rel_user blogs_rel_user
-                                      WHERE blog_id =".$blog_id;
+                        $sql = "SELECT * FROM $tbl_blogs_rel_user blogs_rel_user
+                                WHERE blog_id = ".$blog_id;
                     } else {
-                        $sql_blogs = "SELECT * FROM $tbl_blogs_rel_user blogs_rel_user
-                                      WHERE blog_id =".$blog_id." AND user_id = ".$userId;
+                        $sql = "SELECT * FROM $tbl_blogs_rel_user blogs_rel_user
+                                WHERE blog_id = ".$blog_id." AND user_id = ".$userId;
                     }
-                    $result_blogs = Database::query($sql_blogs);
-
-                    if (Database::num_rows($result_blogs) > 0) {
+                    $result = Database::query($sql);
+                    if (Database::num_rows($result) > 0) {
                         $all_tools_list[] = $tool;
                     }
                 } else {
@@ -1028,7 +1032,9 @@ class CourseHome
                         'onclick' => 'javascript: window.open(\''.$tool['link'].'\',\'window_visio'.api_get_course_id().'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')',
                         'target' => $tool['target']
                     );
-                } elseif (strpos($tool['name'], 'chat') !== false && api_get_course_setting('allow_open_chat_window')) {
+                } elseif (strpos($tool['name'], 'chat') !== false &&
+                    api_get_course_setting('allow_open_chat_window')
+                ) {
                     $tool_link_params = array(
                         'id' => 'tooldesc_'.$toolIid,
                         'class' => $class,
@@ -1167,7 +1173,7 @@ class CourseHome
      * Shows the general data for a particular meeting
      *
      * @param int $id_session
-     * @return string	session data
+     * @return string    session data
      */
     public static function show_session_data($id_session)
     {
@@ -1214,8 +1220,8 @@ class CourseHome
 
     /**
      * Retrieves the name-field within a tool-record and translates it on necessity.
-     * @param array $tool		The input record.
-     * @return string			Returns the name of the corresponding tool.
+     * @param array $tool The input record.
+     * @return string Returns the name of the corresponding tool.
      */
     public static function translate_tool_name(& $tool)
     {

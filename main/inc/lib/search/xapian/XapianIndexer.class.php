@@ -235,7 +235,8 @@ abstract class XapianIndexer
         if ($this->db == null) {
             $this->connectDb();
         }
-        if (is_numeric($did) && $did > 0) {
+        $did = (int) $did;
+        if ($did > 0) {
             $doc = $this->get_document($did);
             if ($doc !== false) {
                 $this->db->delete_document($did);

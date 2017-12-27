@@ -92,7 +92,6 @@ class Certificate extends Model
 
             // Getting QR filename
             $file_info = pathinfo($path_certificate);
-            $qr_code_filename = $this->certification_user_path.$file_info['filename'].'_qr.png';
             $content = $this->generateCustomCertificate();
 
             $my_new_content_html = str_replace(
@@ -320,6 +319,51 @@ class Certificate extends Model
                     }
                 }
             }
+        } else {
+            // General certificate
+            $name = md5($this->user_id).'.html';
+            $my_path_certificate = $this->certification_user_path.$name;
+            $path_certificate = '/'.$name;
+
+            // Getting QR filename
+            $file_info = pathinfo($path_certificate);
+            $content = $this->generateCustomCertificate();
+
+            $my_new_content_html = str_replace(
+                '((certificate_barcode))',
+                Display::img(
+                    +$this->certification_web_user_path.$file_info['filename'].'_qr.png',
+                    'QR'
+                ),
+                $content
+            );
+
+            $my_new_content_html = mb_convert_encoding(
+                $my_new_content_html,
+                'UTF-8',
+                api_get_system_encoding()
+            );
+
+            $result = @file_put_contents($my_path_certificate, $my_new_content_html);
+
+            if ($result) {
+                // Updating the path
+                self::updateUserCertificateInfo(
+                    0,
+                    $this->user_id,
+                    $path_certificate
+                );
+                $this->certificate_data['path_certificate'] = $path_certificate;
+
+                if ($this->isHtmlFileGenerated()) {
+                    if (!empty($file_info)) {
+                        //$text = $this->parse_certificate_variables($new_content_html['variables']);
+                        //$this->generate_qr($text, $qr_code_filename);
+                    }
+                }
+            }
+
+            return $result;
         }
 
         return false;
@@ -534,14 +578,14 @@ class Certificate extends Model
             return false;
         }
 
-        $gradebook = new Gradebook();
-        $gradebook_info = $gradebook->get($this->certificate_data['cat_id']);
+        $gradeBook = new Gradebook();
+        $gradeBookInfo = $gradeBook->get($this->certificate_data['cat_id']);
 
-        if (empty($gradebook_info['course_code'])) {
+        if (empty($gradeBookInfo['course_code'])) {
             return false;
         }
 
-        if (api_get_course_setting('allow_public_certificates', $gradebook_info['course_code']) == 0) {
+        if (api_get_course_setting('allow_public_certificates', $gradeBookInfo['course_code']) == 0) {
             // Printing not allowed
             return false;
         }
@@ -596,7 +640,7 @@ class Certificate extends Model
             }
 
             echo $certificateContent;
-            exit;
+            return;
         }
         api_not_allowed(true);
     }

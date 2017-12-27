@@ -737,24 +737,30 @@ class Skill extends Model
         }
 
         $html = '';
+        $html .= '<ul class="list-badges">';
         foreach ($skills as $skill) {
             if (isset($skill['data'])) {
                 $skill = $skill['data'];
             }
             $item = $skill[$imageSize];
 
-            $name = $skill['name'];
+            $name = '<div class="caption">'.$skill['name'].'</div>';
             if (!empty($skill['short_code'])) {
                 $name = $skill['short_code'];
             }
             $item .= $name;
             if (isset($skill['url'])) {
+                $html .= '<li class="thumbnail">';
                 $html .= Display::url($item, $skill['url'], ['target' => '_blank', 'style' => $style]);
+                $html .= '</li>';
             } else {
+                $html .= '<li class="thumbnail">';
                 $html .= Display::url($item, '#', ['target' => '_blank', 'style' => $style]);
+                $html .= '</li>';
             }
         }
-
+        $html .= '</li>';
+        
         return $html;
     }
 

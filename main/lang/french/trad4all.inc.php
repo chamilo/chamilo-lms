@@ -8034,4 +8034,6 @@ $RequestLinkToStudent = "Demander le lien avec cet apprenant";
 $SendManuallyPendingAnnouncements = "Envoyer manuellement les annonces en attente";
 $UserLinkingRequestRejected = "Demande de lien refusée";
 $UserLinkRemoved = "Lien avec apprenant supprimé";
+$SessionTemplate = "Modèle de session";
+$CloudFileLink = "Lien vers un fichier Cloud";
 ?>

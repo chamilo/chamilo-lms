@@ -8121,4 +8121,6 @@ $RequestLinkToStudent = "Vincularme con este estudiante";
 $SendManuallyPendingAnnouncements = "Enviar manualmente los anuncios pendientes";
 $UserLinkingRequestRejected = "Solicitud de vinculación a estudiante rechazada";
 $UserLinkRemoved = "Vínculo con estudiante eliminado";
+$SessionTemplate = "Plantilla de sesión";
+$CloudFileLink = "Enlace a fichero en la nube";
 ?>

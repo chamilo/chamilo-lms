@@ -37,7 +37,7 @@ if ($isPlatformAdmin) {
             );
         }
 
-        if (!file_exists($extraContentFile) && is_writable($extraContentFile)) {
+        if (!file_exists($extraContentFile)) {
             file_put_contents($extraContentFile, '');
         }
 
@@ -73,9 +73,6 @@ if ($isPlatformAdmin) {
                 }
             }
         } else {
-            /*Display::addFlash(
-                Display::return_message($plugin->get_lang('CheckTheWritingPermissionsOfRobotsFile'), 'warning')
-            );*/
             api_delete_settings_params(
                 [
                     'category = ? AND access_url = ? AND subkey = ? AND type = ? and variable = ?' => [

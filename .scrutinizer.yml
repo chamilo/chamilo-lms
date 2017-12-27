@@ -9,6 +9,13 @@ build:
             ini:
                 'date.timezone': 'US/Pacific'
                 'phar.readonly': false
+        apache2:
+            modules: ['rewrite']
+            sites:
+                chamilodev:
+                    web_root: '/'
+                    host: 'my.chamilodev.net'
+
         hosts:
             my.chamilodev.net: '127.0.0.1'
 checks:
@@ -141,7 +148,9 @@ filter:
         - 'main/auth/openid/*'
         - 'main/chat/emoji_strategy.php'
         - 'main/default_course_document'
+        - 'main/document/Wami.swf'
         - 'main/fonts/*'
+        - 'main/inc/ajax/Wami.swf'
         - 'main/inc/lib/browser/*'
         - 'main/inc/lib/freemindflashbrowser/*'
         - 'main/inc/lib/internationalization_database/*'
@@ -165,11 +174,11 @@ filter:
         - 'main/template/*'
         - 'main/img/*'
         - 'main/lang/*'
-        - 'main/default_course_document'
         - 'plugin/buycourses/src/Culqi/*'
         - 'plugin/buycourses/src/Requests/*'
         - 'plugin/buycourses/src/paypalfunctions.php'
         - 'plugin/buycourses/src/Requests.php'
+        - 'plugin/vchamilo/cli/*'
         - 'plugin/kannelsms/vendor/*'
         - 'plugin/clockworksms/vendor/*'
         - 'plugin/pens/lib/'

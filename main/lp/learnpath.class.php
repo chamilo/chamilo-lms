@@ -1238,7 +1238,7 @@ class learnpath
                     WHERE iid = $previous";
         Database::query($sql_upd);
         $sql_upd = "UPDATE $lp_item SET previous_item_id = $previous
-                    WHERE AND iid = $next";
+                    WHERE iid = $next";
         Database::query($sql_upd);
         // Now update all following items with new display order.
         $sql_all = "UPDATE $lp_item SET display_order = display_order-1

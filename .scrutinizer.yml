@@ -69,34 +69,34 @@ coding_style:
                 size: 4
             switch:
                 indent_case: true
-        spaces:
-            general:
-                linefeed_character: newline
-            around_operators:
-                concatenation: false
-        braces:
-            classes_functions:
-                class: new-line
-                function: new-line
-                closure: end-of-line
-            if:
-                opening: end-of-line
-            for:
-                opening: end-of-line
-            while:
-                opening: end-of-line
-            do_while:
-                opening: end-of-line
-            switch:
-                opening: end-of-line
-            try:
-                opening: end-of-line
-
-        upper_lower_casing:
-            keywords:
-                general: lower
-            constants:
-                true_false_null: lower
+#        spaces:
+#            general:
+#                linefeed_character: newline
+#            around_operators:
+#                concatenation: false
+#        braces:
+#            classes_functions:
+#                class: new-line
+#                function: new-line
+#                closure: end-of-line
+#            if:
+#                opening: end-of-line
+#            for:
+#                opening: end-of-line
+#            while:
+#                opening: end-of-line
+#            do_while:
+#                opening: end-of-line
+#            switch:
+#                opening: end-of-line
+#            try:
+#                opening: end-of-line
+#
+#        upper_lower_casing:
+#            keywords:
+#                general: lower
+#            constants:
+#                true_false_null: lower
 
 #tools:
 #    php_mess_detector:

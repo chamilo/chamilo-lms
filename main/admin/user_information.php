@@ -319,7 +319,7 @@ if (count($sessions) > 0) {
                 '<a href="'.$courseInfo['course_public_url'].'?id_session='.$id_session.'">'.
                 Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>';
 
-            if ($my_course['status'] == STUDENT) {
+            if (!empty($my_course['status']) && $my_course['status'] == STUDENT) {
                 $tools .= '<a href="user_information.php?action=unsubscribe_session_course&course_id='.$courseInfo['real_id'].'&user_id='.$userId.'&id_session='.$id_session.'">'.
                     Display::return_icon('delete.png', get_lang('Delete')).'</a>';
             }

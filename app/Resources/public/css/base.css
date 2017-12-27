@@ -3791,12 +3791,12 @@ i.size-32.icon-new-work{
   margin-bottom: 10px;
   margin-top: 10px;
 }
-#skillList .list-badges{
+.list-badges{
     padding: 0;
     margin: 0;
     list-style: none;
 }
-#skillList .list-badges .thumbnail{
+.list-badges .thumbnail{
   border-color: #bce8f1;
   display: inline-block;
   margin-right: 15px;
@@ -3804,18 +3804,18 @@ i.size-32.icon-new-work{
   vertical-align: top;
   width: 95px;
 }
-#skillList .list-badges .thumbnail a img{
+.list-badges .thumbnail a img{
   margin-bottom: 4px;
   margin-top: 4px;
 }
-#skillList .list-badges .thumbnail a .caption{
+.list-badges .thumbnail a .caption{
   background: #D9EDF7;
   font-size: 12px;
   text-overflow:ellipsis;
   white-space:nowrap; 
   overflow:hidden; 
 }
-#skillList .list-badges .thumbnail a .caption:hover{
+.list-badges .thumbnail a .caption:hover{
     width: auto;
     white-space: initial;
     overflow:visible;

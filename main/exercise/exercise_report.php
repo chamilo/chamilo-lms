@@ -130,6 +130,8 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
 $objExerciseTmp = new Exercise();
 $exerciseExists = $objExerciseTmp->read($exercise_id);
 
+$courseInfo = api_get_course_info();
+
 //Send student email @todo move this code in a class, library
 if (isset($_REQUEST['comments']) &&
     $_REQUEST['comments'] == 'update' &&
@@ -151,7 +153,6 @@ if (isset($_REQUEST['comments']) &&
     $exerciseId = $track_exercise_info['exe_exo_id'];
     $exeWeighting = $track_exercise_info['exe_weighting'];
 
-    $course_info = api_get_course_info();
     $url = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$track_exercise_info['exe_id'].'&'.api_get_cidreq().'&show_headers=1&id_session='.$session_id;
 
     $my_post_info = array();
@@ -168,7 +169,7 @@ if (isset($_REQUEST['comments']) &&
     }
 
     $loop_in_track = $comments_exist === true ? (count($_POST) / 2) : count($_POST);
-    $array_content_id_exe = array();
+    $array_content_id_exe = [];
 
     if ($comments_exist === true) {
         $array_content_id_exe = array_slice($post_content_id, $loop_in_track);
@@ -291,6 +292,12 @@ if (isset($_REQUEST['comments']) &&
                 $statusCondition
                 WHERE c_id = ".$course_id." AND id = ".$lp_item_view_id;
         Database::query($sql);
+
+        if (empty($origin)) {
+            header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?exerciseId='.$exercise_id.'&'.api_get_cidreq());
+            exit;
+        }
+
         if ($origin == 'tracking_course') {
             //Redirect to the course detail in lp
             header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?course='.Security::remove_XSS($_GET['course']));

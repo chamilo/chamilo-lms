@@ -28,38 +28,38 @@ build:
 checks:
     php:
         no_trailing_whitespace: true
-#        code_rating: true
-#        duplication: true
-#        fix_php_opening_tag: false
-#        remove_php_closing_tag: true
-#        one_class_per_file: true
-#        side_effects_or_types: false
-#        no_mixed_inline_html: false
-#        require_braces_around_control_structures: true
-#        php5_style_constructor: true
-#        no_global_keyword: false
-#        avoid_usage_of_logical_operators: false
-#        psr2_class_declaration: true
-#        no_underscore_prefix_in_properties: false
-#        no_underscore_prefix_in_methods: false
-#        blank_line_after_namespace_declaration: true
-#        single_namespace_per_use: false
-#        psr2_switch_declaration: true
-#        psr2_control_structure_declaration: true
-#        avoid_superglobals: false
-#        security_vulnerabilities: false
-#        no_exit: false
-#        uppercase_constants: true
-#        prefer_while_loop_over_for_loop: true
-#        newline_at_end_of_file: true
-#        line_length:
-#            max_length: '120'
-#        parameter_doc_comments: true
-#        parameters_in_camelcaps: true
-#        return_doc_comments: true
-#        use_self_instead_of_fqcn: true
-#        overriding_parameter: false
-#        avoid_entity_manager_injection: false
+        code_rating: true
+        duplication: true
+        fix_php_opening_tag: false
+        remove_php_closing_tag: true
+        one_class_per_file: true
+        side_effects_or_types: false
+        no_mixed_inline_html: false
+        require_braces_around_control_structures: true
+        php5_style_constructor: true
+        no_global_keyword: false
+        avoid_usage_of_logical_operators: false
+        psr2_class_declaration: true
+        no_underscore_prefix_in_properties: false
+        no_underscore_prefix_in_methods: false
+        blank_line_after_namespace_declaration: true
+        single_namespace_per_use: false
+        psr2_switch_declaration: true
+        psr2_control_structure_declaration: true
+        avoid_superglobals: false
+        security_vulnerabilities: false
+        no_exit: false
+        uppercase_constants: true
+        prefer_while_loop_over_for_loop: true
+        newline_at_end_of_file: true
+        line_length:
+            max_length: '120'
+        parameter_doc_comments: true
+        parameters_in_camelcaps: true
+        return_doc_comments: true
+        use_self_instead_of_fqcn: true
+        overriding_parameter: false
+        avoid_entity_manager_injection: false
 
 coding_style:
     php:
@@ -69,38 +69,39 @@ coding_style:
                 size: 4
             switch:
                 indent_case: true
-#        spaces:
-#            general:
-#                linefeed_character: newline
-#            around_operators:
-#                concatenation: false
-#        braces:
-#            classes_functions:
-#                class: new-line
-#                function: new-line
-#                closure: end-of-line
-#            if:
-#                opening: end-of-line
-#            for:
-#                opening: end-of-line
-#            while:
-#                opening: end-of-line
-#            do_while:
-#                opening: end-of-line
-#            switch:
-#                opening: end-of-line
-#            try:
-#                opening: end-of-line
-#
-#        upper_lower_casing:
-#            keywords:
-#                general: lower
-#            constants:
-#                true_false_null: lower
+        spaces:
+            general:
+                linefeed_character: newline
+            around_operators:
+                concatenation: false
+        braces:
+            classes_functions:
+                class: new-line
+                function: new-line
+                closure: end-of-line
+            if:
+                opening: end-of-line
+            for:
+                opening: end-of-line
+            while:
+                opening: end-of-line
+            do_while:
+                opening: end-of-line
+            switch:
+                opening: end-of-line
+            try:
+                opening: end-of-line
 
-#tools:
-#    php_mess_detector:
-#        enabled: true
+        upper_lower_casing:
+            keywords:
+                general: lower
+            constants:
+                true_false_null: lower
+
+tools:
+    php_analyzer: false
+    php_mess_detector: true
+
 #        extensions:
 #            - php
 #        command: phpmd

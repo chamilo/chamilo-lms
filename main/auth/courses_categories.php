@@ -323,7 +323,7 @@ function returnThumbnail($course, $registeredUser)
     }
 
     $html .= '<div class="user-actions">';
-    $html .= return_description_button($course);
+    $html .= CourseManager::returnDescriptionButton($course);
     $html .= '</div></div>';
 
     return $html;
@@ -416,33 +416,6 @@ function return_title($course, $registeredUser)
             $course['point_info']
         );
         $html .= '<div class="ranking">'.$rating.'</div>';
-    }
-
-    return $html;
-}
-
-/**
- * Display the description button of a course in the course catalog
- * @param array $course
- *
- * @return string HTML string
- */
-function return_description_button($course)
-{
-    $title = $course['title'];
-    $html = '';
-    if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-        $html = Display::url(
-            Display::returnFontAwesomeIcon('info-circle'),
-            api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'],
-            array(
-                'class' => 'ajax btn btn-default btn-sm',
-                'data-title' => $title,
-                'title' => get_lang('Description'),
-                'aria-label' => get_lang('Description'),
-                'data-size' => 'lg'
-            )
-        );
     }
 
     return $html;

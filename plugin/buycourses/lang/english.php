@@ -10,7 +10,6 @@ $strings['commissions_enable'] = "Enable Commissions";
 $strings['transfer_enable'] = "Enable bank transfer";
 $strings['unregistered_users_enable'] = "Allow anonymous users";
 $strings['Free'] = "FREE";
-
 $strings['PaypalPayoutCommissions'] = "Paypal Payout Commissions";
 $strings['MyPayouts'] = "My payments";
 $strings['Commission'] = "Commission";
@@ -137,3 +136,4 @@ $strings['SWIFT_help'] = "Standard format of Bank Identifier Codes (BIC) and ser
 $strings['PleaseSelectThePaymentMethodBeforeConfirmYourOrder'] = "Please select your favorite payment method before confirming your order";
 $strings['NoPaymentOptionAvailable'] = 'No payment option available. Please report to the administrator.';
 $strings['XIsOnlyPaymentMethodAvailable'] = '%s is the only payment method available for this purchase.';
+$strings['hide_free_text'] = "Hide 'Free' text";

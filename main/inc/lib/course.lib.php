@@ -5048,21 +5048,10 @@ class CourseManager
             }
             // end buycourse validation
 
-            //Description
-            $my_course['description_button'] = '';
-            $my_course['description_button'] = Display::url(
-                Display::returnFontAwesomeIcon('info-circle'),
-                api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=show_course_information&code='.$course_info['code'],
-                [
-                    'class' => 'btn btn-default btn-sm ajax',
-                    'data-title' => get_lang('Description'),
-                    'title' => get_lang('Description'),
-                    'aria-label' => get_lang('Description')
-                ]
-            );
+            // Description
+            $my_course['description_button'] = self::returnDescriptionButton($course_info);
             $my_course['teachers'] = self::getTeachersFromCourse($course_info['real_id'], true);
             $point_info = self::get_course_ranking($course_info['real_id'], 0);
-
             $my_course['rating_html'] = '';
             if (api_get_configuration_value('hide_course_rating') === false) {
                 $my_course['rating_html'] = Display::return_rating_system(
@@ -6558,5 +6547,32 @@ class CourseManager
         sort($categories);
 
         return $categories;
+    }
+
+    /**
+     * Display the description button of a course in the course catalog
+     * @param array $course
+     *
+     * @return string HTML string
+     */
+    public static function returnDescriptionButton($course)
+    {
+        $title = $course['title'];
+        $html = '';
+        if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
+            $html = Display::url(
+                Display::returnFontAwesomeIcon('info-circle', 2),
+                api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&code='.$course['code'],
+                array(
+                    'class' => 'ajax btn btn-default btn-sm',
+                    'data-title' => $title,
+                    'title' => get_lang('Description'),
+                    'aria-label' => get_lang('Description'),
+                    'data-size' => 'lg'
+                )
+            );
+        }
+
+        return $html;
     }
 }

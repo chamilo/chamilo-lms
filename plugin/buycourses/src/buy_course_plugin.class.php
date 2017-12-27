@@ -86,6 +86,7 @@ class BuyCoursesPlugin extends Plugin
                 'culqi_enable' => 'boolean',
                 'commissions_enable' => 'boolean',
                 'unregistered_users_enable' => 'boolean',
+                'hide_free_text' => 'boolean',
             )
         );
     }
@@ -171,23 +172,27 @@ class BuyCoursesPlugin extends Plugin
         $return = [];
         $paypal = $this->get('paypal_enable') === 'true';
         $transfer = $this->get('transfer_enable') === 'true';
+        $hideFree = $this->get('hide_free_text') === 'true';
 
         if ($paypal || $transfer) {
             $item = $this->getItemByProduct($productId, $productType);
-            $return['html'] = '<div class="buycourses-price">';
+            $html = '<div class="buycourses-price">';
             if ($item) {
-                $return['html'] .= '<span class="label label-primary"><strong>'.$item['iso_code'].' '.$item['price']
-                    .'</strong></span>';
+                $html .= '<span class="label label-primary"><strong>'.$item['iso_code'].' '.$item['price'].'</strong></span>';
                 $return['verificator'] = true;
             } else {
-                $return['html'] .= '<span class="label label-primary"><strong>'.$this->get_lang('Free')
-                    .'</strong></span>';
+                if ($hideFree == false) {
+                    $html .= '<span class="label label-primary"><strong>'.$this->get_lang('Free').'</strong></span>';
+                }
                 $return['verificator'] = false;
             }
-            $return['html'] .= '</div>';
+            $html .= '</div>';
+            $return['html'] = $html;
         } else {
             return false;
         }
+
+
 
         return $return;
     }

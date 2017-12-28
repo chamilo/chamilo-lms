@@ -14,35 +14,35 @@ var iframehide="no";
 //var getFFVersion=navigator.userAgent.substring(navigator.userAgent.indexOf("Firefox")).split("/")[1];
 var FFextraHeight=32; //parseFloat(getFFVersion)>=0.1? 16 : 0; //extra height in px to add to iframe in FireFox 1.0+ browsers
 
+function resizeIframe(frameid) {
+    var currentfr=document.getElementById(frameid);
+    if (currentfr && !window.opera){
+        currentfr.style.display="block";
+        if (currentfr.contentDocument && currentfr.contentDocument.body.offsetHeight){ //ns6 syntax
+            currentfr.height = currentfr.contentDocument.body.offsetHeight+FFextraHeight;
+        }
+        else if (currentfr.Document && currentfr.Document.body.scrollHeight) //ie5+ syntax
+            currentfr.height = currentfr.Document.body.scrollHeight;
+
+        if(currentfr.height < 580){
+            currentfr.height = 580;
+        }
+        if (currentfr.addEventListener)
+            currentfr.addEventListener("load", readjustIframe, false);
+        else if (currentfr.attachEvent){
+            currentfr.detachEvent("onload", readjustIframe); // Bug fix line
+            currentfr.attachEvent("onload", readjustIframe);
+        }
+    }
+}
+
 function resizeCaller() {
-	if (document.getElementById)
-		resizeIframe(iframeid);
+    if (document.getElementById)
+        resizeIframe(iframeid);
 	//reveal iframe for lower end browsers? (see var above):
 	if ((document.all || document.getElementById) && iframehide=="no"){
 		var tempobj=document.all? document.all[iframeid] : document.getElementById(iframeid);
 		tempobj.style.display="block";
-	}
-}
-
-function resizeIframe(frameid){
-	var currentfr=document.getElementById(frameid);
-	if (currentfr && !window.opera){
-		currentfr.style.display="block";
-		if (currentfr.contentDocument && currentfr.contentDocument.body.offsetHeight){ //ns6 syntax
-			currentfr.height = currentfr.contentDocument.body.offsetHeight+FFextraHeight;
-		}
-		else if (currentfr.Document && currentfr.Document.body.scrollHeight) //ie5+ syntax
-			currentfr.height = currentfr.Document.body.scrollHeight;
-
-		if(currentfr.height < 580){
-			currentfr.height = 580;
-		}
-		if (currentfr.addEventListener)
-			currentfr.addEventListener("load", readjustIframe, false);
-		else if (currentfr.attachEvent){
-			currentfr.detachEvent("onload", readjustIframe); // Bug fix line
-			currentfr.attachEvent("onload", readjustIframe);
-		}
 	}
 }
 

@@ -1021,7 +1021,7 @@ class Rest extends WebService
      * @param array $course_param
      * @return array
      */
-    public function saveNewCourse($course_param)
+    public function addCourse($course_param)
     {
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $extra_list= array();
@@ -1155,7 +1155,7 @@ class Rest extends WebService
      * @param $user_param
      * @return array
      */
-    public function saveNewUser($user_param)
+    public function addUser($user_param)
     {
         $results = array();
         $orig_user_id_value = array();

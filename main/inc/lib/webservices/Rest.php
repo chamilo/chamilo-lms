@@ -1034,35 +1034,35 @@ class Rest extends WebService
         $language = isset($course_param['language']) ? $course_param['language'] : null;
         $original_course_id = isset($course_param['original_course_id']) ? $course_param['original_course_id'] : null;
         $diskQuota = isset($course_param['disk_quota']) ? $course_param['disk_quota'] : '100';
-        $visibility = isset($course_param['visibility']) ? $course_param['visibility'] : null;
+        $visibility = isset($course_param['visibility']) ? (int) $course_param['visibility'] : null;
 
         if (isset($course_param['visibility'])) {
             if ($course_param['visibility'] &&
                 $course_param['visibility'] >= 0 &&
                 $course_param['visibility'] <= 3
             ) {
-                $visibility = $course_param['visibility'];
+                $visibility = (int) $course_param['visibility'];
             }
         }
 
         // Check whether exits $x_course_code into user_field_values table.
         $courseInfo = CourseManager::getCourseInfoFromOriginalId(
-            "id",
+            'id',
             $course_param['original_course_id_name']
         );
 
         if (!empty($courseInfo)) {
             if ($courseInfo['visibility'] != 0) {
                 $sql = "UPDATE $table_course SET
-                            course_language='".Database::escape_string($course_language)."',
-                            title='".Database::escape_string($title)."',
-                            category_code='".Database::escape_string($category_code)."',
-                            tutor_name='".Database::escape_string($tutor_name)."',
-                            visual_code='".Database::escape_string($wanted_code)."'";
+                            course_language = '".Database::escape_string($course_language)."',
+                            title = '".Database::escape_string($title)."',
+                            category_code = '".Database::escape_string($category_code)."',
+                            tutor_name = '".Database::escape_string($tutor_name)."',
+                            visual_code = '".Database::escape_string($wanted_code)."'";
                 if ($visibility !== null) {
-                    $sql .= ", visibility = '$visibility' ";
+                    $sql .= ", visibility = $visibility ";
                 }
-                $sql .= " WHERE id='".$courseInfo['real_id']."'";
+                $sql .= " WHERE id = ".$courseInfo['real_id'];
                 Database::query($sql);
                 if (is_array($extra_list) && count($extra_list) > 0) {
                     foreach ($extra_list as $extra) {

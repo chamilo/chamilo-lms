@@ -12,7 +12,6 @@ use ChamiloSession as Session;
 require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script();
 
-$noPHP_SELF = true;
 $path = Security::remove_XSS($_GET['curdirpath']);
 $pathurl = urlencode($path);
 $slide_id = isset($_GET['slide_id']) ? Security::remove_XSS($_GET['slide_id']) : null;

@@ -35,7 +35,6 @@ if (isset($_GET['delete']) && $_GET['delete'] === 'yes') {
     // DELETE CONFIRMATION MESSAGE
     Session::erase('_cid');
     Session::erase('_real_cid');
-    $noPHP_SELF = true;
     $message = '<h2>'.get_lang('Course').' : '.$current_course_name.' ('.$current_course_code.') </h2>';
     $message .= get_lang('HasDel');
     $message .= '<br /><br /><a href="../../index.php">'.get_lang('BackHome').'</a>';

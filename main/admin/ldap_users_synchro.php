@@ -41,8 +41,6 @@ $formSent = 0;
 $errorMsg = $firstLetterUser = $firstLetterSession = '';
 $UserList = $SessionList = array();
 $users = $sessions = array();
-$noPHP_SELF = true;
-
 $page = intval($_GET['page']);
 $action = $_REQUEST['action'];
 

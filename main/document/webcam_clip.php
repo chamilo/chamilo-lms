@@ -82,7 +82,6 @@ if (!empty($groupId)) {
         "url" => "../group/group_space.php?".api_get_cidreq(),
         "name" => get_lang('GroupSpace')
     );
-    $noPHP_SELF = true;
     $group = GroupManager :: get_group_properties($groupId);
     $path = explode('/', $dir);
     if ('/'.$path[1] != $group['directory']) {

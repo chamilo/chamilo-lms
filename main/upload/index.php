@@ -40,13 +40,10 @@ if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
 
-$noPHP_SELF = true;
-
 //what's the current path?
+$path = '/';
 if (isset($_REQUEST['curdirpath'])) {
     $path = $_REQUEST['curdirpath'];
-} else {
-    $path = '/';
 }
 
 $toolFromSession = Session::read('my_tool');

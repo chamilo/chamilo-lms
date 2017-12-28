@@ -76,7 +76,6 @@ if ($geolocalization) {
 
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
-$noPHP_SELF = true;
 $tool_name = get_lang('ModifyUserInfo');
 
 $interbreadcrumb[] = array('url' => 'index.php', "name" => get_lang('PlatformAdmin'));

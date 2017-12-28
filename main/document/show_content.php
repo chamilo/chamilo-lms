@@ -1,16 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *	@author jmontoya
+ * @author jmontoya
  *
- *	@package chamilo.document
+ * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
 // Protection
 api_protect_course_script(true);
 
-$noPHP_SELF = true;
 $header_file = isset($_GET['file']) ? Security::remove_XSS($_GET['file']) : null;
 $document_id = intval($_GET['id']);
 
@@ -99,11 +98,11 @@ $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$head
 $pathinfo = pathinfo($header_file);
 
 if ($pathinfo['extension'] == 'swf') {
-	$width = '83%';
-	$height = '83%';
+    $width = '83%';
+    $height = '83%';
 } else {
-	$width = '100%';
-	$height = '100%';
+    $width = '100%';
+    $height = '100%';
 }
 
 echo '<iframe border="0" frameborder="0" scrolling="no" style="width:'.$width.'; height:'.$height.';background-color:#ffffff;" id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 1000).'"></iframe>';

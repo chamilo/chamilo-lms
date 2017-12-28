@@ -91,7 +91,6 @@ if (!empty($group_id)) {
         'name' => get_lang('GroupSpace'),
     );
     $group_document = true;
-    $noPHP_SELF = true;
 }
 
 $is_certificate_mode = DocumentManager::is_certificate_mode($dir);

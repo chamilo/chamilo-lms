@@ -317,8 +317,6 @@ $form_sent = 0;
 $errorMsg = $firstLetterUser = $firstLetterSession = '';
 $UserList = $SessionList = array();
 $sessions = array();
-$noPHP_SELF = true;
-
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $firstLetterUser = isset($_POST['firstLetterUser']) ? $_POST['firstLetterUser'] : '';

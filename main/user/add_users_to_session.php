@@ -268,8 +268,6 @@ if ($allowTutors == 'true') {
     $firstLetterUser = $firstLetterSession = '';
     $UserList = $SessionList = array();
     $sessions = array();
-    $noPHP_SELF = true;
-
     if (isset($_POST['form_sent']) && $_POST['form_sent']) {
         $form_sent = $_POST['form_sent'];
         $firstLetterUser = $_POST['firstLetterUser'];

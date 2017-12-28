@@ -73,8 +73,6 @@ if ($title == '') {
     $title = basename($my_file);
 }
 $nameTools = $title;
-$noPHP_SELF = true;
-
 $htmlHeadXtra[] = /** @lang HTML */<<<HTML
     <script>
         $(document).on('ready', function () {

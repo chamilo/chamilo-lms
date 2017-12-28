@@ -203,7 +203,6 @@ if (!$is_certificate_mode) {
             "url" => "../group/group_space.php?".api_get_cidreq(),
             "name" => get_lang('GroupSpace'),
         );
-        $noPHP_SELF = true;
         $path = explode('/', $dir);
         if ('/'.$path[1] != $group_properties['directory']) {
             api_not_allowed(true);

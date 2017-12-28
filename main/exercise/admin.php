@@ -310,8 +310,6 @@ if (!$exerciseId && $nameTools != get_lang('ExerciseManagement')) {
 if ($modifyIn == 'thisExercise') {
     if ($buttonBack) {
         $modifyIn = 'allExercises';
-    } else {
-        $noPHP_SELF = true;
     }
 }
 $htmlHeadXtra[] = '<script>

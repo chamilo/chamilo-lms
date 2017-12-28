@@ -6774,7 +6774,8 @@ $server->wsdl->addComplexType(
     array(
         'secret_key'   => array('name' => 'secret_key', 'type' => 'xsd:string'),
         'user_id' => array('name' => 'user_id', 'type' => 'xsd:string'),
-        'group_id' => array('name' => 'group_id', 'type' => 'xsd:string')
+        'group_id' => array('name' => 'group_id', 'type' => 'xsd:string'),
+        'relation_type' => array('name' => 'relation_type', 'type' => 'xsd:string')
     )
 );
 
@@ -6798,7 +6799,12 @@ function WSAddUserToGroup($params)
 
     $userGroup = new UserGroup();
 
-    return $userGroup->add_user_to_group($params['user_id'], $params['group_id']);
+    return $userGroup->subscribe_users_to_usergroup(
+        $params['group_id'],
+        array(0 => $params['user_id']),
+        false,
+        $params['relation_type']
+    );
 }
 
 /* Add user to group Web Service end */

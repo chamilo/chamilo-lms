@@ -41,11 +41,9 @@ class Rest extends WebService
     const GET_MESSAGE_USERS = 'message_users';
     const SAVE_COURSE_NOTEBOOK = 'save_course_notebook';
     const SAVE_FORUM_THREAD = 'save_forum_thread';
-
     const SAVE_COURSE = 'save_course';
     const SAVE_USER = 'save_user';
     const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
-
     const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
 
     /**
@@ -84,8 +82,7 @@ class Rest extends WebService
         /** @var Course $course */
         $course = $em->find('ChamiloCoreBundle:Course', $id);
 
-        if (!$course)
-        {
+        if (!$course) {
             throw new Exception(get_lang('NoCourse'));
         }
 
@@ -283,7 +280,6 @@ class Rest extends WebService
     {
         /** @var string $path */
         $path = '/';
-
         $sessionId = $this->session ? $this->session->getId() : 0;
 
         if ($directoryId) {
@@ -353,7 +349,6 @@ class Rest extends WebService
     }
 
     /**
-     * @param int $courseId
      * @return array
      * @throws Exception
      */
@@ -376,14 +371,17 @@ class Rest extends WebService
             $sessionId
         );
 
-        $announcements = array_map(function($announcement) {
-            return [
-                'id' => intval($announcement['id']),
-                'title' => strip_tags($announcement['title']),
-                'creatorName' => strip_tags($announcement['username']),
-                'date' => strip_tags($announcement['insert_date'])
-            ];
-        }, $announcements);
+        $announcements = array_map(
+            function ($announcement) {
+                return [
+                    'id' => intval($announcement['id']),
+                    'title' => strip_tags($announcement['title']),
+                    'creatorName' => strip_tags($announcement['username']),
+                    'date' => strip_tags($announcement['insert_date']),
+                ];
+            },
+            $announcements
+        );
 
         return $announcements;
     }
@@ -410,7 +408,10 @@ class Rest extends WebService
             'id' => intval($announcement['announcement']->getIid()),
             'title' => $announcement['announcement']->getTitle(),
             'creatorName' => $announcement['item_property']->getInsertUser()->getCompleteName(),
-            'date' => api_convert_and_format_date($announcement['item_property']->getInsertDate(), DATE_TIME_FORMAT_LONG_24H),
+            'date' => api_convert_and_format_date(
+                $announcement['item_property']->getInsertDate(),
+                DATE_TIME_FORMAT_LONG_24H
+            ),
             'content' => AnnouncementManager::parse_content(
                 $this->user->getId(),
                 $announcement['announcement']->getContent(),
@@ -462,7 +463,7 @@ class Rest extends WebService
         $webPath = api_get_path(WEB_PATH);
 
         return array_map(
-            function($event) use ($webPath) {
+            function ($event) use ($webPath) {
                 return [
                     'id' => intval($event['unique_id']),
                     'title' => $event['title'],
@@ -551,7 +552,7 @@ class Rest extends WebService
         foreach ($categoriesFullData as $category) {
             $categoryForums = array_filter(
                 $forums,
-                function(array $forum) use ($category) {
+                function (array $forum) use ($category) {
                     if ($forum['catId'] != $category['cat_id']) {
                         return false;
                     }
@@ -635,7 +636,6 @@ class Rest extends WebService
         ];
 
         $forumInfo = get_forums($threadInfo['forum_id'], $this->course->getCode(), true, $sessionId);
-
         $postsInfo = getPosts($forumInfo, $threadInfo['iid'], 'ASC');
 
         foreach ($postsInfo as $postInfo) {
@@ -736,12 +736,12 @@ class Rest extends WebService
 
                 $timeLimits = false;
 
-                //This is an old LP (from a migration 1.8.7) so we do nothing
+                // This is an old LP (from a migration 1.8.7) so we do nothing
                 if (empty($lpDetails['created_on']) && empty($lpDetails['modified_on'])) {
                     $timeLimits = false;
                 }
 
-                //Checking if expired_on is ON
+                // Checking if expired_on is ON
                 if (!empty($lpDetails['expired_on'])) {
                     $timeLimits = true;
                 }
@@ -806,7 +806,6 @@ class Rest extends WebService
         ]);
 
         $strParams = serialize($params);
-
         $b64Encoded = base64_encode($strParams);
 
         return str_replace(['+', '/', '='], ['-', '_', '.'], $b64Encoded);
@@ -816,7 +815,8 @@ class Rest extends WebService
      * @param string $encoded
      * @return array
      */
-    public static function decodeParams($encoded) {
+    public static function decodeParams($encoded)
+    {
         $decoded = str_replace(['-', '_', '.'], ['+', '/', '='], $encoded);
         $mod4 = strlen($decoded) % 4;
 
@@ -838,7 +838,6 @@ class Rest extends WebService
         $loggedUser['user_id'] = $this->user->getId();
         $loggedUser['status'] = $this->user->getStatus();
         $loggedUser['uidReset'] = true;
-
         $sessionId = $this->session ? $this->session->getId() : 0;
 
         ChamiloSession::write('_user', $loggedUser);
@@ -869,7 +868,6 @@ class Rest extends WebService
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $forum = get_forums($forumId, $this->course->getCode());
-
         store_reply($forum, $postValues, $this->course->getId(), $this->user->getId());
 
         return [
@@ -954,8 +952,7 @@ class Rest extends WebService
     public function getMessageUsers($search)
     {
         /** @var UserRepository $repo */
-        $repo = Database::getManager()
-            ->getRepository('ChamiloUserBundle:User');
+        $repo = Database::getManager()->getRepository('ChamiloUserBundle:User');
 
         $users = $repo->findUsersToSendMessage($this->user->getId(), $search);
 
@@ -982,7 +979,7 @@ class Rest extends WebService
     /**
      * @param string $title
      * @param string $text
-     * @return bool
+     * @return array
      */
     public function saveCourseNotebook($title, $text)
     {
@@ -1013,7 +1010,6 @@ class Rest extends WebService
         $sessionId = $this->session ? $this->session->getId() : 0;
         $forum = get_forums($forumId, $this->course->getCode(), true, $sessionId);
         $courseInfo = api_get_course_info($this->course->getCode());
-
         $id = store_thread($forum, $values, $courseInfo, false, $this->user->getId(), $sessionId);
 
         return [
@@ -1027,7 +1023,6 @@ class Rest extends WebService
      */
     public function saveNewCourse($course_param)
     {
-
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $extra_list= array();
 
@@ -1039,7 +1034,7 @@ class Rest extends WebService
         $language = isset($course_param['language']) ? $course_param['language'] : null;
         $original_course_id = isset($course_param['original_course_id']) ? $course_param['original_course_id'] : null;
         $diskQuota = isset($course_param['disk_quota']) ? $course_param['disk_quota'] : '100';
-        $visibility = isset($course_param['visibility']) ? $course_param['visibility'] : null;;
+        $visibility = isset($course_param['visibility']) ? $course_param['visibility'] : null;
 
         if (isset($course_param['visibility'])) {
             if ($course_param['visibility'] &&
@@ -1157,13 +1152,13 @@ class Rest extends WebService
     }
 
     /**
+     * @param $user_param
+     * @return array
      */
     public function saveNewUser($user_param)
     {
-        global $_user;
         $results = array();
         $orig_user_id_value = array();
-
         $userManager = UserManager::getManager();
         $userRepository = UserManager::getRepository();
 
@@ -1199,12 +1194,6 @@ class Rest extends WebService
         // Default language.
         if (empty($language)) {
             $language = api_get_setting('platformLanguage');
-        }
-
-        if (!empty($_user['user_id'])) {
-            $creator_id = $_user['user_id'];
-        } else {
-            $creator_id = '';
         }
 
         // First check wether the login already exists.
@@ -1282,28 +1271,26 @@ class Rest extends WebService
             $results[] = 0;
         }
 
-        // $results[] = $userId;
         return $results;
     }
 
     /**
      * Subscribe User to Course
+     * @param array $params
+     * @return array
      */
     public function subscribeUserToCourse($params)
     {
         $course_id = $params['course_id'];
         $course_code = $params['course_code'];
         $user_id = $params['user_id'];
-        if (!$course_id && !$course_code)
-        {
+        if (!$course_id && !$course_code) {
             return [false];
         }
-        if (!$course_code)
-        {
+        if (!$course_code) {
             $course_code = CourseManager::get_course_code_from_course_id($course_id);
         }
-        if (CourseManager::subscribe_user($user_id, $course_code))
-        {
+        if (CourseManager::subscribe_user($user_id, $course_code)) {
             return [true];
         } else {
             return [false];

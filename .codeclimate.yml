@@ -58,6 +58,15 @@ plugins:
       Naming/ShortVariable:
         enabled: false
 
+      Design/TooManyFields:
+        enabled: false
+
+      Design/TooManyMethods:
+        enabled: false
+
+      Design/TooManyPublicMethods:
+        enabled: false
+
   sonar-php:
     enabled: false
 

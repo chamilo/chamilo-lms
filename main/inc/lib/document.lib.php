@@ -975,7 +975,7 @@ class DocumentManager
      */
     public static function deleteDocumentFromDb(
         $document_id,
-        $course_info = array(),
+        $course_info = [],
         $session_id = 0,
         $remove_content_from_db = false
     ) {
@@ -993,7 +993,6 @@ class DocumentManager
         if (empty($session_id)) {
             $session_id = api_get_session_id();
         }
-
         // Soft DB delete
         api_item_property_update(
             $course_info,
@@ -6604,104 +6603,161 @@ class DocumentManager
      * @param array $_course
      * @param string $path
      * @param string $url
+     * @param string $name
      * @return int id of document or 0 if already exists or there was a problem creating it
      */
     public static function addCloudLink($_course, $path, $url, $name)
     {
-        require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
         $file_path = $path;
         if (!self::cloudLinkExists($_course, $path, $url)) {
-            $doc_id = add_document($_course, $file_path, "link", 0, $name, $url);
+            $doc_id = add_document($_course, $file_path, 'link', 0, $name, $url);
             if ($doc_id) {
                 // Update document item_property
-                api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), api_get_group_id(), api_get_user_id(), null, null, api_get_session_id());
+                api_item_property_update(
+                    $_course,
+                    TOOL_DOCUMENT,
+                    $doc_id,
+                    'DocumentAdded',
+                    api_get_user_id(),
+                    api_get_group_id(),
+                    api_get_user_id(),
+                    null,
+                    null,
+                    api_get_session_id()
+                );
             }
-    
+
             // If the file is in a folder, we need to update all parent folders
             item_property_update_on_folder($_course, $file_path, api_get_user_id());
-    
+
             return $doc_id;
         } else {
             return 0;
         }
     }
- 
+
     /**
      * Deletes a cloud link from the database
      *
      * @author - Aquilino Blanco Cores <aqblanco@gmail.com>
-     * @param array $_course
-     * @param string $id
-     * @param string $url
+     * @param array $courseInfo
+     * @param string $documentId
      * @return boolean true if success / false if an error occurred
      */
-    public static function deleteCloudLink($_course, $id)
+    public static function deleteCloudLink($courseInfo, $documentId)
     {
- 
-        if (empty($id)) {
+        if (empty($documentId) || empty($courseInfo)) {
             return false;
         }
- 
-        $documentId = (int) $id;
- 
+
+        $documentId = (int) $documentId;
         $fileDeletedFromDb = false;
- 
-        if ($document_id) {
-            self::deleteDocumentFromDb($documentId, array(), 0, true);
-            //checking
-            $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-            $sql = "SELECT * FROM $TABLE_DOCUMENT WHERE id = $documentId";
+        if (!empty($documentId)) {
+            self::deleteDocumentFromDb($documentId, $courseInfo, 0, true);
+            // checking
+            $table = Database::get_course_table(TABLE_DOCUMENT);
+            $courseId = $courseInfo['real_id'];
+            echo $sql = "SELECT * FROM $table WHERE id = $documentId AND c_id = $courseId";
             $result = Database::query($sql);
             $exists = Database::num_rows($result) > 0;
-            $fileDeletedFromDb = !$exists ;
+            $fileDeletedFromDb = !$exists;
         }
 
         return $fileDeletedFromDb;
     }
- 
+
     /**
      * Gets the id of a cloud link with a given path
      *
      * @author - Aquilino Blanco Cores <aqblanco@gmail.com>
-     * @param array $_course
+     * @param array $courseInfo
      * @param string $path
      * @param string $url
      * @return int link's id / false if no link found
      */
-    public static function getCloudLinkId($_course, $path, $url)
+    public static function getCloudLinkId($courseInfo, $path, $url)
     {
-        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-        $courseId = (int) $_course['real_id'];
+        $table = Database::get_course_table(TABLE_DOCUMENT);
+
+        if (empty($courseInfo)) {
+            return false;
+        }
+
+        $courseId = (int) $courseInfo['real_id'];
         $path = Database::escape_string($path);
 
         if (substr($path, -1) != '/') {
             // Add final slash to path if not present
             $path .= '/';
         }
-            
+
         if (!empty($courseId) && !empty($path)) {
-            $sql = "SELECT id FROM $TABLE_DOCUMENT WHERE c_id = $courseId AND path LIKE BINARY '$path' AND comment = '$url' AND filetype = 'link' LIMIT 1";
+            $sql = "SELECT id FROM $table 
+                    WHERE 
+                        c_id = $courseId AND 
+                        path LIKE BINARY '$path' AND 
+                        comment = '$url' AND 
+                        filetype = 'link' 
+                    LIMIT 1";
             $result = Database::query($sql);
             if ($result && Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
                 return intval($row[0]);
             }
         }
+
         return false;
     }
- 
+
     /**
      * Checks if a cloud link exists
      *
      * @author - Aquilino Blanco Cores <aqblanco@gmail.com>
-     * @param array $_course
+     * @param array $courseInfo
      * @param string $path
      * @param string $url
      * @return boolean true if it exists false in other case
      */
-    public static function cloudLinkExists($_course, $path, $url)
+    public static function cloudLinkExists($courseInfo, $path, $url)
     {
-        $exists = self::getCloudLinkId($_course, $path, $url);
+        $exists = self::getCloudLinkId($courseInfo, $path, $url);
         return $exists;
+    }
+
+    /**
+     * Gets the wellformed URLs regular expression in order to use it on forms' verifications
+     *
+     * @author Aquilino Blanco Cores <aqblanco@gmail.com>
+     * @return string the well formed URLs regular expressions string
+     */
+    public static function getWellFormedUrlRegex()
+    {
+        return '/\(?((http|https|ftp):\/\/)(?:((?:[^\W\s]|\.|-|[:]{1})+)@{1})?((?:www.)?(?:[^\W\s]|\.|-)+[\.][^\W\s]{2,4}|localhost(?=\/)|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?::(\d*))?([\/]?[^\s\?]*[\/]{1})*(?:\/?([^\s\n\?\[\]\{\}\#]*(?:(?=\.)){1}|[^\s\n\?\[\]\{\}\.\#]*)?([\.]{1}[^\s\?\#]*)?)?(?:\?{1}([^\s\n\#\[\]]*))?([\#][^\s\n]*)?\)?/i';
+    }
+
+    /**
+     * Gets the files hosting sites' whitelist
+     *
+     * @author Aquilino Blanco Cores <aqblanco@gmail.com>
+     * @return array the sites list.
+     */
+    public static function getFileHostingWhiteList()
+    {
+        return [
+            'asuswebstorage.com',
+            'dropbox.com',
+            'dropboxusercontent.com',
+            'fileserve.com',
+            'drive.google.com',
+            'icloud.com',
+            'mediafire.com',
+            'mega.nz',
+            'onedrive.live.com',
+            'slideshare.net',
+            'scribd.com',
+            'wetransfer.com',
+            'box.com',
+            'livefilestore.com' // OneDrive
+        ];
     }
 }

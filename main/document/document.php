@@ -262,37 +262,35 @@ switch ($action) {
                             $_GET['deleteid'],
                             $groupIid
                         );
+                        if ($deleteDocument) {
+                            $certificateId = isset($_GET['delete_certificate_id']) ? $_GET['delete_certificate_id'] : null;
+                            DocumentManager::remove_attach_certificate(
+                                api_get_course_id(),
+                                $certificateId
+                            );
+                            Display::addFlash(
+                                Display::return_message(
+                                    get_lang('DocDeleted').': '.$documentInfo['title'],
+                                    'success'
+                                )
+                            );
+                        } else {
+                            Display::addFlash(Display::return_message(get_lang('DocDeleteError'), 'warning'));
+                        }
                     } else {
                         // Cloud Links
-                        $deleteDocument = DocumentManager::deleteCloudLink($_course, $_GET['deleteid']);
-                    }
-
-                    if ($deleteDocument) {
-                        $certificateId = isset($_GET['delete_certificate_id']) ? $_GET['delete_certificate_id'] : null;
-                        DocumentManager::remove_attach_certificate(
-                            api_get_course_id(),
-                            $certificateId
-                        );
-                        if ($documentInfo['filetype'] != 'link') {
+                        $deleteDocument = DocumentManager::deleteCloudLink($courseInfo, $_GET['deleteid']);
+                        if ($deleteDocument) {
                             Display::addFlash(Display::return_message(
-                                get_lang('DocDeleted').': '.$documentInfo['title'],
+                                get_lang('CloudLinkDeleted').': '.$documentInfo['title'],
                                 'success'
                             ));
                         } else {
-                            if ($documentInfo['filetype'] != 'link') {
-                                Display::addFlash(Display::return_message(
-                                    get_lang('CloudLinkDeleted').': '.$data['title'],
-                                    'success'
-                                ));
-                            } else {
-                                Display::addFlash(Display::return_message(
-                                    get_lang('CloudLinkDeleteError').': '.$data['title'],
-                                    'error'
-                                ));
-                            }
+                            Display::addFlash(Display::return_message(
+                                get_lang('CloudLinkDeleteError').': '.$documentInfo['title'],
+                                'error'
+                            ));
                         }
-                    } else {
-                        Display::addFlash(Display::return_message(get_lang('DocDeleteError'), 'warning'));
                     }
                 } else {
                     Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));
@@ -1067,7 +1065,7 @@ if ($isAllowedToEdit || $group_member_with_upload_rights ||
                 if (!DocumentManager::cloudLinkExists($_course, $moveTo, $document_to_move['comment'])) {
                     $doc_id = $moveFile;
                     DocumentManager::updateDBInfoCloudLink($document_to_move['path'], $moveTo.'/', $doc_id);
-            
+
                     //update database item property
                     api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FileMoved', api_get_user_id(), $to_group_id, null, null, null, $session_id);
                     Display::addFlash(

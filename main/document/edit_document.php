@@ -28,7 +28,6 @@ use ChamiloSession as Session;
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
-require_once __DIR__.'/../inc/lib/urlUtils.lib.php';
 
 $groupRights = Session::read('group_member_with_upload_rights');
 
@@ -143,9 +142,6 @@ if ($is_certificate_mode) {
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true) || $groupRights ||
     DocumentManager::is_my_shared_folder(api_get_user_id(), $dir, $sessionId);
-$noPHP_SELF = true;
-
-/*	Other initialization code */
 
 $dbTable = Database::get_course_table(TABLE_DOCUMENT);
 $course_id = api_get_course_int_id();
@@ -156,7 +152,6 @@ if (!empty($group_id)) {
         'name' => get_lang('GroupSpace'),
     );
     $group_document = true;
-    $noPHP_SELF = true;
 }
 
 if (!$is_certificate_mode) {
@@ -219,7 +214,7 @@ if (isset($_POST['comment'])) {
         if ($file_type == 'link') {
             $linkExists = DocumentManager::cloudLinkExists($course_info, $file, $_POST['comment']);
         }
-        
+
         if (!$linkExists || $linkExists == $document_id) {
             $params = [
                 'comment' => $comment,
@@ -230,7 +225,7 @@ if (isset($_POST['comment'])) {
                 $params,
                 ['c_id = ? AND id = ?' => [$course_id, $document_id]]
             );
-            
+
             if ($file_type != 'link') {
                 Display::addFlash(Display::return_message(get_lang('fileModified')));
             } else {
@@ -391,15 +386,8 @@ if ($owner_id == api_get_user_id() ||
     );
 
     // Form title
-    $form->addElement('header', $nameTools);
-    $form->addElement('hidden', 'filename');
-    $form->addElement('hidden', 'extension');
-    $form->addElement('hidden', 'file_path');
-    $form->addElement('hidden', 'commentPath');
-    $form->addElement('hidden', 'showedit');
-    $form->addElement('hidden', 'origin');
-    $form->addElement('hidden', 'origin_opt');
-    $key_label_title = ($file_type != 'link' ? 'Title' : 'LinkName');
+    $form->addHeader($nameTools);
+    $key_label_title = $file_type != 'link' ? 'Title' : 'LinkName';
     $form->addText(
         'title',
         get_lang($key_label_title),
@@ -408,10 +396,7 @@ if ($owner_id == api_get_user_id() ||
     );
 
     $defaults['title'] = $document_data['title'];
-
-    $form->addElement('hidden', 'formSent');
     $defaults['formSent'] = 1;
-
     $read_only_flag = isset($_POST['readonly']) ? $_POST['readonly'] : null;
 
     // Desactivation of IE proprietary commenting tags inside the text before loading it on the online editor.
@@ -448,16 +433,24 @@ if ($owner_id == api_get_user_id() ||
             }
         }
     }
-        
+
     if ($file_type == 'link') {
         // URLs in whitelist
-        $urlWL = URLUtils::getFileHostingsWL();
+        $urlWL = DocumentManager::getFileHostingWhiteList();
         sort($urlWL);
-        $urlWLRegEx = '/(\/\/|\.)('.implode('|', $urlWL).')/i'; //Matches any of the whitelisted urls preceded by // or .
+        //Matches any of the whitelisted urls preceded by // or .
+        $urlWLRegEx = '/(\/\/|\.)('.implode('|', $urlWL).')/i';
         $urlWLText = "\n\t* ".implode("\n\t* ", $urlWL);
         $urlWLHTML = "<ul><li>".implode("</li><li>", $urlWL)."</li></ul>";
         $form->addText('comment', get_lang('Url'));
-        $form->addElement('static', 'info', '', '<span class="text-primary" data-toggle="tooltip" title="'.$urlWLHTML.'">'.get_lang('ValidDomainList').' <span class="glyphicon glyphicon-question-sign"></span></span>');
+        $form->addElement(
+            'static',
+            'info',
+            '',
+            '<span class="text-primary" data-toggle="tooltip" title="'.$urlWLHTML.'">'.get_lang(
+                'ValidDomainList'
+            ).' <span class="glyphicon glyphicon-question-sign"></span></span>'
+        );
     } else {
         $form->addElement('textarea', 'comment', get_lang('Comment'), ['cols-size' => [2, 10, 0]]);
     }
@@ -472,16 +465,14 @@ if ($owner_id == api_get_user_id() ||
     }
 
     if ($file_type == 'link') {
-        $form->addRule('title', get_lang('PleaseEnterCloudLinkName'), 'required', null, 'client');
-        $form->addRule('title', get_lang('PleaseEnterCloudLinkName'), 'required', null, 'server');
-        $form->addRule('comment', get_lang('PleaseEnterURL'), 'required', null, 'client');
-        $form->addRule('comment', get_lang('PleaseEnterURL'), 'required', null, 'server');
+        $form->addRule('title', get_lang('PleaseEnterCloudLinkName'), 'required');
+        $form->addRule('comment', get_lang('PleaseEnterURL'), 'required');
         // Well formed url pattern (must have the protocol)
-        $urlRegEx = URLUtils::getWellformedUrlRegex();
+        $urlRegEx = DocumentManager::getWellFormedUrlRegex();
         $form->addRule('comment', get_lang('NotValidURL'), 'regex', $urlRegEx, 'client');
         $form->addRule('comment', get_lang('NotValidURL'), 'regex', $urlRegEx, 'server');
-        $form->addRule('comment', get_lang('NotValidDomain').$urlWLText,'regex', $urlWLRegEx, 'client');
-        $form->addRule('comment', get_lang('NotValidDomain').$urlWLHTML,'regex', $urlWLRegEx, 'server');
+        $form->addRule('comment', get_lang('NotValidDomain').$urlWLText, 'regex', $urlWLRegEx, 'client');
+        $form->addRule('comment', get_lang('NotValidDomain').$urlWLHTML, 'regex', $urlWLRegEx, 'server');
     }
 
     if ($is_certificate_mode) {
@@ -601,7 +592,6 @@ function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc)
 function show_return($document_id, $path, $call_from_tool = '', $slide_id = 0, $is_certificate_mode = false)
 {
     $actionsLeft = null;
-
     global $parent_id;
     $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&id='.$parent_id;
 

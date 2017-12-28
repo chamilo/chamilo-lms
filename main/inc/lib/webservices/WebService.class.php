@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 use Chamilo\UserBundle\Entity\User;
 
 /**
@@ -77,8 +78,7 @@ class WebService
             return false;
         }
 
-        /** @var \Chamilo\UserBundle\Entity\User $user */
-        $user = UserManager::getRepository()->findOneBy(['username' => $username]);
+        $user = UserManager::getManager()->findUserByUsername($username);
 
         if (!$user) {
             return false;

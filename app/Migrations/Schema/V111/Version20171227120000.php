@@ -34,7 +34,8 @@ class Version20171227120000 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE gradebook_linkeval_log CHANGE created_at created_at DATETIME NOT NULL');
         $this->addSql('ALTER TABLE gradebook_result CHANGE created_at created_at DATETIME NOT NULL');
         $this->addSql('ALTER TABLE gradebook_result_log CHANGE created_at created_at DATETIME NOT NULL');
-        $this->addSql('ALTER TABLE language CHANGE id id INT AUTO_INCREMENT NOT NULL');
+        // Fails because of FK on id field
+        //$this->addSql('ALTER TABLE language CHANGE id id INT AUTO_INCREMENT NOT NULL');
         $this->addSql('ALTER TABLE message CHANGE send_date send_date DATETIME NOT NULL');
         $this->addSql('ALTER TABLE promotion CHANGE status status INT NOT NULL, CHANGE created_at created_at DATETIME NOT NULL, CHANGE updated_at updated_at DATETIME NOT NULL');
         $this->addSql('ALTER TABLE session CHANGE name name VARCHAR(150) NOT NULL');

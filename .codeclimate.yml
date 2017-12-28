@@ -1,17 +1,22 @@
 version: "2"
 checks:
+  argument-count:
+    enabled: false
+  complex-logic:
+    enabled: false
   file-lines:
     enabled: false
   method-complexity:
     enabled: false
-  complex-logic:
+  method-count:
     enabled: false
   method-lines:
     enabled: false
-  method-count:
-      config:
-        threshold: 200
-
+  nested-control-flow:
+    config:
+      threshold: 20
+  return-statements:
+    enabled: false
 
 plugins:
   fixme:

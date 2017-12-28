@@ -3,9 +3,9 @@
 
 namespace Application\Migrations\Schema\V111;
 
-use Application\Migrations\AbstractMigrationChamilo,
-    Doctrine\DBAL\Schema\Schema,
-    Doctrine\DBAL\Types\Type;
+use Application\Migrations\AbstractMigrationChamilo;
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Type;
 
 /**
  * Class Version20170608164500
@@ -17,7 +17,7 @@ use Application\Migrations\AbstractMigrationChamilo,
 class Version20170608164500 extends AbstractMigrationChamilo
 {
     /**
-     * @param \Doctrine\DBAL\Schema\Schema $schema
+     * @param Schema $schema
      */
     public function up(Schema $schema)
     {
@@ -29,7 +29,7 @@ class Version20170608164500 extends AbstractMigrationChamilo
     }
 
     /**
-     * @param \Doctrine\DBAL\Schema\Schema $schema
+     * @param Schema $schema
      */
     public function down(Schema $schema)
     {

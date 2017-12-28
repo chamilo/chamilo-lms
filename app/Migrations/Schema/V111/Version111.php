@@ -6,7 +6,6 @@ namespace Application\Migrations\Schema\V111;
 use Application\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
-
 /**
  * Class Version111
  * Migrate file to updated to Chamilo 1.11

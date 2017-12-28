@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Application\Migrations\Schema\V111;
 
@@ -6,7 +7,8 @@ use Application\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Auto-generated Migration: Please modify to your needs!
+ * Class Version20160330103045
+ * @package Application\Migrations\Schema\V111
  */
 class Version20160330103045 extends AbstractMigrationChamilo
 {

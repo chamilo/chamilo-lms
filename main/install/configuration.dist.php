@@ -699,6 +699,9 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Allow session admin to read careers
 //$_configuration['allow_session_admin_read_careers'] = true;
 
+// Enable cloud links in document tool
+// $_configuration['enable_add_file_link'] = false;
+
 // Send score in percentage in the exam result notification
 //$_configuration['send_notification_score_in_percentage'] = false;
 

@@ -119,11 +119,11 @@ try {
             $restApi->showLearningPath($lpId);
             break;
         case Rest::SAVE_COURSE:
-            $data = $restApi->saveNewCourse($_POST);
+            $data = $restApi->addCourse($_POST);
             $restResponse->setData($data);
             break;
         case Rest::SAVE_USER:
-            $data = $restApi->saveNewUser($_POST);
+            $data = $restApi->addUser($_POST);
             $restResponse->setData($data);
             break;
         case Rest::SUBSCRIBE_USER_TO_COURSE:

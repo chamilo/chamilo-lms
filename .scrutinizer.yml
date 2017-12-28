@@ -1,28 +1,28 @@
 # .scrutinizer.yml - see https://scrutinizer-ci.com/docs/guides/php/continuous-integration-deployment for doc
 # Excludes go for things do not contain code, are not managed well by Scrutinizer or are external libraries that
 # Chamilo includes but that we cannot update without patching upstream.
-build:
-    environment:
-        mysql: 5.5
-        php:
-            version: 7.0.20
-            ini:
-                'date.timezone': 'US/Pacific'
-                'phar.readonly': false
-        apache2:
-            modules: ['rewrite']
-            sites:
-                chamilodev:
-                    web_root: '/'
-                    host: 'my.chamilodev.net'
-        hosts:
-            my.chamilodev.net: '127.0.0.1'
-        postgresql: false
-        mongodb: false
-        redis: false
-        node: false
-        neo4j: false
-        rabbitmq: false
+#build:
+#    environment:
+#        mysql: 5.5
+#        php:
+#            version: 7.0.20
+#            ini:
+#                'date.timezone': 'US/Pacific'
+#                'phar.readonly': false
+#        apache2:
+#            modules: ['rewrite']
+#            sites:
+#                chamilodev:
+#                    web_root: '/'
+#                    host: 'my.chamilodev.net'
+#        hosts:
+#            my.chamilodev.net: '127.0.0.1'
+#        postgresql: false
+#        mongodb: false
+#        redis: false
+#        node: false
+#        neo4j: false
+#        rabbitmq: false
 
 checks:
     php:

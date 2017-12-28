@@ -5,7 +5,7 @@ build:
     environment:
         mysql: 5.5
         php:
-            version: 7.0
+            version: 7.0.20
             ini:
                 'date.timezone': 'US/Pacific'
                 'phar.readonly': false

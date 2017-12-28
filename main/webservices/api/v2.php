@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 require_once __DIR__.'/../../inc/global.inc.php';
 
 $hash = isset($_REQUEST['hash']) ? $_REQUEST['hash'] : null;
@@ -116,8 +115,20 @@ try {
             $restResponse->setData($data);
             break;
         case Rest::GET_COURSE_LEARNPATH:
-            $lpId = isset($_REQUEST['lp_id']) ? intval($_REQUEST['lp_id']) : 0;
+            $lpId = isset($_REQUEST['lp_id']) ? intval($_REQUEST['lp_id']) : 1;
             $restApi->showLearningPath($lpId);
+            break;
+        case Rest::SAVE_COURSE:
+            $data = $restApi->saveNewCourse($_POST);
+            $restResponse->setData($data);
+            break;
+        case Rest::SAVE_USER:
+            $data = $restApi->saveNewUser($_POST);
+            $restResponse->setData($data);
+            break;
+        case Rest::SUBSCRIBE_USER_TO_COURSE:
+            $data = $restApi->subscribeUserToCourse($_POST);
+            $restResponse->setData($data);
             break;
         case Rest::SAVE_FORUM_POST:
             if (

@@ -24,7 +24,6 @@ build:
         neo4j: false
         rabbitmq: false
 
-
 checks:
     php:
         no_trailing_whitespace: true
@@ -99,48 +98,19 @@ coding_style:
                 true_false_null: lower
 
 tools:
-    php_analyzer: false
+    php_analyzer: true
     php_mess_detector: true
 
-#        extensions:
-#            - php
-#        command: phpmd
-#        config:
-#            rulesets:
-#                - codesize
-
-#    php_analyzer:
-#        enabled: true
-#        filter:
-#            excluded_paths:
-#                - 'tests/*'
-#        extensions:
-#            - php
-#    php_code_sniffer:
-#        enabled: true
-#        config:
-#            standard: PSR2
-#        extensions:
-#            - php
-#        command: phpcs
-#        filter:
-#            excluded_paths:
-#                - 'tests/*'
-#    sensiolabs_security_checker:
-#        enabled: true
-#    php_pdepend:
-#        command: pdepend
-#        configuration_file:   ~
-#        suffixes:
-#            - php
-#        excluded_dirs:
-#            - 'vendor'
-#            - 'tests/*'
-#        enabled: true
-#    php_code_coverage: true
+    php_cs_fixer: true
+    php_code_sniffer:
+        config:
+            standard: PSR2
+    php_code_coverage: true
+    php_pdepend: true
+    php_loc: true
 
 filter:
-      excluded_paths:
+    excluded_paths:
         - 'cli-config.php'
         - 'app/cache/*'
         - 'app/logs/*'

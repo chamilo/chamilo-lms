@@ -5,7 +5,7 @@ build:
     environment:
         mysql: 5.5
         php:
-            version: '5.6.16'
+            version: 7.0
             ini:
                 'date.timezone': 'US/Pacific'
                 'phar.readonly': false
@@ -99,9 +99,8 @@ coding_style:
 
 tools:
     php_analyzer: true
-    php_mess_detector: true
-
-    php_cs_fixer: true
+    php_cs_fixer:
+        config: { level: psr2 }
     php_code_sniffer:
         config:
             standard: PSR2

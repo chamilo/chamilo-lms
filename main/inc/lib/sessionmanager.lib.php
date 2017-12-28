@@ -541,6 +541,11 @@ class SessionManager
         if ($showCountUsers) {
             $query .= ' GROUP by s.id';
         }
+        $allowOrder = api_get_configuration_value('session_list_order');
+        if ($allowOrder) {
+            $order = ' ORDER BY position ASC';
+        }
+
         $query .= $order;
         $query .= $limit;
         $result = Database::query($query);
@@ -7821,6 +7826,7 @@ class SessionManager
         switch ($list_type) {
             case 'simple':
                 $columns = array(
+                    '#',
                     get_lang('Name'),
                     get_lang('Category'),
                     get_lang('SessionDisplayStartDate'),
@@ -7832,6 +7838,13 @@ class SessionManager
                 );
 
                 $column_model = array(
+                    array(
+                        'name' => 'id',
+                        'index' => 's.id',
+                        'width' => '160',
+                        'width' => '160',
+                        'hidden' => 'true',
+                    ),
                     array(
                         'name' => 'name',
                         'index' => 's.name',

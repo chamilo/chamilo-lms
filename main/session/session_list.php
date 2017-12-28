@@ -152,6 +152,8 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
 }';
 
 $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
+$allowOrder = api_get_configuration_value('session_list_order');
+$orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
 ?>
     <script>
@@ -193,7 +195,6 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
         var second_filters = [];
 
         $(function() {
-
             date_pick_today = function(elem) {
                 $(elem).datetimepicker({dateFormat: "yy-mm-dd"});
                 $(elem).datetimepicker('setDate', (new Date()));
@@ -285,6 +286,29 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
                 };
 
             original_cols = grid.jqGrid('getGridParam', 'colModel');
+
+            <?php if ($allowOrder) { ?>
+            options = {
+                update: function (e, ui) {
+                    var rowNum = jQuery("#sessions").getGridParam('rowNum');
+                    var page = jQuery("#sessions").getGridParam('page');
+                    page = page - 1;
+                    var start = rowNum * page;
+                    var list = jQuery('#sessions').jqGrid('getRowData');
+                    var orderList = [];
+                    $(list).each(function(index, e) {
+                        index = index + start;
+                        orderList.push({'order':index, 'id': e.id});
+                    });
+                    orderList = JSON.stringify(orderList);
+                    $.get("<?php echo $orderUrl ?>", "order="+orderList, function (result) {
+                        console.log(result);
+                    });
+                }
+            };
+            // Sortable rows
+            grid.jqGrid('sortableRows', options);
+            <?php } ?>
 
             grid.jqGrid('navGrid','#sessions_pager',
                 {edit:false,add:false,del:false},

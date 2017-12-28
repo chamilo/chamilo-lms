@@ -2785,7 +2785,13 @@ class UserManager
         $ignoreTimeLimit = false
     ) {
         if ($user_id != strval(intval($user_id))) {
-            return array();
+            return [];
+        }
+
+        $allowOrder = api_get_configuration_value('session_list_order');
+        $position = '';
+        if ($allowOrder) {
+            $position = ', s.position AS position ';
         }
 
         // Get the list of sessions per user
@@ -2806,6 +2812,7 @@ class UserManager
                     sc.dateEnd AS session_category_date_end,
                     s.coachAccessStartDate AS coach_access_start_date,
                     s.coachAccessEndDate AS coach_access_end_date
+                    $position
                 FROM ChamiloCoreBundle:Session AS s
                 LEFT JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
                 INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.sessionId = s.id
@@ -2817,6 +2824,11 @@ class UserManager
         if ($showAllSessions) {
             $order = "ORDER BY s.accessStartDate";
         }
+
+        if ($allowOrder) {
+            $order = "ORDER BY s.position";
+        }
+
         $dql .= $order;
 
         $dql = Database::getManager()
@@ -2832,10 +2844,8 @@ class UserManager
         foreach ($sessionData as $row) {
             $session_id = $row['id'];
             $coachList = SessionManager::getCoachesBySession($session_id);
-
             $categoryStart = $row['session_category_date_start'] ? $row['session_category_date_start']->format('Y-m-d') : '';
             $categoryEnd = $row['session_category_date_end'] ? $row['session_category_date_end']->format('Y-m-d') : '';
-
             $courseList = self::get_courses_list_by_session(
                 $user_id,
                 $session_id

@@ -7,6 +7,8 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script();
+
 $fileLinkEnabled = api_get_configuration_value('enable_add_file_link');
 
 if (!$fileLinkEnabled) {

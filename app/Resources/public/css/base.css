@@ -4969,6 +4969,9 @@ div#chat-remote-video video {
     height: 32px;
     line-height: 23px;
     max-width: 80%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .grid-courses .items .cribbon{
     width: 0;

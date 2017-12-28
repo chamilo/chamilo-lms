@@ -8,6 +8,10 @@ checks:
     enabled: false
   method-lines:
     enabled: false
+  method-count:
+      config:
+        threshold: 200
+
 
 plugins:
   fixme:
@@ -38,6 +42,15 @@ plugins:
         enabled: false
 
       Controversial/Superglobals:
+        enabled: false
+
+      Design/WeightedMethodCount:
+        enabled: false
+
+      Design/TooManyPublicMethods:
+        enabled: false
+
+      Naming/ShortVariable:
         enabled: false
 
   sonar-php:

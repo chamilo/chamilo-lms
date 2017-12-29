@@ -208,4 +208,22 @@ class CWikiMailcue
     {
         return $this->userId;
     }
+
+    /**
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
+
+    /**
+     * @param int $iid
+     * @return CWikiMailcue
+     */
+    public function setIid($iid)
+    {
+        $this->iid = $iid;
+        return $this;
+    }
 }

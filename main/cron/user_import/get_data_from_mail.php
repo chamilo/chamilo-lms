@@ -20,16 +20,15 @@ require_once '../../inc/global.inc.php';
 $users = Database::get_main_table(TABLE_MAIN_USER);
 $string = '';
 foreach ($list as $mail) {
-  $mail = trim($mail);
-  $sql = "SELECT user_id, official_code, firstname, lastname, email FROM $users WHERE email = '$mail'\n";
-  $res = Database::query($sql);
-  if ($res === false) { die(mysql_error()); }
-  if (Database::num_rows($res) == 0) {
-    $string .= 'No encontrado;'.$row['email'];
-  } else {
-    $row = Database::fetch_assoc($res);
-   $string .= $row['user_id'].';'.$row['email'].';'.$row['firstname'].';'.$row['lastname'].';'.$row['official_code']."\r\n";
-  }
+    $mail = trim($mail);
+    $sql = "SELECT user_id, official_code, firstname, lastname, email FROM $users WHERE email = '$mail'\n";
+    $res = Database::query($sql);
+    if (Database::num_rows($res) == 0) {
+        $string .= 'No encontrado;'.$row['email'];
+    } else {
+        $row = Database::fetch_assoc($res);
+        $string .= $row['user_id'].';'.$row['email'].';'.$row['firstname'].';'.$row['lastname'].';'.$row['official_code']."\r\n";
+    }
 }
 echo $string;
 file_put_contents('/tmp/list.txt', $string);

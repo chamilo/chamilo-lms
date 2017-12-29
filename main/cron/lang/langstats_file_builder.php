@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * This script generates a directory based on the English language variables
  * but only composed of the 10,000 (can be configured) most frequent words
@@ -9,11 +10,9 @@
  * When running the language_builder, please make sure this parameter is
  * set to 0 in the configuration.php file, otherwise it will take *ages*.
  */
-/**
- * Requires
- */
+
 require_once '../../inc/global.inc.php';
-require_once 'langstats.class.php'; 
+require_once 'langstats.class.php';
 global $_configuration;
 $_configuration['language_measure_frequency'] = 0;
 $langstats = new langstats();
@@ -33,15 +32,17 @@ $arch_dir = api_get_path(SYS_ARCHIVE_PATH);
  * Code run
  */
 foreach ($terms as $row) {
-  if ($words_counter > 10000) { break; }
-  $words = str_word_count(get_lang($row['term_name'], null, $orig_lang));
-  $words_counter += $words;
-  $terms_in_limit[$row['term_name']] = $i;
-  //echo "Term <b>".$row['term_name']."</b> is <b>'".get_lang($row['term_name'],null,$orig_lang)."'</b> which means $words words<br /><br />\n";
-  //if ($words_counter%1000 >= 0) {
+    if ($words_counter > 10000) {
+        break;
+    }
+    $words = str_word_count(get_lang($row['term_name'], null, $orig_lang));
+    $words_counter += $words;
+    $terms_in_limit[$row['term_name']] = $i;
+    //echo "Term <b>".$row['term_name']."</b> is <b>'".get_lang($row['term_name'],null,$orig_lang)."'</b> which means $words words<br /><br />\n";
+    //if ($words_counter%1000 >= 0) {
     //echo "Reached $words_counter words at term $i (".$row['term_name']." used ".$row['term_count']." times)...<br />\n";
-  //}
-  $i++;
+    //}
+    $i++;
 }
 //echo $words_counter.'<br />';
 
@@ -49,8 +50,8 @@ echo "Reached ".count($terms_in_limit)." terms for the $words_counter most-used 
 
 echo "Scanning English files, trying to find these terms...<br />\n";
 if (!is_dir($arch_dir.'/langstats')) {
-  mkdir($arch_dir.'/langstats');
-  mkdir($arch_dir.'/langstats/'.$orig_lang);
+    mkdir($arch_dir.'/langstats');
+    mkdir($arch_dir.'/langstats/'.$orig_lang);
 }
 $list_files = scandir($lang_dir.'/'.$orig_lang);
 $j = 1;
@@ -59,38 +60,42 @@ $words_found = 0;
 $global_var = array(); //keep the combination of all vars
 $terms_in_limit = array_flip($terms_in_limit);
 foreach ($list_files as $file) {
-  if (substr($file, 0, 1) == '.') {continue; }
-  //echo "'".substr($file,0,-8)."',<br />"; //print in a PHP array format
-  $vars = file($lang_dir.'/'.$orig_lang.'/'.$file);
-  $local_var = array();
-  $file_string = '<?php'."\n";
-  foreach ($vars as $line) {
-    $var = array();
-    $res = preg_match('/^(\$\w*)/', $line, $var);
-    if ($res > 0) {
-      //echo $var[1]."<br />";
-      
-      if (in_array(substr($var[1], 1), $terms_in_limit)) {
-        //echo "Var ".$var[1]." was in the limit<br />";
-        $local_var[$var[1]] = $line;
-        $file_string .= $line;
-        $terms_found[] = substr($var[1], 1); //e.g. store Tools
-        $words_found += str_word_count(get_lang($var[1], null, $orig_lang));
-      } elseif (in_array(substr($var[1], 5), $terms_in_limit)) {
-        //echo "Var ".$var[1]." was in the limit<br />";
-        $local_var[$var[1]] = $line;
-        $file_string .= $line;
-        $terms_found[] = substr($var[1], 5); //e.g. store langTools
-        $words_found += str_word_count(get_lang(substr($var[1], 5), null, $orig_lang));
-      } //else do not care
+    if (substr($file, 0, 1) == '.') {
+        continue;
     }
-  }
-  echo "Writing ".$arch_dir.'/langstats/'.$orig_lang.'/'.$file."<br />\n";
-  file_put_contents($arch_dir.'/langstats/'.$orig_lang.'/'.$file, $file_string); 
-  $global_var += $local_var;
+    //echo "'".substr($file,0,-8)."',<br />"; //print in a PHP array format
+    $vars = file($lang_dir.'/'.$orig_lang.'/'.$file);
+    $local_var = array();
+    $file_string = '<?php'."\n";
+    foreach ($vars as $line) {
+        $var = array();
+        $res = preg_match('/^(\$\w*)/', $line, $var);
+        if ($res > 0) {
+            //echo $var[1]."<br />";
+
+            if (in_array(substr($var[1], 1), $terms_in_limit)) {
+                //echo "Var ".$var[1]." was in the limit<br />";
+                $local_var[$var[1]] = $line;
+                $file_string .= $line;
+                $terms_found[] = substr($var[1], 1); //e.g. store Tools
+                $words_found += str_word_count(get_lang($var[1], null, $orig_lang));
+            } elseif (in_array(substr($var[1], 5), $terms_in_limit)) {
+                //echo "Var ".$var[1]." was in the limit<br />";
+                $local_var[$var[1]] = $line;
+                $file_string .= $line;
+                $terms_found[] = substr($var[1], 5); //e.g. store langTools
+                $words_found += str_word_count(get_lang(substr($var[1], 5), null, $orig_lang));
+            } //else do not care
+        }
+    }
+    echo "Writing ".$arch_dir.'/langstats/'.$orig_lang.'/'.$file."<br />\n";
+    file_put_contents($arch_dir.'/langstats/'.$orig_lang.'/'.$file, $file_string);
+    $global_var += $local_var;
 };
 $terms_diff = count($global_var) - count($terms_in_limit);
-echo count($global_var)." terms found in English files (summing up to $words_found words). Some terms ($terms_diff in this case) might have appeared in two different files<br />";
+echo count(
+        $global_var
+    )." terms found in English files (summing up to $words_found words). Some terms ($terms_diff in this case) might have appeared in two different files<br />";
 /**
  * Display results
  */

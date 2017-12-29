@@ -1,5 +1,6 @@
 <?php
 /* For license terms, see /license.txt */
+
 require_once __DIR__.'/config.php';
 
 // Course legal
@@ -36,8 +37,6 @@ switch ($action) {
         break;
 }
 
-
-
 $order = " ORDER BY firstname, lastname";
 $userList = $legal->getUserAgreementList($courseId, $sessionId, $order);
 $table = new HTML_Table(array('class' => 'data_table'));
@@ -69,15 +68,7 @@ if (!empty($userList)) {
         $table->setCellContents($row, 1, $webDate);
         $table->setCellContents($row, 2, $mailDate);
         $table->setCellContents($row, 3, $link.' '.$deleteLink);
-
         $row++;
-/*
-        'web_agreement' => string '1' (length=1)
-  'web_agreement_date' => string '2014-09-30 14:36:30' (length=19)
-  'mail_agreement' => string '1' (length=1)
-  'mail_agreement_date' => string '2014-09-30 14:43:16' (length=19)
-  'mail_agreement_link' => s*/
-
     }
 }
 $url = $pluginPath.'start.php?'.api_get_cidreq();

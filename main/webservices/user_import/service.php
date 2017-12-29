@@ -14,8 +14,6 @@ require_once __DIR__.'/../../inc/global.inc.php';
  */
 function import_users_from_file($filepath, $security_key)
 {
-    global $_configuration;
-
     $errors_returned = array(
         0 => 'success',
         1 => 'file import does not exist',
@@ -24,8 +22,10 @@ function import_users_from_file($filepath, $security_key)
         4 => 'security error'
     );
 
+    $key = api_get_configuration_value('security_key');
+
     // Check whether this script is launch by server and security key is ok.
-    if (empty($_SERVER['REMOTE_ADDR']) || $_SERVER['REMOTE_ADDR'] != $_SERVER['SERVER_ADDR'] || $security_key != $_configuration['security_key']) {
+    if (empty($_SERVER['REMOTE_ADDR']) || $_SERVER['REMOTE_ADDR'] != $_SERVER['SERVER_ADDR'] || $security_key != $key) {
         return $errors_returned[4];
     }
 

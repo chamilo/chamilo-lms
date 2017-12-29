@@ -4,6 +4,7 @@
 namespace Chamilo\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Chamilo\CoreBundle\Entity\Room;
 
 /**
  * CThematicAdvance
@@ -289,10 +290,28 @@ class CThematicAdvance
      *
      * @return $this
      */
-    public function setRoom($room)
+    public function setRoom(Room $room)
     {
         $this->room = $room;
 
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
+
+    /**
+     * @param int $iid
+     * @return CThematicAdvance
+     */
+    public function setIid($iid)
+    {
+        $this->iid = $iid;
         return $this;
     }
 }

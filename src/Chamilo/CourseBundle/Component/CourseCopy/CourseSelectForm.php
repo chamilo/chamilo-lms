@@ -163,10 +163,10 @@ class CourseSelectForm
             !empty($hidden_fields['destination_session']) &&
             !empty($hidden_fields['origin_session'])
         ) {
-            echo '<input type="hidden" name="destination_course" 	value="'.$hidden_fields['destination_course'].'"/>';
-            echo '<input type="hidden" name="origin_course" 		value="'.$hidden_fields['origin_course'].'"/>';
-            echo '<input type="hidden" name="destination_session" 	value="'.$hidden_fields['destination_session'].'"/>';
-            echo '<input type="hidden" name="origin_session" 		value="'.$hidden_fields['origin_session'].'"/>';
+            echo '<input type="hidden" name="destination_course" value="'.$hidden_fields['destination_course'].'"/>';
+            echo '<input type="hidden" name="origin_course" value="'.$hidden_fields['origin_course'].'"/>';
+            echo '<input type="hidden" name="destination_session" value="'.$hidden_fields['destination_session'].'"/>';
+            echo '<input type="hidden" name="origin_session" value="'.$hidden_fields['origin_session'].'"/>';
         }
 
         $element_count = 0;
@@ -553,7 +553,7 @@ class CourseSelectForm
                         // Mark folders to import which are not selected by the user to import,
                         // but in which a document was selected.
                         $documents = isset($_POST['resource'][RESOURCE_DOCUMENT]) ? $_POST['resource'][RESOURCE_DOCUMENT] : null;
-                        if (!empty($resources) && is_array($resources))
+                        if (!empty($resources) && is_array($resources)) {
                             foreach ($resources as $id => $obj) {
                                 if (isset($obj->file_type) && $obj->file_type == 'folder' &&
                                     !isset($_POST['resource'][RESOURCE_DOCUMENT][$id]) &&
@@ -575,6 +575,7 @@ class CourseSelectForm
                                     }
                                 }
                             }
+                        }
                         // no break
                     default:
                         if (!empty($resources) && is_array($resources)) {
@@ -658,14 +659,11 @@ class CourseSelectForm
 
         //get destination course title
         if (!empty($hidden_fields['destination_course'])) {
+            $sessionTitle = null;
             if (!empty($hidden_fields['destination_session'])) {
                 $sessionTitle = ' ('.api_get_session_name($hidden_fields['destination_session']).')';
-            } else {
-                $sessionTitle = null;
             }
-            $courseInfo = api_get_course_info(
-                $hidden_fields['destination_course']
-            );
+            $courseInfo = api_get_course_info($hidden_fields['destination_course']);
             echo '<h3>';
             echo get_lang('DestinationCourse').' : '.$courseInfo['title'].$sessionTitle;
             echo '</h3>';

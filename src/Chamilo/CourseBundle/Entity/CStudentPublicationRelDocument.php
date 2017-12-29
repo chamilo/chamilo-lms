@@ -135,4 +135,22 @@ class CStudentPublicationRelDocument
     {
         return $this->id;
     }
+
+    /**
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
+
+    /**
+     * @param int $iid
+     * @return CStudentPublicationRelDocument
+     */
+    public function setIid($iid)
+    {
+        $this->iid = $iid;
+        return $this;
+    }
 }

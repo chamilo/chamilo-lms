@@ -55,7 +55,7 @@ class MessageAttachment
      */
     protected $filename;
 
-   /**
+    /**
      * @var integer
      *
      * @ORM\Column(name="size", type="integer", nullable=false, unique=false)
@@ -184,7 +184,4 @@ class MessageAttachment
 
         return $this;
     }
-
-
-
 }

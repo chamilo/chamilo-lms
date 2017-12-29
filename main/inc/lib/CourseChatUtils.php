@@ -109,9 +109,7 @@ class CourseChatUtils
         if (empty($message)) {
             return false;
         }
-
-        $em = Database::getManager();
-        $user = $em->find('ChamiloUserBundle:User', $this->userId);
+        $user = api_get_user_entity($this->userId);
         $courseInfo = api_get_course_info_by_id($this->courseId);
         $isMaster = (bool) api_is_course_admin();
         $document_path = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';

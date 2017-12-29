@@ -168,7 +168,7 @@ class StudentPublicationLink extends AbstractLink
 
     /**
      * @param null $stud_id
-     * @return array|null
+     * @return array
      */
     public function calc_score($stud_id = null, $type = null)
     {
@@ -177,10 +177,9 @@ class StudentPublicationLink extends AbstractLink
         $data = $this->get_exercise_data();
 
         if (empty($data)) {
-            return '';
+            return [];
         }
         $id = $data['id'];
-
         $session = $em->find('ChamiloCoreBundle:Session', api_get_session_id());
 
         $assignment = $em

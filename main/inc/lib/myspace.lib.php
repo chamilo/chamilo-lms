@@ -2689,9 +2689,10 @@ class MySpace
         }
 
         if (!empty($studentId)) {
-            $student = $em->find('ChamiloUserBundle:User', $studentId);
-
-            $studentList[$student->getId()] = $student->getCompleteName();
+            $student = api_get_user_entity($studentId);
+            if ($student) {
+                $studentList[$student->getId()] = $student->getCompleteName();
+            }
         }
 
         $form = new FormValidator('access_overview', 'GET');

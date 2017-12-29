@@ -23,7 +23,7 @@ if (!$userId || !$skillId) {
 Skill::isAllowed($userId);
 
 $em = Database::getManager();
-$user = $em->find('ChamiloUserBundle:User', $userId);
+$user = api_get_user_entity($userId);
 $skill = $em->find('ChamiloCoreBundle:Skill', $skillId);
 
 $currentUserId = api_get_user_id();
@@ -65,8 +65,7 @@ $skillInfo = [
 $allUserBadges = [];
 /** @var SkillRelUser $skillIssue */
 foreach ($userSkills as $index => $skillIssue) {
-    /** @var User $currentUser */
-    $currentUser = $em->find('ChamiloUserBundle:User', $currentUserId);
+    $currentUser = api_get_user_entity($currentUserId);
     $allowDownloadExport = $currentUser ? $currentUser->getId() === $user->getId() : false;
     $allowComment = $currentUser ? Skill::userCanAddFeedbackToUser($currentUser, $user) : false;
     $skillIssueDate = api_get_local_time($skillIssue->getAcquiredSkillAt());
@@ -274,7 +273,7 @@ foreach ($userSkills as $index => $skillIssue) {
 
 $template = new Template(get_lang('IssuedBadgeInformation'));
 $template->assign('user_badges', $allUserBadges);
-$template->assign('show_level', api_get_configuration_value('hide_skill_levels') == false;
+$template->assign('show_level', api_get_configuration_value('hide_skill_levels') == false);
 
 $content = $template->fetch(
     $template->get_template('skill/issued_all.tpl')

@@ -1609,6 +1609,7 @@ function api_get_user_info(
  */
 function api_get_user_entity($userId)
 {
+    $userId = (int) $userId;
     /** @var \Chamilo\UserBundle\Repository\UserRepository $repo */
     $repo = Database::getManager()->getRepository('ChamiloUserBundle:User');
 
@@ -3999,14 +4000,14 @@ function api_item_property_update(
     if ($result == false || Database::affected_rows($result) == 0) {
         $objCourse = $em->find('ChamiloCoreBundle:Course', intval($course_id));
         $objTime = new DateTime('now', new DateTimeZone('UTC'));
-        $objUser = $em->find('ChamiloUserBundle:User', intval($user_id));
+        $objUser = api_get_user_entity($user_id);
         if (empty($objUser)) {
             // Use anonymous
             $user_id = api_get_anonymous_id();
-            $objUser = $em->find('ChamiloUserBundle:User', $user_id);
+            $objUser = api_get_user_entity($user_id);
         }
         $objGroup = $em->find('ChamiloCourseBundle:CGroupInfo', intval($to_group_id));
-        $objToUser = $em->find('ChamiloUserBundle:User', intval($to_user_id));
+        $objToUser = api_get_user_entity($to_user_id);
         $objSession = $em->find('ChamiloCoreBundle:Session', intval($session_id));
 
         $startVisibleDate = !empty($start_visible) ? new DateTime($start_visible, new DateTimeZone('UTC')) : null;

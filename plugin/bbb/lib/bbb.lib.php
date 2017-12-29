@@ -1361,7 +1361,6 @@ class bbb
      */
     public function findMeetingParticipants($meetingId)
     {
-        $em = Database::getManager();
         $meetingData = Database::select(
             '*',
             'plugin_bbb_room',
@@ -1380,7 +1379,7 @@ class bbb
             $return[] = [
                 'id' => $participantInfo['id'],
                 'meeting_id' => $participantInfo['meeting_id'],
-                'participant' => $em->find('ChamiloUserBundle:User', $participantInfo['participant_id']),
+                'participant' => api_get_user_entity($participantInfo['participant_id']),
                 'in_at' => $participantInfo['in_at'],
                 'out_at' => $participantInfo['out_at']
             ];

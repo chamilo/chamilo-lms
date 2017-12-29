@@ -230,9 +230,7 @@ $socialInformation = '';
  * Show social activity
  */
 if (api_get_setting('allow_social_tool') === 'true') {
-    $em = Database::getManager();
-    $userObject = $em->find('ChamiloUserBundle:User', $user['user_id']);
-
+    $userObject = api_get_user_entity($user['user_id']);
     $data = [];
 
     // Calculate values

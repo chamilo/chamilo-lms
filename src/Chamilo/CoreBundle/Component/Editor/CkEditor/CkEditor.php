@@ -221,8 +221,7 @@ class CkEditor extends Editor
 
         $entityManager = \Database::getManager();
         $templatesRepo = $entityManager->getRepository('ChamiloCoreBundle:Templates');
-
-        $user = $entityManager->find('ChamiloUserBundle:User', $userId);
+        $user = api_get_user_entity($userId);
         $course = $entityManager->find('ChamiloCoreBundle:Course', api_get_course_int_id());
 
         if (!$user || !$course) {

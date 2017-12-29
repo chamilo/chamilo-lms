@@ -2075,8 +2075,7 @@ function getPosts(
 
         $posterId = $post->getPosterId();
         if (!empty($posterId)) {
-            /** @var User $user */
-            $user = $em->find('ChamiloUserBundle:User', $posterId);
+            $user = api_get_user_entity($posterId);
             if ($user) {
                 $postInfo['user_id'] = $user->getUserId();
                 $postInfo['username'] = $user->getUsername();

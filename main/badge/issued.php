@@ -75,7 +75,7 @@ $htmlHeadXtra[] = "
 ";
 
 $currentUserId = api_get_user_id();
-$currentUser = $entityManager->find('ChamiloUserBundle:User', $currentUserId);
+$currentUser = api_get_user_entity($currentUserId);
 $allowDownloadExport = $currentUser ? $currentUser->getId() === $user->getId() : false;
 $allowComment = $currentUser ? Skill::userCanAddFeedbackToUser($currentUser, $user) : false;
 $skillIssueDate = api_get_local_time($skillIssue->getAcquiredSkillAt());

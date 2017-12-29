@@ -26,8 +26,8 @@ define('XAPIAN_DB', api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/searchdb/');
  * @param   int             $count_type     Number of items to retrieve
  * @return  array                           An array of nids corresponding to the results.
  */
-function xapian_query($query_string, $db = NULL, $start = 0, $length = 10, $extra = array(), $count_type = 0) {
-
+function xapian_query($query_string, $db = null, $start = 0, $length = 10, $extra = [], $count_type = 0)
+{
     try {
         if (!is_object($db)) {
             $db = new XapianDatabase(XAPIAN_DB);
@@ -41,10 +41,8 @@ function xapian_query($query_string, $db = NULL, $start = 0, $length = 10, $extr
             }
         }
 
-
-        $query = NULL;
+        $query = null;
         $enquire = new XapianEnquire($db);
-
         if (!empty($query_string)) {
             $query_parser = new XapianQueryParser();
             //TODO: choose stemmer
@@ -118,14 +116,15 @@ function xapian_query($query_string, $db = NULL, $start = 0, $length = 10, $extr
         return array($count, $results);
     } catch (Exception $e) {
         display_xapian_error($e->getMessage());
-        return NULL;
+        return null;
     }
 }
 
 /**
  * build a boolean query
  */
-function xapian_get_boolean_query($term) {
+function xapian_get_boolean_query($term)
+{
     return new XapianQuery($term);
 }
 
@@ -137,7 +136,8 @@ function xapian_get_boolean_query($term) {
  * @param   XapianDatabase  $db     Xapian database to connect
  * @return  array
  */
-function xapian_get_all_terms($count = 0, $prefix, $db = NULL) {
+function xapian_get_all_terms($count = 0, $prefix, $db = null)
+{
     try {
         if (!is_object($db)) {
             $db = new XapianDatabase(XAPIAN_DB);
@@ -161,7 +161,7 @@ function xapian_get_all_terms($count = 0, $prefix, $db = NULL) {
         return $terms;
     } catch (Exception $e) {
         display_xapian_error($e->getMessage());
-        return NULL;
+        return null;
     }
 }
 
@@ -171,7 +171,8 @@ function xapian_get_all_terms($count = 0, $prefix, $db = NULL) {
  * @param   XapianDocument  document searched
  * @return  array
  */
-function xapian_get_doc_terms($doc = NULL, $prefix) {
+function xapian_get_doc_terms($doc = null, $prefix)
+{
     try {
         if (!is_a($doc, 'XapianDocument')) {
             return;
@@ -194,7 +195,7 @@ function xapian_get_doc_terms($doc = NULL, $prefix) {
         return $terms;
     } catch (Exception $e) {
         display_xapian_error($e->getMessage());
-        return NULL;
+        return null;
     }
 }
 
@@ -206,7 +207,8 @@ function xapian_get_doc_terms($doc = NULL, $prefix) {
  * @param string $op
  * @return XapianQuery query joined
  */
-function xapian_join_queries($query1, $query2 = NULL, $op = 'or') {
+function xapian_join_queries($query1, $query2 = null, $op = 'or')
+{
     // let decide how to join, avoiding include xapian.php outside
     switch ($op) {
         case 'or':

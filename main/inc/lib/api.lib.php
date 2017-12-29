@@ -4901,7 +4901,9 @@ function rmdirr($dirname, $delete_only_content_in_folder = false, $strict = fals
  */
 function copyr($source, $dest, $exclude = [], $copied_files = [])
 {
-    if (empty($dest)) { return false; }
+    if (empty($dest)) {
+        return false;
+    }
     // Simple copy for a file
     if (is_file($source)) {
         $path_info = pathinfo($source);
@@ -5422,7 +5424,9 @@ function api_set_settings_category($category, $value = null, $access_url = 1, $f
     $category = Database::escape_string($category);
     $t_s = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $access_url = (int) $access_url;
-    if (empty($access_url)) { $access_url = 1; }
+    if (empty($access_url)) {
+        $access_url = 1;
+    }
     if (isset($value)) {
         $value = Database::escape_string($value);
         $sql = "UPDATE $t_s SET selected_value = '$value'
@@ -5742,8 +5746,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
         if ($row[0]['id_coach'] == $userid) {
             $is_courseMember = true;
             $is_courseAdmin = false;
-        }
-        elseif ($row[0]['session_admin_id'] == $userid) {
+        } elseif ($row[0]['session_admin_id'] == $userid) {
             $is_courseMember = false;
             $is_courseAdmin = false;
         } else {
@@ -7019,7 +7022,9 @@ function api_check_ip_in_range($ip, $range)
     }
     foreach ($ranges as $range) {
         $range = trim($range);
-        if (empty($range)) { continue; }
+        if (empty($range)) {
+            continue;
+        }
         if (strpos($range, '/') === false) {
             if (strcmp($ip, $range) === 0) {
                 return true; // there is a direct IP match, return OK
@@ -7266,6 +7271,10 @@ function api_coach_can_edit_view_results($courseId = null, $session_id = null)
     }
 }
 
+/**
+ * @param string $file
+ * @return string
+ */
 function api_get_js_simple($file)
 {
     return '<script type="text/javascript" src="'.$file.'"></script>'."\n";
@@ -7357,8 +7366,7 @@ function api_set_settings_and_plugins()
 
 /**
  * Tries to set memory limit, if authorized and new limit is higher than current
- * @param string New memory limit
- * @param string $mem
+ * @param string $mem New memory limit
  * @return bool True on success, false on failure or current is higher than suggested
  * @assert (null) === false
  * @assert (-1) === false

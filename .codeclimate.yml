@@ -41,31 +41,7 @@ plugins:
     enabled: true
     config:
       file_extensions: "php"
-
-    checks:
-      Naming/LongVariable:
-        enabled: false
-
-      Controversial/Superglobals:
-        enabled: false
-
-      Design/WeightedMethodCount:
-        enabled: false
-
-      Design/TooManyPublicMethods:
-        enabled: false
-
-      Naming/ShortVariable:
-        enabled: false
-
-      Design/TooManyFields:
-        enabled: false
-
-      Design/TooManyMethods:
-        enabled: false
-
-      Design/TooManyPublicMethods:
-        enabled: false
+      rulesets: "ruleset.xml"
 
   sonar-php:
     enabled: false

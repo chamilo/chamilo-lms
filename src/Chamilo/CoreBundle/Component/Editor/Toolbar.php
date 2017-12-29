@@ -11,10 +11,10 @@ namespace Chamilo\CoreBundle\Component\Editor;
  */
 class Toolbar
 {
-    public $config = array();
+    public $config = [];
     public $urlGenerator;
-    public $plugins = array();
-    public $defaultPlugins = array();
+    public $plugins = [];
+    public $defaultPlugins = [];
 
     /**
      * @param string $toolbar
@@ -104,7 +104,7 @@ class Toolbar
      */
     public function getConditionalPlugins()
     {
-        return array();
+        return [];
     }
 
     /**

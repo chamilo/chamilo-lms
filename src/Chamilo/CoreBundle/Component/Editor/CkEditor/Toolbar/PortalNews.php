@@ -10,7 +10,6 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
  */
 class PortalNews extends Basic
 {
-
     /**
      * Get the toolbar config
      * @return array
@@ -100,5 +99,4 @@ class PortalNews extends Basic
             ['Toolbarswitch']
         ];
     }
-
 }

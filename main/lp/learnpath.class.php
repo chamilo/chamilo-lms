@@ -40,7 +40,7 @@ class learnpath
     public $extra_information = ''; // This string can be used by proprietary SCORM contents to store data about the current learnpath.
     public $force_commit = false; // For SCORM only - if set to true, will send a scorm LMSCommit() request on each LMSSetValue().
     public $index; // The index of the active learnpath_item in $ordered_items array.
-    public $items = array();
+    public $items = [];
     public $last; // item_id of last item viewed in the learning path.
     public $last_item_seen = 0; // In case we have already come in this learnpath, reuse the last item seen if authorized.
     public $license; // Which license this course has been given - not used yet on 20060522.
@@ -50,7 +50,7 @@ class learnpath
     public $message = '';
     public $mode = 'embedded'; // Holds the video display mode (fullscreen or embedded).
     public $name; // Learnpath name (they generally have one).
-    public $ordered_items = array(); // List of the learnpath items in the order they are to be read.
+    public $ordered_items = []; // List of the learnpath items in the order they are to be read.
     public $path = ''; // Path inside the scorm directory (if scorm).
     public $theme; // The current theme of the learning path.
     public $preview_image; // The current image of the learning path.
@@ -66,15 +66,15 @@ class learnpath
     // Percentage progress as saved in the db.
     public $progress_db = 0;
     public $proximity; // Wether the content is distant or local or unknown.
-    public $refs_list = array(); //list of items by ref => db_id. Used only for prerequisites match.
+    public $refs_list = []; //list of items by ref => db_id. Used only for prerequisites match.
     // !!!This array (refs_list) is built differently depending on the nature of the LP.
     // If SCORM, uses ref, if Chamilo, uses id to keep a unique value.
     public $type; //type of learnpath. Could be 'chamilo', 'scorm', 'scorm2004', 'aicc', ...
     // TODO: Check if this type variable is useful here (instead of just in the controller script).
     public $user_id; //ID of the user that is viewing/using the course
-    public $update_queue = array();
+    public $update_queue = [];
     public $scorm_debug = 0;
-    public $arrMenu = array(); // Array for the menu items.
+    public $arrMenu = []; // Array for the menu items.
     public $debug = 0; // Logging level.
     public $lp_session_id = 0;
     public $lp_view_session_id = 0; // The specific view might be bound to a session.
@@ -87,7 +87,7 @@ class learnpath
     public $expired_on = '';
     public $ref = null;
     public $course_int_id;
-    public $course_info = array();
+    public $course_info = [];
     public $categoryId;
 
     /**
@@ -246,7 +246,7 @@ class learnpath
                     error_log('-- Start while--');
                 }
 
-                $lp_item_id_list = array();
+                $lp_item_id_list = [];
                 while ($row = Database::fetch_array($res)) {
                     $lp_item_id_list[] = $row['iid'];
                     switch ($this->type) {
@@ -355,7 +355,7 @@ class learnpath
                             );
                         }
 
-                        $status_list = array();
+                        $status_list = [];
                         $res = Database::query($sql);
                         while ($row = Database:: fetch_array($res)) {
                             $status_list[$row['lp_item_id']] = $row['status'];
@@ -1035,7 +1035,7 @@ class learnpath
             return false;
         }
         $this->current_time_stop = time();
-        $this->ordered_items = array();
+        $this->ordered_items = [];
         $this->index = 0;
         unset($this->lp_id);
         //unset other stuff
@@ -1295,7 +1295,7 @@ class learnpath
         $title,
         $description,
         $prerequisites = '0',
-        $audio = array(),
+        $audio = [],
         $max_time_allowed = 0,
         $url = ''
     ) {
@@ -1599,7 +1599,7 @@ class learnpath
         }
 
         if (empty($id) || $id != strval(intval($id))) {
-            return array();
+            return [];
         }
 
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -1617,7 +1617,7 @@ class learnpath
                     ORDER BY display_order";
             $res_bros = Database::query($sql);
 
-            $list = array();
+            $list = [];
             while ($row_bro = Database::fetch_array($res_bros)) {
                 $list[] = $row_bro;
             }
@@ -1625,7 +1625,7 @@ class learnpath
             return $list;
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -1642,7 +1642,7 @@ class learnpath
         }
 
         if (empty($id) || $id != strval(intval($id))) {
-            return array();
+            return [];
         }
 
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -1679,7 +1679,7 @@ class learnpath
             TOOL_LEARNPATH,
             $this->lp_id
         );
-        $prefix_terms = array();
+        $prefix_terms = [];
         if (!empty($terms)) {
             foreach ($terms as $term) {
                 $prefix_terms[] = $term['value'];
@@ -2840,7 +2840,7 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_items_status_list()', 0);
         }
-        $list = array();
+        $list = [];
         foreach ($this->ordered_items as $item_id) {
             $list[] = array(
                 $item_id => $this->items[$item_id]->get_status()
@@ -4988,7 +4988,7 @@ class learnpath
     /**
      * Set index specified prefix terms for all items in this path
      * @param   string  Comma-separated list of terms
-     * @param   char Xapian term prefix
+     * @param   string Xapian term prefix
      * @return  boolean False on error, true otherwise
      */
     public function set_terms_by_prefix($terms_string, $prefix)
@@ -5004,7 +5004,6 @@ class learnpath
         $terms_string = trim($terms_string);
         $terms = explode(',', $terms_string);
         array_walk($terms, 'trim_value');
-
         $stored_terms = $this->get_common_index_terms_by_prefix($prefix);
 
         // Don't do anything if no change, verify only at DB, not the search engine.
@@ -9377,7 +9376,7 @@ class learnpath
      * @param array $data
      * @return string
      */
-    public function display_item_small_form($item_type, $title = '', $data = array())
+    public function display_item_small_form($item_type, $title = '', $data = [])
     {
         $url = api_get_self().'?'.api_get_cidreq().'&action=edit_item&lp_id='.$this->lp_id;
         $form = new FormValidator('small_form', 'post', $url);
@@ -9436,10 +9435,10 @@ class learnpath
         $sql = "SELECT * FROM $tbl_lp_item
                 WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
         $result = Database::query($sql);
-        $arrLP = array();
+        $arrLP = [];
 
-        $selectedMinScore = array();
-        $selectedMaxScore = array();
+        $selectedMinScore = [];
+        $selectedMaxScore = [];
         while ($row = Database::fetch_array($result)) {
             if ($row['id'] == $item_id) {
                 $selectedMinScore[$row['prerequisite']] = $row['prerequisite_min_score'];
@@ -9622,7 +9621,7 @@ class learnpath
         DocumentManager::build_directory_selector(
             $folders,
             '',
-            array(),
+            [],
             true,
             $form,
             'directory_parent_id'
@@ -9732,7 +9731,7 @@ class learnpath
             $return .= Display::return_icon(
                 'move_everywhere.png',
                 get_lang('Move'),
-                array(),
+                [],
                 ICON_SIZE_TINY
             );
             $return .= '</a> ';
@@ -9758,14 +9757,14 @@ class learnpath
             $return .= Display::return_icon(
                 'move_everywhere.png',
                 get_lang('Move'),
-                array(),
+                [],
                 ICON_SIZE_TINY
             );
             $return .= '</a> ';
             $return .= Display::return_icon(
                 'quizz_small.gif',
                 '',
-                array(),
+                [],
                 ICON_SIZE_TINY
             );
             $sessionStar = api_get_session_image(
@@ -9800,7 +9799,7 @@ class learnpath
         $moveEverywhereIcon = Display::return_icon(
             'move_everywhere.png',
             get_lang('Move'),
-            array(),
+            [],
             ICON_SIZE_TINY
         );
 
@@ -9824,8 +9823,8 @@ class learnpath
                 WHERE link.c_id = ".$course_id." $condition_session
                 ORDER BY link_category.category_title ASC, link.title ASC";
         $result = Database::query($sql);
-        $categorizedLinks = array();
-        $categories = array();
+        $categorizedLinks = [];
+        $categories = [];
 
         while ($link = Database::fetch_array($result)) {
             if (!$link['category_id']) {
@@ -9928,7 +9927,7 @@ class learnpath
                     $return .= Display::return_icon(
                         'move_everywhere.png',
                         get_lang('Move'),
-                        array(),
+                        [],
                         ICON_SIZE_TINY
                     );
                     $return .= '</a> ';
@@ -10027,9 +10026,9 @@ class learnpath
 
                 $return .= '<li class="lp_resource_element" data_id="'.$forum['forum_id'].'" data_type="'.TOOL_FORUM.'" title="'.$forum['forum_title'].'" >';
                 $return .= '<a class="moved" href="#">';
-                $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
+                $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
                 $return .= ' </a>';
-                $return .= Display::return_icon('lp_forum.png', '', array(), ICON_SIZE_TINY);
+                $return .= Display::return_icon('lp_forum.png', '', [], ICON_SIZE_TINY);
                 $return .= '<a onclick="javascript:toggle_forum('.$forum['forum_id'].');" style="cursor:hand; vertical-align:middle">
                                 <img src="' . Display::returnIconPath('add.gif').'" id="forum_'.$forum['forum_id'].'_opener" align="absbottom" />
                             </a>
@@ -10050,9 +10049,9 @@ class learnpath
 
                         $return .= '<li class="lp_resource_element" data_id="'.$thread['thread_id'].'" data_type="'.TOOL_THREAD.'" title="'.$thread['thread_title'].'" >';
                         $return .= '&nbsp;<a class="moved" href="#">';
-                        $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
+                        $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
                         $return .= ' </a>';
-                        $return .= Display::return_icon('forumthread.png', get_lang('Thread'), array(), ICON_SIZE_TINY);
+                        $return .= Display::return_icon('forumthread.png', get_lang('Thread'), [], ICON_SIZE_TINY);
                         $return .= '<a class="moved" href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_THREAD.'&thread_id='.$thread['thread_id'].'&lp_id='.$this->lp_id.'">'.
                             Security::remove_XSS($thread['thread_title']).' '.$link.'</a>';
                         $return .= '</li>';
@@ -10103,7 +10102,7 @@ class learnpath
         $zip_folder = new PclZip($temp_zip_file);
         $current_course_path = api_get_path(SYS_COURSE_PATH).api_get_course_path();
         $root_path = $main_path = api_get_path(SYS_PATH);
-        $files_cleanup = array();
+        $files_cleanup = [];
 
         // Place to temporarily stash the zip file.
         // create the temp dir if it doesn't exist
@@ -10120,7 +10119,7 @@ class learnpath
             }
             closedir($handle);
         }
-        $zip_files = $zip_files_abs = $zip_files_dist = array();
+        $zip_files = $zip_files_abs = $zip_files_dist = [];
         if (is_dir($current_course_path.'/scorm/'.$this->path) &&
             is_file($current_course_path.'/scorm/'.$this->path.'/imsmanifest.xml')
         ) {
@@ -10195,8 +10194,8 @@ class learnpath
 
         // For each element, add it to the imsmanifest structure, then add it to the zip.
         // Always call the learnpathItem->scorm_export() method to change it to the SCORM format.
-        $link_updates = array();
-        $links_to_create = array();
+        $link_updates = [];
+        $links_to_create = [];
         //foreach ($this->items as $index => $item) {
         foreach ($this->ordered_items as $index => $itemId) {
             $item = $this->items[$itemId];
@@ -11014,7 +11013,7 @@ EOD;
     public function scorm_export_to_pdf($lp_id)
     {
         $lp_id = intval($lp_id);
-        $files_to_export = array();
+        $files_to_export = [];
         $course_data = api_get_course_info($this->cc);
         if (!empty($course_data)) {
             $scorm_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/scorm/'.$this->path;
@@ -11545,7 +11544,7 @@ EOD;
     public static function getCategoryFromCourseIntoSelect($courseId, $addSelectOption = false)
     {
         $items = self::getCategoryByCourse($courseId);
-        $cats = array();
+        $cats = [];
         if ($addSelectOption) {
             $cats = array(get_lang('SelectACategory'));
         }

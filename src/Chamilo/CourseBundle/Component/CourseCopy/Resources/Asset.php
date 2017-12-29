@@ -13,7 +13,6 @@ class Asset extends Resource
     public $path;
     public $file_type;
 
-
     /**
      * Asset constructor.
      * @param int $id

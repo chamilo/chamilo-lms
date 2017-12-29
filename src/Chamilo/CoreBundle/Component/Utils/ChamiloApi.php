@@ -3,6 +3,8 @@
 
 namespace Chamilo\CoreBundle\Component\Utils;
 
+use ChamiloSession as Session;
+
 /**
  * Class ChamiloApi
  * @package Chamilo\CoreBundle\Component

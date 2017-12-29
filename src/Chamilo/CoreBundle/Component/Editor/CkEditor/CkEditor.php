@@ -229,7 +229,6 @@ class CkEditor extends Editor
         }
 
         $courseTemplates = $templatesRepo->getCourseTemplates($course, $user);
-
         $templateList = [];
 
         foreach ($courseTemplates as $templateData) {

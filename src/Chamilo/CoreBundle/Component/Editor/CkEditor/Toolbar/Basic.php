@@ -16,7 +16,7 @@ class Basic extends Toolbar
      * In order to add a new plugin you have to load it in default/layout/head.tpl
      * @var array
      */
-    public $defaultPlugins = array(
+    public $defaultPlugins = [
         'adobeair',
         'ajax',
         'audio',
@@ -61,24 +61,24 @@ class Basic extends Toolbar
         'wordcount',
         'inserthtml',
         'xml',
-    );
+    ];
 
     /**
      * Plugins this toolbar
      * @var array
      */
-    public $plugins = array();
+    public $plugins = [];
 
     /**
      * @inheritdoc
      */
     public function __construct(
         $toolbar = null,
-        $config = array(),
+        $config = [],
         $prefix = null
     ) {
         // Adding plugins depending of platform conditions
-        $plugins = array();
+        $plugins = [];
 
         if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
             $plugins[] = 'glossary';
@@ -140,10 +140,9 @@ class Basic extends Toolbar
      */
     public function getConfig()
     {
-        $config = array();
+        $config = [];
         if (api_get_setting('more_buttons_maximized_mode') === 'true') {
             $config['toolbar_minToolbar'] = $this->getMinimizedToolbar();
-
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
 

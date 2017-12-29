@@ -10,7 +10,6 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
  */
 class Project extends Basic
 {
-
     /**
      * Get the toolbar config
      * @return array
@@ -97,5 +96,4 @@ class Project extends Basic
             ['Toolbarswitch']
         ];
     }
-
 }

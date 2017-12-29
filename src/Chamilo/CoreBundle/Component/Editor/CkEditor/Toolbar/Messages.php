@@ -10,7 +10,6 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
  */
 class Messages extends Basic
 {
-
     /**
      * Get the toolbar config
      * @return array
@@ -103,5 +102,4 @@ class Messages extends Basic
             ['Toolbarswitch']
         ];
     }
-
 }

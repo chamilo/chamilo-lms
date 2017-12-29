@@ -3,8 +3,6 @@
 
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
-use Chamilo\CoreBundle\Component\Editor\Toolbar;
-
 /**
  * Class ToolbarStartExpanded
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar

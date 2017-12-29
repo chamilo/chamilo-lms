@@ -10,7 +10,6 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
  */
 class Careers extends Basic
 {
-
     /**
      * Get the toolbar config
      * @return array
@@ -95,5 +94,4 @@ class Careers extends Basic
             ['Toolbarswitch', 'ShowBlocks']
         ];
     }
-
 }

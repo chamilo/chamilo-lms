@@ -365,9 +365,7 @@ $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 $user_id_error = array();
 $error_message = '';
 
-if (isset($_POST['formSent']) && $_POST['formSent'] AND
-    $_FILES['import_file']['size'] !== 0
-) {
+if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
     $file_type = $_POST['file_type'];
     Security::clear_token();
     $tok = Security::get_token();

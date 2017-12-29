@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 /**
  * Class ChamiloForm
@@ -26,7 +27,6 @@ abstract class ChamiloForm
         $this->_customdata = $customdata;
 
         $attributes = array('style' => 'width: 60%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;'));
-        // $this->_form = new FormValidator($mode.'_instance', 'post', $returnurl, '', $attributes, true);
         $this->_form = new FormValidator(
             $mode.'_instance',
             'post',
@@ -203,13 +203,12 @@ abstract class ChamiloForm
                     $cform->setElementError($element, $msg);
                 }
                 $chamilo_val = false;
-
             } else {
                 // anything else means validation ok
                 $chamilo_val = true;
             }
 
-            $validated = ($internal_val and $chamilo_val and $file_val);
+            $validated = ($internal_val && $chamilo_val && $file_val);
         }
 
         return $validated;
@@ -254,7 +253,7 @@ abstract class ChamiloForm
         if (is_object($default_values)) {
             $default_values = (array) $default_values;
         }
-        $filter = $slashed ? 'stripslashes' : NULL;
+        $filter = $slashed ? 'stripslashes' : null;
         $this->_form->setDefaults($default_values, $filter);
     }
 
@@ -429,10 +428,11 @@ class InstanceForm extends ChamiloForm
         );
 
         // Database name.
-        $form->addText('main_database',
+        $form->addText(
+            'main_database',
             [
                 $plugin->get_lang('maindatabase'),
-                $plugin->get_lang('DatabaseDescription')
+                $plugin->get_lang('DatabaseDescription'),
             ]
         );
 
@@ -558,7 +558,6 @@ class InstanceForm extends ChamiloForm
         global $plugin;
 
         $errors = array();
-
         $tablename = Database::get_main_table('vchamilo');
         $vchamilo = Database::select(
             '*',

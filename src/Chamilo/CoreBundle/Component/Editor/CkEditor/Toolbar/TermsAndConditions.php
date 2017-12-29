@@ -39,5 +39,4 @@ class TermsAndConditions extends Basic
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight']
         ];
     }
-
 }

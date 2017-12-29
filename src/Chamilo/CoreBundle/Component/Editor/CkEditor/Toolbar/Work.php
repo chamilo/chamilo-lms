@@ -10,9 +10,7 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
  */
 class Work extends Basic
 {
-
-    public $plugins = array(
-    );
+    public $plugins = [];
 
     /**
      * Get the toolbar config
@@ -101,5 +99,4 @@ class Work extends Basic
             ['Toolbarswitch']
         ];
     }
-
 }

@@ -10,7 +10,7 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
  */
 class AgendaStudent extends Basic
 {
-    public $plugins = array();
+    public $plugins = [];
 
     /**
      * Get the toolbar config

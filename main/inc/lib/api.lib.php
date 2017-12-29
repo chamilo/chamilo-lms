@@ -1290,7 +1290,7 @@ function api_get_user_courses($userid, $fetch_session = true)
 {
     // Get out if not integer
     if ($userid != strval(intval($userid))) {
-        return array();
+        return [];
     }
 
     $t_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -1305,10 +1305,10 @@ function api_get_user_courses($userid, $fetch_session = true)
                 cu.relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
     $result = Database::query($sql);
     if ($result === false) {
-        return array();
+        return [];
     }
 
-    $courses = array();
+    $courses = [];
     while ($row = Database::fetch_array($result)) {
         // we only need the database name of the course
         $courses[] = $row;
@@ -1329,7 +1329,7 @@ function api_get_user_courses($userid, $fetch_session = true)
  */
 function _api_format_user($user, $add_password = false, $loadAvatars = true)
 {
-    $result = array();
+    $result = [];
 
     $result['firstname'] = null;
     $result['lastname'] = null;
@@ -1898,7 +1898,7 @@ function api_get_course_info($course_code = null, $strict = false)
         $courseId = api_get_course_int_id($course_code);
 
         if (empty($courseId)) {
-            return array();
+            return [];
         }
 
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -1912,7 +1912,7 @@ function api_get_course_info($course_code = null, $strict = false)
                 ON course.category_code = course_category.code
                 WHERE course.id = $courseId";
         $result = Database::query($sql);
-        $courseInfo = array();
+        $courseInfo = [];
         if (Database::num_rows($result) > 0) {
             $data = Database::fetch_array($result);
             $courseInfo = api_format_course_array($data);
@@ -1923,7 +1923,7 @@ function api_get_course_info($course_code = null, $strict = false)
 
     global $_course;
     if ($_course == '-1') {
-        $_course = array();
+        $_course = [];
     }
 
     return $_course;
@@ -1952,7 +1952,7 @@ function api_get_course_info_by_id($id = null)
                 ON course.category_code = course_category.code
                 WHERE course.id = $id";
         $result = Database::query($sql);
-        $_course = array();
+        $_course = [];
         if (Database::num_rows($result) > 0) {
             $row = Database::fetch_array($result);
             $_course = api_format_course_array($row);
@@ -1962,7 +1962,7 @@ function api_get_course_info_by_id($id = null)
 
     global $_course;
     if ($_course == '-1') {
-        $_course = array();
+        $_course = [];
     }
     return $_course;
 }
@@ -1979,10 +1979,10 @@ function api_get_course_info_by_id($id = null)
 function api_format_course_array($course_data)
 {
     if (empty($course_data)) {
-        return array();
+        return [];
     }
 
-    $_course = array();
+    $_course = [];
     $_course['id'] = $course_data['code'];
     $_course['real_id'] = $course_data['id'];
 
@@ -4075,7 +4075,7 @@ function api_get_item_property_by_tool($tool, $course_code, $session_id = null)
                 tool = '$tool'
                 $session_condition ";
     $rs = Database::query($sql);
-    $list = array();
+    $list = [];
     if (Database::num_rows($rs) > 0) {
         while ($row = Database::fetch_array($rs, 'ASSOC')) {
             $list[] = $row;
@@ -4117,7 +4117,7 @@ function api_get_item_property_list_by_tool_by_user(
                 $session_condition ";
 
     $rs = Database::query($sql);
-    $list = array();
+    $list = [];
     if (Database::num_rows($rs) > 0) {
         while ($row = Database::fetch_array($rs, 'ASSOC')) {
             $list[] = $row;
@@ -4214,7 +4214,7 @@ function api_get_track_item_property_history($tool, $ref)
             ORDER BY lastedit_date DESC";
     $result = Database::query($sql);
     if ($result === false or $result === null) {
-        $result = array();
+        $result = [];
     } else {
         $result = Database::store_result($result, 'ASSOC');
     }
@@ -4266,7 +4266,7 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0, $g
     }
 
     $rs  = Database::query($sql);
-    $row = array();
+    $row = [];
     if (Database::num_rows($rs) > 0) {
         $row = Database::fetch_array($rs, 'ASSOC');
     }
@@ -4460,7 +4460,7 @@ function api_get_languages()
     $sql = "SELECT * FROM $tbl_language WHERE available='1' 
             ORDER BY original_name ASC";
     $result = Database::query($sql);
-    $language_list = array();
+    $language_list = [];
     while ($row = Database::fetch_array($result)) {
         $language_list['name'][] = $row['original_name'];
         $language_list['folder'][] = $row['dokeos_folder'];
@@ -4478,7 +4478,7 @@ function api_get_languages_to_array()
     $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
     $sql = "SELECT * FROM $tbl_language WHERE available='1' ORDER BY original_name ASC";
     $result = Database::query($sql);
-    $languages = array();
+    $languages = [];
     while ($row = Database::fetch_array($result)) {
         $languages[$row['dokeos_folder']] = $row['original_name'];
     }
@@ -4899,7 +4899,7 @@ function rmdirr($dirname, $delete_only_content_in_folder = false, $strict = fals
  * @param string $source
  * @param string $dest
  */
-function copyr($source, $dest, $exclude = array(), $copied_files = array())
+function copyr($source, $dest, $exclude = [], $copied_files = [])
 {
     if (empty($dest)) { return false; }
     // Simple copy for a file
@@ -5117,7 +5117,7 @@ function api_chmod_R($path, $filemode)
  *   The info array.
  */
 function api_parse_info_file($filename) {
-    $info = array();
+    $info = [];
 
     if (!file_exists($filename)) {
         return $info;
@@ -5157,7 +5157,7 @@ function api_parse_info_file($filename) {
                     $key = count($parent);
                 }
                 if (!isset($parent[$key]) || !is_array($parent[$key])) {
-                    $parent[$key] = array();
+                    $parent[$key] = [];
                 }
                 $parent = &$parent[$key];
             }
@@ -5254,7 +5254,7 @@ function api_get_settings_options($var)
             WHERE variable = '$var'
             ORDER BY id";
     $result = Database::query($sql);
-    $settings_options_array = array();
+    $settings_options_array = [];
     while ($row = Database::fetch_array($result, 'ASSOC')) {
         $settings_options_array[] = $row;
     }
@@ -5414,7 +5414,7 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
  * @param string $value
  * @return bool
  */
-function api_set_settings_category($category, $value = null, $access_url = 1, $fieldtype = array())
+function api_set_settings_category($category, $value = null, $access_url = 1, $fieldtype = [])
 {
     if (empty($category)) {
         return false;
@@ -5932,7 +5932,7 @@ function api_get_access_url_from_user($user_id)
             ON (url_rel_user.access_url_id = u.id)
             WHERE user_id = ".intval($user_id);
     $result = Database::query($sql);
-    $list = array();
+    $list = [];
     while ($row = Database::fetch_array($result, 'ASSOC')) {
         $list[] = $row['access_url_id'];
     }
@@ -6658,7 +6658,7 @@ function api_get_jquery_ui_css_web_path()
  */
 function api_get_jquery_ui_js($include_jqgrid = false)
 {
-    $libraries = array();
+    $libraries = [];
     if ($include_jqgrid) {
        $libraries[] = 'jqgrid';
     }
@@ -7076,7 +7076,7 @@ function api_set_default_visibility(
     $item_id,
     $tool_id,
     $group_id = 0,
-    $courseInfo = array(),
+    $courseInfo = [],
     $sessionId = 0,
     $userId = 0
 ) {
@@ -7177,7 +7177,7 @@ function api_get_security_key()
  */
 function api_detect_user_roles($user_id, $courseId, $session_id = 0)
 {
-    $user_roles = array();
+    $user_roles = [];
     $courseInfo = api_get_course_info_by_id($courseId);
     $course_code = $courseInfo['code'];
 
@@ -7274,11 +7274,11 @@ function api_get_js_simple($file)
 function api_set_settings_and_plugins()
 {
     global $_configuration;
-    $_setting = array();
-    $_plugins = array();
+    $_setting = [];
+    $_plugins = [];
 
     // access_url == 1 is the default chamilo location
-    $settings_by_access_list = array();
+    $settings_by_access_list = [];
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != 1) {
         $url_info = api_get_access_url($_configuration['access_url']);
@@ -7341,11 +7341,11 @@ function api_set_settings_and_plugins()
     }
 
     $result = api_get_settings('Plugins', 'list', $access_url_id);
-    $_plugins = array();
+    $_plugins = [];
     foreach ($result as & $row) {
         $key = & $row['variable'];
         if (is_string($_setting[$key])) {
-            $_setting[$key] = array();
+            $_setting[$key] = [];
         }
         $_setting[$key][] = $row['selected_value'];
         $_plugins[$key][] = $row['selected_value'];
@@ -7675,7 +7675,7 @@ function api_can_login_as($loginAsUserId, $userId = null)
                     'drh_all',
                     api_get_user_id()
                 );
-                $userList = array();
+                $userList = [];
                 if (is_array($users)) {
                     foreach ($users as $user) {
                         $userList[] = $user['user_id'];
@@ -8083,10 +8083,10 @@ function api_mail_html(
     $message,
     $senderName = '',
     $senderEmail = '',
-    $extra_headers = array(),
-    $data_file = array(),
+    $extra_headers = [],
+    $data_file = [],
     $embedded_image = false,
-    $additionalParameters = array()
+    $additionalParameters = []
 ) {
     global $platform_email;
 
@@ -8165,7 +8165,7 @@ function api_mail_html(
         // Get all images html inside content.
         preg_match_all("/<img\s+.*?src=[\"\']?([^\"\' >]*)[\"\']?[^>]*>/i", $message, $m);
         // Prepare new tag images.
-        $new_images_html = array();
+        $new_images_html = [];
         $i = 1;
         if (!empty($m[1])) {
             foreach ($m[1] as $image_path) {

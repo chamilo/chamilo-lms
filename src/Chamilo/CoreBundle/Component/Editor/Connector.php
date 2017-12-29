@@ -340,7 +340,6 @@ class Connector
     public function manageCommands($cmd, $result, $args, $elFinder)
     {
         $cmd = ucfirst($cmd);
-
         $cmd = 'after'.$cmd;
 /*
         if (isset($args['target'])) {

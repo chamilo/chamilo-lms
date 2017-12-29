@@ -132,10 +132,6 @@ class DashboardController
                 $content .= '<div style="margin-top:20px;">'.get_lang('YouHaveNotEnabledBlocks').'</div>';
             }
         } else {
-            // block dashboard list
-            if (isset($success)) {
-                Display::addFlash(Display::return_message(get_lang('BlocksHaveBeenUpdatedSuccessfully'), 'confirm'));
-            }
             $user_id = api_get_user_id();
             $content .= DashboardManager::display_user_dashboard_list($user_id);
         }

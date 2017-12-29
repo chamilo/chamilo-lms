@@ -2494,7 +2494,7 @@ class DocumentManager
                     $value = trim($regs[16][$i]);
                 }
                 if (!empty($name)) {
-                    if (!$reduced OR in_array(strtolower($name), $wanted)) {
+                    if (!$reduced || in_array(strtolower($name), $wanted)) {
                         if ($name == $check) {
                             $attributes[strtolower($name)][] = strtolower($name);
                         } else {

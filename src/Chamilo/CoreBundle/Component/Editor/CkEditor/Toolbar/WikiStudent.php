@@ -10,7 +10,6 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
  */
 class WikiStudent extends Basic
 {
-
     /**
      * Get the toolbar config
      * @return array

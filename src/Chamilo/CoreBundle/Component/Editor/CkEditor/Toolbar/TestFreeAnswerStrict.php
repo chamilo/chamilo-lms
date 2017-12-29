@@ -49,5 +49,4 @@ class TestFreeAnswerStrict extends Basic
     {
         return [];
     }
-
 }

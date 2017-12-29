@@ -5,12 +5,11 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
  * LearningPathAuthor toolbar configuration
- * 
+ *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class LearningPathAuthor extends Basic
 {
-
     /**
      * Get the toolbar config
      * @return array
@@ -63,5 +62,4 @@ class LearningPathAuthor extends Basic
             ['Toolbarswitch']
         ];
     }
-
 }

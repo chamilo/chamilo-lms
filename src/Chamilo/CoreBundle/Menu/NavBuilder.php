@@ -27,7 +27,6 @@ class NavBuilder extends ContainerAware
     {
         $factory = $this->container->get('knp_menu.factory');
         $menu = $factory->createItem('categories', $itemOptions);
-
         $this->buildCategoryMenu($menu, $itemOptions, $currentUri);
 
         return $menu;

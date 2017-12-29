@@ -10,7 +10,6 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
  */
 class Minimal extends Basic
 {
-
     /**
      * @return mixed
      */
@@ -40,5 +39,4 @@ class Minimal extends Basic
 
         return $config;
     }
-
 }

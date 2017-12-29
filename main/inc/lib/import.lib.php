@@ -9,7 +9,7 @@ use Ddeboer\DataImport\Writer\ArrayWriter;
  * Class Import
  * This class provides some functions which can be used when importing data from
  * external files into Chamilo.
- * @package	 chamilo.library
+ * @package chamilo.library
  *
  */
 class Import
@@ -52,8 +52,6 @@ class Import
      * @param string $filename The path to the CSV-file which should be imported.
      * @return array Returns an array (in the system encoding) that contains all data from the CSV-file.
      *
-     *
-     * @deprecated use cvs_reader instead
      */
     public static function csvToArray($filename)
     {

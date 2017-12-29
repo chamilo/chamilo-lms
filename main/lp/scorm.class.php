@@ -289,17 +289,14 @@ class scorm extends learnpath
         $courseInfo = api_get_course_info($courseCode);
         $courseId = $courseInfo['real_id'];
 
+        $userId = intval($userId);
         if (empty($userId)) {
             $userId = api_get_user_id();
-        } else {
-            $userId = intval($userId);
         }
-
         // Get table names.
         $new_lp = Database::get_course_table(TABLE_LP_MAIN);
         $new_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $userMaxScore = intval($userMaxScore);
-
         $sessionId = empty($sessionId) ? api_get_session_id() : intval($sessionId);
         foreach ($this->organizations as $id => $dummy) {
             $oOrganization = & $this->organizations[$id];
@@ -315,7 +312,6 @@ class scorm extends learnpath
                 $dsp = $row[0] + 1;
             }
             $myname = api_utf8_decode($oOrganization->get_name());
-
             $now = api_get_utc_datetime();
 
             $params = [
@@ -431,10 +427,9 @@ class scorm extends learnpath
                 if ($max_score == 0 || is_null($max_score) || $max_score == '') {
                     // If max score is not set The use_max_score parameter
                     // is check in order to use 100 (chamilo style) or '' (strict scorm)
+                    $max_score = "NULL";
                     if ($userMaxScore) {
                         $max_score = 100;
-                    } else {
-                        $max_score = "NULL";
                     }
                 } else {
                     // Otherwise save the max score.
@@ -558,7 +553,6 @@ class scorm extends learnpath
         }
 
         $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
-
         $maxFilledSpace = DocumentManager::get_course_quota($courseInfo['code']);
 
         $zip_file_path = $zip_file_info['tmp_name'];
@@ -603,7 +597,6 @@ class scorm extends learnpath
         // The following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?).
         $realFileSize = 0;
         foreach ($zipContentArray as $thisContent) {
-            $thisContent['filename'];
             if (preg_match('~.(php.*|phtml)$~i', $thisContent['filename'])) {
                 $file = $thisContent['filename'];
                 $this->set_error_msg("File $file contains a PHP script");
@@ -619,8 +612,6 @@ class scorm extends learnpath
                 $package_type = 'scorm';
                 $manifest_list[] = $thisContent['filename'];
                 $manifest = $thisContent['filename']; //just the relative directory inside scorm/
-            } else {
-                // Do nothing, if it has not been set as scorm somewhere else, it stays as '' default.
             }
             $realFileSize += $thisContent['size'];
         }
@@ -716,7 +707,6 @@ class scorm extends learnpath
                 while ($file = readdir($dir)) {
                     if ($file != '.' && $file != '..') {
                         $filetype = 'file';
-
                         if (is_dir($course_sys_dir.$new_dir.$file)) {
                             $filetype = 'folder';
                         }

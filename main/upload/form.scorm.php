@@ -62,7 +62,7 @@ $form = new FormValidator(
         'enctype' => "multipart/form-data"
     )
 );
-$form->addElement('header', $nameTools);
+$form->addHeader($nameTools);
 $form->addLabel(null, Display::return_icon('scorm_logo.jpg', null, ['style' => 'width:230px;height:100px']));
 $form->addElement('hidden', 'curdirpath', $path);
 $form->addElement('hidden', 'tool', $my_tool);

@@ -721,7 +721,10 @@ class Certificate extends Model
         $skill = new Skill();
         // Ofaj
         $skills = $skill->getStudentSkills($this->user_id, 2);
-        $timeInSeconds = Tracking::get_time_spent_on_the_platform($this->user_id);
+        $timeInSeconds = Tracking::get_time_spent_on_the_platform(
+            $this->user_id,
+            'ever'
+        );
         $time = api_time_to_hms($timeInSeconds);
 
         $tplContent = new Template(null, false, false, false, false, false);

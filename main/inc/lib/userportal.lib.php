@@ -403,7 +403,7 @@ class IndexManager
         if ($myCertificate) {
             $items[] = [
                 'icon' => Display::return_icon(
-                    'skill-badges.png',
+                    'graduation.png',
                     get_lang('MyGeneralCertificate'),
                     null,
                     ICON_SIZE_SMALL

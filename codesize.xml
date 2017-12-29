@@ -36,6 +36,8 @@
 
     <rule ref="rulesets/design.xml" >
         <exclude name="WeightedMethodCount" />
+        <exclude name="ExitExpression" />
+
     </rule>
 
     <!-- Import entire naming rule set and exclude rules -->

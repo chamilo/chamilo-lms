@@ -133,7 +133,7 @@ if (api_get_setting('search_enabled') === 'true') {
 $defaults['lp_encoding'] = Security::remove_XSS($_SESSION['oLP']->encoding);
 $defaults['lp_name'] = Security::remove_XSS($_SESSION['oLP']->get_name());
 $defaults['lp_author'] = Security::remove_XSS($_SESSION['oLP']->get_author());
-$defaults['hide_toc_frame'] = Security::remove_XSS($_SESSION['oLP']->get_hide_toc_frame());
+$defaults['hide_toc_frame'] = $_SESSION['oLP']->getHideTableOfContents();
 $defaults['category_id'] = intval($_SESSION['oLP']->getCategoryId());
 $defaults['accumulate_scorm_time'] = $_SESSION['oLP']->getAccumulateScormTime();
 
@@ -231,7 +231,6 @@ if ($enableLpExtraFields) {
     </script>';
 }
 
-
 $defaults['publicated_on'] = !empty($publicated_on) && $publicated_on !== '0000-00-00 00:00:00' ? api_get_local_time($publicated_on) : null;
 $defaults['expired_on'] = (!empty($expired_on)) ? api_get_local_time($expired_on) : date('Y-m-d 12:00:00', time() + 84600);
 $defaults['subscribe_users'] = $_SESSION['oLP']->getSubscribeUsers();
@@ -241,13 +240,13 @@ Display::display_header(get_lang('CourseSettings'), 'Path');
 
 echo $_SESSION['oLP']->build_action_menu(false, false, true, false);
 echo '<div class="row">';
-if ($_SESSION['oLP']->get_hide_toc_frame() == 1) {
+if ($_SESSION['oLP']->getHideTableOfContents() == 1) {
     echo '<div class="col-md-12">';
-    $form -> display();
+    $form->display();
     echo '</div>';
 } else {
     echo '<div class="col-md-8">';
-    $form -> display();
+    $form->display();
     echo '</div>';
     echo '<div class="col-md-4" align="center">';
     echo Display::return_icon('course_setting_layout.png');

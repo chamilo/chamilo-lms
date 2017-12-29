@@ -2712,19 +2712,12 @@ class learnpath
     }
 
     /**
-     * Gets the learnpath author
-     * @return	string	LP's author
+     * Gets hide table of contents
+     * @return int
      */
-    public function get_hide_toc_frame()
+    public function getHideTableOfContents()
     {
-        if ($this->debug > 0) {
-            error_log('New LP - In learnpath::get_author()', 0);
-        }
-        if (!empty ($this->hide_toc_frame)) {
-            return $this->hide_toc_frame;
-        } else {
-            return '';
-        }
+        return (int) $this->hide_toc_frame;
     }
 
     /**

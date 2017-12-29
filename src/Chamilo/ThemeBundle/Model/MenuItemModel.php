@@ -59,7 +59,7 @@ class MenuItemModel implements MenuItemInterface
      */
     protected $parent = null;
 
-    function __construct(
+    public function __construct(
         $id,
         $label,
         $route,
@@ -294,7 +294,7 @@ class MenuItemModel implements MenuItemInterface
     public function removeChild(MenuItemInterface $child)
     {
         if (false !== ($key = array_search($child, $this->children))) {
-            unset ($this->children[$key]);
+            unset($this->children[$key]);
         }
 
         return $this;

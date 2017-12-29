@@ -171,7 +171,7 @@ class CourseCopyLearnpath extends Resource
     /**
      * Get the items
      */
-    function get_items()
+    public function get_items()
     {
         return $this->items;
     }
@@ -179,7 +179,7 @@ class CourseCopyLearnpath extends Resource
     /**
      * Check if a given resource is used as an item in this chapter
      */
-    function has_item($resource)
+    public function has_item($resource)
     {
         foreach ($this->items as $item) {
             if ($item['id'] == $resource->get_id() &&
@@ -194,7 +194,7 @@ class CourseCopyLearnpath extends Resource
     /**
      * Show this learnpath
      */
-    function show()
+    public function show()
     {
         parent::show();
         echo $this->name;

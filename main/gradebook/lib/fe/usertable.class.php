@@ -16,7 +16,7 @@ class UserTable extends SortableTable
     /**
      * Constructor
      */
-    public function __construct($userid, $evals = array(), $links = array(), $addparams = null)
+    public function __construct($userid, $evals = array(), $links = [], $addparams = null)
     {
         parent::__construct('userlist', null, null, 0);
         $this->userid = $userid;
@@ -41,7 +41,7 @@ class UserTable extends SortableTable
     /**
      * Function used by SortableTable to get total number of items in the table
      */
-    function get_total_number_of_items()
+    public function get_total_number_of_items()
     {
         return $this->datagen->get_total_items_count();
     }
@@ -85,10 +85,10 @@ class UserTable extends SortableTable
         }
         $data_array = $this->datagen->get_data($sorting, $from, $this->per_page);
         // generate the data to display
-        $sortable_data = array();
+        $sortable_data = [];
         foreach ($data_array as $data) {
-            if ($data[2] != "") {//filter by course removed
-                $row = array();
+            if ($data[2] != '') {//filter by course removed
+                $row = [];
                 $row[] = $this->build_type_column($data[0]);
                 $row[] = $this->build_name_link($data[0]);
                 $row[] = $data[2];

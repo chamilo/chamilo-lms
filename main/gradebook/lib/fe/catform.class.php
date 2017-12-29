@@ -89,22 +89,6 @@ class CatForm extends FormValidator
         //check if we are a root category
         //if so, you can only choose between courses
         if ($this->category_object->get_parent_id() == '0') {
-            $coursecat = Category::get_not_created_course_categories(
-                api_get_user_id()
-            );
-            if (count($coursecat) == 0) {
-                //$select->addoption(get_lang('CourseIndependent'),'COURSEINDEPENDENT','disabled');
-            } else {
-                //$select->addoption(get_lang('CourseIndependent'),'COURSEINDEPENDENT');
-            }
-            //only return courses that are not yet created by the teacher
-            if (!empty($coursecat)) {
-                foreach ($coursecat as $row) {
-                    //$select->addoption($row[1],$row[0]);
-                }
-            } else {
-                //$select->addoption($row[1],$row[0]);
-            }
             $this->setDefaults(
                 array(
                     'select_course' => $this->category_object->get_course_code(
@@ -214,10 +198,9 @@ class CatForm extends FormValidator
 
         $global_weight = api_get_setting('gradebook_default_weight');
 
+        $value = 100;
         if (isset($global_weight)) {
             $value = $global_weight;
-        } else {
-            $value = 100;
         }
 
         $this->addFloat(
@@ -231,7 +214,6 @@ class CatForm extends FormValidator
         );
 
         $skillsDefaults = [];
-
         if (api_is_platform_admin() || api_is_drh()) {
             if (Skill::isToolAvailable()) {
                 $skillSelect = $this->addElement(
@@ -401,12 +383,12 @@ class CatForm extends FormValidator
         $this->addElement('submit', null, get_lang('Ok'));
     }
 
-    function display()
+    public function display()
     {
         parent::display();
     }
 
-    function setDefaults($defaults = array(), $filter = null)
+    public function setDefaults($defaults = array(), $filter = null)
     {
         parent::setDefaults($defaults, $filter);
     }

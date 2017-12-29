@@ -2119,13 +2119,13 @@ abstract class Question
      *
      * @return array
      */
-    static function get_course_medias(
+    public static function get_course_medias(
         $course_id,
         $start = 0,
         $limit = 100,
         $sidx = "question",
         $sord = "ASC",
-        $where_condition = array()
+        $where_condition = []
     ) {
         $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $default_where = array(
@@ -2153,7 +2153,7 @@ abstract class Question
      *
      * @return int
      */
-    static function get_count_course_medias($course_id)
+    public static function get_count_course_medias($course_id)
     {
         $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $result = Database::select(

@@ -1,17 +1,6 @@
 // Set the initial height
 var sliderHeight = "80px";
 
-$(document).ready(function () {
-    // Show the slider content
-    $('.slider').show();
-    $('.slider').each(function () {
-        var current = $(this);
-        current.attr("box_h", current.height());
-    });
-
-    $(".slider").css("height", sliderHeight);
-});
-
 // Set the initial slider state
 var slider_state = "close";
 
@@ -41,3 +30,14 @@ function sliderClose()
     $(".slider").animate({"height": "0px"}, {duration: "fast" });
     $(".slider").animate({"height": sliderHeight}, {duration: "fast" });
 }
+
+$(document).ready(function () {
+    // Show the slider content
+    $('.slider').show();
+    $('.slider').each(function () {
+        var current = $(this);
+        current.attr("box_h", current.height());
+    });
+
+    $(".slider").css("height", sliderHeight);
+});

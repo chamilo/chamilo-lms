@@ -6,13 +6,14 @@
 
 //Input the IDs of the IFRAMES you wish to dynamically resize to match its content height:
 //Separate each ID with a comma. Examples: ["myframe1", "myframe2"] or ["myframe"] or [] for none:
-var iframeid="lp_content_frame";
+var iframeid = "lp_content_frame";
 
 //Should script hide iframe from browsers that don't support this script (non IE5+/NS6+ browsers. Recommended):
-var iframehide="no";
+var iframehide = "no";
 
 //var getFFVersion=navigator.userAgent.substring(navigator.userAgent.indexOf("Firefox")).split("/")[1];
-var FFextraHeight=32; //parseFloat(getFFVersion)>=0.1? 16 : 0; //extra height in px to add to iframe in FireFox 1.0+ browsers
+var FFextraHeight = 32;
+//parseFloat(getFFVersion)>=0.1? 16 : 0; //extra height in px to add to iframe in FireFox 1.0+ browsers
 
 function resizeIframe(frameid) {
     var currentfr=document.getElementById(frameid);
@@ -54,8 +55,8 @@ function readjustIframe(loadevt) {
 }
 
 if (window.addEventListener)
-	window.addEventListener("load", resizeCaller, false);
+    window.addEventListener("load", resizeCaller, false);
 else if (window.attachEvent)
-	window.attachEvent("onload", resizeCaller);
+    window.attachEvent("onload", resizeCaller);
 else
-	window.onload=resizeCaller;
+    window.onload = resizeCaller;

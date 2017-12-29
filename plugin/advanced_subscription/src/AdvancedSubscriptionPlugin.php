@@ -31,7 +31,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         );
 
         parent::__construct('1.0', 'Imanol Losada, Daniel Barreto', $parameters);
-
         $this->errorMessages = array();
     }
 
@@ -80,7 +79,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     {
         $extraField = new ExtraField('user');
         $extraFieldHandler = $extraField->get_handler_field_info_by_field_variable('area');
-
         $areaExists = $extraFieldHandler !== false;
 
         if (!$areaExists) {
@@ -127,7 +125,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     {
         /* Drop plugin tables */
         $advancedSubscriptionQueueTable = Database::get_main_table(TABLE_ADVANCED_SUBSCRIPTION_QUEUE);
-
         $sql = "DROP TABLE IF EXISTS $advancedSubscriptionQueueTable; ";
         Database::query($sql);
 
@@ -154,7 +151,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     {
         $self = self::create();
         $wsUrl = $self->get('ws_url');
-
+        $profileCompleted = 0;
         if (!empty($wsUrl)) {
             $client = new SoapClient(
                 null,
@@ -177,10 +174,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             }
         } elseif (isset($params['profile_completed'])) {
             $profileCompleted = (float) $params['profile_completed'];
-        } else {
-            $profileCompleted = 0;
         }
-
         $profileCompletedMin = (float) $self->get('min_profile_percentage');
 
         if ($profileCompleted < $profileCompletedMin) {
@@ -230,6 +224,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         }
 
         $profileCompletedMin = (float) $plugin->get('min_profile_percentage');
+        $profileCompleted = 0;
 
         if (is_string($wsUrl) && !empty($wsUrl)) {
             $options = array(
@@ -245,8 +240,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             }
         } elseif (isset($params['profile_completed'])) {
             $profileCompleted = (float) $params['profile_completed'];
-        } else {
-            $profileCompleted = 0;
         }
 
         if ($profileCompleted < $profileCompletedMin) {
@@ -299,7 +292,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             foreach ($sessions as $session) {
                 $costField = $extra->get_values_by_handler_and_field_variable($session['id'], 'cost');
                 $userCost += $costField['value'];
-
                 $teachingHoursField = $extra->get_values_by_handler_and_field_variable($session['id'], 'teaching_hours');
                 $expendedTime += $teachingHoursField['value'];
             }
@@ -433,7 +425,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      */
     public function startSubscription($userId, $sessionId, $params)
     {
-        $result = null;
+        $result = 'Params not found';
         if (!empty($sessionId) && !empty($userId)) {
             $plugin = self::create();
             try {
@@ -445,10 +437,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
             } catch (Exception $e) {
                 $result = $e->getMessage();
             }
-        } else {
-            $result = 'Params not found';
         }
-
         return $result;
     }
 
@@ -470,7 +459,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
         $content,
         $sessionId,
         $save = false,
-        $fileAttachments = array()
+        $fileAttachments = []
     ) {
         if (!empty($fileAttachments) &&
             is_array($fileAttachments) &&
@@ -547,8 +536,12 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
      * @param string $sessionFieldVariable
      * @return bool
      */
-    public function isUserInTargetGroup($userId, $sessionId, $userFieldVariable = 'area', $sessionFieldVariable = 'target')
-    {
+    public function isUserInTargetGroup(
+        $userId,
+        $sessionId,
+        $userFieldVariable = 'area',
+        $sessionFieldVariable = 'target'
+    ) {
         $extraSessionFieldValue = new ExtraFieldValue('session');
         $sessionTarget = $extraSessionFieldValue->get_values_by_handler_and_field_variable(
             $sessionId,
@@ -582,6 +575,8 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     public function updateQueueStatus($params, $newStatus)
     {
         $newStatus = intval($newStatus);
+        $res = false;
+
         if (isset($params['queue']['id'])) {
             $where = array(
                 'id = ?' => intval($params['queue']['id']),
@@ -605,8 +600,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 ),
                 $where
             );
-        } else {
-            $res = false;
         }
 
         return $res;
@@ -920,7 +913,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
 
     /**
      * This method will call the Hook management insertHook to add Hook observer from this plugin
-     * @return int
      */
     public function installHook()
     {
@@ -933,7 +925,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
 
     /**
      * This method will call the Hook management deleteHook to disable Hook observer from this plugin
-     * @return int
      */
     public function uninstallHook()
     {
@@ -1028,7 +1019,6 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                 'brochure',
                 'banner',
             );
-            $extraSession = new ExtraFieldValue('session');
             $extraField = new ExtraField('session');
             // Get session fields
             $fieldList = $extraField->get_all(array(
@@ -1081,10 +1071,9 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     {
         switch ($status) {
             case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_NO_QUEUE:
+                $message = $this->get_lang('AdvancedSubscriptionNoQueue');
                 if ($isAble) {
                     $message = $this->get_lang('AdvancedSubscriptionNoQueueIsAble');
-                } else {
-                    $message = $this->get_lang('AdvancedSubscriptionNoQueue');
                 }
                 break;
             case ADVANCED_SUBSCRIPTION_QUEUE_STATUS_START:
@@ -1486,5 +1475,4 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
 
         return $numberOfApproved;
     }
-
 }

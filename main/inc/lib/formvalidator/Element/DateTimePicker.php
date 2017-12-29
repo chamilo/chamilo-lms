@@ -130,9 +130,7 @@ class DateTimePicker extends HTML_QuickForm_text
     public function getTemplate($layout)
     {
         $size = $this->getColumnsSize();
-        $id = $this->getAttribute('id');
         $value = $this->getValue();
-
         if (empty($size)) {
             $sizeTemp = $this->getInputSize();
             if (empty($size)) {
@@ -152,10 +150,6 @@ class DateTimePicker extends HTML_QuickForm_text
             } else {
                 $size = array(2, intval($size), 2);
             }
-        }
-
-        if (!empty($value)) {
-            $value = api_format_date($value, DATE_TIME_FORMAT_LONG_24H);
         }
 
         switch ($layout) {

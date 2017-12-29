@@ -88,7 +88,7 @@ class AddCourse
      * @return int 0
      * @assert (null,null) === false
      */
-    public static function prepare_course_repository($course_repository, $course_code)
+    public static function prepare_course_repository($course_repository)
     {
         $perm = api_get_permissions_for_new_directories();
         $perm_file = api_get_permissions_for_new_files();
@@ -369,15 +369,14 @@ class AddCourse
     /**
      * Sorts pictures by type (used?)
      * @param array List of files (sthg like array(0=>array('png'=>1)))
-     * @param string File type
      * @param string $type
      * @return array The received array without files not matching type
      * @assert (array(),null) === array()
      */
     public static function sort_pictures($files, $type)
     {
-        $pictures = array();
-        foreach ($files as $key => $value) {
+        $pictures = [];
+        foreach ($files as $value) {
             if (isset($value[$type]) && $value[$type] != '') {
                 $pictures[][$type] = $value[$type];
             }
@@ -424,13 +423,8 @@ class AddCourse
         $TABLESETTING = Database::get_course_table(TABLE_COURSE_SETTING);
         $TABLEGRADEBOOK = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $TABLEGRADEBOOKLINK = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-
-        $visible_for_all = 1;
         $visible_for_course_admin = 0;
-        $visible_for_platform_admin = 2;
-
         /*    Course tools  */
-
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
             VALUES ($course_id, 1, '".TOOL_COURSE_DESCRIPTION."','course_description/','info.gif','".self::string2binary(

@@ -227,6 +227,7 @@ switch ($action) {
         exit;
         break;
     case 'send_legal':
+        // Ofaj
         $currentUserInfo = api_get_user_info();
         $subject = get_lang('SendTermsSubject');
         $linkLegal = api_get_path(WEB_PATH)."contrat.php";
@@ -239,11 +240,11 @@ switch ($action) {
         MessageManager::send_message_simple($student_id, $subject, $content);
         $extraFieldValue = new ExtraFieldValue('user');
         $params = [
-	    'item_id' => $student_id,
+            'item_id' => $student_id,
             'extra_termactivated' => 1,
         ];
         $extraFieldValue->saveFieldValues($params, true, false, ['termactivated']);
-	Display::addFlash(Display::return_message(get_lang('Sent')));
+        Display::addFlash(Display::return_message(get_lang('Sent')));
         break;
     case 'delete_legal':
         $extraFieldValue = new ExtraFieldValue('user');
@@ -670,7 +671,7 @@ $userGroups = $userGroupManager->getNameListByUser(
         );
 
         $extraFieldInfoEnd = $extraField->get_handler_field_info_by_field_variable(
-        'datefinstage'
+            'datefinstage'
         );
 
         echo '<tr><td>';
@@ -742,8 +743,6 @@ $userGroups = $userGroupManager->getNameListByUser(
                 }
             }
         }
-
-
 
         // Display timezone if the user selected one and if the admin allows the use of user's timezone
         $timezone = null;

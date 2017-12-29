@@ -395,6 +395,24 @@ class IndexManager
             ];
         }
 
+        $myCertificate = GradebookUtils::get_certificate_by_user_id(
+            +0,
+            $this->user_id
+        );
+
+        if ($myCertificate) {
+            $items[] = [
+                'icon' => Display::return_icon(
+                    'skill-badges.png',
+                    get_lang('MyGeneralCertificate'),
+                    null,
+                    ICON_SIZE_SMALL
+                ),
+                'link' => api_get_path(WEB_CODE_PATH).'social/my_skills_report.php?a=generate_custom_skill',
+                'title' => get_lang('MyGeneralCertificate')
+            ];
+        }
+
         if (Skill::isAllowed(api_get_user_id(), false)) {
             $items[] = [
                 'icon' => Display::return_icon('skill-badges.png', get_lang('MySkills')),

@@ -36,25 +36,38 @@
 <style>
     .version h1 {
         padding-top: 60px;
-
     }
-
 </style>
 
 <script>
     $(document).ready(function() {
         var versionList = '';
         $('.version').each(function( index ) {
-
             var version = $(this).attr('aria-label');
             var title = $(this).find('h1').text();
+            var titleParts = title.split('-');
+            var title = titleParts[0];
+            var cityParts = titleParts[1].split(',');
+
+            var city = cityParts[0];
+            var date = cityParts[1];
+
+            if (typeof date !== 'undefined') {
+            } else {
+                date = city;
+                city = '';
+            }
+
 
             var link = $("<a/>", {
                 text: title,
                 "title": title,
                 "href": "#"+version
             });
-            $("#index").append('<br/>').append(link);
+
+            $("#index").append(
+                $('<tr>').append($('<td>').append(link), $('<td>').append(city), $('<td>').append(date))
+            );
         });
 
     });
@@ -95,7 +108,9 @@
     be seen for confidentiality reasons, but the code change is public and can
     be reviewed by anyone <a href="https://github.com/chamilo/chamilo-lms/commits">on Github</a>.</i>
 </p>
-    <div id="index"></div>
+    <table class="table" id="index">
+
+    </table>
     <div class="version" aria-role="article" aria-label="1.11.6">
     <a name="1.11.6"></a>
 
@@ -6382,19 +6397,19 @@ All security issues are published and patches are attached on <a href="https://s
 
     <div class="version" aria-role="article" aria-label="1.9.8.2">
 <a  name="1.9.8.2"></a>
-
-<h1>Chamilo 1.9.8.2 - 21st of June, 2014</h1>
+<h1>Chamilo 1.9.8.2 - ,21st of June, 2014</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.8.2 is a very little patch version with one bugfix regarding the learning paths tool. Considering the fact that 1.9.8 is planned for the long term, we'd hate to have such a minor patch left on the side for a year or so. This will be packaged and promoted as 1.9.8, but the folder inside the 1.9.8 will be called 1.9.8.2, with a change to this changelog file and a one-line change to main/newscorm/learnpathItem.class.php (as such, you can update just this file to upgrade from 1.9.8.1 to 1.9.8.2. See <a href="https://github.com/chamilo/chamilo-lms/commit/642a80e9e838f98f25135fbb64795e4f3df86260">the code change</a> for detais.</p>
     </div>
 
     <div class="version" aria-role="article" aria-label="1.9.8.1">
-<h1>Chamilo 1.9.8.1 - 18th of June, 2014</h1>
+<h1>Chamilo 1.9.8.1 - ,18th of June 2014</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.8.1 is a patch version with one security patch on top of 1.9.8 (in the included library for FCKeditor). Please check <a href="https://support.chamilo.org/projects/chamilo-18/wiki/Security_issues">our security issues page</a> for more information.</p>
     </div>
 
     <div class="version" aria-role="article" aria-label="1.9.8.0">
+        <a  name="1.9.8.0"></a>
 <h1>Chamilo 1.9.8 - Thon, 15th of June, 2014</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.8 is a minor stable version with a series of improvements on top of 1.9.6.<br />
@@ -6905,7 +6920,7 @@ Stylesheets have been considerably changed in version 1.9.8, which might require
     <div class="version" aria-role="article" aria-label="1.9.6.1">
 <a  name="1.9.6.1"></a>
 
-<h1>Chamilo 1.9.6.1 - 22th of May, 2014</h1>
+<h1>Chamilo 1.9.6.1 - ,22th of May 2014</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.6.1 is a patch version with security patches on top of 1.9.6. Please check <a href="https://support.chamilo.org/projects/chamilo-18/wiki/Security_issues">our security issues page</a> for more information.</p>
 </div>
@@ -8462,10 +8477,10 @@ providers (see our website, <i>Support</i> tab).
 
     </div>
 
-    <div class="version" aria-role="article" aria-label="1.8.7.1">
+<div class="version" aria-role="article" aria-label="1.8.7.1">
 <a  name="1.8.7.1"></a>
 
-<h1>Chamilo 1.8.7.1 - Palmas</h1>
+<h1>Chamilo 1.8.7.1 - Palmas, July 2010</h1>
 <h3>New Features</h3>
 <ul>
   <li>Ajax File Manager updated to  1.0 RC5 (Feature #247)</li>
@@ -8562,13 +8577,11 @@ providers (see our website, <i>Support</i> tab).
   <li>main/WCAG folder has been removed (deprecated) </li>
   <li>main/online folder has been removed (deprecated)</li>
 </ul>
-
     </div>
-
     <div class="version" aria-role="article" aria-label="1.8.7">
 <a  name="1.8.7"></a>
 
-<h1>Chamilo 1.8.7 - Istanbul</h1>
+<h1>Chamilo 1.8.7 - Istanbul, June 2010</h1>
 
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.8.7 is a major&nbsp;release including a lot of new features, mostly focused on social network, the handling of sessions (which will help many educational institutions, public or private, to manage their contents in a more flexible way) and visual style, and a few important bugfixes. It lays the first stable stone in the Chamilo software project. This version is the first one to <b>highly recommend PHP 5.2</b> or superior, and <b>require PHP 5.1</b> or higher.<br />Also, this version of Chamilo will automatically convert all your data to UTF-8, which will make it more difficult to migrate from Dokeos versions higher than 1.8.6.1</p>
@@ -8674,7 +8687,7 @@ providers (see our website, <i>Support</i> tab).
     <div class="version" aria-role="article" aria-label="1.8.6.2">
 <a  name="1.8.6.2"></a>
 
-<h1>Chamilo 1.8.6.2  <span style="font-style: italic;">Salto</span> - January 2010</h1>
+<h1>Chamilo 1.8.6.2 - Salto, January 2010</h1>
 
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.8.6.2 is a intermediate&nbsp;release including a lot of new features, mostly focused on social network, the handling of sessions (which will help many educational institutions, public or private, to manage their contents in a more flexible way) and visual style, and a few important bugfixes. It lays the first stable stone in the Chamilo software project.</p>
@@ -8831,7 +8844,7 @@ providers (see our website, <i>Support</i> tab).
     <div class="version" aria-role="article" aria-label="1.8.6">
 <a  name="1.8.6"></a>
 
-<h1>Dokeos 1.8.6 <span style="font-style: italic;">Svalbard</span> - June 2009</h1>
+<h1>Dokeos 1.8.6 - Svalbard, June 2009</h1>
 
 <h3>Release notes - summary</h3>
 <p>Dokeos 1.8.6 Svalbard is a major&nbsp;release including new features.&nbsp;</p>
@@ -9030,9 +9043,7 @@ providers (see our website, <i>Support</i> tab).
     </div>
     <div class="version" aria-role="article" aria-label="1.8.5">
         <a name="1.8.5"></a>
-
-        <h1>Dokeos 1.8.5 <span style="font-style: italic;">Valparaiso</span>, June 2008</h1>
-
+        <h1>Dokeos 1.8.5 - Valparaiso, June 2008</h1>
         <h3>Release notes - summary</h3>
         <p>Dokeos 1.8.5 is a major debugging release but includes interesting new features as well.&nbsp;</p>
         <h3>New Features</h3>
@@ -9228,7 +9239,7 @@ providers (see our website, <i>Support</i> tab).
     </div>
 
     <div class="version" aria-role="article" aria-label="1.8.0">
-<a name="1.8"></a>
+<a name="1.8.0"></a>
 
 <h1>Dokeos 1.8 - May 2007</h1>
 
@@ -9264,25 +9275,22 @@ a simple videoconferencing interface.</p>
 
     <div class="version" aria-role="article" aria-label="1.6.5">
         <a name="1.6.5"></a>
-        <h1>Dokeos 1.6.5 - July 2006 </h1>
+        <h1>Dokeos 1.6.5 - , July 2006 </h1>
         <h3>Release notes - summary</h3>
         <p>Security Release. 1 bug has been fixed.<br/>
         </p>
     </div>
     <div class="version" aria-role="article" aria-label="1.6.4">
 <a name="1.6.4"></a>
-
-<h1>Dokeos 1.6.4 April 2006 </h1>
-
+<h1>Dokeos 1.6.4 - , April 2006 </h1>
 <h3>Release notes - summary</h3>
-
 <p>Bugfix release. 2 bugs have been fixed. One security hole has been fixed <br />
 </p>
     </div>
     <div class="version" aria-role="article" aria-label="1.6.3">
 <a name="1.6.3"></a>
 
-<h1>Dokeos 1.6.3 February 2006 </h1>
+<h1>Dokeos 1.6.3 - , February 2006 </h1>
 
 <h3>Release notes - summary</h3>
 
@@ -9291,7 +9299,7 @@ a simple videoconferencing interface.</p>
     <div class="version" aria-role="article" aria-label="1.6.2">
 <a name="1.6.2"></a>
 
-<h1>Dokeos 1.6.2 - September 2005</h1>
+<h1>Dokeos 1.6.2 - , September 2005</h1>
 
 <h3>Release notes - summary</h3>
 
@@ -9301,7 +9309,7 @@ a simple videoconferencing interface.</p>
     <div class="version" aria-role="article" aria-label="1.6.1">
 <a name="1.6.1"></a>
 
-<h1>Dokeos 1.6.1 - August 2005</h1>
+<h1>Dokeos 1.6.1 - , August 2005</h1>
 
 <h3>Release notes - summary</h3>
 

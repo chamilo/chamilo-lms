@@ -316,6 +316,15 @@ $allowed_tags_student['video']['src'] = array();
 $allowed_tags_student['video']['controls'] = array();
 $allowed_tags_student['video']['id'] = array();
 
+$allowed_tags_student['audio'] = array();
+$allowed_tags_student['audio']['autoplay'] = array();
+$allowed_tags_student['audio']['src'] = array();
+$allowed_tags_student['audio']['loop'] = array();
+$allowed_tags_student['audio']['preload'] = array();
+$allowed_tags_student['audio']['controls'] = array();
+$allowed_tags_student['audio']['muted'] = array();
+$allowed_tags_student['audio']['id'] = array();
+
 $allowed_tags_student['source'] = array();
 $allowed_tags_student['source']['type'] = array();
 $allowed_tags_student['source']['src'] = array();

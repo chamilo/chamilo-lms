@@ -364,7 +364,7 @@ class Security
             $config->set('HTML.DefinitionID', 'html5-definitions'); // unqiue id
             $config->set('HTML.DefinitionRev', 1);
             if ($def = $config->maybeGetRawHTMLDefinition()) {
-                // http://developers.whatwg.org/the-video-element.html#the-video-element
+                // https://html.spec.whatwg.org/dev/media.html#the-video-element
                 $def->addElement(
                     'video',
                     'Block',
@@ -378,6 +378,21 @@ class Security
                         'poster'   => 'URI',
                         'preload'  => 'Enum#auto,metadata,none',
                         'controls' => 'Bool',
+                    )
+                );
+                // https://html.spec.whatwg.org/dev/media.html#the-audio-element
+                $def->addElement(
+                    'audio',
+                    'Block',
+                    'Optional: (source, Flow) | (Flow, source) | Flow',
+                    'Common',
+                    array(
+                        'autoplay' => 'Bool',
+                        'src'      => 'URI',
+                        'loop'     => 'Bool',
+                        'preload'  => 'Enum#auto,metadata,none',
+                        'controls' => 'Bool',
+                        'muted'    => 'Bool',
                     )
                 );
                 $def->addElement(

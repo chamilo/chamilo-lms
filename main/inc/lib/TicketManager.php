@@ -938,14 +938,20 @@ class TicketManager
                     $img_source = 'icons/32/event.png';
                     break;
                 default:
-                    $img_source = 'icons/32/course_home.png';
+                    $img_source = 'icons/32/ticket.png';
                     break;
             }
 
             $row['start_date'] = Display::dateToStringAgoAndLongDate($row['start_date']);
             $row['sys_lastedit_datetime'] = Display::dateToStringAgoAndLongDate($row['sys_lastedit_datetime']);
 
-            $icon = Display::return_icon($img_source, get_lang('Info')).'<a href="ticket_details.php?ticket_id='.$row['id'].'">'.$row['code'].'</a>';
+            $icon = Display::return_icon(
+                $img_source,
+                get_lang('Info'),
+                ['style' => 'margin-right: 10px; float: left;']
+            );
+
+            $icon .= '<a href="ticket_details.php?ticket_id='.$row['id'].'">'.$row['code'].'</a>';
 
             if ($isAdmin) {
                 $ticket = array(

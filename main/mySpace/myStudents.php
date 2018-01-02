@@ -1691,7 +1691,7 @@ echo Tracking::displayUserSkills(
 
 if ($allowMessages === true) {
     // Messages
-    echo Display::page_subheader2(get_lang('Messages'));
+    echo Display::page_subheader2(get_lang('CommunicationTITC'));
     $messages = MessageManager::getMessagesAboutUser($user_info);
 
     if (!empty($messages)) {

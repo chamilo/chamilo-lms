@@ -235,22 +235,24 @@ header {
   filter:progid:DXImageTransform.Microsoft.Alpha(opacity=80);
 }
 .notification-panel .help a {
-  background-color:#879DAA;
-  border:1px solid #FFFFFF;
-  display:block;
-  margin-left:50px;
-  opacity:0.6;
-  width:65px;
-  padding: 6px 0 8px 6px;
+    background-color:#879DAA;
+    border:1px solid #FFFFFF;
+    display:block;
+    margin-left:50px;
+    opacity:0.8;
+    width:65px;
+    padding: 6px 0 8px 6px;
+    border-radius: 10px 0 0 10px;
 }
 .notification-panel .report a {
-  background-color:#8fd400;
-  border:1px solid #FFFFFF;
-  display:block;
-  margin-left:50px;
-  opacity:0.6;
-  width:65px;
-  padding: 6px 0 8px 6px;
+    background-color:#8fd400;
+    border:1px solid #FFFFFF;
+    display:block;
+    margin-left:50px;
+    opacity:0.8;
+    width:65px;
+    padding: 6px 0 8px 6px;
+    border-radius: 10px 0 0 10px;
 }
 .cookieUsageValidation {
     padding: 5px;

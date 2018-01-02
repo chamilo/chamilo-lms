@@ -1,4 +1,4 @@
-# Chamilo 1.11.x
+# Chamilo 2.x
 
 [![Build Status](https://travis-ci.org/chamilo/chamilo-lms.svg?branch=1.11.x)](https://travis-ci.org/chamilo/chamilo-lms)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/badges/quality-score.png?b=1.11.x)](https://scrutinizer-ci.com/g/chamilo/chamilo-lms/?branch=1.11.x)
@@ -22,14 +22,14 @@ sudo apt-get install libapache2-mod-php mysql-server php5-gd php5-intl php5-curl
 
 ### Install Git
 
-The development version 1.11.x requires you to have Git installed. If you are working on a Debian-based system (Debian, Ubuntu, Mint, etc), just type
+If you are working on a Debian-based system (Debian, Ubuntu, Mint, etc), just type
 ```
 sudo apt-get install git
 ```
 
 ### Install Composer
 
-To run the development version 1.11.x, you need Composer, a libraries dependency management system that will update all the libraries you need for Chamilo to the latest available version.
+To run the development version, you need Composer, a libraries dependency management system that will update all the libraries you need for Chamilo to the latest available version.
 
 Make sure you have Composer installed. If you do, you should be able to launch "composer" on the command line and have the inline help of composer show a few subcommands. If you don't, please follow the installation guide at https://getcomposer.org/download/
 
@@ -38,17 +38,13 @@ Make sure you have Composer installed. If you do, you should be able to launch "
 Clone the repository
 
 ```
-sudo mkdir chamilo-1.11
-sudo chown -R `whoami` chamilo-1.11
-git clone -b 1.11.x --single-branch https://github.com/chamilo/chamilo-lms.git chamilo-1.11
+sudo mkdir chamilo
+sudo chown -R `whoami` chamilo
+git clone https://github.com/chamilo/chamilo-lms.git chamilo
 ```
 
-Checkout branch 1.11.x
-
 ```
-cd chamilo-1.11
-git checkout --track origin/1.11.x
-git config --global push.default current
+cd chamilo
 ```
 
 ### Update dependencies using Composer
@@ -85,10 +81,10 @@ to the installer. If not, add the "main/install/index.php" suffix manually in
 your browser address bar. The rest should be a matter of simple
  OK > Next > OK > Next...
 
-## Upgrade from 1.10.x
+## Upgrade from 1.11.x
 
-1.11.0 is a major version. It contains a series of new features, that
-also mean a series of new database changes in regards with versions 1.10.x. As 
+2.x is a major version. It contains a series of new features, that
+also mean a series of new database changes in regards with versions 1.11.x. As 
 such, it is necessary to go through an upgrade procedure when upgrading from 
 1.10.x to 1.11.x.
 

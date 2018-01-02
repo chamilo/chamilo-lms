@@ -29,6 +29,9 @@ a:focus {
 a:focus {
   outline: none;
 }
+hr{
+    border-top: 1px solid #96bd0d;
+}
 .logo-ofaj{
     padding: 5px;
     margin-bottom: 0;

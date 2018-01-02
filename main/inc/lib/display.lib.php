@@ -222,10 +222,10 @@ class Display
     public static function display_sortable_table(
         $header,
         $content,
-        $sorting_options = array(),
-        $paging_options = array(),
+        $sorting_options = [],
+        $paging_options = [],
         $query_vars = null,
-        $form_actions = array(),
+        $form_actions = [],
         $style = 'table'
     ) {
         $column = isset($sorting_options['column']) ? $sorting_options['column'] : 0;
@@ -267,10 +267,10 @@ class Display
     public static function return_sortable_table(
         $header,
         $content,
-        $sorting_options = array(),
-        $paging_options = array(),
+        $sorting_options = [],
+        $paging_options = [],
         $query_vars = null,
-        $form_actions = array(),
+        $form_actions = [],
         $style = 'table'
     ) {
         ob_start();
@@ -309,12 +309,12 @@ class Display
         $name,
         $header,
         $content,
-        $paging_options = array(),
+        $paging_options = [],
         $query_vars = null,
-        $form_actions = array(),
+        $form_actions = [],
         $visibility_options = true,
         $sort_data = true,
-        $grid_class = array()
+        $grid_class = []
     ) {
         echo self::return_sortable_grid(
             $name,
@@ -353,12 +353,12 @@ class Display
         $name,
         $header,
         $content,
-        $paging_options = array(),
+        $paging_options = [],
         $query_vars = null,
-        $form_actions = array(),
+        $form_actions = [],
         $visibility_options = true,
         $sort_data = true,
-        $grid_class = array(),
+        $grid_class = [],
         $elementCount = 0
     ) {
         $column = 0;
@@ -406,12 +406,12 @@ class Display
         $table_name,
         $header,
         $content,
-        $sorting_options = array(),
-        $paging_options = array(),
+        $sorting_options = [],
+        $paging_options = [],
         $query_vars = null,
-        $column_show = array(),
-        $column_order = array(),
-        $form_actions = array()
+        $column_show = [],
+        $column_order = [],
+        $form_actions = []
     ) {
         $column = isset($sorting_options['column']) ? $sorting_options['column'] : 0;
         $default_items_per_page = isset($paging_options['per_page']) ? $paging_options['per_page'] : 20;
@@ -731,7 +731,7 @@ class Display
     public static function display_icon(
         $image,
         $alt_text = '',
-        $additional_attributes = array(),
+        $additional_attributes = [],
         $size = null
     ) {
         echo self::return_icon($image, $alt_text, $additional_attributes, $size);
@@ -767,7 +767,7 @@ class Display
     public static function return_icon(
         $image,
         $alt_text = '',
-        $additional_attributes = array(),
+        $additional_attributes = [],
         $size = ICON_SIZE_SMALL,
         $show_text = true,
         $return_only_path = false,
@@ -918,7 +918,7 @@ class Display
      * @return string
      * @author Julio Montoya 2010
      */
-    public static function tag($tag, $content, $additional_attributes = array())
+    public static function tag($tag, $content, $additional_attributes = [])
     {
         $attribute_list = '';
         // Managing the additional attributes
@@ -945,7 +945,7 @@ class Display
      *
      * @return string
      */
-    public static function url($name, $url, $attributes = array())
+    public static function url($name, $url, $attributes = [])
     {
         if (!empty($url)) {
             $url = preg_replace('#&amp;#', '&', $url);
@@ -962,7 +962,7 @@ class Display
      * @param array $attributes
      * @return string
      */
-    public static function div($content, $attributes = array())
+    public static function div($content, $attributes = [])
     {
         return self::tag('div', $content, $attributes);
     }
@@ -970,7 +970,7 @@ class Display
     /**
      * Creates a span tag
      */
-    public static function span($content, $attributes = array())
+    public static function span($content, $attributes = [])
     {
         return self::tag('span', $content, $attributes);
     }
@@ -978,7 +978,7 @@ class Display
     /**
      * Displays an HTML input tag
      */
-    public static function input($type, $name, $value, $attributes = array())
+    public static function input($type, $name, $value, $attributes = [])
     {
         if (isset($type)) {
             $attributes['type'] = $type;
@@ -998,7 +998,7 @@ class Display
      * @param array $attributes
      * @return string
      */
-    public static function button($name, $value, $attributes = array())
+    public static function button($name, $value, $attributes = [])
     {
         if (!empty($name)) {
             $attributes['name'] = $name;
@@ -1014,7 +1014,7 @@ class Display
         $name,
         $values,
         $default = -1,
-        $extra_attributes = array(),
+        $extra_attributes = [],
         $show_blank_item = true,
         $blank_item_text = null
     ) {
@@ -1091,8 +1091,8 @@ class Display
         $headers,
         $items,
         $id = 'tabs',
-        $attributes = array(),
-        $ul_attributes = array()
+        $attributes = [],
+        $ul_attributes = []
     ) {
         if (empty($headers) || count($headers) == 0) {
             return '';
@@ -1195,7 +1195,7 @@ class Display
      * @example
      * After your Display::display_header function you have to add the nex javascript code:
      * <script>
-     *   echo Display::grid_js('my_grid_name', $url,$columns, $column_model, $extra_params,array());
+     *   echo Display::grid_js('my_grid_name', $url,$columns, $column_model, $extra_params,[]);
      *   // for more information of this function check the grid_js() function
      * </script>
      * //Then you have to call the grid_html
@@ -1254,7 +1254,7 @@ class Display
         $column_names,
         $column_model,
         $extra_params,
-        $data = array(),
+        $data = [],
         $formatter = '',
         $fixed_width = false
     ) {
@@ -1407,7 +1407,7 @@ class Display
      * @param array $attributes
      * @return string
      */
-    public static function table($headers, $rows, $attributes = array())
+    public static function table($headers, $rows, $attributes = [])
     {
         if (empty($attributes)) {
             $attributes['class'] = 'data_table';
@@ -1515,7 +1515,7 @@ class Display
 
         $group_ids = GroupManager::get_group_ids($courseInfo['real_id'], $user_id);
         $group_ids[] = 0; //add group 'everyone'
-        $notifications = array();
+        $notifications = [];
         if ($tools) {
             foreach ($tools as $tool) {
                 $toolName = $tool['name'];
@@ -1638,7 +1638,7 @@ class Display
         if (!$nosession) {
             global $now, $date_start, $date_end;
         }
-        $output = array();
+        $output = [];
         $active = false;
         if (!$nosession) {
             $main_user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -1653,7 +1653,7 @@ class Display
             $session_info = Database::store_result($rs, 'ASSOC');
             $session_info = $session_info[0];
 
-            $session = array();
+            $session = [];
             $session['category_id'] = $session_info['session_category_id'];
             $session['title'] = $session_info['name'];
             $session['id_coach'] = $session_info['id_coach'];
@@ -1750,7 +1750,7 @@ class Display
                     <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=5" title="'.$star_label.'" class="five-stars">5</a></li>
                 </ul>';
 
-        $labels = array();
+        $labels = [];
 
         $labels[] = $number_of_users_who_voted == 1 ? $number_of_users_who_voted.' '.get_lang('Vote') : $number_of_users_who_voted.' '.get_lang('Votes');
         $labels[] = $accesses == 1 ? $accesses.' '.get_lang('Visit') : $accesses.' '.get_lang('Visits');
@@ -1978,7 +1978,7 @@ class Display
                     $class = 'class ="active"';
                 }
                 $html .= "<li $class >";
-                $attributes = isset($value['url_attributes']) ? $value['url_attributes'] : array();
+                $attributes = isset($value['url_attributes']) ? $value['url_attributes'] : [];
                 $html .= self::url($value['content'], $value['url'], $attributes);
                 $html .= '</li>';
             }
@@ -2090,7 +2090,7 @@ class Display
      * @param array $params
      * @return null|string
      */
-    public static function getMediaPlayer($file, $params = array())
+    public static function getMediaPlayer($file, $params = [])
     {
         $fileInfo = pathinfo($file);
 
@@ -2217,7 +2217,7 @@ class Display
         $defaultClass = 'before';
         $class = $defaultClass;
         foreach ($conditions as $condition) {
-            $array = isset($condition['items']) ? $condition['items'] : array();
+            $array = isset($condition['items']) ? $condition['items'] : [];
             $class_to_applied = $condition['class'];
             $type = isset($condition['type']) ? $condition['type'] : 'positive';
             $mode = isset($condition['mode']) ? $condition['mode'] : 'add';
@@ -2564,7 +2564,7 @@ class Display
         $title,
         $content,
         $id = null,
-        $params = array(),
+        $params = [],
         $idAccordion = null,
         $idCollapse = null,
         $open = true,

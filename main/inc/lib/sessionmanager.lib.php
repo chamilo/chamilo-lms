@@ -132,7 +132,7 @@ class SessionManager
         $duration = null,
         $description = null,
         $showDescription = 0,
-        $extraFields = array(),
+        $extraFields = [],
         $sessionAdminId = 0,
         $sendSubscriptionNotification = false
     ) {
@@ -431,7 +431,7 @@ class SessionManager
      * @param array $extraFieldsToLoad
      *
      * @return mixed Integer for number of rows, or array of results
-     * @assert (array(),true) !== false
+     * @assert ([],true) !== false
      */
     public static function get_sessions_admin(
         $options = [],
@@ -551,13 +551,13 @@ class SessionManager
         $result = Database::query($query);
 
         $categories = self::get_all_session_category();
-        $orderedCategories = array();
+        $orderedCategories = [];
         if (!empty($categories)) {
             foreach ($categories as $category) {
                 $orderedCategories[$category['id']] = $category['name'];
             }
         }
-        $formatted_sessions = array();
+        $formatted_sessions = [];
         if (Database::num_rows($result)) {
             $sessions = Database::store_result($result, 'ASSOC');
             if ($get_count) {
@@ -567,13 +567,13 @@ class SessionManager
             $activeIcon = Display::return_icon(
                 'accept.png',
                 get_lang('Active'),
-                array(),
+                [],
                 ICON_SIZE_SMALL
             );
             $inactiveIcon = Display::return_icon(
                 'error.png',
                 get_lang('Inactive'),
-                array(),
+                [],
                 ICON_SIZE_SMALL
             );
 
@@ -609,7 +609,7 @@ class SessionManager
                             $session['id'],
                             $field['id']
                         );
-                        $fieldDataArray = array();
+                        $fieldDataArray = [];
                         $fieldDataToString = '';
                         if (!empty($fieldData)) {
                             foreach ($fieldData as $data) {
@@ -781,7 +781,7 @@ class SessionManager
         // Get lessons
         $lessons = LearnpathList::get_course_lessons($course['code'], $sessionId);
 
-        $table = array();
+        $table = [];
         foreach ($users as $user) {
             $data = array(
                 'lastname' => $user[1],
@@ -810,7 +810,7 @@ class SessionManager
 
             $result = Database::query($sql_query);
 
-            $user_lessons = array();
+            $user_lessons = [];
             while ($row = Database::fetch_array($result)) {
                 $user_lessons[$row['id']] = $row;
             }
@@ -902,7 +902,7 @@ class SessionManager
         $row = Database::fetch_array($result);
         $anonymous = ($row['anonymous'] == 1) ? true : false;
 
-        $table = array();
+        $table = [];
         foreach ($users as $user) {
             $data = array(
                 'lastname' => ($anonymous ? '***' : $user[1]),
@@ -930,7 +930,7 @@ class SessionManager
 
             $result = Database::query($sql_query);
 
-            $user_questions = array();
+            $user_questions = [];
             while ($row = Database::fetch_array($result)) {
                 $user_questions[$row['question_id']] = $row;
             }
@@ -1032,7 +1032,7 @@ class SessionManager
         $sql = "SELECT * FROM $tbl_course_lp WHERE c_id = %s "; //AND session_id = %s
         $sql_query = sprintf($sql, $course['real_id']);
         $result = Database::query($sql_query);
-        $arrLesson = array(array());
+        $arrLesson = array([]);
         while ($row = Database::fetch_array($result)) {
             if (empty($arrLesson[$row['session_id']]['lessons_total'])) {
                 $arrLesson[$row['session_id']]['lessons_total'] = 1;
@@ -1108,7 +1108,7 @@ class SessionManager
         /**
          * Surveys
          */
-        $survey_user_list = array();
+        $survey_user_list = [];
         $survey_list = SurveyManager::get_surveys($course['code'], $sessionId);
 
         $surveys_total = count($survey_list);
@@ -1158,7 +1158,7 @@ class SessionManager
             $lessons_progress = Tracking::get_avg_student_progress(
                 $user['user_id'],
                 $course['code'],
-                array(),
+                [],
                 $user['id_session']
             );
             $lessons_done = ($lessons_progress * $lessons_total) / 100;
@@ -1397,7 +1397,7 @@ class SessionManager
             $where $order $limit";
         $result = Database::query(sprintf($sql, $sessionId, $courseId));
 
-        $data = array();
+        $data = [];
         while ($user = Database::fetch_assoc($result)) {
             $data[] = $user;
         }
@@ -1523,7 +1523,7 @@ class SessionManager
         $description = null,
         $showDescription = 0,
         $duration = null,
-        $extraFields = array(),
+        $extraFields = [],
         $sessionAdminId = 0,
         $sendSubscriptionNotification = false
     ) {
@@ -1852,7 +1852,7 @@ class SessionManager
         $sql = "SELECT user_id FROM $tbl_session_rel_course_rel_user
                 WHERE session_id = $id_session AND status = 0";
         $result = Database::query($sql);
-        $existingUsers = array();
+        $existingUsers = [];
         while ($row = Database::fetch_array($result)) {
             $existingUsers[] = $row['user_id'];
         }
@@ -1860,7 +1860,7 @@ class SessionManager
         $sql = "SELECT c_id FROM $tbl_session_rel_course
                 WHERE session_id = $id_session";
         $result = Database::query($sql);
-        $course_list = array();
+        $course_list = [];
         while ($row = Database::fetch_array($result)) {
             $course_list[] = $row['c_id'];
         }
@@ -1938,7 +1938,7 @@ class SessionManager
                         status = 0
                     ";
             $result = Database::query($sql);
-            $existingUsers = array();
+            $existingUsers = [];
             while ($row = Database::fetch_array($result)) {
                 $existingUsers[] = $row['user_id'];
             }
@@ -2067,7 +2067,7 @@ class SessionManager
         $courseId = $courseInfo['real_id'];
 
         if (empty($sessionId) || empty($courseId)) {
-            return array();
+            return [];
         }
 
         $statusCondition = null;
@@ -2087,7 +2087,7 @@ class SessionManager
                 ";
 
         $result = Database::query($sql);
-        $existingUsers = array();
+        $existingUsers = [];
         while ($row = Database::fetch_array($result)) {
             $existingUsers[] = $row['user_id'];
         }
@@ -2139,7 +2139,7 @@ class SessionManager
             $sql .= "LIMIT $start, $limit";
         }
         $result = Database::query($sql);
-        $existingUsers = array();
+        $existingUsers = [];
         while ($row = Database::fetch_array($result)) {
             $existingUsers[] = $row['user_id'];
         }
@@ -2998,7 +2998,7 @@ class SessionManager
      * @return array An array with all sessions of the platform.
      * @todo   optional course code parameter, optional sorting parameters...
      */
-    public static function get_sessions_list($conditions = array(), $order_by = array(), $from = null, $to = null)
+    public static function get_sessions_list($conditions = [], $order_by = [], $from = null, $to = null)
     {
         $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
         $session_category_table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
@@ -3007,7 +3007,7 @@ class SessionManager
         $session_course_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
         $access_url_id = api_get_current_access_url_id();
-        $return_array = array();
+        $return_array = [];
 
         $sql_query = " SELECT
                     DISTINCT(s.id),
@@ -3563,7 +3563,7 @@ class SessionManager
             return $row['count'];
         }
 
-        $sessions = array();
+        $sessions = [];
         if (Database::num_rows($result) > 0) {
             $sysUploadPath = api_get_path(SYS_UPLOAD_PATH).'sessions/';
             $webUploadPath = api_get_path(WEB_UPLOAD_PATH).'sessions/';
@@ -3671,7 +3671,7 @@ class SessionManager
         $sql .= Database::escape_string($orderBy);
         $result = Database::query($sql);
         $num_rows = Database::num_rows($result);
-        $courses = array();
+        $courses = [];
         if ($num_rows > 0) {
             if ($getCount) {
                 $count = Database::fetch_assoc($result);
@@ -3761,7 +3761,7 @@ class SessionManager
 
         $result = Database::query($sql);
         $num_rows = Database::num_rows($result);
-        $courses = array();
+        $courses = [];
 
         if ($num_rows > 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -3803,7 +3803,7 @@ class SessionManager
         $sql .= "ORDER BY title;";
         $result = Database::query($sql);
         $num_rows = Database::num_rows($result);
-        $courses = array();
+        $courses = [];
         if ($num_rows > 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $courses[$row['id']] = $row;
@@ -3887,7 +3887,7 @@ class SessionManager
         $urlId = 0
     ) {
         if (empty($id)) {
-            return array();
+            return [];
         }
         $id = intval($id);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -3931,7 +3931,7 @@ class SessionManager
             return $count['count'];
         }
 
-        $return = array();
+        $return = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $return[] = $row;
         }
@@ -4068,7 +4068,7 @@ class SessionManager
     public static function subscribe_sessions_to_promotion($promotion_id, $list)
     {
         $table = Database::get_main_table(TABLE_MAIN_SESSION);
-        $params = array();
+        $params = [];
         $params['promotion_id'] = 0;
         Database::update(
             $table,
@@ -4164,7 +4164,7 @@ class SessionManager
             // Register courses from the original session to the new session
             $courses = self::get_course_list_by_session_id($id);
 
-            $short_courses = $new_short_courses = array();
+            $short_courses = $new_short_courses = [];
             if (is_array($courses) && count($courses) > 0) {
                 foreach ($courses as $course) {
                     $short_courses[] = $course;
@@ -4180,7 +4180,7 @@ class SessionManager
                         api_set_memory_limit('256M');
                         ini_set('max_execution_time', 0);
                     }
-                    $params = array();
+                    $params = [];
                     $params['skip_lp_dates'] = true;
 
                     foreach ($short_courses as $course_data) {
@@ -4239,7 +4239,7 @@ class SessionManager
         if ($copy_users) {
             // Register users from the original session to the new session
             $users = self::get_users_by_session($id);
-            $short_users = array();
+            $short_users = [];
             if (is_array($users) && count($users) > 0) {
                 foreach ($users as $user) {
                     $short_users[] = $user['user_id'];
@@ -4467,7 +4467,7 @@ class SessionManager
             $ignoreTimeLimit
         );
 
-        $sessionArray = array();
+        $sessionArray = [];
         if (!empty($sessionCategories)) {
             foreach ($sessionCategories as $category) {
                 if (isset($category['sessions'])) {
@@ -4510,20 +4510,20 @@ class SessionManager
         $updateSession,
         $defaultUserId = null,
         $logger = null,
-        $extraFields = array(),
+        $extraFields = [],
         $extraFieldId = null,
         $daysCoachAccessBeforeBeginning = null,
         $daysCoachAccessAfterBeginning = null,
         $sessionVisibility = 1,
-        $fieldsToAvoidUpdate = array(),
+        $fieldsToAvoidUpdate = [],
         $deleteUsersNotInList = false,
         $updateCourseCoaches = false,
         $sessionWithCoursesModifier = false,
         $addOriginalCourseTeachersAsCourseSessionCoaches = true,
         $removeAllTeachersFromCourse = true,
         $showDescription = null,
-        &$teacherBackupList = array(),
-        &$groupBackup = array()
+        &$teacherBackupList = [],
+        &$groupBackup = []
     ) {
         $content = file($file);
         $error_message = null;
@@ -4544,13 +4544,11 @@ class SessionManager
         $tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
-        $sessions = array();
-
+        $sessions = [];
         if (!api_strstr($content[0], ';')) {
             $error_message = get_lang('NotCSV');
         } else {
-            $tag_names = array();
+            $tag_names = [];
             foreach ($content as $key => $enreg) {
                 $enreg = explode(';', trim($enreg));
                 if ($key) {
@@ -4573,7 +4571,7 @@ class SessionManager
                 }
             }
 
-            $sessionList = array();
+            $sessionList = [];
             // Looping the sessions.
             foreach ($sessions as $enreg) {
                 $user_counter = 0;
@@ -4945,7 +4943,7 @@ class SessionManager
                 $sessionList[] = $session_id;
 
                 // Adding the relationship "Session - User" for students
-                $userList = array();
+                $userList = [];
                 if (is_array($users)) {
                     foreach ($users as $user) {
                         $user_id = UserManager::get_user_id_from_username($user);
@@ -5045,7 +5043,7 @@ class SessionManager
 
                         // Adding coaches to session course user.
                         if (!empty($course_coaches)) {
-                            $savedCoaches = array();
+                            $savedCoaches = [];
                             // only edit if add_teachers_to_sessions_courses is set.
                             if ($addTeachersToSession) {
                                 if ($addOriginalCourseTeachersAsCourseSessionCoaches) {
@@ -5055,7 +5053,7 @@ class SessionManager
                                     );
 
                                     if (!empty($alreadyAddedTeachers)) {
-                                        $teachersToAdd = array();
+                                        $teachersToAdd = [];
                                         foreach ($alreadyAddedTeachers as $user) {
                                             $teachersToAdd[] = $user['username'];
                                         }
@@ -5460,7 +5458,7 @@ class SessionManager
                     status = 2";
         $result = Database::query($sql);
 
-        $coaches = array();
+        $coaches = [];
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
                 $coaches[] = $row['user_id'];
@@ -5480,7 +5478,7 @@ class SessionManager
         $courseId
     ) {
         $coaches = self::getCoachesByCourseSession($sessionId, $courseId);
-        $list = array();
+        $list = [];
         if (!empty($coaches)) {
             foreach ($coaches as $coachId) {
                 $userInfo = api_get_user_info($coachId);
@@ -5508,7 +5506,7 @@ class SessionManager
                 WHERE session_id = '$sessionId' AND status = 2";
         $result = Database::query($sql);
 
-        $coaches = array();
+        $coaches = [];
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
                 $coaches[] = $row['user_id'];
@@ -5525,7 +5523,7 @@ class SessionManager
     public static function getAllCoursesFromAllSessionFromDrh($userId)
     {
         $sessions = self::get_sessions_followed_by_drh($userId);
-        $coursesFromSession = array();
+        $coursesFromSession = [];
         if (!empty($sessions)) {
             foreach ($sessions as $session) {
                 $courseList = self::get_course_list_by_session_id($session['id']);
@@ -5545,7 +5543,7 @@ class SessionManager
     public static function getAllCoursesFromAllSessions()
     {
         $sessions = self::get_sessions_list();
-        $coursesFromSession = array();
+        $coursesFromSession = [];
         if (!empty($sessions)) {
             foreach ($sessions as $session) {
                 $courseList = self::get_course_list_by_session_id($session['id']);
@@ -5584,8 +5582,8 @@ class SessionManager
         $keyword = null,
         $active = null,
         $lastConnectionDate = null,
-        $sessionIdList = array(),
-        $studentIdList = array(),
+        $sessionIdList = [],
+        $studentIdList = [],
         $filterByStatus = null
     ) {
         $filterByStatus = intval($filterByStatus);
@@ -5822,13 +5820,13 @@ class SessionManager
      */
     public static function copyStudentsFromSession($sessions, $sessionsDestination)
     {
-        $messages = array();
+        $messages = [];
         if (!empty($sessions)) {
             foreach ($sessions as $sessionId) {
                 $sessionInfo = self::fetch($sessionId);
                 $userList = self::get_users_by_session($sessionId, 0);
                 if (!empty($userList)) {
-                    $newUserList = array();
+                    $newUserList = [];
                     $userToString = null;
                     foreach ($userList as $userInfo) {
                         $newUserList[] = $userInfo['user_id'];
@@ -5892,13 +5890,13 @@ class SessionManager
      */
     public static function copyCoachesFromSessionToCourse($sessions, $courses)
     {
-        $coachesPerSession = array();
+        $coachesPerSession = [];
         foreach ($sessions as $sessionId) {
             $coaches = self::getCoachesBySession($sessionId);
             $coachesPerSession[$sessionId] = $coaches;
         }
 
-        $result = array();
+        $result = [];
 
         if (!empty($courses)) {
             foreach ($courses as $courseId) {
@@ -5931,7 +5929,7 @@ class SessionManager
                     $htmlResult .= Display::url(
                         get_lang('Session').': '.$sessionInfo['name'].' <br />', $sessionUrl.$sessionId, array('target' => '_blank')
                     );
-                    $teacherList = array();
+                    $teacherList = [];
                     foreach ($coachList as $coachId) {
                         $userInfo = api_get_user_info($coachId);
                         $teacherList[] = $userInfo['complete_name'];
@@ -5963,8 +5961,8 @@ class SessionManager
         $keyword = null,
         $active = null,
         $lastConnectionDate = null,
-        $sessionIdList = array(),
-        $studentIdList = array(),
+        $sessionIdList = [],
+        $studentIdList = [],
         $filterUserStatus = null
     ) {
         $userId = api_get_user_id();
@@ -6026,15 +6024,15 @@ class SessionManager
         $active = 1,
         $lastConnectionDate = null,
         $getCount = false,
-        $sessionIdList = array()
+        $sessionIdList = []
     ) {
-        $teacherListId = array();
+        $teacherListId = [];
         if (api_is_drh() || api_is_platform_admin()) {
             // Followed teachers by drh
             if (api_drh_can_access_all_session_content()) {
                 if (empty($sessionIdList)) {
                     $sessions = self::get_sessions_followed_by_drh($userId);
-                    $sessionIdList = array();
+                    $sessionIdList = [];
                     foreach ($sessions as $session) {
                         $sessionIdList[] = $session['id'];
                     }
@@ -6227,7 +6225,7 @@ class SessionManager
     ) {
         if (!empty($userSessionList)) {
             foreach ($userSessionList as $userId => $data) {
-                $sessionList = array();
+                $sessionList = [];
                 foreach ($data['session_list'] as $sessionInfo) {
                     $sessionList[] = $sessionInfo['session_id'];
                 }
@@ -6260,7 +6258,7 @@ class SessionManager
                         $sessionListSubscribed = array_keys($sessionListSubscribed);
                     }
 
-                    $sessionList = array();
+                    $sessionList = [];
                     if (!empty($data['session_list'])) {
                         foreach ($data['session_list'] as $sessionInfo) {
                             if (in_array($sessionInfo['session_id'], $sessionListSubscribed)) {
@@ -6301,7 +6299,7 @@ class SessionManager
         $list = Import::csv_reader($file);
 
         if (!empty($list)) {
-            $userSessionList = array();
+            $userSessionList = [];
             foreach ($list as $data) {
                 $userInfo = api_get_user_info_from_username($data['Username']);
                 $sessionInfo = self::get_session_by_name($data['SessionName']);
@@ -6351,7 +6349,7 @@ class SessionManager
         $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $courseList = self::get_course_list_by_session_id($sessionId, null, 'position');
 
-        $position = array();
+        $position = [];
         $count = 0;
         foreach ($courseList as $course) {
             if ($course['position'] == '') {
@@ -6514,7 +6512,7 @@ class SessionManager
         $sql = "SELECT * FROM $table
                 WHERE session_id = $sessionId AND user_id = $userId";
         $result = Database::query($sql);
-        $values = array();
+        $values = [];
         if (Database::num_rows($result)) {
             $values = Database::fetch_array($result, 'ASSOC');
         }
@@ -6597,7 +6595,7 @@ class SessionManager
         $sessions = self::get_sessions_by_general_coach($coachId, $asPlatformAdmin);
         // Get all sessions where $coachId is the course - session coach
         $courseSessionList = self::getCoursesListByCourseCoach($coachId);
-        $sessionsByCoach = array();
+        $sessionsByCoach = [];
         if (!empty($courseSessionList)) {
             foreach ($courseSessionList as $userCourseSubscription) {
                 $session = $userCourseSubscription->getSession();
@@ -6613,7 +6611,7 @@ class SessionManager
 
         // Remove repeated sessions
         if (!empty($sessions)) {
-            $cleanSessions = array();
+            $cleanSessions = [];
             foreach ($sessions as $session) {
                 $cleanSessions[$session['id']] = $session;
             }
@@ -6622,7 +6620,7 @@ class SessionManager
 
         if ($checkSessionRelUserVisibility) {
             if (!empty($sessions)) {
-                $newSessions = array();
+                $newSessions = [];
                 foreach ($sessions as $session) {
                     $visibility = api_get_session_visibility($session['id']);
                     if ($visibility == SESSION_INVISIBLE) {
@@ -6677,7 +6675,7 @@ class SessionManager
      */
     public static function getAllCourseCoaches()
     {
-        $coaches = array();
+        $coaches = [];
 
         $scuTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
@@ -6799,7 +6797,7 @@ class SessionManager
 
         $result = Database::query($sql);
 
-        $list = array();
+        $list = [];
         while ($data = Database::fetch_assoc($result)) {
             $list[] = $data;
         }
@@ -6823,7 +6821,7 @@ class SessionManager
         $publicationDate = null
     ) {
         $categoryId = (int) $categoryId;
-        $sessionList = array();
+        $sessionList = [];
         // Check if categoryId is valid
         if ($categoryId > 0) {
             $target = Database::escape_string($target);
@@ -6832,7 +6830,7 @@ class SessionManager
             $sfvTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
             // Join session field and session field values tables
             $joinTable = $sfTable.' sf INNER JOIN '.$sfvTable.' sfv ON sf.id = sfv.field_id';
-            $fieldsArray = array();
+            $fieldsArray = [];
             foreach ($extraFields as $field) {
                 $fieldsArray[] = Database::escape_string($field);
             }
@@ -6864,8 +6862,8 @@ class SessionManager
                     ),
                 )
             );
-            $whereFieldVariables = array();
-            $whereFieldIds = array();
+            $whereFieldVariables = [];
+            $whereFieldIds = [];
             if (
                 is_array($fieldsArray) &&
                 count($fieldsArray) > 0
@@ -7023,7 +7021,7 @@ class SessionManager
 
                 // Check if session field values had result
                 if (!empty($sessionFieldValueList)) {
-                    $sessionFieldValueListBySession = array();
+                    $sessionFieldValueListBySession = [];
                     foreach ($sessionFieldValueList as $key => $sessionFieldValue) {
                         // Create an array to index ids to session id
                         $sessionFieldValueListBySession[$sessionFieldValue['item_id']][] = $key;
@@ -7178,11 +7176,11 @@ class SessionManager
      * @param array $extraFieldsToInclude
      * @return array
      */
-    public static function getFilteredExtraFields($sessionId, $extraFieldsToInclude = array())
+    public static function getFilteredExtraFields($sessionId, $extraFieldsToInclude = [])
     {
-        $extraData = array();
-        $variables = array();
-        $variablePlaceHolders = array();
+        $extraData = [];
+        $variables = [];
+        $variablePlaceHolders = [];
 
         foreach ($extraFieldsToInclude as $sessionExtraField) {
             $variablePlaceHolders[] = "?";
@@ -7194,7 +7192,7 @@ class SessionManager
             "variable IN ( ".implode(", ", $variablePlaceHolders)." ) " => $variables,
         ));
 
-        $fields = array();
+        $fields = [];
 
         // Index session fields
         foreach ($fieldList as $field) {
@@ -7262,7 +7260,7 @@ class SessionManager
      */
     public static function getSessionsFollowedForGroupAdmin($userId)
     {
-        $sessionList = array();
+        $sessionList = [];
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
         $sessionUserTable = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $userGroup = new UserGroup();
@@ -7498,7 +7496,7 @@ class SessionManager
                 $result = Database::query($sql);
                 $coachesList = Database::store_result($result);
 
-                $coachesOptions = array();
+                $coachesOptions = [];
                 foreach ($coachesList as $coachItem) {
                     $coachesOptions[$coachItem['user_id']] =
                         api_get_person_name($coachItem['firstname'], $coachItem['lastname']).' ('.$coachItem['username'].')';
@@ -7572,7 +7570,7 @@ class SessionManager
 
         $form->addElement('checkbox', 'show_description', null, get_lang('ShowDescription'));
 
-        $visibilityGroup = array();
+        $visibilityGroup = [];
         $visibilityGroup[] = $form->createElement('select', 'session_visibility', null, array(
             SESSION_VISIBLE_READ_ONLY => get_lang('SessionReadOnly'),
             SESSION_VISIBLE => get_lang('SessionAccessible'),
@@ -7711,7 +7709,7 @@ class SessionManager
      * @return integer The number of rows, or false on wrong param
      * @assert ('a') === false
      */
-    static function get_count_admin_complete($options = array())
+    static function get_count_admin_complete($options = [])
     {
         if (!is_array($options)) {
             return false;
@@ -7816,7 +7814,7 @@ class SessionManager
      */
     public static function getGridColumns(
         $list_type = 'simple',
-        $extraFields = array()
+        $extraFields = []
     ) {
         $showCount = api_get_configuration_value('session_list_show_count_users');
         // Column config
@@ -8030,7 +8028,7 @@ class SessionManager
      * @return array Array of rows results
      * @asset ('a') === false
      */
-    public static function get_sessions_admin_complete($options = array())
+    public static function get_sessions_admin_complete($options = [])
     {
         if (!is_array($options)) {
             return false;
@@ -8064,12 +8062,12 @@ class SessionManager
 
         $today = api_get_utc_datetime();
         $inject_extra_fields = null;
-        $extra_fields = array();
-        $extra_fields_info = array();
+        $extra_fields = [];
+        $extra_fields_info = [];
 
         //for now only sessions
         $extra_field = new ExtraFieldModel('session');
-        $double_fields = array();
+        $double_fields = [];
         $extra_field_option = new ExtraFieldOption('session');
 
         if (isset($options['extra'])) {
@@ -8091,7 +8089,7 @@ class SessionManager
             }
         }
 
-        $options_by_double = array();
+        $options_by_double = [];
         foreach ($double_fields as $double) {
             $my_options = $extra_field_option->get_field_options_by_field(
                 $double['id'],
@@ -8212,18 +8210,18 @@ class SessionManager
         $acceptIcon = Display::return_icon(
             'accept.png',
             get_lang('Active'),
-            array(),
+            [],
             ICON_SIZE_SMALL
         );
 
         $errorIcon = Display::return_icon(
             'error.png',
             get_lang('Inactive'),
-            array(),
+            [],
             ICON_SIZE_SMALL
         );
 
-        $formatted_sessions = array();
+        $formatted_sessions = [];
         if (Database::num_rows($result)) {
             $sessions = Database::store_result($result, 'ASSOC');
             foreach ($sessions as $session) {
@@ -8401,7 +8399,7 @@ class SessionManager
      */
     public static function getCoursesForCourseSessionCoach($userId)
     {
-        $listResCourseSession = array();
+        $listResCourseSession = [];
         $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $tblSessionRelCourseRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
@@ -8418,7 +8416,7 @@ class SessionManager
         while ($data = Database::fetch_assoc($res)) {
             if (api_get_session_visibility($data['session_id'])) {
                 if (!isset($listResCourseSession[$data['id']])) {
-                    $listResCourseSession[$data['id']] = array();
+                    $listResCourseSession[$data['id']] = [];
                 }
                 $listResCourseSession[$data['id']][] = $data['session_id'];
             }
@@ -8436,7 +8434,7 @@ class SessionManager
      */
     public static function getCoursesForMainSessionCoach($userId)
     {
-        $listResCourseSession = array();
+        $listResCourseSession = [];
         $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
 
         // list of SESSION where user is session coach
@@ -8450,7 +8448,7 @@ class SessionManager
             foreach ($listCoursesInSession as $i => $courseId) {
                 if (api_get_session_visibility($sessionId)) {
                     if (!isset($listResCourseSession[$courseId])) {
-                        $listResCourseSession[$courseId] = array();
+                        $listResCourseSession[$courseId] = [];
                     }
                     $listResCourseSession[$courseId][] = $sessionId;
                 }
@@ -8483,7 +8481,7 @@ class SessionManager
                 WHERE session_id = ".intval($sessionId);
         $res = Database::query($sql);
 
-        $listResultsCourseId = array();
+        $listResultsCourseId = [];
         while ($data = Database::fetch_assoc($res)) {
             $listResultsCourseId[] = $data['id'];
         }
@@ -8519,18 +8517,18 @@ class SessionManager
      */
     public static function getNamedSessionCourseForCoach($userId)
     {
-        $listResults = array();
+        $listResults = [];
         $listCourseSession = self::getSessionCourseForUser($userId);
         foreach ($listCourseSession as $courseId => $listSessionId) {
             // Course info
             $courseInfo = api_get_course_info_by_id($courseId);
-            $listOneCourse = array();
+            $listOneCourse = [];
             $listOneCourse['courseId'] = $courseId;
             $listOneCourse['title'] = $courseInfo['title'];
             //$listOneCourse['courseCode'] = $courseInfo['code'];
             $listOneCourse['course'] = $courseInfo;
-            $listOneCourse['sessionCatList'] = array();
-            $listCat = array();
+            $listOneCourse['sessionCatList'] = [];
+            $listCat = [];
             foreach ($listSessionId as $i => $sessionId) {
                 // here we got all session for this course
                 // lets check there session categories
@@ -8538,10 +8536,10 @@ class SessionManager
                 $catId = $sessionInfo['session_category_id'];
                 if (!isset($listCat[$catId])) {
                     $listCatInfo = self::get_session_category($catId);
-                    $listCat[$catId] = array();
+                    $listCat[$catId] = [];
                     $listCat[$catId]['catSessionId'] = $catId;
                     $listCat[$catId]['catSessionName'] = $listCatInfo['name'];
-                    $listCat[$catId]['sessionList'] = array();
+                    $listCat[$catId]['sessionList'] = [];
                 }
                 $listSessionInfo = self::fetch($sessionId);
                 $listSessionIdName = array(
@@ -8673,10 +8671,10 @@ class SessionManager
             $courseInfo = $listCoursesInfo['course'];
             $courseCode = $listCoursesInfo['course']['code'];
 
-            $listParamsCourse = array();
+            $listParamsCourse = [];
             $listParamsCourse['icon'] = '<div style="float:left">
                 <input style="border:none;" type="button" onclick="$(\'#course-'.$courseCode.'\').toggle(\'fast\')" value="+" /></div>'.
-                Display::return_icon('blackboard.png', $courseInfo['title'], array(), ICON_SIZE_LARGE);
+                Display::return_icon('blackboard.png', $courseInfo['title'], [], ICON_SIZE_LARGE);
             $listParamsCourse['link'] = '';
             $listParamsCourse['title'] = Display::tag(
                 'a',
@@ -8692,7 +8690,7 @@ class SessionManager
                 $catSessionId = $listCoursesInfo['sessionCatList'][$j]['catSessionId'];
                 $catSessionName = $listCoursesInfo['sessionCatList'][$j]['catSessionName'];
 
-                $listParamsCatSession['icon'] = Display::return_icon('folder_blue.png', $catSessionName, array(), ICON_SIZE_LARGE);
+                $listParamsCatSession['icon'] = Display::return_icon('folder_blue.png', $catSessionName, [], ICON_SIZE_LARGE);
                 $listParamsCatSession['link'] = '';
                 $listParamsCatSession['title'] = $catSessionName;
 
@@ -8711,7 +8709,7 @@ class SessionManager
                     $sessionId = $listSessionInfo['sessionId'];
                     $sessionName = $listSessionInfo['sessionName'];
 
-                    $listParamsSession['icon'] = Display::return_icon('blackboard_blue.png', $sessionName, array(), ICON_SIZE_LARGE);
+                    $listParamsSession['icon'] = Display::return_icon('blackboard_blue.png', $sessionName, [], ICON_SIZE_LARGE);
                     $listParamsSession['link'] = '';
                     $linkToCourseSession = $courseInfo['course_public_url'].'?id_session='.$sessionId;
                     $listParamsSession['title'] =

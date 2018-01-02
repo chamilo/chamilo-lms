@@ -484,7 +484,7 @@ class DocumentManager
         if ($originalPath == '/shared_folder') {
             $students = CourseManager::get_user_list_from_course_code($_course['code'], $sessionId);
             if (!empty($students)) {
-                $conditionList = array();
+                $conditionList = [];
                 foreach ($students as $studentId => $studentInfo) {
                     $conditionList[] = '/shared_folder/sf_user_'.$studentInfo['user_id'];
                 }
@@ -525,8 +525,8 @@ class DocumentManager
                 ";
         $result = Database::query($sql);
 
-        $doc_list = array();
-        $document_data = array();
+        $doc_list = [];
+        $document_data = [];
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
         $isCoach = api_is_coach();
         if ($result !== false && Database::num_rows($result) != 0) {
@@ -570,8 +570,8 @@ class DocumentManager
 
             // Only for the student we filter the results see BT#1652
             if (!$isCoach && !$is_allowed_to_edit) {
-                $ids_to_remove = array();
-                $my_repeat_ids = $temp = array();
+                $ids_to_remove = [];
+                $my_repeat_ids = $temp = [];
 
                 // Selecting repeated ids
                 foreach ($doc_list as $row) {
@@ -615,7 +615,7 @@ class DocumentManager
                 }
 
                 // Checking parents visibility.
-                $final_document_data = array();
+                $final_document_data = [];
                 foreach ($document_data as $row) {
                     $is_visible = self::check_visibility_tree(
                         $row['id'],
@@ -660,14 +660,14 @@ class DocumentManager
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $groupIid = intval($groupIid);
-        $document_folders = array();
+        $document_folders = [];
 
         $students = CourseManager::get_user_list_from_course_code(
             $_course['code'],
             api_get_session_id()
         );
 
-        $conditionList = array();
+        $conditionList = [];
         if (!empty($students)) {
             foreach ($students as $studentId => $studentInfo) {
                 $conditionList[] = '/shared_folder/sf_user_'.$studentInfo['user_id'];
@@ -791,7 +791,7 @@ class DocumentManager
 
             $result = Database::query($sql);
 
-            $visibleFolders = array();
+            $visibleFolders = [];
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $visibleFolders[$row['id']] = $row['path'];
             }
@@ -813,7 +813,7 @@ class DocumentManager
                         last.c_id = {$_course['real_id']} AND
                         docs.c_id = {$_course['real_id']} ";
             $result = Database::query($sql);
-            $invisibleFolders = array();
+            $invisibleFolders = [];
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 //get visible folders in the invisible ones -> they are invisible too
                 $sql = "SELECT DISTINCT docs.id, path
@@ -1356,7 +1356,7 @@ class DocumentManager
             } else {
                 $row['parent_id'] = self::get_document_id($course_info, dirname($row['path']), $session_id);
             }
-            $parents = array();
+            $parents = [];
 
             //Use to generate parents (needed for the breadcrumb)
             //@todo sorry but this for is here because there's not a parent_id in the document table so we parsed the path!!
@@ -1782,7 +1782,7 @@ class DocumentManager
                     WHERE c_id = $course_id AND id = $document_id";
             $rs = Database::query($sql);
             $new_content = '';
-            $all_user_info = array();
+            $all_user_info = [];
             if (Database::num_rows($rs)) {
                 $row = Database::fetch_array($rs);
                 $filepath = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$row['path'];
@@ -1822,7 +1822,7 @@ class DocumentManager
      */
     public static function get_all_info_to_certificate($user_id, $course_id, $is_preview = false)
     {
-        $info_list = array();
+        $info_list = [];
         $user_id = intval($user_id);
         $course_info = api_get_course_info($course_id);
 
@@ -2080,7 +2080,7 @@ class DocumentManager
         $recursivity = 1
     ) {
         $max = 5;
-        $attributes = array();
+        $attributes = [];
         $wanted_attributes = array(
             'src',
             'url',
@@ -2094,7 +2094,7 @@ class DocumentManager
         $abs_path = '';
 
         if ($recursivity > $max) {
-            return array();
+            return [];
         }
 
         if (!isset($type)) {
@@ -2130,7 +2130,7 @@ class DocumentManager
             }
         }
 
-        $files_list = array();
+        $files_list = [];
         switch ($type) {
             case TOOL_DOCUMENT:
             case TOOL_QUIZ:
@@ -2418,8 +2418,8 @@ class DocumentManager
                 break;
         }
 
-        $checked_files_list = array();
-        $checked_array_list = array();
+        $checked_files_list = [];
+        $checked_array_list = [];
 
         if (count($files_list) > 0) {
             foreach ($files_list as $idx => $file) {
@@ -2444,10 +2444,10 @@ class DocumentManager
      * @return   array   An associative array of attributes
      * @author 	 Based on a function from the HTML_Common2 PEAR module     *
      */
-    public static function parse_HTML_attributes($attrString, $wanted = array(), $explode_variables = array())
+    public static function parse_HTML_attributes($attrString, $wanted = [], $explode_variables = [])
     {
-        $attributes = array();
-        $regs = array();
+        $attributes = [];
+        $regs = [];
         $reduced = false;
         if (count($wanted) > 0) {
             $reduced = true;
@@ -2815,7 +2815,7 @@ class DocumentManager
 
                     if (!empty($documentId)) {
                         $table_document = Database::get_course_table(TABLE_DOCUMENT);
-                        $params = array();
+                        $params = [];
 
                         if (!empty($title)) {
                             $params['title'] = $title;
@@ -2906,7 +2906,7 @@ class DocumentManager
                 }
                 // Avoid index unrtf comments
                 if (is_array($output) && count($output) > 1) {
-                    $parsed_output = array();
+                    $parsed_output = [];
                     foreach ($output as & $line) {
                         if (!preg_match('/^###/', $line, $matches)) {
                             if (!empty($line)) {
@@ -3038,7 +3038,7 @@ class DocumentManager
      * @param array $params count, url, extension
      * @return string
      */
-    public static function generate_jplayer_jquery($params = array())
+    public static function generate_jplayer_jquery($params = [])
     {
         $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
 
@@ -3109,7 +3109,7 @@ class DocumentManager
      * @param array $document_data
      * @return string
      */
-    public static function generate_video_preview($document_data = array())
+    public static function generate_video_preview($document_data = [])
     {
         //<button class="jp-video-play-icon" role="button" tabindex="0">play</button>
         $html = '
@@ -3317,7 +3317,7 @@ class DocumentManager
         if ($lp_id) {
             if ($folderId === false) {
                 /*$return .= '<div class="lp_resource_element">';
-                $return .= Display::return_icon('new_doc.gif', '', array(), ICON_SIZE_SMALL);
+                $return .= Display::return_icon('new_doc.gif', '', [], ICON_SIZE_SMALL);
                 $return .= Display::url(
                     get_lang('CreateTheDocument'),
                     api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&lp_id='.$_SESSION['oLP']->lp_id
@@ -3327,7 +3327,7 @@ class DocumentManager
         } else {
             $return .= Display::div(
                 Display::url(
-                    Display::return_icon('close.png', get_lang('Close'), array(), ICON_SIZE_SMALL),
+                    Display::return_icon('close.png', get_lang('Close'), [], ICON_SIZE_SMALL),
                     ' javascript:void(0);',
                     array('id' => 'close_div_'.$course_info['real_id'].'_'.$session_id, 'class' => 'close_div')
                 ),
@@ -3336,7 +3336,7 @@ class DocumentManager
         }
 
         // If you want to debug it, I advise you to do "echo" on the eval statements.
-        $newResources = array();
+        $newResources = [];
         if (!empty($resources) && $user_in_course) {
             foreach ($resources as $resource) {
                 $is_visible = self::is_visible_by_id(
@@ -3560,7 +3560,7 @@ class DocumentManager
 
         if ($add_move_button) {
             $return .= '<a class="moved" href="#">';
-            $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
+            $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
             $return .= '</a> ';
         }
         $return .= $link;
@@ -3808,7 +3808,7 @@ class DocumentManager
         $course_code,
         $session_id = 0,
         $lang = 'english',
-        $specific_fields_values = array(),
+        $specific_fields_values = [],
         $if_exists = '',
         $simulation = false
     ) {
@@ -4046,7 +4046,7 @@ class DocumentManager
      */
     public static function getJodconverterExtensionList($mode, $format)
     {
-        $extensionList = array();
+        $extensionList = [];
         $extensionListFromText = array(
             'odt',
             'sxw',
@@ -4166,7 +4166,7 @@ class DocumentManager
      */
     public static function getFormatTypeListConvertor($mode = 'from', $extension)
     {
-        $formatTypesList = array();
+        $formatTypesList = [];
         $formatTypes = array('text', 'spreadsheet', 'presentation', 'drawing');
         foreach ($formatTypes as $formatType) {
             if (
@@ -4195,7 +4195,7 @@ class DocumentManager
         $systemFolder = api_get_course_setting('show_system_folders');
 
         if ($systemFolder == 1) {
-            $foldersToAvoid = array();
+            $foldersToAvoid = [];
         }
 
         if (basename($path) == 'css') {
@@ -5008,10 +5008,10 @@ class DocumentManager
     ) {
         $doc_table = Database::get_course_table(TABLE_DOCUMENT);
         $course_id = api_get_course_int_id();
-        $folder_titles = array();
+        $folder_titles = [];
 
         if (is_array($folders)) {
-            $escaped_folders = array();
+            $escaped_folders = [];
             foreach ($folders as $key => & $val) {
                 $escaped_folders[$key] = Database::escape_string($val);
             }
@@ -5024,7 +5024,7 @@ class DocumentManager
                         c_id = $course_id AND 
                         path IN ('".$folder_sql."')";
             $res = Database::query($sql);
-            $folder_titles = array();
+            $folder_titles = [];
             while ($obj = Database::fetch_object($res)) {
                 $folder_titles[$obj->path] = $obj->title;
             }
@@ -5222,19 +5222,19 @@ class DocumentManager
                             $isAllowedToEdit || api_is_platform_admin()
                         ) {
                             $force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.
-                                Display::return_icon($forcedownload_icon, get_lang('Download'), array(), ICON_SIZE_SMALL).'</a>';
+                                Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
                         }
                     } elseif (!preg_match('/shared_folder/', urldecode($forcedownload_link)) ||
                         $isAllowedToEdit ||
                         api_is_platform_admin()
                     ) {
                         $force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.
-                            Display::return_icon($forcedownload_icon, get_lang('Download'), array(), ICON_SIZE_SMALL).'</a>';
+                            Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
                     }
                 }
             } else {
                 $force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.' download="'.$document_data['basename'].'">'.
-                    Display::return_icon($forcedownload_icon, get_lang('Download'), array(), ICON_SIZE_SMALL).'</a>';
+                    Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
             }
 
             // Copy files to user's myfiles
@@ -5244,7 +5244,7 @@ class DocumentManager
                 $copy_myfiles_link = $filetype == 'file' ? api_get_self().'?'.$courseParams.'&action=copytomyfiles&id='.$document_data['id'] : api_get_self().'?'.$courseParams;
                 if ($filetype == 'file') {
                     $copyToMyFiles = '<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.
-                        Display::return_icon('briefcase.png', get_lang('CopyToMyFiles'), array(), ICON_SIZE_SMALL).'&nbsp;&nbsp;</a>';
+                        Display::return_icon('briefcase.png', get_lang('CopyToMyFiles'), [], ICON_SIZE_SMALL).'&nbsp;&nbsp;</a>';
 
                     if (api_get_setting('allow_my_files') === 'false') {
                         $copyToMyFiles = '';
@@ -5264,12 +5264,12 @@ class DocumentManager
                 in_array($extension, array('html', 'htm'))
             ) {
                 $pdf_icon = ' <a style="float:right".'.$prevent_multiple_click.' href="'.api_get_self().'?'.$courseParams.'&action=export_to_pdf&id='.$document_data['id'].'&curdirpath='.$curdirpath.'">'.
-                    Display::return_icon('pdf.png', get_lang('Export2PDF'), array(), ICON_SIZE_SMALL).'</a> ';
+                    Display::return_icon('pdf.png', get_lang('Export2PDF'), [], ICON_SIZE_SMALL).'</a> ';
             }
 
             if ($is_browser_viewable_file) {
                 $open_in_new_window_link = '<a href="'.$www.str_replace('%2F', '/', $url_path).'?'.$courseParams.'" style="float:right"'.$prevent_multiple_click.' target="_blank">'.
-                    Display::return_icon('open_in_new_window.png', get_lang('OpenInANewWindow'), array(), ICON_SIZE_SMALL).'&nbsp;&nbsp;</a>';
+                    Display::return_icon('open_in_new_window.png', get_lang('OpenInANewWindow'), [], ICON_SIZE_SMALL).'&nbsp;&nbsp;</a>';
             }
 
             if ($filetype == 'file') {
@@ -5358,18 +5358,18 @@ class DocumentManager
                         $url = 'showinframes.php?'.$courseParams.'&id='.$document_data['id'];
                         return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.
                             self::build_document_icon_tag($filetype, $path, $isAllowedToEdit).
-                            Display::return_icon('shared.png', get_lang('ResourceShared'), array()).
+                            Display::return_icon('shared.png', get_lang('ResourceShared'), []).
                         '</a>';
                     } else {
                         return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.
                             self::build_document_icon_tag($filetype, $path, $isAllowedToEdit).
-                            Display::return_icon('shared.png', get_lang('ResourceShared'), array()).
+                            Display::return_icon('shared.png', get_lang('ResourceShared'), []).
                         '</a>';
                     }
                 } else {
                     return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.
                         self::build_document_icon_tag($filetype, $path, $isAllowedToEdit).
-                        Display::return_icon('shared.png', get_lang('ResourceShared'), array()).
+                        Display::return_icon('shared.png', get_lang('ResourceShared'), []).
                     '</a>';
                 }
             } else {
@@ -5511,10 +5511,10 @@ class DocumentManager
         }
 
         if ($user_image) {
-            return Display::img($icon, $basename, array(), false);
+            return Display::img($icon, $basename, [], false);
         }
 
-        return Display::return_icon($icon, $basename, array(), ICON_SIZE_SMALL);
+        return Display::return_icon($icon, $basename, [], ICON_SIZE_SMALL);
     }
 
     /**
@@ -5898,7 +5898,7 @@ class DocumentManager
         // Form title
         $form->addElement('hidden', 'move_file', $move_file);
 
-        $options = array();
+        $options = [];
 
         // Group documents cannot be uploaded in the root
         if ($group_dir == '') {
@@ -6272,7 +6272,7 @@ class DocumentManager
         ";
 
         $result = Database::query($sql);
-        $files = array();
+        $files = [];
         while ($document = Database::fetch_array($result, 'ASSOC')) {
             $files[] = $document;
         }
@@ -6311,7 +6311,7 @@ class DocumentManager
             return $result;
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -6527,7 +6527,7 @@ class DocumentManager
         $slideshow = 0
     ) {
         // Modifications by Ivan Tcholakov, 04-MAY-2009.
-        $result = array();
+        $result = [];
         $imageResize = Session::read('image_resizing');
         if ($imageResize == 'resizing' || $slideshow == 1) {
             $new_sizes = api_resize_image($image, $target_width, $target_height);

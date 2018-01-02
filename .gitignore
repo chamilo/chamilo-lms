@@ -1,10 +1,10 @@
 # Cache directories
 
-app/cache/*
-!app/cache/.gitkeep
+var/cache/*
+!var/cache/.gitkeep
 
-app/logs/*
-!app/logs/.gitkeep
+var/logs/*
+!var/logs/.gitkeep
 
 # Chamilo configuration
 /app/config/parameters.yml
@@ -49,3 +49,29 @@ plugin/vchamilo/templates/*
 vendor
 web/assets/*
 
+
+###> symfony/framework-bundle ###
+.env
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> friendsofphp/php-cs-fixer ###
+.php_cs
+.php_cs.cache
+###< friendsofphp/php-cs-fixer ###
+
+###> symfony/phpunit-bridge ###
+.phpunit
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> symfony/web-server-bundle ###
+.web-server-pid
+###< symfony/web-server-bundle ###
+
+###> symfony/webpack-encore-pack ###
+/node_modules/
+/public/build/
+###< symfony/webpack-encore-pack ###

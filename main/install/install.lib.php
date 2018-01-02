@@ -760,7 +760,7 @@ function display_requirements(
             <tr>
                 <td class="requirements-item">'.get_lang('PHPVersion').' >= '.REQUIRED_PHP_VERSION.'</td>
                 <td class="requirements-value">';
-    if (phpversion() < REQUIRED_PHP_VERSION) {
+    if (version_compare(phpversion(),REQUIRED_PHP_VERSION, '>=') > 1) {
         echo '<strong><font color="red">'.get_lang('PHPVersionError').'</font></strong>';
     } else {
         echo '<strong><font color="green">'.get_lang('PHPVersionOK').' '.phpversion().'</font></strong>';

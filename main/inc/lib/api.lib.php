@@ -21,7 +21,7 @@ use Chamilo\CoreBundle\Entity\SettingsCurrent;
  */
 
 // PHP version requirement.
-define('REQUIRED_PHP_VERSION', '5.5');
+define('REQUIRED_PHP_VERSION', '7.1.3');
 define('REQUIRED_MIN_MEMORY_LIMIT', '128');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE', '10');
 define('REQUIRED_MIN_POST_MAX_SIZE', '10');
@@ -767,8 +767,8 @@ function api_get_path($path = '', $configuration = [])
             SYS_CSS_PATH => 'app/Resources/public/css/',
             SYS_PLUGIN_PATH => 'plugin/',
             WEB_PLUGIN_PATH => 'plugin/',
-            SYS_ARCHIVE_PATH => 'app/cache/',
-            WEB_ARCHIVE_PATH => 'app/cache/',
+            SYS_ARCHIVE_PATH => 'var/cache/',
+            WEB_ARCHIVE_PATH => 'var/cache/',
             SYS_HOME_PATH => 'app/home/',
             WEB_HOME_PATH => 'app/home/',
             REL_HOME_PATH => 'app/home/',

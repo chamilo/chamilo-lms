@@ -155,6 +155,8 @@ if ($showCourses && $action != 'display_sessions') {
         echo "<p><strong>".get_lang('SearchResultsFor')." ".$searchTerm."</strong><br />";
     }
 
+    $showTeacher = api_get_setting('display_teacher_in_courselist') === 'true';
+
     $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
     $user_id = api_get_user_id();
     $categoryList = CourseManager::getCategoriesList();
@@ -220,7 +222,10 @@ if ($showCourses && $action != 'display_sessions') {
             // display course title and button bloc
             $html .= '<div class="description">';
             $html .= return_title($course, $userRegisteredInCourse);
-            $html .= return_teacher($course);
+
+            if ($showTeacher) {
+                $html .= return_teacher($course);
+            }
 
             // display button line
             $html .= '<div class="toolbar row">';

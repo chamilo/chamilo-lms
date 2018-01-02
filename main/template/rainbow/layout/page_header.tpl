@@ -9,12 +9,12 @@
 <header id="header-section" class="header-movil">
     <div class="container">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-3 col-xs-4">
                 <div class="logo">
                     {{ logo }}
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 col-xs-4">
                 <div class="row">
                     <div class="col-sm-4">
                         {% if plugin_header_left is not null %}
@@ -49,7 +49,7 @@
                     </div>
                 </div>
             </div>
-             <div class="col-md-3">
+             <div class="col-md-3 col-xs-4">
                  <div class="logo-ofaj pull-right">
                     <a href="#"><img class="img-responsive" src="{{ _p.web_css_theme }}images/logo-ofaj.png"/></a>
                 </div>

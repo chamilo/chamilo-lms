@@ -283,21 +283,32 @@ if (!empty($projectId)) {
     }
 
     $options = '';
+    $iconProject = Display::return_icon(
+        'project.png',
+        get_lang('Projects'),
+        null,
+        ICON_SIZE_MEDIUM
+        ) ;
     if ($isAdmin) {
         $options .= Display::url(
-            get_lang('Projects'),
+            $iconProject,
             api_get_path(WEB_CODE_PATH).'ticket/projects.php'
         );
     }
-
-    $options .= Display::url(
+    $iconTicket = Display::return_icon(
+        'tickets.png',
         $ticketLabel,
+        null,
+        ICON_SIZE_MEDIUM
+        ) ;
+    $options .= Display::url(
+        $iconTicket,
         $url
     );
 
     if ($isAllow) {
         echo Display::toolbarAction(
-            'options',
+            'toolbar-options',
             array(
                 $options
             )

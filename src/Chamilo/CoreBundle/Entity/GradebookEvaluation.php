@@ -44,11 +44,10 @@ class GradebookEvaluation
     private $userId;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="course_code", type="string", length=40, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="gradebookEvaluations")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    private $courseCode;
+    private $course;
 
     /**
      * @var integer
@@ -169,26 +168,24 @@ class GradebookEvaluation
     }
 
     /**
-     * Set courseCode
-     *
-     * @param string $courseCode
-     * @return GradebookEvaluation
+     * Set course
+     * @param \Chamilo\CoreBundle\Entity\Course|null $course
+     * @return \Chamilo\CoreBundle\Entity\GradebookEvaluation
      */
-    public function setCourseCode($courseCode)
+    public function setCourse($course)
     {
-        $this->courseCode = $courseCode;
+        $this->course = $course;
 
         return $this;
     }
 
     /**
-     * Get courseCode
-     *
-     * @return string
+     * Get course
+     * @return \Chamilo\CoreBundle\Entity\Course
      */
-    public function getCourseCode()
+    public function getCourse()
     {
-        return $this->courseCode;
+        return $this->course;
     }
 
     /**

@@ -9,9 +9,14 @@ use Doctrine\ORM\Mapping as ORM;
  * SettingsCurrent
  *
  * @ORM\Table(
- *     name="settings_current",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="unique_setting", columns={"variable", "subkey", "access_url"})},
- *     indexes={@ORM\Index(name="access_url", columns={"access_url"})})
+*      name="settings_current",
+ *     uniqueConstraints={
+ *      @ORM\UniqueConstraint(
+ *          name="unique_setting",
+ *          columns={"variable", "subkey", "access_url"})
+ *     },
+ *     indexes={@ORM\Index(name="access_url", columns={"access_url"})}
+ *     )
  * @ORM\Entity
  */
 class SettingsCurrent
@@ -108,6 +113,26 @@ class SettingsCurrent
      * @ORM\Column(name="access_url_locked", type="integer", nullable=false, options={"default": 0 } )
      */
     private $accessUrlLocked = 0;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="settings", cascade={"persist"})
+     * @ORM\JoinColumn(name="access_url", referencedColumnName="id")
+     */
+    protected $url;
+
+    private $parameters;
+    /**
+     * @var string
+     **/
+    private $schemaAlias;
+
+    /**
+     * Constructor
+     */
+    public function __constructor()
+    {
+        $this->accessUrlLocked = 0;
+    }
 
     /**
      * Set variable
@@ -406,4 +431,25 @@ class SettingsCurrent
     {
         return $this->id;
     }
+
+    /**
+     * @return AccessUrl
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param AccessUrl $url
+     * @return SettingsCurrent
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+
 }

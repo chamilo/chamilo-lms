@@ -5,7 +5,8 @@ namespace Chamilo\ContactBundle\Controller;
 
 use Chamilo\ContactBundle\Entity\Category;
 use Chamilo\ContactBundle\Form\Type\ContactType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+//use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,8 +39,7 @@ class ContactController extends Controller
             $data = [
                 'firstname' => $user->getFirstname(),
                 'lastname' =>  $user->getFirstname(),
-                'email' =>  $user->getEmail(),
-
+                'email' =>  $user->getEmail()
             ];
         }
 
@@ -75,8 +75,8 @@ class ContactController extends Controller
 
                 $this->get('mailer')->send($message);
                 $this->addFlash(
-                    'success', 
-                    'Your email has been sent! Thanks!'
+                    'success',
+                    $this->get('translator')->trans('Your email has been sent! Thanks!')
                 );
 
                 return $this->redirect($this->generateUrl('contact'));

@@ -3,6 +3,7 @@
 
 namespace Chamilo\UserBundle\Entity\Manager;
 
+use Chamilo\UserBundle\Entity\User;
 use Sonata\UserBundle\Entity\UserManager as BaseUserManager;
 
 /**
@@ -17,10 +18,20 @@ class UserManager extends BaseUserManager
      *
      * @param string $token
      *
-     * @return UserInterface
+     * @return User
      */
     public function findUserByConfirmationToken($token)
     {
         return $this->findUserBy(array('confirmationToken' => $token));
+    }
+
+    /**
+     * @param string $code
+     * @return User
+     */
+    public function findUserByOfficialCode($code)
+    {
+        $criteria = ['officialCode' => $code ];
+        return $this->findUserBy($criteria);
     }
 }

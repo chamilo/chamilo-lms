@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     @ORM\Index(name="idx_message_user_receiver", columns={"user_receiver_id"}),
  *     @ORM\Index(name="idx_message_user_sender_user_receiver", columns={"user_sender_id", "user_receiver_id"}),
  *     @ORM\Index(name="idx_message_user_receiver_status", columns={"user_receiver_id", "msg_status"}),
+ *     @ORM\Index(name="idx_message_receiver_status_send_date", columns={"user_receiver_id", "msg_status", "send_date"}),
  *     @ORM\Index(name="idx_message_group", columns={"group_id"}),
  *     @ORM\Index(name="idx_message_parent", columns={"parent_id"})
  * })

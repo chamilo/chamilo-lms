@@ -12,7 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  *  name="c_quiz_answer",
  *  indexes={
  *      @ORM\Index(name="c_id", columns={"c_id"}),
- *      @ORM\Index(name="idx_cqa_q", columns={"question_id"})
+ *      @ORM\Index(name="idx_cqa_q", columns={"question_id"}),
+ *      @ORM\Index(name="c_id_auto", columns={"c_id", "id_auto"})
  *  }
  * )
  * @ORM\Entity

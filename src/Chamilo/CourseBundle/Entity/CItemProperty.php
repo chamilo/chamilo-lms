@@ -75,7 +75,7 @@ class CItemProperty
     /**
      * @var integer
      *
-     * @ORM\Column(name="lastedit_user_id", type="integer", nullable=false)
+     * @ORM\Column(name="lastedit_user_id", type="integer", nullable=true)
      */
     private $lasteditUserId;
 

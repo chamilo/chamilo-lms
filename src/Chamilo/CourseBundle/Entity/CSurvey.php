@@ -239,6 +239,12 @@ class CSurvey
     private $visibleResults;
 
     /**
+     * @var bool
+     * @ORM\Column(name="is_mandatory", type="boolean", options={"default":false})
+     */
+    private $isMandatory = false;
+
+    /**
      * Set code
      *
      * @param string $code
@@ -926,5 +932,24 @@ class CSurvey
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * @param bool $isMandatory
+     * @return CSurvey
+     */
+    public function setIsMandatory($isMandatory)
+    {
+        $this->isMandatory = $isMandatory;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMandatory()
+    {
+        return $this->isMandatory;
     }
 }

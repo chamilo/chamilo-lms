@@ -34,7 +34,6 @@ class CSurveyInvitation
      */
     private $cId;
 
-
     /**
      * @var integer
      *
@@ -97,6 +96,13 @@ class CSurveyInvitation
      * @ORM\Column(name="group_id", type="integer", nullable=false)
      */
     private $groupId;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="answered_at", type="datetime", nullable=true)
+     */
+    private $answeredAt;
 
     /**
      * Set surveyCode
@@ -326,5 +332,24 @@ class CSurveyInvitation
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getAnsweredAt(): \DateTime
+    {
+        return $this->answeredAt;
+    }
+
+    /**
+     * @param \DateTime $answeredAt
+     * @return CSurveyInvitation
+     */
+    public function setAnsweredAt(\DateTime $answeredAt): CSurveyInvitation
+    {
+        $this->answeredAt = $answeredAt;
+
+        return $this;
     }
 }

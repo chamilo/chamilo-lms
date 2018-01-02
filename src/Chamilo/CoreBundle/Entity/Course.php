@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -244,6 +245,11 @@ class Course
     protected $sessionUserSubscriptions;
 
     /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupInfo", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
+     **/
+    protected $groups;
+
+    /**
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CItemProperty", mappedBy="course")
      **/
     //protected $items;
@@ -277,9 +283,59 @@ class Course
     protected $currentSession;
 
     /**
+     * @var AccessUrl
+     **/
+    protected $currentUrl;
+
+    /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="course", cascade={"persist"})
      */
     protected $issuedSkills;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookCategory", mappedBy="course")
+     */
+    protected $gradebookCategories;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation", mappedBy="course")
+     */
+    protected $gradebookEvaluations;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\GradebookLink", mappedBy="course")
+     */
+    protected $gradebookLinks;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\TrackEHotspot", mappedBy="course")
+     */
+    protected $trackEHotspots;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\TrackEAttempt", mappedBy="course")
+     */
+    protected $trackEAttempts;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SearchEngineRef", mappedBy="course")
+     */
+    protected $searchEngineRefs;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Templates", mappedBy="course")
+     */
+    protected $templates;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SpecificFieldValues", mappedBy="course")
+     */
+    protected $specificFieldValues;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SharedSurvey", mappedBy="course")
+     */
+    protected $sharedSurveys;
 
     /**
      * Constructor
@@ -287,7 +343,20 @@ class Course
     public function __construct()
     {
         $this->creationDate = new \DateTime();
+        $this->lastVisit = new \DateTime();
+        $this->lastEdit = new \DateTime();
+
         $this->users = new ArrayCollection();
+        $this->urls = new ArrayCollection();
+        $this->gradebookCategories = new ArrayCollection();
+        $this->gradebookEvaluations = new ArrayCollection();
+        $this->gradebookLinks = new ArrayCollection();
+        $this->trackEHotspots = new ArrayCollection();
+        $this->trackEAttempts = new ArrayCollection();
+        $this->searchEngineRefs = new ArrayCollection();
+        $this->templates = new ArrayCollection();
+        $this->specificFieldValues = new ArrayCollection();
+        $this->sharedSurveys = new ArrayCollection();
     }
 
     /**
@@ -389,6 +458,14 @@ class Course
     /**
      * @return ArrayCollection
      */
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
     public function getTeachers()
     {
         $criteria = Criteria::create();
@@ -483,6 +560,7 @@ class Course
 
     /**
      * @param User $user
+     *
      * @return bool
      */
     public function hasTeacher(User $user)
@@ -493,6 +571,21 @@ class Course
 
         return $this->getTeachers()->matching($criteria)->count() > 0;
     }
+
+    /**
+     * @param CGroupInfo $group
+     *
+     * @return bool
+     */
+    public function hasGroup(CGroupInfo $group)
+    {
+        $criteria = Criteria::create()->where(
+            Criteria::expr()->eq("groups", $group)
+        );
+
+        return $this->getGroups()->contains($group);
+    }
+
 
     /**
      * Remove $user
@@ -1179,11 +1272,58 @@ class Course
     public function setCurrentSession(Session $session)
     {
         // If the session is registered in the course session list.
-        if ($this->getSessions()->contains($session->getId())) {
+        /*if ($this->getSessions()->contains($session->getId())) {
             $this->currentSession = $session;
+        }*/
+
+        $list = $this->getSessions();
+            /** @var SessionRelCourse $item */
+            foreach ($list as $item) {
+                if ($item->getSession()->getId() == $session->getId()) {
+                    $this->currentSession = $session;
+                    break;
+            }
         }
+
         return $this;
     }
+
+    /**
+     * @param AccessUrl $url
+     *
+     * @return $this
+     */
+    public function setCurrentUrl(AccessUrl $url)
+    {
+        $urlList = $this->getUrls();
+        /** @var AccessUrlRelCourse $item */
+        foreach ($urlList as $item) {
+            if ($item->getUrl()->getId() == $url->getId()) {
+                $this->currentUrl = $url;
+                break;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return AccessUrl
+     */
+    public function getCurrentUrl()
+    {
+        return $this->currentUrl;
+    }
+
+    /**
+     * Get issuedSkills
+     * @return ArrayCollection
+     */
+    public function getIssuedSkills()
+    {
+        return $this->issuedSkills;
+    }
+
 
     /**
      * Check if the course has a picture

@@ -15,7 +15,7 @@ use Sylius\Component\Attribute\Model\Attribute as BaseAttribute;
  *
  * @ORM\MappedSuperclass
  */
-class ExtraField extends BaseAttribute
+ class ExtraField// extends BaseAttribute
 {
     const USER_FIELD_TYPE = 1;
     const COURSE_FIELD_TYPE = 2;
@@ -127,7 +127,7 @@ class ExtraField extends BaseAttribute
      */
     public function __construct()
     {
-        parent::__construct();
+        //parent::__construct();
         $this->visibleToOthers = false;
         $this->visibleToSelf = false;
     }

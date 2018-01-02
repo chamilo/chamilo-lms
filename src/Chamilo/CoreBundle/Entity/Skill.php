@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\SkillBundle\Entity\Profile;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Skill
@@ -79,7 +80,7 @@ class Skill
 
     /**
      * @var \DateTime
-     *
+     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime", nullable=false)
      */
     private $updatedAt;
@@ -94,6 +95,14 @@ class Skill
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="skill", cascade={"persist"})
      */
     protected $issuedSkills;
+
+    /**
+     * Constructor
+     */
+    public function __constructor()
+    {
+        $this->status = self::STATUS_ENABLED;
+    }
 
     /**
      * @return string

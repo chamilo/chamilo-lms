@@ -24,6 +24,7 @@ use Chamilo\CoreBundle\Entity\SessionCategory;
  *          @ORM\Index(name="idx_id_session_admin_id", columns={"session_admin_id"})
  *      }
  * )
+ * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\SessionListener"})
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\SessionRepository")
  */
 class Session
@@ -159,12 +160,11 @@ class Session
     private $coachAccessEndDate;
 
     /**
-     * Only available when "session_list_order" setting is on
      * @var integer
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
-    //private $position;
+    private $position;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CItemProperty", mappedBy="session")
@@ -219,11 +219,27 @@ class Session
     private $studentPublications;
 
     /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="session", cascade={"persist"})
+     */
+    protected $issuedSkills;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelSession", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
+     **/
+    protected $urls;
+
+    /**
+     * @var AccessUrl
+     **/
+    protected $currentUrl;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->items = new ArrayCollection();
+        $this->urls = new ArrayCollection();
 
         $this->nbrClasses = 0;
         $this->nbrUsers = 0;
@@ -271,10 +287,13 @@ class Session
 
     /**
      * @param string $showDescription
+     * @return $this
      */
     public function setShowDescription($showDescription)
     {
         $this->showDescription = $showDescription;
+
+        return $this;
     }
 
     /**
@@ -313,6 +332,7 @@ class Session
 
     /**
      * @param $users
+     * @return $this
      */
     public function setUsers($users)
     {
@@ -321,6 +341,8 @@ class Session
         foreach ($users as $user) {
             $this->addUser($user);
         }
+
+        return $this;
     }
 
     /**
@@ -508,14 +530,14 @@ class Session
     public function getUserInCourse(User $user, Course $course, $status = null)
     {
         $criteria = Criteria::create()->where(
-            Criteria::expr()->eq("course", $course)
+            Criteria::expr()->eq('course', $course)
         )->andWhere(
-            Criteria::expr()->eq("user", $user)
+            Criteria::expr()->eq('user', $user)
         );
 
         if (!is_null($status)) {
             $criteria->andWhere(
-                Criteria::expr()->eq("status", $status)
+                Criteria::expr()->eq('status', $status)
             );
         }
 
@@ -549,7 +571,7 @@ class Session
      * Set description
      *
      * @param string $description
-     * @return Groups
+     * @return Session
      */
     public function setDescription($description)
     {
@@ -846,6 +868,7 @@ class Session
 
     /**
      * Get id
+     *
      * @return User
      */
     public function getGeneralCoach()
@@ -855,10 +878,13 @@ class Session
 
     /**
      * @param $coach
+     * @return $this
      */
     public function setGeneralCoach($coach)
     {
         $this->generalCoach = $coach;
+
+        return $this;
     }
 
     /**
@@ -904,6 +930,58 @@ class Session
 
         if ($now > $this->getAccessStartDate()) {
             return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActiveForStudent()
+    {
+        $start = $this->getAccessStartDate();
+        $end = $this->getAccessEndDate();
+
+        return $this->compareDates($start, $end);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActiveForCoach()
+    {
+        $start = $this->getCoachAccessStartDate();
+        $end = $this->getCoachAccessEndDate();
+
+        return $this->compareDates($start, $end);
+    }
+
+    /**
+     * @param $start
+     * @param $end
+     * @return bool
+     */
+    private function compareDates($start, $end)
+    {
+        $now = new \Datetime('now');
+
+        if (!empty($start) && !empty($end)) {
+            if ($now >= $start && $now <= $end) {
+                return true;
+            }
+        }
+
+        if (!empty($start)) {
+            if ($now >= $start) {
+                return true;
+            }
+        }
+
+        if (!empty($end)) {
+            if ($now <= $end) {
+                return true;
+            }
         }
 
         return false;
@@ -1016,6 +1094,7 @@ class Session
     }
 
     /**
+     * currentCourse is set in CourseListener
      * @return Course
      */
     public function getCurrentCourse()
@@ -1024,15 +1103,24 @@ class Session
     }
 
     /**
+     * currentCourse is set in CourseListener
      * @param Course $course
      * @return $this
      */
     public function setCurrentCourse(Course $course)
     {
         // If the session is registered in the course session list.
-        if ($this->getCourses()->contains($course->getId())) {
+        $exists = $this->getCourses()->exists(
+            function ($key, $element) use ($course) {
+                /** @var SessionRelCourse $element */
+                return $course->getId() == $element->getCourse()->getId();
+            }
+        );
+
+        if ($exists) {
             $this->currentCourse = $course;
         }
+
         return $this;
     }
 
@@ -1129,6 +1217,71 @@ class Session
     public function getStudentPublications()
     {
         return $this->studentPublications;
+    }
+
+    /**
+     * Get issuedSkills
+     * @return ArrayCollection
+     */
+    public function getIssuedSkills()
+    {
+        return $this->issuedSkills;
+    }
+
+    /**
+     * @param AccessUrl $url
+     *
+     * @return $this
+     */
+    public function setCurrentUrl(AccessUrl $url)
+    {
+        $urlList = $this->getUrls();
+        /** @var AccessUrlRelCourse $item */
+        foreach ($urlList as $item) {
+            if ($item->getUrl()->getId() == $url->getId()) {
+                $this->currentUrl = $url;
+                break;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return AccessUrl
+     */
+    public function getCurrentUrl()
+    {
+        return $this->currentUrl;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getUrls()
+    {
+        return $this->urls;
+    }
+
+    /**
+     * @param $urls
+     */
+    public function setUrls($urls)
+    {
+        $this->urls = new ArrayCollection();
+
+        foreach ($urls as $url) {
+            $this->addUrls($url);
+        }
+    }
+
+    /**
+     * @param AccessUrlRelSession $url
+     */
+    public function addUrls(AccessUrlRelSession $url)
+    {
+        $url->setSession($this);
+        $this->urls[] = $url;
     }
 
     /**

@@ -16,64 +16,71 @@ class AccessUrlRelSession
     /**
      * @var integer
      *
-     * @ORM\Column(name="access_url_id", type="integer")
+     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue()
      */
-    private $accessUrlId;
+    private $id;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="session_id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\ManyToOne(targetEntity="Session", inversedBy="urls", cascade={"persist"})
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      */
-    private $sessionId;
+    protected $session;
 
     /**
-     * Set accessUrlId
+     * @ORM\ManyToOne(targetEntity="AccessUrl", inversedBy="session", cascade={"persist"})
+     * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
+     */
+    protected $url;
+
+    /**
+     * Get id
      *
-     * @param integer $accessUrlId
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set url
+     *
+     * @param $url
      * @return AccessUrlRelSession
      */
-    public function setAccessUrlId($accessUrlId)
+    public function setUrl($url)
     {
-        $this->accessUrlId = $accessUrlId;
+        $this->url = $url;
 
         return $this;
     }
 
     /**
-     * Get accessUrlId
-     *
-     * @return integer
+     * @return AccessUrl
      */
-    public function getAccessUrlId()
+    public function getUrl()
     {
-        return $this->accessUrlId;
+        return $this->url;
     }
 
     /**
-     * Set sessionId
-     *
-     * @param integer $sessionId
-     * @return AccessUrlRelSession
+     * @param Session $session
+     * @return $this
      */
-    public function setSessionId($sessionId)
+    public function setSession(Session $session)
     {
-        $this->sessionId = $sessionId;
+        $this->session = $session;
 
         return $this;
     }
 
     /**
-     * Get sessionId
-     *
-     * @return integer
+     * @return Session
      */
-    public function getSessionId()
+    public function getSession()
     {
-        return $this->sessionId;
+        return $this->session;
     }
 }

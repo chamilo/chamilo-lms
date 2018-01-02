@@ -44,11 +44,10 @@ class GradebookCategory
     private $userId;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="course_code", type="string", length=40, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="gradebookCategories")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    private $courseCode;
+    private $course;
 
     /**
      * @var integer
@@ -133,6 +132,33 @@ class GradebookCategory
     private $isRequirement;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="gradebooks_to_validate_in_dependence", type="integer", nullable=true)
+     */
+    private $gradeBooksToValidateInDependence;
+
+    /**
+     * GradebookCategory constructor.
+     */
+    public function __construct()
+    {
+        $this->locked = 0;
+        $this->generateCertificates = false;
+        $this->isRequirement = false;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * Set name
      *
      * @param string $name
@@ -202,26 +228,24 @@ class GradebookCategory
     }
 
     /**
-     * Set courseCode
-     *
-     * @param string $courseCode
-     * @return GradebookCategory
+     * Set course
+     * @param \Chamilo\CoreBundle\Entity\Course $course
+     * @return \Chamilo\CoreBundle\Entity\GradebookCategory
      */
-    public function setCourseCode($courseCode)
+    public function setCourse(Course $course)
     {
-        $this->courseCode = $courseCode;
+        $this->course = $course;
 
         return $this;
     }
 
     /**
-     * Get courseCode
-     *
-     * @return string
+     * Get course
+     * @return \Chamilo\CoreBundle\Entity\Course
      */
-    public function getCourseCode()
+    public function getCourse()
     {
-        return $this->courseCode;
+        return $this->course;
     }
 
     /**
@@ -476,12 +500,20 @@ class GradebookCategory
     }
 
     /**
-     * Get id
-     *
-     * @return integer
+     * @return int
      */
-    public function getId()
+    public function getGradeBooksToValidateInDependence(): int
     {
-        return $this->id;
+        return $this->gradeBooksToValidateInDependence;
+    }
+
+    /**
+     * @param int $value
+     * @return GradebookCategory
+     */
+    public function setGradeBooksToValidateInDependence(int $value): GradebookCategory {
+        $this->gradeBooksToValidateInDependence = $value;
+
+        return $this;
     }
 }

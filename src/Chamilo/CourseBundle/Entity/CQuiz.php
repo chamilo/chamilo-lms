@@ -210,11 +210,27 @@ class CQuiz
     private $hideQuestionTitle;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="show_previous_button", type="boolean", nullable=true, options={"default":1})
+     */
+    private $showPreviousButton;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="notifications", type="string", length=255, nullable=true)
+     */
+    private $notifications;
+
+    /**
      * CQuiz constructor.
      */
     public function __construct()
     {
         $this->hideQuestionTitle = false;
+        $this->showPreviousButton = true;
+        $this->notifications = '';
     }
 
     /**
@@ -799,6 +815,44 @@ class CQuiz
     public function setHideQuestionTitle($hideQuestionTitle)
     {
         $this->hideQuestionTitle = $hideQuestionTitle;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShowPreviousButton(): bool
+    {
+        return $this->showPreviousButton;
+    }
+
+    /**
+     * @param bool $showPreviousButton
+     * @return CQuiz
+     */
+    public function setShowPreviousButton(bool $showPreviousButton): CQuiz
+    {
+        $this->showPreviousButton = $showPreviousButton;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotifications(): string
+    {
+        return $this->notifications;
+    }
+
+    /**
+     * @param string $notifications
+     * @return CQuiz
+     */
+    public function setNotifications(string $notifications): CQuiz
+    {
+        $this->notifications = $notifications;
 
         return $this;
     }

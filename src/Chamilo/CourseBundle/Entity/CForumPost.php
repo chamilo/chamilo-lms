@@ -15,7 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="poster_id", columns={"poster_id"}),
  *      @ORM\Index(name="forum_id", columns={"forum_id"}),
  *      @ORM\Index(name="idx_forum_post_thread_id", columns={"thread_id"}),
- *      @ORM\Index(name="idx_forum_post_visible", columns={"visible"})
+ *      @ORM\Index(name="idx_forum_post_visible", columns={"visible"}),
+ *      @ORM\Index(name="c_id_visible_post_date", columns={"c_id", "visible", "post_date"})
  *  }
  * )
  * @ORM\Entity

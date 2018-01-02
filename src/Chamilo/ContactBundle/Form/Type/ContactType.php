@@ -50,11 +50,11 @@ class ContactType extends AbstractType
                 new NotBlank(array('message' => 'Category should not be blank.'))
             ),
             'firstname' => array(
-                new NotBlank(array('message' => 'firstname should not be blank.')),
+                new NotBlank(array('message' => 'Firstname should not be blank.')),
                 new Length(array('min' => 2))
             ),
             'lastname' => array(
-                new NotBlank(array('message' => 'lastname should not be blank.')),
+                new NotBlank(array('message' => 'Lastname should not be blank.')),
                 new Length(array('min' => 2))
             ),
             'email' => array(

@@ -19,7 +19,7 @@ use Sylius\Component\Attribute\Model\AttributeValue as BaseAttributeValue;
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\ExtraFieldValuesRepository")
  * @ORM\MappedSuperclass
  */
-class ExtraFieldValues extends BaseAttributeValue
+class ExtraFieldValues// extends BaseAttributeValue
 {
     /**
      * @var integer

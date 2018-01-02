@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,7 +28,7 @@ class CourseCategory
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue()
      */
     private $id;
 
@@ -46,11 +47,15 @@ class CourseCategory
     private $code;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="parent_id", type="string", length=40, nullable=true)
+     * @ORM\OneToMany(targetEntity="CourseCategory", mappedBy="parent")
      */
-    private $parentId;
+    protected $children;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="CourseCategory", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     */
+    private $parent;
 
     /**
      * @var integer
@@ -79,6 +84,58 @@ class CourseCategory
      * @ORM\Column(name="auth_cat_child", type="string", length=40, nullable=true)
      */
     private $authCatChild;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->childrenCount = 0;
+        $this->children = new ArrayCollection();
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return CourseCategory
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param CourseCategory $child
+     */
+    public function addChild(CourseCategory $child)
+    {
+        $this->children[] = $child;
+        $child->setParent($this);
+    }
+
+    /**
+     * @param CourseCategory $parent
+     */
+    public function setParent(CourseCategory $parent)
+    {
+        $this->parent = $parent;
+    }
 
     /**
      * Set name
@@ -239,16 +296,6 @@ class CourseCategory
     public function getAuthCatChild()
     {
         return $this->authCatChild;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

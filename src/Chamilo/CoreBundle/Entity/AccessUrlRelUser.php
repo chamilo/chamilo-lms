@@ -8,14 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * AccessUrlRelUser
  *
- * @ORM\Table(
- *     name="access_url_rel_user",
- *     indexes={
- *      @ORM\Index(name="idx_access_url_rel_user_user", columns={"user_id"}),
- *      @ORM\Index(name="idx_access_url_rel_user_access_url", columns={"access_url_id"}),
- *      @ORM\Index(name="idx_access_url_rel_user_access_url_user", columns={"user_id", "access_url_id"})
- *     }
- * )
+ * @ORM\Table(name="access_url_rel_user", indexes={@ORM\Index(name="idx_access_url_rel_user_user", columns={"user_id"}), @ORM\Index(name="idx_access_url_rel_user_access_url", columns={"access_url_id"}), @ORM\Index(name="idx_access_url_rel_user_access_url_user", columns={"user_id", "access_url_id"})})
  * @ORM\Entity
  */
 class AccessUrlRelUser
@@ -23,18 +16,10 @@ class AccessUrlRelUser
     /**
      * @var integer
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\Column(name="access_url_id", type="integer")
+     * @ORM\GeneratedValue
+     * @ORM\Column(name="id", type="integer")
      */
-    private $accessUrlId;
-
-    /**
-     * @var integer
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\Column(name="user_id", type="integer")
-     */
-    private $userId;
+    private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
@@ -49,48 +34,42 @@ class AccessUrlRelUser
     protected $portal;
 
     /**
-     * Set accessUrlId
-     *
-     * @param integer $accessUrlId
-     * @return AccessUrlRelUser
+     * @return string
      */
-    public function setAccessUrlId($accessUrlId)
+    public function __toString()
     {
-        $this->accessUrlId = $accessUrlId;
-
-        return $this;
+        return (string) $this->id;
     }
 
     /**
-     * Get accessUrlId
-     *
-     * @return integer
+     * @return mixed
      */
-    public function getAccessUrlId()
+    public function getUser()
     {
-        return $this->accessUrlId;
+        return $this->user;
     }
 
     /**
-     * Set userId
-     *
-     * @param integer $userId
-     * @return AccessUrlRelUser
+     * @param mixed $user
      */
-    public function setUserId($userId)
+    public function setUser($user)
     {
-        $this->userId = $userId;
-
-        return $this;
+        $this->user = $user;
     }
 
     /**
-     * Get userId
-     *
-     * @return integer
+     * @return mixed
      */
-    public function getUserId()
+    public function getPortal()
     {
-        return $this->userId;
+        return $this->portal;
+    }
+
+    /**
+     * @param mixed $portal
+     */
+    public function setPortal($portal)
+    {
+        $this->portal = $portal;
     }
 }

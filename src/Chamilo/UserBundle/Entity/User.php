@@ -19,6 +19,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\GroupInterface;
 use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
 
 //use Chamilo\CoreBundle\Component\Auth;
 //use FOS\MessageBundle\Model\ParticipantInterface;
@@ -45,7 +46,7 @@ use Chamilo\CoreBundle\Entity\Skill;
  * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Entity\Repository\UserRepository")
  *
  */
-class User implements UserInterface //implements ParticipantInterface, ThemeUser
+class User extends BaseUser implements ThemeUser //implements ParticipantInterface, ThemeUser
 {
     const COURSE_MANAGER = 1;
     const TEACHER = 1;
@@ -1402,7 +1403,7 @@ class User implements UserInterface //implements ParticipantInterface, ThemeUser
      *
      * @return User
      */
-    public function setLastLogin(\DateTime $lastLogin)
+    public function setLastLogin(\DateTime $lastLogin = null)
     {
         $this->lastLogin = $lastLogin;
 

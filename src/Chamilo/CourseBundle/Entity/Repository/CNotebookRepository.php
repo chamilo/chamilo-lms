@@ -14,7 +14,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class CNotebookRepository extends EntityRepository
 {
-
     /**
      * Get the user notebooks in a course
      * @param User $user

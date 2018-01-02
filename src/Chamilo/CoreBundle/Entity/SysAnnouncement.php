@@ -14,6 +14,15 @@ use Doctrine\ORM\Mapping as ORM;
 class SysAnnouncement
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue()
+     */
+    private $id;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_start", type="datetime", nullable=false)
@@ -48,6 +57,27 @@ class SysAnnouncement
      */
     private $visibleGuest;
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="visible_drh", type="boolean", nullable=false)
+     */
+    private $visibleDrh;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="visible_session_admin", type="boolean", nullable=false)
+     */
+    private $visibleSessionAdmin;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="visible_boss", type="boolean", nullable=false)
+     */
+    private $visibleBoss;
+
     /**
      * @var string
      *
@@ -77,15 +107,17 @@ class SysAnnouncement
     private $accessUrlId;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * SysAnnouncement constructor.
      */
-    private $id;
-
-
+    public function __construct()
+    {
+        $this->visibleBoss = 0;
+        $this->visibleDrh = 0;
+        $this->visibleGuest= 0;
+        $this->visibleSessionAdmin = 0;
+        $this->visibleStudent = 0;
+        $this->visibleTeacher = 0;
+    }
 
     /**
      * Set dateStart
@@ -303,4 +335,62 @@ class SysAnnouncement
     {
         return $this->id;
     }
+
+    /**
+     * @return bool
+     */
+    public function isVisibleDrh(): bool
+    {
+        return $this->visibleDrh;
+    }
+
+    /**
+     * @param bool $visibleDrh
+     * @return SysAnnouncement
+     */
+    public function setVisibleDrh(bool $visibleDrh): SysAnnouncement
+    {
+        $this->visibleDrh = $visibleDrh;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVisibleSessionAdmin(): bool
+    {
+        return $this->visibleSessionAdmin;
+    }
+
+    /**
+     * @param bool $visibleSessionAdmin
+     * @return SysAnnouncement
+     */
+    public function setVisibleSessionAdmin(bool $visibleSessionAdmin
+    ): SysAnnouncement {
+        $this->visibleSessionAdmin = $visibleSessionAdmin;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVisibleBoss(): bool
+    {
+        return $this->visibleBoss;
+    }
+
+    /**
+     * @param bool $visibleBoss
+     * @return SysAnnouncement
+     */
+    public function setVisibleBoss(bool $visibleBoss): SysAnnouncement
+    {
+        $this->visibleBoss = $visibleBoss;
+
+        return $this;
+    }
+
 }

@@ -95,7 +95,7 @@ class ExtraFieldOptions
     }
 
     /**
-     * @return mixed
+     * @return ExtraField
      */
     public function getField()
     {
@@ -103,7 +103,7 @@ class ExtraFieldOptions
     }
 
     /**
-     * @param mixed $field
+     * @param ExtraField $field
      *
      * @return $this
      */
@@ -170,7 +170,7 @@ class ExtraFieldOptions
     /**
      * @param string $priority
      *
-     * @return $this
+     * @return ExtraFieldOptions
      */
     public function setPriority($priority)
     {
@@ -190,7 +190,7 @@ class ExtraFieldOptions
     /**
      * @param string $priorityMessage
      *
-     * @return $this
+     * @return ExtraFieldOptions
      */
     public function setPriorityMessage($priorityMessage)
     {

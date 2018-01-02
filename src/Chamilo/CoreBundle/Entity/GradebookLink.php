@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * GradebookLink
  *
  * @ORM\Table(name="gradebook_link")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\GradebookLinkRepository")
  */
 class GradebookLink
 {
@@ -44,11 +44,10 @@ class GradebookLink
     private $userId;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="course_code", type="string", length=40, nullable=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="gradebookLinks")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    private $courseCode;
+    private $course;
 
     /**
      * @var integer
@@ -156,26 +155,24 @@ class GradebookLink
     }
 
     /**
-     * Set courseCode
-     *
-     * @param string $courseCode
-     * @return GradebookLink
+     * Set course
+     * @param \Chamilo\CoreBundle\Entity\Course $course
+     * @return \Chamilo\CoreBundle\Entity\GradebookLink
      */
-    public function setCourseCode($courseCode)
+    public function setCourse(Course $course)
     {
-        $this->courseCode = $courseCode;
+        $this->course = $course;
 
         return $this;
     }
 
     /**
-     * Get courseCode
-     *
-     * @return string
+     * Get course
+     * @return \Chamilo\CoreBundle\Entity\Course
      */
-    public function getCourseCode()
+    public function getCourse()
     {
-        return $this->courseCode;
+        return $this->course;
     }
 
     /**

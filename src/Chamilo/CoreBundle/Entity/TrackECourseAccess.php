@@ -14,7 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="course", columns={"c_id"}),
  *      @ORM\Index(name="user_id", columns={"user_id"}),
  *      @ORM\Index(name="login_course_date", columns={"login_course_date"}),
- *      @ORM\Index(name="session_id", columns={"session_id"})
+ *      @ORM\Index(name="session_id", columns={"session_id"}),
+ *      @ORM\Index(name="user_course_session_date", columns={"user_id", "c_id", "session_id", "login_course_date"})
  *  }
  * )
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\TrackECourseAccessRepository")

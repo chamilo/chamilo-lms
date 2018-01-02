@@ -18,7 +18,7 @@ class AccessUrlRelCourse
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue()
      */
     private $id;
 
@@ -66,24 +66,23 @@ class AccessUrlRelCourse
     }
 
     /**
-     * @return mixed
+     * @return AccessUrl
      */
     public function getUrl()
     {
         return $this->url;
     }
 
-
     /**
-     * @param $course
+     * @param Course $course
      */
-    public function setCourse($course)
+    public function setCourse(Course $course)
     {
         $this->course = $course;
     }
 
     /**
-     * @return mixed
+     * @return Course
      */
     public function getCourse()
     {

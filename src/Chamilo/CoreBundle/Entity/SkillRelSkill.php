@@ -51,6 +51,16 @@ class SkillRelSkill
     private $level;
 
     /**
+     * Set id
+     *
+     * @return integer
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
      * Set skillId
      *
      * @param integer $skillId

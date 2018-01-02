@@ -119,6 +119,12 @@ class CSurveyQuestion
     private $surveyGroupSec2;
 
     /**
+     * @var bool
+     * @ORM\Column(name="is_required", type="boolean", options={"default": false})
+     */
+    private $isMandatory = false;
+
+    /**
      * Set surveyId
      *
      * @param integer $surveyId
@@ -415,5 +421,26 @@ class CSurveyQuestion
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * Set isMandatory
+     * @return bool
+     */
+    public function isMandatory(): bool
+    {
+        return $this->isMandatory;
+    }
+
+    /**
+     * Get isMandatory
+     * @param bool $isMandatory
+     * @return CSurveyQuestion
+     */
+    public function setIsMandatory(bool $isMandatory): CSurveyQuestion
+    {
+        $this->isMandatory = $isMandatory;
+
+        return $this;
     }
 }

@@ -8,7 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * GradebookCertificate
  *
- * @ORM\Table(name="gradebook_certificate", indexes={@ORM\Index(name="idx_gradebook_certificate_category_id", columns={"cat_id"}), @ORM\Index(name="idx_gradebook_certificate_user_id", columns={"user_id"}), @ORM\Index(name="idx_gradebook_certificate_category_id_user_id", columns={"cat_id", "user_id"})})
+ * @ORM\Table(
+ *     name="gradebook_certificate",
+ *     indexes={
+ *      @ORM\Index(name="idx_gradebook_certificate_category_id", columns={"cat_id"}),
+ *      @ORM\Index(name="idx_gradebook_certificate_user_id", columns={"user_id"}),
+ *      @ORM\Index(name="idx_gradebook_certificate_category_id_user_id", columns={"cat_id", "user_id"})}
+ * )
  * @ORM\Entity
  */
 class GradebookCertificate
@@ -56,6 +62,13 @@ class GradebookCertificate
      * @ORM\Column(name="path_certificate", type="text", nullable=true)
      */
     private $pathCertificate;
+
+      /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="downloaded_at", type="datetime", nullable=true)
+     */
+    private $downloadedAt;
 
     /**
      * Set catId
@@ -180,5 +193,24 @@ class GradebookCertificate
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDownloadedAt(): \DateTime
+    {
+        return $this->downloadedAt;
+    }
+
+    /**
+     * @param \DateTime $downloadedAt
+     * @return GradebookCertificate
+     */
+    public function setDownloadedAt(\DateTime $downloadedAt): GradebookCertificate
+    {
+        $this->downloadedAt = $downloadedAt;
+
+        return $this;
     }
 }

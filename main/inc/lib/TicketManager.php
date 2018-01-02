@@ -2189,7 +2189,7 @@ class TicketManager
     {
         $items = [];
         $project = [
-            'icon' => 'career.png',
+            'icon' => 'project.png',
             'url' => 'projects.php',
             'content' => get_lang('Projects')
         ];
@@ -2199,7 +2199,7 @@ class TicketManager
             'content' => get_lang('Status')
         ];
         $priority = [
-            'icon' => 'order-course.png',
+            'icon' => 'tickets_urgent.png',
             'url' => 'priorities.php',
             'content' => get_lang('Priority')
         ];

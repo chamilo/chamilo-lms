@@ -1,6 +1,8 @@
 -- After the database schema is created, the database is filled
 -- with default values.
 
+INSERT INTO access_url(url, description, active, created_by, tms) VALUES ('http://localhost/',' ',1,1, NOW());
+
 INSERT INTO settings_current
 (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)
 VALUES
@@ -774,8 +776,6 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, option_or
 INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (10, '1', 'AtOnce',1);
 INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (10, '8', 'Daily',2);
 INSERT INTO extra_field_options (field_id, option_value, display_text, option_order) VALUES (10, '0', 'No',3);
-
-INSERT INTO access_url(url, description, active, created_by, tms) VALUES ('http://localhost/',' ',1,1, NOW());
 
 -- Adding the platform templates
 INSERT INTO system_template (title, comment, image, content) VALUES
@@ -1942,12 +1942,7 @@ INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) V
 INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 2);
 INSERT INTO access_url_rel_course_category (access_url_id, course_category_id) VALUES (1, 3);
 
-UPDATE settings_current SET selected_value = '1.11.0.5' WHERE variable = 'chamilo_database_version';
-
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at) VALUES (8, 10, 'tags', 'Tags', 1, 1, NOW());
-
-UPDATE settings_current SET selected_value = '1.11.0.6' WHERE variable = 'chamilo_database_version';
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('icons_mode_svg', NULL, 'radio', 'Tuning', 'false', 'IconsModeSVGTitle', 'IconsModeSVGComment', '', NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('icons_mode_svg', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('icons_mode_svg', 'false', 'No');
@@ -1960,3 +1955,5 @@ INSERT INTO settings_current (variable, type, category, selected_value, title, c
 VALUES ('allow_download_documents_by_api_key', 'radio', 'WebServices', 'false', 'AllowDownloadDocumentsByApiKeyTitle', 'AllowDownloadDocumentsByApiKeyComment', '', NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_download_documents_by_api_key', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_download_documents_by_api_key', 'false', 'No');
+
+UPDATE settings_current SET selected_value = '2.0.0' WHERE variable = 'chamilo_database_version';

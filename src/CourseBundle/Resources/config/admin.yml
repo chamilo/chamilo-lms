@@ -1,0 +1,56 @@
+services:
+#    sonata.admin.course:
+#        class: Chamilo\CourseBundle\Admin\CourseAdmin
+#        tags:
+#            - { name: sonata.admin, manager_type: orm, audit: true, group: "LMS", label: "Course" }
+#        arguments:
+#            - ~
+#            - Chamilo\CoreBundle\Entity\Course
+#            - ~
+#        calls:
+#            - [ setTranslationDomain, [ChamiloCoreBundle]]
+#            - [ setToolChain, [@chamilo_course.tool_chain]]
+
+    sonata.admin.course_rel_user:
+        class: Chamilo\CourseBundle\Admin\CourseRelUserAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "CourseRelUser" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\CourseRelUser
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.course_category:
+        class: Chamilo\CourseBundle\Admin\CourseCategoryAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "CourseCategoryAdmin" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\CourseCategory
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.course_request:
+        class: Chamilo\CourseBundle\Admin\CourseRequestAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "CourseRequestAdmin" }
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\CourseRequest
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]
+
+    sonata.admin.c_group_info:
+        class: Chamilo\CourseBundle\Admin\CGroupInfoAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, audit: true, group: "LMS", label: "CGroupInfo" }
+        arguments:
+            - ~
+            - Chamilo\CourseBundle\Entity\CGroupInfo
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloCoreBundle]]

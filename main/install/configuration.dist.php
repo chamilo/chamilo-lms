@@ -722,6 +722,9 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Requires edit Entity Session: src/Chamilo/CoreBundle/Entity/Session.php uncomment "position" variable.
 //$_configuration['session_list_order'] = false;
 
+// Show skills as a hierarchical table
+//$_configuration['table_of_hierarchical_skill_presentation'] = false;
+
 // ------ Custom DB changes
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

@@ -32,7 +32,7 @@ class SkillProfile extends Model
         $sql = "SELECT * FROM $this->table p
                 INNER JOIN $this->table_rel_profile sp
                 ON(p.id = sp.profile_id) ";
-        $result   = Database::query($sql);
+        $result = Database::query($sql);
         $profiles = Database::store_result($result, 'ASSOC');
 
         return $profiles;
@@ -47,7 +47,11 @@ class SkillProfile extends Model
      */
     public function updateProfileInfo($profileId, $name, $description)
     {
-        $profileId = intval($profileId);
+        $profileId = (int) $profileId;
+
+        if (empty($profileId)) {
+            return false;
+        }
 
         $name = Database::escape_string($name);
         $description = Database::escape_string($description);
@@ -720,15 +724,20 @@ class Skill extends Model
 
     /**
      * @param $skills
-     * @param string $imageSize
+     * @param string $imageSize mini|small|big
      * @param string $style
+     * @param bool $showBadge
+     * @param bool $showTitle
+     *
      * @return string
      */
-    public function processSkillListSimple($skills, $imageSize = '', $style = '')
+    public function processSkillListSimple($skills, $imageSize = '', $style = '', $showBadge = true, $showTitle = true)
     {
         if (empty($skills)) {
             return '';
         }
+
+        $isHierarchicalTable = api_get_configuration_value('table_of_hierarchical_skill_presentation');
 
         if (empty($imageSize)) {
             $imageSize = 'img_small';
@@ -737,30 +746,36 @@ class Skill extends Model
         }
 
         $html = '';
-        $html .= '<ul class="list-badges">';
         foreach ($skills as $skill) {
             if (isset($skill['data'])) {
                 $skill = $skill['data'];
             }
-            $item = $skill[$imageSize];
 
-            $name = '<div class="caption">'.$skill['name'].'</div>';
+            $item = '';
+            if ($showBadge) {
+                $item = $skill[$imageSize];
+            }
+
+            $name = $skill['name'];
             if (!empty($skill['short_code'])) {
                 $name = $skill['short_code'];
             }
-            $item .= $name;
+
+            if (!$isHierarchicalTable) {
+                //$item .= '<br />';
+            }
+
+            if ($showTitle) {
+                $item .= $name;
+            }
+
             if (isset($skill['url'])) {
-                $html .= '<li class="thumbnail">';
                 $html .= Display::url($item, $skill['url'], ['target' => '_blank', 'style' => $style]);
-                $html .= '</li>';
             } else {
-                $html .= '<li class="thumbnail">';
                 $html .= Display::url($item, '#', ['target' => '_blank', 'style' => $style]);
-                $html .= '</li>';
             }
         }
-        $html .= '</li>';
-        
+
         return $html;
     }
 
@@ -1198,13 +1213,19 @@ class Skill extends Model
 
     /**
      * @param Vertex $vertex
+     * @param array $skills
+     * @param int $level
+     *
      * @return string
      */
-    public function processVertex(Vertex $vertex, $skills = [])
+    public function processVertex(Vertex $vertex, $skills = [], $level = 0)
     {
+        $isHierarchicalTable = api_get_configuration_value('table_of_hierarchical_skill_presentation');
         $subTable = '';
         if ($vertex->getVerticesEdgeTo()->count() > 0) {
-            $subTable .= '<ul>';
+            if ($isHierarchicalTable) {
+                $subTable .= '<ul>';
+            }
             foreach ($vertex->getVerticesEdgeTo() as $subVertex) {
                 $data = $subVertex->getAttribute('graphviz.data');
                 $passed = in_array($data['id'], array_keys($skills));
@@ -1213,21 +1234,40 @@ class Skill extends Model
                     // @todo use css class
                     $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
                 }
-                $label = $this->processSkillListSimple([$data], 'mini', $transparency);
 
-                /*$subTable .= '<div style="float:left; margin-right:5px; ">';
-                $subTable .= '<div style="'.$transparency.'">';
-                $subTable .= $label;
-                $subTable .= '</div>';*/
+                if ($isHierarchicalTable) {
+                    $label = $this->processSkillListSimple([$data], 'mini', $transparency);
+                    $subTable .= '<li>'.$label;
+                    $subTable .= $this->processVertex($subVertex, $skills, $level + 1);
+                    $subTable .= '</li>';
+                } else {
+                    $imageSize = 'mini';
+                    if ($level == 2) {
+                        $imageSize = 'small';
+                    }
+                    $showTitle = true;
+                    if ($level > 2) {
+                        $showTitle = false;
+                    }
 
-                $subTable .= '<li>'.$label;
+                    $label = $this->processSkillListSimple([$data], $imageSize, $transparency, true, $showTitle);
+                    $subTable .= '<div class="thumbnail" style="float:left; margin-right:5px; ">';
+                    $subTable .= '<div style="'.$transparency.'">';
 
-                $subTable .= $this->processVertex($subVertex, $skills);
+                    $subTable .= '<div style="text-align: center">';
+                    $subTable .= $label;
+                    $subTable .= '</div>';
 
-                $subTable .= '</li>';
+
+                    $subTable .= '</div>';
+                    $subTable .= $this->processVertex($subVertex, $skills, $level + 1);
+                    $subTable .= '</div>';
+                }
             }
 
-            $subTable .= '</ul>';
+            if ($isHierarchicalTable) {
+                $subTable .= '</ul>';
+            }
         }
 
         return $subTable;
@@ -1284,12 +1324,19 @@ class Skill extends Model
             }
             $tableRows[] = $tableRow;
         }
+
+        $isHierarchicalTable = api_get_configuration_value('table_of_hierarchical_skill_presentation');
         $allowLevels = api_get_configuration_value('skill_levels_names');
 
-        $tableResult = '<div class="table-responsive">';
+        if ($isHierarchicalTable) {
+            $tableResult = '<div class="table-responsive">';
+        } else {
+            $tableResult = '<div id="skillList">';
+        }
+
         if ($addTitle) {
             $tableResult .= '
-                    <table class="table" >
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>'.get_lang('AchievedSkills').'</th>
@@ -1331,32 +1378,64 @@ class Skill extends Model
                     }
                 }
 
-                $table = '<table class ="table table-bordered">';
-                // Getting "root" vertex
-                $root = $graph->getVertex(1);
-                $table .= '<tr>';
-                /** @var Vertex $vertex */
-                foreach ($root->getVerticesEdgeTo() as $vertex) {
-                    $data = $vertex->getAttribute('graphviz.data');
+                if ($isHierarchicalTable) {
+                    $table = '<table class ="table table-bordered">';
+                    // Getting "root" vertex
+                    $root = $graph->getVertex(1);
+                    $table .= '<tr>';
+                    /** @var Vertex $vertex */
+                    foreach ($root->getVerticesEdgeTo() as $vertex) {
+                        $data = $vertex->getAttribute('graphviz.data');
 
-                    $passed = in_array($data['id'], array_keys($skills));
-                    $transparency = '';
-                    if ($passed === false) {
-                        // @todo use a css class
-                        $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
+                        $passed = in_array($data['id'], array_keys($skills));
+                        $transparency = '';
+                        if ($passed === false) {
+                            // @todo use a css class
+                            $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
+                        }
+
+                        $label = $this->processSkillListSimple([$data], 'mini', $transparency);
+                        $table .= '<td >';
+
+                        $table .= '<div class="skills_chart"> <ul><li>'.$label;
+                        $table .= $this->processVertex($vertex, $skills);
+                        $table .= '</ul></li></div>';
+                        $table .= '</td>';
                     }
+                    $table .= '</tr></table>';
+                } else {
+                    // Getting "root" vertex
+                    $root = $graph->getVertex(1);
+                    $table = '';
+                    /** @var Vertex $vertex */
+                    foreach ($root->getVerticesEdgeTo() as $vertex) {
+                        $data = $vertex->getAttribute('graphviz.data');
 
-                    $label = $this->processSkillListSimple([$data], 'mini', $transparency);
+                        $passed = in_array($data['id'], array_keys($skills));
+                        $transparency = '';
+                        if ($passed === false) {
+                            // @todo use a css class
+                            $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
+                        }
 
-                    $table .= '<td >';
+                        $label = $this->processSkillListSimple([$data], 'mini', $transparency, false);
 
-                    //$table .= '<div style="'.$transparency.'">';
-                    $table .= '<div class="skills_chart"> <ul><li>'.$label;
-                    $table .= $this->processVertex($vertex, $skills);
-                    $table .= '</ul></li></div>';
-                    $table .= '</td>';
+                        $skillTable = $this->processVertex($vertex, $skills, 2);
+                        $table .= "<h3>$label</h3>";
+
+                        if (!empty($skillTable)) {
+                            $table .= '<table class ="table table-bordered">';
+                            $table .= '<tr>';
+                            $table .= '<td>';
+                            $table .= '<div>';
+                            $table .= $skillTable;
+                            $table .= '</div>';
+                            $table .= '</td>';
+                            $table .= '</tr></table>';
+                        }
+                    }
                 }
-                $table .= '</tr></table>';
+
                 $tableResult .= $table;
             }
         } else {
@@ -1371,7 +1450,6 @@ class Skill extends Model
                 ';
         }
         $tableResult .= '</div>';
-
 
         return [
             'skills' => $tableRows,

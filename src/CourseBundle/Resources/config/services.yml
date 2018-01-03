@@ -69,10 +69,10 @@ services:
         factory: ["@doctrine", getRepository]
         arguments: [ Chamilo\CourseBundle\Entity\CCourseSetting ]
 
-    chamilo_settings.repository.parameter:
-        class: Chamilo\CoreBundle\Entity\Repository\SettingsCurrentRepository
-        factory: ["@doctrine", getRepository]
-        arguments: [ Chamilo\CoreBundle\Entity\SettingsCurrent ]
+#    chamilo_settings.repository.parameter:
+#        class: Chamilo\CoreBundle\Entity\Repository\SettingsCurrentRepository
+#        factory: ["@doctrine", getRepository]
+#        arguments: [ Chamilo\CoreBundle\Entity\SettingsCurrent ]
 
     chamilo_course.registry.settings_schema:
         class: Sylius\Component\Registry\ServiceRegistry

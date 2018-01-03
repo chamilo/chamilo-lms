@@ -12,7 +12,7 @@
             association mapping  : http://www.doctrine-project.org/projects/orm/2.0/docs/reference/association-mapping/en
     -->
     <entity
-            name="Chamilo\PageBundle\Entity\User"
+            name="Chamilo\UserBundle\Entity\User"
             table="user"
     >
 

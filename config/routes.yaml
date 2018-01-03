@@ -1,3 +1,58 @@
 #index:
 #    path: /
-#    controller: App\Controller\DefaultController::index
+#    defaults: { _controller: 'App\Controller\DefaultController::index' }
+
+# Depends on sensio/framework-extra-bundle, doctrine/annotations, and doctrine/cache
+#   install with composer req sensio/framework-extra-bundle annot
+#controllers:
+#    resource: ../src/Controller/
+#    type: annotation
+
+logout:
+    path: /administration/logout
+
+sonata_user_admin_security_logout:
+    path: /administration/logout
+
+_admin:
+    resource: routes/sonata_admin.yaml
+    prefix: /administration
+
+#index:
+#    path: /
+
+#admin_dashboard:
+#    pattern: /administration/
+#    defaults:
+#        _controller: FrameworkBundle:Redirect:redirect
+#        route: sonata_admin_dashboard
+#        permanent: true # this for 301
+
+#admin_without_locale:
+#    pattern: /administration
+#    defaults:
+#        _controller: FrameworkBundle:Redirect:redirect
+#        route: sonata_admin_dashboard
+#        permanent: true # this for 301
+
+#admin_dashboard_without_locale:
+#    pattern: /administration/dashboard
+#    defaults:
+#        _controller: FrameworkBundle:Redirect:redirect
+#        route: sonata_admin_dashboard
+#        permanent: true
+
+
+
+#_api:
+#    resource: routing_api.yml
+#    prefix:   /api
+
+#liip_theme:
+#    resource: "@LiipThemeBundle/Resources/config/routing.xml"
+#    prefix: /theme
+
+#app_settings:
+#    resource: |
+#        alias: app.settings
+#    type: sylius.resource_api

@@ -23,7 +23,13 @@
 #        node: false
 #        neo4j: false
 #        rabbitmq: false
-
+build:
+    nodes:
+        analysis:
+            project_setup:
+                override: true
+            tests:
+                override: [php-scrutinizer-run]
 checks:
     php:
         no_trailing_whitespace: true

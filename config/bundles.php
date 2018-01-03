@@ -42,4 +42,5 @@ return [
     FM\ElfinderBundle\FMElfinderBundle::class => ['all' => true],
     Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle::class => ['all' => true],
     FOS\RestBundle\FOSRestBundle::class => ['all' => true],
+    Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle::class => ['all' => true],
 ];

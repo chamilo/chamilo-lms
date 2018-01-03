@@ -2818,7 +2818,6 @@ function finishInstallation(
         TicketManager::PRIORITY_LOW => get_lang('PriorityLow')
     );
 
-    $table = Database::get_main_table(TABLE_TICKET_PRIORITY);
     $i = 1;
     foreach ($defaultPriorities as $code => $priority) {
         $ticketPriority = new TicketPriority();

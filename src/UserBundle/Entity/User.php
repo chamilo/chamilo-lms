@@ -3,14 +3,16 @@
 
 namespace Chamilo\UserBundle\Entity;
 
+//use Chamilo\CoreBundle\Entity\UserFieldValues;
+use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
+use Chamilo\CoreBundle\Entity\Skill;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-//use Sonata\UserBundle\Entity\BaseUser as BaseUser;
-use Doctrine\ORM\Query\Expr\Join;
-use Sonata\UserBundle\Model\User as BaseUser;
+use Sonata\UserBundle\Entity\BaseUser as BaseUser;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 //use Symfony\Component\Security\Core\User\UserInterface;
@@ -18,7 +20,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\GroupInterface;
-use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
 
 //use Chamilo\CoreBundle\Component\Auth;
@@ -44,6 +45,25 @@ use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
  * )
  * @UniqueEntity("username")
  * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Entity\Repository\UserRepository")
+ *
+ * @ORM\AttributeOverrides({
+ *      @ORM\AttributeOverride(name="email",
+ *         column=@ORM\Column(
+ *             name="email",
+ *             type="string",
+ *             length=255,
+ *             unique=false
+ *         )
+ *     ),
+ *     @ORM\AttributeOverride(name="emailCanonical",
+ *         column=@ORM\Column(
+ *             name="email_canonical",
+ *             type="string",
+ *             length=255,
+ *             unique=false
+ *         )
+ *     )
+ * })
  *
  */
 class User extends BaseUser implements ThemeUser //implements ParticipantInterface, ThemeUser

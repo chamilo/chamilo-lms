@@ -3,9 +3,8 @@
 
 namespace Chamilo\UserBundle\Security;
 
-use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
+use Symfony\Component\Security\Core\Encoder\BasePasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
-use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\PlaintextPasswordEncoder;
 
@@ -13,10 +12,9 @@ use Symfony\Component\Security\Core\Encoder\PlaintextPasswordEncoder;
  * Class Encoder
  * @package Chamilo\UserBundle\Security
  */
-class Encoder implements PasswordEncoderInterface
+class Encoder extends BasePasswordEncoder
 {
     protected $method;
-    protected $defaultEncoder;
 
     /**
      * @param $method
@@ -24,6 +22,26 @@ class Encoder implements PasswordEncoderInterface
     public function __construct($method)
     {
         $this->method = $method;
+    }
+
+    /**
+     * @param string $raw
+     * @param string $salt
+     * @return string
+     */
+    public function encodePassword($raw, $salt)
+    {
+        $defaultEncoder = $this->getEncoder();
+        $encoded = $defaultEncoder->encodePassword($raw, $salt);
+
+        return $encoded;
+    }
+
+    /**
+     * @return BCryptPasswordEncoder|MessageDigestPasswordEncoder|PlaintextPasswordEncoder
+     */
+    private function getEncoder()
+    {
         switch ($this->method) {
             case 'none':
                 $defaultEncoder = new PlaintextPasswordEncoder();
@@ -36,22 +54,8 @@ class Encoder implements PasswordEncoderInterface
                 $defaultEncoder = new MessageDigestPasswordEncoder($this->method, false, 1);
                 break;
         }
-        $this->defaultEncoder = $defaultEncoder;
-    }
 
-    /**
-     * @param string $raw
-     * @param string $salt
-     *
-     * @return string
-     */
-    public function encodePassword($raw, $salt)
-    {
-        if ($this->method === 'bcrypt') {
-            $salt = null;
-        }
-
-        return $this->defaultEncoder->encodePassword($raw, $salt);
+        return $defaultEncoder;
     }
 
     /**
@@ -62,10 +66,11 @@ class Encoder implements PasswordEncoderInterface
      */
     public function isPasswordValid($encoded, $raw, $salt)
     {
-        if ($this->method === 'bcrypt') {
-            $salt = null;
+        if ($this->isPasswordTooLong($raw)) {
+            return false;
         }
 
-        return $this->defaultEncoder->isPasswordValid($encoded, $raw, $salt);
+        $encoder = $this->getEncoder();
+        return $encoder->isPasswordValid($encoded, $raw, $salt);
     }
 }

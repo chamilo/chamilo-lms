@@ -1,0 +1,15 @@
+sonata_classification:
+    class:
+        tag:          Chamilo\ClassificationBundle\Entity\Tag
+        category:     Chamilo\ClassificationBundle\Entity\Category
+        context:      Chamilo\ClassificationBundle\Entity\Context
+        collection:   Chamilo\ClassificationBundle\Entity\Collection
+        media:        Chamilo\MediaBundle\Entity\Media
+
+
+#doctrine:
+#    orm:
+#        entity_managers:
+#            default:
+#                mappings:
+#                    ChamiloClassificationBundle: ~

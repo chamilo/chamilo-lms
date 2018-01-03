@@ -1,0 +1,27 @@
+framework:
+    secret: '%env(APP_SECRET)%'
+    #default_locale: en
+    #csrf_protection: ~
+    #http_method_override: true
+
+    # uncomment this entire section to enable sessions
+    #session:
+    #    # With this config, PHP's native session handling is used
+    #    handler_id: ~
+
+    #esi: ~
+    #fragments: ~
+    php_errors:
+        log: true
+
+    templating:
+        engines: ['twig', 'php']
+    session:
+        # handler_id set to null will use default session handler from php.ini
+        handler_id: ~
+        name: ch_sid
+    fragments:       ~
+    http_method_override: true
+    assets: ~
+    annotations: true
+    translator: ~

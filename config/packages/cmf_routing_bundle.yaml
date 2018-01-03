@@ -1,0 +1,11 @@
+# Read the documentation: https://symfony.com/doc/master/cmf/bundles/routing/configuration.html
+# Install phpcr stack before using this configuration
+#cmf_routing:
+#    chain:
+#        routers_by_id:
+#            cmf_routing.dynamic_router: 200
+#            router.default:             100
+#    dynamic:
+#        persistence:
+#            phpcr:
+#                enabled: true

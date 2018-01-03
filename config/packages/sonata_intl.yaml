@@ -1,0 +1,12 @@
+#
+# more information can be found here http://sonata-project.org/bundles/intl
+#
+sonata_intl:
+    locale: ~
+    timezone:
+        # if service is left blank, the chain detector will be used with detectors
+        # defined in the dedicated section
+        service:    ~
+        detectors:
+            - sonata.intl.timezone_detector.user    # default value if SonataUserBundle is available
+            - sonata.intl.timezone_detector.locale  # default value

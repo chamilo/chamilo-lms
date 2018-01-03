@@ -1,0 +1,210 @@
+sonata_notification:
+    class:
+        message: Chamilo\NotificationBundle\Entity\Message
+sonata_admin:
+    # default value, change it to sonata.admin.security.handler.acl to use ACL
+    security:
+        handler: sonata.admin.security.handler.role
+    title: Chamilo #%sonata_admin.title%
+    title_logo: css/themes/chamilo/images/header-logo.png #%sonata_admin.logo_title%
+    options:
+        html5_validate: false # does not use html5 validation
+        pager_links: 5 # pager max links to display
+
+    templates:
+        # default global templates
+        # the layout template include javascript/stylesheet to the formatter bundle,
+        # if you don't need it use the default one: SonataAdminBundle::standard_layout.html.
+        layout: ChamiloAdminBundle::layout.html.twig
+#        layout:  ApplicationSonataAdminBundle::standard_layout.html.twig
+        #layout:  ApplicationSonataAdminBundle::demo_layout.html.twig
+
+#        layout:  SonataAdminBundle::standard_layout.html.twig
+        ajax:    SonataAdminBundle::ajax_layout.html.twig
+
+        # default value if done set, actions templates, should extends a global templates
+        list:    SonataAdminBundle:CRUD:list.html.twig
+        show:    SonataAdminBundle:CRUD:show.html.twig
+        edit:    SonataAdminBundle:CRUD:edit.html.twig
+#        user_block: ChamiloCoreBundle:Admin:admin_topnav.html.twig
+
+    extensions:
+#        cmf_core.admin_extension.translatable:
+#            implements:
+#                - Symfony\Cmf\Bundle\CoreBundle\Translatable\TranslatableInterface
+#
+#        cmf_core.admin_extension.publish_workflow.publishable:
+#            implements:
+#                - Symfony\Cmf\Bundle\CoreBundle\PublishWorkflow\PublishableInterface
+#        cmf_core.admin_extension.publish_workflow.time_period:
+#            implements:
+#                - Symfony\Cmf\Bundle\CoreBundle\PublishWorkflow\PublishTimePeriodInterface
+
+    dashboard:
+        blocks:
+            - { position: left, type: sonata.admin.block.admin_list }
+#            - { position: right, type: sonata.timeline.block.timeline, settings: { context: SONATA_ADMIN, max_per_page: 25, template: 'ChamiloTimelineBundle:Block:timeline.html.twig',}}
+#            - { position: right, type: sonata.admin_doctrine_orm.block.audit}
+
+#            - { position: center, type: sonata.block.service.text, settings: { content: "<h2>Welcome!</h2> You can customize this dashboard by editing the sonata_admin.yml file. The current dashboard presents the recent items from the NewsBundle and a timeline with the latest action"} }
+            #- { position: center, type: sonata.news.block.recent_posts, settings: { title: Recent Posts, number: 7, mode: admin }}
+#            - { position: left, type: sonata.block.service.text, settings: { content: "<div class='panel panel-default'><div class='panel-heading'><h3 class='panel-title'>Welcome!</h3></div><div class='panel-body'>You can customize this dashboard by editing the <code>sonata_admin.yml</code> file. The current dashboard presents the recent items from the NewsBundle and a non-statistical e-commerce information.</div></div>"} }
+#            - { position: center, type: sonata.news.block.recent_comments, settings: { title: Recent Comments, number: 7, mode: admin }}
+            #- { position: right, type: sonata.order.block.recent_orders, settings: { title: Recent Orders, number: 5, mode: admin }}
+            #- { position: right, type: sonata.customer.block.recent_customers, settings: { title: Recent Customers, number: 5, mode: admin }}
+            #- { position: right, type: sonata.block.service.rss, settings: { title: Sonata Project's Feeds, url: http://sonata-project.org/blog/archive.rss }}
+
+        groups:
+            sonata.admin.group.content:
+                label:           Content
+                label_catalogue: SonataDemoBundle
+                #icon:            '<i class="fa fa-th"></i>'
+                items:
+                    - sonata.page.admin.page
+#                    - sonata.news.admin.comment
+#                    - sonata.news.admin.post
+                    - sonata.media.admin.media
+                    - sonata.media.admin.gallery
+#                    - sonata.comment.admin.thread
+
+            sonata.admin.group.site_builder:
+                label:           Site Builder
+                label_catalogue: SonataDemoBundle
+                #icon:            '<i class="fa fa-puzzle-piece"></i>'
+                items:
+                    - sonata.page.admin.page
+                    - sonata.page.admin.site
+                    - sonata.admin.contact_category
+
+            sonata.admin.group.faq:
+                label: FAQ
+                label_catalogue: Faq
+                #icon:            '<i class="fa fa-puzzle-piece"></i>'
+                items:
+                    - sonata.admin.faq_category
+                    - sonata.admin.faq_question
+
+            sonata.admin.group.classification:
+                label:           sonata_classification
+                label_catalogue: SonataClassificationBundle
+                #icon:            '<i class="fa fa-sitemap"></i>'
+                items:
+                    - sonata.classification.admin.category
+                    - sonata.classification.admin.tag
+                    - sonata.classification.admin.collection
+
+            sonata.admin.group.administration:
+                label:           sonata_administration
+                label_catalogue: SonataAdminBundle
+                #icon:            '<i class="fa fa-cogs"></i>'
+                items:
+#                    - sonata.notification.admin.message
+#                    - sonata.admin.settings_current
+#                    - sonata.admin.tool
+            sonata.admin.group.user:
+                label: Users
+                #icon:  '<i class="fa fa-play-circle"></i>'
+                label_catalogue: SonataAdminBundle
+                items:
+                    - sonata.user.admin.user
+                    - sonata.user.admin.group
+#                    - sonata.admin.user_group
+#                    - sonata.admin.user_field
+#                    - sonata.admin.user_field_values
+#            sonata.admin.group.course:
+#                label: Courses
+#                #icon:  '<i class="fa fa-play-circle"></i>'
+#                label_catalogue: SonataAdminBundle
+#                items:
+##                    - sonata.admin.course
+#                    - sonata.admin.course_category
+#                    - sonata.admin.course_request
+#                    - sonata.admin.c_group_info
+##                    - sonata.admin.notebook
+#            sonata.admin.group.session:
+#                  label: Sessions
+#                  #icon:  '<i class="fa fa-play-circle"></i>'
+#                  label_catalogue: SonataAdminBundle
+#                  items:
+#                      - sonata.admin.session
+#                      - sonata.admin.session_category
+#                      - sonata.admin.career
+#                      - sonata.admin.promotion
+#            sonata.admin.group.url:
+#                  label: URLs
+#                  #icon:  '<i class="fa fa-play-circle"></i>'
+#                  label_catalogue: SonataAdminBundle
+#                  items:
+#                      - sonata.admin.access_url
+
+    assets:
+        stylesheets:
+            # The sandbox includes default pre-optimized version of some css and js
+            # So you can either use them, and add your custom assets here
+            #   ~ or ~
+            # tweak the assetic.yml and the following lines
+            - assetic/sonata_admin_css.css
+            - assetic/sonata_formatter_css.css
+            - assetic/sonata_jqueryui_css.css
+            - bundles/sonataadmin/vendor/admin-lte/dist/css/skins/skin-black.min.css
+
+            # Default admin assets
+  #            - bundles/sonatacore/vendor/bootstrap/dist/css/bootstrap.min.css
+  #            - bundles/sonatacore/vendor/components-font-awesome/css/font-awesome.min.css
+  #            - bundles/sonatacore/vendor/ionicons/css/ionicons.min.css
+  #            - bundles/sonataadmin/vendor/admin-lte/dist/css/AdminLTE.min.css
+  #            - bundles/sonataadmin/vendor/iCheck/skins/flat/blue.css
+  #            - bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css
+  #            - bundles/sonataadmin/vendor/jqueryui/themes/base/jquery-ui.css
+  #            - bundles/sonatacore/vendor/select2/select2.css
+  #            - bundles/sonatacore/vendor/select2-bootstrap-css/select2-bootstrap.min.css
+  #            - bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css
+  #            - bundles/sonataadmin/css/styles.css
+  #            - bundles/sonataadmin/css/layout.css
+  #            - bundles/sonataadmin/css/tree.css
+
+            # Formatter assets
+  #            - bundles/sonataformatter/markitup/skins/sonata/style.css
+  #            - bundles/sonataformatter/markitup/sets/markdown/style.css
+  #            - bundles/sonataformatter/markitup/sets/html/style.css
+  #            - bundles/sonataformatter/markitup/sets/textile/style.css
+
+            # Page assets
+  #            - bundles/sonatapage/sonata-page.back.min.css
+
+
+        javascripts:
+            - assetic/sonata_admin_js.js
+  #            - bundles/sonataadmin/Admin.js
+  #            - bundles/sonataadmin/treeview.js
+            - assetic/sonata_jqueryui_js.js
+            - assetic/sonata_formatter_js.js
+            - bundles/sonataformatter/vendor/ckeditor/ckeditor.js
+
+            # Default admin assets
+  #            - bundles/sonatacore/vendor/jquery/dist/jquery.min.js
+  #            - bundles/sonataadmin/vendor/jquery.scrollTo/jquery.scrollTo.min.js
+  #            - bundles/sonatacore/vendor/moment/min/moment.min.js
+  #            - bundles/sonatacore/vendor/bootstrap/dist/js/bootstrap.min.js
+  #            - bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js
+  #            - bundles/sonataadmin/vendor/jqueryui/ui/minified/jquery-ui.min.js
+  #            - bundles/sonataadmin/vendor/jqueryui/ui/minified/i18n/jquery-ui-i18n.min.js
+  #            - bundles/sonataadmin/jquery/jquery.form.js
+  #            - bundles/sonataadmin/jquery/jquery.confirmExit.js
+  #            - bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js
+  #            - bundles/sonatacore/vendor/select2/select2.min.js
+  #            - bundles/sonataadmin/vendor/admin-lte/dist/js/app.min.js
+  #            - bundles/sonataadmin/vendor/iCheck/icheck.min.js
+  #            - bundles/sonataadmin/vendor/slimScroll/jquery.slimscroll.min.js
+  #            - bundles/sonataadmin/Admin.js
+  #            - bundles/sonataadmin/treeview.js
+
+            # Formatter assets
+  #            - bundles/sonataformatter/vendor/markitup-markitup/markitup/jquery.markitup.js
+  #            - bundles/sonataformatter/markitup/sets/markdown/set.js
+  #            - bundles/sonataformatter/markitup/sets/html/set.js
+  #            - bundles/sonataformatter/markitup/sets/textile/set.js
+
+            # Page assets
+  #            - bundles/sonatapage/sonata-page.back.js
+

@@ -5,7 +5,6 @@ namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
-use Chamilo\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -28,14 +27,13 @@ class UserLocaleListener
      * @var Session
      */
     private $session;
+    /** @var SettingsManager */
+    private $settings;
 
-    /**
-     * UserLocaleListener constructor.
-     * @param Session $session
-     */
-    public function __construct(Session $session)
+    public function __construct(Session $session, $settings)
     {
         $this->session = $session;
+        $this->settings = $settings;
     }
 
     /**
@@ -44,17 +42,11 @@ class UserLocaleListener
      */
     public function onInteractiveLogin(InteractiveLoginEvent $event)
     {
-        $languages = ['german' => 'de', 'english' => 'en', 'spanish' => 'es', 'french' => 'fr'];
+        $user = $event->getAuthenticationToken()->getUser();
 
-        /** @var User $user */
-        $token = $event->getAuthenticationToken();
-
-        if ($token) {
-            $user = $token->getUser();
-            $locale = isset($languages[$user->getLanguage()]) ? $languages[$user->getLanguage()] : '';
-            if ($user && !empty($locale)) {
-                $this->session->set('_locale', $locale);
-            }
+        if (null !== $user->getLocale()) {
+            $this->session->set('_locale', $user->getLocale());
+            $this->session->set('_locale_user', $user->getLocale());
         }
     }
 }

@@ -1,0 +1,56 @@
+course_url:
+    path: courses
+#    resource: '@ChamiloCoreBundle/Controller/Admin'
+
+core_tool:
+    resource: '@ChamiloCourseBundle/Controller'
+    type: annotation
+    prefix: /courses/{course}/
+
+core_tool_document:
+    path: /courses/{course}/document/{file}
+    defaults:
+        _controller: ChamiloCoreBundle:Resource:getDocument
+    requirements:
+        file: .+ # allow "/" in {file}
+
+chamilo_course_tool_intro_create:
+    path: /courses/{course}/introduction/{tool}/create/
+    methods: [GET, POST]
+    defaults:
+        _controller: ChamiloCourseBundle:CToolIntro:create
+    requirements:
+        tool: "[a-zA-Z_]+"
+
+chamilo_course_tool_intro_update:
+    path: /courses/{course}/introduction/{tool}/update/
+    methods: [GET]
+    defaults:
+        _controller: chamilo_course.controller.c_tool_intro:updateAction
+
+chamilo_course_tool_list:
+    path: /courses/{course}/introduction
+    methods: [GET]
+    defaults:
+        _controller: chamilo_course.controller.tool:indexAction
+
+
+#chamilo_course.c_tool_intro:
+#    resource: |
+#        alias: chamilo_course.c_tool_intro
+#        path: /courses/{course}/introduction/{tool}
+#        templates: :Admin/Book
+#    type: sylius.resource_api
+
+# Course settings
+chamilo_course_settings:
+    path: /courses/{course}/settings/{namespace}
+    defaults:
+        _controller: ChamiloCourseBundle:Settings:update
+        template: ChamiloCourseBundle:Settings:default.html.twig
+
+chamilo_course_tool_index:
+    path: /courses/{course}/tools
+    methods: [GET, POST, HEAD, DELETE]
+    defaults:
+        _controller: chamilo_course.controller.tool:indexAction

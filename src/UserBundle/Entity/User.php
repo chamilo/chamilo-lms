@@ -463,6 +463,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     public function __construct()
     {
         $this->status = self::STUDENT;
+        parent::__construct();
         $this->salt = sha1(uniqid(null, true));
         $this->active = true;
         $this->registrationDate = new \DateTime();
@@ -1329,6 +1330,20 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     public function getAvatar()
     {
         return $this->getPictureUri();
+    }
+
+    /**
+     * @return string
+     */
+    public function getAvatarOrAnonymous($size = 22)
+    {
+        $avatar = $this->getAvatar();
+
+        if (empty($avatar)) {
+            return "img/icons/$size/unknown.png";
+        }
+
+        return $avatar;
     }
 
     /**

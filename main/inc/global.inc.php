@@ -20,9 +20,8 @@ define('SHOW_ERROR_CODES', false);
 
 // Include the libraries that are necessary everywhere
 require_once __DIR__.'/../../vendor/autoload.php';
-require_once __DIR__.'/../../app/AppKernel.php';
 
-$kernel = new AppKernel('', '');
+$kernel = new Chamilo\Kernel('', '');
 
 // Determine the directory path where this current file lies.
 // This path will be useful to include the other initialisation files.
@@ -80,15 +79,14 @@ define('USERNAME_MAX_LENGTH', $defaultUserNameLength);
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
 api_request_uri();
 
-define('_MPDF_TEMP_PATH', __DIR__.'/../../app/cache/mpdf/');
-define('_MPDF_TTFONTDATAPATH', __DIR__.'/../../app/cache/mpdf/');
+define('_MPDF_TEMP_PATH', __DIR__.'/../../var/cache/mpdf/');
+define('_MPDF_TTFONTDATAPATH', __DIR__.'/../../var/cache/mpdf/');
 
 // Include the libraries that are necessary everywhere
 require_once __DIR__.'/../../vendor/autoload.php';
 
 // Do not over-use this variable. It is only for this script's local use.
 $libraryPath = __DIR__.'/lib/';
-
 // @todo convert this libs in classes
 require_once $libraryPath.'database.constants.inc.php';
 require_once $libraryPath.'text.lib.php';

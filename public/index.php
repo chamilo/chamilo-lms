@@ -1,6 +1,6 @@
 <?php
 
-use App\Kernel;
+use Chamilo\Kernel;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +33,10 @@ if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? false) {
 }
 
 $kernel = new Kernel($env, $debug);
-$request = Request::createFromGlobals();
+//$request = Request::createFromGlobals();
+$request = Sonata\PageBundle\Request\RequestFactory::createFromGlobals(
+    'host_with_path_by_locale'
+);
 $response = $kernel->handle($request);
 $response->send();
 $kernel->terminate($request, $response);

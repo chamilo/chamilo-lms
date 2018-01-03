@@ -338,6 +338,7 @@ $controller->tpl->assign('user_image_block', $controller->return_user_image_bloc
 $controller->tpl->assign('course_block', $controller->return_course_block());
 $controller->tpl->assign('navigation_course_links', $controller->return_navigation_links());
 $controller->tpl->assign('search_block', $controller->return_search_block());
+$controller->tpl->assign('notice_block', $controller->return_notice());
 $controller->tpl->assign('classes_block', $controller->return_classes_block());
 $controller->tpl->assign('skills_block', $controller->returnSkillLinks());
 

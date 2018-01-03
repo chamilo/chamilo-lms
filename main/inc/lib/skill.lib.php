@@ -136,7 +136,7 @@ class SkillRelProfile extends Model
     {
         $profileId = intval($profileId);
         $skills = $this->get_all(array('where' => array('profile_id = ? ' => $profileId)));
-        $return = array();
+        $return = [];
         if (!empty($skills)) {
             foreach ($skills as $skill_data) {
                 $return[] = $skill_data['skill_id'];
@@ -188,7 +188,7 @@ class SkillRelSkill extends Model
     public function getSkillInfo($id)
     {
         if (empty($id)) {
-            return array();
+            return [];
         }
         $result = Database::select(
             '*',
@@ -216,7 +216,7 @@ class SkillRelSkill extends Model
         $skill = Database::store_result($result, 'ASSOC');
         $skill = isset($skill[0]) ? $skill[0] : null;
 
-        $parents = array();
+        $parents = [];
         if (!empty($skill)) {
             if ($skill['parent_id'] != null) {
                 $parents = self::getSkillParents($skill['parent_id']);
@@ -241,7 +241,7 @@ class SkillRelSkill extends Model
         $result = Database::query($sql);
         $skill = Database::store_result($result, 'ASSOC');
         $skill = isset($skill[0]) ? $skill[0] : null;
-        $parents = array();
+        $parents = [];
         if (!empty($skill)) {
             $parents[] = $skill;
         }
@@ -275,7 +275,7 @@ class SkillRelSkill extends Model
 
         if ($load_user_data) {
             $passed_skills = $skill_rel_user->getUserSkills($user_id);
-            $done_skills = array();
+            $done_skills = [];
             foreach ($passed_skills as $done_skill) {
                 $done_skills[] = $done_skill['skill_id'];
             }
@@ -389,7 +389,7 @@ class SkillRelGradebook extends Model
     public function getSkillInfo($skill_id, $gradebookId)
     {
         if (empty($skill_id)) {
-            return array();
+            return [];
         }
         $result = Database::select(
             '*',
@@ -417,9 +417,9 @@ class SkillRelGradebook extends Model
             'all',
             array('where' => array('skill_id = ?' => array($skill_id)))
         );
-        $gradebooks_to_remove = array();
-        $gradebooks_to_add = array();
-        $original_gradebook_list_ids = array();
+        $gradebooks_to_remove = [];
+        $gradebooks_to_add = [];
+        $original_gradebook_list_ids = [];
 
         if (!empty($original_gradebook_list)) {
             foreach ($original_gradebook_list as $gradebook) {
@@ -509,7 +509,7 @@ class SkillRelUser extends Model
      */
     public function getUserBySkills($skill_list)
     {
-        $users = array();
+        $users = [];
         if (!empty($skill_list)) {
             $skill_list = array_map('intval', $skill_list);
             $skill_list = implode("', '", $skill_list);
@@ -533,7 +533,7 @@ class SkillRelUser extends Model
     public function getUserSkills($userId, $courseId = 0, $sessionId = 0)
     {
         if (empty($userId)) {
-            return array();
+            return [];
         }
 
         $courseId = intval($courseId);
@@ -724,11 +724,14 @@ class Skill extends Model
 
     /**
      * @param $skills
-     * @param string $imageSize
+     * @param string $imageSize mini|small|big
      * @param string $style
+     * @param bool $showBadge
+     * @param bool $showTitle
+     *
      * @return string
      */
-    public function processSkillListSimple($skills, $imageSize = '', $style = '')
+    public function processSkillListSimple($skills, $imageSize = '', $style = '', $showBadge = true, $showTitle = true)
     {
         if (empty($skills)) {
             return '';
@@ -747,7 +750,11 @@ class Skill extends Model
             if (isset($skill['data'])) {
                 $skill = $skill['data'];
             }
-            $item = $skill[$imageSize];
+
+            $item = '';
+            if ($showBadge) {
+                $item = $skill[$imageSize];
+            }
 
             $name = $skill['name'];
             if (!empty($skill['short_code'])) {
@@ -757,7 +764,10 @@ class Skill extends Model
             if (!$isHierarchicalTable) {
                 //$item .= '<br />';
             }
-            $item .= $name;
+
+            if ($showTitle) {
+                $item .= $name;
+            }
 
             if (isset($skill['url'])) {
                 $html .= Display::url($item, $skill['url'], ['target' => '_blank', 'style' => $style]);
@@ -858,7 +868,7 @@ class Skill extends Model
                 ORDER BY ss.id, ss.parent_id";
 
         $result = Database::query($sql);
-        $skills = array();
+        $skills = [];
         $webPath = api_get_path(WEB_UPLOAD_PATH);
         if (Database::num_rows($result)) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -1023,7 +1033,7 @@ class Skill extends Model
 
             if (!empty($params['gradebook_id'])) {
                 foreach ($params['gradebook_id'] as $gradebook_id) {
-                    $attributes = array();
+                    $attributes = [];
                     $attributes['gradebook_id'] = $gradebook_id;
                     $attributes['skill_id'] = $skill_id;
                     $skillRelGradebook->save($attributes);
@@ -1185,7 +1195,7 @@ class Skill extends Model
 
         $result = Database::query($sql);
         $skills = Database::store_result($result, 'ASSOC');
-        $skillList = array();
+        $skillList = [];
         if (!empty($skills)) {
             foreach ($skills as $skill) {
                 if ($getSkillData) {
@@ -1203,9 +1213,12 @@ class Skill extends Model
 
     /**
      * @param Vertex $vertex
+     * @param array $skills
+     * @param int $level
+     *
      * @return string
      */
-    public function processVertex(Vertex $vertex, $skills = [])
+    public function processVertex(Vertex $vertex, $skills = [], $level = 0)
     {
         $isHierarchicalTable = api_get_configuration_value('table_of_hierarchical_skill_presentation');
         $subTable = '';
@@ -1221,19 +1234,33 @@ class Skill extends Model
                     // @todo use css class
                     $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
                 }
-                $label = $this->processSkillListSimple([$data], 'mini', $transparency);
+
                 if ($isHierarchicalTable) {
+                    $label = $this->processSkillListSimple([$data], 'mini', $transparency);
                     $subTable .= '<li>'.$label;
-                    $subTable .= $this->processVertex($subVertex, $skills);
+                    $subTable .= $this->processVertex($subVertex, $skills, $level + 1);
                     $subTable .= '</li>';
                 } else {
+                    $imageSize = 'mini';
+                    if ($level == 2) {
+                        $imageSize = 'small';
+                    }
+                    $showTitle = true;
+                    if ($level > 2) {
+                        $showTitle = false;
+                    }
+
+                    $label = $this->processSkillListSimple([$data], $imageSize, $transparency, true, $showTitle);
                     $subTable .= '<div class="thumbnail" style="float:left; margin-right:5px; ">';
                     $subTable .= '<div style="'.$transparency.'">';
+
                     $subTable .= '<div style="text-align: center">';
                     $subTable .= $label;
                     $subTable .= '</div>';
+
+
                     $subTable .= '</div>';
-                    $subTable .= $this->processVertex($subVertex, $skills);
+                    $subTable .= $this->processVertex($subVertex, $skills, $level + 1);
                     $subTable .= '</div>';
                 }
             }
@@ -1391,9 +1418,9 @@ class Skill extends Model
                             $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
                         }
 
-                        $label = $this->processSkillListSimple([$data], 'mini', $transparency);
+                        $label = $this->processSkillListSimple([$data], 'mini', $transparency, false);
 
-                        $skillTable = $this->processVertex($vertex, $skills);
+                        $skillTable = $this->processVertex($vertex, $skills, 2);
                         $table .= "<h3>$label</h3>";
 
                         if (!empty($skillTable)) {
@@ -1475,12 +1502,12 @@ class Skill extends Model
             }
         }
 
-        $refs = array();
+        $refs = [];
         $skills_tree = null;
 
         // Create references for all nodes
-        $flat_array = array();
-        $family = array();
+        $flat_array = [];
+        $family = [];
         if (!empty($skills)) {
             foreach ($skills as &$skill) {
                 if ($skill['parent_id'] == 0) {
@@ -1541,7 +1568,7 @@ class Skill extends Model
             // Checking family value
 
             $family_id = 1;
-            $new_family_array = array();
+            $new_family_array = [];
             foreach ($family as $main_family_id => $family_items) {
                 if (!empty($family_items)) {
                     foreach ($family_items as $item) {
@@ -1572,7 +1599,7 @@ class Skill extends Model
                 'name' => get_lang('SkillRootName'),
                 'id' => 'root',
                 'children' => $refs['root']['children'],
-                'data' => array(),
+                'data' => [],
             );
         }
 
@@ -1604,7 +1631,7 @@ class Skill extends Model
             $return_flat_array,
             true
         );
-        $simple_tree = array();
+        $simple_tree = [];
         if (!empty($tree['children'])) {
             foreach ($tree['children'] as $element) {
                 $children = [];
@@ -1630,11 +1657,11 @@ class Skill extends Model
      */
     public function getSkillToJson($subtree, $depth = 1, $max_depth = 2)
     {
-        $simple_sub_tree = array();
+        $simple_sub_tree = [];
         if (is_array($subtree)) {
             $counter = 1;
             foreach ($subtree as $elem) {
-                $tmp = array();
+                $tmp = [];
                 $tmp['name'] = $elem['name'];
                 $tmp['id'] = $elem['id'];
                 $tmp['isSearched'] = self::isSearched($elem['id']);
@@ -1719,7 +1746,7 @@ class Skill extends Model
             return Database::store_result($result, 'ASSOC');
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -1875,10 +1902,10 @@ class Skill extends Model
         $courseId = intval($courseId);
 
         if ($courseId == 0) {
-            return array();
+            return [];
         }
 
-        $list = array();
+        $list = [];
 
         $sql = "SELECT
                     course.id c_id,
@@ -1921,10 +1948,10 @@ class Skill extends Model
         $skillId = intval($skillId);
 
         if ($skillId == 0) {
-            return array();
+            return [];
         }
 
-        $list = array();
+        $list = [];
         $sql = "SELECT
                     course.id c_id,
                     course.title c_name,

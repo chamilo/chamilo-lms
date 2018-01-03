@@ -73,6 +73,26 @@ sonata_doctrine_orm_admin:
 #    theme: ChamiloCoreBundle::grid.html.twig
 #
 
+# Platform settings (new)
+sylius_settings:
+    driver: doctrine/orm
+
+
+# Course settings
+chamilo_course:
+    driver: doctrine/orm
+    resources:
+        parameter:
+            classes:
+                model: Chamilo\CourseBundle\Entity\CCourseSetting
+                repository: Chamilo\CourseBundle\Entity\Repository\CCourseSettingRepository
+doctrine_cache:
+    providers:
+        sylius_settings:
+            type: file_system
+        chamilo_settings:
+            type: file_system
+
 imports:
     - { resource: ../../src/CoreBundle/Resources/config/services.yml }
     - { resource: ../../vendor/knplabs/doctrine-behaviors/config/orm-services.yml }

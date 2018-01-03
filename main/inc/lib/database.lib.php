@@ -143,6 +143,7 @@ class Database
 
         $config->setEntityNamespaces(
             array(
+                'ChamiloPageBundle' => 'Chamilo\PageBundle\Entity',
                 'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity',
                 'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
                 'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
@@ -156,38 +157,34 @@ class Database
         $entityManager = EntityManager::create($params, $config);
         $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
 
-        // Registering Constraints
-        /*AnnotationRegistry::registerAutoloadNamespace(
-            'Symfony\Component',
-            $sysPath."vendor/"
-        );*/
+        $uniqueEntityPath = $sysPath.'vendor/symfony/symfony/src/Symfony/Bridge/Doctrine/Validator/Constraints/UniqueEntity.php';
 
-        AnnotationRegistry::registerLoader(
-            function ($class) use ($sysPath) {
-                $file = str_replace("\\", DIRECTORY_SEPARATOR, $class).".php";
-                $file = str_replace('Symfony/Component/Validator', '', $file);
-                $file = str_replace('Symfony\Component\Validator', '', $file);
-                $fileToInclude = $sysPath.'vendor/symfony/validator/'.$file;
+        // Folder symfony/symfony/src doesn't exists in chash use the component folder
+        if (!file_exists($uniqueEntityPath)) {
+            $uniqueEntityPath = $sysPath.'vendor/symfony/doctrine-bridge/Validator/Constraints/UniqueEntity.php';
 
-                if (file_exists($fileToInclude)) {
-                    // file exists makes sure that the loader fails silently
-                    require_once $fileToInclude;
-
-                    return true;
+            AnnotationRegistry::registerLoader(
+                function ($class) use ($sysPath) {
+                    $file = str_replace("\\", DIRECTORY_SEPARATOR, $class).".php";
+                    $file = str_replace('Symfony/Component/Validator', '', $file);
+                    $file = $sysPath.'vendor/symfony/validator'.$file;
+                    if (file_exists($file)) {
+                        // file exists makes sure that the loader fails silently
+                        require_once $file;
+                        return true;
+                    }
                 }
-
-                $fileToInclude = $sysPath.'vendor/symfony/validator/Constraints/'.$file;
-                if (file_exists($fileToInclude)) {
-                    // file exists makes sure that the loader fails silently
-                    require_once $fileToInclude;
-
-                    return true;
-                }
-            }
-        );
+            );
+        } else {
+            // Registering Constraints
+            AnnotationRegistry::registerAutoloadNamespace(
+                'Symfony\Component\Validator\Constraint',
+                $sysPath.'vendor/symfony/symfony/src'
+            );
+        }
 
         AnnotationRegistry::registerFile(
-            $sysPath."vendor/symfony/doctrine-bridge/Validator/Constraints/UniqueEntity.php"
+            $uniqueEntityPath
         );
 
         // Registering gedmo extensions
@@ -719,19 +716,19 @@ class Database
         $paths = array(
             //$path.'src/Chamilo/ClassificationBundle/Entity',
             //$path.'src/Chamilo/MediaBundle/Entity',
-            //$path.'src/Chamilo/PageBundle/Entity',
-            $path.'src/Chamilo/CoreBundle/Entity',
-            $path.'src/Chamilo/UserBundle/Entity',
-            $path.'src/Chamilo/CourseBundle/Entity',
-            $path.'src/Chamilo/TicketBundle/Entity',
-            $path.'src/Chamilo/SkillBundle/Entity',
-            $path.'src/Chamilo/PluginBundle/Entity',
+            $path.'src/PageBundle/Entity',
+            $path.'src/CoreBundle/Entity',
+            $path.'src/UserBundle/Entity',
+            $path.'src/CourseBundle/Entity',
+            $path.'src/TicketBundle/Entity',
+            $path.'src/SkillBundle/Entity',
+            $path.'src/PluginBundle/Entity',
             //$path.'vendor/sonata-project/user-bundle/Entity',
             //$path.'vendor/sonata-project/user-bundle/Model',
             //$path.'vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Entity',
         );
 
-        $proxyDir = $path.'app/cache/';
+        $proxyDir = $path.'var/cache/';
 
         $config = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
             $paths,

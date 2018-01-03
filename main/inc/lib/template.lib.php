@@ -616,6 +616,52 @@ class Template
     }
 
     /**
+     * Set legacy twig globals in order to be hook in the LegacyListener.php
+     * @return array
+     */
+    public static function getGlobals()
+    {
+        $_p = array(
+            'web' => api_get_path(WEB_PATH),
+            'web_relative' => api_get_path(REL_PATH),
+            'web_course' => api_get_path(WEB_COURSE_PATH),
+            'web_main' => api_get_path(WEB_CODE_PATH),
+            'web_css' => api_get_path(WEB_CSS_PATH),
+            //'web_css_theme' => api_get_path(WEB_CSS_PATH) . 'themes/' . $this->theme . '/',
+            'web_ajax' => api_get_path(WEB_AJAX_PATH),
+            'web_img' => api_get_path(WEB_IMG_PATH),
+            'web_plugin' => api_get_path(WEB_PLUGIN_PATH),
+            'web_plugin_asset' => api_get_path(WEB_PLUGIN_ASSET_PATH),
+            'web_lib' => api_get_path(WEB_LIBRARY_PATH),
+            'web_upload' => api_get_path(WEB_UPLOAD_PATH),
+            'web_self' => api_get_self(),
+            'web_query_vars' => api_htmlentities($_SERVER['QUERY_STRING']),
+            'web_self_query_vars' => api_htmlentities($_SERVER['REQUEST_URI']),
+            'web_cid_query' => api_get_cidreq(),
+        );
+
+        $_s = array(
+            'software_name' => api_get_configuration_value('software_name'),
+            'system_version' => api_get_configuration_value('system_version'),
+            'site_name' => api_get_setting('siteName'),
+            'institution' => api_get_setting('Institution'),
+            'date' => api_format_date('now', DATE_FORMAT_LONG),
+            'timezone' => api_get_timezone(),
+            'gamification_mode' => api_get_setting('gamification_mode')
+        );
+
+        //$user_info = api_get_user_info();
+
+        return [
+            '_p' => $_p,
+            '_s' => $_s,
+            //       '_u' => $user_info,
+            'template' => 'default' // @todo setup template folder in config.yml;
+        ];
+    }
+
+
+    /**
      * Set theme, include mainstream CSS files
      * @return void
      * @see setCssCustomFiles() for additional CSS sheets

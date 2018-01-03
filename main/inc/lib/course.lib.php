@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt*/
 
+use Chamilo\CourseBundle\ToolChain;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use ChamiloSession as Session;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
@@ -29,6 +30,55 @@ class CourseManager
     const USER_SEPARATOR = ' |';
     const COURSE_FIELD_TYPE_CHECKBOX = 10;
     public $columns = [];
+    public static $em;
+    private static $manager;
+    public static $toolList;
+    public static $courseSettingsManager;
+
+    /**
+     * @param \Doctrine\ORM\EntityManager
+     */
+    public static function setEntityManager($em)
+    {
+        self::$em = $em;
+    }
+
+    /**
+     * @return \Doctrine\ORM\EntityManager
+     */
+    public static function getEntityManager()
+    {
+        return self::$em;
+    }
+
+    public static function setCourseManager($manager)
+    {
+        self::$manager = $manager;
+    }
+
+    /**
+     * @return SettingsManager
+     */
+    public static function getCourseSettingsManager()
+    {
+        return self::$courseSettingsManager;
+    }
+
+    /**
+     * @param SettingsManager $courseSettingsManager
+     */
+    public static function setCourseSettingsManager($courseSettingsManager)
+    {
+        self::$courseSettingsManager = $courseSettingsManager;
+    }
+
+    /**
+     * @return Chamilo\CoreBundle\Entity\Manager\CourseManager
+     */
+    public static function getManager()
+    {
+        return self::$manager;
+    }
 
     /**
      * Creates a course
@@ -6484,5 +6534,21 @@ class CourseManager
             return $html;
         }
         return '';
+    }
+
+    /**
+     * @param ToolChain $toolList
+     */
+    public static function setToolList($toolList)
+    {
+        self::$toolList = $toolList;
+    }
+
+    /**
+     * @return ToolChain
+     */
+    public static function getToolList()
+    {
+        return self::$toolList;
     }
 }

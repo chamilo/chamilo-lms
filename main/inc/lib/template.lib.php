@@ -995,7 +995,7 @@ class Template
         if (api_get_setting('show_link_ticket_notification') == 'true' && $this->user_is_logged_in) {
             // by default is project_id = 1
             $iconTicket = Display::return_icon(
-                'bug.png',
+                'help.png',
                 get_lang('Ticket'),
                 [],
                 ICON_SIZE_LARGE
@@ -1006,7 +1006,7 @@ class Template
                 $courseParams = api_get_cidreq();
             }
             $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id=1&'.$courseParams;
-            $rightFloatMenu .= '<div class="report">
+            $rightFloatMenu .= '<div class="help">
 		        <a href="'.$url.'" target="_blank">
                     '.$iconTicket.'
                 </a>

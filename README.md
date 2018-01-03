@@ -22,31 +22,18 @@ The upgrade instructions are located in the documentation here:
 * app/Resources/public/assets moved to public/assets
 * main/inc/lib/javascript moved to public/js
 * main/img/ moved to public/img
-* Installation url changed from main/install/index.php to public/install.php
 * main/template/default moved to src/Chamilo/CoreBundle/Resources/views
-* Template twig file names are changed from *.tpl to *.html.twig to follow Symfony2 format
 * bin/doctrine.php removed use bin/console doctrine:xyz options
-* php files are now loaded using the public/index.php file
- * In 1.x:
-      main/admin/user_list.php
- * In 2.x (dev mode)
-      public/index.php/main/admin/user_list.php
- * In 2.x: (prod mode) htaccess redirects main calls to /index.php/
-      main/admin/user_list.php
-* Language list is now loaded using the iso code not the english name.
-  Example: "es" instead of "spanish"
 * PHPMailer replaced with Swift Mailer
 * Plugin images, css and js libs are loaded inside the public/plugins folder
   (composer update copies the content inside plugin_name/public inside web/plugins/plugin_name
 * Plugins templates use asset() function instead of using "_p.web_plugin"
 
 ## Todo
-* Template system to work with current Symfony2 structure
 * Auth (CAS, Shibboleth, Oath2)
 * URL course changes "cidReq" to "c", "session_id" to "s"
 * Fix plugins that use api_get_setting directly in the code
 * Fix plugins render using tpl or PHP files
-* CAPTCHA
 
 ## Contributing
 

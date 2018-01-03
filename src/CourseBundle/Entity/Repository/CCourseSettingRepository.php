@@ -3,12 +3,12 @@
 
 namespace Chamilo\CourseBundle\Entity\Repository;
 
-//use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
  * Class CCourseSettingRepository
  * @package Chamilo\CourseBundle\Entity\Repository
  */
-class CCourseSettingRepository
+class CCourseSettingRepository extends EntityRepository
 {
 }

@@ -12,7 +12,7 @@
 </style>
 
 {% if rows %}
-    <h1 class="page-header">{{ 'SkillsAcquired' | get_lang }}</h1>
+    <h1 class="table-header">{{ 'SkillsAcquired' | get_lang }}</h1>
     <table class="table">
         <thead>
             <tr>

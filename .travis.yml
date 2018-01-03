@@ -111,7 +111,7 @@ script:
 
 # configure notifications (email, IRC, campfire etc)
 notifications:
-  # IRC notifications - disabled for creating a lot of noise on the channel
-  irc: "irc.freenode.org#chamilodev"
+  irc: irc.freenode.org#chamilodev
   slack:
-      secure: qVu1BH+UBset9e+v5Qm4UNgAPUdZyEsI+BsVbhBoNZ3h/Qfq/0gb/+EAbffEf5BWTBIMJwVo3f8y6+sszMPgyBSriu8BoGqtQ8OZelLnw0/yTDRnNzbZQhbc+Sszqr1X+Dzz4xjLdW5LsqoIhPQTwoMemh/hT+Vz8O/rp9tVWts=
+    rooms:
+      secure: wlaaOwNt58ENjx2PEciISr4VBRWXp6YfI8TAZgvhDO1H0XpLByRYyktgm/+h6NQWvTEcPGBSFcsIA6K0N8FA52/fdDQFxbe0en+b4q7AGNLdjTRdszfZ4AbIdRngSBFKRmXC5IX0dEx/nGWYp5fRs26QPvgBadpj8M11BnL7qhg=

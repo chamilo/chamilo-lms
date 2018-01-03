@@ -2059,4 +2059,13 @@ blockquote p {
 .skills_chart > ul > li > ul > li > a {
     width: 8em;
 }
-
+.communications #skillList .thumbnail{
+    border: none;
+}
+.communications #skillList .table-bordered{
+    border: 1px solid #84bd00;
+}
+.table thead tr th.achieved{
+    vertical-align: bottom;
+    border-bottom: 2px solid #84bd00;
+}

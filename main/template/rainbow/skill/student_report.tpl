@@ -20,7 +20,7 @@
         {{ skill_table }}
     {% endif %}
 
-    <h6 class="page-header">{{ 'SkillsAcquired' | get_lang }}</h6>
+    <h6 class="page-header">{{ 'SkillsHistory' | get_lang }}</h6>
     <table class="table">
         <thead>
             <tr>

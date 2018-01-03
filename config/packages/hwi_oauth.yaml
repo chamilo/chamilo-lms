@@ -1,0 +1,41 @@
+hwi_oauth:
+    connect:
+        account_connector: chamilo_user_provider
+    firewall_names: [admin]
+    resource_owners:
+        github:
+            type:                github
+            client_id:           <client_id>
+            client_secret:       <client_secret>
+        facebook:
+            type:                facebook
+            client_id:           <client_id>
+            client_secret:       <client_secret>
+        google:
+            type:                google
+            client_id:           <client_id>
+            client_secret:       <client_secret>
+            scope:               "email profile"
+        my_custom_oauth2:
+            type:                oauth2
+            client_id:           <client_id>
+            client_secret:       <client_secret>
+            access_token_url:    https://path.to/oauth/v2/token
+            authorization_url:   https://path.to/oauth/v2/authorize
+            infos_url:           https://path.to/api/user
+            scope:               "user_details"
+            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
+            paths:
+                identifier: id
+                nickname:   username
+                realname:   fullname
+    fosub:
+        # try 30 times to check if a username is available (foo, foo1, foo2 etc)
+        username_iterations: 30
+
+        # mapping between resource owners (see below) and properties
+        properties:
+            github: githubId
+            google: googleId
+            facebook: facebookId
+            my_custom_provider: customId

@@ -1,30 +1,26 @@
-parameters:
-    # Adds a fallback DATABASE_URL if the env var is not set.
-    # This allows you to run cache:warmup even if your
-    # environment variables are not available yet.
-    # You should not need to change this value.
-    env(DATABASE_URL): ''
-
 doctrine:
     dbal:
-        # configure these for your database server
+        server_version: 5.6
+        dbname: '%env(DATABASE_NAME)%'
+        user: '%env(DATABASE_USER)%'
+        password: '%env(DATABASE_PASSWORD)%'
+        host: '%env(DATABASE_HOST)%'
         driver: 'pdo_mysql'
-        server_version: '5.7'
-        charset: utf8mb4
+        charset:  utf8mb4
 
-        # With Symfony 3.3, remove the `resolve:` prefix
-        url: '%env(resolve:DATABASE_URL)%'
+        types:
+            json: Sonata\Doctrine\Types\JsonType
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
         mappings:
-            App:
-                is_bundle: false
-                type: annotation
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity'
-                alias: App
+#            App:
+#                is_bundle: false
+#                type: annotation
+#                dir: '%kernel.project_dir%/src/Entity'
+#                prefix: 'App\Entity'
+#                alias: App
             gedmo_translatable:
                 type: annotation
                 prefix: Gedmo\Translatable\Entity

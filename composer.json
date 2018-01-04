@@ -170,7 +170,7 @@
         "jeroendesloovere/vcard": "^1.2",
         "knplabs/doctrine-behaviors": "~1.1",
         "jimmiw/php-time-ago": "^0.4.14",
-        "phpoffice/phpword": "^0.13.0||dev-master",
+        "phpoffice/phpword": "^0.14.0||dev-master",
         "facebook/php-sdk-v4": "~5.0",
         "kigkonsult/icalcreator": "2.22.5",
         "essence/essence": "~3.0",
@@ -191,7 +191,7 @@
         "symfony/web-profiler-bundle": "^3.0|^4.0",
         "symfony/web-server-bundle": "^3.0|^4.0",
         "behat/behat": "@stable",
-        "behat/mink": "@stable",
+        "behat/mink": "dev-master",
         "behat/mink-extension": "*",
         "behat/mink-goutte-driver": "*",
         "behat/mink-selenium2-driver": "*"

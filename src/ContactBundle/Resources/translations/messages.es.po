@@ -1,0 +1,26 @@
+msgid "Category"
+msgstr "Categoría"
+
+msgid "Firstname"
+msgstr "Apellidos"
+
+msgid "Lastname"
+msgstr "Nombre"
+
+msgid "Email"
+msgstr "Correo electrónico"
+
+msgid "Subject"
+msgstr "Asunto"
+
+msgid "Message"
+msgstr "Mensaje"
+
+msgid "Send"
+msgstr "Enviar"
+
+msgid "You had a new message from %url%"
+msgstr "Ha recibido un nuevo mensaje de %url%"
+
+msgid "Your email has been sent! Thanks!"
+msgstr "Su mensaje ha sido enviado! Gracias!"

@@ -145,12 +145,14 @@ services:
         arguments: ['%kernel.default_locale%', '@service_container']
         tags:
             - { name: kernel.event_subscriber }
+
     # User locale listener
     chamilo_core.listener.user_locale_listener:
         class: Chamilo\CoreBundle\EventListener\UserLocaleListener
         arguments: ['@session', '@chamilo.settings.manager']
         tags:
             - { name: kernel.event_listener, event: security.interactive_login, method: onInteractiveLogin }
+
     # Settings listener
     chamilo_core.listener.settings:
         class: Chamilo\CoreBundle\EventListener\SettingListener
@@ -194,15 +196,14 @@ services:
 #        class: Chamilo\CoreBundle\Menu\LeftMenuBuilder
 #        arguments: ['@knp_menu.factory', '@chamilo_core.entity.manager.course_manager', '@router']
 
-
     # Auth listeners
     chamilo_core.listener.login_success_handler:
         class: Chamilo\CoreBundle\EventListener\LoginSuccessHandler
-        arguments:  ['@router', '@security.authorization_checker']
+        arguments: ['@router', '@security.authorization_checker']
 
     chamilo_core.listener.logout_success_handler:
         class: Chamilo\CoreBundle\EventListener\LogoutSuccessHandler
-        arguments:  ['@router', '@security.authorization_checker', '@security.token_storage']
+        arguments: ['@router', '@security.authorization_checker', '@security.token_storage']
 
     # Block services
     chamilo_core.block.course:

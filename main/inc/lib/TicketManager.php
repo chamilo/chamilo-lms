@@ -938,7 +938,7 @@ class TicketManager
                     $img_source = 'icons/32/event.png';
                     break;
                 default:
-                    $img_source = 'icons/32/course_home.png';
+                    $img_source = 'icons/32/ticket.png';
                     break;
             }
 
@@ -947,7 +947,8 @@ class TicketManager
 
             $icon = Display::return_icon(
                 $img_source,
-                get_lang('Info')
+                get_lang('Info'),
+                ['style' => 'margin-right: 10px; float: left;']
             );
 
             $icon .= '<a href="ticket_details.php?ticket_id='.$row['id'].'">'.$row['code'].'</a>';
@@ -2189,7 +2190,7 @@ class TicketManager
     {
         $items = [];
         $project = [
-            'icon' => 'career.png',
+            'icon' => 'project.png',
             'url' => 'projects.php',
             'content' => get_lang('Projects')
         ];
@@ -2199,7 +2200,7 @@ class TicketManager
             'content' => get_lang('Status')
         ];
         $priority = [
-            'icon' => 'order-course.png',
+            'icon' => 'tickets_urgent.png',
             'url' => 'priorities.php',
             'content' => get_lang('Priority')
         ];

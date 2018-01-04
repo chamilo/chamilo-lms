@@ -236,7 +236,7 @@ if (!empty($projectId)) {
                 null,
                 ICON_SIZE_MEDIUM
             ),
-            api_get_path(WEB_CODE_PATH) . 'ticket/new_ticket.php?project_id=' . $projectId,
+            api_get_path(WEB_CODE_PATH) . 'ticket/new_ticket.php?project_id=' . $projectId.'&'.api_get_cidReq(),
             ['title' => get_lang('Add')]
         );
     }
@@ -256,7 +256,7 @@ if (!empty($projectId)) {
         $actionRight .= Display::url(
             Display::return_icon(
                 'settings.png',
-                get_lang('Categories'),
+                get_lang('Settings'),
                 null,
                 ICON_SIZE_MEDIUM
             ),
@@ -283,21 +283,32 @@ if (!empty($projectId)) {
     }
 
     $options = '';
+    $iconProject = Display::return_icon(
+        'project.png',
+        get_lang('Projects'),
+        null,
+        ICON_SIZE_MEDIUM
+        ) ;
     if ($isAdmin) {
         $options .= Display::url(
-            get_lang('Projects'),
+            $iconProject,
             api_get_path(WEB_CODE_PATH).'ticket/projects.php'
         );
     }
-
-    $options .= Display::url(
+    $iconTicket = Display::return_icon(
+        'tickets.png',
         $ticketLabel,
+        null,
+        ICON_SIZE_MEDIUM
+        ) ;
+    $options .= Display::url(
+        $iconTicket,
         $url
     );
 
     if ($isAllow) {
         echo Display::toolbarAction(
-            'options',
+            'toolbar-options',
             array(
                 $options
             )

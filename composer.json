@@ -44,10 +44,6 @@
         {
           "type": "vcs",
           "url": "https://github.com/chamilo/SyliusSettingsBundle.git"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/chamilo/pclzip"
         }
     ],
     "require": {
@@ -152,7 +148,6 @@
 
         "robrichards/xmlseclibs": "3.0.*",
 
-        "ezyang/htmlpurifier": "4.9.*",
         "szymach/c-pchart": "3.0.4",
         "aferrandini/phpqrcode": "1.0.1",
         "alchemy/zippy": "~0.4",
@@ -179,7 +174,6 @@
         "facebook/php-sdk-v4": "~5.0",
         "kigkonsult/icalcreator": "2.22.5",
         "essence/essence": "~3.0",
-        "chamilo/pclzip": "^2.8",
         "paragonie/random-lib": "2.0.0",
         "ocramius/proxy-manager": "~1.0|2.0.*",
         "culqi/culqi-php": "v1.3.3",

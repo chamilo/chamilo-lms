@@ -493,6 +493,7 @@ class PDF
             api_get_path(SYS_CODE_PATH).'img/',
             $document_html
         );
+        $document_html = str_replace(api_get_path(WEB_ARCHIVE_PATH), api_get_path(SYS_ARCHIVE_PATH), $document_html);
 
         //replace relative path by absolute path for resources
         //$document_html= str_replace('src="/chamilo/main/default_course_document/', 'temp_template_path', $document_html);// before save src templates not apply

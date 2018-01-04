@@ -32,7 +32,6 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude('assets')
     ->exclude('bin')
     ->exclude('documentation')
-
     ->exclude('main/auth/cas/lib')
     ->exclude('main/auth/shibboleth')
     ->exclude('main/auth/openid')
@@ -74,17 +73,17 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude('web')
 
     ->notPath('main/admin/db.php')
-    ->notPath('main/admin/db.php')
     ->notPath('main/admin/ldap_synchro.php')
     ->notPath('main/chat/emoji_strategy.php')
     ->in(__DIR__)
 ;
 
 return PhpCsFixer\Config::create()
-    ->setRules([
-        '@PSR2' => true,
-        //'strict_param' => true,
-        'array_syntax' => ['syntax' => 'short'],
-    ])
-    ->setFinder($finder)
-;
+    ->setRules(
+        [
+            '@PSR2' => true,
+            //'strict_param' => true,
+            'array_syntax' => ['syntax' => 'short'],
+        ]
+    )
+    ->setFinder($finder);

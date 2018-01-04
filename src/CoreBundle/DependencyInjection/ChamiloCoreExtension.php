@@ -36,5 +36,4 @@ class ChamiloCoreExtension extends Extension
     {
         return 'chamilo_core';
     }
-
 }

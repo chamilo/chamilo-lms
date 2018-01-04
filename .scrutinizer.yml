@@ -112,7 +112,7 @@ filter:
     excluded_paths:
         - 'cli-config.php'
         - 'var/cache/*'
-        - 'var/logs/*'
+        - 'var/log/*'
         - 'app/config/*'
         - 'app/SymfonyRequirements.php'
         - 'documentation/*'

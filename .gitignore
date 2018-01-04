@@ -3,8 +3,8 @@
 var/cache/*
 !var/cache/.gitkeep
 
-var/logs/*
-!var/logs/.gitkeep
+var/log/*
+!var/log/.gitkeep
 
 # Chamilo configuration
 /app/config/parameters.yml

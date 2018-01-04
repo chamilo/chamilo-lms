@@ -52,7 +52,7 @@ plugins:
 exclude_patterns:
 - cli-config.php
 - var/cache/
-- var/logs/
+- var/log/
 - app/config/
 - config/
 - app/SymfonyRequirements.php

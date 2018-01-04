@@ -17,14 +17,14 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
 
+/** @var learnpath $lp */
+$lp = Session::read('oLP');
+
 if (isset($_GET['lp_item_id'])) {
     // Get parameter only came from lp_view.php.
     $lp_item_id = intval($_GET['lp_item_id']);
-    if (isset($_SESSION['lpobject'])) {
-        $oLP = unserialize($_SESSION['lpobject']);
-    }
-    if (is_object($oLP)) {
-        $src = $oLP->get_link('http', $lp_item_id);
+    if (is_object($lp)) {
+        $src = $lp->get_link('http', $lp_item_id);
     }
 
     $url_info = parse_url($src);
@@ -41,9 +41,15 @@ if (isset($_GET['lp_item_id'])) {
     }
 }
 
+
+
+if (empty($lp)) {
+    api_not_allowed();
+}
+
 $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : 'fullpage';
 if (isset($_SESSION['oLP']) && isset($_GET['id'])) {
-    $_SESSION['oLP'] -> current = intval($_GET['id']);
+    $_SESSION['oLP']->current = intval($_GET['id']);
 }
 $this_section = SECTION_COURSES;
 /* Header and action code */
@@ -61,9 +67,6 @@ if ((!$is_allowed_to_edit) || $isStudentView) {
 // From here on, we are admin because of the previous condition, so don't check anymore.
 
 $course_id = api_get_course_int_id();
-$sql = "SELECT * FROM $tbl_lp WHERE iid = $learnpath_id";
-$result = Database::query($sql);
-$therow = Database::fetch_array($result);
 
 /* SHOWING THE ADMIN TOOLS	*/
 if (api_is_in_gradebook()) {
@@ -79,7 +82,7 @@ $interbreadcrumb[] = array(
 );
 $interbreadcrumb[] = array(
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
-    'name' => $therow['name']
+    'name' => $lp->get_name()
 );
 $interbreadcrumb[] = array(
     'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
@@ -88,9 +91,7 @@ $interbreadcrumb[] = array(
 
 // Theme calls
 $show_learn_path = true;
-if (isset($_SESSION['oLP']) && is_object($_SESSION['oLP'])) {
-	$lp_theme_css = $_SESSION['oLP']->get_theme();
-}
+$lp_theme_css = $lp->get_theme();
 
 if ($mode == 'fullpage') {
     Display::display_header(get_lang('Item'), 'Path');
@@ -118,22 +119,22 @@ function confirmation(name) {
 <?php
 
 $id = isset($new_item_id) ? $new_item_id : $_GET['id'];
-if (is_object($_SESSION['oLP'])) {
+if (is_object($lp)) {
     switch ($mode) {
         case 'fullpage':
-            echo $_SESSION['oLP']->build_action_menu();
+            echo $lp->build_action_menu();
             echo '<div class="row">';
             echo '<div class="col-md-3">';
-            echo $_SESSION['oLP']->return_new_tree();
+            echo $lp->return_new_tree();
             echo '</div>';
             echo '<div class="col-md-9">';
-            echo $_SESSION['oLP']->display_item($id);
+            echo $lp->display_item($id);
             echo '</div>';
             echo '</div>';
             Display::display_footer();
             break;
         case 'preview_document':
-            echo $_SESSION['oLP']->display_item($id, null, false);
+            echo $lp->display_item($id, null, false);
             break;
     }
 }

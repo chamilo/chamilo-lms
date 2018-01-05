@@ -45,6 +45,9 @@ plugins:
 
   sonar-php:
     enabled: false
+    checks:
+      php:S1192:
+        enabled: false
 
   duplication:
     enabled: false

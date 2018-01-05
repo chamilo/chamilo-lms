@@ -27,7 +27,7 @@ class NavBuilder implements ContainerAwareInterface
      *
      * @return \Knp\Menu\ItemInterface
      */
-    public function createCategoryMenu(array $itemOptions = array(), $currentUri = null)
+    public function createCategoryMenu(array $itemOptions = [], $currentUri = null)
     {
         $factory = $this->container->get('knp_menu.factory');
         $menu = $factory->createItem('categories', $itemOptions);
@@ -42,12 +42,12 @@ class NavBuilder implements ContainerAwareInterface
      * @param array                   $options     The item options
      * @param string                  $currentUri  The current URI
      */
-    public function buildCategoryMenu(ItemInterface $menu, array $options = array(), $currentUri = null)
+    public function buildCategoryMenu(ItemInterface $menu, array $options = [], $currentUri = null)
     {
         //$categories = $this->categoryManager->getCategoryTree();
 
         //$this->fillMenu($menu, $categories, $options, $currentUri);
-        $menu->addChild('home', array('route' => 'home'));
+        $menu->addChild('home', ['route' => 'home']);
     }
 
     /**
@@ -66,61 +66,61 @@ class NavBuilder implements ContainerAwareInterface
 
         $menu->addChild(
             $translator->trans('Home'),
-            array('route' => 'home')
+            ['route' => 'home']
         );
 
         if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $menu->addChild(
                 $translator->trans('MyCourses'),
-                array('route' => 'userportal')
+                ['route' => 'userportal']
             );
 
             $menu->addChild(
                 $translator->trans('Calendar'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => 'calendar/agenda_js.php',
-                    ),
-                )
+                    ],
+                ]
             );
 
             $menu->addChild(
                 $translator->trans('Reporting'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => 'mySpace/index.php',
-                    ),
-                )
+                    ],
+                ]
             );
 
             $menu->addChild(
                 $translator->trans('Social'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => 'social/home.php',
-                    ),
-                )
+                    ],
+                ]
             );
 
             if ($checker->isGranted('ROLE_ADMIN')) {
                 $menu->addChild(
                     $translator->trans('Dashboard'),
-                    array(
+                    [
                         'route' => 'main',
-                        'routeParameters' => array(
+                        'routeParameters' => [
                             'name' => 'dashboard/index.php',
-                        ),
-                    )
+                        ],
+                    ]
                 );
 
                 $menu->addChild(
                     $translator->trans('Administration'),
-                    array(
+                    [
                         'route' => 'administration',
-                    )
+                    ]
                 );
             }
         }
@@ -137,13 +137,13 @@ class NavBuilder implements ContainerAwareInterface
             foreach ($categories as $category) {
                 $faq->addChild(
                     $category->getHeadline(),
-                    array(
+                    [
                         'route' => 'faq',
-                        'routeParameters' => array(
+                        'routeParameters' => [
                             'categorySlug' => $category->getSlug(),
                             'questionSlug' => '',
-                        ),
-                    )
+                        ],
+                    ]
                 )->setAttribute('divider_append', true);
             }
         }
@@ -153,10 +153,10 @@ class NavBuilder implements ContainerAwareInterface
         $host = $site->getRequestContext()->getHost();
         $siteManager = $this->container->get('sonata.page.manager.site');
         /** @var Site $site */
-        $site = $siteManager->findOneBy(array(
-            'host'    => array($host, 'localhost'),
+        $site = $siteManager->findOneBy([
+            'host'    => [$host, 'localhost'],
             'enabled' => true,
-        ));
+        ]);
 
         if ($site) {
             $pageManager = $this->container->get('sonata.page.manager.page');
@@ -195,12 +195,12 @@ class NavBuilder implements ContainerAwareInterface
                 foreach ($page->getChildren() as $child) {
                     $subMenu->addChild(
                         $child->getName(),
-                        array(
+                        [
                             'route' => $page->getRouteName(),
-                            'routeParameters' => array(
+                            'routeParameters' => [
                                 'path' => $child->getUrl(),
-                            ),
-                        )
+                            ],
+                        ]
                     )->setAttribute('divider_append', true);
                 }
             }

@@ -245,7 +245,7 @@ class Container
      */
     public static function getMailer()
     {
-       return self::$container->get('mailer');
+        return self::$container->get('mailer');
     }
 
     /**
@@ -338,5 +338,4 @@ class Container
     {
         return self::$container->get('chamilo_course.tool_chain');
     }
-
 }

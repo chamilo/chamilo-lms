@@ -48,7 +48,7 @@ class PageController
                 get_lang('MenuGeneral'),
                 null,
                 'help_block',
-                array('content' => $home_menu_content)
+                ['content' => $home_menu_content]
             );
         }
     }
@@ -60,18 +60,18 @@ class PageController
     public function returnSkillsLinks()
     {
         if (api_get_setting('skill.allow_skills_tool') == 'true') {
-            $content   = array();
-            $content[] = array(
+            $content   = [];
+            $content[] = [
                 'title' => get_lang('MySkills'),
                 'href'  => api_get_path(WEB_CODE_PATH).'social/skills_wheel.php'
-            );
+            ];
 
             if (api_get_setting('skill.allow_hr_skills_management') == 'true'
                 || api_is_platform_admin()) {
-                $content[] = array(
+                $content[] = [
                     'title' => get_lang('ManageSkills'),
                     'href'  => api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php'
-                );
+                ];
             }
             $this->show_right_block(get_lang("Skills"), $content, 'skill_block');
         }
@@ -96,9 +96,9 @@ class PageController
 
         if (!empty($home_notice)) {
             $home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
-            $home_notice = Display::div($home_notice, array('class' => 'homepage_notice'));
+            $home_notice = Display::div($home_notice, ['class' => 'homepage_notice']);
 
-            $this->show_right_block(get_lang('Notice'), null, 'notice_block', array('content' => $home_notice));
+            $this->show_right_block(get_lang('Notice'), null, 'notice_block', ['content' => $home_notice]);
         }
     }
 
@@ -117,12 +117,12 @@ class PageController
         if (!empty($id)) {
             $params['id'] = $id;
         }
-        $block_menu = array(
+        $block_menu = [
             'id'       => $params['id'],
             'title'    => $title,
             'elements' => $content,
             'content'  => isset($params['content']) ? $params['content'] : null
-        );
+        ];
 
         //$app['template']->assign($id, $block_menu);
     }
@@ -272,7 +272,7 @@ class PageController
                 );
             }
             if (!empty($classes)) {
-                $classes = Display::tag('ul', $classes, array('class' => 'nav nav-list'));
+                $classes = Display::tag('ul', $classes, ['class' => 'nav nav-list']);
                 $html .= $this->show_right_block(get_lang('Classes'), $classes, 'classes_block');
             }
         }
@@ -287,7 +287,7 @@ class PageController
      */
     public function return_exercise_block($personal_course_list, $tpl)
     {
-        $exercise_list = array();
+        $exercise_list = [];
         if (!empty($personal_course_list)) {
             foreach ($personal_course_list as $course_item) {
                 $course_code = $course_item['c'];
@@ -475,7 +475,6 @@ class PageController
         $courses_list_string = '';
         $courses_shown       = 0;
         if ($numrows > 0) {
-
             $courses_list_string .= Display::page_header(get_lang('CourseList'));
             $courses_list_string .= "<ul>";
 
@@ -493,7 +492,7 @@ class PageController
                         $courses_shown++;
                         $courses_list_string .= "<li>\n";
                         $courses_list_string .= '<a href="'.$web_course_path.$course['directory'].'/">'.$course['title'].'</a><br />';
-                        $course_details = array();
+                        $course_details = [];
                         if (api_get_setting('course.display_coursecode_in_courselist') ==
                             'true') {
                             $course_details[] = $course['visual_code'];
@@ -546,7 +545,7 @@ class PageController
                     ) {
                         $courses_list_string .= '</a><br />';
                     }
-                    $course_details = array();
+                    $course_details = [];
                     if (api_get_setting('course.display_coursecode_in_courselist') == 'true') {
                         $course_details[] = $course['visual_code'];
                     }
@@ -630,24 +629,23 @@ class PageController
             $this->maxPerPage
         );
 
-        $adapter    = new FixedAdapter($nbResults, array());
+        $adapter    = new FixedAdapter($nbResults, []);
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
         $pagerfanta->setCurrentPage($page); // 1 by default
 
         $this->app['pagerfanta.view.router.name']   = 'userportal';
-        $this->app['pagerfanta.view.router.params'] = array(
+        $this->app['pagerfanta.view.router.params'] = [
             'filter' => $filter,
             'type'   => 'courses',
             'page'   => $page
-        );
+        ];
         $this->app['template']->assign('pagination', $pagerfanta);
 
         return $html;
-
     }
 
-    function returnSpecialCourses($user_id, $filter, $page)
+    public function returnSpecialCourses($user_id, $filter, $page)
     {
         if (empty($user_id)) {
             return false;
@@ -660,17 +658,16 @@ class PageController
 
         $html = CourseManager::displaySpecialCourses($user_id, $filter, $loadDirs, false, $start, $this->maxPerPage);
         if (!empty($html)) {
-
-            $adapter    = new FixedAdapter($nbResults, array());
+            $adapter    = new FixedAdapter($nbResults, []);
             $pagerfanta = new Pagerfanta($adapter);
             $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
             $pagerfanta->setCurrentPage($page); // 1 by default
             $this->app['pagerfanta.view.router.name']   = 'userportal';
-            $this->app['pagerfanta.view.router.params'] = array(
+            $this->app['pagerfanta.view.router.params'] = [
                 'filter' => $filter,
                 'type'   => 'courses',
                 'page'   => $page
-            );
+            ];
             $this->app['template']->assign('pagination', $pagerfanta);
         }
 
@@ -712,7 +709,7 @@ class PageController
         );
 
         if (!empty($html)) {
-            $adapter    = new FixedAdapter($nbResults, array());
+            $adapter    = new FixedAdapter($nbResults, []);
             $pagerfanta = new Pagerfanta($adapter);
             $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
             $pagerfanta->setCurrentPage($page); // 1 by default
@@ -802,12 +799,12 @@ class PageController
                         $count++;
                     }
 
-                    $params = array();
+                    $params = [];
                     if ($count > 0) {
                         $params['icon'] = Display::return_icon(
                             'window_list.png',
                             $session['session_name'],
-                            array('id' => 'session_img_'.$session_id),
+                            ['id' => 'session_img_'.$session_id],
                             ICON_SIZE_LARGE
                         );
 
@@ -820,7 +817,7 @@ class PageController
                             $session_link = Display::tag(
                                 'a',
                                 $session['session_name'],
-                                array('href' => api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id)
+                                ['href' => api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id]
                             );
                             $params['link'] = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id;
                         }
@@ -841,7 +838,7 @@ class PageController
                             $params['right_actions'] = '<a href="'.api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session_id.'">'.Display::return_icon(
                                 'edit.png',
                                 get_lang('Edit'),
-                                array('align' => 'absmiddle'),
+                                ['align' => 'absmiddle'],
                                 ICON_SIZE_SMALL
                             ).'</a>';
                         }
@@ -850,11 +847,11 @@ class PageController
                 }
 
                 if ($count_courses_session > 0) {
-                    $params = array();
+                    $params = [];
                     $params['icon'] = Display::return_icon(
                         'folder_blue.png',
                         $session_category['session_category']['name'],
-                        array(),
+                        [],
                         ICON_SIZE_LARGE
                     );
 
@@ -864,7 +861,7 @@ class PageController
                         ).'admin/session_category_edit.php?&id='.$session_category['session_category']['id'].'">'.Display::return_icon(
                             'edit.png',
                             get_lang('Edit'),
-                            array(),
+                            [],
                             ICON_SIZE_SMALL
                         ).'</a>';
                     }
@@ -902,17 +899,17 @@ class PageController
             }
 
             //Pagination
-            $adapter    = new FixedAdapter($nbResults, array());
+            $adapter    = new FixedAdapter($nbResults, []);
             $pagerfanta = new Pagerfanta($adapter);
             $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
             $pagerfanta->setCurrentPage($page); // 1 by default
 
             $this->app['pagerfanta.view.router.name']   = 'userportal';
-            $this->app['pagerfanta.view.router.params'] = array(
+            $this->app['pagerfanta.view.router.params'] = [
                 'filter' => $filter,
                 'type'   => 'sessioncategories',
                 'page'   => $page
-            );
+            ];
             $this->app['template']->assign('pagination', $pagerfanta);
         }
 
@@ -1084,18 +1081,17 @@ class PageController
                                         $course_session['skill'] = isset($courseUserHtml['skill']) ? $courseUserHtml['skill'] : '';
                                         $html_courses_session[] = $course_session;
                                     }
-
                                 }
                                 $count_courses_session++;
                             }
 
                             if ($count_courses_session > 0) {
-                                $params = array();
+                                $params = [];
 
                                 $params['icon'] = Display::return_icon(
                                     'window_list.png',
                                     $session['session_name'],
-                                    array('id' => 'session_img_'.$session_id),
+                                    ['id' => 'session_img_'.$session_id],
                                     ICON_SIZE_LARGE
                                 );
                                 $params['is_session'] = true;
@@ -1108,9 +1104,9 @@ class PageController
                                     $session_link = Display::tag(
                                         'a',
                                         $session['session_name'],
-                                        array(
+                                        [
                                             'href' => api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id
-                                        )
+                                        ]
                                     );
                                     $params['link'] = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id;
                                 }
@@ -1135,7 +1131,7 @@ class PageController
                                             Display::return_icon(
                                                 'edit.png',
                                                 get_lang('Edit'),
-                                                array('align' => 'absmiddle'),
+                                                ['align' => 'absmiddle'],
                                                 ICON_SIZE_SMALL
                                             ),
                                             api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session_id
@@ -1197,9 +1193,9 @@ class PageController
         $tpl->assign('welcome_to_course_block', 1);
     }
 
-     /**
-     * @param array
-     */
+    /**
+    * @param array
+    */
     public function returnNavigationLinks($items)
     {
         // Main navigation section.
@@ -1213,7 +1209,7 @@ class PageController
                 $content .= '</li>';
             }
             $content .= '</ul>';
-            $this->show_right_block(get_lang('MainNavigation'), null, 'navigation_block', array('content' => $content));
+            $this->show_right_block(get_lang('MainNavigation'), null, 'navigation_block', ['content' => $content]);
         }
     }
 }

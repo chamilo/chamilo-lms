@@ -93,7 +93,6 @@ class LeftMenuBuilder implements ContainerAwareInterface
                     ],
                 ]
             );
-
         }
 
         return $menu;
@@ -154,62 +153,62 @@ class LeftMenuBuilder implements ContainerAwareInterface
 
             $menu->addChild(
                 $translator->trans('Inbox'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => 'messages/inbox.php',
-                    ),
-                )
+                    ],
+                ]
             );
 
             $menu->addChild(
                 $translator->trans('Compose'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => 'messages/new_message.php',
-                    ),
-                )
+                    ],
+                ]
             );
 
             $menu->addChild(
                 $translator->trans('PendingInvitations'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => 'social/invitations.php',
-                    ),
-                )
+                    ],
+                ]
             );
 
             $menu->addChild(
                 $translator->trans('MyFiles'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => 'social/myfiles.php',
-                    ),
-                )
+                    ],
+                ]
             );
 
             $menu->addChild(
                 $translator->trans('EditProfile'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => 'messages/inbox.php',
-                    ),
-                )
+                    ],
+                ]
             );
 
             $menu->addChild(
                 $translator->trans('Inbox'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => 'messages/inbox.php',
-                    ),
-                )
+                    ],
+                ]
             );
         }
 
@@ -233,82 +232,82 @@ class LeftMenuBuilder implements ContainerAwareInterface
 
             $menu->addChild(
                 $translator->trans('Home'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => 'social/home.php',
-                    ),
-                )
+                    ],
+                ]
             );
 
             $menu->addChild(
                 $translator->trans('Messages'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => 'messages/inbox.php',
-                    ),
-                )
+                    ],
+                ]
             );
 
             $menu->addChild(
                 $translator->trans('Invitations'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => 'social/invitations.php',
-                    ),
-                )
+                    ],
+                ]
             );
 
             $menu->addChild(
                 $translator->trans('ViewMySharedProfile'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => 'social/profile.php',
-                    ),
-                )
+                    ],
+                ]
             );
 
             $menu->addChild(
                 $translator->trans('Friends'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => 'social/friends.php',
-                    ),
-                )
+                    ],
+                ]
             );
 
             $menu->addChild(
                 $translator->trans('SocialGroups'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => 'social/groups.php',
-                    ),
-                )
+                    ],
+                ]
             );
 
             $menu->addChild(
                 $translator->trans('Search'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => 'social/search.php',
-                    ),
-                )
+                    ],
+                ]
             );
 
             $menu->addChild(
                 $translator->trans('MyFiles'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => 'social/myfiles.php',
-                    ),
-                )
+                    ],
+                ]
             );
         }
 
@@ -396,14 +395,14 @@ class LeftMenuBuilder implements ContainerAwareInterface
             $menu->addChild(
                 $translator->trans(
                     'registration.submit',
-                    array(),
+                    [],
                     'FOSUserBundle'
                 ),
-                array(
+                [
                     'route' => 'main',
                     'routeParameters' => ['name' => 'auth/inscription.php'],
-                    array("attributes" => array("id" => 'nav')),
-                )
+                    ["attributes" => ["id" => 'nav']],
+                ]
             );
         }
 
@@ -411,15 +410,15 @@ class LeftMenuBuilder implements ContainerAwareInterface
             $menu->addChild(
                 $translator->trans(
                     'resetting.request.submit',
-                    array(),
+                    [],
                     'FOSUserBundle'
                 ),
-                array(
+                [
                     //'route' => 'fos_user_resetting_request',
                     'route' => 'main',
                     'routeParameters' => ['name' => 'auth/lostPassword.php'],
-                    array("attributes" => array("id" => 'nav')),
-                )
+                    ["attributes" => ["id" => 'nav']],
+                ]
             );
         }
 
@@ -437,10 +436,10 @@ class LeftMenuBuilder implements ContainerAwareInterface
         $menu = $factory->createItem('main');
         $menu->addChild(
             $translator->trans('Forum'),
-            array(
+            [
                 'uri' => 'https://chamilo.org/forum/',
-                array("attributes" => array("id" => 'nav')),
-            )
+                ["attributes" => ["id" => 'nav']],
+            ]
         );
 
         return $menu;

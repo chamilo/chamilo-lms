@@ -1,0 +1,21 @@
+{% extends "::layout.html.twig" %}
+
+{% block page_title %}
+    {{ 'Settings' | trans }}
+{% endblock %}
+
+{% block page_subtitle %}
+{% endblock %}
+
+{% block page_content %}
+    <div>
+    {% for plugin in plugins %}
+        <div class="panel panel-default">
+            <div class="panel-heading">{{ plugin | var_dump }} </div>
+            <div class="panel-body">
+            </div>
+        </div>
+
+    {% endfor %}
+    </div>
+{% endblock%}

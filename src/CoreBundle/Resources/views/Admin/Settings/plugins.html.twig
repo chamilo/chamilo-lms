@@ -1,0 +1,31 @@
+{% extends "::layout.html.twig" %}
+
+{% block page_title %}
+    {{ 'Plugins' | trans }}
+{% endblock %}
+
+{% block page_subtitle %}
+{% endblock %}
+
+{% block page_content %}
+
+<a href="{{ url('chamilo_core_admin_plugins_pluginsadd') }}">
+    Add
+</a>
+
+<form class="form-horizontal" name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'&sec_token=' . $token . '">
+    <table class="data_table">
+        <tr>
+            <th>Action</th>
+            <th>Plugin</th>
+            <th>Description</th>
+        </tr>
+        {% for plugin in plugins %}
+            <tr>
+                <td>{{ plugin | var_dump }}</td>
+                <td>Description</td>
+            </tr>
+
+        {% endfor %}
+    </table>
+{% endblock%}

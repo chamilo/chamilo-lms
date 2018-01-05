@@ -1,0 +1,12 @@
+{% extends "@ChamiloTheme/Layout/layout_two_col.html.twig" %}
+
+{% block chamilo_right_column %}
+    {% autoescape false %}
+        {{ content }}
+
+        {% if content is null %}
+            {% include '@ChamiloCore/default/layout/welcome_to_course.html.twig' %}
+        {% endif %}
+
+    {% endautoescape %}
+{% endblock %}

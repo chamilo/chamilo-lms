@@ -1,0 +1,26 @@
+{% if actions != '' %}
+    <div class="actions">
+        {% autoescape false %}
+        {{ actions }}
+        {% endautoescape %}
+    </div>
+{% endif %}
+
+{% autoescape false %}
+{{ flash_messages }}
+{% endautoescape %}
+<span id="js_alerts"></span>
+{% if header != '' %}
+    <div class="section-page">
+        <div class="page-header">
+            <h3>{{ header }}</h3>
+        </div>
+    </div>
+{% endif %}
+{% if message != '' %}
+    <section id="messages">
+        {% autoescape false %}
+        {{ message}}
+        {% endautoescape %}
+    </section>
+{% endif %}

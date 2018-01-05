@@ -1,0 +1,13 @@
+{% extends "@ChamiloTheme/Layout/layout_two_col.html.twig" %}
+
+{% block chamilo_right_column %}
+    {% autoescape false %}
+        {{ announcements_block }}
+        {{ content }}
+        {% if chamilo_settings_get('display.show_hot_courses') == 'true' %}
+            {# See CourseBlockService.php #}
+            {{ sonata_block_render({'type': 'chamilo_core.block.course'}) }}
+        {% endif %}
+
+    {% endautoescape %}
+{% endblock %}

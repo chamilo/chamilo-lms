@@ -1,0 +1,26 @@
+{% autoescape false %}
+
+{{ "HelloXAsYouCanSeeYourCourseListIsEmpty" | trans | format(app.user.completeName) }}
+
+{% if count_courses == 0 %}
+    {{ "PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses"|trans }}
+{% else %}
+
+    {% if chamilo_settings_get("display.allow_students_to_browse_courses")  == 'true' %}
+        {{
+            "GoAheadAndBrowseOurCourseCatalogXOnceRegisteredYouWillSeeTheCourseHereX" | trans |
+            format(
+                '<a href="' ~ url('main', {'name': 'auth/courses.php'}) ~ '"/> '~ "here" | trans ~'</a>',
+                '<a href="' ~ url('userportal') ~ '"/> '~ "here" | trans ~'</a>'
+            )
+        }}
+
+        <a class="btn btn-primary btn-large" href="{{ url('main', {'name': 'auth/courses.php'}) }}">
+            {{ "CourseCatalog"|trans }}
+        </a>
+    {% else %}
+        {{ "PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses"|trans }}
+    {% endif %}
+{% endif %}
+
+{% endautoescape %}

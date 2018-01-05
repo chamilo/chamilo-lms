@@ -1,0 +1,9 @@
+{% from '@ChamiloTheme/Macros/actions.html.twig' import create %}
+
+{{ form_errors(form) }}
+
+<form action="{{ url }}" method="post"
+      class="form-horizontal" {{ form_enctype(form) }} novalidate>
+    {% include '@ChamiloCore/User/_form.html.twig' %}
+    {{ create(url) }}
+</form>

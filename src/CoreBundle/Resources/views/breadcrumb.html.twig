@@ -1,0 +1,22 @@
+{% autoescape false %}
+    {% if course is not defined %}
+        {% set course = '' %}
+    {% endif %}
+
+    {% if legacy_breadcrumb is not defined %}
+        {% set legacy_breadcrumb = '' %}
+    {% endif %}
+
+    {{
+        sonata_block_render_event(
+            'breadcrumb',
+            {
+                'context': 'chamilo_core.block.breadcrumb',
+                'course': course,
+                'legacy_breadcrumb': legacy_breadcrumb,
+                'current_uri': app.request.requestUri
+            }
+        )
+    }}
+{% endautoescape %}
+

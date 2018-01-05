@@ -11,6 +11,7 @@ use Knp\Menu\ItemInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Routing\RouterInterface;
+use Chamilo\FaqBundle\Repository\CategoryRepository;
 
 /**
  * Class NavBuilder
@@ -30,6 +31,7 @@ class NavBuilder implements ContainerAwareInterface
     {
         $factory = $this->container->get('knp_menu.factory');
         $menu = $factory->createItem('categories', $itemOptions);
+
         $this->buildCategoryMenu($menu, $itemOptions, $currentUri);
 
         return $menu;
@@ -69,12 +71,12 @@ class NavBuilder implements ContainerAwareInterface
 
         if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $menu->addChild(
-                $translator->trans('My courses'),
+                $translator->trans('MyCourses'),
                 array('route' => 'userportal')
             );
 
             $menu->addChild(
-                $translator->trans('Personal agenda'),
+                $translator->trans('Calendar'),
                 array(
                     'route' => 'main',
                     'routeParameters' => array(
@@ -94,7 +96,7 @@ class NavBuilder implements ContainerAwareInterface
             );
 
             $menu->addChild(
-                $translator->trans('Social network'),
+                $translator->trans('Social'),
                 array(
                     'route' => 'main',
                     'routeParameters' => array(
@@ -117,16 +119,13 @@ class NavBuilder implements ContainerAwareInterface
                 $menu->addChild(
                     $translator->trans('Administration'),
                     array(
-                        'route' => 'main',
-                        'routeParameters' => array(
-                            'name' => 'social/home.php',
-                        )
+                        'route' => 'administration',
                     )
                 );
             }
         }
 
-        $categories = $this->container->get('faq.entity.category_repository')->retrieveActive();
+        $categories = $this->container->get('Chamilo\FaqBundle\Repository\CategoryRepository')->retrieveActive();
         if ($categories) {
             $faq = $menu->addChild(
                 'FAQ',
@@ -150,7 +149,6 @@ class NavBuilder implements ContainerAwareInterface
         }
 
         // Getting site information
-
         $site = $this->container->get('sonata.page.site.selector');
         $host = $site->getRequestContext()->getHost();
         $siteManager = $this->container->get('sonata.page.manager.site');
@@ -208,87 +206,6 @@ class NavBuilder implements ContainerAwareInterface
             }
         }
 
-
         return $menu;
     }
-
-    /**
-     * Top menu right
-     * @param FactoryInterface $factory
-     * @param array $options
-     * @return \Knp\Menu\ItemInterface
-     */
-    public function rightMenu(FactoryInterface $factory, array $options)
-    {
-        $checker = $this->container->get('security.authorization_checker');
-
-        $translator = $this->container->get('translator');
-        $menu = $factory->createItem('root');
-
-        // <nav class="navbar navbar-default">
-        if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {
-            $token = $this->container->get('security.token_storage');
-            /** @var User $user */
-            $user = $token->getToken()->getUser();
-            $menu->setChildrenAttribute('class', 'nav navbar-nav navbar-right');
-            $dropdown = $menu->addChild($user->getUsername())->setAttribute('dropdown', true);
-
-            /*$dropdown->addChild(
-                $translator->trans('Profile'),
-                array('route' => 'fos_user_profile_show')
-            )->setAttribute('divider_append', true);*/
-            $dropdown->addChild(
-                $translator->trans('Inbox'),
-                array(
-                    'route' => 'main',
-                    'routeParameters' => array(
-                        'name' => 'messages/inbox.php',
-                    ),
-                )
-            )->setAttribute('divider_append', true);
-
-            // legacy logout
-            $logoutLink = $menu->addChild(
-                $translator->trans('Logout'),
-                array(
-                    'route' => 'main',
-                    'routeParameters' => array(
-                        'name' => '../index.php',
-                        'logout' => 'logout',
-                        'uid' => $user->getId(),
-                    ),
-                    'query' => '1',
-                    'icon' => 'fa fa-sign-out'
-                )
-            );
-
-            $logoutLink
-                ->setLinkAttributes(array(
-                    'id' => 'logout_button',
-                    'class' => 'fa fa-power-off',
-                ))
-                ->setAttributes(array(
-                    /*'id' => 'signin',
-                    'class' => 'dropdown'*/
-                ))
-            ;
-        }
-
-        return $menu;
-    }
-
-    /*public function profileMenu(FactoryInterface $factory, array $options)
-    {
-        $menu = $factory->createItem('root');
-        $security = $this->container->get('security.context');
-        if ($security->isGranted('IS_AUTHENTICATED_FULLY')) {
-            $menu->setChildrenAttribute('class', 'nav nav-pills nav-stacked');
-
-            $menu->addChild('Inbox', array('route' => 'logout'));
-            $menu->addChild('Compose', array('route' => 'logout'));
-            $menu->addChild('Edit', array('route' => 'logout'));
-        }
-
-        return $menu;
-    }*/
 }

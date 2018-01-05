@@ -1,0 +1,138 @@
+{% extends 'form_div_layout.html.twig' %}
+
+{% block choice_widget_collapsed %}
+    {% set attr = attr|merge({'class': attr.class|default('') ~ ' form-control'}) %}
+    {{ parent() }}
+{% endblock choice_widget_collapsed %}
+
+{% block textarea_widget %}
+    {% set attr = attr|merge({'class': attr.class|default('') ~ ' form-control'}) %}
+    {{ parent() }}
+{% endblock textarea_widget %}
+
+{% block form_widget_simple %}
+    {% spaceless %}
+        {% set attr = attr|merge({'class': attr.class|default('') ~ ' form-control'}) %}
+        {% set type = type|default('text') %}
+
+        {% if 'file' == type %}
+            <span class="btn-primary btn-lg file-overlay"><i
+                        class="icon-folder-open"></i> {{ 'sylius.form.choose_file'|trans }}</span>
+        {% endif %}
+        {{ parent() }}
+    {% endspaceless %}
+{% endblock form_widget_simple %}
+
+{% block form_label %}
+    {% spaceless %}
+        {% set label_attr = label_attr|merge({'class': label_attr.class|default('col-lg-2') ~ ' control-label'}) %}
+        {{ parent() }}
+    {% endspaceless %}
+{% endblock form_label %}
+
+{% block money_widget %}
+    {% spaceless %}
+        <div class="input-group">
+            <span class="input-group-addon">{{ money_pattern|replace({'{{ widget }}': ''}) }}</span>
+            {{ block('form_widget_simple') }}
+        </div>
+    {% endspaceless %}
+{% endblock money_widget %}
+
+{% block percent_widget %}
+    {% spaceless %}
+        <div class="input-group">
+            <span class="input-group-addon">%</span>
+            {{ block('form_widget_simple') }}
+        </div>
+    {% endspaceless %}
+{% endblock percent_widget %}
+
+{% block datetime_widget %}
+    {% spaceless %}
+        {% if widget == 'single_text' %}
+            {{ block('form_widget_simple') }}
+        {% else %}
+            <div class="form-group">
+                {{ form_widget(form.date) }}
+                {{ form_widget(form.time) }}
+            </div>
+        {% endif %}
+    {% endspaceless %}
+{% endblock datetime_widget %}
+
+{% block date_widget %}
+    {% spaceless %}
+        {% if widget == 'single_text' %}
+            {{ block('form_widget_simple') }}
+        {% else %}
+            {{ '{{ year }} / {{ month }} / {{ day }}'|replace({
+                '{{ year }}':  form_widget(form.year, {'attr': {'style': 'display: inline; width: 100px;'}}),
+                '{{ month }}': form_widget(form.month, {'attr': {'style': 'display: inline; width: 100px;'}}),
+                '{{ day }}':   form_widget(form.day, {'attr': {'style': 'display: inline; width: 100px;'}}),
+            })|raw }}
+        {% endif %}
+    {% endspaceless %}
+{% endblock date_widget %}
+
+{% block time_widget %}
+    {% spaceless %}
+        {% if widget == 'single_text' %}
+            {{ block('form_widget_simple') }}
+        {% else %}
+            {% set vars = widget == 'text' ? { 'attr': { 'size': 1, 'style': 'width: 60px; display: inline;' }} : {} %}
+            &nbsp;{{ form_widget(form.hour, vars) }}{% if with_minutes %}:{{ form_widget(form.minute, vars) }}{% endif %}{% if with_seconds %} {{ form_widget(form.second, vars) }}{% endif %}
+        {% endif %}
+    {% endspaceless %}
+{% endblock time_widget %}
+
+{% block form_row %}
+    {% spaceless %}
+        <div class="form-group{% if errors|length > 0 %} has-error{% endif %}">
+            {{ form_label(form) }}
+            <div class="col-lg-10">
+                {{ form_widget(form) }}
+                {% for error in errors %}
+                    <span class="help-block form-error">
+                {{ error.messagePluralization is null
+                ? error.messageTemplate|trans(error.messageParameters, 'validators')
+                : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators') }}
+            </span>
+                {% endfor %}
+            </div>
+        </div>
+    {% endspaceless %}
+{% endblock form_row %}
+
+{% block sonata_media_type_widget %}
+    <div class="col-xs-3 pull-left">
+        {% if value is not empty and value.providerReference %}
+            <div class="pull-left" style="margin-right: 5px">
+                {% thumbnail value, 'admin' with {'class': 'img-polaroid media-object'} %}
+            </div>
+
+            {% if sonata_admin_enabled is defined and sonata_admin_enabled %}
+                <a href="{{ url('admin_sonata_media_media_edit', {id: value.id}) }}"><strong>{{ value.name }}</strong></a>
+            {% else %}
+                <strong>{{ value.name }}</strong>
+            {% endif %}
+            <br/>
+            <span type="label">{{ value.providerName|trans({}, 'SonataMediaBundle') }}</span> ~ {{ value.context }}
+        {% else %}
+            <div class="pull-left" style="margin-right: 5px">
+                <img src="{{ asset('bundles/sonatamedia/grey.png') }}"
+                     class="img-polaroid media-object"
+                     style="width: 85px; height: 85px"/>
+            </div>
+            <strong>{{ 'no_linked_media'|trans({}, 'SonataMediaBundle') }}</strong>
+            <br/>
+            <span type="label">{{ form.vars['provider']|trans({}, 'SonataMediaBundle') }}
+                ~ {{ form.vars['context']|trans({}, 'SonataMediaBundle') }}</span>
+        {% endif %}
+    </div>
+
+    <div class="span3 pull-left">
+        {{ 'link_media'|trans({}, 'SonataMediaBundle') }}
+        {{ block('form_widget') }}
+    </div>
+{% endblock sonata_media_type_widget %}

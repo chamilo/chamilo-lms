@@ -77,9 +77,9 @@ security:
                   facebook:        "/administration/login/check-facebook"
                   google:          "/administration/login/check-google"
                   github:          "/administration/login/check-github"
-              login_path:        /administration/login
-              check_path:     /administration/login_check
-              failure_path:      /administration/connect
+              login_path:        /oauth/login
+              check_path:        /oauth/login_check
+              failure_path:      /oauth/connect
               use_forward:       false
               oauth_user_provider:
                   service: chamilo_user_provider

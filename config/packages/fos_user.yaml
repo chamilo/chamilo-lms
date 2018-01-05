@@ -1,6 +1,6 @@
 fos_user:
     db_driver: orm # can be orm or odm
-    firewall_name: secured_area
+    firewall_name: admin
 
     # if you change the class configuration, please also alter the sonata_user.yml file
     user_class: Chamilo\UserBundle\Entity\User

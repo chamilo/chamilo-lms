@@ -6,9 +6,9 @@ namespace Chamilo\SettingsBundle\Manager;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Settings\PlatformSettingsSchema;
+use Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\SettingsBundle\Event\SettingsEvent;
-use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sylius\Bundle\SettingsBundle\Manager\SettingsManagerInterface;
 use Sylius\Bundle\SettingsBundle\Model\Settings;
@@ -19,10 +19,8 @@ use Sylius\Bundle\SettingsBundle\Schema\SchemaRegistryInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilder;
 use Sylius\Component\Registry\ServiceRegistryInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
-use Symfony\Component\Validator\ValidatorInterface;
 use Sylius\Bundle\SettingsBundle\Manager\SettingsManager as SyliusSettingsManager;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 
@@ -45,7 +43,7 @@ class SettingsManager implements SettingsManagerInterface
     protected $resolverRegistry;
 
     /**
-     * @var ObjectManager
+     * @var EntityRepository
      */
     protected $manager;
 
@@ -70,14 +68,14 @@ class SettingsManager implements SettingsManagerInterface
      * SettingsManager constructor.
      * @param ServiceRegistryInterface $schemaRegistry
      * @param ServiceRegistryInterface $resolverRegistry
-     * @param ObjectManager $manager
+     * @param EntityRepository $manager
      * @param FactoryInterface $settingsFactory
      * @param $eventDispatcher
      */
     public function __construct(
         ServiceRegistryInterface $schemaRegistry,
         ServiceRegistryInterface $resolverRegistry,
-        ObjectManager $manager,
+        $manager,
         FactoryInterface $settingsFactory,
         $eventDispatcher
     ) {
@@ -681,12 +679,12 @@ class SettingsManager implements SettingsManagerInterface
         $resolver = $this->resolverRegistry->get($schemaAlias);
 
         // try to resolve settings for schema alias and namespace
-        $settings = $resolver->resolve($schemaAlias, $namespace);
+        //$settings = $resolver->resolve($schemaAlias, $namespace);
 
-        if (!$settings) {
+        //if (!$settings) {
             $settings = $this->settingsFactory->createNew();
             $settings->setSchemaAlias($schemaAlias);
-        }
+        //}
 
          // We need to get a plain parameters array since we use the options resolver on it
         $parameters = $this->getParameters($schemaAliasNoPrefix);
@@ -745,7 +743,7 @@ class SettingsManager implements SettingsManagerInterface
             $this->resolvedSettings[$namespace]->setParameters($transformedParameters);
         }*/
 
-        $repo = $this->manager->getRepository('ChamiloCoreBundle:SettingsCurrent');
+        $repo = $this->manager;
         $persistedParameters = $repo->findBy(['category' => $settings->getSchemaAlias()]);
         $persistedParametersMap = array();
 
@@ -786,7 +784,6 @@ var_dump($name, $value);
                 if (0 < $errors->count()) {
                     throw new ValidatorException($errors->get(0)->getMessage());
                 }*/
-
                 $this->manager->persist($parameter);
             }
         }
@@ -871,11 +868,9 @@ var_dump($name, $value);
      */
     private function getParameters($namespace)
     {
-        //$repo = $this->parameterRepository;
-        $repo = $this->manager->getRepository('ChamiloCoreBundle:SettingsCurrent');
         $parameters = [];
         /** @var  SettingsCurrent $parameter */
-        foreach ($repo->findBy(array('category' => $namespace)) as $parameter) {
+        foreach ($this->manager->findBy(array('category' => $namespace)) as $parameter) {
             $parameters[$parameter->getTitle()] = $parameter->getSelectedValue();
         }
 

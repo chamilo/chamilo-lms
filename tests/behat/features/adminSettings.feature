@@ -3,6 +3,9 @@ Feature: Settings update
   As an administrator
   I need to be able to update Chamilo settings
 
+  @common
+  @javascript
+
   Scenario: Update 'profile' setting
     Given I am a platform administrator
     And I am on "/main/admin/settings.php?category=User"

@@ -405,6 +405,8 @@ $defaults['extra_mail_notify_group_message'] = 1;
 $form->setDefaults($defaults);
 $content = null;
 
+$tool_name = get_lang('Registration');
+
 if (!CustomPages::enabled()) {
     // Load terms & conditions from the current lang
     if (api_get_setting('allow_terms_conditions') === 'true') {
@@ -434,8 +436,6 @@ if (!CustomPages::enabled()) {
         }
     }
 
-    $tool_name = get_lang('Registration');
-
     if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_registered_show_terms) {
         $tool_name = get_lang('TermsAndConditions');
     }
@@ -460,7 +460,7 @@ if (file_exists($home.'register_top_'.$user_selected_language.'.html')) {
     $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
     $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
     if (!empty($open)) {
-        $content = '<div class="well_border">'.$open.'</div>';
+        $content = '<div class="well well-lg">'.$open.'</div>';
     }
 }
 
@@ -797,9 +797,15 @@ if ($form->validate()) {
                 // 3. exit the page
                 unset($user_id);
 
-                Display::display_header(get_lang('ConfirmationForNewAccount'));
-                echo Display::page_header(get_lang('YouNeedConfirmYourAccountViaEmailToAccessThePlatform'));
-                echo $content;
+                Display::addFlash(
+                    Display::return_message(
+                        get_lang('YouNeedConfirmYourAccountViaEmailToAccessThePlatform'),
+                        'warning'
+                    )
+                );
+
+                Display::display_header($tool_name);
+                //echo $content;
                 Display::display_footer();
                 exit;
             }

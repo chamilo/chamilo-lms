@@ -1,118 +1,19 @@
-# .scrutinizer.yml - see https://scrutinizer-ci.com/docs/guides/php/continuous-integration-deployment for doc
-# Excludes go for things do not contain code, are not managed well by Scrutinizer or are external libraries that
-# Chamilo includes but that we cannot update without patching upstream.
-#build:
-#    environment:
-#        mysql: 5.5
-#        php:
-#            version: 7.0.20
-#            ini:
-#                'date.timezone': 'US/Pacific'
-#                'phar.readonly': false
-#        apache2:
-#            modules: ['rewrite']
-#            sites:
-#                chamilodev:
-#                    web_root: '/'
-#                    host: 'my.chamilodev.net'
-#        hosts:
-#            my.chamilodev.net: '127.0.0.1'
-#        postgresql: false
-#        mongodb: false
-#        redis: false
-#        node: false
-#        neo4j: false
-#        rabbitmq: false
+build:
+    nodes:
+        analysis:
+            project_setup:
+                override: true
+            tests:
+                override: [php-scrutinizer-run]
 
 checks:
-    php:
-        no_trailing_whitespace: true
-        code_rating: true
-        duplication: true
-        fix_php_opening_tag: false
-        remove_php_closing_tag: true
-        one_class_per_file: true
-        side_effects_or_types: false
-        no_mixed_inline_html: false
-        require_braces_around_control_structures: true
-        php5_style_constructor: true
-        no_global_keyword: false
-        avoid_usage_of_logical_operators: false
-        psr2_class_declaration: true
-        no_underscore_prefix_in_properties: false
-        no_underscore_prefix_in_methods: false
-        blank_line_after_namespace_declaration: true
-        single_namespace_per_use: false
-        psr2_switch_declaration: true
-        psr2_control_structure_declaration: true
-        avoid_superglobals: false
-        security_vulnerabilities: false
-        no_exit: false
-        uppercase_constants: true
-        prefer_while_loop_over_for_loop: true
-        newline_at_end_of_file: true
-        line_length:
-            max_length: '120'
-        parameter_doc_comments: true
-        parameters_in_camelcaps: true
-        return_doc_comments: true
-        use_self_instead_of_fqcn: true
-        overriding_parameter: false
-        avoid_entity_manager_injection: false
-
-coding_style:
-    php:
-        indentation:
-            general:
-                use_tabs: false
-                size: 4
-            switch:
-                indent_case: true
-        spaces:
-            general:
-                linefeed_character: newline
-            around_operators:
-                concatenation: false
-        braces:
-            classes_functions:
-                class: new-line
-                function: new-line
-                closure: end-of-line
-            if:
-                opening: end-of-line
-            for:
-                opening: end-of-line
-            while:
-                opening: end-of-line
-            do_while:
-                opening: end-of-line
-            switch:
-                opening: end-of-line
-            try:
-                opening: end-of-line
-
-        upper_lower_casing:
-            keywords:
-                general: lower
-            constants:
-                true_false_null: lower
-
-tools:
-    php_analyzer: true
-    php_cs_fixer:
-        config: { level: psr2 }
-    php_code_sniffer:
-        config:
-            standard: PSR2
-    php_code_coverage: true
-    php_pdepend: true
-    php_loc: true
+    php: true
 
 filter:
     excluded_paths:
         - 'cli-config.php'
-        - 'var/cache/*'
-        - 'var/log/*'
+        - 'app/cache/*'
+        - 'app/logs/*'
         - 'app/config/*'
         - 'app/SymfonyRequirements.php'
         - 'documentation/*'

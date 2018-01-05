@@ -5,12 +5,9 @@ build:
                 override: true
             tests:
                 override: [php-scrutinizer-run]
-    tests:
-        override:
-            - "php -v"
     dependencies:
         override:
-            - "php -v"
+            - "php -d memory_limit=-1 composer.phar install"
 checks:
     php: true
 

@@ -47,6 +47,14 @@ use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
  * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Entity\Repository\UserRepository")
  *
  * @ORM\AttributeOverrides({
+ *     @ORM\AttributeOverride(name="username",
+ *         column=@ORM\Column(
+ *             name="username",
+ *             type="string",
+ *             length=100,
+ *             unique=false
+ *         )
+ *     ),
  *      @ORM\AttributeOverride(name="email",
  *         column=@ORM\Column(
  *             name="email",
@@ -96,27 +104,27 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
      *
      * @ORM\Column(name="username", type="string", length=100, nullable=false, unique=true)
      */
-    protected $username;
+    //protected $username;
 
     /**
      * @var string
      *
      * @ORM\Column(name="username_canonical", type="string", length=100, nullable=false)
      */
-    protected $usernameCanonical;
+    //protected $usernameCanonical;
 
     /**
      * @var string
      * @ORM\Column(name="email_canonical", type="string", length=100, nullable=false, unique=false)
      */
-    protected $emailCanonical;
+    //protected $emailCanonical;
 
     /**
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=100, nullable=false, unique=false)
      */
-    protected $email;
+    //protected $email;
 
     /**
      * @var boolean
@@ -128,7 +136,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
      * @var boolean
      * @ORM\Column(name="enabled", type="boolean")
      */
-    protected $enabled;
+    //protected $enabled;
 
     /**
      * @var boolean
@@ -159,21 +167,21 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
      *
      * @ORM\Column(name="lastname", type="string", length=60, nullable=true, unique=false)
      */
-    protected $lastname;
+    //protected $lastname;
 
     /**
      * @var string
      *
      * @ORM\Column(name="firstname", type="string", length=60, nullable=true, unique=false)
      */
-    protected $firstname;
+    //protected $firstname;
 
     /**
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255, nullable=false, unique=false)
      */
-    protected $password;
+    //protected $password;
 
     /**
      * @var string
@@ -201,7 +209,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
      *
      * @ORM\Column(name="phone", type="string", length=30, nullable=true, unique=false)
      */
-    protected $phone;
+    //protected $phone;
 
     /**
      * @var string
@@ -323,28 +331,33 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     private $hrDeptId;
 
     /**
+     * @var AccessUrl
+     **/
+    protected $currentUrl;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
-    protected $salt;
+    //protected $salt;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="last_login", type="datetime", nullable=true, unique=false)
      */
-    protected $lastLogin;
+    //protected $lastLogin;
 
     /**
      * @var \DateTime
      * @ORM\Column(name="created_at", type="datetime", nullable=true, unique=false)
      */
-    protected $createdAt;
+    //protected $createdAt;
 
     /**
      * @var \DateTime
      * @ORM\Column(name="updated_at", type="datetime", nullable=true, unique=false)
      */
-    protected $updatedAt;
+    //protected $updatedAt;
 
     /**
      * Random string sent to the user email address in order to verify it
@@ -352,14 +365,14 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
      * @var string
      * @ORM\Column(name="confirmation_token", type="string", length=255, nullable=true)
      */
-    protected $confirmationToken;
+    //protected $confirmationToken;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="password_requested_at", type="datetime", nullable=true, unique=false)
      */
-    protected $passwordRequestedAt;
+    //protected $passwordRequestedAt;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user")
@@ -389,7 +402,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     /**
      * @ORM\Column(type="array")
      */
-    protected $roles;
+    //protected $roles;
 
     /**
      * @var boolean
@@ -492,7 +505,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
      */
     public function __toString()
     {
-        return $this->getUsername();
+        return $this->getCompleteName();
     }
 
     /**
@@ -1506,8 +1519,8 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     public function removeExtraField(ExtraFieldValues $attribute)
     {
         //if ($this->hasExtraField($attribute)) {
-            //$this->extraFields->removeElement($attribute);
-            //$attribute->setUser($this);
+        //$this->extraFields->removeElement($attribute);
+        //$attribute->setUser($this);
         //}
 
         return $this;
@@ -1597,7 +1610,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     public function isPasswordRequestNonExpired($ttl)
     {
         return $this->getPasswordRequestedAt() instanceof \DateTime &&
-        $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
+            $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
     }
 
     public function getUsername()
@@ -1929,7 +1942,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
         return $this->locale;
     }
 
-     /**
+    /**
      * @param string $timezone
      *
      * @return User
@@ -2111,7 +2124,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
         }
     }
 
-      /**
+    /**
      * Returns the user roles
      *
      * @return array The roles
@@ -2471,6 +2484,35 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
 
         return $this;
     }
+
+    /**
+     * Sets the AccessUrl for the current user in memory
+     * @param AccessUrl $url
+     *
+     * @return $this
+     */
+    public function setCurrentUrl(AccessUrl $url)
+    {
+        $urlList = $this->getPortals();
+        /** @var AccessUrlRelUser $item */
+        foreach ($urlList as $item) {
+            if ($item->getPortal()->getId() == $url->getId()) {
+                $this->currentUrl = $url;
+                break;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return AccessUrl
+     */
+    public function getCurrentUrl()
+    {
+        return $this->currentUrl;
+    }
+
 
     /**
      * Get sessionAsGeneralCoach

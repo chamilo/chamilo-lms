@@ -2805,6 +2805,8 @@ class UserManager
         // LEFT JOIN is used for session_rel_course_rel_user because an inner
         // join would not catch session-courses where the user is general
         // session coach but which do not have students nor coaches registered
+
+        // master changes
         $dql = "SELECT DISTINCT
                     s.id,
                     s.name,
@@ -2820,9 +2822,9 @@ class UserManager
                     $position
                 FROM ChamiloCoreBundle:Session AS s
                 LEFT JOIN ChamiloCoreBundle:SessionRelCourseRelUser AS scu WITH scu.session = s
-                INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.sessionId = s.id
+                INNER JOIN ChamiloCoreBundle:AccessUrlRelSession AS url WITH url.session = s
                 LEFT JOIN ChamiloCoreBundle:SessionCategory AS sc WITH s.category = sc
-                WHERE (scu.user = :user OR s.generalCoach = :user) AND url.accessUrlId = :url ";
+                WHERE (scu.user = :user OR s.generalCoach = :user) AND url.url = :url ";
 
         $order = "ORDER BY sc.name, s.name";
         $showAllSessions = api_get_configuration_value('show_all_sessions_on_my_course_page') === true;

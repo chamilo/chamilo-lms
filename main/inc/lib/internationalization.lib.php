@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Patchwork\Utf8;
+use Westsworld\TimeAgo;
 
 /**
  * File: internationalization.lib.php

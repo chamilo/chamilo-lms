@@ -159,7 +159,6 @@
         "clue/graph": "~0.9.0",
         "graphp/graphviz": "~0.2.0",
         "graphp/algorithms": "~0.8.0",
-        "sunra/php-simple-html-dom-parser": "~1.5.0",
         "php-ffmpeg/php-ffmpeg": "0.5.1",
         "imagine/imagine": "~0.6",
         "jeroendesloovere/vcard": "^1.2",

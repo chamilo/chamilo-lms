@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php
  *
@@ -12,7 +14,6 @@
  */
 
 // Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
@@ -41,8 +42,6 @@ if (isset($_GET['lp_item_id'])) {
     }
 }
 
-
-
 if (empty($lp)) {
     api_not_allowed();
 }
@@ -55,7 +54,6 @@ $this_section = SECTION_COURSES;
 /* Header and action code */
 /* Constants and variables */
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-
 $isStudentView = (empty($_REQUEST['isStudentView']) ? 0 : (int) $_REQUEST['isStudentView']);
 $learnpath_id = (int) $_REQUEST['lp_id'];
 
@@ -65,9 +63,7 @@ if ((!$is_allowed_to_edit) || $isStudentView) {
     exit;
 }
 // From here on, we are admin because of the previous condition, so don't check anymore.
-
 $course_id = api_get_course_int_id();
-
 /* SHOWING THE ADMIN TOOLS	*/
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = array(

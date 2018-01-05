@@ -100,7 +100,7 @@ function get_lang($variable, $reserved = null, $language = null)
     }
 
     if (!isset($used_lang_vars)) {
-        $used_lang_vars = array();
+        $used_lang_vars = [];
     }
 
     // Caching results from some API functions, for speed.
@@ -219,11 +219,11 @@ function api_get_interface_language(
  */
 function api_purify_language_id($language)
 {
-    static $purified = array();
+    static $purified = [];
     if (!isset($purified[$language])) {
         $purified[$language] = trim(
             str_replace(
-                array('_unicode', '_latin', '_corporate', '_org', '_km'),
+                ['_unicode', '_latin', '_corporate', '_org', '_km'],
                 '',
                 strtolower($language)
             )
@@ -246,7 +246,7 @@ function api_purify_language_id($language)
  */
 function api_get_language_isocode($language = null, $default_code = 'en')
 {
-    static $iso_code = array();
+    static $iso_code = [];
     if (empty($language)) {
         $language = api_get_interface_language(false, true);
     }
@@ -282,7 +282,7 @@ function api_get_language_isocode($language = null, $default_code = 'en')
  * */
 function api_get_platform_isocodes()
 {
-    $iso_code = array();
+    $iso_code = [];
     $sql = "SELECT isocode 
             FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." 
             ORDER BY isocode ";
@@ -305,7 +305,7 @@ function api_get_platform_isocodes()
  */
 function api_get_text_direction($language = null)
 {
-    static $text_direction = array();
+    static $text_direction = [];
 
     if (empty($language)) {
         $language = api_get_interface_language();
@@ -313,7 +313,7 @@ function api_get_text_direction($language = null)
     if (!isset($text_direction[$language])) {
         $text_direction[$language] = in_array(
             api_purify_language_id($language),
-            array(
+            [
                 'arabic',
                 'ar',
                 'dari',
@@ -328,7 +328,7 @@ function api_get_text_direction($language = null)
                 'ur',
                 'yiddish',
                 'yid'
-            )
+            ]
         ) ? 'rtl' : 'ltr';
     }
 
@@ -347,11 +347,11 @@ function api_get_timezones()
 {
     $timezone_identifiers = DateTimeZone::listIdentifiers();
     sort($timezone_identifiers);
-    $out = array();
+    $out = [];
     foreach ($timezone_identifiers as $tz) {
         $out[$tz] = $tz;
     }
-    $null_option = array('' => '');
+    $null_option = ['' => ''];
     $result = array_merge($null_option, $out);
 
     return $result;
@@ -671,18 +671,17 @@ function api_format_date($time, $format = null, $language = null)
         $date_formatter = new IntlDateFormatter($language, $datetype, $timetype, date_default_timezone_get());
         //$date_formatter->setPattern($date_format);
         $formatted_date = api_to_system_encoding($date_formatter->format($time), 'UTF-8');
-
     } else {
         // We replace %a %A %b %B masks of date format with translated strings
         $translated = &_api_get_day_month_names($language);
         $date_format = str_replace(
-            array('%A', '%a', '%B', '%b'),
-            array(
+            ['%A', '%a', '%B', '%b'],
+            [
                 $translated['days_long'][(int) strftime('%w', $time)],
                 $translated['days_short'][(int) strftime('%w', $time)],
                 $translated['months_long'][(int) strftime('%m', $time) - 1],
                 $translated['months_short'][(int) strftime('%m', $time) - 1],
-            ),
+            ],
             $date_format
         );
         $formatted_date = api_to_system_encoding(strftime($date_format, $time), 'UTF-8');
@@ -837,7 +836,7 @@ function api_get_person_name(
     $encoding = null,
     $username = null
 ) {
-    static $valid = array();
+    static $valid = [];
     if (empty($format)) {
         $format = PERSON_NAME_COMMON_CONVENTION;
     }
@@ -879,7 +878,7 @@ function api_get_person_name(
 
     $format = $valid[$format][$language];
 
-    $keywords = array(
+    $keywords = [
         '%firstname',
         '%f',
         '%F',
@@ -892,9 +891,9 @@ function api_get_person_name(
         '%username',
         '%u',
         '%U',
-    );
+    ];
 
-    $values = array(
+    $values = [
         $first_name,
         $first_name,
         api_strtoupper($first_name),
@@ -907,7 +906,7 @@ function api_get_person_name(
         $username,
         $username,
         api_strtoupper($username),
-    );
+    ];
     $person_name = str_replace($keywords, $values, $format);
 
     return _api_clean_person_name($person_name);
@@ -932,7 +931,7 @@ function api_get_person_name(
  */
 function api_is_western_name_order($format = null, $language = null)
 {
-    static $order = array();
+    static $order = [];
     if (empty($format)) {
         $format = PERSON_NAME_COMMON_CONVENTION;
     }
@@ -962,11 +961,11 @@ function api_is_western_name_order($format = null, $language = null)
 function api_sort_by_first_name($language = null)
 {
     $userNameSortBy = api_get_setting('user_name_sort_by');
-    if (!empty($userNameSortBy) && in_array($userNameSortBy, array('firstname', 'lastname'))) {
+    if (!empty($userNameSortBy) && in_array($userNameSortBy, ['firstname', 'lastname'])) {
         return $userNameSortBy == 'firstname' ? true : false;
     }
 
-    static $sort_by_first_name = array();
+    static $sort_by_first_name = [];
 
     if (empty($language)) {
         $language = api_get_interface_language(false, true);
@@ -1062,10 +1061,10 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = 'UTF-8
 {
     switch ($quote_style) {
         case ENT_COMPAT:
-            $string = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $string);
+            $string = str_replace(['&', '"', '<', '>'], ['&amp;', '&quot;', '&lt;', '&gt;'], $string);
             break;
         case ENT_QUOTES:
-            $string = str_replace(array('&', '\'', '"', '<', '>'), array('&amp;', '&#039;', '&quot;', '&lt;', '&gt;'), $string);
+            $string = str_replace(['&', '\'', '"', '<', '>'], ['&amp;', '&#039;', '&quot;', '&lt;', '&gt;'], $string);
             break;
     }
 
@@ -1541,7 +1540,8 @@ function api_preg_match(
  * @return int|boolean					Returns the number of full pattern matches (which might be zero), or FALSE if an error occurred.
  * @link http://php.net/preg_match_all
  */
-function api_preg_match_all($pattern, $subject, &$matches, $flags = PREG_PATTERN_ORDER, $offset = 0, $encoding = null) {
+function api_preg_match_all($pattern, $subject, &$matches, $flags = PREG_PATTERN_ORDER, $offset = 0, $encoding = null)
+{
     if (empty($encoding)) {
         $encoding = _api_mb_internal_encoding();
     }
@@ -1594,7 +1594,8 @@ function api_preg_replace($pattern, $replacement, $subject, $limit = -1, &$count
  * @return array						Returns an array containing substrings of $subject split along boundaries matched by $pattern.
  * @link http://php.net/preg_split
  */
-function api_preg_split($pattern, $subject, $limit = -1, $flags = 0, $encoding = null) {
+function api_preg_split($pattern, $subject, $limit = -1, $flags = 0, $encoding = null)
+{
     if (empty($encoding)) {
         $encoding = _api_mb_internal_encoding();
     }
@@ -1713,7 +1714,7 @@ function api_refine_encoding_id($encoding)
  */
 function api_equal_encodings($encoding1, $encoding2, $strict = false)
 {
-    static $equal_encodings = array();
+    static $equal_encodings = [];
     if (is_array($encoding1)) {
         foreach ($encoding1 as $encoding) {
             if (api_equal_encodings($encoding, $encoding2, $strict)) {
@@ -1721,8 +1722,7 @@ function api_equal_encodings($encoding1, $encoding2, $strict = false)
             }
         }
         return false;
-    }
-    elseif (is_array($encoding2)) {
+    } elseif (is_array($encoding2)) {
         foreach ($encoding2 as $encoding) {
             if (api_equal_encodings($encoding1, $encoding, $strict)) {
                 return true;
@@ -1756,7 +1756,7 @@ function api_equal_encodings($encoding1, $encoding2, $strict = false)
  */
 function api_is_utf8($encoding)
 {
-    static $result = array();
+    static $result = [];
     if (!isset($result[$encoding])) {
         $result[$encoding] = api_equal_encodings($encoding, 'UTF-8');
     }
@@ -1782,7 +1782,7 @@ function api_get_system_encoding()
  */
 function api_is_encoding_supported($encoding)
 {
-    static $supported = array();
+    static $supported = [];
     if (!isset($supported[$encoding])) {
         $supported[$encoding] = _api_mb_supports($encoding) || _api_iconv_supports($encoding) || _api_convert_encoding_supports($encoding);
     }
@@ -1851,7 +1851,8 @@ function api_is_valid_date($date, $format = 'Y-m-d H:i:s')
  * @param string $pluginName the Plugin name
  * @return string the variable translated
  */
-function get_plugin_lang($variable, $pluginName) {
+function get_plugin_lang($variable, $pluginName)
+{
     $plugin = $pluginName::create();
     return $plugin->get_lang($variable);
 }
@@ -1864,12 +1865,12 @@ function get_plugin_lang($variable, $pluginName) {
  */
 function &_api_get_day_month_names($language = null)
 {
-    static $date_parts = array();
+    static $date_parts = [];
     if (empty($language)) {
         $language = api_get_interface_language();
     }
     if (!isset($date_parts[$language])) {
-        $week_day = array(
+        $week_day = [
             'Sunday',
             'Monday',
             'Tuesday',
@@ -1877,8 +1878,8 @@ function &_api_get_day_month_names($language = null)
             'Thursday',
             'Friday',
             'Saturday',
-        );
-        $month = array(
+        ];
+        $month = [
             'January',
             'February',
             'March',
@@ -1891,7 +1892,7 @@ function &_api_get_day_month_names($language = null)
             'October',
             'November',
             'December',
-        );
+        ];
         for ($i = 0; $i < 7; $i++) {
             $date_parts[$language]['days_short'][] = get_lang(
                 $week_day[$i].'Short',
@@ -1937,12 +1938,12 @@ function _api_get_person_name_convention($language, $type)
         if (file_exists($file)) {
             $conventions = include $file;
         } else {
-            $conventions = array(
-                'english' => array(
+            $conventions = [
+                'english' => [
                     'format' => 'title first_name last_name',
                     'sort_by' => 'first_name'
-                )
-            );
+                ]
+            ];
         }
         // Overwrite classic conventions
         $customConventions = api_get_configuration_value('name_order_conventions');
@@ -1953,10 +1954,10 @@ function _api_get_person_name_convention($language, $type)
             }
         }
 
-        $search1 = array('FIRST_NAME', 'LAST_NAME', 'TITLE');
-        $replacement1 = array('%F', '%L', '%T');
-        $search2 = array('first_name', 'last_name', 'title');
-        $replacement2 = array('%f', '%l', '%t');
+        $search1 = ['FIRST_NAME', 'LAST_NAME', 'TITLE'];
+        $replacement1 = ['%F', '%L', '%T'];
+        $search2 = ['first_name', 'last_name', 'title'];
+        $replacement2 = ['%f', '%l', '%t'];
         foreach (array_keys($conventions) as $key) {
             $conventions[$key]['format'] = str_replace($search1, $replacement1, $conventions[$key]['format']);
             $conventions[$key]['format'] = _api_validate_person_name_format(
@@ -2005,7 +2006,7 @@ function _api_validate_person_name_format($format)
  */
 function _api_clean_person_name($person_name)
 {
-    return preg_replace(array('/\s+/', '/, ,/', '/,+/', '/^[ ,]/', '/[ ,]$/'), array(' ', ', ', ',', '', ''), $person_name);
+    return preg_replace(['/\s+/', '/, ,/', '/,+/', '/^[ ,]/', '/[ ,]$/'], [' ', ', ', ',', '', ''], $person_name);
 }
 
 /**
@@ -2037,9 +2038,9 @@ function _api_get_character_map_name($encoding)
     if (!isset($character_map_selector)) {
         $file = __DIR__.'/internationalization_database/conversion/character_map_selector.php';
         if (file_exists($file)) {
-            $character_map_selector = include ($file);
+            $character_map_selector = include($file);
         } else {
-            $character_map_selector = array();
+            $character_map_selector = [];
         }
     }
     return isset($character_map_selector[$encoding]) ? $character_map_selector[$encoding] : '';
@@ -2079,7 +2080,7 @@ function _api_mb_internal_encoding($encoding = 'UTF-8')
  */
 function _api_mb_supports($encoding)
 {
-    static $supported = array();
+    static $supported = [];
     if (!isset($supported[$encoding])) {
         if (MBSTRING_INSTALLED) {
             $supported[$encoding] = api_equal_encodings($encoding, mb_list_encodings(), true);
@@ -2097,7 +2098,7 @@ function _api_mb_supports($encoding)
  */
 function _api_iconv_supports($encoding)
 {
-    static $supported = array();
+    static $supported = [];
     if (!isset($supported[$encoding])) {
         if (ICONV_INSTALLED) {
             $enc = api_refine_encoding_id($encoding);
@@ -2121,7 +2122,7 @@ function _api_iconv_supports($encoding)
 // implementation) is able to convert from/to a given encoding.
 function _api_convert_encoding_supports($encoding)
 {
-    static $supports = array();
+    static $supports = [];
     if (!isset($supports[$encoding])) {
         $supports[$encoding] = _api_get_character_map_name(api_refine_encoding_id($encoding)) != '';
     }
@@ -2139,15 +2140,15 @@ function api_get_human_date_time($date, $showTime = true, $humanForm = false)
 {
     if ($showTime) {
         if ($humanForm) {
-           return $date->format('j M Y H:i:s');
+            return $date->format('j M Y H:i:s');
         } else {
-           return $date->format('Y-m-d H:i:s');
+            return $date->format('Y-m-d H:i:s');
         }
     } else {
         if ($humanForm) {
-           return $date->format('j M Y');
+            return $date->format('j M Y');
         } else {
-           return $date->format('Y-m-d');
+            return $date->format('Y-m-d');
         }
     }
 }

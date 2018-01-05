@@ -312,6 +312,7 @@ define('WEB_PUBLIC_PATH', 'WEB_PUBLIC_PATH');
 define('SYS_CSS_PATH', 'SYS_CSS_PATH');
 define('SYS_PLUGIN_PATH', 'SYS_PLUGIN_PATH');
 define('WEB_PLUGIN_PATH', 'WEB_PLUGIN_PATH');
+define('WEB_PLUGIN_ASSET_PATH', 'WEB_PLUGIN_ASSET_PATH');
 define('SYS_ARCHIVE_PATH', 'SYS_ARCHIVE_PATH');
 define('WEB_ARCHIVE_PATH', 'WEB_ARCHIVE_PATH');
 define('SYS_INC_PATH', 'SYS_INC_PATH');
@@ -681,7 +682,7 @@ require_once __DIR__.'/internationalization.lib.php';
  *
  * Vchamilo changes : allow using an alternate configuration
  * to get vchamilo  instance paths
-*/
+ */
 function api_get_path($path = '', $configuration = [])
 {
     global $paths;
@@ -767,6 +768,7 @@ function api_get_path($path = '', $configuration = [])
             SYS_CSS_PATH => 'app/Resources/public/css/',
             SYS_PLUGIN_PATH => 'plugin/',
             WEB_PLUGIN_PATH => 'plugin/',
+            WEB_PLUGIN_ASSET_PATH => 'public/plugins/',
             SYS_ARCHIVE_PATH => 'var/cache/',
             WEB_ARCHIVE_PATH => 'var/cache/',
             SYS_HOME_PATH => 'app/home/',
@@ -828,6 +830,7 @@ function api_get_path($path = '', $configuration = [])
         $paths[$root_web][WEB_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[$root_web][WEB_CODE_PATH].'default_course_document/';
         $paths[$root_web][WEB_APP_PATH] = $paths[$root_web][WEB_PATH].$paths[$root_web][WEB_APP_PATH];
         $paths[$root_web][WEB_PLUGIN_PATH] = $paths[$root_web][WEB_PATH].$paths[$root_web][WEB_PLUGIN_PATH];
+        $paths[$root_web][WEB_PLUGIN_ASSET_PATH] = $paths[$root_web][WEB_PATH].$paths[$root_web][WEB_PLUGIN_ASSET_PATH];
         $paths[$root_web][WEB_ARCHIVE_PATH] = $paths[$root_web][WEB_PATH].$paths[$root_web][WEB_ARCHIVE_PATH];
 
         $paths[$root_web][WEB_CSS_PATH] = $paths[$root_web][WEB_PATH].$paths[$root_web][WEB_CSS_PATH];
@@ -2447,11 +2450,11 @@ function api_get_session_image($session_id, $status_id)
     if ((int) $status_id != 5) { //check whether is not a student
         if ($session_id > 0) {
             $session_img = "&nbsp;&nbsp;".Display::return_icon(
-                'star.png',
-                get_lang('SessionSpecificResource'),
-                array('align' => 'absmiddle'),
-                ICON_SIZE_SMALL
-            );
+                    'star.png',
+                    get_lang('SessionSpecificResource'),
+                    array('align' => 'absmiddle'),
+                    ICON_SIZE_SMALL
+                );
         }
     }
     return $session_img;
@@ -3192,12 +3195,12 @@ function api_is_coach_of_course_in_session($sessionId)
 }
 
 /**
-* Checks if a student can edit contents in a session depending
-* on the session visibility
-* @param bool $tutor  Whether to check if the user has the tutor role
-* @param bool  $coach Whether to check if the user has the coach role
-* @return boolean true: the user has the rights to edit, false: he does not
-*/
+ * Checks if a student can edit contents in a session depending
+ * on the session visibility
+ * @param bool $tutor  Whether to check if the user has the tutor role
+ * @param bool  $coach Whether to check if the user has the coach role
+ * @return boolean true: the user has the rights to edit, false: he does not
+ */
 function api_is_allowed_to_session_edit($tutor = false, $coach = false)
 {
     if (api_is_allowed_to_edit($tutor, $coach)) {
@@ -4345,7 +4348,7 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
     $countryCode = languageToCountryIsoCode($currentLanguageInfo['isocode']);
     $url = api_get_self();
     if ($showAsButton) {
-         $html = '<div class="btn-group">
+        $html = '<div class="btn-group">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 <span class="flag-icon flag-icon-'.$countryCode.'"></span>
                 '.$currentLanguageInfo['original_name'].'
@@ -4353,7 +4356,7 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
                 </span>
               </button>';
     } else {
-            $html = '
+        $html = '
             <a href="'.$url.'" class="dropdown-toggle" data-toggle="dropdown" role="button">
                 <span class="flag-icon flag-icon-'.$countryCode.'"></span> 
                 '.$currentLanguageInfo['original_name'].'
@@ -5245,9 +5248,9 @@ function api_get_status_langvars()
 }
 
 /**
-* The function that retrieves all the possible settings for a certain config setting
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-*/
+ * The function that retrieves all the possible settings for a certain config setting
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ */
 function api_get_settings_options($var)
 {
     $table_settings_options = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
@@ -5366,10 +5369,10 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
                 $insert = "INSERT INTO $t_settings (variable, subkey, type,category, selected_value, title, comment, scope, subkeytext, access_url)
                         VALUES
                         ('".$row['variable']."',".(!empty($row['subkey']) ? "'".$row['subkey']."'" : "NULL").",".
-                        "'".$row['type']."','".$row['category']."',".
-                        "'$value','".$row['title']."',".
-                        "".(!empty($row['comment']) ? "'".$row['comment']."'" : "NULL").",".(!empty($row['scope']) ? "'".$row['scope']."'" : "NULL").",".
-                        "".(!empty($row['subkeytext']) ? "'".$row['subkeytext']."'" : "NULL").",$access_url)";
+                    "'".$row['type']."','".$row['category']."',".
+                    "'$value','".$row['title']."',".
+                    "".(!empty($row['comment']) ? "'".$row['comment']."'" : "NULL").",".(!empty($row['scope']) ? "'".$row['scope']."'" : "NULL").",".
+                    "".(!empty($row['subkeytext']) ? "'".$row['subkeytext']."'" : "NULL").",$access_url)";
                 Database::query($insert);
             } else {
                 // Such a setting does not exist.
@@ -5391,12 +5394,12 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
                 if ($row['access_url_changeable'] == 1) {
                     $insert = "INSERT INTO $t_settings (variable,subkey, type,category, selected_value,title, comment,scope, subkeytext,access_url, access_url_changeable) VALUES
                             ('".$row['variable']."',".
-                            (!empty($row['subkey']) ? "'".$row['subkey']."'" : "NULL").",".
-                            "'".$row['type']."','".$row['category']."',".
-                            "'$value','".$row['title']."',".
-                            "".(!empty($row['comment']) ? "'".$row['comment']."'" : "NULL").",".
-                            (!empty($row['scope']) ? "'".$row['scope']."'" : "NULL").",".
-                            "".(!empty($row['subkeytext']) ? "'".$row['subkeytext']."'" : "NULL").",$access_url,".$row['access_url_changeable'].")";
+                        (!empty($row['subkey']) ? "'".$row['subkey']."'" : "NULL").",".
+                        "'".$row['type']."','".$row['category']."',".
+                        "'$value','".$row['title']."',".
+                        "".(!empty($row['comment']) ? "'".$row['comment']."'" : "NULL").",".
+                        (!empty($row['scope']) ? "'".$row['scope']."'" : "NULL").",".
+                        "".(!empty($row['subkeytext']) ? "'".$row['subkeytext']."'" : "NULL").",$access_url,".$row['access_url_changeable'].")";
                     Database::query($insert);
                 }
             } else { // Such a setting does not exist.
@@ -6663,7 +6666,7 @@ function api_get_jquery_ui_js($include_jqgrid = false)
 {
     $libraries = [];
     if ($include_jqgrid) {
-       $libraries[] = 'jqgrid';
+        $libraries[] = 'jqgrid';
     }
     return api_get_jquery_libraries_js($libraries);
 }
@@ -8135,7 +8138,7 @@ function api_mail_html(
             $extra_headers['reply_to']['mail'],
             $extra_headers['reply_to']['name']
         );
-            // Errors to sender
+        // Errors to sender
         $mail->AddCustomHeader('Errors-To: '.$extra_headers['reply_to']['mail']);
         $mail->Sender = $extra_headers['reply_to']['mail'];
         unset($extra_headers['reply_to']);

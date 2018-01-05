@@ -7,7 +7,7 @@ build:
                 override: [php-scrutinizer-run]
     dependencies:
         override:
-            - "php -d memory_limit=-1 composer.phar install"
+            - "php -d memory_limit=-1 composer install"
 checks:
     php: true
 

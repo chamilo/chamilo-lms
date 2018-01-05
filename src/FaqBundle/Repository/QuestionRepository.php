@@ -1,17 +1,29 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\FaqBundle\Entity;
+namespace Chamilo\FaqBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Chamilo\FaqBundle\Entity\Question;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Class QuestionRepository
  *
  * @package Genj\FaqBundle\Entity
  */
-class QuestionRepository extends EntityRepository
+class QuestionRepository
 {
+    private $repository;
+
+    /**
+     * QuestionRepository constructor.
+     * @param EntityManagerInterface $entityManager
+     */
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->repository = $entityManager->getRepository(Question::class);
+    }
+
     /**
      * @param string $categorySlug
      *
@@ -19,7 +31,7 @@ class QuestionRepository extends EntityRepository
      */
     public function retrieveFirstByCategorySlug($categorySlug)
     {
-        $query = $this->createQueryBuilder('q')
+        $query = $this->repository->createQueryBuilder('q')
             ->join('q.category', 'c')
             ->join('c.translations', 't')
             ->where('t.slug = :categorySlug')
@@ -39,7 +51,7 @@ class QuestionRepository extends EntityRepository
      */
     public function getQuestionBySlug($slug)
     {
-        $query = $this->createQueryBuilder('q')
+        $query = $this->repository->createQueryBuilder('q')
             ->join('q.translations', 't')
             ->where('t.slug = :slug')
             ->orderBy('q.rank', 'ASC')
@@ -50,6 +62,4 @@ class QuestionRepository extends EntityRepository
 
         return $query->getOneOrNullResult();
     }
-
-
 }

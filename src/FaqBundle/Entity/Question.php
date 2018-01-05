@@ -10,7 +10,7 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 /**
  * Class Question
  *
- * @ORM\Entity(repositoryClass="Chamilo\FaqBundle\Entity\QuestionRepository")
+ * @ORM\Entity()
  * @ORM\Table(name="faq_question")
  * *
  * @package Chamilo\FaqBundle\Entity

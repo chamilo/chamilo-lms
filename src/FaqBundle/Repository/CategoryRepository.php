@@ -1,23 +1,36 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\FaqBundle\Entity;
+namespace Chamilo\FaqBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Chamilo\FaqBundle\Entity\Category;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Class CategoryRepository
  *
  * @package Genj\FaqBundle\Entity
  */
-class CategoryRepository extends EntityRepository
+class CategoryRepository
 {
+    /** @var \Doctrine\Common\Persistence\ObjectRepository EN */
+    private $repository;
+
+    /**
+     * CategoryRepository constructor.
+     * @param EntityManagerInterface $entityManager
+     */
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->repository = $entityManager->getRepository(Category::class);
+    }
+
     /**
      * @return mixed
      */
     public function retrieveActive()
     {
-        $query = $this->createQueryBuilder('c')
+        $query = $this->repository->createQueryBuilder('c')
             ->where('c.isActive = :isActive')
             ->orderBy('c.rank', 'ASC')
             ->getQuery();
@@ -34,7 +47,7 @@ class CategoryRepository extends EntityRepository
      */
     public function retrieveActiveBySlug($slug)
     {
-        $query = $this->createQueryBuilder('c')
+        $query = $this->repository->createQueryBuilder('c')
             ->where('c.isActive = :isActive')
             ->andWhere('c.slug = :slug')
             ->orderBy('c.rank', 'ASC')
@@ -53,7 +66,7 @@ class CategoryRepository extends EntityRepository
      */
     public function getCategoryActiveBySlug($slug)
     {
-        $query = $this->createQueryBuilder('c')
+        $query = $this->repository->createQueryBuilder('c')
             ->join('c.translations', 't')
             ->where('c.isActive = :isActive')
             ->andWhere('t.slug = :slug')
@@ -65,13 +78,12 @@ class CategoryRepository extends EntityRepository
         return $query->getOneOrNullResult();
     }
 
-
     /**
      * @return Category|null
      */
     public function retrieveFirst()
     {
-        $query = $this->createQueryBuilder('c')
+        $query = $this->repository->createQueryBuilder('c')
             ->where('c.isActive = :isActive')
             ->orderBy('c.rank', 'ASC')
             ->setMaxResults(1)

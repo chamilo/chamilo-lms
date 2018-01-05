@@ -16,9 +16,6 @@ checks:
 
 filter:
     excluded_paths:
-        - 'cli-config.php'
-        - 'var/cache/*'
-        - 'var/logs/*'
         - 'app/config/*'
         - 'app/SymfonyRequirements.php'
         - 'documentation/*'
@@ -69,5 +66,8 @@ filter:
         - 'plugin/ims_lti/OAuthSimple.php'
         - 'plugin/sepe/src/wsse/*'
         - 'tests/*'
+        - 'var/cache/*'
+        - 'var/log/*'
         - 'vendor/*'
         - 'web/*'
+        - 'public/*'

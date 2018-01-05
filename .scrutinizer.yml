@@ -15,8 +15,8 @@ checks:
 filter:
     excluded_paths:
         - 'cli-config.php'
-        - 'app/cache/*'
-        - 'app/logs/*'
+        - 'var/cache/*'
+        - 'var/logs/*'
         - 'app/config/*'
         - 'app/SymfonyRequirements.php'
         - 'documentation/*'

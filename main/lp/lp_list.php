@@ -368,7 +368,7 @@ foreach ($categories as $item) {
             }
 
             if ($is_allowed_to_edit) {
-                $dsp_progress = '<center>'.$progress.'</center>';
+                $dsp_progress = '<center>'.$progress.'%</center>';
             } else {
                 $dsp_progress = '';
                 if (!api_is_invitee()) {

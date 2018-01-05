@@ -1,19 +1,21 @@
 <?php
-/* For licensing terms, see /license.txt */
+/**
+ * ContextListener.php
+ * publisher
+ * Date: 23.05.14
+ */
 
 namespace Chamilo\ThemeBundle\EventListener;
+
 
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * Class ContextListener
- * @package Chamilo\ThemeBundle\EventListener
- */
 class ContextListener
 {
+
     protected $indicator = '^/admin';
     protected $container = null;
 

@@ -1,15 +1,16 @@
 <?php
-/* For licensing terms, see /license.txt */
+/**
+ * SetupThemeListener.php
+ * publisher
+ * Date: 01.05.14
+ */
 
 namespace Chamilo\ThemeBundle\EventListener;
+
 
 use Chamilo\ThemeBundle\Theme\ThemeManager;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
-/**
- * Class SetupThemeListener
- * @package Chamilo\ThemeBundle\EventListener
- */
 class SetupThemeListener
 {
     /**

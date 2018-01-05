@@ -1,16 +1,17 @@
 <?php
-/* For licensing terms, see /license.txt */
+/**
+ * NavbarMessageListDemoListener.php
+ * avanzu-admin
+ * Date: 23.02.14
+ */
 
 namespace Chamilo\ThemeBundle\EventListener;
+
 
 use Chamilo\ThemeBundle\Event\MessageListEvent;
 use Chamilo\ThemeBundle\Model\MessageModel;
 use Chamilo\ThemeBundle\Model\UserModel;
 
-/**
- * Class NavbarMessageListDemoListener
- * @package Chamilo\ThemeBundle\EventListener
- */
 class NavbarMessageListDemoListener
 {
     public function onListMessages(MessageListEvent $event)
@@ -27,4 +28,5 @@ class NavbarMessageListDemoListener
             new MessageModel(new UserModel('Jack Trockendoc'), 'This is some subject', new \DateTime('-10 month')),
         );
     }
+
 }

@@ -1,14 +1,16 @@
 <?php
-/* For licensing terms, see /license.txt */
+/**
+ * UserModel.php
+ * avanzu-admin
+ * Date: 23.02.14
+ */
 
 namespace Chamilo\ThemeBundle\Model;
 
-/**
- * Class UserModel
- * @package Chamilo\ThemeBundle\Model
- */
+
 class UserModel implements UserInterface
 {
+
     /**
      * @var string
      */
@@ -29,13 +31,14 @@ class UserModel implements UserInterface
      */
     protected $isOnline = false;
 
-    public function __construct($username = '', $avatar = '', $memberSince = null, $isOnline = true)
+    function __construct($username = '', $avatar = '', $memberSince = null, $isOnline = true)
     {
         $this->avatar      = $avatar;
         $this->isOnline    = $isOnline;
         $this->memberSince = $memberSince ?: new \DateTime();
         $this->username    = $username;
     }
+
 
     /**
      * @param string $avatar

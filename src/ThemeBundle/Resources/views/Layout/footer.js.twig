@@ -3,17 +3,17 @@
     $(document).ready( function() {
         // Date time settings.
         moment.locale('{{ app.request.locale }}');
-        //$.datepicker.setDefaults($.datepicker.regional["{{ app.request.locale }}"]);
-        //$.datepicker.regional["local"] = $.datepicker.regional["{{ app.request.locale }}"];
+        $.datepicker.setDefaults($.datepicker.regional["{{ app.request.locale }}"]);
+        $.datepicker.regional["local"] = $.datepicker.regional["{{ app.request.locale }}"];
 
         // Chosen select
-        {#$(".chzn-select").chosen({#}
-            {#disable_search_threshold: 10,#}
-            {#no_results_text: '{{ 'SearchNoResultsFound' | trans }}',#}
-            {#placeholder_text_multiple: '{{ 'SelectSomeOptions' | trans }}',#}
-            {#placeholder_text_single: '{{ 'SelectAnOption' | trans }}',#}
-            {#width: "100%"#}
-        {#});#}
+        $(".chzn-select").chosen({
+            disable_search_threshold: 10,
+            no_results_text: '{{ 'SearchNoResultsFound' | trans | escape('js') }}',
+            placeholder_text_multiple: '{{ 'SelectSomeOptions' | trans | escape('js') }}',
+            placeholder_text_single: '{{ 'SelectAnOption' | trans | escape('js') }}',
+            width: "100%"
+        });
 
         // Bootstrap tabs.
         $('.tab-wrapper a').click(function (e) {
@@ -60,7 +60,7 @@
         });
 
         // Adv multi-select search input.
-        $('.select_class_filter').on('focus', function () {
+        $('.select_class_filter').each( function () {
             var inputId = $(this).attr('id');
             inputId = inputId.replace('-filter', '');
             $("#" + inputId).filterByText($("#" + inputId + "-filter"));
@@ -69,13 +69,14 @@
         $(".jp-jplayer audio").addClass('skip');
 
         // Mediaelement
-        //jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer(/* Options */);
+        if ( {{ show_media_element }} == 1) {
+            jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer(/* Options */);
+        }
 
         // Table highlight.
         $("form .data_table input:checkbox").click(function () {
             if ($(this).is(":checked")) {
                 $(this).parentsUntil("tr").parent().addClass("row_selected");
-
             } else {
                 $(this).parentsUntil("tr").parent().removeClass("row_selected");
             }
@@ -86,13 +87,19 @@
             $("input[name=login]").focus();
         }
 
-        /* For IOS users */
-        $('.autocapitalize_off').attr('autocapitalize', 'off');
-
         // Tool tip (in exercises)
         var tip_options = {
             placement: 'right'
         };
         $('.boot-tooltip').tooltip(tip_options);
+        var more = '{{ 'SeeMore' | get_lang | escape('js') }}';
+        var close = '{{ 'Close' | get_lang | escape('js') }}';
+        $('.list-teachers').readmore({
+            speed: 75,
+            moreLink: '<a href="#">' + more + '</a>',
+            lessLink: '<a href="#">' + close + '</a>',
+            collapsedHeight: 35,
+            blockCSS: 'display: block; width: 100%;'
+        });
     });
 </script>

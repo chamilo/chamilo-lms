@@ -63,18 +63,21 @@ class BreadcrumbController extends Controller
             }
         }
 
-        return $this->render('ChamiloThemeBundle:Breadcrumb:breadcrumb.html.twig', array(
-            'active' => $list,
-            'title'  => $title
-        ));
+        return $this->render(
+            'ChamiloThemeBundle:Breadcrumb:breadcrumb.html.twig',
+            [
+                'active' => $list,
+                'title' => $title,
+            ]
+        );
     }
 
-
     /**
-     * @return EventDispatcher
+     * @return object|\Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher|\Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher
      */
     protected function getDispatcher()
     {
         return $this->get('event_dispatcher');
     }
+
 }

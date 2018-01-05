@@ -1,0 +1,20 @@
+{% extends "@ChamiloTheme/Layout/base-layout.html.twig" %}
+
+{% block chamilo_wrap %}
+    {% if js is defined %}
+        {% autoescape false %}
+            {% for item in js %}
+                {{ item }}
+            {% endfor %}
+        {% endautoescape %}
+    {% endif %}
+    {% block content %}
+    {% autoescape false %}
+        {{ content }}
+    {% endautoescape %}
+    {% endblock %}
+{% endblock %}
+
+{# Some how twig does not override completely a block that used an "include" call #}
+{% block chamilo_footer %}
+{% endblock %}

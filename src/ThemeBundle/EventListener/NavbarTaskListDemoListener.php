@@ -1,15 +1,16 @@
 <?php
-/* For licensing terms, see /license.txt */
+/**
+ * NavbarTaskListDemoListener.php
+ * avanzu-admin
+ * Date: 23.02.14
+ */
 
 namespace Chamilo\ThemeBundle\EventListener;
+
 
 use Chamilo\ThemeBundle\Event\TaskListEvent;
 use Chamilo\ThemeBundle\Model\TaskModel;
 
-/**
- * Class NavbarTaskListDemoListener
- * @package Chamilo\ThemeBundle\EventListener
- */
 class NavbarTaskListDemoListener
 {
     public function onListTasks(TaskListEvent $event)

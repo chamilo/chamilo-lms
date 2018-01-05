@@ -1,0 +1,36 @@
+{{ locale_switcher(null, null, 'ChamiloCoreBundle:Admin:switcher_links.html.twig') }}
+
+<form class="form-horizontal" action="{{ path("sonata_user_admin_security_check") }}" method="post" name="formLogin" id="formLogin">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
+    <fieldset>
+        <div class="input-group">
+            <div class="input-group-addon">
+                <em class="fa fa-user fa-fw"></em>
+            </div>
+            <input id="login" autofocus="autofocus" placeholder="{{ 'UserName' | trans }}"
+                   autocapitalize="none" class="form-control" name="_username"
+                   type="text">
+        </div>
+
+        <div class="input-group">
+            <div class="input-group-addon">
+                <em class="fa fa-lock fa-fw"></em>
+            </div>
+            <input id="password" placeholder="{{ 'Pass' | trans }}" autocapitalize="none"
+                   class="form-control" name="_password" type="password">
+        </div>
+
+        <div class="input-group">
+            <div class="checkbox">
+                <label for="remember_me">
+                    <input type="checkbox" id="remember_me" name="_remember_me" value="on"/>{{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}
+                </label>
+            </div>
+        </div>
+        <button class="btn-block btn btn-primary " name="submitAuth" type="submit">
+            {{ 'LoginEnter' | trans }}
+        </button>
+    </fieldset>
+    <input name="_qf__formLogin" type="hidden" value="">
+</form>
+{{ mopa_bootstrap_menu('ChamiloCoreBundle:LeftMenuBuilder:loginMenu', {'automenu': 'pills', 'stacked':true}) }}

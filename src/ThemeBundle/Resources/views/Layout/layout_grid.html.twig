@@ -1,0 +1,138 @@
+{% extends 'APYDataGridBundle::blocks.html.twig' %}
+
+{% block grid_actions %}
+    <div class="mass-actions">
+        <div class="btn-group" role="group">
+        <span class="grid_massactions_helper">
+            <a class="btn btn-default" href="#"
+               onclick="return {{ grid.hash }}_markVisible(true);">{{ 'Select visible'|trans }}</a>
+            <a class="btn btn-default" href="#"
+               onclick="return {{ grid.hash }}_markVisible(false);">{{ 'Deselect visible'|trans }}</a>
+            <a class="btn btn-default" href="#"
+               onclick="return {{ grid.hash }}_markAll(true);">{{ 'Select all'|trans }}</a>
+            <a class="btn btn-default" href="#"
+               onclick="return {{ grid.hash }}_markAll(false);">{{ 'Deselect all'|trans }}</a>
+            <span class="mass-actions-selected"
+                  id="{{ grid.hash }}_mass_action_selected"></span>
+        </span>
+        </div>
+        {% spaceless %}
+            <div style="float:right;" class="grid_massactions">
+                {{ 'Action'|trans }}
+                <input type="hidden" id="{{ grid.hash }}_mass_action_all"
+                       name="{{ grid.hash }}[{{ constant('APY\\DataGridBundle\\Grid\\Grid::REQUEST_QUERY_MASS_ACTION_ALL_KEYS_SELECTED') }}]"
+                       value="0"/>
+                <select name="{{ grid.hash }}[{{ constant('APY\\DataGridBundle\\Grid\\Grid::REQUEST_QUERY_MASS_ACTION') }}]">
+                    <option value="-1"></option>
+                    {% for key, massAction in grid.massActions %}
+                        <option value="{{ key }}">{{ massAction.title|trans }}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="{{ 'Submit Action'|trans }}"/>
+            </div>
+        {% endspaceless %}
+    </div>
+{% endblock grid_actions %}
+
+{# Bootstrap changes #}
+{% block grid_column_actions_cell %}
+    {% set actions = column.getActionsToRender(row) %}
+    <div class="btn-group">
+        {% for action in actions %}
+            {%  if action.attributes.form_delete is defined and action.attributes.form_delete %}
+                <div class="btn-group">
+                <form method="post" action="{{ url(action.route, column.routeParameters(row, action), false) }}">
+                    <input type="hidden" name="_method" value="DELETE" />
+                    <button type="submit" class="btn btn-danger">
+                        {{ action.title|trans }}
+                    </button>
+                </form>
+                </div>
+            {% else %}
+                <a class="btn btn-default" href="{{ url(action.route, column.routeParameters(row, action), false) }}" target="{{ action.target }}"{% if action.confirm %} onclick="return confirm('{{ action.confirmMessage }}')"{% endif %}{% for name, value in action.attributes %} {{ name }}="{{ value }}" {% endfor %}>
+                {{ action.title|trans }}
+                </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock grid_column_actions_cell %}
+
+{% block grid %}
+    <div class="col-md-10">
+        <div class="box box-primary">
+            <div class="box-body table-responsive no-padding">
+                {% if grid.totalCount > 0 or grid.isFiltered or grid.noDataMessage is sameas(false) %}
+                    <form id="{{ grid.hash }}" action="{{ grid.routeUrl }}"
+                          method="post">
+                        <div class="grid_header">
+                            {% if grid.massActions|length > 0 %}
+                                {{ grid_actions(grid) }}
+                            {% endif %}
+                        </div>
+                        <div class="grid_body">
+                            <table class="table table-bordered table-striped">
+                                {% if grid.isTitleSectionVisible %}
+                                    {{ grid_titles(grid) }}
+                                {% endif %}
+                                {% if grid.isFilterSectionVisible %}
+                                    {{ grid_filters(grid) }}
+                                {% endif %}
+                                {{ grid_rows(grid) }}
+                            </table>
+                        </div>
+                        <div class="grid_footer">
+                            {% if grid.isPagerSectionVisible %}
+                                {{ grid_pager(grid) }}
+                            {% endif %}
+                            {% if grid.exports|length > 0 %}
+                                {{ grid_exports(grid) }}
+                            {% endif %}
+                            {% if grid.tweaks|length > 0 %}
+                                {{ grid_tweaks(grid) }}
+                            {% endif %}
+                        </div>
+                        {% if withjs %}
+                            {{ grid_scripts(grid) }}
+                        {% endif %}
+                    </form>
+                {% else %}
+                    {{ grid_no_data(grid) }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock grid %}
+
+{% block grid_search %}
+    {% if grid.isFilterSectionVisible %}
+        <div class="col-md-2">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h4 class="box-title filter_legend inactive">Filters</h4>
+                </div>
+
+                <div class="box-body">
+                    <form id="{{ grid.hash }}_search"
+                          action="{{ grid.routeUrl }}" method="post">
+                        {% for column in grid.columns %}
+                            {% if column.isFilterable and column.type not in ['actions', 'massaction'] %}
+                                {% set columnTitle = grid.prefixTitle ~ column.title %}
+                                <div class="{{ cycle(['odd', 'even'], loop.index) }}">
+                                    <label>{{ columnTitle|trans }}</label>{{ grid_filter(column, grid, false)|raw }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <div class="grid-search-action"><input type="submit"
+                                                               class="grid-search-submit"
+                                                               value="{{ 'Search'|trans }}"/><input
+                                    type="button" class="grid-search-reset"
+                                    value="{{ 'Reset'|trans }}"
+                                    onclick="return {{ grid.hash }}_reset();"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    {% endif %}
+{% endblock grid_search %}

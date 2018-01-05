@@ -1,0 +1,10 @@
+{% extends "@ChamiloTheme/Layout/base-layout.html.twig" %}
+{# overrides everything inside body no-footer no-header #}
+{% block chamilo_wrap %}
+    {% autoescape false %}
+    {{ content }}
+    {% endautoescape %}
+{% endblock %}
+
+{% block chamilo_footer %}
+{% endblock %}

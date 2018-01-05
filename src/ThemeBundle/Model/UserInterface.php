@@ -1,12 +1,13 @@
 <?php
-/* For licensing terms, see /license.txt */
+/**
+ * UserInterface.php
+ * avanzu-admin
+ * Date: 23.02.14
+ */
 
 namespace Chamilo\ThemeBundle\Model;
 
-/**
- * Interface UserInterface
- * @package Chamilo\ThemeBundle\Model
- */
+
 interface UserInterface
 {
     public function getAvatar();

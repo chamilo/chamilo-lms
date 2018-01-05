@@ -1,47 +1,34 @@
 <!-- User Account: style can be found in dropdown.less -->
 {% import "ChamiloThemeBundle:Macros:image.html.twig" as macro_image %}
 <li class="dropdown user user-menu">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        <i class="glyphicon glyphicon-user"></i>
-        <span>{{ user.username }} <i class="caret"></i></span>
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+        <img class="img-circle" src="{{ asset(user.avatarOrAnonymous(32)) }}" alt="{{ user.completeName }}" />
+        <span class="caret"></span>
     </a>
-    <ul class="dropdown-menu">
-        <!-- User image -->
-        <li class="user-header bg-light-blue">
-            {{ macro_image.avatar(user.avatar, user.username) }}
-            <p>
-                {{ user.username }}
-                 <small>
-                    {{ 'Member since %date%'|trans({'%date%': user.memberSince|date('m.Y') }, 'ChamiloThemeBundle') }}
-                </small>
+
+    <ul class="dropdown-menu" role="menu">
+        <li class="user-header">
+            <div class="text-center">
+            <img class="img-circle" src="{{ asset(user.avatarOrAnonymous(64)) }}" alt="{{ user.completeName }}" />
+            <p class="name">
+                <a href="{{ url('main', { 'name' : 'social/home.php' })}}">
+                    {{ user.completeName }}
+                </a>
             </p>
+            <p><i class="fa fa-envelope-o" aria-hidden="true"></i> {{ user.email }}</p>
+            </div>
         </li>
-        <!-- Menu Body -->
-        {#
+        <li role="separator" class="divider"></li>
         <li class="user-body">
-            <div class="col-xs-4 text-center">
-                <a href="#">Followers</a>
-            </div>
-            <div class="col-xs-4 text-center">
-                <a href="#">Sales</a>
-            </div>
-            <div class="col-xs-4 text-center">
-                <a href="#">Friends</a>
-            </div>
-        </li>
-        #}
-        <!-- Menu Footer-->
-        <li class="user-footer">
-            <div class="pull-left">
-                <a href="{{ path('chamilo_core_user_user_profile', {'username' : user.identifier}) }}" class="btn btn-default btn-flat">
-                    {{'Profile'|trans({}, 'ChamiloThemeBundle')}}
-                </a>
-            </div>
-            <div class="pull-right">
-                <a href="{{ path('logout') }}" class="btn btn-default btn-flat">
-                    {{ 'Sign out'|trans({}, 'ChamiloThemeBundle') }}
-                </a>
-            </div>
+            <a title="{{ "Inbox"|trans }}" href="{{ url('main', { 'name' : 'messages/inbox.php' }) }}">
+                <em class="fa fa-envelope" aria-hidden="true"></em> {{ "Inbox"|get_lang }}
+            </a>
+            <a title="{{ "MyCertificates"|trans }}" href="{{ url('main', { 'name' : 'gradebook/my_certificates.php' })  }}">
+                <em class="fa fa-graduation-cap" aria-hidden="true"></em> {{ "MyCertificates"|get_lang }}
+            </a>
+            <a id="logout_button" title="{{ "Logout"|trans }}" href="{{ path('logout') }}" >
+                <em class="fa fa-sign-out"></em> {{ "Logout"|trans }}
+            </a>
         </li>
     </ul>
 </li>

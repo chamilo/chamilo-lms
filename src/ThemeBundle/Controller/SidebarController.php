@@ -1,5 +1,9 @@
 <?php
-/* For licensing terms, see /license.txt */
+/**
+ * SidebarController.php
+ * avanzu-admin
+ * Date: 23.02.14
+ */
 
 namespace Chamilo\ThemeBundle\Controller;
 
@@ -18,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 class SidebarController extends Controller
 {
     /**
-     * "Hello user" section
+     * Avatar user panel
      * @return Response
      */
     public function userPanelAction()
@@ -27,10 +31,36 @@ class SidebarController extends Controller
             return new Response();
         }
 
-        $userEvent = $this->getDispatcher()->dispatch(ThemeEvents::THEME_SIDEBAR_USER, new ShowUserEvent());
+        $userEvent = $this->getDispatcher()->dispatch(
+            ThemeEvents::THEME_SIDEBAR_USER,
+            new ShowUserEvent()
+        );
 
         return $this->render(
             'ChamiloThemeBundle:Sidebar:user-panel.html.twig',
+            array(
+                'user' => $userEvent->getUser()
+            )
+        );
+    }
+
+    /**
+     * User social network section
+     * @return Response
+     */
+    public function socialPanelAction()
+    {
+        if (!$this->getDispatcher()->hasListeners(ThemeEvents::THEME_SIDEBAR_USER)) {
+            return new Response();
+        }
+
+        $userEvent = $this->getDispatcher()->dispatch(
+            ThemeEvents::THEME_SIDEBAR_USER,
+            new ShowUserEvent()
+        );
+
+        return $this->render(
+            'ChamiloThemeBundle:Sidebar:social-panel.html.twig',
             array(
                 'user' => $userEvent->getUser()
             )
@@ -47,7 +77,7 @@ class SidebarController extends Controller
     }
 
     /**
-     * @return EventDispatcher
+     * @return object|\Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher|\Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher
      */
     protected function getDispatcher()
     {
@@ -58,43 +88,23 @@ class SidebarController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function menuAction(Request $request)
+    public function leftMenuAction(Request $request)
     {
-        if (!$this->getDispatcher()->hasListeners(ThemeEvents::THEME_SIDEBAR_SETUP_MENU)) {
-            return new Response();
-        }
-
-        $event = $this->getDispatcher()->dispatch(
-            ThemeEvents::THEME_SIDEBAR_SETUP_MENU,
-            new SidebarMenuEvent($request)
-        );
-
-        return $this->render(
-            'ChamiloThemeBundle:Sidebar:menu.html.twig',
-            array(
-                'menu' => $event->getItems()
-            )
-        );
-    }
-
-    /**
-     * @param Request $request
-     * @return Response
-     */
-    public function menuKnpAction(Request $request)
-    {
-        if (!$this->getDispatcher()->hasListeners(ThemeEvents::THEME_SIDEBAR_SETUP_MENU_KNP)) {
+        if (!$this->getDispatcher()->hasListeners(
+            ThemeEvents::THEME_SIDEBAR_LEFT_MENU
+        )
+        ) {
             return new Response();
         }
 
         /** @var SidebarMenuKnpEvent $event */
         $event = $this->getDispatcher()->dispatch(
-            ThemeEvents::THEME_SIDEBAR_SETUP_MENU_KNP,
+            ThemeEvents::THEME_SIDEBAR_LEFT_MENU,
             new SidebarMenuKnpEvent($request)
         );
 
         return $this->render(
-            'ChamiloThemeBundle:Sidebar:menu_knp.html.twig',
+            'ChamiloThemeBundle:Sidebar:left_menu.html.twig',
             array(
                 'menu' => $event->getMenu()
             )

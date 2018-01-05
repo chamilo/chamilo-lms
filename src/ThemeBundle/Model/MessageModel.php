@@ -13,6 +13,7 @@ namespace Chamilo\ThemeBundle\Model;
  */
 class MessageModel implements MessageInterface
 {
+
     /**
      * Holds the sender
      *

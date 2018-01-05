@@ -1414,7 +1414,8 @@ class Template
                         $message = get_lang('AccountNotConfirmed').PHP_EOL;
                         $message .= Display::url(
                             get_lang('ReSendConfirmationMail'),
-                            api_get_path(WEB_PATH).'main/auth/resend_confirmation_mail.php'
+                            api_get_path(WEB_PATH).'main/auth/resend_confirmation_mail.php',
+                            ['class' => 'alert-link']
                         );
                     }
                     break;

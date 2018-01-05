@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 use Chamilo\Kernel;
 use Symfony\Component\Debug\Debug;
@@ -31,6 +32,8 @@ if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? false) {
 if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? false) {
     Request::setTrustedHosts(explode(',', $trustedHosts));
 }
+
+require_once __DIR__.'/legacy.php';
 
 $kernel = new Kernel($env, $debug);
 //$request = Request::createFromGlobals();

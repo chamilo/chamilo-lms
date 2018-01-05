@@ -7,8 +7,10 @@ build:
                 override: [php-scrutinizer-run]
     tests:
         override:
-            command: "php -v"
-
+            - "php -v"
+    dependencies:
+        override:
+            - "php -v"
 checks:
     php: true
 

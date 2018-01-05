@@ -1,3 +1,17 @@
+build:
+    nodes:
+        analysis:
+            project_setup:
+                override: true
+            tests:
+                override: [php-scrutinizer-run]
+    tests:
+        override:
+            command: "php -v"
+    dependencies:
+        override:
+            - "php -v"
+
 checks:
     php: true
 

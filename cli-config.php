@@ -26,13 +26,13 @@ if (!is_file($configurationFile)) {
 require_once $configurationFile;
 
 $database = new \Database();
-$dbParams = array(
+$dbParams = [
     'driver' => 'pdo_mysql',
     'host' => $_configuration['db_host'],
     'user' => $_configuration['db_user'],
     'password' => $_configuration['db_password'],
     'dbname' => $_configuration['main_database']
-);
+];
 
 $database->connect($dbParams, realpath(__DIR__).'/', realpath(__DIR__).'/');
 $entityManager = $database::getManager();

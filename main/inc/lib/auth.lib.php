@@ -706,7 +706,7 @@ class Auth
                         )
                     )
                 )
-                ->setParameter('date', $date);
+                ->setParameter('date', api_get_utc_datetime($date));
         }
 
         return $query->getQuery()->getResult();

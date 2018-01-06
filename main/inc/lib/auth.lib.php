@@ -697,15 +697,12 @@ class Auth
             $query
                 ->andWhere(
                     $qb->expr()->orX(
-                        $qb->expr()->andX(
-                            $qb->expr()->gte('s.accessStartDate', ':date'),
-                            $qb->expr()->gte('s.accessEndDate', ':date')
-                        ),
+                        $qb->expr()->between(':date', 's.accessStartDate', 's.accessEndDate'),
                         $qb->expr()->isNull('s.accessEndDate'),
                         $qb->expr()->andX(
                             $qb->expr()->isNull('s.accessStartDate'),
                             $qb->expr()->isNotNull('s.accessEndDate'),
-                            $qb->expr()->gte('s.accessEndDate', ':date')
+                            $qb->expr()->gt('s.accessEndDate', ':date')
                         )
                     )
                 )

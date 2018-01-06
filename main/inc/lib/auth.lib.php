@@ -674,42 +674,46 @@ class Auth
         $qb = $em->createQueryBuilder();
         $urlId = api_get_current_access_url_id();
 
-        $query = $qb->select('s')->from('ChamiloCoreBundle:Session', 's');
+        $sql = "SELECT s.id FROM session s ";
+        $sql .= "
+            INNER JOIN access_url_rel_session ars
+            ON s.id = ars.session_id
+        ";
 
-        $qb->innerJoin(
-            'ChamiloCoreBundle:AccessUrlRelSession',
-            'ars',
-            Join::WITH,
-            's = ars.sessionId'
-        );
-
-        if (!empty($limit)) {
-            $query->setFirstResult($limit['start'])
-                ->setMaxResults($limit['length']);
-        }
-
-        $query
-            ->where($qb->expr()->gt('s.nbrCourses', 0))
-            ->andWhere($qb->expr()->eq('ars.accessUrlId', $urlId))
-        ;
+        $sql .= "
+            WHERE s.nbr_courses > 0
+                AND ars.access_url_id = $urlId
+        ";
 
         if (!is_null($date)) {
-            $query
-                ->andWhere(
-                    $qb->expr()->orX(
-                        $qb->expr()->between(':date', 's.accessStartDate', 's.accessEndDate'),
-                        $qb->expr()->isNull('s.accessEndDate'),
-                        $qb->expr()->andX(
-                            $qb->expr()->isNull('s.accessStartDate'),
-                            $qb->expr()->isNotNull('s.accessEndDate'),
-                            $qb->expr()->gt('s.accessEndDate', ':date')
-                        )
+            $sql .= "
+                AND (
+                    ('$date' BETWEEN DATE(s.access_start_date) AND DATE(s.access_end_date))
+                    OR (s.access_end_date IS NULL)
+                    OR (
+                        s.access_start_date IS NULL
+                        AND s.access_end_date IS NOT NULL
+                        AND DATE(s.access_end_date) >= '$date'
                     )
                 )
-                ->setParameter('date', api_get_utc_datetime($date));
+            ";
         }
-
-        return $query->getQuery()->getResult();
+        
+        if (!empty($limit)) {
+            $sql .= "LIMIT {$limit['start']}, {$limit['length']} ";
+        }
+        
+        $ids = Database::store_result(
+            Database::query($sql)
+        );
+        
+        $sessions = [];
+        
+        foreach ($ids as $id) {
+            $sessions[] = $em->find('ChamiloCoreBundle:Session', $id);
+        }
+        
+        return $sessions;
     }
 
     /**

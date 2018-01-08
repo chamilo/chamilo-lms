@@ -1,11 +1,5 @@
 # Check that your Apache virtualhost have this settings:
 
-#<Directory "/var/www/chamilo-classic">
-#  AllowOverride All
-#  Order allow,deny
-#  Allow from all
-#</Directory>
-
 RewriteEngine on
 
 # http://my.chamilo.net/certificates/?id=123 to http://my.chamilo.net/certificates/index.php?id=123
@@ -60,7 +54,7 @@ RewriteRule ^service/(\d{1,})$ plugin/buycourses/src/service_information.php?ser
 RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
 
 # Deny access
-RewriteRule ^(tests|.git) - [F,L,NC]
+RewriteRule ^(tests|.git|.env|.env.dist|config) - [F,L,NC]
 
 # Add caching of woff font files to avoid loading 2*15KB each time with Chamilo
 # default OpenSans font

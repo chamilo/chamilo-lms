@@ -51,7 +51,6 @@ switch ($action) {
                             AnnouncementManager::delete_announcement($courseInfo, $itemId);
                         }
                     }
-
                 }
             }
         }

@@ -134,14 +134,14 @@ try {
                     $student->getId()
                 );
                 $exerciseResult = current($exerciseResult);
-        
+
                 if (!$exerciseResult) {
                     continue;
                 }
-        
+
                 $attemptDate = new DateTime($exerciseResult['exe_date'], new DateTimeZone('UTC'));
                 $dateIsRange = $attemptDate >= $dateStart && $attemptDate <= $dateEnd;
-        
+
                 if (!$dateEnd) {
                     continue;
                 }
@@ -158,7 +158,7 @@ try {
         );
 
         /** old method to get the score
-        
+
                 $score = Category::getCurrentScore(
                     $student->getId(),
                     $gradebook,

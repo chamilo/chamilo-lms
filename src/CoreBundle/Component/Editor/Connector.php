@@ -345,7 +345,7 @@ class Connector
                 if (isset($args['target'])) {
                     $driverName = $elFinder->getVolumeDriverNameByTarget($args['target']);
                 }
-        
+
                 if (isset($args['targets'])) {
                     foreach ($args['targets'] as $target) {
                         $driverName = $elFinder->getVolumeDriverNameByTarget($target);

@@ -1512,7 +1512,7 @@ if (empty($details)) {
         </div>
     ';
 
-    // line about other tools ?>
+    // line about other tools?>
     <div class="table-responsive">
     <table class="table table-striped table-hover">
         <thead>

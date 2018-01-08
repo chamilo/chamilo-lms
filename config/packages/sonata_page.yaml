@@ -76,7 +76,7 @@ sonata_page:
         - chamilo_core_user_user_mycourses
         - chamilo_page_page_getlatestpages
     cache_invalidation:
-        service:  sonata.page.cache.invalidation.simple
+        service: sonata.page.cache.invalidation.simple
         recorder: sonata.page.cache.recorder
 #        classes:
 #            "Chamilo\PageBundle\Entity\Block": getId
@@ -93,60 +93,60 @@ sonata_page:
 #            path: '::layout.html.twig'
             name: 'default'
             containers:
-                 header:
-                     name: Header
-                 content_top:
-                     name: Top content
-                 content:
-                     name: Main content
-                 content_bottom:
-                     name: Bottom content
-                 footer:
-                     name: Footer
+                header:
+                    name: Header
+                content_top:
+                    name: Top content
+                content:
+                    name: Main content
+                content_bottom:
+                    name: Bottom content
+                footer:
+                    name: Footer
             matrix:
-                 layout: |
-                     HHHHHHHH
-                     TTTTTTTT
-                     CCCCCCCC
-                     BBBBBBBB
-                     FFFFFFFF
-                 mapping:
-                     H: header
-                     T: content_top
-                     C: content
-                     B: content_bottom
-                     F: footer
+                layout: |
+                    HHHHHHHH
+                    TTTTTTTT
+                    CCCCCCCC
+                    BBBBBBBB
+                    FFFFFFFF
+                mapping:
+                    H: header
+                    T: content_top
+                    C: content
+                    B: content_bottom
+                    F: footer
         2columns:
             path: 'ChamiloPageBundle::demo_2columns_layout.html.twig'
 #            path: '::layout.html.twig'
             name: '2 columns layout'
             containers:
-                 header:
-                     name: Header
-                 content_top:
-                     name: Top content
-                 left_col:
-                     name: Left content
-                 rigth_col:
-                     name: Right content
-                 content_bottom:
-                     name: Bottom content
-                 footer:
-                     name: Footer
+                header:
+                    name: Header
+                content_top:
+                    name: Top content
+                left_col:
+                    name: Left content
+                rigth_col:
+                    name: Right content
+                content_bottom:
+                    name: Bottom content
+                footer:
+                    name: Footer
             matrix:
-                 layout: |
-                     HHHHHHHH
-                     TTTTTTTT
-                     LLLLRRRR
-                     BBBBBBBB
-                     FFFFFFFF
-                 mapping:
-                     H: header
-                     T: content_top
-                     L: left_col
-                     R: rigth_col
-                     B: content_bottom
-                     F: footer
+                layout: |
+                    HHHHHHHH
+                    TTTTTTTT
+                    LLLLRRRR
+                    BBBBBBBB
+                    FFFFFFFF
+                mapping:
+                    H: header
+                    T: content_top
+                    L: left_col
+                    R: rigth_col
+                    B: content_bottom
+                    F: footer
     page_defaults:
         homepage: {decorate: false, enabled: true}
         home: {decorate: false, enabled: true}

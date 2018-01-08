@@ -55,15 +55,15 @@ services:
             - [setTranslationDomain, [ChamiloCoreBundle]]
 
     sonata.admin.session_rel_user:
-            class: Chamilo\CoreBundle\Admin\SessionRelUserAdmin
-            tags:
-                - {name: sonata.admin, manager_type: orm, group: "LMS", label: "SessionRelUserAdmin"}
-            arguments:
-                - ~
-                - Chamilo\CoreBundle\Entity\SessionRelUser
-                - ~
-            calls:
-                - [setTranslationDomain, [ChamiloCoreBundle]]
+        class: Chamilo\CoreBundle\Admin\SessionRelUserAdmin
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: "LMS", label: "SessionRelUserAdmin"}
+        arguments:
+            - ~
+            - Chamilo\CoreBundle\Entity\SessionRelUser
+            - ~
+        calls:
+            - [setTranslationDomain, [ChamiloCoreBundle]]
 
     sonata.admin.access_url:
         class: Chamilo\CoreBundle\Admin\AccessUrlAdmin

@@ -18,7 +18,7 @@ sonata_media:
                 - sonata.media.provider.vimeo
             formats:
                 small: {width: 100, quality: 100}
-                big: {width: 970 , quality: 100}
+                big: {width: 970, quality: 100}
         course:
             providers:
                 - sonata.media.provider.dailymotion
@@ -27,8 +27,8 @@ sonata_media:
                 - sonata.media.provider.file
                 - sonata.media.provider.vimeo
             formats:
-                  small: {width: 100, quality: 100}
-                  big: {width: 970 , quality: 100}
+                small: {width: 100, quality: 100}
+                big: {width: 970, quality: 100}
         news:
             providers:
                 - sonata.media.provider.dailymotion
@@ -41,24 +41,24 @@ sonata_media:
 
         sonata_collection:
             providers:
-              - sonata.media.provider.image
+                - sonata.media.provider.image
             formats:
                 preview: {width: 100, quality: 100}
                 wide: {width: 820, quality: 100}
 
         sonata_category:
             providers:
-              - sonata.media.provider.image
+                - sonata.media.provider.image
             formats:
                 preview: {width: 100, quality: 100}
                 wide: {width: 820, quality: 100}
         user:
             providers:
-              - sonata.media.provider.image
+                - sonata.media.provider.image
 
             formats:
                 small: {width: 100, quality: 100}
-                big: {width: 970 , quality: 100}
+                big: {width: 970, quality: 100}
     cdn:
         # define the public base url for the uploaded media
         server:
@@ -74,7 +74,7 @@ sonata_media:
             # the resizer must be set to false, otherwhise this can delete icon files from the fs
             resizer: false
         image:
-           thumbnail: sonata.media.thumbnail.format          # default value
+            thumbnail: sonata.media.thumbnail.format          # default value
 #           thumbnail: sonata.media.thumbnail.consumer.format # can be used to dispatch the resize action to async task
 #            thumbnail: sonata.media.thumbnail.liip_imagine    # use the LiipImagineBundle to resize the image
         vimeo:

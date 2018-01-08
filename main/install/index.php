@@ -575,7 +575,7 @@ if (@$_POST['step2']) {
         $passForm
     );
 } elseif (@$_POST['step5']) {
-    //STEP 6 : LAST CHECK BEFORE INSTALL ?>
+    //STEP 6 : LAST CHECK BEFORE INSTALL?>
     <div class="RequirementHeading">
        <h3><?php echo display_step_sequence().get_lang('LastCheck'); ?></h3>
     </div>

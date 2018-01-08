@@ -13,16 +13,15 @@ sonata_block:
         chamilo_core.block.breadcrumb: ~
         chamilo_core.block.course: ~
         chamilo_core.block.skill: ~
-
         sonata.admin.block.stats:
-            contexts:   [admin]
+            contexts: [admin]
         sonata.admin.block.admin_list:
-            contexts:   [admin]
+            contexts: [admin]
         sonata.admin.block.search_result:
-            contexts:   [admin]
+            contexts: [admin]
 
         sonata.admin_doctrine_orm.block.audit:
-            contexts:   [admin]
+            contexts: [admin]
 
         # Builtin Block
         sonata.block.service.text:
@@ -30,7 +29,6 @@ sonata_block:
         sonata.block.service.rss:
         sonata.block.service.menu:
         sonata.block.service.template:
-
         # PageBundle's Blocks
         sonata.page.block.container:
             # cache: sonata.cache.memcached
@@ -39,20 +37,17 @@ sonata_block:
             # cache: sonata.block.cache.esi # if you are using the BlockBundle without the PageBundle
         sonata.page.block.children_pages:
         sonata.page.block.breadcrumb:
-
         # MediaBundle's Blocks
         sonata.media.block.media:
         sonata.media.block.gallery:
         sonata.media.block.feature_media:
-
         # NewsBundle's Blocks
         sonata.news.block.recent_comments:
         sonata.news.block.recent_posts:
 
         # TimelineBundle's Blocks
         sonata.timeline.block.timeline:
-            contexts:   [admin]
-
+            contexts: [admin]
         # UserBundle's Blocks
         sonata.user.block.account:
             cache: sonata.page.cache.js_async
@@ -60,7 +55,6 @@ sonata_block:
             contexts: [user]
         sonata.user.block.menu:
             contexts: [user]
-
         # SeoBundle's Blocks
         sonata.seo.block.social.container:
         sonata.seo.block.email.share_button:

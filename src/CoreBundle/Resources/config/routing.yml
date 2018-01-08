@@ -1,42 +1,41 @@
 core_controller:
     resource: '@ChamiloCoreBundle/Controller/IndexController.php'
-    type:     annotation
+    type: annotation
 
 userportal:
     resource: '@ChamiloCoreBundle/Controller/UserPortalController.php'
-    type:     annotation
-    prefix:   /userportal
+    type: annotation
+    prefix: /userportal
 
 front:
     resource: '@ChamiloCoreBundle/Controller/FrontController.php'
-    type:     annotation
-    prefix:   /front
+    type: annotation
+    prefix: /front
 
 user:
     resource: '@ChamiloCoreBundle/Controller/User/UserController.php'
-    type:     annotation
-    prefix:   /user
+    type: annotation
+    prefix: /user
 
 course:
     resource: '@ChamiloCoreBundle/Controller/CourseController.php'
-    type:     annotation
-    prefix:   /course
+    type: annotation
+    prefix: /course
 
 legacy_javascript:
     resource: '@ChamiloCoreBundle/Controller/JavascriptLegacyController.php'
-    type:     annotation
-    prefix:   /js
-
+    type: annotation
+    prefix: /js
 # Legacy routes
 main:
     path: /main/{name}
-    defaults: { _controller: ChamiloCoreBundle:Legacy:classic }
+    defaults: {_controller: ChamiloCoreBundle:Legacy:classic}
     requirements:
       name: .+
 
 legacy_plugin:
     path: /plugin/{name}
-    defaults: { _controller: ChamiloCoreBundle:Legacy:plugin }
+    defaults: {_controller: ChamiloCoreBundle:Legacy:plugin}
     requirements:
       name: .+
 
@@ -56,7 +55,7 @@ core_admin:
 # Redirects /url/ to /url always located at the end
 remove_trailing_slash:
     path: /{url}
-    defaults: { _controller: ChamiloCoreBundle:Redirecting:removeTrailingSlash }
+    defaults: {_controller: ChamiloCoreBundle:Redirecting:removeTrailingSlash}
     requirements:
         url: .*/$
         _method: GET

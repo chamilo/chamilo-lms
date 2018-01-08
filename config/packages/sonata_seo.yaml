@@ -12,7 +12,6 @@ sonata_seo:
                 apple-mobile-web-app-capable: yes
                 author: chamilo
                 Generator: Chamilo 2
-
             property:
                 # Facebook application settings
                 #'fb:app_id':          XXXXXX
@@ -22,14 +21,11 @@ sonata_seo:
                 # see http://developers.facebook.com/docs/opengraphprotocol/#types or http://ogp.me/
 #                'og:site_name':        %sonata_admin.title%
 #                'og:description':      %sonata_admin.title%
-
             http-equiv:
 #                'Content-Type':         text/html; charset=utf-8
                 #'X-Ua-Compatible':      IE=EmulateIE7
-
         head:
-            'xmlns':              http://www.w3.org/1999/xhtml
-
+            'xmlns': http://www.w3.org/1999/xhtml
 #    sitemap:
 #        services:
 #            - sonata.product.seo_iterator

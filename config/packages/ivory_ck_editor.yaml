@@ -1,7 +1,7 @@
 ivory_ck_editor:
     autoload: false
     base_path: "bundles/ivoryckeditor"
-    js_path:   "bundles/ivoryckeditor/ckeditor.js"
+    js_path: "bundles/ivoryckeditor/ckeditor.js"
     default_config: default
     configs:
         chamilo:
@@ -28,7 +28,7 @@ ivory_ck_editor:
                 context: my-context # Optional, to upload in a custom context
     plugins:
         wordcount:
-            path:     "/bundles/chamilocore/ckeditor/plugins/wordcount"
+            path: "/bundles/chamilocore/ckeditor/plugins/wordcount"
             filename: "plugin.js"
 #        adobeair:
 #            path:     "/bundles/chamilocore/components/ckeditor/plugins/adobeair"

@@ -18,9 +18,9 @@ services:
         class: Chamilo\CourseBundle\EventListener\CourseListener
         arguments: ['@service_container']
         tags:
-          - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
-          - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
-          - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 10}
+          - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}
+          - {name: kernel.event_listener, event: kernel.response, method: onKernelResponse}
+          - {name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 10}
 
     # Sets the user access in a course listener
     chamilo_course.listener.course_access:
@@ -30,7 +30,7 @@ services:
         calls:
             - [setRequest, ['@request_stack']]
         tags:
-            - { name: kernel.event_listener, event: chamilo_course.course.access, method: onCourseAccessEvent }
+            - {name: kernel.event_listener, event: chamilo_course.course.access, method: onCourseAccessEvent}
 
     # Sets the user access in a course session listener
     chamilo_course.listener.session_access:
@@ -40,7 +40,7 @@ services:
         calls:
                 - [setRequest, ['@request_stack']]
         tags:
-            - { name: kernel.event_listener, event: chamilo_course.course.session, method: onSessionAccessEvent }
+            - {name: kernel.event_listener, event: chamilo_course.course.session, method: onSessionAccessEvent}
 
     # Voters
 
@@ -55,7 +55,7 @@ services:
           ]
         public: false
         tags:
-           - { name: security.voter }
+           - {name: security.voter}
 
     # Course settings
     chamilo_course.controller.settings:
@@ -109,13 +109,13 @@ services:
             - agenda.gif
             - chamilo_course.settings.agenda
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Agenda tool settings
     chamilo_course.settings.agenda:
         class: Chamilo\CourseBundle\Settings\AgendaCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.agenda, namespace: agenda }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.agenda, namespace: agenda}
 
     # Announcement tool
     chamilo_course.tool.announcement:
@@ -127,13 +127,13 @@ services:
             - valves.gif
             - chamilo_course.settings.announcement
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Announcement tool settings
     chamilo_course.settings.announcement:
         class: Chamilo\CourseBundle\Settings\AnnouncementCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.announcement, namespace: announcement }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.announcement, namespace: announcement}
 
     chamilo_course.tool.assignment:
         class: Chamilo\CourseBundle\Tool\Assignment
@@ -144,13 +144,13 @@ services:
             - works.gif
             - chamilo_course.settings.assignment
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Course settings
     chamilo_course.settings.assignment:
         class: Chamilo\CourseBundle\Settings\AssignmentCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.assignment, namespace: assignment }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.assignment, namespace: assignment}
 
     chamilo_course.tool.attendance:
         class: Chamilo\CourseBundle\Tool\Attendance
@@ -161,13 +161,13 @@ services:
             - attendance.gif
             - '@chamilo_course.settings.attendance'
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Course settings
     chamilo_course.settings.attendance:
         class: Chamilo\CourseBundle\Settings\AttendanceCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.attendance, namespace: attendance }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.attendance, namespace: attendance}
 
     chamilo_course.tool.blog:
         class: Chamilo\CourseBundle\Tool\Blog
@@ -178,13 +178,13 @@ services:
             - blog_admin.gif
             - '@chamilo_course.settings.blog'
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Course settings
     chamilo_course.settings.blog:
         class: Chamilo\CourseBundle\Settings\BlogCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.blog, namespace: blog }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.blog, namespace: blog}
 
     chamilo_course.tool.course_description:
         class: Chamilo\CourseBundle\Tool\CourseDescription
@@ -195,13 +195,13 @@ services:
             - info.gif
             - '@chamilo_course.settings.course_description'
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Course settings
     chamilo_course.settings.course_description:
         class: Chamilo\CourseBundle\Settings\CourseDescriptionCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.course_description, namespace: course_description }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.course_description, namespace: course_description}
 
     chamilo_course.tool.chat:
         class: Chamilo\CourseBundle\Tool\Chat
@@ -212,13 +212,13 @@ services:
             - chat.gif
             - '@chamilo_course.settings.chat'
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Course settings
     chamilo_course.settings.chat:
         class: Chamilo\CourseBundle\Settings\ChatCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.chat, namespace: chat }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.chat, namespace: chat}
 
     chamilo_course.tool.course_progress:
         class: Chamilo\CourseBundle\Tool\CourseProgress
@@ -230,13 +230,13 @@ services:
             - '@chamilo_course.settings.course_progress'
 
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Course settings
     chamilo_course.settings.course_progress:
         class: Chamilo\CourseBundle\Settings\CourseProgressCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.course_progress, namespace: course_progress }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.course_progress, namespace: course_progress}
 
     chamilo_course.tool.document:
         class: Chamilo\CourseBundle\Tool\Document
@@ -247,13 +247,13 @@ services:
             - folder_document.gif
             - '@chamilo_course.settings.document'
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Course settings
     chamilo_course.settings.document:
         class: Chamilo\CourseBundle\Settings\DocumentCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.document, namespace: document }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.document, namespace: document}
 
     chamilo_course.tool.dropbox:
         class: Chamilo\CourseBundle\Tool\Dropbox
@@ -265,13 +265,13 @@ services:
             - '@chamilo_course.settings.dropbox'
 
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Course settings
     chamilo_course.settings.dropbox:
         class: Chamilo\CourseBundle\Settings\DropboxCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.dropbox, namespace: dropbox }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.dropbox, namespace: dropbox}
 
     chamilo_course.tool.exercise:
         class: Chamilo\CourseBundle\Tool\Exercise
@@ -283,13 +283,13 @@ services:
             - '@chamilo_course.settings.exercise'
 
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Course settings
     chamilo_course.settings.exercise:
         class: Chamilo\CourseBundle\Settings\ExerciseCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.quiz, namespace: quiz }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.quiz, namespace: quiz}
 
     chamilo_course.tool.forum:
         class: Chamilo\CourseBundle\Tool\Forum
@@ -301,13 +301,13 @@ services:
             - '@chamilo_course.settings.forum'
 
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Course settings
     chamilo_course.settings.forum:
         class: Chamilo\CourseBundle\Settings\ForumCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.forum, namespace: forum }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.forum, namespace: forum}
 
     chamilo_course.tool.glossary:
         class: Chamilo\CourseBundle\Tool\Glossary
@@ -319,13 +319,13 @@ services:
             - '@chamilo_course.settings.glossary'
 
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Course settings
     chamilo_course.settings.glossary:
         class: Chamilo\CourseBundle\Settings\GlossaryCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.glossary, namespace: glossary }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.glossary, namespace: glossary}
 
     chamilo_course.tool.gradebook:
         class: Chamilo\CourseBundle\Tool\Gradebook
@@ -337,13 +337,13 @@ services:
             - '@chamilo_course.settings.gradebook'
 
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Course settings
     chamilo_course.settings.gradebook:
         class: Chamilo\CourseBundle\Settings\GradebookCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.gradebook, namespace: gradebook }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.gradebook, namespace: gradebook}
 
     chamilo_course.tool.group:
         class: Chamilo\CourseBundle\Tool\Group
@@ -355,13 +355,13 @@ services:
             - '@chamilo_course.settings.group'
 
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Course settings
     chamilo_course.settings.group:
         class: Chamilo\CourseBundle\Settings\GroupCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.group, namespace: group }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.group, namespace: group}
 
     chamilo_course.tool.learning_path:
         class: Chamilo\CourseBundle\Tool\LearningPath
@@ -372,13 +372,13 @@ services:
             - scorms.gif
             - '@chamilo_course.settings.learning_path'
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Course settings
     chamilo_course.settings.learning_path:
         class: Chamilo\CourseBundle\Settings\LearningPathCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.learnpath, namespace: learnpath }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.learnpath, namespace: learnpath}
 
     chamilo_course.tool.link:
         class: Chamilo\CourseBundle\Tool\Link
@@ -390,13 +390,13 @@ services:
             - '@chamilo_course.settings.link'
 
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Course settings
     chamilo_course.settings.link:
         class: Chamilo\CourseBundle\Settings\LinkCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.link, namespace: link }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.link, namespace: link}
 
     chamilo_course.tool.maintenance:
         class: Chamilo\CourseBundle\Tool\Maintenance
@@ -407,13 +407,13 @@ services:
             - backup.gif
             - '@chamilo_course.settings.maintenance'
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Course settings
     chamilo_course.settings.maintenance:
         class: Chamilo\CourseBundle\Settings\MaintenanceCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.maintenance, namespace: maintenance }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.maintenance, namespace: maintenance}
 
     chamilo_course.tool.settings:
         class: Chamilo\CourseBundle\Tool\Settings
@@ -425,13 +425,13 @@ services:
             - '@chamilo_course.settings.settings'
 
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Course settings
     chamilo_course.settings.settings:
         class: Chamilo\CourseBundle\Settings\SettingsCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.settings, namespace: settings }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.settings, namespace: settings}
 
     chamilo_course.tool.survey:
         class: Chamilo\CourseBundle\Tool\Survey
@@ -443,13 +443,13 @@ services:
             - '@chamilo_course.settings.survey'
 
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Course settings
     chamilo_course.settings.survey:
         class: Chamilo\CourseBundle\Settings\SurveyCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.survey, namespace: survey }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.survey, namespace: survey}
 
     chamilo_course.tool.tracking:
         class: Chamilo\CourseBundle\Tool\Tracking
@@ -461,13 +461,13 @@ services:
             - '@chamilo_course.settings.tracking'
 
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Course settings
     chamilo_course.settings.tracking:
         class: Chamilo\CourseBundle\Settings\TrackingCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.tracking, namespace: tracking }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.tracking, namespace: tracking}
 
     chamilo_course.tool.user:
         class: Chamilo\CourseBundle\Tool\User
@@ -479,13 +479,13 @@ services:
             - '@chamilo_course.settings.user'
 
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Course settings
     chamilo_course.settings.user:
         class: Chamilo\CourseBundle\Settings\UserCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.user, namespace: user }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.user, namespace: user}
 
     chamilo_course.tool.wiki:
         class: Chamilo\CourseBundle\Tool\Wiki
@@ -497,10 +497,10 @@ services:
             - '@chamilo_course.settings.wiki'
 
         tags:
-            - { name: chamilo_course.tool }
+            - {name: chamilo_course.tool}
 
     # Course settings
     chamilo_course.settings.wiki:
         class: Chamilo\CourseBundle\Settings\WikiCourseSettingsSchema
         tags:
-            - { name: chamilo_course.settings_schema, alias: chamilo_course.settings.wiki, namespace: wiki }
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.wiki, namespace: wiki}

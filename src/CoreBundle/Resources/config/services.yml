@@ -27,7 +27,7 @@ services:
     twig.extension.chamilo_extension:
         class: Chamilo\CoreBundle\Twig\Extension\ChamiloExtension
         tags:
-            - { name: twig.extension }
+            - {name: twig.extension}
 
     # Chamilo custom password encoder (depends on the password_encryption param)
     chamilo_user.security.encoder:
@@ -40,7 +40,7 @@ services:
         arguments: [ '@doctrine.orm.entity_manager', '@chamilo_core.entity.manager.course_manager', '@service_container']
         public: false
         tags:
-           - { name: security.voter }
+           - {name: security.voter}
 
     # Session voter checks if a user has permissions to do actions in a session
     chamilo_core.security.authorization.voter.session_voter:
@@ -48,7 +48,7 @@ services:
         arguments: [ '@doctrine.orm.entity_manager', '@chamilo_core.entity.manager.course_manager', '@service_container']
         public: false
         tags:
-           - { name: security.voter }
+           - {name: security.voter}
 
     # Resrouce voter checks if a user has permissions to do actions in a resource
     chamilo_core.security.authorization.voter.resource_node_voter:
@@ -56,26 +56,23 @@ services:
         public: false
         arguments: [ '@service_container' ]
         tags:
-            - { name: security.voter }
+            - {name: security.voter}
 
     # User image naming
 #    chamilo_core.naming.user_image:
 #        class: Chamilo\CoreBundle\Naming\UserImage
-
     # Form types
-
     # Custom yes/no form type, use in the platform settings
     chamilo_core.form.type.yes_no:
         class: Chamilo\CoreBundle\Form\Type\YesNoType
         tags:
-            - { name: form.type, alias: yes_no }
-
+            - {name: form.type, alias: yes_no}
 #    # Extra field attribute services
 #    chamilo_user.form.type.attribute_value_type:
 #        class: Chamilo\UserBundle\Form\Type\AttributeValueType
 #        arguments: [Chamilo\CoreBundle\Entity\ExtraFieldValues, ['registration'], 'user', @sylius.repository.subject_name_attribute_value]
 #        tags:
-#            - { name: form.type, alias: chamilo_user_extra_field_value }
+#            - {name: form.type, alias: chamilo_user_extra_field_value}
 ##
 #
 #    chamilo_user.form.type.attribute_type:
@@ -83,13 +80,13 @@ services:
 #        arguments: [Chamilo\CoreBundle\Entity\ExtraField, ['registration'], 'user']
 ##        arguments: [%sylius.attribute.attribute_types%]
 #        tags:
-#            - { name: form.type, alias: chamilo_user_attribute_type }
+#            - {name: form.type, alias: chamilo_user_attribute_type}
 #
 #    chamilo_user.form.type.attribute_choice_type:
 #        class: Chamilo\UserBundle\Form\Type\AttributeTypeChoiceType
 #        arguments: [%sylius.attribute.attribute_types%]
 #        tags:
-#            - { name: form.type, alias: chamilo_user_attribute_choice }
+#            - {name: form.type, alias: chamilo_user_attribute_choice}
 
     # html editor
     chamilo_core.html_editor:
@@ -107,80 +104,80 @@ services:
 #        class: Chamilo\CoreBundle\EventListener\OnlineListener
 #        arguments: [@security.context, @doctrine.orm.entity_manager ]
 #        tags:
-#            - { name: kernel.event_listener, event: kernel.controller, method: onCoreController }
+#            - {name: kernel.event_listener, event: kernel.controller, method: onCoreController}
 
     # When Course entity is loaded
     chamilo_core.listener.course:
         class: Chamilo\CoreBundle\Entity\Listener\CourseListener
         arguments: [ '@chamilo_course.tool_chain' ]
         tags:
-            - { name: doctrine.orm.entity_listener }
+            - {name: doctrine.orm.entity_listener}
 
     # When Session entity is loaded
     chamilo_core.listener.session:
         class: Chamilo\CoreBundle\Entity\Listener\SessionListener
         tags:
-            - { name: doctrine.orm.entity_listener }
+            - {name: doctrine.orm.entity_listener}
 
     # Setting user and platform locale
     chamilo_core.listener.legacy:
         class: Chamilo\CoreBundle\EventListener\LegacyListener
         arguments: ['@service_container']
         tags:
-          - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 10 }
-          - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
-          - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+          - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 10}
+          - {name: kernel.event_listener, event: kernel.response, method: onKernelResponse}
+          - {name: kernel.event_listener, event: kernel.controller, method: onKernelController}
 
     # Setting user and platform locale
     chamilo_core.listener.plugin:
         class: Chamilo\CoreBundle\EventListener\PluginListener
         arguments: ['@service_container']
         tags:
-          - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
-          - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 9}
+          - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}
+          - {name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 9}
 
     # Locale listener
     chamilo_core.listener.locale:
         class: Chamilo\CoreBundle\EventListener\LocaleListener
         arguments: ['%kernel.default_locale%', '@service_container']
         tags:
-            - { name: kernel.event_subscriber }
+            - {name: kernel.event_subscriber}
 
     # User locale listener
     chamilo_core.listener.user_locale_listener:
         class: Chamilo\CoreBundle\EventListener\UserLocaleListener
         arguments: ['@session', '@chamilo.settings.manager']
         tags:
-            - { name: kernel.event_listener, event: security.interactive_login, method: onInteractiveLogin }
+            - {name: kernel.event_listener, event: security.interactive_login, method: onInteractiveLogin}
 
     # Settings listener
     chamilo_core.listener.settings:
         class: Chamilo\CoreBundle\EventListener\SettingListener
         arguments: ['@service_container']
         tags:
-            - { name: kernel.event_listener, event: sylius.settings.pre_save, method: onSettingPreSave }
+            - {name: kernel.event_listener, event: sylius.settings.pre_save, method: onSettingPreSave}
 
     # Menu listener
     chamilo_core.listener.navbar_menu_listener:
         class: Chamilo\CoreBundle\EventListener\MenuListener
         arguments: ['@service_container']
         tags:
-            - { name: kernel.event_listener, event: theme.sidebar_left_menu, method: onSetupMenu }
-            - { name: kernel.event_listener, event: theme.breadcrumb, method: onSetupMenu }
+            - {name: kernel.event_listener, event: theme.sidebar_left_menu, method: onSetupMenu}
+            - {name: kernel.event_listener, event: theme.breadcrumb, method: onSetupMenu}
 
     chamilo_core.listener.navbar_user_listener:
         class: Chamilo\CoreBundle\EventListener\ShowUserListener
         arguments: ['@service_container']
         tags:
-            - { name: kernel.event_listener, event: theme.navbar_user, method: onShowUser }
-            - { name: kernel.event_listener, event: theme.sidebar_user, method: onShowUser }
+            - {name: kernel.event_listener, event: theme.navbar_user, method: onShowUser}
+            - {name: kernel.event_listener, event: theme.sidebar_user, method: onShowUser}
 
     # Menu
     chamilo_core.listener.message_listener:
         class: Chamilo\CoreBundle\EventListener\MessageListener
         arguments: ['@service_container']
         tags:
-            - { name: kernel.event_listener, event: theme.messages, method: onListMessages }
+            - {name: kernel.event_listener, event: theme.messages, method: onListMessages}
 
 #    chamilo_core.menu.simple_menu:
 #        class: Chamilo\CoreBundle\Menu\SimpleMenuBuilder
@@ -190,7 +187,7 @@ services:
 #        class: Chamilo\CoreBundle\Menu\NavBuilder
 #        arguments: ['@knp_menu.factory', '@router']
 #        tags:
-#         - { name: mopa_bootstrap.menu, alias: chamilo_core.menu.nav }
+#         - {name: mopa_bootstrap.menu, alias: chamilo_core.menu.nav}
 
 #    chamilo_core.menu.course_menu_builder:
 #        class: Chamilo\CoreBundle\Menu\LeftMenuBuilder
@@ -210,52 +207,52 @@ services:
         class: Chamilo\CoreBundle\Block\CourseBlockService
         arguments: [chamilo_core.block.course, '@templating']
         tags:
-            - { name: sonata.block }
+            - {name: sonata.block}
 
     chamilo_core.block.skill:
         class: Chamilo\CoreBundle\Block\SkillBlockService
         arguments: [chamilo_core.block.skill, '@templating' ]
         tags:
-            - { name: sonata.block }
+            - {name: sonata.block}
 
     # Breadcrumb
     chamilo_core.block.breadcrumb:
         class: Chamilo\CoreBundle\Block\BreadcrumbBlockService
         arguments: ['chamilo_core.block.breadcrumb', 'breadcrumb', '@templating', '@knp_menu.menu_provider', '@knp_menu.factory']
         tags:
-            - { name: sonata.block }
-            - { name: sonata.breadcrumb }
+            - {name: sonata.block}
+            - {name: sonata.breadcrumb}
 
     # Platform settings
     chamilo_core.settings.admin:
         class: Chamilo\CoreBundle\Settings\AdminSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.admin, namespace: admin }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.admin, namespace: admin}
 
     chamilo_core.settings.announcement:
         class: Chamilo\CoreBundle\Settings\AnnouncementSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.announcement, namespace: announcement }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.announcement, namespace: announcement}
 
     chamilo_core.settings.agenda:
         class: Chamilo\CoreBundle\Settings\AgendaSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.agenda, namespace: agenda }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.agenda, namespace: agenda}
 
     chamilo_core.settings.attendance:
         class: Chamilo\CoreBundle\Settings\AttendanceSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.attendance, namespace: attendance }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.attendance, namespace: attendance}
 
     chamilo_core.settings.cas:
         class: Chamilo\CoreBundle\Settings\CasSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.cas, namespace: cas }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.cas, namespace: cas}
 
     chamilo_core.settings.chat:
         class: Chamilo\CoreBundle\Settings\ChatSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.chat, namespace: chat }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.chat, namespace: chat}
 
     chamilo_core.settings.course:
         class: Chamilo\CoreBundle\Settings\CourseSettingsSchema
@@ -263,139 +260,137 @@ services:
              - [ setToolChain, ['@chamilo_course.tool_chain']]
              - [ setCourseManager, ['@chamilo_core.entity.manager.course_manager']]
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.course, namespace: course }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.course, namespace: course}
 
     chamilo_core.settings.display:
         class: Chamilo\CoreBundle\Settings\DisplaySettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.display, namespace: display }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.display, namespace: display}
 
     chamilo_core.settings.document:
         class: Chamilo\CoreBundle\Settings\DocumentSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.document, namespace: document }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.document, namespace: document}
 
     chamilo_core.settings.dropbox:
         class: Chamilo\CoreBundle\Settings\DropboxSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.dropbox, namespace: dropbox }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.dropbox, namespace: dropbox}
 
     chamilo_core.settings.editor:
         class: Chamilo\CoreBundle\Settings\EditorSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.editor, namespace: editor }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.editor, namespace: editor}
 
     chamilo_core.settings.exercise:
         class: Chamilo\CoreBundle\Settings\ExerciseSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.exercise, namespace: exercise }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.exercise, namespace: exercise}
 
     chamilo_core.settings.forum:
         class: Chamilo\CoreBundle\Settings\ForumSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.forum, namespace: forum }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.forum, namespace: forum}
 
     chamilo_core.settings.glossary:
         class: Chamilo\CoreBundle\Settings\GlossarySettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.glossary, namespace: glossary }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.glossary, namespace: glossary}
 
     chamilo_core.settings.gradebook:
         class: Chamilo\CoreBundle\Settings\GradebookSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.gradebook, namespace: gradebook }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.gradebook, namespace: gradebook}
 
     chamilo_core.settings.group:
         class: Chamilo\CoreBundle\Settings\GroupSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.group, namespace: group }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.group, namespace: group}
 
     chamilo_core.settings.language:
         class: Chamilo\CoreBundle\Settings\LanguageSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.language, namespace: language }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.language, namespace: language}
 
     chamilo_core.settings.mail:
         class: Chamilo\CoreBundle\Settings\MailSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.mail, namespace: mail }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.mail, namespace: mail}
 
     chamilo_core.settings.message:
         class: Chamilo\CoreBundle\Settings\MessageSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.message, namespace: message }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.message, namespace: message}
 
     chamilo_core.settings.platform:
         class: Chamilo\CoreBundle\Settings\PlatformSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.platform, namespace: platform }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.platform, namespace: platform}
 
     chamilo_core.settings.profile:
         class: Chamilo\CoreBundle\Settings\ProfileSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.profile, namespace: profile }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.profile, namespace: profile}
 
     chamilo_core.settings.ppt_to_lp:
         class: Chamilo\CoreBundle\Settings\PptToLpSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.ppt_to_lp, namespace: ppt_to_lp }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.ppt_to_lp, namespace: ppt_to_lp}
 
     chamilo_core.settings.registration:
         class: Chamilo\CoreBundle\Settings\RegistrationSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.registration, namespace: registration }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.registration, namespace: registration}
 
     chamilo_core.settings.search:
         class: Chamilo\CoreBundle\Settings\SearchSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.search, namespace: search }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.search, namespace: search}
 
     chamilo_core.settings.security:
         class: Chamilo\CoreBundle\Settings\SecuritySettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.security, namespace: security }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.security, namespace: security}
 
     chamilo_core.settings.session:
         class: Chamilo\CoreBundle\Settings\SessionSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.session, namespace: session }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.session, namespace: session}
 
     chamilo_core.settings.skill:
         class: Chamilo\CoreBundle\Settings\SkillSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.skill, namespace: skill }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.skill, namespace: skill}
 
     chamilo_core.settings.social:
         class: Chamilo\CoreBundle\Settings\SocialSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.social, namespace: social }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.social, namespace: social}
 
     chamilo_core.settings.survey:
         class: Chamilo\CoreBundle\Settings\SurveySettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.survey, namespace: survey }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.survey, namespace: survey}
 
     chamilo_core.settings.tracking:
         class: Chamilo\CoreBundle\Settings\TrackingSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.tracking, namespace: tracking }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.tracking, namespace: tracking}
 
     chamilo_core.settings.webservice:
         class: Chamilo\CoreBundle\Settings\WebServiceSettingsSchema
         tags:
-            - { name: sylius.settings_schema, alias: chamilo_core.settings.webservice, namespace: webservice }
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.webservice, namespace: webservice}
 
     # Form types
     chamilo_user.registration.form.type:
         class: Chamilo\UserBundle\Form\Type\RegistrationFormType
         arguments: ['%fos_user.model.user.class%']
         tags:
-            - { name: form.type, alias: chamilo_sonata_user_registration }
+            - {name: form.type, alias: chamilo_sonata_user_registration}
 
     chamilo_user.profile.form.type:
         class: Chamilo\UserBundle\Form\ProfileType
         arguments: ['%fos_user.model.user.class%']
         tags:
-            - { name: form.type, alias: chamilo_sonata_user_profile }
-
-
+            - {name: form.type, alias: chamilo_sonata_user_profile}

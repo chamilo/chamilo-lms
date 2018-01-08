@@ -5,25 +5,20 @@ sonata_user:
             class: Chamilo\UserBundle\Admin\UserAdmin
         group:
             class: Chamilo\UserBundle\Admin\GroupAdmin
-
     class:
         # Entity Classes
         user: Chamilo\UserBundle\Entity\User
         group: Chamilo\UserBundle\Entity\Group
-
-    security_acl:             false
+    security_acl: false
     table:
-        user_group:           fos_user_user_group
-
+        user_group: fos_user_user_group
     impersonating:
-        route:                page_slug
-        parameters:           { path: / }
-
+        route: page_slug
+        parameters: {path: /}
 #    google_authenticator:
 #        server:               %sonata_user.google_authenticator.server%
 #        enabled:              true
-
-    manager_type:             orm
+    manager_type: orm
     profile:
 #        dashboard:
 #            blocks:
@@ -39,7 +34,6 @@ sonata_user:
 #            name:                 sonata_user_registration_form
 #            validation_groups:
 #                - Profile
-
 #        register:
 #            form:
 #                type:                 chamilo_sonata_user_registration

@@ -1,11 +1,9 @@
-
 sonata_media:
     class:
         media: Chamilo\MediaBundle\Entity\Media
         gallery: Chamilo\MediaBundle\Entity\Gallery
         gallery_has_media: Chamilo\MediaBundle\Entity\GalleryHasMedia
         category: Chamilo\ClassificationBundle\Entity\Category
-
     db_driver: doctrine_orm # | doctrine_mongodb
     default_context: default
     contexts:
@@ -18,11 +16,9 @@ sonata_media:
                 - sonata.media.provider.image
                 - sonata.media.provider.file
                 - sonata.media.provider.vimeo
-
             formats:
-                small: { width: 100, quality: 100}
-                big:   { width: 970 , quality: 100}
-
+                small: {width: 100, quality: 100}
+                big: {width: 970 , quality: 100}
         course:
             providers:
                 - sonata.media.provider.dailymotion
@@ -31,8 +27,8 @@ sonata_media:
                 - sonata.media.provider.file
                 - sonata.media.provider.vimeo
             formats:
-                  small: { width: 100, quality: 100}
-                  big:   { width: 970 , quality: 100}
+                  small: {width: 100, quality: 100}
+                  big: {width: 970 , quality: 100}
         news:
             providers:
                 - sonata.media.provider.dailymotion
@@ -40,49 +36,43 @@ sonata_media:
                 - sonata.media.provider.image
 
             formats:
-                abstract: { width: 100, quality: 100}
-                wide:     { width: 820, quality: 100}
+                abstract: {width: 100, quality: 100}
+                wide: {width: 820, quality: 100}
 
         sonata_collection:
             providers:
               - sonata.media.provider.image
-
             formats:
-                preview: { width: 100, quality: 100}
-                wide:    { width: 820, quality: 100}
+                preview: {width: 100, quality: 100}
+                wide: {width: 820, quality: 100}
 
         sonata_category:
             providers:
               - sonata.media.provider.image
-
             formats:
-                preview: { width: 100, quality: 100}
-                wide:    { width: 820, quality: 100}
-
+                preview: {width: 100, quality: 100}
+                wide: {width: 820, quality: 100}
         user:
             providers:
               - sonata.media.provider.image
 
             formats:
-                small: { width: 100, quality: 100}
-                big:   { width: 970 , quality: 100}
-
+                small: {width: 100, quality: 100}
+                big: {width: 970 , quality: 100}
     cdn:
         # define the public base url for the uploaded media
         server:
             path: '%url_append%%sonata_media.cdn.host%'
-
     filesystem:
         # define where the uploaded file will be stored
         local:
-            directory:  '%kernel.root_dir%/../public/uploads/media'
-            create:     true
-
+            directory: '%kernel.root_dir%/../public/uploads/media'
+            create: true
     providers:
         # ...
         file:
             # the resizer must be set to false, otherwhise this can delete icon files from the fs
-            resizer:    false
+            resizer: false
         image:
            thumbnail: sonata.media.thumbnail.format          # default value
 #           thumbnail: sonata.media.thumbnail.consumer.format # can be used to dispatch the resize action to async task
@@ -99,16 +89,13 @@ sonata_media:
             thumbnail: sonata.media.thumbnail.format          # default value
 #           thumbnail: sonata.media.thumbnail.consumer.format # can be used to dispatch the resize action to async task
 #           thumbnail: sonata.media.thumbnail.liip_imagine    # use the LiipImagineBundle to resize the image
-
     pixlr:
-        enabled:  true
+        enabled: true
         referrer: App
-
     resizer:
         simple:
 #            mode:  outbound
-            mode:  inset
-
+            mode: inset
 #
 # The LiipImagineBundle can be used if you want to convert on demand an image
 # to a specific format. (ie a controller render the file)
@@ -183,4 +170,3 @@ sonata_media:
 #            controller_action: 'SonataMediaBundle:Media:liipImagineFilter'
 #            filters:
 #                thumbnail: { size: [820, 70], mode: outbound }
-

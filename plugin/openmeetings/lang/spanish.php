@@ -50,4 +50,3 @@ $strings['plugin_tool_openmeetings'] = 'Video';
 
 $strings['ThereAreNotRecordingsForTheMeetings'] = 'No hay grabaciones de sesiones de videoconferencia';
 $strings['NoRecording'] = 'No hay grabación';
-

@@ -38,7 +38,7 @@ if (
     $lastMessageId = $plugin->getLastMessageId($data['studentUserId'], $data['sessionId']);
     if ($lastMessageId !== false) {
         // Render mail
-        $url = $plugin->getRenderMailUrl(array('queueId' => $lastMessageId));
+        $url = $plugin->getRenderMailUrl(['queueId' => $lastMessageId]);
         header('Location: '.$url);
         exit;
     }
@@ -63,7 +63,6 @@ if (
     $data['rejectTermsUrl'] = $plugin->getTermsUrl($data, ADVANCED_SUBSCRIPTION_TERMS_MODE_REJECT);
     // Use Twig with String loader
     $termsContent = $plugin->renderTemplateString($termsAndConditions, $data);
-
 } else {
     $termsContent = '';
     $termFiles = '';

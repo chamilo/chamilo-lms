@@ -107,7 +107,7 @@ function authenticate($WSUser, $WSKey)
             return false;
         }
     } else {
-         return false;
+        return false;
     }
 }
 
@@ -123,9 +123,9 @@ if (!empty($post)) {
     if (!empty($WSUser) && !empty($WSKey)) {
         if (authenticate($WSUser, $WSKey)) {
             // pointing to the current file here
-            $options = array(
+            $options = [
                 'soap_version' => SOAP_1_1
-            );
+            ];
             $soap = new CustomServer($wsdl, $options);
             $soap->setObject(new Sepe());
 

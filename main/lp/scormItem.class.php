@@ -15,7 +15,7 @@ class scormItem extends learnpathItem
     public $isvisible = '';
     public $parameters = '';
     public $title = '';
-    public $sub_items = array();
+    public $sub_items = [];
     public $metadata;
     //public $prerequisites = ''; - defined in learnpathItem.class.php
     // Modified by Ivan Tcholakov, 06-FEB-2010.
@@ -149,7 +149,7 @@ class scormItem extends learnpathItem
      */
     public function get_flat_list(&$list, &$abs_order, $rel_order = 1, $level = 0)
     {
-        $list[] = array(
+        $list[] = [
             'abs_order' => $abs_order,
             'datafromlms' => $this->datafromlms,
             'identifier' => $this->identifier,
@@ -165,7 +165,7 @@ class scormItem extends learnpathItem
             'timelimitaction' => $this->timelimitaction,
             'title' => $this->title,
             'max_score' => $this->max_score
-        );
+        ];
         $abs_order++;
         $i = 1;
         foreach ($this->sub_items as $id => $dummy) {

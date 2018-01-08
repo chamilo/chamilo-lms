@@ -113,7 +113,7 @@ class Attendance
         $from = intval($from);
         $number_of_items = intval($number_of_items);
 
-        if (!in_array($direction, array('ASC', 'DESC'))) {
+        if (!in_array($direction, ['ASC', 'DESC'])) {
             $direction = 'ASC';
         }
 
@@ -246,21 +246,21 @@ class Attendance
                 }
                 $actions .= '</center>';
 
-                $attendances[] = array(
+                $attendances[] = [
                     $attendance[0],
                     $attendance[1],
                     $attendance[2],
                     $attendance[3],
                     $actions
-                );
+                ];
             } else {
                 $attendance[0] = '&nbsp;';
-                $attendances[] = array(
+                $attendances[] = [
                     $attendance[0],
                     $attendance[1],
                     $attendance[2],
                     $attendance[3]
-                );
+                ];
             }
         }
 
@@ -332,7 +332,6 @@ class Attendance
                 "AttendanceAdded",
                 $user_id
             );
-
         }
         // add link to gradebook
         if ($link_to_gradebook && !empty($this->category_id)) {
@@ -1420,7 +1419,7 @@ class Attendance
                    ";
         }
 
-        if (!in_array($type, array('today', 'all', 'all_done', 'all_not_done', 'calendar_id'))) {
+        if (!in_array($type, ['today', 'all', 'all_done', 'all_not_done', 'calendar_id'])) {
             $type = 'all';
         }
 
@@ -1639,12 +1638,12 @@ class Attendance
                     attendance_id = '$attendanceId'";
         $rs = Database::query($sql);
         if (Database::num_rows($rs) == 0) {*/
-        $params = array(
+        $params = [
             'c_id' =>  $course_id,
             'date_time' => $this->date_time,
             'attendance_id' => $attendanceId,
             'done_attendance' => 0
-        );
+        ];
         $id = Database::insert($tbl_attendance_calendar, $params);
 
         if ($id) {
@@ -1692,11 +1691,11 @@ class Attendance
             );
 
             if (empty($result)) {
-                $params = array(
+                $params = [
                     'calendar_id' => $calendarId,
                     'c_id' => $courseId,
                     'group_id' => $groupId,
-                );
+                ];
                 Database::insert($table, $params);
             }
         }
@@ -1716,11 +1715,11 @@ class Attendance
         return Database::select(
             '*',
             $table,
-            array('where'=>
-                array(
-                    'calendar_id = ? AND c_id = ?' => array($calendarId, $courseId)
-                )
-            )
+            ['where'=>
+                [
+                    'calendar_id = ? AND c_id = ?' => [$calendarId, $courseId]
+                ]
+            ]
         );
     }
 
@@ -1736,11 +1735,11 @@ class Attendance
         return Database::select(
             '*',
             $table,
-            array('where'=>
-                array(
-                    'calendar_id = ? AND c_id = ? AND group_id = ?' => array($calendarId, $courseId, $groupId)
-                )
-            )
+            ['where'=>
+                [
+                    'calendar_id = ? AND c_id = ? AND group_id = ?' => [$calendarId, $courseId, $groupId]
+                ]
+            ]
         );
     }
 
@@ -1754,9 +1753,9 @@ class Attendance
         $table = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
         Database::delete(
             $table,
-            array(
-                'calendar_id = ? AND c_id = ?' => array($calendarId, $courseId)
-            )
+            [
+                'calendar_id = ? AND c_id = ?' => [$calendarId, $courseId]
+            ]
         );
     }
 
@@ -2031,11 +2030,11 @@ class Attendance
         $interval = $dateTimeStart->diff($dateTimeEnd);
         $days = intval($interval->format('%a'));
 
-        $dateList = array($dateTimeStart->format('Y-m-d'));
-        $headers = array(
+        $dateList = [$dateTimeStart->format('Y-m-d')];
+        $headers = [
             get_lang('User'),
             $dateTimeStart->format('Y-m-d')
-        );
+        ];
 
         for ($i = 0; $i < $days; $i++) {
             $dateTimeStart = $dateTimeStart->add(new DateInterval('P1D'));
@@ -2059,12 +2058,12 @@ class Attendance
             }
         }
 
-        return array(
+        return [
             'users' => $users,
             'dateList' => $dateList,
             'headers' => $headers,
             'results' => $results
-        );
+        ];
     }
 
     /**
@@ -2085,7 +2084,7 @@ class Attendance
         $users = $data['users'];
         $results = $data['results'];
 
-        $table = new HTML_Table(array('class' => 'data_table'));
+        $table = new HTML_Table(['class' => 'data_table']);
         $row = 0;
         $column = 0;
         foreach ($headers as $header) {
@@ -2138,7 +2137,7 @@ class Attendance
         $users = $data['users'];
         $results = $data['results'];
 
-        $table = new HTML_Table(array('class' => 'data_table'));
+        $table = new HTML_Table(['class' => 'data_table']);
         $table->setHeaderContents(0, 0, get_lang('User'));
         $table->setHeaderContents(0, 1, get_lang('Date'));
 
@@ -2151,7 +2150,7 @@ class Attendance
             );
             $row++;
         }
-        $table->setColAttributes(0, array('style' => 'width:28%'));
+        $table->setColAttributes(0, ['style' => 'width:28%']);
 
         $row = 1;
         foreach ($users as $user) {
@@ -2165,12 +2164,12 @@ class Attendance
         }
 
         $tableToString = $table->toHtml();
-        $params = array(
+        $params = [
             'filename' => get_lang('Attendance').'_'.api_get_utc_datetime(),
             'pdf_title' => get_lang('Attendance'),
             'course_code' => api_get_course_id(),
             'show_real_course_teachers' => true
-        );
+        ];
         $pdf = new PDF('A4', null, $params);
         $pdf->html_to_pdf_with_template($tableToString);
     }

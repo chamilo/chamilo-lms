@@ -28,10 +28,10 @@ if (api_is_platform_admin()) {
         $info = '';
     }
     $templateName = $plugin->get_lang('Setting');
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => "/plugin/sepe/src/sepe-administration-menu.php",
         "name" => $plugin->get_lang('MenuSepe'),
-    );
+    ];
     $tpl = new Template($templateName);
 
     $tpl->assign('info', $info);

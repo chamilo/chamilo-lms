@@ -42,7 +42,7 @@ if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create
 }
 
 // filter actions
-$actions = array(
+$actions = [
     'sortmycourses',
     'createcoursecategory',
     'subscribe',
@@ -54,7 +54,7 @@ $actions = array(
     'subscribe_to_session',
     'search_tag',
     'search_session'
-);
+];
 
 $action = CoursesAndSessionsCatalog::is(CATALOG_SESSIONS) ? 'display_sessions' : 'display_courses';
 if (isset($_GET['action']) && in_array($_GET['action'], $actions)) {
@@ -68,20 +68,20 @@ $nameTools = CourseCategory::getCourseCatalogNameTools($action);
 if (empty($nameTools)) {
     $nameTools = get_lang('CourseManagement');
 } else {
-    if (!in_array($action, array('sortmycourses', 'createcoursecategory', 'display_random_courses', 'display_courses', 'subscribe'))) {
-        $interbreadcrumb[] = array(
+    if (!in_array($action, ['sortmycourses', 'createcoursecategory', 'display_random_courses', 'display_courses', 'subscribe'])) {
+        $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'auth/courses.php',
             'name' => get_lang('CourseManagement'),
-        );
+        ];
     }
 
     if ($action === 'createcoursecategory') {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses',
             'name' => get_lang('SortMyCourses'),
-        );
+        ];
     }
-    $interbreadcrumb[] = array('url' => '#', 'name' => $nameTools);
+    $interbreadcrumb[] = ['url' => '#', 'name' => $nameTools];
 }
 
 // course description controller object
@@ -301,7 +301,7 @@ switch ($action) {
 
             SessionManager::subscribe_users_to_session(
                 $_GET['session_id'],
-                array($userId),
+                [$userId],
                 SESSION_VISIBLE_READ_ONLY,
                 false
             );

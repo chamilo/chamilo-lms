@@ -90,8 +90,8 @@ function showResults($courseInfo, $weeksCount, $page)
     $tableThread = Database::get_course_table(TABLE_FORUM_THREAD);
     $tableWork = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
-    $results = array();
-    $tableExport = array();
+    $results = [];
+    $tableExport = [];
     $sqlHeader = "SELECT rs.id as id,rs.week_id, w.title AS work_title,  t.thread_title ,'EVALUATION' as eval_title ,'QUIZ' as pc_title
                     FROM $tableWeeklyReport rs
                     LEFT JOIN $tableThread t ON t.thread_id =  rs.forum_id
@@ -99,11 +99,11 @@ function showResults($courseInfo, $weeksCount, $page)
                     WHERE rs.course_code = '$course_code'
                     ORDER BY rs.week_id";
     $resultHeader = Database::query($sqlHeader);
-    $ids = array();
+    $ids = [];
     $line = '<tr>
         <th ></th>';
-    $lineHeaderExport = array(null, null);
-    $lineHeaderExport2 = array(null, ull);
+    $lineHeaderExport = [null, null];
+    $lineHeaderExport2 = [null, ull];
     while ($rowe = Database::fetch_assoc($resultHeader)) {
         $lineHeaderExport[] = utf8_decode('Work'.$rowe['week_id']);
         $lineHeaderExport[] = utf8_decode('Forum'.$rowe['week_id']);
@@ -113,7 +113,7 @@ function showResults($courseInfo, $weeksCount, $page)
         $lineHeaderExport2[] = utf8_decode($rowe['thread_title']);
         //$fila_export_encabezado2[] = utf8_decode($rowe['eval_title']);
         //$fila_export_encabezado2[] = utf8_decode($rowe['pc_title']);
-        $fila_export = array('Work'.$rowe['week_id'], 'Forum'.$rowe['week_id'], 'Eval'.$rowe['week_id'], 'PC'.$rowe['week_id']);
+        $fila_export = ['Work'.$rowe['week_id'], 'Forum'.$rowe['week_id'], 'Eval'.$rowe['week_id'], 'PC'.$rowe['week_id']];
         if ($rowe['week_id'] > (($page - 1) * 7) && $rowe['week_id'] <= (7 * $page)) {
             $ids[$rowe['week_id']] = $rowe['id'];
             $line .= '<th>
@@ -149,7 +149,7 @@ function showResults($courseInfo, $weeksCount, $page)
     $html .= '<tr>
             <th ></th>';
     for ($i = (7 * $page - 6); $i <= $page * 7; $i++) {
-        $html .= '<th colspan="2">Week '.$i.'<a href="assign_tickets.php?id='.$ids[$i].'" class="ajax">'.Display::return_icon('edit.png', get_lang('Edit'), array('width' => '16', 'height' => '16'), 22).'</a></th>';
+        $html .= '<th colspan="2">Week '.$i.'<a href="assign_tickets.php?id='.$ids[$i].'" class="ajax">'.Display::return_icon('edit.png', get_lang('Edit'), ['width' => '16', 'height' => '16'], 22).'</a></th>';
     }
     $html .= '</tr>';
     $html .= $line;
@@ -176,7 +176,7 @@ function showResults($courseInfo, $weeksCount, $page)
     $html .= '
           </table>';
 
-    return array('show' => $html, 'export' => $tableExport);
+    return ['show' => $html, 'export' => $tableExport];
 }
 
 /**
@@ -206,7 +206,7 @@ function showStudentResult($datos, $pagina)
  */
 function showStudentResultExport($data, $numero_semanas)
 {
-    $fila = array();
+    $fila = [];
     $fila[] = utf8_decode($data[1]['username']);
     $fila[] = utf8_decode($data[1]['fullname']);
     foreach ($data as $line) {

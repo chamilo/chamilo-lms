@@ -43,8 +43,8 @@ $query = "
         '$expirationDate' AND
         category.session_id IS NOT NULL";
 $sessionId = 0;
-$userIds = array();
-$sessions = array();
+$userIds = [];
+$sessions = [];
 $result = Database::query($query);
 $urlSessionTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 $urlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
@@ -52,7 +52,7 @@ $urlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
 while ($row = Database::fetch_array($result)) {
     if ($sessionId != $row['session_id']) {
         $sessionId = $row['session_id'];
-        $userIds = array();
+        $userIds = [];
     }
     if (!is_null($row['user_id'])) {
         array_push($userIds, $row['user_id']);
@@ -60,7 +60,7 @@ while ($row = Database::fetch_array($result)) {
     $sessions[$sessionId] = $userIds;
 }
 
-$usersToBeReminded = array();
+$usersToBeReminded = [];
 
 foreach ($sessions as $sessionId => $userIds) {
     $userId = 0;
@@ -74,16 +74,16 @@ foreach ($sessions as $sessionId => $userIds) {
             session_id = $sessionId$userIds";
     $result = Database::query($query);
     while ($row = Database::fetch_array($result)) {
-        $usersToBeReminded[$row['user_id']][$row['session_id']] = array(
+        $usersToBeReminded[$row['user_id']][$row['session_id']] = [
             'name' => $row['name'],
             'access_end_date' => $row['access_end_date']
-        );
+        ];
     }
 }
 
 if ($usersToBeReminded) {
     $today = date_create($today);
-    $administrator = array(
+    $administrator = [
         'completeName' => api_get_person_name(
             api_get_setting("administratorName"),
             api_get_setting("administratorSurname"),
@@ -91,7 +91,7 @@ if ($usersToBeReminded) {
             PERSON_NAME_EMAIL_ADDRESS
         ),
         'email' => api_get_setting("emailAdministrator")
-    );
+    ];
     echo "\n======================================================================\n\n";
     foreach ($usersToBeReminded as $userId => $sessions) {
         $user = api_get_user_info($userId);
@@ -107,14 +107,14 @@ if ($usersToBeReminded) {
             $result = Database::select(
                 'url',
                 "$urlTable $join",
-                array(
-                    'where' => array(
-                        'session_id = ?' => array(
+                [
+                    'where' => [
+                        'session_id = ?' => [
                             $sessionId
-                        )
-                    ),
+                        ]
+                    ],
                     'limit' => '1'
-                )
+                ]
             );
 
             $subjectTemplate = new Template(null, false, false, false, false, false);

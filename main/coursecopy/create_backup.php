@@ -34,10 +34,10 @@ if (function_exists('ini_set')) {
 $this_section = SECTION_COURSES;
 
 // Breadcrumbs
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'course_info/maintenance.php',
     'name' => get_lang('Maintenance')
-);
+];
 
 // Displaying the header
 $nameTools = get_lang('CreateBackup');
@@ -72,7 +72,6 @@ if (Security::check_token('post') && (
     echo Display::return_message(get_lang('BackupCreated'), 'confirm');
     echo '<br /><a class="btn btn-primary btn-large" href="'.api_get_path(WEB_CODE_PATH).'course_info/download.php?archive='.$zip_file.'&'.api_get_cidreq().'">
     ' . get_lang('Download').'</a>';
-
 } elseif (Security::check_token('post') && (
         isset($_POST['backup_option']) &&
         $_POST['backup_option'] == 'select_items'
@@ -86,7 +85,6 @@ if (Security::check_token('post') && (
     // Add token to Course select form
     $hiddenFields['sec_token'] = Security::get_token();
     CourseSelectForm::display_form($course, $hiddenFields);
-
 } else {
     $cb = new CourseBuilder();
     $course = $cb->build();
@@ -105,13 +103,13 @@ if (Security::check_token('post') && (
         $form->addProgress();
         // When progress bar appears we have to hide the title "Please select a backup-option".
         $form->updateAttributes(
-            array(
+            [
                 'onsubmit' => str_replace(
                     'javascript: ',
                     'javascript: page_title = getElementById(\'page_title\'); if (page_title) { setTimeout(\'page_title.style.display = \\\'none\\\';\', 2000); } ',
                     $form->getAttribute('onsubmit')
                 )
-            )
+            ]
         );
         $values['backup_option'] = 'full_backup';
         $form->setDefaults($values);
@@ -119,11 +117,11 @@ if (Security::check_token('post') && (
         // Add Security token
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
-        $form->setConstants(array('sec_token' => $token));
+        $form->setConstants(['sec_token' => $token]);
         echo '<div class="row">';
         echo '<div class="col-md-12">';
         echo '<div class="tool-backup">';
-            $form->display();
+        $form->display();
         echo '</div>';
         echo '</div>';
         echo '</div>';

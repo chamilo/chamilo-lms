@@ -108,10 +108,10 @@ if ($form->validate()) {
     exit;
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$linkcat,
     'name' => get_lang('Gradebook')
-);
+];
 
 $htmlHeadXtra[] = '<script>
 $(document).ready( function() {

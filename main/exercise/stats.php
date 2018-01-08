@@ -47,7 +47,7 @@ $question_list = $objExercise->get_validated_question_list();
 
 $data = [];
 // Question title 	# of students who tool it 	Lowest score 	Average 	Highest score 	Maximum score
-$headers = array(
+$headers = [
     get_lang('Question'),
     get_lang('QuestionType'),
     get_lang('NumberStudentWhoSelectedIt'),
@@ -55,7 +55,7 @@ $headers = array(
     get_lang('AverageScore'),
     get_lang('HighestScore'),
     get_lang('Weighting'),
-);
+];
 
 if (!empty($question_list)) {
     foreach ($question_list as $question_id) {
@@ -96,7 +96,7 @@ if (!empty($question_list)) {
 }
 
 // Format A table
-$table = new HTML_Table(array('class' => 'data_table'));
+$table = new HTML_Table(['class' => 'data_table']);
 $row = 0;
 $column = 0;
 foreach ($headers as $header) {
@@ -117,14 +117,14 @@ foreach ($data as $row_table) {
 $content = $table->toHtml();
 
 // Format B
-$headers = array(
+$headers = [
     get_lang('Question'),
     get_lang('Answer'),
     get_lang('Correct'),
     get_lang('NumberStudentWhoSelectedIt')
-);
+];
 
-$data = array();
+$data = [];
 
 if (!empty($question_list)) {
     $id = 0;
@@ -185,7 +185,6 @@ if (!empty($question_list)) {
                     }
                     break;
                 case MATCHING:
-                    //no break
                 case MATCHING_DRAGGABLE:
                     if ($is_correct == 0) {
                         if ($answer_id == 1) {
@@ -281,7 +280,7 @@ if (!empty($question_list)) {
 }
 
 // Format A table
-$table = new HTML_Table(array('class' => 'data_table'));
+$table = new HTML_Table(['class' => 'data_table']);
 $row = 0;
 $column = 0;
 foreach ($headers as $header) {
@@ -301,14 +300,14 @@ foreach ($data as $row_table) {
 }
 $content .= $table->toHtml();
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => "exercise.php?".api_get_cidreq(),
     "name" => get_lang('Exercises'),
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     "url" => "admin.php?exerciseId=$exerciseId&".api_get_cidreq(),
     "name" => $objExercise->selectTitle(true),
-);
+];
 
 $tpl = new Template(get_lang('ReportByQuestion'));
 $actions = '<a href="exercise_report.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
@@ -319,7 +318,7 @@ $actions = '<a href="exercise_report.php?exerciseId='.$exerciseId.'&'.api_get_ci
         ICON_SIZE_MEDIUM
     )
     .'</a>';
-$actions = Display::div($actions, array('class'=> 'actions'));
+$actions = Display::div($actions, ['class'=> 'actions']);
 $content = $actions.$content;
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

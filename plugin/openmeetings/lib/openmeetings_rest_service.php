@@ -27,7 +27,7 @@
  */
 class OpenMeetingsRestService
 {
-    function call($request, $returnAttribute = "return")
+    public function call($request, $returnAttribute = "return")
     {
         // This will allow you to view errors in the browser
         // Note: set "display_errors" to 0 in production
@@ -57,11 +57,11 @@ class OpenMeetingsRestService
         
         // Confirm that the request was transmitted to the OpenMeetings! Image Search Service
         if (!$response) {
-            die ("Request OpenMeetings! OpenMeetings Service failed and no response was returned in ".__CLASS__.'::'.__FUNCTION__.'()');
+            die("Request OpenMeetings! OpenMeetings Service failed and no response was returned in ".__CLASS__.'::'.__FUNCTION__.'()');
         }
         
         // Create an array to store the HTTP response codes
-        $status_code = array();
+        $status_code = [];
         
         // Use regular expressions to extract the code from the header
         preg_match('/\d\d\d/', $response, $status_code);
@@ -70,24 +70,24 @@ class OpenMeetingsRestService
         $extra = ' (from '.$caller['file'].' at line '.$caller['line'].') ';
         // Check the HTTP Response code and display message if status code is not 200 (OK)
         switch ($status_code [0]) {
-            case 200 :
+            case 200:
                 // Success
                 break;
-            case 503 :
+            case 503:
                 error_log('Your call to OpenMeetings Web Services '.$extra.' failed and returned an HTTP status of 503.
-                                 That means: Service unavailable. An internal problem prevented us from returning data to you.' );
+                                 That means: Service unavailable. An internal problem prevented us from returning data to you.');
                 return false;
                 break;
-            case 403 :
+            case 403:
                 error_log('Your call to OpenMeetings Web Services '.$extra.' failed and returned an HTTP status of 403.
-                                 That means: Forbidden. You do not have permission to access this resource, or are over your rate limit.' );
+                                 That means: Forbidden. You do not have permission to access this resource, or are over your rate limit.');
                 return false;
                 break;
-            case 400 :
+            case 400:
                 // You may want to fall through here and read the specific XML error
                 error_log('Your call to OpenMeetings Web Services '.$extra.' failed and returned an HTTP status of 400.
                                  That means:  Bad request. The parameters passed to the service did not match as expected.   
-                                 The exact error is returned in the XML response.' );
+                                 The exact error is returned in the XML response.');
                 return false;
                 break;
             default:
@@ -95,7 +95,7 @@ class OpenMeetingsRestService
                 return false;
         }
         
-            // Get the XML from the response, bypassing the header
+        // Get the XML from the response, bypassing the header
         if (!($xml = strstr($response, '<ns'))) {
             $xml = null;
         }
@@ -108,7 +108,7 @@ class OpenMeetingsRestService
             return $this->getArray($dom);
         } else {
             $returnNodeList = $dom->getElementsByTagName($returnAttribute);
-            $ret = array();
+            $ret = [];
             foreach ($returnNodeList as $returnNode) {
                 if ($returnNodeList->length == 1) {
                     return $this->getArray($returnNode);
@@ -118,10 +118,9 @@ class OpenMeetingsRestService
             }
             return $ret;
         }
-            
     }
 
-    function getArray($node)
+    public function getArray($node)
     {
         if (is_null($node) || !is_object($node)) {
             return $node;
@@ -169,12 +168,12 @@ class OpenMeetingsRestService
         return $array;
     }
 
-    function getError()
+    public function getError()
     {
         return false;
     }
 
-    function fault()
+    public function fault()
     {
         return false;
     }

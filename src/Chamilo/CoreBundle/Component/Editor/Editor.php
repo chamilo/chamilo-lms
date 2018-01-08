@@ -56,7 +56,7 @@ class Editor
     {
         $this->toolbarSet = 'Basic';
         $this->value = '';
-        $this->config = array();
+        $this->config = [];
         $this->setConfigAttribute('width', '100%');
         $this->setConfigAttribute('height', '200');
         $this->setConfigAttribute('fullPage', false);
@@ -129,16 +129,13 @@ class Editor
             case 'boolean':
                 return $var ? 'true' : 'false'; // Lowercase necessary!
             case 'integer':
-                //no break
             case 'double':
                 return (string) $var;
-                //no break
             case 'resource':
-                //no break
             case 'string':
                 return '"'.str_replace(
-                    array("\r", "\n", "<", ">", "&"),
-                    array('\r', '\n', '\x3c', '\x3e', '\x26'),
+                    ["\r", "\n", "<", ">", "&"],
+                    ['\r', '\n', '\x3c', '\x3e', '\x26'],
                     addslashes($var)
                 ).'"';
                 break;
@@ -147,7 +144,7 @@ class Editor
                 // has sequential whole number keys starting with 0, it's not associative
                 // so we can go ahead and convert it as an array.
                 if (empty($var) || array_keys($var) === range(0, sizeof($var) - 1)) {
-                    $output = array();
+                    $output = [];
                     foreach ($var as $v) {
                         $output[] = $this->toJavascript($v);
                     }
@@ -157,7 +154,7 @@ class Editor
                 //no break
             case 'object':
                 // Otherwise, fall through to convert the array as an object.
-                $output = array();
+                $output = [];
                 foreach ($var as $k => $v) {
                     $output[] = $this->toJavascript(strval($k)).': '.$this->toJavascript($v);
                 }

@@ -136,11 +136,11 @@ class BranchSync
      */
     private $lastSyncType;
 
-     /**
-     * @var string
-     *
-     * @ORM\Column(name="ssl_pub_key", type="string", length=250, nullable=true, unique=false)
-     */
+    /**
+    * @var string
+    *
+    * @ORM\Column(name="ssl_pub_key", type="string", length=250, nullable=true, unique=false)
+    */
     private $sslPubKey;
 
     /**
@@ -530,12 +530,12 @@ class BranchSync
         return $this->sslPubKey;
     }
 
-     /**
-     * Set sslPubKey
-     *
-     * @param string $branchType
-     * @return BranchSync
-     */
+    /**
+    * Set sslPubKey
+    *
+    * @param string $branchType
+    * @return BranchSync
+    */
     public function setBranchType($branchType)
     {
         $this->branchType = $branchType;

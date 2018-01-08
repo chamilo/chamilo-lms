@@ -63,10 +63,10 @@ $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
 // Language variables
 if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
         'name' => get_lang('SurveyList')
-    );
+    ];
     $tool_name = get_lang('SearchASurvey');
 } else {
     $tool_name = get_lang('SurveyList');

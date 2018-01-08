@@ -17,7 +17,7 @@ api_protect_admin_script();
 $plugin = AdvancedSubscriptionPlugin::create();
 $hookPlugin = HookAdvancedSubscription::create();
 // Get params from request (GET or POST)
-$params = array();
+$params = [];
 // Init result array
 $params['user_id'] = intval($_REQUEST['u']);
 $params['user_field'] = 'drupal_user_id';
@@ -64,10 +64,10 @@ $params['secret_key'] = sha1($security_key);
 
 // Registration soap wsdl
 $wsUrl = api_get_path(WEB_CODE_PATH).'webservices/registration.soap.php?wsdl';
-$options = array(
+$options = [
     'location' => $wsUrl,
     'uri' => $wsUrl
-);
+];
 
 /**
  * WS test
@@ -76,7 +76,7 @@ try {
     // Init soap client
     $client = new SoapClient(null, $options);
     // Soap call to WS
-    $result = $client->__soapCall('HookAdvancedSubscription..WSSessionGetDetailsByUser', array($params));
+    $result = $client->__soapCall('HookAdvancedSubscription..WSSessionGetDetailsByUser', [$params]);
     if (is_object($result) && isset($result->action_url)) {
         echo '<br />';
         echo Display::url("message".$result->message, $result->action_url);

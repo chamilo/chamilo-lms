@@ -69,4 +69,3 @@ $string['tooldeliverysudouser'] = 'User for sudo';
 $string['tooldirectdeliverytools'] = 'Direct path to delivery tools';
 $string['update'] = 'Update code';
 $string['updatesession'] = 'Update session';
-

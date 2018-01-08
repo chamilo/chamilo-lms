@@ -6,11 +6,11 @@
 require_once('../inc/global.inc.php');
 
 // variable cleaning...
-foreach (array("svkey", "svvalue") as $key) {
+foreach (["svkey", "svvalue"] as $key) {
     $_REQUEST[$key] = Database::escape_string($_REQUEST[$key]);
 }
 
-foreach (array("svuser", "svcourse", "svsco", "svlength", "svasc") as $key) {
+foreach (["svuser", "svcourse", "svsco", "svlength", "svasc"] as $key) {
     $_REQUEST[$key] = intval($_REQUEST[$key]);
 }
 
@@ -45,8 +45,9 @@ switch ($_REQUEST['action']) {
         }
         break;
     case "stackgetall":
-        if (storage_can_set($_REQUEST['svuser']))
+        if (storage_can_set($_REQUEST['svuser'])) {
             print storage_stack_getall($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey']);
+        }
         break;
     case "getposition":
         print storage_get_position($_REQUEST['svuser'], $_REQUEST['svcourse'], $_REQUEST['svsco'], $_REQUEST['svkey'], $_REQUEST['svasc']);
@@ -63,7 +64,8 @@ switch ($_REQUEST['action']) {
         // Do nothing
 }
 
-function storage_can_set($sv_user) {
+function storage_can_set($sv_user)
+{
     // platform admin can change any user's stored values, other users can only change their own values
     $allowed = ((api_is_platform_admin()) || ($sv_user == api_get_user_id()));
     if (!$allowed) {
@@ -72,7 +74,8 @@ function storage_can_set($sv_user) {
     return $allowed;
 }
 
-function storage_get($sv_user, $sv_course, $sv_sco, $sv_key) {
+function storage_get($sv_user, $sv_course, $sv_sco, $sv_key)
+{
     $sql = "select sv_value
         from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES)."
         where user_id= '$sv_user'
@@ -87,13 +90,13 @@ function storage_get($sv_user, $sv_course, $sv_sco, $sv_key) {
         } else {
             return $row['sv_value'];
         }
-    }
-    else {
+    } else {
         return null;
     }
 }
 
-function storage_get_leaders($sv_user, $sv_course, $sv_sco, $sv_key, $sv_asc, $sv_length) {
+function storage_get_leaders($sv_user, $sv_course, $sv_sco, $sv_key, $sv_asc, $sv_length)
+{
 
     // get leaders
     $sql_leaders = "select u.user_id, firstname, lastname, email, username, sv_value as value
@@ -104,30 +107,31 @@ function storage_get_leaders($sv_user, $sv_course, $sv_sco, $sv_key, $sv_asc, $s
         and course_id = '$sv_course'
         and sv_key = '$sv_key'
         order by sv_value ".($sv_asc ? "ASC" : "DESC")." limit $sv_length";
-//	$sql_data = "select sv.user_id as user_id, sv_key as variable, sv_value as value
-//		from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES)." sv
-//		where sv.user_id in (select u2.user_id from ($sql_leaders) u2)
-//		and sco_id = '$sv_sco'
-//		and course_id = '$sv_course'";
-//	$resData = Database::query($sql_data);
-//	$data = Array();
-//	while($row = Database::fetch_assoc($resData))
-//		$data[] = $row; // fetching all data
+    //	$sql_data = "select sv.user_id as user_id, sv_key as variable, sv_value as value
+    //		from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES)." sv
+    //		where sv.user_id in (select u2.user_id from ($sql_leaders) u2)
+    //		and sco_id = '$sv_sco'
+    //		and course_id = '$sv_course'";
+    //	$resData = Database::query($sql_data);
+    //	$data = Array();
+    //	while($row = Database::fetch_assoc($resData))
+    //		$data[] = $row; // fetching all data
 //
     $resLeaders = Database::query($sql_leaders);
-    $result = array();
+    $result = [];
     while ($row = Database::fetch_assoc($resLeaders)) {
-        $row["values"] = array();
-//		foreach($data as $dataRow) {
-//			if ($dataRow["user_id"] = $row["user_id"])
-//				$row["values"][$dataRow["variable"]] = $dataRow["value"];
-//		}
+        $row["values"] = [];
+        //		foreach($data as $dataRow) {
+        //			if ($dataRow["user_id"] = $row["user_id"])
+        //				$row["values"][$dataRow["variable"]] = $dataRow["value"];
+        //		}
         $result[] = $row;
     }
     return json_encode($result);
 }
 
-function storage_get_position($sv_user, $sv_course, $sv_sco, $sv_key, $sv_asc, $sv_length) {
+function storage_get_position($sv_user, $sv_course, $sv_sco, $sv_key, $sv_asc, $sv_length)
+{
     $sql = "select count(list.user_id) as position
         from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES)." search,
             ".Database::get_main_table(TABLE_TRACK_STORED_VALUES)." list
@@ -144,13 +148,13 @@ function storage_get_position($sv_user, $sv_course, $sv_sco, $sv_key, $sv_asc, $
     if (Database::num_rows($res) > 0) {
         $row = Database::fetch_assoc($res);
         return $row['position'];
-    }
-    else {
+    } else {
         return null;
     }
 }
 
-function storage_set($sv_user, $sv_course, $sv_sco, $sv_key, $sv_value) {
+function storage_set($sv_user, $sv_course, $sv_sco, $sv_key, $sv_value)
+{
     $sv_value = Database::escape_string($sv_value);
     $sql = "replace into ".Database::get_main_table(TABLE_TRACK_STORED_VALUES)."
         (user_id, sco_id, course_id, sv_key, sv_value)
@@ -160,14 +164,15 @@ function storage_set($sv_user, $sv_course, $sv_sco, $sv_key, $sv_value) {
     return Database::affected_rows($res);
 }
 
-function storage_getall($sv_user, $sv_course, $sv_sco) {
+function storage_getall($sv_user, $sv_course, $sv_sco)
+{
     $sql = "select sv_key, sv_value
         from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES)."
         where user_id= '$sv_user'
         and sco_id = '$sv_sco'
         and course_id = '$sv_course'";
     $res = Database::query($sql);
-    $data = array();
+    $data = [];
     while ($row = Database::fetch_assoc($res)) {
         if (get_magic_quotes_gpc()) {
             $row['sv_value'] = stripslashes($row['sv_value']);
@@ -177,7 +182,8 @@ function storage_getall($sv_user, $sv_course, $sv_sco) {
     return json_encode($data);
 }
 
-function storage_stack_push($sv_user, $sv_course, $sv_sco, $sv_key, $sv_value) {
+function storage_stack_push($sv_user, $sv_course, $sv_sco, $sv_key, $sv_value)
+{
     $sv_value = Database::escape_string($sv_value);
     Database::query("start transaction");
     $sqlorder = "select ifnull((select max(stack_order)
@@ -198,14 +204,14 @@ function storage_stack_push($sv_user, $sv_course, $sv_sco, $sv_key, $sv_value) {
     if ($resorder && $resinsert) {
         Database::query("commit");
         return 1;
-    }
-    else {
+    } else {
         Database::query("rollback");
         return 0;
     }
 }
 
-function storage_stack_pop($sv_user, $sv_course, $sv_sco, $sv_key) {
+function storage_stack_pop($sv_user, $sv_course, $sv_sco, $sv_key)
+{
     Database::query("start transaction");
     $sqlselect = "select sv_value, stack_order
         from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES_STACK)."
@@ -239,7 +245,8 @@ function storage_stack_pop($sv_user, $sv_course, $sv_sco, $sv_key) {
     }
 }
 
-function storage_stack_length($sv_user, $sv_course, $sv_sco, $sv_key) {
+function storage_stack_length($sv_user, $sv_course, $sv_sco, $sv_key)
+{
     $sql = "select count(*) as length
         from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES_STACK)."
         where user_id= '$sv_user'
@@ -251,7 +258,8 @@ function storage_stack_length($sv_user, $sv_course, $sv_sco, $sv_key) {
     return $row['length'];
 }
 
-function storage_stack_clear($sv_user, $sv_course, $sv_sco, $sv_key) {
+function storage_stack_clear($sv_user, $sv_course, $sv_sco, $sv_key)
+{
     $sql = "delete
         from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES_STACK)."
         where user_id= '$sv_user'
@@ -262,7 +270,8 @@ function storage_stack_clear($sv_user, $sv_course, $sv_sco, $sv_key) {
     return Database::num_rows($res);
 }
 
-function storage_stack_getall($sv_user, $sv_course, $sv_sco, $sv_key) {
+function storage_stack_getall($sv_user, $sv_course, $sv_sco, $sv_key)
+{
     $sql = "select stack_order as stack_order, sv_value as value
         from ".Database::get_main_table(TABLE_TRACK_STORED_VALUES_STACK)."
         where user_id= '$sv_user'
@@ -270,7 +279,7 @@ function storage_stack_getall($sv_user, $sv_course, $sv_sco, $sv_key) {
         and course_id='$sv_course'
         and sv_key='$sv_key'";
     $res = Database::query($sql);
-    $results = array();
+    $results = [];
     while ($row = Database::fetch_assoc($res)) {
         if (get_magic_quotes_gpc()) {
             $row['value'] = stripslashes($row['value']);
@@ -280,12 +289,13 @@ function storage_stack_getall($sv_user, $sv_course, $sv_sco, $sv_key) {
     return json_encode($results);
 }
 
-function storage_get_all_users() {
+function storage_get_all_users()
+{
     $sql = "select user_id, username, firstname, lastname
         from ".Database::get_main_table(TABLE_MAIN_USER)."
         order by user_id asc";
     $res = Database::query($sql);
-    $results = array();
+    $results = [];
     while ($row = Database::fetch_assoc($res)) {
         $results[] = $row;
     }

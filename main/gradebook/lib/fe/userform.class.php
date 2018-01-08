@@ -24,16 +24,15 @@ class UserForm extends FormValidator
     {
         parent::__construct($form_name, $method, $action);
         $this->form_type = $form_type;
-        if (isset ($user)) {
+        if (isset($user)) {
             $this->user_info = $user;
         }
-        if (isset ($result_object)) {
+        if (isset($result_object)) {
             $this->result_object = $result_object;
         }
         if ($this->form_type == self::TYPE_USER_INFO) {
             $this->build_user_info_form();
-        }
-        elseif ($this->form_type == self::TYPE_SIMPLE_SEARCH) {
+        } elseif ($this->form_type == self::TYPE_SIMPLE_SEARCH) {
             $this->build_simple_search();
         }
         $this->setDefaults();
@@ -42,9 +41,9 @@ class UserForm extends FormValidator
     protected function build_simple_search()
     {
         if (isset($_GET['search']) && (!empty($_GET['search']))) {
-            $this->setDefaults(array(
+            $this->setDefaults([
                 'keyword' => Security::remove_XSS($_GET['search'])
-            ));
+            ]);
         }
         $renderer = & $this->defaultRenderer();
         $renderer->setCustomElementTemplate('<span>{element}</span> ');
@@ -68,12 +67,12 @@ class UserForm extends FormValidator
         $this->addButtonSave(get_lang('Back'), 'submit');
     }
 
-    function display()
+    public function display()
     {
         parent::display();
     }
 
-    function setDefaults($defaults = array(), $filter = null)
+    public function setDefaults($defaults = [], $filter = null)
     {
         parent::setDefaults($defaults, $filter);
     }

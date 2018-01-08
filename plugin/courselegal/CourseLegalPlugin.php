@@ -9,12 +9,12 @@ class CourseLegalPlugin extends Plugin
     public $isCoursePlugin = true;
 
     // When creating a new course this settings are added to the course
-    public $course_settings = array(
-        array(
+    public $course_settings = [
+        [
             'name' => 'courselegal',
             'type' => 'text'
-        )
-    );
+        ]
+    ];
 
     /**
      * @return CourseLegalPlugin
@@ -33,9 +33,9 @@ class CourseLegalPlugin extends Plugin
         parent::__construct(
             '0.1',
             'Julio Montoya',
-            array(
+            [
                 'tool_enable' => 'boolean'
-            )
+            ]
         );
     }
 
@@ -50,7 +50,7 @@ class CourseLegalPlugin extends Plugin
             $link = Display::url(
                 $this->get_lang('CourseLegal'),
                 $url,
-                array('class' => 'btn')
+                ['class' => 'btn']
             );
         }
 
@@ -75,7 +75,7 @@ class CourseLegalPlugin extends Plugin
                 FROM $table
                 WHERE user_id = $userId AND c_id = $courseId AND session_id = $sessionId";
         $result = Database::query($sql);
-        $data = array();
+        $data = [];
         if (Database::num_rows($result) > 0) {
             $data = Database::fetch_array($result, 'ASSOC');
         }
@@ -126,14 +126,14 @@ class CourseLegalPlugin extends Plugin
                 'session_rel_course_rel_user_legal'
             );
             $uniqueId = api_get_unique_id();
-            $values = array(
+            $values = [
                 'user_id' => $userId,
                 'c_id' => $courseId,
                 'session_id' => $sessionId,
                 'web_agreement' => 1,
                 'web_agreement_date' => api_get_utc_datetime(),
                 'mail_agreement_link' => $uniqueId
-            );
+            ];
             $id = Database::insert($table, $values);
 
             if ($sendEmail) {
@@ -159,8 +159,8 @@ class CourseLegalPlugin extends Plugin
             $uniqueId = api_get_unique_id();
             Database::update(
                 $table,
-                array('mail_agreement_link' => $uniqueId),
-                array('id = ? ' => array($data['id']))
+                ['mail_agreement_link' => $uniqueId],
+                ['id = ? ' => [$data['id']]]
             );
             $this->sendMailLink($uniqueId, $userId, $courseId, $sessionId);
         }
@@ -180,7 +180,7 @@ class CourseLegalPlugin extends Plugin
             );
             Database::delete(
                 $table,
-                array('id = ? ' => array($data['id']))
+                ['id = ? ' => [$data['id']]]
             );
         }
     }
@@ -231,11 +231,11 @@ class CourseLegalPlugin extends Plugin
         if ($data['mail_agreement_link'] == $link) {
             $table = Database::get_main_table('session_rel_course_rel_user_legal');
             $id = $data['id'];
-            $values = array(
+            $values = [
                 'mail_agreement' => 1,
                 'mail_agreement_date' => api_get_utc_datetime()
-            );
-            Database::update($table, $values, array('id = ?' => array($id)));
+            ];
+            Database::update($table, $values, ['id = ?' => [$id]]);
         }
     }
 
@@ -261,12 +261,12 @@ class CourseLegalPlugin extends Plugin
         $subject = $this->get_lang("AgreementUpdated");
         $message = sprintf($this->get_lang("AgreementWasUpdatedClickHere"), $url);
 
-        $dataFile = array();
+        $dataFile = [];
         if (!empty($filePath)) {
-            $dataFile = array(
+            $dataFile = [
                 'path' => $filePath,
                 'filename' => basename($filePath),
-            );
+            ];
             $message = sprintf($this->get_lang("AgreementWasUpdatedClickHere"), $url)." \n";
             $message .= $this->get_lang("TheAgreementIsAttachedInThisEmail");
         }
@@ -311,7 +311,7 @@ class CourseLegalPlugin extends Plugin
             $sql .= $order;
         }
         $result = Database::query($sql);
-        $data = array();
+        $data = [];
         if (Database::num_rows($result) > 0) {
             $data = Database::store_result($result, 'ASSOC');
         }
@@ -338,17 +338,17 @@ class CourseLegalPlugin extends Plugin
      * @param array $file $_FILES['uploaded_file']
      * @param bool  $deleteFile
      */
-    public function save($values, $file = array(), $deleteFile = false)
+    public function save($values, $file = [], $deleteFile = false)
     {
         $table = Database::get_main_table('session_rel_course_legal');
 
         $courseId = $values['c_id'];
         $sessionId = $values['session_id'];
 
-        $conditions = array(
+        $conditions = [
             'c_id' => $courseId,
             'session_id' => $sessionId,
-        );
+        ];
 
         $course = api_get_course_info_by_id($courseId);
 
@@ -399,9 +399,9 @@ class CourseLegalPlugin extends Plugin
         } else {
             $id = $legalData['id'];
 
-            $updateParams = array(
+            $updateParams = [
                 'content' => $values['content'],
-            );
+            ];
 
             if (!empty($fileName)) {
                 $updateParams['filename'] = $fileName;
@@ -410,15 +410,15 @@ class CourseLegalPlugin extends Plugin
             Database::update(
                 $table,
                 $updateParams,
-                array('id = ? ' => $id)
+                ['id = ? ' => $id]
             );
         }
 
         if ($deleteFile) {
             Database::update(
                 $table,
-                array('filename' => ''),
-                array('id = ? ' => $id)
+                ['filename' => ''],
+                ['id = ? ' => $id]
             );
             if (!empty($legalData['filename'])) {
                 $fileToDelete = $coursePath.'/'.$legalData['filename'];
@@ -466,15 +466,15 @@ class CourseLegalPlugin extends Plugin
     public function getData($courseId, $sessionId)
     {
         $table = Database::get_main_table('session_rel_course_legal');
-        $conditions = array(
-            'c_id  = ? AND session_id = ? ' => array(
+        $conditions = [
+            'c_id  = ? AND session_id = ? ' => [
                 $courseId,
                 $sessionId
-            )
-        );
+            ]
+        ];
 
-        $result = Database::select('*', $table, array('where' => $conditions));
-        $legalData = isset($result) && !empty($result) ? current($result) : array();
+        $result = Database::select('*', $table, ['where' => $conditions]);
+        $legalData = isset($result) && !empty($result) ? current($result) : [];
 
         return $legalData;
     }
@@ -499,7 +499,7 @@ class CourseLegalPlugin extends Plugin
                 return Display::url(
                     $data['filename'],
                     api_get_path(WEB_COURSE_PATH).$course['directory'].'/courselegal/'.$data['filename'],
-                    array('target' => '_blank')
+                    ['target' => '_blank']
                 );
             }
         }

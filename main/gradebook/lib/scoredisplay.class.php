@@ -46,19 +46,19 @@ class ScoreDisplay
         $this->custom_enabled = $value == 'true' ? true : false;
 
         if ($this->custom_enabled) {
-            $params = array('category = ?' =>  array('Gradebook'));
+            $params = ['category = ?' =>  ['Gradebook']];
             $displays = api_get_settings_params($params);
-            $portal_displays = array();
+            $portal_displays = [];
             if (!empty($displays)) {
                 foreach ($displays as $display) {
                     $data = explode('::', $display['selected_value']);
                     if (empty($data[1])) {
                         $data[1] = "";
                     }
-                    $portal_displays[$data[0]] = array(
+                    $portal_displays[$data[0]] = [
                         'score' => $data[0],
                         'display' => $data[1]
-                    );
+                    ];
                 }
                 sort($portal_displays);
             }
@@ -246,23 +246,23 @@ class ScoreDisplay
         }
 
         //Get this from DB settings
-        $display = array(
+        $display = [
             50 => get_lang('GradebookFailed'),
             60 => get_lang('GradebookPoor'),
             70 => get_lang('GradebookFair'),
             80 => get_lang('GradebookGood'),
             90 => get_lang('GradebookOutstanding'),
             100 => get_lang('GradebookExcellent')
-        );
+        ];
 
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
         foreach ($display as $value => $text) {
-            $params = array(
+            $params = [
                 'score' => $value,
                 'display' => $text,
                 'category_id' => $category_id,
                 'score_color_percent' => 0,
-            );
+            ];
             Database::insert($table, $params);
         }
     }
@@ -343,10 +343,9 @@ class ScoreDisplay
                 $display = Display::tag(
                     'font',
                     $display,
-                    array('color' => 'red')
+                    ['color' => 'red']
                 );
             }
-
         }
 
         return $display;
@@ -543,7 +542,7 @@ class ScoreDisplay
     {
         if (isset($custom_display)) {
             // get highest score entry, and copy each element to a new array
-            $converted = array();
+            $converted = [];
             $highest = 0;
             foreach ($custom_display as $element) {
                 if ($element['score'] > $highest) {
@@ -552,14 +551,14 @@ class ScoreDisplay
                 $converted[] = $element;
             }
             // sort the new array (ascending)
-            usort($converted, array('ScoreDisplay', 'sort_display'));
+            usort($converted, ['ScoreDisplay', 'sort_display']);
 
             // adjust each score in such a way that
             // each score is scaled between 0 and 1
             // the highest score in this array will be equal to 1
-            $converted2 = array();
+            $converted2 = [];
             foreach ($converted as $element) {
-                $newelement = array();
+                $newelement = [];
                 if (isset($highest) && !empty($highest) && $highest > 0) {
                     $newelement['score'] = $element['score'] / $highest;
                 } else {

@@ -416,19 +416,19 @@ $is_allowed_to_edit = api_is_allowed_to_edit(false, true, true, false);
 
 global $interbreadcrumb;
 if ($is_allowed_to_edit) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_self().'?action=list&isStudentView=false&'.api_get_cidreq(true, true, 'course'),
         'name' => get_lang('LearningPaths')
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_self()."?action=add_item&type=step&lp_id={$lp->lp_id}&isStudentView=false&".api_get_cidreq(true, true, 'course'),
         'name' => $lp->get_name()
-    );
+    ];
 
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => '#',
         'name' => get_lang('Preview')
-    );
+    ];
 }
 
 // Return to course home.

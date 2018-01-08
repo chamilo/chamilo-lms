@@ -85,11 +85,11 @@ function loginWSAuthenticate($username, $password, $wsUrl)
     // The call to the webservice will change depending on your definition
     try {
         $response = $client->validateUser(
-            array(
+            [
                 'user' => $username,
                 'pass' => $passCrypted,
                 'system' => 'chamilo',
-            )
+            ]
         );
     } catch (SoapFault $fault) {
         error_log('Caught something');
@@ -104,12 +104,3 @@ function loginWSAuthenticate($username, $password, $wsUrl)
 
     return $response->validateUserResult;
 }
-
-
-
-
-
-
-
-
-

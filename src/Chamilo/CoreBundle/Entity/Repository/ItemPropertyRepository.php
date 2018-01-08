@@ -34,14 +34,14 @@ class ItemPropertyRepository extends EntityRepository
         Session $session = null,
         Group $group = null
     ) {
-        $criteria = array(
+        $criteria = [
             'tool' => $tool,
             'lasteditType' => 'LearnpathSubscription',
             'ref' => $itemId,
             'course' => $course,
             'session' => $session,
             'group' => $group,
-        );
+        ];
 
         return $this->findBy($criteria);
     }
@@ -60,14 +60,14 @@ class ItemPropertyRepository extends EntityRepository
         Course $course,
         Session $session = null
     ) {
-        $criteria = array(
+        $criteria = [
             'tool' => $tool,
             'lasteditType' => 'LearnpathSubscription',
             'ref' => $itemId,
             'course' => $course,
             'session' => $session,
             'toUser' => null,
-        );
+        ];
 
         return $this->findBy($criteria);
     }
@@ -87,7 +87,7 @@ class ItemPropertyRepository extends EntityRepository
         Course $course,
         Session $session = null,
         $itemId,
-        $newList = array()
+        $newList = []
     ) {
         $em = $this->getEntityManager();
         $groupsSubscribedToItem = $this->getGroupsSubscribedToItem(
@@ -97,7 +97,7 @@ class ItemPropertyRepository extends EntityRepository
             $session
         );
 
-        $alreadyAdded = array();
+        $alreadyAdded = [];
         if ($groupsSubscribedToItem) {
             /** @var CItemProperty $itemProperty */
             foreach ($groupsSubscribedToItem as $itemProperty) {
@@ -163,12 +163,12 @@ class ItemPropertyRepository extends EntityRepository
             $em = $this->getEntityManager();
 
             foreach ($groups as $groupId) {
-                $item = $this->findOneBy(array(
+                $item = $this->findOneBy([
                     'tool' => $tool,
                     'session' => $session,
                     'ref' => $itemId,
                     'group' => $groupId,
-                ));
+                ]);
                 if ($item) {
                     $em->remove($item);
                 }
@@ -176,7 +176,7 @@ class ItemPropertyRepository extends EntityRepository
                 if ($unsubscribeUserToo) {
                     //Adding users from this group to the item
                     $users = \GroupManager::getStudentsAndTutors($groupId);
-                    $newUserList = array();
+                    $newUserList = [];
                     if (!empty($users)) {
                         foreach ($users as $user) {
                             $newUserList[] = $user['user_id'];
@@ -211,7 +211,7 @@ class ItemPropertyRepository extends EntityRepository
         Course $course,
         Session $session = null,
         $itemId,
-        $newUserList = array()
+        $newUserList = []
     ) {
         $em = $this->getEntityManager();
         $user = $em->getRepository('ChamiloUserBundle:User');
@@ -223,7 +223,7 @@ class ItemPropertyRepository extends EntityRepository
             $session
         );
 
-        $alreadyAddedUsers = array();
+        $alreadyAddedUsers = [];
         if ($usersSubscribedToItem) {
             /** @var CItemProperty $itemProperty */
             foreach ($usersSubscribedToItem as $itemProperty) {
@@ -291,12 +291,12 @@ class ItemPropertyRepository extends EntityRepository
         if (!empty($usersToDelete)) {
             foreach ($usersToDelete as $userId) {
                 $item = $this->findOneBy(
-                    array(
+                    [
                         'tool' => $tool,
                         'session' => $session,
                         'ref' => $itemId,
                         'toUser' => $userId,
-                    )
+                    ]
                 );
                 if ($item) {
                     $em->remove($item);

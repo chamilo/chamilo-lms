@@ -40,16 +40,16 @@ class ChamiloThemeExtension extends Extension implements PrependExtensionInterfa
         $bundles = $container->getParameter('kernel.bundles');
 
         if (isset($bundles['TwigBundle'])) {
-            $container->prependExtensionConfig('twig', array(
-                'form' => array(
-                    'resources' => array(
+            $container->prependExtensionConfig('twig', [
+                'form' => [
+                    'resources' => [
                         'ChamiloThemeBundle:Layout:form-theme.html.twig'
-                    )
-                ),
-                'globals' => array(
+                    ]
+                ],
+                'globals' => [
                     'admin_theme' => 'chamilo_admin_theme.theme_manager'
-                )
-            ));
+                ]
+            ]);
         }
 
         return;
@@ -63,13 +63,13 @@ class ChamiloThemeExtension extends Extension implements PrependExtensionInterfa
         if (isset($bundles['AsseticBundle']) && 0) {
             $container->prependExtensionConfig(
               'assetic',
-                  array(
-                      'bundles' => array(
+                  [
+                      'bundles' => [
                         'ChamiloThemeBundle'
-                        ),
-                      'assets' => array(
-                          'common_js'              => array(
-                              'inputs' => array(
+                        ],
+                      'assets' => [
+                          'common_js'              => [
+                              'inputs' => [
                                   $jsAssets.'public/vendor/jquery/dist/jquery.js',
                                   $jsAssets.'public/vendor/jquery-ui/jquery-ui.js',
                                   $jsAssets.'public/vendor/underscore/underscore.js',
@@ -79,27 +79,27 @@ class ChamiloThemeExtension extends Extension implements PrependExtensionInterfa
                                   $jsAssets.'public/vendor/bootbox/bootbox.js',
                                   $jsAssets.'public/js/dialogs.js',
                                   $jsAssets.'public/js/namespace.js',
-                              ),
-                          ),
-                          'tools_js'               => array(
-                              'inputs' => array(
+                              ],
+                          ],
+                          'tools_js'               => [
+                              'inputs' => [
                                   '@common_js',
                                   $jsAssets.'public/vendor/momentjs/moment.js',
                                   $jsAssets.'public/vendor/holderjs/holder.js',
                                   $jsAssets.'public/vendor/spinjs/spin.js',
-                              ),
-                          ),
-                          'admin_lte_js'           => array(
-                              'inputs' => array(
+                              ],
+                          ],
+                          'admin_lte_js'           => [
+                              'inputs' => [
                                   $lteJs.'plugins/bootstrap-slider/bootstrap-slider.js',
                                   $lteJs.'plugins/datatables/jquery.dataTables.js',
                                   $lteJs.'plugins/datatables/dataTables.bootstrap.js',
                                   $lteJs.'plugins/slimScroll/jquery.slimscroll.js',
                                   $jsAssets.'public/js/adminLTE.js',
-                              )
-                          ),
-                          'admin_lte_css'          => array(
-                              'inputs' => array(
+                              ]
+                          ],
+                          'admin_lte_css'          => [
+                              'inputs' => [
 
                                 //  $lteCss . 'jQueryUI/jquery-ui-1.10.3.custom.css',
                                  $cssAssets.'vendor/bootstrap/dist/css/bootstrap.min.css',
@@ -110,66 +110,66 @@ class ChamiloThemeExtension extends Extension implements PrependExtensionInterfa
                                   $lteCss.'AdminLTE.css',
                                   //$lteFont . 'fontawesome-webfont.eot',
                                   // $lteFont . 'ionicons.eot',
-                              )
-                          ),
-                          'admin_lte_forms_js'     => array(
-                              'inputs' => array(
+                              ]
+                          ],
+                          'admin_lte_forms_js'     => [
+                              'inputs' => [
                                   $lteJs.'plugins/colorpicker/bootstrap-colorpicker.js',
                                   $lteJs.'plugins/daterangepicker/daterangepicker.js',
                                   $lteJs.'plugins/timepicker/bootstrap-timepicker.js',
                                   $lteJs.'plugins/input-mask/jquery.inputmask.js',
                                   //   $lteJs.'plugins/input-mask/*',
-                              )
-                          ),
-                          'admin_lte_forms_css'    => array(
-                              'inputs' => array(
+                              ]
+                          ],
+                          'admin_lte_forms_css'    => [
+                              'inputs' => [
                                   $lteCss.'colorpicker/bootstrap-colorpicker.css',
                                   $lteCss.'daterangepicker/daterangepicker-bs3.css',
                                   $lteCss.'timepicker/bootstrap-timepicker.css',
-                              )
-                          ),
-                          'admin_lte_wysiwyg'      => array(
-                              'inputs' => array(
+                              ]
+                          ],
+                          'admin_lte_wysiwyg'      => [
+                              'inputs' => [
                                   $lteJs.'plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.js',
-                              )
-                          ),
-                          'admin_lte_wysiwyg_css'  => array(
-                              'inputs' => array(
+                              ]
+                          ],
+                          'admin_lte_wysiwyg_css'  => [
+                              'inputs' => [
                                   $lteCss.'bootstrap-wysihtml5/bootstrap3-wysihtml5.css',
-                              )
-                          ),
-                          'admin_lte_morris'       => array(
-                              'inputs' => array(
+                              ]
+                          ],
+                          'admin_lte_morris'       => [
+                              'inputs' => [
                                   $lteJs.'plugins/morris/morris.js',
-                              )
-                          ),
-                          'admin_lte_morris_css'   => array(
-                              'inputs' => array(
+                              ]
+                          ],
+                          'admin_lte_morris_css'   => [
+                              'inputs' => [
                                   $lteCss.'morris/morris.css',
-                              )
-                          ),
-                          'admin_lte_flot'         => array(
-                              'inputs' => array(
+                              ]
+                          ],
+                          'admin_lte_flot'         => [
+                              'inputs' => [
                                   $lteJs.'plugins/flot/*',
-                              )
-                          ),
-                          'admin_lte_calendar'     => array(
-                              'inputs' => array(
+                              ]
+                          ],
+                          'admin_lte_calendar'     => [
+                              'inputs' => [
                                   $jsAssets.'public/vendor/fullcalendar/dist/fullcalendar.min.js',
-                              )
-                          ),
-                          'admin_lte_calendar_css' => array(
-                              'inputs' => array(
+                              ]
+                          ],
+                          'admin_lte_calendar_css' => [
+                              'inputs' => [
                                   $lteCss.'fullcalendar/fullcalendar.css',
-                              )
-                          ),
-                          'avatar_img'             => array(
-                              'inputs' => array(
+                              ]
+                          ],
+                          'avatar_img'             => [
+                              'inputs' => [
                                   '@ChamiloThemeBundle/Resources/public/img/avatar.png'
-                              )
-                          ),
-                          'admin_lte_all'          => array(
-                              'inputs' => array(
+                              ]
+                          ],
+                          'admin_lte_all'          => [
+                              'inputs' => [
                                   '@tools_js',
                                   '@admin_lte_forms_js',
                                   '@admin_lte_wysiwyg',
@@ -177,19 +177,19 @@ class ChamiloThemeExtension extends Extension implements PrependExtensionInterfa
                                   '@admin_lte_calendar',
                                   '@admin_lte_js',
                                   //  '@admin_lte_flot',
-                              )
-                          ),
-                          'admin_lte_all_css'      => array(
-                              'inputs' => array(
+                              ]
+                          ],
+                          'admin_lte_all_css'      => [
+                              'inputs' => [
                                   '@admin_lte_calendar_css',
                                   '@admin_lte_morris_css',
                                   '@admin_lte_wysiwyg_css',
                                   '@admin_lte_forms_css',
                                   '@admin_lte_css'
-                              )
-                          ),
-                      )
-                  )
+                              ]
+                          ],
+                      ]
+                  ]
             );
         }
     }

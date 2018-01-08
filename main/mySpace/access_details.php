@@ -35,32 +35,32 @@ $form = new FormValidator(
     'get',
     api_get_self(),
     null,
-    array('id' => 'myform')
+    ['id' => 'myform']
 );
-$form->addElement('text', 'from', get_lang('From'), array('id' => 'date_from'));
-$form->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to'));
+$form->addElement('text', 'from', get_lang('From'), ['id' => 'date_from']);
+$form->addElement('text', 'to', get_lang('Until'), ['id' => 'date_to']);
 $form->addElement(
     'select',
     'type',
     get_lang('Type'),
-    array('day' => get_lang('Day'), 'month' => get_lang('Month')),
-    array('id' => 'type')
+    ['day' => get_lang('Day'), 'month' => get_lang('Month')],
+    ['id' => 'type']
 );
 $form->addElement('hidden', 'student', $user_id);
 $form->addElement('hidden', 'course', $course_code);
 $form->addRule('from', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('to', get_lang('ThisFieldIsRequired'), 'required');
-$group = array(
+$group = [
     $form->createElement(
         'label',
         null,
         Display::url(
             get_lang('Search'),
             'javascript://',
-            array('onclick' => 'loadGraph();', 'class' => 'btn btn-default')
+            ['onclick' => 'loadGraph();', 'class' => 'btn btn-default']
         )
     )
-);
+];
 $form->addGroup($group);
 $from = null;
 $to = null;
@@ -119,7 +119,7 @@ $(function() {
 </script>';
 
 //Changes END
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('AccessDetails'));
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AccessDetails')];
 
 Display :: display_header('');
 $userInfo = api_get_user_info($user_id);
@@ -132,7 +132,7 @@ echo Display::page_subheader(
     get_lang('User').': '.$userInfo['complete_name'].' - '.get_lang('Course').': '.$courseInfo['title'].' ('.$course_code.')'
 );
 
-$form->setDefaults(array('from' => $from, 'to' => $to));
+$form->setDefaults(['from' => $from, 'to' => $to]);
 $form->display();
 ?>
 <br />

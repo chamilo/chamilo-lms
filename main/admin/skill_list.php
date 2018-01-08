@@ -110,9 +110,8 @@ switch ($action) {
         exit;
         break;
     case 'list':
-        // no break
     default:
-        $interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+        $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
 
         $toolbar = Display::url(
             Display::return_icon(

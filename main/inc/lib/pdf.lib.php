@@ -11,9 +11,9 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 class PDF
 {
     public $pdf;
-    public $custom_header = array();
-    public $custom_footer = array();
-    public $params = array();
+    public $custom_header = [];
+    public $custom_footer = [];
+    public $params = [];
     public $template;
 
     /**
@@ -27,14 +27,14 @@ class PDF
     public function __construct(
         $pageFormat = 'A4',
         $orientation = 'P',
-        $params = array(),
+        $params = [],
         $template = null
     ) {
         $this->template = $template;
         /* More info @ http://mpdf1.com/manual/index.php?tid=184&searchstring=mPDF
          * mPDF ([ string $mode [, mixed $format [, float $default_font_size [, string $default_font [, float $margin_left , float $margin_right , float $margin_top , float $margin_bottom , float $margin_header , float $margin_footer [, string $orientation ]]]]]])
          */
-        if (!in_array($orientation, array('P', 'L'))) {
+        if (!in_array($orientation, ['P', 'L'])) {
             $orientation = 'P';
         }
         //left, right, top, bottom, margin_header, margin footer
@@ -210,7 +210,7 @@ class PDF
                 return false;
             }
             // Converting the string into an array
-            $html_file_array = array($html_file_array);
+            $html_file_array = [$html_file_array];
         }
 
         if (!empty($course_code)) {
@@ -220,10 +220,10 @@ class PDF
         }
 
         // Clean styles and javascript document
-        $clean_search = array(
+        $clean_search = [
             '@<script[^>]*?>.*?</script>@si',
             '@<style[^>]*?>.*?</style>@si'
-        );
+        ];
 
         // Formatting the pdf
         self::format_pdf($course_data, $complete_style);
@@ -278,7 +278,7 @@ class PDF
             $file_info = pathinfo($file);
             $extension = $file_info['extension'];
 
-            if (in_array($extension, array('html', 'htm'))) {
+            if (in_array($extension, ['html', 'htm'])) {
                 $dirName = $file_info['dirname'];
                 $filename = $file_info['basename'];
                 $filename = str_replace('_', ' ', $filename);
@@ -382,7 +382,7 @@ class PDF
                 if (!empty($document_html)) {
                     $this->pdf->WriteHTML($document_html.$page_break);
                 }
-            } elseif (in_array($extension, array('jpg', 'jpeg', 'png', 'gif'))) {
+            } elseif (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
                 // Images
                 $image = Display::img($file);
                 $this->pdf->WriteHTML('<html><body>'.$image.'</body></html>'.$page_break);
@@ -437,10 +437,10 @@ class PDF
         }
 
         //clean styles and javascript document
-        $clean_search = array(
+        $clean_search = [
             '@<script[^>]*?>.*?</script>@si',
             '@<style[^>]*?>.*?</style>@siU'
-        );
+        ];
 
         // Formatting the pdf
         $course_data = api_get_course_info($course_code);
@@ -551,7 +551,6 @@ class PDF
                 $fileToSave,
                 $outputMode
             ); // F to save the pdf in a file
-
         } else {
             $this->pdf->Output(
                 $output_file,

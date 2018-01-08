@@ -22,12 +22,12 @@ api_protect_admin_script(true);
 $nameTools = get_lang('PlatformAdmin');
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => $nameTools);
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => $nameTools];
 
 // setting the name of the tool
 $nameTools = get_lang('DataFiller');
 
-$output = array();
+$output = [];
 if (!empty($_GET['fill'])) {
     switch ($_GET['fill']) {
         case 'users':

@@ -14,7 +14,7 @@ class document_processor extends search_processor
 
     public function process()
     {
-        $results = array();
+        $results = [];
         foreach ($this->rows as $row_val) {
             $search_show_unlinked_results = (api_get_setting('search_show_unlinked_results') == 'true');
             $course_visible_for_user = api_is_course_visible_for_user(null, $row_val['courseid']);
@@ -24,7 +24,7 @@ class document_processor extends search_processor
                 $visibility = api_get_item_visibility(api_get_course_info($row_val['courseid']), TOOL_DOCUMENT, $row_val['xapian_data'][SE_DATA]['doc_id']);
                 if ($visibility) {
                     list($thumbnail, $image, $name, $author, $url) = $this->get_information($row_val['courseid'], $row_val['xapian_data'][SE_DATA]['doc_id']);
-                    $result = array(
+                    $result = [
                         'toolid' => TOOL_DOCUMENT,
                         'score' => $row_val['score'],
                         'url' => $url,
@@ -32,7 +32,7 @@ class document_processor extends search_processor
                         'image' => $image,
                         'title' => $name,
                         'author' => $author,
-                    );
+                    ];
                     if ($course_visible_for_user) {
                         $results[] = $result;
                     } else { // course not visible for user
@@ -95,10 +95,9 @@ class document_processor extends search_processor
                     $author = api_get_person_name($user_data['firstName'], $user_data['lastName']);
                 }
             }
-            return array($thumbnail, $image, $name, $author, $url); // FIXME: is it posible to get an author here?
+            return [$thumbnail, $image, $name, $author, $url]; // FIXME: is it posible to get an author here?
         } else {
-            return array();
+            return [];
         }
     }
-
 }

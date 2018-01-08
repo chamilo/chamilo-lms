@@ -15,7 +15,7 @@ if (api_get_setting('allow_social_tool') != 'true') {
     api_not_allowed();
 }
 
-$views = array('friends', 'mygroups');
+$views = ['friends', 'mygroups'];
 $user_id = intval($_GET['user_id']);
 $userGroup = new UserGroup();
 
@@ -23,7 +23,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
     // show all friends by user_id
     if ($_GET['view'] == 'friends') {
         echo '<div style="margin-top:20px;">';
-        $list_path_friends = $list_path_normal_friends = $list_path_parents = array();
+        $list_path_friends = $list_path_normal_friends = $list_path_parents = [];
         //SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, SOCIALPARENT
         $friends = SocialManager::get_friends(
             $user_id,
@@ -65,7 +65,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
         // show all groups by user_id
         // MY GROUPS
         $results = $userGroup->get_groups_by_user($user_id, 0);
-        $grid_my_groups = array();
+        $grid_my_groups = [];
         if (is_array($results) && count($results) > 0) {
             $i = 1;
             foreach ($results as $result) {
@@ -78,13 +78,13 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
                     $icon = Display::return_icon(
                         'social_group_admin.png',
                         get_lang('Admin'),
-                        array('style' => 'vertical-align:middle;width:16px;height:16px;')
+                        ['style' => 'vertical-align:middle;width:16px;height:16px;']
                     );
                 } elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
                     $icon = Display::return_icon(
                         'social_group_moderator.png',
                         get_lang('Moderator'),
-                        array('style' => 'vertical-align:middle;width:16px;height:16px;')
+                        ['style' => 'vertical-align:middle;width:16px;height:16px;']
                     );
                 }
                 $count_users_group = count(
@@ -120,11 +120,11 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
                     $item_actions = '<div class="box_shared_profile_group_actions"><a href="group_view.php?id='.$id.'">'.
                         get_lang('SeeMore').$url_close.'</div>';
                 }
-                $grid_my_groups[] = array(
+                $grid_my_groups[] = [
                     $item_name,
                     $url_open.$result['picture_uri'].$url_close,
                     $item_description.$item_actions
-                );
+                ];
                 $i++;
             }
         }
@@ -141,12 +141,12 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
 
             Display::display_sortable_grid(
                 'shared_profile_mygroups',
-                array(),
+                [],
                 $grid_my_groups,
-                array('hide_navigation' => true, 'per_page' => 2),
+                ['hide_navigation' => true, 'per_page' => 2],
                 $query_vars,
                 false,
-                array(true, true, true, false)
+                [true, true, true, false]
             );
             echo '</div>';
         }

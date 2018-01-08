@@ -45,10 +45,10 @@ class CarePost
      */
     protected $externalCareId;
 
-     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", cascade={"persist"})
-     * @ORM\JoinColumn(name="insert_user_id", referencedColumnName="id", nullable=false)
-     */
+    /**
+    * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", cascade={"persist"})
+    * @ORM\JoinColumn(name="insert_user_id", referencedColumnName="id", nullable=false)
+    */
     private $insertUser;
 
     /**
@@ -102,10 +102,10 @@ class CarePost
      */
     private $parent;
 
-     /**
-     * @ORM\OneToMany(targetEntity="CarePost", mappedBy="parent")
-     * @ORM\OrderBy({"createdAt" = "DESC"})
-     */
+    /**
+    * @ORM\OneToMany(targetEntity="CarePost", mappedBy="parent")
+    * @ORM\OrderBy({"createdAt" = "DESC"})
+    */
     private $children;
 
     /**
@@ -418,5 +418,4 @@ class CarePost
 
         return $this;
     }
-
 }

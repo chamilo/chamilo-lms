@@ -48,10 +48,10 @@ class HotSpot extends Question
             $form->addElement(
                 'file',
                 'imageUpload',
-                array(
+                [
                     '<img src="'.$icon.'" />',
                     get_lang('UploadJpgPicture'),
-                )
+                ]
             );
 
             // setting the save button here and not in the question class.php
@@ -62,7 +62,7 @@ class HotSpot extends Question
                 'imageUpload',
                 get_lang('OnlyImagesAllowed'),
                 'filetype',
-                array('jpg', 'jpeg', 'png', 'gif')
+                ['jpg', 'jpeg', 'png', 'gif']
             );
             $form->addRule('imageUpload', get_lang('NoImage'), 'uploadedfile');
         } else {
@@ -92,7 +92,7 @@ class HotSpot extends Question
         return false;
     }
 
-    function createAnswersForm($form)
+    public function createAnswersForm($form)
     {
         // nothing
     }

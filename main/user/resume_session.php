@@ -89,7 +89,7 @@ if ($allowTutors === 'true') {
         case 'delete':
             $idChecked = $_GET['idChecked'];
             if (is_array($idChecked)) {
-                $my_temp = array();
+                $my_temp = [];
                 foreach ($idChecked as $id) {
                     $courseInfo = api_get_course_info($id);
                     $my_temp[] = $courseInfo['real_id']; // forcing the escape_string
@@ -130,21 +130,21 @@ if ($allowTutors === 'true') {
             get_lang('Session')
         ).' '.$session['name']
     );
-    echo Display::page_subheader(get_lang('GeneralProperties').$url);
-
-    ?>
+    echo Display::page_subheader(get_lang('GeneralProperties').$url); ?>
     <!-- General properties -->
     <table class="data_table">
     <tr>
         <td><?php echo get_lang('GeneralCoach'); ?> :</td>
         <td><?php echo api_get_person_name($session['firstname'], $session['lastname']).' ('.$session['username'].')' ?></td>
     </tr>
-    <?php if (!empty($session_category)) { ?>
+    <?php if (!empty($session_category)) {
+        ?>
     <tr>
         <td><?php echo get_lang('SessionCategory') ?></td>
         <td><?php echo $session_category; ?></td>
     </tr>
-    <?php } ?>
+    <?php
+    } ?>
     <tr>
         <td><?php echo get_lang('Date'); ?> :</td>
         <td>
@@ -189,7 +189,13 @@ if ($allowTutors === 'true') {
             <?php echo api_ucfirst(get_lang('SessionVisibility')) ?> :
         </td>
         <td>
-            <?php if ($session['visibility'] == 1) echo get_lang('ReadOnly'); elseif ($session['visibility'] == 2) echo get_lang('Visible'); elseif ($session['visibility'] == 3) echo api_ucfirst(get_lang('Invisible'))  ?>
+            <?php if ($session['visibility'] == 1) {
+            echo get_lang('ReadOnly');
+        } elseif ($session['visibility'] == 2) {
+            echo get_lang('Visible');
+        } elseif ($session['visibility'] == 3) {
+            echo api_ucfirst(get_lang('Invisible'));
+        } ?>
         </td>
     </tr>
     <?php
@@ -205,13 +211,11 @@ if ($allowTutors === 'true') {
             echo $url_data['url'].'<br />';
         }
         echo '</td></tr>';
-    }
-    ?>
+    } ?>
     </table>
     <br />
     <?php
-    echo Display::page_subheader(get_lang('CourseList').$url);
-    ?>
+    echo Display::page_subheader(get_lang('CourseList').$url); ?>
     <!--List of courses -->
     <table class="data_table">
     <tr>
@@ -258,7 +262,7 @@ if ($allowTutors === 'true') {
                         session_rcru.status=2";
             $rs = Database::query($sql);
 
-            $coachs = array();
+            $coachs = [];
             if (Database::num_rows($rs) > 0) {
                 while ($info_coach = Database::fetch_array($rs)) {
                     $coachs[] = api_get_person_name(
@@ -287,13 +291,11 @@ if ($allowTutors === 'true') {
 
             </tr>';
         }
-    }
-    ?>
+    } ?>
     </table>
     <br />
     <?php
-    echo Display::page_subheader(get_lang('UserList').$url);
-    ?>
+    echo Display::page_subheader(get_lang('UserList').$url); ?>
     <!--List of users -->
     <table class="data_table">
         <tr>
@@ -344,8 +346,8 @@ if ($allowTutors === 'true') {
 
             if ($multiple_url_is_on) {
                 if ($user['access_url_id'] != $url_id) {
-                    $user_link .= ' '.Display::return_icon('warning.png', get_lang('UserNotAddedInURL'), array(), ICON_SIZE_SMALL);
-                    $add = Display::return_icon('add.png', get_lang('AddUsersToURL'), array(), ICON_SIZE_SMALL);
+                    $user_link .= ' '.Display::return_icon('warning.png', get_lang('UserNotAddedInURL'), [], ICON_SIZE_SMALL);
+                    $add = Display::return_icon('add.png', get_lang('AddUsersToURL'), [], ICON_SIZE_SMALL);
                     $link_to_add_user_in_url = '<a href="resume_session.php?action=add_user_to_url&id_session='.$id_session.'&user_id='.$user['user_id'].'">'.$add.'</a>';
                 }
             }
@@ -365,12 +367,11 @@ if ($allowTutors === 'true') {
                     </td>
                     </tr>';
         }
-    }
-    ?>
+    } ?>
     </table>
 <?php
 } else {
-    api_not_allowed();
-}
+        api_not_allowed();
+    }
 // footer
 Display::display_footer();

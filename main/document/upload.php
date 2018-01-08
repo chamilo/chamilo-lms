@@ -39,7 +39,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
 // Adding extra javascript to the form
-$htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'));
+$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 
 // Variables
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
@@ -82,7 +82,7 @@ if (empty($document_data)) {
         dirname($path)
     );
 }
-$group_properties = array();
+$group_properties = [];
 
 $htmlHeadXtra[] = '<script>
 
@@ -113,10 +113,10 @@ if (!empty($groupId)) {
 
     // Only courseadmin or group members allowed
     if ($is_allowed_to_edit || GroupManager::is_user_in_group(api_get_user_id(), $group_properties)) {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
             'name' => get_lang('GroupSpace'),
-        );
+        ];
     } else {
         api_not_allowed(true);
     }
@@ -155,27 +155,27 @@ if (isset($_REQUEST['certificate'])) {
 
 // Breadcrumbs
 if ($is_certificate_mode) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => '../gradebook/index.php?'.api_get_cidreq(),
         'name' => get_lang('Gradebook'),
-    );
+    ];
 } else {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => './document.php?id='.$document_id.'&'.api_get_cidreq(),
         'name' => get_lang('Documents'),
-    );
+    ];
 }
 
 // Interbreadcrumb for the current directory root path
 if ($document_data) {
     if (empty($document_data['parents'])) {
-        $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
+        $interbreadcrumb[] = ['url' => '#', 'name' => $document_data['title']];
     } else {
         foreach ($document_data['parents'] as $document_sub_data) {
-            $interbreadcrumb[] = array(
+            $interbreadcrumb[] = [
                 'url' => $document_sub_data['document_url'],
                 'name' => $document_sub_data['title']
-            );
+            ];
         }
     }
 }
@@ -229,7 +229,7 @@ if ($is_certificate_mode) {
 }
 
 // Link to create a folder
-echo $toolbar = Display::toolbarAction('toolbar-upload', array($actions));
+echo $toolbar = Display::toolbarAction('toolbar-upload', [$actions]);
 // Form to select directory
 $folders = DocumentManager::get_all_document_folders(
     $_course,
@@ -240,7 +240,7 @@ if (!$is_certificate_mode) {
     echo DocumentManager::build_directory_selector(
         $folders,
         $document_id,
-        (isset($group_properties['directory']) ? $group_properties['directory'] : array())
+        (isset($group_properties['directory']) ? $group_properties['directory'] : [])
     );
 }
 
@@ -251,7 +251,7 @@ $form = new FormValidator(
     'POST',
     $action.'#tabs-2',
     '',
-    array('enctype' => 'multipart/form-data')
+    ['enctype' => 'multipart/form-data']
 );
 $form->addElement('hidden', 'id', $document_id);
 $form->addElement('hidden', 'curdirpath', $path);
@@ -261,8 +261,8 @@ $label =
     get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.
     get_lang('DocumentQuota').': '.$course_quota;
 
-$form->addElement('file', 'file', array(get_lang('File'), $label), 'style="width: 250px" id="user_upload"');
-$form->addElement('text', 'title', get_lang('Title'), array('id' => 'title_file'));
+$form->addElement('file', 'file', [get_lang('File'), $label], 'style="width: 250px" id="user_upload"');
+$form->addElement('text', 'title', get_lang('Title'), ['id' => 'title_file']);
 $form->addElement('textarea', 'comment', get_lang('Comment'));
 
 // Advanced parameters
@@ -315,10 +315,10 @@ if (!empty($fileExistsOption)) {
     $defaultFileExistsOption = $fileExistsOption;
 }
 
-$defaults = array(
+$defaults = [
     'index_document' => 'checked="checked"',
     'if_exists' => $defaultFileExistsOption
-);
+];
 
 $form->setDefaults($defaults);
 
@@ -328,15 +328,15 @@ $multipleForm = new FormValidator(
     'drag_drop',
     'post',
     '#',
-    array('enctype' => 'multipart/form-data')
+    ['enctype' => 'multipart/form-data']
 );
 $multipleForm->addMultipleUpload($url);
 
-$headers = array(
+$headers = [
     get_lang('Upload'),
     get_lang('Upload').' ('.get_lang('Simple').')'
-);
+];
 
-echo Display::tabs($headers, array($multipleForm->returnForm(), $form->returnForm()), 'tabs');
+echo Display::tabs($headers, [$multipleForm->returnForm(), $form->returnForm()], 'tabs');
 
 Display::display_footer();

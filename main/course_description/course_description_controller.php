@@ -28,12 +28,12 @@ class CourseDescriptionController
      * @param boolean    true for listing history (optional)
      * @param array    message for showing by action['edit','add','destroy'] (optional)
      */
-    public function listing($history = false, $messages = array())
+    public function listing($history = false, $messages = [])
     {
         $course_description = new CourseDescription();
         $session_id = api_get_session_id();
         $course_description->set_session_id($session_id);
-        $data = array();
+        $data = [];
         $course_description_data = $course_description->get_description_data();
         $data['descriptions'] = isset($course_description_data['descriptions']) ? $course_description_data['descriptions'] : '';
         $data['default_description_titles'] = $course_description->get_default_description_title();
@@ -43,7 +43,7 @@ class CourseDescriptionController
         $browser = api_get_navigator();
 
         if (!is_array($data['descriptions'])) {
-            $data['descriptions'] = array($data['descriptions']);
+            $data['descriptions'] = [$data['descriptions']];
         }
 
         foreach ($data['descriptions'] as $description) {
@@ -73,7 +73,7 @@ class CourseDescriptionController
         $course_description = new CourseDescription();
         $session_id = api_get_session_id();
         $course_description->set_session_id($session_id);
-        $data = array();
+        $data = [];
         $data['id'] = $id;
         $affected_rows = null;
         if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
@@ -186,7 +186,7 @@ class CourseDescriptionController
         $session_id = api_get_session_id();
         $course_description->set_session_id($session_id);
 
-        $data = array();
+        $data = [];
         if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
             if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
                 if (1) {

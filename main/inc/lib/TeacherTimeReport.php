@@ -13,7 +13,7 @@ class TeacherTimeReport
      * The report data
      * @var array
      */
-    public $data = array();
+    public $data = [];
 
     /**
      * Callback for compare sessions names
@@ -55,11 +55,11 @@ class TeacherTimeReport
     public function sortData($withFilter = false)
     {
         if ($withFilter) {
-            uasort($this->data, array($this, 'compareSessions'));
-            uasort($this->data, array($this, 'compareCourses'));
+            uasort($this->data, [$this, 'compareSessions']);
+            uasort($this->data, [$this, 'compareCourses']);
         }
 
-        uasort($this->data, array($this, 'compareCoaches'));
+        uasort($this->data, [$this, 'compareCoaches']);
     }
 
     /**
@@ -68,24 +68,24 @@ class TeacherTimeReport
      */
     public function prepareDataToExport($withFilter = false)
     {
-        $dataToExport = array();
+        $dataToExport = [];
 
         if ($withFilter) {
-            $dataToExport[] = array(
+            $dataToExport[] = [
                 get_lang('Session'),
                 get_lang('Course'),
                 get_lang('Coach'),
                 get_lang('TotalTime')
-            );
+            ];
         } else {
-            $dataToExport[] = array(
+            $dataToExport[] = [
                 get_lang('Coach'),
                 get_lang('TotalTime')
-            );
+            ];
         }
 
         foreach ($this->data as $row) {
-            $data = array();
+            $data = [];
 
             if ($withFilter) {
                 $data[] = $row['session']['name'];

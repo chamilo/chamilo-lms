@@ -7,7 +7,7 @@
  */
 class link_processor extends search_processor
 {
-    public $links = array();
+    public $links = [];
 
     public function __construct($rows)
     {
@@ -17,12 +17,12 @@ class link_processor extends search_processor
         foreach ($rows as $row_id => $row_val) {
             $link_id = $row_val['xapian_data'][SE_DATA]['link_id'];
             $courseid = $row_val['courseid'];
-            $item = array(
+            $item = [
                 'courseid' => $courseid,
                 'score' => $row_val['score'],
                 'link_id' => $link_id,
                 'row_id' => $row_id,
-            );
+            ];
             $this->links[$courseid]['links'][] = $item;
             $this->links[$courseid]['total_score'] += $row_val['score'];
         }
@@ -30,14 +30,14 @@ class link_processor extends search_processor
 
     public function process()
     {
-        $results = array();
+        $results = [];
         foreach ($this->links as $courseCode => $one_course_links) {
             $course_info = api_get_course_info($courseCode);
             $search_show_unlinked_results = (api_get_setting('search_show_unlinked_results') == 'true');
             $course_visible_for_user = api_is_course_visible_for_user(null, $courseCode);
             // can view course?
             if ($course_visible_for_user || $search_show_unlinked_results) {
-                $result = NULL;
+                $result = null;
                 foreach ($one_course_links['links'] as $one_link) {
                     // is visible?
                     $visibility = api_get_item_visibility($course_info, TOOL_LINK, $one_link['link_id']);
@@ -45,7 +45,7 @@ class link_processor extends search_processor
                         // if one is visible let show the result for a course
                         // also asume all data of this item like the data of the whole group of links(Ex. author)
                         list($thumbnail, $image, $name, $author, $url) = $this->get_information($courseCode, $one_link['link_id']);
-                        $result_tmp = array(
+                        $result_tmp = [
                             'toolid' => TOOL_LINK,
                             'score' => $one_course_links['total_score'] / (count($one_course_links) - 1), // not count total_score array item
                             'url' => $url,
@@ -53,7 +53,7 @@ class link_processor extends search_processor
                             'image' => $image,
                             'title' => $name,
                             'author' => $author,
-                        );
+                        ];
                         if ($course_visible_for_user) {
                             $result = $result_tmp;
                         } else { // course not visible for user
@@ -113,9 +113,9 @@ class link_processor extends search_processor
                 $author = api_get_person_name($user_data['firstName'], $user_data['lastName']);
             }
 
-            return array($thumbnail, $image, $name, $author, $url);
+            return [$thumbnail, $image, $name, $author, $url];
         } else {
-            return array();
+            return [];
         }
     }
 }

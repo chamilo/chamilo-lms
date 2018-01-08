@@ -11,7 +11,7 @@ class Agenda
     public $events = [];
     /** @var string Current type */
     public $type = 'personal';
-    public $types = array('personal', 'admin', 'course');
+    public $types = ['personal', 'admin', 'course'];
     public $sessionId = 0;
     public $senderId;
     /** @var array */
@@ -239,7 +239,7 @@ class Agenda
 
         switch ($this->type) {
             case 'personal':
-                $attributes = array(
+                $attributes = [
                     'user' => api_get_user_id(),
                     'title' => $title,
                     'text' => $content,
@@ -247,7 +247,7 @@ class Agenda
                     'enddate' => $end,
                     'all_day' => $allDay,
                     'color' => $color
-                );
+                ];
 
                 $id = Database::insert(
                     $this->tbl_personal_agenda,
@@ -255,7 +255,7 @@ class Agenda
                 );
                 break;
             case 'course':
-                $attributes = array(
+                $attributes = [
                     'title' => $title,
                     'content' => $content,
                     'start_date' => $start,
@@ -265,7 +265,7 @@ class Agenda
                     'c_id' => $this->course['real_id'],
                     'comment' => $eventComment,
                     'color' => $color
-                );
+                ];
 
                 if (!empty($parentEventId)) {
                     $attributes['parent_event_id'] = $parentEventId;
@@ -416,14 +416,14 @@ class Agenda
                 break;
             case 'admin':
                 if (api_is_platform_admin()) {
-                    $attributes = array(
+                    $attributes = [
                         'title' => $title,
                         'content' => $content,
                         'start_date' => $start,
                         'end_date' => $end,
                         'all_day' => $allDay,
                         'access_url_id' => api_get_current_access_url_id()
-                    );
+                    ];
 
                     $id = Database::insert(
                         $this->tbl_global_agenda,
@@ -525,14 +525,14 @@ class Agenda
             }
         }
 
-        $typeList = array(
+        $typeList = [
             'daily',
             'weekly',
             'monthlyByDate',
             'monthlyByDay',
             'monthlyByDayR',
             'yearly'
-        );
+        ];
 
         // The event has to repeat *in the future*. We don't allow repeated
         // events in the past
@@ -720,13 +720,13 @@ class Agenda
                 if ($eventInfo['user'] != api_get_user_id()) {
                     break;
                 }
-                $attributes = array(
+                $attributes = [
                     'title' => $title,
                     'date' => $start,
                     'enddate' => $end,
                     'all_day' => $allDay,
 
-                );
+                ];
 
                 if ($updateContent) {
                     $attributes['text'] = $content;
@@ -739,7 +739,7 @@ class Agenda
                 Database::update(
                     $this->tbl_personal_agenda,
                     $attributes,
-                    array('id = ?' => $id)
+                    ['id = ?' => $id]
                 );
                 break;
             case 'course':
@@ -766,13 +766,13 @@ class Agenda
                 }
 
                 if ($this->getIsAllowedToEdit()) {
-                    $attributes = array(
+                    $attributes = [
                         'title' => $title,
                         'start_date' => $start,
                         'end_date' => $end,
                         'all_day' => $allDay,
                         'comment' => $comment
-                    );
+                    ];
 
                     if ($updateContent) {
                         $attributes['content'] = $content;
@@ -785,13 +785,13 @@ class Agenda
                     Database::update(
                         $this->tbl_course_agenda,
                         $attributes,
-                        array(
-                            'id = ? AND c_id = ? AND session_id = ? ' => array(
+                        [
+                            'id = ? AND c_id = ? AND session_id = ? ' => [
                                 $id,
                                 $course_id,
                                 $this->sessionId
-                            )
-                        )
+                            ]
+                        ]
                     );
 
                     if (!empty($usersToSend)) {
@@ -997,12 +997,12 @@ class Agenda
             case 'admin':
             case 'platform':
                 if (api_is_platform_admin()) {
-                    $attributes = array(
+                    $attributes = [
                         'title' => $title,
                         'start_date' => $start,
                         'end_date' => $end,
                         'all_day' => $allDay
-                    );
+                    ];
 
                     if ($updateContent) {
                         $attributes['content'] = $content;
@@ -1010,7 +1010,7 @@ class Agenda
                     Database::update(
                         $this->tbl_global_agenda,
                         $attributes,
-                        array('id = ?' => $id)
+                        ['id = ?' => $id]
                     );
                 }
                 break;
@@ -1029,7 +1029,7 @@ class Agenda
                 if ($eventInfo['user'] == api_get_user_id()) {
                     Database::delete(
                         $this->tbl_personal_agenda,
-                        array('id = ?' => $id)
+                        ['id = ?' => $id]
                     );
                 }
                 break;
@@ -1083,7 +1083,7 @@ class Agenda
                     // Removing from events.
                     Database::delete(
                         $this->tbl_course_agenda,
-                        array('id = ? AND c_id = ?' => array($id, $course_id))
+                        ['id = ? AND c_id = ?' => [$id, $course_id]]
                     );
 
                     api_item_property_update(
@@ -1097,12 +1097,12 @@ class Agenda
                     // Removing from series.
                     Database::delete(
                         $this->table_repeat,
-                        array(
-                            'cal_id = ? AND c_id = ?' => array(
+                        [
+                            'cal_id = ? AND c_id = ?' => [
                                 $id,
                                 $course_id
-                            )
-                        )
+                            ]
+                        ]
                     );
 
                     if (isset($eventInfo['attachment']) && !empty($eventInfo['attachment'])) {
@@ -1119,7 +1119,7 @@ class Agenda
                 if (api_is_platform_admin()) {
                     Database::delete(
                         $this->tbl_global_agenda,
-                        array('id = ?' => $id)
+                        ['id = ?' => $id]
                     );
                 }
                 break;
@@ -1232,10 +1232,10 @@ class Agenda
                                 $courses = SessionManager::get_course_list_by_session_id(
                                     $sessionId
                                 );
-                                $sessionInfo = array(
+                                $sessionInfo = [
                                     'session_id' => $sessionId,
                                     'courses' => $courses
-                                );
+                                ];
                                 $session_list[] = $sessionInfo;
                             }
                         }
@@ -1613,11 +1613,11 @@ class Agenda
             }
         }
 
-        return array(
+        return [
             'everyone' => $everyone,
             'users' => $users,
             'groups' => $groups
-        );
+        ];
     }
 
     /**
@@ -1724,7 +1724,7 @@ class Agenda
 
         $groupMemberships = [];
         if (!empty($groupId)) {
-            $groupMemberships = array($groupId);
+            $groupMemberships = [$groupId];
         } else {
             if ($isAllowToEdit) {
                 if (!empty($groupList)) {
@@ -2137,12 +2137,12 @@ class Agenda
         $addOnlyItemsInSendTo = false,
         $required = false
     ) {
-        $params = array(
+        $params = [
             'id' => 'users_to_send_id',
             'data-placeholder' => get_lang('Select'),
             'multiple' => 'multiple',
             'class' => 'multiple-select'
-        );
+        ];
 
         if (!empty($attributes)) {
             $params = array_merge($params, $attributes);
@@ -2168,7 +2168,7 @@ class Agenda
 
         $selectedEveryoneOptions = [];
         if (isset($sendTo['everyone']) && $sendTo['everyone']) {
-            $selectedEveryoneOptions = array('selected');
+            $selectedEveryoneOptions = ['selected'];
             $sendToUsers = [];
         }
 
@@ -2183,10 +2183,10 @@ class Agenda
             foreach ($groupList as $group) {
                 $count_users = isset($group['count_users']) ? $group['count_users'] : $group['userNb'];
                 $count_users = " &ndash; $count_users ".get_lang('Users');
-                $option = array(
+                $option = [
                     'text' => $group['name'].$count_users,
                     'value' => "GROUP:".$group['id']
-                );
+                ];
                 $selected = in_array(
                     $group['id'],
                     $sendToGroups
@@ -2213,13 +2213,13 @@ class Agenda
                 if ($user['status'] == ANONYMOUS) {
                     continue;
                 }
-                $option = array(
+                $option = [
                     'text' => api_get_person_name(
                             $user['firstname'],
                             $user['lastname']
                         ).' ('.$user['username'].')',
                     'value' => "USER:".$user['user_id']
-                );
+                ];
 
                 $selected = in_array(
                     $user['user_id'],
@@ -2302,7 +2302,7 @@ class Agenda
             'post',
             $url,
             null,
-            array('enctype' => 'multipart/form-data')
+            ['enctype' => 'multipart/form-data']
         );
 
         $idAttach = isset($params['id_attach']) ? intval(
@@ -2369,7 +2369,7 @@ class Agenda
             'date_range',
             get_lang('DateRange'),
             false,
-            array('id' => 'date_range')
+            ['id' => 'date_range']
         );
         $form->addElement('checkbox', 'all_day', null, get_lang('AllDay'));
 
@@ -2379,7 +2379,7 @@ class Agenda
                 'repeat',
                 null,
                 get_lang('RepeatEvent'),
-                array('onclick' => 'return plus_repeated_event();')
+                ['onclick' => 'return plus_repeated_event();']
             );
             $form->addElement(
                 'html',
@@ -2395,7 +2395,7 @@ class Agenda
                 'date_picker',
                 'repeat_end_day',
                 get_lang('RepeatEnd'),
-                array('id' => 'repeat_end_date_form')
+                ['id' => 'repeat_end_date_form']
             );
 
             if ($isSubEventEdition || $isParentFromSerie) {
@@ -2413,7 +2413,7 @@ class Agenda
                     10
                 );
 
-                $form->freeze(array('repeat_type', 'repeat_end_day'));
+                $form->freeze(['repeat_type', 'repeat_end_day']);
                 $repeat->_attributes['disabled'] = 'disabled';
             }
             $form->addElement('html', '</div>');
@@ -2440,11 +2440,11 @@ class Agenda
             'content',
             get_lang('Description'),
             null,
-            array(
+            [
                 'ToolbarSet' => $toolbar,
                 'Width' => '100%',
                 'Height' => '200'
-            )
+            ]
         );
 
         if ($this->type == 'course') {
@@ -2616,14 +2616,14 @@ class Agenda
      */
     public static function getRepeatTypes()
     {
-        return array(
+        return [
             'daily' => get_lang('RepeatDaily'),
             'weekly' => get_lang('RepeatWeekly'),
             'monthlyByDate' => get_lang('RepeatMonthlyByDate'),
             //monthlyByDay"> get_lang('RepeatMonthlyByDay');
             //monthlyByDayR' => get_lang('RepeatMonthlyByDayR'),
             'yearly' => get_lang('RepeatYearly')
-        );
+        ];
     }
 
     /**
@@ -3010,10 +3010,10 @@ class Agenda
                         [],
                         FormValidator::LAYOUT_INLINE
                     );
-                    $attributes = array(
+                    $attributes = [
                         'multiple' => false,
                         'id' => 'select_form_id_search'
-                    );
+                    ];
                     $selectedValues = $this->parseAgendaFilter($filter);
                     $this->showToForm($form, $selectedValues, $attributes);
                     $form = $form->returnForm();
@@ -3083,7 +3083,7 @@ class Agenda
 
         $toolbar = Display::toolbarAction(
             'toolbar-agenda',
-            array($actionsLeft, $actionsRight)
+            [$actionsLeft, $actionsRight]
         );
 
         return $toolbar;
@@ -3098,7 +3098,7 @@ class Agenda
             'frm_import_ical',
             'post',
             api_get_self().'?action=importical&type='.$this->type,
-            array('enctype' => 'multipart/form-data')
+            ['enctype' => 'multipart/form-data']
         );
         $form->addElement('header', get_lang('ICalFileImport'));
         $form->addElement('file', 'ical_import', get_lang('ICalFileImport'));
@@ -3133,13 +3133,13 @@ class Agenda
 
         $data = file_get_contents($filepath);
 
-        $trans = array(
+        $trans = [
             'DAILY' => 'daily',
             'WEEKLY' => 'weekly',
             'MONTHLY' => 'monthlyByDate',
             'YEARLY' => 'yearly'
-        );
-        $sentTo = array('everyone' => true);
+        ];
+        $sentTo = ['everyone' => true];
         $calendar = Sabre\VObject\Reader::read($data);
         $currentTimeZone = api_get_timezone();
         if (!empty($calendar->VEVENT)) {
@@ -3241,7 +3241,6 @@ class Agenda
             $messages = implode('<br /> ', $messages);
         } else {
             $messages = get_lang('NoAgendaItems');
-
         }
 
         return $messages;
@@ -3271,11 +3270,11 @@ class Agenda
             $everyone = true;
         }
 
-        return array(
+        return [
             'everyone' => $everyone,
-            'users' => array($userId),
-            'groups' => array($groupId)
-        );
+            'users' => [$userId],
+            'groups' => [$groupId]
+        ];
     }
 
     /**
@@ -3387,12 +3386,12 @@ class Agenda
 
         // sorting by hour for every day
         $agendaitems = [];
-        while (list ($agendaday, $tmpitems) = each($items)) {
+        while (list($agendaday, $tmpitems) = each($items)) {
             if (!isset($agendaitems[$agendaday])) {
                 $agendaitems[$agendaday] = '';
             }
             sort($tmpitems);
-            while (list ($key, $val) = each($tmpitems)) {
+            while (list($key, $val) = each($tmpitems)) {
                 $agendaitems[$agendaday] .= $val;
             }
         }
@@ -3467,7 +3466,6 @@ class Agenda
         $result = Database::query($sql);
 
         while ($item = Database::fetch_array($result)) {
-
             if (!empty($item['start_date'])) {
                 $item['start_date'] = api_get_local_time($item['start_date']);
                 $item['start_date_tms'] = api_strtotime($item['start_date']);
@@ -3600,7 +3598,6 @@ class Agenda
 
         $result = Database::query($sql);
         while ($item = Database::fetch_array($result, 'ASSOC')) {
-
             $time_minute = api_convert_and_format_date(
                 $item['date'],
                 TIME_NO_SEC_FORMAT
@@ -3650,7 +3647,6 @@ class Agenda
 
                 //Display events in agenda
                 $agendaitems[$day] .= "<div><i>$time_minute</i> $course_link <a href=\"myagenda.php?action=view&view=personal&day=$day&month=$month&year=$year&id=".$item['id']."#".$item['id']."\" class=\"personal_agenda\">".$item['title']."</a></div><br />";
-
             } else {
                 // this is the array construction for the DAY view
                 $halfhour = 2 * $agendatime['0'];
@@ -3687,7 +3683,7 @@ class Agenda
     ) {
         global $DaysShort, $course_path;
         //Handle leap year
-        $numberofdays = array(
+        $numberofdays = [
             0,
             31,
             28,
@@ -3701,7 +3697,7 @@ class Agenda
             31,
             30,
             31
-        );
+        ];
         if (($year % 400 == 0) or ($year % 4 == 0 and $year % 100 <> 0)) {
             $numberofdays[2] = 29;
         }
@@ -3738,18 +3734,18 @@ class Agenda
             $back_url = Display::url(
                 get_lang('Previous'),
                 '',
-                array(
+                [
                     'onclick' => "load_calendar('".$user_id."','".$next_month."', '".$next_year."'); ",
                     'class' => 'btn ui-button ui-widget ui-state-default'
-                )
+                ]
             );
             $next_url = Display::url(
                 get_lang('Next'),
                 '',
-                array(
+                [
                     'onclick' => "load_calendar('".$user_id."','".$prev_month."', '".$prev_year."'); ",
                     'class' => 'pull-right btn ui-button ui-widget ui-state-default'
-                )
+                ]
             );
         }
         $html = '';
@@ -3779,7 +3775,7 @@ class Agenda
                     $bgcolor = $class = 'class="days_week"';
                     $dayheader = Display::div(
                         $curday,
-                        array('class' => 'agenda_day')
+                        ['class' => 'agenda_day']
                     );
                     if (($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon'])) {
                         $class = "class=\"days_today\" style=\"width:10%;\"";
@@ -3872,7 +3868,7 @@ class Agenda
                                 //Setting a personal event to green
                                 $icon = Display::div(
                                     $icon,
-                                    array('style' => 'float:right')
+                                    ['style' => 'float:right']
                                 );
 
                                 $link = $value['calendar_type'].'_'.$value['id'].'_'.$value['course_id'].'_'.$value['session_id'];
@@ -3881,7 +3877,7 @@ class Agenda
                                 $url = Display::url(
                                     cut($value['title'], 40),
                                     '#',
-                                    array('id' => $link, 'class' => 'opener')
+                                    ['id' => $link, 'class' => 'opener']
                                 );
                                 $result .= $time.' '.$icon.' '.Display::div(
                                         $url
@@ -3903,11 +3899,11 @@ class Agenda
                                 //Main div
                                 $result .= Display::div(
                                     $content,
-                                    array(
+                                    [
                                         'id' => 'main_'.$link,
                                         'class' => 'dialog',
                                         'style' => 'display:none'
-                                    )
+                                    ]
                                 );
                                 $result .= '</div>';
                                 $html .= $result;
@@ -4050,13 +4046,13 @@ class Agenda
                 );
                 $end_date = $year.$month.$day.$hour.$min;
 
-                $items[] = array(
+                $items[] = [
                     'datestart' => $start_date,
                     'dateend' => $end_date,
                     'title' => $item['title'],
                     'link' => $URL,
                     'coursetitle' => $c['name'],
-                );
+                ];
             }
         }
 

@@ -41,7 +41,7 @@ function handle_multiple_actions()
     }
 
     // STEP 2: at least one file has to be selected. If not we return an error message
-    $ids = isset($_GET['id']) ? $_GET['id'] : array();
+    $ids = isset($_GET['id']) ? $_GET['id'] : [];
     if (count($ids) > 0) {
         $checked_file_ids = $_POST['id'];
     } else {
@@ -84,11 +84,11 @@ function handle_multiple_actions()
     if (strstr($_POST['action'], 'move_')) {
         // check move_received_n or move_sent_n command
         if (strstr($_POST['action'], 'received')) {
-                $part = 'received';
-                $to_cat_id = str_replace('move_received_', '', $_POST['action']);
+            $part = 'received';
+            $to_cat_id = str_replace('move_received_', '', $_POST['action']);
         } else {
-                $part = 'sent';
-                $to_cat_id = str_replace('move_sent_', '', $_POST['action']);
+            $part = 'sent';
+            $to_cat_id = str_replace('move_sent_', '', $_POST['action']);
         }
 
         foreach ($checked_file_ids as $value) {
@@ -187,8 +187,8 @@ function delete_category($action, $id, $user_id = null)
 function display_move_form(
     $part,
     $id,
-    $target = array(),
-    $extra_params = array(),
+    $target = [],
+    $extra_params = [],
     $viewReceivedCategory,
     $viewSentCategory,
     $view
@@ -202,7 +202,7 @@ function display_move_form(
     $form->addElement('hidden', 'id', intval($id));
     $form->addElement('hidden', 'part', Security::remove_XSS($part));
 
-    $options = array('0' => get_lang('Root'));
+    $options = ['0' => get_lang('Root')];
     foreach ($target as $category) {
         $options[$category['cat_id']] = $category['cat_name'];
     }
@@ -271,7 +271,7 @@ function get_dropbox_categories($filter = '')
 {
     $course_id = api_get_course_int_id();
     $_user = api_get_user_info();
-    $return_array = array();
+    $return_array = [];
 
     $session_id = api_get_session_id();
     $condition_session = api_get_session_condition($session_id);
@@ -297,12 +297,14 @@ function get_dropbox_categories($filter = '')
 function get_dropbox_category($id)
 {
     $course_id = api_get_course_int_id();
-    if (empty($id) or $id != intval($id)) { return array(); }
+    if (empty($id) or $id != intval($id)) {
+        return [];
+    }
     $sql = "SELECT * FROM ".Database::get_course_table(TABLE_DROPBOX_CATEGORY)."
             WHERE c_id = $course_id AND cat_id='".$id."'";
     $res = Database::query($sql);
     if ($res === false) {
-        return array();
+        return [];
     }
     $row = Database::fetch_assoc($res);
     return $row;
@@ -341,7 +343,7 @@ function store_addcategory()
 
     // check if the category name is valid
     if ($_POST['category_name'] == '') {
-        return array('type' => 'error', 'message' => get_lang('ErrorPleaseGiveCategoryName'));
+        return ['type' => 'error', 'message' => get_lang('ErrorPleaseGiveCategoryName')];
     }
 
     if (!isset($_POST['edit_id'])) {
@@ -374,9 +376,9 @@ function store_addcategory()
                 Database::query($sql);
             }
 
-            return array('type' => 'confirmation', 'message' => get_lang('CategoryStored'));
+            return ['type' => 'confirmation', 'message' => get_lang('CategoryStored')];
         } else {
-            return array('type' => 'error', 'message' => get_lang('CategoryAlreadyExistsEditIt'));
+            return ['type' => 'error', 'message' => get_lang('CategoryAlreadyExistsEditIt')];
         }
     } else {
         $params = [
@@ -397,7 +399,7 @@ function store_addcategory()
             ]
         );
 
-        return array('type' => 'confirmation', 'message' => get_lang('CategoryModified'));
+        return ['type' => 'confirmation', 'message' => get_lang('CategoryModified')];
     }
 }
 
@@ -469,7 +471,7 @@ function display_addcategory_form($category_name = '', $id = '', $action)
     $form->addRule('category_name', get_lang('ThisFieldIsRequired'), 'required');
     $form->addButtonSave($text, 'StoreCategory');
 
-    $defaults = array();
+    $defaults = [];
     $defaults['category_name'] = $category_name;
     $form->setDefaults($defaults);
     $form->display();
@@ -509,10 +511,10 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
         'post',
         $url,
         null,
-        array(
+        [
             'enctype' => 'multipart/form-data',
             'onsubmit' => 'javascript: return checkForm(this);',
-        )
+        ]
     );
 
     $form->addElement('header', get_lang('UploadNewFile'));
@@ -524,7 +526,7 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
         'file',
         'file',
         get_lang('UploadFile'),
-        array('onChange' => 'javascript: checkfile(this.value);')
+        ['onChange' => 'javascript: checkfile(this.value);']
     );
 
     $allowOverwrite = api_get_setting('dropbox_allow_overwrite');
@@ -534,13 +536,13 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
             'cb_overwrite',
             null,
             get_lang('OverwriteFile'),
-            array('id' => 'cb_overwrite')
+            ['id' => 'cb_overwrite']
         );
     }
 
     // List of all users in this course and all virtual courses combined with it
     if (api_get_session_id()) {
-        $complete_user_list_for_dropbox = array();
+        $complete_user_list_for_dropbox = [];
         if (api_get_setting('dropbox_allow_student_to_student') == 'true' || $_user['status'] != STUDENT) {
             $complete_user_list_for_dropbox = CourseManager:: get_user_list_from_course_code(
                 $course_info['code'],
@@ -556,8 +558,8 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
             api_get_session_id()
         );
 
-        $generalCoachList = array();
-        $courseCoachList = array();
+        $generalCoachList = [];
+        $courseCoachList = [];
         foreach ($complete_user_list2 as $coach) {
             if ($coach['type'] == 'general_coach') {
                 $generalCoachList[] = $coach;
@@ -597,12 +599,12 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
 
     if (!empty($complete_user_list_for_dropbox)) {
         foreach ($complete_user_list_for_dropbox as $k => $e) {
-            $complete_user_list_for_dropbox[$k] = $e + array(
+            $complete_user_list_for_dropbox[$k] = $e + [
                 'lastcommafirst' => api_get_person_name(
                     $e['firstname'],
                     $e['lastname']
                 ),
-            );
+            ];
         }
         $complete_user_list_for_dropbox = TableSort::sort_table($complete_user_list_for_dropbox, 'lastcommafirst');
     }
@@ -613,10 +615,11 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
     */
     $current_user_id = '';
     $allowStudentToStudent = api_get_setting('dropbox_allow_student_to_student');
-    $options = array();
+    $options = [];
     $userGroup = new UserGroup();
     foreach ($complete_user_list_for_dropbox as $current_user) {
-        if (($dropbox_person -> isCourseTutor
+        if ((
+            $dropbox_person -> isCourseTutor
                 || $dropbox_person -> isCourseAdmin
                 || $allowStudentToStudent == 'true'
                 || $current_user['status'] != 5                         // Always allow teachers.
@@ -670,25 +673,25 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
             'recipients',
             get_lang('SendTo'),
             $options,
-            array(
+            [
                 'multiple' => 'multiple',
                 'size' => '10'
-            )
+            ]
         );
     }
     $form->addButtonUpload(get_lang('Upload'), 'submitWork');
 
-    $headers = array(
+    $headers = [
         get_lang('Upload'),
         get_lang('Upload').' ('.get_lang('Simple').')',
-    );
+    ];
 
     $multipleForm = new FormValidator(
         'sent_multiple',
         'post',
         '#',
         null,
-        array('enctype' => 'multipart/form-data', 'id' => 'fileupload')
+        ['enctype' => 'multipart/form-data', 'id' => 'fileupload']
     );
 
     if (empty($idCondition)) {
@@ -696,11 +699,11 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
             'recipients',
             get_lang('SendTo'),
             $options,
-            array(
+            [
                 'multiple' => 'multiple',
                 'size' => '10',
                 'id' => 'recipient_form'
-            )
+            ]
         );
     }
 
@@ -715,7 +718,7 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
 
     echo Display::tabs(
         $headers,
-        array($multipleForm->returnForm(), $form->returnForm()),
+        [$multipleForm->returnForm(), $form->returnForm()],
         'tabs'
     );
 }
@@ -792,10 +795,15 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
             ";
     $result = Database::query($sql);
 
-    if (!($res = Database::fetch_array($result)))
+    if (!($res = Database::fetch_array($result))) {
         die(get_lang('GeneralError').' (code 901)');
-    if ($owner == 0) return $res['uploader_id'];
-    if ($res['uploader_id'] == $owner) return true;
+    }
+    if ($owner == 0) {
+        return $res['uploader_id'];
+    }
+    if ($res['uploader_id'] == $owner) {
+        return true;
+    }
     die(get_lang('GeneralError').' (code '.$or_die.')');
 }
 
@@ -998,7 +1006,7 @@ function store_add_dropbox($file = [], $work = null)
 
     if (empty($work)) {
         // creating the array that contains all the users who will receive the file
-        $new_work_recipients = array();
+        $new_work_recipients = [];
         foreach ($_POST['recipients'] as $rec) {
             if (strpos($rec, 'user_') === 0) {
                 $new_work_recipients[] = substr($rec, strlen('user_'));
@@ -1024,12 +1032,12 @@ function store_add_dropbox($file = [], $work = null)
     if ($b_send_mail && empty($work)) {
         foreach ($new_work_recipients as $recipient_id) {
             $recipent_temp = api_get_user_info($recipient_id);
-            $additionalParameters = array(
+            $additionalParameters = [
                 'smsType' => SmsPlugin::NEW_FILE_SHARED_COURSE_BY,
                 'userId' => $recipient_id,
                 'courseTitle' => $_course['title'],
                 'userUsername' => $recipent_temp['username']
-            );
+            ];
             api_mail_html(
                 api_get_person_name(
                     $recipent_temp['firstname'].' '.$recipent_temp['lastname'],
@@ -1131,7 +1139,7 @@ function format_feedback($feedback)
 * this function returns the code for the form for adding a new feedback message to a dropbox file.
 * @param $url  url string
 * @return string code
-* 
+*
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
@@ -1269,14 +1277,14 @@ function zip_download($fileList)
                 ) ";
     $result = Database::query($sql);
 
-    $files = array();
+    $files = [];
     while ($row = Database::fetch_array($result)) {
-        $files[$row['filename']] = array(
+        $files[$row['filename']] = [
             'filename' => $row['filename'],
             'title' => $row['title'],
             'author' => $row['author'],
             'description' => $row['description']
-        );
+        ];
     }
 
     // Step 3: create the zip file and add all the files to it
@@ -1323,7 +1331,7 @@ function my_pre_add_callback($p_event, &$p_header)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, March 2006
  * @author Ivan Tcholakov, 2010, code for html metadata has been added.
  */
-function generate_html_overview($files, $dont_show_columns = array(), $make_link = array())
+function generate_html_overview($files, $dont_show_columns = [], $make_link = [])
 {
     $return = '<!DOCTYPE html'."\n";
     $return .= "\t".'PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"'."\n";
@@ -1387,7 +1395,7 @@ function get_total_number_feedback($file_id = '')
             FROM ". Database::get_course_table(TABLE_DROPBOX_FEEDBACK)."
             WHERE c_id = $course_id GROUP BY file_id";
     $result = Database::query($sql);
-    $return = array();
+    $return = [];
     while ($row = Database::fetch_array($result)) {
         $return[$row['file_id']] = $row['total'];
     }

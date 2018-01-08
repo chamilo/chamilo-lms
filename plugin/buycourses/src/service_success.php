@@ -133,7 +133,6 @@ if ($form->validate()) {
                     $purchaseStatus = $plugin->get_lang('PendingReasonByVerify');
                     break;
                 case 'other':
-                    //no break
                 default:
                     $purchaseStatus = $plugin->get_lang('PendingReasonByOther');
                     break;
@@ -166,10 +165,10 @@ if (empty($token)) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => "service_catalog.php",
     "name" => $plugin->get_lang('ListOfServicesOnSale'),
-);
+];
 
 $templateName = $plugin->get_lang('PaymentMethods');
 $tpl = new Template($templateName);

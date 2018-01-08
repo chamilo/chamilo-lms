@@ -21,7 +21,7 @@ class CategoryAdmin extends Admin
     {
         $listMapper
             //->add('headline', null, array('identifier' => true))
-            ->add('name', null, array('identifier' => true))
+            ->add('name', null, ['identifier' => true])
             ->add('email')
         ;
     }
@@ -48,4 +48,3 @@ class CategoryAdmin extends Admin
         ;
     }
 }
-

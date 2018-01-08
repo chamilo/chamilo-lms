@@ -41,13 +41,13 @@ function getUsersInCourseIds($status)
     return Database::select(
         'login_user_id',
         $table.$joinStatement,
-        array(
-            'where' => array(
-                'c_id IS NOT NULL AND status = ?' => array(
+        [
+            'where' => [
+                'c_id IS NOT NULL AND status = ?' => [
                     $status
-                )
-            )
-        )
+                ]
+            ]
+        ]
     );
 }
 
@@ -76,32 +76,32 @@ function updateUsersInCourseIdleForTimeLimit($users)
         $logResult = Database::select(
             'course_access_id, logout_course_date',
             $table,
-            array(
-                'where' => array(
-                    'user_id = ?' => array(
+            [
+                'where' => [
+                    'user_id = ?' => [
                         $value,
-                    )
-                ),
+                    ]
+                ],
                 'order' => 'course_access_id DESC',
                 'limit' => '1'
-            )
+            ]
         );
         $currentTeacherData = array_shift($logResult);
         Database::update(
             $table,
-            array(
+            [
                 'logout_course_date' => date(
                     'Y-m-d H:i:s',
                     strtotime($currentTeacherData['logout_course_date'].' '.$extraTime)
                 )
-            ),
-            array(
-                'user_id = ? AND logout_course_date < ? AND course_access_id = ?' => array(
+            ],
+            [
+                'user_id = ? AND logout_course_date < ? AND course_access_id = ?' => [
                     $value,
                     $maximumIdleTimeInCourse,
                     $currentTeacherData['course_access_id']
-                )
-            )
+                ]
+            ]
         );
 
         /*

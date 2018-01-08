@@ -75,11 +75,11 @@ class Kannelsms implements SmsPluginLibraryInterface
     {
         $trimmedKey = trim(CONFIG_SECURITY_API_KEY);
         if (!empty($trimmedKey)) {
-            $message = array(
+            $message = [
                 "to" => array_key_exists("mobilePhoneNumber", $additionalParameters) ?
                     $additionalParameters['mobilePhoneNumber'] : $this->getMobilePhoneNumberById($additionalParameters['userId']),
                 "message" => $this->getSms($additionalParameters)
-            );
+            ];
 
             if (!empty($message['message'])) {
                 if (extension_loaded('curl')) {
@@ -98,7 +98,6 @@ class Kannelsms implements SmsPluginLibraryInterface
                     echo "Message failed - Error: " . $result["error_message"];
                 }*/
             }
-
         }
     }
 
@@ -116,9 +115,9 @@ class Kannelsms implements SmsPluginLibraryInterface
         $result = Database::select(
             'selected_value',
             'settings_current',
-            array(
-                'where'=> array('variable = ?' => array('kannelsms_message'.$messageKey))
-            )
+            [
+                'where'=> ['variable = ?' => ['kannelsms_message'.$messageKey]]
+            ]
         );
 
         if (empty($result)) {
@@ -162,11 +161,11 @@ class Kannelsms implements SmsPluginLibraryInterface
                     $tpl,
                     'welcome_login_password.tpl',
                     'WelcomeXLoginXPasswordX',
-                    array(
+                    [
                         api_get_setting('siteName'),
                         $userInfo['username'],
                         $additionalParameters['password']
-                    )
+                    ]
                 );
                 break;
             case SmsPlugin::NEW_FILE_SHARED_COURSE_BY:
@@ -175,11 +174,11 @@ class Kannelsms implements SmsPluginLibraryInterface
                     $tpl,
                     'new_file_shared_course_by.tpl',
                     'XNewFileSharedCourseXByX',
-                    array(
+                    [
                         api_get_setting('siteName'),
                         $additionalParameters['courseTitle'],
                         $additionalParameters['userUsername']
-                    )
+                    ]
                 );
                 break;
             case SmsPlugin::ACCOUNT_APPROVED_CONNECT:
@@ -188,10 +187,10 @@ class Kannelsms implements SmsPluginLibraryInterface
                     $tpl,
                     'account_approved_connect.tpl',
                     'XAccountApprovedConnectX',
-                    array(
+                    [
                         api_get_setting('siteName'),
                         $tpl->params['_p']['web']
-                    )
+                    ]
                 );
                 break;
             case SmsPlugin::NEW_COURSE_BEEN_CREATED:
@@ -200,11 +199,11 @@ class Kannelsms implements SmsPluginLibraryInterface
                     $tpl,
                     'new_course_been_created.tpl',
                     'XNewCourseXBeenCreatedX',
-                    array(
+                    [
                         api_get_setting('siteName'),
                         $additionalParameters['courseName'],
                         $additionalParameters['creatorUsername']
-                    )
+                    ]
                 );
                 break;
             case SmsPlugin::NEW_USER_SUBSCRIBED_COURSE:
@@ -213,11 +212,11 @@ class Kannelsms implements SmsPluginLibraryInterface
                     $tpl,
                     'new_user_subscribed_course.tpl',
                     'XNewUserXSubscribedCourseX',
-                    array(
+                    [
                         api_get_setting('siteName'),
                         $additionalParameters['userUsername'],
                         $additionalParameters['courseCode']
-                    )
+                    ]
                 );
                 break;
             case SmsPlugin::NEW_COURSE_SUGGESTED_TEACHER:
@@ -226,10 +225,10 @@ class Kannelsms implements SmsPluginLibraryInterface
                     $tpl,
                     'new_course_suggested_teacher.tpl',
                     'XNewCourseSuggestedTeacherX',
-                    array(
+                    [
                         api_get_setting('siteName'),
                         $additionalParameters['userUsername']
-                    )
+                    ]
                 );
                 break;
             case SmsPlugin::COURSE_OPENING_REQUEST_CODE_REGISTERED:
@@ -238,10 +237,10 @@ class Kannelsms implements SmsPluginLibraryInterface
                     $tpl,
                     'course_opening_request_code_registered.tpl',
                     'XCourseOpeningRequestCodeXRegistered',
-                    array(
+                    [
                         api_get_setting('siteName'),
                         $additionalParameters['courseCode']
-                    )
+                    ]
                 );
                 break;
             case SmsPlugin::COURSE_OPENING_REQUEST_CODE_APPROVED:
@@ -250,10 +249,10 @@ class Kannelsms implements SmsPluginLibraryInterface
                     $tpl,
                     'course_opening_request_course_code_approved.tpl',
                     'XCourseOpeningRequestCourseCodeXApproved',
-                    array(
+                    [
                         api_get_setting('siteName'),
                         $additionalParameters['courseCode']
-                    )
+                    ]
                 );
                 break;
             case SmsPlugin::COURSE_OPENING_REQUEST_CODE_REJECTED:
@@ -262,10 +261,10 @@ class Kannelsms implements SmsPluginLibraryInterface
                     $tpl,
                     'request_open_course_code_rejected.tpl',
                     'XRequestOpenCourseCodeXReject',
-                    array(
+                    [
                         api_get_setting('siteName'),
                         $additionalParameters['courseCode']
-                    )
+                    ]
                 );
                 break;
             case SmsPlugin::COURSE_OPENING_REQUEST_CODE:
@@ -274,10 +273,10 @@ class Kannelsms implements SmsPluginLibraryInterface
                     $tpl,
                     'course_opening_request_course_code.tpl',
                     'XCourseOpeningRequestCourseCodeX',
-                    array(
+                    [
                         api_get_setting('siteName'),
                         $additionalParameters['courseCode']
-                    )
+                    ]
                 );
                 break;
             case SmsPlugin::BEEN_SUBSCRIBED_COURSE:
@@ -286,10 +285,10 @@ class Kannelsms implements SmsPluginLibraryInterface
                     $tpl,
                     'been_subscribed_course.tpl',
                     'XBeenSubscribedCourseX',
-                    array(
+                    [
                         api_get_setting('siteName'),
                         $additionalParameters['courseTitle']
-                    )
+                    ]
                 );
                 break;
             case SmsPlugin::ASSIGNMENT_BEEN_CREATED_COURSE:
@@ -298,10 +297,10 @@ class Kannelsms implements SmsPluginLibraryInterface
                     $tpl,
                     'assignment_been_created_course.tpl',
                     'XAssignmentBeenCreatedCourseX',
-                    array(
+                    [
                         api_get_setting('siteName'),
                         $additionalParameters['courseTitle']
-                    )
+                    ]
                 );
                 break;
             // Message types to be implemented. Fill the array parameter with arguments.

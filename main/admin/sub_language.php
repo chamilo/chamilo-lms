@@ -61,8 +61,8 @@ $htmlHeadXtra[] = '<script>
 // setting the name of the tool
 $tool_name = get_lang('CreateSubLanguage');
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'languages.php', 'name' => get_lang('PlatformLanguages'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'languages.php', 'name' => get_lang('PlatformLanguages')];
 
 $sublanguage_folder_error = false;
 
@@ -146,7 +146,7 @@ function search_language_term(
     global $language_files_to_load, $sub_language_array, $english_language_array, $parent_language_array;
     $language_files_to_load_keys = array_flip($language_files_to_load);
     $array_to_search = $parent_language_array;
-    $list_info = array();
+    $list_info = [];
     $term = '/'.Security::remove_XSS(trim($_REQUEST['txt_search_word'])).'/i';
     //@todo optimize this foreach
     foreach ($language_files_to_load as $lang_file) {
@@ -179,14 +179,14 @@ function search_language_term(
                     $obj_text = '<textarea rows="10" cols="40" name="txt|'.$parent_name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="txtid_'.$language_files_to_load_keys[$lang_file].'_'.$parent_name_variable.'" >'.$sub_language_name_variable.'</textarea>';
                     $obj_button = '<button class="save" type="button" name="btn|'.$parent_name_variable.'|'.$language_files_to_load_keys[$lang_file].'" id="btnid_'.$parent_name_variable.'"  />'.get_lang('Save').'</button>';
 
-                    $list_info[] = array(
+                    $list_info[] = [
                         $lang_file.'.inc.php',
                         $parent_name_variable,
                         $english_name_variable,
                         $parent_variable_value,
                         $obj_text,
                         $obj_button
-                    );
+                    ];
                 }
             }
         }
@@ -239,14 +239,14 @@ function search_language_term(
                     //loading variable from the english array
                     $english_name_variable = $english_language_array[$lang_file][$name_variable];
 
-                    $list_info[] = array(
+                    $list_info[] = [
                         $lang_file.'.inc.php',
                         $name_variable,
                         $english_name_variable,
                         $parent_variable_value,
                         $obj_text,
                         $obj_button
-                    );
+                    ];
                 }
             }
         }
@@ -278,10 +278,10 @@ function search_language_term(
 
                     //loading variable from the english array
                     $english_name_variable = $english_language_array[$lang_file][$name_variable];
-                    $list_info[] = array($lang_file.'.inc.php',
+                    $list_info[] = [$lang_file.'.inc.php',
                         $name_variable,
                         $english_name_variable,
-                        $parent_variable_value, $obj_text, $obj_button);
+                        $parent_variable_value, $obj_text, $obj_button];
                 }
             }
         }
@@ -292,7 +292,7 @@ function search_language_term(
 }
 
 // Allow see data in sort table
-$list_info = array();
+$list_info = [];
 if (isset($_REQUEST['txt_search_word'])) {
     //@todo fix to accept a char with 1 char
     if (strlen(trim($_REQUEST['txt_search_word'])) > 2) {
@@ -306,11 +306,11 @@ if (isset($_REQUEST['txt_search_word'])) {
     }
 }
 
-$parameters = array(
+$parameters = [
     'id' => intval($_GET['id']),
     'sub_language_id' => intval($_GET['sub_language_id']),
     'txt_search_word' => $txt_search_word
-);
+];
 $table = new SortableTableFromArrayConfig($list_info, 1, 20, 'data_info');
 $table->set_additional_parameters($parameters);
 $table->set_header(0, get_lang('LanguageFile'));

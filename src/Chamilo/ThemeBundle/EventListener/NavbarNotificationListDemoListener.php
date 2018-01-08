@@ -21,9 +21,9 @@ class NavbarNotificationListDemoListener
 
     protected function getNotifications()
     {
-        return array(
+        return [
             new NotificationModel('some notification'),
             new NotificationModel('some more notices', 'success'),
-        );
+        ];
     }
 }

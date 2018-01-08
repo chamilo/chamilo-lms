@@ -19,11 +19,10 @@
  */
 class BlockDaily extends Block
 {
-
     private $user_id;
     private $courses;
     private $path;
-    private $permission = array(DRH);
+    private $permission = [DRH];
 
     /**
      * Constructor
@@ -68,7 +67,7 @@ class BlockDaily extends Block
     {
         global $charset;
         $column = 2;
-        $data = array();
+        $data = [];
         $content = $this->get_content_html();
         $html = '<div class="panel panel-default" id="intro">
 		                <div class="panel-heading">' . get_lang('GradebookAndAttendances').'
@@ -144,7 +143,7 @@ class BlockDaily extends Block
      * Get number of courses
      * @return int
      */
-    function get_number_of_courses()
+    public function get_number_of_courses()
     {
         return count($this->courses);
     }
@@ -153,10 +152,10 @@ class BlockDaily extends Block
      * Get course information data
      * @return array
      */
-    function get_course_information_data()
+    public function get_course_information_data()
     {
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $course_data = array();
+        $course_data = [];
         $courses = $this->courses;
 
         foreach ($courses as $row_course) {
@@ -174,8 +173,8 @@ class BlockDaily extends Block
             $sql = "SELECT id, name, attendance_qualify_max FROM $table_course
                     WHERE c_id = ".$course_info['real_id']." AND active = 1 AND session_id = 0";
             $rs = Database::query($sql);
-            $attendance = array();
-            $attendances = array();
+            $attendance = [];
+            $attendances = [];
 
             while ($row = Database::fetch_array($rs, 'ASSOC')) {
                 $attendance['done'] = $row['attendance_qualify_max'];
@@ -198,7 +197,7 @@ class BlockDaily extends Block
             $sql = "SELECT user_id FROM $tbl_course_user as course_rel_user
                     WHERE course_rel_user.status=".STUDENT." AND course_rel_user.c_id=$courseId";
             $rs = Database::query($sql);
-            $users = array();
+            $users = [];
             while ($row = Database::fetch_array($rs)) {
                 $users[] = $row['user_id'];
             }
@@ -247,7 +246,7 @@ class BlockDaily extends Block
                 $score = get_lang("NotAvailable");
             }
 
-            $table_row = array();
+            $table_row = [];
             $table_row[] = $row_course['title'];
             $table_row[] = $nb_students_in_course;
             $table_row[] = $score;

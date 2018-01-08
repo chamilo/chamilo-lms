@@ -16,7 +16,7 @@ class MessageListEvent extends ThemeEvent
      * Stores the list of messages
      * @var array
      */
-    protected $messages = array();
+    protected $messages = [];
 
     /**
      * Stores the total amount
@@ -43,7 +43,6 @@ class MessageListEvent extends ThemeEvent
      */
     public function addMessage(MessageInterface $messageInterface)
     {
-
         $this->messages[] = $messageInterface;
 
         return $this;

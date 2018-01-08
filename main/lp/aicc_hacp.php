@@ -70,15 +70,15 @@ if (!is_object($oItem)) {
 }
 $autocomplete_when_80pct = 0;
 
-$result = array(
-    'core' => array(),
-    'core_lesson' => array(),
-    'core_vendor' => array(),
-    'evaluation' => array(),
-    'student_data' => array(),
-);
-$convert_enc = array('%25', '%0D', '%0A', '%09', '%20', '%2D', '%2F', '%3B', '%3F', '%7B', '%7D', '%7C', '%5C', '%5E', '%7E', '%5B', '%5D', '%60', '%23', '%3E', '%3C', '%22');
-$convert_dec = array('%', "\r", "\n", "\t", ' ', '-', '/', ';', '?', '{', '}', '|', '\\', '^', '~', '[', ']', '`', '#', '>', '<', '"');
+$result = [
+    'core' => [],
+    'core_lesson' => [],
+    'core_vendor' => [],
+    'evaluation' => [],
+    'student_data' => [],
+];
+$convert_enc = ['%25', '%0D', '%0A', '%09', '%20', '%2D', '%2F', '%3B', '%3F', '%7B', '%7D', '%7C', '%5C', '%5E', '%7E', '%5B', '%5D', '%60', '%23', '%3E', '%3C', '%22'];
+$convert_dec = ['%', "\r", "\n", "\t", ' ', '-', '/', ';', '?', '{', '}', '|', '\\', '^', '~', '[', ']', '`', '#', '>', '<', '"'];
 $crlf = "\r\n";
 //$tab = "\t";
 $tab = "";
@@ -86,7 +86,7 @@ $s_ec = 'error='; //string for error code
 $s_et = 'error_text='; //string for error text
 $s_ad = 'aicc_data='; //string for aicc_data
 
-$errors = array(0 => 'Successful', 1 => 'Invalid Command', 2 => 'Invalid AU password', 3 => 'Invalid Session ID');
+$errors = [0 => 'Successful', 1 => 'Invalid Command', 2 => 'Invalid AU password', 3 => 'Invalid Session ID'];
 
 $error_code = 0;
 $error_text = '';
@@ -159,7 +159,7 @@ if (!empty($_REQUEST['command'])) {
             //error_log('In '.__FILE__.', '.__LINE__.' - aicc data is '.$hacp_aicc_data, 0);
             // Treat the incoming request:
             $aicc = new aicc();
-            $msg_array = $aicc->parse_ini_string_quotes_safe($hacp_aicc_data, array('core_lesson', 'core_vendor'));
+            $msg_array = $aicc->parse_ini_string_quotes_safe($hacp_aicc_data, ['core_lesson', 'core_vendor']);
             //error_log('Message is now in this form: '.print_r($msg_array, true), 0);
             foreach ($msg_array as $key => $dummy) {
                 switch (strtolower($key)) {

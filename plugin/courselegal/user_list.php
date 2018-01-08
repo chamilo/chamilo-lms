@@ -39,7 +39,7 @@ switch ($action) {
 
 $order = " ORDER BY firstname, lastname";
 $userList = $legal->getUserAgreementList($courseId, $sessionId, $order);
-$table = new HTML_Table(array('class' => 'data_table'));
+$table = new HTML_Table(['class' => 'data_table']);
 $table->setHeaderContents(0, 0, get_lang('User'));
 $table->setHeaderContents(0, 1, $legal->get_lang('WebAgreement'));
 $table->setHeaderContents(0, 2, $legal->get_lang('MailAgreement'));
@@ -73,7 +73,7 @@ if (!empty($userList)) {
 }
 $url = $pluginPath.'start.php?'.api_get_cidreq();
 
-$interbreadcrumb[] = array("url" => $url, "name" => $legal->get_lang('CourseLegal'));
+$interbreadcrumb[] = ["url" => $url, "name" => $legal->get_lang('CourseLegal')];
 Display::display_header($legal->get_lang('UserList'));
 
 $table->display();

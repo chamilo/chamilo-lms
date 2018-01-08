@@ -16,7 +16,7 @@ class SidebarMenuEvent extends ThemeEvent
     /**
      * @var array
      */
-    protected $menuRootItems = array();
+    protected $menuRootItems = [];
 
     /**
      * @var Request
@@ -68,7 +68,6 @@ class SidebarMenuEvent extends ThemeEvent
      */
     public function getActive()
     {
-
         foreach ($this->getItems() as $item) {
             /** @var $item MenuItemInterface */
             if ($item->isActive()) {

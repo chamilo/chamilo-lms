@@ -22,8 +22,8 @@ Session::erase('this_section');
 
 $table = new SortableTable(
     'TicketProject',
-    array('TicketManager', 'getStatusCount'),
-    array('TicketManager', 'getStatusAdminList'),
+    ['TicketManager', 'getStatusCount'],
+    ['TicketManager', 'getStatusAdminList'],
     1
 );
 
@@ -35,14 +35,14 @@ $formToString = '';
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
     'name' => get_lang('MyTickets')
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/settings.php',
     'name' => get_lang('Settings')
-);
+];
 
 switch ($action) {
     case 'delete':
@@ -59,10 +59,10 @@ switch ($action) {
         break;
     case 'add':
         $toolName = get_lang('Add');
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'ticket/status.php',
             'name' => get_lang('Status')
-        );
+        ];
         $url = api_get_self().'?action=add';
         $form = TicketManager::getStatusForm($url);
         $formToString = $form->returnForm();
@@ -82,10 +82,10 @@ switch ($action) {
         break;
     case 'edit':
         $toolName = get_lang('Edit');
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'ticket/status.php',
             'name' => get_lang('Status')
-        );
+        ];
         $url = api_get_self().'?action=edit&id='.$id;
         $form = TicketManager::getStatusForm($url);
 
@@ -144,7 +144,7 @@ function modify_filter($id, $params, $row)
 
 $table->set_header(0, '', false);
 $table->set_header(1, get_lang('Title'), false);
-$table->set_header(2, get_lang('Description'), true, array("style" => "width:200px"));
+$table->set_header(2, get_lang('Description'), true, ["style" => "width:200px"]);
 $table->set_header(3, get_lang('Actions'), true);
 $table->set_column_filter('3', 'modify_filter');
 

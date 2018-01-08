@@ -57,7 +57,7 @@ if (isset($_GET['action']) &&
 $thread_structure = "<div class=\"structure\">".get_lang('Structure')."</div>";
 $counter = 0;
 $count = 0;
-$prev_next_array = array();
+$prev_next_array = [];
 
 $forumId  = intval($_GET['forum']);
 $threadId = intval($_GET['thread']);
@@ -118,22 +118,22 @@ $prev_message = get_lang('PrevMessage');
 $first_img = Display::return_icon(
     'action_first.png',
     get_lang('FirstMessage'),
-    array('style' => 'vertical-align: middle;')
+    ['style' => 'vertical-align: middle;']
 );
 $last_img = Display::return_icon(
     'action_last.png',
     get_lang('LastMessage'),
-    array('style' => 'vertical-align: middle;')
+    ['style' => 'vertical-align: middle;']
 );
 $prev_img = Display::return_icon(
     'action_prev.png',
     get_lang('PrevMessage'),
-    array('style' => 'vertical-align: middle;')
+    ['style' => 'vertical-align: middle;']
 );
 $next_img = Display::return_icon(
     'action_next.png',
     get_lang('NextMessage'),
-    array('style' => 'vertical-align: middle;')
+    ['style' => 'vertical-align: middle;']
 );
 
 $class_prev = '';
@@ -222,7 +222,8 @@ $groupInfo = GroupManager::get_group_properties($groupId);
 
 // The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum
 // The course admin him/herself can do this off course always
-if ((isset($groupInfo['iid']) &&
+if ((
+    isset($groupInfo['iid']) &&
         GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo)
     ) || (
         $current_forum['allow_edit'] == 1 &&
@@ -242,7 +243,7 @@ if ((isset($groupInfo['iid']) &&
             Display::return_icon(
                 'edit.png',
                 get_lang('Edit'),
-                array(),
+                [],
                 ICON_SIZE_SMALL
             ).'</a>';
     }
@@ -251,7 +252,7 @@ if ((isset($groupInfo['iid']) &&
 
 // Verified the post minor
 $my_post = getPosts($current_forum, $_GET['thread']);
-$id_posts = array();
+$id_posts = [];
 
 if (!empty($my_post) && is_array($my_post)) {
     foreach ($my_post as $post_value) {
@@ -263,7 +264,8 @@ if (!empty($my_post) && is_array($my_post)) {
     $post_minor = (int) $id_posts[0];
 }
 
-if ((isset($groupInfo['iid']) &&
+if ((
+    isset($groupInfo['iid']) &&
         GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo)
     ) ||
     api_is_allowed_to_edit(false, true) &&
@@ -279,7 +281,7 @@ if ((isset($groupInfo['iid']) &&
             "')) return false;\">".Display::return_icon(
                 'delete.png',
                 get_lang('Delete'),
-                array(),
+                [],
                 ICON_SIZE_SMALL
             )."</a>";
     }
@@ -287,11 +289,11 @@ if ((isset($groupInfo['iid']) &&
         'post',
         $rows[$display_post_id]['post_id'],
         $rows[$display_post_id]['visible'],
-        array(
+        [
             'forum' => $forumId,
             'thread' => $threadId,
             'post' => Security::remove_XSS($_GET['post'])
-        )
+        ]
     );
 
     if (!isset($_GET['id']) && $post_id > $post_minor) {
@@ -302,10 +304,9 @@ if ((isset($groupInfo['iid']) &&
             Display::return_icon(
                 'move.png',
                 get_lang('MovePost'),
-                array(),
+                [],
                 ICON_SIZE_SMALL
             )."</a>";
-
     }
 }
 
@@ -426,8 +427,11 @@ if (!empty($attachment_list) && is_array($attachment_list)) {
                 api_get_cidreq().'&action=delete_attach&id_attach='.$attachment['id'].'&forum='.$forumId.
                 '&thread='.$threadId.
                 '" onclick="javascript:if(!confirm(\''.
-                addslashes(api_htmlentities(
-                    get_lang('ConfirmYourChoice'), ENT_QUOTES)
+                addslashes(
+                    api_htmlentities(
+                    get_lang('ConfirmYourChoice'),
+                    ENT_QUOTES
+                )
                 ).'\')) return false;">'.Display::return_icon(
                     'delete.gif',
                     get_lang('Delete')

@@ -71,7 +71,8 @@ require 'ldap_var.inc.php';
  *    @author Roan Embrechts (based on code from Universit� Jean Monet)
  */
 
-function ldap_login($login, $password) {
+function ldap_login($login, $password)
+{
     //error_log('Entering ldap_login('.$login.','.$password.')',0);
     $res = ldap_authentication_check($login, $password);
 
@@ -80,7 +81,12 @@ function ldap_login($login, $password) {
 
     if ($res == 1) { //WRONG PASSWORD
         //$errorMessage = "LDAP User or password incorrect, try again.<br />";
-        if (isset($log)) unset($log); if (isset($uid)) unset($uid);
+        if (isset($log)) {
+            unset($log);
+        }
+        if (isset($uid)) {
+            unset($uid);
+        }
         $loginLdapSucces = false;
     }
     if ($res == -1) { //WRONG USERNAME
@@ -103,7 +109,8 @@ function ldap_login($login, $password) {
  *    @author Stefan De Wannemacker
  *    @author Roan Embrechts
  */
-function ldap_find_user_info($login) {
+function ldap_find_user_info($login)
+{
     //error_log('Entering ldap_find_user_info('.$login.')',0);
     global $ldap_host, $ldap_port, $ldap_basedn, $ldap_rdn, $ldap_pass, $ldap_search_dn;
     // basic sequence with LDAP is connect, bind, search,
@@ -154,7 +161,8 @@ function ldap_find_user_info($login) {
 *    "firstname", "name", "email", "isEmployee"
 *    @author Roan Embrechts
 */
-function ldap_put_user_info_locally($login, $info_array) {
+function ldap_put_user_info_locally($login, $info_array)
+{
     //error_log('Entering ldap_put_user_info_locally('.$login.',info_array)',0);
     global $ldap_pass_placeholder;
     global $submitRegistration, $submit, $uname, $email,
@@ -205,7 +213,9 @@ function ldap_put_user_info_locally($login, $info_array) {
     ------------------------------------------------------------ */
 
     $language = api_get_setting('platformLanguage');
-    if (empty($language)) { $language = 'english'; }
+    if (empty($language)) {
+        $language = 'english';
+    }
     $_userId = UserManager::create_user(
         $prenom,
         $nom,
@@ -252,7 +262,8 @@ function ldap_put_user_info_locally($login, $info_array) {
  * @param string password given by user
  * @return int 0 if authentication succeeded, 1 if password was incorrect, -1 if it didn't belong to LDAP
  */
-function ldap_authentication_check($uname, $passwd) {
+function ldap_authentication_check($uname, $passwd)
+{
     //error_log('Entering ldap_authentication_check('.$uname.','.$passwd.')',0);
     global $ldap_host, $ldap_port, $ldap_basedn, $ldap_host2, $ldap_port2, $ldap_rdn, $ldap_pass;
     //error_log('Entering ldap_authentication_check('.$uname.','.$passwd.')',0);
@@ -275,7 +286,7 @@ function ldap_authentication_check($uname, $passwd) {
         // Open anonymous LDAP connection
         $result = false;
         $ldap_bind_res = ldap_handle_bind($ds, $result);
-	// Executing the search with the $filter parametr
+        // Executing the search with the $filter parametr
         //error_log('Searching for '.$filter.' on LDAP server',0);
         $sr = ldap_search($ds, $ldap_basedn, $filter);
         $info = ldap_get_entries($ds, $sr);
@@ -312,7 +323,8 @@ function ldap_authentication_check($uname, $passwd) {
  * @param    resource    resource LDAP connexion resource, passed by reference.
  * @return    void
  */
-function ldap_set_version(&$resource) {
+function ldap_set_version(&$resource)
+{
     //error_log('Entering ldap_set_version(&$resource)',0);
     global $ldap_version;
     if ($ldap_version > 2) {
@@ -328,7 +340,8 @@ function ldap_set_version(&$resource) {
  * @param boolean $ldap_bind
  * @return    boolean        Status of the bind assignment. True for success, false for failure.
  */
-function ldap_handle_bind(&$ldap_handler, &$ldap_bind) {
+function ldap_handle_bind(&$ldap_handler, &$ldap_bind)
+{
     //error_log('Entering ldap_handle_bind(&$ldap_handler,&$ldap_bind)',0);
     global $ldap_rdn, $ldap_pass, $extldap_config;
     $ldap_rdn = $extldap_config['admin_dn'];
@@ -357,8 +370,8 @@ function ldap_handle_bind(&$ldap_handler, &$ldap_bind) {
  * @see SortableTable#get_total_number_of_items()
  * @author    Mustapha Alouani
  */
-function ldap_get_users() {
-
+function ldap_get_users()
+{
     global $ldap_basedn, $ldap_host, $ldap_port, $ldap_rdn, $ldap_pass, $ldap_search_dn, $extldap_user_correspondance;
 
     $keyword_firstname = isset($_GET['keyword_firstname']) ? trim(Database::escape_string($_GET['keyword_firstname'])) : '';
@@ -366,7 +379,7 @@ function ldap_get_users() {
     $keyword_username = isset($_GET['keyword_username']) ? trim(Database::escape_string($_GET['keyword_username'])) : '';
     $keyword_type = isset($_GET['keyword_type']) ? Database::escape_string($_GET['keyword_type']) : '';
 
-    $ldap_query = array();
+    $ldap_query = [];
 
     if ($keyword_username != "") {
         $ldap_query[] = str_replace('%username%', $keyword_username, $ldap_search_dn);
@@ -402,11 +415,11 @@ function ldap_get_users() {
         //echo "Le nombre de resultats est : ".ldap_count_entries($ds,$sr)."<p>";
         $info = ldap_get_entries($ds, $sr);
         return $info;
-
     } else {
-        if (count($ldap_query) != 0)
+        if (count($ldap_query) != 0) {
             echo Display::return_message(get_lang('LDAPConnectionError'), 'error');
-        return array();
+        }
+        return [];
     }
 }
 
@@ -415,7 +428,8 @@ function ldap_get_users() {
  * @see SortableTable#get_total_number_of_items()
  * @author    Mustapha Alouani
  */
-function ldap_get_number_of_users() {
+function ldap_get_number_of_users()
+{
     $info = ldap_get_users();
     if (count($info) > 0) {
         return $info['count'];
@@ -429,17 +443,17 @@ function ldap_get_number_of_users() {
  * @see SortableTable#get_table_data($from)
  * @author    Mustapha Alouani
  */
-function ldap_get_user_data($from, $number_of_items, $column, $direction) {
-
+function ldap_get_user_data($from, $number_of_items, $column, $direction)
+{
     global $extldap_user_correspondance;
 
-    $users = array();
+    $users = [];
     $is_western_name_order = api_is_western_name_order();
     if (isset($_GET['submit'])) {
         $info = ldap_get_users();
         if ($info['count'] > 0) {
             for ($key = 0; $key < $info["count"]; $key++) {
-                $user = array();
+                $user = [];
                 // Get uid from dn
                 //YW: this might be a variation between LDAP 2 and LDAP 3, but in LDAP 3, the uid is in
                 //the corresponding index of the array
@@ -473,7 +487,8 @@ function ldap_get_user_data($from, $number_of_items, $column, $direction) {
  * @return string Some HTML-code with modify-buttons
  * @author    Mustapha Alouani
  */
-function modify_filter($user_id, $url_params, $row) {
+function modify_filter($user_id, $url_params, $row)
+{
     $query_string = "id[]=".$row[0];
     if (!empty($_GET['id_session'])) {
         $query_string .= '&amp;id_session='.Security::remove_XSS($_GET['id_session']);
@@ -494,14 +509,15 @@ function modify_filter($user_id, $url_params, $row) {
  * @param    string    username (and uid inside LDAP)
  * @author    Mustapha Alouani
  */
-function ldap_add_user($login) {
+function ldap_add_user($login)
+{
     if ($ldap_user = extldap_authenticate($login, 'nopass', true)) {
         return extldap_add_user_by_array($ldap_user);
     }
 }
 
-function ldap_add_user_by_array($data, $update_if_exists = true) {
-
+function ldap_add_user_by_array($data, $update_if_exists = true)
+{
     $lastname = api_convert_encoding($data['sn'][0], api_get_system_encoding(), 'UTF-8');
     $firstname = api_convert_encoding($data['cn'][0], api_get_system_encoding(), 'UTF-8');
     $email = $data['mail'][0];
@@ -526,9 +542,15 @@ function ldap_add_user_by_array($data, $update_if_exists = true) {
     // No expiration date for students (recover from LDAP's shadow expiry)
     $expiration_date = '';
     $active = 1;
-    if (empty($status)) {$status = 5; }
-    if (empty($phone)) {$phone = ''; }
-    if (empty($picture_uri)) {$picture_uri = ''; }
+    if (empty($status)) {
+        $status = 5;
+    }
+    if (empty($phone)) {
+        $phone = '';
+    }
+    if (empty($picture_uri)) {
+        $picture_uri = '';
+    }
     // Adding user
     $user_id = 0;
     if (UserManager::is_username_available($username)) {
@@ -577,7 +599,8 @@ function ldap_add_user_by_array($data, $update_if_exists = true) {
  * @param    string    Course code
  * @return    void
  */
-function ldap_add_user_to_session($UserList, $id_session) {
+function ldap_add_user_to_session($UserList, $id_session)
+{
 
     // Database Table Definitions
     $tbl_session                        = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -593,7 +616,7 @@ function ldap_add_user_to_session($UserList, $id_session) {
     $id_session = (int) $id_session;
     // Once users are imported in the users base, we can assign them to the session
     $result = Database::query("SELECT c_id FROM $tbl_session_rel_course WHERE session_id ='$id_session'");
-    $CourseList = array();
+    $CourseList = [];
     while ($row = Database::fetch_array($result)) {
         $CourseList[] = $row['c_id'];
     }
@@ -719,7 +742,7 @@ function syncro_users(
                                 if ($debug) {
                                     error_log('Student '.$row['username'].' removed from Chamilo');
                                 }
-                            } else if ($deleteTeachers === true && $row['status'] == 1) {
+                            } elseif ($deleteTeachers === true && $row['status'] == 1) {
                                 UserManager::delete_user($usersDBShortList[$row['username']]);
                                 if ($debug) {
                                     error_log('Teacher '.$row['username'].' removed from Chamilo');
@@ -731,7 +754,6 @@ function syncro_users(
                                 }
                             }
                         }
-
                     }
                 }
             }

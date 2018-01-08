@@ -25,27 +25,27 @@ if (!$object->allowed()) {
 $sessionUrl = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId;
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => "session_list.php",
     "name" => get_lang('SessionList')
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => $sessionUrl,
     "name" => get_lang('SessionOverview')
-);
+];
 
 if ($action == 'add') {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_self()."?session_id=".$sessionId,
         "name" => get_lang('ScheduledAnnouncements')
-    );
+    ];
     $tool_name = get_lang('Add');
 } elseif ($action == 'edit') {
     $tool_name = get_lang('Edit');
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_self()."?session_id=".$sessionId,
         "name" => get_lang('ScheduledAnnouncements')
-    );
+    ];
 } else {
     $tool_name = get_lang('ScheduledAnnouncements');
 }
@@ -160,34 +160,34 @@ $columns = [
 ];
 
 $columnModel = [
-    array(
+    [
         'name' => 'subject',
         'index' => 'subject',
         'width' => '250',
         'align' => 'left',
-    ),
-    array(
+    ],
+    [
         'name' => 'date',
         'index' => 'date',
         //'width' => '90',
         //'align' => 'left',
         'sortable' => 'true',
-    ),
-    array(
+    ],
+    [
         'name' => 'sent',
         'index' => 'sent',
         //'width' => '90',
         //'align' => 'left',
         'sortable' => 'true',
-    ),
-    array(
+    ],
+    [
         'name' => 'actions',
         'index' => 'actions',
         'width' => '100',
         'align' => 'left',
         'formatter' => 'action_formatter',
         'sortable' => 'false',
-    )
+    ]
 ];
 
 $actionLinks = 'function action_formatter(cellvalue, options, rowObject) {
@@ -208,7 +208,7 @@ $(function() {
         $columns,
         $columnModel,
         $extraParams,
-        array(),
+        [],
         $actionLinks,
         true
     ).'

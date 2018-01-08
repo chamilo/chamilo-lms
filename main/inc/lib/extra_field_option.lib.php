@@ -9,7 +9,7 @@ use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
  */
 class ExtraFieldOption extends Model
 {
-    public $columns = array(
+    public $columns = [
         'id',
         'field_id',
         'option_value',
@@ -18,7 +18,7 @@ class ExtraFieldOption extends Model
         'priority',
         'priority_message',
         'tms'
-    );
+    ];
 
     public $extraField;
     public $fieldId;
@@ -98,7 +98,7 @@ class ExtraFieldOption extends Model
     public function getFieldOptionsToString($field_id, $add_id_in_array = false, $ordered_by = null)
     {
         $options = self::get_field_options_by_field($field_id, $add_id_in_array, $ordered_by);
-        $new_options = array();
+        $new_options = [];
         if (!empty($options)) {
             foreach ($options as $option) {
                 $new_options[] = $option['option_value'].':'.$option['display_text'];
@@ -143,12 +143,12 @@ class ExtraFieldOption extends Model
         if ($optionInfo == false) {
             $optionValue = api_replace_dangerous_char($params['option_value']);
             $order = self::get_max_order($params['field_id']);
-            $newParams = array(
+            $newParams = [
                 'field_id' => $params['field_id'],
                 'value' => trim($optionValue),
                 'display_text' => trim($params['display_text']),
                 'option_order' => $order
-            );
+            ];
 
             return parent::save($newParams, $showQuery);
         }
@@ -175,14 +175,14 @@ class ExtraFieldOption extends Model
 
         $parseOptions = in_array(
             $params['field_type'],
-            array(
+            [
                 ExtraField::FIELD_TYPE_RADIO,
                 ExtraField::FIELD_TYPE_SELECT,
                 ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
                 ExtraField::FIELD_TYPE_DOUBLE_SELECT,
                 ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD,
                 ExtraField::FIELD_TYPE_TRIPLE_SELECT
-            )
+            ]
         );
 
         if (empty($params['field_options']) || !$parseOptions) {
@@ -192,7 +192,6 @@ class ExtraFieldOption extends Model
         switch ($params['field_type']) {
             case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
                 //$params['field_options'] = France:Paris;Bretagne;Marseilles;Lyon|Belgique:Bruxelles;Namur;Liège;Bruges|Peru:Lima;Piura;
-                //no break;
             case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
                 //$params['field_options'] = Option 1|Option 2|Option 3
                 $options_parsed = ExtraField::extra_field_double_select_convert_string_to_array(
@@ -204,12 +203,12 @@ class ExtraFieldOption extends Model
                 }
 
                 foreach ($options_parsed as $key => $option) {
-                    $new_params = array(
+                    $new_params = [
                         'field_id' => $field_id,
                         'option_value' => 0,
                         'display_text' => $option['label'],
                         'option_order' => 0,
-                    );
+                    ];
                     // Looking if option already exists:
                     $option_info = self::get_field_option_by_field_id_and_option_display_text(
                         $field_id,
@@ -233,12 +232,12 @@ class ExtraFieldOption extends Model
                             continue;
                         }
 
-                        $new_params = array(
+                        $new_params = [
                             'field_id' => $field_id,
                             'option_value' => $sub_id,
                             'display_text' => $sub_option,
                             'option_order' => 0,
-                        );
+                        ];
                         $option_info = self::getFieldOptionByFieldIdAndOptionDisplayTextAndOptionValue(
                             $field_id,
                             $sub_option,
@@ -346,12 +345,12 @@ class ExtraFieldOption extends Model
 
                     $order = self::get_max_order($field_id);
 
-                    $new_params = array(
+                    $new_params = [
                         'field_id' => $field_id,
                         'option_value' => trim($optionValue),
                         'display_text' => trim($option),
                         'option_order' => $order,
-                    );
+                    ];
                     parent::save($new_params, $showQuery);
                 }
                 break;
@@ -622,7 +621,7 @@ class ExtraFieldOption extends Model
         $field = new ExtraField($this->type);
         $field_info = $field->get($field_id);
         $options = self::get_field_options_by_field($field_id, false, $ordered_by);
-        $elements = array();
+        $elements = [];
         if (!empty($options)) {
             switch ($field_info['field_type']) {
                 case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
@@ -690,13 +689,13 @@ class ExtraFieldOption extends Model
      */
     public function getPriorityOptions()
     {
-        return  array(
+        return  [
             '' => get_lang('SelectAnOption'),
             1 => get_lang('Success'),
             2 => get_lang('Info'),
             3 => get_lang('Warning'),
             4 => get_lang('Error'),
-        );
+        ];
     }
 
     /**
@@ -767,7 +766,7 @@ class ExtraFieldOption extends Model
         $form->addElement('select', 'priority', get_lang('Priority'), $this->getPriorityOptions());
         $form->addElement('textarea', 'priority_message', get_lang('PriorityOfMessage'));
 
-        $defaults = array();
+        $defaults = [];
 
         if ($action == 'edit') {
             // Setting the defaults
@@ -807,7 +806,7 @@ class ExtraFieldOption extends Model
                 LIMIT 0, $limit
                 ";
         $result = Database::query($sql);
-        $values = array();
+        $values = [];
         if (Database::num_rows($result)) {
             $values = Database::store_result($result, 'ASSOC');
         }
@@ -826,14 +825,14 @@ class ExtraFieldOption extends Model
     public function getSearchOptionsByField($tag, $field_id, $limit = 10)
     {
         $result = $this->searchByField($tag, $field_id, $limit = 10);
-        $values = array();
+        $values = [];
         $json = null;
         if (!empty($result)) {
             foreach ($result as $item) {
-                $values[] = array(
+                $values[] = [
                     'value' => $item['id'],
                     'caption' => $item['option_display_text'],
-                );
+                ];
             }
             $json = json_encode($values);
         }

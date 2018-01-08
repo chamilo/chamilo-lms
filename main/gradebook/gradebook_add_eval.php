@@ -84,9 +84,9 @@ if ($form->validate()) {
     }
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$select_cat,
-    'name' => get_lang('Gradebook'))
+    'name' => get_lang('Gradebook')]
 ;
 $this_section = SECTION_COURSES;
 

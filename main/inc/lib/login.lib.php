@@ -139,7 +139,7 @@ class Login
         $email_subject = "[".api_get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
 
         if ($by_username) {
-        // Show only for lost password
+            // Show only for lost password
             $user_account_list = self::get_user_account_list($user, true, $by_username); // BODY
             $email_to = $user['email'];
         } else {
@@ -195,27 +195,27 @@ class Login
     public static function sendResetEmail(User $user)
     {
         //if (null === $user->getConfirmationToken()) {
-            $uniqueId = api_get_unique_id();
-            $user->setConfirmationToken($uniqueId);
-            $user->setPasswordRequestedAt(new \DateTime());
+        $uniqueId = api_get_unique_id();
+        $user->setConfirmationToken($uniqueId);
+        $user->setPasswordRequestedAt(new \DateTime());
 
-            Database::getManager()->persist($user);
-            Database::getManager()->flush();
+        Database::getManager()->persist($user);
+        Database::getManager()->flush();
 
-            $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
-            $mailSubject = get_lang('ResetPasswordInstructions');
-            $mailBody = sprintf(
+        $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
+        $mailSubject = get_lang('ResetPasswordInstructions');
+        $mailBody = sprintf(
                 get_lang('ResetPasswordCommentWithUrl'),
                 $url
             );
 
-            api_mail_html(
+        api_mail_html(
                 $user->getCompleteName(),
                 $user->getEmail(),
                 $mailSubject,
                 $mailBody
             );
-            Display::addFlash(Display::return_message(get_lang('CheckYourEmailAndFollowInstructions')));
+        Display::addFlash(Display::return_message(get_lang('CheckYourEmailAndFollowInstructions')));
         //}
     }
 
@@ -369,7 +369,7 @@ class Login
      * @param type $course_id
      * @param boolean $reset
      */
-    static function init_course($course_id, $reset)
+    public static function init_course($course_id, $reset)
     {
         global $is_platformAdmin;
         global $_user;
@@ -403,7 +403,7 @@ class Login
                     $_real_cid = $course_data['id'];
 
                     $_cid = $course_data['code'];
-                    $_course = array();
+                    $_course = [];
                     $_course['real_id'] = $course_data['id'];
                     $_course['id'] = $course_data['code']; //auto-assigned integer
                     $_course['code'] = $course_data['code'];
@@ -744,7 +744,7 @@ class Login
      * @param int $group_id
      * @param bool $reset
      */
-    static function init_group($group_id, $reset)
+    public static function init_group($group_id, $reset)
     {
         global $_cid;
         global $_course;
@@ -790,7 +790,7 @@ class Login
                         }
                     }
                 }
-            //} elseif (!empty($_SESSION['studentview'])) {
+                //} elseif (!empty($_SESSION['studentview'])) {
                 //all is fine, no change to that, obviously
             } elseif (empty($_SESSION['studentview'])) {
                 // We are in teacherview here

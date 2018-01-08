@@ -53,12 +53,12 @@ class Message
      */
     protected $ipAddress;
 
-     /**
-     * @var Ticket
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Ticket")
-     * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id")
-     **/
+    /**
+    * @var Ticket
+    *
+    * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Ticket")
+    * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id")
+    **/
     protected $ticket;
 
     /**
@@ -88,5 +88,4 @@ class Message
      * @ORM\Column(name="sys_lastedit_datetime", type="datetime", nullable=true, unique=false)
      */
     protected $lastEditDateTime;
-
 }

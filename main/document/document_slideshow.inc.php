@@ -38,7 +38,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'exit_slideshow') {
 // We check if there are images in this folder by searching the extensions for .jpg, .gif, .png
 // grabbing the list of all the documents of this folder
 //$all_files = $fileList['name'];
-$array_to_search = !empty($documentAndFolders) && is_array($documentAndFolders) ? $documentAndFolders : array();
+$array_to_search = !empty($documentAndFolders) && is_array($documentAndFolders) ? $documentAndFolders : [];
 
 if (count($array_to_search) > 0) {
     while (list($key) = each($array_to_search)) {
@@ -74,8 +74,8 @@ Session::write('image_files_only', $image_files_only);
 function sort_files($table)
 {
     $tablename_direction = isset($_GET['tablename_direction']) ? Security::remove_XSS($_GET['tablename_direction']) : 'ASC';
-    $accepted_extensions = array('.jpg', '.jpeg', '.gif', '.png', '.bmp', '.svg');
-    $temp = array();
+    $accepted_extensions = ['.jpg', '.jpeg', '.gif', '.png', '.bmp', '.svg'];
+    $temp = [];
 
     foreach ($table as & $file_array) {
         if ($file_array['filetype'] == 'file') {
@@ -83,7 +83,7 @@ function sort_files($table)
             $slideshow_extension = strtolower($slideshow_extension);
             if (in_array($slideshow_extension, $accepted_extensions)) {
                 $start_date = isset($file_array['insert_date']) ? $file_array['insert_date'] : null;
-                $temp[] = array('file', basename($file_array['path']), $file_array['size'], $start_date);
+                $temp[] = ['file', basename($file_array['path']), $file_array['size'], $start_date];
             }
         }
     }
@@ -94,7 +94,7 @@ function sort_files($table)
         usort($temp, 'sort_table');
     }
 
-    $final_array = array();
+    $final_array = [];
     foreach ($temp as & $file_array) {
         $final_array[] = $file_array[1];
     }

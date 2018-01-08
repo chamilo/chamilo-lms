@@ -16,7 +16,7 @@ class ch_score extends survey_question
 
         $this->getForm()->addText('maximum_score', get_lang('MaximumScore'));
 
-        $config = array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120');
+        $config = ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120'];
         if (is_array($formData['answers'])) {
             foreach ($formData['answers'] as $key => $value) {
                 $this->getForm()->addHtmlEditor(
@@ -37,13 +37,13 @@ class ch_score extends survey_question
      * @param array $questionData
      * @param array $answers
      */
-    public function render(FormValidator $form, $questionData = array(), $answers = array())
+    public function render(FormValidator $form, $questionData = [], $answers = [])
     {
         $defaults = [];
         foreach ($questionData['options'] as $key => & $value) {
-            $options = array(
+            $options = [
                 '--' => '--'
-            );
+            ];
             for ($i = 1; $i <= $questionData['maximum_score']; $i++) {
                 $options[$i] = $i;
             }

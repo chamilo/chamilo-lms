@@ -37,7 +37,7 @@ class Display
      */
     public static function toolList()
     {
-        return array(
+        return [
             'group',
             'work',
             'glossary',
@@ -47,15 +47,15 @@ class Display
             'attendance',
             'course_progress',
             'notebook'
-        );
+        ];
     }
 
-     /**
-     * Displays the page header
-     * @param string The name of the page (will be showed in the page title)
-     * @param string Optional help file name
-     * @param string $page_header
-     */
+    /**
+    * Displays the page header
+    * @param string The name of the page (will be showed in the page title)
+    * @param string Optional help file name
+    * @param string $page_header
+    */
     public static function display_header(
         $tool_name = '',
         $help = null,
@@ -585,7 +585,7 @@ class Display
                 $class .= 'alert alert-info';
         }
 
-        return self::div($message, array('class'=> $class));
+        return self::div($message, ['class'=> $class]);
     }
 
     /**
@@ -929,7 +929,7 @@ class Display
             }
         }
         //some tags don't have this </XXX>
-        if (in_array($tag, array('img', 'input', 'br'))) {
+        if (in_array($tag, ['img', 'input', 'br'])) {
             $return_value = '<'.$tag.' '.$attribute_list.' />';
         } else {
             $return_value = '<'.$tag.' '.$attribute_list.' >'.$content.'</'.$tag.'>';
@@ -1038,7 +1038,7 @@ class Display
             $html .= self::tag(
                 'option',
                 '-- '.$blank_item_text.' --',
-                array('value' => '-1')
+                ['value' => '-1']
             );
         }
         if ($values) {
@@ -1108,12 +1108,12 @@ class Display
             $item = self::tag(
                 'a',
                 $item,
-                array(
+                [
                     'href' => '#'.$id.'-'.$i,
                     'role' => 'tab',
                     'data-toggle' => 'tab',
                     'id' => $id.$i,
-                )
+                ]
             );
             $ul_attributes['role'] = 'presentation';
             $ul_attributes['class'] = $active;
@@ -1140,7 +1140,7 @@ class Display
             $divs .= self::tag(
                 'div',
                 $content,
-                array('id' => $id.'-'.$i, 'class' => 'tab-pane '.$active, 'role' => 'tabpanel')
+                ['id' => $id.'-'.$i, 'class' => 'tab-pane '.$active, 'role' => 'tabpanel']
             );
             $i++;
         }
@@ -1177,16 +1177,16 @@ class Display
             $item = self::tag(
                 'a',
                 $item['content'],
-                array('id' => $id.'-'.$i, 'href' => $item['url'])
+                ['id' => $id.'-'.$i, 'href' => $item['url']]
             );
-            $lis .= self::tag('li', $item, array('class' => $class));
+            $lis .= self::tag('li', $item, ['class' => $class]);
             $i++;
         }
 
         return self::tag(
             'ul',
             $lis,
-            array('class' => 'nav nav-tabs tabs-margin')
+            ['class' => 'nav nav-tabs tabs-margin']
         );
     }
 
@@ -1208,8 +1208,8 @@ class Display
      */
     public static function grid_html($div_id)
     {
-        $table = self::tag('table', '', array('id' => $div_id));
-        $table .= self::tag('div', '', array('id' => $div_id.'_pager'));
+        $table = self::tag('table', '', ['id' => $div_id]);
+        $table .= self::tag('div', '', ['id' => $div_id.'_pager']);
         return $table;
     }
 
@@ -1220,9 +1220,9 @@ class Display
      */
     public static function form_row($label, $form_item)
     {
-        $label = self::span($label, array('class' =>'control-label'));
-        $form_item = self::div($form_item, array('class' =>'controls'));
-        return self::div($label.$form_item, array('class'=>'control-group'));
+        $label = self::span($label, ['class' =>'control-label']);
+        $form_item = self::div($form_item, ['class' =>'controls']);
+        return self::div($label.$form_item, ['class'=>'control-group']);
     }
 
     /**
@@ -1277,7 +1277,7 @@ class Display
 
         // Default row quantity
         if (!isset($extra_params['rowList'])) {
-            $extra_params['rowList'] = array(20, 50, 100, 500, 1000, $all_value);
+            $extra_params['rowList'] = [20, 50, 100, 500, 1000, $all_value];
         }
 
         $json = '';
@@ -1368,7 +1368,7 @@ class Display
         $json_encode = str_replace('"wrap_cell":true', 'cellattr : function(rowId, value, rowObject, colModel, arrData) { return \'class = "jqgrid_whitespace"\'; }', $json_encode);
         $json_encode = str_replace(':"false"', ':false', $json_encode);
         $json_encode = str_replace('"formatter":"action_formatter"', 'formatter:action_formatter', $json_encode);
-        $json_encode = str_replace(array('{"first":"first",', '"end":"end"}'), '', $json_encode);
+        $json_encode = str_replace(['{"first":"first",', '"end":"end"}'], '', $json_encode);
 
         // Creating the jqgrid element.
         $json .= '$("#'.$div_id.'").jqGrid({';
@@ -1382,7 +1382,6 @@ class Display
             foreach ($extra_params['groupHeaders'] as $group) {
                 //{ "startColumnName" : "courses", "numberOfColumns" : 1, "titleText" : "Order Info" },
                 $groups .= '{ "startColumnName" : "'.$group['startColumnName'].'", "numberOfColumns" : '.$group['numberOfColumns'].', "titleText" : "'.$group['titleText'].'" },';
-
             }
             $json .= '$("#'.$div_id.'").jqGrid("setGroupHeaders", {
                 "useColSpanStyle" : false,
@@ -1757,14 +1756,14 @@ class Display
         $labels[] = $point_info['user_vote'] ? get_lang('YourVote').' ['.$point_info['user_vote'].']' : get_lang('YourVote').' [?] ';
 
         if (!$add_div_wrapper && api_is_anonymous()) {
-            $labels[] = self::tag('span', get_lang('LoginToVote'), array('class' => 'error'));
+            $labels[] = self::tag('span', get_lang('LoginToVote'), ['class' => 'error']);
         }
 
-        $html .= self::div(implode(' | ', $labels), array('id' =>  'vote_label_'.$id, 'class' => 'vote_label_info'));
-        $html .= ' '.self::span(' ', array('id' =>  'vote_label2_'.$id));
+        $html .= self::div(implode(' | ', $labels), ['id' =>  'vote_label_'.$id, 'class' => 'vote_label_info']);
+        $html .= ' '.self::span(' ', ['id' =>  'vote_label2_'.$id]);
 
         if ($add_div_wrapper) {
-            $html = self::div($html, array('id' => 'rating_wrapper_'.$id));
+            $html = self::div($html, ['id' => 'rating_wrapper_'.$id]);
         }
 
         return $html;
@@ -1798,8 +1797,8 @@ class Display
         return self::page_header($title, $second_title);
     }
 
-     public static function page_subheader_and_translate($title, $second_title = null)
-     {
+    public static function page_subheader_and_translate($title, $second_title = null)
+    {
         $title = get_lang($title);
         return self::page_subheader($title, $second_title);
     }
@@ -1933,7 +1932,6 @@ class Display
                 $class = 'label-warning';
                 break;
             case 'important':
-                //no break
             case 'danger':
                 $class = 'label-danger';
                 break;
@@ -2004,7 +2002,7 @@ class Display
 
         return self::span(
             $text,
-            array('class' => 'boot-tooltip', 'title' => strip_tags($tip))
+            ['class' => 'boot-tooltip', 'title' => strip_tags($tip)]
         );
     }
 
@@ -2115,7 +2113,6 @@ class Display
                 return $html;
                 break;
             case 'wav':
-                //no break;
             case 'ogg':
                 $html = '<audio width="300px" controls src="'.$params['url'].'" >';
 
@@ -2273,7 +2270,7 @@ class Display
         $html = null;
         if (!empty($current) && !empty($total)) {
             $label = sprintf(get_lang('PaginationXofY'), $current, $total);
-            $html = self::url($label, '#', array('class' => 'btn disabled'));
+            $html = self::url($label, '#', ['class' => 'btn disabled']);
         }
         return $html;
     }
@@ -2475,7 +2472,7 @@ class Display
 
         if (!$colsWidth) {
             $width = 12 / $col;
-            array_walk($content, function() use ($width, &$colsWidth) {
+            array_walk($content, function () use ($width, &$colsWidth) {
                 $colsWidth[] = $width;
             });
         }
@@ -2529,11 +2526,8 @@ class Display
                 $className .= ' fa-lg';
                 break;
             case 2:
-                //no break
             case 3:
-                //no break
             case 4:
-                //no break
             case 5:
                 $className .= " fa-{$size}x";
                 break;
@@ -2615,7 +2609,7 @@ HTML;
      */
     public static function dateToStringAgoAndLongDate($dateTime)
     {
-       if (empty($dateTime) || $dateTime === '0000-00-00 00:00:00') {
+        if (empty($dateTime) || $dateTime === '0000-00-00 00:00:00') {
             return '';
         }
 

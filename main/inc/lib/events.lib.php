@@ -355,9 +355,9 @@ class Event
         $learnpath_item_id = 0,
         $learnpath_item_view_id = 0,
         $duration = 0,
-        $question_list = array(),
+        $question_list = [],
         $status = '',
-        $remind_list = array(),
+        $remind_list = [],
         $end_date = null
     ) {
         if ($exeid != '') {
@@ -506,7 +506,7 @@ class Event
             if (is_null($answer)) {
                 $answer = '';
             }
-            $attempt = array(
+            $attempt = [
                 'user_id' => $user_id,
                 'question_id' => $question_id,
                 'answer' => $answer,
@@ -517,7 +517,7 @@ class Event
                 'tms' => $now,
                 'filename' => !empty($fileName) ? basename($fileName) : $fileName,
                 'teacher_comment' => ''
-            );
+            ];
 
             // Check if attempt exists.
             $sql = "SELECT exe_id FROM $TBL_TRACK_ATTEMPT
@@ -560,49 +560,49 @@ class Event
                     if ($debug) {
                         error_log("Saving e attempt recording ");
                     }
-                    $attempt_recording = array(
+                    $attempt_recording = [
                         'exe_id' => $attempt_id,
                         'question_id' => $question_id,
                         'marks' => $score,
                         'insert_date' => $now,
                         'author' => '',
                         'session_id' => $session_id,
-                    );
+                    ];
                     Database::insert($recording_table, $attempt_recording);
                 }
             } else {
                 Database::update(
                     $TBL_TRACK_ATTEMPT,
                     $attempt,
-                    array(
-                        'exe_id = ? AND question_id = ? AND user_id = ? ' => array(
+                    [
+                        'exe_id = ? AND question_id = ? AND user_id = ? ' => [
                             $exe_id,
                             $question_id,
                             $user_id
-                        )
-                    )
+                        ]
+                    ]
                 );
 
                 if (defined('ENABLED_LIVE_EXERCISE_TRACKING')) {
-                    $attempt_recording = array(
+                    $attempt_recording = [
                         'exe_id' => $exe_id,
                         'question_id' => $question_id,
                         'marks' => $score,
                         'insert_date' => $now,
                         'author' => '',
                         'session_id' => $session_id,
-                    );
+                    ];
 
                     Database::update(
                         $recording_table,
                         $attempt_recording,
-                        array(
-                            'exe_id = ? AND question_id = ? AND session_id = ? ' => array(
+                        [
+                            'exe_id = ? AND question_id = ? AND session_id = ? ' => [
                                 $exe_id,
                                 $question_id,
                                 $session_id
-                            )
-                        )
+                            ]
+                        ]
                     );
                 }
                 $attempt_id = $exe_id;
@@ -651,23 +651,22 @@ class Event
 
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
         if ($updateResults) {
-            $params = array(
+            $params = [
                 'hotspot_correct' => $correct,
                 'hotspot_coordinate' => $coords
-            );
+            ];
             Database::update(
                 $table,
                 $params,
-                array(
-                    'hotspot_user_id = ? AND hotspot_exe_id = ? AND hotspot_question_id = ? AND hotspot_answer_id = ? ' => array(
+                [
+                    'hotspot_user_id = ? AND hotspot_exe_id = ? AND hotspot_question_id = ? AND hotspot_answer_id = ? ' => [
                         api_get_user_id(),
                         $exeId,
                         $questionId,
                         $answerId
-                    )
-                )
+                    ]
+                ]
             );
-
         } else {
             return Database::insert(
                 $table,
@@ -760,7 +759,7 @@ class Event
             $user_id = api_get_user_id();
         }
 
-        $params = array(
+        $params = [
             'default_user_id' => $user_id,
             'c_id' => $course_id,
             'default_date' => $datetime,
@@ -768,7 +767,7 @@ class Event
             'default_value_type' => $event_value_type,
             'default_value' => $event_value,
             'session_id' => $sessionId
-        );
+        ];
         Database::insert($table, $params);
 
         return true;
@@ -791,7 +790,7 @@ class Event
 
         $events_types = Database::store_result(Database::query($sql), 'ASSOC');
 
-        $to_return = array();
+        $to_return = [];
         foreach ($events_types as $et) {
             $et['nameLangVar'] = $event_config[$et["event_type_name"]]["name_lang_var"];
             $et['descLangVar'] = $event_config[$et["event_type_name"]]["desc_lang_var"];
@@ -1119,7 +1118,7 @@ class Event
                     c_id = $course_id AND
                     orig_lp_id = $lp_id";
         $result = Database::query($sql);
-        $exe_list = array();
+        $exe_list = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $exe_list[] = $row['exe_id'];
         }
@@ -1226,7 +1225,7 @@ class Event
                     $user_condition
                 ORDER BY exe_id";
         $res = Database::query($sql);
-        $list = array();
+        $list = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $list[$row['exe_id']] = $row;
             if ($load_question_list) {
@@ -1274,7 +1273,7 @@ class Event
             $row = Database::fetch_array($res, 'ASSOC');
             return $row['count'];
         } else {
-            $list = array();
+            $list = [];
             while ($row = Database::fetch_array($res, 'ASSOC')) {
                 $list[$row['exe_id']] = $row;
             }
@@ -1312,7 +1311,7 @@ class Event
                 ORDER by exe_id";
 
         $res = Database::query($sql);
-        $list = array();
+        $list = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $list[$row['exe_id']] = $row;
             $sql = "SELECT * FROM $table_track_attempt 
@@ -1346,7 +1345,7 @@ class Event
                 WHERE status = '".$status."' AND exe_id = $exe_id";
 
         $res = Database::query($sql);
-        $list = array();
+        $list = [];
         if (Database::num_rows($res)) {
             $row = Database::fetch_array($res, 'ASSOC');
 
@@ -1403,7 +1402,7 @@ class Event
         $lp_id = intval($lp_id);
         $lp_item_id = intval($lp_item_id);
 
-        if (!in_array(strtolower($order), array('asc', 'desc'))) {
+        if (!in_array(strtolower($order), ['asc', 'desc'])) {
             $order = 'asc';
         }
 
@@ -1419,7 +1418,7 @@ class Event
                 ORDER by exe_id $order ";
 
         $res = Database::query($sql);
-        $list = array();
+        $list = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             // Checking if this attempt was revised by a teacher
             $sql = 'SELECT exe_id FROM '.$table_track_attempt_recording.'
@@ -1520,7 +1519,7 @@ class Event
         $sql .= " ORDER BY exe_id";
 
         $res = Database::query($sql);
-        $list = array();
+        $list = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $list[$row['exe_id']] = $row;
             $sql = "SELECT * FROM $table_track_attempt 
@@ -1532,7 +1531,7 @@ class Event
         }
 
         // Getting the best results of every student
-        $best_score_return = array();
+        $best_score_return = [];
         foreach ($list as $student_result) {
             $user_id = $student_result['exe_user_id'];
             $current_best_score[$user_id] = $student_result['exe_result'];
@@ -1581,12 +1580,12 @@ class Event
                 ORDER BY exe_id";
 
         $res = Database::query($sql);
-        $list = array();
+        $list = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $list[$row['exe_id']] = $row;
         }
         //Getting the best results of every student
-        $best_score_return = array();
+        $best_score_return = [];
         $best_score_return['exe_result'] = 0;
 
         foreach ($list as $result) {
@@ -1596,7 +1595,7 @@ class Event
             }
         }
         if (!isset($best_score_return['exe_weighting'])) {
-            $best_score_return = array();
+            $best_score_return = [];
         }
         return $best_score_return;
     }
@@ -1699,7 +1698,7 @@ class Event
                     orig_lp_item_id != 0";
 
         $res = Database::query($sql);
-        $list = array();
+        $list = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $list[$row['exe_id']] = $row;
             $sql = "SELECT * FROM $table_track_attempt 
@@ -1731,7 +1730,7 @@ class Event
                 ORDER BY parent_item_id, display_order";
         $res = Database::query($sql);
 
-        $my_exercise_list = array();
+        $my_exercise_list = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $my_exercise_list[] = $row;
         }
@@ -1777,7 +1776,7 @@ class Event
                 WHERE exe_id = $exeId
                 ORDER BY position";
         $res_question = Database::query($sql);
-        $list = array();
+        $list = [];
         if (Database::num_rows($res_question)) {
             while ($row = Database::fetch_array($res_question, 'ASSOC')) {
                 $list[$row['question_id']][] = $row;
@@ -2036,11 +2035,11 @@ class Event
                 $logout = api_strtotime($logout, 'UTC');
                 */
                 //if ($now - $logout < $sessionLifetime) {
-                    $sql = "UPDATE $tableCourseAccess SET 
+                $sql = "UPDATE $tableCourseAccess SET 
                                 logout_course_date = '$currentDate', 
                                 counter = counter + 1
                             WHERE course_access_id = $courseAccessId";
-                    Database::query($sql);
+                Database::query($sql);
                 //}
             } else {
                 $insert = true;

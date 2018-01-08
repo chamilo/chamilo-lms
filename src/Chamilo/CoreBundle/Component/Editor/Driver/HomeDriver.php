@@ -26,16 +26,16 @@ class HomeDriver extends Driver implements DriverInterface
         if ($this->allow()) {
             $home = api_get_path(SYS_APP_PATH).'home';
 
-            return array(
+            return [
                 'driver' => 'HomeDriver',
                 'alias' => get_lang('Portal'),
                 'path' => $home,
                 'URL' => api_get_path(WEB_PATH).'home',
-                'accessControl' => array($this, 'access'),
-            );
+                'accessControl' => [$this, 'access'],
+            ];
         }
 
-        return array();
+        return [];
     }
 
     /**

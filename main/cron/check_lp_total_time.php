@@ -89,7 +89,7 @@ function compareLpTimeAndCourseTime($user, $courseInfo, $sessionId = 0)
     $totalLpTime = Tracking::get_time_spent_in_lp(
         $userId,
         $courseCode,
-        array(),
+        [],
         $sessionId
     );
 

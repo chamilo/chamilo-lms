@@ -10,14 +10,14 @@ use Fhaculty\Graph\Vertex;
 class Career extends Model
 {
     public $table;
-    public $columns = array(
+    public $columns = [
         'id',
         'name',
         'description',
         'status',
         'created_at',
         'updated_at'
-    );
+    ];
 
     /**
      * Constructor
@@ -46,12 +46,12 @@ class Career extends Model
      * @param array $where_conditions
      * @return array
      */
-    public function get_all($where_conditions = array())
+    public function get_all($where_conditions = [])
     {
         return Database::select(
             '*',
             $this->table,
-            array('where' => $where_conditions, 'order' => 'name ASC')
+            ['where' => $where_conditions, 'order' => 'name ASC']
         );
     }
 
@@ -98,10 +98,10 @@ class Career extends Model
      */
     public function get_status_list()
     {
-        return array(
+        return [
             CAREER_STATUS_ACTIVE => get_lang('Unarchived'),
             CAREER_STATUS_INACTIVE => get_lang('Archived')
-        );
+        ];
     }
 
     /**
@@ -123,17 +123,17 @@ class Career extends Model
         $id = isset($_GET['id']) ? intval($_GET['id']) : '';
         $form->addHeader($header);
         $form->addHidden('id', $id);
-        $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
+        $form->addElement('text', 'name', get_lang('Name'), ['size' => '70']);
         $form->addHtmlEditor(
             'description',
             get_lang('Description'),
             false,
             false,
-            array(
+            [
                 'ToolbarSet' => 'Careers',
                 'Width' => '100%',
                 'Height' => '250'
-            )
+            ]
         );
         $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
@@ -174,7 +174,7 @@ class Career extends Model
     public function copy($id, $copy_promotions = false)
     {
         $career = $this->get($id);
-        $new = array();
+        $new = [];
         foreach ($career as $key => $val) {
             switch ($key) {
                 case 'id':

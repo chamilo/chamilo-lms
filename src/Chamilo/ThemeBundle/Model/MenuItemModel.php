@@ -32,7 +32,7 @@ class MenuItemModel implements MenuItemInterface
     /**
      * @var array
      */
-    protected $routeArgs = array();
+    protected $routeArgs = [];
     /**
      * @var bool
      */
@@ -40,7 +40,7 @@ class MenuItemModel implements MenuItemInterface
     /**
      * @var array
      */
-    protected $children = array();
+    protected $children = [];
 
     /**
      * @var mixed
@@ -63,7 +63,7 @@ class MenuItemModel implements MenuItemInterface
         $id,
         $label,
         $route,
-        $routeArgs = array(),
+        $routeArgs = [],
         $icon = false,
         $badge = false,
         $badgeColor = 'green'

@@ -17,8 +17,8 @@ if (api_get_setting('allow_social_tool') != 'true') {
 $tok = Security::get_token();
 
 if (isset($_REQUEST['user_friend'])) {
-    $info_user_friend = array();
-    $info_path_friend = array();
+    $info_user_friend = [];
+    $info_path_friend = [];
     $userfriend_id = intval($_REQUEST['user_friend']);
     $info_user_friend = api_get_user_info($userfriend_id);
     $info_path_friend = UserManager::get_user_picture_path_by_id($userfriend_id, 'web');
@@ -26,7 +26,7 @@ if (isset($_REQUEST['user_friend'])) {
 
 $group_id = isset($_GET['group_id']) ? intval($_GET['group_id']) : null;
 $message_id = isset($_GET['message_id']) ? intval($_GET['message_id']) : null;
-$actions = array('add_message_group', 'edit_message_group', 'reply_message_group');
+$actions = ['add_message_group', 'edit_message_group', 'reply_message_group'];
 $allowed_action = isset($_GET['action']) && in_array($_GET['action'], $actions) ? Security::remove_XSS($_GET['action']) : '';
 
 $to_group = '';
@@ -68,7 +68,7 @@ $form = new FormValidator(
     'post',
     $url,
     null,
-    array('enctype' => 'multipart/form-data')
+    ['enctype' => 'multipart/form-data']
 );
 $form->addHidden('action', $allowed_action);
 $form->addHidden('group_id', $group_id);

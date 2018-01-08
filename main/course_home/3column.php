@@ -172,7 +172,7 @@ if (api_is_platform_admin() && api_is_allowed_to_edit(null, true) && !api_is_coa
             </tr>
             </table>\n";
     } elseif (isset($delete) && $delete) {
-         // if remove
+        // if remove
         /*
          * Process hiding a tools from aivailable tools.
          * visibility=2 are only viewed by Dokeos Administrator visibility 0,1->2

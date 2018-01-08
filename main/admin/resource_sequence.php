@@ -10,7 +10,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_global_admin_script();
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
 $tpl = new Template(get_lang('ResourcesSequencing'));
 
@@ -92,4 +92,3 @@ $tpl->assign('configure_sequence', $form->returnForm());
 $tpl->assign('save_sequence', $formSave->returnForm());
 $layout = $tpl->get_template('admin/resource_sequence.tpl');
 $tpl->display($layout);
-

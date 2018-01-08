@@ -34,9 +34,9 @@ $badgeStudio = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $params = array(
+    $params = [
         'id' => $skillId
-    );
+    ];
 
     if ((isset($_FILES['image']) && $_FILES['image']['error'] == 0) ||
         !empty($_POST['badge_studio_image'])
@@ -90,13 +90,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-$interbreadcrumb = array(
-    array(
+$interbreadcrumb = [
+    [
         'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
         'name' => get_lang('Administration')
-    )
-);
-$interbreadcrumb[] = array('url' => 'skill_list.php', 'name' => get_lang('ManageSkills'));
+    ]
+];
+$interbreadcrumb[] = ['url' => 'skill_list.php', 'name' => get_lang('ManageSkills')];
 
 $toolbar = $objSkill->getToolBar();
 

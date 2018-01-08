@@ -30,4 +30,3 @@ $content = $tpl->fetch($add_course_tpl);
 $tpl->assign('content', $content);
 $template = $tpl->get_template('layout/layout_1_col.tpl');
 $tpl->display($template);
-

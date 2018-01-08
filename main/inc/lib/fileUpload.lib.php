@@ -32,7 +32,7 @@ function php2phps($file_name)
  */
 function htaccess2txt($filename)
 {
-    return str_replace(array('.htaccess', '.HTACCESS'), array('htaccess.txt', 'htaccess.txt'), $filename);
+    return str_replace(['.htaccess', '.HTACCESS'], ['htaccess.txt', 'htaccess.txt'], $filename);
 }
 
 /**
@@ -379,7 +379,7 @@ function handle_uploaded_document(
                 }*/
 
                 //if ($found == false) {
-                    $whatIfFileExists = 'rename';
+                $whatIfFileExists = 'rename';
                 //}
             }
 
@@ -779,7 +779,7 @@ function dir_total_space($dir_path)
     chdir($dir_path);
     $handle = opendir($dir_path);
     $sumSize = 0;
-    $dirList = array();
+    $dirList = [];
     while ($element = readdir($handle)) {
         if ($element == '.' || $element == '..') {
             continue; // Skip the current and parent directories
@@ -826,65 +826,120 @@ function add_ext_on_mime($file_name, $file_type)
 
     if (!preg_match('/^.*\.[a-zA-Z_0-9]+$/', $file_name) && $file_type) {
         // Build a "MIME-types / extensions" connection table
-        static $mime_type = array();
+        static $mime_type = [];
 
-        $mime_type[] = 'application/msword'; $extension[] = '.doc';
-        $mime_type[] = 'application/rtf'; $extension[] = '.rtf';
-        $mime_type[] = 'application/vnd.ms-powerpoint'; $extension[] = '.ppt';
-        $mime_type[] = 'application/vnd.ms-excel'; $extension[] = '.xls';
-        $mime_type[] = 'application/pdf'; $extension[] = '.pdf';
-        $mime_type[] = 'application/postscript'; $extension[] = '.ps';
-        $mime_type[] = 'application/mac-binhex40'; $extension[] = '.hqx';
-        $mime_type[] = 'application/x-gzip'; $extension[] = 'tar.gz';
-        $mime_type[] = 'application/x-shockwave-flash'; $extension[] = '.swf';
-        $mime_type[] = 'application/x-stuffit'; $extension[] = '.sit';
-        $mime_type[] = 'application/x-tar'; $extension[] = '.tar';
-        $mime_type[] = 'application/zip'; $extension[] = '.zip';
-        $mime_type[] = 'application/x-tar'; $extension[] = '.tar';
-        $mime_type[] = 'text/html'; $extension[] = '.html';
-        $mime_type[] = 'text/plain'; $extension[] = '.txt';
-        $mime_type[] = 'text/rtf'; $extension[] = '.rtf';
-        $mime_type[] = 'img/gif'; $extension[] = '.gif';
-        $mime_type[] = 'img/jpeg'; $extension[] = '.jpg';
-        $mime_type[] = 'img/png'; $extension[] = '.png';
-        $mime_type[] = 'audio/midi'; $extension[] = '.mid';
-        $mime_type[] = 'audio/mpeg'; $extension[] = '.mp3';
-        $mime_type[] = 'audio/x-aiff'; $extension[] = '.aif';
-        $mime_type[] = 'audio/x-pn-realaudio'; $extension[] = '.rm';
-        $mime_type[] = 'audio/x-pn-realaudio-plugin'; $extension[] = '.rpm';
-        $mime_type[] = 'audio/x-wav'; $extension[] = '.wav';
-        $mime_type[] = 'video/mpeg'; $extension[] = '.mpg';
-        $mime_type[] = 'video/mpeg4-generic'; $extension[] = '.mp4';
-        $mime_type[] = 'video/quicktime'; $extension[] = '.mov';
-        $mime_type[] = 'video/x-msvideo'; $extension[] = '.avi';
+        $mime_type[] = 'application/msword';
+        $extension[] = '.doc';
+        $mime_type[] = 'application/rtf';
+        $extension[] = '.rtf';
+        $mime_type[] = 'application/vnd.ms-powerpoint';
+        $extension[] = '.ppt';
+        $mime_type[] = 'application/vnd.ms-excel';
+        $extension[] = '.xls';
+        $mime_type[] = 'application/pdf';
+        $extension[] = '.pdf';
+        $mime_type[] = 'application/postscript';
+        $extension[] = '.ps';
+        $mime_type[] = 'application/mac-binhex40';
+        $extension[] = '.hqx';
+        $mime_type[] = 'application/x-gzip';
+        $extension[] = 'tar.gz';
+        $mime_type[] = 'application/x-shockwave-flash';
+        $extension[] = '.swf';
+        $mime_type[] = 'application/x-stuffit';
+        $extension[] = '.sit';
+        $mime_type[] = 'application/x-tar';
+        $extension[] = '.tar';
+        $mime_type[] = 'application/zip';
+        $extension[] = '.zip';
+        $mime_type[] = 'application/x-tar';
+        $extension[] = '.tar';
+        $mime_type[] = 'text/html';
+        $extension[] = '.html';
+        $mime_type[] = 'text/plain';
+        $extension[] = '.txt';
+        $mime_type[] = 'text/rtf';
+        $extension[] = '.rtf';
+        $mime_type[] = 'img/gif';
+        $extension[] = '.gif';
+        $mime_type[] = 'img/jpeg';
+        $extension[] = '.jpg';
+        $mime_type[] = 'img/png';
+        $extension[] = '.png';
+        $mime_type[] = 'audio/midi';
+        $extension[] = '.mid';
+        $mime_type[] = 'audio/mpeg';
+        $extension[] = '.mp3';
+        $mime_type[] = 'audio/x-aiff';
+        $extension[] = '.aif';
+        $mime_type[] = 'audio/x-pn-realaudio';
+        $extension[] = '.rm';
+        $mime_type[] = 'audio/x-pn-realaudio-plugin';
+        $extension[] = '.rpm';
+        $mime_type[] = 'audio/x-wav';
+        $extension[] = '.wav';
+        $mime_type[] = 'video/mpeg';
+        $extension[] = '.mpg';
+        $mime_type[] = 'video/mpeg4-generic';
+        $extension[] = '.mp4';
+        $mime_type[] = 'video/quicktime';
+        $extension[] = '.mov';
+        $mime_type[] = 'video/x-msvideo';
+        $extension[] = '.avi';
 
-        $mime_type[] = 'video/x-ms-wmv'; $extension[] = '.wmv';
-        $mime_type[] = 'video/x-flv'; $extension[] = '.flv';
-        $mime_type[] = 'image/svg+xml'; $extension[] = '.svg';
-        $mime_type[] = 'image/svg+xml'; $extension[] = '.svgz';
-        $mime_type[] = 'video/ogg'; $extension[] = '.ogv';
-        $mime_type[] = 'audio/ogg'; $extension[] = '.oga';
-        $mime_type[] = 'application/ogg'; $extension[] = '.ogg';
-        $mime_type[] = 'application/ogg'; $extension[] = '.ogx';
-        $mime_type[] = 'application/x-freemind'; $extension[] = '.mm';
+        $mime_type[] = 'video/x-ms-wmv';
+        $extension[] = '.wmv';
+        $mime_type[] = 'video/x-flv';
+        $extension[] = '.flv';
+        $mime_type[] = 'image/svg+xml';
+        $extension[] = '.svg';
+        $mime_type[] = 'image/svg+xml';
+        $extension[] = '.svgz';
+        $mime_type[] = 'video/ogg';
+        $extension[] = '.ogv';
+        $mime_type[] = 'audio/ogg';
+        $extension[] = '.oga';
+        $mime_type[] = 'application/ogg';
+        $extension[] = '.ogg';
+        $mime_type[] = 'application/ogg';
+        $extension[] = '.ogx';
+        $mime_type[] = 'application/x-freemind';
+        $extension[] = '.mm';
 
-        $mime_type[] = 'application/vnd.ms-word.document.macroEnabled.12'; $extension[] = '.docm';
-        $mime_type[] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'; $extension[] = '.docx';
-        $mime_type[] = 'application/vnd.ms-word.template.macroEnabled.12'; $extension[] = '.dotm';
-        $mime_type[] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.template'; $extension[] = '.dotx';
-        $mime_type[] = 'application/vnd.ms-powerpoint.template.macroEnabled.12'; $extension[] = '.potm';
-        $mime_type[] = 'application/vnd.openxmlformats-officedocument.presentationml.template'; $extension[] = '.potx';
-        $mime_type[] = 'application/vnd.ms-powerpoint.addin.macroEnabled.12'; $extension[] = '.ppam';
-        $mime_type[] = 'application/vnd.ms-powerpoint.slideshow.macroEnabled.12'; $extension[] = '.ppsm';
-        $mime_type[] = 'application/vnd.openxmlformats-officedocument.presentationml.slideshow'; $extension[] = '.ppsx';
-        $mime_type[] = 'application/vnd.ms-powerpoint.presentation.macroEnabled.12'; $extension[] = '.pptm';
-        $mime_type[] = 'application/vnd.openxmlformats-officedocument.presentationml.presentation'; $extension[] = '.pptx';
-        $mime_type[] = 'application/vnd.ms-excel.addin.macroEnabled.12'; $extension[] = '.xlam';
-        $mime_type[] = 'application/vnd.ms-excel.sheet.binary.macroEnabled.12'; $extension[] = '.xlsb';
-        $mime_type[] = 'application/vnd.ms-excel.sheet.macroEnabled.12'; $extension[] = '.xlsm';
-        $mime_type[] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'; $extension[] = '.xlsx';
-        $mime_type[] = 'application/vnd.ms-excel.template.macroEnabled.12'; $extension[] = '.xltm';
-        $mime_type[] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.template'; $extension[] = '.xltx';
+        $mime_type[] = 'application/vnd.ms-word.document.macroEnabled.12';
+        $extension[] = '.docm';
+        $mime_type[] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+        $extension[] = '.docx';
+        $mime_type[] = 'application/vnd.ms-word.template.macroEnabled.12';
+        $extension[] = '.dotm';
+        $mime_type[] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.template';
+        $extension[] = '.dotx';
+        $mime_type[] = 'application/vnd.ms-powerpoint.template.macroEnabled.12';
+        $extension[] = '.potm';
+        $mime_type[] = 'application/vnd.openxmlformats-officedocument.presentationml.template';
+        $extension[] = '.potx';
+        $mime_type[] = 'application/vnd.ms-powerpoint.addin.macroEnabled.12';
+        $extension[] = '.ppam';
+        $mime_type[] = 'application/vnd.ms-powerpoint.slideshow.macroEnabled.12';
+        $extension[] = '.ppsm';
+        $mime_type[] = 'application/vnd.openxmlformats-officedocument.presentationml.slideshow';
+        $extension[] = '.ppsx';
+        $mime_type[] = 'application/vnd.ms-powerpoint.presentation.macroEnabled.12';
+        $extension[] = '.pptm';
+        $mime_type[] = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+        $extension[] = '.pptx';
+        $mime_type[] = 'application/vnd.ms-excel.addin.macroEnabled.12';
+        $extension[] = '.xlam';
+        $mime_type[] = 'application/vnd.ms-excel.sheet.binary.macroEnabled.12';
+        $extension[] = '.xlsb';
+        $mime_type[] = 'application/vnd.ms-excel.sheet.macroEnabled.12';
+        $extension[] = '.xlsm';
+        $mime_type[] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        $extension[] = '.xlsx';
+        $mime_type[] = 'application/vnd.ms-excel.template.macroEnabled.12';
+        $extension[] = '.xltm';
+        $mime_type[] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.template';
+        $extension[] = '.xltx';
 
         // Test on PC (files with no extension get application/octet-stream)
         //$mime_type[] = 'application/octet-stream';      $extension[] = '.ext';
@@ -1001,9 +1056,10 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
             if ($dir = @opendir($base_work_dir.$upload_path)) {
                 while ($file = readdir($dir)) {
                     if ($file != '.' && $file != '..') {
-
                         $filetype = 'file';
-                        if (is_dir($base_work_dir.$upload_path.'/'.$file)) $filetype = 'folder';
+                        if (is_dir($base_work_dir.$upload_path.'/'.$file)) {
+                            $filetype = 'folder';
+                        }
 
                         $safe_file = api_replace_dangerous_char($file);
                         @rename($base_work_dir.$upload_path.'/'.$file, $base_work_dir.$upload_path.'/'.$safe_file);
@@ -1094,7 +1150,7 @@ function unzip_uploaded_document(
             $sessionId,
             $groupId,
             $output,
-            array('path' => $uploadPath)
+            ['path' => $uploadPath]
         );
     } else {
         // Copy result
@@ -1432,7 +1488,7 @@ function set_default_settings($upload_path, $filename, $filetype = 'file')
  */
 function search_img_from_html($html_file)
 {
-    $img_path_list = array();
+    $img_path_list = [];
 
     if (!$fp = fopen($html_file, 'r')) {
         return;
@@ -1450,7 +1506,7 @@ function search_img_from_html($html_file)
     } else {
         die('<center>Can not read file.</center>');
     }
-    $matches = array();
+    $matches = [];
     if (preg_match_all('~<[[:space:]]*img[^>]*>~i', $buffer, $matches)) {
         $img_tag_list = $matches[0];
     }
@@ -1532,7 +1588,6 @@ function create_unexisting_directory(
             }
             $desired_dir_name = $desired_dir_name.'_'.$counter;
         } else {
-
             return false;
         }
     }
@@ -1594,11 +1649,11 @@ function create_unexisting_directory(
                 if ($document_id) {
                     // Update document item_property
                     if (!empty($visibility)) {
-                        $visibilities = array(
+                        $visibilities = [
                             0 => 'invisible',
                             1 => 'visible',
                             2 => 'delete'
-                        );
+                        ];
                         api_item_property_update(
                             $_course,
                             TOOL_DOCUMENT,
@@ -1678,7 +1733,7 @@ function move_uploaded_file_collection_into_directory(
     $max_filled_space
 ) {
     $number_of_uploaded_images = count($uploaded_file_collection['name']);
-    $new_file_list = array();
+    $new_file_list = [];
     for ($i = 0; $i < $number_of_uploaded_images; $i++) {
         $missing_file['name'] = $uploaded_file_collection['name'][$i];
         $missing_file['type'] = $uploaded_file_collection['type'][$i];
@@ -1823,10 +1878,9 @@ function add_all_documents_in_folder_to_database(
     $sessionId = 0,
     $groupId = 0,
     $output = false,
-    $parent = array()
+    $parent = []
 ) {
     if (empty($userInfo) || empty($courseInfo)) {
-
         return false;
     }
 
@@ -1838,7 +1892,6 @@ function add_all_documents_in_folder_to_database(
     if (is_dir($folderPath)) {
         // Run trough
         while ($file = readdir($handle)) {
-
             if ($file == '.' || $file == '..') {
                 continue;
             }
@@ -1857,7 +1910,6 @@ function add_all_documents_in_folder_to_database(
 
             // Is directory?
             if (is_dir($sysFolderPath)) {
-
                 $folderExists = DocumentManager::folderExists(
                     $completePath,
                     $courseInfo,
@@ -1903,14 +1955,14 @@ function add_all_documents_in_folder_to_database(
                 );
             } else {
                 // Rename
-                $uploadedFile = array(
+                $uploadedFile = [
                     'name' => $file,
                     'tmp_name' => $sysFolderPath,
                     'size' => filesize($sysFolderPath),
                     'type' => null,
                     'from_file' => true,
                     'move_file' => true
-                );
+                ];
 
                 handle_uploaded_document(
                     $courseInfo,

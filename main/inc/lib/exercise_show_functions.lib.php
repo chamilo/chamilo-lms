@@ -60,13 +60,14 @@ class ExerciseShowFunctions
                 </td>
 
                 <?php
-                if (!api_is_allowed_to_edit(null, true) && $feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
+                if (!api_is_allowed_to_edit(null, true) && $feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) {
+                    ?>
                     <td>
                         <?php
-                        $comm = Event::get_comments($id, $questionId);
-                        ?>
+                        $comm = Event::get_comments($id, $questionId); ?>
                     </td>
-                <?php } ?>
+                <?php
+                } ?>
             </tr>
         <?php
         }
@@ -90,22 +91,22 @@ class ExerciseShowFunctions
         if (empty($id)) {
             echo '<tr><td>'.Security::remove_XSS($answer).'</td></tr>';
         } else {
-        ?>
+            ?>
             <tr>
                 <td>
                     <?php
-                    echo Security::remove_XSS($answer);
-                    ?>
+                    echo Security::remove_XSS($answer); ?>
                 </td>
 
             <?php
-            if (!api_is_allowed_to_edit(null, true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
+            if (!api_is_allowed_to_edit(null, true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+                ?>
                 <td>
                     <?php
-                    $comm = Event::get_comments($id, $questionId);
-                    ?>
+                    $comm = Event::get_comments($id, $questionId); ?>
                 </td>
-            <?php } ?>
+            <?php
+            } ?>
             </tr>
         <?php
         }
@@ -172,11 +173,11 @@ class ExerciseShowFunctions
 
         if (empty($id)) {
             echo '<tr>';
-            echo Display::tag('td', Security::remove_XSS($answer), array('width'=>'55%'));
+            echo Display::tag('td', Security::remove_XSS($answer), ['width'=>'55%']);
             echo '</tr>';
             if (!$questionScore && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
                 echo '<tr>';
-                echo Display::tag('td', ExerciseLib::getNotCorrectedYetText(), array('width'=>'45%'));
+                echo Display::tag('td', ExerciseLib::getNotCorrectedYetText(), ['width'=>'45%']);
                 echo '</tr>';
             } else {
                 echo '<tr><td>&nbsp;</td></tr>';
@@ -232,7 +233,7 @@ class ExerciseShowFunctions
             }
         }
 
-        $hotspot_colors = array(
+        $hotspot_colors = [
             "", // $i starts from 1 on next loop (ugly fix)
             "#4271B5",
             "#FE8E16",
@@ -247,9 +248,7 @@ class ExerciseShowFunctions
             "#ED2024",
             "#3B3B3B",
             "#F7BDE2"
-        );
-
-        ?>
+        ]; ?>
         <table class="data_table">
         <tr>
             <td class="text-center" width="5%">
@@ -263,20 +262,22 @@ class ExerciseShowFunctions
                 if (!$hide_expected_answer) {
                     $my_choice = $studentChoice ? get_lang('Correct') : get_lang('Fault');
                     echo $my_choice;
-                }
-                ?>
+                } ?>
             </td>
-            <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
+            <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+                    ?>
             <td class="text-left" width="60%">
                 <?php
                 if ($studentChoice) {
                     echo '<span style="font-weight: bold; color: #008000;">'.nl2br($answerComment).'</span>';
-                }
-                ?>
+                } ?>
             </td>
-            <?php } else { ?>
+            <?php
+                } else {
+                    ?>
                 <td class="text-left" width="60%">&nbsp;</td>
-            <?php } ?>
+            <?php
+                } ?>
         </tr>
         <?php
     }
@@ -336,32 +337,30 @@ class ExerciseShowFunctions
             }
         }
 
-        $icon = in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION)) ? 'radio' : 'checkbox';
+        $icon = in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION]) ? 'radio' : 'checkbox';
         $icon .= $studentChoice ? '_on' : '_off';
         $icon .= '.png';
-        $iconAnswer = in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION)) ? 'radio' : 'checkbox';
+        $iconAnswer = in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION]) ? 'radio' : 'checkbox';
         $iconAnswer .= $answerCorrect ? '_on' : '_off';
-        $iconAnswer .= '.png';
-
-        ?>
+        $iconAnswer .= '.png'; ?>
         <tr>
         <td width="5%">
             <?php echo Display::return_icon($icon, null, null, ICON_SIZE_TINY); ?>
         </td>
         <td width="5%">
             <?php if (!$hide_expected_answer) {
-                echo Display::return_icon($iconAnswer, null, null, ICON_SIZE_TINY);
-            } else {
-                echo "-";
-            } ?>
+            echo Display::return_icon($iconAnswer, null, null, ICON_SIZE_TINY);
+        } else {
+            echo "-";
+        } ?>
         </td>
         <td width="40%">
             <?php
-            echo $answer;
-            ?>
+            echo $answer; ?>
         </td>
 
-        <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
+        <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+                ?>
         <td width="20%">
             <?php
             if ($studentChoice) {
@@ -376,17 +375,18 @@ class ExerciseShowFunctions
                     $color = '';
                 }
                 echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
-            }
-            ?>
+            } ?>
         </td>
             <?php
             if ($ans == 1) {
                 $comm = Event::get_comments($id, $questionId);
-            }
-            ?>
-         <?php } else { ?>
+            } ?>
+         <?php
+            } else {
+                ?>
             <td>&nbsp;</td>
-        <?php } ?>
+        <?php
+            } ?>
         </tr>
         <?php
     }
@@ -429,9 +429,7 @@ class ExerciseShowFunctions
             } else {
                 $hide_expected_answer = true;
             }
-        }
-
-        ?>
+        } ?>
         <tr>
         <td width="5%">
         <?php
@@ -443,9 +441,7 @@ class ExerciseShowFunctions
             echo get_lang($new_options[$studentChoice]['name']);
         } else {
             echo '-';
-        }
-
-        ?>
+        } ?>
         </td>
         <td width="5%">
         <?php
@@ -459,14 +455,14 @@ class ExerciseShowFunctions
             }
         } else {
             echo '-';
-        }
-        ?>
+        } ?>
         </td>
         <td width="40%">
             <?php echo $answer; ?>
         </td>
 
-        <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
+        <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            ?>
         <td width="20%">
             <?php
             $color = "black";
@@ -480,34 +476,35 @@ class ExerciseShowFunctions
                 }
 
                 echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
-            }
-            ?>
+            } ?>
         </td>
             <?php
             if ($ans == 1) {
                 $comm = Event::get_comments($id, $questionId);
-            }
+            } ?>
+         <?php
+        } else {
             ?>
-         <?php } else { ?>
             <td>&nbsp;</td>
-        <?php } ?>
+        <?php
+        } ?>
         </tr>
         <?php
     }
 
-     /**
-     * Display the answers to a multiple choice question
-     *
-     * @param integer Answer type
-     * @param integer Student choice
-     * @param string  Textual answer
-     * @param string  Comment on answer
-     * @param string  Correct answer comment
-     * @param integer Exercise ID
-     * @param integer Question ID
-     * @param boolean Whether to show the answer comment or not
-     * @return void
-     */
+    /**
+    * Display the answers to a multiple choice question
+    *
+    * @param integer Answer type
+    * @param integer Student choice
+    * @param string  Textual answer
+    * @param string  Comment on answer
+    * @param string  Correct answer comment
+    * @param integer Exercise ID
+    * @param integer Question ID
+    * @param boolean Whether to show the answer comment or not
+    * @return void
+    */
     public static function display_multiple_answer_combination_true_false(
         $feedback_type,
         $answerType,
@@ -532,9 +529,7 @@ class ExerciseShowFunctions
             } else {
                 $hide_expected_answer = true;
             }
-        }
-
-        ?>
+        } ?>
         <tr>
         <td width="5%">
         <?php
@@ -544,8 +539,7 @@ class ExerciseShowFunctions
             echo $question->options[$studentChoice];
         } else {
             echo $question->options[2];
-        }
-        ?>
+        } ?>
         </td>
         <td width="5%">
         <?php
@@ -558,22 +552,21 @@ class ExerciseShowFunctions
             }
         } else {
             echo '-';
-        }
-        ?>
+        } ?>
         </td>
         <td width="40%">
             <?php
             //my answer
-            echo $answer;
-            ?>
+            echo $answer; ?>
         </td>
         <?php
-        if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
+        if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            ?>
         <td width="20%">
             <?php
             //@todo replace this harcoded value
             if ($studentChoice) {
-                 $color = "black";
+                $color = "black";
                 if ($studentChoice == $answerCorrect) {
                     $color = "green";
                 }
@@ -581,8 +574,7 @@ class ExerciseShowFunctions
                     $color = '';
                 }
                 echo '<span style="font-weight: bold; color: '.$color.';">'.nl2br($answerComment).'</span>';
-            }
-            ?>
+            } ?>
         </td>
             <?php
             if ($ans == 1) {

@@ -30,7 +30,7 @@ abstract class HookEvent implements HookEventInterface
     {
         $this->observers = new SplObjectStorage();
         $this->eventName = $eventName;
-        $this->eventData = array();
+        $this->eventData = [];
         $this->manager = HookManagement::create();
         $this->loadAttachments();
     }
@@ -67,11 +67,11 @@ abstract class HookEvent implements HookEventInterface
     public function attach(HookObserverInterface $observer)
     {
         $observerClass = get_class($observer);
-        self::$hook[$this->eventName][$observerClass] = array(
+        self::$hook[$this->eventName][$observerClass] = [
             'class_name' => $observerClass,
             'path' => $observer->getPath(),
             'plugin_name' => $observer->getPluginName(),
-        );
+        ];
         $this->observers->attach($observer);
         $this->manager->insertHook($this->eventName, $observerClass, HOOK_EVENT_TYPE_ALL);
     }

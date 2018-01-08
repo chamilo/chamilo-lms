@@ -402,15 +402,15 @@ class CourseCategory
         $categories = self::getCategories($categorySource);
 
         if (count($categories) > 0) {
-            $table = new HTML_Table(array('class' => 'data_table'));
+            $table = new HTML_Table(['class' => 'data_table']);
             $column = 0;
             $row = 0;
-            $headers = array(
+            $headers = [
                 get_lang('Category'),
                 get_lang('SubCat'),
                 get_lang('Courses'),
                 get_lang('Actions')
-            );
+            ];
             foreach ($headers as $header) {
                 $table->setHeaderContents($row, $column, $header);
                 $column++;
@@ -456,12 +456,12 @@ class CourseCategory
                     ).' '.$category['name'].' ('.$category['code'].')',
                     $url
                 );
-                $content = array(
+                $content = [
                     $title,
                     $category['children_count'],
                     $category['nbr_courses'],
                     $actions
-                );
+                ];
                 $column = 0;
                 foreach ($content as $value) {
                     $table->setCellContents($row, $column, $value);
@@ -497,8 +497,8 @@ class CourseCategory
     public static function addToUrl($id)
     {
         UrlManager::addCourseCategoryListToUrl(
-            array($id),
-            array(api_get_current_access_url_id())
+            [$id],
+            [api_get_current_access_url_id()]
         );
     }
 
@@ -556,14 +556,14 @@ class CourseCategory
         $countCourses = CourseManager::countAvailableCourses($url_access_id);
 
         $categories = [];
-        $categories[0][0] = array(
+        $categories[0][0] = [
             'id' => 0,
             'name' => get_lang('DisplayAll'),
             'code' => 'ALL',
             'parent_id' => null,
             'tree_pos' => 0,
             'count_courses' => $countCourses
-        );
+        ];
 
         while ($row = Database::fetch_array($result)) {
             $count_courses = self::countCoursesInCategory($row['code']);
@@ -577,7 +577,7 @@ class CourseCategory
 
         $count_courses = self::countCoursesInCategory();
 
-        $categories[0][count($categories[0]) + 1] = array(
+        $categories[0][count($categories[0]) + 1] = [
             'id' => 0,
             'name' => get_lang('None'),
             'code' => 'NONE',
@@ -587,7 +587,7 @@ class CourseCategory
             'auth_course_child' => true,
             'auth_cat_child' => true,
             'count_courses' => $count_courses
-        );
+        ];
 
         return $categories;
     }
@@ -784,7 +784,7 @@ class CourseCategory
                 $row['tutor_name'] = get_lang('NoManager');
             }
             $point_info = CourseManager::get_course_ranking($row['id'], 0);
-            $courses[] = array(
+            $courses[] = [
                 'real_id' => $row['real_id'],
                 'point_info' => $point_info,
                 'code' => $row['code'],
@@ -800,7 +800,7 @@ class CourseCategory
                 'category' => $row['category_code'],
                 'count_users' => $count_users,
                 'count_connections' => $count_connections_last_month
-            );
+            ];
         }
 
         return $courses;
@@ -940,11 +940,11 @@ class CourseCategory
         $pageCurrent = isset($_REQUEST['pageCurrent']) ? intval($_GET['pageCurrent']) : 1;
         $pageLength = isset($_REQUEST['pageLength']) ? intval($_GET['pageLength']) : CoursesAndSessionsCatalog::PAGE_LENGTH;
 
-        return array(
+        return [
             'start' => ($pageCurrent - 1) * $pageLength,
             'current' => $pageCurrent,
             'length' => $pageLength
-        );
+        ];
     }
 
     /**
@@ -994,7 +994,7 @@ class CourseCategory
         // For each page add its page button to html
         for ($i = $pageBottom; $i <= $pageTop; $i++) {
             if ($i === $pageCurrent) {
-                $pageItemAttributes = array('class' => 'active');
+                $pageItemAttributes = ['class' => 'active'];
             } else {
                 $pageItemAttributes = [];
             }
@@ -1019,7 +1019,7 @@ class CourseCategory
         }
 
         // Complete pagination html
-        $pageDiv = Display::tag('ul', $pageDiv, array('class' => 'pagination'));
+        $pageDiv = Display::tag('ul', $pageDiv, ['class' => 'pagination']);
         $html .= '<nav>'.$pageDiv.'</nav>';
 
         return $html;
@@ -1071,7 +1071,6 @@ class CourseCategory
                     '&sec_token='.Security::getTokenFromSession();
                 break;
             case 'display_courses':
-                // No break
             default:
                 break;
         }
@@ -1141,7 +1140,6 @@ class CourseCategory
                 $nameTools = get_lang('CourseManagement');
                 break;
             case 'display_random_courses':
-                // No break
             case 'display_courses':
                 $nameTools = get_lang('CourseManagement');
                 break;

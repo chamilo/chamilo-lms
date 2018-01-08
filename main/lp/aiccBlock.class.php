@@ -13,7 +13,7 @@
 class aiccBlock extends learnpathItem
 {
     public $identifier = '';
-    public $members = array();
+    public $members = [];
 
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormResource

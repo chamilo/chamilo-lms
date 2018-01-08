@@ -46,7 +46,7 @@ class SubLanguageManager
      */
     public static function get_lang_folder_files_list($path, $only_main_name = false)
     {
-        $content_dir = array();
+        $content_dir = [];
         if (is_dir($path)) {
             if ($dh = opendir($path)) {
                 while (($file = readdir($dh)) !== false) {
@@ -83,7 +83,7 @@ class SubLanguageManager
                     parent_id = $parent_id AND
                     id = $sub_language_id";
         $rs = Database::query($sql);
-        $all_information = array();
+        $all_information = [];
         while ($row = Database::fetch_array($rs, 'ASSOC')) {
             $all_information = $row;
         }
@@ -101,7 +101,7 @@ class SubLanguageManager
         $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
         $sql = 'SELECT * FROM '.$table.' WHERE id = "'.intval($parent_id).'"';
         $rs = Database::query($sql);
-        $all_information = array();
+        $all_information = [];
         while ($row = Database::fetch_array($rs, 'ASSOC')) {
             $all_information = $row;
         }
@@ -117,7 +117,7 @@ class SubLanguageManager
      */
     public static function get_all_language_variable_in_file($system_path_file, $get_as_string_index = false)
     {
-        $res_list = array();
+        $res_list = [];
         if (!is_readable($system_path_file)) {
             return $res_list;
         }

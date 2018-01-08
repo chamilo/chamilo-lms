@@ -253,7 +253,7 @@ class Statistics
         $numberOfItems = intval($numberOfItems);
         $direction = strtoupper($direction);
 
-        if (!in_array($direction, array('ASC', 'DESC'))) {
+        if (!in_array($direction, ['ASC', 'DESC'])) {
             $direction = 'DESC';
         }
 
@@ -310,7 +310,7 @@ class Statistics
         $sql .= " LIMIT $from, $numberOfItems ";
 
         $res = Database::query($sql);
-        $activities = array();
+        $activities = [];
         while ($row = Database::fetch_row($res)) {
             if (strpos($row[1], '_object') === false &&
                 strpos($row[1], '_array') === false
@@ -360,7 +360,7 @@ class Statistics
                 $row[5] = Display::url(
                     $row[5],
                     api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$row[6],
-                    array('class' => 'ajax')
+                    ['class' => 'ajax']
                 );
 
                 $row[6] = Tracking::get_ip_from_user_event(
@@ -389,7 +389,7 @@ class Statistics
                 FROM $categoryTable
                 ORDER BY tree_pos";
         $res = Database::query($sql);
-        $categories = array();
+        $categories = [];
         while ($category = Database::fetch_object($res)) {
             $categories[$category->code] = $category->name;
         }
@@ -410,7 +410,7 @@ class Statistics
             $data_max = ($data_max < $value ? $value : $data_max);
         }
         reset($data);
-        $result = array();
+        $result = [];
         $delta = $max / $data_max;
         foreach ($data as $index => $value) {
             $result[$index] = (int) round($value * $delta);
@@ -535,7 +535,7 @@ class Statistics
 
         if ($sql_last_x) {
             $res_last_x = Database::query($sql_last_x);
-            $result_last_x = array();
+            $result_last_x = [];
             while ($obj = Database::fetch_object($res_last_x)) {
                 $stat_date = ($type === 'day') ? $periodCollection[$obj->stat_date] : $obj->stat_date;
                 $result_last_x[$stat_date] = $obj->number_of_logins;
@@ -545,7 +545,7 @@ class Statistics
             echo '<br />';
         }
         $res = Database::query($sql);
-        $result = array();
+        $result = [];
         while ($obj = Database::fetch_object($res)) {
             $stat_date = $obj->stat_date;
             switch ($type) {
@@ -616,7 +616,7 @@ class Statistics
                     WHERE 
                         login_date BETWEEN '$startDate' AND '$endDate'
                         $where_url";
-             $sqlList[$label] = $sql;
+            $sqlList[$label] = $sql;
         }
         $sqlList[get_lang('Total')] = "SELECT count($field) AS number FROM $table $table_url WHERE 1=1 $where_url";
 
@@ -683,7 +683,7 @@ class Statistics
         $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
 
-        $tools = array(
+        $tools = [
             'announcement',
             'assignment',
             'calendar_event',
@@ -698,8 +698,8 @@ class Statistics
             'student_publication',
             'user',
             'forum'
-        );
-        $tool_names = array();
+        ];
+        $tool_names = [];
         foreach ($tools as $tool) {
             $tool_names[$tool] = get_lang(ucfirst($tool), '');
         }
@@ -720,7 +720,7 @@ class Statistics
         }
 
         $res = Database::query($sql);
-        $result = array();
+        $result = [];
         while ($obj = Database::fetch_object($res)) {
             $result[$tool_names[$obj->access_tool]] = $obj->number_of_logins;
         }
@@ -748,7 +748,7 @@ class Statistics
                    ORDER BY number_of_courses DESC";
         }
         $res = Database::query($sql);
-        $result = array();
+        $result = [];
         while ($obj = Database::fetch_object($res)) {
             $result[$obj->course_language] = $obj->number_of_courses;
         }
@@ -808,18 +808,18 @@ class Statistics
         $form->addElement('text', 'keyword', get_lang('Keyword'));
         $form->addButtonSearch(get_lang('Search'), 'submit');
         echo '<div class="actions">';
-            $form->display();
+        $form->display();
         echo '</div>';
 
         $table = new SortableTable(
             'activities',
-            array('Statistics', 'getNumberOfActivities'),
-            array('Statistics', 'getActivitiesData'),
+            ['Statistics', 'getNumberOfActivities'],
+            ['Statistics', 'getActivitiesData'],
             7,
             50,
             'DESC'
         );
-        $parameters = array();
+        $parameters = [];
 
         $parameters['report'] = 'activities';
         if (isset($_GET['keyword'])) {
@@ -855,7 +855,7 @@ class Statistics
         $column = isset($_GET['column']) ? intval($_GET['column']) : 0;
         $direction = isset($_GET['direction']) ? $_GET['direction'] : SORT_ASC;
 
-        if (!in_array($direction, array(SORT_ASC, SORT_DESC))) {
+        if (!in_array($direction, [SORT_ASC, SORT_DESC])) {
             $direction = SORT_ASC;
         }
         $form = new FormValidator('courselastvisit', 'get');
@@ -894,10 +894,10 @@ class Statistics
         echo '<p>'.get_lang('LastAccess').' &gt;= '.$date_diff.' '.get_lang('Days').'</p>';
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
-            $courses = array();
+            $courses = [];
             while ($obj = Database::fetch_object($res)) {
                 $courseInfo = api_get_course_info_by_id($obj->c_id);
-                $course = array();
+                $course = [];
                 $course[] = '<a href="'.api_get_path(WEB_COURSE_PATH).$courseInfo['code'].'">'.$courseInfo['code'].' <a>';
                 // Allow sort by date hiding the numerical date
                 $course[] = '<span style="display:none;">'.$obj->access_date.'</span>'.api_convert_and_format_date($obj->access_date);
@@ -905,13 +905,13 @@ class Statistics
             }
             $parameters['date_diff'] = $date_diff;
             $parameters['report'] = 'courselastvisit';
-            $table_header[] = array(get_lang("CourseCode"), true);
-            $table_header[] = array(get_lang("LastAccess"), true);
+            $table_header[] = [get_lang("CourseCode"), true];
+            $table_header[] = [get_lang("LastAccess"), true];
             Display:: display_sortable_table(
                 $table_header,
                 $courses,
-                array('column' => $column, 'direction' => $direction),
-                array(),
+                ['column' => $column, 'direction' => $direction],
+                [],
                 $parameters
             );
         } else {
@@ -955,7 +955,7 @@ class Statistics
                 GROUP BY m.$field ORDER BY count_message DESC ";
         }
         $res = Database::query($sql);
-        $messages_sent = array();
+        $messages_sent = [];
         while ($messages = Database::fetch_array($res)) {
             if (empty($messages['username'])) {
                 $messages['username'] = get_lang('Unknown');
@@ -1000,7 +1000,7 @@ class Statistics
                     ORDER BY count_friend DESC ";
         }
         $res = Database::query($sql);
-        $list_friends = array();
+        $list_friends = [];
         while ($friends = Database::fetch_array($res)) {
             $users = api_get_person_name($friends['firstname'], $friends['lastname']).'<br />('.$friends['username'].')';
             $list_friends[$users] = $friends['count_friend'];
@@ -1014,7 +1014,7 @@ class Statistics
      */
     public static function printUsersNotLoggedInStats()
     {
-        $totalLogin = array();
+        $totalLogin = [];
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();

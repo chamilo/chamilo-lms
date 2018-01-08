@@ -30,42 +30,42 @@ abstract class AbstractLink implements GradebookItem
     /**
      * @return bool
      */
-    abstract function has_results();
+    abstract public function has_results();
 
     /**
      * @return string
      */
-    abstract function get_link();
+    abstract public function get_link();
 
     /**
      * @return bool
      */
-    abstract function is_valid_link();
+    abstract public function is_valid_link();
 
     /**
      * @return string
      */
-    abstract function get_type_name();
+    abstract public function get_type_name();
 
     /**
      * @return bool
      */
-    abstract function needs_name_and_description();
+    abstract public function needs_name_and_description();
 
     /**
      * @return bool
      */
-    abstract function needs_max();
+    abstract public function needs_max();
 
     /**
      * @return bool
      */
-    abstract function needs_results();
+    abstract public function needs_results();
 
     /**
      * @return bool
      */
-    abstract function is_allowed_to_change_name();
+    abstract public function is_allowed_to_change_name();
 
     /**
      * Constructor
@@ -353,7 +353,7 @@ abstract class AbstractLink implements GradebookItem
      */
     private static function create_objects_from_sql_result($result)
     {
-        $links = array();
+        $links = [];
         while ($data = Database::fetch_array($result)) {
             $link = LinkFactory::create($data['type']);
             $link->set_id($data['id']);
@@ -508,11 +508,11 @@ abstract class AbstractLink implements GradebookItem
     public function get_target_categories()
     {
         // links can only be moved to categories inside this course
-        $targets = array();
+        $targets = [];
         $level = 0;
         $categories = Category::load(null, null, $this->get_course_code(), 0);
         foreach ($categories as $cat) {
-            $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
+            $targets[] = [$cat->get_id(), $cat->get_name(), $level + 1];
             $targets = $this->addTargetSubcategories(
                 $targets,
                 $level + 1,
@@ -534,7 +534,7 @@ abstract class AbstractLink implements GradebookItem
     {
         $subcats = Category::load(null, null, null, $catid);
         foreach ($subcats as $cat) {
-            $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
+            $targets[] = [$cat->get_id(), $cat->get_name(), $level + 1];
             $targets = $this->addTargetSubcategories(
                 $targets,
                 $level + 1,
@@ -569,7 +569,7 @@ abstract class AbstractLink implements GradebookItem
     {
         $rootcat = Category::load($selectcat);
         $links = $rootcat[0]->get_links((api_is_allowed_to_edit() ? null : api_get_user_id()), true);
-        $foundlinks = array();
+        $foundlinks = [];
         foreach ($links as $link) {
             if (!(api_strpos(api_strtolower($link->get_name()), api_strtolower($name_mask)) === false)) {
                 $foundlinks[] = $link;
@@ -690,9 +690,9 @@ abstract class AbstractLink implements GradebookItem
                 return [];
             }
 
-            return array($ranking, $count);
+            return [$ranking, $count];
         }
 
-        return array();
+        return [];
     }
 }

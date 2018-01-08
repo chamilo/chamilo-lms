@@ -33,7 +33,7 @@ $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $url = 'document.php?curdirpath='.$pathurl;
 $originaltoolname = get_lang('Documents');
 $_course = api_get_course_info();
-$interbreadcrumb[] = array('url' => Security::remove_XSS($url), 'name' => $originaltoolname);
+$interbreadcrumb[] = ['url' => Security::remove_XSS($url), 'name' => $originaltoolname];
 $originaltoolname = get_lang('SlideShow');
 
 Display :: display_header($originaltoolname, 'Doc');
@@ -163,11 +163,11 @@ if ($imageResize == 'resizing') {
 
 /*	THUMBNAIL VIEW */
 // This is for viewing all the images in the slideshow as thumbnails.
-$image_tag = array();
+$image_tag = [];
 $html = '';
 if ($slide_id == 'all') {
     // Config for make thumbnails
-    $allowed_thumbnail_types = array('jpg', 'jpeg', 'gif', 'png');
+    $allowed_thumbnail_types = ['jpg', 'jpeg', 'gif', 'png'];
     $max_thumbnail_width = 250;
     $max_thumbnail_height = 250;
     $png_compression = 0; //0(none)-9
@@ -244,12 +244,12 @@ if ($slide_id == 'all') {
                         if ($imagetype == "gif") {
                             $transindex = imagecolortransparent($source_img);
                             $palletsize = imagecolorstotal($source_img);
-                             //GIF89a for transparent and anim (first clip), either GIF87a
+                            //GIF89a for transparent and anim (first clip), either GIF87a
                             if ($transindex >= 0 && $transindex < $palletsize) {
-                                 $transcol = imagecolorsforindex($source_img, $transindex);
-                                 $transindex = imagecolorallocatealpha($crop, $transcol['red'], $transcol['green'], $transcol['blue'], 127);
-                                 imagefill($crop, 0, 0, $transindex);
-                                 imagecolortransparent($crop, $transindex);
+                                $transcol = imagecolorsforindex($source_img, $transindex);
+                                $transindex = imagecolorallocatealpha($crop, $transcol['red'], $transcol['green'], $transcol['blue'], 127);
+                                imagefill($crop, 0, 0, $transindex);
+                                imagecolortransparent($crop, $transindex);
                             }
                         }
 
@@ -343,7 +343,6 @@ if ($slide_id == 'all') {
         }
     }
     $html .= '</div>';
-
 }//end slide==all
 echo $html;
 /*	ONE AT A TIME VIEW */
@@ -388,7 +387,7 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
         list($width, $height) = getimagesize($image);
         // Auto resize
         if ($imageResize == 'resizing') {
-        ?>
+            ?>
         <script>
             var initial_width='<?php echo $width; ?>';
             var initial_height='<?php echo $height; ?>';

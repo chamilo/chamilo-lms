@@ -11,7 +11,6 @@
  */
 class SearchCourseWidget
 {
-
     const PARAM_ACTION = 'action';
     const ACTION_SUBSCRIBE = 'subscribe';
 
@@ -137,7 +136,7 @@ class SearchCourseWidget
     public function get_url($action = '')
     {
         $self = $_SERVER['PHP_SELF'];
-        $parameters = array();
+        $parameters = [];
         if ($action) {
             $parameters[self::PARAM_ACTION] = $action;
         }
@@ -217,7 +216,7 @@ EOT;
 
         echo '<table cellpadding="4">';
         foreach ($courses as $key => $course) {
-            $details = array();
+            $details = [];
             if ($display_coursecode) {
                 $details[] = $course['visual_code'];
             }
@@ -234,7 +233,7 @@ EOT;
                     Display::display_icon(
                         'passwordprotected.png',
                         '',
-                        array('style' => 'float:left;')
+                        ['style' => 'float:left;']
                     );
                 }
                 $this->display_subscribe_icon($course, $user_courses);
@@ -281,8 +280,7 @@ EOT;
 EOT;
 
         $search_term = $this->post('search_term');
-        if ($search_term)
-        {
+        if ($search_term) {
             $search_term = Security::remove_XSS($search_term);
             echo <<<EOT
                     <input type="hidden" name="search_course" value="1" />
@@ -310,7 +308,7 @@ EOT;
     public function retrieve_courses($search_term)
     {
         if (empty($search_term)) {
-            return array();
+            return [];
         }
         $search_term = Database::escape_string($search_term);
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -329,11 +327,11 @@ EOT;
                 ORDER BY title, visual_code ASC
 EOT;
 
-        $result = array();
+        $result = [];
         $resultset = Database::query($sql);
         while ($row = Database::fetch_array($resultset)) {
             $code = $row['code'];
-            $result[$code] = array(
+            $result[$code] = [
                 'code' => $code,
                 'directory' => $row['directory'],
                 'visual_code' => $row['visual_code'],
@@ -341,7 +339,7 @@ EOT;
                 'tutor' => $row['tutor_name'],
                 'subscribe' => $row['subscribe'],
                 'unsubscribe' => $row['unsubscribe']
-            );
+            ];
         }
 
         return $result;
@@ -370,11 +368,11 @@ EOT;
                        WHERE course.id = course_rel_user.c_id
                              AND course_rel_user.user_id = $user_id
                        ORDER BY course_rel_user.sort ASC";
-        $result = array();
+        $result = [];
         $resultset = Database::query($sql_select_courses);
         while ($row = Database::fetch_array($resultset)) {
             $code = $row['k'];
-            $result[$code] = array(
+            $result[$code] = [
                 'code' => $code,
                 'visual_code' => $row['vc'],
                 'title' => $row['i'],
@@ -384,7 +382,7 @@ EOT;
                 'subscribe' => $row['subscr'],
                 'unsubscribe' => $row['unsubscr'],
                 'sort' => $row['sort'],
-                'user_course_category' => $row['user_course_cat']);
+                'user_course_category' => $row['user_course_cat']];
         }
 
         return $result;

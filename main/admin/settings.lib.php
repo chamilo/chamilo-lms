@@ -54,7 +54,7 @@ function handleRegions()
     echo '</tr>';
 
     /* We display all the possible plugins and the checkboxes */
-    $plugin_region_list = array();
+    $plugin_region_list = [];
     $my_plugin_list = $plugin_obj->get_plugin_regions();
     foreach ($my_plugin_list as $plugin_item) {
         $plugin_region_list[$plugin_item] = $plugin_item;
@@ -67,7 +67,7 @@ function handleRegions()
         $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
 
         if (file_exists($plugin_info_file)) {
-            $plugin_info = array();
+            $plugin_info = [];
             require $plugin_info_file;
             if (isset($_GET['name']) && $_GET['name'] === $pluginName) {
                 echo '<tr class="row_selected">';
@@ -98,7 +98,7 @@ function handleRegions()
                 'plugin_'.$pluginName.'[]',
                 $region_list,
                 $selected_plugins,
-                array('multiple' => 'multiple', 'style' => 'width:500px'),
+                ['multiple' => 'multiple', 'style' => 'width:500px'],
                 true,
                 get_lang('None')
             );
@@ -114,7 +114,6 @@ function handleExtensions()
 {
     echo Display::page_subheader(get_lang('ConfigureExtensions'));
     echo '<a class="btn btn-success" href="configure_extensions.php?display=ppt2lp" role="button">'.get_lang('Ppt2lp').'</a>';
-
 }
 
 /**
@@ -168,7 +167,7 @@ function handlePlugins()
     foreach ($all_plugins as $pluginName) {
         $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
         if (file_exists($plugin_info_file)) {
-            $plugin_info = array();
+            $plugin_info = [];
             require $plugin_info_file;
 
             $pluginRow = '';
@@ -195,12 +194,12 @@ function handlePlugins()
                 $pluginRow .= Display::url(
                     '<em class="fa fa-cogs"></em> '.get_lang('Configure'),
                     'configure_plugin.php?name='.$pluginName,
-                    array('class' => 'btn btn-default')
+                    ['class' => 'btn btn-default']
                 );
                 $pluginRow .= Display::url(
                     '<em class="fa fa-th-large"></em> '.get_lang('Regions'),
                     'settings.php?category=Regions&name='.$pluginName,
-                    array('class' => 'btn btn-default')
+                    ['class' => 'btn btn-default']
                 );
             }
 
@@ -273,7 +272,7 @@ function handleStylesheets()
         'text',
         'name_stylesheet',
         get_lang('NameStylesheet'),
-        array('size' => '40', 'maxlength' => '40')
+        ['size' => '40', 'maxlength' => '40']
     );
     $form->addRule(
         'name_stylesheet',
@@ -456,7 +455,7 @@ function handleStylesheets()
         'post',
         api_get_self().'?category=Stylesheets',
         null,
-        array('id' => 'stylesheets_id')
+        ['id' => 'stylesheets_id']
     );
 
     $styles = $form_change->addElement(
@@ -477,8 +476,8 @@ function handleStylesheets()
 
         if ($show_upload_form) {
             echo Display::tabs(
-                array(get_lang('Update'), get_lang('UpdateLogo'), get_lang('UploadNewStylesheet')),
-                array($form_change->returnForm(), $logoForm->returnForm(), $form->returnForm())
+                [get_lang('Update'), get_lang('UpdateLogo'), get_lang('UploadNewStylesheet')],
+                [$form_change->returnForm(), $logoForm->returnForm(), $form->returnForm()]
             );
         } else {
             $form_change->display();
@@ -536,7 +535,7 @@ function uploadStylesheet($values, $picture)
             $num_files = $zip->numFiles;
             $valid = true;
             $single_directory = true;
-            $invalid_files = array();
+            $invalid_files = [];
 
             $allowedFiles = getAllowedFileTypes();
 
@@ -634,7 +633,7 @@ function storeRegions()
 
     // Get a list of all current 'Plugins' settings
     $installed_plugins = $plugin_obj->get_installed_plugins();
-    $shortlist_installed = array();
+    $shortlist_installed = [];
     if (!empty($installed_plugins)) {
         foreach ($installed_plugins as $plugin) {
             if (isset($plugin['subkey'])) {
@@ -669,7 +668,7 @@ function storePlugins()
     $appPlugin = new AppPlugin();
     // Get a list of all current 'Plugins' settings
     $plugin_list = $appPlugin->read_plugins_from_path();
-    $installed_plugins = array();
+    $installed_plugins = [];
 
     foreach ($plugin_list as $plugin) {
         if (isset($_POST['plugin_'.$plugin])) {
@@ -747,7 +746,7 @@ function handleSearch()
     $form->addGroup(
         $group,
         'search_enabled',
-        array(get_lang('SearchEnabledTitle'), get_lang('SearchEnabledComment')),
+        [get_lang('SearchEnabledTitle'), get_lang('SearchEnabledComment')],
         null,
         false
     );
@@ -772,16 +771,16 @@ function handleSearch()
         $form->addGroup(
             $group,
             'search_show_unlinked_results',
-            array(
+            [
                 get_lang('SearchShowUnlinkedResultsTitle'),
                 get_lang('SearchShowUnlinkedResultsComment')
-            ),
+            ],
             null,
             false
         );
         $default_values['search_show_unlinked_results'] = api_get_setting('search_show_unlinked_results');
 
-        $sf_values = array();
+        $sf_values = [];
         foreach ($specific_fields as $sf) {
             $sf_values[$sf['code']] = $sf['name'];
         }
@@ -790,7 +789,7 @@ function handleSearch()
                 get_lang('AddSpecificSearchField'),
                 'specific_fields.php'
             ),
-            array('class' => 'sectioncomment')
+            ['class' => 'sectioncomment']
         );
         if (empty($sf_values)) {
             $form->addElement('label', [get_lang('SearchPrefilterPrefix'), $url]);
@@ -798,7 +797,7 @@ function handleSearch()
             $form->addElement(
                 'select',
                 'search_prefilter_prefix',
-                array(get_lang('SearchPrefilterPrefix'), $url),
+                [get_lang('SearchPrefilterPrefix'), $url],
                 $sf_values,
                 ''
             );
@@ -867,11 +866,11 @@ function handleSearch()
             $dir_is_writable = Display::return_icon('bullet_red.png', get_lang('Error'));
         }
 
-        $data = array();
-        $data[] = array(get_lang('XapianModuleInstalled'), $xapianLoaded);
-        $data[] = array(get_lang('DirectoryExists').' - '.$xapianPath, $dir_exists);
-        $data[] = array(get_lang('IsWritable').' - '.$xapianPath, $dir_is_writable);
-        $data[] = array(get_lang('SpecificSearchFieldsAvailable'), $specific_fields_exists);
+        $data = [];
+        $data[] = [get_lang('XapianModuleInstalled'), $xapianLoaded];
+        $data[] = [get_lang('DirectoryExists').' - '.$xapianPath, $dir_exists];
+        $data[] = [get_lang('IsWritable').' - '.$xapianPath, $dir_is_writable];
+        $data[] = [get_lang('SpecificSearchFieldsAvailable'), $specific_fields_exists];
 
         showSearchSettingsTable($data);
         showSearchToolsStatusTable();
@@ -947,11 +946,11 @@ function displayTemplates()
         1
     );
     $table->set_additional_parameters(
-        array('category' => Security::remove_XSS($_GET['category']))
+        ['category' => Security::remove_XSS($_GET['category'])]
     );
-    $table->set_header(0, get_lang('Image'), true, array('style' => 'width: 101px;'));
+    $table->set_header(0, get_lang('Image'), true, ['style' => 'width: 101px;']);
     $table->set_header(1, get_lang('Title'));
-    $table->set_header(2, get_lang('Actions'), false, array('style' => 'width:50px;'));
+    $table->set_header(2, get_lang('Actions'), false, ['style' => 'width:50px;']);
     $table->set_column_filter(2, 'actionsFilter');
     $table->set_column_filter(0, 'searchImageFilter');
     $table->display();
@@ -1003,7 +1002,7 @@ function getTemplateData($from, $number_of_items, $column, $direction)
     $sql .= " ORDER BY col$column $direction ";
     $sql .= " LIMIT $from,$number_of_items";
     $result = Database::query($sql);
-    $return = array();
+    $return = [];
     while ($row = Database::fetch_array($result)) {
         $row['1'] = get_lang($row['1']);
         $return[] = $row;
@@ -1223,7 +1222,7 @@ function addEditTemplate()
     } else {
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
-        $form->setConstants(array('sec_token' => $token));
+        $form->setConstants(['sec_token' => $token]);
         // Display the form.
         $form->display();
     }
@@ -1280,7 +1279,7 @@ function select_timezone_value()
  */
 function select_gradebook_number_decimals()
 {
-    return array('0', '1', '2');
+    return ['0', '1', '2'];
 }
 
 /**
@@ -1291,7 +1290,7 @@ function select_gradebook_default_grade_model_id()
 {
     $grade_model = new GradeModel();
     $models = $grade_model->get_all();
-    $options = array();
+    $options = [];
     $options[-1] = get_lang('None');
 
     if (!empty($models)) {
@@ -1340,7 +1339,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
         $form->addGroup($group, 'buttons_in_action_right');
     }*/
 
-    $default_values = array();
+    $default_values = [];
     $url_info = api_get_access_url($url_id);
     $i = 0;
     $addedSettings = [];
@@ -1391,14 +1390,14 @@ function generateSettingsForm($settings, $settings_by_access_list)
             }
         }
 
-        $hideme = array();
+        $hideme = [];
         $hide_element = false;
 
         if ($_configuration['access_url'] != 1) {
             if ($row['access_url_changeable'] == 0) {
                 // We hide the element in other cases (checkbox, radiobutton) we 'freeze' the element.
                 $hide_element = true;
-                $hideme = array('disabled');
+                $hideme = ['disabled'];
             } elseif ($url_info['active'] == 1) {
                 // We show the elements.
                 if (empty($row['variable'])) {
@@ -1429,12 +1428,12 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     $form->addElement(
                         'text',
                         $row['variable'],
-                        array(
+                        [
                             get_lang($row['title']),
                             get_lang($row['comment']),
                             get_lang('MB')
-                        ),
-                        array('maxlength' => '8', 'aria-label' => get_lang($row['title']))
+                        ],
+                        ['maxlength' => '8', 'aria-label' => get_lang($row['title'])]
                     );
                     $form->applyFilter($row['variable'], 'html_filter');
                     $default_values[$row['variable']] = round($row['selected_value'] / 1024 / 1024, 1);
@@ -1442,11 +1441,11 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     $form->addElement(
                         'text',
                         $row['variable'],
-                        array(
+                        [
                             get_lang($row['title']),
                             get_lang($row['comment']),
-                        ),
-                        array('maxlength' => '5', 'aria-label' => get_lang($row['title']))
+                        ],
+                        ['maxlength' => '5', 'aria-label' => get_lang($row['title'])]
                     );
                     $form->applyFilter($row['variable'], 'html_filter');
                     $default_values[$row['variable']] = $row['selected_value'];
@@ -1460,10 +1459,10 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     $form->addElement(
                         'text',
                         $row['variable'],
-                        array(
+                        [
                             get_lang($row['title']),
                             get_lang($row['comment'])
-                        ),
+                        ],
                         $hideme
                     );
                     $form->applyFilter($row['variable'], 'html_filter');
@@ -1480,8 +1479,8 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     $form->addElement(
                         'textarea',
                         $row['variable'],
-                        array(get_lang($row['title']), get_lang($row['comment'])),
-                        array('rows' => '10', 'id' => $row['variable']),
+                        [get_lang($row['title']), get_lang($row['comment'])],
+                        ['rows' => '10', 'id' => $row['variable']],
                         $hideme
                     );
                     $default_values[$row['variable']] = $value;
@@ -1494,8 +1493,8 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     $form->addElement(
                         'textarea',
                         $row['variable'],
-                        array(get_lang($row['title']), get_lang($row['comment'])),
-                        array('rows' => '10', 'id' => $row['variable']),
+                        [get_lang($row['title']), get_lang($row['comment'])],
+                        ['rows' => '10', 'id' => $row['variable']],
                         $hideme
                     );
                     $default_values[$row['variable']] = $value;
@@ -1503,9 +1502,9 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     $form->addElement(
                         'textarea',
                         $row['variable'],
-                        array(get_lang($row['title']),
-                        get_lang($row['comment'])),
-                        array('rows' => '10', 'id' => $row['variable']),
+                        [get_lang($row['title']),
+                        get_lang($row['comment'])],
+                        ['rows' => '10', 'id' => $row['variable']],
                         $hideme
                     );
                     $default_values[$row['variable']] = $row['selected_value'];
@@ -1513,7 +1512,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 break;
             case 'radio':
                 $values = api_get_settings_options($row['variable']);
-                $group = array();
+                $group = [];
                 if (is_array($values)) {
                     foreach ($values as $key => $value) {
                         $element = &$form->createElement(
@@ -1532,7 +1531,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 $form->addGroup(
                     $group,
                     $row['variable'],
-                    array(get_lang($row['title']), get_lang($row['comment'])),
+                    [get_lang($row['title']), get_lang($row['comment'])],
                     null,
                     false
                 );
@@ -1544,7 +1543,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         WHERE variable='".$row['variable']."' AND access_url =  1";
 
                 $result = Database::query($sql);
-                $group = array();
+                $group = [];
                 while ($rowkeys = Database::fetch_array($result)) {
                     // Profile tab option should be hidden when the social tool is enabled.
                     if (api_get_setting('allow_social_tool') == 'true') {
@@ -1595,7 +1594,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 $form->addGroup(
                     $group,
                     $row['variable'],
-                    array(get_lang($row['title']), get_lang($row['comment'])),
+                    [get_lang($row['title']), get_lang($row['comment'])],
                     null
                 );
                 break;
@@ -1603,7 +1602,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 $form->addElement(
                     'static',
                     null,
-                    array(get_lang($row['title']), get_lang($row['comment'])),
+                    [get_lang($row['title']), get_lang($row['comment'])],
                     get_lang('CurrentValue').' : '.$row['selected_value'],
                     $hideme
                 );
@@ -1616,7 +1615,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 $form->addElement(
                     'select',
                     $row['variable'],
-                    array(get_lang($row['title']), get_lang($row['comment'])),
+                    [get_lang($row['title']), get_lang($row['comment'])],
                     call_user_func('select_'.$row['variable']),
                     $hideme
                 );
@@ -1654,7 +1653,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 }
 
                 $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
-                $allowed_picture_types = array('jpg', 'jpeg', 'png', 'gif');
+                $allowed_picture_types = ['jpg', 'jpeg', 'png', 'gif'];
                 $form->addRule(
                     'pdf_export_watermark_path',
                     get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
@@ -1690,13 +1689,13 @@ function generateSettingsForm($settings, $settings_by_access_list)
 function searchSetting($search)
 {
     if (empty($search)) {
-        return array();
+        return [];
     }
     $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $sql = "SELECT * FROM $table_settings_current
             WHERE category <> 'Plugins' ORDER BY id ASC ";
     $result = Database::store_result(Database::query($sql), 'ASSOC');
-    $settings = array();
+    $settings = [];
 
     $search = api_strtolower($search);
 
@@ -1719,7 +1718,6 @@ function searchSetting($search)
                 } else {
                     $found = true;
                 }
-
             } else {
                 $found = true;
             }
@@ -1736,9 +1734,9 @@ function searchSetting($search)
  * @param array $values Values to browse through
  * @return array
  */
-function formGenerateElementsGroup($form, $values = array(), $elementName)
+function formGenerateElementsGroup($form, $values = [], $elementName)
 {
-    $group = array();
+    $group = [];
     if (is_array($values)) {
         foreach ($values as $key => $value) {
             $element = &$form->createElement('radio', $elementName, '', get_lang($value['display_text']), $value['value']);
@@ -1753,7 +1751,7 @@ function formGenerateElementsGroup($form, $values = array(), $elementName)
  */
 function getAllowedFileTypes()
 {
-    $allowedFiles = array(
+    $allowedFiles = [
         'css',
         'zip',
         'jpeg',
@@ -1767,7 +1765,7 @@ function getAllowedFileTypes()
         'webp',
         'woff',
         'woff2'
-    );
+    ];
     return $allowedFiles;
 }
 /**
@@ -1806,7 +1804,7 @@ function showSearchToolsStatusTable()
 {
     //@todo windows support
     if (api_is_windows_os() == false) {
-        $list_of_programs = array('pdftotext', 'ps2pdf', 'catdoc', 'html2text', 'unrtf', 'catppt', 'xls2csv');
+        $list_of_programs = ['pdftotext', 'ps2pdf', 'catdoc', 'html2text', 'unrtf', 'catppt', 'xls2csv'];
         foreach ($list_of_programs as $program) {
             $output = [];
             $ret_val = null;
@@ -1820,7 +1818,7 @@ function showSearchToolsStatusTable()
             if (!empty($output[0])) {
                 $icon = Display::return_icon('bullet_green.png', get_lang('Installed'));
             }
-            $data2[] = array($program, $output[0], $icon);
+            $data2[] = [$program, $output[0], $icon];
         }
         echo Display::tag('h3', get_lang('ProgramsNeededToConvertFiles'));
         $table = new SortableTableFromArray($data2);
@@ -1891,7 +1889,7 @@ function isStyleChangeable()
 function getCategorySettings($category = '')
 {
     $url_id = api_get_current_access_url_id();
-    $settings_by_access_list = array();
+    $settings_by_access_list = [];
 
     if ($url_id == 1) {
         $settings = api_get_settings($category, 'group', $url_id);
@@ -1922,7 +1920,7 @@ function getCategorySettings($category = '')
                 if ($row['access_url_changeable'] == 1) {
                     $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']] = $row;
                 } else {
-                    $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']] = array();
+                    $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']] = [];
                 }
             }
         }
@@ -1934,8 +1932,8 @@ function getCategorySettings($category = '')
         }
     }
 
-    return array(
+    return [
         'settings' => $settings,
         'settings_by_access_list' => $settings_by_access_list
-    );
+    ];
 }

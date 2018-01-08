@@ -37,7 +37,7 @@ if (!empty($_POST)) {
                 $_SESSION['sepe_message_info'] = $plugin->get_lang('SaveChange');
             }
         } else {
-           //Checker exists centers
+            //Checker exists centers
             $sql = "SELECT * FROM $tableCenters 
                     WHERE center_origin='".$centerOrigin."' AND center_code='".$centerCode."'";
             $rs_tmp = Database::query($sql);
@@ -45,10 +45,10 @@ if (!empty($_POST)) {
                 $aux = Database::fetch_assoc($rs_tmp);
                 $centerId = $aux['id'];
             } else {
-                $params = array(
+                $params = [
                     'center_origin' => $centerOrigin,
                     'center_code' => $centerCode,
-                );
+                ];
                 $centerId = Database::insert($tableCenters, $params);
             }
 
@@ -88,16 +88,16 @@ if (!empty($_POST)) {
 
 if (api_is_platform_admin()) {
     $courseId = getCourse(intval($_GET['action_id']));
-    $interbreadcrumb[] = array("url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe'));
-    $interbreadcrumb[] = array("url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList'));
-    $interbreadcrumb[] = array("url" => "formative-action.php?cid=".$courseId, "name" => $plugin->get_lang('FormativeAction'));
-    $interbreadcrumb[] = array("url" => "specialty-action-edit.php?new_specialty=0&specialty_id=".intval($_GET['specialty_id'])."&action_id=".intval($_GET['action_id']), "name" => $plugin->get_lang('SpecialtyFormativeAction'));
+    $interbreadcrumb[] = ["url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe')];
+    $interbreadcrumb[] = ["url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList')];
+    $interbreadcrumb[] = ["url" => "formative-action.php?cid=".$courseId, "name" => $plugin->get_lang('FormativeAction')];
+    $interbreadcrumb[] = ["url" => "specialty-action-edit.php?new_specialty=0&specialty_id=".intval($_GET['specialty_id'])."&action_id=".intval($_GET['action_id']), "name" => $plugin->get_lang('SpecialtyFormativeAction')];
     if (isset($_GET['new_classroom']) && intval($_GET['new_classroom']) == 1) {
         $templateName = $plugin->get_lang('NewSpecialtyClassroom');
         $tpl = new Template($templateName);
         $tpl->assign('action_id', intval($_GET['action_id']));
         $tpl->assign('specialty_id', intval($_GET['specialty_id']));
-        $info = array();
+        $info = [];
         $tpl->assign('info', $info);
         $tpl->assign('new_classroom', '1');
     } else {
@@ -109,7 +109,6 @@ if (api_is_platform_admin()) {
         $info = getInfoSpecialtyClassroom(intval($_GET['classroom_id']));
         $tpl->assign('info', $info);
         $tpl->assign('new_classroom', '0');
-
     }
     $centerList = getCentersList();
     $tpl->assign('listExistsCenters', $centerList);

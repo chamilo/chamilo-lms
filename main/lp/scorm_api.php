@@ -43,7 +43,7 @@ $userId = api_get_user_id();
 
 header('Content-type: text/javascript');
 
-?>var scorm_logs=<?php echo ((empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin())) ? '0' : '3'); ?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
+?>var scorm_logs=<?php echo((empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin())) ? '0' : '3'); ?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
 var lms_logs = 0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
 
 // API Object initialization (eases access later on)
@@ -342,7 +342,7 @@ function LMSInitialize() {
         <?php
         $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
         $fixLinkSetting = api_get_configuration_value('lp_fix_embed_content');
-        $showGlossary = in_array($glossaryExtraTools, array('true', 'lp', 'exercise_and_lp'));
+        $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
         if ($showGlossary) {
             if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
                 ?>
@@ -351,14 +351,20 @@ function LMSInitialize() {
                 } else {
                     attach_glossary_into_scorm('manual');
                 }
-                <?php } elseif (api_get_setting('show_glossary_in_documents') == 'isautomatic') { ?>
+                <?php
+            } elseif (api_get_setting('show_glossary_in_documents') == 'isautomatic') {
+                ?>
                 attach_glossary_into_scorm('automatic');
-            <?php } ?>
-        <?php } ?>
+            <?php
+            } ?>
+        <?php
+        } ?>
 
-        <?php if ($fixLinkSetting) { ?>
+        <?php if ($fixLinkSetting) {
+            ?>
             attach_glossary_into_scorm('fix_links');
-        <?php } ?>
+        <?php
+        } ?>
         return('true');
     }
 }
@@ -1633,7 +1639,8 @@ function switch_item(current_item, next_item){
                 '&item_id=' + next_item + '&cidReq=' + olms.lms_course_code + '&id_session=' + olms.lms_session_id;
     var cont_f = $("#content_id");
 
-    <?php if ($oLP->mode == 'fullscreen') { ?>
+    <?php if ($oLP->mode == 'fullscreen') {
+        ?>
         cont_f = window.open('' + mysrc, 'content_id', 'toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
         cont_f.onload=function(){
             olms.info_lms_item[0]=olms.info_lms_item[1];
@@ -1642,10 +1649,13 @@ function switch_item(current_item, next_item){
             olms.info_lms_item[0]=olms.info_lms_item[1];
         }
 
-    <?php } else { ?>
+    <?php
+    } else {
+        ?>
             log_in_log('loading '+mysrc+' in frame');
             cont_f.attr("src",mysrc);
-    <?php } ?>
+    <?php
+    } ?>
 
     if (olms.lms_lp_type==1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
         xajax_start_timer();

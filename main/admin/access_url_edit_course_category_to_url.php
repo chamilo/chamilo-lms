@@ -12,7 +12,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $xajax = new xajax();
 $xajax->registerFunction(
-    array('searchCourseCategoryAjax', 'UrlManager', 'searchCourseCategoryAjax')
+    ['searchCourseCategoryAjax', 'UrlManager', 'searchCourseCategoryAjax']
 );
 
 // Setting the section (for the tabs)
@@ -27,8 +27,8 @@ if (!api_get_multiple_access_url()) {
 
 // Setting breadcrumbs
 $tool_name = get_lang('EditUserGroupToURL');
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs')];
 
 $add_type = 'multiple';
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
@@ -72,15 +72,15 @@ function remove_item(origin) {
 </script>';
 
 $form_sent = 0;
-$UserList = $SessionList = array();
-$users = $sessions = array();
+$UserList = $SessionList = [];
+$users = $sessions = [];
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $list = $_POST['course_list'];
 
     if (!is_array($list)) {
-        $list = array();
+        $list = [];
     }
 
     if ($form_sent == 1) {
@@ -99,7 +99,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 Display::display_header($tool_name);
 api_display_tool_title($tool_name);
 
-$noUserGroupList = $userGroupList = array();
+$noUserGroupList = $userGroupList = [];
 $ajax_search = $add_type == 'unique' ? true : false;
 
 if ($ajax_search) {
@@ -119,12 +119,12 @@ if ($ajax_search) {
 }
 
 if ($add_type == 'multiple') {
-	$link_add_type_unique = '<a href="'.api_get_self().'?add_type=unique&access_url_id='.$access_url_id.'">'.
+    $link_add_type_unique = '<a href="'.api_get_self().'?add_type=unique&access_url_id='.$access_url_id.'">'.
         get_lang('SessionAddTypeUnique').'</a>';
-	$link_add_type_multiple = get_lang('SessionAddTypeMultiple');
+    $link_add_type_multiple = get_lang('SessionAddTypeMultiple');
 } else {
-	$link_add_type_unique = get_lang('SessionAddTypeUnique');
-	$link_add_type_multiple = '<a href="'.api_get_self().'?add_type=multiple&access_url_id='.$access_url_id.'">'.
+    $link_add_type_unique = get_lang('SessionAddTypeUnique');
+    $link_add_type_multiple = '<a href="'.api_get_self().'?add_type=multiple&access_url_id='.$access_url_id.'">'.
         get_lang('SessionAddTypeMultiple').'</a>';
 }
 
@@ -138,7 +138,9 @@ $url_list = UrlManager::get_url_data();
     name="formulaire"
     method="post"
     action="<?php echo api_get_self(); ?>"
-    style="margin:0px;" <?php if ($ajax_search) { echo ' onsubmit="valide();"'; } ?>
+    style="margin:0px;" <?php if ($ajax_search) {
+    echo ' onsubmit="valide();"';
+} ?>
 >
 <?php echo get_lang('SelectUrl').' : '; ?>
 <select name="access_url_id" onchange="javascript:send();">
@@ -153,7 +155,8 @@ $url_list = UrlManager::get_url_data();
                 $url_selected = $url_obj[1];
             }
         }
-        if ($url_obj['active'] == 1) { ?>
+        if ($url_obj['active'] == 1) {
+            ?>
             <option <?php echo $checked; ?> value="<?php echo $url_obj[0]; ?>"> <?php echo $url_obj[1]; ?>
             </option>
         <?php
@@ -176,24 +179,33 @@ $url_list = UrlManager::get_url_data();
 <tr>
   <td align="center">
   <div id="content_source">
-    <?php if ($ajax_search) { ?>
+    <?php if ($ajax_search) {
+    ?>
 		<input type="text" id="course_to_add" onkeyup="xajax_searchCourseCategoryAjax(this.value,document.formulaire.access_url_id.options[document.formulaire.access_url_id.selectedIndex].value)" />
 		<div id="ajax_list_courses"></div>
-    <?php } else { ?>
+    <?php
+} else {
+        ?>
 	  <select id="origin_users" name="no_course_list[]" multiple="multiple" size="15" style="width:380px;">
-		<?php foreach ($noUserGroupList as $noItem) { ?>
+		<?php foreach ($noUserGroupList as $noItem) {
+            ?>
 			<option value="<?php echo $noItem['id']; ?>">
                 <?php echo $noItem['name']; ?>
             </option>
-		<?php } ?>
+		<?php
+        } ?>
 	  </select>
-    <?php } ?>
+    <?php
+    } ?>
   </div>
   </td>
   <td width="10%" valign="middle" align="center">
-  <?php if ($ajax_search) { ?>
+  <?php if ($ajax_search) {
+        ?>
 	<button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('destination_users'))" ></button>
-  <?php } else { ?>
+  <?php
+    } else {
+        ?>
 	<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" >
         <em class="fa fa-arrow-right"></em>
     </button>
@@ -201,19 +213,20 @@ $url_list = UrlManager::get_url_data();
 	<button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" >
         <em class="fa fa-arrow-left"></em>
     </button>
-   <?php } ?>
+   <?php
+    } ?>
 	<br /><br /><br /><br /><br /><br />
   </td>
   <td align="center">
   <select id="destination_users" name="course_list[]" multiple="multiple" size="15" style="width:380px;">
 <?php
 foreach ($userGroupList as $item) {
-?>
+        ?>
 	<option value="<?php echo $item['id']; ?>">
         <?php echo $item['name']; ?>
     </option>
 <?php
-}
+    }
 ?>
   </select>
   </td>
@@ -227,7 +240,7 @@ foreach ($userGroupList as $item) {
         } else {
             echo '<button class="save" onclick="valide()" >'.get_lang('Edit').'</button>';
         }
-		?>
+        ?>
 	</td>
 </tr>
 </table>

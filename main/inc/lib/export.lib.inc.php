@@ -208,7 +208,7 @@ class Export
         foreach ($data as $row) {
             $string .= "\n".str_repeat("\t", $level).'<'.$row['name'].'>';
             if (is_array($row['value'])) {
-            	$string .= self::_export_complex_table_xml_helper($row['value'], $level + 1)."\n";
+                $string .= self::_export_complex_table_xml_helper($row['value'], $level + 1)."\n";
                 $string .= str_repeat("\t", $level).'</'.$row['name'].'>';
             } else {
                 $string .= $row['value'];
@@ -222,7 +222,7 @@ class Export
     /**
      * @param array $data table to be read with the HTML_table class
      */
-    public static function export_table_pdf($data, $params = array())
+    public static function export_table_pdf($data, $params = [])
     {
         $table_html = self::convert_array_to_html($data, $params);
         $params['format'] = isset($params['format']) ? $params['format'] : 'A4';
@@ -236,7 +236,7 @@ class Export
      * @param string $html
      * @param array $params
      */
-    public static function export_html_to_pdf($html, $params = array())
+    public static function export_html_to_pdf($html, $params = [])
     {
         $params['format'] = isset($params['format']) ? $params['format'] : 'A4';
         $params['orientation'] = isset($params['orientation']) ? $params['orientation'] : 'P';
@@ -251,18 +251,18 @@ class Export
      *
      * @return string
      */
-    public static function convert_array_to_html($data, $params = array())
+    public static function convert_array_to_html($data, $params = [])
     {
         $headers = $data[0];
         unset($data[0]);
 
-        $header_attributes = isset($params['header_attributes']) ? $params['header_attributes'] : array();
-        $table = new HTML_Table(array('class' => 'data_table', 'repeat_header' => '1'));
+        $header_attributes = isset($params['header_attributes']) ? $params['header_attributes'] : [];
+        $table = new HTML_Table(['class' => 'data_table', 'repeat_header' => '1']);
         $row = 0;
         $column = 0;
         foreach ($headers as $header) {
             $table->setHeaderContents($row, $column, $header);
-            $attributes = array();
+            $attributes = [];
             if (isset($header_attributes) && isset($header_attributes[$column])) {
                 $attributes = $header_attributes[$column];
             }
@@ -275,7 +275,6 @@ class Export
         foreach ($data as &$printable_data_row) {
             $column = 0;
             foreach ($printable_data_row as &$printable_data_cell) {
-
                 $table->setCellContents($row, $column, $printable_data_cell);
                 //$table->updateCellAttributes($row, $column, $atributes);
                 $column++;
@@ -313,10 +312,10 @@ class Export
             $connector = new Connector();
 
             $drivers = new DriversContainer();
-            $drivers['configuration'] = array(
+            $drivers['configuration'] = [
                 'unoconv.binaries' => $unoconv,
                 'unoconv.timeout' => 60,
-            );
+            ];
 
             $tempFilesystem = TemporaryFilesystem::create();
             $manager = new Manager($tempFilesystem, $fs);

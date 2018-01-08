@@ -446,7 +446,6 @@ class MoodleImport
                     }
                     $counter++;
                 }
-
             }
             $currentItem['question_instances'] = $questionList;
             return $currentItem;

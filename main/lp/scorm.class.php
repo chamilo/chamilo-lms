@@ -8,21 +8,21 @@
  */
 class scorm extends learnpath
 {
-    public $manifest = array();
-    public $resources = array();
-    public $resources_att = array();
-    public $organizations = array();
-    public $organizations_att = array();
-    public $metadata = array();
+    public $manifest = [];
+    public $resources = [];
+    public $resources_att = [];
+    public $organizations = [];
+    public $organizations_att = [];
+    public $metadata = [];
     // Will hold the references to resources for each item ID found.
-    public $idrefs = array();
+    public $idrefs = [];
     // For each resource found, stores the file url/uri.
-    public $refurls = array();
+    public $refurls = [];
     /*  Path between the scorm/ directory and the imsmanifest.xml e.g.
     maritime_nav/maritime_nav. This is the path that will be used in the
     lp_path when importing a package. */
     public $subdir = '';
-    public $items = array();
+    public $items = [];
     // Keeps the zipfile safe for the object's life so that we can use it if no title avail.
     public $zipname = '';
     // Keeps an index of the number of uses of the zipname so far.
@@ -51,7 +51,9 @@ class scorm extends learnpath
      */
     public function open($id)
     {
-        if ($this->debug > 0) { error_log('New LP - scorm::open() - In scorm::open method', 0); }
+        if ($this->debug > 0) {
+            error_log('New LP - scorm::open() - In scorm::open method', 0);
+        }
         // redefine parent method
     }
 
@@ -375,7 +377,7 @@ class scorm extends learnpath
             // Now insert all elements from inside that learning path.
             // Make sure we also get the href and sco/asset from the resources.
             $list = $oOrganization->get_flat_items_list();
-            $parents_stack = array(0);
+            $parents_stack = [0];
             $parent = 0;
             $previous = 0;
             $level = 0;
@@ -496,12 +498,12 @@ class scorm extends learnpath
                     $courseid = api_get_course_id();
                     $ic_slide->addCourseId($courseid);
                     $ic_slide->addToolId(TOOL_LEARNPATH);
-                    $xapian_data = array(
+                    $xapian_data = [
                         SE_COURSE_ID => $courseid,
                         SE_TOOL_ID => TOOL_LEARNPATH,
-                        SE_DATA => array('lp_id' => $lp_id, 'lp_item'=> $previous, 'document_id' => ''), // TODO: Unify with other lp types.
+                        SE_DATA => ['lp_id' => $lp_id, 'lp_item'=> $previous, 'document_id' => ''], // TODO: Unify with other lp types.
                         SE_USER => (int) api_get_user_id(),
-                    );
+                    ];
                     $ic_slide->xapian_data = serialize($xapian_data);
                     $di->addChunk($ic_slide);
                     // Index and return search engine document id.
@@ -528,7 +530,7 @@ class scorm extends learnpath
     public function import_local_package($file_path, $current_dir = '')
     {
         // TODO: Prepare info as given by the $_FILES[''] vector.
-        $file_info = array();
+        $file_info = [];
         $file_info['tmp_name'] = $file_path;
         $file_info['name'] = basename($file_path);
         // Call the normal import_package function.
@@ -546,7 +548,7 @@ class scorm extends learnpath
     public function import_package(
         $zip_file_info,
         $current_dir = '',
-        $courseInfo = array()
+        $courseInfo = []
     ) {
         if ($this->debug > 0) {
             error_log('In scorm::import_package('.print_r($zip_file_info, true).',"'.$current_dir.'") method', 0);
@@ -592,7 +594,7 @@ class scorm extends learnpath
         $package_type = '';
         $at_root = false;
         $manifest = '';
-        $manifest_list = array();
+        $manifest_list = [];
 
         // The following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?).
         $realFileSize = 0;
@@ -713,8 +715,8 @@ class scorm extends learnpath
 
                         // TODO: RENAMING FILES CAN BE VERY DANGEROUS SCORM-WISE, avoid that as much as possible!
                         //$safe_file = api_replace_dangerous_char($file, 'strict');
-                        $find_str = array('\\', '.php', '.phtml');
-                        $repl_str = array('/', '.txt', '.txt');
+                        $find_str = ['\\', '.php', '.phtml'];
+                        $repl_str = ['/', '.txt', '.txt'];
                         $safe_file = str_replace($find_str, $repl_str, $file);
 
                         if ($this->debug >= 1) {
@@ -1005,7 +1007,9 @@ class scorm extends learnpath
      */
     public function reimport_manifest($courseCode, $lp_id = null, $imsmanifest_path = '')
     {
-        if ($this->debug > 0) { error_log('In scorm::reimport_manifest() method', 0); }
+        if ($this->debug > 0) {
+            error_log('In scorm::reimport_manifest() method', 0);
+        }
 
         $courseInfo = api_get_course_info($courseCode);
         if (empty($courseInfo)) {

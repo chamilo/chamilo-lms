@@ -17,7 +17,7 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 class ExtraFieldValue extends Model
 {
     public $type = '';
-    public $columns = array(
+    public $columns = [
         'id',
         'field_id',
         'value',
@@ -25,7 +25,7 @@ class ExtraFieldValue extends Model
         'item_id',
         'created_at',
         'updated_at',
-    );
+    ];
     /** @var ExtraField */
     public $extraField;
 
@@ -92,7 +92,7 @@ class ExtraFieldValue extends Model
 
             $tempKey = str_replace('__persist__', '', $key);
             if (!isset($params[$tempKey])) {
-                $params[$tempKey] = array();
+                $params[$tempKey] = [];
             }
         }
 
@@ -253,12 +253,12 @@ class ExtraFieldValue extends Model
                         $imageExtraField = new Image($value['tmp_name']);
                         $imageExtraField->resize(400);
                         $imageExtraField->send_image($fileDir.$fileName, -1, 'png');
-                        $newParams = array(
+                        $newParams = [
                             'item_id' => $params['item_id'],
                             'field_id' => $extraFieldInfo['id'],
                             'value' => $fileDirStored.$fileName,
                             'comment' => $comment
-                        );
+                        ];
                         self::save($newParams);
                     }
                     break;
@@ -291,11 +291,11 @@ class ExtraFieldValue extends Model
                     if (isset($value['error']) && $value['error'] == 0) {
                         moveUploadedFile($value, $fileDir.$fileName);
 
-                        $new_params = array(
+                        $new_params = [
                             'item_id' => $params['item_id'],
                             'field_id' => $extraFieldInfo['id'],
                             'value' => $fileDirStored.$fileName
-                        );
+                        ];
 
                         if ($this->type !== 'session' && $this->type !== 'course') {
                             $new_params['comment'] = $comment;
@@ -312,23 +312,23 @@ class ExtraFieldValue extends Model
                         }
                     }
 
-                    $newParams = array(
+                    $newParams = [
                         'item_id' => $params['item_id'],
                         'field_id' => $extraFieldInfo['id'],
                         'value' => $fieldToSave,
                         'comment' => $comment
-                    );
+                    ];
 
                     self::save($newParams);
 
                     break;
                 default:
-                    $newParams = array(
+                    $newParams = [
                         'item_id' => $params['item_id'],
                         'field_id' => $extraFieldInfo['id'],
                         'value' => $value,
                         'comment' => $comment
-                    );
+                    ];
                     self::save($newParams, $showQuery);
             }
         }
@@ -396,7 +396,6 @@ class ExtraFieldValue extends Model
                 case ExtraField::FIELD_TYPE_TEXTAREA:
                     break;
                 case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
-                    //no break
                 case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
                     if (is_array($value)) {
                         if (isset($value['extra_'.$extraFieldInfo['variable']]) &&
@@ -472,10 +471,10 @@ class ExtraFieldValue extends Model
                         $option = new ExtraFieldOption($this->type);
                         $optionExists = $option->get($params['value']);
                         if (empty($optionExists)) {
-                            $optionParams = array(
+                            $optionParams = [
                                 'field_id' => $params['field_id'],
                                 'option_value' => $params['value']
-                            );
+                            ];
                             $optionId = $option->saveOptions($optionParams);
                         } else {
                             $optionId = $optionExists['id'];
@@ -657,7 +656,7 @@ class ExtraFieldValue extends Model
                 LIMIT 0, $limit
                 ";
         $result = Database::query($sql);
-        $values = array();
+        $values = [];
         if (Database::num_rows($result)) {
             $values = Database::store_result($result, 'ASSOC');
         }
@@ -834,11 +833,11 @@ class ExtraFieldValue extends Model
         return false;
     }
 
-     /**
-     * @param int $itemId
-     * @param int $fieldId
-     * @return array
-     */
+    /**
+    * @param int $itemId
+    * @param int $fieldId
+    * @return array
+    */
     public function getAllValuesByItemAndField($itemId, $fieldId)
     {
         $fieldId = intval($fieldId);

@@ -126,8 +126,8 @@ class Survey extends Resource
         $this->answered = $answered;
         $this->invite_mail = $invite_mail;
         $this->reminder_mail = $reminder_mail;
-        $this->question_ids = array();
-        $this->invitation_ids = array();
+        $this->question_ids = [];
+        $this->invitation_ids = [];
     }
 
     /**

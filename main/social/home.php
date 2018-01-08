@@ -31,7 +31,7 @@ $userGroup = new UserGroup();
 
 //fast upload image
 if (api_get_setting('profile', 'picture') == 'true') {
-    $form = new FormValidator('profile', 'post', 'home.php', null, array());
+    $form = new FormValidator('profile', 'post', 'home.php', null, []);
 
     //	PICTURE
     $form->addElement('file', 'picture', get_lang('AddImage'));
@@ -88,7 +88,7 @@ $social_search_block = Display::panel(
 
 $results = $userGroup->get_groups_by_age(1, false);
 
-$groups_newest = array();
+$groups_newest = [];
 
 if (!empty($results)) {
     foreach ($results as $result) {
@@ -122,21 +122,21 @@ if (!empty($results)) {
         $result['picture'] = '<img class="img-responsive" src="'.$picture['file'].'" />';
         $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-2">'.get_lang('SeeMore').'</a></div>';
         $group_info = '<div class="description"><p>'.cut($result['description'], 120, true)."</p></div>";
-        $groups_newest[] = array(
+        $groups_newest[] = [
             Display::url(
                 $result['picture'],
                 $group_url
             ),
             $result['name'],
             $group_info.$group_actions
-        );
+        ];
     }
 }
 
 // Top popular
 $results = $userGroup->get_groups_by_popularity(1, false);
 
-$groups_pop = array();
+$groups_pop = [];
 foreach ($results as $result) {
     $result['description'] = Security::remove_XSS(
         $result['description'],
@@ -169,10 +169,10 @@ foreach ($results as $result) {
     $result['picture_uri'] = '<img class="img-responsive" src="'.$picture['file'].'" />';
     $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-3">'.get_lang('SeeMore').'</a></div>';
     $group_info = '<div class="description"><p>'.cut($result['description'], 120, true)."</p></div>";
-    $groups_pop[] = array(
+    $groups_pop[] = [
         Display::url($result['picture_uri'], $group_url),
         $result['name'], $group_info.$group_actions
-    );
+    ];
 }
 
 $list = count($groups_newest);

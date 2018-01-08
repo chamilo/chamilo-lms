@@ -18,8 +18,5 @@ if ($form->validate()) {
 }
 
 
-$plugin_info['templates'] = array('view/post.html.twig', 'view/posts.html.twig');
+$plugin_info['templates'] = ['view/post.html.twig', 'view/posts.html.twig'];
 $plugin_info['settings_form'] = $form;
-
-
-

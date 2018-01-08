@@ -35,8 +35,8 @@ class Connector
 
     public $entityManager;
 
-    public $drivers = array();
-    public $driverList = array();
+    public $drivers = [];
+    public $driverList = [];
 
     public function __construct(
         /*EntityManager $entityManager,
@@ -47,14 +47,14 @@ class Connector
         //$user,
         //$course = null
     ) {
-        $this->paths = array(
+        $this->paths = [
             'root_sys' => api_get_path(SYS_PATH),
             'sys_root' => api_get_path(SYS_PATH), // just an alias
             'sys_course_path' => api_get_path(SYS_COURSE_PATH),
             //   'sys_config_path' => $app['path.config'],
             'path.temp' => api_get_path(SYS_ARCHIVE_PATH),
             //'sys_log_path' => $app['path.logs']
-        );
+        ];
         /*$this->entityManager = $entityManager;
         $this->paths = $paths;
         $this->urlGenerator = $urlGenerator;
@@ -88,13 +88,13 @@ class Connector
      */
     private function getDefaultDriverList()
     {
-        return array(
+        return [
             'CourseDriver',
             'CourseUserDriver',
             'DropBoxDriver',
             'HomeDriver',
             'PersonalDriver'
-        );
+        ];
     }
 
     /**
@@ -135,17 +135,17 @@ class Connector
      */
     public function getRoots($processDefaultValues = true)
     {
-        $roots = array();
+        $roots = [];
         $drivers = $this->getDrivers();
         /** @var Driver $driver */
         foreach ($drivers as $driver) {
             if ($processDefaultValues) {
-                $plugin = array(
-                    'chamilo' => array(
+                $plugin = [
+                    'chamilo' => [
                         'driverName' => $driver->getName(),
                         'connector' => $this,
-                    )
-                );
+                    ]
+                ];
                 $configuration = $driver->getConfiguration();
                 $driver->setup();
                 $configuration['plugin'] = $plugin;
@@ -165,7 +165,7 @@ class Connector
     public function updateWithDefaultValues($driver)
     {
         if (empty($driver) || !isset($driver['driver'])) {
-            return array();
+            return [];
         }
 
         $defaultDriver = $this->getDefaultDriverSettings();
@@ -190,10 +190,10 @@ class Connector
     public function getDefaultDriverSettings()
     {
         // for more options: https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
-        return array(
+        return [
             'uploadOverwrite' => false, // Replace files on upload or give them new name if the same file was uploaded
             //'acceptedName' =>
-            'uploadAllow' => array(
+            'uploadAllow' => [
                 'image',
                 'audio',
                 'video',
@@ -209,10 +209,10 @@ class Connector
                 'application/vnd.oasis.opendocument.text',
                 'application/x-shockwave-flash',
                 'application/vnd.adobe.flash.movie'
-            ), # allow files
+            ], # allow files
             //'uploadDeny' => array('text/x-php'),
-            'uploadOrder' => array('allow'), // only executes allow
-            'disabled' => array(
+            'uploadOrder' => ['allow'], // only executes allow
+            'disabled' => [
                 'duplicate',
                 'rename',
                 'mkdir',
@@ -225,48 +225,48 @@ class Connector
                 'archive',
                 'help',
                 'resize'
-            ),
-            'attributes' =>  array(
+            ],
+            'attributes' =>  [
                 // Hiding dangerous files
-                array(
+                [
                     'pattern' => '/\.(php|py|pl|sh|xml)$/i',
                     'read' => false,
                     'write' => false,
                     'hidden' => true,
                     'locked' => false
-                ),
+                ],
                 // Hiding _DELETED_ files
-                array(
+                [
                     'pattern' => '/_DELETED_/',
                     'read' => false,
                     'write' => false,
                     'hidden' => true,
                     'locked' => false
-                ),
+                ],
                 // Hiding thumbnails
-                array(
+                [
                     'pattern' => '/.tmb/',
                     'read' => false,
                     'write' => false,
                     'hidden' => true,
                     'locked' => false
-                ),
-                array(
+                ],
+                [
                     'pattern' => '/.thumbs/',
                     'read' => false,
                     'write' => false,
                     'hidden' => true,
                     'locked' => false
-                ),
-                array(
+                ],
+                [
                     'pattern' => '/.quarantine/',
                     'read' => false,
                     'write' => false,
                     'hidden' => true,
                     'locked' => false
-                )
-            )
-        );
+                ]
+            ]
+        ];
     }
 
     /**
@@ -278,7 +278,7 @@ class Connector
         $opts = [
             //'debug' => true,
             'bind' => [
-                'upload rm mkdir' => array($this, 'manageCommands')
+                'upload rm mkdir' => [$this, 'manageCommands']
             ],
             'sessionCloseEarlier' => false
         ];
@@ -341,18 +341,18 @@ class Connector
     {
         $cmd = ucfirst($cmd);
         $cmd = 'after'.$cmd;
-/*
-        if (isset($args['target'])) {
-            $driverName = $elFinder->getVolumeDriverNameByTarget($args['target']);
-        }
-
-        if (isset($args['targets'])) {
-            foreach ($args['targets'] as $target) {
-                $driverName = $elFinder->getVolumeDriverNameByTarget($target);
-                break;
-            }
-        }
-*/
+        /*
+                if (isset($args['target'])) {
+                    $driverName = $elFinder->getVolumeDriverNameByTarget($args['target']);
+                }
+        
+                if (isset($args['targets'])) {
+                    foreach ($args['targets'] as $target) {
+                        $driverName = $elFinder->getVolumeDriverNameByTarget($target);
+                        break;
+                    }
+                }
+        */
         if (empty($driverName)) {
             return false;
         }

@@ -48,7 +48,7 @@ function save_item(
     $time = 0,
     $suspend = '',
     $location = '',
-    $interactions = array(),
+    $interactions = [],
     $core_exit = 'none',
     $sessionId = null,
     $courseId = null,
@@ -467,7 +467,7 @@ function save_item(
     }
 
     if ($myLP->get_type() == 2) {
-         $return .= "update_stats();";
+        $return .= "update_stats();";
     }
 
     // To be sure progress is updated.
@@ -481,7 +481,7 @@ function save_item(
     return $return;
 }
 
-$interactions = array();
+$interactions = [];
 if (isset($_REQUEST['interact'])) {
     if (is_array($_REQUEST['interact'])) {
         foreach ($_REQUEST['interact'] as $idx => $interac) {

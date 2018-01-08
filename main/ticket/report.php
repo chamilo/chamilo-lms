@@ -69,22 +69,22 @@ div.ticket-form {
 
 </style>';
 $types = TicketManager::get_all_tickets_categories();
-$tools = array();
-$tools['todas'] = array('id' => '', 'name' => get_lang('All'));
-$tools['announcement'] = array('id' => 'announcement', 'name' => get_lang('Announcement'));
+$tools = [];
+$tools['todas'] = ['id' => '', 'name' => get_lang('All')];
+$tools['announcement'] = ['id' => 'announcement', 'name' => get_lang('Announcement')];
 // $tools[]= array('id'=>'assignment','name'=>get_lang('Assignment'));
-$tools['calendar_event'] = array('id' => 'calendar_event', 'name' => get_lang('ToolCalendarEvent'));
-$tools['chat'] = array('id' => 'chat', 'name' => get_lang('Chat'));
-$tools['course_description'] = array('id' => 'course_description', 'name' => get_lang('CourseDescription'));
-$tools['document'] = array('id' => 'document', 'name' => get_lang('Document'));
-$tools['dropbox'] = array('id' => 'dropbox', 'name' => get_lang('Dropbox'));
-$tools['group'] = array('id' => 'group', 'name' => get_lang('Group'));
-$tools['learnpath'] = array('id' => 'learnpath', 'name' => get_lang('Learnpath'));
-$tools['link'] = array('id' => 'link', 'name' => get_lang('Link'));
-$tools['quiz'] = array('id' => 'quiz', 'name' => get_lang('Quiz'));
-$tools['student_publication'] = array('id' => 'student_publication', 'name' => get_lang('ToolStudentPublication'));
-$tools['user'] = array('id' => 'user', 'name' => get_lang('User'));
-$tools['forum'] = array('id' => 'forum', 'name' => get_lang('Forum'));
+$tools['calendar_event'] = ['id' => 'calendar_event', 'name' => get_lang('ToolCalendarEvent')];
+$tools['chat'] = ['id' => 'chat', 'name' => get_lang('Chat')];
+$tools['course_description'] = ['id' => 'course_description', 'name' => get_lang('CourseDescription')];
+$tools['document'] = ['id' => 'document', 'name' => get_lang('Document')];
+$tools['dropbox'] = ['id' => 'dropbox', 'name' => get_lang('Dropbox')];
+$tools['group'] = ['id' => 'group', 'name' => get_lang('Group')];
+$tools['learnpath'] = ['id' => 'learnpath', 'name' => get_lang('Learnpath')];
+$tools['link'] = ['id' => 'link', 'name' => get_lang('Link')];
+$tools['quiz'] = ['id' => 'quiz', 'name' => get_lang('Quiz')];
+$tools['student_publication'] = ['id' => 'student_publication', 'name' => get_lang('ToolStudentPublication')];
+$tools['user'] = ['id' => 'user', 'name' => get_lang('User')];
+$tools['forum'] = ['id' => 'forum', 'name' => get_lang('Forum')];
 
 /**
  * Returns the escaped string.
@@ -208,7 +208,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                   u.official_code LIKE '%$keyword%'
                   OR u.email LIKE '%$keyword%' )";
     }
-    if (!in_array($direction, array('ASC', 'DESC'))) {
+    if (!in_array($direction, ['ASC', 'DESC'])) {
         $direction = 'ASC';
     }
     $column = intval($column);
@@ -220,7 +220,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
     $res = Database::query($sql);
 
-    $users = array();
+    $users = [];
     $webPath = api_get_path(WEB_PATH);
     while ($user = Database::fetch_row($res)) {
         $userPicture = UserManager::getUserPicture($user[0]);
@@ -229,7 +229,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
         $button = '<a  href="javascript:void(0)" onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')">
 					<img onclick="load_course_list(\'div_' . $user_id.'\','.$user_id.')"  src="'.$webPath.'img/view_more_stats.gif" title="'.get_lang('Courses').'" alt="'.get_lang('Courses').'"/>
 					</a>&nbsp;&nbsp;';
-        $users[] = array(
+        $users[] = [
             $photo,
             $user[1],
             $user[2],
@@ -237,7 +237,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             $user[4],
             $user[5],
             $button,
-        );
+        ];
     }
 
     return $users;
@@ -308,13 +308,13 @@ if (isset($_POST['report'])) {
     $table_result->set_header(3, get_lang('Course'), false);
     $table_result->set_header(4, get_lang('Tool'), false);
     while ($row = Database::fetch_assoc($result)) {
-        $row = array(
+        $row = [
             $row['username'],
             $row['fullname'],
             $row['access_date'],
             $row['course'],
             get_lang($tools[$row['tool']]['name'])
-        );
+        ];
         $table_result->addRow($row);
     }
     $table_result->display();

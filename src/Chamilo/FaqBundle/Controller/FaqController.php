@@ -36,7 +36,7 @@ class FaqController extends Controller
         }
 
         // Otherwise get the selected category and/or question as usual
-        $questions = array();
+        $questions = [];
         $categories = $this->getCategoryRepository()->retrieveActive();
         $selectedCategory = $this->getSelectedCategory($categorySlug);
         $selectedQuestion = $this->getSelectedQuestion($questionSlug);
@@ -52,12 +52,12 @@ class FaqController extends Controller
 
         return $this->render(
             '@ChamiloFaq/Faq/index.html.twig',
-            array(
+            [
                 'categories'       => $categories,
                 'questions'        => $questions,
                 'selectedCategory' => $selectedCategory,
                 'selectedQuestion' => $selectedQuestion
-            )
+            ]
         );
     }
 
@@ -83,10 +83,10 @@ class FaqController extends Controller
 
         return $this->render(
             '@ChamiloFaq/Faq/index_without_collapse.html.twig',
-            array(
+            [
                 'categories'   => $categories,
                 'categorySlug' => $categorySlug
-            )
+            ]
         );
     }
 
@@ -129,7 +129,7 @@ class FaqController extends Controller
 
         if ($doRedirect) {
             return $this->redirect(
-                $this->generateUrl('faq', array('categorySlug' => $categorySlug, 'questionSlug' => $questionSlug), true)
+                $this->generateUrl('faq', ['categorySlug' => $categorySlug, 'questionSlug' => $questionSlug], true)
             );
         }
 

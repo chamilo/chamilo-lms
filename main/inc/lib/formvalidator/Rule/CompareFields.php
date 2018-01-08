@@ -25,7 +25,7 @@ class HTML_QuickForm_Compare_Fields extends HTML_QuickForm_Rule_Compare
             $operator = $params[0];
             $max_value = $params[1];
 
-            return parent::validate(array($final_value, $max_value), $operator);
+            return parent::validate([$final_value, $max_value], $operator);
         }
 
         return false;

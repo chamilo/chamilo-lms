@@ -255,7 +255,7 @@ class LegalManager
                 LIMIT $from, $number_of_items ";
 
         $result = Database::query($sql);
-        $legals = array();
+        $legals = [];
         while ($legal = Database::fetch_array($result)) {
             // max 2000 chars
             $languages[] = $legal[1];
@@ -326,12 +326,12 @@ class LegalManager
         if ($value === false) {
             $extraFieldInfo = $extraFieldValue->getExtraField()->get_handler_field_info_by_field_variable('termactivated');
             if ($extraFieldInfo) {
-                $newParams = array(
+                $newParams = [
                     'item_id' => $userId,
                     'field_id' => $extraFieldInfo['id'],
                     'value' => 1,
                     'comment' => ''
-                );
+                ];
                 $extraFieldValue->save($newParams);
             }
         }

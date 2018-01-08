@@ -158,7 +158,7 @@ class SurveyManager
         }
 
         $result = Database::query($sql);
-        $return = array();
+        $return = [];
 
         if (Database::num_rows($result) > 0) {
             $return = Database::fetch_array($result, 'ASSOC');
@@ -719,12 +719,12 @@ class SurveyManager
                 WHERE c_id = $course_id AND  survey_id='".$survey_id."'";
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res, 'ASSOC')) {
-            $params = array(
+            $params = [
                 'c_id' => $targetCourseId,
                 'name' => $row['name'],
                 'description' => $row['description'],
                 'survey_id' => $new_survey_id
-            );
+            ];
             $insertId = Database::insert($table_survey_question_group, $params);
 
             $sql = "UPDATE $table_survey_question_group SET id = iid
@@ -739,7 +739,7 @@ class SurveyManager
                 WHERE c_id = $course_id AND survey_id='".$survey_id."'";
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res, 'ASSOC')) {
-            $params = array(
+            $params = [
                 'c_id' => $targetCourseId,
                 'survey_id' => $new_survey_id,
                 'survey_question' => $row['survey_question'],
@@ -752,7 +752,7 @@ class SurveyManager
                 'survey_group_pri' => $row['survey_group_pri'],
                 'survey_group_sec1' => $row['survey_group_sec1'],
                 'survey_group_sec2' => $row['survey_group_sec2']
-            );
+            ];
             $insertId = Database::insert($table_survey_question, $params);
             $sql = "UPDATE $table_survey_question SET question_id = iid WHERE iid = $insertId";
             Database::query($sql);
@@ -766,14 +766,14 @@ class SurveyManager
 
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res, 'ASSOC')) {
-            $params = array(
+            $params = [
                 'c_id' => $targetCourseId,
                 'question_id' => $question_id[$row['question_id']],
                 'survey_id' => $new_survey_id,
                 'option_text' => $row['option_text'],
                 'sort' => $row['sort'],
                 'value' => $row['value']
-            );
+            ];
             $insertId = Database::insert($table_survey_options, $params);
 
             $sql = "UPDATE $table_survey_options SET question_option_id = $insertId
@@ -894,7 +894,7 @@ class SurveyManager
     public static function icon_question($type)
     {
         // the possible question types
-        $possible_types = array(
+        $possible_types = [
             'personality',
             'yesno',
             'multiplechoice',
@@ -905,10 +905,10 @@ class SurveyManager
             'pagebreak',
             'percentage',
             'score',
-        );
+        ];
 
         // the images array
-        $icon_question = array(
+        $icon_question = [
             'yesno' => 'yesno.png',
             'personality' => 'yesno.png',
             'multiplechoice' => 'mcua.png',
@@ -919,7 +919,7 @@ class SurveyManager
             'score' => 'scorequestion.png',
             'comment' => 'commentquestion.png',
             'pagebreak' => 'page_end.png',
-        );
+        ];
 
         if (in_array($type, $possible_types)) {
             return $icon_question[$type];
@@ -1034,7 +1034,7 @@ class SurveyManager
         $sql = "SELECT * FROM $tbl_survey_question
 		        WHERE c_id = $course_id AND survey_id='".intval($survey_id)."'";
         $result = Database::query($sql);
-        $return = array();
+        $return = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $return[$row['question_id']]['survey_id'] = $row['survey_id'];
             $return[$row['question_id']]['question_id'] = $row['question_id'];
@@ -1104,7 +1104,7 @@ class SurveyManager
                     $empty_answer = true;
                 }
             }
-            $additional = array();
+            $additional = [];
             $course_id = api_get_course_int_id();
 
             if (!$empty_answer) {
@@ -1696,7 +1696,7 @@ class SurveyManager
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
         // Variable initialisation
-        $return = array();
+        $return = [];
 
         if (empty($course_id)) {
             $course_id = api_get_course_int_id();
@@ -1964,12 +1964,12 @@ class SurveyManager
                     WHERE survey_id = $surveyId AND c_id = $originalCourseId ";
             $res = Database::query($sql);
             while ($row = Database::fetch_array($res, 'ASSOC')) {
-                $params = array(
+                $params = [
                     'c_id' => $targetCourseId,
                     'name' => $row['name'],
                     'description' => $row['description'],
                     'survey_id' => $newSurveyId
-                );
+                ];
                 $insertId = Database::insert($surveyQuestionGroupTable, $params);
                 if ($insertId) {
                     $sql = "UPDATE $surveyQuestionGroupTable SET id = iid WHERE iid = $insertId";
@@ -1983,7 +1983,7 @@ class SurveyManager
                     WHERE survey_id = $surveyId AND c_id = $originalCourseId";
             $res = Database::query($sql);
             while ($row = Database::fetch_array($res, 'ASSOC')) {
-                $params = array(
+                $params = [
                     'c_id' => $targetCourseId,
                     'survey_id' => $newSurveyId,
                     'survey_question' => $row['survey_question'],
@@ -1996,7 +1996,7 @@ class SurveyManager
                     'survey_group_pri' => $row['survey_group_pri'],
                     'survey_group_sec1' => $row['survey_group_sec1'],
                     'survey_group_sec2' => $row['survey_group_sec2']
-                );
+                ];
                 $insertId = Database::insert($surveyQuestionTable, $params);
                 if ($insertId) {
                     $sql = "UPDATE $surveyQuestionTable 
@@ -2014,14 +2014,14 @@ class SurveyManager
 
             $res = Database::query($sql);
             while ($row = Database::fetch_array($res, 'ASSOC')) {
-                $params = array(
+                $params = [
                     'c_id' => $targetCourseId,
                     'question_id' => $question_id[$row['question_id']],
                     'survey_id' => $newSurveyId,
                     'option_text' => $row['option_text'],
                     'sort' => $row['sort'],
                     'value' => $row['value']
-                );
+                ];
                 $insertId = Database::insert($surveyOptionsTable, $params);
                 if ($insertId) {
                     $sql = "UPDATE $surveyOptionsTable SET question_option_id = $insertId WHERE iid = $insertId";

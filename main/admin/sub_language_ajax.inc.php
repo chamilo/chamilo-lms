@@ -32,7 +32,7 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
     // Replace new line signs to avoid parse errors - see #6773
     $new_language = str_replace("\n", "\\n", $new_language);
     $all_file_of_directory[$language_variable] = "\"".$new_language."\";";
-    $result_array = array();
+    $result_array = [];
 
     foreach ($all_file_of_directory as $key_value => $value_info) {
         $result_array[$key_value] = SubLanguageManager::write_data_in_file($path_folder, $value_info, $key_value);
@@ -87,4 +87,3 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
         echo 1;
     }
 }
-

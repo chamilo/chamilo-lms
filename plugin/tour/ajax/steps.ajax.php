@@ -12,14 +12,14 @@ if (!api_is_anonymous()) {
     $currentPageClass = isset($_GET['page_class']) ? $_GET['page_class'] : '';
     $tourPlugin = Tour::create();
     $json = $tourPlugin->getTourConfig();
-    $currentPageSteps = array();
+    $currentPageSteps = [];
     foreach ($json as $pageContent) {
         if ($pageContent['pageClass'] == $currentPageClass) {
             foreach ($pageContent['steps'] as $step) {
-                $currentPageSteps[] = array(
+                $currentPageSteps[] = [
                     'element' => $step['elementSelector'],
                     'intro' => $tourPlugin->get_lang($step['message'])
-                );
+                ];
             }
 
             break;

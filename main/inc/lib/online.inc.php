@@ -66,7 +66,7 @@ function preventMultipleLogin($userId)
                         LIMIT 1";
 
                 $result = Database::query($sql);
-                $loginData = array();
+                $loginData = [];
                 if (Database::num_rows($result)) {
                     $loginData = Database::fetch_array($result);
                 }
@@ -205,7 +205,6 @@ function user_is_online($user_id)
     }
 
     return false;
-
 }
 
 /**
@@ -247,7 +246,7 @@ function who_is_online(
     if (empty($direction)) {
         $direction = 'DESC';
     } else {
-        if (!in_array(strtolower($direction), array('asc', 'desc'))) {
+        if (!in_array(strtolower($direction), ['asc', 'desc'])) {
             $direction = 'DESC';
         }
     }
@@ -307,16 +306,16 @@ function who_is_online(
         }
     }
 
-	//This query will show all registered users. Only for dev purposes.
-	/*$query = "SELECT DISTINCT u.id as login_user_id, login_date
-	        FROM $track_online_table e, $table_user u
+    //This query will show all registered users. Only for dev purposes.
+    /*$query = "SELECT DISTINCT u.id as login_user_id, login_date
+            FROM $track_online_table e, $table_user u
             GROUP by u.id
             ORDER BY $column $direction
             LIMIT $from, $number_of_items";*/
 
     $result = Database::query($query);
     if ($result) {
-        $users_online = array();
+        $users_online = [];
         while (list($login_user_id, $login_date) = Database::fetch_row($result)) {
             $users_online[] = $login_user_id;
         }
@@ -442,7 +441,7 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
 
     $result = Database::query($query);
     if ($result) {
-        $users_online = array();
+        $users_online = [];
         while (list($login_user_id, $login_date) = Database::fetch_row($result)) {
             $users_online[] = $login_user_id;
         }

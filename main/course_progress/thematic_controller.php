@@ -38,7 +38,7 @@ class ThematicController
     public function thematic($action)
     {
         $thematic = new Thematic();
-        $data = array();
+        $data = [];
         $check = Security::check_token('request');
         $thematic_id = isset($_REQUEST['thematic_id']) ? intval($_REQUEST['thematic_id']) : null;
         $displayHeader = !empty($_REQUEST['display']) && $_REQUEST['display'] === 'no_header' ? false : true;
@@ -170,10 +170,10 @@ class ThematicController
                     break;
                 case 'thematic_export':
                     $list = $thematic->get_thematic_list();
-                    $csv = array();
-                    $csv[] = array('type', 'data1', 'data2', 'data3');
+                    $csv = [];
+                    $csv[] = ['type', 'data1', 'data2', 'data3'];
                     foreach ($list as $theme) {
-                        $csv[] = array('title', strip_tags($theme['title']), strip_tags($theme['content']));
+                        $csv[] = ['title', strip_tags($theme['title']), strip_tags($theme['content'])];
                         $data = $thematic->get_thematic_plan_data($theme['id']);
                         if (!empty($data)) {
                             foreach ($data as $plan) {
@@ -191,12 +191,12 @@ class ThematicController
                         $data = $thematic->get_thematic_advance_by_thematic_id($theme['id']);
                         if (!empty($data)) {
                             foreach ($data as $advance) {
-                                $csv[] = array(
+                                $csv[] = [
                                     'progress',
                                     strip_tags($advance['start_date']),
                                     strip_tags($advance['duration']),
                                     strip_tags($advance['content']),
-                                );
+                                ];
                             }
                         }
                     }
@@ -205,13 +205,12 @@ class ThematicController
                     // Don't continue building a normal page.
                     return;
                 case 'export_documents':
-                    //no break
                 case 'thematic_export_pdf':
                     $pdfOrientation = api_get_configuration_value('thematic_pdf_orientation');
 
                     $list = $thematic->get_thematic_list();
-                    $item = array();
-                    $listFinish = array();
+                    $item = [];
+                    $listFinish = [];
                     foreach ($list as $theme) {
                         $dataPlan = $thematic->get_thematic_plan_data($theme['id']);
                         if (!empty($dataPlan)) {
@@ -219,13 +218,12 @@ class ThematicController
                                 if (empty($plan['description'])) {
                                     continue;
                                 }
-                                $item[] = array(
+                                $item[] = [
                                     'title' => $plan['title'],
                                     'description' => $plan['description']
-                                );
+                                ];
                             }
                             $theme['thematic_plan'] = $item;
-
                         }
                         $dataAdvance = $thematic->get_thematic_advance_by_thematic_id($theme['id']);
                         if (!empty($dataAdvance)) {
@@ -272,7 +270,6 @@ class ThematicController
                     );
                     break;
                 case 'export_single_documents':
-                    //no break
                 case 'export_single_thematic':
                     $theme = $thematic->get_thematic_list($thematic_id);
                     $plans = $thematic->get_thematic_plan_data($theme['id']);
@@ -397,7 +394,7 @@ class ThematicController
     public function thematic_plan($action)
     {
         $thematic = new Thematic();
-        $data = array();
+        $data = [];
         if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
             if (isset($_POST['action']) &&
                 ($_POST['action'] == 'thematic_plan_add' || $_POST['action'] == 'thematic_plan_edit')
@@ -525,12 +522,12 @@ class ThematicController
     {
         $thematic = new Thematic();
         $attendance = new Attendance();
-        $data = array();
+        $data = [];
         $displayHeader = (!empty($_REQUEST['display']) && $_REQUEST['display'] === 'no_header') ? false : true;
 
         // get data for attendance input select
         $attendance_list = $attendance->get_attendances_list();
-        $attendance_select = array();
+        $attendance_select = [];
         $attendance_select[0] = get_lang('SelectAnAttendance');
         foreach ($attendance_list as $attendance_id => $attendance_data) {
             $attendance_select[$attendance_id] = $attendance_data['name'];
@@ -538,7 +535,7 @@ class ThematicController
 
         $thematic_id = intval($_REQUEST['thematic_id']);
         $thematic_advance_id = isset($_REQUEST['thematic_advance_id']) ? intval($_REQUEST['thematic_advance_id']) : null;
-        $thematic_advance_data = array();
+        $thematic_advance_data = [];
 
         switch ($action) {
             case 'thematic_advance_delete':
@@ -572,7 +569,7 @@ class ThematicController
         }
 
         // get calendar select by attendance id
-        $calendar_select = array();
+        $calendar_select = [];
         if (!empty($thematic_advance_data)) {
             if (!empty($thematic_advance_data['attendance_id'])) {
                 $attendance_calendar = $attendance->get_attendance_calendar($thematic_advance_data['attendance_id']);

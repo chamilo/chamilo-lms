@@ -92,9 +92,9 @@ class StudentPublicationLink extends AbstractLink
 
         $result = Database::query($sql);
 
-        $cats = array();
+        $cats = [];
         while ($data = Database::fetch_array($result)) {
-            $cats[] = array($data['id'], $data['url']);
+            $cats[] = [$data['id'], $data['url']];
         }
         return $cats;
     }
@@ -135,9 +135,9 @@ class StudentPublicationLink extends AbstractLink
             if (empty($work_name)) {
                 $work_name = basename($data->getUrl());
             }
-            $cats[] = array($data->getId(), $work_name);
+            $cats[] = [$data->getId(), $work_name];
         }
-        $cats = isset($cats) ? $cats : array();
+        $cats = isset($cats) ? $cats : [];
         return $cats;
     }
 
@@ -239,7 +239,6 @@ class StudentPublicationLink extends AbstractLink
                 $dql .= ' ORDER BY a.sentDate DESC';
                 break;
             case 'first':
-                //no break
             default:
                 // first attempt
                 $dql .= ' ORDER BY a.id';
@@ -262,7 +261,7 @@ class StudentPublicationLink extends AbstractLink
             ];
         }
 
-        $students = array(); // user list, needed to make sure we only
+        $students = []; // user list, needed to make sure we only
         // take first attempts into account
         $rescount = 0;
         $sum = 0;
@@ -292,16 +291,16 @@ class StudentPublicationLink extends AbstractLink
 
         switch ($type) {
             case 'best':
-                return array($bestResult, $weight);
+                return [$bestResult, $weight];
                 break;
             case 'average':
-                return array($sumResult / $rescount, $weight);
+                return [$sumResult / $rescount, $weight];
                 break;
             case 'ranking':
                 return AbstractLink::getCurrentUserRanking($stud_id, $students);
                 break;
             default:
-                return array($sum, $rescount);
+                return [$sum, $rescount];
                 break;
         }
     }

@@ -212,7 +212,7 @@ if (api_is_allowed_to_edit(false, true)) {
 }
 
 $actionsRight = GroupManager::getSearchForm();
-$toolbar = Display::toolbarAction('toolbar-groups', array($actionsLeft, $actionsRight));
+$toolbar = Display::toolbarAction('toolbar-groups', [$actionsLeft, $actionsRight]);
 $group_cats = GroupManager::get_categories(api_get_course_id());
 echo $toolbar;
 echo UserManager::getUserSubscriptionTab(3);
@@ -251,9 +251,9 @@ if (api_get_setting('allow_group_categories') === 'true') {
             $actions .= Display::url(
                 Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL),
                 'group.php?'.api_get_cidreq().'&action=delete_category&id='.$categoryId,
-                array(
+                [
                     'onclick' => 'javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;'
-                )
+                ]
             );
             // Move
             if ($index != 0) {

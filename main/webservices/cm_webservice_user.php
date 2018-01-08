@@ -13,7 +13,6 @@ require_once __DIR__.'/cm_webservice.php';
  */
 class WSCMUser extends WSCM
 {
-
     public function find_id_user($username, $password, $name)
     {
         if ($this->verifyUserPass($username, $password) == "valid") {
@@ -23,24 +22,24 @@ class WSCMUser extends WSCM
             $listArray = [];
 
             $list = $this->get_user_list_like_start(
-                array('firstname' => $name),
-                array('firstname')
+                ['firstname' => $name],
+                ['firstname']
             );
             foreach ($list as $userData) {
                 $listArray[] = $userData['user_id'];
             }
 
             $list = $this->get_user_list_like_start(
-                array('lastname' => $name),
-                array('firstname')
+                ['lastname' => $name],
+                ['firstname']
             );
             foreach ($list as $userData) {
                 $listArray[] = $userData['user_id'];
             }
 
             $list = $this->get_user_list_like_start(
-                array('email' => $name),
-                array('firstname')
+                ['email' => $name],
+                ['firstname']
             );
             foreach ($list as $userData) {
                 $listArray[] = $userData['user_id'];
@@ -61,7 +60,7 @@ class WSCMUser extends WSCM
     {
         if ($this->verifyUserPass($username, $password) == "valid") {
             $userPic = UserManager::getUserPicture($id);
-            if (empty ($userPic)) {
+            if (empty($userPic)) {
                 return "0";
             }
 

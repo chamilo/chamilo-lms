@@ -17,7 +17,7 @@ if (isset($_GET['archive_path'])) {
     $archive_path = CourseArchiver::getBackupDir();
 }
 $archive_file = isset($_GET['archive']) ? $_GET['archive'] : null;
-$archive_file = str_replace(array('..', '/', '\\'), '', $archive_file);
+$archive_file = str_replace(['..', '/', '\\'], '', $archive_file);
 
 list($extension) = getextension($archive_file);
 
@@ -28,7 +28,7 @@ if (empty($extension) || !file_exists($archive_path.$archive_file)) {
 $extension = strtolower($extension);
 $content_type = '';
 
-if (in_array($extension, array('xml', 'csv')) &&
+if (in_array($extension, ['xml', 'csv']) &&
     (api_is_platform_admin(true) || api_is_drh())
 ) {
     $content_type = 'application/force-download';

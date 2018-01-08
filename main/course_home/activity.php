@@ -98,7 +98,6 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
         'class' => 'course-tools-administration',
         'content' => CourseHome::show_tools_category($my_list)
     ];
-
 } elseif (api_is_coach()) {
     $content .= $pluginExtra;
     if (api_get_setting('show_session_data') === 'true' && $session_id > 0) {
@@ -120,7 +119,7 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
     if ($sessionsCopy === 'true') {
         // Adding only maintenance for coaches.
         $myList = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
-        $onlyMaintenanceList = array();
+        $onlyMaintenanceList = [];
 
         foreach ($myList as $item) {
             if ($item['name'] === 'course_maintenance') {
@@ -154,7 +153,7 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
         }
 
         if ($addUserTool) {
-            $tools[] = array(
+            $tools[] = [
                 'c_id' => api_get_course_int_id(),
                 'name' => 'user',
                 'link' => 'user/user.php',
@@ -166,7 +165,7 @@ if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, t
                 'target' => '_self',
                 'category' => 'interaction',
                 'session_id' => api_get_session_id()
-            );
+            ];
         }
     }
 

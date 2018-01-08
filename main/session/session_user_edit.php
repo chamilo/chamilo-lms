@@ -28,11 +28,11 @@ if (empty($sessionId) || empty($userId)) {
 }
 
 
-$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
+$interbreadcrumb[] = [
     'url' => "resume_session.php?id_session=".$sessionId,
     "name" => get_lang('SessionOverview')
-);
+];
 
 $form = new FormValidator('edit', 'post', api_get_self().'?session_id='.$sessionId.'&user_id='.$userId);
 $form->addHeader(get_lang('EditUserSessionDuration'));
@@ -71,7 +71,7 @@ $form->addElement('html', sprintf(get_lang('UserXSessionY'), $userInfo['complete
 $form->addElement('html', '<br>');
 $form->addElement('html', $msg);
 
-$form->addElement('text', 'duration', array(get_lang('ExtraDurationForUser'), null, get_lang('Days')));
+$form->addElement('text', 'duration', [get_lang('ExtraDurationForUser'), null, get_lang('Days')]);
 $form->addButtonSave(get_lang('Save'));
 
 $form->setDefaults(['duration' => 0]);

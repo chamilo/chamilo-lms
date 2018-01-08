@@ -47,9 +47,9 @@ class WSUser extends WS
      */
     protected function changeUsersActiveState($users, $state)
     {
-        $results = array();
+        $results = [];
         foreach ($users as $user) {
-            $result_tmp = array();
+            $result_tmp = [];
             $result_op = $this->changeUserActiveState(
                 $user['user_id_field_name'],
                 $user['user_id_value'],
@@ -228,9 +228,9 @@ class WSUser extends WS
         if ($verifKey instanceof WSError) {
             $this->handleError($verifKey);
         } else {
-            $results = array();
+            $results = [];
             foreach ($users as $user) {
-                $result_tmp = array();
+                $result_tmp = [];
                 $result_op = $this->deleteUserHelper(
                     $user['user_id_field_name'],
                     $user['user_id_value']
@@ -285,11 +285,11 @@ class WSUser extends WS
         $language,
         $phone,
         $expiration_date,
-        $extras = array()
+        $extras = []
     ) {
 
         // Add the original user id field name and value to the extra fields if needed
-        $extras_associative = array();
+        $extras_associative = [];
         if ($user_id_field_name != "chamilo_user_id") {
             $extras_associative[$user_id_field_name] = $user_id_value;
         }
@@ -370,7 +370,7 @@ class WSUser extends WS
         $language = 'english',
         $phone = '',
         $expiration_date = '0000-00-00 00:00:00',
-        $extras = array()
+        $extras = []
     ) {
         // First, verify the secret key
         $verifKey = $this->verifyKey($secret_key);
@@ -415,9 +415,9 @@ class WSUser extends WS
         if ($verifKey instanceof WSError) {
             $this->handleError($verifKey);
         } else {
-            $results = array();
+            $results = [];
             foreach ($users as $user) {
-                $result_tmp = array();
+                $result_tmp = [];
                 // re-initialize variables just in case
                 $firstname = $lastname = $status = $login = $password = $encrypt_method = $user_id_field_name = $user_id_value = $visibility = $email = $language = $phone = $expiration_date = $extras = null;
                 extract($user);
@@ -572,7 +572,7 @@ class WSUser extends WS
         if ($verifKey instanceof WSError) {
             $this->handleError($verifKey);
         } else {
-            $extras_associative = array();
+            $extras_associative = [];
             if (!empty($extras)) {
                 foreach ($extras as $extra) {
                     $extras_associative[$extra['field_name']] = $extra['field_value'];
@@ -616,9 +616,9 @@ class WSUser extends WS
         if ($verifKey instanceof WSError) {
             $this->handleError($verifKey);
         } else {
-            $results = array();
+            $results = [];
             foreach ($users as $user) {
-                $result_tmp = array();
+                $result_tmp = [];
                 // re-initialize variables just in case
                 $user_id_field_name = $user_id_value = $firstname = $lastname = $status = $loginname = $password = $encrypt_method = $email = $language = $phone = $expiration_date = $extras = null;
                 extract($user);

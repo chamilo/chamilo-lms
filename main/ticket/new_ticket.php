@@ -188,41 +188,41 @@ function save_ticket()
     }
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
     'name' => get_lang('MyTickets')
-);
+];
 
 $userId = api_get_user_id();
 
 // Category List
-$categoryList = array();
+$categoryList = [];
 foreach ($types as $type) {
     $categoryList[$type['category_id']] = $type['name'].': '.$type['description'];
 }
 
 // Status List
-$statusAttributes = array(
+$statusAttributes = [
     'style' => 'display: none;',
     'id' => 'status_id',
     'for' => 'status_id'
-);
+];
 
 $statusList = TicketManager::getStatusList();
 
 // Source List
-$sourceList = array();
-$sourceAttributes = array(
+$sourceList = [];
+$sourceAttributes = [
     'style' => 'display: none;',
     'id' => 'source_id',
     'for' => 'source_id'
-);
+];
 $sourceList[TicketManager::SOURCE_PLATFORM] = get_lang('SrcPlatform');
 if (api_is_platform_admin()) {
-    $sourceAttributes = array(
+    $sourceAttributes = [
         'id' => 'source_id',
         'for' => 'source_id'
-    );
+    ];
     $sourceList[TicketManager::SOURCE_EMAIL] = get_lang('SrcEmail');
     $sourceList[TicketManager::SOURCE_PHONE] = get_lang('SrcPhone');
     $sourceList[TicketManager::SOURCE_PRESENTIAL] = get_lang('SrcPresential');
@@ -238,18 +238,18 @@ $form = new FormValidator(
     'POST',
     api_get_self().'?project_id='.$projectId,
     '',
-    array(
+    [
         'enctype' => 'multipart/form-data',
-    )
+    ]
 );
 
 $form->addElement(
     'hidden',
     'user_id_request',
     '',
-    array(
+    [
         'id' => 'user_id_request'
-    )
+    ]
 );
 
 $form->addElement(
@@ -262,38 +262,38 @@ $form->addElement(
     'hidden',
     'other_area',
     '',
-    array(
+    [
         'id' => 'other_area'
-    )
+    ]
 );
 
 $form->addElement(
     'hidden',
     'email',
     '',
-    array(
+    [
         'id' => 'email'
-    )
+    ]
 );
 
 $form->addSelect(
     'category_id',
     get_lang('Category'),
     $categoryList,
-    array(
+    [
         'id' => 'category_id',
         'for' => 'category_id',
         'style' => 'width: 562px;'
-    )
+    ]
 );
 
 $form->addElement(
     'text',
     'subject',
     get_lang('Subject'),
-    array(
+    [
         'id' => 'subject'
-    )
+    ]
 );
 
 $form->addHtmlEditor(
@@ -301,10 +301,10 @@ $form->addHtmlEditor(
     get_lang('Message'),
     false,
     false,
-    array(
+    [
         'ToolbarSet' => 'Profile',
         'Height' => '250'
-    )
+    ]
 );
 
 if (api_is_platform_admin()) {
@@ -320,18 +320,18 @@ $form->addElement(
     'text',
     'personal_email',
     get_lang('PersonalEmail'),
-    array(
+    [
         'id' => 'personal_email'
-    )
+    ]
 );
 
 $form->addLabel(
     '',
     Display::div(
         '',
-        array(
+        [
             'id' => 'user_request'
-        )
+        ]
     )
 );
 
@@ -348,10 +348,10 @@ $form->addElement(
     'priority_id',
     get_lang('Priority'),
     $priorityList,
-    array(
+    [
         'id' => 'priority_id',
         'for' => 'priority_id'
-    )
+    ]
 );
 
 $form->addElement(
@@ -366,13 +366,13 @@ $form->addElement(
     'text',
     'phone',
     get_lang('Phone').' ('.get_lang('Optional').')',
-    array(
+    [
         'id' => 'phone'
-    )
+    ]
 );
 
 $sessionList = SessionManager::get_sessions_by_user($userId);
-$sessionListToSelect = array(get_lang('Select'));
+$sessionListToSelect = [get_lang('Select')];
 //Course List
 foreach ($sessionList as $sessionInfo) {
     $sessionListToSelect[$sessionInfo['session_id']] = $sessionInfo['session_name'];
@@ -418,9 +418,9 @@ $form->addElement(
     null,
     null,
     'btn btn-primary',
-    array(
+    [
         'id' => 'btnsubmit'
-    )
+    ]
 );
 
 $form->addRule('content', get_lang('ThisFieldIsRequired'), 'required');

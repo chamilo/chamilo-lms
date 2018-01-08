@@ -59,8 +59,8 @@ $projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
 
 $table = new SortableTable(
     'Tickets',
-    array('TicketManager', 'get_total_tickets_by_user_id'),
-    array('TicketManager', 'get_tickets_by_user_id'),
+    ['TicketManager', 'get_total_tickets_by_user_id'],
+    ['TicketManager', 'get_tickets_by_user_id'],
     2,
     20,
     'DESC'
@@ -79,8 +79,8 @@ switch ($action) {
         }
         break;
     case 'export':
-        $data = array(
-            array(
+        $data = [
+            [
                 '#',
                 get_lang('Date'),
                 get_lang('LastUpdate'),
@@ -90,12 +90,12 @@ switch ($action) {
                 get_lang('AssignedTo'),
                 get_lang('Status'),
                 get_lang('Description')
-            )
-        );
+            ]
+        ];
         $datos = $table->get_clean_html();
         foreach ($datos as $ticket) {
             $ticket[0] = substr(strip_tags($ticket[0]), 0, 12);
-            $ticket_rem = array(
+            $ticket_rem = [
                 utf8_decode(strip_tags($ticket[0])),
                 utf8_decode(api_html_entity_decode($ticket[1])),
                 utf8_decode(strip_tags($ticket[2])),
@@ -104,7 +104,7 @@ switch ($action) {
                 utf8_decode(strip_tags($ticket[5])),
                 utf8_decode(strip_tags($ticket[6])),
                 utf8_decode(strip_tags($ticket[7]))
-            );
+            ];
             $data[] = $ticket_rem;
         }
         Export::arrayToXls($data, get_lang('Tickets'));
@@ -181,8 +181,8 @@ if (!empty($projectId)) {
     }
 
     $admins = UserManager::get_user_list_like(
-        array('status' => '1'),
-        array('username'),
+        ['status' => '1'],
+        ['username'],
         true
     );
     $selectAdmins = [
@@ -221,10 +221,10 @@ if (!empty($projectId)) {
         '<span id="img_plus_and_minus">&nbsp;'.
         Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch'),
         'javascript://',
-        array(
+        [
             'class' => 'btn btn-default advanced-parameters',
             'onclick' => 'display_advanced_search_form();'
-        )
+        ]
     );
 
     // Add link
@@ -267,11 +267,11 @@ if (!empty($projectId)) {
 
     echo Display::toolbarAction(
         'toolbar-tickets',
-        array(
+        [
             $form->returnForm(),
             $advancedSearch,
             $actionRight
-        )
+        ]
     );
 
     $ticketLabel = get_lang('AllTickets');
@@ -309,9 +309,9 @@ if (!empty($projectId)) {
     if ($isAllow) {
         echo Display::toolbarAction(
             'toolbar-options',
-            array(
+            [
                 $options
-            )
+            ]
         );
     }
 

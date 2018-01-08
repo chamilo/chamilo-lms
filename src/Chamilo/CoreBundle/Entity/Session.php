@@ -447,7 +447,6 @@ class Session
         foreach ($this->userCourseSubscriptions as $i => $courseSubscription) {
             if ($courseSubscription->getCourse()->getId() === $course->getId() &&
                 $courseSubscription->getUser()->getId() === $user->getId()) {
-
                 if ($this->userCourseSubscriptions[$i]->getStatus() === self::STUDENT) {
                     $sessionCourse = $this->getCourseSubscription($course);
 
@@ -886,12 +885,12 @@ class Session
      */
     public static function getStatusList()
     {
-        return array(
+        return [
             self::VISIBLE => 'status_visible',
             self::READ_ONLY => 'status_read_only',
             self::INVISIBLE => 'status_invisible',
             self::AVAILABLE => 'status_available',
-        );
+        ];
     }
 
     /**

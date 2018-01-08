@@ -90,9 +90,9 @@ class AnnouncementEmail
                 $userList = CourseManager::get_user_list_from_course_code($courseCode);
             } else {
                 $userList = GroupManager::get_users($group_id);
-                $new_user_list = array();
+                $new_user_list = [];
                 foreach ($userList as $user) {
-                    $new_user_list[] = array('user_id' => $user);
+                    $new_user_list[] = ['user_id' => $user];
                 }
                 $userList = $new_user_list;
             }
@@ -113,9 +113,9 @@ class AnnouncementEmail
      */
     public function sent_to_info()
     {
-        $result = array();
-        $result['groups'] = array();
-        $result['users'] = array();
+        $result = [];
+        $result['groups'] = [];
+        $result['users'] = [];
 
         $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tool = TOOL_ANNOUNCEMENT;
@@ -164,7 +164,7 @@ class AnnouncementEmail
     {
         $sent_to = $this->sent_to_info();
         $users = $sent_to['users'];
-        $users = $users ? $users : array();
+        $users = $users ? $users : [];
         $groups = $sent_to['groups'];
 
         if ($users) {
@@ -279,7 +279,7 @@ class AnnouncementEmail
      */
     public function attachment()
     {
-        $result = array();
+        $result = [];
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $id = $this->announcement('id');
         $course_id = $this->course('real_id');
@@ -290,10 +290,10 @@ class AnnouncementEmail
         while ($row = Database::fetch_array($rs)) {
             $path = api_get_path(SYS_COURSE_PATH).$course_path.'/upload/announcements/'.$row['path'];
             $filename = $row['filename'];
-            $result[] = array('path' => $path, 'filename' => $filename);
+            $result[] = ['path' => $path, 'filename' => $filename];
         }
 
-        $result = $result ? reset($result) : array();
+        $result = $result ? reset($result) : [];
 
         return $result;
     }

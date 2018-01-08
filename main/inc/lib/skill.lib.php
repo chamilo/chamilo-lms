@@ -13,7 +13,7 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
  */
 class SkillProfile extends Model
 {
-    public $columns = array('id', 'name', 'description');
+    public $columns = ['id', 'name', 'description'];
 
     /**
      * Constructor
@@ -80,10 +80,10 @@ class SkillProfile extends Model
                 $skill_rel_profile = new SkillRelProfile();
                 if (isset($params['skills'])) {
                     foreach ($params['skills'] as $skill_id) {
-                        $attributes = array(
+                        $attributes = [
                             'skill_id' => $skill_id,
                             'profile_id' => $profile_id,
-                        );
+                        ];
                         $skill_rel_profile->save($attributes);
                     }
                 }
@@ -103,9 +103,9 @@ class SkillProfile extends Model
     {
         Database::delete(
             $this->table_rel_profile,
-            array(
+            [
                 'profile_id' => $id,
-            )
+            ]
         );
 
         return parent::delete($id);
@@ -117,7 +117,7 @@ class SkillProfile extends Model
  */
 class SkillRelProfile extends Model
 {
-    public $columns = array('id', 'skill_id', 'profile_id');
+    public $columns = ['id', 'skill_id', 'profile_id'];
 
     /**
      * Constructor
@@ -135,7 +135,7 @@ class SkillRelProfile extends Model
     public function getSkillsByProfile($profileId)
     {
         $profileId = intval($profileId);
-        $skills = $this->get_all(array('where' => array('profile_id = ? ' => $profileId)));
+        $skills = $this->get_all(['where' => ['profile_id = ? ' => $profileId]]);
         $return = [];
         if (!empty($skills)) {
             foreach ($skills as $skill_data) {
@@ -169,7 +169,7 @@ class SkillRelProfile extends Model
  */
 class SkillRelSkill extends Model
 {
-    public $columns = array('skill_id', 'parent_id', 'relation_type', 'level');
+    public $columns = ['skill_id', 'parent_id', 'relation_type', 'level'];
 
     /**
      * Constructor
@@ -193,7 +193,7 @@ class SkillRelSkill extends Model
         $result = Database::select(
             '*',
             $this->table,
-            array('where' => array('skill_id = ?' => intval($id))),
+            ['where' => ['skill_id = ?' => intval($id)]],
             'first'
         );
 
@@ -309,7 +309,7 @@ class SkillRelSkill extends Model
         $result = Database::update(
             $this->table,
             $params,
-            array('skill_id = ? ' => $params['skill_id'])
+            ['skill_id = ? ' => $params['skill_id']]
         );
         if ($result) {
             return true;
@@ -327,14 +327,14 @@ class SkillRelSkill extends Model
     {
         $result = $this->find(
             'all',
-            array(
-                'where' => array(
-                    'skill_id = ? AND parent_id = ?' => array(
+            [
+                'where' => [
+                    'skill_id = ? AND parent_id = ?' => [
                         $skill_id,
                         $parent_id,
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
 
         if (!empty($result)) {
@@ -349,7 +349,7 @@ class SkillRelSkill extends Model
  */
 class SkillRelGradebook extends Model
 {
-    public $columns = array('id', 'gradebook_id', 'skill_id');
+    public $columns = ['id', 'gradebook_id', 'skill_id'];
 
     /**
      * SkillRelGradebook constructor.
@@ -368,14 +368,14 @@ class SkillRelGradebook extends Model
     {
         $result = $this->find(
             'all',
-            array(
-                'where' => array(
-                    'gradebook_id = ? AND skill_id = ?' => array(
+            [
+                'where' => [
+                    'gradebook_id = ? AND skill_id = ?' => [
                         $gradebookId,
                         $skillId,
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
         if (!empty($result)) {
             return true;
@@ -394,14 +394,14 @@ class SkillRelGradebook extends Model
         $result = Database::select(
             '*',
             $this->table,
-            array(
-                'where' => array(
-                    'skill_id = ? AND gradebook_id = ? ' => array(
+            [
+                'where' => [
+                    'skill_id = ? AND gradebook_id = ? ' => [
                         $skill_id,
                         $gradebookId,
-                    ),
-                ),
-            ),
+                    ],
+                ],
+            ],
             'first'
         );
         return $result;
@@ -415,7 +415,7 @@ class SkillRelGradebook extends Model
     {
         $original_gradebook_list = $this->find(
             'all',
-            array('where' => array('skill_id = ?' => array($skill_id)))
+            ['where' => ['skill_id = ?' => [$skill_id]]]
         );
         $gradebooks_to_remove = [];
         $gradebooks_to_add = [];
@@ -448,10 +448,10 @@ class SkillRelGradebook extends Model
 
         if (!empty($gradebooks_to_add)) {
             foreach ($gradebooks_to_add as $gradebook_id) {
-                $attributes = array(
+                $attributes = [
                     'skill_id' => $skill_id,
                     'gradebook_id' => $gradebook_id,
-                );
+                ];
                 $this->save($attributes);
             }
         }
@@ -485,7 +485,7 @@ class SkillRelGradebook extends Model
  */
 class SkillRelUser extends Model
 {
-    public $columns = array(
+    public $columns = [
         'id',
         'user_id',
         'skill_id',
@@ -493,7 +493,7 @@ class SkillRelUser extends Model
         'assigned_by',
         'course_id',
         'session_id',
-    );
+    ];
 
     /**
      * Constructor
@@ -538,9 +538,9 @@ class SkillRelUser extends Model
 
         $courseId = intval($courseId);
         $sessionId = $sessionId ? intval($sessionId) : null;
-        $whereConditions = array(
+        $whereConditions = [
             'user_id = ? ' => intval($userId),
-        );
+        ];
 
         if ($courseId > 0) {
             $whereConditions['AND course_id = ? '] = $courseId;
@@ -550,9 +550,9 @@ class SkillRelUser extends Model
         $result = Database::select(
             'skill_id',
             $this->table,
-            array(
+            [
                 'where' => $whereConditions,
-            ),
+            ],
             'all'
         );
         return $result;
@@ -568,20 +568,19 @@ class SkillRelUser extends Model
      */
     public function getByUserAndSkill($userId, $skillId, $courseId, $sessionId = 0)
     {
-        $where = array(
-            'user_id = ? AND skill_id = ? AND course_id = ? AND session_id = ?' => array(
+        $where = [
+            'user_id = ? AND skill_id = ? AND course_id = ? AND session_id = ?' => [
                 intval($userId),
                 intval($skillId),
                 intval($courseId),
                 $sessionId ? intval($sessionId) : null,
-            ),
-        );
+            ],
+        ];
 
-        return Database::select('*', $this->table, array(
+        return Database::select('*', $this->table, [
             'where' => $where,
-        ), 'first');
+        ], 'first');
     }
-
 }
 
 /**
@@ -589,7 +588,7 @@ class SkillRelUser extends Model
  */
 class Skill extends Model
 {
-    public $columns = array(
+    public $columns = [
         'id',
         'name',
         'description',
@@ -597,8 +596,8 @@ class Skill extends Model
         'short_code',
         'icon',
         'criteria',
-    );
-    public $required = array('name');
+    ];
+    public $required = ['name'];
 
     /** Array of colours by depth, for the coffee wheel. Each depth has 4 col */
     /*var $colours = array(
@@ -1008,7 +1007,7 @@ class Skill extends Model
         }
 
         if (!is_array($params['parent_id'])) {
-            $params['parent_id'] = array($params['parent_id']);
+            $params['parent_id'] = [$params['parent_id']];
         }
 
         $skillRelSkill = new SkillRelSkill();
@@ -1021,12 +1020,12 @@ class Skill extends Model
             foreach ($params['parent_id'] as $parent_id) {
                 $relation_exists = $skillRelSkill->relationExists($skill_id, $parent_id);
                 if (!$relation_exists) {
-                    $attributes = array(
+                    $attributes = [
                         'skill_id' => $skill_id,
                         'parent_id' => $parent_id,
                         'relation_type' => (isset($params['relation_type']) ? $params['relation_type'] : 0),
                         //'level'         => $params['level'],
-                    );
+                    ];
                     $skillRelSkill->save($attributes);
                 }
             }
@@ -1060,7 +1059,7 @@ class Skill extends Model
         $skill_rel_user = new SkillRelUser();
 
         $skill_gradebooks = $skill_gradebook->get_all(
-            array('where' => array('gradebook_id = ?' => $gradebookId))
+            ['where' => ['gradebook_id = ?' => $gradebookId]]
         );
         if (!empty($skill_gradebooks)) {
             foreach ($skill_gradebooks as $skill_gradebook) {
@@ -1071,13 +1070,13 @@ class Skill extends Model
                     $sessionId
                 );
                 if (!$user_has_skill) {
-                    $params = array(
+                    $params = [
                         'user_id' => $user_id,
                         'skill_id' => $skill_gradebook['skill_id'],
                         'acquired_skill_at' => api_get_utc_datetime(),
                         'course_id' => intval($courseId),
                         'session_id' => $sessionId ? intval($sessionId) : null,
-                    );
+                    ];
 
                     $skill_rel_user->save($params);
                 }
@@ -1124,7 +1123,7 @@ class Skill extends Model
         if ($skillId) {
             // Saving skill_rel_skill (parent_id, relation_type)
             if (!is_array($params['parent_id'])) {
-                $params['parent_id'] = array($params['parent_id']);
+                $params['parent_id'] = [$params['parent_id']];
             }
 
             // Cannot change parent of root
@@ -1135,12 +1134,12 @@ class Skill extends Model
             foreach ($params['parent_id'] as $parent_id) {
                 $relation_exists = $skillRelSkill->relationExists($skillId, $parent_id);
                 if (!$relation_exists) {
-                    $attributes = array(
+                    $attributes = [
                         'skill_id' => $skillId,
                         'parent_id' => $parent_id,
                         'relation_type' => $params['relation_type'],
                         //'level'         => $params['level'],
-                    );
+                    ];
                     $skillRelSkill->updateBySkill($attributes);
                 }
             }
@@ -1309,14 +1308,14 @@ class Skill extends Model
                 }
             }
 
-            $tableRow = array(
+            $tableRow = [
                 'skill_badge' => $resultData['img_mini'],
                 'skill_name' => self::translateName($resultData['name']),
                 'short_code' => $resultData['short_code'],
                 'achieved_at' => api_get_local_time($resultData['acquired_skill_at']),
                 'course_image' => '',
                 'course_name' => '',
-            );
+            ];
 
             if (!empty($courseInfo)) {
                 $tableRow['course_image'] = $courseInfo['course_image_source'];
@@ -1486,11 +1485,11 @@ class Skill extends Model
             if ($add_root) {
                 if (!empty($skill_id)) {
                     // Default root node
-                    $skills[1] = array(
+                    $skills[1] = [
                         'id' => '1',
                         'name' => get_lang('Root'),
                         'parent_id' => '0',
-                    );
+                    ];
                     $skillInfo = $this->getSkillInfo($skill_id);
 
                     // 2nd node
@@ -1516,7 +1515,7 @@ class Skill extends Model
 
                 // because except main keys (id, name, children) others keys
                 // are not saved while in the space tree
-                $skill['data'] = array('parent_id' => $skill['parent_id']);
+                $skill['data'] = ['parent_id' => $skill['parent_id']];
 
                 // If a short code was defined, send the short code to replace
                 // skill name (to shorten the text in the wheel)
@@ -1595,12 +1594,12 @@ class Skill extends Model
                 }
             }
 
-            $skills_tree = array(
+            $skills_tree = [
                 'name' => get_lang('SkillRootName'),
                 'id' => 'root',
                 'children' => $refs['root']['children'],
                 'data' => [],
-            );
+            ];
         }
 
         if ($return_flat_array) {
@@ -1638,10 +1637,10 @@ class Skill extends Model
                 if (isset($element['children'])) {
                     $children = $this->getSkillToJson($element['children'], 1, $main_depth);
                 }
-                $simple_tree[] = array(
+                $simple_tree[] = [
                     'name' => $element['name'],
                     'children' => $children,
-                );
+                ];
             }
         }
 
@@ -1827,10 +1826,10 @@ class Skill extends Model
         $courseId = intval($courseId);
         $sessionId = intval($sessionId);
 
-        $whereConditions = array(
+        $whereConditions = [
             'user_id = ? ' => intval($userId),
             'AND skill_id = ? ' => intval($skillId),
-        );
+        ];
 
         if ($courseId > 0) {
             $whereConditions['AND course_id = ? '] = $courseId;
@@ -1840,9 +1839,9 @@ class Skill extends Model
         $result = Database::select(
             'COUNT(1) AS qty',
             $this->table_skill_rel_user,
-            array(
+            [
                 'where' => $whereConditions,
-            ),
+            ],
             'first'
         );
 
@@ -1873,11 +1872,11 @@ class Skill extends Model
         $result = Database::select(
             'COUNT( DISTINCT `skill_id`) AS qty',
             $skillRelProfileTable,
-            array(
-                'where' => array(
+            [
+                'where' => [
                     'skill_id = ?' => $id,
-                ),
-            ),
+                ],
+            ],
             'first'
         );
 

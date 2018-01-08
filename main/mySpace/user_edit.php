@@ -51,7 +51,7 @@ if (api_drh_can_access_all_session_content()) {
     if (empty($students)) {
         api_not_allowed(true);
     }
-    $userIdList = array();
+    $userIdList = [];
     foreach ($students as $student) {
         $userIdList[] = $student['user_id'];
     }
@@ -74,28 +74,28 @@ $usernameInput = $form->addElement('text', 'username', get_lang('LoginName'));
 $usernameInput->freeze();
 
 // Password
-$group = array();
+$group = [];
 $auth_sources = 0; //make available wider as we need it in case of form reset (see below)
 $group[] = & $form->createElement('radio', 'password_auto', get_lang('Password'), get_lang('AutoGeneratePassword').'<br />', 1);
 $group[] = & $form->createElement('radio', 'password_auto', 'id="radio_user_password"', null, 0);
-$group[] = & $form->createElement('password', 'password', null, array('onkeydown' => 'javascript: password_switch_radio_button(document.user_add,"password[password_auto]");'));
+$group[] = & $form->createElement('password', 'password', null, ['onkeydown' => 'javascript: password_switch_radio_button(document.user_add,"password[password_auto]");']);
 $form->addGroup($group, 'password', get_lang('Password'));
 
 // Send email
-$group = array();
+$group = [];
 $group[] = & $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
 $group[] = & $form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
 $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'));
 
 // Set default values
-$defaults = array();
+$defaults = [];
 $defaults['username'] = $userInfo['username'];
 $defaults['mail']['send_mail'] = 0;
 $defaults['password']['password_auto'] = 1;
 
 $form->setDefaults($defaults);
 // Submit button
-$select_level = array();
+$select_level = [];
 $html_results_enabled[] = $form->addButtonUpdate(get_lang('Update'), 'submit', true);
 $form->addGroup($html_results_enabled);
 // Validate form
@@ -178,13 +178,13 @@ if ($form->validate()) {
     }
     $token = Security::get_token();
     $form->addElement('hidden', 'sec_token');
-    $form->setConstants(array('sec_token' => $token));
+    $form->setConstants(['sec_token' => $token]);
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH)."mySpace/student.php",
     "name" => get_lang('UserList'),
-);
+];
 
 if (isset($_REQUEST['message'])) {
     Display::addFlash(Display::return_message(get_lang('Updated'), 'normal'));

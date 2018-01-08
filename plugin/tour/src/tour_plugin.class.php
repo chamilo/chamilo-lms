@@ -12,10 +12,10 @@ class Tour extends Plugin
      */
     protected function __construct()
     {
-        $parameters = array(
+        $parameters = [
             'show_tour' => 'boolean',
             'theme' => 'text'
-        );
+        ];
 
         parent::__construct('1.0', 'Angel Fernando Quiroz Campos', $parameters);
     }
@@ -25,7 +25,7 @@ class Tour extends Plugin
      * @staticvar null $result
      * @return Tour
      */
-    static function create()
+    public static function create()
     {
         static $result = null;
 
@@ -91,11 +91,11 @@ class Tour extends Plugin
     {
         $pluginTourLogTable = Database::get_main_table(TABLE_TOUR_LOG);
 
-        $checkResult = Database::select('count(1) as qty', $pluginTourLogTable, array(
-                    'where' => array(
+        $checkResult = Database::select('count(1) as qty', $pluginTourLogTable, [
+                    'where' => [
                         "page_class = '?' AND " => $currentPageClass,
                         "user_id = ?" => intval($userId)
-                    )), 'first');
+                    ]], 'first');
 
         if ($checkResult !== false) {
             if ($checkResult['qty'] > 0) {
@@ -116,11 +116,11 @@ class Tour extends Plugin
     {
         $pluginTourLogTable = Database::get_main_table(TABLE_TOUR_LOG);
 
-        Database::insert($pluginTourLogTable, array(
+        Database::insert($pluginTourLogTable, [
             'page_class' => $currentPageClass,
             'user_id' => intval($userId),
             'visualization_datetime' => api_get_utc_datetime()
-        ));
+        ]);
     }
 
     /**

@@ -11,13 +11,13 @@
  */
 class aicc extends learnpath
 {
-    public $config = array();
+    public $config = [];
     // The configuration files might be multiple and might have
     // funny names. We need to keep the name of that file while we
     // install the content.
     public $config_basename = '';
-    public $config_files = array();
-    public $config_exts = array(
+    public $config_files = [];
+    public $config_exts = [
         'crs' => 0, // Course description file (mandatory)
         'au'  => 0, // Assignable Unit file (mandatory)
         'des' => 0, // Descriptor file (mandatory)
@@ -25,13 +25,13 @@ class aicc extends learnpath
         'ore' => 0, // Objectives relationshops file (optional)
         'pre' => 0, // Prerequisites file (optional)
         'cmp' => 0  // Completion Requirements file (optional)
-    );
-    public $aulist = array();
-    public $au_order_list = array();
-    public $au_order_list_new_id = array();
-    public $deslist = array();
-    public $cstlist = array();
-    public $orelist = array();
+    ];
+    public $aulist = [];
+    public $au_order_list = [];
+    public $au_order_list_new_id = [];
+    public $deslist = [];
+    public $cstlist = [];
+    public $orelist = [];
 
     // Path between the scorm/ directory and the config files
     // e.g. maritime_nav/maritime_nav.
@@ -354,7 +354,7 @@ class aicc extends learnpath
     public function import_local_package($file_path, $current_dir = '')
     {
         // TODO: Prepare info as given by the $_FILES[''] vector.
-        $file_info = array();
+        $file_info = [];
         $file_info['tmp_name'] = $file_path;
         $file_info['name'] = basename($file_path);
         // Call the normal import_package function.
@@ -423,7 +423,7 @@ class aicc extends learnpath
         $package = ''; // The basename of the config files (if 'courses.crs' => 'courses').
         $at_root = false; // Check if the config files are at zip root.
         $config_dir = ''; // The directory in which the config files are. May remain empty.
-        $files_found = array();
+        $files_found = [];
         $subdir_isset = false;
         // The following loop should be stopped as soon as we found the right config files (.crs, .au, .des and .cst).
         foreach ($zipContentArray as $thisContent) {
@@ -447,7 +447,7 @@ class aicc extends learnpath
                 $package_type = 'aicc';
             } else {
                 // else, look for one of the files we're searching for (something.crs case insensitive).
-                $res = array();
+                $res = [];
                 if (preg_match('?^(.*)\.(crs|au|des|cst|ore|pre|cmp)$?i', $thisContent['filename'], $res)) {
                     if ($this->debug > 1) {
                         error_log(
@@ -455,7 +455,9 @@ class aicc extends learnpath
                         );
                     }
                     if ($thisContent['filename'] == basename($thisContent['filename'])) {
-                        if ($this->debug > 2) { error_log('New LP - aicc::import_package() - '.$thisContent['filename'].' is at root level', 0); }
+                        if ($this->debug > 2) {
+                            error_log('New LP - aicc::import_package() - '.$thisContent['filename'].' is at root level', 0);
+                        }
                         $at_root = true;
                         if (!is_array($files_found[$res[1]])) {
                             $files_found[$res[1]] = $this->config_exts; // Initialise list of expected extensions (defined in class definition).
@@ -473,7 +475,9 @@ class aicc extends learnpath
                             }
                             $subdir_isset = true;
                         }
-                        if ($this->debug > 2) { error_log('New LP - aicc::import_package() - '.$thisContent['filename'].' is not at root level - recording subdir '.$this->subdir, 0); }
+                        if ($this->debug > 2) {
+                            error_log('New LP - aicc::import_package() - '.$thisContent['filename'].' is not at root level - recording subdir '.$this->subdir, 0);
+                        }
                         $config_dir = dirname($thisContent['filename']); // Just the relative directory inside scorm/
                         if (!is_array($files_found[basename($res[1])])) {
                             $files_found[basename($res[1])] = $this->config_exts;
@@ -482,7 +486,9 @@ class aicc extends learnpath
                     }
                     $package_type = 'aicc';
                 } else {
-                    if ($this->debug > 3) { error_log('New LP - aicc::import_package() - File '.$thisContent['filename'].' didnt match any check', 0); }
+                    if ($this->debug > 3) {
+                        error_log('New LP - aicc::import_package() - File '.$thisContent['filename'].' didnt match any check', 0);
+                    }
                 }
             }
             $realFileSize += $thisContent['size'];
@@ -565,7 +571,6 @@ class aicc extends learnpath
                 // TODO: Fix relative links in html files (?)
                 $extension = strrchr($state["stored_filename"], '.');
                 //if ($this->debug > 1) { error_log('New LP - found extension '.$extension.' in '.$state['stored_filename'], 0); }
-
             }
 
             if (!empty($new_dir)) {
@@ -586,8 +591,8 @@ class aicc extends learnpath
 
                         // TODO: RENAMING FILES CAN BE VERY DANGEROUS AICC-WISE, avoid that as much as possible!
                         //$safe_file = api_replace_dangerous_char($file, 'strict');
-                        $find_str = array('\\', '.php', '.phtml');
-                        $repl_str = array('/', '.txt', '.txt');
+                        $find_str = ['\\', '.php', '.phtml'];
+                        $repl_str = ['/', '.txt', '.txt'];
                         $safe_file = str_replace($find_str, $repl_str, $file);
 
                         if ($safe_file != $file) {
@@ -724,7 +729,9 @@ class aicc extends learnpath
     public function set_maker($maker = '')
     {
         $course_id = api_get_course_int_id();
-        if ($this->debug > 0) { error_log('In aicc::set_maker method('.$maker.')', 0); }
+        if ($this->debug > 0) {
+            error_log('In aicc::set_maker method('.$maker.')', 0);
+        }
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
@@ -802,7 +809,9 @@ class aicc extends learnpath
      */
     public function get_res_path($id)
     {
-        if ($this->debug > 0) { error_log('In aicc::get_res_path('.$id.') method', 0); }
+        if ($this->debug > 0) {
+            error_log('In aicc::get_res_path('.$id.') method', 0);
+        }
         $path = '';
         if (isset($this->resources[$id])) {
             $oRes = & $this->resources[$id];
@@ -818,7 +827,9 @@ class aicc extends learnpath
      */
     public function get_res_type($id)
     {
-        if ($this->debug > 0) { error_log('In aicc::get_res_type('.$id.') method', 0); }
+        if ($this->debug > 0) {
+            error_log('In aicc::get_res_type('.$id.') method', 0);
+        }
         $type = '';
         if (isset($this->resources[$id])) {
             $oRes = & $this->resources[$id];
@@ -836,7 +847,9 @@ class aicc extends learnpath
      */
     public function get_title()
     {
-        if ($this->debug > 0) { error_log('In aicc::get_title() method', 0); }
+        if ($this->debug > 0) {
+            error_log('In aicc::get_title() method', 0);
+        }
         $title = '';
         if (isset($this->config['organizations']['default'])) {
             $title = $this->organizations[$this->config['organizations']['default']]->get_name();
@@ -927,7 +940,7 @@ class aicc extends learnpath
      * as containing only hard string data (no variables), provided in lower case
      * @return	array	Structured array
      */
-    public function parse_ini_string_quotes_safe($s, $pure_strings = array())
+    public function parse_ini_string_quotes_safe($s, $pure_strings = [])
     {
         $null = '';
         $r = $null;
@@ -1054,13 +1067,13 @@ class aicc extends learnpath
             $ret_array[$linecount][$fldcount] = $fldval;
         }
         // Transform the array to use the first line as titles.
-        $titles = array();
-        $ret_ret_array = array();
+        $titles = [];
+        $ret_ret_array = [];
         foreach ($ret_array as $line_idx => $line) {
             if ($line_idx == 0) {
                 $titles = $line;
             } else {
-                $ret_ret_array[$line_idx] = array();
+                $ret_ret_array[$line_idx] = [];
                 foreach ($line as $idx => $val) {
                     if ($multiples && !empty($ret_ret_array[$line_idx][api_strtolower($titles[$idx])])) {
                         $ret_ret_array[$line_idx][api_strtolower($titles[$idx])] .= ','.$val;

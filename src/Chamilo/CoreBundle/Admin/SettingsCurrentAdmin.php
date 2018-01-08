@@ -8,7 +8,6 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 
-
 /**
  * Class SettingsCurrentAdmin
  * @package Chamilo\CoreBundle\Admin

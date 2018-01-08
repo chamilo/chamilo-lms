@@ -121,7 +121,7 @@ class MessageManager
             $direction = 'DESC';
         } else {
             $column = intval($column);
-            if (!in_array($direction, array('ASC', 'DESC'))) {
+            if (!in_array($direction, ['ASC', 'DESC'])) {
                 $direction = 'ASC';
             }
         }
@@ -461,7 +461,7 @@ class MessageManager
                 $notification->saveNotification(
                     $messageId,
                     $type,
-                    array($receiver_user_id),
+                    [$receiver_user_id],
                     $subject,
                     $content,
                     $sender_info,
@@ -488,10 +488,10 @@ class MessageManager
                 foreach ($user_list as $user_data) {
                     $new_user_list[] = $user_data['id'];
                 }
-                $group_info = array(
+                $group_info = [
                     'group_info' => $group_info,
                     'user_info' => $sender_info,
-                );
+                ];
                 $notification->saveNotification(
                     $messageId,
                     Notification::NOTIFICATION_TYPE_GROUP,
@@ -993,7 +993,7 @@ class MessageManager
             $direction = 'DESC';
         } else {
             $column = intval($column);
-            if (!in_array($direction, array('ASC', 'DESC'))) {
+            if (!in_array($direction, ['ASC', 'DESC'])) {
                 $direction = 'ASC';
             }
         }
@@ -1151,7 +1151,7 @@ class MessageManager
             $userImage = Display::img(
                 $fromUser['avatar_small'],
                 $name,
-                array('title' => $name, 'class' => 'img-responsive img-circle', 'style' => 'max-width:35px'),
+                ['title' => $name, 'class' => 'img-responsive img-circle', 'style' => 'max-width:35px'],
                 false
             );
         }
@@ -1271,7 +1271,7 @@ class MessageManager
         $rows = self::get_messages_by_group($group_id);
         $topics_per_page = 10;
         $html_messages = '';
-        $query_vars = array('id' => $group_id, 'topics_page_nr' => 0);
+        $query_vars = ['id' => $group_id, 'topics_page_nr' => 0];
 
         if (is_array($rows) && count($rows) > 0) {
             // prepare array for topics with its items
@@ -1322,7 +1322,7 @@ class MessageManager
                         Security::remove_XSS($topic['title'], STUDENT, true),
                         api_get_path(WEB_CODE_PATH).'social/group_topics.php?id='.$group_id.'&topic_id='.$topic['id']
                     ),
-                    array('class' => 'title')
+                    ['class' => 'title']
                 );
                 $actions = '';
                 if ($my_group_role == GROUP_USER_PERMISSION_ADMIN ||
@@ -1331,7 +1331,7 @@ class MessageManager
                     $actions = '<br />'.Display::url(
                         get_lang('Delete'),
                         api_get_path(WEB_CODE_PATH).'social/group_topics.php?action=delete&id='.$group_id.'&topic_id='.$topic['id'],
-                        array('class' => 'btn btn-default')
+                        ['class' => 'btn btn-default']
                     );
                 }
 
@@ -1357,7 +1357,7 @@ class MessageManager
                 $html .= '</div>';
                 $html .= '</div>';
 
-                $array_html[] = array($html);
+                $array_html[] = [$html];
             }
 
             // grids for items and topics  with paginations
@@ -1365,13 +1365,13 @@ class MessageManager
                 'topics',
                 [],
                 $array_html,
-                array(
+                [
                     'hide_navigation' => false,
                     'per_page' => $topics_per_page
-                ),
+                ],
                 $query_vars,
                 false,
-                array(true, true, true, false),
+                [true, true, true, false],
                 false
             );
         }
@@ -1399,7 +1399,7 @@ class MessageManager
         $current_user_id = api_get_user_id();
 
         $items_per_page = 50;
-        $query_vars = array('id' => $group_id, 'topic_id' => $topic_id, 'topics_page_nr' => 0);
+        $query_vars = ['id' => $group_id, 'topic_id' => $topic_id, 'topics_page_nr' => 0];
 
         // Main message
         $links = '';
@@ -1518,9 +1518,9 @@ class MessageManager
         $html .= Display::div(
             Display::div(
                 $title.$main_content,
-                array('class' => 'message-topic')
+                ['class' => 'message-topic']
             ),
-            array('class' => 'sm-groups-message')
+            ['class' => 'sm-groups-message']
         );
 
         $topic_id = $main_message['id'];
@@ -1594,19 +1594,19 @@ class MessageManager
                     $indent = intval($topic['indent_cnt']) * $base_padding + $base_padding;
                 }
 
-                $html_items = Display::div($html_items, array('class' => 'message-post', 'id' => 'msg_'.$topic['id']));
-                $html_items = Display::div($html_items, array('class' => '', 'style' => 'margin-left:'.$indent.'px'));
-                $array_html_items[] = array($html_items);
+                $html_items = Display::div($html_items, ['class' => 'message-post', 'id' => 'msg_'.$topic['id']]);
+                $html_items = Display::div($html_items, ['class' => '', 'style' => 'margin-left:'.$indent.'px']);
+                $array_html_items[] = [$html_items];
             }
 
             // grids for items with paginations
-            $options = array('hide_navigation' => false, 'per_page' => $items_per_page);
-            $visibility = array(true, true, true, false);
+            $options = ['hide_navigation' => false, 'per_page' => $items_per_page];
+            $visibility = [true, true, true, false];
 
-            $style_class = array(
-                'item' => array('class' => 'user-post'),
-                'main' => array('class' => 'user-list'),
-            );
+            $style_class = [
+                'item' => ['class' => 'user-post'],
+                'main' => ['class' => 'user-list'],
+            ];
             if (!empty($array_html_items)) {
                 $html .= Display::return_sortable_grid(
                     'items_'.$topic['id'],
@@ -1638,7 +1638,7 @@ class MessageManager
             $rows_with_children[$row["parent_id"]]["children"][] = $row["id"];
         }
         $rows = $rows_with_children;
-        $sorted_rows = array(0 => []);
+        $sorted_rows = [0 => []];
         self::message_recursive_sort($rows, $sorted_rows, $first_seed);
         unset($sorted_rows[0]);
 
@@ -1849,27 +1849,27 @@ class MessageManager
         // display sortable table with messages of the current user
         $table = new SortableTable(
             'message_inbox',
-            array('MessageManager', 'getNumberOfMessages'),
-            array('MessageManager', 'get_message_data'),
+            ['MessageManager', 'getNumberOfMessages'],
+            ['MessageManager', 'get_message_data'],
             2,
             20,
             'DESC'
         );
-        $table->set_header(0, '', false, array('style' => 'width:15px;'));
+        $table->set_header(0, '', false, ['style' => 'width:15px;']);
         $table->set_header(1, get_lang('Messages'), false);
-        $table->set_header(2, get_lang('Date'), true, array('style' => 'width:180px;'));
-        $table->set_header(3, get_lang('Modify'), false, array('style' => 'width:120px;'));
+        $table->set_header(2, get_lang('Date'), true, ['style' => 'width:180px;']);
+        $table->set_header(3, get_lang('Modify'), false, ['style' => 'width:120px;']);
 
         if (isset($_REQUEST['f']) && $_REQUEST['f'] == 'social') {
             $parameters['f'] = 'social';
             $table->set_additional_parameters($parameters);
         }
         $table->set_form_actions(
-            array(
+            [
                 'delete' => get_lang('DeleteSelectedMessages'),
                 'mark_as_unread' => get_lang('MailMarkSelectedAsUnread'),
                 'mark_as_read' => get_lang('MailMarkSelectedAsRead'),
-            )
+            ]
         );
         $html .= $table->return_table();
 
@@ -1914,19 +1914,19 @@ class MessageManager
         // display sortable table with messages of the current user
         $table = new SortableTable(
             'message_outbox',
-            array('MessageManager', 'getNumberOfMessagesSent'),
-            array('MessageManager', 'get_message_data_sent'),
+            ['MessageManager', 'getNumberOfMessagesSent'],
+            ['MessageManager', 'get_message_data_sent'],
             2,
             20,
             'DESC'
         );
 
-        $table->set_header(0, '', false, array('style' => 'width:15px;'));
+        $table->set_header(0, '', false, ['style' => 'width:15px;']);
         $table->set_header(1, get_lang('Messages'), false);
-        $table->set_header(2, get_lang('Date'), true, array('style' => 'width:180px;'));
-        $table->set_header(3, get_lang('Modify'), false, array('style' => 'width:70px;'));
+        $table->set_header(2, get_lang('Date'), true, ['style' => 'width:180px;']);
+        $table->set_header(3, get_lang('Modify'), false, ['style' => 'width:70px;']);
 
-        $table->set_form_actions(array('delete' => get_lang('DeleteSelectedMessages')));
+        $table->set_form_actions(['delete' => get_lang('DeleteSelectedMessages')]);
         $html .= $table->return_table();
 
         Session::erase('message_sent_search_keyword');
@@ -1951,13 +1951,13 @@ class MessageManager
 
         $messagesTable = Database::get_main_table(TABLE_MESSAGE);
 
-        $conditions = array(
-            'where' => array(
+        $conditions = [
+            'where' => [
                 'user_receiver_id = ?' => $userId,
                 'AND msg_status = ?' => MESSAGE_STATUS_UNREAD,
                 'AND id > ?' => $lastId
-            )
-        );
+            ]
+        ];
 
         $result = Database::select('COUNT(1) AS qty', $messagesTable, $conditions);
 
@@ -2025,11 +2025,11 @@ class MessageManager
 
         $messageAttachmentTable = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
-        $conditions = array(
-            'where' => array(
+        $conditions = [
+            'where' => [
                 'message_id = ?' => $messageId
-            )
-        );
+            ]
+        ];
 
         $result = Database::select(
             'COUNT(1) AS qty',
@@ -2067,9 +2067,9 @@ class MessageManager
             'text',
             'keyword',
             false,
-            array(
+            [
                 'aria-label' => get_lang('Search'),
-            )
+            ]
         );
         $form->addButtonSearch(get_lang('Search'));
 

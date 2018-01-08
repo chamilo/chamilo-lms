@@ -26,7 +26,9 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
 {
     global $debug;
     $return = '';
-    if ($debug > 0) { error_log('In initialize_item('.$lp_id.','.$user_id.','.$view_id.','.$next_item.')', 0); }
+    if ($debug > 0) {
+        error_log('In initialize_item('.$lp_id.','.$user_id.','.$view_id.','.$next_item.')', 0);
+    }
     /*$item_id may be one of:
      * -'next'
      * -'previous'
@@ -36,14 +38,20 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
      */
     $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
     $mylp->set_current_item($next_item);
-    if ($debug > 1) { error_log('In initialize_item() - new item is '.$next_item, 0); }
+    if ($debug > 1) {
+        error_log('In initialize_item() - new item is '.$next_item, 0);
+    }
     $mylp->start_current_item(true);
 
     if (is_object($mylp->items[$next_item])) {
-        if ($debug > 1) { error_log('In initialize_item - recovering existing item object '.$next_item, 0); }
+        if ($debug > 1) {
+            error_log('In initialize_item - recovering existing item object '.$next_item, 0);
+        }
         $mylpi = $mylp->items[$next_item];
     } else {
-        if ($debug > 1) { error_log('In initialize_item - generating new item object '.$next_item, 0); }
+        if ($debug > 1) {
+            error_log('In initialize_item - generating new item object '.$next_item, 0);
+        }
         $mylpi = new learnpathItem($next_item, $user_id);
     }
 
@@ -87,7 +95,7 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
     $mycoursedb = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
     $course_id = api_get_course_int_id();
     $mylp_iv_id = $mylpi->db_item_view_id;
-    $phpobjectives = array();
+    $phpobjectives = [];
     if (!empty($mylp_iv_id)) {
         $sql = "SELECT objective_id, status, score_raw, score_max, score_min
                 FROM $mycoursedb
@@ -164,8 +172,12 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item)
 
     $mylp->set_error_msg('');
     $mylp->prerequisites_match(); // Check the prerequisites are all complete.
-    if ($debug > 1) { error_log('Prereq_match() returned '.htmlentities($mylp->error), 0); }
-    if ($debug > 1) { error_log("return = $return "); }
+    if ($debug > 1) {
+        error_log('Prereq_match() returned '.htmlentities($mylp->error), 0);
+    }
+    if ($debug > 1) {
+        error_log("return = $return ");
+    }
 
     return $return;
 }

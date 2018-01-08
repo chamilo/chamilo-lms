@@ -42,30 +42,30 @@ if (empty($careerInfo)) {
 }
 
 // setting breadcrumbs
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'index.php',
     'name' => get_lang('PlatformAdmin'),
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => 'career_dashboard.php',
     'name' => get_lang('CareersAndPromotions'),
-);
+];
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'careers.php',
     'name' => get_lang('Careers'),
-);
+];
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 $check = Security::check_token('request');
 $token = Security::get_token();
 
 if ($action == 'add') {
-    $interbreadcrumb[] = array('url' => 'careers.php', 'name' => get_lang('Careers'));
+    $interbreadcrumb[] = ['url' => 'careers.php', 'name' => get_lang('Careers')];
     $toolName = get_lang('Add');
 } elseif ($action == 'edit') {
-    $interbreadcrumb[] = array('url' => 'careers.php', 'name' => get_lang('Careers'));
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
+    $interbreadcrumb[] = ['url' => 'careers.php', 'name' => get_lang('Careers')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
     $toolName = get_lang('Edit');
 } else {
     $toolName = get_lang('Careers');
@@ -110,13 +110,13 @@ $html = Display::page_subheader2($careerInfo['name'].$urlToString);
 if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
     $graph = unserialize($item['value']);
     $html .= Career::renderDiagram($careerInfo, $graph);
-
 } else {
     Display::addFlash(
         Display::return_message(
         sprintf(get_lang('CareerXDoesntHaveADiagram'), $careerInfo['name']),
         'warning'
-    ));
+    )
+    );
 }
 $tpl->assign('content', $html);
 $tpl->display_one_col_template();

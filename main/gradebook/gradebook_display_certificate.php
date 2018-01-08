@@ -41,12 +41,12 @@ $url = api_get_self().'?'.api_get_cidreq().'&cat_id='.$categoryId.'&filter='.$fi
 $courseInfo = api_get_course_info();
 
 $filter = api_get_setting('certificate_filter_by_official_code');
-$userList = array();
+$userList = [];
 $filterForm = null;
-$certificate_list = array();
+$certificate_list = [];
 if ($filter === 'true') {
     $options = UserManager::getOfficialCodeGrouped();
-    $options = array_merge(array('all' => get_lang('All')), $options);
+    $options = array_merge(['all' => get_lang('All')], $options);
     $form = new FormValidator(
         'official_code_filter',
         'POST',
@@ -131,7 +131,7 @@ switch ($action) {
             $userGroup = new UserGroup();
             $userList = $userGroup->getGroupUsersByUser(api_get_user_id());
         } else {
-            $userList = array();
+            $userList = [];
             if (!empty($filterOfficialCodeGet)) {
                 $userList = UserManager::getUsersByOfficialCode($filterOfficialCodeGet);
             }
@@ -159,11 +159,11 @@ switch ($action) {
         break;
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => Category::getUrl(),
     'name' => get_lang('Gradebook'),
-);
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('GradebookListOfStudentsCertificates'));
+];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('GradebookListOfStudentsCertificates')];
 
 $this_section = SECTION_COURSES;
 Display::display_header('');
@@ -221,7 +221,7 @@ if (!empty($cats)) {
         );
 
         if (!empty($data_array)) {
-            $newarray = array();
+            $newarray = [];
             foreach ($data_array as $data) {
                 $newarray[] = array_slice($data, 1);
             }
@@ -245,13 +245,13 @@ echo '<div class="btn-group">';
 echo Display::url(
     get_lang('GenerateCertificates'),
     $url.'&action=generate_all_certificates',
-    array('class' => 'btn btn-default')
+    ['class' => 'btn btn-default']
 );
 
 echo Display::url(
     get_lang('DeleteAllCertificates'),
     $url.'&action=delete_all_certificates',
-    array('class' => 'btn btn-default')
+    ['class' => 'btn btn-default']
 );
 
 $hideCertificateExport = api_get_setting('hide_certificate_export_link');
@@ -259,13 +259,13 @@ if (count($certificate_list) > 0 && $hideCertificateExport !== 'true') {
     echo Display::url(
         get_lang('ExportAllCertificatesToPDF'),
         $url.'&action=export_all_certificates',
-        array('class' => 'btn btn-default')
+        ['class' => 'btn btn-default']
     );
 
     echo Display::url(
         get_lang('SendCertificateNotifications'),
         $url.'&action=show_notification_form',
-        array('class' => 'btn btn-default')
+        ['class' => 'btn btn-default']
     );
 }
 
@@ -297,7 +297,7 @@ if (count($certificate_list) == 0) {
             $certificates = Display::url(
                 get_lang('Certificate'),
                 $url,
-                array('target' => '_blank', 'class' => 'btn btn-default')
+                ['target' => '_blank', 'class' => 'btn btn-default']
             );
             echo $certificates;
             echo '<a onclick="return confirmation();" href="gradebook_display_certificate.php?sec_token='.$token.'&'.api_get_cidreq().'&action=delete&cat_id='.$categoryId.'&certificate_id='.$valueCertificate['id'].'">

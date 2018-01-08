@@ -9,13 +9,13 @@
 class Certificate extends Model
 {
     public $table;
-    public $columns = array(
+    public $columns = [
         'id',
         'cat_id',
         'score_certificate',
         'created_at',
         'path_certificate'
-    );
+    ];
     /**
      * Certification data
      */
@@ -436,11 +436,11 @@ class Certificate extends Model
         $plugin = new AppPlugin();
         $smsPlugin = $plugin->getSMSPluginLibrary();
         if ($smsPlugin) {
-            $additionalParameters = array(
+            $additionalParameters = [
                 'smsType' => SmsPlugin::CERTIFICATE_NOTIFICATION,
                 'userId' => $userInfo['id'],
                 'direct_message' => $message
-            );
+            ];
             $smsPlugin->send($additionalParameters);
         }
     }
@@ -514,11 +514,11 @@ class Certificate extends Model
     {
         $headers = $array[0];
         $content = $array[1];
-        $final_content = array();
+        $final_content = [];
 
         if (!empty($content)) {
             foreach ($content as $key => $value) {
-                $my_header = str_replace(array('((', '))'), '', $headers[$key]);
+                $my_header = str_replace(['((', '))'], '', $headers[$key]);
                 $final_content[$my_header] = $value;
             }
         }

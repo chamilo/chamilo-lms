@@ -97,8 +97,8 @@ EOT;
                         <img src="/custompages/images/header.png">
                     </div>
                     <?php if (isset($content['error']) && !empty($content['error'])) {
-                        echo '<div id="registration-form-error" class="alert alert-danger">'.$content['error'].'</div>';
-                    }?>
+    echo '<div id="registration-form-error" class="alert alert-danger">'.$content['error'].'</div>';
+}?>
                     <div id="registration-form-box" class="form-box">
                         <div class="block-form-login">
                             <?php

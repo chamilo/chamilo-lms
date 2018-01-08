@@ -312,7 +312,6 @@ function DirectPayment(
     $resArray = hash_call("DoDirectPayment", $nvpstr);
 
     return $resArray;
-
 }
 
 /**
@@ -326,7 +325,6 @@ function DirectPayment(
 
 function MassPayment(array $beneficiaries, $currencyCode)
 {
-
     $nvpstr = "&RECEIVERTYPE=EmailAddress";
     $nvpstr .= "&CURRENCYCODE=".$currencyCode;
 
@@ -426,7 +424,7 @@ function RedirectToPayPal($token)
 function deformatNVP($nvpstr)
 {
     $intial = 0;
-    $nvpArray = array();
+    $nvpArray = [];
 
     while (strlen($nvpstr)) {
         //postion of Key

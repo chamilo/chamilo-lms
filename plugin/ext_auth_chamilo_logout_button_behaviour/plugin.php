@@ -23,8 +23,8 @@ $form = new FormValidator('eaclbb_form');
 $form->addElement("html", "<div class='normal-message'>Fill the text boxes below to overwrite the default values used in this plugin</div>");
 $form->addElement('text', 'eaclbb_form_link_url', 'Page to load when clicking on the logout button');
 $form->addElement('text', 'eaclbb_form_link_infobulle', 'Tooltip text for the logout button (displayed on mouseover)');
-$form->addElement('checkbox', 'eaclbb_form_link_image', "Display the logout button disabled (black and white)", "", array('checked' => true));
-$form->addElement('checkbox', 'eaclbb_form_alert_onoff', "Display an alert when clicking on the logout button", "", array('checked' => true));
+$form->addElement('checkbox', 'eaclbb_form_link_image', "Display the logout button disabled (black and white)", "", ['checked' => true]);
+$form->addElement('checkbox', 'eaclbb_form_alert_onoff', "Display an alert when clicking on the logout button", "", ['checked' => true]);
 $form->addElement('text', 'eaclbb_form_alert_text', "Text displayed in the alert box when clickng on the logout button (if checkbox above has been checked).");
 
 $form->addButtonSave(get_lang('Save'), 'submit_button');
@@ -44,4 +44,4 @@ $form->setDefaults($defaults);
 $plugin_info['settings_form'] = $form;
 
 // Set the templates that are going to be used
-$plugin_info['templates'] = array('template.tpl');
+$plugin_info['templates'] = ['template.tpl'];

@@ -51,7 +51,7 @@ class CourseBuilder
 
     /* With this array you can filter the tools you want to be parsed by
     default all tools are included */
-    public $tools_to_build = array(
+    public $tools_to_build = [
         'announcements',
         'attendance',
         'course_descriptions',
@@ -71,11 +71,11 @@ class CourseBuilder
         'wiki',
         'works',
         'gradebook',
-    );
+    ];
 
     /* With this array you can filter wich elements of the tools are going
     to be added in the course obj (only works with LPs) */
-    public $specific_id_list = array();
+    public $specific_id_list = [];
 
     /**
      * Create a new CourseBuilder
@@ -185,7 +185,7 @@ class CourseBuilder
                                 tool = '".$tool."' AND
                                 ref = '".$resource->get_id()."'";
                     $res = Database::query($sql);
-                    $all_properties = array();
+                    $all_properties = [];
                     while ($item_property = Database::fetch_array($res)) {
                         $all_properties[] = $item_property;
                     }
@@ -208,7 +208,7 @@ class CourseBuilder
         $session_id = 0,
         $courseId = 0,
         $with_base_content = false,
-        $id_list = array()
+        $id_list = []
     ) {
         $table_doc = Database::get_course_table(TABLE_DOCUMENT);
         $table_prop = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -332,7 +332,7 @@ class CourseBuilder
         $session_id = 0,
         $courseId = 0,
         $with_base_content = false,
-        $id_list = array()
+        $id_list = []
     ) {
         $table = Database::get_course_table(TABLE_FORUM);
 
@@ -363,7 +363,7 @@ class CourseBuilder
         $session_id = 0,
         $courseId = 0,
         $with_base_content = false,
-        $id_list = array()
+        $id_list = []
     ) {
         $table = Database::get_course_table(TABLE_FORUM_CATEGORY);
 
@@ -396,7 +396,7 @@ class CourseBuilder
         $session_id = 0,
         $courseId = 0,
         $with_base_content = false,
-        $id_list = array()
+        $id_list = []
     ) {
         $table = Database::get_course_table(TABLE_FORUM_THREAD);
 
@@ -458,7 +458,7 @@ class CourseBuilder
         $session_id = 0,
         $courseId = 0,
         $with_base_content = false,
-        $id_list = array()
+        $id_list = []
     ) {
         $categories = LinkManager::getLinkCategories(
             $courseId,
@@ -509,7 +509,7 @@ class CourseBuilder
         $session_id = 0,
         $courseId = 0,
         $with_base_content = false,
-        $id_list = array()
+        $id_list = []
     ) {
         $table = Database::get_course_table(TABLE_TOOL_INTRO);
 
@@ -563,7 +563,7 @@ class CourseBuilder
         $session_id = 0,
         $courseId = 0,
         $with_base_content = false,
-        $idList = array()
+        $idList = []
     ) {
         $table_qui = Database::get_course_table(TABLE_QUIZ_TEST);
         $table_rel = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -724,7 +724,7 @@ class CourseBuilder
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             $build_orphan_questions = true;
-            $orphanQuestionIds = array();
+            $orphanQuestionIds = [];
             while ($obj = Database::fetch_object($result)) {
                 // Orphan questions
                 if (!empty($obj->question_id)) {
@@ -775,11 +775,11 @@ class CourseBuilder
         }
 
         if ($build_orphan_questions) {
-            $obj = array(
+            $obj = [
                 'id' => -1,
                 'title' => get_lang('OrphanQuestions', ''),
                 'type' => 2,
-            );
+            ];
             $newQuiz = new Quiz((object) $obj);
             if (!empty($orphanQuestionIds)) {
                 foreach ($orphanQuestionIds as $index => $orphanId) {
@@ -874,7 +874,7 @@ class CourseBuilder
         $sessionId = 0,
         $courseId = 0,
         $withBaseContent = false,
-        $idList = array()
+        $idList = []
     ) {
         // get all test category in course
         $categories = TestCategory::getCategoryListInfo('', $courseId);
@@ -900,7 +900,7 @@ class CourseBuilder
         $session_id = 0,
         $courseId = 0,
         $with_base_content = false,
-        $id_list = array()
+        $id_list = []
     ) {
         $table_survey = Database::get_course_table(TABLE_SURVEY);
         $table_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
@@ -919,12 +919,23 @@ class CourseBuilder
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
             $survey = new Survey(
-                $obj->survey_id, $obj->code, $obj->title,
-                $obj->subtitle, $obj->author, $obj->lang,
-                $obj->avail_from, $obj->avail_till, $obj->is_shared,
-                $obj->template, $obj->intro, $obj->surveythanks,
-                $obj->creation_date, $obj->invited, $obj->answered,
-                $obj->invite_mail, $obj->reminder_mail
+                $obj->survey_id,
+                $obj->code,
+                $obj->title,
+                $obj->subtitle,
+                $obj->author,
+                $obj->lang,
+                $obj->avail_from,
+                $obj->avail_till,
+                $obj->is_shared,
+                $obj->template,
+                $obj->intro,
+                $obj->surveythanks,
+                $obj->creation_date,
+                $obj->invited,
+                $obj->answered,
+                $obj->invite_mail,
+                $obj->reminder_mail
             );
             $sql = 'SELECT * FROM '.$table_question.'
                     WHERE c_id = '.$courseId.' AND survey_id = '.$obj->survey_id;
@@ -988,7 +999,7 @@ class CourseBuilder
         $session_id = 0,
         $courseId = 0,
         $with_base_content = false,
-        $id_list = array()
+        $id_list = []
     ) {
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
 
@@ -1049,7 +1060,7 @@ class CourseBuilder
         $session_id = 0,
         $courseId = 0,
         $with_base_content = false,
-        $id_list = array()
+        $id_list = []
     ) {
         $table = Database::get_course_table(TABLE_AGENDA);
 
@@ -1106,7 +1117,7 @@ class CourseBuilder
         $session_id = 0,
         $courseId = 0,
         $with_base_content = false,
-        $id_list = array()
+        $id_list = []
     ) {
         $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 
@@ -1155,7 +1166,7 @@ class CourseBuilder
         $session_id = 0,
         $courseId = 0,
         $with_base_content = false,
-        $id_list = array()
+        $id_list = []
     ) {
         $table_main = Database::get_course_table(TABLE_LP_MAIN);
         $table_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -1190,7 +1201,7 @@ class CourseBuilder
         $db_result = Database::query($sql);
         if ($db_result) {
             while ($obj = Database::fetch_object($db_result)) {
-                $items = array();
+                $items = [];
                 $sql = "SELECT * FROM ".$table_item."
                         WHERE c_id = '$courseId' AND lp_id = ".$obj->id;
                 $db_items = Database::query($sql);
@@ -1266,7 +1277,7 @@ class CourseBuilder
         if ($dir = @opendir($this->course->backup_path.'/scorm')) {
             while ($file = readdir($dir)) {
                 if (is_dir($this->course->backup_path.'/scorm/'.$file) &&
-                    !in_array($file, array('.', '..'))
+                    !in_array($file, ['.', '..'])
                 ) {
                     $doc = new ScormDocument($i++, '/'.$file, $file);
                     $this->course->add_resource($doc);
@@ -1287,7 +1298,7 @@ class CourseBuilder
         $session_id = 0,
         $courseId = 0,
         $with_base_content = false,
-        $id_list = array()
+        $id_list = []
     ) {
         $table_glossary = Database::get_course_table(TABLE_GLOSSARY);
 
@@ -1344,7 +1355,7 @@ class CourseBuilder
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $list_course = CourseManager::get_course_list();
-        $list = array();
+        $list = [];
         foreach ($list_course as $_course) {
             $this->course = new Course();
             $this->course->code = $_course['code'];
@@ -1382,7 +1393,7 @@ class CourseBuilder
         $session_id = 0,
         $courseId = 0,
         $with_base_content = false,
-        $id_list = array()
+        $id_list = []
     ) {
         $tbl_wiki = Database::get_course_table(TABLE_WIKI);
 
@@ -1436,7 +1447,7 @@ class CourseBuilder
         $session_id = 0,
         $courseId = 0,
         $with_base_content = false,
-        $id_list = array()
+        $id_list = []
     ) {
         $table_thematic = Database::get_course_table(TABLE_THEMATIC);
         $table_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
@@ -1473,7 +1484,7 @@ class CourseBuilder
                 $session_id
             );
 
-            $thematic_plan_id_list = array();
+            $thematic_plan_id_list = [];
             if (!empty($items)) {
                 foreach ($items as $item) {
                     $thematic_plan_id_list[] = $item['ref'];
@@ -1509,7 +1520,7 @@ class CourseBuilder
         $session_id = 0,
         $courseId = 0,
         $with_base_content = false,
-        $id_list = array()
+        $id_list = []
     ) {
         $table_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $table_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
@@ -1543,7 +1554,7 @@ class CourseBuilder
         $session_id = 0,
         $courseId = 0,
         $with_base_content = false,
-        $id_list = array()
+        $id_list = []
     ) {
         $table_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
         $sessionCondition = api_get_session_condition(

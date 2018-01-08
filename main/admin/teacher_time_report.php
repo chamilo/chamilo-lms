@@ -17,10 +17,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'index.php',
     'name' => get_lang('PlatformAdmin')
-);
+];
 $toolName = get_lang('TeacherTimeReport');
 
 // Access restrictions.
@@ -67,7 +67,7 @@ $courseList = CourseManager::get_courses_list(
     api_get_current_access_url_id()
 );
 
-$sessionList = SessionManager::get_sessions_list(array(), array('name'));
+$sessionList = SessionManager::get_sessions_list([], ['name']);
 $teacherList = UserManager::get_user_list(['status' => COURSEMANAGER]);
 
 foreach ($courseList as $courseItem) {
@@ -108,13 +108,13 @@ if (!empty($selectedCourse)) {
         );
         $formattedTime = api_format_time($totalTime);
 
-        $timeReport->data[] = array(
+        $timeReport->data[] = [
             'session' => null,
-            'course' => array(
+            'course' => [
                 'id' => $course['real_id'],
                 'name' => $course['title']
-            ),
-            'coach' => array(
+            ],
+            'coach' => [
                 'userId' => $teacher['user_id'],
                 'lastname' => $teacher['lastname'],
                 'firstname' => $teacher['firstname'],
@@ -123,9 +123,9 @@ if (!empty($selectedCourse)) {
                     $teacher['firstname'],
                     $teacher['lastname']
                 )
-            ),
+            ],
             'total_time' => $formattedTime
-        );
+        ];
     }
 
     $sessionsByCourse = SessionManager::get_session_by_course($course['real_id']);
@@ -147,16 +147,16 @@ if (!empty($selectedCourse)) {
                 );
                 $formattedTime = api_format_time($totalTime);
 
-                $timeReport->data[] = array(
-                    'session' => array(
+                $timeReport->data[] = [
+                    'session' => [
                         'id' => $session['id'],
                         'name' => $session['name']
-                    ),
-                    'course' => array(
+                    ],
+                    'course' => [
                         'id' => $course['real_id'],
                         'name' => $course['title']
-                    ),
-                    'coach' => array(
+                    ],
+                    'coach' => [
                         'userId' => $coach['user_id'],
                         'lastname' => $coach['lastname'],
                         'firstname' => $coach['firstname'],
@@ -165,9 +165,9 @@ if (!empty($selectedCourse)) {
                             $coach['firstname'],
                             $coach['lastname']
                         )
-                    ),
+                    ],
                     'total_time' => $formattedTime
-                );
+                ];
             }
         }
     }
@@ -177,19 +177,19 @@ if (!empty($selectedSession)) {
     $withFilter = true;
 
     $session = api_get_session_info($selectedSession);
-    $sessionData = array(
+    $sessionData = [
         'id' => $session['id'],
         'name' => $session['name']
-    );
+    ];
 
     $reportTitle = sprintf(get_lang('TimeReportForSessionX'), $session['name']);
     $courses = SessionManager::get_course_list_by_session_id($selectedSession);
 
     foreach ($courses as $course) {
-        $courseData = array(
+        $courseData = [
             'id' => $course['id'],
             'name' => $course['title']
-        );
+        ];
 
         $coaches = CourseManager::get_coachs_from_course(
             $selectedSession,
@@ -207,10 +207,10 @@ if (!empty($selectedSession)) {
                 );
                 $formattedTime = api_format_time($totalTime);
 
-                $timeReport->data[] = array(
+                $timeReport->data[] = [
                     'session' => $sessionData,
                     'course' => $courseData,
-                    'coach' => array(
+                    'coach' => [
                         'userId' => $coach['user_id'],
                         'lastname' => $coach['lastname'],
                         'firstname' => $coach['firstname'],
@@ -219,9 +219,9 @@ if (!empty($selectedSession)) {
                             $coach['firstname'],
                             $coach['lastname']
                         )
-                    ),
+                    ],
                     'total_time' => $formattedTime
-                );
+                ];
             }
         }
     }
@@ -230,13 +230,13 @@ if (!empty($selectedSession)) {
 if (!empty($selectedTeacher)) {
     $withFilter = true;
     $teacher = api_get_user_info();
-    $teacherData = array(
+    $teacherData = [
         'userId' => $teacher['user_id'],
         'lastname' => $teacher['lastname'],
         'firstname' => $teacher['firstname'],
         'username' => $teacher['username'],
         'complete_name' => $teacher['complete_name']
-    );
+    ];
 
     $reportTitle = sprintf(
         get_lang('TimeReportForTeacherX'),
@@ -260,15 +260,15 @@ if (!empty($selectedTeacher)) {
             );
             $formattedTime = api_format_time($totalTime);
 
-            $timeReport->data[] = array(
+            $timeReport->data[] = [
                 'session' => null,
-                'course' => array(
+                'course' => [
                     'id' => $courseInfo['real_id'],
                     'name' => $courseInfo['title']
-                ),
+                ],
                 'coach' => $teacherData,
                 'total_time' => $formattedTime
-            );
+            ];
         }
     }
 
@@ -287,18 +287,18 @@ if (!empty($selectedTeacher)) {
         );
         $formattedTime = api_format_time($totalTime);
 
-        $timeReport->data[] = array(
+        $timeReport->data[] = [
             'session' => [
                 'id' => $session->getId(),
                 'name' => $session->getName()
             ],
-            'course' => array(
+            'course' => [
                 'id' => $course->getId(),
                 'name' => $course->getTitle()
-            ),
+            ],
             'coach' => $teacherData,
             'total_time' => $formattedTime
-        );
+        ];
     }
 }
 
@@ -306,17 +306,17 @@ if (empty($selectedCourse) && empty($selectedSession) &&
     empty($selectedTeacher)
 ) {
     foreach ($teacherList as &$teacher) {
-        $timeReport->data[] = array(
-            'coach' => array(
+        $timeReport->data[] = [
+            'coach' => [
                 'username' => $teacher['username'],
                 'complete_name' => $teacher['complete_name'],
-            ),
+            ],
             'total_time' => SessionManager::getTotalUserTimeInPlatform(
                 $teacher['user_id'],
                 $selectedFrom,
                 $selectedUntil
             )
-        );
+        ];
     }
 }
 
@@ -328,24 +328,24 @@ if (isset($_GET['export'])) {
 
     switch ($_GET['export']) {
         case 'pdf':
-            $params = array(
+            $params = [
                 'filename' => $fileName,
                 'pdf_title' => "$reportTitle - $reportSubTitle",
                 'pdf_description' => get_lang('TeacherTimeReport'),
                 'format' => 'A4-L',
                 'orientation' => 'L'
-            );
+            ];
 
             $pdfContent = Export::convert_array_to_html($dataToExport);
 
             Export::export_html_to_pdf($pdfContent, $params);
             break;
         case 'xls':
-            array_unshift($dataToExport, array(
+            array_unshift($dataToExport, [
                 $reportTitle
-            ), array(
+            ], [
                 $reportSubTitle
-            ), array());
+            ], []);
 
             Export::export_table_xls_html($dataToExport, $fileName);
             break;

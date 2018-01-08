@@ -17,9 +17,9 @@ require_once __DIR__.'/../inc/global.inc.php';
  */
 function validate_data($skills)
 {
-    $errors = array();
+    $errors = [];
     // 1. Check if mandatory fields are set.
-    $mandatory_fields = array('id', 'parent_id', 'name');
+    $mandatory_fields = ['id', 'parent_id', 'name'];
     foreach ($skills as $index => $skill) {
         foreach ($mandatory_fields as $field) {
             if (empty($skill[$field])) {
@@ -57,7 +57,7 @@ function validate_data($skills)
 function save_data($skills)
 {
     if (is_array($skills)) {
-        $parents = array();
+        $parents = [];
         foreach ($skills as $index => $skill) {
             if (isset($parents[$skill['parent_id']])) {
                 $skill['parent_id'] = $parents[$skill['parent_id']];
@@ -99,7 +99,7 @@ function element_start($parser, $data)
     global $current_tag;
     switch ($data) {
         case 'Skill':
-            $skill = array();
+            $skill = [];
             break;
         default:
             $current_tag = $data;
@@ -146,7 +146,7 @@ function parse_xml_data($file)
     global $current_value;
     global $skill;
     global $skills;
-    $skills = array();
+    $skills = [];
     $parser = xml_parser_create('UTF-8');
     xml_set_element_handler($parser, 'element_start', 'element_end');
     xml_set_character_data_handler($parser, 'character_data');
@@ -161,18 +161,18 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 $tool_name = get_lang('ImportSkillsListCSV');
-$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
 
 set_time_limit(0);
 $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
-$user_id_error = array();
+$user_id_error = [];
 $error_message = '';
 
 if (!empty($_POST['formSent']) && $_FILES['import_file']['size'] !== 0) {
     $file_type = $_POST['file_type'];
     Security::clear_token();
     $tok = Security::get_token();
-    $allowed_file_mimetype = array('csv', 'xml');
+    $allowed_file_mimetype = ['csv', 'xml'];
     $error_kind_file = false;
     $error_message = '';
 
@@ -195,7 +195,7 @@ if (!empty($_POST['formSent']) && $_FILES['import_file']['size'] !== 0) {
     }
 
     // List skill id with error.
-    $skills_to_insert = $skill_id_error = array();
+    $skills_to_insert = $skill_id_error = [];
     if (is_array($errors)) {
         foreach ($errors as $my_errors) {
             $skill_id_error[] = $my_errors['SkillName'];
@@ -238,7 +238,7 @@ if (!empty($_POST['formSent']) && $_FILES['import_file']['size'] !== 0) {
     }
 }
 
-$interbreadcrumb[] = array("url" => 'skill_list.php', "name" => get_lang('ManageSkills'));
+$interbreadcrumb[] = ["url" => 'skill_list.php', "name" => get_lang('ManageSkills')];
 
 Display :: display_header($tool_name);
 
@@ -256,7 +256,7 @@ $form = new FormValidator('user_import', 'post', 'skills_import.php');
 $form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'formSent');
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
-$group = array();
+$group = [];
 $group[] = $form->createElement(
     'radio',
     'file_type',
@@ -272,8 +272,8 @@ $defaults['file_type'] = 'csv';
 $form->setDefaults($defaults);
 $form->display();
 
-$list = array();
-$list_reponse = array();
+$list = [];
+$list_reponse = [];
 $result_xml = '';
 $i = 0;
 $count_fields = count($extra_fields);

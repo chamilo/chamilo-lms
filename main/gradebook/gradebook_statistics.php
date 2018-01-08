@@ -18,16 +18,16 @@ if ($eval[0]->get_category_id() < 0) {
     $currentcat = Category::load($eval[0]->get_category_id());
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$currentcat[0]->get_id(),
     'name' => get_lang('ToolGradebook')
-);
+];
 
 if (api_is_allowed_to_edit()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'gradebook_view_result.php?selecteval='.intval($_GET['selecteval']).'&'.api_get_cidreq(),
         'name' => get_lang('ViewResult')
-    );
+    ];
 }
 $displayScore = ScoreDisplay::instance();
 
@@ -48,7 +48,7 @@ if (!$displayScore->is_custom() || empty($displays)) {
     }
 } else {
     $allresults = Result::load(null, null, $eval[0]->get_id());
-    $nr_items = array();
+    $nr_items = [];
     foreach ($displays as $itemsdisplay) {
         $nr_items[$itemsdisplay['display']] = 0;
     }
@@ -58,7 +58,7 @@ if (!$displayScore->is_custom() || empty($displays)) {
         $score = $result->get_score();
         if (isset($score)) {
             $display = $displayScore->display_score(
-                array($score, $eval[0]->get_max()),
+                [$score, $eval[0]->get_max()],
                 SCORE_CUSTOM,
                 SCORE_ONLY_CUSTOM,
                 true

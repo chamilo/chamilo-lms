@@ -31,14 +31,14 @@ if (empty($userInfo) || empty($courseInfo)) {
 
 if (!empty($group_id)) {
     $group_properties = GroupManager::get_group_properties($group_id);
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups')
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
         'name' => get_lang('GroupSpace').' '.$group_properties['name']
-    );
+    ];
 } else {
     if (!(api_is_allowed_to_edit() || api_is_coach())) {
         api_not_allowed(true);
@@ -74,14 +74,14 @@ switch ($action) {
         break;
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
     'name' => get_lang('StudentPublications')
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => '#',
     'name' => $userInfo['complete_name']
-);
+];
 
 Display :: display_header(null);
 
@@ -106,16 +106,16 @@ if (api_is_allowed_to_edit()) {
 
 echo '</div>';
 
-$table = new HTML_Table(array('class' => 'data_table'));
+$table = new HTML_Table(['class' => 'data_table']);
 $column = 0;
 $row = 0;
-$headers = array(
+$headers = [
     get_lang('Title'),
     get_lang('HandedOutDate'),
     get_lang('HandOutDateLimit'),
     get_lang('Feedback'),
     get_lang('Actions')
-);
+];
 foreach ($headers as $header) {
     $table->setHeaderContents($row, $column, $header);
     $column++;
@@ -133,7 +133,7 @@ foreach ($workPerUser as $work) {
     foreach ($work->user_results as $userResult) {
         $itemId = $userResult['id'];
         $table->setCellContents($row, $column, $work->title.' ['.trim(strip_tags($userResult['title'])).']');
-        $table->setCellAttributes($row, $column, array('width' => '300px'));
+        $table->setCellAttributes($row, $column, ['width' => '300px']);
         $column++;
         $table->setCellContents($row, $column, $userResult['sent_date']);
         $column++;

@@ -40,12 +40,11 @@ class HookAdvancedSubscription extends HookObserver implements
         $data = $hook->getEventData();
         // if ($data['type'] === HOOK_EVENT_TYPE_PRE) // Nothing to do
         if ($data['type'] === HOOK_EVENT_TYPE_POST) {
-
             if (isset($data['blocks'])) {
-                $data['blocks']['sessions']['items'][] = array(
+                $data['blocks']['sessions']['items'][] = [
                     'url' => '../../plugin/advanced_subscription/src/admin_view.php',
                     'label' => get_plugin_lang('plugin_title', 'AdvancedSubscriptionPlugin'),
-                );
+                ];
             }
         } // Else: Hook type is not valid, nothing to do
 
@@ -74,26 +73,26 @@ class HookAdvancedSubscription extends HookObserver implements
                 'struct',
                 'all',
                 '',
-                array(
+                [
                     // session.id
-                    'id' => array('name' => 'id', 'type' => 'xsd:int'),
+                    'id' => ['name' => 'id', 'type' => 'xsd:int'],
                     // session.name
-                    'name' => array('name' => 'name', 'type' => 'xsd:string'),
+                    'name' => ['name' => 'name', 'type' => 'xsd:string'],
                     // session.short_description
-                    'short_description' => array('name' => 'short_description', 'type' => 'xsd:string'),
+                    'short_description' => ['name' => 'short_description', 'type' => 'xsd:string'],
                     // session.mode
-                    'mode' => array('name' => 'mode', 'type' => 'xsd:string'),
+                    'mode' => ['name' => 'mode', 'type' => 'xsd:string'],
                     // session.date_start
-                    'date_start' => array('name' => 'date_start', 'type' => 'xsd:string'),
+                    'date_start' => ['name' => 'date_start', 'type' => 'xsd:string'],
                     // session.date_end
-                    'date_end' => array('name' => 'date_end', 'type' => 'xsd:string'),
+                    'date_end' => ['name' => 'date_end', 'type' => 'xsd:string'],
                     // session.human_text_duration
-                    'human_text_duration' => array('name' => 'human_text_duration', 'type' => 'xsd:string'),
+                    'human_text_duration' => ['name' => 'human_text_duration', 'type' => 'xsd:string'],
                     // session.vacancies
-                    'vacancies' => array('name' => 'vacancies', 'type' => 'xsd:string'),
+                    'vacancies' => ['name' => 'vacancies', 'type' => 'xsd:string'],
                     // session.schedule
-                    'schedule' => array('name' => 'schedule', 'type' => 'xsd:string'),
-                )
+                    'schedule' => ['name' => 'schedule', 'type' => 'xsd:string'],
+                ]
             );
 
             //Output params for WSSessionListInCategory
@@ -103,11 +102,11 @@ class HookAdvancedSubscription extends HookObserver implements
                 'array',
                 '',
                 'SOAP-ENC:Array',
-                array(),
-                array(
-                    array('ref'=>'SOAP-ENC:arrayType',
-                        'wsdl:arrayType'=>'tns:sessionBrief[]')
-                ),
+                [],
+                [
+                    ['ref'=>'SOAP-ENC:arrayType',
+                        'wsdl:arrayType'=>'tns:sessionBrief[]']
+                ],
                 'tns:sessionBrief'
             );
 
@@ -118,12 +117,12 @@ class HookAdvancedSubscription extends HookObserver implements
                 'struct',
                 'all',
                 '',
-                array(
-                    'id' => array('name' => 'id', 'type' => 'xsd:string'), // session_category.id
-                    'name' => array('name' => 'name', 'type' => 'xsd:string'), // session_category.name
-                    'target' => array('name' => 'target', 'type' => 'xsd:string'), // session.target
-                    'secret_key'   => array('name' => 'secret_key', 'type' => 'xsd:string')
-                )
+                [
+                    'id' => ['name' => 'id', 'type' => 'xsd:string'], // session_category.id
+                    'name' => ['name' => 'name', 'type' => 'xsd:string'], // session_category.name
+                    'target' => ['name' => 'target', 'type' => 'xsd:string'], // session.target
+                    'secret_key'   => ['name' => 'secret_key', 'type' => 'xsd:string']
+                ]
             );
 
             // Input params for WSSessionGetDetailsByUser
@@ -133,19 +132,19 @@ class HookAdvancedSubscription extends HookObserver implements
                 'struct',
                 'all',
                 '',
-                array(
+                [
                     // user_field_values.value
-                    'user_id' => array('name' => 'user_id', 'type' => 'xsd:int'),
+                    'user_id' => ['name' => 'user_id', 'type' => 'xsd:int'],
                     // user_field.user_id
-                    'user_field' => array('name' => 'user_field', 'type' => 'xsd:string'),
+                    'user_field' => ['name' => 'user_field', 'type' => 'xsd:string'],
                     // session.id
-                    'session_id' => array('name' => 'session_id', 'type' => 'xsd:int'),
+                    'session_id' => ['name' => 'session_id', 'type' => 'xsd:int'],
                     // user.profile_completes
-                    'profile_completed' => array('name' => 'profile_completed', 'type' => 'xsd:float'),
+                    'profile_completed' => ['name' => 'profile_completed', 'type' => 'xsd:float'],
                     // user.is_connected
-                    'is_connected' => array('name' => 'is_connected', 'type' => 'xsd:boolean'),
-                    'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string'),
-                )
+                    'is_connected' => ['name' => 'is_connected', 'type' => 'xsd:boolean'],
+                    'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
+                ]
             );
 
             // Output params for WSSessionGetDetailsByUser
@@ -155,32 +154,32 @@ class HookAdvancedSubscription extends HookObserver implements
                 'struct',
                 'all',
                 '',
-                array(
+                [
                     // session.id
-                    'id' => array('name' => 'id', 'type' => 'xsd:string'),
+                    'id' => ['name' => 'id', 'type' => 'xsd:string'],
                     // session.code
-                    'code' => array('name' => 'code', 'type' => 'xsd:string'),
+                    'code' => ['name' => 'code', 'type' => 'xsd:string'],
                     // session.place
-                    'cost' => array('name' => 'cost', 'type' => 'xsd:float'),
+                    'cost' => ['name' => 'cost', 'type' => 'xsd:float'],
                     // session.place
-                    'place' => array('name' => 'place', 'type' => 'xsd:string'),
+                    'place' => ['name' => 'place', 'type' => 'xsd:string'],
                     // session.allow_visitors
-                    'allow_visitors' => array('name' => 'allow_visitors', 'type' => 'xsd:string'),
+                    'allow_visitors' => ['name' => 'allow_visitors', 'type' => 'xsd:string'],
                     // session.teaching_hours
-                    'teaching_hours' => array('name' => 'teaching_hours', 'type' => 'xsd:int'),
+                    'teaching_hours' => ['name' => 'teaching_hours', 'type' => 'xsd:int'],
                     // session.brochure
-                    'brochure' => array('name' => 'brochure', 'type' => 'xsd:string'),
+                    'brochure' => ['name' => 'brochure', 'type' => 'xsd:string'],
                     // session.banner
-                    'banner' => array('name' => 'banner', 'type' => 'xsd:string'),
+                    'banner' => ['name' => 'banner', 'type' => 'xsd:string'],
                     // session.description
-                    'description' => array('name' => 'description', 'type' => 'xsd:string'),
+                    'description' => ['name' => 'description', 'type' => 'xsd:string'],
                     // status
-                    'status' => array('name' => 'status', 'type' => 'xsd:string'),
+                    'status' => ['name' => 'status', 'type' => 'xsd:string'],
                     // action_url
-                    'action_url' => array('name' => 'action_url', 'type' => 'xsd:string'),
+                    'action_url' => ['name' => 'action_url', 'type' => 'xsd:string'],
                     // message
-                    'message' => array('name' => 'error_message', 'type' => 'xsd:string'),
-                )
+                    'message' => ['name' => 'error_message', 'type' => 'xsd:string'],
+                ]
             );
 
             /** WSListSessionsDetailsByCategory **/
@@ -192,17 +191,17 @@ class HookAdvancedSubscription extends HookObserver implements
                 'struct',
                 'all',
                 '',
-                array(
+                [
                     // session_category.id
-                    'id' => array('name' => 'id', 'type' => 'xsd:string'),
+                    'id' => ['name' => 'id', 'type' => 'xsd:string'],
                     // session_category.access_url_id
-                    'access_url_id' => array('name' => 'access_url_id', 'type' => 'xsd:int'),
+                    'access_url_id' => ['name' => 'access_url_id', 'type' => 'xsd:int'],
                     // session_category.name
-                    'category_name' => array('name' => 'category_name', 'type' => 'xsd:string'),
+                    'category_name' => ['name' => 'category_name', 'type' => 'xsd:string'],
                     // secret key
-                    'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string'),
-                ),
-                array(),
+                    'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
+                ],
+                [],
                 'tns:listSessionsDetailsByCategory'
             );
 
@@ -213,14 +212,14 @@ class HookAdvancedSubscription extends HookObserver implements
                 'struct',
                 'all',
                 '',
-                array(
-                    'course_id' => array('name' => 'course_id', 'type' => 'xsd:int'), // course.id
-                    'course_code' => array('name' => 'course_code', 'type' => 'xsd:string'), // course.code
-                    'course_title' => array('name' => 'course_title', 'type' => 'xsd:string'), // course.title
-                    'coach_username' => array('name' => 'coach_username', 'type' => 'xsd:string'), // user.username
-                    'coach_firstname' => array('name' => 'coach_firstname', 'type' => 'xsd:string'), // user.firstname
-                    'coach_lastname' => array('name' => 'coach_lastname', 'type' => 'xsd:string'), // user.lastname
-                )
+                [
+                    'course_id' => ['name' => 'course_id', 'type' => 'xsd:int'], // course.id
+                    'course_code' => ['name' => 'course_code', 'type' => 'xsd:string'], // course.code
+                    'course_title' => ['name' => 'course_title', 'type' => 'xsd:string'], // course.title
+                    'coach_username' => ['name' => 'coach_username', 'type' => 'xsd:string'], // user.username
+                    'coach_firstname' => ['name' => 'coach_firstname', 'type' => 'xsd:string'], // user.firstname
+                    'coach_lastname' => ['name' => 'coach_lastname', 'type' => 'xsd:string'], // user.lastname
+                ]
             );
 
 
@@ -231,13 +230,13 @@ class HookAdvancedSubscription extends HookObserver implements
                 'array',
                 '',
                 'SOAP-ENC:Array',
-                array(),
-                array(
-                    array(
+                [],
+                [
+                    [
                         'ref' => 'SOAP-ENC:arrayType',
                         'wsdl:arrayType' => 'tns:sessionDetailsCourse[]',
-                    )
-                ),
+                    ]
+                ],
                 'tns:sessionDetailsCourse'
             );
 
@@ -248,100 +247,100 @@ class HookAdvancedSubscription extends HookObserver implements
                 'struct',
                 'all',
                 '',
-                array(
+                [
                     // session.id
-                    'id' => array(
+                    'id' => [
                         'name' => 'id',
                         'type' => 'xsd:int'
-                    ),
+                    ],
                     // session.id_coach
-                    'coach_id' => array(
+                    'coach_id' => [
                         'name' => 'coach_id',
                         'type' => 'xsd:int'
-                    ),
+                    ],
                     // session.name
-                    'name' => array(
+                    'name' => [
                         'name' => 'name',
                         'type' => 'xsd:string'
-                    ),
+                    ],
                     // session.nbr_courses
-                    'courses_num' => array(
+                    'courses_num' => [
                         'name' => 'courses_num',
                         'type' => 'xsd:int'
-                    ),
+                    ],
                     // session.nbr_users
-                    'users_num' => array(
+                    'users_num' => [
                         'name' => 'users_num',
                         'type' => 'xsd:int'
-                    ),
+                    ],
                     // session.nbr_classes
-                    'classes_num' => array(
+                    'classes_num' => [
                         'name' => 'classes_num',
                         'type' => 'xsd:int'
-                    ),
+                    ],
                     // session.date_start
-                    'date_start' => array(
+                    'date_start' => [
                         'name' => 'date_start',
                         'type' => 'xsd:string'
-                    ),
+                    ],
                     // session.date_end
-                    'date_end' => array(
+                    'date_end' => [
                         'name' => 'date_end',
                         'type' => 'xsd:string'
-                    ),
+                    ],
                     // session.nb_days_access_before_beginning
-                    'access_days_before_num' => array(
+                    'access_days_before_num' => [
                         'name' => 'access_days_before_num',
                         'type' => 'xsd:int'
-                    ),
+                    ],
                     // session.nb_days_access_after_end
-                    'access_days_after_num' => array(
+                    'access_days_after_num' => [
                         'name' => 'access_days_after_num',
                         'type' => 'xsd:int'
-                    ),
+                    ],
                     // session.session_admin_id
-                    'session_admin_id' => array(
+                    'session_admin_id' => [
                         'name' => 'session_admin_id',
                         'type' => 'xsd:int'
-                    ),
+                    ],
                     // session.visibility
-                    'visibility' => array(
+                    'visibility' => [
                         'name' => 'visibility',
                         'type' => 'xsd:int'
-                    ),
+                    ],
                     // session.session_category_id
-                    'session_category_id' => array(
+                    'session_category_id' => [
                         'name' => 'session_category_id',
                         'type' => 'xsd:int'
-                    ),
+                    ],
                     // session.promotion_id
-                    'promotion_id' => array(
+                    'promotion_id' => [
                         'name' => 'promotion_id',
                         'type' => 'xsd:int'
-                    ),
+                    ],
                     // session.number of registered users validated
-                    'validated_user_num' => array(
+                    'validated_user_num' => [
                         'name' => 'validated_user_num',
                         'type' => 'xsd:int'
-                    ),
+                    ],
                     // session.number of registered users from waiting queue
-                    'waiting_user_num' => array(
+                    'waiting_user_num' => [
                         'name' => 'waiting_user_num',
                         'type' => 'xsd:int'
-                    ),
+                    ],
                     // extra fields
                     // Array(field_name, field_value)
-                    'extra' => array(
+                    'extra' => [
                         'name' => 'extra',
                         'type' => 'tns:extrasList'
-                    ),
+                    ],
                     // course and coaches data
                     // Array(course_id, course_code, course_title, coach_username, coach_firstname, coach_lastname)
-                    'course' => array(
+                    'course' => [
                         'name' => 'courses',
                         'type' => 'tns:sessionDetailsCourseList'
-                    ),
-                )
+                    ],
+                ]
             );
 
             // Output params for WSListSessionsDetailsByCategory
@@ -351,21 +350,21 @@ class HookAdvancedSubscription extends HookObserver implements
                 'array',
                 '',
                 'SOAP-ENC:Array',
-                array(),
-                array(
-                    array(
+                [],
+                [
+                    [
                         'ref' => 'SOAP-ENC:arrayType',
                         'wsdl:arrayType' => 'tns:sessionDetails[]',
-                    )
-                ),
+                    ]
+                ],
                 'tns:sessionDetails'
             );
 
             // Register the method for WSSessionListInCategory
             $server->register(
                 'HookAdvancedSubscription..WSSessionListInCategory', // method name
-                array('sessionCategoryInput' => 'tns:sessionCategoryInput'), // input parameters
-                array('return' => 'tns:sessionBriefList'), // output parameters
+                ['sessionCategoryInput' => 'tns:sessionCategoryInput'], // input parameters
+                ['return' => 'tns:sessionBriefList'], // output parameters
                 'urn:WSRegistration', // namespace
                 'urn:WSRegistration#WSSessionListInCategory', // soapaction
                 'rpc', // style
@@ -376,8 +375,8 @@ class HookAdvancedSubscription extends HookObserver implements
             // Register the method for WSSessionGetDetailsByUser
             $server->register(
                 'HookAdvancedSubscription..WSSessionGetDetailsByUser', // method name
-                array('advsubSessionDetailInput' => 'tns:advsubSessionDetailInput'), // input parameters
-                array('return' => 'tns:advsubSessionDetail'), // output parameters
+                ['advsubSessionDetailInput' => 'tns:advsubSessionDetailInput'], // input parameters
+                ['return' => 'tns:advsubSessionDetail'], // output parameters
                 'urn:WSRegistration', // namespace
                 'urn:WSRegistration#WSSessionGetDetailsByUser', // soapaction
                 'rpc', // style
@@ -388,8 +387,8 @@ class HookAdvancedSubscription extends HookObserver implements
             // Register the method for WSListSessionsDetailsByCategory
             $server->register(
                 'HookAdvancedSubscription..WSListSessionsDetailsByCategory', // method name
-                array('name' => 'tns:listSessionsDetailsByCategory'), // input parameters
-                array('return' => 'tns:sessionDetailsList'), // output parameters
+                ['name' => 'tns:listSessionsDetailsByCategory'], // input parameters
+                ['return' => 'tns:sessionDetailsList'], // output parameters
                 'urn:WSRegistration', // namespace
                 'urn:WSRegistration#WSListSessionsDetailsByCategory', // soapaction
                 'rpc', // style
@@ -434,14 +433,14 @@ class HookAdvancedSubscription extends HookObserver implements
         }
 
         // Get the session brief List by category
-        $fields = array(
+        $fields = [
             'id',
             'short_description',
             'mode',
             'human_text_duration',
             'vacancies',
             'schedule',
-        );
+        ];
         $datePub = new DateTime();
         $sessionList = SessionManager::getShortSessionListAndExtraByCategory(
             $sessionCategoryId,
@@ -601,20 +600,20 @@ class HookAdvancedSubscription extends HookObserver implements
         foreach ($sessionList as &$session) {
             // Add validated and queue users count
             $session['validated_user_num'] = self::$plugin->countQueueByParams(
-                array(
-                    'sessions' => array($session['id']),
-                    'status' => array(ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED)
+                [
+                    'sessions' => [$session['id']],
+                    'status' => [ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED]
 
-                )
+                ]
             );
             $session['waiting_user_num'] = self::$plugin->countQueueByParams(
-                array(
-                    'sessions' => array($session['id']),
-                    'status' => array(
+                [
+                    'sessions' => [$session['id']],
+                    'status' => [
                         ADVANCED_SUBSCRIPTION_QUEUE_STATUS_START,
                         ADVANCED_SUBSCRIPTION_QUEUE_STATUS_BOSS_APPROVED,
-                    ),
-                )
+                    ],
+                ]
             );
         }
 
@@ -640,11 +639,11 @@ class HookAdvancedSubscription extends HookObserver implements
                 !empty($data['advanced_subscription_pre_content'])
             ) {
                 $data['content'] = str_replace(
-                    array(
+                    [
                         '<br /><hr>',
                         '<br />',
                         '<br/>',
-                    ),
+                    ],
                     '',
                     $data['advanced_subscription_pre_content']
                 );

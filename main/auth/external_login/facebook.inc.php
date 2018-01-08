@@ -124,7 +124,7 @@ function facebookConnect()
         'language' => $language,
         'password' => 'facebook',
         'auth_source' => 'facebook',
-        'extra' => array()
+        'extra' => []
     ];
     $chamiloUinfo = api_get_user_info_from_email($user->getEmail());
 
@@ -213,4 +213,3 @@ function facebookPluginGetLanguage($language = 'en_US')
 
     return false;
 }
-

@@ -19,7 +19,7 @@ $annee_base = date('Y');
 
 $tool_name = get_lang('LDAPImport');
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
 $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
 var buttoncheck = 1;
@@ -59,7 +59,6 @@ if (empty($annee) && empty($id_session)) {
     echo '<input type="submit" value="'.get_lang('Submit').'">';
     echo '</form>';
     echo '</div>';
-
 } elseif (!empty($annee) && empty($id_session)) {
     Display::display_header($tool_name);
     echo '<div style="align:center">';
@@ -134,8 +133,8 @@ elseif (!empty($annee) && !empty($id_session) && empty($_POST['confirmed'])) {
     echo '</div>';
 } elseif (!empty($annee) && !empty($id_session) && ($_POST['confirmed'] == 'yes')) {
     $id = $_POST['username_form'];
-    $UserList = array();
-    $userid_match_login = array();
+    $UserList = [];
+    $userid_match_login = [];
     foreach ($id as $form_index => $user_id) {
         if (is_array($_POST['checkboxes']) && in_array($form_index, array_values($_POST['checkboxes']))) {
             $tmp = ldap_add_user($user_id);

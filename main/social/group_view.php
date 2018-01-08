@@ -78,24 +78,24 @@ function add_image_form() {
 
 </script>';
 
-$allowed_views = array('mygroups', 'newest', 'pop');
+$allowed_views = ['mygroups', 'newest', 'pop'];
 $content = null;
 
 if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
     if ($_GET['view'] == 'mygroups') {
-        $interbreadcrumb[] = array('url' =>'groups.php', 'name' => get_lang('Groups'));
-        $interbreadcrumb[] = array('url' =>'#', 'name' => get_lang('MyGroups'));
-    } else if ($_GET['view'] == 'newest') {
-        $interbreadcrumb[] = array('url' =>'groups.php', 'name' => get_lang('Groups'));
-        $interbreadcrumb[] = array('url' =>'#', 'name' => get_lang('Newest'));
+        $interbreadcrumb[] = ['url' =>'groups.php', 'name' => get_lang('Groups')];
+        $interbreadcrumb[] = ['url' =>'#', 'name' => get_lang('MyGroups')];
+    } elseif ($_GET['view'] == 'newest') {
+        $interbreadcrumb[] = ['url' =>'groups.php', 'name' => get_lang('Groups')];
+        $interbreadcrumb[] = ['url' =>'#', 'name' => get_lang('Newest')];
     } else {
-        $interbreadcrumb[] = array('url' =>'groups.php', 'name' => get_lang('Groups'));
-        $interbreadcrumb[] = array('url' =>'#', 'name' => get_lang('Popular'));
+        $interbreadcrumb[] = ['url' =>'groups.php', 'name' => get_lang('Groups')];
+        $interbreadcrumb[] = ['url' =>'#', 'name' => get_lang('Popular')];
     }
 } else {
-    $interbreadcrumb[] = array('url' =>'groups.php', 'name' => get_lang('Groups'));
+    $interbreadcrumb[] = ['url' =>'groups.php', 'name' => get_lang('Groups')];
     if (!isset($_GET['id'])) {
-        $interbreadcrumb[] = array('url' =>'#', 'name' => get_lang('GroupList'));
+        $interbreadcrumb[] = ['url' =>'#', 'name' => get_lang('GroupList')];
     } else {
         //$interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Group'));
     }
@@ -112,7 +112,7 @@ if ($group_id != 0) {
     $group_info = $usergroup->get($group_id);
 
 
-    $interbreadcrumb[] = array('url' =>'#', 'name' => $group_info['name']);
+    $interbreadcrumb[] = ['url' =>'#', 'name' => $group_info['name']];
 
     if (isset($_GET['action']) && $_GET['action'] == 'leave') {
         $user_leaved = intval($_GET['u']);
@@ -174,7 +174,7 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
     if (!$is_group_member) {
         if (!in_array(
             $role,
-            array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER, GROUP_USER_PERMISSION_PENDING_INVITATION)
+            [GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER, GROUP_USER_PERMISSION_PENDING_INVITATION]
         )) {
             $social_right_content .= '<div class="group-tool">';
             $social_right_content .= '<div class="pull-right">';
@@ -254,7 +254,7 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
             $member_content .= Display::url(
                 Display::returnFontAwesomeIcon('pencil').' '.get_lang('EditMembersList'),
                 'group_members.php?id='.$group_id,
-                array('class' => 'btn btn-default btn-sm', 'title' => get_lang('EditMembersList'))
+                ['class' => 'btn btn-default btn-sm', 'title' => get_lang('EditMembersList')]
             );
             $member_content .= '</div>';
             $member_content .= '</div>';
@@ -265,7 +265,7 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
             // if is a member
             if (in_array(
                 $member['relation_type'],
-                array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR)
+                [GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR]
             )) {
                 //add icons
                 if ($member['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
@@ -280,8 +280,8 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
                 $member_content .= '<div class="col-md-3">';
                 $member_content .= '<div class="items-user">';
                 $member_name = Display::url(api_get_person_name(cut($member['user_info']['firstname'], 15), cut($member['user_info']['lastname'], 15)).'&nbsp;'.$icon, $member['user_info']['profile_url']);
-                $member_content .= Display::div('<img class="img-circle" src="'.$userPicture.'"/>', array('class' => 'avatar'));
-                $member_content .= Display::div($member_name, array('class' => 'name'));
+                $member_content .= Display::div('<img class="img-circle" src="'.$userPicture.'"/>', ['class' => 'avatar']);
+                $member_content .= Display::div($member_name, ['class' => 'name']);
                 $member_content .= '</div>';
                 $member_content .= '</div>';
             }
@@ -291,19 +291,18 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
     }
 
     if (!empty($create_thread_link)) {
-        $create_thread_link = Display::div($create_thread_link, array('class'=>'pull-right'));
+        $create_thread_link = Display::div($create_thread_link, ['class'=>'pull-right']);
     }
-    $headers = array(get_lang('Discussions'), get_lang('Members'));
-    $socialForum = Display::tabs($headers, array($content, $member_content), 'tabs');
-
+    $headers = [get_lang('Discussions'), get_lang('Members')];
+    $socialForum = Display::tabs($headers, [$content, $member_content], 'tabs');
 } else {
     // if I already sent an invitation message
     if (!in_array(
         $role,
-        array(
+        [
             GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER,
             GROUP_USER_PERMISSION_PENDING_INVITATION,
-        )
+        ]
     )) {
         $social_right_content .= '<a class="btn" href="group_view.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a>';
     } elseif ($role == GROUP_USER_PERMISSION_PENDING_INVITATION) {

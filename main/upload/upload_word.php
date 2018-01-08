@@ -35,7 +35,7 @@ if (api_get_setting('search_enabled') == 'true') {
 if (isset($_POST['convert'])) {
     $cwdir = getcwd();
     if (isset($_FILES['user_file'])) {
-        $allowed_extensions = array('doc', 'docx', 'odt', 'txt', 'sxw', 'rtf');
+        $allowed_extensions = ['doc', 'docx', 'odt', 'txt', 'sxw', 'rtf'];
         if (in_array(strtolower(pathinfo($_FILES['user_file']['name'], PATHINFO_EXTENSION)), $allowed_extensions)) {
             require('../lp/lp_upload.php');
             if (isset($o_doc) && $first_item_id != 0) {
@@ -77,7 +77,7 @@ if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = array("url"=>"../lp/lp_controller.php?action=list", "name"=> get_lang("Doc"));
+$interbreadcrumb[] = ["url"=>"../lp/lp_controller.php?action=list", "name"=> get_lang("Doc")];
 $nameTools = get_lang("WoogieConversionPowerPoint");
 Display :: display_header($nameTools);
 
@@ -174,7 +174,7 @@ $form->addElement('hidden', 'split_steps', 'per_page');
 $form->addElement('submit', 'convert', get_lang('ConvertToLP'), 'class="convert_button"');
 $form->addElement('hidden', 'woogie', 'true');
 $form->addProgress();
-$defaults = array('split_steps'=>'per_page', 'index_document'=>'checked="checked"');
+$defaults = ['split_steps'=>'per_page', 'index_document'=>'checked="checked"'];
 $form -> setDefaults($defaults);
 
 // display the form

@@ -7,10 +7,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script();
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
     'name' => get_lang('MyTickets')
-);
+];
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'projects';
 

@@ -92,19 +92,19 @@ switch ($action) {
             $thematic   = new Thematic();
             $thematic_list = $thematic->get_thematic_list();
 
-            $my_list = $thematic_list_temp = array();
+            $my_list = $thematic_list_temp = [];
             foreach ($thematic_list as $item) {
                 $my_list = $thematic->get_thematic_advance_by_thematic_id($item['id']);
                 $thematic_list_temp = array_merge($my_list, $thematic_list_temp);
             }
-            $new_thematic_list = array();
+            $new_thematic_list = [];
 
             foreach ($thematic_list_temp as $item) {
                 if (!empty($item['attendance_id'])) {
-                    $new_thematic_list[$item['id']] = array(
+                    $new_thematic_list[$item['id']] = [
                         'attendance_id' => $item['attendance_id'],
                         'start_date' => $item['start_date'],
-                    );
+                    ];
                 }
             }
 

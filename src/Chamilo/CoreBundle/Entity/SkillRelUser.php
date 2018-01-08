@@ -322,7 +322,6 @@ class SkillRelUser
         $source = '';
 
         if ($this->session && $this->session->getId() != 0) {
-
             $source .= "[{$this->session->getName()}] ";
         }
 
@@ -359,12 +358,12 @@ class SkillRelUser
     {
         $url = api_get_path(WEB_CODE_PATH)."badge/assertion.php?";
 
-        $url .= http_build_query(array(
+        $url .= http_build_query([
             'user' => $this->user->getId(),
             'skill' => $this->skill->getId(),
             'course' => $this->course ? $this->course->getId() : 0,
             'session' => $this->session ? $this->session->getId() : 0
-        ));
+        ]);
 
         return $url;
     }

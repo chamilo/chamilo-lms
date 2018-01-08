@@ -40,10 +40,9 @@ use ChamiloSession as Session;
  */
 class KeyAuth
 {
-
     const PARAM_ACCESS_TOKEN = 'access_token';
 
-    protected static $services = array();
+    protected static $services = [];
 
     public static function create_temp_token($service = null, $duration = 60, $user_id = null)
     {
@@ -70,10 +69,10 @@ class KeyAuth
     public static function enable_services($_)
     {
         $args = func_get_args();
-        $names = array();
+        $names = [];
         foreach ($args as $arg) {
             if (is_object($arg)) {
-                $f = array($arg, 'get_service_name');
+                $f = [$arg, 'get_service_name'];
                 $name = call_user_func($f);
             } else {
                 $name = $arg;
@@ -86,7 +85,7 @@ class KeyAuth
     public static function disable_services($_)
     {
         $args = func_get_args();
-        $names = array();
+        $names = [];
         foreach ($args as $name) {
             $name = substr($name, 0, 10);
             unset(self::$services[$name]);
@@ -106,7 +105,7 @@ class KeyAuth
 
     public static function clear_services()
     {
-        self::$services[$name] = array();
+        self::$services[$name] = [];
     }
 
     /**
@@ -119,7 +118,7 @@ class KeyAuth
 
     public static function disable()
     {
-        self::$services[$name] = array();
+        self::$services[$name] = [];
     }
 
     /**
@@ -147,7 +146,6 @@ class KeyAuth
 
     protected function __construct()
     {
-
     }
 
     /**
@@ -262,5 +260,4 @@ class KeyAuth
     {
         return Request::get('gidReq', 0);
     }
-
 }

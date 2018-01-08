@@ -1,11 +1,11 @@
+extends: default
 
 ignore: |
-    app/*
-    src/*
+    app
+    src
     .travis.yml
     .codeclimate.yml
 
-extends: default
 rules:
   line-length:
     max: 500

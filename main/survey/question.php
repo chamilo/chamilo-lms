@@ -59,14 +59,14 @@ if ($surveyData['survey_type'] == 1) {
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
     'name' => get_lang('SurveyList'),
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']),
     'name' => strip_tags($urlname),
-);
+];
 
 // Tool name
 if ($_GET['action'] == 'add') {
@@ -77,7 +77,7 @@ if ($_GET['action'] == 'edit') {
 }
 
 // The possible question types
-$possible_types = array(
+$possible_types = [
     'personality',
     'yesno',
     'multiplechoice',
@@ -88,7 +88,7 @@ $possible_types = array(
     'pagebreak',
     'percentage',
     'score'
-);
+];
 
 // Actions
 $actions = '<div class="actions">';
@@ -112,8 +112,8 @@ $ch_type = 'ch_'.$_GET['type'];
 $surveyQuestion = new $ch_type;
 
 // The defaults values for the form
-$formData = array();
-$formData['answers'] = array('', '');
+$formData = [];
+$formData['answers'] = ['', ''];
 
 if ($_GET['type'] == 'yesno') {
     $formData['answers'][0] = get_lang('Yes');

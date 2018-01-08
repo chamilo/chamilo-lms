@@ -51,7 +51,7 @@ if ($conferenceManager) {
                 'true',
                 $title,
                 $content,
-                array('everyone')
+                ['everyone']
             );
             if (!empty($eventId)) {
                 $message = Display::return_message($plugin->get_lang('VideoConferenceAddedToTheCalendar'), 'success');

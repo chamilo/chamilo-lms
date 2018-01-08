@@ -250,4 +250,3 @@ switch ($serviceSale['payment_type']) {
         $template->display_one_col_template();
         break;
 }
-

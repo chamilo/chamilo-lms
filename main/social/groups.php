@@ -17,24 +17,24 @@ if (api_get_setting('allow_social_tool') !== 'true') {
 $join_url = '';
 
 $this_section = SECTION_SOCIAL;
-$allowed_views = array('mygroups', 'newest', 'pop');
+$allowed_views = ['mygroups', 'newest', 'pop'];
 $content = null;
 
 if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
     if ($_GET['view'] == 'mygroups') {
-        $interbreadcrumb[] = array('url' =>'groups.php', 'name' => get_lang('Groups'));
-        $interbreadcrumb[] = array('url' =>'#', 'name' => get_lang('MyGroups'));
-    } else if ($_GET['view'] == 'newest') {
-        $interbreadcrumb[] = array('url' =>'groups.php', 'name' => get_lang('Groups'));
-        $interbreadcrumb[] = array('url' =>'#', 'name' => get_lang('Newest'));
+        $interbreadcrumb[] = ['url' =>'groups.php', 'name' => get_lang('Groups')];
+        $interbreadcrumb[] = ['url' =>'#', 'name' => get_lang('MyGroups')];
+    } elseif ($_GET['view'] == 'newest') {
+        $interbreadcrumb[] = ['url' =>'groups.php', 'name' => get_lang('Groups')];
+        $interbreadcrumb[] = ['url' =>'#', 'name' => get_lang('Newest')];
     } else {
-        $interbreadcrumb[] = array('url' =>'groups.php', 'name' => get_lang('Groups'));
-        $interbreadcrumb[] = array('url' =>'#', 'name' => get_lang('Popular'));
+        $interbreadcrumb[] = ['url' =>'groups.php', 'name' => get_lang('Groups')];
+        $interbreadcrumb[] = ['url' =>'#', 'name' => get_lang('Popular')];
     }
 } else {
-    $interbreadcrumb[] = array('url' =>'groups.php', 'name' => get_lang('Groups'));
+    $interbreadcrumb[] = ['url' =>'groups.php', 'name' => get_lang('Groups')];
     if (!isset($_GET['id'])) {
-        $interbreadcrumb[] = array('url' =>'#', 'name' => get_lang('GroupList'));
+        $interbreadcrumb[] = ['url' =>'#', 'name' => get_lang('GroupList')];
     }
 }
 
@@ -56,8 +56,8 @@ $social_right_content = null;
 // My groups
 $results = $usergroup->get_groups_by_user(api_get_user_id(), 0);
 
-$grid_my_groups = array();
-$my_group_list = array();
+$grid_my_groups = [];
+$my_group_list = [];
 if (is_array($results) && count($results) > 0) {
     foreach ($results as $result) {
         $id = $result['id'];
@@ -70,13 +70,13 @@ if (is_array($results) && count($results) > 0) {
             $name .= ' '.Display::return_icon(
                 'social_group_admin.png',
                 get_lang('Admin'),
-                array('style' => 'vertical-align:middle')
+                ['style' => 'vertical-align:middle']
             );
         } elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
             $name .= ' '.Display::return_icon(
                 'social_group_moderator.png',
                 get_lang('Moderator'),
-                array('style' => 'vertical-align:middle')
+                ['style' => 'vertical-align:middle']
             );
         }
         $url = '<a href="group_view.php?id='.$id.'">'.$name.'</a>';
@@ -85,11 +85,11 @@ if (is_array($results) && count($results) > 0) {
             $usergroup->get_users_by_group(
                 $id,
                 false,
-                array(
+                [
                     GROUP_USER_PERMISSION_ADMIN,
                     GROUP_USER_PERMISSION_READER,
                     GROUP_USER_PERMISSION_MODERATOR,
-                ),
+                ],
                 0,
                 1000
             )
@@ -126,14 +126,14 @@ if (is_array($results) && count($results) > 0) {
         $html .= '</div>';
 
         $grid_item_2 = $html;
-        $grid_my_groups[] = array($grid_item_2);
+        $grid_my_groups[] = [$grid_item_2];
     }
 }
 
 // Newest groups
 $results = $usergroup->get_groups_by_age(4, false);
 
-$grid_newest_groups = array();
+$grid_newest_groups = [];
 foreach ($results as $result) {
     $result['name'] = Security::remove_XSS($result['name'], STUDENT, true);
     $result['description'] = Security::remove_XSS($result['description'], STUDENT, true);
@@ -144,7 +144,7 @@ foreach ($results as $result) {
         $usergroup->get_users_by_group(
             $id,
             false,
-            array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR),
+            [GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR],
             0,
             1000
         )
@@ -185,12 +185,12 @@ foreach ($results as $result) {
     $html .= '</div>';
     $html .= '</div>';
     $grid_item_2 = $html;
-    $grid_newest_groups[] = array($grid_item_2);
+    $grid_newest_groups[] = [$grid_item_2];
 }
 
 // Pop groups
 $results = $usergroup->get_groups_by_popularity(4, false);
-$grid_pop_groups = array();
+$grid_pop_groups = [];
 
 if (is_array($results) && count($results) > 0) {
     foreach ($results as $result) {
@@ -203,11 +203,11 @@ if (is_array($results) && count($results) > 0) {
             $usergroup->get_users_by_group(
                 $id,
                 false,
-                array(
+                [
                     GROUP_USER_PERMISSION_ADMIN,
                     GROUP_USER_PERMISSION_READER,
                     GROUP_USER_PERMISSION_MODERATOR,
-                ),
+                ],
                 0,
                 1000
             )
@@ -247,12 +247,12 @@ if (is_array($results) && count($results) > 0) {
         $html .= '</div>';
 
         $grid_item_2 = $html;
-        $grid_pop_groups[] = array($grid_item_2);
+        $grid_pop_groups[] = [$grid_item_2];
     }
 }
 
 // Display groups (newest, mygroups, pop)
-$query_vars = array();
+$query_vars = [];
 $newest_content = $popular_content = $my_group_content = null;
 if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
     $view_group = $_GET['view'];
@@ -261,12 +261,12 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
             if (count($grid_my_groups) > 0) {
                 $my_group_content = Display::return_sortable_grid(
                     'mygroups',
-                    array(),
+                    [],
                     $grid_my_groups,
-                    array('hide_navigation' => true, 'per_page' => 2),
+                    ['hide_navigation' => true, 'per_page' => 2],
                     $query_vars,
                     false,
-                    array(true, true, true, false)
+                    [true, true, true, false]
                 );
             }
             if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
@@ -283,12 +283,12 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
             if (count($grid_newest_groups) > 0) {
                 $newest_content = Display::return_sortable_grid(
                     'newest',
-                    array(),
+                    [],
                     $grid_newest_groups,
-                    array('hide_navigation' => true, 'per_page' => 100),
+                    ['hide_navigation' => true, 'per_page' => 100],
                     $query_vars,
                     false,
-                    array(true, true, true, false)
+                    [true, true, true, false]
                 );
             }
             break;
@@ -296,12 +296,12 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
             if (count($grid_pop_groups) > 0) {
                 $popular_content = Display::return_sortable_grid(
                     'popular',
-                    array(),
+                    [],
                     $grid_pop_groups,
-                    array('hide_navigation' => true, 'per_page' => 100),
+                    ['hide_navigation' => true, 'per_page' => 100],
                     $query_vars,
                     false,
-                    array(true, true, true, true, true)
+                    [true, true, true, true, true]
                 );
             }
             break;
@@ -311,12 +311,12 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
     if (count($grid_my_groups) > 0) {
         $my_group_content = Display::return_sortable_grid(
             'mygroups',
-            array(),
+            [],
             $grid_my_groups,
-            array('hide_navigation' => true, 'per_page' => 2),
+            ['hide_navigation' => true, 'per_page' => 2],
             $query_vars,
             false,
-            array(true, true, true, false)
+            [true, true, true, false]
         );
     } else {
         $my_group_content = '<span class="muted">'.get_lang('GroupNone').'</span>';
@@ -333,12 +333,12 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
     if (count($grid_newest_groups) > 0) {
         $newest_content = Display::return_sortable_grid(
             'mygroups',
-            array(),
+            [],
             $grid_newest_groups,
-            array('hide_navigation' => true, 'per_page' => 100),
+            ['hide_navigation' => true, 'per_page' => 100],
             $query_vars,
             false,
-            array(true, true, true, false)
+            [true, true, true, false]
         );
     } else {
         $newest_content = '<div class="muted">'.get_lang('GroupNone').'</div>';
@@ -346,12 +346,12 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
     if (count($grid_pop_groups) > 0) {
         $popular_content = Display::return_sortable_grid(
             'mygroups',
-            array(),
+            [],
             $grid_pop_groups,
-            array('hide_navigation' => true, 'per_page' => 100),
+            ['hide_navigation' => true, 'per_page' => 100],
             $query_vars,
             false,
-            array(true, true, true, true, true)
+            [true, true, true, true, true]
         );
     } else {
         $popular_content = '<div class="muted">'.get_lang('GroupNone').'</div>';
@@ -361,10 +361,10 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
 if (!empty($create_group_item)) {
     $social_right_content .= Display::page_subheader($create_group_item);
 }
-$headers = array(get_lang('Newest'), get_lang('Popular'), get_lang('MyGroups'));
+$headers = [get_lang('Newest'), get_lang('Popular'), get_lang('MyGroups')];
 $social_right_content .= Display::tabs(
     $headers,
-    array($newest_content, $popular_content, $my_group_content),
+    [$newest_content, $popular_content, $my_group_content],
     'tab_browse'
 );
 

@@ -16,7 +16,8 @@ class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserve
     public function __construct()
     {
         parent::__construct(
-            'plugin/createdrupaluser/src/CreateDrupalUser.php', 'drupaluser'
+            'plugin/createdrupaluser/src/CreateDrupalUser.php',
+            'drupaluser'
         );
     }
 
@@ -36,23 +37,23 @@ class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserve
             $originalPassword = $data['originalPassword'];
 
             $userInfo = api_get_user_info($return);
-            $fields = array(
+            $fields = [
                 'name' => $userInfo['username'],
                 'pass' => $originalPassword,
                 'mail' => $userInfo['email'],
                 'status' => 1,
                 'init' => $userInfo['email']
-            );
+            ];
 
-            $extraFields = array(
+            $extraFields = [
                 'first_name' => $userInfo['firstname'],
                 'last_name' => $userInfo['lastname']
-            );
+            ];
 
-            $options = array(
+            $options = [
                 'location' => $drupalDomain.'sites/all/modules/chamilo/soap.php?wsdl',
                 'uri' => $drupalDomain
-            );
+            ];
 
             $client = new SoapClient(null, $options);
             $drupalUserId = false;
@@ -71,5 +72,4 @@ class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserve
             }
         }
     }
-
 }

@@ -10,7 +10,7 @@
  */
 class ZombieManager
 {
-    static function last_year()
+    public static function last_year()
     {
         $today = time();
         $day = date('j', $today);
@@ -26,7 +26,7 @@ class ZombieManager
      * @param bool $active_only if true returns only active users. Otherwise returns all users.
      * @return ResultSet
      */
-    static function listZombies($ceiling, $active_only = true, $count = 0, $from = 10, $column = 'user.firstname', $direction = 'desc')
+    public static function listZombies($ceiling, $active_only = true, $count = 0, $from = 10, $column = 'user.firstname', $direction = 'desc')
     {
         if (empty($column)) {
             $column = 'user.firstname';
@@ -90,10 +90,10 @@ class ZombieManager
     /**
      * @param $ceiling
      */
-    static function deactivate_zombies($ceiling)
+    public static function deactivate_zombies($ceiling)
     {
         $zombies = self::list_zombies($ceiling);
-        $ids = array();
+        $ids = [];
         foreach ($zombies as $zombie) {
             $ids[] = $zombie['user_id'];
         }

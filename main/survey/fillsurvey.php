@@ -52,10 +52,10 @@ if (empty($course_info)) {
 
 // Breadcrumbs
 if (!empty($_user)) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cidReq='.$course_info['code'],
         'name' => get_lang('SurveyList')
-    );
+    ];
 }
 
 $course_id = $course_info['real_id'];
@@ -368,7 +368,7 @@ if ($survey_data['form_fields'] != '' &&
     $survey_data['anonymous'] == 0 && is_array($user_data)
 ) {
     $form_fields = explode('@', $survey_data['form_fields']);
-    $list = array();
+    $list = [];
     foreach ($form_fields as $field) {
         $field_value = explode(':', $field);
         if (isset($field_value[1]) && $field_value[1] == 1) {
@@ -390,43 +390,43 @@ if ($survey_data['form_fields'] != '' &&
     if (api_is_western_name_order()) {
         if (isset($list['firstname']) && $list['firstname'] == 1) {
             //FIRST NAME
-            $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
+            $form->addElement('text', 'firstname', get_lang('FirstName'), ['size' => 40]);
             if (api_get_setting('profile', 'name') !== 'true') {
-                $form->freeze(array('firstname'));
+                $form->freeze(['firstname']);
             }
-            $form->applyFilter(array('firstname'), 'stripslashes');
-            $form->applyFilter(array('firstname'), 'trim');
+            $form->applyFilter(['firstname'], 'stripslashes');
+            $form->applyFilter(['firstname'], 'trim');
             $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
         }
         if (isset($list['lastname']) && $list['lastname'] == 1) {
             //    LAST NAME
-            $form->addElement('text', 'lastname', get_lang('LastName'), array('size' => 40));
+            $form->addElement('text', 'lastname', get_lang('LastName'), ['size' => 40]);
             if (api_get_setting('profile', 'name') !== 'true') {
-                $form->freeze(array('lastname'));
+                $form->freeze(['lastname']);
             }
-            $form->applyFilter(array('lastname'), 'stripslashes');
-            $form->applyFilter(array('lastname'), 'trim');
+            $form->applyFilter(['lastname'], 'stripslashes');
+            $form->applyFilter(['lastname'], 'trim');
             $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
         }
     } else {
         if (isset($list['lastname']) && $list['lastname'] == 1) {
             //    LAST NAME
-            $form->addElement('text', 'lastname', get_lang('LastName'), array('size' => 40));
+            $form->addElement('text', 'lastname', get_lang('LastName'), ['size' => 40]);
             if (api_get_setting('profile', 'name') !== 'true') {
-                $form->freeze(array('lastname'));
+                $form->freeze(['lastname']);
             }
-            $form->applyFilter(array('lastname'), 'stripslashes');
-            $form->applyFilter(array('lastname'), 'trim');
+            $form->applyFilter(['lastname'], 'stripslashes');
+            $form->applyFilter(['lastname'], 'trim');
             $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
         }
         if (isset($list['firstname']) && $list['firstname'] == 1) {
             //FIRST NAME
-            $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
+            $form->addElement('text', 'firstname', get_lang('FirstName'), ['size' => 40]);
             if (api_get_setting('profile', 'name') !== 'true') {
-                $form->freeze(array('firstname'));
+                $form->freeze(['firstname']);
             }
-            $form->applyFilter(array('firstname'), 'stripslashes');
-            $form->applyFilter(array('firstname'), 'trim');
+            $form->applyFilter(['firstname'], 'stripslashes');
+            $form->applyFilter(['firstname'], 'trim');
             $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
         }
     }
@@ -434,7 +434,7 @@ if ($survey_data['form_fields'] != '' &&
     if (isset($list['official_code']) && $list['official_code'] == 1) {
         //    OFFICIAL CODE
         if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
-            $form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => 40));
+            $form->addElement('text', 'official_code', get_lang('OfficialCode'), ['size' => 40]);
             if (api_get_setting('profile', 'officialcode') !== 'true') {
                 $form->freeze('official_code');
             }
@@ -450,7 +450,7 @@ if ($survey_data['form_fields'] != '' &&
 
     if (isset($list['email']) && $list['email'] == 1) {
         //    EMAIL
-        $form->addElement('text', 'email', get_lang('Email'), array('size' => 40));
+        $form->addElement('text', 'email', get_lang('Email'), ['size' => 40]);
         if (api_get_setting('profile', 'email') !== 'true') {
             $form->freeze('email');
         }
@@ -464,7 +464,7 @@ if ($survey_data['form_fields'] != '' &&
 
     if (isset($list['phone']) && $list['phone'] == 1) {
         // PHONE
-        $form->addElement('text', 'phone', get_lang('Phone'), array('size' => 20));
+        $form->addElement('text', 'phone', get_lang('Phone'), ['size' => 20]);
         if (api_get_setting('profile', 'phone') !== 'true') {
             $form->freeze('phone');
         }
@@ -522,7 +522,7 @@ if (!isset($_GET['show'])) {
     // The first thing we do is delete the session
     Session::erase('paged_questions');
     Session::erase('page_questions_sec');
-    $paged_questions_sec = array();
+    $paged_questions_sec = [];
 
     if (!empty($survey_data['survey_introduction'])) {
         echo '<div class="survey_content">'.$survey_data['survey_introduction'].'</div>';
@@ -539,7 +539,7 @@ if ($survey_data['form_fields'] &&
         $user_data = $form->exportValues();
         if (is_array($user_data)) {
             if (count($user_data) > 0) {
-                $extras = array();
+                $extras = [];
                 // Build SQL query
                 $sql = "UPDATE $table_user SET";
                 $update = false;
@@ -557,7 +557,6 @@ if ($survey_data['form_fields'] &&
                         $sql .= " $key = '".Database :: escape_string($value)."',";
                         $update = true;
                     }
-
                 }
                 // Remove trailing , from the query we have so far
                 $sql = rtrim($sql, ',');
@@ -578,13 +577,13 @@ if ($survey_data['form_fields'] &&
         // We unset the sessions
         Session::erase('paged_questions');
         Session::erase('page_questions_sec');
-        $paged_questions_sec = array();
+        $paged_questions_sec = [];
     } else {
         echo '<div id="survey_content" class="survey_content">'.get_lang('UpdateInformation').'</div>';
         // We unset the sessions
         Session::erase('paged_questions');
         Session::erase('page_questions_sec');
-        $paged_questions_sec = array();
+        $paged_questions_sec = [];
         $form->display();
     }
 }
@@ -629,7 +628,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
     // Getting all the questions for this page and add them to a
     // multidimensional array where the first index is the page.
     // As long as there is no pagebreak fount we keep adding questions to the page
-    $questions_displayed = array();
+    $questions_displayed = [];
     $counter = 0;
     $paged_questions = Session::read('paged_questions');
     // If non-conditional survey
@@ -721,7 +720,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
             $question_counter_max = Database::num_rows($result);
             $counter = 0;
             $limit = 0;
-            $questions = array();
+            $questions = [];
             while ($row = Database :: fetch_array($result, 'ASSOC')) {
                 // If the type is not a pagebreak we store it in the $questions array
                 if ($row['type'] != 'pagebreak') {
@@ -753,10 +752,10 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                 $order = $shuffle;
             }
 
-            $answer_list = array();
+            $answer_list = [];
 
             // Get current user results
-            $results = array();
+            $results = [];
             $sql = "SELECT survey_group_pri, user, SUM(value) as value
                     FROM $table_survey_answer as survey_answer
                     INNER JOIN $table_survey_question as survey_question
@@ -779,7 +778,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
 
             //echo '<br />'; print_r($results); echo '<br />';
             // Get the total score for each group of questions
-            $totals = array();
+            $totals = [];
             $sql = "SELECT SUM(temp.value) as value, temp.survey_group_pri FROM
                     (
                         SELECT
@@ -809,7 +808,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
             }
             //echo '<pre>'; print_r($totals);
 
-            $final_results = array();
+            $final_results = [];
 
             // Get a percentage score for each group
             for ($i = 0; $i < count($totals); $i++) {
@@ -825,10 +824,10 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
             // Sort the results by score (getting a list of group IDs by score into $groups)
             arsort($final_results);
             $groups = array_keys($final_results);
-            $result = array();
+            $result = [];
             $count_result = 0;
             foreach ($final_results as $key => & $sub_result) {
-                $result[] = array('group' => $key, 'value' => $sub_result);
+                $result[] = ['group' => $key, 'value' => $sub_result];
                 $count_result++;
             }
 
@@ -1013,7 +1012,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                         $question_counter_max = Database::num_rows($result);
                         $counter = 0;
                         $limit = 0;
-                        $questions = array();
+                        $questions = [];
                         while ($row = Database::fetch_array($result, 'ASSOC')) {
                             // If the type is not a pagebreak we store it in the $questions array
                             if ($row['type'] != 'pagebreak') {
@@ -1047,7 +1046,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
         } else {
             // We need this variable only in the 2nd set of questions when personality is set.
             Session::erase('page_questions_sec');
-            $paged_questions_sec = array();
+            $paged_questions_sec = [];
 
             // Only the questions from the basic group
             // the 50 questions A B C D E F G
@@ -1130,7 +1129,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
             if (!is_null($result)) {
                 $counter = 0;
                 $limit = 0;
-                $questions = array();
+                $questions = [];
                 while ($row = Database :: fetch_array($result, 'ASSOC')) {
                     // If the type is not a pagebreak we store it in the $questions array
                     if ($row['type'] != 'pagebreak') {
@@ -1218,7 +1217,7 @@ if (isset($questions) && is_array($questions)) {
             $userAnswer = $userAnswerData[$user_id];
             switch ($question['type']) {
                 case 'score':
-                    $finalAnswer = array();
+                    $finalAnswer = [];
 
                     foreach ($userAnswer as $userChoice) {
                         list($choiceId, $choiceValue) = explode('*', $userChoice);
@@ -1312,7 +1311,7 @@ if ($survey_data['survey_type'] === '0') {
         } else {
             // We need this variable only if personality == 1
             Session::erase('page_questions_sec');
-            $paged_questions_sec = array();
+            $paged_questions_sec = [];
         }
 
         if ($personality == 0) {

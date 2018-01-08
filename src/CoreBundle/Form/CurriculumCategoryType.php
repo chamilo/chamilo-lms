@@ -29,18 +29,17 @@ class CurriculumCategoryType extends AbstractType
         $builder->add(
             'parent',
             'entity',
-            array(
+            [
                 'class' => 'Entity\CurriculumCategory',
                 'query_builder' => function ($repository) use (
                     $entity,
                     $course,
                     $session
                 ) {
-
                     $qb = $repository->createQueryBuilder('c')
                         ->where('c.cId = :id')
                         ->orderBy('c.title', 'ASC');
-                    $parameters = array('id' => $course->getId());
+                    $parameters = ['id' => $course->getId()];
 
                     if (!empty($session)) {
                         $qb->andWhere('c.sessionId = :session_id');
@@ -52,7 +51,7 @@ class CurriculumCategoryType extends AbstractType
                 },
                 'property' => 'title',
                 'required' => false,
-            )
+            ]
         );
 
         $builder->add('submit', 'submit');
@@ -61,9 +60,9 @@ class CurriculumCategoryType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => 'Chamilo\CoreBundle\Entity\CurriculumCategory',
-            )
+            ]
         );
     }
 

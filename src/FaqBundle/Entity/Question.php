@@ -206,10 +206,10 @@ class Question
      */
     public function getRouteParameters()
     {
-        return array(
+        return [
             'categorySlug' => $this->getCategory()->getSlug(),
             'questionSlug' => $this->getSlug()
-        );
+        ];
     }
 
     /**

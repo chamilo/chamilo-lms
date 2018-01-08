@@ -143,9 +143,9 @@ class WSReport extends WS
 
         $lp = new LearnpathList($user_id, $course_code);
         $list = $lp->list;
-        $return = array();
+        $return = [];
         foreach ($list as $id => $item) {
-            $return[] = array('id' => $id, 'title' => $item['lp_name']);
+            $return[] = ['id' => $id, 'title' => $item['lp_name']];
         }
 
         return $return;
@@ -185,10 +185,10 @@ class WSReport extends WS
             );
         }
         $lp = new learnpath($course_code, $learnpath_id, $user_id);
-        $return = array(
+        $return = [
             'progress_bar_mode' => $lp->progress_bar_mode,
             'progress_db' => $lp->progress_db,
-        );
+        ];
 
         return $return;
     }
@@ -275,12 +275,12 @@ class WSReport extends WS
         }
 
         $lp = new learnpath($course_code, $learnpath_id, $user_id);
-        $return = array(
+        $return = [
             'min_score' => $lp->items[$learnpath_item_id]->min_score,
             'max_score' => $lp->items[$learnpath_item_id]->max_score,
             'mastery_score' => $lp->items[$learnpath_item_id]->mastery_score,
             'current_score' => $lp->items[$learnpath_item_id]->current_score,
-        );
+        ];
 
         return $return;
     }

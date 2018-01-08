@@ -45,7 +45,7 @@ class ProfileController extends BaseController
             $this->getTemplatePath().'files.tpl'
         );
 
-        return new Response($response, 200, array());
+        return new Response($response, 200, []);
     }
 
     /**

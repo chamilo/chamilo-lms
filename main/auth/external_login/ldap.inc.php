@@ -37,7 +37,7 @@ function extldap_connect()
     global $extldap_config, $debug;
 
     if (!is_array($extldap_config['host'])) {
-        $extldap_config['host'] = array($extldap_config['host']);
+        $extldap_config['host'] = [$extldap_config['host']];
     }
 
     foreach ($extldap_config['host'] as $host) {
@@ -180,7 +180,7 @@ function extldap_get_chamilo_user($ldap_user, $cor = null)
         $cor = $extldap_user_correspondance;
     }
 
-    $chamilo_user = array();
+    $chamilo_user = [];
     foreach ($cor as $chamilo_field => $ldap_field) {
         if (is_array($ldap_field)) {
             $chamilo_user[$chamilo_field] = extldap_get_chamilo_user($ldap_user, $ldap_field);
@@ -285,7 +285,7 @@ function extldap_import_all_users()
     }
     //browse ASCII values from a to z to avoid 1000 results limit of LDAP
     $count    = 0;
-    $alphanum = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+    $alphanum = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     for ($a = 97; $a <= 122; $a++) {
         $alphanum[] = chr($a);
     }
@@ -386,4 +386,3 @@ function extldap_add_user_by_array($data, $update_if_exists = true)
     }
     return $user_id;
 }
-

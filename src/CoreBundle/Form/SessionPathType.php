@@ -20,20 +20,18 @@ class SessionPathType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
         $builder
             ->add('name', 'text')
             ->add('description', 'text')
             ->add('submit', 'submit');
-
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => 'Chamilo\CoreBundle\Entity\SessionPath',
-            )
+            ]
         );
     }
 
@@ -42,4 +40,3 @@ class SessionPathType extends AbstractType
         return 'sessionPath';
     }
 }
-

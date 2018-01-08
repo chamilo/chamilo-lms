@@ -19,13 +19,13 @@ class SessionTreeType extends AbstractType
         $builder->add(
             'type',
             'choice',
-            array('choices' => array('1', '2', '3', '4'))
+            ['choices' => ['1', '2', '3', '4']]
         );
 
         $builder->add(
             'sessionPath',
             'entity',
-            array(
+            [
                 'class' => 'Entity\SessionPath',
                 'property' => 'name',
                 'query_builder' =>
@@ -33,14 +33,14 @@ class SessionTreeType extends AbstractType
                         return $er->createQueryBuilder('u')
                             ->orderBy('u.name', 'DESC');
                     },
-            )
+            ]
         );
 
 
         $builder->add(
             'tool',
             'entity',
-            array(
+            [
                 'class' => 'Entity\Tool',
                 'property' => 'name',
                 'query_builder' =>
@@ -48,13 +48,13 @@ class SessionTreeType extends AbstractType
                         return $er->createQueryBuilder('u')
                             ->orderBy('u.name', 'DESC');
                     },
-            )
+            ]
         );
 
         $builder->add(
             'tool',
             'entity',
-            array(
+            [
                 'class' => 'Entity\Tool',
                 'property' => 'name',
                 'query_builder' =>
@@ -62,13 +62,13 @@ class SessionTreeType extends AbstractType
                         return $er->createQueryBuilder('u')
                             ->orderBy('u.name', 'DESC');
                     },
-            )
+            ]
         );
 
         $builder->add(
             'session',
             'entity',
-            array(
+            [
                 'class' => 'Entity\Session',
                 'property' => 'name',
                 'query_builder' =>
@@ -76,13 +76,13 @@ class SessionTreeType extends AbstractType
                         return $er->createQueryBuilder('u')
                             ->orderBy('u.name', 'DESC');
                     },
-            )
+            ]
         );
 
         $builder->add(
             'course',
             'entity',
-            array(
+            [
                 'class' => 'Entity\Course',
                 'property' => 'title',
                 'query_builder' =>
@@ -90,19 +90,18 @@ class SessionTreeType extends AbstractType
                         return $er->createQueryBuilder('u')
                             ->orderBy('u.title', 'DESC');
                     },
-            )
+            ]
         );
         $builder
             ->add('submit', 'submit');
-
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => 'Chamilo\CoreBundle\Entity\SessionTree',
-            )
+            ]
         );
     }
 
@@ -111,4 +110,3 @@ class SessionTreeType extends AbstractType
         return 'sessionPath';
     }
 }
-

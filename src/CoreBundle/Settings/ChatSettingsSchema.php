@@ -22,14 +22,14 @@ class ChatSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'show_chat_folder' => 'true',
                     'allow_global_chat' => 'true',
-                )
+                ]
             );
-        $allowedTypes = array(
-            'show_chat_folder' => array('string'),
-        );
+        $allowedTypes = [
+            'show_chat_folder' => ['string'],
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 

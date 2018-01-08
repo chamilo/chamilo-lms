@@ -50,9 +50,9 @@ class ExerciseLink extends AbstractLink
                 exe.c_id = ".$this->course_id;
 
         $result = Database::query($sql);
-        $cats = array();
+        $cats = [];
         while ($data = Database::fetch_array($result)) {
-            $cats[] = array($data['id'], $data['title']);
+            $cats[] = [$data['id'], $data['title']];
         }
 
         return $cats;
@@ -111,7 +111,7 @@ class ExerciseLink extends AbstractLink
                 ";
 
         require_once api_get_path(SYS_CODE_PATH).'exercise/hotpotatoes.lib.php';
-        $exerciseInLP = array();
+        $exerciseInLP = [];
 
         if (!$this->is_hp) {
             $result = Database::query($sql);
@@ -121,11 +121,11 @@ class ExerciseLink extends AbstractLink
             $result2 = Database::query($sql2);
         }
 
-        $cats = array();
+        $cats = [];
         if (isset($result)) {
             if (Database::num_rows($result) > 0) {
                 while ($data = Database::fetch_array($result)) {
-                    $cats[] = array($data['id'], $data['title']);
+                    $cats[] = [$data['id'], $data['title']];
                 }
             }
         }
@@ -144,7 +144,7 @@ class ExerciseLink extends AbstractLink
                             if ($title == '') {
                                 $title = basename($path);
                             }
-                            $element = array($attribute['id'], $title.'(HP)');
+                            $element = [$attribute['id'], $title.'(HP)'];
                             $cats[] = $element;
                             $hotPotatoes[] = $element;
                         }
@@ -159,10 +159,10 @@ class ExerciseLink extends AbstractLink
 
         if (!empty($exerciseInLP)) {
             foreach ($exerciseInLP as $exercise) {
-                $cats[] = array(
+                $cats[] = [
                     $exercise['id'],
                     $exercise['title'].' ('.get_lang('ToolLearnpath').')'
-                );
+                ];
             }
         }
 
@@ -244,7 +244,6 @@ class ExerciseLink extends AbstractLink
                 $sql .= " AND exe_user_id = $stud_id ";
             }
             $sql .= ' ORDER BY exe_id DESC';
-
         } else {
             $sql = "SELECT * FROM $tblHp hp 
                     INNER JOIN $tblDoc doc
@@ -263,14 +262,14 @@ class ExerciseLink extends AbstractLink
         if (isset($stud_id) && empty($type)) {
             // for 1 student
             if ($data = Database::fetch_array($scores)) {
-                return array($data['exe_result'], $data['exe_weighting']);
+                return [$data['exe_result'], $data['exe_weighting']];
             } else {
                 return null;
             }
         } else {
             // all students -> get average
             // normal way of getting the info
-            $students = array(); // user list, needed to make sure we only
+            $students = []; // user list, needed to make sure we only
             // take first attempts into account
             $student_count = 0;
             $sum = 0;
@@ -298,20 +297,20 @@ class ExerciseLink extends AbstractLink
             } else {
                 switch ($type) {
                     case 'best':
-                        return array($bestResult, $weight);
+                        return [$bestResult, $weight];
                         break;
                     case 'average':
                         $count = count($this->getStudentList());
                         if (empty($count)) {
-                            return array(0, $weight);
+                            return [0, $weight];
                         }
-                        return array($sumResult / $count, $weight);
+                        return [$sumResult / $count, $weight];
                         break;
                     case 'ranking':
                         return AbstractLink::getCurrentUserRanking($stud_id, $students);
                         break;
                     default:
-                        return array($sum, $student_count);
+                        return [$sum, $student_count];
                         break;
                 }
             }

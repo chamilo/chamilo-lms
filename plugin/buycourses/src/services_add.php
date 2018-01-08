@@ -100,7 +100,7 @@ $form->addFile(
     (get_lang(
         'AddImage'
     )),
-    array('id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '16 / 9')
+    ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '16 / 9']
 );
 $form->addText('video_url', get_lang('VideoUrl'), false);
 $form->addHtmlEditor('service_information', $plugin->get_lang('ServiceInformation'), false);

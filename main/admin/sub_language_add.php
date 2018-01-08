@@ -18,8 +18,8 @@ api_protect_admin_script();
 $tool_name = get_lang('CreateSubLanguage');
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'languages.php', 'name' => get_lang('PlatformLanguages'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'languages.php', 'name' => get_lang('PlatformLanguages')];
 
 /**
  * Add sub-language
@@ -75,7 +75,7 @@ function check_if_language_exist($original_name, $english_name, $isocode, $subla
     $count_english_name = Database::result($rs_english_name, 0, 'count_english_name');
 
     $has_error = false;
-    $message_information = array();
+    $message_information = [];
 
     if ($count_original_name == 1) {
         $has_error = true;
@@ -154,9 +154,8 @@ if (isset($_GET['sub_language_id']) && $_GET['sub_language_id'] == strval(intval
     } else {
         $sub_language_id_exist = false;
     }
-
 }
-$language_details = array();
+$language_details = [];
 $language_name = '';
 if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
     $language_details = SubLanguageManager::get_all_information_of_language($_GET['id']);
@@ -181,7 +180,6 @@ if ((isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) &&
         $original_name = $get_all_information['original_name'];
         $english_name = $get_all_information['english_name'];
         $isocode = $get_all_information['isocode'];
-
     }
 }
 
@@ -203,7 +201,7 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
     $isocode = str_replace(' ', '_', $isocode);
 
     $sublanguage_available = $_POST['sub_language_is_visible'];
-    $check_information = array();
+    $check_information = [];
     $check_information = check_if_language_exist($original_name, $english_name, $isocode, $sublanguage_available);
     foreach ($check_information as $index_information => $value_information) {
         $allow_insert_info = false;

@@ -17,7 +17,7 @@ api_protect_admin_script();
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
 $tool_name = null;
 
@@ -38,34 +38,34 @@ $check = Security::check_token('request');
 $token = Security::get_token();
 
 if ($action == 'add') {
-    $interbreadcrumb[] = array('url' => 'extra_fields.php?type='.$extra_field->type, 'name' => $extra_field->pageName);
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = ['url' => 'extra_fields.php?type='.$extra_field->type, 'name' => $extra_field->pageName];
+    $interbreadcrumb[] = [
         'url' => 'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],
         'name' => $extra_field_info['display_text'],
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => 'extra_field_options.php?type='.$extra_field->type.'&field_id='.$extra_field_info['id'],
         'name' => get_lang('EditExtraFieldOptions'),
-    );
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Add'));
+    ];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
 } elseif ($action == 'edit') {
-    $interbreadcrumb[] = array('url' => 'extra_fields.php?type='.$extra_field->type, 'name' => $extra_field->pageName);
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = ['url' => 'extra_fields.php?type='.$extra_field->type, 'name' => $extra_field->pageName];
+    $interbreadcrumb[] = [
         'url' => 'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],
         'name' => $extra_field_info['display_text'],
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => 'extra_field_options.php?type='.$extra_field->type.'&field_id='.$extra_field_info['id'],
         'name' => get_lang('EditExtraFieldOptions'),
-    );
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
+    ];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
 } else {
-    $interbreadcrumb[] = array('url' => 'extra_fields.php?type='.$extra_field->type, 'name' => $extra_field->pageName);
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = ['url' => 'extra_fields.php?type='.$extra_field->type, 'name' => $extra_field->pageName];
+    $interbreadcrumb[] = [
         'url' =>  'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],
         'name' => $extra_field_info['display_text']
-    );
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('EditExtraFieldOptions'));
+    ];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('EditExtraFieldOptions')];
 }
 
 //jqgrid will use this URL to do the selects
@@ -73,44 +73,44 @@ $params = 'field_id='.$field_id.'&type='.$extra_field->type;
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_extra_field_options&'.$params;
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = array(
+$columns = [
     get_lang('Name'),
     get_lang('Value'),
     get_lang('Order'),
     get_lang('Actions'),
-);
+];
 
 //Column config
-$column_model = array(
-    array(
+$column_model = [
+    [
         'name' => 'display_text',
         'index' => 'display_text',
         'width' => '180',
         'align' => 'left',
-    ),
-    array(
+    ],
+    [
         'name' => 'option_value',
         'index' => 'option_value',
         'width' => '',
         'align' => 'left',
         'sortable' => 'false',
-    ),
-    array(
+    ],
+    [
         'name' => 'option_order',
         'index' => 'option_order',
         'width' => '',
         'align' => 'left',
         'sortable' => 'false',
-    ),
-    array(
+    ],
+    [
         'name' => 'actions',
         'index' => 'actions',
         'width' => '100',
         'align' => 'left',
         'formatter' => 'action_formatter',
         'sortable' => 'false',
-    ),
-);
+    ],
+];
 
 //Autowidth
 $extra_params['autowidth'] = 'true';
@@ -133,7 +133,7 @@ $(function() {
         $columns,
         $column_model,
         $extra_params,
-        array(),
+        [],
         $action_links,
         true
     ).'
@@ -167,7 +167,7 @@ switch ($action) {
             $obj->display();
         } else {
             $form->addElement('hidden', 'sec_token');
-            $form->setConstants(array('sec_token' => $token));
+            $form->setConstants(['sec_token' => $token]);
             $form->display();
         }
         break;
@@ -190,7 +190,7 @@ switch ($action) {
             $obj->display();
         } else {
             $form->addElement('hidden', 'sec_token');
-            $form->setConstants(array('sec_token' => $token));
+            $form->setConstants(['sec_token' => $token]);
             $form->display();
         }
         break;

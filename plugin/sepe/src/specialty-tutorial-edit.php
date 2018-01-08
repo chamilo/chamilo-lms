@@ -83,16 +83,16 @@ if (!empty($_POST)) {
 if (api_is_platform_admin()) {
     $courseId = getCourse(intval($_GET['action_id']));
     $participantId = getParticipantId(intval($_GET['specialty_id']));
-    $interbreadcrumb[] = array("url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe'));
-    $interbreadcrumb[] = array("url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList'));
-    $interbreadcrumb[] = array("url" => "formative-action.php?cid=".$courseId, "name" => $plugin->get_lang('FormativeAction'));
-    $interbreadcrumb[] = array("url" => "participant-specialty-edit.php?new_specialty=0&participant_id=".$participantId."&specialty_id=".intval($_GET['specialty_id'])."&action_id=".intval($_GET['action_id']), "name" => $plugin->get_lang('SpecialtyFormativeParcipant'));
+    $interbreadcrumb[] = ["url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe')];
+    $interbreadcrumb[] = ["url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList')];
+    $interbreadcrumb[] = ["url" => "formative-action.php?cid=".$courseId, "name" => $plugin->get_lang('FormativeAction')];
+    $interbreadcrumb[] = ["url" => "participant-specialty-edit.php?new_specialty=0&participant_id=".$participantId."&specialty_id=".intval($_GET['specialty_id'])."&action_id=".intval($_GET['action_id']), "name" => $plugin->get_lang('SpecialtyFormativeParcipant')];
     if (isset($_GET['new_tutorial']) && intval($_GET['new_tutorial']) == 1) {
         $templateName = $plugin->get_lang('new_tutorial');
         $tpl = new Template($templateName);
         $tpl->assign('action_id', intval($_GET['action_id']));
         $tpl->assign('specialty_id', intval($_GET['specialty_id']));
-        $info = array();
+        $info = [];
         $tpl->assign('info', $info);
         $tpl->assign('new_tutorial', '1');
         $startYear = $endYear = date("Y");
@@ -126,7 +126,7 @@ if (api_is_platform_admin()) {
             $endYear = date("Y");
         }
     }
-    $listYears = array();
+    $listYears = [];
     if ($startYear > $endYear) {
         $tmp = $startYear;
         $startYear = $endYear;

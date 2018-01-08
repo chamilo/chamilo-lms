@@ -30,14 +30,14 @@ class UserController extends BaseController
 
         return $this->getTemplate()->render(
             $this->getTemplatePath().'me.tpl',
-            array('user', $userInfo)
+            ['user', $userInfo]
         );
 
         $response = $this->getTemplate()->renderTemplate(
             $this->getTemplatePath().'me.tpl'
         );
 
-        return new Response($response, 200, array('user', $userInfo));
+        return new Response($response, 200, ['user', $userInfo]);
     }
 
     /**
@@ -50,7 +50,7 @@ class UserController extends BaseController
         $userId = \UserManager::get_user_id_from_username($username);
         $userInfo = api_get_user_info($userId);
 
-        return array(
+        return [
             'user' => $userInfo,
             'form_send_message' => \MessageManager::generate_message_form(
                 'send_message'
@@ -58,7 +58,7 @@ class UserController extends BaseController
             'form_send_invitation' => \MessageManager::generate_invitation_form(
                 'send_invitation'
             ),
-        );
+        ];
     }
 
     /**
@@ -70,19 +70,19 @@ class UserController extends BaseController
         $user = $this->getUser();
         $courses = $user->getCourses();
 
-        $output = array();
+        $output = [];
         /** @var CourseRelUser $courseRelUser */
         foreach ($courses as $courseRelUser) {
             $course = $courseRelUser->getCourse();
             if ($course) {
-                $output[] = array(
+                $output[] = [
                     'id' => $course->getId(),
                     'title' => $course->getTitle(),
-                );
+                ];
             }
         }
 
-        return $response = new JsonResponse(array('items' => $output));
+        return $response = new JsonResponse(['items' => $output]);
     }
 
     /**
@@ -93,7 +93,7 @@ class UserController extends BaseController
     {
         $response = $app['template']->renderLayout('layout_1_col.tpl');
 
-        return new Response($response, 200, array());
+        return new Response($response, 200, []);
     }
 
     /**

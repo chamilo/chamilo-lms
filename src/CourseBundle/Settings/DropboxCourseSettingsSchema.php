@@ -19,10 +19,10 @@ class DropboxCourseSettingsSchema extends AbstractSettingsSchema
     public function buildSettings(SettingsBuilderInterface $builder)
     {
         $builder
-            ->setDefaults(array(
+            ->setDefaults([
                 'enabled' => '',
                 'email_alert_on_new_doc_dropbox' => ''
-            ))
+            ])
         ;
 
         $allowedTypes = [

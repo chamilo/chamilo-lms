@@ -21,7 +21,7 @@ class Category implements GradebookItem
     private $visible;
     private $certificate_min_score;
     private $session_id;
-    private $skills = array();
+    private $skills = [];
     private $grade_model_id;
     private $generateCertificates;
     private $isRequirement;
@@ -335,7 +335,7 @@ class Category implements GradebookItem
     public function getSkillsForSelect()
     {
         $skills = $this->get_skills();
-        $skill_select = array();
+        $skill_select = [];
         if (!empty($skills)) {
             foreach ($skills as $skill) {
                 $skill_select[$skill['id']] = $skill['name'];
@@ -374,7 +374,7 @@ class Category implements GradebookItem
         $session_id = null
     ) {
         if (isset($id) && (int) $id === 0) {
-            $cats = array();
+            $cats = [];
             $cats[] = self::create_root_category();
             return $cats;
         }
@@ -390,7 +390,7 @@ class Category implements GradebookItem
                     WHERE session_id = '.$session_id;
             $result_session = Database::query($sql);
             if (Database::num_rows($result_session) > 0) {
-                $categoryList = array();
+                $categoryList = [];
                 while ($data_session = Database::fetch_array($result_session)) {
                     $parent_id = $data_session['id'];
                     if ($data_session['course_code'] == $courseCode) {
@@ -429,7 +429,7 @@ class Category implements GradebookItem
         //if the category given is explicitly 0 (not null), then create
         // a root category object (in memory)
         if (isset($id) && (int) $id === 0) {
-            $cats = array();
+            $cats = [];
             $cats[] = self::create_root_category();
 
             return $cats;
@@ -508,7 +508,7 @@ class Category implements GradebookItem
         }
 
         $result = Database::query($sql);
-        $categories = array();
+        $categories = [];
         if (Database::num_rows($result) > 0) {
             $categories = self::create_category_objects_from_sql_result(
                 $result
@@ -545,7 +545,7 @@ class Category implements GradebookItem
      */
     private static function create_category_objects_from_sql_result($result)
     {
-        $categories = array();
+        $categories = [];
         while ($data = Database::fetch_array($result)) {
             $cat = new Category();
             $cat->set_id($data['id']);
@@ -654,7 +654,7 @@ class Category implements GradebookItem
                         }
                         foreach ($components as $component) {
                             $gradebook = new Gradebook();
-                            $params = array();
+                            $params = [];
 
                             $params['name'] = $component['acronym'];
                             $params['description'] = $component['title'];
@@ -734,7 +734,7 @@ class Category implements GradebookItem
                     }
                     foreach ($components as $component) {
                         $gradebook = new Gradebook();
-                        $params = array();
+                        $params = [];
                         $params['name'] = $component['acronym'];
                         $params['description'] = $component['title'];
                         $params['user_id'] = api_get_user_id();
@@ -982,7 +982,7 @@ class Category implements GradebookItem
                 }
             }
 
-            $students = array();
+            $students = [];
             if (!empty($evals)) {
                 /** @var Evaluation $eval */
                 foreach ($evals as $eval) {
@@ -1076,7 +1076,6 @@ class Category implements GradebookItem
                             $bestResult = $ressum;
                         }
                     }
-
                 }
             }
 
@@ -1097,7 +1096,6 @@ class Category implements GradebookItem
                         if ($ressum > $bestResult) {
                             $bestResult = $ressum;
                         }
-
                     } else {
                         if ($eval->get_weight() != 0) {
                             $evalweight = $eval->get_weight();
@@ -1144,22 +1142,22 @@ class Category implements GradebookItem
                 if (empty($bestResult)) {
                     return null;
                 }
-                return array($bestResult, $weightsum);
+                return [$bestResult, $weightsum];
                 break;
             case 'average':
                 if (empty($ressum)) {
                     return null;
                 }
-                return array($ressum, $weightsum);
+                return [$ressum, $weightsum];
                 break;
             case 'ranking':
                 // category ranking is calculated in gradebook_data_generator.class.php
                 // function get_data
                 return null;
-                return AbstractLink::getCurrentUserRanking($stud_id, array());
+                return AbstractLink::getCurrentUserRanking($stud_id, []);
                 break;
             default:
-                return array($ressum, $weightsum);
+                return [$ressum, $weightsum];
                 break;
         }
     }
@@ -1390,21 +1388,21 @@ class Category implements GradebookItem
             //   -> movable to root, independent categories or categories inside the course
 
             $user = api_is_platform_admin() ? null : api_get_user_id();
-            $targets = array();
+            $targets = [];
             $level = 0;
 
-            $root = array(0, get_lang('RootCat'), $level);
+            $root = [0, get_lang('RootCat'), $level];
             $targets[] = $root;
 
             if (isset($this->course_code) && !empty($this->course_code)) {
                 $crscats = self::load(null, null, $this->course_code, 0);
                 foreach ($crscats as $cat) {
                     if ($this->can_be_moved_to_cat($cat)) {
-                        $targets[] = array(
+                        $targets[] = [
                             $cat->get_id(),
                             $cat->get_name(),
                             $level + 1
-                        );
+                        ];
                         $targets = $this->addTargetSubcategories(
                             $targets,
                             $level + 1,
@@ -1417,7 +1415,7 @@ class Category implements GradebookItem
             $indcats = self::load(null, $user, 0, 0);
             foreach ($indcats as $cat) {
                 if ($this->can_be_moved_to_cat($cat)) {
-                    $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
+                    $targets[] = [$cat->get_id(), $cat->get_name(), $level + 1];
                     $targets = $this->addTargetSubcategories(
                         $targets,
                         $level + 1,
@@ -1443,11 +1441,11 @@ class Category implements GradebookItem
         $subcats = self::load(null, null, null, $catid);
         foreach ($subcats as $cat) {
             if ($this->can_be_moved_to_cat($cat)) {
-                $targets[] = array(
+                $targets[] = [
                     $cat->get_id(),
                     $cat->get_name(),
                     $level + 1
-                );
+                ];
                 $targets = $this->addTargetSubcategories(
                     $targets,
                     $level + 1,
@@ -1525,9 +1523,9 @@ class Category implements GradebookItem
      */
     public function get_tree()
     {
-        $targets = array();
+        $targets = [];
         $level = 0;
-        $root = array(0, get_lang('RootCat'), $level);
+        $root = [0, get_lang('RootCat'), $level];
         $targets[] = $root;
 
         // course or platform admin
@@ -1535,11 +1533,11 @@ class Category implements GradebookItem
             $user = api_is_platform_admin() ? null : api_get_user_id();
             $cats = self::get_root_categories_for_teacher($user);
             foreach ($cats as $cat) {
-                $targets[] = array(
+                $targets[] = [
                     $cat->get_id(),
                     $cat->get_name(),
                     $level + 1
-                );
+                ];
                 $targets = self::add_subtree(
                     $targets,
                     $level + 1,
@@ -1551,11 +1549,11 @@ class Category implements GradebookItem
             // student
             $cats = self::get_root_categories_for_student(api_get_user_id());
             foreach ($cats as $cat) {
-                $targets[] = array(
+                $targets[] = [
                     $cat->get_id(),
                     $cat->get_name(),
                     $level + 1
-                );
+                ];
                 $targets = self::add_subtree(
                     $targets,
                     $level + 1,
@@ -1580,11 +1578,11 @@ class Category implements GradebookItem
 
         if (!empty($subcats)) {
             foreach ($subcats as $cat) {
-                $targets[] = array(
+                $targets[] = [
                     $cat->get_id(),
                     $cat->get_name(),
                     $level + 1
-                );
+                ];
                 $targets = self::add_subtree(
                     $targets,
                     $level + 1,
@@ -1625,9 +1623,9 @@ class Category implements GradebookItem
                 )';
         $result = Database::query($sql);
 
-        $cats = array();
+        $cats = [];
         while ($data = Database::fetch_array($result)) {
-            $cats[] = array($data['code'], $data['title']);
+            $cats[] = [$data['code'], $data['title']];
         }
 
         return $cats;
@@ -1650,9 +1648,9 @@ class Category implements GradebookItem
         }
 
         $result = Database::query($sql);
-        $cats = array();
+        $cats = [];
         while ($data = Database::fetch_array($result)) {
-            $cats[] = array($data['code'], $data['title']);
+            $cats[] = [$data['code'], $data['title']];
         }
 
         return $cats;
@@ -1738,7 +1736,7 @@ class Category implements GradebookItem
     public function getIndependentCategoriesWithStudentResult(
         $categoryId,
         $studentId,
-        $cats = array()
+        $cats = []
     ) {
         $creator = api_is_allowed_to_edit() && !api_is_platform_admin() ? api_get_user_id() : null;
 
@@ -1871,7 +1869,7 @@ class Category implements GradebookItem
             }
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -1889,7 +1887,7 @@ class Category implements GradebookItem
         $course_code = '',
         $sessionId = 0
     ) {
-        $evals = array();
+        $evals = [];
         $course_code = empty($course_code) ? $this->get_course_code() : $course_code;
         $sessionId = empty($sessionId) ? $this->get_session_id() : $sessionId;
 
@@ -1994,7 +1992,7 @@ class Category implements GradebookItem
         $course_code = '',
         $sessionId = 0
     ) {
-        $links = array();
+        $links = [];
 
         $course_code = empty($course_code) ? $this->get_course_code() : $course_code;
         $sessionId = empty($sessionId) ? $this->get_session_id() : $sessionId;
@@ -2105,7 +2103,7 @@ class Category implements GradebookItem
      */
     public function find_category($name_mask, $allcat)
     {
-        $categories = array();
+        $categories = [];
         foreach ($allcat as $search_cat) {
             if (!(strpos(strtolower($search_cat->get_name()), strtolower($name_mask)) === false)) {
                 $categories[] = $search_cat;
@@ -2201,7 +2199,7 @@ class Category implements GradebookItem
         $courseId = $courseInfo['real_id'];
 
         //@todo move these in a function
-        $sum_categories_weight_array = array();
+        $sum_categories_weight_array = [];
         if (isset($cats_course) && !empty($cats_course)) {
             $categories = self::load(null, null, null, $category_id);
             if (!empty($categories)) {
@@ -2285,7 +2283,7 @@ class Category implements GradebookItem
             );
         }
 
-        $html = array();
+        $html = [];
         if (!empty($my_certificate)) {
             $certificate_obj = new Certificate(
                 $my_certificate['id'],
@@ -2308,7 +2306,7 @@ class Category implements GradebookItem
                     Display::return_icon(
                         'pdf.png',
                         get_lang('ExportToPDF'),
-                        array(),
+                        [],
                         ICON_SIZE_MEDIUM
                     ),
                     "$url&action=export"
@@ -2320,11 +2318,11 @@ class Category implements GradebookItem
                     $exportToPDF = null;
                 }
 
-                $html = array(
+                $html = [
                     'certificate_link' => $certificates,
                     'pdf_link' => $exportToPDF,
                     'pdf_url' => "$url&action=export",
-                );
+                ];
 
                 if ($skillToolEnabled && $userHasSkills) {
                     $html['badge_link'] = Display::toolbarButton(
@@ -2358,7 +2356,7 @@ class Category implements GradebookItem
      */
     public static function exportAllCertificates(
         $catId,
-        $userList = array()
+        $userList = []
     ) {
         $orientation = api_get_configuration_value('certificate_pdf_orientation');
 
@@ -2375,7 +2373,7 @@ class Category implements GradebookItem
         $pdf = new PDF($page_format, $params['orientation'], $params);
 
         $certificate_list = GradebookUtils::get_list_users_certificates($catId, $userList);
-        $certificate_path_list = array();
+        $certificate_path_list = [];
 
         if (!empty($certificate_list)) {
             foreach ($certificate_list as $index=>$value) {
@@ -2385,7 +2383,7 @@ class Category implements GradebookItem
                 );
                 foreach ($list_certificate as $value_certificate) {
                     $certificate_obj = new Certificate($value_certificate['id']);
-                    $certificate_obj->generate(array('hide_print_button' => true));
+                    $certificate_obj->generate(['hide_print_button' => true]);
                     if ($certificate_obj->isHtmlFileGenerated()) {
                         $certificate_path_list[] = $certificate_obj->html_file;
                     }
@@ -2513,7 +2511,8 @@ class Category implements GradebookItem
             return 0;
         }
         $courseEvaluations = $category->get_evaluations(
-            $userId, true
+            $userId,
+            true
         );
         $courseLinks = $category->get_links($userId, true);
         $evaluationsAndLinks = array_merge($courseEvaluations, $courseLinks);

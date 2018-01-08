@@ -17,4 +17,3 @@ $plugin_info['comment']     = "This is useful when trying to find the Chamilo re
 $plugin_info['version']     = '1.0';
 //the plugin author
 $plugin_info['author']      = 'Julio Montoya';
-

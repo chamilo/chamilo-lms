@@ -91,10 +91,10 @@ $currentForumCategory = get_forumcategory_information(
 $groupId = api_get_group_id();
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
-    );
+    ];
 }
 
 $search = isset($_GET['search']) ? Security::remove_XSS(urlencode($_GET['search'])) : '';
@@ -104,59 +104,59 @@ if ($origin == 'learnpath') {
 } else {
     if (!empty($groupId)) {
         $group_properties = GroupManager::get_group_properties($groupId);
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             "url" => "../group/group.php?".api_get_cidreq(),
             "name" => get_lang('Groups')
-        );
-        $interbreadcrumb[] = array(
+        ];
+        $interbreadcrumb[] = [
             "url" => "../group/group_space.php?".api_get_cidreq(),
             "name" => get_lang('GroupSpace').' ('.$group_properties['name'].')'
-        );
-        $interbreadcrumb[] = array(
+        ];
+        $interbreadcrumb[] = [
             "url" => "viewforum.php?".api_get_cidreq()."&forum=".intval($_GET['forum'])."&search=".$search,
             "name" => prepare4display($currentForum['forum_title'])
-        );
+        ];
         if ($message <> 'PostDeletedSpecial') {
-            $interbreadcrumb[] = array(
+            $interbreadcrumb[] = [
                 "url" => "viewthread.php?".api_get_cidreq()."&forum=".intval($_GET['forum'])."&thread=".intval($_GET['thread']),
                 "name" => prepare4display($currentThread['thread_title'])
-            );
+            ];
         }
 
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             "url" => "#",
             "name" => get_lang('QualifyThread')
-        );
+        ];
 
         // the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
         Display::display_header('');
         api_display_tool_title($nameTools);
     } else {
         $info_thread = get_thread_information($currentForum['forum_id'], $_GET['thread']);
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             "url" => "index.php?".api_get_cidreq()."&search=".$search,
             "name" => $nameTools
-        );
-        $interbreadcrumb[] = array(
+        ];
+        $interbreadcrumb[] = [
             "url" => "viewforumcategory.php?".api_get_cidreq()."&forumcategory=".$currentForumCategory['cat_id']."&search=".$search,
             "name" => prepare4display($currentForumCategory['cat_title'])
-        );
-        $interbreadcrumb[] = array(
+        ];
+        $interbreadcrumb[] = [
             "url" => "viewforum.php?".api_get_cidreq()."&forum=".intval($_GET['forum'])."&search=".$search,
             "name" => prepare4display($currentForum['forum_title'])
-        );
+        ];
 
         if ($message <> 'PostDeletedSpecial') {
-            $interbreadcrumb[] = array(
+            $interbreadcrumb[] = [
                 "url" => "viewthread.php?".api_get_cidreq()."&forum=".$info_thread['forum_id']."&thread=".intval($_GET['thread']),
                 "name" => prepare4display($currentThread['thread_title'])
-            );
+            ];
         }
         // the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             "url" => "#",
             "name" => get_lang('QualifyThread')
-        );
+        ];
         Display::display_header('');
     }
 }
@@ -227,7 +227,7 @@ $form->addLabel(
 );
 $form->addText(
     'idtextqualify',
-    array(get_lang('Qualification'), get_lang('MaxScore').' '.$maxQualify),
+    [get_lang('Qualification'), get_lang('MaxScore').' '.$maxQualify],
     $qualify
 );
 
@@ -301,7 +301,7 @@ if (isset($rows)) {
 }
 
 $form->addButtonSave(get_lang('QualifyThisThread'));
-$form->setDefaults(array('idtextqualify' => $qualify));
+$form->setDefaults(['idtextqualify' => $qualify]);
 $form->display();
 
 // Show past data

@@ -232,7 +232,7 @@ class Plugin
                     $result->addHtmlEditor($name, $this->get_lang($name), false);
                     break;
                 case 'text':
-                    $result->addElement($type, $name, array($this->get_lang($name), $help));
+                    $result->addElement($type, $name, [$this->get_lang($name), $help]);
                     break;
                 case 'boolean':
                     $group = [];
@@ -250,7 +250,7 @@ class Plugin
                         get_lang('No'),
                         'false'
                     );
-                    $result->addGroup($group, null, array($this->get_lang($name), $help));
+                    $result->addGroup($group, null, [$this->get_lang($name), $help]);
                     break;
                 case 'checkbox':
                     $selectedValue = null;
@@ -273,7 +273,7 @@ class Plugin
                     $result->addElement(
                         $type,
                         $name,
-                        array($this->get_lang($name), $help),
+                        [$this->get_lang($name), $help],
                         $options,
                         $attributes
                     );
@@ -285,7 +285,7 @@ class Plugin
             $result->addGroup(
                 $checkboxGroup,
                 null,
-                array($this->get_lang('sms_types'), $help)
+                [$this->get_lang('sms_types'), $help]
             );
         }
         $result->setDefaults($defaults);
@@ -327,14 +327,14 @@ class Plugin
     {
         if (empty($this->settings) || $forceFromDB) {
             $settings = api_get_settings_params(
-                array(
-                    "subkey = ? AND category = ? AND type = ? AND access_url = ?" => array(
+                [
+                    "subkey = ? AND category = ? AND type = ? AND access_url = ?" => [
                         $this->get_name(),
                         'Plugins',
                         'setting',
                         api_get_current_access_url_id()
-                    )
-                )
+                    ]
+                ]
             );
             $this->settings = $settings;
         }
@@ -693,14 +693,14 @@ class Plugin
         $subkeytext = "Tabs".$tabNameNoSpaces;
 
         // Check if it is already added
-        $checkCondition = array(
+        $checkCondition = [
             'where' =>
-                array(
-                    "variable = 'show_tabs' AND subkeytext = ?" => array(
+                [
+                    "variable = 'show_tabs' AND subkeytext = ?" => [
                         $subkeytext
-                    )
-                )
-        );
+                    ]
+                ]
+        ];
 
         $checkDuplicate = Database::select('*', 'settings_current', $checkCondition);
         if (!empty($checkDuplicate)) {
@@ -713,14 +713,13 @@ class Plugin
         if (!empty($userFilter)) {
             switch ($userFilter) {
                 case self::TAB_FILTER_NO_STUDENT:
-                    //no break
                 case self::TAB_FILTER_ONLY_STUDENT:
                     $subkey .= $userFilter;
                     break;
             }
         }
 
-        $attributes = array(
+        $attributes = [
             'variable' => 'show_tabs',
             'subkey' => $subkey,
             'type' => 'checkbox',
@@ -732,17 +731,17 @@ class Plugin
             'access_url' => 1,
             'access_url_changeable' => 1,
             'access_url_locked' => 0
-        );
+        ];
         $resp = Database::insert('settings_current', $attributes);
 
         // Save the id
         $settings = $this->get_settings();
-        $setData = array(
+        $setData = [
             'comment' => $subkey
-        );
-        $whereCondition = array(
+        ];
+        $whereCondition = [
             'id = ?' => key($settings)
-        );
+        ];
         Database::update('settings_current', $setData, $whereCondition);
 
         return $resp;
@@ -766,9 +765,9 @@ class Plugin
         $customTabsNum = Database::num_rows($result);
 
         if (!empty($key)) {
-            $whereCondition = array(
-                'variable = ? AND subkey = ?' => array('show_tabs', $key)
-            );
+            $whereCondition = [
+                'variable = ? AND subkey = ?' => ['show_tabs', $key]
+            ];
             $resp = Database::delete('settings_current', $whereCondition);
 
             //if there is more than one tab
@@ -804,9 +803,9 @@ class Plugin
      */
     public function updateTab($key, $attributes)
     {
-        $whereCondition = array(
-            'variable = ? AND subkey = ?' => array('show_tabs', $key)
-        );
+        $whereCondition = [
+            'variable = ? AND subkey = ?' => ['show_tabs', $key]
+        ];
         $resp = Database::update('settings_current', $attributes, $whereCondition);
 
         return $resp;
@@ -831,14 +830,14 @@ class Plugin
             }
         } else {
             $settingsCurrentTable = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-            $conditions = array(
-                'where' => array(
-                    "variable = 'show_tabs' AND title = ? AND comment = ? " => array(
+            $conditions = [
+                'where' => [
+                    "variable = 'show_tabs' AND title = ? AND comment = ? " => [
                         $langString,
                         $pluginUrl
-                    )
-                )
-            );
+                    ]
+                ]
+            ];
             $result = Database::select('subkey', $settingsCurrentTable, $conditions);
             if (!empty($result)) {
                 $this->deleteTab($result[0]['subkey']);
@@ -871,13 +870,13 @@ class Plugin
     public function isEnabled()
     {
         $settings = api_get_settings_params_simple(
-            array(
-                "subkey = ? AND category = ? AND type = ? AND variable = 'status' " => array(
+            [
+                "subkey = ? AND category = ? AND type = ? AND variable = 'status' " => [
                     $this->get_name(),
                     'Plugins',
                     'setting',
-                )
-            )
+                ]
+            ]
         );
         if (is_array($settings) && isset($settings['selected_value']) && $settings['selected_value'] == 'installed') {
             return true;

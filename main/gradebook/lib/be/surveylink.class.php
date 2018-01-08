@@ -77,13 +77,13 @@ class SurveyLink extends AbstractLink
                 WHERE c_id = '.$course_id.' AND session_id = '.intval($session_id);
         $result = Database::query($sql);
         while ($data = Database::fetch_array($result)) {
-            $links[] = array(
+            $links[] = [
                 $data['survey_id'],
                 api_trunc_str(
                     $data['code'].': '.self::html_to_text($data['title']),
                     80
                 )
-            );
+            ];
         }
 
         return isset($links) ? $links : null;
@@ -113,12 +113,12 @@ class SurveyLink extends AbstractLink
 
         $result = Database::query($sql);
 
-        $links = array();
+        $links = [];
         while ($data = Database::fetch_array($result)) {
-            $links[] = array(
+            $links[] = [
                 $data['survey_id'],
                 api_trunc_str($data['code'].': '.self::html_to_text($data['title']), 80)
-            );
+            ];
         }
         return $links;
     }
@@ -188,9 +188,9 @@ class SurveyLink extends AbstractLink
         if ($get_individual_score) {
             // for 1 student
             if ($data = Database::fetch_array($sql_result)) {
-                return array($data['answered'] ? $max_score : 0, $max_score);
+                return [$data['answered'] ? $max_score : 0, $max_score];
             }
-            return array(0, $max_score);
+            return [0, $max_score];
         } else {
             // for all the students -> get average
             $rescount = 0;
@@ -211,16 +211,16 @@ class SurveyLink extends AbstractLink
 
             switch ($type) {
                 case 'best':
-                    return array($bestResult, $rescount);
+                    return [$bestResult, $rescount];
                     break;
                 case 'average':
-                    return array($sum, $rescount);
+                    return [$sum, $rescount];
                     break;
                 case 'ranking':
                     return null;
                     break;
                 default:
-                    return array($sum, $rescount);
+                    return [$sum, $rescount];
                     break;
             }
         }

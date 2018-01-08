@@ -16,7 +16,7 @@ class Aiken2Question extends Question
     /**
      * Include the correct answer class and create answer
      */
-    function setAnswer()
+    public function setAnswer()
     {
         switch ($this->type) {
             case MCUA:

@@ -7,7 +7,6 @@
 
 namespace Chamilo\ThemeBundle\Model;
 
-
 interface NotificationInterface
 {
     public function getMessage();

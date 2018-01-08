@@ -122,7 +122,7 @@ class GradebookUtils
     /**
      * Builds an img tag for a gradebook item
      */
-    public static function build_type_icon_tag($kind, $attributes = array())
+    public static function build_type_icon_tag($kind, $attributes = [])
     {
         return Display::return_icon(
             self::get_icon_file_name($kind),
@@ -274,7 +274,7 @@ class GradebookUtils
                     }
                 }
 
-               $modify_icons .= '<a href="gradebook_edit_all.php?selectcat='.$cat->get_id().'&'.$courseParams.'">'.
+                $modify_icons .= '<a href="gradebook_edit_all.php?selectcat='.$cat->get_id().'&'.$courseParams.'">'.
                     Display::return_icon(
                         'percentage.png',
                         get_lang('EditAllWeights'),
@@ -528,7 +528,7 @@ class GradebookUtils
         $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $sql = "SELECT * FROM $l WHERE id = ".(int) $link_id;
         $res = Database::query($sql);
-        $row = array();
+        $row = [];
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res, 'ASSOC');
         }
@@ -606,11 +606,11 @@ class GradebookUtils
             true
         );
 
-        $result = array();
+        $result = [];
         foreach ($data_array as $data) {
             $result[] = array_slice($data, 1);
         }
-        $return = array($header_names, $result);
+        $return = [$header_names, $result];
 
         return $return;
     }
@@ -651,7 +651,7 @@ class GradebookUtils
         global $current_tag;
         switch ($data) {
             case 'Result':
-                $user = array();
+                $user = [];
                 break;
             default:
                 $current_tag = $data;
@@ -681,7 +681,7 @@ class GradebookUtils
         global $current_value;
         global $user;
         global $users;
-        $users = array();
+        $users = [];
         $parser = xml_parser_create();
         xml_set_element_handler($parser, 'element_start', 'element_end');
         xml_set_character_data_handler($parser, "character_data");
@@ -747,7 +747,7 @@ class GradebookUtils
      * @param array $userList Only users in this list
      * @return array
      */
-    public static function get_list_users_certificates($cat_id = null, $userList = array())
+    public static function get_list_users_certificates($cat_id = null, $userList = [])
     {
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -766,7 +766,7 @@ class GradebookUtils
         $sql .= ' ORDER BY u.firstname';
         $rs = Database::query($sql);
 
-        $list_users = array();
+        $list_users = [];
         while ($row = Database::fetch_array($rs)) {
             $list_users[] = $row;
         }
@@ -799,7 +799,7 @@ class GradebookUtils
         }
 
         $rs = Database::query($sql);
-        $list_certificate = array();
+        $list_certificate = [];
         while ($row = Database::fetch_array($rs)) {
             $list_certificate[] = $row;
         }
@@ -992,7 +992,7 @@ class GradebookUtils
         $users,
         $alleval,
         $alllinks,
-        $params = array(),
+        $params = [],
         $mainCourseCategory = null
     ) {
         // Getting data
@@ -1011,7 +1011,7 @@ class GradebookUtils
         $displayscore = ScoreDisplay::instance();
         $customDisplays = $displayscore->get_custom_score_display_settings();
 
-        $total = array();
+        $total = [];
         if (is_array($customDisplays) && count(($customDisplays))) {
             foreach ($customDisplays as $custom) {
                 $total[$custom['display']] = 0;
@@ -1056,7 +1056,7 @@ class GradebookUtils
         $columns = count($printable_data[0]);
         $has_data = is_array($printable_data[1]) && count($printable_data[1]) > 0;
 
-        $table = new HTML_Table(array('class' => 'data_table'));
+        $table = new HTML_Table(['class' => 'data_table']);
         $row = 0;
         $column = 0;
         $table->setHeaderContents($row, $column, get_lang('NumberAbbreviation'));
@@ -1080,7 +1080,7 @@ class GradebookUtils
                 $counter++;
 
                 foreach ($printable_data_row as $key => &$printable_data_cell) {
-                    $attributes = array();
+                    $attributes = [];
                     $attributes['align'] = 'center';
                     $attributes['style'] = null;
 
@@ -1103,12 +1103,12 @@ class GradebookUtils
             $table->updateCellAttributes($row, $column, 'colspan="'.$columns.'" align="center" class="row_odd"');
         }
 
-        $pdfParams = array(
+        $pdfParams = [
             'filename' => get_lang('FlatView').'_'.api_get_local_time(),
             'pdf_title' => $title,
             'course_code' => $course_code,
             'add_signatures' => ['Drh', 'Teacher', 'Date']
-        );
+        ];
 
         $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';
         ob_start();
@@ -1127,7 +1127,7 @@ class GradebookUtils
     public static function score_badges($list_values)
     {
         $counter = 1;
-        $badges = array();
+        $badges = [];
         foreach ($list_values as $value) {
             $class = 'warning';
             if ($counter == 1) {
@@ -1190,10 +1190,10 @@ class GradebookUtils
      */
     public static function get_user_array_from_sql_result($result)
     {
-        $a_students = array();
+        $a_students = [];
         while ($user = Database::fetch_array($result)) {
             if (!array_key_exists($user['user_id'], $a_students)) {
-                $a_current_student = array();
+                $a_current_student = [];
                 $a_current_student[] = $user['user_id'];
                 $a_current_student[] = $user['username'];
                 $a_current_student[] = $user['lastname'];
@@ -1210,9 +1210,9 @@ class GradebookUtils
      * @param array $links
      * @return array
      */
-    public static function get_all_users($evals = array(), $links = array())
+    public static function get_all_users($evals = [], $links = [])
     {
-        $coursecodes = array();
+        $coursecodes = [];
         // By default add all user in course
         $coursecodes[api_get_course_id()] = '1';
         $users = self::get_users_in_course(api_get_course_id());
@@ -1271,7 +1271,7 @@ class GradebookUtils
     public static function find_students($mask = '')
     {
         // students shouldn't be here // don't search if mask empty
-        if (!api_is_allowed_to_edit() || empty ($mask)) {
+        if (!api_is_allowed_to_edit() || empty($mask)) {
             return null;
         }
         $mask = Database::escape_string($mask);
@@ -1548,7 +1548,7 @@ class GradebookUtils
         $cats,
         $saveToFile = false,
         $saveToHtmlFile = false,
-        $studentList = array(),
+        $studentList = [],
         $pdf = null
     ) {
         $courseInfo = api_get_course_info();
@@ -1595,7 +1595,7 @@ class GradebookUtils
         $table = $gradebooktable->return_table();
         $graph = $gradebooktable->getGraph();
 
-        $params = array(
+        $params = [
             'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['name']),
             'session_info' => '',
             'course_info' => '',
@@ -1606,7 +1606,7 @@ class GradebookUtils
             'show_real_course_teachers' => false,
             'show_teacher_as_myself' => false,
             'orientation' => 'P'
-        );
+        ];
 
         if (empty($pdf)) {
             $pdf = new PDF('A4', $params['orientation'], $params);

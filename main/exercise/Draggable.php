@@ -26,9 +26,9 @@ class Draggable extends Question
      */
     public function createAnswersForm($form)
     {
-        $defaults = array();
+        $defaults = [];
         $nb_matches = $nb_options = 2;
-        $matches = array();
+        $matches = [];
         $answer = null;
         if ($form->isSubmitted()) {
             $nb_matches = $form->getSubmitValue('nb_matches');

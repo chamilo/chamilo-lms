@@ -120,7 +120,6 @@ if (!empty($_POST)) {
                             '".date("Y-m-d H:i:s")."'
                             '".$leavingDateLog."'
                         );";
-
             } else {
                 if ($finalResult == "1" || $finalResult == "2") {
                     $sql = "UPDATE $tableSepeLogParticipant 
@@ -162,16 +161,16 @@ if (!empty($_POST)) {
 if (api_is_platform_admin()) {
     $actionId = intval($_GET['action_id']);
     $courseId = getCourse($actionId);
-    $interbreadcrumb[] = array("url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe'));
-    $interbreadcrumb[] = array("url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList'));
-    $interbreadcrumb[] = array("url" => "formative-action.php?cid=".$courseId, "name" => $plugin->get_lang('FormativeAction'));
-    $interbreadcrumb[] = array("url" => "participant-action-edit.php?new_participant=0&participant_id=".intval($_GET['participant_id'])."&action_id=".$_GET['action_id'], "name" => $plugin->get_lang('FormativeActionParticipant'));
+    $interbreadcrumb[] = ["url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe')];
+    $interbreadcrumb[] = ["url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList')];
+    $interbreadcrumb[] = ["url" => "formative-action.php?cid=".$courseId, "name" => $plugin->get_lang('FormativeAction')];
+    $interbreadcrumb[] = ["url" => "participant-action-edit.php?new_participant=0&participant_id=".intval($_GET['participant_id'])."&action_id=".$_GET['action_id'], "name" => $plugin->get_lang('FormativeActionParticipant')];
     if (isset($_GET['new_specialty']) && intval($_GET['new_specialty']) == 1) {
         $templateName = $plugin->get_lang('NewSpecialtyParticipant');
         $tpl = new Template($templateName);
         $tpl->assign('action_id', $actionId);
         $tpl->assign('participant_id', intval($_GET['participant_id']));
-        $info = array();
+        $info = [];
         $tpl->assign('info', $info);
         $tpl->assign('new_specialty', '1');
         $startYear = $endYear = date("Y");
@@ -230,7 +229,7 @@ if (api_is_platform_admin()) {
     }
 
 
-    $listYear = array();
+    $listYear = [];
     if ($registrationYear > $leaveYear) {
         $tmp = $registrationYear;
         $registrationYear = $leaveYear;
@@ -245,7 +244,7 @@ if (api_is_platform_admin()) {
     }
     $tpl->assign('list_year', $listYear);
 
-    $listYear = array();
+    $listYear = [];
     if ($startYear > $endYear) {
         $tmp = $startYear;
         $startYear = $endYear;

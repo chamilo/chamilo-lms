@@ -36,7 +36,7 @@ class ImportCsv
     private $dumpValues;
     public $test;
     public $defaultLanguage = 'dutch';
-    public $extraFieldIdNameList = array(
+    public $extraFieldIdNameList = [
         'session' => 'external_session_id',
         'session_career' => 'external_career_id',
         'course' => 'external_course_id',
@@ -45,7 +45,7 @@ class ImportCsv
         'career' => 'external_career_id',
         'career_urls' => 'career_urls',
         'career_diagram' => 'career_diagram',
-    );
+    ];
     public $defaultAdminId = 1;
     public $defaultSessionVisibility = 1;
 
@@ -120,10 +120,10 @@ class ImportCsv
         echo "Reading files: ".PHP_EOL.PHP_EOL;
 
         $files = scandir($path);
-        $fileToProcess = array();
-        $fileToProcessStatic = array();
-        $teacherBackup = array();
-        $groupBackup = array();
+        $fileToProcess = [];
+        $fileToProcessStatic = [];
+        $teacherBackup = [];
+        $groupBackup = [];
 
         if (!empty($files)) {
             foreach ($files as $file) {
@@ -163,15 +163,15 @@ class ImportCsv
                             ) ||
                             empty($isStatic)
                         ) {
-                            $fileToProcess[$parts[1]][] = array(
+                            $fileToProcess[$parts[1]][] = [
                                 'method' => $method,
                                 'file' => $path.$fileInfo['basename']
-                            );
+                            ];
                         } else {
-                            $fileToProcessStatic[$parts[1]][] = array(
+                            $fileToProcessStatic[$parts[1]][] = [
                                 'method' => $method,
                                 'file' => $path.$fileInfo['basename']
-                            );
+                            ];
                         }
                     } else {
                         echo "Error - This file '$file' can't be processed.".PHP_EOL;
@@ -192,7 +192,7 @@ class ImportCsv
 
             $this->prepareImport();
 
-            $sections = array(
+            $sections = [
                 'students',
                 'teachers',
                 'courses',
@@ -203,7 +203,7 @@ class ImportCsv
                 'care',
                 'careers',
                 'careersdiagram'
-            );
+            ];
 
             foreach ($sections as $section) {
                 $this->logger->addInfo("-- Import $section --");
@@ -234,7 +234,7 @@ class ImportCsv
                 }
             }
 
-            $sections = array(
+            $sections = [
                 'students-static',
                 'teachers-static',
                 'courses-static',
@@ -244,7 +244,7 @@ class ImportCsv
                 'unsubscribe-static',
                 'unsubsessionsextid-static',
                 'subsessionsextid-static'
-            );
+            ];
 
             foreach ($sections as $section) {
                 $this->logger->addInfo("-- Import static files $section --");
@@ -314,39 +314,39 @@ class ImportCsv
         // Create calendar_event extra field extra_external_session_id
         $extraField = new ExtraField('calendar_event');
         $extraField->save(
-            array(
+            [
                 'field_type' => ExtraField::FIELD_TYPE_TEXT,
                 'variable' => $this->extraFieldIdNameList['calendar_event'],
                 'display_text' => 'External calendar event id',
-            )
+            ]
         );
 
         $extraField = new ExtraField('career');
         $extraField->save(
-            array(
+            [
                 'visible_to_self' => 1,
                 'field_type' => ExtraField::FIELD_TYPE_TEXT,
                 'variable' => $this->extraFieldIdNameList['career'],
                 'display_text' => 'External career id',
-            )
+            ]
         );
 
         $extraField->save(
-            array(
+            [
                 'visible_to_self' => 1,
                 'field_type' => ExtraField::FIELD_TYPE_TEXTAREA,
                 'variable' => $this->extraFieldIdNameList['career_diagram'],
                 'display_text' => 'Career diagram',
-            )
+            ]
         );
 
         $extraField->save(
-            array(
+            [
                 'visible_to_self' => 1,
                 'field_type' => ExtraField::FIELD_TYPE_TEXTAREA,
                 'variable' => $this->extraFieldIdNameList['career_urls'],
                 'display_text' => 'Career urls',
-            )
+            ]
         );
     }
 
@@ -413,7 +413,7 @@ class ImportCsv
         $row['language'] = $row['Language'];
         $row['visibility'] = isset($row['Visibility']) ? $row['Visibility'] : COURSE_VISIBILITY_REGISTERED;
 
-        $row['teachers'] = array();
+        $row['teachers'] = [];
         if (isset($row['Teacher']) && !empty($row['Teacher'])) {
             $this->logger->addInfo("Teacher list found: ".$row['Teacher']);
             $teachers = explode(',', $row['Teacher']);
@@ -480,7 +480,7 @@ class ImportCsv
                     $row['extra_'.$this->extraFieldIdNameList['user']],
                     $this->extraFieldIdNameList['user']
                 );
-                $userInfo = array();
+                $userInfo = [];
                 $userInfoByOfficialCode = null;
 
                 if (!empty($user_id)) {
@@ -642,7 +642,7 @@ class ImportCsv
                     $this->extraFieldIdNameList['user']
                 );
 
-                $userInfo = array();
+                $userInfo = [];
                 $userInfoByOfficialCode = null;
                 if (!empty($user_id)) {
                     $userInfo = api_get_user_info($user_id, false, true);
@@ -823,7 +823,7 @@ class ImportCsv
     /**
      * @param string $file
      */
-    private function importCoursesStatic($file, $moveFile, &$teacherBackup = array(), &$groupBackup = array())
+    private function importCoursesStatic($file, $moveFile, &$teacherBackup = [], &$groupBackup = [])
     {
         $this->importCourses($file, true, $teacherBackup, $groupBackup);
     }
@@ -843,7 +843,7 @@ class ImportCsv
 
         if (!empty($data)) {
             $this->logger->addInfo(count($data)." records found.");
-            $eventsToCreate = array();
+            $eventsToCreate = [];
             $errorFound = false;
 
             foreach ($data as $row) {
@@ -931,7 +931,7 @@ class ImportCsv
                 }
 
                 if ($errorFound == false) {
-                    $eventsToCreate[] = array(
+                    $eventsToCreate[] = [
                         'start' => $startDate,
                         'end' => $endDate,
                         'title' => $title,
@@ -941,7 +941,7 @@ class ImportCsv
                         'comment' => $comment,
                         'color' => $color,
                         $this->extraFieldIdNameList['calendar_event'] => $row['external_calendar_itemID'],
-                    );
+                    ];
                 }
                 $errorFound = false;
             }
@@ -1248,10 +1248,10 @@ class ImportCsv
                             false,
                             $event['title'],
                             $content,
-                            array('everyone'), // $usersToSend
+                            ['everyone'], // $usersToSend
                             false, //$addAsAnnouncement = false
                             null, //  $parentEventId
-                            array(), //$attachmentArray = array(),
+                            [], //$attachmentArray = array(),
                             [], //$attachmentCommentList
                             $eventComment,
                             $color
@@ -1286,8 +1286,8 @@ class ImportCsv
                             false,
                             $event['title'],
                             $content,
-                            array('everyone'), // $usersToSend
-                            array(), //$attachmentArray = array(),
+                            ['everyone'], // $usersToSend
+                            [], //$attachmentArray = array(),
                             [], //$attachmentCommentList
                             $eventComment,
                             $color,
@@ -1314,10 +1314,10 @@ class ImportCsv
                         false,
                         $event['title'],
                         $content,
-                        array('everyone'), // $usersToSend
+                        ['everyone'], // $usersToSend
                         false, //$addAsAnnouncement = false
                         null, //  $parentEventId
-                        array(), //$attachmentArray = array(),
+                        [], //$attachmentArray = array(),
                         [], //$attachmentCommentList
                         $eventComment,
                         $color
@@ -1325,11 +1325,11 @@ class ImportCsv
 
                     if (!empty($eventId)) {
                         $extraFieldValue->save(
-                            array(
+                            [
                                 'value' => $externalEventId,
                                 'field_id' => $extraFieldInfo['id'],
                                 'item_id' => $eventId
-                            )
+                            ]
                         );
                         $this->logger->addInfo(
                             "Event added: #$eventId External cal id: (".$externalEventId.") $info"
@@ -1370,8 +1370,8 @@ class ImportCsv
     private function importCourses(
         $file,
         $moveFile = true,
-        &$teacherBackup = array(),
-        &$groupBackup = array()
+        &$teacherBackup = [],
+        &$groupBackup = []
     ) {
         $this->fixCSVFile($file);
         $data = Import::csvToArray($file);
@@ -1391,7 +1391,7 @@ class ImportCsv
 
                 if (empty($courseInfo)) {
                     // Create
-                    $params = array();
+                    $params = [];
                     $params['title'] = $row['title'];
                     $params['exemplary_content'] = false;
                     $params['wanted_code'] = $row['course_code'];
@@ -1418,11 +1418,11 @@ class ImportCsv
                     }
                 } else {
                     // Update
-                    $params = array(
+                    $params = [
                         'title' => $row['title'],
                         'category_code' => $row['course_category'],
                         'visibility' => $row['visibility']
-                    );
+                    ];
 
                     $result = CourseManager::update_attributes(
                         $courseInfo['real_id'],
@@ -1433,7 +1433,7 @@ class ImportCsv
 
                     $teachers = $row['teachers'];
                     if (!is_array($teachers)) {
-                        $teachers = array($teachers);
+                        $teachers = [$teachers];
                     }
 
                     if ($addTeacherToSession) {
@@ -1466,7 +1466,7 @@ class ImportCsv
                             foreach ($groupBackup['tutor'][$teacherId][$courseInfo['code']] as $data) {
                                 $groupInfo = GroupManager::get_group_properties($data['group_id']);
                                 GroupManager::subscribe_tutors(
-                                    array($teacherId),
+                                    [$teacherId],
                                     $groupInfo,
                                     $data['c_id']
                                 );
@@ -1480,7 +1480,7 @@ class ImportCsv
                             foreach ($groupBackup['user'][$teacherId][$courseInfo['code']] as $data) {
                                 $groupInfo = GroupManager::get_group_properties($data['group_id']);
                                 GroupManager::subscribe_users(
-                                    array($teacherId),
+                                    [$teacherId],
                                     $groupInfo,
                                     $data['c_id']
                                 );
@@ -1549,7 +1549,7 @@ class ImportCsv
                 switch ($status) {
                     case 'student':
                         SessionManager::subscribe_users_to_session_course(
-                            array($userId),
+                            [$userId],
                             $chamiloSessionId,
                             $courseInfo['code']
                         );
@@ -1582,7 +1582,6 @@ class ImportCsv
                 $this->logger->addError(
                     "User '$chamiloUserName' was added as '$status' to Session: #$chamiloSessionId - Course: ".$courseInfo['code']
                 );
-
             }
         }
 
@@ -1636,7 +1635,7 @@ class ImportCsv
                 }
 
                 SessionManager::removeUsersFromCourseSession(
-                    array($userId),
+                    [$userId],
                     $chamiloSessionId,
                     $courseInfo
                 );
@@ -1644,7 +1643,6 @@ class ImportCsv
                 $this->logger->addError(
                     "User '$chamiloUserName' was remove from Session: #$chamiloSessionId - Course: ".$courseInfo['code']
                 );
-
             }
         }
 
@@ -1699,7 +1697,7 @@ class ImportCsv
                 switch ($type) {
                     case 'student':
                         SessionManager::subscribe_users_to_session_course(
-                            array($userId),
+                            [$userId],
                             $chamiloSessionId,
                             $courseInfo['code'],
                             null,
@@ -1734,8 +1732,8 @@ class ImportCsv
     private function importSessionsStatic($file, $moveFile = true)
     {
         $content = file($file);
-        $sessions = array();
-        $tag_names = array();
+        $sessions = [];
+        $tag_names = [];
 
         foreach ($content as $key => $enreg) {
             $enreg = explode(';', trim($enreg));
@@ -1870,13 +1868,13 @@ class ImportCsv
                         if (is_numeric($result)) {
                             $this->logger->addInfo("Session #$sessionId updated: ".$session['SessionName']);
                             $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-                            $params = array(
+                            $params = [
                                 'description' => $session['SessionDescription']
-                            );
+                            ];
                             Database::update(
                                 $tbl_session,
                                 $params,
-                                array('id = ?' => $sessionId)
+                                ['id = ?' => $sessionId]
                             );
                         }
                     }
@@ -1930,7 +1928,7 @@ class ImportCsv
 
                             // Coaches
                             if (!empty($courseCoaches)) {
-                                $coachList = array();
+                                $coachList = [];
                                 foreach ($courseCoaches as $courseCoach) {
                                     $courseCoachId = UserManager::get_user_id_from_username(
                                         $courseCoach
@@ -1955,7 +1953,7 @@ class ImportCsv
 
                             // Students
                             if (!empty($courseUsers)) {
-                                $userList = array();
+                                $userList = [];
                                 foreach ($courseUsers as $username) {
                                     $userInfo = api_get_user_info_from_username(trim($username));
                                     if (!empty($userInfo)) {
@@ -2002,8 +2000,8 @@ class ImportCsv
     private function importSessions(
         $file,
         $moveFile = true,
-        &$teacherBackup = array(),
-        &$groupBackup = array()
+        &$teacherBackup = [],
+        &$groupBackup = []
     ) {
         $avoid = null;
         if (isset($this->conditions['importSessions']) &&
@@ -2016,10 +2014,10 @@ class ImportCsv
             true,
             $this->defaultAdminId,
             $this->logger,
-            array(
+            [
                 'SessionID' => 'extra_'.$this->extraFieldIdNameList['session'],
                 'CareerId' => 'extra_'.$this->extraFieldIdNameList['session_career']
-            ),
+            ],
             $this->extraFieldIdNameList['session'],
             $this->daysCoachAccessBeforeBeginning,
             $this->daysCoachAccessAfterBeginning,
@@ -2084,7 +2082,7 @@ class ImportCsv
                 switch ($type) {
                     case 'student':
                         SessionManager::subscribe_users_to_session_course(
-                            array($userId),
+                            [$userId],
                             $chamiloSessionId,
                             $courseInfo['code'],
                             null,
@@ -2331,8 +2329,8 @@ class ImportCsv
     private function importCareers(
         $file,
         $moveFile = false,
-        &$teacherBackup = array(),
-        &$groupBackup = array()
+        &$teacherBackup = [],
+        &$groupBackup = []
     ) {
         $data = Import::csv_reader($file);
 
@@ -2430,8 +2428,8 @@ class ImportCsv
     private function importCareersDiagram(
         $file,
         $moveFile = false,
-        &$teacherBackup = array(),
-        &$groupBackup = array()
+        &$teacherBackup = [],
+        &$groupBackup = []
     ) {
         $data = Import::csv_reader($file);
 
@@ -2607,8 +2605,8 @@ class ImportCsv
     private function importUnsubscribeStatic(
         $file,
         $moveFile = false,
-        &$teacherBackup = array(),
-        &$groupBackup = array()
+        &$teacherBackup = [],
+        &$groupBackup = []
     ) {
         $data = Import::csv_reader($file);
 
@@ -2708,7 +2706,7 @@ class ImportCsv
         echo $sql.PHP_EOL;
 
         // Truncate tables
-        $truncateTables = array(
+        $truncateTables = [
             Database::get_main_table(TABLE_MAIN_COURSE),
             Database::get_main_table(TABLE_MAIN_COURSE_USER),
             Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE),
@@ -2794,7 +2792,7 @@ class ImportCsv
             Database::get_course_table(TABLE_DROPBOX_POST),
             Database::get_course_table(TABLE_DROPBOX_FILE),
             Database::get_course_table(TABLE_DROPBOX_PERSON)
-        );
+        ];
 
         foreach ($truncateTables as $table) {
             $sql = "TRUNCATE $table";
@@ -2865,7 +2863,7 @@ $emails = isset($_configuration['cron_notification_mails']) ? $_configuration['c
 $minLevel = Logger::DEBUG;
 
 if (!is_array($emails)) {
-    $emails = array($emails);
+    $emails = [$emails];
 }
 $subject = "Cron main/cron/import_csv.php ".date('Y-m-d h:i:s');
 $from = api_get_setting('emailAdministrator');

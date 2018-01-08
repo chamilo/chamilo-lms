@@ -21,21 +21,21 @@ class CurriculumItemRelUserType extends AbstractType
         $builder->add(
             'description',
             'text',
-            array('label' => ' ', 'attr' => array('class' => 'span7'))
+            ['label' => ' ', 'attr' => ['class' => 'span7']]
         );
         $builder->add(
             'item_id',
             'hidden',
-            array('attr' => array('value' => $this->itemId))
+            ['attr' => ['value' => $this->itemId]]
         );
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => 'Chamilo\CoreBundle\Entity\CurriculumItemRelUser',
-            )
+            ]
         );
     }
 

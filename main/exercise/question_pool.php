@@ -48,13 +48,13 @@ if (empty($objExercise) && !empty($fromExercise)) {
 }
 
 $nameTools = get_lang('QuestionPool');
-$interbreadcrumb[] = array("url" => "exercise.php", "name" => get_lang('Exercises'));
+$interbreadcrumb[] = ["url" => "exercise.php", "name" => get_lang('Exercises')];
 
 if (!empty($objExercise)) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => "admin.php?exerciseId=".$objExercise->id."&".api_get_cidreq(),
         "name" => $objExercise->selectTitle(true)
-    );
+    ];
 }
 
 // message to be displayed if actions successful
@@ -172,10 +172,10 @@ if ($is_allowedToEdit) {
 }
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
-    );
+    ];
 }
 
 // if admin of course
@@ -242,9 +242,9 @@ echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
 // Session list, if sessions are used.
 $sessionList = SessionManager::get_sessions_by_user(api_get_user_id(), api_is_platform_admin());
 
-$tabAttrParam = array('onchange' => 'submit_form(this)');
+$tabAttrParam = ['onchange' => 'submit_form(this)'];
 $labelFormRow = get_lang('Session');
-$session_select_list = array();
+$session_select_list = [];
 foreach ($sessionList as $item) {
     $session_select_list[$item['session_id']] = $item['session_name'];
 }
@@ -253,7 +253,7 @@ echo Display::form_row($labelFormRow, $select_session_html);
 
 // Course list, get course list of session, or for course where user is admin
 if (!empty($session_id) && $session_id != '-1' && !empty($sessionList)) {
-    $sessionInfo = array();
+    $sessionInfo = [];
     foreach ($sessionList as $session) {
         if ($session['session_id'] == $session_id) {
             $sessionInfo = $session;
@@ -270,15 +270,15 @@ if (!empty($session_id) && $session_id != '-1' && !empty($sessionList)) {
         $courseInfo = api_get_course_info();
         if (!empty($course_list)) {
             if (!in_array($courseInfo['real_id'], $course_list)) {
-                $course_list = array_merge($course_list, array($courseInfo));
+                $course_list = array_merge($course_list, [$courseInfo]);
             }
         } else {
-            $course_list = array($courseInfo);
+            $course_list = [$courseInfo];
         }
     }
 }
 
-$course_select_list = array();
+$course_select_list = [];
 foreach ($course_list as $item) {
     $courseItemId = $item['real_id'];
     $courseInfo = api_get_course_info_by_id($courseItemId);
@@ -293,7 +293,7 @@ $select_course_html = Display::select(
     'selected_course',
     $course_select_list,
     $selected_course,
-    array('onchange' => 'mark_course_id_changed(); submit_form(this);')
+    ['onchange' => 'mark_course_id_changed(); submit_form(this);']
 );
 
 echo Display::form_row(get_lang('Course'), $select_course_html);
@@ -327,7 +327,7 @@ $selectCourseCategory = Display::select(
     'courseCategoryId',
     $categoryList,
     $courseCategoryId,
-    array('onchange' => 'submit_form(this);'),
+    ['onchange' => 'submit_form(this);'],
     false
 );
 echo Display::form_row(get_lang("QuestionCategory"), $selectCourseCategory);
@@ -341,7 +341,7 @@ $exercise_list = ExerciseLib::get_all_exercises_for_course_id(
     false
 );
 //Exercise List
-$my_exercise_list = array();
+$my_exercise_list = [];
 $my_exercise_list['0']  = get_lang('AllExercises');
 $my_exercise_list['-1'] = get_lang('OrphanQuestions');
 if (is_array($exercise_list)) {
@@ -361,14 +361,14 @@ $select_exercise_html = Display::select(
     'exerciseId',
     $my_exercise_list,
     $exerciseId,
-    array('onchange' => 'mark_exercise_id_changed(); submit_form(this);'),
+    ['onchange' => 'mark_exercise_id_changed(); submit_form(this);'],
     false
 );
 
 echo Display::form_row(get_lang('Exercise'), $select_exercise_html);
 
 // Difficulty list (only from 0 to 5)
-$levels = array(
+$levels = [
     -1 => get_lang('All'),
     0 => 0,
     1 => 1,
@@ -376,12 +376,12 @@ $levels = array(
     3 => 3,
     4 => 4,
     5 => 5
-);
+];
 $select_difficulty_html = Display::select(
     'exerciseLevel',
     $levels,
     $exerciseLevel,
-    array('onchange' => 'submit_form(this);'),
+    ['onchange' => 'submit_form(this);'],
     false
 );
 echo Display::form_row(get_lang('Difficulty'), $select_difficulty_html);
@@ -389,14 +389,14 @@ echo Display::form_row(get_lang('Difficulty'), $select_difficulty_html);
 // Answer type
 $question_list = Question::get_question_type_list();
 
-$new_question_list = array();
+$new_question_list = [];
 $new_question_list['-1'] = get_lang('All');
 if (!empty($_course)) {
     $objExercise = new Exercise();
     $objExercise->read($fromExercise);
     foreach ($question_list as $key => $item) {
         if ($objExercise->feedback_type == EXERCISE_FEEDBACK_TYPE_DIRECT) {
-            if (!in_array($key, array(HOT_SPOT_DELINEATION, UNIQUE_ANSWER))) {
+            if (!in_array($key, [HOT_SPOT_DELINEATION, UNIQUE_ANSWER])) {
                 continue;
             }
             $new_question_list[$key] = get_lang($item[1]);
@@ -413,7 +413,7 @@ $select_answer_html = Display::select(
     'answerType',
     $new_question_list,
     $answerType,
-    array('onchange' => 'submit_form(this);'),
+    ['onchange' => 'submit_form(this);'],
     false
 );
 
@@ -428,7 +428,7 @@ echo "<input type='hidden' id='exercise_id_changed' name='exercise_id_changed' v
 <form method="post" action="<?php echo $url.'?'.api_get_cidreq().'&fromExercise='.$fromExercise; ?>" >
 <?php
 echo '<input type="hidden" name="course_id" value="'.$selected_course.'">';
-$mainQuestionList = array();
+$mainQuestionList = [];
 
 // if we have selected an exercise in the list-box 'Filter'
 
@@ -544,7 +544,7 @@ if ($exerciseId > 0) {
     }
 
     if (!empty($session_id) && $session_id != '-1') {
-        $mainQuestionList = array();
+        $mainQuestionList = [];
         if (!empty($course_list)) {
             foreach ($course_list as $course_item) {
                 $courseItemId = $course_item['real_id'];
@@ -600,7 +600,7 @@ if ($exerciseId > 0) {
                                         }
                                     }
 
-                                    $question_row = array(
+                                    $question_row = [
                                         'id' => $question_obj->id,
                                         'question' => $question_obj->question,
                                         'type' => $question_obj->type,
@@ -608,7 +608,7 @@ if ($exerciseId > 0) {
                                         'exercise_id' => $exercise['id'],
                                         'exercise_name' => $exercise['title'],
                                         'course_id' => $courseItemId,
-                                    );
+                                    ];
                                     $mainQuestionList[] = $question_row;
                                 }
                             }
@@ -697,44 +697,44 @@ if ($fromExercise <= 0) {
     }
 }
 // Display table
-$header = array(
-    array(
+$header = [
+    [
         get_lang('QuestionUpperCaseFirstLetter'),
         false,
-        array("style" => "text-align:center"),
+        ["style" => "text-align:center"],
         ''
-    ),
-    array(
+    ],
+    [
         get_lang('Type'),
         false,
-        array("style" => "text-align:center"),
-        array("style" => "text-align:center"),
+        ["style" => "text-align:center"],
+        ["style" => "text-align:center"],
         ''
-    ),
-    array(
+    ],
+    [
         get_lang('QuestionCategory'),
         false,
-        array("style" => "text-align:center"),
-        array("style" => "text-align:center"),
+        ["style" => "text-align:center"],
+        ["style" => "text-align:center"],
         ''
-    ),
-    array(
+    ],
+    [
         get_lang('Difficulty'),
         false,
-        array("style" => "text-align:center"),
-        array("style" => "text-align:center"),
+        ["style" => "text-align:center"],
+        ["style" => "text-align:center"],
         ''
-    ),
-    array(
+    ],
+    [
         $actionLabel,
         false,
-        array("style" => "text-align:center"),
-        array("style" => "text-align:center"),
+        ["style" => "text-align:center"],
+        ["style" => "text-align:center"],
         ''
-    )
-);
+    ]
+];
 
-$data = array();
+$data = [];
 
 if (is_array($mainQuestionList)) {
     foreach ($mainQuestionList as $question) {
@@ -745,7 +745,7 @@ if (is_array($mainQuestionList)) {
         }
         $questionAdded[$question['question']] = $question;*/
 
-        $row = array();
+        $row = [];
 
         // This function checks if the question can be read
         $question_type = get_question_type_for_question(
@@ -804,7 +804,7 @@ Display :: display_sortable_table(
     $header,
     $data,
     '',
-    array('per_page_default' => 999, 'per_page' => 999, 'page_nr' => 1)
+    ['per_page_default' => 999, 'per_page' => 999, 'page_nr' => 1]
 );
 
 if (!$nbrQuestions) {
@@ -953,7 +953,7 @@ function get_question_type_for_question($in_selectedcourse, $in_questionid)
     $questionType = null;
     if (!empty($myObjQuestion)) {
         list($typeImg, $typeExpl) = $myObjQuestion->get_type_icon_html();
-        $questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), 32), array());
+        $questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, [], 32), []);
         unset($myObjQuestion);
     }
     return $questionType;

@@ -97,7 +97,6 @@ class CourseVoter extends AbstractVoter
 
         // Admins have access to everything
         if ($authChecker->isGranted('ROLE_ADMIN')) {
-
             return true;
         }
 

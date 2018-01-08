@@ -48,7 +48,7 @@ class Accessurleditcoursestourl
             while ($course = Database::fetch_array($rs)) {
                 $i++;
                 if ($i <= 10) {
-                     $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_url(\''.addslashes($course['code']).'\',\''.addslashes($course['title']).' ('.addslashes($course['code']).')'.'\')">'.$course['title'].' ('.$course['code'].')</a><br />';
+                    $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_url(\''.addslashes($course['code']).'\',\''.addslashes($course['title']).' ('.addslashes($course['code']).')'.'\')">'.$course['title'].' ('.$course['code'].')</a><br />';
                 } else {
                     $return .= '...<br />';
                 }
@@ -63,4 +63,3 @@ class Accessurleditcoursestourl
         return $xajax_response;
     }
 }
-

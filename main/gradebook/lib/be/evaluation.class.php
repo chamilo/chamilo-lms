@@ -293,7 +293,7 @@ class Evaluation implements GradebookItem
      */
     private static function create_evaluation_objects_from_sql_result($result)
     {
-        $alleval = array();
+        $alleval = [];
         if (Database::num_rows($result)) {
             while ($data = Database::fetch_array($result)) {
                 $eval = new Evaluation();
@@ -570,7 +570,7 @@ class Evaluation implements GradebookItem
             $results = null;
             if (empty($results)) {
                 $results = Result::load(null, $stud_id, $this->id);
-                Session::write('calc_score', array($key => $results));
+                Session::write('calc_score', [$key => $results]);
             }
 
             $score = 0;
@@ -579,7 +579,7 @@ class Evaluation implements GradebookItem
                 $score = $res->get_score();
             }
 
-            return array($score, $this->get_max());
+            return [$score, $this->get_max()];
         } else {
             $count = 0;
             $sum = 0;
@@ -599,7 +599,7 @@ class Evaluation implements GradebookItem
                 Session::write($key, $allResults);
             }
 
-            $students = array();
+            $students = [];
             /** @var Result $res */
             foreach ($allResults as $res) {
                 $score = $res->get_score();
@@ -620,13 +620,13 @@ class Evaluation implements GradebookItem
 
             switch ($type) {
                 case 'best':
-                    return array($bestResult, $weight);
+                    return [$bestResult, $weight];
                     break;
                 case 'average':
-                    return array($sumResult / $count, $weight);
+                    return [$sumResult / $count, $weight];
                     break;
                 case 'ranking':
-                    $students = array();
+                    $students = [];
                     /** @var Result $res */
                     foreach ($allResults as $res) {
                         $score = $res->get_score();
@@ -635,7 +635,7 @@ class Evaluation implements GradebookItem
                     return AbstractLink::getCurrentUserRanking($stud_id, $students);
                     break;
                 default:
-                    return array($sum, $count);
+                    return [$sum, $count];
                     break;
             }
         }
@@ -654,15 +654,15 @@ class Evaluation implements GradebookItem
         // - evaluation inside a course
         //   -> movable to root, independent categories or categories inside the course
         $user = api_is_platform_admin() ? null : api_get_user_id();
-        $targets = array();
+        $targets = [];
         $level = 0;
-        $root = array(0, get_lang('RootCat'), $level);
+        $root = [0, get_lang('RootCat'), $level];
         $targets[] = $root;
 
         if (isset($this->course_code) && !empty($this->course_code)) {
             $crscats = Category::load(null, null, $this->course_code, 0);
             foreach ($crscats as $cat) {
-                $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
+                $targets[] = [$cat->get_id(), $cat->get_name(), $level + 1];
                 $targets = $this->addTargetSubcategories(
                     $targets,
                     $level + 1,
@@ -673,7 +673,7 @@ class Evaluation implements GradebookItem
 
         $indcats = Category::load(null, $user, 0, 0);
         foreach ($indcats as $cat) {
-            $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
+            $targets[] = [$cat->get_id(), $cat->get_name(), $level + 1];
             $targets = $this->addTargetSubcategories(
                 $targets,
                 $level + 1,
@@ -694,7 +694,7 @@ class Evaluation implements GradebookItem
     {
         $subcats = Category::load(null, null, null, $catid);
         foreach ($subcats as $cat) {
-            $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
+            $targets[] = [$cat->get_id(), $cat->get_name(), $level + 1];
             $targets = $this->addTargetSubcategories(
                 $targets,
                 $level + 1,
@@ -789,7 +789,7 @@ class Evaluation implements GradebookItem
             (api_is_allowed_to_create_course() ? null : api_get_user_id()),
             true
         );
-        $foundevals = array();
+        $foundevals = [];
         foreach ($evals as $eval) {
             if (!(api_strpos(api_strtolower($eval->get_name()), api_strtolower($name_mask)) === false)) {
                 $foundevals[] = $eval;

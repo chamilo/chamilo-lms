@@ -12,7 +12,7 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 // the section (for the tabs)
 $this_section = SECTION_TRACKING;
 
-$csv_content = array();
+$csv_content = [];
 $nameTools = get_lang('MySpace');
 
 $is_platform_admin = api_is_platform_admin();
@@ -61,4 +61,3 @@ switch ($display) {
 }
 
 Display::display_footer();
-

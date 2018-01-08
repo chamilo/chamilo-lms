@@ -134,9 +134,9 @@ class CTool
 
     protected $originalImage;
 
-     /**
-     * @return int
-     */
+    /**
+    * @return int
+    */
     public function getIid()
     {
         return $this->iid;
@@ -180,11 +180,11 @@ class CTool
     {
         $metadata->addPropertyConstraint(
             'customIcon',
-            new Assert\File(array('mimeTypes' => array("image/png")))
+            new Assert\File(['mimeTypes' => ["image/png"]])
         );
         $metadata->addPropertyConstraint(
             'customIcon',
-            new Assert\Image(array('maxWidth' => 64, 'minHeight' => 64))
+            new Assert\Image(['maxWidth' => 64, 'minHeight' => 64])
         );
         $metadata->addPropertyConstraint('cId', new Assert\NotBlank());
     }

@@ -17,7 +17,7 @@ class JuryMembersType extends AbstractType
         $builder->add(
             'role',
             'entity',
-            array(
+            [
                 'class' => 'Entity\Role',
                 'property' => 'name',
                 'query_builder' =>
@@ -27,10 +27,10 @@ class JuryMembersType extends AbstractType
                             ->setParameter(':role', 'ROLE_JURY%')
                             ->orderBy('u.name', 'DESC');
                     },
-            )
+            ]
         );
 
-        $builder->add('user_id', 'choice', array('label' => 'User'));
+        $builder->add('user_id', 'choice', ['label' => 'User']);
         $builder->add('jury_id', 'hidden');
         $builder->add('submit', 'submit');
 
@@ -51,7 +51,7 @@ class JuryMembersType extends AbstractType
                             'user_id',
                             'hidden',
                             $id,
-                            array('auto_initialize' => false)
+                            ['auto_initialize' => false]
                         )
                     );
                 }
@@ -62,9 +62,9 @@ class JuryMembersType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => 'Chamilo\CoreBundle\Entity\JuryMembers',
-            )
+            ]
         );
     }
 

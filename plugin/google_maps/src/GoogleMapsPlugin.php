@@ -13,11 +13,11 @@ class GoogleMapsPlugin extends Plugin
      */
     protected function __construct()
     {
-        $parameters = array(
+        $parameters = [
             'enable_api' => 'boolean',
             'api_key' => 'text',
             'extra_field_name' => 'text'
-        );
+        ];
 
         parent::__construct('1.0', 'José Loguercio Silva', $parameters);
     }
@@ -37,7 +37,7 @@ class GoogleMapsPlugin extends Plugin
      * @staticvar null $result
      * @return GoogleMapsPlugin
      */
-    static function create()
+    public static function create()
     {
         static $result = null;
 

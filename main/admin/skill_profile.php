@@ -42,9 +42,9 @@ if (!empty($item)) {
 }
 $formToDisplay = $form->returnForm();
 
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'skill.php', 'name' => get_lang('ManageSkillsLevels'));
-$interbreadcrumb[] = array('url' =>  api_get_self(), 'name' => get_lang('SkillProfile'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'skill.php', 'name' => get_lang('ManageSkillsLevels')];
+$interbreadcrumb[] = ['url' =>  api_get_self(), 'name' => get_lang('SkillProfile')];
 
 $toolbar = null;
 

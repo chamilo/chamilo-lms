@@ -24,11 +24,11 @@ $form = new FormValidator('add_cas_button_form');
 $form->addElement('text', 'label', 'Text label', '');
 //get default value
 $tab_default_formLogin_hide_unhide_label = api_get_setting('formLogin_hide_unhide_label');
-$defaults = array();
+$defaults = [];
 $defaults['label'] = $tab_default_formLogin_hide_unhide_label['formLogin_hide_unhide'];
 $form->setDefaults($defaults);
 //display form
 $plugin_info['settings_form'] = $form;
 
 //set the templates that are going to be used
-$plugin_info['templates'] = array('template.tpl');
+$plugin_info['templates'] = ['template.tpl'];

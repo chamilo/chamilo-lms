@@ -19,10 +19,10 @@ class UserCourseSettingsSchema extends AbstractSettingsSchema
     public function buildSettings(SettingsBuilderInterface $builder)
     {
         $builder
-            ->setDefaults(array(
+            ->setDefaults([
                 'enabled' => '',
                 'allow_user_view_user_list' => '',
-            ))
+            ])
         ;
         $allowedTypes = [
             'enabled' => ['string'],

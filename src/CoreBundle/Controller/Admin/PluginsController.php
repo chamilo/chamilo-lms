@@ -32,9 +32,9 @@ class PluginsController extends SyliusSettingsController
 
         return $this->render(
             '@ChamiloCore/Admin/Settings/plugins.html.twig',
-            array(
+            [
                 'plugins' => $installedPlugins
-            )
+            ]
         );
     }
 
@@ -54,7 +54,8 @@ class PluginsController extends SyliusSettingsController
 
             if (is_file($file)) {
                 $pluginInfo = require $file;
-                var_dump($pluginInfo);exit;
+                var_dump($pluginInfo);
+                exit;
                 $allPluginsList[] = $pluginInfo;
             }
         }
@@ -68,10 +69,10 @@ class PluginsController extends SyliusSettingsController
 
         return $this->render(
             '@ChamiloCore/Admin/Settings/pluginsAdd.html.twig',
-            array(
+            [
                 'plugins' => $allPluginsList,
                 'installed_plugins' =>$installedPlugins
-            )
+            ]
         );
     }
 

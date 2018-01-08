@@ -137,5 +137,4 @@ class WikiStudent extends Basic
             ['Toolbarswitch']
         ];
     }
-
 }

@@ -22,7 +22,7 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'default_document_quotum' => '100000000',
                     'default_group_quotum' => '100000000',
                     'permanently_remove_deleted_files' => 'false',
@@ -59,7 +59,7 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                     'documents_default_visibility_defined_in_course' => 'false', // ?
                     'allow_personal_user_files' => '', // ?
                     'if_file_exists_option' => 'rename'
-                )
+                ]
             )
             ->setTransformer(
                 'tool_visible_by_default_at_creation',
@@ -67,11 +67,11 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
             )
         ;
 
-        $allowedTypes = array(
-            'tool_visible_by_default_at_creation' => array('array'),
-            'default_document_quotum' => array('string'),
-            'default_group_quotum' => array('string')
-        );
+        $allowedTypes = [
+            'tool_visible_by_default_at_creation' => ['array'],
+            'default_document_quotum' => ['string'],
+            'default_group_quotum' => ['string']
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
@@ -87,12 +87,12 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
             ->add(
                 'upload_extensions_list_type',
                 'choice',
-                array(
-                    'choices' => array(
+                [
+                    'choices' => [
                         'blacklist' => 'Blacklist',
                         'whitelist' => 'Whitelist',
-                    ),
-                )
+                    ],
+                ]
             )
             ->add('upload_extensions_blacklist', 'textarea')
             ->add('upload_extensions_whitelist', 'textarea')

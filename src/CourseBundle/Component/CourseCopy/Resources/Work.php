@@ -10,7 +10,7 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
  */
 class Work extends Resource
 {
-    public $params = array();
+    public $params = [];
 
     /**
      * Create a new Work

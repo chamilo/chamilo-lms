@@ -191,7 +191,6 @@ if ($action == 'disable_all_except_default') {
     if ($checkFailed) {
         $_SESSION['disabled_languages'] = $failedDisabledLanguages;
     }
-
 }
 
 if (isset($_POST['Submit']) && $_POST['Submit']) {
@@ -209,7 +208,7 @@ if (isset($_POST['Submit']) && $_POST['Submit']) {
     switch ($_POST['action']) {
         case 'makeavailable':
             if (count($_POST['id']) > 0) {
-                $ids = array();
+                $ids = [];
                 foreach ($_POST['id'] as $index => $id) {
                     $ids[] = intval($id);
                 }
@@ -219,7 +218,7 @@ if (isset($_POST['Submit']) && $_POST['Submit']) {
             break;
         case 'makeunavailable':
             if (count($_POST['id']) > 0) {
-                $ids = array();
+                $ids = [];
                 foreach ($_POST['id'] as $index => $id) {
                     $ids[] = intval($id);
                 }
@@ -234,7 +233,7 @@ if (isset($_POST['Submit']) && $_POST['Submit']) {
 $tool_name = get_lang('PlatformLanguages');
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
 if (isset($_GET['action']) && $_GET['action'] == 'make_unavailable_confirmed') {
     $language_info = SubLanguageManager::get_all_information_of_language($_GET['id']);
@@ -263,9 +262,9 @@ $result_select_lang = Database::query($sql_select_lang);
 $row_lang = Database::fetch_array($result_select_lang);
 
 // the table data
-$language_data = array();
+$language_data = [];
 while ($row = Database::fetch_array($result_select)) {
-    $row_td = array();
+    $row_td = [];
     $row_td[] = $row['id'];
     // the first column is the original name of the language OR a form containing the original name
     if ($action == 'edit' and $row['id'] == $_GET['id']) {
@@ -298,7 +297,7 @@ while ($row = Database::fetch_array($result_select)) {
 
         if ($verified_if_is_sub_language === false) {
             $verified_if_is_father = SubLanguageManager::check_if_language_is_father($row['id']);
-            $allow_use_sub_language = "&nbsp;<a href='sub_language_add.php?action=definenewsublanguage&id=".$row['id']."'>".Display::return_icon('new_language.png', get_lang('CreateSubLanguage'), array(), ICON_SIZE_SMALL)."</a>";
+            $allow_use_sub_language = "&nbsp;<a href='sub_language_add.php?action=definenewsublanguage&id=".$row['id']."'>".Display::return_icon('new_language.png', get_lang('CreateSubLanguage'), [], ICON_SIZE_SMALL)."</a>";
             if ($verified_if_is_father === true) {
                 //$allow_add_term_sub_language = "&nbsp;<a href='sub_language.php?action=registersublanguage&id=".$row['id']."'>".Display::return_icon('2rightarrow.png', get_lang('AddWordForTheSubLanguage'),array('width'=>ICON_SIZE_SMALL,'height'=>ICON_SIZE_SMALL))."</a>";
                 $allow_add_term_sub_language = '';
@@ -308,8 +307,8 @@ while ($row = Database::fetch_array($result_select)) {
         } else {
             $allow_use_sub_language = '';
             $all_information_of_sub_language = SubLanguageManager::get_all_information_of_language($row['id']);
-            $allow_add_term_sub_language = "&nbsp;<a href='sub_language.php?action=registersublanguage&id=".Security::remove_XSS($all_information_of_sub_language['parent_id'])."&sub_language_id=".Security::remove_XSS($row['id'])."'>".Display::return_icon('2rightarrow.png', get_lang('AddWordForTheSubLanguage'), array('width' => ICON_SIZE_SMALL, 'height' => ICON_SIZE_SMALL))."</a>";
-            $allow_delete_sub_language = "&nbsp;<a href='sub_language_add.php?action=deletesublanguage&id=".Security::remove_XSS($all_information_of_sub_language['parent_id'])."&sub_language_id=".Security::remove_XSS($row['id'])."'>".Display::return_icon('delete.png', get_lang('DeleteSubLanguage'), array('width' => ICON_SIZE_SMALL, 'height' => ICON_SIZE_SMALL))."</a>";
+            $allow_add_term_sub_language = "&nbsp;<a href='sub_language.php?action=registersublanguage&id=".Security::remove_XSS($all_information_of_sub_language['parent_id'])."&sub_language_id=".Security::remove_XSS($row['id'])."'>".Display::return_icon('2rightarrow.png', get_lang('AddWordForTheSubLanguage'), ['width' => ICON_SIZE_SMALL, 'height' => ICON_SIZE_SMALL])."</a>";
+            $allow_delete_sub_language = "&nbsp;<a href='sub_language_add.php?action=deletesublanguage&id=".Security::remove_XSS($all_information_of_sub_language['parent_id'])."&sub_language_id=".Security::remove_XSS($row['id'])."'>".Display::return_icon('delete.png', get_lang('DeleteSubLanguage'), ['width' => ICON_SIZE_SMALL, 'height' => ICON_SIZE_SMALL])."</a>";
         }
     } else {
         $allow_use_sub_language = '';
@@ -321,9 +320,9 @@ while ($row = Database::fetch_array($result_select)) {
                      &nbsp;" . $setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
     } else {
         if ($row['available'] == 1) {
-            $row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'>".Display::return_icon('visible.png', get_lang('MakeUnavailable'), array('id' => 'imglinktool_'.$row['id']), ICON_SIZE_SMALL)."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
+            $row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'>".Display::return_icon('visible.png', get_lang('MakeUnavailable'), ['id' => 'imglinktool_'.$row['id']], ICON_SIZE_SMALL)."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
         } else {
-            $row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='".api_get_self()."?action=makeavailable&id=".$row['id']."'>".Display::return_icon('invisible.png', get_lang('MakeAvailable'), array('id' => 'imglinktool_'.$row['id']), ICON_SIZE_SMALL)."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
+            $row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='".api_get_self()."?action=makeavailable&id=".$row['id']."'>".Display::return_icon('invisible.png', get_lang('MakeAvailable'), ['id' => 'imglinktool_'.$row['id']], ICON_SIZE_SMALL)."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
         }
     }
     $language_data[] = $row_td;
@@ -335,7 +334,7 @@ $table->set_header(1, get_lang('OriginalName'));
 $table->set_header(2, get_lang('EnglishName'));
 $table->set_header(3, get_lang('LMSFolder'));
 $table->set_header(4, get_lang('Properties'));
-$form_actions = array();
+$form_actions = [];
 $form_actions['makeavailable'] = get_lang('MakeAvailable');
 $form_actions['makeunavailable'] = get_lang('MakeUnavailable');
 $table->set_form_actions($form_actions);

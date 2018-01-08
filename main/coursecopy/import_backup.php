@@ -32,10 +32,10 @@ if (function_exists('ini_set')) {
 $this_section = SECTION_COURSES;
 
 // Breadcrumbs
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => '../course_info/maintenance.php',
     'name' => get_lang('Maintenance')
-);
+];
 
 // Displaying the header
 $nameTools = get_lang('ImportBackup');
@@ -69,7 +69,6 @@ if (Security::check_token('post') && (
         // restoration of a course with many items. A value of 1,000,000 bytes
         // might be too short.
         $course = CourseSelectForm::get_posted_course();
-
     } else {
         if ($_POST['backup_type'] == 'server') {
             $filename = $_POST['backup_server'];
@@ -119,7 +118,6 @@ if (Security::check_token('post') && (
         }
     }
     CourseArchiver::cleanBackupDir();
-
 } elseif (Security::check_token('post') && (
         isset($_POST['import_option']) &&
         $_POST['import_option'] == 'select_items'
@@ -161,7 +159,7 @@ if (Security::check_token('post') && (
         'post',
         api_get_path(WEB_CODE_PATH).'coursecopy/import_backup.php?'.api_get_cidreq(),
         '',
-        array('enctype' => 'multipart/form-data')
+        ['enctype' => 'multipart/form-data']
     );
     $form->addElement('header', get_lang('SelectBackupFile'));
     $renderer = $form->defaultRenderer();
@@ -272,18 +270,18 @@ if (Security::check_token('post') && (
 
     $form->addProgress();
     // When progress bar appears we have to hide the title "Select backup file".
-    $form->updateAttributes(array(
+    $form->updateAttributes([
         'onsubmit' => str_replace(
             'javascript: ',
             'javascript: page_title = getElementById(\'page_title\'); if (page_title) { setTimeout(\'page_title.style.display = \\\'none\\\';\', 2000); } ',
             $form->getAttribute('onsubmit')
         )
-    ));
+    ]);
 
     // Add Security token
     $token = Security::get_token();
     $form->addElement('hidden', 'sec_token');
-    $form->setConstants(array('sec_token' => $token));
+    $form->setConstants(['sec_token' => $token]);
     $form->display();
 }
 

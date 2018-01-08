@@ -38,7 +38,7 @@ class LinkAddEditForm extends FormValidator
             die('LinkAddEditForm error: define link_type/category_object or link_object');
         }
 
-        $defaults = array();
+        $defaults = [];
         if (!empty($_GET['editlink'])) {
             $this->addElement('header', '', get_lang('EditLink'));
         }
@@ -46,7 +46,7 @@ class LinkAddEditForm extends FormValidator
         // ELEMENT: name
         if ($form_type == self::TYPE_ADD || $link->is_allowed_to_change_name()) {
             if ($link->needs_name_and_description()) {
-                $this->addText('name', get_lang('Name'), true, array('size'=>'40', 'maxlength'=>'40'));
+                $this->addText('name', get_lang('Name'), true, ['size'=>'40', 'maxlength'=>'40']);
             } else {
                 $select = $this->addElement('select', 'select_link', get_lang('ChooseItem'));
                 foreach ($link->get_all_links() as $newlink) {
@@ -64,7 +64,7 @@ class LinkAddEditForm extends FormValidator
                 'hidden',
                 'name_link',
                 $link->get_name(),
-                array('id' => 'name_link')
+                ['id' => 'name_link']
             );
         }
 
@@ -75,8 +75,8 @@ class LinkAddEditForm extends FormValidator
                 'select',
                 'select_gradebook',
                 get_lang('SelectGradebook'),
-                array(),
-                array('id' => 'hide_category_id')
+                [],
+                ['id' => 'hide_category_id']
             );
             $this->addRule('select_gradebook', get_lang('ThisFieldIsRequired'), 'nonzero');
             $default_weight = 0;
@@ -104,17 +104,17 @@ class LinkAddEditForm extends FormValidator
 
         $this->addFloat(
             'weight_mask',
-            array(
+            [
                 get_lang('Weight'),
                 null,
                 ' [0 .. <span id="max_weight">'.$category_object[0]->get_weight(
                 ).'</span>] ',
-            ),
+            ],
             true,
-            array(
+            [
                 'size' => '4',
                 'maxlength' => '5'
-            )
+            ]
         );
 
         $this->addElement('hidden', 'weight');
@@ -134,7 +134,6 @@ class LinkAddEditForm extends FormValidator
             }
             $defaults['weight_mask'] = $values['weight'];
             $defaults['select_gradebook'] = $link->get_category_id();
-
         }
         // ELEMENT: max
         if ($link->needs_max()) {
@@ -143,14 +142,14 @@ class LinkAddEditForm extends FormValidator
                     'max',
                     get_lang('QualificationNumeric'),
                     false,
-                    array(
+                    [
                         'size' => '4',
                         'maxlength' => '5',
                         'disabled' => 'disabled',
-                    )
+                    ]
                 );
             } else {
-                $this->addText('max', get_lang('QualificationNumeric'), true, array('size' => '4', 'maxlength' => '5'));
+                $this->addText('max', get_lang('QualificationNumeric'), true, ['size' => '4', 'maxlength' => '5']);
                 $this->addRule('max', get_lang('OnlyNumbers'), 'numeric');
                 $this->addRule(
                     'max',
@@ -174,7 +173,7 @@ class LinkAddEditForm extends FormValidator
                 'textarea',
                 'description',
                 get_lang('Description'),
-                array('rows' => '3', 'cols' => '34')
+                ['rows' => '3', 'cols' => '34']
             );
             if ($form_type == self::TYPE_EDIT) {
                 $defaults['description'] = $link->get_description();

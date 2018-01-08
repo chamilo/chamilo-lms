@@ -35,7 +35,7 @@ switch ($action) {
         $sidx = $_REQUEST['sidx']; //index to filter
         $sord = $_REQUEST['sord']; //asc or desc
 
-        if (!in_array($sord, array('asc', 'desc'))) {
+        if (!in_array($sord, ['asc', 'desc'])) {
             $sord = 'desc';
         }
         // get index row - i.e. user click to sort $sord = $_GET['sord'];
@@ -114,7 +114,7 @@ switch ($action) {
                 LIMIT $start, $limit";
 
         $result = Database::query($sql);
-        $results = array();
+        $results = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $results[] = $row;
         }
@@ -164,13 +164,13 @@ switch ($action) {
                             DATE_TIME_FORMAT_LONG
                     );
                 }
-                $array = array(
+                $array = [
                     $row['firstname'],
                     $row['lastname'],
                     $timeInfo,
                     $row['count_questions'],
                     round($row['score'] * 100).'%'
-                );
+                ];
                 $response->rows[$i]['cell'] = $array;
                 $i++;
             }
@@ -189,12 +189,12 @@ switch ($action) {
             foreach ($new_list as $new_order_id) {
                 Database::insert(
                     $table,
-                    array(
+                    [
                         'exercise_order' => $counter,
                         'session_id' => $session_id,
                         'exercise_id' => intval($new_order_id),
                         'c_id' => $course_id
-                    )
+                    ]
                 );
                 $counter++;
             }
@@ -216,16 +216,16 @@ switch ($action) {
             foreach ($new_question_list as $new_order_id) {
                 Database::update(
                     $TBL_QUESTIONS,
-                    array('question_order' => $counter),
-                    array(
-                        'question_id = ? AND c_id = ? AND exercice_id = ? ' => array(
+                    ['question_order' => $counter],
+                    [
+                        'question_id = ? AND c_id = ? AND exercice_id = ? ' => [
                             intval(
                                 $new_order_id
                             ),
                             $course_id,
                             $exercise_id
-                        )
-                    )
+                        ]
+                    ]
                 )
                 ;
                 $counter++;
@@ -323,7 +323,7 @@ switch ($action) {
 
                 if (empty($remind_list)) {
                     $remind_list = $bd_reminder_list;
-                    $new_list = array();
+                    $new_list = [];
                     foreach ($bd_reminder_list as $item) {
                         if ($item != $question_id) {
                             $new_list[] = $item;
@@ -512,7 +512,7 @@ switch ($action) {
                     $remind_list
                 );
 
-                 // Destruction of the Question object
+                // Destruction of the Question object
                 unset($objQuestionTmp);
                 if ($debug) {
                     error_log(" -- end question -- ");

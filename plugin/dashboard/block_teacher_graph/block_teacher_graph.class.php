@@ -24,7 +24,7 @@ class BlockTeacherGraph extends Block
     private $user_id;
     private $teachers;
     private $path;
-    private $permission = array(DRH);
+    private $permission = [DRH];
 
     /**
      * Controller
@@ -63,7 +63,7 @@ class BlockTeacherGraph extends Block
     {
         global $charset;
         $column = 1;
-        $data   = array();
+        $data   = [];
         $teacher_information_graph = $this->get_teachers_information_graph();
         $html = '
                 <div class="panel panel-default" id="intro">
@@ -101,7 +101,7 @@ class BlockTeacherGraph extends Block
             foreach ($user_ids as $user_id) {
                 $teacher_info = api_get_user_info($user_id);
                 $username = $teacher_info['username'];
-                $time_by_days = array();
+                $time_by_days = [];
                 foreach ($a_last_week as $day) {
                     // day is received as y-m-d 12:00:00
                     $start_date = api_get_utc_datetime($day);
@@ -121,7 +121,7 @@ class BlockTeacherGraph extends Block
             }
 
             $last_week = date('Y-m-d', $a_last_week[0]).' '.get_lang('To').' '.date('Y-m-d', $a_last_week[6]);
-            $days_on_week = array();
+            $days_on_week = [];
             foreach ($a_last_week as $weekday) {
                 $days_on_week[] = date('d/m', $weekday);
             }
@@ -134,7 +134,7 @@ class BlockTeacherGraph extends Block
 
             // Cache definition
             $cachePath = api_get_path(SYS_ARCHIVE_PATH);
-            $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
+            $myCache = new pCache(['CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)]);
             $chartHash = $myCache->getHash($dataSet);
             if ($myCache->isInCache($chartHash)) {
                 $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
@@ -151,10 +151,10 @@ class BlockTeacherGraph extends Block
                 $myPicture->Antialias = false;
 
                 /* Add a border to the picture */
-                $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, array('R' => 0, 'G' => 0, 'B' => 0));
+                $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, ['R' => 0, 'G' => 0, 'B' => 0]);
 
                 /* Set the default font */
-                $myPicture->setFontProperties(array('FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf', 'FontSize' => 10));
+                $myPicture->setFontProperties(['FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf', 'FontSize' => 10]);
 
                 /* Do NOT Write the chart title */
 
@@ -162,7 +162,7 @@ class BlockTeacherGraph extends Block
                 $myPicture->setGraphArea(40, 40, $widthSize - 20, $heightSize - 80);
 
                 /* Draw the scale */
-                $scaleSettings = array(
+                $scaleSettings = [
                     'GridR' => 200,
                     'GridG' => 200,
                     'GridB' => 200,
@@ -170,23 +170,23 @@ class BlockTeacherGraph extends Block
                     'CycleBackground' => true,
                     'Mode' => SCALE_MODE_ADDALL_START0,
                     'LabelRotation' => $angle,
-                );
+                ];
 
                 $myPicture->drawScale($scaleSettings);
 
                 /* Turn on shadow computing */
-                $myPicture->setShadow(true, array('X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10));
+                $myPicture->setShadow(true, ['X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10]);
 
                 /* Draw the chart */
-                $myPicture->setShadow(true, array('X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10));
-                $settings = array(
+                $myPicture->setShadow(true, ['X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10]);
+                $settings = [
                     'DisplayValues' => true,
                     'DisplayR' => 0,
                     'DisplayG' => 0,
                     'DisplayB' => 0,
-                );
+                ];
                 $myPicture->drawFilledSplineChart($settings);
-                $myPicture->drawLegend(40, 20, array('Mode' => LEGEND_HORIZONTAL));
+                $myPicture->drawLegend(40, 20, ['Mode' => LEGEND_HORIZONTAL]);
 
                 /* Write and save into cache */
                 $myCache->writeToCache($chartHash, $myPicture);
@@ -206,9 +206,8 @@ class BlockTeacherGraph extends Block
      * Get number of teachers
      * @return int
      */
-    function get_number_of_teachers()
+    public function get_number_of_teachers()
     {
         return count($this->teachers);
     }
-
 }

@@ -135,12 +135,11 @@ switch ($action) {
         if (api_is_anonymous()) {
             echo '';
         } else {
-            $array_list_key = array();
+            $array_list_key = [];
             $user_id = api_get_user_id();
             $api_service = 'dokeos';
             $num = UserManager::update_api_key($user_id, $api_service);
-            $array_list_key = UserManager::get_api_keys($user_id, $api_service);
-            ?>
+            $array_list_key = UserManager::get_api_keys($user_id, $api_service); ?>
             <div class="form-group">
                 <label class="col-sm-2 control-label"><?php echo get_lang('MyApiKey'); ?></label>
                 <div class="col-sm-8">
@@ -206,10 +205,10 @@ switch ($action) {
                     api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".
                     get_lang('Email')." : ".api_get_setting('emailAdministrator');
 
-                    $additionalParameters = array(
+                    $additionalParameters = [
                         'smsType' => SmsPlugin::ACCOUNT_APPROVED_CONNECT,
                         'userId' => $user_id
-                    );
+                    ];
 
                     MessageManager::send_message_simple(
                         $user_id,

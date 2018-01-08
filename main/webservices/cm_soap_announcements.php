@@ -14,12 +14,12 @@ $s = WSCMSoapServer::singleton();
 
 $s->register(
     'WSCMAnnouncements.get_announcements_id',
-    array(
+    [
         'username' => 'xsd:string',
         'password' => 'xsd:string',
         'course_code' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string'),
+    ],
+    ['return' => 'xsd:string'],
     'urn:WSCMService',
     '',
     '',
@@ -30,14 +30,14 @@ $s->register(
 
 $s->register(
     'WSCMAnnouncements.get_announcement_data',
-    array(
+    [
         'username' => 'xsd:string',
         'password' => 'xsd:string',
         'course_code' => 'xsd:string',
         'announcement_id' => 'xsd:string',
         'field' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string'),
+    ],
+    ['return' => 'xsd:string'],
     'urn:WSCMService',
     '',
     '',

@@ -1224,11 +1224,11 @@ class Course
      */
     public function isActive()
     {
-        $activeVisibilityList = array(
+        $activeVisibilityList = [
             self::REGISTERED,
             self::OPEN_PLATFORM,
             self::OPEN_WORLD,
-        );
+        ];
 
         return in_array($this->visibility, $activeVisibilityList);
     }
@@ -1248,13 +1248,13 @@ class Course
      */
     public static function getStatusList()
     {
-        return array(
+        return [
             self::CLOSED => 'Closed',
             self::REGISTERED => 'Registered',
             self::OPEN_PLATFORM => 'Open platform',
             self::OPEN_WORLD => 'Open world',
             self::HIDDEN => 'Hidden',
-        );
+        ];
     }
 
     /**
@@ -1277,11 +1277,11 @@ class Course
         }*/
 
         $list = $this->getSessions();
-            /** @var SessionRelCourse $item */
-            foreach ($list as $item) {
-                if ($item->getSession()->getId() == $session->getId()) {
-                    $this->currentSession = $session;
-                    break;
+        /** @var SessionRelCourse $item */
+        foreach ($list as $item) {
+            if ($item->getSession()->getId() == $session->getId()) {
+                $this->currentSession = $session;
+                break;
             }
         }
 

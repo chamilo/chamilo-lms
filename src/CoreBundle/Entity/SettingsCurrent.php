@@ -450,6 +450,4 @@ class SettingsCurrent
 
         return $this;
     }
-
-
 }

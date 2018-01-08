@@ -80,7 +80,6 @@ abstract class AbstractResource
      */
     public function preUpdate()
     {
-
     }
 
     /**
@@ -88,7 +87,6 @@ abstract class AbstractResource
      */
     public function postRemove()
     {
-
     }
 
     /**

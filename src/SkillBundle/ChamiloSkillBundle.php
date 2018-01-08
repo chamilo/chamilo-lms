@@ -22,5 +22,4 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class ChamiloSkillBundle extends Bundle
 {
-
 }

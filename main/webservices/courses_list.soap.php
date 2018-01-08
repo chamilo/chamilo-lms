@@ -27,7 +27,7 @@ $server->wsdl->addComplexType(
     'struct',
     'all',
     '',
-    array(
+    [
         'name' => 'code',
         'type' => 'xsd:string',
         'name' => 'title',
@@ -38,7 +38,7 @@ $server->wsdl->addComplexType(
         'type' => 'xsd:string',
         'name' => 'language',
         'type' => 'xsd:string',
-    )
+    ]
 );
 
 $server->wsdl->addComplexType(
@@ -47,21 +47,21 @@ $server->wsdl->addComplexType(
     'array',
     '',
     'SOAP-ENC:Array',
-    array(),
-    array(
-        array('ref'=>'SOAP-ENC:arrayType',
-        'wsdl:arrayType'=>'tns:courseDetails[]')
-    ),
+    [],
+    [
+        ['ref'=>'SOAP-ENC:arrayType',
+        'wsdl:arrayType'=>'tns:courseDetails[]']
+    ],
     'tns:courseDetails'
 );
 
 // Register the method to expose
 $server->register(
     'WSCourseList', // method name
-    array('username' => 'xsd:string',
+    ['username' => 'xsd:string',
           'signature' => 'xsd:string',
-          'visibilities' => 'xsd:string'), // input parameters
-    array('return' => 'xsd:Array'), // output parameters
+          'visibilities' => 'xsd:string'], // input parameters
+    ['return' => 'xsd:Array'], // output parameters
     'urn:WSCourseList', // namespace
     'urn:WSCourseList#WSCourseList', // soapaction
     'rpc', // style
@@ -80,7 +80,9 @@ $server->register(
  */
 function WSCourseList($username, $signature, $visibilities = 'public')
 {
-    if (empty($username) or empty($signature)) { return -1; }
+    if (empty($username) or empty($signature)) {
+        return -1;
+    }
 
     global $_configuration;
 
@@ -104,16 +106,16 @@ function WSCourseList($username, $signature, $visibilities = 'public')
         return -1; // The secret key is incorrect.
     }
     //public-registered = open
-    $vis = array('public' => '3', 'public-registered' => '2', 'private' => '1', 'closed' => '0');
+    $vis = ['public' => '3', 'public-registered' => '2', 'private' => '1', 'closed' => '0'];
 
-    $courses_list = array();
+    $courses_list = [];
 
     if (!is_array($visibilities)) {
         $visibilities = split(',', $visibilities);
     }
     foreach ($visibilities as $visibility) {
         if (!in_array($visibility, array_keys($vis))) {
-            return array('error_msg' => 'Security check failed');
+            return ['error_msg' => 'Security check failed'];
         }
         $courses_list_tmp = CourseManager::get_courses_list(
             null,
@@ -124,13 +126,13 @@ function WSCourseList($username, $signature, $visibilities = 'public')
         );
         foreach ($courses_list_tmp as $index => $course) {
             $course_info = CourseManager::get_course_information($course['code']);
-            $courses_list[] = array(
+            $courses_list[] = [
                 'code' => $course['code'],
                 'title' => api_utf8_encode($course_info['title']),
                 'url' => api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/',
                 'teacher' => api_utf8_encode($course_info['tutor_name']),
                 'language' => $course_info['course_language'],
-            );
+            ];
         }
     }
     return $courses_list;

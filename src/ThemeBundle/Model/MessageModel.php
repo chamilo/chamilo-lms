@@ -51,7 +51,7 @@ class MessageModel implements MessageInterface
      * @param null          $sentAt
      * @param UserInterface $to
      */
-    function __construct(UserInterface $from = null, $subject = '', $sentAt = null, UserInterface $to = null)
+    public function __construct(UserInterface $from = null, $subject = '', $sentAt = null, UserInterface $to = null)
     {
         $this->to      = $to;
         $this->subject = $subject;
@@ -161,5 +161,4 @@ class MessageModel implements MessageInterface
     {
         return $this->getSubject();
     }
-
 }

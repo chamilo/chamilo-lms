@@ -52,7 +52,6 @@ class WSCMInbox extends WSCM
             }
 
             return $message;
-
         } else {
             return get_lang('InvalidId');
         }
@@ -94,7 +93,6 @@ class WSCMInbox extends WSCM
             $sql_result = Database::query($sql_query);
             $result = Database::fetch_row($sql_result);
             return $htmlcode ? html_entity_decode($result[0]) : $result[0];
-
         } else {
             return get_lang('InvalidId');
         }
@@ -121,7 +119,6 @@ class WSCMInbox extends WSCM
             }
 
             return $message;
-
         } else {
             return get_lang('InvalidId');
         }
@@ -198,7 +195,6 @@ class WSCMInbox extends WSCM
             $inbox_last_id = Database::insert_id();
 
             return $inbox_last_id;
-
         } else {
             return get_lang('InvalidId');
         }

@@ -15,11 +15,11 @@ use Chamilo\CourseBundle\Entity\CLp;
 class LearnpathList
 {
     // Holds a flat list of learnpaths data from the database.
-    public $list = array();
+    public $list = [];
     // Holds a list of references to the learnpaths objects (only filled by get_refs()).
-    public $ref_list = array();
+    public $ref_list = [];
     // Holds a flat list of learnpaths sorted by alphabetical name order.
-    public $alpha_list = array();
+    public $alpha_list = [];
     public $course_code;
     public $user_id;
     public $refs_active = false;
@@ -73,7 +73,7 @@ class LearnpathList
 
         $order = "ORDER BY lp.displayOrder ASC, lp.name ASC";
         if (isset($order_by)) {
-            $order = Database::parse_conditions(array('order' => $order_by));
+            $order = Database::parse_conditions(['order' => $order_by]);
         }
 
         $now = api_get_utc_datetime();
@@ -133,7 +133,6 @@ class LearnpathList
             if (Database::num_rows($res2) > 0) {
                 $row2 = Database::fetch_array($res2);
                 $pub = $row2['visibility'];
-
             } else {
                 $pub = 'i';
             }
@@ -158,7 +157,7 @@ class LearnpathList
                 }
             }
 
-            $this->list[$row->getIid()] = array(
+            $this->list[$row->getIid()] = [
                 'lp_type' => $row->getLpType(),
                 'lp_session' => $row->getSessionId(),
                 'lp_name' => stripslashes($row->getName()),
@@ -187,7 +186,7 @@ class LearnpathList
                 'lp_old_id' => $row->getId(),
                 'iid' => $row->getIid(),
                 'prerequisite' => $row->getPrerequisite()
-            );
+            ];
             $names[$row->getName()] = $row->getIid();
         }
         asort($names);
@@ -233,7 +232,7 @@ class LearnpathList
         $sql_query = sprintf($sql, $course['real_id']);
         $result = Database::query($sql_query);
 
-        $lessons = array();
+        $lessons = [];
         while ($row = Database::fetch_array($result)) {
             if (api_get_item_visibility($course, 'learnpath', $row['id'], $session_id)) {
                 $lessons[$row['id']] = $row;

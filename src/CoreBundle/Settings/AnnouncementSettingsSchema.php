@@ -21,14 +21,14 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'hide_global_announcements_when_not_connected' => 'false',
-                )
+                ]
             );
 
-        $allowedTypes = array(
-            'hide_global_announcements_when_not_connected' => array('string'),
-        );
+        $allowedTypes = [
+            'hide_global_announcements_when_not_connected' => ['string'],
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 

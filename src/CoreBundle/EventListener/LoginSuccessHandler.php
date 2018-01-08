@@ -45,7 +45,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $user = $token->getUser();
         $userId = $user->getId();
         $session = $request->getSession();
-    dump($user->getId());
+        dump($user->getId());
         $userInfo = api_get_user_info($user->getId());
         $userInfo['is_anonymous'] = false;
 
@@ -95,7 +95,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             // Get the courses list
             $personal_course_list = \UserManager::get_personal_session_course_list($userId);
 
-            $my_session_list = array();
+            $my_session_list = [];
             $count_of_courses_no_sessions = 0;
             $count_of_courses_with_sessions = 0;
 

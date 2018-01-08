@@ -8,7 +8,7 @@
 class GradeModel extends Model
 {
     public $table;
-    public $columns = array('id', 'name', 'description');
+    public $columns = ['id', 'name', 'description'];
 
     /**
      * Constructor
@@ -24,12 +24,12 @@ class GradeModel extends Model
      *
      * @return array
      */
-    public function get_all($where_conditions = array())
+    public function get_all($where_conditions = [])
     {
         return Database::select(
             '*',
             $this->table,
-            array('where' => $where_conditions, 'order' => 'name ASC')
+            ['where' => $where_conditions, 'order' => 'name ASC']
         );
     }
 
@@ -41,7 +41,7 @@ class GradeModel extends Model
         $row = Database::select(
             'count(*) as count',
             $this->table,
-            array(),
+            [],
             'first'
         );
 
@@ -91,11 +91,11 @@ class GradeModel extends Model
             get_lang('Description'),
             false,
             false,
-            array(
+            [
                 'ToolbarSet' => 'careers',
                 'Width' => '100%',
                 'Height' => '250'
-            )
+            ]
         );
 
         $form->addLabel(get_lang('Components'), '');
@@ -120,7 +120,7 @@ class GradeModel extends Model
         $form->addElement('hidden', 'minvalue', '0');
         $renderer = & $form->defaultRenderer();
 
-        $component_array = array();
+        $component_array = [];
 
 
         for ($i = 0; $i <= $max; $i++) {
@@ -162,8 +162,8 @@ class GradeModel extends Model
                 $form->addRule('components['.$i.'][title]', get_lang('ThisFieldIsRequired'), 'required');
             }
             $form->addRule('components['.$i.'][percentage]', get_lang('OnlyNumbers'), 'numeric');
-            $form->addRule(array('components['.$i.'][percentage]', 'maxvalue'), get_lang('Over100'), 'compare', '<=');
-            $form->addRule(array('components['.$i.'][percentage]', 'minvalue'), get_lang('UnderMin'), 'compare', '>=');
+            $form->addRule(['components['.$i.'][percentage]', 'maxvalue'], get_lang('Over100'), 'compare', '<=');
+            $form->addRule(['components['.$i.'][percentage]', 'minvalue'], get_lang('UnderMin'), 'compare', '>=');
 
             $component_array[] = 'components['.$i.'][percentage]';
         }
@@ -203,7 +203,7 @@ class GradeModel extends Model
     {
         $obj = new GradeModelComponents();
         if (!empty($id)) {
-            return $obj->get_all(array('where'=> array('grade_model_id = ?' => $id)));
+            return $obj->get_all(['where'=> ['grade_model_id = ?' => $id]]);
         }
         return null;
     }
@@ -255,7 +255,7 @@ class GradeModel extends Model
      */
     public function delete($id)
     {
-	    parent::delete($id);
+        parent::delete($id);
     }
 
     /**
@@ -272,7 +272,7 @@ class GradeModel extends Model
 
         if (api_get_setting('teachers_can_change_grade_model_settings') === 'true' || api_is_platform_admin()) {
             $grade_models = $this->get_all();
-            $grade_model_options = array('-1' => get_lang('None'));
+            $grade_model_options = ['-1' => get_lang('None')];
             if (!empty($grade_models)) {
                 foreach ($grade_models as $item) {
                     $grade_model_options[$item['id']] = $item['name'];
@@ -291,7 +291,7 @@ class GradeModel extends Model
             }
 
             if (!empty($default) && $default != '-1') {
-                $form->setDefaults(array($name => $default));
+                $form->setDefaults([$name => $default]);
             }
         }
     }
@@ -303,16 +303,16 @@ class GradeModel extends Model
 class GradeModelComponents extends Model
 {
     public $table;
-    public $columns = array('id', 'title', 'percentage', 'acronym', 'grade_model_id');
+    public $columns = ['id', 'title', 'percentage', 'acronym', 'grade_model_id'];
 
     /**
      * GradeModelComponents constructor.
      */
-	public function __construct()
+    public function __construct()
     {
         parent::__construct();
         $this->table = Database::get_main_table(TABLE_GRADE_MODEL_COMPONENTS);
-	}
+    }
 
     /**
      * @param array $params
@@ -321,7 +321,7 @@ class GradeModelComponents extends Model
      */
     public function save($params, $showQuery = false)
     {
-	    $id = parent::save($params, $showQuery);
+        $id = parent::save($params, $showQuery);
 
         return $id;
     }

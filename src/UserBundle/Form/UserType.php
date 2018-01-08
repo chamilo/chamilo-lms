@@ -45,16 +45,16 @@ class UserType extends AbstractType
             ->add(
                 'locale',
                 'locale',
-                array('preferred_choices' => array('en', 'fr', 'es'))
+                ['preferred_choices' => ['en', 'fr', 'es']]
             )
             ->add(
                 'picture_uri',
                 'sonata_media_type',
-                array(
+                [
                     'provider' => 'sonata.media.provider.image',
                     'context' => 'user_image',
                     'required' => false,
-                )
+                ]
             )
             /*->add(
                 'extraFields',
@@ -67,7 +67,7 @@ class UserType extends AbstractType
                     'by_reference' => false,
                 )
             )*/
-            ->add('save', 'submit', array('label' => 'Update'));
+            ->add('save', 'submit', ['label' => 'Update']);
 
         // Update Author id
         $builder->addEventListener(
@@ -89,9 +89,9 @@ class UserType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => 'Chamilo\UserBundle\Entity\User',
-            )
+            ]
         );
     }
 
@@ -103,4 +103,3 @@ class UserType extends AbstractType
         return 'user';
     }
 }
-

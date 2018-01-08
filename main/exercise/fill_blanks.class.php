@@ -332,7 +332,7 @@ class FillBlanks extends Question
             'answer',
             Display::return_icon('fill_field.png'),
             ['id' => 'answer'],
-            array('ToolbarSet' => 'TestQuestionDescription')
+            ['ToolbarSet' => 'TestQuestionDescription']
         );
         $form->addRule('answer', get_lang('GiveText'), 'required');
 
@@ -556,7 +556,6 @@ class FillBlanks extends Question
                 );
                 break;
             case self::FILL_THE_BLANK_SEVERAL_ANSWER:
-                //no break
             case self::FILL_THE_BLANK_STANDARD:
             default:
                 $attributes['id'] = 'choice_id_'.$currentQuestion.'_'.$inBlankNumber;
@@ -800,7 +799,7 @@ class FillBlanks extends Question
                     }
                     $value = trim($value, $trimChars);
                 },
-                array($blankCharStart, $blankCharEnd)
+                [$blankCharStart, $blankCharEnd]
             );
             $listAnswerResults['words'] = $listWords[0];
         }

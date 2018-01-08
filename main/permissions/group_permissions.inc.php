@@ -16,10 +16,10 @@ if ($_POST['StoreGroupPermissions'] and $setting_visualisation == 'checkbox') {
     }
 }
 if (isset($_GET['action'])) {
-    if (($_GET['action'] == 'grant' OR $_GET['action'] == 'revoke') AND isset($_GET['permission']) AND isset($_GET['tool'])) {
+    if (($_GET['action'] == 'grant' or $_GET['action'] == 'revoke') and isset($_GET['permission']) and isset($_GET['tool'])) {
         $result_message = store_one_permission('group', $_GET['action'], $group_id, $_GET['tool'], $_GET['permission']);
     }
-    if (isset($_GET['role']) AND ($_GET['action'] == 'grant' OR $_GET['action'] == 'revoke')) {
+    if (isset($_GET['role']) and ($_GET['action'] == 'grant' or $_GET['action'] == 'revoke')) {
         $result_message = assign_role('group', $_GET['action'], $group_id, $_GET['role'], $_GET['scope']);
         echo 'hier';
     }
@@ -29,7 +29,7 @@ if (isset($result_message)) {
 }
 
 // 			RETRIEVING THE PERMISSIONS
-$current_group_permissions = array();
+$current_group_permissions = [];
 $current_group_permissions = get_permissions('group', $group_id);
 // @todo current group permissions and current role permissions
 
@@ -71,8 +71,7 @@ foreach ($header_array as $header_key => $header_value) {
 echo "\t</tr>\n";
 
 // the main area with the checkboxes or images
-foreach ($tool_rights as $tool => $rights) // $tool_rights contains all the possible tools and their rights
-{
+foreach ($tool_rights as $tool => $rights) { // $tool_rights contains all the possible tools and their rights
     echo "\t<tr>\n";
     echo "\t\t<td>\n";
     echo get_lang($tool);

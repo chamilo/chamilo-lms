@@ -21,7 +21,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'institution' => 'Chamilo.org',
                     'institution_url' => 'http://www.chamilo.org',
                     'institution_address' => '',
@@ -47,21 +47,21 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
 //('catalog_show_courses_sessions', '0', 'CatalogueShowOnlyCourses'),
 //('catalog_show_courses_sessions', '1', 'CatalogueShowOnlySessions'),
 //('catalog_show_courses_sessions', '2', 'CatalogueShowCoursesAndSessions'),
-                )
+                ]
             );
-        $allowedTypes = array(
-            'institution' => array('string'),
-            'institution_url' => array('string'),
-            'site_name' => array('string'),
+        $allowedTypes = [
+            'institution' => ['string'],
+            'institution_url' => ['string'],
+            'site_name' => ['string'],
 //                    'administrator_email' => array('string'),
 //                    'administrator_name' => array('string'),
 //                    'administrator_surname' => array('string'),
 //                    'administrator_phone' => array('string'),
-            'timezone' => array('string'),
-            'gravatar_enabled' => array('string'),
-            'gravatar_type' => array('string'),
+            'timezone' => ['string'],
+            'gravatar_enabled' => ['string'],
+            'gravatar_type' => ['string'],
             //'gamification_mode' => array('string'),
-        );
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 

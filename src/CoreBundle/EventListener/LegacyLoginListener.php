@@ -91,7 +91,7 @@ class LegacyLoginListener implements EventSubscriberInterface
                             $this->container->get('event_dispatcher')->dispatch("security.interactive_login", $event);
                             $this->container->get('event_dispatcher')->addListener(
                                 KernelEvents::RESPONSE,
-                                array($this, 'redirectUser')
+                                [$this, 'redirectUser']
                             );
                         }
                     }
@@ -107,7 +107,7 @@ class LegacyLoginListener implements EventSubscriberInterface
     {
         return [
             // must be registered before the default Locale listener
-            KernelEvents::REQUEST => array(array('onKernelRequest', 15)),
+            KernelEvents::REQUEST => [['onKernelRequest', 15]],
         ];
     }
 

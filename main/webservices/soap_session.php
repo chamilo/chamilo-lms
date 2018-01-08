@@ -11,7 +11,7 @@ $s = WSSoapServer::singleton();
 
 $s->register(
     'WSSession.CreateSession',
-    array(
+    [
         'secret_key' => 'xsd:string',
         'name' => 'xsd:string',
         'start_date' => 'xsd:string',
@@ -25,22 +25,22 @@ $s->register(
         'session_id_field_name' => 'xsd:string',
         'session_id_value' => 'xsd:string',
         'extras' => 'tns:extra_field',
-    ),
-    array('return' => 'xsd:int')
+    ],
+    ['return' => 'xsd:int']
 );
 
 $s->register(
     'WSSession.DeleteSession',
-    array(
+    [
         'secret_key' => 'xsd:string',
         'session_id_field_name' => 'xsd:string',
         'session_id_value' => 'xsd:string',
-    )
+    ]
 );
 
 $s->register(
     'WSSession.EditSession',
-    array(
+    [
         'secret_key' => 'xsd:string',
         'name' => 'xsd:string',
         'start_date' => 'xsd:string',
@@ -54,34 +54,34 @@ $s->register(
         'session_id_field_name' => 'xsd:string',
         'session_id_value' => 'xsd:string',
         'extras' => 'tns:extra_field',
-    )
+    ]
 );
 
 $s->register(
     'WSSession.SubscribeUserToSession',
-    array(
+    [
         'secret_key' => 'xsd:string',
         'user_id_field_name' => 'xsd:string',
         'user_id_value' => 'xsd:string',
         'session_id_field_name' => 'xsd:string',
         'session_id_value' => 'xsd:string',
-    )
+    ]
 );
 
 $s->register(
     'WSSession.UnsubscribeUserFromSession',
-    array(
+    [
         'secret_key' => 'xsd:string',
         'user_id_field_name' => 'xsd:string',
         'user_id_value' => 'xsd:string',
         'session_id_field_name' => 'xsd:string',
         'session_id_value' => 'xsd:string',
-    )
+    ]
 );
 
 $s->register(
     'WSSession.SubscribeTeacherToSessionCourse',
-    array(
+    [
         'secret_key' => 'xsd:string',
         'user_id_field_name' => 'xsd:string',
         'user_id_value' => 'xsd:string',
@@ -89,12 +89,12 @@ $s->register(
         'session_id_value' => 'xsd:string',
         'course_id_field_name' => 'xsd:string',
         'course_id_value' => 'xsd:string',
-    )
+    ]
 );
 
 $s->register(
     'WSSession.UnsubscribeTeacherFromSessionCourse',
-    array(
+    [
         'secret_key' => 'xsd:string',
         'user_id_field_name' => 'xsd:string',
         'user_id_value' => 'xsd:string',
@@ -102,27 +102,27 @@ $s->register(
         'session_id_value' => 'xsd:string',
         'course_id_field_name' => 'xsd:string',
         'course_id_value' => 'xsd:string',
-    )
+    ]
 );
 
 $s->register(
     'WSSession.SubscribeCourseToSession',
-    array(
+    [
         'secret_key' => 'xsd:string',
         'course_id_field_name' => 'xsd:string',
         'course_id_value' => 'xsd:string',
         'session_id_field_name' => 'xsd:string',
         'session_id_value' => 'xsd:string',
-    )
+    ]
 );
 
 $s->register(
     'WSSession.UnsubscribeCourseFromSession',
-    array(
+    [
         'secret_key' => 'xsd:string',
         'course_id_field_name' => 'xsd:string',
         'course_id_value' => 'xsd:string',
         'session_id_field_name' => 'xsd:string',
         'session_id_value' => 'xsd:string',
-    )
+    ]
 );

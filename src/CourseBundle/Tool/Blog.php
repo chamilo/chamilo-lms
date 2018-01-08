@@ -9,5 +9,4 @@ namespace Chamilo\CourseBundle\Tool;
  */
 class Blog extends BaseTool
 {
-
 }

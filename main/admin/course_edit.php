@@ -37,8 +37,8 @@ if (empty($courseInfo)) {
 }
 
 $tool_name = get_lang('ModifyCourseInfo');
-$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array("url" => "course_list.php", "name" => get_lang('CourseList'));
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ["url" => "course_list.php", "name" => get_lang('CourseList')];
 
 // Get all course categories
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -56,7 +56,7 @@ $sql = "SELECT user.user_id,lastname,firstname
             course_user.c_id ='".$courseId."'".
         $order_clause;
 $res = Database::query($sql);
-$course_teachers = array();
+$course_teachers = [];
 while ($obj = Database::fetch_object($res)) {
     $course_teachers[] = $obj->user_id;
 }
@@ -78,8 +78,8 @@ if (api_is_multiple_url_enabled()) {
 $courseInfo['tutor_name'] = null;
 
 $res = Database::query($sql);
-$teachers = array();
-$allTeachers = array();
+$teachers = [];
+$allTeachers = [];
 $platform_teachers[0] = '-- '.get_lang('NoManager').' --';
 while ($obj = Database::fetch_object($res)) {
     $allTeachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
@@ -122,18 +122,18 @@ $form->applyFilter('title', 'trim');
 $element = $form->addElement(
     'text',
     'real_code',
-    array(get_lang('CourseCode'), get_lang('ThisValueCantBeChanged'))
+    [get_lang('CourseCode'), get_lang('ThisValueCantBeChanged')]
 );
 $element->freeze();
 
 // Visual code
 $form->addText(
     'visual_code',
-    array(
+    [
         get_lang('VisualCode'),
         get_lang('OnlyLettersAndNumbers'),
         get_lang('ThisValueIsUsedInTheCourseURL')
-    ),
+    ],
     true,
     [
         'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
@@ -214,7 +214,7 @@ if (!empty($coursesInSession) && $allowEditSessionCoaches) {
         );
         $teachers = $allTeachers;
 
-        $sessionTeachers = array();
+        $sessionTeachers = [];
         foreach ($coaches as $coachId) {
             $userInfo = api_get_user_info($coachId);
             $sessionTeachers[] = $coachId;
@@ -236,7 +236,7 @@ if (!empty($coursesInSession) && $allowEditSessionCoaches) {
             Display::url(
                 $session['name'],
                 $sessionUrl,
-                array('target' => '_blank')
+                ['target' => '_blank']
             ).' - '.get_lang('Coaches'),
             $allTeachers
         );
@@ -244,17 +244,17 @@ if (!empty($coursesInSession) && $allowEditSessionCoaches) {
     }
 }
 
-$form->addText('department_name', get_lang('CourseDepartment'), false, array('size' => '60'));
+$form->addText('department_name', get_lang('CourseDepartment'), false, ['size' => '60']);
 $form->applyFilter('department_name', 'html_filter');
 $form->applyFilter('department_name', 'trim');
 
-$form->addText('department_url', get_lang('CourseDepartmentURL'), false, array('size' => '60'));
+$form->addText('department_url', get_lang('CourseDepartmentURL'), false, ['size' => '60']);
 $form->applyFilter('department_url', 'html_filter');
 $form->applyFilter('department_url', 'trim');
 
 $form->addSelectLanguage('course_language', get_lang('CourseLanguage'));
 
-$group = array();
+$group = [];
 $group[] = $form->createElement('radio', 'visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
 $group[] = $form->createElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
 $group[] = $form->createElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
@@ -262,17 +262,17 @@ $group[] = $form->createElement('radio', 'visibility', null, get_lang('CourseVis
 $group[] = $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityHidden'), COURSE_VISIBILITY_HIDDEN);
 $form->addGroup($group, '', get_lang('CourseAccess'));
 
-$group = array();
+$group = [];
 $group[] = $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
 $group[] = $form->createElement('radio', 'subscribe', null, get_lang('Denied'), 0);
 $form->addGroup($group, '', get_lang('Subscription'));
 
-$group = array();
+$group = [];
 $group[] = $form->createElement('radio', 'unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
 $group[] = $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
 $form->addGroup($group, '', get_lang('Unsubscription'));
 
-$form->addElement('text', 'disk_quota', array(get_lang('CourseQuota'), null, get_lang('MB')));
+$form->addElement('text', 'disk_quota', [get_lang('CourseQuota'), null, get_lang('MB')]);
 $form->addRule('disk_quota', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');
 
@@ -456,7 +456,7 @@ Display::display_header($tool_name);
 
 echo '<div class="actions">';
 echo Display::url(Display::return_icon('back.png', get_lang('Back')), api_get_path(WEB_CODE_PATH).'admin/course_list.php');
-echo Display::url(Display::return_icon('course_home.png', get_lang('CourseHome')), $courseInfo['course_public_url'], array('target' => '_blank'));
+echo Display::url(Display::return_icon('course_home.png', get_lang('CourseHome')), $courseInfo['course_public_url'], ['target' => '_blank']);
 echo '</div>';
 
 echo "<script>

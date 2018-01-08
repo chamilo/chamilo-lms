@@ -19,15 +19,15 @@ class AnnouncementCourseSettingsSchema extends AbstractSettingsSchema
     public function buildSettings(SettingsBuilderInterface $builder)
     {
         $builder
-            ->setDefaults(array(
+            ->setDefaults([
                 'enabled' => '',
                 'allow_user_edit_announcement' => '',
-            ))
+            ])
         ;
-        $allowedTypes = array(
-            'enabled' => array('string'),
-            'allow_user_edit_announcement' => array('string'),
-        );
+        $allowedTypes = [
+            'enabled' => ['string'],
+            'allow_user_edit_announcement' => ['string'],
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 

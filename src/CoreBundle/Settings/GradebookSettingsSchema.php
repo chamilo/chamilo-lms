@@ -21,7 +21,7 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'gradebook_enable' => 'true',
                     'gradebook_score_display_custom' => 'false',
                     'gradebook_score_display_colorsplit' => '50',
@@ -39,15 +39,15 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
                     'gradebook_detailed_admin_view' => 'false',
                     'openbadges_backpack' => 'https://backpack.openbadges.org/',
                     'hide_certificate_export_link' => 'false'
-                )
+                ]
             );
-        $allowedTypes = array(
-            'gradebook_enable' => array('string'),
-            'gradebook_number_decimals' => array('string'),
-            'gradebook_default_weight' => array('string'),
-            'student_publication_to_take_in_gradebook' => array('string'),
-            'gradebook_detailed_admin_view' => array('string')
-        );
+        $allowedTypes = [
+            'gradebook_enable' => ['string'],
+            'gradebook_number_decimals' => ['string'],
+            'gradebook_default_weight' => ['string'],
+            'student_publication_to_take_in_gradebook' => ['string'],
+            'gradebook_detailed_admin_view' => ['string']
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 

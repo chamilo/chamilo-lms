@@ -12,7 +12,7 @@ $exportCSV = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
 // the section (for the tabs)
 $this_section = SECTION_TRACKING;
 
-$csv_content = array();
+$csv_content = [];
 $nameTools = get_lang('MySpace');
 
 $is_platform_admin = api_is_platform_admin();
@@ -184,17 +184,17 @@ if ($form->validate() && !empty($courseInfo)) {
 
     if (!empty($categoryList)) {
         foreach ($categoryList as $categoryInfo) {
-            $columnModel[] = array(
+            $columnModel[] = [
                 'name' => 'category_'.$categoryInfo['id'],
                 'index' => 'category_'.$categoryInfo['id'],
                 'width' => '50',
                 'align' => 'center',
                 'search' => 'true',
-            );
+            ];
         }
     }
 
-    $columnModel[] = array(
+    $columnModel[] = [
         'name' => 'actions',
         'index' => 'actions',
         'width' => '60',
@@ -202,11 +202,11 @@ if ($form->validate() && !empty($courseInfo)) {
         'search' => 'false',
         'sortable' => 'false',
         'hidden' => 'true'
-    );
+    ];
 
     $extra_params['autowidth'] = 'true';
 
-//height auto
+    //height auto
     $extra_params['height'] = 'auto';
     $actionLinks = '
     // add username as title in lastname filed - ref 4226
@@ -218,8 +218,7 @@ if ($form->validate() && !empty($courseInfo)) {
         // may be empty string but is defined
         return "<span title=\""+tabLoginx[0]+rowObject[2]+tabLoginx[1]+"\">"+cellvalue+"</span>";
     }';
-    $tableId = 'results';
-    ?>
+    $tableId = 'results'; ?>
     <script>
         $(function() {
             <?php
@@ -229,11 +228,10 @@ if ($form->validate() && !empty($courseInfo)) {
                 $columns,
                 $columnModel,
                 $extra_params,
-                array(),
+                [],
                 $actionLinks,
                 true
-            );
-            ?>
+            ); ?>
         });
     </script>
     <?php
@@ -283,4 +281,3 @@ if ($form->validate() && !empty($courseInfo)) {
 }
 
 Display::display_footer();
-

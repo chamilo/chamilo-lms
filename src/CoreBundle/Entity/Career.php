@@ -57,11 +57,11 @@ class Career
      */
     private $updatedAt;
 
-     /**
-     * Get id
-     *
-     * @return integer
-     */
+    /**
+    * Get id
+    *
+    * @return integer
+    */
     public function getId()
     {
         return $this->id;

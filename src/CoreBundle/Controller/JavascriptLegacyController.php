@@ -43,11 +43,11 @@ class JavascriptLegacyController extends BaseController
 
         return $this->render(
             'ChamiloCoreBundle:default/javascript/editor/ckeditor:config_js.html.twig',
-            array(
+            [
                 'more_buttons_in_max_mode' => $moreButtonsInMaximizedMode,
                 'course_id' => $courseId,
                 'session_id' => $sessionId
-            )
+            ]
         );
     }
 }

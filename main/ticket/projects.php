@@ -20,8 +20,8 @@ Session::erase('this_section');
 
 $table = new SortableTable(
     'TicketProject',
-    array('TicketManager', 'getProjectsCount'),
-    array('TicketManager', 'getProjects'),
+    ['TicketManager', 'getProjectsCount'],
+    ['TicketManager', 'getProjects'],
     1
 );
 
@@ -33,20 +33,20 @@ $formToString = '';
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
     'name' => get_lang('MyTickets')
-);
+];
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/settings.php',
     'name' => get_lang('Settings')
-);
+];
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/projects.php',
     'name' => get_lang('Projects')
-);
+];
 
 switch ($action) {
     case 'delete':
@@ -154,7 +154,7 @@ function modify_filter($id, $params, $row)
 
 $table->set_header(0, '', false);
 $table->set_header(1, get_lang('Title'), false);
-$table->set_header(2, get_lang('Description'), true, array("style" => "width:200px"));
+$table->set_header(2, get_lang('Description'), true, ["style" => "width:200px"]);
 $table->set_header(3, get_lang('Actions'), true);
 $table->set_column_filter('3', 'modify_filter');
 

@@ -23,7 +23,7 @@ class Link extends Model
 {
     public $table;
     public $is_course_model = true;
-    public $columns = array(
+    public $columns = [
         'id',
         'c_id',
         'url',
@@ -34,8 +34,8 @@ class Link extends Model
         'on_homepage',
         'target',
         'session_id'
-    );
-    public $required = array('url', 'title');
+    ];
+    public $required = ['url', 'title'];
     private $course;
 
     /**
@@ -85,7 +85,7 @@ class Link extends Model
                     c_id = $courseId AND
                     category_id = '".intval($params['category_id'])."'";
         $result = Database:: query($sql);
-        list ($orderMax) = Database:: fetch_row($result);
+        list($orderMax) = Database:: fetch_row($result);
         $order = $orderMax + 1;
         $params['display_order'] = $order;
 
@@ -254,14 +254,14 @@ class Link extends Model
                     $ic_slide->addValue('title', $title);
                     $ic_slide->addCourseId($courseCode);
                     $ic_slide->addToolId(TOOL_LINK);
-                    $xapian_data = array(
+                    $xapian_data = [
                         SE_COURSE_ID => $courseCode,
                         SE_TOOL_ID => TOOL_LINK,
-                        SE_DATA => array(
+                        SE_DATA => [
                             'link_id' => (int) $link_id
-                        ),
+                        ],
                         SE_USER => (int) api_get_user_id(),
-                    );
+                    ];
                     $ic_slide->xapian_data = serialize($xapian_data);
                     $description = $all_specific_terms.' '.$description;
                     $ic_slide->addValue('content', $description);
@@ -333,7 +333,7 @@ class Link extends Model
                     "SELECT MAX(display_order) FROM  $tbl_categories
                     WHERE c_id = $course_id "
                 );
-                list ($orderMax) = Database:: fetch_row($result);
+                list($orderMax) = Database:: fetch_row($result);
                 $order = $orderMax + 1;
                 $order = intval($order);
                 $session_id = api_get_session_id();
@@ -490,7 +490,7 @@ class Link extends Model
         $sql = "SELECT * FROM $tbl_link
                 WHERE c_id = $course_id AND id='".intval($id)."' ";
         $result = Database::query($sql);
-        $data = array();
+        $data = [];
         if (Database::num_rows($result)) {
             $data = Database::fetch_array($result);
         }
@@ -501,7 +501,7 @@ class Link extends Model
      * @param int $id
      * @param array $values
      */
-    public static function editLink($id, $values = array())
+    public static function editLink($id, $values = [])
     {
         $tbl_link = Database::get_course_table(TABLE_LINK);
         $_course = api_get_course_info();
@@ -553,7 +553,7 @@ class Link extends Model
                         c_id = $course_id AND
                         category_id='".intval($values['category_id'])."'";
             $result = Database:: query($sql);
-            list ($max_display_order) = Database:: fetch_row($result);
+            list($max_display_order) = Database:: fetch_row($result);
             $max_display_order++;
         } else {
             $max_display_order = $row['display_order'];
@@ -641,15 +641,15 @@ class Link extends Model
                 $ic_slide->addValue("title", $link_title);
                 $ic_slide->addCourseId($course_id);
                 $ic_slide->addToolId(TOOL_LINK);
-                $xapian_data = array(
+                $xapian_data = [
                     SE_COURSE_ID => $course_id,
                     SE_TOOL_ID => TOOL_LINK,
-                    SE_DATA => array(
+                    SE_DATA => [
                         'link_id' => (int) $id
-                    ),
+                    ],
                     SE_USER => (int) api_get_user_id(),
 
-                );
+                ];
                 $ic_slide->xapian_data = serialize($xapian_data);
                 $link_description = $all_specific_terms.' '.$link_description;
                 $ic_slide->addValue('content', $link_description);
@@ -677,7 +677,7 @@ class Link extends Model
                 }
 
                 $di = new ChamiloIndexer();
-                isset ($_POST['language']) ? $lang = Database:: escape_string($_POST['language']) : $lang = 'english';
+                isset($_POST['language']) ? $lang = Database:: escape_string($_POST['language']) : $lang = 'english';
                 $di->connectDb(null, null, $lang);
                 $di->remove_document($se_ref['search_did']);
                 $di->addChunk($ic_slide);
@@ -829,7 +829,7 @@ class Link extends Model
 
         $result = Database::query($sql);
 
-        $categoryInItemProperty = array();
+        $categoryInItemProperty = [];
         if (Database::num_rows($result)) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $categoryInItemProperty[$row['id']] = $row;
@@ -995,18 +995,18 @@ class Link extends Model
                         'javascript:void(0);',
                         'check-circle-o',
                         'default btn-sm',
-                        array(
+                        [
                             'onclick' => "check_url('".$linkId."', '".addslashes($myrow['url'])."');",
                             'title' => get_lang('CheckURL')
-                        )
+                        ]
                     );
 
                     $link_validator .= Display::span(
                         '',
-                        array(
+                        [
                         'id' => 'url_id_'.$linkId,
                         'class' => 'check-link'
-                        )
+                        ]
                     );
 
                     if ($session_id == $myrow['link_session_id']) {
@@ -1017,9 +1017,9 @@ class Link extends Model
                             $url,
                             'pencil',
                             'default btn-sm',
-                            array(
+                            [
                                 'title' => $title
-                            )
+                            ]
                         );
                     }
 
@@ -1037,9 +1037,9 @@ class Link extends Model
                                 $urlVisibility,
                                 'eye',
                                 'default btn-sm',
-                                array(
+                                [
                                     'title' => $title
-                                )
+                                ]
                             );
                             break;
                         case '0':
@@ -1050,9 +1050,9 @@ class Link extends Model
                                 $urlVisibility,
                                 'eye-slash',
                                 'primary btn-sm',
-                                array(
+                                [
                                     'title' => $title
-                                )
+                                ]
                             );
                             break;
                     }
@@ -1093,10 +1093,10 @@ class Link extends Model
                             $url,
                             'trash',
                             'default btn-sm',
-                            array(
+                            [
                                 'onclick' => $event,
                                 'title' => $title
-                            )
+                            ]
                         );
                     }
                 }
@@ -1127,11 +1127,11 @@ class Link extends Model
                     $content .= Display::tag(
                         'a',
                         Security::remove_XSS($myrow['title']),
-                        array(
+                        [
                             'href' => $url,
                             'target' => $myrow['target'],
                             'class' => $titleClass
-                        )
+                        ]
                     );
                     $content .= $link_validator;
                     $content .= $session_img;
@@ -1164,7 +1164,7 @@ class Link extends Model
             Display:: return_icon(
                 'edit.png',
                 get_lang('Modify'),
-                array(),
+                [],
                 ICON_SIZE_SMALL
             ).'</a>';
 
@@ -1174,14 +1174,14 @@ class Link extends Model
                 Display:: return_icon(
                     'up.png',
                     get_lang('Up'),
-                    array(),
+                    [],
                     ICON_SIZE_SMALL
                 ).'</a>';
         } else {
             $tools .= Display:: return_icon(
                 'up_na.png',
                 get_lang('Up'),
-                array(),
+                [],
                 ICON_SIZE_SMALL
             ).'</a>';
         }
@@ -1192,14 +1192,14 @@ class Link extends Model
                 Display:: return_icon(
                     'down.png',
                     get_lang('Down'),
-                    array(),
+                    [],
                     ICON_SIZE_SMALL
                 ).'</a>';
         } else {
             $tools .= Display:: return_icon(
                 'down_na.png',
                 get_lang('Down'),
-                array(),
+                [],
                 ICON_SIZE_SMALL
             ).'</a>';
         }
@@ -1209,7 +1209,7 @@ class Link extends Model
             Display:: return_icon(
                 'delete.png',
                 get_lang('Delete'),
-                array(),
+                [],
                 ICON_SIZE_SMALL
             ).'</a>';
 
@@ -1249,7 +1249,7 @@ class Link extends Model
         $movetable = $tbl_categories;
 
         if (!empty($sortDirection)) {
-            if (!in_array(trim(strtoupper($sortDirection)), array('ASC', 'DESC'))) {
+            if (!in_array(trim(strtoupper($sortDirection)), ['ASC', 'DESC'])) {
                 $sortDirection = 'ASC';
             }
 
@@ -1312,7 +1312,7 @@ class Link extends Model
         $result = Database:: query(
             "SELECT MAX(display_order) FROM ".$tbl_categories." WHERE c_id = $course_id "
         );
-        list ($max_order) = Database:: fetch_row($result);
+        list($max_order) = Database:: fetch_row($result);
 
         $params = [
             'c_id' => $course_id,
@@ -1345,7 +1345,8 @@ class Link extends Model
         $urleq = "url='".Database:: escape_string($url)."'";
         $cateq = "category_id=".intval($cat);
 
-        $result = Database:: query("
+        $result = Database:: query(
+            "
             SELECT id FROM $tbl_link
             WHERE c_id = $course_id AND ".$urleq.' AND '.$cateq
         );
@@ -1365,7 +1366,7 @@ class Link extends Model
                 "SELECT MAX(display_order) FROM  $tbl_link
                 WHERE c_id = $course_id AND category_id='".intval($cat)."'"
             );
-            list ($max_order) = Database:: fetch_row($result);
+            list($max_order) = Database:: fetch_row($result);
 
             Database:: query(
                 "INSERT INTO $tbl_link (c_id, url, title, description, category_id, display_order, on_homepage)
@@ -1412,22 +1413,22 @@ class Link extends Model
     {
         // url, category_id, title, description, ...
         // Field names used in the uploaded file
-        $known_fields = array(
+        $known_fields = [
             'url',
             'category',
             'title',
             'description',
             'on_homepage',
             'hidden'
-        );
+        ];
 
-        $hide_fields = array(
+        $hide_fields = [
             'kw',
             'kwd',
             'kwds',
             'keyword',
             'keywords'
-        );
+        ];
 
         // All other fields are added to description, as "name:value".
         // Only one hide_field is assumed to be present, <> is removed from value.
@@ -1437,7 +1438,7 @@ class Link extends Model
 
         $cat = ($catname = trim($linkdata['category'])) ? self::get_cat($catname) : 0;
 
-        $regs = array(); // Will be passed to ereg()
+        $regs = []; // Will be passed to ereg()
         $d = '';
         foreach ($linkdata as $key => $value) {
             if (!in_array($key, $known_fields)) {
@@ -1497,12 +1498,12 @@ class Link extends Model
      */
     public static function getVimeoLinkId($url)
     {
-        $possibleUrls = array(
+        $possibleUrls = [
             'http://www.vimeo.com/',
             'http://vimeo.com/',
             'https://www.vimeo.com/',
             'https://vimeo.com/'
-        );
+        ];
         $url = str_replace($possibleUrls, '', $url);
 
         if (is_numeric($url)) {
@@ -1637,11 +1638,11 @@ class Link extends Model
             $visibilityClass = null;
             if ($myrow['visibility'] == '1') {
                 $strVisibility = '<a href="link.php?'.api_get_cidreq().'&sec_token='.$token.'&action=invisible&id='.$myrow['id'].'&scope='.TOOL_LINK_CATEGORY.'" title="'.get_lang('Hide').'">'.
-                    Display::return_icon('visible.png', get_lang('Hide'), array(), ICON_SIZE_SMALL).'</a>';
+                    Display::return_icon('visible.png', get_lang('Hide'), [], ICON_SIZE_SMALL).'</a>';
             } elseif ($myrow['visibility'] == '0') {
                 $visibilityClass = 'text-muted';
                 $strVisibility = ' <a href="link.php?'.api_get_cidreq().'&sec_token='.$token.'&action=visible&id='.$myrow['id'].'&scope='.TOOL_LINK_CATEGORY.'" title="'.get_lang('Show').'">'.
-                    Display::return_icon('invisible.png', get_lang('Show'), array(), ICON_SIZE_SMALL).'</a>';
+                    Display::return_icon('invisible.png', get_lang('Show'), [], ICON_SIZE_SMALL).'</a>';
             }
 
             $header = '';
@@ -1745,30 +1746,30 @@ class Link extends Model
         $form->addSelect('category_id', get_lang('Category'), $options);
         $form->addCheckBox('on_homepage', null, get_lang('OnHomepage'));
 
-        $targets = array(
+        $targets = [
             '_self' => get_lang('LinkOpenSelf'),
             '_blank' => get_lang('LinkOpenBlank'),
             '_parent' => get_lang('LinkOpenParent'),
             '_top' => get_lang('LinkOpenTop')
-        );
+        ];
 
         $form->addSelect(
             'target',
-            array(
+            [
                 get_lang('LinkTarget'),
                 get_lang('AddTargetOfLinkOnHomepage')
-            ),
+            ],
             $targets
         );
 
-        $defaults = array(
+        $defaults = [
             'url' => empty($urllink) ? 'http://' : Security::remove_XSS($urllink),
             'title' => Security::remove_XSS($title),
             'category_id' => $category,
             'on_homepage' => $onhomepage,
             'description' => $description,
             'target' => $target_link
-        );
+        ];
 
         if (api_get_setting('search_enabled') == 'true') {
             require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -1778,14 +1779,14 @@ class Link extends Model
             foreach ($specific_fields as $specific_field) {
                 $default_values = '';
                 if ($action == 'editlink') {
-                    $filter = array(
+                    $filter = [
                         'field_id' => $specific_field['id'],
                         'ref_id' => intval($_GET['id']),
                         'tool_id' => '\''.TOOL_LINK.'\''
-                    );
-                    $values = get_specific_field_values_list($filter, array('value'));
+                    ];
+                    $values = get_specific_field_values_list($filter, ['value']);
                     if (!empty($values)) {
-                        $arr_str_values = array();
+                        $arr_str_values = [];
                         foreach ($values as $value) {
                             $arr_str_values[] = $value['value'];
                         }
@@ -1946,21 +1947,21 @@ class Link extends Model
         }
 
         // set URL and other appropriate options
-        $defaults = array(
+        $defaults = [
             CURLOPT_URL => $url,
             CURLOPT_FOLLOWLOCATION => true, // follow redirects accept youtube.com
             CURLOPT_HEADER => 0,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT => 4
-        );
+        ];
 
         $proxySettings = api_get_configuration_value('proxy_settings');
 
         if (!empty($proxySettings) &&
             isset($proxySettings['curl_setopt_array'])
         ) {
-             $defaults[CURLOPT_PROXY] = $proxySettings['curl_setopt_array']['CURLOPT_PROXY'];
-             $defaults[CURLOPT_PROXYPORT] = $proxySettings['curl_setopt_array']['CURLOPT_PROXYPORT'];
+            $defaults[CURLOPT_PROXY] = $proxySettings['curl_setopt_array']['CURLOPT_PROXY'];
+            $defaults[CURLOPT_PROXYPORT] = $proxySettings['curl_setopt_array']['CURLOPT_PROXYPORT'];
         }
 
         // Create a new cURL resource

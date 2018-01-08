@@ -43,7 +43,7 @@ class MessageListener
         $user = $token->getUser();
 
         if (!empty($user)) {
-            $messages = array();
+            $messages = [];
 
             /** @var \Chamilo\CoreBundle\Entity\Thread $thread */
             foreach ($threads as $thread) {

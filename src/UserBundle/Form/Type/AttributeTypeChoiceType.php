@@ -34,7 +34,7 @@ class AttributeTypeChoiceType extends AbstractType
     {
         $resolver
             ->setDefaults(
-                array('choices' => $this->attributeTypes)
+                ['choices' => $this->attributeTypes]
             )
         ;
     }

@@ -78,10 +78,10 @@ if (!is_dir($filepath)) {
 $groupId = api_get_group_id();
 
 if (!empty($groupId)) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => "../group/group_space.php?".api_get_cidreq(),
         "name" => get_lang('GroupSpace')
-    );
+    ];
     $group = GroupManager :: get_group_properties($groupId);
     $path = explode('/', $dir);
     if ('/'.$path[1] != $group['directory']) {
@@ -89,10 +89,10 @@ if (!empty($groupId)) {
     }
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => "./document.php?id=".$document_id."&".api_get_cidreq(),
     "name" => get_lang('Documents')
-);
+];
 
 if (!api_is_allowed_in_course()) {
     api_not_allowed(true);
@@ -125,10 +125,10 @@ if (isset($document_data['parents'])) {
                 continue;
             }
         }
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => $document_sub_data['document_url'],
             'name' => $document_sub_data['title']
-        );
+        ];
         $counter++;
     }
 }

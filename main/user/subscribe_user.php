@@ -41,15 +41,15 @@ if ($type == COURSEMANAGER) {
 }
 
 //extra entries in breadcrumb
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => "user.php?".api_get_cidreq(),
     "name" => get_lang("ToolUser")
-);
+];
 if ($keyword) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => "subscribe_user.php?type=".$type.'&'.api_get_cidreq(),
         "name" => $tool_name
-    );
+    ];
     $tool_name = get_lang('SearchResults');
 }
 
@@ -157,7 +157,7 @@ $table->set_header($col++, get_lang('Active'), false);
 $table->set_column_filter($col - 1, 'active_filter');
 $table->set_header($col++, get_lang('Actions'), false);
 $table->set_column_filter($col - 1, 'reg_filter');
-$table->set_form_actions(array('subscribe' => get_lang('reg')), 'user');
+$table->set_form_actions(['subscribe' => get_lang('reg')], 'user');
 
 if (!empty($_POST['keyword'])) {
     $keyword_name = Security::remove_XSS($_POST['keyword']);
@@ -480,7 +480,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             }
             $sql .= " AND access_url_id = $url_access_id";
         } else {
-             // adding a teacher NOT through a session
+            // adding a teacher NOT through a session
             $sql = "SELECT $select_fields
                     FROM $user_table u
                     LEFT JOIN $course_user_table cu
@@ -665,7 +665,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
     $sql .= " LIMIT $from, $number_of_items";
 
     $res = Database::query($sql);
-    $users = array();
+    $users = [];
     while ($user = Database::fetch_row($res)) {
         $users[] = $user;
     }
@@ -728,7 +728,7 @@ function active_filter($active, $url_params, $row)
         $result = Display::return_icon(
             $image.'.png',
             get_lang(ucfirst($action)),
-            array(),
+            [],
             ICON_SIZE_TINY
         );
     }
@@ -789,7 +789,7 @@ function search_additional_profile_fields($keyword)
                 e.extra_field_type = $extraFieldType AND
                 (value LIKE '%".$keyword."%'".$profiling_field_options_exact_values_sql.")";
     $result = Database::query($sql);
-    $additional_users = array();
+    $additional_users = [];
     while ($profiled_users = Database::fetch_array($result)) {
         $additional_users[$profiled_users['col0']] = $profiled_users;
     }

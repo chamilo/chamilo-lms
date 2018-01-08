@@ -86,10 +86,10 @@ class DashboardController
         // block dashboard view
         if (isset($view) && $view == 'blocks') {
             if (isset($blocks) && count($blocks) > 0) {
-                $columns = array();
+                $columns = [];
                 // group content html by number of column
                 if (is_array($blocks)) {
-                    $tmp_columns = array();
+                    $tmp_columns = [];
                     foreach ($blocks as $block) {
                         $tmp_columns[] = $block['column'];
                         if (in_array($block['column'], $tmp_columns)) {

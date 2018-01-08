@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Editor\Finder;
 
-
 /**
  * Class FrontController
  * @package Chamilo\CoreBundle\Controller
@@ -52,7 +51,8 @@ class FrontController extends Controller
         $sessionId = $request->get('session_id');
 
         return $this->render(
-            '@ChamiloCore/default/javascript/editor/ckeditor/elfinder.html.twig', [
+            '@ChamiloCore/default/javascript/editor/ckeditor/elfinder.html.twig',
+            [
                 'course_id' => $courseId,
                 'session_id' => $sessionId
             ]
@@ -86,12 +86,12 @@ class FrontController extends Controller
             $sessionId
         );
 
-        $driverList = array(
+        $driverList = [
             'PersonalDriver',
             'CourseDriver',
             //'CourseUserDriver',
             //'HomeDriver'
-        );
+        ];
         $connector->setDriverList($driverList);
 
         $operations = $connector->getOperations();
@@ -118,8 +118,7 @@ class FrontController extends Controller
     {
         return $this->render(
             'ChamiloCoreBundle:Security:only_login.html.twig',
-            array('error' => null)
+            ['error' => null]
         );
     }
-
 }

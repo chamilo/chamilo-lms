@@ -22,7 +22,7 @@ class BlockGlobalInfo extends Block
     private $user_id;
     private $courses;
     private $path;
-    private $permission = array();
+    private $permission = [];
 
     /**
      * Constructor
@@ -64,7 +64,7 @@ class BlockGlobalInfo extends Block
     {
         global $charset;
         $column = 2;
-        $data = array();
+        $data = [];
         $content = $this->get_content_html();
         $html = '<div class="panel panel-default" id="intro">
                     <div class="panel-heading">'.get_lang('GlobalPlatformInformation').'
@@ -126,18 +126,18 @@ class BlockGlobalInfo extends Block
         // Two-dimensional array with data about the system
         $path = api_get_path(WEB_CODE_PATH);
         // Check total number of users
-        $global_info = array(
-            array(get_lang('CountUsers'), '<a href="'.$path.'admin/user_list.php">'.Statistics::countUsers().'</a>'),
+        $global_info = [
+            [get_lang('CountUsers'), '<a href="'.$path.'admin/user_list.php">'.Statistics::countUsers().'</a>'],
             // Check only active users
-            array(get_lang('NumberOfUsersActive'), '<a href="'.$path.'admin/user_list.php?keyword_firstname=&amp;keyword_lastname=&amp;keyword_username=&amp;keyword_email=&amp;keyword_officialcode=&amp;keyword_status=%25&amp;keyword_active=1&amp;submit=&amp;_qf__advanced_search=">'.Statistics::countUsers(null, null, null, true).'</a>'),
+            [get_lang('NumberOfUsersActive'), '<a href="'.$path.'admin/user_list.php?keyword_firstname=&amp;keyword_lastname=&amp;keyword_username=&amp;keyword_email=&amp;keyword_officialcode=&amp;keyword_status=%25&amp;keyword_active=1&amp;submit=&amp;_qf__advanced_search=">'.Statistics::countUsers(null, null, null, true).'</a>'],
             // Check number of courses
-            array(get_lang('NumberOfCoursesTotal'), '<a href="'.$path.'admin/course_list.php">'.Statistics::countCourses().'</a>'),
-            array(get_lang('NumberOfCoursesPublic'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_OPEN_WORLD.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.Statistics::countCoursesByVisibility(COURSE_VISIBILITY_OPEN_WORLD).'</a>'),
-            array(get_lang('NumberOfCoursesOpen'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_OPEN_PLATFORM.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.Statistics::countCoursesByVisibility(COURSE_VISIBILITY_OPEN_PLATFORM).'</a>'),
-            array(get_lang('NumberOfCoursesPrivate'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_REGISTERED.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.Statistics::countCoursesByVisibility(COURSE_VISIBILITY_REGISTERED).'</a>'),
-            array(get_lang('NumberOfCoursesClosed'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_CLOSED.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.Statistics::countCoursesByVisibility(COURSE_VISIBILITY_CLOSED).'</a>'),
-            array(get_lang('NumberOfCoursesHidden'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_HIDDEN.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.Statistics::countCoursesByVisibility(COURSE_VISIBILITY_HIDDEN).'</a>')
-        );
+            [get_lang('NumberOfCoursesTotal'), '<a href="'.$path.'admin/course_list.php">'.Statistics::countCourses().'</a>'],
+            [get_lang('NumberOfCoursesPublic'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_OPEN_WORLD.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.Statistics::countCoursesByVisibility(COURSE_VISIBILITY_OPEN_WORLD).'</a>'],
+            [get_lang('NumberOfCoursesOpen'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_OPEN_PLATFORM.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.Statistics::countCoursesByVisibility(COURSE_VISIBILITY_OPEN_PLATFORM).'</a>'],
+            [get_lang('NumberOfCoursesPrivate'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_REGISTERED.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.Statistics::countCoursesByVisibility(COURSE_VISIBILITY_REGISTERED).'</a>'],
+            [get_lang('NumberOfCoursesClosed'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_CLOSED.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.Statistics::countCoursesByVisibility(COURSE_VISIBILITY_CLOSED).'</a>'],
+            [get_lang('NumberOfCoursesHidden'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_HIDDEN.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.Statistics::countCoursesByVisibility(COURSE_VISIBILITY_HIDDEN).'</a>']
+        ];
         return $global_info;
     }
 }

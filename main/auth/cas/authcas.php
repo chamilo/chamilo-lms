@@ -92,9 +92,25 @@ function cas_is_authenticated()
                         $chamilo_user = extldap_get_chamilo_user($ldapuser);
                         $chamilo_user['user_id'] = $tab_user_info['user_id'];
                         $chamilo_user['status'] = $tab_user_info['status'];
-                        UserManager::update_user($chamilo_user["user_id"], $chamilo_user["firstname"],
-                            $chamilo_user["lastname"], $login, null, null, $chamilo_user["email"],
-                            $chamilo_user["status"], '', '', '', '', 1, null, 0, null, '');
+                        UserManager::update_user(
+                            $chamilo_user["user_id"],
+                            $chamilo_user["firstname"],
+                            $chamilo_user["lastname"],
+                            $login,
+                            null,
+                            null,
+                            $chamilo_user["email"],
+                            $chamilo_user["status"],
+                            '',
+                            '',
+                            '',
+                            '',
+                            1,
+                            null,
+                            0,
+                            null,
+                            ''
+                        );
                     }
                 }
                 return $login;
@@ -103,7 +119,7 @@ function cas_is_authenticated()
                 // if option is on we can ADD user automatically from ldap server or by modify own profil
                 $user_added = false;
                 switch (api_get_setting("cas_add_user_activate")) {
-                    case PLATFORM_AUTH_SOURCE :
+                    case PLATFORM_AUTH_SOURCE:
                         // user will have to modify firstname, lastname, email in chamilo profil edit
                         $userdata = get_lang("EditInProfil");
                         UserManager::create_user(
@@ -121,7 +137,7 @@ function cas_is_authenticated()
                         );
                         $user_added = $login;
                         break;
-                    case LDAP_AUTH_SOURCE :
+                    case LDAP_AUTH_SOURCE:
                         // user info are read from ldap connexion
                         // get user info from ldap server
                         // user has already been authenticated by CAS
@@ -141,27 +157,27 @@ function cas_is_authenticated()
                 return $user_added;
             }
         }
-//		//If the user is in the dokeos database and we are ,not in a logout request, we upgrade his infomration by ldap
-//		if (! $logout){
-//			$user_table = Database::get_main_table(TABLE_MAIN_USER);
-//			$sql = "SELECT user_id, username, password, auth_source, active, expiration_date ".
-//				"FROM $user_table ".
-//				"WHERE username = '$login' ";
+        //		//If the user is in the dokeos database and we are ,not in a logout request, we upgrade his infomration by ldap
+        //		if (! $logout){
+        //			$user_table = Database::get_main_table(TABLE_MAIN_USER);
+        //			$sql = "SELECT user_id, username, password, auth_source, active, expiration_date ".
+        //				"FROM $user_table ".
+        //				"WHERE username = '$login' ";
 //
-//			$result = Database::query($sql,__FILE__,__LINE__);
-//			if(mysql_num_rows($result) == 0) {
-//				require_once(api_get_path(SYS_PATH).'main/inc/lib/usermanager.lib.php');
-//				$rnumber=rand(0,256000);
-//				UserManager::create_user($firstName, $lastName, $status, $email, $login, md5('casplaceholder'.$rnumber), $official_code='',$language='',$phone='',$picture_uri='',$auth_source = PLATFORM_AUTH_SOURCE);
-//			}
-//			else {
-//				$user = mysql_fetch_assoc($result);
-//				$user_id = intval($user['user_id']);
-//				//echo "deb : $status";
-//				UserManager::update_user ($user_id, $firstname, $lastname, $login, null, null, $email, $status, '', '', '', '', 1, null, 0, null,'') ;
+        //			$result = Database::query($sql,__FILE__,__LINE__);
+        //			if(mysql_num_rows($result) == 0) {
+        //				require_once(api_get_path(SYS_PATH).'main/inc/lib/usermanager.lib.php');
+        //				$rnumber=rand(0,256000);
+        //				UserManager::create_user($firstName, $lastName, $status, $email, $login, md5('casplaceholder'.$rnumber), $official_code='',$language='',$phone='',$picture_uri='',$auth_source = PLATFORM_AUTH_SOURCE);
+        //			}
+        //			else {
+        //				$user = mysql_fetch_assoc($result);
+        //				$user_id = intval($user['user_id']);
+        //				//echo "deb : $status";
+        //				UserManager::update_user ($user_id, $firstname, $lastname, $login, null, null, $email, $status, '', '', '', '', 1, null, 0, null,'') ;
 //
-//			}
-//		}
+        //			}
+        //		}
         return $login;
     } else {
         return false;

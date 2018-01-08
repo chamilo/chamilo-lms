@@ -19,13 +19,13 @@ class AssignmentCourseSettingsSchema extends AbstractSettingsSchema
     public function buildSettings(SettingsBuilderInterface $builder)
     {
         $builder
-            ->setDefaults(array(
+            ->setDefaults([
                 'enabled' => '',
-            ))
+            ])
         ;
-        $allowedTypes = array(
-            'enabled' => array('string'),
-        );
+        $allowedTypes = [
+            'enabled' => ['string'],
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 

@@ -206,7 +206,6 @@ try {
     $restResponse->setErrorMessage(
         $exeption->getMessage()
     );
-
 }
 
 header('Content-Type: application/json');

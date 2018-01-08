@@ -21,17 +21,17 @@ class MessageSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'allow_message_tool' => 'true',
                     'allow_send_message_to_all_platform_users' => 'false',
                     'message_max_upload_filesize' => '20971520',
 
-                )
+                ]
             );
-        $allowedTypes = array(
-            'allow_message_tool' => array('string'),
-            'message_max_upload_filesize' => array('string'),
-        );
+        $allowedTypes = [
+            'allow_message_tool' => ['string'],
+            'message_max_upload_filesize' => ['string'],
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 

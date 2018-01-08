@@ -25,7 +25,7 @@ class CurriculumItemType extends AbstractType
         $builder->add(
             'category',
             'entity',
-            array(
+            [
                 'class' => 'Entity\CurriculumCategory',
                 'query_builder' => function ($repository) {
                     return $repository->createQueryBuilder('p')
@@ -33,7 +33,7 @@ class CurriculumItemType extends AbstractType
                 },
                 'property' => 'title',
                 'required' => false,
-            )
+            ]
         );
         $builder->add('submit', 'submit');
     }
@@ -41,9 +41,9 @@ class CurriculumItemType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => 'Entity\CurriculumItem',
-            )
+            ]
         );
     }
 

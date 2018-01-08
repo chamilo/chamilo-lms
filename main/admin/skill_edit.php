@@ -16,8 +16,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 Skill::isAllowed();
 
-$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'skill_list.php', 'name' => get_lang('ManageSkills'));
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'skill_list.php', 'name' => get_lang('ManageSkills')];
 
 /* Process data */
 $skillId = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;

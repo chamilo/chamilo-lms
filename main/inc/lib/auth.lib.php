@@ -47,7 +47,7 @@ class Auth
                 ";
 
         $result = Database::query($sql);
-        $special_course_list = array();
+        $special_course_list = [];
         if (Database::num_rows($result) > 0) {
             while ($result_row = Database::fetch_array($result)) {
                 $special_course_list[] = '"'.$result_row['item_id'].'"';
@@ -80,10 +80,10 @@ class Auth
                     course_rel_user.user_id = '" . $user_id."' $without_special_courses
                 ORDER BY course_rel_user.sort ASC";
         $result = Database::query($sql);
-        $courses = array();
+        $courses = [];
         while ($row = Database::fetch_array($result)) {
             //we only need the database name of the course
-            $courses[] = array(
+            $courses[] = [
                 'code' => $row['k'],
                 'visual_code' => $row['vc'],
                 'title' => $row['i'],
@@ -95,7 +95,7 @@ class Auth
                 'unsubscribe' => $row['unsubscr'],
                 'sort' => $row['sort'],
                 'user_course_category' => $row['user_course_cat']
-            );
+            ];
         }
 
         return $courses;
@@ -136,7 +136,7 @@ class Auth
                     tcfv.value = 1 ";
 
         $result = Database::query($sql);
-        $special_course_list = array();
+        $special_course_list = [];
         if (Database::num_rows($result) > 0) {
             while ($result_row = Database::fetch_array($result)) {
                 $special_course_list[] = '"'.$result_row['item_id'].'"';
@@ -161,7 +161,7 @@ class Auth
                     $without_special_courses
                 ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
         $result = Database::query($sql);
-        $data = array();
+        $data = [];
         while ($course = Database::fetch_array($result)) {
             $data[$course['user_course_cat']][] = $course;
         }
@@ -217,14 +217,14 @@ class Auth
         $all_user_courses = $this->get_courses_of_user($current_user_id);
 
         // we need only the courses of the category we are moving in
-        $user_courses = array();
+        $user_courses = [];
         foreach ($all_user_courses as $key => $course) {
             if ($course['user_course_category'] == $category) {
                 $user_courses[] = $course;
             }
         }
 
-        $target_course = array();
+        $target_course = [];
         foreach ($user_courses as $count => $course) {
             if ($course2move == $course['code']) {
                 // source_course is the course where we clicked the up or down icon
@@ -403,7 +403,7 @@ class Auth
 
         $special_course_result = Database::query($sql);
         if (Database::num_rows($special_course_result) > 0) {
-            $special_course_list = array();
+            $special_course_list = [];
             while ($result_row = Database::fetch_array($special_course_result)) {
                 $special_course_list[] = '"'.$result_row['item_id'].'"';
             }
@@ -450,7 +450,7 @@ class Auth
             }
         }
         $result_find = Database::query($sql_find);
-        $courses = array();
+        $courses = [];
         while ($row = Database::fetch_array($result_find)) {
             $row['registration_code'] = !empty($row['registration_code']);
             $count_users = count(CourseManager::get_user_list_from_course_code($row['code']));
@@ -462,7 +462,7 @@ class Auth
 
             $point_info = CourseManager::get_course_ranking($row['id'], 0);
 
-            $courses[] = array(
+            $courses[] = [
                 'real_id' => $row['id'],
                 'point_info' => $point_info,
                 'code' => $row['code'],
@@ -477,7 +477,7 @@ class Auth
                 'visibility' => $row['visibility'],
                 'count_users' => $count_users,
                 'count_connections' => $count_connections_last_month
-            );
+            ];
         }
         return $courses;
     }
@@ -590,7 +590,7 @@ class Auth
      * This array should contains 'start' and 'length' keys
      * @return array Courses data
      */
-    public function browse_courses_in_category($categoryCode, $randomValue = null, $limit = array())
+    public function browse_courses_in_category($categoryCode, $randomValue = null, $limit = [])
     {
         return CourseCategory::browseCoursesInCategory($categoryCode, $randomValue, $limit);
     }
@@ -636,7 +636,7 @@ class Auth
             } else {
                 $message = get_lang('ErrorContactPlatformAdmin');
             }
-            return array('message' => $message);
+            return ['message' => $message];
         } else {
             if (isset($_POST['course_registration_code']) &&
                 $_POST['course_registration_code'] != $all_course_information['registration_code']
@@ -658,7 +658,7 @@ class Auth
             $form->addButton('submit', get_lang('SubmitRegistrationCode'));
             $content = $form->returnForm();
 
-            return array('message' => $message, 'content' => $content);
+            return ['message' => $message, 'content' => $content];
         }
     }
 
@@ -668,7 +668,7 @@ class Auth
      * @param array $limit
      * @return array The session list
      */
-    public function browseSessions($date = null, $limit = array())
+    public function browseSessions($date = null, $limit = [])
     {
         $em = Database::getManager();
         $qb = $em->createQueryBuilder();

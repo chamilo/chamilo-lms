@@ -73,7 +73,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
 
         $builder
             ->setDefaults(
-                array(
+                [
                     'homepage_view' => 'activity_big',
                     'show_tool_shortcuts' => 'false', // @todo check default value?
                     'active_tools_on_create' => $tools,
@@ -107,7 +107,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'teacher_can_select_course_template' => 'true',
                     'show_toolshortcuts' => '',
                     'enable_record_audio' => 'false'
-                )
+                ]
             )
             ->setTransformer(
                 'active_tools_on_create',
@@ -123,14 +123,14 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             )
         ;
 
-        $allowedTypes = array(
-            'homepage_view' => array('string'),
-            'active_tools_on_create' => array('array'),
-            'course_hide_tools' => array('array'),
-            'display_coursecode_in_courselist' => array('string'),
-            'display_teacher_in_courselist' => array('string'),
-            'student_view_enabled' => array('string'),
-        );
+        $allowedTypes = [
+            'homepage_view' => ['string'],
+            'active_tools_on_create' => ['array'],
+            'course_hide_tools' => ['array'],
+            'display_coursecode_in_courselist' => ['string'],
+            'display_teacher_in_courselist' => ['string'],
+            'student_view_enabled' => ['string'],
+        ];
 
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
@@ -146,22 +146,22 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add(
                 'homepage_view',
                 'choice',
-                array(
-                    'choices' => array(
+                [
+                    'choices' => [
                         'activity' => 'activity',
                         'activity_big' => 'activity_big',
-                    ),
-                )
+                    ],
+                ]
             )
             ->add('show_tool_shortcuts', YesNoType::class)
             ->add(
                 'active_tools_on_create',
                 'choice',
-                array(
+                [
                     'choices' => $tools,
                     'multiple' => true,
                     'expanded' => true,
-                )
+                ]
             )
             ->add('display_coursecode_in_courselist', YesNoType::class)
             ->add('display_teacher_in_courselist', YesNoType::class)
@@ -170,27 +170,27 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add(
                 'show_navigation_menu',
                 'choice',
-                array(
-                    'choices' => array(
+                [
+                    'choices' => [
                         'false' => 'No',
                         'icons' => 'IconsOnly',
                         'text' => 'TextOnly',
                         'iconstext' => 'IconsText',
-                    ),
-                )
+                    ],
+                ]
             )
             ->add('enable_tool_introduction', YesNoType::class)
             ->add(
                 'breadcrumbs_course_homepage',
                 'choice',
-                array(
-                    'choices' => array(
+                [
+                    'choices' => [
                         'course_home' => 'CourseHomepage',
                         'course_code' => 'CourseCode',
                         'course_title' => 'CourseTitle',
                         'session_name_and_course_title' => 'SessionNameAndCourseTitle',
-                    ),
-                )
+                    ],
+                ]
             )
             ->add('example_material_course_creation', YesNoType::class)
             ->add('allow_course_theme', YesNoType::class)
@@ -203,36 +203,36 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add(
                 'course_hide_tools',
                 'choice',
-                array(
+                [
                     'choices' => $tools,
                     'multiple' => true,
                     'expanded' => true,
-                )
+                ]
             )
             ->add('scorm_cumulative_session_time', YesNoType::class)
             ->add(
                 'courses_default_creation_visibility',
                 'choice',
-                array(
-                    'choices' => array(
+                [
+                    'choices' => [
                         '3' => 'Public',
                         '2' => 'Open',
                         '1' => 'Private',
                         '0' => 'Closed',
-                    ),
-                )
+                    ],
+                ]
             )
             ->add('allow_public_certificates', YesNoType::class)
             ->add('allow_lp_return_link', YesNoType::class)
             ->add(
                 'course_creation_use_template',
                 'entity',
-                array(
+                [
                     //'choices' => $courses,
                     'class' => 'Chamilo\CoreBundle\Entity\Course',
                     'placeholder' => 'Choose ...',
                     'empty_data'  => null
-                )
+                ]
             )
             ->add('hide_scorm_export_link', YesNoType::class)
             ->add('hide_scorm_copy_link', YesNoType::class)

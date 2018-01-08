@@ -158,7 +158,7 @@ if (api_is_allowed_to_edit()) {
     $sql .= DocumentManager::getSessionFolderFilters($querypath, $sessionId);
 
     $result = Database::query($sql);
-    $files = array();
+    $files = [];
     while ($row = Database::fetch_array($result)) {
         $files[$row['path']] = $row;
     }
@@ -258,7 +258,7 @@ if (api_is_allowed_to_edit()) {
 
     // If we get invisible folders, we have to filter out these results from all visible files we found
     if (Database::num_rows($query2) > 0) {
-        $files = array();
+        $files = [];
         // Add item to an array
         while ($invisible_folders = Database::fetch_assoc($query2)) {
             //3rd: Get all files that are in the found invisible folder (these are "invisible" too)
@@ -339,7 +339,7 @@ if (Security::check_abs_path($tempZipFile, api_get_path(SYS_ARCHIVE_PATH))) {
  */
 function diff($arr1, $arr2)
 {
-    $res = array();
+    $res = [];
     $r = 0;
     foreach ($arr1 as & $av) {
         if (!in_array($av, $arr2)) {

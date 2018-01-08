@@ -14,11 +14,11 @@ $s = WSCMSoapServer::singleton();
 
 $s->register(
     'WSCMInbox.unreadMessage',
-    array(
+    [
         'username' => 'xsd:string',
         'password' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string'),
+    ],
+    ['return' => 'xsd:string'],
     'urn:WSCMService',
     '',
     '',
@@ -29,13 +29,13 @@ $s->register(
 
 $s->register(
     'WSCMInbox.get_message_id',
-    array(
+    [
         'username' => 'xsd:string',
         'password' => 'xsd:string',
         'from' => 'xsd:string',
         'number_of_items' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string'),
+    ],
+    ['return' => 'xsd:string'],
     'urn:WSCMService',
     '',
     '',
@@ -47,13 +47,13 @@ $s->register(
 
 $s->register(
     'WSCMInbox.get_message_data',
-    array(
+    [
         'username' => 'xsd:string',
         'password' => 'xsd:string',
         'id' => 'xsd:string',
         'field' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string'),
+    ],
+    ['return' => 'xsd:string'],
     'urn:WSCMService',
     '',
     '',
@@ -64,13 +64,13 @@ $s->register(
 
 $s->register(
     'WSCMInbox.get_message_id_sent',
-    array(
+    [
         'username' => 'xsd:string',
         'password' => 'xsd:string',
         'from' => 'xsd:string',
         'number_of_items' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string'),
+    ],
+    ['return' => 'xsd:string'],
     'urn:WSCMService',
     '',
     '',
@@ -81,13 +81,13 @@ $s->register(
 
 $s->register(
     'WSCMInbox.get_message_data_sent',
-    array(
+    [
         'username' => 'xsd:string',
         'password' => 'xsd:string',
         'id' => 'xsd:string',
         'field' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string'),
+    ],
+    ['return' => 'xsd:string'],
     'urn:WSCMService',
     '',
     '',
@@ -97,14 +97,14 @@ $s->register(
 
 $s->register(
     'WSCMInbox.message_send',
-    array(
+    [
         'username' => 'xsd:string',
         'password' => 'xsd:string',
         'receiver_user_id' => 'xsd:string',
         'subject' => 'xsd:string',
         'content' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string'),
+    ],
+    ['return' => 'xsd:string'],
     'urn:WSCMService',
     '',
     '',

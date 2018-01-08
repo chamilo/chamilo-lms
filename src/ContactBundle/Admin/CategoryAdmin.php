@@ -22,8 +22,8 @@ class CategoryAdmin extends AbstractAdmin
         $listMapper
             //->add('headline', null, array('identifier' => true))
             //->add('name', null, array('identifier' => true))
-            ->add('translations', null, array('identifier' => true))
-            ->add('email', null, array('identifier' => true))
+            ->add('translations', null, ['identifier' => true])
+            ->add('email', null, ['identifier' => true])
         ;
     }
 
@@ -34,7 +34,7 @@ class CategoryAdmin extends AbstractAdmin
     {
         $formMapper
             //->add('name')
-            ->add('translations', 'a2lix_translations', array())
+            ->add('translations', 'a2lix_translations', [])
             ->add('email')
         ;
     }
@@ -45,9 +45,8 @@ class CategoryAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('translations', null, array('identifier' => true))
-            ->add('email', null, array('identifier' => true))
+            ->add('translations', null, ['identifier' => true])
+            ->add('email', null, ['identifier' => true])
         ;
     }
 }
-

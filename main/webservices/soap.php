@@ -68,10 +68,10 @@ $s->wsdl->addComplexType(
     'struct',
     'all',
     '',
-    array(
-        'code' => array('name' => 'code', 'type' => 'xsd:int'),
-        'message' => array('name' => 'message', 'type' => 'xsd:string')
-    )
+    [
+        'code' => ['name' => 'code', 'type' => 'xsd:int'],
+        'message' => ['name' => 'message', 'type' => 'xsd:string']
+    ]
 );
 
 $s->wsdl->addComplexType(
@@ -80,10 +80,10 @@ $s->wsdl->addComplexType(
     'struct',
     'all',
     '',
-    array(
-        'field_name' => array('name' => 'field_name', 'type' => 'xsd:string'),
-        'field_value' => array('name' => 'field_value', 'type' => 'xsd:string')
-    )
+    [
+        'field_name' => ['name' => 'field_name', 'type' => 'xsd:string'],
+        'field_value' => ['name' => 'field_value', 'type' => 'xsd:string']
+    ]
 );
 
 $s->wsdl->addComplexType(
@@ -92,13 +92,13 @@ $s->wsdl->addComplexType(
     'array',
     '',
     'SOAP-ENC:Array',
-    array(),
-    array(
-        array(
+    [],
+    [
+        [
             'ref' => 'SOAP-ENC:arrayType',
             'wsdl:arrayType' => 'tns:extras[]'
-        )
-    ),
+        ]
+    ],
     'tns:extras'
 );
 
@@ -118,8 +118,8 @@ $s->wsdl->addComplexType(
 
 $s->register(
     'WS.test',
-    array(),
-    array('return' => 'xsd:string')
+    [],
+    ['return' => 'xsd:string']
 );
 
 require_once __DIR__.'/soap_user.php';

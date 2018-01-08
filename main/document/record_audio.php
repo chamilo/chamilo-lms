@@ -76,7 +76,7 @@ if (!is_dir($filepath)) {
 
 //groups //TODO: clean
 if (!empty($groupId)) {
-    $interbreadcrumb[] = array("url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('GroupSpace'));
+    $interbreadcrumb[] = ["url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('GroupSpace')];
     $group = GroupManager :: get_group_properties($groupId);
     $path = explode('/', $dir);
     if ('/'.$path[1] != $group['directory']) {
@@ -84,7 +84,7 @@ if (!empty($groupId)) {
     }
 }
 
-$interbreadcrumb[] = array("url" => "./document.php?id=".$document_id.'&'.api_get_cidreq(), "name" => get_lang('Documents'));
+$interbreadcrumb[] = ["url" => "./document.php?id=".$document_id.'&'.api_get_cidreq(), "name" => get_lang('Documents')];
 
 if (!api_is_allowed_in_course()) {
     api_not_allowed(true);
@@ -122,10 +122,10 @@ if (isset($document_data['parents'])) {
                 continue;
             }
         }
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => $document_sub_data['document_url'],
             'name' => $document_sub_data['title'],
-        );
+        ];
         $counter++;
     }
 }

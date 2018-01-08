@@ -42,13 +42,13 @@ class CourseController extends Controller
 
             return $this->redirectToRoute(
                 'chamilo_core_course_welcome',
-                array('course' => $course)
+                ['course' => $course]
             );
         }
 
-        return array(
+        return [
             'form' => $form->createView(),
-        );
+        ];
     }
 
     /**
@@ -62,6 +62,6 @@ class CourseController extends Controller
      */
     public function welcomeAction(Course $course)
     {
-        return array('course' => $course);
+        return ['course' => $course];
     }
 }

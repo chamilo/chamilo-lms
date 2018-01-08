@@ -45,7 +45,7 @@ class Virtual
 
         if ($result->rowCount()) {
             $data = $result->fetch();
-            $excludes = array('id', 'name');
+            $excludes = ['id', 'name'];
             $query = "SELECT * FROM settings_current WHERE subkey = 'vchamilo'";
             $virtualSettings = $connection->executeQuery($query);
             $virtualSettings = $virtualSettings->fetchAll();
@@ -198,7 +198,7 @@ class Virtual
     */
     public static function bootConnection(&$_configuration)
     {
-        $dbParams = array(
+        $dbParams = [
             'driver' => 'pdo_mysql',
             'host' => $_configuration['db_host'],
             'user' => $_configuration['db_user'],
@@ -208,7 +208,7 @@ class Virtual
             'path' => isset($_configuration['db_path']) ? $_configuration['db_path'] : '',
             // Only relevant for pdo_mysql, pdo_pgsql, and pdo_oci/oci8,
             'port' => isset($_configuration['db_port']) ? $_configuration['db_port'] : '',
-        );
+        ];
 
         try {
             $database = new \Database();
@@ -493,7 +493,7 @@ class Virtual
         }
 
         // Making the commands for each database.
-        $cmds = array();
+        $cmds = [];
         // Windows environments are not supported for this plugin at this time
         //if ($CFG->ostype == 'WINDOWS') {
         //    $cmd_main = "-h{$host} -P{$port} -u{$vchamilo->db_user} {$pass} {$vchamilo->main_database}";
@@ -638,7 +638,7 @@ class Virtual
             $key = $module.'_'.$key;
         }
 
-        $params = array('variable = ? AND subkey = ?' => [$key, $module]);
+        $params = ['variable = ? AND subkey = ?' => [$key, $module]];
         $result = api_get_settings_params_simple($params);
         if ($result) {
             return $result['selected_value'];
@@ -868,7 +868,7 @@ class Virtual
      */
     public static function getConnectionFromInstance($instance, $getManager = false)
     {
-        $dbParams = array(
+        $dbParams = [
             'driver' => 'pdo_mysql',
             'host' => $instance->db_host,
             'user' => $instance->db_user,
@@ -878,7 +878,7 @@ class Virtual
             //'path' => isset($_configuration['db_path']) ? $_configuration['db_path'] : '',
             // Only relevant for pdo_mysql, pdo_pgsql, and pdo_oci/oci8,
             //'port' => isset($_configuration['db_port']) ? $_configuration['db_port'] : '',
-        );
+        ];
 
         if (!empty($instance->main_database)) {
             $dbParams['dbname'] = $instance->main_database;
@@ -1186,10 +1186,10 @@ class Virtual
         // Creates the helper set
         $helperSet = \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet($em);
 
-        $helpers = array(
+        $helpers = [
             'configuration' => new Chash\Helpers\ConfigurationHelper(),
             'dialog' => new \Symfony\Component\Console\Helper\QuestionHelper(),
-        );
+        ];
 
         foreach ($helpers as $name => $helper) {
             $helperSet->set($helper, $name);
@@ -1200,7 +1200,7 @@ class Virtual
         $tmpFile = tmpfile();
         $outputStream = new \Symfony\Component\Console\Output\BufferedOutput($tmpFile);
 
-        $arguments = array(
+        $arguments = [
             'from-version' => $fromVersion, // @todo change value
             'to-version' => '1.11.x',
             'host' => $newDatabase->db_host,
@@ -1208,7 +1208,7 @@ class Virtual
             'password' => $newDatabase->db_password,
             'db_name' => $newDatabase->main_database,
             'root_sys' => api_get_configuration_value('root_sys')
-        );
+        ];
 
         $input = new ArrayInput($arguments);
         $command->run($input, $outputStream);
@@ -1365,7 +1365,4 @@ class Virtual
 
         return array_combine($encryptList, $encryptList);
     }
-
-
 }
-

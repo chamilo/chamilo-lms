@@ -10,8 +10,8 @@ class UserApiKeyManager
 {
     /**
      * The name of the default service.
-     * 
-     * @return string 
+     *
+     * @return string
      */
     public static function default_service()
     {
@@ -19,7 +19,7 @@ class UserApiKeyManager
     }
 
     /**
-     *  
+     *
      */
     public static function end_of_time()
     {
@@ -44,7 +44,7 @@ class UserApiKeyManager
      * @param int $user_id
      * @param string $api_service
      * @param string $api_end_point
-     * @return AccessToken 
+     * @return AccessToken
      */
     public static function create_temp_token($api_service = null, $duration = 60, $user_id = null, $api_end_point = null)
     {
@@ -63,7 +63,7 @@ class UserApiKeyManager
      * @param int $validity_start_date
      * @param int $validity_end_date
      * @param string $description
-     * @return AccessToken 
+     * @return AccessToken
      */
     public static function create_token($user_id = null, $api_key = null, $api_service = null, $api_end_point = null, $validity_start_date = null, $validity_end_date = null, $description = '')
     {
@@ -84,7 +84,7 @@ class UserApiKeyManager
         $validity_end_date = date('Y-m-d H:i:s', $validity_end_date);
         $created_date = date('Y-m-d H:i:s', $created_date);
 
-        $values = array();
+        $values = [];
         $values['user_id'] = $user_id;
         $values['api_key'] = $api_key;
         $values['api_service'] = $api_service;
@@ -98,5 +98,4 @@ class UserApiKeyManager
         $id = Database::insert($table, $values);
         return AccessToken::create($id, $user_id, $api_key);
     }
-
 }

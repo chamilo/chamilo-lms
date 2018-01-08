@@ -46,10 +46,10 @@ class AttributeType extends AbstractResourceType
                 'form_type' => sprintf('sylius_%s_attribute_translation', $this->subjectName),
                 'label' => 'sylius.form.attribute.translations',
             ))*/
-            ->add('type', 'sylius_attribute_type_choice', array(
+            ->add('type', 'sylius_attribute_type_choice', [
                 'label'    => 'sylius.form.attribute.type',
                 'disabled' => true,
-            ))
+            ])
         ;
     }
 

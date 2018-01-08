@@ -21,14 +21,14 @@ class SkillSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'allow_skills_tool' => 'true',
                     'allow_hr_skills_management' => 'true',
-                )
+                ]
             );
-        $allowedTypes = array(
-            'allow_skills_tool' => array('string'),
-        );
+        $allowedTypes = [
+            'allow_skills_tool' => ['string'],
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 

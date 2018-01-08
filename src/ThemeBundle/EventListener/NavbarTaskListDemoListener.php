@@ -7,7 +7,6 @@
 
 namespace Chamilo\ThemeBundle\EventListener;
 
-
 use Chamilo\ThemeBundle\Event\TaskListEvent;
 use Chamilo\ThemeBundle\Model\TaskModel;
 
@@ -22,10 +21,10 @@ class NavbarTaskListDemoListener
 
     protected function getTasks()
     {
-        return array(
+        return [
             new TaskModel('make stuff', 30, TaskModel::COLOR_GREEN),
             new TaskModel('make more stuff', 60),
             new TaskModel('some more tasks to do', 10, TaskModel::COLOR_RED),
-        );
+        ];
     }
 }

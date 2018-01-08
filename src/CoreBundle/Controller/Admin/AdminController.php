@@ -46,7 +46,7 @@ class AdminController extends BaseController
             'get',
             $url,
             null,
-            array('class' => 'form-inline')
+            ['class' => 'form-inline']
         );
         $form->addElement('text', 'keyword');
         $form->addElement('button', 'submit', get_lang('Search'));
@@ -63,13 +63,13 @@ class AdminController extends BaseController
         api_protect_admin_script(true);
 
         $adminUrl = api_get_path(WEB_CODE_PATH).'admin/';
-        $blocks = array();
+        $blocks = [];
 
         /* Users */
         $blocks['users']['icon'] = \Display::return_icon(
             'members.png',
             get_lang('Users'),
-            array(),
+            [],
             ICON_SIZE_MEDIUM,
             false
         );
@@ -78,60 +78,60 @@ class AdminController extends BaseController
         if (api_is_platform_admin()) {
             $search_form = $this->getSearchForm($adminUrl.'user_list.php')->return_form();
             $blocks['users']['search_form'] = $search_form;
-            $items = array(
-                array(
+            $items = [
+                [
                     'url' => $adminUrl.'user_list.php',
                     'label' => get_lang('UserList'),
-                ),
-                array(
+                ],
+                [
                     'url' => $adminUrl.'user_add.php',
                     'label' => get_lang('AddUsers'),
-                ),
-                array(
+                ],
+                [
                     'url' => $adminUrl.'user_export.php',
                     'label' => get_lang('ExportUserListXMLCSV'),
-                ),
-                array(
+                ],
+                [
                     'url' => $adminUrl.'user_import.php',
                     'label' => get_lang('ImportUserListXMLCSV'),
-                ),
-            );
+                ],
+            ];
             if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count(
                     $extAuthSource['ldap']
                 ) > 0
             ) {
-                $items[] = array(
+                $items[] = [
                     'url' => $adminUrl.'ldap_users_list.php',
                     'label' => get_lang('ImportLDAPUsersIntoPlatform'),
-                );
+                ];
             }
-            $items[] = array(
+            $items[] = [
                 'url' => $adminUrl.'extra_fields.php?type=user',
                 'label' => get_lang('ManageUserFields'),
-            );
+            ];
             /*$items[] = array('url'=> api_get_path(WEB_PUBLIC_PATH)
                 .'admin/administrator/roles', 'label' => get_lang('Roles'));*/
         } else {
-            $items = array(
-                array(
+            $items = [
+                [
                     'url' => $adminUrl.'user_list.php',
                     'label' => get_lang('UserList'),
-                ),
-                array(
+                ],
+                [
                     'url' => $adminUrl.'user_add.php',
                     'label' => get_lang('AddUsers'),
-                ),
-                array(
+                ],
+                [
                     'url' => $adminUrl.'user_import.php',
                     'label' => get_lang('ImportUserListXMLCSV'),
-                ),
-            );
+                ],
+            ];
         }
 
-        $items[] = array(
+        $items[] = [
             'url' => $adminUrl.'usergroups.php',
             'label' => get_lang('Classes'),
-        );
+        ];
 
         $blocks['users']['items'] = $items;
         $blocks['users']['extra'] = null;
@@ -141,7 +141,7 @@ class AdminController extends BaseController
             $blocks['courses']['icon'] = \Display::return_icon(
                 'course.png',
                 get_lang('Courses'),
-                array(),
+                [],
                 ICON_SIZE_MEDIUM,
                 false
             );
@@ -152,60 +152,60 @@ class AdminController extends BaseController
             )->return_form();
             $blocks['courses']['search_form'] = $search_form;
 
-            $items = array();
-            $items[] = array(
+            $items = [];
+            $items[] = [
                 'url' => $adminUrl.'course_list.php',
                 'label' => get_lang('CourseList'),
-            );
+            ];
 
             if (api_get_setting('course.course_validation') != 'true') {
-                $items[] = array(
+                $items[] = [
                     'url' => $adminUrl.'course_add.php',
                     'label' => get_lang('AddCourse'),
-                );
+                ];
             } else {
-                $items[] = array(
+                $items[] = [
                     'url' => $adminUrl.'course_request_review.php',
                     'label' => get_lang('ReviewCourseRequests'),
-                );
-                $items[] = array(
+                ];
+                $items[] = [
                     'url' => $adminUrl.'course_request_accepted.php',
                     'label' => get_lang('AcceptedCourseRequests'),
-                );
-                $items[] = array(
+                ];
+                $items[] = [
                     'url' => $adminUrl.'course_request_rejected.php',
                     'label' => get_lang('RejectedCourseRequests'),
-                );
+                ];
             }
 
-            $items[] = array(
+            $items[] = [
                 'url' => $adminUrl.'course_export.php',
                 'label' => get_lang('ExportCourses'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => $adminUrl.'course_import.php',
                 'label' => get_lang('ImportCourses'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => $adminUrl.'course_category.php',
                 'label' => get_lang('AdminCategories'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => $adminUrl.'subscribe_user2course.php',
                 'label' => get_lang('AddUsersToACourse'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => $adminUrl.'course_user_import.php',
                 'label' => get_lang('ImportUsersToACourse'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => $adminUrl.'extra_fields.php?type=course',
                 'label' => get_lang('ManageCourseFields'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => $adminUrl.'extra_fields.php?type=question',
                 'label' => get_lang('ManageQuestionFields'),
-            );
+            ];
 
             /*if (api_get_setting('gradebook.gradebook_enable_grade_model') == 'true') {
                 $items[] = array(
@@ -218,10 +218,10 @@ class AdminController extends BaseController
                 isset($extAuthSource['ldap']) &&
                 count($extAuthSource['ldap']) > 0
             ) {
-                $items[] = array(
+                $items[] = [
                     'url' => $adminUrl.'ldap_import_students.php',
                     'label' => get_lang('ImportLDAPUsersIntoCourse'),
-                );
+                ];
             }
             $blocks['courses']['items'] = $items;
             $blocks['courses']['extra'] = null;
@@ -230,7 +230,7 @@ class AdminController extends BaseController
             $blocks['platform']['icon'] = \Display::return_icon(
                 'platform.png',
                 get_lang('Platform'),
-                array(),
+                [],
                 ICON_SIZE_MEDIUM,
                 false
             );
@@ -241,75 +241,75 @@ class AdminController extends BaseController
             $search_form = $form->return_form();
             $blocks['platform']['search_form'] = $search_form;
 
-            $items = array();
-            $items[] = array(
+            $items = [];
+            $items[] = [
                 'url' => $this->generateUrl(
                     'admin_settings'
                 ),
                 'label' => get_lang('PlatformConfigSettings'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => $adminUrl.'settings.php?category=Plugins',
                 'label' => get_lang('Plugins'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => $adminUrl.'settings.php?category=Regions',
                 'label' => get_lang('Regions'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => $adminUrl.'system_announcements.php',
                 'label' => get_lang('SystemAnnouncements'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => api_get_path(
                         WEB_CODE_PATH
                     ).'calendar/agenda_js.php?type=admin',
                 'label' => get_lang('GlobalAgenda'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => $adminUrl.'configure_homepage.php',
                 'label' => get_lang('ConfigureHomePage'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => $adminUrl.'configure_inscription.php',
                 'label' => get_lang('ConfigureInscription'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => $adminUrl.'statistics/index.php',
                 'label' => get_lang('Statistics'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => api_get_path(
                         WEB_CODE_PATH
                     ).'mySpace/company_reports.php',
                 'label' => get_lang('Reports'),
-            );
+            ];
 
             /* Event settings */
 
             if (api_get_setting('mail.activate_email_template') == 'true') {
-                $items[] = array(
+                $items[] = [
                     'url' => $adminUrl.'event_controller.php?action=listing',
                     'label' => get_lang('EventMessageManagement'),
-                );
+                ];
             }
 
             if (api_get_multiple_access_url()) {
                 if (api_is_global_platform_admin()) {
-                    $items[] = array(
+                    $items[] = [
                         'url' => $adminUrl.'access_urls.php',
                         'label' => get_lang('ConfigureMultipleAccessURLs'),
-                    );
+                    ];
                 }
             }
 
             if (api_get_setting('registration.allow_terms_conditions') ==
                 'true'
             ) {
-                $items[] = array(
+                $items[] = [
                     'url' => $adminUrl.'legal_add.php',
                     'label' => get_lang('TermsAndConditions'),
-                );
+                ];
             }
             $blocks['platform']['items'] = $items;
             $blocks['platform']['extra'] = null;
@@ -319,7 +319,7 @@ class AdminController extends BaseController
         $blocks['sessions']['icon'] = \Display::return_icon(
             'session.png',
             get_lang('Sessions'),
-            array(),
+            [],
             ICON_SIZE_MEDIUM,
             false
         );
@@ -328,110 +328,109 @@ class AdminController extends BaseController
             api_get_path(WEB_CODE_PATH).'session/session_list.php'
         )->return_form();
         $blocks['sessions']['search_form'] = $search_form;
-        $items = array();
-        $items[] = array(
+        $items = [];
+        $items[] = [
             'url' => api_get_path(
                     WEB_CODE_PATH
                 ).'session/session_list.php',
             'label' => get_lang('ListSession'),
-        );
-        $items[] = array(
+        ];
+        $items[] = [
             'url' => api_get_path(
                     WEB_CODE_PATH
                 ).'session/session_add.php',
             'label' => get_lang('AddSession'),
-        );
-        $items[] = array(
+        ];
+        $items[] = [
             'url' => api_get_path(WEB_CODE_PATH).'session/session_category_list.php',
             'label' => get_lang('ListSessionCategory'),
-        );
-        $items[] = array(
+        ];
+        $items[] = [
             'url' => api_get_path(WEB_CODE_PATH).'session/session_import.php',
             'label' => get_lang('ImportSessionListXMLCSV'),
-        );
+        ];
         if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count(
                 $extAuthSource['ldap']
             ) > 0
         ) {
-            $items[] = array(
+            $items[] = [
                 'url' => $adminUrl.'ldap_import_students_to_session.php',
                 'label' => get_lang('ImportLDAPUsersIntoSession'),
-            );
+            ];
         }
-        $items[] = array(
+        $items[] = [
             'url' => api_get_path(WEB_CODE_PATH).'session/session_export.php',
             'label' => get_lang('ExportSessionListXMLCSV'),
-        );
-        $items[] = array(
+        ];
+        $items[] = [
             'url' => $adminUrl.'../coursecopy/copy_course_session.php',
             'label' => get_lang('CopyFromCourseInSessionToAnotherSession'),
-        );
+        ];
 
         if (api_is_platform_admin()) {
             if (is_dir(
                 api_get_path(SYS_TEST_PATH).'datafiller/'
             )) { // option only visible in development mode. Enable through code if required
-                $items[] = array(
+                $items[] = [
                     'url' => $adminUrl.'user_move_stats.php',
                     'label' => get_lang('MoveUserStats'),
-                );
+                ];
             }
-            $items[] = array(
+            $items[] = [
                 'url' => $adminUrl.'career_dashboard.php',
                 'label' => get_lang('CareersAndPromotions'),
-            );
+            ];
         }
 
-        $items[] = array(
+        $items[] = [
             'url' => $adminUrl.'exercise_report.php',
             'label' => get_lang('ExerciseReport'),
-        );
-        $items[] = array(
+        ];
+        $items[] = [
             'url' => $adminUrl.'extra_fields.php?type=session',
             'label' => get_lang('ManageSessionFields'),
-        );
+        ];
 
         $blocks['sessions']['items'] = $items;
         $blocks['sessions']['extra'] = null;
 
         /* Settings */
         if (api_is_platform_admin()) {
-
             $blocks['settings']['icon'] = \Display::return_icon(
                 'settings.png',
                 get_lang('System'),
-                array(),
+                [],
                 ICON_SIZE_MEDIUM,
                 false
             );
             $blocks['settings']['label'] = api_ucfirst(get_lang('System'));
 
-            $items = array();
-            $items[] = array(
+            $items = [];
+            $items[] = [
                 'url' => $adminUrl.'special_exports.php',
                 'label' => get_lang('SpecialExports'),
-            );
+            ];
             $dbPath = api_get_configuration_value('db_admin_path');
             if (!empty($dbPath)) {
-                $items[] = array(
+                $items[] = [
                     'url' => $dbPath,
                     'label' => get_lang('AdminDatabases').' ('.get_lang('DBManagementOnlyForServerAdmin').') ',
-                );
+                ];
             }
-            $items[] = array(
+            $items[] = [
                 'url' => $adminUrl.'system_status.php',
                 'label' => get_lang('SystemStatus'),
-            );
+            ];
             if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
-                $items[] = array(
+                $items[] = [
                     'url' => $adminUrl.'filler.php',
                     'label' => get_lang('DataFiller'),
-                );
+                ];
             }
-            $items[] = array(
+            $items[] = [
                 'url' => $adminUrl.'archive_cleanup.php',
                 'label' => get_lang('ArchiveDirCleanup'),
-            );
+            ];
             //$items[] = array('url' => $adminUrl.'system_management.php', 'label' => get_lang('SystemManagement'));
 
             $blocks['settings']['items'] = $items;
@@ -444,33 +443,33 @@ class AdminController extends BaseController
                 $blocks['skills']['icon'] = \Display::return_icon(
                     'skill-badges.png',
                     get_lang('Skills'),
-                    array(),
+                    [],
                     ICON_SIZE_MEDIUM,
                     false
                 );
                 $blocks['skills']['label'] = get_lang('Skills');
 
-                $items = array();
+                $items = [];
                 //$items[] = array('url' => $adminUrl.'skills.php',           'label' => get_lang('SkillsTree'));
-                $items[] = array(
+                $items[] = [
                     'url' => $adminUrl.'skills_wheel.php',
                     'label' => get_lang('SkillsWheel'),
-                );
-                $items[] = array(
+                ];
+                $items[] = [
                     'url' => $adminUrl.'skills_import.php',
                     'label' => get_lang('SkillsImport'),
-                );
+                ];
                 //$items[] = array('url' => $adminUrl.'skills_profile.php',   'label' => get_lang('SkillsProfile'));
-                $items[] = array(
+                $items[] = [
                     'url' => api_get_path(
                             WEB_CODE_PATH
                         ).'social/skills_ranking.php',
                     'label' => get_lang('SkillsRanking'),
-                );
-                $items[] = array(
+                ];
+                $items[] = [
                     'url' => $adminUrl.'skills_gradebook.php',
                     'label' => get_lang('SkillsAndGradebooks'),
-                );
+                ];
                 $blocks['skills']['items'] = $items;
                 $blocks['skills']['extra'] = null;
                 $blocks['skills']['search_form'] = null;
@@ -480,49 +479,49 @@ class AdminController extends BaseController
             $blocks['chamilo']['icon'] = \Display::return_icon(
                 'platform.png',
                 'Chamilo.org',
-                array(),
+                [],
                 ICON_SIZE_MEDIUM,
                 false
             );
             $blocks['chamilo']['label'] = 'Chamilo.org';
 
-            $items = array();
-            $items[] = array(
+            $items = [];
+            $items[] = [
                 'url' => 'http://www.chamilo.org/',
                 'label' => get_lang('ChamiloHomepage'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => 'http://www.chamilo.org/forum',
                 'label' => get_lang('ChamiloForum'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => '../../documentation/installation_guide.html',
                 'label' => get_lang('InstallationGuide'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => '../../documentation/changelog.html',
                 'label' => get_lang('ChangesInLastVersion'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => '../../documentation/credits.html',
                 'label' => get_lang('ContributorsList'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => '../../documentation/security.html',
                 'label' => get_lang('SecurityGuide'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => '../../documentation/optimization.html',
                 'label' => get_lang('OptimizationGuide'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => 'http://www.chamilo.org/extensions',
                 'label' => get_lang('ChamiloExtensions'),
-            );
-            $items[] = array(
+            ];
+            $items[] = [
                 'url' => 'http://www.chamilo.org/en/providers',
                 'label' => get_lang('ChamiloOfficialServicesProviders'),
-            );
+            ];
 
             $blocks['chamilo']['items'] = $items;
             $blocks['chamilo']['extra'] = null;
@@ -533,10 +532,10 @@ class AdminController extends BaseController
 
         return $this->render(
             'ChamiloCoreBundle:Admin:index.html.twig',
-            array(
+            [
                 'blocks' => $blocks,
                 'web_admin_ajax_url' => $admin_ajax_url,
-            )
+            ]
         );
     }
 }

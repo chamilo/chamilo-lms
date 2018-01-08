@@ -13,5 +13,4 @@ use Sonata\CoreBundle\Model\BaseEntityManager;
  */
 class SequenceResourceManager extends BaseEntityManager
 {
-
 }

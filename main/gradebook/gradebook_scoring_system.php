@@ -40,10 +40,10 @@ function minItem(item) {
 }
 </script>';
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat=1',
     'name' => get_lang('ToolGradebook')
-);
+];
 
 $select_cat = intval($_GET['selectcat']);
 $displayScore = ScoreDisplay :: instance();
@@ -62,12 +62,12 @@ if ($scoreform->validate()) {
 
     // create new array of custom display settings
     // this loop also checks if all score ranges are unique
-    $scoringDisplay = array();
+    $scoringDisplay = [];
     $ranges_ok = true;
     $endscore = isset($values['endscore']) ? $values['endscore'] : null;
     $displaytext = isset($values['displaytext']) ? $values['displaytext'] : null;
     for ($counter = 1; $ranges_ok && $counter <= 20; $counter++) {
-        $setting = array();
+        $setting = [];
         $setting['score'] = $endscore[$counter];
         $setting['display'] = $displaytext[$counter];
         if (!empty($setting['score'])) {

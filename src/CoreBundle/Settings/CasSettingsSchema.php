@@ -27,7 +27,7 @@ class CasSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'cas_activate' => '',
                     'cas_server' => '',
                     'cas_server_uri' => '',
@@ -35,14 +35,13 @@ class CasSettingsSchema extends AbstractSettingsSchema
                     'cas_protocol' => '',
                     'cas_add_user_activate' => '',
                     'update_user_info_cas_with_ldap' => '',
-                )
+                ]
             )
 //            ->setAllowedTypes(
 //                array(
 //                )
 //            )
         ;
-
     }
 
     /**

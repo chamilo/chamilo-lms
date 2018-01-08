@@ -52,13 +52,13 @@ class HookManagement implements HookManagementInterface
             $row = Database::select(
                 'id, enabled',
                 $this->tables[TABLE_HOOK_CALL],
-                array(
-                    'where' => array(
+                [
+                    'where' => [
                         'hook_event_id = ? ' => $this->hookEvents[$eventName],
                         'AND hook_observer_id = ? ' => $this->hookObservers[$observerClassName],
                         'AND type = ? ' => $type,
-                    ),
-                ),
+                    ],
+                ],
                 'ASSOC'
             );
 
@@ -67,12 +67,12 @@ class HookManagement implements HookManagementInterface
                 if ((int) $row['enabled'] === 0) {
                     Database::update(
                         $this->tables[TABLE_HOOK_CALL],
-                        array(
+                        [
                             'enabled' => 1,
-                        ),
-                        array(
+                        ],
+                        [
                             'id = ?' => $row['id'],
-                        )
+                        ]
                     );
                 }
             }
@@ -97,12 +97,12 @@ class HookManagement implements HookManagementInterface
 
             Database::update(
                 $this->tables[TABLE_HOOK_CALL],
-                array(
+                [
                     'enabled' => 0,
-                ),
-                array(
+                ],
+                [
                     'id = ? ' => $this->hookCalls[$eventName][$observerClassName][$type],
-                )
+                ]
             );
         }
     }
@@ -121,13 +121,13 @@ class HookManagement implements HookManagementInterface
             foreach ($hookOrders as $oldOrder => $newOrder) {
                 $res = Database::update(
                     $this->tables[TABLE_HOOK_CALL],
-                    array(
+                    [
                         'hook_order ' => $newOrder,
-                    ),
-                    array(
+                    ],
+                    [
                         'id = ? ' => $types[$type],
                         'AND hook_order = ? ' => $oldOrder,
-                    )
+                    ]
                 );
 
                 if ($res) {
@@ -145,14 +145,14 @@ class HookManagement implements HookManagementInterface
      */
     public function listHookObservers($eventName)
     {
-        $array = array();
+        $array = [];
         $joinTable = $this->tables[TABLE_HOOK_CALL].' hc'.
             ' INNER JOIN '.$this->tables[TABLE_HOOK_EVENT].' he'.
             ' ON hc.hook_event_id = he.id '.
             ' INNER JOIN '.$this->tables[TABLE_HOOK_OBSERVER].' ho '.
             ' ON hc.hook_observer_id = ho.id ';
         $columns = 'ho.class_name, ho.path, ho.plugin_name, hc.enabled';
-        $where = array('where' => array('he.class_name = ? ' => $eventName, 'AND hc.enabled = ? ' => 1));
+        $where = ['where' => ['he.class_name = ? ' => $eventName, 'AND hc.enabled = ? ' => 1]];
         $rows = Database::select($columns, $joinTable, $where);
 
         foreach ($rows as $row) {
@@ -168,7 +168,7 @@ class HookManagement implements HookManagementInterface
      */
     public function listAllHookObservers()
     {
-        $array = array();
+        $array = [];
         $columns = 'id, class_name';
         $rows = Database::select($columns, $this->tables[TABLE_HOOK_OBSERVER]);
 
@@ -185,7 +185,7 @@ class HookManagement implements HookManagementInterface
      */
     public function listAllHookEvents()
     {
-        $array = array();
+        $array = [];
         $columns = 'id, class_name';
         $rows = Database::select($columns, $this->tables[TABLE_HOOK_EVENT]);
 
@@ -202,7 +202,7 @@ class HookManagement implements HookManagementInterface
      */
     public function listAllHookCalls()
     {
-        $array = array();
+        $array = [];
         $joinTable = $this->tables[TABLE_HOOK_CALL].' hc'.
             ' INNER JOIN '.$this->tables[TABLE_HOOK_EVENT].' he'.
             ' ON hc.hook_event_id = he.id '.
@@ -230,10 +230,10 @@ class HookManagement implements HookManagementInterface
     {
         // Check if exists hook event
         if (isset($eventName) && !isset($this->hookEvents[$eventName])) {
-            $attributes = array(
+            $attributes = [
                 'class_name' => $eventName,
                 'description' => get_lang('HookDescription'.$eventName),
-            );
+            ];
             $id = Database::insert($this->tables[TABLE_HOOK_EVENT], $attributes);
             $this->hookEvents[$eventName] = $id;
         }
@@ -243,11 +243,11 @@ class HookManagement implements HookManagementInterface
             !isset($this->hookObservers[$observerClassName])
         ) {
             $object = $observerClassName::create();
-            $attributes = array(
+            $attributes = [
                 'class_name' => $observerClassName,
                 'path' => $object->getPath(),
                 'plugin_name' => $object->getPluginName(),
-            );
+            ];
             $id = Database::insert($this->tables[TABLE_HOOK_OBSERVER], $attributes);
             $this->hookObservers[$observerClassName] = $id;
         }
@@ -261,25 +261,25 @@ class HookManagement implements HookManagementInterface
             $row = Database::select(
                 'MAX(hook_order) as hook_order',
                 $this->tables[TABLE_HOOK_CALL],
-                array(
-                    'where' => array(
+                [
+                    'where' => [
                         'hook_event_id = ? ' =>$this->hookEvents[$eventName],
                         'AND type = ? ' => HOOK_EVENT_TYPE_PRE,
-                    ),
-                ),
+                    ],
+                ],
                 'ASSOC'
             );
 
             // Check if exists hook call
             $id = Database::insert(
                 $this->tables[TABLE_HOOK_CALL],
-                array(
+                [
                     'hook_event_id' => $this->hookEvents[$eventName],
                     'hook_observer_id' => $this->hookObservers[$observerClassName],
                     'type' => HOOK_EVENT_TYPE_PRE,
                     'enabled' => 0,
                     'hook_order' => $row['hook_order'] + 1,
-                )
+                ]
             );
 
             $this->hookCalls[$eventName][$observerClassName][HOOK_EVENT_TYPE_PRE] = $id;
@@ -288,29 +288,28 @@ class HookManagement implements HookManagementInterface
             $row = Database::select(
                 'MAX(hook_order) as hook_order',
                 $this->tables[TABLE_HOOK_CALL],
-                array(
-                    'where' => array(
+                [
+                    'where' => [
                         'hook_event_id = ? ' =>$this->hookEvents[$eventName],
                         'AND type = ? ' => HOOK_EVENT_TYPE_POST,
-                    ),
-                ),
+                    ],
+                ],
                 'ASSOC'
             );
 
             // Check if exists hook call
             $id = Database::insert(
                 $this->tables[TABLE_HOOK_CALL],
-                array(
+                [
                     'hook_event_id' => $this->hookEvents[$eventName],
                     'hook_observer_id' => $this->hookObservers[$observerClassName],
                     'type' => HOOK_EVENT_TYPE_POST,
                     'enabled' => 0,
                     'hook_order' => $row['hook_order'] + 1,
-                )
+                ]
             );
 
             $this->hookCalls[$eventName][$observerClassName][HOOK_EVENT_TYPE_POST] = $id;
-
         } elseif (isset($eventName) && !isset($observerClassName)) {
             foreach ($this->hookObservers as $observer => $id) {
                 $this->insertHookIfNotExist($eventName, $observer);
@@ -345,13 +344,13 @@ class HookManagement implements HookManagementInterface
         $row = Database::select(
             'id',
             $joinTable,
-            array(
-                'where' => array(
+            [
+                'where' => [
                     'he.class_name = ? ' => $eventName,
                     'AND ho.class_name = ? ' => $observerClassName,
                     'AND hc.type = ? ' => $type,
-                ),
-            ),
+                ],
+            ],
             'ASSOC'
         );
 

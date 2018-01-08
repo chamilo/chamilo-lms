@@ -19,10 +19,10 @@ if (!api_is_allowed_to_edit(null, true)) {
 }
 
 // the breadcrumbs
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => api_get_path(WEB_CODE_PATH)."exercise/exercise.php?".api_get_cidreq(),
     "name" => get_lang('Exercises')
-);
+];
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
 /**
@@ -39,7 +39,7 @@ function displayForm()
         'post',
         api_get_self()."?".api_get_cidreq(),
         null,
-        array('enctype' => 'multipart/form-data')
+        ['enctype' => 'multipart/form-data']
     );
     $formValidator->addHeader(get_lang('ImportQtiQuiz'));
     $formValidator->addElement('file', 'userFile', get_lang('DownloadFile'));

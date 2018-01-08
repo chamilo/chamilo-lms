@@ -62,12 +62,12 @@ class AttendanceLink extends AbstractLink
                 AND att.session_id='.api_get_session_id().'';
         $result = Database::query($sql);
 
-        $cats = array();
+        $cats = [];
         while ($data = Database::fetch_array($result)) {
             if (isset($data['attendance_qualify_title']) && $data['attendance_qualify_title'] != '') {
-                $cats[] = array($data['id'], $data['attendance_qualify_title']);
+                $cats[] = [$data['id'], $data['attendance_qualify_title']];
             } else {
-                $cats[] = array($data['id'], $data['name']);
+                $cats[] = [$data['id'], $data['name']];
             }
         }
 
@@ -96,9 +96,9 @@ class AttendanceLink extends AbstractLink
 
         while ($data = Database::fetch_array($result)) {
             if (isset($data['attendance_qualify_title']) && $data['attendance_qualify_title'] != '') {
-                $cats[] = array($data['id'], $data['attendance_qualify_title']);
+                $cats[] = [$data['id'], $data['attendance_qualify_title']];
             } else {
-                $cats[] = array($data['id'], $data['name']);
+                $cats[] = [$data['id'], $data['name']];
             }
         }
         $my_cats = isset($cats) ? $cats : null;
@@ -154,17 +154,17 @@ class AttendanceLink extends AbstractLink
         // for 1 student
         if (isset($stud_id)) {
             if ($data = Database::fetch_array($scores, 'ASSOC')) {
-                return array(
+                return [
                     $data['score'],
                     $attendance['attendance_qualify_max'],
-                );
+                ];
             } else {
                 //We sent the 0/attendance_qualify_max instead of null for correct calculations
-                return array(0, $attendance['attendance_qualify_max']);
+                return [0, $attendance['attendance_qualify_max']];
             }
         } else {
             // all students -> get average
-            $students = array(); // user list, needed to make sure we only
+            $students = []; // user list, needed to make sure we only
             // take first attempts into account
             $rescount = 0;
             $sum = 0;
@@ -191,16 +191,16 @@ class AttendanceLink extends AbstractLink
             } else {
                 switch ($type) {
                     case 'best':
-                        return array($bestResult, $weight);
+                        return [$bestResult, $weight];
                         break;
                     case 'average':
-                        return array($sumResult / $rescount, $weight);
+                        return [$sumResult / $rescount, $weight];
                         break;
                     case 'ranking':
                         return AbstractLink::getCurrentUserRanking($stud_id, $students);
                         break;
                     default:
-                        return array($sum, $rescount);
+                        return [$sum, $rescount];
                         break;
                 }
             }

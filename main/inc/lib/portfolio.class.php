@@ -46,10 +46,10 @@ class Portfolio
     {
         $conf = api_get_path(SYS_CODE_PATH).'inc/conf/portfolio.conf.php';
         if (!is_readable($conf)) {
-            return array();
+            return [];
         }
         include $conf;
-        return isset($portfolios) ? $portfolios : array();
+        return isset($portfolios) ? $portfolios : [];
     }
 
     /**
@@ -108,7 +108,7 @@ class Portfolio
      * @param array $attributes
      * @return \PortfolioShare
      */
-    public static function share($tool, $id, $attributes = array())
+    public static function share($tool, $id, $attributes = [])
     {
         return PortfolioShare::factory($tool, $id, $attributes);
     }
@@ -139,7 +139,6 @@ class Portfolio
         $result = Uri::url("/main/$tool/file.php", $params, false);
         return $result;
     }
-
 }
 
 /**
@@ -155,7 +154,6 @@ class Portfolio
  */
 class PortfolioController
 {
-
     const PARAM_ACTION = 'action';
     const PARAM_ID = 'id';
     const PARAM_TOOL = 'tool';
@@ -169,7 +167,7 @@ class PortfolioController
      *
      * @return \PortfolioController
      */
-    static function instance()
+    public static function instance()
     {
         static $result = null;
         if (empty($result)) {
@@ -182,7 +180,6 @@ class PortfolioController
 
     protected function __construct()
     {
-
     }
 
     public static function portfolios()
@@ -204,11 +201,11 @@ class PortfolioController
 
         $items = self::portfolios();
         if (empty($items)) {
-            $result = array();
+            $result = [];
             return $result;
         }
 
-        $result = array();
+        $result = [];
         foreach ($items as $item) {
             $action = PortfolioBulkAction::create($item);
             $result[] = $action;
@@ -222,7 +219,7 @@ class PortfolioController
      *
      * @return boolean
      */
-    function accept()
+    public function accept()
     {
         if (!Portfolio::is_enabled()) {
             return false;
@@ -254,7 +251,7 @@ class PortfolioController
      *
      * @return string
      */
-    function get_controller()
+    public function get_controller()
     {
         return Request::get(self::PARAM_CONTROLLER);
     }
@@ -265,7 +262,7 @@ class PortfolioController
      *
      * @return string
      */
-    function get_action()
+    public function get_action()
     {
         $result = Request::get(self::PARAM_ACTION);
         return ($result == self::ACTION_SHARE) ? self::ACTION_SHARE : '';
@@ -276,7 +273,7 @@ class PortfolioController
      *
      * @return int
      */
-    function get_id()
+    public function get_id()
     {
         return (int) Request::get(self::PARAM_ID);
     }
@@ -286,7 +283,7 @@ class PortfolioController
      *
      * @return string
      */
-    function course_code()
+    public function course_code()
     {
         return ChamiloSession::instance()->course()->code();
     }
@@ -296,7 +293,7 @@ class PortfolioController
      *
      * @return type
      */
-    function get_portfolio()
+    public function get_portfolio()
     {
         return Request::get(self::PARAM_PORTFOLIO);
     }
@@ -307,7 +304,7 @@ class PortfolioController
      * @global string $current_course_tool
      * @return string
      */
-    function get_tool()
+    public function get_tool()
     {
         global $current_course_tool;
         return Request::get(self::PARAM_TOOL, $current_course_tool);
@@ -317,7 +314,7 @@ class PortfolioController
      * Returns the end user message after running the controller..
      * @return string
      */
-    function message()
+    public function message()
     {
         return $this->message;
     }
@@ -331,7 +328,7 @@ class PortfolioController
      *
      * @return PortfolioController
      */
-    function run()
+    public function run()
     {
         if (!$this->accept()) {
             return $this;
@@ -346,7 +343,6 @@ class PortfolioController
 
         $action = $this->get_action();
         if ($action == self::ACTION_SHARE) {
-
             $user = new \Portfolio\User();
             $user->email = Chamilo::user()->email();
 
@@ -369,7 +365,6 @@ class PortfolioController
         }
         return $this;
     }
-
 }
 
 /**
@@ -397,7 +392,7 @@ class PortfolioShare
      * @param array $attributes     Html attributes
      * @return \PortfolioShare
      */
-    static function factory($tool, $id, $attributes = array())
+    public static function factory($tool, $id, $attributes = [])
     {
         $result = new self($tool, $id, $attributes);
         return $result;
@@ -408,7 +403,7 @@ class PortfolioShare
      *
      * @return type
      */
-    static function security_token()
+    public static function security_token()
     {
         static $result = null;
         if (empty($result)) {
@@ -418,10 +413,10 @@ class PortfolioShare
     }
 
     protected $id = 0;
-    protected $attributes = array();
+    protected $attributes = [];
     protected $tool = '';
 
-    function __construct($tool, $id, $attributes = array())
+    public function __construct($tool, $id, $attributes = [])
     {
         $this->tool = $tool;
         $this->id = (int) $id;
@@ -432,7 +427,7 @@ class PortfolioShare
      * Object id to send
      * @return int
      */
-    function get_id()
+    public function get_id()
     {
         return $this->id;
     }
@@ -441,7 +436,7 @@ class PortfolioShare
      * Object id to send
      * @return int
      */
-    function get_c_id()
+    public function get_c_id()
     {
         return $this->c_id;
     }
@@ -451,7 +446,7 @@ class PortfolioShare
      *
      * @return array
      */
-    function get_attributes()
+    public function get_attributes()
     {
         return $this->attributes;
     }
@@ -461,7 +456,7 @@ class PortfolioShare
      *
      * @return string
      */
-    function get_tool()
+    public function get_tool()
     {
         return $this->tool;
     }
@@ -471,7 +466,7 @@ class PortfolioShare
      *
      * @return string
      */
-    function display()
+    public function display()
     {
         if (!Portfolio::is_enabled()) {
             return '';
@@ -486,11 +481,11 @@ class PortfolioShare
             $s .= $key.'="'.$value.'" ';
         }
 
-        $result = array();
+        $result = [];
         $result[] = '<span '.$s.' >';
         $result[] = '<span class="dropdown" >';
         $result[] = '<a href="#" data-toggle="dropdown" class="dropdown-toggle">';
-        $result[] = Display::return_icon('document_send.png', get_lang('Send'), array(), ICON_SIZE_SMALL).'<b class="caret"></b>';
+        $result[] = Display::return_icon('document_send.png', get_lang('Send'), [], ICON_SIZE_SMALL).'<b class="caret"></b>';
         $result[] = '</a>';
         $result[] = '<ul class="dropdown-menu">';
 
@@ -515,11 +510,10 @@ class PortfolioShare
         return implode("\n", $result);
     }
 
-    function __toString()
+    public function __toString()
     {
         return $this->display();
     }
-
 }
 
 /**
@@ -617,9 +611,9 @@ class PortfolioBulkAction
         $course = Course::current();
 
         $pathes = Request::get('path');
-        $pathes = is_array($pathes) ? $pathes : array($pathes);
+        $pathes = is_array($pathes) ? $pathes : [$pathes];
 
-        $ids = array();
+        $ids = [];
         foreach ($pathes as $path) {
             $doc = Document::get_by_path($course, $path);
             if ($doc) {
@@ -640,5 +634,4 @@ class PortfolioBulkAction
         $result = $portfolio->send($user, $artefact);
         return $result;
     }
-
 }

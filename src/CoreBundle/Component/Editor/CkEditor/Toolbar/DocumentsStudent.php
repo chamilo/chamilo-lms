@@ -159,5 +159,4 @@ class DocumentsStudent extends Basic
             ['Toolbarswitch']
         ];
     }
-
 }

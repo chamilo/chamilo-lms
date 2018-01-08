@@ -55,5 +55,4 @@ class Register extends Basic
             ['JustifyLeft', 'JustifyCenter', '-', 'NumberedList', 'BulletedList', '-', 'TextColor', 'BGColor']
         ];
     }
-
 }

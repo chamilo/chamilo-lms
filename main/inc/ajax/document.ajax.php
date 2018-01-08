@@ -103,12 +103,12 @@ switch ($action) {
                     'files'
                 );
 
-                $json = array();
+                $json = [];
                 if (!empty($result) && is_array($result)) {
                     $json['name'] = Display::url(
                         api_htmlentities($result['title']),
                         api_htmlentities($result['url']),
-                        array('target'=>'_blank')
+                        ['target'=>'_blank']
                     );
 
                     $json['url'] = $result['url'];

@@ -106,7 +106,6 @@ class HtmlEditor extends HTML_QuickForm_textarea
             } else {
                 $result = $this->editor->createHtml();
             }
-
         }
 
         return $result;

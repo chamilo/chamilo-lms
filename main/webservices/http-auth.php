@@ -12,7 +12,9 @@ $nonce = uniqid();
 $digest = getDigest();
 
 // If there was no digest, show login
-if (is_null($digest)) requireLogin($realm, $nonce);
+if (is_null($digest)) {
+    requireLogin($realm, $nonce);
+}
 
 $digestParts = digestParse($digest);
 
@@ -25,12 +27,12 @@ $A2 = md5("{$_SERVER['REQUEST_METHOD']}:{$digestParts['uri']}");
 
 $validResponse = md5("{$A1}:{$digestParts['nonce']}:{$digestParts['nc']}:{$digestParts['cnonce']}:{$digestParts['qop']}:{$A2}");
 
-if ($digestParts['response'] != $validResponse)
-  requireLogin($realm, $nonce);
-else {
-  // We're in!
-  echo 'a7532ae474e5e66a0c16eddab02e02a7';
-  die();
+if ($digestParts['response'] != $validResponse) {
+    requireLogin($realm, $nonce);
+} else {
+    // We're in!
+    echo 'a7532ae474e5e66a0c16eddab02e02a7';
+    die();
 }
 
 // This function returns the digest string
@@ -55,7 +57,8 @@ function getDigest()
 }
 
 // This function forces a login prompt
-function requireLogin($realm, $nonce) {
+function requireLogin($realm, $nonce)
+{
     header('WWW-Authenticate: Digest realm="'.$realm.'",qop="auth",nonce="'.$nonce.'",opaque="'.md5($realm).'"');
     header('HTTP/1.1 401');
     echo 'Authentication Canceled';
@@ -63,10 +66,11 @@ function requireLogin($realm, $nonce) {
 }
 
 // This function extracts the separate values from the digest string
-function digestParse($digest) {
+function digestParse($digest)
+{
     // protect against missing data
-    $needed_parts = array('nonce' => 1, 'nc' => 1, 'cnonce' => 1, 'qop' => 1, 'username' => 1, 'uri' => 1, 'response' => 1);
-    $data = array();
+    $needed_parts = ['nonce' => 1, 'nc' => 1, 'cnonce' => 1, 'qop' => 1, 'username' => 1, 'uri' => 1, 'response' => 1];
+    $data = [];
 
     preg_match_all('@(\w+)=(?:(?:")([^"]+)"|([^\s,$]+))@', $digest, $matches, PREG_SET_ORDER);
 

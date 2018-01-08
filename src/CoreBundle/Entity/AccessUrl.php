@@ -477,8 +477,4 @@ class AccessUrl
         $this->limitCourses = $limitCourses;
         return $this;
     }
-
-
-
-
 }

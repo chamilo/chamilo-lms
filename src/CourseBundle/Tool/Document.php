@@ -8,5 +8,4 @@ namespace Chamilo\CourseBundle\Tool;
  */
 class Document extends BaseTool
 {
-
 }

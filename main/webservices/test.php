@@ -24,7 +24,7 @@ if ($err) {
     echo '<h2>Constructor error</h2><pre>'.$err.'</pre>';
     // At this point, you know the call that follows will fail
 }
-$response = array();
+$response = [];
 if (!empty($function)) {
     $response = $client->call($function);
     echo '<pre>';
@@ -35,9 +35,11 @@ if (!empty($function)) {
 }
 
 $list = scandir($serversys);
-$scripts = array();
+$scripts = [];
 foreach ($list as $item) {
-    if (substr($item, 0, 1) == '.') { continue; }
+    if (substr($item, 0, 1) == '.') {
+        continue;
+    }
     if (substr($item, -8) == 'soap.php') {
         $scripts[] = $item;
     }

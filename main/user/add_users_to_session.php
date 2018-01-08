@@ -22,18 +22,18 @@ SessionManager::protect_teacher_session_edit($id_session);
 
 // setting breadcrumbs
 if (api_is_platform_admin()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'index.php',
         'name' => get_lang('PlatformAdmin')
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => 'session_list.php',
         'name' => get_lang('SessionList')
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => "resume_session.php?id_session=".$id_session,
         "name" => get_lang('SessionOverview')
-    );
+    ];
 }
 $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
 $extra_field_list = [];
@@ -56,16 +56,16 @@ if ($allowTutors == 'true') {
 
     // Checking for extra field with filter on
     $extra_field_list = UserManager::get_extra_fields();
-    $new_field_list = array();
+    $new_field_list = [];
     if (is_array($extra_field_list)) {
         foreach ($extra_field_list as $extra_field) {
             //if is enabled to filter and is a "<select>" field type
             if ($extra_field[8] == 1 && $extra_field[2] == 4) {
-                $new_field_list[] = array(
+                $new_field_list[] = [
                     'name' => $extra_field[3],
                     'variable' => $extra_field[1],
                     'data' => $extra_field[9],
-                );
+                ];
             }
         }
     }
@@ -94,14 +94,14 @@ if ($allowTutors == 'true') {
             $cond_user_id = '';
 
             //Only for single & multiple
-            if (in_array($type, array('single', 'multiple'))) {
+            if (in_array($type, ['single', 'multiple'])) {
                 if (!empty($id_session)) {
                     $id_session = intval($id_session);
                     // check id_user from session_rel_user table
                     $sql = 'SELECT user_id FROM '.$tbl_session_rel_user.'
                             WHERE session_id ="'.$id_session.'" AND relation_type<>'.SESSION_RELATION_TYPE_RRHH.' ';
                     $res = Database::query($sql);
-                    $user_ids = array();
+                    $user_ids = [];
                     if (Database::num_rows($res) > 0) {
                         while ($row = Database::fetch_row($res)) {
                             $user_ids[] = (int) $row[0];
@@ -266,8 +266,8 @@ if ($allowTutors == 'true') {
 
     $form_sent = 0;
     $firstLetterUser = $firstLetterSession = '';
-    $UserList = $SessionList = array();
-    $sessions = array();
+    $UserList = $SessionList = [];
+    $sessions = [];
     if (isset($_POST['form_sent']) && $_POST['form_sent']) {
         $form_sent = $_POST['form_sent'];
         $firstLetterUser = $_POST['firstLetterUser'];
@@ -275,7 +275,7 @@ if ($allowTutors == 'true') {
         $UserList = $_POST['sessionUsersList'];
 
         if (!is_array($UserList)) {
-            $UserList = array();
+            $UserList = [];
         }
 
         if ($form_sent == 1) {
@@ -289,7 +289,7 @@ if ($allowTutors == 'true') {
     $session_info = SessionManager::fetch($id_session);
     Display::display_header($tool_name);
 
-    $nosessionUsersList = $sessionUsersList = array();
+    $nosessionUsersList = $sessionUsersList = [];
 
     $ajax_search = $add_type === 'unique' ? true : false;
 
@@ -332,7 +332,7 @@ if ($allowTutors == 'true') {
         $use_extra_fields = false;
         if (is_array($extra_field_list)) {
             if (is_array($new_field_list) && count($new_field_list) > 0) {
-                $result_list = array();
+                $result_list = [];
                 foreach ($new_field_list as $new_field) {
                     $varname = 'field_'.$new_field['variable'];
                     if (UserManager::is_extra_field_available($new_field['variable'])) {
@@ -349,7 +349,7 @@ if ($allowTutors == 'true') {
         }
 
         if ($use_extra_fields) {
-            $final_result = array();
+            $final_result = [];
             if (count($extra_field_result) > 1) {
                 for ($i = 0; $i < count($extra_field_result) - 1; $i++) {
                     if (is_array($extra_field_result[$i + 1])) {
@@ -390,7 +390,6 @@ if ($allowTutors == 'true') {
                     $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
                     $where_filter AND u.status<>".DRH." AND u.status<>6
                     $order_clause";
-
         } else {
             $sql = "SELECT  user_id, lastname, firstname, username, session_id
                     FROM $tbl_user u
@@ -423,11 +422,11 @@ if ($allowTutors == 'true') {
 
         foreach ($users as $uid => $user) {
             if ($user['session_id'] != $id_session) {
-                $nosessionUsersList[$user['user_id']] = array(
+                $nosessionUsersList[$user['user_id']] = [
                     'fn' => $user['firstname'],
                     'ln' => $user['lastname'],
                     'un' => $user['username']
-                );
+                ];
                 unset($users[$uid]);
             }
         }
@@ -480,13 +479,16 @@ if ($allowTutors == 'true') {
         $link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
         $link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
     }
-        $link_add_group = '<a href="usergroups.php">'.
-            Display::return_icon('multiple.gif', get_lang('RegistrationByUsersGroups')).get_lang('RegistrationByUsersGroups').'</a>';
-    ?>
+    $link_add_group = '<a href="usergroups.php">'.
+            Display::return_icon('multiple.gif', get_lang('RegistrationByUsersGroups')).get_lang('RegistrationByUsersGroups').'</a>'; ?>
     <div class="actions">
         <?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>&nbsp;|&nbsp;<?php echo $link_add_group; ?>
     </div>
-    <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($_GET['add'])) echo '&add=true'; ?>" style="margin:0px;" <?php if ($ajax_search) {echo ' onsubmit="valide();"'; }?>>
+    <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($_GET['add'])) {
+                echo '&add=true';
+            } ?>" style="margin:0px;" <?php if ($ajax_search) {
+                echo ' onsubmit="valide();"';
+            } ?>>
     <?php echo '<legend>'.$tool_name.' ('.$session->getName().') </legend>'; ?>
     <?php
     if ($add_type === 'multiple') {
@@ -514,8 +516,7 @@ if ($allowTutors == 'true') {
                 echo '<br /><br />';
             }
         }
-    }
-    ?>
+    } ?>
     <input type="hidden" name="form_sent" value="1" />
     <input type="hidden" name="add_type"  />
     <div class="row">
@@ -523,42 +524,43 @@ if ($allowTutors == 'true') {
             <div class="multiple_select_header">
                 <b><?php echo get_lang('UserListInPlatform') ?> :</b>
 
-            <?php if ($add_type == 'multiple') { ?>
+            <?php if ($add_type == 'multiple') {
+        ?>
                 <?php echo get_lang('FirstLetterUser'); ?> :
                     <select id="first_letter_user" name="firstLetterUser" onchange = "change_select(this.value);" >
                     <option value = "%">--</option>
                     <?php
-                        echo Display :: get_alphabet_options();
-                    ?>
+                        echo Display :: get_alphabet_options(); ?>
                     </select>
-            <?php } ?>
+            <?php
+    } ?>
             </div>
                 <div id="content_source">
                 <?php
                 if (!($add_type == 'multiple')) {
-                  ?>
+                    ?>
                   <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" />
                   <div id="ajax_list_users_single"></div>
                   <?php
                 } else {
-                ?>
+                    ?>
                 <div id="ajax_list_users_multiple">
                 <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" class="span5">
                   <?php
                   foreach ($nosessionUsersList as $uid => $enreg) {
-                  ?>
-                      <option value="<?php echo $uid; ?>" <?php if (in_array($uid, $UserList)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['fn'], $enreg['ln']).' ('.$enreg['un'].')'; ?></option>
+                      ?>
+                      <option value="<?php echo $uid; ?>" <?php if (in_array($uid, $UserList)) {
+                          echo 'selected="selected"';
+                      } ?>><?php echo api_get_person_name($enreg['fn'], $enreg['ln']).' ('.$enreg['un'].')'; ?></option>
                   <?php
-                  }
-                  ?>
+                  } ?>
                 </select>
                 </div>
                     <input type="checkbox" onchange="checked_in_no_session(this.checked);" name="user_with_any_session" id="user_with_any_session_id">
                     <label for="user_with_any_session_id"><?php echo get_lang('UsersRegisteredInNoSession'); ?></label>
                 <?php
                 }
-                unset($nosessionUsersList);
-               ?>
+    unset($nosessionUsersList); ?>
             </div>
         </div>
 
@@ -566,11 +568,11 @@ if ($allowTutors == 'true') {
             <div style="padding-top:54px;width:auto;text-align: center;">
             <?php
                 if ($ajax_search) {
-                ?>
+                    ?>
                   <button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('destination_users'))" ><em class="fa fa-arrow-left"></em></button>
                 <?php
-            } else {
-                ?>
+                } else {
+                    ?>
                     <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))">
                         <em class="fa fa-arrow-right"></em>
                     </button>
@@ -579,8 +581,7 @@ if ($allowTutors == 'true') {
                         <em class="fa fa-arrow-left"></em>
                     </button>
                   <?php
-            }
-            ?>
+                } ?>
             </div>
             <br />
             <br />
@@ -590,8 +591,7 @@ if ($allowTutors == 'true') {
             } else {
                 //@todo see that the call to "valide()" doesn't duplicate the onsubmit of the form (necessary to avoid delete on "enter" key pressed)
                 echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToSession').'</button>';
-            }
-            ?>
+            } ?>
         </div>
         <div class="span5">
             <div class="multiple_select_header">
@@ -600,12 +600,11 @@ if ($allowTutors == 'true') {
             <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" class="span5">
             <?php
             foreach ($sessionUsersList as $enreg) {
-            ?>
+                ?>
                 <option value="<?php echo $enreg['user_id']; ?>"><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
             <?php
             }
-            unset($sessionUsersList);
-            ?>
+    unset($sessionUsersList); ?>
             </select>
         </div>
     </div>
@@ -692,6 +691,6 @@ if ($allowTutors == 'true') {
     </script>
 <?php
 } else {
-    api_not_allowed();
-}
+        api_not_allowed();
+    }
 Display::display_footer();

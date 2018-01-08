@@ -11,8 +11,9 @@ require_once __DIR__.'/language.php';
 /**
  * Security checks
  */
-if (!isset($_SESSION['conditional_login']['uid']))
-  die("Not Authorised");
+if (!isset($_SESSION['conditional_login']['uid'])) {
+    die("Not Authorised");
+}
 
 if (isset($_POST['password'])) {
     $u = api_get_user_info($_SESSION['conditional_login']['uid']);
@@ -95,8 +96,8 @@ $www = api_get_path('WEB_PATH');
         <div id="changepassword-form-box" class="form-box">
       <div class="info"> <?php echo custompages_get_lang('FirstLoginChangePassword'); ?> </div>
         <?php if (isset($error_message)) {
-            echo '<div id="changepassword-form-error" class="form-error">'.$error_message.'</div>';
-        }?>
+    echo '<div id="changepassword-form-error" class="form-error">'.$error_message.'</div>';
+}?>
             <form id="changepassword-form" class="form" method="post">
                 <div>
           <label for="password">*<?php echo custompages_get_lang('Password'); ?></label>

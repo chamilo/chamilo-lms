@@ -28,7 +28,7 @@ function api_html_to_text($string)
     $string = strip_tags($string);
 
     // Line endings unification and cleaning.
-    $string = str_replace(array("\r\n", "\n\r", "\r"), "\n", $string);
+    $string = str_replace(["\r\n", "\n\r", "\r"], "\n", $string);
     $string = preg_replace('/\s*\n/', "\n", $string);
     $string = preg_replace('/\n+/', "\n", $string);
 
@@ -410,16 +410,17 @@ function esc_url($url, $protocols = null, $_context = 'display')
         return $url;
     }
     $url = preg_replace('|[^a-z0-9-~+_.?#=!&;,/:%@$\|*\'()\\x80-\\xff]|i', '', $url);
-    $strip = array('%0d', '%0a', '%0D', '%0A');
+    $strip = ['%0d', '%0a', '%0D', '%0A'];
     $url = _deep_replace($strip, $url);
     $url = str_replace(';//', '://', $url);
     /* If the URL doesn't appear to contain a scheme, we
      * presume it needs http:// appended (unless a relative
      * link starting with /, # or ? or a php file).
      */
-    if (strpos($url, ':') === false && !in_array($url[0], array('/', '#', '?')) &&
-        !preg_match('/^[a-z0-9-]+?\.php/i', $url))
+    if (strpos($url, ':') === false && !in_array($url[0], ['/', '#', '?']) &&
+        !preg_match('/^[a-z0-9-]+?\.php/i', $url)) {
         $url = 'http://'.$url;
+    }
 
     return Security::remove_XSS($url);
 
@@ -502,7 +503,7 @@ function _make_web_ftp_clickable_cb($matches)
     }
 
     // removed trailing [.,;:)] from URL
-    if (in_array(substr($dest, -1), array('.', ',', ';', ':', ')')) === true) {
+    if (in_array(substr($dest, -1), ['.', ',', ';', ':', ')']) === true) {
         $ret = substr($dest, -1);
         $dest = substr($dest, 0, strlen($dest) - 1);
     }
@@ -630,7 +631,7 @@ function make_clickable($text)
  */
 function _split_str_by_whitespace($string, $goal)
 {
-    $chunks = array();
+    $chunks = [];
     $string_nullspace = strtr($string, "\r\n\t\v\f ", "\000\000\000\000\000\000");
     while ($goal < strlen($string_nullspace)) {
         $pos = strrpos(substr($string_nullspace, 0, $goal + 1), "\000");
@@ -713,7 +714,7 @@ function get_last_week()
     }
 
     $lastweek = sprintf("%02d", $lastweek);
-    $arrdays = array();
+    $arrdays = [];
     for ($i = 1; $i <= 7; $i++) {
         $arrdays[] = strtotime("$year"."W$lastweek"."$i");
     }
@@ -814,13 +815,21 @@ function return_datetime_from_array($array)
     if (isset($array['Y']) && (isset($array['F']) || isset($array['M'])) && isset($array['d']) && isset($array['H']) && isset($array['i'])) {
         $year = $array['Y'];
         $month = isset($array['F']) ? $array['F'] : $array['M'];
-        if (intval($month) < 10) $month = '0'.$month;
+        if (intval($month) < 10) {
+            $month = '0'.$month;
+        }
         $day = $array['d'];
-        if (intval($day) < 10) $day = '0'.$day;
+        if (intval($day) < 10) {
+            $day = '0'.$day;
+        }
         $hours = $array['H'];
-        if (intval($hours) < 10) $hours = '0'.$hours;
+        if (intval($hours) < 10) {
+            $hours = '0'.$hours;
+        }
         $minutes = $array['i'];
-        if (intval($minutes) < 10) $minutes = '0'.$minutes;
+        if (intval($minutes) < 10) {
+            $minutes = '0'.$minutes;
+        }
     }
     if (checkdate($month, $day, $year)) {
         $datetime = $year.'-'.$month.'-'.$day.' '.$hours.':'.$minutes.':'.$seconds;

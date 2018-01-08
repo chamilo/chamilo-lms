@@ -21,19 +21,19 @@ class DropboxSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'dropbox_allow_overwrite' => 'true',
                     'dropbox_max_filesize' => '100000000',
                     'dropbox_allow_just_upload' => 'true',
                     'dropbox_allow_student_to_student' => 'true',
                     'dropbox_allow_group' => 'true',
                     'dropbox_allow_mailing' => 'false'
-                )
+                ]
             );
 
-        $allowedTypes = array(
-            'dropbox_allow_overwrite' => array('string'),
-        );
+        $allowedTypes = [
+            'dropbox_allow_overwrite' => ['string'],
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 

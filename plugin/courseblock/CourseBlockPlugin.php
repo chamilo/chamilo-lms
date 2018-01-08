@@ -10,24 +10,24 @@ class CourseBlockPlugin extends Plugin
     public $addCourseTool = false;
 
     // When creating a new course this settings are added to the course
-    public $course_settings = array(
-         array(
+    public $course_settings = [
+         [
             'name' => 'course_block_pre_footer',
             'type' => 'textarea'
-        ),
-        array(
+        ],
+        [
             'name' => 'course_block_footer_left',
             'type' => 'textarea'
-        ),
-        array(
+        ],
+        [
             'name' => 'course_block_footer_center',
             'type' => 'textarea'
-        ),
-        array(
+        ],
+        [
             'name' => 'course_block_footer_right',
             'type' => 'textarea'
-        )
-    );
+        ]
+    ];
 
     /**
      * @return CourseBlockPlugin
@@ -46,9 +46,9 @@ class CourseBlockPlugin extends Plugin
         parent::__construct(
             '0.1',
             'Julio Montoya',
-            array(
+            [
                 'tool_enable' => 'boolean'
-            )
+            ]
         );
     }
 

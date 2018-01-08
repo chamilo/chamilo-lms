@@ -7,7 +7,6 @@
 
 namespace Chamilo\ThemeBundle\Model;
 
-
 interface UserInterface
 {
     public function getAvatar();

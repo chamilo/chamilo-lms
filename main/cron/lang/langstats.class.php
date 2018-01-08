@@ -138,7 +138,7 @@ class langstats
         $res = $this->db->query(
             'SELECT * FROM lang_freq ORDER BY term_count DESC LIMIT '.$num
         );
-        $list = array();
+        $list = [];
         while ($row = $res->fetchArray()) {
             $list[] = $row;
         }
@@ -164,8 +164,8 @@ class langstats
     public function get_variables_origin()
     {
         $path = api_get_path(SYS_LANG_PATH).'english/';
-        $vars = array();
-        $priority = array('trad4all');
+        $vars = [];
+        $priority = ['trad4all'];
         foreach ($priority as $file) {
             $list = SubLanguageManager::get_all_language_variable_in_file(
                 $path.$file.'.inc.php',

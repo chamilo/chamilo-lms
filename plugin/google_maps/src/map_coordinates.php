@@ -66,4 +66,3 @@ $content = $tpl->fetch('google_maps/view/map_coordinates.tpl');
 $tpl->assign('header', $templateName);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
-

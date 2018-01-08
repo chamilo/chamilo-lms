@@ -64,9 +64,9 @@ class SystemAnnouncementManager
         $userGroup = new UserGroup();
 
         $temp_user_groups = $userGroup->get_groups_by_user(api_get_user_id(), 0);
-        $groups = array();
+        $groups = [];
         foreach ($temp_user_groups as $user_group) {
-            $groups = array_merge($groups, array($user_group['id']));
+            $groups = array_merge($groups, [$user_group['id']]);
             $groups = array_merge(
                 $groups,
                 $userGroup->get_parent_groups($user_group['id'])
@@ -156,9 +156,9 @@ class SystemAnnouncementManager
         $userGroup = new UserGroup();
         $tbl_announcement_group = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS);
         $temp_user_groups = $userGroup->get_groups_by_user(api_get_user_id(), 0);
-        $groups = array();
+        $groups = [];
         foreach ($temp_user_groups as $user_group) {
-            $groups = array_merge($groups, array($user_group['id']));
+            $groups = array_merge($groups, [$user_group['id']]);
             $groups = array_merge($groups, $userGroup->get_parent_groups($user_group['id']));
         }
 
@@ -198,11 +198,11 @@ class SystemAnnouncementManager
             $content .= '<div class="system_announcements">';
             $content .= '<h3>'.get_lang('SystemAnnouncements').'</h3>';
             $content .= '<table align="center">';
-                $content .= '<tr>';
-                    $content .= '<td>';
-                        $content .= self::display_arrow($user_id);
-                    $content .= '</td>';
-                $content .= '</tr>';
+            $content .= '<tr>';
+            $content .= '<td>';
+            $content .= self::display_arrow($user_id);
+            $content .= '</td>';
+            $content .= '</tr>';
             $content .= '</table>';
             $content .= '<table align="center" border="0" width="900px">';
             while ($announcement = Database::fetch_object($announcements)) {
@@ -222,11 +222,11 @@ class SystemAnnouncementManager
             $content .= '</table>';
 
             $content .= '<table align="center">';
-                $content .= '<tr>';
-                    $content .= '<td>';
-                        $content .= self::display_arrow($user_id);
-                    $content .= '</td>';
-                $content .= '</tr>';
+            $content .= '<tr>';
+            $content .= '<td>';
+            $content .= self::display_arrow($user_id);
+            $content .= '</td>';
+            $content .= '</tr>';
             $content .= '</table>';
             $content .= '</div>';
         }
@@ -309,7 +309,7 @@ class SystemAnnouncementManager
         $sql .= " ORDER BY date_start ASC";
 
         $result = Database::query($sql);
-        $announcements = array();
+        $announcements = [];
         while ($announcement = Database::fetch_object($result)) {
             $announcements[] = $announcement;
         }
@@ -453,7 +453,6 @@ class SystemAnnouncementManager
             }
 
             return $resultId;
-
         }
 
         return false;
@@ -727,7 +726,7 @@ class SystemAnnouncementManager
         $language = null,
         $sendEmailTest = false
     ) {
-        $content = str_replace(array('\r\n', '\n', '\r'), '', $content);
+        $content = str_replace(['\r\n', '\n', '\r'], '', $content);
         $now = api_get_utc_datetime();
         $teacher = $visibility['visible_teacher'];
         $student = $visibility['visible_student'];

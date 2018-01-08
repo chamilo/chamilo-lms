@@ -11,11 +11,11 @@ class ch_percentage extends survey_question
      * @param array $questionData
      * @param array $answers
      */
-    public function render(FormValidator $form, $questionData = array(), $answers = '')
+    public function render(FormValidator $form, $questionData = [], $answers = '')
     {
-        $options = array(
+        $options = [
             '--' => '--'
-        );
+        ];
 
         foreach ($questionData['options'] as $key => & $value) {
             $options[$key] = $value;
@@ -34,5 +34,3 @@ class ch_percentage extends survey_question
         }
     }
 }
-
-

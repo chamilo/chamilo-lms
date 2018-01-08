@@ -38,10 +38,10 @@ $current_forum_category = get_forumcategory_information($current_forum['forum_ca
 $whatsnew_post_info = isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null;
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
-    );
+    ];
 }
 
 $groupId = api_get_group_id();
@@ -68,22 +68,22 @@ $(function() {
 </script>';
 
 if (!empty($groupId)) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups')
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
         'name' => get_lang('GroupSpace').' '.$group_properties['name']
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.intval($_GET['forum']).'&'.api_get_cidreq()."&search=".Security::remove_XSS(urlencode($my_search)),
         'name' => Security::remove_XSS($current_forum['forum_title'])
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.intval($_GET['forum']).'&'.api_get_cidreq().'&thread='.intval($_GET['thread']),
         'name' => Security::remove_XSS($current_thread['thread_title'])
-    );
+    ];
 
     Display::display_header('');
 } else {
@@ -91,21 +91,21 @@ if (!empty($groupId)) {
     if ($origin == 'learnpath') {
         Display::display_reduced_header();
     } else {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&search='.Security::remove_XSS(urlencode($my_search)),
             'name' => $nameTools
-        );
-        $interbreadcrumb[] = array(
+        ];
+        $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?forumcategory='.$current_forum_category['cat_id']."&search=".Security::remove_XSS(urlencode($my_search)),
             'name' => Security::remove_XSS($current_forum_category['cat_title'])
-        );
-        $interbreadcrumb[] = array(
+        ];
+        $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.intval($_GET['forum'])."&search=".Security::remove_XSS(urlencode($my_search)),
             'name' => Security::remove_XSS($current_forum['forum_title'])
-        );
-        $interbreadcrumb[] = array(
+        ];
+        $interbreadcrumb[] = [
             'url' => '#', 'name' => Security::remove_XSS($current_thread['thread_title'])
-        );
+        ];
 
         $message = isset($message) ? $message : '';
         // the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
@@ -227,7 +227,7 @@ if ($my_message != 'PostDeletedSpecial') {
         $viewMode = $_SESSION['view'];
     }
 
-    $whiteList = array('flat', 'threaded', 'nested');
+    $whiteList = ['flat', 'threaded', 'nested'];
     if (isset($_GET['view']) && in_array($_GET['view'], $whiteList)) {
         $viewMode = $_GET['view'];
         $_SESSION['view'] = $viewMode;
@@ -242,12 +242,10 @@ if ($my_message != 'PostDeletedSpecial') {
 
     switch ($viewMode) {
         case 'threaded':
-            //no break;
         case 'nested':
             include_once 'viewthread_nested.inc.php';
             break;
         case 'flat':
-            //no break
         default:
             include_once 'viewthread_flat.inc.php';
             break;

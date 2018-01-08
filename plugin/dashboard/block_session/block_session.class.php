@@ -17,7 +17,7 @@ class BlockSession extends Block
     private $user_id;
     private $sessions;
     private $path;
-    private $permission = array(DRH, SESSIONADMIN);
+    private $permission = [DRH, SESSIONADMIN];
 
     /**
      * Constructor
@@ -57,7 +57,7 @@ class BlockSession extends Block
     {
         global $charset;
         $column = 2;
-        $data = array();
+        $data = [];
         $content = $this->get_content_html();
         $content_html = '<div class="panel panel-default" id="intro">
                             <div class="panel-heading">
@@ -148,9 +148,8 @@ class BlockSession extends Block
      * Get number of sessions
      * @return int
      */
-    function get_number_of_sessions()
+    public function get_number_of_sessions()
     {
         return count($this->sessions);
     }
-
 }

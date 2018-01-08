@@ -21,13 +21,13 @@ class AdminSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'administrator_email' => '',
                     'administrator_name' => '',
                     'administrator_surname' => '',
                     'administrator_phone' => '',
                     'redirect_admin_to_courses_list' => 'false'
-                )
+                ]
             );
 //            ->setAllowedTypes(
 //                array(

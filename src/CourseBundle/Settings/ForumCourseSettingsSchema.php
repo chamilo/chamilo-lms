@@ -19,10 +19,10 @@ class ForumCourseSettingsSchema extends AbstractSettingsSchema
     public function buildSettings(SettingsBuilderInterface $builder)
     {
         $builder
-            ->setDefaults(array(
+            ->setDefaults([
                 'enabled' => '',
                 'allow_user_image_forum' => '',
-            ))
+            ])
         ;
         $allowedTypes = [
             'enabled' => ['string'],

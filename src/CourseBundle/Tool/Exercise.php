@@ -9,5 +9,4 @@ namespace Chamilo\CourseBundle\Tool;
  */
 class Exercise extends BaseTool
 {
-
 }

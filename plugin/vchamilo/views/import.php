@@ -4,7 +4,7 @@
 $cidReset = true;
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
-$interbreadcrumb[] = array('url' => 'manage.php', 'name' => get_lang('VChamilo'));
+$interbreadcrumb[] = ['url' => 'manage.php', 'name' => get_lang('VChamilo')];
 
 // Security
 api_protect_admin_script();
@@ -30,7 +30,7 @@ $form->addElement(
     'password',
     'db_password',
     $plugin->get_lang('dbpassword'),
-    array('id' => 'id_vdbpassword')
+    ['id' => 'id_vdbpassword']
 );
 
 // Database name.
@@ -109,11 +109,12 @@ $form->addElement(
     'password',
     'to_db_password',
     $plugin->get_lang('dbpassword'),
-    array('id' => 'id_vdbpassword')
+    ['id' => 'id_vdbpassword']
 );
 
 // Database name.
-$form->addText('to_main_database',
+$form->addText(
+    'to_main_database',
     [
         $plugin->get_lang('maindatabase'),
         $plugin->get_lang('DatabaseDescription'),

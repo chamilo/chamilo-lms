@@ -7,7 +7,6 @@
 
 namespace Chamilo\ThemeBundle\Event;
 
-
 use Chamilo\ThemeBundle\Model\MenuItemInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -22,7 +21,7 @@ class SidebarMenuEvent extends ThemeEvent
     /**
      * @var array
      */
-    protected $menuRootItems = array();
+    protected $menuRootItems = [];
 
     /**
      * @var Request
@@ -72,13 +71,14 @@ class SidebarMenuEvent extends ThemeEvent
     /**
      * @return MenuItemInterface|null
      */
-    public function getActive() {
-
+    public function getActive()
+    {
         foreach ($this->getItems() as $item) {
             /** @var $item MenuItemInterface */
-            if ($item->isActive()) return $item;
+            if ($item->isActive()) {
+                return $item;
+            }
         }
         return null;
     }
-
 }

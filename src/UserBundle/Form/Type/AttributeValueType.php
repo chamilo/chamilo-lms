@@ -127,7 +127,6 @@ class AttributeValueType extends AbstractResourceType
         $extraField = $builder->get('extraField');
 
         if ($extraField->hasOption('choice_list')) {
-
             return $extraField->getOption('choice_list')->getChoices();
         }
 

@@ -13,14 +13,14 @@ class SearchCoursePlugin extends Plugin
      *
      * @return SearchCoursePlugin
      */
-    static function create()
+    public static function create()
     {
         static $result = null;
 
         return $result ? $result : $result = new self();
     }
 
-    function get_name()
+    public function get_name()
     {
         return 'search_course';
     }

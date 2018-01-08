@@ -174,20 +174,20 @@ class Rest extends WebService
         foreach ($lastMessages as $message) {
             $hasAttachments = MessageManager::hasAttachments($message['id']);
 
-            $messages[] = array(
+            $messages[] = [
                 'id' => $message['id'],
                 'title' => $message['title'],
-                'sender' => array(
+                'sender' => [
                     'id' => $message['user_id'],
                     'lastname' => $message['lastname'],
                     'firstname' => $message['firstname'],
                     'completeName' => api_get_person_name($message['firstname'], $message['lastname']),
-                ),
+                ],
                 'sendDate' => $message['send_date'],
                 'content' => $message['content'],
                 'hasAttachments' => $hasAttachments,
                 'url' => ''
-            );
+            ];
         }
 
         return $messages;
@@ -698,7 +698,7 @@ class Rest extends WebService
         $categoryNone->setPosition(0);
 
         $categories = array_merge([$categoryNone], $categoriesTempList);
-        $categoryData = array();
+        $categoryData = [];
 
         /** @var CLpCategory $category */
         foreach ($categories as $category) {
@@ -717,7 +717,7 @@ class Rest extends WebService
                 continue;
             }
 
-            $listData = array();
+            $listData = [];
 
             foreach ($flatLpList as $lpId => $lpDetails) {
                 if ($lpDetails['lp_visibility'] == 0) {
@@ -764,7 +764,7 @@ class Rest extends WebService
 
                 $progress = learnpath::getProgress($lpId, $this->user->getId(), $this->course->getId(), $sessionId);
 
-                $listData[] = array(
+                $listData[] = [
                     'id' => $lpId,
                     'title' => Security::remove_XSS($lpDetails['lp_name']),
                     'progress' => intval($progress),
@@ -776,18 +776,18 @@ class Rest extends WebService
                             'session' => $sessionId
                         ])
                     ])
-                );
+                ];
             }
 
             if (empty($listData)) {
                 continue;
             }
 
-            $categoryData[] = array(
+            $categoryData[] = [
                 'id' => $category->getId(),
                 'name' => $category->getName(),
                 'learnpaths' => $listData
-            );
+            ];
         }
 
         return $categoryData;
@@ -1023,7 +1023,7 @@ class Rest extends WebService
     public function addCourse($course_param)
     {
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $extra_list= array();
+        $extra_list= [];
 
         $title = isset($course_param['title']) ? $course_param['title'] : '';
         $category_code = isset($course_param['category_code']) ? $course_param['category_code'] : '';
@@ -1085,7 +1085,7 @@ class Rest extends WebService
             $course_language = $course_param['course_language'];
         }
 
-        $params = array();
+        $params = [];
         $params['title'] = $title;
         $params['wanted_code'] = $wanted_code;
         $params['category_code'] = $category_code;
@@ -1156,8 +1156,8 @@ class Rest extends WebService
      */
     public function addUser($user_param)
     {
-        $results = array();
-        $orig_user_id_value = array();
+        $results = [];
+        $orig_user_id_value = [];
         $userManager = UserManager::getManager();
         $userRepository = UserManager::getRepository();
 

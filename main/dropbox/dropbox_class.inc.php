@@ -211,7 +211,7 @@ class Dropbox_Work
 
         // Getting the feedback on the work.
         if ($action == 'viewfeedback' && $this->id == $_GET['id']) {
-            $feedback2 = array();
+            $feedback2 = [];
             $sql = "SELECT * FROM ".Database::get_course_table(TABLE_DROPBOX_FEEDBACK)."
                     WHERE c_id = $course_id AND file_id='".$id."' 
                     ORDER BY feedback_id ASC";
@@ -314,10 +314,10 @@ class Dropbox_SentWork extends Dropbox_Work
         $justSubmit = false;
         if (is_int($recipient_ids)) {
             $justSubmit = true;
-            $recipient_ids = array($recipient_ids + $this->id);
+            $recipient_ids = [$recipient_ids + $this->id];
         } elseif (count($recipient_ids) == 0) {
             $justSubmit = true;
-            $recipient_ids = array($uploader_id);
+            $recipient_ids = [$uploader_id];
         }
 
         if (!is_array($recipient_ids) || count($recipient_ids) == 0) {
@@ -330,7 +330,7 @@ class Dropbox_SentWork extends Dropbox_Work
             }
 
             //this check is done when validating submitted data
-            $this->recipients[] = array('id' => $rec);
+            $this->recipients[] = ['id' => $rec];
         }
 
         $table_post = Database::get_course_table(TABLE_DROPBOX_POST);
@@ -396,7 +396,7 @@ class Dropbox_SentWork extends Dropbox_Work
         parent::__construct($id);
 
         // Fill in recipients array
-        $this->recipients = array();
+        $this->recipients = [];
         $sql = "SELECT dest_user_id, feedback_date, feedback
                 FROM ".Database::get_course_table(TABLE_DROPBOX_POST)."
                 WHERE c_id = $course_id AND file_id = ".intval($id)."";
@@ -406,15 +406,15 @@ class Dropbox_SentWork extends Dropbox_Work
             $dest_user_id = $res['dest_user_id'];
             $user_info = api_get_user_info($dest_user_id);
             if (!$user_info) {
-                $this->recipients[] = array('id' => -1, 'name' => get_lang('Unknown', ''));
+                $this->recipients[] = ['id' => -1, 'name' => get_lang('Unknown', '')];
             } else {
-                $this->recipients[] = array(
+                $this->recipients[] = [
                     'id' => $dest_user_id,
                     'name' => $user_info['complete_name'],
                     'user_id' => $dest_user_id,
                     'feedback_date' => $res['feedback_date'],
                     'feedback' => $res['feedback']
-                );
+                ];
             }
         }
     }
@@ -446,8 +446,8 @@ class Dropbox_Person
         $this->userId = $userId;
         $this->isCourseAdmin = $isCourseAdmin;
         $this->isCourseTutor = $isCourseTutor;
-        $this->receivedWork = array();
-        $this->sentWork = array();
+        $this->receivedWork = [];
+        $this->sentWork = [];
 
         // Note: perhaps include an ex coursemember check to delete old files
 
@@ -685,7 +685,7 @@ class Dropbox_Person
      */
     public function filter_received_work($type, $value)
     {
-        $new_received_work = array();
+        $new_received_work = [];
         $mailId = get_mail_id_base();
         foreach ($this->receivedWork as $work) {
             switch ($type) {

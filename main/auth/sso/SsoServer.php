@@ -14,7 +14,7 @@ class SsoServer
      * @param array $additionalParams
      * @return string
      */
-    public function getUrl($refererSso, $additionalParams = array())
+    public function getUrl($refererSso, $additionalParams = [])
     {
         if (empty($refererSso)) {
             return null;

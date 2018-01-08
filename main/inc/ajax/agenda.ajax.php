@@ -4,7 +4,7 @@
  * Responses to AJAX calls
  */
 
-$type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin')) ? $_REQUEST['type'] : 'personal';
+$type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], ['personal', 'course', 'admin']) ? $_REQUEST['type'] : 'personal';
 
 if ($type == 'personal') {
     $cidReset = true; // fixes #5162
@@ -28,7 +28,7 @@ switch ($action) {
         }
         $add_as_announcement = isset($_REQUEST['add_as_annonuncement']) ? $_REQUEST['add_as_annonuncement'] : null;
         $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : null;
-        $userToSend = isset($_REQUEST['users_to_send']) ? $_REQUEST['users_to_send'] : array();
+        $userToSend = isset($_REQUEST['users_to_send']) ? $_REQUEST['users_to_send'] : [];
 
         echo $agenda->addEvent(
             $_REQUEST['start'],
@@ -39,7 +39,7 @@ switch ($action) {
             $userToSend,
             $add_as_announcement,
             null, //$parentEventId = null,
-            array(), //$attachmentArray = array(),
+            [], //$attachmentArray = array(),
             null, //$attachmentComment = null,
             $comment
         );
@@ -125,7 +125,7 @@ switch ($action) {
             $my_course_list = CourseManager::get_courses_list_by_user_id($user_id, true);
             if (!is_array($my_course_list)) {
                 // this is for the special case if the user has no courses (otherwise you get an error)
-                $my_course_list = array();
+                $my_course_list = [];
             }
             $today = getdate();
             $year = (!empty($_GET['year']) ? (int) $_GET['year'] : null);
@@ -174,7 +174,7 @@ switch ($action) {
                 $agendaitems,
                 $month,
                 $year,
-                array(),
+                [],
                 $monthName,
                 false
             );

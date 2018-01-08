@@ -17,7 +17,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
-$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
 // Access restrictions
 api_protect_admin_script(true);
 $nameTools = get_lang('SpecialExports');
@@ -52,7 +52,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
         $to_group_id = 0;
         $sql_session = "SELECT id, name FROM $tbl_session ";
         $query_session = Database::query($sql_session);
-        $ListSession = array();
+        $ListSession = [];
         while ($rows_session = Database::fetch_assoc($query_session)) {
             $ListSession[$rows_session['id']] = $rows_session['name'];
         }
@@ -192,13 +192,13 @@ function create_zip()
         closedir($handle);
     }
     $temp_zip_file = $temp_zip_dir."/".md5(time()).".zip"; //create zipfile of given directory
-    return array(
+    return [
         'PATH' => $path,
         'PATH_TEMP_ARCHIVE' => $temp_zip_dir,
         'PATH_COURSE' => $sys_course_path,
         'TEMP_FILE_ZIP' => $temp_zip_file,
         'PATH_REMOVE' => $remove_dir
-    );
+    ];
 }
 
 function rename_zip($FileZip)

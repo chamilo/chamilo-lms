@@ -30,7 +30,7 @@ class CalculatedAnswer extends Question
      */
     public function createAnswersForm($form)
     {
-        $defaults = array();
+        $defaults = [];
         if (!empty($this->id)) {
             $objAnswer = new Answer($this->id);
             $preArray = explode('@@', $objAnswer->selectAnswer(1));
@@ -122,15 +122,15 @@ class CalculatedAnswer extends Question
             'html_editor',
             'answer',
             Display::return_icon('fill_field.png'),
-            array(
+            [
                 'id' => 'answer',
                 'onkeyup' => 'javascript: updateBlanks(this);',
-            ),
-            array(
+            ],
+            [
                 'ToolbarSet' => 'TestQuestionDescription',
                 'Width' => '100%',
                 'Height' => '350',
-            )
+            ]
         );
 
         $form->addRule('answer', get_lang('GiveText'), 'required');
@@ -142,11 +142,11 @@ class CalculatedAnswer extends Question
         $notationListButton = Display::url(
             get_lang('NotationList'),
             api_get_path(WEB_CODE_PATH).'exercise/evalmathnotation.php',
-            array(
+            [
                 'class' => 'btn btn-info ajax',
                 'data-title' => get_lang('NotationList'),
                 '_target' => '_blank'
-            )
+            ]
         );
         $form->addElement(
             'label',
@@ -154,11 +154,11 @@ class CalculatedAnswer extends Question
             $notationListButton
         );
 
-        $form->addElement('text', 'formula', [get_lang('Formula'), get_lang('FormulaExample')], array('id' => 'formula'));
+        $form->addElement('text', 'formula', [get_lang('Formula'), get_lang('FormulaExample')], ['id' => 'formula']);
         $form->addRule('formula', get_lang('GiveFormula'), 'required');
 
-        $form->addElement('text', 'weighting', get_lang('Weighting'), array('id' => 'weighting'));
-        $form->setDefaults(array('weighting' => '10'));
+        $form->addElement('text', 'weighting', get_lang('Weighting'), ['id' => 'weighting']);
+        $form->setDefaults(['weighting' => '10']);
 
         $form->addElement('text', 'answerVariations', get_lang('AnswerVariations'));
         $form->addRule(
@@ -166,7 +166,7 @@ class CalculatedAnswer extends Question
             get_lang('GiveAnswerVariations'),
             'required'
         );
-        $form->setDefaults(array('answerVariations' => '1'));
+        $form->setDefaults(['answerVariations' => '1']);
 
         global $text;
         // setting the save button here and not in the question class.php
@@ -190,12 +190,12 @@ class CalculatedAnswer extends Question
             $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
             Database::delete(
                 $table,
-                array(
-                    'c_id = ? AND question_id = ?' => array(
+                [
+                    'c_id = ? AND question_id = ?' => [
                         $this->course['real_id'],
                         $this->id
-                    )
-                )
+                    ]
+                ]
             );
             $answer = $form->getSubmitValue('answer');
             $formula = $form->getSubmitValue('formula');
@@ -212,7 +212,7 @@ class CalculatedAnswer extends Question
                 if ($nb > 0) {
                     for ($i = 0; $i < $nb; ++$i) {
                         $blankItem = $blanks[0][$i];
-                        $replace = array("[", "]");
+                        $replace = ["[", "]"];
                         $newBlankItem = str_replace($replace, "", $blankItem);
                         $newBlankItem = "[".trim($newBlankItem)."]";
                         // take random float values when one or both edge values have a decimal point
@@ -238,7 +238,7 @@ class CalculatedAnswer extends Question
                 $this->save($exercise);
                 $objAnswer = new Answer($this->id);
                 $objAnswer->createAnswer($auxAnswer, 1, '', $this->weighting, '');
-                $objAnswer->position = array();
+                $objAnswer->position = [];
                 $objAnswer->save();
             }
         }
@@ -267,14 +267,14 @@ class CalculatedAnswer extends Question
         $result = Database::select(
             'question_id',
             $table,
-            array(
-                'where' => array(
-                    'question_id = ? AND c_id = ?' => array(
+            [
+                'where' => [
+                    'question_id = ? AND c_id = ?' => [
                         $this->id,
                         $this->course['real_id']
-                    )
-                )
-            )
+                    ]
+                ]
+            ]
         );
 
         return empty($result) ? false : true;

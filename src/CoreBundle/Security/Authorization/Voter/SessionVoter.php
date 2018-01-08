@@ -132,7 +132,7 @@ class SessionVoter extends Voter
                 if ($session->hasUserInCourse($user, $course)) {
                     $user->addRole('ROLE_CURRENT_SESSION_COURSE_STUDENT');
 
-                     // Session duration per student.
+                    // Session duration per student.
                     if (!empty($session->getDuration())) {
                         $duration = $session->getDuration() * 24 * 60 * 60;
 
@@ -210,7 +210,5 @@ class SessionVoter extends Voter
 
         // User don't have access to the session
         return false;
-
     }
 }
-

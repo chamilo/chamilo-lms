@@ -29,7 +29,7 @@ $sessionId = api_get_session_id();
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_group_reporting&course_id='.$course_id.'&session_id='.$sessionId;
 
 // The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = array(
+$columns = [
     get_lang('Name'),
     get_lang('Time'),
     get_lang('Progress'),
@@ -37,60 +37,60 @@ $columns = array(
     get_lang('Works'),
     get_lang('Messages'),
     get_lang('Actions'),
-);
+];
 
 // Column config
-$column_model = array(
-    array(
+$column_model = [
+    [
         'name' => 'name',
         'index' => 'name',
         'width' => '200',
         'align' => 'left',
-    ),
-    array(
+    ],
+    [
         'name' => 'time',
         'index' => 'time',
         'width' => '50',
         'align' => 'left',
         'sortable' => 'false',
-    ),
-    array(
+    ],
+    [
         'name' => 'progress',
         'index' => 'progress',
         'width' => '50',
         'align' => 'left',
         'sortable' => 'false',
-    ),
-    array(
+    ],
+    [
         'name' => 'score',
         'index' => 'score',
         'width' => '50',
         'align' => 'left',
         'sortable' => 'false',
-    ),
-    array(
+    ],
+    [
         'name' => 'works',
         'index' => 'works',
         'width' => '50',
         'align' => 'left',
         'sortable' => 'false',
-    ),
-    array(
+    ],
+    [
         'name' => 'messages',
         'index' => 'messages',
         'width' => '50',
         'align' => 'left',
         'sortable' => 'false',
-    ),
-    array(
+    ],
+    [
         'name' => 'actions',
         'index' => 'actions',
         'width' => '50',
         'align' => 'left',
         'formatter' => 'action_formatter',
         'sortable' => 'false',
-    ),
-);
+    ],
+];
 
 // Autowidth
 $extra_params['autowidth'] = 'true';
@@ -115,7 +115,7 @@ $(function() {
         $columns,
         $column_model,
         $extra_params,
-        array(),
+        [],
         $action_links,
         true
     ).'

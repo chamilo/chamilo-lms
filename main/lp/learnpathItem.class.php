@@ -14,7 +14,7 @@ class learnpathItem
     const DEBUG = 0; // Logging parameter.
     public $attempt_id; // Also called "objectives" SCORM-wise.
     public $audio; // The path to an audio file (stored in document/audio/).
-    public $children = array(); // Contains the ids of children items.
+    public $children = []; // Contains the ids of children items.
     public $condition; // If this item has a special condition embedded.
     public $current_score;
     public $current_start_time;
@@ -29,9 +29,9 @@ class learnpathItem
      * of 8 text fields: id(0), type(1), time(2), weighting(3),
      * correct_responses(4), student_response(5), result(6), latency(7)
      */
-    public $interactions = array();
+    public $interactions = [];
     public $interactions_count = 0;
-    public $objectives = array();
+    public $objectives = [];
     public $objectives_count = 0;
     public $launch_data = '';
     public $lesson_location = '';
@@ -47,17 +47,17 @@ class learnpathItem
     public $next;
     public $parent;
     public $path; // In some cases the exo_id = exercise_id in courseDb exercices table.
-    public $possible_status = array(
+    public $possible_status = [
         'not attempted',
         'incomplete',
         'completed',
         'passed',
         'failed',
         'browsed'
-    );
+    ];
     public $prereq_string = '';
     public $prereq_alert = '';
-    public $prereqs = array();
+    public $prereqs = [];
     public $previous;
     public $prevent_reinit = 1; // 0 =  multiple attempts   1 = one attempt
     public $seriousgame_mode;
@@ -395,7 +395,7 @@ class learnpathItem
         if (self::DEBUG > 0) {
             error_log('learnpathItem::get_children()', 0);
         }
-        $list = array();
+        $list = [];
         foreach ($this->children as $child) {
             if (!empty($child)) {
                 $list[] = $child;
@@ -565,7 +565,7 @@ class learnpathItem
      */
     public function load_interactions()
     {
-        $this->interactions = array();
+        $this->interactions = [];
         $course_id = api_get_course_int_id();
         $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $sql = "SELECT id FROM $tbl
@@ -583,7 +583,7 @@ class learnpathItem
                     WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id ";
             $res_sql = Database::query($sql);
             while ($row = Database::fetch_array($res_sql)) {
-                $this->interactions[$row['interaction_id']] = array(
+                $this->interactions[$row['interaction_id']] = [
                     $row['interaction_id'],
                     $row['interaction_type'],
                     $row['weighting'],
@@ -592,7 +592,7 @@ class learnpathItem
                     $row['student_responses'],
                     $row['result'],
                     $row['latency']
-                );
+                ];
             }
         }
     }
@@ -699,8 +699,8 @@ class learnpathItem
         }
         if (!empty($this->launch_data)) {
             return str_replace(
-                array("\r", "\n", "'"),
-                array('\r', '\n', "\\'"),
+                ["\r", "\n", "'"],
+                ['\r', '\n', "\\'"],
                 $this->launch_data
             );
         }
@@ -719,8 +719,8 @@ class learnpathItem
         }
         if (!empty($this->lesson_location)) {
             return str_replace(
-                array("\r", "\n", "'"),
-                array('\r', '\n', "\\'"),
+                ["\r", "\n", "'"],
+                ['\r', '\n', "\\'"],
                 $this->lesson_location
             );
         } else {
@@ -1013,7 +1013,7 @@ class learnpathItem
     ) {
         $max = 5;
         if ($recursivity > $max) {
-            return array();
+            return [];
         }
         if (!isset($type)) {
             $type = $this->get_type();
@@ -1023,7 +1023,7 @@ class learnpathItem
             $abs_path = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.$path;
         }
 
-        $files_list = array();
+        $files_list = [];
         $type = $this->get_type();
 
         switch ($type) {
@@ -1046,13 +1046,13 @@ class learnpathItem
                     case 'htm':
                     case 'shtml':
                     case 'css':
-                        $wanted_attributes = array(
+                        $wanted_attributes = [
                             'src',
                             'url',
                             '@import',
                             'href',
                             'value'
-                        );
+                        ];
                         // Parse it for included resources.
                         $file_content = file_get_contents($abs_path);
                         // Get an array of attributes from the HTML source.
@@ -1086,7 +1086,7 @@ class learnpathItem
 
                                     if ($attr == 'value') {
                                         if (strpos($source, 'mp3file')) {
-                                            $files_list[] = array(
+                                            $files_list[] = [
                                                 substr(
                                                     $source,
                                                     0,
@@ -1097,7 +1097,7 @@ class learnpathItem
                                                 ),
                                                 'local',
                                                 'abs'
-                                            );
+                                            ];
                                             $mp3file = substr(
                                                 $source,
                                                 strpos(
@@ -1106,17 +1106,17 @@ class learnpathItem
                                                 ) + 8
                                             );
                                             if (substr($mp3file, 0, 1) == '/') {
-                                                $files_list[] = array(
+                                                $files_list[] = [
                                                     $mp3file,
                                                     'local',
                                                     'abs'
-                                                );
+                                                ];
                                             } else {
-                                                $files_list[] = array(
+                                                $files_list[] = [
                                                     $mp3file,
                                                     'local',
                                                     'rel'
-                                                );
+                                                ];
                                             }
                                         } elseif (strpos($source, 'flv=') === 0) {
                                             $source = substr($source, 4);
@@ -1130,25 +1130,25 @@ class learnpathItem
                                             if (strpos($source, '://') > 0) {
                                                 if (strpos($source, api_get_path(WEB_PATH)) !== false) {
                                                     // We found the current portal url.
-                                                    $files_list[] = array(
+                                                    $files_list[] = [
                                                         $source,
                                                         'local',
                                                         'url'
-                                                    );
+                                                    ];
                                                 } else {
                                                     // We didn't find any trace of current portal.
-                                                    $files_list[] = array(
+                                                    $files_list[] = [
                                                         $source,
                                                         'remote',
                                                         'url'
-                                                    );
+                                                    ];
                                                 }
                                             } else {
-                                                $files_list[] = array(
+                                                $files_list[] = [
                                                     $source,
                                                     'local',
                                                     'abs'
-                                                );
+                                                ];
                                             }
                                             continue; // Skipping anything else to avoid two entries
                                             //(while the others can have sub-files in their url, flv's can't).
@@ -1180,11 +1180,11 @@ class learnpathItem
                                                 );
                                                 if (strpos($second_part, api_get_path(WEB_PATH)) !== false) {
                                                     // We found the current portal url.
-                                                    $files_list[] = array(
+                                                    $files_list[] = [
                                                         $second_part,
                                                         'local',
                                                         'url'
-                                                    );
+                                                    ];
                                                     $in_files_list[] = self::get_resources_from_source(
                                                         TOOL_DOCUMENT,
                                                         $second_part,
@@ -1198,21 +1198,21 @@ class learnpathItem
                                                     }
                                                 } else {
                                                     // We didn't find any trace of current portal.
-                                                    $files_list[] = array(
+                                                    $files_list[] = [
                                                         $second_part,
                                                         'remote',
                                                         'url'
-                                                    );
+                                                    ];
                                                 }
                                             } elseif (strpos($second_part, '=') > 0) {
                                                 if (substr($second_part, 0, 1) === '/') {
                                                     // Link starts with a /,
                                                     // making it absolute (relative to DocumentRoot).
-                                                    $files_list[] = array(
+                                                    $files_list[] = [
                                                         $second_part,
                                                         'local',
                                                         'abs'
-                                                    );
+                                                    ];
                                                     $in_files_list[] = self::get_resources_from_source(
                                                         TOOL_DOCUMENT,
                                                         $second_part,
@@ -1226,11 +1226,11 @@ class learnpathItem
                                                     }
                                                 } elseif (strstr($second_part, '..') === 0) {
                                                     // Link is relative but going back in the hierarchy.
-                                                    $files_list[] = array(
+                                                    $files_list[] = [
                                                         $second_part,
                                                         'local',
                                                         'rel'
-                                                    );
+                                                    ];
                                                     $dir = dirname(
                                                         $abs_path
                                                     );
@@ -1256,11 +1256,11 @@ class learnpathItem
                                                             2
                                                         );
                                                     }
-                                                    $files_list[] = array(
+                                                    $files_list[] = [
                                                         $second_part,
                                                         'local',
                                                         'rel'
-                                                    );
+                                                    ];
                                                     $dir = dirname(
                                                         $abs_path
                                                     );
@@ -1289,11 +1289,11 @@ class learnpathItem
                                             if (strpos($source, '://') > 0) {
                                                 if (strpos($source, api_get_path(WEB_PATH)) !== false) {
                                                     // We found the current portal url.
-                                                    $files_list[] = array(
+                                                    $files_list[] = [
                                                         $source,
                                                         'local',
                                                         'url'
-                                                    );
+                                                    ];
                                                     $in_files_list[] = self::get_resources_from_source(
                                                         TOOL_DOCUMENT,
                                                         $source,
@@ -1307,21 +1307,21 @@ class learnpathItem
                                                     }
                                                 } else {
                                                     // We didn't find any trace of current portal.
-                                                    $files_list[] = array(
+                                                    $files_list[] = [
                                                         $source,
                                                         'remote',
                                                         'url'
-                                                    );
+                                                    ];
                                                 }
                                             } else {
                                                 // No protocol found, make link local.
                                                 if (substr($source, 0, 1) === '/') {
                                                     // Link starts with a /, making it absolute (relative to DocumentRoot).
-                                                    $files_list[] = array(
+                                                    $files_list[] = [
                                                         $source,
                                                         'local',
                                                         'abs'
-                                                    );
+                                                    ];
                                                     $in_files_list[] = self::get_resources_from_source(
                                                         TOOL_DOCUMENT,
                                                         $source,
@@ -1335,11 +1335,11 @@ class learnpathItem
                                                     }
                                                 } elseif (strstr($source, '..') === 0) {
                                                     // Link is relative but going back in the hierarchy.
-                                                    $files_list[] = array(
+                                                    $files_list[] = [
                                                         $source,
                                                         'local',
                                                         'rel'
-                                                    );
+                                                    ];
                                                     $dir = dirname(
                                                         $abs_path
                                                     );
@@ -1365,11 +1365,11 @@ class learnpathItem
                                                             2
                                                         );
                                                     }
-                                                    $files_list[] = array(
+                                                    $files_list[] = [
                                                         $source,
                                                         'local',
                                                         'rel'
-                                                    );
+                                                    ];
                                                     $dir = dirname(
                                                         $abs_path
                                                     );
@@ -1394,11 +1394,11 @@ class learnpathItem
                                         // Found some protocol there.
                                         if (strpos($source, api_get_path(WEB_PATH)) !== false) {
                                             // We found the current portal url.
-                                            $files_list[] = array(
+                                            $files_list[] = [
                                                 $source,
                                                 'local',
                                                 'url'
-                                            );
+                                            ];
                                             $in_files_list[] = self::get_resources_from_source(
                                                 TOOL_DOCUMENT,
                                                 $source,
@@ -1412,21 +1412,21 @@ class learnpathItem
                                             }
                                         } else {
                                             // We didn't find any trace of current portal.
-                                            $files_list[] = array(
+                                            $files_list[] = [
                                                 $source,
                                                 'remote',
                                                 'url'
-                                            );
+                                            ];
                                         }
                                     } else {
                                         // No protocol found, make link local.
                                         if (substr($source, 0, 1) === '/') {
                                             // Link starts with a /, making it absolute (relative to DocumentRoot).
-                                            $files_list[] = array(
+                                            $files_list[] = [
                                                 $source,
                                                 'local',
                                                 'abs'
-                                            );
+                                            ];
                                             $in_files_list[] = self::get_resources_from_source(
                                                 TOOL_DOCUMENT,
                                                 $source,
@@ -1440,11 +1440,11 @@ class learnpathItem
                                             }
                                         } elseif (strstr($source, '..') === 0) {
                                             // Link is relative but going back in the hierarchy.
-                                            $files_list[] = array(
+                                            $files_list[] = [
                                                 $source,
                                                 'local',
                                                 'rel'
-                                            );
+                                            ];
                                             $dir = dirname($abs_path);
                                             $new_abs_path = realpath(
                                                 $dir.'/'.$source
@@ -1474,11 +1474,11 @@ class learnpathItem
                                                     2
                                                 );
                                             }
-                                            $files_list[] = array(
+                                            $files_list[] = [
                                                 $source,
                                                 'local',
                                                 'rel'
-                                            );
+                                            ];
                                             $dir = dirname($abs_path);
                                             $new_abs_path = realpath(
                                                 $dir.'/'.$source
@@ -1509,8 +1509,8 @@ class learnpathItem
                 break;
         }
 
-        $checked_files_list = array();
-        $checked_array_list = array();
+        $checked_files_list = [];
+        $checked_array_list = [];
         foreach ($files_list as $idx => $file) {
             if (!empty($file[0])) {
                 if (!in_array($file[0], $checked_files_list)) {
@@ -1639,8 +1639,8 @@ class learnpathItem
         // a beautiful way to do it ?
         if (!empty($this->current_data)) {
             return str_replace(
-                array("\r", "\n", "'"),
-                array('\r', '\n', "\\'"),
+                ["\r", "\n", "'"],
+                ['\r', '\n', "\\'"],
                 $this->current_data
             );
         } else {
@@ -1891,12 +1891,12 @@ class learnpathItem
      */
     public function is_done()
     {
-        $completedStatusList = array(
+        $completedStatusList = [
             'completed',
             'passed',
             'succeeded',
             'failed'
-        );
+        ];
 
         if ($this->status_is($completedStatusList)) {
             if (self::DEBUG > 2) {
@@ -1984,9 +1984,9 @@ class learnpathItem
             $this->status = $this->possible_status[1];
         } else {
             /*if ($this->current_start_time == 0) {
-				// Small exception for start time, to avoid amazing values.
-				$this->current_start_time = time();
-			}*/
+                // Small exception for start time, to avoid amazing values.
+                $this->current_start_time = time();
+            }*/
             // If we don't init start time here, the time is sometimes calculated from the last start time.
             $this->current_start_time = time();
         }
@@ -2050,7 +2050,7 @@ class learnpathItem
         }
         while (strpos($prereqs_string, '(') !== false) {
             // Remove any () set and replace with its value.
-            $matches = array();
+            $matches = [];
             $res = preg_match_all(
                 '/(\(([^\(\)]*)\))/',
                 $prereqs_string,
@@ -2203,7 +2203,7 @@ class learnpathItem
                                     0
                                 );
                             }
-                            $list = array();
+                            $list = [];
                             $myres = preg_match(
                                 '/~([^(\d+\*)\{]*)/',
                                 $prereqs_string,
@@ -2238,7 +2238,7 @@ class learnpathItem
                                 );
                             }
                             // Only groups here.
-                            $groups = array();
+                            $groups = [];
                             $groups_there = preg_match_all(
                                 '/((\d+\*)?\{([^\}]+)\}+)/',
                                 $prereqs_string,
@@ -2255,7 +2255,7 @@ class learnpathItem
                                             0
                                         );
                                     }
-                                    $multi = array();
+                                    $multi = [];
                                     $mycond = false;
                                     if (preg_match(
                                         '/(\d+)\*\{([^\}]+)\}/',
@@ -2692,9 +2692,9 @@ class learnpathItem
             $this->current_data = '';
             $this->status = $this->possible_status[0];
             $this->interactions_count = 0;
-            $this->interactions = array();
+            $this->interactions = [];
             $this->objectives_count = 0;
-            $this->objectives = array();
+            $this->objectives = [];
             $this->lesson_location = '';
             if ($this->type != TOOL_QUIZ) {
                 $this->write_to_db();
@@ -3316,7 +3316,7 @@ class learnpathItem
         } else {
             switch ($format) {
                 case 'scorm':
-                    $res = array();
+                    $res = [];
                     if (preg_match(
                         '/^(\d{1,4}):(\d{2}):(\d{2})(\.\d{1,4})?/',
                         $scorm_time,
@@ -3378,7 +3378,7 @@ class learnpathItem
      * @return boolean True if the status was one of the given strings,
      * false otherwise
      */
-    public function status_is($list = array())
+    public function status_is($list = [])
     {
         if (self::DEBUG > 1) {
             error_log(
@@ -3536,12 +3536,12 @@ class learnpathItem
 
         // Step 3 update db only if status != completed, passed, browsed or seriousgamemode not activated
         // @todo complete
-        $case_completed = array(
+        $case_completed = [
             'completed',
             'passed',
             'browsed',
             'failed'
-        );
+        ];
 
         if ($this->seriousgame_mode != 1 ||
             !in_array($row['status'], $case_completed)
@@ -3637,7 +3637,7 @@ class learnpathItem
                         Database::query($ivau_sql);
                     } else {
                         // Insert new one.
-                        $params = array(
+                        $params = [
                             'c_id' => $course_id,
                             'lp_iv_id' => $lp_iv_id,
                             'order_id' => $index,
@@ -3646,7 +3646,7 @@ class learnpathItem
                             'score_raw' => $objective[2],
                             'score_min' => $objective[4],
                             'score_max' => $objective[3]
-                        );
+                        ];
 
                         $insertId = Database::insert($iva_table, $params);
                         if ($insertId) {
@@ -3695,12 +3695,12 @@ class learnpathItem
         $rs_verified = Database::query($sql);
         $row_verified = Database::fetch_array($rs_verified);
 
-        $my_case_completed = array(
+        $my_case_completed = [
             'completed',
             'passed',
             'browsed',
             'failed'
-        );
+        ];
 
         $oldTotalTime = $row_verified['total_time'];
         $this->oldTotalTime = $oldTotalTime;
@@ -3736,7 +3736,7 @@ class learnpathItem
             ) {
                 // We force the item to be restarted.
                 $this->restart();
-                $params = array(
+                $params = [
                     "c_id" => $course_id,
                     "total_time" => $this->get_total_time(),
                     "start_time" => $this->current_start_time,
@@ -3749,7 +3749,7 @@ class learnpathItem
                     "suspend_data" => $this->current_data,
                     //"max_time_allowed" => ,
                     "lesson_location" => $this->lesson_location
-                );
+                ];
                 if (self::DEBUG > 2) {
                     error_log(
                         'learnpathItem::write_to_db() - Inserting into item_view forced: '.print_r($params, 1),
@@ -3782,7 +3782,7 @@ class learnpathItem
             // Depending on what we want (really), we'll update or insert a new row
             // now save into DB.
             if (!$inserted && Database::num_rows($check_res) < 1) {
-                $params = array(
+                $params = [
                     "c_id" => $course_id,
                     "total_time" => $this->get_total_time(),
                     "start_time" => $this->current_start_time,
@@ -3795,7 +3795,7 @@ class learnpathItem
                     "suspend_data" => $this->current_data,
                     //"max_time_allowed" => ,$this->get_max_time_allowed()
                     "lesson_location" => $this->lesson_location
-                );
+                ];
 
                 if (self::DEBUG > 2) {
                     error_log(
@@ -3812,7 +3812,7 @@ class learnpathItem
                 }
             } else {
                 if ($this->type == 'hotpotatoes') {
-                    $params = array(
+                    $params = [
                         'total_time' => $this->get_total_time(),
                         'start_time' => $this->get_current_start_time(),
                         'score' =>  $this->get_score(),
@@ -3820,16 +3820,16 @@ class learnpathItem
                         'max_score' => $this->get_max(),
                         'suspend_data' => $this->current_data,
                         'lesson_location' => $this->lesson_location
-                    );
-                    $where = array(
+                    ];
+                    $where = [
                         'c_id = ? AND lp_item_id = ? AND lp_view_id = ? AND view_count = ?' =>
-                        array(
+                        [
                             $course_id,
                             $this->db_id,
                             $this->view_id,
                             $this->get_attempt_id()
-                        )
-                    );
+                        ]
+                    ];
                     Database::update($item_view_table, $params, $where);
                 } else {
                     // For all other content types...
@@ -3859,12 +3859,12 @@ class learnpathItem
                     } else {
                         $my_type_lp = learnpath::get_type_static($this->lp_id);
                         // This is a array containing values finished
-                        $case_completed = array(
+                        $case_completed = [
                             'completed',
                             'passed',
                             'browsed',
                             'failed'
-                        );
+                        ];
 
                         // Is not multiple attempts
                         if ($this->seriousgame_mode == 1 && $this->type == 'sco') {
@@ -3964,7 +3964,6 @@ class learnpathItem
                                     lp_item_id = ".$this->db_id." AND
                                     lp_view_id = ".$this->view_id."  AND
                                     view_count = ".$this->get_attempt_id();
-
                     } else {
                         //" max_time_allowed = '".$this->get_max_time_allowed()."'," .
                         $sql = "UPDATE $item_view_table SET
@@ -4057,7 +4056,7 @@ class learnpathItem
                             $iva_row = Database::fetch_array($iva_res);
                             $iva_id = $iva_row[0];
                             // Insert new one.
-                            $params = array(
+                            $params = [
                                 'interaction_id' => $interaction[0],
                                 'interaction_type' => $interaction[1],
                                 'weighting' => $interaction[3],
@@ -4066,20 +4065,20 @@ class learnpathItem
                                 'student_response' => $interaction[5],
                                 'result' => $interaction[6],
                                 'latency' => $interaction[7]
-                            );
+                            ];
                             Database::update(
                                 $iva_table,
                                 $params,
-                                array(
-                                    'c_id = ? AND iid = ?' => array(
+                                [
+                                    'c_id = ? AND iid = ?' => [
                                         $course_id,
                                         $iva_id
-                                    )
-                                )
+                                    ]
+                                ]
                             );
                         } else {
                             // Insert new one.
-                            $params = array(
+                            $params = [
                                 'c_id' => $course_id,
                                 'order_id' => $index,
                                 'lp_iv_id' => $lp_iv_id,
@@ -4091,7 +4090,7 @@ class learnpathItem
                                 'student_response' => $interaction[5],
                                 'result' => $interaction[6],
                                 'latency' => $interaction[7]
-                            );
+                            ];
 
                             $insertId = Database::insert($iva_table, $params);
                             if ($insertId) {
@@ -4241,16 +4240,16 @@ class learnpathItem
      * @param string $type classic|simple
      * @return array|string
      */
-    static function humanize_status($status, $decorate = true, $type = 'classic')
+    public static function humanize_status($status, $decorate = true, $type = 'classic')
     {
-        $statusList = array(
+        $statusList = [
             'completed' => 'ScormCompstatus',
             'incomplete' => 'ScormIncomplete',
             'failed' => 'ScormFailed',
             'passed' => 'ScormPassed',
             'browsed' => 'ScormBrowsed',
             'not attempted' => 'ScormNotAttempted'
-        );
+        ];
 
         $myLessonStatus = get_lang($statusList[$status]);
 
@@ -4274,8 +4273,9 @@ class learnpathItem
         }
 
         if ($type == 'simple') {
-            if (in_array($status, array('failed', 'passed', 'browsed'))) {
-                $myLessonStatus = get_lang('ScormIncomplete'); ;
+            if (in_array($status, ['failed', 'passed', 'browsed'])) {
+                $myLessonStatus = get_lang('ScormIncomplete');
+                ;
                 $classStatus = 'warning';
             }
         }

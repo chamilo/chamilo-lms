@@ -82,23 +82,23 @@ class CourseDriver extends Driver implements DriverInterface
             $alias = $courseCode.' '.get_lang('Documents');
             $userId = api_get_user_id();
 
-            $config = array(
+            $config = [
                 'driver' => 'CourseDriver',
                 'path' => $this->getCourseDocumentSysPath(),
                 'URL' => $this->getCourseDocumentRelativeWebPath(),
-                'accessControl' => array($this, 'access'),
+                'accessControl' => [$this, 'access'],
                 'alias' => $alias,
-                'attributes' => array(
+                'attributes' => [
                     // Hide shared_folder
-                    array(
+                    [
                         'pattern' => '/shared_folder/',
                         'read' => false,
                         'write' => false,
                         'hidden' => true,
                         'locked' => false
-                    )
-                )
-            );
+                    ]
+                ]
+            ];
 
             // admin/teachers can create dirs from ckeditor
             if ($this->allowToEdit()) {
@@ -227,7 +227,7 @@ class CourseDriver extends Driver implements DriverInterface
     /**
      * {@inheritdoc}
      */
-    public function upload($fp, $dst, $name, $tmpname, $hashes = array())
+    public function upload($fp, $dst, $name, $tmpname, $hashes = [])
     {
         // Needed to load course information in elfinder
         $this->setConnectorFromPlugin();

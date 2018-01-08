@@ -90,19 +90,19 @@ class CatForm extends FormValidator
         //if so, you can only choose between courses
         if ($this->category_object->get_parent_id() == '0') {
             $this->setDefaults(
-                array(
+                [
                     'select_course' => $this->category_object->get_course_code(
                     ),
                     'hid_user_id' => $this->category_object->get_user_id(),
                     'hid_parent_id' => $this->category_object->get_parent_id()
-                )
+                ]
             );
         } else {
             $this->setDefaults(
-                array(
+                [
                     'hid_user_id' => $this->category_object->get_user_id(),
                     'hid_parent_id' => $this->category_object->get_parent_id()
-                )
+                ]
             );
             $this->addElement(
                 'hidden',
@@ -153,7 +153,7 @@ class CatForm extends FormValidator
         }
 
         $this->setDefaults(
-            array(
+            [
                 'name' => $category_name,
                 'description' => $this->category_object->get_description(),
                 'hid_user_id' => $this->category_object->get_user_id(),
@@ -165,7 +165,7 @@ class CatForm extends FormValidator
                 'certif_min_score' => $this->category_object->getCertificateMinScore(),
                 'generate_certificates' => $this->category_object->getGenerateCertificates(),
                 'is_requirement' => $this->category_object->getIsRequirement(),
-            )
+            ]
         );
         $this->addElement('hidden', 'hid_id', $this->category_object->get_id());
         $this->addElement(
@@ -185,7 +185,7 @@ class CatForm extends FormValidator
             'name',
             get_lang('CategoryName'),
             true,
-            array('maxlength' => '50')
+            ['maxlength' => '50']
         );
         $this->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
@@ -205,12 +205,12 @@ class CatForm extends FormValidator
 
         $this->addFloat(
             'weight',
-            array(
+            [
                 get_lang('TotalWeight'),
                 get_lang('TotalSumOfWeights'),
-            ),
+            ],
             true,
-            array('value' => $value, 'maxlength' => '5')
+            ['value' => $value, 'maxlength' => '5']
         );
 
         $skillsDefaults = [];
@@ -219,10 +219,10 @@ class CatForm extends FormValidator
                 $skillSelect = $this->addElement(
                     'select_ajax',
                     'skills',
-                    array(
+                    [
                         get_lang('Skills'),
                         get_lang('SkillsAchievedWhenAchievingThisGradebook')
-                    ),
+                    ],
                     null,
                     [
                         'id' => 'skills',
@@ -248,7 +248,7 @@ class CatForm extends FormValidator
                 'certif_min_score',
                 get_lang('CertificateMinScore'),
                 true,
-                array('maxlength' => '5')
+                ['maxlength' => '5']
             );
             $this->addRule(
                 'certif_min_score',
@@ -312,7 +312,7 @@ class CatForm extends FormValidator
                 }
             }
 
-            $generateCertificatesParams = array();
+            $generateCertificatesParams = [];
             if ($this->category_object->getGenerateCertificates()) {
                 $generateCertificatesParams['checked'] = 'checked';
             }
@@ -353,7 +353,7 @@ class CatForm extends FormValidator
         if (isset($setting['gradebook']) && $setting['gradebook'] == 'false') {
             $visibility_default = 0;
         }
-        $this->setDefaults(array('visible' => $visibility_default, 'skills' => $skillsDefaults));
+        $this->setDefaults(['visible' => $visibility_default, 'skills' => $skillsDefaults]);
     }
 
     /**
@@ -365,7 +365,7 @@ class CatForm extends FormValidator
         $select = $this->addElement(
             'select',
             'select_course',
-            array(get_lang('PickACourse'), 'test'),
+            [get_lang('PickACourse'), 'test'],
             null
         );
         $coursecat = Category::get_all_courses(api_get_user_id());
@@ -374,10 +374,10 @@ class CatForm extends FormValidator
         foreach ($coursecat as $row) {
             $select->addoption($row[1], $row[0]);
         }
-        $this->setDefaults(array(
+        $this->setDefaults([
             'hid_user_id' => $this->category_object->get_user_id(),
             'hid_parent_id' => $this->category_object->get_parent_id()
-        ));
+        ]);
         $this->addElement('hidden', 'hid_user_id');
         $this->addElement('hidden', 'hid_parent_id');
         $this->addElement('submit', null, get_lang('Ok'));
@@ -388,7 +388,7 @@ class CatForm extends FormValidator
         parent::display();
     }
 
-    public function setDefaults($defaults = array(), $filter = null)
+    public function setDefaults($defaults = [], $filter = null)
     {
         parent::setDefaults($defaults, $filter);
     }

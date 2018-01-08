@@ -29,10 +29,10 @@ class SkillBlockService extends AbstractBlockService
     public function configureSettings(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'template' => 'ChamiloCoreBundle:Block:skill.html.twig',
                 'ttl' => 0,
-            )
+            ]
         );
     }
 
@@ -60,10 +60,10 @@ class SkillBlockService extends AbstractBlockService
 
         return $this->renderResponse(
             $blockContext->getTemplate(),
-            array(
+            [
                 'block' => $blockContext->getBlock(),
                 'settings' => $settings,
-            ),
+            ],
             $response
         );
     }

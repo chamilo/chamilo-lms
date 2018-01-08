@@ -21,17 +21,17 @@ class SearchSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'search_enabled' => 'false',
                     'search_prefilter_prefix' => '',
                     'search_show_unlinked_results' => 'true',
                     'number_of_upcoming_events' => '0',
-                )
+                ]
             );
-        $allowedTypes = array(
+        $allowedTypes = [
             //'allow_personal_agenda' => array('string'),
-            'number_of_upcoming_events' => array('string'),
-        );
+            'number_of_upcoming_events' => ['string'],
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
@@ -46,12 +46,12 @@ class SearchSettingsSchema extends AbstractSettingsSchema
             ->add(
                 'search_show_unlinked_results',
                 'choice',
-                array(
-                    'choices' => array(
+                [
+                    'choices' => [
                         'true' =>  'SearchShowUnlinkedResults',
                         'false' =>  'SearchHideUnlinkedResults',
-                    ),
-                )
+                    ],
+                ]
             )
             ->add('number_of_upcoming_events');
     }

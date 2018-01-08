@@ -21,7 +21,7 @@ class EditorSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'allow_email_editor' => '',
                     'math_mimetex' => '',
                     'math_asciimathML' => '',
@@ -41,7 +41,7 @@ class EditorSettingsSchema extends AbstractSettingsSchema
                     'htmlpurifier_wiki' => '',
                     'enable_iframe_inclusion' => '',
                     'enabled_mathjax' => ''
-                )
+                ]
             )
             /*->setAllowedTypes(
                 array(//'allow_personal_agenda' => array('string')

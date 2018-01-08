@@ -39,29 +39,29 @@ $result = Database::query($sql_query);
 $therow = Database::fetch_array($result);
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
-    );
+    ];
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
     'name' => get_lang('LearningPaths')
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
     "name" => stripslashes("{$therow['name']}"),
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
     'name' => get_lang('NewStep'),
-);
+];
 
 if (isset($_REQUEST['updateaudio'])) {
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('UpdateAllAudioFragments'));
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('UpdateAllAudioFragments')];
 } else {
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('BasicOverview'));
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('BasicOverview')];
 }
 
 // Theme calls.
@@ -166,7 +166,7 @@ var newOrderData= "";
 $(function() {
     <?php
     if (!isset($_REQUEST['updateaudio'])) {
-    ?>
+        ?>
     $("#lp_item_list").sortable({
         items: "li",
         handle: ".moved", //only the class "moved"
@@ -217,7 +217,8 @@ $(function() {
         return false;
 
     }); //end of lp_item_list event assignment
-    <?php } ?>
+    <?php
+    } ?>
 
     function processChildren(parentId) {
         //Loop through the children of the UL element defined by the parentId

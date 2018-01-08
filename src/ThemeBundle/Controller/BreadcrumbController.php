@@ -54,7 +54,7 @@ class BreadcrumbController extends Controller
             )
         );*/
 
-        $list = array();
+        $list = [];
         if ($active) {
             $list[] = $active;
             while (null !== ($item = $active->getActiveChild())) {
@@ -79,5 +79,4 @@ class BreadcrumbController extends Controller
     {
         return $this->get('event_dispatcher');
     }
-
 }

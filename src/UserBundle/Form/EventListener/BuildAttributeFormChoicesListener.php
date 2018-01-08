@@ -40,10 +40,10 @@ class BuildAttributeFormChoicesListener extends BaseBuildAttributeFormChoicesLis
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             FormEvents::PRE_SET_DATA => 'buildChoices',
             FormEvents::PRE_SUBMIT => 'buildConfiguration',
-        );
+        ];
     }
 
     /**
@@ -54,7 +54,7 @@ class BuildAttributeFormChoicesListener extends BaseBuildAttributeFormChoicesLis
     public function buildConfiguration(FormEvent $event)
     {
         $data = $event->getData();
-        $choices = array();
+        $choices = [];
 
         if (AttributeTypes::CHOICE === $data['type'] && !empty($data['choices'])) {
             $choices = $data['choices'];
@@ -68,12 +68,12 @@ class BuildAttributeFormChoicesListener extends BaseBuildAttributeFormChoicesLis
                     'configuration',
                     'collection',
                     null,
-                    array(
+                    [
                         'allow_add' => true,
                         'allow_delete' => true,
                         'by_reference' => false,
                         'auto_initialize' => false,
-                    )
+                    ]
                 )
             );
         }
@@ -108,7 +108,7 @@ class BuildAttributeFormChoicesListener extends BaseBuildAttributeFormChoicesLis
                     'choices',
                     'collection',
                     null,
-                    array(
+                    [
                         'type' => 'text',
                         'allow_add' => true,
                         'allow_delete' => true,
@@ -116,7 +116,7 @@ class BuildAttributeFormChoicesListener extends BaseBuildAttributeFormChoicesLis
                         'auto_initialize' => false,
                         'mapped' => false,
                         'data' => $data,
-                    )
+                    ]
                 )
             );
         }

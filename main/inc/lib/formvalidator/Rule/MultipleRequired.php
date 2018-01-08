@@ -37,8 +37,8 @@ class HTML_QuickForm_Rule_MultipleRequired extends HTML_QuickForm_Rule
         return true;
     } // end func validate
 
-    function getValidationScript($options = null)
+    public function getValidationScript($options = null)
     {
-        return array('', "{jsVar} == ''");
+        return ['', "{jsVar} == ''"];
     }
 }

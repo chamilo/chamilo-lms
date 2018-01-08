@@ -20,9 +20,9 @@ if (!api_get_multiple_access_url()) {
 $form_sent = 0;
 $first_letter_user = '';
 $first_letter_course = '';
-$courses = array();
-$url_list = array();
-$users = array();
+$courses = [];
+$url_list = [];
+$users = [];
 
 $tbl_access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 $tbl_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
@@ -30,8 +30,8 @@ $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
 /*	Header	*/
 $tool_name = get_lang('AddUsersToURL');
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs')];
 
 Display :: display_header($tool_name);
 
@@ -46,8 +46,8 @@ api_display_tool_title($tool_name);
 
 if ($_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
-    $users = is_array($_POST['user_list']) ? $_POST['user_list'] : array();
-    $url_list = is_array($_POST['url_list']) ? $_POST['url_list'] : array();
+    $users = is_array($_POST['user_list']) ? $_POST['user_list'] : [];
+    $url_list = is_array($_POST['url_list']) ? $_POST['url_list'] : [];
     $first_letter_user = $_POST['first_letter_user'];
     foreach ($users as $key => $value) {
         $users[$key] = intval($value);
@@ -120,8 +120,10 @@ unset($result);
      <select name="user_list[]" multiple="multiple" size="20" style="width:380px;">
         <?php
         foreach ($db_users as $user) {
-        ?>
-            <option value="<?php echo $user['user_id']; ?>" <?php if (in_array($user['user_id'], $users)) echo 'selected="selected"'; ?>>
+            ?>
+            <option value="<?php echo $user['user_id']; ?>" <?php if (in_array($user['user_id'], $users)) {
+                echo 'selected="selected"';
+            } ?>>
             <?php echo api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')'; ?>
             </option>
         <?php
@@ -137,7 +139,9 @@ unset($result);
 		<?php
         foreach ($db_urls as $url_obj) {
             ?>
-			<option value="<?php echo $url_obj['id']; ?>" <?php if (in_array($url_obj['id'], $url_list)) echo 'selected="selected"'; ?>>
+			<option value="<?php echo $url_obj['id']; ?>" <?php if (in_array($url_obj['id'], $url_list)) {
+                echo 'selected="selected"';
+            } ?>>
                 <?php echo $url_obj['url']; ?>
 			</option>
 			<?php

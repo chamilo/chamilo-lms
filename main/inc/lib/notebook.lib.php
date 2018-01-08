@@ -119,7 +119,7 @@ class NotebookManager
                WHERE c_id = $course_id AND notebook_id = '".intval($notebook_id)."' ";
         $result = Database::query($sql);
         if (Database::num_rows($result) != 1) {
-            return array();
+            return [];
         }
 
         return Database::fetch_array($result);
@@ -263,7 +263,7 @@ class NotebookManager
             $notebookView = 'creation_date';
         }
 
-        if (!in_array($notebookView, array('creation_date', 'update_date', 'title'))) {
+        if (!in_array($notebookView, ['creation_date', 'update_date', 'title'])) {
             Session::write('notebook_view', 'creation_date');
         }
 

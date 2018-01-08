@@ -29,7 +29,7 @@ function getMonthFirstAndLastDates($initialDate = null)
     $startDate = $initialDate ? $initialDate : date("Y-m-01");
     $nextMonthStartDate = date("Y-m-d", api_strtotime($startDate." + 1 month"));
     $endDate = date("Y-m-d", api_strtotime($nextMonthStartDate." - 1 minute"));
-    return array('startDate' => $startDate, 'endDate' => $endDate);
+    return ['startDate' => $startDate, 'endDate' => $endDate];
 }
 
 /**
@@ -44,7 +44,7 @@ function getQuarterFirstAndLastDates($initialDate = null)
     $startDate = substr($startDate, 0, 5).$month.'-01';
     $nextQuarterStartDate = date('Y-m-d', api_strtotime($startDate.' + 3 month'));
     $endDate = date('Y-m-d', api_strtotime($nextQuarterStartDate.' - 1 minute'));
-    return array('startDate' => $startDate, 'endDate' => $endDate);
+    return ['startDate' => $startDate, 'endDate' => $endDate];
 }
 
 /**
@@ -63,30 +63,22 @@ function getQuarter($month)
     // reduce to 4 quarters: 1..3=1; 4..6=2
     switch ($month) {
         case 1:
-            //no break
         case 2:
-            //no break
         case 3:
             $quarter = 1;
             break;
         case 4:
-            //no break
         case 5:
-            //no break
         case 6:
             $quarter = 2;
             break;
         case 7:
-            //no break
         case 8:
-            //no break
         case 9:
             $quarter = 3;
             break;
         case 10:
-            //no break
         case 11:
-            //no break
         case 12:
             $quarter = 4;
             break;
@@ -171,7 +163,7 @@ function createCourseSessions($courses, $administratorId, $startDate, $endDate)
             0,
             SESSION_INVISIBLE
         );
-        SessionManager::add_courses_to_session($sessionId, array($course['id']));
+        SessionManager::add_courses_to_session($sessionId, [$course['id']]);
         echo "Session '".$sessionName."' created.\nCourse '".$course['title']."' added.\n\n";
     }
 }

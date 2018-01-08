@@ -16,19 +16,19 @@ class UniqueAnswerImage extends Basic
      */
     public function getConfig()
     {
-        $config['toolbarGroups'] = array(
+        $config['toolbarGroups'] = [
             '/',
-            array('name' => 'basicstyles', 'groups' =>array('basicstyles', 'cleanup',)),
-            array('name' => 'paragraph', 'groups' =>array('list', 'indent', 'blocks', 'align')),
-            array('name' => 'links'),
-            array('name' => 'insert'),
+            ['name' => 'basicstyles', 'groups' =>['basicstyles', 'cleanup',]],
+            ['name' => 'paragraph', 'groups' =>['list', 'indent', 'blocks', 'align']],
+            ['name' => 'links'],
+            ['name' => 'insert'],
             '/',
-            array('name' => 'styles'),
-            array('name' => 'colors'),
-            array('name' => 'tools'),
-            array('name' => 'others'),
-            array('name' => 'mode')
-        );
+            ['name' => 'styles'],
+            ['name' => 'colors'],
+            ['name' => 'tools'],
+            ['name' => 'others'],
+            ['name' => 'mode']
+        ];
 
         $config['fullPage'] = true;
         //$config['height'] = '200';

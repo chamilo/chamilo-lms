@@ -32,9 +32,9 @@ class Matching extends Question
      */
     public function createAnswersForm($form)
     {
-        $defaults = array();
+        $defaults = [];
         $nb_matches = $nb_options = 2;
-        $matches = array();
+        $matches = [];
         $answer = null;
         $counter = 1;
 
@@ -123,11 +123,11 @@ class Matching extends Question
             );
         }
 
-        $editorConfig = array(
+        $editorConfig = [
             'ToolbarSet' => 'TestMatching',
             'Width' => '100%',
             'Height' => '125'
-        );
+        ];
 
         for ($i = 1; $i <= $nb_matches; ++$i) {
             $renderer = &$form->defaultRenderer();
@@ -215,7 +215,7 @@ class Matching extends Question
         $form->addHtml('</table>');
 
         global $text;
-        $group = array();
+        $group = [];
         // setting the save button here and not in the question class.php
         $group[] = $form->addButtonDelete(get_lang('DelElem'), 'lessOptions', true);
         $group[] = $form->addButtonCreate(get_lang('AddElem'), 'moreOptions', true);
@@ -231,10 +231,10 @@ class Matching extends Question
         }
 
         $form->setConstants(
-            array(
+            [
                 'nb_matches' => $nb_matches,
                 'nb_options' => $nb_options
-            )
+            ]
         );
     }
 

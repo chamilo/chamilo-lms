@@ -31,7 +31,7 @@ class FormValidator extends HTML_QuickForm
         $method = 'post',
         $action = '',
         $target = '',
-        $attributes = array(),
+        $attributes = [],
         $layout = self::LAYOUT_HORIZONTAL,
         $trackSubmit = true
     ) {
@@ -181,7 +181,7 @@ EOT;
      * @param array $attributes (optional)    List of attributes for the form-element
      * @return HTML_QuickForm_text
      */
-    public function addText($name, $label, $required = true, $attributes = array())
+    public function addText($name, $label, $required = true, $attributes = [])
     {
         $element = $this->addElement('text', $name, $label, $attributes);
         $this->applyFilter($name, 'trim');
@@ -204,7 +204,7 @@ EOT;
      * @param bool   $required
      * @param array  $attributes
      */
-    public function addDateRangePicker($name, $label, $required = true, $attributes = array())
+    public function addDateRangePicker($name, $label, $required = true, $attributes = [])
     {
         $this->addElement('date_range_picker', $name, $label, $attributes);
         $this->addElement('hidden', $name.'_start');
@@ -288,7 +288,7 @@ EOT;
      *
      * @return HTML_QuickForm_textarea
      */
-    public function addTextarea($name, $label, $attributes = array())
+    public function addTextarea($name, $label, $attributes = [])
     {
         return $this->addElement('textarea', $name, $label, $attributes);
     }
@@ -311,7 +311,7 @@ EOT;
         $style = 'default',
         $size = 'default',
         $class = null,
-        $attributes = array(),
+        $attributes = [],
         $createElement = false
     ) {
         if ($createElement) {
@@ -356,7 +356,7 @@ EOT;
             'primary',
             null,
             null,
-            array(),
+            [],
             $createElement
         );
     }
@@ -378,7 +378,7 @@ EOT;
             'danger',
             null,
             null,
-            array(),
+            [],
             $createElement
         );
     }
@@ -392,7 +392,7 @@ EOT;
      *
      * @return HTML_QuickForm_button
      */
-    public function addButtonCreate($label, $name = 'submit', $createElement = false, $attributes = array())
+    public function addButtonCreate($label, $name = 'submit', $createElement = false, $attributes = [])
     {
         return $this->addButton(
             $name,
@@ -422,7 +422,7 @@ EOT;
             'primary',
             null,
             null,
-            array(),
+            [],
             $createElement
         );
     }
@@ -444,7 +444,7 @@ EOT;
             'danger',
             null,
             null,
-            array(),
+            [],
             $createElement
         );
     }
@@ -466,7 +466,7 @@ EOT;
             'primary',
             null,
             null,
-            array(),
+            [],
             $createElement
         );
     }
@@ -546,7 +546,7 @@ EOT;
             'primary',
             null,
             null,
-            array(),
+            [],
             $createElement
         );
     }
@@ -567,7 +567,7 @@ EOT;
             'primary',
             null,
             null,
-            array(),
+            [],
             $createElement
         );
     }
@@ -588,7 +588,7 @@ EOT;
             'primary',
             null,
             null,
-            array(),
+            [],
             $createElement
         );
     }
@@ -606,7 +606,7 @@ EOT;
         $style = 'default';
         $size = 'default';
         $class = null;
-        $attributes = array();
+        $attributes = [];
 
         if ($createElement) {
             return $this->createElement(
@@ -650,7 +650,7 @@ EOT;
             'primary',
             null,
             null,
-            array(),
+            [],
             $createElement
         );
     }
@@ -672,7 +672,7 @@ EOT;
             'primary',
             null,
             null,
-            array(),
+            [],
             $createElement
         );
     }
@@ -694,7 +694,7 @@ EOT;
             'primary',
             null,
             null,
-            array(),
+            [],
             $createElement
         );
     }
@@ -716,7 +716,7 @@ EOT;
             'primary',
             null,
             null,
-            array(),
+            [],
             $createElement
         );
     }
@@ -742,9 +742,9 @@ EOT;
      *
      * @return HTML_QuickForm_group
      */
-    public function addCheckBoxGroup($name, $label, $options = array(), $attributes = array())
+    public function addCheckBoxGroup($name, $label, $options = [], $attributes = [])
     {
-        $group = array();
+        $group = [];
         foreach ($options as $value => $text) {
             $attributes['value'] = $value;
             $group[] = $this->createElement(
@@ -769,7 +769,7 @@ EOT;
      */
     public function addRadio($name, $label, $options = [], $attributes = [])
     {
-        $group = array();
+        $group = [];
         foreach ($options as $key => $value) {
             $group[] = $this->createElement('radio', null, null, $value, $key, $attributes);
         }
@@ -804,7 +804,7 @@ EOT;
         $name,
         $label,
         $collection,
-        $attributes = array(),
+        $attributes = [],
         $addNoneOption = false,
         $textCallable = ''
     ) {
@@ -851,7 +851,7 @@ EOT;
      * @param array  $attributes
      * @throws Exception if the file doesn't have an id
      */
-    public function addFile($name, $label, $attributes = array())
+    public function addFile($name, $label, $attributes = [])
     {
         $element = $this->addElement('file', $name, $label, $attributes);
         if (isset($attributes['crop_image'])) {
@@ -859,7 +859,8 @@ EOT;
             if (empty($id)) {
                 throw new Exception('If you use the crop functionality the element must have an id');
             }
-            $this->addHtml('
+            $this->addHtml(
+                '
                 <div class="form-group" id="'.$id.'-form-group" style="display: none;">
                     <div class="col-sm-offset-2 col-sm-8">
                         <div id="'.$id.'_crop_image" class="cropCanvas thumbnail">
@@ -1230,7 +1231,7 @@ EOT;
         $reset = null;
         $result = new FormValidator($form_name, $form_method, $form_action, $form_target, $form_attributes, $form_track_submit);
 
-        $defaults = array();
+        $defaults = [];
         foreach ($form_data['items'] as $item) {
             $name = $item['name'];
             $type = isset($item['type']) ? $item['type'] : 'text';
@@ -1740,14 +1741,14 @@ EOT;
                         throw new Exception("The $groupName doesn't have the element $elementName");
                     }
 
-                    $this->_rules[$elementName][] = array(
+                    $this->_rules[$elementName][] = [
                         'type' => 'callback',
                         'format' => 'api_check_password',
                         'message' => $message,
                         'validation' => '',
                         'reset' => false,
                         'group' => $groupName
-                    );
+                    ];
                 }
             } else {
                 $this->addRule(
@@ -1816,7 +1817,7 @@ function html_filter_student_fullpage($html)
  */
 function mobile_phone_number_filter($mobilePhoneNumber)
 {
-    $mobilePhoneNumber = str_replace(array('+', '(', ')'), '', $mobilePhoneNumber);
+    $mobilePhoneNumber = str_replace(['+', '(', ')'], '', $mobilePhoneNumber);
 
     return ltrim($mobilePhoneNumber, '0');
 }

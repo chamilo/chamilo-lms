@@ -13,7 +13,6 @@ if (!ctype_alnum($token)) {
 $user = UserManager::getManager()->findUserByConfirmationToken($token);
 
 if ($user) {
-
     $user->setActive(1); // Setted 1 to active the user
     $user->setConfirmationToken(null);
 

@@ -21,7 +21,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'add_users_by_coach' => 'false',
                     'extend_rights_for_coach' => 'false',
                     'show_session_coach' => 'false',
@@ -44,13 +44,13 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'session_days_after_coach_access' => '',
                     'session_days_before_coach_access' => '',
                     'show_session_description' => 'false'
-                )
+                ]
             )
         ;
 
-        $allowedTypes = array(
-            'add_users_by_coach' => array('string'),
-        );
+        $allowedTypes = [
+            'add_users_by_coach' => ['string'],
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
@@ -79,7 +79,8 @@ class SessionSettingsSchema extends AbstractSettingsSchema
             ->add('session_page_enabled', YesNoType::class)
             ->add('allow_teachers_to_create_sessions', YesNoType::class)
             ->add('prevent_session_admins_to_manage_all_users', YesNoType::class)
-            ->add('session_course_ordering',
+            ->add(
+                'session_course_ordering',
                 'text',
                 [
                     'label' => 'SessionCourseOrderingTitle',

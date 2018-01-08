@@ -2,14 +2,14 @@
 /* For licensing terms, see /license.txt */
 /**
  * This script executes the importation of all users in the LDAP repository
- * into Chamilo 
+ * into Chamilo
  * @package chamilo.auth.ldap
  */
 /**
  * Init
  */
 if (PHP_SAPI != 'cli') {
-    die ('For security reasons, this script can only be launched from cron or from the command line');
+    die('For security reasons, this script can only be launched from cron or from the command line');
 }
 use \ChamiloSession as Session;
 

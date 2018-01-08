@@ -21,7 +21,7 @@ class TrackingSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'header_extra_content' => '',
                     'footer_extra_content' => '',
                     'meta_title' => '',
@@ -30,7 +30,7 @@ class TrackingSettingsSchema extends AbstractSettingsSchema
                     'meta_twitter_site' => '',
                     'meta_twitter_creator' => ''
 
-                )
+                ]
             );
 //            ->setAllowedTypes(
 //                array(
@@ -55,6 +55,5 @@ class TrackingSettingsSchema extends AbstractSettingsSchema
             ->add('meta_twitter_site', 'text')
             ->add('meta_twitter_creator', 'text')
         ;
-
     }
 }

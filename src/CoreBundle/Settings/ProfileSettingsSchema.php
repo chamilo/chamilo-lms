@@ -22,7 +22,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'changeable_options' => [],
                     'extended_profile' => 'false',
                     'account_valid_duration' => '3660',
@@ -35,17 +35,17 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                     'enable_profile_user_address_geolocalization' => '',
                     'allow_show_skype_account' => '',
                     'allow_show_linkedin_url' => ''
-                )
+                ]
             )
             ->setTransformer(
                 'changeable_options',
                 new ArrayToIdentifierTransformer()
             )
         ;
-        $allowedTypes = array(
-            'changeable_options' => array('array'),
-            'account_valid_duration' => array('string'),
-        );
+        $allowedTypes = [
+            'changeable_options' => ['array'],
+            'account_valid_duration' => ['string'],
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
@@ -58,9 +58,9 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
             ->add(
                 'changeable_options',
                 'choice',
-                array(
+                [
                     'multiple' => true,
-                    'choices' => array(
+                    'choices' => [
                         'name' => 'name',
                         'officialcode' => 'officialcode',
                         'email' => 'email',
@@ -72,10 +72,11 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                         'openid' => 'openid',
                         'theme' => 'theme',
                         'apikeys' => 'apikeys',
-                    )
-                )
+                    ]
+                ]
             )
-            ->add('extended_profile',
+            ->add(
+                'extended_profile',
                 YesNoType::class,
                 ['label' => 'ExtendedProfileTitle', 'help_block'=> 'ExtendedProfileComment']
             )

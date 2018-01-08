@@ -132,7 +132,7 @@ class Database
      * @return
      */
     public function connect(
-        $params = array(),
+        $params = [],
         $sysPath = '',
         $entityRootPath = '',
         $returnConnection = false,
@@ -142,7 +142,7 @@ class Database
         $config->setAutoGenerateProxyClasses(true);
 
         $config->setEntityNamespaces(
-            array(
+            [
                 'ChamiloPageBundle' => 'Chamilo\PageBundle\Entity',
                 'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity',
                 'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
@@ -150,7 +150,7 @@ class Database
                 'ChamiloSkillBundle' => 'Chamilo\SkillBundle\Entity',
                 'ChamiloTicketBundle' => 'Chamilo\TicketBundle\Entity',
                 'ChamiloPluginBundle' => 'Chamilo\PluginBundle\Entity'
-            )
+            ]
         );
 
         $params['charset'] = 'utf8';
@@ -264,7 +264,7 @@ class Database
     public static function fetch_array(Statement $result, $option = 'BOTH')
     {
         if ($result === false) {
-            return array();
+            return [];
         }
 
         return $result->fetch(self::customOptionToDoctrineOption($option));
@@ -306,7 +306,7 @@ class Database
     public static function fetch_row(Statement $result)
     {
         if ($result === false) {
-            return array();
+            return [];
         }
         return $result->fetch(PDO::FETCH_NUM);
     }
@@ -471,7 +471,7 @@ class Database
     public static function update(
         $tableName,
         $attributes,
-        $whereConditions = array(),
+        $whereConditions = [],
         $showQuery = false
     ) {
         if (!empty($tableName) && !empty($attributes)) {
@@ -533,7 +533,7 @@ class Database
     public static function select(
         $columns,
         $table_name,
-        $conditions = array(),
+        $conditions = [],
         $type_result = 'all',
         $option = 'ASSOC',
         $debug = false
@@ -556,7 +556,7 @@ class Database
             var_dump($sql);
         }
         $result = self::query($sql);
-        $array = array();
+        $array = [];
 
         if ($type_result === 'all') {
             while ($row = self::fetch_array($result, $option)) {
@@ -595,7 +595,7 @@ class Database
                 case 'where':
                     foreach ($condition_data as $condition => $value_array) {
                         if (is_array($value_array)) {
-                            $clean_values = array();
+                            $clean_values = [];
                             foreach ($value_array as $item) {
                                 $item = self::escape_string($item);
                                 $clean_values[] = $item;
@@ -632,7 +632,7 @@ class Database
                         // 'order' => 'id desc, name desc'
                         $order_array = self::escape_string($order_array, null, false);
                         $new_order_array = explode(',', $order_array);
-                        $temp_value = array();
+                        $temp_value = [];
 
                         foreach ($new_order_array as $element) {
                             $element = explode(' ', $element);
@@ -642,7 +642,7 @@ class Database
                             if (!empty($element[1])) {
                                 $element[1] = strtolower($element[1]);
                                 $order = 'DESC';
-                                if (in_array($element[1], array('desc', 'asc'))) {
+                                if (in_array($element[1], ['desc', 'asc'])) {
                                     $order = $element[1];
                                 }
                                 $temp_value[] = $element[0].' '.$order.' ';
@@ -679,7 +679,7 @@ class Database
      */
     public static function parse_where_conditions($conditions)
     {
-        return self::parse_conditions(array('where' => $conditions));
+        return self::parse_conditions(['where' => $conditions]);
     }
 
     /**
@@ -693,7 +693,10 @@ class Database
     {
         $where_return = self::parse_where_conditions($where_conditions);
         $sql    = "DELETE FROM $table_name $where_return ";
-        if ($show_query) { echo $sql; echo '<br />'; }
+        if ($show_query) {
+            echo $sql;
+            echo '<br />';
+        }
         $result = self::query($sql);
         $affected_rows = self::affected_rows($result);
         //@todo should return affected_rows for
@@ -713,7 +716,7 @@ class Database
         $cache = null;
         $path = !empty($path) ? $path : api_get_path(SYS_PATH);
 
-        $paths = array(
+        $paths = [
             //$path.'src/Chamilo/ClassificationBundle/Entity',
             //$path.'src/Chamilo/MediaBundle/Entity',
             $path.'src/PageBundle/Entity',
@@ -726,7 +729,7 @@ class Database
             //$path.'vendor/sonata-project/user-bundle/Entity',
             //$path.'vendor/sonata-project/user-bundle/Model',
             //$path.'vendor/friendsofsymfony/user-bundle/FOS/UserBundle/Entity',
-        );
+        ];
 
         $proxyDir = $path.'var/cache/';
 

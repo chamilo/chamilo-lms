@@ -32,13 +32,13 @@ class TableSort
         $type = SORT_REGULAR
     ) {
         if (!is_array($data) || empty($data)) {
-            return array();
+            return [];
         }
         if ($column != strval(intval($column))) {
             // Probably an attack
             return $data;
         }
-        if (!in_array($direction, array(SORT_ASC, SORT_DESC))) {
+        if (!in_array($direction, [SORT_ASC, SORT_DESC])) {
             // Probably an attack
             return $data;
         }
@@ -99,7 +99,7 @@ class TableSort
         $doc_filter = false
     ) {
         if (!is_array($data) || empty($data)) {
-            return array();
+            return [];
         }
 
         if ($column != strval(intval($column))) {
@@ -107,7 +107,7 @@ class TableSort
             return $data;
         }
 
-        if (!in_array($direction, array(SORT_ASC, SORT_DESC))) {
+        if (!in_array($direction, [SORT_ASC, SORT_DESC])) {
             // Probably an attack
             return $data;
         }
@@ -131,9 +131,9 @@ class TableSort
         }
 
         //This fixes only works in the document tool when ordering by name
-        if ($doc_filter && in_array($type, array(SORT_STRING))) {
-            $folder_to_sort = array();
-            $new_data = array();
+        if ($doc_filter && in_array($type, [SORT_STRING])) {
+            $folder_to_sort = [];
+            $new_data = [];
             if (!empty($data)) {
                 foreach ($data as $document) {
                     if ($document['type'] == 'folder') {
@@ -160,7 +160,7 @@ class TableSort
                     }
                 }
 
-                $new_data_order = array();
+                $new_data_order = [];
                 if (!empty($docs_to_sort)) {
                     foreach ($docs_to_sort as $id => $document) {
                         if (isset($new_data[$id])) {
@@ -202,7 +202,7 @@ class TableSort
 
         if (is_array($column_show) && !empty($column_show)) {
             // We show only the columns data that were set up on the $column_show array
-            $new_order_data = array();
+            $new_order_data = [];
             $count_data = count($data);
             $count_column_show = count($column_show);
             for ($j = 0; $j < $count_data; $j++) {

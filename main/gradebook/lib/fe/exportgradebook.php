@@ -81,7 +81,6 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
             $printdata .= '<td>'.$rowdata.'</td>';
         }
         $printdata .= '</tr>';
-
     }
     $printdata .= '</table></div></body></html>';
 
@@ -322,7 +321,6 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
     $pdf->set_custom_header($headers_in_pdf);
     $pdf->content_to_pdf($header.$content_table, $css, $title_pdf);
     exit;
-
 }
 
 /**
@@ -346,12 +344,12 @@ function export_pdf($pdf, $newarray, $header_names, $format)
         $pdf->line(40, 40, 790, 40);
     }
     $pdf->ezSetY(($format == 'portrait') ? '750' : '520');
-    $pdf->ezTable($newarray, $header_names, '', array(
+    $pdf->ezTable($newarray, $header_names, '', [
         'showHeadings' => 1,
         'shaded' => 1,
         'showLines' => 1,
         'rowGap' => 3,
         'width' => (($format == 'portrait') ? '500' : '750'),
-    ));
+    ]);
     $pdf->ezStream();
 }

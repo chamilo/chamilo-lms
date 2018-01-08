@@ -159,7 +159,7 @@ class UrlManager
                 FROM $table
                 ORDER BY id";
         $res = Database::query($sql);
-        $urls = array();
+        $urls = [];
         while ($url = Database::fetch_array($res)) {
             $urls[] = $url;
         }
@@ -471,7 +471,7 @@ class UrlManager
     public static function add_users_to_urls($user_list, $url_list)
     {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $result_array = array();
+        $result_array = [];
 
         if (is_array($user_list) && is_array($url_list)) {
             foreach ($url_list as $urlId) {
@@ -507,7 +507,7 @@ class UrlManager
     public static function add_courses_to_urls($course_list, $url_list)
     {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $result_array = array();
+        $result_array = [];
 
         if (is_array($course_list) && is_array($url_list)) {
             foreach ($url_list as $urlId) {
@@ -542,7 +542,7 @@ class UrlManager
      **/
     public static function addUserGroupListToUrl($userGroupList, $urlList)
     {
-        $resultArray = array();
+        $resultArray = [];
         if (is_array($userGroupList) && is_array($urlList)) {
             foreach ($urlList as $urlId) {
                 foreach ($userGroupList as $userGroupId) {
@@ -574,7 +574,7 @@ class UrlManager
      **/
     public static function addCourseCategoryListToUrl($courseCategoryList, $urlList)
     {
-        $resultArray = array();
+        $resultArray = [];
         if (is_array($courseCategoryList) && is_array($urlList)) {
             foreach ($urlList as $urlId) {
                 foreach ($courseCategoryList as $categoryCourseId) {
@@ -665,7 +665,7 @@ class UrlManager
     public static function add_sessions_to_urls($session_list, $url_list)
     {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $result_array = array();
+        $result_array = [];
 
         if (is_array($session_list) && is_array($url_list)) {
             foreach ($url_list as $urlId) {
@@ -898,7 +898,7 @@ class UrlManager
                 FROM $table 
                 WHERE access_url_id = ".intval($urlId);
         $result = Database::query($sql);
-        $existing_users = array();
+        $existing_users = [];
 
         // Getting all users
         while ($row = Database::fetch_array($result)) {
@@ -906,7 +906,7 @@ class UrlManager
         }
 
         // Adding users
-        $users_added = array();
+        $users_added = [];
         foreach ($user_list as $user_id_to_add) {
             if (!in_array($user_id_to_add, $existing_users)) {
                 $result = self::add_user_to_url($user_id_to_add, $urlId);
@@ -916,7 +916,7 @@ class UrlManager
             }
         }
 
-        $users_deleted = array();
+        $users_deleted = [];
         // Deleting old users
         foreach ($existing_users as $user_id_to_delete) {
             if (!in_array($user_id_to_delete, $user_list)) {
@@ -931,10 +931,10 @@ class UrlManager
             return false;
         }
 
-        return array(
+        return [
             'users_added' => $users_added,
             'users_deleted' => $users_deleted
-        );
+        ];
     }
 
     /**
@@ -951,7 +951,7 @@ class UrlManager
                 WHERE access_url_id = ".intval($urlId);
         $result = Database::query($sql);
 
-        $existing_courses = array();
+        $existing_courses = [];
         while ($row = Database::fetch_array($result)) {
             $existing_courses[] = $row['c_id'];
         }
@@ -988,7 +988,7 @@ class UrlManager
         $sql = "SELECT usergroup_id FROM $table 
                 WHERE access_url_id = ".intval($urlId);
         $result = Database::query($sql);
-        $existingItems = array();
+        $existingItems = [];
         while ($row = Database::fetch_array($result)) {
             $existingItems[] = $row['usergroup_id'];
         }
@@ -1021,7 +1021,7 @@ class UrlManager
                 FROM $table 
                 WHERE access_url_id = ".intval($urlId);
         $result = Database::query($sql);
-        $existingItems = array();
+        $existingItems = [];
 
         while ($row = Database::fetch_array($result)) {
             $existingItems[] = $row['course_category_id'];
@@ -1068,7 +1068,7 @@ class UrlManager
         $sql = "SELECT session_id FROM $table 
                 WHERE access_url_id=".intval($urlId);
         $result = Database::query($sql);
-        $existing_sessions = array();
+        $existing_sessions = [];
 
         while ($row = Database::fetch_array($result)) {
             $existing_sessions[] = $row['session_id'];

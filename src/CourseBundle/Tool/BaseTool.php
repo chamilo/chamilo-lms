@@ -125,6 +125,5 @@ abstract class BaseTool implements ToolInterface
      */
     public function setDefaultSettings(OptionsResolverInterface $resolver)
     {
-
     }
 }

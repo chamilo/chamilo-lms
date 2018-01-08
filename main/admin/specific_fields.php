@@ -15,8 +15,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_admin_script();
 
 // Breadcrumb
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'settings.php?category=Search', 'name' => get_lang('PlatformConfigSettings'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'settings.php?category=Search', 'name' => get_lang('PlatformConfigSettings')];
 
 $libpath = api_get_path(LIBRARY_PATH);
 
@@ -34,8 +34,8 @@ $form->addElement(
 );
 
 // Create a sortable table with specific fields data
-$column_show = array(1, 1, 1);
-$column_order = array(3, 2, 1);
+$column_show = [1, 1, 1];
+$column_order = [3, 2, 1];
 $extra_fields = get_specific_field_list();
 $number_of_extra_fields = count($extra_fields);
 

@@ -50,31 +50,31 @@ class IndexController extends BaseController
         /** @var \PageController $pageController */
         //$pageController = $this->get('page_controller');
         $pageController = new PageController();
-/*
-        if (api_get_setting('display_categories_on_homepage') == 'true') {
-            //$template->assign('course_category_block', $pageController->return_courses_in_categories());
-        }
-
-        if (!api_is_anonymous()) {
-            if (api_is_platform_admin()) {
-                $pageController->setCourseBlock();
-            } else {
-                $pageController->return_teacher_link();
-            }
-        }
-
-        // Hot courses & announcements
-        $hotCourses         = null;
-        $announcementsBlock = null;
-
-        // Navigation links
-        //$pageController->returnNavigationLinks($template->getNavigationLinks());
-        $pageController->returnNotice();
-        $pageController->returnHelp();
-
-        if (api_is_platform_admin() || api_is_drh()) {
-            $pageController->returnSkillsLinks();
-        }*/
+        /*
+                if (api_get_setting('display_categories_on_homepage') == 'true') {
+                    //$template->assign('course_category_block', $pageController->return_courses_in_categories());
+                }
+        
+                if (!api_is_anonymous()) {
+                    if (api_is_platform_admin()) {
+                        $pageController->setCourseBlock();
+                    } else {
+                        $pageController->return_teacher_link();
+                    }
+                }
+        
+                // Hot courses & announcements
+                $hotCourses         = null;
+                $announcementsBlock = null;
+        
+                // Navigation links
+                //$pageController->returnNavigationLinks($template->getNavigationLinks());
+                $pageController->returnNotice();
+                $pageController->returnHelp();
+        
+                if (api_is_platform_admin() || api_is_drh()) {
+                    $pageController->returnSkillsLinks();
+                }*/
 
         $sessionHandler = $request->getSession();
         $sessionHandler->remove('coursesAlreadyVisited');
@@ -91,47 +91,47 @@ class IndexController extends BaseController
         //$user = $userManager->find(1);
 
         //$attribute = $this->container->get('doctrine')->getRepository('ChamiloCoreBundle:ExtraField')->find(1);
-/*
-        $attribute = new ExtraField();
-        $attribute->setName('size');
-        $attribute->setVariable('size');
-        $attribute->setType(TextAttributeType::TYPE);
-        $attribute->setStorageType(AttributeValueInterface::STORAGE_TEXT);
-        $this->getDoctrine()->getManager()->persist($attribute);
-        $this->getDoctrine()->getManager()->flush();
-
-        $attributeColor = new ExtraField();
-        $attributeColor->setName('color');
-        $attributeColor->setVariable('color');
-        $attributeColor->setType(TextAttributeType::TYPE);
-        $attributeColor->setStorageType(AttributeValueInterface::STORAGE_TEXT);
-        $this->getDoctrine()->getManager()->persist($attributeColor);
-        $this->getDoctrine()->getManager()->flush();
-
-        $color = new ExtraFieldValues();
-        $color->setComment('lol');
-        $color->setAttribute($attributeColor);
-        $color->setValue('blue');
-
-        $user->addAttribute($color);
-
-        $smallSize = new ExtraFieldValues();
-        $smallSize->setComment('lol');
-        $smallSize->setAttribute($attribute);
-        $smallSize->setValue('S');
-
-        $user->addAttribute($smallSize);
-        $userManager->updateUser($user);
-*/
+        /*
+                $attribute = new ExtraField();
+                $attribute->setName('size');
+                $attribute->setVariable('size');
+                $attribute->setType(TextAttributeType::TYPE);
+                $attribute->setStorageType(AttributeValueInterface::STORAGE_TEXT);
+                $this->getDoctrine()->getManager()->persist($attribute);
+                $this->getDoctrine()->getManager()->flush();
+        
+                $attributeColor = new ExtraField();
+                $attributeColor->setName('color');
+                $attributeColor->setVariable('color');
+                $attributeColor->setType(TextAttributeType::TYPE);
+                $attributeColor->setStorageType(AttributeValueInterface::STORAGE_TEXT);
+                $this->getDoctrine()->getManager()->persist($attributeColor);
+                $this->getDoctrine()->getManager()->flush();
+        
+                $color = new ExtraFieldValues();
+                $color->setComment('lol');
+                $color->setAttribute($attributeColor);
+                $color->setValue('blue');
+        
+                $user->addAttribute($color);
+        
+                $smallSize = new ExtraFieldValues();
+                $smallSize->setComment('lol');
+                $smallSize->setAttribute($attribute);
+                $smallSize->setValue('S');
+        
+                $user->addAttribute($smallSize);
+                $userManager->updateUser($user);
+        */
         $this->get('session')->remove('id_session');
 
         return $this->render(
             '@ChamiloCore/Index/index.html.twig',
-            array(
+            [
                 'content' => '',
                 'announcements_block' => $announcementsBlock
                 //'home_page_block' => $pageController->returnHomePage()
-            )
+            ]
         );
     }
 

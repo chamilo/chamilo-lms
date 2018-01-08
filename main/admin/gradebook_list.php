@@ -50,10 +50,10 @@ $toolName = get_lang('Gradebook');
 switch ($action) {
     case 'add':
     case 'edit':
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => $currentUrl,
             'name' => get_lang('Gradebook')
-        );
+        ];
         $toolName = get_lang(ucfirst($action));
         break;
 }
@@ -293,7 +293,7 @@ $searchForm = new FormValidator(
     'get',
     '',
     '',
-    array(),
+    [],
     FormValidator::LAYOUT_INLINE
 );
 $searchForm->addText('keyword', '', false);

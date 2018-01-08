@@ -7,7 +7,6 @@
 
 namespace Chamilo\ThemeBundle\EventListener;
 
-
 use Chamilo\ThemeBundle\Event\NotificationListEvent;
 use Chamilo\ThemeBundle\Model\NotificationModel;
 
@@ -22,10 +21,9 @@ class NavbarNotificationListDemoListener
 
     protected function getNotifications()
     {
-        return array(
+        return [
             new NotificationModel('some notification'),
             new NotificationModel('some more notices', 'success'),
-        );
+        ];
     }
-
 }

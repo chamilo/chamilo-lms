@@ -164,20 +164,20 @@ if ($form->validate()) {
     exit;
 } else {
     if (api_is_in_gradebook()) {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => Category::getUrl(),
             'name' => get_lang('ToolGradebook')
-        );
+        ];
     }
     $nameTools = get_lang('ExerciseManagement');
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => 'exercise.php?'.api_get_cidreq(),
         'name' => get_lang('Exercises'),
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         "url" => 'admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq(),
         "name" => $objExercise->selectTitle(true),
-    );
+    ];
 
     Display::display_header($nameTools, get_lang('Exercise'));
 

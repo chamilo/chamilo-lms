@@ -37,24 +37,24 @@ $lp = Session::read('oLP');
 $lp_theme_css = $lp->get_theme();
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
-    );
+    ];
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list',
     'name' => get_lang('LearningPaths')
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id",
     'name' => stripslashes($lp->get_name()),
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
     'name' => get_lang('NewStep'),
-);
+];
 
 Display::display_header(get_lang('LearnpathPrerequisites'), 'Path');
 

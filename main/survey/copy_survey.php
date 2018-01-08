@@ -16,10 +16,10 @@ if (!api_is_allowed_to_edit()) {
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
     'name' => get_lang('SurveyList')
-);
+];
 
 // The section (for the tabs)
 $this_section = SECTION_COURSES;
@@ -42,7 +42,7 @@ $form->addElement(
     'text',
     'survey_title',
     get_lang('Survey'),
-    array('value' => $surveyTitle, 'disabled' => 'disabled')
+    ['value' => $surveyTitle, 'disabled' => 'disabled']
 );
 $form->addSelectAjax(
     'destination_course',
@@ -58,7 +58,7 @@ $form->addButtonCopy(get_lang('CopySurvey'));
 // Add Security token
 $token = Security::get_existing_token();
 $form->addElement('hidden', 'sec_token');
-$form->setConstants(array('sec_token' => $token));
+$form->setConstants(['sec_token' => $token]);
 
 
 // If a CourseSelectForm is posted or we should copy all resources, then copy them

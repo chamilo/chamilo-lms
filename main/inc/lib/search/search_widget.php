@@ -39,7 +39,7 @@ function format_one_specific_field_select($prefix, $sf_term_array, $op, $extra_s
     }
     if ($op == 'and') {
         $all_selected_name = get_lang('All');
-    } else if ($op == 'or') {
+    } elseif ($op == 'or') {
         $all_selected_name = get_lang('Any');
     }
     $multiple_select .= '<option value="__all__" '.$all_selected.' >-- '.$all_selected_name.' --</option>';
@@ -79,7 +79,7 @@ function format_specific_fields_selects($sf_terms, $op, $prefilter_prefix = '')
             $multiple_select .= '<td><img class="sf-select-splitter" src="../img/search-big-plus.gif" alt="plus-sign-decoration"/></td>';
         }
         //sorting the array of terms
-        $temp = array();
+        $temp = [];
         if (!empty($sf_term_array)) {
             foreach ($sf_term_array as $key => $value) {
                 $temp[trim(stripslashes($value['name']))] = $key;
@@ -92,7 +92,7 @@ function format_specific_fields_selects($sf_terms, $op, $prefilter_prefix = '')
 
         $sf_copy = $sf_term_array;
         // get specific field name
-        $sf_value = get_specific_field_list(array('code' => "'$prefix'"));
+        $sf_value = get_specific_field_list(['code' => "'$prefix'"]);
         $sf_value = array_shift($sf_value);
         $multiple_select .= '<td><label class="sf-select-multiple-title" for="sf_'.$prefix.'[]">'.$sf_value['name'].'</label><br />';
         $multiple_select .= format_one_specific_field_select($prefix, $sf_term_array, $op, 'multiple="multiple" size="7" class="sf-select-multiple"');
@@ -110,7 +110,7 @@ function format_specific_fields_selects($sf_terms, $op, $prefilter_prefix = '')
  */
 function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op)
 {
-    $thesaurus_icon = Display::return_icon('thesaurus.gif', get_lang('SearchAdvancedOptions'), array('id'=>'thesaurus-icon'));
+    $thesaurus_icon = Display::return_icon('thesaurus.gif', get_lang('SearchAdvancedOptions'), ['id'=>'thesaurus-icon']);
     $advanced_options = '<a id="tags-toggle" href="#">'.get_lang('SearchAdvancedOptions').'</a>';
     $display_thesaurus = ($show_thesaurus == true ? 'block' : 'none');
     $help = '<h3>'.get_lang('SearchKeywordsHelpTitle').'</h3>'.get_lang('SearchKeywordsHelpComment');
@@ -197,7 +197,7 @@ function search_widget_prefilter_form(
     $op,
     $prefilter_prefix = null
 ) {
-    $thesaurus_icon = Display::return_icon('thesaurus.gif', get_lang('SearchAdvancedOptions'), array('id'=>'thesaurus-icon'));
+    $thesaurus_icon = Display::return_icon('thesaurus.gif', get_lang('SearchAdvancedOptions'), ['id'=>'thesaurus-icon']);
     $advanced_options = '<a id="tags-toggle" href="#">'.get_lang('SearchAdvancedOptions').'</a>';
     $display_thesaurus = ($show_thesaurus == true ? 'block' : 'none');
     $help = '<h3>'.get_lang('SearchKeywordsHelpTitle').'</h3>'.get_lang('SearchKeywordsHelpComment');
@@ -230,7 +230,7 @@ function search_widget_prefilter_form(
                     <tr>';
         if (!is_null($prefilter_prefix)) {
             //sorting the array of terms
-            $temp = array();
+            $temp = [];
             foreach ($sf_terms[$prefilter_prefix] as $key => $value) {
                 $temp[trim(stripslashes($value['name']))] = $key;
             }
@@ -240,7 +240,7 @@ function search_widget_prefilter_form(
             $sf_term_array = $temp;
 
             // get specific field name
-            $sf_value = get_specific_field_list(array('code' => "'$prefilter_prefix'"));
+            $sf_value = get_specific_field_list(['code' => "'$prefilter_prefix'"]);
             $sf_value = array_shift($sf_value);
             $form .= '<label class="sf-select-multiple-title" for="sf_'.$prefix.'[]">'.$icons_for_search_terms[$prefix].' '.$sf_value['name'].'</label><br />';
 
@@ -331,19 +331,19 @@ function search_widget_show($action = 'index.php')
     // TODO: load images dinamically when they're avalaible from specific field ui to add
     $groupId = api_get_group_id();
 
-    $sf_terms = array();
+    $sf_terms = [];
     $specific_fields = get_specific_field_list();
-    $url_params = array();
+    $url_params = [];
 
     if (($cid = api_get_course_id()) != -1) { // with cid
 
         // get search engine terms
         $course_filter = chamilo_get_boolean_query(XAPIAN_PREFIX_COURSEID.$cid);
-        $dkterms = chamilo_query_simple_query('', 0, 1000, array($course_filter));
+        $dkterms = chamilo_query_simple_query('', 0, 1000, [$course_filter]);
 
         //prepare specific fields names (and also get possible URL param names)
         foreach ($specific_fields as $specific_field) {
-            $temp = array();
+            $temp = [];
             if (is_array($dkterms) && count($dkterms) > 0) {
                 foreach ($dkterms[1] as $obj) {
                     $temp = array_merge($obj['sf-'.$specific_field['code']], $temp);
@@ -365,15 +365,16 @@ function search_widget_show($action = 'index.php')
 
     // Tool introduction
     // TODO: Settings for the online editor to be checked (insert an image for example). Probably this is a special case here.
-    if (api_get_course_id() !== -1)
-    if (!empty($groupId)) {
-        Display::display_introduction_section(TOOL_SEARCH.$groupId);
-    } else {
-        Display::display_introduction_section(TOOL_SEARCH);
+    if (api_get_course_id() !== -1) {
+        if (!empty($groupId)) {
+            Display::display_introduction_section(TOOL_SEARCH.$groupId);
+        } else {
+            Display::display_introduction_section(TOOL_SEARCH);
+        }
     }
 
     $op = 'or';
-    if (!empty($_REQUEST['operator']) && in_array($op, array('or', 'and'))) {
+    if (!empty($_REQUEST['operator']) && in_array($op, ['or', 'and'])) {
         $op = $_REQUEST['operator'];
     }
 

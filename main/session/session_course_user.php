@@ -97,11 +97,11 @@ $form->setDefaults(['courses_to_avoid' => $avoidedCourseIds]);
 
 /* View */
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
+$interbreadcrumb[] = [
     'url' => 'resume_session.php?id_session='.$id_session,
     'name' => get_lang('SessionOverview'),
-);
+];
 
 Display::display_header($tool_name);
 echo Display::page_header($session->getName().' - '.$user->getCompleteName());

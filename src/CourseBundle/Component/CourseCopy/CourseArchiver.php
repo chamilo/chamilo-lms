@@ -191,7 +191,7 @@ class CourseArchiver
      */
     public static function getAvailableBackups($user_id = null)
     {
-        $backup_files = array();
+        $backup_files = [];
         $dirname = self::getBackupDir();
 
         if (!file_exists($dirname)) {
@@ -209,11 +209,11 @@ class CourseArchiver
                     $ext = isset($file_parts[1]) ? $file_parts[1] : null;
                     if ($ext == 'zip' && ($user_id != null && $owner_id == $user_id || $user_id == null)) {
                         $date = substr($date, 0, 4).'-'.substr($date, 4, 2).'-'.substr($date, 6, 2).' '.substr($date, 9, 2).':'.substr($date, 11, 2).':'.substr($date, 13, 2);
-                        $backup_files[] = array(
+                        $backup_files[] = [
                             'file' => $file,
                             'date' => $date,
                             'course_code' => $course_code,
-                        );
+                        ];
                     }
                 }
             }
@@ -316,7 +316,9 @@ class CourseArchiver
         $course = unserialize(base64_decode($contents));
 
         if (!in_array(
-            get_class($course), ['Course', 'Chamilo\CourseBundle\Component\CourseCopy\Course'])
+            get_class($course),
+            ['Course', 'Chamilo\CourseBundle\Component\CourseCopy\Course']
+        )
         ) {
             return new Course();
         }

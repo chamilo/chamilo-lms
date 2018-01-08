@@ -29,7 +29,7 @@ $form->addButtonSave(get_lang('Save'), 'submit_button');
 $tab_default_add_cas_login_button_cas_button_label = api_get_setting('add_cas_login_button_cas_button_label');
 $tab_default_add_cas_login_button_cas_button_comment = api_get_setting('add_cas_login_button_cas_button_comment');
 $tab_default_add_cas_login_button_cas_image_url = api_get_setting('add_cas_login_button_cas_image_url');
-$defaults = array();
+$defaults = [];
 $defaults['cas_button_label'] = $tab_default_add_cas_login_button_cas_button_label['add_cas_login_button'];
 $defaults['cas_button_comment'] = $tab_default_add_cas_login_button_cas_button_comment['add_cas_login_button'];
 $defaults['cas_image_url'] = $tab_default_add_cas_login_button_cas_image_url['add_cas_login_button'];
@@ -38,4 +38,4 @@ $form->setDefaults($defaults);
 $plugin_info['settings_form'] = $form;
 
 //set the templates that are going to be used
-$plugin_info['templates'] = array('template.tpl');
+$plugin_info['templates'] = ['template.tpl'];

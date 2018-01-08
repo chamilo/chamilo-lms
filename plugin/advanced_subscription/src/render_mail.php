@@ -20,6 +20,6 @@ $verified = $plugin->checkHash($data, $hash);
 if ($verified) {
     // Render mail
     $message = MessageManager::get_message_by_id($data['queueId']);
-    $message = str_replace(array('<br /><hr>', '<br />', '<br/>'), '', $message['content']);
+    $message = str_replace(['<br /><hr>', '<br />', '<br/>'], '', $message['content']);
     echo $message;
 }

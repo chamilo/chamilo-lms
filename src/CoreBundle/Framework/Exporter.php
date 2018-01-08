@@ -53,14 +53,14 @@ class Exporter
                 throw new \RuntimeException('Invalid format');
         }
 
-        $callback = function() use ($source, $writer) {
+        $callback = function () use ($source, $writer) {
             $handler = \Exporter\Handler::create($source, $writer);
             $handler->export();
         };
 
-        return new StreamedResponse($callback, 200, array(
+        return new StreamedResponse($callback, 200, [
             'Content-Type'        => $contentType,
             'Content-Disposition' => sprintf('attachment; filename=%s', $filename)
-        ));
+        ]);
     }
 }

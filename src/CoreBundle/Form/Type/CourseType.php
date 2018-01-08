@@ -26,20 +26,20 @@ class CourseType extends AbstractType
             ->add(
                 'course_language',
                 'locale',
-                array('preferred_choices' => array('en', 'fr', 'es'))
+                ['preferred_choices' => ['en', 'fr', 'es']]
             )
             ->add(
                 'visibility',
                 'choice',
-                array('choices' => Course::getStatusList())
+                ['choices' => Course::getStatusList()]
             )
-            ->add('department_name', 'text', array('required' => false))
-            ->add('department_url', 'url', array('required' => false))
+            ->add('department_name', 'text', ['required' => false])
+            ->add('department_url', 'url', ['required' => false])
             //->add('disk_quota', 'text')
             ->add(
                 'expiration_date',
                 'sonata_type_datetime_picker',
-                array('required' => false)
+                ['required' => false]
             )
             /* ->add('general_coach', 'entity', array(
                  'class' => 'ChamiloUserBundle:User',
@@ -63,7 +63,7 @@ class CourseType extends AbstractType
             /*
             ->add('coach_access_end_date', 'sonata_type_datetime_picker')*/
 
-            ->add('save', 'submit', array('label' => 'Update'));
+            ->add('save', 'submit', ['label' => 'Update']);
     }
 
     /**
@@ -72,9 +72,9 @@ class CourseType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => 'Chamilo\CoreBundle\Entity\Course',
-            )
+            ]
         );
     }
 

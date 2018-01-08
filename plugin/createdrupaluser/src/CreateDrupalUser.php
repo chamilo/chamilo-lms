@@ -16,9 +16,9 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
      */
     protected function __construct()
     {
-        $parameters = array(
+        $parameters = [
             'drupal_domain' => 'text'
-        );
+        ];
 
         parent::__construct('1.0', 'Angel Fernando Quiroz Campos', $parameters);
     }
@@ -28,7 +28,7 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
      * @staticvar null $result
      * @return CreateDrupalUser
      */
-    static function create()
+    public static function create()
     {
         static $result = null;
 
@@ -129,5 +129,4 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
             $extraField->delete($extraFieldInfo['id']);
         }
     }
-
 }

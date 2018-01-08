@@ -41,8 +41,8 @@ class AddCourse
             $unique_prefix = '';
         }
 
-        $keys = array();
-        $final_suffix = array('CourseId' => '', 'CourseDb' => '', 'CourseDir' => '');
+        $keys = [];
+        $final_suffix = ['CourseId' => '', 'CourseDb' => '', 'CourseDir' => ''];
         $limit_numb_try = 100;
         $keys_are_unique = false;
         $try_new_fsc_id = $try_new_fsc_db = $try_new_fsc_dir = 0;
@@ -202,7 +202,7 @@ class AddCourse
      */
     public static function get_course_tables()
     {
-        $tables = array();
+        $tables = [];
         $tables[] = 'item_property';
         $tables[] = 'tool';
         $tables[] = 'tool_intro';
@@ -568,8 +568,10 @@ class AddCourse
         }
 
         $sql = "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-                VALUES ($course_id, 24,'".TOOL_BLOGS."','blog/blog_admin.php','blog_admin.gif','".intval(self::string2binary(
-                api_get_setting('course_create_active_tools', 'blogs'))
+                VALUES ($course_id, 24,'".TOOL_BLOGS."','blog/blog_admin.php','blog_admin.gif','".intval(
+            self::string2binary(
+                api_get_setting('course_create_active_tools', 'blogs')
+        )
             )."','1','squaregrey.gif',0,'_self','admin','0')";
         Database::query($sql);
 
@@ -694,22 +696,22 @@ class AddCourse
             }
 
             // FILL THE COURSE DOCUMENT WITH DEFAULT COURSE PICTURES
-            $folders_to_copy_from_default_course = array(
+            $folders_to_copy_from_default_course = [
                 'images',
                 'audio',
                 'flash',
                 'video',
                 'certificates',
-            );
+            ];
 
             $default_course_path = api_get_path(SYS_CODE_PATH).'default_course_document/';
 
-            $default_document_array = array();
+            $default_document_array = [];
             foreach ($folders_to_copy_from_default_course as $folder) {
                 $default_course_folder_path = $default_course_path.$folder.'/';
                 $files = self::browse_folders(
                     $default_course_folder_path,
-                    array(),
+                    [],
                     $folder
                 );
 
@@ -856,7 +858,6 @@ class AddCourse
                                     );
                                     $image_id = Database:: insert_id();
                                     if ($image_id) {
-
                                         $sql = "UPDATE $TABLETOOLDOCUMENT SET id = iid WHERE iid = $image_id";
                                         Database::query($sql);
 
@@ -1264,7 +1265,7 @@ class AddCourse
                     'creation_date' => $time,
                     'expiration_date' => $expiration_date,
                     'last_edit' => $time,
-                    'last_visit' => NULL,
+                    'last_visit' => null,
                     'tutor_name' => $tutor_name,
                     'department_name' => $department_name,
                     'department_url' => $department_url,
@@ -1279,7 +1280,6 @@ class AddCourse
                 // Default true
                 $addTeacher = isset($params['add_user_as_teacher']) ? $params['add_user_as_teacher'] : true;
                 if ($addTeacher) {
-
                     $i_course_sort = CourseManager:: userCourseSort(
                         $user_id,
                         $code
@@ -1299,7 +1299,7 @@ class AddCourse
 
                 if (!empty($teachers)) {
                     if (!is_array($teachers)) {
-                        $teachers = array($teachers);
+                        $teachers = [$teachers];
                     }
                     foreach ($teachers as $key) {
                         //just in case
@@ -1373,12 +1373,12 @@ class AddCourse
 
                     $userInfo = api_get_user_info($user_id);
 
-                    $additionalParameters = array(
+                    $additionalParameters = [
                         'smsType' => SmsPlugin::NEW_COURSE_BEEN_CREATED,
                         'userId' => $user_id,
                         'courseName' => $title,
                         'creatorUsername' => $userInfo['username']
-                    );
+                    ];
 
                     api_mail_html(
                         $recipient_name,
@@ -1423,5 +1423,4 @@ class AddCourse
 
         return $newIdResultData['new_id'] > 0 ? $newIdResultData['new_id'] : 1;
     }
-
 }

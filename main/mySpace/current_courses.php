@@ -17,7 +17,7 @@ if (!api_is_allowed_to_create_course()) {
 
 $user_id = api_get_user_id();
 $my_courses = CourseManager::get_course_list_of_user_as_course_admin($user_id);
-$array = array();
+$array = [];
 
 $i = 0;
 $session_id = 0;
@@ -34,7 +34,7 @@ if (!empty($my_courses)) {
         }
 
         $teachers = CourseManager::get_teacher_list_from_course_code($course_code);
-        $teacher_list = array();
+        $teacher_list = [];
 
         if (!empty($teachers)) {
             foreach ($teachers as $teacher) {
@@ -45,7 +45,7 @@ if (!empty($my_courses)) {
         $tmp_students = CourseManager :: get_student_list_from_course_code($course_code, false);
 
         //Cleaning students only REAL students
-        $students = array();
+        $students = [];
         foreach ($tmp_students as $student) {
             $user_info = api_get_user_info($student['user_id']);
             if ($user_info['status'] != STUDENT) {
@@ -92,9 +92,9 @@ if (!empty($my_courses)) {
 
                 if (!empty($students)) {
                     foreach ($students  as $student_id) {
-                        $avg_student_progress   = Tracking::get_avg_student_progress($student_id, $course_code, array($lp_id), $session_id);
-                        $myavg_temp = Tracking::get_avg_student_score($student_id, $course_code, array($lp_id), $session_id);
-                        $avg_progress_in_course = Tracking::get_avg_student_progress($student_id, $course_code, array($lp_id), $session_id);
+                        $avg_student_progress   = Tracking::get_avg_student_progress($student_id, $course_code, [$lp_id], $session_id);
+                        $myavg_temp = Tracking::get_avg_student_score($student_id, $course_code, [$lp_id], $session_id);
+                        $avg_progress_in_course = Tracking::get_avg_student_progress($student_id, $course_code, [$lp_id], $session_id);
 
                         if (intval($avg_progress_in_course) == 100) {
                             $count_students_complete_all_activities++;
@@ -173,7 +173,8 @@ if (!empty($my_courses)) {
                     $array[$i]['count_students_accessing'] = $count_students_accessing;
                     $array[$i]['count_students_accessing_percentage'] = round($count_students_accessing / $student_count * 100, 0);
                     $array[$i]['count_students_complete_all_activities_at_50'] = $count_students_complete_all_activities;
-                    $array[$i]['count_students_complete_all_activities'] = round($count_students_complete_all_activities / $student_count * 100, 0); ;
+                    $array[$i]['count_students_complete_all_activities'] = round($count_students_complete_all_activities / $student_count * 100, 0);
+                    ;
                     $array[$i]['average_percentage_activities_completed_per_student'] = round($count_students_complete_all_activities / $student_count * 100, 2);
                     $array[$i]['total_time_spent'] = 0;
                     $array[$i]['average_time_spent_per_student'] = 0;
@@ -190,7 +191,7 @@ if (!empty($my_courses)) {
     }
 }
 
-$headers = array(
+$headers = [
     get_lang('LearningPath'),
     get_lang('Teachers'),
     get_lang('Courses'),
@@ -208,7 +209,7 @@ $headers = array(
     get_lang('NumberOfForumsInLearnpath'),
     get_lang('NumberOfAssignmentsInLearnpath'),
     get_lang('NumberOfAnnouncementsInCourse'),
-);
+];
 
 if (isset($_GET['export'])) {
     global $charset;
@@ -245,10 +246,10 @@ if (isset($_GET['export'])) {
     exit;
 }
 
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('MySpace'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
 Display::display_header(get_lang('CurrentCourses'));
 
-$table = new HTML_Table(array('class' => 'data_table'));
+$table = new HTML_Table(['class' => 'data_table']);
 $row = 0;
 $column = 0;
 foreach ($headers as $header) {
@@ -269,8 +270,8 @@ foreach ($array as $row_table) {
 }
 
 echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php?export=1">'.Display::return_icon('export_excel.png', get_lang('CurrentCoursesReport'), array(), 32).'</a> ';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace">'.Display::return_icon('back.png', get_lang('Back'), [], 32).'</a>';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php?export=1">'.Display::return_icon('export_excel.png', get_lang('CurrentCoursesReport'), [], 32).'</a> ';
 echo '</div>';
 echo '<div style="overflow:auto;">';
 echo $table->toHtml();

@@ -37,7 +37,7 @@ class CourseRestorer
     public $file_option;
     public $set_tools_invisible_by_default;
     public $skip_content;
-    public $tools_to_restore = array(
+    public $tools_to_restore = [
         'documents', // first restore documents
         'announcements',
         'attendance',
@@ -59,10 +59,10 @@ class CourseRestorer
         'works',
         'gradebook',
         'assets',
-    );
+    ];
 
     /** Setting per tool */
-    public $tool_copy_settings = array();
+    public $tool_copy_settings = [];
 
     /**
      * If true adds the text "copy" in the title of an item (only for LPs right now)
@@ -85,7 +85,7 @@ class CourseRestorer
         }
         $this->file_option = FILE_RENAME;
         $this->set_tools_invisible_by_default = false;
-        $this->skip_content = array();
+        $this->skip_content = [];
     }
 
     /**
@@ -543,7 +543,7 @@ class CourseRestorer
                                 // Replace old course code with the new destination code
                                 $file_info = pathinfo($path.$document->path);
 
-                                if (isset($file_info['extension']) && in_array($file_info['extension'], array('html', 'htm'))) {
+                                if (isset($file_info['extension']) && in_array($file_info['extension'], ['html', 'htm'])) {
                                     $content = file_get_contents($path.$document->path);
                                     if (UTF8_CONVERT) {
                                         $content = utf8_encode($content);
@@ -663,7 +663,7 @@ class CourseRestorer
                                     // Replace old course code with the new destination code see BT#1985
                                     if (file_exists($dest_document_path)) {
                                         $file_info = pathinfo($dest_document_path);
-                                        if (in_array($file_info['extension'], array('html', 'htm'))) {
+                                        if (in_array($file_info['extension'], ['html', 'htm'])) {
                                             $content = file_get_contents($dest_document_path);
                                             if (UTF8_CONVERT) {
                                                 $content = utf8_encode($content);
@@ -726,7 +726,7 @@ class CourseRestorer
                                     //Replace old course code with the new destination code see BT#1985
                                     if (file_exists($path.$new_file_name)) {
                                         $file_info = pathinfo($path.$new_file_name);
-                                        if (in_array($file_info['extension'], array('html', 'htm'))) {
+                                        if (in_array($file_info['extension'], ['html', 'htm'])) {
                                             $content = file_get_contents($path.$new_file_name);
                                             if (UTF8_CONVERT) {
                                                 $content = utf8_encode($content);
@@ -792,7 +792,7 @@ class CourseRestorer
                                 // Replace old course code with the new destination code see BT#1985
                                 if (file_exists($path.$new_file_name)) {
                                     $file_info = pathinfo($path.$new_file_name);
-                                    if (in_array($file_info['extension'], array('html', 'htm'))) {
+                                    if (in_array($file_info['extension'], ['html', 'htm'])) {
                                         $content = file_get_contents($path.$new_file_name);
                                         if (UTF8_CONVERT) {
                                             $content = utf8_encode($content);
@@ -868,7 +868,7 @@ class CourseRestorer
                         // Replace old course code with the new destination code see BT#1985
                         if (file_exists($path.$document->path)) {
                             $file_info = pathinfo($path.$document->path);
-                            if (isset($file_info['extension']) && in_array($file_info['extension'], array('html', 'htm'))) {
+                            if (isset($file_info['extension']) && in_array($file_info['extension'], ['html', 'htm'])) {
                                 $content = file_get_contents($path.$document->path);
                                 if (UTF8_CONVERT) {
                                     $content = utf8_encode($content);
@@ -1645,7 +1645,6 @@ class CourseRestorer
 
                 // Copy announcement attachment file
                 if (!empty($this->course->orig)) {
-
                     $table_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
                     $sql = 'SELECT path, comment, size, filename
                             FROM '.$table_attachment.'
@@ -1777,7 +1776,7 @@ class CourseRestorer
                         $quiz->end_time   = null;
                     }
 
-                    $params = array(
+                    $params = [
                         'c_id' => $this->destination_course_id,
                         'title' => self::DBUTF8($quiz->title),
                         'description' => ($quiz->description === false ? '' : self::DBUTF8($quiz->description)),
@@ -1802,7 +1801,7 @@ class CourseRestorer
                         'display_category_name' => 0,
                         'save_correct_answers' => $quiz->save_correct_answers,
                         'hide_question_title' => isset($quiz->hide_question_title) ? $quiz->hide_question_title : 0,
-                    );
+                    ];
 
                     $allow = api_get_configuration_value('allow_notification_setting_per_exercise');
                     if ($allow) {
@@ -1827,7 +1826,6 @@ class CourseRestorer
                         $sql = "UPDATE $table_qui SET id = iid WHERE iid = $new_id";
                         Database::query($sql);
                     }
-
                 } else {
                     // $id = -1 identifies the fictionary test for collecting
                     // orphan questions. We do not store it in the database.
@@ -1913,7 +1911,7 @@ class CourseRestorer
                 Database::query($sql);
             }
 
-            $correctAnswers = array();
+            $correctAnswers = [];
             $allAnswers = [];
             $onlyAnswers = [];
 
@@ -1922,7 +1920,7 @@ class CourseRestorer
             }
 
             if (in_array($question->quiz_type, [MATCHING, MATCHING_DRAGGABLE])) {
-                $temp = array();
+                $temp = [];
                 foreach ($question->answers as $index => $answer) {
                     $temp[$answer['position']] = $answer;
                 }
@@ -2029,7 +2027,7 @@ class CourseRestorer
 
                 // Question copied from the current platform
                 if ($question_option_list) {
-                    $old_option_ids = array();
+                    $old_option_ids = [];
                     foreach ($question_option_list as $item) {
                         $old_id = $item['id'];
                         unset($item['id']);
@@ -2049,38 +2047,38 @@ class CourseRestorer
                         $new_answers = Database::select(
                             'iid, correct',
                             $table_ans,
-                            array(
-                                'WHERE' => array(
-                                    'question_id = ? AND c_id = ? ' => array(
+                            [
+                                'WHERE' => [
+                                    'question_id = ? AND c_id = ? ' => [
                                         $new_id,
                                         $this->destination_course_id,
-                                    ),
-                                ),
-                            )
+                                    ],
+                                ],
+                            ]
                         );
 
                         foreach ($new_answers as $answer_item) {
-                            $params = array();
+                            $params = [];
                             $params['correct'] = $old_option_ids[$answer_item['correct']];
                             Database::update(
                                 $table_ans,
                                 $params,
-                                array(
-                                    'iid = ? AND c_id = ? AND question_id = ? ' => array(
+                                [
+                                    'iid = ? AND c_id = ? AND question_id = ? ' => [
                                         $answer_item['iid'],
                                         $this->destination_course_id,
                                         $new_id,
-                                    ),
-                                ),
+                                    ],
+                                ],
                                 false
                             );
                         }
                     }
                 } else {
-                    $new_options = array();
+                    $new_options = [];
                     if (isset($question->question_options)) {
                         foreach ($question->question_options as $obj) {
-                            $item = array();
+                            $item = [];
                             $item['question_id'] = $new_id;
                             $item['c_id'] = $this->destination_course_id;
                             $item['name'] = $obj->obj->name;
@@ -2095,18 +2093,18 @@ class CourseRestorer
                         }
 
                         foreach ($correctAnswers as $answer_id => $correct_answer) {
-                            $params = array();
+                            $params = [];
                             $params['correct'] = $new_options[$correct_answer];
                             Database::update(
                                 $table_ans,
                                 $params,
-                                array(
-                                    'id = ? AND c_id = ? AND question_id = ? ' => array(
+                                [
+                                    'id = ? AND c_id = ? AND question_id = ? ' => [
                                         $answer_id,
                                         $this->destination_course_id,
                                         $new_id,
-                                    ),
-                                ),
+                                    ],
+                                ],
                                 false
                             );
                         }
@@ -2118,7 +2116,7 @@ class CourseRestorer
             if (in_array($question->quiz_type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
                 $onlyAnswersFlip = array_flip($onlyAnswers);
                 foreach ($correctAnswers as $answer_id => $correct_answer) {
-                    $params = array();
+                    $params = [];
                     if (isset($allAnswers[$correct_answer]) &&
                         isset($onlyAnswersFlip[$allAnswers[$correct_answer]])
                     ) {
@@ -2126,13 +2124,13 @@ class CourseRestorer
                         Database::update(
                             $table_ans,
                             $params,
-                            array(
-                                'id = ? AND c_id = ? AND question_id = ? ' => array(
+                            [
+                                'id = ? AND c_id = ? AND question_id = ? ' => [
                                     $answer_id,
                                     $this->destination_course_id,
                                     $new_id,
-                                ),
-                            )
+                                ],
+                            ]
                         );
                     }
                 }
@@ -2482,7 +2480,6 @@ class CourseRestorer
 
             $new_id = Database::insert($table_que, $params);
             if ($new_id) {
-
                 $sql = "UPDATE $table_que SET question_id = iid WHERE iid = $new_id";
                 Database::query($sql);
 
@@ -2845,13 +2842,13 @@ class CourseRestorer
                 if ($file != '.' && $file != '..') {
                     $path = $source.'/'.$file;
                     if (is_file($path)) {
-                       /* if (!is_file($dest . '/' . $file) || $overwrite)
-                        if (!@copy($path, $dest . '/' . $file)) {
-                            echo '<font color="red">File ('.$path.') '.get_lang('NotHavePermission').'</font>';
-                        }*/
+                        /* if (!is_file($dest . '/' . $file) || $overwrite)
+                         if (!@copy($path, $dest . '/' . $file)) {
+                             echo '<font color="red">File ('.$path.') '.get_lang('NotHavePermission').'</font>';
+                         }*/
                     } elseif (is_dir($path)) {
                         if (!is_dir($dest.'/'.$file)) {
-                                                mkdir($dest.'/'.$file);
+                            mkdir($dest.'/'.$file);
                         }
                         self:: allow_create_all_directory($path, $dest.'/'.$file, $overwrite);
                     }
@@ -2883,7 +2880,6 @@ class CourseRestorer
 
         // Check if the course is the same (last hope).
         if ($this->course_origin_id == $this->destination_course_id) {
-
             return $ref;
         }
 
@@ -2899,7 +2895,6 @@ class CourseRestorer
             $table_glossary = Database::get_course_table(TABLE_GLOSSARY);
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_GLOSSARY] as $id => $glossary) {
-
                 $params = [];
                 if (!empty($session_id)) {
                     $session_id = intval($session_id);
@@ -3056,7 +3051,6 @@ class CourseRestorer
                 $last_id = Database::insert($table_thematic, $thematic->params, false);
 
                 if ($last_id) {
-
                     $sql = "UPDATE $table_thematic SET id = iid WHERE iid = $last_id";
                     Database::query($sql);
 
@@ -3241,7 +3235,7 @@ class CourseRestorer
                             $obj->params['enable_qualification'] = $row['enable_qualification'];
                             $obj->params['add_to_calendar'] = !empty($row['add_to_calendar']) ? 1 : 0;
                         }
-                        //No break
+                        //no break
                     case FILE_RENAME:
                         $workData = get_work_data_by_path(
                             $path,
@@ -3373,7 +3367,7 @@ class CourseRestorer
                                         break;
                                 }
 
-                                 if ($this->course->has_resources($type) &&
+                                if ($this->course->has_resources($type) &&
                                     isset($this->course->resources[$type][$itemId])
                                 ) {
                                     $item = $this->course->resources[$type][$itemId];
@@ -3486,7 +3480,6 @@ class CourseRestorer
         if (!empty($userId)) {
             $userInfo = api_get_user_info($userId);
             if (empty($userInfo)) {
-
                 return api_get_user_id();
             }
         }
@@ -3496,7 +3489,6 @@ class CourseRestorer
         }
 
         if (empty($userId)) {
-
             return api_get_user_id();
         }
 

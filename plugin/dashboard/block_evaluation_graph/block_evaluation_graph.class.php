@@ -25,7 +25,7 @@ class BlockEvaluationGraph extends Block
     private $courses;
     private $sessions;
     private $path;
-    private $permission = array(DRH, SESSIONADMIN);
+    private $permission = [DRH, SESSIONADMIN];
 
     /**
      * Constructor
@@ -70,7 +70,7 @@ class BlockEvaluationGraph extends Block
     {
         global $charset;
         $column = 1;
-        $data = array();
+        $data = [];
         $evaluations_base_courses_graph = $this->get_evaluations_base_courses_graph();
         $evaluations_courses_in_sessions_graph = $this->get_evaluations_courses_in_sessions_graph();
 
@@ -121,7 +121,7 @@ class BlockEvaluationGraph extends Block
      */
     public function get_evaluations_base_courses_graph()
     {
-        $graphs = array();
+        $graphs = [];
         if (!empty($this->courses)) {
             $courses_code = array_keys($this->courses);
             foreach ($courses_code as $course_code) {
@@ -143,7 +143,7 @@ class BlockEvaluationGraph extends Block
                     $evaluation_sumary = $datagen->getEvaluationSummaryResults();
                     if (!empty($evaluation_sumary)) {
                         $items = array_keys($evaluation_sumary);
-                        $max = $min = $avg = array();
+                        $max = $min = $avg = [];
                         foreach ($evaluation_sumary as $evaluation) {
                             $max[] = $evaluation['max'];
                             $min[] = !empty($evaluation['min']) ? $evaluation['min'] : 0;
@@ -169,7 +169,7 @@ class BlockEvaluationGraph extends Block
 
                         // Cache definition
                         $cachePath = api_get_path(SYS_ARCHIVE_PATH);
-                        $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
+                        $myCache = new pCache(['CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)]);
                         $chartHash = $myCache->getHash($dataSet);
                         if ($myCache->isInCache($chartHash)) {
                             $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
@@ -193,19 +193,19 @@ class BlockEvaluationGraph extends Block
                                 0,
                                 $widthSize - 1,
                                 $heightSize - 1,
-                                array(
+                                [
                                     'R' => 0,
                                     'G' => 0,
                                     'B' => 0
-                                )
+                                ]
                             );
 
                             /* Set the default font */
                             $myPicture->setFontProperties(
-                                array(
+                                [
                                     'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
                                     'FontSize' => 10
-                                )
+                                ]
                             );
 
                             /* Do NOT Write the chart title */
@@ -219,49 +219,49 @@ class BlockEvaluationGraph extends Block
                             );
 
                             /* Draw the scale */
-                            $scaleSettings = array(
+                            $scaleSettings = [
                                 'GridR' => 200,
                                 'GridG' => 200,
                                 'GridB' => 200,
                                 'DrawSubTicks' => true,
                                 'CycleBackground' => true,
                                 'Mode' => SCALE_MODE_MANUAL,
-                                'ManualScale' => array(
-                                    '0' => array(
+                                'ManualScale' => [
+                                    '0' => [
                                         'Min' => 0,
                                         'Max' => 100,
-                                    )
-                                ),
+                                    ]
+                                ],
                                 'LabelRotation' => $angle,
-                            );
+                            ];
                             $myPicture->drawScale($scaleSettings);
 
                             /* Turn on shadow computing */
                             $myPicture->setShadow(
                                 true,
-                                array(
+                                [
                                     'X' => 1,
                                     'Y' => 1,
                                     'R' => 0,
                                     'G' => 0,
                                     'B' => 0,
                                     'Alpha' => 10
-                                )
+                                ]
                             );
 
                             /* Draw the chart */
                             $myPicture->setShadow(
                                 true,
-                                array(
+                                [
                                     'X' => 1,
                                     'Y' => 1,
                                     'R' => 0,
                                     'G' => 0,
                                     'B' => 0,
                                     'Alpha' => 10
-                                )
+                                ]
                             );
-                            $settings = array(
+                            $settings = [
                                 'DisplayValues' => true,
                                 'DisplaySize' => $fontSize,
                                 'DisplayR' => 0,
@@ -271,13 +271,13 @@ class BlockEvaluationGraph extends Block
                                 'Gradient' => false,
                                 'Surrounding' => 30,
                                 'InnerSurrounding' => 25
-                            );
+                            ];
                             $myPicture->drawStackedBarChart($settings);
 
-                            $legendSettings = array(
+                            $legendSettings = [
                                 'Mode' => LEGEND_HORIZONTAL,
                                 'Style' => LEGEND_NOBORDER,
-                            );
+                            ];
                             $myPicture->drawLegend($widthSize / 2, 15, $legendSettings);
 
                             /* Write and save into cache */
@@ -305,12 +305,12 @@ class BlockEvaluationGraph extends Block
      */
     public function get_evaluations_courses_in_sessions_graph()
     {
-        $graphs = array();
+        $graphs = [];
         if (!empty($this->sessions)) {
             $session_ids = array_keys($this->sessions);
             foreach ($session_ids as $session_id) {
                 $courses_code = array_keys(Tracking::get_courses_list_from_session($session_id));
-                $courses_graph = array();
+                $courses_graph = [];
                 foreach ($courses_code as $course_code) {
                     $cats = Category::load(null, null, $course_code, null, null, $session_id);
                     if (isset($cats) && isset($cats[0])) {
@@ -321,7 +321,7 @@ class BlockEvaluationGraph extends Block
                         $evaluation_sumary = $datagen->getEvaluationSummaryResults();
                         if (!empty($evaluation_sumary)) {
                             $items = array_keys($evaluation_sumary);
-                            $max = $min = $avg = array();
+                            $max = $min = $avg = [];
                             foreach ($evaluation_sumary as $evaluation) {
                                 $max[] = $evaluation['max'];
                                 $min[] = $evaluation['min'];
@@ -345,13 +345,13 @@ class BlockEvaluationGraph extends Block
                             // Cache definition
                             $cachePath = api_get_path(SYS_ARCHIVE_PATH);
                             $myCache = new pCache(
-                                array(
+                                [
                                     'CacheFolder' => substr(
                                         $cachePath,
                                         0,
                                         strlen($cachePath) - 1
                                     ),
-                                )
+                                ]
                             );
                             $chartHash = $myCache->getHash($dataSet);
                             if ($myCache->isInCache($chartHash)) {
@@ -376,19 +376,19 @@ class BlockEvaluationGraph extends Block
                                     0,
                                     $widthSize - 1,
                                     $heightSize - 1,
-                                    array(
+                                    [
                                         'R' => 0,
                                         'G' => 0,
                                         'B' => 0
-                                    )
+                                    ]
                                 );
 
                                 /* Set the default font */
                                 $myPicture->setFontProperties(
-                                    array(
+                                    [
                                         'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
                                         'FontSize' => 10
-                                    )
+                                    ]
                                 );
 
                                 /* Do NOT Write the chart title */
@@ -397,49 +397,49 @@ class BlockEvaluationGraph extends Block
                                 $myPicture->setGraphArea(50, 30, $widthSize - 20, $heightSize - 100);
 
                                 /* Draw the scale */
-                                $scaleSettings = array(
+                                $scaleSettings = [
                                     'GridR' => 200,
                                     'GridG' => 200,
                                     'GridB' => 200,
                                     'DrawSubTicks' => true,
                                     'CycleBackground' => true,
                                     'Mode' => SCALE_MODE_MANUAL,
-                                    'ManualScale' => array(
-                                        '0' => array(
+                                    'ManualScale' => [
+                                        '0' => [
                                             'Min' => 0,
                                             'Max' => 100,
-                                        )
-                                    ),
+                                        ]
+                                    ],
                                     'LabelRotation' => $angle,
-                                );
+                                ];
                                 $myPicture->drawScale($scaleSettings);
 
                                 /* Turn on shadow computing */
                                 $myPicture->setShadow(
                                     true,
-                                    array(
+                                    [
                                         'X' => 1,
                                         'Y' => 1,
                                         'R' => 0,
                                         'G' => 0,
                                         'B' => 0,
                                         'Alpha' => 10
-                                    )
+                                    ]
                                 );
 
                                 /* Draw the chart */
                                 $myPicture->setShadow(
                                     true,
-                                    array(
+                                    [
                                         'X' => 1,
                                         'Y' => 1,
                                         'R' => 0,
                                         'G' => 0,
                                         'B' => 0,
                                         'Alpha' => 10
-                                    )
+                                    ]
                                 );
-                                $settings = array(
+                                $settings = [
                                     'DisplayValues' => true,
                                     'DisplaySize' => $fontSize,
                                     'DisplayR' => 0,
@@ -449,13 +449,13 @@ class BlockEvaluationGraph extends Block
                                     'Gradient' => false,
                                     'Surrounding' => 30,
                                     'InnerSurrounding' => 25
-                                );
+                                ];
                                 $myPicture->drawStackedBarChart($settings);
 
-                                $legendSettings = array(
+                                $legendSettings = [
                                     'Mode' => LEGEND_HORIZONTAL,
                                     'Style' => LEGEND_NOBORDER,
-                                );
+                                ];
                                 $myPicture->drawLegend($widthSize / 2, 15, $legendSettings);
 
                                 /* Write and save into cache */

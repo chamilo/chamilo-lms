@@ -31,11 +31,11 @@ class SettingsExtension extends \Twig_Extension
      */
     public function getFunctions()
     {
-        return array(
-             new \Twig_SimpleFunction('chamilo_settings_all', array($this, 'getSettings')),
-             new \Twig_SimpleFunction('chamilo_settings_get', array($this, 'getSettingsParameter')),
+        return [
+             new \Twig_SimpleFunction('chamilo_settings_all', [$this, 'getSettings']),
+             new \Twig_SimpleFunction('chamilo_settings_get', [$this, 'getSettingsParameter']),
              new \Twig_SimpleFunction('chamilo_settings_has', [$this, 'hasSettingsParameter']),
-        );
+        ];
     }
 
     /**
@@ -44,12 +44,12 @@ class SettingsExtension extends \Twig_Extension
      */
     public function getFilters()
     {
-        return array(
+        return [
              //new \Twig_SimpleFunction('chamilo_settings_all', array($this, 'getSettings')),
-             new \Twig_SimpleFilter('get_setting', array($this, 'getSettingsParameter')),
-             new \Twig_SimpleFilter('api_get_setting', array($this, 'getSettingsParameter')),
+             new \Twig_SimpleFilter('get_setting', [$this, 'getSettingsParameter']),
+             new \Twig_SimpleFilter('api_get_setting', [$this, 'getSettingsParameter']),
              //new \Twig_SimpleFunction('chamilo_settings_has', [$this, 'hasSettingsParameter']),
-        );
+        ];
     }
 
     /**

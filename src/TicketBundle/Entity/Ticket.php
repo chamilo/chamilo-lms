@@ -102,12 +102,12 @@ class Ticket
      */
     protected $assignedLastUser;
 
-     /**
-     * @var Status
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Status")
-     * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
-     **/
+    /**
+    * @var Status
+    *
+    * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Status")
+    * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
+    **/
     protected $status;
 
     /**

@@ -37,4 +37,4 @@ $form->setDefaults($defaults);
 $plugin_info['settings_form'] = $form;
 
 // Set the templates that are going to be used
-$plugin_info['templates'] = array('template.tpl');
+$plugin_info['templates'] = ['template.tpl'];

@@ -169,6 +169,5 @@ class LegacyListener
      */
     public function onKernelController(FilterControllerEvent $event)
     {
-
     }
 }

@@ -21,7 +21,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'exercise_min_score' => '0',
                     'exercise_max_score' => '20',
                     'enable_quiz_scenario' => 'true',
@@ -31,14 +31,14 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                     'exercise_max_ckeditors_in_page' => '0',
                     'configure_exercise_visibility_in_course' => 'false',
                     'exercise_invisible_in_session' => 'false'
-                )
+                ]
             )
         ;
-        $allowedTypes = array(
-            'exercise_min_score' => array('string'),
-            'exercise_max_score' => array('string'),
-            'enable_quiz_scenario' => array('string'),
-        );
+        $allowedTypes = [
+            'exercise_min_score' => ['string'],
+            'exercise_max_score' => ['string'],
+            'enable_quiz_scenario' => ['string'],
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 

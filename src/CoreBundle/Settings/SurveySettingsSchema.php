@@ -21,11 +21,11 @@ class SurveySettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'survey_email_sender_noreply' => 'coach',
                     'extend_rights_for_coach_on_survey' => 'true',
 
-                )
+                ]
             );
 //            ->setAllowedTypes(
 //                array(
@@ -43,12 +43,12 @@ class SurveySettingsSchema extends AbstractSettingsSchema
             ->add(
                 'survey_email_sender_noreply',
                 'choice',
-                array(
-                    'choices' => array(
+                [
+                    'choices' => [
                         'coach' => 'CourseCoachEmailSender',
                         'noreply' => 'NoReplyEmailSender',
-                    ),
-                )
+                    ],
+                ]
             )
             ->add('extend_rights_for_coach_on_survey', YesNoType::class);
     }

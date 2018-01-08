@@ -11,8 +11,9 @@
 /**
  * Small function to list files in archive/
  */
-function get_zip_files_in_garbage() {
-    $list = array();
+function get_zip_files_in_garbage()
+{
+    $list = [];
     $dh = opendir(api_get_path(SYS_ARCHIVE_PATH));
     if ($dh === false) {
         //ignore
@@ -37,10 +38,10 @@ function get_zip_files_in_garbage() {
  * Just display the form needed to upload a SCORM and give its settings
  */
 $nameTools = get_lang("FileUpload");
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => api_get_path(WEB_CODE_PATH)."lp/lp_controller.php?action=list?".api_get_cidreq(),
     "name" => get_lang("ToolLearnpath"),
-);
+];
 
 Display::display_header($nameTools, "Path");
 
@@ -57,10 +58,10 @@ $form = new FormValidator(
     'POST',
     api_get_path(WEB_CODE_PATH).'upload/upload.php?'.api_get_cidreq(),
     '',
-    array(
+    [
         'id' => "upload_form",
         'enctype' => "multipart/form-data"
-    )
+    ]
 );
 $form->addHeader($nameTools);
 $form->addLabel(null, Display::return_icon('scorm_logo.jpg', null, ['style' => 'width:230px;height:100px']));
@@ -125,7 +126,7 @@ if (is_dir(api_get_path(PLUGIN_PATH)."/pens")) {
 */
 
 // the default values for the form
-$defaults = array('index_document' => 'checked="checked"', 'use_max_score' => 1);
+$defaults = ['index_document' => 'checked="checked"', 'use_max_score' => 1];
 $form->setDefaults($defaults);
 echo Display::return_message(
     Display::tag('strong', get_lang('SupportedScormContentMakers')).': '.implode(', ', $content_origins),

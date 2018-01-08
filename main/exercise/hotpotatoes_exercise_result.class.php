@@ -9,10 +9,10 @@
 class HotpotatoesExerciseResult
 {
     //stores the list of exercises
-    private $exercises_list = array();
+    private $exercises_list = [];
 
     //stores the results
-    private $results = array();
+    private $results = [];
 
     /**
      * Gets the results of all students (or just one student if access is limited)
@@ -23,7 +23,7 @@ class HotpotatoesExerciseResult
      */
     public function getExercisesReporting($document_path, $hotpotato_name)
     {
-        $return = array();
+        $return = [];
         $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
         $TBL_TRACK_HOTPOTATOES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 
@@ -61,14 +61,14 @@ class HotpotatoesExerciseResult
                     ORDER BY c_id ASC, exe_date ASC";
         }
 
-        $results = array();
+        $results = [];
 
         $resx = Database::query($sql);
         while ($rowx = Database::fetch_array($resx, 'ASSOC')) {
             $results[] = $rowx;
         }
 
-        $hpresults = array();
+        $hpresults = [];
         $resx = Database::query($sql);
         while ($rowx = Database::fetch_array($resx, 'ASSOC')) {
             $hpresults[] = $rowx;
@@ -77,7 +77,7 @@ class HotpotatoesExerciseResult
         // Print the Result of Hotpotatoes Tests
         if (is_array($hpresults)) {
             for ($i = 0; $i < sizeof($hpresults); $i++) {
-                $return[$i] = array();
+                $return[$i] = [];
                 $title = GetQuizName($hpresults[$i]['exe_name'], $document_path);
                 if ($title == '') {
                     $title = basename($hpresults[$i]['exe_name']);
@@ -141,11 +141,11 @@ class HotpotatoesExerciseResult
         // Results
         foreach ($this->results as $row) {
             if (api_is_western_name_order()) {
-              $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
-              $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
             } else {
-              $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
-              $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
+                $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
             }
 
             $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset)).';';

@@ -43,7 +43,7 @@ $autocomplete_when_80pct = 0;
 
 /* JavaScript Functions */
 
-?>var scorm_logs=<?php echo (empty($oLP->scorm_debug) ? '0' : '3'); ?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
+?>var scorm_logs=<?php echo(empty($oLP->scorm_debug) ? '0' : '3'); ?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
 var lms_logs=0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
 //logit_lms('scormfunctions.php included',0);
 
@@ -255,9 +255,11 @@ function LMSSetValue(param, val) {
     case 'cmi.core.lesson_status'	:
         saved_lesson_status = lesson_status;
         lesson_status = val;
-        <?php if ($oLP->mode != 'fullscreen') { ?>
+        <?php if ($oLP->mode != 'fullscreen') {
+              ?>
         //var update = update_toc(lesson_status,lms_item_id);
-        <?php } ?>
+        <?php
+          } ?>
         break;
     case 'cmi.completion_status'	: lesson_status = val;	break; //1.3
     case 'cmi.core.session_time'	: session_time = val;	break;
@@ -275,11 +277,13 @@ function LMSSetValue(param, val) {
     return(true);
 }
 function savedata(origin) { //origin can be 'commit', 'finish' or 'terminate'
-    <?php if ($autocomplete_when_80pct) { ?>
+    <?php if ($autocomplete_when_80pct) {
+        ?>
     if( ( lesson_status == 'incomplete') && (score >= (0.8*max) ) ){
       lesson_status = 'completed';
     }
-    <?php }?>
+    <?php
+    }?>
     param = 'id='+lms_item_id+'&origin='+origin+'&score='+score+'&max='+max+'&min='+min+'&lesson_status='+lesson_status+'&time='+session_time+'&suspend_data='+suspend_data;
 
     url="http://<?php
@@ -484,7 +488,8 @@ function logit_lms(message,priority) {
  */
 function update_toc(update_action,update_id)
 {
-    <?php if ($oLP->mode != 'fullscreen') { ?>
+    <?php if ($oLP->mode != 'fullscreen') {
+    ?>
         var myframe = frames["toc_name"];
         var myelem = myframe.document.getElementById("toc_"+update_id);
         var myelemimg = myframe.document.getElementById("toc_img_"+update_id);
@@ -539,7 +544,8 @@ function update_toc(update_action,update_id)
             }
         }
         return true;
-    <?php } ?>
+    <?php
+} ?>
     return true;
 }
 /**

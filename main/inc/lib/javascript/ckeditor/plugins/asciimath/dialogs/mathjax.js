@@ -24,6 +24,7 @@ CKEDITOR.dialog.add( 'asciimath', function( editor ) {
                         id: 'equation',
                         type: 'textarea',
                         label: lang.dialogInput,
+                        class: 'asciimath_textarea',
 
                         onLoad: function( widget ) {
                             var that = this;
@@ -33,6 +34,10 @@ CKEDITOR.dialog.add( 'asciimath', function( editor ) {
                                     // Add ` and ` for preview.
                                     preview.setValue( '`' + that.getInputElement().getValue() + '`' );
                                 } );
+
+                                $('.Hand').on('click', function() {
+                                    preview.setValue( '`' + that.getInputElement().getValue() + '`' );
+                                });
                             }
                         },
 
@@ -67,11 +72,14 @@ CKEDITOR.dialog.add( 'asciimath', function( editor ) {
                                 'border: 1px solid gray;' +
                                 'font-size: 1.1em;' +
                             '}' +
+                            '#clickInput img' +
+                            '{' +
+                            'cursor: pointer;' +
+                            '}' +
 
                             '.Hand' +
                             '{' +
                                 'cursor: pointer;' +
-                                'cursor: hand;' +
                             '}' +
 
                             '</style>'+
@@ -275,7 +283,7 @@ function out(td)
 
 function Set( string )
 {
-    var inputField = document.getElementsByTagName('textarea')[1];
-    inputField.value += string ;
-    return false ;
+    var inputField = document.getElementsByClassName('asciimath_textarea')[0];
+    inputField.value += string;
+    return false;
 }

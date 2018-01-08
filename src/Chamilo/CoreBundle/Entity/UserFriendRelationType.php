@@ -29,8 +29,6 @@ class UserFriendRelationType
      */
     private $id;
 
-
-
     /**
      * Set title
      *

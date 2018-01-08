@@ -671,7 +671,7 @@ class Category implements GradebookItem
             }
 
             $gradebook = new Gradebook();
-            $gradebook->update_skills_to_gradebook(
+            $gradebook->updateSkillsToGradeBook(
                 $this->id,
                 $this->get_skills(false)
             );
@@ -749,7 +749,7 @@ class Category implements GradebookItem
         }
 
         $gradebook = new Gradebook();
-        $gradebook->update_skills_to_gradebook(
+        $gradebook->updateSkillsToGradeBook(
             $this->id,
             $this->get_skills(false),
             true
@@ -2165,7 +2165,7 @@ class Category implements GradebookItem
      * @param int $user_id
      * @param bool $sendNotification
      *
-     * @return bool|string
+     * @return array
      */
     public static function generateUserCertificate(
         $category_id,
@@ -2187,6 +2187,11 @@ class Category implements GradebookItem
         $category = $cats_course[0];
 
         if (empty($category)) {
+            return false;
+        }
+
+        // Block certification links depending gradebook configuration (generate certifications)
+        if (empty($category->getGenerateCertificates())) {
             return false;
         }
 
@@ -2533,7 +2538,7 @@ class Category implements GradebookItem
      * @param float $score The achieved score
      * @param int $userId The user id
      * @param int $categoryId The gradebook category
-     * @return false|string The insert id
+     * @return int The insert id
      */
     public static function registerCurrentScore($score, $userId, $categoryId)
     {
@@ -2618,7 +2623,4 @@ class Category implements GradebookItem
 
         return $this;
     }
-
-
-
 }

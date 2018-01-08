@@ -5,6 +5,7 @@ use Chamilo\TicketBundle\Entity\Project;
 use Chamilo\TicketBundle\Entity\Status;
 use Chamilo\TicketBundle\Entity\Priority;
 use Chamilo\TicketBundle\Entity\Ticket;
+use \Database;
 
 /**
  * Class TicketManager
@@ -275,7 +276,7 @@ class TicketManager
      * @param string $subject
      * @param string $content
      * @param string $personalEmail
-     * @param $file_attachments
+     * @param array $fileAttachments
      * @param string $source
      * @param string $priority
      * @param string $status
@@ -292,7 +293,7 @@ class TicketManager
         $subject,
         $content,
         $personalEmail = '',
-        $file_attachments = [],
+        $fileAttachments = [],
         $source = '',
         $priority = '',
         $status = '',
@@ -397,9 +398,9 @@ class TicketManager
                 ));
             }
 
-            if (!empty($file_attachments)) {
+            if (!empty($fileAttachments)) {
                 $attachmentCount = 0;
-                foreach ($file_attachments as $attach) {
+                foreach ($fileAttachments as $attach) {
                     if (!empty($attach['tmp_name'])) {
                         $attachmentCount++;
                     }
@@ -409,7 +410,7 @@ class TicketManager
                         $ticketId,
                         '',
                         '',
-                        $file_attachments,
+                        $fileAttachments,
                         $currentUserId
                     );
                 }
@@ -613,7 +614,7 @@ class TicketManager
      * @param int $ticketId
      * @param string $subject
      * @param string $content
-     * @param array $file_attachments
+     * @param array $fileAttachments
      * @param int $userId
      * @param string $status
      * @param bool $sendConfirmation
@@ -624,7 +625,7 @@ class TicketManager
         $ticketId,
         $subject,
         $content,
-        $file_attachments,
+        $fileAttachments,
         $userId,
         $status = 'NOL',
         $sendConfirmation = false
@@ -670,10 +671,10 @@ class TicketManager
                     WHERE id = $ticketId ";
             Database::query($sql);
 
-            if (is_array($file_attachments)) {
-                foreach ($file_attachments as $file_attach) {
+            if (is_array($fileAttachments)) {
+                foreach ($fileAttachments as $file_attach) {
                     if ($file_attach['error'] == 0) {
-                        self::save_message_attachment_file(
+                        self::saveMessageAttachmentFile(
                             $file_attach,
                             $ticketId,
                             $messageId
@@ -697,7 +698,7 @@ class TicketManager
      * @param $message_id
      * @return array
      */
-    public static function save_message_attachment_file(
+    public static function saveMessageAttachmentFile(
         $file_attach,
         $ticketId,
         $message_id
@@ -717,45 +718,35 @@ class TicketManager
                 'error'
             );
         } else {
-            $new_file_name = uniqid('');
-            $path_attachment = api_get_path(SYS_ARCHIVE_PATH);
-            $path_message_attach = $path_attachment.'plugin_ticket_messageattch/';
-            if (!file_exists($path_message_attach)) {
-                @mkdir($path_message_attach, api_get_permissions_for_new_directories(), true);
-            }
-            $new_path = $path_message_attach.$new_file_name;
-            if (is_uploaded_file($file_attach['tmp_name'])) {
-                @copy($file_attach['tmp_name'], $new_path);
-            }
-            $safe_file_name = Database::escape_string($file_name);
-            $safe_new_file_name = Database::escape_string($new_file_name);
-            $sql = "INSERT INTO $table_support_message_attachments (
-                    filename,
-                    path,
-                    ticket_id,
-                    message_id,
-                    size,
-                    sys_insert_user_id,
-                    sys_insert_datetime,
-                    sys_lastedit_user_id,
-                    sys_lastedit_datetime
-                ) VALUES (
-                    '$safe_file_name',
-                    '$safe_new_file_name',
-                    '$ticketId',
-                    '$message_id',
-                    '".$file_attach['size']."',
-                    '$userId',
-                    '$now',
-                    '$userId',
-                    '$now'
-                )";
-            Database::query($sql);
+            $result = api_upload_file('ticket_attachment', $file_attach, $ticketId);
+            if ($result) {
+                $safe_file_name = Database::escape_string($new_file_name);
+                $safe_new_file_name = Database::escape_string($result['path_to_save']);
+                $sql = "INSERT INTO $table_support_message_attachments (
+                        filename,
+                        path,
+                        ticket_id,
+                        message_id,
+                        size,
+                        sys_insert_user_id,
+                        sys_insert_datetime,
+                        sys_lastedit_user_id,
+                        sys_lastedit_datetime
+                    ) VALUES (
+                        '$safe_file_name',
+                        '$safe_new_file_name',
+                        '$ticketId',
+                        '$message_id',
+                        '".$file_attach['size']."',
+                        '$userId',
+                        '$now',
+                        '$userId',
+                        '$now'
+                    )";
+                Database::query($sql);
 
-            return array(
-                'path' => $path_message_attach.$safe_new_file_name,
-                'filename' => $safe_file_name,
-            );
+                return true;
+            }
         }
     }
 
@@ -860,6 +851,9 @@ class TicketManager
                       ticket.message LIKE '%$keyword%' OR
                       ticket.keyword LIKE '%$keyword%' OR
                       ticket.source LIKE '%$keyword%' OR
+                      cat.name LIKE '%$keyword%' OR
+                      status.name LIKE '%$keyword%' OR
+                      priority.name LIKE '%$keyword%' OR
                       ticket.personal_email LIKE '%$keyword%'                          
             )";
         }
@@ -873,10 +867,12 @@ class TicketManager
             'keyword_priority' => 'ticket.priority_id'
         ];
 
-        foreach ($keywords as $keyword => $sqlLabel) {
+        foreach ($keywords as $keyword => $label) {
             if (isset($_GET[$keyword])) {
                 $data = Database::escape_string(trim($_GET[$keyword]));
-                $sql .= " AND $sqlLabel = '$data' ";
+                if (!empty($data)) {
+                    $sql .= " AND $label = '$data' ";
+                }
             }
         }
 
@@ -942,14 +938,20 @@ class TicketManager
                     $img_source = 'icons/32/event.png';
                     break;
                 default:
-                    $img_source = 'icons/32/course_home.png';
+                    $img_source = 'icons/32/ticket.png';
                     break;
             }
 
             $row['start_date'] = Display::dateToStringAgoAndLongDate($row['start_date']);
             $row['sys_lastedit_datetime'] = Display::dateToStringAgoAndLongDate($row['sys_lastedit_datetime']);
 
-            $icon = Display::return_icon($img_source, get_lang('Info')).'<a href="ticket_details.php?ticket_id='.$row['id'].'">'.$row['code'].'</a>';
+            $icon = Display::return_icon(
+                $img_source,
+                get_lang('Info'),
+                ['style' => 'margin-right: 10px; float: left;']
+            );
+
+            $icon .= '<a href="ticket_details.php?ticket_id='.$row['id'].'">'.$row['code'].'</a>';
 
             if ($isAdmin) {
                 $ticket = array(
@@ -1089,6 +1091,23 @@ class TicketManager
     }
 
     /**
+     * @param int $id
+     * @return \Chamilo\TicketBundle\Entity\MessageAttachment
+     */
+    public static function getTicketMessageAttachment($id)
+    {
+        $id = (int) $id;
+        $em = Database::getManager();
+
+        $item = $em->getRepository('ChamiloTicketBundle:MessageAttachment')->find($id);
+        if ($item) {
+            return $item;
+        }
+
+        return false;
+    }
+
+    /**
      * @param int $ticketId
      * @return array
      */
@@ -1123,11 +1142,23 @@ class TicketManager
             while ($row = Database::fetch_assoc($result)) {
                 $row['course'] = null;
                 $row['start_date_from_db'] = $row['start_date'];
-                $row['start_date'] = api_convert_and_format_date(api_get_local_time($row['start_date']), DATE_TIME_FORMAT_LONG, api_get_timezone());
+                $row['start_date'] = api_convert_and_format_date(
+                    api_get_local_time($row['start_date']),
+                    DATE_TIME_FORMAT_LONG,
+                    api_get_timezone()
+                );
                 $row['end_date_from_db'] = $row['end_date'];
-                $row['end_date'] = api_convert_and_format_date(api_get_local_time($row['end_date']), DATE_TIME_FORMAT_LONG, api_get_timezone());
+                $row['end_date'] = api_convert_and_format_date(
+                    api_get_local_time($row['end_date']),
+                    DATE_TIME_FORMAT_LONG,
+                    api_get_timezone()
+                );
                 $row['sys_lastedit_datetime_from_db'] = $row['sys_lastedit_datetime'];
-                $row['sys_lastedit_datetime'] = api_convert_and_format_date(api_get_local_time($row['sys_lastedit_datetime']), DATE_TIME_FORMAT_LONG, api_get_timezone());
+                $row['sys_lastedit_datetime'] = api_convert_and_format_date(
+                    api_get_local_time($row['sys_lastedit_datetime']),
+                    DATE_TIME_FORMAT_LONG,
+                    api_get_timezone()
+                );
                 $row['course_url'] = null;
                 if ($row['course_id'] != 0) {
                     $course = api_get_course_info_by_id($row['course_id']);
@@ -1169,8 +1200,8 @@ class TicketManager
 
                 $result_attach = Database::query($sql);
                 while ($row2 = Database::fetch_assoc($result_attach)) {
-                    $archiveURL = $archiveURL = $webPath.'ticket/download.php?ticket_id='.$ticketId.'&file=';
-                    $row2['attachment_link'] = $attach_icon.'&nbsp;<a href="'.$archiveURL.$row2['path'].'&title='.$row2['filename'].'">'.$row2['filename'].'</a>&nbsp;('.$row2['size'].')';
+                    $archiveURL = $webPath.'ticket/download.php?ticket_id='.$ticketId.'&id='.$row2['id'];
+                    $row2['attachment_link'] = $attach_icon.'&nbsp;<a href="'.$archiveURL.'">'.$row2['filename'].'</a>&nbsp;('.$row2['size'].')';
                     $message['attachments'][] = $row2;
                 }
                 $ticket['messages'][] = $message;
@@ -1314,9 +1345,9 @@ class TicketManager
     }
 
     /**
-     * @param $status_id
-     * @param $ticketId
-     * @param $userId
+     * @param int $status_id
+     * @param int $ticketId
+     * @param int $userId
      * @return bool
      */
     public static function update_ticket_status(
@@ -1433,7 +1464,7 @@ class TicketManager
     }
 
     /**
-     *
+     * @throws \Doctrine\DBAL\DBALException
      */
     public static function close_old_tickets()
     {
@@ -1680,10 +1711,12 @@ class TicketManager
                 $row['responsable'] = $row['responsable']['firstname'].' '.$row['responsable']['lastname'];
             }
             $row['sys_insert_datetime'] = api_format_date(
-                    $row['sys_insert_datetime'], '%d/%m/%y - %I:%M:%S %p'
+                $row['sys_insert_datetime'],
+                '%d/%m/%y - %I:%M:%S %p'
             );
             $row['sys_lastedit_datetime'] = api_format_date(
-                    $row['sys_lastedit_datetime'], '%d/%m/%y - %I:%M:%S %p'
+                $row['sys_lastedit_datetime'],
+                '%d/%m/%y - %I:%M:%S %p'
             );
             $row['category'] = utf8_decode($row['category']);
             $row['programa'] = utf8_decode($row['fullname']);
@@ -2146,29 +2179,48 @@ class TicketManager
     }
 
     /**
-     * @return string
+     * Returns a list of menu elements for the tickets system's configuration
+     * @param string $exclude The element to exclude from the list
+     * @return array
      */
-    public static function getSettingsMenu()
+    public static function getSettingsMenuItems($exclude = null)
     {
-        $items = [
-            [
-                'url' => 'projects.php',
-                'content' => get_lang('Projects')
-            ],
-            [
-                'url' => 'status.php',
-                'content' => get_lang('Status')
-            ],
-            [
-                'url' => 'priorities.php',
-                'content' => get_lang('Priority')
-            ]
+        $items = [];
+        $project = [
+            'icon' => 'project.png',
+            'url' => 'projects.php',
+            'content' => get_lang('Projects')
         ];
+        $status = [
+            'icon' => 'check-circle.png',
+            'url' => 'status.php',
+            'content' => get_lang('Status')
+        ];
+        $priority = [
+            'icon' => 'tickets_urgent.png',
+            'url' => 'priorities.php',
+            'content' => get_lang('Priority')
+        ];
+        switch ($exclude) {
+            case 'project':
+                $items = [$status, $priority];
+                break;
+            case 'status':
+                $items = [$project, $priority];
+                break;
+            case 'priority':
+                $items = [$project, $status];
+                break;
+            default:
+                $items = [$project, $status, $priority];
+                break;
+        }
 
-        echo Display::actions($items);
+        return $items;
     }
 
     /**
+     * Returns a list of strings representing the default statuses
      * @return array
      */
     public static function getDefaultStatusList()

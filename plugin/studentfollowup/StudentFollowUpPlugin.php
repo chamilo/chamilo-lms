@@ -41,6 +41,11 @@ class StudentFollowUpPlugin extends Plugin
     {
         $pluginEntityPath = $this->getEntityPath();
         if (!is_dir($pluginEntityPath)) {
+            if (!is_writable(dirname($pluginEntityPath))) {
+                $message = get_lang('ErrorCreatingDir').': '.$pluginEntityPath;
+                Display::addFlash(Display::return_message($message, 'error'));
+                return false;
+            }
             mkdir($pluginEntityPath, api_get_permissions_for_new_directories());
         }
 

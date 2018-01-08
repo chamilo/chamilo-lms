@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity\Repository;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\UserBundle\Entity\User;

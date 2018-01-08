@@ -203,8 +203,9 @@ if (array_key_exists('add_teachers_to_sessions_courses', $courseInfo)) {
     );
 }
 
+$allowEditSessionCoaches = api_get_configuration_value('disabled_edit_session_coaches_course_editing_course') === false;
 $coursesInSession = SessionManager::get_session_by_course($courseInfo['real_id']);
-if (!empty($coursesInSession)) {
+if (!empty($coursesInSession) && $allowEditSessionCoaches) {
     foreach ($coursesInSession as $session) {
         $sessionId = $session['id'];
         $coaches = SessionManager::getCoachesByCourseSession(

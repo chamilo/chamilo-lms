@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \ChamiloSession as Session;
+
 /**
  *    This script displays a specialty classroom edit form.
  */
-
-use \ChamiloSession as Session;
 require_once '../config.php';
 
 $course_plugin = 'sepe';
@@ -69,6 +69,7 @@ if (!empty($_POST)) {
         }
         session_write_close();
         header("Location: specialty-action-edit.php?new_specialty=0&specialty_id=".$specialtyId."&action_id=".$actionId);
+        exit;
     } else {
         $newClassroom = intval($_POST['new_classroom']);
         $actionId = intval($_POST['action_id']);
@@ -79,6 +80,7 @@ if (!empty($_POST)) {
         $token = Security::get_token();
         session_write_close();
         header("Location:specialty-classroom-edit.php?new_classroom=".$newClassroom."&specialty_id=".$specialtyId."&classroom_id=".$classroomId."&action_id=".$actionId);
+        exit;
     }
 } else {
     $token = Security::get_token();
@@ -128,4 +130,5 @@ if (api_is_platform_admin()) {
     $tpl->display_one_col_template();
 } else {
     header('Location:'.api_get_path(WEB_PATH));
+    exit;
 }

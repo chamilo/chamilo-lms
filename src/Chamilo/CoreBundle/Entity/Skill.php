@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\SkillBundle\Entity\Profile;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -118,10 +119,17 @@ class Skill
     /**
      * Get name
      *
+     * @param bool $translated Optional. Get the name translated when is it exists in a sub-language. By default is true
      * @return string
      */
-    public function getName()
+    public function getName($translated = true)
     {
+        if ($translated) {
+            $variable = ChamiloApi::getLanguageVar($this->name, 'Skill');
+
+            return isset($GLOBALS[$variable]) ? $GLOBALS[$variable] : $this->name;
+        }
+
         return $this->name;
     }
 
@@ -141,10 +149,17 @@ class Skill
     /**
      * Get shortCode
      *
+     * @param bool $translated Optional. Get the code translated when is it exists in a sub-language. By default is true
      * @return string
      */
-    public function getShortCode()
+    public function getShortCode($translated = true)
     {
+        if ($translated && !empty($this->shortCode)) {
+            $variable = ChamiloApi::getLanguageVar($this->shortCode, 'SkillCode');
+
+            return isset($GLOBALS[$variable]) ? $GLOBALS[$variable] : $this->shortCode;
+        }
+
         return $this->shortCode;
     }
 

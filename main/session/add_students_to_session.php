@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  *   @package chamilo.admin
  */
@@ -13,7 +14,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
+$interbreadcrumb[] = array(
+    'url' => 'session_list.php',
+    'name' => get_lang('SessionList')
+);
 
 // Setting the name of the tool
 $tool_name = get_lang('SubscribeStudentsToSession');
@@ -24,17 +28,19 @@ if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
 $form_sent  = 0;
 $errorMsg   = '';
 $users = $sessions = array();
-$id = isset($_GET['id']) ? intval($_GET['id']) : null;
+$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 SessionManager::protectSession($id);
 
-$htmlResult = null;
-
+$htmlResult = '';
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     if ($form_sent == 1) {
         $sessionSourceList = $_POST['sessions'];
         $sessionDestinationList = $_POST['sessions_destination'];
-        $result = SessionManager::copyStudentsFromSession($sessionSourceList, $sessionDestinationList);
+        $result = SessionManager::copyStudentsFromSession(
+            $sessionSourceList,
+            $sessionDestinationList
+        );
         foreach ($result as $message) {
             $htmlResult .= $message;
         }
@@ -49,7 +55,7 @@ foreach ($session_list as $session) {
 Display::display_header($tool_name);
 ?>
 
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;" >
+<form name="formulaire" method="post" action="<?php echo api_get_self().'?id='.$id; ?>" style="margin:0px;" >
 <?php echo '<legend>'.$tool_name.' </legend>';
 echo $htmlResult;
 echo Display::input('hidden', 'form_sent', '1');

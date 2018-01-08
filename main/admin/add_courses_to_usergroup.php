@@ -34,22 +34,6 @@ if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
 $add = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '<script>
-function add_user_to_session (code, content) {
-    document.getElementById("user_to_add").value = "";
-    document.getElementById("ajax_list_users_single").innerHTML = "";
-
-    destination = document.getElementById("elements_in");
-
-    for (i=0;i<destination.length;i++) {
-        if(destination.options[i].text == content) {
-                return false;
-        }
-    }
-
-    destination.options[destination.length] = new Option(content,code);
-    destination.selectedIndex = -1;
-    sortOptions(destination.options);
-}
 function remove_item(origin) {
     for(var i = 0 ; i<origin.options.length ; i++) {
         if(origin.options[i].selected) {
@@ -59,11 +43,6 @@ function remove_item(origin) {
     }
 }
 
-function validate_filter() {
-    document.formulaire.add_type.value = \''.$add_type.'\';
-    document.formulaire.form_sent.value=0;
-    document.formulaire.submit();
-}
 </script>';
 
 $form_sent = 0;
@@ -140,6 +119,9 @@ foreach ($course_list_in as $course) {
 
 if (!empty($course_list)) {
     foreach ($course_list as $item) {
+        if (isset($elements_in[$item['id']])) {
+            continue;
+        }
         $elements_not_in[$item['id']] = $item['title']." (".$item['visual_code'].")";
     }
 }
@@ -192,7 +174,8 @@ if ($add_type == 'multiple') {
 }
 
 echo '<div class="actions">';
-echo '<a href="usergroups.php">'.Display::return_icon('back.png', get_lang('Back'), array(), ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="usergroups.php">';
+echo Display::return_icon('back.png', get_lang('Back'), array(), ICON_SIZE_MEDIUM).'</a>';
 echo Display::url(get_lang('AdvancedSearch'), '#', array('class' => 'advanced_options', 'id' => 'advanced_search'));
 echo '</div>';
 
@@ -244,7 +227,15 @@ if (!empty($errorMsg)) {
       } else {
       ?>
       <div id="ajax_list_multiple">
-        <?php echo Display::select('elements_not_in_name', $elements_not_in, '', array('style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'elements_not_in', 'size'=>'15px'), false); ?>
+        <?php
+        echo Display::select(
+            'elements_not_in_name',
+            $elements_not_in,
+            '',
+            array('style' => 'width:360px', 'multiple' => 'multiple', 'id' => 'elements_not_in', 'size' => '15px'),
+            false
+        );
+        ?>
       </div>
     <?php
       }
@@ -275,8 +266,14 @@ if (!empty($errorMsg)) {
   </td>
   <td align="center">
 <?php
-    echo Display::select('elements_in_name[]', $elements_in, '', array('style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'elements_in', 'size'=>'15px'), false);
-    unset($sessionUsersList);
+echo Display::select(
+    'elements_in_name[]',
+    $elements_in,
+    '',
+    array('style' => 'width:360px', 'multiple' => 'multiple', 'id' => 'elements_in', 'size' => '15px'),
+    false
+);
+unset($sessionUsersList);
 ?>
  </td>
 </tr>
@@ -315,7 +312,7 @@ function sortOptions(options) {
         options[i] = newOptions[i];
 }
 
-function mysort(a, b){
+function mysort(a, b) {
     if(a.text.toLowerCase() > b.text.toLowerCase()){
         return 1;
     }
@@ -325,44 +322,13 @@ function mysort(a, b){
     return 0;
 }
 
-function valide(){
+function valide() {
     var options = document.getElementById('elements_in').options;
     for (i = 0 ; i<options.length ; i++)
         options[i].selected = true;
     document.forms.formulaire.submit();
 }
 
-function loadUsersInSelect(select) {
-    var xhr_object = null;
-    if(window.XMLHttpRequest) // Firefox
-        xhr_object = new XMLHttpRequest();
-    else if(window.ActiveXObject) // Internet Explorer
-        xhr_object = new ActiveXObject("Microsoft.XMLHTTP");
-    else  // XMLHttpRequest non supporté par le navigateur
-    alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
-
-    xhr_object.open("POST", "loadUsersInSelect.ajax.php");
-    xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    nosessionUsers = makepost(document.getElementById('elements_not_in'));
-    sessionUsers = makepost(document.getElementById('elements_in'));
-    nosessionClasses = makepost(document.getElementById('origin_classes'));
-    sessionClasses = makepost(document.getElementById('destination_classes'));
-    xhr_object.send("nosessionusers="+nosessionUsers+"&sessionusers="+sessionUsers+"&nosessionclasses="+nosessionClasses+"&sessionclasses="+sessionClasses);
-
-    xhr_object.onreadystatechange = function() {
-        if(xhr_object.readyState == 4) {
-            document.getElementById('content_source').innerHTML = result = xhr_object.responseText;
-        }
-    }
-}
-
-function makepost(select){
-    var options = select.options;
-    var ret = "";
-    for (i = 0 ; i<options.length ; i++)
-        ret = ret + options[i].value +'::'+options[i].text+";;";
-    return ret;
-}
 </script>
 <?php
 Display::display_footer();

@@ -20,7 +20,7 @@ if (!$userId || !$skillId) {
     api_not_allowed(true);
 }
 
-Skill::isAllow($userId);
+Skill::isAllowed($userId);
 
 $em = Database::getManager();
 $user = $em->find('ChamiloUserBundle:User', $userId);
@@ -117,7 +117,7 @@ foreach ($userSkills as $index => $skillIssue) {
 
     if (!$profile) {
         $skillRelSkill = new SkillRelSkill();
-        $parents = $skillRelSkill->get_skill_parents($skillId);
+        $parents = $skillRelSkill->getSkillParents($skillId);
 
         krsort($parents);
 
@@ -274,7 +274,7 @@ foreach ($userSkills as $index => $skillIssue) {
 
 $template = new Template(get_lang('IssuedBadgeInformation'));
 $template->assign('user_badges', $allUserBadges);
-
+$template->assign('show_level', api_get_configuration_value('hide_skill_levels') == false;
 
 $content = $template->fetch(
     $template->get_template('skill/issued_all.tpl')

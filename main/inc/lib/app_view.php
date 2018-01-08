@@ -46,8 +46,7 @@ class View
 
     /**
      * Set layout view sent from a controller
-     * @param string layout view
-     * @param string $layout
+     * @param string $layout view
      */
     public function set_layout($layout)
     {
@@ -56,8 +55,7 @@ class View
 
     /**
      * Set template view sent from a controller
-     * @param string template view
-     * @param string $template
+     * @param string $template view
      */
     public function set_template($template)
     {

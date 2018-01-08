@@ -10,7 +10,7 @@
  *  
  *  ---------------------------------------------------------------------
  *  
- *  Copyright (c) 2010-2015 The MathJax Consortium
+ *  Copyright (c) 2010-2017 The MathJax Consortium
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -326,6 +326,9 @@
         container.onmousedown   = EVENT.Mousedown;
         container.onclick       = EVENT.Click;
         container.ondblclick    = EVENT.DblClick;
+        // Added for keyboard accessible menu.
+        container.onkeydown = EVENT.Keydown;
+        container.tabIndex = HUB.getTabOrder(jax);
 	if (HUB.Browser.noContextMenu) {
 	  container.ontouchstart = TOUCH.start;
 	  container.ontouchend   = TOUCH.end;
@@ -515,8 +518,10 @@
             skip = MML.skipAttributes, copy = MML.copyAttributes;
         if (!this.attrNames) {
           for (var id in defaults) {if (!skip[id] && !copy[id] && defaults.hasOwnProperty(id)) {
-	    if (this[id] != null && this[id] !== defaults[id]) 
-              tag.setAttribute(id,this.NativeMMLattribute(this[id]));
+	    if (this[id] != null && this[id] !== defaults[id]) {
+              if (this.Get(id,null,1) !== this[id]) 
+                tag.setAttribute(id,this.NativeMMLattribute(this[id]));
+            }
           }}
         }
 	for (var i = 0, m = names.length; i < m; i++) {
@@ -530,7 +535,10 @@
         var CLASS = []; if (this["class"]) {CLASS.push(this["class"])}
         if (this.isa(MML.TeXAtom)) {
           var TEXCLASS = ["ORD","OP","BIN","REL","OPEN","CLOSE","PUNCT","INNER","VCENTER"][this.texClass];
-          if (TEXCLASS) {CLASS.push("MJX-TeXAtom-"+TEXCLASS)}
+          if (TEXCLASS) {
+            CLASS.push("MJX-TeXAtom-"+TEXCLASS)
+            if (TEXCLASS === "OP" && !this.movablelimits) CLASS.push("MJX-fixedlimits");
+          }
         }
         if (this.mathvariant && this.NativeMMLvariants[this.mathvariant])
           {CLASS.push("MJX"+this.mathvariant)}
@@ -556,8 +564,8 @@
       //  Create a MathML element
       //
       NativeMMLelement: function (type) {
-        var math = (document.createElementNS ? document.createElementNS(nMML.MMLnamespace,type) :
-                    (HUB.Browser.mpNamespace ? document.createElement("m:"+type) :
+        var math = ( HUB.Browser.mpNamespace ? document.createElement("m:"+type) :
+                   (document.createElementNS ? document.createElementNS(nMML.MMLnamespace,type) :
                                                document.createElement(type)));
         math.isMathJax = true;
         return math;
@@ -627,12 +635,19 @@
     MML.munderover.Augment({
       //
       //  Use proper version of munder, mover, or munderover, depending on
-      //  which items are present
+      //  which items are present.  Handle movablelimits on TeXAtom base.
       //
       toNativeMML: function (parent) {
 	var type = this.type;
-	if (this.data[this.under] == null) {type = "mover"}
-	if (this.data[this.over] == null)  {type = "munder"}
+        var base = this.data[this.base];
+        if (base && base.isa(MML.TeXAtom) && base.movablelimits && !base.Get("displaystyle")) {
+          type = "msubsup";
+          if (this.data[this.under] == null) {type = "msup"}
+          if (this.data[this.over] == null)  {type = "msub"}
+        } else {
+          if (this.data[this.under] == null) {type = "mover"}
+          if (this.data[this.over] == null)  {type = "munder"}
+        }
 	var tag = this.NativeMMLelement(type);
 	this.NativeMMLattributes(tag);
 	if (this.data[0]) {delete this.data[0].inferred}
@@ -875,6 +890,22 @@
             var style = (mspace.getAttribute("style") || "").replace(/;?\s*/,"; ");
             mspace.setAttribute("style",style+"width:"+width);
           }
+        }
+      });
+      
+      MML.mn.Augment({
+        NativeMMLremapMinus: function (text) {return text.replace(/^-/,"\u2212")},
+        toNativeMML: function (parent) {
+          var tag = this.NativeMMLelement(this.type);
+          this.NativeMMLattributes(tag);
+          var remap = this.NativeMMLremapMinus;
+          for (var i = 0, m = this.data.length; i < m; i++) {
+            if (this.data[i]) {
+              this.data[i].toNativeMML(tag,remap);
+              remap = null;
+            }
+          }
+          parent.appendChild(tag);
         }
       });
 
@@ -1166,8 +1197,10 @@
       //
       //  Add a text node
       //
-      toNativeMML: function (parent) {
-	parent.appendChild(document.createTextNode(this.toString()));
+      toNativeMML: function (parent,remap) {
+        var text = this.toString();
+        if (remap) text = remap(text);
+	parent.appendChild(document.createTextNode(text));
       }
     });
 
@@ -1350,7 +1383,6 @@
       nMML.msieIE8HeightBug = (mode === 8);
     },
     Opera: function (browser) {
-      nMML.operaPositionBug = true;
       nMML.stretchyMoBug = true;
       nMML.tableLabelBug = true;
       nMML.mfencedBug = true;

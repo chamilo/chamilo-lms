@@ -29,6 +29,9 @@ a:focus {
 a:focus {
   outline: none;
 }
+hr{
+    border-top: 1px solid #96bd0d;
+}
 .logo-ofaj{
     padding: 5px;
     margin-bottom: 0;
@@ -1546,7 +1549,7 @@ blockquote p {
   padding-top: 15px;
   font-weight: bold;
   font-size: 16px;
-} 
+}
 .result-body .panel.panel-default{
     border: none;
     box-shadow: none;
@@ -1696,7 +1699,7 @@ blockquote p {
 	text-align: center;
     }
     .partners a img {
-        width: 125px;
+        width: 110px;
     }
     footer #footer_right {
 	text-align: center;
@@ -1947,4 +1950,130 @@ blockquote p {
 
 .future_session a {
     color: #666 !important;
+}
+
+.course_section_title {
+    color: #162A83;
+    font-weight: bold;
+}
+
+
+.skills_chart * {
+    margin: 0px;
+    padding: 0px;
+}
+
+.skills_chart ul {
+    padding-top: 20px;
+    position: relative;
+}
+
+.skills_chart li {
+    float: left;
+    text-align: center;
+    list-style-type: none;
+    padding: 20px 5px 0px 5px;
+    position: relative;
+}
+
+.skills_chart li::before, .skills_chart li::after {
+    content: '';
+    position: absolute;
+    top: 0px;
+    right: 50%;
+    border-top: 1px solid #A4DC2D;
+    width: 50%;
+    height: 20px;
+}
+
+.skills_chart li::after{
+    right: auto;
+    left: 50%;
+    border-left: 1px solid #A4DC2D;
+}
+
+.skills_chart li:only-child::before, .skills_chart li:only-child::after {
+    display: none;
+}
+
+.skills_chart li:only-child {
+    padding-top: 0;
+}
+
+.skills_chart li:first-child::before, .skills_chart li:last-child::after{
+    border: 0 none;
+}
+
+.skills_chart li:last-child::before{
+    border-right: 1px solid #A4DC2D;
+    -webkit-border-radius: 0 5px 0 0;
+    -moz-border-radius: 0 5px 0 0;
+    border-radius: 0 5px 0 0;
+}
+
+.skills_chart li:first-child::after{
+    border-radius: 5px 0 0 0;
+    -webkit-border-radius: 5px 0 0 0;
+    -moz-border-radius: 5px 0 0 0;
+}
+
+.skills_chart ul ul::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    border-left: 1px solid #A4DC2D;
+    width: 0;
+    height: 20px;
+}
+
+.skills_chart li a {
+    border: 1px solid #A4DC2D;
+    padding: 1em 0.75em;
+    text-decoration: none;
+    color: #333;
+    background-color: rgba(255,255,255,0.5);
+    font-family: arial, verdana, tahoma;
+    font-size: 0.85em;
+    display: inline-block;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-transition: all 500ms;
+    -moz-transition: all 500ms;
+    transition: all 500ms;
+}
+
+.skills_chart li a:hover {
+    border: 1px solid #fff;
+    color: #ddd;
+    background-color: rgba(185, 244, 46, 0.7);
+    display: inline-block;
+}
+
+.skills_chart > ul > li > a {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.skills_chart > ul > li > ul > li > a {
+    width: 8em;
+}
+.communications #skillList .thumbnail{
+    border: none;
+}
+.communications #skillList .table-bordered tbody tr td{
+    border: 1px solid #84bd00;
+}
+.table thead tr th.achieved{
+    vertical-align: bottom;
+    border-bottom: 2px solid #84bd00;
+}
+.table-header{
+    color: #333;
+    padding: 8px;
+    line-height: 1.428;
+    border-bottom: 2px solid #84bd00;
+    font-size: 13px;
+    font-weight: bold;
 }

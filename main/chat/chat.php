@@ -48,7 +48,7 @@ foreach (Emojione\Emojione::$shortcode_replace as $key => $icon) {
 
 $view = new Template(get_lang('Chat'), false, false, false, true, false);
 $view->assign('icons', $iconList);
-$view->assign('emoji_strategy', CourseChatUtils::getEmojiStrategry());
+$view->assign('emoji_strategy', CourseChatUtils::getEmojiStrategy());
 $view->assign('emoji_smile', \Emojione\Emojione::toImage(':smile:'));
 
 $template = $view->get_template('chat/chat.tpl');

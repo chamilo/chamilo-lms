@@ -327,7 +327,6 @@ $group[] = $form->createElement('radio', 'email_alert_on_new_doc_dropbox', get_l
 $group[] = $form->createElement('radio', 'email_alert_on_new_doc_dropbox', null, get_lang('DropboxEmailAlertDeactivate'), 0);
 $form->addGroup($group, '', array(get_lang("DropboxEmailAlert")));
 
-
 // Exercises notifications
 $emailAlerts = ExerciseLib::getNotificationSettings();
 $group = [];
@@ -342,6 +341,24 @@ foreach ($emailAlerts as $itemId => $label) {
 }
 
 $form->addGroup($group, '', array(get_lang('Exercises')));
+
+$group = array();
+$group[] = $form->createElement(
+    'radio',
+    'email_to_teachers_on_new_work_feedback',
+    get_lang('EmailToTeachersWhenNewWorkFeedback'),
+    get_lang('Yes'),
+    1
+);
+$group[] = $form->createElement(
+    'radio',
+    'email_to_teachers_on_new_work_feedback',
+    null,
+    get_lang('No'),
+    2
+);
+$form->addGroup($group, '', array(get_lang("EmailToTeachersWhenNewWorkFeedback")));
+
 $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
 
 $form->addHtml('

@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	Functions and main code for the download folder feature
- *  @todo use ids instead of the path like the document tool
- *	@package chamilo.work
+ * Functions and main code for the download folder feature
+ * @todo use ids instead of the path like the document tool
+ * @package chamilo.work
  */
 
 $work_id = $_GET['id'];
@@ -36,8 +36,7 @@ if (empty($_course) || empty($_course['path'])) {
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 
 // Creating a ZIP file
-$temp_zip_file = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
-
+$temp_zip_file = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'.zip';
 $zip_folder = new PclZip($temp_zip_file);
 
 $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);

@@ -15,7 +15,7 @@ class HTML_QuickForm_Rule_Filetype extends HTML_QuickForm_Rule
      *
      * @return boolean True if filetype is allowed
      */
-    function validate($file, $extensions = array())
+    public function validate($file, $extensions = array())
     {
         $parts = explode('.', $file['name']);
         if (count($parts) < 2) {

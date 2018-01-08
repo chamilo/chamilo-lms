@@ -105,6 +105,7 @@ CKEDITOR.editorConfig = function (config) {
 
     // File manager (elFinder)
     config.filebrowserBrowseUrl = '{{ _p.web_lib ~ 'elfinder/filemanager.php?' }}{{ course_condition }}';
+    config.videobrowserBrowseUrl = '{{ _p.web_lib ~ 'elfinder/filemanager.php?' }}{{ course_condition }}';
 
     // Allows to use "class" attribute inside divs and spans.
     config.allowedContent = true;

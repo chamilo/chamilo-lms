@@ -1,11 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use \ChamiloSession as Session;
+
 /**
  *    This script displays a participant specialty edit form.
  */
 
-use \ChamiloSession as Session;
 require_once '../config.php';
 
 $course_plugin = 'sepe';
@@ -141,6 +142,7 @@ if (!empty($_POST)) {
         }
         session_write_close();
         header("Location: participant-specialty-edit.php?new_specialty=0&specialty_id=".$specialtyId."&participant_id=".$participantId."&action_id=".$actionId);
+        exit;
     } else {
         $newSpecialty = intval($_POST['new_specialty']);
         $participantId = intval($_POST['participant_id']);
@@ -151,6 +153,7 @@ if (!empty($_POST)) {
         $_SESSION['sepe_message_error'] = $plugin->get_lang('ProblemToken');
         session_write_close();
         header("Location: participant-specialty-edit.php?new_specialty=".$newSpecialty."&specialty_id=".$specialtyId."&participant_id=".$participantId."&action_id=".$actionId);
+        exit;
     }
 } else {
     $token = Security::get_token();
@@ -182,7 +185,7 @@ if (api_is_platform_admin()) {
         $info = getInfoSpecialtyParticipant(intval($_GET['specialty_id']));
         $tpl->assign('info', $info);
         $tpl->assign('new_specialty', '0');
-        if ($info['registration_date'] != '0000-00-00' && $info['registration_date'] != NULL) {
+        if ($info['registration_date'] != '0000-00-00' && $info['registration_date'] != null) {
             $tpl->assign('day_registration', date("j", strtotime($info['registration_date'])));
             $tpl->assign('month_registration', date("n", strtotime($info['registration_date'])));
             $tpl->assign('year_registration', date("Y", strtotime($info['registration_date'])));
@@ -192,7 +195,7 @@ if (api_is_platform_admin()) {
         } else {
             $registrationYear = date("Y");
         }
-        if ($info['leaving_date'] != '0000-00-00' && $info['leaving_date'] != NULL) {
+        if ($info['leaving_date'] != '0000-00-00' && $info['leaving_date'] != null) {
             $tpl->assign('day_leaving', date("j", strtotime($info['leaving_date'])));
             $tpl->assign('month_leaving', date("n", strtotime($info['leaving_date'])));
             $tpl->assign('year_leaving', date("Y", strtotime($info['leaving_date'])));
@@ -202,7 +205,7 @@ if (api_is_platform_admin()) {
         } else {
             $leaveYear = date("Y");
         }
-        if ($info['start_date'] != '0000-00-00' && $info['start_date'] != NULL) {
+        if ($info['start_date'] != '0000-00-00' && $info['start_date'] != null) {
             $tpl->assign('day_start', date("j", strtotime($info['start_date'])));
             $tpl->assign('month_start', date("n", strtotime($info['start_date'])));
             $tpl->assign('year_start', date("Y", strtotime($info['start_date'])));
@@ -212,7 +215,7 @@ if (api_is_platform_admin()) {
         } else {
             $startYear = date("Y");
         }
-        if ($info['end_date'] != '0000-00-00' && $info['end_date'] != NULL) {
+        if ($info['end_date'] != '0000-00-00' && $info['end_date'] != null) {
             $tpl->assign('day_end', date("j", strtotime($info['end_date'])));
             $tpl->assign('month_end', date("n", strtotime($info['end_date'])));
             $tpl->assign('year_end', date("Y", strtotime($info['end_date'])));
@@ -272,4 +275,5 @@ if (api_is_platform_admin()) {
     $tpl->display_one_col_template();
 } else {
     header('Location:'.api_get_path(WEB_PATH));
+    exit;
 }

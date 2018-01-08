@@ -316,7 +316,6 @@ switch ($action) {
 }
 exit;
 
-
 /*
  * Classes to create a special data structure to manipulate LP Items
  * used only in this file
@@ -371,7 +370,6 @@ class LP_item_order_list
             }
         }
     }
-
 }
 
 class LP_item_order_item
@@ -387,5 +385,4 @@ class LP_item_order_item
         $this->id = $in_id;
         $this->parent_item_id = $in_parent_id;
     }
-
 }

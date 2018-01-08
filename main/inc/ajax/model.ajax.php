@@ -33,6 +33,7 @@ if (!in_array(
     $action,
     array(
         'get_exercise_results',
+        'get_exercise_results_report',
         'get_work_student_list_overview',
         'get_hotpotatoes_exercise_results',
         'get_work_teacher',
@@ -462,7 +463,7 @@ switch ($action) {
         break;
     case 'get_user_skill_ranking':
         $skill = new Skill();
-        $count = $skill->get_user_list_skill_ranking_count();
+        $count = $skill->getUserListSkillRankingCount();
         break;
     case 'get_course_announcements':
         $count = AnnouncementManager::getAnnouncements(null, null, true);
@@ -553,6 +554,19 @@ switch ($action) {
         $count = ExerciseLib::get_count_exam_results(
             $exercise_id,
             $whereCondition
+        );
+        break;
+    case 'get_exercise_results_report':
+        $exerciseId = $_REQUEST['exercise_id'];
+        $courseId = $_REQUEST['course_id'];
+        $startDate = Database::escape_string($_REQUEST['start_date']);
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $whereCondition .= " AND exe_date > '$startDate' ";
+        $count = ExerciseLib::get_count_exam_results(
+            $exerciseId,
+            $whereCondition,
+            $courseInfo['code'],
+            true
         );
         break;
     case 'get_hotpotatoes_exercise_results':
@@ -995,7 +1009,7 @@ switch ($action) {
             'currently_learning',
             'rank'
         );
-        $result = $skill->get_user_list_skill_ranking(
+        $result = $skill->getUserListSkillRanking(
             $start,
             $limit,
             $sidx,
@@ -1014,7 +1028,7 @@ switch ($action) {
                 $count_skill_by_course = array();
                 foreach ($personal_course_list as $course_item) {
                     if (!isset($skills_in_course[$course_item['code']])) {
-                        $count_skill_by_course[$course_item['code']] = $skill->get_count_skills_by_course($course_item['code']);
+                        $count_skill_by_course[$course_item['code']] = $skill->getCountSkillsByCourse($course_item['code']);
                         $skills_in_course[$course_item['code']] = $count_skill_by_course[$course_item['code']];
                     } else {
                         $count_skill_by_course[$course_item['code']] = $skills_in_course[$course_item['code']];
@@ -1196,6 +1210,43 @@ switch ($action) {
             $sord,
             $exercise_id,
             $whereCondition
+        );
+        break;
+    case 'get_exercise_results_report':
+        api_protect_admin_script();
+
+        // Used inside ExerciseLib::get_exam_results_data()
+        $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path']."/document";
+
+        $columns = array(
+            'firstname',
+            'lastname',
+            'username',
+            'session',
+            'start_date',
+            'exe_date',
+            'score'
+        );
+        $categoryList = TestCategory::getListOfCategoriesIDForTest($exerciseId, $courseId);
+        if (!empty($categoryList)) {
+            foreach ($categoryList as $categoryInfo) {
+                $columns[] = 'category_'.$categoryInfo['id'];
+            }
+        }
+
+        $columns[] = 'actions';
+
+        $result = ExerciseLib::get_exam_results_data(
+            $start,
+            $limit,
+            $sidx,
+            $sord,
+            $exerciseId,
+            $whereCondition,
+            false,
+            $courseInfo['code'],
+            true,
+            true
         );
         break;
     case 'get_hotpotatoes_exercise_results':
@@ -2020,6 +2071,7 @@ $allowed_actions = array(
     'get_session_progress',
     'get_exercise_progress',
     'get_exercise_results',
+    'get_exercise_results_report',
     'get_work_student_list_overview',
     'get_hotpotatoes_exercise_results',
     'get_work_teacher',

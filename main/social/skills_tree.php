@@ -11,7 +11,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_MYPROFILE;
 
 api_block_anonymous_users();
-Skill::isAllow(api_get_user_id());
+Skill::isAllowed(api_get_user_id());
 
 //Adds the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -21,7 +21,7 @@ $htmlHeadXtra[] = api_get_js('skills.js');
 
 $skill = new Skill();
 $type = 'read'; //edit
-$tree = $skill->get_skills_tree(api_get_user_id(), null, true);
+$tree = $skill->getSkillsTree(api_get_user_id(), null, true);
 $skill_visualizer = new SkillVisualizer($tree, $type);
 $url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?1=1';
 $tpl = new Template(null, false, false);

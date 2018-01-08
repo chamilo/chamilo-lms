@@ -1778,7 +1778,7 @@ class Display
             if ($filter) {
                 $second_title = Security::remove_XSS($second_title);
             }
-            $title .= "<small> $second_title<small>";
+            $title .= "<small> $second_title</small>";
         }
         return '<'.$size.' class="page-header">'.$title.'</'.$size.'>';
     }

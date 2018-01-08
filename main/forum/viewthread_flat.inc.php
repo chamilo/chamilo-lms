@@ -35,17 +35,27 @@ if (isset($current_thread['thread_id'])) {
         LINK_FORUM_THREAD
     );
 
-    $closedPost = null;
+    $buttonReply = '';
+    $buttonQuote = '';
+    $closedPost = '';
+
     if (!empty($rows)) {
         $postCount = count($rows);
         foreach ($rows as $row) {
-            if ($row['user_id'] == '0') {
+            $posterId = isset($row['user_id']) ? $row['user_id'] : 0;
+            $name = '';
+            if (empty($posterId)) {
                 $name = prepare4display($row['poster_name']);
             } else {
-                $name = api_get_person_name($row['firstname'], $row['lastname']);
+                if (isset($row['complete_name'])) {
+                    $name = $row['complete_name'];
+                }
             }
 
-            $username = sprintf(get_lang('LoginX'), $row['username']);
+            $username = '';
+            if (isset($row['username'])) {
+                $username = sprintf(get_lang('LoginX'), $row['username']);
+            }
 
             if (($current_forum_category && $current_forum_category['locked'] == 0) &&
                 $current_forum['locked'] == 0 &&
@@ -55,8 +65,8 @@ if (isset($current_thread['thread_id'])) {
                 if ($_user['user_id'] ||
                     ($current_forum['allow_anonymous'] == 1 && !$_user['user_id'])
                 ) {
-                    if (!api_is_anonymous() &&
-                        api_is_allowed_to_session_edit(false, true)
+                    if ((api_is_anonymous() && $current_forum['allow_anonymous'] == 1) ||
+                        (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true))
                     ) {
                         $buttonReply = Display::toolbarButton(
                             get_lang('ReplyToMessage'),
@@ -117,16 +127,16 @@ if (isset($current_thread['thread_id'])) {
 
             if ($origin != 'learnpath') {
                 if (api_get_course_setting('allow_user_image_forum')) {
-                    $html .= '<div class="thumbnail">'.display_user_image($row['user_id'], $name, $origin).'</div>';
+                    $html .= '<div class="thumbnail">'.display_user_image($posterId, $name, $origin).'</div>';
                 }
                 $html .= Display::tag(
                     'h4',
-                    display_user_link($row['user_id'], $name),
+                    display_user_link($posterId, $name),
                     array('class' => 'title-username')
                 );
             } else {
                 if (api_get_course_setting('allow_user_image_forum')) {
-                    $html .= '<div class="thumbnail">'.display_user_image($row['user_id'], $name, $origin).'</div>';
+                    $html .= '<div class="thumbnail">'.display_user_image($posterId, $name, $origin).'</div>';
                 }
                 $name = Display::tag('strong', "#".$postCount--, ['class' => 'text-info'])." | $name";
                 $html .= Display::tag(
@@ -232,7 +242,7 @@ if (isset($current_thread['thread_id'])) {
                 }
             }
 
-            $user_status = api_get_status_of_user_in_course($row['user_id'], api_get_course_int_id());
+            $user_status = api_get_status_of_user_in_course($posterId, api_get_course_int_id());
             $current_qualify_thread = showQualify('1', $row['poster_id'], $_GET['thread']);
             if (($current_thread['thread_peer_qualify'] == 1 || api_is_allowed_to_edit(null, true)) &&
                 $current_thread['thread_qualify_max'] > 0 && $origin != 'learnpath'
@@ -240,7 +250,6 @@ if (isset($current_thread['thread_id'])) {
                 $my_forum_id = $clean_forum_id;
                 $info_thread = get_thread_information($clean_forum_id, $clean_thread_id);
                 $my_forum_id = $info_thread['forum_id'];
-
                 $userCanEdit = $current_thread['thread_peer_qualify'] == 1 && $row['poster_id'] != $userId;
                 /*if ($row['poster_id'] != $userId && $current_forum['moderated'] == 1 && $row['status']) {
                 }*/
@@ -310,7 +319,6 @@ if (isset($current_thread['thread_id'])) {
             }
             // The post title
             // The check if there is an attachment
-
             $attachment_list = getAllAttachment($row['post_id']);
             if (!empty($attachment_list) && is_array($attachment_list)) {
                 foreach ($attachment_list as $attachment) {

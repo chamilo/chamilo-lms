@@ -15,8 +15,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_admin_script(true);
 
 $toolName = get_lang('Priorities');
-
-$libPath = api_get_path(LIBRARY_PATH);
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
 
 $this_section = 'tickets';
@@ -152,13 +150,24 @@ $table->set_column_filter('3', 'modify_filter');
 Display::display_header($toolName);
 
 $items = [
-    [
-        'url' => 'priorities.php?action=add',
-        'content' => Display::return_icon('new_folder.png', null, null, ICON_SIZE_MEDIUM)
-    ]
+    'icon' => 'new_folder.png',
+    'url' => 'priorities.php?action=add',
+    'content' => get_lang('AddPriority')
 ];
-
-echo Display::actions($items);
+echo '<div class="actions">';
+echo Display::url(
+    Display::return_icon('back.png', get_lang('Tickets'), [], ICON_SIZE_MEDIUM),
+    api_get_path(WEB_CODE_PATH).'ticket/tickets.php'
+);
+$sections = TicketManager::getSettingsMenuItems('priority');
+array_unshift($sections, $items);
+foreach ($sections as $item) {
+    echo Display::url(
+        Display::return_icon($item['icon'], $item['content'], [], ICON_SIZE_MEDIUM),
+        $item['url']
+    );
+}
+echo '</div>';
 echo $formToString;
 echo $table->return_table();
 

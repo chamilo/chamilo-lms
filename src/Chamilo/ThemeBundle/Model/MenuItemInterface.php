@@ -7,13 +7,13 @@
 
 namespace Chamilo\ThemeBundle\Model;
 
-
 /**
  * Interface MenuItemInterface
  *
  * @package Chamilo\ThemeBundle\Model
  */
-interface MenuItemInterface {
+interface MenuItemInterface
+{
     /**
      * @return mixed
      */

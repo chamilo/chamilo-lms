@@ -1,11 +1,8 @@
-/* -*- Mode: Javascript; indent-tabs-mode:nil; js-indent-level: 2 -*- */
-/* vim: set ts=2 et sw=2 tw=80: */
-
 /*************************************************************
  *
  *  MathJax/localization/mk/MathMenu.js
  *
- *  Copyright (c) 2009-2015 The MathJax Consortium
+ *  Copyright (c) 2009-2016 The MathJax Consortium
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,9 +17,8 @@
  *  limitations under the License.
  *
  */
-
 MathJax.Localization.addTranslation("mk","MathMenu",{
-        version: "2.5.0",
+        version: "2.7.2",
         isLoaded: true,
         strings: {
           Show: "\u041F\u0440\u0438\u043A\u0430\u0436\u0438 \u0458\u0430 \u043C\u0430\u0442\u0435\u043C\u0430\u0442\u0438\u043A\u0430\u0442\u0430 \u043A\u0430\u043A\u043E",
@@ -104,7 +100,11 @@ MathJax.Localization.addTranslation("mk","MathMenu",{
           IE9warning: "\u041A\u043E\u043D\u0442\u0435\u043A\u0441\u0442\u043D\u043E\u0442\u043E \u043C\u0435\u043D\u0438 \u043D\u0430 MathJax \u045C\u0435 \u0431\u0438\u0434\u0435 \u0438\u0441\u043A\u043B\u0443\u0447\u0435\u043D\u043E, \u043D\u043E \u043C\u043E\u0436\u0435\u0442\u0435 \u0434\u0430 \u043D\u0430\u043F\u0440\u0430\u0432\u0438\u0442\u0435 Alt-\u0441\u0442\u0438\u0441\u043E\u043A \u043D\u0430 \u0438\u0437\u0440\u0430\u0437\u043E\u0442 \u0437\u0430 \u0434\u0430 \u0433\u043E \u0434\u043E\u0431\u0438\u0435\u0442\u0435 \u043C\u0435\u043D\u0438\u0442\u043E.",
           NoOriginalForm: "\u041D\u0435\u043C\u0430 \u0438\u0437\u0432\u043E\u0440\u0435\u043D \u043E\u0431\u043B\u0438\u043A \u043D\u0430 \u0440\u0430\u0441\u043F\u043E\u043B\u0430\u0433\u0430\u045A\u0435",
           Close: "\u0417\u0430\u0442\u0432\u043E\u0440\u0438",
-          EqSource: "\u0418\u0437\u0432\u043E\u0440 \u043D\u0430 \u0440\u0430\u0432\u0435\u043D\u043A\u0438\u0442\u0435 \u043D\u0430 MathJax"
+          EqSource: "\u0418\u0437\u0432\u043E\u0440 \u043D\u0430 \u0440\u0430\u0432\u0435\u043D\u043A\u0438\u0442\u0435 \u043D\u0430 MathJax",
+          CloseAboutDialog: "\u0417\u0430\u0442\u0432\u043E\u0440\u0438 \u0433\u043E \u0434\u0438\u0458\u0430\u043B\u043E\u0433\u043E\u0442 \u0437\u0430 MathJax",
+          FastPreview: "\u0411\u0440\u0437 \u043F\u0440\u0435\u0433\u043B\u0435\u0434",
+          AssistiveMML: "\u041F\u043E\u043C\u043E\u0448\u0435\u043D MathML",
+          InTabOrder: "\u0412\u043A\u043B\u0443\u0447\u0438 \u0432\u043E \u0440\u0435\u0434\u043E\u0441\u043B\u0435\u0434\u043E\u0442 \u043D\u0430 \u0458\u0430\u0437\u0438\u0447\u0438\u045A\u0430"
         }
 });
 

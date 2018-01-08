@@ -1,11 +1,8 @@
-/* -*- Mode: Javascript; indent-tabs-mode:nil; js-indent-level: 2 -*- */
-/* vim: set ts=2 et sw=2 tw=80: */
-
 /*************************************************************
  *
  *  MathJax/localization/en/en.js
  *
- *  Copyright (c) 2009-2015 The MathJax Consortium
+ *  Copyright (c) 2009-2016 The MathJax Consortium
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,14 +17,13 @@
  *  limitations under the License.
  *
  */
-
 MathJax.Localization.addTranslation("en",null,{
   menuTitle: "English",
-  version: "2.5.0",
+  version: "2.7.2",
   isLoaded: true,
   domains: {
     "_": {
-        version: "2.5.0",
+        version: "2.7.2",
         isLoaded: true,
         strings: {
           CookieConfig: "MathJax has found a user-configuration cookie that includes code to be run. Do you want to run it?\n\n(You should press Cancel unless you set up the cookie yourself.)",
@@ -40,7 +36,8 @@ MathJax.Localization.addTranslation("en",null,{
           Processing: "Processing",
           TypesetMath: "Typesetting math: %1%%",
           Typesetting: "Typesetting",
-          MathJaxNotSupported: "Your browser does not support MathJax"
+          MathJaxNotSupported: "Your browser does not support MathJax",
+          ErrorTips: "Debugging tips: use %%1, inspect %%2 in the browser console"
         }
     },
     "FontWarnings": {},

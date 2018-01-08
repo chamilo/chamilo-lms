@@ -68,12 +68,15 @@
                     {% endif %}
                 </li>
             </ul>
+
+            {% if show_level %}
             <h4>{{ 'AcquiredLevel'|get_lang }}</h4>
             <ul class="fa-ul">
                 <li>
                     <em class="fa-li fa fa-check-circle-o fa-fw"></em> {{ badge.issue_info.acquired_level }}
                 </li>
             </ul>
+            {% endif %}
 
             {% if badge.allow_comment %}
                 <hr>

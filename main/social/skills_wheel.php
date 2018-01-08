@@ -10,7 +10,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_SOCIAL;
 
 api_block_anonymous_users();
-Skill::isAllow(api_get_user_id());
+Skill::isAllowed(api_get_user_id());
 
 //Adds the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_js('d3/d3.v3.5.4.min.js');
@@ -26,7 +26,7 @@ $userId = api_get_user_id();
 $userInfo = api_get_user_info();
 
 $skill = new Skill();
-$ranking = $skill->get_user_skill_ranking($userId);
+$ranking = $skill->getUserSkillRanking($userId);
 $skills = $skill->getUserSkills($userId, true);
 
 $dialogForm = new FormValidator('form', 'post', null, null, ['id' => 'add_item']);
@@ -59,7 +59,7 @@ $dialogForm->addLabel(
 );
 
 $type = 'read';
-$tree = $skill->get_skills_tree($userId, null, true);
+$tree = $skill->getSkillsTree($userId, null, true);
 $skill_visualizer = new SkillVisualizer($tree, $type);
 $tpl->assign('skill_visualizer', $skill_visualizer);
 $tpl->assign('dialogForm', $dialogForm->returnForm());

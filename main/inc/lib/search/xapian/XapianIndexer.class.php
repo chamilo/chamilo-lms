@@ -6,7 +6,6 @@
  */
 
 require_once 'xapian.php';
-require_once __DIR__.'/../IndexableChunk.class.php';
 
 /**
  * Abstract helper class

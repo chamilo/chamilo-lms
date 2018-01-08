@@ -187,7 +187,7 @@ class DateTimePicker extends HTML_QuickForm_text
                         <!-- END label_2 -->
 
                         <!-- BEGIN error -->
-                            <span class="help-inline">{error}</span>
+                            <span class="help-inline help-block">{error}</span>
                         <!-- END error -->
                     </div>
                     <div class="col-sm-'.$size[2].'">
@@ -202,5 +202,4 @@ class DateTimePicker extends HTML_QuickForm_text
                 break;
         }
     }
-
 }

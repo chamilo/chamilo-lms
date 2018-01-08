@@ -206,9 +206,19 @@ function ldap_put_user_info_locally($login, $info_array) {
 
     $language = api_get_setting('platformLanguage');
     if (empty($language)) { $language = 'english'; }
-    $_userId = UserManager::create_user($prenom, $nom, $status,
-                     $email, $uname, $password, $official_code,
-                     $language, '', '', 'ldap');
+    $_userId = UserManager::create_user(
+        $prenom,
+        $nom,
+        $status,
+        $email,
+        $uname,
+        $password,
+        $official_code,
+        $language,
+        '',
+        '',
+        'ldap'
+    );
 
     //echo "new user added to Chamilo, id = $_userId";
 
@@ -468,8 +478,14 @@ function modify_filter($user_id, $url_params, $row) {
     if (!empty($_GET['id_session'])) {
         $query_string .= '&amp;id_session='.Security::remove_XSS($_GET['id_session']);
     }
+    $icon = '';
+    if (UserManager::is_username_available($user_id)) {
+        $icon = 'invitation_friend.png';
+    } else {
+        $icon = 'reload.png';
+    }
     //$url_params_id="id=".$row[0];
-    $result = '<a href="ldap_users_list.php?action=add_user&amp;user_id='.$user_id.'&amp;'.$query_string.'&amp;sec_token='.Security::getTokenFromSession().'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, api_get_system_encoding()))."'".')) return false;">'.Display::return_icon('add_user.gif', get_lang('AddUsers')).'</a>';
+    $result = '<a href="ldap_users_list.php?action=add_user&amp;user_id='.$user_id.'&amp;'.$query_string.'&amp;sec_token='.Security::getTokenFromSession().'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, api_get_system_encoding()))."'".')) return false;">'.Display::return_icon($icon, get_lang('AddUsers')).'</a>';
     return $result;
 }
 
@@ -516,12 +532,40 @@ function ldap_add_user_by_array($data, $update_if_exists = true) {
     // Adding user
     $user_id = 0;
     if (UserManager::is_username_available($username)) {
-        $user_id = UserManager::create_user($firstname, $lastname, $status, $email, $username, $password, $official_code, api_get_setting('platformLanguage'), $phone, $picture_uri, $auth_source, $expiration_date, $active);
+        $user_id = UserManager::create_user(
+            $firstname,
+            $lastname,
+            $status,
+            $email,
+            $username,
+            $password,
+            $official_code,
+            api_get_setting('platformLanguage'),
+            $phone,
+            $picture_uri,
+            $auth_source,
+            $expiration_date,
+            $active
+        );
     } else {
         if ($update_if_exists) {
             $user = api_get_user_info($username);
             $user_id = $user['user_id'];
-            UserManager::update_user($user_id, $firstname, $lastname, $username, null, null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active);
+            UserManager::update_user(
+                $user_id,
+                $firstname,
+                $lastname,
+                $username,
+                null,
+                null,
+                $email,
+                $status,
+                $official_code,
+                $phone,
+                $picture_uri,
+                $expiration_date,
+                $active
+            );
         }
     }
     return $user_id;
@@ -588,42 +632,119 @@ function ldap_add_user_to_session($UserList, $id_session) {
            " WHERE id='$id_session'");
 }
 
-function syncro_users() {
-    global $ldap_basedn, $ldap_host, $ldap_port, $ldap_rdn, $ldap_pass, $ldap_search_dn;
-    echo "Connecting ...";
-    $ldap_connect = ldap_connect($ldap_host, $ldap_port);
-    ldap_set_version($ldap_connect);
-    if ($ldap_connect) {
-        //echo " Connect to LDAP server successful ";
-        //echo "Binding ...";
-        $ldap_bind = false;
-        $ldap_bind_res = ldap_handle_bind($ldap_connect, $ldap_bind);
-        if ($ldap_bind_res) {
-            //echo " LDAP bind successful... ";
-            //echo " Searching for uid... ";
-            // Search surname entry
-            //OLD: $sr=ldap_search($ldapconnect,"dc=rug, dc=ac, dc=be", "uid=$login");
-            //echo "<p> ldapDc = '$LDAPbasedn' </p>";
-            $all_user_query = "uid=*";
-            if (!empty($ldap_search_dn)) {
-                $sr = ldap_search($ldap_connect, $ldap_search_dn, $all_user_query);
-            } else {
-                $sr = ldap_search($ldap_connect, $ldap_basedn, $all_user_query);
+/**
+ * Synchronize users from the configured LDAP connection (in auth.conf.php). If
+ * configured to disable old users,
+ * @param   bool    $disableOldUsers Whether to disable users who have disappeared from LDAP (true) or just leave them be (default: false)
+ * @param   bool    $deleteStudents Go one step further and delete completely students missing from LDAP
+ * @param   bool    $deleteTeachers Go even one step further and also delete completely teachers missing from LDAP
+ * @return  int     Total number of users added (not counting possible removals)
+ */
+function syncro_users(
+  $disableOldUsers = false,
+  $deleteStudents = false,
+  $deleteTeachers = false
+) {
+    global $ldap_basedn, $ldap_host, $ldap_port, $ldap_rdn, $ldap_pass, $ldap_search_dn, $debug;
+    $i = 0;
+    if ($debug) {
+        error_log('Connecting... ('.__FUNCTION__.')');
+    }
+    $ldapConnect = ldap_connect($ldap_host, $ldap_port);
+    ldap_set_version($ldapConnect);
+    if ($ldapConnect) {
+        if ($debug) {
+            error_log('Connected to LDAP server successfully! Binding... ('.__FUNCTION__.')');
+        }
+        $ldapBind = false;
+        $ldapBindRes = ldap_handle_bind($ldapConnect, $ldapBind);
+        if ($ldapBindRes) {
+            if ($debug) {
+                error_log('Bind successful! Searching for uid in LDAP DC: '.$ldap_search_dn);
             }
-            //echo " Number of entries returned is ".ldap_count_entries($ldapconnect,$sr);
-            //echo " Getting entries ...";
-            $info = ldap_get_entries($ldap_connect, $sr);
+            $allUserQuery = "uid=*";
+            if (!empty($ldap_search_dn)) {
+                $sr = ldap_search($ldapConnect, $ldap_search_dn, $allUserQuery);
+            } else {
+                //OLD: $sr=ldap_search($ldapconnect,"dc=rug, dc=ac, dc=be", "uid=$login");
+                $sr = ldap_search($ldapConnect, $ldap_basedn, $allUserQuery);
+            }
+            if ($debug) {
+                error_log('Entries returned: '.ldap_count_entries($ldapConnect, $sr));
+            }
+            $info = ldap_get_entries($ldapConnect, $sr);
             for ($key = 0; $key < $info['count']; $key++) {
                 $user_id = ldap_add_user_by_array($info[$key], false);
                 if ($user_id) {
-                    echo "User #$user_id created ";
+                    if ($debug) {
+                        error_log('User #'.$user_id.' created from LDAP');
+                    }
+                    $i++;
                 } else {
-                    echo "User was not created ";
+                    if ($debug) {
+                        error_log('User '.$info[$key]['sn'][0].' ('.$info[$key]['mail'][0].') could not be created');
+                    }
                 }
             }
+            if ($disableOldUsers === true) {
+                if ($debug) {
+                    error_log('Disable mode selected in '.__FUNCTION__);
+                    if ($deleteStudents) {
+                        error_log('...with complete deletion of users if disabled');
+                    }
+                }
+                // Get a big array of all user IDs, usernames only if they are
+                // registered as auth_source = 'ldap'
+                // This array will take about 60 bytes per user in memory, so
+                // having  100K users should only take a few (6?) MB and will
+                // highly reduce the number of DB queries
+                $usersDBShortList = [];
+                $usersLDAPShortList = [];
+                $sql = "SELECT id, username, status FROM user WHERE auth_source = 'ldap' ORDER BY username";
+                $res = Database::query($sql);
+                if ($res !== false) {
+                    // First build a list of users present in LDAP
+                    for ($key = 0; $key < $info['count']; $key++) {
+                        $dn_array = ldap_explode_dn($info[$key]['dn'], 1);
+                        $usersLDAPShortList[$dn_array[0]] = 1;
+                    }
+                    // Go through all 'extldap' users. For any that cannot
+                    // be found in the LDAP list, disable
+                    while ($row = Database::fetch_assoc($res)) {
+                        $usersDBShortList[$row['username']] = $row['id'];
+                        // If any of those users is NOT in LDAP, disable or remove
+                        if (empty($usersLDAPShortList[$row['username']])) {
+                            if ($deleteStudents === true && $row['status'] == 5) {
+                                UserManager::delete_user($usersDBShortList[$row['username']]);
+                                if ($debug) {
+                                    error_log('Student '.$row['username'].' removed from Chamilo');
+                                }
+                            } else if ($deleteTeachers === true && $row['status'] == 1) {
+                                UserManager::delete_user($usersDBShortList[$row['username']]);
+                                if ($debug) {
+                                    error_log('Teacher '.$row['username'].' removed from Chamilo');
+                                }
+                            } else {
+                                UserManager::disable($usersDBShortList[$row['username']]);
+                                if ($debug) {
+                                    error_log('User '.$row['username'].' disabled in Chamilo');
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+            if ($debug) {
+                error_log('Data for '.$info['count'].' items processed');
+            }
             //echo "Data for ".$info["count"]." items returned:<p>";
-        } // else: could echo "LDAP bind failed...";
-        //echo "Closing LDAP connection<hr>";
-        ldap_close($ldap_connect);
-    } // else: could echo "<h3>Unable to connect to LDAP server</h3>";
+        } else {
+            error_log('Could not bind to LDAP server');
+        }
+        ldap_close($ldapConnect);
+    } else {
+        error_log('Could not connect to LDAP server');
+    }
+    error_log('Ended execution of function '.__FUNCTION__);
 }

@@ -26,7 +26,7 @@ function openid_form()
     $form -> addElement('text', 'openid_url', array(get_lang('OpenIDURL'), Display::url(get_lang('OpenIDWhatIs'), 'main/auth/openid/whatis.php')), array('class' => 'openid_input'));
     $form -> addElement('button', 'submit', get_lang('Login'));
 
-    return $form->return_form();
+    return $form->returnForm();
 }
 
 /**

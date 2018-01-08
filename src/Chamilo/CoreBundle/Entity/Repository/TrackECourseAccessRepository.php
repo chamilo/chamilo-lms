@@ -13,8 +13,8 @@ use Chamilo\UserBundle\Entity\User;
  * @package Chamilo\CoreBundle\Entity\Repository
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
-class TrackECourseAccessRepository extends EntityRepository {
-
+class TrackECourseAccessRepository extends EntityRepository
+{
     /**
      * Get the last registered access by an user
      * @param User $user The user

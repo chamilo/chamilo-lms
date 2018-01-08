@@ -459,10 +459,11 @@ $domaine1 = $form->getElementByName('extra_domaine[0]');
 $domaine2 = $form->getElementByName('extra_domaine[1]');
 $domaine3 = $form->getElementByName('extra_domaine[2]');
 $userForm->setDefaults($defaults);
+
 $domainList = array_merge(
-    is_object($domaine1) ? $domaine1->getValue() : [],
-    is_object($domaine3) ? $domaine3->getValue() : [],
-    is_object($domaine2) ? $domaine2->getValue() : []
+    is_object($domaine1) && !empty($domaine1->getValue()) ? $domaine1->getValue() : [],
+    is_object($domaine3) && !empty($domaine3->getValue()) ? $domaine3->getValue() : [],
+    is_object($domaine2) && !empty($domaine2->getValue()) ? $domaine2->getValue() : []
 );
 
 $themeList = [];

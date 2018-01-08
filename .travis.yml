@@ -8,13 +8,13 @@ addons:
         - libapache2-mod-fastcgi
         - libappindicator1
         - fonts-liberation
+    chrome: stable
 
 services:
     - mysql
 
 sudo: required
 dist: trusty
-
 cache:
   directories:
     - $HOME/.composer/cache/files
@@ -24,6 +24,8 @@ php:
   - 5.5
   - 5.6
   - 7.0
+  - 7.1
+  - 7.2
 
 env:
   global:
@@ -31,22 +33,29 @@ env:
     - CHAMILO_VERSION=1.11.x
 
 before_install:
+  # Fix travis error https://github.com/travis-ci/travis-ci/issues/8607
+  - sudo rm -vf /etc/apt/sources.list.d/*riak*
   # Get Chrome
-  - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-  - sudo apt-get update
-  - sudo apt-get install google-chrome-stable
+  #- wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+  #- sudo apt-get update
+  #- sudo apt-get install google-chrome-stable
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   # Get Chrome driver
-  - wget https://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/bin
+  - wget https://chromedriver.storage.googleapis.com/2.32/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
+  - sudo mv chromedriver /usr/bin
+  - sudo chmod +x /usr/bin/chromedriver
   # Setup display for Selenium
   - sh -e /etc/init.d/xvfb start
   - export DISPLAY=:99.0
+  - sleep 3
   # Get Selenium
   - wget http://selenium-release.storage.googleapis.com/3.1/selenium-server-standalone-3.1.0.jar
   # Check java
   - java -version
   - sudo apt-get install oracle-java8-installer
   - java -version
-  - java -jar selenium-server-standalone-3.1.0.jar -log selenium.log > /dev/null &
+  #- java -jar selenium-server-standalone-3.7.1.jar -log selenium.log > /dev/null &
+  - java -jar selenium-server-standalone-3.1.0.jar -log selenium.log  > /dev/null &
   - nohup bash -c "webdriver-manager start 2>&1 &"
   - sleep 10
 
@@ -89,13 +98,18 @@ before_install:
   - curl $VHOST_URL
 
 script:
+  - whereis google-chrome-stable
+  - whereis chromedriver
   - cd tests/behat
+  - pwd
   - travis_wait 45 ../../vendor/behat/behat/bin/behat -v
-  #- sudo cat /var/log/apache2/$VHOST_URL-error.log
-  #- sudo cat /var/log/apache2/$VHOST_URL-access.log
+  # - sudo cat /var/log/apache2/$VHOST_URL-error.log
+  # - sudo cat /var/log/apache2/$VHOST_URL-access.log
+
 
 # configure notifications (email, IRC, campfire etc)
 notifications:
   # IRC notifications - disabled for creating a lot of noise on the channel
   irc: "irc.freenode.org#chamilodev"
-
+  slack:
+      secure: qVu1BH+UBset9e+v5Qm4UNgAPUdZyEsI+BsVbhBoNZ3h/Qfq/0gb/+EAbffEf5BWTBIMJwVo3f8y6+sszMPgyBSriu8BoGqtQ8OZelLnw0/yTDRnNzbZQhbc+Sszqr1X+Dzz4xjLdW5LsqoIhPQTwoMemh/hT+Vz8O/rp9tVWts=

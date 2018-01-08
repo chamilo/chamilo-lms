@@ -11,7 +11,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-Skill::isAllow();
+Skill::isAllowed();
 
 //Adds the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -24,6 +24,27 @@ $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdm
 if ($action == 'add_skill') {
     $interbreadcrumb[] = array('url' => 'skills_gradebook.php', 'name' => get_lang('SkillsAndGradebooks'));
     $tool_name = get_lang('Add');
+}
+
+$gradebook = new Gradebook();
+switch ($action) {
+    case 'display':
+        $content = $gradebook->returnGrid();
+        break;
+    case 'add_skill':
+        $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
+        $gradebook_info = $gradebook->get($id);
+        $url = api_get_self().'?action='.$action.'&id='.$id;
+        $form = $gradebook->show_skill_form($id, $url, $gradebook_info['name']);
+        if ($form->validate()) {
+            $values = $form->exportValues();
+            $gradebook->updateSkillsToGradeBook($values['id'], $values['skill']);
+            Display::addFlash(Display::return_message(get_lang('ItemAdded'), 'confirm'));
+            header('Location: '.api_get_self());
+            exit;
+        }
+        $content = $form->returnForm();
+        break;
 }
 
 Display::display_header($tool_name);
@@ -103,25 +124,7 @@ $(function() {
 });
 </script>
 <?php
-$gradebook = new Gradebook();
 
-switch ($action) {
-    case 'display':
-        $gradebook->display();
-        break;
-    case 'add_skill':
-        $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
-        $gradebook_info = $gradebook->get($id);
-        $url  = api_get_self().'?action='.$action.'&id='.$id;
-        $form = $gradebook->show_skill_form($id, $url, $gradebook_info['name']);
-        if ($form->validate()) {
-            $values = $form->exportValues();
-            $res    = $gradebook->update_skills_to_gradebook($values['id'], $values['skill']);
-            if ($res) {
-                echo Display::return_message(get_lang('ItemAdded'), 'confirm');
-            }
-        }
-        $form->display();
-        break;
-}
+echo $content;
+
 Display::display_footer();

@@ -228,7 +228,4 @@ class Usergroup
 
         return $this;
     }
-
-
-
 }

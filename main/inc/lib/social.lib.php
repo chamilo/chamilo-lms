@@ -254,14 +254,14 @@ class SocialManager extends UserManager
             ];
             Database::insert($tbl_message, $params);
 
-            $sender_info = api_get_user_info($user_id);
+            $senderInfo = api_get_user_info($user_id);
             $notification = new Notification();
-            $notification->save_notification(
+            $notification->saveNotification(
                 Notification::NOTIFICATION_TYPE_INVITATION,
                 array($friend_id),
                 $message_title,
                 $message_content,
-                $sender_info
+                $senderInfo
             );
 
             return true;
@@ -579,7 +579,6 @@ class SocialManager extends UserManager
      * @param string $subject
      * @param string $content
      *
-     * @return string message invitation
      */
     public static function sendInvitationToUser($userId, $subject = '', $content = '')
     {
@@ -1046,12 +1045,10 @@ class SocialManager extends UserManager
                     'new-message.png',
                     $sendMessageText
                 );
-                $sendMessageUrl = api_get_path(WEB_AJAX_PATH)
-                    . 'user_manager.ajax.php?'
-                    . http_build_query([
-                        'a' => 'get_user_popup',
-                        'user_id' => $user_id,
-                    ]);
+                $sendMessageUrl = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?'. http_build_query([
+                    'a' => 'get_user_popup',
+                    'user_id' => $user_id,
+                ]);
 
                 $links .= '<li>';
                 $links .= Display::url(
@@ -1071,11 +1068,18 @@ class SocialManager extends UserManager
                 api_get_user_id()
             );
 
-            if (isset($invitation_sent_list[$user_id]) && is_array($invitation_sent_list[$user_id]) && count($invitation_sent_list[$user_id]) > 0) {
-                $links .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">'.Display::return_icon('invitation.png', get_lang('YouAlreadySentAnInvitation')).'&nbsp;&nbsp;'.get_lang('YouAlreadySentAnInvitation').'</a></li>';
+            if (isset($invitation_sent_list[$user_id]) && is_array($invitation_sent_list[$user_id]) &&
+                count($invitation_sent_list[$user_id]) > 0
+            ) {
+                $links .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">'.
+                    Display::return_icon('invitation.png', get_lang('YouAlreadySentAnInvitation'))
+                    .'&nbsp;&nbsp;'.get_lang('YouAlreadySentAnInvitation').'</a></li>';
             } else {
                 if (!$show_full_profile) {
-                    $links .= '<li><a class="btn-to-send-invitation" href="#" data-send-to="'.$user_id.'" title="'.get_lang('SendInvitation').'">'.Display::return_icon('invitation.png', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a></li>';
+                    $links .= '<li>
+                        <a class="btn-to-send-invitation" href="#" data-send-to="'.$user_id.'" title="'.get_lang('SendInvitation').'">'.
+                        Display::return_icon('invitation.png', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').
+                        '</a></li>';
                 }
             }
 
@@ -1119,7 +1123,10 @@ class SocialManager extends UserManager
 
                         if (!empty($content)) {
                             $url = Display::url(
-                                Display::return_icon('announcement.png', get_lang('Announcements')).$course_info['name'].' ('.$content['count'].')',
+                                Display::return_icon(
+                                    'announcement.png',
+                                    get_lang('Announcements')
+                                ).$course_info['name'].' ('.$content['count'].')',
                                 api_get_path(WEB_CODE_PATH).'announcements/announcements.php?cidReq='.$course['code']
                             );
                             $announcements[] = Display::tag('li', $url);
@@ -1195,7 +1202,7 @@ class SocialManager extends UserManager
     {
         $html = null;
 
-        if (isset($_GET['id']) or count($user_list) < 1) {
+        if (isset($_GET['id']) || count($user_list) < 1) {
             return false;
         }
 
@@ -1205,14 +1212,14 @@ class SocialManager extends UserManager
         }
 
         foreach ($user_list as $uid) {
-            $user_info = api_get_user_info($uid, $checkIfUserOnline = true);
+            $user_info = api_get_user_info($uid, true);
             $lastname = $user_info['lastname'];
             $firstname = $user_info['firstname'];
             $completeName = $firstname.', '.$lastname;
 
             $user_rol = $user_info['status'] == 1 ? Display::return_icon('teacher.png', get_lang('Teacher'), null, ICON_SIZE_TINY) : Display::return_icon('user.png', get_lang('Student'), null, ICON_SIZE_TINY);
             $status_icon_chat = null;
-            if ($user_info['user_is_online_in_chat'] == 1) {
+            if (isset($user_info['user_is_online_in_chat']) && $user_info['user_is_online_in_chat'] == 1) {
                 $status_icon_chat = Display::return_icon('online.png', get_lang('Online'));
             } else {
                 $status_icon_chat = Display::return_icon('offline.png', get_lang('Offline'));
@@ -1257,6 +1264,7 @@ class SocialManager extends UserManager
     /**
      * Displays the information of an individual user
      * @param int $user_id
+     * @return string
      */
     public static function display_individual_user($user_id)
     {
@@ -1623,7 +1631,9 @@ class SocialManager extends UserManager
             $media .= '</div>';
             $media .= '<div class="col-md-9 col-xs-9 social-post-answers">';
             $media .= '<div class="user-data">';
-            $media .= '<div class="username">'.'<a href="'.$url.'">'.$nameComplete.'</a> <span>'.Security::remove_XSS($message['content']).'</span></div>';
+            $media .= '<div class="username">'.'<a href="'.$url.'">'.$nameComplete.'</a> 
+                        <span>'.Security::remove_XSS($message['content']).'</span>
+                       </div>';
             $media .= '<div class="time timeago" title="'.$date.'">'.$date.'</div>';
             $media .= '<br />';
             $media .= '</div>';
@@ -1867,6 +1877,7 @@ class SocialManager extends UserManager
      * group_add, home, messages, messages_inbox, messages_compose,
      * messages_outbox, invitations, shared_profile, friends, groups, search
      * @param int $groupId Optional. Group ID
+     * @param bool $show_full_profile
      * @return string The HTML code with the social block
      */
     public static function setSocialUserBlock(
@@ -2144,17 +2155,17 @@ class SocialManager extends UserManager
      */
     public static function getSkillBlock($userId)
     {
-        if (Skill::isAllow($userId, false) === false) {
+        if (Skill::isAllowed($userId, false) === false) {
             return '';
         }
 
         $skill = new Skill();
-        $ranking = $skill->get_user_skill_ranking($userId);
-        $skills = $skill->getUserSkills($userId, true);
+        $ranking = $skill->getUserSkillRanking($userId);
+        //$skills = $skill->getUserSkills($userId, true);
 
         $template = new Template(null, false, false, false, false, false);
         $template->assign('ranking', $ranking);
-        $template->assign('skills', $skills);
+        $template->assign('skills', $skill->getUserSkillsTable($userId)['table']);
         $template->assign('user_id', $userId);
         $template->assign(
             'show_skills_report_link',

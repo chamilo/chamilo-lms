@@ -273,7 +273,6 @@ $form->addGroup(
 );
 
 $form->addElement('html', '</div>');
-$form->addElement('html', '<div class="col-md-12">');
 
 // Submit
 if (isset($_GET['id'])) {
@@ -360,4 +359,4 @@ if ($defaults['max_student'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
 $form->setDefaults($defaults);
 $form->display();
 
-Display :: display_footer();
+Display::display_footer();

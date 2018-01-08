@@ -281,8 +281,9 @@
             })();
         {% endif %}
 
-        $('iframe#content_id')
-            .on('load', function () {
+        {% if disable_js_in_lp_view == 0 %}
+        $('iframe#content_id').on('load', function () {
+            if ('link' !== olms.lms_item_type) {
                 $.frameReady(function () {
                 }, 'top.content_name', {
                     load: [
@@ -295,7 +296,9 @@
                         {type: 'script', id: '_fr3', src: '{{ _p.web_main }}glossary/glossary.js.php?{{ _p.web_cid_req }}'}
                     ]
                 });
-            });
+            }
+        });
+        {% endif %}
     });
 
     $(window).on('resize', function () {

@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @author Julio Montoya <gugli100@gmail.com> BeezNest 2012
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
@@ -13,7 +14,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_admin_script();
 
 $pluginName = $_GET['name'];
-
 $appPlugin = new AppPlugin();
 $installedPlugins = $appPlugin->get_installed_plugins();
 $pluginInfo = $appPlugin->getPluginInfo($pluginName, true);
@@ -48,12 +48,14 @@ if (isset($form)) {
     if ($form->validate()) {
         $values = $form->getSubmitValues();
 
-        if (!isset($values['global_conference_allow_roles'])) {
-            $values['global_conference_allow_roles'] = [];
+        // Fix only for bbb
+        if ($pluginName == 'bbb') {
+            if (!isset($values['global_conference_allow_roles'])) {
+                $values['global_conference_allow_roles'] = [];
+            }
         }
 
         $accessUrlId = api_get_current_access_url_id();
-
         api_delete_settings_params(
             array(
                 'category = ? AND access_url = ? AND subkey = ? AND type = ? and variable <> ?' => array(
@@ -92,7 +94,6 @@ if (isset($form)) {
         }
 
         Display::addFlash(Display::return_message(get_lang('Updated'), 'success'));
-
         header("Location: $currentUrl");
         exit;
     } else {

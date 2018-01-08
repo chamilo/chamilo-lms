@@ -165,7 +165,7 @@ if (isset($_GET['movecat'])) {
     $cats = Category::load($_GET['movecat']);
     if (!isset($_GET['targetcat'])) {
         $move_form = new CatForm(
-            CatForm :: TYPE_MOVE,
+            CatForm::TYPE_MOVE,
             $cats[0],
             'move_cat_form',
             null,
@@ -197,7 +197,7 @@ if (isset($_GET['moveeval'])) {
     $evals = Evaluation :: load($_GET['moveeval']);
     if (!isset($_GET['targetcat'])) {
         $move_form = new EvalForm(
-            EvalForm :: TYPE_MOVE,
+            EvalForm::TYPE_MOVE,
             $evals[0],
             null,
             'move_eval_form',
@@ -230,7 +230,7 @@ if (isset($_GET['movelink'])) {
     GradebookUtils::block_students();
     $link = LinkFactory :: load($_GET['movelink']);
     $move_form = new LinkForm(
-        LinkForm :: TYPE_MOVE,
+        LinkForm::TYPE_MOVE,
         null,
         $link[0],
         'move_link_form',
@@ -239,7 +239,7 @@ if (isset($_GET['movelink'])) {
     );
 
     if ($move_form->validate()) {
-        $targetcat = Category :: load($move_form->exportValue('move_cat'));
+        $targetcat = Category::load($move_form->exportValue('move_cat'));
         $link[0]->move_to_cat($targetcat[0]);
         unset($link);
         header('Location: '.api_get_self().'?linkmoved=&selectcat='.$selectCat);
@@ -975,8 +975,6 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
 
                 if ($action == 'export_table') {
                     ob_clean();
-                    $sessionName = api_get_session_name(api_get_session_id());
-                    $sessionName = !empty($sessionName) ? " - $sessionName" : '';
                     $params = array(
                         'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['name']),
                         'course_code' => api_get_course_id(),
@@ -986,16 +984,11 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                         'student_info' => api_get_user_info(),
                         'show_grade_generated_date' => true,
                         'show_real_course_teachers' => false,
-                        'show_teacher_as_myself' => false
+                        'show_teacher_as_myself' => false,
+                        'orientation' => 'P'
                     );
 
                     $pdf = new PDF('A4', $params['orientation'], $params);
-
-                    $address = api_get_setting('institution_address');
-                    $phone = api_get_setting('administratorTelephone');
-                    $address = str_replace('\n', '<br />', $address);
-                    $pdf->custom_header = array('html' => "<h5  align='right'>$address <br />$phone</h5>");
-
                     $pdf->html_to_pdf_with_template(
                         $table.
                         $graph.

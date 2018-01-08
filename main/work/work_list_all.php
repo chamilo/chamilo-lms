@@ -42,7 +42,7 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 $user_id = api_get_user_id();
 
 if (!empty($group_id)) {
-    $group_properties = GroupManager :: get_group_properties($group_id);
+    $group_properties = GroupManager::get_group_properties($group_id);
     $show_work = false;
 
     if (api_is_allowed_to_edit(false, true)) {
@@ -213,7 +213,6 @@ if (!empty($my_folder_data['description'])) {
 $check_qualification = intval($my_folder_data['qualification']);
 $orderName = api_is_western_name_order() ? 'firstname' : 'lastname';
 
-
 if (!empty($work_data['enable_qualification']) &&
     !empty($check_qualification)
 ) {
@@ -365,9 +364,15 @@ $(function() {
 
 </script>
 <?php
+
 echo $documentsAddedInWork;
+
 $tableWork = Display::grid_html('results');
+
+echo workGetExtraFieldData($workId);
+
 echo Display::panel($tableWork);
+
 echo '<div class="list-work-results">';
 echo '<div class="panel panel-default">';
 echo '<div class="panel-body">';

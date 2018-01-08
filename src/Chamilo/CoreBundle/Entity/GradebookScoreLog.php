@@ -164,5 +164,4 @@ class GradebookScoreLog
 
         return $this;
     }
-
 }

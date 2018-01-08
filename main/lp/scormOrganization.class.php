@@ -101,7 +101,7 @@ class scormOrganization
      */
     public function get_flat_items_list()
     {
-        $list = array();
+        $list = [];
         $i = 1;
         foreach ($this->items as $id => $dummy) {
             $abs_order = 0;

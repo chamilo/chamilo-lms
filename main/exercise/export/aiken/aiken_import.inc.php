@@ -29,7 +29,7 @@ function aiken_display_form()
         'post',
         api_get_self()."?".api_get_cidreq(),
         null,
-        array('enctype' => 'multipart/form-data')
+        ['enctype' => 'multipart/form-data']
     );
     $form_validator->addElement('header', $name_tools);
     $form_validator->addElement('text', 'total_weight', get_lang('TotalWeight'));
@@ -115,9 +115,9 @@ function aiken_import_exercise($file)
     $uploadPath = 'aiken_'.api_get_unique_id().'/';
 
     // set some default values for the new exercise
-    $exercise_info = array();
+    $exercise_info = [];
     $exercise_info['name'] = preg_replace('/.(zip|txt)$/i', '', $file);
-    $exercise_info['question'] = array();
+    $exercise_info['question'] = [];
 
     // if file is not a .zip, then we cancel all
     if (!preg_match('/.(zip|txt)$/i', $file)) {
@@ -252,7 +252,7 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
 
     $question_index = 0;
     $correct_answer = '';
-    $answers_array = array();
+    $answers_array = [];
     $new_question = true;
     foreach ($data as $line => $info) {
         if ($question_index > 0 && $new_question == true && preg_match('/^(\r)?\n/', $info)) {
@@ -288,7 +288,7 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
             $correct_answer_index = array_search($matches[1], $answers_array);
             $exercise_info['question'][$question_index]['title'] = $matches[1];
         } elseif (preg_match('/^TAGS:\s?([A-Z])\s?/', $info, $matches)) {
-             //TAGS for chamilo >= 1.10
+            //TAGS for chamilo >= 1.10
             $exercise_info['question'][$question_index]['answer_tags'] = explode(',', $matches[1]);
         } elseif (preg_match('/^ETIQUETAS:\s?([A-Z])\s?/', $info, $matches)) {
             //TAGS for chamilo >= 1.10 (Spanish e-ducativa format)
@@ -305,7 +305,7 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
             }
             $question_index++;
             //emptying answers array when moving to next question
-            $answers_array = array();
+            $answers_array = [];
             $new_question = true;
         } else {
             if (empty($exercise_info['question'][$question_index]['title'])) {
@@ -349,7 +349,6 @@ function aiken_import_file($array_file)
             Display::addFlash(Display::return_message(get_lang('Uploaded')));
 
             return $imported;
-
         } else {
             Display::addFlash(Display::return_message(get_lang($imported), 'error'));
 

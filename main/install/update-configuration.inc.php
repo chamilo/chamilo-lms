@@ -9,7 +9,6 @@
  * @package chamilo.install
  */
 if (defined('SYSTEM_INSTALLATION')) {
-
     error_log("Starting ".basename(__FILE__));
     $perm = api_get_permissions_for_new_files();
 
@@ -42,7 +41,7 @@ if (defined('SYSTEM_INSTALLATION')) {
         if (stripos($line, '$_configuration[\'system_version\']') !== false) {
             $found_version = true;
             $line = '$_configuration[\'system_version\'] = \''.$GLOBALS['new_version'].'\';'."\r\n";
-       } elseif (stripos($line, '$_configuration[\'system_stable\']') !== false) {
+        } elseif (stripos($line, '$_configuration[\'system_stable\']') !== false) {
             $found_stable = true;
             $line = '$_configuration[\'system_stable\'] = '.($GLOBALS['new_version_stable'] ? 'true' : 'false').';'."\r\n";
         } elseif (stripos($line, '$_configuration[\'software_name\']') !== false) {

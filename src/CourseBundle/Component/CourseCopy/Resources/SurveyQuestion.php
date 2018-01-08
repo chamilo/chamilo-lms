@@ -83,7 +83,7 @@ class SurveyQuestion extends Resource
         $this->sort = $sort;
         $this->shared_question_id = $shared_question_id;
         $this->max_value = $max_value;
-        $this->answers = array();
+        $this->answers = [];
         if (api_get_configuration_value('allow_required_survey_questions')) {
             $this->is_required = $is_required;
         }
@@ -96,7 +96,7 @@ class SurveyQuestion extends Resource
      */
     public function add_answer($option_text, $sort)
     {
-        $answer = array();
+        $answer = [];
         $answer['option_text'] = $option_text;
         $answer['sort'] = $sort;
         $this->answers[] = $answer;

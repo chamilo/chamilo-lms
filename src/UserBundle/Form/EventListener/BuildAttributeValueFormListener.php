@@ -16,10 +16,10 @@ class BuildAttributeValueFormListener implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             FormEvents::PRE_SET_DATA => 'onPreSetData',
             FormEvents::PRE_SUBMIT   => 'onPreSubmit',
-        );
+        ];
     }
 
     /**
@@ -40,7 +40,7 @@ class BuildAttributeValueFormListener implements EventSubscriberInterface
                     'value',
                     'text',
                     null,
-                    array('auto_initialize' => false)
+                    ['auto_initialize' => false]
                 )
             );
             return;
@@ -49,10 +49,10 @@ class BuildAttributeValueFormListener implements EventSubscriberInterface
         $type = $attributeValue->getType();
         $attributeValue->setAttribute($attributeValue->getField());
 
-        $options = array(
+        $options = [
             'label' => $attributeValue->getName(),
             'auto_initialize' => false,
-        );
+        ];
 
         if (is_array($attributeValue->getConfiguration())) {
             $options = array_merge(

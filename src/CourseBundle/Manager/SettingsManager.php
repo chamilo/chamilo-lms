@@ -71,7 +71,7 @@ class SettingsManager extends ChamiloSettingsManager
             $settings->setSchemaAlias($schemaAlias);
         }
 
-         // We need to get a plain parameters array since we use the options resolver on it
+        // We need to get a plain parameters array since we use the options resolver on it
         //$parameters = $settings->getParameters();
         $parameters = $this->getParameters($schemaAliasNoPrefix);
 
@@ -121,8 +121,8 @@ class SettingsManager extends ChamiloSettingsManager
         }*/
 
         $repo = $this->manager->getRepository('ChamiloCoreBundle:SettingsCurrent');
-        $persistedParameters = $repo->findBy(array('category' => $settings->getSchemaAlias()));
-        $persistedParametersMap = array();
+        $persistedParameters = $repo->findBy(['category' => $settings->getSchemaAlias()]);
+        $persistedParametersMap = [];
 
         foreach ($persistedParameters as $parameter) {
             $persistedParametersMap[$parameter->getTitle()] = $parameter;
@@ -179,10 +179,10 @@ class SettingsManager extends ChamiloSettingsManager
         }
 
         $persistedParameters = $this->parameterRepository->findBy(
-            array('category' => $namespace, 'cId' => $this->getCourse()->getId())
+            ['category' => $namespace, 'cId' => $this->getCourse()->getId()]
         );
 
-        $persistedParametersMap = array();
+        $persistedParametersMap = [];
 
         foreach ($persistedParameters as $parameter) {
             $persistedParametersMap[$parameter->getName()] = $parameter;
@@ -228,7 +228,7 @@ class SettingsManager extends ChamiloSettingsManager
     {
         $repo = $this->manager->getRepository('ChamiloCourseBundle:CCourseSetting');
         $parameters = [];
-        foreach ($repo->findBy(array('category' => $namespace)) as $parameter) {
+        foreach ($repo->findBy(['category' => $namespace]) as $parameter) {
             $parameters[$parameter->getTitle()] = $parameter->getValue();
         }
 

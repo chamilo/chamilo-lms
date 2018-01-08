@@ -216,11 +216,11 @@ class CQuiz
      */
     private $showPreviousButton;
 
-     /**
-     * @var string
-     *
-     * @ORM\Column(name="notifications", type="string", length=255, nullable=true)
-     */
+    /**
+    * @var string
+    *
+    * @ORM\Column(name="notifications", type="string", length=255, nullable=true)
+    */
     private $notifications;
 
     /**

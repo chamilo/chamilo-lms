@@ -14,9 +14,9 @@ use Symfony\Component\Templating\Helper\Helper;
  */
 class SettingsHelper extends Helper implements SettingsHelperInterface
 {
-     /**
-     * @var SettingsManager
-     */
+    /**
+    * @var SettingsManager
+    */
     private $settingsManager;
 
     /**

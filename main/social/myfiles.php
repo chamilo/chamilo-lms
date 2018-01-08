@@ -83,19 +83,19 @@ if (isset($_GET['cidReq'])) {
 
 if (api_get_setting('allow_social_tool') == 'true') {
     Session::write('this_section', SECTION_SOCIAL);
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'profile.php',
         'name' => get_lang('SocialNetwork')
-    );
+    ];
 } else {
     Session::write('this_section', SECTION_COURSES);
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_PATH).'user_portal.php',
         'name' => get_lang('MyCourses')
-    );
+    ];
 }
 
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('MyFiles'));
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('MyFiles')];
 
 $tpl = new Template();
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'myfiles');

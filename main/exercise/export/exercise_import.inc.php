@@ -77,12 +77,12 @@ function import_exercise($file)
     }
 
     // set some default values for the new exercise
-    $exercise_info = array();
+    $exercise_info = [];
     $exercise_info['name'] = preg_replace('/.zip$/i', '', $file);
-    $exercise_info['question'] = array();
-    $element_pile = array();
+    $exercise_info['question'] = [];
+    $element_pile = [];
     // create parser and array to retrieve info from manifest
-    $element_pile = array(); //pile to known the depth in which we are
+    $element_pile = []; //pile to known the depth in which we are
 
     // if file is not a .zip, then we cancel all
     if (!preg_match('/.zip$/i', $file)) {
@@ -101,7 +101,7 @@ function import_exercise($file)
     $file_found = false;
     $result = false;
     $filePath = null;
-    $resourcesLinks = array();
+    $resourcesLinks = [];
 
     // parse every subdirectory to search xml question files and other assets to be imported
     // The assets-related code is a bit fragile as it has to deal with files renamed by Chamilo and it only works if
@@ -138,7 +138,6 @@ function import_exercise($file)
                     $resourcesLinks = qtiProcessManifest($baseWorkDir.'/'.$file);
                 }
             }
-
         }
     }
 
@@ -222,7 +221,7 @@ function import_exercise($file)
             $answer->new_nbrAnswers = count($answerList);
             $totalCorrectWeight = 0;
             $j = 1;
-            $matchAnswerIds = array();
+            $matchAnswerIds = [];
             if (!empty($answerList)) {
                 foreach ($answerList as $key => $answers) {
                     if (preg_match('/_/', $key)) {
@@ -308,8 +307,8 @@ function qti_parse_file($exercisePath, $file, $questionFile)
 
     //parse XML question file
     //$data = str_replace(array('<p>', '</p>', '<front>', '</front>'), '', $data);
-    $data = ChamiloApi::stripGivenTags($data, array('p', 'front'));
-    $qtiVersion = array();
+    $data = ChamiloApi::stripGivenTags($data, ['p', 'front']);
+    $qtiVersion = [];
     $match = preg_match('/ims_qtiasiv(\d)p(\d)/', $data, $qtiVersion);
     $qtiMainVersion = 2; //by default, assume QTI version 2
     if ($match) {
@@ -318,7 +317,7 @@ function qti_parse_file($exercisePath, $file, $questionFile)
 
     //used global variable start values declaration:
     $record_item_body = false;
-    $non_HTML_tag_to_avoid = array(
+    $non_HTML_tag_to_avoid = [
         "SIMPLECHOICE",
         "CHOICEINTERACTION",
         "INLINECHOICEINTERACTION",
@@ -332,7 +331,7 @@ function qti_parse_file($exercisePath, $file, $questionFile)
         "ITEMBODY",
         "BR",
         "IMG"
-    );
+    ];
 
     $question_format_supported = true;
     $xml_parser = xml_parser_create();
@@ -379,9 +378,9 @@ function qti_parse_file($exercisePath, $file, $questionFile)
             Display::return_message(
                 get_lang(
                     'Unknown question format in file %file',
-                    array(
+                    [
                         '%file' => $questionFile,
-                    )
+                    ]
                 ),
                 'error'
             )
@@ -449,7 +448,6 @@ function startElementQti2($parser, $name, $attributes)
             if ($current_element == 'TEXTENTRYINTERACTION') {
                 $correct_answer_value = $exercise_info['question'][$current_question_ident]['correct_answers'][$current_answer_id];
                 $current_question_item_body .= "[".$correct_answer_value."]";
-
             }
             if ($current_element == 'BR') {
                 $current_question_item_body .= "<br />";
@@ -514,7 +512,7 @@ function startElementQti2($parser, $name, $attributes)
             } else {
                 $current_match_set++;
             }
-            $exercise_info['question'][$current_question_ident]['answer'][$current_match_set] = array();
+            $exercise_info['question'][$current_question_ident]['answer'][$current_match_set] = [];
             break;
         case 'SIMPLEASSOCIABLECHOICE':
             $currentAssociableChoice = $attributes['IDENTIFIER'];
@@ -523,14 +521,14 @@ function startElementQti2($parser, $name, $attributes)
         case 'SIMPLECHOICE':
             $current_answer_id = $attributes['IDENTIFIER'];
             if (!isset($exercise_info['question'][$current_question_ident]['answer'][$current_answer_id])) {
-                $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id] = array();
+                $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id] = [];
             }
             break;
         case 'MAPENTRY':
             if ($parent_element == 'MAPPING' || $parent_element == 'MAPENTRY') {
                 $answer_id = $attributes['MAPKEY'];
                 if (!isset($exercise_info['question'][$current_question_ident]['weighting'])) {
-                    $exercise_info['question'][$current_question_ident]['weighting'] = array();
+                    $exercise_info['question'][$current_question_ident]['weighting'] = [];
                 }
                 $exercise_info['question'][$current_question_ident]['weighting'][$answer_id] = $attributes['MAPPEDVALUE'];
             }
@@ -715,7 +713,7 @@ function elementDataQti2($parser, $data)
                 );
             } else {
                 if (!isset($exercise_info['question'][$current_question_ident]['wrong_answers'])) {
-                    $exercise_info['question'][$current_question_ident]['wrong_answers'] = array();
+                    $exercise_info['question'][$current_question_ident]['wrong_answers'] = [];
                 }
                 $exercise_info['question'][$current_question_ident]['wrong_answers'][] = $data;
             }
@@ -790,7 +788,6 @@ function startElementQti1($parser, $name, $attributes)
             if ($current_element == 'TEXTENTRYINTERACTION') {
                 $correct_answer_value = $exercise_info['question'][$current_question_ident]['correct_answers'][$current_answer_id];
                 $current_question_item_body .= "[".$correct_answer_value."]";
-
             }
             if ($current_element == 'BR') {
                 $current_question_item_body .= "<br />";
@@ -808,9 +805,9 @@ function startElementQti1($parser, $name, $attributes)
         case 'ITEM':
             //retrieve current question
             $current_question_ident = $attributes['IDENT'];
-            $exercise_info['question'][$current_question_ident] = array();
-            $exercise_info['question'][$current_question_ident]['answer'] = array();
-            $exercise_info['question'][$current_question_ident]['correct_answers'] = array();
+            $exercise_info['question'][$current_question_ident] = [];
+            $exercise_info['question'][$current_question_ident]['answer'] = [];
+            $exercise_info['question'][$current_question_ident]['correct_answers'] = [];
             $exercise_info['question'][$current_question_ident]['tempdir'] = $questionTempDir;
             break;
         case 'SECTION':
@@ -1107,11 +1104,11 @@ function qtiProcessManifest($filePath)
     $exercisesSysPath = $sysPath.$courseDir.'/document/';
     $webPath = api_get_path(WEB_CODE_PATH);
     $exercisesWebPath = $webPath.'document/document.php?'.api_get_cidreq().'&action=download&id=';
-    $links = array(
-        'manifest' => array(),
-        'system' => array(),
-        'web' => array(),
-    );
+    $links = [
+        'manifest' => [],
+        'system' => [],
+        'web' => [],
+    ];
     $tableDocuments = Database::get_course_table(TABLE_DOCUMENT);
     $countResources = count($xml->resources->resource->file);
     for ($i = 0; $i < $countResources; $i++) {

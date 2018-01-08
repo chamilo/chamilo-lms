@@ -32,7 +32,7 @@ class ResultsDataGenerator
         $include_edit = false
     ) {
         $this->evaluation = $evaluation;
-        $this->results = isset($results) ? $results : array();
+        $this->results = isset($results) ? $results : [];
     }
 
     /**
@@ -74,9 +74,9 @@ class ResultsDataGenerator
 
         $scoreDisplay = ScoreDisplay::instance();
         // generate actual data array
-        $table = array();
+        $table = [];
         foreach ($this->results as $result) {
-            $user = array();
+            $user = [];
             $info = api_get_user_info($result->get_user_id());
             $user['id'] = $result->get_user_id();
             if ($pdf) {
@@ -96,7 +96,7 @@ class ResultsDataGenerator
             }
             $user['percentage_score'] = intval(
                 $scoreDisplay->display_score(
-                    array($result->get_score(), $this->evaluation->get_max()),
+                    [$result->get_score(), $this->evaluation->get_max()],
                     SCORE_PERCENT,
                     SCORE_BOTH,
                     true
@@ -126,13 +126,13 @@ class ResultsDataGenerator
 
         // sort array
         if ($sorting & self::RDG_SORT_LASTNAME) {
-            usort($table, array('ResultsDataGenerator', 'sort_by_last_name'));
+            usort($table, ['ResultsDataGenerator', 'sort_by_last_name']);
         } elseif ($sorting & self::RDG_SORT_FIRSTNAME) {
-            usort($table, array('ResultsDataGenerator', 'sort_by_first_name'));
+            usort($table, ['ResultsDataGenerator', 'sort_by_first_name']);
         } elseif ($sorting & self::RDG_SORT_SCORE) {
-            usort($table, array('ResultsDataGenerator', 'sort_by_score'));
+            usort($table, ['ResultsDataGenerator', 'sort_by_score']);
         } elseif ($sorting & self::RDG_SORT_MASK) {
-            usort($table, array('ResultsDataGenerator', 'sort_by_mask'));
+            usort($table, ['ResultsDataGenerator', 'sort_by_mask']);
         }
         if ($sorting & self::RDG_SORT_DESC) {
             $table = array_reverse($table);
@@ -163,7 +163,7 @@ class ResultsDataGenerator
             }
 
             return $scoreDisplay->display_score(
-                array($score, $this->evaluation->get_max()),
+                [$score, $this->evaluation->get_max()],
                 $type,
                 SCORE_BOTH,
                 $ignore_score_color
@@ -216,8 +216,8 @@ class ResultsDataGenerator
      */
     public function sort_by_mask($item1, $item2)
     {
-        $score1 = (isset($item1['score']) ? array($item1['score'], $this->evaluation->get_max()) : null);
-        $score2 = (isset($item2['score']) ? array($item2['score'], $this->evaluation->get_max()) : null);
+        $score1 = (isset($item1['score']) ? [$item1['score'], $this->evaluation->get_max()] : null);
+        $score2 = (isset($item2['score']) ? [$item2['score'], $this->evaluation->get_max()] : null);
         return ScoreDisplay::compare_scores_by_custom_display($score1, $score2);
     }
 }

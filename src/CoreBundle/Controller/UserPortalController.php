@@ -68,13 +68,13 @@ class UserPortalController extends BaseController
         $form->addElement(
             'text',
             'title',
-            array(
+            [
                 get_lang('CourseName'),
                 get_lang('Ex'),
-            ),
-            array(
+            ],
+            [
                 'id' => 'title',
-            )
+            ]
         );
         $form->applyFilter('title', 'html_filter');
         $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
@@ -93,22 +93,22 @@ class UserPortalController extends BaseController
             'category_code',
             get_lang('CourseFaculty'),
             null,
-            array('url' => $url)
+            ['url' => $url]
         );
 
         // Course code
         $form->addText(
             'wanted_code',
-            array(
+            [
                 get_lang('Code'),
                 get_lang('OnlyLettersAndNumbers'),
-            ),
+            ],
             '',
-            array(
+            [
                 'maxlength' => \CourseManager::MAX_COURSE_LENGTH_CODE,
                 'pattern' => '[a-zA-Z0-9]+',
                 'title' => get_lang('OnlyLettersAndNumbers'),
-            )
+            ]
         );
         $form->applyFilter('wanted_code', 'html_filter');
         $form->addRule(
@@ -126,7 +126,7 @@ class UserPortalController extends BaseController
                 'textarea',
                 'description',
                 get_lang('Description'),
-                array('rows' => '3')
+                ['rows' => '3']
             );
 
             // Objectives of the requested course.
@@ -134,7 +134,7 @@ class UserPortalController extends BaseController
                 'textarea',
                 'objetives',
                 get_lang('Objectives'),
-                array('rows' => '3')
+                ['rows' => '3']
             );
 
             // Target audience of the requested course.
@@ -142,7 +142,7 @@ class UserPortalController extends BaseController
                 'textarea',
                 'target_audience',
                 get_lang('TargetAudience'),
-                array('rows' => '3')
+                ['rows' => '3']
             );
         }
 
@@ -151,8 +151,8 @@ class UserPortalController extends BaseController
             'select_language',
             'course_language',
             get_lang('Ln'),
-            array(),
-            array('style' => 'width:150px')
+            [],
+            ['style' => 'width:150px']
         );
         $form->applyFilter('select_language', 'html_filter');
 
@@ -292,8 +292,7 @@ class UserPortalController extends BaseController
 
             if ($course_code_ok) {
                 if (!$courseValidation) {
-
-                    $params = array();
+                    $params = [];
                     $params['title'] = $title;
                     $params['exemplary_content'] = $exemplary_content;
                     $params['wanted_code'] = $wanted_code;
@@ -304,7 +303,6 @@ class UserPortalController extends BaseController
                     $course_info = \CourseManager::create_course($params);
 
                     if (!empty($course_info)) {
-
                         $url = api_get_path(WEB_CODE_PATH);
                         $url .= 'course_info/start.php?cidReq=';
                         $url .= $course_info['code'];
@@ -385,9 +383,9 @@ class UserPortalController extends BaseController
 
         return $this->render(
             'ChamiloCoreBundle:Index:userportal.html.twig',
-            array(
+            [
                 'content' => $content,
-            )
+            ]
         );
     }
 
@@ -487,10 +485,10 @@ class UserPortalController extends BaseController
 
         return $this->render(
             'ChamiloCoreBundle:Index:userportal.html.twig',
-            array(
+            [
                 'content' => $items,
                 'count_courses' => $countCourses
-            )
+            ]
         );
     }
 }

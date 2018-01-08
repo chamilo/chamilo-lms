@@ -60,9 +60,9 @@ class HomeController extends ToolBaseController
                 Display::return_icon('edit.png'),
                 $this->generateUrl(
                     'chamilo_course_home_home_iconlist',
-                    array(
+                    [
                         'course' => api_get_course_id(),
-                    )
+                    ]
                 )
             );
         }
@@ -110,7 +110,7 @@ class HomeController extends ToolBaseController
 
         return $this->render(
             'ChamiloCourseBundle:Home:index.html.twig',
-            array(
+            [
                 'course' => $course,
                 'session_info' => $sessionInfo,
                 'icons' => $result['content'],
@@ -119,7 +119,7 @@ class HomeController extends ToolBaseController
                 'introduction_text' => $introduction,
                 'exercise_warning' => null,
                 'lp_warning' => null
-            )
+            ]
         );
     }
 
@@ -159,7 +159,7 @@ class HomeController extends ToolBaseController
         }
 
         // Start of tools for CourseAdmins (teachers/tutors)
-        $totalList = array();
+        $totalList = [];
 
         // Start of tools for CourseAdmins (teachers/tutors)
         if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, true)) {
@@ -210,7 +210,6 @@ class HomeController extends ToolBaseController
                 'class' => 'course-tools-administration',
                 'content' => CourseHome::show_tools_category($my_list)
             ];
-
         } elseif (api_is_coach()) {
             $content .= $pluginExtra;
             if (api_get_setting('show_session_data') === 'true' && $session_id > 0) {
@@ -232,7 +231,7 @@ class HomeController extends ToolBaseController
             if ($sessionsCopy === 'true') {
                 // Adding only maintenance for coaches.
                 $myList = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
-                $onlyMaintenanceList = array();
+                $onlyMaintenanceList = [];
 
                 foreach ($myList as $item) {
                     if ($item['name'] === 'course_maintenance') {
@@ -266,7 +265,7 @@ class HomeController extends ToolBaseController
                 }
 
                 if ($addUserTool) {
-                    $tools[] = array(
+                    $tools[] = [
                         'c_id' => api_get_course_int_id(),
                         'name' => 'user',
                         'link' => 'user/user.php',
@@ -278,7 +277,7 @@ class HomeController extends ToolBaseController
                         'target' => '_self',
                         'category' => 'interaction',
                         'session_id' => api_get_session_id()
-                    );
+                    ];
                 }
             }
 
@@ -297,17 +296,14 @@ class HomeController extends ToolBaseController
 
     private function render2ColumnView()
     {
-
     }
 
     private function render3ColumnView()
     {
-
     }
 
     private function renderVerticalActivityView()
     {
-
     }
 
     /**
@@ -442,10 +438,10 @@ class HomeController extends ToolBaseController
             }
         }
 
-        return array(
+        return [
             'show_autolaunch_exercise_warning' => $showAutoLaunchExerciseWarning,
             'show_autolaunch_lp_warning' => $showAutoLaunchLpWarning
-        );
+        ];
     }
 
     /**
@@ -484,7 +480,7 @@ class HomeController extends ToolBaseController
     public function showIconAction($iconId)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $criteria = array('cId' => api_get_course_int_id(), 'id' => $iconId);
+        $criteria = ['cId' => api_get_course_int_id(), 'id' => $iconId];
         $tool = $this->getRepository(
             'Chamilo\CourseBundle\Entity\CTool'
         )->findOneBy($criteria);
@@ -509,7 +505,7 @@ class HomeController extends ToolBaseController
         }
 
         $entityManager = $this->getDoctrine()->getManager();
-        $criteria = array('cId' => api_get_course_int_id(), 'id' => $iconId);
+        $criteria = ['cId' => api_get_course_int_id(), 'id' => $iconId];
         $tool = $this->getRepository(
             'Chamilo\CourseBundle\Entity\CTool'
         )->findOneBy($criteria);
@@ -534,7 +530,7 @@ class HomeController extends ToolBaseController
         }
 
         $entityManager = $this->getDoctrine()->getManager();
-        $criteria = array('cId' => api_get_course_int_id(), 'id' => $iconId, 'added_tool' => 1);
+        $criteria = ['cId' => api_get_course_int_id(), 'id' => $iconId, 'added_tool' => 1];
         $tool = $this->getRepository(
             'Chamilo\CourseBundle\Entity\CTool'
         )->findOneBy($criteria);
@@ -556,21 +552,21 @@ class HomeController extends ToolBaseController
         );
 
         $sessionId = intval($request->get('id_session'));
-        $itemsFromSession = array();
+        $itemsFromSession = [];
         if (!empty($sessionId)) {
             $query = $repo->createQueryBuilder('a');
             $query->select('s');
             $query->from('Chamilo\CourseBundle\Entity\CTool', 's');
             $query->where('s.cId  = :courseId AND s.sessionId = :sessionId')
                 ->setParameters(
-                    array(
+                    [
                         'courseId' => $this->getCourse()->getId(),
                         'sessionId' => $sessionId
-                    )
+                    ]
                 );
             $itemsFromSession = $query->getQuery()->getResult();
 
-            $itemNameList = array();
+            $itemNameList = [];
             foreach ($itemsFromSession as $item) {
                 $itemNameList[] = $item->getName();
             }
@@ -581,16 +577,16 @@ class HomeController extends ToolBaseController
             $query->from('Chamilo\CourseBundle\Entity\CTool', 's');
             $query->where('s.cId  = :courseId AND s.sessionId = 0')
                 ->setParameters(
-                    array(
+                    [
                         'courseId' => $this->getCourse()->getId()
-                    )
+                    ]
                 );
             if (!empty($itemNameList)) {
                 $query->andWhere($query->expr()->notIn('s.name', $itemNameList));
             }
             $itemsFromCourse = $query->getQuery()->getResult();
         } else {
-            $criteria = array('cId' => $this->getCourse()->getId(), 'sessionId' => 0);
+            $criteria = ['cId' => $this->getCourse()->getId(), 'sessionId' => 0];
             $itemsFromCourse = $repo->findBy($criteria);
         }
 
@@ -624,7 +620,7 @@ class HomeController extends ToolBaseController
             return $this->abort(500);
         }
 
-        $criteria = array('cId' => $this->getCourse()->getId(), 'sessionId' => 0, 'name' => $itemName);
+        $criteria = ['cId' => $this->getCourse()->getId(), 'sessionId' => 0, 'name' => $itemName];
         $itemFromDatabase = $this->getRepository()->findOneBy($criteria);
 
         if (!$itemFromDatabase) {
@@ -639,7 +635,6 @@ class HomeController extends ToolBaseController
         $form->handleRequest($this->getRequest());
 
         if ($form->isValid()) {
-
             $query = $this->getDoctrine()->getManager()->createQueryBuilder('a');
             $query->select('MAX(s.id) as id');
             $query->from('Chamilo\CourseBundle\Entity\CTool', 's');
@@ -657,7 +652,7 @@ class HomeController extends ToolBaseController
             }
 
             $this->get('session')->getFlashBag()->add('success', "Added");
-            $url = $this->generateUrl('course_home.controller:iconListAction', array('id_session' => $sessionId));
+            $url = $this->generateUrl('course_home.controller:iconListAction', ['id_session' => $sessionId]);
             return $this->redirect($url);
         }
 
@@ -666,7 +661,6 @@ class HomeController extends ToolBaseController
         $this->getTemplate()->assign('links', $this->generateLinks());
 
         return $this->render('@ChamiloCourse/Home/add.html.twig');
-
     }
 
     /**
@@ -681,7 +675,7 @@ class HomeController extends ToolBaseController
 
         $sessionId = intval($this->getRequest()->get('id_session'));
 
-        $criteria = array('cId' => $this->getCourse()->getId(), 'id' => $itemId);
+        $criteria = ['cId' => $this->getCourse()->getId(), 'id' => $itemId];
         /** @var CTool $item */
         $item = $this->getRepository()->findOneBy($criteria);
 
@@ -699,7 +693,7 @@ class HomeController extends ToolBaseController
             }
 
             $this->get('session')->getFlashBag()->add('success', "Updated");
-            $url = $this->generateUrl('course_home.controller:iconListAction', array('id_session' => $sessionId));
+            $url = $this->generateUrl('course_home.controller:iconListAction', ['id_session' => $sessionId]);
             return $this->redirect($url);
         }
 
@@ -720,7 +714,7 @@ class HomeController extends ToolBaseController
             return $this->abort(404);
         }
 
-        $criteria = array('cId' => $this->getCourse()->getId(), 'id' => $itemId);
+        $criteria = ['cId' => $this->getCourse()->getId(), 'id' => $itemId];
 
         /** @var CTool $item */
         $item = $this->getRepository()->findOneBy($criteria);

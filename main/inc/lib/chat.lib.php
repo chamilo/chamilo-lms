@@ -10,15 +10,15 @@ use ChamiloSession as Session;
  */
 class Chat extends Model
 {
-    public $columns = array(
+    public $columns = [
         'id',
         'from_user',
         'to_user',
         'message',
         'sent',
         'recd',
-    );
-    public $window_list = array();
+    ];
+    public $window_list = [];
 
     /**
      * The contructor sets the chat table name and the window_list attribute
@@ -99,7 +99,6 @@ class Chat extends Model
                 );
                 $chats[$userId]['items'] = $items;
             }
-
         }
         return $chats;
     }
@@ -112,12 +111,12 @@ class Chat extends Model
     {
         $chatList = Session::read('chatHistory');
         $chats = self::getAllLatestChats($chatList);
-        $return = array(
+        $return = [
             'user_status' => $this->getUserStatus(),
             'me' => get_lang('Me'),
             'user_id' => api_get_user_id(),
             'items' => $chats
-        );
+        ];
         echo json_encode($return);
         return true;
     }
@@ -132,16 +131,16 @@ class Chat extends Model
         $row = Database::select(
             'count(*) as count',
             $this->table,
-            array(
-                'where' => array(
+            [
+                'where' => [
                     '(from_user = ? AND to_user = ?) OR (from_user = ? AND to_user = ?) ' => [
                         $fromUserId,
                         $toUserId,
                         $toUserId,
                         $fromUserId
                     ]
-                )
-            ),
+                ]
+            ],
             'first'
         );
 
@@ -210,7 +209,7 @@ class Chat extends Model
             }
 
             $chat['message'] = Security::remove_XSS($chat['message']);
-            $item = array(
+            $item = [
                 'id' => $chat['id'],
                 's' => '0',
                 'f' => $fromUserId,
@@ -223,7 +222,7 @@ class Chat extends Model
                     'user_id' => $userInfo['user_id']
                 ],
                 'date' => api_strtotime($chat['sent'], 'UTC')
-            );
+            ];
             $items[] = $item;
             $_SESSION['openChatBoxes'][$fromUserId] = api_strtotime($chat['sent'], 'UTC');
         }
@@ -245,12 +244,12 @@ class Chat extends Model
                 ORDER BY id ASC";
         $result = Database::query($sql);
 
-        $chat_list = array();
+        $chat_list = [];
         while ($chat = Database::fetch_array($result, 'ASSOC')) {
             $chat_list[$chat['from_user']]['items'][] = $chat;
         }
 
-        $items = array();
+        $items = [];
         foreach ($chat_list as $fromUserId => $rows) {
             $rows = $rows['items'];
             $user_info = api_get_user_info($fromUserId, true);
@@ -291,11 +290,11 @@ class Chat extends Model
                     $message = sprintf(get_lang('SentAtX'), $time);
 
                     if ($now > 180) {
-                        $item = array(
+                        $item = [
                             's' => '2',
                             'f' => $userId,
                             'm' => $message
-                        );
+                        ];
 
                         if (isset($_SESSION['chatHistory'][$userId])) {
                             $_SESSION['chatHistory'][$userId]['items'][] = $item;
@@ -360,15 +359,15 @@ class Chat extends Model
             }
 
             if (!isset($_SESSION['chatHistory'][$to_user_id])) {
-                $_SESSION['chatHistory'][$to_user_id] = array();
+                $_SESSION['chatHistory'][$to_user_id] = [];
             }
-            $item = array(
+            $item = [
                 "s" => "1",
                 "f" => $fromUserId,
                 "m" => $messagesan,
                 'date' => api_strtotime($now, 'UTC'),
                 'username' => get_lang('Me')
-            );
+            ];
             $_SESSION['chatHistory'][$to_user_id]['items'][] = $item;
             $_SESSION['chatHistory'][$to_user_id]['user_info']['user_name'] = $user_info['complete_name'];
             $_SESSION['chatHistory'][$to_user_id]['user_info']['online'] = $user_info['user_is_online'];
@@ -377,7 +376,7 @@ class Chat extends Model
 
             unset($_SESSION['tsChatBoxes'][$to_user_id]);
 
-            $params = array();
+            $params = [];
             $params['from_user'] = intval($fromUserId);
             $params['to_user'] = intval($to_user_id);
             $params['message'] = $message;
@@ -451,7 +450,7 @@ class Chat extends Model
             }
         }
 
-         return false;
+        return false;
     }
 
     /**

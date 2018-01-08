@@ -49,7 +49,7 @@ $form->setDefaults($defaults);
 
 if ($form->validate()) {
     $values = $form->getSubmitValues();
-    $file = isset($_FILES['uploaded_file']) ? $_FILES['uploaded_file'] : array();
+    $file = isset($_FILES['uploaded_file']) ? $_FILES['uploaded_file'] : [];
     $deleteFile = isset($values['delete_file']) ? $values['delete_file'] : false;
     $legal->save($values, $file, $deleteFile);
     header('Location: '.$url);

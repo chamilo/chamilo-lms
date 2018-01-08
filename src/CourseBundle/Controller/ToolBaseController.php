@@ -69,18 +69,18 @@ abstract class ToolBaseController extends BaseController implements ToolInterfac
         // Tool home
         $menu->addChild(
             $this->trans($this->getClassnameLabel()),
-            array(
+            [
                 'uri' => $this->generateControllerUrl(
                     'indexAction',
-                    array(
+                    [
                         'courseCode' => $this->getCourse()->getCode()
-                    )
+                    ]
                 )
-            )
+            ]
         );
 
         $action = str_replace(
-            array($this->getControllerAlias().':', 'Action'),
+            [$this->getControllerAlias().':', 'Action'],
             '',
             $action
         );
@@ -106,9 +106,9 @@ abstract class ToolBaseController extends BaseController implements ToolInterfac
     {
         $parts = $this->getClassParts();
 
-        $newPath = array();
+        $newPath = [];
         foreach ($parts as $part) {
-            if (in_array($part, array('chamilo', 'controller')) ||
+            if (in_array($part, ['chamilo', 'controller']) ||
                 strpos($part, '_controller') > 0
             ) {
                 continue;
@@ -164,7 +164,6 @@ abstract class ToolBaseController extends BaseController implements ToolInterfac
         }
 
         if ($courseReset) {
-
             if (!empty($cidReq) && $cidReq != -1) {
                 $courseInfo = api_get_course_info($cidReq, true, true);
 
@@ -175,7 +174,6 @@ abstract class ToolBaseController extends BaseController implements ToolInterfac
                     $sessionHandler->set('_real_cid', $courseId);
                     $sessionHandler->set('_cid', $courseCode);
                     $sessionHandler->set('_course', $courseInfo);
-
                 } else {
                     $this->abort(404, $this->trans('Course not available'));
                 }
@@ -229,5 +227,4 @@ abstract class ToolBaseController extends BaseController implements ToolInterfac
 
         return $this->redirect($url);
     }
-
 }

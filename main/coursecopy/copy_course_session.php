@@ -37,10 +37,10 @@ if (function_exists('ini_set')) {
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $nameTools = get_lang('CopyCourse');
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
     'name' => get_lang('PlatformAdmin')
-);
+];
 
 // Database Table Definitions
 $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -55,7 +55,7 @@ $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
  * @param array $attr
  * @return string
  */
-function make_select_session_list($name, $sessions, $attr = array())
+function make_select_session_list($name, $sessions, $attr = [])
 {
     $attributes = '';
     if (count($attr) > 0) {
@@ -94,14 +94,14 @@ function make_select_session_list($name, $sessions, $attr = array())
 function display_form()
 {
     $html = '';
-    $sessions = SessionManager::get_sessions_list(array(), array('name', 'ASC'));
+    $sessions = SessionManager::get_sessions_list([], ['name', 'ASC']);
 
     // Link back to the documents overview
     $actionsLeft = '<a href="../admin/index.php">'.
         Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).
         '</a>';
 
-    $html .= Display::toolbarAction('toolbar-copysession', array($actionsLeft));
+    $html .= Display::toolbarAction('toolbar-copysession', [$actionsLeft]);
 
     $html .= Display::return_message(get_lang('CopyCourseFromSessionToSessionExplanation'), 'warning');
 
@@ -110,7 +110,7 @@ function display_form()
 
     // origin
     $html .= '<label class="col-sm-2 control-label">'.get_lang('OriginCoursesFromSession').': </label>';
-    $html .= '<div class="col-sm-5">'.make_select_session_list('sessions_list_origin', $sessions, array('onchange' => 'javascript: xajax_search_courses(this.value,\'origin\');')).'</div>';
+    $html .= '<div class="col-sm-5">'.make_select_session_list('sessions_list_origin', $sessions, ['onchange' => 'javascript: xajax_search_courses(this.value,\'origin\');']).'</div>';
     $html .= '<div class="col-sm-5" id="ajax_list_courses_origin">';
     $html .= '<select id="origin" class="form-control" name="SessionCoursesListOrigin[]" ></select>';
     $html .= '</div></div>';
@@ -162,7 +162,7 @@ function search_courses($id_session, $type)
         $id_session = intval($id_session);
         if ($type == 'origin') {
             $course_list = SessionManager::get_course_list_by_session_id($id_session);
-            $temp_course_list = array();
+            $temp_course_list = [];
             $return .= '<select id="origin" name="SessionCoursesListOrigin[]" class="form-control" onclick="javascript: checkSelected(this.id,\'copy_option_2\',\'title_option2\',\'destination\');">';
 
             foreach ($course_list as $course) {
@@ -176,7 +176,7 @@ function search_courses($id_session, $type)
 
             // Build select for destination sessions where is not included current session from select origin
             if (!empty($id_session)) {
-                $sessions = SessionManager::get_sessions_list(array(), array('name', 'ASC'));
+                $sessions = SessionManager::get_sessions_list([], ['name', 'ASC']);
 
                 $select_destination .= '<select name="sessions_list_destination" class="form-control" onchange = "javascript: xajax_search_courses(this.value,\'destination\');">';
                 $select_destination .= '<option value = "0">-- '.get_lang('SelectASession').' --</option>';
@@ -210,10 +210,10 @@ function search_courses($id_session, $type)
                     FROM $tbl_course c, $tbl_session_rel_course src
                     WHERE src.c_id = c.id
                     AND src.session_id = '".intval($id_session)."'";
-                    //AND c.code IN ($list_courses_origin)";
+            //AND c.code IN ($list_courses_origin)";
             $rs = Database::query($sql);
 
-            $course_list_destination = array();
+            $course_list_destination = [];
             $return .= '<select id="destination" name="SessionCoursesListDestination[]" class="form-control">';
             while ($course = Database :: fetch_array($rs)) {
                 $course_list_destination[] = $course['code'];
@@ -306,8 +306,8 @@ if (Security::check_token('post') && (
         echo Display::return_message(get_lang('CopyFinished'), 'confirmation');
         display_form();
     } else {
-        $arr_course_origin = array();
-        $arr_course_destination = array();
+        $arr_course_origin = [];
+        $arr_course_destination = [];
         $destination_session = '';
         $origin_session = '';
 
@@ -338,7 +338,6 @@ if (Security::check_token('post') && (
                 $course = $cb->build($origin_session, $course_code, $with_base_content);
                 $cr = new CourseRestorer($course);
                 $cr->restore($course_destinatination, $destination_session);
-
             }
             echo Display::return_message(get_lang('CopyFinished'), 'confirm');
             display_form();
@@ -360,8 +359,8 @@ if (Security::check_token('post') && (
         echo Display::return_message(get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'), 'normal');
     }
 
-    $arr_course_origin = array();
-    $arr_course_destination = array();
+    $arr_course_origin = [];
+    $arr_course_destination = [];
     $destination_session = '';
     $origin_session = '';
 
@@ -394,7 +393,7 @@ if (Security::check_token('post') && (
             Display::return_icon(
                 'back.png',
                 get_lang('Back').' '.get_lang('To').' '.get_lang('PlatformAdmin'),
-                array('style' => 'vertical-align:middle')
+                ['style' => 'vertical-align:middle']
             ).
             get_lang('Back').'</a></div>';
     } else {

@@ -24,11 +24,11 @@ class LegacyController extends ToolBaseController
 
     private function setContainerValuesToLegacy($request)
     {
-          /** @var Connection $dbConnection */
+        /** @var Connection $dbConnection */
         $dbConnection = $this->container->get('database_connection');
         $em = $this->get('kernel')->getContainer()->get('doctrine.orm.entity_manager');
 
-        $database = new \Database($dbConnection, array());
+        $database = new \Database($dbConnection, []);
 
         $database->setConnection($dbConnection);
         $database->setManager($em);
@@ -84,13 +84,13 @@ class LegacyController extends ToolBaseController
 
             // No browser cache when executing an exercise.
             if ($name == 'exercise/exercise_submit.php') {
-                $responseHeaders = array(
+                $responseHeaders = [
                     'cache-control' => 'no-store, no-cache, must-revalidate'
-                );
+                ];
             }
 
             // Loading code to be added
-            $js = isset($htmlHeadXtra) ? $htmlHeadXtra : array();
+            $js = isset($htmlHeadXtra) ? $htmlHeadXtra : [];
 
             // Loading legacy breadcrumb $interbreadcrumb
             $interbreadcrumb = isset($interbreadcrumb) ? $interbreadcrumb : null;

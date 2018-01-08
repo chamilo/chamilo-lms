@@ -30,7 +30,7 @@ $form->addElement('hidden', 'dest');
 $form->addElement('text', 'email_address', get_lang('EmailDestination'));
 $form->addElement('text', 'email_title', get_lang('EmailTitle'));
 $form->freeze('email_address');
-$form->addElement('textarea', 'email_text', get_lang('EmailText'), array('rows' => '6'));
+$form->addElement('textarea', 'email_text', get_lang('EmailText'), ['rows' => '6']);
 $form->addRule('email_address', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('email_title', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('email_text', get_lang('ThisFieldIsRequired'), 'required');
@@ -56,12 +56,12 @@ switch ($action) {
         $emailText = Security::remove_XSS($_REQUEST['email_text']);
 }
 
-$defaults = array(
+$defaults = [
     'dest' => $emailDest,
     'email_address' => $emailDest,
     'email_title' => $emailTitle,
     'email_text' => $emailText
-);
+];
 
 $form->setDefaults($defaults);
 

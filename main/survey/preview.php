@@ -65,14 +65,14 @@ if (empty($survey_data)) {
 $urlname = strip_tags($survey_data['title']);
 if (api_is_allowed_to_edit()) {
     // Breadcrumbs
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
         'name' => get_lang('SurveyList')
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
         'name' => $urlname,
-    );
+    ];
 }
 $courseCode = isset($_GET['cidReq']) ? $_GET['cidReq'] : null;
 $surveyAnonymous = SurveyManager::get_survey($survey_id, 0, $courseCode);
@@ -117,13 +117,13 @@ if (api_is_course_admin() ||
         exit;
     }
 
-    $questions = array();
+    $questions = [];
     if (isset($_GET['show'])) {
         // Getting all the questions for this page and add them to a
         // multidimensional array where the first index is the page.
         // as long as there is no pagebreak fount we keep adding questions to the page
-        $questions_displayed = array();
-        $paged_questions = array();
+        $questions_displayed = [];
+        $paged_questions = [];
         $counter = 0;
         $sql = "SELECT * FROM $table_survey_question
                 WHERE c_id = $course_id AND survey_id = '".$survey_id."'

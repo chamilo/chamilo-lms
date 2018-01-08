@@ -19,10 +19,10 @@ class ExerciseCourseSettingsSchema extends AbstractSettingsSchema
     public function buildSettings(SettingsBuilderInterface $builder)
     {
         $builder
-            ->setDefaults(array(
+            ->setDefaults([
                 'enabled' => '',
                 'email_alert_manager_on_new_quiz' => '',
-            ))
+            ])
         ;
         $allowedTypes = [
             'enabled' => ['string'],

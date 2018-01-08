@@ -15,23 +15,23 @@ class TestQuestionDescription extends Basic
      */
     public function getConfig()
     {
-        $config['toolbarGroups'] = array(
-            array('name' => 'document', 'groups' =>array('document', 'doctools')),
-            array('name' => 'clipboard', 'groups' =>array('clipboard', 'undo')),
-            array('name' => 'editing', 'groups' =>array('clipboard', 'undo')),
+        $config['toolbarGroups'] = [
+            ['name' => 'document', 'groups' =>['document', 'doctools']],
+            ['name' => 'clipboard', 'groups' =>['clipboard', 'undo']],
+            ['name' => 'editing', 'groups' =>['clipboard', 'undo']],
             //array('name' => 'forms',    'groups' =>array('clipboard', 'undo', )),
             '/',
-            array('name' => 'basicstyles', 'groups' =>array('basicstyles', 'cleanup')),
-            array('name' => 'paragraph', 'groups' =>array('list', 'indent', 'blocks', 'align')),
-            array('name' => 'links'),
-            array('name' => 'insert'),
+            ['name' => 'basicstyles', 'groups' =>['basicstyles', 'cleanup']],
+            ['name' => 'paragraph', 'groups' =>['list', 'indent', 'blocks', 'align']],
+            ['name' => 'links'],
+            ['name' => 'insert'],
             '/',
-            array('name' => 'styles'),
-            array('name' => 'colors'),
-            array('name' => 'tools'),
-            array('name' => 'others'),
-            array('name' => 'mode')
-        );
+            ['name' => 'styles'],
+            ['name' => 'colors'],
+            ['name' => 'tools'],
+            ['name' => 'others'],
+            ['name' => 'mode']
+        ];
 
         $config['extraPlugins'] = $this->getPluginsToString();
         if (api_get_setting('more_buttons_maximized_mode') != 'true') {
@@ -49,7 +49,7 @@ class TestQuestionDescription extends Basic
      */
     public function getConditionalPlugins()
     {
-        $plugins = array();
+        $plugins = [];
         if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
             $plugins[] = 'glossary';
         }

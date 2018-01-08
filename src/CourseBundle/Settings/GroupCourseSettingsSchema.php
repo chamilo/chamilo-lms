@@ -19,9 +19,9 @@ class GroupCourseSettingsSchema extends AbstractSettingsSchema
     public function buildSettings(SettingsBuilderInterface $builder)
     {
         $builder
-            ->setDefaults(array(
+            ->setDefaults([
                 'enabled' => '',
-            ))
+            ])
         ;
         $allowedTypes = [
             'enabled' => ['string'],

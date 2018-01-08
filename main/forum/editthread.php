@@ -35,10 +35,10 @@ $currentForumCategory = get_forumcategory_information($currentForum['forum_categ
 $forumSettings = $forum_setting;
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
-    );
+    ];
 }
 
 $threadId = isset($_GET['thread']) ? intval($_GET['thread']) : 0;
@@ -95,33 +95,33 @@ if (api_is_invitee()) {
 $groupId = api_get_group_id();
 if (!empty($groupId)) {
     $groupProperties = GroupManager:: get_group_properties($groupId);
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.$cidreq,
         'name' => get_lang('Groups'),
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.$cidreq,
         'name' => get_lang('GroupSpace').' '.$groupProperties['name'],
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.$forumId,
         'name' => $currentForum['forum_title'],
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.$forumId,
         'name' => get_lang('EditThread'),
-    );
+    ];
 } else {
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.$cidreq, 'name' => $nameTools);
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.$cidreq, 'name' => $nameTools];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?'.$cidreq.'&forumcategory='.$currentForumCategory['cat_id'],
         'name' => $currentForumCategory['cat_title'],
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.$forumId,
         'name' => $currentForum['forum_title'],
-    );
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('EditThread'));
+    ];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('EditThread')];
 }
 
 $tableLink = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
@@ -171,7 +171,7 @@ $form = new FormValidator(
 );
 
 $form->addElement('header', get_lang('EditThread'));
-$form->setConstants(array('forum' => '5'));
+$form->setConstants(['forum' => '5']);
 $form->addElement('hidden', 'forum_id', $forumId);
 $form->addElement('hidden', 'thread_id', $threadId);
 $form->addElement('hidden', 'gradebook', $gradebookId);
@@ -207,7 +207,7 @@ if ((api_is_course_admin() || api_is_session_general_coach() || api_is_course_tu
         ['value' => '0.00', 'step' => '0.01']
     );
     $form->applyFilter('weight_calification', 'html_filter');
-    $group = array();
+    $group = [];
     $group[] = $form->createElement('radio', 'thread_peer_qualify', null, get_lang('Yes'), 1);
     $group[] = $form->createElement('radio', 'thread_peer_qualify', null, get_lang('No'), 0);
     $form->addGroup(
@@ -258,7 +258,7 @@ if ($form->validate()) {
 $form->setDefaults(isset($defaults) ? $defaults : null);
 $token = Security::get_token();
 $form->addElement('hidden', 'sec_token');
-$form->setConstants(array('sec_token' => $token));
+$form->setConstants(['sec_token' => $token]);
 
 $originIsLearnPath = $origin == 'learnpath';
 

@@ -28,20 +28,20 @@ class RegistrationFormType extends AbstractType
             ->add(
                 'username',
                 null,
-                array(
+                [
                     'label' => 'form.username',
                     'translation_domain' => 'FOSUserBundle',
-                )
+                ]
             )
             ->add('firstname', 'text')
             ->add('lastname', 'text')
             ->add(
                 'email',
                 'email',
-                array(
+                [
                     'label' => 'form.email',
                     'translation_domain' => 'FOSUserBundle',
-                )
+                ]
             )
             ->add('captcha', 'Gregwar\CaptchaBundle\Type\CaptchaType');
         ;
@@ -112,9 +112,9 @@ class RegistrationFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'class' => 'Chamilo\UserBundle\Entity\User',
-            )
+            ]
         );
     }
 
@@ -134,4 +134,3 @@ class RegistrationFormType extends AbstractType
         return 'chamilo_sonata_user_registration';
     }
 }
-

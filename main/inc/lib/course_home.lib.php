@@ -24,7 +24,7 @@ class CourseHome
 
         $numcols = 3;
         $table = new HTML_Table('width="100%"');
-        $all_tools = array();
+        $all_tools = [];
 
         $course_id = api_get_course_int_id();
 
@@ -98,7 +98,7 @@ class CourseHome
             }
             $result_links = Database::query($sql_links);
             while ($links_row = Database::fetch_array($result_links)) {
-                $properties = array();
+                $properties = [];
                 $properties['name'] = $links_row['title'];
                 $properties['link'] = $links_row['url'];
                 $properties['visibility'] = $links_row['visibility'];
@@ -133,7 +133,7 @@ class CourseHome
             }
 
             if (api_get_session_id() != 0 &&
-                in_array($tool['name'], array('course_maintenance', 'course_setting'))
+                in_array($tool['name'], ['course_maintenance', 'course_setting'])
             ) {
                 continue;
             }
@@ -194,7 +194,7 @@ class CourseHome
                 }
             }
 
-            $lnk = array();
+            $lnk = [];
             if (api_is_allowed_to_edit(null, true) &&
                 $cat != "courseAdmin" &&
                 !strpos($tool['link'], 'learnpath_handler.php?learnpath_id') &&
@@ -204,7 +204,7 @@ class CourseHome
                     $link['name'] = Display::return_icon(
                         'remove.gif',
                         get_lang('Deactivate'),
-                        array('style' => 'vertical-align: middle;')
+                        ['style' => 'vertical-align: middle;']
                     );
                     $link['cmd'] = "hide=yes";
                     $lnk[] = $link;
@@ -212,7 +212,7 @@ class CourseHome
                     $link['name'] = Display::return_icon(
                         'add.gif',
                         get_lang('Activate'),
-                        array('style' => 'vertical-align: middle;')
+                        ['style' => 'vertical-align: middle;']
                     );
                     $link['cmd'] = "restore=yes";
                     $lnk[] = $link;
@@ -305,7 +305,7 @@ class CourseHome
                 break;
         }
         if ($sql_links != null) {
-            $properties = array();
+            $properties = [];
             $result_links = Database::query($sql_links);
             while ($links_row = Database::fetch_array($result_links)) {
                 unset($properties);
@@ -318,7 +318,7 @@ class CourseHome
             }
         }
         if (isset($all_tools_list)) {
-            $lnk = array();
+            $lnk = [];
             foreach ($all_tools_list as & $tool) {
                 if ($tool['image'] == 'scormbuilder.gif') {
                     // check if the published learnpath is visible for student
@@ -337,7 +337,7 @@ class CourseHome
                 }
 
                 if (api_get_session_id() != 0 &&
-                    in_array($tool['name'], array('course_maintenance', 'course_setting'))
+                    in_array($tool['name'], ['course_maintenance', 'course_setting'])
                 ) {
                     continue;
                 }
@@ -374,7 +374,7 @@ class CourseHome
                 $html .= Display::return_icon(
                     $tool['image'],
                     $tool_name,
-                    array(),
+                    [],
                     null,
                     ICON_SIZE_MEDIUM
                 ).'&nbsp;'.$tool_name.
@@ -476,7 +476,7 @@ class CourseHome
     ) {
         $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
         $is_platform_admin = api_is_platform_admin();
-        $all_tools_list = array();
+        $all_tools_list = [];
 
         // Condition for the session
         $sessionId = $sessionId ?: api_get_session_id();
@@ -555,7 +555,7 @@ class CourseHome
         // if the course homepage is loaded many times, so the list of hidden
         // tools might benefit from a shared memory storage later on
         $list = api_get_settings('Tools', 'list', api_get_current_access_url_id());
-        $hide_list = array();
+        $hide_list = [];
         $check = false;
         foreach ($list as $line) {
             // Admin can see all tools even if the course_hide_tools configuration is set
@@ -710,7 +710,7 @@ class CourseHome
             $result_links = Database::query($sql_links);
             if (Database::num_rows($result_links) > 0) {
                 while ($links_row = Database::fetch_array($result_links, 'ASSOC')) {
-                    $properties = array();
+                    $properties = [];
                     $properties['name'] = $links_row['title'];
                     $properties['session_id'] = $links_row['session_id'];
                     $properties['link'] = $links_row['url'];
@@ -822,20 +822,20 @@ class CourseHome
         $theme = api_get_setting('homepage_view');
         if ($theme === 'vertical_activity') {
             //ordering by get_lang name
-            $order_tool_list = array();
+            $order_tool_list = [];
             if (is_array($all_tools_list) && count($all_tools_list) > 0) {
                 foreach ($all_tools_list as $key => $new_tool) {
                     $tool_name = self::translate_tool_name($new_tool);
                     $order_tool_list [$key] = $tool_name;
                 }
                 natsort($order_tool_list);
-                $my_temp_tool_array = array();
+                $my_temp_tool_array = [];
                 foreach ($order_tool_list as $key => $new_tool) {
                     $my_temp_tool_array[] = $all_tools_list[$key];
                 }
                 $all_tools_list = $my_temp_tool_array;
             } else {
-                $all_tools_list = array();
+                $all_tools_list = [];
             }
         }
         $web_code_path = api_get_path(WEB_CODE_PATH);
@@ -853,13 +853,13 @@ class CourseHome
         }
 
         $i = 0;
-        $items = array();
+        $items = [];
         $app_plugin = new AppPlugin();
 
         if (isset($all_tools_list)) {
             $lnk = '';
             foreach ($all_tools_list as & $tool) {
-                $item = array();
+                $item = [];
                 $studentview = false;
                 $tool['original_link'] = $tool['link'];
                 if ($tool['image'] == 'scormbuilder.gif') {
@@ -880,7 +880,7 @@ class CourseHome
                     }
                 }
 
-                if ($session_id != 0 && in_array($tool['name'], array('course_setting'))) {
+                if ($session_id != 0 && in_array($tool['name'], ['course_setting'])) {
                     continue;
                 }
 
@@ -898,7 +898,7 @@ class CourseHome
                                 $link['name'] = Display::return_icon(
                                     'visible.png',
                                     get_lang('Deactivate'),
-                                    array('id' => 'linktool_'.$tool['iid']),
+                                    ['id' => 'linktool_'.$tool['iid']],
                                     ICON_SIZE_SMALL,
                                     false
                                 );
@@ -909,7 +909,7 @@ class CourseHome
                                 $link['name'] = Display::return_icon(
                                     'invisible.png',
                                     get_lang('Activate'),
-                                    array('id' => 'linktool_'.$tool['iid']),
+                                    ['id' => 'linktool_'.$tool['iid']],
                                     ICON_SIZE_SMALL,
                                     false
                                 );
@@ -936,7 +936,7 @@ class CourseHome
                                     $link['name'] = Display::return_icon(
                                         'invisible.png',
                                         get_lang('Activate'),
-                                        array('id' => 'linktool_'.$tool['iid']),
+                                        ['id' => 'linktool_'.$tool['iid']],
                                         ICON_SIZE_SMALL,
                                         false
                                     );
@@ -947,7 +947,7 @@ class CourseHome
                                     $link['name'] = Display::return_icon(
                                         'visible.png',
                                         get_lang('Deactivate'),
-                                        array('id' => 'linktool_'.$tool['iid']),
+                                        ['id' => 'linktool_'.$tool['iid']],
                                         ICON_SIZE_SMALL,
                                         false
                                     );
@@ -959,7 +959,7 @@ class CourseHome
                             $link['name'] = Display::return_icon(
                                 'visible.png',
                                 get_lang('Deactivate'),
-                                array('id' => 'linktool_'.$tool['iid']),
+                                ['id' => 'linktool_'.$tool['iid']],
                                 ICON_SIZE_SMALL,
                                 false
                             );
@@ -1020,35 +1020,35 @@ class CourseHome
                     $tool['link'] = $tool['link'].$qm_or_amp.api_get_cidreq();
                 }
 
-                $tool_link_params = array();
+                $tool_link_params = [];
                 $toolIid = isset($tool["iid"]) ? $tool["iid"] : null;
 
                 //@todo this visio stuff should be removed
                 if (strpos($tool['name'], 'visio_') !== false) {
-                    $tool_link_params = array(
+                    $tool_link_params = [
                         'id' => 'tooldesc_'.$toolIid,
                         'href' => '"javascript: void(0);"',
                         'class' => $class,
                         'onclick' => 'javascript: window.open(\''.$tool['link'].'\',\'window_visio'.api_get_course_id().'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')',
                         'target' => $tool['target']
-                    );
+                    ];
                 } elseif (strpos($tool['name'], 'chat') !== false &&
                     api_get_course_setting('allow_open_chat_window')
                 ) {
-                    $tool_link_params = array(
+                    $tool_link_params = [
                         'id' => 'tooldesc_'.$toolIid,
                         'class' => $class,
                         'href' => 'javascript: void(0);',
                         'onclick' => 'javascript: window.open(\''.$tool['link'].'\',\'window_chat'.api_get_course_id().'\',config=\'height=\'+600+\', width=\'+825+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')', //Chat Open Windows
                         'target' => $tool['target']
-                    );
+                    ];
                 } else {
-                    $tool_link_params = array(
+                    $tool_link_params = [
                         'id' => 'tooldesc_'.$toolIid,
                         'href' => $tool['link'],
                         'class' => $class,
                         'target' => $tool['target']
-                    );
+                    ];
                 }
 
                 $tool_name = self::translate_tool_name($tool);
@@ -1072,7 +1072,7 @@ class CourseHome
                 $icon = Display::return_icon(
                     $tool['image'],
                     $tool_name,
-                    array('class' => 'tool-icon', 'id' => 'toolimage_'.$toolIid),
+                    ['class' => 'tool-icon', 'id' => 'toolimage_'.$toolIid],
                     ICON_SIZE_BIG,
                     false
                 );
@@ -1142,7 +1142,7 @@ class CourseHome
             return Display::img(
                 $item['tool']['custom_image'],
                 $item['name'],
-                array('id' => 'toolimage_'.$toolIid)
+                ['id' => 'toolimage_'.$toolIid]
             );
         }
 
@@ -1156,14 +1156,14 @@ class CourseHome
             return Display::img(
                 self::getCustomWebIconPath().$customIcon,
                 $item['name'],
-                array('id' => 'toolimage_'.$toolIid)
+                ['id' => 'toolimage_'.$toolIid]
             );
         }
 
         return Display::return_icon(
             $image,
             $item['name'],
-            array('id' => 'toolimage_'.$toolIid),
+            ['id' => 'toolimage_'.$toolIid],
             ICON_SIZE_BIG,
             false
         );
@@ -1209,7 +1209,7 @@ class CourseHome
                     <td>'.get_lang('GeneralCoach').': '.'<b>'.$coachInfo['complete_name'].'</b></td></tr>';
         $output .= '<tr>
                         <td>'.get_lang('SessionIdentifier').': '.
-                            Display::return_icon('star.png', ' ', array('align' => 'absmiddle')).'
+                            Display::return_icon('star.png', ' ', ['align' => 'absmiddle']).'
                         </td>
                         <td>'.get_lang('Date').': '.'<b>'.$msgDate.'</b>
                         </td>
@@ -1225,7 +1225,7 @@ class CourseHome
      */
     public static function translate_tool_name(& $tool)
     {
-        static $already_translated_icons = array(
+        static $already_translated_icons = [
             'file_html.gif',
             'file_html_na.gif',
             'file_html.png',
@@ -1236,7 +1236,7 @@ class CourseHome
             'blog_na.gif',
             'external.gif',
             'external_na.gif'
-        );
+        ];
 
         $toolName = Security::remove_XSS(stripslashes($tool['name']));
 
@@ -1295,7 +1295,7 @@ class CourseHome
      */
     public static function get_navigation_items($include_admin_tools = false)
     {
-        $navigation_items = array();
+        $navigation_items = [];
         $course_id = api_get_course_int_id();
         $courseInfo = api_get_course_info();
         $sessionId = api_get_session_id();
@@ -1399,7 +1399,7 @@ class CourseHome
                 $item = Display::return_icon(
                     substr($navigation_item['image'], 0, -3)."png",
                     $navigation_item['name'],
-                    array('class' => 'tool-img'),
+                    ['class' => 'tool-img'],
                     ICON_SIZE_SMALL
                 );
             } else {
@@ -1408,7 +1408,7 @@ class CourseHome
                     Display::return_icon(
                         substr($navigation_item['image'], 0, -3)."png",
                         $navigation_item['name'],
-                        array('class' => 'tool-img'),
+                        ['class' => 'tool-img'],
                         ICON_SIZE_SMALL
                     );
             }
@@ -1541,7 +1541,7 @@ class CourseHome
         if (empty($courseId)) {
             // We shouldn't get here, but for some reason api_get_course_int_id()
             // doesn't seem to get the course from the context, sometimes
-            return array();
+            return [];
         }
 
         $table = Database::get_course_table(TABLE_TOOL_LIST);

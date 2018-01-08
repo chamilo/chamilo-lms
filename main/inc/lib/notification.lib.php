@@ -10,7 +10,7 @@
 class Notification extends Model
 {
     public $table;
-    public $columns = array(
+    public $columns = [
         'id',
         'dest_user_id',
         'dest_mail',
@@ -19,7 +19,7 @@ class Notification extends Model
         'send_freq',
         'created_at',
         'sent_at'
-    );
+    ];
 
     //Max length of the notification.content field
     public $max_content_length = 254;
@@ -111,7 +111,7 @@ class Notification extends Model
     {
         $notifications = $this->find(
             'all',
-            array('where' => array('sent_at IS NULL AND send_freq = ?' => $frequency))
+            ['where' => ['sent_at IS NULL AND send_freq = ?' => $frequency]]
         );
 
         if (!empty($notifications)) {
@@ -149,7 +149,7 @@ class Notification extends Model
     {
         $hook = HookNotificationTitle::create();
         if (!empty($hook)) {
-            $hook->setEventData(array('title' => $title));
+            $hook->setEventData(['title' => $title]);
             $data = $hook->notifyNotificationTitle(HOOK_EVENT_TYPE_PRE);
             if (isset($data['title'])) {
                 $title = $data['title'];
@@ -200,7 +200,7 @@ class Notification extends Model
         }
 
         if (!empty($hook)) {
-            $hook->setEventData(array('title' => $newTitle));
+            $hook->setEventData(['title' => $newTitle]);
             $data = $hook->notifyNotificationTitle(HOOK_EVENT_TYPE_POST);
             if (isset($data['title'])) {
                 $newTitle = $data['title'];
@@ -304,12 +304,12 @@ class Notification extends Model
                         $extraHeaders = [];
                         $noReply = api_get_setting('noreply_email_address');
                         if (empty($noReply) && isset($senderInfo['email'])) {
-                            $extraHeaders = array(
-                                'reply_to' => array(
+                            $extraHeaders = [
+                                'reply_to' => [
                                     'name' => $senderInfo['complete_name'],
                                     'mail' => $senderInfo['email']
-                                )
-                            );
+                                ]
+                            ];
                         }
 
                         if (!empty($userInfo['email'])) {
@@ -331,14 +331,14 @@ class Notification extends Model
 
                 // Saving the notification to be sent some day.
                 $content = cut($content, $this->max_content_length);
-                $params = array(
+                $params = [
                     'sent_at' => $sendDate,
                     'dest_user_id' => $user_id,
                     'dest_mail' => $userInfo['email'],
                     'title' => $title,
                     'content' => $content,
                     'send_freq' => $userSetting
-                );
+                ];
 
                 $this->save($params);
             }
@@ -361,7 +361,7 @@ class Notification extends Model
     {
         $hook = HookNotificationContent::create();
         if (!empty($hook)) {
-            $hook->setEventData(array('content' => $content));
+            $hook->setEventData(['content' => $content]);
             $data = $hook->notifyNotificationContent(HOOK_EVENT_TYPE_PRE);
             if (isset($data['content'])) {
                 $content = $data['content'];
@@ -468,7 +468,7 @@ class Notification extends Model
             ).'</i>';
 
         if (!empty($hook)) {
-            $hook->setEventData(array('content' => $content));
+            $hook->setEventData(['content' => $content]);
             $data = $hook->notifyNotificationContent(HOOK_EVENT_TYPE_POST);
             if (isset($data['content'])) {
                 $content = $data['content'];

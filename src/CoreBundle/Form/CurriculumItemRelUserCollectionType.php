@@ -21,17 +21,17 @@ class CurriculumItemRelUserCollectionType extends AbstractType
         $builder->add(
             'userItems',
             'collection',
-            array(
+            [
                 'type' => new CurriculumItemRelUserType($this->itemId),
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
                 'prototype' => true,
                 'prototype_name' => '__name__',
-                'options' => array(// options on the rendered CurriculumItemRelUserType
-                ),
+                'options' => [// options on the rendered CurriculumItemRelUserType
+                ],
                 'label' => ' ',
-            )
+            ]
         );
 
         // Save button per item
@@ -46,9 +46,9 @@ class CurriculumItemRelUserCollectionType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => 'Chamilo\CoreBundle\Entity\CurriculumItem',
-            )
+            ]
         );
     }
 

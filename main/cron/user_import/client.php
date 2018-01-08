@@ -25,9 +25,9 @@ $client = new nusoap_client(api_get_path(WEB_CODE_PATH).'cron/user_import/servic
 // call import_user method
 $response = $client->call(
     'import_users',
-    array(
+    [
         'filepath' => api_get_path(SYS_UPLOAD_PATH)."users_import.csv",
         'security_key' => api_get_configuration_value('security_key'),
-    )
+    ]
 );
 echo $response;

@@ -47,7 +47,7 @@ class OpenofficeText extends OpenofficeDocument
      * @param    array    The files that will compose the generated learning path. Unused so far.
      * @return    boolean    False if file does not exit. Nothing otherwise.
      */
-    public function make_lp($files = array())
+    public function make_lp($files = [])
     {
         $_course = api_get_course_info();
         // We get a content where ||page_break|| indicates where the page is broken.
@@ -147,7 +147,6 @@ class OpenofficeText extends OpenofficeDocument
                 $dir_content = $content;
             }
             $items_to_create[$matches[1][$i]] = $dir_content;
-
         }
 
         $i = 0;
@@ -187,7 +186,7 @@ class OpenofficeText extends OpenofficeDocument
 
                 $infos = pathinfo($this->filepath);
                 $slide_name = strip_tags(nl2br($item_title));
-                $slide_name = str_replace(array("\r\n", "\r", "\n"), '', $slide_name);
+                $slide_name = str_replace(["\r\n", "\r", "\n"], '', $slide_name);
                 $slide_name = html_entity_decode($slide_name);
                 $previous = learnpath::add_item(
                     0,
@@ -288,12 +287,12 @@ class OpenofficeText extends OpenofficeDocument
                         $ic_slide->addCourseId($courseid);
                         $ic_slide->addToolId(TOOL_LEARNPATH);
                         $lp_id = $this->lp_id;
-                        $xapian_data = array(
+                        $xapian_data = [
                             SE_COURSE_ID => $courseid,
                             SE_TOOL_ID => TOOL_LEARNPATH,
-                            SE_DATA => array('lp_id' => $lp_id, 'lp_item' => $previous, 'document_id' => $document_id),
+                            SE_DATA => ['lp_id' => $lp_id, 'lp_item' => $previous, 'document_id' => $document_id],
                             SE_USER => (int)api_get_user_id(),
-                        );
+                        ];
                         $ic_slide->xapian_data = serialize($xapian_data);
                         $di->addChunk($ic_slide);
                         // Index and return search engine document id.
@@ -368,7 +367,6 @@ class OpenofficeText extends OpenofficeDocument
                     $picture_resized = str_ireplace('<img', '<img width="'.$new_width.'" ', $images[0][$key]);
                     $content = str_replace($images[0][$key], $picture_resized, $content);
                 }
-
             } elseif ($img_width > $max_width - 10) {
                 $picture_resized = str_ireplace('width='.$img_width, 'width="'.($max_width - 10).'"', $images[0][$key]);
                 $content = str_replace($images[0][$key], $picture_resized, $content);

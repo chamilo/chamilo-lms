@@ -57,14 +57,14 @@ $subscriptionSettings = learnpath::getSubscriptionSettings();
 /* Introduction section (editable by course admins) */
 $introductionSection = Display::return_introduction_section(
     TOOL_LEARNPATH,
-    array(
+    [
         'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH)
             .api_get_course_path().'/document/',
         'CreateDocumentDir' => '../..'.api_get_path(REL_COURSE_PATH)
             .api_get_course_path().'/document/',
         'BaseHref' => api_get_path(WEB_COURSE_PATH)
             .api_get_course_path().'/',
-    )
+    ]
 );
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
@@ -95,7 +95,7 @@ if ($is_allowed_to_edit) {
             Display::return_icon(
                 'new_folder.png',
                 get_lang('AddCategory'),
-                array(),
+                [],
                 ICON_SIZE_MEDIUM
             ),
             api_get_self().'?'.api_get_cidreq().'&action=add_lp_category'
@@ -132,7 +132,7 @@ if ($is_allowed_to_edit) {
             '../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH
         );
     }
-    $actions = Display::toolbarAction('actions-lp', array($actionLeft));
+    $actions = Display::toolbarAction('actions-lp', [$actionLeft]);
 }
 
 $token = Security::get_token();
@@ -143,9 +143,9 @@ $categoryTest = new CLpCategory();
 $categoryTest->setId(0);
 $categoryTest->setName(get_lang('WithOutCategory'));
 $categoryTest->setPosition(0);
-$categories = array(
+$categories = [
     $categoryTest
-);
+];
 
 if (!empty($categoriesTempList)) {
     $categories = array_merge($categories, $categoriesTempList);
@@ -323,7 +323,7 @@ foreach ($categories as $item) {
                 $my_title = Display::tag(
                     'font',
                     $name,
-                    array('class' => 'text-muted')
+                    ['class' => 'text-muted']
                 );
                 $icon_learnpath = Display::return_icon(
                     'learnpath_na.png',
@@ -338,7 +338,7 @@ foreach ($categories as $item) {
                 $my_title = Display::tag(
                     'font',
                     $name,
-                    array('class' => 'text-muted')
+                    ['class' => 'text-muted']
                 );
                 $icon_learnpath = Display::return_icon(
                     'learnpath_na.png',
@@ -857,7 +857,6 @@ foreach ($categories as $item) {
             $lpIsShown = true;
             // Counter for number of elements treated
             $current++;
-
         } // end foreach ($flat_list)
     }
 

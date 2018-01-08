@@ -86,43 +86,43 @@ $(function() {
 </script>";
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
-    );
+    ];
 }
 
-$htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'));
-$interbreadcrumb[] = array(
+$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
+$interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
     'name' => get_lang('LearningPaths'),
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
     'name' => $learnPath->get_name(),
-);
+];
 
 switch ($type) {
     case 'dir':
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id().'&'.api_get_cidreq(),
             'name' => get_lang('NewStep'),
-        );
-        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewChapter'));
+        ];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewChapter')];
         break;
     case 'document':
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id().'&'.api_get_cidreq(),
             'name' => get_lang('NewStep'),
-        );
+        ];
         break;
     default:
-        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewStep'));
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewStep')];
         break;
 }
 
 if ($action == 'add_item' && $type == 'document') {
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewDocumentCreated'));
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewDocumentCreated')];
 }
 
 // Theme calls.
@@ -226,7 +226,7 @@ echo '</div>';
 echo '<div id="doc_form" class="col-md-8">';
 
 //@todo use session flash messages
-if (in_array($message, array('ItemUpdated'))) {
+if (in_array($message, ['ItemUpdated'])) {
     echo Display::return_message(get_lang($message));
 }
 

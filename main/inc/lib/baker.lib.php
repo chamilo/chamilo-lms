@@ -27,7 +27,7 @@ class PNGImageBaker
             echo 'This is not a valid PNG image';
         }
         $this->_size = strlen($this->_contents);
-        $this->_chunks = array();
+        $this->_chunks = [];
         // Skip 8 bytes of IHDR image header.
         $position = 8;
         do {

@@ -26,7 +26,7 @@ abstract class ChamiloForm
         $this->_cancelurl = $cancelurl;
         $this->_customdata = $customdata;
 
-        $attributes = array('style' => 'width: 60%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;'));
+        $attributes = ['style' => 'width: 60%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;')];
         $this->_form = new FormValidator(
             $mode.'_instance',
             'post',
@@ -36,8 +36,8 @@ abstract class ChamiloForm
         );
     }
 
-    public abstract function definition();
-    public abstract function validation($data, $files = null);
+    abstract public function definition();
+    abstract public function validation($data, $files = null);
 
     public function validate()
     {
@@ -184,7 +184,7 @@ abstract class ChamiloForm
         } elseif ($validated === null) {
             $internal_val = $cform->validate();
 
-            $files = array();
+            $files = [];
             $file_val = $this->_validate_files($files);
             if ($file_val !== true) {
                 if (!empty($file_val)) {
@@ -262,7 +262,7 @@ abstract class ChamiloForm
      */
     public function _validate_files(&$files)
     {
-        $files = array();
+        $files = [];
 
         if (empty($_FILES)) {
             // we do not need to do any checks because no files were submitted
@@ -270,7 +270,7 @@ abstract class ChamiloForm
             return true;
         }
 
-        $errors = array();
+        $errors = [];
         $mform = & $this->_form;
 
         // check the files
@@ -288,8 +288,7 @@ abstract class ChamiloForm
                         continue;
                     }
                     $errors[$elname] = $this->_upload_manager->files[$elname]['uploadlog'];
-
-                } else if (!empty($this->_upload_manager->files[$elname]['clear'])) {
+                } elseif (!empty($this->_upload_manager->files[$elname]['clear'])) {
                     $files[$elname] = $this->_upload_manager->files[$elname]['tmp_name'];
                 }
             } else {
@@ -301,7 +300,7 @@ abstract class ChamiloForm
         if ($status && 0 == count($errors)) {
             return true;
         } else {
-            $files = array();
+            $files = [];
 
             return $errors;
         }
@@ -406,7 +405,7 @@ class InstanceForm extends ChamiloForm
             'text',
             'db_host',
             $this->_plugin->get_lang('dbhost'),
-            array('id' => 'id_vdbhost')
+            ['id' => 'id_vdbhost']
         );
         $form->applyFilter('db_host', 'trim');
 
@@ -415,7 +414,7 @@ class InstanceForm extends ChamiloForm
             'text',
             'db_user',
             $this->_plugin->get_lang('dbuser'),
-            array('id' => 'id_vdbuser')
+            ['id' => 'id_vdbuser']
         );
         $form->applyFilter('db_user', 'trim');
 
@@ -424,7 +423,7 @@ class InstanceForm extends ChamiloForm
             'password',
             'db_password',
             $this->_plugin->get_lang('dbpassword'),
-            array('id' => 'id_vdbpassword')
+            ['id' => 'id_vdbpassword']
         );
 
         // Database name.
@@ -557,12 +556,12 @@ class InstanceForm extends ChamiloForm
     {
         global $plugin;
 
-        $errors = array();
+        $errors = [];
         $tablename = Database::get_main_table('vchamilo');
         $vchamilo = Database::select(
             '*',
             $tablename,
-            array('where' => array(' root_web = ? ' => array($data['root_web']))),
+            ['where' => [' root_web = ? ' => [$data['root_web']]]],
             'first'
         );
 

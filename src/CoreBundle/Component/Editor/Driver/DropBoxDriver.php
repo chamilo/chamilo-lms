@@ -30,11 +30,10 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
 
     public function allow()
     {
-
     }
 
-    public function setup() {
-
+    public function setup()
+    {
     }
 
 
@@ -95,7 +94,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
             //if (!empty($courses)) {
             $userId = $this->connector->user->getUserId();
             if (!empty($userId)) {
-                return array(
+                return [
                     'driver'     => 'DropBoxDriver',
                     'path'       => '1',
                     'alias' => 'dropbox',
@@ -103,7 +102,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
                     //'alias' => $courseInfo['code'].' personal documents',
                     //'URL' => $this->getCourseDocumentRelativeWebPath().$path,
                     'accessControl' => 'access'
-                );
+                ];
             }
             //}
         }
@@ -167,7 +166,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
     {
         $this->setConnectorFromPlugin();
         $posts = $this->connector->user->getDropBoxReceivedFiles();
-        $this->dirsCache[$path] = array();
+        $this->dirsCache[$path] = [];
 
         if (!empty($posts)) {
             foreach ($posts as $post) {
@@ -210,12 +209,12 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
         $this->setConnectorFromPlugin();
 
         $userId = $this->connector->user->getUserId();
-        $criteria = array();
+        $criteria = [];
         $criteria['uploaderId'] = $userId;
 
         if ($path != 1) {
             $criteria['filename'] = $path;
-            $criteria = array('filename' => $path);
+            $criteria = ['filename' => $path];
         } else {
             return $this->returnDirectory();
         }
@@ -226,7 +225,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
             $stat = $this->transformFileInStat($file);
             return $stat;
         }
-        return array();
+        return [];
     }
 
     /**
@@ -234,7 +233,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
      */
     private function returnDirectory()
     {
-        return array(
+        return [
             //'id' => $file->getId().$file->getCId(),
             'name' => 'Dropbox',
             //'ts' => $file->getUploadDate(),
@@ -244,7 +243,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
             'locked' => false,
             'hidden' => false,
             'dirs' => 0
-        );
+        ];
     }
 
     /**
@@ -253,7 +252,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
      */
     private function transformFileInStat(CDropboxFile $file)
     {
-        $stat = array(
+        $stat = [
             'id' => $file->getId().$file->getCId(),
             'name' => $file->getFilename(),
             'ts' => $file->getUploadDate(),
@@ -265,7 +264,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
             'width' => 100,
             'height' => 100,
             'dirs' => 0
-        );
+        ];
         return $stat;
 
         /*
@@ -292,7 +291,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
      **/
     protected function getParents($path)
     {
-        $parents = array();
+        $parents = [];
         while ($path) {
             if ($file = $this->stat($path)) {
                 array_unshift($parents, $path);
@@ -333,7 +332,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
      **/
     protected function doSearch($path, $q, $mimes)
     {
-        return array();
+        return [];
     }
 
     /*********************** paths/urls *************************/

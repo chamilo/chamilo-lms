@@ -7,18 +7,15 @@
 
 namespace Chamilo\ThemeBundle\Model;
 
-
 class NotificationModel implements NotificationInterface
 {
-
-
     protected $type;
 
     protected $message;
 
     protected $icon;
 
-    function __construct($message = null, $type = 'info', $icon = 'fa fa-warning')
+    public function __construct($message = null, $type = 'info', $icon = 'fa fa-warning')
     {
         $this->message = $message;
         $this->type    = $type;
@@ -89,5 +86,4 @@ class NotificationModel implements NotificationInterface
     {
         return $this->message;
     }
-
 }

@@ -21,16 +21,16 @@ class SocialSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'allow_social_tool' => 'true',
                     'allow_students_to_create_groups_in_social' => 'false',
 
-                )
+                ]
             );
-        $allowedTypes = array(
-            'allow_social_tool' => array('string'),
-            'allow_students_to_create_groups_in_social' => array('string'),
-        );
+        $allowedTypes = [
+            'allow_social_tool' => ['string'],
+            'allow_students_to_create_groups_in_social' => ['string'],
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 

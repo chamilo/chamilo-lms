@@ -77,7 +77,7 @@ class Blog
                     blogs_rel_user.c_id = $course_id AND
                     blogs_rel_user.blog_id = '".(int) $blog_id."'";
         $result = Database::query($sql);
-        $blog_members = array();
+        $blog_members = [];
         while ($user = Database::fetch_array($result)) {
             $blog_members[$user['user_id']] = api_get_person_name(
                 $user['firstname'],
@@ -934,7 +934,7 @@ class Blog
     public static function getSearchResults($blog_id, $query_string)
     {
         $query_string_parts = explode(' ', $query_string);
-        $query_string = array();
+        $query_string = [];
         foreach ($query_string_parts as $query_part) {
             $query_part = Database::escape_string($query_part);
             $query_string[] = " full_text LIKE '%".$query_part."%' OR title LIKE '%".$query_part."%' ";
@@ -1014,11 +1014,9 @@ class Blog
                 ];
 
                 $listArticle[] = $article;
-
             }
 
             return $listArticle;
-
         } else {
             if ($filter == '1=1') {
                 return get_lang('NoArticles');
@@ -1404,14 +1402,14 @@ class Blog
                 'task_id' => $taskId
             ]),
             null,
-            array('enctype' => 'multipart/form-data')
+            ['enctype' => 'multipart/form-data']
         );
 
         $header = $taskId ? get_lang('ExecuteThisTask') : get_lang('AddNewComment');
         $form->addHeader($header);
         $form->addText('title', get_lang('Title'));
 
-        $config = array();
+        $config = [];
         if (!api_is_allowed_to_edit()) {
             $config['ToolbarSet'] = 'ProjectComment';
         } else {
@@ -1535,12 +1533,12 @@ class Blog
             'post',
             api_get_path(WEB_CODE_PATH)."blog/blog.php?action=new_post&blog_id=".$blog_id."&".api_get_cidreq(),
             null,
-            array('enctype' => 'multipart/form-data')
+            ['enctype' => 'multipart/form-data']
         );
         $form->addHidden('post_title_edited', 'false');
         $form->addHeader(get_lang('NewPost'));
         $form->addText('title', get_lang('Title'));
-        $config = array();
+        $config = [];
         $config['ToolbarSet'] = !api_is_allowed_to_edit() ? 'ProjectStudent' : 'Project';
         $form->addHtmlEditor('full_text', get_lang('Content'), false, false, $config);
         $form->addFile('user_upload', get_lang('AddAnAttachment'));
@@ -1777,7 +1775,7 @@ class Blog
             $return .= '<td width="240">'.Display::tag(
                 'span',
                 api_get_person_name($assignment['firstname'], $assignment['lastname']),
-                array('title' => $username)
+                ['title' => $username]
             ).'</td>';
             $return .= '<td>'.stripslashes($assignment['title']).'</td>';
             $return .= '<td>'.stripslashes($assignment['description']).'</td>';
@@ -1809,7 +1807,7 @@ class Blog
     {
         $blog_id = intval($blog_id);
         // Init
-        $colors = array(
+        $colors = [
             'FFFFFF',
             'FFFF99',
             'FFCC99',
@@ -1825,7 +1823,7 @@ class Blog
             '0033FF',
             '003366',
             '000000',
-        );
+        ];
 
         // form
         $return = '<form name="add_task" method="post" action="blog.php?action=manage_tasks&blog_id='.$blog_id.'">';
@@ -1923,7 +1921,7 @@ class Blog
         $blog_id = intval($blog_id);
         $task_id = intval($task_id);
 
-        $colors = array(
+        $colors = [
             'FFFFFF',
             'FFFF99',
             'FFCC99',
@@ -1939,7 +1937,7 @@ class Blog
             '0033FF',
             '003366',
             '000000',
-        );
+        ];
 
         $sql = "SELECT blog_id, task_id, title, description, color FROM $tbl_blogs_tasks 
                 WHERE c_id = $course_id AND task_id = $task_id";
@@ -1966,7 +1964,7 @@ class Blog
                 WHERE c_id = $course_id AND task_id = $task_id";
         $result = Database::query($sql);
 
-        $arrPermissions = array();
+        $arrPermissions = [];
 
         while ($row = Database::fetch_array($result)) {
             $arrPermissions[] = $row['action'];
@@ -2066,7 +2064,7 @@ class Blog
                 WHERE blogs_rel_user.c_id = $course_id AND blogs_rel_user.blog_id = $blog_id";
         $result = Database::query($sql);
 
-        $options = array();
+        $options = [];
         while ($user = Database::fetch_array($result)) {
             $options[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
         }
@@ -2085,7 +2083,7 @@ class Blog
                 ORDER BY system_task, title";
         $result = Database::query($sql);
 
-        $taskOptions = array();
+        $taskOptions = [];
         while ($task = Database::fetch_array($result)) {
             $taskOptions[$task['task_id']] = stripslashes($task['title']);
         }
@@ -2311,7 +2309,7 @@ class Blog
                     Display::tag(
                         'span',
                         api_get_person_name($blog_post['firstname'], $blog_post['lastname']),
-                        array('title' => $username)
+                        ['title' => $username]
                     )
                 ).'<br />';
         }
@@ -2378,29 +2376,29 @@ class Blog
                 WHERE blogs_rel_user.c_id = $course_id AND blogs_rel_user.blog_id = $blog_id";
         $result = Database::query($sql);
 
-        $blog_member_ids = array();
+        $blog_member_ids = [];
         while ($user = Database::fetch_array($result)) {
             $blog_member_ids[] = $user['user_id'];
         }
 
         // Set table headers
-        $column_header[] = array('', false, '');
+        $column_header[] = ['', false, ''];
         if ($is_western_name_order) {
-            $column_header[] = array(get_lang('FirstName'), true, '');
-            $column_header[] = array(get_lang('LastName'), true, '');
+            $column_header[] = [get_lang('FirstName'), true, ''];
+            $column_header[] = [get_lang('LastName'), true, ''];
         } else {
-            $column_header[] = array(get_lang('LastName'), true, '');
-            $column_header[] = array(get_lang('FirstName'), true, '');
+            $column_header[] = [get_lang('LastName'), true, ''];
+            $column_header[] = [get_lang('FirstName'), true, ''];
         }
-        $column_header[] = array(get_lang('Email'), false, '');
-        $column_header[] = array(get_lang('Register'), false, '');
+        $column_header[] = [get_lang('Email'), false, ''];
+        $column_header[] = [get_lang('Register'), false, ''];
 
         $student_list = CourseManager:: get_student_list_from_course_code(
             $currentCourse,
             false,
             $session_id
         );
-        $user_data = array();
+        $user_data = [];
 
         // Add users that are not in this blog to the list.
         foreach ($student_list as $key => $user) {
@@ -2409,7 +2407,7 @@ class Blog
             }
             if (!in_array($user['user_id'], $blog_member_ids)) {
                 $a_infosUser = api_get_user_info($user['user_id']);
-                $row = array();
+                $row = [];
                 $row[] = '<input type="checkbox" name="user[]" value="'.$a_infosUser['user_id'].'" '.((isset($_GET['selectall']) && $_GET['selectall'] == "subscribe") ? ' checked="checked" ' : '').'/>';
                 $username = api_htmlentities(sprintf(get_lang('LoginX'), $a_infosUser["username"]), ENT_QUOTES);
                 if ($is_western_name_order) {
@@ -2417,13 +2415,13 @@ class Blog
                     $row[] = Display::tag(
                         'span',
                         $a_infosUser["lastname"],
-                        array('title' => $username)
+                        ['title' => $username]
                     );
                 } else {
                     $row[] = Display::tag(
                         'span',
                         $a_infosUser["lastname"],
-                        array('title' => $username)
+                        ['title' => $username]
                     );
                     $row[] = $a_infosUser["firstname"];
                 }
@@ -2490,17 +2488,17 @@ class Blog
 
         $properties["width"] = "100%";
         //table column titles
-        $column_header[] = array('', false, '');
+        $column_header[] = ['', false, ''];
         if ($is_western_name_order) {
-            $column_header[] = array(get_lang('FirstName'), true, '');
-            $column_header[] = array(get_lang('LastName'), true, '');
+            $column_header[] = [get_lang('FirstName'), true, ''];
+            $column_header[] = [get_lang('LastName'), true, ''];
         } else {
-            $column_header[] = array(get_lang('LastName'), true, '');
-            $column_header[] = array(get_lang('FirstName'), true, '');
+            $column_header[] = [get_lang('LastName'), true, ''];
+            $column_header[] = [get_lang('FirstName'), true, ''];
         }
-        $column_header[] = array(get_lang('Email'), false, '');
-        $column_header[] = array(get_lang('TaskManager'), true, '');
-        $column_header[] = array(get_lang('UnRegister'), false, '');
+        $column_header[] = [get_lang('Email'), false, ''];
+        $column_header[] = [get_lang('TaskManager'), true, ''];
+        $column_header[] = [get_lang('UnRegister'), false, ''];
 
         $course_id = api_get_course_int_id();
 
@@ -2513,10 +2511,10 @@ class Blog
             return false;
         }
 
-        $user_data = array();
+        $user_data = [];
 
         while ($myrow = Database::fetch_array($sql_result)) {
-            $row = array();
+            $row = [];
             $row[] = '<input type="checkbox" name="user[]" value="'.$myrow['user_id'].'" '.((isset($_GET['selectall']) && $_GET['selectall'] == "unsubscribe") ? ' checked="checked" ' : '').'/>';
             $username = api_htmlentities(sprintf(get_lang('LoginX'), $myrow["username"]), ENT_QUOTES);
             if ($is_western_name_order) {
@@ -2524,13 +2522,13 @@ class Blog
                 $row[] = Display::tag(
                     'span',
                     $myrow["lastname"],
-                    array('title' => $username)
+                    ['title' => $username]
                 );
             } else {
                 $row[] = Display::tag(
                     'span',
                     $myrow["lastname"],
-                    array('title' => $username)
+                    ['title' => $username]
                 );
                 $row[] = $myrow["firstname"];
             }
@@ -2631,8 +2629,8 @@ class Blog
         global $MonthsLong;
         $html = null;
 
-        $posts = array();
-        $tasks = array();
+        $posts = [];
+        $tasks = [];
 
         $tbl_users = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
@@ -2646,7 +2644,7 @@ class Blog
         $year = intval($year);
 
         //Handle leap year
-        $numberofdays = array(0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+        $numberofdays = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
         if (($year % 400 == 0) or ($year % 4 == 0 and $year % 100 <> 0)) {
             $numberofdays[2] = 29;
@@ -2806,10 +2804,10 @@ class Blog
         $form->addElement('hidden', 'new_blog_submit', 'true');
         $form->addButtonSave(get_lang('SaveProject'));
 
-        $defaults = array(
+        $defaults = [
             'blog_name' => isset($_POST['blog_name']) ? Security::remove_XSS($_POST['blog_name']) : null,
             'blog_subtitle' => isset($_POST['blog_subtitle']) ? Security::remove_XSS($_POST['blog_subtitle']) : null,
-        );
+        ];
         $form->setDefaults($defaults);
         $form->display();
     }
@@ -2849,7 +2847,7 @@ class Blog
         $form->addElement('hidden', 'blog_id', $blog['blog_id']);
         $form->addButtonSave(get_lang('Save'));
 
-        $defaults = array();
+        $defaults = [];
         $defaults['blog_name'] = $blog['blog_name'];
         $defaults['blog_subtitle'] = $blog['blog_subtitle'];
         $form->setDefaults($defaults);
@@ -2874,15 +2872,15 @@ class Blog
                 FROM $tbl_blogs WHERE c_id = $course_id
                 ORDER BY date_creation DESC";
         $result = Database::query($sql);
-        $list_info = array();
+        $list_info = [];
         if (Database::num_rows($result)) {
             while ($row_project = Database::fetch_row($result)) {
                 $list_info[] = $row_project;
             }
         }
 
-        $list_content_blog = array();
-        $list_body_blog = array();
+        $list_content_blog = [];
+        $list_body_blog = [];
 
         if (is_array($list_info)) {
             foreach ($list_info as $key => $info_log) {
@@ -2918,7 +2916,7 @@ class Blog
 
                 $list_body_blog[] = $my_image;
                 $list_content_blog[] = $list_body_blog;
-                $list_body_blog = array();
+                $list_body_blog = [];
             }
 
             $table = new SortableTableFromArrayConfig(
@@ -2950,14 +2948,14 @@ class Blog
         $blog_id = intval($blog_id);
         $comment_id = intval($comment_id);
         $post_id = intval($post_id);
-        $row = array();
+        $row = [];
         $where = '';
-        if (!empty ($post_id) && is_numeric($post_id)) {
+        if (!empty($post_id) && is_numeric($post_id)) {
             $where .= " AND post_id = $post_id ";
         }
 
-        if (!empty ($comment_id) && is_numeric($comment_id)) {
-            if (!empty ($post_id)) {
+        if (!empty($comment_id) && is_numeric($comment_id)) {
+            if (!empty($post_id)) {
                 $where .= ' AND ';
             }
             $where .= " comment_id = $comment_id ";
@@ -3002,12 +3000,12 @@ class Blog
         $where = null;
 
         // delete files in DB
-        if (!empty ($post_id) && is_numeric($post_id)) {
+        if (!empty($post_id) && is_numeric($post_id)) {
             $where .= " AND post_id = $post_id ";
         }
 
-        if (!empty ($comment_id) && is_numeric($comment_id)) {
-            if (!empty ($post_id)) {
+        if (!empty($comment_id) && is_numeric($comment_id)) {
+            if (!empty($post_id)) {
                 $where .= ' AND ';
             }
             $where .= " comment_id = $comment_id ";

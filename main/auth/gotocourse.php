@@ -26,7 +26,7 @@ if (isset($_GET['firstpage'])) {
 
     $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
     $action = str_replace('&amp;', '&', $action);
-    $form = new FormValidator('formLogin', 'post', $action, null, array('class'=>'form-stacked'));
+    $form = new FormValidator('formLogin', 'post', $action, null, ['class'=>'form-stacked']);
     $params = [
         'placeholder' => get_lang('UserName')
     ];
@@ -57,7 +57,7 @@ if (isset($_GET['firstpage'])) {
     // see same text in main_api.lib.php function api_not_allowed
     if (api_is_cas_activated()) {
         $msg .= Display::return_message(sprintf(get_lang('YouHaveAnInstitutionalAccount'), api_get_setting("Institution")), '', false);
-        $msg .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_id())."'>".getCASLogoHTML()." ".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", array('align'=>'center'));
+        $msg .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_id())."'>".getCASLogoHTML()." ".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", ['align'=>'center']);
         $msg .= Display::return_message(get_lang('YouDontHaveAnInstitutionAccount'));
         $msg .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
         $msg .= "<div style='display:none;'>";
@@ -73,7 +73,6 @@ if (isset($_GET['firstpage'])) {
 
     $tpl->assign('content', '<h4>'.get_lang('LoginToGoToThisCourse').'</h4>'.$msg);
     $tpl->display_one_col_template();
-
 } else {
     api_delete_firstpage_parameter();
     header('Location: '.api_get_path(WEB_PATH).'index.php');

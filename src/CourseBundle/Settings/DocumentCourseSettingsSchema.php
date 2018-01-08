@@ -19,14 +19,14 @@ class DocumentCourseSettingsSchema extends AbstractSettingsSchema
     public function buildSettings(SettingsBuilderInterface $builder)
     {
         $builder
-            ->setDefaults(array(
+            ->setDefaults([
                 'enabled' => '',
                 'documents_default_visibility' => '',
-            ))
+            ])
         ;
         $allowedTypes = [
-            'enabled' => array('string'),
-            'documents_default_visibility' => array('string'),
+            'enabled' => ['string'],
+            'documents_default_visibility' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }

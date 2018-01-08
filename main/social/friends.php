@@ -66,8 +66,8 @@ function hide_icon_delete(element_html)  {
 
 </script>';
 
-$interbreadcrumb[] = array('url' => 'profile.php', 'name' => get_lang('SocialNetwork'));
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Friends'));
+$interbreadcrumb[] = ['url' => 'profile.php', 'name' => get_lang('SocialNetwork')];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Friends')];
 
 //Block Social Menu
 $social_menu_block = SocialManager::show_social_menu('friends');

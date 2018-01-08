@@ -20,16 +20,16 @@ if (!api_is_allowed_to_edit(null, true)) {
 }
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
-    );
+    ];
 }
 // The breadcrumbs.
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq(),
     'name' => get_lang('Exercises')
-);
+];
 
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
@@ -88,7 +88,7 @@ $form = new FormValidator(
     'post',
     api_get_self()."?".api_get_cidreq(),
     null,
-    array('enctype' => 'multipart/form-data')
+    ['enctype' => 'multipart/form-data']
 );
 $form->addElement('header', $nameTools);
 $form->addElement('hidden', 'uploadPath');

@@ -34,29 +34,29 @@ $result = Database::query($sql);
 
 if (Database::num_rows($result)) {
     $files = Database::store_result($result);
-    $rows = array();
+    $rows = [];
     foreach ($files as $file) {
         //Check if I have this file:
         $sql = "SELECT * FROM $person_tbl
                 WHERE c_id = $course_id AND user_id = $user_id AND file_id = {$file['id']}";
         $result_person = Database::query($sql);
         if (Database::num_rows($result_person) == 0) {
-            $rows[] = array(
+            $rows[] = [
                 $file['filename'],
                 api_convert_and_format_date($file['upload_date']),
                 Display::url(
                     get_lang('Recover'),
                     api_get_self().'?recover_id='.$file['id'],
-                    array('class' => 'btn btn-default')
+                    ['class' => 'btn btn-default']
                 )
-            );
+            ];
         }
     }
-    $headers = array(
+    $headers = [
         get_lang('FileName'),
         get_lang('UploadedDate'),
         get_lang('Action')
-    );
+    ];
     echo Display::table($headers, $rows);
 }
 Display::display_footer();

@@ -33,7 +33,7 @@ class SocialManager extends UserManager
                 WHERE id<>6 
                 ORDER BY id ASC';
         $result = Database::query($sql);
-        $friend_relation_list = array();
+        $friend_relation_list = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $friend_relation_list[] = $row;
         }
@@ -139,7 +139,7 @@ class SocialManager extends UserManager
         $search_name = null,
         $load_extra_info = true
     ) {
-        $list_ids_friends = array();
+        $list_ids_friends = [];
         $tbl_my_friend = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $tbl_my_user = Database::get_main_table(TABLE_MAIN_USER);
         $sql = 'SELECT friend_user_id FROM '.$tbl_my_friend.'
@@ -166,14 +166,14 @@ class SocialManager extends UserManager
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             if ($load_extra_info) {
                 $my_user_info = api_get_user_info($row['friend_user_id']);
-                $list_ids_friends[] = array(
+                $list_ids_friends[] = [
                     'friend_user_id' => $row['friend_user_id'],
                     'firstName' => $my_user_info['firstName'],
                     'lastName' => $my_user_info['lastName'],
                     'username' => $my_user_info['username'],
                     'image' => $my_user_info['avatar'],
                     'user_info' => $my_user_info,
-                );
+                ];
             } else {
                 $list_ids_friends[] = $row;
             }
@@ -193,7 +193,7 @@ class SocialManager extends UserManager
     public static function get_list_web_path_user_invitation_by_user_id($user_id)
     {
         $list_ids = self::get_list_invitation_of_friends_by_user_id($user_id);
-        $list = array();
+        $list = [];
         foreach ($list_ids as $values_ids) {
             $list[] = UserManager::get_user_picture_path_by_id(
                 $values_ids['user_sender_id'],
@@ -225,7 +225,7 @@ class SocialManager extends UserManager
         $friend_id = intval($friend_id);
 
         //Just in case we replace the and \n and \n\r while saving in the DB
-        $message_content = str_replace(array("\n", "\n\r"), '<br />', $message_content);
+        $message_content = str_replace(["\n", "\n\r"], '<br />', $message_content);
 
         $clean_message_content = Database::escape_string($message_content);
         $now = api_get_utc_datetime();
@@ -257,7 +257,7 @@ class SocialManager extends UserManager
             $notification->saveNotification(
                 $messageId,
                 Notification::NOTIFICATION_TYPE_INVITATION,
-                array($friend_id),
+                [$friend_id],
                 $message_title,
                 $message_content,
                 $senderInfo
@@ -382,7 +382,7 @@ class SocialManager extends UserManager
                     user_receiver_id = '.intval($userId).' AND
                     msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
-        $list = array();
+        $list = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $list[] = $row;
         }
@@ -409,7 +409,7 @@ class SocialManager extends UserManager
                     user_sender_id = '.intval($userId).' AND
                     msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
-        $list = array();
+        $list = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $list[$row['user_receiver_id']] = $row;
         }
@@ -545,9 +545,9 @@ class SocialManager extends UserManager
                     $iconRss = '';
                     if (!empty($feed)) {
                         $iconRss = Display::url(
-                            Display::return_icon('social_rss.png', '', array(), 22),
+                            Display::return_icon('social_rss.png', '', [], 22),
                             Security::remove_XSS($feed['rssfeeds']),
-                            array('target' => '_blank')
+                            ['target' => '_blank']
                         );
                     }
 
@@ -652,19 +652,19 @@ class SocialManager extends UserManager
         if (api_get_setting('course_images_in_courses_list') === 'true') {
             if (file_exists($course_path.'/course-pic85x85.png')) {
                 $image = $my_course['course_info']['course_image'];
-                $imageCourse = Display::img($image, $course_title, array('class'=>'img-course'));
+                $imageCourse = Display::img($image, $course_title, ['class'=>'img-course']);
             } else {
                 $imageCourse = Display::return_icon(
                     'session_default_small.png',
                     $course_title,
-                    array('class' => 'img-course')
+                    ['class' => 'img-course']
                 );
             }
         } else {
             $imageCourse = Display::return_icon(
                 'course.png',
                 get_lang('Course'),
-                array('class' => 'img-default')
+                ['class' => 'img-default']
             );
         }
 
@@ -698,7 +698,7 @@ class SocialManager extends UserManager
             $sessioncoach = Database::store_result($rs);
             $sessioncoach = $sessioncoach[0];
 
-            $session = array();
+            $session = [];
             $session['title'] = $my_course['session_name'];
             if ($my_course['access_start_date'] == '0000-00-00') {
                 $session['dates'] = get_lang('WithoutTimeLimits');
@@ -716,12 +716,12 @@ class SocialManager extends UserManager
         }
 
         $my_course['id_session'] = isset($my_course['id_session']) ? $my_course['id_session'] : 0;
-        $output = array(
+        $output = [
             $my_course['user_course_cat'],
             $result,
             $my_course['id_session'],
             $session
-        );
+        ];
 
         return $output;
     }
@@ -750,7 +750,7 @@ class SocialManager extends UserManager
             $user_id = api_get_user_id();
         }
 
-        $show_groups = array(
+        $show_groups = [
             'groups',
             'group_messages',
             'messages_list',
@@ -761,7 +761,7 @@ class SocialManager extends UserManager
             'invite_friends',
             'waiting_list',
             'browse_groups',
-        );
+        ];
 
         $template = new Template(null, false, false, false, false, false);
 
@@ -843,7 +843,7 @@ class SocialManager extends UserManager
         }
 
         $usergroup = new UserGroup();
-        $show_groups = array(
+        $show_groups = [
             'groups',
             'group_messages',
             'messages_list',
@@ -854,7 +854,7 @@ class SocialManager extends UserManager
             'invite_friends',
             'waiting_list',
             'browse_groups',
-        );
+        ];
 
         // get count unread message and total invitations
         $count_unread_message = MessageManager::getNumberOfMessages(true);
@@ -883,7 +883,7 @@ class SocialManager extends UserManager
         $active = null;
         if (!in_array(
             $show,
-            array('shared_profile', 'groups', 'group_edit', 'member_list', 'waiting_list', 'invite_friends')
+            ['shared_profile', 'groups', 'group_edit', 'member_list', 'waiting_list', 'invite_friends']
         )) {
             $links = '<ul class="nav nav-pills nav-stacked">';
             $active = $show == 'home' ? 'active' : null;
@@ -1094,12 +1094,12 @@ class SocialManager extends UserManager
 
             if ($show_full_profile && $user_id == intval(api_get_user_id())) {
                 $personal_course_list = UserManager::get_personal_session_course_list($user_id);
-                $course_list_code = array();
+                $course_list_code = [];
                 $i = 1;
                 if (is_array($personal_course_list)) {
                     foreach ($personal_course_list as $my_course) {
                         if ($i <= 10) {
-                            $course_list_code[] = array('code' => $my_course['code']);
+                            $course_list_code[] = ['code' => $my_course['code']];
                         } else {
                             break;
                         }
@@ -1111,7 +1111,7 @@ class SocialManager extends UserManager
 
                 // Announcements
                 $my_announcement_by_user_id = intval($user_id);
-                $announcements = array();
+                $announcements = [];
                 foreach ($course_list_code as $course) {
                     $course_info = api_get_course_info($course['code']);
                     if (!empty($course_info)) {
@@ -1152,7 +1152,7 @@ class SocialManager extends UserManager
                 Display::return_icon(
                     'delete.png',
                     get_lang('Unsubscribe'),
-                    array(),
+                    [],
                     ICON_SIZE_TINY
                 ).get_lang('Unsubscribe'),
                 $url
@@ -1229,7 +1229,6 @@ class SocialManager extends UserManager
                             <div class="items-user-status">'.$status_icon_chat.' '.$user_rol.'</div>
                         </div>
                       </div>';
-
         }
 
         return $html;
@@ -1255,7 +1254,7 @@ class SocialManager extends UserManager
             $userInfo = api_get_user_info($user_id);
             $alt = $userInfo['complete_name'].($currentUserId == $user_id ? '&nbsp;('.get_lang('Me').')' : '');
             $status = get_status_from_code($user_object->status);
-            $interbreadcrumb[] = array('url' => 'whoisonline.php', 'name' => get_lang('UsersOnLineList'));
+            $interbreadcrumb[] = ['url' => 'whoisonline.php', 'name' => get_lang('UsersOnLineList')];
 
             $html .= '<div class ="thumbnail">';
             $fullurl = $userInfo['avatar'];
@@ -1360,7 +1359,7 @@ class SocialManager extends UserManager
         $content = '';
         switch ($place) {
             case SOCIAL_CENTER_PLUGIN:
-                $social_plugins = array(1, 2);
+                $social_plugins = [1, 2];
                 if (is_array($social_plugins) && count($social_plugins) > 0) {
                     $content .= '<div id="social-plugins">';
                     foreach ($social_plugins as $plugin) {
@@ -1402,10 +1401,10 @@ class SocialManager extends UserManager
         $messageId = intval($messageId);
 
         // Just in case we replace the and \n and \n\r while saving in the DB
-        $messageContent = str_replace(array("\n", "\n\r"), '<br />', $messageContent);
+        $messageContent = str_replace(["\n", "\n\r"], '<br />', $messageContent);
         $now = api_get_utc_datetime();
 
-        $attributes = array(
+        $attributes = [
             'user_sender_id' => $userId,
             'user_receiver_id' => $friendId,
             'msg_status' => $messageStatus,
@@ -1415,7 +1414,7 @@ class SocialManager extends UserManager
             'parent_id' => $messageId,
             'group_id' => 0,
             'update_date' => $now
-        );
+        ];
 
         return Database::insert($tblMessage, $attributes);
     }
@@ -1537,7 +1536,7 @@ class SocialManager extends UserManager
         $sql .= (empty($messageStatus) || is_null($messageStatus)) ? '' : " AND msg_status = '$messageStatus' ";
         $sql .= (empty($parentId) || is_null($parentId)) ? '' : " AND parent_id = '$parentId' ";
         $sql .= " ORDER BY send_date DESC LIMIT $offset, $limit ";
-        $messages = array();
+        $messages = [];
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             while ($row = Database::fetch_array($res)) {
@@ -1580,7 +1579,7 @@ class SocialManager extends UserManager
             $offset
         );
         $formattedList = '<div class="sub-mediapost">';
-        $users = array();
+        $users = [];
 
         // The messages are ordered by date descendant, for comments we need ascendant
         krsort($messages);
@@ -1628,7 +1627,7 @@ class SocialManager extends UserManager
         $formattedList .= '</div>';
 
         $formattedList .= '<div class="mediapost-form">';
-            $formattedList .= '<form name="social_wall_message" method="POST">
+        $formattedList .= '<form name="social_wall_message" method="POST">
                 <label for="social_wall_new_msg" class="hide">'.get_lang('SocialWriteNewComment').'</label>
                 <input type="hidden" name = "messageId" value="'.$idMessage.'" />
                 <textarea placeholder="'.get_lang('SocialWriteNewComment').
@@ -1669,8 +1668,8 @@ class SocialManager extends UserManager
             $limit,
             $offset
         );
-        $users = array();
-        $data = array();
+        $users = [];
+        $data = [];
         foreach ($messages as $key => $message) {
             $userIdLoop = $message['user_sender_id'];
             $userFriendIdLoop = $message['user_receiver_id'];
@@ -1958,9 +1957,9 @@ class SocialManager extends UserManager
                     $user_info_friend = api_get_user_info($friend['friend_user_id'], true);
 
                     if ($user_info_friend['user_is_online']) {
-                        $statusIcon = Display::span('', array('class' => 'online_user_in_text'));
+                        $statusIcon = Display::span('', ['class' => 'online_user_in_text']);
                     } else {
-                        $statusIcon = Display::span('', array('class' => 'offline_user_in_text'));
+                        $statusIcon = Display::span('', ['class' => 'offline_user_in_text']);
                     }
 
                     $friendHtml .= '<li>';
@@ -2075,7 +2074,7 @@ class SocialManager extends UserManager
                 'post',
                 api_get_path(WEB_CODE_PATH).'social/profile.php'.$userId,
                 null,
-                array('enctype' => 'multipart/form-data'),
+                ['enctype' => 'multipart/form-data'],
                 FormValidator::LAYOUT_HORIZONTAL
             );
 

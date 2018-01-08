@@ -20,8 +20,8 @@ if (!api_get_multiple_access_url()) {
 $userGroup = new UserGroup();
 $form_sent = 0;
 $firstLetterUserGroup = null;
-$courses = array();
-$url_list = array();
+$courses = [];
+$url_list = [];
 
 $tbl_access_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 $tbl_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
@@ -29,8 +29,8 @@ $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
 $tool_name = get_lang('AddUserGroupToURL');
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs')];
 
 Display::display_header($tool_name);
 
@@ -45,8 +45,8 @@ api_display_tool_title($tool_name);
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
-    $userGroups = is_array($_POST['user_group_list']) ? $_POST['user_group_list'] : array();
-    $urlList = is_array($_POST['url_list']) ? $_POST['url_list'] : array();
+    $userGroups = is_array($_POST['user_group_list']) ? $_POST['user_group_list'] : [];
+    $urlList = is_array($_POST['url_list']) ? $_POST['url_list'] : [];
     $firstLetterUserGroup = $_POST['first_letter_user_group'];
 
     if ($form_sent == 1) {
@@ -97,10 +97,14 @@ $db_urls = Database::store_result($result);
    <tr>
         <td width="40%" align="center">
         <select name="user_group_list[]" multiple="multiple" size="20" style="width:400px;">
-		<?php foreach ($dbUserGroups as $item) { ?>
-			<option value="<?php echo $item['id']; ?>" <?php if (in_array($item['id'], $courses)) echo 'selected="selected"'; ?>><?php echo $item['name']; ?>
+		<?php foreach ($dbUserGroups as $item) {
+                    ?>
+			<option value="<?php echo $item['id']; ?>" <?php if (in_array($item['id'], $courses)) {
+                        echo 'selected="selected"';
+                    } ?>><?php echo $item['name']; ?>
             </option>
-        <?php } ?>
+        <?php
+                } ?>
     </select>
    </td>
    <td width="20%" valign="middle" align="center">
@@ -108,10 +112,14 @@ $db_urls = Database::store_result($result);
    </td>
    <td width="40%" align="center">
     <select name="url_list[]" multiple="multiple" size="20" style="width:300px;">
-        <?php foreach ($db_urls as $url_obj) { ?>
-        <option value="<?php echo $url_obj['id']; ?>" <?php if (in_array($url_obj['id'], $url_list)) echo 'selected="selected"'; ?>><?php echo $url_obj['url']; ?>
+        <?php foreach ($db_urls as $url_obj) {
+                    ?>
+        <option value="<?php echo $url_obj['id']; ?>" <?php if (in_array($url_obj['id'], $url_list)) {
+                        echo 'selected="selected"';
+                    } ?>><?php echo $url_obj['url']; ?>
         </option>
-		<?php } ?>
+		<?php
+                } ?>
     </select>
    </td>
   </tr>

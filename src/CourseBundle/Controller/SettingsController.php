@@ -48,13 +48,13 @@ class SettingsController extends Controller
                 $manager->saveSettings($namespace, $form->getData());
                 $message = $this->getTranslator()->trans(
                     'sylius.settings.update',
-                    array(),
+                    [],
                     'flashes'
                 );
             } catch (ValidatorException $exception) {
                 $message = $this->getTranslator()->trans(
                     $exception->getMessage(),
-                    array(),
+                    [],
                     'validators'
                 );
                 $messageType = 'error';
@@ -75,14 +75,14 @@ class SettingsController extends Controller
                 'template',
                 'ChamiloCourseBundle:Settings:update.html.twig'
             ),
-            array(
+            [
                 'course' => $course,
                 'schemas' => $schemas,
                 'settings' => $settings,
                 'form' => $form->createView(),
                 'keyword' => '',
                 'search_form' => '',
-            )
+            ]
         );
     }
 

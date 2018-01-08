@@ -60,9 +60,9 @@ class DateTimePicker extends HTML_QuickForm_text
     {
         $value = substr($value, 0, 16);
         $this->updateAttributes(
-            array(
+            [
                 'value'=>$value
-            )
+            ]
         );
     }
 
@@ -136,7 +136,7 @@ class DateTimePicker extends HTML_QuickForm_text
             if (empty($size)) {
                 $sizeTemp = 8;
             }
-            $size = array(2, $sizeTemp, 2);
+            $size = [2, $sizeTemp, 2];
         } else {
             if (is_array($size)) {
                 if (count($size) != 3) {
@@ -144,11 +144,11 @@ class DateTimePicker extends HTML_QuickForm_text
                     if (empty($size)) {
                         $sizeTemp = 8;
                     }
-                    $size = array(2, $sizeTemp, 2);
+                    $size = [2, $sizeTemp, 2];
                 }
                 // else just keep the $size array as received
             } else {
-                $size = array(2, intval($size), 2);
+                $size = [2, intval($size), 2];
             }
         }
 

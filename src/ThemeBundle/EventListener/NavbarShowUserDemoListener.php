@@ -7,7 +7,6 @@
 
 namespace Chamilo\ThemeBundle\EventListener;
 
-
 use Chamilo\ThemeBundle\Event\ShowUserEvent;
 use Chamilo\ThemeBundle\Model\UserModel;
 

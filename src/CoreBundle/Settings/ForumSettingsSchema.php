@@ -21,16 +21,16 @@ class ForumSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'default_forum_view' => 'flat',
                     'display_groups_forum_in_general_tool' => 'true',
-                )
+                ]
             )
         ;
 
-        $allowedTypes = array(
-            'default_forum_view' => array('string'),
-        );
+        $allowedTypes = [
+            'default_forum_view' => ['string'],
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
@@ -43,13 +43,13 @@ class ForumSettingsSchema extends AbstractSettingsSchema
             ->add(
                 'default_forum_view',
                 'choice',
-                array(
-                    'choices' => array(
+                [
+                    'choices' => [
                         'flat' => 'Flat',
                         'threaded' => 'Threaded',
                         'nested' => 'Nested',
-                    ),
-                )
+                    ],
+                ]
             )
             ->add('display_groups_forum_in_general_tool', YesNoType::class);
     }

@@ -21,7 +21,3 @@ $strings['SendOnlyWarning'] = 'Envoyer seulement l\'avertissement';
 $strings['SendAgreementFile'] = 'Envoyer à nouveau l\'avertissement avec la pièce jointe';
 $strings['NoSendWarning'] = 'Ne pas envoyer l\'avertissement';
 $strings['TheAgreementIsAttachedInThisEmail'] = 'Une copie du document d\'accord est joint à cet e-mail';
-
-
-
-

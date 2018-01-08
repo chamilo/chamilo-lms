@@ -21,7 +21,7 @@
 class ScheduledAnnouncement extends Model
 {
     public $table;
-    public $columns = array('id', 'subject', 'message', 'date', 'sent', 'session_id');
+    public $columns = ['id', 'subject', 'message', 'date', 'sent', 'session_id'];
 
     /**
      * Constructor
@@ -37,12 +37,12 @@ class ScheduledAnnouncement extends Model
      *
      * @return array
      */
-    public function get_all($where_conditions = array())
+    public function get_all($where_conditions = [])
     {
         return Database::select(
             '*',
             $this->table,
-            array('where' => $where_conditions, 'order' => 'subject ASC')
+            ['where' => $where_conditions, 'order' => 'subject ASC']
         );
     }
 
@@ -54,7 +54,7 @@ class ScheduledAnnouncement extends Model
         $row = Database::select(
             'count(*) as count',
             $this->table,
-            array(),
+            [],
             'first'
         );
 

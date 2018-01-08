@@ -511,7 +511,8 @@ class GradebookCategory
      * @param int $value
      * @return GradebookCategory
      */
-    public function setGradeBooksToValidateInDependence(int $value): GradebookCategory {
+    public function setGradeBooksToValidateInDependence(int $value): GradebookCategory
+    {
         $this->gradeBooksToValidateInDependence = $value;
 
         return $this;

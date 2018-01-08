@@ -13,25 +13,24 @@ class StaticPlugin extends Plugin
      *
      * @return StaticPlugin
      */
-    static function create()
+    public static function create()
     {
         static $result = null;
         return $result ? $result : $result = new self();
     }
 
-    function get_block_title()
+    public function get_block_title()
     {
         return $this->get('block_title');
     }
 
-    function get_content()
+    public function get_content()
     {
         return $this->get('content');
     }
 
     protected function __construct()
     {
-        parent::__construct('1.1', 'Laurent Opprecht', array('block_title' => 'text', 'content' => 'wysiwyg'));
+        parent::__construct('1.1', 'Laurent Opprecht', ['block_title' => 'text', 'content' => 'wysiwyg']);
     }
-
 }

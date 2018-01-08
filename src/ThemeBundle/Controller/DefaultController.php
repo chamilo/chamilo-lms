@@ -21,31 +21,35 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return array();
+        return [];
     }
 
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function dashboardAction() {
+    public function dashboardAction()
+    {
         return    $this->render('ChamiloThemeBundle:Default:index.html.twig');
     }
 
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function uiGeneralAction() {
+    public function uiGeneralAction()
+    {
         return $this->render('ChamiloThemeBundle:Default:index.html.twig');
     }
 
-    public function uiIconsAction() {
+    public function uiIconsAction()
+    {
         return $this->render('ChamiloThemeBundle:Default:index.html.twig');
     }
 
-    public function formAction() {
+    public function formAction()
+    {
         $form = $this->createForm(new FormDemoModelType());
-        return $this->render('ChamiloThemeBundle:Default:form.html.twig', array(
+        return $this->render('ChamiloThemeBundle:Default:form.html.twig', [
                 'form' => $form->createView()
-            ));
+            ]);
     }
 }

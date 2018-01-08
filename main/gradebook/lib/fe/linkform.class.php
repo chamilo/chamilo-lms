@@ -36,7 +36,7 @@ class LinkForm extends FormValidator
     ) {
         parent::__construct($form_name, $method, $action);
 
-        if (isset ($category_object)) {
+        if (isset($category_object)) {
             $this->category_object = $category_object;
         } else {
             if (isset($link_object)) {
@@ -88,7 +88,7 @@ class LinkForm extends FormValidator
             'select_link',
             get_lang('ChooseLink'),
             null,
-            array('onchange' => 'document.create_link.submit()')
+            ['onchange' => 'document.create_link.submit()']
         );
 
         $linkTypes = LinkFactory::get_all_types();
@@ -131,7 +131,7 @@ class LinkForm extends FormValidator
         }
 
         if (isset($this->extra)) {
-            $this->setDefaults(array('select_link' => $this->extra));
+            $this->setDefaults(['select_link' => $this->extra]);
         }
     }
 

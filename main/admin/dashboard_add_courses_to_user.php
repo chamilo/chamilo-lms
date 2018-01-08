@@ -20,8 +20,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'user_list.php', 'name' => get_lang('UserList'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('UserList')];
 
 // Database Table Definitions
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -153,7 +153,7 @@ function remove_item(origin) {
 
 $formSent = 0;
 $errorMsg = $firstLetterCourse = '';
-$UserList = array();
+$UserList = [];
 
 $msg = '';
 if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
@@ -173,7 +173,7 @@ $actionsLeft = '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.
 $actionsLeft .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.
     Display::return_icon('session-add.png', get_lang('AssignSessions'), null, ICON_SIZE_MEDIUM).'</a>';
 
-echo $html = Display::toolbarAction('toolbar-dashboard', array($actionsLeft));
+echo $html = Display::toolbarAction('toolbar-dashboard', [$actionsLeft]);
 
 echo Display::page_header(
     sprintf(get_lang('AssignCoursesToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])),
@@ -208,7 +208,6 @@ if (api_is_multiple_url_enabled()) {
                 c.code LIKE '$needle' $without_assigned_courses AND
                 access_url_id = ".api_get_current_access_url_id()."
             ORDER BY c.title";
-
 } else {
     $sql = " SELECT c.code, c.title
             FROM $tbl_course c
@@ -233,22 +232,26 @@ if (!empty($msg)) {
 
         <div id="ajax_list_courses_multiple">
     <select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" style="width:340px;">
-    <?php while ($enreg = Database::fetch_array($result)) { ?>
+    <?php while ($enreg = Database::fetch_array($result)) {
+    ?>
             <option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'], ENT_QUOTES).'"'; ?>><?php echo $enreg['title'].' ('.$enreg['code'].')'; ?></option>
-    <?php } ?>
+    <?php
+} ?>
     </select>
         </div>
 
     </div>
     <div class="col-md-4">
         <div class="code-course">
-        <?php if ($add_type == 'multiple') { ?>
+        <?php if ($add_type == 'multiple') {
+        ?>
         <p><?php echo get_lang('FirstLetterCourse'); ?> :</p>
         <select name="firstLetterCourse" class="selectpicker form-control" onchange = "xajax_search_courses(this.value,'multiple')">
             <option value="%">--</option>
             <?php  echo Display :: get_alphabet_options($firstLetter); ?>
         </select>
-        <?php } ?>
+        <?php
+    } ?>
         </div>
         <div class="control-course">
             <div class="separate-action">
@@ -281,11 +284,11 @@ if (!empty($msg)) {
             <?php
             if (is_array($assigned_courses_to_hrm)) {
                 foreach ($assigned_courses_to_hrm as $enreg) {
-            ?>
+                    ?>
                 <option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'], ENT_QUOTES).'"'; ?>><?php echo $enreg['title'].' ('.$enreg['code'].')'; ?></option>
             <?php
-                    }
                 }
+            }
             ?>
         </select>
     </div>

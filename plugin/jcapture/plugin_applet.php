@@ -15,7 +15,9 @@ $capturePath = api_get_path(WEB_PLUGIN_PATH).'jcapture/';
 $hostName = api_get_path(WEB_PATH);
 
 define('DOKU_BASE', '/tmp');
-function getSecurityToken() {};
+function getSecurityToken()
+{
+};
 
 //close sesseion
 session_write_close();

@@ -8,7 +8,7 @@ use ChamiloSession as Session;
  */
 class AppPlugin
 {
-    public $plugin_regions = array(
+    public $plugin_regions = [
         'main_top',
         'main_bottom',
         'login_top',
@@ -27,7 +27,7 @@ class AppPlugin
         'footer_right',
         'menu_administrator',
         'course_tool_plugin'
-    );
+    ];
 
     public $installedPluginListName = [];
     public $installedPluginListObject = [];
@@ -125,9 +125,9 @@ class AppPlugin
     {
         $installedPlugins = [];
         $plugins = api_get_settings_params(
-            array(
-                "variable = ? AND selected_value = ? AND category = ? " => array('status', 'installed', 'Plugins')
-            )
+            [
+                "variable = ? AND selected_value = ? AND category = ? " => ['status', 'installed', 'Plugins']
+            ]
         );
 
         if (!empty($plugins)) {
@@ -196,7 +196,7 @@ class AppPlugin
         }
         // Second remove all remaining global settings
         api_delete_settings_params(
-            array('category = ? AND access_url = ? AND subkey = ? ' => array('Plugins', $urlId, $pluginName))
+            ['category = ? AND access_url = ? AND subkey = ? ' => ['Plugins', $urlId, $pluginName]]
         );
     }
 
@@ -423,14 +423,14 @@ class AppPlugin
             // @todo check if settings are already added
             // Extra options
             $plugin_settings = api_get_settings_params(
-                array(
-                    "subkey = ? AND category = ? AND type = ? AND access_url = ?" => array(
+                [
+                    "subkey = ? AND category = ? AND type = ? AND access_url = ?" => [
                         $plugin_name,
                         'Plugins',
                         'setting',
                         api_get_current_access_url_id()
-                    )
-                )
+                    ]
+                ]
             );
 
             $settings_filtered = [];
@@ -474,14 +474,14 @@ class AppPlugin
         $access_url_id = api_get_current_access_url_id();
         if (!empty($plugin)) {
             api_delete_settings_params(
-                array(
-                    'category = ? AND type = ? AND access_url = ? AND subkey = ? ' => array(
+                [
+                    'category = ? AND type = ? AND access_url = ? AND subkey = ? ' => [
                         'Plugins',
                         'region',
                         $access_url_id,
                         $plugin,
-                    ),
-                )
+                    ],
+                ]
             );
         }
     }
@@ -601,7 +601,7 @@ class AppPlugin
                     }
                 }
                 foreach ($groups as $k => $v) {
-                    $form->addGroup($groups[$k], $k, array($obj->get_lang($k)));
+                    $form->addGroup($groups[$k], $k, [$obj->get_lang($k)]);
                 }
                 $form->addButtonSave(get_lang('SaveSettings'));
                 $form->addHtml('

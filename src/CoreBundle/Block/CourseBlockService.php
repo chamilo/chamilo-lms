@@ -28,12 +28,12 @@ class CourseBlockService extends AbstractBlockService
 
     public function configureSettings(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'url'      => false,
             'title'    => 'Course block',
             'template' => 'ChamiloCoreBundle:Block:course.html.twig',
             'ttl' => 0
-        ));
+        ]);
     }
 
     public function validateBlock(ErrorElement $errorElement, BlockInterface $block)
@@ -57,11 +57,11 @@ class CourseBlockService extends AbstractBlockService
 
         return $this->renderResponse(
             $blockContext->getTemplate(),
-            array(
+            [
                 'hot_courses' => $hotCourses,
                 'block' => $blockContext->getBlock(),
                 'settings' => $settings,
-            ),
+            ],
             $response
         );
     }

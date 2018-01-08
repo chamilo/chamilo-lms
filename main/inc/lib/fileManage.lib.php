@@ -108,7 +108,8 @@ function folder_is_empty($in_folder)
     $folder_is_empty = 0;
     if (is_dir($in_folder)) {
         $tab_folder_content = scandir($in_folder);
-        if ((count($tab_folder_content) == 2 &&
+        if ((
+            count($tab_folder_content) == 2 &&
             in_array(".", $tab_folder_content) &&
             in_array("..", $tab_folder_content)
             ) ||
@@ -185,7 +186,7 @@ function move($source, $target, $forceMove = true, $moveContent = false)
         $file_name = basename($source);
         // move onto self illegal: mv a/b/c a/b/c or mv a/b/c a/b
         if (strcasecmp($target, dirname($source)) === 0) {
-               return false;
+            return false;
         }
         $isWindowsOS = api_is_windows_os();
         $canExec = function_exists('exec');
@@ -312,5 +313,5 @@ function copyDirWithoutFilesTo($source, $destination)
 function getextension($filename)
 {
     $bouts = explode('.', $filename);
-    return array(array_pop($bouts), implode('.', $bouts));
+    return [array_pop($bouts), implode('.', $bouts)];
 }

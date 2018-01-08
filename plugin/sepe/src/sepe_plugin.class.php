@@ -45,7 +45,7 @@ class SepePlugin extends Plugin
                 Jose Angel Ruiz - NoSoloRed (original author) <br>
                 Julio Montoya (SOAP integration)
             ',
-            array('sepe_enable' => 'boolean')
+            ['sepe_enable' => 'boolean']
         );
     }
 
@@ -54,7 +54,7 @@ class SepePlugin extends Plugin
      */
     public function install()
     {
-        $tablesToBeCompared = array(
+        $tablesToBeCompared = [
             self::TABLE_SEPE_CENTER,
             self::TABLE_SEPE_ACTIONS,
             self::TABLE_SEPE_SPECIALTY,
@@ -71,7 +71,7 @@ class SepePlugin extends Plugin
             self::TABLE_SEPE_LOG_PARTICIPANT,
             self::TABLE_SEPE_LOG_MOD_PARTICIPANT,
             self::TABLE_SEPE_LOG
-        );
+        ];
         $em = Database::getManager();
         $cn = $em->getConnection();
         $sm = $cn->getSchemaManager();
@@ -89,7 +89,7 @@ class SepePlugin extends Plugin
      */
     public function uninstall()
     {
-        $tablesToBeDeleted = array(
+        $tablesToBeDeleted = [
             self::TABLE_SEPE_CENTER,
             self::TABLE_SEPE_SPECIALTY_CLASSROOM,
             self::TABLE_SEPE_CENTERS,
@@ -106,7 +106,7 @@ class SepePlugin extends Plugin
             self::TABLE_SEPE_LOG_PARTICIPANT,
             self::TABLE_SEPE_LOG_MOD_PARTICIPANT,
             self::TABLE_SEPE_LOG
-        );
+        ];
 
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {
             $table = Database::get_main_table($tableToBeDeleted);

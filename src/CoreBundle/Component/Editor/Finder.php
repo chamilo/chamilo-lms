@@ -77,13 +77,13 @@ class Finder extends \elFinder
         if (!empty($opts['session']) && $opts['session'] instanceof elFinderSessionInterface) {
             $this->session = $opts['session'];
         } else {
-            $sessionOpts = array(
+            $sessionOpts = [
                 'base64encode' => !empty($opts['base64encodeSessionData']),
-                'keys' => array(
+                'keys' => [
                     'default'   => !empty($opts['sessionCacheKey']) ? $opts['sessionCacheKey'] : 'elFinderCaches',
                     'netvolume' => !empty($opts['netVolumesSessionKey']) ? $opts['netVolumesSessionKey'] : 'elFinderNetVolumes'
-                )
-            );
+                ]
+            ];
             if (!class_exists('elFinderSession')) {
                 include_once __DIR__.'/elFinderSession.php';
             }
@@ -92,7 +92,7 @@ class Finder extends \elFinder
         // try session start | restart
         $this->session->start();
 
-        $sessionUseCmds = array();
+        $sessionUseCmds = [];
         if (isset($opts['sessionUseCmds']) && is_array($opts['sessionUseCmds'])) {
             $sessionUseCmds = $opts['sessionUseCmds'];
         }
@@ -117,7 +117,7 @@ class Finder extends \elFinder
             }
         }
         $this->maxArcFilesSize = isset($opts['maxArcFilesSize']) ? intval($opts['maxArcFilesSize']) : 0;
-        $this->optionsNetVolumes = (isset($opts['optionsNetVolumes']) && is_array($opts['optionsNetVolumes'])) ? $opts['optionsNetVolumes'] : array();
+        $this->optionsNetVolumes = (isset($opts['optionsNetVolumes']) && is_array($opts['optionsNetVolumes'])) ? $opts['optionsNetVolumes'] : [];
         if (isset($opts['itemLockExpire'])) {
             $this->itemLockExpire = intval($opts['itemLockExpire']);
         }
@@ -154,10 +154,10 @@ class Finder extends \elFinder
                 if ($doRegist) {
                     // for backward compatibility
                     if (!is_array($handlers)) {
-                        $handlers = array($handlers);
+                        $handlers = [$handlers];
                     } else {
                         if (count($handlers) === 2 && is_object($handlers[0])) {
-                            $handlers = array($handlers);
+                            $handlers = [$handlers];
                         }
                     }
                     foreach ($handlers as $handler) {
@@ -165,9 +165,9 @@ class Finder extends \elFinder
                             if (is_string($handler) && strpos($handler, '.')) {
                                 list($_domain, $_name, $_method) = array_pad(explode('.', $handler), 3, '');
                                 if (strcasecmp($_domain, 'plugin') === 0) {
-                                    if ($plugin = $this->getPluginInstance($_name, isset($opts['plugin'][$_name]) ? $opts['plugin'][$_name] : array())
+                                    if ($plugin = $this->getPluginInstance($_name, isset($opts['plugin'][$_name]) ? $opts['plugin'][$_name] : [])
                                             and method_exists($plugin, $_method)) {
-                                        $this->bind($cmd, array($plugin, $_method));
+                                        $this->bind($cmd, [$plugin, $_method]);
                                     }
                                 }
                             } else {
@@ -180,7 +180,7 @@ class Finder extends \elFinder
         }
 
         if (!isset($opts['roots']) || !is_array($opts['roots'])) {
-            $opts['roots'] = array();
+            $opts['roots'] = [];
         }
 
         // check for net volumes stored in session

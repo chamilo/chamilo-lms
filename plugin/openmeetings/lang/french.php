@@ -47,4 +47,3 @@ $strings['plugin_tool_openmeetings'] = 'Vidéo';
 
 $strings['ThereAreNotRecordingsForTheMeetings'] = 'Aucun enregistrement disponible';
 $strings['NoRecording'] = "Pas d'enregistrement";
-

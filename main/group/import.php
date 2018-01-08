@@ -14,10 +14,10 @@ if (!api_is_allowed_to_edit(false, true)) {
 }
 
 $nameTools = get_lang('Import');
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'group.php?'.api_get_cidreq(),
     'name' => get_lang('Groups')
-);
+];
 
 $form = new FormValidator(
     'import',

@@ -21,7 +21,7 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'enable_help_link' => 'true',
                     'show_administrator_data' => 'true',
                     'show_tutor_data' => 'true',
@@ -50,12 +50,12 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
                     'hide_home_top_when_connected' => 'false',
                     'hide_logout_button' => 'false',
                     'show_link_ticket_notification' => 'false'
-                )
+                ]
             );
 
-        $allowedTypes = array(
-            'time_limit_whosonline' => array('string'),
-        );
+        $allowedTypes = [
+            'time_limit_whosonline' => ['string'],
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
@@ -72,13 +72,13 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
             ->add(
                 'showonline',
                 'choice',
-                array(
-                    'choices' => array(
+                [
+                    'choices' => [
                         'course' => 'Course',
                         'users' => 'Users',
                         'world' => 'World',
-                    ),
-                )
+                    ],
+                ]
             )
             ->add('allow_user_headings', YesNoType::class)
             ->add('time_limit_whosonline')
@@ -103,7 +103,8 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
                         'show_to_admin_and_teachers' => 'ShowToAdminsAndTeachers',
                         'show_to_all' => 'ShowToAllUsers'
                     ]
-                ])
+                ]
+            )
             ->add('show_hot_courses', YesNoType::class)
             ->add('use_virtual_keyboard', YesNoType::class)
             ->add('disable_copy_paste', YesNoType::class)

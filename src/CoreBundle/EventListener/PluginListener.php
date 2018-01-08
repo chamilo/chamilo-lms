@@ -31,7 +31,6 @@ class PluginListener
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
-
     }
 
     /**
@@ -46,7 +45,7 @@ class PluginListener
      */
     public function onKernelController(FilterControllerEvent $event)
     {
-         $request = $event->getRequest();
+        $request = $event->getRequest();
         $controller = $request->get('_controller');
         // Only process legacy listener when loading legacy controller
         /*if ($controller != 'Chamilo\CoreBundle\Controller\LegacyController::classicAction') {
@@ -97,7 +96,7 @@ class PluginListener
             //$result = & api_get_settings('Plugins', 'list', $_configuration['access_url']);
             $result = & api_get_settings('Plugins', 'list', 1);
 
-            $_plugins = array();
+            $_plugins = [];
             foreach ($result as & $row) {
                 $key = $row['variable'];
                 $_plugins[$key][] = $row['selected_value'];

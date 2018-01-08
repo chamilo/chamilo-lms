@@ -32,9 +32,9 @@ class SettingsController extends SyliusSettingsController
 
         return $this->render(
             '@ChamiloCore/Admin/Settings/index.html.twig',
-            array(
+            [
                 'schemas' => $schemas
-            )
+            ]
         );
     }
 
@@ -105,9 +105,9 @@ class SettingsController extends SyliusSettingsController
             $messageType = 'success';
             try {
                 $manager->save($form->getData());
-                $message = $this->getTranslator()->trans('sylius.settings.update', array(), 'flashes');
+                $message = $this->getTranslator()->trans('sylius.settings.update', [], 'flashes');
             } catch (ValidatorException $exception) {
-                $message = $this->getTranslator()->trans($exception->getMessage(), array(), 'validators');
+                $message = $this->getTranslator()->trans($exception->getMessage(), [], 'validators');
                 $messageType = 'error';
             }
 
@@ -121,13 +121,13 @@ class SettingsController extends SyliusSettingsController
 
         return $this->render(
             '@ChamiloCore/Admin/Settings/default.html.twig',
-            array(
+            [
                 'schemas' => $schemas,
                 'settings' => $settings,
                 'form' => $form->createView(),
                 'keyword' => $keyword,
                 'search_form' => $searchForm->createView(),
-            )
+            ]
         );
     }
 

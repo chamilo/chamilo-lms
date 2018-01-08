@@ -63,7 +63,7 @@ class DocumentManager
     {
         // All MIME types in an array (from 1.6, this is the authorative source)
         // Please, keep this alphabetical if you add something to this list!
-        $mime_types = array(
+        $mime_types = [
             'ai' => 'application/postscript',
             'aif' => 'audio/x-aiff',
             'aifc' => 'audio/x-aiff',
@@ -249,7 +249,7 @@ class DocumentManager
             'xwd' => 'image/x-windowdump',
             'xyz' => 'chemical/x-xyz',
             'zip' => 'application/zip'
-        );
+        ];
 
         if ($filename === true) {
             return $mime_types;
@@ -383,8 +383,8 @@ class DocumentManager
             if ($fixLinksHttpToHttps) {
                 $content = file_get_contents($full_file_name);
                 $content = str_replace(
-                    array('http%3A%2F%2F', 'http://'),
-                    array('https%3A%2F%2F', 'https://'),
+                    ['http%3A%2F%2F', 'http://'],
+                    ['https%3A%2F%2F', 'https://'],
                     $content
                 );
                 echo $content;
@@ -597,7 +597,7 @@ class DocumentManager
                 }
 
                 foreach ($doc_list as $key => $row) {
-                    if (in_array($row['visibility'], array('0', '2')) &&
+                    if (in_array($row['visibility'], ['0', '2']) &&
                         !in_array($row['id'], $my_repeat_ids)
                     ) {
                         $ids_to_remove[] = $row['id'];
@@ -1520,7 +1520,7 @@ class DocumentManager
             $doc_path = substr($doc_path, 0, strlen($doc_path) - 7 - strlen(api_get_user_id()));
         }
 
-        if (!in_array($file_type, array('file', 'folder'))) {
+        if (!in_array($file_type, ['file', 'folder'])) {
             $file_type = 'file';
         }
         $doc_path = Database::escape_string($doc_path).'/';
@@ -1607,7 +1607,7 @@ class DocumentManager
             if (isset($course_info) &&
                 in_array(
                     $course_info['visibility'],
-                    array(COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD)
+                    [COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD]
                 )
             ) {
                 $user_in_course = true;
@@ -1619,7 +1619,7 @@ class DocumentManager
                 $session_id
             );
 
-            if (in_array($user_status, array('0', '2', '6'))) {
+            if (in_array($user_status, ['0', '2', '6'])) {
                 //is true if is an student, course session teacher or coach
                 $user_in_course = true;
             }
@@ -1879,7 +1879,7 @@ class DocumentManager
         }
 
         // Replace content
-        $info_to_replace_in_content_html = array(
+        $info_to_replace_in_content_html = [
             $first_name,
             $last_name,
             $organization_name,
@@ -1896,9 +1896,9 @@ class DocumentManager
             '<a href="'.$url.'" target="_blank">'.get_lang('CertificateOnlineLink').'</a>',
             '((certificate_barcode))',
             $externalStyle
-        );
+        ];
 
-        $tags = array(
+        $tags = [
             '((user_firstname))',
             '((user_lastname))',
             '((gradebook_institution))',
@@ -1915,7 +1915,7 @@ class DocumentManager
             '((certificate_link_html))',
             '((certificate_barcode))',
             '((external_style))'
-        );
+        ];
 
         if (!empty($extraFields)) {
             foreach ($extraFields as $extraField) {
@@ -2081,7 +2081,7 @@ class DocumentManager
     ) {
         $max = 5;
         $attributes = [];
-        $wanted_attributes = array(
+        $wanted_attributes = [
             'src',
             'url',
             '@import',
@@ -2089,8 +2089,8 @@ class DocumentManager
             'value',
             'flashvars',
             'poster'
-        );
-        $explode_attributes = array('flashvars' => 'file');
+        ];
+        $explode_attributes = ['flashvars' => 'file'];
         $abs_path = '';
 
         if ($recursivity > $max) {
@@ -2156,16 +2156,16 @@ class DocumentManager
 
                             if ($attr == 'value') {
                                 if (strpos($source, 'mp3file')) {
-                                    $files_list[] = array(
+                                    $files_list[] = [
                                         substr($source, 0, strpos($source, '.swf') + 4),
                                         'local',
                                         'abs',
-                                    );
+                                    ];
                                     $mp3file = substr($source, strpos($source, 'mp3file=') + 8);
                                     if (substr($mp3file, 0, 1) == '/') {
-                                        $files_list[] = array($mp3file, 'local', 'abs');
+                                        $files_list[] = [$mp3file, 'local', 'abs'];
                                     } else {
-                                        $files_list[] = array($mp3file, 'local', 'rel');
+                                        $files_list[] = [$mp3file, 'local', 'rel'];
                                     }
                                 } elseif (strpos($source, 'flv=') === 0) {
                                     $source = substr($source, 4);
@@ -2175,13 +2175,13 @@ class DocumentManager
                                     if (strpos($source, '://') > 0) {
                                         if (strpos($source, api_get_path(WEB_PATH)) !== false) {
                                             //we found the current portal url
-                                            $files_list[] = array($source, 'local', 'url');
+                                            $files_list[] = [$source, 'local', 'url'];
                                         } else {
                                             //we didn't find any trace of current portal
-                                            $files_list[] = array($source, 'remote', 'url');
+                                            $files_list[] = [$source, 'remote', 'url'];
                                         }
                                     } else {
-                                        $files_list[] = array($source, 'local', 'abs');
+                                        $files_list[] = [$source, 'local', 'abs'];
                                     }
                                     /* skipping anything else to avoid two entries
                                     (while the others can have sub-files in their url, flv's can't)*/
@@ -2199,7 +2199,7 @@ class DocumentManager
                                         $second_part = substr($second_part, $pos1 + 1, $pos2 - ($pos1 + 1));
                                         if (strpos($second_part, api_get_path(WEB_PATH)) !== false) {
                                             //we found the current portal url
-                                            $files_list[] = array($second_part, 'local', 'url');
+                                            $files_list[] = [$second_part, 'local', 'url'];
                                             $in_files_list[] = self::get_resources_from_source_html(
                                                 $second_part,
                                                 true,
@@ -2211,12 +2211,12 @@ class DocumentManager
                                             }
                                         } else {
                                             //we didn't find any trace of current portal
-                                            $files_list[] = array($second_part, 'remote', 'url');
+                                            $files_list[] = [$second_part, 'remote', 'url'];
                                         }
                                     } elseif (strpos($second_part, '=') > 0) {
                                         if (substr($second_part, 0, 1) === '/') {
                                             //link starts with a /, making it absolute (relative to DocumentRoot)
-                                            $files_list[] = array($second_part, 'local', 'abs');
+                                            $files_list[] = [$second_part, 'local', 'abs'];
                                             $in_files_list[] = self::get_resources_from_source_html(
                                                 $second_part,
                                                 true,
@@ -2228,7 +2228,7 @@ class DocumentManager
                                             }
                                         } elseif (strstr($second_part, '..') === 0) {
                                             //link is relative but going back in the hierarchy
-                                            $files_list[] = array($second_part, 'local', 'rel');
+                                            $files_list[] = [$second_part, 'local', 'rel'];
                                             //$dir = api_get_path(SYS_CODE_PATH);//dirname($abs_path);
                                             //$new_abs_path = realpath($dir.'/'.$second_part);
                                             $dir = '';
@@ -2250,7 +2250,7 @@ class DocumentManager
                                             if (substr($second_part, 0, 2) == './') {
                                                 $second_part = substr($second_part, 2);
                                             }
-                                            $files_list[] = array($second_part, 'local', 'rel');
+                                            $files_list[] = [$second_part, 'local', 'rel'];
                                             $dir = '';
                                             if (!empty($abs_path)) {
                                                 $dir = dirname($abs_path).'/';
@@ -2272,7 +2272,7 @@ class DocumentManager
                                     if (strpos($source, '://') > 0) {
                                         if (strpos($source, api_get_path(WEB_PATH)) !== false) {
                                             //we found the current portal url
-                                            $files_list[] = array($source, 'local', 'url');
+                                            $files_list[] = [$source, 'local', 'url'];
                                             $in_files_list[] = self::get_resources_from_source_html(
                                                 $source,
                                                 true,
@@ -2284,13 +2284,13 @@ class DocumentManager
                                             }
                                         } else {
                                             //we didn't find any trace of current portal
-                                            $files_list[] = array($source, 'remote', 'url');
+                                            $files_list[] = [$source, 'remote', 'url'];
                                         }
                                     } else {
                                         //no protocol found, make link local
                                         if (substr($source, 0, 1) === '/') {
                                             //link starts with a /, making it absolute (relative to DocumentRoot)
-                                            $files_list[] = array($source, 'local', 'abs');
+                                            $files_list[] = [$source, 'local', 'abs'];
                                             $in_files_list[] = self::get_resources_from_source_html(
                                                 $source,
                                                 true,
@@ -2302,7 +2302,7 @@ class DocumentManager
                                             }
                                         } elseif (strstr($source, '..') === 0) {
                                             //link is relative but going back in the hierarchy
-                                            $files_list[] = array($source, 'local', 'rel');
+                                            $files_list[] = [$source, 'local', 'rel'];
                                             $dir = '';
                                             if (!empty($abs_path)) {
                                                 $dir = dirname($abs_path).'/';
@@ -2322,7 +2322,7 @@ class DocumentManager
                                             if (substr($source, 0, 2) == './') {
                                                 $source = substr($source, 2);
                                             }
-                                            $files_list[] = array($source, 'local', 'rel');
+                                            $files_list[] = [$source, 'local', 'rel'];
                                             $dir = '';
                                             if (!empty($abs_path)) {
                                                 $dir = dirname($abs_path).'/';
@@ -2343,7 +2343,7 @@ class DocumentManager
                                 //found some protocol there
                                 if (strpos($source, api_get_path(WEB_PATH)) !== false) {
                                     //we found the current portal url
-                                    $files_list[] = array($source, 'local', 'url');
+                                    $files_list[] = [$source, 'local', 'url'];
                                     $in_files_list[] = self::get_resources_from_source_html(
                                         $source,
                                         true,
@@ -2355,13 +2355,13 @@ class DocumentManager
                                     }
                                 } else {
                                     //we didn't find any trace of current portal
-                                    $files_list[] = array($source, 'remote', 'url');
+                                    $files_list[] = [$source, 'remote', 'url'];
                                 }
                             } else {
                                 //no protocol found, make link local
                                 if (substr($source, 0, 1) === '/') {
                                     //link starts with a /, making it absolute (relative to DocumentRoot)
-                                    $files_list[] = array($source, 'local', 'abs');
+                                    $files_list[] = [$source, 'local', 'abs'];
                                     $in_files_list[] = self::get_resources_from_source_html(
                                         $source,
                                         true,
@@ -2373,7 +2373,7 @@ class DocumentManager
                                     }
                                 } elseif (strpos($source, '..') === 0) {
                                     //link is relative but going back in the hierarchy
-                                    $files_list[] = array($source, 'local', 'rel');
+                                    $files_list[] = [$source, 'local', 'rel'];
                                     $dir = '';
                                     if (!empty($abs_path)) {
                                         $dir = dirname($abs_path).'/';
@@ -2393,7 +2393,7 @@ class DocumentManager
                                     if (substr($source, 0, 2) == './') {
                                         $source = substr($source, 2);
                                     }
-                                    $files_list[] = array($source, 'local', 'rel');
+                                    $files_list[] = [$source, 'local', 'rel'];
                                     $dir = '';
                                     if (!empty($abs_path)) {
                                         $dir = dirname($abs_path).'/';
@@ -2608,7 +2608,7 @@ class DocumentManager
                                     $perm = api_get_permissions_for_new_directories();
                                     $result = @mkdir($filepath_dir, $perm, true);
                                     if ($result) {
-                                        $filepath_to_add = str_replace(array($dest_course_path, 'document'), '', $filepath_dir);
+                                        $filepath_to_add = str_replace([$dest_course_path, 'document'], '', $filepath_dir);
 
                                         //Add to item properties to the new folder
                                         $doc_id = add_document(
@@ -2635,7 +2635,7 @@ class DocumentManager
                                 if (!file_exists($destination_filepath)) {
                                     $result = @copy($origin_filepath, $destination_filepath);
                                     if ($result) {
-                                        $filepath_to_add = str_replace(array($dest_course_path, 'document'), '', $destination_filepath);
+                                        $filepath_to_add = str_replace([$dest_course_path, 'document'], '', $destination_filepath);
                                         $size = filesize($destination_filepath);
 
                                         // Add to item properties to the file
@@ -2828,12 +2828,12 @@ class DocumentManager
                         Database::update(
                             $table_document,
                             $params,
-                            array(
-                                'id = ? AND c_id = ? ' => array(
+                            [
+                                'id = ? AND c_id = ? ' => [
                                     $documentId,
                                     $course_info['real_id']
-                                )
-                            )
+                                ]
+                            ]
                         );
                     }
 
@@ -2876,7 +2876,7 @@ class DocumentManager
         switch ($doc_mime) {
             case 'text/plain':
                 $handle = fopen($doc_path, 'r');
-                $output = array(fread($handle, filesize($doc_path)));
+                $output = [fread($handle, filesize($doc_path))];
                 fclose($handle);
                 break;
             case 'application/pdf':
@@ -3009,7 +3009,7 @@ class DocumentManager
         $message = get_lang('YouAreCurrentlyUsingXOfYourX');
         $message = sprintf($message, $already_consumed_space_m, $percentage.'%', $course_quota_m.' ');
 
-        return Display::div($message, array('id' => 'document_quota'));
+        return Display::div($message, ['id' => 'document_quota']);
     }
 
     /**
@@ -3211,7 +3211,7 @@ class DocumentManager
                     $user_in_course = true;
                 }
                 // Check if course is open then we can consider that the student is registered to the course
-                if (isset($course_info) && in_array($course_info['visibility'], array(2, 3))) {
+                if (isset($course_info) && in_array($course_info['visibility'], [2, 3])) {
                     $user_in_course = true;
                 }
             } else {
@@ -3221,7 +3221,7 @@ class DocumentManager
                     $session_id
                 );
                 //is true if is an student, course session teacher or coach
-                if (in_array($user_status, array('0', '2', '6'))) {
+                if (in_array($user_status, ['0', '2', '6'])) {
                     $user_in_course = true;
                 }
             }
@@ -3329,9 +3329,9 @@ class DocumentManager
                 Display::url(
                     Display::return_icon('close.png', get_lang('Close'), [], ICON_SIZE_SMALL),
                     ' javascript:void(0);',
-                    array('id' => 'close_div_'.$course_info['real_id'].'_'.$session_id, 'class' => 'close_div')
+                    ['id' => 'close_div_'.$course_info['real_id'].'_'.$session_id, 'class' => 'close_div']
                 ),
-                array('style' => 'position:absolute;right:10px')
+                ['style' => 'position:absolute;right:10px']
             );
         }
 
@@ -3360,16 +3360,16 @@ class DocumentManager
 
         $documents = [];
         if ($folderId === false) {
-            $documents[$label] = array(
+            $documents[$label] = [
                 'id' => 0,
                 'files' => $newResources
-            );
+            ];
         } else {
             if (is_array($parentData)) {
-                $documents[$parentData['title']] = array(
+                $documents[$parentData['title']] = [
                     'id' => intval($folderId),
                     'files' => $newResources
-                );
+                ];
             }
         }
 
@@ -3534,7 +3534,7 @@ class DocumentManager
         $link = Display::url(
             '<img alt="" src="'.$img.'" title="" />&nbsp;'.$my_file_title,
             $url,
-            array('target' => $target, 'class' => 'moved')
+            ['target' => $target, 'class' => 'moved']
         );
 
         $directUrl = $web_code_path.'document/document.php?cidReq='.$course_info['code'].'&id_session='.$session_id.'&id='.$documentId;
@@ -3591,8 +3591,10 @@ class DocumentManager
 
         // It's a folder.
         //hide some folders
-        if (in_array($path,
-            array('shared_folder', 'chat_files', 'HotPotatoes_files', 'css', 'certificates'))) {
+        if (in_array(
+            $path,
+            ['shared_folder', 'chat_files', 'HotPotatoes_files', 'css', 'certificates']
+        )) {
             return null;
         } elseif (preg_match('/_groupdocs/', $path)) {
             return null;
@@ -3685,10 +3687,10 @@ class DocumentManager
         if (!empty($documents)) {
             foreach ($documents as $key => $resource) {
                 if (isset($resource['id']) && is_int($resource['id'])) {
-                    $mainFolderResource = array(
+                    $mainFolderResource = [
                         'id' => $resource['id'],
                         'title' => $key,
-                    );
+                    ];
 
                     if ($folderId === false) {
                         $return .= self::parseFolder($folderId, $mainFolderResource, $lp_id);
@@ -3842,7 +3844,7 @@ class DocumentManager
             // mime_content_type does not detect correctly some formats that
             // are going to be supported for index, so an extensions array is used for the moment
             if (empty($doc_mime)) {
-                $allowed_extensions = array(
+                $allowed_extensions = [
                     'doc',
                     'docx',
                     'ppt',
@@ -3861,7 +3863,7 @@ class DocumentManager
                     'csv',
                     'html',
                     'htm',
-                );
+                ];
                 $extensions = preg_split("/[\/\\.]/", $doc_path);
                 $doc_ext = strtolower($extensions[count($extensions) - 1]);
                 if (in_array($doc_ext, $allowed_extensions)) {
@@ -3887,12 +3889,12 @@ class DocumentManager
                 $ic_slide->addValue('title', $file_title);
                 $ic_slide->addCourseId($course_code);
                 $ic_slide->addToolId(TOOL_DOCUMENT);
-                $xapian_data = array(
+                $xapian_data = [
                     SE_COURSE_ID => $course_code,
                     SE_TOOL_ID => TOOL_DOCUMENT,
-                    SE_DATA => array('doc_id' => $docid),
+                    SE_DATA => ['doc_id' => $docid],
                     SE_USER => api_get_user_id(),
-                );
+                ];
 
                 $ic_slide->xapian_data = serialize($xapian_data);
                 $di = new ChamiloIndexer();
@@ -4029,7 +4031,7 @@ class DocumentManager
      */
     public static function get_web_odf_extension_list()
     {
-        return array('ods', 'odt', 'odp');
+        return ['ods', 'odt', 'odp'];
     }
 
     /**
@@ -4047,7 +4049,7 @@ class DocumentManager
     public static function getJodconverterExtensionList($mode, $format)
     {
         $extensionList = [];
-        $extensionListFromText = array(
+        $extensionListFromText = [
             'odt',
             'sxw',
             'rtf',
@@ -4055,8 +4057,8 @@ class DocumentManager
             'docx',
             'wpd',
             'txt',
-        );
-        $extensionListToText = array(
+        ];
+        $extensionListToText = [
             'pdf',
             'odt',
             'sxw',
@@ -4064,16 +4066,16 @@ class DocumentManager
             'doc',
             'docx',
             'txt',
-        );
-        $extensionListFromSpreadsheet = array(
+        ];
+        $extensionListFromSpreadsheet = [
             'ods',
             'sxc',
             'xls',
             'xlsx',
             'csv',
             'tsv',
-        );
-        $extensionListToSpreadsheet = array(
+        ];
+        $extensionListToSpreadsheet = [
             'pdf',
             'ods',
             'sxc',
@@ -4081,23 +4083,23 @@ class DocumentManager
             'xlsx',
             'csv',
             'tsv',
-        );
-        $extensionListFromPresentation = array(
+        ];
+        $extensionListFromPresentation = [
             'odp',
             'sxi',
             'ppt',
             'pptx',
-        );
-        $extensionListToPresentation = array(
+        ];
+        $extensionListToPresentation = [
             'pdf',
             'swf',
             'odp',
             'sxi',
             'ppt',
             'pptx',
-        );
-        $extensionListFromDrawing = array('odg');
-        $extensionListToDrawing = array('svg', 'swf');
+        ];
+        $extensionListFromDrawing = ['odg'];
+        $extensionListToDrawing = ['svg', 'swf'];
 
         if ($mode === 'from') {
             if ($format === 'text') {
@@ -4167,7 +4169,7 @@ class DocumentManager
     public static function getFormatTypeListConvertor($mode = 'from', $extension)
     {
         $formatTypesList = [];
-        $formatTypes = array('text', 'spreadsheet', 'presentation', 'drawing');
+        $formatTypes = ['text', 'spreadsheet', 'presentation', 'drawing'];
         foreach ($formatTypes as $formatType) {
             if (
             in_array(
@@ -4188,10 +4190,10 @@ class DocumentManager
      */
     public static function is_folder_to_avoid($path, $is_certificate_mode = false)
     {
-        $foldersToAvoid = array(
+        $foldersToAvoid = [
             '/HotPotatoes_files',
             '/certificates',
-        );
+        ];
         $systemFolder = api_get_course_setting('show_system_folders');
 
         if ($systemFolder == 1) {
@@ -4232,10 +4234,8 @@ class DocumentManager
         }
 
         if (is_array($foldersToAvoid)) {
-
             return in_array($path, $foldersToAvoid);
         } else {
-
             return false;
         }
     }
@@ -4245,7 +4245,7 @@ class DocumentManager
      */
     public static function get_system_folders()
     {
-        return array(
+        return [
             '/certificates',
             '/HotPotatoes_files',
             '/chat_files',
@@ -4255,7 +4255,7 @@ class DocumentManager
             '/video',
             '/shared_folder',
             '/learning_path'
-        );
+        ];
     }
 
     /**
@@ -4263,13 +4263,13 @@ class DocumentManager
      */
     public static function getProtectedFolderFromStudent()
     {
-        return array(
+        return [
             '/certificates',
             '/HotPotatoes_files',
             '/chat_files',
             '/shared_folder',
             '/learning_path'
-        );
+        ];
     }
 
     /**
@@ -4292,7 +4292,7 @@ class DocumentManager
 
         if (api_get_setting('documents_default_visibility_defined_in_course') == 'true') {
             $courseVisibility = api_get_course_setting('documents_default_visibility', $courseCode);
-            if (!empty($courseVisibility) && in_array($courseVisibility, array('visible', 'invisible'))) {
+            if (!empty($courseVisibility) && in_array($courseVisibility, ['visible', 'invisible'])) {
                 $defaultVisibility = $courseVisibility;
             }
         }
@@ -4374,12 +4374,12 @@ class DocumentManager
 
         $fileInfo = pathinfo($filePath);
 
-        $file = array(
+        $file = [
             'name' => $fileInfo['basename'],
             'tmp_name' => $filePath,
             'size' => filesize($filePath),
             'from_file' => true
-        );
+        ];
 
         $course_dir = $courseInfo['path'].'/document';
         $baseWorkDir = api_get_path(SYS_COURSE_PATH).$course_dir;
@@ -4470,7 +4470,6 @@ class DocumentManager
             error_log($mp3FilePath);
 
             if (!empty($mp3FilePath) && file_exists($mp3FilePath)) {
-
                 $documentId = self::addFileToDocumentTool(
                     $mp3FilePath,
                     dirname($documentData['path']),
@@ -4649,8 +4648,8 @@ class DocumentManager
         $fileType = 'file';
         $templateContent = file_get_contents(api_get_path(SYS_CODE_PATH).'gradebook/certificate_template/template.html');
 
-        $search = array('{CSS}', '{IMG_DIR}', '{REL_CODE_PATH}', '{COURSE_DIR}');
-        $replace = array($css.$js, $img_dir, $codePath, $default_course_dir);
+        $search = ['{CSS}', '{IMG_DIR}', '{REL_CODE_PATH}', '{COURSE_DIR}'];
+        $replace = [$css.$js, $img_dir, $codePath, $default_course_dir];
 
         $fileContent = str_replace($search, $replace, $templateContent);
         $saveFilePath = "$dir/$fileName.html";
@@ -4733,13 +4732,13 @@ class DocumentManager
         $newName = Database::escape_string($newName);
         $docuentTable = Database::get_course_table(TABLE_DOCUMENT);
 
-        $values = array(
+        $values = [
             'title' => $newName
-        );
+        ];
 
-        $whereConditions = array(
+        $whereConditions = [
             'id = ?' => $documentId
-        );
+        ];
 
         Database::update($docuentTable, $values, $whereConditions);
     }
@@ -4757,7 +4756,6 @@ class DocumentManager
     {
         // If no session or group, then no suffix.
         if (empty($sessionId) && empty($groupId)) {
-
             return '';
         }
 
@@ -4948,7 +4946,7 @@ class DocumentManager
         }
 
         $suffix = self::getDocumentSuffix(
-            array('real_id' => $courseId),
+            ['real_id' => $courseId],
             $sessionId,
             $groupId
         );
@@ -5033,7 +5031,7 @@ class DocumentManager
         $attributes = [];
         if (empty($form)) {
             $form = new FormValidator('selector', 'GET', api_get_self().'?'.api_get_cidreq());
-            $attributes = array('onchange' => 'javascript: document.selector.submit();');
+            $attributes = ['onchange' => 'javascript: document.selector.submit();'];
         }
         $form->addElement('hidden', 'cidReq', api_get_course_id());
         $parent_select = $form->addSelect(
@@ -5261,7 +5259,7 @@ class DocumentManager
             if (!$isAllowedToEdit &&
                 api_get_setting('students_export2pdf') == 'true' &&
                 $filetype == 'file' &&
-                in_array($extension, array('html', 'htm'))
+                in_array($extension, ['html', 'htm'])
             ) {
                 $pdf_icon = ' <a style="float:right".'.$prevent_multiple_click.' href="'.api_get_self().'?'.$courseParams.'&action=export_to_pdf&id='.$document_data['id'].'&curdirpath='.$curdirpath.'">'.
                     Display::return_icon('pdf.png', get_lang('Export2PDF'), [], ICON_SIZE_SMALL).'</a> ';
@@ -5319,7 +5317,7 @@ class DocumentManager
                         $pdfPreview = Display::url(
                             Display::return_icon('preview.png', get_lang('Preview'), null, ICON_SIZE_SMALL),
                             api_get_path(WEB_CODE_PATH).'document/showinframes.php?'.$courseParams.'&id='.$document_data['id'],
-                            array('style' => 'float:right')
+                            ['style' => 'float:right']
                         );
                     }
                     // No plugin just the old and good showinframes.php page
@@ -5773,7 +5771,7 @@ class DocumentManager
         if ($type == 'link') {
             $parent_id = self::get_document_id(
                 api_get_course_info(),
-                rtrim($path,'/'),
+                rtrim($path, '/'),
                 0
             );
         } else {
@@ -6032,7 +6030,7 @@ class DocumentManager
         $form->addElement('hidden', 'dir_id', intval($document_id));
         $form->addElement('hidden', 'id', intval($dirId));
         $form->addElement('header', get_lang('CreateDir'));
-        $form->addText('dirname', get_lang('NewDir'), array('autofocus' => 'autofocus'));
+        $form->addText('dirname', get_lang('NewDir'), ['autofocus' => 'autofocus']);
         $form->addButtonCreate(get_lang('CreateFolder'));
 
         return $form->returnForm();
@@ -6192,14 +6190,14 @@ class DocumentManager
      */
     public static function isBrowserViewable($file_extension)
     {
-        static $allowed_extensions = array(
+        static $allowed_extensions = [
             'htm', 'html', 'xhtml',
             'gif', 'jpg', 'jpeg', 'png', 'tif', 'tiff',
             'pdf', 'svg', 'swf',
             'txt', 'log',
             'mp4', 'ogg', 'ogv', 'ogx', 'mpg', 'mpeg', 'mov', 'avi', 'webm', 'wmv',
             'mp3', 'oga', 'wav', 'au', 'wma', 'mid', 'kar'
-        );
+        ];
 
         /*
           //TODO: make a admin switch to strict mode

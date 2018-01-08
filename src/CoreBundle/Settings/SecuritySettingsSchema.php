@@ -20,7 +20,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
     public function buildSettings(SettingsBuilderInterface $builder)
     {
         $builder->setDefaults(
-            array(
+            [
                 'filter_terms' => '',
                 'allow_browser_sniffer' => 'false',
                 'admins_can_set_users_pass' => '', // ?
@@ -28,12 +28,12 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
                 'allow_captcha' => 'false',
                 'user_reset_password' => 'false',
                 'user_reset_password_token_limit' => '3600'
-            )
+            ]
         );
-        $allowedTypes = array(
-            'allow_browser_sniffer' => array('string'),
-            'allow_strength_pass_checker' => array('string'),
-        );
+        $allowedTypes = [
+            'allow_browser_sniffer' => ['string'],
+            'allow_strength_pass_checker' => ['string'],
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 

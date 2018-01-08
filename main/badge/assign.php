@@ -56,7 +56,6 @@ if (empty($skillLevels)) {
     foreach ($skills as $skill) {
         $skillsOptions[$skill['data']['id']] = $skill['data']['name'];
     }
-
 }
 $skillIdFromGet = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $currentValue = isset($_REQUEST['current_value']) ? (int) $_REQUEST['current_value'] : 0;
@@ -374,38 +373,38 @@ $form->setDefaults(['user_name' => $user->getCompleteNameWithUsername()]);
 $form->freeze(['user_name']);
 
 if (api_is_drh()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'mySpace/index.php',
         "name" => get_lang('MySpace'),
-    );
+    ];
     if ($user->getStatus() == COURSEMANAGER) {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             "url" => api_get_path(WEB_CODE_PATH).'mySpace/teachers.php',
             'name' => get_lang('Teachers'),
-        );
+        ];
     } else {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             "url" => api_get_path(WEB_CODE_PATH).'mySpace/student.php',
             'name' => get_lang('MyStudents'),
-        );
+        ];
     }
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userId,
         'name' => $user->getCompleteName(),
-    );
+    ];
 } else {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
         'name' => get_lang('PlatformAdmin'),
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'admin/user_list.php',
         'name' => get_lang('UserList'),
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId,
         'name' => $user->getCompleteName(),
-    );
+    ];
 }
 
 $url = api_get_path(WEB_CODE_PATH).'badge/assign.php?user='.$userId;

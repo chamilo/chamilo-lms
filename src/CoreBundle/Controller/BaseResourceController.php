@@ -59,9 +59,9 @@ abstract class BaseResourceController extends ResourceController
     {
         $parts = $this->classParts;
 
-        $newPath = array();
+        $newPath = [];
         foreach ($parts as $part) {
-            if (in_array($part, array('chamilo_lms', 'controller'))
+            if (in_array($part, ['chamilo_lms', 'controller'])
                 //strpos($part, '_controller') > 0
             ) {
                 continue;
@@ -132,17 +132,17 @@ abstract class BaseResourceController extends ResourceController
     {
         $menu = $this->getMenuFactory()->createItem(
             'root',
-            array(
-                'childrenAttributes' => array(
+            [
+                'childrenAttributes' => [
                     'class'        => 'breadcrumb',
                     'currentClass' => 'active'
-                )
-            )
+                ]
+            ]
         );
 
         $menu->addChild(
             $this->trans('Home'),
-            array('uri' => $this->generateUrl('home'))
+            ['uri' => $this->generateUrl('home')]
         );
 
         return $menu;
@@ -161,11 +161,11 @@ abstract class BaseResourceController extends ResourceController
 
         $menu->addChild(
             $this->trans($this->getClassnameLabel().'List'),
-            array('uri' => $this->generateControllerUrl('listingAction'))
+            ['uri' => $this->generateControllerUrl('listingAction')]
         );
 
         $action = str_replace(
-            array($this->getControllerAlias().':', 'Action'),
+            [$this->getControllerAlias().':', 'Action'],
             '',
             $action
         );
@@ -187,13 +187,13 @@ abstract class BaseResourceController extends ResourceController
      * @param array $breadCrumbList
      * @return string
      */
-    protected function parseLegacyBreadCrumb($breadCrumbList = array())
+    protected function parseLegacyBreadCrumb($breadCrumbList = [])
     {
         $menu = $this->getHomeBreadCrumb();
         foreach ($breadCrumbList as $item) {
             $menu->addChild(
                 $this->trans($item['title']),
-                array('uri' => $item['url'])
+                ['uri' => $item['url']]
             );
         }
 
@@ -209,7 +209,7 @@ abstract class BaseResourceController extends ResourceController
      * @param array $elements
      * @return mixed
      */
-    public function renderTemplate($name, $elements = array())
+    public function renderTemplate($name, $elements = [])
     {
         $name = $this->getTemplatePath().'/'.$name;
 

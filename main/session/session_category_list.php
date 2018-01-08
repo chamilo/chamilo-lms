@@ -28,7 +28,7 @@ $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
 $page = isset($_GET['page']) ? intval($_GET['page']) : null;
 $action = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action']) : null;
-$sort = isset($_GET['sort']) && in_array($_GET['sort'], array('name', 'nbr_session', 'date_start', 'date_end')) ? Security::remove_XSS($_GET['sort']) : 'name';
+$sort = isset($_GET['sort']) && in_array($_GET['sort'], ['name', 'nbr_session', 'date_start', 'date_end']) ? Security::remove_XSS($_GET['sort']) : 'name';
 $idChecked = isset($_REQUEST['idChecked']) ? Security::remove_XSS($_REQUEST['idChecked']) : null;
 $order = isset($_REQUEST['order']) ? Security::remove_XSS($_REQUEST['order']) : 'ASC';
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
@@ -41,15 +41,15 @@ if ($action == 'delete_on_session' || $action == 'delete_off_session') {
     exit();
 }
 
-$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
 
 if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
-    $interbreadcrumb[] = array("url" => 'session_category_list.php', "name" => get_lang('ListSessionCategory'));
+    $interbreadcrumb[] = ["url" => 'session_category_list.php', "name" => get_lang('ListSessionCategory')];
     $tool_name = get_lang('SearchASession');
     Display :: display_header($tool_name);
     $form = new FormValidator('advanced_search', 'get');
     $form->addElement('header', '', $tool_name);
-    $active_group = array();
+    $active_group = [];
     $active_group[] = $form->createElement('checkbox', 'active', '', get_lang('Active'));
     $active_group[] = $form->createElement('checkbox', 'inactive', '', get_lang('Inactive'));
     $form->addGroup($active_group, '', get_lang('ActiveSession'), null, false);
@@ -98,8 +98,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     $Sessions = Database::store_result($result);
     $nbr_results = sizeof($Sessions);
     $tool_name = get_lang('ListSessionCategory');
-    Display::display_header($tool_name);
-    ?>
+    Display::display_header($tool_name); ?>
     <div class="actions">
         <div class="row">
             <div class="col-md-6">
@@ -107,8 +106,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                 echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_add.php">'.
                         Display::return_icon('new_folder.png', get_lang('AddSessionCategory'), '', ICON_SIZE_MEDIUM).'</a>
                       <a href="'.api_get_path(WEB_CODE_PATH).'session/session_list.php">'.
-                        Display::return_icon('session.png', get_lang('ListSession'), '', ICON_SIZE_MEDIUM).'</a>';
-            ?>
+                        Display::return_icon('session.png', get_lang('ListSession'), '', ICON_SIZE_MEDIUM).'</a>'; ?>
             </div>
             <div class="col-md-6">
                 <div class="pull-right">
@@ -138,8 +136,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                     <?php
                 } else {
                     echo get_lang('Previous');
-                }
-                ?>
+                } ?>
                 |
                 <?php
                 if ($nbr_results > $limit) {
@@ -149,8 +146,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                 } else {
                     echo get_lang('Next');
                 }
-            }
-            ?>
+            } ?>
         </div>
 
         <table class="data_table" width="100%">
@@ -179,8 +175,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                             us.access_url_id = '.api_get_current_access_url_id();
 
                 $rs = Database::query($sql);
-                list($nb_courses) = Database::fetch_array($rs);
-                ?>
+                list($nb_courses) = Database::fetch_array($rs); ?>
                 <tr class="<?php echo $i ? 'row_odd' : 'row_even'; ?>">
                     <td><input type="checkbox" id="idChecked_<?php echo $x; ?>" name="idChecked[]" value="<?php echo $enreg['id']; ?>"></td>
                     <td><?php echo api_htmlentities($enreg['name'], ENT_QUOTES, $charset); ?></td>
@@ -192,15 +187,14 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                             echo api_format_date($enreg['date_end'], DATE_FORMAT_SHORT);
                         } else {
                             echo '-';
-                        }
-                        ?>
+                        } ?>
                     </td>
                     <td>
                         <a href="session_category_edit.php?&id=<?php echo $enreg['id']; ?>">
-                            <?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?>
+                            <?php Display::display_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL); ?>
                         </a>
                         <a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=delete_off_session&idChecked=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
-                            <?php Display::display_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL); ?>
+                            <?php Display::display_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL); ?>
                         </a>
                     </td>
                 </tr>
@@ -208,21 +202,20 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                 $i = $i ? 0 : 1;
                 $x++;
             }
-            unset($Sessions);
-            ?>
+            unset($Sessions); ?>
         </table>
         <br />
         <div align="left">
         <?php
         if ($num > $limit) {
-            if ($page) { ?>
+            if ($page) {
+                ?>
                     <a href="<?php echo api_get_self(); ?>?page=<?php echo $page - 1; ?>&sort=<?php echo $sort; ?>&order=<?php echo Security::remove_XSS($_REQUEST['order']); ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>">
                         <?php echo get_lang('Previous'); ?></a>
                 <?php
             } else {
                 echo get_lang('Previous');
-            }
-            ?>
+            } ?>
                 |
             <?php
             if ($nbr_results > $limit) {
@@ -235,8 +228,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
             } else {
                 echo get_lang('Next');
             }
-        }
-        ?>
+        } ?>
         </div>
         <div class="btn-group">
             <a class="btn btn-default" href="#" onclick="selectAll('idChecked',<?php echo $x; ?>,'true');return false;"><?php echo get_lang('SelectAll') ?></a>
@@ -249,7 +241,9 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
             </select>
         </div>
         <button class="btn btn-success" type="submit" name="name" value="<?php echo get_lang('Ok') ?>"><?php echo get_lang('Ok') ?></button>
-    <?php } ?>
+    <?php
+        } ?>
     </table>
-<?php }
+<?php
+}
 Display::display_footer();

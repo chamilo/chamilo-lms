@@ -16,19 +16,19 @@ $this_section = SECTION_COURSES;
 Event::event_access_tool(TOOL_LEARNPATH);
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
-    );
+    ];
 }
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
     'name' => get_lang('LearningPaths')
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=".$_SESSION['oLP']->get_id().'&'.api_get_cidreq(),
     'name' => $_SESSION['oLP']->get_name()
-);
+];
 
 $htmlHeadXtra[] = '<script>
 function activate_start_date() {
@@ -49,7 +49,7 @@ function activate_end_date() {
 
 </script>';
 
-$defaults = array();
+$defaults = [];
 $form = new FormValidator(
     'form1',
     'post',
@@ -60,7 +60,7 @@ $form = new FormValidator(
 $form->addElement('header', get_lang('EditLPSettings'));
 
 // Title
-$form->addElement('text', 'lp_name', api_ucfirst(get_lang('LearnpathTitle')), array('size' => 43));
+$form->addElement('text', 'lp_name', api_ucfirst(get_lang('LearnpathTitle')), ['size' => 43]);
 $form->applyFilter('lp_name', 'html_filter');
 $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
 $form->addElement('hidden', 'lp_encoding');
@@ -73,7 +73,7 @@ $hide_toc_frame = $form->addElement(
     'hide_toc_frame',
     null,
     get_lang('HideTocFrame'),
-    array('onclick' => '$("#lp_layout_column").toggle()')
+    ['onclick' => '$("#lp_layout_column").toggle()']
 );
 if (api_get_setting('allow_course_theme') === 'true') {
     $mycourselptheme = api_get_course_setting('allow_learning_path_theme');
@@ -92,8 +92,8 @@ $form->addElement(
     'html_editor',
     'lp_author',
     get_lang('Author'),
-    array('size' => 80),
-    array('ToolbarSet' => 'LearningPathAuthor', 'Width' => '100%', 'Height' => '150px')
+    ['size' => 80],
+    ['ToolbarSet' => 'LearningPathAuthor', 'Width' => '100%', 'Height' => '150px']
 );
 $form->applyFilter('lp_author', 'html_filter');
 
@@ -104,24 +104,24 @@ if (strlen($_SESSION['oLP']->get_preview_image()) > 0) {
     $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
 }
 $label = ($_SESSION['oLP']->get_preview_image() != '' ? get_lang('UpdateImage') : get_lang('AddImage'));
-$form->addElement('file', 'lp_preview_image', array($label, get_lang('ImageWillResizeMsg')));
+$form->addElement('file', 'lp_preview_image', [$label, get_lang('ImageWillResizeMsg')]);
 
-$form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'filetype', array('jpg', 'jpeg', 'png', 'gif'));
+$form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'filetype', ['jpg', 'jpeg', 'png', 'gif']);
 
 // Search terms (only if search is activated).
 if (api_get_setting('search_enabled') === 'true') {
     $specific_fields = get_specific_field_list();
     foreach ($specific_fields as $specific_field) {
         $form->addElement('text', $specific_field['code'], $specific_field['name']);
-        $filter = array(
+        $filter = [
             'c_id' => "'".api_get_course_int_id()."'",
             'field_id' => $specific_field['id'],
             'ref_id' => $_SESSION['oLP']->lp_id,
             'tool_id' => '\''.TOOL_LEARNPATH.'\'',
-        );
-        $values = get_specific_field_values_list($filter, array('value'));
+        ];
+        $values = get_specific_field_values_list($filter, ['value']);
         if (!empty($values)) {
-            $arr_str_values = array();
+            $arr_str_values = [];
             foreach ($values as $value) {
                 $arr_str_values[] = $value['value'];
             }
@@ -156,7 +156,7 @@ $form->addElement(
     'activate_start_date_check',
     null,
     get_lang('EnableStartTime'),
-    array('onclick' => 'activate_start_date()')
+    ['onclick' => 'activate_start_date()']
 );
 
 $display_date = 'none';
@@ -175,7 +175,7 @@ $form->addElement(
     'activate_end_date_check',
     null,
     get_lang('EnableEndTime'),
-    array('onclick' => 'activate_end_date()')
+    ['onclick' => 'activate_end_date()']
 );
 $display_date = 'none';
 if (!empty($expired_on)) {

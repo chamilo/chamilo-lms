@@ -7,7 +7,6 @@
 
 namespace Chamilo\ThemeBundle\Event;
 
-
 use Chamilo\ThemeBundle\Model\MessageInterface;
 
 /**
@@ -21,7 +20,7 @@ class MessageListEvent extends ThemeEvent
      * Stores the list of messages
      * @var array
      */
-    protected $messages = array();
+    protected $messages = [];
 
     /**
      * Stores the total amount
@@ -48,11 +47,9 @@ class MessageListEvent extends ThemeEvent
      */
     public function addMessage(MessageInterface $messageInterface)
     {
-
         $this->messages[] = $messageInterface;
 
         return $this;
-
     }
 
     /**
@@ -64,5 +61,4 @@ class MessageListEvent extends ThemeEvent
     {
         return $this->totalMessages == 0 ? sizeof($this->messages) : $this->totalMessages;
     }
-
 }

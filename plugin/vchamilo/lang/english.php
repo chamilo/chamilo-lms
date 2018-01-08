@@ -123,6 +123,3 @@ $strings['UploadUrl'] = 'Upload URL';
 $strings['CourseUrl'] = 'Course URL';
 $strings['ThemeFolder'] = 'Theme folder';
 $strings['ThemeFolderExplanation'] = 'Theme folder should be located inside the web/css/themes/ folder';
-
-
-

@@ -287,6 +287,4 @@ class Priority
 
         return $this;
     }
-
-
 }

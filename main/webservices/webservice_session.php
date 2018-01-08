@@ -83,7 +83,7 @@ class WSSession extends WS
             return new WSError(301, 'Could not create the session');
         } else {
             // Add the Original session id to the extra fields
-            $extras_associative = array();
+            $extras_associative = [];
             if ($session_id_field_name != "chamilo_session_id") {
                 $extras_associative[$session_id_field_name] = $session_id_value;
             }
@@ -292,7 +292,7 @@ class WSSession extends WS
                 return new WSError(302, 'Could not edit the session');
             } else {
                 if (!empty($extras)) {
-                    $extras_associative = array();
+                    $extras_associative = [];
                     foreach ($extras as $extra) {
                         $extras_associative[$extra['field_name']] = $extra['field_value'];
                     }
@@ -403,7 +403,7 @@ class WSSession extends WS
                 if ($state == 1) {
                     SessionManager::subscribe_users_to_session(
                         $session_id,
-                        array($user_id)
+                        [$user_id]
                     );
                 } else {
                     $result = SessionManager::unsubscribe_user_from_session(
@@ -535,7 +535,7 @@ class WSSession extends WS
                             $course_id
                         );
                     } else {
-                        $user_id = array(0 => $user_id);
+                        $user_id = [0 => $user_id];
                         $result = SessionManager::removeUsersFromCourseSession(
                             $user_id,
                             $session_id,
@@ -667,7 +667,7 @@ class WSSession extends WS
                 if ($state == 1) {
                     SessionManager::add_courses_to_session(
                         $session_id,
-                        array($course_id)
+                        [$course_id]
                     );
 
                     return true;

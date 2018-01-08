@@ -51,13 +51,13 @@ $result = Database::query($sql_query);
 $therow = Database::fetch_array($result);
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
-    );
+    ];
 }
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
-$interbreadcrumb[] = array('url' => '#', "name" => $therow['name']);
+$interbreadcrumb[] = ['url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths')];
+$interbreadcrumb[] = ['url' => '#', "name" => $therow['name']];
 
 // Theme calls.
 $lp_theme_css = $_SESSION['oLP']->get_theme();
@@ -127,7 +127,7 @@ function show_block($link, $title, $subtitle, $icon)
     $html = '<li class="col-md-4">';
     $html .= '<div class="thumbnail">';
     $html .= '<a href="'.$link.'" title="'.$title.'">';
-    $html .= Display::return_icon($icon, $title, array(), ICON_SIZE_BIG);
+    $html .= Display::return_icon($icon, $title, [], ICON_SIZE_BIG);
     $html .= '</a>';
     $html .= '<div class="caption">';
     $html .= '<strong>'.$title.'</strong></a> '.$subtitle;

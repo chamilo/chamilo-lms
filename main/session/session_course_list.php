@@ -25,7 +25,7 @@ if (empty($id_session)) {
 
 $page = isset($_GET['page']) ? intval($_GET['page']) : 0;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
-$sort = isset($_GET['sort']) && in_array($_GET['sort'], array('title', 'nbr_users')) ? $_GET['sort'] : 'title';
+$sort = isset($_GET['sort']) && in_array($_GET['sort'], ['title', 'nbr_users']) ? $_GET['sort'] : 'title';
 
 $result = Database::query("SELECT name FROM $tbl_session WHERE id='$id_session'");
 
@@ -37,7 +37,7 @@ if (!list($session_name) = Database::fetch_row($result)) {
 if ($action == 'delete') {
     $idChecked = $_REQUEST['idChecked'];
     if (is_array($idChecked) && count($idChecked) > 0) {
-        $my_temp = array();
+        $my_temp = [];
         foreach ($idChecked as $id) {
             $my_temp[] = Database::escape_string($id); // forcing the escape_string
         }
@@ -64,24 +64,24 @@ $result = Database::query($sql);
 $Courses = Database::store_result($result);
 $tool_name = api_htmlentities($session_name, ENT_QUOTES, $charset).' : '.get_lang('CourseListInSession');
 
-$interbreadcrumb[] = array('url' => "session_list.php", "name" => get_lang('SessionList'));
-$interbreadcrumb[] = array('url' => "resume_session.php?id_session=".Security::remove_XSS($_REQUEST['id_session']), "name" => get_lang('SessionOverview'));
+$interbreadcrumb[] = ['url' => "session_list.php", "name" => get_lang('SessionList')];
+$interbreadcrumb[] = ['url' => "resume_session.php?id_session=".Security::remove_XSS($_REQUEST['id_session']), "name" => get_lang('SessionOverview')];
 
 Display::display_header($tool_name);
 echo Display::page_header($tool_name);
 ?>
 <form method="post" action="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
 <?php
-$tableHeader = array();
-$tableHeader[] = array(' ');
-$tableHeader[] = array(get_lang('CourseTitle'));
-$tableHeader[] = array(get_lang('NbUsers'));
-$tableHeader[] = array(get_lang('Actions'));
+$tableHeader = [];
+$tableHeader[] = [' '];
+$tableHeader[] = [get_lang('CourseTitle')];
+$tableHeader[] = [get_lang('NbUsers')];
+$tableHeader[] = [get_lang('Actions')];
 
-$tableCourses = array();
+$tableCourses = [];
 
 foreach ($Courses as $key=>$enreg) {
-    $course = array();
+    $course = [];
     $course[] = '<input type="checkbox" name="idChecked[]" value="'.$enreg['id'].'">';
     $course[] = api_htmlentities($enreg['title'], ENT_QUOTES, $charset);
     $course[] = '<a href="session_course_user_list.php?id_session='.$id_session.'&course_code='.$enreg['code'].'">'.$enreg['nbr_users'].' '.get_lang('Users').'</a>';
@@ -94,7 +94,7 @@ foreach ($Courses as $key=>$enreg) {
     $tableCourses[] = $course;
 }
 echo '<form method="post" action="'.api_get_self().'">';
-Display :: display_sortable_table($tableHeader, $tableCourses, array(), array());
+Display :: display_sortable_table($tableHeader, $tableCourses, [], []);
 echo '<select name="action">
 	<option value="delete">'.get_lang('UnsubscribeCoursesFromSession').'</option>
 	</select>

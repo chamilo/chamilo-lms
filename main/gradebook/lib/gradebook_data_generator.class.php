@@ -29,11 +29,11 @@ class GradebookDataGenerator
      * @param array $evals
      * @param array $links
      */
-    public function __construct($cats = array(), $evals = array(), $links = array())
+    public function __construct($cats = [], $evals = [], $links = [])
     {
-        $allcats = isset($cats) ? $cats : array();
-        $allevals = isset($evals) ? $evals : array();
-        $alllinks = isset($links) ? $links : array();
+        $allcats = isset($cats) ? $cats : [];
+        $allevals = isset($evals) ? $evals : [];
+        $alllinks = isset($links) ? $links : [];
 
         // if we are in the root category and if there are sub categories
         // display only links depending of the root category and not link that belongs
@@ -41,12 +41,12 @@ class GradebookDataGenerator
         $tabLinkToDisplay = $alllinks;
         if (count($allcats) > 0) {
             // get sub categories id
-            $tabCategories = array();
+            $tabCategories = [];
             for ($i = 0; $i < count($allcats); $i++) {
                 $tabCategories[] = $allcats[$i]->get_id();
             }
             // dont display links that belongs to a sub category
-            $tabLinkToDisplay = array();
+            $tabLinkToDisplay = [];
             for ($i = 0; $i < count($alllinks); $i++) {
                 if (!in_array($alllinks[$i]->get_category_id(), $tabCategories)) {
                     $tabLinkToDisplay[] = $alllinks[$i];
@@ -85,7 +85,7 @@ class GradebookDataGenerator
         $start = 0,
         $count = null,
         $ignore_score_color = false,
-        $studentList = array()
+        $studentList = []
     ) {
         // do some checks on count, redefine if invalid value
         if (!isset($count)) {
@@ -96,7 +96,7 @@ class GradebookDataGenerator
         }
 
         $allitems = $this->items;
-        usort($allitems, array('GradebookDataGenerator', 'sort_by_name'));
+        usort($allitems, ['GradebookDataGenerator', 'sort_by_name']);
 
         $userId = $this->userId;
 
@@ -105,12 +105,12 @@ class GradebookDataGenerator
         $userCount = count($studentList);
 
         // Generate the data to display
-        $data = array();
+        $data = [];
         $totalWeight = 0;
 
         /** @var GradebookItem $item */
         foreach ($visibleItems as $item) {
-            $row = array();
+            $row = [];
             $row[] = $item;
             $row[] = $item->get_name();
             // display the 2 first line of description, and all description on mouseover (https://support.chamilo.org/issues/6588)
@@ -173,7 +173,7 @@ class GradebookDataGenerator
                 $row['average_score'] = $average['score'];
 
                 // Ranking
-                $rankingStudentList = array();
+                $rankingStudentList = [];
                 $invalidateResults = true;
                 foreach ($studentList as $user) {
                     $score = $this->build_result_column(
@@ -234,10 +234,10 @@ class GradebookDataGenerator
             $display = ExerciseLib::show_score($score[0], $score[1], false);
         }
 
-        return array(
+        return [
             'display' => $display,
             'score' => $score
-        );
+        ];
     }
 
     /**
@@ -261,10 +261,10 @@ class GradebookDataGenerator
             $display = ExerciseLib::show_score($score[0], $score[1], false);
         }
 
-        return array(
+        return [
             'display' => $display,
             'score' => $score
-        );
+        ];
     }
 
     /**
@@ -318,30 +318,30 @@ class GradebookDataGenerator
                 case 'C':
                     if ($score != null) {
                         if ($forceSimpleResult) {
-                            return array(
+                            return [
                                 'display' => $scoreDisplay->display_score(
                                     $score,
                                     SCORE_DIV
                                 ),
                                 'score' => $score,
                                 'score_weight' => $score
-                            );
+                            ];
                         }
 
-                        return array(
+                        return [
                             'display' => $scoreDisplay->display_score(
                                 $score,
                                 SCORE_DIV
                             ),
                             'score' => $score,
                             'score_weight' => $score
-                        );
+                        ];
                     } else {
-                        return array(
+                        return [
                             'display' => null,
                             'score' => $score,
                             'score_weight' => $score
-                        );
+                        ];
                     }
                     break;
                 // evaluation and link
@@ -367,19 +367,19 @@ class GradebookDataGenerator
                         );
                     }
 
-                    return array(
+                    return [
                         'display' => $display,
                         'score' => $score,
                         'score_weight' => $scoreWeight,
-                    );
+                    ];
                 }
         }
 
-        return array(
+        return [
             'display' => null,
             'score' => null,
             'score_weight' => null
-        );
+        ];
     }
 
     /**

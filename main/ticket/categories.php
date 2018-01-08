@@ -26,8 +26,8 @@ Session::erase('this_section');
 
 $table = new SortableTable(
     'TicketCategories',
-    array('TicketManager', 'getCategoriesCount'),
-    array('TicketManager', 'getCategories'),
+    ['TicketManager', 'getCategoriesCount'],
+    ['TicketManager', 'getCategories'],
     1
 );
 
@@ -47,25 +47,25 @@ if (empty($project)) {
 Session::write('project_id', $projectId);
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId,
     'name' => get_lang('MyTickets')
-);
+];
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/settings.php',
     'name' => get_lang('Settings')
-);
+];
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/projects.php',
     'name' => get_lang('Projects')
-);
+];
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/projects.php',
     'name' => $project->getName()
-);
+];
 
 switch ($action) {
     case 'delete':
@@ -81,10 +81,10 @@ switch ($action) {
         break;
     case 'add':
         $toolName = get_lang('Add');
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php',
             'name' => get_lang('Categories')
-        );
+        ];
         $url = api_get_self().'?action=add&project_id='.$projectId;
         $form = TicketManager::getCategoryForm($url, $projectId);
         $formToString = $form->returnForm();
@@ -114,10 +114,10 @@ switch ($action) {
         }
 
         $toolName = get_lang('Edit');
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php?project_id='.$projectId,
             'name' => get_lang('Categories')
-        );
+        ];
         $url = api_get_self().'?action=edit&project_id='.$projectId.'&id='.$id;
         $form = TicketManager::getCategoryForm($url, $projectId);
 
@@ -178,7 +178,7 @@ function modify_filter($id, $params, $row)
 
 $table->set_header(0, '', false);
 $table->set_header(1, get_lang('Title'), false);
-$table->set_header(2, get_lang('Description'), true, array("style" => "width:200px"));
+$table->set_header(2, get_lang('Description'), true, ["style" => "width:200px"]);
 $table->set_header(3, get_lang('TotalTickets'), false);
 $table->set_header(4, get_lang('Actions'), true);
 $table->set_column_filter(4, 'modify_filter');

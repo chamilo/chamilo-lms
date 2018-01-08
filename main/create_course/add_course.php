@@ -54,10 +54,10 @@ $htmlHeadXtra[] = '<script>
     });
 </script>';
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_PATH).'user_portal.php',
     'name' => get_lang('MyCourses')
-);
+];
 
 // Displaying the header.
 $tool_name = $course_validation_feature ? get_lang('CreateCourseRequest') : get_lang('CreateSite');
@@ -74,13 +74,13 @@ $form->addElement('header', $tool_name);
 $form->addElement(
     'text',
     'title',
-    array(
+    [
         get_lang('CourseName'),
         get_lang('Ex')
-    ),
-    array(
+    ],
+    [
         'id' => 'title'
-    )
+    ]
 );
 $form->applyFilter('title', 'html_filter');
 $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
@@ -123,16 +123,16 @@ if ($countCategories >= 100) {
 // Course code
 $form->addText(
     'wanted_code',
-    array(
+    [
         get_lang('Code'),
         get_lang('OnlyLettersAndNumbers')
-    ),
+    ],
     '',
-    array(
+    [
         'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
         'pattern' => '[a-zA-Z0-9]+',
         'title' => get_lang('OnlyLettersAndNumbers')
-    )
+    ]
 );
 $form->applyFilter('wanted_code', 'html_filter');
 $form->addRule(
@@ -150,7 +150,7 @@ if ($course_validation_feature) {
         'textarea',
         'description',
         get_lang('Description'),
-        array('rows' => '3')
+        ['rows' => '3']
     );
 
     // Objectives of the requested course.
@@ -158,7 +158,7 @@ if ($course_validation_feature) {
         'textarea',
         'objetives',
         get_lang('Objectives'),
-        array('rows' => '3')
+        ['rows' => '3']
     );
 
     // Target audience of the requested course.
@@ -166,7 +166,7 @@ if ($course_validation_feature) {
         'textarea',
         'target_audience',
         get_lang('TargetAudience'),
-        array('rows' => '3')
+        ['rows' => '3']
     );
 }
 
@@ -179,8 +179,8 @@ if (count($languages['name']) === 1) {
     $form->addSelectLanguage(
         'course_language',
         get_lang('Ln'),
-        array(),
-        array('style' => 'width:150px')
+        [],
+        ['style' => 'width:150px']
     );
 }
 
@@ -306,7 +306,7 @@ if ($form->validate()) {
 
     if ($course_code_ok) {
         if (!$course_validation_feature) {
-            $params = array();
+            $params = [];
             $params['title'] = $title;
             $params['exemplary_content'] = $exemplary_content;
             $params['wanted_code'] = $wanted_code;

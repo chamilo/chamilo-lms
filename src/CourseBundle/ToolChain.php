@@ -53,7 +53,7 @@ class ToolChain
      */
     public function __construct()
     {
-        $this->tools = array();
+        $this->tools = [];
     }
 
     /**

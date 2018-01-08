@@ -22,17 +22,17 @@ class CourseHomeToolType extends AbstractType
         $builder->add(
             'custom_icon',
             'file',
-            array('required' => false, 'data_class' => null)
+            ['required' => false, 'data_class' => null]
         );
         $builder->add(
             'target',
             'choice',
-            array('choices' => array('_self', '_blank'))
+            ['choices' => ['_self', '_blank']]
         );
         $builder->add(
             'visibility',
             'choice',
-            array('choices' => array('1', '0'))
+            ['choices' => ['1', '0']]
         );
         $builder->add('c_id', 'hidden');
         $builder->add('session_id', 'hidden');
@@ -44,9 +44,9 @@ class CourseHomeToolType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => 'Chamilo\CourseBundle\Entity\CTool',
-            )
+            ]
         );
     }
 

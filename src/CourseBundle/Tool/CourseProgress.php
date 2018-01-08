@@ -9,5 +9,4 @@ namespace Chamilo\CourseBundle\Tool;
  */
 class CourseProgress extends BaseTool
 {
-
 }

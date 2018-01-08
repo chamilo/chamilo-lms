@@ -43,9 +43,9 @@ class Category
         return $this->proxyCurrentLocaleTranslation($method, $arguments);
     }
 
-     /**
-     * @return string
-     */
+    /**
+    * @return string
+    */
     public function __toString()
     {
         return (string) $this->getName();

@@ -38,9 +38,9 @@ class SidebarController extends Controller
 
         return $this->render(
             'ChamiloThemeBundle:Sidebar:user-panel.html.twig',
-            array(
+            [
                 'user' => $userEvent->getUser()
-            )
+            ]
         );
     }
 
@@ -61,9 +61,9 @@ class SidebarController extends Controller
 
         return $this->render(
             'ChamiloThemeBundle:Sidebar:social-panel.html.twig',
-            array(
+            [
                 'user' => $userEvent->getUser()
-            )
+            ]
         );
     }
 
@@ -73,7 +73,7 @@ class SidebarController extends Controller
      */
     public function searchFormAction()
     {
-        return $this->render('ChamiloThemeBundle:Sidebar:search-form.html.twig', array());
+        return $this->render('ChamiloThemeBundle:Sidebar:search-form.html.twig', []);
     }
 
     /**
@@ -105,9 +105,9 @@ class SidebarController extends Controller
 
         return $this->render(
             'ChamiloThemeBundle:Sidebar:left_menu.html.twig',
-            array(
+            [
                 'menu' => $event->getMenu()
-            )
+            ]
         );
     }
 }

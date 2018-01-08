@@ -16,27 +16,27 @@ class TestAnswerFeedback extends Basic
      */
     public function getConfig()
     {
-        $config['toolbarGroups'] = array(
-            array('name' => 'document'),
-            array(
+        $config['toolbarGroups'] = [
+            ['name' => 'document'],
+            [
                 'name' => 'clipboard',
-                'groups' => array('clipboard', 'undo',)
-            ),
-            array(
+                'groups' => ['clipboard', 'undo',]
+            ],
+            [
                 'name' => 'basicstyles',
-                'groups' => array('basicstyles', 'cleanup',)
-            ),
-            array(
+                'groups' => ['basicstyles', 'cleanup',]
+            ],
+            [
                 'name' => 'paragraph',
-                'groups' => array('list', 'indent', 'blocks', 'align')
-            ),
-            array('name' => 'links'),
-            array('name' => 'insert'),
+                'groups' => ['list', 'indent', 'blocks', 'align']
+            ],
+            ['name' => 'links'],
+            ['name' => 'insert'],
             '/',
-            array('name' => 'styles'),
-            array('name' => 'colors'),
-            array('name' => 'mode')
-        );
+            ['name' => 'styles'],
+            ['name' => 'colors'],
+            ['name' => 'mode']
+        ];
 
         $config['toolbarCanCollapse'] = true;
         $config['toolbarStartupExpanded'] = false;

@@ -7,7 +7,6 @@
 
 namespace Chamilo\ThemeBundle\Model;
 
-
 class UserModel implements UserInterface
 {
 
@@ -31,7 +30,7 @@ class UserModel implements UserInterface
      */
     protected $isOnline = false;
 
-    function __construct($username = '', $avatar = '', $memberSince = null, $isOnline = true)
+    public function __construct($username = '', $avatar = '', $memberSince = null, $isOnline = true)
     {
         $this->avatar      = $avatar;
         $this->isOnline    = $isOnline;

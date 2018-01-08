@@ -36,10 +36,10 @@ class UserDataGenerator
      * @param array $evals
      * @param array $links
      */
-    public function __construct($userid, $evals = array(), $links = array())
+    public function __construct($userid, $evals = [], $links = [])
     {
         $this->userid = $userid;
-        $result = array();
+        $result = [];
         foreach ($evals as $eval) {
             $toadd = true;
             $coursecode = $eval->get_course_code();
@@ -52,7 +52,6 @@ class UserDataGenerator
             if ($toadd) {
                 $evals_filtered_copy = $evals;
             }
-
         }
         if (count($result) == 0) {
             $evals_filtered = $evals;
@@ -61,8 +60,8 @@ class UserDataGenerator
         }
         $this->items = array_merge($evals_filtered, $links);
 
-        $this->coursecodecache = array();
-        $this->categorycache = array();
+        $this->coursecodecache = [];
+        $this->categorycache = [];
         $this->scorecache = null;
         $this->avgcache = null;
     }
@@ -103,33 +102,33 @@ class UserDataGenerator
 
         // sort users array
         if ($sorting & self::UDG_SORT_TYPE) {
-            usort($allitems, array('UserDataGenerator', 'sort_by_type'));
+            usort($allitems, ['UserDataGenerator', 'sort_by_type']);
         } elseif ($sorting & self::UDG_SORT_NAME) {
-            usort($allitems, array('UserDataGenerator', 'sort_by_name'));
+            usort($allitems, ['UserDataGenerator', 'sort_by_name']);
         } elseif ($sorting & self::UDG_SORT_COURSE) {
-            usort($allitems, array('UserDataGenerator', 'sort_by_course'));
+            usort($allitems, ['UserDataGenerator', 'sort_by_course']);
         } elseif ($sorting & self::UDG_SORT_CATEGORY) {
-            usort($allitems, array('UserDataGenerator', 'sort_by_category'));
+            usort($allitems, ['UserDataGenerator', 'sort_by_category']);
         } elseif ($sorting & self::UDG_SORT_AVERAGE) {
             // if user sorts on average scores, first calculate them and cache them
             foreach ($allitems as $item) {
                 $this->avgcache[$item->get_item_type().$item->get_id()] = $item->calc_score();
             }
-            usort($allitems, array('UserDataGenerator', 'sort_by_average'));
+            usort($allitems, ['UserDataGenerator', 'sort_by_average']);
         } elseif ($sorting & self::UDG_SORT_SCORE) {
             // if user sorts on student's scores, first calculate them and cache them
             foreach ($allitems as $item) {
                 $this->scorecache[$item->get_item_type().$item->get_id()]
                     = $item->calc_score($this->userid);
             }
-            usort($allitems, array('UserDataGenerator', 'sort_by_score'));
+            usort($allitems, ['UserDataGenerator', 'sort_by_score']);
         } elseif ($sorting & self::UDG_SORT_MASK) {
             // if user sorts on student's masks, first calculate scores and cache them
             foreach ($allitems as $item) {
                 $this->scorecache[$item->get_item_type().$item->get_id()]
                     = $item->calc_score($this->userid);
             }
-            usort($allitems, array('UserDataGenerator', 'sort_by_mask'));
+            usort($allitems, ['UserDataGenerator', 'sort_by_mask']);
         }
 
         if ($sorting & self::UDG_SORT_DESC) {
@@ -144,13 +143,12 @@ class UserDataGenerator
                 $this->scorecache[$item->get_item_type().$item->get_id()]
                     = $item->calc_score($this->userid);
             }
-
         }
         // generate the data to display
         $scoredisplay = ScoreDisplay::instance();
-        $data = array();
+        $data = [];
         foreach ($visibleitems as $item) {
-            $row = array();
+            $row = [];
             $row[] = $item;
             $row[] = $item->get_name();
             $row[] = $this->build_course_name($item);

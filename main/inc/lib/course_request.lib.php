@@ -168,11 +168,11 @@ class CourseRequestManager
 
         $userInfo = api_get_user_info($user_id);
 
-        $additionalParameters = array(
+        $additionalParameters = [
             'smsType' => SmsPlugin::NEW_COURSE_SUGGESTED_TEACHER,
             'userId' => $user_id,
             'userUsername' => $userInfo['username']
-        );
+        ];
 
         api_mail_html(
             $recipient_name_admin,
@@ -205,11 +205,11 @@ class CourseRequestManager
         $recipient_name_teacher = $sender_name_teacher;
         $recipient_email_teacher = $sender_email_teacher;
 
-        $additionalParameters = array(
+        $additionalParameters = [
             'smsType' => SmsPlugin::COURSE_OPENING_REQUEST_CODE_REGISTERED,
             'userId' => $user_info['user_id'],
             'courseCode' => $wanted_code
-        );
+        ];
 
         api_mail_html(
             $recipient_name_teacher,
@@ -323,12 +323,14 @@ class CourseRequestManager
         }
 
         // @todo use entity
-        $sql = sprintf('UPDATE %s SET
+        $sql = sprintf(
+            'UPDATE %s SET
                 code = "%s", user_id = "%s", directory = "%s", db_name = "%s",
                 course_language = "%s", title = "%s", description = "%s", category_code = "%s",
                 tutor_name = "%s", visual_code = "%s", request_date = "%s",
                 objetives = "%s", target_audience = "%s", status = "%s", info = "%s", exemplary_content = "%s"
-            WHERE id = '.$id, Database::get_main_table(TABLE_MAIN_COURSE_REQUEST),
+            WHERE id = '.$id,
+            Database::get_main_table(TABLE_MAIN_COURSE_REQUEST),
             Database::escape_string($code),
             intval($user_id),
             Database::escape_string($directory),
@@ -458,7 +460,7 @@ class CourseRequestManager
         }
 
         // Create the requested course
-        $params = array();
+        $params = [];
 
         $params['title'] = $course_request_info['title'];
         $params['course_category'] = $course_request_info['category_code'];
@@ -506,11 +508,11 @@ class CourseRequestManager
             $recipient_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
             $recipient_email = $user_info['mail'];
 
-            $additionalParameters = array(
+            $additionalParameters = [
                 'smsType' => SmsPlugin::COURSE_OPENING_REQUEST_CODE_APPROVED,
                 'userId' => $user_id,
                 'courseCode' => $course_info['code']
-            );
+            ];
 
             api_mail_html(
                 $recipient_name,
@@ -587,11 +589,11 @@ class CourseRequestManager
         $recipient_email = $user_info['mail'];
         $extra_headers = 'Bcc: '.$sender_email;
 
-        $additionalParameters = array(
+        $additionalParameters = [
             'smsType' => SmsPlugin::COURSE_OPENING_REQUEST_CODE_REJECTED,
             'userId' => $user_id,
             'courseCode' => $code
-        );
+        ];
 
         api_mail_html(
             $recipient_name,
@@ -669,11 +671,11 @@ class CourseRequestManager
         $recipient_email = $user_info['mail'];
         $extra_headers = 'Bcc: '.$sender_email;
 
-        $additionalParameters = array(
+        $additionalParameters = [
             'smsType' => SmsPlugin::COURSE_OPENING_REQUEST_CODE,
             'userId' => $user_id,
             'courseCode' => $code
-        );
+        ];
 
         $result = api_mail_html(
             $recipient_name,

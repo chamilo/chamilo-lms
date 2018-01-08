@@ -77,15 +77,15 @@ fclose($fh);
 $fileInfo = pathinfo($documentPath);
 $courseInfo = api_get_course_info();
 
-$file = array(
-    'file' => array(
+$file = [
+    'file' => [
         'name' => $fileInfo['basename'],
         'tmp_name' => $documentPath,
         'size' => filesize($documentPath),
         'type' => 'audio/wav',
         'from_file' => true
-    )
-);
+    ]
+];
 $output = true;
 ob_start();
 

@@ -237,7 +237,7 @@ if ($allowOverwrite == 'true') {
             $javascript .= "'".$dropbox_person->sentWork[$i]->title."'";
         }
     }
-	$javascript .= ");
+    $javascript .= ");
 
 		function checkfile(str)
 		{
@@ -299,7 +299,7 @@ Session::write('javascript', $javascript);
 $htmlHeadXtra[] = '<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="expires" content="-1">';
-$htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'));
+$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 $htmlHeadXtra[] = "<script>
 $(function () {
     $('#recipient_form').on('change', function() {
@@ -344,33 +344,33 @@ if ((!$is_allowed_in_course || !$is_course_member) &&
 
 /*	BREADCRUMBS */
 if ($view == 'received') {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq(),
         'name' => get_lang('Dropbox', ''),
-    );
+    ];
     $nameTools = get_lang('ReceivedFiles');
 
     if ($action == 'addreceivedcategory') {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=received&'.api_get_cidreq(),
             'name' => get_lang('ReceivedFiles'),
-        );
+        ];
         $nameTools = get_lang('AddNewCategory');
     }
 }
 
 if ($view == 'sent' || empty($view)) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq(),
         'name' => get_lang('Dropbox')
-    );
+    ];
     $nameTools = get_lang('SentFiles');
 
     if ($action == 'addsentcategory') {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=sent&'.api_get_cidreq(),
             'name' => get_lang('SentFiles'),
-        );
+        ];
         $nameTools = get_lang('AddNewCategory');
     }
     if ($action == 'add') {
@@ -378,10 +378,10 @@ if ($view == 'sent' || empty($view)) {
     }
 
     if ($action == 'update') {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=sent&'.api_get_cidreq(),
             'name' => get_lang('SentFiles'),
-        );
+        ];
         $nameTools = get_lang('UpdateFile');
     }
 }

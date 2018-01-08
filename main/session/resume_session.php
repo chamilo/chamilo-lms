@@ -30,10 +30,10 @@ if (empty($sessionId)) {
 SessionManager::protectSession($sessionId);
 
 $tool_name = get_lang('SessionOverview');
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'session_list.php',
     'name' => get_lang('SessionList')
-);
+];
 
 $orig_param = '&origin=resume_session';
 
@@ -87,7 +87,7 @@ switch ($action) {
         // Delete course from session.
         $idChecked = isset($_GET['idChecked']) ? $_GET['idChecked'] : null;
         if (is_array($idChecked)) {
-            $usersToDelete = array();
+            $usersToDelete = [];
             foreach ($idChecked as $courseCode) {
                 // forcing the escape_string
                 $courseInfo = api_get_course_info($courseCode);
@@ -121,7 +121,7 @@ $sessionHeader = Display::page_header(
 );
 
 $url = Display::url(
-    Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),
+    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
     "session_edit.php?page=resume_session.php&id=$sessionId"
 );
 
@@ -138,7 +138,7 @@ if ($multiple_url_is_on) {
 }
 
 $url = Display::url(
-    Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),
+    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
     "add_courses_to_session.php?page=resume_session.php&id_session=$sessionId"
 );
 $courseListToShow = Display::page_subheader(get_lang('CourseList').$url);
@@ -237,15 +237,15 @@ if ($sessionInfo['nbr_courses'] == 0) {
 $courseListToShow .= '</table><br />';
 
 $url = Display::url(
-    Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),
+    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL),
     "add_users_to_session.php?page=resume_session.php&id_session=$sessionId"
 );
 $url .= Display::url(
-    Display::return_icon('import_csv.png', get_lang('ImportUsers'), array(), ICON_SIZE_SMALL),
+    Display::return_icon('import_csv.png', get_lang('ImportUsers'), [], ICON_SIZE_SMALL),
     "session_user_import.php?id_session=$sessionId"
 );
 $url .= Display::url(
-    Display::return_icon('export_csv.png', get_lang('ExportUsers'), array(), ICON_SIZE_SMALL),
+    Display::return_icon('export_csv.png', get_lang('ExportUsers'), [], ICON_SIZE_SMALL),
     api_get_path(WEB_CODE_PATH)."user/user_export.php?file_type=csv&session=$sessionId&addcsvheader=1"
 );
 
@@ -254,7 +254,7 @@ $userList = SessionManager::get_users_by_session($sessionId);
 
 if (!empty($userList)) {
     $table = new HTML_Table(
-        array('class' => 'data_table', 'id' => 'session-user-list')
+        ['class' => 'data_table', 'id' => 'session-user-list']
     );
     $table->setHeaderContents(0, 0, get_lang('User'));
     $table->setHeaderContents(0, 1, get_lang('Status'));
@@ -281,7 +281,7 @@ if (!empty($userList)) {
         $removeLink = Display::url(
             Display::return_icon('delete.png', get_lang('Delete')),
             api_get_self().'?id_session='.$sessionId.'&action=delete&user='.$user['user_id'],
-            array('onclick' => "javascript:if(!confirm('".get_lang('ConfirmYourChoice')."')) return false;")
+            ['onclick' => "javascript:if(!confirm('".get_lang('ConfirmYourChoice')."')) return false;"]
         );
 
         $addUserToUrlLink = '';
@@ -290,13 +290,13 @@ if (!empty($userList)) {
                 $userLink .= ' '.Display::return_icon(
                     'warning.png',
                     get_lang('UserNotAddedInURL'),
-                    array(),
+                    [],
                     ICON_SIZE_SMALL
                 );
                 $add = Display::return_icon(
                     'add.png',
                     get_lang('AddUsersToURL'),
-                    array(),
+                    [],
                     ICON_SIZE_SMALL
                 );
                 $addUserToUrlLink = '<a href="resume_session.php?action=add_user_to_url&id_session='.$sessionId.'&user_id='.$user['user_id'].'">'.$add.'</a>';

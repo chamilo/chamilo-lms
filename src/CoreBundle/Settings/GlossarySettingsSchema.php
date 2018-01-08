@@ -21,14 +21,14 @@ class GlossarySettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'show_glossary_in_extra_tools' => '',
-                )
+                ]
             );
 
-        $allowedTypes = array(
-            'show_glossary_in_extra_tools' => array('string'),
-        );
+        $allowedTypes = [
+            'show_glossary_in_extra_tools' => ['string'],
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 

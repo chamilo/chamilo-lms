@@ -57,11 +57,11 @@ class SysAnnouncement
      */
     private $visibleGuest;
 
-     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="visible_drh", type="boolean", nullable=false)
-     */
+    /**
+    * @var boolean
+    *
+    * @ORM\Column(name="visible_drh", type="boolean", nullable=false)
+    */
     private $visibleDrh;
 
     /**
@@ -367,7 +367,8 @@ class SysAnnouncement
      * @param bool $visibleSessionAdmin
      * @return SysAnnouncement
      */
-    public function setVisibleSessionAdmin(bool $visibleSessionAdmin
+    public function setVisibleSessionAdmin(
+        bool $visibleSessionAdmin
     ): SysAnnouncement {
         $this->visibleSessionAdmin = $visibleSessionAdmin;
 
@@ -392,5 +393,4 @@ class SysAnnouncement
 
         return $this;
     }
-
 }

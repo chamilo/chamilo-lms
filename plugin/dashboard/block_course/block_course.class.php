@@ -13,11 +13,10 @@
  */
 class BlockCourse extends Block
 {
-
     private $user_id;
     private $courses;
     private $path;
-    private $permission = array(DRH);
+    private $permission = [DRH];
 
     /**
      * Constructor
@@ -61,7 +60,7 @@ class BlockCourse extends Block
     {
         global $charset;
         $column = 2;
-        $data = array();
+        $data = [];
         $content = $this->get_content_html();
         $html = '
 		            <div class="panel panel-default" id="intro">
@@ -138,7 +137,7 @@ class BlockCourse extends Block
      * Get number of courses
      * @return int
      */
-    function get_number_of_courses()
+    public function get_number_of_courses()
     {
         return count($this->courses);
     }
@@ -147,10 +146,10 @@ class BlockCourse extends Block
      * Get course information data
      * @return array
      */
-    function get_course_information_data()
+    public function get_course_information_data()
     {
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $course_data = array();
+        $course_data = [];
         $courses = $this->courses;
         $thematic = new Thematic();
 
@@ -164,7 +163,7 @@ class BlockCourse extends Block
             $sql = "SELECT user_id FROM $tbl_course_user as course_rel_user
                     WHERE course_rel_user.status=".STUDENT." AND course_rel_user.c_id='$courseId'";
             $rs = Database::query($sql);
-            $users = array();
+            $users = [];
             while ($row = Database::fetch_array($rs)) {
                 $users[] = $row['user_id'];
             }
@@ -187,7 +186,7 @@ class BlockCourse extends Block
                 $tematic_advance_progress = '0%';
             }
 
-            $table_row = array();
+            $table_row = [];
             $table_row[] = $row_course['title'];
             $table_row[] = $nb_students_in_course;
             $table_row[] = $avg_time_spent_in_course;

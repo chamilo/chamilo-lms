@@ -24,10 +24,10 @@ class ChamiloCourseExtension extends Extension
     protected $configDirectory = '/../Resources/config';
 
     // You can define what service definitions you want to load
-    protected $configFiles = array(
+    protected $configFiles = [
         'services.yml',
         'forms.yml',
-    );
+    ];
 
     /**
      * {@inheritDoc}
@@ -38,7 +38,7 @@ class ChamiloCourseExtension extends Extension
         $loader->load('services.yml');
         $loader->load('admin.yml');
 
-//self::CONFIGURE_VALIDATORS
+        //self::CONFIGURE_VALIDATORS
 
         /*$this->configure(
             $config,

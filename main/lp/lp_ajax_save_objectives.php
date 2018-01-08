@@ -21,7 +21,7 @@ require_once __DIR__.'/../inc/global.inc.php';
  * @param   integer Item ID
  * @param   array   Objectives array
  */
-function save_objectives($lp_id, $user_id, $view_id, $item_id, $objectives = array())
+function save_objectives($lp_id, $user_id, $view_id, $item_id, $objectives = [])
 {
     $debug = 0;
     $return = '';
@@ -39,7 +39,7 @@ function save_objectives($lp_id, $user_id, $view_id, $item_id, $objectives = arr
 
     return $return;
 }
-$objectives = array();
+$objectives = [];
 if (isset($_REQUEST['objectives'])) {
     if (is_array($_REQUEST['objectives'])) {
         foreach ($_REQUEST['objectives'] as $idx => $ob) {

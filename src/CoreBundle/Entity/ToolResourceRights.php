@@ -126,10 +126,10 @@ class ToolResourceRights
      */
     public static function getDefaultRoles()
     {
-        return array(
+        return [
             'ROLE_STUDENT' => 'Students',
             'ROLE_TEACHER' => 'Teachers',
-        );
+        ];
     }
 
     /**
@@ -140,9 +140,9 @@ class ToolResourceRights
         $readerMask = ResourceNodeVoter::getReaderMask();
         $editorMask = ResourceNodeVoter::getEditorMask();
 
-        return array(
+        return [
             $readerMask => 'Can read',
             $editorMask => 'Can edit',
-        );
+        ];
     }
 }

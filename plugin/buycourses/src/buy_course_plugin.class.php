@@ -76,7 +76,7 @@ class BuyCoursesPlugin extends Plugin
                 José Loguercio Silva - BeezNest (Payouts and buy Services) <br/>
                 Julio Montoya
             ",
-            array(
+            [
                 'show_main_menu_tab' => 'boolean',
                 'public_main_menu_tab' => 'boolean',
                 'include_sessions' => 'boolean',
@@ -87,7 +87,7 @@ class BuyCoursesPlugin extends Plugin
                 'commissions_enable' => 'boolean',
                 'unregistered_users_enable' => 'boolean',
                 'hide_free_text' => 'boolean',
-            )
+            ]
         );
     }
 
@@ -105,7 +105,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function install()
     {
-        $tablesToBeCompared = array(
+        $tablesToBeCompared = [
             self::TABLE_PAYPAL,
             self::TABLE_TRANSFER,
             self::TABLE_CULQI,
@@ -118,7 +118,7 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_SERVICES,
             self::TABLE_SERVICES_SALE,
             self::TABLE_GLOBAL_CONFIG,
-        );
+        ];
         $em = Database::getManager();
         $cn = $em->getConnection();
         $sm = $cn->getSchemaManager();
@@ -136,7 +136,7 @@ class BuyCoursesPlugin extends Plugin
      */
     public function uninstall()
     {
-        $tablesToBeDeleted = array(
+        $tablesToBeDeleted = [
             self::TABLE_PAYPAL,
             self::TABLE_TRANSFER,
             self::TABLE_CULQI,
@@ -149,7 +149,7 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_SERVICES_SALE,
             self::TABLE_SERVICES,
             self::TABLE_GLOBAL_CONFIG,
-        );
+        ];
 
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {
             $table = Database::get_main_table($tableToBeDeleted);
@@ -525,7 +525,7 @@ class BuyCoursesPlugin extends Plugin
     {
         $sessions = $this->filterSessionList($name, $min, $max);
 
-        $sessionCatalog = array();
+        $sessionCatalog = [];
         // loop through all sessions
         foreach ($sessions as $session) {
             $sessionCourses = $session->getCourses();
@@ -549,7 +549,7 @@ class BuyCoursesPlugin extends Plugin
                 api_get_user_id(),
                 $session
             );
-            $sessionData['courses'] = array();
+            $sessionData['courses'] = [];
 
             foreach ($sessionCourses as $sessionCourse) {
                 $course = $sessionCourse->getCourse();
@@ -843,7 +843,8 @@ class BuyCoursesPlugin extends Plugin
     {
         if (!in_array(
             $paymentType,
-            [self::PAYMENT_TYPE_PAYPAL, self::PAYMENT_TYPE_TRANSFER, self::PAYMENT_TYPE_CULQI])
+            [self::PAYMENT_TYPE_PAYPAL, self::PAYMENT_TYPE_TRANSFER, self::PAYMENT_TYPE_CULQI]
+        )
         ) {
             return false;
         }
@@ -2243,7 +2244,8 @@ class BuyCoursesPlugin extends Plugin
     {
         if (!in_array(
             $paymentType,
-            [self::PAYMENT_TYPE_PAYPAL, self::PAYMENT_TYPE_TRANSFER, self::PAYMENT_TYPE_CULQI])
+            [self::PAYMENT_TYPE_PAYPAL, self::PAYMENT_TYPE_TRANSFER, self::PAYMENT_TYPE_CULQI]
+        )
         ) {
             return false;
         }

@@ -19,7 +19,7 @@ class BlockTeacher extends Block
     private $user_id;
     private $teachers;
     private $path;
-    private $permission = array(DRH);
+    private $permission = [DRH];
 
     /**
      * Controller
@@ -60,7 +60,7 @@ class BlockTeacher extends Block
     {
         global $charset;
         $column = 1;
-        $data = array();
+        $data = [];
         $teacher_content_html = $this->get_teachers_content_html_for_drh();
         $html = '
                 <div class="panel panel-default" id="intro">

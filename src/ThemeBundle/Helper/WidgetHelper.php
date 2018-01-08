@@ -7,8 +7,8 @@
 
 namespace Chamilo\ThemeBundle\Helper;
 
-
-class WidgetHelper extends \Twig_Extension {
+class WidgetHelper extends \Twig_Extension
+{
 
     /**
      * Get widget helper name

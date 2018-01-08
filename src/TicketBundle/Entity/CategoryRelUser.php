@@ -40,5 +40,4 @@ class CategoryRelUser
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      **/
     protected $user;
-
 }

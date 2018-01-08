@@ -21,7 +21,7 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'platform_language' => 'en',
                     'allow_use_sub_language' => 'false',
                     'auto_detect_language_custom_pages' => 'true',
@@ -30,15 +30,15 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
                     'language_priority_2' => '',
                     'language_priority_3' => '',
                     'language_priority_4' => '',
-                )
+                ]
             );
 
-        $allowedTypes = array(
-            'platform_language' => array('string'),
-            'allow_use_sub_language' => array('string'),
-            'auto_detect_language_custom_pages' => array('string'),
-            'show_different_course_language' => array('string')
-        );
+        $allowedTypes = [
+            'platform_language' => ['string'],
+            'allow_use_sub_language' => ['string'],
+            'auto_detect_language_custom_pages' => ['string'],
+            'show_different_course_language' => ['string']
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 

@@ -25,18 +25,18 @@ class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
         return 'chamilo_core.block.breadcrumb';
     }
 
-     /**
-     * {@inheritdoc}
-     */
+    /**
+    * {@inheritdoc}
+    */
     public function configureSettings(OptionsResolver $resolver)
     {
         parent::configureSettings($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'menu_template' => 'SonataSeoBundle:Block:breadcrumb.html.twig',
             'include_homepage_link' => false,
             'context' => false,
-        ));
+        ]);
     }
 
     /**
@@ -62,12 +62,12 @@ class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
         if ($course = $blockContext->getBlock()->getSetting('course')) {
             $menu->addChild(
                 $course->getTitle(),
-                array(
+                [
                     'route' => 'course_home',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'course' => $course->getCode(),
-                    ),
-                )
+                    ],
+                ]
             );
         }
 

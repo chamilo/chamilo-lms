@@ -14,33 +14,27 @@ Display::display_header($tool_name);
 
 
 // storing all the permission for a given role when the checkbox approach is used
-if ($_POST['StoreRolePermissions'])
-{
-    if (!empty($_POST['role_name']))
-    {
+if ($_POST['StoreRolePermissions']) {
+    if (!empty($_POST['role_name'])) {
         $table_role = Database::get_course_table(TABLE_ROLE);
         $sql = "INSERT INTO $table_role (role_name, role_comment, default_role)
                     VALUES ('".Database::escape_string($_POST['role_name'])."','".Database::escape_string($_POST['role_comment'])."','".Database::escape_string($_POST['default_role'])."')";
         $result = Database::query($sql);
         $role_id = Database::insert_id();
         $result_message = store_permissions('role', $role_id);
-    }
-    else
-    {
+    } else {
         $result_message = get_lang('ErrorPleaseGiveRoleName');
     }
 }
 // storing a permission for a given role when the image approach is used
-if (isset($_GET['action']) AND isset($_GET['permission']) AND isset($_GET['tool']))
-{
-    if ($_GET['action'] == 'grant' OR $_GET['action'] == 'revoke')
-    {
+if (isset($_GET['action']) and isset($_GET['permission']) and isset($_GET['tool'])) {
+    if ($_GET['action'] == 'grant' or $_GET['action'] == 'revoke') {
         $result_message = store_one_permission('role', $_GET['action'], $role_id, $_GET['tool'], $_GET['permission']);
     }
 }
 
 // deleting a role
-if (isset($_GET['action']) AND isset($_GET['role_id']) AND $_GET['action'] == 'delete') {
+if (isset($_GET['action']) and isset($_GET['role_id']) and $_GET['action'] == 'delete') {
     //deleting the assignments fo this role: users
     $table = Database::get_course_table(TABLE_ROLE_USER);
     $sql = "DELETE FROM $table WHERE role_id='".intval($_GET['role_id'])."'";
@@ -71,8 +65,7 @@ if (isset($result_message)) {
 // 		ADDING A NEW ROLE (FORM AND LINK)
 echo '<img src="../img/add.png" /> <a href="roles.php?action=add">'.get_lang('AddRole').'</a>';
 
-if ($_GET['action'] == 'add')
-{
+if ($_GET['action'] == 'add') {
     echo "<form method=\"post\" action=\"".api_get_self()."\">";
     echo "\n<table>";
     echo "\n\t<tr>";
@@ -117,8 +110,7 @@ if ($_GET['action'] == 'add')
     echo "\t</tr>\n";
 
     // the main area with the checkboxes or images
-    foreach ($tool_rights as $tool=>$rights) // $tool_rights contains all the possible tools and their rights
-    {
+    foreach ($tool_rights as $tool=>$rights) { // $tool_rights contains all the possible tools and their rights
         echo "\t<tr>\n";
         echo "\t\t<td>\n";
         echo get_lang($tool);
@@ -126,7 +118,7 @@ if ($_GET['action'] == 'add')
 
         foreach ($header_array as $key => $value) {
             echo "\t\t<td align='center'>\n";
-            display_checkbox_matrix(array(), $tool, $value);
+            display_checkbox_matrix([], $tool, $value);
             echo "\t\t</td>\n";
         }
         echo "\t</tr>\n";
@@ -140,12 +132,10 @@ if ($_GET['action'] == 'add')
 // 		DISPLAYING THE EXISTING ROLES
 // platform roles
 $all_roles = get_all_roles('platform');
-foreach ($all_roles as $role)
-{
+foreach ($all_roles as $role) {
     echo '<div><a href="roles.php?action=view&amp;role_id='.$role['role_id'].'&amp;scope=platform">'.$role['role_name'].'</a></div>';
     echo '<div>'.$role['role_comment'].'</div><br />';
-    if ($role['role_id'] == $_GET['role_id'])
-    {
+    if ($role['role_id'] == $_GET['role_id']) {
         $current_role_info = $role;
     }
 }
@@ -154,8 +144,7 @@ $all_roles = get_all_roles();
 foreach ($all_roles as $role) {
     echo '<div><a href="roles.php?action=view&amp;role_id='.$role['role_id'].'">'.$role['role_name'].'</a><a href="roles.php?action=delete&amp;role_id='.$role['role_id'].'"><img src="../img/delete.gif" /></a></div>';
     echo '<div>'.$role['role_comment'].'</div><br />';
-    if ($role['role_id'] == $_GET['role_id'])
-    {
+    if ($role['role_id'] == $_GET['role_id']) {
         $current_role_info = $role;
     }
 }
@@ -165,12 +154,10 @@ if ($_GET['role_id']) {
     $current_role_permissions = get_permissions('role', $_GET['role_id']);
     // 			LIMITED OR FULL
     $current_role_permissions = limited_or_full($current_role_permissions);
-    if (api_get_setting('permissions') == 'limited')
-    {
+    if (api_get_setting('permissions') == 'limited') {
         $header_array = $rights_limited;
     }
-    if (api_get_setting('permissions') == 'full')
-    {
+    if (api_get_setting('permissions') == 'full') {
         $header_array = $rights_full;
     }
     // ---------------------------------------------------
@@ -180,8 +167,7 @@ if ($_GET['role_id']) {
 
     // the list of the roles for the user
     echo get_lang('PermissionsOfRole').':'.$current_role_info['role_name'].'<br />';
-    if ($_GET['scope'] == 'platform')
-    {
+    if ($_GET['scope'] == 'platform') {
         echo get_lang('IsPlatformRoleNotEditable').'<br />';
     }
 
@@ -196,8 +182,7 @@ if ($_GET['role_id']) {
     echo "\t</tr>\n";
 
     // the main area with the checkboxes or images
-    foreach ($tool_rights as $tool=>$rights) // $tool_rights contains all the possible tools and their rights
-    {
+    foreach ($tool_rights as $tool=>$rights) { // $tool_rights contains all the possible tools and their rights
         echo "\t<tr>\n";
         echo "\t\t<td>\n";
         echo get_lang($tool);

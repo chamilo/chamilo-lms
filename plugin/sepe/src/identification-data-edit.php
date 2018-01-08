@@ -70,8 +70,8 @@ if (!empty($_POST)) {
 }
 
 if (api_is_platform_admin()) {
-    $interbreadcrumb[] = array("url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe'));
-    $interbreadcrumb[] = array("url" => "identification-data.php", "name" => $plugin->get_lang('DataCenter'));
+    $interbreadcrumb[] = ["url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe')];
+    $interbreadcrumb[] = ["url" => "identification-data.php", "name" => $plugin->get_lang('DataCenter')];
     $templateName = $plugin->get_lang('DataCenterEdit');
     $tpl = new Template($templateName);
     $info = getInfoIdentificationData();

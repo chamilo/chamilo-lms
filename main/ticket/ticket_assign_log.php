@@ -26,7 +26,7 @@ if (count($history) == 0) {
     <?php
 }
 foreach ($history as $item) {
-?>
+    ?>
     <tr>
         <td width="50px">
             <?php echo api_convert_encoding($item['insertuser'], 'UTF-8', $charset); ?>
@@ -38,5 +38,6 @@ foreach ($history as $item) {
             <?php echo api_convert_encoding($item['assignuser'], 'UTF-8', $charset); ?>
         </td>
     </tr>
-<?php } ?>
+<?php
+} ?>
 </table>

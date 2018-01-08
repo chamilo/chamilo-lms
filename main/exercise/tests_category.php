@@ -34,10 +34,10 @@ $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 
 // breadcrumbs
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => "exercise.php?".api_get_cidreq(),
     "name" => get_lang('Exercises'),
-);
+];
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 $content = '';
@@ -125,18 +125,18 @@ function edit_category_form($action)
         // Setting the form elements
         $form->addElement('header', get_lang('EditCategory'));
         $form->addElement('hidden', 'category_id');
-        $form->addElement('text', 'category_name', get_lang('CategoryName'), array('size' => '95'));
+        $form->addElement('text', 'category_name', get_lang('CategoryName'), ['size' => '95']);
         $form->addHtmlEditor(
             'category_description',
             get_lang('CategoryDescription'),
             false,
             false,
-            array('ToolbarSet' => 'test_category', 'Height' => '200')
+            ['ToolbarSet' => 'test_category', 'Height' => '200']
         );
         $form->addButtonSave(get_lang('ModifyCategory'), 'SubmitNote');
 
         // setting the defaults
-        $defaults = array();
+        $defaults = [];
         $defaults["category_id"] = $objcat->id;
         $defaults["category_name"] = $objcat->name;
         $defaults["category_description"] = $objcat->description;
@@ -166,7 +166,7 @@ function edit_category_form($action)
         } else {
             $token = Security::get_token();
             $form->addElement('hidden', 'sec_token');
-            $form->setConstants(array('sec_token' => $token));
+            $form->setConstants(['sec_token' => $token]);
 
             return $form->returnForm();
         }
@@ -204,13 +204,13 @@ function add_category_form($action)
     $form = new FormValidator('note', 'post', api_get_self().'?action='.$action.'&'.api_get_cidreq());
     // Setting the form elements
     $form->addElement('header', get_lang('AddACategory'));
-    $form->addElement('text', 'category_name', get_lang('CategoryName'), array('size' => '95'));
+    $form->addElement('text', 'category_name', get_lang('CategoryName'), ['size' => '95']);
     $form->addHtmlEditor(
         'category_description',
         get_lang('CategoryDescription'),
         false,
         false,
-        array('ToolbarSet' => 'test_category', 'Height' => '200')
+        ['ToolbarSet' => 'test_category', 'Height' => '200']
     );
     $form->addButtonCreate(get_lang('AddTestCategory'), 'SubmitNote');
     // setting the rules
@@ -233,7 +233,7 @@ function add_category_form($action)
     } else {
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
-        $form->setConstants(array('sec_token' => $token));
+        $form->setConstants(['sec_token' => $token]);
 
         return $form->returnForm();
     }

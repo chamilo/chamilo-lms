@@ -38,10 +38,10 @@ abstract class XapianIndexer
      * Chamilo languages and Xapian languages (through hardcoding)
      * @return  array  Array of languages codes -> Xapian languages
      */
-    public final function xapian_languages()
+    final public function xapian_languages()
     {
         /* http://xapian.org/docs/apidoc/html/classXapian_1_1Stem.html */
-        return array(
+        return [
             'none' => 'none', //don't stem terms
             'da' => 'danish',
             'nl' => 'dutch',
@@ -60,7 +60,7 @@ abstract class XapianIndexer
             'ru' => 'russian',
             'es' => 'spanish',
             'sv' => 'swedish',
-        );
+        ];
     }
 
     /**

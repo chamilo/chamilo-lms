@@ -21,22 +21,22 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'allow_personal_agenda' => 'true',
                     //'display_mini_month_calendar' => '', ??
                     'display_upcoming_events' => '', // ??
                     //'number_of_upcoming_events' => '0',
                     'default_calendar_view' => 'month',
-                )
+                ]
             );
 
-        $allowedTypes = array(
-            'allow_personal_agenda' => array('string'),
+        $allowedTypes = [
+            'allow_personal_agenda' => ['string'],
             //'display_mini_month_calendar' => array('string'),
-            'display_upcoming_events' => array('string'),
+            'display_upcoming_events' => ['string'],
             //'number_of_upcoming_events' => array('string'),
-            'default_calendar_view' => array('string'),
-        );
+            'default_calendar_view' => ['string'],
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 

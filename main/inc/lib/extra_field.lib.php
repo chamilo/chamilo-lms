@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Entity\Tag;
  */
 class ExtraField extends Model
 {
-    public $columns = array(
+    public $columns = [
         'id',
         'field_type',
         'variable',
@@ -25,9 +25,9 @@ class ExtraField extends Model
         //Enable this when field_loggeable is introduced as a table field (2.0)
         //'field_loggeable',
         'created_at'
-    );
+    ];
 
-    public $ops = array(
+    public $ops = [
         'eq' => '=', //equal
         'ne' => '<>', //not equal
         'lt' => '<', //less than
@@ -42,7 +42,7 @@ class ExtraField extends Model
         'en' => 'NOT LIKE', //doesn't end with
         'cn' => 'LIKE', //contains
         'nc' => 'NOT LIKE'  //doesn't contain
-    );
+    ];
 
     const FIELD_TYPE_TEXT = 1;
     const FIELD_TYPE_TEXTAREA = 2;
@@ -161,7 +161,7 @@ class ExtraField extends Model
      */
     public static function getValidExtraFieldTypes()
     {
-        return array(
+        return [
             'user',
             'course',
             'session',
@@ -174,7 +174,7 @@ class ExtraField extends Model
             'career',
             'user_certificate',
             'survey'
-        );
+        ];
     }
 
     /**
@@ -244,7 +244,7 @@ class ExtraField extends Model
      */
     public function get_all($conditions = [], $order_field_options_by = null)
     {
-        $conditions = Database::parse_conditions(array('where' => $conditions));
+        $conditions = Database::parse_conditions(['where' => $conditions]);
 
         if (empty($conditions)) {
             $conditions .= " WHERE extra_field_type = ".$this->extraFieldType;
@@ -407,7 +407,7 @@ class ExtraField extends Model
      */
     public static function get_extra_fields_by_handler($handler)
     {
-        $types = array();
+        $types = [];
         $types[self::FIELD_TYPE_TEXT] = get_lang('FieldTypeText');
         $types[self::FIELD_TYPE_TEXTAREA] = get_lang('FieldTypeTextarea');
         $types[self::FIELD_TYPE_RADIO] = get_lang('FieldTypeRadio');
@@ -446,11 +446,8 @@ class ExtraField extends Model
 
         switch ($handler) {
             case 'course':
-                // no break
             case 'session':
-                // no break
             case 'user':
-                // no break
             case 'skill':
                 break;
         }
@@ -537,10 +534,10 @@ class ExtraField extends Model
     public function get_handler_extra_data($itemId)
     {
         if (empty($itemId)) {
-            return array();
+            return [];
         }
 
-        $extra_data = array();
+        $extra_data = [];
         $fields = self::get_all();
         $field_values = new ExtraFieldValue($this->type);
 
@@ -576,7 +573,6 @@ class ExtraField extends Model
                             $extra_data['extra_'.$field['variable']] = $tags;
                             break;
                         case self::FIELD_TYPE_DOUBLE_SELECT:
-                            //no break
                         case self::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
                             $selected_options = explode(
                                 '::',
@@ -635,7 +631,7 @@ class ExtraField extends Model
                 ";
         $result = Database::query($sql);
 
-        $return = array();
+        $return = [];
         while ($row = Database::fetch_array($result)) {
             $return[] = $row['id'];
         }
@@ -683,17 +679,17 @@ class ExtraField extends Model
     public static function extra_field_double_select_convert_string_to_array($string)
     {
         $options = explode('|', $string);
-        $options_parsed = array();
+        $options_parsed = [];
         $id = 0;
 
         if (!empty($options)) {
             foreach ($options as $sub_options) {
                 $options = explode(':', $sub_options);
                 $sub_sub_options = isset($options[1]) ? explode(';', $options[1]) : [];
-                $options_parsed[$id] = array(
+                $options_parsed[$id] = [
                     'label' => $options[0],
                     'options' => $sub_sub_options,
-                );
+                ];
                 $id++;
             }
         }
@@ -746,7 +742,7 @@ class ExtraField extends Model
      */
     public static function extra_field_double_select_convert_array_to_ordered_array($options)
     {
-        $options_parsed = array();
+        $options_parsed = [];
         if (!empty($options)) {
             foreach ($options as $option) {
                 if ($option['option_value'] == 0) {
@@ -765,7 +761,8 @@ class ExtraField extends Model
      * @param int $parentId
      * @return array
      */
-    private static function getOptionsFromTripleSelect(array $options, $parentId) {
+    private static function getOptionsFromTripleSelect(array $options, $parentId)
+    {
         return array_filter($options, function ($option) use ($parentId) {
             return $option['option_value'] == $parentId;
         });
@@ -976,21 +973,21 @@ class ExtraField extends Model
         $get_lang_variables = false;
         if (in_array(
             $fieldDetails['variable'],
-            array('mail_notify_message', 'mail_notify_invitation', 'mail_notify_group_message')
+            ['mail_notify_message', 'mail_notify_invitation', 'mail_notify_group_message']
         )) {
             $get_lang_variables = true;
         }
 
         // Get extra field workflow
         $userInfo = api_get_user_info();
-        $addOptions = array();
+        $addOptions = [];
         $optionsExists = false;
         global $app;
         // Check if exist $app['orm.em'] object
         if (isset($app['orm.em']) && is_object($app['orm.em'])) {
             $optionsExists = $app['orm.em']
                 ->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')
-                ->findOneBy(array('fieldId' => $fieldDetails['id']));
+                ->findOneBy(['fieldId' => $fieldDetails['id']]);
         }
 
         if ($optionsExists) {
@@ -1000,11 +997,11 @@ class ExtraField extends Model
                 $fieldWorkFlow = $app['orm.em']
                     ->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')
                     ->findBy(
-                        array(
+                        [
                             'fieldId' => $fieldDetails['id'],
                             'relatedFieldOptionId' => $defaultValueId,
                             'roleId' => $userInfo['status']
-                        )
+                        ]
                     );
                 foreach ($fieldWorkFlow as $item) {
                     $addOptions[] = $item->getFieldOptionId();
@@ -1012,12 +1009,12 @@ class ExtraField extends Model
             }
         }
 
-        $options = array();
+        $options = [];
         if (empty($defaultValueId)) {
             $options[''] = get_lang('SelectAnOption');
         }
 
-        $optionList = array();
+        $optionList = [];
         if (!empty($fieldDetails['options'])) {
             foreach ($fieldDetails['options'] as $option_details) {
                 $optionList[$option_details['id']] = $option_details;
@@ -1080,7 +1077,7 @@ class ExtraField extends Model
             'extra_'.$fieldDetails['variable'],
             $fieldDetails['display_text'],
             [],
-            array('id' => 'extra_'.$fieldDetails['variable'])
+            ['id' => 'extra_'.$fieldDetails['variable']]
         );
 
         foreach ($options as $value => $text) {
@@ -1198,9 +1195,9 @@ class ExtraField extends Model
         }
 
         $options = self::extra_field_double_select_convert_array_to_ordered_array($fieldDetails['options']);
-        $values = array('' => get_lang('Select'));
+        $values = ['' => get_lang('Select')];
 
-        $second_values = array();
+        $second_values = [];
         if (!empty($options)) {
             foreach ($options as $option) {
                 foreach ($option as $sub_option) {
@@ -1219,20 +1216,20 @@ class ExtraField extends Model
         $form
             ->defaultRenderer()
             ->setGroupElementTemplate('<p>{element}</p>', 'extra_'.$fieldDetails['variable']);
-        $group = array();
+        $group = [];
         $group[] = $form->createElement(
             'select',
             'extra_'.$fieldDetails['variable'],
             null,
             $values,
-            array('id' => $firstSelectId)
+            ['id' => $firstSelectId]
         );
         $group[] = $form->createElement(
             'select',
             'extra_'.$fieldDetails['variable'].'_second',
             null,
             $second_values,
-            array('id' => $secondSelectId)
+            ['id' => $secondSelectId]
         );
         $form->addGroup(
             $group,
@@ -1272,7 +1269,7 @@ class ExtraField extends Model
         ";
 
         $options = self::extra_field_double_select_convert_array_to_ordered_array($fieldDetails['options']);
-        $values = array('' => get_lang('Select'));
+        $values = ['' => get_lang('Select')];
 
         if (!empty($options)) {
             foreach ($options as $option) {
@@ -1289,13 +1286,13 @@ class ExtraField extends Model
         $form
             ->defaultRenderer()
             ->setGroupElementTemplate('<p>{element}</p>', 'extra_'.$fieldDetails['variable']);
-        $group = array();
+        $group = [];
         $group[] = $form->createElement(
             'select',
             'extra_'.$fieldDetails['variable'],
             null,
             $values,
-            array('id' => $firstSelectId)
+            ['id' => $firstSelectId]
         );
         $group[] = $form->createElement(
             'text',
@@ -1479,7 +1476,7 @@ class ExtraField extends Model
         $form,
         $extraData,
         $adminPermissions = false,
-        $extra = array(),
+        $extra = [],
         $itemId = null,
         $exclude = [],
         $useTagAsSelect = false,
@@ -1547,9 +1544,9 @@ class ExtraField extends Model
                             'text',
                             'extra_'.$field_details['variable'],
                             $field_details['display_text'],
-                            array(
+                            [
                                 'id' => 'extra_'.$field_details['variable']
-                            )
+                            ]
                         );
                         $form->applyFilter(
                             'extra_'.$field_details['variable'],
@@ -1569,12 +1566,12 @@ class ExtraField extends Model
                             $field_details['display_text'],
                             false,
                             false,
-                            array(
+                            [
                                 'ToolbarSet' => 'Profile',
                                 'Width' => '100%',
                                 'Height' => '130',
                                 'id' => 'extra_'.$field_details['variable']
-                            )
+                            ]
                         );
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
@@ -1583,7 +1580,7 @@ class ExtraField extends Model
                         }
                         break;
                     case self::FIELD_TYPE_RADIO:
-                        $group = array();
+                        $group = [];
                         if (isset($field_details['options']) &&
                             !empty($field_details['options'])
                         ) {
@@ -1608,7 +1605,7 @@ class ExtraField extends Model
                         }
                         break;
                     case self::FIELD_TYPE_CHECKBOX:
-                        $group = array();
+                        $group = [];
                         if (isset($field_details['options']) &&
                             !empty($field_details['options'])
                         ) {
@@ -1624,7 +1621,7 @@ class ExtraField extends Model
                             }
                         } else {
                             $fieldVariable = "extra_{$field_details['variable']}";
-                            $checkboxAttributes = array();
+                            $checkboxAttributes = [];
                             if (is_array($extraData) &&
                                 array_key_exists($fieldVariable, $extraData)
                             ) {
@@ -1657,7 +1654,7 @@ class ExtraField extends Model
                         self::addSelectElement($form, $field_details, $defaultValueId, $freezeElement);
                         break;
                     case self::FIELD_TYPE_SELECT_MULTIPLE:
-                        $options = array();
+                        $options = [];
                         foreach ($field_details['options'] as $option_id => $option_details) {
                             $options[$option_details['option_value']] = $option_details['display_text'];
                         }
@@ -1666,10 +1663,10 @@ class ExtraField extends Model
                             'extra_'.$field_details['variable'],
                             $field_details['display_text'],
                             $options,
-                            array(
+                            [
                                 'multiple' => 'multiple',
                                 'id' => 'extra_'.$field_details['variable']
-                            )
+                            ]
                         );
                         if ($freezeElement) {
                             $form->freeze('extra_'.$field_details['variable']);
@@ -1871,7 +1868,7 @@ class ExtraField extends Model
                             'text',
                             'extra_'.$field_details['variable'],
                             $field_details['display_text'],
-                            array(
+                            [
                                 'size' => 60,
                                 'size' => implode(
                                     '; ',
@@ -1882,7 +1879,7 @@ class ExtraField extends Model
                                         "padding-left: {$leftpad}em"
                                     ]
                                 )
-                            )
+                            ]
                         );
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
@@ -1895,7 +1892,7 @@ class ExtraField extends Model
                             'text',
                             'extra_'.$field_details['variable'],
                             $field_details['display_text']." (".get_lang('CountryDialCode').")",
-                            array('size' => 40, 'placeholder' => '(xx)xxxxxxxxx')
+                            ['size' => 40, 'placeholder' => '(xx)xxxxxxxxx']
                         );
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
                         $form->applyFilter('extra_'.$field_details['variable'], 'trim');
@@ -1914,7 +1911,7 @@ class ExtraField extends Model
                             'number',
                             'extra_'.$field_details['variable'],
                             $field_details['display_text'],
-                            array('class' => 'span1', 'step' => 1)
+                            ['class' => 'span1', 'step' => 1]
                         );
 
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
@@ -1971,7 +1968,7 @@ class ExtraField extends Model
                             'number',
                             'extra_'.$field_details['variable'],
                             $field_details['display_text'],
-                            array('class' => 'span1', 'step' => '0.01')
+                            ['class' => 'span1', 'step' => '0.01']
                         );
 
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
@@ -1984,9 +1981,9 @@ class ExtraField extends Model
                         break;
                     case self::FIELD_TYPE_FILE:
                         $fieldVariable = "extra_{$field_details['variable']}";
-                        $fieldTexts = array(
+                        $fieldTexts = [
                             $field_details['display_text']
-                        );
+                        ];
 
                         if (is_array($extraData) &&
                             array_key_exists($fieldVariable, $extraData)
@@ -1995,10 +1992,10 @@ class ExtraField extends Model
                                 $fieldTexts[] = Display::url(
                                     api_get_path(WEB_UPLOAD_PATH).$extraData[$fieldVariable],
                                     api_get_path(WEB_UPLOAD_PATH).$extraData[$fieldVariable],
-                                    array(
+                                    [
                                         'title' => $field_details['display_text'],
                                         'target' => '_blank'
-                                    )
+                                    ]
                                 );
                             }
                         }
@@ -2007,7 +2004,7 @@ class ExtraField extends Model
                             'file',
                             $fieldVariable,
                             $fieldTexts,
-                            array()
+                            []
                         );
 
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
@@ -2430,7 +2427,7 @@ class ExtraField extends Model
             }
         }
 
-        $return = array();
+        $return = [];
         $return['jquery_ready_content'] = $jquery_ready_content;
 
         return $return;
@@ -2443,13 +2440,13 @@ class ExtraField extends Model
     public function setupBreadcrumb(&$breadcrumb, $action)
     {
         if ($action == 'add') {
-            $breadcrumb[] = array('url' => $this->pageUrl, 'name' => $this->pageName);
-            $breadcrumb[] = array('url' => '#', 'name' => get_lang('Add'));
+            $breadcrumb[] = ['url' => $this->pageUrl, 'name' => $this->pageName];
+            $breadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
         } elseif ($action == 'edit') {
-            $breadcrumb[] = array('url' => $this->pageUrl, 'name' => $this->pageName);
-            $breadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
+            $breadcrumb[] = ['url' => $this->pageUrl, 'name' => $this->pageName];
+            $breadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
         } else {
-            $breadcrumb[] = array('url' => '#', 'name' => $this->pageName);
+            $breadcrumb[] = ['url' => '#', 'name' => $this->pageName];
         }
     }
 
@@ -2485,7 +2482,7 @@ class ExtraField extends Model
      */
     public function getJqgridColumnNames()
     {
-        return array(
+        return [
             get_lang('Name'),
             get_lang('FieldLabel'),
             get_lang('Type'),
@@ -2495,7 +2492,7 @@ class ExtraField extends Model
             get_lang('Filter'),
             get_lang('FieldOrder'),
             get_lang('Actions')
-        );
+        ];
     }
 
     /**
@@ -2503,71 +2500,71 @@ class ExtraField extends Model
      */
     public function getJqgridColumnModel()
     {
-        return array(
-            array(
+        return [
+            [
                 'name' => 'display_text',
                 'index' => 'display_text',
                 'width' => '140',
                 'align' => 'left',
-            ),
-            array(
+            ],
+            [
                 'name' => 'variable',
                 'index' => 'variable',
                 'width' => '90',
                 'align' => 'left',
                 'sortable' => 'true',
-            ),
-            array(
+            ],
+            [
                 'name' => 'field_type',
                 'index' => 'field_type',
                 'width' => '70',
                 'align' => 'left',
                 'sortable' => 'true',
-            ),
-            array(
+            ],
+            [
                 'name' => 'changeable',
                 'index' => 'changeable',
                 'width' => '35',
                 'align' => 'left',
                 'sortable' => 'true',
-            ),
-            array(
+            ],
+            [
                 'name' => 'visible_to_self',
                 'index' => 'visible_to_self',
                 'width' => '45',
                 'align' => 'left',
                 'sortable' => 'true',
-            ),
-            array(
+            ],
+            [
                 'name' => 'visible_to_others',
                 'index' => 'visible_to_others',
                 'width' => '35',
                 'align' => 'left',
                 'sortable' => 'true',
-            ),
-            array(
+            ],
+            [
                 'name' => 'filter',
                 'index' => 'filter',
                 'width' => '30',
                 'align' => 'left',
                 'sortable' => 'true',
-            ),
-            array(
+            ],
+            [
                 'name' => 'field_order',
                 'index' => 'field_order',
                 'width' => '25',
                 'align' => 'left',
                 'sortable' => 'true',
-            ),
-            array(
+            ],
+            [
                 'name' => 'actions',
                 'index' => 'actions',
                 'width' => '40',
                 'align' => 'left',
                 'formatter' => 'action_formatter',
                 'sortable' => 'false',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -2585,7 +2582,7 @@ class ExtraField extends Model
 
         // Setting the form elements
         $header = get_lang('Add');
-        $defaults = array();
+        $defaults = [];
 
         if ($action == 'edit') {
             $header = get_lang('Modify');
@@ -2616,18 +2613,18 @@ class ExtraField extends Model
             'field_type',
             get_lang('FieldType'),
             $types,
-            array('id' => 'field_type')
+            ['id' => 'field_type']
         );
         $form->addElement('label', get_lang('Example'), '<div id="example">-</div>');
-        $form->addElement('text', 'variable', get_lang('FieldLabel'), array('class' => 'span5'));
+        $form->addElement('text', 'variable', get_lang('FieldLabel'), ['class' => 'span5']);
         $form->addElement(
             'text',
             'field_options',
             get_lang('FieldPossibleValues'),
-            array('id' => 'field_options', 'class' => 'span6')
+            ['id' => 'field_options', 'class' => 'span6']
         );
 
-        $fieldWithOptions = array(
+        $fieldWithOptions = [
             self::FIELD_TYPE_RADIO,
             self::FIELD_TYPE_SELECT_MULTIPLE,
             self::FIELD_TYPE_SELECT,
@@ -2635,7 +2632,7 @@ class ExtraField extends Model
             self::FIELD_TYPE_DOUBLE_SELECT,
             self::FIELD_TYPE_SELECT_WITH_TEXT_FIELD,
             self::FIELD_TYPE_TRIPLE_SELECT
-        );
+        ];
 
         if ($action == 'edit') {
             if (in_array($defaults['field_type'], $fieldWithOptions)) {
@@ -2660,25 +2657,25 @@ class ExtraField extends Model
             'text',
             'default_value',
             get_lang('FieldDefaultValue'),
-            array('id' => 'default_value')
+            ['id' => 'default_value']
         );
 
-        $group = array();
+        $group = [];
         $group[] = $form->createElement('radio', 'visible_to_self', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'visible_to_self', null, get_lang('No'), 0);
         $form->addGroup($group, '', get_lang('VisibleToSelf'), null, false);
 
-        $group = array();
+        $group = [];
         $group[] = $form->createElement('radio', 'visible_to_others', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'visible_to_others', null, get_lang('No'), 0);
         $form->addGroup($group, '', get_lang('VisibleToOthers'), null, false);
 
-        $group = array();
+        $group = [];
         $group[] = $form->createElement('radio', 'changeable', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'changeable', null, get_lang('No'), 0);
         $form->addGroup($group, '', get_lang('FieldChangeability'), null, false);
 
-        $group = array();
+        $group = [];
         $group[] = $form->createElement('radio', 'filter', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'filter', null, get_lang('No'), 0);
         $form->addGroup($group, '', get_lang('FieldFilter'), null, false);
@@ -2757,26 +2754,26 @@ JAVASCRIPT;
      * @param array $extraFields
      * @return array
      */
-    public function getRules(&$columns, &$column_model, $extraFields = array(), $checkExtraFieldExistence = false)
+    public function getRules(&$columns, &$column_model, $extraFields = [], $checkExtraFieldExistence = false)
     {
         $fields = $this->get_all(
-            array(
-                'visible_to_self = ? AND filter = ?' => array(1, 1)
-            ),
+            [
+                'visible_to_self = ? AND filter = ?' => [1, 1]
+            ],
             'display_text'
         );
         $extraFieldOption = new ExtraFieldOption($this->type);
 
-        $rules = array();
+        $rules = [];
         if (!empty($fields)) {
             foreach ($fields as $field) {
-                $search_options = array();
+                $search_options = [];
                 $type = 'text';
-                if (in_array($field['field_type'], array(self::FIELD_TYPE_SELECT, self::FIELD_TYPE_DOUBLE_SELECT))) {
+                if (in_array($field['field_type'], [self::FIELD_TYPE_SELECT, self::FIELD_TYPE_DOUBLE_SELECT])) {
                     $type = 'select';
-                    $search_options['sopt'] = array('eq', 'ne'); //equal not equal
+                    $search_options['sopt'] = ['eq', 'ne']; //equal not equal
                 } else {
-                    $search_options['sopt'] = array('cn', 'nc'); //contains not contains
+                    $search_options['sopt'] = ['cn', 'nc']; //contains not contains
                 }
 
                 $search_options['searchhidden'] = 'true';
@@ -2788,7 +2785,7 @@ JAVASCRIPT;
                     //Add 2 selects
                     $options = $extraFieldOption->get_field_options_by_field($field['id']);
                     $options = self::extra_field_double_select_convert_array_to_ordered_array($options);
-                    $first_options = array();
+                    $first_options = [];
 
                     if (!empty($options)) {
                         foreach ($options as $option) {
@@ -2805,7 +2802,7 @@ JAVASCRIPT;
                     $search_options['dataInit'] = 'fill_second_select';
 
                     // First
-                    $column_model[] = array(
+                    $column_model[] = [
                         'name' => 'extra_'.$field['variable'],
                         'index' => 'extra_'.$field['variable'],
                         'width' => '100',
@@ -2813,18 +2810,18 @@ JAVASCRIPT;
                         'search' => 'true',
                         'stype' => 'select',
                         'searchoptions' => $search_options,
-                    );
+                    ];
                     $columns[] = $field['display_text'].' (1)';
-                    $rules[] = array(
+                    $rules[] = [
                         'field' => 'extra_'.$field['variable'],
                         'op' => 'cn',
-                    );
+                    ];
 
                     // Second
                     $search_options['value'] = $field['id'].':';
                     $search_options['dataInit'] = 'register_second_select';
 
-                    $column_model[] = array(
+                    $column_model[] = [
                         'name' => 'extra_'.$field['variable'].'_second',
                         'index' => 'extra_'.$field['variable'].'_second',
                         'width' => '100',
@@ -2832,9 +2829,9 @@ JAVASCRIPT;
                         'search' => 'true',
                         'stype' => 'select',
                         'searchoptions' => $search_options,
-                    );
+                    ];
                     $columns[] = $field['display_text'].' (2)';
-                    $rules[] = array('field' => 'extra_'.$field['variable'].'_second', 'op' => 'cn');
+                    $rules[] = ['field' => 'extra_'.$field['variable'].'_second', 'op' => 'cn'];
                     continue;
                 } else {
                     $search_options['value'] = $extraFieldOption->getFieldOptionsToString(
@@ -2843,7 +2840,7 @@ JAVASCRIPT;
                         'display_text'
                     );
                 }
-                $column_model[] = array(
+                $column_model[] = [
                     'name' => 'extra_'.$field['variable'],
                     'index' => 'extra_'.$field['variable'],
                     'width' => '100',
@@ -2851,12 +2848,12 @@ JAVASCRIPT;
                     'search' => 'true',
                     'stype' => $type,
                     'searchoptions' => $search_options,
-                );
+                ];
                 $columns[] = $field['display_text'];
-                $rules[] = array(
+                $rules[] = [
                     'field' => 'extra_'.$field['variable'],
                     'op' => 'cn'
-                );
+                ];
             }
         }
 
@@ -2871,7 +2868,7 @@ JAVASCRIPT;
     {
         $inject_extra_fields = null;
         $extraFieldOption = new ExtraFieldOption($this->type);
-        $double_fields = array();
+        $double_fields = [];
 
         if (isset($options['extra'])) {
             $extra_fields = $options['extra'];
@@ -2885,11 +2882,11 @@ JAVASCRIPT;
                     if (isset($extra_field_info['field_type']) &&
                         in_array(
                             $extra_field_info['field_type'],
-                            array(
+                            [
                                 self::FIELD_TYPE_SELECT,
                                 self::FIELD_TYPE_SELECT,
                                 self::FIELD_TYPE_DOUBLE_SELECT
-                            )
+                            ]
                         )
                     ) {
                         $inject_extra_fields .= " fvo$counter.display_text as {$extra['field']}, ";
@@ -2911,7 +2908,7 @@ JAVASCRIPT;
             }
         }
 
-        $options_by_double = array();
+        $options_by_double = [];
         foreach ($double_fields as $double) {
             $my_options = $extraFieldOption->get_field_options_by_field(
                 $double['id'],
@@ -2920,7 +2917,7 @@ JAVASCRIPT;
             $options_by_double['extra_'.$double['variable']] = $my_options;
         }
 
-        $field_value_to_join = array();
+        $field_value_to_join = [];
         //filter can be all/any = and/or
         $inject_joins = null;
         $inject_where = null;
@@ -2940,11 +2937,11 @@ JAVASCRIPT;
                     if (isset($extra_field_info['field_type']) &&
                         in_array(
                             $extra_field_info['field_type'],
-                            array(
+                            [
                                 self::FIELD_TYPE_SELECT,
                                 self::FIELD_TYPE_SELECT,
                                 self::FIELD_TYPE_DOUBLE_SELECT
-                            )
+                            ]
                         )
                     ) {
                         $options['where'] = str_replace(
@@ -3007,7 +3004,7 @@ JAVASCRIPT;
             $limit = " LIMIT ".$options['limit'];
         }
 
-        return array(
+        return [
             'order' => $order,
             'limit' => $limit,
             'where' => $where,
@@ -3015,7 +3012,7 @@ JAVASCRIPT;
             'inject_joins' => $inject_joins,
             'field_value_to_join' => $field_value_to_join,
             'inject_extra_fields' => $inject_extra_fields,
-        );
+        ];
     }
 
     //@todo move this in the display_class or somewhere else
@@ -3062,10 +3059,10 @@ JAVASCRIPT;
      */
     public function getExtraFieldRules($filters, $stringToSearch = 'extra_')
     {
-        $extra_fields = array();
+        $extra_fields = [];
 
         // Getting double select if exists
-        $double_select = array();
+        $double_select = [];
         foreach ($filters->rules as $rule) {
             if (empty($rule)) {
                 continue;
@@ -3077,7 +3074,7 @@ JAVASCRIPT;
             }
         }
 
-        $condition_array = array();
+        $condition_array = [];
         foreach ($filters->rules as $rule) {
             if (empty($rule)) {
                 continue;
@@ -3111,7 +3108,7 @@ JAVASCRIPT;
                             $condition_array[] = ' ('
                                 .$this->get_where_clause($rule->field, $rule->op, $rule->data)
                                 .') ';
-                            $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
+                            $extra_fields[] = ['field' => $rule->field, 'id' => $field_option['id']];
                         }
                     } else {
                         if (isset($rule->data)) {
@@ -3121,29 +3118,29 @@ JAVASCRIPT;
                             $condition_array[] = ' ('
                                 .$this->get_where_clause($rule->field, $rule->op, $rule->data)
                                 .') ';
-                            $extra_fields[] = array(
+                            $extra_fields[] = [
                                 'field' => $rule->field,
                                 'id' => $field_option['id'],
                                 'data' => $rule->data
-                            );
+                            ];
                         }
                     }
                 } else {
                     $my_field = str_replace('_second', '', $rule->field);
                     $original_field = str_replace($stringToSearch, '', $my_field);
                     $field_option = $this->get_handler_field_info_by_field_variable($original_field);
-                    $extra_fields[] = array(
+                    $extra_fields[] = [
                         'field' => $rule->field,
                         'id' => $field_option['id']
-                    );
+                    ];
                 }
             }
         }
 
-        return array(
+        return [
             'extra_fields' => $extra_fields,
             'condition_array' => $condition_array
-        );
+        ];
     }
 
     /**
@@ -3153,7 +3150,7 @@ JAVASCRIPT;
      */
     public function getDataAndFormattedValues($itemId)
     {
-        $valuesData = array();
+        $valuesData = [];
         $fields = $this->get_all();
         $em = Database::getManager();
 
@@ -3230,13 +3227,13 @@ JAVASCRIPT;
                     $image = Display::img(
                         api_get_path(WEB_UPLOAD_PATH).$valueData['value'],
                         $field['display_text'],
-                        array('width' => '300')
+                        ['width' => '300']
                     );
 
                     $displayedValue = Display::url(
                         $image,
                         api_get_path(WEB_UPLOAD_PATH).$valueData['value'],
-                        array('target' => '_blank')
+                        ['target' => '_blank']
                     );
                     break;
                 case self::FIELD_TYPE_FILE:
@@ -3251,10 +3248,10 @@ JAVASCRIPT;
                     $displayedValue = Display::url(
                         get_lang('Download'),
                         api_get_path(WEB_UPLOAD_PATH).$valueData['value'],
-                        array(
+                        [
                             'title' => $field['display_text'],
                             'target' => '_blank'
-                        )
+                        ]
                     );
                     break;
                 default:
@@ -3262,10 +3259,10 @@ JAVASCRIPT;
                     break;
             }
 
-            $valuesData[] = array(
+            $valuesData[] = [
                 'text' => $field['display_text'],
                 'value' => $displayedValue
-            );
+            ];
         }
 
         return $valuesData;

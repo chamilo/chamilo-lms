@@ -15,7 +15,9 @@ use ChamiloSession as Session;
 $use_anonymous = true;
 
 $debug = 0;
-if ($debug > 0) error_log('New LP -+- Entered lp_controller.php -+- (action: '.$_REQUEST['action'].')', 0);
+if ($debug > 0) {
+    error_log('New LP -+- Entered lp_controller.php -+- (action: '.$_REQUEST['action'].')', 0);
+}
 
 // Language files that needs to be included.
 if (isset($_GET['action'])) {
@@ -31,7 +33,7 @@ $current_course_tool = TOOL_LEARNPATH;
 $_course = api_get_course_info();
 
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
-$showGlossary = in_array($glossaryExtraTools, array('true', 'lp', 'exercise_and_lp'));
+$showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
 
 if ($showGlossary) {
     if (api_get_setting('show_glossary_in_documents') === 'ismanual' ||
@@ -42,8 +44,8 @@ if ($showGlossary) {
         var jQueryFrameReadyConfigPath = \'' . api_get_jquery_web_path().'\';
     -->
     </script>';
-    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>';
-    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
+        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>';
+        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
     }
 }
 
@@ -225,10 +227,14 @@ $lp_controller_touched = 1;
 $lp_found = false;
 $lpObject = Session::read('lpobject');
 if (!empty($lpObject)) {
-    if ($debug > 0) error_log('New LP - SESSION[lpobject] is defined', 0);
+    if ($debug > 0) {
+        error_log('New LP - SESSION[lpobject] is defined', 0);
+    }
     $oLP = unserialize($lpObject);
     if (isset($oLP) && is_object($oLP)) {
-        if ($debug > 0) error_log('New LP - oLP is object', 0);
+        if ($debug > 0) {
+            error_log('New LP - oLP is object', 0);
+        }
         if ($myrefresh == 1 ||
             empty($oLP->cc) ||
             $oLP->cc != api_get_course_id() ||
@@ -254,13 +260,19 @@ if (!empty($lpObject)) {
 
 $course_id = api_get_course_int_id();
 
-if ($debug > 0) error_log('New LP - Passed data remains check', 0);
+if ($debug > 0) {
+    error_log('New LP - Passed data remains check', 0);
+}
 
 if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $_REQUEST['lp_id'])) {
-    if ($debug > 0) error_log('New LP - oLP is not object, has changed or refresh been asked, getting new', 0);
+    if ($debug > 0) {
+        error_log('New LP - oLP is not object, has changed or refresh been asked, getting new', 0);
+    }
     // Regenerate a new lp object? Not always as some pages don't need the object (like upload?)
     if (!empty($_REQUEST['lp_id']) || !empty($myrefresh_id)) {
-        if ($debug > 0) error_log('New LP - lp_id is defined', 0);
+        if ($debug > 0) {
+            error_log('New LP - lp_id is defined', 0);
+        }
         // Select the lp in the database and check which type it is (scorm/dokeos/aicc) to generate the
         // right object.
         if (!empty($_REQUEST['lp_id'])) {
@@ -272,13 +284,17 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         if (is_numeric($lp_id)) {
             $sel = "SELECT lp_type FROM $lp_table WHERE c_id = $course_id AND id = $lp_id";
-            if ($debug > 0) error_log('New LP - querying '.$sel, 0);
+            if ($debug > 0) {
+                error_log('New LP - querying '.$sel, 0);
+            }
             $res = Database::query($sel);
 
             if (Database::num_rows($res)) {
                 $row = Database::fetch_array($res);
                 $type = $row['lp_type'];
-                if ($debug > 0) error_log('New LP - found row - type '.$type.' - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
+                if ($debug > 0) {
+                    error_log('New LP - found row - type '.$type.' - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
+                }
                 switch ($type) {
                     case 1:
                         $oLP = new learnpath(api_get_course_id(), $lp_id, api_get_user_id());
@@ -315,22 +331,28 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                 }
             }
         } else {
-            if ($debug > 0) error_log('New LP - Request[lp_id] is not numeric', 0);
+            if ($debug > 0) {
+                error_log('New LP - Request[lp_id] is not numeric', 0);
+            }
         }
     } else {
-        if ($debug > 0) error_log('New LP - Request[lp_id] and refresh_id were empty', 0);
+        if ($debug > 0) {
+            error_log('New LP - Request[lp_id] and refresh_id were empty', 0);
+        }
     }
     if ($lp_found) {
         Session::write('oLP', $oLP);
     }
 }
 
-if ($debug > 0) error_log('New LP - Passed oLP creation check', 0);
+if ($debug > 0) {
+    error_log('New LP - Passed oLP creation check', 0);
+}
 
 $is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);
 
 if (isset($_SESSION['oLP'])) {
-    $_SESSION['oLP']->update_queue = array();
+    $_SESSION['oLP']->update_queue = [];
     // Reinitialises array used by javascript to update items in the TOC.
 }
 
@@ -654,7 +676,7 @@ switch ($action) {
                 $_SESSION['oLP']->set_modified_on();
 
                 // TODO: mp3 edit
-                $audio = array();
+                $audio = [];
                 if (isset($_FILES['mp3'])) {
                     $audio = $_FILES['mp3'];
                 }
@@ -997,9 +1019,9 @@ switch ($action) {
             }
 
             $extraFieldValue = new ExtraFieldValue('lp');
-            $params = array(
+            $params = [
                 'lp_id' => $_SESSION['oLP']->id
-            );
+            ];
             $extraFieldValue->saveFieldValues($_REQUEST);
 
             if ($_FILES['lp_preview_image']['size'] > 0) {
@@ -1115,7 +1137,9 @@ switch ($action) {
         }
         break;
     case 'content':
-        if ($debug > 0) error_log('New LP - Item id is '.intval($_GET['item_id']), 0);
+        if ($debug > 0) {
+            error_log('New LP - Item id is '.intval($_GET['item_id']), 0);
+        }
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
@@ -1138,7 +1162,9 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            if ($debug > 0) {error_log('New LP - Trying to set current item to '.$_REQUEST['item_id'], 0); }
+            if ($debug > 0) {
+                error_log('New LP - Trying to set current item to '.$_REQUEST['item_id'], 0);
+            }
             if (!empty($_REQUEST['item_id'])) {
                 $_SESSION['oLP']->set_current_item($_REQUEST['item_id']);
             }
@@ -1416,7 +1442,9 @@ switch ($action) {
 
 if (!empty($_SESSION['oLP'])) {
     $_SESSION['lpobject'] = serialize($_SESSION['oLP']);
-    if ($debug > 0) error_log('New LP - lpobject is serialized in session', 0);
+    if ($debug > 0) {
+        error_log('New LP - lpobject is serialized in session', 0);
+    }
 }
 
 if (!empty($redirectTo)) {

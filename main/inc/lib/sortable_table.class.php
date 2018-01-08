@@ -93,12 +93,12 @@ class SortableTable extends HTML_Table
     public $odd_even_rows_enabled = true;
     public $use_jqgrid = false;
     public $table_id = null;
-    public $headers = array();
+    public $headers = [];
     /**
      * @var array
      * Columns to hide
      */
-    private $columnsToHide = array();
+    private $columnsToHide = [];
 
     /**
      * Create a new SortableTable
@@ -128,9 +128,9 @@ class SortableTable extends HTML_Table
             $table_id = $table_name.uniqid();
         }
         $this->table_id = $table_id;
-        parent::__construct(array('class' => 'data_table table', 'id' => $table_id));
+        parent::__construct(['class' => 'data_table table', 'id' => $table_id]);
         $this->table_name = $table_name;
-        $this->additional_parameters = array();
+        $this->additional_parameters = [];
         $this->param_prefix = $table_name.'_';
 
         $this->page_nr = Session::read($this->param_prefix.'page_nr', 1);
@@ -139,13 +139,13 @@ class SortableTable extends HTML_Table
         $this->column = isset($_GET[$this->param_prefix.'column']) ? intval($_GET[$this->param_prefix.'column']) : $this->column;
 
         // Default direction.
-        if (in_array(strtoupper($default_order_direction), array('ASC', 'DESC'))) {
+        if (in_array(strtoupper($default_order_direction), ['ASC', 'DESC'])) {
             $this->direction = $default_order_direction;
         }
 
         $my_session_direction = Session::read($this->param_prefix.'direction');
         if (!empty($my_session_direction)) {
-            if (!in_array($my_session_direction, array('ASC', 'DESC'))) {
+            if (!in_array($my_session_direction, ['ASC', 'DESC'])) {
                 $this->direction = 'ASC';
             } else {
                 if ($my_session_direction == 'ASC') {
@@ -158,7 +158,7 @@ class SortableTable extends HTML_Table
 
         if (isset($_GET[$this->param_prefix.'direction'])) {
             $my_get_direction = $_GET[$this->param_prefix.'direction'];
-            if (!in_array($my_get_direction, array('ASC', 'DESC'))) {
+            if (!in_array($my_get_direction, ['ASC', 'DESC'])) {
                 $this->direction = 'ASC';
             } else {
                 if ($my_get_direction == 'ASC') {
@@ -185,12 +185,12 @@ class SortableTable extends HTML_Table
         $this->total_number_of_items = -1;
         $this->get_total_number_function = $get_total_number_function;
         $this->get_data_function = $get_data_function;
-        $this->column_filters = array();
-        $this->form_actions = array();
+        $this->column_filters = [];
+        $this->form_actions = [];
         $this->checkbox_name = null;
-        $this->td_attributes = array();
-        $this->th_attributes = array();
-        $this->other_tables = array();
+        $this->td_attributes = [];
+        $this->th_attributes = [];
+        $this->other_tables = [];
     }
 
     /**
@@ -205,7 +205,7 @@ class SortableTable extends HTML_Table
             $params['totalItems'] = $total_number_of_items;
             $params['urlVar'] = $this->param_prefix.'page_nr';
             $params['currentPage'] = $this->page_nr;
-            $icon_attributes = array('style' => 'vertical-align: middle;');
+            $icon_attributes = ['style' => 'vertical-align: middle;'];
             $params['prevImg'] = Display:: return_icon(
                 'action_prev.png',
                 get_lang('PreviousPage'),
@@ -233,7 +233,7 @@ class SortableTable extends HTML_Table
             $params['spacesBeforeSeparator'] = '';
             $params['spacesAfterSeparator'] = '';
             $query_vars = array_keys($_GET);
-            $query_vars_needed = array($this->param_prefix.'column', $this->param_prefix.'direction', $this->param_prefix.'per_page');
+            $query_vars_needed = [$this->param_prefix.'column', $this->param_prefix.'direction', $this->param_prefix.'per_page'];
             if (count($this->additional_parameters) > 0) {
                 $query_vars_needed = array_merge(
                     $query_vars_needed,
@@ -450,7 +450,7 @@ class SortableTable extends HTML_Table
         $hide_navigation = true,
         $per_page = 20,
         $sort_data = true,
-        $grid_class = array()
+        $grid_class = []
     ) {
         $empty_table = false;
         if ($this->get_total_number_of_items() == 0) {
@@ -526,20 +526,20 @@ class SortableTable extends HTML_Table
                 }
                 $div .= Display::div(
                     $rows,
-                    array(
+                    [
                         'class' => $item_css_class.' '.$this->table_name.'_grid_item',
                         'style' => $item_css_style
-                    )
+                    ]
                 );
             }
         }
 
         $html .= Display::div(
             $div,
-            array(
+            [
                 'class' => $grid_css_class.' '.$this->table_name.'_grid_container',
                 'style' => $grid_css_style
-            )
+            ]
         );
         $html .= '<div class="clear"></div>';
         return $html;
@@ -576,7 +576,7 @@ class SortableTable extends HTML_Table
             foreach ($table_data as & $row) {
                 $row = $this->filter_data($row);
 
-                $newRow = array();
+                $newRow = [];
                 if (!empty($this->columnsToHide)) {
                     $counter = 0;
                     foreach ($row as $index => $rowInfo) {
@@ -591,7 +591,7 @@ class SortableTable extends HTML_Table
                 if (isset($row['child_of'])) {
                     $this->setRowAttributes(
                         $count,
-                        array('class' => 'hidden hidden_'.$row['child_of']),
+                        ['class' => 'hidden hidden_'.$row['child_of']],
                         true
                     );
                 }
@@ -602,15 +602,14 @@ class SortableTable extends HTML_Table
         if ($this->odd_even_rows_enabled == true) {
             $this->altRowAttributes(
                 0,
-                array('class' => 'row_odd'),
-                array('class' => 'row_even'),
+                ['class' => 'row_odd'],
+                ['class' => 'row_even'],
                 true
             );
         }
 
         foreach ($this->th_attributes as $column => $attributes) {
             $this->setCellAttributes(0, $column, $attributes);
-
         }
         foreach ($this->td_attributes as $column => $attributes) {
             $this->setColAttributes($column, $attributes);
@@ -630,7 +629,7 @@ class SortableTable extends HTML_Table
         $offset = $pager->getOffsetByPageId();
         $from = $offset[0] - 1;
         $table_data = $this->get_table_data($from, null, null, null, $sort);
-        $new_table_data = array();
+        $new_table_data = [];
         if (is_array($table_data)) {
             foreach ($table_data as $index => & $row) {
                 $row = $this->filter_data($row);
@@ -669,7 +668,7 @@ class SortableTable extends HTML_Table
         }
         // @todo no limits
         //if ($total_number_of_items < 500) {
-            $result[] = '<option value="'.$total_number_of_items.'" '.($total_number_of_items == $this->per_page ? 'selected="selected"' : '').'>'.api_ucfirst(get_lang('All')).'</option>';
+        $result[] = '<option value="'.$total_number_of_items.'" '.($total_number_of_items == $this->per_page ? 'selected="selected"' : '').'>'.api_ucfirst(get_lang('All')).'</option>';
         //}
         $result[] = '</select>';
         $result[] = '<noscript>';
@@ -767,15 +766,15 @@ class SortableTable extends HTML_Table
         $column,
         $label,
         $sortable = true,
-        $th_attributes = array('class' => 'th-header'),
+        $th_attributes = ['class' => 'th-header'],
         $td_attributes = null
     ) {
-        $this->headers[$column] = array(
+        $this->headers[$column] = [
             'label' => $label,
             'sortable' => $sortable,
             'th_attributes' => $th_attributes,
             'td_attributes' => $td_attributes,
-        );
+        ];
     }
 
     /**
@@ -784,7 +783,7 @@ class SortableTable extends HTML_Table
      */
     public function get_additional_url_paramstring()
     {
-        $param_string_parts = array();
+        $param_string_parts = [];
         if (is_array($this->additional_parameters) && count($this->additional_parameters) > 0) {
             foreach ($this->additional_parameters as $key => & $value) {
                 $param_string_parts[] = urlencode($key).'='.urlencode($value);
@@ -792,12 +791,12 @@ class SortableTable extends HTML_Table
         }
         $result = implode('&amp;', $param_string_parts);
         foreach ($this->other_tables as $index => & $tablename) {
-            $param = array();
+            $param = [];
             if (isset($_GET[$tablename.'_direction'])) {
                 //$param[$tablename.'_direction'] = $_GET[$tablename.'_direction'];
                 $my_get_direction = $_GET[$tablename.'_direction'];
-                if (!in_array($my_get_direction, array('ASC', 'DESC'))) {
-                     $param[$tablename.'_direction'] = 'ASC';
+                if (!in_array($my_get_direction, ['ASC', 'DESC'])) {
+                    $param[$tablename.'_direction'] = 'ASC';
                 } else {
                     $param[$tablename.'_direction'] = $my_get_direction;
                 }
@@ -811,7 +810,7 @@ class SortableTable extends HTML_Table
             if (isset($_GET[$tablename.'_column'])) {
                 $param[$tablename.'_column'] = intval($_GET[$tablename.'_column']);
             }
-            $param_string_parts = array();
+            $param_string_parts = [];
             foreach ($param as $key => & $value) {
                 $param_string_parts[] = urlencode($key).'='.urlencode($value);
             }
@@ -832,7 +831,7 @@ class SortableTable extends HTML_Table
         $param[$this->param_prefix.'page_nr'] = $this->page_nr;
         $param[$this->param_prefix.'per_page'] = $this->per_page;
         $param[$this->param_prefix.'column'] = $this->column;
-        $param_string_parts = array();
+        $param_string_parts = [];
         foreach ($param as $key => & $value) {
             $param_string_parts[] = urlencode($key).'='.urlencode($value);
         }
@@ -928,7 +927,7 @@ class SortableTable extends HTML_Table
         if (is_array($row)) {
             foreach ($row as & $value) {
                 if (empty($value)) {
-                     $value = '-';
+                    $value = '-';
                 }
             }
         }
@@ -1102,8 +1101,8 @@ class SortableTableFromArrayConfig extends SortableTable
         $default_column = 1,
         $default_items_per_page = 20,
         $tablename = 'tablename',
-        $column_show = array(),
-        $column_order = array(),
+        $column_show = [],
+        $column_order = [],
         $direction = 'ASC',
         $doc_filter = false
     ) {

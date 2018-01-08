@@ -75,14 +75,14 @@ function edit_specific_field($id, $name)
  * @param array $order_by a list of fields on which to sort
  * @return array An array with all specific fields, at platform level
  */
-function get_specific_field_list($conditions = array(), $order_by = array())
+function get_specific_field_list($conditions = [], $order_by = [])
 {
     $table_sf = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
-    $return_array = array();
+    $return_array = [];
     $sql = "SELECT * FROM $table_sf";
     if (count($conditions) > 0) {
         $sql .= ' WHERE ';
-        $conditions_string_array = array();
+        $conditions_string_array = [];
         foreach ($conditions as $field => $value) {
             $conditions_string_array[] = $field.' = '.$value;
         }
@@ -105,11 +105,11 @@ function get_specific_field_list($conditions = array(), $order_by = array())
  * @return array An array with all users of the platform.
  */
 function get_specific_field_values_list(
-    $conditions = array(),
-    $order_by = array()
+    $conditions = [],
+    $order_by = []
 ) {
     $table_sfv = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
-    $return_array = array();
+    $return_array = [];
     $sql = "SELECT * FROM $table_sfv";
     if (count($conditions) > 0) {
         $sql .= ' WHERE ';
@@ -125,7 +125,7 @@ function get_specific_field_values_list(
             $conditions['course_code'] = " '".api_get_course_id()."' ";
         }
 
-        $conditions_string_array = array();
+        $conditions_string_array = [];
         foreach ($conditions as $field => $value) {
             $conditions_string_array[] = $field.' = '.$value;
         }
@@ -223,7 +223,8 @@ function add_specific_field_value(
  * @param string $tool_id tool id, from main.api.lib
  * @param int $ref_id intern id inside specific tool table
  */
-function delete_all_specific_field_value($course_id, $id_specific_field, $tool_id, $ref_id) {
+function delete_all_specific_field_value($course_id, $id_specific_field, $tool_id, $ref_id)
+{
     $table_sf_values = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
     $sql = 'DELETE FROM %s WHERE course_code = \'%s\' AND tool_id = \'%s\' AND ref_id = %s AND field_id = %s';
     $sql = sprintf($sql, $table_sf_values, $course_id, $tool_id, $ref_id, $id_specific_field);
@@ -237,11 +238,12 @@ function delete_all_specific_field_value($course_id, $id_specific_field, $tool_i
  * @param   string  Tool ID
  * @param   int     Internal ID used in specific tool table
  */
-function delete_all_values_for_item($course_id, $tool_id, $ref_id) {
-  $table_sf_values = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
-  $sql = 'DELETE FROM %s WHERE course_code = \'%s\' AND tool_id = \'%s\' AND ref_id = %s';
-  $sql = sprintf($sql, $table_sf_values, $course_id, $tool_id, $ref_id);
-  Database::query($sql);
+function delete_all_values_for_item($course_id, $tool_id, $ref_id)
+{
+    $table_sf_values = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
+    $sql = 'DELETE FROM %s WHERE course_code = \'%s\' AND tool_id = \'%s\' AND ref_id = %s';
+    $sql = sprintf($sql, $table_sf_values, $course_id, $tool_id, $ref_id);
+    Database::query($sql);
 }
 
 /**
@@ -251,10 +253,11 @@ function delete_all_values_for_item($course_id, $tool_id, $ref_id) {
  * @param   string  Name
  * @return  string  One-letter code, upper-case
  */
-function get_specific_field_code_from_name($name) {
+function get_specific_field_code_from_name($name)
+{
     // Z is used internally by Xapian
     // O & C already used by tool_id and course_id
-    $list = array(
+    $list = [
         'A',
         'B',
         'D',
@@ -278,7 +281,7 @@ function get_specific_field_code_from_name($name) {
         'W',
         'X',
         'Y',
-    );
+    ];
     $table_sf = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
     $sql = "SELECT code FROM $table_sf ORDER BY code";
     $res = Database::query($sql);
@@ -288,7 +291,7 @@ function get_specific_field_code_from_name($name) {
         return $code;
     }
 
-    $existing_list = array();
+    $existing_list = [];
     while ($row = Database::fetch_array($res)) {
         $existing_list[] = $row['code'];
     }

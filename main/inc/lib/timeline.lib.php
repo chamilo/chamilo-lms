@@ -9,7 +9,7 @@
 class Timeline extends Model
 {
     public $table;
-    public $columns = array(
+    public $columns = [
         'headline',
         'type',
         'start_date',
@@ -22,7 +22,7 @@ class Timeline extends Model
         'parent_id',
         'status',
         'c_id'
-    );
+    ];
     public $is_course_model = true;
 
     /**
@@ -43,14 +43,14 @@ class Timeline extends Model
         $row = Database::select(
             'count(*) as count',
             $this->table,
-            array(
-                'where' => array(
-                    'parent_id = ? AND c_id = ?' => array(
+            [
+                'where' => [
+                    'parent_id = ? AND c_id = ?' => [
                         '0',
                         $course_id
-                    )
-                )
-            ),
+                    ]
+                ]
+            ],
             'first'
         );
         return $row['count'];
@@ -60,12 +60,12 @@ class Timeline extends Model
      * @param array $where_conditions
      * @return array
      */
-    public function get_all($where_conditions = array())
+    public function get_all($where_conditions = [])
     {
         return Database::select(
             '*',
             $this->table,
-            array('where' => $where_conditions, 'order' => 'headline ASC')
+            ['where' => $where_conditions, 'order' => 'headline ASC']
         );
     }
 
@@ -88,10 +88,10 @@ class Timeline extends Model
      */
     public function get_status_list()
     {
-        return array(
+        return [
             TIMELINE_STATUS_ACTIVE => get_lang('Active'),
             TIMELINE_STATUS_INACTIVE => get_lang('Inactive')
-        );
+        ];
     }
 
     /**
@@ -113,7 +113,7 @@ class Timeline extends Model
         $id = isset($_GET['id']) ? intval($_GET['id']) : '';
         $form->addElement('hidden', 'id', $id);
 
-        $form->addElement('text', 'headline', get_lang('Name'), array('size' => '70'));
+        $form->addElement('text', 'headline', get_lang('Name'), ['size' => '70']);
         $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
         if ($action == 'edit') {
@@ -165,13 +165,13 @@ class Timeline extends Model
         $form->addElement('text', 'headline', get_lang('Name'));
 
         //@todo fix this
-        $form->addElement('text', 'start_date', get_lang('StartDate'), array('size' => '70'));
-        $form->addElement('text', 'end_date', get_lang('EndDate'), array('size' => '70'));
+        $form->addElement('text', 'start_date', get_lang('StartDate'), ['size' => '70']);
+        $form->addElement('text', 'end_date', get_lang('EndDate'), ['size' => '70']);
         $form->addElement('textarea', 'text', get_lang('TimelineItemText'));
-        $form->addElement('text', 'media', get_lang('TimelineItemMedia'), array('size' => '70'));
-        $form->addElement('text', 'media_caption', get_lang('TimelineItemMediaCaption'), array('size' => '70'));
-        $form->addElement('text', 'media_credit', get_lang('TimelineItemMediaCredit'), array('size' => '70'));
-        $form->addElement('text', 'title_slide', get_lang('TimelineItemTitleSlide'), array('size' => '70'));
+        $form->addElement('text', 'media', get_lang('TimelineItemMedia'), ['size' => '70']);
+        $form->addElement('text', 'media_caption', get_lang('TimelineItemMediaCaption'), ['size' => '70']);
+        $form->addElement('text', 'media_credit', get_lang('TimelineItemMediaCredit'), ['size' => '70']);
+        $form->addElement('text', 'title_slide', get_lang('TimelineItemTitleSlide'), ['size' => '70']);
 
         $form->addRule('headline', get_lang('ThisFieldIsRequired'), 'required');
         $form->addRule('start_date', get_lang('ThisFieldIsRequired'), 'required');
@@ -244,27 +244,27 @@ class Timeline extends Model
      */
     public function get_timeline_content($id)
     {
-        $timeline = array();
+        $timeline = [];
         $course_id = api_get_course_int_id();
         $timeline['timeline'] = $this->process_item($this->get($id));
-        $items = $this->process_items($this->get_all(array('parent_id = ? AND c_id = ? ' =>array($id, $course_id))));
+        $items = $this->process_items($this->get_all(['parent_id = ? AND c_id = ? ' =>[$id, $course_id]]));
         $timeline['timeline']['date'] = $items;
         return $timeline;
     }
 
-    function process_items($items)
+    public function process_items($items)
     {
         foreach ($items as &$item) {
             $item = $this->process_item($item);
         }
-        $new_array = array();
+        $new_array = [];
         foreach ($items as $item) {
             $new_array[] = $item;
         }
         return $new_array;
     }
 
-    function process_item($item)
+    public function process_item($item)
     {
         $item['startDate'] = $item['start_date'];
         unset($item['start_date']);
@@ -275,11 +275,11 @@ class Timeline extends Model
         }
         unset($item['end_date']);
         // Assets
-        $item['asset'] = array(
+        $item['asset'] = [
             'media' => $item['media'],
             'credit' => $item['media_credit'],
             'caption' => $item['media_caption'],
-        );
+        ];
 
         //Cleaning items
         unset($item['id']);

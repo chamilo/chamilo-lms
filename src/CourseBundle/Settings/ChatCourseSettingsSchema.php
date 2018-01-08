@@ -19,14 +19,14 @@ class ChatCourseSettingsSchema extends AbstractSettingsSchema
     public function buildSettings(SettingsBuilderInterface $builder)
     {
         $builder
-            ->setDefaults(array(
+            ->setDefaults([
                 'enabled' => '',
                 'allow_open_chat_window' => ''
-            ))
+            ])
         ;
-        $allowedTypes = array(
-            'enabled' => array('string'),
-        );
+        $allowedTypes = [
+            'enabled' => ['string'],
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 

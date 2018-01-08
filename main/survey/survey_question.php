@@ -10,7 +10,7 @@ class survey_question
 {
     /** @var FormValidator */
     private $form;
-    public $buttonList = array();
+    public $buttonList = [];
 
     /**
      * Generic part of any survey question: the question field
@@ -28,7 +28,7 @@ class survey_question
         $toolName = Display::return_icon(
             SurveyManager::icon_question(Security::remove_XSS($_GET['type'])),
             get_lang(ucfirst(Security::remove_XSS($_GET['type']))),
-            array('align' => 'middle', 'height' => '22px')
+            ['align' => 'middle', 'height' => '22px']
         ).' ';
 
         if ($action == 'add') {
@@ -62,11 +62,11 @@ class survey_question
         $form->addHidden('shared_question_id', Security::remove_XSS($sharedQuestionId));
         $form->addHidden('type', Security::remove_XSS($_GET['type']));
 
-        $config = array(
+        $config = [
             'ToolbarSet' => 'SurveyQuestion',
             'Width' => '100%',
             'Height' => '120'
-        );
+        ];
         $form->addHtmlEditor(
             'question',
             get_lang('Question'),
@@ -187,7 +187,7 @@ class survey_question
         $answerList = Session::read('answer_list');
 
         if (empty($answerList)) {
-            $answerList = isset($formData['answers']) ? $formData['answers'] : array();
+            $answerList = isset($formData['answers']) ? $formData['answers'] : [];
             Session::write('answer_list', $answerList);
         }
 
@@ -326,7 +326,7 @@ class survey_question
 
         if (count($data['answers']) <= 2) {
             $this->buttonList['remove_answer']->updateAttributes(
-                array('disabled' => 'disabled')
+                ['disabled' => 'disabled']
             );
         }
 
@@ -344,9 +344,8 @@ class survey_question
      * @param array $questionData
      * @param array $answers
      */
-    public function render(FormValidator $form, $questionData = array(), $answers = array())
+    public function render(FormValidator $form, $questionData = [], $answers = [])
     {
         return null;
     }
 }
-

@@ -18,4 +18,4 @@ $plugin_info['version'] = '1.0';
 // The plugin author
 $plugin_info['author'] = 'Julio Montoya';
 // Set the templates that are going to be used
-$plugin_info['templates'] = array('template.tpl');
+$plugin_info['templates'] = ['template.tpl'];

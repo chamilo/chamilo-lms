@@ -21,8 +21,8 @@ function home_tabs($file_logged_in)
     if ($post !== false) {
         $file_logged_out = str_replace('_logged_in', '', $file_logged_in);
         //variables initialization
-        $data_logged_out = array();
-        $data_logged_in = array();
+        $data_logged_out = [];
+        $data_logged_in = [];
 
         //we read the file with all links
         $file = file($file_logged_in);
@@ -72,16 +72,16 @@ $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
 $tool_name = get_lang('ConfigureHomePage');
 $_languages = api_get_languages();
 $selfUrl = api_get_self();
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'index.php',
     'name' => get_lang('PlatformAdmin')
-);
+];
 
 if (!empty($action)) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'configure_homepage.php',
         'name' => get_lang('ConfigureHomePage')
-    );
+    ];
 
     switch ($action) {
         case 'edit_top':
@@ -170,7 +170,7 @@ $menutabs = 'home_tabs'; //menutabs for tabs Menu
 $mtloggedin = 'home_tabs_logged_in'; //menutabs for tabs Menu
 $ext = '.html'; //ext for HTML Extension - when used frequently, variables are
 // faster than hardcoded strings
-$homef = array($menuf, $newsf, $topf, $noticef, $menutabs, $mtloggedin);
+$homef = [$menuf, $newsf, $topf, $noticef, $menutabs, $mtloggedin];
 
 // If language-specific file does not exist, create it by copying default file
 foreach ($homef as $my_file) {
@@ -260,7 +260,7 @@ if (!empty($action)) {
                 }
 
                 if (EventsMail::check_if_using_class('portal_homepage_edited')) {
-                    EventsDispatcher::events('portal_homepage_edited', array('about_user' => api_get_user_id()));
+                    EventsDispatcher::events('portal_homepage_edited', ['about_user' => api_get_user_id()]);
                 }
                 Event::addEvent(
                     LOG_HOMEPAGE_CHANGED,
@@ -273,7 +273,7 @@ if (!empty($action)) {
             case 'edit_notice':
                 // Filter
                 $notice_title = trim(strip_tags(stripslashes($_POST['notice_title'])));
-                $notice_text = trim(str_replace(array("\r", "\n"), array('', '<br />'), strip_tags(stripslashes($_POST['notice_text']), '<a>')));
+                $notice_text = trim(str_replace(["\r", "\n"], ['', '<br />'], strip_tags(stripslashes($_POST['notice_text']), '<a>')));
                 if (empty($notice_title) || empty($notice_text)) {
                     $errorMsg = get_lang('NoticeWillBeNotDisplayed');
                 }
@@ -453,7 +453,7 @@ if (!empty($action)) {
                     }
                     // If the requested action is to edit a link, open the file and
                     // write to it (if the file doesn't exist, create it)
-                    if (in_array($action, array('edit_link')) && !empty($link_html)) {
+                    if (in_array($action, ['edit_link']) && !empty($link_html)) {
                         $fp = @fopen($homep.$filename, 'w');
                         if ($fp) {
                             fputs($fp, $link_html);
@@ -563,7 +563,7 @@ if (!empty($action)) {
                 $menuf = ($action == 'delete_tabs') ? $mtloggedin : $menuf;
                 $home_menu = @file($homep.$menuf.'_'.$lang.$ext);
                 if (empty($home_menu)) {
-                    $home_menu = array();
+                    $home_menu = [];
                 }
                 foreach ($home_menu as $key => $enreg) {
                     if ($key == $link_index) {
@@ -613,7 +613,7 @@ if (!empty($action)) {
                     $errorMsg = get_lang('HomePageFilesNotReadable');
                 }
                 if (empty($home_notice)) {
-                    $home_notice = array();
+                    $home_notice = [];
                 }
                 $notice_title = strip_tags($home_notice[0]);
                 $notice_title = api_to_system_encoding($notice_title, api_detect_encoding($notice_title));
@@ -644,7 +644,7 @@ if (!empty($action)) {
                     $errorMsg = get_lang('HomePageFilesNotReadable');
                 }
                 if (empty($home_menu)) {
-                    $home_menu = array();
+                    $home_menu = [];
                 }
                 if (!empty($home_menu)) {
                     $home_menu = implode("\n", $home_menu);
@@ -666,7 +666,7 @@ if (!empty($action)) {
                     $errorMsg = get_lang('HomePageFilesNotReadable');
                 }
                 if (empty($home_menu)) {
-                    $home_menu = array();
+                    $home_menu = [];
                 }
                 if (!empty($home_menu)) {
                     $home_menu = implode("\n", $home_menu);
@@ -695,7 +695,7 @@ if (!empty($action)) {
                 }
 
                 if (empty($home_menu)) {
-                    $home_menu = array();
+                    $home_menu = [];
                 }
                 if (!empty($home_menu)) {
                     $home_menu = implode("\n", $home_menu);
@@ -849,8 +849,8 @@ switch ($action) {
         if (!empty($errorMsg)) {
             echo Display::return_message($errorMsg, 'normal');
         }
-        $default = array();
-        $form = new FormValidator('configure_homepage_'.$action, 'post', $selfUrl.'?action='.$action, '', array('style' => 'margin: 0px;'));
+        $default = [];
+        $form = new FormValidator('configure_homepage_'.$action, 'post', $selfUrl.'?action='.$action, '', ['style' => 'margin: 0px;']);
         $renderer = & $form->defaultRenderer();
 
         $form->addElement('header', '', $tool_name);
@@ -858,15 +858,15 @@ switch ($action) {
         $form->addElement('hidden', 'link_index', ($action == 'edit_link' || $action == 'edit_tabs') ? $link_index : '0');
         $form->addElement('hidden', 'filename', ($action == 'edit_link' || $action == 'edit_tabs') ? (!empty($filename) ? $filename : '') : '');
 
-        $form->addElement('text', 'link_name', get_lang('LinkName'), array('size' => '30', 'maxlength' => '50'));
+        $form->addElement('text', 'link_name', get_lang('LinkName'), ['size' => '30', 'maxlength' => '50']);
         if (!empty($link_name)) {
             $default['link_name'] = $link_name;
         }
         $default['link_url'] = empty($link_url) ? 'http://' : api_htmlentities($link_url, ENT_QUOTES);
         $linkUrlComment = ($action == 'insert_tabs') ? get_lang('Optional').'<br />'.get_lang('GlobalLinkUseDoubleColumnPrivateToShowPrivately') : '';
-        $form->addElement('text', 'link_url', array(get_lang('LinkURL'), $linkUrlComment), array('size' => '30', 'maxlength' => '100', 'style' => 'width: 350px;'));
+        $form->addElement('text', 'link_url', [get_lang('LinkURL'), $linkUrlComment], ['size' => '30', 'maxlength' => '100', 'style' => 'width: 350px;']);
 
-        $options = array('-1' => get_lang('FirstPlace'));
+        $options = ['-1' => get_lang('FirstPlace')];
 
         $selected = '';
 
@@ -898,15 +898,14 @@ switch ($action) {
 
         if ($action == 'edit_link' && (empty($link_url) || $link_url == 'http://' || $link_url == 'https://')) {
             $default['link_html'] = isset($_POST['link_html']) ? $_POST['link_html'] : $link_html;
-            $form->addHtmlEditor('link_html', get_lang('Content'), false, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
+            $form->addHtmlEditor('link_html', get_lang('Content'), false, false, ['ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400']);
             $form->addButtonSave(get_lang('Save'), 'submit');
-
         } else {
-            if (in_array($action, array('edit_tabs', 'insert_tabs'))) {
+            if (in_array($action, ['edit_tabs', 'insert_tabs'])) {
                 $default['link_html'] = isset($_POST['link_html']) ? $_POST['link_html'] : (!empty($link_html) ? $link_html : '');
-                $form->addHtmlEditor('link_html', get_lang('Content'), false, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
+                $form->addHtmlEditor('link_html', get_lang('Content'), false, false, ['ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400']);
             }
-            $form->addElement('checkbox', 'all_langs', null, get_lang('ApplyAllLanguages'), array('id' => 'all_langs'));
+            $form->addElement('checkbox', 'all_langs', null, get_lang('ApplyAllLanguages'), ['id' => 'all_langs']);
             $form->addElement('html', '<table id="table_langs" style="margin-left:159px;"><tr>');
             $i = 0;
             foreach ($_languages['name'] as $key => $value) {
@@ -943,13 +942,13 @@ switch ($action) {
             echo Display::return_message($errorMsg, 'normal'); //main API
         }
 
-        $default = array();
+        $default = [];
         $form = new FormValidator(
             'configure_homepage_'.$action,
             'post',
             $selfUrl.'?action='.$action,
             '',
-            array('style' => 'margin: 0px;')
+            ['style' => 'margin: 0px;']
         );
         $renderer = & $form->defaultRenderer();
         $renderer->setHeaderTemplate('');
@@ -976,8 +975,8 @@ switch ($action) {
         }
 
         $default[$name] = str_replace('{rel_path}', api_get_path(REL_PATH), $open);
-        $form->addHtmlEditor($name, '', true, false, array('ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400'));
-        $form->addElement('checkbox', 'all_langs', null, get_lang('ApplyAllLanguages'), array('id' => 'all_langs'));
+        $form->addHtmlEditor($name, '', true, false, ['ToolbarSet' => 'PortalHomePage', 'Width' => '100%', 'Height' => '400']);
+        $form->addElement('checkbox', 'all_langs', null, get_lang('ApplyAllLanguages'), ['id' => 'all_langs']);
         $form->addElement('html', '<table id="table_langs" style="margin-left:5px;"><tr>');
 
         $currentLanguage = api_get_interface_language();
@@ -1047,7 +1046,7 @@ switch ($action) {
                                        href="#notice-list" aria-expanded="true" aria-controls="notice-list">
                                         <?php echo get_lang('Notice'); ?>
                                         <a class="pull-right"
-                                           href="<?php echo $selfUrl; ?>?action=edit_notice"><?php Display::display_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL); ?></a>
+                                           href="<?php echo $selfUrl; ?>?action=edit_notice"><?php Display::display_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL); ?></a>
                                     </a>
                                 </h4>
                             </div>
@@ -1097,7 +1096,7 @@ switch ($action) {
                                             $home_menu = @file($homep.$menuf.$ext);
                                         }
                                         if (empty($home_menu)) {
-                                            $home_menu = array();
+                                            $home_menu = [];
                                         }
                                         if (!empty($home_menu)) {
                                             $home_menu = implode("\n", $home_menu);
@@ -1110,7 +1109,7 @@ switch ($action) {
                                             if (!empty($enreg)) {
                                                 $edit_link = '<a href="'.$selfUrl.'?action=edit_link&amp;link_index='.$i.'">'.Display::return_icon('edit.png', get_lang('Edit')).'</a>';
                                                 $delete_link = '<a href="'.$selfUrl.'?action=delete_link&amp;link_index='.$i.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>';
-                                                echo str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'), array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename($selfUrl).'?action=open_link&link=', $edit_link.' '.$delete_link.'</li>'), $enreg);
+                                                echo str_replace(['href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'], ['href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename($selfUrl).'?action=open_link&link=', $edit_link.' '.$delete_link.'</li>'], $enreg);
                                                 $i++;
                                             }
                                         }
@@ -1196,7 +1195,7 @@ switch ($action) {
                         }
                     }
                     if (empty($home_menu)) {
-                        $home_menu = array();
+                        $home_menu = [];
                     }
                     if (!empty($home_menu)) {
                         $home_menu = implode("\n", $home_menu);
@@ -1211,13 +1210,13 @@ switch ($action) {
                             $edit_link = ' <a href="'.$selfUrl.'?action=edit_tabs&amp;link_index='.$tab_counter.'" ><span>'.Display::return_icon('edit.png', get_lang('Edit')).'</span></a>';
                             $delete_link = ' <a href="'.$selfUrl.'?action=delete_tabs&amp;link_index='.$tab_counter.'"  onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;"><span>'.Display::return_icon('delete.png', get_lang('Delete')).'</span></a>';
                             $tab_string = str_replace(
-                                array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'),
-                                array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename($selfUrl).'?action=open_link&link=', $edit_link.$delete_link.'</li>'),
+                                ['href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'],
+                                ['href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename($selfUrl).'?action=open_link&link=', $edit_link.$delete_link.'</li>'],
                                 $enreg
                             );
                             $tab_string = str_replace([' class="hide_menu"', ' class="show_menu"'], '', $tab_string);
-                            $tab_string = str_replace(array('<li>', '</li>'), '', $tab_string);
-                            $link_list .= Display::tag('li', $tab_string, array('class' => 'list-group-item'));
+                            $tab_string = str_replace(['<li>', '</li>'], '', $tab_string);
+                            $link_list .= Display::tag('li', $tab_string, ['class' => 'list-group-item']);
                             $tab_counter++;
                         }
                     }

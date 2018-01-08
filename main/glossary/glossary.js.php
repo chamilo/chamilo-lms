@@ -10,9 +10,9 @@ $tpl = new Template();
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 
 if ($origin == 'learnpath') {
-    $showGlossary = in_array($glossaryExtraTools, array('lp', 'exercise_and_lp'));
+    $showGlossary = in_array($glossaryExtraTools, ['lp', 'exercise_and_lp']);
 } else {
-    $showGlossary = in_array($glossaryExtraTools, array('true', 'lp', 'exercise_and_lp'));
+    $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
 }
 
 if ($showGlossary) {

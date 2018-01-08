@@ -14,13 +14,13 @@ require_once __DIR__.'/../../inc/global.inc.php';
  */
 function import_users_from_file($filepath, $security_key)
 {
-    $errors_returned = array(
+    $errors_returned = [
         0 => 'success',
         1 => 'file import does not exist',
         2 => 'no users to import',
         3 => 'wrong datas in file',
         4 => 'security error'
-    );
+    ];
 
     $key = api_get_configuration_value('security_key');
 

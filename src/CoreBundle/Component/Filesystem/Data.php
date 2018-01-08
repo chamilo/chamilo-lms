@@ -281,7 +281,7 @@ class Data
         $path = \UserManager::get_user_picture_path_by_id($userId, 'system');
 
         if (!$this->fs->exists($path['dir'].'my_files')) {
-            $this->createFolders(array($path['dir'].'my_files'));
+            $this->createFolders([$path['dir'].'my_files']);
         }
     }
 }

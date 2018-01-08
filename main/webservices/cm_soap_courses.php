@@ -14,11 +14,11 @@ $s = WSCMSoapServer::singleton();
 
 $s->register(
     'WSCMCourses.get_courses_code',
-    array(
+    [
         'username' => 'xsd:string',
         'password' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string'),
+    ],
+    ['return' => 'xsd:string'],
     'urn:WSCMService',
     '',
     '',
@@ -29,12 +29,12 @@ $s->register(
 
 $s->register(
     'WSCMCourses.get_course_title',
-    array(
+    [
         'username' => 'xsd:string',
         'password' => 'xsd:string',
         'course_code' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string'),
+    ],
+    ['return' => 'xsd:string'],
     'urn:WSCMService',
     '',
     '',
@@ -42,6 +42,3 @@ $s->register(
     'Retorna o titulo/nome do curso de course_code informado'
 
 );
-
-
-

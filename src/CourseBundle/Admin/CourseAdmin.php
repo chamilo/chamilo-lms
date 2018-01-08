@@ -41,24 +41,28 @@ class CourseAdmin extends Admin
     {
         $formMapper
             ->add('title')
-            ->add('code', 'text', array(
+            ->add('code', 'text', [
                 //'read_only' => true,
-            ))
+            ])
             ->add('description', 'ckeditor')
             ->add('courseLanguage', 'language')
             ->add('departmentName')
             ->add(
                 'visibility',
                 'choice',
-                array(
+                [
                     'choices' => Course::getStatusList(),
                     'translation_domain' => 'ChamiloCoreBundle'
-                )
+                ]
             )
-            ->add('departmentUrl', 'url', array('required' => false))
-            ->add('urls', 'sonata_type_collection', array(
+            ->add('departmentUrl', 'url', ['required' => false])
+            ->add(
+                'urls',
+                'sonata_type_collection',
+                [
                     'cascade_validation' => true,
-                ), array(
+                ],
+                [
                     'allow_delete' => true,
                     'by_reference' => false,
                     'edit'              => 'inline',
@@ -68,12 +72,15 @@ class CourseAdmin extends Admin
                     //'sortable'          => 'position',
                     //'link_parameters'   => array('content' => $users),
                     'admin_code'        => 'sonata.admin.access_url_rel_course'
-                )
+                ]
             )
-            ->add('users', 'sonata_type_collection', array(
+            ->add(
+                'users',
+                'sonata_type_collection',
+                [
                     'cascade_validation' => true,
-                ),
-                array(
+                ],
+                [
                     'allow_delete' => true,
                     'by_reference' => false,
                     'edit'              => 'inline',
@@ -83,7 +90,7 @@ class CourseAdmin extends Admin
                     //'sortable'          => 'position',
                     //'link_parameters'   => array('content' => $users),
                     'admin_code'        => 'sonata.admin.course_rel_user'
-                )
+                ]
             )
         ;
     }
@@ -99,9 +106,9 @@ class CourseAdmin extends Admin
             ->add(
                 'visibility',
                 null,
-                array(),
+                [],
                 'choice',
-                array('choices' => Course::getStatusList())
+                ['choices' => Course::getStatusList()]
             )
         ;
     }
@@ -115,9 +122,9 @@ class CourseAdmin extends Admin
             ->addIdentifier('title')
             ->addIdentifier('code')
             ->add('courseLanguage')
-            ->add('visibility', 'choice', array(
+            ->add('visibility', 'choice', [
                 'choices' => Course::getStatusList()
-            ))
+            ])
         ;
     }
 
@@ -158,7 +165,7 @@ class CourseAdmin extends Admin
         // @todo use
         //$toolChain->addToolsInCourse($course);
 
-        $addedTools = array();
+        $addedTools = [];
         if (!empty($currentTools)) {
             foreach ($currentTools as $tool) {
                 $addedTools[] = $tool->getName();

@@ -8,13 +8,13 @@
 class EventEmailTemplate extends Model
 {
     public $table;
-    public $columns = array(
+    public $columns = [
         'id',
         'message',
         'subject',
         'event_type_name',
         'activated',
-    );
+    ];
 
     /**
      * Constructor
@@ -28,12 +28,12 @@ class EventEmailTemplate extends Model
      * @param array $where_conditions
      * @return array
      */
-    public function get_all($where_conditions = array())
+    public function get_all($where_conditions = [])
     {
         return Database::select(
             '*',
             $this->table,
-            array('where' => $where_conditions, 'order' => 'name ASC')
+            ['where' => $where_conditions, 'order' => 'name ASC']
         );
     }
 
@@ -43,17 +43,18 @@ class EventEmailTemplate extends Model
     public function display()
     {
         // action links
-        $content = Display::actions(array(
-                array(
+        $content = Display::actions(
+            [
+                [
                     'url' => 'event_type.php',
                     'content' => Display::return_icon(
                         'new_document.png',
                         get_lang('Add'),
-                        array(),
+                        [],
                         ICON_SIZE_MEDIUM
                     )
-                 )
-            )
+                 ]
+            ]
         );
         $content .= Display::grid_html('event_email_template');
         return $content;
@@ -64,10 +65,10 @@ class EventEmailTemplate extends Model
      */
     public function get_status_list()
     {
-        return array(
+        return [
             EVENT_EMAIL_TEMPLATE_ACTIVE => get_lang('Enabled'),
             EVENT_EMAIL_TEMPLATE_INACTIVE => get_lang('Disabled')
-        );
+        ];
     }
 
     /**
@@ -89,17 +90,17 @@ class EventEmailTemplate extends Model
         $form->addElement('header', $header);
         $id = isset($_GET['id']) ? intval($_GET['id']) : '';
         $form->addElement('hidden', 'id', $id);
-        $form->addElement('text', 'name', get_lang('Name'), array('size' => '70'));
+        $form->addElement('text', 'name', get_lang('Name'), ['size' => '70']);
         $form->addHtmlEditor(
             'description',
             get_lang('Description'),
             false,
             false,
-            array(
+            [
                 'ToolbarSet' => 'careers',
                 'Width' => '100%',
                 'Height' => '250',
-            )
+            ]
         );
         $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
@@ -133,7 +134,7 @@ class EventEmailTemplate extends Model
 
     public function get_count()
     {
-        $row = Database::select('count(*) as count', $this->table, array(), 'first');
+        $row = Database::select('count(*) as count', $this->table, [], 'first');
 
         return $row['count'];
     }

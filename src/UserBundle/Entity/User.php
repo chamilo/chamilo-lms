@@ -496,7 +496,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
         $this->enabled = false;
         $this->locked = false;
         $this->expired = false;
-        $this->roles = array();
+        $this->roles = [];
         $this->credentialsExpired = false;
     }
 
@@ -587,12 +587,13 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     public static function getPasswordConstraints()
     {
         return
-            array(
-                new Assert\Length(array('min' => 5)),
+            [
+                new Assert\Length(['min' => 5]),
                 // Alpha numeric + "_" or "-"
-                new Assert\Regex(array(
+                new Assert\Regex(
+                    [
                         'pattern' => '/^[a-z\-_0-9]+$/i',
-                        'htmlPattern' => '/^[a-z\-_0-9]+$/i')
+                        'htmlPattern' => '/^[a-z\-_0-9]+$/i']
                 ),
                 // Min 3 letters - not needed
                 /*new Assert\Regex(array(
@@ -600,11 +601,12 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
                     'htmlPattern' => '/[a-z]{3}/i')
                 ),*/
                 // Min 2 numbers
-                new Assert\Regex(array(
+                new Assert\Regex(
+                    [
                         'pattern' => '/[0-9]{2}/',
-                        'htmlPattern' => '/[0-9]{2}/')
+                        'htmlPattern' => '/[0-9]{2}/']
                 ),
-            )
+            ]
             ;
     }
 
@@ -803,7 +805,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     public function getCompleteNameWithClasses()
     {
         $classSubscription = $this->getClasses();
-        $classList = array();
+        $classList = [];
         /** @var UsergroupRelUser $subscription */
         foreach ($classSubscription as $subscription) {
             $class = $subscription->getUsergroup();
@@ -2327,7 +2329,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
 
     public function setRoles(array $roles)
     {
-        $this->roles = array();
+        $this->roles = [];
 
         foreach ($roles as $role) {
             $this->addRole($role);
@@ -2348,7 +2350,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
 
     public function getGroupNames()
     {
-        $names = array();
+        $names = [];
         foreach ($this->getGroups() as $group) {
             $names[] = $group->getName();
         }
@@ -2402,7 +2404,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
      */
     public function serialize()
     {
-        return serialize(array(
+        return serialize([
             $this->password,
             $this->salt,
             $this->usernameCanonical,
@@ -2412,7 +2414,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
             $this->credentialsExpired,
             $this->enabled,
             $this->id,
-        ));
+        ]);
     }
 
     /**

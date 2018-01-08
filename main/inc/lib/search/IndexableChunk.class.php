@@ -58,7 +58,7 @@ abstract class _IndexableChunk
      */
     public function __construct()
     {
-        $this->data = array();
+        $this->data = [];
     }
 
     /**
@@ -81,7 +81,7 @@ abstract class _IndexableChunk
     {
         global $charset;
         if (strlen($flag) == 1) {
-            $this->terms[] = array('name' => api_convert_encoding(stripslashes($term), 'UTF-8', $charset), 'flag' => $flag);
+            $this->terms[] = ['name' => api_convert_encoding(stripslashes($term), 'UTF-8', $charset), 'flag' => $flag];
         }
     }
 
@@ -93,7 +93,6 @@ abstract class _IndexableChunk
         unset($this->data);
         unset($this->terms);
     }
-
 }
 
 /**

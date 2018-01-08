@@ -54,18 +54,18 @@ if (empty($objExercise)) {
 }
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook'),
-    );
+    ];
 }
 
 $nameTools = get_lang('Exercises');
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => "exercise.php?".api_get_cidreq(),
     "name" => get_lang('Exercises'),
-);
+];
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
@@ -89,9 +89,9 @@ if ($origin != 'learnpath') {
 if (api_is_course_admin() && $origin != 'learnpath') {
     echo '<div class="actions">';
     echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
-        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), array(), 32).'</a>';
+        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
     echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
-        Display::return_icon('edit.png', get_lang('ModifyExercise'), array(), 32).'</a>';
+        Display::return_icon('edit.png', get_lang('ModifyExercise'), [], 32).'</a>';
     echo '</div>';
 }
 
@@ -107,7 +107,7 @@ $learnpath_item_id = isset($exercise_stat_info['orig_lp_item_id']) ? $exercise_s
 $learnpath_item_view_id = isset($exercise_stat_info['orig_lp_item_view_id']) ? $exercise_stat_info['orig_lp_item_view_id'] : 0;
 
 if ($origin == 'learnpath') {
-?>
+    ?>
     <form method="GET" action="exercise.php?<?php echo api_get_cidreq() ?>">
     <input type="hidden" name="origin" value="<?php echo $origin; ?>" />
     <input type="hidden" name="learnpath_id" value="<?php echo $learnpath_id; ?>" />
@@ -195,7 +195,7 @@ if ($origin != 'learnpath') {
     echo Display::url(
         get_lang('ReturnToCourseHomepage'),
         api_get_course_url(),
-        array('class' => 'btn btn-primary')
+        ['class' => 'btn btn-primary']
     );
     echo '</div>';
 
@@ -205,9 +205,9 @@ if ($origin != 'learnpath') {
     }
     Display::display_footer();
 } else {
-	$lp_mode = Session::read('lp_mode');
-	$url = '../lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->feedback_type.'#atoc_'.$learnpath_item_id;
-	$href = $lp_mode == 'fullscreen' ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
+    $lp_mode = Session::read('lp_mode');
+    $url = '../lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->feedback_type.'#atoc_'.$learnpath_item_id;
+    $href = $lp_mode == 'fullscreen' ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
 
     if (api_is_allowed_to_session_edit()) {
         Session::erase('objExercise');

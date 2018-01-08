@@ -12,5 +12,4 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class ChamiloContactBundle extends Bundle
 {
-
 }

@@ -11,7 +11,8 @@ use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\ExceptionController {
+class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\ExceptionController
+{
 
 
     /**
@@ -24,7 +25,6 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
      */
     protected function findTemplate(Request $request, $format, $code, $debug)
     {
-
         if (strpos($request->getPathInfo(), '/admin') !== 0) {
             return parent::findTemplate($request, $format, $code, $debug);
         }
@@ -57,8 +57,5 @@ class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\Exceptio
         }
 
         return parent::findTemplate($request, $format, $code, $debug);
-
     }
-
-
 }

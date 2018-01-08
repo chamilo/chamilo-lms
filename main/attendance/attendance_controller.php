@@ -44,7 +44,7 @@ class AttendanceController
     public function attendance_add()
     {
         $attendance = new Attendance();
-        $data = array();
+        $data = [];
 
         if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
             if (!empty($_POST['title'])) {
@@ -90,7 +90,7 @@ class AttendanceController
     public function attendance_edit($attendance_id)
     {
         $attendance = new Attendance();
-        $data = array();
+        $data = [];
         $attendance_id = intval($attendance_id);
 
         if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
@@ -271,7 +271,7 @@ class AttendanceController
         $edit = true
     ) {
         $attendance = new Attendance();
-        $data = array();
+        $data = [];
         $data['attendance_id'] = $attendance_id;
         $groupId = isset($_REQUEST['group_id']) ? $_REQUEST['group_id'] : null;
         $data['users_in_course'] = $attendance->get_users_rel_course($attendance_id, $groupId);
@@ -332,7 +332,7 @@ class AttendanceController
         if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
             if (isset($_POST['hidden_input'])) {
                 foreach ($_POST['hidden_input'] as $cal_id) {
-                    $users_present = array();
+                    $users_present = [];
                     if (isset($_POST['check_presence'][$cal_id])) {
                         $users_present = $_POST['check_presence'][$cal_id];
                     }
@@ -384,10 +384,10 @@ class AttendanceController
     {
         $attendance = new Attendance();
         $calendar_id = intval($calendar_id);
-        $data = array();
+        $data = [];
         $data['attendance_id'] = $attendance_id;
         $attendance_id = intval($attendance_id);
-        $groupList = isset($_POST['groups']) ? array($_POST['groups']) : array();
+        $groupList = isset($_POST['groups']) ? [$_POST['groups']] : [];
 
         if ($action == 'calendar_add') {
             if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
@@ -490,7 +490,7 @@ class AttendanceController
         $courseInfo = api_get_course_info($course_id);
         $attendance->set_course_id($courseInfo['code']);
         $groupId = isset($_REQUEST['group_id']) ? $_REQUEST['group_id'] : null;
-        $data_array = array();
+        $data_array = [];
         $data_array['attendance_id'] = $attendance_id;
         $data_array['users_in_course'] = $attendance->get_users_rel_course($attendance_id, $groupId);
 
@@ -540,8 +540,8 @@ class AttendanceController
         }
 
         // Get data table
-        $data_table = array();
-        $head_table = array('#', get_lang('Name'));
+        $data_table = [];
+        $head_table = ['#', get_lang('Name')];
         foreach ($data_array['attendant_calendar'] as $class_day) {
             $head_table[] =
                 api_format_date($class_day['date_time'], DATE_FORMAT_NUMBER_NO_YEAR).' '.
@@ -555,7 +555,7 @@ class AttendanceController
         if (!empty($data_array['users_in_course'])) {
             foreach ($data_array['users_in_course'] as $user) {
                 $cols = 1;
-                $result = array();
+                $result = [];
                 $result['count'] = $count;
                 $result['full_name'] = api_get_person_name($user['firstname'], $user['lastname']);
                 foreach ($data_array['attendant_calendar'] as $class_day) {
@@ -581,8 +581,8 @@ class AttendanceController
         if ($cols > $max_cols_per_page) {
             $number_tables = round(($cols - 2) / $max_dates_per_page);
             $headers = $data_table[0];
-            $all = array();
-            $tables = array();
+            $all = [];
+            $tables = [];
             $changed = 1;
 
             for ($i = 0; $i <= $rows; $i++) {
@@ -616,11 +616,11 @@ class AttendanceController
         } else {
             $content = Export::convert_array_to_html(
                 $data_table,
-                array('header_attributes' => array('align' => 'center'))
+                ['header_attributes' => ['align' => 'center']]
             );
         }
 
-        $params = array(
+        $params = [
             'filename' => get_lang('Attendance').'-'.api_get_local_time(),
             'pdf_title' => $courseInfo['title'],
             'course_code' => $courseInfo['code'],
@@ -630,7 +630,7 @@ class AttendanceController
             'pdf_course_category' => $courseCategory['name'],
             'format' => 'A4-L',
             'orientation' => 'L'
-        );
+        ];
 
         Export::export_html_to_pdf($content, $params);
         exit;
@@ -682,10 +682,10 @@ class AttendanceController
             }
         }
         $table = $attendance->getAttendanceLoginTable($startDate, $endDate);
-        $data = array(
+        $data = [
             'form' => $formToDisplay,
             'table' => $table
-        );
+        ];
         $this->view->set_data($data);
         $this->view->set_layout('layout');
         $this->view->set_template('calendar_logins');

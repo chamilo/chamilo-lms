@@ -8,8 +8,8 @@
  */
 class GradeBookResult
 {
-    private $gradebook_list = array(); //stores the list of exercises
-    private $results = array(); //stores the results
+    private $gradebook_list = []; //stores the list of exercises
+    private $results = []; //stores the results
 
     /**
      * constructor of the class
@@ -59,7 +59,8 @@ class GradeBookResult
             header('Content-Disposition: filename= '.$filename);
         } else {
             header('Content-Disposition: attachment; filename= '.$filename);
-        } if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
+        }
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
             header('Pragma: ');
             header('Cache-Control: ');
             header('Cache-Control: public'); // IE cannot download from sessions without a cache

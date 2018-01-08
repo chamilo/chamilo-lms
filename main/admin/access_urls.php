@@ -19,7 +19,7 @@ if (!api_get_multiple_access_url()) {
     exit;
 }
 
-$interbreadcrumb[] = array("url" => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ["url" => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $tool_name = get_lang('MultipleAccessURLs');
 Display :: display_header($tool_name);
 
@@ -111,38 +111,38 @@ if ($current_access_url_id == -1) {
 // action menu
 echo '<div class="actions">';
 echo Display::url(
-    Display::return_icon('new_link.png', get_lang('AddUrl'), array(), ICON_SIZE_MEDIUM),
+    Display::return_icon('new_link.png', get_lang('AddUrl'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'admin/access_url_edit.php'
 );
 echo Display::url(
-    Display::return_icon('user.png', get_lang('ManageUsers'), array(), ICON_SIZE_MEDIUM),
+    Display::return_icon('user.png', get_lang('ManageUsers'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php'
 );
 echo Display::url(
-    Display::return_icon('course.png', get_lang('ManageCourses'), array(), ICON_SIZE_MEDIUM),
+    Display::return_icon('course.png', get_lang('ManageCourses'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php'
 );
 
 $userGroup = new UserGroup();
 if ($userGroup->getUseMultipleUrl()) {
     echo Display::url(
-        Display::return_icon('class.png', get_lang('ManageUserGroup'), array(), ICON_SIZE_MEDIUM),
+        Display::return_icon('class.png', get_lang('ManageUserGroup'), [], ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH).'admin/access_url_edit_usergroup_to_url.php'
     );
 }
 
 echo Display::url(
-    Display::return_icon('folder.png', get_lang('ManageCourseCategories'), array(), ICON_SIZE_MEDIUM),
+    Display::return_icon('folder.png', get_lang('ManageCourseCategories'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'admin/access_url_edit_course_category_to_url.php'
 );
 
 echo '</div>';
 
 $sortable_data = UrlManager::get_url_data();
-$urls = array();
+$urls = [];
 foreach ($sortable_data as $row) {
     //title
-    $url = Display::url($row['url'], $row['url'], array('target'=>'_blank'));
+    $url = Display::url($row['url'], $row['url'], ['target'=>'_blank']);
     $description = $row['description'];
 
     //Status
@@ -164,12 +164,12 @@ foreach ($sortable_data as $row) {
     }
     // Actions
     $url_id = $row['id'];
-    $actions = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "access_url_edit.php?url_id=$url_id");
+    $actions = Display::url(Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL), "access_url_edit.php?url_id=$url_id");
     if ($url_id != '1') {
         $actions .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."'".')) return false;">'.
-            Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
+            Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
     }
-    $urls[] = array($url, $description, $status, $actions);
+    $urls[] = [$url, $description, $status, $actions];
 }
 
 $table = new SortableTableFromArrayConfig($urls, 2, 50, 'urls');

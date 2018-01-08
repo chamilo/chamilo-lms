@@ -27,16 +27,16 @@ if (empty($userSkills)) {
     api_not_allowed(true);
 }
 
-$assertions = array();
+$assertions = [];
 foreach ($userSkills as $skill) {
     $skillId = current($skill);
     $assertionUrl = api_get_path(WEB_CODE_PATH).'badge/assertion.php?';
-    $assertionUrl .= http_build_query(array(
+    $assertionUrl .= http_build_query([
         'user' => $userId,
         'skill' => $skillId,
         'course' => $courseId,
         'session' => $sessionId
-    ));
+    ]);
 
     $assertions[] = $assertionUrl;
 }

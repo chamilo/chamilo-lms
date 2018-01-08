@@ -55,12 +55,12 @@ switch ($action) {
                     false
                 );
 
-                $json = array();
+                $json = [];
                 if (!empty($result) && is_array($result) && empty($result['error'])) {
                     $json['name'] = Display::url(
                         api_htmlentities($result['title']),
                         api_htmlentities($result['view_url']),
-                        array('target' => '_blank')
+                        ['target' => '_blank']
                     );
 
                     $json['url'] = $result['view_url'];
@@ -98,7 +98,7 @@ switch ($action) {
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
         $itemId = isset($_GET['item_id']) ? intval($_GET['item_id']) : '';
 
-        $result = array();
+        $result = [];
 
         if (!empty($_FILES) && !empty($itemId)) {
             $file = $_FILES['file'];
@@ -129,11 +129,11 @@ switch ($action) {
                 $result['title'] = $resultUpload['filename'];
                 $result['url'] = 'view.php?'.api_get_cidreq().'&id='.$itemId;
 
-                $json = array();
+                $json = [];
                 $json['name'] = Display::url(
                     api_htmlentities($result['title']),
                     api_htmlentities($result['url']),
-                    array('target' => '_blank')
+                    ['target' => '_blank']
                 );
 
                 $json['type'] = api_htmlentities($file['type']);

@@ -136,7 +136,7 @@ class CourseRequest
      *
      * @ORM\Column(name="exemplary_content", type="integer", nullable=false)
      */
-    private $exemplaryContent;  
+    private $exemplaryContent;
 
     /**
      * Constructor

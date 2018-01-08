@@ -99,7 +99,7 @@ class LinkFactory
     public static function get_all_types()
     {
         //LINK_DROPBOX,
-        return array(
+        return [
             LINK_EXERCISE,
             //LINK_DROPBOX,
             LINK_HOTPOTATOES,
@@ -108,7 +108,7 @@ class LinkFactory
             LINK_FORUM_THREAD,
             LINK_ATTENDANCE,
             LINK_SURVEY
-        );
+        ];
     }
 
     public function delete()

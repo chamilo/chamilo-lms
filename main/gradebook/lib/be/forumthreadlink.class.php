@@ -61,15 +61,15 @@ class ForumThreadLink extends AbstractLink
                 AND forum_thread.session_id='.api_get_session_id();
 
         $result = Database::query($sql);
-        $cats = array();
+        $cats = [];
         while ($data = Database::fetch_array($result)) {
             if (isset($data['thread_title_qualify']) && $data['thread_title_qualify'] != "") {
-                $cats[] = array(
+                $cats[] = [
                     $data['thread_id'],
                     $data['thread_title_qualify'],
-                );
+                ];
             } else {
-                $cats[] = array($data['thread_id'], $data['thread_title']);
+                $cats[] = [$data['thread_id'], $data['thread_title']];
             }
         }
 
@@ -110,9 +110,9 @@ class ForumThreadLink extends AbstractLink
         $result = Database::query($sql);
         while ($data = Database::fetch_array($result)) {
             if (isset($data['thread_title_qualify']) && $data['thread_title_qualify'] != '') {
-                $cats[] = array($data['thread_id'], $data['thread_title_qualify']);
+                $cats[] = [$data['thread_id'], $data['thread_title_qualify']];
             } else {
-                $cats[] = array($data['thread_id'], $data['thread_title']);
+                $cats[] = [$data['thread_id'], $data['thread_title']];
             }
         }
         $my_cats = isset($cats) ? $cats : null;
@@ -189,13 +189,13 @@ class ForumThreadLink extends AbstractLink
             if ($threadInfo['thread_peer_qualify'] == 0) {
                 // Classic way of calculate score
                 if ($data = Database::fetch_array($scores)) {
-                    return array(
+                    return [
                         $data['qualify'],
                         $assignment['thread_qualify_max']
-                    );
+                    ];
                 } else {
                     // We sent the 0/thread_qualify_max instead of null for correct calculations
-                    return array(0, $assignment['thread_qualify_max']);
+                    return [0, $assignment['thread_qualify_max']];
                 }
             } else {
                 // Take average
@@ -209,13 +209,13 @@ class ForumThreadLink extends AbstractLink
                 }
                 // If no result
                 if (empty($counter) || $counter <= 2) {
-                    return array(0, $assignment['thread_qualify_max']);
+                    return [0, $assignment['thread_qualify_max']];
                 }
                 return [$score / $counter, $assignment['thread_qualify_max']];
             }
         } else {
             // All students -> get average
-            $students = array(); // user list, needed to make sure we only
+            $students = []; // user list, needed to make sure we only
             // take first attempts into account
             $counter = 0;
             $sum = 0;
@@ -243,16 +243,16 @@ class ForumThreadLink extends AbstractLink
             } else {
                 switch ($type) {
                     case 'best':
-                        return array($bestResult, $weight);
+                        return [$bestResult, $weight];
                         break;
                     case 'average':
-                        return array($sumResult / $counter, $weight);
+                        return [$sumResult / $counter, $weight];
                         break;
                     case 'ranking':
                         return AbstractLink::getCurrentUserRanking($stud_id, $students);
                         break;
                     default:
-                        return array($sum, $counter);
+                        return [$sum, $counter];
                         break;
                 }
             }

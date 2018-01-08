@@ -67,29 +67,29 @@ $therow = Database::fetch_array($result);
 
 /* SHOWING THE ADMIN TOOLS	*/
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq(),
         'name' => get_lang('ToolGradebook')
-    );
+    ];
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=list&'.api_get_cidreq(),
     'name' => get_lang('LearningPaths')
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
     'name' => $therow['name']
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
     'name' => get_lang('NewStep')
-);
+];
 
 // Theme calls
 $show_learn_path = true;
 if (isset($_SESSION['oLP']) && is_object($_SESSION['oLP'])) {
-	$lp_theme_css = $_SESSION['oLP']->get_theme();
+    $lp_theme_css = $_SESSION['oLP']->get_theme();
 }
 
 if ($mode == 'fullpage') {

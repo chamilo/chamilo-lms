@@ -90,7 +90,7 @@ class QuizQuestion extends Resource
         $this->position = $position;
         $this->picture = $picture;
         $this->level = $level;
-        $this->answers = array();
+        $this->answers = [];
         $this->extra = $extra;
         $this->question_category = $question_category;
     }
@@ -116,7 +116,7 @@ class QuizQuestion extends Resource
         $hotspot_coordinates,
         $hotspot_type
     ) {
-        $answer = array();
+        $answer = [];
         $answer['id'] = $answer_id;
         $answer['answer'] = $answer_text;
         $answer['correct'] = $correct;

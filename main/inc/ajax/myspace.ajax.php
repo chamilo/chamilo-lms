@@ -39,7 +39,7 @@ switch ($action) {
 
         break;
     case 'access_detail_by_date':
-        $db = array('is_empty' => true);
+        $db = ['is_empty' => true];
         $start_date = isset($_REQUEST['startDate']) ? $_REQUEST['startDate'] : '';
         $end_date = isset($_REQUEST['endDate']) ? $_REQUEST['endDate'] : '';
         $user_id = isset($_REQUEST['student']) ? $_REQUEST['student'] : '';

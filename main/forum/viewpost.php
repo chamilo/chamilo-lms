@@ -42,27 +42,27 @@ $current_forum_category = get_forumcategory_information($current_forum['forum_ca
 $whatsnew_post_info = $_SESSION['whatsnew_post_info'];
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
-    );
+    ];
 }
 
 if ($origin == 'learnpath') {
     Display::display_reduced_header();
 } else {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&search='.Security::remove_XSS(urlencode($_GET['search'])),
         'name' => $nameTools,
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.$current_forum_category['cat_id'].'&search='.Security::remove_XSS(urlencode($_GET['search'])),
         'name' => prepare4display($current_forum_category['cat_title'])
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => 'viewforum.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&search='.Security::remove_XSS(urlencode($_GET['search'])),
         'name' => prepare4display($current_forum['forum_title'])
-    );
+    ];
 
     // the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
     Display :: display_header('');
@@ -151,7 +151,7 @@ if ($message != 'PostDeletedSpecial') {
         $viewmode = $_SESSION['view'];
     }
 
-    $viewmode_whitelist = array('flat', 'threaded', 'nested');
+    $viewmode_whitelist = ['flat', 'threaded', 'nested'];
     if (isset($_GET['view']) && in_array($_GET['view'], $viewmode_whitelist)) {
         $viewmode = Database::escape_string($_GET['view']);
         $_SESSION['view'] = $viewmode;

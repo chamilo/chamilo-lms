@@ -56,23 +56,23 @@ function wsConvertPpt($pptData)
     //$perms = api_get_permissions_for_new_files();
     chmod($tempPathNewFiles.$fileName, $perms);
 
-    $files = array();
+    $files = [];
     $return = 0;
     $shell = exec($cmd, $files, $return);
     umask($oldumask);
 
     if ($return === 0) {
-        $images = array();
+        $images = [];
         if (is_array($files) && !empty($files)) {
             foreach ($files as $file) {
                 $imageData = explode('||', $file);
                 $images[$imageData[1]] = base64_encode(file_get_contents($tempPathNewFiles.$fileName.'/'.$imageData[1]));
             }
         }
-        $data = array(
+        $data = [
             'files' => $files,
             'images' => $images
-        );
+        ];
 
         deleteDirectory($tempPath);
         deleteDirectory($tempPathNewFiles);
@@ -92,7 +92,7 @@ function wsConvertPpt($pptData)
  */
 function deleteDirectory($directoryPath)
 {
-    $files = array_diff(scandir($directoryPath), array('.', '..'));
+    $files = array_diff(scandir($directoryPath), ['.', '..']);
     foreach ($files as $file) {
         if (is_dir("$directoryPath/$file")) {
             deleteDirectory("$directoryPath/$file");
@@ -147,10 +147,10 @@ function pptConverterGetCommandBaseParams()
 
 $webPath = api_get_path(WEB_PATH);
 $webCodePath = api_get_path(WEB_CODE_PATH);
-$options = array(
+$options = [
     'uri' => $webPath,
     'location' => $webCodePath.'webservices/additional_webservices.php'
-);
+];
 
 $soapServer = new SoapServer(null, $options);
 $soapServer->addFunction('wsConvertPpt');

@@ -104,7 +104,7 @@ if (empty($exercise_stat_info) || empty($question_list)) {
 }
 
 $nameTools = get_lang('Exercises');
-$interbreadcrumb[] = array("url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises'));
+$interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises')];
 
 if ($origin != 'learnpath') {
     //so we are not in learnpath tool
@@ -119,9 +119,9 @@ if ($origin != 'learnpath') {
 if (api_is_course_admin() && $origin != 'learnpath') {
     echo '<div class="actions">';
     echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
-        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), array(), 32).'</a>';
+        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
     echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
-        Display::return_icon('edit.png', get_lang('ModifyExercise'), array(), 32).'</a>';
+        Display::return_icon('edit.png', get_lang('ModifyExercise'), [], 32).'</a>';
     echo '</div>';
 }
 echo Display::page_header(get_lang('QuestionsToReview'));
@@ -130,7 +130,7 @@ if ($time_control) {
     echo $objExercise->return_time_left_div();
 }
 
-echo Display::div('', array('id'=>'message'));
+echo Display::div('', ['id'=>'message']);
 echo '<script>
     var lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
 
@@ -174,7 +174,7 @@ echo '<script>
 $attempt_list = Event::getAllExerciseEventByExeId($exe_id);
 $remind_list = $exercise_stat_info['questions_to_check'];
 $remind_list = explode(',', $remind_list);
-$exercise_result = array();
+$exercise_result = [];
 
 foreach ($attempt_list as $question_id => $options) {
     foreach ($options as $item) {
@@ -207,12 +207,12 @@ foreach ($question_list as $questionId) {
     $objQuestionTmp = Question:: read($questionId);
     $quesId = $objQuestionTmp->selectId();
     $check_id = 'remind_list['.$questionId.']';
-    $attributes = array('id' => $check_id, 'onclick' => "save_remind_item(this, '$questionId');");
+    $attributes = ['id' => $check_id, 'onclick' => "save_remind_item(this, '$questionId');"];
 
     if (in_array($questionId, $remind_list)) {
         $attributes['checked'] = 1;
     }
-    $label_attributes = array();
+    $label_attributes = [];
     $label_attributes['class'] = 'checkbox';
     $label_attributes['for'] = $check_id;
     $label_attributes['class'] = "checkbox";
@@ -234,25 +234,25 @@ foreach ($question_list as $questionId) {
         $question_title = Display::label($question_title, 'warning');
     }
     $question_title = Display::tag('label', $checkbox.$question_title, $label_attributes);
-    $table .= Display::div($question_title, array('class'=>'exercise_reminder_item'));
+    $table .= Display::div($question_title, ['class'=>'exercise_reminder_item']);
 } // end foreach() block that loops over all questions
 
-echo Display::div($table, array('class'=>'question-check-test'));
+echo Display::div($table, ['class'=>'question-check-test']);
 
 $exerciseActions = Display::url(
     get_lang('ReviewQuestions'),
     'javascript://',
-    array('onclick'=>'review_questions();', 'class'=>'btn btn-success')
+    ['onclick'=>'review_questions();', 'class'=>'btn btn-success']
 );
 
 $exerciseActions .= '&nbsp;'.Display::url(
     get_lang('EndTest'),
     'javascript://',
-    array('onclick' => 'final_submit();', 'class' => 'btn btn-warning')
+    ['onclick' => 'final_submit();', 'class' => 'btn btn-warning']
 );
 
-echo Display::div('', array('class'=>'clear'));
-echo Display::div($exerciseActions, array('class'=>'form-actions'));
+echo Display::div('', ['class'=>'clear']);
+echo Display::div($exerciseActions, ['class'=>'form-actions']);
 
 if ($origin != 'learnpath') {
     // We are not in learnpath tool

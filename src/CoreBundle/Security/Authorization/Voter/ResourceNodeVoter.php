@@ -22,6 +22,7 @@ use Zend\Permissions\Acl\Role\GenericRole as Role;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
 use Symfony\Component\Security\Core\Authorization\Voter\Voter as AbstractVoter;
+
 //use Sonata\AdminBundle\Security\Acl\Permission\MaskBuilder;
 
 /**
@@ -93,7 +94,7 @@ class ResourceNodeVoter extends AbstractVoter
 
         // Admins have access to everything
         if ($authChecker->isGranted('ROLE_ADMIN')) {
-             // return true;
+            // return true;
         }
 
         // Check if I'm the owner
@@ -181,7 +182,7 @@ class ResourceNodeVoter extends AbstractVoter
         $askedMask = $mask->get();
 
         // Check all the right this link has.
-        $roles = array();
+        $roles = [];
         foreach ($rights as $right) {
             $roles[$right->getMask()] = $right->getRole();
         }
@@ -221,10 +222,10 @@ class ResourceNodeVoter extends AbstractVoter
         $acl->allow(
             $teacher,
             null,
-            array(
+            [
                 self::getReaderMask(),
                 self::getEditorMask()
-            )
+            ]
         );
 
         // Admin can do everything
@@ -268,5 +269,4 @@ class ResourceNodeVoter extends AbstractVoter
 
         return $builder->get();
     }
-
 }

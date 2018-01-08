@@ -16,10 +16,10 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 if (!$isDrhOfCourse) {
     GradebookUtils::block_students();
 }
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => Category::getUrl(),
     'name' => get_lang('Gradebook')
-);
+];
 
 $categoryId = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 $evaluationId = isset($_GET['selecteval']) ? (int) $_GET['selecteval'] : 0;
@@ -30,15 +30,15 @@ $allevals = $category[0]->get_evaluations($userId, true);
 $alllinks = $category[0]->get_links($userId, true);
 
 if (!empty($categoryId)) {
-    $addparams = array(
+    $addparams = [
         'userid' => $userId,
         'selectcat' => $categoryId
-    );
+    ];
 } else {
-    $addparams = array(
+    $addparams = [
         'userid' => $userId,
         'selecteval' => $evaluationId
-    );
+    ];
 }
 
 $user_table = new UserTable($userId, $allevals, $alllinks, $addparams);
@@ -51,7 +51,7 @@ if (isset($_GET['exportpdf'])) {
         null,
         true
     );
-    $newarray = array();
+    $newarray = [];
     $displayscore = ScoreDisplay :: instance();
     foreach ($data_array as $data) {
         $newarray[] = array_slice($data, 1);
@@ -60,25 +60,25 @@ if (isset($_GET['exportpdf'])) {
     $html .= get_lang('Results').' : '.$userInfo['complete_name_with_username'].' ('.api_get_local_time().')';
 
     if ($displayscore->is_custom()) {
-        $header_names = array(
+        $header_names = [
             get_lang('Evaluation'),
             get_lang('Course'),
             get_lang('Category'),
             get_lang('EvaluationAverage'),
             get_lang('Result'),
             get_lang('Display'),
-        );
+        ];
     } else {
-        $header_names = array(
+        $header_names = [
             get_lang('Evaluation'),
             get_lang('Course'),
             get_lang('Category'),
             get_lang('EvaluationAverage'),
             get_lang('Result'),
-        );
+        ];
     }
 
-    $table = new HTML_Table(array('class' => 'data_table'));
+    $table = new HTML_Table(['class' => 'data_table']);
     $row = 0;
     $column = 0;
     foreach ($header_names as $item) {
@@ -103,10 +103,10 @@ if (isset($_GET['exportpdf'])) {
 $actions = '<div class="actions">';
 
 if (!empty($categoryId)) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'gradebook_flatview.php?selectcat='.$categoryId.'&'.api_get_cidreq(),
         'name' => get_lang('FlatView')
-    );
+    ];
     $actions .= '<a href=gradebook_flatview.php?selectcat='.$categoryId.'&'.api_get_cidreq().'>'.
         Display::return_icon(
             'back.png',
@@ -118,10 +118,10 @@ if (!empty($categoryId)) {
 }
 
 if (!empty($evaluationId)) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'gradebook_view_result.php?selecteval='.$evaluationId.'&'.api_get_cidreq(),
         'name' => get_lang('ViewResult')
-    );
+    ];
     $actions .= '<a href="gradebook_view_result.php?selecteval='.$evaluationId.'&'.api_get_cidreq().'">
 	'.Display::return_icon('back.png', get_lang('BackToEvaluation'), '', ICON_SIZE_MEDIUM).'</a>';
 }

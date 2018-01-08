@@ -40,7 +40,7 @@ class Tracking
         $limit = 1000,
         $sidx = 1,
         $sord = 'desc',
-        $where_condition = array()
+        $where_condition = []
     ) {
         $course_id = (int) $course_id;
         $sessionId = (int) $sessionId;
@@ -54,7 +54,7 @@ class Tracking
         }
 
         $groupList = GroupManager::get_group_list(null, $courseInfo, null, $sessionId);
-        $parsedResult = array();
+        $parsedResult = [];
         if (!empty($groupList)) {
             foreach ($groupList as $group) {
                 $users = GroupManager::get_users($group['id'], true, null, null, false, $courseInfo['real_id']);
@@ -73,13 +73,13 @@ class Tracking
                     $avg_student_score += self::get_avg_student_score(
                         $user_data['user_id'],
                         $courseInfo['code'],
-                        array(),
+                        [],
                         $sessionId
                     );
                     $avg_student_progress += self::get_avg_student_progress(
                         $user_data['user_id'],
                         $courseInfo['code'],
-                        array(),
+                        [],
                         $sessionId
                     );
                     $work += self::count_student_assignments(
@@ -98,7 +98,7 @@ class Tracking
                 $averageProgress = empty($countUsers) ? 0 : round($avg_student_progress / $countUsers, 2);
                 $averageScore = empty($countUsers) ? 0 : round($avg_student_score / $countUsers, 2);
 
-                $groupItem = array(
+                $groupItem = [
                     'id' => $group['id'],
                     'name' => $group['name'],
                     'time' => api_time_to_hms($time),
@@ -106,7 +106,7 @@ class Tracking
                     'score' => $averageScore,
                     'works' => $work,
                     'messages' => $messages,
-                );
+                ];
                 $parsedResult[] = $groupItem;
             }
         }
@@ -251,11 +251,11 @@ class Tracking
         $h = get_lang('h');
 
         if (!empty($export_csv)) {
-            $csvHeaders = array(
+            $csvHeaders = [
                 get_lang('ScormLessonTitle'),
                 get_lang('ScormStatus'),
                 get_lang('ScormScore')
-            );
+            ];
 
             if ($hideTime === false) {
                 $csvHeaders[] = get_lang('ScormTime');
@@ -506,7 +506,7 @@ class Tracking
                                 </tr>';
                             $attemptCount++;
                             if (!empty($export_csv)) {
-                                $temp = array();
+                                $temp = [];
                                 $temp[] = $title = Security::remove_XSS($title);
                                 $temp[] = Security::remove_XSS(
                                     learnpathItem::humanize_status($lesson_status, false, $type)
@@ -883,7 +883,7 @@ class Tracking
                         }
 
                         if (!empty($export_csv)) {
-                            $temp = array();
+                            $temp = [];
                             $temp[] = api_html_entity_decode($title, ENT_QUOTES);
                             $temp[] = api_html_entity_decode($lesson_status, ENT_QUOTES);
 
@@ -1091,7 +1091,7 @@ class Tracking
 
                 $total_time += $time_for_total;
                 // QUIZZ IN LP
-                $a_my_id = array();
+                $a_my_id = [];
                 if (!empty($my_lp_id)) {
                     $a_my_id[] = $my_lp_id;
                 }
@@ -1126,7 +1126,7 @@ class Tracking
             $total_score = self::get_avg_student_score(
                 $user_id,
                 $course_id,
-                array($lp_id),
+                [$lp_id],
                 $session_id,
                 false,
                 false
@@ -1183,18 +1183,18 @@ class Tracking
         ';
 
         if (!empty($export_csv)) {
-            $temp = array(
+            $temp = [
                 '',
                 '',
                 '',
                 ''
-            );
+            ];
             $csv_content[] = $temp;
-            $temp = array(
+            $temp = [
                 get_lang('AccomplishedStepsTotal'),
                 '',
                 $finalScoreToCsv
-            );
+            ];
 
             if ($hideTime === false) {
                 $temp[] = $total_time;
@@ -1239,12 +1239,12 @@ class Tracking
                 null,
                 null,
                 null,
-                array(),
-                array(),
+                [],
+                [],
                 STUDENT
             );
 
-            $students = array();
+            $students = [];
             if (is_array($studentList)) {
                 foreach ($studentList as $studentData) {
                     $students[] = $studentData['user_id'];
@@ -1262,15 +1262,15 @@ class Tracking
                 null,
                 null,
                 null,
-                array(),
-                array(),
+                [],
+                [],
                 STUDENT_BOSS
             );
 
             if ($getCount) {
                 $studentBossCount = $studentBossesList;
             } else {
-                $studentBosses = array();
+                $studentBosses = [];
                 if (is_array($studentBossesList)) {
                     foreach ($studentBossesList as $studentBossData) {
                         $studentBosses[] = $studentBossData['user_id'];
@@ -1289,15 +1289,15 @@ class Tracking
                 null,
                 null,
                 null,
-                array(),
-                array(),
+                [],
+                [],
                 COURSEMANAGER
             );
 
             if ($getCount) {
                 $teachersCount = $teacherList;
             } else {
-                $teachers = array();
+                $teachers = [];
                 foreach ($teacherList as $teacherData) {
                     $teachers[] = $teacherData['user_id'];
                 }
@@ -1314,15 +1314,15 @@ class Tracking
                 null,
                 null,
                 null,
-                array(),
-                array(),
+                [],
+                [],
                 DRH
             );
 
             if ($getCount) {
                 $drhCount = $humanResources;
             } else {
-                $humanResourcesList = array();
+                $humanResourcesList = [];
                 if (is_array($humanResources)) {
                     foreach ($humanResources as $item) {
                         $humanResourcesList[] = $item['user_id'];
@@ -1370,7 +1370,7 @@ class Tracking
                 COURSEMANAGER
             );
 
-            $students = array();
+            $students = [];
             if (is_array($studentList)) {
                 foreach ($studentList as $studentData) {
                     $students[] = $studentData['user_id'];
@@ -1395,7 +1395,7 @@ class Tracking
             if ($getCount) {
                 $studentBossCount = $studentBossesList;
             } else {
-                $studentBosses = array();
+                $studentBosses = [];
                 if (is_array($studentBossesList)) {
                     foreach ($studentBossesList as $studentBossData) {
                         $studentBosses[] = $studentBossData['user_id'];
@@ -1421,7 +1421,7 @@ class Tracking
             if ($getCount) {
                 $teachersCount = $teacherList;
             } else {
-                $teachers = array();
+                $teachers = [];
                 foreach ($teacherList as $teacherData) {
                     $teachers[] = $teacherData['user_id'];
                 }
@@ -1445,7 +1445,7 @@ class Tracking
             if ($getCount) {
                 $drhCount = $humanResources;
             } else {
-                $humanResourcesList = array();
+                $humanResourcesList = [];
                 foreach ($humanResources as $item) {
                     $humanResourcesList[] = $item['user_id'];
                 }
@@ -1513,7 +1513,7 @@ class Tracking
             ];
         }
 
-        return array(
+        return [
             'drh' => $humanResourcesList,
             'teachers' => $teachers,
             'student_list' => $students,
@@ -1521,7 +1521,7 @@ class Tracking
             'courses' => $courses,
             'sessions' => $sessions,
             'assigned_courses' => $assignedCourses
-        );
+        ];
     }
 
     /**
@@ -2042,7 +2042,7 @@ class Tracking
                     $sql = "SELECT id FROM $tbl_course_quiz
                             WHERE c_id = {$course_info['real_id']} $condition_active $condition_quiz";
                     $result = Database::query($sql);
-                    $exercise_list = array();
+                    $exercise_list = [];
                     $exercise_id = null;
                     if (!empty($result) && Database::num_rows($result)) {
                         while ($row = Database::fetch_array($result)) {
@@ -2100,9 +2100,9 @@ class Tracking
                         $result = Database::query($sql);
                         $row_lp = Database::fetch_row($result);
                         $lp_name = $row_lp[0];
-                        return array($quiz_avg_score, $lp_name);
+                        return [$quiz_avg_score, $lp_name];
                     } else {
-                        return array($quiz_avg_score, null);
+                        return [$quiz_avg_score, null];
                     }
                 }
             }
@@ -2260,7 +2260,7 @@ class Tracking
      * @param int session id
      * @return array
      */
-    static function get_teachers_progress_by_course($courseId, $sessionId)
+    public static function get_teachers_progress_by_course($courseId, $sessionId)
     {
         $course = api_get_course_info_by_id($courseId);
         $sessionId = intval($sessionId);
@@ -2280,11 +2280,11 @@ class Tracking
                     AND scu.session_id = %s";
         $query = sprintf($sql, intval($courseId), $sessionId);
         $rs = Database::query($query);
-        $teachers = array();
+        $teachers = [];
         while ($teacher = Database::fetch_array($rs, 'ASSOC')) {
             $teachers[] = $teacher;
         }
-        $data = array();
+        $data = [];
         foreach ($teachers as $teacher) {
             //total documents added
             $sql = "SELECT count(*) as total
@@ -2412,7 +2412,7 @@ class Tracking
                 $totalAnnouncements = $row[0];
             }
             $tutor = api_get_user_info($teacher['user_id']);
-            $data[] = array(
+            $data[] = [
                 'course' => $course['title'],
                 'session' => $teacher['name'],
                 'tutor' => $tutor['username'].' - '.$tutor['lastname'].' '.$tutor['firstname'],
@@ -2422,7 +2422,7 @@ class Tracking
                 'works' => $totalWorks,
                 'wikis' => $totalWikis,
                 'announcements' => $totalAnnouncements,
-            );
+            ];
         }
 
         return $data;
@@ -2445,7 +2445,7 @@ class Tracking
     public static function get_avg_student_progress(
         $studentId,
         $courseCode = null,
-        $lpIdList = array(),
+        $lpIdList = [],
         $sessionId = null,
         $returnArray = false,
         $onlySeriousGame = false
@@ -2609,14 +2609,16 @@ class Tracking
     public static function get_avg_student_score(
         $student_id,
         $course_code,
-        $lp_ids = array(),
+        $lp_ids = [],
         $session_id = null,
         $return_array = false,
         $get_only_latest_attempt_results = false,
         $getOnlyBestAttempt = false
     ) {
         $debug = false;
-        if ($debug) echo '<h1>Tracking::get_avg_student_score</h1>';
+        if ($debug) {
+            echo '<h1>Tracking::get_avg_student_score</h1>';
+        }
         $tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $tbl_stats_attempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $course = api_get_course_info($course_code);
@@ -2661,7 +2663,7 @@ class Tracking
             $res_row_lp = Database::query($sql);
             $count_row_lp = Database::num_rows($res_row_lp);
 
-            $lp_list = $use_max_score = array();
+            $lp_list = $use_max_score = [];
             while ($row_lp = Database::fetch_array($res_row_lp)) {
                 $lp_list[] = $row_lp['id'];
                 $use_max_score[$row_lp['id']] = $row_lp['use_max_score'];
@@ -2706,7 +2708,7 @@ class Tracking
                     while ($row_lp_view = Database::fetch_array($rs_last_lp_view_id)) {
                         $count_items = 0;
                         $lpPartialTotal = 0;
-                        $list = array();
+                        $list = [];
                         $lp_view_id = $row_lp_view['id'];
                         $lp_id = $row_lp_view['lp_id'];
                         $user_id = $row_lp_view['user_id'];
@@ -2802,7 +2804,9 @@ class Tracking
                             // Came from the lp_item_view
                             $max_score_item_view = $row_max_score['max_score_item_view'];
                             $score = $row_max_score['score'];
-                            if ($debug) echo '<h3>Item Type: '.$row_max_score['item_type'].'</h3>';
+                            if ($debug) {
+                                echo '<h3>Item Type: '.$row_max_score['item_type'].'</h3>';
+                            }
 
                             if ($row_max_score['item_type'] == 'sco') {
                                 /* Check if it is sco (easier to get max_score)
@@ -2860,18 +2864,24 @@ class Tracking
                                         LIMIT 1";
 
                                 $result_last_attempt = Database::query($sql);
-                                if ($debug) var_dump($sql);
+                                if ($debug) {
+                                    var_dump($sql);
+                                }
                                 $num = Database::num_rows($result_last_attempt);
                                 if ($num > 0) {
                                     $attemptResult = Database::fetch_array($result_last_attempt, 'ASSOC');
                                     $id_last_attempt = $attemptResult['exe_id'];
                                     // We overwrite the score with the best one not the one saved in the LP (latest)
                                     if ($getOnlyBestAttempt && $get_only_latest_attempt_results == false) {
-                                        if ($debug) echo "Following score comes from the track_exercise table not in the LP because the score is the best<br />";
+                                        if ($debug) {
+                                            echo "Following score comes from the track_exercise table not in the LP because the score is the best<br />";
+                                        }
                                         $score = $attemptResult['exe_result'];
                                     }
 
-                                    if ($debug) echo "Attempt id: $id_last_attempt with score $score<br />";
+                                    if ($debug) {
+                                        echo "Attempt id: $id_last_attempt with score $score<br />";
+                                    }
                                     // Within the last attempt number tracking, get the sum of
                                     // the max_scores of all questions that it was
                                     // made of (we need to make this call dynamic because of random questions selection)
@@ -2907,7 +2917,7 @@ class Tracking
                                 }
                             }
 
-                            if (in_array($row_max_score['item_type'], array('quiz', 'sco'))) {
+                            if (in_array($row_max_score['item_type'], ['quiz', 'sco'])) {
                                 // Normal way
                                 if ($use_max_score[$lp_id]) {
                                     $count_items++;
@@ -2916,7 +2926,9 @@ class Tracking
                                         $count_items++;
                                     }
                                 }
-                                if ($debug) echo '$count_items: '.$count_items;
+                                if ($debug) {
+                                    echo '$count_items: '.$count_items;
+                                }
                             }
                         } //end for
 
@@ -2952,23 +2964,32 @@ class Tracking
                     }
                 }
 
-                if ($debug) echo '<h3>$lp_with_quiz '.$lp_with_quiz.' </h3>';
-                if ($debug) echo '<h3>Final return</h3>';
+                if ($debug) {
+                    echo '<h3>$lp_with_quiz '.$lp_with_quiz.' </h3>';
+                }
+                if ($debug) {
+                    echo '<h3>Final return</h3>';
+                }
 
                 if ($lp_with_quiz != 0) {
                     if (!$return_array) {
                         $score_of_scorm_calculate = round(($global_result / $lp_with_quiz), 2);
-                        if ($debug) var_dump($score_of_scorm_calculate);
+                        if ($debug) {
+                            var_dump($score_of_scorm_calculate);
+                        }
                         if (empty($lp_ids)) {
-                            if ($debug) echo '<h2>All lps fix: '.$score_of_scorm_calculate.'</h2>';
+                            if ($debug) {
+                                echo '<h2>All lps fix: '.$score_of_scorm_calculate.'</h2>';
+                            }
                         }
                         return $score_of_scorm_calculate;
                     } else {
-                        if ($debug) var_dump($global_result, $lp_with_quiz);
-                        return array($global_result, $lp_with_quiz);
+                        if ($debug) {
+                            var_dump($global_result, $lp_with_quiz);
+                        }
+                        return [$global_result, $lp_with_quiz];
                     }
                 } else {
-
                     return '-';
                 }
             }
@@ -2996,14 +3017,14 @@ class Tracking
     public static function getAverageStudentScore(
         $student_id,
         $course_code = '',
-        $lp_ids = array(),
+        $lp_ids = [],
         $session_id = 0
     ) {
         if (empty($student_id)) {
             return 0;
         }
 
-        $conditions = array();
+        $conditions = [];
         if (!empty($course_code)) {
             $course = api_get_course_info($course_code);
             $courseId = $course['real_id'];
@@ -3070,7 +3091,7 @@ class Tracking
     public static function get_time_spent_in_lp(
         $student_id,
         $course_code,
-        $lp_ids = array(),
+        $lp_ids = [],
         $session_id = 0
     ) {
         $course = api_get_course_info($course_code);
@@ -3417,7 +3438,7 @@ class Tracking
             $sql .= ' AND session_id='.$id_session;
         }
 
-        $courseList = array();
+        $courseList = [];
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             $courseList[$row['code']] = $row['code'];
@@ -3450,13 +3471,15 @@ class Tracking
             }
         }
 
-        if (!empty ($id_session)) {
+        if (!empty($id_session)) {
             $sql .= ' WHERE session_course.session_id='.$id_session;
-            if (api_is_multiple_url_enabled())
-            $sql .= ' AND access_url_id = '.$access_url_id;
+            if (api_is_multiple_url_enabled()) {
+                $sql .= ' AND access_url_id = '.$access_url_id;
+            }
         } else {
-            if (api_is_multiple_url_enabled())
-            $sql .= ' WHERE access_url_id = '.$access_url_id;
+            if (api_is_multiple_url_enabled()) {
+                $sql .= ' WHERE access_url_id = '.$access_url_id;
+            }
         }
 
         $result = Database::query($sql);
@@ -3570,8 +3593,7 @@ class Tracking
                 if (empty($session['access_start_date'])
                 ) {
                     $session['status'] = get_lang('SessionActive');
-                }
-                else {
+                } else {
                     $time_start = api_strtotime($session['access_start_date'], 'UTC');
                     $time_end = api_strtotime($session['access_end_date'], 'UTC');
                     if ($time_start < time() && time() < $time_end) {
@@ -3613,7 +3635,7 @@ class Tracking
 
         $result = Database::query($sql);
 
-        $courses = array();
+        $courses = [];
         while ($row = Database::fetch_array($result)) {
             $courses[$row['code']] = $row;
         }
@@ -3694,7 +3716,7 @@ class Tracking
             return 0;
         }
 
-        $conditions = array();
+        $conditions = [];
 
         // Get the information of the course
         $a_course = api_get_course_info($course_code);
@@ -3753,7 +3775,7 @@ class Tracking
         $tbl_forum_post = Database::get_course_table(TABLE_FORUM_POST);
         $tbl_forum = Database::get_course_table(TABLE_FORUM);
 
-        $conditions = array();
+        $conditions = [];
         if (is_array($student_id)) {
             $studentList = array_map('intval', $student_id);
             $conditions[] = " post.poster_id IN ('".implode("','", $studentList)."') ";
@@ -3925,7 +3947,6 @@ class Tracking
 
             return $count;
         } else {
-
             return null;
         }
     }
@@ -3952,8 +3973,8 @@ class Tracking
 
         $condition_session = '';
         if (isset($session_id)) {
-             $session_id = intval($session_id);
-             $condition_session = ' AND f.session_id = '.$session_id;
+            $session_id = intval($session_id);
+            $condition_session = ' AND f.session_id = '.$session_id;
         }
 
         $groupId = intval($groupId);
@@ -4137,7 +4158,7 @@ class Tracking
                     user_id= $user_id  AND
                     session_id = $id_session";
         $result = Database::query($sql);
-        $courses = array();
+        $courses = [];
         while ($row = Database::fetch_array($result)) {
             $courses[$row['code']] = $row['code'];
         }
@@ -4263,7 +4284,7 @@ class Tracking
     public static function get_student_followed_by_drh($hr_dept_id)
     {
         $hr_dept_id = intval($hr_dept_id);
-        $a_students = array();
+        $a_students = [];
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
         $sql = 'SELECT DISTINCT user_id FROM '.$tbl_user.' as user
@@ -4288,7 +4309,7 @@ class Tracking
     public static function get_tools_most_used_by_course($courseId, $session_id = null)
     {
         $courseId = intval($courseId);
-        $data = array();
+        $data = [];
         $TABLETRACK_ACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         $condition_session     = '';
         if (isset($session_id)) {
@@ -4332,7 +4353,7 @@ class Tracking
         $limit = 0
     ) {
         $courseId = api_get_course_int_id($course_code);
-        $data = array();
+        $data = [];
 
         $TABLETRACK_DOWNLOADS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
         $condition_session = '';
@@ -4373,7 +4394,7 @@ class Tracking
         $course_code = Database::escape_string($course_code);
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
-        $data = array();
+        $data = [];
 
         $TABLETRACK_LINKS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LINKS);
         $TABLECOURSE_LINKS = Database::get_course_table(TABLE_LINK);
@@ -4476,7 +4497,7 @@ class Tracking
         }
 
         $rs = Database::query($sql);
-        $courses = $course_in_session = $temp_course_in_session = array();
+        $courses = $course_in_session = $temp_course_in_session = [];
         while ($row = Database::fetch_array($rs, 'ASSOC')) {
             $courses[$row['code']] = $row['title'];
         }
@@ -4527,7 +4548,7 @@ class Tracking
         }
 
         $rs = Database::query($sql);
-        $simple_session_array = array();
+        $simple_session_array = [];
         while ($row = Database::fetch_array($rs, 'ASSOC')) {
             $course_info = api_get_course_info($row['code']);
             $temp_course_in_session[$row['session_id']]['course_list'][$course_info['real_id']] = $course_info;
@@ -4537,7 +4558,7 @@ class Tracking
 
         foreach ($simple_session_array as $my_session_id => $session_name) {
             $course_list = $temp_course_in_session[$my_session_id]['course_list'];
-            $my_course_data = array();
+            $my_course_data = [];
             foreach ($course_list as $courseId => $course_data) {
                 $my_course_data[$courseId] = $course_data['title'];
             }
@@ -4546,7 +4567,7 @@ class Tracking
                 $my_course_data = utf8_sort($my_course_data);
             }
 
-            $final_course_data = array();
+            $final_course_data = [];
             foreach ($my_course_data as $course_id => $value) {
                 if (isset($course_list[$course_id])) {
                     $final_course_data[$course_id] = $course_list[$course_id];
@@ -4564,7 +4585,7 @@ class Tracking
                     Display::return_icon(
                         'course.png',
                         get_lang('MyCourses'),
-                        array(),
+                        [],
                         ICON_SIZE_SMALL
                     ).' '.get_lang('MyCourses')
                 );
@@ -4611,7 +4632,7 @@ class Tracking
                     $bestScore = self::get_avg_student_score(
                         $user_id,
                         $course_code,
-                        array(),
+                        [],
                         null,
                         false,
                         false,
@@ -4672,7 +4693,7 @@ class Tracking
                         $html .= '<tr class="row_even">';
                     }
                     $url = api_get_course_url($course_code, $session_id);
-                    $course_url = Display::url($course_title, $url, array('target' => SESSION_LINK_TARGET));
+                    $course_url = Display::url($course_title, $url, ['target' => SESSION_LINK_TARGET]);
                     $bestScoreResult = '';
                     if (empty($bestScore)) {
                         $bestScoreResult = '-';
@@ -4730,15 +4751,15 @@ class Tracking
         if (!empty($course_in_session)) {
             $main_session_graph = '';
             // Load graphics only when calling to an specific session
-            $all_exercise_graph_name_list = array();
-            $my_results = array();
-            $all_exercise_graph_list = array();
-            $all_exercise_start_time = array();
+            $all_exercise_graph_name_list = [];
+            $my_results = [];
+            $all_exercise_graph_list = [];
+            $all_exercise_start_time = [];
             foreach ($course_in_session as $my_session_id => $session_data) {
                 $course_list = $session_data['course_list'];
                 $user_count = count(SessionManager::get_users_by_session($my_session_id));
-                $exercise_graph_name_list = array();
-                $exercise_graph_list = array();
+                $exercise_graph_name_list = [];
+                $exercise_graph_list = [];
 
                 foreach ($course_list as $course_data) {
                     $exercise_list = ExerciseLib::get_all_exercises(
@@ -4803,9 +4824,9 @@ class Tracking
                 asort($all_exercise_start_time);
 
                 //Fix exams order
-                $final_all_exercise_graph_name_list = array();
-                $my_results_final = array();
-                $final_all_exercise_graph_list = array();
+                $final_all_exercise_graph_name_list = [];
+                $my_results_final = [];
+                $final_all_exercise_graph_list = [];
 
                 foreach ($all_exercise_start_time as $key => $time) {
                     $label_time = '';
@@ -4826,7 +4847,7 @@ class Tracking
             $sessionIcon = Display::return_icon(
                 'session.png',
                 get_lang('Sessions'),
-                array(),
+                [],
                 ICON_SIZE_SMALL
             );
 
@@ -4839,8 +4860,8 @@ class Tracking
             $html .= '<table class="table table-striped table-hover">';
             $html .= '<thead>';
             $html .= '<tr>
-                  '.Display::tag('th', get_lang('Session'), array('width'=>'300px')).'
-                  '.Display::tag('th', get_lang('PublishedExercises'), array('width'=>'300px')).'
+                  '.Display::tag('th', get_lang('Session'), ['width'=>'300px']).'
+                  '.Display::tag('th', get_lang('PublishedExercises'), ['width'=>'300px']).'
                   '.Display::tag('th', get_lang('NewExercises')).'
                   '.Display::tag('th', get_lang('AverageExerciseResult')).'
                   '.Display::tag('th', get_lang('Details')).'
@@ -4862,7 +4883,7 @@ class Tracking
                 $all_exercises = 0;
                 $all_unanswered_exercises_by_user = 0;
                 $all_average = 0;
-                $stats_array = array();
+                $stats_array = [];
 
                 foreach ($course_list as $course_data) {
                     // All exercises in the course @todo change for a real count
@@ -4912,7 +4933,7 @@ class Tracking
                 }
                 $url = api_get_path(WEB_CODE_PATH)."session/index.php?session_id={$my_session_id}";
 
-                $html .= Display::tag('td', Display::url($session_name, $url, array('target'=>SESSION_LINK_TARGET)));
+                $html .= Display::tag('td', Display::url($session_name, $url, ['target'=>SESSION_LINK_TARGET]));
                 $html .= Display::tag('td', $all_exercises);
                 $html .= Display::tag('td', $all_unanswered_exercises_by_user);
                 $html .= Display::tag('td', ExerciseLib::convert_to_percentage($all_average));
@@ -4941,11 +4962,11 @@ class Tracking
             $html .= '</table></div><br />';
             $html .= Display::div(
                 $main_session_graph,
-                array(
+                [
                     'id' => 'session_graph',
                     'class' => 'chart-session',
                     'style' => 'position:relative; text-align: center;',
-                )
+                ]
             );
 
             // Checking selected session.
@@ -4963,7 +4984,7 @@ class Tracking
                 $columnHeaders = [
                     'course_title' => [
                         get_lang('Course'),
-                        array('width'=>'300px')
+                        ['width'=>'300px']
                     ],
                     'published_exercises' => [
                         get_lang('PublishedExercises')
@@ -4988,7 +5009,7 @@ class Tracking
                         Display::return_icon(
                             'info3.gif',
                             get_lang('ScormAndLPTestTotalAverage'),
-                            array('align' => 'absmiddle', 'hspace' => '3px')
+                            ['align' => 'absmiddle', 'hspace' => '3px']
                         ),
                     ],
                     'best_score'  => [
@@ -5064,21 +5085,21 @@ class Tracking
                     $bestScore = self::get_avg_student_score(
                         $user_id,
                         $course_code,
-                        array(),
+                        [],
                         $session_id_from_get,
                         false,
                         false,
                         true
                     );
 
-                    $stats_array[$course_code] = array(
+                    $stats_array[$course_code] = [
                         'exercises' => $count_exercises,
                         'unanswered_exercises_by_user' => $unanswered_exercises,
                         'done_exercises' => $done_exercises,
                         'average' => $average,
                         'my_average' => $my_average,
                         'best_score' => $bestScore
-                    );
+                    ];
 
                     $last_connection = self::get_last_connection_date_on_the_course(
                         $user_id,
@@ -5089,7 +5110,7 @@ class Tracking
                     $progress = self::get_avg_student_progress(
                         $user_id,
                         $course_code,
-                        array(),
+                        [],
                         $session_id_from_get
                     );
 
@@ -5103,7 +5124,7 @@ class Tracking
                     $percentage_score = self::get_avg_student_score(
                         $user_id,
                         $course_code,
-                        array(),
+                        [],
                         $session_id_from_get
                     );
                     $courseCodeFromGet = isset($_GET['course']) ? $_GET['course'] : null;
@@ -5118,7 +5139,7 @@ class Tracking
                     $course_url = Display::url(
                         $course_title,
                         $url,
-                        array('target' => SESSION_LINK_TARGET)
+                        ['target' => SESSION_LINK_TARGET]
                     );
 
                     if (is_numeric($progress)) {
@@ -5224,7 +5245,7 @@ class Tracking
                 <th>'.get_lang('BestAttempt').'</th>
                 <th>'.get_lang('Ranking').'</th>
                 <th>'.get_lang('BestResultInCourse').'</th>
-                <th>'.get_lang('Statistics').' '.Display::return_icon('info3.gif', get_lang('OnlyBestResultsPerStudent'), array('align' => 'absmiddle', 'hspace' => '3px')).'</th>
+                <th>'.get_lang('Statistics').' '.Display::return_icon('info3.gif', get_lang('OnlyBestResultsPerStudent'), ['align' => 'absmiddle', 'hspace' => '3px']).'</th>
                 </tr>
                 </thead>
                 <tbody>';
@@ -5257,7 +5278,7 @@ class Tracking
                 2
             );
 
-            $to_graph_exercise_result = array();
+            $to_graph_exercise_result = [];
             if (!empty($exercise_list)) {
                 $score = $weighting = $exe_id = 0;
                 foreach ($exercise_list as $exercices) {
@@ -5281,7 +5302,7 @@ class Tracking
                         $exercices['title'] = Display::url(
                             $exercices['title'],
                             $url,
-                            array('target' => SESSION_LINK_TARGET)
+                            ['target' => SESSION_LINK_TARGET]
                         );
                     } elseif ($exercices['active'] == -1) {
                         $exercices['title'] = sprintf(get_lang('XParenthesisDeleted'), $exercices['title']);
@@ -5298,10 +5319,10 @@ class Tracking
                             $session_id
                         );
 
-                        $to_graph_exercise_result[$exercices['id']] = array(
+                        $to_graph_exercise_result[$exercices['id']] = [
                             'title' => $exercices['title'],
                             'data' => $best_exercise_stats
-                        );
+                        ];
 
                         $latest_attempt_url = '';
                         $best_score = $position = $percentage_score_result = '-';
@@ -5346,7 +5367,7 @@ class Tracking
                                 }
                                 //@todo this function slows the page
                                 if (is_int($user_list)) {
-                                    $user_list = array($user_list);
+                                    $user_list = [$user_list];
                                 }
                                 $position = ExerciseLib::get_exercise_result_ranking(
                                     $my_score,
@@ -5367,11 +5388,11 @@ class Tracking
                         }
                         $html .= Display::div(
                             $normal_graph,
-                            array(
+                            [
                                 'id' => 'main_graph_'.$exercices['id'],
                                 'class' => 'dialog',
                                 'style' => 'display:none'
-                            )
+                            ]
                         );
 
                         if (empty($graph)) {
@@ -5380,10 +5401,10 @@ class Tracking
                             $graph = Display::url(
                                 '<img src="'.$graph.'" >',
                                 $normal_graph,
-                                array(
+                                [
                                     'id' => $exercices['id'],
                                     'class' => 'expand-image',
-                                )
+                                ]
                             );
                         }
 
@@ -5393,7 +5414,6 @@ class Tracking
                         $html .= Display::tag('td', $best_score);
                         $html .= Display::tag('td', $graph);
                         //$html .= Display::tag('td', $latest_attempt_url,       array('align'=>'center', 'width'=>'25'));
-
                     } else {
                         // Exercise configuration NO results
                         $html .= Display::tag('td', $attempts);
@@ -5462,7 +5482,7 @@ class Tracking
                     $progress = self::get_avg_student_progress(
                         $user_id,
                         $course,
-                        array($lp_id),
+                        [$lp_id],
                         $session_id
                     );
                     $last_connection_in_lp = self::get_last_connection_time_in_lp(
@@ -5475,20 +5495,20 @@ class Tracking
                     $time_spent_in_lp = self::get_time_spent_in_lp(
                         $user_id,
                         $course,
-                        array($lp_id),
+                        [$lp_id],
                         $session_id
                     );
                     $percentage_score = self::get_avg_student_score(
                         $user_id,
                         $course,
-                        array($lp_id),
+                        [$lp_id],
                         $session_id
                     );
 
                     $bestScore = self::get_avg_student_score(
                         $user_id,
                         $course,
-                        array($lp_id),
+                        [$lp_id],
                         $session_id,
                         false,
                         false,
@@ -5531,7 +5551,7 @@ class Tracking
                                 Display::url(
                                     $learnpath['lp_name'],
                                     $url,
-                                    array('target' => SESSION_LINK_TARGET)
+                                    ['target' => SESSION_LINK_TARGET]
                                 )
                             );
                         }
@@ -5559,7 +5579,7 @@ class Tracking
                     }
 
                     if (in_array('last_connection', $columnHeadersKeys)) {
-                        $html .= Display::tag('td', $last_connection, array('width'=>'180px'));
+                        $html .= Display::tag('td', $last_connection, ['width'=>'180px']);
                     }
                     $html .= '</tr>';
                 }
@@ -5602,7 +5622,7 @@ class Tracking
         $myData->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
         // Cache definition
         $cachePath = api_get_path(SYS_ARCHIVE_PATH);
-        $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
+        $myCache = new pCache(['CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)]);
         $chartHash = $myCache->getHash($myData);
 
         if ($myCache->isInCache($chartHash)) {
@@ -5623,7 +5643,7 @@ class Tracking
             $myPicture->Antialias = false;
 
             /* Draw the background */
-            $settings = array('R' => 255, 'G' => 255, 'B' => 255);
+            $settings = ['R' => 255, 'G' => 255, 'B' => 255];
             $myPicture->drawFilledRectangle(0, 0, $mainWidth, $mainHeight, $settings);
 
             /* Add a border to the picture */
@@ -5632,39 +5652,39 @@ class Tracking
                 0,
                 $mainWidth - 1,
                 $mainHeight - 1,
-                array('R' => 0, 'G' => 0, 'B' => 0)
+                ['R' => 0, 'G' => 0, 'B' => 0]
             );
 
             /* Set the default font */
             $myPicture->setFontProperties(
-                array(
+                [
                     'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
-                    'FontSize' => 10)
+                    'FontSize' => 10]
             );
             /* Write the chart title */
             $myPicture->drawText(
                 $mainWidth / 2,
                 30,
                 get_lang('ExercisesInTimeProgressChart'),
-                array(
+                [
                     'FontSize' => 12,
                     'Align' => TEXT_ALIGN_BOTTOMMIDDLE
-                )
+                ]
             );
 
             /* Set the default font */
             $myPicture->setFontProperties(
-                array(
+                [
                     'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
                     'FontSize' => 6
-                )
+                ]
             );
 
             /* Define the chart area */
             $myPicture->setGraphArea(60, 60, $mainWidth - 60, $mainHeight - 150);
 
             /* Draw the scale */
-            $scaleSettings = array(
+            $scaleSettings = [
                 'XMargin' => 10,
                 'YMargin' => 10,
                 'Floating' => true,
@@ -5675,7 +5695,7 @@ class Tracking
                 'CycleBackground' => true,
                 'LabelRotation' => $angle,
                 'Mode' => SCALE_MODE_ADDALL_START0,
-            );
+            ];
             $myPicture->drawScale($scaleSettings);
 
             /* Turn on Antialiasing */
@@ -5684,39 +5704,39 @@ class Tracking
             /* Enable shadow computing */
             $myPicture->setShadow(
                 true,
-                array(
+                [
                     'X' => 1,
                     'Y' => 1,
                     'R' => 0,
                     'G' => 0,
                     'B' => 0,
                     'Alpha' => 10
-                )
+                ]
             );
 
             /* Draw the line chart */
             $myPicture->setFontProperties(
-                array(
+                [
                     'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
                     'FontSize' => 10
-                )
+                ]
             );
             $myPicture->drawSplineChart();
             $myPicture->drawPlotChart(
-                array(
+                [
                     'DisplayValues' => true,
                     'PlotBorder' => true,
                     'BorderSize' => 1,
                     'Surrounding' => -60,
                     'BorderAlpha' => 80
-                )
+                ]
             );
 
             /* Write the chart legend */
             $myPicture->drawLegend(
                 $mainWidth / 2 + 50,
                 50,
-                array(
+                [
                     'Style' => LEGEND_BOX,
                     'Mode' => LEGEND_HORIZONTAL,
                     'FontR' => 0,
@@ -5726,7 +5746,7 @@ class Tracking
                     'G' => 220,
                     'B' => 220,
                     'Alpha' => 100
-                )
+                ]
             );
 
             $myCache->writeToCache($chartHash, $myPicture);
@@ -5744,11 +5764,11 @@ class Tracking
      * Returns a thumbnail of the function generate_exercise_result_graph
      * @param  array $attempts
      */
-    static function generate_exercise_result_thumbnail_graph($attempts)
+    public static function generate_exercise_result_thumbnail_graph($attempts)
     {
         //$exercise_title = $attempts['title'];
         $attempts = $attempts['data'];
-        $my_exercise_result_array = $exercise_result = array();
+        $my_exercise_result_array = $exercise_result = [];
         if (empty($attempts)) {
             return null;
         }
@@ -5775,9 +5795,9 @@ class Tracking
         $max     = 100;
         $pieces  = 5;
         $part    = round($max / $pieces);
-        $x_axis = array();
-        $final_array = array();
-        $my_final_array = array();
+        $x_axis = [];
+        $final_array = [];
+        $my_final_array = [];
 
         for ($i = 1; $i <= $pieces; $i++) {
             $sum = 1;
@@ -5823,7 +5843,7 @@ class Tracking
 
         // Cache definition
         $cachePath = api_get_path(SYS_ARCHIVE_PATH);
-        $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
+        $myCache = new pCache(['CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)]);
         $chartHash = $myCache->getHash($dataSet);
         if ($myCache->isInCache($chartHash)) {
             $imgPath = api_get_path(SYS_ARCHIVE_PATH).$chartHash;
@@ -5846,17 +5866,17 @@ class Tracking
                 0,
                 $widthSize - 1,
                 $heightSize - 1,
-                array('R' => 0, 'G' => 0, 'B' => 0)
+                ['R' => 0, 'G' => 0, 'B' => 0]
             );
 
             /* Set the default font */
             $myPicture->setFontProperties(
-                array(
+                [
                     'FontName' => api_get_path(
                             SYS_FONTS_PATH
                         ).'opensans/OpenSans-Regular.ttf',
                     'FontSize' => $fontSize
-                )
+                ]
             );
 
             /* Do not write the chart title */
@@ -5865,48 +5885,48 @@ class Tracking
             $myPicture->setGraphArea(5, 5, $widthSize - 5, $heightSize - 5);
 
             /* Draw the scale */
-            $scaleSettings = array(
+            $scaleSettings = [
                 'GridR' => 200,
                 'GridG' => 200,
                 'GridB' => 200,
                 'DrawSubTicks' => true,
                 'CycleBackground' => true,
                 'Mode' => SCALE_MODE_MANUAL,
-                'ManualScale' => array(
-                    '0' => array(
+                'ManualScale' => [
+                    '0' => [
                         'Min' => 0,
                         'Max' => 100
-                    )
-                )
-            );
+                    ]
+                ]
+            ];
             $myPicture->drawScale($scaleSettings);
 
             /* Turn on shadow computing */
             $myPicture->setShadow(
                 true,
-                array(
+                [
                     'X' => 1,
                     'Y' => 1,
                     'R' => 0,
                     'G' => 0,
                     'B' => 0,
                     'Alpha' => 10
-                )
+                ]
             );
 
             /* Draw the chart */
             $myPicture->setShadow(
                 true,
-                array(
+                [
                     'X' => 1,
                     'Y' => 1,
                     'R' => 0,
                     'G' => 0,
                     'B' => 0,
                     'Alpha' => 10
-                )
+                ]
             );
-            $settings = array(
+            $settings = [
                 'DisplayValues' => true,
                 'DisplaySize' => $fontSize,
                 'DisplayR' => 0,
@@ -5916,7 +5936,7 @@ class Tracking
                 'Gradient' => false,
                 'Surrounding' => 5,
                 'InnerSurrounding' => 5
-            );
+            ];
             $myPicture->drawStackedBarChart($settings);
 
             /* Save and write in cache */
@@ -5933,11 +5953,11 @@ class Tracking
      * Generates a big graph with the number of best results
      * @param	array
      */
-    static function generate_exercise_result_graph($attempts)
+    public static function generate_exercise_result_graph($attempts)
     {
         $exercise_title = strip_tags($attempts['title']);
         $attempts       = $attempts['data'];
-        $my_exercise_result_array = $exercise_result = array();
+        $my_exercise_result_array = $exercise_result = [];
         if (empty($attempts)) {
             return null;
         }
@@ -5963,9 +5983,9 @@ class Tracking
         $max = 100;
         $pieces = 5;
         $part = round($max / $pieces);
-        $x_axis = array();
-        $final_array = array();
-        $my_final_array = array();
+        $x_axis = [];
+        $final_array = [];
+        $my_final_array = [];
 
         for ($i = 1; $i <= $pieces; $i++) {
             $sum = 1;
@@ -6017,7 +6037,7 @@ class Tracking
 
         // Cache definition
         $cachePath = api_get_path(SYS_ARCHIVE_PATH);
-        $myCache = new pCache(array('CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)));
+        $myCache = new pCache(['CacheFolder' => substr($cachePath, 0, strlen($cachePath) - 1)]);
         $chartHash = $myCache->getHash($dataSet);
 
         if ($myCache->isInCache($chartHash)) {
@@ -6035,16 +6055,16 @@ class Tracking
             $myPicture->Antialias = false;
 
             /* Add a border to the picture */
-            $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, array('R' => 0, 'G' => 0, 'B' => 0));
+            $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, ['R' => 0, 'G' => 0, 'B' => 0]);
 
             /* Set the default font */
             $myPicture->setFontProperties(
-                array(
+                [
                     'FontName' => api_get_path(
                             SYS_FONTS_PATH
                         ).'opensans/OpenSans-Regular.ttf',
                     'FontSize' => 10
-                )
+                ]
             );
 
             /* Write the chart title */
@@ -6052,38 +6072,38 @@ class Tracking
                 250,
                 20,
                 $exercise_title,
-                array(
+                [
                     'FontSize' => 12,
                     'Align' => TEXT_ALIGN_BOTTOMMIDDLE
-                )
+                ]
             );
 
             /* Define the chart area */
             $myPicture->setGraphArea(50, 50, $widthSize - 20, $heightSize - 30);
 
             /* Draw the scale */
-            $scaleSettings = array(
+            $scaleSettings = [
                 'GridR' => 200,
                 'GridG' => 200,
                 'GridB' => 200,
                 'DrawSubTicks' => true,
                 'CycleBackground' => true,
                 'Mode' => SCALE_MODE_MANUAL,
-                'ManualScale' => array(
-                    '0' => array(
+                'ManualScale' => [
+                    '0' => [
                         'Min' => 0,
                         'Max' => 100
-                    )
-                )
-            );
+                    ]
+                ]
+            ];
             $myPicture->drawScale($scaleSettings);
 
             /* Turn on shadow computing */
-            $myPicture->setShadow(true, array('X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10));
+            $myPicture->setShadow(true, ['X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10]);
 
             /* Draw the chart */
-            $myPicture->setShadow(true, array('X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10));
-            $settings = array(
+            $myPicture->setShadow(true, ['X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10]);
+            $settings = [
                 'DisplayValues' => true,
                 'DisplaySize' => $fontSize,
                 'DisplayR' => 0,
@@ -6093,13 +6113,13 @@ class Tracking
                 'Gradient' => false,
                 'Surrounding' => 30,
                 'InnerSurrounding' => 25
-            );
+            ];
             $myPicture->drawStackedBarChart($settings);
 
-            $legendSettings = array(
+            $legendSettings = [
                 'Mode' => LEGEND_HORIZONTAL,
                 'Style' => LEGEND_NOBORDER,
-            );
+            ];
             $myPicture->drawLegend($widthSize / 2, 30, $legendSettings);
 
             /* Write and save into cache */
@@ -6124,14 +6144,14 @@ class Tracking
             'select',
             'active',
             get_lang('Status'),
-            array(1 => get_lang('Active'), 0 => get_lang('Inactive'))
+            [1 => get_lang('Active'), 0 => get_lang('Inactive')]
         );
 
         $form->addElement(
             'select',
             'sleeping_days',
             get_lang('InactiveDays'),
-            array(
+            [
                 '',
                 1 => 1,
                 5 => 5,
@@ -6140,7 +6160,7 @@ class Tracking
                 60 => 60,
                 90 => 90,
                 120 => 120,
-            )
+            ]
         );
 
         $form->addButtonSearch(get_lang('Search'));
@@ -6164,7 +6184,7 @@ class Tracking
         $exerciseId = 0,
         $date_from = null,
         $date_to = null,
-        $options = array()
+        $options = []
     ) {
         $sessionId  = intval($sessionId);
         $courseId   = intval($courseId);
@@ -6184,8 +6204,8 @@ class Tracking
         $ttrack_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $ttrack_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-        $sessions = array();
-        $courses = array();
+        $sessions = [];
+        $courses = [];
         // if session ID is defined but course ID is empty, get all the courses
         // from that session
         if (!empty($sessionId) && empty($courseId)) {
@@ -6204,28 +6224,28 @@ class Tracking
         } elseif (!empty($courseId) && !empty($sessionId)) {
             //none is empty
             $course = api_get_course_info_by_id($courseId);
-            $courses[$courseId] = array($course['code']);
+            $courses[$courseId] = [$course['code']];
             $courses[$courseId]['code'] = $course['code'];
             $sessions[$sessionId] = api_get_session_info($sessionId);
         } else {
             //both are empty, not enough data, return an empty array
-            return array();
+            return [];
         }
         // Now we have two arrays of courses and sessions with enough data to proceed
         // If no course could be found, we shouldn't return anything.
         // Sessions can be empty (then we only return the pure-course-context results)
         if (count($courses) < 1) {
-            return array();
+            return [];
         }
 
-        $data = array();
+        $data = [];
         // The following loop is less expensive than what it seems:
         // - if a course was defined, then we only loop through sessions
         // - if a session was defined, then we only loop through courses
         // - if a session and a course were defined, then we only loop once
         foreach ($courses as $courseIdx => $courseData) {
             $where = '';
-            $whereParams = array();
+            $whereParams = [];
             $whereSessionParams = '';
             if (count($sessions > 0)) {
                 foreach ($sessions as $sessionIdx => $sessionData) {
@@ -6304,9 +6324,9 @@ class Tracking
 
             // Now browse through the results and get the data
             $rs = Database::query($sql_query);
-            $userIds = array();
-            $questionIds = array();
-            $answerIds = array();
+            $userIds = [];
+            $questionIds = [];
+            $answerIds = [];
             while ($row = Database::fetch_array($rs)) {
                 //only show if exercise is visible
                 if (api_get_item_visibility($courseData, 'quiz', $row['exercise_id'])) {
@@ -6328,17 +6348,17 @@ class Tracking
                                 tq.id IN (".implode(',', $questionIds).")";
 
             $resQuestions = Database::query($sqlQuestions);
-            $answer = array();
-            $question = array();
+            $answer = [];
+            $question = [];
             while ($rowQuestion = Database::fetch_assoc($resQuestions)) {
                 $questionId = $rowQuestion['question_id'];
                 $answerId = $rowQuestion['answer_id'];
-                $answer[$questionId][$answerId] = array(
+                $answer[$questionId][$answerId] = [
                     'position' => $rowQuestion['position'],
                     'question' => $rowQuestion['question'],
                     'answer' => $rowQuestion['answer'],
                     'correct' => $rowQuestion['correct']
-                );
+                ];
                 $question[$questionId]['question'] = $rowQuestion['question'];
             }
 
@@ -6470,8 +6490,9 @@ class Tracking
             $row_ip = Database::fetch_row($res_ip);
             if ($return_as_link) {
                 $ip = Display::url(
-                    (empty($body_replace) ? $row_ip[1] : $body_replace), 'http://www.whatsmyip.org/ip-geo-location/?ip='.$row_ip[1],
-                    array('title' => get_lang('TraceIP'), 'target' => '_blank')
+                    (empty($body_replace) ? $row_ip[1] : $body_replace),
+                    'http://www.whatsmyip.org/ip-geo-location/?ip='.$row_ip[1],
+                    ['title' => get_lang('TraceIP'), 'target' => '_blank']
                 );
             } else {
                 $ip = $row_ip[1];
@@ -6492,15 +6513,15 @@ class Tracking
         $courseInfo,
         $sessionId = 0
     ) {
-        $csvContent = array();
+        $csvContent = [];
         $courseToolInformation = '';
-        $headerTool = array(
-            array(get_lang('Title')),
-            array(get_lang('CreatedAt')),
-            array(get_lang('UpdatedAt')),
-        );
+        $headerTool = [
+            [get_lang('Title')],
+            [get_lang('CreatedAt')],
+            [get_lang('UpdatedAt')],
+        ];
 
-        $headerListForCSV = array();
+        $headerListForCSV = [];
         foreach ($headerTool as $item) {
             $headerListForCSV[] = $item[0];
         }
@@ -6512,7 +6533,7 @@ class Tracking
         );
 
         if (!empty($courseForumInformationArray)) {
-            $csvContent[] = array();
+            $csvContent[] = [];
             $csvContent[] = [get_lang('Forums')];
             $csvContent[] = $headerListForCSV;
             foreach ($courseForumInformationArray as $row) {
@@ -6566,10 +6587,10 @@ class Tracking
             $courseToolInformationTotal .= $courseToolInformation;
         }
 
-        return array(
+        return [
             'array' => $csvContent,
             'html' => $courseToolInformationTotal
-        );
+        ];
     }
 }
 
@@ -6695,8 +6716,8 @@ class TrackingCourseLog
         }
 
         $res = Database::query($sql);
-        $resources = array();
-        $thematic_tools = array('thematic', 'thematic_advance', 'thematic_plan');
+        $resources = [];
+        $thematic_tools = ['thematic', 'thematic_advance', 'thematic_plan'];
         while ($row = Database::fetch_array($res)) {
             $ref = $row['ref'];
             $table_name = self::get_tool_name_table($row['col0']);
@@ -6705,7 +6726,7 @@ class TrackingCourseLog
             $id = $table_name['id_tool'];
             $recorset = false;
 
-            if (in_array($row['col0'], array('thematic_plan', 'thematic_advance'))) {
+            if (in_array($row['col0'], ['thematic_plan', 'thematic_advance'])) {
                 $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
                 $sql = "SELECT thematic_id FROM $table_tool
                         WHERE c_id = $course_id AND id = $ref";
@@ -6947,11 +6968,11 @@ class TrackingCourseLog
             break;
         }
 
-        return array(
+        return [
             'table_name' => $table_name,
             'link_tool' => $link_tool,
             'id_tool' => $id_tool
-        );
+        ];
     }
 
     /**
@@ -7026,14 +7047,14 @@ class TrackingCourseLog
             if ($result_extra_field['field_type'] == UserManager::USER_FIELD_TYPE_TAG) {
                 foreach ($users as $user_id) {
                     $user_result = UserManager::get_user_tags($user_id, $field_id);
-                    $tag_list = array();
+                    $tag_list = [];
                     foreach ($user_result as $item) {
                         $tag_list[] = $item['tag'];
                     }
                     $return[$user_id][] = implode(', ', $tag_list);
                 }
             } else {
-                $new_user_array = array();
+                $new_user_array = [];
                 foreach ($users as $user_id) {
                     $new_user_array[] = "'".$user_id."'";
                 }
@@ -7194,7 +7215,7 @@ class TrackingCourseLog
                 FROM $tbl_user as user $url_table
                 $condition_user $url_condition $invitedUsersCondition";
 
-        if (!in_array($direction, array('ASC', 'DESC'))) {
+        if (!in_array($direction, ['ASC', 'DESC'])) {
             $direction = 'ASC';
         }
 
@@ -7206,7 +7227,7 @@ class TrackingCourseLog
         $sql .= " LIMIT $from,$number_of_items";
 
         $res = Database::query($sql);
-        $users = array();
+        $users = [];
 
         $course_info = api_get_course_info($course_code);
         $total_surveys = 0;
@@ -7220,7 +7241,7 @@ class TrackingCourseLog
         );
 
         if (empty($session_id)) {
-            $survey_user_list = array();
+            $survey_user_list = [];
             $survey_list = SurveyManager::get_surveys($course_code, $session_id);
 
             $total_surveys = count($survey_list);
@@ -7257,14 +7278,14 @@ class TrackingCourseLog
             $avg_student_score = Tracking::get_avg_student_score(
                 $user['user_id'],
                 $course_code,
-                array(),
+                [],
                 $session_id
             );
 
             $avg_student_progress = Tracking::get_avg_student_progress(
                 $user['user_id'],
                 $course_code,
-                array(),
+                [],
                 $session_id
             );
 
@@ -7331,7 +7352,7 @@ class TrackingCourseLog
 
             // store columns in array $users
             $is_western_name_order = api_is_western_name_order();
-            $user_row = array();
+            $user_row = [];
             $user_row['official_code'] = $user['official_code']; //0
             if ($is_western_name_order) {
                 $user_row['firstname'] = $user['firstname'];
@@ -7454,7 +7475,7 @@ class TrackingCourseLog
                 FROM $tbl_user as user $url_table
                 $condition_user $url_condition $invitedUsersCondition";
 
-        if (!in_array($direction, array('ASC', 'DESC'))) {
+        if (!in_array($direction, ['ASC', 'DESC'])) {
             $direction = 'ASC';
         }
 
@@ -7466,7 +7487,7 @@ class TrackingCourseLog
         $sql .= " LIMIT $from,$number_of_items";
 
         $res = Database::query($sql);
-        $users = array();
+        $users = [];
 
         $course_info = api_get_course_info($course_code);
 
@@ -7489,7 +7510,7 @@ class TrackingCourseLog
             $totalLpTime = Tracking::get_time_spent_in_lp(
                 $user['user_id'],
                 $course_code,
-                array(),
+                [],
                 $session_id
             );
 
@@ -7521,7 +7542,7 @@ class TrackingCourseLog
 
             // store columns in array $users
             $is_western_name_order = api_is_western_name_order();
-            $user_row = array();
+            $user_row = [];
             $user_row['official_code'] = $user['official_code']; //0
             if ($is_western_name_order) {
                 $user_row['firstname'] = $user['firstname'];
@@ -7549,32 +7570,32 @@ class TrackingCourseLog
     public static function actionsLeft($current, $sessionId = 0)
     {
         $usersLink = Display::url(
-            Display::return_icon('user.png', get_lang('StudentsTracking'), array(), ICON_SIZE_MEDIUM),
+            Display::return_icon('user.png', get_lang('StudentsTracking'), [], ICON_SIZE_MEDIUM),
             'courseLog.php?'.api_get_cidreq(true, false)
         );
 
         $groupsLink = Display::url(
-            Display::return_icon('group.png', get_lang('GroupReporting'), array(), ICON_SIZE_MEDIUM),
+            Display::return_icon('group.png', get_lang('GroupReporting'), [], ICON_SIZE_MEDIUM),
             'course_log_groups.php?'.api_get_cidreq()
         );
 
         $resourcesLink = Display::url(
-            Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), ICON_SIZE_MEDIUM),
+            Display::return_icon('tools.png', get_lang('ResourcesTracking'), [], ICON_SIZE_MEDIUM),
             'course_log_resources.php?'.api_get_cidreq(true, false)
         );
 
         $courseLink = Display::url(
-            Display::return_icon('course.png', get_lang('CourseTracking'), array(), ICON_SIZE_MEDIUM),
+            Display::return_icon('course.png', get_lang('CourseTracking'), [], ICON_SIZE_MEDIUM),
             'course_log_tools.php?'.api_get_cidreq(true, false)
         );
 
         $examLink = Display::url(
-            Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), ICON_SIZE_MEDIUM),
+            Display::return_icon('quiz.png', get_lang('ExamTracking'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'tracking/exams.php?'.api_get_cidreq()
         );
 
         $eventsLink = Display::url(
-            Display::return_icon('security.png', get_lang('EventsReport'), array(), ICON_SIZE_MEDIUM),
+            Display::return_icon('security.png', get_lang('EventsReport'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'tracking/course_log_events.php?'.api_get_cidreq()
         );
 
@@ -7592,7 +7613,7 @@ class TrackingCourseLog
                         Display::return_icon(
                         'user_na.png',
                         get_lang('StudentsTracking'),
-                        array(),
+                        [],
                         ICON_SIZE_MEDIUM
                     ),
                     '#'
@@ -7600,13 +7621,13 @@ class TrackingCourseLog
                 break;
             case 'groups':
                 $groupsLink = Display::url(
-                    Display::return_icon('group_na.png', get_lang('GroupReporting'), array(), ICON_SIZE_MEDIUM),
+                    Display::return_icon('group_na.png', get_lang('GroupReporting'), [], ICON_SIZE_MEDIUM),
                     '#'
                 );
                 break;
             case 'courses':
                 $courseLink = Display::url(
-                    Display::return_icon('course_na.png', get_lang('CourseTracking'), array(), ICON_SIZE_MEDIUM),
+                    Display::return_icon('course_na.png', get_lang('CourseTracking'), [], ICON_SIZE_MEDIUM),
                     '#'
                 );
                 break;
@@ -7615,20 +7636,21 @@ class TrackingCourseLog
                     Display::return_icon(
                     'tools_na.png',
                     get_lang('ResourcesTracking'),
-                    array(),
+                    [],
                     ICON_SIZE_MEDIUM
-                    ), '#'
+                    ),
+                    '#'
                 );
                 break;
             case 'exams':
                 $examLink = Display::url(
-                    Display::return_icon('quiz_na.png', get_lang('ExamTracking'), array(), ICON_SIZE_MEDIUM),
+                    Display::return_icon('quiz_na.png', get_lang('ExamTracking'), [], ICON_SIZE_MEDIUM),
                     '#'
                 );
                 break;
             case 'logs':
                 $eventsLink = Display::url(
-                    Display::return_icon('security_na.png', get_lang('EventsReport'), array(), ICON_SIZE_MEDIUM),
+                    Display::return_icon('security_na.png', get_lang('EventsReport'), [], ICON_SIZE_MEDIUM),
                     '#'
                 );
                 break;

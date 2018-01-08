@@ -7,10 +7,10 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php',
     'name' => get_lang('Agenda')
-);
+];
 
 $currentCourseId = api_get_course_int_id();
 $currentGroupdId = api_get_group_id();
@@ -18,14 +18,14 @@ $currentGroupdId = api_get_group_id();
 if (!empty($currentGroupdId)) {
     $groupProperties = GroupManager::get_group_properties($currentGroupdId);
     $currentGroupdId = $groupProperties['iid'];
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
         "name" => get_lang('Groups')
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
         "name" => get_lang('GroupSpace').' '.$groupProperties['name']
-    );
+    ];
 }
 
 $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
@@ -47,7 +47,7 @@ if (!empty($currentCourseId) && $currentCourseId != -1) {
     $this_section = SECTION_COURSES;
 
     // Order by start date
-    usort($events, function($a, $b) {
+    usort($events, function ($a, $b) {
         $t1 = strtotime($a['start']);
         $t2 = strtotime($b['start']);
         return $t1 > $t2;
@@ -56,7 +56,7 @@ if (!empty($currentCourseId) && $currentCourseId != -1) {
     // Agenda is out of the course tool (e.g personal agenda)
 
     // Little hack to sort the events by start date in personal agenda (Agenda events List view - See #8014)
-    usort($events, function($a, $b) {
+    usort($events, function ($a, $b) {
         $t1 = strtotime($a['start']);
         $t2 = strtotime($b['start']);
         return $t1 - $t2;

@@ -128,7 +128,7 @@ class CourseRecycler
         if ($this->course->has_resources(RESOURCE_WIKI)) {
             $table_wiki = Database::get_course_table(TABLE_WIKI);
             $table_wiki_conf = Database::get_course_table(TABLE_WIKI_CONF);
-            $pages = array();
+            $pages = [];
             foreach ($this->course->resources[RESOURCE_WIKI] as $resource) {
                 $pages[] = $resource->page_id;
             }
@@ -448,7 +448,7 @@ class CourseRecycler
                     )";
                 $db_result = Database::query($sql);
                 if (Database::num_rows($db_result) > 0) {
-                    $orphan_ids = array();
+                    $orphan_ids = [];
                     while ($obj = Database::fetch_object($db_result)) {
                         $orphan_ids[] = $obj->id;
                     }
@@ -625,12 +625,12 @@ class CourseRecycler
             foreach ($resources[RESOURCE_THEMATIC] as $last_id => $thematic) {
                 if (is_numeric($last_id)) {
                     foreach ($thematic->thematic_advance_list as $thematic_advance) {
-                        $cond = array(
-                            'id = ? AND  c_id = ?' => array(
+                        $cond = [
+                            'id = ? AND  c_id = ?' => [
                                 $thematic_advance['id'],
                                 $this->course_id
-                            )
-                        );
+                            ]
+                        ];
                         api_item_property_update(
                             $this->course_info,
                             'thematic_advance',
@@ -642,12 +642,12 @@ class CourseRecycler
                     }
 
                     foreach ($thematic->thematic_plan_list as $thematic_plan) {
-                        $cond = array(
-                            'id = ? AND  c_id = ?' => array(
+                        $cond = [
+                            'id = ? AND  c_id = ?' => [
                                 $thematic_plan['id'],
                                 $this->course_id,
-                            ),
-                        );
+                            ],
+                        ];
                         api_item_property_update(
                             $this->course_info,
                             'thematic_plan',
@@ -657,12 +657,12 @@ class CourseRecycler
                         );
                         Database::delete($table_thematic_plan, $cond);
                     }
-                    $cond = array(
-                        'id = ? AND  c_id = ?' => array(
+                    $cond = [
+                        'id = ? AND  c_id = ?' => [
                             $last_id,
                             $this->course_id,
-                        ),
-                    );
+                        ],
+                    ];
                     api_item_property_update(
                         $this->course_info,
                         'thematic',
@@ -689,10 +689,10 @@ class CourseRecycler
             foreach ($resources[RESOURCE_ATTENDANCE] as $last_id => $obj) {
                 if (is_numeric($last_id)) {
                     foreach ($obj->attendance_calendar as $attendance_calendar) {
-                        $cond = array('id = ? AND c_id = ? '=>array($attendance_calendar['id'], $this->course_id));
+                        $cond = ['id = ? AND c_id = ? '=>[$attendance_calendar['id'], $this->course_id]];
                         Database::delete($table_attendance_calendar, $cond);
                     }
-                    $cond = array('id = ? AND c_id = ?'=>array($last_id, $this->course_id));
+                    $cond = ['id = ? AND c_id = ?'=>[$last_id, $this->course_id]];
                     Database::delete($table_attendance, $cond);
                     api_item_property_update(
                         $this->course_info,
@@ -718,13 +718,13 @@ class CourseRecycler
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_WORK] as $last_id => $obj) {
                 if (is_numeric($last_id)) {
-                    $cond = array('publication_id = ? AND c_id = ? '=>array($last_id, $this->course_id));
+                    $cond = ['publication_id = ? AND c_id = ? '=>[$last_id, $this->course_id]];
                     Database::delete($table_work_assignment, $cond);
                     // The following also deletes student tasks
-                    $cond = array('parent_id = ? AND c_id = ?'=>array($last_id, $this->course_id));
+                    $cond = ['parent_id = ? AND c_id = ?'=>[$last_id, $this->course_id]];
                     Database::delete($table_work, $cond);
                     // Finally, delete the main task registry
-                    $cond = array('id = ? AND c_id = ?'=>array($last_id, $this->course_id));
+                    $cond = ['id = ? AND c_id = ?'=>[$last_id, $this->course_id]];
                     Database::delete($table_work, $cond);
                     api_item_property_update(
                         $this->course_info,

@@ -196,7 +196,7 @@ function remove_memory_and_time_limits()
  */
 function detect_browser_language()
 {
-    static $language_index = array(
+    static $language_index = [
         'ar' => 'arabic',
         'ast' => 'asturian',
         'bg' => 'bulgarian',
@@ -251,7 +251,7 @@ function detect_browser_language()
         'vi' => 'vietnamese',
         'sw' => 'swahili',
         'yo' => 'yoruba'
-    );
+    ];
 
     $system_available_languages = & get_language_folder_list();
     $accept_languages = strtolower(str_replace('_', '-', $_SERVER['HTTP_ACCEPT_LANGUAGE']));
@@ -326,7 +326,7 @@ function checkReadable($folder, $suggestion = false)
 function file_to_array($filename)
 {
     if (!is_readable($filename) || is_dir($filename)) {
-        return array();
+        return [];
     }
     $fp = fopen($filename, 'rb');
     $buffer = fread($fp, filesize($filename));
@@ -417,10 +417,10 @@ function & get_language_folder_list()
 {
     static $result;
     if (!is_array($result)) {
-        $result = array();
-        $exceptions = array('.', '..', 'CVS', '.svn');
-        $search       = array('_latin', '_unicode', '_corporate', '_org', '_KM', '_');
-        $replace_with = array(' (Latin)', ' (unicode)', ' (corporate)', ' (org)', ' (KM)', ' ');
+        $result = [];
+        $exceptions = ['.', '..', 'CVS', '.svn'];
+        $search       = ['_latin', '_unicode', '_corporate', '_org', '_KM', '_'];
+        $replace_with = [' (Latin)', ' (unicode)', ' (corporate)', ' (org)', ' (KM)', ' '];
         $dirname = api_get_path(SYS_LANG_PATH);
         $handle = opendir($dirname);
         while ($entries = readdir($handle)) {
@@ -450,7 +450,7 @@ function & get_language_folder_list()
  */
 function my_directory_to_array($directory)
 {
-    $array_items = array();
+    $array_items = [];
     if ($handle = opendir($directory)) {
         while (false !== ($file = readdir($handle))) {
             if ($file != "." && $file != "..") {
@@ -564,14 +564,14 @@ function connectToDatabase(
     $dbNameForm,
     $dbPortForm = 3306
 ) {
-    $dbParams = array(
+    $dbParams = [
         'driver' => 'pdo_mysql',
         'host' => $dbHostForm,
         'port' => $dbPortForm,
         'user' => $dbUsernameForm,
         'password' => $dbPassForm,
         'dbname' => $dbNameForm
-    );
+    ];
 
     $database = new \Database();
     $database->connect($dbParams);
@@ -627,7 +627,7 @@ function display_language_selection_box(
 
     // Sanity checks due to the possibility for customizations.
     if (!is_array($language_list) || empty($language_list)) {
-        $language_list = array('english' => 'English');
+        $language_list = ['english' => 'English'];
     }
 
     // Sorting again, if it is necessary.
@@ -711,7 +711,7 @@ function display_requirements(
     $installType,
     $badUpdatePath,
     $updatePath = '',
-    $update_from_version_8 = array()
+    $update_from_version_8 = []
 ) {
     global $_setting;
     echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Requirements')."</h2></div>";
@@ -760,7 +760,7 @@ function display_requirements(
             <tr>
                 <td class="requirements-item">'.get_lang('PHPVersion').' >= '.REQUIRED_PHP_VERSION.'</td>
                 <td class="requirements-value">';
-    if (version_compare(phpversion(),REQUIRED_PHP_VERSION, '>=') > 1) {
+    if (version_compare(phpversion(), REQUIRED_PHP_VERSION, '>=') > 1) {
         echo '<strong><font color="red">'.get_lang('PHPVersionError').'</font></strong>';
     } else {
         echo '<strong><font color="green">'.get_lang('PHPVersionOK').' '.phpversion().'</font></strong>';
@@ -924,8 +924,8 @@ function display_requirements(
     @unlink($course_dir.'/test.php');
     @rmdir($course_dir);
 
-    $perms_dir = array(0777, 0755, 0775, 0770, 0750, 0700);
-    $perms_fil = array(0666, 0644, 0664, 0660, 0640, 0600);
+    $perms_dir = [0777, 0755, 0775, 0770, 0750, 0700];
+    $perms_fil = [0666, 0644, 0664, 0660, 0640, 0600];
     $course_test_was_created = false;
     $dir_perm_verified = 0777;
     foreach ($perms_dir as $perm) {
@@ -1027,16 +1027,16 @@ function display_requirements(
     echo '</div>';
 
     if ($installType == 'update' && (empty($updatePath) || $badUpdatePath)) {
-        if ($badUpdatePath) { ?>
+        if ($badUpdatePath) {
+            ?>
             <div class="alert alert-warning">
                 <?php echo get_lang('Error'); ?>!<br />
                 Chamilo <?php echo implode('|', $update_from_version_8).' '.get_lang('HasNotBeenFoundInThatDir'); ?>.
             </div>
-        <?php }
-        else {
+        <?php
+        } else {
             echo '<br />';
-        }
-        ?>
+        } ?>
             <div class="row">
                 <div class="col-md-12">
                     <p><?php echo get_lang('OldVersionRootPath'); ?>:
@@ -1047,7 +1047,7 @@ function display_requirements(
                             <em class="fa fa-backward"> <?php echo get_lang('Back'); ?></em>
                         </button>
                         <input type="hidden" name="is_executable" id="is_executable" value="-" />
-                        <button type="submit" class="btn btn-success" name="<?php echo (isset($_POST['step2_update_6']) ? 'step2_update_6' : 'step2_update_8'); ?>" value="<?php echo get_lang('Next'); ?> &gt;" >
+                        <button type="submit" class="btn btn-success" name="<?php echo(isset($_POST['step2_update_6']) ? 'step2_update_6' : 'step2_update_8'); ?>" value="<?php echo get_lang('Next'); ?> &gt;" >
                             <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
                         </button>
                     </p>
@@ -1060,7 +1060,7 @@ function display_requirements(
         // First, attempt to set writing permissions if we don't have them yet
         $perm = api_get_permissions_for_new_directories();
         $perm_file = api_get_permissions_for_new_files();
-        $notWritable = array();
+        $notWritable = [];
 
         $checked_writable = api_get_path(SYS_APP_PATH);
         if (!is_writable($checked_writable)) {
@@ -1094,8 +1094,7 @@ function display_requirements(
 
         //--> The user would have to adjust the permissions manually
         if (count($notWritable) > 0) {
-            $error = true;
-            ?>
+            $error = true; ?>
             <div class="text-danger">
                 <h3 class="text-center"><?php echo get_lang('Warning') ?></h3>
                 <p>
@@ -1132,13 +1131,14 @@ function display_requirements(
         }
 
         if (count($deprecatedToRemove) > 0) {
-            $error = true;
-            ?>
+            $error = true; ?>
             <p class="text-danger"><?php echo get_lang('WarningForDeprecatedDirectoriesForUpgrade') ?></p>
             <ul>
-                <?php foreach ($deprecatedToRemove as $deprecatedDirectory) { ?>
+                <?php foreach ($deprecatedToRemove as $deprecatedDirectory) {
+                ?>
                     <li class="text-danger"><?php echo $deprecatedDirectory ?></li>
-                <?php } ?>
+                <?php
+            } ?>
             </ul>
             <?php
         }
@@ -1147,13 +1147,14 @@ function display_requirements(
             $error = true;
         }
 
-        // And now display the choice buttons (go back or install)
-        ?>
+        // And now display the choice buttons (go back or install) ?>
         <p align="center" style="padding-top:15px">
         <button type="submit" name="step1" class="btn btn-default" onclick="javascript: window.location='index.php'; return false;" value="<?php echo get_lang('Previous'); ?>" >
             <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
         </button>
-        <button type="submit" name="step2_install" class="btn btn-success" value="<?php echo get_lang("NewInstallation"); ?>" <?php if ($error) echo 'disabled="disabled"'; ?> >
+        <button type="submit" name="step2_install" class="btn btn-success" value="<?php echo get_lang("NewInstallation"); ?>" <?php if ($error) {
+            echo 'disabled="disabled"';
+        } ?> >
             <em class="fa fa-forward"> </em> <?php echo get_lang('NewInstallation'); ?>
         </button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
@@ -1176,8 +1177,7 @@ function display_license_agreement()
     echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Licence').'</h2>';
     echo '<p>'.get_lang('LMSLicenseInfo').'</p>';
     echo '<p><a href="../../documentation/license.html" target="_blank">'.get_lang('PrintVers').'</a></p>';
-    echo '</div>';
-    ?>
+    echo '</div>'; ?>
     <div class="row">
         <div class="col-md-12">
             <pre style="overflow: auto; height: 200px; margin-top: 5px;">
@@ -1427,61 +1427,65 @@ function display_database_settings_form(
         echo '<div class="RequirementContent">';
         echo get_lang('DBSettingIntro');
         echo '</div>';
-    }
-    ?>
+    } ?>
     <div class="panel panel-default">
         <div class="panel-body">
         <div class="form-group">
             <label class="col-sm-4"><?php echo get_lang('DBHost'); ?> </label>
-            <?php if ($installType == 'update') { ?>
+            <?php if ($installType == 'update') {
+        ?>
             <div class="col-sm-5">
                 <input type="hidden" name="dbHostForm" value="<?php echo htmlentities($dbHostForm); ?>" /><?php echo $dbHostForm; ?>
             </div>
             <div class="col-sm-3"></div>
-            <?php } else { ?>
+            <?php
+    } else {
+        ?>
             <div class="col-sm-5">
                 <input type="text" class="form-control" size="25" maxlength="50" name="dbHostForm" value="<?php echo htmlentities($dbHostForm); ?>" />
             </div>
             <div class="col-sm-3"><?php echo get_lang('EG').' localhost'; ?></div>
-            <?php } ?>
+            <?php
+    } ?>
         </div>
         <div class="form-group">
             <label class="col-sm-4"><?php echo get_lang('DBPort'); ?> </label>
-            <?php if ($installType == 'update') { ?>
+            <?php if ($installType == 'update') {
+        ?>
             <div class="col-sm-5">
                 <input type="hidden" name="dbPortForm" value="<?php echo htmlentities($dbPortForm); ?>" /><?php echo $dbPortForm; ?>
             </div>
             <div class="col-sm-3"></div>
-            <?php } else { ?>
+            <?php
+    } else {
+        ?>
             <div class="col-sm-5">
                 <input type="text" class="form-control" size="25" maxlength="50" name="dbPortForm" value="<?php echo htmlentities($dbPortForm); ?>" />
             </div>
             <div class="col-sm-3"><?php echo get_lang('EG').' 3306'; ?></div>
-            <?php } ?>
+            <?php
+    } ?>
         </div>
         <div class="form-group">
             <?php
                 //database user username
                 $example_login = get_lang('EG').' root';
-                displayDatabaseParameter($installType, get_lang('DBLogin'), 'dbUsernameForm', $dbUsernameForm, $example_login);
-            ?>
+    displayDatabaseParameter($installType, get_lang('DBLogin'), 'dbUsernameForm', $dbUsernameForm, $example_login); ?>
         </div>
         <div class="form-group">
             <?php
             //database user password
             $example_password = get_lang('EG').' '.api_generate_password();
-            displayDatabaseParameter($installType, get_lang('DBPassword'), 'dbPassForm', $dbPassForm, $example_password);
-
-            ?>
+    displayDatabaseParameter($installType, get_lang('DBPassword'), 'dbPassForm', $dbPassForm, $example_password); ?>
         </div>
         <div class="form-group">
             <?php
             //Database Name fix replace weird chars
             if ($installType != INSTALL_TYPE_UPDATE) {
-                $dbNameForm = str_replace(array('-', '*', '$', ' ', '.'), '', $dbNameForm);
+                $dbNameForm = str_replace(['-', '*', '$', ' ', '.'], '', $dbNameForm);
             }
 
-            displayDatabaseParameter(
+    displayDatabaseParameter(
                 $installType,
                 get_lang('MainDB'),
                 'dbNameForm',
@@ -1489,10 +1493,10 @@ function display_database_settings_form(
                 '&nbsp;',
                 null,
                 'id="optional_param1"'
-                );
-            ?>
+                ); ?>
         </div>
-       <?php if ($installType != INSTALL_TYPE_UPDATE) { ?>
+       <?php if ($installType != INSTALL_TYPE_UPDATE) {
+                    ?>
         <div class="form-group">
             <div class="col-sm-3"></div>
             <div class="col-sm-9">
@@ -1502,28 +1506,29 @@ function display_database_settings_form(
             </button>
             </div>
         </div>
-        <?php } ?>
+        <?php
+                } ?>
 
         </div>
     </div>
     <?php
         $database_exists_text = '';
-        $manager = null;
-        try {
-            $manager = connectToDatabase(
+    $manager = null;
+    try {
+        $manager = connectToDatabase(
                 $dbHostForm,
                 $dbUsernameForm,
                 $dbPassForm,
                 null,
                 $dbPortForm
             );
-            $databases = $manager->getConnection()->getSchemaManager()->listDatabases();
-            if (in_array($dbNameForm, $databases)) {
-                $database_exists_text = '<div class="alert alert-warning">'.get_lang('ADatabaseWithTheSameNameAlreadyExists').'</div>';
-            }
-        } catch (Exception $e) {
-            $database_exists_text = $e->getMessage();
+        $databases = $manager->getConnection()->getSchemaManager()->listDatabases();
+        if (in_array($dbNameForm, $databases)) {
+            $database_exists_text = '<div class="alert alert-warning">'.get_lang('ADatabaseWithTheSameNameAlreadyExists').'</div>';
         }
+    } catch (Exception $e) {
+        $database_exists_text = $e->getMessage();
+    }
 
     if ($manager && $manager->getConnection()->isConnected()): ?>
         <?php echo $database_exists_text ?>
@@ -1546,15 +1551,19 @@ function display_database_settings_form(
        </div>
       <div class="col-sm-6">
        <input type="hidden" name="is_executable" id="is_executable" value="-" />
-       <?php if ($manager) { ?>
+       <?php if ($manager) {
+        ?>
            <button type="submit"  class="btn btn-success" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" >
                <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
            </button>
-       <?php } else { ?>
+       <?php
+    } else {
+        ?>
            <button disabled="disabled" type="submit" class="btn btn-success disabled" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" >
                <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
            </button>
-       <?php } ?>
+       <?php
+    } ?>
       </div>
    </div>
 
@@ -1568,12 +1577,12 @@ function panel($content = null, $title = null, $id = null, $style = null)
         $style = 'default';
     }
     if (!empty($title)) {
-        $panelTitle = Display::div($title, array('class' => 'panel-heading'));
-        $panelBody = Display::div($content, array('class' => 'panel-body'));
-        $panelParent = Display::div($panelTitle.$panelBody, array('id' => $id, 'class' => 'panel panel-'.$style));
+        $panelTitle = Display::div($title, ['class' => 'panel-heading']);
+        $panelBody = Display::div($content, ['class' => 'panel-body']);
+        $panelParent = Display::div($panelTitle.$panelBody, ['id' => $id, 'class' => 'panel panel-'.$style]);
     } else {
-        $panelBody = Display::div($html, array('class' => 'panel-body'));
-        $panelParent = Display::div($panelBody, array('id' => $id, 'class' => 'panel panel-'.$style));
+        $panelBody = Display::div($html, ['class' => 'panel-body']);
+        $panelParent = Display::div($panelBody, ['id' => $id, 'class' => 'panel panel-'.$style]);
     }
     $html .= $panelParent;
     return $html;
@@ -1677,7 +1686,6 @@ function display_configuration_settings_form(
     $html .= '<label class="col-sm-6 control-label">'.get_lang('MainLang')."</label>";
     if ($installType == 'update') {
         $html .= '<input type="hidden" name="languageForm" value="'.api_htmlentities($languageForm, ENT_QUOTES).'" />'.$languageForm;
-
     } else { // new installation
         $html .= '<div class="col-sm-6">';
         $html .= display_language_selection_box('languageForm', $languageForm);
@@ -1728,7 +1736,6 @@ function display_configuration_settings_form(
     if ($installType == 'update') {
         $html .= '<input type="hidden" name="encryptPassForm" value="'.$encryptPassForm.'" />'.$encryptPassForm;
     } else {
-
         $html .= '<div class="checkbox">
                     <label>
                         <input  type="radio" name="encryptPassForm" value="bcrypt" id="encryptPass1" '. ($encryptPassForm == 'bcrypt' ? 'checked="checked" ' : '').'/> bcrypt
@@ -1769,7 +1776,7 @@ function display_configuration_settings_form(
         $html .= '<label class="checkbox-inline">
                         <input type="radio" name="allowSelfReg" value="false" id="allowSelfReg0" '. ($allowSelfReg == 'false' ? '' : 'checked="checked" ').' /> '.get_lang('No').'
                     </label>';
-         $html .= '<label class="checkbox-inline">
+        $html .= '<label class="checkbox-inline">
                     <input type="radio" name="allowSelfReg" value="approval" id="allowSelfReg2" '. ($allowSelfReg == 'approval' ? '' : 'checked="checked" ').' /> '.get_lang('AfterApproval').'
                 </label>';
         $html .= '</div>';
@@ -1802,8 +1809,7 @@ function display_configuration_settings_form(
     $html .= '</div>
     </div>';
 
-    echo panel($html, get_lang('Platform'), 'platform');
- ?>
+    echo panel($html, get_lang('Platform'), 'platform'); ?>
     <div class='form-group'>
         <div class="col-sm-6">
             <button type="submit" class="btn btn-default pull-right" name="step3" value="&lt; <?php echo get_lang('Previous'); ?>" ><em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?></button>
@@ -1828,8 +1834,7 @@ function display_after_install_message($installType)
     echo '<strong>'.get_lang('SecurityAdvice').'</strong>';
     echo ': ';
     printf(get_lang('ToProtectYourSiteMakeXReadOnlyAndDeleteY'), 'app/config/', 'main/install/');
-    echo '</div>';
-    ?></form>
+    echo '</div>'; ?></form>
     <br />
     <a class="btn btn-success btn-block" href="../../index.php">
         <?php echo get_lang('GoToYourNewlyCreatedPortal'); ?>
@@ -1844,7 +1849,7 @@ function display_after_install_message($installType)
  */
 function get_countries_list_from_array($combo = false)
 {
-    $a_countries = array(
+    $a_countries = [
         "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan",
         "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi",
         "Cambodia", "Cameroon", "Canada", "Cape Verde", "Central African Republic", "Chad", "Chile", "China", "Colombi", "Comoros", "Congo (Brazzaville)", "Congo", "Costa Rica", "Cote d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czech Republic",
@@ -1869,7 +1874,7 @@ function get_countries_list_from_array($combo = false)
         "Vanuatu", "Vatican City", "Venezuela", "Vietnam",
         "Yemen",
         "Zambia", "Zimbabwe"
-    );
+    ];
 
     $country_select = '';
     if ($combo) {
@@ -1958,7 +1963,6 @@ function check_course_script_interpretation(
     $content = '<?php echo "123"; exit;';
 
     if (is_writable($file_name)) {
-
         if ($handler = @fopen($file_name, "w")) {
             //write content
             if (fwrite($handler, $content)) {
@@ -2065,7 +2069,7 @@ function installSettings(
     $allowTeacherSelfRegistration = $allowTeacherSelfRegistration ? 'true' : 'false';
 
     // Use PHP 5.3 to avoid issue with weird peripherical auto-installers like travis-ci
-    $settings = array(
+    $settings = [
         'Institution' => $organizationName,
         'InstitutionUrl' => $organizationUrl,
         'siteName' => $siteName,
@@ -2075,7 +2079,7 @@ function installSettings(
         'platformLanguage' => $language,
         'allow_registration' => $allowRegistration,
         'allow_registration_as_teacher' => $allowTeacherSelfRegistration,
-    );
+    ];
 
     foreach ($settings as $variable => $value) {
         $sql = "UPDATE settings_current
@@ -2458,7 +2462,7 @@ function fixIds(EntityManager $em)
     $result = $connection->executeQuery($sql);
     $groups = $result->fetchAll();
 
-    $oldGroups = array();
+    $oldGroups = [];
 
     if (!empty($groups)) {
         foreach ($groups as $group) {
@@ -2621,7 +2625,7 @@ function fixIds(EntityManager $em)
             $connection->insert('extra_field', $params);
             $newExtraFieldId = $connection->lastInsertId();
 
-            $values = array();
+            $values = [];
             $handlerId = null;
             switch ($type) {
                 case ExtraField::USER_FIELD_TYPE:
@@ -2777,14 +2781,14 @@ function finishInstallation(
     $manager->persist($ticketProject);
     $manager->flush();
 
-    $categories = array(
+    $categories = [
         get_lang('TicketEnrollment') => get_lang('TicketsAboutEnrollment'),
         get_lang('TicketGeneralInformation') => get_lang('TicketsAboutGeneralInformation'),
         get_lang('TicketRequestAndPapework') => get_lang('TicketsAboutRequestAndPapework'),
         get_lang('TicketAcademicIncidence') => get_lang('TicketsAboutAcademicIncidence'),
         get_lang('TicketVirtualCampus') => get_lang('TicketsAboutVirtualCampus'),
         get_lang('TicketOnlineEvaluation') => get_lang('TicketsAboutOnlineEvaluation')
-    );
+    ];
 
     $i = 1;
 
@@ -2812,11 +2816,11 @@ function finishInstallation(
     }
 
     // Default Priorities
-    $defaultPriorities = array(
+    $defaultPriorities = [
         TicketManager::PRIORITY_NORMAL => get_lang('PriorityNormal'),
         TicketManager::PRIORITY_HIGH => get_lang('PriorityHigh'),
         TicketManager::PRIORITY_LOW => get_lang('PriorityLow')
-    );
+    ];
 
     $i = 1;
     foreach ($defaultPriorities as $code => $priority) {
@@ -2835,21 +2839,21 @@ function finishInstallation(
     $table = Database::get_main_table(TABLE_TICKET_STATUS);
 
     // Default status
-    $defaultStatus = array(
+    $defaultStatus = [
         TicketManager::STATUS_NEW => get_lang('StatusNew'),
         TicketManager::STATUS_PENDING => get_lang('StatusPending'),
         TicketManager::STATUS_UNCONFIRMED => get_lang('StatusUnconfirmed'),
         TicketManager::STATUS_CLOSE => get_lang('StatusClose'),
         TicketManager::STATUS_FORWARDED => get_lang('StatusForwarded')
-    );
+    ];
 
     $i = 1;
     foreach ($defaultStatus as $code => $status) {
-        $attributes = array(
+        $attributes = [
             'id' => $i,
             'code' => $code,
             'name' => $status
-        );
+        ];
         Database::insert($table, $attributes);
         $i++;
     }
@@ -3042,10 +3046,10 @@ function get_group_picture_path_by_id($id, $type = 'web', $preview = false, $ano
             break;
     }
 
-    $noPicturePath = array('dir' => $base.'img/', 'file' => 'unknown.jpg');
+    $noPicturePath = ['dir' => $base.'img/', 'file' => 'unknown.jpg'];
 
     if (empty($id) || empty($type)) {
-        return $anonymous ? $noPicturePath : array('dir' => '', 'file' => '');
+        return $anonymous ? $noPicturePath : ['dir' => '', 'file' => ''];
     }
 
     $id = intval($id);
@@ -3056,7 +3060,7 @@ function get_group_picture_path_by_id($id, $type = 'web', $preview = false, $ano
     $res = Database::query($sql);
 
     if (!Database::num_rows($res)) {
-        return $anonymous ? $noPicturePath : array('dir' => '', 'file' => '');
+        return $anonymous ? $noPicturePath : ['dir' => '', 'file' => ''];
     }
 
     $user = Database::fetch_array($res);
@@ -3078,7 +3082,7 @@ function get_group_picture_path_by_id($id, $type = 'web', $preview = false, $ano
         return $noPicturePath;
     }
 
-    return array('dir' => $dir, 'file' => $picture_filename);
+    return ['dir' => $dir, 'file' => $picture_filename];
 }
 
 /**
@@ -3102,27 +3106,16 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
 
     switch ($fromVersion) {
         case '1.9.0':
-            // no break
         case '1.9.2':
-            // no break
         case '1.9.4':
-            // no break
         case '1.9.6':
-            // no break
         case '1.9.6.1':
-            // no break
         case '1.9.8':
-            // no break
         case '1.9.8.1':
-            // no break
         case '1.9.8.2':
-            // no break
         case '1.9.10':
-            // no break
         case '1.9.10.2':
-            // no break
         case '1.9.10.4':
-            // no break
         case '1.9.10.6':
             $database = new Database();
             $database->setManager($manager);
@@ -3158,7 +3151,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                     // Only updates the configuration.inc.php with the new version
                     include __DIR__.'/update-configuration.inc.php';
 
-                    $configurationFiles = array(
+                    $configurationFiles = [
                         'mail.conf.php',
                         'profile.conf.php',
                         'course_info.conf.php',
@@ -3166,7 +3159,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                         'events.conf.php',
                         'auth.conf.php',
                         'portfolio.conf.php'
-                    );
+                    ];
 
                     error_log('Copy conf files');
 
@@ -3185,14 +3178,11 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                 error_log('There was an error during running migrations. Check error.log');
                 break;
             }
+            // no break
         case '1.10.0':
-            // no break
         case '1.10.2':
-            // no break
         case '1.10.4':
-            // no break
         case '1.10.6':
-            // no break
         case '1.10.8':
             $database = new Database();
             $database->setManager($manager);

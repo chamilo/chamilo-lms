@@ -141,7 +141,7 @@ function get_request_data($from, $number_of_items, $column, $direction)
     $sql .= " LIMIT $from,$number_of_items";
     $res = Database :: query($sql);
 
-    $course_requests = array();
+    $course_requests = [];
     while ($course_request = Database :: fetch_row($res)) {
         $course_request[5] = api_get_local_time($course_request[5]);
         $course_requests[] = $course_request;
@@ -157,15 +157,15 @@ function modify_filter($id)
 {
     $code = CourseRequestManager::get_course_request_code($id);
     $result = '<a href="course_request_edit.php?id='.$id.'&caller=2">'.
-        Display::return_icon('edit.png', get_lang('Edit'), array('style' => 'vertical-align: middle;')).'</a>'.
+        Display::return_icon('edit.png', get_lang('Edit'), ['style' => 'vertical-align: middle;']).'</a>'.
         '&nbsp;<a href="?accept_course_request='.$id.'">'.
         Display::return_icon(
             'accept.png',
             get_lang('AcceptThisCourseRequest'),
-            array(
+            [
                 'style' => 'vertical-align: middle;',
                 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ANewCourseWillBeCreated'), $code), ENT_QUOTES)).'\')) return false;',
-            )
+            ]
         ).
         '</a>';
     if (!CourseRequestManager::additional_info_asked($id)) {
@@ -173,10 +173,10 @@ function modify_filter($id)
             Display::return_icon(
                 'request_info.gif',
                 get_lang('AskAdditionalInfo'),
-                array(
+                [
                     'style' => 'vertical-align: middle;',
                     'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('AdditionalInfoWillBeAsked'), $code), ENT_QUOTES)).'\')) return false;',
-                )
+                ]
             ).
             '</a>';
     }
@@ -184,18 +184,18 @@ function modify_filter($id)
         Display::return_icon(
             'delete.png',
             get_lang('DeleteThisCourseRequest'),
-            array(
+            [
                 'style' => 'vertical-align: middle;',
                 'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ACourseRequestWillBeDeleted'), $code), ENT_QUOTES)).'\')) return false;',
-            )
+            ]
         ).
         '</a>';
 
     return $result;
 }
 
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('CourseList')];
 
 $tool_name = get_lang('RejectedCourseRequests');
 
@@ -245,7 +245,7 @@ $table->set_header(4, get_lang('Teacher'));
 $table->set_header(5, get_lang('CourseRequestDate'));
 $table->set_header(6, '', false);
 $table->set_column_filter(6, 'modify_filter');
-$table->set_form_actions(array('delete_course_requests' => get_lang('DeleteCourseRequests')), 'course_request');
+$table->set_form_actions(['delete_course_requests' => get_lang('DeleteCourseRequests')], 'course_request');
 $table->display();
 
 Display::display_footer();

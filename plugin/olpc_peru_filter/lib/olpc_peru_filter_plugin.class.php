@@ -14,12 +14,12 @@ class OLPC_Peru_FilterPlugin extends Plugin
     public $isCoursePlugin = true;
 
     //When creating a new course, these settings are added to the course
-    public $course_settings = array(
-    );
+    public $course_settings = [
+    ];
     public $course_settings_callback = true;
     public $error = '';
 
-    static function create()
+    public static function create()
     {
         static $result = null;
         return $result ? $result : $result = new self();
@@ -27,13 +27,13 @@ class OLPC_Peru_FilterPlugin extends Plugin
 
     protected function __construct()
     {
-        parent::__construct('0.1', 'Yannick Warnier, Aliosh Neira', array('tool_enable' => 'boolean'));
+        parent::__construct('0.1', 'Yannick Warnier, Aliosh Neira', ['tool_enable' => 'boolean']);
 
-        $this->course_settings = array();
+        $this->course_settings = [];
         $list = $this->get_blacklist_options();
         foreach ($list as $k => $v) {
             $this->course_settings[] =
-              array('group'=> 'olpc_peru_filter_filter', 'name' => $k, 'type' => 'checkbox', 'init_value' => $v);
+              ['group'=> 'olpc_peru_filter_filter', 'name' => $k, 'type' => 'checkbox', 'init_value' => $v];
         }
         require_once __DIR__.'/../config.php';
         if (!empty($blacklist_enabled_file)) {
@@ -68,7 +68,7 @@ class OLPC_Peru_FilterPlugin extends Plugin
         $this->install_course_fields($course_id, false);
     }
 
-    public function course_settings_updated($values = array())
+    public function course_settings_updated($values = [])
     {
         if (!is_array($values) or count($values) == 0) {
             return false;
@@ -82,7 +82,7 @@ class OLPC_Peru_FilterPlugin extends Plugin
      */
     public function get_blacklist_options()
     {
-        $categories = $blacklists = array();
+        $categories = $blacklists = [];
         if (!is_dir($this->blacklists_dir)) {
             $this->error = 'Could not find blacklists dir '.$this->blacklists_dir;
             return $blacklists;

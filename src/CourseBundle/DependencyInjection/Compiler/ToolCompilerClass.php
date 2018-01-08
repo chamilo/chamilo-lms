@@ -30,7 +30,7 @@ class ToolCompilerClass implements CompilerPassInterface
         );
 
         foreach ($taggedServices as $id => $attributes) {
-            $definition->addMethodCall('addTool', array(new Reference($id)));
+            $definition->addMethodCall('addTool', [new Reference($id)]);
         }
     }
 }

@@ -121,7 +121,7 @@ function store_one_permission($content, $action, $id, $tool, $permission)
 function get_permissions($content, $id)
 {
     $course_id = api_get_course_int_id();
-    $currentpermissions = array();
+    $currentpermissions = [];
     // Which database are we using (depending on the $content parameter)
     $course_id_condition = " c_id = $course_id AND ";
     if ($content == 'user') {
@@ -175,7 +175,7 @@ function limited_or_full($current_permissions)
                 if ($value == 'View') {
                     unset($current_permissions[$tool][$key]);
                 }
-                if ($value == 'Visibility' OR $value == 'Move') {
+                if ($value == 'Visibility' or $value == 'Move') {
                     if (!in_array('Edit', $current_permissions[$tool])) {
                         $current_permissions[$tool][] = 'Edit';
                     }
@@ -203,15 +203,13 @@ function limited_or_full($current_permissions)
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
 * @version 1.0
 */
-function display_checkbox_matrix($permission_array, $tool, $permission, $inherited_permissions = array())
+function display_checkbox_matrix($permission_array, $tool, $permission, $inherited_permissions = [])
 {
     $checked = "";
-    if (is_array($permission_array[$tool]) AND in_array($permission, $permission_array[$tool]))
-    {
+    if (is_array($permission_array[$tool]) and in_array($permission, $permission_array[$tool])) {
         $checked = "checked";
     }
     echo "\t\t\t<input type=\"checkbox\" name=\"permission*$tool*$permission\" $checked>\n";
-
 }
 
 /**
@@ -224,7 +222,7 @@ function display_checkbox_matrix($permission_array, $tool, $permission, $inherit
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
 * @version 1.0
 */
-function display_image_matrix($permission_array, $tool, $permission, $inherited_permissions = array(), $course_admin = false, $editable = true)
+function display_image_matrix($permission_array, $tool, $permission, $inherited_permissions = [], $course_admin = false, $editable = true)
 {
     if ($course_admin) {
         echo "\t\t\t<img src=\"../img/checkbox_on3.gif\" border=\"0\"/ title=\"".get_lang('PermissionGrantedByGroupOrRole')."\">";
@@ -232,7 +230,7 @@ function display_image_matrix($permission_array, $tool, $permission, $inherited_
         if (in_array($permission, $inherited_permissions[$tool])) {
             echo "\t\t\t<img src=\"../img/checkbox_on3.gif\" border=\"0\"/ title=\"".get_lang('PermissionGrantedByGroupOrRole')."\">";
         } else {
-            if (is_array($permission_array[$tool]) AND in_array($permission, $permission_array[$tool])) {
+            if (is_array($permission_array[$tool]) and in_array($permission, $permission_array[$tool])) {
                 if ($editable) {
                     $url = api_get_self();
                     $urlparameters = '';
@@ -254,8 +252,7 @@ function display_image_matrix($permission_array, $tool, $permission, $inherited_
                     echo "</a>";
                 }
             } else {
-                if ($editable)
-                {
+                if ($editable) {
                     $url = api_get_self();
                     $urlparameters = '';
                     foreach ($_GET as $key => $value) {
@@ -273,8 +270,7 @@ function display_image_matrix($permission_array, $tool, $permission, $inherited_
                     echo "\t\t\t <a href=\"".$url."\">";
                 }
                 echo "<img src=\"../img/wrong.gif\" border=\"0\"/>";
-                if ($editable)
-                {
+                if ($editable) {
                     echo "</a>";
                 }
             }
@@ -294,7 +290,7 @@ function display_image_matrix($permission_array, $tool, $permission, $inherited_
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
 * @version 1.0
 */
-function display_image_matrix_for_blogs($permission_array, $user_id, $tool, $permission, $inherited_permissions = array(), $course_admin = false, $editable = true)
+function display_image_matrix_for_blogs($permission_array, $user_id, $tool, $permission, $inherited_permissions = [], $course_admin = false, $editable = true)
 {
     if ($course_admin) {
         echo "\t\t\t<img src=\"../img/checkbox_on3.gif\" border=\"0\"/ title=\"".get_lang('PermissionGrantedByGroupOrRole')."\">";
@@ -302,12 +298,11 @@ function display_image_matrix_for_blogs($permission_array, $user_id, $tool, $per
         if (!empty($inherited_permissions) and in_array($permission, $inherited_permissions[$tool])) {
             echo "\t\t\t<img src=\"../img/checkbox_on3.gif\" border=\"0\"/ title=\"".get_lang('PermissionGrantedByGroupOrRole')."\">";
         } else {
-            if (is_array($permission_array[$tool]) AND in_array($permission, $permission_array[$tool])) {
+            if (is_array($permission_array[$tool]) and in_array($permission, $permission_array[$tool])) {
                 if ($editable) {
                     $url = api_get_self();
                     $urlparameters = '';
-                    foreach ($_GET as $key => $value)
-                    {
+                    foreach ($_GET as $key => $value) {
                         $parameter[$key] = $value;
                     }
                     $parameter['action'] = 'manage_rights';
@@ -315,8 +310,7 @@ function display_image_matrix_for_blogs($permission_array, $user_id, $tool, $per
                     $parameter['permission'] = $permission;
                     $parameter['tool'] = $tool;
                     $parameter['user_id'] = $user_id;
-                    foreach ($parameter as $key=>$value)
-                    {
+                    foreach ($parameter as $key=>$value) {
                         $urlparameters .= $key.'='.$value.'&amp;';
                     }
                     $url = $url.'?'.$urlparameters;
@@ -417,7 +411,7 @@ function get_roles($content, $id, $scope = 'course')
     }
     $table_role = Database::get_course_table(TABLE_ROLE);
 
-    $current_roles = array();
+    $current_roles = [];
     //$sql="SELECT role.role_id FROM $table role_group_user, $table_role role WHERE role_group_user.$id_field = '$id' AND role_group_user.role_id=role.role_id AND role_group_user.scope='".$scope."'";$sql="SELECT role.role_id FROM $table role_group_user, $table_role role WHERE role_group_user.$id_field = '$id' AND role_group_user.role_id=role.role_id AND role_group_user.scope='".$scope."'";
     $sql = "SELECT role_id FROM $table WHERE c_id = $course_id AND $id_field = '$id' AND scope='".$scope."'";
     $result = Database::query($sql);
@@ -433,25 +427,23 @@ function get_roles($content, $id, $scope = 'course')
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
 * @version 1.0
 */
-function get_all_roles($content = 'course') {
+function get_all_roles($content = 'course')
+{
     $course_id = api_get_course_int_id();
     $course_id_condition = " WHERE c_id = $course_id ";
 
-    if ($content == 'course')
-    {
+    if ($content == 'course') {
         $table_role = Database::get_course_table(TABLE_ROLE);
     }
-    if ($content == 'platform')
-    {
+    if ($content == 'platform') {
         $table_role = Database::get_main_table(TABLE_ROLE);
         $course_id_condition = '';
     }
 
-    $current_roles = array();
+    $current_roles = [];
     $sql = "SELECT * FROM $table_role $course_id_condition ";
     $result = Database::query($sql);
-    while ($row = Database::fetch_array($result))
-    {
+    while ($row = Database::fetch_array($result)) {
         $roles[] = $row;
     }
 
@@ -511,7 +503,7 @@ function get_roles_permissions($content, $id, $scope = 'course')
             role.role_id = role_permissions.role_id";
 
     $result = Database::query($sql);
-    $current_role_permissions = array();
+    $current_role_permissions = [];
     while ($row = Database::fetch_array($result)) {
         $current_role_permissions[$row['tool']][] = $row['action'];
     }

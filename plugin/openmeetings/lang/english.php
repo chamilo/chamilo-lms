@@ -54,4 +54,3 @@ $strings['plugin_tool_openmeetings'] = 'Video';
 
 $strings['ThereAreNotRecordingsForTheMeetings'] = 'There are not recording for the meeting sessions';
 $strings['NoRecording'] = 'No recording';
-

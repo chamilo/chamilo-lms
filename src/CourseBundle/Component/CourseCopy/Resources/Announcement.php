@@ -75,7 +75,7 @@ class Announcement extends Resource
     /**
      * Show this announcement
      */
-    function show()
+    public function show()
     {
         parent::show();
         echo $this->date.': '.$this->title;

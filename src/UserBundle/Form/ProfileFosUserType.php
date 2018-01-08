@@ -48,9 +48,9 @@ class ProfileFosUserType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => 'Chamilo\UserBundle\Entity\User',
-            )
+            ]
         );
     }
 
@@ -59,4 +59,3 @@ class ProfileFosUserType extends AbstractType
         return 'chamilo_fos_user_profile';
     }
 }
-

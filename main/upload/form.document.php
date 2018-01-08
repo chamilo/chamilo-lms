@@ -11,7 +11,7 @@
  * Just display the form needed to upload a SCORM and give its settings
  */
 $nameTools = get_lang('FileUpload');
-$interbreadcrumb[] = array("url"=>"../lp/lp_controller.php?action=list", "name"=> get_lang(TOOL_DOCUMENT));
+$interbreadcrumb[] = ["url"=>"../lp/lp_controller.php?action=list", "name"=> get_lang(TOOL_DOCUMENT)];
 Display::display_header($nameTools, "Doc");
 //show the title
 api_display_tool_title($nameTools.$add_group_to_title);
@@ -30,6 +30,6 @@ api_display_tool_title($nameTools.$add_group_to_title);
 <br/>
 <?php
 /*
-		FOOTER
+        FOOTER
 */
 Display::display_footer();

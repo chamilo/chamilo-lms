@@ -72,9 +72,9 @@ class GroupVoter extends AbstractVoter
         return $this->groupManager;
     }
 
-     /**
-     * @inheritdoc
-     */
+    /**
+    * @inheritdoc
+    */
     protected function supports($attribute, $subject)
     {
         $options = [
@@ -96,9 +96,9 @@ class GroupVoter extends AbstractVoter
         return true;
     }
 
-     /**
-     * @inheritdoc
-     */
+    /**
+    * @inheritdoc
+    */
     protected function voteOnAttribute($attribute, $group, TokenInterface $token)
     {
         $user = $token->getUser();
@@ -116,7 +116,6 @@ class GroupVoter extends AbstractVoter
 
         // Admins have access to everything
         if ($authChecker->isGranted('ROLE_ADMIN')) {
-
             return true;
         }
 

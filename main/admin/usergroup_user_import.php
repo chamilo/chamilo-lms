@@ -15,14 +15,14 @@
 function validate_data($user_classes)
 {
     global $purification_option_for_usernames;
-    $errors = array();
-    $classcodes = array();
+    $errors = [];
+    $classcodes = [];
     $usergroup = new UserGroup();
 
     foreach ($user_classes as $index => $user_class) {
         $user_class['line'] = $index + 1;
         // 1. Check whether mandatory fields are set.
-        $mandatory_fields = array('UserName', 'ClassName');
+        $mandatory_fields = ['UserName', 'ClassName'];
 
         foreach ($mandatory_fields as $field) {
             if (!isset($user_class[$field]) || strlen($user_class[$field]) == 0) {
@@ -70,13 +70,12 @@ function validate_data($user_classes)
  */
 function save_data($users_classes, $deleteUsersNotInList = false)
 {
-
     global $purification_option_for_usernames;
     // Table definitions.
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
     $usergroup = new UserGroup();
     // Data parsing: purification + conversion (UserName, ClassName) --> (user_is, class_id)
-    $csv_data = array();
+    $csv_data = [];
     if (!empty($users_classes)) {
         foreach ($users_classes as $user_class) {
             $sql1 = "SELECT user_id FROM $user_table
@@ -135,8 +134,8 @@ api_protect_admin_script(true);
 
 $tool_name = get_lang('AddUsersToAClass').' CSV';
 
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'usergroups.php', 'name' => get_lang('Classes'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 
 // Set this option to true to enforce strict purification for usenames.
 $purification_option_for_usernames = false;
@@ -150,7 +149,7 @@ $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
 $form->addElement('checkbox', 'unsubscribe', '', get_lang('UnsubscribeUserIfSubscriptionIsNotInFile'));
 $form->addButtonImport(get_lang('Import'));
 
-$errors = array();
+$errors = [];
 if ($form->validate()) {
     $users_classes = parse_csv_data($_FILES['import_file']['tmp_name']);
     $errors = validate_data($users_classes);

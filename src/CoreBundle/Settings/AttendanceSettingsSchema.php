@@ -21,9 +21,9 @@ class AttendanceSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'allow_delete_attendance' => 'true',
-                )
+                ]
             )
 //            ->setAllowedTypes(
 //                array()

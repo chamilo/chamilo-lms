@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\UserBundle\Security;
+
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseFOSUBProvider;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -21,7 +22,7 @@ class FOSUBUserProvider extends BaseFOSUBProvider
         $setterId = $setter.'Id';
         $setter_token = $setter.'AccessToken';
         //we "disconnect" previously connected users
-        if (null !== $previousUser = $this->userManager->findUserBy(array($property => $username))) {
+        if (null !== $previousUser = $this->userManager->findUserBy([$property => $username])) {
             $previousUser->$setterId(null);
             $previousUser->$setter_token(null);
             $this->userManager->updateUser($previousUser);
@@ -38,7 +39,7 @@ class FOSUBUserProvider extends BaseFOSUBProvider
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
         $username = $response->getUsername();
-        $user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
+        $user = $this->userManager->findUserBy([$this->getProperty($response) => $username]);
         // User creation
         if (null === $user) {
             $service = $response->getResourceOwner()->getName();

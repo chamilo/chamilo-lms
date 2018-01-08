@@ -101,5 +101,4 @@ class Wiki extends Basic
             ['Toolbarswitch']
         ];
     }
-
 }

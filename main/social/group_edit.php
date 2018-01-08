@@ -26,8 +26,8 @@ if (empty($group_data)) {
     exit;
 }
 
-$interbreadcrumb[] = array('url' => 'groups.php', 'name' => get_lang('Groups'));
-$interbreadcrumb[] = array('url' => 'group_view.php?id='.$group_id, 'name' => $group_data['name']);
+$interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
+$interbreadcrumb[] = ['url' => 'group_view.php?id='.$group_id, 'name' => $group_data['name']];
 
 // only group admins can edit the group
 if (!$usergroup->is_group_admin($group_id)) {

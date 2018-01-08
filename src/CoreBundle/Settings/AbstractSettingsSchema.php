@@ -14,7 +14,7 @@ abstract class AbstractSettingsSchema implements SchemaInterface
      */
     public function setMultipleAllowedTypes($allowedTypes, $builder)
     {
-        foreach ($allowedTypes as $name => $type)  {
+        foreach ($allowedTypes as $name => $type) {
             $builder->setAllowedTypes($name, $type);
         }
     }

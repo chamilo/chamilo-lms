@@ -107,22 +107,22 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
     'name' => get_lang('SurveyList')
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
     'name' => $urlname
-);
+];
 
 if ($action == 'overview') {
     $tool_name = get_lang('Reporting');
 } else {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$survey_id,
         'name' => get_lang('Reporting')
-    );
+    ];
     switch ($action) {
         case 'questionreport':
             $singlePage = isset($_GET['single_page']) ? intval($_GET['single_page']) : 0;
@@ -161,7 +161,7 @@ if ($action == 'overview') {
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('QuestionsOverallReport').'</h4><p>'.get_lang('QuestionsOverallReportDetail').'</p>',
         $url.'action=questionreport&survey_id='.$survey_id.'&single_page=1',
-        array('class' => 'list-group-item')
+        ['class' => 'list-group-item']
     );
 
     $html .= Display::url(
@@ -172,7 +172,7 @@ if ($action == 'overview') {
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('DetailedReportByQuestion').'</h4><p>'.get_lang('DetailedReportByQuestionDetail').'</p>',
         $url.'action=questionreport&survey_id='.$survey_id,
-        array('class' => 'list-group-item')
+        ['class' => 'list-group-item']
     );
 
     $html .= Display::url(
@@ -183,7 +183,7 @@ if ($action == 'overview') {
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('DetailedReportByUser').'</h4><p>'.get_lang('DetailedReportByUserDetail').'</p>',
         $url.'action=userreport&survey_id='.$survey_id,
-        array('class' => 'list-group-item')
+        ['class' => 'list-group-item']
     );
 
     $html .= Display::url(
@@ -194,7 +194,7 @@ if ($action == 'overview') {
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('ComparativeReport').'</h4><p>'.get_lang('ComparativeReportDetail').'</p>',
         $url.'action=comparativereport&survey_id='.$survey_id,
-        array('class' => 'list-group-item')
+        ['class' => 'list-group-item']
     );
 
     $html .= Display::url(
@@ -205,7 +205,7 @@ if ($action == 'overview') {
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('CompleteReport').'</h4><p>'.get_lang('CompleteReportDetail').'</p>',
         $url.'action=completereport&survey_id='.$survey_id,
-        array('class' => 'list-group-item')
+        ['class' => 'list-group-item']
     );
 
     $html .= '</div>';

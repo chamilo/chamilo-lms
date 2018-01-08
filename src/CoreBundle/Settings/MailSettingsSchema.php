@@ -21,10 +21,10 @@ class MailSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'noreply_email_address' => 'no_reply@example.com',
                     'activate_email_template' => 'false',
-                )
+                ]
             )
         ;
         //$this->setMultipleAllowedTypes($allowedTypes, $builder);

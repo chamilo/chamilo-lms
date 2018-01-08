@@ -23,7 +23,7 @@ $current_course_tool = TOOL_COURSE_PROGRESS;
 api_protect_course_script(true);
 
 // get actions
-$actions = array(
+$actions = [
     'thematic_details',
     'thematic_list',
     'thematic_add',
@@ -47,7 +47,7 @@ $actions = array(
     'thematic_advance_delete',
     'export_single_thematic',
     'export_single_documents'
-);
+];
 
 $action = 'thematic_details';
 if (isset($_REQUEST['action']) && in_array($_REQUEST['action'], $actions)) {
@@ -181,49 +181,49 @@ function check_per_custom_date(obj) {
 $thematicControl = Session::read('thematic_control');
 
 if ($action == 'thematic_list') {
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('ThematicControl'));
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('ThematicControl')];
 }
 if ($action == 'thematic_add') {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl,
         'name' => get_lang('ThematicControl')
-    );
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewThematicSection'));
+    ];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewThematicSection')];
 }
 if ($action == 'thematic_edit') {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl,
         'name' => get_lang('ThematicControl')
-    );
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('EditThematicSection'));
+    ];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('EditThematicSection')];
 }
 if ($action == 'thematic_details') {
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('ThematicControl'));
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('ThematicControl')];
 }
 if ($action == 'thematic_plan_list' || $action == 'thematic_plan_delete') {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl,
         'name' => get_lang('ThematicControl')
-    );
+    ];
     if (!empty($thematic_data)) {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => '#',
             'name' => get_lang('ThematicPlan').' ('.$cleanThematicTitle.') '
-        );
+        ];
     }
 }
 if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
-    $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl, 'name' => get_lang('ThematicControl'));
-    $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic_id, 'name' => get_lang('ThematicPlan').' ('.$cleanThematicTitle.')');
+    $interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl, 'name' => get_lang('ThematicControl')];
+    $interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic_id, 'name' => get_lang('ThematicPlan').' ('.$cleanThematicTitle.')'];
 }
 if ($action == 'thematic_advance_list' || $action == 'thematic_advance_delete') {
-    $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl, 'name' => get_lang('ThematicControl'));
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('ThematicAdvance').' ('.$cleanThematicTitle.')');
+    $interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl, 'name' => get_lang('ThematicControl')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('ThematicAdvance').' ('.$cleanThematicTitle.')'];
 }
 if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
-    $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl, 'name' => get_lang('ThematicControl'));
-    $interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic_id, 'name' => get_lang('ThematicAdvance').' ('.$cleanThematicTitle.')');
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('NewThematicAdvance'));
+    $interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl, 'name' => get_lang('ThematicControl')];
+    $interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic_id, 'name' => get_lang('ThematicAdvance').' ('.$cleanThematicTitle.')'];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewThematicAdvance')];
 }
 
 if ($action == 'thematic_plan_list') {
@@ -250,45 +250,29 @@ if ($action == 'thematic_plan_list') {
 // Dispatch actions to controller
 switch ($action) {
     case 'thematic_add':
-        //no break
     case 'thematic_edit':
-        //no break
     case 'thematic_delete':
-        //no break
     case 'thematic_delete_select':
-        //no break
     case 'thematic_copy':
-        //no break
     case 'thematic_import_select':
-        //no break
     case 'thematic_import':
-        //no break
     case 'moveup':
-        //no break
     case 'movedown':
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed();
         }
         //no break
     case 'thematic_list':
-        //no break
     case 'thematic_export':
-        //no break
     case 'thematic_export_pdf':
-        //no break
     case 'thematic_details':
-        //no break
     case 'export_single_thematic':
-        //no break
     case 'export_documents':
-        //no break
     case 'export_single_documents':
         $thematic_controller->thematic($action);
         break;
     case 'thematic_plan_add':
-        //no break
     case 'thematic_plan_edit':
-        //no break
     case 'thematic_plan_delete':
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed();
@@ -298,9 +282,7 @@ switch ($action) {
         $thematic_controller->thematic_plan($action);
         break;
     case 'thematic_advance_add':
-        //no break
     case 'thematic_advance_edit':
-        //no break
     case 'thematic_advance_delete':
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed();

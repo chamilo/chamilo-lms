@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\UserRelUser,
-    Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\UserBundle\Entity\User;
 
 $cidReset = true;
 

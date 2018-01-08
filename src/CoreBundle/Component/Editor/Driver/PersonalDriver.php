@@ -43,13 +43,13 @@ class PersonalDriver extends Driver implements DriverInterface
                 $dir = \UserManager::getUserPathById($userId, 'system');
                 $dirWeb = \UserManager::getUserPathById($userId, 'web');
 
-                $driver = array(
+                $driver = [
                     'driver' => 'PersonalDriver',
                     'alias' => get_lang('MyFiles'),
                     'path' => $dir.'my_files',
                     'URL' => $dirWeb.'my_files',
-                    'accessControl' => array($this, 'access'),
-                    'disabled' => array(
+                    'accessControl' => [$this, 'access'],
+                    'disabled' => [
                         'duplicate',
                         //'rename',
                         //'mkdir',
@@ -62,20 +62,20 @@ class PersonalDriver extends Driver implements DriverInterface
                         'archive',
                         'help',
                         'resize'
-                    ),
-                );
+                    ],
+                ];
 
                 return $driver;
             }
         }
 
-        return array();
+        return [];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function upload($fp, $dst, $name, $tmpname, $hashes = array())
+    public function upload($fp, $dst, $name, $tmpname, $hashes = [])
     {
         $this->setConnectorFromPlugin();
         if ($this->allow()) {

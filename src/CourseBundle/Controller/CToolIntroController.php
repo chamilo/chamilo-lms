@@ -195,9 +195,9 @@ class CToolIntroController extends ToolBaseController
      */
     public function deleteAction($iid, Request $request)
     {
-        $criteria = array(
+        $criteria = [
             'iid' => $iid,
-        );
+        ];
 
         $doctrine = $this->getDoctrine();
         $toolIntro = $doctrine->getRepository('ChamiloCourseBundle:CToolIntro')->findOneBy($criteria);

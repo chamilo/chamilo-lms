@@ -36,10 +36,10 @@ if ($form->validate()) {
     exit;
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$selectCat,
     'name' => get_lang('Gradebook')
-);
+];
 Display :: display_header(get_lang('NewCategory'));
 $form->display();
 Display :: display_footer();

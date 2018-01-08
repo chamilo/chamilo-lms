@@ -39,7 +39,7 @@ use Chamilo\CoreBundle\Component\HTMLPurifier\Filter\AllowIframes;
  */
 class Security
 {
-    public static $clean = array();
+    public static $clean = [];
 
     /**
      * Checks if the absolute path (directory) given is really under the
@@ -296,7 +296,7 @@ class Security
             return $var; // No filtering.
         }
 
-        static $purifier = array();
+        static $purifier = [];
         if (!isset($purifier[$user_status])) {
             $cache_dir = api_get_path(SYS_ARCHIVE_PATH).'Serializer';
             if (!file_exists($cache_dir)) {
@@ -312,12 +312,12 @@ class Security
             $config->set('Core.RemoveProcessingInstructions', true);
 
             if (api_get_setting('enable_iframe_inclusion') == 'true') {
-                $config->set('Filter.Custom', array(new AllowIframes()));
+                $config->set('Filter.Custom', [new AllowIframes()]);
             }
 
 
             // Shows _target attribute in anchors
-            $config->set('Attr.AllowedFrameTargets', array('_blank', '_top', '_self', '_parent'));
+            $config->set('Attr.AllowedFrameTargets', ['_blank', '_top', '_self', '_parent']);
 
             if ($user_status == STUDENT) {
                 global $allowed_html_student;
@@ -346,7 +346,7 @@ class Security
             $config->set('CSS.Proprietary', true);
 
             // Allow uri scheme.
-            $config->set('URI.AllowedSchemes', array(
+            $config->set('URI.AllowedSchemes', [
                 'http' => true,
                 'https' => true,
                 'mailto' => true,
@@ -354,7 +354,7 @@ class Security
                 'nntp' => true,
                 'news' => true,
                 'data' => true,
-            ));
+            ]);
 
             // Allow <video> tag
             //$config->set('HTML.Doctype', 'HTML 4.01 Transitional');
@@ -370,7 +370,7 @@ class Security
                     'Block',
                     'Optional: (source, Flow) | (Flow, source) | Flow',
                     'Common',
-                    array(
+                    [
                         'src'      => 'URI',
                         'type'     => 'Text',
                         'width'    => 'Length',
@@ -378,7 +378,7 @@ class Security
                         'poster'   => 'URI',
                         'preload'  => 'Enum#auto,metadata,none',
                         'controls' => 'Bool',
-                    )
+                    ]
                 );
                 // https://html.spec.whatwg.org/dev/media.html#the-audio-element
                 $def->addElement(
@@ -386,21 +386,21 @@ class Security
                     'Block',
                     'Optional: (source, Flow) | (Flow, source) | Flow',
                     'Common',
-                    array(
+                    [
                         'autoplay' => 'Bool',
                         'src'      => 'URI',
                         'loop'     => 'Bool',
                         'preload'  => 'Enum#auto,metadata,none',
                         'controls' => 'Bool',
                         'muted'    => 'Bool',
-                    )
+                    ]
                 );
                 $def->addElement(
                     'source',
                     'Block',
                     'Flow',
                     'Common',
-                    array('src' => 'URI', 'type' => 'Text',)
+                    ['src' => 'URI', 'type' => 'Text',]
                 );
             }
 
@@ -421,7 +421,7 @@ class Security
      */
     public static function filter_terms($text)
     {
-        static $bad_terms = array();
+        static $bad_terms = [];
 
         if (empty($bad_terms)) {
             $list = api_get_setting('filter_terms');
@@ -430,7 +430,7 @@ class Security
                 $list = array_filter($list);
                 if (!empty($list)) {
                     foreach ($list as $term) {
-                        $term = str_replace(array("\r\n", "\r", "\n", "\t"), '', $term);
+                        $term = str_replace(["\r\n", "\r", "\n", "\t"], '', $term);
                         $html_entities_value = api_htmlentities($term, ENT_QUOTES, api_get_system_encoding());
                         $bad_terms[] = $term;
                         if ($term != $html_entities_value) {
@@ -464,7 +464,7 @@ class Security
      */
     public static function filter_img_path($image_path)
     {
-        static $allowed_extensions = array('png', 'gif', 'jpg', 'jpeg', 'svg', 'webp');
+        static $allowed_extensions = ['png', 'gif', 'jpg', 'jpeg', 'svg', 'webp'];
         $image_path = htmlspecialchars(trim($image_path)); // No html code is allowed.
         // We allow static images only, query strings are forbidden.
         if (strpos($image_path, '?') !== false) {

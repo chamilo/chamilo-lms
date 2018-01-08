@@ -20,7 +20,7 @@ $annee_base = date('Y');
 
 $tool_name = get_lang('LDAPImport');
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
 $htmlHeadXtra[] = '<script>
 var buttoncheck = 1;
@@ -128,8 +128,8 @@ if (empty($annee) && empty($course)) {
     echo '</div>';
 } elseif (!empty($annee) && !empty($course) && ($_POST['confirmed'] == 'yes')) {
     $id = $_POST['username_form'];
-    $UserList = array();
-    $userid_match_login = array();
+    $UserList = [];
+    $userid_match_login = [];
     foreach ($id as $form_index => $user_id) {
         if (is_array($_POST['checkboxes']) && in_array($form_index, array_values($_POST['checkboxes']))) {
             $tmp = ldap_add_user($user_id);

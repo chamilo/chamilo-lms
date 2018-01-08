@@ -336,7 +336,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 if (isset($blockedUntilDate) && !empty($blockedUntilDate)) {
                     if (time() > api_strtotime($blockedUntilDate, 'UTC')) {
                         api_clean_account_captcha($login);
-
                     } else {
                         $loginFailed = true;
                         Session::erase('_uid');
@@ -460,7 +459,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                 Session::write('_user', $_user);
                                 Event::eventLogin($uData['user_id']);
                                 $logging_in = true;
-
                             }
                         } else {
                             $loginFailed = true;
@@ -1108,8 +1106,7 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
             $termAndConditionStatus = api_check_term_condition($user_id);
             // @todo not sure why we need the login password and update_term_status
             if ($termAndConditionStatus === false) {
-                Session::write('term_and_condition', array('user_id' => $user_id));
-
+                Session::write('term_and_condition', ['user_id' => $user_id]);
             } else {
                 Session::erase('term_and_condition');
             }

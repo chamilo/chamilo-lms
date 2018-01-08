@@ -7,7 +7,6 @@
 
 namespace Chamilo\ThemeBundle\Model;
 
-
 /**
  * Class TaskModel
  *
@@ -54,7 +53,7 @@ class TaskModel implements TaskInterface
      * @param int    $progress
      * @param string $color
      */
-    function __construct($title = null, $progress = 0, $color = self::COLOR_AQUA)
+    public function __construct($title = null, $progress = 0, $color = self::COLOR_AQUA)
     {
         $this->color    = $color;
         $this->progress = $progress;
@@ -123,6 +122,4 @@ class TaskModel implements TaskInterface
     {
         return $this->title;
     }
-
-
 }

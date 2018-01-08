@@ -89,7 +89,7 @@ class RedirectionPlugin extends Plugin
         $table = Database::get_main_table('plugin_redirection');
         Database::delete(
             $table,
-            array('id = ?' => array($id))
+            ['id = ?' => [$id]]
         );
     }
 

@@ -103,41 +103,41 @@ $my_search = isset($_GET['search']) ? $_GET['search'] : '';
 $my_action = isset($_GET['action']) ? $_GET['action'] : '';
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
-    );
+    ];
 }
 
 $forumUrl = api_get_path(WEB_CODE_PATH).'forum/';
 
 if (!empty($groupId)) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups')
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
         'name' => get_lang('GroupSpace').' '.$group_properties['name']
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => '#',
         'name' => get_lang('Forum').' '.Security::remove_XSS($current_forum['forum_title'])
-    );
+    ];
 } else {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => $forumUrl.'index.php?search='.Security::remove_XSS($my_search),
         'name' => get_lang('ForumCategories')
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => $forumUrl.'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id']
             . '&search='.Security::remove_XSS(urlencode($my_search)),
         'name' => prepare4display($current_forum_category['cat_title'])
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => '#',
         'name' => Security::remove_XSS($current_forum['forum_title'])
-    );
+    ];
 }
 
 if ($origin == 'learnpath') {
@@ -239,20 +239,20 @@ if ($my_action == 'liststd' &&
         $url = api_get_cidreq().'&forum='.$my_forum.'&action='
             . Security::remove_XSS($_GET['action']).'&content='
             . Security::remove_XSS($_GET['content'], STUDENT).'&id='.intval($_GET['id']);
-        $tabs = array(
-            array(
+        $tabs = [
+            [
                 'content' =>  get_lang('AllStudents'),
                 'url' => $forumUrl.'viewforum.php?'.$url.'&list=all'
-            ),
-            array(
+            ],
+            [
                 'content' =>  get_lang('StudentsQualified'),
                 'url' => $forumUrl.'viewforum.php?'.$url.'&list=qualify'
-            ),
-            array(
+            ],
+            [
                 'content' =>  get_lang('StudentsNotQualified'),
                 'url' => $forumUrl.'viewforum.php?'.$url.'&list=notqualify'
-            ),
-        );
+            ],
+        ];
         $table_list .= Display::tabsOnlyLink($tabs, $active);
 
         $icon_qualify = 'quiz.png';
@@ -389,17 +389,17 @@ if ($origin != 'learnpath') {
     $html .= Display::tag(
         'h3',
         $iconForum.' '.$titleForum,
-        array(
-            'class' => 'title-forum')
+        [
+            'class' => 'title-forum']
     );
 
     if (!empty($descriptionForum)) {
         $html .= Display::tag(
             'p',
             Security::remove_XSS($descriptionForum),
-            array(
+            [
                 'class' => 'description',
-            )
+            ]
         );
     }
 }
@@ -466,9 +466,9 @@ if (is_array($threads)) {
                         $row['firstname'],
                         $row['lastname']
                     ),
-                    array(
+                    [
                         'title' => api_htmlentities($poster_username, ENT_QUOTES)
-                    )
+                    ]
                 );
             }
 
@@ -478,9 +478,9 @@ if (is_array($threads)) {
             $html .= Display::tag(
                 'h3',
                 $linkPostForum,
-                array(
+                [
                     'class' => 'title'
-                )
+                ]
             );
             $html .= '<p>'.get_lang('By').' '.$authorName.'</p>';
             $html .= '<p>'.api_convert_and_format_date($row['insert_date']).'</p>';
@@ -556,12 +556,12 @@ if (is_array($threads)) {
                         . '&forum='.$my_forum.'&thread='
                         . intval($row['thread_id'])
                         . '&id_attach='.$id_attach.'">'
-                        . Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
+                        . Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
                     if (api_resource_is_locked_by_gradebook($row['thread_id'], LINK_FORUM_THREAD)) {
                         $iconsEdit .= Display::return_icon(
                             'delete_na.png',
                             get_lang('ResourceLockedByGradebook'),
-                            array(),
+                            [],
                             ICON_SIZE_SMALL
                         );
                     } else {
@@ -570,31 +570,31 @@ if (is_array($threads)) {
                             . $row['thread_id']."\" onclick=\"javascript:if(!confirm('"
                             . addslashes(api_htmlentities(get_lang('DeleteCompleteThread'), ENT_QUOTES))
                             . "')) return false;\">"
-                            . Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
+                            . Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
                     }
 
                     $iconsEdit .= return_visible_invisible_icon(
                         'thread',
                         $row['thread_id'],
                         $row['visibility'],
-                        array(
+                        [
                             'forum' => $my_forum,
                             'gidReq' => $groupId
-                        )
+                        ]
                     );
                     $iconsEdit .= return_lock_unlock_icon(
                         'thread',
                         $row['thread_id'],
                         $row['locked'],
-                        array(
+                        [
                             'forum' => $my_forum,
                             'gidReq' => api_get_group_id()
-                        )
+                        ]
                     );
                     $iconsEdit .= '<a href="viewforum.php?'.$cidreq.'&forum='
                         . $my_forum
                         . '&action=move&thread='.$row['thread_id'].'">'
-                        . Display::return_icon('move.png', get_lang('MoveThread'), array(), ICON_SIZE_SMALL)
+                        . Display::return_icon('move.png', get_lang('MoveThread'), [], ICON_SIZE_SMALL)
                         . '</a>';
                 }
             }
@@ -619,7 +619,7 @@ if (is_array($threads)) {
                 $iconsEdit .= '<a href="'.api_get_self().'?'.$cidreq.'&forum='
                     . $my_forum
                     . "&action=liststd&content=thread&id={$row['thread_id']}"
-                    . '">'.Display::return_icon($icon_liststd, get_lang('StudentList'), array(), ICON_SIZE_SMALL)
+                    . '">'.Display::return_icon($icon_liststd, get_lang('StudentList'), [], ICON_SIZE_SMALL)
                     . '</a>';
             }
             $html .= $iconsEdit;

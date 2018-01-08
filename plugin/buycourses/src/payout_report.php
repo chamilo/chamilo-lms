@@ -52,7 +52,6 @@ switch ($selectedStatus) {
 
         break;
     case '0':
-        //no break
     default:
         $payouts = $plugin->getPayouts();
 

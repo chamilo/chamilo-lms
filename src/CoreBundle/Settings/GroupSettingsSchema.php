@@ -21,15 +21,15 @@ class GroupSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'allow_group_categories' => 'false',
                     'hide_course_group_if_no_tools_available' => 'false',
-                )
+                ]
             )
         ;
-        $allowedTypes = array(
-            'allow_group_categories' => array('string'),
-        );
+        $allowedTypes = [
+            'allow_group_categories' => ['string'],
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 

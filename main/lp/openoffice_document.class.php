@@ -52,7 +52,7 @@ abstract class OpenofficeDocument extends learnpath
         // Create the directory
         $result = $this->generate_lp_folder($_course, $this->file_name);
 
-         // Create the directory
+        // Create the directory
         $this->base_work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
         ///learning_path/ppt_dirname directory
         $this->created_dir = $result['dir'];
@@ -125,7 +125,7 @@ abstract class OpenofficeDocument extends learnpath
             $locale = $this->original_locale; // TODO: Improve it because we're not sure this locale is present everywhere.
             putenv('LC_ALL='.$locale);
 
-            $files = array();
+            $files = [];
             $return = 0;
             $shell = exec($cmd, $files, $return);
 
@@ -197,7 +197,7 @@ abstract class OpenofficeDocument extends learnpath
         // host
         $ppt2lp_host = api_get_setting('service_ppt2lp', 'host');
         // SOAP URI (just the host)
-        $matches = array();
+        $matches = [];
         $uri = '';
         $result = preg_match('/^([a-zA-Z0-9]*):\/\/([^\/]*)\//', $ppt2lp_host, $matches);
         if ($result) {
@@ -209,7 +209,7 @@ abstract class OpenofficeDocument extends learnpath
         $secret_key = sha1(api_get_setting('service_ppt2lp', 'ftp_password'));
 
         // client
-        $options = array(
+        $options = [
             'location' => $ppt2lp_host,
             'uri' => $uri,
             'trace' => 1,
@@ -218,7 +218,7 @@ abstract class OpenofficeDocument extends learnpath
             'keep_alive' => false,
             'features' => SOAP_SINGLE_ELEMENT_ARRAYS,
             'compression' => SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP | 9,
-        );
+        ];
         if (substr($ppt2lp_host, 0, 5) === 'https') {
             $options['ssl_method'] = SOAP_SSL_METHOD_TLS;
             // If using SSL, please note that *not* supporting the SSLv2
@@ -234,16 +234,16 @@ abstract class OpenofficeDocument extends learnpath
         if (empty($size)) {
             $size = api_get_setting('service_ppt2lp', 'size');
         }
-        $params = array(
+        $params = [
             'secret_key' => $secret_key,
             'file_data' => $file_data,
             'file_name' => $file_name,
             'service_ppt2lp_size' => $size,
-        );
+        ];
 
         try {
             //error_log('['.time().'] Calling wsConvertPpt webservice on ' . $ppt2lp_host);
-            $result = $client->__call('wsConvertPpt', array('pptData' => $params));
+            $result = $client->__call('wsConvertPpt', ['pptData' => $params]);
         } catch (Exception $e) {
             error_log('['.time().'] Chamilo SOAP call error: '.$e->getMessage());
         }
@@ -253,9 +253,9 @@ abstract class OpenofficeDocument extends learnpath
         return $result;
     }
 
-    abstract function make_lp();
-    abstract function add_docs_to_visio();
-    abstract function add_command_parameters();
+    abstract public function make_lp();
+    abstract public function add_docs_to_visio();
+    abstract public function add_command_parameters();
 
     /**
      * Used to convert copied from document
@@ -264,10 +264,10 @@ abstract class OpenofficeDocument extends learnpath
      * @param string $convertedTitle
      * @return bool
      */
-    function convertCopyDocument($originalPath, $convertedPath, $convertedTitle)
+    public function convertCopyDocument($originalPath, $convertedPath, $convertedTitle)
     {
         $_course = api_get_course_info();
-        $ids = array();
+        $ids = [];
         $originalPathInfo = pathinfo($originalPath);
         $convertedPathInfo = pathinfo($convertedPath);
         $this->base_work_dir = $originalPathInfo['dirname'];
@@ -301,7 +301,7 @@ abstract class OpenofficeDocument extends learnpath
             $locale = $this->original_locale; // TODO: Improve it because we're not sure this locale is present everywhere.
             putenv('LC_ALL='.$locale);
 
-            $files = array();
+            $files = [];
             $return = 0;
             $shell = exec($cmd, $files, $return);
             // TODO: Chown is not working, root keep user privileges, should be www-data

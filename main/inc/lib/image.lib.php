@@ -135,7 +135,7 @@ abstract class ImageWrapper
     public $width;
     public $height;
     public $type;
-    public $allowed_extensions = array('jpeg', 'jpg', 'png', 'gif');
+    public $allowed_extensions = ['jpeg', 'jpg', 'png', 'gif'];
     public $image_validated = false;
 
     public function __construct($path)
@@ -147,23 +147,23 @@ abstract class ImageWrapper
         $this->set_image_wrapper(); //Creates image obj
     }
 
-    abstract function set_image_wrapper();
-    abstract function fill_image_info();
-    abstract function get_image_size();
-    abstract function resize($thumbw, $thumbh, $border, $specific_size = false);
-    abstract function crop($x, $y, $width, $height, $src_width, $src_height);
-    abstract function send_image($file = '', $compress = -1, $convert_file_to = null);
+    abstract public function set_image_wrapper();
+    abstract public function fill_image_info();
+    abstract public function get_image_size();
+    abstract public function resize($thumbw, $thumbh, $border, $specific_size = false);
+    abstract public function crop($x, $y, $width, $height, $src_width, $src_height);
+    abstract public function send_image($file = '', $compress = -1, $convert_file_to = null);
 
     /**
      * @return array
      */
     public function get_image_info()
     {
-        return array(
+        return [
             'width' => $this->width,
             'height' => $this->height,
             'type' => $this->type,
-        );
+        ];
     }
 }
 
@@ -185,7 +185,7 @@ class ImagickWrapper extends ImageWrapper
      */
     public function __construct($path)
     {
-          parent::__construct($path);
+        parent::__construct($path);
     }
 
     /**
@@ -193,7 +193,9 @@ class ImagickWrapper extends ImageWrapper
      */
     public function set_image_wrapper()
     {
-        if ($this->debug) error_log('Image::set_image_wrapper loaded');
+        if ($this->debug) {
+            error_log('Image::set_image_wrapper loaded');
+        }
         try {
             if (file_exists($this->path)) {
                 $this->image = new Imagick($this->path);
@@ -202,10 +204,14 @@ class ImagickWrapper extends ImageWrapper
                     $this->fill_image_info(); //Fills height, width and type
                 }
             } else {
-                if ($this->debug) error_log('Image::image does not exist');
+                if ($this->debug) {
+                    error_log('Image::image does not exist');
+                }
             }
         } catch (ImagickException $e) {
-            if ($this->debug) error_log($e->getMessage());
+            if ($this->debug) {
+                error_log($e->getMessage());
+            }
         }
     }
 
@@ -218,13 +224,15 @@ class ImagickWrapper extends ImageWrapper
 
         if (in_array($this->type, $this->allowed_extensions)) {
             $this->image_validated = true;
-            if ($this->debug) error_log('image_validated true');
+            if ($this->debug) {
+                error_log('image_validated true');
+            }
         }
     }
 
     public function get_image_size()
     {
-        $imagesize = array('width'=>0, 'height'=>0);
+        $imagesize = ['width'=>0, 'height'=>0];
         if ($this->image_validated) {
             $imagesize = $this->image->getImageGeometry();
         }
@@ -234,7 +242,9 @@ class ImagickWrapper extends ImageWrapper
     //@todo implement border logic case for Imagick
     public function resize($thumbw, $thumbh, $border, $specific_size = false)
     {
-        if (!$this->image_validated) return false;
+        if (!$this->image_validated) {
+            return false;
+        }
 
         if ($specific_size) {
             $width = $thumbw;
@@ -371,9 +381,9 @@ class GDWrapper extends ImageWrapper
      */
     public function get_image_size()
     {
-        $return_array = array('width'=>0, 'height'=>0);
+        $return_array = ['width'=>0, 'height'=>0];
         if ($this->image_validated) {
-            $return_array = array('width'=>$this->width, 'height'=>$this->height);
+            $return_array = ['width'=>$this->width, 'height'=>$this->height];
         }
         return $return_array;
     }

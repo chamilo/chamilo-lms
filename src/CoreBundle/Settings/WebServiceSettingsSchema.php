@@ -21,21 +21,21 @@ class WebServiceSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'decode_utf8' => 'false',
                     'messaging_allow_send_push_notification' => 'false',
                     'messaging_gdc_project_number' => '',
                     'messaging_gdc_api_key' => '',
                     'allow_download_documents_by_api_key' => 'false'
-                )
+                ]
             );
-        $allowedTypes = array(
+        $allowedTypes = [
             // commenting this line allows setting to be null
             //'header_extra_content' => array('string'),
             //'footer_extra_content' => array('string'),
             'messaging_gdc_project_number' => ['string'],
             'messaging_gdc_api_key' => ['string']
-        );
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 

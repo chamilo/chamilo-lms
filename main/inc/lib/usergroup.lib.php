@@ -11,7 +11,7 @@
  */
 class UserGroup extends Model
 {
-    public $columns = array(
+    public $columns = [
         'id',
         'name',
         'description',
@@ -22,7 +22,7 @@ class UserGroup extends Model
         'visibility',
         'updated_at',
         'created_at'
-    );
+    ];
 
     public $useMultipleUrl = false;
 
@@ -163,7 +163,7 @@ class UserGroup extends Model
         $row = Database::select(
             'id',
             $this->table,
-            array('where' => array('name = ?' => $name)),
+            ['where' => ['name = ?' => $name]],
             'first'
         );
 
@@ -218,10 +218,10 @@ class UserGroup extends Model
                     INNER JOIN {$this->access_url_rel_usergroup} a
                     ON (a.usergroup_id = c.usergroup_id) ";
             $whereConditionSql = 'a.usergroup_id = ? AND access_url_id = ? ';
-            $whereConditionValues = array($id, $urlId);
+            $whereConditionValues = [$id, $urlId];
         } else {
             $whereConditionSql = 'usergroup_id = ?';
-            $whereConditionValues = array($id);
+            $whereConditionValues = [$id];
             $from = $this->usergroup_rel_course_table." c ";
         }
 
@@ -240,7 +240,7 @@ class UserGroup extends Model
             $whereConditionSql .= ' AND '.implode(' AND ', $conditionSql);
         }*/
 
-        $where = array('where' => array($whereConditionSql => $whereConditionValues));
+        $where = ['where' => [$whereConditionSql => $whereConditionValues]];
 
         if ($loadCourseData) {
             $select = 'course.*';
@@ -405,18 +405,18 @@ class UserGroup extends Model
     {
         if ($this->useMultipleUrl) {
             $urlId = api_get_current_access_url_id();
-            $options = array(
-                'where' => array(
-                    'c.course_id = ? AND access_url_id = ?' => array(
+            $options = [
+                'where' => [
+                    'c.course_id = ? AND access_url_id = ?' => [
                         $course_id,
                         $urlId,
-                    ),
-                ),
-            );
+                    ],
+                ],
+            ];
             $from = $this->usergroup_rel_course_table." as c INNER JOIN ".$this->access_url_rel_usergroup." a
                     ON c.usergroup_id = a.usergroup_id";
         } else {
-            $options = array('where' => array('c.course_id = ?' => $course_id));
+            $options = ['where' => ['c.course_id = ?' => $course_id]];
             $from = $this->usergroup_rel_course_table." c";
         }
 
@@ -441,7 +441,7 @@ class UserGroup extends Model
         $results = Database::select(
             'usergroup_id',
             $this->usergroup_rel_course_table,
-            array('where' => array('course_id = ? AND usergroup_id = ?' => array($course_id, $usergroup_id)))
+            ['where' => ['course_id = ? AND usergroup_id = ?' => [$course_id, $usergroup_id]]]
         );
 
         if (empty($results)) {
@@ -461,7 +461,7 @@ class UserGroup extends Model
         $results = Database::select(
             'session_id',
             $this->usergroup_rel_session_table,
-            array('where' => array('usergroup_id = ?' => $id))
+            ['where' => ['usergroup_id = ?' => $id]]
         );
 
         $array = [];
@@ -500,7 +500,7 @@ class UserGroup extends Model
         if (empty($id)) {
             $conditions = [];
         } else {
-            $conditions = array('where' => array("usergroup_id = ? $relationCondition "=> $id));
+            $conditions = ['where' => ["usergroup_id = ? $relationCondition "=> $id]];
         }
 
         $results = Database::select(
@@ -527,9 +527,9 @@ class UserGroup extends Model
     {
         $relation = (int) $relation;
         if (empty($relation)) {
-            $conditions = array('where' => array('usergroup_id = ? AND (relation_type = 0 OR relation_type IS NULL OR relation_type = "") ' => [$id]));
+            $conditions = ['where' => ['usergroup_id = ? AND (relation_type = 0 OR relation_type IS NULL OR relation_type = "") ' => [$id]]];
         } else {
-            $conditions = array('where' => array('usergroup_id = ? AND relation_type = ?' => [$id, $relation]));
+            $conditions = ['where' => ['usergroup_id = ? AND relation_type = ?' => [$id, $relation]]];
         }
 
         $results = Database::select(
@@ -565,13 +565,13 @@ class UserGroup extends Model
                 INNER JOIN {$this->table} g
                 ON (u.usergroup_id = g.id)
                 ";
-            $where = array('where' => array('user_id = ? AND access_url_id = ? ' => array($userId, $urlId)));
+            $where = ['where' => ['user_id = ? AND access_url_id = ? ' => [$userId, $urlId]]];
         } else {
             $from = $this->usergroup_rel_user_table." u
                 INNER JOIN {$this->table} g
                 ON (u.usergroup_id = g.id)
                 ";
-            $where = array('where' => array('user_id = ?' => $userId));
+            $where = ['where' => ['user_id = ?' => $userId]];
         }
 
         if ($filterByType !== null) {
@@ -605,10 +605,10 @@ class UserGroup extends Model
             $urlId = api_get_current_access_url_id();
             $from = $this->usergroup_rel_user_table." u
                     INNER JOIN {$this->access_url_rel_usergroup} a ON (a.usergroup_id AND u.usergroup_id)";
-            $where = array('where' => array('user_id = ? AND access_url_id = ? ' => array($userId, $urlId)));
+            $where = ['where' => ['user_id = ? AND access_url_id = ? ' => [$userId, $urlId]]];
         } else {
             $from = $this->usergroup_rel_user_table." u ";
-            $where = array('where' => array('user_id = ?' => $userId));
+            $where = ['where' => ['user_id = ?' => $userId]];
         }
 
         $results = Database::select(
@@ -665,7 +665,7 @@ class UserGroup extends Model
                     }
                     Database::delete(
                         $this->usergroup_rel_session_table,
-                        array('usergroup_id = ? AND session_id = ?' => array($usergroup_id, $session_id))
+                        ['usergroup_id = ? AND session_id = ?' => [$usergroup_id, $session_id]]
                     );
                 }
             }
@@ -674,7 +674,7 @@ class UserGroup extends Model
         // Adding new relationships.
         if (!empty($new_items)) {
             foreach ($new_items as $session_id) {
-                $params = array('session_id' => $session_id, 'usergroup_id' => $usergroup_id);
+                $params = ['session_id' => $session_id, 'usergroup_id' => $usergroup_id];
                 Database::insert($this->usergroup_rel_session_table, $params);
 
                 if (!empty($user_list)) {
@@ -734,10 +734,10 @@ class UserGroup extends Model
                             );
                         }
                     }
-                    $params = array(
+                    $params = [
                         'course_id' => $course_id,
                         'usergroup_id' => $usergroup_id,
-                    );
+                    ];
                     Database::insert(
                         $this->usergroup_rel_course_table,
                         $params
@@ -771,12 +771,12 @@ class UserGroup extends Model
 
                     Database::delete(
                         $this->usergroup_rel_course_table,
-                        array(
-                            'usergroup_id = ? AND course_id = ?' => array(
+                        [
+                            'usergroup_id = ? AND course_id = ?' => [
                                 $usergroup_id,
                                 $course_id
-                            )
-                        )
+                            ]
+                        ]
                     );
                 }
             }
@@ -841,23 +841,23 @@ class UserGroup extends Model
                 if (empty($relationType)) {
                     Database::delete(
                         $this->usergroup_rel_user_table,
-                        array(
-                            'usergroup_id = ? AND user_id = ? AND (relation_type = "0" OR relation_type IS NULL OR relation_type = "")' => array(
+                        [
+                            'usergroup_id = ? AND user_id = ? AND (relation_type = "0" OR relation_type IS NULL OR relation_type = "")' => [
                                 $usergroup_id,
                                 $user_id,
-                            ),
-                        )
+                            ],
+                        ]
                     );
                 } else {
                     Database::delete(
                         $this->usergroup_rel_user_table,
-                        array(
-                            'usergroup_id = ? AND user_id = ? AND relation_type = ?' => array(
+                        [
+                            'usergroup_id = ? AND user_id = ? AND relation_type = ?' => [
                                 $usergroup_id,
                                 $user_id,
                                 $relationType,
-                            ),
-                        )
+                            ],
+                        ]
                     );
                 }
             }
@@ -880,11 +880,11 @@ class UserGroup extends Model
                         CourseManager::subscribe_user($user_id, $course_info['code']);
                     }
                 }
-                $params = array(
+                $params = [
                     'user_id' => $user_id,
                     'usergroup_id' => $usergroup_id,
                     'relation_type' => $relationType,
-                );
+                ];
                 Database::insert($this->usergroup_rel_user_table, $params);
             }
         }
@@ -920,14 +920,14 @@ class UserGroup extends Model
      */
     public function getUsergroupsPagination($sidx, $sord, $start, $limit)
     {
-        $sord = in_array(strtolower($sord), array('asc', 'desc')) ? $sord : 'desc';
+        $sord = in_array(strtolower($sord), ['asc', 'desc']) ? $sord : 'desc';
 
         $start = intval($start);
         $limit = intval($limit);
         if ($this->useMultipleUrl) {
             $urlId = api_get_current_access_url_id();
             $from = $this->table." u INNER JOIN {$this->access_url_rel_usergroup} a ON (u.id = a.usergroup_id)";
-            $where = array(' access_url_id = ?' => $urlId);
+            $where = [' access_url_id = ?' => $urlId];
         } else {
             $from = $this->table." u ";
             $where = [];
@@ -936,11 +936,11 @@ class UserGroup extends Model
         $result = Database::select(
             'u.*',
             $from,
-            array(
+            [
                 'where' => $where,
                 'order' => "name $sord",
                 'LIMIT' => "$start , $limit"
-            )
+            ]
         );
 
         $new_result = [];
@@ -969,7 +969,7 @@ class UserGroup extends Model
             }
             $result = $new_result;
         }
-        $columns = array('name', 'users', 'courses', 'sessions', 'group_type');
+        $columns = ['name', 'users', 'courses', 'sessions', 'group_type'];
 
         if (!in_array($sidx, $columns)) {
             $sidx = 'name';
@@ -991,7 +991,7 @@ class UserGroup extends Model
             $urlId = api_get_current_access_url_id();
             $from = $this->table." u INNER JOIN {$this->access_url_rel_usergroup} a
                     ON (u.id = a.usergroup_id)";
-            $options = array('where' => array('access_url_id = ? ' => $urlId));
+            $options = ['where' => ['access_url_id = ? ' => $urlId]];
             $classes = Database::select('a.id, name, description', $from, $options);
         } else {
             $classes = Database::select('id, name, description', $this->table, $options);
@@ -1082,11 +1082,11 @@ class UserGroup extends Model
                 $picture = isset($_FILES['picture']) ? $_FILES['picture'] : null;
                 $picture = $this->manageFileUpload($id, $picture);
                 if ($picture) {
-                    $params = array(
+                    $params = [
                         'id' => $id,
                         'picture' => $picture,
                         'group_type' => $params['group_type']
-                    );
+                    ];
                     $this->update($params);
                 }
             }
@@ -1215,7 +1215,7 @@ class UserGroup extends Model
         }
 
         // Validation 2.
-        $allowed_types = array('jpg', 'jpeg', 'png', 'gif');
+        $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
         $file = str_replace('\\', '/', $file);
         $filename = (($pos = strrpos($file, '/')) !== false) ? substr($file, $pos + 1) : $file;
         $extension = strtolower(substr(strrchr($filename, '.'), 1));
@@ -1251,9 +1251,9 @@ class UserGroup extends Model
         $imagine = new Imagine\Gd\Imagine();
         $image = $imagine->open($source_file);
 
-        $options = array(
+        $options = [
             'quality' => 90,
-        );
+        ];
 
         //$image->resize(new Imagine\Image\Box(200, 200))->save($path.'big_'.$filename);
         $image->resize($image->getSize()->widen(200))->save($path.'big_'.$filename, $options);
@@ -1324,10 +1324,10 @@ class UserGroup extends Model
     {
         Database::insert(
             $this->access_url_rel_usergroup,
-            array(
+            [
                 'access_url_id' => $urlId,
                 'usergroup_id' =>$id
-            )
+            ]
         );
     }
 
@@ -1339,9 +1339,9 @@ class UserGroup extends Model
     {
         Database::delete(
             $this->access_url_rel_usergroup,
-            array(
-                'access_url_id = ? AND usergroup_id = ? ' => array($urlId, $id)
-            )
+            [
+                'access_url_id = ? AND usergroup_id = ? ' => [$urlId, $id]
+            ]
         );
     }
 
@@ -1420,14 +1420,14 @@ class UserGroup extends Model
         $form->addElement('header', $header);
 
         //Name
-        $form->addElement('text', 'name', get_lang('Name'), array('maxlength'=>255));
+        $form->addElement('text', 'name', get_lang('Name'), ['maxlength'=>255]);
         $form->applyFilter('name', 'trim');
 
         $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
         $form->addRule('name', '', 'maxlength', 255);
 
         // Description
-        $form->addTextarea('description', get_lang('Description'), array('cols' => 58));
+        $form->addTextarea('description', get_lang('Description'), ['cols' => 58]);
         $form->applyFilter('description', 'trim');
 
         if ($this->showGroupTypeSetting) {
@@ -1523,7 +1523,6 @@ class UserGroup extends Model
                 $dimension = api_getimagesize($picture['file']);
                 $margin = ($height - $dimension['width']) / 2;
                 //@ todo the padding-top should not be here
-
             }
         } else {
             $file = $image_array_sys['dir'].$picture_file;
@@ -1571,7 +1570,7 @@ class UserGroup extends Model
         }
 
         if (empty($id) || empty($type)) {
-            return $anonymous ? array('dir' => $base.'img/', 'file' => 'unknown.jpg') : array('dir' => '', 'file' => '');
+            return $anonymous ? ['dir' => $base.'img/', 'file' => 'unknown.jpg'] : ['dir' => '', 'file' => ''];
         }
 
         $id = intval($id);
@@ -1580,7 +1579,7 @@ class UserGroup extends Model
         $res = Database::query($sql);
 
         if (!Database::num_rows($res)) {
-            return $anonymous ? array('dir' => $base.'img/', 'file' => 'unknown.jpg') : array('dir' => '', 'file' => '');
+            return $anonymous ? ['dir' => $base.'img/', 'file' => 'unknown.jpg'] : ['dir' => '', 'file' => ''];
         }
         $user = Database::fetch_array($res);
         $picture_filename = trim($user['picture']);
@@ -1597,7 +1596,7 @@ class UserGroup extends Model
             $dir = $base.'groups/'.$id.'/';
         }
 
-        return array('dir' => $dir, 'file' => $picture_filename);
+        return ['dir' => $dir, 'file' => $picture_filename];
     }
 
     /**
@@ -1640,7 +1639,7 @@ class UserGroup extends Model
             $user_id = api_get_user_id();
         }
         $user_role = $this->get_user_group_role($user_id, $group_id);
-        if (in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN))) {
+        if (in_array($user_role, [GROUP_USER_PERMISSION_ADMIN])) {
             return true;
         } else {
             return false;
@@ -1658,7 +1657,7 @@ class UserGroup extends Model
             $user_id = api_get_user_id();
         }
         $user_role = $this->get_user_group_role($user_id, $group_id);
-        if (in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {
+        if (in_array($user_role, [GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR])) {
             return true;
         } else {
             return false;
@@ -1678,12 +1677,12 @@ class UserGroup extends Model
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
-        $roles = array(
+        $roles = [
             GROUP_USER_PERMISSION_ADMIN,
             GROUP_USER_PERMISSION_MODERATOR,
             GROUP_USER_PERMISSION_READER,
             GROUP_USER_PERMISSION_HRM,
-        );
+        ];
         $user_role = self::get_user_group_role($user_id, $group_id);
         if (in_array($user_role, $roles)) {
             return true;
@@ -2012,7 +2011,7 @@ class UserGroup extends Model
         $relation_type = [],
         $from = null,
         $limit = null,
-        $image_conf = array('size' => USER_IMAGE_SIZE_MEDIUM, 'height' => 80)
+        $image_conf = ['size' => USER_IMAGE_SIZE_MEDIUM, 'height' => 80]
     ) {
         $table_group_rel_user = $this->usergroup_rel_user_table;
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -2038,8 +2037,9 @@ class UserGroup extends Model
                 $new_relation_type[] = "'$rel'";
             }
             $relation_type = implode(',', $new_relation_type);
-            if (!empty($relation_type))
+            if (!empty($relation_type)) {
                 $where_relation_condition = "AND gu.relation_type IN ($relation_type) ";
+            }
         }
 
         $sql = "SELECT picture_uri as image, u.id, CONCAT (u.firstname,' ', u.lastname) as fullname, relation_type
@@ -2265,7 +2265,7 @@ class UserGroup extends Model
         $keyword = $tag;
         $sql = "SELECT  g.id, g.name, g.description, g.url, g.picture
                 FROM $group_table g";
-        if (isset ($keyword)) {
+        if (isset($keyword)) {
             $sql .= " WHERE (
                         g.name LIKE '%".$keyword."%' OR
                         g.description LIKE '%".$keyword."%' OR
@@ -2274,7 +2274,7 @@ class UserGroup extends Model
         }
 
         $direction = 'ASC';
-        if (!in_array($direction, array('ASC', 'DESC'))) {
+        if (!in_array($direction, ['ASC', 'DESC'])) {
             $direction = 'ASC';
         }
 

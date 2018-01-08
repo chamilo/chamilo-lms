@@ -27,7 +27,7 @@ class ClockworksmsPlugin extends SmsPlugin
      */
     public function __construct()
     {
-        $fields = array('tool_enable' => 'boolean', 'api_key' => 'text');
+        $fields = ['tool_enable' => 'boolean', 'api_key' => 'text'];
         $smsTypeOptions = $this->getSmsTypeOptions();
         foreach ($smsTypeOptions as $smsTypeOption) {
             $fields[$smsTypeOption] = 'checkbox';

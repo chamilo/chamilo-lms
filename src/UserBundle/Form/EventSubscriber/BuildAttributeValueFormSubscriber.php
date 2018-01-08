@@ -41,10 +41,10 @@ class BuildAttributeValueFormSubscriber implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             FormEvents::PRE_SET_DATA => 'preSetData',
             FormEvents::PRE_SUBMIT   => 'preSubmit',
-        );
+        ];
     }
 
     /**
@@ -77,7 +77,6 @@ class BuildAttributeValueFormSubscriber implements EventSubscriberInterface
         $attribute = $attribute->getAttribute();
 
         $this->addValueField($form, $attribute);
-
     }
 
     /**
@@ -86,10 +85,10 @@ class BuildAttributeValueFormSubscriber implements EventSubscriberInterface
      */
     private function addValueField(FormInterface $form, AttributeInterface $attribute)
     {
-        $options = array(
+        $options = [
             'auto_initialize' => false,
             'label' => $attribute->getName()
-        );
+        ];
 
         $form->add('attribute');
         $form->add('value', 'sylius_attribute_type_'.$attribute->getType(), $options);

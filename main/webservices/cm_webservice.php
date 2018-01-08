@@ -76,7 +76,7 @@ class WSCMError
      */
     public function toArray()
     {
-        return array('code' => $this->code, 'message' => $this->message);
+        return ['code' => $this->code, 'message' => $this->message];
     }
 }
 
@@ -292,7 +292,7 @@ class WSCM
      */
     protected function getSuccessfulResult()
     {
-        return array('code' => 0, 'message' => 'Operation was successful');
+        return ['code' => 0, 'message' => 'Operation was successful'];
     }
 
     /**
@@ -315,4 +315,3 @@ class WSCM
         return preg_replace('`<br(?: /)?>([\\n\\r])`', '$1', $string);
     }
 }
-

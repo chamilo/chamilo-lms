@@ -48,12 +48,12 @@ if (empty($sessionId)) {
 $lpInfo = Database::select(
     '*',
     $lpTable,
-    array(
-        'where' => array(
+    [
+        'where' => [
             'c_id = ? AND ' => $courseId,
             'id = ?' => $lpId
-        )
-    ),
+        ]
+    ],
     'first'
 );
 
@@ -66,21 +66,21 @@ if (!empty($users)) {
         $lpTime = Tracking::get_time_spent_in_lp(
             $user['user_id'],
             $courseCode,
-            array($lpId),
+            [$lpId],
             $sessionId
         );
 
         $lpScore = Tracking::get_avg_student_score(
             $user['user_id'],
             $courseCode,
-            array($lpId),
+            [$lpId],
             $sessionId
         );
 
         $lpProgress = Tracking::get_avg_student_progress(
             $user['user_id'],
             $courseCode,
-            array($lpId),
+            [$lpId],
             $sessionId
         );
 
@@ -121,7 +121,7 @@ $actions = Display::url(
     Display::return_icon(
         'back.png',
         get_lang('Back'),
-        array(),
+        [],
         ICON_SIZE_MEDIUM
     ),
     api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq()
@@ -133,7 +133,7 @@ if (!empty($users)) {
         Display::return_icon(
             'pdf.png',
             get_lang('ExportToPdf'),
-            array(),
+            [],
             ICON_SIZE_MEDIUM
         ),
         api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=report&export=pdf&lp_id='.$lpId
@@ -161,11 +161,11 @@ $template->assign('content', $result);
 
 
 if ($export) {
-    $pdfParams = array(
+    $pdfParams = [
         'filename' => get_lang('StudentScore').'_'.api_get_local_time(),
         //'pdf_title' => $title,
         //'course_code' => $course_code
-    );
+    ];
     $pdf = new PDF('A4', 'P', $pdfParams);
     $pdf->html_to_pdf_with_template(
         $result,

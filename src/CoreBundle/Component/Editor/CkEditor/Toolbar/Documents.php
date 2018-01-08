@@ -18,7 +18,7 @@ class Documents extends Basic
      */
     public function getConfig()
     {
-        $config = array();
+        $config = [];
 
         if (api_get_setting('more_buttons_maximized_mode') !== 'true') {
             $config['toolbar'] = $this->getNormalToolbar();
@@ -37,7 +37,7 @@ class Documents extends Basic
      */
     public function getConditionalPlugins()
     {
-        $plugins = array();
+        $plugins = [];
 
         if (api_get_setting('show_glossary_in_documents') === 'ismanual') {
             $plugins[] = 'glossary';

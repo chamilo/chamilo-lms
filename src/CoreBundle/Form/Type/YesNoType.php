@@ -19,12 +19,12 @@ class YesNoType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
-            array(
-                'choices' => array(
+            [
+                'choices' => [
                     'Yes' => 'true',
                     'No' => 'false',
-                ),
-            )
+                ],
+            ]
         );
     }
 

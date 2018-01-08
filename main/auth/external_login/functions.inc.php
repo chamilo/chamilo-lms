@@ -60,7 +60,7 @@ function external_get_user_info($login, $password)
     //Can Send Message ?
     $can_send_message = ($user_info['can_send_message'] == 1) ? 'yes' : 'no';
 
-    $u = array(
+    $u = [
         'firstname' => $user_info['firstname'],
         'lastname' => $user_info['lastname'],
         'status' => $status,
@@ -73,7 +73,7 @@ function external_get_user_info($login, $password)
         'profile_link' => $user_info['profile_link'],
         'worldwide_bu' => $user_info['worlwide_bu'],
         'manager' => $user_info['manager'],
-        'extra' => array(
+        'extra' => [
             'position_title' => $user_info['position_title'],
             'country' => $user_info['country'],
             'job_family' => $user_info['job_family'],
@@ -81,8 +81,8 @@ function external_get_user_info($login, $password)
             'worldwide_bu' => $user_info['worldwide_bu'],
             'profile_link' => $user_info['profile_link'],
             'can_send_message' => $can_send_message,
-            'update_type' => 'external_logininfo')
-    );
+            'update_type' => 'external_logininfo']
+    ];
 
     return $u; //Please return false if user does not exist
     //return false;

@@ -54,7 +54,7 @@ if (api_is_allowed_to_edit(null, true)) {
             case 'unsubscribe':
                 // Make sure we don't unsubscribe current user from the course
                 if (is_array($_POST['user'])) {
-                    $user_ids = array_diff($_POST['user'], array($user_id));
+                    $user_ids = array_diff($_POST['user'], [$user_id]);
                     if (count($user_ids) > 0) {
                         CourseManager::unsubscribe_user($user_ids, $courseCode);
                         Display::addFlash(
@@ -68,7 +68,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
 // Getting extra fields that have the filter option "on"
 $extraField = new ExtraField('user');
-$extraFields = $extraField->get_all(array('filter = ?' => 1));
+$extraFields = $extraField->get_all(['filter = ?' => 1]);
 $user_image_pdf_size = 80;
 
 if (api_is_allowed_to_edit(null, true)) {
@@ -106,8 +106,8 @@ if (api_is_allowed_to_edit(null, true)) {
                 $table_users = Database::get_main_table(TABLE_MAIN_USER);
                 $is_western_name_order = api_is_western_name_order();
 
-                $data = array();
-                $a_users = array();
+                $data = [];
+                $a_users = [];
                 $current_access_url_id = api_get_current_access_url_id();
                 $extra_fields = UserManager::get_extra_user_data(
                     api_get_user_id(),
@@ -123,7 +123,7 @@ if (api_is_allowed_to_edit(null, true)) {
                 if (api_get_setting('show_email_addresses') == 'true') {
                     $select_email_condition = ' user.email, ';
                     if ($sort_by_first_name) {
-                        $a_users[0] = array(
+                        $a_users[0] = [
                             'id',
                             get_lang('FirstName'),
                             get_lang('LastName'),
@@ -132,9 +132,9 @@ if (api_is_allowed_to_edit(null, true)) {
                             get_lang('Phone'),
                             get_lang('OfficialCode'),
                             get_lang('Active')
-                        );
+                        ];
                     } else {
-                        $a_users[0] = array(
+                        $a_users[0] = [
                             'id',
                             get_lang('LastName'),
                             get_lang('FirstName'),
@@ -143,11 +143,11 @@ if (api_is_allowed_to_edit(null, true)) {
                             get_lang('Phone'),
                             get_lang('OfficialCode'),
                             get_lang('Active')
-                        );
+                        ];
                     }
                 } else {
                     if ($sort_by_first_name) {
-                        $a_users[0] = array(
+                        $a_users[0] = [
                             'id',
                             get_lang('FirstName'),
                             get_lang('LastName'),
@@ -155,9 +155,9 @@ if (api_is_allowed_to_edit(null, true)) {
                             get_lang('Phone'),
                             get_lang('OfficialCode'),
                             get_lang('Active')
-                        );
+                        ];
                     } else {
-                        $a_users[0] = array(
+                        $a_users[0] = [
                             'id',
                             get_lang('LastName'),
                             get_lang('FirstName'),
@@ -165,7 +165,7 @@ if (api_is_allowed_to_edit(null, true)) {
                             get_lang('Phone'),
                             get_lang('OfficialCode'),
                             get_lang('Active')
-                        );
+                        ];
                     }
                 }
 
@@ -179,23 +179,23 @@ if (api_is_allowed_to_edit(null, true)) {
                 if ($_GET['format'] == 'pdf') {
                     $select_email_condition = ' user.email, ';
                     if ($is_western_name_order) {
-                        $a_users[0] = array(
+                        $a_users[0] = [
                             '#',
                             get_lang('UserPicture'),
                             get_lang('OfficialCode'),
                             get_lang('FirstName').', '.get_lang('LastName'),
                             get_lang('Email'),
                             get_lang('Phone')
-                        );
+                        ];
                     } else {
-                        $a_users[0] = array(
+                        $a_users[0] = [
                             '#',
                             get_lang('UserPicture'),
                             get_lang('OfficialCode'),
                             get_lang('LastName').', '.get_lang('FirstName'),
                             get_lang('Email'),
                             get_lang('Phone')
-                        );
+                        ];
                     }
                 }
 
@@ -264,23 +264,23 @@ if (api_is_allowed_to_edit(null, true)) {
                             $user_image = '<img src="'.$user_info['avatar'].'" width ="'.$user_image_pdf_size.'px" />';
 
                             if ($is_western_name_order) {
-                                $user_pdf = array(
+                                $user_pdf = [
                                     $counter,
                                     $user_image,
                                     $user['official_code'],
                                     $user['firstname'].', '.$user['lastname'],
                                     $user['email'],
                                     $user['phone']
-                                );
+                                ];
                             } else {
-                                $user_pdf = array(
+                                $user_pdf = [
                                     $counter,
                                     $user_image,
                                     $user['official_code'],
                                     $user['lastname'].', '.$user['firstname'],
                                     $user['email'],
                                     $user['phone']
-                                );
+                                ];
                             }
 
                             $a_users[] = $user_pdf;
@@ -352,23 +352,23 @@ if (api_is_allowed_to_edit(null, true)) {
                             $user_image = '<img src="'.$user_info['avatar'].'" width ="'.$user_image_pdf_size.'px" />';
 
                             if ($is_western_name_order) {
-                                $user_pdf = array(
+                                $user_pdf = [
                                     $counter,
                                     $user_image,
                                     $user['official_code'],
                                     $user['firstname'].', '.$user['lastname'],
                                     $user['email'],
                                     $user['phone']
-                                );
+                                ];
                             } else {
-                                $user_pdf = array(
+                                $user_pdf = [
                                     $counter,
                                     $user_image,
                                     $user['official_code'],
                                     $user['lastname'].', '.$user['firstname'],
                                     $user['email'],
                                     $user['phone']
-                                );
+                                ];
                             }
 
                             $a_users[] = $user_pdf;
@@ -396,17 +396,17 @@ if (api_is_allowed_to_edit(null, true)) {
                         Export::arrayToXls($a_users, $fileName);
                         exit;
                     case 'pdf':
-                        $header_attributes = array(
-                            array('style' => 'width:10px'),
-                            array('style' => 'width:30px'),
-                            array('style' => 'width:50px'),
-                            array('style' => 'width:500px')
-                        );
-                        $params = array(
+                        $header_attributes = [
+                            ['style' => 'width:10px'],
+                            ['style' => 'width:30px'],
+                            ['style' => 'width:50px'],
+                            ['style' => 'width:500px']
+                        ];
+                        $params = [
                             'filename' => $fileName,
                             'pdf_title' => $pdfTitle,
                             'header_attributes' => $header_attributes
-                        );
+                        ];
 
                         Export::export_table_pdf($a_users, $params);
                         exit;
@@ -487,7 +487,7 @@ $parameters['type'] = $type;
 
 $table->set_additional_parameters($parameters);
 $header_nr = 0;
-$indexList = array();
+$indexList = [];
 $table->set_header($header_nr++, '', false);
 
 $indexList['photo'] = $header_nr;
@@ -543,7 +543,7 @@ if (api_is_allowed_to_edit(null, true)) {
     $table->set_column_filter($header_nr - 1, 'modify_filter');
 
     if ($canEditUsers) {
-        $table->set_form_actions(array('unsubscribe' => get_lang('Unreg')), 'user');
+        $table->set_form_actions(['unsubscribe' => get_lang('Unreg')], 'user');
     }
 } else {
     if ($course_info['unsubscribe'] == 1) {
@@ -557,10 +557,10 @@ if (isset($origin) && $origin == 'learnpath') {
     Display::display_reduced_header();
 } else {
     if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             "url" => "user.php?".api_get_cidreq(),
             "name" => get_lang("Users"),
-        );
+        ];
         $tool_name = get_lang('SearchResults');
     } else {
         $tool_name = get_lang('Users');
@@ -708,7 +708,8 @@ function get_number_of_users()
     }
 
     foreach ($a_course_users as $o_course_user) {
-        if ((isset($_GET['keyword']) &&
+        if ((
+            isset($_GET['keyword']) &&
                 searchUserKeyword(
                     $o_course_user['firstname'],
                     $o_course_user['lastname'],
@@ -763,7 +764,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
     $course_info = api_get_course_info();
     $sessionId = api_get_session_id();
     $course_code = $course_info['code'];
-    $a_users = array();
+    $a_users = [];
     $limit = null;
 
     // limit
@@ -771,7 +772,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
         $limit = 'LIMIT '.intval($from).','.intval($number_of_items);
     }
 
-    if (!in_array($direction, array('ASC', 'DESC'))) {
+    if (!in_array($direction, ['ASC', 'DESC'])) {
         $direction = 'ASC';
     }
 
@@ -827,13 +828,14 @@ function get_user_data($from, $number_of_items, $column, $direction)
         false,
         false,
         null,
-        array(),
-        array(),
+        [],
+        [],
         $active
     );
 
     foreach ($a_course_users as $user_id => $o_course_user) {
-        if ((isset($_GET['keyword']) &&
+        if ((
+            isset($_GET['keyword']) &&
                 searchUserKeyword(
                     $o_course_user['firstname'],
                     $o_course_user['lastname'],
@@ -849,7 +851,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 $groupsNameListParsed = array_column($groupsNameList, 'name');
             }
 
-            $temp = array();
+            $temp = [];
             if (api_is_allowed_to_edit(null, true)) {
                 $userInfo = api_get_user_info($user_id);
                 $photo = Display::img($userInfo['avatar_small'], $userInfo['complete_name'], [], false);
@@ -1022,7 +1024,7 @@ function modify_filter($user_id, $row, $data)
                 $result .= Display::url(
                     $text,
                     'user.php?'.api_get_cidreq().'&action=set_tutor&is_tutor='.$isTutor.'&user_id='.$user_id.'&type='.$type,
-                    array('class' => 'btn btn-default '.$disabled)
+                    ['class' => 'btn btn-default '.$disabled]
                 ).'&nbsp;';
             }
         }

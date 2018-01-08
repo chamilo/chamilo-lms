@@ -25,58 +25,58 @@ class ProfileType extends AbstractType
             ->add(
                 'firstname',
                 null,
-                array(
+                [
                     'label' => 'form.label_firstname',
                     'required' => false,
-                )
+                ]
             )
             ->add(
                 'lastname',
                 null,
-                array(
+                [
                     'label' => 'form.label_lastname',
                     'required' => false,
-                )
+                ]
             )
             ->add('official_code', 'text')
             //->add('groups')
             ->add(
                 'locale',
                 'locale',
-                array(
-                    'preferred_choices' => array(
+                [
+                    'preferred_choices' => [
                         'en',
                         'fr',
                         'es',
                         'pt',
                         'nl',
-                    ),
-                )
+                    ],
+                ]
             )
             ->add(
                 'dateOfBirth',
                 'birthday',
-                array(
+                [
                     'label' => 'form.label_date_of_birth',
                     'required' => false,
                     'widget' => 'single_text',
-                )
+                ]
             )
             ->add(
                 'website',
                 'url',
-                array(
+                [
                     'label' => 'form.label_website',
                     'required' => false,
-                )
+                ]
             )
             ->add(
                 'biography',
                 'textarea',
-                array(
+                [
                     'label' => 'form.label_biography',
                     'required' => false,
-                )
+                ]
             )
             /*->add('locale', 'locale', array(
                 'label'    => 'form.label_locale',
@@ -85,29 +85,29 @@ class ProfileType extends AbstractType
             ->add(
                 'timezone',
                 'timezone',
-                array(
+                [
                     'label' => 'form.label_timezone',
                     'required' => false,
                     //'preferred_choices' => array('Europe/Paris', 'America/Lima'),
-                )
+                ]
             )
             ->add(
                 'phone',
                 null,
-                array(
+                [
                     'label' => 'form.label_phone',
                     'required' => false,
-                )
+                ]
             )
             ->add(
                 'picture',
                 'sonata_media_type',
-                array(
+                [
                     'provider' => 'sonata.media.provider.image',
                     'context' => 'user',
                     'required' => false,
                     'data_class' => 'Chamilo\MediaBundle\Entity\Media',
-                )
+                ]
             )
             /*->add(
                 'extraFieldValues',
@@ -159,9 +159,9 @@ class ProfileType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => 'Chamilo\UserBundle\Entity\User',
-            )
+            ]
         );
     }
 
@@ -170,4 +170,3 @@ class ProfileType extends AbstractType
         return 'chamilo_sonata_user_profile';
     }
 }
-

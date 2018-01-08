@@ -29,7 +29,7 @@ $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : ''
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=course_log_events&'.api_get_cidreq().'&keyword='.$keyword;
 
 // The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = array(
+$columns = [
     get_lang('EventType'),
     get_lang('DataType'),
     get_lang('Value'),
@@ -38,68 +38,68 @@ $columns = array(
     get_lang('UserName'),
     get_lang('IPAddress'),
     get_lang('Date')
-);
+];
 
 // Column config
-$column_model = array(
-    array(
+$column_model = [
+    [
         'name' => 'col0',
         'index' => 'col0',
         'width' => '70',
         'align' => 'left',
         'sortable' => 'false'
-    ),
-    array(
+    ],
+    [
         'name' => 'col1',
         'index' => 'col1',
         'width' => '50',
         'align' => 'left',
         'sortable' => 'false',
-    ),
-    array(
+    ],
+    [
         'name' => 'col2',
         'index' => 'col2',
         'width' => '200',
         'align' => 'left',
         'sortable' => 'false',
-    ),
-    array(
+    ],
+    [
         'name' => 'col3',
         'index' => 'col3',
         'width' => '50',
         'align' => 'left',
         'sortable' => 'false',
         'hidden' => 'true'
-    ),
-    array(
+    ],
+    [
         'name' => 'col4',
         'index' => 'col4',
         'width' => '50',
         'align' => 'left',
         'sortable' => 'false',
         'hidden' => 'true'
-    ),
-    array(
+    ],
+    [
         'name' => 'col5',
         'index' => 'col5',
         'width' => '50',
         'align' => 'left',
         'sortable' => 'false',
-    ),
-    array(
+    ],
+    [
         'name' => 'col6',
         'index' => '6',
         'width' => '50',
         'align' => 'left',
         'sortable' => 'false',
-    ),
-    array(
+    ],
+    [
         'name' => 'col7',
         'index' => '7',
         'width' => '50',
         'align' => 'left'
-    )
-);
+    ]
+];
 
 // Autowidth
 $extra_params['autowidth'] = 'true';
@@ -123,7 +123,7 @@ $(function() {
     $columns,
     $column_model,
     $extra_params,
-    array(),
+    [],
     $actionLinks,
     true
 ).'

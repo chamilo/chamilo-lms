@@ -83,10 +83,10 @@ if (!is_dir($filepath)) {
 
 //groups //TODO: clean
 if (!empty($groupId)) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => "../group/group_space.php?".api_get_cidreq(),
         "name" => get_lang('GroupSpace')
-    );
+    ];
     $group = GroupManager:: get_group_properties($groupId);
     $path = explode('/', $dir);
     if ('/'.$path[1] != $group['directory']) {
@@ -94,10 +94,10 @@ if (!empty($groupId)) {
     }
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => "./document.php?curdirpath=".urlencode($dir)."&".api_get_cidreq(),
     "name" => get_lang('Documents')
-);
+];
 
 if (!api_is_allowed_in_course()) {
     api_not_allowed(true);
@@ -118,7 +118,7 @@ if (!($is_allowed_to_edit || $groupRights ||
 Event::event_access_tool(TOOL_DOCUMENT);
 
 $display_dir = $dir;
-if (isset ($group)) {
+if (isset($group)) {
     $display_dir = explode('/', $dir);
     unset($display_dir[0]);
     unset($display_dir[1]);
@@ -134,7 +134,7 @@ for ($i = 0; $i < $array_len; $i++) {
     $url_dir = 'document.php?&curdirpath='.$dir_acum.$dir_array[$i];
     //Max char 80
     $url_to_who = cut($dir_array[$i], 80);
-    $interbreadcrumb[] = array('url' => $url_dir, 'name' => $url_to_who);
+    $interbreadcrumb[] = ['url' => $url_dir, 'name' => $url_to_who];
     $dir_acum .= $dir_array[$i].'/';
 }
 
@@ -212,12 +212,12 @@ $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 $sql_select = "SELECT * FROM $tbl_admin_languages";
 $result_select = Database::query($sql_select);
 
-$options = $options_pedia = array();
+$options = $options_pedia = [];
 $selected_language = null;
 
 while ($row = Database::fetch_array($result_select)) {
     $options[$row['isocode']] = $row['original_name'].' ('.$row['english_name'].')';
-    if (in_array($row['isocode'], array('de', 'en', 'es', 'fr'))) {
+    if (in_array($row['isocode'], ['de', 'en', 'es', 'fr'])) {
         $options_pedia[$row['isocode']] = $row['original_name'].' ('.$row['english_name'].')';
     }
 }
@@ -225,15 +225,15 @@ while ($row = Database::fetch_array($result_select)) {
 if ($service == 'google') {
     $selected_language = api_get_language_isocode(); //lang default is the course language
 
-    $form = new FormValidator('form1', 'post', api_get_self().'?'.api_get_cidreq(), '', array('id' => 'form1'));
+    $form = new FormValidator('form1', 'post', api_get_self().'?'.api_get_cidreq(), '', ['id' => 'form1']);
     $form->addHeader(get_lang('HelpText2Audio'));
     $form->addElement('hidden', 'text2voice_mode', 'google');
     $form->addElement('hidden', 'id', $document_id);
     $form->addElement('text', 'title', get_lang('Title'));
     $form->addElement('select', 'lang', get_lang('Language'), $options);
-    $form->addElement('textarea', 'text', get_lang('InsertText2Audio'), array('id' => 'textarea_google'));
+    $form->addElement('textarea', 'text', get_lang('InsertText2Audio'), ['id' => 'textarea_google']);
     $form->addButtonSave(get_lang('SaveMP3'));
-    $defaults = array();
+    $defaults = [];
     $defaults['lang'] = $selected_language;
     $form->setDefaults($defaults);
     $form->display();
@@ -349,4 +349,3 @@ function downloadAudioGoogle($filepath, $dir)
     echo Display::return_message(get_lang('DocumentCreated'), 'confirm');
     echo '<script>window.location.href="'.$location.'"</script>';
 }
-

@@ -29,7 +29,7 @@ class SelectLanguage extends HTML_QuickForm_select
                 $defaultValue = api_get_setting('platformLanguage');
             }
             if ($languages['folder'][$index] == $defaultValue) {
-                $this->addOption($name, $languages['folder'][$index], array('selected'=>'selected'));
+                $this->addOption($name, $languages['folder'][$index], ['selected'=>'selected']);
             } else {
                 $this->addOption($name, $languages['folder'][$index]);
             }

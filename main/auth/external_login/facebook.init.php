@@ -8,7 +8,7 @@
  *
  * External login module : FACEBOOK
  *
- * Configuration file 
+ * Configuration file
  * Please edit this file to match with your FACEBOOK settings
  * */
 /**
@@ -23,4 +23,3 @@
  */
 
 require __DIR__.'/../../../app/config/auth.conf.php';
-

@@ -31,20 +31,20 @@ class BranchType extends AbstractType
             ->add(
                 'branch_type',
                 'choice',
-                array(
-                    'choices' => array(
+                [
+                    'choices' => [
                         'remote_child',
                         'local_child',
                         'local_parent',
                         'remote_parent',
-                    ),
-                )
+                    ],
+                ]
             )
             //->add('parent_id', 'choice', array('choices'=> array(), 'required' => false))
             ->add(
                 'parent_id',
                 'text',
-                array('required' => false, 'disabled' => $parentIdDisabled)
+                ['required' => false, 'disabled' => $parentIdDisabled]
             )
             //->add('parent_id', 'choice', array('choices'=> array(1 => 'jjaa',2=>'ddd'), 'required' => false))
             ->add('branch_ip', 'text')
@@ -56,13 +56,13 @@ class BranchType extends AbstractType
             ->add('delay', 'text')
             ->add('admin_mail', 'email')
             ->add('admin_name', 'text')
-            ->add('admin_phone', 'text', array('required' => false))
+            ->add('admin_phone', 'text', ['required' => false])
             ->add(
                 'last_sync_trans_date',
                 'datetime',
-                array(
+                [
                     'data' => new \DateTime(),
-                )
+                ]
             )
             ->add('last_sync_type', 'text')
             ->add('last_sync_trans_id', 'text')
@@ -70,16 +70,14 @@ class BranchType extends AbstractType
             ->add('last_sync_trans_id', 'text')
             ->add('access_url_id', 'text')
             ->add('submit', 'submit');
-
-
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => 'Chamilo\CoreBundle\Entity\BranchSync',
-            )
+            ]
         );
     }
 
@@ -88,4 +86,3 @@ class BranchType extends AbstractType
         return 'branch';
     }
 }
-

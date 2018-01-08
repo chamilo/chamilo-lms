@@ -18,14 +18,14 @@ class QuestionScoreNameType extends AbstractType
         $builder->add(
             'questionScore',
             'entity',
-            array(
+            [
                 'class' => 'Entity\QuestionScore',
                 'query_builder' => function ($repository) {
                     return $repository->createQueryBuilder('p')
                         ->orderBy('p.id', 'ASC');
                 },
                 'property' => 'name',
-            )
+            ]
         );
         $builder->add('submit', 'submit');
     }
@@ -33,9 +33,9 @@ class QuestionScoreNameType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => 'Chamilo\CoreBundle\Entity\QuestionScoreName',
-            )
+            ]
         );
     }
 

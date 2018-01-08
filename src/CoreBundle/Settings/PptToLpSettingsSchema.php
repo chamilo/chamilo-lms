@@ -21,7 +21,7 @@ class PptToLpSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'active' => '',
                     'size' => '',
                     'host' => '',
@@ -29,7 +29,7 @@ class PptToLpSettingsSchema extends AbstractSettingsSchema
                     'user' => '',
                     'ftp_password' => '',
                     'path_to_lzx' => '',
-                )
+                ]
             )
 //            ->setAllowedTypes(
 //                array(

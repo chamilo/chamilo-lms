@@ -31,17 +31,17 @@ $pathurl = urlencode($path);
 // Breadcrumb navigation
 $url = 'document.php?curdirpath='.$pathurl;
 $originaltoolname = get_lang('Documents');
-$interbreadcrumb[] = array('url' => $url, 'name' => $originaltoolname);
+$interbreadcrumb[] = ['url' => $url, 'name' => $originaltoolname];
 
 $url = 'slideshow.php?curdirpath='.$pathurl;
 $originaltoolname = get_lang('SlideShow');
-$interbreadcrumb[] = array('url' => $url, 'name' => $originaltoolname);
+$interbreadcrumb[] = ['url' => $url, 'name' => $originaltoolname];
 
 // Because $nametools uses $_SERVER['PHP_SELF'] for the breadcrumbs instead of $_SERVER['REQUEST_URI'], I had to
 // bypass the $nametools thing and use <b></b> tags in the $interbreadcrump array
 $url = 'slideshowoptions.php?curdirpath='.$pathurl;
 $originaltoolname = '<b>'.get_lang('SlideshowOptions').'</b>';
-$interbreadcrumb[] = array('url' => $url, 'name' => $originaltoolname);
+$interbreadcrumb[] = ['url' => $url, 'name' => $originaltoolname];
 
 Display::display_header($originaltoolname, 'Doc');
 $image_resizing = Session::read('image_resizing');
@@ -85,7 +85,7 @@ echo Display::toolbarAction('toolbar-slideshow', [$actions])
             <label>
                 <input name="radio_resizing" type="radio" onClick="disableresizing()" value="autoresizing" <?php
                 if ($image_resizing == 'resizing_auto' || $image_resizing == '') {
-                        echo ' checked';
+                    echo ' checked';
                 }
         ?>>
             </label>
@@ -110,9 +110,9 @@ echo Display::toolbarAction('toolbar-slideshow', [$actions])
         if ($image_resizing == 'resizing') {
             echo ' value="'.$width.'"';
             echo ' class="enabled_input"';
-                    } else {
-                    echo ' class="disabled_input"';
-                }
+        } else {
+            echo ' class="disabled_input"';
+        }
         ?> >
             </div>
             <div class="col-sm-8"></div>

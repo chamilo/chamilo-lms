@@ -41,7 +41,7 @@ Display::display_header(get_lang('UserOnlineListSession'));
         </th>
     </tr>
 <?php
-$session_is_coach = array();
+$session_is_coach = [];
 
 if (isset($_user['user_id']) && $_user['user_id'] != '') {
     $_user['user_id'] = intval($_user['user_id']);
@@ -82,7 +82,7 @@ if (isset($_user['user_id']) && $_user['user_id'] != '') {
 
     $online_time = time() - $time_limit * 60;
     $current_date = api_get_utc_datetime($online_time);
-    $students_online = array();
+    $students_online = [];
     foreach ($session_is_coach as $session) {
         $sql = "SELECT DISTINCT last_access.access_user_id,
                     last_access.access_date,

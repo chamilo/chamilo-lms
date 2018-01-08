@@ -140,7 +140,7 @@ $isAllowedToEdit = api_is_allowed_to_edit(null, true);
 $group_member_with_upload_rights = false;
 
 // If the group id is set, we show them group documents
-$group_properties = array();
+$group_properties = [];
 $group_properties['directory'] = null;
 
 // For sessions we should check the parameters of visibility
@@ -169,14 +169,14 @@ if (!empty($groupId)) {
         // Documents are private
         if ($isAllowedToEdit || GroupManager::is_user_in_group($userId, $group_properties)) {
             // Only courseadmin or group members (members + tutors) allowed
-            $interbreadcrumb[] = array(
+            $interbreadcrumb[] = [
                 'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
                 'name' => get_lang('Groups')
-            );
-            $interbreadcrumb[] = array(
+            ];
+            $interbreadcrumb[] = [
                 'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
                 'name' => get_lang('GroupSpace').' '.$group_properties['name']
-            );
+            ];
             //they are allowed to upload
             $group_member_with_upload_rights = true;
         } else {
@@ -184,14 +184,14 @@ if (!empty($groupId)) {
         }
     } elseif ($group_properties['doc_state'] == 1) {
         // Documents are public
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
             'name' => get_lang('Groups')
-        );
-        $interbreadcrumb[] = array(
+        ];
+        $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
             'name' => get_lang('GroupSpace').' '.$group_properties['name']
-        );
+        ];
 
         // Allowed to upload?
         if ($isAllowedToEdit ||
@@ -819,38 +819,38 @@ DocumentManager::createUserSharedFolder(api_get_user_id(), $courseInfo, $session
 Session::write('image_files_only', '');
 $image_files_only = '';
 if ($is_certificate_mode) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => '../gradebook/index.php?'.api_get_cidreq(),
         'name' => get_lang('Gradebook')
-    );
+    ];
 } else {
     if ((isset($_GET['id']) && $_GET['id'] != 0) || isset($_GET['curdirpath']) || isset($_GET['createdir'])) {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => 'document.php?'.api_get_cidreq(),
             'name' => get_lang('Documents')
-        );
+        ];
     } else {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => '#',
             'name' => get_lang('Documents')
-        );
+        ];
     }
 }
 
 // Interbreadcrumb for the current directory root path
 if (empty($document_data['parents'])) {
     if (isset($_GET['createdir'])) {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => $document_data['document_url'],
             'name' => $document_data['title'],
-        );
+        ];
     } else {
         // Hack in order to not add the document to the breadcrumb in case it is a link
         if ($document_data['filetype'] != 'link') {
-            $interbreadcrumb[] = array(
+            $interbreadcrumb[] = [
                 'url' => '#',
                 'name' => $document_data['title']
-            );
+            ];
         }
     }
 } else {
@@ -866,16 +866,16 @@ if (empty($document_data['parents'])) {
         if (!isset($_GET['createdir']) && $document_sub_data['id'] == $document_data['id']) {
             $document_sub_data['document_url'] = '#';
         }
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => $document_sub_data['document_url'],
             'name' => $document_sub_data['title'],
-        );
+        ];
         $counter++;
     }
 }
 
 if (isset($_GET['createdir'])) {
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('CreateDir'));
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('CreateDir')];
 }
 
 $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
@@ -908,7 +908,7 @@ if (!empty($documentAndFolders)) {
             }
 
             //@todo use a js loop to auto generate this code
-            if (in_array($extension, array('ogg', 'mp3', 'wav'))) {
+            if (in_array($extension, ['ogg', 'mp3', 'wav'])) {
                 // Get the document data from the ID
                 $document_data = DocumentManager::get_document_data_by_id(
                     $file['id'],
@@ -932,11 +932,11 @@ if (!empty($documentAndFolders)) {
                     $extension = 'oga';
                 }
 
-                $params = array(
+                $params = [
                     'url' => $document_data['direct_url'],
                     'extension' => $extension,
                     'count' => $count
-                );
+                ];
                 $jquery .= DocumentManager::generate_jplayer_jquery($params);
                 $count++;
             }
@@ -1008,7 +1008,7 @@ if ($isAllowedToEdit || $group_member_with_upload_rights ||
                 //only main user shared folder
                 $main_user_shared_folder_main = '/shared_folder/sf_user_'.api_get_user_id();
                 $main_user_shared_folder_sub = '/shared_folder\/sf_user_'.api_get_user_id().'\//'; //all subfolders
-                $user_shared_folders = array();
+                $user_shared_folders = [];
 
                 foreach ($folders as $fold) {
                     if ($main_user_shared_folder_main == $fold ||
@@ -1167,7 +1167,7 @@ if ($isAllowedToEdit ||
         $files = $_POST['ids'];
         $readonlyAlreadyChecked = false;
         $messages = '';
-        $items = array(
+        $items = [
             '/audio',
             '/flash',
             '/images',
@@ -1175,7 +1175,7 @@ if ($isAllowedToEdit ||
             '/video',
             '/chat_files',
             '/certificates'
-        );
+        ];
         foreach ($files as $documentId) {
             $data = DocumentManager::get_document_data_by_id($documentId, $courseInfo['code']);
             if (in_array($data['path'], $items)) {
@@ -1360,7 +1360,6 @@ if ($isAllowedToEdit ||
                     'error'
                 );
             }
-
         }
         Display::addFlash($message);
     }
@@ -1595,9 +1594,9 @@ if ($groupId != 0) {
 }
 
 if (!isset($folders) || $folders === false) {
-    $folders = array();
+    $folders = [];
 }
-$btngroup = array('class' => 'btn btn-default');
+$btngroup = ['class' => 'btn btn-default'];
 
 /* GO TO PARENT DIRECTORY */
 $actionsLeft = '';
@@ -1618,7 +1617,7 @@ if ($is_certificate_mode && $curdirpath != '/certificates') {
     );
 }
 
-$column_show = array();
+$column_show = [];
 
 if ($isAllowedToEdit ||
     $group_member_with_upload_rights ||
@@ -1629,8 +1628,12 @@ if ($isAllowedToEdit ||
     // Create new document
     if (!$is_certificate_mode) {
         $actionsLeft .= Display::url(
-            Display::return_icon('new_document.png', get_lang('CreateDoc'), '',
-                ICON_SIZE_MEDIUM),
+            Display::return_icon(
+                'new_document.png',
+                get_lang('CreateDoc'),
+                '',
+                ICON_SIZE_MEDIUM
+            ),
             api_get_path(WEB_CODE_PATH).'document/create_document.php?'
             .api_get_cidreq().'&id='.$document_id
         );
@@ -1655,8 +1658,12 @@ if ($isAllowedToEdit ||
         // Create new paint
         if (api_get_setting('enabled_support_pixlr') == 'true') {
             $actionsLeft .= Display::url(
-                Display::return_icon('new_paint.png',
-                    get_lang('PhotoRetouching'), '', ICON_SIZE_MEDIUM),
+                Display::return_icon(
+                    'new_paint.png',
+                    get_lang('PhotoRetouching'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
                 api_get_path(WEB_CODE_PATH).'document/create_paint.php?'
                 .api_get_cidreq().'&id='.$document_id
             );
@@ -1690,7 +1697,8 @@ if ($isAllowedToEdit ||
     // Create new certificate
     if ($is_certificate_mode) {
         $actionsLeft .= Display::url(
-            Display::return_icon('new_certificate.png',
+            Display::return_icon(
+                'new_certificate.png',
                 get_lang('CreateCertificate'),
                 '',
                 ICON_SIZE_MEDIUM
@@ -1722,7 +1730,7 @@ if ($isAllowedToEdit ||
         $actionsLeft .= Display::url(
             Display::return_icon('capture.png', get_lang('CatchScreenCasts'), '', ICON_SIZE_MEDIUM),
             '#',
-            array('id' => 'jcapture')
+            ['id' => 'jcapture']
         );
     }
 
@@ -1765,10 +1773,10 @@ if (!$is_certificate_mode) {
         'get',
         api_get_self().'?'.api_get_cidreq(),
         '',
-        array(),
+        [],
         FormValidator::LAYOUT_INLINE
     );
-    $form->addText('keyword', '', false, array('class' => 'col-md-2'));
+    $form->addText('keyword', '', false, ['class' => 'col-md-2']);
     $form->addElement('hidden', 'cidReq', api_get_course_id());
     $form->addElement('hidden', 'id_session', api_get_session_id());
     $form->addElement('hidden', 'gidReq', $groupId);
@@ -1778,8 +1786,8 @@ if (!$is_certificate_mode) {
 
 $table_footer = '';
 $total_size = 0;
-$sortable_data = array();
-$row = array();
+$sortable_data = [];
+$row = [];
 $userIsSubscribed = CourseManager::is_user_subscribed_in_course(
     api_get_user_id(),
     $courseInfo['code']
@@ -1790,9 +1798,9 @@ $getSizeURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_dir_size&'.ap
 if (isset($documentAndFolders) && is_array($documentAndFolders)) {
     if ($groupId == 0 || $userAccess) {
         $count = 1;
-        $countedPaths = array();
+        $countedPaths = [];
         foreach ($documentAndFolders as $key => $document_data) {
-            $row = array();
+            $row = [];
             $row['id'] = $document_data['id'];
             $row['type'] = $document_data['filetype'];
 
@@ -1864,7 +1872,7 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
 
             $path_info = pathinfo($document_data['path']);
             if (isset($path_info['extension']) &&
-                in_array($path_info['extension'], array('ogg', 'mp3', 'wav'))
+                in_array($path_info['extension'], ['ogg', 'mp3', 'wav'])
             ) {
                 $count++;
             }
@@ -1994,7 +2002,7 @@ if (api_is_platform_admin()) {
         $actionsLeft .= Display::url(
             get_lang('Recycle'),
             api_get_path(WEB_CODE_PATH).'document/recycle.php?'.api_get_cidreq(),
-            array('class' => 'btn btn-default')
+            ['class' => 'btn btn-default']
         );
     }
 }
@@ -2012,7 +2020,7 @@ if (!$is_certificate_mode && !isset($_GET['move'])) {
     $selector = DocumentManager::build_directory_selector(
         $folders,
         $document_id,
-        (isset($group_properties['directory']) ? $group_properties['directory'] : array())
+        (isset($group_properties['directory']) ? $group_properties['directory'] : [])
     );
 }
 
@@ -2034,7 +2042,7 @@ if ($isAllowedToEdit ||
 $column_show[] = 0;
 $column_show[] = 0;
 
-$column_order = array();
+$column_order = [];
 
 if (count($row) == 12) {
     //teacher
@@ -2061,7 +2069,7 @@ $table = new SortableTableFromArrayConfig(
     'ASC',
     true
 );
-$query_vars = array();
+$query_vars = [];
 if (isset($_GET['keyword'])) {
     $query_vars['keyword'] = Security::remove_XSS($_GET['keyword']);
 } else {
@@ -2079,18 +2087,18 @@ $column = 0;
 if (($isAllowedToEdit || $group_member_with_upload_rights) &&
     count($documentAndFolders) > 1
 ) {
-    $table->set_header($column++, '', false, array('style' => 'width:12px;'));
+    $table->set_header($column++, '', false, ['style' => 'width:12px;']);
 }
-$table->set_header($column++, get_lang('Type'), true, array('style' => 'width:30px;'));
+$table->set_header($column++, get_lang('Type'), true, ['style' => 'width:30px;']);
 $table->set_header($column++, get_lang('Name'));
-$table->set_header($column++, get_lang('Size'), true, array('style' => 'width:50px;'));
-$table->set_header($column++, get_lang('Date'), true, array('style' => 'width:150px;'));
+$table->set_header($column++, get_lang('Size'), true, ['style' => 'width:50px;']);
+$table->set_header($column++, get_lang('Date'), true, ['style' => 'width:150px;']);
 // Admins get an edit column
 if ($isAllowedToEdit ||
     $group_member_with_upload_rights ||
     DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
 ) {
-    $table->set_header($column++, get_lang('Actions'), false, array('class' => 'td_actions'));
+    $table->set_header($column++, get_lang('Actions'), false, ['class' => 'td_actions']);
 }
 
 // Actions on multiple selected documents
@@ -2098,7 +2106,7 @@ if ($isAllowedToEdit ||
 
 if (count($documentAndFolders) > 1) {
     if ($isAllowedToEdit || $groupMemberWithEditRights) {
-        $form_actions = array();
+        $form_actions = [];
         $form_action['set_invisible'] = get_lang('SetInvisible');
         $form_action['set_visible'] = get_lang('SetVisible');
         $form_action['delete'] = get_lang('Delete');
@@ -2120,7 +2128,7 @@ if (!empty($groupId)) {
 }
 $toolbar = Display::toolbarAction(
     'toolbar-document',
-    array($actionsLeft, $actionsRight)
+    [$actionsLeft, $actionsRight]
 );
 
 echo $toolbar;

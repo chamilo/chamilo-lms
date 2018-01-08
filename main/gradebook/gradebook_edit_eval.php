@@ -48,10 +48,10 @@ if ($form->validate()) {
     exit;
 }
 $selectcat_inter = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$selectcat_inter,
     'name' => get_lang('Gradebook')
-);
+];
 
 $htmlHeadXtra[] = '<script>
 $(document).ready( function() {

@@ -22,7 +22,7 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->setDefaults(
-                array(
+                [
                     'required_profile_fields' => [],
                     'allow_registration' => 'false',
                     'allow_registration_as_teacher' => 'false',
@@ -40,7 +40,7 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                     'drh_autosubscribe' => '',
                     'sessionadmin_autosubscribe' => '',
                     'platform_unsubscribe_allowed' => 'false',
-                )
+                ]
             )
             ->setTransformer(
                 'required_profile_fields',
@@ -55,14 +55,14 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                 new ArrayToIdentifierTransformer()
             )
         ;
-        $allowedTypes = array(
-            'required_profile_fields' => array('array'),
-            'extendedprofile_registration' => array('array'),
-            'extendedprofile_registrationrequired' => array('array'),
-            'allow_registration' => array('string'),
-            'allow_registration_as_teacher' => array('string'),
-            'allow_lostpassword' => array('string'),
-        );
+        $allowedTypes = [
+            'required_profile_fields' => ['array'],
+            'extendedprofile_registration' => ['array'],
+            'extendedprofile_registrationrequired' => ['array'],
+            'allow_registration' => ['string'],
+            'allow_registration_as_teacher' => ['string'],
+            'allow_lostpassword' => ['string'],
+        ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
@@ -82,42 +82,43 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
             ->add(
                 'required_profile_fields',
                 'choice',
-                array(
+                [
                     'multiple' => true,
-                    'choices' => array(
+                    'choices' => [
                         'officialcode' => 'officialcode',
                         'email' => 'email',
                         'language' => 'language',
                         'phone' => 'phone',
-                    ),
-                )
+                    ],
+                ]
             )
             ->add(
                 'allow_registration',
                 'choice',
-                array(
-                    'choices' => array(
+                [
+                    'choices' => [
                         'true' => 'Yes',
                         'false' => 'No',
                         'confirmation' => 'MailConfirmation',
                         'approval' => 'Approval',
-                    ),
-                )
+                    ],
+                ]
             )
             ->add('allow_registration_as_teacher', YesNoType::class)
             ->add('allow_lostpassword', YesNoType::class)
             ->add(
                 'page_after_login',
                 'choice',
-                array(
-                    'choices' => array(
+                [
+                    'choices' => [
                         'index.php' => 'CampusHomepage',
                         'user_portal.php' => 'MyCourses',
                         'main/auth/courses.php' => 'CourseCatalog',
-                    ),
-                )
+                    ],
+                ]
             )
-            ->add('extendedprofile_registration',
+            ->add(
+                'extendedprofile_registration',
                 'choice',
                 [
                     'multiple' => true,
@@ -126,7 +127,8 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                     'help_block' => 'ExtendedProfileRegistrationComment'
                 ]
             )
-            ->add('extendedprofile_registrationrequired',
+            ->add(
+                'extendedprofile_registrationrequired',
                 'choice',
                 [
                     'multiple' => true,

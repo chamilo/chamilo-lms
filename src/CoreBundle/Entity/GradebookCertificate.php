@@ -63,7 +63,7 @@ class GradebookCertificate
      */
     private $pathCertificate;
 
-      /**
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="downloaded_at", type="datetime", nullable=true)

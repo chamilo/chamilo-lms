@@ -163,7 +163,7 @@ if (isset($_GET['createdir'])) {
     //show the form
     echo Display::return_message($new_folder_text, 'normal');
 } else {
-    //give them a link to create a directory ?>
+    //give them a link to create a directory?>
     <p>
         <a href="<?php echo api_get_self(); ?>?path=<?php echo $path; ?>&amp;createdir=1">
             <?php echo Display::return_icon('new_folder.gif'); ?>

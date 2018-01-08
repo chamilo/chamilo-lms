@@ -1147,7 +1147,7 @@ function display_requirements(
             $error = true;
         }
 
-        // And now display the choice buttons (go back or install) ?>
+        // And now display the choice buttons (go back or install)?>
         <p align="center" style="padding-top:15px">
         <button type="submit" name="step1" class="btn btn-default" onclick="javascript: window.location='index.php'; return false;" value="<?php echo get_lang('Previous'); ?>" >
             <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>

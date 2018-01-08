@@ -1321,7 +1321,7 @@ class Wiki
                         ).'</a>';
                 }
 
-                //export to print ?>
+                //export to print?>
                 <script>
                     function goprint() {
                         var a = window.open('', '', 'width=800,height=600');

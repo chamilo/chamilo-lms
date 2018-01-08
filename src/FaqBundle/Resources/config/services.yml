@@ -4,4 +4,3 @@ services:
 
     Chamilo\FaqBundle\Repository\:
         resource: ../../Repository
-

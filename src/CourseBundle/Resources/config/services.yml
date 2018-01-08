@@ -47,7 +47,12 @@ services:
     # Group voter, checks if a user has permissions to do actions
     chamilo_course.security.authorization.voter.group_voter:
         class: Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter
-        arguments: [ '@doctrine.orm.entity_manager', '@chamilo_core.entity.manager.course_manager', '@chamilo_course.manager.group', '@service_container' ]
+        arguments: [
+            '@doctrine.orm.entity_manager',
+            '@chamilo_core.entity.manager.course_manager',
+            '@chamilo_course.manager.group',
+            '@service_container'
+          ]
         public: false
         tags:
            - { name: security.voter }

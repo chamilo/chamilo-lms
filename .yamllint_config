@@ -1,0 +1,10 @@
+
+ignore: |
+    app/*
+    .travis.yml
+    .codeclimate.yml
+
+extends: default
+rules:
+  line-length:
+    max: 200

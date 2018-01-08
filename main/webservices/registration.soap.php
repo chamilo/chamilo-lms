@@ -1215,21 +1215,21 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-        'firstname'                 => array('name' => 'firstname', 'type' => 'xsd:string'),
-        'lastname'                  => array('name' => 'lastname', 'type' => 'xsd:string'),
-        'status'                    => array('name' => 'status', 'type' => 'xsd:string'),
-        'email'                     => array('name' => 'email', 'type' => 'xsd:string'),
-        'loginname'                 => array('name' => 'loginname', 'type' => 'xsd:string'),
-        'password'                  => array('name' => 'password', 'type' => 'xsd:string'), //encripted password using the encrypt_method
-        'encrypt_method'            => array('name' => 'encrypt_method', 'type' => 'xsd:string'),
-        'language'                  => array('name' => 'language', 'type' => 'xsd:string'),
-        'phone'                     => array('name' => 'phone', 'type' => 'xsd:string'),
-        'expiration_date'           => array('name' => 'expiration_date', 'type' => 'xsd:string'),
-        'official_code'             => array('name' => 'official_code', 'type' => 'xsd:string'),
-        'original_user_id_name'     => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
-        'original_user_id_value'    => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
-        'extra'                     => array('name' => 'extra', 'type' => 'tns:extrasList'),
-        'secret_key'                => array('name' => 'secret_key', 'type' => 'xsd:string')
+        'firstname' => array('name' => 'firstname', 'type' => 'xsd:string'),
+        'lastname' => array('name' => 'lastname', 'type' => 'xsd:string'),
+        'status' => array('name' => 'status', 'type' => 'xsd:string'),
+        'email' => array('name' => 'email', 'type' => 'xsd:string'),
+        'loginname' => array('name' => 'loginname', 'type' => 'xsd:string'),
+        'password' => array('name' => 'password', 'type' => 'xsd:string'), //encripted password using the encrypt_method
+        'encrypt_method' => array('name' => 'encrypt_method', 'type' => 'xsd:string'),
+        'language' => array('name' => 'language', 'type' => 'xsd:string'),
+        'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
+        'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
+        'official_code' => array('name' => 'official_code', 'type' => 'xsd:string'),
+        'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
+        'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
+        'extra' => array('name' => 'extra', 'type' => 'tns:extrasList'),
+        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string'),
     )
 );
 
@@ -1250,9 +1250,10 @@ function WSCreateUserPasswordCrypted($params)
 {
     global $_configuration, $debug;
     $debug = 1;
-    if ($debug) error_log('WSCreateUserPasswordCrypted');
-    if ($debug) error_log(print_r($params, 1));
-
+    if ($debug) {
+        error_log('WSCreateUserPasswordCrypted');
+        error_log(print_r($params, 1));
+    }
     if (!WSHelperVerifyKey($params)) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
@@ -1371,7 +1372,11 @@ function WSCreateUserPasswordCrypted($params)
             return 0;
         }
     } else {
-        if ($debug) error_log("User not found with original_id = $original_user_id_value and original_name = $original_user_id_name");
+        if ($debug) {
+            error_log(
+                "User not found with original_id = $original_user_id_value and original_name = $original_user_id_name"
+            );
+        }
     }
 
     // Default language.
@@ -1383,12 +1388,16 @@ function WSCreateUserPasswordCrypted($params)
 
     // First check wether the login already exists
     if (!UserManager::is_username_available($loginName)) {
-        if ($debug) error_log("Username $loginName is not available");
+        if ($debug) {
+            error_log("Username $loginName is not available");
+        }
         return 0;
     }
 
     $queryExpirationDate = '';
-    if (!empty($params['expiration_date'])) $queryExpirationDate = "expiration_date     = '".Database::escape_string($expiration_date)."', ";
+    if (!empty($params['expiration_date'])) {
+        $queryExpirationDate = "expiration_date     = '".Database::escape_string($expiration_date)."', ";
+    }
 
     $sql = "INSERT INTO $table_user SET
             lastname            = '".Database::escape_string(trim($lastName))."',
@@ -1413,12 +1422,17 @@ function WSCreateUserPasswordCrypted($params)
     Database::query($sql);
     $return = Database::insert_id();
     if ($return) {
+        if ($debug) {
+            error_log("New user created. user_id = $return");
+        }
         $sql = "UPDATE $table_user SET user_id = id WHERE id = $return";
         Database::query($sql);
 
         $url_id = api_get_current_access_url_id();
         UrlManager::add_user_to_url($return, $url_id);
-        if ($debug) error_log("Adding user_id = $return to URL id $url_id ");
+        if ($debug) {
+            error_log("Adding user_id = $return to URL id $url_id ");
+        }
 
         // Create extra field for the original_user_id_name
         UserManager::create_extra_field(
@@ -1437,8 +1451,8 @@ function WSCreateUserPasswordCrypted($params)
         // Create extra fields
         if (is_array($extra_list) && count($extra_list) > 0) {
             foreach ($extra_list as $extra) {
-                $extra_field_name   = $extra['field_name'];
-                $extra_field_value  = $extra['field_value'];
+                $extra_field_name = $extra['field_name'];
+                $extra_field_value = $extra['field_value'];
                 // save new fieldlabel into user_field table
                 UserManager::create_extra_field(
                     $extra_field_name,
@@ -1455,11 +1469,15 @@ function WSCreateUserPasswordCrypted($params)
             }
         }
     } else {
-        if ($debug) error_log('Error while inserting a user');
+        if ($debug) {
+            error_log('Error while inserting a user');
+        }
 
         return 0;
     }
-
+    if ($debug) {
+        error_log("Return value: $return");
+    }
     return $return;
 }
 
@@ -2666,6 +2684,12 @@ $server->wsdl->addComplexType(
 
 function WSHelperActionOnUsers($params, $type)
 {
+    $debug = 1;
+    if ($debug) {
+        error_log("WSHelperActionOnUsers");
+        error_log(print_r($params, 1));
+    }
+
     if (!WSHelperVerifyKey($params)) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
@@ -2681,17 +2705,23 @@ function WSHelperActionOnUsers($params, $type)
             $original_user_id['original_user_id_name']
         );
         if ($user_id > 0) {
-            if ($type == "delete") {
+            if ($debug) {
+                error_log("User found: $user_id");
+            }
+            if ($type == 'delete') {
                 $result = UserManager::delete_user($user_id);
-            } else if ($type == "disable") {
+            } elseif ($type == "disable") {
                 $result = UserManager::disable($user_id);
-            } else if ($type == "enable") {
+            } elseif ($type == "enable") {
                 $result = UserManager::enable($user_id);
+            }
+        } else {
+            if ($debug) {
+                error_log("User id not found: $user_id");
             }
         }
         $results[] = $result ? 1 : 0;
     }
-
 
     $count_results = count($results);
     $output = array();
@@ -2718,7 +2748,7 @@ $server->register(
 
 function WSDeleteUsers($params)
 {
-    return WSHelperActionOnUsers($params, "delete");
+    return WSHelperActionOnUsers($params, 'delete');
 }
 
 /** WSDisableUsers **/
@@ -4534,7 +4564,9 @@ function WSSubscribeUserToCourse($params)
     if (!WSHelperVerifyKey($params)) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
-    if ($debug) error_log('WSSubscribeUserToCourse params: '.print_r($params, 1));
+    if ($debug) {
+        error_log('WSSubscribeUserToCourse params: '.print_r($params, 1));
+    }
 
     $results = array();
     $userscourses = $params['userscourses'];
@@ -4553,7 +4585,9 @@ function WSSubscribeUserToCourse($params)
             $original_user_id['original_user_id_value'],
             $original_user_id['original_user_id_name']
         );
-        if ($debug) error_log('WSSubscribeUserToCourse user_id: '.$user_id);
+        if ($debug) {
+            error_log('WSSubscribeUserToCourse user_id: '.$user_id);
+        }
 
         if ($user_id == 0) {
             // If user was not found, there was a problem
@@ -4565,7 +4599,7 @@ function WSSubscribeUserToCourse($params)
                 $original_course_id['original_course_id_name']
             );
 
-            $courseCode = $courseInfo['code'];
+            $courseCode = isset($courseInfo['code']) ? $courseInfo['code'] : '';
 
             if (empty($courseCode)) {
                 // Course was not found

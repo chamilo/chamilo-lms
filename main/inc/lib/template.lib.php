@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\UserBundle\Entity\User;
+
 /**
  * Class Template
  *
@@ -171,6 +174,15 @@ class Template
             } else {
                 $this->twig->addFilter(new Twig_SimpleFilter($filter, $filter));
             }
+        }
+
+        $functions = [
+            ['name' => 'get_tutors_names', 'callable' => 'Template::returnTutorsNames'],
+            ['name' => 'get_teachers_names', 'callable' => 'Template::returnTeachersNames']
+        ];
+
+        foreach ($functions as $function) {
+            $this->twig->addFunction(new Twig_SimpleFunction($function['name'], $function['callable']));
         }
 
         // Setting system variables
@@ -1621,5 +1633,66 @@ class Template
             header('Referrer-Policy: '.$setting);
         }
         // end of HTTP headers security block
+    }
+
+    /**
+     * Returns the tutors names for the current course in session
+     * Function to use in Twig templates
+     * @return string
+     */
+    public static function returnTutorsNames()
+    {
+        $em = Database::getManager();
+        $tutors = $em
+            ->createQuery('
+                SELECT u FROM ChamiloUserBundle:User u
+                INNER JOIN ChamiloCoreBundle:SessionRelCourseRelUser scu WITH u.id = scu.user
+                WHERE scu.status = :teacher_status AND scu.session = :session AND scu.course = :course
+            ')
+            ->setParameters([
+                'teacher_status' => SessionRelCourseRelUser::STATUS_COURSE_COACH,
+                'session' => api_get_session_id(),
+                'course' => api_get_course_int_id()
+            ])
+            ->getResult();
+
+        $names = [];
+
+        /** @var User $tutor */
+        foreach ($tutors as $tutor) {
+            $names[] = $tutor->getCompleteName();
+        }
+
+        return implode(CourseManager::USER_SEPARATOR, $names);
+    }
+
+    /**s
+     * Returns the teachers name for the current course
+     * Function to use in Twig templates
+     * @return string
+     */
+    public static function returnTeachersNames()
+    {
+        $em = Database::getManager();
+        $teachers = $em
+            ->createQuery('
+                SELECT u FROM ChamiloUserBundle:User u
+                INNER JOIN ChamiloCoreBundle:CourseRelUser cu WITH u.id = cu.user
+                WHERE cu.status = :teacher_status AND cu.course = :course
+            ')
+            ->setParameters([
+                'teacher_status' => User::COURSE_MANAGER,
+                'course' => api_get_course_int_id()
+            ])
+            ->getResult();
+
+        $names = [];
+
+        /** @var User $teacher */
+        foreach ($teachers as $teacher) {
+            $names[] = $teacher->getCompleteName();
+        }
+
+        return implode(CourseManager::USER_SEPARATOR, $names);
     }
 }

@@ -32,7 +32,7 @@ switch ($action) {
 $skillTable = Database::get_main_table(TABLE_MAIN_SKILL);
 $skillRelUserTable = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
 $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-$tableRows = array();
+$tableRows = [];
 $objSkill = new Skill();
 $tpl = new Template(get_lang('Skills'));
 $tplPath = null;
@@ -47,7 +47,7 @@ if ($isStudent) {
     $tplPath = 'skill/student_report.tpl';
 } elseif ($isStudentBoss) {
     $selectedStudent = isset($_REQUEST['student']) ? (int) $_REQUEST['student'] : 0;
-    $tableRows = array();
+    $tableRows = [];
     $followedStudents = UserManager::getUsersFollowedByStudentBoss($userId);
 
     foreach ($followedStudents as &$student) {
@@ -67,7 +67,7 @@ if ($isStudent) {
         $result = Database::query($sql);
 
         while ($resultData = Database::fetch_assoc($result)) {
-            $tableRow = array(
+            $tableRow = [
                 'complete_name' => $followedStudents[$selectedStudent]['completeName'],
                 'skill_name' => Skill::translateName($resultData['name']),
                 'achieved_at' => api_format_date($resultData['acquired_skill_at'], DATE_FORMAT_NUMBER),
@@ -80,7 +80,7 @@ if ($isStudent) {
                     true
                 ),
                 'course_name' => $resultData['title']
-            );
+            ];
 
             $imageSysPath = sprintf("%s%s/course-pic.png", api_get_path(SYS_COURSE_PATH), $resultData['directory']);
 
@@ -114,7 +114,7 @@ if ($isStudent) {
 
     $courses = CourseManager::get_courses_list();
 
-    $tableRows = array();
+    $tableRows = [];
     $reportTitle = null;
     $skills = $objSkill->get_all();
 
@@ -142,7 +142,7 @@ if ($isStudent) {
                 DRH
             );
 
-            $coursesFilter = array();
+            $coursesFilter = [];
             foreach ($courses as $course) {
                 $coursesFilter[] = $course['id'];
             }

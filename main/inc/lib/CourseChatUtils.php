@@ -606,7 +606,7 @@ class CourseChatUtils
         }
 
         $remove = 0;
-        $content = array();
+        $content = [];
 
         if (file_exists($chat_path.$basename_chat.'.log.html')) {
             $content = file($chat_path.$basename_chat.'.log.html');

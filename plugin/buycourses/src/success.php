@@ -145,7 +145,6 @@ if ($form->validate()) {
                     $purchaseStatus = $plugin->get_lang('PendingReasonByVerify');
                     break;
                 case 'other':
-                    //no break
                 default:
                     $purchaseStatus = $plugin->get_lang('PendingReasonByOther');
                     break;
@@ -191,7 +190,7 @@ if ($shippingDetails['ACK'] !== 'Success') {
     exit;
 }
 
-$interbreadcrumb[] = array("url" => "course_catalog.php", "name" => $plugin->get_lang('CourseListOnSale'));
+$interbreadcrumb[] = ["url" => "course_catalog.php", "name" => $plugin->get_lang('CourseListOnSale')];
 
 $templateName = $plugin->get_lang('PaymentMethods');
 $tpl = new Template($templateName);

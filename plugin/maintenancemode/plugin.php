@@ -198,4 +198,3 @@ RewriteRule \.*$ '.$append.'/maintenance.html [R=302,L]
     }
     $plugin_info['settings_form'] = $form;
 }
-

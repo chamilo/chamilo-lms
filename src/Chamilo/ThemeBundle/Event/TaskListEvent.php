@@ -11,7 +11,7 @@ use Chamilo\ThemeBundle\Model\TaskInterface;
  */
 class TaskListEvent extends ThemeEvent
 {
-    protected $tasks = array();
+    protected $tasks = [];
     protected $total = 0;
 
     /**

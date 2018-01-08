@@ -3,7 +3,6 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
-
 /**
  * Class Resource
  * Representation of a resource in a Chamilo-course.
@@ -53,8 +52,8 @@ class Resource
         $this->source_id = $id;
         $this->type = $type;
         $this->destination_id = -1;
-        $this->linked_resources = array();
-        $this->item_properties = array();
+        $this->linked_resources = [];
+        $this->item_properties = [];
     }
 
     /**

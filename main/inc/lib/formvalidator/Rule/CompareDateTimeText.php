@@ -22,7 +22,7 @@ class HTML_QuickForm_Rule_CompareDateTimeText extends HTML_QuickForm_Rule_Compar
                 return true;
             }
         }
-        $result = parent::validate(array($datetime1, $datetime2), $operator);
+        $result = parent::validate([$datetime1, $datetime2], $operator);
 
         return $result;
     }

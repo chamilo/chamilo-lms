@@ -23,9 +23,9 @@ class MaintenanceModePlugin extends Plugin
         parent::__construct(
             '0.1',
             'Julio Montoya',
-            array(
+            [
                 'tool_enable' => 'boolean'
-            )
+            ]
         );
     }
 }

@@ -34,7 +34,7 @@ function xapian_query($query_string, $db = null, $start = 0, $length = 10, $extr
         }
 
         // Build subqueries from $extra array. Now only used by tags search filter on search widget
-        $subqueries = array();
+        $subqueries = [];
         foreach ($extra as $subquery) {
             if (!empty($subquery)) {
                 $subqueries[] = new XapianQuery($subquery);
@@ -53,7 +53,7 @@ function xapian_query($query_string, $db = null, $start = 0, $length = 10, $extr
             $query_parser->add_boolean_prefix('courseid', XAPIAN_PREFIX_COURSEID);
             $query_parser->add_boolean_prefix('toolid', XAPIAN_PREFIX_TOOLID);
             $query = $query_parser->parse_query($query_string);
-            $final_array = array_merge($subqueries, array($query));
+            $final_array = array_merge($subqueries, [$query]);
             $query = new XapianQuery(XapianQuery::OP_AND, $final_array);
         } else {
             $query = new XapianQuery(XapianQuery::OP_OR, $subqueries);
@@ -67,7 +67,7 @@ function xapian_query($query_string, $db = null, $start = 0, $length = 10, $extr
 
         $specific_fields = get_specific_field_list();
 
-        $results = array();
+        $results = [];
         $i = $matches->begin();
 
         // Display the results.
@@ -113,7 +113,7 @@ function xapian_query($query_string, $db = null, $start = 0, $length = 10, $extr
                 $count = $matches->get_matches_estimated();
                 break;
         }
-        return array($count, $results);
+        return [$count, $results];
     } catch (Exception $e) {
         display_xapian_error($e->getMessage());
         return null;
@@ -149,13 +149,13 @@ function xapian_get_all_terms($count = 0, $prefix, $db = null)
             $termi = $db->allterms_begin();
         }
 
-        $terms = array();
+        $terms = [];
         $i = 0;
         for (; !$termi->equals($db->allterms_end()) && (++$i <= $count || $count == 0); $termi->next()) {
-            $terms[] = array(
+            $terms[] = [
                 'frequency' => $termi->get_termfreq(),
                 'name' => $termi->get_term(),
-            );
+            ];
         }
 
         return $terms;
@@ -181,12 +181,12 @@ function xapian_get_doc_terms($doc = null, $prefix)
         //TODO: make the filter by prefix on xapian if possible
         //ojwb marvil07: use Document::termlist_begin() and then skip_to(prefix) on the TermIterator
         //ojwb you'll need to check the end condition by hand though
-        $terms = array();
+        $terms = [];
         for ($termi = $doc->termlist_begin(); !$termi->equals($doc->termlist_end()); $termi->next()) {
-            $term = array(
+            $term = [
                 'frequency' => $termi->get_termfreq(),
                 'name' => $termi->get_term(),
-            );
+            ];
             if ($term['name'][0] === $prefix) {
                 $terms[] = $term;
             }
@@ -224,14 +224,14 @@ function xapian_join_queries($query1, $query2 = null, $op = 'or')
 
     // review parameters to decide how to join
     if (!is_array($query1)) {
-        $query1 = array($query1);
+        $query1 = [$query1];
     }
     if (is_null($query2)) {
         // join an array of queries with $op
         return new XapianQuery($op, $query1);
     }
     if (!is_array($query2)) {
-        $query2 = array($query2);
+        $query2 = [$query2];
     }
 
     return new XapianQuery($op, array_merge($query1, $query2));
@@ -242,7 +242,8 @@ function xapian_join_queries($query1, $query2 = null, $op = 'or')
  * @param String The xapian error message
  * @return String The chamilo error message
  */
-function display_xapian_error($xapian_error_message) {
+function display_xapian_error($xapian_error_message)
+{
     $message = explode(':', $xapian_error_message);
     $type_error_message = $message[0];
     if ($type_error_message == 'DatabaseOpeningError') {

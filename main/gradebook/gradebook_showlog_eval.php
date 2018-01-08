@@ -11,18 +11,18 @@ GradebookUtils::block_students();
 
 $selectCat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => Category::getUrl(),
     'name' => get_lang('Gradebook')
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$selectCat,
     'name' => get_lang('Details')
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => 'gradebook_showlog_eval.php?visiblelog='.Security::remove_XSS($_GET['visiblelog']).'&amp;selectcat='.$selectCat,
     'name' => get_lang('GradebookQualifyLog')
-);
+];
 $this_section = SECTION_COURSES;
 Display::display_header('');
 echo Display::page_header(get_lang('GradebookQualifyLog'));
@@ -41,7 +41,7 @@ $sql = "SELECT le.name,le.description,le.weight,le.visible,le.type,le.created_at
             type = 'evaluation'
         ";
 $result = Database::query($sql);
-$list_info = array();
+$list_info = [];
 while ($row = Database::fetch_row($result)) {
     $list_info[] = $row;
 }
@@ -57,10 +57,10 @@ foreach ($list_info as $key => $info_log) {
     }
 }
 
-$parameters = array(
+$parameters = [
     'visiblelog' => $visible_log,
     'selectcat' => intval($_GET['selectcat']),
-);
+];
 $table = new SortableTableFromArrayConfig($list_info, 1, 20, 'gradebookeval');
 $table->set_additional_parameters($parameters);
 

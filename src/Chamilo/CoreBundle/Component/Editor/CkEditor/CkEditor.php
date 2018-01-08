@@ -107,16 +107,16 @@ class CkEditor extends Editor
             return null;
         }
         /** @var \Chamilo\CoreBundle\Entity\SystemTemplate $template */
-        $templateList = array();
+        $templateList = [];
         $cssTheme = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/';
-        $search = array('{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}');
-        $replace = array(
+        $search = ['{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}'];
+        $replace = [
             $cssTheme,
             api_get_path(REL_CODE_PATH).'img/',
             api_get_path(REL_PATH),
             api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH),
             ''
-        );
+        ];
 
         foreach ($templates as $template) {
             $image = $template->getImage();
@@ -130,12 +130,12 @@ class CkEditor extends Editor
 
             $content = str_replace($search, $replace, $template->getContent());
 
-            $templateList[] = array(
+            $templateList[] = [
                 'title' => $this->translator->trans($template->getTitle()),
                 'description' => $this->translator->trans($template->getComment()),
                 'image' => $image,
                 'html' => $content
-            );
+            ];
         }
 
         return json_encode($templateList);
@@ -177,16 +177,16 @@ class CkEditor extends Editor
         $entityManager = \Database::getManager();
         $systemTemplates = $entityManager->getRepository('ChamiloCoreBundle:SystemTemplate')->findAll();
         $cssTheme = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/';
-        $search = array('{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}');
-        $replace = array(
+        $search = ['{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}'];
+        $replace = [
             $cssTheme,
             api_get_path(REL_CODE_PATH).'img/',
             api_get_path(REL_PATH),
             api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH),
             '',
-        );
+        ];
 
-        $templateList = array();
+        $templateList = [];
 
         foreach ($systemTemplates as $template) {
             $image = $template->getImage();
@@ -202,12 +202,12 @@ class CkEditor extends Editor
             $templateContent = $template->getContent();
             $content = str_replace($search, $replace, $templateContent);
 
-            $templateList[] = array(
+            $templateList[] = [
                 'title' => get_lang($template->getTitle()),
                 'description' => get_lang($template->getComment()),
                 'image' => $image,
                 'html' => $content
-            );
+            ];
         }
 
         return $templateList;

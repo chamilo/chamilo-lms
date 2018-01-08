@@ -63,7 +63,7 @@ class SmsPlugin extends Plugin
      */
     public function getSmsTypeOptions()
     {
-        return array(
+        return [
             'MessageWelcomeXLoginXPasswordX',
             'MessageXNewFileSharedCourseXByX',
             'MessageXAccountApprovedConnectX',
@@ -107,7 +107,7 @@ class SmsPlugin extends Plugin
             'MessageXBeenInvitedCompleteSurveyXCourseX',
             'MessageXReminderAssignmentXCourseXDue',
             'MessageXUserDetailsModified'
-        );
+        ];
     }
 
     /**
@@ -121,7 +121,7 @@ class SmsPlugin extends Plugin
         $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable('mobile_phone_number');
 
         if (empty($extraFieldInfo)) {
-            $extraField->save(array(
+            $extraField->save([
                 'field_type' => 1,
                 'variable' => 'mobile_phone_number',
                 'display_text' => $this->get_lang('mobile_phone_number'),
@@ -130,7 +130,7 @@ class SmsPlugin extends Plugin
                 'visible' => 1,
                 'changeable' => 1,
                 'filter' => null
-            ));
+            ]);
         }
     }
 

@@ -16,7 +16,7 @@ class EventsDispatcher
      * @param array $event_data
      * @return bool
      */
-    public static function events($event_name, $event_data = array())
+    public static function events($event_name, $event_data = [])
     {
         global $event_config;
         // get the config for the event passed in parameter ($event_name)

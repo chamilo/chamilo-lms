@@ -48,7 +48,7 @@ $sessionFilter = new FormValidator(
     'get',
     '',
     '',
-    array(),
+    [],
     FormValidator::LAYOUT_INLINE
 );
 $courseSelect = $sessionFilter->addElement(
@@ -56,7 +56,7 @@ $courseSelect = $sessionFilter->addElement(
     'course_name',
     get_lang('SearchCourse'),
     null,
-    array('url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course')
+    ['url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course']
 );
 
 if (!empty($courseId)) {
@@ -126,8 +126,8 @@ $extra_params['autowidth'] = 'true';
 $extra_params['height'] = 'auto';
 
 if (!isset($_GET['keyword'])) {
-    $extra_params['postData'] = array(
-        'filters' => array(
+    $extra_params['postData'] = [
+        'filters' => [
             "groupOp" => "AND",
             "rules" => $result['rules'],
             /*array(
@@ -135,8 +135,8 @@ if (!isset($_GET['keyword'])) {
                 array( "field" => "display_end_date", "op" => "gt", "data" => "")
             ),*/
             //'groups' => $groups
-        )
-    );
+        ]
+    ];
 }
 
 $hideSearch = api_get_configuration_value('hide_search_form_in_session_list');
@@ -241,7 +241,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
                 $columns,
                 $column_model,
                 $extra_params,
-                array(),
+                [],
                 $action_links,
                 true
             );
@@ -287,7 +287,8 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
 
             original_cols = grid.jqGrid('getGridParam', 'colModel');
 
-            <?php if ($allowOrder) { ?>
+            <?php if ($allowOrder) {
+                ?>
             options = {
                 update: function (e, ui) {
                     var rowNum = jQuery("#sessions").getGridParam('rowNum');
@@ -308,7 +309,8 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             };
             // Sortable rows
             grid.jqGrid('sortableRows', options);
-            <?php } ?>
+            <?php
+            } ?>
 
             grid.jqGrid('navGrid','#sessions_pager',
                 {edit:false,add:false,del:false},
@@ -381,9 +383,9 @@ if (api_is_platform_admin()) {
         [],
         FormValidator::LAYOUT_INLINE
     );
-    $form->addElement('text', 'keyword', null, array(
+    $form->addElement('text', 'keyword', null, [
         'aria-label' => get_lang('Search')
-    ));
+    ]);
     $form->addButtonSearch(get_lang('Search'));
     $form->display();
     echo '</div>';
@@ -398,5 +400,3 @@ echo Display::grid_html('sessions');
 echo '</div>';
 
 Display::display_footer();
-
-

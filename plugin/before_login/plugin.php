@@ -23,17 +23,17 @@ $form = new FormValidator('form');
 $form->addElement('select', 'language', get_lang('Language'), api_get_languages_to_array());
 
 $form->addElement('header', 'Option 1');
-$form->addElement('textarea', 'option1', get_lang('Description'), array('rows' => 10, 'class' => 'span6'));
+$form->addElement('textarea', 'option1', get_lang('Description'), ['rows' => 10, 'class' => 'span6']);
 $form->addElement('text', 'option1_url', get_lang('RedirectTo'));
 
 $form->addElement('header', 'Option 2');
-$form->addElement('textarea', 'option2', get_lang('Description'), array('rows' => 10, 'class' => 'span6'));
+$form->addElement('textarea', 'option2', get_lang('Description'), ['rows' => 10, 'class' => 'span6']);
 $form->addElement('text', 'option2_url', get_lang('RedirectTo'));
 $form->addElement('button', 'submit_button', get_lang('Save'));
 
 // Get default value for form
 
-$defaults = array();
+$defaults = [];
 $defaults['language'] = api_get_plugin_setting('before_login', 'language');
 $defaults['option1'] = api_get_plugin_setting('before_login', 'option1');
 $defaults['option2'] = api_get_plugin_setting('before_login', 'option2');
@@ -41,9 +41,9 @@ $defaults['option2'] = api_get_plugin_setting('before_login', 'option2');
 $defaults['option1_url'] = api_get_plugin_setting('before_login', 'option1_url');
 $defaults['option2_url'] = api_get_plugin_setting('before_login', 'option2_url');
 
-$plugin_info['templates'] = array('template.tpl');
+$plugin_info['templates'] = ['template.tpl'];
 if (file_exists(__DIR__.'/custom.template.tpl')) {
-    $plugin_info['templates'] = array('custom.template.tpl');
+    $plugin_info['templates'] = ['custom.template.tpl'];
 }
 $form->setDefaults($defaults);
 

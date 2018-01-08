@@ -21,8 +21,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'user_list.php', 'name' => get_lang('UserList'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('UserList')];
 
 // Database Table Definitions
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -153,7 +153,7 @@ function remove_item(origin) {
 $formSent = 0;
 $firstLetterSession = isset($_POST['firstLetterSession']) ? $_POST['firstLetterSession'] : null;
 $errorMsg = '';
-$UserList = array();
+$UserList = [];
 
 if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
     $sessions_list = $_POST['SessionsList'];
@@ -179,7 +179,7 @@ if ($user_info['status'] != SESSIONADMIN) {
     $actionsLeft .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.
         Display::return_icon('course-add.png', get_lang('AssignCourses'), null, ICON_SIZE_MEDIUM).'</a>';
 
-    echo Display::toolbarAction('toolbar-dashboard', array($actionsLeft));
+    echo Display::toolbarAction('toolbar-dashboard', [$actionsLeft]);
 }
 
 echo Display::page_header(
@@ -216,7 +216,9 @@ if (api_is_multiple_url_enabled()) {
 }
 $result = Database::query($sql);
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id ?>" style="margin:0px;" <?php if ($ajax_search) { echo ' onsubmit="valide();"'; }?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id ?>" style="margin:0px;" <?php if ($ajax_search) {
+    echo ' onsubmit="valide();"';
+}?>>
     <input type="hidden" name="formSent" value="1" />
 
     <div class="row">
@@ -226,23 +228,26 @@ $result = Database::query($sql);
                 <select id="origin" name="NoAssignedSessionsList[]" multiple="multiple" size="20" style="width:340px;">
                     <?php
                     while ($enreg = Database::fetch_array($result)) {
-                    ?>
+                        ?>
                         <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'], ENT_QUOTES).'"'; ?>>
                             <?php echo $enreg['name']; ?>
                         </option>
-                    <?php } ?>
+                    <?php
+                    } ?>
                 </select>
             </div>
         </div>
         <div class="col-md-4">
             <div class="code-course">
-                <?php if ($add_type == 'multiple') { ?>
+                <?php if ($add_type == 'multiple') {
+                        ?>
                 <p><?php echo get_lang('FirstLetterSession'); ?> :</p>
                 <select class="selectpicker form-control" name="firstLetterSession" onchange = "xajax_search_sessions(this.value, 'multiple')">
                     <option value="%">--</option>
                         <?php  echo Display :: get_alphabet_options($firstLetterSession); ?>
                 </select>
-                <?php } ?>
+                <?php
+                    } ?>
             </div>
             <div class="control-course">
             <?php
@@ -253,7 +258,9 @@ $result = Database::query($sql);
                             <em class="fa fa-arrow-left"></em>
                         </button>
                     </div>
-                <?php } else { ?>
+                <?php
+                } else {
+                    ?>
                 <div class="separate-action">
                     <button class="btn btn-primary" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))">
                         <em class="fa fa-arrow-right"></em>
@@ -291,7 +298,8 @@ $result = Database::query($sql);
                         <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'], ENT_QUOTES).'"'; ?>>
                             <?php echo $enreg['name'] ?>
                         </option>
-                <?php }
+                <?php
+                    }
                 }?>
             </select>
         </div>

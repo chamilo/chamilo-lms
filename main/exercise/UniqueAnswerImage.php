@@ -68,7 +68,7 @@ class UniqueAnswerImage extends UniqueAnswer
         $form->addHeader(get_lang('Answers'));
         $form->addHtml($html);
 
-        $defaults = array();
+        $defaults = [];
         $correct = 0;
 
         if (!empty($this->id)) {
@@ -84,7 +84,7 @@ class UniqueAnswerImage extends UniqueAnswer
 
         //Feedback SELECT
         $questionList = $objExercise->selectQuestionList();
-        $selectQuestion = array();
+        $selectQuestion = [];
         $selectQuestion[0] = get_lang('SelectTargetQuestion');
 
         if (is_array($questionList)) {
@@ -106,14 +106,14 @@ class UniqueAnswerImage extends UniqueAnswer
 
         $list = new LearnpathList(api_get_user_id());
         $flatList = $list->get_flat_list();
-        $selectLpId = array();
+        $selectLpId = [];
         $selectLpId[0] = get_lang('SelectTargetLP');
 
         foreach ($flatList as $id => $details) {
             $selectLpId[$id] = cut($details['lp_name'], 20);
         }
 
-        $tempScenario = array();
+        $tempScenario = [];
 
         if ($numberAnswers < 1) {
             $numberAnswers = 1;
@@ -161,8 +161,8 @@ class UniqueAnswerImage extends UniqueAnswer
                 $defaults['answer[2]'] = get_lang('DefaultUniqueAnswer2');
                 $defaults['weighting[2]'] = 0;
 
-                $tempScenario['destination'.$i] = array('0');
-                $tempScenario['lp'.$i] = array('0');
+                $tempScenario['destination'.$i] = ['0'];
+                $tempScenario['lp'.$i] = ['0'];
             }
 
             $defaults['scenario'] = $tempScenario;
@@ -206,7 +206,7 @@ class UniqueAnswerImage extends UniqueAnswer
                 );
                 // Direct feedback
                 // Adding extra feedback fields
-                $group = array();
+                $group = [];
                 $group['try'.$i] = $form->createElement('checkbox', 'try'.$i, null, get_lang('TryAgain'));
                 $group['lp'.$i] = $form->createElement(
                     'select',
@@ -224,10 +224,10 @@ class UniqueAnswerImage extends UniqueAnswer
                     'text',
                     'url'.$i,
                     get_lang('Other').': ',
-                    array(
+                    [
                         'class' => 'col-md-2',
                         'placeholder' => get_lang('Other')
-                    )
+                    ]
                 );
                 $form->addGroup($group, 'scenario');
 
@@ -238,7 +238,7 @@ class UniqueAnswerImage extends UniqueAnswer
             } else {
                 $form->addHtmlEditor('comment['.$i.']', null, null, false, $editorConfig);
             }
-            $form->addText('weighting['.$i.']', null, null, array('class' => "col-md-1", 'value' => '0'));
+            $form->addText('weighting['.$i.']', null, null, ['class' => "col-md-1", 'value' => '0']);
             $form->addHtml('</tr>');
         }
 
@@ -269,11 +269,11 @@ class UniqueAnswerImage extends UniqueAnswer
                 // Default sample content.
                 $form->setDefaults($defaults);
             } else {
-                $form->setDefaults(array('correct' => 1));
+                $form->setDefaults(['correct' => 1]);
             }
         }
 
-        $form->setConstants(array('nb_answers' => $numberAnswers));
+        $form->setConstants(['nb_answers' => $numberAnswers]);
     }
 
     /**

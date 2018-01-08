@@ -63,7 +63,7 @@ class Room
     public function getRoom($id)
     {
         if (!empty($id)) {
-            $roomData = \Database::select('*', $this->table, array('where' => array('id = ?' => $id)), 'first');
+            $roomData = \Database::select('*', $this->table, ['where' => ['id = ?' => $id]], 'first');
             if (!empty($roomData)) {
                 $this->rooms_id = $this->room_id = $roomData['room_id'];
                 $this->status = $roomData['status'];
@@ -83,7 +83,7 @@ class Room
     public function loadRoomId($id)
     {
         if (!empty($id)) {
-            $roomData = \Database::select('*', $this->table, array('where' => array('room_id = ?' => $id)), 'last');
+            $roomData = \Database::select('*', $this->table, ['where' => ['room_id = ?' => $id]], 'last');
             if (!empty($roomData)) {
                 $this->rooms_id = $this->room_id = $roomData['room_id'];
                 $this->status = $roomData['status'];

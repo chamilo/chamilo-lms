@@ -76,7 +76,7 @@ foreach ($posts as $post) {
         $html .= Display::tag(
             'h4',
             display_user_link($posterId, $name, $origin, $username),
-            array('class' => 'title-username')
+            ['class' => 'title-username']
         );
     } else {
         if ($allowUserImageForum) {
@@ -86,10 +86,10 @@ foreach ($posts as $post) {
         $html .= Display::tag(
             'p',
             $name,
-            array(
+            [
                 'title' => api_htmlentities($username, ENT_QUOTES),
                 'class' => 'lead'
-            )
+            ]
         );
     }
 
@@ -97,13 +97,13 @@ foreach ($posts as $post) {
         $html .= Display::tag(
             'p',
             Display::dateToStringAgoAndLongDate($post['post_date']),
-            array('class' => 'post-date')
+            ['class' => 'post-date']
         );
     } else {
         $html .= Display::tag(
             'p',
             Display::dateToStringAgoAndLongDate($post['post_date']),
-            array('class' => 'text-muted')
+            ['class' => 'text-muted']
         );
     }
 
@@ -128,7 +128,7 @@ foreach ($posts as $post) {
             $editUrl .= "&forum=$clean_forum_id&thread=$clean_thread_id&post={$post['post_id']}&id_attach=$id_attach";
 
             $iconEdit .= "<a href='".$editUrl."'>"
-                . Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL)
+                . Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL)
                 . "</a>";
 
             $editButton = Display::toolbarButton(
@@ -153,7 +153,7 @@ foreach ($posts as $post) {
                 'id' => $post['post_id']
             ]);
             $iconEdit .= Display::url(
-                Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL),
+                Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL),
                 $deleteUrl,
                 [
                     'onclick' => "javascript:if(!confirm('"
@@ -175,16 +175,16 @@ foreach ($posts as $post) {
             'post',
             $post['post_id'],
             $post['visible'],
-            array(
+            [
                 'forum' => $clean_forum_id,
                 'thread' => $clean_thread_id
-            )
+            ]
         );
 
         if ($count > 0) {
             $iconEdit .= "<a href=\"viewthread.php?".api_get_cidreq()
                 . "&forum=$clean_forum_id&thread=$clean_thread_id&action=move&post={$post['post_id']}"
-                . "\">".Display::return_icon('move.png', get_lang('MovePost'), array(), ICON_SIZE_SMALL)."</a>";
+                . "\">".Display::return_icon('move.png', get_lang('MovePost'), [], ICON_SIZE_SMALL)."</a>";
         }
     }
 
@@ -272,21 +272,21 @@ foreach ($posts as $post) {
             $closedPost = Display::tag(
                 'div',
                 '<em class="fa fa-exclamation-triangle"></em> '.get_lang('ForumcategoryLocked'),
-                array('class' => 'alert alert-warning post-closed')
+                ['class' => 'alert alert-warning post-closed']
             );
         }
         if ($current_forum['locked'] == 1) {
             $closedPost = Display::tag(
                 'div',
                 '<em class="fa fa-exclamation-triangle"></em> '.get_lang('ForumLocked'),
-                array('class' => 'alert alert-warning post-closed')
+                ['class' => 'alert alert-warning post-closed']
             );
         }
         if ($current_thread['locked'] == 1) {
             $closedPost = Display::tag(
                 'div',
                 '<em class="fa fa-exclamation-triangle"></em> '.get_lang('ThreadLocked'),
-                array('class' => 'alert alert-warning post-closed')
+                ['class' => 'alert alert-warning post-closed']
             );
         }
 
@@ -314,11 +314,11 @@ foreach ($posts as $post) {
     $html .= '<div class="col-md-10">';
     // The post title
 
-    $titlePost = Display::tag('h3', $post['post_title'], array('class' => 'forum_post_title'));
-    $html .= Display::tag('div', $titlePost, array('class' => 'post-header'));
+    $titlePost = Display::tag('h3', $post['post_title'], ['class' => 'forum_post_title']);
+    $html .= Display::tag('div', $titlePost, ['class' => 'post-header']);
 
     // the post body
-    $html .= Display::tag('div', $post['post_text'], array('class' => 'post-body'));
+    $html .= Display::tag('div', $post['post_text'], ['class' => 'post-body']);
     $html .= '</div>';
     $html .= '</div>';
 

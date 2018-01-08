@@ -7,7 +7,7 @@
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 
-$content_origins = array(
+$content_origins = [
     '--'.get_lang('GenericScorm').'--',
     '--'.get_lang('Other').'--',
     'Accent',
@@ -49,4 +49,4 @@ $content_origins = array(
     'U&I Learning',
     'Udutu',
     'WebCT'
-);
+];

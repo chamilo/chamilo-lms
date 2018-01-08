@@ -17,7 +17,7 @@ class BlockStudent extends Block
     private $user_id;
     private $students;
     private $path;
-    private $permission = array(DRH);
+    private $permission = [DRH];
 
     /**
      * Constructor
@@ -57,7 +57,7 @@ class BlockStudent extends Block
     {
         global $charset;
         $column = 1;
-        $data = array();
+        $data = [];
         $student_content_html = $this->get_students_content_html_for_drh();
         $html = '<div class="panel panel-default" id="intro">
                     <div class="panel-heading">
@@ -194,7 +194,7 @@ class BlockStudent extends Block
                         null,
                         false
                     );
-                    $scoretotal = array();
+                    $scoretotal = [];
                     if (isset($cats) && isset($cats[0])) {
                         $scoretotal = $cats[0]->calc_score($student_id, null, $course_code);
                     }
@@ -243,7 +243,7 @@ class BlockStudent extends Block
      * Get number of students
      * @return int
      */
-    function get_number_of_students()
+    public function get_number_of_students()
     {
         return count($this->students);
     }

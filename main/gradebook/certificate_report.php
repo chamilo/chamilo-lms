@@ -17,10 +17,10 @@ $this_section = SECTION_TRACKING;
 
 api_block_anonymous_users();
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => api_is_student_boss() ? "#" : api_get_path(WEB_CODE_PATH)."mySpace/index.php?".api_get_cidreq(),
     "name" => get_lang("MySpace")
-);
+];
 
 $selectedSession = isset($_POST['session']) && !empty($_POST['session']) ? intval($_POST['session']) : 0;
 $selectedCourse = isset($_POST['course']) && !empty($_POST['course']) ? intval($_POST['course']) : 0;
@@ -95,7 +95,7 @@ for ($key = 1; $key <= 12; $key++) {
 }
 
 $exportAllLink = null;
-$certificateStudents = array();
+$certificateStudents = [];
 $searchSessionAndCourse = $selectedSession > 0 && $selectedCourse > 0;
 $searchCourseOnly = $selectedSession <= 0 && $selectedCourse > 0;
 $searchStudentOnly = $selectedStudent > 0;
@@ -127,20 +127,20 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
 
     if (!is_null($gradebook)) {
         $exportAllLink = api_get_path(WEB_CODE_PATH)."gradebook/gradebook_display_certificate.php?";
-        $exportAllLink .= http_build_query(array(
+        $exportAllLink .= http_build_query([
             "action" => "export_all_certificates",
             "cidReq" => $selectedCourseInfo['code'],
             "id_session" => 0,
             "gidReq" => 0,
             "cat_id" => $gradebook->get_id()
-        ));
+        ]);
 
         $sessionName = api_get_session_name($selectedSession);
         $courseName = api_get_course_info($selectedCourseInfo['code'])['title'];
 
         $studentList = GradebookUtils::get_list_users_certificates($gradebook->get_id());
 
-        $certificateStudents = array();
+        $certificateStudents = [];
 
         if (is_array($studentList) && !empty($studentList)) {
             foreach ($studentList as $student) {
@@ -148,12 +148,12 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
                     continue;
                 }
 
-                $certificateStudent = array(
+                $certificateStudent = [
                     'fullName' => api_get_person_name($student['firstname'], $student['lastname']),
                     'sessionName' => $sessionName,
                     'courseName' => $courseName,
-                    'certificates' => array()
-                );
+                    'certificates' => []
+                ];
 
                 $studentCertificates = GradebookUtils::get_list_gradebook_certificates_by_user_id(
                     $student['user_id'],
@@ -184,10 +184,10 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
                         }
                     }
 
-                    $certificateStudent['certificates'][] = array(
+                    $certificateStudent['certificates'][] = [
                         'createdAt' => api_convert_and_format_date($certificate['created_at']),
                         'id' => $certificate['id']
-                    );
+                    ];
                 }
 
                 if (count($certificateStudent['certificates']) > 0) {
@@ -248,10 +248,10 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
                 }
 
                 foreach ($studentCertificates as $certificate) {
-                    $certificateStudent['certificates'][] = array(
+                    $certificateStudent['certificates'][] = [
                         'createdAt' => api_convert_and_format_date($certificate['created_at']),
                         'id' => $certificate['id']
-                    );
+                    ];
                 }
 
                 if (count($certificateStudent['certificates']) > 0) {

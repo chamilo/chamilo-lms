@@ -43,7 +43,7 @@ class AllowIframes extends HTMLPurifier_Filter
     public function postFilter($html, $config, $context)
     {
         $post_regex = '#<img class="MyIframe"([^>]+?)>#';
-        return preg_replace_callback($post_regex, array($this, 'postFilterCallback'), $html);
+        return preg_replace_callback($post_regex, [$this, 'postFilterCallback'], $html);
     }
 
     /**
@@ -54,7 +54,7 @@ class AllowIframes extends HTMLPurifier_Filter
     protected function postFilterCallback($matches)
     {
         // Domain Whitelist
-        $hostName = array();
+        $hostName = [];
         preg_match('#https?://(.*)#i', api_get_path(WEB_PATH), $hostName);
 
         $youTubeMatch = preg_match('#src="(https:)?//www.youtube(-nocookie)?.com/#i', $matches[1]);

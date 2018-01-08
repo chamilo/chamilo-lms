@@ -23,7 +23,7 @@ switch ($action) {
             $company_city = $_POST['company_city'];
 
             // validating required fields
-            $a_required_fields = array($person_name, $person_role, $company_name, $company_activity, $company_country);
+            $a_required_fields = [$person_name, $person_role, $company_name, $company_activity, $company_country];
             $required_field_error = false;
             foreach ($a_required_fields as $required_file) {
                 if (trim($required_file) === '') {
@@ -40,7 +40,7 @@ switch ($action) {
                 $client = new SoapClient('https://version.chamilo.org/contact.php?wsdl');
 
                 // call method ws_add_contact_information
-                $contact_params = array(
+                $contact_params = [
                                         'person_name' => $person_name,
                                         'person_email' => $person_email,
                                         'person_role' => $person_role,
@@ -50,11 +50,11 @@ switch ($action) {
                                         'company_activity' => $company_activity,
                                         'company_country' => $company_country,
                                         'company_city' => $company_city
-                                    );
+                                    ];
 
                 $result = $client->__soapCall(
                     'ws_add_contact_information',
-                    array('contact_params' => $contact_params)
+                    ['contact_params' => $contact_params]
                 );
                 echo $result;
             }

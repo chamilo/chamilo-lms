@@ -49,7 +49,7 @@ if (isset($_GET['cat_id']) &&
                     post.cat_id = ".intval($_GET['cat_id'])." AND
                     post.dest_user_id = $user_id";
     }
-    $files_to_download = array();
+    $files_to_download = [];
     $result = Database::query($sql);
     while ($row = Database::fetch_array($result)) {
         $files_to_download[] = $row['id'];

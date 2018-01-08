@@ -13,11 +13,11 @@ api_block_anonymous_users();
 
 $user_id = api_get_user_id();
 $isAdmin = api_is_platform_admin();
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
     'name' => get_lang('MyTickets')
-);
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('TicketDetail'));
+];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('TicketDetail')];
 
 $disableReponseButtons = '';
 $htmlHeadXtra[] = '<script>
@@ -179,9 +179,9 @@ foreach ($messages as $message) {
 
     $attachmentLinks = '';
     if (isset($message['attachments'])) {
-        $attributeClass = array(
+        $attributeClass = [
             'class' => 'attachment-link'
-        );
+        ];
         foreach ($message['attachments'] as $attach) {
             $attachmentLinks .= Display::tag('div', $attach['attachment_link'], $attributeClass);
         }
@@ -440,10 +440,10 @@ function getForm($ticket)
         'POST',
         api_get_self().'?ticket_id='.$ticket['id'],
         '',
-        array(
+        [
             'enctype' => 'multipart/form-data',
             'class' => 'form-horizontal'
-        )
+        ]
     );
 
     if ($isAdmin) {
@@ -461,10 +461,10 @@ function getForm($ticket)
             'priority_id',
             get_lang('Priority'),
             $priorityList,
-            array(
+            [
                 'id' => 'priority_id',
                 'for' => 'priority_id'
-            )
+            ]
         );
 
         $form->addSelectAjax(
@@ -487,11 +487,11 @@ function getForm($ticket)
         'text',
         'subject',
         get_lang('Subject'),
-        array(
+        [
             'for' => 'subject',
             'value' => $subject,
             'style' => 'width: 540px;'
-        )
+        ]
     );
 
     $form->addElement('hidden', 'ticket_id', $ticket['id']);
@@ -501,11 +501,11 @@ function getForm($ticket)
         get_lang('Message'),
         false,
         false,
-        array(
+        [
             'ToolbarSet' => 'Profile',
             'Width' => '550',
             'Height' => '250'
-        )
+        ]
     );
 
     if ($isAdmin) {

@@ -29,7 +29,7 @@ if (empty($error)) {
     $token = Security::get_token();
 }
 // display categories
-$categories = array();
+$categories = [];
 foreach ($default_description_titles as $id => $title) {
     $categories[$id] = $title;
 }
@@ -95,11 +95,11 @@ $form->addHtmlEditor(
     get_lang('Content'),
     true,
     false,
-    array(
+    [
         'ToolbarSet' => 'TrainingDescription',
         'Width' => '100%',
         'Height' => '200',
-    )
+    ]
 );
 $form->addButtonCreate(get_lang('Save'));
 

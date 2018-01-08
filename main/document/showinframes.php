@@ -100,7 +100,7 @@ if (!$is_allowed_to_edit && !$is_visible) {
 }
 
 $pathinfo = pathinfo($header_file);
-$jplayer_supported_files = array('mp4', 'ogv', 'flv', 'm4v', 'webm');
+$jplayer_supported_files = ['mp4', 'ogv', 'flv', 'm4v', 'webm'];
 $jplayer_supported = false;
 
 if (in_array(strtolower($pathinfo['extension']), $jplayer_supported_files)) {
@@ -112,45 +112,45 @@ $current_group = GroupManager::get_group_properties($group_id);
 $current_group_name = $current_group['name'];
 
 if (isset($group_id) && $group_id != '') {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
         'name' => get_lang('GroupSpace').' '.$current_group_name,
-    );
+    ];
     $name_to_show = explode('/', $name_to_show);
     unset($name_to_show[1]);
     $name_to_show = implode('/', $name_to_show);
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => './document.php?curdirpath='.dirname($header_file).'&'.api_get_cidreq(),
     'name' => get_lang('Documents'),
-);
+];
 
 if (empty($document_data['parents'])) {
     if (isset($_GET['createdir'])) {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => $document_data['document_url'],
             'name' => $document_data['title'],
-        );
+        ];
     } else {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => '#',
             'name' => $document_data['title'],
-        );
+        ];
     }
 } else {
     foreach ($document_data['parents'] as $document_sub_data) {
         if (!isset($_GET['createdir']) && $document_sub_data['id'] == $document_data['id']) {
             $document_sub_data['document_url'] = '#';
         }
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => $document_sub_data['document_url'],
             'name' => $document_sub_data['title'],
-        );
+        ];
     }
 }
 
@@ -402,8 +402,8 @@ if ($is_freemind_available) {
         fo.addVariable("scaleTooltips","false");
         //
         //extra
-        //fo.addVariable("CSSFile","<?php // echo api_get_path(WEB_LIBRARY_PATH); ?>freeMindFlashBrowser/flashfreemind.css");//
-        //fo.addVariable("baseImagePath","<?php // echo api_get_path(WEB_LIBRARY_PATH); ?>freeMindFlashBrowser/");//
+        //fo.addVariable("CSSFile","<?php // echo api_get_path(WEB_LIBRARY_PATH);?>freeMindFlashBrowser/flashfreemind.css");//
+        //fo.addVariable("baseImagePath","<?php // echo api_get_path(WEB_LIBRARY_PATH);?>freeMindFlashBrowser/");//
         //fo.addVariable("justMap","false");//Hides all the upper control options. Default value "false"
         //fo.addVariable("noElipseMode","anyvalue");//for changing to old elipseNode edges. Default = not set
         //fo.addVariable("ShotsWidth","200");//The width of snapshots, in pixels.

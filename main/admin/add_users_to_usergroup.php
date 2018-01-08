@@ -18,8 +18,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'usergroups.php', 'name' => get_lang('Classes'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 
 // Database Table Definitions
 
@@ -90,15 +90,15 @@ function change_select(val) {
 $form_sent = 0;
 
 $extra_field_list = UserManager::get_extra_fields();
-$new_field_list = array();
+$new_field_list = [];
 if (is_array($extra_field_list)) {
     foreach ($extra_field_list as $extra_field) {
         //if is enabled to filter and is a "<select>" field type
         if ($extra_field[8] == 1 && $extra_field[2] == 4) {
-            $new_field_list[] = array(
+            $new_field_list[] = [
                 'name'=> $extra_field[3],
                 'variable' => $extra_field[1], 'data'=> $extra_field[9]
-            );
+            ];
         }
     }
 }
@@ -119,7 +119,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $first_letter_user = $_POST['firstLetterUser'];
 
     if (!is_array($elements_posted)) {
-        $elements_posted = array();
+        $elements_posted = [];
     }
 
     // If "social group" you need to select a role
@@ -144,11 +144,11 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 if (isset($_GET['action']) && $_GET['action'] == 'export') {
     $users = $usergroup->getUserListByUserGroup($id);
     if (!empty($users)) {
-        $data = array(
-            array('UserName', 'ClassName')
-        );
+        $data = [
+            ['UserName', 'ClassName']
+        ];
         foreach ($users as $user) {
-            $data[] = array($user['username'], $groupInfo['name']);
+            $data[] = [$user['username'], $groupInfo['name']];
         }
         $filename = 'export_user_class_'.api_get_local_time();
         Export::arrayToCsv($data, $filename);
@@ -176,7 +176,7 @@ if (is_array($extra_field_list)) {
 }
 
 if ($use_extra_fields) {
-    $final_result = array();
+    $final_result = [];
     if (count($extra_field_result) > 1) {
         for ($i = 0; $i < count($extra_field_result) - 1; $i++) {
             if (is_array($extra_field_result[$i + 1])) {
@@ -189,13 +189,13 @@ if ($use_extra_fields) {
 }
 
 // Filters
-$filters = array(
-    array('type' => 'text', 'name' => 'username', 'label' => get_lang('Username')),
-    array('type' => 'text', 'name' => 'firstname', 'label' => get_lang('FirstName')),
-    array('type' => 'text', 'name' => 'lastname', 'label' => get_lang('LastName')),
-    array('type' => 'text', 'name' => 'official_code', 'label' => get_lang('OfficialCode')),
-    array('type' => 'text', 'name' => 'email', 'label' => get_lang('Email'))
-);
+$filters = [
+    ['type' => 'text', 'name' => 'username', 'label' => get_lang('Username')],
+    ['type' => 'text', 'name' => 'firstname', 'label' => get_lang('FirstName')],
+    ['type' => 'text', 'name' => 'lastname', 'label' => get_lang('LastName')],
+    ['type' => 'text', 'name' => 'official_code', 'label' => get_lang('OfficialCode')],
+    ['type' => 'text', 'name' => 'email', 'label' => get_lang('Email')]
+];
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?id='.$id);
 $searchForm->addHeader(get_lang('AdvancedSearch'));
@@ -207,7 +207,7 @@ foreach ($filters as $param) {
 }
 $searchForm->addButtonSearch();
 
-$filterData = array();
+$filterData = [];
 if ($searchForm->validate()) {
     $filterData = $searchForm->getSubmitValues();
 }
@@ -216,17 +216,17 @@ $data = $usergroup->get($id);
 $list_in = $usergroup->getUsersByUsergroupAndRelation($id, $relation);
 $list_all = $usergroup->get_users_by_usergroup();
 
-$order = array('lastname');
+$order = ['lastname'];
 if (api_is_western_name_order()) {
-    $order = array('firstname');
+    $order = ['firstname'];
 }
 
 $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
 if ($orderListByOfficialCode === 'true') {
-    $order = array('official_code', 'lastname');
+    $order = ['official_code', 'lastname'];
 }
 
-$conditions = array();
+$conditions = [];
 if (!empty($first_letter_user)) {
     $conditions['lastname'] = $first_letter_user;
 }
@@ -242,8 +242,8 @@ if (!empty($filters) && !empty($filterData)) {
     }
 }
 
-$elements_not_in = $elements_in = array();
-$complete_user_list = UserManager::get_user_list_like(array(), $order);
+$elements_not_in = $elements_in = [];
+$complete_user_list = UserManager::get_user_list_like([], $order);
 
 if (!empty($complete_user_list)) {
     foreach ($complete_user_list as $item) {
@@ -283,7 +283,7 @@ $user_with_any_group = isset($_REQUEST['user_with_any_group']) && !empty($_REQUE
 
 if ($user_with_any_group) {
     $user_list = UserManager::get_user_list_like($conditions, $order, true);
-    $new_user_list = array();
+    $new_user_list = [];
     foreach ($user_list as $item) {
         if (!in_array($item['user_id'], $list_all)) {
             $new_user_list[] = $item;
@@ -332,22 +332,24 @@ Display::display_header($tool_name);
 
 echo '<div class="actions">';
 echo '<a href="usergroups.php">'.
-    Display::return_icon('back.png', get_lang('Back'), array(), ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM).'</a>';
 
-echo Display::url(get_lang('AdvancedSearch'), '#', array('class' => 'advanced_options', 'id' => 'advanced_search'));
+echo Display::url(get_lang('AdvancedSearch'), '#', ['class' => 'advanced_options', 'id' => 'advanced_search']);
 
 echo '<a href="usergroup_user_import.php">'.
-    Display::return_icon('import_csv.png', get_lang('Import'), array(), ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('import_csv.png', get_lang('Import'), [], ICON_SIZE_MEDIUM).'</a>';
 
 echo '<a href="'.api_get_self().'?id='.$id.'&action=export">'.
-    Display::return_icon('export_csv.png', get_lang('Export'), array(), ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('export_csv.png', get_lang('Export'), [], ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 echo '<div id="advanced_search_options" style="display:none">';
 $searchForm->display();
 echo '</div>';
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if (!empty($_GET['add'])) echo '&add=true'; ?>" style="margin:0px;">
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if (!empty($_GET['add'])) {
+    echo '&add=true';
+} ?>" style="margin:0px;">
 <?php
 echo '<legend>'.$tool_name.': '.$data['name'].'</legend>';
 
@@ -383,21 +385,23 @@ echo Display::input('hidden', 'add_type', null);
 ?>
 <div class="row">
     <div class="col-md-5">
-        <?php if ($data['group_type'] == UserGroup::SOCIAL_CLASS) { ?>
+        <?php if ($data['group_type'] == UserGroup::SOCIAL_CLASS) {
+    ?>
         <select name="relation" id="relation">
             <option value=""><?php echo get_lang('SelectARelationType')?></option>
-            <option value="<?php echo GROUP_USER_PERMISSION_ADMIN ?>" <?php echo ((isset($relation) && $relation == GROUP_USER_PERMISSION_ADMIN) ? 'selected=selected' : '') ?> >
+            <option value="<?php echo GROUP_USER_PERMISSION_ADMIN ?>" <?php echo((isset($relation) && $relation == GROUP_USER_PERMISSION_ADMIN) ? 'selected=selected' : '') ?> >
                 <?php echo get_lang('Admin') ?></option>
-            <option value="<?php echo GROUP_USER_PERMISSION_READER ?>" <?php echo ((isset($relation) && $relation == GROUP_USER_PERMISSION_READER) ? 'selected=selected' : '') ?> >
+            <option value="<?php echo GROUP_USER_PERMISSION_READER ?>" <?php echo((isset($relation) && $relation == GROUP_USER_PERMISSION_READER) ? 'selected=selected' : '') ?> >
                 <?php echo get_lang('Reader') ?></option>
-            <option value="<?php echo GROUP_USER_PERMISSION_PENDING_INVITATION ?>" <?php echo ((isset($relation) && $relation == GROUP_USER_PERMISSION_PENDING_INVITATION) ? 'selected=selected' : '') ?> >
+            <option value="<?php echo GROUP_USER_PERMISSION_PENDING_INVITATION ?>" <?php echo((isset($relation) && $relation == GROUP_USER_PERMISSION_PENDING_INVITATION) ? 'selected=selected' : '') ?> >
                 <?php echo get_lang('PendingInvitation') ?></option>
-            <option value="<?php echo GROUP_USER_PERMISSION_MODERATOR ?>" <?php echo ((isset($relation) && $relation == GROUP_USER_PERMISSION_MODERATOR) ? 'selected=selected' : '') ?> >
+            <option value="<?php echo GROUP_USER_PERMISSION_MODERATOR ?>" <?php echo((isset($relation) && $relation == GROUP_USER_PERMISSION_MODERATOR) ? 'selected=selected' : '') ?> >
                 <?php echo get_lang('Moderator') ?></option>
-            <option value="<?php echo GROUP_USER_PERMISSION_HRM ?>" <?php echo ((isset($relation) && $relation == GROUP_USER_PERMISSION_HRM) ? 'selected=selected' : '') ?> >
+            <option value="<?php echo GROUP_USER_PERMISSION_HRM ?>" <?php echo((isset($relation) && $relation == GROUP_USER_PERMISSION_HRM) ? 'selected=selected' : '') ?> >
                 <?php echo get_lang('Drh') ?></option>
         </select>
-        <?php } ?>
+        <?php
+} ?>
 
         <div class="multiple_select_header">
         <b><?php echo get_lang('UsersInPlatform') ?> :</b>
@@ -414,18 +418,20 @@ echo Display::input('hidden', 'add_type', null);
         'elements_not_in_name',
         $elements_not_in,
         '',
-        array(
+        [
             'class' => 'form-control',
             'multiple' => 'multiple',
             'id' => 'elements_not_in',
             'size' => '15px',
-        ),
+        ],
         false
     );
     ?>
     <br />
       <label class="control-label">
-          <input type="checkbox" <?php if ($user_with_any_group) echo 'checked="checked"'; ?> onchange="checked_in_no_group(this.checked);" name="user_with_any_group" id="user_with_any_group_id">
+          <input type="checkbox" <?php if ($user_with_any_group) {
+        echo 'checked="checked"';
+    } ?> onchange="checked_in_no_group(this.checked);" name="user_with_any_group" id="user_with_any_group_id">
           <?php echo get_lang('UsersRegisteredInAnyGroup'); ?>
       </label>
     </div>
@@ -449,12 +455,12 @@ echo Display::input('hidden', 'add_type', null);
             'elements_in_name[]',
             $elements_in,
             '',
-            array(
+            [
                 'class' => 'form-control',
                 'multiple' => 'multiple',
                 'id' => 'elements_in',
                 'size' => '15px'
-            ),
+            ],
             false
         );
         unset($sessionUsersList);

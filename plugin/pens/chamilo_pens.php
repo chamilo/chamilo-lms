@@ -207,7 +207,7 @@ class ChamiloPens extends Plugin
         $table = Database::get_main_table(self::TABLE_NAME);
         $sql_query = "SELECT * FROM $table ORDER BY created_at;";
         $results = Database::query($sql_query);
-        $return = array();
+        $return = [];
         while ($assoc = Database::fetch_assoc($results)) {
             $return[] = new ChamiloPens($assoc);
         }

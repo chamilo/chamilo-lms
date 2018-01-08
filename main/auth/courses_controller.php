@@ -36,7 +36,7 @@ class CoursesController
      */
     public function courseList($action, $message = '')
     {
-        $data = array();
+        $data = [];
         $data['user_courses'] = $this->model->get_courses_of_user(api_get_user_id());
         $data['user_course_categories'] = $this->model->get_user_course_categories();
         $data['courses_in_category'] = $this->model->get_courses_in_category();
@@ -61,7 +61,7 @@ class CoursesController
     {
         api_block_anonymous_users();
 
-        $data = array();
+        $data = [];
         $data['user_course_categories'] = $this->model->get_user_course_categories();
 
         $stok = Security::get_token();
@@ -105,9 +105,9 @@ class CoursesController
         $message = '',
         $error = '',
         $content = null,
-        $limit = array()
+        $limit = []
     ) {
-        $data = array();
+        $data = [];
         $browse_course_categories = $this->model->browse_course_categories();
         $data['countCoursesInCategory'] = $this->model->count_courses_in_category($category_code);
         if ($action === 'display_random_courses') {
@@ -135,7 +135,7 @@ class CoursesController
         // getting all the courses to which the user is subscribed to
         $curr_user_id = api_get_user_id();
         $user_courses = $this->model->get_courses_of_user($curr_user_id);
-        $user_coursecodes = array();
+        $user_coursecodes = [];
 
         // we need only the course codes as these will be used to match against the courses of the category
         if ($user_courses != '') {
@@ -182,10 +182,10 @@ class CoursesController
         $message = '',
         $error = '',
         $content = null,
-        $limit = array(),
+        $limit = [],
         $justVisible = false
     ) {
-        $data = array();
+        $data = [];
         $limit = !empty($limit) ? $limit : CourseCategory::getLimitArray();
         $browse_course_categories = $this->model->browse_course_categories();
         $data['countCoursesInCategory'] = $this->model->count_courses_in_category(
@@ -203,7 +203,7 @@ class CoursesController
         // getting all the courses to which the user is subscribed to
         $curr_user_id = api_get_user_id();
         $user_courses = $this->model->get_courses_of_user($curr_user_id);
-        $user_coursecodes = array();
+        $user_coursecodes = [];
 
         // we need only the course codes as these will be used to match against the courses of the category
         if ($user_courses != '') {
@@ -239,11 +239,11 @@ class CoursesController
         // The course must be open in order to access the auto subscription
         if (in_array(
             $courseInfo['visibility'],
-            array(
+            [
                 COURSE_VISIBILITY_CLOSED,
                 COURSE_VISIBILITY_REGISTERED,
                 COURSE_VISIBILITY_HIDDEN
-            )
+            ]
         )
         ) {
             Display::addFlash(
@@ -636,9 +636,9 @@ class CoursesController
 
         $hook = HookResubscribe::create();
         if (!empty($hook)) {
-            $hook->setEventData(array(
+            $hook->setEventData([
                 'session_id' => intval($sessionId),
-            ));
+            ]);
             try {
                 $hook->notifyResubscribe(HOOK_EVENT_TYPE_PRE);
             } catch (Exception $exception) {
@@ -659,10 +659,10 @@ class CoursesController
 
         return Display::div(
             $icon,
-            array(
+            [
                 'class' => 'btn btn-default btn-sm registered',
                 'title' => get_lang("AlreadyRegisteredToSession"),
-            )
+            ]
         );
     }
 
@@ -687,7 +687,7 @@ class CoursesController
      * @param string $nameTools
      * @param array $limit
      */
-    public function sessionsList($action, $nameTools, $limit = array())
+    public function sessionsList($action, $nameTools, $limit = [])
     {
         $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
         $hiddenLinks = isset($_GET['hidden_links']) ? intval($_GET['hidden_links']) == 1 : false;
@@ -889,7 +889,7 @@ class CoursesController
 
             $isThisSessionOnSale = $session->getBuyCoursePluginPrice();
 
-            $sessionsBlock = array(
+            $sessionsBlock = [
                 'id' => $session->getId(),
                 'name' => $session->getName(),
                 'image' => isset($imageField['value']) ? $imageField['value'] : null,
@@ -923,7 +923,7 @@ class CoursesController
                     ['id' => $session->getId(), 'duration' => $session->getDuration()],
                     $userId
                 )
-            );
+            ];
 
             $sessionsBlock = array_merge($sessionsBlock, $sequences);
             $sessionsBlocks[] = $sessionsBlock;

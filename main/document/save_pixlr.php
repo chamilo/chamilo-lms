@@ -72,8 +72,8 @@ $filename = api_replace_dangerous_char($filename);
 $filename = disable_dangerous_file($filename);
 
 if (strlen(trim($filename)) == 0) {
-     echo "The title is empty"; //if title is empty, headers Content-Type = application/octet-stream, then not create a new title here please
-     exit;
+    echo "The title is empty"; //if title is empty, headers Content-Type = application/octet-stream, then not create a new title here please
+    exit;
 }
 
 //check file_get_contents
@@ -124,7 +124,9 @@ if ($currentTool == 'document/createpaint') {
 
     if (file_exists($saveDir.'/'.$filename.'.'.$extension)) {
         $i = 1;
-        while (file_exists($saveDir.'/'.$filename.'_'.$i.'.'.$extension)) $i++;
+        while (file_exists($saveDir.'/'.$filename.'_'.$i.'.'.$extension)) {
+            $i++;
+        }
         $paintFileName = $filename.'_'.$i.'.'.$extension;
         $title = $filename.'_'.$i.'.'.$extension;
     }

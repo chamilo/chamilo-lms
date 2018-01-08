@@ -43,20 +43,20 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
     'name' => get_lang('SurveyList')
-);
+];
 if (api_is_course_admin()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
         'name' => $urlname,
-    );
+    ];
 } else {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_invite.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
         'name' => $urlname,
-    );
+    ];
 }
 $tool_name = get_lang('SurveyPublication');
 
@@ -106,7 +106,7 @@ $complete_user_list = CourseManager::get_user_list_from_course_code(
     '',
     api_sort_by_first_name() ? 'ORDER BY firstname' : 'ORDER BY lastname'
 );
-$possible_users = array();
+$possible_users = [];
 foreach ($complete_user_list as & $user) {
     $possible_users[$user['user_id']] = api_get_person_name(
         $user['firstname'],
@@ -114,14 +114,14 @@ foreach ($complete_user_list as & $user) {
     );
 }
 
-CourseManager::addUserGroupMultiSelect($form, array());
+CourseManager::addUserGroupMultiSelect($form, []);
 
 // Additional users
 $form->addElement(
     'textarea',
     'additional_users',
-    array(get_lang('AdditonalUsers'), get_lang('AdditonalUsersComment')),
-    array('rows' => 5)
+    [get_lang('AdditonalUsers'), get_lang('AdditonalUsersComment')],
+    ['rows' => 5]
 );
 
 $form->addElement('html', '<div id="check_mail">');
@@ -134,9 +134,9 @@ $form->addText('mail_title', get_lang('MailTitle'), false);
 // The text of the mail
 $form->addHtmlEditor(
     'mail_text',
-    array(get_lang('MailText'), get_lang('UseLinkSyntax')),
+    [get_lang('MailText'), get_lang('UseLinkSyntax')],
     false,
-    array('ToolbarSet' => 'Survey', 'Height' => '150')
+    ['ToolbarSet' => 'Survey', 'Height' => '150']
 );
 $form->addElement('html', '</div>');
 // You cab send a reminder to unanswered people if the survey is not anonymous

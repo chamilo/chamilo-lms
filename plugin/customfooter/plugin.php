@@ -36,13 +36,13 @@ $form = new FormValidator('customfooter_form');
 $plugininstance = CustomFooterPlugin::create();
 
 $config = api_get_settings_params(
-    array('subkey = ? ' => 'customfooter', ' AND category = ? ' => 'Plugins')
+    ['subkey = ? ' => 'customfooter', ' AND category = ? ' => 'Plugins']
 );
 $form_settings = [];
 
 foreach ($config as $fooid => $configrecord) {
     $canonic = preg_replace('/^customfooter_/', '', $configrecord['variable']);
-    if (in_array($canonic, array('footer_left', 'footer_right'))) {
+    if (in_array($canonic, ['footer_left', 'footer_right'])) {
         $form_settings[$canonic] = $configrecord['selected_value'];
     }
 }

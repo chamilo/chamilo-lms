@@ -15,7 +15,6 @@ require_once __DIR__.'/cm_webservice.php';
  */
 class WSCMForum extends WSCM
 {
-
     public function get_foruns_id($username, $password, $course_code)
     {
         if ($this->verifyUserPass($username, $password) == "valid") {
@@ -76,7 +75,6 @@ class WSCMForum extends WSCM
             }
 
             return $threads_id;
-
         } else {
             return get_lang('InvalidId');
         }
@@ -123,7 +121,6 @@ class WSCMForum extends WSCM
             }
 
             return $thread_info[$field_table];
-
         } else {
             return get_lang('InvalidId');
         }
@@ -151,7 +148,6 @@ class WSCMForum extends WSCM
             $field_table = "thread_title";
 
             return $thread_info[$field_table];
-
         } else {
             return get_lang('InvalidId');
         }
@@ -294,7 +290,6 @@ class WSCMForum extends WSCM
         } else {
             return get_lang('InvalidId');
         }
-
     }
 }
 

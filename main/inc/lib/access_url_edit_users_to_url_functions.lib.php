@@ -60,4 +60,3 @@ class AccessUrlEditUsersToUrl
         return $xajax_response;
     }
 }
-

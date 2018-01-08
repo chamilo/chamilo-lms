@@ -136,13 +136,13 @@ $picturePath = $documentPath.'/images';
 $audioPath = $documentPath.'/audio';
 
 // the 5 types of answers
-$aType = array(
+$aType = [
     get_lang('UniqueSelect'),
     get_lang('MultipleSelect'),
     get_lang('FillBlanks'),
     get_lang('Matching'),
     get_lang('FreeAnswer')
-);
+];
 
 // tables used in the exercise tool
 
@@ -279,13 +279,13 @@ if ($editQuestion || $modifyQuestion || $newQuestion || $modifyAnswers) {
 }
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
-    );
+    ];
 }
 
-$interbreadcrumb[] = array("url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises'));
+$interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises')];
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
     $interbreadcrumb[] = [
         "url" => "admin.php?exerciseId=".$objExercise->id.'&'.api_get_cidreq(),
@@ -300,10 +300,10 @@ if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
 
 // shows a link to go back to the question pool
 if (!$exerciseId && $nameTools != get_lang('ExerciseManagement')) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."exercise/question_pool.php?fromExercise=$fromExercise&".api_get_cidreq(),
         "name" => get_lang('QuestionPool')
-    );
+    ];
 }
 
 // if the question is duplicated, disable the link of tool name
@@ -343,7 +343,7 @@ $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PA
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 
 if (isset($_GET['message'])) {
-    if (in_array($_GET['message'], array('ExerciseStored', 'ItemUpdated', 'ItemAdded'))) {
+    if (in_array($_GET['message'], ['ExerciseStored', 'ItemUpdated', 'ItemAdded'])) {
         Display::addFlash(Display::return_message(get_lang($_GET['message']), 'confirmation'));
     }
 }
@@ -363,9 +363,10 @@ $inATest = isset($exerciseId) && $exerciseId > 0;
 
 if ($inATest) {
     echo '<div class="actions">';
-    if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid']))
+    if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid'])) {
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
+    }
 
     if (!isset($_GET['hotspotadmin']) && !isset($_GET['newQuestion']) && !isset($_GET['myid']) && !isset($_GET['editQuestion'])) {
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">'.
@@ -411,7 +412,6 @@ if ($inATest) {
             sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
     }
     echo '</div>';
-
 } elseif (isset($_GET['newQuestion'])) {
     // we are in create a new question from question pool not in a test
     echo '<div class="actions">';
@@ -441,7 +441,7 @@ if ($newQuestion || $editQuestion) {
         // Question preview if teacher clicked the "switch to student"
         if ($studentViewActive && $is_allowedToEdit) {
             echo '<div class="main-question">';
-            echo Display::div($objQuestion->selectTitle(), array('class' => 'question_title'));
+            echo Display::div($objQuestion->selectTitle(), ['class' => 'question_title']);
             ExerciseLib::showQuestion(
                 $objExercise,
                 $editQuestion,

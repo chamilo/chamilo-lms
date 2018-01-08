@@ -32,11 +32,11 @@ class MultipleAnswer extends Question
      */
     public function createAnswersForm($form)
     {
-        $editorConfig = array(
+        $editorConfig = [
             'ToolbarSet' => 'TestProposedAnswer',
             'Width' => '100%',
             'Height' => '125'
-        );
+        ];
 
         $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4; // The previous default value was 2. See task #1759.
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
@@ -59,7 +59,7 @@ class MultipleAnswer extends Question
 
         $form->addHtml($html);
 
-        $defaults = array();
+        $defaults = [];
         $correct = 0;
         $answer = false;
         if (!empty($this->id)) {
@@ -71,7 +71,7 @@ class MultipleAnswer extends Question
         }
 
         $form->addElement('hidden', 'nb_answers');
-        $boxes_names = array();
+        $boxes_names = [];
 
         if ($nb_answers < 1) {
             $nb_answers = 1;
@@ -136,7 +136,7 @@ class MultipleAnswer extends Question
 
             $form->addHtmlEditor("comment[$i]", null, null, false, $editorConfig);
 
-            $form->addElement('text', 'weighting['.$i.']', null, array('style' => "width: 60px;", 'value' => '0'));
+            $form->addElement('text', 'weighting['.$i.']', null, ['style' => "width: 60px;", 'value' => '0']);
             $form->addHtml('</tr>');
         }
 
@@ -178,13 +178,13 @@ class MultipleAnswer extends Question
                 $form->setDefaults($defaults);
             }
         }
-        $form->setConstants(array('nb_answers' => $nb_answers));
+        $form->setConstants(['nb_answers' => $nb_answers]);
     }
 
     /**
      * @inheritdoc
      */
-	public function processAnswersCreation($form, $exercise)
+    public function processAnswersCreation($form, $exercise)
     {
         $questionWeighting = $nbrGoodAnswers = 0;
         $objAnswer  = new Answer($this->id);

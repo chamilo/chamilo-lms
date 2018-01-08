@@ -46,13 +46,13 @@ class CourseDescription
         if (!empty($course_info)) {
             $course_id = $course_info['real_id'];
         } else {
-            return array();
+            return [];
         }
         $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
         $sql = "SELECT * FROM $table
                 WHERE c_id = $course_id AND session_id = '0'";
         $sql_result = Database::query($sql);
-        $results = array();
+        $results = [];
         while ($row = Database::fetch_array($sql_result)) {
             $desc_tmp = new CourseDescription();
             $desc_tmp->set_id($row['id']);
@@ -86,7 +86,7 @@ class CourseDescription
 		        WHERE c_id = $course_id $condition_session
 		        ORDER BY id ";
         $rs = Database::query($sql);
-        $data = array();
+        $data = [];
         while ($description = Database::fetch_array($rs)) {
             $data['descriptions'][$description['id']] = $description;
         }
@@ -123,7 +123,7 @@ class CourseDescription
 		            description_type = '$description_type' 
 		            $condition_session ";
         $rs = Database::query($sql);
-        $data = array();
+        $data = [];
         if ($description = Database::fetch_array($rs)) {
             $data['description_title'] = $description['title'];
             $data['description_content'] = $description['content'];
@@ -158,7 +158,7 @@ class CourseDescription
         $sql = "SELECT * FROM $table
 		        WHERE c_id = $course_id AND id='$id' $condition_session ";
         $rs = Database::query($sql);
-        $data = array();
+        $data = [];
         if ($description = Database::fetch_array($rs)) {
             $data['description_type'] = $description['description_type'];
             $data['description_title'] = $description['title'];

@@ -28,7 +28,7 @@ class DashboardManager
         $dashboard_pluginpath = api_get_path(SYS_PLUGIN_PATH).'dashboard/';
         $possiblePlugins = self::getPossibleDashboardPluginsPath();
 
-        $table_cols = array('name', 'version', 'description');
+        $table_cols = ['name', 'version', 'description'];
         echo Display::page_subheader(get_lang('DashboardPlugins'));
         echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).$tokenCondition.'">';
         echo '<table class="data_table">';
@@ -69,7 +69,7 @@ class DashboardManager
                         Display::tag(
                             'td',
                             get_lang('CheckFilePermissions').' '.Security::remove_XSS($plugin_info_file),
-                            array('colspan' => '3')
+                            ['colspan' => '3']
                         )
                     );
                 }
@@ -395,7 +395,7 @@ class DashboardManager
                           </td>';
                     $html .= '</tr>';
                 } else {
-                    $html .= Display::tag('tr', Display::tag('td', get_lang('Error').' '.$controller_class, array('colspan'=>'3')));
+                    $html .= Display::tag('tr', Display::tag('td', get_lang('Error').' '.$controller_class, ['colspan'=>'3']));
                 }
             }
 
@@ -483,7 +483,7 @@ class DashboardManager
             if (!empty($split_extra)) {
                 $block_id = $split_extra[0];
                 $column = isset($split_extra[1]) ? $split_extra[1] : null;
-                $data[$block_id] = array('block_id' => $block_id, 'column' => $column);
+                $data[$block_id] = ['block_id' => $block_id, 'column' => $column];
             }
         }
 

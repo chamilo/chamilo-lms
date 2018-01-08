@@ -14,12 +14,12 @@ class ChamiloExtension extends \Twig_Extension
      */
     public function getFilters()
     {
-        return array(
+        return [
             new \Twig_SimpleFilter('var_dump', 'var_dump'),
             new \Twig_SimpleFilter('icon', 'Template::get_icon_path'),
             new \Twig_SimpleFilter('api_get_local_time', 'api_get_local_time'),
 
-        );
+        ];
     }
 
     /**

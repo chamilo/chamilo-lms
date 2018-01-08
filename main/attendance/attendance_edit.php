@@ -37,11 +37,11 @@ $form->addHtmlEditor(
     get_lang('Description'),
     false,
     false,
-    array(
+    [
         'ToolbarSet' => 'TrainingDescription',
         'Width' => '100%',
         'Height' => '200',
-    )
+    ]
 );
 
 // Adavanced Parameters
@@ -55,7 +55,7 @@ if (Gradebook::is_active()) {
             'attendance_qualify_gradebook',
             '',
             get_lang('QualifyAttendanceGradebook'),
-            array('checked'=>'true', 'onclick'=>'javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}')
+            ['checked'=>'true', 'onclick'=>'javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}']
         );
         $form->addElement('html', '<div id="options_field" style="display:block">');
     } else {

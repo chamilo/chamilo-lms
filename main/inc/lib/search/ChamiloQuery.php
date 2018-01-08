@@ -45,13 +45,13 @@ function chamilo_get_boolean_query($term)
 function chamilo_preprocess_results($results)
 {
     // group by toolid
-    $results_by_tool = array();
+    $results_by_tool = [];
     if (count($results) > 0) {
         foreach ($results as $key => $row) {
             $results_by_tool[$row['toolid']][] = $row;
         }
 
-        $processed_results = array();
+        $processed_results = [];
         foreach ($results_by_tool as $toolid => $rows) {
             $tool_processor_class = $toolid.'_processor';
             $tool_processor_path = api_get_path(LIBRARY_PATH).'search/tool_processors/'.$tool_processor_class.'.class.php';
@@ -62,7 +62,7 @@ function chamilo_preprocess_results($results)
             }
         }
 
-        return array(count($processed_results), $processed_results);
+        return [count($processed_results), $processed_results];
     }
 }
 

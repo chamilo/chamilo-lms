@@ -46,14 +46,14 @@ if ($edit_result_form->validate()) {
 
 $table = $edit_result_form->toHtml();
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => Category::getUrl(),
     'name' => get_lang('Gradebook')
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => 'gradebook_view_result.php?selecteval='.$select_eval.'&'.api_get_cidreq(),
     'name' => get_lang('ViewResult')
-);
+];
 Display::display_header(get_lang('EditResult'));
 DisplayGradebook::display_header_result($evaluation[0], null, 0, 0);
 echo $table;

@@ -117,19 +117,19 @@ $form = new FormValidator('profile');
 
 if (api_is_western_name_order()) {
     //    FIRST NAME and LAST NAME
-    $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
-    $form->addElement('text', 'lastname', get_lang('LastName'), array('size' => 40));
+    $form->addElement('text', 'firstname', get_lang('FirstName'), ['size' => 40]);
+    $form->addElement('text', 'lastname', get_lang('LastName'), ['size' => 40]);
 } else {
     //    LAST NAME and FIRST NAME
-    $form->addElement('text', 'lastname', get_lang('LastName'), array('size' => 40));
-    $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
+    $form->addElement('text', 'lastname', get_lang('LastName'), ['size' => 40]);
+    $form->addElement('text', 'firstname', get_lang('FirstName'), ['size' => 40]);
 }
 if (api_get_setting('profile', 'name') !== 'true') {
-    $form->freeze(array('lastname', 'firstname'));
+    $form->freeze(['lastname', 'firstname']);
 }
-$form->applyFilter(array('lastname', 'firstname'), 'stripslashes');
-$form->applyFilter(array('lastname', 'firstname'), 'trim');
-$form->applyFilter(array('lastname', 'firstname'), 'html_filter');
+$form->applyFilter(['lastname', 'firstname'], 'stripslashes');
+$form->applyFilter(['lastname', 'firstname'], 'trim');
+$form->applyFilter(['lastname', 'firstname'], 'html_filter');
 $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 
@@ -138,11 +138,11 @@ $form->addElement(
     'text',
     'username',
     get_lang('UserName'),
-    array(
+    [
         'id' => 'username',
         'maxlength' => USERNAME_MAX_LENGTH,
         'size' => USERNAME_MAX_LENGTH,
-    )
+    ]
 );
 if (api_get_setting('profile', 'login') !== 'true' || api_get_setting('login_is_email') == 'true') {
     $form->freeze('username');
@@ -155,7 +155,7 @@ $form->addRule('username', get_lang('UserTaken'), 'username_available', $user_da
 
 //    OFFICIAL CODE
 if (defined('CONFVAL_ASK_FOR_OFFICIAL_CODE') && CONFVAL_ASK_FOR_OFFICIAL_CODE === true) {
-    $form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => 40));
+    $form->addElement('text', 'official_code', get_lang('OfficialCode'), ['size' => 40]);
     if (api_get_setting('profile', 'officialcode') !== 'true') {
         $form->freeze('official_code');
     }
@@ -170,7 +170,7 @@ if (defined('CONFVAL_ASK_FOR_OFFICIAL_CODE') && CONFVAL_ASK_FOR_OFFICIAL_CODE ==
 }
 
 //    EMAIL
-$form->addElement('email', 'email', get_lang('Email'), array('size' => 40));
+$form->addElement('email', 'email', get_lang('Email'), ['size' => 40]);
 if (api_get_setting('profile', 'email') !== 'true') {
     $form->freeze('email');
 }
@@ -184,7 +184,7 @@ if (api_get_setting('registration', 'email') == 'true' && api_get_setting('profi
 
 // OPENID URL
 if (is_profile_editable() && api_get_setting('openid_authentication') == 'true') {
-    $form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40));
+    $form->addElement('text', 'openid', get_lang('OpenIDURL'), ['size' => 40]);
     if (api_get_setting('profile', 'openid') !== 'true') {
         $form->freeze('openid');
     }
@@ -192,7 +192,7 @@ if (is_profile_editable() && api_get_setting('openid_authentication') == 'true')
 }
 
 //    PHONE
-$form->addElement('text', 'phone', get_lang('Phone'), array('size' => 20));
+$form->addElement('text', 'phone', get_lang('Phone'), ['size' => 20]);
 if (api_get_setting('profile', 'phone') !== 'true') {
     $form->freeze('phone');
 }
@@ -254,11 +254,11 @@ if (api_get_setting('extended_profile') === 'true') {
         get_lang('MyCompetences'),
         false,
         false,
-        array(
+        [
             'ToolbarSet' => 'Profile',
             'Width' => $width_extended_profile,
             'Height' => '130',
-        )
+        ]
     );
     //    MY DIPLOMAS
     $form->addHtmlEditor(
@@ -266,11 +266,11 @@ if (api_get_setting('extended_profile') === 'true') {
         get_lang('MyDiplomas'),
         false,
         false,
-        array(
+        [
             'ToolbarSet' => 'Profile',
             'Width' => $width_extended_profile,
             'Height' => '130',
-        )
+        ]
     );
     // WHAT I AM ABLE TO TEACH
     $form->addHtmlEditor(
@@ -278,11 +278,11 @@ if (api_get_setting('extended_profile') === 'true') {
         get_lang('MyTeach'),
         false,
         false,
-        array(
+        [
             'ToolbarSet' => 'Profile',
             'Width' => $width_extended_profile,
             'Height' => '130',
-        )
+        ]
     );
 
     //    MY PRODUCTIONS
@@ -296,15 +296,15 @@ if (api_get_setting('extended_profile') === 'true') {
         get_lang('MyPersonalOpenArea'),
         false,
         false,
-        array(
+        [
             'ToolbarSet' => 'Profile',
             'Width' => $width_extended_profile,
             'Height' => '350',
-        )
+        ]
     );
     // openarea is untrimmed for maximum openness
-    $form->applyFilter(array('competences', 'diplomas', 'teach', 'openarea'), 'stripslashes');
-    $form->applyFilter(array('competences', 'diplomas', 'teach'), 'trim');
+    $form->applyFilter(['competences', 'diplomas', 'teach', 'openarea'], 'stripslashes');
+    $form->applyFilter(['competences', 'diplomas', 'teach'], 'trim');
 }
 
 //    PASSWORD, if auth_source is platform
@@ -312,16 +312,16 @@ if (is_platform_authentication() &&
     is_profile_editable() &&
     api_get_setting('profile', 'password') == 'true'
 ) {
-    $form->addElement('password', 'password0', array(get_lang('Pass'), get_lang('Enter2passToChange')), array('size' => 40));
-    $form->addElement('password', 'password1', get_lang('NewPass'), array('id'=> 'password1', 'size' => 40));
+    $form->addElement('password', 'password0', [get_lang('Pass'), get_lang('Enter2passToChange')], ['size' => 40]);
+    $form->addElement('password', 'password1', get_lang('NewPass'), ['id'=> 'password1', 'size' => 40]);
 
     $checkPass = api_get_setting('allow_strength_pass_checker');
     if ($checkPass == 'true') {
         $form->addElement('label', null, '<div id="password_progress"></div>');
     }
-    $form->addElement('password', 'password2', get_lang('Confirmation'), array('size' => 40));
+    $form->addElement('password', 'password2', get_lang('Confirmation'), ['size' => 40]);
     //    user must enter identical password twice so we can prevent some user errors
-    $form->addRule(array('password1', 'password2'), get_lang('PassTwo'), 'compare');
+    $form->addRule(['password1', 'password2'], get_lang('PassTwo'), 'compare');
     $form->addPasswordRule('password1');
 }
 
@@ -347,7 +347,7 @@ if (api_get_setting('profile', 'apikeys') == 'true') {
         'text',
         'api_key_generate',
         get_lang('MyApiKey'),
-        array('size' => 40, 'id' => 'id_api_key_generate')
+        ['size' => 40, 'id' => 'id_api_key_generate']
     );
     $form->addElement('html', '</div>');
     $form->addButton(
@@ -597,7 +597,7 @@ if ($form->validate()) {
         //ensure there is at least a http:// scheme in the URI provided
         $user_data['openid'] = 'http://'.$my_user_openid;
     }
-    $extras = array();
+    $extras = [];
 
     //Checking the user language
     $languages = api_get_languages();
@@ -610,7 +610,7 @@ if ($form->validate()) {
     $profile_list = api_get_setting('profile');
     //Adding missing variables
 
-    $available_values_to_modify = array();
+    $available_values_to_modify = [];
     foreach ($profile_list as $key => $status) {
         if ($status == 'true') {
             switch ($key) {
@@ -634,7 +634,7 @@ if ($form->validate()) {
     //Fixing missing variables
     $available_values_to_modify = array_merge(
         $available_values_to_modify,
-        array('competences', 'diplomas', 'openarea', 'teach', 'openid', 'address')
+        ['competences', 'diplomas', 'openarea', 'teach', 'openid', 'address']
     );
 
     // build SQL query
@@ -643,7 +643,7 @@ if ($form->validate()) {
 
     foreach ($user_data as $key => $value) {
         if (substr($key, 0, 6) === 'extra_') { //an extra field
-           continue;
+            continue;
         } elseif (strpos($key, 'remove_extra_') !== false) {
         } else {
             if (in_array($key, $available_values_to_modify)) {

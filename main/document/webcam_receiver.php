@@ -17,8 +17,7 @@ if (isset($params['webcamname']) && isset($params['webcamdir']) && isset($params
     $webcamname = $params['webcamname'];
     $webcamdir = $params['webcamdir'];
     $webcamuserid = $params['webcamuserid'];
-}
-else {
+} else {
     api_not_allowed();
     die();
 }

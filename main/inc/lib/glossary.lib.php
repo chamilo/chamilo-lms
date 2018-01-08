@@ -23,7 +23,7 @@ class GlossaryManager
      */
     public static function get_glossary_terms()
     {
-        $glossary_data  = array();
+        $glossary_data  = [];
         $table = Database::get_course_table(TABLE_GLOSSARY);
         $session_id = api_get_session_id();
         $sql_filter = api_get_session_condition($session_id);
@@ -427,10 +427,10 @@ class GlossaryManager
             'get',
             api_get_self().'?'.api_get_cidreq(),
             '',
-            array(),
+            [],
             FormValidator::LAYOUT_INLINE
         );
-        $form->addText('keyword', '', false, array('class' => 'col-md-2'));
+        $form->addText('keyword', '', false, ['class' => 'col-md-2']);
         $form->addElement('hidden', 'cidReq', api_get_course_id());
         $form->addElement('hidden', 'id_session', api_get_session_id());
         $form->addButtonSearch(get_lang('Search'));
@@ -438,7 +438,7 @@ class GlossaryManager
 
         $toolbar = Display::toolbarAction(
             'toolbar-document',
-            array($actionsLeft, $actionsRight)
+            [$actionsLeft, $actionsRight]
         );
 
         $content = $toolbar;
@@ -446,16 +446,16 @@ class GlossaryManager
         if (!$view || $view === 'table') {
             $table = new SortableTable(
                 'glossary',
-                array('GlossaryManager', 'get_number_glossary_terms'),
-                array('GlossaryManager', 'get_glossary_data'),
+                ['GlossaryManager', 'get_number_glossary_terms'],
+                ['GlossaryManager', 'get_glossary_data'],
                 0
             );
             //$table->set_header(0, '', false);
             $table->set_header(0, get_lang('TermName'), true);
             $table->set_header(1, get_lang('TermDefinition'), true);
             if (api_is_allowed_to_edit(null, true)) {
-                $table->set_header(2, get_lang('Actions'), false, 'width=90px', array('class' => 'td_actions'));
-                $table->set_column_filter(2, array('GlossaryManager', 'actions_filter'));
+                $table->set_header(2, get_lang('Actions'), false, 'width=90px', ['class' => 'td_actions']);
+                $table->set_column_filter(2, ['GlossaryManager', 'actions_filter']);
             }
             $content .= $table->return_table();
         }
@@ -557,7 +557,7 @@ class GlossaryManager
         );
 
         $column = intval($column);
-        if (!in_array($direction, array('DESC', 'ASC'))) {
+        if (!in_array($direction, ['DESC', 'ASC'])) {
             $direction = 'ASC';
         }
         $from = intval($from);
@@ -586,15 +586,15 @@ class GlossaryManager
 		        LIMIT $from,$number_of_items";
         $res = Database::query($sql);
 
-        $return = array();
-        $array = array();
+        $return = [];
+        $array = [];
         while ($data = Database::fetch_array($res)) {
             // Validation when belongs to a session
             $session_img = api_get_session_image($data['session_id'], $_user['status']);
             $array[0] = $data[0].$session_img;
 
             if (!$view || $view === 'table') {
-                $array[1] = str_replace(array('<p>', '</p>'), array('', '<br />'), $data[1]);
+                $array[1] = str_replace(['<p>', '</p>'], ['', '<br />'], $data[1]);
             } else {
                 $array[1] = $data[1];
             }

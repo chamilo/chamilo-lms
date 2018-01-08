@@ -50,6 +50,4 @@ class QuestionRepository extends EntityRepository
 
         return $query->getOneOrNullResult();
     }
-
-
 }

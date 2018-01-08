@@ -57,5 +57,4 @@ class AccessUrlRelCourseAdmin extends AbstractAdmin
             ->addIdentifier('url')
         ;
     }
-
 }

@@ -92,7 +92,7 @@ class Result
         $tbl_course_rel_course = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_session_rel_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $sessionId = api_get_session_id();
-        $list_user_course_list = array();
+        $list_user_course_list = [];
 
         if (is_null($id) && is_null($user_id) && !is_null($evaluation_id)) {
             // Verified_if_exist_evaluation
@@ -139,7 +139,7 @@ class Result
             }
         }
 
-        $userIdList = array();
+        $userIdList = [];
         foreach ($list_user_course_list as $data) {
             $userIdList[] = $data['user_id'];
         }
@@ -180,7 +180,7 @@ class Result
         $sql .= ' ORDER BY u.lastname, u.firstname';
 
         $result = Database::query($sql);
-        $allres = array();
+        $allres = [];
         while ($data = Database::fetch_array($result)) {
             $res = new Result();
             $res->set_id($data['id']);

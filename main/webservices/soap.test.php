@@ -30,11 +30,11 @@ $server = api_get_path(WEB_CODE_PATH).'webservices/registration.soap.php?wsdl';
  */
 
 // Init the SOAP connection
-$client = new SoapClient($server, array('cache_wsdl' => WSDL_CACHE_NONE));
+$client = new SoapClient($server, ['cache_wsdl' => WSDL_CACHE_NONE]);
 
 // Call the function we want with the right params...
 try {
-    $response = $client->{'WSSearchSession'}(array('term' => 'a', 'extrafields' => array(), 'secret_key' => $signature));
+    $response = $client->{'WSSearchSession'}(['term' => 'a', 'extrafields' => [], 'secret_key' => $signature]);
 } catch (Exception $e) {
     error_log(print_r($e->getMessage(), 1));
 }

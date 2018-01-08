@@ -19,7 +19,7 @@ $sql = "SELECT sitename, root_web FROM $table WHERE visible = 1";
 
 if ($virtualChamilo == '%') {
     $result = Database::query($sql);
-    $_template['hosts'] = array();
+    $_template['hosts'] = [];
     if ($result) {
         while ($vchamilo = Database::fetch_assoc($result)) {
             $_template['hosts'][] = $vchamilo;

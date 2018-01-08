@@ -53,8 +53,8 @@ class SkillVisualizer
 
         $content = $skill['name'];
         $content .= '<div class="btn-group">';
-        $content .= Display::url(get_lang('Edit'), '#', array('id'=>'edit_block_'.$block_id, 'class'=>'edit_block btn'));
-        $content .= Display::url('+', '#', array('id'=>'edit_block_'.$block_id, 'class'=>'edit_block btn'));
+        $content .= Display::url(get_lang('Edit'), '#', ['id'=>'edit_block_'.$block_id, 'class'=>'edit_block btn']);
+        $content .= Display::url('+', '#', ['id'=>'edit_block_'.$block_id, 'class'=>'edit_block btn']);
         $content .= '</div>';
 
         $this->html .= $content;
@@ -129,9 +129,9 @@ class SkillVisualizer
         $skill_count = sizeof($this->skills);
         //$corner = 360 / $skill_count;
         $count = 0;
-        $brothers = array();
+        $brothers = [];
         foreach ($this->skills as &$skill) {
-            if (!in_array($skill['parent_id'], array(0, 1))) {
+            if (!in_array($skill['parent_id'], [0, 1])) {
                 continue;
             }
             $childs = isset($skill['children']) ? count($skill['children']) : 0;
@@ -171,7 +171,7 @@ class SkillVisualizer
 
             //$skill['description']  = "{$brothers[$skill['parent_id']]} $x - $y";
             //$skill['name']  =  $skill['name']."  |  $x = $my_count * 150  +  $parent_x - (150* $max/2) - 10*$childs ";
-            $this->add_item($skill, array('x' => $this->offset_x + $x, 'y' => $this->offset_y + $y));
+            $this->add_item($skill, ['x' => $this->offset_x + $x, 'y' => $this->offset_y + $y]);
         }
         return $this->get_html();
     }

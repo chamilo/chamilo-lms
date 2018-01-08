@@ -19,18 +19,18 @@ $this_section = SECTION_PLATFORM_ADMIN;
 // user permissions
 api_protect_admin_script();
 $fieldId = isset($_REQUEST['field_id']) ? intval($_REQUEST['field_id']) : 0;
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'index.php',
     'name' => get_lang('PlatformAdmin'),
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => 'settings.php?category=Search',
     'name' => get_lang('PlatformConfigSettings'),
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => 'specific_fields.php',
     'name' => get_lang('SpecificSearchFields'),
-);
+];
 
 $tool_name = get_lang('AddSpecificSearchField');
 
@@ -49,9 +49,9 @@ $form->addRule('field_name', get_lang('OnlyLettersAndNumbersAllowed'), 'username
 $form->addRule('field_name', '', 'maxlength', 20);
 
 // Set default values (only not empty when editing)
-$defaults = array();
+$defaults = [];
 if ($fieldId) {
-    $form_information = get_specific_field_list(array('id' => $fieldId));
+    $form_information = get_specific_field_list(['id' => $fieldId]);
     $defaults['field_name'] = $form_information[0]['name'];
 }
 $form->setDefaults($defaults);

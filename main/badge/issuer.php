@@ -10,9 +10,9 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 header('Content-Type: application/json');
 
-$json = array(
+$json = [
     'name' => api_get_setting('Institution'),
     'url' => api_get_path(WEB_PATH)
-);
+];
 
 echo json_encode($json);

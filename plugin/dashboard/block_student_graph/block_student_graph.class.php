@@ -24,7 +24,7 @@ class BlockStudentGraph extends Block
     private $user_id;
     private $students;
     private $path;
-    private $permission = array(DRH);
+    private $permission = [DRH];
 
     /**
      * Constructor
@@ -37,7 +37,7 @@ class BlockStudentGraph extends Block
             /*if (api_is_platform_admin()) {
                 $this->students = UserManager::get_user_list(array('status' => STUDENT));
             } else if (api_is_drh()) {*/
-                $this->students = UserManager::get_users_followed_by_drh($user_id, STUDENT);
+            $this->students = UserManager::get_users_followed_by_drh($user_id, STUDENT);
             //}
         }
     }
@@ -68,7 +68,7 @@ class BlockStudentGraph extends Block
     {
         global $charset;
         $column = 1;
-        $data = array();
+        $data = [];
         $students_attendance_graph = $this->get_students_attendance_graph();
 
         $html = '<div class="panel panel-default" id="intro">
@@ -99,7 +99,7 @@ class BlockStudentGraph extends Block
         $attendance = new Attendance();
 
         // get data
-        $attendances_faults_avg = array();
+        $attendances_faults_avg = [];
         if (is_array($students) && count($students) > 0) {
             foreach ($students as $student) {
                 $student_id = $student['user_id'];
@@ -118,7 +118,7 @@ class BlockStudentGraph extends Block
         arsort($attendances_faults_avg);
         $usernames = array_keys($attendances_faults_avg);
 
-        $faults = array();
+        $faults = [];
         foreach ($usernames as $username) {
             $faults[] = $attendances_faults_avg[$username];
         }
@@ -135,27 +135,27 @@ class BlockStudentGraph extends Block
             $dataSet->setAbscissa('Labels');
             $dataSet->setAbscissaName(get_lang('User'));
             $dataSet->setAxisName(0, get_lang('Attendance'));
-            $palette = array(
-                '0' => array('R' => 186, 'G' => 206, 'B' => 151, 'Alpha' => 100),
-                '1' => array('R' => 210, 'G' => 148, 'B' => 147, 'Alpha' => 100),
-                '2' => array('R' => 148, 'G' => 170, 'B' => 208, 'Alpha' => 100),
-                '3' => array('R' => 221, 'G' => 133, 'B' => 61, 'Alpha' => 100),
-                '4' => array('R' => 65, 'G' => 153, 'B' => 176, 'Alpha' => 100),
-                '5' => array('R' => 114, 'G' => 88, 'B' => 144, 'Alpha' => 100),
-                '6' => array('R' => 138, 'G' => 166, 'B' => 78, 'Alpha' => 100),
-                '7' => array('R' => 171, 'G' => 70, 'B' => 67, 'Alpha' => 100),
-                '8' => array('R' => 69, 'G' => 115, 'B' => 168, 'Alpha' => 100),
-            );
+            $palette = [
+                '0' => ['R' => 186, 'G' => 206, 'B' => 151, 'Alpha' => 100],
+                '1' => ['R' => 210, 'G' => 148, 'B' => 147, 'Alpha' => 100],
+                '2' => ['R' => 148, 'G' => 170, 'B' => 208, 'Alpha' => 100],
+                '3' => ['R' => 221, 'G' => 133, 'B' => 61, 'Alpha' => 100],
+                '4' => ['R' => 65, 'G' => 153, 'B' => 176, 'Alpha' => 100],
+                '5' => ['R' => 114, 'G' => 88, 'B' => 144, 'Alpha' => 100],
+                '6' => ['R' => 138, 'G' => 166, 'B' => 78, 'Alpha' => 100],
+                '7' => ['R' => 171, 'G' => 70, 'B' => 67, 'Alpha' => 100],
+                '8' => ['R' => 69, 'G' => 115, 'B' => 168, 'Alpha' => 100],
+            ];
             // Cache definition
             $cachePath = api_get_path(SYS_ARCHIVE_PATH);
             $myCache = new pCache(
-                array(
+                [
                     'CacheFolder' => substr(
                         $cachePath,
                         0,
                         strlen($cachePath) - 1
                     ),
-                )
+                ]
             );
             $chartHash = $myCache->getHash($dataSet);
             if ($myCache->isInCache($chartHash)) {
@@ -180,14 +180,14 @@ class BlockStudentGraph extends Block
                 $myPicture->Antialias = false;
 
                 /* Add a border to the picture */
-                $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, array('R' => 0, 'G' => 0, 'B' => 0));
+                $myPicture->drawRectangle(0, 0, $widthSize - 1, $heightSize - 1, ['R' => 0, 'G' => 0, 'B' => 0]);
 
                 /* Set the default font */
                 $myPicture->setFontProperties(
-                    array(
+                    [
                         'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
                         'FontSize' => 10
-                    )
+                    ]
                 );
 
                 /* Do NOT Write the chart title */
@@ -196,7 +196,7 @@ class BlockStudentGraph extends Block
                 $myPicture->setGraphArea(80, 40, $widthSize - 20, $heightSize - 40);
 
                 /* Draw the scale */
-                $scaleSettings = array(
+                $scaleSettings = [
                     'GridR' => 200,
                     'GridG' => 200,
                     'GridB' => 200,
@@ -206,16 +206,16 @@ class BlockStudentGraph extends Block
                     'Pos' => SCALE_POS_TOPBOTTOM,
                     'DrawXLines' => false,
                     'LabelRotation' => $angle,
-                );
+                ];
 
                 $myPicture->drawScale($scaleSettings);
 
                 /* Turn on shadow computing */
-                $myPicture->setShadow(true, array('X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10));
+                $myPicture->setShadow(true, ['X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10]);
 
                 /* Draw the chart */
-                $myPicture->setShadow(true, array('X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10));
-                $settings = array(
+                $myPicture->setShadow(true, ['X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 10]);
+                $settings = [
                     'OverrideColors' => $palette,
                     'Gradient' => false,
                     'GradientMode' => GRADIENT_SIMPLE,
@@ -226,7 +226,7 @@ class BlockStudentGraph extends Block
                     'DisplayB' => 0,
                     'DisplayShadow' => true,
                     'Surrounding' => 10,
-                );
+                ];
                 $myPicture->drawBarChart($settings);
 
                 /* Write and save into cache */
@@ -247,7 +247,7 @@ class BlockStudentGraph extends Block
      * Get number of students
      * @return int
      */
-    function get_number_of_students()
+    public function get_number_of_students()
     {
         return count($this->students);
     }

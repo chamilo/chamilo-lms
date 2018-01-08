@@ -25,7 +25,7 @@ class ResultTable extends SortableTable
      */
     public function __construct(
         $evaluation,
-        $results = array(),
+        $results = [],
         $iscourse,
         $addparams = [],
         $forprint = false
@@ -50,9 +50,9 @@ class ResultTable extends SortableTable
         $column = 0;
         if ($this->iscourse == '1') {
             $this->set_header($column++, '', false);
-            $this->set_form_actions(array(
+            $this->set_form_actions([
                     'delete' => get_lang('Delete')
-            ));
+            ]);
         }
         if (api_is_western_name_order()) {
             $this->set_header($column++, get_lang('FirstName'));
@@ -129,11 +129,11 @@ class ResultTable extends SortableTable
         $data_array = $this->datagen->get_data($sorting, $from, $this->per_page);
 
         // generate the data to display
-        $sortable_data = array();
+        $sortable_data = [];
         foreach ($data_array as $item) {
-            $row = array();
+            $row = [];
             if ($this->iscourse == '1') {
-                 $row[] = $item['result_id'];
+                $row[] = $item['result_id'];
             }
             if ($isWesternNameOrder) {
                 $row[] = $item['firstname'];

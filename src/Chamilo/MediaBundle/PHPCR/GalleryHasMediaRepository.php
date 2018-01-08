@@ -23,5 +23,4 @@ use Sonata\MediaBundle\PHPCR\BaseGalleryHasMediaRepository;
  */
 class GalleryHasMediaRepository extends BaseGalleryHasMediaRepository
 {
-
 }

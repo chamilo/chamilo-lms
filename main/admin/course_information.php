@@ -80,24 +80,24 @@ function get_course_usage($course, $session_id = 0)
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
 
-        $usage[] = array(
+        $usage[] = [
             $title,
             $row['count']
-        );
+        ];
     }
 
     return $usage;
 }
 
-$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array("url" => 'course_list.php', "name" => get_lang('Courses'));
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ["url" => 'course_list.php', "name" => get_lang('Courses')];
 $courseId = $courseInfo['real_id'];
 $tool_name = $courseInfo['title'].' ('.$courseInfo['visual_code'].')';
 Display::display_header($tool_name);
 ?>
     <div class="actions">
         <a href="<?php echo $courseInfo['course_public_url']; ?>">
-            <?php Display::display_icon('home.png', get_lang('CourseHomepage'), array(), ICON_SIZE_MEDIUM); ?>
+            <?php Display::display_icon('home.png', get_lang('CourseHomepage'), [], ICON_SIZE_MEDIUM); ?>
         </a>
     </div>
 <?php
@@ -110,8 +110,8 @@ $table = new SortableTableFromArray(
     20,
     'usage_table'
 );
-$table->set_additional_parameters(array('code' => $courseInfo['code']));
-$table->set_other_tables(array('user_table', 'class_table'));
+$table->set_additional_parameters(['code' => $courseInfo['code']]);
+$table->set_other_tables(['user_table', 'class_table']);
 $table->set_header(0, get_lang('Tool'), true);
 $table->set_header(1, get_lang('NumberOfItems'), true);
 $table->display();
@@ -138,9 +138,9 @@ $sql .= " WHERE
 $res = Database::query($sql);
 $is_western_name_order = api_is_western_name_order();
 if (Database::num_rows($res) > 0) {
-    $users = array();
+    $users = [];
     while ($obj = Database::fetch_object($res)) {
-        $user   = array();
+        $user   = [];
         $user[] = $obj->official_code;
         if ($is_western_name_order) {
             $user[] = $obj->firstname;
@@ -156,8 +156,8 @@ if (Database::num_rows($res) > 0) {
         $users[] = $user;
     }
     $table = new SortableTableFromArray($users, 0, 20, 'user_table');
-    $table->set_additional_parameters(array('code' => $courseInfo['code']));
-    $table->set_other_tables(array('usage_table', 'class_table'));
+    $table->set_additional_parameters(['code' => $courseInfo['code']]);
+    $table->set_other_tables(['usage_table', 'class_table']);
     $table->set_header(0, get_lang('OfficialCode'), true);
     if ($is_western_name_order) {
         $table->set_header(1, get_lang('FirstName'), true);

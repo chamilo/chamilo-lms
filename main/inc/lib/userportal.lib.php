@@ -62,7 +62,7 @@ class IndexManager
      */
     public function return_exercise_block($personal_course_list)
     {
-        $exercise_list = array();
+        $exercise_list = [];
         if (!empty($personal_course_list)) {
             foreach ($personal_course_list as $course_item) {
                 $course_code = $course_item['c'];
@@ -621,7 +621,7 @@ class IndexManager
                         $courses_shown++;
                         $courses_list_string .= "<li>";
                         $courses_list_string .= '<a href="'.$web_course_path.$course['directory'].'/">'.$course['title'].'</a><br />';
-                        $course_details = array();
+                        $course_details = [];
                         if (api_get_setting('display_coursecode_in_courselist') === 'true') {
                             $course_details[] = $course['visual_code'];
                         }
@@ -666,7 +666,7 @@ class IndexManager
                     ) {
                         $courses_list_string .= '</a><br />';
                     }
-                    $course_details = array();
+                    $course_details = [];
                     if (api_get_setting('display_coursecode_in_courselist') == 'true') {
                         $course_details[] = $course['visual_code'];
                     }
@@ -745,10 +745,10 @@ class IndexManager
                     course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
                 ORDER BY course_rel_user.sort ASC";
         $result = Database::query($sql);
-        $courses = array();
+        $courses = [];
         while ($row = Database::fetch_array($result)) {
             // We only need the database name of the course.
-            $courses[$row['k']] = array(
+            $courses[$row['k']] = [
                 'code' => $row['k'],
                 'visual_code' => $row['vc'],
                 'title' => $row['i'],
@@ -759,7 +759,7 @@ class IndexManager
                 'unsubscribe' => $row['unsubscr'],
                 'sort' => $row['sort'],
                 'user_course_category' => $row['user_course_cat']
-            );
+            ];
         }
 
         return $courses;
@@ -793,7 +793,6 @@ class IndexManager
             $html .= '<div id="'.$idCollapse.'" class="panel-collapse collapse in" role="tabpanel">';
             $html .= '<div class="panel-body">'.$content.'</div>';
             $html .= '</div></div></div>';
-
         } else {
             if (!empty($id)) {
                 $params['id'] = $id;
@@ -899,7 +898,7 @@ class IndexManager
                 null,
                 $content,
                 'user_image_block',
-                array('style' => 'text-align:center;')
+                ['style' => 'text-align:center;']
             );
         }
 
@@ -1241,7 +1240,7 @@ class IndexManager
                             $percentage_score = Tracking::get_avg_student_score(
                                 $user_id,
                                 $specialCourseInfo['course_code'],
-                                array()
+                                []
                             );
                             $specialCourses[$key]['student_info']['score'] = $percentage_score;
                         }
@@ -1289,7 +1288,7 @@ class IndexManager
                                     $percentage_score = Tracking::get_avg_student_score(
                                         $user_id,
                                         $specialCourseInfo['course_code'],
-                                        array()
+                                        []
                                     );
                                     $courses['in_category'][$key1]['courses'][$key2]['student_info']['score'] = $percentage_score;
                                 }
@@ -1346,7 +1345,7 @@ class IndexManager
                             $percentage_score = Tracking::get_avg_student_score(
                                 $user_id,
                                 $courseNotInCatInfo['course_code'],
-                                array()
+                                []
                             );
                             $courses['not_category'][$key]['student_info']['score'] = $percentage_score;
                         }
@@ -1555,7 +1554,7 @@ class IndexManager
                                                     $progress = Tracking::get_avg_student_progress(
                                                         $user_id,
                                                         $course['course_code'],
-                                                        array(),
+                                                        [],
                                                         $session_id
                                                     );
                                                     $course_session['student_info']['progress'] = $progress === false ? null : $progress;
@@ -1565,7 +1564,7 @@ class IndexManager
                                                     $percentage_score = Tracking::get_avg_student_score(
                                                         $user_id,
                                                         $course['course_code'],
-                                                        array(),
+                                                        [],
                                                         $session_id
                                                     );
                                                     $course_session['student_info']['score'] = $percentage_score;
@@ -1605,9 +1604,9 @@ class IndexManager
                             }
 
                             if ($count_courses_session > 0) {
-                                $params = array(
+                                $params = [
                                     'id' => $session_id
-                                );
+                                ];
                                 $session_box = Display::get_session_title_box($session_id);
                                 $actions = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session_id;
                                 $coachId = $session_box['id_coach'];
@@ -1655,8 +1654,10 @@ class IndexManager
                                 if ($gameModeIsActive) {
                                     $params['stars'] =
                                         GamificationUtils::getSessionStars($params['id'], $this->user_id);
-                                    $params['progress'] = GamificationUtils::getSessionProgress($params['id'],
-                                        $this->user_id);
+                                    $params['progress'] = GamificationUtils::getSessionProgress(
+                                        $params['id'],
+                                        $this->user_id
+                                    );
                                     $params['points'] =
                                         GamificationUtils::getSessionPoints($params['id'], $this->user_id);
                                 }
@@ -1790,13 +1791,13 @@ class IndexManager
                         }
 
                         if ($count_courses_session > 0) {
-                            $categoryParams = array(
+                            $categoryParams = [
                                 'id' => $session_category['session_category']['id'],
                                 'title' => $session_category['session_category']['name'],
                                 'show_actions' => api_is_platform_admin(),
                                 'subtitle' => '',
                                 'sessions' => $html_sessions
-                            );
+                            ];
 
                             $session_category_start_date = $session_category['session_category']['date_start'];
                             $session_category_end_date = $session_category['session_category']['date_end'];
@@ -1922,7 +1923,7 @@ class IndexManager
         $loadDirs = $this->load_directories_preview;
 
         // If we're not in the history view...
-        $listCoursesInfo = array();
+        $listCoursesInfo = [];
         if (!isset($_GET['history'])) {
             // Display special courses
             $specialCoursesResult = CourseManager::returnSpecialCourses(
@@ -1962,14 +1963,14 @@ class IndexManager
                 }
 
                 $listCourse = api_get_course_info_by_id($listCourseCodeId['real_id']);
-                $listCoursesInfo[] = array(
+                $listCoursesInfo[] = [
                     'course' => $listCourse,
                     'code' => $listCourseCodeId['code'],
                     'id' => $listCourseCodeId['real_id'],
                     'title' => $listCourse['title'],
                     'userCatId' => $userCategoryId,
                     'userCatTitle' => $userCatTitle
-                );
+                ];
                 $courseCount++;
             }
             usort($listCoursesInfo, 'self::compareByCourse');
@@ -1983,7 +1984,7 @@ class IndexManager
         // we got all courses
         // for each user category, sorted alphabetically, display courses
         $listUserCategories = CourseManager::get_user_course_categories($user_id);
-        $listCoursesAlreadyDisplayed = array();
+        $listCoursesAlreadyDisplayed = [];
         uasort($listUserCategories, "self::compareListUserCategory");
         $listUserCategories[0] = '';
 
@@ -2101,7 +2102,7 @@ class IndexManager
         $icon = Display::return_icon(
             'folder_yellow.png',
             $title,
-            array('class' => 'sessionView'),
+            ['class' => 'sessionView'],
             ICON_SIZE_LARGE
         );
 
@@ -2148,7 +2149,7 @@ class IndexManager
         $icon = Display::return_icon(
             'blackboard.png',
             $title,
-            array('class' => 'sessionView'),
+            ['class' => 'sessionView'],
             ICON_SIZE_LARGE
         );
 
@@ -2197,7 +2198,7 @@ class IndexManager
         $icon = Display::return_icon(
             'folder_blue.png',
             $title,
-            array('class' => 'sessionView'),
+            ['class' => 'sessionView'],
             ICON_SIZE_LARGE
         );
 
@@ -2232,7 +2233,7 @@ class IndexManager
         $icon = Display::return_icon(
             'blackboard_blue.png',
             $title,
-            array('class' => 'sessionView'),
+            ['class' => 'sessionView'],
             ICON_SIZE_LARGE
         );
         $courseLink = $courseInfo['course_public_url'].'?id_session='.intval($id);

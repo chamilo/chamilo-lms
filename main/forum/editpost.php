@@ -65,46 +65,46 @@ if (!$isEditable) {
 }
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
-    );
+    ];
 }
 
 $group_properties = GroupManager::get_group_properties(api_get_group_id());
 if ($origin == 'group') {
     $_clean['toolgroup'] = api_get_group_id();
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
         'name' => get_lang('GroupSpace').' '.$group_properties['name'],
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']),
         'name' => prepare4display($current_forum['forum_title']),
-    );
-    $interbreadcrumb[] = array('url' => 'javascript: void (0);', 'name' => get_lang('EditPost'));
+    ];
+    $interbreadcrumb[] = ['url' => 'javascript: void (0);', 'name' => get_lang('EditPost')];
 } else {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq(),
         'name' => $nameTools,
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&'.api_get_cidreq(),
         'name' => prepare4display($current_forum_category['cat_title'])
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.intval($_GET['forum']).'&'.api_get_cidreq(),
         'name' => prepare4display($current_forum['forum_title'])
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']),
         'name' => prepare4display($current_thread['thread_title'])
-    );
-    $interbreadcrumb[] = array('url' => 'javascript: void (0);', 'name' => get_lang('EditPost'));
+    ];
+    $interbreadcrumb[] = ['url' => 'javascript: void (0);', 'name' => get_lang('EditPost')];
 }
 
 $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);

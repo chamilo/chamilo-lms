@@ -7,7 +7,6 @@
 
 namespace Chamilo\ThemeBundle\Util;
 
-
 /**
  * Class DependencyResolver
  *
@@ -19,19 +18,19 @@ class DependencyResolver implements DependencyResolverInterface
     /**
      * @var array
      */
-    protected $queued = array();
+    protected $queued = [];
     /**
      * @var array
      */
-    protected $registered = array();
+    protected $registered = [];
     /**
      * @var array
      */
-    protected $resolved = array();
+    protected $resolved = [];
     /**
      * @var array
      */
-    protected $unresolved = array();
+    protected $unresolved = [];
 
 
     /**
@@ -89,7 +88,6 @@ class DependencyResolver implements DependencyResolverInterface
                 continue;
             }
         }
-
     }
 
     /**
@@ -155,7 +153,6 @@ class DependencyResolver implements DependencyResolverInterface
         $ids = array_keys($this->registered);
 
         foreach ($ids as $id) {
-
             if (!$this->hasDependencies($id)) {
                 continue;
             }
@@ -167,14 +164,13 @@ class DependencyResolver implements DependencyResolverInterface
                     throw new \RuntimeException(
                         sprintf(
                             'Circular dependency [%s] depends on [%s] which itself depends on [%s]',
-                            $id, $dep, $id
+                            $id,
+                            $dep,
+                            $id
                         )
                     );
                 }
             }
         }
-
-
     }
-
 }

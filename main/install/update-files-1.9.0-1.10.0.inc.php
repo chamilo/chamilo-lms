@@ -26,7 +26,7 @@ if (defined('SYSTEM_INSTALLATION')) {
     // Delete the "chat" file in all language directories, as variables have been moved to the trad4all file
     $langPath = api_get_path(SYS_CODE_PATH).'lang/';
     // Only erase files from Chamilo languages (not sublanguages defined by the users)
-    $officialLanguages = array(
+    $officialLanguages = [
         'arabic',
         'asturian',
         'basque',
@@ -88,9 +88,9 @@ if (defined('SYSTEM_INSTALLATION')) {
         'vietnamese',
         'xhosa',
         'yoruba',
-    );
+    ];
 
-    $filesToDelete = array(
+    $filesToDelete = [
         'accessibility',
         'admin',
         'agenda',
@@ -139,7 +139,7 @@ if (defined('SYSTEM_INSTALLATION')) {
         'videoconf',
         'wiki',
         'work',
-    );
+    ];
 
     $list = scandir($langPath);
     foreach ($list as $entry) {
@@ -244,7 +244,6 @@ if (defined('SYSTEM_INSTALLATION')) {
 
     // Remove archive
     @rrmdir(api_get_path(SYS_PATH).'archive');
-
 } else {
     echo 'You are not allowed here !'.__FILE__;
 }

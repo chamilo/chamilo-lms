@@ -71,7 +71,7 @@ class Diagnoser
 
         $html .= '</ul><div class="tab-pane">';
 
-        $data = call_user_func(array($this, 'get_'.$currentSection.'_data'));
+        $data = call_user_func([$this, 'get_'.$currentSection.'_data']);
         echo $html;
 
         if ($currentSection != 'paths') {
@@ -93,7 +93,7 @@ class Diagnoser
 
             $headers = $data['headers'];
             $results = $data['data'];
-            $table = new HTML_Table(array('class' => 'data_table'));
+            $table = new HTML_Table(['class' => 'data_table']);
 
             $column = 0;
             foreach ($headers as $header) {
@@ -141,14 +141,14 @@ class Diagnoser
      */
     public function get_chamilo_data()
     {
-        $array = array();
-        $writable_folders = array(
+        $array = [];
+        $writable_folders = [
             api_get_path(SYS_APP_PATH).'cache',
             api_get_path(SYS_COURSE_PATH),
             api_get_path(SYS_APP_PATH).'home',
             api_get_path(SYS_APP_PATH).'upload/users/',
             api_get_path(SYS_PATH).'main/default_course_document/images/',
-        );
+        ];
         foreach ($writable_folders as $index => $folder) {
             $writable = is_writable($folder);
             $status = $writable ? self::STATUS_OK : self::STATUS_ERROR;
@@ -227,7 +227,7 @@ class Diagnoser
      */
     public function get_php_data()
     {
-        $array = array();
+        $array = [];
 
         // General Functions
 
@@ -512,58 +512,58 @@ class Diagnoser
         );
 
         // Extensions
-        $extensions = array(
-            'gd' => array(
+        $extensions = [
+            'gd' => [
                 'link' => 'http://www.php.net/gd',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
-            ),
-            'pdo_mysql' => array(
+            ],
+            'pdo_mysql' => [
                 'link' => 'http://php.net/manual/en/ref.pdo-mysql.php',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
-            ),
-            'pcre' => array(
+            ],
+            'pcre' => [
                 'link' => 'http://www.php.net/pcre',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
-            ),
-            'session' => array(
+            ],
+            'session' => [
                 'link' => 'http://www.php.net/session',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
-            ),
-            'standard' => array(
+            ],
+            'standard' => [
                 'link' => 'http://www.php.net/spl',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
-            ),
-            'zlib' => array(
+            ],
+            'zlib' => [
                 'link' => 'http://www.php.net/zlib',
                 'expected' => 1,
                 'comment' => get_lang('ExtensionMustBeLoaded'),
-            ),
-            'xsl' => array(
+            ],
+            'xsl' => [
                 'link' => 'http://be2.php.net/xsl',
                 'expected' => 2,
                 'comment' => get_lang('ExtensionShouldBeLoaded'),
-            ),
-            'curl' => array(
+            ],
+            'curl' => [
                 'link' => 'http://www.php.net/curl',
                 'expected' => 2,
                 'comment' => get_lang('ExtensionShouldBeLoaded'),
-            ),
-            'Zend OPcache' => array(
+            ],
+            'Zend OPcache' => [
                 'link' => 'http://www.php.net/opcache',
                 'expected' => 2,
                 'comment' => get_lang('ExtensionShouldBeLoaded'),
-            ),
-            'apcu' => array(
+            ],
+            'apcu' => [
                 'link' => 'http://www.php.net/apcu',
                 'expected' => 2,
                 'comment' => get_lang('ExtensionShouldBeLoaded'),
-            ),
-        );
+            ],
+        ];
 
         foreach ($extensions as $extension => $data) {
             $url = $data['link'];
@@ -593,7 +593,7 @@ class Diagnoser
      */
     public function get_database_data()
     {
-        $array = array();
+        $array = [];
         $em = Database::getManager();
         $connection = $em->getConnection();
         $host = $connection->getHost();
@@ -655,7 +655,7 @@ class Diagnoser
      */
     public function get_webserver_data()
     {
-        $array = array();
+        $array = [];
 
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION,
@@ -787,12 +787,12 @@ class Diagnoser
 
         if ($formatter) {
             if (method_exists($this, 'format_'.$formatter)) {
-                $formatted_current_value = call_user_func(array($this, 'format_'.$formatter), $current_value);
-                $formatted_expected_value = call_user_func(array($this, 'format_'.$formatter), $expected_value);
+                $formatted_current_value = call_user_func([$this, 'format_'.$formatter], $current_value);
+                $formatted_expected_value = call_user_func([$this, 'format_'.$formatter], $expected_value);
             }
         }
 
-        return array($image, $section, $url, $formatted_current_value, $formatted_expected_value, $comment);
+        return [$image, $section, $url, $formatted_current_value, $formatted_expected_value, $comment];
     }
 
     /**

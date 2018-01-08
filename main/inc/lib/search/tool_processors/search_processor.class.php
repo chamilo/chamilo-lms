@@ -22,7 +22,7 @@ abstract class search_processor
     /**
      * Search engine api results
      */
-    protected $rows = array();
+    protected $rows = [];
 
     /**
      * Process the data sorted by the constructor

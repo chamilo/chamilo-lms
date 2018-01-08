@@ -11,12 +11,12 @@ exit;
  */
 function validate_data($users_courses)
 {
-    $errors = array();
-    $coursecodes = array();
+    $errors = [];
+    $coursecodes = [];
     foreach ($users_courses as $index => $user_course) {
         $user_course['line'] = $index + 1;
         // 1. Check whether mandatory fields are set.
-        $mandatory_fields = array('Email', 'CourseCode', 'Status');
+        $mandatory_fields = ['Email', 'CourseCode', 'Status'];
         foreach ($mandatory_fields as $key => $field) {
             if (!isset($user_course[$field]) || strlen($user_course[$field]) == 0) {
                 $user_course['error'] = get_lang($field.'Mandatory');
@@ -70,8 +70,8 @@ function save_data($users_courses)
 {
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
     $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $csv_data = array();
-    $inserted_in_course = array();
+    $csv_data = [];
+    $inserted_in_course = [];
 
     foreach ($users_courses as $user_course) {
         $csv_data[$user_course['Email']][$user_course['CourseCode']] = $user_course['Status'];
@@ -87,7 +87,7 @@ function save_data($users_courses)
         $sql = "SELECT * FROM $course_user_table cu
                 WHERE cu.user_id = $user_id AND cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH." ";
         $res = Database::query($sql);
-        $db_subscriptions = array();
+        $db_subscriptions = [];
         while ($obj = Database::fetch_object($res)) {
             $db_subscriptions[$obj->c_id] = $obj->status;
         }
@@ -153,7 +153,7 @@ api_protect_admin_script();
 
 $tool_name = get_lang('AddUsersToACourse').' CSV';
 
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
 set_time_limit(0);
 
@@ -164,8 +164,8 @@ $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 $form->addElement('checkbox', 'subscribe', get_lang('Action'), get_lang('SubscribeUserIfNotAllreadySubscribed'));
 $form->addElement('checkbox', 'unsubscribe', '', get_lang('UnsubscribeUserIfSubscriptionIsNotInFile'));
 $form->addButtonImport(get_lang('Import'));
-$form->setDefaults(array('subscribe' => '1', 'unsubscribe' => 1));
-$errors = array();
+$form->setDefaults(['subscribe' => '1', 'unsubscribe' => 1]);
+$errors = [];
 
 if ($form->validate()) {
     $users_courses = parse_csv_data($_FILES['import_file']['tmp_name']);

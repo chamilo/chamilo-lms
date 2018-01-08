@@ -21,14 +21,14 @@ if (api_is_platform_admin()) {
         exit;
     }
     $templateName = $plugin->get_lang('FormativeActionData');
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => "/plugin/sepe/src/sepe-administration-menu.php",
         "name" => $plugin->get_lang('MenuSepe'),
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         "url" => "formative-actions-list.php",
         "name" => $plugin->get_lang('FormativesActionsList'),
-    );
+    ];
     $tpl = new Template($templateName);
 
     if (isset($_SESSION['sepe_message_info'])) {

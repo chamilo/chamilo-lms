@@ -36,17 +36,15 @@ class NavbarController extends Controller
 
         return $this->render(
             'ChamiloThemeBundle:Navbar:notifications.html.twig',
-            array(
+            [
                 'notifications' => $listEvent->getNotifications(),
                 'total' => $listEvent->getTotal(),
-            )
+            ]
         );
-
     }
 
     public function messagesAction($max = 5)
     {
-
         if (!$this->getDispatcher()->hasListeners(ThemeEvents::THEME_MESSAGES)) {
             return new Response();
         }
@@ -55,16 +53,15 @@ class NavbarController extends Controller
 
         return $this->render(
             'ChamiloThemeBundle:Navbar:messages.html.twig',
-            array(
+            [
                 'messages' => $listEvent->getMessages(),
                 'total' => $listEvent->getTotal(),
-            )
+            ]
         );
     }
 
     public function tasksAction($max = 5)
     {
-
         if (!$this->getDispatcher()->hasListeners(ThemeEvents::THEME_TASKS)) {
             return new Response();
         }
@@ -72,10 +69,10 @@ class NavbarController extends Controller
 
         return $this->render(
             'ChamiloThemeBundle:Navbar:tasks.html.twig',
-            array(
+            [
                 'tasks' => $listEvent->getTasks(),
                 'total' => $listEvent->getTotal(),
-            )
+            ]
         );
     }
 
@@ -88,9 +85,9 @@ class NavbarController extends Controller
 
         return $this->render(
             'ChamiloThemeBundle:Navbar:user.html.twig',
-            array(
+            [
                 'user' => $userEvent->getUser(),
-            )
+            ]
         );
     }
 }

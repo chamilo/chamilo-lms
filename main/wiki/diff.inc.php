@@ -50,7 +50,7 @@ function diff(
     $deleted = array_diff_assoc($oldArr, $newArr);
     $added = array_diff_assoc($newArr, $oldArr);
 
-    $moved = array();
+    $moved = [];
 
     foreach ($added as $key => $candidate) {
         foreach ($deleted as $index => $content) {
@@ -93,7 +93,7 @@ function diff(
  */
 function str_split_on_new_line($str)
 {
-    $content = array();
+    $content = [];
 
     if (api_strpos($str, "\r\n") !== false) {
         $content = explode("\r\n", $str);

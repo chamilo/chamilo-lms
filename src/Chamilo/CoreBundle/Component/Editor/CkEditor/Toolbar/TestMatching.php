@@ -25,7 +25,7 @@ class TestMatching extends Basic
 
         $config['fullPage'] = false;
         $config['extraPlugins'] = 'wordcount';
-        $config['wordcount'] = array(
+        $config['wordcount'] = [
             // Whether or not you want to show the Word Count
             'showWordCount' => true,
             // Whether or not you want to show the Char Count
@@ -34,7 +34,7 @@ class TestMatching extends Basic
             'charLimit' => 'unlimited',
             // Option to limit the words in the Editor
             'wordLimit' => 'unlimited'
-        );
+        ];
 
         //$config['height'] = '200';
 

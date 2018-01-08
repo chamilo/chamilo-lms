@@ -32,7 +32,7 @@ class Template
     public $show_header;
     public $show_footer;
     public $help;
-    public $menu_navigation = array(); //Used in the userportal.lib.php function: return_navigation_course_links()
+    public $menu_navigation = []; //Used in the userportal.lib.php function: return_navigation_course_links()
     public $show_learnpath = false; // This is a learnpath section or not?
     public $plugin = null;
     public $course_id = null;
@@ -41,7 +41,7 @@ class Template
 
     /* Loads chamilo plugins */
     public $load_plugins = false;
-    public $params = array();
+    public $params = [];
     public $force_plugin_load = false;
 
     /**
@@ -78,11 +78,11 @@ class Template
         $this->hide_global_chat = $hide_global_chat;
         $this->load_plugins = $load_plugins;
 
-        $template_paths = array(
+        $template_paths = [
             api_get_path(SYS_CODE_PATH).'template/overrides', // user defined templates
             api_get_path(SYS_CODE_PATH).'template', //template folder
             api_get_path(SYS_PLUGIN_PATH) // plugin folder
-        );
+        ];
 
         $urlId = api_get_current_access_url_id();
 
@@ -98,7 +98,7 @@ class Template
 
         //Setting Twig options depending on the server see http://twig.sensiolabs.org/doc/api.html#environment-options
         if ($isTestMode) {
-            $options = array(
+            $options = [
                 //'cache' => api_get_path(SYS_ARCHIVE_PATH), //path to the cache folder
                 'autoescape' => false,
                 'debug' => true,
@@ -107,9 +107,9 @@ class Template
                 // turn on optimizations with -1
                 'strict_variables' => false,
                 //If set to false, Twig will silently ignore invalid variables
-            );
+            ];
         } else {
-            $options = array(
+            $options = [
                 'cache' => $cache_folder,
                 //path to the cache folder
                 'autoescape' => false,
@@ -119,7 +119,7 @@ class Template
                 // turn on optimizations with -1
                 'strict_variables' => false
                 //If set to false, Twig will silently ignore invalid variables
-            );
+            ];
         }
 
         $this->twig = new Twig_Environment($loader, $options);
@@ -236,7 +236,7 @@ class Template
      */
     public static function get_icon_path($image, $size = ICON_SIZE_SMALL)
     {
-        return Display::return_icon($image, '', array(), $size, false, true);
+        return Display::return_icon($image, '', [], $size, false, true);
     }
 
     /**
@@ -247,7 +247,7 @@ class Template
      */
     public static function get_image($image, $size = ICON_SIZE_SMALL, $name = '')
     {
-        return Display::return_icon($image, $name, array(), $size);
+        return Display::return_icon($image, $name, [], $size);
     }
 
     /**
@@ -497,7 +497,7 @@ class Template
         }
         $this->assign('course_is_set', true);
         $this->course_id = $course['id'];
-        $_c = array(
+        $_c = [
             'id' => $course['real_id'],
             'code' => $course['code'],
             'title' => $course['name'],
@@ -507,7 +507,7 @@ class Template
             'session_id' => api_get_session_id(),
             'user_is_teacher' => api_is_course_admin(),
             'student_view' => (!empty($_GET['isStudentView']) && $_GET['isStudentView'] == 'true'),
-        );
+        ];
         $this->assign('course_code', $course['code']);
         $this->assign('_c', $_c);
     }
@@ -520,7 +520,7 @@ class Template
      */
     private function set_user_parameters()
     {
-        $user_info = array();
+        $user_info = [];
         $user_info['logged'] = 0;
         $this->user_is_logged_in = false;
         if (api_user_is_login()) {
@@ -603,7 +603,7 @@ class Template
         $this->assign('_p', $this->getWebPaths());
 
         // Here we can add system parameters that can be use in any template
-        $_s = array(
+        $_s = [
             'software_name' => api_get_configuration_value('software_name'),
             'system_version' => api_get_configuration_value('system_version'),
             'site_name' => api_get_setting('siteName'),
@@ -611,7 +611,7 @@ class Template
             'date' => api_format_date('now', DATE_FORMAT_LONG),
             'timezone' => api_get_timezone(),
             'gamification_mode' => api_get_setting('gamification_mode')
-        );
+        ];
         $this->assign('_s', $_s);
     }
 
@@ -623,7 +623,7 @@ class Template
     public function setCssFiles()
     {
         global $disable_js_and_css_files;
-        $css = array();
+        $css = [];
 
         // Default CSS Bootstrap
         $bowerCSSFiles = [
@@ -749,9 +749,9 @@ class Template
             $selectLink = 'bootstrap-select/dist/js/i18n/defaults-'.$isoCode.'_US.min.js';
         }
         // JS files
-        $js_files = array(
+        $js_files = [
             'chosen/chosen.jquery.min.js'
-        );
+        ];
 
         $viewBySession = api_get_setting('my_courses_view_by_session') === 'true';
 
@@ -842,7 +842,7 @@ class Template
     public function set_js_files_post()
     {
         global $disable_js_and_css_files;
-        $js_files = array();
+        $js_files = [];
         if (api_is_global_chat_enabled()) {
             //Do not include the global chat in LP
             if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
@@ -893,7 +893,7 @@ class Template
 
         $course_title = isset($_course['name']) ? $_course['name'] : null;
 
-        $title_list = array();
+        $title_list = [];
 
         $title_list[] = api_get_setting('Institution');
         $title_list[] = api_get_setting('siteName');
@@ -1196,7 +1196,7 @@ class Template
                         $id_session,
                         $courseId
                     );
-                    $email_link = array();
+                    $email_link = [];
                     foreach ($coachs_email as $coach) {
                         $email_link[] = Display::encrypted_mailto_link($coach['email'], $coach['complete_name']);
                     }
@@ -1221,7 +1221,7 @@ class Template
                 $teacher_data = '';
                 $mail = CourseManager::get_emails_of_tutors_to_course($courseId);
                 if (!empty($mail)) {
-                    $teachers_parsed = array();
+                    $teachers_parsed = [];
                     foreach ($mail as $value) {
                         foreach ($value as $email => $name) {
                             $teachers_parsed[] = Display::encrypted_mailto_link($email, $name);
@@ -1496,18 +1496,18 @@ class Template
             $useCaptcha = isset($_SESSION['loginFailed']) ? $_SESSION['loginFailed'] : null;
             if ($useCaptcha) {
                 $ajax = api_get_path(WEB_AJAX_PATH).'form.ajax.php?a=get_captcha';
-                $options = array(
+                $options = [
                     'width' => 250,
                     'height' => 90,
                     'callback'     => $ajax.'&var='.basename(__FILE__, '.php'),
                     'sessionVar'   => basename(__FILE__, '.php'),
-                    'imageOptions' => array(
+                    'imageOptions' => [
                         'font_size' => 20,
                         'font_path' => api_get_path(SYS_FONTS_PATH).'opensans/',
                         'font_file' => 'OpenSans-Regular.ttf',
                         //'output' => 'gif'
-                    )
-                );
+                    ]
+                ];
 
                 // Minimum options using all defaults (including defaults for Image_Text):
                 //$options = array('callback' => 'qfcaptcha_image.php');

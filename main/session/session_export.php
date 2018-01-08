@@ -31,7 +31,7 @@ $archivePath = api_get_path(SYS_ARCHIVE_PATH);
 $archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=&archive=';
 
 $tool_name = get_lang('ExportSessionListXMLCSV');
-$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
 set_time_limit(0);
 if (isset($_POST['formSent'])) {
     $formSent = $_POST['formSent'];
@@ -56,7 +56,7 @@ if (isset($_POST['formSent'])) {
             $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-            $sql = "SELECT s.id, name,id_coach,username,access_start_date,access_end_date,visibility,session_category_id
+                $sql = "SELECT s.id, name,id_coach,username,access_start_date,access_end_date,visibility,session_category_id
                     FROM $tbl_session s
                     INNER JOIN $tbl_session_rel_access_url as session_rel_url
                     ON (s.id= session_rel_url.session_id)
@@ -163,7 +163,7 @@ if (isset($_POST['formSent'])) {
                             scu.status = 2 ";
 
                 $rs_coachs = Database::query($sql);
-                $coachs = array();
+                $coachs = [];
                 while ($row_coachs = Database::fetch_array($rs_coachs)) {
                     $coachs[] = $row_coachs['username'];
                 }
@@ -301,9 +301,9 @@ $form = new FormValidator('session_export', 'post', api_get_self());
 $form->addElement('hidden', 'formSent', 1);
 $form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV', 'csv', null);
 $form->addElement('radio', 'file_type', '', 'XLS', 'xls', null);
-$form->addElement('radio', 'file_type', null, 'XML', 'xml', null, array('id' => 'file_type_xml'));
+$form->addElement('radio', 'file_type', null, 'XML', 'xml', null, ['id' => 'file_type_xml']);
 
-$options = array();
+$options = [];
 $options['0'] = get_lang('AllSessions');
 foreach ($Sessions as $enreg) {
     $options[$enreg['id']] = $enreg['name'];
@@ -312,7 +312,7 @@ foreach ($Sessions as $enreg) {
 $form->addElement('select', 'session_id', get_lang('WhichSessionToExport'), $options);
 $form->addButtonExport(get_lang('ExportSession'));
 
-$defaults = array();
+$defaults = [];
 $defaults['file_type'] = 'csv';
 $form->setDefaults($defaults);
 $form->display();

@@ -16,10 +16,10 @@ if (!$is_allowed_to_edit) {
     exit;
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
     'name' => get_lang('LearningPaths'),
-);
+];
 
 $form = new FormValidator(
     'lp_add_category',
@@ -69,10 +69,10 @@ if ($form->validate()) {
 
     if ($id) {
         $item = learnpath::getCategory($id);
-        $defaults = array(
+        $defaults = [
             'id' => $item->getId(),
             'name' => $item->getName()
-        );
+        ];
         $form->setDefaults($defaults);
     }
 }

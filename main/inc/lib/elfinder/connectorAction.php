@@ -14,12 +14,12 @@ $connector = new Connector();
 // Check driver list in configuration
 $driverList = api_get_configuration_value('editor_driver_list');
 if (empty($driverList)) {
-    $driverList = array(
+    $driverList = [
         'PersonalDriver',
         'CourseDriver',
         //'CourseUserDriver',
         //'HomeDriver'
-    );
+    ];
 }
 
 $connector->setDriverList($driverList);

@@ -54,7 +54,7 @@ if ($bbb->pluginEnabled) {
                 }
             }
 
-            $meetingParams = array();
+            $meetingParams = [];
             $meetingParams['meeting_name'] = $bbb->getCurrentVideoConferenceName();
 
             if ($bbb->meetingExists($meetingParams['meeting_name'])) {
@@ -72,7 +72,6 @@ if ($bbb->pluginEnabled) {
                 header('Location: '.$url);
                 exit;
             }
-
         } else {
             $url = $bbb->getListingUrl();
             header('Location: '.$url);

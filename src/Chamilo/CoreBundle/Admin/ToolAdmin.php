@@ -22,9 +22,13 @@ class ToolAdmin extends AbstractAdmin
         $formMapper
             ->add('name')
             ->add('description', 'ckeditor')
-            ->add('toolResourceRights', 'sonata_type_collection', array(
+            ->add(
+                'toolResourceRights',
+                'sonata_type_collection',
+                [
                 'cascade_validation' => true,
-            ), array(
+            ],
+                [
                     //'allow_delete' => true,
                     //'by_reference' => false,
                     'edit'              => 'inline',
@@ -34,7 +38,7 @@ class ToolAdmin extends AbstractAdmin
                     //'sortable'          => 'position',
                     //'link_parameters'   => array('content' => $users),
                     'admin_code'        => 'sonata.admin.tool_resource_rights'
-                )
+                ]
             )
             /*->add('image', 'sonata_media_type', array(
                 'provider' => 'sonata.media.provider.image',

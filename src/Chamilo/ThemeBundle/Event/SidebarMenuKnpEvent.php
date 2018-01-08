@@ -17,7 +17,7 @@ class SidebarMenuKnpEvent extends ThemeEvent
     /**
      * @var array
      */
-    protected $menuRootItems = array();
+    protected $menuRootItems = [];
 
     protected $menu;
 

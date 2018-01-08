@@ -150,7 +150,7 @@ switch ($action) {
                 }
             }
 
-            $results = array();
+            $results = [];
 
             if (empty($courseList)) {
                 echo json_encode([]);
@@ -165,10 +165,10 @@ switch ($action) {
                     $title = $parents.$course['title'];
                 }
 
-                $results['items'][] = array(
+                $results['items'][] = [
                     'id' => $course['id'],
                     'text' => $title
-                );
+                ];
             }
 
             echo json_encode($results);
@@ -177,10 +177,10 @@ switch ($action) {
     case 'search_course_by_session':
         if (api_is_platform_admin()) {
             $results = SessionManager::get_course_list_by_session_id($_GET['session_id'], $_GET['q']);
-            $results2 = array();
+            $results2 = [];
             if (is_array($results) && !empty($results)) {
                 foreach ($results as $item) {
-                    $item2 = array();
+                    $item2 = [];
                     foreach ($item as $id => $internal) {
                         if ($id == 'id') {
                             $item2[$id] = $internal;
@@ -193,7 +193,7 @@ switch ($action) {
                 }
                 echo json_encode($results2);
             } else {
-                echo json_encode(array());
+                echo json_encode([]);
             }
         }
         break;
@@ -210,7 +210,7 @@ switch ($action) {
             $results2 = ['items' => []];
             if (!empty($results)) {
                 foreach ($results as $item) {
-                    $item2 = array();
+                    $item2 = [];
                     foreach ($item as $id => $internal) {
                         if ($id == 'id') {
                             $item2[$id] = $internal;
@@ -272,13 +272,13 @@ switch ($action) {
             );
 
             foreach ($exercises as $exercise) {
-                $data[] = array('id' => $exercise['id'], 'text' => html_entity_decode($exercise['title']));
+                $data[] = ['id' => $exercise['id'], 'text' => html_entity_decode($exercise['title'])];
             }
             if (!empty($data)) {
-                $data[] = array('id' => 'T', 'text' => 'TODOS');
+                $data[] = ['id' => 'T', 'text' => 'TODOS'];
                 echo json_encode($data);
             } else {
-                echo json_encode(array(array('id' => 'T', 'text' => 'TODOS')));
+                echo json_encode([['id' => 'T', 'text' => 'TODOS']]);
             }
         }
         break;
@@ -302,15 +302,15 @@ switch ($action) {
             $result = Database::query($sql_query);
             while ($survey = Database::fetch_assoc($result)) {
                 $survey['title'] .= ($survey['anonymous'] == 1) ? ' ('.get_lang('Anonymous').')' : '';
-                $data[] = array(
+                $data[] = [
                     'id' => $survey['id'],
                     'text' => strip_tags(html_entity_decode($survey['title']))
-                );
+                ];
             }
             if (!empty($data)) {
                 echo json_encode($data);
             } else {
-                echo json_encode(array());
+                echo json_encode([]);
             }
         }
         break;
@@ -319,26 +319,26 @@ switch ($action) {
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $coursesData = SessionManager::get_course_list_by_session_id($sessionId);
 
-        $courses = array();
+        $courses = [];
 
         foreach ($coursesData as $courseId => $course) {
             $coachData = SessionManager::getCoachesByCourseSession($sessionId, $courseId);
             $coachName = '';
             if (!empty($coachData)) {
-                $userResult = Database::select('lastname,firstname', $userTable, array(
-                    'where' => array(
+                $userResult = Database::select('lastname,firstname', $userTable, [
+                    'where' => [
                         'user_id = ?' => $coachData[0]
-                    )
-                ), 'first');
+                    ]
+                ], 'first');
 
                 $coachName = api_get_person_name($userResult['firstname'], $userResult['lastname']);
             }
 
-            $courses[] = array(
+            $courses[] = [
                 'id' => $courseId,
                 'name' => $course['title'],
                 'coachName' => $coachName,
-            );
+            ];
         }
 
         echo json_encode($courses);

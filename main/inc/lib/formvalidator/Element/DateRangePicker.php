@@ -40,9 +40,9 @@ class DateRangePicker extends HTML_QuickForm_text
     public function setValue($value)
     {
         $this->updateAttributes(
-            array(
+            [
                 'value' => $value
-            )
+            ]
         );
     }
 
@@ -147,10 +147,10 @@ class DateRangePicker extends HTML_QuickForm_text
         $start = isset($dates[0]) ? $dates[0] : '';
         $end = isset($dates[1]) ? $dates[1] : '';
 
-        return array(
+        return [
             'start' => $start,
             'end' => $end
-        );
+        ];
     }
 
     /**

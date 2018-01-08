@@ -23,7 +23,7 @@
 /**
  * Init
  */
-require_once ('openmeetings_rest_service.php');
+require_once('openmeetings_rest_service.php');
 /**
  * Class OpenMeetingsGateway
  */
@@ -48,7 +48,8 @@ class OpenMeetingsGateway
         $err = $this->rest->getError();
         if ($err) {
             error_log('Constructor error: '.$err);
-            error_log('Debug: '.$this->rest->getDebug()); ;
+            error_log('Debug: '.$this->rest->getDebug());
+            ;
             exit();
         }
     }
@@ -224,7 +225,8 @@ class OpenMeetingsGateway
         $err = $this->rest->getError();
         if ($err) {
             error_log('Constructor error: '.$err);
-            error_log('Debug: '.$this->rest->getDebug()); ;
+            error_log('Debug: '.$this->rest->getDebug());
+            ;
             exit();
         }
 
@@ -388,7 +390,7 @@ class OpenMeetingsGateway
         //    . "SID=" . $this->sessionId;
         //$url = $this->getRestUrl('JabberService') . 'getAvailableRooms?SID=' . $this->sessionId;
         $result = $this->rest->call($url, "return");
-        $rooms = array();
+        $rooms = [];
         foreach ($result as $room) {
             if ($room['externalRoomType'] == $type && count($room['currentusers']) > 0) {
                 $rooms[] = $room;

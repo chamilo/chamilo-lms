@@ -10,7 +10,7 @@
 class Promotion extends Model
 {
     public $table;
-    public $columns = array(
+    public $columns = [
         'id',
         'name',
         'description',
@@ -18,7 +18,7 @@ class Promotion extends Model
         'status',
         'created_at',
         'updated_at',
-    );
+    ];
 
     /**
      * Constructor
@@ -37,7 +37,7 @@ class Promotion extends Model
         $row = Database::select(
             'count(*) as count',
             $this->table,
-            array(),
+            [],
             'first'
         );
 
@@ -56,7 +56,7 @@ class Promotion extends Model
         $pid = false;
         $promotion = $this->get($id);
         if (!empty($promotion)) {
-            $new = array();
+            $new = [];
             foreach ($promotion as $key => $val) {
                 switch ($key) {
                     case 'id':
@@ -94,7 +94,7 @@ class Promotion extends Model
                 if (!empty($session_list)) {
                     $pid = $this->save($new);
                     if (!empty($pid)) {
-                        $new_session_list = array();
+                        $new_session_list = [];
 
                         foreach ($session_list as $item) {
                             $sid = SessionManager::copy(
@@ -134,10 +134,10 @@ class Promotion extends Model
         return Database::select(
             '*',
             $this->table,
-            array(
-                'where' => array('career_id = ?' => $career_id),
+            [
+                'where' => ['career_id = ?' => $career_id],
                 'order' => $order,
-            )
+            ]
         );
     }
 
@@ -146,10 +146,10 @@ class Promotion extends Model
      */
     public function get_status_list()
     {
-        return array(
+        return [
             PROMOTION_STATUS_ACTIVE => get_lang('Active'),
             PROMOTION_STATUS_INACTIVE => get_lang('Inactive'),
-        );
+        ];
     }
 
     /**
@@ -226,22 +226,22 @@ class Promotion extends Model
             'text',
             'name',
             get_lang('Name'),
-            array('size' => '70', 'id' => 'name')
+            ['size' => '70', 'id' => 'name']
         );
         $form->addHtmlEditor(
             'description',
             get_lang('Description'),
             false,
             false,
-            array(
+            [
                 'ToolbarSet' => 'Careers',
                 'Width' => '100%',
                 'Height' => '250'
-            )
+            ]
         );
         $career = new Career();
         $careers = $career->get_all();
-        $career_list = array();
+        $career_list = [];
         foreach ($careers as $item) {
             $career_list[$item['id']] = $item['name'];
         }

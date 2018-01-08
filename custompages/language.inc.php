@@ -16,7 +16,7 @@
 function get_preferred_language($available_langs)
 {
     // Parsing the Accept-languages HTTP header
-    $langs = array();
+    $langs = [];
     foreach (explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']) as $httplang) {
         $rawlang = explode(';q=', $httplang);
         if (strpos($rawlang[0], '-') !== false) {

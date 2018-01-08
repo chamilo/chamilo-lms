@@ -10,8 +10,8 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 class Attendance extends Resource
 {
-    public $params = array();
-    public $attendance_calendar = array();
+    public $params = [];
+    public $attendance_calendar = [];
 
     /**
      * Create a new Thematic

@@ -31,15 +31,15 @@ if ($subscriptionSettings['allow_add_users_to_lp'] == false) {
 
 $oLP = new learnpath(api_get_course_id(), $lpId, api_get_user_id());
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
     'name' => get_lang('LearningPaths')
-);
+];
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=".$oLP->get_id().'&'.api_get_cidreq(),
     'name' => $oLP->get_name()
-);
+];
 
 $courseId = api_get_course_int_id();
 $courseCode = api_get_course_id();
@@ -77,7 +77,7 @@ if (!$session) {
 }
 
 // Getting all users in a nice format.
-$choices = array();
+$choices = [];
 /** @var User $user */
 foreach ($subscribedUsers as $user) {
     $choices[$user->getUserId()] = $user->getCompleteNameWithClasses();
@@ -91,7 +91,7 @@ $subscribedUsersInLp = $itemRepo->getUsersSubscribedToItem(
     $session
 );
 
-$selectedChoices = array();
+$selectedChoices = [];
 foreach ($subscribedUsersInLp as $itemProperty) {
     $selectedChoices[] = $itemProperty->getToUser()->getId();
 }
@@ -108,7 +108,7 @@ $userMultiSelect = $formUsers->addElement(
 );
 $formUsers->addButtonSave(get_lang('Save'));
 
-$defaults = array();
+$defaults = [];
 
 if (!empty($selectedChoices)) {
     $defaults['users'] = $selectedChoices;
@@ -136,7 +136,7 @@ $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
     $session
 );
 
-$selectedGroupChoices = array();
+$selectedGroupChoices = [];
 /** @var CItemProperty $itemProperty */
 foreach ($subscribedGroupsInLp as $itemProperty) {
     $selectedGroupChoices[] = $itemProperty->getGroup()->getId();
@@ -152,7 +152,7 @@ $groupMultiSelect = $form->addElement(
 // submit button
 $form->addButtonSave(get_lang('Save'));
 
-$defaults = array();
+$defaults = [];
 if (!empty($selectedGroupChoices)) {
     $defaults['groups'] = $selectedGroupChoices;
 }

@@ -21,18 +21,18 @@ class UserAdmin extends BaseUserAdmin
         // define group zoning
         $formMapper
             ->tab('User')
-            ->with('Profile', array('class' => 'col-md-6'))->end()
-            ->with('General', array('class' => 'col-md-6'))->end()
+            ->with('Profile', ['class' => 'col-md-6'])->end()
+            ->with('General', ['class' => 'col-md-6'])->end()
             //->with('Social', array('class' => 'col-md-6'))->end()
             ->end()
             ->tab('Security')
-            ->with('Status', array('class' => 'col-md-4'))->end()
-            ->with('Groups', array('class' => 'col-md-4'))->end()
-            ->with('Keys', array('class' => 'col-md-4'))->end()
-            ->with('Roles', array('class' => 'col-md-12'))->end()
+            ->with('Status', ['class' => 'col-md-4'])->end()
+            ->with('Groups', ['class' => 'col-md-4'])->end()
+            ->with('Keys', ['class' => 'col-md-4'])->end()
+            ->with('Roles', ['class' => 'col-md-12'])->end()
             ->end()
             ->tab('ExtraFields')
-            ->with('ExtraFields', array('class' => 'col-md-4'))->end()
+            ->with('ExtraFields', ['class' => 'col-md-4'])->end()
             ->end();
 
         $now = new \DateTime();
@@ -63,8 +63,8 @@ class UserAdmin extends BaseUserAdmin
                     'required' => false,
                 )
             )*/
-            ->add('firstname', null, array('required' => false))
-            ->add('lastname', null, array('required' => false))
+            ->add('firstname', null, ['required' => false])
+            ->add('lastname', null, ['required' => false])
             //->add('website', 'url', array('required' => false))
             //->add('biography', 'text', array('required' => false))
             /*->add(
@@ -96,32 +96,32 @@ class UserAdmin extends BaseUserAdmin
             $formMapper
                 ->tab('Security')
                 ->with('Status')
-                ->add('locked', null, array('required' => false))
-                ->add('expired', null, array('required' => false))
-                ->add('enabled', null, array('required' => false))
-                ->add('credentialsExpired', null, array('required' => false))
+                ->add('locked', null, ['required' => false])
+                ->add('expired', null, ['required' => false])
+                ->add('enabled', null, ['required' => false])
+                ->add('credentialsExpired', null, ['required' => false])
                 ->end()
                 ->with('Groups')
                 ->add(
                     'groups',
                     'sonata_type_model',
-                    array(
+                    [
                         'required' => false,
                         'expanded' => true,
                         'multiple' => true,
-                    )
+                    ]
                 )
                 ->end()
                 ->with('Roles')
                 ->add(
                     'realRoles',
                     'sonata_security_roles',
-                    array(
+                    [
                         'label' => 'form.label_roles',
                         'expanded' => true,
                         'multiple' => true,
                         'required' => false,
-                    )
+                    ]
                 )
                 ->end()
                 ->end();
@@ -170,7 +170,6 @@ class UserAdmin extends BaseUserAdmin
 //            )
 //            ->end()
 //            ->end();
-
     }
 
     /**
@@ -191,4 +190,3 @@ class UserAdmin extends BaseUserAdmin
         ;
     }
 }
-

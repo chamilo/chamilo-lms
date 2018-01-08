@@ -25,7 +25,7 @@ $terms_limit = 3000; //change this if you think you'll need more terms
 $terms = $langstats->get_popular_terms($terms_limit);
 $words_counter = 0;
 $i = 0;
-$terms_in_limit = array();
+$terms_in_limit = [];
 $lang_dir = api_get_path(SYS_LANG_PATH);
 $arch_dir = api_get_path(SYS_ARCHIVE_PATH);
 /**
@@ -55,9 +55,9 @@ if (!is_dir($arch_dir.'/langstats')) {
 }
 $list_files = scandir($lang_dir.'/'.$orig_lang);
 $j = 1;
-$terms_found = array();
+$terms_found = [];
 $words_found = 0;
-$global_var = array(); //keep the combination of all vars
+$global_var = []; //keep the combination of all vars
 $terms_in_limit = array_flip($terms_in_limit);
 foreach ($list_files as $file) {
     if (substr($file, 0, 1) == '.') {
@@ -65,10 +65,10 @@ foreach ($list_files as $file) {
     }
     //echo "'".substr($file,0,-8)."',<br />"; //print in a PHP array format
     $vars = file($lang_dir.'/'.$orig_lang.'/'.$file);
-    $local_var = array();
+    $local_var = [];
     $file_string = '<?php'."\n";
     foreach ($vars as $line) {
-        $var = array();
+        $var = [];
         $res = preg_match('/^(\$\w*)/', $line, $var);
         if ($res > 0) {
             //echo $var[1]."<br />";

@@ -152,7 +152,7 @@ function WriteFileCont($full_file_path, $content)
             return false;
         }
         //if (!($fp = fopen(urldecode($full_file_path), 'w'))) {
-            //die('Could not open Quiz input.');
+        //die('Could not open Quiz input.');
         //}
         $fp = fopen(urldecode($full_file_path), 'w');
         if ($fp !== false) {
@@ -172,14 +172,14 @@ function WriteFileCont($full_file_path, $content)
 function GetImgName($imageTag)
 {
     // Select src tag from img tag.
-    $match = array();
+    $match = [];
     //preg_match('/(src=(["\'])1.*(["\'])1)/i', $imageTag, $match);            //src
     preg_match('/src(\s)*=(\s)*[\'"]([^\'"]*)[\'"]/i', $imageTag, $match); //get the img src as contained between " or '
     //list($key, $srctag) = each($match);
     $src = $match[3];
     //$src = substr($srctag, 5, (strlen($srctag) - 7));
     if (stristr($src, 'http') === false) {
-    // Valid or invalid image name.
+        // Valid or invalid image name.
         if ($src == '') {
             return '';
         } else {
@@ -204,12 +204,12 @@ function GetImgName($imageTag)
 function GetSrcName($imageTag)
 {
     // Select src tag from img tag.
-    $match = array();
+    $match = [];
     preg_match("|(src=\".*\" )|U", $imageTag, $match); //src
     list(, $srctag) = each($match);
     $src = substr($srctag, 5, (strlen($srctag) - 7));
     if (stristr($src, 'http') === false) {
-    // valid or invalid image name
+        // valid or invalid image name
         return $src;
     } else {
         return '';
@@ -226,10 +226,10 @@ function GetSrcName($imageTag)
 function GetImgParams($fname, $fpath, &$imgparams, &$imgcount)
 {
     // Select img tags from context.
-    $imgparams = array();
+    $imgparams = [];
     //phpinfo();
     $contents = ReadFileCont("$fpath"."$fname");
-    $matches = array();
+    $matches = [];
     preg_match_all('(<img .*>)', $contents, $matches);
     $imgcount = 0;
     while (list(, $match) = each($matches)) {
@@ -269,7 +269,7 @@ function GenerateHiddenList($imgparams)
 function myarraysearch(&$array, $node)
 {
     $match = false;
-    $tmp_array = array();
+    $tmp_array = [];
     for ($i = 0; $i < count($array); $i++) {
         if (!strcmp($array[$i], $node)) {
             $match = $node;
@@ -302,7 +302,7 @@ function CheckImageName(&$imgparams, $string)
 function ReplaceImgTag($content)
 {
     $newcontent = $content;
-    $matches = array();
+    $matches = [];
     preg_match_all('(<img .*>)', $content, $matches);
     while (list(, $match) = each($matches)) {
         while (list(, $imageTag) = each($match)) {
@@ -340,7 +340,7 @@ function FillFolderName($name, $nsize)
  */
 function GenerateHpFolder($folder)
 {
-    $filelist = array();
+    $filelist = [];
     if ($dir = @opendir($folder)) {
         while (($file = readdir($dir)) !== false) {
             if ($file != '.') {
@@ -427,7 +427,7 @@ function CheckSubFolder($path)
 function HotPotGCt($folder, $flag, $user_id)
 {
     // Garbage Collector
-    $filelist = array();
+    $filelist = [];
     if ($dir = @opendir($folder)) {
         while (($file = readdir($dir)) !== false) {
             if ($file != '.') {

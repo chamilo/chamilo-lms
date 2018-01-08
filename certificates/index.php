@@ -20,7 +20,7 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        $certificate->generate(array('hide_print_button' => true));
+        $certificate->generate(['hide_print_button' => true]);
 
         if ($certificate->isHtmlFileGenerated()) {
             $certificatePathList[] = $certificate->html_file;

@@ -84,10 +84,10 @@ if ($form->validate()) {
     exit;
 }
 $selectcat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : '';
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$selectcat,
     'name' => get_lang('Gradebook')
-);
+];
 $this_section = SECTION_COURSES;
 Display :: display_header(get_lang('EditCategory'));
 $form->display();

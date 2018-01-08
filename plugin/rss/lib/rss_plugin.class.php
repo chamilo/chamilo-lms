@@ -15,7 +15,7 @@ class RssPlugin extends Plugin
      */
     public function __construct()
     {
-        parent::__construct('1.1', 'Laurent Opprecht, Julio Montoya', array('block_title' => 'text', 'rss' => 'text'));
+        parent::__construct('1.1', 'Laurent Opprecht, Julio Montoya', ['block_title' => 'text', 'rss' => 'text']);
     }
 
     /**
@@ -37,5 +37,4 @@ class RssPlugin extends Plugin
     {
         return $this->get('rss');
     }
-
 }

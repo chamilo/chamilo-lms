@@ -50,10 +50,10 @@ if (api_get_group_id()) {
     if ($is_allowed_to_edit || GroupManager::is_user_in_group($_user['user_id'], api_get_group_id())) {
         // Only courseadmin or group members allowed
         $groupIid = $group_properties['iid'];
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => '../group/group_space.php?'.api_get_cidreq(),
             'name' => get_lang('GroupSpace'),
-        );
+        ];
     } else {
         api_not_allowed(true);
     }
@@ -69,25 +69,25 @@ if ($groupIid != 0 && $path == '/') {
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => './document.php?id='.$document_id.'&'.api_get_cidreq(),
     'name' => get_lang('Documents'),
-);
+];
 
 // Interbreadcrumb for the current directory root path
 if (empty($document_data['parents'])) {
     // Hack in order to not add the document to the breadcrumb in case it is a link
     if ($document_data['filetype'] != 'link') {
-        $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
+        $interbreadcrumb[] = ['url' => '#', 'name' => $document_data['title']];
     }
 } else {
     foreach ($document_data['parents'] as $document_sub_data) {
         // Hack in order to not add the document to the breadcrumb in case it is a link
         if ($document_data['filetype'] != 'link') {
-            $interbreadcrumb[] = array(
+            $interbreadcrumb[] = [
                 'url' => $document_sub_data['document_url'],
                 'name' => $document_sub_data['title'],
-            );
+            ];
         }
     }
 }
@@ -105,11 +105,11 @@ $urlWLRegEx = '/(\/\/|\.)('.implode('|', $urlWL).')/i'; //Matches any of the whi
 $urlWLText = "\n\t* ".implode("\n\t* ", $urlWL);
 $urlWLHTML = "<ul><li>".implode("</li><li>", $urlWL)."</li></ul>";
 
-$form = new FormValidator('upload', 'POST', $action, '', array('enctype' => 'multipart/form-data'));
+$form = new FormValidator('upload', 'POST', $action, '', ['enctype' => 'multipart/form-data']);
 $form->addHidden('linkid', $document_id);
 $form->addHidden('curdirpath', $path);
-$form->addElement('text', 'name', get_lang('LinkName'), array('id' => 'name_link'));
-$form->addElement('text', 'url', get_lang('Url'), array('id' => 'url_link'));
+$form->addElement('text', 'name', get_lang('LinkName'), ['id' => 'name_link']);
+$form->addElement('text', 'url', get_lang('Url'), ['id' => 'url_link']);
 $form->addElement(
     'static',
     'info',
@@ -170,7 +170,7 @@ $folders = DocumentManager::get_all_document_folders(
 echo DocumentManager::build_directory_selector(
     $folders,
     $document_id,
-    isset($group_properties['directory']) ? $group_properties['directory'] : array()
+    isset($group_properties['directory']) ? $group_properties['directory'] : []
 );
 
 // Add tooltip and correctly parse its inner HTML

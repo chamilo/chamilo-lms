@@ -54,4 +54,3 @@ $tpl->assign('form', $form->toHtml());
 $content = $tpl->get_template('auth/set_temp_password.tpl');
 $tpl->assign('content', $tpl->fetch($content));
 $tpl->display_one_col_template();
-

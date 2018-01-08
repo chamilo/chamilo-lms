@@ -10,5 +10,4 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
  */
 class SurveyQuestion extends Basic
 {
-
 }

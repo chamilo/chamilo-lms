@@ -267,9 +267,9 @@ class ExtraField extends BaseAttribute
         return $this;
     }
 
-     /**
-     * @return boolean
-     */
+    /**
+    * @return boolean
+    */
     public function isChangeable()
     {
         return $this->changeable;

@@ -82,9 +82,9 @@ class WSCMCourse extends WSCM
         if ($verifKey instanceof WSError) {
             $this->handleError($verifKey);
         } else {
-            $results = array();
+            $results = [];
             foreach ($courses as $course) {
-                $result_tmp = array();
+                $result_tmp = [];
                 $result_op = $this->deleteCourseHelper($course['course_id_field_name'], $course['course_id_value']);
                 $result_tmp['course_id_value'] = $course['course_id_value'];
                 if ($result_op instanceof WSCMError) {
@@ -127,7 +127,7 @@ class WSCMCourse extends WSCM
         $extras
     ) {
         // Add the original course id field name and value to the extra fields if needed
-        $extras_associative = array();
+        $extras_associative = [];
         if ($course_id_field_name != "chamilo_course_id") {
             $extras_associative[$course_id_field_name] = $course_id_value;
         }
@@ -233,9 +233,9 @@ class WSCMCourse extends WSCM
         if ($verifKey instanceof WSCMError) {
             $this->handleError($verifKey);
         } else {
-            $results = array();
+            $results = [];
             foreach ($courses as $course) {
-                $result_tmp = array();
+                $result_tmp = [];
                 //reinitialize variables just in case
                 $title = $category_code = $wanted_code = $tutor_name = $course_admin_user_id_field_name = $course_admin_user_id_value = $language = $course_id_field_name = $course_id_value = $extras = null;
                 extract($course);
@@ -301,7 +301,7 @@ class WSCMCourse extends WSCM
         if ($course_id instanceof WSCMError) {
             return $course_id;
         } else {
-            $attributes = array();
+            $attributes = [];
             if (!empty($title)) {
                 $attributes['title'] = $title;
             }
@@ -334,7 +334,7 @@ class WSCMCourse extends WSCM
             }
             if (!empty($extras)) {
                 $course_code = CourseManager::get_course_code_from_course_id($course_id);
-                $extras_associative = array();
+                $extras_associative = [];
                 foreach ($extras as $extra) {
                     $extras_associative[$extra['field_name']] = $extra['field_value'];
                 }
@@ -417,12 +417,12 @@ class WSCMCourse extends WSCM
         if ($verifKey instanceof WSError) {
             $this->handleError($verifKey);
         } else {
-            $courses_result = array();
-            $category_names = array();
+            $courses_result = [];
+            $category_names = [];
 
             $courses = CourseManager::get_courses_list();
             foreach ($courses as $course) {
-                $course_tmp = array();
+                $course_tmp = [];
                 $course_tmp['id'] = $course['id'];
                 $course_tmp['code'] = $course['code'];
                 $course_tmp['title'] = $course['title'];
@@ -588,11 +588,11 @@ class WSCMCourse extends WSCM
             } else {
                 // Course exists, get its descriptions
                 $descriptions = CourseDescription::get_descriptions($course_id);
-                $results = array();
+                $results = [];
                 foreach ($descriptions as $description) {
-                    $results[] = array('course_desc_id' => $description->get_description_type(),
+                    $results[] = ['course_desc_id' => $description->get_description_type(),
                         'course_desc_title' => $description->get_title(),
-                        'course_desc_content' => $description->get_content());
+                        'course_desc_content' => $description->get_content()];
                 }
                 return $results;
             }
@@ -688,4 +688,3 @@ class WSCMCourse extends WSCM
         return $username;
     }
 }
-

@@ -40,11 +40,11 @@ if (!$category) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
     'name' => get_lang('LearningPaths')
-);
-$interbreadcrumb[] = array('url' => '#', 'name' => strip_tags($category->getName()));
+];
+$interbreadcrumb[] = ['url' => '#', 'name' => strip_tags($category->getName())];
 
 $url = api_get_self().'?'.api_get_cidreq().'&action=add_users_to_category&id='.$categoryId;
 
@@ -83,7 +83,7 @@ $subscribedGroupsInLp = $itemRepo->getGroupsSubscribedToItem(
     $session
 );
 
-$selectedGroupChoices = array();
+$selectedGroupChoices = [];
 /** @var CItemProperty $itemProperty */
 foreach ($subscribedGroupsInLp as $itemProperty) {
     $selectedGroupChoices[] = $itemProperty->getGroup()->getId();
@@ -99,7 +99,7 @@ $groupMultiSelect = $form->addElement(
 // submit button
 $form->addButtonSave(get_lang('Save'));
 
-$defaults = array();
+$defaults = [];
 if (!empty($selectedGroupChoices)) {
     $defaults['groups'] = $selectedGroupChoices;
 }
@@ -111,7 +111,7 @@ $subscribedUsers = $subscribedUsers->getQuery();
 $subscribedUsers = $subscribedUsers->execute();
 
 // Getting all users in a nice format.
-$choices = array();
+$choices = [];
 /** @var User $user */
 foreach ($subscribedUsers as $user) {
     $choices[$user->getUserId()] = $user->getCompleteNameWithClasses();
@@ -120,7 +120,7 @@ foreach ($subscribedUsers as $user) {
 // Getting subscribed users to a category.
 $subscribedUsersInCategory = $category->getUsers();
 
-$selectedChoices = array();
+$selectedChoices = [];
 foreach ($subscribedUsersInCategory as $item) {
     $selectedChoices[] = $item->getUser()->getId();
 }
@@ -137,7 +137,7 @@ $userMultiSelect = $formUsers->addElement(
 );
 $formUsers->addButtonSave(get_lang('Save'));
 
-$defaults = array();
+$defaults = [];
 
 if (!empty($selectedChoices)) {
     $defaults['users'] = $selectedChoices;

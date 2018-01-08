@@ -242,10 +242,10 @@ $form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success'
 
 // View
 $templateName = $plugin->get_lang('PaymentMethods');
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => "service_catalog.php",
     "name" => $plugin->get_lang('ListOfServicesOnSale'),
-);
+];
 
 $tpl = new Template($templateName);
 $tpl->assign('buying_service', true);

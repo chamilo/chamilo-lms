@@ -51,7 +51,7 @@ if (api_is_drh()) {
             null
         );
 
-        $coursesFromSessionCodeList = array();
+        $coursesFromSessionCodeList = [];
         if (!empty($coursesFromSession)) {
             foreach ($coursesFromSession as $course) {
                 $coursesFromSessionCodeList[$course['code']] = $course['code'];
@@ -112,7 +112,7 @@ $js = "<script>
                     '<div style=\"cursor:pointer\" onclick=\"foldup(' + index + ')\">" . Display::return_icon(
                         'visible.png',
                         get_lang('HideColumn'),
-                        array('align' => 'absmiddle', 'hspace' => '3px'),
+                        ['align' => 'absmiddle', 'hspace' => '3px'],
                         ICON_SIZE_SMALL
                      )."</div>'
                 );
@@ -149,18 +149,18 @@ $sessionId = api_get_session_id();
 
 // Breadcrumbs.
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => '../admin/index.php',
         'name' => get_lang('PlatformAdmin')
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => '../session/session_list.php',
         'name' => get_lang('SessionList')
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => '../session/resume_session.php?id_session='.$sessionId,
         'name' => get_lang('SessionOverview')
-    );
+    ];
 }
 
 $view = isset($_REQUEST['view']) ? $_REQUEST['view'] : '';
@@ -182,17 +182,17 @@ if (empty($session_id)) {
 }
 
 $nbStudents = count($a_students);
-$extra_info = array();
+$extra_info = [];
 $userProfileInfo = [];
 // Getting all the additional information of an additional profile field.
 if (isset($_GET['additional_profile_field'])) {
-    $user_array = array();
+    $user_array = [];
     foreach ($a_students as $key => $item) {
         $user_array[] = $key;
     }
 
     foreach ($_GET['additional_profile_field'] as $fieldId) {
-         // Fetching only the user that are loaded NOT ALL user in the portal.
+        // Fetching only the user that are loaded NOT ALL user in the portal.
         $userProfileInfo[$fieldId] = TrackingCourseLog::getAdditionalProfileInformationOfFieldByUser(
             $fieldId,
             $user_array
@@ -238,7 +238,7 @@ $form_search = new FormValidator(
     'GET',
     api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq(),
     '',
-    array(),
+    [],
     FormValidator::LAYOUT_INLINE
 );
 $form_search->addHidden('from', Security::remove_XSS($from));
@@ -256,20 +256,20 @@ if ($session_id) {
     $titleSession = Display::return_icon(
         'session.png',
         get_lang('Session'),
-        array(),
+        [],
         ICON_SIZE_SMALL
     ).' '.api_get_session_name($session_id);
     $titleCourse = Display::return_icon(
         'course.png',
         get_lang('Course'),
-        array(),
+        [],
         ICON_SIZE_SMALL
     ).' '.$course_name;
 } else {
     $titleSession = Display::return_icon(
         'course.png',
         get_lang('Course'),
-        array(),
+        [],
         ICON_SIZE_SMALL
     ).' '.$courseInfo['name'];
 }
@@ -340,7 +340,7 @@ if (count($a_students) > 0) {
         ['style' => 'margin-bottom: 10px'],
         FormValidator::LAYOUT_INLINE
     );
-    $options = array(
+    $options = [
         2 => sprintf($getLangXDays, 2),
         3 => sprintf($getLangXDays, 3),
         4 => sprintf($getLangXDays, 4),
@@ -350,7 +350,7 @@ if (count($a_students) > 0) {
         15 => sprintf($getLangXDays, 15),
         30 => sprintf($getLangXDays, 30),
         'never' => get_lang('Never')
-    );
+    ];
     $el = $form->addSelect(
         'since',
         Display::returnFontAwesomeIcon('warning').get_lang('RemindInactivesLearnersSince'),
@@ -374,20 +374,20 @@ if (count($a_students) > 0) {
     $html .= $form->returnForm();
 
     if ($export_csv) {
-        $csv_content = array();
+        $csv_content = [];
         //override the SortableTable "per page" limit if CSV
         $_GET['users_tracking_per_page'] = 1000000;
     }
 
-    $all_datas = array();
+    $all_datas = [];
     $course_code = $_course['id'];
 
     $user_ids = array_keys($a_students);
 
     $table = new SortableTable(
         'users_tracking',
-        array('TrackingCourseLog', 'get_number_of_users'),
-        array('TrackingCourseLog', 'get_user_data'),
+        ['TrackingCourseLog', 'get_number_of_users'],
+        ['TrackingCourseLog', 'get_user_data'],
         (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2
     );
 
@@ -396,7 +396,7 @@ if (count($a_students) > 0) {
     $parameters['from'] = isset($_GET['myspace']) ? Security::remove_XSS($_GET['myspace']) : null;
 
     $table->set_additional_parameters($parameters);
-    $headers = array();
+    $headers = [];
     // tab of header texts
     $table->set_header(0, get_lang('OfficialCode'), true);
     $headers['official_code'] = get_lang('OfficialCode');
@@ -415,20 +415,20 @@ if (count($a_students) > 0) {
     $headers['login'] = get_lang('Login');
 
     $table->set_header(4, get_lang('TrainingTime').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('CourseTimeInfo'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
+        Display::return_icon('info3.gif', get_lang('CourseTimeInfo'), ['align' => 'absmiddle', 'hspace' => '3px']), false, ['style' => 'width:110px;']);
     $headers['training_time'] = get_lang('TrainingTime');
     $table->set_header(5, get_lang('CourseProgress').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
+        Display::return_icon('info3.gif', get_lang('ScormAndLPProgressTotalAverage'), ['align' => 'absmiddle', 'hspace' => '3px']), false, ['style' => 'width:110px;']);
     $headers['course_progress'] = get_lang('CourseProgress');
 
     $table->set_header(6, get_lang('ExerciseProgress').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('ExerciseProgressInfo'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
+        Display::return_icon('info3.gif', get_lang('ExerciseProgressInfo'), ['align' => 'absmiddle', 'hspace' => '3px']), false, ['style' => 'width:110px;']);
     $headers['exercise_progress'] = get_lang('ExerciseProgress');
     $table->set_header(7, get_lang('ExerciseAverage').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('ExerciseAverageInfo'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
+        Display::return_icon('info3.gif', get_lang('ExerciseAverageInfo'), ['align' => 'absmiddle', 'hspace' => '3px']), false, ['style' => 'width:110px;']);
     $headers['exercise_average'] = get_lang('ExerciseAverage');
     $table->set_header(8, get_lang('Score').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array('align' => 'absmiddle', 'hspace' => '3px')), false, array('style' => 'width:110px;'));
+        Display::return_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), ['align' => 'absmiddle', 'hspace' => '3px']), false, ['style' => 'width:110px;']);
     $headers['score'] = get_lang('Score');
     $table->set_header(9, get_lang('Student_publication'), false);
     $headers['student_publication'] = get_lang('Student_publication');
@@ -540,7 +540,7 @@ if ($export_csv) {
     }
     ob_end_clean();
 
-     // Adding headers before the content.
+    // Adding headers before the content.
     array_unshift($csv_content, $csv_headers);
 
     if ($session_id) {

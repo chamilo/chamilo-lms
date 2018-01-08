@@ -22,8 +22,8 @@ $group_id = api_get_group_id();
 $current_group = GroupManager::get_group_properties($group_id);
 
 $nameTools = get_lang('EditGroup');
-$interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
-$interbreadcrumb[] = array('url' => 'group_space.php?'.api_get_cidreq(), 'name' => $current_group['name']);
+$interbreadcrumb[] = ['url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups')];
+$interbreadcrumb[] = ['url' => 'group_space.php?'.api_get_cidreq(), 'name' => $current_group['name']];
 
 $is_group_member = GroupManager::is_tutor_of_group(api_get_user_id(), $current_group);
 
@@ -112,7 +112,7 @@ $form->addElement('hidden', 'action');
 // Group tutors
 $group_tutor_list = GroupManager::get_subscribed_tutors($current_group);
 
-$selected_tutors = array();
+$selected_tutors = [];
 foreach ($group_tutor_list as $index => $user) {
     $selected_tutors[] = $user['user_id'];
 }
@@ -122,7 +122,7 @@ $complete_user_list = CourseManager::get_user_list_from_course_code(
     api_get_session_id()
 );
 
-$possible_users = array();
+$possible_users = [];
 $userGroup = new UserGroup();
 
 $subscribedUsers = GroupManager::get_subscribed_users($current_group);

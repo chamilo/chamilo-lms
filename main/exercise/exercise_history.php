@@ -24,18 +24,18 @@ if (!$is_allowedToEdit) {
     exit;
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'exercise_report.php?'.api_get_cidreq(),
     'name' => get_lang('Exercises'),
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => 'exercise_report.php?filter=2&'.api_get_cidreq(),
     'name' => get_lang('StudentScore'),
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => 'exercise_history.php?exe_id='.intval($_GET['exe_id']).'&'.api_get_cidreq(),
     'name' => get_lang('Details'),
-);
+];
 
 $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
 $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -44,7 +44,7 @@ $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_
 Display::display_header($nameTools, get_lang('Exercise'));
 
 if (isset($_GET['message'])) {
-    if (in_array($_GET['message'], array('ExerciseEdited'))) {
+    if (in_array($_GET['message'], ['ExerciseEdited'])) {
         $my_message_history = Security::remove_XSS($_GET['message']);
         echo Display::return_message(get_lang($my_message_history), 'confirm');
     }

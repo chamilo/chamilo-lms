@@ -29,7 +29,7 @@ if (isset($_GET['lang'])) {
 }
 
 $file = file($hotspot_lang_file);
-$temp = array();
+$temp = [];
 
 foreach ($file as $value) {
     $explode = explode('=', $value);

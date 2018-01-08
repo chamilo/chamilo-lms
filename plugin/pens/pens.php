@@ -47,8 +47,8 @@ class ChamiloPackageHandler extends PENSPackageHandler
 }
 
 $handler = new ChamiloPackageHandler();
-$handler->setSupportedPackageTypes(array('scorm-pif'));
-$handler->setSupportedPackageFormats(array('zip'));
+$handler->setSupportedPackageTypes(['scorm-pif']);
+$handler->setSupportedPackageFormats(['zip']);
 
 $server = PENSServer::singleton();
 $server->setPackageHandler($handler);

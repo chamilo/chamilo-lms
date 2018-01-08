@@ -47,7 +47,7 @@ class Accessurleditsessionstourl
             while ($session = Database::fetch_array($rs)) {
                 $i++;
                 if ($i <= 10) {
-                     $return .= '<a href="#" onclick="add_user_to_url(\''.addslashes($session['id']).'\',\''.addslashes($session['name']).' ('.addslashes($session['id']).')'.'\')">'.$session['name'].' </a><br />';
+                    $return .= '<a href="#" onclick="add_user_to_url(\''.addslashes($session['id']).'\',\''.addslashes($session['name']).' ('.addslashes($session['id']).')'.'\')">'.$session['name'].' </a><br />';
                 } else {
                     $return .= '...<br />';
                 }
@@ -61,4 +61,3 @@ class Accessurleditsessionstourl
         return $xajax_response;
     }
 }
-

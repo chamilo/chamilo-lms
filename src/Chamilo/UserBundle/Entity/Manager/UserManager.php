@@ -21,6 +21,6 @@ class UserManager extends BaseUserManager
      */
     public function findUserByConfirmationToken($token)
     {
-        return $this->findUserBy(array('confirmationToken' => $token));
+        return $this->findUserBy(['confirmationToken' => $token]);
     }
 }

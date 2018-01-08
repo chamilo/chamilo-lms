@@ -109,7 +109,7 @@ class EventsMail
                         $sender_name,
                         $email_admin,
                         null,
-                        array($values['certificate_pdf_file'])
+                        [$values['certificate_pdf_file']]
                     );
                 } else {
                     api_mail_html(

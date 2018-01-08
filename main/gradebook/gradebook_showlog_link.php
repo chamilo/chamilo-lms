@@ -13,18 +13,18 @@ GradebookUtils::block_students();
 
 $selectCat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => Category::getUrl(),
     'name' => get_lang('Gradebook'),
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$selectCat,
     'name' => get_lang('Details')
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => 'gradebook_showlog_link.php?visiblelink='.Security::remove_XSS($_GET['visiblelink']).'&selectcat='.$selectCat,
     'name' => get_lang('GradebookQualifyLog')
-);
+];
 $this_section = SECTION_COURSES;
 Display::display_header('');
 echo '<div class="actions">';
@@ -40,7 +40,7 @@ $sql = "SELECT lk.name,lk.description,lk.weight,lk.visible,lk.type,lk.created_at
         ON lk.user_id_log=us.user_id
         WHERE lk.id_linkeval_log=".$evaledit[0]->get_id()." AND lk.type='link';";
 $result = Database::query($sql);
-$list_info = array();
+$list_info = [];
 while ($row = Database::fetch_row($result)) {
     $list_info[] = $row;
 }
@@ -50,10 +50,10 @@ foreach ($list_info as $key => $info_log) {
     $list_info[$key][3] = ($info_log[3] == 1) ? get_lang('GradebookVisible') : get_lang('GradebookInvisible');
 }
 
-$parameters = array(
+$parameters = [
     'visiblelink' => Security::remove_XSS($_GET['visiblelink']),
     'selectcat' => $selectCat,
-);
+];
 
 $table = new SortableTableFromArrayConfig($list_info, 1, 20, 'gradebooklink');
 $table->set_additional_parameters($parameters);

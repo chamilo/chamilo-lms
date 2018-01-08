@@ -37,31 +37,31 @@ abstract class Question
     public $questionTypeWithFeedback;
     public $extra;
     public $export = false;
-    public static $questionTypes = array(
-        UNIQUE_ANSWER => array('unique_answer.class.php', 'UniqueAnswer'),
-        MULTIPLE_ANSWER => array('multiple_answer.class.php', 'MultipleAnswer'),
-        FILL_IN_BLANKS => array('fill_blanks.class.php', 'FillBlanks'),
-        MATCHING => array('matching.class.php', 'Matching'),
-        FREE_ANSWER => array('freeanswer.class.php', 'FreeAnswer'),
-        ORAL_EXPRESSION => array('oral_expression.class.php', 'OralExpression'),
-        HOT_SPOT => array('hotspot.class.php', 'HotSpot'),
-        HOT_SPOT_DELINEATION => array('hotspot.class.php', 'HotspotDelineation'),
-        MULTIPLE_ANSWER_COMBINATION => array('multiple_answer_combination.class.php', 'MultipleAnswerCombination'),
-        UNIQUE_ANSWER_NO_OPTION => array('unique_answer_no_option.class.php', 'UniqueAnswerNoOption'),
-        MULTIPLE_ANSWER_TRUE_FALSE => array('multiple_answer_true_false.class.php', 'MultipleAnswerTrueFalse'),
-        MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE => array(
+    public static $questionTypes = [
+        UNIQUE_ANSWER => ['unique_answer.class.php', 'UniqueAnswer'],
+        MULTIPLE_ANSWER => ['multiple_answer.class.php', 'MultipleAnswer'],
+        FILL_IN_BLANKS => ['fill_blanks.class.php', 'FillBlanks'],
+        MATCHING => ['matching.class.php', 'Matching'],
+        FREE_ANSWER => ['freeanswer.class.php', 'FreeAnswer'],
+        ORAL_EXPRESSION => ['oral_expression.class.php', 'OralExpression'],
+        HOT_SPOT => ['hotspot.class.php', 'HotSpot'],
+        HOT_SPOT_DELINEATION => ['hotspot.class.php', 'HotspotDelineation'],
+        MULTIPLE_ANSWER_COMBINATION => ['multiple_answer_combination.class.php', 'MultipleAnswerCombination'],
+        UNIQUE_ANSWER_NO_OPTION => ['unique_answer_no_option.class.php', 'UniqueAnswerNoOption'],
+        MULTIPLE_ANSWER_TRUE_FALSE => ['multiple_answer_true_false.class.php', 'MultipleAnswerTrueFalse'],
+        MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE => [
             'multiple_answer_combination_true_false.class.php',
             'MultipleAnswerCombinationTrueFalse'
-        ),
-        GLOBAL_MULTIPLE_ANSWER => array('global_multiple_answer.class.php', 'GlobalMultipleAnswer'),
-        CALCULATED_ANSWER => array('calculated_answer.class.php', 'CalculatedAnswer'),
+        ],
+        GLOBAL_MULTIPLE_ANSWER => ['global_multiple_answer.class.php', 'GlobalMultipleAnswer'],
+        CALCULATED_ANSWER => ['calculated_answer.class.php', 'CalculatedAnswer'],
         UNIQUE_ANSWER_IMAGE => ['UniqueAnswerImage.php', 'UniqueAnswerImage'],
         DRAGGABLE => ['Draggable.php', 'Draggable'],
         MATCHING_DRAGGABLE => ['MatchingDraggable.php', 'MatchingDraggable'],
         //MEDIA_QUESTION => array('media_question.class.php' , 'MediaQuestion')
         ANNOTATION => ['Annotation.php', 'Annotation'],
         READING_COMPREHENSION => ['ReadingComprehension.php', 'ReadingComprehension']
-    );
+    ];
 
     /**
      * constructor of the class
@@ -81,9 +81,9 @@ abstract class Question
         // This variable is used when loading an exercise like an scenario with
         // an special hotspot: final_overlap, final_missing, final_excess
         $this->extra = '';
-        $this->exerciseList = array();
+        $this->exerciseList = [];
         $this->course = api_get_course_info();
-        $this->category_list = array();
+        $this->category_list = [];
         $this->parent_id = 0;
         // See BT#12611
         $this->questionTypeWithFeedback = [
@@ -608,8 +608,8 @@ abstract class Question
         // if we really change the type
         if ($type != $this->type) {
             // if we don't change from "unique answer" to "multiple answers" (or conversely)
-            if (!in_array($this->type, array(UNIQUE_ANSWER, MULTIPLE_ANSWER)) ||
-                !in_array($type, array(UNIQUE_ANSWER, MULTIPLE_ANSWER))
+            if (!in_array($this->type, [UNIQUE_ANSWER, MULTIPLE_ANSWER]) ||
+                !in_array($type, [UNIQUE_ANSWER, MULTIPLE_ANSWER])
             ) {
                 // removes old answers
                 $sql = "DELETE FROM $TBL_REPONSES
@@ -1123,9 +1123,9 @@ abstract class Question
             if (Database::num_rows($res) > 0 || $addQs) {
                 $di = new ChamiloIndexer();
                 if ($addQs) {
-                    $question_exercises = array((int) $exerciseId);
+                    $question_exercises = [(int) $exerciseId];
                 } else {
-                    $question_exercises = array();
+                    $question_exercises = [];
                 }
                 isset($_POST['language']) ? $lang = Database::escape_string($_POST['language']) : $lang = 'english';
                 $di->connectDb(null, null, $lang);
@@ -1162,16 +1162,16 @@ abstract class Question
                 $ic_slide->addValue("title", $this->question);
                 $ic_slide->addCourseId($course_id);
                 $ic_slide->addToolId(TOOL_QUIZ);
-                $xapian_data = array(
+                $xapian_data = [
                     SE_COURSE_ID => $course_id,
                     SE_TOOL_ID => TOOL_QUIZ,
-                    SE_DATA => array(
+                    SE_DATA => [
                         'type' => SE_DOCTYPE_EXERCISE_QUESTION,
                         'exercise_ids' => $question_exercises,
                         'question_id' => (int) $this->id
-                    ),
+                    ],
                     SE_USER => (int) api_get_user_id(),
-                );
+                ];
                 $ic_slide->xapian_data = serialize($xapian_data);
                 $ic_slide->addValue("content", $this->description);
 
@@ -1232,7 +1232,6 @@ abstract class Question
                         Database::query($sql);
                     }
                 }
-
             }
         }
     }
@@ -1388,7 +1387,6 @@ abstract class Question
                 api_get_user_id()
             );
             $this->removePicture();
-
         } else {
             // just removes the exercise from the list
             $this->removeFromList($deleteFromEx);
@@ -1590,10 +1588,10 @@ abstract class Question
         $form->addElement('hidden', 'answerType', $answerType);
 
         // html editor
-        $editorConfig = array(
+        $editorConfig = [
             'ToolbarSet' => 'TestQuestionDescription',
             'Height' => '150'
-        );
+        ];
 
         if (!api_is_allowed_to_edit(null, true)) {
             $editorConfig['UserStatus'] = 'student';
@@ -1636,7 +1634,7 @@ abstract class Question
 
             switch ($this->type) {
                 case UNIQUE_ANSWER:
-                    $buttonGroup = array();
+                    $buttonGroup = [];
                     $buttonGroup[] = $form->addButtonSave(
                         $text,
                         'submitQuestion',
@@ -1655,7 +1653,7 @@ abstract class Question
                     $form->addGroup($buttonGroup);
                     break;
                 case MULTIPLE_ANSWER:
-                    $buttonGroup = array();
+                    $buttonGroup = [];
                     $buttonGroup[] = $form->addButtonSave(
                         $text,
                         'submitQuestion',
@@ -1713,7 +1711,7 @@ abstract class Question
 
 
         // default values
-        $defaults = array();
+        $defaults = [];
         $defaults['questionName'] = $this->question;
         $defaults['questionDescription'] = $this->description;
         $defaults['questionLevel'] = $this->level;
@@ -1789,10 +1787,10 @@ abstract class Question
 
         if ($feedback_type == 1) {
             //2. but if it is a feedback DIRECT we only show the UNIQUE_ANSWER type that is currently available
-            $question_type_custom_list = array(
+            $question_type_custom_list = [
                 UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER],
                 HOT_SPOT_DELINEATION => self::$questionTypes[HOT_SPOT_DELINEATION]
-            );
+            ];
         } else {
             unset($question_type_custom_list[HOT_SPOT_DELINEATION]);
         }
@@ -1886,12 +1884,12 @@ abstract class Question
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
         Database::delete(
             $table,
-            array(
-                'c_id = ? AND question_id = ?' => array(
+            [
+                'c_id = ? AND question_id = ?' => [
                     $course_id,
                     $question_id
-                )
-            )
+                ]
+            ]
         );
     }
 
@@ -1907,7 +1905,7 @@ abstract class Question
         $result = Database::update(
             $table,
             $params,
-            array('c_id = ? AND id = ?' => array($course_id, $id))
+            ['c_id = ? AND id = ?' => [$course_id, $id]]
         );
         return $result;
     }
@@ -1923,15 +1921,15 @@ abstract class Question
         $result = Database::select(
             '*',
             $table,
-            array(
-                'where' => array(
-                    'c_id = ? AND question_id = ?' => array(
+            [
+                'where' => [
+                    'c_id = ? AND question_id = ?' => [
                         $course_id,
                         $question_id
-                    )
-                ),
+                    ]
+                ],
                 'order' => 'id ASC'
-            )
+            ]
         );
 
         return $result;
@@ -1993,7 +1991,7 @@ abstract class Question
             // Do not show the description (the text to read) if the question is of type READING_COMPREHENSION
             $header .= Display::div(
                 $this->description,
-                array('class' => 'question_description')
+                ['class' => 'question_description']
             );
         } else {
             if ($score['pass'] == true) {
@@ -2109,7 +2107,7 @@ abstract class Question
         $img = $explanation = null;
         eval('$img = '.$tabQuestionList[$type][1].'::$typePicture;');
         eval('$explanation = get_lang('.$tabQuestionList[$type][1].'::$explanationLangVar);');
-        return array($img, $explanation);
+        return [$img, $explanation];
     }
 
     /**
@@ -2128,20 +2126,20 @@ abstract class Question
         $where_condition = []
     ) {
         $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $default_where = array(
-            'c_id = ? AND parent_id = 0 AND type = ?' => array(
+        $default_where = [
+            'c_id = ? AND parent_id = 0 AND type = ?' => [
                 $course_id,
                 MEDIA_QUESTION
-            )
-        );
+            ]
+        ];
         $result = Database::select(
             '*',
             $table_question,
-            array(
+            [
                 'limit' => " $start, $limit",
                 'where' => $default_where,
                 'order' => "$sidx $sord"
-            )
+            ]
         );
 
         return $result;
@@ -2159,14 +2157,14 @@ abstract class Question
         $result = Database::select(
             'count(*) as count',
             $table_question,
-            array(
-                'where' => array(
-                    'c_id = ? AND parent_id = 0 AND type = ?' => array(
+            [
+                'where' => [
+                    'c_id = ? AND parent_id = 0 AND type = ?' => [
                         $course_id,
                         MEDIA_QUESTION,
-                    ),
-                )
-            ),
+                    ],
+                ]
+            ],
             'first'
         );
 
@@ -2183,7 +2181,7 @@ abstract class Question
     public static function prepare_course_media_select($course_id)
     {
         $medias = self::get_course_medias($course_id);
-        $media_list = array();
+        $media_list = [];
         $media_list[0] = get_lang('NoMedia');
 
         if (!empty($medias)) {
@@ -2199,13 +2197,13 @@ abstract class Question
      */
     public static function get_default_levels()
     {
-        $select_level = array(
+        $select_level = [
             1 => 1,
             2 => 2,
             3 => 3,
             4 => 4,
             5 => 5
-        );
+        ];
 
         return $select_level;
     }
@@ -2232,20 +2230,20 @@ abstract class Question
      */
     public function swapSimpleAnswerTypes()
     {
-        $oppositeAnswers = array(
+        $oppositeAnswers = [
             UNIQUE_ANSWER => MULTIPLE_ANSWER,
             MULTIPLE_ANSWER => UNIQUE_ANSWER
-        );
+        ];
         $this->type = $oppositeAnswers[$this->type];
         Database::update(
             Database::get_course_table(TABLE_QUIZ_QUESTION),
-            array('type' => $this->type),
-            array('c_id = ? AND id = ?' => array($this->course['real_id'], $this->id))
+            ['type' => $this->type],
+            ['c_id = ? AND id = ?' => [$this->course['real_id'], $this->id]]
         );
-        $answerClasses = array(
+        $answerClasses = [
             UNIQUE_ANSWER => 'UniqueAnswer',
             MULTIPLE_ANSWER => 'MultipleAnswer'
-        );
+        ];
         $swappedAnswer = new $answerClasses[$this->type];
         foreach ($this as $key => $value) {
             $swappedAnswer->$key = $value;

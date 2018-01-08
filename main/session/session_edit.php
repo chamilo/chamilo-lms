@@ -54,8 +54,8 @@ if (!empty($sessionInfo['coach_access_end_date'])) {
 $id_coach = $sessionInfo['id_coach'];
 $tool_name = get_lang('EditSession');
 
-$interbreadcrumb[] = array('url' => "session_list.php", "name" => get_lang('SessionList'));
-$interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id, "name" => get_lang('SessionOverview'));
+$interbreadcrumb[] = ['url' => "session_list.php", "name" => get_lang('SessionList')];
+$interbreadcrumb[] = ['url' => "resume_session.php?id_session=".$id, "name" => get_lang('SessionOverview')];
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     $formSent = 1;
@@ -84,9 +84,9 @@ $result = Database::query($sql);
 $coaches = Database::store_result($result);
 $thisYear = date('Y');
 
-$coachesOption = array(
+$coachesOption = [
     '' => '----- '.get_lang('None').' -----'
-);
+];
 
 foreach ($coaches as $coach) {
     $personName = api_get_person_name($coach['firstname'], $coach['lastname']);
@@ -95,9 +95,9 @@ foreach ($coaches as $coach) {
 
 $categoriesList = SessionManager::get_all_session_category();
 
-$categoriesOption = array(
+$categoriesOption = [
     '0' => get_lang('None')
-);
+];
 
 if ($categoriesList != false) {
     foreach ($categoriesList as $categoryItem) {
@@ -106,10 +106,10 @@ if ($categoriesList != false) {
 }
 
 $formAction = api_get_self().'?';
-$formAction .= http_build_query(array(
+$formAction .= http_build_query([
     'page' => Security::remove_XSS($_GET['page']),
     'id' => $id
-));
+]);
 
 $form = new FormValidator('edit_session', 'post', $formAction);
 $form->addElement('header', $tool_name);

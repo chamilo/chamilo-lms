@@ -34,10 +34,10 @@ switch ($action) {
         }
         break;
     case 'find_skills':
-        $skills = $skill->find('all', array('where' => array('name LIKE %?% '=>$_REQUEST['q'])));
-        $return_skills = array([
+        $skills = $skill->find('all', ['where' => ['name LIKE %?% '=>$_REQUEST['q']]]);
+        $return_skills = [[
             'items' => []
-        ]);
+        ]];
         foreach ($skills as $skill) {
             $return_skills['items'][] = [
                 'id' => $skill['id'],
@@ -49,7 +49,7 @@ switch ($action) {
         break;
     case 'get_gradebooks':
         $gradebooks = $gradebook_list = $gradebook->get_all();
-        $gradebook_list = array();
+        $gradebook_list = [];
         //Only course gradebook with certificate
         if (!empty($gradebooks)) {
             foreach ($gradebooks as $gradebook) {
@@ -58,7 +58,7 @@ switch ($action) {
                     //$gradebook['name'] = $gradebook['name'];
                     //$gradebook_list[]  = $gradebook;
                 } else {
-                  //  $gradebook['name'] = $gradebook_list[$gradebook['parent_id']]['name'].' > '.$gradebook['name'];
+                    //  $gradebook['name'] = $gradebook_list[$gradebook['parent_id']]['name'].' > '.$gradebook['name'];
                     //$gradebook_list[]  = $gradebook;
                 }
             }
@@ -66,8 +66,8 @@ switch ($action) {
         echo json_encode($gradebook_list);
         break;
     case 'find_gradebooks':
-        $gradebooks = $gradebook->find('all', array('where' => array('name LIKE %?% ' => $_REQUEST['tag'])));
-        $return = array();
+        $gradebooks = $gradebook->find('all', ['where' => ['name LIKE %?% ' => $_REQUEST['tag']]]);
+        $return = [];
         foreach ($gradebooks as $item) {
             $item['key'] = $item['name'];
             $item['value'] = $item['id'];
@@ -175,14 +175,14 @@ switch ($action) {
         $load_user_data = isset($_REQUEST['load_user_data']) ? $_REQUEST['load_user_data'] : null;
         $skills = $skill->getChildren($id, $load_user_data);
 
-        $return = array();
+        $return = [];
         foreach ($skills as $skill) {
             if (isset($skill['data']) && !empty($skill['data'])) {
-                $return[$skill['data']['id']] = array(
+                $return[$skill['data']['id']] = [
                     'id'    => $skill['data']['id'],
                     'name'  => $skill['data']['name'],
                     'passed'=> $skill['data']['passed']
-                );
+                ];
             }
         }
         $success = true;
@@ -190,31 +190,31 @@ switch ($action) {
             $success = false;
         }
 
-        $result = array(
+        $result = [
             'success' => $success,
             'data' => $return
-        );
+        ];
         echo json_encode($result);
         break;
     case 'load_direct_parents':
         $id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
         $skills = $skill->getDirectParents($id);
-        $return = array();
+        $return = [];
         foreach ($skills as $skill) {
-            $return [$skill['data']['id']] = array(
+            $return [$skill['data']['id']] = [
                 'id'        => $skill['data']['id'],
                 'parent_id' => $skill['data']['parent_id'],
                 'name'      => $skill['data']['name']
-            );
+            ];
         }
         echo json_encode($return);
         break;
     case 'profile_matches':
         $skill_rel_user = new SkillRelUser();
-        $skills = (!empty($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] : array());
+        $skills = (!empty($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] : []);
         $total_skills_to_search = $skills;
         $users  = $skill_rel_user->getUserBySkills($skills);
-        $user_list = array();
+        $user_list = [];
         $count_skills = count($skills);
         $ordered_user_list = null;
 
@@ -224,12 +224,12 @@ switch ($action) {
                 $user_list[$user['user_id']]['user'] = $user_info;
                 $my_user_skills = $skill_rel_user->getUserSkills($user['user_id']);
 
-                $user_skill_list = array();
+                $user_skill_list = [];
                 foreach ($my_user_skills as $skill_item) {
                     $user_skill_list[] = $skill_item['skill_id'];
                 }
 
-                $user_skills = array();
+                $user_skills = [];
                 $found_counts = 0;
 
                 foreach ($skills as $skill_id) {
@@ -237,16 +237,16 @@ switch ($action) {
                     if (in_array($skill_id, $user_skill_list)) {
                         $found = true;
                         $found_counts++;
-                        $user_skills[$skill_id] = array('skill_id' => $skill_id, 'found' => $found);
+                        $user_skills[$skill_id] = ['skill_id' => $skill_id, 'found' => $found];
                     }
                 }
 
                 foreach ($my_user_skills as $my_skill) {
                     if (!isset($user_skills[$my_skill['skill_id']])) {
-                        $user_skills[$my_skill['skill_id']] = array(
+                        $user_skills[$my_skill['skill_id']] = [
                             'skill_id' => $my_skill['skill_id'],
                             'found' => false
-                        );
+                        ];
                     }
                     $total_skills_to_search[$my_skill['skill_id']] = $my_skill['skill_id'];
                 }
@@ -267,7 +267,7 @@ switch ($action) {
         Display::$global_template->assign('order_user_list', $ordered_user_list);
         Display::$global_template->assign('total_search_skills', $count_skills);
 
-        $skill_list = array();
+        $skill_list = [];
 
         if (!empty($total_skills_to_search)) {
             $total_skills_to_search = $skill->getSkillsInfo($total_skills_to_search);
@@ -335,9 +335,9 @@ switch ($action) {
             $skillProfile = new SkillProfile();
             $isDeleted = $skillProfile->delete($profileId);
 
-            echo json_encode(array(
+            echo json_encode([
                 'status' => $isDeleted
-            ));
+            ]);
         }
         break;
     case 'skill_exists':

@@ -173,16 +173,16 @@ if (!empty($_POST)) {
 
 if (api_is_platform_admin()) {
     $courseId = getCourse(intval($_GET['action_id']));
-    $interbreadcrumb[] = array("url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe'));
-    $interbreadcrumb[] = array("url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList'));
-    $interbreadcrumb[] = array("url" => "formative-action.php?cid=".$courseId, "name" => $plugin->get_lang('FormativeAction'));
-    $interbreadcrumb[] = array("url" => "specialty-action-edit.php?new_specialty=0&specialty_id=".intval($_GET['specialty_id'])."&action_id=".$_GET['action_id'], "name" => $plugin->get_lang('SpecialtyFormativeAction'));
+    $interbreadcrumb[] = ["url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe')];
+    $interbreadcrumb[] = ["url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList')];
+    $interbreadcrumb[] = ["url" => "formative-action.php?cid=".$courseId, "name" => $plugin->get_lang('FormativeAction')];
+    $interbreadcrumb[] = ["url" => "specialty-action-edit.php?new_specialty=0&specialty_id=".intval($_GET['specialty_id'])."&action_id=".$_GET['action_id'], "name" => $plugin->get_lang('SpecialtyFormativeAction')];
     if (isset($_GET['new_tutor']) && intval($_GET['new_tutor']) == 1) {
         $templateName = $plugin->get_lang('NewSpecialtyTutor');
         $tpl = new Template($templateName);
         $tpl->assign('action_id', intval($_GET['action_id']));
         $tpl->assign('specialty_id', intval($_GET['specialty_id']));
-        $info = array();
+        $info = [];
         $tpl->assign('info', $info);
         $tpl->assign('new_tutor', '1');
         $platformUserId = '';
@@ -196,7 +196,6 @@ if (api_is_platform_admin()) {
         $tpl->assign('info', $info);
         $tpl->assign('new_tutor', '0');
         $platformUserId = $info['platform_user_id'];
-
     }
     $tutorsList = getTutorsSpecialty(intval($_GET['specialty_id']));
     $tpl->assign('ExistingTutorsList', $tutorsList);

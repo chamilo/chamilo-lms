@@ -9,10 +9,9 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  * Class ChamiloFaqBundle
  *
  * Based in GenjFaqBundle
- * 
+ *
  * @package Chamilo\UserBundle
  */
 class ChamiloFaqBundle extends Bundle
 {
-
 }

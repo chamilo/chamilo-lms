@@ -299,10 +299,10 @@ class CourseRelUser
      */
     public static function getRelationTypeList()
     {
-        return array(
+        return [
             '0' => '',
             COURSE_RELATION_TYPE_RRHH => 'drh',
-        );
+        ];
     }
 
     /**
@@ -311,10 +311,10 @@ class CourseRelUser
      */
     public static function getStatusList()
     {
-        return array(
+        return [
             User::COURSE_MANAGER => 'Teacher',
             User::STUDENT => 'Student'
             //User::DRH => 'DRH'
-        );
+        ];
     }
 }

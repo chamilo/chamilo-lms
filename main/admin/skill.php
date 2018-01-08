@@ -54,8 +54,8 @@ if (!empty($item)) {
 }
 $formToDisplay = $form->returnForm();
 
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => api_get_self(), 'name' => get_lang('ManageSkillsLevels'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('ManageSkillsLevels')];
 
 $tpl = new Template($action);
 switch ($action) {

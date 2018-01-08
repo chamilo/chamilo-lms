@@ -89,4 +89,3 @@ if ($isPlatformAdmin) {
     }
     $plugin_info['settings_form'] = $form;
 }
-

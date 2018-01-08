@@ -45,7 +45,7 @@ class CustomPages
      * @param array $content used to pass data to the custom page
      * @return bool False if custom pages is not enabled or file could not be found. Void otherwise.
      */
-    public static function display($pageName, $content = array())
+    public static function display($pageName, $content = [])
     {
         if (!self::enabled()) {
             return false;
@@ -74,7 +74,7 @@ class CustomPages
             $url_id = UrlManager::get_url_id($url);
         }
         $url_images_dir = api_get_path(SYS_PATH).'custompages/url-images/';
-        $images = array();
+        $images = [];
         for ($img_id = 1; $img_id <= 3; $img_id++) {
             if (file_exists($url_images_dir.$url_id.'_url_image_'.$img_id.'.png')) {
                 $images[] = api_get_path(WEB_PATH).'custompages/url-images/'.$url_id.'_url_image_'.$img_id.'.png';
@@ -95,5 +95,4 @@ class CustomPages
 
         return file_exists($fileName);
     }
-
 }

@@ -33,7 +33,8 @@ $(document).ready(function () {
 // Tracking
 Event::event_access_tool(TOOL_GLOSSARY);
 
-function sorter($item1, $item2) {
+function sorter($item1, $item2)
+{
     if ($item1[2] == $item2[2]) {
         return 0;
     }
@@ -44,7 +45,7 @@ function sorter($item1, $item2) {
 // Displaying the header
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 $currentUrl = api_get_self().'?'.api_get_cidreq();
-$interbreadcrumb[] = array('url' => 'index.php?'.api_get_cidreq(), 'name' => get_lang('Glossary'));
+$interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq(), 'name' => get_lang('Glossary')];
 
 $content = '';
 $tool_name = '';
@@ -70,7 +71,7 @@ switch ($action) {
                 ['ToolbarSet' => 'Minimal']
             );
         } else {
-            $form->addElement('text', 'name', get_lang('TermName'), array('id' => 'glossary_title'));
+            $form->addElement('text', 'name', get_lang('TermName'), ['id' => 'glossary_title']);
         }
 
         $form->addElement(
@@ -78,7 +79,7 @@ switch ($action) {
             'description',
             get_lang('TermDefinition'),
             null,
-            array('ToolbarSet' => 'Glossary', 'Height' => '300')
+            ['ToolbarSet' => 'Glossary', 'Height' => '300']
         );
         $form->addButtonCreate(get_lang('TermAddButton'), 'SubmitGlossary');
         // setting the rules
@@ -96,7 +97,7 @@ switch ($action) {
         } else {
             $token = Security::get_token();
             $form->addElement('hidden', 'sec_token');
-            $form->setConstants(array('sec_token' => $token));
+            $form->setConstants(['sec_token' => $token]);
             $content = $form->returnForm();
         }
         break;
@@ -124,7 +125,7 @@ switch ($action) {
                     ['ToolbarSet' => 'Minimal']
                 );
             } else {
-                $form->addElement('text', 'name', get_lang('TermName'), array('id' => 'glossary_title'));
+                $form->addElement('text', 'name', get_lang('TermName'), ['id' => 'glossary_title']);
             }
 
             $form->addElement(
@@ -132,7 +133,7 @@ switch ($action) {
                 'description',
                 get_lang('TermDefinition'),
                 null,
-                array('ToolbarSet' => 'Glossary', 'Height' => '300')
+                ['ToolbarSet' => 'Glossary', 'Height' => '300']
             );
 
             // setting the defaults
@@ -148,7 +149,7 @@ switch ($action) {
             if (!empty($glossary_data['update_date'])) {
                 $glossary_data['update_date'] = Display::dateToStringAgoAndLongDate($glossary_data['update_date']);
             } else {
-                 $glossary_data['update_date'] = '';
+                $glossary_data['update_date'] = '';
             }
 
             $form->addLabel(get_lang('CreationDate'), $glossary_data['insert_date']);
@@ -173,7 +174,7 @@ switch ($action) {
             } else {
                 $token = Security::get_token();
                 $form->addElement('hidden', 'sec_token');
-                $form->setConstants(array('sec_token' => $token));
+                $form->setConstants(['sec_token' => $token]);
                 $content = $form->returnForm();
             }
         }
@@ -355,10 +356,10 @@ switch ($action) {
         );
 
         usort($data, "sorter");
-        $list = array();
-        $list[] = array('term', 'definition');
+        $list = [];
+        $list[] = ['term', 'definition'];
         foreach ($data as $line) {
-            $list[] = array($line[0], $line[1]);
+            $list[] = [$line[0], $line[1]];
         }
         $filename = 'glossary_course_'.api_get_course_id();
         Export::arrayToCsv($list, $filename);
@@ -370,7 +371,7 @@ switch ($action) {
         GlossaryManager::export_to_pdf();
         break;
     case 'changeview':
-        if (in_array($_GET['view'], array('list', 'table'))) {
+        if (in_array($_GET['view'], ['list', 'table'])) {
             Session::write('glossary_view', $_GET['view']);
         } else {
             $view = Session::read('glossary_view');

@@ -28,10 +28,10 @@ if (function_exists('ini_set')) {
 $this_section = SECTION_COURSES;
 
 // Breadcrumbs
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'course_info/maintenance.php?'.api_get_cidreq(),
     'name' => get_lang('Maintenance')
-);
+];
 
 $form = new FormValidator('import_moodle', 'post', api_get_self().'?'.api_get_cidreq());
 $form->addFile('moodle_file', get_lang('MoodleFile'));

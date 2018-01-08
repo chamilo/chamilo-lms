@@ -156,23 +156,23 @@ if (!empty($_POST)) {
 
 if (api_is_platform_admin()) {
     $id_course = getCourse(intval($_GET['action_id']));
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => "/plugin/sepe/src/sepe-administration-menu.php",
         "name" => $plugin->get_lang('MenuSepe'),
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         "url" => "formative-actions-list.php",
         "name" => $plugin->get_lang('FormativesActionsList'),
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         "url" => "formative-action.php?cid=".$id_course,
         "name" => $plugin->get_lang('FormativeAction'),
-    );
+    ];
     if (isset($_GET['new_specialty']) && intval($_GET['new_specialty']) == 1) {
         $templateName = $plugin->get_lang('NewSpecialtyAccion');
         $tpl = new Template($templateName);
         $tpl->assign('action_id', intval($_GET['action_id']));
-        $info = array();
+        $info = [];
         $tpl->assign('info', $info);
         $tpl->assign('new_action', '1');
         $yearStart = $yearEnd = date("Y");
@@ -211,7 +211,7 @@ if (api_is_platform_admin()) {
         $tpl->assign('listTutors', $listTutors);
     }
 
-    $yearList = array();
+    $yearList = [];
     if ($yearStart > $yearEnd) {
         $tmp = $yearStart;
         $yearStart = $yearEnd;
@@ -238,7 +238,6 @@ if (api_is_platform_admin()) {
     $content = $tpl->fetch($listing_tpl);
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
-
 } else {
     header('Location:'.api_get_path(WEB_PATH));
     exit;

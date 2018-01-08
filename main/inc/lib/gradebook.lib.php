@@ -9,7 +9,7 @@
  */
 class Gradebook extends Model
 {
-    public $columns = array(
+    public $columns = [
         'id',
         'name',
         'description',
@@ -19,7 +19,7 @@ class Gradebook extends Model
         'session_id',
         'weight',
         'user_id'
-    );
+    ];
 
     /**
      * Constructor
@@ -49,7 +49,7 @@ class Gradebook extends Model
         $result = Database::query($sql);
         $setting = Database::store_result($result);
         $setting = isset($setting[0]) ? $setting[0] : null;
-        $setting = $setting ? $setting : array();
+        $setting = $setting ? $setting : [];
         $inactive = isset($setting['selected_value']) && $setting['selected_value'] == 'true';
 
         if ($inactive) {
@@ -76,7 +76,7 @@ class Gradebook extends Model
      *
      * @return array
      */
-    public function get_all($options = array())
+    public function get_all($options = [])
     {
         $gradebooks = parent::get_all($options);
         foreach ($gradebooks as &$gradebook) {
@@ -100,9 +100,9 @@ class Gradebook extends Model
     ) {
         $skill_gradebook = new SkillRelGradebook();
         $skill_gradebooks_source = $skill_gradebook->get_all(
-            array('where' => array('gradebook_id = ?' => $gradebook_id))
+            ['where' => ['gradebook_id = ?' => $gradebook_id]]
         );
-        $clean_gradebook = array();
+        $clean_gradebook = [];
 
         if (!empty($skill_gradebooks_source)) {
             foreach ($skill_gradebooks_source as $source) {
@@ -122,7 +122,7 @@ class Gradebook extends Model
             }
 
             foreach ($skill_list as $skill_id) {
-                $params = array();
+                $params = [];
                 $params['gradebook_id'] = $gradebook_id;
                 $params['skill_id'] = $skill_id;
                 if (!$skill_gradebook->existsGradeBookSkill($gradebook_id, $skill_id)) {
@@ -169,7 +169,7 @@ class Gradebook extends Model
 
         $skill = new Skill();
         $skills = $skill->get_all();
-        $clean_skill_list = array();
+        $clean_skill_list = [];
         foreach ($skills as $skill) {
             $clean_skill_list[$skill['id']] = $skill['name'];
         }
@@ -178,13 +178,13 @@ class Gradebook extends Model
             'skill',
             get_lang('Skills'),
             $clean_skill_list,
-            array(
+            [
                 'multiple' => 'multiple'
-            )
+            ]
         );
 
         $selected_skills = self::getSkillsByGradebook($gradebook_id);
-        $clean_selected_skills = array();
+        $clean_selected_skills = [];
         if (!empty($selected_skills)) {
             foreach ($selected_skills as $skill) {
                 $clean_selected_skills[] = $skill['id'];
@@ -192,7 +192,7 @@ class Gradebook extends Model
         }
 
         $form->addButtonCreate(get_lang('Add'), 'submit');
-        $form->setDefaults(array('skill' => $clean_selected_skills));
+        $form->setDefaults(['skill' => $clean_selected_skills]);
 
         return $form;
     }

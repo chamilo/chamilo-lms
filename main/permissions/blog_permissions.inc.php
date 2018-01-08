@@ -9,7 +9,7 @@
 /**
  * Init
  */
-$rights_full = array(
+$rights_full = [
     "article_add",
     "article_delete",
     "article_edit",
@@ -20,9 +20,9 @@ $rights_full = array(
     "task_management",
     "member_management",
     "role_management",
-);
-$rights_limited = array("Add", "Edit", "Delete");
-$rights_blog = array(
+];
+$rights_limited = ["Add", "Edit", "Delete"];
+$rights_blog = [
     "article_add",
     "article_delete",
     "article_edit",
@@ -33,7 +33,7 @@ $rights_blog = array(
     "task_management",
     "member_management",
     "role_management",
-);
+];
 $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 
 // Get all user
@@ -60,7 +60,7 @@ if (isset($mainUserInfo) && isset($mainUserInfo['status']) && $mainUserInfo['sta
 include_once('permissions_functions.inc.php');
 // 			ACTIONS
 if (isset($_GET['do'])) {
-    if (isset($_GET['permission']) AND isset($_GET['tool']) AND ($_GET['do'] == 'grant' OR $_GET['do'] == 'revoke')) {
+    if (isset($_GET['permission']) and isset($_GET['tool']) and ($_GET['do'] == 'grant' or $_GET['do'] == 'revoke')) {
         $result_message = store_one_permission(
             'user',
             $_GET['do'],
@@ -69,7 +69,7 @@ if (isset($_GET['do'])) {
             $_GET['permission']
         );
     }
-    if (isset($_GET['role']) AND ($_GET['do'] == 'grant' OR $_GET['do'] == 'revoke')) {
+    if (isset($_GET['role']) and ($_GET['do'] == 'grant' or $_GET['do'] == 'revoke')) {
         $result_message = assign_role(
             'user',
             $_GET['do'],
@@ -157,7 +157,7 @@ foreach ($blog_users as $user_id => $user_name) { // $blog_users contains all th
     // ---------------------------------------------------
     // 			RETRIEVING THE PERMISSIONS OF THE USER
     // ---------------------------------------------------
-    $current_user_permissions = array();
+    $current_user_permissions = [];
     $current_user_permissions = get_permissions('user', $user_id);
 
     echo "\t<tr>\n";

@@ -138,7 +138,7 @@ class AnnouncementManager
         $rs = Database::query($sql);
         $num_rows = Database::num_rows($rs);
         if ($num_rows > 0) {
-            $list = array();
+            $list = [];
             while ($row = Database::fetch_array($rs)) {
                 $list[] = $row;
             }
@@ -423,7 +423,7 @@ class AnnouncementManager
             $html .= Display::tag(
                 'td',
                 get_lang('SentTo').': '.$sent_to_form,
-                array('class' => 'announcements_datum')
+                ['class' => 'announcements_datum']
             );
         }
         $attachment_list = self::get_attachment($id);
@@ -503,7 +503,7 @@ class AnnouncementManager
         $title,
         $newContent,
         $sentTo,
-        $file = array(),
+        $file = [],
         $file_comment = null,
         $end_date = null,
         $sendToUsersInSession = false,
@@ -525,14 +525,14 @@ class AnnouncementManager
         $order = self::get_last_announcement_order($courseInfo);
 
         // store in the table announcement
-        $params = array(
+        $params = [
             'c_id' => $courseId,
             'content' => $newContent,
             'title' => $title,
             'end_date' => $end_date,
             'display_order' => $order,
             'session_id' => (int) $sessionId
-        );
+        ];
 
         $last_id = Database::insert($tbl_announcement, $params);
 
@@ -588,8 +588,8 @@ class AnnouncementManager
                         );
 
                         if (($counter % $batchSize) === 0) {
-                             $em->flush();
-                             $em->clear();
+                            $em->flush();
+                            $em->clear();
                         }
                         $counter++;
                     }
@@ -610,8 +610,8 @@ class AnnouncementManager
                         );
 
                         if (($counter % $batchSize) === 0) {
-                             $em->flush();
-                             $em->clear();
+                            $em->flush();
+                            $em->clear();
                         }
                         $counter++;
                     }
@@ -642,7 +642,7 @@ class AnnouncementManager
         $newContent,
         $to,
         $to_users,
-        $file = array(),
+        $file = [],
         $file_comment = '',
         $sendToUsersInSession = false
     ) {
@@ -749,7 +749,7 @@ class AnnouncementManager
         $title,
         $newContent,
         $to,
-        $file = array(),
+        $file = [],
         $file_comment = '',
         $sendToUsersInSession = false
     ) {
@@ -958,7 +958,7 @@ class AnnouncementManager
             $num_rows = Database::num_rows($rs);
             $content = '';
             $i = 0;
-            $result = array();
+            $result = [];
             if ($num_rows > 0) {
                 while ($myrow = Database::fetch_array($rs)) {
                     $content .= '<strong>'.$myrow['title'].'</strong><br /><br />';
@@ -1054,7 +1054,7 @@ class AnnouncementManager
         $sql = "SELECT * FROM $table
                 WHERE c_id = $courseId AND tool='$tool' AND ref = $id";
         $result = Database::query($sql);
-        $to = array();
+        $to = [];
         while ($row = Database::fetch_array($result)) {
             $to_group = $row['to_group_id'];
             switch ($to_group) {
@@ -1105,7 +1105,7 @@ class AnnouncementManager
         $total_numbers = $number_users + $number_groups;
 
         // starting the form if there is more than one user/group
-        $output = array();
+        $output = [];
         if ($total_numbers > 1) {
             // outputting the name of the groups
             if (is_array($sent_to_array['groups'])) {
@@ -1163,8 +1163,8 @@ class AnnouncementManager
         $tool = Database::escape_string($tool);
         $id = (int) $id;
 
-        $sent_to_group = array();
-        $sent_to = array();
+        $sent_to_group = [];
+        $sent_to = [];
         $courseId = api_get_course_int_id();
 
         $sql = "SELECT to_group_id, to_user_id
@@ -1209,7 +1209,7 @@ class AnnouncementManager
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $announcementId = intval($announcementId);
         $courseId = api_get_course_int_id();
-        $row = array();
+        $row = [];
         $sql = 'SELECT id, path, filename, comment 
                 FROM '.$table.'
 				WHERE c_id = ' . $courseId.' AND announcement_id = '.$announcementId;
@@ -1671,7 +1671,6 @@ class AnnouncementManager
                                 announcement.session_id IN ( 0,".api_get_session_id().")
                             $groupBy
                             ";
-
                 }
             }
         }
@@ -1753,7 +1752,7 @@ class AnnouncementManager
                 $username_span = Display::tag(
                     'span',
                     $user_info['complete_name'],
-                    array('title' => $username)
+                    ['title' => $username]
                 );
 
                 $title = Display::url(

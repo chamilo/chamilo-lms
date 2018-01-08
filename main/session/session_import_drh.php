@@ -15,11 +15,11 @@ api_protect_limit_for_session_admin();
 $form_sent = 0;
 $tool_name = get_lang('ImportSessionDrhList');
 
-$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
 
 set_time_limit(0);
 
-$inserted_in_course = array();
+$inserted_in_course = [];
 
 // Display the header.
 Display::display_header($tool_name);
@@ -35,7 +35,10 @@ if (!empty($error_message)) {
 
 $form = new FormValidator(
     'import_sessions',
-    'post', api_get_self(), null, array('enctype' => 'multipart/form-data')
+    'post',
+    api_get_self(),
+    null,
+    ['enctype' => 'multipart/form-data']
 );
 
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));

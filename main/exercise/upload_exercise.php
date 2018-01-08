@@ -32,10 +32,10 @@ $(document).ready( function(){
 // Action handling
 lp_upload_quiz_action_handling();
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => "exercise.php?".api_get_cidreq(),
     "name" => get_lang('Exercises')
-);
+];
 
 // Display the header
 Display :: display_header(get_lang('ImportExcelQuiz'), 'Exercises');
@@ -69,7 +69,7 @@ function lp_upload_quiz_main()
         'POST',
         api_get_self().'?'.api_get_cidreq().'&lp_id='.$lp_id,
         '',
-        array('enctype' => 'multipart/form-data')
+        ['enctype' => 'multipart/form-data']
     );
     $form->addElement('header', get_lang('ImportExcelQuiz'));
     $form->addElement('file', 'user_upload_quiz', get_lang('FileUpload'));
@@ -78,16 +78,16 @@ function lp_upload_quiz_main()
         Display::return_icon('export_excel.png', get_lang('DownloadExcelTemplate')).get_lang('DownloadExcelTemplate').'</a>';
     $form->addElement('label', '', $link);
 
-    $table = new HTML_Table(array('class' => 'table'));
+    $table = new HTML_Table(['class' => 'table']);
 
-    $tableList = array(
+    $tableList = [
         UNIQUE_ANSWER => get_lang('UniqueSelect'),
         MULTIPLE_ANSWER => get_lang('MultipleSelect'),
         FILL_IN_BLANKS => get_lang('FillBlanks'),
         MATCHING => get_lang('Matching'),
         FREE_ANSWER => get_lang('FreeAnswer'),
         GLOBAL_MULTIPLE_ANSWER => get_lang('GlobalMultipleAnswer')
-    );
+    ];
 
     $table->setHeaderContents(0, 0, get_lang('QuestionType'));
     $table->setHeaderContents(0, 1, '#');
@@ -106,7 +106,7 @@ function lp_upload_quiz_main()
         'user_custom_score',
         null,
         get_lang('UseCustomScoreForAllQuestions'),
-        array('id' => 'user_custom_score')
+        ['id' => 'user_custom_score']
     );
     $form->addElement('html', '<div id="options" style="display:none">');
     $form->addElement('text', 'correct_score', get_lang('CorrectScore'));

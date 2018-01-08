@@ -49,10 +49,10 @@ if (function_exists('ini_set')) {
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('CopyCourse');
 $returnLink = api_get_path(WEB_CODE_PATH).'course_info/maintenance_coach.php?'.api_get_cidreq();
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => $returnLink,
     'name' => get_lang('Maintenance')
-);
+];
 
 // Database Table Definitions
 $tbl_session_rel_course_rel_user = Database::get_main_table(
@@ -65,7 +65,7 @@ $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 /**
  * @param string $name
  */
-function make_select_session_list($name, $sessions, $attr = array())
+function make_select_session_list($name, $sessions, $attr = [])
 {
     $attrs = '';
     if (count($attr) > 0) {
@@ -118,7 +118,10 @@ function displayForm()
     $html .= '<div class="actions">';
     // Link back to the documents overview
     $html .= '<a href="'.$returnLink.'">'.Display::return_icon(
-            'back.png', get_lang('BackTo').' '.get_lang('Maintenance'), '', ICON_SIZE_MEDIUM
+            'back.png',
+        get_lang('BackTo').' '.get_lang('Maintenance'),
+        '',
+        ICON_SIZE_MEDIUM
         ).'</a>';
     $html .= '</div>';
 
@@ -212,7 +215,9 @@ function searchCourses($idSession, $type)
             $courseTitle = str_replace("'", "\'", $course['title']);
 
             $return .= '<option value="'.$course['code'].'" title="'.@htmlspecialchars(
-                    $course['title'].' ('.$course['visual_code'].')', ENT_QUOTES, api_get_system_encoding()
+                    $course['title'].' ('.$course['visual_code'].')',
+                ENT_QUOTES,
+                api_get_system_encoding()
                 ).'">'.
                 $course['title'].' ('.$course['visual_code'].')</option>';
         }
@@ -300,8 +305,8 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
 
         displayForm();
     } else {
-        $arrCourseOrigin = array();
-        $arrCourseDestination = array();
+        $arrCourseOrigin = [];
+        $arrCourseDestination = [];
         $destinationSession = '';
 
         if (isset($_POST['SessionCoursesListDestination'])) {
@@ -357,7 +362,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
         );
     }
 
-    $arrCourseDestination = array();
+    $arrCourseDestination = [];
     $destinationSession = '';
 
     if (isset($_POST['SessionCoursesListDestination'])) {
@@ -388,7 +393,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
                 get_lang('Back').' '.get_lang('To').' '.get_lang(
                     'PlatformAdmin'
                 ),
-                array('style' => 'vertical-align:middle')
+                ['style' => 'vertical-align:middle']
             ).
             get_lang('Back').'</a></div>';
     } else {

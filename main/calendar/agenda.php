@@ -108,7 +108,7 @@ if ($allowToEdit) {
     switch ($action) {
         case 'add':
             $actionName = get_lang('Add');
-            $form = $agenda->getForm(array('action' => 'add'));
+            $form = $agenda->getForm(['action' => 'add']);
 
             if ($form->validate()) {
                 $values = $form->getSubmitValues();
@@ -244,7 +244,7 @@ if ($allowToEdit) {
                     );
                 }
 
-                $deleteAttachmentList = isset($values['delete_attachment']) ? $values['delete_attachment'] : array();
+                $deleteAttachmentList = isset($values['delete_attachment']) ? $values['delete_attachment'] : [];
 
                 if (!empty($deleteAttachmentList)) {
                     foreach ($deleteAttachmentList as $deleteAttachmentId => $value) {
@@ -297,20 +297,20 @@ if ($allowToEdit) {
 
 if (!empty($group_id)) {
     $group_properties = GroupManager :: get_group_properties($group_id);
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
         "name" => get_lang('Groups')
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
         "name" => get_lang('GroupSpace').' '.$group_properties['name']
-    );
+    ];
 }
 if (!empty($actionName)) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => $url,
         "name" => get_lang('Agenda')
-    );
+    ];
 }
 
 // Tool introduction

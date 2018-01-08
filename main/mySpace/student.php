@@ -19,20 +19,20 @@ api_block_anonymous_users();
 
 $this_section = SECTION_TRACKING;
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => api_is_student_boss() ? "#" : "index.php",
     "name" => get_lang('MySpace')
-);
+];
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => "teachers.php",
         "name" => get_lang('Teachers')
-    );
+    ];
 }
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && isset($_GET["type"]) && $_GET["type"] == "coach") {
-    $interbreadcrumb[] = array("url" => "coaches.php", "name" => get_lang('Tutors'));
+    $interbreadcrumb[] = ["url" => "coaches.php", "name" => get_lang('Tutors')];
 }
 
 function get_count_users()
@@ -116,7 +116,7 @@ function get_users($from, $limit, $column, $direction)
 
     $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php';
 
-    $all_datas = array();
+    $all_datas = [];
     foreach ($students as $student_data) {
         $student_id = $student_data['user_id'];
         if (isset($_GET['id_session'])) {
@@ -156,7 +156,7 @@ function get_users($from, $limit, $column, $direction)
             $urlDetails = $url."?student=$student_id&id_coach=$coach_id&id_session=$sessionId";
         }
 
-        $row = array();
+        $row = [];
         if ($is_western_name_order) {
             $first = Display::url($student_data['firstname'], $urlDetails);
             $last = Display::url($student_data['lastname'], $urlDetails);
@@ -208,32 +208,32 @@ $sort_by_first_name = api_sort_by_first_name();
 $actionsLeft = '';
 
 if (api_is_drh()) {
-    $menu_items = array(
+    $menu_items = [
         Display::url(
             Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
         ),
         Display::url(
-            Display::return_icon('user_na.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM),
+            Display::return_icon('user_na.png', get_lang('Students'), [], ICON_SIZE_MEDIUM),
             '#'
         ),
         Display::url(
-            Display::return_icon('teacher.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM),
+            Display::return_icon('teacher.png', get_lang('Trainers'), [], ICON_SIZE_MEDIUM),
             'teachers.php'
         ),
         Display::url(
-            Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_MEDIUM),
+            Display::return_icon('course.png', get_lang('Courses'), [], ICON_SIZE_MEDIUM),
             'course.php'
         ),
         Display::url(
-            Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM),
+            Display::return_icon('session.png', get_lang('Sessions'), [], ICON_SIZE_MEDIUM),
             'session.php'
         ),
         Display::url(
-            Display::return_icon('skills.png', get_lang('Skills'), array(), ICON_SIZE_MEDIUM),
+            Display::return_icon('skills.png', get_lang('Skills'), [], ICON_SIZE_MEDIUM),
             'skills.php'
         )
-    );
+    ];
 
     $nb_menu_items = count($menu_items);
     if ($nb_menu_items > 1) {
@@ -247,11 +247,11 @@ if (api_is_drh()) {
         api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
     );
     $actionsLeft .= Display::url(
-        Display::return_icon('user_na.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM),
+        Display::return_icon('user_na.png', get_lang('Students'), [], ICON_SIZE_MEDIUM),
         '#'
     );
     $actionsLeft .= Display::url(
-        Display::return_icon("statistics.png", get_lang("CompanyReport"), array(), ICON_SIZE_MEDIUM),
+        Display::return_icon("statistics.png", get_lang("CompanyReport"), [], ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH)."mySpace/company_reports.php"
     );
     $actionsLeft .= Display::url(
@@ -267,12 +267,12 @@ if (api_is_drh()) {
 
 $actionsRight = '';
 $actionsRight .= Display::url(
-    Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM),
+    Display::return_icon('printer.png', get_lang('Print'), [], ICON_SIZE_MEDIUM),
     'javascript: void(0);',
-    array('onclick'=>'javascript: window.print();')
+    ['onclick'=>'javascript: window.print();']
 );
 $actionsRight .= Display::url(
-    Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM),
+    Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
     api_get_self().'?export=csv&keyword='.$keyword
 );
 
@@ -286,11 +286,11 @@ $table = new SortableTable(
     10
 );
 
-$params = array(
+$params = [
     'keyword' => $keyword,
     'active' => $active,
     'sleeping_days' => $sleepingDays
-);
+];
 $table->set_additional_parameters($params);
 
 if ($is_western_name_order) {
@@ -307,19 +307,19 @@ $table->set_header(4, get_lang('Details'), false);
 
 if ($export_csv) {
     if ($is_western_name_order) {
-        $csv_header[] = array(
+        $csv_header[] = [
             get_lang('FirstName'),
             get_lang('LastName'),
             get_lang('FirstLogin'),
             get_lang('LastConnexion')
-        );
+        ];
     } else {
-        $csv_header[] = array(
+        $csv_header[] = [
             get_lang('LastName'),
             get_lang('FirstName'),
             get_lang('FirstLogin'),
             get_lang('LastConnexion')
-        );
+        ];
     }
 }
 

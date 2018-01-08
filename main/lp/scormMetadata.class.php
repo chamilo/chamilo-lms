@@ -16,7 +16,7 @@ class scormMetadata
     public $schemaversion = '';
     public $location = '';
     public $text = '';
-    public $attribs = array();
+    public $attribs = [];
 
     /**
      * Class constructor. Works in two different ways defined by the first element, being 'db' or 'manifest'.

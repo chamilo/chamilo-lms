@@ -25,7 +25,6 @@ class WSCMAnnouncements extends WSCM
             }
 
             return $announcements;
-
         } else {
             return get_lang('InvalidId');
         }
@@ -80,7 +79,6 @@ class WSCMAnnouncements extends WSCM
             return (htmlcode) ? html_entity_decode(
                 $announcements[0][$field_table]
             ) : $announcements[0][$field_table];
-
         } else {
             return get_lang('InvalidId');
         }

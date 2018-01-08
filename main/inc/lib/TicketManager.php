@@ -63,7 +63,7 @@ class TicketManager
                 WHERE project.id  = $projectId
                 ORDER BY $order";
         $result = Database::query($sql);
-        $types = array();
+        $types = [];
         while ($row = Database::fetch_assoc($result)) {
             $types[] = $row;
         }
@@ -84,7 +84,7 @@ class TicketManager
         $sql = "SELECT id, name, description, total_tickets
                 FROM $table";
 
-        if (!in_array($direction, array('ASC', 'DESC'))) {
+        if (!in_array($direction, ['ASC', 'DESC'])) {
             $direction = 'ASC';
         }
         $column = intval($column);
@@ -95,7 +95,7 @@ class TicketManager
         $sql .= " LIMIT $from,$numberItems";
 
         $result = Database::query($sql);
-        $types = array();
+        $types = [];
         while ($row = Database::fetch_array($result)) {
             $types[] = $row;
         }
@@ -258,7 +258,7 @@ class TicketManager
         $table = Database::get_main_table(TABLE_TICKET_STATUS);
         $sql = "SELECT * FROM ".$table;
         $result = Database::query($sql);
-        $types = array();
+        $types = [];
         while ($row = Database::fetch_assoc($result)) {
             $types[] = $row;
         }
@@ -905,7 +905,7 @@ class TicketManager
         $sql .= " LIMIT $from, $number_of_items";
 
         $result = Database::query($sql);
-        $tickets = array();
+        $tickets = [];
         $webPath = api_get_path(WEB_PATH);
         while ($row = Database::fetch_assoc($result)) {
             $userInfo = api_get_user_info($row['sys_insert_user_id']);
@@ -954,7 +954,7 @@ class TicketManager
             $icon .= '<a href="ticket_details.php?ticket_id='.$row['id'].'">'.$row['code'].'</a>';
 
             if ($isAdmin) {
-                $ticket = array(
+                $ticket = [
                     $icon.' '.$row['subject'],
                     $row['status_name'],
                     $row['start_date'],
@@ -963,15 +963,15 @@ class TicketManager
                     $name,
                     $row['assigned_last_user'],
                     $row['total_messages']
-                );
+                ];
             } else {
-                $ticket = array(
+                $ticket = [
                     $icon.' '.$row['subject'],
                     $row['status_name'],
                     $row['start_date'],
                     $row['sys_lastedit_datetime'],
                     $row['category_name']
-                );
+                ];
             }
             if ($isAdmin) {
                 $ticket['0'] .= '&nbsp;&nbsp;<a  href="javascript:void(0)" onclick="load_history_ticket(\'div_'.$row['ticket_id'].'\','.$row['ticket_id'].')">
@@ -1140,7 +1140,7 @@ class TicketManager
 		        WHERE
                     ticket.id = $ticketId ";
         $result = Database::query($sql);
-        $ticket = array();
+        $ticket = [];
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_assoc($result)) {
                 $row['course'] = null;
@@ -1188,7 +1188,7 @@ class TicketManager
                     WHERE
                         message.ticket_id = '$ticketId' ";
             $result = Database::query($sql);
-            $ticket['messages'] = array();
+            $ticket['messages'] = [];
             $attach_icon = Display::return_icon('attachment.gif', '');
             $webPath = api_get_path(WEB_CODE_PATH);
             while ($row = Database::fetch_assoc($result)) {
@@ -1696,7 +1696,7 @@ class TicketManager
         $sql .= " LIMIT $from,$number_of_items";
 
         $result = Database::query($sql);
-        $tickets[0] = array(
+        $tickets[0] = [
             utf8_decode('Ticket#'),
             utf8_decode('Fecha'),
             utf8_decode('Fecha Edicion'),
@@ -1706,7 +1706,7 @@ class TicketManager
             utf8_decode('Mensajes'),
             utf8_decode('Responsable'),
             utf8_decode('Programa'),
-        );
+        ];
 
         while ($row = Database::fetch_assoc($result)) {
             if ($row['responsable'] != 0) {
@@ -1797,9 +1797,9 @@ class TicketManager
         return 0;
     }
 
-     /**
-     * @return array
-     */
+    /**
+    * @return array
+    */
     public static function getPriorityList()
     {
         $projects = Database::getManager()->getRepository('ChamiloTicketBundle:Priority')->findAll();
@@ -2237,7 +2237,7 @@ class TicketManager
         ];
     }
 
-        /**
+    /**
      * @return array
      */
     public static function getDefaultPriorityList()

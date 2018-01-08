@@ -53,14 +53,14 @@ class Answer
     public function __construct($questionId, $course_id = 0, $exercise = null)
     {
         $this->questionId = intval($questionId);
-        $this->answer = array();
-        $this->correct = array();
-        $this->comment = array();
-        $this->weighting = array();
-        $this->position = array();
-        $this->hotspot_coordinates = array();
-        $this->hotspot_type = array();
-        $this->destination = array();
+        $this->answer = [];
+        $this->correct = [];
+        $this->comment = [];
+        $this->weighting = [];
+        $this->position = [];
+        $this->hotspot_coordinates = [];
+        $this->hotspot_type = [];
+        $this->destination = [];
         // clears $new_* arrays
         $this->cancel();
 
@@ -96,15 +96,15 @@ class Answer
      */
     public function cancel()
     {
-        $this->new_answer = array();
-        $this->new_correct = array();
-        $this->new_comment = array();
-        $this->new_weighting = array();
-        $this->new_position = array();
-        $this->new_hotspot_coordinates = array();
-        $this->new_hotspot_type = array();
+        $this->new_answer = [];
+        $this->new_correct = [];
+        $this->new_comment = [];
+        $this->new_weighting = [];
+        $this->new_position = [];
+        $this->new_hotspot_coordinates = [];
+        $this->new_hotspot_type = [];
         $this->new_nbrAnswers = 0;
-        $this->new_destination = array();
+        $this->new_destination = [];
     }
 
     /**
@@ -166,12 +166,12 @@ class Answer
         return [];
     }
 
-     /**
-     * returns all answer ids from this question Id
-     *
-     * @author Yoselyn Castillo
-     * @return array - $id (answer ids)
-     */
+    /**
+    * returns all answer ids from this question Id
+    *
+    * @author Yoselyn Castillo
+    * @return array - $id (answer ids)
+    */
     public function selectAnswerId()
     {
         $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
@@ -182,7 +182,7 @@ class Answer
               WHERE c_id = {$this->course_id} AND question_id ='".$questionId."'";
 
         $result = Database::query($sql);
-        $id = array();
+        $id = [];
         // while a record is found
         if (Database::num_rows($result) > 0) {
             while ($object = Database::fetch_array($result)) {
@@ -394,7 +394,7 @@ class Answer
      */
     public function getAnswersList($decode = false)
     {
-        $list = array();
+        $list = [];
         for ($i = 1; $i <= $this->nbrAnswers; $i++) {
             if (!empty($this->answer[$i])) {
                 //Avoid problems when parsing elements with accents
@@ -411,7 +411,7 @@ class Answer
                     );
                 }
 
-                $list[] = array(
+                $list[] = [
                     'id' => $i,
                     'answer' => $this->answer[$i],
                     'comment' => $this->comment[$i],
@@ -420,7 +420,7 @@ class Answer
                     'hotspot_type' => $this->hotspot_type[$i],
                     'correct' => $this->correct[$i],
                     'destination' => $this->destination[$i],
-                );
+                ];
             }
         }
 
@@ -434,7 +434,7 @@ class Answer
      */
     public function getGradesList()
     {
-        $list = array();
+        $list = [];
         for ($i = 0; $i < $this->nbrAnswers; $i++) {
             if (!empty($this->answer[$i])) {
                 $list[$i] = $this->weighting[$i];
@@ -803,7 +803,7 @@ class Answer
             $course_info = $this->course;
         }
 
-        $fixed_list = array();
+        $fixed_list = [];
         $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
         if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE ||
@@ -845,7 +845,7 @@ class Answer
             $em = Database::getManager();
 
             if (in_array($newQuestion->type, [MATCHING, MATCHING_DRAGGABLE])) {
-                $temp = array();
+                $temp = [];
                 for ($i = 1; $i <= $this->nbrAnswers; $i++) {
                     $answer = [
                         'id' => $this->id[$i],
@@ -973,13 +973,13 @@ class Answer
                         Database::update(
                             $tableAnswer,
                             $params,
-                            array(
-                                'id = ? AND c_id = ? AND question_id = ? ' => array(
+                            [
+                                'id = ? AND c_id = ? AND question_id = ? ' => [
                                     $answer_id,
                                     $courseId,
                                     $newQuestionId,
-                                ),
-                            )
+                                ],
+                            ]
                         );
                     }
                 }

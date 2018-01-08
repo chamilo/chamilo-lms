@@ -63,22 +63,22 @@ if (!empty($workInfo) && !empty($workInfo['qualification'])) {
 $homework = get_work_assignment_by_id($workInfo['id']);
 $validationStatus = getWorkDateValidationStatus($homework);
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
     'name' => get_lang('StudentPublications')
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$work_id,
     'name' => $workInfo['title']
-);
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('UploadADocument'));
+];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('UploadADocument')];
 
 $form = new FormValidator(
     'form-work',
     'POST',
     api_get_self()."?".api_get_cidreq()."&id=".$work_id,
     '',
-    array('enctype' => "multipart/form-data")
+    ['enctype' => "multipart/form-data"]
 );
 
 setWorkUploadForm($form, $workInfo['allow_text_assignment']);
@@ -130,7 +130,7 @@ if ($form->validate()) {
 
 $url = api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq().'&a=upload_file&id='.$work_id;
 
-$htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'));
+$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 $htmlHeadXtra[] = to_javascript_work();
 Display::display_header(null);
 
@@ -138,17 +138,17 @@ Display::display_header(null);
 if ($workInfo['allow_text_assignment'] == 1) {
     $tabs = $form->returnForm();
 } else {
-    $headers = array(
+    $headers = [
         get_lang('Upload'),
         get_lang('Upload').' ('.get_lang('Simple').')',
-    );
+    ];
 
     $multipleForm = new FormValidator('post');
     $multipleForm->addMultipleUpload($url, $urlToRedirect);
 
     $tabs = Display::tabs(
         $headers,
-        array($multipleForm->returnForm(), $form->returnForm()),
+        [$multipleForm->returnForm(), $form->returnForm()],
         'tabs'
     );
 }

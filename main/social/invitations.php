@@ -16,8 +16,8 @@ if (api_get_setting('allow_social_tool') !== 'true') {
 
 $this_section = SECTION_SOCIAL;
 
-$interbreadcrumb[] = array('url' =>'profile.php', 'name' => get_lang('SocialNetwork'));
-$interbreadcrumb[] = array('url' =>'#', 'name' => get_lang('Invitations'));
+$interbreadcrumb[] = ['url' =>'profile.php', 'name' => get_lang('SocialNetwork')];
+$interbreadcrumb[] = ['url' =>'#', 'name' => get_lang('Invitations')];
 
 $userGroupModel = new UserGroup();
 
@@ -29,10 +29,10 @@ if (is_array($_GET) && count($_GET) > 0) {
 
                 if (in_array(
                     $useRole,
-                    array(
+                    [
                         GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER,
                         GROUP_USER_PERMISSION_PENDING_INVITATION
-                    )
+                    ]
                 )) {
                     $userGroupModel->update_user_role(api_get_user_id(), $value, GROUP_USER_PERMISSION_READER);
 
@@ -46,11 +46,11 @@ if (is_array($_GET) && count($_GET) > 0) {
 
                 if (in_array(
                     $useRole,
-                    array(
+                    [
                         GROUP_USER_PERMISSION_READER,
                         GROUP_USER_PERMISSION_ADMIN,
                         GROUP_USER_PERMISSION_MODERATOR
-                    )
+                    ]
                 )) {
                     Display::addFlash(
                         Display::return_message(get_lang('UserIsAlreadySubscribedToThisGroup'), 'warning')
@@ -192,7 +192,7 @@ if (count($list_get_invitation_sent) > 0) {
 }
 
 if (count($pending_invitations) > 0) {
-    $new_invitation = array();
+    $new_invitation = [];
     $waitingInvitation = '';
     foreach ($pending_invitations as $invitation) {
         $picture = $userGroupModel->get_picture_group(

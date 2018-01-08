@@ -181,15 +181,14 @@ switch ($action) {
                     if ($all_result_data == 0) {
                         echo api_xml_http_response_encode(get_lang('NoDataAvailable'));
                     }
-
                 } else {
-                        echo '<div class="clear"></div><br />';
-                        api_display_tool_title(api_xml_http_response_encode(get_lang('Details')));
-                        echo '<div style="background:#FAF9F6; padding:0px;">';
-                        echo api_xml_http_response_encode(get_lang('UserNonRegisteredAtTheCourse'));
-                        echo '<div class="clear"></div><br />';
-                        echo '</div>';
-                        echo '<div class="clear"></div><br />';
+                    echo '<div class="clear"></div><br />';
+                    api_display_tool_title(api_xml_http_response_encode(get_lang('Details')));
+                    echo '<div style="background:#FAF9F6; padding:0px;">';
+                    echo api_xml_http_response_encode(get_lang('UserNonRegisteredAtTheCourse'));
+                    echo '<div class="clear"></div><br />';
+                    echo '</div>';
+                    echo '<div class="clear"></div><br />';
                 }
                 break;
             case 'unload_course':
@@ -217,13 +216,13 @@ switch ($action) {
                     get_lang('SeeMore'),
                     api_get_self().'?u='.$userId.'&a=list_wall_message&start='.
                     ($start + $length + 1).'&length='.$length,
-                    array(
+                    [
                         'class' => 'nextPage',
-                    )
+                    ]
                 ),
-                array(
+                [
                     'class' => 'next',
-                )
+                ]
             );
             echo $html;
         }

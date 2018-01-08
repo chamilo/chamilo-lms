@@ -48,7 +48,8 @@ if (!is_dir($_configuration['root_sys'].'plugin/vchamilo/log')) {
 *
 *
 */
-function fire_vhost_cron($vhost) {
+function fire_vhost_cron($vhost)
+{
     global $VCRON;
 
     if ($VCRON->TRACE_ENABLE) {
@@ -67,13 +68,12 @@ function fire_vhost_cron($vhost) {
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_USERAGENT, 'Chamilo');
     curl_setopt($ch, CURLOPT_POSTFIELDS, '');
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: text/xml charset=UTF-8"));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: text/xml charset=UTF-8"]);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 
     // Check for proxy.
     if (!empty($http_proxy_host) && !is_proxybypass($uri)) {
-
         curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, false);
 
         if (empty($http_proxy_port)) {
@@ -131,8 +131,7 @@ function fire_vhost_cron($vhost) {
     $vhostid = $vhost->id;
     unset($vhost->id);
 
-    Database::update('vchamilo', (array) $vhost, array('id = ?' => $vhostid));
-
+    Database::update('vchamilo', (array) $vhost, ['id = ?' => $vhostid]);
 }
 
 /**
@@ -140,7 +139,8 @@ function fire_vhost_cron($vhost) {
 *
 *
 */
-function exec_vhost_cron($vhost) {
+function exec_vhost_cron($vhost)
+{
     global $VCRON, $DB, $_configuration;
 
     if ($VCRON->TRACE_ENABLE) {
@@ -228,7 +228,7 @@ function is_proxybypass($url)
 
 // Main execution sequence
 
-if (!$vchamilos = Database::select('*', 'vchamilo', array(), 'all')) {
+if (!$vchamilos = Database::select('*', 'vchamilo', [], 'all')) {
     die("Nothing to do. No Vhosts");
 }
 
@@ -267,8 +267,7 @@ if ($VCRON->STRATEGY == ROUND_ROBIN) {
     } else {
         fire_vhost_cron($firsthost);
     }
-
-} else if ($VCRON->STRATEGY == LOWEST_POSSIBLE_GAP) {
+} elseif ($VCRON->STRATEGY == LOWEST_POSSIBLE_GAP) {
     // First make measurement of cron period.
     if (api_get_setting('vcrontickperiod', 'vchamilo')) {
         api_set_setting('vcrontime', time(), 'vchamilo');
@@ -292,4 +291,3 @@ if ($VCRON->STRATEGY == ROUND_ROBIN) {
         }
     }
 }
-

@@ -51,7 +51,7 @@ class ChamiloApi
      */
     public static function getDocumentConversionSizes()
     {
-        return array(
+        return [
             '540x405' => '540x405 (3/4)',
             '640x480' => '640x480 (3/4)',
             '720x540' => '720x540 (3/4)',
@@ -62,7 +62,7 @@ class ChamiloApi
             '1280x860' => '1280x960 (3/4)',
             '1400x1050' => '1400x1050 (3/4)',
             '1600x900' => '1600x900 (16/9)',
-        );
+        ];
     }
 
     /**
@@ -193,7 +193,7 @@ class ChamiloApi
             $row = \Database::select(
                 'id',
                 \Database::get_main_table(TABLE_MAIN_COURSE),
-                array('where'=> array('directory = ?' => array($directory))),
+                ['where'=> ['directory = ?' => [$directory]]],
                 'first'
             );
 

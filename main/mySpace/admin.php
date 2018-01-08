@@ -15,7 +15,7 @@ $this_section = SECTION_TRACKING;
 $nameTools = get_lang('Administrators');
 
 api_block_anonymous_users();
-$interbreadcrumb[] = array("url" => "index.php", "name" => get_lang('MySpace'));
+$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
 Display :: display_header($nameTools);
 
 api_display_tool_title($nameTools);
@@ -55,7 +55,6 @@ $header[] = get_lang('Email', '');
 
 if (Database::num_rows($result_admins) > 0) {
     while ($admins = Database::fetch_array($result_admins)) {
-
         $user_id = $admins["user_id"];
         $lastname = $admins["lastname"];
         $firstname = $admins["firstname"];

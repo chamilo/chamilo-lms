@@ -235,8 +235,8 @@ class Category
      */
     public function getRouteParameters()
     {
-        return array(
+        return [
             'categorySlug' => $this->getSlug()
-        );
+        ];
     }
 }

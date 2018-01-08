@@ -116,7 +116,8 @@ class sso
                 global $_configuration;
                 // Two possible authentication methods here: legacy using password
                 // and new using a temporary, session-fixed, tempkey
-                if (($sso['username'] == $uData['username']
+                if ((
+                    $sso['username'] == $uData['username']
                         && $sso['secret'] === sha1(
                             $uData['username'].
                             Session::read('tempkey').
@@ -147,7 +148,7 @@ class sso
                                 $my_url_list = api_get_access_url_from_user($uData['user_id']);
                             } else {
                                 $current_access_url_id = 1;
-                                $my_url_list = array(1);
+                                $my_url_list = [1];
                             }
 
                             $my_user_is_admin = UserManager::is_admin($uData['user_id']);

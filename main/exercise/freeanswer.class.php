@@ -33,10 +33,10 @@ class FreeAnswer extends Question
         // setting the save button here and not in the question class.php
         $form->addButtonSave($text, 'submitQuestion');
         if (!empty($this->id)) {
-            $form->setDefaults(array('weighting' => float_format($this->weighting, 1)));
+            $form->setDefaults(['weighting' => float_format($this->weighting, 1)]);
         } else {
             if ($this->isContent == 1) {
-                $form->setDefaults(array('weighting' => '10'));
+                $form->setDefaults(['weighting' => '10']);
             }
         }
     }

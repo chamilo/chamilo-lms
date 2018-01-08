@@ -27,13 +27,13 @@ class KannelsmsPlugin extends SmsPlugin
      */
     public function __construct()
     {
-        $fields = array(
+        $fields = [
             'tool_enable' => 'boolean',
             'hostAddress' => 'text',
             'username' => 'text',
             'password' => 'text',
             'from' => 'text'
-        );
+        ];
         $smsTypeOptions = $this->getSmsTypeOptions();
         foreach ($smsTypeOptions as $smsTypeOption) {
             $fields[$smsTypeOption] = 'checkbox';

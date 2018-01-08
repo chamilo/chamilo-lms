@@ -147,7 +147,7 @@ function getInfoSpecialtyTutorial($tutorialId)
     global $tableSepeParticipantsSpecialtyTutorials;
     $sql = "SELECT * FROM $tableSepeParticipantsSpecialtyTutorials WHERE id = $tutorialId";
     $res = Database::query($sql);
-    $aux = array();
+    $aux = [];
     if (Database::num_rows($res) > 0) {
         $row = Database::fetch_assoc($res);
     } else {
@@ -174,7 +174,7 @@ function getCentersList()
     global $tableCenters;
     $sql = "SELECT * FROM $tableCenters;";
     $res = Database::query($sql);
-    $aux = array();
+    $aux = [];
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row;
     }
@@ -186,9 +186,9 @@ function listTutorType($condition)
     global $tableTutorCompany;
     $sql = "SELECT * FROM $tableTutorCompany WHERE ".$condition." ORDER BY alias ASC, document_number ASC;";
     $res = Database::query($sql);
-    $aux = array();
+    $aux = [];
     while ($row = Database::fetch_assoc($res)) {
-        $tmp = array();
+        $tmp = [];
         $tmp['id'] = $row['id'];
         if (trim($row['alias']) != '') {
             $tmp['alias'] = $row['alias'].' - '.$row['document_type'].' '.$row['document_number'].' '.$row['document_letter'];
@@ -207,17 +207,17 @@ function getTutorsSpecialty($specialtyId)
     global $tableUser;
     $sql = "SELECT tutor_id FROM $tableSepeSpecialtyTutors WHERE specialty_id = $specialtyId";
     $rs = Database::query($sql);
-    $tutorsList = array();
+    $tutorsList = [];
     while ($tmp = Database::fetch_assoc($rs)) {
         $tutorsList[] = $tmp['tutor_id'];
     }
     $sql = "SELECT a.*, b.firstname AS firstname, b.lastname AS lastname 
             FROM $tableSepeTutors AS a LEFT JOIN $tableUser AS b ON a.platform_user_id=b.user_id;";
     $res = Database::query($sql);
-    $aux = array();
+    $aux = [];
     while ($row = Database::fetch_assoc($res)) {
         if (!in_array($row['id'], $tutorsList)) {
-            $tutor = array();
+            $tutor = [];
             $tutor['id'] = $row['id'];
             if (trim($row['firstname']) != '' || trim($row['lastname']) != '') {
                 $tutor['data'] = $row['firstname'].' '.$row['lastname'].' ('.$row['document_type'].' '.$row['document_number'].' '.$row['document_letter'].' )';
@@ -239,7 +239,7 @@ function getInfoSpecialtyTutor($tutorId)
             INNER JOIN $tableSepeTutors b ON a.tutor_id=b.id 
             WHERE a.id = $tutorId;";
     $res = Database::query($sql);
-    $aux = array();
+    $aux = [];
     if (Database::num_rows($res) > 0) {
         $row['tutor_accreditation'] = Security::remove_XSS(stripslashes($row['tutor_accreditation']));
         $row['teaching_competence'] = Security::remove_XSS(stripslashes($row['teaching_competence']));
@@ -282,7 +282,7 @@ function getInfoParticipantAction($participantId)
     global $tableSepeParticipants;
     $sql = "SELECT * FROM $tableSepeParticipants WHERE id = $participantId";
     $res = Database::query($sql);
-    $aux = array();
+    $aux = [];
     if (Database::num_rows($res) > 0) {
         $row = Database::fetch_assoc($res);
         $result = [];
@@ -317,7 +317,7 @@ function getInfoSpecialtyParticipant($specialtyId)
     global $tableSepeParticipantsSpecialty;
     $sql = "SELECT * FROM $tableSepeParticipantsSpecialty WHERE id = $specialtyId";
     $res = Database::query($sql);
-    $aux = array();
+    $aux = [];
     if (Database::num_rows($res) > 0) {
         $row = Database::fetch_assoc($res);
         $row['specialty_origin'] = Security::remove_XSS(stripslashes($row['specialty_origin']));
@@ -341,7 +341,7 @@ function specialtyList($actionId)
             FROM $tableSepeSpecialty
             WHERE action_id = $actionId";
     $res = Database::query($sql);
-    $aux = array();
+    $aux = [];
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row;
     }
@@ -356,7 +356,7 @@ function participantList($actionId)
             FROM $tableSepeParticipants LEFT JOIN $tableUser ON $tableSepeParticipants.platform_user_id=$tableUser.user_id
             WHERE action_id = $actionId";
     $res = Database::query($sql);
-    $aux = array();
+    $aux = [];
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row;
     }
@@ -368,7 +368,7 @@ function listParticipantSpecialty($participantId)
     global $tableSepeParticipantsSpecialty;
     $sql = "SELECT * FROM $tableSepeParticipantsSpecialty WHERE participant_id = $participantId";
     $res = Database::query($sql);
-    $aux = array();
+    $aux = [];
     while ($row = Database::fetch_assoc($res)) {
         $row['specialty_origin'] = Security::remove_XSS(stripslashes($row['specialty_origin']));
         $row['professional_area'] = Security::remove_XSS(stripslashes($row['professional_area']));
@@ -391,7 +391,7 @@ function classroomList($specialtyId)
             FROM $tableSepeSpecialtyClassroom a LEFT JOIN $tableCenters b ON a.center_id=b.id 
             WHERE specialty_id = $specialtyId";
     $res = Database::query($sql);
-    $aux = array();
+    $aux = [];
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row;
     }
@@ -403,7 +403,7 @@ function tutorsList($specialtyId)
     global $tableSepeSpecialtyTutors;
     global $tableSepeTutors;
     global $tableUser;
-    $aux = array();
+    $aux = [];
     $sql = "SELECT a.*,document_type,document_number,document_letter, firstname, lastname FROM $tableSepeSpecialtyTutors a 
             INNER JOIN $tableSepeTutors b ON a.tutor_id=b.id 
             LEFT JOIN $tableUser c ON b.platform_user_id=c.user_id 
@@ -420,7 +420,7 @@ function getListSpecialtyTutorial($specialtyId)
     global $tableSepeParticipantsSpecialtyTutorials;
     $sql = "SELECT * FROM $tableSepeParticipantsSpecialtyTutorials WHERE participant_specialty_id = $specialtyId";
     $res = Database::query($sql);
-    $aux = array();
+    $aux = [];
     while ($row = Database::fetch_assoc($res)) {
         $row['tutor_accreditation'] = Security::remove_XSS(stripslashes($row['tutor_accreditation']));
         $row['teaching_competence'] = Security::remove_XSS(stripslashes($row['teaching_competence']));
@@ -439,7 +439,7 @@ function listCourseAction()
             WHERE $tableSepeCourseActions.course_id=course.id 
             AND $tableSepeActions.id=$tableSepeCourseActions.action_id";
     $res = Database::query($sql);
-    $aux = array();
+    $aux = [];
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row;
     }
@@ -470,7 +470,7 @@ function listActionFree()
                 SELECT * FROM $tableSepeCourseActions WHERE $tableSepeActions.id = $tableSepeCourseActions.action_id)
             ;";
     $res = Database::query($sql);
-    $aux = array();
+    $aux = [];
     while ($row = Database::fetch_assoc($res)) {
         $row['action_origin'] = Security::remove_XSS(stripslashes($row['action_origin']));
         $row['action_code'] = Security::remove_XSS(stripslashes($row['action_code']));

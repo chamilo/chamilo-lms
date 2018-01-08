@@ -42,10 +42,10 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
 
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $tool_name = get_lang('ConfigureInscription');
 if (!empty($action)) {
-    $interbreadcrumb[] = array('url' => 'configure_inscription.php', 'name' => get_lang('ConfigureInscription'));
+    $interbreadcrumb[] = ['url' => 'configure_inscription.php', 'name' => get_lang('ConfigureInscription')];
     switch ($action) {
         case 'edit_top':
             $tool_name = get_lang('EditTopRegister');
@@ -89,7 +89,7 @@ if (api_is_multiple_url_enabled()) {
 
 $topf = 'register_top'; //topf for Top File
 $ext = '.html'; //ext for HTML Extension - when used frequently, variables are
-$homef = array($topf);
+$homef = [$topf];
 
 // If language-specific file does not exist, create it by copying default file
 foreach ($homef as $my_file) {
@@ -182,12 +182,12 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
 if ($display_all_form) {
     if (api_is_western_name_order()) {
         //	FIRST NAME and LAST NAME
-        $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40, 'disabled' => 'disabled'));
-        $form->addElement('text', 'lastname', get_lang('LastName'), array('size' => 40, 'disabled' => 'disabled'));
+        $form->addElement('text', 'firstname', get_lang('FirstName'), ['size' => 40, 'disabled' => 'disabled']);
+        $form->addElement('text', 'lastname', get_lang('LastName'), ['size' => 40, 'disabled' => 'disabled']);
     } else {
         //	LAST NAME and FIRST NAME
-        $form->addElement('text', 'lastname', get_lang('LastName'), array('size' => 40, 'disabled' => 'disabled'));
-        $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40, 'disabled' => 'disabled'));
+        $form->addElement('text', 'lastname', get_lang('LastName'), ['size' => 40, 'disabled' => 'disabled']);
+        $form->addElement('text', 'firstname', get_lang('FirstName'), ['size' => 40, 'disabled' => 'disabled']);
     }
     $form->applyFilter('firstname', 'trim');
     $form->applyFilter('lastname', 'trim');
@@ -195,32 +195,32 @@ if ($display_all_form) {
     $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 
     //	EMAIL
-    $form->addElement('text', 'email', get_lang('Email'), array('size' => 40, 'disabled' => 'disabled'));
+    $form->addElement('text', 'email', get_lang('Email'), ['size' => 40, 'disabled' => 'disabled']);
     if (api_get_setting('registration', 'email') == 'true') {
         $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
     }
     $form->addRule('email', get_lang('EmailWrong'), 'email');
     if (api_get_setting('openid_authentication') == 'true') {
-        $form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40, 'disabled' => 'disabled'));
+        $form->addElement('text', 'openid', get_lang('OpenIDURL'), ['size' => 40, 'disabled' => 'disabled']);
     }
 
     //	USERNAME
-    $form->addElement('text', 'username', get_lang('UserName'), array('size' => USERNAME_MAX_LENGTH, 'disabled' => 'disabled'));
+    $form->addElement('text', 'username', get_lang('UserName'), ['size' => USERNAME_MAX_LENGTH, 'disabled' => 'disabled']);
     $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('username', get_lang('UsernameWrong'), 'username');
     $form->addRule('username', get_lang('UserTaken'), 'username_available');
     $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
 
     //	PASSWORD
-    $form->addElement('password', 'pass1', get_lang('Pass'), array('size' => 40, 'disabled' => 'disabled'));
-    $form->addElement('password', 'pass2', get_lang('Confirmation'), array('size' => 40, 'disabled' => 'disabled'));
+    $form->addElement('password', 'pass1', get_lang('Pass'), ['size' => 40, 'disabled' => 'disabled']);
+    $form->addElement('password', 'pass2', get_lang('Confirmation'), ['size' => 40, 'disabled' => 'disabled']);
     $form->addRule('pass1', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addRule(array('pass1', 'pass2'), get_lang('PassTwo'), 'compare');
+    $form->addRule(['pass1', 'pass2'], get_lang('PassTwo'), 'compare');
     $form->addPasswordRule('pass1');
 
     //	PHONE
-    $form->addElement('text', 'phone', get_lang('Phone'), array('size' => 40, 'disabled' => 'disabled'));
+    $form->addElement('text', 'phone', get_lang('Phone'), ['size' => 40, 'disabled' => 'disabled']);
     if (api_get_setting('registration', 'phone') == 'true') {
         $form->addRule('phone', get_lang('ThisFieldIsRequired'), 'required');
     }
@@ -231,39 +231,39 @@ if ($display_all_form) {
             'language',
             get_lang('Language'),
             '',
-            array('disabled' => 'disabled')
+            ['disabled' => 'disabled']
         );
     }
 
     //	STUDENT/TEACHER
     if (api_get_setting('allow_registration_as_teacher') != 'false') {
-        $form->addElement('radio', 'status', get_lang('Status'), get_lang('RegStudent'), STUDENT, array('disabled' => 'disabled'));
-        $form->addElement('radio', 'status', null, get_lang('RegAdmin'), COURSEMANAGER, array('disabled' => 'disabled'));
+        $form->addElement('radio', 'status', get_lang('Status'), get_lang('RegStudent'), STUDENT, ['disabled' => 'disabled']);
+        $form->addElement('radio', 'status', null, get_lang('RegAdmin'), COURSEMANAGER, ['disabled' => 'disabled']);
     }
 
     //	EXTENDED FIELDS
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true'
     ) {
-        $form->addHtmlEditor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
+        $form->addHtmlEditor('competences', get_lang('MyCompetences'), false, false, ['ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130']);
     }
 
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true'
     ) {
-        $form->addHtmlEditor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
+        $form->addHtmlEditor('diplomas', get_lang('MyDiplomas'), false, false, ['ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130']);
     }
 
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'myteach') == 'true'
     ) {
-        $form->addHtmlEditor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
+        $form->addHtmlEditor('teach', get_lang('MyTeach'), false, false, ['ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130']);
     }
 
     if (api_get_setting('extended_profile') == 'true' &&
         api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true'
     ) {
-        $form->addHtmlEditor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
+        $form->addHtmlEditor('openarea', get_lang('MyPersonalOpenArea'), false, false, ['ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130']);
     }
 
     if (api_get_setting('extended_profile') == 'true') {
@@ -366,13 +366,13 @@ switch ($action) {
             echo Display::return_message($errorMsg, 'normal');
         }
 
-        $default = array();
+        $default = [];
         $form = new FormValidator(
             'configure_inscription_'.$action,
             'post',
             api_get_self().'?action='.$action,
             '',
-            array('style' => 'margin: 0px;')
+            ['style' => 'margin: 0px;']
         );
         $renderer = & $form->defaultRenderer();
         $renderer->setHeaderTemplate('');
@@ -386,11 +386,11 @@ switch ($action) {
             '',
             true,
             false,
-            array(
+            [
                 'ToolbarSet' => 'PortalHomePage',
                 'Width' => '100%',
                 'Height' => '400'
-            )
+            ]
         );
         $form->addButtonSave(get_lang('Save'));
         $form->setDefaults($default);

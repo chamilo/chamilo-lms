@@ -21,7 +21,7 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -51,9 +51,9 @@ class DefaultController extends Controller
 
         return $this->render(
             'ChamiloThemeBundle:Default:form.html.twig',
-            array(
+            [
                 'form' => $form->createView(),
-            )
+            ]
         );
     }
 }

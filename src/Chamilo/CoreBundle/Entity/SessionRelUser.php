@@ -81,10 +81,10 @@ class SessionRelUser
      */
     private $registeredAt;
 
-    public $relationTypeList = array(
+    public $relationTypeList = [
         0 => 'student',
         1 => 'drh'
-    );
+    ];
 
     /**
      * Constructor

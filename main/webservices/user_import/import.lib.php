@@ -5,12 +5,12 @@
 function validate_data($users)
 {
     global $defined_auth_sources;
-    $errors = array();
-    $usernames = array();
+    $errors = [];
+    $usernames = [];
     if (is_array($users)) {
         foreach ($users as $index => $user) {
             // 1. Check whether mandatory fields have been set.
-            $mandatory_fields = array('LastName', 'FirstName');
+            $mandatory_fields = ['LastName', 'FirstName'];
             if (api_get_setting('registration', 'email') == 'true') {
                 $mandatory_fields[] = 'Email';
             }

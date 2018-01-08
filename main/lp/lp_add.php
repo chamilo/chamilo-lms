@@ -55,16 +55,16 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
 */
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
-    );
+    ];
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list',
     'name' => get_lang('LearningPaths')
-);
+];
 
 Display::display_header(get_lang('LearnpathAddLearnpath'), 'Path');
 
@@ -102,7 +102,7 @@ $form->addElement(
     'text',
     'lp_name',
     api_ucfirst(get_lang('LPName')),
-    array('autofocus' => 'autofocus')
+    ['autofocus' => 'autofocus']
 );
 $form->applyFilter('lp_name', 'html_filter');
 $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
@@ -133,7 +133,7 @@ $form->addElement(
     'activate_start_date_check',
     null,
     get_lang('EnableStartTime'),
-    array('onclick' => 'activate_start_date()')
+    ['onclick' => 'activate_start_date()']
 );
 $form->addElement('html', '<div id="start_date_div" style="display:block;">');
 $form->addDatePicker('publicated_on', get_lang('PublicationDate'));
@@ -145,7 +145,7 @@ $form->addElement(
     'activate_end_date_check',
     null,
     get_lang('EnableEndTime'),
-    array('onclick' => 'activate_end_date()')
+    ['onclick' => 'activate_end_date()']
 );
 $form->addElement('html', '<div id="end_date_div" style="display:none;">');
 $form->addDatePicker('expired_on', get_lang('ExpirationDate'));

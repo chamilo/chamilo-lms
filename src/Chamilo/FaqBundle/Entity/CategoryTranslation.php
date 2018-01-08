@@ -100,8 +100,4 @@ class CategoryTranslation
 
         return $this;
     }
-
-
-
-
 }

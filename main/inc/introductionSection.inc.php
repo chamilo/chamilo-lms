@@ -54,11 +54,11 @@ if (!empty($courseId)) {
     $form = new FormValidator('introduction_text');
 }
 
-$config = array(
+$config = [
     'ToolbarSet' => 'IntroductionTool',
     'Width' => '100%',
     'Height' => '300'
-);
+];
 
 $form->addHtmlEditor('intro_content', null, false, false, $config, true);
 $form->addButtonSave(get_lang('SaveIntroText'), 'intro_cmdUpdate');
@@ -310,7 +310,6 @@ if ($intro_dispCommand) {
             $toolbar .= $editIconButton;
         }
         $toolbar .= '</div></div>';
-
     } else {
         // Displays "edit intro && delete intro" commands
         $toolbar .= '<div class="toolbar-edit">';
@@ -323,7 +322,6 @@ if ($intro_dispCommand) {
             $toolbar .= "<a class=\"btn btn-default\" href=\"".api_get_self()."?".api_get_cidreq()."&intro_cmdDel=1\" onclick=\"javascript:
                 if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
                 "')) return false;\"><em class=\"fa fa-trash-o\"></em></a>";
-
         } else {
             $toolbar .=
                 '<a class="btn btn-default" href="'.api_get_self().'?intro_cmdEdit=1" title="'.get_lang('Modify').'">

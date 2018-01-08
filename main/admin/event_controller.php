@@ -41,23 +41,23 @@ switch ($action) {
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_event_email_template';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = array(
+$columns = [
     get_lang('Subject'),
     get_lang('EventTypeName'),
     get_lang('Language'),
     get_lang('Status'),
     get_lang('Actions'),
-);
+];
 
 //Column config
-$column_model = array(
-    array('name' => 'subject', 'index' => 'subject', 'width' => '80', 'align' => 'left'),
+$column_model = [
+    ['name' => 'subject', 'index' => 'subject', 'width' => '80', 'align' => 'left'],
 //                        array('name'=>'message',        'index'=>'message', 'width'=>'500',  'align'=>'left','sortable'=>'false'),
-    array('name' => 'event_type_name', 'index' => 'event_type_name', 'width' => '80', 'align' => 'left'),
-    array('name' => 'language_id', 'index' => 'language_id', 'width' => '80', 'align' => 'left'),
-    array('name' => 'activated', 'index' => 'activated', 'width' => '80', 'align' => 'left'),
-    array('name' => 'actions', 'index' => 'actions', 'width' => '100'),
-);
+    ['name' => 'event_type_name', 'index' => 'event_type_name', 'width' => '80', 'align' => 'left'],
+    ['name' => 'language_id', 'index' => 'language_id', 'width' => '80', 'align' => 'left'],
+    ['name' => 'activated', 'index' => 'activated', 'width' => '80', 'align' => 'left'],
+    ['name' => 'actions', 'index' => 'actions', 'width' => '100'],
+];
 //Autowidth
 $extra_params['autowidth'] = 'true';
 //height auto
@@ -66,12 +66,12 @@ $extra_params['height'] = 'auto';
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = '<script>
 $(function() {
-    '.Display::grid_js('event_email_template', $url, $columns, $column_model, $extra_params, array(), $action_links, true).'
+    '.Display::grid_js('event_email_template', $url, $columns, $column_model, $extra_params, [], $action_links, true).'
 });
 </script>';
 
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Events'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Events')];
 
 $tpl = new Template($tool_name);
 $tpl->assign('message', $message);

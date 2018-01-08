@@ -23,7 +23,7 @@ class NavBuilder extends ContainerAware
      *
      * @return \Knp\Menu\ItemInterface
      */
-    public function createCategoryMenu(array $itemOptions = array(), $currentUri = null)
+    public function createCategoryMenu(array $itemOptions = [], $currentUri = null)
     {
         $factory = $this->container->get('knp_menu.factory');
         $menu = $factory->createItem('categories', $itemOptions);
@@ -37,12 +37,12 @@ class NavBuilder extends ContainerAware
      * @param array                   $options     The item options
      * @param string                  $currentUri  The current URI
      */
-    public function buildCategoryMenu(ItemInterface $menu, array $options = array(), $currentUri = null)
+    public function buildCategoryMenu(ItemInterface $menu, array $options = [], $currentUri = null)
     {
         //$categories = $this->categoryManager->getCategoryTree();
 
         //$this->fillMenu($menu, $categories, $options, $currentUri);
-        $menu->addChild('home', array('route' => 'home'));
+        $menu->addChild('home', ['route' => 'home']);
     }
 
     /**
@@ -61,64 +61,64 @@ class NavBuilder extends ContainerAware
 
         $menu->addChild(
             $translator->trans('Home'),
-            array('route' => 'home')
+            ['route' => 'home']
         );
 
         if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $menu->addChild(
                 $translator->trans('My courses'),
-                array('route' => 'userportal')
+                ['route' => 'userportal']
             );
 
             $menu->addChild(
                 $translator->trans('Personal agenda'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => 'calendar/agenda_js.php',
-                    ),
-                )
+                    ],
+                ]
             );
 
             $menu->addChild(
                 $translator->trans('Reporting'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => 'mySpace/index.php',
-                    ),
-                )
+                    ],
+                ]
             );
 
             $menu->addChild(
                 $translator->trans('Social network'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => 'social/home.php',
-                    ),
-                )
+                    ],
+                ]
             );
 
             if ($checker->isGranted('ROLE_ADMIN')) {
                 $menu->addChild(
                     $translator->trans('Dashboard'),
-                    array(
+                    [
                         'route' => 'main',
-                        'routeParameters' => array(
+                        'routeParameters' => [
                             'name' => 'dashboard/index.php',
-                        ),
-                    )
+                        ],
+                    ]
                 );
 
                 $menu->addChild(
                     $translator->trans('Administration'),
-                    array(
+                    [
                         'route' => 'main',
-                        'routeParameters' => array(
+                        'routeParameters' => [
                             'name' => 'social/home.php',
-                        )
-                    )
+                        ]
+                    ]
                 );
             }
         }
@@ -135,13 +135,13 @@ class NavBuilder extends ContainerAware
             foreach ($categories as $category) {
                 $faq->addChild(
                     $category->getHeadline(),
-                    array(
+                    [
                         'route' => 'faq',
-                        'routeParameters' => array(
+                        'routeParameters' => [
                             'categorySlug' => $category->getSlug(),
                             'questionSlug' => '',
-                        ),
-                    )
+                        ],
+                    ]
                 )->setAttribute('divider_append', true);
             }
         }
@@ -152,10 +152,10 @@ class NavBuilder extends ContainerAware
         $host = $site->getRequestContext()->getHost();
         $siteManager = $this->container->get('sonata.page.manager.site');
         /** @var Site $site */
-        $site = $siteManager->findOneBy(array(
-            'host'    => array($host, 'localhost'),
+        $site = $siteManager->findOneBy([
+            'host'    => [$host, 'localhost'],
             'enabled' => true,
-        ));
+        ]);
 
         if ($site) {
             $pageManager = $this->container->get('sonata.page.manager.page');
@@ -194,12 +194,12 @@ class NavBuilder extends ContainerAware
                 foreach ($page->getChildren() as $child) {
                     $subMenu->addChild(
                         $child->getName(),
-                        array(
+                        [
                             'route' => $page->getRouteName(),
-                            'routeParameters' => array(
+                            'routeParameters' => [
                                 'path' => $child->getUrl(),
-                            ),
-                        )
+                            ],
+                        ]
                     )->setAttribute('divider_append', true);
                 }
             }
@@ -236,38 +236,38 @@ class NavBuilder extends ContainerAware
             )->setAttribute('divider_append', true);*/
             $dropdown->addChild(
                 $translator->trans('Inbox'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => 'messages/inbox.php',
-                    ),
-                )
+                    ],
+                ]
             )->setAttribute('divider_append', true);
 
             // legacy logout
             $logoutLink = $menu->addChild(
                 $translator->trans('Logout'),
-                array(
+                [
                     'route' => 'main',
-                    'routeParameters' => array(
+                    'routeParameters' => [
                         'name' => '../index.php',
                         'logout' => 'logout',
                         'uid' => $user->getId(),
-                    ),
+                    ],
                     'query' => '1',
                     'icon' => 'fa fa-sign-out'
-                )
+                ]
             );
 
             $logoutLink
-                ->setLinkAttributes(array(
+                ->setLinkAttributes([
                     'id' => 'logout_button',
                     'class' => 'fa fa-power-off',
-                ))
-                ->setAttributes(array(
+                ])
+                ->setAttributes([
                     /*'id' => 'signin',
                     'class' => 'dropdown'*/
-                ))
+                ])
             ;
         }
 

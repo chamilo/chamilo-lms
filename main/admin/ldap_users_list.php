@@ -15,8 +15,7 @@ $action = @$_GET["action"] ?: null;
 $login_as_user_id = @$_GET["user_id"] ?: null;
 
 // Login as ...
-if ($action == "login_as" && !empty ($login_as_user_id))
-{
+if ($action == "login_as" && !empty($login_as_user_id)) {
     login_user($login_as_user_id);
 }
 
@@ -27,13 +26,12 @@ if (($_GET['action']=="add_user") && ($_GET['id_session'] == strval(intval($_GET
 }
 */
 
-$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
 $tool_name = get_lang('SearchLDAPUsers');
 //Display::display_header($tool_name); //cannot display now as we need to redirect
 //api_display_tool_title($tool_name);
 
-if (isset ($_GET['action']))
-{
+if (isset($_GET['action'])) {
     $check = Security::check_token('get');
     if ($check) {
         switch ($_GET['action']) {
@@ -61,8 +59,8 @@ if (isset ($_GET['action']))
                 break;
             case 'add_user':
                 $id = $_GET['id'];
-                $UserList = array();
-                $userid_match_login = array();
+                $UserList = [];
+                $userid_match_login = [];
                 foreach ($id as $user_id) {
                     $tmp = ldap_add_user($user_id);
                     $UserList[] = $tmp;
@@ -118,7 +116,7 @@ if (isset($_POST['action'])) {
             case 'add_user':
                 $number_of_selected_users = count($_POST['id']);
                 $number_of_added_users = 0;
-                $UserList = array();
+                $UserList = [];
                 foreach ($_POST['id'] as $index => $user_id) {
                     if ($user_id != $_user['user_id']) {
                         $UserList[] = ldap_add_user($user_id);
@@ -154,7 +152,7 @@ if (isset($_GET['id_session'])) {
     $form->addElement('hidden', 'id_session', $_GET['id_session']);
 }
 
-$type = array();
+$type = [];
 $type["all"] = get_lang('All');
 $type["employee"] = get_lang('Teacher');
 $type["student"] = get_lang('Student');
@@ -197,7 +195,7 @@ $table->set_header(5, get_lang('Actions'));
 //$table->set_column_filter(5, 'email_filter');
 //$table->set_column_filter(5, 'active_filter');
 $table->set_column_filter(5, 'modify_filter');
-$table->set_form_actions(array('add_user' => get_lang('AddLDAPUsers')));
+$table->set_form_actions(['add_user' => get_lang('AddLDAPUsers')]);
 $table->display();
 
 Display::display_footer();

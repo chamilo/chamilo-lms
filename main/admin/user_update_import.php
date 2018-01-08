@@ -19,16 +19,16 @@ $purification_option_for_usernames = false;
 function validate_data($users)
 {
     global $defined_auth_sources;
-    $errors = array();
-    $usernames = array();
+    $errors = [];
+    $usernames = [];
 
     // 1. Check if mandatory fields are set.
-    $mandatory_fields = array('LastName', 'FirstName');
+    $mandatory_fields = ['LastName', 'FirstName'];
 
     if (api_get_setting('registration', 'email') == 'true') {
         $mandatory_fields[] = 'Email';
     }
-    $classExistList = array();
+    $classExistList = [];
     $usergroup = new UserGroup();
 
     foreach ($users as $user) {
@@ -137,7 +137,7 @@ function updateUsers($users)
     global $insertedIn_course;
     // Not all scripts declare the $inserted_in_course array (although they should).
     if (!isset($inserted_in_course)) {
-        $inserted_in_course = array();
+        $inserted_in_course = [];
     }
     $usergroup = new UserGroup();
     $send_mail = $_POST['sendMail'] ? true : false;
@@ -191,7 +191,7 @@ function updateUsers($users)
 
             );
             if (!is_array($user['Courses']) && !empty($user['Courses'])) {
-                $user['Courses'] = array($user['Courses']);
+                $user['Courses'] = [$user['Courses']];
             }
             if (is_array($user['Courses'])) {
                 foreach ($user['Courses'] as $course) {
@@ -207,7 +207,7 @@ function updateUsers($users)
                 foreach ($classId as $id) {
                     $usergroup->subscribe_users_to_usergroup(
                         $id,
-                        array($user_id),
+                        [$user_id],
                         false
                     );
                 }
@@ -242,7 +242,7 @@ function parse_csv_data($file)
 {
     $users = Import :: csvToArray($file);
     foreach ($users as $index => $user) {
-        if (isset ($user['Courses'])) {
+        if (isset($user['Courses'])) {
             $user['Courses'] = explode('|', trim($user['Courses']));
         }
         $users[$index] = $user;
@@ -261,7 +261,7 @@ function element_start($parser, $data)
     global $current_tag;
     switch ($data) {
         case 'Contact':
-            $user = array();
+            $user = [];
             break;
         default:
             $current_tag = $data;
@@ -316,7 +316,7 @@ function character_data($parser, $data)
 function parse_xml_data($file)
 {
     global $users;
-    $users = array();
+    $users = [];
     $parser = xml_parser_create('UTF-8');
     xml_set_element_handler($parser, 'element_start', 'element_end');
     xml_set_character_data_handler($parser, 'character_data');
@@ -337,18 +337,18 @@ if (isset($extAuthSource) && is_array($extAuthSource)) {
 }
 
 $tool_name = get_lang('ImportUserListXMLCSV');
-$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
 
 set_time_limit(0);
 $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
-$user_id_error = array();
+$user_id_error = [];
 $error_message = '';
 
 if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
     $file_type = 'csv';
     Security::clear_token();
     $tok = Security::get_token();
-    $allowed_file_mimetype = array('csv', 'xml');
+    $allowed_file_mimetype = ['csv', 'xml'];
     $error_kind_file = false;
 
     $uploadInfo = pathinfo($_FILES['import_file']['name']);
@@ -371,7 +371,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
     }
 
     // List user id with error.
-    $users_to_insert = $user_id_error = array();
+    $users_to_insert = $user_id_error = [];
 
     if (is_array($errors)) {
         foreach ($errors as $my_errors) {
@@ -387,7 +387,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
         }
     }
 
-    $inserted_in_course = array();
+    $inserted_in_course = [];
     if (strcmp($file_type, 'csv') === 0) {
         updateUsers($users_to_insert);
     }
@@ -419,7 +419,6 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
         header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_list.php?sec_token='.$tok);
         exit;
     }
-
 }
 Display :: display_header($tool_name);
 
@@ -432,7 +431,7 @@ $form->addElement('header', $tool_name);
 $form->addElement('hidden', 'formSent');
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 
-$group = array();
+$group = [];
 
 $form->addButtonImport(get_lang('Import'));
 $defaults['formSent'] = 1;
@@ -441,8 +440,8 @@ $defaults['file_type'] = 'csv';
 $form->setDefaults($defaults);
 $form->display();
 
-$list = array();
-$list_reponse = array();
+$list = [];
+$list_reponse = [];
 $result_xml = '';
 $i = 0;
 $count_fields = count($extra_fields);
@@ -464,7 +463,9 @@ if ($count_fields > 0) {
 <blockquote>
     <pre>
         <b>UserName</b>;LastName;FirstName;Email;NewUserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;Active;Language;Courses;ClassId;
-        xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;user/teacher/drh;YYYY-MM-DD 00:00:00;0/1;xxx;<span style="color:red;"><?php if (count($list_reponse) > 0) echo implode(';', $list_reponse).';'; ?></span>xxx1|xxx2|xxx3;1;<br />
+        xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;xxx;user/teacher/drh;YYYY-MM-DD 00:00:00;0/1;xxx;<span style="color:red;"><?php if (count($list_reponse) > 0) {
+    echo implode(';', $list_reponse).';';
+} ?></span>xxx1|xxx2|xxx3;1;<br />
     </pre>
 </blockquote>
 <p><?php

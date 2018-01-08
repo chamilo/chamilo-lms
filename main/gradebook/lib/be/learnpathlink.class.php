@@ -44,9 +44,9 @@ class LearnpathLink extends AbstractLink
 
         $result = Database::query($sql);
 
-        $cats = array();
+        $cats = [];
         while ($data = Database::fetch_array($result)) {
-            $cats[] = array($data['id'], $data['name']);
+            $cats[] = [$data['id'], $data['name']];
         }
 
         return $cats;
@@ -73,9 +73,9 @@ class LearnpathLink extends AbstractLink
                 WHERE c_id = ' . $this->course_id.' '.$session_condition.' ';
         $result = Database::query($sql);
 
-        $cats = array();
+        $cats = [];
         while ($data = Database::fetch_array($result)) {
-            $cats[] = array($data['id'], $data['name']);
+            $cats[] = [$data['id'], $data['name']];
         }
 
         return $cats;
@@ -128,13 +128,13 @@ class LearnpathLink extends AbstractLink
         // for 1 student
         if (isset($stud_id)) {
             if ($data = Database::fetch_assoc($scores)) {
-                return array($data['progress'], 100);
+                return [$data['progress'], 100];
             } else {
                 return null;
             }
         } else {
             // all students -> get average
-            $students = array(); // user list, needed to make sure we only
+            $students = []; // user list, needed to make sure we only
             // take first attempts into account
             $rescount = 0;
             $sum = 0;
@@ -158,16 +158,16 @@ class LearnpathLink extends AbstractLink
             } else {
                 switch ($type) {
                     case 'best':
-                        return array($bestResult, 100);
+                        return [$bestResult, 100];
                         break;
                     case 'average':
-                        return array($sumResult / $rescount, 100);
+                        return [$sumResult / $rescount, 100];
                         break;
                     case 'ranking':
                         return AbstractLink::getCurrentUserRanking($stud_id, $students);
                         break;
                     default:
-                        return array($sum, $rescount);
+                        return [$sum, $rescount];
                         break;
                 }
             }
@@ -180,8 +180,10 @@ class LearnpathLink extends AbstractLink
     public function get_link()
     {
         $session_id = api_get_session_id();
-        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq_params($this->get_course_code(),
-                $session_id).'&gradebook=view';
+        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq_params(
+            $this->get_course_code(),
+                $session_id
+        ).'&gradebook=view';
 
         if (!api_is_allowed_to_edit() || $this->calc_score(api_get_user_id()) == null) {
             $url .= '&action=view&lp_id='.$this->get_ref_id();

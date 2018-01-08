@@ -9,10 +9,10 @@ class OpenMeetingsPlugin extends Plugin
     public $isCoursePlugin = true;
 
     //When creating a new course this settings are added to the course
-    public $course_settings = array(array(
+    public $course_settings = [[
         'name' => 'openmeetings_record_and_store',
         'type' => 'checkbox'
-    ));
+    ]];
 
     public static function create()
     {
@@ -22,7 +22,7 @@ class OpenMeetingsPlugin extends Plugin
 
     protected function __construct()
     {
-        parent::__construct('2.0', 'Francis Gonzales', array('tool_enable' => 'boolean', 'host' =>'text', 'user' => 'text', 'pass' => 'text'));
+        parent::__construct('2.0', 'Francis Gonzales', ['tool_enable' => 'boolean', 'host' =>'text', 'user' => 'text', 'pass' => 'text']);
     }
 
     public function install()

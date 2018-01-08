@@ -12,7 +12,7 @@ require_once api_get_path(SYS_CODE_PATH).'exercise/hotpotatoes.lib.php';
 $_course = api_get_course_info();
 
 $time = time();
-$doc_url = str_replace(array('../', '\\', '\\0', '..'), array('', '', '', ''), urldecode($_GET['file']));
+$doc_url = str_replace(['../', '\\', '\\0', '..'], ['', '', '', ''], urldecode($_GET['file']));
 $cid = api_get_course_id();
 $document_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $document_web_path = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document';
@@ -66,7 +66,7 @@ $doc_url = GetFolderPath($doc_url).urlencode(basename($doc_url));
 
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $my_file = Security::remove_XSS($_GET['file']);
-$my_file = str_replace(array('../', '\\..', '\\0', '..\\'), array('', '', '', ''), urldecode($my_file));
+$my_file = str_replace(['../', '\\..', '\\0', '..\\'], ['', '', '', ''], urldecode($my_file));
 
 $title = GetQuizName($my_file, $documentPath);
 if ($title == '') {
@@ -85,7 +85,7 @@ $htmlHeadXtra[] = /** @lang HTML */<<<HTML
     </script>
 HTML;
 
-$interbreadcrumb[] = array("url"=>"./exercise.php", "name"=> get_lang('Exercises'));
+$interbreadcrumb[] = ["url"=>"./exercise.php", "name"=> get_lang('Exercises')];
 if ($origin == 'learnpath') {
     Display::display_reduced_header($nameTools, "Exercise");
 } else {

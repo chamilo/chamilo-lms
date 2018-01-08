@@ -10,9 +10,9 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 class Thematic extends Resource
 {
-    public $params = array();
-    public $thematic_advance_list = array();
-    public $thematic_plan_list = array();
+    public $params = [];
+    public $thematic_advance_list = [];
+    public $thematic_plan_list = [];
 
     /**
     * Create a new Thematic

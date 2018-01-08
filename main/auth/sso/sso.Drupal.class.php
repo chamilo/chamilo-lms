@@ -118,14 +118,13 @@ class ssoDrupal
             $uData = Database::fetch_array($result);
             //Check the user's password
             if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
-
                 if ($sso['secret'] === sha1($uData['username'].$sso_challenge.api_get_security_key())
                     && ($sso['username'] == $uData['username'])) {
 
                     //Check if the account is active (not locked)
                     if ($uData['active'] == '1') {
                         // check if the expiration date has not been reached
-                        if (empty($uData['expiration_date']) OR $uData['expiration_date'] > date('Y-m-d H:i:s') OR $uData['expiration_date'] == '0000-00-00 00:00:00') {
+                        if (empty($uData['expiration_date']) or $uData['expiration_date'] > date('Y-m-d H:i:s') or $uData['expiration_date'] == '0000-00-00 00:00:00') {
 
                             //If Multiple URL is enabled
                             if (api_get_multiple_access_url()) {
@@ -137,7 +136,7 @@ class ssoDrupal
                                 $my_url_list = api_get_access_url_from_user($uData['id']);
                             } else {
                                 $current_access_url_id = 1;
-                                $my_url_list = array(1);
+                                $my_url_list = [1];
                             }
 
                             $my_user_is_admin = UserManager::is_admin($uData['id']);
@@ -291,5 +290,4 @@ class ssoDrupal
         $url = "{$this->protocol}{$this->domain}/user/{$drupalUserId}/edit";
         return $url;
     }
-
 }

@@ -53,13 +53,13 @@ foreach ($list as $mail) {
             continue;
         }
 
-        $user = array(
+        $user = [
             'FirstName' => $row['firstname'],
             'LastName' => $row['lastname'],
             'UserName' => $row['username'],
             'Password' => $pass,
             'Email' => $mail,
-        );
+        ];
         $l = api_get_interface_language();
         if (!empty($row['language'])) {
             $l = $row['language'];

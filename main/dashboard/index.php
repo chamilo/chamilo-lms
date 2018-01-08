@@ -24,7 +24,7 @@ $this_section = SECTION_DASHBOARD;
 Session::erase('this_section'); //for hmtl editor repository
 
 // get actions
-$actions = array('listing', 'store_user_block', 'disable_block');
+$actions = ['listing', 'store_user_block', 'disable_block'];
 $action = 'listing';
 if (isset($_GET['action']) && in_array($_GET['action'], $actions)) {
     $action = $_GET['action'];

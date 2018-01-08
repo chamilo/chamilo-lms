@@ -39,14 +39,14 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
     'name' => get_lang('SurveyList')
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id,
     'name' => $urlname
-);
+];
 
 // Displaying the header
 Display::display_header($tool_name);
@@ -59,7 +59,7 @@ if ($survey_data['anonymous'] == 1) {
             $answered_data
         ).' '.get_lang('PeopleAnswered')
     );
-    $answered_data = array();
+    $answered_data = [];
 }
 
 if (!isset($_GET['view']) || $_GET['view'] == 'invited') {

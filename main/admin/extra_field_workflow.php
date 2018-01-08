@@ -14,7 +14,7 @@ $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 api_protect_admin_script();
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
 $tool_name = null;
 
@@ -35,44 +35,44 @@ $check = Security::check_token('request');
 $token = Security::get_token();
 
 if ($action == 'add') {
-    $interbreadcrumb[] = array('url' => 'extra_fields.php?type='.$extraField->type, 'name' => $extraField->pageName);
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = ['url' => 'extra_fields.php?type='.$extraField->type, 'name' => $extraField->pageName];
+    $interbreadcrumb[] = [
         'url' => 'extra_fields.php?type='.$extraField->type.'&action=edit&id='.$extraFieldInfo['id'],
         'name' => $extraFieldInfo['display_text']
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => 'extra_field_options.php?type='.$extraField->type.'&field_id='.$extraFieldInfo['id'],
         'name' => get_lang('EditExtraFieldOptions')
-    );
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Add'));
+    ];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
 } elseif ($action == 'edit') {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'extra_fields.php?type='.$extraField->type,
         'name' => $extraField->pageName
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => 'extra_fields.php?type='.$extraField->type.'&action=edit&id='.$extraFieldInfo['id'],
         'name' => $extraFieldInfo['display_text']
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => 'extra_field_options.php?type='.$extraField->type.'&field_id='.$extraFieldInfo['id'],
         'name' => get_lang('EditExtraFieldOptions')
-    );
+    ];
 
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
 } else {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'extra_fields.php?type='.$extraField->type,
         'name' => $extraField->pageName
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => 'extra_fields.php?type='.$extraField->type.'&action=edit&id='.$extraFieldInfo['id'],
         'name' => $extraFieldInfo['display_text']
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => '#',
         'name' => get_lang('EditExtraFieldOptions')
-    );
+    ];
 }
 
 $roleId = isset($_REQUEST['roleId']) ? $_REQUEST['roleId'] : null;
@@ -82,7 +82,7 @@ $params = 'field_id='.$field_id.'&type='.$extraField->type.'&roleId='.$roleId;
 $paramsNoRole = 'field_id='.$field_id.'&type='.$extraField->type;
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = array(get_lang('Name'), get_lang('Value'), get_lang('Order'), get_lang('Actions'));
+$columns = [get_lang('Name'), get_lang('Value'), get_lang('Order'), get_lang('Actions')];
 
 $htmlHeadXtra[] = '<script>
     function setHidden(obj) {
@@ -119,17 +119,17 @@ Display::display_header($tool_name);
 echo Display::page_header($extraFieldInfo['display_text']);
 
 $obj = new ExtraFieldOption($type);
-$columns = array('display_text', 'option_value', 'option_order');
+$columns = ['display_text', 'option_value', 'option_order'];
 $result = Database::select(
     '*',
     $obj->table,
-    array(
-        'where' => array("field_id = ? " => $field_id),
+    [
+        'where' => ["field_id = ? " => $field_id],
         'order' => "option_order ASC"
-    )
+    ]
 );
 
-$table = new HTML_Table(array('class' => 'data_table'));
+$table = new HTML_Table(['class' => 'data_table']);
 $column = 0;
 $row = 0;
 $table->setHeaderContents($row, $column, get_lang('CurrentStatus'));
@@ -144,12 +144,12 @@ $form = new FormValidator('workflow', 'post', api_get_self().'?'.$params);
 $options = api_get_user_roles();
 $options[0] = get_lang('SelectAnOption');
 ksort($options);
-$form->addElement('select', 'status', get_lang('SelectRole'), $options, array('onclick' => 'changeStatus(this)'));
+$form->addElement('select', 'status', get_lang('SelectRole'), $options, ['onclick' => 'changeStatus(this)']);
 
 $checks = $app['orm.em']->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')->findBy(
-    array('fieldId' => $field_id, 'roleId' => $roleId)
+    ['fieldId' => $field_id, 'roleId' => $roleId]
 );
-$includedFields = array();
+$includedFields = [];
 if (!empty($checks)) {
     foreach ($checks as $availableField) {
         $includedFields[$availableField->getFieldOptionId()][] = $availableField->getRelatedFieldOptionId();
@@ -165,7 +165,7 @@ foreach ($result as $item) {
     foreach ($result as $itemCol) {
         $id = 'extra_field_status_'.$item['id'].'_'.$itemCol['id'];
         $idForm = 'extra_field_status['.$item['id'].']['.$itemCol['id'].']';
-        $attributes = array('onclick' => 'setHidden(this)');
+        $attributes = ['onclick' => 'setHidden(this)'];
         $value = 0;
 
         if (isset($includedFields[$itemCol['id']]) && in_array($item['id'], $includedFields[$itemCol['id']])) {
@@ -175,7 +175,7 @@ foreach ($result as $item) {
 
         $element = Display::input('checkbox', $id, null, $attributes);
         $table->setCellContents($row, $column, $element);
-        $form->addElement('hidden', 'hidden_'.$idForm, $value, array('id' => 'hidden_'.$id));
+        $form->addElement('hidden', 'hidden_'.$idForm, $value, ['id' => 'hidden_'.$id]);
         $column++;
     }
     $row++;
@@ -183,13 +183,13 @@ foreach ($result as $item) {
 
 if (!empty($roleId)) {
     $form->addElement('html', $table->toHtml());
-    $group = array();
+    $group = [];
     $group[] = $form->createElement('button', 'submit', get_lang('Save'));
-    $group[] = $form->createElement('button', 'select_all', get_lang('SelectAll'), array('class' => 'btn select_all'));
-    $group[] = $form->createElement('button', 'unselect_all', get_lang('UnSelectAll'), array('class' => 'btn unselect_all'));
+    $group[] = $form->createElement('button', 'select_all', get_lang('SelectAll'), ['class' => 'btn select_all']);
+    $group[] = $form->createElement('button', 'unselect_all', get_lang('UnSelectAll'), ['class' => 'btn unselect_all']);
     $form->addGroup($group, '', null, ' ');
 
-    $form->setDefaults(array('status' => $roleId));
+    $form->setDefaults(['status' => $roleId]);
 } else {
     $form->addButtonUpdate(get_lang('Edit'));
 }
@@ -203,12 +203,12 @@ if ($form->validate()) {
         foreach ($result as $id => $items) {
             foreach ($items as $subItemId => $value) {
                 $extraFieldOptionRelFieldOption = $app['orm.em']->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')->findOneBy(
-                    array(
+                    [
                     'fieldId' => $field_id,
                     'fieldOptionId' => $subItemId,
                     'roleId' => $roleId,
                     'relatedFieldOptionId' => $id
-                    )
+                    ]
                 );
 
                 if ($value == 1) {
@@ -225,7 +225,6 @@ if ($form->validate()) {
                         $app['orm.ems']['db_write']->remove($extraFieldOptionRelFieldOption);
                     }
                 }
-
             }
         }
         $app['orm.ems']['db_write']->flush();

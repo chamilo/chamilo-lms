@@ -54,7 +54,7 @@ class BreadcrumbController extends Controller
             )
         );*/
 
-        $list = array();
+        $list = [];
         if ($active) {
             $list[] = $active;
             while (null !== ($item = $active->getActiveChild())) {
@@ -63,10 +63,10 @@ class BreadcrumbController extends Controller
             }
         }
 
-        return $this->render('ChamiloThemeBundle:Breadcrumb:breadcrumb.html.twig', array(
+        return $this->render('ChamiloThemeBundle:Breadcrumb:breadcrumb.html.twig', [
             'active' => $list,
             'title'  => $title
-        ));
+        ]);
     }
 
 

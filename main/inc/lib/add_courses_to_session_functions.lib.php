@@ -103,7 +103,7 @@ class AddCourseToSession
             }
 
             $rs = Database::query($sql);
-            $course_list = array();
+            $course_list = [];
             if ($type == 'single') {
                 while ($course = Database::fetch_array($rs)) {
                     $course_list[] = $course['id'];

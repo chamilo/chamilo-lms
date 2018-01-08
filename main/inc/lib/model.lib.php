@@ -54,10 +54,10 @@ class Model
         if (empty($id) or $id != strval(intval($id))) {
             return false;
         }
-        $params = array('id = ?' => $id);
+        $params = ['id = ?' => $id];
         if ($this->is_course_model) {
             $course_id = api_get_course_int_id();
-            $params = array('id = ? AND c_id = ?' => array($id, $course_id));
+            $params = ['id = ? AND c_id = ?' => [$id, $course_id]];
         }
         // Database table definition
         $result = Database::delete($this->table, $params);
@@ -75,7 +75,7 @@ class Model
      */
     private function clean_parameters($params)
     {
-        $clean_params = array();
+        $clean_params = [];
         if (!empty($params)) {
             foreach ($params as $key => $value) {
                 if (in_array($key, $this->columns)) {
@@ -103,17 +103,17 @@ class Model
     public function get($id)
     {
         if (empty($id)) {
-            return array();
+            return [];
         }
-        $params = array('id = ?' => intval($id));
+        $params = ['id = ?' => intval($id)];
         if ($this->is_course_model) {
             $course_id = api_get_course_int_id();
-            $params = array('id = ? AND c_id = ?' => array($id, $course_id));
+            $params = ['id = ? AND c_id = ?' => [$id, $course_id]];
         }
         $result = Database::select(
             '*',
             $this->table,
-            array('where' => $params),
+            ['where' => $params],
             'first'
         );
 
@@ -135,7 +135,7 @@ class Model
      *
      * @return array
      */
-    public function getDataToExport($options = array())
+    public function getDataToExport($options = [])
     {
         return Database::select('name, description', $this->table, $options);
     }
@@ -149,7 +149,7 @@ class Model
         $row = Database::select(
             'count(*) as count',
             $this->table,
-            array('where' => array('parent_id = ?' => '0')),
+            ['where' => ['parent_id = ?' => '0']],
             'first'
         );
 
@@ -244,7 +244,7 @@ class Model
                 $result = Database::update(
                     $this->table,
                     $params,
-                    array('id = ?' => $id),
+                    ['id = ?' => $id],
                     $showQuery
                 );
                 if ($result) {

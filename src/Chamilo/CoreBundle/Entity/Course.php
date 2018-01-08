@@ -1131,11 +1131,11 @@ class Course
      */
     public function isActive()
     {
-        $activeVisibilityList = array(
+        $activeVisibilityList = [
             self::REGISTERED,
             self::OPEN_PLATFORM,
             self::OPEN_WORLD,
-        );
+        ];
 
         return in_array($this->visibility, $activeVisibilityList);
     }
@@ -1155,13 +1155,13 @@ class Course
      */
     public static function getStatusList()
     {
-        return array(
+        return [
             self::CLOSED => 'Closed',
             self::REGISTERED => 'Registered',
             self::OPEN_PLATFORM => 'Open platform',
             self::OPEN_WORLD => 'Open world',
             self::HIDDEN => 'Hidden',
-        );
+        ];
     }
 
     /**

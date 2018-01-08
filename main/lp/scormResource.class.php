@@ -22,8 +22,8 @@ class scormResource
     public $metadata;
     //public $file_href;
     //public $file_metadata;
-    public $files = array();
-    public $dependencies = array();
+    public $files = [];
+    public $dependencies = [];
 
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormResource

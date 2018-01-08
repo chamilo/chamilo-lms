@@ -7,11 +7,11 @@
 
 namespace Chamilo\ThemeBundle\Routing;
 
-
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Config\Loader\LoaderResolverInterface;
 
-class MenuLoader extends Loader {
+class MenuLoader extends Loader
+{
 
     /**
      * Loads a resource.
@@ -35,5 +35,4 @@ class MenuLoader extends Loader {
     {
         return true;
     }
-
 }

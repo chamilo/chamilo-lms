@@ -117,11 +117,11 @@ $_configuration['hosting_total_size_limit'] = 0;
 // Set the following setting to true to start using the CDN
 $_configuration['cdn_enable'] = false;
 // The following setting will be ignored if the previous one is set to false
-$_configuration['cdn'] = array(
+$_configuration['cdn'] = [
     // You can define several CDNs and split them by extensions
     // Replace the following by your full CDN URL, which should point to
     // your Chamilo's root directory. DO NOT INCLUDE a final slash! (won't work)
-    'http://cdn.chamilo.org' => array(
+    'http://cdn.chamilo.org' => [
         '.css',
         '.js',
         '.jpg',
@@ -130,9 +130,9 @@ $_configuration['cdn'] = array(
         '.gif',
         '.avi',
         '.flv'
-    ),
+    ],
     // copy the line above and modify following your needs
-);
+];
 
 /**
  * Misc. settings

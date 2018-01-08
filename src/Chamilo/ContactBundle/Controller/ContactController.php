@@ -62,20 +62,20 @@ class ContactController extends Controller
                     ->setBody(
                         $this->renderView(
                             '@ChamiloContact/contact.html.twig',
-                            array(
+                            [
                                 'ip' => $request->getClientIp(),
                                 'firstname' => $form->get('firstname')->getData(),
                                 'lastname' => $form->get('lastname')->getData(),
                                 'subject' => $form->get('subject')->getData(),
                                 'email' => $form->get('email')->getData(),
                                 'message' => $form->get('message')->getData()
-                            )
+                            ]
                         )
                     );
 
                 $this->get('mailer')->send($message);
                 $this->addFlash(
-                    'success', 
+                    'success',
                     'Your email has been sent! Thanks!'
                 );
 
@@ -85,9 +85,9 @@ class ContactController extends Controller
 
         return $this->render(
             '@ChamiloContact/index.html.twig',
-            array(
+            [
                 'form' => $form->createView()
-            )
+            ]
         );
     }
 }

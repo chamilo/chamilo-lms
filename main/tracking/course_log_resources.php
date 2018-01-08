@@ -80,18 +80,18 @@ if (empty($session_id)) {
 
 // Breadcrumbs.
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
         'name' => get_lang('PlatformAdmin'),
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php',
         'name' => get_lang('SessionList'),
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.api_get_session_id(),
         'name' => get_lang('SessionOverview'),
-    );
+    ];
 }
 
 $nameTools = get_lang('Tracking');
@@ -128,7 +128,7 @@ $form = new FormValidator(
     'GET',
     api_get_path(WEB_CODE_PATH).'tracking/course_log_resources.php?'.api_get_cidreq().'&id_session'.$session_id,
     '',
-    array('class' => 'form-search'),
+    ['class' => 'form-search'],
     false
 );
 $renderer = $form->defaultRenderer();
@@ -143,17 +143,17 @@ echo '</div>';
 
 $table = new SortableTable(
     'resources',
-    array('TrackingCourseLog', 'count_item_resources'),
-    array('TrackingCourseLog', 'get_item_resources_data'),
+    ['TrackingCourseLog', 'count_item_resources'],
+    ['TrackingCourseLog', 'get_item_resources_data'],
     6,
     20,
     'DESC'
 );
 
-$parameters = array(
+$parameters = [
     'id_session' => $session_id,
     'cidReq' => api_get_course_id()
-);
+];
 
 $table->set_additional_parameters($parameters);
 $table->set_header(0, get_lang('Tool'));

@@ -11,7 +11,7 @@ Display::display_header(null);
 
 $form = new FormValidator('export_certificate');
 $courses = CourseManager::get_courses_list(0, 0, 'title');
-$options = array();
+$options = [];
 foreach ($courses as $course) {
     $options[$course['id']] = $course['title'];
 }
@@ -42,7 +42,7 @@ if ($form->validate()) {
 
         if (isset($cats[0])) {
             /** @var Category $cat */
-            $userList = array();
+            $userList = [];
             foreach ($users as $user) {
                 $userInfo = api_get_user_info_from_official_code(
                     $user['official_code']

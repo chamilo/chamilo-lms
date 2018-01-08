@@ -29,19 +29,19 @@ $courseId = $courseInfo['real_id'];
 $page = isset($_GET['page']) ? intval($_GET['page']) : null;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $default_sort = api_sort_by_first_name() ? 'firstname' : 'lastname';
-$sort = isset($_GET['sort']) && in_array($_GET['sort'], array('lastname', 'firstname', 'username'))
+$sort = isset($_GET['sort']) && in_array($_GET['sort'], ['lastname', 'firstname', 'username'])
     ? $_GET['sort']
     : $default_sort;
 $idChecked = isset($_GET['idChecked']) && is_array($_GET['idChecked'])
     ? $_GET['idChecked']
     : (isset($_POST['idChecked'])
     && is_array($_POST['idChecked']) ? $_POST['idChecked'] : null);
-$direction = isset($_GET['direction']) && in_array($_GET['direction'], array('desc', 'asc'))
+$direction = isset($_GET['direction']) && in_array($_GET['direction'], ['desc', 'asc'])
     ? $_GET['direction']
     : 'desc';
 
 if (is_array($idChecked)) {
-    $my_temp = array();
+    $my_temp = [];
     foreach ($idChecked as $id) {
         // forcing the intval
         $my_temp[] = intval($id);
@@ -116,11 +116,11 @@ $nbr_results = sizeof($users);
 
 $tool_name = get_lang('Session').': '.$session_name.' - '.get_lang('Course').': '.$course_title;
 
-$interbreadcrumb[] = array("url" => "session_list.php", "name" => get_lang('SessionList'));
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = ["url" => "session_list.php", "name" => get_lang('SessionList')];
+$interbreadcrumb[] = [
     'url' => "resume_session.php?id_session=".$id_session,
     "name" => get_lang('SessionOverview')
-);
+];
 
 Display::display_header($tool_name);
 echo Display::page_header($tool_name);
@@ -155,21 +155,25 @@ echo Display::page_header($tool_name);
         <table class="data_table" width="100%">
             <tr>
                 <th>&nbsp;</th>
-                <?php if ($is_western_name_order) { ?>
+                <?php if ($is_western_name_order) {
+                ?>
                     <th>
                         <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=firstname&direction=<?php echo urlencode($direction); ?>"><?php echo get_lang('FirstName'); ?></a>
                     </th>
                     <th>
                         <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=lastname&direction=<?php echo urlencode($direction); ?>"><?php echo get_lang('LastName'); ?></a>
                     </th>
-                <?php } else { ?>
+                <?php
+            } else {
+                ?>
                     <th>
                         <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=lastname&direction=<?php echo urlencode($direction); ?>"><?php echo get_lang('LastName'); ?></a>
                     </th>
                     <th>
                         <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=firstname&direction=<?php echo urlencode($direction); ?>"><?php echo get_lang('FirstName'); ?></a>
                     </th>
-                <?php } ?>
+                <?php
+            } ?>
                 <th>
                     <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=username&direction=<?php echo urlencode($direction); ?>"><?php echo get_lang('Login'); ?></a>
                 </th>
@@ -178,33 +182,39 @@ echo Display::page_header($tool_name);
             <?php
             $i = 0;
             foreach ($users as $key => $enreg) {
-
                 if ($key == $limit) {
                     break;
-                }
-                ?>
+                } ?>
                 <tr class="<?php echo $i ? 'row_odd' : 'row_even'; ?>">
                     <td><input type="checkbox" name="idChecked[]" value="<?php echo $enreg['user_id']; ?>"></td>
-                    <?php if ($is_western_name_order) { ?>
+                    <?php if ($is_western_name_order) {
+                    ?>
                         <td><?php echo api_htmlentities($enreg['firstname'], ENT_QUOTES, $charset); ?></td>
                         <td><?php echo api_htmlentities($enreg['lastname'], ENT_QUOTES, $charset); ?></td>
-                    <?php } else { ?>
+                    <?php
+                } else {
+                    ?>
                         <td><?php echo api_htmlentities($enreg['lastname'], ENT_QUOTES, $charset); ?></td>
                         <td><?php echo api_htmlentities($enreg['firstname'], ENT_QUOTES, $charset); ?></td>
-                    <?php } ?>
+                    <?php
+                } ?>
                     <td><?php echo api_htmlentities($enreg['username'], ENT_QUOTES, $charset); ?></td>
                     <td>
-                        <?php if ($enreg['is_subscribed']) { ?>
+                        <?php if ($enreg['is_subscribed']) {
+                    ?>
                             <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>&action=delete&idChecked[]=<?php echo $enreg['user_id']; ?>"
                                onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
                                 <?php Display::display_icon('delete.png', get_lang('Delete')); ?>
                             </a>
-                        <?php } else { ?>
+                        <?php
+                } else {
+                    ?>
                             <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>&action=add&idChecked[]=<?php echo $enreg['user_id']; ?>"
                                onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
-                                <?php Display::display_icon('add.png', get_lang('Add'), array(), ICON_SIZE_SMALL); ?>
+                                <?php Display::display_icon('add.png', get_lang('Add'), [], ICON_SIZE_SMALL); ?>
                             </a>
-                        <?php } ?>
+                        <?php
+                } ?>
 
                     </td>
                 </tr>

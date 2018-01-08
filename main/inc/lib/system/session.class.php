@@ -64,7 +64,7 @@ class Session implements \ArrayAccess
     {
         session_regenerate_id();
         session_unset();
-        $_SESSION = array();
+        $_SESSION = [];
     }
 
     /**
@@ -73,7 +73,7 @@ class Session implements \ArrayAccess
     public static function destroy()
     {
         session_unset();
-        $_SESSION = array();
+        $_SESSION = [];
         session_destroy();
     }
 

@@ -22,7 +22,7 @@ class CourseRequestAdmin extends Admin
     {
         $formMapper
             ->add('title')
-            ->add('description', 'textarea', array('attr' => array('class'=> 'ckeditor')))
+            ->add('description', 'textarea', ['attr' => ['class'=> 'ckeditor']])
             ->add('code')
             ->add('user')
             ->add('status')

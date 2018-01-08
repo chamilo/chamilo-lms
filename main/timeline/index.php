@@ -23,32 +23,32 @@ $token = Security::get_token();
 
 switch ($action) {
     case 'add':
-        $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('Timeline'));
-        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Add'));
+        $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Timeline')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
         break;
     case 'edit':
-        $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('Timeline'));
-        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
+        $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Timeline')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
         break;
     case 'add_item':
-        $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('Timeline'));
-        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('TimelineItem'));
+        $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Timeline')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('TimelineItem')];
         break;
     default:
-        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Timeline'));
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Timeline')];
 }
 
 //jqgrid will use this URL to do the selects
 $url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_timelines';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns        = array(get_lang('Name'), get_lang('Actions'));
+$columns        = [get_lang('Name'), get_lang('Actions')];
 
 //Column config
-$column_model   = array(
-                        array('name'=>'name', 'index'=>'name', 'width'=>'120', 'align'=>'left'),
-                        array('name'=>'actions', 'index'=>'actions', 'width'=>'100', 'align'=>'left', 'sortable'=>'false')
-                        );
+$column_model   = [
+                        ['name'=>'name', 'index'=>'name', 'width'=>'120', 'align'=>'left'],
+                        ['name'=>'actions', 'index'=>'actions', 'width'=>'100', 'align'=>'left', 'sortable'=>'false']
+                        ];
 //Autowidth
 $extra_params['autowidth'] = 'true';
 //height auto
@@ -59,7 +59,7 @@ $htmlHeadXtra[] = '
 <script>
 $(function() {
     // grid definition see the $timeline->display() function
-    '.Display::grid_js('timelines', $url, $columns, $column_model, $extra_params, array(), null, true).'
+    '.Display::grid_js('timelines', $url, $columns, $column_model, $extra_params, [], null, true).'
 });
 </script>';
 $toolbarAction = '';
@@ -87,7 +87,7 @@ switch ($action) {
         } else {
             $actions .= '<a href="'.api_get_self().'">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             $form->addElement('hidden', 'sec_token');
-            $form->setConstants(array('sec_token' => $token));
+            $form->setConstants(['sec_token' => $token]);
             $content = $form->return_form();
         }
         break;
@@ -108,7 +108,7 @@ switch ($action) {
         } else {
             $actions = '<a href="'.api_get_self().'">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             $form->addElement('hidden', 'sec_token');
-            $form->setConstants(array('sec_token' => $token));
+            $form->setConstants(['sec_token' => $token]);
             $content = $form->return_form();
         }
         break;
@@ -130,7 +130,7 @@ switch ($action) {
         } else {
             $actions = '<a href="'.api_get_self().'">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             $form->addElement('hidden', 'sec_token');
-            $form->setConstants(array('sec_token' => $token));
+            $form->setConstants(['sec_token' => $token]);
             $content = $form->return_form();
         }
         break;

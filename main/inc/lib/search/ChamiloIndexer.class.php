@@ -51,7 +51,7 @@ class ChamiloIndexer extends XapianIndexer
         // compare terms
         $doc = $this->get_document($search_did);
         $xapian_terms = xapian_get_doc_terms($doc, $prefix);
-        $xterms = array();
+        $xterms = [];
         foreach ($xapian_terms as $xapian_term) {
             $xterms[] = substr($xapian_term['name'], 1);
         }
@@ -90,7 +90,7 @@ class ChamiloIndexer extends XapianIndexer
             $tool_id,
             $ref_id
         );
-        $prefix_terms = array();
+        $prefix_terms = [];
         foreach ($terms as $term) {
             $prefix_terms[] = $term['value'];
         }

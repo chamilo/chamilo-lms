@@ -23,7 +23,7 @@ function get_tabs($courseId = null)
 {
     $courseInfo = api_get_course_info($courseId);
 
-    $navigation = array();
+    $navigation = [];
 
     // Campus Homepage
     $navigation[SECTION_CAMPUS]['url'] = api_get_path(WEB_PATH).'index.php';
@@ -158,7 +158,7 @@ function getCustomTabs()
                 variable = 'show_tabs' AND
                 subkey LIKE 'custom_tab_%' AND access_url = $urlId ";
     $result = Database::query($sql);
-    $customTabs = array();
+    $customTabs = [];
     while ($row = Database::fetch_assoc($result)) {
         $shouldAdd = true;
         if (strpos($row['subkey'], Plugin::TAB_FILTER_NO_STUDENT) !== false && api_is_student()) {
@@ -224,7 +224,7 @@ function returnNotificationMenu()
         ) {
             $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_self" title="'
                 .get_lang('UsersOnline').'" >'
-                .Display::return_icon('user.png', get_lang('UsersOnline'), array(), ICON_SIZE_TINY)
+                .Display::return_icon('user.png', get_lang('UsersOnline'), [], ICON_SIZE_TINY)
                 .' '.$number.'</a></li>';
         }
 
@@ -237,7 +237,7 @@ function returnNotificationMenu()
         ) {
             $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$courseInfo['sysCode']
                 .'" target="_self">'
-                .Display::return_icon('course.png', get_lang('UsersOnline').' '.get_lang('InThisCourse'), array(), ICON_SIZE_TINY)
+                .Display::return_icon('course.png', get_lang('UsersOnline').' '.get_lang('InThisCourse'), [], ICON_SIZE_TINY)
                 .' '.$number_online_in_course.' </a></li>';
         }
 
@@ -245,7 +245,7 @@ function returnNotificationMenu()
             $numberOnlineInSession = getOnlineUsersInSessionCount($sessionId);
 
             $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'" target="_self">'
-                .Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array(), ICON_SIZE_TINY)
+                .Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), [], ICON_SIZE_TINY)
                 .' '.$numberOnlineInSession
                 .'</a></li>';
         }
@@ -260,8 +260,8 @@ function returnNotificationMenu()
  */
 function return_navigation_array()
 {
-    $navigation = array();
-    $menu_navigation = array();
+    $navigation = [];
+    $menu_navigation = [];
     $possible_tabs = get_tabs();
 
     // Campus Homepage
@@ -343,7 +343,7 @@ function return_navigation_array()
 
         ///if (api_is_student()) {
         if (true) {
-            $params = array('variable = ? AND subkey = ?' => ['status', 'studentfollowup']);
+            $params = ['variable = ? AND subkey = ?' => ['status', 'studentfollowup']];
             $result = api_get_settings_params_simple($params);
             $plugin = StudentFollowUpPlugin::create();
             if (!empty($result) && $result['selected_value'] === 'installed') {
@@ -406,11 +406,11 @@ function return_navigation_array()
         }
     }
 
-    return array(
+    return [
         'menu_navigation' => $menu_navigation,
         'navigation' => $navigation,
         'possible_tabs' => $possible_tabs,
-    );
+    ];
 }
 
 /**
@@ -427,7 +427,6 @@ function menuArray()
     $lang = api_get_setting('platformLanguage');
     if (!empty($_SESSION['user_language_choice'])) {
         $lang = $_SESSION['user_language_choice'];
-
     } elseif (!empty($_SESSION['_user']['language'])) {
         $lang = $_SESSION['_user']['language'];
     }
@@ -504,19 +503,19 @@ function menuArray()
                     continue;
                 }
 
-                $matches = array();
+                $matches = [];
                 $match = preg_match('$href="([^"]*)" target="([^"]*)">([^<]*)</a>$', $link, $matches);
 
                 if (!$match) {
                     continue;
                 }
 
-                $mainNavigation['navigation'][$matches[3]] = array(
+                $mainNavigation['navigation'][$matches[3]] = [
                     'url' => $matches[1],
                     'target' => $matches[2],
                     'title' => $matches[3],
                     'key' => 'page-'.str_replace(' ', '-', strtolower($matches[3])),
-                );
+                ];
             }
         }
     }
@@ -553,7 +552,6 @@ function menuArray()
         if (!empty($activeSection)) {
             $mainNavigation['navigation'][$activeSection]['current'] = 'active';
         }
-
     }
     unset($mainNavigation['navigation']['myprofile']);
 
@@ -577,7 +575,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
     $web_course_path = api_get_path(WEB_COURSE_PATH);
 
     /* If the user is a coach he can see the users who are logged in its session */
-    $navigation = array();
+    $navigation = [];
 
     $sessionId = api_get_session_id();
     // part 1: Course Homepage. If we are in a course then the first breadcrumb
@@ -612,7 +610,6 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
                 .' '.$courseInfo['official_code'];
                 break;
             case 'session_name_and_course_title':
-                //no break
             default:
                 $itemTitle = Display::return_icon(
                     'home.png',
@@ -701,7 +698,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         }
     }
 
-    $navigation_right = array();
+    $navigation_right = [];
     if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
         foreach ($interbreadcrumb as $breadcrumb_step) {
             if (isset($breadcrumb_step['type']) && $breadcrumb_step['type'] == 'right') {
@@ -727,7 +724,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         $navigation[] = $navigation_item;
     }
 
-    $final_navigation = array();
+    $final_navigation = [];
     $counter = 0;
     foreach ($navigation as $index => $navigation_info) {
         if (!empty($navigation_info['title'])) {
@@ -781,7 +778,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
                     if ($final_navigation_count - 1 > $i) {
                         $bread .= '';
                     }
-                    $lis .= Display::tag('li', $bread, array('class' => 'active'));
+                    $lis .= Display::tag('li', $bread, ['class' => 'active']);
                     $i++;
                 }
             }
@@ -793,7 +790,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 
         // View as student/teacher link
         if (!empty($view_as_student_link)) {
-            $html .= Display::tag('div', $view_as_student_link, array('id' => 'view_as_link', 'class' => 'pull-right'));
+            $html .= Display::tag('div', $view_as_student_link, ['id' => 'view_as_link', 'class' => 'pull-right']);
         }
 
         if (!empty($navigation_right)) {
@@ -802,13 +799,13 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
                 $lis .= Display::tag(
                     'li',
                     $item['title'],
-                    array('class' => $extra_class.' pull-right')
+                    ['class' => $extra_class.' pull-right']
                 );
             }
         }
 
         if (!empty($lis)) {
-            $html .= Display::tag('ul', $lis, array('class' => 'breadcrumb'));
+            $html .= Display::tag('ul', $lis, ['class' => 'breadcrumb']);
         }
     }
 

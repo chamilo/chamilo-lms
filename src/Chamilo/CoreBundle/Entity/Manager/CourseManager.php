@@ -13,5 +13,4 @@ use Sonata\CoreBundle\Model\BaseEntityManager;
  */
 class CourseManager extends BaseEntityManager
 {
-
 }

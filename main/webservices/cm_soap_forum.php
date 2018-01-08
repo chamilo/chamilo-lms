@@ -14,12 +14,12 @@ $s = WSCMSoapServer::singleton();
 
 $s->register(
     'WSCMForum.get_foruns_id',
-    array(
+    [
         'username' => 'xsd:string',
         'password' => 'xsd:string',
         'course_code' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string'),
+    ],
+    ['return' => 'xsd:string'],
     'urn:WSCMService',
     '',
     '',
@@ -29,13 +29,13 @@ $s->register(
 
 $s->register(
     'WSCMForum.get_forum_title',
-    array(
+    [
         'username' => 'xsd:string',
         'password' => 'xsd:string',
         'course_code' => 'xsd:string',
         'forum_id' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string'),
+    ],
+    ['return' => 'xsd:string'],
     'urn:WSCMService',
     '',
     '',
@@ -45,13 +45,13 @@ $s->register(
 
 $s->register(
     'WSCMForum.get_forum_threads_id',
-    array(
+    [
         'username' => 'xsd:string',
         'password' => 'xsd:string',
         'course_code' => 'xsd:string',
         'forum_id' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string'),
+    ],
+    ['return' => 'xsd:string'],
     'urn:WSCMService',
     '',
     '',
@@ -61,14 +61,14 @@ $s->register(
 
 $s->register(
     'WSCMForum.get_forum_thread_data',
-    array(
+    [
         'username' => 'xsd:string',
         'password' => 'xsd:string',
         'course_code' => 'xsd:string',
         'thread_id' => 'xsd:string',
         'field' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string'),
+    ],
+    ['return' => 'xsd:string'],
     'urn:WSCMService',
     '',
     '',
@@ -78,13 +78,13 @@ $s->register(
 
 $s->register(
     'WSCMForum.get_forum_thread_title',
-    array(
+    [
         'username' => 'xsd:string',
         'password' => 'xsd:string',
         'course_code' => 'xsd:string',
         'thread_id' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string'),
+    ],
+    ['return' => 'xsd:string'],
     'urn:WSCMService',
     '',
     '',
@@ -95,13 +95,13 @@ $s->register(
 
 $s->register(
     'WSCMForum.get_posts_id',
-    array(
+    [
         'username' => 'xsd:string',
         'password' => 'xsd:string',
         'course_code' => 'xsd:string',
         'thread_id' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string'),
+    ],
+    ['return' => 'xsd:string'],
     'urn:WSCMService',
     '',
     '',
@@ -111,14 +111,14 @@ $s->register(
 
 $s->register(
     'WSCMForum.get_post_data',
-    array(
+    [
         'username' => 'xsd:string',
         'password' => 'xsd:string',
         'course_code' => 'xsd:string',
         'post_id' => 'xsd:string',
         'field' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string'),
+    ],
+    ['return' => 'xsd:string'],
     'urn:WSCMService',
     '',
     '',
@@ -129,7 +129,7 @@ $s->register(
 
 $s->register(
     'WSCMForum.send_post',
-    array(
+    [
         'username' => 'xsd:string',
         'password' => 'xsd:string',
         'course_code' => 'xsd:string',
@@ -137,8 +137,8 @@ $s->register(
         'thread_id' => 'xsd:string',
         'title' => 'xsd:string',
         'content' => 'xsd:string',
-    ),
-    array('return' => 'xsd:string'),
+    ],
+    ['return' => 'xsd:string'],
     'urn:WSCMService',
     '',
     '',

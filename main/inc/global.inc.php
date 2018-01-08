@@ -37,7 +37,7 @@ if (file_exists($kernel->getConfigurationFile())) {
     // Recalculate a system absolute path symlinks insensible.
     $includePath = $_configuration['root_sys'].'main/inc/';
 } else {
-    $_configuration = array();
+    $_configuration = [];
     //Redirects to the main/install/ page
     if (!$alreadyInstalled) {
         $global_error_code = 2;
@@ -121,7 +121,7 @@ $params = array(
 
 // Doctrine ORM configuration
 
-$dbParams = array(
+$dbParams = [
     'driver' => 'pdo_mysql',
     'host' => $_configuration['db_host'],
     'user' => $_configuration['db_user'],
@@ -131,7 +131,7 @@ $dbParams = array(
     'path' => isset($_configuration['db_path']) ? $_configuration['db_path'] : '',
     // Only relevant for pdo_mysql, pdo_pgsql, and pdo_oci/oci8,
     'port' => isset($_configuration['db_port']) ? $_configuration['db_port'] : ''
-);
+];
 
 try {
     $database = new \Database();
@@ -270,11 +270,11 @@ foreach ($result as & $row) {
 }
 
 $result = & api_get_settings('Plugins', 'list', $_configuration['access_url']);
-$_plugins = array();
+$_plugins = [];
 foreach ($result as & $row) {
     $key = & $row['variable'];
     if (isset($_setting[$key]) && is_string($_setting[$key])) {
-        $_setting[$key] = array();
+        $_setting[$key] = [];
     }
     if ($row['subkey'] == null) {
         $_setting[$key][] = $row['selected_value'];
@@ -314,7 +314,7 @@ $administrator['email'] = isset($administrator['email']) ? $administrator['email
 $administrator['name'] = isset($administrator['name']) ? $administrator['name'] : 'Admin';
 
 // Including configuration files
-$configurationFiles = array(
+$configurationFiles = [
     'mail.conf.php',
     'profile.conf.php',
     'course_info.conf.php',
@@ -322,7 +322,7 @@ $configurationFiles = array(
     'events.conf.php',
     'auth.conf.php',
     'portfolio.conf.php'
-);
+];
 
 foreach ($configurationFiles as $file) {
     $file = api_get_path(CONFIGURATION_PATH).$file;
@@ -373,7 +373,7 @@ if (isset($this_script) && $this_script == 'sub_language') {
     //getting sub language info
     $sub_language = SubLanguageManager::get_all_information_of_language($_REQUEST['sub_language_id']);
 
-    $english_language_array = $parent_language_array = $sub_language_array = array();
+    $english_language_array = $parent_language_array = $sub_language_array = [];
 
     foreach ($language_files_to_load as $language_file_item) {
         $lang_list_pre = array_keys($GLOBALS);

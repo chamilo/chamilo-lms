@@ -26,10 +26,10 @@ $errorMsg = '';
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'session_list.php',
     'name' => get_lang('SessionList')
-);
+];
 
 function search_coachs($needle)
 {

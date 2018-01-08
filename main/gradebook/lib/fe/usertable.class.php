@@ -16,7 +16,7 @@ class UserTable extends SortableTable
     /**
      * Constructor
      */
-    public function __construct($userid, $evals = array(), $links = [], $addparams = null)
+    public function __construct($userid, $evals = [], $links = [], $addparams = null)
     {
         parent::__construct('userlist', null, null, 0);
         $this->userid = $userid;

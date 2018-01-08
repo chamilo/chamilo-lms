@@ -19,7 +19,7 @@ api_protect_admin_script();
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
 $tool_name = null;
 
@@ -61,7 +61,7 @@ $(function() {
         $columns,
         $column_model,
         $extra_params,
-        array(),
+        [],
         $action_links,
         true
     ).'
@@ -136,7 +136,7 @@ switch ($action) {
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             echo '</div>';
             $form->addElement('hidden', 'sec_token');
-            $form->setConstants(array('sec_token' => $token));
+            $form->setConstants(['sec_token' => $token]);
             $form->display();
         }
         break;
@@ -161,7 +161,7 @@ switch ($action) {
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
             echo '</div>';
             $form->addElement('hidden', 'sec_token');
-            $form->setConstants(array('sec_token' => $token));
+            $form->setConstants(['sec_token' => $token]);
             $form->display();
         }
         break;

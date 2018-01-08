@@ -21,12 +21,12 @@ if (strcmp($backpack, $configBackpack) !== 0) {
     $backpack = $configBackpack;
 }
 
-$interbreadcrumb = array(
-    array(
+$interbreadcrumb = [
+    [
         'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
         'name' => get_lang('Administration')
-    )
-);
+    ]
+];
 
 $toolbar = Display::url(
     Display::return_icon(

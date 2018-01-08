@@ -78,55 +78,55 @@ if ($current_forum['forum_of_group'] != 0) {
 }
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
-    );
+    ];
 }
 $groupId = api_get_group_id();
 if (!empty($groupId)) {
     $group_properties = GroupManager::get_group_properties($groupId);
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
-    );
+    ];
 
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
         'name' => get_lang('GroupSpace').' '.$group_properties['name']
-    );
+    ];
 
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq(),
         'name' => $current_forum['forum_title']
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
         'name' => $current_thread['thread_title']
-    );
+    ];
 
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'javascript: void(0);',
         'name' => get_lang('Reply'),
-    );
+    ];
 } else {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq(),
         'name' => $nameTools
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&'.api_get_cidreq(),
         'name' => $current_forum_category['cat_title']
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq(),
         'name' => $current_forum['forum_title']
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
         'name' => $current_thread['thread_title']
-    );
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Reply'));
+    ];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Reply')];
 }
 
 /* Header */

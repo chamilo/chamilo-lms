@@ -29,16 +29,16 @@ class FloatNumber extends HTML_QuickForm_text
         $this->setType('float');
     }
 
-     /**
-     * @param string $value
-     */
+    /**
+    * @param string $value
+    */
     public function setValue($value)
     {
         $value = api_float_val($value);
         $this->updateAttributes(
-            array(
+            [
                 'value'=>$value
-            )
+            ]
         );
     }
 
@@ -47,10 +47,10 @@ class FloatNumber extends HTML_QuickForm_text
      */
     public function getValue()
     {
-         $value = $this->getAttribute('value');
-         $value = api_float_val($value);
+        $value = $this->getAttribute('value');
+        $value = api_float_val($value);
 
-         return $value;
+        return $value;
     }
 
     /**

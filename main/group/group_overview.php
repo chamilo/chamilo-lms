@@ -62,7 +62,7 @@ if (isset($_GET['action'])) {
 }
 
 /*	Header */
-$interbreadcrumb[] = array('url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups'));
+$interbreadcrumb[] = ['url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups')];
 $origin = api_get_origin();
 if ($origin != 'learnpath') {
     // So we are not in learnpath tool

@@ -23,10 +23,10 @@ class SessionRelCourseRelUser
     const STATUS_STUDENT = 0;
     const STATUS_COURSE_COACH = 2;
 
-    public $statusList = array(
+    public $statusList = [
         0 => 'student',
         2 => 'course_coach'
-    );
+    ];
 
     /**
      * @var integer

@@ -24,10 +24,10 @@ class MultipleAnswerCombinationTrueFalse extends MultipleAnswerCombination
         parent::__construct();
         $this->type = MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE;
         $this->isContent = $this->getIsContent();
-        $this->options = array(
+        $this->options = [
             '1' => get_lang('True'),
             '0' => get_lang('False'),
             '2' => get_lang('DontKnow'),
-        );
+        ];
     }
 }

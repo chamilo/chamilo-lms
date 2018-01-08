@@ -14,24 +14,12 @@ use Sonata\UserBundle\Entity\UserManager as BaseUserManager;
 class UserManager extends BaseUserManager
 {
     /**
-     * Finds a user either by confirmation token
-     *
-     * @param string $token
-     *
-     * @return User
-     */
-    public function findUserByConfirmationToken($token)
-    {
-        return $this->findUserBy(['confirmationToken' => $token]);
-    }
-
-    /**
      * @param string $code
      * @return User
      */
     public function findUserByOfficialCode($code)
     {
-        $criteria = ['officialCode' => $code ];
+        $criteria = ['officialCode' => $code];
         return $this->findUserBy($criteria);
     }
 }

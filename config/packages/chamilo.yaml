@@ -86,6 +86,7 @@ chamilo_course:
             classes:
                 model: Chamilo\CourseBundle\Entity\CCourseSetting
                 repository: Chamilo\CourseBundle\Entity\Repository\CCourseSettingRepository
+
 doctrine_cache:
     providers:
         sylius_settings:

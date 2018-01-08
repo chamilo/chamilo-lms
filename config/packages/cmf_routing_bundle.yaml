@@ -1,4 +1,3 @@
-# Read the documentation: https://symfony.com/doc/master/cmf/bundles/routing/configuration.html
 # Install phpcr stack before using this configuration
 #cmf_routing:
 #    chain:

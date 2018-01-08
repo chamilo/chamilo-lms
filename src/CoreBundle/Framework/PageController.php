@@ -33,9 +33,9 @@ class PageController
      */
     public function returnHelp()
     {
-        $home                   = api_get_home_path();
+        $home = api_get_home_path();
         $user_selected_language = api_get_language_isocode();
-        $sys_path               = api_get_path(SYS_PATH);
+        $sys_path = api_get_path(SYS_PATH);
         $platformLanguage = api_get_setting('language.platform_language');
 
         if (!isset($user_selected_language)) {
@@ -709,7 +709,7 @@ class PageController
         );
 
         if (!empty($html)) {
-            $adapter    = new FixedAdapter($nbResults, []);
+            $adapter = new FixedAdapter($nbResults, []);
             $pagerfanta = new Pagerfanta($adapter);
             $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
             $pagerfanta->setCurrentPage($page); // 1 by default

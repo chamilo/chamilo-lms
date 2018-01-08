@@ -1,28 +1,23 @@
 language: php
-
 addons:
-    apt:
-        packages:
-        - apache2
-        - postfix
-        - libapache2-mod-fastcgi
-        - libappindicator1
-        - fonts-liberation
-    chrome: stable
-
+  apt:
+    packages:
+      - apache2
+      - postfix
+      - libapache2-mod-fastcgi
+      - libappindicator1
+      - fonts-liberation
+  chrome: stable
 services:
-    - mysql
-
+  - mysql
 sudo: required
 dist: trusty
 cache:
   directories:
     - $HOME/.composer/cache/files
-
 php:
   - 7.1
   - 7.2
-
 env:
   global:
     - VHOST_URL=localhost

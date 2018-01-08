@@ -1,3 +1,5 @@
 services:
   phpcsfixer: true
-  yamllint: true
+  yamllint:
+    version: latest
+    config_path: .yamllint_config

@@ -28,7 +28,7 @@ $rules = [
 ];
 
 $finder = PhpCsFixer\Finder::create()
-    ->exclude('app')
+    ->exclude('app/')
     ->exclude('assets')
     ->exclude('bin')
     ->exclude('documentation')

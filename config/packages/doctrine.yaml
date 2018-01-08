@@ -6,7 +6,7 @@ doctrine:
         password: '%env(DATABASE_PASSWORD)%'
         host: '%env(DATABASE_HOST)%'
         driver: 'pdo_mysql'
-        charset:  utf8mb4
+        charset: utf8mb4
         types:
             json: Sonata\Doctrine\Types\JsonType
     orm:

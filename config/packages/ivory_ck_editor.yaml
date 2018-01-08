@@ -10,8 +10,8 @@ ivory_ck_editor:
         default:
             # default toolbar plus Format button
             toolbar:
-            - [Bold, Italic, Underline, -, Cut, Copy, Paste, PasteText, PasteFromWord, -, Undo, Redo, -, NumberedList, BulletedList, -, Outdent, Indent, -, Blockquote, -, Image, Link, Unlink, Table]
-            - [Format, Maximize, Source]
+              - [Bold, Italic, Underline, -, Cut, Copy, Paste, PasteText, PasteFromWord, -, Undo, Redo, -, NumberedList, BulletedList, -, Outdent, Indent, -, Blockquote, -, Image, Link, Unlink, Table]
+              - [Format, Maximize, Source]
 
             filebrowserBrowseRoute: admin_chamilo_media_media_ckeditor_browser
             filebrowserImageBrowseRoute: admin_chamilo_media_media_ckeditor_browser

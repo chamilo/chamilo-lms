@@ -8,7 +8,7 @@ services:
             - Chamilo\CoreBundle\Entity\Session
             - ~
         calls:
-            - [ setTranslationDomain, [ChamiloCoreBundle]]
+            - [setTranslationDomain, [ChamiloCoreBundle]]
 
     sonata.admin.session_category:
         class: Chamilo\CoreBundle\Admin\SessionCategoryAdmin
@@ -19,7 +19,7 @@ services:
             - Chamilo\CoreBundle\Entity\SessionCategory
             - ~
         calls:
-            - [ setTranslationDomain, [ChamiloCoreBundle]]
+            - [setTranslationDomain, [ChamiloCoreBundle]]
 
     sonata.admin.career:
         class: Chamilo\CoreBundle\Admin\CareerAdmin
@@ -30,7 +30,7 @@ services:
             - Chamilo\CoreBundle\Entity\Career
             - ~
         calls:
-            - [ setTranslationDomain, [ChamiloCoreBundle]]
+            - [setTranslationDomain, [ChamiloCoreBundle]]
 
     sonata.admin.promotion:
         class: Chamilo\CoreBundle\Admin\PromotionAdmin
@@ -41,7 +41,7 @@ services:
             - Chamilo\CoreBundle\Entity\Promotion
             - ~
         calls:
-            - [ setTranslationDomain, [ChamiloCoreBundle]]
+            - [setTranslationDomain, [ChamiloCoreBundle]]
 
     sonata.admin.session_rel_course:
         class: Chamilo\CoreBundle\Admin\SessionRelCourseAdmin
@@ -52,7 +52,7 @@ services:
             - Chamilo\CoreBundle\Entity\SessionRelCourse
             - ~
         calls:
-            - [ setTranslationDomain, [ChamiloCoreBundle]]
+            - [setTranslationDomain, [ChamiloCoreBundle]]
 
     sonata.admin.session_rel_user:
             class: Chamilo\CoreBundle\Admin\SessionRelUserAdmin
@@ -63,7 +63,7 @@ services:
                 - Chamilo\CoreBundle\Entity\SessionRelUser
                 - ~
             calls:
-                - [ setTranslationDomain, [ChamiloCoreBundle]]
+                - [setTranslationDomain, [ChamiloCoreBundle]]
 
     sonata.admin.access_url:
         class: Chamilo\CoreBundle\Admin\AccessUrlAdmin
@@ -74,7 +74,7 @@ services:
             - Chamilo\CoreBundle\Entity\AccessUrl
             - ~
         calls:
-            - [ setTranslationDomain, [ChamiloCoreBundle]]
+            - [setTranslationDomain, [ChamiloCoreBundle]]
 
     sonata.admin.access_url_rel_course:
         class: Chamilo\CoreBundle\Admin\AccessUrlRelCourseAdmin
@@ -85,7 +85,7 @@ services:
             - Chamilo\CoreBundle\Entity\AccessUrlRelCourse
             - ~
         calls:
-            - [ setTranslationDomain, [ChamiloCoreBundle]]
+            - [setTranslationDomain, [ChamiloCoreBundle]]
 
     sonata.admin.settings_current:
         class: Chamilo\CoreBundle\Admin\SettingsCurrentAdmin
@@ -96,7 +96,7 @@ services:
             - Chamilo\CoreBundle\Entity\SettingsCurrent
             - ~
         calls:
-            - [ setTranslationDomain, [ChamiloCoreBundle]]
+            - [setTranslationDomain, [ChamiloCoreBundle]]
 
     sonata.admin.user_group:
         class: Chamilo\CoreBundle\Admin\UserGroupAdmin
@@ -107,7 +107,7 @@ services:
             - Chamilo\CoreBundle\Entity\UserGroup
             - ~
         calls:
-            - [ setTranslationDomain, [ChamiloCoreBundle]]
+            - [setTranslationDomain, [ChamiloCoreBundle]]
 
     sonata.admin.user_group_rel_user:
         class: Chamilo\CoreBundle\Admin\UsergroupRelUser
@@ -118,7 +118,7 @@ services:
             - Chamilo\CoreBundle\Entity\UsergroupRelUser
             - ~
         calls:
-            - [ setTranslationDomain, [ChamiloCoreBundle]]
+            - [setTranslationDomain, [ChamiloCoreBundle]]
 
     sonata.admin.tool:
         class: Chamilo\CoreBundle\Admin\ToolAdmin
@@ -129,7 +129,7 @@ services:
             - Chamilo\CoreBundle\Entity\Tool
             - ~
         calls:
-            - [ setTranslationDomain, [ChamiloCoreBundle]]
+            - [setTranslationDomain, [ChamiloCoreBundle]]
 
     sonata.admin.tool_resource_rights:
         class: Chamilo\CoreBundle\Admin\ToolResourceRightsAdmin
@@ -140,4 +140,4 @@ services:
             - Chamilo\CoreBundle\Entity\ToolResourceRights
             - ~
         calls:
-            - [ setTranslationDomain, [ChamiloCoreBundle]]
+            - [setTranslationDomain, [ChamiloCoreBundle]]

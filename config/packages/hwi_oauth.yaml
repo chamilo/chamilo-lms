@@ -26,12 +26,10 @@ hwi_oauth:
       infos_url: 'https://path.to/api/user'
       scope: user_details
       user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
-      paths: { identifier: id, nickname: username, realname: fullname }
-
+      paths: {identifier: id, nickname: username, realname: fullname}
   fosub:
     # try 30 times to check if a username is available (foo, foo1, foo2 etc)
     username_iterations: 30
-
     # mapping between resource owners (see below) and properties
     properties:
       github: githubId

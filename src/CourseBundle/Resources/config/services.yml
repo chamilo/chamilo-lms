@@ -18,9 +18,9 @@ services:
         class: Chamilo\CourseBundle\EventListener\CourseListener
         arguments: ['@service_container']
         tags:
-          - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}
-          - {name: kernel.event_listener, event: kernel.response, method: onKernelResponse}
-          - {name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 10}
+            - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}
+            - {name: kernel.event_listener, event: kernel.response, method: onKernelResponse}
+            - {name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 10}
 
     # Sets the user access in a course listener
     chamilo_course.listener.course_access:
@@ -36,14 +36,12 @@ services:
     chamilo_course.listener.session_access:
         class: Chamilo\CourseBundle\EventListener\SessionAccessListener
         arguments:
-          - '@doctrine.orm.entity_manager'
+            - '@doctrine.orm.entity_manager'
         calls:
-                - [setRequest, ['@request_stack']]
+            - [setRequest, ['@request_stack']]
         tags:
             - {name: kernel.event_listener, event: chamilo_course.course.session, method: onSessionAccessEvent}
-
     # Voters
-
     # Group voter, checks if a user has permissions to do actions
     chamilo_course.security.authorization.voter.group_voter:
         class: Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter
@@ -52,16 +50,16 @@ services:
             '@chamilo_core.entity.manager.course_manager',
             '@chamilo_course.manager.group',
             '@service_container'
-          ]
+        ]
         public: false
         tags:
-           - {name: security.voter}
+            - {name: security.voter}
 
     # Course settings
     chamilo_course.controller.settings:
         class: "%chamilo_course.controller.settings.class%"
         calls:
-          - [setContainer, ['@service_container']]
+            - [setContainer, ['@service_container']]
 
     chamilo_course.settings.form_factory:
         class: Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactory
@@ -72,7 +70,7 @@ services:
     chamilo_course.repository.parameter:
         class: Chamilo\CourseBundle\Entity\Repository\CCourseSettingRepository
         factory: ["@doctrine", getRepository]
-        arguments: [ Chamilo\CourseBundle\Entity\CCourseSetting ]
+        arguments: [Chamilo\CourseBundle\Entity\CCourseSetting]
 
 #    chamilo_settings.repository.parameter:
 #        class: Chamilo\CoreBundle\Entity\Repository\SettingsCurrentRepository
@@ -82,8 +80,8 @@ services:
     chamilo_course.registry.settings_schema:
         class: Sylius\Component\Registry\ServiceRegistry
         arguments:
-          - Sylius\Bundle\SettingsBundle\Schema\SchemaInterface
-          - 'Course settings'
+            - Sylius\Bundle\SettingsBundle\Schema\SchemaInterface
+            - 'Course settings'
 
     chamilo_course.settings.manager:
         class: '%chamilo_course.settings.manager.class%'
@@ -480,7 +478,6 @@ services:
 
         tags:
             - {name: chamilo_course.tool}
-
     # Course settings
     chamilo_course.settings.user:
         class: Chamilo\CourseBundle\Settings\UserCourseSettingsSchema

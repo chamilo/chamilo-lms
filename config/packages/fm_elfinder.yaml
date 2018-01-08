@@ -23,8 +23,8 @@ fm_elfinder:
                         flysystem:
                             type: local
                             options:
-                              local:
-                                  path: '%kernel.root_dir%/../public/uploads/media/'
+                                local:
+                                    path: '%kernel.root_dir%/../public/uploads/media/'
                         upload_allow: ['all']
                         #upload_allow: ['image/png', 'image/jpg', 'image/jpeg']
                         #upload_deny: ['all']

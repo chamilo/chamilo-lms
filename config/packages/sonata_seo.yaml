@@ -1,7 +1,7 @@
 sonata_seo:
     encoding: UTF-8
     page:
-        default:  sonata.seo.page.default
+        default: sonata.seo.page.default
         title: Chamilo
         metas:
             name:

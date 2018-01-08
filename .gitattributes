@@ -5,6 +5,7 @@
 .scrutinizer.yml export-ignore
 .styleci.yml export-ignore
 .travis.yml export-ignore
+.yamllint_config export-ignore
 codesize.xml export-ignore
 phpcs.xml export-ignore
 

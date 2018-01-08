@@ -52,7 +52,7 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         admin:
-            pattern:.*
+            pattern: .*
             context: user
             form_login:
                 provider: fos_userbundle

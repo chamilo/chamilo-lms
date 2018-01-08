@@ -5,4 +5,4 @@ services:
     arguments:
       - '@SensioLabs\Security\SecurityChecker'
     tags:
-      - { name: console.command }
+      - {name: console.command}

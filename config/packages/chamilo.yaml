@@ -95,5 +95,5 @@ doctrine_cache:
             type: file_system
 
 imports:
-    - { resource: ../../src/CoreBundle/Resources/config/services.yml }
-    - { resource: ../../vendor/knplabs/doctrine-behaviors/config/orm-services.yml }
+    - {resource: ../../src/CoreBundle/Resources/config/services.yml}
+    - {resource: ../../vendor/knplabs/doctrine-behaviors/config/orm-services.yml}

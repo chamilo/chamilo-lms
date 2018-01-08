@@ -16,10 +16,11 @@
 {{ 'MySkillsReportIntroduction' | get_lang }}
 </p>
 {% if rows %}
+<div class="communications">
     {% if skill_table %}
         {{ skill_table }}
     {% endif %}
-
+</div>
     <h6 class="table-header">{{ 'SkillsHistory' | get_lang }}</h6>
     <table class="table">
         <thead>

@@ -6,6 +6,8 @@ var/cache/*
 var/log/*
 !var/log/.gitkeep
 
+/node_modules/
+
 # Chamilo configuration
 /app/config/parameters.yml
 /app/config/add_course.conf.php

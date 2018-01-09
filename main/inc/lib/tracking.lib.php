@@ -7263,8 +7263,6 @@ class TrackingCourseLog
             $courseId = $courseInfo['real_id'];
 
             $user['official_code'] = $user['col0'];
-            $user['lastname'] = $user['col1'];
-            $user['firstname'] = $user['col2'];
             $user['username'] = $user['col3'];
 
             $user['time'] = api_time_to_hms(
@@ -7355,11 +7353,11 @@ class TrackingCourseLog
             $user_row = [];
             $user_row['official_code'] = $user['official_code']; //0
             if ($is_western_name_order) {
-                $user_row['firstname'] = $user['firstname'];
-                $user_row['lastname'] = $user['lastname'];
+                $user_row['firstname'] = $user['col1'];
+                $user_row['lastname'] = $user['col2'];
             } else {
-                $user_row['lastname'] = $user['lastname'];
-                $user_row['firstname'] = $user['firstname'];
+                $user_row['lastname'] = $user['col1'];
+                $user_row['firstname'] = $user['col2'];
             }
             $user_row['username'] = $user['username'];
             $user_row['time'] = $user['time'];

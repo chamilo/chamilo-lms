@@ -162,7 +162,7 @@ class CourseHome
 
             // VISIBLE
             if (($tool['visibility'] ||
-                ((api_is_coach() || api_is_course_tutor()) && $tool['name'] == TOOL_TRACKING)) ||
+                    ((api_is_coach() || api_is_course_tutor()) && $tool['name'] == TOOL_TRACKING)) ||
                 $cat == 'courseAdmin' || $cat == 'platformAdmin'
             ) {
                 if (strpos($tool['name'], 'visio_') !== false) {
@@ -372,13 +372,13 @@ class CourseHome
 
                 $tool_name = self::translate_tool_name($tool);
                 $html .= Display::return_icon(
-                    $tool['image'],
-                    $tool_name,
-                    [],
-                    null,
-                    ICON_SIZE_MEDIUM
-                ).'&nbsp;'.$tool_name.
-                '</a>';
+                        $tool['image'],
+                        $tool_name,
+                        [],
+                        null,
+                        ICON_SIZE_MEDIUM
+                    ).'&nbsp;'.$tool_name.
+                    '</a>';
 
                 // This part displays the links to hide or remove a tool.
                 // These links are only visible by the course manager.
@@ -507,37 +507,31 @@ class CourseHome
                         $conditions AND
                         c_id = $course_id $condition_session
                         ";
-                $result = Database::query($sql);
                 break;
             case TOOL_AUTHORING:
                 $sql = "SELECT * FROM $course_tool_table t
                         WHERE category = 'authoring' AND c_id = $course_id $condition_session
                         ";
-                $result = Database::query($sql);
                 break;
             case TOOL_INTERACTION:
                 $sql = "SELECT * FROM $course_tool_table t
                         WHERE category = 'interaction' AND c_id = $course_id $condition_session
                         ";
-                $result = Database::query($sql);
                 break;
             case TOOL_ADMIN_VISIBLE:
                 $sql = "SELECT * FROM $course_tool_table t
                         WHERE category = 'admin' AND visibility ='1' AND c_id = $course_id $condition_session
                         ";
-                $result = Database::query($sql);
                 break;
             case TOOL_ADMIN_PLATFORM:
                 $sql = "SELECT * FROM $course_tool_table t
                         WHERE category = 'admin' AND c_id = $course_id $condition_session
                         ";
-                $result = Database::query($sql);
                 break;
             case TOOL_DRH:
                 $sql = "SELECT * FROM $course_tool_table t
                         WHERE name IN ('tracking') AND c_id = $course_id $condition_session
                         ";
-                $result = Database::query($sql);
                 break;
             case TOOL_COURSE_PLUGIN:
                 //Other queries recover id, name, link, image, visibility, admin, address, added_tool, target, category and session_id
@@ -545,11 +539,14 @@ class CourseHome
                 $sql = "SELECT * FROM $course_tool_table t
                         WHERE category = 'plugin' AND name <> 'courseblock' AND c_id = $course_id $condition_session
                         ";
-                $result = Database::query($sql);
                 break;
         }
-
         $sql .= " ORDER BY id ";
+        $result = Database::query($sql);
+        $tools = [];
+        while ($row = Database::fetch_assoc($result)) {
+            $tools[] = $row;
+        }
 
         // Get the list of hidden tools - this might imply performance slowdowns
         // if the course homepage is loaded many times, so the list of hidden
@@ -570,10 +567,7 @@ class CourseHome
 
         $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
 
-        $tools = [];
-        while ($row = Database::fetch_assoc($result)) {
-            $tools[] = $row;
-        }
+
 
         $toolWithSessionValue = [];
         foreach ($tools as $row) {
@@ -970,7 +964,7 @@ class CourseHome
                     if (!empty($tool['adminlink'])) {
                         $item['extra'] = '<a href="'.$tool['adminlink'].'">'.
                             Display::return_icon('edit.gif', get_lang('Edit')).
-                        '</a>';
+                            '</a>';
                     }
                 }
 
@@ -1209,7 +1203,7 @@ class CourseHome
                     <td>'.get_lang('GeneralCoach').': '.'<b>'.$coachInfo['complete_name'].'</b></td></tr>';
         $output .= '<tr>
                         <td>'.get_lang('SessionIdentifier').': '.
-                            Display::return_icon('star.png', ' ', ['align' => 'absmiddle']).'
+            Display::return_icon('star.png', ' ', ['align' => 'absmiddle']).'
                         </td>
                         <td>'.get_lang('Date').': '.'<b>'.$msgDate.'</b>
                         </td>

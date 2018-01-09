@@ -64,4 +64,5 @@ return [
     Sylius\Bundle\ResourceBundle\SyliusResourceBundle::class => ['all' => true],
     Sylius\Bundle\SettingsBundle\SyliusSettingsBundle::class => ['all' => true],
     Lunetics\LocaleBundle\LuneticsLocaleBundle::class => ['all' => true],
+    Http\HttplugBundle\HttplugBundle::class => ['all' => true],
 ];

@@ -78,7 +78,7 @@
         "symfony/polyfill-apcu": "^1.5",
         "symfony/security-bundle": "^3.0|^4.0",
         "symfony/swiftmailer-bundle": "^3.1",
-        "symfony/translation": "^3.0|^4.0",
+        "symfony/translation": "^4.0",
         "symfony/twig-bundle": "^3.0|^4.0",
         "symfony/validator": "^3.0|^4.0",
         "symfony/yaml": "^3.0|^4.0",
@@ -123,7 +123,7 @@
         "gedmo/doctrine-extensions": "~2.4",
         "gregwar/captcha-bundle": "^2.0",
         "helios-ag/fm-elfinder-bundle": "~6.0",
-        "hwi/oauth-bundle": "~0.5",
+
 
         "doctrine/data-fixtures": "~1.0@dev",
         "knplabs/gaufrette": "~0.3",
@@ -149,7 +149,6 @@
         "mpdf/mpdf": "~7.0",
         "studio-42/elfinder": "2.1.*",
         "jbroadway/urlify": "1.1.0-stable",
-        "monolog/monolog": "~1.0",
         "ircmaxell/password-compat": "~1.0.4",
 
         "patchwork/utf8": "~1.3",
@@ -168,26 +167,28 @@
         "kigkonsult/icalcreator": "2.*",
         "essence/essence": "~3.0",
         "paragonie/random-lib": "2.0.0",
-
         "knplabs/knp-components": "^1.3",
         "symfony/webpack-encore-pack": "^1.0",
-        "lunetics/locale-bundle": "2.5.*"
+        "lunetics/locale-bundle": "2.5.*",
+        "hwi/oauth-bundle": "^0.6.0",
+        "php-http/guzzle6-adapter": "^1.1",
+        "php-http/httplug-bundle": "^1.8"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.7",
         "symfony/browser-kit": "^3.0|^4.0",
         "symfony/css-selector": "^4.0",
-        "symfony/debug-bundle": "^3.0|^4.0",
-        "symfony/dotenv": "^3.0|^4.0",
-        "symfony/phpunit-bridge": "^3.0|^4.0",
-        "symfony/stopwatch": "^3.0|^4.0",
-        "symfony/web-profiler-bundle": "^3.0|^4.0",
-        "symfony/web-server-bundle": "^3.0|^4.0",
+        "symfony/debug-bundle": "^4.0",
+        "symfony/dotenv": "^4.0",
+        "symfony/phpunit-bridge": "^4.0",
+        "symfony/stopwatch": "^4.0",
+        "symfony/web-profiler-bundle": "^4.0",
+        "symfony/web-server-bundle": "^4.0",
         "behat/behat": "@stable",
         "behat/mink": "dev-master",
-        "behat/mink-extension": "*",
-        "behat/mink-goutte-driver": "*",
-        "behat/mink-selenium2-driver": "*"
+        "behat/mink-extension": "dev-master",
+        "behat/mink-goutte-driver": "dev-master",
+        "behat/mink-selenium2-driver": "dev-master"
     },
     "scripts": {
         "pre-install-cmd": [

@@ -8105,6 +8105,7 @@ function api_mail_html(
     $additionalParameters = []
 ) {
     global $platform_email;
+    return;
 
     $mail = new PHPMailer();
     $mail->Mailer = $platform_email['SMTP_MAILER'];

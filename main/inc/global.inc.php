@@ -104,6 +104,7 @@ if (!is_dir(_MPDF_TEMP_PATH)) {
 }
 
 if (file_exists(api_get_path(SYS_PATH).'.env')) {
+    // Get settings from .env file created when installation chamilo
     (new Dotenv())->load(api_get_path(SYS_PATH).'.env');
     $kernel->boot();
     $doctrine = $kernel->getContainer()->get('doctrine');
@@ -117,45 +118,6 @@ if (file_exists(api_get_path(SYS_PATH).'.env')) {
     require $includePath.'/global_error_message.inc.php';
     die();
 }
-
-// Connect to the server database and select the main chamilo database.
-// When $_configuration['db_persistent_connection'] is set, it is expected to be a boolean type.
-/*$dbPersistConnection = api_get_configuration_value('db_persistent_connection');
-// $_configuration['db_client_flags'] can be set in configuration.php to pass
-// flags to the DB connection
-$dbFlags = api_get_configuration_value('db_client_flags');
-
-$params = array(
-    'server' => $_configuration['db_host'],
-    'username' => $_configuration['db_user'],
-    'password' => $_configuration['db_password'],
-    'persistent' => $dbPersistConnection,
-    'client_flags' => $dbFlags,
-);*/
-
-// Doctrine ORM configuration
-/*
-$dbParams = [
-    'driver' => 'pdo_mysql',
-    'host' => $_configuration['db_host'],
-    'user' => $_configuration['db_user'],
-    'password' => $_configuration['db_password'],
-    'dbname' => $_configuration['main_database'],
-    // Only relevant for pdo_sqlite, specifies the path to the SQLite database.
-    'path' => isset($_configuration['db_path']) ? $_configuration['db_path'] : '',
-    // Only relevant for pdo_mysql, pdo_pgsql, and pdo_oci/oci8,
-    'port' => isset($_configuration['db_port']) ? $_configuration['db_port'] : ''
-];
-
-try {
-    $database = new \Database();
-    $database->connect($dbParams);
-} catch (Exception $e) {
-    $global_error_code = 3;
-    // The database server is not available or credentials are invalid.
-    require $includePath.'/global_error_message.inc.php';
-    die();
-}*/
 
 /* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE*/
 if (!empty($_configuration['multiple_access_urls'])) {

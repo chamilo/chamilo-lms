@@ -553,7 +553,7 @@ function get_config_param_from_db($param = '')
  * @param string  $dbNameForm DB name
  * @param int     $dbPortForm DB port
  *
- * @return EntityManager
+ * @return Database
  */
 function connectToDatabase(
     $dbHostForm,
@@ -574,7 +574,7 @@ function connectToDatabase(
     $database = new \Database();
     $database->connect($dbParams);
 
-    return $database->getManager();
+    return $database;
 }
 
 /*      DISPLAY FUNCTIONS */
@@ -2763,8 +2763,11 @@ function finishInstallation(
     $installationProfile = ''
 ) {
     $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
-
     $connection = $manager->getConnection();
+
+    Database::setConnection($connection);
+    Database::setManager($manager);
+
     $sql = getVersionTable();
     // Add version table
     $connection->executeQuery($sql);

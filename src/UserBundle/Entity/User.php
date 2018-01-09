@@ -12,7 +12,7 @@ use Chamilo\CoreBundle\Entity\Skill;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-use Sonata\UserBundle\Entity\BaseUser as BaseUser;
+use Sonata\UserBundle\Entity\BaseUser;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 //use Symfony\Component\Security\Core\User\UserInterface;
@@ -28,7 +28,6 @@ use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
 //use Vich\UploaderBundle\Mapping\Annotation as Vich;
 //use Application\Sonata\MediaBundle\Entity\Media;
 //use Chamilo\UserBundle\Model\UserInterface as UserInterfaceModel;
-
 //use Sylius\Component\Attribute\Model\AttributeValueInterface as BaseAttributeValueInterface;
 //use Sylius\Component\Variation\Model\OptionInterface as BaseOptionInterface;
 //use Sylius\Component\Variation\Model\VariantInterface as BaseVariantInterface;
@@ -59,7 +58,7 @@ use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
  *         column=@ORM\Column(
  *             name="email",
  *             type="string",
- *             length=255,
+ *             length=100,
  *             unique=false
  *         )
  *     ),
@@ -67,7 +66,7 @@ use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
  *         column=@ORM\Column(
  *             name="email_canonical",
  *             type="string",
- *             length=255,
+ *             length=100,
  *             unique=false
  *         )
  *     )
@@ -2228,20 +2227,6 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
         return $this;
     }
 
-    public function setUsername($username)
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    public function setUsernameCanonical($usernameCanonical)
-    {
-        $this->usernameCanonical = $usernameCanonical;
-
-        return $this;
-    }
-
     /**
      * @param boolean $boolean
      *
@@ -2250,13 +2235,6 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     public function setCredentialsExpired($boolean)
     {
         $this->credentialsExpired = $boolean;
-
-        return $this;
-    }
-
-    public function setEmailCanonical($emailCanonical)
-    {
-        $this->emailCanonical = $emailCanonical;
 
         return $this;
     }

@@ -22,7 +22,7 @@ class Database
     /**
      * @param EntityManager $em
      */
-    public function setManager($em)
+    public static function setManager($em)
     {
         self::$em = $em;
     }
@@ -30,7 +30,7 @@ class Database
     /**
      * @param Connection $connection
      */
-    public function setConnection(Connection $connection)
+    public static function setConnection(Connection $connection)
     {
         self::$connection = $connection;
     }
@@ -143,13 +143,13 @@ class Database
 
         $config->setEntityNamespaces(
             [
-                'ChamiloPageBundle' => 'Chamilo\PageBundle\Entity',
-                'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity',
                 'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
                 'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
+                'ChamiloPageBundle' => 'Chamilo\PageBundle\Entity',
+                'ChamiloPluginBundle' => 'Chamilo\PluginBundle\Entity',
                 'ChamiloSkillBundle' => 'Chamilo\SkillBundle\Entity',
                 'ChamiloTicketBundle' => 'Chamilo\TicketBundle\Entity',
-                'ChamiloPluginBundle' => 'Chamilo\PluginBundle\Entity'
+                'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity'
             ]
         );
 

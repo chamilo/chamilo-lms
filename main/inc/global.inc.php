@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Symfony\Component\Dotenv\Dotenv;
+
 /**
  * It is recommended that ALL Chamilo scripts include this important file.
  * This script manages
@@ -21,14 +23,13 @@ define('SHOW_ERROR_CODES', false);
 // Include the libraries that are necessary everywhere
 require_once __DIR__.'/../../vendor/autoload.php';
 
-$kernel = new Chamilo\Kernel('', '');
+$kernel = new Chamilo\Kernel('dev', true);
 
 // Determine the directory path where this current file lies.
 // This path will be useful to include the other initialisation files.
 $includePath = __DIR__;
 
 // Include the main Chamilo platform configuration file.
-
 $alreadyInstalled = false;
 if (file_exists($kernel->getConfigurationFile())) {
     require_once $kernel->getConfigurationFile();
@@ -102,6 +103,21 @@ if (!is_dir(_MPDF_TEMP_PATH)) {
     mkdir(_MPDF_TEMP_PATH, api_get_permissions_for_new_directories(), true);
 }
 
+if (file_exists(api_get_path(SYS_PATH).'.env')) {
+    (new Dotenv())->load(api_get_path(SYS_PATH).'.env');
+    $kernel->boot();
+    $doctrine = $kernel->getContainer()->get('doctrine');
+
+    $database = new \Database();
+    $database->setManager($doctrine->getManager());
+    $database->setConnection($doctrine->getConnection());
+} else {
+    $global_error_code = 3;
+    // The database server is not available or credentials are invalid.
+    require $includePath.'/global_error_message.inc.php';
+    die();
+}
+
 // Connect to the server database and select the main chamilo database.
 // When $_configuration['db_persistent_connection'] is set, it is expected to be a boolean type.
 /*$dbPersistConnection = api_get_configuration_value('db_persistent_connection');
@@ -118,7 +134,7 @@ $params = array(
 );*/
 
 // Doctrine ORM configuration
-
+/*
 $dbParams = [
     'driver' => 'pdo_mysql',
     'host' => $_configuration['db_host'],
@@ -139,7 +155,7 @@ try {
     // The database server is not available or credentials are invalid.
     require $includePath.'/global_error_message.inc.php';
     die();
-}
+}*/
 
 /* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE*/
 if (!empty($_configuration['multiple_access_urls'])) {

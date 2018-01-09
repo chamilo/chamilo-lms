@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Doctrine\ORM\EntityManager;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\TicketBundle\Entity\Project as TicketProject;
 use Chamilo\TicketBundle\Entity\Category as TicketCategory;
 use Chamilo\TicketBundle\Entity\Priority as TicketPriority;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Chamilo LMS

@@ -302,6 +302,8 @@ See https://support.chamilo.org/issues/6976
     height: 100%;
     margin: 0;
     overflow: hidden;
+    position: absolute;
+    width: 100%;
 }
 #learning_path_left_zone,
 #learning_path_right_zone {
@@ -313,8 +315,12 @@ See https://support.chamilo.org/issues/6976
     position: absolute;
     right: 0;
     top: 0;
-    transition-property: left width;
+    transition-property: left, width;
     transition-duration: 0.5s;
+}
+#learning_path_right_zone #wrapper-iframe {
+    height: 100%;
+    width: 100%;
 }
 #learning_path_left_zone .lp-view-zone-container,
 #learning_path_right_zone .lp-view-zone-container {
@@ -338,6 +344,9 @@ See https://support.chamilo.org/issues/6976
 #learning_path_right_zone {
     left: 100%;
     width: 100%;
+}
+#learning_path_right_zone.no-right-col {
+    left: 0;
 }
 #learning_path_right_zone .lp-view-tabs .tab-content {
     bottom: 5px;
@@ -434,6 +443,9 @@ See https://support.chamilo.org/issues/6976
     #learning_path_right_zone {
         left: 250px;
         width: calc(100% - 250px);
+    }
+    #learning_path_right_zone.no-right-col {
+        width: 100%;
     }
     #learning_path_main.lp-view-include-breadcrumb #learning_path_left_zone,
     #learning_path_main.lp-view-include-breadcrumb #learning_path_right_zone {

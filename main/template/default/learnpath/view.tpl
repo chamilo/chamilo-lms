@@ -94,12 +94,7 @@
     </div>
 
     {# right zone #}
-    {% if show_left_column == 1 %}
-        <div id="learning_path_right_zone" class="content-scorm">
-    {% else %}
-        <div id="" class="content-scorm">
-    {% endif %}
-
+    <div id="learning_path_right_zone" class="{{ show_left_column == 1 ? 'content-scorm' : 'no-right-col' }}">
         <div class="lp-view-zone-container">
             <div class="lp-view-tabs">
                 <div id="navTabsbar" class="nav-tabs-bar">
@@ -120,7 +115,7 @@
                 </div>
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="lp-view-content">
-                        <div id="wrapper-iframe" style="width:100%; height:100%">
+                        <div id="wrapper-iframe">
                         {% if lp_mode == 'fullscreen' %}
                             <iframe id="content_id_blank" name="content_name_blank" src="blank.php" style="width:100%; height:100%" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
                         {% else %}

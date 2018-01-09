@@ -791,7 +791,7 @@ if (@$_POST['step2']) {
                 '{{APP_INSTALLED}}' => 1,
                 '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm
             ];
-            updateEnvFile($params);
+            updateEnvFile($envFile, $params);
             (new Dotenv())->load($envFile);
 
             $kernel = new Kernel('dev', true);

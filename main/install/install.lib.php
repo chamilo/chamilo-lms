@@ -2723,11 +2723,11 @@ function fixIds(EntityManager $em)
 }
 
 /**
+ * @param string $envFile
  * @param array $params
  */
-function updateEnvFile($params)
+function updateEnvFile($envFile, $params)
 {
-    $envFile = api_get_path(SYS_PATH).'.env';
     $contents = file_get_contents($envFile);
     $contents = str_replace(array_keys($params), array_values($params), $contents);
     file_put_contents($envFile, $contents);

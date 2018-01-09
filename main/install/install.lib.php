@@ -2723,6 +2723,17 @@ function fixIds(EntityManager $em)
 }
 
 /**
+ * @param array $params
+ */
+function updateEnvFile($params)
+{
+    $envFile = api_get_path(SYS_PATH).'.env';
+    $contents = file_get_contents($envFile);
+    $contents = str_replace(array_keys($params), array_values($params), $contents);
+    file_put_contents($envFile, $contents);
+}
+
+/**
  *
  * After the schema was created (table creation), the function adds
  * admin/platform information.

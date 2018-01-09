@@ -782,8 +782,6 @@ if (@$_POST['step2']) {
             $manager->getConnection()->executeQuery($sql);
 
             $envFile = api_get_path(SYS_PATH).'.env';
-            $contents = file_get_contents($envFile);
-
             $params = [
                 '{{DATABASE_HOST}}' => $dbHostForm,
                 '{{DATABASE_PORT}}' => $dbPortForm,
@@ -793,10 +791,8 @@ if (@$_POST['step2']) {
                 '{{APP_INSTALLED}}' => 1,
                 '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm
             ];
-            $contents = str_replace(array_keys($params), array_values($params), $contents);
-            file_put_contents($envFile, $contents);
-
-            (new Dotenv())->load(api_get_path(SYS_PATH).'.env');
+            updateEnvFile($params);
+            (new Dotenv())->load($envFile);
 
             $kernel = new Kernel('dev', true);
             $application = new Application($kernel);
@@ -810,7 +806,6 @@ if (@$_POST['step2']) {
                 $kernel->boot();
                 $doctrine = $kernel->getContainer()->get('doctrine');
                 $manager = $doctrine->getManager();
-
                 $sysPath = api_get_path(SYS_PATH);
                 finishInstallation(
                     $manager,

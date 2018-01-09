@@ -3,8 +3,6 @@
 
 use Doctrine\ORM\EntityManager;
 use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
-use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\TicketBundle\Entity\Project as TicketProject;
 use Chamilo\TicketBundle\Entity\Category as TicketCategory;
 use Chamilo\TicketBundle\Entity\Priority as TicketPriority;

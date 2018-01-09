@@ -79,7 +79,7 @@ class UserManager
                 $passwordUpdater,
                 $canonicalUpdater,
                 Database::getManager(),
-                'Chamilo\\UserBundle\\Entity\\User'
+                User::class
             );
         }
 

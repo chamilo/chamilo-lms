@@ -687,10 +687,10 @@ class Template
         ];
 
         foreach ($bowerCSSFiles as $file) {
-            $css[] = api_get_path(WEB_PUBLIC_PATH).'assets/'.$file;
+            //$css[] = api_get_path(WEB_PUBLIC_PATH).'assets/'.$file;
         }
 
-        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
+        //$css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
 
         if (api_is_global_chat_enabled()) {
             $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
@@ -848,11 +848,13 @@ class Template
         }
 
         foreach ($bowerJsFiles as $file) {
-            $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"></script>'."\n";
+            //$js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"></script>'."\n";
         }
 
+        $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'build/chamilo.js"></script>'."\n";
+
         foreach ($js_files as $file) {
-            $js_file_to_string .= api_get_js($file);
+            //$js_file_to_string .= api_get_js($file);
         }
 
         // Loading email_editor js

@@ -71,6 +71,8 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/lib/javascript/jquery-ui',
             __DIR__.'/../../../../main/inc/lib/fckeditor',
             __DIR__.'/../../../../main/inc/lib/mpdf/',
+            __DIR__.'/../../../../main/inc/lib/phpseclib/',
+            __DIR__.'/../../../../main/inc/lib/phpmailer/',
             __DIR__.'/../../../../main/inc/lib/symfony/',
             __DIR__.'/../../../../main/inc/lib/system/media/renderer',
             __DIR__.'/../../../../main/inc/lib/system/io',

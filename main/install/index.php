@@ -781,6 +781,7 @@ if (@$_POST['step2']) {
             $sql = getVersionTable();
             $manager->getConnection()->executeQuery($sql);
 
+            // Create .env file
             $envFile = api_get_path(SYS_PATH).'.env';
             $params = [
                 '{{DATABASE_HOST}}' => $dbHostForm,
@@ -794,15 +795,18 @@ if (@$_POST['step2']) {
             updateEnvFile($envFile, $params);
             (new Dotenv())->load($envFile);
 
+            // Load Symfony Kernel
             $kernel = new Kernel('dev', true);
             $application = new Application($kernel);
 
+            // Create database
             $input = new \Symfony\Component\Console\Input\ArrayInput([]);
             $command = $application->find('doctrine:schema:create');
             $result = $command->run($input, new ConsoleOutput());
 
             // No errors
             if ($result == 0) {
+                // Boot kernel and get the doctrine from Symfony container
                 $kernel->boot();
                 $doctrine = $kernel->getContainer()->get('doctrine');
                 $manager = $doctrine->getManager();

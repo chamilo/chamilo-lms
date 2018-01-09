@@ -7353,11 +7353,11 @@ class TrackingCourseLog
             $user_row = [];
             $user_row['official_code'] = $user['official_code']; //0
             if ($is_western_name_order) {
-                $user_row['firstname'] = $user['col1'];
-                $user_row['lastname'] = $user['col2'];
-            } else {
-                $user_row['lastname'] = $user['col1'];
                 $user_row['firstname'] = $user['col2'];
+                $user_row['lastname'] = $user['col1'];
+            } else {
+                $user_row['lastname'] = $user['col2'];
+                $user_row['firstname'] = $user['col1'];
             }
             $user_row['username'] = $user['username'];
             $user_row['time'] = $user['time'];

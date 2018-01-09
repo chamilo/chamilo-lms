@@ -507,37 +507,31 @@ class CourseHome
                         $conditions AND
                         c_id = $course_id $condition_session
                         ";
-                $result = Database::query($sql);
                 break;
             case TOOL_AUTHORING:
                 $sql = "SELECT * FROM $course_tool_table t
                         WHERE category = 'authoring' AND c_id = $course_id $condition_session
                         ";
-                $result = Database::query($sql);
                 break;
             case TOOL_INTERACTION:
                 $sql = "SELECT * FROM $course_tool_table t
                         WHERE category = 'interaction' AND c_id = $course_id $condition_session
                         ";
-                $result = Database::query($sql);
                 break;
             case TOOL_ADMIN_VISIBLE:
                 $sql = "SELECT * FROM $course_tool_table t
                         WHERE category = 'admin' AND visibility ='1' AND c_id = $course_id $condition_session
                         ";
-                $result = Database::query($sql);
                 break;
             case TOOL_ADMIN_PLATFORM:
                 $sql = "SELECT * FROM $course_tool_table t
                         WHERE category = 'admin' AND c_id = $course_id $condition_session
                         ";
-                $result = Database::query($sql);
                 break;
             case TOOL_DRH:
                 $sql = "SELECT * FROM $course_tool_table t
                         WHERE name IN ('tracking') AND c_id = $course_id $condition_session
                         ";
-                $result = Database::query($sql);
                 break;
             case TOOL_COURSE_PLUGIN:
                 //Other queries recover id, name, link, image, visibility, admin, address, added_tool, target, category and session_id
@@ -545,11 +539,14 @@ class CourseHome
                 $sql = "SELECT * FROM $course_tool_table t
                         WHERE category = 'plugin' AND name <> 'courseblock' AND c_id = $course_id $condition_session
                         ";
-                $result = Database::query($sql);
                 break;
         }
-
         $sql .= " ORDER BY id ";
+        $result = Database::query($sql);
+        $tools = [];
+        while ($row = Database::fetch_assoc($result)) {
+            $tools[] = $row;
+        }
 
         // Get the list of hidden tools - this might imply performance slowdowns
         // if the course homepage is loaded many times, so the list of hidden
@@ -570,10 +567,7 @@ class CourseHome
 
         $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
 
-        $tools = [];
-        while ($row = Database::fetch_assoc($result)) {
-            $tools[] = $row;
-        }
+
 
         $toolWithSessionValue = [];
         foreach ($tools as $row) {

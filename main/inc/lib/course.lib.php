@@ -3787,7 +3787,9 @@ class CourseManager
         $sql = "SELECT DISTINCT
                     course.id,
                     course_rel_user.status status,
-                    course.code as course_code                    
+                    course.code as course_code,
+                    user_course_cat,
+                    course_rel_user.sort
                 FROM $TABLECOURS course 
                 INNER JOIN $TABLECOURSUSER course_rel_user
                 ON (course.id = course_rel_user.c_id)

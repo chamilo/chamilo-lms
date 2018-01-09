@@ -624,25 +624,29 @@ class TestCategory
 
     /**
      * @param int $questionId
-     * @param int $in_display_category_name
+     * @param int $showCategoryName
      * @return null|string
      */
-    public static function returnCategoryAndTitle($questionId, $in_display_category_name = 1)
+    public static function returnCategoryAndTitle($questionId, $showCategoryName = 1)
     {
         $is_student = !(api_is_allowed_to_edit(null, true) || api_is_session_admin());
         $objExercise = Session::read('objExercise');
-        if (!empty($objExercise)) {
-            $in_display_category_name = $objExercise->display_category_name;
+        if (empty($objExercise)) {
+            return '';
         }
-        $content = null;
-        if (self::getCategoryNameForQuestion($questionId) != '' &&
-            ($in_display_category_name == 1 || !$is_student)
-        ) {
-            $content .= '<div class="page-header">';
-            $content .= '<h4>'.get_lang('Category').": ".self::getCategoryNameForQuestion($questionId).'</h4>';
-            $content .= "</div>";
+
+        $showCategoryName = !!$objExercise->display_category_name; //double negation to get a boolean value
+        $categoryName = self::getCategoryNameForQuestion($questionId);
+
+        if (empty($categoryName) || (!$showCategoryName && $is_student)) {
+            return '';
         }
-        return $content;
+
+        return Display::page_header(
+            get_lang('Category').': '.$categoryName,
+            null,
+            'h4'
+        );
     }
 
     /**

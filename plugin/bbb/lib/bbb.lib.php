@@ -858,7 +858,10 @@ class bbb
                     'userID' => '', //	-- OPTIONAL - string
                     'webVoiceConf' => '' //	-- OPTIONAL - string
                 );
-                $item['go_url'] = $this->protocol.$this->api->getJoinMeetingURL($joinParams);
+                $item['go_url'] = '';
+                if (!empty($pass)) {
+                    $item['go_url'] = $this->protocol.$this->api->getJoinMeetingURL($joinParams);
+                }
             }
             $item = array_merge($item, $meetingDB, $meetingBBB);
 

@@ -321,15 +321,11 @@ if ($encryptPassForm == '1') {
 <head>
     <title>&mdash; <?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
     <style type="text/css" media="screen, projection">
-        @import "../../web/assets/bootstrap/dist/css/bootstrap.min.css";
-        @import "../../web/assets/bootstrap-select/dist/css/bootstrap-select.min.css";
-        @import "../../web/assets/fontawesome/css/font-awesome.min.css";
-        @import "../../web/css/base.css";
-        @import "../../web/css/themes/chamilo/default.css";
+        @import "../../public/build/chamilo.css";
+        @import "../../public/build/css/base.css";
+        @import "../../public/build/css/themes/chamilo/default.css";
     </style>
-    <script type="text/javascript" src="../../web/assets/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="../../web/assets/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="../../web/assets/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" src="../../public/build/chamilo.js"></script>
     <script type="text/javascript">
         $(document).ready( function() {
 

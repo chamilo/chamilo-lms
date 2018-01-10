@@ -726,6 +726,9 @@ class Template
     public function setCssCustomFiles()
     {
         global $disable_js_and_css_files;
+        // chamilo CSS
+        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'../chamilo.css');
+
         // Base CSS
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
 

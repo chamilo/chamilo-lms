@@ -10,12 +10,12 @@
                 return $('#popover-content-' + id).html();
               }
             });
-            
-            
-            
+
+
+
 
             });
-        
+
         // Date time settings.
         moment.locale('{{ locale }}');
         $.datepicker.setDefaults($.datepicker.regional["{{ locale }}"]);
@@ -122,12 +122,12 @@
         $('.boot-tooltip').tooltip(tip_options);
         var more = '{{ 'SeeMore' | get_lang | escape('js') }}';
         var close = '{{ 'Close' | get_lang | escape('js') }}';
-        $('.list-teachers').readmore({
+        /*$('.list-teachers').readmore({
             speed: 75,
             moreLink: '<a href="#">' + more + '</a>',
             lessLink: '<a href="#">' + close + '</a>',
             collapsedHeight: 35,
             blockCSS: 'display: block; width: 100%;'
-        });
+        });*/
     });
 </script>

@@ -789,7 +789,7 @@ function api_get_path($path = '', $configuration = [])
             SYS_TEMPLATE_PATH => 'template/',
             WEB_UPLOAD_PATH => 'app/upload/',
             WEB_PUBLIC_PATH => 'public/',
-            SYS_PUBLIC_PATH => 'web/',
+            SYS_PUBLIC_PATH => 'public/',
             WEB_FONTS_PATH => 'fonts/',
             SYS_FONTS_PATH => 'fonts/',
         ];

@@ -9,10 +9,14 @@ Encore
     // If chamilo is installed in a domain my.chamilo.net
     //.setPublicPath('/build')
     .cleanupOutputBeforeBuild()
+    // enable features!
+    .enableSassLoader()
+    .autoProvidejQuery()
+    .enableReactPreset()
 
     // read main.js     -> output as public/build/chamilo.js
     .addEntry('chamilo', './assets/js/main.js')
-    // read main.scss -> output as web/build/chamilo_style.css
+    // read main.scss -> output as web/build/css/base.css
     .addStyleEntry('css/base', './assets/css/main.scss')
 
     // Add chamilo themes
@@ -20,10 +24,7 @@ Encore
     .addStyleEntry('css/themes/chamilo/default', './assets/css/themes/chamilo/default.css')
 
 
-    // enable features!
-    .enableSassLoader()
-    .autoProvidejQuery()
-    .enableReactPreset()
+
     .enableSourceMaps(!Encore.isProduction())
     .autoProvideVariables({
         $: 'jquery',

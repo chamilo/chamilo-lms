@@ -20,14 +20,15 @@ require("fullcalendar");
 require("qtip2");
 require("image-map-resizer");
 
+require("cropper");
+require("jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon");
+require("jquery.scrollbar");
+
 //require ("readmore-js");
 import "select2";
 
 require("bootstrap-select");
-
-
-
-
+require("bootstrap-select/dist/css/bootstrap-select.css")
 
 /*
 

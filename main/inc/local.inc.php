@@ -365,7 +365,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                         'update_type'
                     );
 
-                    $update_type = $update_type['update_type'];
+                    $update_type = isset($update_type['update_type']) ? $update_type['update_type'] : '';
                     if (!empty($extAuthSource[$update_type]['updateUser'])
                         && file_exists($extAuthSource[$update_type]['updateUser'])
                     ) {

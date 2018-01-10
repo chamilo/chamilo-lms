@@ -119,11 +119,12 @@ function online_logout($user_id = null, $logout_redirect = false)
     		ORDER BY login_date DESC
     		LIMIT 0,1";
     $q_last_connection = Database::query($sql);
+    $i_id_last_connection = 0;
     if (Database::num_rows($q_last_connection) > 0) {
         $i_id_last_connection = Database::result($q_last_connection, 0, "login_id");
     }
 
-    if (!isset($_SESSION['login_as'])) {
+    if (!isset($_SESSION['login_as']) && !empty($i_id_last_connection)) {
         $current_date = api_get_utc_datetime();
         $sql = "UPDATE $tbl_track_login SET logout_date='".$current_date."'
         		WHERE login_id='$i_id_last_connection'";

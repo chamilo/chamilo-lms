@@ -28,7 +28,9 @@ require("jquery.scrollbar");
 require("blueimp-file-upload");
 
 //require ("readmore-js");
-import "select2";
+require("select2");
+
+require("select2/dist/css/select2.css");
 
 require('bootstrap-select/dist/js/bootstrap-select.js');
 require('bootstrap-select/dist/css/bootstrap-select.css');

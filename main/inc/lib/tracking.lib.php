@@ -3542,7 +3542,7 @@ class Tracking
             $select
             (
                 SELECT DISTINCT
-                    id,
+                    session.id,
                     name,
                     access_start_date,
                     access_end_date

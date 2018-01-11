@@ -320,8 +320,11 @@ abstract class AbstractLink implements GradebookItem
             } else {
                 $sql .= ' WHERE';
             }
-            $sql .= " course_code = '".Database::escape_string($course_code)."'";
-            $paramcount++;
+            $courseInfo = api_get_course_info($course_code);
+            if ($courseInfo) {
+                $sql .= " c_id = '".$courseInfo['real_id']."'";
+                $paramcount++;
+            }
         }
         if (isset($category_id)) {
             if ($paramcount != 0) {
@@ -360,7 +363,7 @@ abstract class AbstractLink implements GradebookItem
             $link->set_type($data['type']);
             $link->set_ref_id($data['ref_id']);
             $link->set_user_id($data['user_id']);
-            $link->set_course_code($data['course_code']);
+            $link->set_course_code(api_get_course_id());
             $link->set_category_id($data['category_id']);
             $link->set_date($data['created_at']);
             $link->set_weight($data['weight']);
@@ -395,8 +398,9 @@ abstract class AbstractLink implements GradebookItem
                     WHERE
                         ref_id = ".$this->get_ref_id()." AND
                         category_id =  ".$this->category->get_id()." AND
-                        course_code = '".$this->course_code."' AND
-                        type =  ".$this->type;
+                        c_id = '".$this->course_id."' AND
+                        type =  ".$this->type." ";
+
             $result = Database::query($sql);
             $row = Database::fetch_array($result, 'ASSOC');
 
@@ -405,7 +409,7 @@ abstract class AbstractLink implements GradebookItem
                     'type' => $this->get_type(),
                     'ref_id' => $this->get_ref_id(),
                     'user_id' => $this->get_user_id(),
-                    'course_code' => $this->get_course_code(),
+                    'c_id' => $this->course_id,
                     'category_id' => $this->get_category_id(),
                     'weight' => $this->get_weight(),
                     'visible' => $this->is_visible(),
@@ -439,11 +443,13 @@ abstract class AbstractLink implements GradebookItem
 
         $this->save_linked_data();
 
+        $course = api_get_course_entity($this->getCourseId());
+
         $link
             ->setType($this->get_type())
             ->setRefId($this->get_ref_id())
             ->setUserId($this->get_user_id())
-            ->setCourseCode($this->get_course_code())
+            ->setCourse($course)
             ->setCategoryId($this->get_category_id())
             ->setWeight($this->get_weight())
             ->setVisible($this->is_visible());

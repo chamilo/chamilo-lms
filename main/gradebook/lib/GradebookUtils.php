@@ -78,12 +78,13 @@ class GradebookUtils
         $course_code,
         $weight
     ) {
-        $course_code = Database::escape_string($course_code);
-        if (!empty($link_id)) {
+        $courseInfo = api_get_course_info($course_code);
+        if (!empty($link_id) && !empty($courseInfo)) {
             $link_id = intval($link_id);
+            $courseId = $courseInfo['real_id'];
             $sql = 'UPDATE '.Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK).'
                     SET weight = ' . "'".api_float_val($weight)."'".'
-                    WHERE course_code = "' . $course_code.'" AND id = '.$link_id;
+                    WHERE c_id = "'.$courseId.'" AND id = '.$link_id;
             Database::query($sql);
         }
 
@@ -498,10 +499,14 @@ class GradebookUtils
         $session_id = 0
     ) {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        $course_code = Database::escape_string($course_code);
+        $courseInfo = api_get_course_info($course_code);
+        if (empty($courseInfo)) {
+            return [];
+        }
+
         $sql = "SELECT * FROM $table l
                 WHERE
-                    course_code = '$course_code' AND
+                    c_id = ".$courseInfo['real_id']." AND
                     type = ".(int) $resource_type." AND
                     ref_id = " . (int) $resource_id;
         $res = Database::query($sql);
@@ -546,7 +551,7 @@ class GradebookUtils
         $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $sql = 'SELECT c.id FROM '.$course_table.' c
                 INNER JOIN ' . $tbl_grade_links.' l
-                ON c.code = l.course_code
+                ON c.id = l.c_id
                 WHERE l.id=' . intval($id_link).' OR l.category_id='.intval($id_link);
         $res = Database::query($sql);
         $array = Database::fetch_array($res, 'ASSOC');
@@ -883,10 +888,11 @@ class GradebookUtils
                 $course_code = api_get_course_id();
             }
             $session_id = api_get_session_id();
+            $courseInfo = api_get_course_info($course_code);
 
             $t = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
             $sql = "SELECT * FROM $t 
-                    WHERE course_code = '".Database::escape_string($course_code)."' ";
+                    WHERE course_code = '".$courseInfo['real_id']."' ";
             if (!empty($session_id)) {
                 $sql .= " AND session_id = ".(int) $session_id;
             } else {

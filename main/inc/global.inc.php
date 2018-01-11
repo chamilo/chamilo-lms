@@ -107,11 +107,16 @@ if (file_exists(api_get_path(SYS_PATH).'.env')) {
     // Get settings from .env file created when installation chamilo
     (new Dotenv())->load(api_get_path(SYS_PATH).'.env');
     $kernel->boot();
-    $doctrine = $kernel->getContainer()->get('doctrine');
+    $container = $kernel->getContainer();
+    $doctrine = $container->get('doctrine');
 
     $database = new \Database();
     $database->setManager($doctrine->getManager());
     $database->setConnection($doctrine->getConnection());
+
+    \CourseManager::setCourseManager(
+        $container->get('chamilo_core.entity.manager.course_manager')
+    );
 } else {
     $global_error_code = 3;
     // The database server is not available or credentials are invalid.

@@ -16,6 +16,7 @@ class Category implements GradebookItem
     private $description;
     private $user_id;
     private $course_code;
+    private $courseId;
     private $parent;
     private $weight;
     private $visible;
@@ -43,7 +44,8 @@ class Category implements GradebookItem
         $this->name = null;
         $this->description = null;
         $this->user_id = 0;
-        $this->course_code = null;
+        $this->course_code = '';
+        $this->courseId = 0;
         $this->parent = 0;
         $this->weight = 0;
         $this->visible = false;
@@ -378,14 +380,14 @@ class Category implements GradebookItem
             $cats[] = self::create_root_category();
             return $cats;
         }
-
-        $courseInfo = api_get_course_info_by_id(api_get_course_int_id());
+        $courseId = api_get_course_int_id();
+        $courseInfo = api_get_course_info_by_id($courseId);
         $courseCode = $courseInfo['code'];
         $session_id = intval($session_id);
 
         if (!empty($session_id)) {
             $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-            $sql = 'SELECT id, course_code
+            $sql = 'SELECT id, c_id
                     FROM '.$table.'
                     WHERE session_id = '.$session_id;
             $result_session = Database::query($sql);
@@ -393,7 +395,7 @@ class Category implements GradebookItem
                 $categoryList = [];
                 while ($data_session = Database::fetch_array($result_session)) {
                     $parent_id = $data_session['id'];
-                    if ($data_session['course_code'] == $courseCode) {
+                    if ($data_session['c_id'] == $courseId) {
                         $categories = self::load($parent_id);
                         $categoryList = array_merge($categoryList, $categories);
                     }
@@ -462,9 +464,12 @@ class Category implements GradebookItem
             }
 
             if ($course_code == '0') {
-                $sql .= ' course_code is null ';
+                $sql .= ' c_id is null ';
             } else {
-                $sql .= " course_code = '".Database::escape_string($course_code)."'";
+                $courseInfo = api_get_course_info($course_code);
+                if ($courseInfo) {
+                    $sql .= " c_id = '".intval($courseInfo['real_id'])."'";
+                }
             }
 
             /*if ($show_session_categories !== true) {
@@ -552,7 +557,9 @@ class Category implements GradebookItem
             $cat->set_name($data['name']);
             $cat->set_description($data['description']);
             $cat->set_user_id($data['user_id']);
-            $cat->set_course_code($data['course_code']);
+            $courseInfo = api_get_course_info_by_id($data['c_id']);
+            $cat->set_course_code($courseInfo['code']);
+            $cat->setCourseId($data['c_id']);
             $cat->set_parent_id($data['parent_id']);
             $cat->set_weight($data['weight']);
             $cat->set_visible($data['visible']);
@@ -615,11 +622,14 @@ class Category implements GradebookItem
         if (isset($this->name) && isset($this->user_id)) {
             $em = Database::getManager();
 
+            $courseInfo = api_get_course_info($this->course_code);
+            $course = api_get_course_entity($courseInfo['real_id']);
+
             $category = new GradebookCategory();
             $category->setName($this->name);
             $category->setDescription($this->description);
             $category->setUserId($this->user_id);
-            $category->setCourseCode($this->course_code);
+            $category->setCourse($course);
             $category->setParentId($this->parent);
             $category->setWeight($this->weight);
             $category->setVisible($this->visible);
@@ -688,6 +698,7 @@ class Category implements GradebookItem
     {
         $em = Database::getManager();
 
+        /** @var  GradebookCategory $gradebookCategory */
         $gradebookCategory = $em
             ->getRepository('ChamiloCoreBundle:GradebookCategory')
             ->find($this->id);
@@ -696,10 +707,13 @@ class Category implements GradebookItem
             return false;
         }
 
+        $course = api_get_user_course_entity();
+
         $gradebookCategory->setName($this->name);
         $gradebookCategory->setDescription($this->description);
         $gradebookCategory->setUserId($this->user_id);
-        $gradebookCategory->setCourseCode($this->course_code);
+        $gradebookCategory->setCourse($course);
+        //$gradebookCategory->setCourseCode($this->course_code);
         $gradebookCategory->setParentId($this->parent);
         $gradebookCategory->setWeight($this->weight);
         $gradebookCategory->setVisible($this->visible);
@@ -788,26 +802,39 @@ class Category implements GradebookItem
 
     /**
      * Not delete this category from the database,when visible=3 is category eliminated
+     * @param int $courseId
      */
-    public function update_category_delete($course_id)
+    public function update_category_delete($courseId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = 'UPDATE '.$table.' SET 
-                    visible = 3
-                WHERE course_code ="'.Database::escape_string($course_id).'"';
+        $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $sql = 'UPDATE '.$tbl_grade_categories.' SET visible=3
+                WHERE c_id ="'.intval($courseId).'"';
         Database::query($sql);
     }
 
     /**
-     * Show message resource delete
+     * Delete this category from the database
+     * @param int $courseId
+     */
+    public static function deleteCategoryFromCourse($courseId)
+    {
+        $table = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $sql = 'DELETE FROM '.$table.' 
+                WHERE c_id ="'.intval($courseId).'"';
+        Database::query($sql);
+    }
+
+    /**
+     * @param int $course_id
+     * @return bool|string
      */
     public function show_message_resource_delete($course_id)
     {
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sql = 'SELECT count(*) AS num 
-                FROM '.$table.'
+                FROM '.$tbl_grade_categories.'
                 WHERE
-                    course_code = "'.Database::escape_string($course_id).'" AND
+                    c_id = "'.Database::escape_string($course_id).'" AND
                     visible = 3';
         $res = Database::query($sql);
         $option = Database::fetch_array($res, 'ASSOC');
@@ -2602,6 +2629,25 @@ class Category implements GradebookItem
                 break;
         }
         Session::write('gradebook_dest', $url);
+    }
+
+    /**
+     * @return int
+     */
+    public function getCourseId()
+    {
+        return $this->courseId;
+    }
+
+    /**
+     * @param int $courseId
+     * @return Category
+     */
+    public function setCourseId($courseId)
+    {
+        $this->courseId = $courseId;
+
+        return $this;
     }
 
     /**

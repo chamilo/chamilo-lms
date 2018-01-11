@@ -1696,7 +1696,7 @@ class DocumentManager
      * @param int $session_id
      * @return void
      */
-    public static function attach_gradebook_certificate($course_id, $document_id, $session_id = 0)
+    public static function attach_gradebook_certificate($courseCode, $document_id, $session_id = 0)
     {
         $tbl_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $session_id = intval($session_id);
@@ -1711,8 +1711,10 @@ class DocumentManager
         } else {
             $sql_session = '';
         }
+        $courseInfo = api_get_course_info($courseCode);
+
         $sql = 'UPDATE '.$tbl_category.' SET document_id="'.intval($document_id).'"
-                WHERE course_code="' . Database::escape_string($course_id).'" '.$sql_session;
+                WHERE c_id ="' . $courseInfo['real_id'].'" '.$sql_session;
         Database::query($sql);
     }
 
@@ -1724,7 +1726,7 @@ class DocumentManager
      *
      * @return int The default certificate id
      */
-    public static function get_default_certificate_id($course_id, $session_id = 0)
+    public static function get_default_certificate_id($courseCode, $session_id = 0)
     {
         $tbl_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $session_id = intval($session_id);
@@ -1739,8 +1741,9 @@ class DocumentManager
         } else {
             $sql_session = '';
         }
+        $courseInfo = api_get_course_info($courseCode);
         $sql = 'SELECT document_id FROM '.$tbl_category.'
-                WHERE course_code="' . Database::escape_string($course_id).'" '.$sql_session;
+                WHERE c_id ="'.$courseInfo['real_id'].'" '.$sql_session;
 
         $rs = Database::query($sql);
         $num = Database::num_rows($rs);

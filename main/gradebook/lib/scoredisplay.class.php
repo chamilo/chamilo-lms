@@ -174,7 +174,7 @@ class ScoreDisplay
     private function get_current_gradebook_category_id()
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $curr_course_code = api_get_course_id();
+        $courseId = api_get_course_int_id();
         $curr_session_id = api_get_session_id();
 
         if (empty($curr_session_id)) {
@@ -184,7 +184,7 @@ class ScoreDisplay
         }
 
         $sql = 'SELECT id FROM '.$table.'
-                WHERE course_code = "'.$curr_course_code.'" '.$session_condition;
+                WHERE c_id = "'.$courseId.'" '.$session_condition;
         $rs  = Database::query($sql);
         $category_id = 0;
         if (Database::num_rows($rs) > 0) {

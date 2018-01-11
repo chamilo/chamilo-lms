@@ -243,13 +243,16 @@ class Evaluation implements GradebookItem
         }
 
         if (isset($course_code) && $course_code <> '-1') {
-            if ($paramcount != 0) {
-                $sql .= ' AND';
-            } else {
-                $sql .= ' WHERE';
+            $courseInfo = api_get_course_info($course_code);
+            if ($courseInfo) {
+                if ($paramcount != 0) {
+                    $sql .= ' AND';
+                } else {
+                    $sql .= ' WHERE';
+                }
+                $sql .= " c_id = '".$courseInfo['real_id']."'";
+                $paramcount++;
             }
-            $sql .= " course_code = '".Database::escape_string($course_code)."'";
-            $paramcount++;
         }
 
         if (isset($category_id)) {
@@ -301,7 +304,9 @@ class Evaluation implements GradebookItem
                 $eval->set_name($data['name']);
                 $eval->set_description($data['description']);
                 $eval->set_user_id($data['user_id']);
-                $eval->set_course_code($data['course_code']);
+                $eval->setCourseId($data['c_id']);
+                $courseInfo = api_get_course_info_by_id($data['c_id']);
+                $eval->set_course_code($courseInfo['course_code']);
                 $eval->set_category_id($data['category_id']);
                 $eval->set_date(api_get_local_time($data['created_at']));
                 $eval->set_weight($data['weight']);
@@ -336,8 +341,8 @@ class Evaluation implements GradebookItem
             if (isset($this->description)) {
                 $sql .= ',description';
             }
-            if (isset($this->course_code)) {
-                $sql .= ', course_code';
+            if (isset($this->courseId)) {
+                $sql .= ', c_id';
             }
             if (isset($this->category)) {
                 $sql .= ', category_id';
@@ -348,12 +353,15 @@ class Evaluation implements GradebookItem
                 .','.intval($this->get_user_id())
                 .','.api_float_val($this->get_weight())
                 .','.intval($this->get_max())
-                .','.intval($this->is_visible());
+                .','.intval($this->is_visible())
+                .','.intval(0)
+
+            ;
             if (isset($this->description)) {
                 $sql .= ",'".Database::escape_string($this->get_description())."'";
             }
-            if (isset($this->course_code)) {
-                $sql .= ",'".Database::escape_string($this->get_course_code())."'";
+            if (isset($this->courseId)) {
+                $sql .= ",'".Database::escape_string($this->getCourseId())."'";
             }
             if (isset($this->category)) {
                 $sql .= ','.intval($this->get_category_id());
@@ -420,9 +428,9 @@ class Evaluation implements GradebookItem
             $sql .= 'null';
         }
         $sql .= ', user_id = '.intval($this->get_user_id())
-            .', course_code = ';
-        if (isset($this->course_code)) {
-            $sql .= "'".Database::escape_string($this->get_course_code())."'";
+            .', c_id = ';
+        if (isset($this->courseId)) {
+            $sql .= "'".Database::escape_string($this->getCourseId())."'";
         } else {
             $sql .= 'null';
         }
@@ -473,18 +481,15 @@ class Evaluation implements GradebookItem
 
         if (api_is_allowed_to_edit()) {
             $parent = Category::load($parent);
-            $code = $parent[0]->get_course_code();
-            $courseInfo = api_get_course_info($code);
-            $courseId = $courseInfo['real_id'];
-
-            if (isset($code) && $code != '0') {
-                $main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+            $courseId = $parent[0]->getCourseId();
+            if (isset($courseId) && !empty($courseId)) {
+                $table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
                 $sql .= ' AND user_id IN (
-                     SELECT user_id FROM '.$main_course_user_table.'
-                     WHERE
-                        c_id = '.$courseId.' AND
-                        status = '.COURSEMANAGER.'
-                    )';
+					 SELECT user_id FROM '.$table.'
+					 WHERE
+						c_id = '.$courseId.' AND
+						status = '.COURSEMANAGER.'
+					)';
             } else {
                 $sql .= ' AND user_id = '.api_get_user_id();
             }
@@ -659,15 +664,11 @@ class Evaluation implements GradebookItem
         $root = [0, get_lang('RootCat'), $level];
         $targets[] = $root;
 
-        if (isset($this->course_code) && !empty($this->course_code)) {
+        if (isset($this->courseId) && !empty($this->courseId)) {
             $crscats = Category::load(null, null, $this->course_code, 0);
             foreach ($crscats as $cat) {
-                $targets[] = [$cat->get_id(), $cat->get_name(), $level + 1];
-                $targets = $this->addTargetSubcategories(
-                    $targets,
-                    $level + 1,
-                    $cat->get_id()
-                );
+                $targets[] = [$cat->get_id(), $cat->get_name(), $level+1];
+                $targets = $this->addTargetSubcategories($targets, $level+1, $cat->get_id());
             }
         }
 
@@ -845,5 +846,16 @@ class Evaluation implements GradebookItem
     public function setStudentList($list)
     {
         $this->studentList = $list;
+    }
+
+    /**
+     * @param int $courseId
+     * @return Evaluation
+     */
+    public function setCourseId($courseId)
+    {
+        $this->courseId = $courseId;
+
+        return $this;
     }
 }

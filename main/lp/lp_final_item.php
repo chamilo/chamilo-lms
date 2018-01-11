@@ -132,8 +132,8 @@ if ($accessGranted == false) {
 
         if ($link) {
             $cat = new Category();
-            $catCourseCode = CourseManager::get_course_by_category($categoryId);
-            $show_message = $cat->show_message_resource_delete($catCourseCode);
+            $courseId = CourseManager::get_course_by_category($categoryId);
+            $show_message = $cat->show_message_resource_delete($courseId);
 
             if ($show_message == '') {
                 if (!api_is_allowed_to_edit() && !api_is_excluded_user_type()) {

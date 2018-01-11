@@ -75,11 +75,13 @@ $content .= Tracking::show_course_detail(api_get_user_id(), $courseCode, $sessio
 
 // Ofaj
 $courseId = 0;
+
 if (empty($courseCode)) {
-    $content .= '<br />';
+    $content .= '<div class="communications">';
     $content .= Tracking::displayUserSkills(
         $user_id
     );
+    $content .= '</div>';
 }
 
 if (!empty($dates)) {

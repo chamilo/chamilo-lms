@@ -56,15 +56,19 @@ if ($bbb->pluginEnabled) {
 
             $meetingParams = array();
             $meetingParams['meeting_name'] = $bbb->getCurrentVideoConferenceName();
-
             if ($bbb->meetingExists($meetingParams['meeting_name'])) {
-                $url = $bbb->joinMeeting($meetingParams['meeting_name']) ?: $bbb->createMeeting($meetingParams);
+                $joinUrl = $bbb->joinMeeting($meetingParams['meeting_name']);
+                if ($joinUrl) {
+                    $url = $joinUrl;
+                } else {
+                    $url = $bbb->createMeeting($meetingParams);
+                }
             } else {
                 $url = $bbb->isConferenceManager() ? $bbb->createMeeting($meetingParams) : $bbb->getListingUrl();
             }
 
             $meetingInfo = $bbb->findMeetingByName($meetingParams['meeting_name']);
-            if (!empty($meetingInfo)) {
+            if (!empty($meetingInfo) && $url) {
                 $bbb->saveParticipant($meetingInfo['id'], api_get_user_id());
                 $bbb->redirectToBBB($url);
             } else {

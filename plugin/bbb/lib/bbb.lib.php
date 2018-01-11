@@ -349,7 +349,6 @@ class bbb
             // This setting currently limits the maximum conference duration,
             // to avoid lingering sessions on the video-conference server #6261
             $duration = 300;
-
             $bbbParams = array(
                 'meetingId' => $params['remote_id'], // REQUIRED
                 'meetingName' => $meetingName, // REQUIRED
@@ -389,8 +388,9 @@ class bbb
                 }
             }
 
-            return $this->logoutUrl;
+            return false;
         }
+        return false;
     }
 
     /**
@@ -479,8 +479,12 @@ class bbb
      * @assert ('') === false
      * @assert ('abcdefghijklmnopqrstuvwxyzabcdefghijklmno') === false
      */
-    public function joinMeeting($meetingName, $loop = false)
+    public function joinMeeting($meetingName)
     {
+        if ($this->debug) {
+            error_log("joinMeeting: $meetingName");
+        }
+
         if (empty($meetingName)) {
             return false;
         }
@@ -521,51 +525,47 @@ class bbb
             //  -- REQUIRED - The moderator password for the meeting
         );
 
-        $status = false;
         $meetingInfoExists = false;
-        while ($status === false) {
+        $meetingIsRunningInfo = $this->getMeetingInfo($params);
+        if ($this->debug) {
+            error_log('Searching meeting with params:');
+            error_log(print_r($params, 1));
+            error_log('Result:');
+            error_log(print_r($meetingIsRunningInfo, 1));
+        }
+
+        if ($meetingIsRunningInfo === false) {
+            // checking with the remote_id didn't work, so just in case and
+            // to provide backwards support, check with the id
+            $params = array(
+                'meetingId' => $meetingData['id'],
+                //  -- REQUIRED - The unique id for the meeting
+                'password' => $this->getModMeetingPassword()
+                //  -- REQUIRED - The moderator password for the meeting
+            );
             $meetingIsRunningInfo = $this->getMeetingInfo($params);
-            if ($meetingIsRunningInfo === false) {
-                //checking with the remote_id didn't work, so just in case and
-                // to provide backwards support, check with the id
-                $params = array(
-                    'meetingId' => $meetingData['id'],
-                    //  -- REQUIRED - The unique id for the meeting
-                    'password' => $this->getModMeetingPassword()
-                    //  -- REQUIRED - The moderator password for the meeting
-                );
-                $meetingIsRunningInfo = $this->getMeetingInfo($params);
-            }
-
             if ($this->debug) {
+                error_log('Searching meetingId with params:');
+                error_log(print_r($params, 1));
+                error_log('Result:');
                 error_log(print_r($meetingIsRunningInfo, 1));
-            }
-
-            if (strval($meetingIsRunningInfo['returncode']) == 'SUCCESS' &&
-                isset($meetingIsRunningInfo['meetingName']) &&
-                !empty($meetingIsRunningInfo['meetingName'])
-                //strval($meetingIsRunningInfo['running']) == 'true'
-            ) {
-                $meetingInfoExists = true;
-            }
-
-            if ($this->debug) {
-                error_log(
-                    "meeting is running: ".intval($meetingInfoExists)
-                );
-            }
-
-            if ($meetingInfoExists) {
-                $status = true;
-            }
-
-            if ($loop) {
-                continue;
-            } else {
-                break;
             }
         }
 
+        if (strval($meetingIsRunningInfo['returncode']) == 'SUCCESS' &&
+            isset($meetingIsRunningInfo['meetingName']) &&
+            !empty($meetingIsRunningInfo['meetingName'])
+        ) {
+            $meetingInfoExists = true;
+        }
+
+        if ($this->debug) {
+            error_log(
+                "meeting is running: ".intval($meetingInfoExists)
+            );
+        }
+
+        $url = false;
         if ($meetingInfoExists) {
             $joinParams = array(
                 'meetingId' => $meetingData['remote_id'], //	-- REQUIRED - A unique id for the meeting
@@ -577,8 +577,6 @@ class bbb
             );
             $url = $this->api->getJoinMeetingURL($joinParams);
             $url = $this->protocol.$url;
-        } else {
-            $url = $this->logoutUrl;
         }
         if ($this->debug) {
             error_log("return url :".$url);

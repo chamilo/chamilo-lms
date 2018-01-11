@@ -46,7 +46,7 @@ class Template
     public $load_plugins = false;
     public $params = [];
     public $force_plugin_load = false;
-    public $responseCode = '';
+    public $responseCode = 0;
 
     /**
      * @param string $title
@@ -55,6 +55,7 @@ class Template
      * @param bool $show_learnpath
      * @param bool $hide_global_chat
      * @param bool $load_plugins
+     * @param int $responseCode
      * @param bool $sendHeaders send http headers or not
      */
     public function __construct(
@@ -64,12 +65,13 @@ class Template
         $show_learnpath = false,
         $hide_global_chat = false,
         $load_plugins = true,
-        $sendHeaders = true
+        $sendHeaders = true,
+        $responseCode = 0
     ) {
         // Page title
         $this->title = $title;
-
         $this->show_learnpath = $show_learnpath;
+        $this->setResponseCode($responseCode);
 
         if (empty($this->show_learnpath)) {
             $origin = api_get_origin();

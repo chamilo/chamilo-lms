@@ -3408,8 +3408,7 @@ function api_not_allowed(
         $show_headers = 1;
     }
 
-    $tpl = new Template(null, $show_headers, $show_headers, false, true, false);
-    $tpl->setResponseCode($responseCode);
+    $tpl = new Template(null, $show_headers, $show_headers, false, true, false, true, $responseCode);
     $tpl->assign('hide_login_link', 1);
     $tpl->assign('content', $msg);
 

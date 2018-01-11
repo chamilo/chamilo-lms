@@ -545,7 +545,7 @@ class bbb
             );
             $meetingIsRunningInfo = $this->getMeetingInfo($params);
             if ($this->debug) {
-                error_log('Searching meetingId with params:')
+                error_log('Searching meetingId with params:');
                 error_log(print_r($params, 1));
                 error_log('Result:');
                 error_log(print_r($meetingIsRunningInfo, 1));

@@ -10,7 +10,9 @@ Encore
     //.setPublicPath('/build')
     .cleanupOutputBeforeBuild()
     // enable features!
-    .enableSassLoader()
+    .enableSassLoader(function(sassOptions) {}, {
+    //     resolveUrlLoader: false
+     })
     .autoProvidejQuery()
     .enableReactPreset()
 
@@ -19,11 +21,11 @@ Encore
     // read main.scss -> output as web/build/css/base.css
     .addStyleEntry('css/base', './assets/css/main.scss')
 
+    .addStyleEntry('css/editor', './assets/css/editor.css')
+
     // Add chamilo themes
     .addStyleEntry('css/themes/academica/default', './assets/css/themes/academica/default.css')
     .addStyleEntry('css/themes/chamilo/default', './assets/css/themes/chamilo/default.css')
-
-
 
     .enableSourceMaps(!Encore.isProduction())
     .autoProvideVariables({

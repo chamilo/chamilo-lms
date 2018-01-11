@@ -163,7 +163,7 @@
         "jeroendesloovere/vcard": "^1.2",
         "knplabs/doctrine-behaviors": "~1.1",
         "jimmiw/php-time-ago": "2.0.*",
-        "phpoffice/phpword": "^0.14.0|dev-master",
+        "phpoffice/phpword": "^0.14.0",
         "kigkonsult/icalcreator": "2.*",
         "essence/essence": "~3.0",
         "paragonie/random-lib": "2.0.0",
@@ -186,9 +186,9 @@
         "symfony/web-server-bundle": "^4.0",
         "behat/behat": "@stable",
         "behat/mink": "dev-master",
-        "behat/mink-extension": "dev-master",
-        "behat/mink-goutte-driver": "dev-master",
-        "behat/mink-selenium2-driver": "dev-master"
+        "behat/mink-extension": "@stable",
+        "behat/mink-goutte-driver": "@stable",
+        "behat/mink-selenium2-driver": "@stable"
     },
     "scripts": {
         "pre-install-cmd": [
@@ -196,6 +196,12 @@
         ],
         "pre-update-cmd": [
             "Chamilo\\CoreBundle\\Composer\\ScriptHandler::deleteOldFilesFrom19x"
+        ],
+        "post-install-cmd": [
+            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles"
+        ],
+        "post-update-cmd": [
+            "Chamilo\\CoreBundle\\Composer\\ScriptHandler::dumpCssFiles"
         ],
         "auto-scripts": {
             "cache:clear": "symfony-cmd",

@@ -14,7 +14,8 @@ require("webpack-jquery-ui/css");
 require("bootstrap-sass");
 require("chosen-js");
 require("font-awesome-webpack");
-require("ckeditor");
+
+// require("ckeditor"); // version 4.x doesnt have webpack support
 require("mediaelement");
 require("js-cookie");
 require("fullcalendar");

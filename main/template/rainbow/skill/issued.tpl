@@ -20,56 +20,16 @@
                 {% endif %}
             </div>
         </div>
-        {% if allow_download_export %}
-            {% if badge_error %}
-                <hr>
-                <div class="alert alert-danger"> {{ 'BakedBadgeProblem'|get_lang }}</div>
-            {% else %}
-                <p class="text-center">
-                    <a href="{{ personal_badge }}" class="btn btn-primary" target="_new" download="badge">
-                        <em class="fa fa-download fa-fw"></em> {{ 'DownloadBadge'|get_lang }}
-                    </a>
-                </p>
-            {% endif %}
-            <hr>
-            <p class="text-center">
-                <a href="#" class="btn btn-success" id="badge-export-button">
-                    <em class="fa fa-external-link-square fa-fw"></em> {{ 'ExportBadge'|get_lang }}
-                </a>
-            </p>
-            <div class='col-md-12 text-center'>
-                <h5><b> {{ 'ShareWithYourFriends' | get_lang }} </b></h5>
-                <a href="http://www.facebook.com/sharer.php?u={{ _p.web }}badge/{{ issue_info.id }}" target="_new">
-                    <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
-                </a>
-                <a href="https://twitter.com/home?status={{ 'IHaveObtainedSkillXOnY' | get_lang |format(skill_info.name, _s.site_name)}} - {{ _p.web }}badge/{{ issue_info.id }}" target="_new">
-                    <em class='fa fa-twitter-square fa-3x text-light' aria-hidden='true'></em>
-                </a>
-            </div>
-        {% endif %}
     </div>
     <div class="col-md-7">
-        <h3>{{ 'RecipientDetails'|get_lang }}</h3>
-        <p class="lead">{{ issue_info.user_complete_name }}</p>
-        <h4>{{ 'SkillAcquiredAt'|get_lang }}</h4>
+        <p class="lead" style="color: #162A83;">{{ issue_info.user_complete_name }}</p>
         <ul class="fa-ul">
-            <li>
-                {% if issue_info.source_name %}
-                    <em class="fa-li fa fa-clock-o fa-fw"></em>
-                    {{ 'TimeXThroughCourseY'|get_lang|format(issue_info.datetime, issue_info.source_name) }}
-                {% else %}
-                    <em class="fa-li fa fa-clock-o fa-fw"></em>
-                    {{ issue_info.datetime }}
-                {% endif %}
+            <li><p style="color: #162A83;"><em class="fa-li fa fa-clock-o fa-fw"></em>{{ 'SkillAcquiredAt'|get_lang }} {{ issue_info.datetime }}</p>
                 {% if issue_info.argumentation %}
-                    {% if issue_info.argumentation %}
-                        <b>
-                            <p style="font-style: italic;">
+                            <p style="color: #162A83;">
                                 {{ 'UserXIndicated'|get_lang|format(issue_info.argumentation_author_name) }}
                             </p>
-                        </b>
-                    {% endif %}
-                    <p>{{ issue_info.argumentation }}</p>
+	    <ul><p style="font-style: italic; color: #162A83;">{{ issue_info.argumentation }}</p></ul>
                 {% endif %}
             </li>
         </ul>
@@ -130,13 +90,22 @@
                 </div>
             </div>
         {% else %}
-            <hr>
-            <p class="lead">
+            <p style="color: #162A83;">
                 <em class="fa fa-comment-o fa-fw" aria-hidden="true"></em>
                 {{ 'XComments'|get_lang|format(issue_info.comments|length) }}
-                /
-                <em class="fa fa-thumbs-o-up fa-fw" aria-hidden="true"></em>
-                {{ 'AverageRatingX'|get_lang|format(issue_info.feedback_average) }}
+                <ul class="fa-ul">
+                   {% if issue_info.comments %}
+                        {% for comment in issue_info.comments %}
+                           <li><ul>
+                            <article class="media">
+                                <div class="media-body">
+                                    <p style="font-style: italic; color: #162A83;">{{ comment.text }}</p>
+                                </div>
+                            </article>
+                            </ul></li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
             </p>
         {% endif %}
     </div>

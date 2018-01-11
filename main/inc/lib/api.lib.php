@@ -3357,10 +3357,12 @@ function api_is_anonymous($user_id = null, $db_check = false)
  * Displays message "You are not allowed here..." and exits the entire script.
  * @param bool   $print_headers    Whether or not to print headers (default = false -> does not print them)
  * @param string $message
+ * @param int $responseCode
  */
 function api_not_allowed(
     $print_headers = false,
-    $message = null
+    $message = null,
+    $responseCode = 0
 ) {
     if (api_get_setting('sso_authentication') === 'true') {
         global $osso;
@@ -3407,6 +3409,7 @@ function api_not_allowed(
     }
 
     $tpl = new Template(null, $show_headers, $show_headers, false, true, false);
+    $tpl->setResponseCode($responseCode);
     $tpl->assign('hide_login_link', 1);
     $tpl->assign('content', $msg);
 

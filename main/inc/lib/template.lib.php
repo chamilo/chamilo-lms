@@ -46,6 +46,7 @@ class Template
     public $load_plugins = false;
     public $params = [];
     public $force_plugin_load = false;
+    public $responseCode = '';
 
     /**
      * @param string $title
@@ -1114,6 +1115,15 @@ class Template
                 'X-Powered-By: '.$_configuration['software_name'].' '.substr($_configuration['system_version'], 0, 1)
             );
             self::addHTTPSecurityHeaders();
+
+            $responseCode = $this->getResponseCode();
+            if (!empty($responseCode)) {
+                switch ($responseCode) {
+                    case '404':
+                        header("HTTP/1.0 404 Not Found");
+                        break;
+                }
+            }
         }
 
         $socialMeta = '';
@@ -1694,5 +1704,21 @@ class Template
         }
 
         return implode(CourseManager::USER_SEPARATOR, $names);
+    }
+
+    /**
+     * @param int $code
+     */
+    public function setResponseCode($code)
+    {
+        $this->responseCode = $code;
+    }
+
+    /**
+     * @param string $code
+     */
+    public function getResponseCode()
+    {
+        return $this->responseCode;
     }
 }

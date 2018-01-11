@@ -766,7 +766,7 @@ function api_get_path($path = '', $configuration = [])
             SYS_LANG_PATH => 'lang/',
             WEB_IMG_PATH => 'img/',
             WEB_CSS_PATH => 'public/build/css/',
-            SYS_CSS_PATH => 'app/Resosurces/public/css/',
+            SYS_CSS_PATH => 'public/build/css/',
             SYS_PLUGIN_PATH => 'plugin/',
             WEB_PLUGIN_PATH => 'plugin/',
             WEB_PLUGIN_ASSET_PATH => 'public/plugins/',
@@ -1934,6 +1934,18 @@ function api_get_course_info($course_code = null, $strict = false)
     }
 
     return $_course;
+}
+
+/**
+ * @param int $courseId
+ * @return \Chamilo\CoreBundle\Entity\Course
+ */
+function api_get_course_entity($courseId)
+{
+    if (empty($courseId)) {
+        $courseId = api_get_course_int_id();
+    }
+    return CourseManager::getManager()->find($courseId);
 }
 
 /**
@@ -6713,7 +6725,7 @@ function api_get_jquery_libraries_js($libraries)
     }
 
     //Document multiple upload funcionality
-    if (in_array('jquery-upload', $libraries)) {
+    if (in_array('jquery-uploadzs', $libraries)) {
         $js .= api_get_asset('blueimp-load-image/js/load-image.all.min.js');
         $js .= api_get_asset('blueimp-canvas-to-blob/js/canvas-to-blob.min.js');
         $js .= api_get_asset('jquery-file-upload/js/jquery.iframe-transport.js');

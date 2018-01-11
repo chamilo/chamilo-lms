@@ -1,6 +1,6 @@
 {% if add_ready %}
 $(document).ready(function() {
-    $(window).load(function () {
+    $(window).on("load", function (e) {
 {% endif %}
     var my_text = $(".glossary-content").html();
     var ajaxRequestUrl = "{{ _p.web }}main/glossary/glossary_ajax_request.php?{{ _p.web_cid_query }}";

@@ -3300,13 +3300,9 @@ jquery.scrollbar@^0.2.11:
   version "0.2.11"
   resolved "https://registry.yarnpkg.com/jquery.scrollbar/-/jquery.scrollbar-0.2.11.tgz#e91bd4a97d83859463024d26e730dc36676ab59d"
 
-jquery@>=1.10, jquery@>=1.2.3, jquery@>=1.6.0, jquery@>=1.8, jquery@>=2.0.0, jquery@>=3.0.0, jquery@^3.2.1:
+jquery@>=1.10, jquery@>=1.2.3, jquery@>=1.6.0, jquery@>=1.8, jquery@>=2.0.0, jquery@>=3.0.0, jquery@^3.0, jquery@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
-
-jquery@^2.2:
-  version "2.2.4"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-2.2.4.tgz#2c89d6889b5eac522a7eea32c14521559c6cbf02"
 
 jquery@~2.1.4:
   version "2.1.4"

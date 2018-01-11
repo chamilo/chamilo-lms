@@ -615,21 +615,19 @@ class TestCategory
 
     /**
      * @param int $questionId
-     * @param int $displayCategoryName
      */
-    public static function displayCategoryAndTitle($questionId, $displayCategoryName = 1)
+    public static function displayCategoryAndTitle($questionId)
     {
-        echo self::returnCategoryAndTitle($questionId, $displayCategoryName);
+        echo self::returnCategoryAndTitle($questionId);
     }
 
     /**
      * @param int $questionId
-     * @param int $showCategoryName
      * @return null|string
      */
-    public static function returnCategoryAndTitle($questionId, $showCategoryName = 1)
+    public static function returnCategoryAndTitle($questionId)
     {
-        $is_student = !(api_is_allowed_to_edit(null, true) || api_is_session_admin());
+        $isStudent = !(api_is_allowed_to_edit(null, true) || api_is_session_admin());
         $objExercise = Session::read('objExercise');
         if (empty($objExercise)) {
             return '';
@@ -638,7 +636,7 @@ class TestCategory
         $showCategoryName = !!$objExercise->display_category_name; //double negation to get a boolean value
         $categoryName = self::getCategoryNameForQuestion($questionId);
 
-        if (empty($categoryName) || (!$showCategoryName && $is_student)) {
+        if (empty($categoryName) || (!$showCategoryName && $isStudent)) {
             return '';
         }
 

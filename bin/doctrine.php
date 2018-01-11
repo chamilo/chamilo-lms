@@ -47,10 +47,12 @@ Type::overrideType(
     Database::getUTCDateTimeTypeClass()
 );
 
-/*Type::addType(
-    'json',
-    'Sonata\Doctrine\Types\JsonType'
-);*/
+if (!Type::hasType('json')) {
+    Type::addType(
+        'json',
+        'Sonata\Doctrine\Types\JsonType'
+    );
+}
 
 $commands = array(
     new \Doctrine\DBAL\Migrations\Tools\Console\Command\DiffCommand(),

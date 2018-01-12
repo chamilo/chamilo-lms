@@ -715,10 +715,10 @@ UPDATE language SET parent_id = 18 WHERE english_name = 'occitan';
 UPDATE language SET parent_id = 40 WHERE english_name = 'brazilian';
 UPDATE language SET parent_id = 45 WHERE english_name = 'trad_chinese';
 
-INSERT INTO course_category (id, name, code, parent_id, tree_pos, children_count, auth_course_child, auth_cat_child) VALUES
-(1,'Language skills','LANG',NULL,1,0,'TRUE','TRUE'),
-(2,'PC Skills','PC',NULL,2,0,'TRUE','TRUE'),
-(3,'Projects','PROJ',NULL,3,0,'TRUE','TRUE');
+INSERT INTO course_category (name, code, parent_id, tree_pos, children_count, auth_course_child, auth_cat_child) VALUES
+('Language skills','LANG',NULL,1,0,'TRUE','TRUE'),
+('PC Skills','PC',NULL,2,0,'TRUE','TRUE'),
+('Projects','PROJ',NULL,3,0,'TRUE','TRUE');
 
 INSERT INTO course_module VALUES
 (1,'calendar_event','calendar/agenda.php','agenda.gif',1,1,'basic'),

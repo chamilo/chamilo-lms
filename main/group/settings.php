@@ -229,7 +229,7 @@ if ($form->validate()) {
         header('Location: group.php?'.api_get_cidreq(true, false));
     } else {
         Display::addFlash(Display::return_message(get_lang('GroupSettingsModified'), 'success'));
-        header('Location: group.php?'.api_get_cidreq(true, false).'&category='.$cat['id']);
+        header('Location: group.php?'.api_get_cidreq(true, false).'&category='.$categoryId);
     }
     exit;
 }

@@ -28,8 +28,6 @@ if (isset($_POST['action'])) {
             if (isset($_POST['same_category']) && $_POST['same_category']) {
                 $useOnlyFirstCategory = true;
             }
-            $group1['category'] = isset($_POST['group_'.$i.'_category']) ? $_POST['group_'.$i.'_category'] : null;
-
             for ($i = 0; $i < $_POST['number_of_groups']; $i++) {
                 $group1['name'] = empty($_POST['group_'.$i.'_name']) ? get_lang('Group').' '.$i : $_POST['group_'.$i.'_name'];
                 $group1['category'] = isset($_POST['group_'.$i.'_category']) ? $_POST['group_'.$i.'_category'] : null;

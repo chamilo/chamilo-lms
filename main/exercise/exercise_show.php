@@ -906,7 +906,6 @@ foreach ($questionList as $questionId) {
 
     $contents = ob_get_clean();
     $question_content = '<div class="question_row">';
-
     if ($show_results) {
         $objQuestionTmp->export = $action == 'export';
         // Shows question title an description
@@ -957,7 +956,11 @@ if (!empty($category_list) && ($show_results || $show_only_total_score || $showT
 
 echo $total_score_text;
 echo $exercise_content;
-echo $total_score_text;
+
+// only show "score" in bottom of page if there's exercise content
+if ($show_results) {
+    echo $total_score_text;
+}
 
 if ($action == 'export') {
     $content = ob_get_clean();

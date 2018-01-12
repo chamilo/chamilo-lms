@@ -5,9 +5,9 @@ Feature: Course tools basic testing
   As a teacher
   I need to be able to enter a course and each of its tools
 
-  Background:
-    Given I am a platform administrator
-    And I am a "English" user
+  #Background:
+    #Given I am a platform administrator
+    #And I am a "English" user
     # This is executed just before each scenario below
 
   Scenario: See the courses list

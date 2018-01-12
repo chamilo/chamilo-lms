@@ -62,7 +62,8 @@ Feature: Group tool
     Then I follow "My folder in group"
     Then I follow "Upload documents"
     Then I follow "Upload (Simple)"
-    Then I attach the file "css/base.css" to "file"
+    # File path is located in behat.yml
+    Then I attach the file "build/css/base.css" to "file"
     Then wait for the page to be loaded
     Then I press "upload_submitDocument"
     Then wait for the page to be loaded

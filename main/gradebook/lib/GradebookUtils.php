@@ -892,7 +892,7 @@ class GradebookUtils
 
             $t = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
             $sql = "SELECT * FROM $t 
-                    WHERE course_code = '".$courseInfo['real_id']."' ";
+                    WHERE c_id = '".$courseInfo['real_id']."' ";
             if (!empty($session_id)) {
                 $sql .= " AND session_id = ".(int) $session_id;
             } else {

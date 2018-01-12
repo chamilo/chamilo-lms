@@ -1068,9 +1068,7 @@ if (!empty($error)) {
             });*/
 
             $(\'form#exercise_form\').prepend($(\'#exercise-description\'));
-        });
-
-        $(document).on(\'ready\', function () {
+       
             $(\'button[name="previous_question_and_save"]\').on(\'click\', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -1095,6 +1093,7 @@ if (!empty($error)) {
             });
 
             $(\'button[name="save_now"]\').on(\'click\', function (e) {
+                
                 e.preventDefault();
                 e.stopPropagation();
                 

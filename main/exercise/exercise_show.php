@@ -891,7 +891,11 @@ foreach ($questionList as $questionId) {
     }
 
     if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
-        $check = $objQuestionTmp->isQuestionWaitingReview($score);
+        $scoreToReview = [
+            'score' => $my_total_score,
+            'comments' => isset($comnt) ? $comnt : null
+        ];
+        $check = $objQuestionTmp->isQuestionWaitingReview($scoreToReview);
         if ($check === false) {
             $countPendingQuestions++;
         }

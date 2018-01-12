@@ -4160,7 +4160,6 @@ EOT;
                 $comnt = null;
                 if ($show_results) {
                     $comnt = Event::get_comments($exeId, $questionId);
-
                     $teacherAudio = ExerciseLib::getOralFeedbackAudio(
                         $exeId,
                         $questionId,
@@ -4197,7 +4196,11 @@ EOT;
                 }
 
                 if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
-                    $check = $objQuestionTmp->isQuestionWaitingReview($score);
+                    $reviewScore = [
+                        'score' => $my_total_score,
+                        'comments' => Event::get_comments($exeId, $questionId)
+                    ];
+                    $check = $objQuestionTmp->isQuestionWaitingReview($reviewScore);
                     if ($check === false) {
                         $countPendingQuestions++;
                     }

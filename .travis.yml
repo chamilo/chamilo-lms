@@ -66,7 +66,6 @@ before_install:
   - apache2 -v
   - php -v
   - sudo cat /etc/hosts
-
   - phpenv config-add tests/travis/php-config.ini
 
   # Install Chash, a database, and then install Chamilo
@@ -89,8 +88,6 @@ before_install:
   - sudo chmod -R 777 var/cache var/log app/courses app/upload
   # Check chamilo status
   - php -d date.timezone="Europe/Paris" $TRAVIS_BUILD_DIR/chash/chash.php chash:chamilo_status
-  - ls -la
-  - ls -la /var/www
   # Permissions
   - sudo chown -R www-data:www-data $TRAVIS_BUILD_DIR
   - sudo chown -R 775 $TRAVIS_BUILD_DIR

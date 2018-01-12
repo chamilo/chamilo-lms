@@ -715,7 +715,10 @@ UPDATE language SET parent_id = 18 WHERE english_name = 'occitan';
 UPDATE language SET parent_id = 40 WHERE english_name = 'brazilian';
 UPDATE language SET parent_id = 45 WHERE english_name = 'trad_chinese';
 
-INSERT INTO course_category VALUES (1,'Language skills','LANG',NULL,1,0,'TRUE','TRUE'),(2,'PC Skills','PC',NULL,2,0,'TRUE','TRUE'),(3,'Projects','PROJ',NULL,3,0,'TRUE','TRUE');
+INSERT INTO course_category (id, name, code, parent_id, tree_pos, children_count, auth_course_child, auth_cat_child) VALUES
+(1,'Language skills','LANG',NULL,1,0,'TRUE','TRUE'),
+(2,'PC Skills','PC',NULL,2,0,'TRUE','TRUE'),
+(3,'Projects','PROJ',NULL,3,0,'TRUE','TRUE');
 
 INSERT INTO course_module VALUES
 (1,'calendar_event','calendar/agenda.php','agenda.gif',1,1,'basic'),
@@ -816,55 +819,6 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 </body>
 </html>
 ');
-
-/*
-INSERT INTO system_template (title, comment, image, content) VALUES
-('TemplateTitleCheckList', 'TemplateTitleCheckListDescription', 'checklist.gif', '
-      <head>
-                   {CSS}
-                </head>
-                <body>
-                <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
-                <tbody>
-                <tr>
-                <td style="vertical-align: top; width: 66%;">
-                <h3>Lorem ipsum dolor sit amet</h3>
-                <ul>
-                    <li>consectetur adipisicing elit</li>
-                    <li>sed do eiusmod tempor incididunt</li>
-                    <li>ut labore et dolore magna aliqua</li>
-                </ul>
-
-                <h3>Ut enim ad minim veniam</h3>
-                <ul>
-                    <li>quis nostrud exercitation ullamco</li>
-                    <li>laboris nisi ut aliquip ex ea commodo consequat</li>
-                    <li>Excepteur sint occaecat cupidatat non proident</li>
-                </ul>
-
-                <h3>Sed ut perspiciatis unde omnis</h3>
-                <ul>
-                    <li>iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam</li>
-                    <li>eaque ipsa quae ab illo inventore veritatis</li>
-                    <li>et quasi architecto beatae vitae dicta sunt explicabo.&nbsp;</li>
-                </ul>
-
-                </td>
-                <td style="background: transparent url({IMG_DIR}postit.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; width: 33%; text-align: center; vertical-align: bottom;">
-                <h3>Ut enim ad minima</h3>
-                Veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.<br>
-                <h3>
-                <img style="width: 180px; height: 144px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_smile.png "><br></h3>
-                </td>
-                </tr>
-                </tbody>
-                </table>
-                <p><br>
-                <br>
-                </p>
-                </body>
-');
-*/
 
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleTeacher', 'TemplateTitleTeacherDescription', 'yourinstructor.gif', '
@@ -1057,33 +1011,6 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 </html>
 ');
 
-/*
-INSERT INTO system_template (title, comment, image, content) VALUES
-('TemplateTitleComparison', 'TemplateTitleComparisonDescription', 'compare.gif', '
-<head>
-            {CSS}
-            </head>
-
-            <body>
-                <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
-                <tr>
-                    <td style="height: 10%; width: 33%;"></td>
-                    <td style="vertical-align: top; width: 33%;" colspan="1" rowspan="2">&nbsp;<img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_standing.png "><br>
-                    </td>
-                    <td style="height: 10%; width: 33%;"></td>
-                </tr>
-            <tr>
-            <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 33%; text-align: right;">
-            Lorem ipsum dolor sit amet.
-            </td>
-            <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; text-align: left; width: 33%;">
-            Convallis
-            ut.&nbsp;Cras dui magna.</td>
-            </tr>
-            </body>
-');
-*/
-
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleDiagram', 'TemplateTitleDiagramDescription', 'diagram.gif', '
 <!DOCTYPE html>
@@ -1161,47 +1088,6 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 </html>
 ');
 
-/*
-INSERT INTO system_template (title, comment, image, content) VALUES
-('TemplateTitleObjectives', 'TemplateTitleObjectivesDescription', 'courseobjectives.gif', '
-<head>
-                   {CSS}
-                </head>
-
-                <body>
-                    <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
-                    <tbody>
-                    <tr>
-                    <td style="vertical-align: bottom; width: 33%;" colspan="1" rowspan="2">
-                    <img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_chair.png "><br>
-                    </td>
-                    <td style="height: 10%; width: 66%;"></td>
-                    </tr>
-                    <tr>
-                    <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; text-align: left; width: 66%;">
-                    <h3>Lorem ipsum dolor sit amet</h3>
-                    <ul>
-                    <li>consectetur adipisicing elit</li>
-                    <li>sed do eiusmod tempor incididunt</li>
-                    <li>ut labore et dolore magna aliqua</li>
-                    </ul>
-                    <h3>Ut enim ad minim veniam</h3>
-                    <ul>
-                    <li>quis nostrud exercitation ullamco</li>
-                    <li>laboris nisi ut aliquip ex ea commodo consequat</li>
-                    <li>Excepteur sint occaecat cupidatat non proident</li>
-                    </ul>
-                    </td>
-                    </tr>
-                    </tbody>
-                    </table>
-                <p><br>
-                <br>
-                </p>
-                </body>
-');
-*/
-
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleCycle', 'TemplateTitleCycleDescription', 'cyclechart.gif', '
 <!DOCTYPE html>
@@ -1269,48 +1155,6 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 </html>
 ');
 
-/*
-INSERT INTO system_template (title, comment, image, content) VALUES
-('TemplateTitleLearnerWonder', 'TemplateTitleLearnerWonderDescription', 'learnerwonder.gif', '
-<head>
-               {CSS}
-            </head>
-
-            <body>
-                <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
-                <tbody>
-                <tr>
-                <td style="width: 33%;" colspan="1" rowspan="4">
-                    <img style="width: 120px; height: 348px;" alt="learner wonders" src="{COURSE_DIR}images/silhouette.png "><br>
-                </td>
-                <td style="width: 66%;"></td>
-                </tr>
-                <tr align="center">
-                <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 66%;">
-                Convallis
-                ut.&nbsp;Cras dui magna.</td>
-                </tr>
-                <tr align="center">
-                <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 66%;">
-                Etiam
-                lacinia stibulum ante.<br>
-                </td>
-                </tr>
-                <tr align="center">
-                <td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 66%;">
-                Consectetuer
-                adipiscing elit. <br>
-                </td>
-                </tr>
-                </tbody>
-                </table>
-            <p><br>
-            <br>
-            </p>
-            </body>
-');
-*/
-
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleTimeline', 'TemplateTitleTimelineDescription', 'phasetimeline.gif', '
 <!DOCTYPE html>
@@ -1374,40 +1218,6 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 </body>
 </html>
 ');
-
-/*
-INSERT INTO system_template (title, comment, image, content) VALUES
-('TemplateTitleStopAndThink', 'TemplateTitleStopAndThinkDescription', 'stopthink.gif', '
-<head>
-               {CSS}
-            </head>
-            <body>
-                <table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
-                <tbody>
-                <tr>
-                <td style="vertical-align: bottom; width: 33%;" colspan="1" rowspan="2">
-                    <img style="width: 180px; height: 169px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_staring.png ">
-                <br>
-                </td>
-                <td style="height: 10%; width: 66%;"></td>
-                </tr>
-                <tr>
-                <td style="background: transparent url({IMG_DIR}postit.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; width: 66%; vertical-align: middle; text-align: center;">
-                    <h3>Attentio sectetur adipisicing elit</h3>
-                    <ul>
-                        <li>sed do eiusmod tempor incididunt</li>
-                        <li>ut labore et dolore magna aliqua</li>
-                        <li>quis nostrud exercitation ullamco</li>
-                    </ul><br></td>
-                </tr>
-                </tbody>
-                </table>
-            <p><br>
-            <br>
-            </p>
-            </body>
-');
-*/
 
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleTable', 'TemplateTitleCheckListDescription', 'table.gif', '

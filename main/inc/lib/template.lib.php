@@ -46,6 +46,7 @@ class Template
     public $load_plugins = false;
     public $params = [];
     public $force_plugin_load = false;
+    public $responseCode = 0;
 
     /**
      * @param string $title
@@ -54,6 +55,7 @@ class Template
      * @param bool $show_learnpath
      * @param bool $hide_global_chat
      * @param bool $load_plugins
+     * @param int $responseCode
      * @param bool $sendHeaders send http headers or not
      */
     public function __construct(
@@ -63,12 +65,13 @@ class Template
         $show_learnpath = false,
         $hide_global_chat = false,
         $load_plugins = true,
-        $sendHeaders = true
+        $sendHeaders = true,
+        $responseCode = 0
     ) {
         // Page title
         $this->title = $title;
-
         $this->show_learnpath = $show_learnpath;
+        $this->setResponseCode($responseCode);
 
         if (empty($this->show_learnpath)) {
             $origin = api_get_origin();
@@ -1114,6 +1117,15 @@ class Template
                 'X-Powered-By: '.$_configuration['software_name'].' '.substr($_configuration['system_version'], 0, 1)
             );
             self::addHTTPSecurityHeaders();
+
+            $responseCode = $this->getResponseCode();
+            if (!empty($responseCode)) {
+                switch ($responseCode) {
+                    case '404':
+                        header("HTTP/1.0 404 Not Found");
+                        break;
+                }
+            }
         }
 
         $socialMeta = '';
@@ -1694,5 +1706,21 @@ class Template
         }
 
         return implode(CourseManager::USER_SEPARATOR, $names);
+    }
+
+    /**
+     * @param int $code
+     */
+    public function setResponseCode($code)
+    {
+        $this->responseCode = $code;
+    }
+
+    /**
+     * @param string $code
+     */
+    public function getResponseCode()
+    {
+        return $this->responseCode;
     }
 }

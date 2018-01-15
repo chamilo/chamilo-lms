@@ -4436,7 +4436,7 @@ class Wiki
                         s2.c_id = '.$course_id.' AND 
                         s1.reflink = s2.reflink AND 
                         '.$groupfilter.' AND 
-                        session_id='.$session_id.')';            
+                        session_id='.$session_id.')';
         } else {
             // warning don't use group by reflink because does not return the last version
             $sql = 'SELECT  *  FROM '.$tbl_wiki.' s1
@@ -4446,7 +4446,7 @@ class Wiki
                             s2.c_id = '.$course_id.' AND 
                             s1.reflink = s2.reflink AND
                              '.$groupfilter.' AND 
-                             session_id='.$session_id.')';            
+                             session_id='.$session_id.')';
         }
 
         $allpages = Database::query($sql);

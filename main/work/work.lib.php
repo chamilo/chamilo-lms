@@ -2031,8 +2031,8 @@ function get_work_user_list(
 
     if (!empty($work_data)) {
         if (!empty($group_id)) {
-            $extra_conditions = " work.post_group_id = '".intval($groupIid)."' ";
             // set to select only messages posted by the user's group
+            $extra_conditions = " work.post_group_id = '".intval($groupIid)."' ";
         } else {
             $extra_conditions = " (work.post_group_id = '0' OR work.post_group_id is NULL) ";
         }

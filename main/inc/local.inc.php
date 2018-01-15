@@ -538,7 +538,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 /* >>>>>>>> External authentication modules <<<<<<<<< */
                 // see configuration.php to define these
                 include_once($extAuthSource[$key]['login']);
-                /* >>>>>>>> External authentication modules <<<<<<<<< */
             } else { // no standard Chamilo login - try external authentification
                 //huh... nothing to do... we shouldn't get here
                 error_log(

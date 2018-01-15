@@ -109,8 +109,6 @@ class AdminController extends BaseController
                 'url' => $adminUrl.'extra_fields.php?type=user',
                 'label' => get_lang('ManageUserFields'),
             ];
-            /*$items[] = array('url'=> api_get_path(WEB_PUBLIC_PATH)
-                .'admin/administrator/roles', 'label' => get_lang('Roles'));*/
         } else {
             $items = [
                 [

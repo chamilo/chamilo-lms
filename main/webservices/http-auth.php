@@ -40,8 +40,8 @@ function getDigest()
 {
     // mod_php
     if (isset($_SERVER['PHP_AUTH_DIGEST'])) {
-        $digest = $_SERVER['PHP_AUTH_DIGEST'];
         // most other servers
+        $digest = $_SERVER['PHP_AUTH_DIGEST'];
     } elseif (isset($_SERVER['HTTP_AUTHENTICATION'])) {
         if (strpos(
                 strtolower($_SERVER['HTTP_AUTHENTICATION']),

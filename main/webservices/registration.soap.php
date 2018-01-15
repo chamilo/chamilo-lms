@@ -329,12 +329,10 @@ function WSCreateUsers($params)
                 $userManager->updateUser($user, true);
                 $results[] = $user_id;
                 continue;
-                //return $r_check_user[0];
             } else {
+                // user id already exits.
                 $results[] = 0;
                 continue;
-                //return 0;
-                // user id already exits.
             }
         }
 

@@ -583,13 +583,13 @@ class CourseBuilder
                     true
                 );
             }
+            //select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
             $sql = "SELECT * FROM $table_qui
                     WHERE c_id = $courseId AND active >=0 $session_condition";
-            //select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
         } else {
+            //select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
             $sql = "SELECT * FROM $table_qui
                     WHERE c_id = $courseId AND active >=0 AND (session_id = 0 OR session_id IS NULL)";
-            //select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
         }
 
         $sql .= 'ORDER BY title';

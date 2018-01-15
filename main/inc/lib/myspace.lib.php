@@ -2321,11 +2321,11 @@ class MySpace
                 } else {
                     $is_session_avail = self::user_available_in_session($user['UserName'], $course_list, $id_session);
                     if ($is_session_avail == 0) {
+                        // This should be the ID because the user exists.
                         $user_name = $user['UserName'];
                         $sql_select = "SELECT user_id FROM $table_user WHERE username ='$user_name' ";
                         $rs = Database::query($sql_select);
                         $user['create'] = Database::result($rs, 0, 0);
-                        // This should be the ID because the user exists.
                     } else {
                         $user['create'] = $is_session_avail;
                     }

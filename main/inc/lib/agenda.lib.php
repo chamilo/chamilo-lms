@@ -3907,7 +3907,6 @@ class Agenda
                                 );
                                 $result .= '</div>';
                                 $html .= $result;
-                                //echo Display::div($content, array('id'=>'main_'.$value['calendar_type'].'_'.$value['id'], 'class' => 'dialog'));
                             } else {
                                 $html .= $result .= $icon.'</div>';
                             }

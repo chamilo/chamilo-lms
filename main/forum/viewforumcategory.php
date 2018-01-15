@@ -273,20 +273,15 @@ if ($action != 'add') {
                         $show_forum = true;
                     } else {
                         // it is a group forum
-                        //echo '-groepsforum';
                         // it is a group forum but it is public => show
                         if ($forum['forum_group_public_private'] == 'public') {
                             $show_forum = true;
-                            //echo '-publiek';
                         } else {
                             // it is a group forum and it is private
-                            //echo '-prive';
                             // it is a group forum and it is private but the user is member of the group
                             if (in_array($forum['forum_of_group'], $groups_of_user)) {
-                                //echo '-is lid';
                                 $show_forum = true;
                             } else {
-                                //echo '-is GEEN lid';
                                 $show_forum = false;
                             }
                         }

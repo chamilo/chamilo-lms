@@ -2030,17 +2030,11 @@ class Event
             if (Database::num_rows($result) > 0) {
                 $row = Database::fetch_array($result, 'ASSOC');
                 $courseAccessId = $row['course_access_id'];
-                /*$logout = $row['logout_course_date'];
-                $now = time();
-                $logout = api_strtotime($logout, 'UTC');
-                */
-                //if ($now - $logout < $sessionLifetime) {
                 $sql = "UPDATE $tableCourseAccess SET 
                                 logout_course_date = '$currentDate', 
                                 counter = counter + 1
                             WHERE course_access_id = $courseAccessId";
                 Database::query($sql);
-                //}
             } else {
                 $insert = true;
             }

@@ -1,0 +1,18 @@
+oneup_flysystem:
+    adapters:
+        courses_adapter:
+            local:
+                directory: '%kernel.project_dir%/var/courses'
+
+#        s3.adapter:
+#              awss3v3:
+#                  client: s3_client # add service "s3_client"
+#                  bucket: ~
+#                  prefix: ~
+    filesystems:
+        courses:
+            adapter: courses_adapter
+            visibility: private
+            cache: ~
+            alias: ~
+            mount: ~

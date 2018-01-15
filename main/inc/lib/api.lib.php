@@ -2,10 +2,11 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Entity\SettingsCurrent;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\UserBundle\Entity\User;
 use Symfony\Component\Finder\Finder;
-use Chamilo\CoreBundle\Entity\SettingsCurrent;
 
 /**
  * This is a code library for Chamilo.
@@ -699,7 +700,7 @@ function api_get_path($path = '', $configuration = [])
 
     $course_folder = 'courses/';
     static $root_web = '';
-    $root_sys = $_configuration['root_sys'];
+    $root_sys = Container::getRootDir();
 
     // If no $root_web has been set so far *and* no custom config has been passed to the function
     // then re-use the previously-calculated (run-specific) $root_web and skip this complex calculation
@@ -775,7 +776,7 @@ function api_get_path($path = '', $configuration = [])
             SYS_HOME_PATH => 'app/home/',
             WEB_HOME_PATH => 'app/home/',
             REL_HOME_PATH => 'app/home/',
-            SYS_APP_PATH => 'app/',
+            SYS_APP_PATH => 'var/',
             WEB_APP_PATH => 'app/',
             SYS_UPLOAD_PATH => 'app/upload/',
             SYS_INC_PATH => 'inc/',

@@ -20,13 +20,15 @@ var/log/*
 /app/config/configuration.php
 
 # Courses
-app/courses/*
+var/courses/*
+!var/courses/.gitkeep
 
 # Home
 app/home/*
 
 # Upload content
-app/upload/*
+var/upload/*
+!var/upload/.gitkeep
 
 # Logs and databases #
 *.log

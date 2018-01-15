@@ -78,7 +78,6 @@ class CourseListener
 
                 // Group
                 $groupId = intval($request->get('gidReq'));
-
                 if (empty($sessionId)) {
                     // Check if user is allowed to this course
                     // See CourseVoter.php
@@ -158,10 +157,7 @@ class CourseListener
                     $dispatcher = $this->container->get('event_dispatcher');
 
                     if (empty($sessionId)) {
-                        $dispatcher->dispatch(
-                            'chamilo_course.course.access',
-                            new CourseAccess($user, $course)
-                        );
+                        $dispatcher->dispatch('chamilo_course.course.access', new CourseAccess($user, $course));
                     } else {
                         $dispatcher->dispatch(
                             'chamilo_course.course.access',

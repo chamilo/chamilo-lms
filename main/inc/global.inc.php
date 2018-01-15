@@ -101,9 +101,9 @@ if (!is_dir(_MPDF_TEMP_PATH)) {
     mkdir(_MPDF_TEMP_PATH, api_get_permissions_for_new_directories(), true);
 }
 
-if (file_exists(api_get_path(SYS_PATH).'.env')) {
+if (file_exists(__DIR__.'/../../.env')) {
     // Get settings from .env file created when installation chamilo
-    (new Dotenv())->load(api_get_path(SYS_PATH).'.env');
+    (new Dotenv())->load(__DIR__.'/../../.env');
     $kernel->boot();
     $container = $kernel->getContainer();
     $doctrine = $container->get('doctrine');

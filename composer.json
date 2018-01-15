@@ -147,6 +147,7 @@
         "aferrandini/phpqrcode": "1.0.1",
         "alchemy/zippy": "~0.4",
         "mpdf/mpdf": "~7.0",
+        "oneup/flysystem-bundle": "~3.0",
         "studio-42/elfinder": "2.1.*",
         "jbroadway/urlify": "1.1.0-stable",
         "ircmaxell/password-compat": "~1.0.4",
@@ -172,7 +173,8 @@
         "lunetics/locale-bundle": "2.5.*",
         "hwi/oauth-bundle": "^0.6.0",
         "php-http/guzzle6-adapter": "^1.1",
-        "php-http/httplug-bundle": "^1.8"
+        "php-http/httplug-bundle": "^1.8",
+        "symfony/apache-pack": "^1.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.7",

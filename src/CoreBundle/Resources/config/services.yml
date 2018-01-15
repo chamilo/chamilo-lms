@@ -37,7 +37,10 @@ services:
     # Course voter checks if a user has permissions to do actions in a course
     chamilo_core.security.authorization.voter.course_voter:
         class: Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter
-        arguments: ['@doctrine.orm.entity_manager', '@chamilo_core.entity.manager.course_manager', '@service_container']
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@chamilo_core.entity.manager.course_manager'
+            - '@service_container'
         public: false
         tags:
             - {name: security.voter}

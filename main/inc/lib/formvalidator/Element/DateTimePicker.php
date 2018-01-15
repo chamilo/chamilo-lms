@@ -44,8 +44,8 @@ class DateTimePicker extends HTML_QuickForm_text
                 <p class="form-control disabled" id="' . $id.'_alt_text">'.$value.'</p>
                 <input class="form-control" type="hidden" id="' . $id.'_alt" value="'.$value.'">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button">
-                        <span class="fa fa-times text-danger" aria-hidden="true"></span>
+                    <button class="btn btn-default" type="button" title="' . get_lang('Reset').'">
+                        <span class="fa fa-trash text-danger" aria-hidden="true"></span>
                         <span class="sr-only">' . get_lang('Reset').'</span>
                     </button>
                 </span>

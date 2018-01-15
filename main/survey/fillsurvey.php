@@ -192,6 +192,9 @@ if (Database::num_rows($result) > 1) {
 
 // Getting the survey information
 $survey_data = SurveyManager::get_survey($survey_invitation['survey_id']);
+if (empty($survey_data)) {
+    api_not_allowed(true);
+}
 $survey_data['survey_id'] = $survey_invitation['survey_id'];
 
 // Storing the answers
@@ -1376,7 +1379,7 @@ function check_time_availability($surveyData)
     $endDate = new DateTime($surveyData['end_date'], $userTimeZone);
     $currentDate = new DateTime('now', $userTimeZone);
     $currentDate->modify('today');
-
+    var_dump($currentDate->format('Y-m-d'), $startDate->format('Y-m-d'));
     if ($currentDate < $startDate) {
         api_not_allowed(
             true,

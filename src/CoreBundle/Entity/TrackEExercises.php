@@ -97,7 +97,7 @@ class TrackEExercises
     /**
      * @var integer
      *
-     * @ORM\Column(name="session_id", type="smallint", nullable=false)
+     * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
 

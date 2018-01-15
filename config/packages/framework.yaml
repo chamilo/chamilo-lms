@@ -21,6 +21,7 @@ framework:
         name: ch_sid
     fragments: ~
     http_method_override: true
-    assets: ~
+    assets:
+        json_manifest_path: '%kernel.project_dir%/public/build/manifest.json'
     annotations: true
     translator: ~

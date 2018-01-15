@@ -163,7 +163,7 @@ if (api_is_multiple_url_enabled()) {
 }
 
 // Show the URL that can be used by users to fill a survey without invitation
-$auto_survey_link = $portal_url.'main/survey/fillsurvey.php?course='.$_course['sysCode'].'&invitationcode=auto&scode='.$survey_data['survey_code'];
+$auto_survey_link = $portal_url.'main/survey/fillsurvey.php?course='.$_course['sysCode'].'&invitationcode=auto&scode='.$survey_data['survey_code'].'&id_session='.$survey_data['session_id'];
 
 $form->addElement('label', null, get_lang('AutoInviteLink'));
 $form->addElement('label', null, $auto_survey_link);

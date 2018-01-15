@@ -14,3 +14,7 @@ $strings['ConsumerKey'] = 'Consumer key';
 $strings['SharedSecret'] = 'Shared secret';
 $strings['CustomParams'] = 'Custom params';
 $strings['ToolName'] = 'Tool name';
+$strings['ToolNotAdded'] = 'Tool not added';
+$strings['AvailableTools'] = 'Available tools';
+$strings['ToolSettings'] = 'Tool settings';
+$strings['ToolNotAvailable'] = 'Tool not available';

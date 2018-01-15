@@ -14,6 +14,8 @@
 <html lang="{{ app.request.locale }}" class="no-js ie9"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!-->
 <html lang="{{ app.request.locale }}" class="no-js"> <!--<![endif]-->
+{# Chamilo theme #}
+{% set theme = 'chamilo' %}
 <head>
     <meta charset="utf-8">
     {# Check settings to add more metadata in app/config/sonata/sonata_seo.yml #}
@@ -22,7 +24,7 @@
     <link href="https://chamilo.org/the-association/" rel="author"/>
     <link href="https://chamilo.org/the-association/" rel="copyright"/>
     <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}"/>
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+    <link rel="icon" type="image/x-icon" href="{{ asset('build/css/themes/'~ theme ~'/favicon.ico') }}"/>
     <title>
     {% block title %}
     {{ chamilo_settings_get('platform.institution') }} - {{ chamilo_settings_get('platform.site_name') }}
@@ -38,8 +40,6 @@
     {#%}#}
     {#<link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />#}
     {#{% endstylesheets %}#}
-    {# Chamilo theme #}
-    {% set theme = 'chamilo' %}
     {% set bug_notification_link = '' %}
     {% set help_content = '' %}
     {% set header_extra_content = '' %}
@@ -54,10 +54,12 @@
     {% set message_link = '' %}
 
     <link rel="stylesheet" href="{{ asset('build/chamilo.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('build/css/base.css') }}"/>
     <link rel="stylesheet" href="{{ asset('build/css/themes/'~ theme ~'/default.css') }}"/>
-    <link rel="stylesheet" media="print" href="{{ asset('build/css/themes/'~ theme ~'/print.css') }}"/>
-
+    <link rel="stylesheet" media="print" href="{{ asset('build/css/print.css') }}"/>
     <script src="{{ asset('build/chamilo.js') }}"></script>
+    <script src="{{ asset('libs/ckeditor/ckeditor.js') }}"></script>
+
 
     {#<script src="{{ asset('assets/modernizr/modernizr.js') }}"></script>#}
 
@@ -126,7 +128,7 @@
                     <div class="col-lg-3">
                         <div class="logo">
                             {#<a href="{{ url('index') }}">#}
-                            <img src="{{ asset('css/themes/'~ theme ~'/images/header-logo.png') }}"/>
+                            <img src="{{ asset('build/css/themes/'~ theme ~'/images/header-logo.png') }}"/>
                             {#</a>#}
                         </div>
                     </div>

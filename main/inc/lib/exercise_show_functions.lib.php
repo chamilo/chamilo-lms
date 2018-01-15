@@ -366,10 +366,8 @@ class ExerciseShowFunctions
             if ($studentChoice) {
                 if ($answerCorrect) {
                     $color = 'green';
-                    //echo '<span style="font-weight: bold; color: #008000;">'.nl2br($answerComment).'</span>';
                 } else {
                     $color = 'black';
-                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br($answerComment).'</span>';
                 }
                 if ($hide_expected_answer) {
                     $color = '';

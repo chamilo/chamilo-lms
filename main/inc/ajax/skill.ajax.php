@@ -53,13 +53,10 @@ switch ($action) {
         //Only course gradebook with certificate
         if (!empty($gradebooks)) {
             foreach ($gradebooks as $gradebook) {
-                if ($gradebook['parent_id'] == 0 && !empty($gradebook['certif_min_score']) && !empty($gradebook['document_id'])) {
+                if ($gradebook['parent_id'] == 0 && !empty($gradebook['certif_min_score']) &&
+                    !empty($gradebook['document_id'])
+                ) {
                     $gradebook_list[] = $gradebook;
-                    //$gradebook['name'] = $gradebook['name'];
-                    //$gradebook_list[]  = $gradebook;
-                } else {
-                    //  $gradebook['name'] = $gradebook_list[$gradebook['parent_id']]['name'].' > '.$gradebook['name'];
-                    //$gradebook_list[]  = $gradebook;
                 }
             }
         }

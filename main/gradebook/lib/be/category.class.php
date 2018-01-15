@@ -1862,6 +1862,7 @@ class Category implements GradebookItem
                         $order
                     );
                 } elseif (!empty($course_code)) {
+                    // course independent
                     return self::load(
                         null,
                         null,
@@ -1871,7 +1872,6 @@ class Category implements GradebookItem
                         $session_id,
                         $order
                     );
-                    // course independent
                 } else {
                     return self::load(
                         null,

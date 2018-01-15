@@ -2007,8 +2007,8 @@ function check_course_script_interpretation(
                         }
                     }
                     fclose($fp);
-                    //Check allow_url_fopen
                 } elseif (ini_get('allow_url_fopen')) {
+                    // Check allow_url_fopen
                     if ($fp = @fopen($url, 'r')) {
                         while ($result = fgets($fp, 1024)) {
                             if (!empty($result) && $result == '123') {
@@ -2017,8 +2017,8 @@ function check_course_script_interpretation(
                         }
                         fclose($fp);
                     }
-                    // Check if has support for cURL
                 } elseif (function_exists('curl_init')) {
+                    // Check if has support for cURL
                     $ch = curl_init();
                     curl_setopt($ch, CURLOPT_HEADER, 0);
                     curl_setopt($ch, CURLOPT_URL, $url);

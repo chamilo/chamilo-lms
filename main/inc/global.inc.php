@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Symfony\Component\Dotenv\Dotenv;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * It is recommended that ALL Chamilo scripts include this important file.
@@ -83,9 +84,6 @@ api_request_uri();
 define('_MPDF_TEMP_PATH', __DIR__.'/../../var/cache/mpdf/');
 define('_MPDF_TTFONTDATAPATH', __DIR__.'/../../var/cache/mpdf/');
 
-// Include the libraries that are necessary everywhere
-require_once __DIR__.'/../../vendor/autoload.php';
-
 // Do not over-use this variable. It is only for this script's local use.
 $libraryPath = __DIR__.'/lib/';
 // @todo convert this libs in classes
@@ -110,9 +108,11 @@ if (file_exists(api_get_path(SYS_PATH).'.env')) {
     $container = $kernel->getContainer();
     $doctrine = $container->get('doctrine');
 
+    // Connect Chamilo with the Symfony container
     $database = new \Database();
     $database->setManager($doctrine->getManager());
     $database->setConnection($doctrine->getConnection());
+    Container::setContainer($container);
 
     \CourseManager::setCourseManager(
         $container->get('chamilo_core.entity.manager.course_manager')

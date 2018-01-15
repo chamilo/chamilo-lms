@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Application\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Type;
 
 /**
  * Class Version20170904173000
@@ -22,6 +23,8 @@ class Version20170904173000 extends AbstractMigrationChamilo
 
     /**
      * @param Schema $schema
+     *
+     * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     public function up(Schema $schema)
     {

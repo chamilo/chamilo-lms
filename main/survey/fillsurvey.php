@@ -1155,7 +1155,6 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                     }
                     $counter++;
                 }
-                var_Dump($questions);
             }
         }
     } else { // In case it's another type than 0 or 1
@@ -1376,7 +1375,6 @@ function check_time_availability($surveyData)
     $endDate = new DateTime($surveyData['end_date'], $utcZone);
     $currentDate = new DateTime('now', $utcZone);
     $currentDate->modify('today');
-    var_dump($currentDate->format('Y-m-d'), $startDate->format('Y-m-d'));
     if ($currentDate < $startDate) {
         api_not_allowed(
             true,

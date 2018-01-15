@@ -2722,7 +2722,7 @@ class Wiki
                             $search_term
                         )."%' AND
                                 ".$groupfilter.$condition_session."";
-                    //search all pages and all versions
+                //search all pages and all versions
                 } else {
                     $sql = "SELECT * FROM ".$tbl_wiki."
                             WHERE
@@ -2751,7 +2751,7 @@ class Wiki
                                         s2.c_id = $course_id AND
                                         s1.reflink = s2.reflink AND
                                         ".$groupfilter.$condition_session.")";
-                    // warning don't use group by reflink because don't return the last version
+                // warning don't use group by reflink because don't return the last version
                 } else {
                     $sql = "SELECT * FROM ".$tbl_wiki." s1
                             WHERE
@@ -2783,7 +2783,7 @@ class Wiki
                             $search_term
                         )."%' AND
                                 ".$groupfilter.$condition_session."";
-                    //search all pages and all versions
+                //search all pages and all versions
                 } else {
                     $sql = "SELECT * FROM ".$tbl_wiki."
                             WHERE
@@ -2813,7 +2813,7 @@ class Wiki
                                     WHERE s2.c_id = $course_id AND
                                     s1.reflink = s2.reflink AND
                                     ".$groupfilter.$condition_session.")";
-                    // warning don't use group by reflink because don't return the last version
+                // warning don't use group by reflink because don't return the last version
                 } else {
                     $sql = "SELECT * FROM ".$tbl_wiki." s1
                             WHERE
@@ -4460,7 +4460,7 @@ class Wiki
                         s1.reflink = s2.reflink AND 
                         '.$groupfilter.' AND 
                         session_id='.$session_id.')';
-            // warning don't use group by reflink because does not return the last version
+        // warning don't use group by reflink because does not return the last version
         } else {
             $sql = 'SELECT  *  FROM '.$tbl_wiki.' s1
 				    WHERE visibility=1 AND s1.c_id = '.$course_id.' AND id=(
@@ -4899,7 +4899,7 @@ class Wiki
                     )."%' AND id=(
                         SELECT MAX(s2.id) FROM ".$tbl_wiki." s2
                         WHERE s2.c_id = $course_id AND s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";
-                //add blank space after like '%" " %' to identify each word
+            //add blank space after like '%" " %' to identify each word
             } else {
                 $sql = "SELECT * FROM ".$tbl_wiki." s1
                         WHERE s1.c_id = $course_id AND visibility=1 AND linksto LIKE '%".Database::escape_string(

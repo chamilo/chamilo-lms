@@ -2040,7 +2040,7 @@ class Event
                                 counter = counter + 1
                             WHERE course_access_id = $courseAccessId";
                 Database::query($sql);
-                //}
+            //}
             } else {
                 $insert = true;
             }

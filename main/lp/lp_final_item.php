@@ -115,7 +115,7 @@ if ($accessGranted == false) {
             $downloadCertificateLink,
             $badgeLink
         );
-        // TODO: Missing validation of learning path completion
+    // TODO: Missing validation of learning path completion
     } else {
         // A gradebook was found, proceed...
         /** @var Category $category */

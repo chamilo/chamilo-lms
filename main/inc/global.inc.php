@@ -600,7 +600,7 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
         if ($res_logout_date < time() - $lifeTime) {
             // it isn't, we should create a fresh entry
             Event::eventLogin($_user['user_id']);
-            // now that it's created, we can get its ID and carry on
+        // now that it's created, we can get its ID and carry on
         } else {
             $sql = "UPDATE $tbl_track_login SET logout_date = '$now'
                     WHERE login_id = '$i_id_last_connection'";

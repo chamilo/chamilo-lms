@@ -277,7 +277,7 @@ if ($action != 'add') {
                         // it is a group forum but it is public => show
                         if ($forum['forum_group_public_private'] == 'public') {
                             $show_forum = true;
-                            //echo '-publiek';
+                        //echo '-publiek';
                         } else {
                             // it is a group forum and it is private
                             //echo '-prive';

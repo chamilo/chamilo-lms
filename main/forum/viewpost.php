@@ -133,7 +133,7 @@ if ($message != 'PostDeletedSpecial') {
             ) {
                 if ($current_forum['locked'] <> 1 && $current_forum['locked'] <> 1) {
                     echo '&nbsp;&nbsp;';
-                    /*echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).$origin_string.'">'.Display::return_icon('new_thread.png','','',ICON_SIZE_MEDIUM).'</a>';*/
+                /*echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).$origin_string.'">'.Display::return_icon('new_thread.png','','',ICON_SIZE_MEDIUM).'</a>';*/
                 } else {
                     echo get_lang('ForumLocked');
                 }

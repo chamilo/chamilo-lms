@@ -329,7 +329,7 @@ function WSCreateUsers($params)
                 $userManager->updateUser($user, true);
                 $results[] = $user_id;
                 continue;
-                //return $r_check_user[0];
+            //return $r_check_user[0];
             } else {
                 $results[] = 0;
                 continue;

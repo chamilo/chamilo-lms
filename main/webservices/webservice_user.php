@@ -319,14 +319,14 @@ class WSUser extends WS
         if (!$result) {
             return new WSError(104, 'There was an error creating the user');
 
-            /*$failure = $api_failureList[0];
-            if($failure == 'login-pass already taken') {
-                return new WSError(102, 'This username is already taken');
-            } else if($failure == 'encrypt_method invalid') {
-                return new WSError(103, 'The encryption of the password is invalid');
-            } else {
-                return new WSError(104, 'There was an error creating the user');
-            }*/
+        /*$failure = $api_failureList[0];
+        if($failure == 'login-pass already taken') {
+            return new WSError(102, 'This username is already taken');
+        } else if($failure == 'encrypt_method invalid') {
+            return new WSError(103, 'The encryption of the password is invalid');
+        } else {
+            return new WSError(104, 'There was an error creating the user');
+        }*/
         } else {
             return $result;
         }

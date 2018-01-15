@@ -4425,8 +4425,9 @@ class Wiki
         }
         echo '</div>';
 
-        if (api_is_allowed_to_edit(false, true) || api_is_platform_admin(
-            )) { //only by professors if page is hidden
+        if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
+            // only by professors if page is hidden
+            // warning don't use group by reflink because does not return the last version
             $sql = 'SELECT  *
                     FROM  '.$tbl_wiki.' s1
         		    WHERE s1.c_id = '.$course_id.' AND id=(
@@ -4436,8 +4437,8 @@ class Wiki
                         s1.reflink = s2.reflink AND 
                         '.$groupfilter.' AND 
                         session_id='.$session_id.')';
-            // warning don't use group by reflink because does not return the last version
         } else {
+            // warning don't use group by reflink because does not return the last version
             $sql = 'SELECT  *  FROM '.$tbl_wiki.' s1
 				    WHERE visibility=1 AND s1.c_id = '.$course_id.' AND id=(
                         SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2
@@ -4446,12 +4447,10 @@ class Wiki
                             s1.reflink = s2.reflink AND
                              '.$groupfilter.' AND 
                              session_id='.$session_id.')';
-            // warning don't use group by reflink because does not return the last version
         }
 
         $allpages = Database::query($sql);
-
-        //show table
+        // show table
         if (Database::num_rows($allpages) > 0) {
             while ($obj = Database::fetch_object($allpages)) {
                 //get author
@@ -4510,14 +4509,9 @@ class Wiki
                             $obj->user_ip
                         ).')';
                 }
-                $row[] = api_get_local_time(
-                    $obj->dtime
-                );
+                $row[] = api_get_local_time($obj->dtime);
                 $showdelete = '';
-                if (api_is_allowed_to_edit(
-                        false,
-                        true
-                    ) || api_is_platform_admin()) {
+                if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
                     $showdelete = ' <a href="'.api_get_self(
                         ).'?cidReq='.$_course['code'].'&action=delete&title='.api_htmlentities(
                             urlencode($obj->reflink)
@@ -4664,16 +4658,17 @@ class Wiki
                 urlencode($page)
             ).'">'.$notify_all.'</a>';
         echo '</span>'.get_lang('RecentChanges').'</div>';
-
         if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
-            //only by professors if page is hidden
+            // new version
+            // only by professors if page is hidden
             $sql = 'SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.'
         		WHERE 	'.$tbl_wiki_conf.'.c_id= '.$course_id.' AND
         				'.$tbl_wiki.'.c_id= '.$course_id.' AND
         				'.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND
         				'.$tbl_wiki.'.'.$groupfilter.$condition_session.'
-        		ORDER BY dtime DESC'; // new version
+        		ORDER BY dtime DESC';
         } else {
+            // old version TODO: Replace by the bottom line
             $sql = 'SELECT *
                 FROM '.$tbl_wiki.'
                 WHERE
@@ -4681,12 +4676,9 @@ class Wiki
                     '.$groupfilter.$condition_session.' AND
                     visibility=1
                 ORDER BY dtime DESC';
-            // old version TODO: Replace by the bottom line
         }
-
         $allpages = Database::query($sql);
-
-        //show table
+        // Show table
         if (Database::num_rows($allpages) > 0) {
             $rows = [];
             while ($obj = Database::fetch_object($allpages)) {
@@ -4727,9 +4719,7 @@ class Wiki
                 }
 
                 $row = [];
-                $row[] = api_get_local_time(
-                    $obj->dtime
-                );
+                $row[] = api_get_local_time($obj->dtime);
                 $row[] = $ShowAssignment.$icon_task;
                 $row[] = '<a href="'.api_get_self().'?'.api_get_cidreq(
                     ).'&action=showpage&title='.api_htmlentities(
@@ -4865,25 +4855,23 @@ class Wiki
                 $page = str_replace(' ', '_', get_lang('DefaultTitle'));
             }
 
-            //table
-            if (api_is_allowed_to_edit(false, true) || api_is_platform_admin(
-                )) {
-                //only by professors if page is hidden
+            if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
+                // only by professors if page is hidden
+                //add blank space after like '%" " %' to identify each word
                 $sql = "SELECT * FROM ".$tbl_wiki." s1
                         WHERE s1.c_id = $course_id AND linksto LIKE '%".Database::escape_string(
                         $page
                     )."%' AND id=(
                         SELECT MAX(s2.id) FROM ".$tbl_wiki." s2
                         WHERE s2.c_id = $course_id AND s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";
-                //add blank space after like '%" " %' to identify each word
             } else {
+                //add blank space after like '%" " %' to identify each word
                 $sql = "SELECT * FROM ".$tbl_wiki." s1
                         WHERE s1.c_id = $course_id AND visibility=1 AND linksto LIKE '%".Database::escape_string(
                         $page
                     )."%' AND id=(
                         SELECT MAX(s2.id) FROM ".$tbl_wiki." s2
                         WHERE s2.c_id = $course_id AND s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";
-                //add blank space after like '%" " %' to identify each word
             }
 
             $allpages = Database::query($sql);
@@ -5003,7 +4991,6 @@ class Wiki
             );
 
             // Setting the form elements
-
             $form->addText(
                 'search_term',
                 get_lang('SearchTerm'),
@@ -5082,7 +5069,6 @@ class Wiki
                         user_id="'.$userId.'" AND
                         visibility=1';
         }
-
         $allpages = Database::query($sql);
 
         //show table
@@ -5106,9 +5092,7 @@ class Wiki
                         ICON_SIZE_SMALL
                     );
                 } elseif ($obj->assignment == 0) {
-                    $ShowAssignment = Display::return_icon(
-                        'px_transparent.gif'
-                    );
+                    $ShowAssignment = Display::return_icon('px_transparent.gif');
                 }
 
                 $row = [];
@@ -5319,13 +5303,12 @@ class Wiki
                 )
             );
         } else {
-
             // check if is a wiki group
             if ($current_row['group_id'] != 0) {
                 $groupInfo = GroupManager::get_group_properties(
                     $this->group_id
                 );
-                //Only teacher, platform admin and group members can edit a wiki group
+                // Only teacher, platform admin and group members can edit a wiki group
                 if (api_is_allowed_to_edit(false, true) ||
                     api_is_platform_admin() ||
                     GroupManager::is_user_in_group($userId, $groupInfo) ||
@@ -5357,10 +5340,7 @@ class Wiki
                 );
             } elseif ($current_row['assignment'] == 2) {
                 if (($userId == $current_row['user_id']) == false) {
-                    if (api_is_allowed_to_edit(
-                            false,
-                            true
-                        ) || api_is_platform_admin()) {
+                    if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
                         $PassEdit = true;
                     } else {
                         Display::addFlash(
@@ -5377,7 +5357,7 @@ class Wiki
                 }
             }
 
-            //show editor if edit is allowed
+            // show editor if edit is allowed
             if ($PassEdit) {
                 if ($current_row['editlock'] == 1 &&
                     (api_is_allowed_to_edit(false, true) == false ||

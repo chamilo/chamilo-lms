@@ -2009,7 +2009,7 @@ function check_course_script_interpretation(
                         }
                     }
                     fclose($fp);
-                    //Check allow_url_fopen
+                //Check allow_url_fopen
                 } elseif (ini_get('allow_url_fopen')) {
                     if ($fp = @fopen($url, 'r')) {
                         while ($result = fgets($fp, 1024)) {

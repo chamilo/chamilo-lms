@@ -1450,7 +1450,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                     $form->applyFilter($row['variable'], 'html_filter');
                     $default_values[$row['variable']] = $row['selected_value'];
 
-                    // For platform character set selection: Conversion of the textfield to a select box with valid values.
+                // For platform character set selection: Conversion of the textfield to a select box with valid values.
                 } elseif ($row['variable'] == 'platform_charset') {
                     continue;
                 } else {

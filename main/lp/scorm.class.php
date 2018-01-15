@@ -218,7 +218,7 @@ class scorm extends learnpath
                 }
             }
             unset($doc);
-            // End parsing using PHP5 DOMXML methods.
+        // End parsing using PHP5 DOMXML methods.
         } else {
             if ($this->debug > 1) {
                 error_log('New LP - Could not open/read file '.$file);

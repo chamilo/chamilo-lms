@@ -5413,7 +5413,7 @@ class Tracking
                         $html .= Display::tag('td', $position);
                         $html .= Display::tag('td', $best_score);
                         $html .= Display::tag('td', $graph);
-                        //$html .= Display::tag('td', $latest_attempt_url,       array('align'=>'center', 'width'=>'25'));
+                    //$html .= Display::tag('td', $latest_attempt_url,       array('align'=>'center', 'width'=>'25'));
                     } else {
                         // Exercise configuration NO results
                         $html .= Display::tag('td', $attempts);

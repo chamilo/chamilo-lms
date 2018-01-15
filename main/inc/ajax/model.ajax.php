@@ -2084,7 +2084,7 @@ switch ($action) {
                 if ($obj->usergroup_was_added_in_course($group['id'], $course_id)) {
                     $url  = 'class.php?action=remove_class_from_course&id='.$group['id'].'&'.api_get_cidreq();
                     $icon = Display::return_icon('delete.png', get_lang('Remove'));
-                    //$class = 'btn btn-danger';
+                //$class = 'btn btn-danger';
                     //$text = get_lang('Remove');
                 } else {
                     $url = 'class.php?action=add_class_to_course&id='.$group['id'].'&'.api_get_cidreq().'&type=not_registered';

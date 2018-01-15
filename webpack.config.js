@@ -18,14 +18,11 @@ Encore
 
     // read main.js     -> output as public/build/chamilo.js
     .addEntry('chamilo', './assets/js/main.js')
+
     // read main.scss -> output as web/build/css/base.css
     .addStyleEntry('css/base', './assets/css/main.scss')
-
     .addStyleEntry('css/editor', './assets/css/editor.css')
-
-    // Add chamilo themes
-    .addStyleEntry('css/themes/academica/default', './assets/css/themes/academica/default.css')
-    .addStyleEntry('css/themes/chamilo/default', './assets/css/themes/chamilo/default.css')
+    .addStyleEntry('css/print', './assets/css/print.css')
 
     .enableSourceMaps(!Encore.isProduction())
     .autoProvideVariables({
@@ -35,6 +32,46 @@ Encore
     })
     //.enableVersioning() // hashed filenames (e.g. main.abc123.js)
 ;
+
+var chamiloThemes = [
+    'academica',
+    'baby_orange',
+    'beach',
+    'blue_lagoon',
+    'chamilo',
+    'chamilo_electric_blue',
+    'chamilo_green',
+    'chamilo_orange',
+    'chamilo_red',
+    'chamilo_sport_red',
+    'cool_blue',
+    'corporate',
+    'cosmic_campus',
+    'delicious_bordeaux',
+    'empire_green',
+    'fruity_orange',
+    'holi',
+    'journal',
+    'kiddy',
+    'medical',
+    'readable',
+    'royal_purple',
+    'silver_line',
+    'simplex',
+    'sober_brown',
+    'spacelab',
+    'steel_grey',
+    'tasty_olive',
+];
+
+// Add chamilo themes
+chamiloThemes.forEach(function (theme) {
+    Encore
+        .addStyleEntry('css/themes/'+theme+'/default', './assets/css/themes/'+theme+'/default.css')
+        .addStyleEntry('css/themes/'+theme+'/images/header-logo.png', './assets/css/themes/'+theme+'/images/header-logo.png')
+        .addStyleEntry('css/themes/'+theme+'/images/favicon.ico', './assets/css/themes/'+theme+'/images/favicon.ico')
+    ;
+});
 
 module.exports = Encore.getWebpackConfig();
 

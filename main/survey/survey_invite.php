@@ -174,6 +174,7 @@ if ($form->validate()) {
     $resendAll = isset($values['resend_to_all']) ? $values['resend_to_all'] : '';
     $sendMail = isset($values['send_mail']) ? $values['send_mail'] : '';
     $remindUnAnswered = isset($values['remindUnAnswered']) ? $values['remindUnAnswered'] : '';
+    $users = isset($values['users']) ? $values['users'] : [];
 
     if ($sendMail) {
         if (empty($values['mail_title']) || empty($values['mail_text'])) {
@@ -194,6 +195,7 @@ if ($form->validate()) {
             return;
         }
     }
+
     // Save the invitation mail
     SurveyUtil::save_invite_mail(
         $values['mail_text'],
@@ -203,7 +205,7 @@ if ($form->validate()) {
 
     // Saving the invitations for the course users
     $count_course_users = SurveyUtil::saveInvitations(
-        $values['users'],
+        $users,
         $values['mail_title'],
         $values['mail_text'],
         $resendAll,
@@ -225,7 +227,8 @@ if ($form->validate()) {
         $values['mail_text'],
         $resendAll,
         $sendMail,
-        $remindUnAnswered
+        $remindUnAnswered,
+        true
     );
 
     // Updating the invited field in the survey table

@@ -560,6 +560,7 @@ if ($survey_data['form_fields'] &&
                 }
                 // Remove trailing , from the query we have so far
                 $sql = rtrim($sql, ',');
+                $sql .= " WHERE id  = $user_id";
 
                 if ($update) {
                     Database::query($sql);

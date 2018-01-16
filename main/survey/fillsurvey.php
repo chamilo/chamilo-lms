@@ -19,7 +19,6 @@ if (!isset($_GET['cidReq'])) {
     $_cid = $_GET['cidReq'];
 }
 
-// Including the global initialization file
 require_once __DIR__.'/../inc/global.inc.php';
 
 // Database table definitions
@@ -33,32 +32,34 @@ $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $allowRequiredSurveyQuestions = api_get_configuration_value('allow_required_survey_questions');
 
 // Check if user is anonymous or not
+$isAnonymous = false;
 if (api_is_anonymous(api_get_user_id(), true)) {
     $isAnonymous = true;
-} else {
-    $isAnonymous = false;
 }
 
 // getting all the course information
 if (isset($_GET['course'])) {
-    $course_info = api_get_course_info($_GET['course']);
+    $courseInfo = api_get_course_info($_GET['course']);
 } else {
-    $course_info = api_get_course_info();
+    $courseInfo = api_get_course_info();
 }
 
-if (empty($course_info)) {
-    api_not_allowed();
+if (empty($courseInfo)) {
+    api_not_allowed(true);
 }
+
+$userInfo = api_get_user_info();
+$sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : api_get_session_id();
 
 // Breadcrumbs
-if (!empty($_user)) {
-    $interbreadcrumb[] = array(
-        'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cidReq='.$course_info['code'],
+if (!empty($userInfo)) {
+    $interbreadcrumb[] = [
+        'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId,
         'name' => get_lang('SurveyList')
     );
 }
 
-$course_id = $course_info['real_id'];
+$course_id = $courseInfo['real_id'];
 $surveyCode = isset($_GET['scode']) ? Database::escape_string($_GET['scode']) : '';
 
 if ($surveyCode != '') {
@@ -159,7 +160,7 @@ $sql = "SELECT * FROM $table_survey
         WHERE
             c_id = $course_id AND
             code = '".Database::escape_string($survey_invitation['survey_code'])."'";
-$sql .= api_get_session_condition(api_get_session_id());
+$sql .= api_get_session_condition($sessionId);
 $result = Database::query($sql);
 
 if (Database::num_rows($result) > 1) {
@@ -356,7 +357,7 @@ if (count($_POST) > 0) {
         }
     } else {
         // In case it's another type than 0 or 1
-        die(get_lang('ErrorSurveyTypeUnknown'));
+        api_not_allowed(true, get_lang('ErrorSurveyTypeUnknown'));
     }
 }
 
@@ -608,10 +609,10 @@ if (isset($_POST['finish_survey'])) {
         $survey_invitation['c_id']
     );
 
-    if ($course_info) {
+    if ($courseInfo) {
         echo Display::toolbarButton(
             get_lang('ReturnToCourseHomepage'),
-            api_get_course_url($course_info['code']),
+            api_get_course_url($courseInfo['code']),
             'home'
         );
     }

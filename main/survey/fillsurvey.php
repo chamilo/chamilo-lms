@@ -56,7 +56,7 @@ if (!empty($userInfo)) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId,
         'name' => get_lang('SurveyList')
-    );
+    ];
 }
 
 $course_id = $courseInfo['real_id'];
@@ -808,14 +808,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                 $list['group'] = $row['survey_group_pri'];
                 $totals[] = $list;
             }
-<<<<<<< HEAD
-            //echo '<pre>'; print_r($totals);
-
-            $final_results = array();
-
-=======
             $final_results = [];
->>>>>>> 41df4096c1... Fix form link, to avoid "not allowed" message in fill survey BT#13870
             // Get a percentage score for each group
             for ($i = 0; $i < count($totals); $i++) {
                 for ($j = 0; $j < count($results); $j++) {
@@ -1223,12 +1216,7 @@ if (isset($questions) && is_array($questions)) {
             $userAnswer = $userAnswerData[$user_id];
             switch ($question['type']) {
                 case 'score':
-<<<<<<< HEAD
-                    $finalAnswer = array();
-
-=======
                     $finalAnswer = [];
->>>>>>> 41df4096c1... Fix form link, to avoid "not allowed" message in fill survey BT#13870
                     foreach ($userAnswer as $userChoice) {
                         list($choiceId, $choiceValue) = explode('*', $userChoice);
 

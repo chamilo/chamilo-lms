@@ -3252,7 +3252,8 @@ class SurveyUtil
                     ICON_SIZE_TINY
                 );
                 echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?course='.$_course['sysCode']
-                    .'&invitationcode='.$row['invitation_code'].'&cidReq='.$_course['sysCode'].'">'.$row['title']
+                    .'&invitationcode='.$row['invitation_code'].'&cidReq='.$_course['sysCode'].'&id_session='.$row['session_id'].'">
+                    '.$row['title']
                     .'</a></td>';
             } else {
                 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
@@ -3290,7 +3291,6 @@ class SurveyUtil
                 );
                 echo '<td class="text-center">'.($efvMandatory['value'] ? get_lang('Yes') : get_lang('No')).'</td>';
             }
-
             echo '</tr>';
         }
         echo '</tbody>';

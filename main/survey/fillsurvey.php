@@ -19,7 +19,6 @@ if (!isset($_GET['cidReq'])) {
     $_cid = $_GET['cidReq'];
 }
 
-// Including the global initialization file
 require_once __DIR__.'/../inc/global.inc.php';
 
 // Database table definitions
@@ -33,32 +32,34 @@ $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $allowRequiredSurveyQuestions = api_get_configuration_value('allow_required_survey_questions');
 
 // Check if user is anonymous or not
+$isAnonymous = false;
 if (api_is_anonymous(api_get_user_id(), true)) {
     $isAnonymous = true;
-} else {
-    $isAnonymous = false;
 }
 
 // getting all the course information
 if (isset($_GET['course'])) {
-    $course_info = api_get_course_info($_GET['course']);
+    $courseInfo = api_get_course_info($_GET['course']);
 } else {
-    $course_info = api_get_course_info();
+    $courseInfo = api_get_course_info();
 }
 
-if (empty($course_info)) {
-    api_not_allowed();
+if (empty($courseInfo)) {
+    api_not_allowed(true);
 }
+
+$userInfo = api_get_user_info();
+$sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : api_get_session_id();
 
 // Breadcrumbs
-if (!empty($_user)) {
-    $interbreadcrumb[] = array(
-        'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cidReq='.$course_info['code'],
+if (!empty($userInfo)) {
+    $interbreadcrumb[] = [
+        'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId,
         'name' => get_lang('SurveyList')
     );
 }
 
-$course_id = $course_info['real_id'];
+$course_id = $courseInfo['real_id'];
 $surveyCode = isset($_GET['scode']) ? Database::escape_string($_GET['scode']) : '';
 
 if ($surveyCode != '') {
@@ -159,7 +160,7 @@ $sql = "SELECT * FROM $table_survey
         WHERE
             c_id = $course_id AND
             code = '".Database::escape_string($survey_invitation['survey_code'])."'";
-$sql .= api_get_session_condition(api_get_session_id());
+$sql .= api_get_session_condition($sessionId);
 $result = Database::query($sql);
 
 if (Database::num_rows($result) > 1) {
@@ -192,6 +193,9 @@ if (Database::num_rows($result) > 1) {
 
 // Getting the survey information
 $survey_data = SurveyManager::get_survey($survey_invitation['survey_id']);
+if (empty($survey_data)) {
+    api_not_allowed(true);
+}
 $survey_data['survey_id'] = $survey_invitation['survey_id'];
 
 // Storing the answers
@@ -353,7 +357,7 @@ if (count($_POST) > 0) {
         }
     } else {
         // In case it's another type than 0 or 1
-        die(get_lang('ErrorSurveyTypeUnknown'));
+        api_not_allowed(true, get_lang('ErrorSurveyTypeUnknown'));
     }
 }
 
@@ -379,14 +383,11 @@ if ($survey_data['form_fields'] != '' &&
         }
     }
 
-    // We use the same form as in auth/profile.php
-    $form = new FormValidator(
-        'profile',
-        'post',
-        api_get_self()."?".api_get_cidreq().'&'
-            .str_replace('&show_form=1', '&show_form=1', Security::remove_XSS($_SERVER['QUERY_STRING']))
-    );
+    $url = api_get_self().'?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&'.
+           str_replace('&show_form=1', '&show_form=1', Security::remove_XSS($_SERVER['QUERY_STRING']));
 
+    // We use the same form as in auth/profile.php
+    $form = new FormValidator('profile', 'post', $url);
     if (api_is_western_name_order()) {
         if (isset($list['firstname']) && $list['firstname'] == 1) {
             //FIRST NAME
@@ -605,10 +606,10 @@ if (isset($_POST['finish_survey'])) {
         $survey_invitation['c_id']
     );
 
-    if ($course_info) {
+    if ($courseInfo) {
         echo Display::toolbarButton(
             get_lang('ReturnToCourseHomepage'),
-            api_get_course_url($course_info['code']),
+            api_get_course_url($courseInfo['code']),
             'home'
         );
     }
@@ -807,10 +808,14 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                 $list['group'] = $row['survey_group_pri'];
                 $totals[] = $list;
             }
+<<<<<<< HEAD
             //echo '<pre>'; print_r($totals);
 
             $final_results = array();
 
+=======
+            $final_results = [];
+>>>>>>> 41df4096c1... Fix form link, to avoid "not allowed" message in fill survey BT#13870
             // Get a percentage score for each group
             for ($i = 0; $i < count($totals); $i++) {
                 for ($j = 0; $j < count($results); $j++) {
@@ -974,7 +979,6 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                         $paged_questions_sec = Session::read('page_questions_sec');
                     }
                     $paged_questions = Session::read('paged_questions'); // For the sake of pages counting
-                    //$paged_questions = $paged_questions_sec; // For the sake of pages counting coming up at display time...
                     if ($shuffle == '') {
                         $shuffle = ' BY survey_question.sort, survey_question_option.sort ASC ';
                     }
@@ -1153,7 +1157,6 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                     }
                     $counter++;
                 }
-                var_Dump($questions);
             }
         }
     } else { // In case it's another type than 0 or 1
@@ -1192,7 +1195,8 @@ $p_l = isset($_POST['language']) ? Security::remove_XSS($_POST['language']) : ''
 
 $add_parameters = isset($_GET['user_id']) ? 'user_id='.intval($_GET['user_id']).'&amp;' : '';
 
-$url = api_get_self().'?'.api_get_cidreq().'&'.$add_parameters.'course='.$g_c.'&invitationcode='.$g_ic.'&show='.$show;
+$url = api_get_self().'?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.
+       '&'.$add_parameters.'course='.$g_c.'&invitationcode='.$g_ic.'&show='.$show;
 $form = new FormValidator(
     'question',
     'post',
@@ -1209,7 +1213,6 @@ if (isset($questions) && is_array($questions)) {
         $display = new $ch_type;
         // @todo move this in a function.
         $form->addHtml('<div class="survey_question '.$ch_type.'">');
-        //$form->addHtml('<div class="survey_question_wrapper"><div class="survey_question">');
         $form->addHtml('<h5 class="title">'.$question['sort'].'. '.strip_tags($question['survey_question']).'</h5>');
         //$form->addHtml($question['survey_question']);
 
@@ -1220,8 +1223,12 @@ if (isset($questions) && is_array($questions)) {
             $userAnswer = $userAnswerData[$user_id];
             switch ($question['type']) {
                 case 'score':
+<<<<<<< HEAD
                     $finalAnswer = array();
 
+=======
+                    $finalAnswer = [];
+>>>>>>> 41df4096c1... Fix form link, to avoid "not allowed" message in fill survey BT#13870
                     foreach ($userAnswer as $userChoice) {
                         list($choiceId, $choiceValue) = explode('*', $userChoice);
 
@@ -1238,7 +1245,6 @@ if (isset($questions) && is_array($questions)) {
                     break;
             }
         }
-
         $display->render($form, $question, $finalAnswer);
         $form->addHtml('</div>');
     }
@@ -1305,7 +1311,8 @@ if ($survey_data['survey_type'] === '0') {
             }
         }
     }
-} elseif ($survey_data['survey_type'] === '1') { //conditional/personality-test type survey
+} elseif ($survey_data['survey_type'] === '1') {
+    //conditional/personality-test type survey
     if (isset($_GET['show']) || isset($_POST['personality'])) {
         $numberofpages = count($paged_questions);
         if (!empty($paged_questions_sec) && count($paged_questions_sec) > 0) {
@@ -1361,33 +1368,20 @@ if ($survey_data['survey_type'] === '0') {
 }
 $form->addHtml('</div>');
 $form->display();
-
-// Footer
 Display::display_footer();
 
 /**
  * Check whether this survey has ended. If so, display message and exit rhis script
+ * @param array $surveyData Survey data
  */
-function check_time_availability($surv_data)
+function check_time_availability($surveyData)
 {
-    $start_date = mktime(
-        0,
-        0,
-        0,
-        substr($surv_data['start_date'], 5, 2),
-        substr($surv_data['start_date'], 8, 2),
-        substr($surv_data['start_date'], 0, 4)
-    );
-    $end_date = mktime(
-        0,
-        0,
-        0,
-        substr($surv_data['end_date'], 5, 2),
-        substr($surv_data['end_date'], 8, 2),
-        substr($surv_data['end_date'], 0, 4)
-    );
-    $cur_date = time();
-    if ($cur_date < $start_date) {
+    $userTimeZone = new DateTimeZone(api_get_timezone());
+    $startDate = new DateTime($surveyData['start_date'], $userTimeZone);
+    $endDate = new DateTime($surveyData['end_date'], $userTimeZone);
+    $currentDate = new DateTime('now', $userTimeZone);
+    $currentDate->modify('today');
+    if ($currentDate < $startDate) {
         api_not_allowed(
             true,
             Display:: return_message(
@@ -1398,7 +1392,7 @@ function check_time_availability($surv_data)
         );
     }
 
-    if ($cur_date > $end_date) {
+    if ($currentDate > $endDate) {
         api_not_allowed(
             true,
             Display:: return_message(

@@ -2368,12 +2368,14 @@ class SurveyUtil
     ) {
         $_user = api_get_user_info();
         $_course = api_get_course_info();
+        $sessionId = api_get_session_id();
 
         // Replacing the **link** part with a valid link for the user
-        $survey_link = api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?course='.$_course['code'].'&invitationcode='
-            .$invitation_code;
-        $text_link = '<a href="'.$survey_link.'">'.get_lang('ClickHereToAnswerTheSurvey')."</a><br />\r\n<br />\r\n"
-            .get_lang('OrCopyPasteTheFollowingUrl')." <br />\r\n ".$survey_link;
+        $link = api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?';
+        $link .= 'id_session='.$sessionId.'&course='.$_course['code'].'&invitationcode='.$invitation_code;
+
+        $text_link = '<a href="'.$link.'">'.get_lang('ClickHereToAnswerTheSurvey')."</a><br />\r\n<br />\r\n"
+            .get_lang('OrCopyPasteTheFollowingUrl')." <br />\r\n ".$link;
 
         $replace_count = 0;
         $full_invitation_text = api_str_ireplace('**link**', $text_link, $invitation_text, $replace_count);

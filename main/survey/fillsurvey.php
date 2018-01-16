@@ -369,7 +369,8 @@ if ($user_id == 0) {
 $user_data = api_get_user_info($user_id);
 
 if ($survey_data['form_fields'] != '' &&
-    $survey_data['anonymous'] == 0 && is_array($user_data)
+    $survey_data['anonymous'] == 0 &&
+    is_array($user_data)
 ) {
     $form_fields = explode('@', $survey_data['form_fields']);
     $list = [];
@@ -383,8 +384,13 @@ if ($survey_data['form_fields'] != '' &&
         }
     }
 
-    $url = api_get_self().'?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&'.
-           str_replace('&show_form=1', '&show_form=1', Security::remove_XSS($_SERVER['QUERY_STRING']));
+    $url = api_get_self().
+        '?cidReq='.$courseInfo['code'].
+        '&id_session='.$sessionId;
+    $listQueryParams = preg_split('/&/', $_SERVER['QUERY_STRING']);
+    foreach ($listQueryParams as $param) {
+        $url .= '&'.Security::remove_XSS($param);
+    }
 
     // We use the same form as in auth/profile.php
     $form = new FormValidator('profile', 'post', $url);
@@ -560,6 +566,7 @@ if ($survey_data['form_fields'] &&
                 }
                 // Remove trailing , from the query we have so far
                 $sql = rtrim($sql, ',');
+                $sql .= " WHERE id  = $user_id";
 
                 if ($update) {
                     Database::query($sql);
@@ -1184,10 +1191,14 @@ $g_ic = isset($_GET['invitationcode']) ? Security::remove_XSS($_GET['invitationc
 $g_cr = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
 $p_l = isset($_POST['language']) ? Security::remove_XSS($_POST['language']) : '';
 
-$add_parameters = isset($_GET['user_id']) ? 'user_id='.intval($_GET['user_id']).'&amp;' : '';
+$add_parameters = isset($_GET['user_id']) ? '&user_id='.intval($_GET['user_id']) : '';
 
-$url = api_get_self().'?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.
-       '&'.$add_parameters.'course='.$g_c.'&invitationcode='.$g_ic.'&show='.$show;
+$url = api_get_self().'?cidReq='.$courseInfo['code'].
+    '&id_session='.$sessionId.
+    $add_parameters.
+    '&course='.$g_c.
+    '&invitationcode='.$g_ic.
+    '&show='.$show;
 $form = new FormValidator(
     'question',
     'post',

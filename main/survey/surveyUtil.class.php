@@ -2800,7 +2800,7 @@ class SurveyUtil
         $hideReportingButton = api_get_configuration_value('hide_survey_reporting_button');
 
         $reportingLink = Display::url(
-            Display::return_icon('stats.png', get_lang('Reporting'), [], ICON_SIZE_SMALL),
+            Display::return_icon('statistics.png', get_lang('Reporting'), [], ICON_SIZE_SMALL),
             api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&survey_id='.$survey_id
         );
 

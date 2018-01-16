@@ -17,6 +17,8 @@ $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
 
 /**
  * Get the number of courses which will be displayed
+ * @return int The number of matching courses
+ * @throws Exception
  */
 function get_number_of_courses()
 {
@@ -80,6 +82,7 @@ function get_number_of_courses()
  * @param string $direction
  *
  * @return array
+ * @throws Exception
  */
 function get_course_data($from, $number_of_items, $column, $direction)
 {
@@ -205,6 +208,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
  * @param int $column
  * @param string $direction
  * @return array
+ * @throws Exception
  */
 function get_course_data_by_session($from, $number_of_items, $column, $direction)
 {

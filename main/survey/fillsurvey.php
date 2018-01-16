@@ -56,7 +56,7 @@ if (!empty($userInfo)) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId,
         'name' => get_lang('SurveyList')
-    );
+    ];
 }
 
 $course_id = $courseInfo['real_id'];

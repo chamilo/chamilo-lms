@@ -5,6 +5,7 @@ use Chamilo\TicketBundle\Entity\Project;
 use Chamilo\TicketBundle\Entity\Status;
 use Chamilo\TicketBundle\Entity\Priority;
 use Chamilo\TicketBundle\Entity\Ticket;
+use \Database;
 
 /**
  * Class TicketManager
@@ -850,6 +851,9 @@ class TicketManager
                       ticket.message LIKE '%$keyword%' OR
                       ticket.keyword LIKE '%$keyword%' OR
                       ticket.source LIKE '%$keyword%' OR
+                      cat.name LIKE '%$keyword%' OR
+                      status.name LIKE '%$keyword%' OR
+                      priority.name LIKE '%$keyword%' OR
                       ticket.personal_email LIKE '%$keyword%'                          
             )";
         }
@@ -863,10 +867,12 @@ class TicketManager
             'keyword_priority' => 'ticket.priority_id'
         ];
 
-        foreach ($keywords as $keyword => $sqlLabel) {
+        foreach ($keywords as $keyword => $label) {
             if (isset($_GET[$keyword])) {
                 $data = Database::escape_string(trim($_GET[$keyword]));
-                $sql .= " AND $sqlLabel = '$data' ";
+                if (!empty($data)) {
+                    $sql .= " AND $label = '$data' ";
+                }
             }
         }
 
@@ -932,14 +938,20 @@ class TicketManager
                     $img_source = 'icons/32/event.png';
                     break;
                 default:
-                    $img_source = 'icons/32/course_home.png';
+                    $img_source = 'icons/32/ticket.png';
                     break;
             }
 
             $row['start_date'] = Display::dateToStringAgoAndLongDate($row['start_date']);
             $row['sys_lastedit_datetime'] = Display::dateToStringAgoAndLongDate($row['sys_lastedit_datetime']);
 
-            $icon = Display::return_icon($img_source, get_lang('Info')).'<a href="ticket_details.php?ticket_id='.$row['id'].'">'.$row['code'].'</a>';
+            $icon = Display::return_icon(
+                $img_source,
+                get_lang('Info'),
+                ['style' => 'margin-right: 10px; float: left;']
+            );
+
+            $icon .= '<a href="ticket_details.php?ticket_id='.$row['id'].'">'.$row['code'].'</a>';
 
             if ($isAdmin) {
                 $ticket = array(
@@ -2167,29 +2179,48 @@ class TicketManager
     }
 
     /**
-     * @return string
+     * Returns a list of menu elements for the tickets system's configuration
+     * @param string $exclude The element to exclude from the list
+     * @return array
      */
-    public static function getSettingsMenu()
+    public static function getSettingsMenuItems($exclude = null)
     {
-        $items = [
-            [
-                'url' => 'projects.php',
-                'content' => get_lang('Projects')
-            ],
-            [
-                'url' => 'status.php',
-                'content' => get_lang('Status')
-            ],
-            [
-                'url' => 'priorities.php',
-                'content' => get_lang('Priority')
-            ]
+        $items = [];
+        $project = [
+            'icon' => 'project.png',
+            'url' => 'projects.php',
+            'content' => get_lang('Projects')
         ];
+        $status = [
+            'icon' => 'check-circle.png',
+            'url' => 'status.php',
+            'content' => get_lang('Status')
+        ];
+        $priority = [
+            'icon' => 'tickets_urgent.png',
+            'url' => 'priorities.php',
+            'content' => get_lang('Priority')
+        ];
+        switch ($exclude) {
+            case 'project':
+                $items = [$status, $priority];
+                break;
+            case 'status':
+                $items = [$project, $priority];
+                break;
+            case 'priority':
+                $items = [$project, $status];
+                break;
+            default:
+                $items = [$project, $status, $priority];
+                break;
+        }
 
-        echo Display::actions($items);
+        return $items;
     }
 
     /**
+     * Returns a list of strings representing the default statuses
      * @return array
      */
     public static function getDefaultStatusList()

@@ -1339,7 +1339,7 @@ class Skill extends Model
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>'.get_lang('AchievedSkills').'</th>
+                                <th class="achieved">'.get_lang('AchievedSkills').'</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1391,7 +1391,7 @@ class Skill extends Model
                         $transparency = '';
                         if ($passed === false) {
                             // @todo use a css class
-                            $transparency = 'opacity: 0.4; filter: alpha(opacity=40);';
+                            $transparency = 'filter: alpha(opacity=40);';
                         }
 
                         $label = $this->processSkillListSimple([$data], 'mini', $transparency);

@@ -2173,11 +2173,8 @@ class SurveyUtil
      * @param int $reminder
      * @param bool $sendmail
      * @param int $remindUnAnswered
-     * @return int
-     * @internal param
-     * @internal param
-     * @internal param
-     *                 The text has to contain a **link** string or this will automatically be added to the end
+     * @return bool $isAdditionalEmail
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @author Julio Montoya - Adding auto-generated link support
      * @version January 2007
@@ -2188,7 +2185,8 @@ class SurveyUtil
         $invitation_text,
         $reminder = 0,
         $sendmail = false,
-        $remindUnAnswered = 0
+        $remindUnAnswered = 0,
+        $isAdditionalEmail = false
     ) {
         if (!is_array($users_array)) {
             // Should not happen
@@ -2211,36 +2209,37 @@ class SurveyUtil
         $counter = 0; // Nr of invitations "sent" (if sendmail option)
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
-        $result = CourseManager::separateUsersGroups($users_array);
 
-        $groupList = $result['groups'];
-        $users_array = $result['users'];
+        if ($isAdditionalEmail == false) {
+            $result = CourseManager::separateUsersGroups($users_array);
+            $groupList = $result['groups'];
+            $users_array = $result['users'];
 
-        foreach ($groupList as $groupId) {
-            $userGroupList = GroupManager::getStudents($groupId);
-            $userGroupIdList = array_column($userGroupList, 'user_id');
-            $users_array = array_merge($users_array, $userGroupIdList);
+            foreach ($groupList as $groupId) {
+                $userGroupList = GroupManager::getStudents($groupId);
+                $userGroupIdList = array_column($userGroupList, 'user_id');
+                $users_array = array_merge($users_array, $userGroupIdList);
 
-            $params = array(
-                'c_id' => $course_id,
-                'session_id' => $session_id,
-                'group_id' => $groupId,
-                'survey_code' => $survey_data['code']
-            );
+                $params = [
+                    'c_id' => $course_id,
+                    'session_id' => $session_id,
+                    'group_id' => $groupId,
+                    'survey_code' => $survey_data['code']
+                ];
 
-            $invitationExists = self::invitationExists(
-                $course_id,
-                $session_id,
-                $groupId,
-                $survey_data['code']
-            );
-            if (empty($invitationExists)) {
-                self::save_invitation($params);
+                $invitationExists = self::invitationExists(
+                    $course_id,
+                    $session_id,
+                    $groupId,
+                    $survey_data['code']
+                );
+                if (empty($invitationExists)) {
+                    self::save_invitation($params);
+                }
             }
         }
 
         $users_array = array_unique($users_array);
-
         foreach ($users_array as $key => $value) {
             if (!isset($value) || $value == '') {
                 continue;
@@ -3253,7 +3252,8 @@ class SurveyUtil
                     ICON_SIZE_TINY
                 );
                 echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?course='.$_course['sysCode']
-                    .'&invitationcode='.$row['invitation_code'].'&cidReq='.$_course['sysCode'].'">'.$row['title']
+                    .'&invitationcode='.$row['invitation_code'].'&cidReq='.$_course['sysCode'].'&id_session='.$row['session_id'].'">
+                    '.$row['title']
                     .'</a></td>';
             } else {
                 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
@@ -3291,7 +3291,6 @@ class SurveyUtil
                 );
                 echo '<td class="text-center">'.($efvMandatory['value'] ? get_lang('Yes') : get_lang('No')).'</td>';
             }
-
             echo '</tr>';
         }
         echo '</tbody>';

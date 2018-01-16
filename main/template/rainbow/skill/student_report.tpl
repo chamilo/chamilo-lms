@@ -1,3 +1,4 @@
+<!--
 {% if allow_skill_tool %}
     <div class="btn-group">
         <a class="btn btn-default" href="{{ _p.web_main }}social/skills_wheel.php">
@@ -5,14 +6,22 @@
         </a>
     </div>
 {% endif %}
-
+-->
 <style>
 
 
 </style>
-
+<h1 class="page-header">{{ 'MyBadges' | get_lang }}</h1>
+<p>
+{{ 'MySkillsReportIntroduction' | get_lang }}
+</p>
 {% if rows %}
-    <h1 class="page-header">{{ 'SkillsAcquired' | get_lang }}</h1>
+<div class="communications">
+    {% if skill_table %}
+        {{ skill_table }}
+    {% endif %}
+</div>
+    <h6 class="table-header">{{ 'SkillsHistory' | get_lang }}</h6>
     <table class="table">
         <thead>
             <tr>
@@ -40,7 +49,4 @@
         {% endfor %}
         </tbody>
     </table>
-    {% if skill_table %}
-        {{ skill_table }}
-    {% endif %}
 {% endif %}

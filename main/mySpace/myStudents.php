@@ -1682,12 +1682,13 @@ if (empty($_GET['details'])) {
     </div>
 <?php
 } //end details
-
+echo '<div class="communications">';
 echo Tracking::displayUserSkills(
     $user_info['user_id'],
     $courseInfo ? $courseInfo['real_id'] : 0,
     $sessionId
 );
+echo '</div>';
 
 if ($allowMessages === true) {
     // Messages

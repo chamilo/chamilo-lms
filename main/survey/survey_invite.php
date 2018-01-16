@@ -163,7 +163,7 @@ if (api_is_multiple_url_enabled()) {
 }
 
 // Show the URL that can be used by users to fill a survey without invitation
-$auto_survey_link = $portal_url.'main/survey/fillsurvey.php?course='.$_course['sysCode'].'&invitationcode=auto&scode='.$survey_data['survey_code'];
+$auto_survey_link = $portal_url.'main/survey/fillsurvey.php?course='.$_course['sysCode'].'&invitationcode=auto&scode='.$survey_data['survey_code'].'&id_session='.$survey_data['session_id'];
 
 $form->addElement('label', null, get_lang('AutoInviteLink'));
 $form->addElement('label', null, $auto_survey_link);
@@ -174,6 +174,7 @@ if ($form->validate()) {
     $resendAll = isset($values['resend_to_all']) ? $values['resend_to_all'] : '';
     $sendMail = isset($values['send_mail']) ? $values['send_mail'] : '';
     $remindUnAnswered = isset($values['remindUnAnswered']) ? $values['remindUnAnswered'] : '';
+    $users = isset($values['users']) ? $values['users'] : [];
 
     if ($sendMail) {
         if (empty($values['mail_title']) || empty($values['mail_text'])) {
@@ -194,6 +195,7 @@ if ($form->validate()) {
             return;
         }
     }
+
     // Save the invitation mail
     SurveyUtil::save_invite_mail(
         $values['mail_text'],
@@ -203,7 +205,7 @@ if ($form->validate()) {
 
     // Saving the invitations for the course users
     $count_course_users = SurveyUtil::saveInvitations(
-        $values['users'],
+        $users,
         $values['mail_title'],
         $values['mail_text'],
         $resendAll,
@@ -225,7 +227,8 @@ if ($form->validate()) {
         $values['mail_text'],
         $resendAll,
         $sendMail,
-        $remindUnAnswered
+        $remindUnAnswered,
+        true
     );
 
     // Updating the invited field in the survey table

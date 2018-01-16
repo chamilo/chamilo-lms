@@ -808,10 +808,14 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                 $list['group'] = $row['survey_group_pri'];
                 $totals[] = $list;
             }
+<<<<<<< HEAD
             //echo '<pre>'; print_r($totals);
 
             $final_results = array();
 
+=======
+            $final_results = [];
+>>>>>>> 41df4096c1... Fix form link, to avoid "not allowed" message in fill survey BT#13870
             // Get a percentage score for each group
             for ($i = 0; $i < count($totals); $i++) {
                 for ($j = 0; $j < count($results); $j++) {
@@ -975,7 +979,6 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                         $paged_questions_sec = Session::read('page_questions_sec');
                     }
                     $paged_questions = Session::read('paged_questions'); // For the sake of pages counting
-                    //$paged_questions = $paged_questions_sec; // For the sake of pages counting coming up at display time...
                     if ($shuffle == '') {
                         $shuffle = ' BY survey_question.sort, survey_question_option.sort ASC ';
                     }
@@ -1192,7 +1195,8 @@ $p_l = isset($_POST['language']) ? Security::remove_XSS($_POST['language']) : ''
 
 $add_parameters = isset($_GET['user_id']) ? 'user_id='.intval($_GET['user_id']).'&amp;' : '';
 
-$url = api_get_self().'?'.api_get_cidreq().'&'.$add_parameters.'course='.$g_c.'&invitationcode='.$g_ic.'&show='.$show;
+$url = api_get_self().'?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.
+       '&'.$add_parameters.'course='.$g_c.'&invitationcode='.$g_ic.'&show='.$show;
 $form = new FormValidator(
     'question',
     'post',
@@ -1209,7 +1213,6 @@ if (isset($questions) && is_array($questions)) {
         $display = new $ch_type;
         // @todo move this in a function.
         $form->addHtml('<div class="survey_question '.$ch_type.'">');
-        //$form->addHtml('<div class="survey_question_wrapper"><div class="survey_question">');
         $form->addHtml('<h5 class="title">'.$question['sort'].'. '.strip_tags($question['survey_question']).'</h5>');
         //$form->addHtml($question['survey_question']);
 
@@ -1220,8 +1223,12 @@ if (isset($questions) && is_array($questions)) {
             $userAnswer = $userAnswerData[$user_id];
             switch ($question['type']) {
                 case 'score':
+<<<<<<< HEAD
                     $finalAnswer = array();
 
+=======
+                    $finalAnswer = [];
+>>>>>>> 41df4096c1... Fix form link, to avoid "not allowed" message in fill survey BT#13870
                     foreach ($userAnswer as $userChoice) {
                         list($choiceId, $choiceValue) = explode('*', $userChoice);
 
@@ -1238,7 +1245,6 @@ if (isset($questions) && is_array($questions)) {
                     break;
             }
         }
-
         $display->render($form, $question, $finalAnswer);
         $form->addHtml('</div>');
     }
@@ -1305,7 +1311,8 @@ if ($survey_data['survey_type'] === '0') {
             }
         }
     }
-} elseif ($survey_data['survey_type'] === '1') { //conditional/personality-test type survey
+} elseif ($survey_data['survey_type'] === '1') {
+    //conditional/personality-test type survey
     if (isset($_GET['show']) || isset($_POST['personality'])) {
         $numberofpages = count($paged_questions);
         if (!empty($paged_questions_sec) && count($paged_questions_sec) > 0) {
@@ -1361,8 +1368,6 @@ if ($survey_data['survey_type'] === '0') {
 }
 $form->addHtml('</div>');
 $form->display();
-
-// Footer
 Display::display_footer();
 
 /**

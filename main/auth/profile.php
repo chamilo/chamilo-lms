@@ -685,7 +685,7 @@ if ($form->validate()) {
         $sql .= ", official_code = '".Database::escape_string($user_data['official_code'])."'";
     }
 
-    $sql .= " WHERE user_id  = '".api_get_user_id()."'";
+    $sql .= " WHERE id  = '".api_get_user_id()."'";
     Database::query($sql);
 
     if ($passwordWasChecked == false) {

@@ -383,14 +383,11 @@ if ($survey_data['form_fields'] != '' &&
         }
     }
 
-    // We use the same form as in auth/profile.php
-    $form = new FormValidator(
-        'profile',
-        'post',
-        api_get_self()."?".api_get_cidreq().'&'
-            .str_replace('&show_form=1', '&show_form=1', Security::remove_XSS($_SERVER['QUERY_STRING']))
-    );
+    $url = api_get_self().'?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&'.
+           str_replace('&show_form=1', '&show_form=1', Security::remove_XSS($_SERVER['QUERY_STRING']));
 
+    // We use the same form as in auth/profile.php
+    $form = new FormValidator('profile', 'post', $url);
     if (api_is_western_name_order()) {
         if (isset($list['firstname']) && $list['firstname'] == 1) {
             //FIRST NAME

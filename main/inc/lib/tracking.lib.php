@@ -5413,7 +5413,7 @@ class Tracking
                         $html .= Display::tag('td', $position);
                         $html .= Display::tag('td', $best_score);
                         $html .= Display::tag('td', $graph);
-                        //$html .= Display::tag('td', $latest_attempt_url,       array('align'=>'center', 'width'=>'25'));
+                    //$html .= Display::tag('td', $latest_attempt_url,       array('align'=>'center', 'width'=>'25'));
                     } else {
                         // Exercise configuration NO results
                         $html .= Display::tag('td', $attempts);
@@ -7353,11 +7353,11 @@ class TrackingCourseLog
             $user_row = [];
             $user_row['official_code'] = $user['official_code']; //0
             if ($is_western_name_order) {
-                $user_row['firstname'] = $user['col1'];
-                $user_row['lastname'] = $user['col2'];
-            } else {
-                $user_row['lastname'] = $user['col1'];
                 $user_row['firstname'] = $user['col2'];
+                $user_row['lastname'] = $user['col1'];
+            } else {
+                $user_row['lastname'] = $user['col2'];
+                $user_row['firstname'] = $user['col1'];
             }
             $user_row['username'] = $user['username'];
             $user_row['time'] = $user['time'];

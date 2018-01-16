@@ -190,7 +190,7 @@ if ($form->validate()) {
         if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
             if (!empty($_POST['lp_id'])) {
                 $lp_id = intval($_POST['lp_id']);
-                //TODO:this remains to be implemented after press the first post
+            //TODO:this remains to be implemented after press the first post
             } else {
                 $lp_id = intval($_GET['lp_id']);
             }

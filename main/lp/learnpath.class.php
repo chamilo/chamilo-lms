@@ -5418,7 +5418,7 @@ class learnpath
                             error_log('New LP - In learnpath::stop_previous_item() - '.$this->last.' in lp_type 3 is <> au', 0);
                         }
                         $this->items[$this->last]->close();
-                        //$this->autocomplete_parents($this->last);
+                    //$this->autocomplete_parents($this->last);
                         //$this->update_queue[$this->last] = $this->items[$this->last]->get_status();
                     } else {
                         if ($this->debug > 2) {
@@ -5432,7 +5432,7 @@ class learnpath
                             error_log('New LP - In learnpath::stop_previous_item() - '.$this->last.' in lp_type 2 is <> sco', 0);
                         }
                         $this->items[$this->last]->close();
-                        //$this->autocomplete_parents($this->last);
+                    //$this->autocomplete_parents($this->last);
                         //$this->update_queue[$this->last] = $this->items[$this->last]->get_status();
                     } else {
                         if ($this->debug > 2) {

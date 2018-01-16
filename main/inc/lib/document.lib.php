@@ -298,7 +298,6 @@ class DocumentManager
         $len = filesize($full_file_name);
         // Fixing error when file name contains a ","
         $filename = str_replace(',', '', $filename);
-
         $sendFileHeaders = api_get_configuration_value('enable_x_sendfile_headers');
 
         if ($forced) {
@@ -334,7 +333,6 @@ class DocumentManager
             return true;
         } else {
             //no forced download, just let the browser decide what to do according to the mimetype
-
             $content_type = self::file_get_mime_type($filename);
             $lpFixedEncoding = api_get_configuration_value('lp_fixed_encoding');
 

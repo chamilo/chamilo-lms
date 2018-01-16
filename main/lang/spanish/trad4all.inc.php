@@ -8123,4 +8123,5 @@ $UserLinkingRequestRejected = "Solicitud de vinculación a estudiante rechazada"
 $UserLinkRemoved = "Vínculo con estudiante eliminado";
 $SessionTemplate = "Plantilla de sesión";
 $CloudFileLink = "Enlace a fichero en la nube";
+$ResetFieldX = "Reiniciar %s";
 ?>

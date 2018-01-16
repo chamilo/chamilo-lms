@@ -7,13 +7,14 @@
  */
 class ImsLtiTool
 {
-    private $id;
-    private $name;
-    private $description;
-    private $launchUrl;
-    private $consumerKey;
-    private $sharedSecret;
-    private $customParams;
+    private $id = 0;
+    private $name = '';
+    private $description = null;
+    private $launchUrl = '';
+    private $consumerKey = '';
+    private $sharedSecret = '';
+    private $customParams = null;
+    private $isGlobal = false;
 
     public function getId()
     {
@@ -101,34 +102,27 @@ class ImsLtiTool
 
     public function save()
     {
+        $parameters = [
+            'name' => $this->name,
+            'description' => $this->description,
+            'launch_url' => $this->launchUrl,
+            'consumer_key' => $this->consumerKey,
+            'shared_secret' => $this->sharedSecret,
+            'custom_params' => $this->customParams,
+            'is_global' => $this->isGlobal
+        ];
+
         if (!empty($this->id)) {
             Database::update(
                 ImsLtiPlugin::TABLE_TOOL,
-                [
-                    'name' => $this->name,
-                    'description' => $this->description,
-                    'launch_url' => $this->launchUrl,
-                    'consumer_key' => $this->consumerKey,
-                    'shared_secret' => $this->sharedSecret,
-                    'custom_params' => $this->customParams
-                ],
+                $parameters,
                 ['id' => $this->id]
             );
 
             return;
         }
 
-        $this->id = Database::insert(
-            ImsLtiPlugin::TABLE_TOOL,
-            [
-                'name' => $this->name,
-                'description' => $this->description,
-                'launch_url' => $this->launchUrl,
-                'consumer_key' => $this->consumerKey,
-                'shared_secret' => $this->sharedSecret,
-                'custom_params' => $this->customParams
-            ]
-        );
+        $this->id = Database::insert(ImsLtiPlugin::TABLE_TOOL, $parameters);
     }
 
     public static function fetch($id)
@@ -154,6 +148,7 @@ class ImsLtiTool
         $tool->consumerKey = $result['consumer_key'];
         $tool->sharedSecret = $result['shared_secret'];
         $tool->customParams = $result['custom_params'];
+        $tool->isGlobal = (boolean) $result['is_global'];
 
         return $tool;
     }
@@ -176,5 +171,15 @@ class ImsLtiTool
             'key' => 'custom_'.$foo[0],
             'value' => $foo[1]
         ];
+    }
+
+    public function setIsGlobal($isGlobal = true)
+    {
+        $this->isGlobal = $isGlobal;
+    }
+
+    public function isGlobal()
+    {
+        return $this->isGlobal;
     }
 }

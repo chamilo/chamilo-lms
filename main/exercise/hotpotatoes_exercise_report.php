@@ -101,9 +101,9 @@ if ($is_allowedToEdit || $is_tutor) {
     $nameTools = get_lang('StudentScore');
     $interbreadcrumb[] = ["url" => "exercise.php", "name" => get_lang('Exercises')];
     $objExerciseTmp = new Exercise();
-    /*if ($objExerciseTmp->read($exercise_id)) {
-        $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$exercise_id, "name" => $objExerciseTmp->name);
-    }*/
+/*if ($objExerciseTmp->read($exercise_id)) {
+    $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$exercise_id, "name" => $objExerciseTmp->name);
+}*/
 } else {
     $interbreadcrumb[] = ["url" => "exercise.php", "name" => get_lang('Exercises')];
     $objExerciseTmp = new Exercise();

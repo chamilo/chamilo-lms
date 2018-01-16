@@ -33,6 +33,7 @@ $params = [
 
     'resource_link_id' => $tool->getId(),
     'resource_link_title' => $tool->getName(),
+    'resource_link_description' => $tool->getDescription(),
 
     'user_id' => $toolUserId,
     'roles' => api_is_teacher() ? 'Instructor' : 'Student',
@@ -55,8 +56,6 @@ $params = [
     'tool_consumer_instance_name' => $siteName,
     'tool_consumer_instance_url' => api_get_path(WEB_PATH),
     'tool_consumer_instance_contact_email' => api_get_setting('emailAdministrator'),
-
-    'resource_link_description' => 'A quick revision PowerPoint about the Water cycle. Make sure you\'re clear about it!',
 ];
 
 $oauth = new OAuthSimple(

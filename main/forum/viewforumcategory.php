@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CForumPost;
+use ChamiloSession as Session;
 
 /**
  * These files are a complete rework of the forum. The database structure is
@@ -25,6 +26,8 @@ use Chamilo\CourseBundle\Entity\CForumPost;
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
+
+Session::erase('_gid');
 
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){
@@ -353,14 +356,12 @@ if ($action != 'add') {
                         null,
                         ICON_SIZE_MEDIUM
                     );
-                    $linkForum = '';
-                    $linkForum .= Display::tag(
+
+                    $linkForum = Display::tag(
                         'a',
                         $forum['forum_title'].$session_displayed,
                         [
-                            'href' => 'viewforum.php?'.api_get_cidreq()
-                                . "&gidReq={$forum['forum_of_group']}&forum={$forum['forum_id']}&search="
-                                . Security::remove_XSS(urlencode(isset($_GET['search']) ? $_GET['search'] : '')),
+                            'href' => 'viewforum.php?'.api_get_cidreq(true, false)."&gidReq={$forum['forum_of_group']}&forum={$forum['forum_id']}&search=".Security::remove_XSS(urlencode(isset($_GET['search']) ? $_GET['search'] : '')),
                             'class' => empty($forum['visibility']) ? 'text-muted' : null
                         ]
                     );
@@ -395,22 +396,17 @@ if ($action != 'add') {
                     $html .= '</div>';
                     $html .= '</div>';
                     $html .= '<div class="col-md-6">';
-
                     $iconEmpty = '';
-
                     // The number of topics and posts.
                     if ($forum['forum_of_group'] !== '0') {
-                        $newPost = '';
+                        $newPost = $iconEmpty;
                         if (is_array($my_whatsnew_post_info) && !empty($my_whatsnew_post_info)) {
                             $newPost = ' '.Display::return_icon('alert.png', get_lang('Forum'), null, ICON_SIZE_SMALL);
-                        } else {
-                            $newPost = $iconEmpty;
                         }
                     } else {
+                        $newPost = $iconEmpty;
                         if (is_array($my_whatsnew_post_info) && !empty($my_whatsnew_post_info)) {
                             $newPost = ' '.Display::return_icon('alert.png', get_lang('Forum'), null, ICON_SIZE_SMALL);
-                        } else {
-                            $newPost = $iconEmpty;
                         }
                     }
 

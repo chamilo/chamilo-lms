@@ -138,6 +138,8 @@ switch ($action) {
         }
 
         Category::exportAllCertificates($categoryId, $userList);
+        header('Location: '.$url);
+        exit;
         break;
     case 'generate_all_certificates':
         $userList = CourseManager::get_user_list_from_course_code(
@@ -153,9 +155,14 @@ switch ($action) {
                 Category::generateUserCertificate($categoryId, $userInfo['user_id']);
             }
         }
+        header('Location: '.$url);
+        exit;
         break;
     case 'delete_all_certificates':
         Category::deleteAllCertificates($categoryId);
+        Display::addFlash(Display::return_message(get_lang('Deleted')));
+        header('Location: '.$url);
+        exit;
         break;
 }
 

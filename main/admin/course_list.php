@@ -437,7 +437,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
         'session_name',
         get_lang('SearchCourseBySession'),
         null,
-        ['url' => $url]
+        ['id' => 'session_name', 'url' => $url]
     );
 
     if (!empty($sessionId)) {
@@ -480,7 +480,6 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
         $(function() {
             $("#session_name").on("change", function() {
                 var sessionId = $(this).val();
-    
                 if (!sessionId) {
                     return;
                 }

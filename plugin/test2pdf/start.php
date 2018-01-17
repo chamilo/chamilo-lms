@@ -19,9 +19,9 @@ $plugin = Test2pdfPlugin::create();
 $t2p_plugin = $plugin->get('enable_plugin');
 
 if ($t2p_plugin == "true") {
-	$url = 'src/view-pdf.php?'.api_get_cidreq();
-	header('Location: ' . $url);
-	exit;
-}else{
-	echo get_lang('PluginDisabledFromAdminPanel');
+    $url = 'src/view-pdf.php?'.api_get_cidreq();
+    header('Location: ' . $url);
+    exit;
+} else {
+    echo get_lang('PluginDisabledFromAdminPanel');
 }

@@ -1,5 +1,5 @@
 <?php
-/* For license terms, see /license.txt 
+/* For license terms, see /license.txt
 /* To show the plugin course icons you need to add these icons:
  * main/img/icons/22/ranking.png
  * main/img/icons/64/ranking.png
@@ -15,12 +15,12 @@
  */
 class Test2pdfPlugin extends Plugin
 {
-	public $isCoursePlugin = true;
+    public $isCoursePlugin = true;
     /**
      *
      * @return StaticPlugin
      */
-    static function create()
+    public static function create()
     {
         static $result = null;
         return $result ? $result : $result = new self();
@@ -31,18 +31,18 @@ class Test2pdfPlugin extends Plugin
         parent::__construct(
             '1.0',
             'Jose Angel Ruiz - NoSoloRed (original author)',
-            array(
-                'enable_plugin' => 'boolean'				
-            )
+            [
+                'enable_plugin' => 'boolean'
+            ]
         );
     }
 
     /**
      * This method creates the tables required to this plugin
      */
-    function install()
+    public function install()
     {
-		//Installing course settings
+        //Installing course settings
         $this->install_course_fields_in_all_courses();
         require_once api_get_path(SYS_PLUGIN_PATH) . 'test2pdf/database.php';
     }
@@ -50,14 +50,14 @@ class Test2pdfPlugin extends Plugin
     /**
      * This method drops the plugin tables
      */
-    function uninstall()
+    public function uninstall()
     {
-		//Deleting course settings
+        //Deleting course settings
         $this->uninstall_course_fields_in_all_courses($this->course_settings);
-		
-        $tablesToBeDeleted = array(
-			TABLE_TEST2PDF
-        );
+        
+        $tablesToBeDeleted = [
+            TABLE_TEST2PDF
+        ];
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {
             $table = Database::get_main_table($tableToBeDeleted);
             $sql = "DROP TABLE IF EXISTS $tableToBeDeleted";

@@ -50,6 +50,7 @@ $view = new Template(get_lang('Chat'), false, false, false, true, false);
 $view->assign('icons', $iconList);
 $view->assign('emoji_strategy', CourseChatUtils::getEmojiStrategy());
 $view->assign('emoji_smile', \Emojione\Emojione::toImage(':smile:'));
+$view->assign('restrict_to_coach', api_get_configuration_value('course_chat_restrict_to_coach'));
 
 $template = $view->get_template('chat/chat.tpl');
 $content = $view->fetch($template);

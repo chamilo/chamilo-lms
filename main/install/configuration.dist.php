@@ -731,3 +731,5 @@ $_configuration['gradebook_badge_sidebar'] = [
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
 // ------ (End) Custom DB changes
+// Restrict course chat only for course coach in sessions
+//$_configuration['course_chat_restrict_to_coach'] = false;

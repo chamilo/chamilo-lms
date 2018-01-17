@@ -6,13 +6,15 @@
         <div class="col-sm-8 col-md-7 col-lg-8">
             <div id="chat-tabs">
                 <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active">
-                        <a href="#all" aria-controls="all" role="tab" data-toggle="tab">{{ 'All'|get_lang }}</a>
-                    </li>
+                    {% if not restrict_to_coach %}
+                        <li role="presentation" class="active">
+                            <a href="#all" aria-controls="all" role="tab" data-toggle="tab">{{ 'All'|get_lang }}</a>
+                        </li>
+                    {% endif %}
                 </ul>
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="all">
-                        <div class="course-chat chat-history" id="chat-history"></div>
+                    <div role="tabpanel" class="tab-pane active" id="{{ restrict_to_coach ? '' : 'all' }}">
+                        <div class="course-chat chat-history" id="{{ restrict_to_coach ? '' : 'chat-history' }}"></div>
                     </div>
                 </div>
             </div>
@@ -41,7 +43,7 @@
                                             <textarea id="chat-writer" name="message"></textarea>
                                         </div>
                                         <div class="col-sm-3">
-                                            <button id="chat-send-message" type="button" class="btn btn-primary">{{ 'Send'|get_lang }}</button>
+                                            <button id="chat-send-message" type="button" disabled class="btn btn-primary">{{ 'Send'|get_lang }}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -270,6 +272,8 @@ $(document).on('ready', function () {
                 exists = true;
             }
         });
+
+        $('button#chat-send-message').prop('disabled', false);
 
         if (exists) {
             $('#chat-tab-' + userId).tab('show');

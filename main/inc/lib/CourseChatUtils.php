@@ -4,6 +4,8 @@
 use Michelf\MarkdownExtra;
 use Doctrine\Common\Collections\Criteria;
 use Chamilo\CourseBundle\Entity\CChatConnected;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 
 /**
  * Class CourseChat
@@ -41,20 +43,31 @@ class CourseChatUtils
     private function getUsersSubscriptions()
     {
         $em = Database::getManager();
+        /** @var Course $course */
         $course = $em->find('ChamiloCoreBundle:Course', $this->courseId);
 
         if ($this->sessionId) {
+            /** @var Session $session */
+            $session = $em->find('ChamiloCoreBundle:Session', $this->sessionId);
             $criteria = Criteria::create()->where(Criteria::expr()->eq('course', $course));
+            $userIsCoach = api_is_course_session_coach($this->userId, $course->getId(), $session->getId());
 
-            return $em
-                ->find('ChamiloCoreBundle:Session', $this->sessionId)
+            if (api_get_configuration_value('course_chat_restrict_to_coach')) {
+                if (!$userIsCoach) {
+                    $criteria->andWhere(
+                        Criteria::expr()->eq('status', Session::COACH)
+                    );
+                }
+            }
+
+            $criteria->orderBy(['status' => Criteria::DESC]);
+
+            return $session
                 ->getUserCourseSubscriptions()
                 ->matching($criteria);
         }
 
-        return $em
-            ->find('ChamiloCoreBundle:Course', $course)
-            ->getUsers();
+        return $course->getUsers();
     }
 
     /**

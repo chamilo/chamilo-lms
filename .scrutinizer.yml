@@ -69,6 +69,7 @@ filter:
         - 'plugin/bbb/lib/bbb_api.php'
         - 'plugin/ims_lti/OAuthSimple.php'
         - 'plugin/sepe/src/wsse/*'
+        - 'plugin/test2pdf/class/*'
         - 'tests/*'
         - 'vendor/*'
         - 'web/*'

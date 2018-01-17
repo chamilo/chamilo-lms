@@ -332,7 +332,7 @@ class Certificate extends Model
             $my_new_content_html = str_replace(
                 '((certificate_barcode))',
                 Display::img(
-                    +$this->certification_web_user_path.$file_info['filename'].'_qr.png',
+                    $this->certification_web_user_path.$file_info['filename'].'_qr.png',
                     'QR'
                 ),
                 $content

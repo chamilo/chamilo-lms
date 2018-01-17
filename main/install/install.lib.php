@@ -1121,17 +1121,14 @@ function display_requirements(
             api_get_path(SYS_PLUGIN_PATH).'skype/'
         ];
         $deprecatedToRemove = [];
-
         foreach ($deprecated as $deprecatedDirectory) {
             if (!is_dir($deprecatedDirectory)) {
                 continue;
             }
-
             $deprecatedToRemove[] = $deprecatedDirectory;
         }
 
-        if (count($deprecatedToRemove) > 0) {
-            $error = true; ?>
+        if (count($deprecatedToRemove) > 0) { ?>
             <p class="text-danger"><?php echo get_lang('WarningForDeprecatedDirectoriesForUpgrade') ?></p>
             <ul>
                 <?php foreach ($deprecatedToRemove as $deprecatedDirectory) {

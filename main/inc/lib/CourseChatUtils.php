@@ -57,6 +57,10 @@ class CourseChatUtils
                     $criteria->andWhere(
                         Criteria::expr()->eq('status', Session::STUDENT)
                     );
+                } else {
+                    $criteria->andWhere(
+                        Criteria::expr()->eq('status', Session::COACH)
+                    );
                 }
             }
 

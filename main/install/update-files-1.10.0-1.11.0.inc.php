@@ -57,10 +57,10 @@ if (defined('SYSTEM_INSTALLATION')) {
             if (!$success) {
                 error_log('Could not delete '.$entity.', probably due to permissions. Please delete manually to avoid entities inconsistencies');
             }
+        } else {
+            error_log('Could not delete. It seems the file '.$entity.' does not exists.');
         }
     }
-
-
     if ($debug) {
         error_log('Folders cleaned up');
     }

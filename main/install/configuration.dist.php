@@ -732,4 +732,5 @@ $_configuration['gradebook_badge_sidebar'] = [
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
 // ------ (End) Custom DB changes
 // Restrict course chat only for course coach in sessions
+// Course coaches will can chat with students only. And students will can chat with all course coaches
 //$_configuration['course_chat_restrict_to_coach'] = false;

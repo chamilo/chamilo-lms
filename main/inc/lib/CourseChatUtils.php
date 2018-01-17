@@ -53,9 +53,9 @@ class CourseChatUtils
             $userIsCoach = api_is_course_session_coach($this->userId, $course->getId(), $session->getId());
 
             if (api_get_configuration_value('course_chat_restrict_to_coach')) {
-                if (!$userIsCoach) {
+                if ($userIsCoach) {
                     $criteria->andWhere(
-                        Criteria::expr()->eq('status', Session::COACH)
+                        Criteria::expr()->eq('status', Session::STUDENT)
                     );
                 }
             }

@@ -46,10 +46,10 @@ if (defined('SYSTEM_INSTALLATION')) {
 
     // Some entities have been removed in 1.11. Delete the corresponding files
     $entitiesToRemove = [
-        api_get_path(SYS_PATH).'src/CoreBundle/Entity/Groups.php',
-        api_get_path(SYS_PATH).'src/CoreBundle/Entity/GroupRelGroup.php',
-        api_get_path(SYS_PATH).'src/CoreBundle/Entity/GroupRelTag.php',
-        api_get_path(SYS_PATH).'src/CoreBundle/Entity/GroupRelUser.php'
+        api_get_path(SYS_PATH).'src/Chamilo/CoreBundle/Entity/Groups.php',
+        api_get_path(SYS_PATH).'src/Chamilo/CoreBundle/Entity/GroupRelGroup.php',
+        api_get_path(SYS_PATH).'src/Chamilo/CoreBundle/Entity/GroupRelTag.php',
+        api_get_path(SYS_PATH).'src/Chamilo/CoreBundle/Entity/GroupRelUser.php'
     ];
     foreach ($entitiesToRemove as $entity) {
         if (file_exists($entity)) {

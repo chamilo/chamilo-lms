@@ -13,4 +13,3 @@ $strings['PluginDisabledFromAdminPanel'] = "The plugin has been disabled from th
 $strings['AnswersColumn'] = "Answers: ";
 $strings['Statement']= "Statement";
 $strings['PageX']= "Page %s";
-

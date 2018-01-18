@@ -172,6 +172,15 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
             if (isset($work['download_url']) && !empty($work['download_url'])) {
                 $actions = Display::url(
                     Display::return_icon(
+                        'back.png',
+                        get_lang('BackToWorksList'),
+                        null,
+                        ICON_SIZE_MEDIUM
+                    ),
+                    api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq()
+                );
+                $actions .= Display::url(
+                    Display::return_icon(
                         'save.png',
                         get_lang('Download'),
                         null,

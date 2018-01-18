@@ -10326,161 +10326,161 @@ class learnpath
                             $my_dep->setAttribute('xml:base', '');
                         } elseif ($doc_info[1] === 'local') {
                             switch ($doc_info[2]) {
-                            case 'url': // Local URL - save path as url for now, don't zip file.
-                                $abs_path = api_get_path(SYS_PATH).str_replace(api_get_path(WEB_PATH), '', $doc_info[0]);
-                                $current_dir = dirname($abs_path);
-                                $current_dir = str_replace('\\', '/', $current_dir);
-                                $file_path = realpath($abs_path);
-                                $file_path = str_replace('\\', '/', $file_path);
-                                $my_dep_file->setAttribute('href', $file_path);
-                                $my_dep->setAttribute('xml:base', '');
-                                if (strstr($file_path, $main_path) !== false) {
-                                    // The calculated real path is really inside Chamilo's root path.
-                                    // Reduce file path to what's under the DocumentRoot.
-                                    $file_path = substr($file_path, strlen($root_path) - 1);
-                                    //echo $file_path;echo '<br /><br />';
-                                    //error_log(__LINE__.'Reduced url path: '.$file_path, 0);
-                                    $zip_files_abs[] = $file_path;
-                                    $link_updates[$my_file_path][] = ['orig' => $doc_info[0], 'dest' => $file_path];
-                                    $my_dep_file->setAttribute('href', $file_path);
-                                    $my_dep->setAttribute('xml:base', '');
-                                } elseif (empty($file_path)) {
-                                    /*$document_root = substr(api_get_path(SYS_PATH), 0, strpos(api_get_path(SYS_PATH), api_get_path(REL_PATH)));
-                                    if (strpos($document_root, -1) == '/') {
-                                        $document_root = substr(0, -1, $document_root);
-                                    }*/
-                                    $file_path = $_SERVER['DOCUMENT_ROOT'].$abs_path;
-                                    $file_path = str_replace('//', '/', $file_path);
-                                    if (file_exists($file_path)) {
-                                        $file_path = substr($file_path, strlen($current_dir)); // We get the relative path.
-                                        $zip_files[] = $my_sub_dir.'/'.$file_path;
-                                        $link_updates[$my_file_path][] = ['orig' => $doc_info[0], 'dest' => $file_path];
-                                        $my_dep_file->setAttribute('href', $file_path);
-                                        $my_dep->setAttribute('xml:base', '');
-                                    }
-                                }
-                                break;
-                            case 'abs': // Absolute path from DocumentRoot. Save file and leave path as is in the zip.
-                                $my_dep_file->setAttribute('href', $doc_info[0]);
-                                $my_dep->setAttribute('xml:base', '');
-
-                                // The next lines fix a bug when using the "subdir" mode of Chamilo, whereas
-                                // an image path would be constructed as /var/www/subdir/subdir/img/foo.bar
-                                $abs_img_path_without_subdir = $doc_info[0];
-                                $relp = api_get_path(REL_PATH); // The url-append config param.
-                                $pos = strpos($abs_img_path_without_subdir, $relp);
-                                if ($pos === 0) {
-                                    $abs_img_path_without_subdir = '/'.substr($abs_img_path_without_subdir, strlen($relp));
-                                }
-
-                                //$file_path = realpath(api_get_path(SYS_PATH).$abs_img_path_without_subdir);
-                                $file_path = realpath(api_get_path(SYS_APP_PATH).$abs_img_path_without_subdir);
-
-                                $file_path = str_replace('\\', '/', $file_path);
-                                $file_path = str_replace('//', '/', $file_path);
-
-                                // Prepare the current directory path (until just under 'document') with a trailing slash.
-                                $cur_path = substr($current_course_path, -1) == '/' ? $current_course_path : $current_course_path.'/';
-                                // Check if the current document is in that path.
-                                if (strstr($file_path, $cur_path) !== false) {
-                                    // The document is in that path, now get the relative path
-                                    // to the containing document.
-                                    $orig_file_path = dirname($cur_path.$my_file_path).'/';
-                                    $orig_file_path = str_replace('\\', '/', $orig_file_path);
-                                    $relative_path = '';
-                                    if (strstr($file_path, $cur_path) !== false) {
-                                        //$relative_path = substr($file_path, strlen($orig_file_path));
-                                        $relative_path = str_replace($cur_path, '', $file_path);
-                                        $file_path = substr($file_path, strlen($cur_path));
-                                    } else {
-                                        // This case is still a problem as it's difficult to calculate a relative path easily
-                                        // might still generate wrong links.
-                                        //$file_path = substr($file_path,strlen($cur_path));
-                                        // Calculate the directory path to the current file (without trailing slash).
-                                        $my_relative_path = dirname($file_path);
-                                        $my_relative_path = str_replace('\\', '/', $my_relative_path);
-                                        $my_relative_file = basename($file_path);
-                                        // Calculate the directory path to the containing file (without trailing slash).
-                                        $my_orig_file_path = substr($orig_file_path, 0, -1);
-                                        $dotdot = '';
-                                        $subdir = '';
-                                        while (strstr($my_relative_path, $my_orig_file_path) === false && (strlen($my_orig_file_path) > 1) && (strlen($my_relative_path) > 1)) {
-                                            $my_relative_path2 = dirname($my_relative_path);
-                                            $my_relative_path2 = str_replace('\\', '/', $my_relative_path2);
-                                            $my_orig_file_path = dirname($my_orig_file_path);
-                                            $my_orig_file_path = str_replace('\\', '/', $my_orig_file_path);
-                                            $subdir = substr($my_relative_path, strlen($my_relative_path2) + 1).'/'.$subdir;
-                                            $dotdot += '../';
-                                            $my_relative_path = $my_relative_path2;
-                                        }
-                                        $relative_path = $dotdot.$subdir.$my_relative_file;
-                                    }
-                                    // Put the current document in the zip (this array is the array
-                                    // that will manage documents already in the course folder - relative).
-                                    $zip_files[] = $file_path;
-                                    // Update the links to the current document in the containing document (make them relative).
-                                    $link_updates[$my_file_path][] = ['orig' => $doc_info[0], 'dest' => $relative_path];
-                                    $my_dep_file->setAttribute('href', $file_path);
-                                    $my_dep->setAttribute('xml:base', '');
-                                } elseif (strstr($file_path, $main_path) !== false) {
-                                    // The calculated real path is really inside Chamilo's root path.
-                                    // Reduce file path to what's under the DocumentRoot.
-                                    $file_path = substr($file_path, strlen($root_path));
-                                    //echo $file_path;echo '<br /><br />';
-                                    //error_log('Reduced path: '.$file_path, 0);
-                                    $zip_files_abs[] = $file_path;
-                                    $link_updates[$my_file_path][] = ['orig' => $doc_info[0], 'dest' => $file_path];
-                                    $my_dep_file->setAttribute('href', 'document/'.$file_path);
-                                    $my_dep->setAttribute('xml:base', '');
-                                } elseif (empty($file_path)) {
-                                    /*$document_root = substr(api_get_path(SYS_PATH), 0, strpos(api_get_path(SYS_PATH), api_get_path(REL_PATH)));
-                                    if(strpos($document_root,-1) == '/') {
-                                        $document_root = substr(0, -1, $document_root);
-                                    }*/
-                                    $file_path = $_SERVER['DOCUMENT_ROOT'].$doc_info[0];
-                                    $file_path = str_replace('//', '/', $file_path);
+                                case 'url': // Local URL - save path as url for now, don't zip file.
                                     $abs_path = api_get_path(SYS_PATH).str_replace(api_get_path(WEB_PATH), '', $doc_info[0]);
                                     $current_dir = dirname($abs_path);
                                     $current_dir = str_replace('\\', '/', $current_dir);
-
-                                    if (file_exists($file_path)) {
-                                        $file_path = substr($file_path, strlen($current_dir)); // We get the relative path.
-                                        $zip_files[] = $my_sub_dir.'/'.$file_path;
-                                        $link_updates[$my_file_path][] = ['orig' => $doc_info[0], 'dest' => $file_path];
-                                        $my_dep_file->setAttribute('href', 'document/'.$file_path);
-                                        $my_dep->setAttribute('xml:base', '');
-                                    }
-                                }
-                                break;
-                            case 'rel':
-                                // Path relative to the current document.
-                                // Save xml:base as current document's directory and save file in zip as subdir.file_path
-                                if (substr($doc_info[0], 0, 2) == '..') {
-                                    // Relative path going up.
-                                    $current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
-                                    $current_dir = str_replace('\\', '/', $current_dir);
-                                    $file_path = realpath($current_dir.$doc_info[0]);
+                                    $file_path = realpath($abs_path);
                                     $file_path = str_replace('\\', '/', $file_path);
+                                    $my_dep_file->setAttribute('href', $file_path);
+                                    $my_dep->setAttribute('xml:base', '');
                                     if (strstr($file_path, $main_path) !== false) {
                                         // The calculated real path is really inside Chamilo's root path.
                                         // Reduce file path to what's under the DocumentRoot.
+                                        $file_path = substr($file_path, strlen($root_path) - 1);
+                                        //echo $file_path;echo '<br /><br />';
+                                        //error_log(__LINE__.'Reduced url path: '.$file_path, 0);
+                                        $zip_files_abs[] = $file_path;
+                                        $link_updates[$my_file_path][] = ['orig' => $doc_info[0], 'dest' => $file_path];
+                                        $my_dep_file->setAttribute('href', $file_path);
+                                        $my_dep->setAttribute('xml:base', '');
+                                    } elseif (empty($file_path)) {
+                                        /*$document_root = substr(api_get_path(SYS_PATH), 0, strpos(api_get_path(SYS_PATH), api_get_path(REL_PATH)));
+                                        if (strpos($document_root, -1) == '/') {
+                                            $document_root = substr(0, -1, $document_root);
+                                        }*/
+                                        $file_path = $_SERVER['DOCUMENT_ROOT'].$abs_path;
+                                        $file_path = str_replace('//', '/', $file_path);
+                                        if (file_exists($file_path)) {
+                                            $file_path = substr($file_path, strlen($current_dir)); // We get the relative path.
+                                            $zip_files[] = $my_sub_dir.'/'.$file_path;
+                                            $link_updates[$my_file_path][] = ['orig' => $doc_info[0], 'dest' => $file_path];
+                                            $my_dep_file->setAttribute('href', $file_path);
+                                            $my_dep->setAttribute('xml:base', '');
+                                        }
+                                    }
+                                    break;
+                                case 'abs': // Absolute path from DocumentRoot. Save file and leave path as is in the zip.
+                                    $my_dep_file->setAttribute('href', $doc_info[0]);
+                                    $my_dep->setAttribute('xml:base', '');
+
+                                    // The next lines fix a bug when using the "subdir" mode of Chamilo, whereas
+                                    // an image path would be constructed as /var/www/subdir/subdir/img/foo.bar
+                                    $abs_img_path_without_subdir = $doc_info[0];
+                                    $relp = api_get_path(REL_PATH); // The url-append config param.
+                                    $pos = strpos($abs_img_path_without_subdir, $relp);
+                                    if ($pos === 0) {
+                                        $abs_img_path_without_subdir = '/'.substr($abs_img_path_without_subdir, strlen($relp));
+                                    }
+
+                                    //$file_path = realpath(api_get_path(SYS_PATH).$abs_img_path_without_subdir);
+                                    $file_path = realpath(api_get_path(SYS_APP_PATH).$abs_img_path_without_subdir);
+
+                                    $file_path = str_replace('\\', '/', $file_path);
+                                    $file_path = str_replace('//', '/', $file_path);
+
+                                    // Prepare the current directory path (until just under 'document') with a trailing slash.
+                                    $cur_path = substr($current_course_path, -1) == '/' ? $current_course_path : $current_course_path.'/';
+                                    // Check if the current document is in that path.
+                                    if (strstr($file_path, $cur_path) !== false) {
+                                        // The document is in that path, now get the relative path
+                                        // to the containing document.
+                                        $orig_file_path = dirname($cur_path.$my_file_path).'/';
+                                        $orig_file_path = str_replace('\\', '/', $orig_file_path);
+                                        $relative_path = '';
+                                        if (strstr($file_path, $cur_path) !== false) {
+                                            //$relative_path = substr($file_path, strlen($orig_file_path));
+                                            $relative_path = str_replace($cur_path, '', $file_path);
+                                            $file_path = substr($file_path, strlen($cur_path));
+                                        } else {
+                                            // This case is still a problem as it's difficult to calculate a relative path easily
+                                            // might still generate wrong links.
+                                            //$file_path = substr($file_path,strlen($cur_path));
+                                            // Calculate the directory path to the current file (without trailing slash).
+                                            $my_relative_path = dirname($file_path);
+                                            $my_relative_path = str_replace('\\', '/', $my_relative_path);
+                                            $my_relative_file = basename($file_path);
+                                            // Calculate the directory path to the containing file (without trailing slash).
+                                            $my_orig_file_path = substr($orig_file_path, 0, -1);
+                                            $dotdot = '';
+                                            $subdir = '';
+                                            while (strstr($my_relative_path, $my_orig_file_path) === false && (strlen($my_orig_file_path) > 1) && (strlen($my_relative_path) > 1)) {
+                                                $my_relative_path2 = dirname($my_relative_path);
+                                                $my_relative_path2 = str_replace('\\', '/', $my_relative_path2);
+                                                $my_orig_file_path = dirname($my_orig_file_path);
+                                                $my_orig_file_path = str_replace('\\', '/', $my_orig_file_path);
+                                                $subdir = substr($my_relative_path, strlen($my_relative_path2) + 1).'/'.$subdir;
+                                                $dotdot += '../';
+                                                $my_relative_path = $my_relative_path2;
+                                            }
+                                            $relative_path = $dotdot.$subdir.$my_relative_file;
+                                        }
+                                        // Put the current document in the zip (this array is the array
+                                        // that will manage documents already in the course folder - relative).
+                                        $zip_files[] = $file_path;
+                                        // Update the links to the current document in the containing document (make them relative).
+                                        $link_updates[$my_file_path][] = ['orig' => $doc_info[0], 'dest' => $relative_path];
+                                        $my_dep_file->setAttribute('href', $file_path);
+                                        $my_dep->setAttribute('xml:base', '');
+                                    } elseif (strstr($file_path, $main_path) !== false) {
+                                        // The calculated real path is really inside Chamilo's root path.
+                                        // Reduce file path to what's under the DocumentRoot.
                                         $file_path = substr($file_path, strlen($root_path));
+                                        //echo $file_path;echo '<br /><br />';
+                                        //error_log('Reduced path: '.$file_path, 0);
                                         $zip_files_abs[] = $file_path;
                                         $link_updates[$my_file_path][] = ['orig' => $doc_info[0], 'dest' => $file_path];
                                         $my_dep_file->setAttribute('href', 'document/'.$file_path);
                                         $my_dep->setAttribute('xml:base', '');
+                                    } elseif (empty($file_path)) {
+                                        /*$document_root = substr(api_get_path(SYS_PATH), 0, strpos(api_get_path(SYS_PATH), api_get_path(REL_PATH)));
+                                        if(strpos($document_root,-1) == '/') {
+                                            $document_root = substr(0, -1, $document_root);
+                                        }*/
+                                        $file_path = $_SERVER['DOCUMENT_ROOT'].$doc_info[0];
+                                        $file_path = str_replace('//', '/', $file_path);
+                                        $abs_path = api_get_path(SYS_PATH).str_replace(api_get_path(WEB_PATH), '', $doc_info[0]);
+                                        $current_dir = dirname($abs_path);
+                                        $current_dir = str_replace('\\', '/', $current_dir);
+
+                                        if (file_exists($file_path)) {
+                                            $file_path = substr($file_path, strlen($current_dir)); // We get the relative path.
+                                            $zip_files[] = $my_sub_dir.'/'.$file_path;
+                                            $link_updates[$my_file_path][] = ['orig' => $doc_info[0], 'dest' => $file_path];
+                                            $my_dep_file->setAttribute('href', 'document/'.$file_path);
+                                            $my_dep->setAttribute('xml:base', '');
+                                        }
                                     }
-                                } else {
-                                    $zip_files[] = $my_sub_dir.'/'.$doc_info[0];
+                                    break;
+                                case 'rel':
+                                    // Path relative to the current document.
+                                    // Save xml:base as current document's directory and save file in zip as subdir.file_path
+                                    if (substr($doc_info[0], 0, 2) == '..') {
+                                        // Relative path going up.
+                                        $current_dir = dirname($current_course_path.'/'.$item->get_file_path()).'/';
+                                        $current_dir = str_replace('\\', '/', $current_dir);
+                                        $file_path = realpath($current_dir.$doc_info[0]);
+                                        $file_path = str_replace('\\', '/', $file_path);
+                                        if (strstr($file_path, $main_path) !== false) {
+                                            // The calculated real path is really inside Chamilo's root path.
+                                            // Reduce file path to what's under the DocumentRoot.
+                                            $file_path = substr($file_path, strlen($root_path));
+                                            $zip_files_abs[] = $file_path;
+                                            $link_updates[$my_file_path][] = ['orig' => $doc_info[0], 'dest' => $file_path];
+                                            $my_dep_file->setAttribute('href', 'document/'.$file_path);
+                                            $my_dep->setAttribute('xml:base', '');
+                                        }
+                                    } else {
+                                        $zip_files[] = $my_sub_dir.'/'.$doc_info[0];
+                                        $my_dep_file->setAttribute('href', $doc_info[0]);
+                                        $my_dep->setAttribute('xml:base', $my_xml_sub_dir);
+                                    }
+                                    break;
+                                default:
                                     $my_dep_file->setAttribute('href', $doc_info[0]);
-                                    $my_dep->setAttribute('xml:base', $my_xml_sub_dir);
-                                }
-                                break;
-                            default:
-                                $my_dep_file->setAttribute('href', $doc_info[0]);
-                                $my_dep->setAttribute('xml:base', '');
-                                break;
-                        }
+                                    $my_dep->setAttribute('xml:base', '');
+                                    break;
+                            }
                         }
                         $my_dep->appendChild($my_dep_file);
                         $resources->appendChild($my_dep);

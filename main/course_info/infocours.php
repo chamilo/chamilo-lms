@@ -17,20 +17,17 @@
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_SETTING;
 $this_section = SECTION_COURSES;
-
 $nameTools = get_lang('ModifInfo');
-
 api_protect_course_script(true);
 api_block_anonymous_users();
 $_course = api_get_course_info();
 
-/*	Constants and variables */
+/* Constants and variables */
 define('MODULE_HELP_NAME', 'Settings');
 define('COURSE_CHANGE_PROPERTIES', 'COURSE_CHANGE_PROPERTIES');
 
 $currentCourseRepository = $_course['path'];
 $is_allowedToEdit = $is_courseAdmin || $is_platformAdmin;
-
 $course_code = api_get_course_id();
 $courseId = api_get_course_int_id();
 
@@ -768,8 +765,8 @@ if ($form->validate() && is_settings_editable()) {
         'activate_legal' => $activeLegal,
         'registration_code' => $updateValues['course_registration_password'],
     ];
-
     Database::update($table_course, $params, ['id = ?' => $courseId]);
+
     // Insert/Updates course_settings table
     foreach ($courseSettings as $setting) {
         $value = isset($updateValues[$setting]) ? $updateValues[$setting] : null;
@@ -782,11 +779,12 @@ if ($form->validate() && is_settings_editable()) {
     }
 
     $appPlugin->saveCourseSettingsHook($updateValues);
+    $courseParams = api_get_cidreq();
     $cidReset = true;
     $cidReq = $course_code;
     Display::addFlash(Display::return_message(get_lang('Updated')));
     require '../inc/local.inc.php';
-    $url = api_get_path(WEB_CODE_PATH).'course_info/infocours.php?'.api_get_cidreq();
+    $url = api_get_path(WEB_CODE_PATH).'course_info/infocours.php?'.$courseParams;
     header("Location: $url");
     exit;
 }

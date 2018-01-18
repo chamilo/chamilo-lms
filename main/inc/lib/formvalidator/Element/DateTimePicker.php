@@ -36,21 +36,29 @@ class DateTimePicker extends HTML_QuickForm_text
             $value = api_format_date($value, DATE_TIME_FORMAT_LONG_24H);
         }
 
+        $label = $this->getLabel();
+        if (is_array($label) && isset($label[0])) {
+            $label = $label[0];
+        }
+
+        $resetFieldX = sprintf(get_lang('ResetFieldX'), $label);
+
         return '
             <div class="input-group">
                 <span class="input-group-addon cursor-pointer">
-                    <input ' . $this->_getAttrString($this->_attributes).'>
+                    <input '.$this->_getAttrString($this->_attributes).'>
                 </span>
-                <p class="form-control disabled" id="' . $id.'_alt_text">'.$value.'</p>
-                <input class="form-control" type="hidden" id="' . $id.'_alt" value="'.$value.'">
+                <p class="form-control disabled" id="'.$id.'_alt_text">'.$value.'</p>
+                <input class="form-control" type="hidden" id="'.$id.'_alt" value="'.$value.'">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button">
-                        <span class="fa fa-times text-danger" aria-hidden="true"></span>
-                        <span class="sr-only">' . get_lang('Reset').'</span>
+                    <button class="btn btn-default" type="button"
+                            title="'.$resetFieldX.'">
+                        <span class="fa fa-trash text-danger" aria-hidden="true"></span>
+                        <span class="sr-only">'.$resetFieldX.'</span>
                     </button>
                 </span>
             </div>
-        ' . $this->getElementJS();
+        '.$this->getElementJS();
     }
 
     /**

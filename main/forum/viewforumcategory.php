@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CForumPost;
+use ChamiloSession as Session;
 
 /**
  * These files are a complete rework of the forum. The database structure is
@@ -25,6 +26,8 @@ use Chamilo\CourseBundle\Entity\CForumPost;
  */
 
 require_once __DIR__.'/../inc/global.inc.php';
+
+Session::erase('_gid');
 
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){
@@ -273,15 +276,20 @@ if ($action != 'add') {
                         $show_forum = true;
                     } else {
                         // it is a group forum
+                        //echo '-groepsforum';
                         // it is a group forum but it is public => show
                         if ($forum['forum_group_public_private'] == 'public') {
                             $show_forum = true;
+                        //echo '-publiek';
                         } else {
                             // it is a group forum and it is private
+                            //echo '-prive';
                             // it is a group forum and it is private but the user is member of the group
                             if (in_array($forum['forum_of_group'], $groups_of_user)) {
+                                //echo '-is lid';
                                 $show_forum = true;
                             } else {
+                                //echo '-is GEEN lid';
                                 $show_forum = false;
                             }
                         }
@@ -348,14 +356,12 @@ if ($action != 'add') {
                         null,
                         ICON_SIZE_MEDIUM
                     );
-                    $linkForum = '';
-                    $linkForum .= Display::tag(
+
+                    $linkForum = Display::tag(
                         'a',
                         $forum['forum_title'].$session_displayed,
                         [
-                            'href' => 'viewforum.php?'.api_get_cidreq()
-                                . "&gidReq={$forum['forum_of_group']}&forum={$forum['forum_id']}&search="
-                                . Security::remove_XSS(urlencode(isset($_GET['search']) ? $_GET['search'] : '')),
+                            'href' => 'viewforum.php?'.api_get_cidreq(true, false)."&gidReq={$forum['forum_of_group']}&forum={$forum['forum_id']}&search=".Security::remove_XSS(urlencode(isset($_GET['search']) ? $_GET['search'] : '')),
                             'class' => empty($forum['visibility']) ? 'text-muted' : null
                         ]
                     );
@@ -390,22 +396,17 @@ if ($action != 'add') {
                     $html .= '</div>';
                     $html .= '</div>';
                     $html .= '<div class="col-md-6">';
-
                     $iconEmpty = '';
-
                     // The number of topics and posts.
                     if ($forum['forum_of_group'] !== '0') {
-                        $newPost = '';
+                        $newPost = $iconEmpty;
                         if (is_array($my_whatsnew_post_info) && !empty($my_whatsnew_post_info)) {
                             $newPost = ' '.Display::return_icon('alert.png', get_lang('Forum'), null, ICON_SIZE_SMALL);
-                        } else {
-                            $newPost = $iconEmpty;
                         }
                     } else {
+                        $newPost = $iconEmpty;
                         if (is_array($my_whatsnew_post_info) && !empty($my_whatsnew_post_info)) {
                             $newPost = ' '.Display::return_icon('alert.png', get_lang('Forum'), null, ICON_SIZE_SMALL);
-                        } else {
-                            $newPost = $iconEmpty;
                         }
                     }
 

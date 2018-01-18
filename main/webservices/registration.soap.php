@@ -329,10 +329,12 @@ function WSCreateUsers($params)
                 $userManager->updateUser($user, true);
                 $results[] = $user_id;
                 continue;
+            //return $r_check_user[0];
             } else {
-                // user id already exits.
                 $results[] = 0;
                 continue;
+                //return 0;
+                // user id already exits.
             }
         }
 
@@ -1229,21 +1231,21 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'firstname'                 => ['name' => 'firstname', 'type' => 'xsd:string'],
-        'lastname'                  => ['name' => 'lastname', 'type' => 'xsd:string'],
-        'status'                    => ['name' => 'status', 'type' => 'xsd:string'],
-        'email'                     => ['name' => 'email', 'type' => 'xsd:string'],
-        'loginname'                 => ['name' => 'loginname', 'type' => 'xsd:string'],
-        'password'                  => ['name' => 'password', 'type' => 'xsd:string'], //encripted password using the encrypt_method
-        'encrypt_method'            => ['name' => 'encrypt_method', 'type' => 'xsd:string'],
-        'language'                  => ['name' => 'language', 'type' => 'xsd:string'],
-        'phone'                     => ['name' => 'phone', 'type' => 'xsd:string'],
-        'expiration_date'           => ['name' => 'expiration_date', 'type' => 'xsd:string'],
-        'official_code'             => ['name' => 'official_code', 'type' => 'xsd:string'],
-        'original_user_id_name'     => ['name' => 'original_user_id_name', 'type' => 'xsd:string'],
-        'original_user_id_value'    => ['name' => 'original_user_id_value', 'type' => 'xsd:string'],
-        'extra'                     => ['name' => 'extra', 'type' => 'tns:extrasList'],
-        'secret_key'                => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'firstname' => ['name' => 'firstname', 'type' => 'xsd:string'],
+        'lastname' => ['name' => 'lastname', 'type' => 'xsd:string'],
+        'status' => ['name' => 'status', 'type' => 'xsd:string'],
+        'email' => ['name' => 'email', 'type' => 'xsd:string'],
+        'loginname' => ['name' => 'loginname', 'type' => 'xsd:string'],
+        'password' => ['name' => 'password', 'type' => 'xsd:string'], //encripted password using the encrypt_method
+        'encrypt_method' => ['name' => 'encrypt_method', 'type' => 'xsd:string'],
+        'language' => ['name' => 'language', 'type' => 'xsd:string'],
+        'phone' => ['name' => 'phone', 'type' => 'xsd:string'],
+        'expiration_date' => ['name' => 'expiration_date', 'type' => 'xsd:string'],
+        'official_code' => ['name' => 'official_code', 'type' => 'xsd:string'],
+        'original_user_id_name' => ['name' => 'original_user_id_name', 'type' => 'xsd:string'],
+        'original_user_id_value' => ['name' => 'original_user_id_value', 'type' => 'xsd:string'],
+        'extra' => ['name' => 'extra', 'type' => 'tns:extrasList'],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -1266,11 +1268,8 @@ function WSCreateUserPasswordCrypted($params)
     $debug = 1;
     if ($debug) {
         error_log('WSCreateUserPasswordCrypted');
-    }
-    if ($debug) {
         error_log(print_r($params, 1));
     }
-
     if (!WSHelperVerifyKey($params)) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
@@ -1405,7 +1404,9 @@ function WSCreateUserPasswordCrypted($params)
         }
     } else {
         if ($debug) {
-            error_log("User not found with original_id = $original_user_id_value and original_name = $original_user_id_name");
+            error_log(
+                "User not found with original_id = $original_user_id_value and original_name = $original_user_id_name"
+            );
         }
     }
 
@@ -1452,6 +1453,9 @@ function WSCreateUserPasswordCrypted($params)
     Database::query($sql);
     $return = Database::insert_id();
     if ($return) {
+        if ($debug) {
+            error_log("New user created. user_id = $return");
+        }
         $sql = "UPDATE $table_user SET user_id = id WHERE id = $return";
         Database::query($sql);
 
@@ -1478,8 +1482,8 @@ function WSCreateUserPasswordCrypted($params)
         // Create extra fields
         if (is_array($extra_list) && count($extra_list) > 0) {
             foreach ($extra_list as $extra) {
-                $extra_field_name   = $extra['field_name'];
-                $extra_field_value  = $extra['field_value'];
+                $extra_field_name = $extra['field_name'];
+                $extra_field_value = $extra['field_value'];
                 // save new fieldlabel into user_field table
                 UserManager::create_extra_field(
                     $extra_field_name,
@@ -1502,7 +1506,9 @@ function WSCreateUserPasswordCrypted($params)
 
         return 0;
     }
-
+    if ($debug) {
+        error_log("Return value: $return");
+    }
     return $return;
 }
 
@@ -2709,6 +2715,12 @@ $server->wsdl->addComplexType(
 
 function WSHelperActionOnUsers($params, $type)
 {
+    $debug = 1;
+    if ($debug) {
+        error_log("WSHelperActionOnUsers");
+        error_log(print_r($params, 1));
+    }
+
     if (!WSHelperVerifyKey($params)) {
         return returnError(WS_ERROR_SECRET_KEY);
     }
@@ -2724,17 +2736,23 @@ function WSHelperActionOnUsers($params, $type)
             $original_user_id['original_user_id_name']
         );
         if ($user_id > 0) {
-            if ($type == "delete") {
+            if ($debug) {
+                error_log("User found: $user_id");
+            }
+            if ($type == 'delete') {
                 $result = UserManager::delete_user($user_id);
             } elseif ($type == "disable") {
                 $result = UserManager::disable($user_id);
             } elseif ($type == "enable") {
                 $result = UserManager::enable($user_id);
             }
+        } else {
+            if ($debug) {
+                error_log("User id not found: $user_id");
+            }
         }
         $results[] = $result ? 1 : 0;
     }
-
 
     $count_results = count($results);
     $output = [];
@@ -2761,7 +2779,7 @@ $server->register(
 
 function WSDeleteUsers($params)
 {
-    return WSHelperActionOnUsers($params, "delete");
+    return WSHelperActionOnUsers($params, 'delete');
 }
 
 /** WSDisableUsers **/
@@ -4609,7 +4627,7 @@ function WSSubscribeUserToCourse($params)
                 $original_course_id['original_course_id_name']
             );
 
-            $courseCode = $courseInfo['code'];
+            $courseCode = isset($courseInfo['code']) ? $courseInfo['code'] : '';
 
             if (empty($courseCode)) {
                 // Course was not found

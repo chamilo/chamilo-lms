@@ -239,7 +239,7 @@
             {% if _u.logged and not is_subscribed %}
                 {{ subscribe_button }}
             {% elseif not _u.logged %}
-                {% if 'allow_registration'|api_get_setting == 'true' %}
+                {% if 'allow_registration'|api_get_setting != 'false' %}
                     <a href="{{ _p.web_main ~ 'auth/inscription.php' ~ redirect_to_session }}" class="btn btn-info btn-lg">
                         <i class="fa fa-pencil" aria-hidden="true"></i> {{ 'SignUp'|get_lang }}
                     </a>

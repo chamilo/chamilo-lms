@@ -72,8 +72,7 @@ $hide_toc_frame = $form->addElement(
     'checkbox',
     'hide_toc_frame',
     null,
-    get_lang('HideTocFrame'),
-    ['onclick' => '$("#lp_layout_column").toggle()']
+    get_lang('HideTocFrame')
 );
 if (api_get_setting('allow_course_theme') === 'true') {
     $mycourselptheme = api_get_course_setting('allow_learning_path_theme');
@@ -130,10 +129,12 @@ if (api_get_setting('search_enabled') === 'true') {
     }
 }
 
+$hideTableOfContents = $_SESSION['oLP']->getHideTableOfContents();
+
 $defaults['lp_encoding'] = Security::remove_XSS($_SESSION['oLP']->encoding);
 $defaults['lp_name'] = Security::remove_XSS($_SESSION['oLP']->get_name());
 $defaults['lp_author'] = Security::remove_XSS($_SESSION['oLP']->get_author());
-$defaults['hide_toc_frame'] = $_SESSION['oLP']->getHideTableOfContents();
+$defaults['hide_toc_frame'] = $hideTableOfContents;
 $defaults['category_id'] = intval($_SESSION['oLP']->getCategoryId());
 $defaults['accumulate_scorm_time'] = $_SESSION['oLP']->getAccumulateScormTime();
 
@@ -240,17 +241,21 @@ Display::display_header(get_lang('CourseSettings'), 'Path');
 
 echo $_SESSION['oLP']->build_action_menu(false, false, true, false);
 echo '<div class="row">';
-if ($_SESSION['oLP']->getHideTableOfContents() == 1) {
-    echo '<div class="col-md-12">';
-    $form->display();
-    echo '</div>';
-} else {
-    echo '<div class="col-md-8">';
-    $form->display();
-    echo '</div>';
-    echo '<div class="col-md-4" align="center">';
-    echo Display::return_icon('course_setting_layout.png');
-    echo '</div>';
-}
+echo '<div class="'.($hideTableOfContents ? 'col-md-12' : 'col-md-8').'" id="pnl-frm">';
+$form->display();
 echo '</div>';
+echo '<div class="'.($hideTableOfContents ? 'hide' : 'col-md-4').' text-right" id="pnl-toc">';
+echo Display::return_icon('course_setting_layout.png');
+echo '</div>';
+echo '</div>';
+echo "
+    <script>
+        $(document).on('ready', function () {
+            $('[name=\'hide_toc_frame\']').on('change', function() {
+                $('#pnl-frm').toggleClass('col-md-8').toggleClass('col-sm-12');
+                $('#pnl-toc').toggleClass('col-md-4').toggleClass('hide');
+            });
+        });
+    </script>
+";
 Display::display_footer();

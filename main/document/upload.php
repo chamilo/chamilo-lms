@@ -153,15 +153,20 @@ if (isset($_REQUEST['certificate'])) {
     $nameTools = get_lang('UplUploadDocument').$add_group_to_title;
 }
 
+$certificateLink = '';
+if ($is_certificate_mode) {
+    $certificateLink = '&certificate=true';
+}
+
 // Breadcrumbs
 if ($is_certificate_mode) {
     $interbreadcrumb[] = [
-        'url' => '../gradebook/index.php?'.api_get_cidreq(),
+        'url' => '../gradebook/index.php?'.api_get_cidreq().$certificateLink,
         'name' => get_lang('Gradebook'),
     ];
 } else {
     $interbreadcrumb[] = [
-        'url' => './document.php?id='.$document_id.'&'.api_get_cidreq(),
+        'url' => './document.php?id='.$document_id.'&'.api_get_cidreq().$certificateLink,
         'name' => get_lang('Documents'),
     ];
 }
@@ -173,7 +178,7 @@ if ($document_data) {
     } else {
         foreach ($document_data['parents'] as $document_sub_data) {
             $interbreadcrumb[] = [
-                'url' => $document_sub_data['document_url'],
+                'url' => $document_sub_data['document_url'].$certificateLink,
                 'name' => $document_sub_data['title']
             ];
         }
@@ -199,7 +204,7 @@ if (!empty($_FILES)) {
         true
     );
 
-    $redirectUrl = api_get_self().'?'.api_get_cidreq();
+    $redirectUrl = api_get_self().'?'.api_get_cidreq().$certificateLink;
 
     if ($document_data) {
         $redirectUrl .= '&'.http_build_query(
@@ -244,7 +249,7 @@ if (!$is_certificate_mode) {
     );
 }
 
-$action = api_get_self().'?'.api_get_cidreq().'&id='.$document_id;
+$action = api_get_self().'?'.api_get_cidreq().'&id='.$document_id.$certificateLink;
 
 $form = new FormValidator(
     'upload',

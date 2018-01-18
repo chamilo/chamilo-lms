@@ -316,6 +316,7 @@ class PDF
                     if (!empty($elements)) {
                         foreach ($elements as $item) {
                             $old_src = $item->getAttribute('src');
+                            $old_src = trim($old_src);
 
                             if (strpos($old_src, $protocol) === false) {
                                 if (strpos($old_src, '/main/default_course_document') === false) {
@@ -352,9 +353,20 @@ class PDF
 
                                         $new_path = $document_path.$old_src_fixed;
                                     } else {
-                                        $new_path = $old_src;
+                                        $new_path = str_replace(
+                                            '/main/img/',
+                                            api_get_path(SYS_CODE_PATH).'img/',
+                                            $old_src
+                                        );
                                     }
-                                    $document_html = str_replace($old_src, $new_path, $document_html);
+                                    $item->setAttribute('src', $new_path);
+                                } else {
+                                    $new_path = str_replace(
+                                        '/main/default_course_document',
+                                        api_get_path(SYS_CODE_PATH).'default_course_document',
+                                        $old_src
+                                    );
+                                    $item->setAttribute('src', $new_path);
                                 }
                             } else {
                                 //Check if this is a complete URL
@@ -369,6 +381,8 @@ class PDF
                         }
                     }
                 }
+
+                $document_html = $doc->saveHTML();
 
                 api_set_encoding_html($document_html, 'UTF-8'); // The library mPDF expects UTF-8 encoded input data.
                 // TODO: Maybe it is better idea the title to be passed through
@@ -493,6 +507,7 @@ class PDF
             api_get_path(SYS_CODE_PATH).'img/',
             $document_html
         );
+        $document_html = str_replace(api_get_path(WEB_ARCHIVE_PATH), api_get_path(SYS_ARCHIVE_PATH), $document_html);
 
         //replace relative path by absolute path for resources
         //$document_html= str_replace('src="/chamilo/main/default_course_document/', 'temp_template_path', $document_html);// before save src templates not apply

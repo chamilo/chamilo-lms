@@ -64,7 +64,6 @@ if (api_is_in_group()) {
 }
 
 $dir = '/';
-
 $currentDirPath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
 $readonly = false;
 if (isset($_GET['id'])) {
@@ -194,7 +193,7 @@ if (!api_is_allowed_to_edit()) {
 }
 
 /* MAIN TOOL CODE */
-/*	Code to change the comment	*/
+/* Code to change the comment */
 if (isset($_POST['comment'])) {
     // Fixing the path if it is wrong
     $comment = trim($_POST['comment']);
@@ -237,87 +236,72 @@ if (isset($_POST['comment'])) {
     }
 }
 
-/*	WYSIWYG HTML EDITOR - Program Logic */
+/* WYSIWYG HTML EDITOR - Program Logic */
 if ($is_allowed_to_edit) {
-    if (isset($_POST['formSent']) && $_POST['formSent'] == 1) {
-        $filename = stripslashes($_POST['filename']);
-        $extension = $_POST['extension'];
+    if (isset($_POST['formSent']) && $_POST['formSent'] == 1 && !empty($document_id)) {
         $content = isset($_POST['content']) ? trim(str_replace(["\r", "\n"], '', stripslashes($_POST['content']))) : null;
         $content = Security::remove_XSS($content, COURSEMANAGERLOWSECURITY);
-
         if ($dir == '/') {
             $dir = '';
         }
 
-        $file = $dir.'/'.$filename.'.'.$extension;
         $read_only_flag = isset($_POST['readonly']) ? $_POST['readonly'] : null;
         $read_only_flag = empty($read_only_flag) ? 0 : 1;
 
-        if (empty($filename)) {
-            Display::addFlash(Display::return_message(get_lang('NoFileName'), 'warning'));
-        } else {
-            if ($file_type != 'link') {
-                $file_size = filesize($document_data['absolute_path']);
-            }
+        if ($file_type != 'link') {
+            $file_size = filesize($document_data['absolute_path']);
+        }
 
-            if ($read_only_flag == 0) {
-                if (!empty($content)) {
-                    if ($fp = @fopen($document_data['absolute_path'], 'w')) {
-                        // For flv player, change absolute path temporarily to prevent from erasing it in the following lines
-                        $content = str_replace(['flv=h', 'flv=/'], ['flv=h|', 'flv=/|'], $content);
-                        fputs($fp, $content);
-                        fclose($fp);
+        if ($read_only_flag == 0) {
+            if (!empty($content)) {
+                if ($fp = @fopen($document_data['absolute_path'], 'w')) {
+                    // For flv player, change absolute path temporarily to prevent
+                    // from erasing it in the following lines
+                    $content = str_replace(['flv=h', 'flv=/'], ['flv=h|', 'flv=/|'], $content);
+                    fputs($fp, $content);
+                    fclose($fp);
+                    $filepath = $document_data['absolute_parent_path'];
 
-                        $filepath = $document_data['absolute_parent_path'];
-
-                        // "WHAT'S NEW" notification: update table item_property
-                        $document_id = DocumentManager::get_document_id($_course, $file);
-
-                        if ($document_id) {
-                            update_existing_document(
-                                $_course,
-                                $document_id,
-                                $file_size,
-                                $read_only_flag
-                            );
-                            api_item_property_update(
-                                $_course,
-                                TOOL_DOCUMENT,
-                                $document_id,
-                                'DocumentUpdated',
-                                api_get_user_id(),
-                                null,
-                                null,
-                                null,
-                                null,
-                                $sessionId
-                            );
-                            // Update parent folders
-                            item_property_update_on_folder(
-                                $_course,
-                                $dir,
-                                api_get_user_id()
-                            );
-                        } else {
-                            Display::addFlash(Display::return_message(get_lang('Impossible'), 'warning'));
-                        }
-                    } else {
-                        Display::addFlash(Display::return_message(get_lang('Impossible'), 'warning'));
-                    }
+                    update_existing_document(
+                        $_course,
+                        $document_id,
+                        $file_size,
+                        $read_only_flag
+                    );
+                    api_item_property_update(
+                        $_course,
+                        TOOL_DOCUMENT,
+                        $document_id,
+                        'DocumentUpdated',
+                        api_get_user_id(),
+                        null,
+                        null,
+                        null,
+                        null,
+                        $sessionId
+                    );
+                    // Update parent folders
+                    item_property_update_on_folder(
+                        $_course,
+                        $dir,
+                        api_get_user_id()
+                    );
                 } else {
-                    if ($document_id) {
-                        update_existing_document($_course, $document_id, $file_size, $read_only_flag);
-                    }
+                    Display::addFlash(Display::return_message(get_lang('Impossible'), 'warning'));
                 }
             } else {
                 if ($document_id) {
                     update_existing_document($_course, $document_id, $file_size, $read_only_flag);
                 }
             }
-
-            header('Location: document.php?id='.$document_data['parent_id'].'&'.api_get_cidreq().($is_certificate_mode ? '&curdirpath=/certificates&selectcat=1' : ''));
-            exit;
+        } else {
+            if ($document_id) {
+                update_existing_document($_course, $document_id, $file_size, $read_only_flag);
+            }
         }
+
+        header('Location: document.php?id='.$document_data['parent_id'].'&'.api_get_cidreq().($is_certificate_mode ? '&curdirpath=/certificates&selectcat=1' : ''));
+        exit;
     }
 }
 
@@ -395,15 +379,12 @@ if ($owner_id == api_get_user_id() ||
     );
 
     $defaults['title'] = $document_data['title'];
-    $defaults['formSent'] = 1;
     $read_only_flag = isset($_POST['readonly']) ? $_POST['readonly'] : null;
 
     // Desactivation of IE proprietary commenting tags inside the text before loading it on the online editor.
     // This fix has been proposed by Hubert Borderiou, see Bug #573, http://support.chamilo.org/issues/573
     $defaults['content'] = str_replace('<!--[', '<!-- [', $content);
-
     // HotPotatoes tests are html files, but they should not be edited in order their functionality to be preserved.
-
     $showSystemFolders = api_get_course_setting('show_system_folders');
     $condition = stripos($dir, '/HotPotatoes_files') === false;
     if ($showSystemFolders == 1) {
@@ -481,8 +462,9 @@ if ($owner_id == api_get_user_id() ||
     } else {
         $form->addButtonUpdate(get_lang('SaveDocument'));
     }
+    $form->addHidden('formSent', 1);
+    $form->addHidden('filename', $filename);
 
-    $defaults['filename'] = $filename;
     $defaults['extension'] = $extension;
     $defaults['file_path'] = isset($_GET['file']) ? Security::remove_XSS($_GET['file']) : null;
     $defaults['commentPath'] = $file;
@@ -518,7 +500,9 @@ if ($owner_id == api_get_user_id() ||
         );
     }
 
-    if ($extension == 'svg' && !api_browser_support('svg') && api_get_setting('enabled_support_svg') == 'true') {
+    if ($extension == 'svg' && !api_browser_support('svg') &&
+        api_get_setting('enabled_support_svg') == 'true'
+    ) {
         echo Display::return_message(get_lang('BrowserDontSupportsSVG'), 'warning');
     }
     if ($file_type != 'link') {
@@ -551,43 +535,13 @@ if ($owner_id == api_get_user_id() ||
         });
         </script>';
 
-        echo $form->return_form();
+        echo $form->returnForm();
     }
 }
 
 Display::display_footer();
 
-/**
-    This function changes the name of a certain file.
-    It needs no global variables, it takes all info from parameters.
-    It returns nothing.
-    @todo check if this function is used
-*/
-function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc)
-{
-    $file_name_for_change = $base_work_dir.$dir.$source_file;
-    $rename_to = disable_dangerous_file($rename_to); // Avoid renaming to .htaccess file
-    $rename_to = my_rename($file_name_for_change, stripslashes($rename_to)); // fileManage API
-
-    if ($rename_to) {
-        if (isset($dir) && $dir != '') {
-            $source_file = $dir.$source_file;
-            $new_full_file_name = dirname($source_file).'/'.$rename_to;
-        } else {
-            $source_file = '/'.$source_file;
-            $new_full_file_name = '/'.$rename_to;
-        }
-
-        update_db_info('update', $source_file, $new_full_file_name); // fileManage API
-        Display::addFlash(Display::return_message(get_lang('fileModified')));
-
-        return true;
-    } else {
-        Display::addFlash(Display::return_message(get_lang('FileExists')));
-    }
-}
-
-//return button back to
+// return button back to
 function show_return($document_id, $path, $call_from_tool = '', $slide_id = 0, $is_certificate_mode = false)
 {
     $actionsLeft = null;

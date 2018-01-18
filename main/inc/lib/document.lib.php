@@ -298,7 +298,6 @@ class DocumentManager
         $len = filesize($full_file_name);
         // Fixing error when file name contains a ","
         $filename = str_replace(',', '', $filename);
-
         $sendFileHeaders = api_get_configuration_value('enable_x_sendfile_headers');
 
         if ($forced) {
@@ -334,7 +333,6 @@ class DocumentManager
             return true;
         } else {
             //no forced download, just let the browser decide what to do according to the mimetype
-
             $content_type = self::file_get_mime_type($filename);
             $lpFixedEncoding = api_get_configuration_value('lp_fixed_encoding');
 
@@ -5100,6 +5098,7 @@ class DocumentManager
      * @param int $counter
      * @param int $size
      * @param bool $isAllowedToEdit
+     * @param bool $isCertificateMode
      *
      * @return string url
      */
@@ -5110,7 +5109,8 @@ class DocumentManager
         $counter = null,
         $visibility,
         $size = 0,
-        $isAllowedToEdit = false
+        $isAllowedToEdit = false,
+        $isCertificateMode = false
     ) {
         global $dbl_click_id;
 
@@ -5156,7 +5156,6 @@ class DocumentManager
 
             // HTML-files an some other types are shown in a frameset by default.
             $is_browser_viewable_file = self::isBrowserViewable($ext);
-
             if ($is_browser_viewable_file) {
                 if ($ext == 'pdf' || in_array($ext, $webODFList)) {
                     $url = api_get_self().'?'.$courseParams.'&amp;action=download&amp;id='.$document_data['id'];
@@ -5172,9 +5171,12 @@ class DocumentManager
             $url = api_get_self().'?'.$courseParams.'&id='.$document_data['id'];
         }
 
+        if ($isCertificateMode) {
+            $url .= '&certificate=true';
+        }
+
         // The little download icon
         $tooltip_title = $title;
-
         $tooltip_title_alt = $tooltip_title;
 
         if ($filetype == 'link') {
@@ -5251,10 +5253,6 @@ class DocumentManager
                         $copyToMyFiles = '';
                     }
                 }
-
-                if ($filetype == 'file') {
-                    //$send_to = Portfolio::share('document', $document_data['id'], array('style' => 'float:right;'));
-                }
             }
 
             $pdf_icon = '';
@@ -5283,7 +5281,6 @@ class DocumentManager
                     $title.
                     '</span>'.$force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
                 } elseif (
-
                     // Show preview
                     preg_match('/swf$/i', urldecode($checkExtension)) ||
                     preg_match('/png$/i', urldecode($checkExtension)) ||

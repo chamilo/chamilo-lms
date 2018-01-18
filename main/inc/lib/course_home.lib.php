@@ -85,7 +85,7 @@ class CourseHome
                                 tl.c_id = $course_id AND
                                 tip.c_id = $course_id AND
                                 tl.on_homepage='1' AND
-                				tip.visibility != 2";
+                                tip.visibility != 2";
             } else {
                 $sql_links = "SELECT tl.*, tip.visibility
                                 FROM $tbl_link tl
@@ -566,8 +566,6 @@ class CourseHome
         }
 
         $allowEditionInSession = api_get_configuration_value('allow_edit_tool_visibility_in_session');
-
-
 
         $toolWithSessionValue = [];
         foreach ($tools as $row) {
@@ -1296,7 +1294,6 @@ class CourseHome
 
         if (!empty($course_id)) {
             $course_tools_table = Database::get_course_table(TABLE_TOOL_LIST);
-
             /* 	Link to the Course homepage */
             $navigation_items['home']['image'] = 'home.gif';
             $navigation_items['home']['link'] = $courseInfo['course_public_url'];
@@ -1305,8 +1302,25 @@ class CourseHome
             $sql = "SELECT * FROM $course_tools_table
                     WHERE c_id = $course_id AND visibility='1' and admin='0'
                     ORDER BY id ASC";
-            $sql_result = Database::query($sql);
-            while ($row = Database::fetch_array($sql_result)) {
+            $result = Database::query($sql);
+
+            $hideTools = [];
+            $hideToolsKeys = [];
+            if (!api_is_platform_admin()) {
+                $hideTools = api_get_setting('course_hide_tools');
+                $hideToolsKeys = array_keys($hideTools);
+            }
+
+            while ($row = Database::fetch_array($result)) {
+                if (!empty($hideTools)) {
+                    if (in_array($row['name'], $hideToolsKeys)) {
+                        // Tool is hidden
+                        if ($hideTools[$row['name']] == 'true') {
+                            continue;
+                        }
+                    }
+                }
+
                 $navigation_items[$row['id']] = $row;
                 if (stripos($row['link'], 'http://') === false && stripos($row['link'], 'https://') === false) {
                     $navigation_items[$row['id']]['link'] = api_get_path(WEB_CODE_PATH);
@@ -1324,9 +1338,9 @@ class CourseHome
                 }
             }
 
-            /* 	Admin (edit rights) only links
-              - Course settings (course admin only)
-              - Course rights (roles & rights overview) */
+            /* Admin (edit rights) only links
+            - Course settings (course admin only)
+            - Course rights (roles & rights overview) */
             if ($include_admin_tools) {
                 $sql = "SELECT name, image FROM $course_tools_table
                         WHERE c_id = $course_id  AND link='course_info/infocours.php'";
@@ -1487,13 +1501,11 @@ class CourseHome
                     if (isset($plugin_info) && isset($plugin_info['title'])) {
                         $tool_name = $plugin_info['title'];
                     }*/
-
                     if (!file_exists(api_get_path(SYS_CODE_PATH).'img/'.$navigation_item['image']) &&
                         !file_exists(api_get_path(SYS_CODE_PATH).'img/icons/'.ICON_SIZE_MEDIUM.'/'.$navigation_item['image'])
                     ) {
                         $navigation_item['image'] = 'plugins.png';
                     }
-                    //$tool_link_params['href'] = api_get_path(WEB_PLUGIN_PATH).$navigation_item['link'].'?'.api_get_cidreq();
                 }
 
                 $html .= Display::return_icon(

@@ -17,6 +17,7 @@ use Chamilo\CourseBundle\Entity\CQuizCategory;
  */
 class Exercise
 {
+    public $iId;
     public $id;
     public $name;
     public $title;
@@ -87,6 +88,7 @@ class Exercise
      */
     public function __construct($courseId = 0)
     {
+        $this->iId = 0;
         $this->id = 0;
         $this->exercise = '';
         $this->description = '';
@@ -153,6 +155,7 @@ class Exercise
 
         // if the exercise has been found
         if ($object = Database::fetch_object($result)) {
+            $this->iId = $object->iid;
             $this->id = $id;
             $this->exercise = $object->title;
             $this->name = $object->title;
@@ -1718,7 +1721,7 @@ class Exercise
                 }
             }
 
-            $this->id = Database::insert($TBL_EXERCISES, $params);
+            $this->id = $this->iId = Database::insert($TBL_EXERCISES, $params);
 
             if ($this->id) {
                 $sql = "UPDATE $TBL_EXERCISES SET id = iid WHERE iid = {$this->id} ";
@@ -1757,6 +1760,8 @@ class Exercise
 
         // Updates the question position
         $this->update_question_positions();
+
+        return $this->iId;
     }
 
     /**
@@ -1929,6 +1934,8 @@ class Exercise
             false,
             $editor_config
         );
+
+        $skillList = [];
 
         if ($type == 'full') {
             //Can't modify a DirectFeedback question
@@ -2613,6 +2620,7 @@ class Exercise
      * function which process the creation of exercises
      * @param FormValidator $form
      * @param string
+     * @return int c_quiz.iid
      */
     public function processCreation($form, $type = '')
     {

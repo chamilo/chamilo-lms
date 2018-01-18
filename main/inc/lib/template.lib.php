@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\UserBundle\Entity\User;
+
 /**
  * Class Template
  *
@@ -43,6 +46,7 @@ class Template
     public $load_plugins = false;
     public $params = [];
     public $force_plugin_load = false;
+    public $responseCode = 0;
 
     /**
      * @param string $title
@@ -51,6 +55,7 @@ class Template
      * @param bool $show_learnpath
      * @param bool $hide_global_chat
      * @param bool $load_plugins
+     * @param int $responseCode
      * @param bool $sendHeaders send http headers or not
      */
     public function __construct(
@@ -60,12 +65,13 @@ class Template
         $show_learnpath = false,
         $hide_global_chat = false,
         $load_plugins = true,
-        $sendHeaders = true
+        $sendHeaders = true,
+        $responseCode = 0
     ) {
         // Page title
         $this->title = $title;
-
         $this->show_learnpath = $show_learnpath;
+        $this->setResponseCode($responseCode);
 
         if (empty($this->show_learnpath)) {
             $origin = api_get_origin();
@@ -171,6 +177,15 @@ class Template
             } else {
                 $this->twig->addFilter(new Twig_SimpleFilter($filter, $filter));
             }
+        }
+
+        $functions = [
+            ['name' => 'get_tutors_names', 'callable' => 'Template::returnTutorsNames'],
+            ['name' => 'get_teachers_names', 'callable' => 'Template::returnTeachersNames']
+        ];
+
+        foreach ($functions as $function) {
+            $this->twig->addFunction(new Twig_SimpleFunction($function['name'], $function['callable']));
         }
 
         // Setting system variables
@@ -1466,7 +1481,8 @@ class Template
                         $message = get_lang('AccountNotConfirmed').PHP_EOL;
                         $message .= Display::url(
                             get_lang('ReSendConfirmationMail'),
-                            api_get_path(WEB_PATH).'main/auth/resend_confirmation_mail.php'
+                            api_get_path(WEB_PATH).'main/auth/resend_confirmation_mail.php',
+                            ['class' => 'alert-link']
                         );
                     }
                     break;
@@ -1501,7 +1517,7 @@ class Template
         $form = new FormValidator(
             'formLogin',
             'POST',
-            null,
+            api_get_path(WEB_PUBLIC_PATH).'login_check',
             null,
             null,
             FormValidator::LAYOUT_BOX_NO_LABEL
@@ -1520,7 +1536,7 @@ class Template
             $params['autocapitalize'] = 'none';
         }
         $form->addText(
-            'login',
+            '_username',
             get_lang('UserName'),
             true,
             $params
@@ -1535,10 +1551,14 @@ class Template
         }
         $form->addElement(
             'password',
-            'password',
+            '_password',
             get_lang('Pass'),
             $params
         );
+
+        $token = Chamilo\CoreBundle\Framework\Container::$container->get('security.csrf.token_manager')->getToken('authenticate');
+        $form->addHidden('_csrf_token', $token->getValue());
+
         // Captcha
         $captcha = api_get_setting('allow_captcha');
         $allowCaptcha = $captcha === 'true';
@@ -1672,5 +1692,82 @@ class Template
             header('Referrer-Policy: '.$setting);
         }
         // end of HTTP headers security block
+    }
+
+    /**
+     * Returns the tutors names for the current course in session
+     * Function to use in Twig templates
+     * @return string
+     */
+    public static function returnTutorsNames()
+    {
+        $em = Database::getManager();
+        $tutors = $em
+            ->createQuery('
+                SELECT u FROM ChamiloUserBundle:User u
+                INNER JOIN ChamiloCoreBundle:SessionRelCourseRelUser scu WITH u.id = scu.user
+                WHERE scu.status = :teacher_status AND scu.session = :session AND scu.course = :course
+            ')
+            ->setParameters([
+                'teacher_status' => SessionRelCourseRelUser::STATUS_COURSE_COACH,
+                'session' => api_get_session_id(),
+                'course' => api_get_course_int_id()
+            ])
+            ->getResult();
+
+        $names = [];
+
+        /** @var User $tutor */
+        foreach ($tutors as $tutor) {
+            $names[] = $tutor->getCompleteName();
+        }
+
+        return implode(CourseManager::USER_SEPARATOR, $names);
+    }
+
+    /**s
+     * Returns the teachers name for the current course
+     * Function to use in Twig templates
+     * @return string
+     */
+    public static function returnTeachersNames()
+    {
+        $em = Database::getManager();
+        $teachers = $em
+            ->createQuery('
+                SELECT u FROM ChamiloUserBundle:User u
+                INNER JOIN ChamiloCoreBundle:CourseRelUser cu WITH u.id = cu.user
+                WHERE cu.status = :teacher_status AND cu.course = :course
+            ')
+            ->setParameters([
+                'teacher_status' => User::COURSE_MANAGER,
+                'course' => api_get_course_int_id()
+            ])
+            ->getResult();
+
+        $names = [];
+
+        /** @var User $teacher */
+        foreach ($teachers as $teacher) {
+            $names[] = $teacher->getCompleteName();
+        }
+
+        return implode(CourseManager::USER_SEPARATOR, $names);
+    }
+
+    /**
+     * @param int $code
+     */
+    public function setResponseCode($code)
+    {
+        $this->responseCode = $code;
+    }
+
+    /**
+     * @param string $code
+     */
+    public function getResponseCode()
+    {
+        return $this->responseCode;
     }
 }

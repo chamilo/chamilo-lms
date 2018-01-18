@@ -12,7 +12,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 SessionManager::protectSession(null, false);
 
-//Add the JS needed to use the jqgrid
+// Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
@@ -41,7 +41,7 @@ if ($action == 'delete') {
 $tool_name = get_lang('SessionList');
 Display::display_header($tool_name);
 
-$courseId = isset($_GET['course_id']) ? $_GET['course_id'] : null;
+$courseId = isset($_GET['course_id']) ? $_GET['course_id'] : 0;
 
 $sessionFilter = new FormValidator(
     'course_filter',
@@ -56,7 +56,10 @@ $courseSelect = $sessionFilter->addElement(
     'course_name',
     get_lang('SearchCourse'),
     null,
-    ['url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course']
+    [
+        'id' => 'course_name',
+        'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course'
+    ]
 );
 
 if (!empty($courseId)) {

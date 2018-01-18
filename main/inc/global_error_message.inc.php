@@ -59,8 +59,8 @@ if (is_int($global_error_code) && $global_error_code > 0) {
     $installation_guide_url = $root_rel.'documentation/installation_guide.html';
 
     $css_path = 'app/Resources/public/css/';
-    $css_web_assets = 'web/assets/';
-    $css_web_path = 'web/css/';
+    $css_web_assets = 'public/assets/';
+    $css_web_path = 'public/css/';
     $themePath = $css_path.'themes/'.$theme.'/default.css';
     $bootstrap_file = $css_web_assets.'bootstrap/dist/css/bootstrap.min.css';
     $css_base_file = $css_web_path.'base.css';

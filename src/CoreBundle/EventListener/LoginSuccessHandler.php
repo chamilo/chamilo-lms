@@ -7,7 +7,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerI
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Routing\Router;
+use ChamiloSession as Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Chamilo\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
@@ -76,10 +76,12 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         if ($this->checker->isGranted('ROLE_STUDENT') && !empty($pageAfterLogin)) {
             switch ($pageAfterLogin) {
                 case 'index.php':
-                    $url = $this->router->generate('home');
+                    //$url = $this->router->generate('home');
+                    $url = $this->router->generate('home').'/../index.php';
                     break;
                 case 'user_portal.php':
-                    $url = $this->router->generate('userportal');
+                    //$url = $this->router->generate('userportal');
+                    $url = $this->router->generate('home').'/../user_portal.php';
                     break;
                 case 'main/auth/courses.php':
                     $url = api_get_path(WEB_PUBLIC_PATH).$pageAfterLogin;
@@ -87,11 +89,15 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             }
         }
 
-        $url = $this->router->generate('userportal');
+        Session::write('_uid', $user->getId());
+        Session::write('_user', $userInfo);
+        Session::write('is_platformAdmin', (bool) \UserManager::is_admin($userId));
+        Session::write('is_allowedCreateCourse', (bool) ($userInfo['status'] == 1));
+
+        //$url = $this->router->generate('userportal');
 
         // Redirecting to a course or a session.
         if (api_get_setting('course.go_to_course_after_login') == 'true') {
-
             // Get the courses list
             $personal_course_list = \UserManager::get_personal_session_course_list($userId);
 
@@ -109,7 +115,6 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             }
 
             $count_of_sessions = count($my_session_list);
-
             if ($count_of_sessions == 1 && $count_of_courses_no_sessions == 0) {
                 $key = array_keys($personal_course_list);
                 $course_info = $personal_course_list[$key[0]]['course_info'];

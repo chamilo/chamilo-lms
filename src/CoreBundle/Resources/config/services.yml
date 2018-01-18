@@ -48,7 +48,10 @@ services:
     # Session voter checks if a user has permissions to do actions in a session
     chamilo_core.security.authorization.voter.session_voter:
         class: Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter
-        arguments: ['@doctrine.orm.entity_manager', '@chamilo_core.entity.manager.course_manager', '@service_container']
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@chamilo_core.entity.manager.course_manager'
+            - '@service_container'
         public: false
         tags:
             - {name: security.voter}
@@ -135,6 +138,12 @@ services:
         tags:
             - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}
             - {name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 9}
+
+#    chamilo_core.listener.legacy_login_listener:
+#        class: Chamilo\CoreBundle\EventListener\LegacyLoginListener
+#        arguments: ["@service_container", '@security.token_storage']
+#        tags:
+#            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
     # Locale listener
     chamilo_core.listener.locale:

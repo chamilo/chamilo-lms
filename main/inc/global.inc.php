@@ -187,7 +187,7 @@ $charset = 'UTF-8';
 \Patchwork\Utf8\Bootup::initAll();
 
 // Start session after the internationalization library has been initialized.
-ChamiloSession::start($alreadyInstalled);
+//ChamiloSession::start($alreadyInstalled);
 
 // access_url == 1 is the default chamilo location
 if ($_configuration['access_url'] != 1) {

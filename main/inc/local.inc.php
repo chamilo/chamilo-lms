@@ -136,8 +136,8 @@ if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login
 }
 
 // parameters passed via GET
-$logout = isset($_GET["logout"]) ? $_GET["logout"] : '';
-$gidReq = isset($_GET["gidReq"]) ? intval($_GET["gidReq"]) : '';
+$logout = isset($_GET['logout']) ? $_GET['logout'] : '';
+$gidReq = isset($_GET['gidReq']) ? (int) $_GET['gidReq'] : '';
 
 // Keep a trace of the course and session from which we are getting out, to
 // enable proper course logout tracking in courseLogout()

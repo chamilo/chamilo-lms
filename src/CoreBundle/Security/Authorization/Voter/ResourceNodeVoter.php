@@ -13,7 +13,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Sonata\AdminBundle\Security\Acl\Permission\AdminPermissionMap;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
-//use Symfony\Component\Security\Core\Authorization\Voter\AbstractVoter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Zend\Permissions\Acl\Acl;
@@ -21,7 +20,7 @@ use Zend\Permissions\Acl\Role\GenericRole as Role;
 //use Zend\Permissions\Acl\Resource\GenericResource as Resource;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
-use Symfony\Component\Security\Core\Authorization\Voter\Voter as AbstractVoter;
+use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 //use Sonata\AdminBundle\Security\Acl\Permission\MaskBuilder;
 
@@ -29,7 +28,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter as AbstractVoter;
  * Class ResourceNodeVoter
  * @package Chamilo\CoreBundle\Security\Authorization\Voter
  */
-class ResourceNodeVoter extends AbstractVoter
+class ResourceNodeVoter extends Voter
 {
     private $container;
 

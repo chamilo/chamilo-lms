@@ -9,14 +9,15 @@ use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\Voter\Voter as AbstractVoter;
+use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class CourseVoter
  * @package Chamilo\CoreBundle\Security\Authorization\Voter
  */
-class CourseVoter extends AbstractVoter
+class CourseVoter extends Voter
 {
     const VIEW = 'VIEW';
     const EDIT = 'EDIT';

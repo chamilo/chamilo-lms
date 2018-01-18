@@ -691,7 +691,7 @@ class PageController
 
         $loadDirs = api_get_setting('document.show_documents_preview') == 'true' ? true : false;
         $start = ($page - 1) * $this->maxPerPage;
-
+        return ;
         $nbResults = CourseManager::displayCourses(
             $user_id,
             $filter,

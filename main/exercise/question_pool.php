@@ -62,15 +62,13 @@ $displayMessage = '';
 if ($is_allowedToEdit) {
     // Duplicating a Question
     if (!isset($_POST['recup']) && $question_copy != 0 && isset($fromExercise)) {
-        $origin_course_id   = intval($_GET['course_id']);
+        $origin_course_id = (int) $_GET['course_id'];
         $origin_course_info = api_get_course_info_by_id($origin_course_id);
-        $current_course     = api_get_course_info();
-        $old_question_id    = $question_copy;
+        $current_course = api_get_course_info();
+        $old_question_id = $question_copy;
         // Reading the source question
         $old_question_obj = Question::read($old_question_id, $origin_course_id);
-
         $courseId = $current_course['real_id'];
-
         if ($old_question_obj) {
             $old_question_obj->updateTitle(
                 $old_question_obj->selectTitle().' - '.get_lang('Copy')
@@ -128,12 +126,10 @@ if ($is_allowedToEdit) {
         Session::write('objExercise', $objExercise);
     } elseif (isset($_POST['recup']) && is_array($_POST['recup']) && $fromExercise) {
         $list_recup = $_POST['recup'];
-
         foreach ($list_recup as $course_id => $question_data) {
-            $origin_course_id   = intval($course_id);
+            $origin_course_id = (int) $course_id;
             $origin_course_info = api_get_course_info_by_id($origin_course_id);
-            $current_course     = api_get_course_info();
-
+            $current_course = api_get_course_info();
             foreach ($question_data as $old_question_id) {
                 //Reading the source question
                 $old_question_obj = Question::read($old_question_id, $origin_course_id);
@@ -142,10 +138,10 @@ if ($is_allowedToEdit) {
                         $old_question_obj->selectTitle().' - '.get_lang('Copy')
                     );
 
-                    //Duplicating the source question, in the current course
+                    // Duplicating the source question, in the current course
                     $new_id = $old_question_obj->duplicate($current_course);
 
-                    //Reading new question
+                    // Reading new question
                     $new_question_obj = Question::read($new_id);
                     $new_question_obj->addToList($fromExercise);
 
@@ -184,7 +180,6 @@ if (!$is_allowedToEdit) {
 }
 
 $confirmYourChoice = addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset));
-
 $htmlHeadXtra[] = "
 <script>
     function submit_form(obj) {
@@ -241,7 +236,6 @@ echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
 
 // Session list, if sessions are used.
 $sessionList = SessionManager::get_sessions_by_user(api_get_user_id(), api_is_platform_admin());
-
 $tabAttrParam = ['onchange' => 'submit_form(this)'];
 $labelFormRow = get_lang('Session');
 $session_select_list = [];
@@ -282,7 +276,7 @@ $course_select_list = [];
 foreach ($course_list as $item) {
     $courseItemId = $item['real_id'];
     $courseInfo = api_get_course_info_by_id($courseItemId);
-    $course_select_list[$courseItemId] = "";
+    $course_select_list[$courseItemId] = '';
     if ($courseItemId == api_get_course_int_id()) {
         $course_select_list[$courseItemId] = ">&nbsp;&nbsp;&nbsp;&nbsp;";
     }
@@ -305,6 +299,7 @@ if (empty($selected_course) || $selected_course == '-1') {
 } else {
     $course_info = api_get_course_info_by_id($selected_course);
 }
+
 // If course has changed, reset the menu default
 if ($course_id_changed) {
     reset_menu_exo_lvl_type();
@@ -330,10 +325,9 @@ $selectCourseCategory = Display::select(
     ['onchange' => 'submit_form(this);'],
     false
 );
-echo Display::form_row(get_lang("QuestionCategory"), $selectCourseCategory);
+echo Display::form_row(get_lang('QuestionCategory'), $selectCourseCategory);
 
 // Get exercise list for this course
-
 $exercise_list = ExerciseLib::get_all_exercises_for_course_id(
     $course_info,
     $session_id,
@@ -346,7 +340,7 @@ $my_exercise_list['0']  = get_lang('AllExercises');
 $my_exercise_list['-1'] = get_lang('OrphanQuestions');
 if (is_array($exercise_list)) {
     foreach ($exercise_list as $row) {
-        $my_exercise_list[$row['id']] = "";
+        $my_exercise_list[$row['id']] = '';
         if ($row['id'] == $fromExercise && $selected_course == api_get_course_int_id()) {
             $my_exercise_list[$row['id']] = ">&nbsp;&nbsp;&nbsp;&nbsp;";
         }
@@ -431,7 +425,6 @@ echo '<input type="hidden" name="course_id" value="'.$selected_course.'">';
 $mainQuestionList = [];
 
 // if we have selected an exercise in the list-box 'Filter'
-
 if ($exerciseId > 0) {
     $where = '';
     $from = '';
@@ -618,7 +611,7 @@ if ($exerciseId > 0) {
             }
         }
     } else {
-        if ($session_id == -1 or empty($session_id)) {
+        if ($session_id == -1 || empty($session_id)) {
             $session_id = 0;
         }
 
@@ -800,7 +793,7 @@ if (is_array($mainQuestionList)) {
     }
 }
 
-Display :: display_sortable_table(
+Display::display_sortable_table(
     $header,
     $data,
     '',
@@ -900,12 +893,12 @@ function get_action_icon_for_question(
     $res = "";
     $getParams = "&selected_course=$in_selected_course&courseCategoryId=$in_courseCategoryId&exerciseId=$in_exercise_id&exerciseLevel=$in_exerciseLevel&answerType=$in_answerType&session_id=$in_session_id";
     switch ($in_action) {
-        case "delete":
+        case 'delete':
             $res = "<a href='".api_get_self()."?".api_get_cidreq().$getParams."&delete=$in_questionid' onclick='return confirm_your_choice()'>";
             $res .= Display::return_icon("delete.png", get_lang('Delete'));
             $res .= "</a>";
             break;
-        case "edit":
+        case 'edit':
             $res = get_a_tag_for_question(
                 1,
                 $from_exercise,
@@ -915,20 +908,19 @@ function get_action_icon_for_question(
                 $in_session_id
             );
             break;
-        case "add":
+        case 'add':
             // add if question is not already in test
             $myObjEx = new Exercise();
             $myObjEx->read($from_exercise);
+            $res = "-";
             if (!$myObjEx->isInList($in_questionid)) {
                 $res = "<a href='".api_get_self()."?".api_get_cidreq().$getParams."&recup=$in_questionid&fromExercise=$from_exercise'>";
                 $res .= Display::return_icon("view_more_stats.gif", get_lang('InsertALinkToThisQuestionInTheExercise'));
                 $res .= "</a>";
-            } else {
-                $res = "-";
             }
             unset($myObjEx);
             break;
-        case "clone":
+        case 'clone':
             $url = api_get_self()."?".api_get_cidreq().$getParams."&question_copy=$in_questionid&course_id=$in_selected_course&fromExercise=$from_exercise";
             $res = Display::url(
                 Display::return_icon('cd.png', get_lang('ReUseACopyInCurrentTest')),

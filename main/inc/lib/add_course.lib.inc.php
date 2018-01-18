@@ -548,11 +548,14 @@ class AddCourse
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
             VALUES ($course_id, 19, '".TOOL_ATTENDANCE."','attendance/index.php','attendance.gif','".$setting."','0','squaregrey.gif',0,'_self','authoring','0')"
         );
+
+        $setting = intval(self::string2binary(
+            api_get_setting('course_create_active_tools', 'course_progress')
+        ));
+
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, 20, '".TOOL_COURSE_PROGRESS."','course_progress/index.php','course_progress.gif','".self::string2binary(
-                intval(api_get_setting('course_create_active_tools', 'course_progress'))
-            )."','0','squaregrey.gif',0,'_self','authoring','0')"
+            VALUES ($course_id, 20, '".TOOL_COURSE_PROGRESS."','course_progress/index.php','course_progress.gif','".$setting."','0','squaregrey.gif',0,'_self','authoring','0')"
         );
 
         if (api_get_setting('search_enabled') === 'true') {

@@ -615,6 +615,8 @@ if ($exerciseId > 0) {
             $session_id = 0;
         }
 
+        $sessionCondition = api_get_session_condition($session_id, true, 'q.session_id');
+
         // All tests for the course selected, not in session
         $sql = "SELECT DISTINCT qu.id, question, qu.type, level, q.session_id
                 FROM
@@ -626,8 +628,8 @@ if ($exerciseId > 0) {
                     qu.c_id = $selected_course AND
                     qt.c_id = $selected_course AND
                     q.c_id = $selected_course AND
-                    qu.id = qt.question_id AND
-                    q.session_id = $session_id AND
+                    qu.id = qt.question_id 
+                    $sessionCondition AND                    
                     q.id = qt.exercice_id $filter
                 ORDER BY session_id ASC";
         $result = Database::query($sql);

@@ -5,6 +5,7 @@ security:
         - {path: ^/administrator, role: ROLE_ADMIN}
         - {path: ^/efconnect, role: ROLE_USER}
         - {path: ^/elfinder, role: ROLE_USER}
+        - {path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY}
 
     encoders:
         FOS\UserBundle\Model\UserInterface:
@@ -57,9 +58,9 @@ security:
             form_login:
                 provider: fos_userbundle
                 csrf_token_generator: security.csrf.token_manager
-                login_path: /administration/login
+                login_path: /login
                 use_forward: false
-                check_path: /administration/login_check
+                check_path: /login_check
                 success_handler: chamilo_core.listener.login_success_handler
                 failure_path: null
             remember_me:
@@ -67,17 +68,17 @@ security:
                 lifetime: 604800 # 1 week in seconds
                 path: /
             logout:
-                path: /administration/logout
+                path: /logout
                 target: /
-            anonymous: true
+            anonymous: ~
+            switch_user: false
             oauth:
                 resource_owners:
-                    facebook: "/administration/login/check-facebook"
-                    google: "/administration/login/check-google"
-                    github: "/administration/login/check-github"
-                login_path: /oauth/login
-                check_path: /oauth/login_check
-                failure_path: /oauth/connect
+                    facebook: "/login/check-facebook"
+                    google: "/login/check-google"
+                    github: "/login/check-github"
+                login_path: /login
+                failure_path: /login
                 use_forward: false
                 oauth_user_provider:
                     service: chamilo_user_provider

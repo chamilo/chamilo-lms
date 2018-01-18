@@ -8,9 +8,9 @@
 #    resource: ../src/Controller/
 #    type: annotation
 logout:
-    path: /administration/logout
+    path: /logout
 sonata_user_admin_security_logout:
-    path: /administration/logout
+    path: /logout
 _admin:
     resource: routes/sonata_admin.yaml
     prefix: /administration

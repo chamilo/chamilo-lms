@@ -18,3 +18,6 @@ $strings['ToolNotAdded'] = 'Tool not added';
 $strings['AvailableTools'] = 'Available tools';
 $strings['ToolSettings'] = 'Tool settings';
 $strings['ToolNotAvailable'] = 'Tool not available';
+$strings['IsGlobal'] = 'Is global';
+$strings['EditExternalTool'] = 'Editar external tool';
+$strings['ToolDeleted'] = 'Tool deleted';

@@ -3,20 +3,25 @@
 
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 require './OAuthSimple.php';
 
 api_protect_course_script();
 
-$toolId = isset($_GET['id']) ? intval($_GET['id']) : 0;
-
 $em = Database::getManager();
+
+/** @var ImsLtiTool $tool */
+$tool = isset($_GET['id']) ? $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', intval($_GET['id'])) : 0;
+
+if (!$tool) {
+    api_not_allowed(true);
+}
+
 /** @var ImsLtiPlugin $imsLtiPlugin */
 $imsLtiPlugin = ImsLtiPlugin::create();
 
-/** @var ImsLtiTool $tool */
-$tool = ImsLtiTool::fetch($toolId);
 /** @var Course $course */
 $course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
 /** @var User $user */

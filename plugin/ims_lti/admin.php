@@ -4,10 +4,12 @@ $cidReset = true;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-$plugin = ImsLtiPlugin::create();
-$em = Database::getManager();
+api_protect_admin_script();
 
-$tools = Database::select('*', ImsLtiPlugin::TABLE_TOOL);
+$plugin = ImsLtiPlugin::create();
+
+$em = Database::getManager();
+$tools = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool')->findAll();
 
 $template = new Template($plugin->get_title());
 $template->assign('tools', $tools);

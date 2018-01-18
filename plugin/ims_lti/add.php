@@ -1,6 +1,9 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_protect_course_script();
@@ -8,20 +11,16 @@ api_protect_teacher_script();
 
 $plugin = ImsLtiPlugin::create();
 $em = Database::getManager();
+$toolsRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
 
-$type = isset($_GET['type']) ? intval($_GET['type']) : 0;
+/** @var ImsLtiTool $baseTool */
+$baseTool = isset($_REQUEST['type']) ? $toolsRepo->find(intval($_REQUEST['type'])) : null;
 
+/** @var Course $course */
 $course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
-$tools = array_filter(
-    ImsLtiTool::fetchAll(),
-    function ($tool) {
-        return (boolean) $tool['is_global'];
-    }
-);
+$globalTools = $toolsRepo->findBy(['isGlobal' => true]);
 
-$isGlobalTool = $type ? array_key_exists($type, $tools) : true;
-
-if (!$isGlobalTool) {
+if ($baseTool && !$baseTool->isGlobal()) {
     Display::addFlash(
         Display::return_message($plugin->get_lang('ToolNotAvailable'), 'warning')
     );
@@ -31,16 +30,22 @@ if (!$isGlobalTool) {
 }
 
 $form = new FormValidator('ims_lti_add_tool');
-$form->addText('name', $plugin->get_lang('ToolName'));
 
-if (!$type) {
-    $form->addHtml('<div id="show_advanced_options">');
+if ($baseTool) {
+    $form->addHtml('<p class="lead">'.Security::remove_XSS($baseTool->getDescription()).'</p>');
+}
+
+$form->addText('name', get_lang('Title'));
+$form->addTextarea('description', get_lang('Description'), ['rows' => 10]);
+
+if (!$baseTool) {
     $form->addElement('url', 'url', $plugin->get_lang('LaunchUrl'));
     $form->addText('consumer_key', $plugin->get_lang('ConsumerKey'), true);
     $form->addText('shared_secret', $plugin->get_lang('SharedSecret'), true);
     $form->addTextarea('custom_params', $plugin->get_lang('CustomParams'));
-    $form->addHtml('</div>');
     $form->addRule('url', get_lang('Required'), 'required');
+} else {
+    $form->addHidden('type', $baseTool->getId());
 }
 
 $form->addButtonCreate($plugin->get_lang('AddExternalTool'));
@@ -49,45 +54,41 @@ if ($form->validate()) {
     $formValues = $form->getSubmitValues();
     $tool = null;
 
-    if ($type) {
-        $baseTool = ImsLtiTool::fetch($type);
-
-        if ($baseTool) {
-            $baseTool->setName($formValues['name']);
-        }
-
-        $tool = $baseTool;
+    if ($baseTool) {
+        $tool = clone $baseTool;
     } else {
         $tool = new ImsLtiTool();
         $tool
-            ->setName($formValues['name'])
             ->setLaunchUrl($formValues['url'])
             ->setConsumerKey($formValues['consumer_key'])
             ->setSharedSecret($formValues['shared_secret'])
-            ->setCustomParams($formValues['custom_params'])
-            ->isGlobal(false);
-        $tool->save();
+            ->setCustomParams(
+                empty($formValues['custom_params']) ? null : $formValues['custom_params']
+            );
     }
 
-    if ($tool) {
-        $plugin->addCourseTool($course, $tool);
+    $tool
+        ->setName($formValues['name'])
+        ->setDescription(
+            empty($formValues['description']) ? null : $formValues['description']
+        )
+        ->isGlobal(false);
+    $em->persist($tool);
+    $em->flush();
 
-        Display::addFlash(
-            Display::return_message($plugin->get_lang('ToolAdded'), 'success')
-        );
-    } else {
-        Display::addFlash(
-            Display::return_message($plugin->get_lang('NoTool'), 'error')
-        );
-    }
+    $plugin->addCourseTool($course, $tool);
+
+    Display::addFlash(
+        Display::return_message($plugin->get_lang('ToolAdded'), 'success')
+    );
 
     header('Location: '.api_get_course_url());
     exit;
 }
 
 $template = new Template($plugin->get_lang('AddExternalTool'));
-$template->assign('type', $type);
-$template->assign('tools', $tools);
+$template->assign('type', $baseTool->getId());
+$template->assign('tools', $globalTools);
 $template->assign('form', $form->returnForm());
 
 $content = $template->fetch('ims_lti/view/add.tpl');

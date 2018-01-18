@@ -8036,4 +8036,6 @@ $UserLinkingRequestRejected = "Demande de lien refusée";
 $UserLinkRemoved = "Lien avec apprenant supprimé";
 $SessionTemplate = "Modèle de session";
 $CloudFileLink = "Lien vers un fichier Cloud";
+$ResetFieldX = "Réinitialiser %s";
+$MyGeneralCertificate = "Mon certificat global";
 ?>

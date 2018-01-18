@@ -8100,4 +8100,5 @@ $UserLinkRemoved = "Student link removed";
 $SessionTemplate = "Session template";
 $CloudFileLink = "Cloud file link";
 $ResetFieldX = "Reset %s";
+$MyGeneralCertificate = "My global certificate";
 ?>

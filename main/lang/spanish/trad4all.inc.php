@@ -8124,4 +8124,5 @@ $UserLinkRemoved = "Vínculo con estudiante eliminado";
 $SessionTemplate = "Plantilla de sesión";
 $CloudFileLink = "Enlace a fichero en la nube";
 $ResetFieldX = "Reiniciar %s";
+$MyGeneralCertificate = "Mi certificado principal";
 ?>

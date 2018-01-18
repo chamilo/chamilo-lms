@@ -16,7 +16,8 @@ RewriteRule ^courses/([^/]+)/scorm/(.*)$ main/document/download_scorm.php?doc_ur
 # Rewrite everything in the document folder of a course to the download script
 # Except certificate resources, which might need to be accessible publicly to all
 RewriteRule ^courses/([^/]+)/document/certificates/(.*)$ app/courses/$1/document/certificates/$2 [QSA,L]
-RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
+#RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
+RewriteRule ^courses/([^/]+)/document/(.*)$ public/courses.php?courseCode=$1&url=$2 [L,NC]
 
 # Course upload files
 RewriteRule ^courses/([^/]+)/upload/([^/]+)/(.*)$ main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 [QSA,L]

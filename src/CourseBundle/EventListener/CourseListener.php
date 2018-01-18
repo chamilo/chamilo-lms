@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
 use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\ORM\EntityManager;
 use Chamilo\UserBundle\Entity\User;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
@@ -30,27 +31,30 @@ use Chamilo\CourseBundle\Event\SessionAccess;
  */
 class CourseListener
 {
-    /** @var ContainerInterface */
-    protected $container;
-
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
+    use ContainerAwareTrait;
 
     /**
      * @param GetResponseEvent $event
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
-        $request = $event->getRequest();
-        $sessionHandler = $event->getRequest()->getSession();
-        $translator = $this->container->get('translator.default');
-        $container = $this->container;
+        if (!$event->isMasterRequest()) {
+            // don't do anything if it's not the master request
+            return;
+        }
 
+        $request = $event->getRequest();
+
+        if (!$request->hasPreviousSession()) {
+            return;
+        }
+
+        var_dump(get_class($request));
+
+        $sessionHandler = $event->getRequest()->getSession();
+
+        $container = $this->container;
+        $translator = $container->get('translator.default');
         $courseCode = $request->get('course');
 
         // Detect if the course was set with a cidReq:
@@ -63,7 +67,16 @@ class CourseListener
         $em = $container->get('doctrine')->getManager();
 
         $checker = $container->get('security.authorization_checker');
-        $user = $event->getRequest()->getUser();
+
+        $user = $request->getUser();
+        var_dump(get_class($user));
+        var_dump(get_class($sessionHandler));
+        var_dump(get_class($event));
+
+
+        /*$user = $this->container->get('security.token_storage')->getToken()->getUser();
+        var_dump(get_class($user));*/
+        var_dump($courseCode);
         $alreadyVisited = $sessionHandler->get('course_already_visited');
 
         if (!empty($courseCode)) {
@@ -108,10 +121,7 @@ class CourseListener
                             );
                         }
 
-                        $sessionHandler->set(
-                            'session_name',
-                            $session->getName()
-                        );
+                        $sessionHandler->set('session_name', $session->getName());
                         $sessionHandler->set('id_session', $session->getId());
                         $sessionHandler->set('sessionObj', $session);
                     } else {
@@ -155,7 +165,6 @@ class CourseListener
                 ) {
                     // Course access events
                     $dispatcher = $this->container->get('event_dispatcher');
-
                     if (empty($sessionId)) {
                         $dispatcher->dispatch('chamilo_course.course.access', new CourseAccess($user, $course));
                     } else {

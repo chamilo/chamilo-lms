@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Controller;
 
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use League\Flysystem\Filesystem;
 
 /**
  * Class ResourceController
@@ -23,9 +24,10 @@ class ResourceController extends BaseController
     public function getDocumentAction($course, $file)
     {
         try {
-            /** @var \League\Flysystem\Filesystem $fs */
+            /** @var Filesystem $fs */
             $fs = $this->container->get('oneup_flysystem.courses_filesystem');
             $path = $course.'/document/'.$file;
+
             // Has folder
             if (!$fs->has($course)) {
                 return $this->abort();

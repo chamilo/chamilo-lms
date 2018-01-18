@@ -109,8 +109,8 @@
                     var buttonStatus = user.isConnected ? 'success' : 'muted',
                         buttonTitle = user.isConnected ? '{{ 'StartAChat'|get_lang }}' : '{{ 'LeaveAMessage'|get_lang }}';
 
-                    html += '<li class="col-xs-12 chat-user">' +
-                        '   <div>' +
+                    html += '<li class="col-xs-12">' +
+                        '   <div class="chat-user" data-name="' + user.complete_name + '" data-user="' + user.id + '">' +
                         '       <img src="' + user.image_url + '" alt="' + user.complete_name + '" class="img-circle user-image-chat"/>' +
                         '       <ul class="list-unstyled">' +
                         '           <li>' + user.complete_name;
@@ -261,7 +261,7 @@
         }], {});
 
         $('button#chat-send-message').on('click', ChChat.onSendMessageListener);
-        $('#chat-users').on('click', 'button.btn', function (e) {
+        $('#chat-users').on('click', 'div.chat-user', function (e) {
             e.preventDefault();
             var jSelf = $(this),
                 userId = parseInt(jSelf.data('user')) || 0;

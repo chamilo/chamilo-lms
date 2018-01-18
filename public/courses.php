@@ -15,4 +15,3 @@ $path = $_GET['url'];
 $url = $publicPath."courses/$courseCode/document/$path";
 header("Location: $url");
 exit;
-

@@ -11,7 +11,7 @@ class DatePicker extends HTML_QuickForm_text
     /**
      * @param string $elementName
      * @param string $elementLabel
-     * @param array  $attributes
+     * @param array $attributes
      */
     public function __construct($elementName = null, $elementLabel = null, $attributes = null)
     {
@@ -46,18 +46,19 @@ class DatePicker extends HTML_QuickForm_text
         return '
             <div class="input-group">
                 <span class="input-group-addon cursor-pointer">
-                    <input ' . $this->_getAttrString($this->_attributes).'>
+                    <input '.$this->_getAttrString($this->_attributes).'>
                 </span>
-                <p class="form-control disabled" id="' . $id.'_alt_text">'.$value.'</p>
-                <input class="form-control" type="hidden" id="' . $id.'_alt" value="'.$value.'">
+                <p class="form-control disabled" id="'.$id.'_alt_text">'.$value.'</p>
+                <input class="form-control" type="hidden" id="'.$id.'_alt" value="'.$value.'">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button">
-                        <span class="fa fa-times text-danger" aria-hidden="true"></span>
-                        <span class="sr-only">' . get_lang('Reset').'</span>
+                    <button class="btn btn-default" type="button"
+                            title="'.sprintf(get_lang('ResetFieldX'), $this->_label).'">
+                        <span class="fa fa-trash text-danger" aria-hidden="true"></span>
+                        <span class="sr-only">'.sprintf(get_lang('ResetFieldX'), $this->_label).'</span>
                     </button>
                 </span>
             </div>
-        ' . $this->getElementJS();
+        '.$this->getElementJS();
     }
 
     /**
@@ -97,9 +98,9 @@ class DatePicker extends HTML_QuickForm_text
                         altField: '#{$id}_alt',
                         altFormat: \"".get_lang('DateFormatLongNoDayJS')."\",
                         showOn: 'both',
-                        buttonImage: '" . Display::return_icon('attendance.png', null, [], ICON_SIZE_TINY, true, true)."',
+                        buttonImage: '".Display::return_icon('attendance.png', null, [], ICON_SIZE_TINY, true, true)."',
                         buttonImageOnly: true,
-                        buttonText: '" . get_lang('SelectDate')."',
+                        buttonText: '".get_lang('SelectDate')."',
                         changeMonth: true,
                         changeYear: true,
                         yearRange: 'c-60y:c+5y'

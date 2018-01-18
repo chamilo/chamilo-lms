@@ -97,8 +97,9 @@
 	-moz-border-radius: 10px;
 	border-radius: 10px;
 	color: #666;
-	margin-bottom: -1px;
+	margin-bottom: 5px;
 	padding: 10px;
+        cursor: pointer;
 }
 .chat-user .user-image-chat {
 	-webkit-border-radius: 10px;

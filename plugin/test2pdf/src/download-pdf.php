@@ -4,27 +4,21 @@
  * Configuration script for the Ranking plugin
  * @package chamilo.plugin.ranking
  */
-/**
- * Initialization
- */
-require_once dirname(__FILE__) . '/test2pdf.lib.php';
+
 require_once '../../../main/inc/global.inc.php';
-require_once 'test2pdf_plugin.class.php';
- 
+
 $test2pdfPlugin = Test2pdfPlugin::create();
 $enable = $test2pdfPlugin->get('enable_plugin');
 if ($enable != "true") {
     header('Location: ../../../index.php');
 }
 
-require('../class/fpdf.php');
-
 api_protect_course_script();
 
-$course_id 	= (int) $_GET['c_id'];
-$id_quiz	= (int) $_GET['id_quiz'];
+$course_id = (int)$_GET['c_id'];
+$id_quiz = (int)$_GET['id_quiz'];
 
-class PDF extends FPDF
+class TestToPDF extends FPDF
 {
     public function Header()
     {
@@ -33,13 +27,13 @@ class PDF extends FPDF
 
         $logo = '../resources/img/logo.png';
         $this->Image($logo, 10, 0);
-    
+
         // Title
         $this->SetFont('Courier', 'I', 14);
         $this->Cell(0, 5, $title_course, 0, 1, 'R');
         $this->SetFont('Helvetica', 'I', 14);
         $this->Cell(0, 5, $title_quiz, 0, 1, 'R');
-        
+
         // Line break
         $this->SetLineWidth(0.5);
         $this->SetDrawColor(60, 120, 255);
@@ -49,7 +43,7 @@ class PDF extends FPDF
         $this->Line(11, 24.5, 199, 24.5);
         $this->Ln(10);
     }
-    
+
     public function Footer()
     {
         global $test2pdfPlugin;
@@ -63,8 +57,8 @@ class PDF extends FPDF
         $this->SetLineWidth(0.4);
         $this->SetDrawColor(200);
         $this->Line(11, $y+0.5, 199, $y+0.5);
-    
-        
+
+
         // Arial italic 8
         $this->SetFont('Arial', 'I', 8);
         // Text color in gray
@@ -73,7 +67,7 @@ class PDF extends FPDF
         $this->Cell(0, 10, utf8_decode(sprintf($test2pdfPlugin->get_lang('PageX'), $this->PageNo())), 0, 0, 'C');
         $this->Cell(0, 10, date('Y'), 0, 0, 'R');
     }
-    
+
     public $B;
     public $I;
     public $U;
@@ -81,7 +75,7 @@ class PDF extends FPDF
     public $fontList;
     public $issetfont;
     public $issetcolor;
-    
+
     public function PDF($orientation='P', $unit='mm', $format='A4')
     {
         //Call parent constructor
@@ -95,7 +89,7 @@ class PDF extends FPDF
         $this->issetfont=false;
         $this->issetcolor=false;
     }
-    
+
     public function WriteHTML($html)
     {
         //HTML parser
@@ -129,7 +123,7 @@ class PDF extends FPDF
             }
         }
     }
-    
+
     public function OpenTag($tag, $attr)
     {
         //Opening tag
@@ -180,7 +174,7 @@ class PDF extends FPDF
                 break;
         }
     }
-    
+
     public function CloseTag($tag)
     {
         //Closing tag
@@ -206,7 +200,7 @@ class PDF extends FPDF
             }
         }
     }
-    
+
     public function SetStyle($tag, $enable)
     {
         //Modify style and select corresponding font
@@ -219,7 +213,7 @@ class PDF extends FPDF
         }
         $this->SetFont('', $style);
     }
-    
+
     public function PutLink($URL, $txt)
     {
         //Put a hyperlink
@@ -231,7 +225,6 @@ class PDF extends FPDF
     }
 }
 
-
 //Obtener nombre del curso y nombre del ejercicio
 //$info_course = CourseManager::get_course_information_by_id($course_id);
 $info_course = api_get_course_info_by_id($course_id);
@@ -239,7 +232,7 @@ $info_quiz = getInfoQuiz($course_id, $id_quiz);
 $title_course = utf8_decode(removeHtml($info_course['title']));
 $title_quiz = utf8_decode(removeHtml($info_quiz['title']));
 
-$pdf = new PDF();
+$pdf = new TestToPDF();
 $pdf->SetTitle($title_course.' - '.$title_quiz);
 $pdf->AddPage();
 
@@ -256,7 +249,7 @@ if ($_GET['type'] == 'question' || $_GET['type'] == 'all') {
         }
         $pdf->SetFont('Arial', '', 12);
         $pdf->SetTextColor(64);
-        
+
         if (trim($InfoQuestion['description'])!='') {
             $j = 0;
             $pdf->WriteHTML(utf8_decode(removeQuotes($InfoQuestion['description'])));

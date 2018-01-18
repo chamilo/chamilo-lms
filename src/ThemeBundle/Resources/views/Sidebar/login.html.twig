@@ -1,6 +1,6 @@
 {{ locale_switcher(null, null, 'ChamiloCoreBundle:Admin:switcher_links.html.twig') }}
 
-<form class="form-horizontal" action="{{ path("sonata_user_admin_security_check") }}" method="post" name="formLogin" id="formLogin">
+<form class="form-horizontal" action="{{ path("fos_user_security_check") }}" method="post" name="formLogin" id="formLogin">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
     <fieldset>
         <div class="input-group">

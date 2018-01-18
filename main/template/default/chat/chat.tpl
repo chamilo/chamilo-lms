@@ -43,7 +43,7 @@
                                             <textarea id="chat-writer" name="message"></textarea>
                                         </div>
                                         <div class="col-sm-3">
-                                            <button id="chat-send-message" type="button" disabled
+                                            <button id="chat-send-message" type="button" {{ restrict_to_coach ? 'disabled' : '' }}
                                                     class="btn btn-primary">{{ 'Send'|get_lang }}</button>
                                         </div>
                                     </div>

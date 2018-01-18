@@ -20,11 +20,7 @@ class FeatureContext extends MinkContext
      */
     public function iAmAPlatformAdministrator()
     {
-        $this->visit('/index.php?logout=logout');
-        $this->iAmOnHomepage();
-        $this->fillField('login', 'admin');
-        $this->fillField('password', 'admin');
-        $this->pressButton('submitAuth');
+        $this->iAmLoggedAs('admin');
         $this->getSession()->back();
     }
 
@@ -33,11 +29,7 @@ class FeatureContext extends MinkContext
      */
     public function iAmATeacher()
     {
-        $this->visit('/index.php?logout=logout');
-        $this->iAmOnHomepage();
-        $this->fillField('login', 'mmosquera');
-        $this->fillField('password', 'mmosquera');
-        $this->pressButton('submitAuth');
+        $this->iAmLoggedAs('mmosquera');
     }
 
     /**
@@ -45,11 +37,7 @@ class FeatureContext extends MinkContext
      */
     public function iAmAStudent()
     {
-        $this->visit('/index.php?logout=logout');
-        $this->iAmOnHomepage();
-        $this->fillField('login', 'acostea');
-        $this->fillField('password', 'acostea');
-        $this->pressButton('submitAuth');
+        $this->iAmLoggedAs('acostea');
     }
 
     /**
@@ -57,11 +45,7 @@ class FeatureContext extends MinkContext
      */
     public function iAmAnHR()
     {
-        $this->visit('/index.php?logout=logout');
-        $this->iAmOnHomepage();
-        $this->fillField('login', 'ptook');
-        $this->fillField('password', 'ptook');
-        $this->pressButton('submitAuth');
+        $this->iAmLoggedAs('ptook');
     }
 
     /**
@@ -69,11 +53,7 @@ class FeatureContext extends MinkContext
      */
     public function iAmAStudentBoss()
     {
-        $this->visit('/index.php?logout=logout');
-        $this->iAmOnHomepage();
-        $this->fillField('login', 'abaggins');
-        $this->fillField('password', 'abaggins');
-        $this->pressButton('submitAuth');
+        $this->iAmLoggedAs('abaggins');
     }
 
     /**
@@ -81,11 +61,7 @@ class FeatureContext extends MinkContext
      */
     public function iAmAnInvitee()
     {
-        $this->visit('/index.php?logout=logout');
-        $this->iAmOnHomepage();
-        $this->fillField('login', 'bproudfoot');
-        $this->fillField('password', 'bproudfoot');
-        $this->pressButton('submitAuth');
+        $this->iAmLoggedAs('bproudfoot');
     }
 
     /**
@@ -142,8 +118,8 @@ class FeatureContext extends MinkContext
         $this->visit('/index.php?logout=logout');
         $this->iAmOnHomepage();
         $this->fillFields(new \Behat\Gherkin\Node\TableNode([
-            ['login', $username],
-            ['password', $username]
+            ['_username', $username],
+            ['_password', $username]
         ]));
         $this->pressButton('submitAuth');
     }

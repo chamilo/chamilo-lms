@@ -319,7 +319,7 @@ input[type=checkbox], input[type=radio]{
     margin-right: 10px;
 }
 .button-load{
-    background: url("../../main/img/icons/64/file_upload.png") no-repeat center 20px;
+    background: url("../../public/img/icons/64/file_upload.png") no-repeat center 20px;
     padding-top: 70px;
 }
 .radio.learnpath img{
@@ -571,10 +571,10 @@ input[type=checkbox], input[type=radio]{
     margin-left: 25px;
 }
 #exercise-description .panel-heading a{
-    background: url("../../main/img/icons/22/arrow-up-collapse.png") no-repeat left center;
+    background: url("../../public/img/icons/22/arrow-up-collapse.png") no-repeat left center;
 }
 #exercise-description .panel-heading a.collapsed{
-    background: url("../../main/img/icons/22/arrow-down-collapse.png") no-repeat left center;
+    background: url("../../public/img/icons/22/arrow-down-collapse.png") no-repeat left center;
 }
 /*****************************************************
  *              AGENDA                               *
@@ -2043,7 +2043,7 @@ div.admin_section h4 {
     padding: 5px;
     text-align: center;
     margin-bottom: 10px;
-    background: url(../../main/img/clock-exercise.png) no-repeat center center #FFF;
+    background: url(../../public/img/clock-exercise.png) no-repeat center center #FFF;
     border: 1px solid #DDD;
     border-radius: 5px;
 }
@@ -2051,12 +2051,12 @@ div.admin_section h4 {
     border-radius: 0px;
 }
 .time_warning_two {
-    background: url(../../main/img/clock-exercise.png) no-repeat center center #FFD700;
+    background: url(../../public/img/clock-exercise.png) no-repeat center center #FFD700;
     border:1px solid #FFCC00;
     color: #C00;
 }
 .time_warning_one {
-    background: url(../../main/img/clock-exercise.png) no-repeat center center #FB3A35;
+    background: url(../../public/img/clock-exercise.png) no-repeat center center #FB3A35;
     border:1px solid #FB3A35;
     color: #FFF;
 }
@@ -2356,7 +2356,7 @@ form .formw .freeze {
     padding-bottom: 1em;
 }
 .skill-options .skill-winner li a{
-    background: url("../../main/img/icons/16/winner.png") no-repeat;
+    background: url("../../public/img/icons/16/winner.png") no-repeat;
     padding-left: 1.5em;
     padding-bottom: 1em;
 }
@@ -2681,7 +2681,7 @@ div#no-data-view div.controls {
     height: 25px;
     position: relative;
     overflow:hidden;
-    background: url(../../main/img/alt_star.png) top left repeat-x;
+    background: url(../../public/img/alt_star.png) top left repeat-x;
 }
 .star-rating li{
     padding:0px;
@@ -2703,7 +2703,7 @@ div#no-data-view div.controls {
     overflow:hidden;
 }
 .star-rating li a:hover{
-    background: url(../../main/img/alt_star.png) left bottom;
+    background: url(../../public/img/alt_star.png) left bottom;
     z-index: 2;
     left: 0px;
     border:none;
@@ -2739,7 +2739,7 @@ div#no-data-view div.controls {
     width: 125px;
 }
 .star-rating li.current-rating{
-    background: url(../../main/img/alt_star.png) left center;
+    background: url(../../public/img/alt_star.png) left center;
     position: absolute;
     height: 25px;
     display: block;
@@ -2869,14 +2869,14 @@ a:active{
 }
 
 .send_msg_in_text {
-    background: url("../../main/img/mail_send.png") no-repeat scroll right center transparent;
+    background: url("../../public/img/mail_send.png") no-repeat scroll right center transparent;
     height: 16px;
     width: 17px;
     display: inline-block;
     margin-right: 4px;
 }
 .send_inv_in_text {
-    background: url("../../main/img/invitation.png") no-repeat scroll right center transparent;
+    background: url("../../public/img/invitation.png") no-repeat scroll right center transparent;
     height: 16px;
     width: 17px;
     display: inline-block;
@@ -3243,35 +3243,35 @@ a.forum-goto{
     margin-bottom: 10px;
 }
 .handle{
-    background-image: url('../../main/img/div_show.gif');
+    background-image: url('../../public/img/div_show.gif');
     background-repeat: no-repeat;
     background-position:left center;
     padding-left: 25px;
     box-shadow:none;
 }
 .handle.collapsed{
-    background-image:  url('../../main/img/div_show.gif');
+    background-image:  url('../../public/img/div_show.gif');
     background-repeat: no-repeat;
     background-position:left center;
     padding-left: 25px;
     box-shadow:none;
 }
 .handle.expanded{
-    background-image:  url('../../main/img/div_hide.gif');
+    background-image:  url('../../public/img/div_hide.gif');
     background-repeat: no-repeat;
     background-position:left center;
     padding-left: 25px;
     box-shadow:none;
 }
 .collapsible .handle{
-    background-image: url('../../main/img/div_hide.gif');
+    background-image: url('../../public/img/div_hide.gif');
     background-repeat: no-repeat;
     background-position:left center;
     padding-left: 25px;
     box-shadow:none;
 }
 .collapsible .handle.collapsed{
-    background-image:  url('../../main/img/div_show.gif');
+    background-image:  url('../../public/img/div_show.gif');
     background-repeat: no-repeat;
     background-position:left center;
     padding-left: 25px;
@@ -3279,7 +3279,7 @@ a.forum-goto{
 }
 
 .collapsible.expanded .handle{
-    background-image:  url('../../main/img/div_hide.gif');
+    background-image:  url('../../public/img/div_hide.gif');
     background-repeat: no-repeat;
     background-position:left center;
     padding-left: 25px;
@@ -3294,7 +3294,7 @@ a.forum-goto{
     margin:0;
     padding:0;
     display:inline-block;
-    background-image:  url('../../main/img/icons/22/invisible.png');
+    background-image:  url('../../public/img/icons/22/invisible.png');
     background-repeat: no-repeat;
     background-position:center center;
     box-shadow:none;
@@ -3308,7 +3308,7 @@ a.forum-goto{
     width:22px;
     height:22px;
     display:inline-block;
-    background-image:  url('../../main/img/icons/22/visible.png');
+    background-image:  url('../../public/img/icons/22/visible.png');
     background-repeat: no-repeat;
     background-position:center center;
     box-shadow:none;
@@ -3322,7 +3322,7 @@ a.forum-goto{
     margin:0;
     padding:0;
     display:inline-block;
-    background-image:  url('../../main/img/loading1.gif') !important;
+    background-image:  url('../../public/img/loading1.gif') !important;
     background-repeat: no-repeat;
     background-position:center center;
     box-shadow:none;
@@ -3362,11 +3362,11 @@ a.forum-goto{
 */
 
 i.size-32.icon-new-glossary-term{
-    background-image:  url('../../main/img/icons/32/new_glossary_term.png');
+    background-image:  url('../../public/img/icons/32/new_glossary_term.png');
 }
 
 i.size-32.icon-new-note{
-    background-image:  url('../../main/img/icons/32/new_note.png');
+    background-image:  url('../../public/img/icons/32/new_note.png');
 }
 /* Data table */
 
@@ -3405,13 +3405,13 @@ i.size-32.icon-new-note{
 
 .dataTables_wrapper .paginate_disabled_previous, .dataTables_wrapper .paginate_enabled_previous {
     padding-left: 23px;
-    background: url("../../main/img/action_prev.png") no-repeat scroll left top;
+    background: url("../../public/img/action_prev.png") no-repeat scroll left top;
 }
 
 .dataTables_wrapper .paginate_disabled_next, .dataTables_wrapper .paginate_enabled_next {
     margin-left: 10px;
     padding-right: 23px;
-    background: url("../../main/img/action_next.png") no-repeat scroll left top;
+    background: url("../../public/img/action_next.png") no-repeat scroll left top;
 }
 
 .dataTables_wrapper .paginate_disabled_previous, .dataTables_wrapper .paginate_disabled_next{
@@ -3419,14 +3419,14 @@ i.size-32.icon-new-note{
 }
 
 .dataTables_wrapper .sorting_asc {
-    background-image: url("../../main/img/sort_asc.png");
+    background-image: url("../../public/img/sort_asc.png");
     background-repeat: no-repeat;
     background-attachment: scroll;
     background-position: right center;
 }
 
 .dataTables_wrapper .sorting_desc{
-    background-image: url("../../main/img/sort_desc.png");
+    background-image: url("../../public/img/sort_desc.png");
     background-repeat: no-repeat;
     background-attachment: scroll;
     background-position: right center;
@@ -3441,27 +3441,27 @@ i.size-32.icon-new-note{
         padding: 10px 0px 10px 40px;
         background-repeat:no-repeat;
     }
-    select#question_type_hidden option[value="1"] {background-image: url(../../main/img/icons/32/mcua.png);}
-    select#question_type_hidden option[value="2"] {background-image: url(../../main/img/icons/32/mcma.png);}
-    select#question_type_hidden option[value="3"] {background-image: url(../../main/img/icons/32/fill_in_blanks.png);}
-    select#question_type_hidden option[value="4"] {background-image: url(../../main/img/icons/32/matching.png);}
-    select#question_type_hidden option[value="5"] {background-image: url(../../main/img/icons/32/open_answer.png);}
-    select#question_type_hidden option[value="6"] {background-image: url(../../main/img/icons/32/hotspot.png);}
-    select#question_type_hidden option[value="7"] {background-image: url(../../main/img/icons/32/mcma.png);}
-    select#question_type_hidden option[value="8"] {background-image: url(../../main/img/icons/32/mcma.png);}
-    select#question_type_hidden option[value="9"] {background-image: url(../../main/img/icons/32/mcmac.png);}
-    select#question_type_hidden option[value="10"] {background-image: url(../../main/img/icons/32/mcuao.png);}
-    select#question_type_hidden option[value="11"] {background-image: url(../../main/img/icons/32/mcmao.png);}
-    select#question_type_hidden option[value="12"] {background-image: url(../../main/img/icons/32/mcmaco.png);}
-    select#question_type_hidden option[value="13"] {background-image: url(../../main/img/icons/32/audio_question.png);}
-    select#question_type_hidden option[value="14"] {background-image: url(../../main/img/icons/32/mcmagl.png);}
-    select#question_type_hidden option[value="16"] {background-image: url(../../main/img/icons/32/calculated_answer.png);}
+    select#question_type_hidden option[value="1"] {background-image: url(../../public/img/icons/32/mcua.png);}
+    select#question_type_hidden option[value="2"] {background-image: url(../../public/img/icons/32/mcma.png);}
+    select#question_type_hidden option[value="3"] {background-image: url(../../public/img/icons/32/fill_in_blanks.png);}
+    select#question_type_hidden option[value="4"] {background-image: url(../../public/img/icons/32/matching.png);}
+    select#question_type_hidden option[value="5"] {background-image: url(../../public/img/icons/32/open_answer.png);}
+    select#question_type_hidden option[value="6"] {background-image: url(../../public/img/icons/32/hotspot.png);}
+    select#question_type_hidden option[value="7"] {background-image: url(../../public/img/icons/32/mcma.png);}
+    select#question_type_hidden option[value="8"] {background-image: url(../../public/img/icons/32/mcma.png);}
+    select#question_type_hidden option[value="9"] {background-image: url(../../public/img/icons/32/mcmac.png);}
+    select#question_type_hidden option[value="10"] {background-image: url(../../public/img/icons/32/mcuao.png);}
+    select#question_type_hidden option[value="11"] {background-image: url(../../public/img/icons/32/mcmao.png);}
+    select#question_type_hidden option[value="12"] {background-image: url(../../public/img/icons/32/mcmaco.png);}
+    select#question_type_hidden option[value="13"] {background-image: url(../../public/img/icons/32/audio_question.png);}
+    select#question_type_hidden option[value="14"] {background-image: url(../../public/img/icons/32/mcmagl.png);}
+    select#question_type_hidden option[value="16"] {background-image: url(../../public/img/icons/32/calculated_answer.png);}
 }
 /*
  * work
  */
 i.size-32.icon-new-work{
-    background-image:  url('../../main/img/icons/32/new_work.png');
+    background-image:  url('../../public/img/icons/32/new_work.png');
 }
 
 /* Default skill partition colors */
@@ -4144,10 +4144,10 @@ ul.holder li.bit-box{
     font-size: 12px;
 }
 #thematic .arrow{
-    background: url("../../main/img/icons/22/arrow-up-collapse.png") no-repeat 99% center;
+    background: url("../../public/img/icons/22/arrow-up-collapse.png") no-repeat 99% center;
 }
 #thematic .arrow.collapsed{
-    background: url("../../main/img/icons/22/arrow-down-collapse.png") no-repeat 99% center;
+    background: url("../../public/img/icons/22/arrow-down-collapse.png") no-repeat 99% center;
 }
 .thematic .toolbar-actions{
     height: 30px;
@@ -4510,18 +4510,18 @@ div#chat-remote-video video {
     display: inline-block;
     width: 125px;
     padding: 5px;
-    /* background: url("../../main/img/icons/48/sequence-arrow.png") no-repeat center bottom; */
+    /* background: url("../../public/img/icons/48/sequence-arrow.png") no-repeat center bottom; */
 }
 #parents .sequence-plus-icon{
     color: #CCCCCC;
     padding: 0 10px;
 }
 .border-sequence{
-    background: url("../../main/img/line.png") repeat-x 0 35px;
+    background: url("../../public/img/line.png") repeat-x 0 35px;
 }
 .arrow-sequence{
     height: 68px;
-    background: url("../../main/img/icons/48/sequence-arrow.png") no-repeat center 15px;
+    background: url("../../public/img/icons/48/sequence-arrow.png") no-repeat center 15px;
     margin-top: 10px;
     padding-top: 10px;
 }
@@ -5707,7 +5707,7 @@ a.sessionView {
 }
 #chat-video-panel .thumbnail video {
     background-color: #FFF;
-    background-image: url("../../main/img/icons/128/camera-webrtc.png");
+    background-image: url("../../public/img/icons/128/camera-webrtc.png");
     background-position: center center;
     background-repeat: no-repeat;
     display: block;
@@ -5793,7 +5793,7 @@ a.sessionView {
     overflow: hidden;
     margin: 20px auto;
     position: relative;
-    background: url('../../main/img/timeline/dot.gif') left 45px repeat-x;
+    background: url('../../public/img/timeline/dot.gif') left 45px repeat-x;
 }
 #dates {
     width: 800px;
@@ -5807,7 +5807,7 @@ a.sessionView {
     height: 50px;
     font-size: 16px;
     text-align: center;
-    background: url('../../main/img/timeline/biggerdot.png') center bottom no-repeat;
+    background: url('../../public/img/timeline/biggerdot.png') center bottom no-repeat;
 }
 #dates a {
     line-height: 38px;
@@ -5898,11 +5898,11 @@ a.sessionView {
 }
 #next {
     right: 0;
-    background-image: url('../../main/img/timeline/next.png');
+    background-image: url('../../public/img/timeline/next.png');
 }
 #prev {
     left: 0;
-    background-image: url('../../main/img/timeline/prev.png');
+    background-image: url('../../public/img/timeline/prev.png');
 }
 #next.disabled,
 #prev.disabled {

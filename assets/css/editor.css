@@ -58,7 +58,7 @@ body{
     text-transform: uppercase;
     color: #E95839;
     font-weight: bold;
-    background: url(../../main/img/document/border-title.png) repeat-x 0 80%;
+    background: url(../../public/img/document/border-title.png) repeat-x 0 80%;
     padding-bottom: 2%;
     margin-bottom: 10px;
 }
@@ -144,12 +144,12 @@ blockquote p {
 /* line horizontal separation */
 .ck-style1 {
     height: 6px;
-    background: url(../../main/img/document/hr-1.png) repeat-x 0 0;
+    background: url(../../public/img/document/hr-1.png) repeat-x 0 0;
     border: 0;
 }
 .ck-style2 {
     height: 6px;
-    background: url(../../main/img/document/hr-2.png) repeat-x 0 0;
+    background: url(../../public/img/document/hr-2.png) repeat-x 0 0;
     border: 0;
 }
 .ck-style3 {

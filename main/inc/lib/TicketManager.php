@@ -196,7 +196,7 @@ class TicketManager
             if (self::userIsAssignedToCategory($userId, $categoryId) == false) {
                 $params = [
                     'category_id' => $categoryId,
-                    'user_id' => $userId
+                    'user_id' => $userId,
                 ];
                 Database::insert($table, $params);
             }
@@ -356,7 +356,7 @@ class TicketManager
             'source' => $source,
             'assigned_last_user' => $assignedUserId,
             'subject' => $subject,
-            'message' => $content
+            'message' => $content,
         ];
 
         if (!empty($course_id)) {
@@ -599,7 +599,7 @@ class TicketManager
                 'ticket_id' => $ticketId,
                 'user_id' => $userId,
                 'sys_insert_user_id' => api_get_user_id(),
-                'assigned_date' => api_get_utc_datetime()
+                'assigned_date' => api_get_utc_datetime(),
             ];
             Database::insert($table, $params);
 
@@ -654,7 +654,7 @@ class TicketManager
             'sys_insert_datetime' => $now,
             'sys_lastedit_user_id' => $userId,
             'sys_lastedit_datetime' => $now,
-            'status' => $status
+            'status' => $status,
         ];
         $messageId = Database::insert($table_support_messages, $params);
         if ($messageId) {
@@ -864,7 +864,7 @@ class TicketManager
             'keyword_assigned_to' => 'ticket.assigned_last_user',
             'keyword_source' => 'ticket.source ',
             'keyword_status' => 'ticket.status_id',
-            'keyword_priority' => 'ticket.priority_id'
+            'keyword_priority' => 'ticket.priority_id',
         ];
 
         foreach ($keywords as $keyword => $label) {
@@ -954,7 +954,7 @@ class TicketManager
             $icon .= '<a href="ticket_details.php?ticket_id='.$row['id'].'">'.$row['code'].'</a>';
 
             if ($isAdmin) {
-                $ticket = array(
+                $ticket = [
                     $icon.' '.$row['subject'],
                     $row['status_name'],
                     $row['start_date'],
@@ -962,16 +962,16 @@ class TicketManager
                     $row['category_name'],
                     $name,
                     $row['assigned_last_user'],
-                    $row['total_messages']
-                );
+                    $row['total_messages'],
+                ];
             } else {
-                $ticket = array(
+                $ticket = [
                     $icon.' '.$row['subject'],
                     $row['status_name'],
                     $row['start_date'],
                     $row['sys_lastedit_datetime'],
-                    $row['category_name']
-                );
+                    $row['category_name'],
+                ];
             }
             if ($isAdmin) {
                 $ticket['0'] .= '&nbsp;&nbsp;<a  href="javascript:void(0)" onclick="load_history_ticket(\'div_'.$row['ticket_id'].'\','.$row['ticket_id'].')">
@@ -1051,7 +1051,7 @@ class TicketManager
             'keyword_assigned_to' => 'ticket.assigned_last_user',
             'keyword_source' => 'ticket.source',
             'keyword_status' => 'ticket.status_id',
-            'keyword_priority' => 'ticket.priority_id'
+            'keyword_priority' => 'ticket.priority_id',
         ];
 
         foreach ($keywords as $keyword => $sqlLabel) {
@@ -1102,6 +1102,22 @@ class TicketManager
         $item = $em->getRepository('ChamiloTicketBundle:MessageAttachment')->find($id);
         if ($item) {
             return $item;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     */
+    public static function getTicketMessageAttachmentsByTicketId($id)
+    {
+        $id = (int) $id;
+        $em = Database::getManager();
+        $items = $em->getRepository('ChamiloTicketBundle:MessageAttachment')->findBy(['ticketId' => $id]);
+        if ($items) {
+            return $items;
         }
 
         return false;
@@ -1284,8 +1300,31 @@ class TicketManager
         $messageEmail .= get_lang('Priority').": $priority <br />";
         $messageEmail .= '<hr /><br />';
         $messageEmail .= $message;
-
         $currentUserId = api_get_user_id();
+        $attachmentList = [];
+        $attachments = self::getTicketMessageAttachmentsByTicketId($ticketId);
+        if (!empty($attachments)) {
+            /** @var MessageAttachment $attachment */
+            foreach ($attachments as $attachment) {
+                $file = api_get_uploaded_file(
+                    'ticket_attachment',
+                    $ticketId,
+                    $attachment->getPath()
+                );
+                if (!empty($file)) {
+                    $attachmentList[] = [
+                        'tmp_name' => api_get_uploaded_file(
+                            'ticket_attachment',
+                            $ticketId,
+                            $attachment->getPath()
+                        ),
+                        'size' => $attachment->getSize(),
+                        'name' => $attachment->getFilename(),
+                        'error' => 0
+                    ];
+                }
+            }
+        }
 
         if (!empty($onlyToUserId)) {
             // Send only to specific user
@@ -1293,7 +1332,13 @@ class TicketManager
                 MessageManager::send_message_simple(
                     $onlyToUserId,
                     $titleEmail,
-                    $messageEmail
+                    $messageEmail,
+                     0,
+                    false,
+                    false,
+                    [],
+                    false,
+                    $attachmentList
                 );
             }
         } else {
@@ -1302,7 +1347,13 @@ class TicketManager
                 MessageManager::send_message_simple(
                     $requestUserInfo['id'],
                     $titleEmail,
-                    $messageEmail
+                    $messageEmail,
+                    0,
+                    false,
+                    false,
+                    [],
+                    false,
+                    $attachmentList
                 );
             }
 
@@ -1313,7 +1364,13 @@ class TicketManager
                 MessageManager::send_message_simple(
                     $assignedUserInfo['id'],
                     $titleEmail,
-                    $messageEmail
+                    $messageEmail,
+                    0,
+                    false,
+                    false,
+                    [],
+                    false,
+                    $attachmentList
                 );
             }
         }
@@ -1825,7 +1882,7 @@ class TicketManager
                 '0' => $row->getId(),
                 '1' => $row->getName(),
                 '2' => $row->getDescription(),
-                '3' => $row->getId()
+                '3' => $row->getId(),
             ];
         }
 
@@ -1849,7 +1906,7 @@ class TicketManager
                     $row->getName(),
                     api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$row->getId()
                 ),
-                '2' => $row->getDescription()
+                '2' => $row->getDescription(),
             ];
         }
 
@@ -1949,7 +2006,7 @@ class TicketManager
                 '0' => $row->getId(),
                 '1' => $row->getName(),
                 '2' => $row->getDescription(),
-                '3' => $row->getId()
+                '3' => $row->getId(),
             ];
         }
 
@@ -1970,7 +2027,7 @@ class TicketManager
                 'id' => $row->getId(),
                 '0' => $row->getId(),
                 '1' => Display::url($row->getName()),
-                '2' => $row->getDescription()
+                '2' => $row->getDescription(),
             ];
         }
 
@@ -2069,7 +2126,7 @@ class TicketManager
                 '0' => $row->getId(),
                 '1' => $row->getName(),
                 '2' => $row->getDescription(),
-                '3' => $row->getId()
+                '3' => $row->getId(),
             ];
         }
 
@@ -2090,7 +2147,7 @@ class TicketManager
                 'id' => $row->getId(),
                 '0' => $row->getId(),
                 '1' => Display::url($row->getName()),
-                '2' => $row->getDescription()
+                '2' => $row->getDescription(),
             ];
         }
 
@@ -2189,17 +2246,17 @@ class TicketManager
         $project = [
             'icon' => 'project.png',
             'url' => 'projects.php',
-            'content' => get_lang('Projects')
+            'content' => get_lang('Projects'),
         ];
         $status = [
             'icon' => 'check-circle.png',
             'url' => 'status.php',
-            'content' => get_lang('Status')
+            'content' => get_lang('Status'),
         ];
         $priority = [
             'icon' => 'tickets_urgent.png',
             'url' => 'priorities.php',
-            'content' => get_lang('Priority')
+            'content' => get_lang('Priority'),
         ];
         switch ($exclude) {
             case 'project':
@@ -2230,7 +2287,7 @@ class TicketManager
             self::STATUS_PENDING,
             self::STATUS_UNCONFIRMED,
             self::STATUS_CLOSE,
-            self::STATUS_FORWARDED
+            self::STATUS_FORWARDED,
         ];
     }
 
@@ -2244,7 +2301,7 @@ class TicketManager
             self::PRIORITY_HIGH,
             self::PRIORITY_LOW,
             self::STATUS_CLOSE,
-            self::STATUS_FORWARDED
+            self::STATUS_FORWARDED,
         ];
     }
 

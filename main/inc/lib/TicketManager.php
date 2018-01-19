@@ -5,7 +5,6 @@ use Chamilo\TicketBundle\Entity\Project;
 use Chamilo\TicketBundle\Entity\Status;
 use Chamilo\TicketBundle\Entity\Priority;
 use Chamilo\TicketBundle\Entity\Ticket;
-use \Database;
 
 /**
  * Class TicketManager

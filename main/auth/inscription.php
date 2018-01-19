@@ -1135,7 +1135,9 @@ if ($form->validate()) {
     if ($usersCanCreateCourse) {
         $form_register->addElement('html', $form_data['button']);
     } else {
-        $form_register->addElement('html', $form_data['go_button']);
+        if (isset($form_data['go_button'])) {
+            $form_register->addElement('html', $form_data['go_button']);
+        }
     }
 
     $text_after_registration .= $form_register->returnForm();

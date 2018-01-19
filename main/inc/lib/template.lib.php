@@ -1523,7 +1523,7 @@ class Template
             FormValidator::LAYOUT_BOX_NO_LABEL
         );
         $params = [
-            'id' => 'login',
+            'id' => '_username',
             'autofocus' => 'autofocus',
             'icon' => 'user fa-fw',
             'placeholder' => get_lang('UserName'),
@@ -1542,7 +1542,7 @@ class Template
             $params
         );
         $params = [
-            'id' => 'password',
+            'id' => '_password',
             'icon' => 'lock fa-fw',
             'placeholder' => get_lang('Pass'),
         ];

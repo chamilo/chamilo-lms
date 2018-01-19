@@ -111,16 +111,19 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     *
      * @Given /^I am logged as "([^"]*)"$/
      */
     public function iAmLoggedAs($username)
     {
         $this->visit('/index.php?logout=logout');
         $this->iAmOnHomepage();
-        $this->fillFields(new \Behat\Gherkin\Node\TableNode([
+        /*$this->fillFields(new \Behat\Gherkin\Node\TableNode([
             ['_username', $username],
             ['_password', $username]
-        ]));
+        ]));*/
+        $this->fillField('_username', $username);
+        $this->fillField('_password', $username);
         $this->pressButton('submitAuth');
     }
 

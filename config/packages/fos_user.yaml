@@ -1,5 +1,5 @@
 fos_user:
-    db_driver: orm # can be orm or odm
+    db_driver: orm
     firewall_name: admin
     user_class: Chamilo\UserBundle\Entity\User
 

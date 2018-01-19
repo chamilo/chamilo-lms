@@ -1,7 +1,7 @@
 In order to run behat tests locally with the right support for browser
 and JS environments under Linux, you will need to:
 
-- Download Selenium Standalone Server v3.*
+- Download Selenium Standalone Server v3.1.0
 
 http://www.seleniumhq.org/download/
 
@@ -17,7 +17,7 @@ Check the latest version at https://sites.google.com/a/chromium.org/chromedriver
 then adapt the following command to the latest version:
 
 ```
-cd /tmp && wget https://chromedriver.storage.googleapis.com/2.34/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/local/bin
+cd /tmp && wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/local/bin
 ```
 
 ### Chamilo configuration

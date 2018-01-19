@@ -869,8 +869,10 @@ class Template
             //$js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"></script>'."\n";
         }
 
+
         $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'build/chamilo.js"></script>'."\n";
         $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'libs/ckeditor/ckeditor.js"></script>'."\n";
+        $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'libs/readmore/readmore.js"></script>'."\n";
 
         foreach ($js_files as $file) {
             //$js_file_to_string .= api_get_js($file);

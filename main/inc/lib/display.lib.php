@@ -773,8 +773,8 @@ class Display
         $return_only_path = false,
         $loadThemeIcon = true
     ) {
-        $code_path = api_get_path(SYS_CODE_PATH);
-        $w_code_path = api_get_path(WEB_CODE_PATH);
+        $code_path = api_get_path(SYS_PUBLIC_PATH);
+        $w_code_path = api_get_path(WEB_PUBLIC_PATH);
         // The following path is checked to see if the file exist. It's
         // important to use the public path (i.e. web/css/) rather than the
         // internal path (/app/Resource/public/css/) because the path used
@@ -801,6 +801,7 @@ class Display
         $theme = 'themes/chamilo/icons/';
 
         if ($loadThemeIcon) {
+            // @todo with chamilo 2 code
             $theme = 'themes/'.api_get_visual_theme().'/icons/';
             if (is_file($alternateCssPath.$theme.$image)) {
                 $icon = $alternateWebCssPath.$theme.$image;
@@ -879,7 +880,7 @@ class Display
             // breaking the HTML
             $trace = debug_backtrace();
             $caller = $trace[1];
-            error_log('No image provided in Display::img(). Caller info: '.print_r($caller, 1));
+            //error_log('No image provided in Display::img(). Caller info: '.print_r($caller, 1));
             return '';
         }
         // Sanitizing the parameter $image_path

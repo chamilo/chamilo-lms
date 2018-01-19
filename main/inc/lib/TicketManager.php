@@ -1115,7 +1115,7 @@ class TicketManager
     {
         $id = (int) $id;
         $em = Database::getManager();
-        $items = $em->getRepository('ChamiloTicketBundle:MessageAttachment')->findBy(['ticketId' => $id]);
+        $items = $em->getRepository('ChamiloTicketBundle:MessageAttachment')->findBy(['ticket' => $id]);
         if ($items) {
             return $items;
         }

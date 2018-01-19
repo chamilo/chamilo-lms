@@ -511,6 +511,7 @@ class MessageManager
      * @param bool $directMessage
      * @param array $smsParameters
      * @param bool $uploadFiles Do not upload files using the MessageManager class
+     * @param bool $attachmentList
      *
      * @return bool
      */
@@ -522,11 +523,16 @@ class MessageManager
         $sendCopyToDrhUsers = false,
         $directMessage = false,
         $smsParameters = [],
-        $uploadFiles = true
+        $uploadFiles = true,
+        $attachmentList = []
     ) {
         $files = $_FILES ? $_FILES : [];
         if ($uploadFiles === false) {
             $files = [];
+        }
+        // $attachmentList must have: tmp_name, name, size keys
+        if (!empty($attachmentList)) {
+            $files = $attachmentList;
         }
         $result = self::send_message(
             $receiver_user_id,

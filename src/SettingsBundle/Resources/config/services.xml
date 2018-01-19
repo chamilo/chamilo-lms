@@ -21,9 +21,8 @@
         <service id="chamilo.settings.manager" class="%chamilo_settings.settings.manager.class%">
             <argument type="service" id="sylius.registry.settings_schema" />
             <argument type="service" id="sylius.registry.settings_resolver" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="chamilo_settings.repository" />
-            <!--<argument type="service" id="sylius.manager.settings" />-->
-
             <argument type="service" id="sylius.factory.settings" />
             <argument type="service" id="event_dispatcher" />
         </service>

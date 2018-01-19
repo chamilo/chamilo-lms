@@ -23,7 +23,7 @@ class SettingsController extends SyliusSettingsController
      * @Security("has_role('ROLE_ADMIN')")
      * @Route("/settings", name="admin_settings")
      *
-     * @return array
+     * @return Response
      */
     public function indexAction()
     {
@@ -85,9 +85,7 @@ class SettingsController extends SyliusSettingsController
             );
         }
 
-
         $settings = $manager->load($namespace);
-
         $form = $this->getSettingsFormFactory()->create($schemaAlias);
 
         if (!empty($keyword)) {

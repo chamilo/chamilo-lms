@@ -6,6 +6,7 @@ namespace Chamilo\SettingsBundle\Manager;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Settings\PlatformSettingsSchema;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\SettingsBundle\Event\SettingsEvent;
@@ -43,9 +44,14 @@ class SettingsManager implements SettingsManagerInterface
     protected $resolverRegistry;
 
     /**
-     * @var EntityRepository
+     * @var EntityManager
      */
     protected $manager;
+
+    /**
+     * @var EntityRepository
+     */
+    protected $repository;
 
     /**
      * @var FactoryInterface
@@ -68,20 +74,23 @@ class SettingsManager implements SettingsManagerInterface
      * SettingsManager constructor.
      * @param ServiceRegistryInterface $schemaRegistry
      * @param ServiceRegistryInterface $resolverRegistry
-     * @param EntityRepository $manager
+     * @param EntityManager $manager
+     * @param EntityRepository $repository
      * @param FactoryInterface $settingsFactory
      * @param $eventDispatcher
      */
     public function __construct(
         ServiceRegistryInterface $schemaRegistry,
         ServiceRegistryInterface $resolverRegistry,
-        $manager,
+        EntityManager $manager,
+        EntityRepository $repository,
         FactoryInterface $settingsFactory,
         $eventDispatcher
     ) {
         $this->schemaRegistry = $schemaRegistry;
         $this->resolverRegistry = $resolverRegistry;
         $this->manager = $manager;
+        $this->repository = $repository;
         $this->settingsFactory = $settingsFactory;
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -687,7 +696,6 @@ class SettingsManager implements SettingsManagerInterface
 
         // We need to get a plain parameters array since we use the options resolver on it
         $parameters = $this->getParameters($schemaAliasNoPrefix);
-
         $settingsBuilder = new SettingsBuilder();
         $schema->buildSettings($settingsBuilder);
 
@@ -706,6 +714,7 @@ class SettingsManager implements SettingsManagerInterface
             }
         }
         $parameters = $settingsBuilder->resolve($parameters);
+
         $settings->setParameters($parameters);
 
         return $settings;
@@ -742,8 +751,7 @@ class SettingsManager implements SettingsManagerInterface
             $this->resolvedSettings[$namespace]->setParameters($transformedParameters);
         }*/
 
-        $repo = $this->manager;
-        $persistedParameters = $repo->findBy(['category' => $settings->getSchemaAlias()]);
+        $persistedParameters = $this->repository->findBy(['category' => $settings->getSchemaAlias()]);
         $persistedParametersMap = [];
 
         foreach ($persistedParameters as $parameter) {
@@ -767,7 +775,6 @@ class SettingsManager implements SettingsManagerInterface
                 $persistedParametersMap[$name]->setValue($value);
             } else {
                 $parameter = new SettingsCurrent();
-                var_dump($name, $value);
                 $parameter
                     ->setVariable($name)
                     ->setCategory($simpleCategoryName)
@@ -783,6 +790,7 @@ class SettingsManager implements SettingsManagerInterface
                 if (0 < $errors->count()) {
                     throw new ValidatorException($errors->get(0)->getMessage());
                 }*/
+
                 $this->manager->persist($parameter);
             }
         }
@@ -869,7 +877,7 @@ class SettingsManager implements SettingsManagerInterface
     {
         $parameters = [];
         /** @var  SettingsCurrent $parameter */
-        foreach ($this->manager->findBy(['category' => $namespace]) as $parameter) {
+        foreach ($this->repository->findBy(['category' => $namespace]) as $parameter) {
             $parameters[$parameter->getTitle()] = $parameter->getSelectedValue();
         }
 

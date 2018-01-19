@@ -88,7 +88,8 @@ services:
         arguments:
             - '@chamilo_course.registry.settings_schema'
             - '@sylius.registry.settings_resolver'
-            - '@sylius.manager.settings'
+            - '@doctrine.orm.entity_manager'
+            - '@chamilo_course.repository.parameter'
             - '@sylius.factory.settings'
             - '@event_dispatcher'
 

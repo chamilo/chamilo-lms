@@ -511,6 +511,7 @@ class MessageManager
      * @param bool $directMessage
      * @param array $smsParameters
      * @param bool $uploadFiles Do not upload files using the MessageManager class
+     * @param bool $attachmentList
      *
      * @return bool
      */
@@ -522,11 +523,16 @@ class MessageManager
         $sendCopyToDrhUsers = false,
         $directMessage = false,
         $smsParameters = [],
-        $uploadFiles = true
+        $uploadFiles = true,
+        $attachmentList = []
     ) {
         $files = $_FILES ? $_FILES : [];
         if ($uploadFiles === false) {
             $files = [];
+        }
+        // $attachmentList must have: tmp_name, name, size keys
+        if (!empty($attachmentList)) {
+            $files = $attachmentList;
         }
         $result = self::send_message(
             $receiver_user_id,
@@ -699,7 +705,11 @@ class MessageManager
         $tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
         // Try to add an extension to the file if it hasn't one
-        $new_file_name = add_ext_on_mime(stripslashes($file_attach['name']), $file_attach['type']);
+        $type = isset($file_attach['type']) ? $file_attach['type'] : '';
+        if (empty($type)) {
+            $type = DocumentManager::file_get_mime_type($file_attach['name']);
+        }
+        $new_file_name = add_ext_on_mime(stripslashes($file_attach['name']), $type);
 
         // user's file name
         $file_name = $file_attach['name'];

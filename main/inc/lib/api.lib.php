@@ -2559,6 +2559,7 @@ function api_get_setting($variable)
         case 'stylesheets':
             $variable = 'platform.theme';
         // deprecated settings
+        // no break
         case 'openid_authentication':
         case 'sso_authentication':
         case 'service_ppt2lp':
@@ -2641,7 +2642,7 @@ function api_get_plugin_setting($plugin, $variable)
     $result = Database::select(
         'selected_value',
         $table,
-        array('where' => $params),
+        ['where' => $params],
         'one'
     );
     if ($result) {

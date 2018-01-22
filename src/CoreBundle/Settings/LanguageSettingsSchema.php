@@ -30,6 +30,7 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
                     'language_priority_2' => '',
                     'language_priority_3' => '',
                     'language_priority_4' => '',
+                    'hide_dltt_markup' => 'false'
                 ]
             );
 
@@ -56,6 +57,7 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
             ->add('language_priority_2')
             ->add('language_priority_3')
             ->add('language_priority_4')
+            ->add('hide_dltt_markup')
         ;
     }
 }

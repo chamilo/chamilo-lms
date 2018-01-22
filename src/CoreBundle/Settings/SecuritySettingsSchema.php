@@ -27,12 +27,16 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
                 'allow_strength_pass_checker' => 'true',
                 'allow_captcha' => 'false',
                 'user_reset_password' => 'false',
-                'user_reset_password_token_limit' => '3600'
+                'user_reset_password_token_limit' => '3600',
+                'captcha_number_mistakes_to_block_account' => '',
+                'captcha_time_to_block' => '',
+                'prevent_multiple_simultaneous_login' => 'false'
             ]
         );
         $allowedTypes = [
             'allow_browser_sniffer' => ['string'],
             'allow_strength_pass_checker' => ['string'],
+            'captcha_number_mistakes_to_block_account'=> ['string']
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
@@ -50,6 +54,9 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             ->add('allow_captcha', YesNoType::class)
             ->add('user_reset_password', YesNoType::class)
             ->add('user_reset_password_token_limit', 'text')
+            ->add('captcha_number_mistakes_to_block_account', 'text')
+            ->add('captcha_time_to_block', 'text')
+            ->add('prevent_multiple_simultaneous_login', YesNoType::class)
 
         ;
     }

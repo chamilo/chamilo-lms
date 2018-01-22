@@ -271,6 +271,11 @@ services:
         tags:
             - {name: sylius.settings_schema, alias: chamilo_core.settings.course, namespace: course}
 
+    chamilo_core.settings.crons:
+        class: Chamilo\CoreBundle\Settings\CronSettingsSchema
+        tags:
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.crons, namespace: crons}
+
     chamilo_core.settings.display:
         class: Chamilo\CoreBundle\Settings\DisplaySettingsSchema
         tags:
@@ -380,6 +385,11 @@ services:
         class: Chamilo\CoreBundle\Settings\SurveySettingsSchema
         tags:
             - {name: sylius.settings_schema, alias: chamilo_core.settings.survey, namespace: survey}
+
+    chamilo_core.settings.ticket:
+        class: Chamilo\CoreBundle\Settings\TicketSettingsSchema
+        tags:
+            - {name: sylius.settings_schema, alias: chamilo_core.settings.ticket, namespace: ticket}
 
     chamilo_core.settings.tracking:
         class: Chamilo\CoreBundle\Settings\TrackingSettingsSchema

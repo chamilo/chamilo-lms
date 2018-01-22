@@ -117,17 +117,16 @@ class SettingsManager implements SettingsManagerInterface
     public function installSchemas(AccessUrl $url)
     {
         $this->url = $url;
-        //$schemas = $this->getSchemas();
-        //$schemas = array_keys($schemas);
+        $schemas = array_keys($this->getSchemas());
 
         /**
          * @var string $key
          * @var \Sylius\Bundle\SettingsBundle\Schema\SchemaInterface $schema
          */
-        /*foreach ($schemas as $schema) {
-            $settings = $this->load($schema);
-            $this->save($schema, $settings);
-        }*/
+        foreach ($schemas as $schema) {
+            $settings = $this->load($this->convertServiceToNameSpace($schema));
+            $this->save($settings);
+        }
     }
 
     /**
@@ -398,7 +397,7 @@ class SettingsManager implements SettingsManagerInterface
             'certificate_filter_by_official_code' => 'Gradebook',
             'exercise_max_ckeditors_in_page' => 'Tools',
             'document_if_file_exists_option' => 'Tools',
-            'add_gradebook_certificates_cron_task_enabled' => 'Tools',
+            'add_gradebook_certificates_cron_task_enabled' => 'Gradebook',
             'openbadges_backpack' => 'Gradebook',
             'cookie_warning' => 'Tools',
             'hide_course_group_if_no_tools_available' => 'Tools',
@@ -673,6 +672,16 @@ class SettingsManager implements SettingsManagerInterface
     }
 
     /**
+     * @param string $category
+     * @return string
+     */
+    public function convertServiceToNameSpace($category)
+    {
+        return str_replace('chamilo_core.settings.', '', $category);
+    }
+
+
+    /**
      * {@inheritdoc}
      */
     public function load($schemaAlias, $namespace = null, $ignoreUnknown = true)
@@ -745,13 +754,7 @@ class SettingsManager implements SettingsManagerInterface
             }
         }
         $settings->setParameters($parameters);
-
-        /*if (isset($this->resolvedSettings[$namespace])) {
-            $transformedParameters = $this->transformParameters($settingsBuilder, $parameters);
-            $this->resolvedSettings[$namespace]->setParameters($transformedParameters);
-        }*/
-
-        $persistedParameters = $this->repository->findBy(['category' => $settings->getSchemaAlias()]);
+        $persistedParameters = $this->repository->findBy(['category' => $this->convertServiceToNameSpace($settings->getSchemaAlias())]);
         $persistedParametersMap = [];
 
         foreach ($persistedParameters as $parameter) {
@@ -765,14 +768,13 @@ class SettingsManager implements SettingsManagerInterface
         );*/
 
         /** @var \Chamilo\CoreBundle\Entity\SettingsCurrent $url */
-        //$url = $event->getArgument('url');
         $url = $this->getUrl();
-
         $simpleCategoryName = str_replace('chamilo_core.settings.', '', $namespace);
 
         foreach ($parameters as $name => $value) {
             if (isset($persistedParametersMap[$name])) {
-                $persistedParametersMap[$name]->setValue($value);
+                $parameter = $persistedParametersMap[$name];
+                $parameter->setSelectedValue($value);
             } else {
                 $parameter = new SettingsCurrent();
                 $parameter
@@ -790,9 +792,9 @@ class SettingsManager implements SettingsManagerInterface
                 if (0 < $errors->count()) {
                     throw new ValidatorException($errors->get(0)->getMessage());
                 }*/
-
                 $this->manager->persist($parameter);
             }
+            $this->manager->persist($parameter);
         }
 
         $this->manager->flush();

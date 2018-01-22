@@ -45,11 +45,12 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
                     'user_name_sort_by' => '', // ?
                     'use_virtual_keyboard' => '', //?
                     'disable_copy_paste' => '',//?
-                    'breadcrumb_navigation_display' => '',//?
+                    //'breadcrumb_navigation_display' => '',//?
                     'bug_report_link' => '', //?
                     'hide_home_top_when_connected' => 'false',
                     'hide_logout_button' => 'false',
-                    'show_link_ticket_notification' => 'false'
+                    'show_link_ticket_notification' => 'false',
+                    'icons_mode_svg' => 'false'
                 ]
             );
 
@@ -108,11 +109,13 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
             ->add('show_hot_courses', YesNoType::class)
             ->add('use_virtual_keyboard', YesNoType::class)
             ->add('disable_copy_paste', YesNoType::class)
-            ->add('breadcrumb_navigation_display', YesNoType::class)
+            //->add('breadcrumb_navigation_display', YesNoType::class)
             ->add('bug_report_link', YesNoType::class)
             ->add('hide_home_top_when_connected', YesNoType::class)
             ->add('hide_logout_button', YesNoType::class)
             ->add('show_link_ticket_notification', YesNoType::class)
+            ->add('icons_mode_svg', YesNoType::class)
+
         ;
     }
 }

@@ -27,7 +27,9 @@ class DropboxSettingsSchema extends AbstractSettingsSchema
                     'dropbox_allow_just_upload' => 'true',
                     'dropbox_allow_student_to_student' => 'true',
                     'dropbox_allow_group' => 'true',
-                    'dropbox_allow_mailing' => 'false'
+                    'dropbox_allow_mailing' => 'false',
+                    'dropbox_hide_course_coach' => 'false',
+                    'dropbox_hide_general_coach' => 'false'
                 ]
             );
 
@@ -49,6 +51,9 @@ class DropboxSettingsSchema extends AbstractSettingsSchema
             ->add('dropbox_allow_student_to_student', YesNoType::class)
             ->add('dropbox_allow_group', YesNoType::class)
             ->add('dropbox_allow_mailing', YesNoType::class)
+            ->add('dropbox_hide_course_coach', YesNoType::class)
+            ->add('dropbox_hide_general_coach', YesNoType::class)
+
         ;
     }
 }

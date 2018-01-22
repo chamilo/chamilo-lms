@@ -98,7 +98,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     //COURSE_VISIBILITY_OPEN_PLATFORM
                     'allow_public_certificates' => 'false',
                     'allow_lp_return_link' => 'true',
-                    'course_creation_use_template' => '',
+                    'course_creation_use_template' => null,
                     'hide_scorm_export_link' => 'false',
                     'hide_scorm_copy_link' => 'false',
                     'hide_scorm_pdf_link' => 'true',
@@ -106,7 +106,8 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'course_images_in_courses_list' => 'true',
                     'teacher_can_select_course_template' => 'true',
                     'show_toolshortcuts' => '',
-                    'enable_record_audio' => 'false'
+                    'enable_record_audio' => 'false',
+                    'lp_show_reduced_report' => 'false'
                 ]
             )
             ->setTransformer(
@@ -242,6 +243,8 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add('teacher_can_select_course_template', YesNoType::class)
             ->add('show_toolshortcuts', YesNoType::class)
             ->add('enable_record_audio', YesNoType::class)
+            ->add('lp_show_reduced_report', YesNoType::class)
+
         ;
     }
 }

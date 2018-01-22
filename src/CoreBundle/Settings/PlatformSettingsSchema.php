@@ -42,7 +42,13 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'course_catalog_hide_private' => 'false',
                     'use_custom_pages' => 'false',
                     'pdf_logo_header' => '',
-                    'allow_my_files' => 'true'
+                    'allow_my_files' => 'true',
+                    'chamilo_database_version' => '2.0.0',
+                    'registered' => 'false',
+                    'load_term_conditions_section' => 'login',
+                    'server_type' => 'false',
+                    'show_full_skill_name_on_skill_wheel' => 'false',
+                    'show_official_code_whoisonline' => 'false'
                     //
 //('catalog_show_courses_sessions', '0', 'CatalogueShowOnlyCourses'),
 //('catalog_show_courses_sessions', '1', 'CatalogueShowOnlySessions'),
@@ -59,7 +65,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
 //                    'administrator_phone' => array('string'),
             'timezone' => ['string'],
             'gravatar_enabled' => ['string'],
-            'gravatar_type' => ['string'],
+            'gravatar_type' => ['string']
             //'gamification_mode' => array('string'),
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
@@ -100,6 +106,22 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('use_custom_pages', YesNoType::class)
             ->add('pdf_logo_header')
             ->add('allow_my_files', YesNoType::class)
+            // old settings with no category
+            ->add('chamilo_database_version')
+            ->add('registered', YesNoType::class)
+            ->add(
+                'load_term_conditions_section',
+                'choice',
+                [
+                    'choices' => [
+                        '0' => 'Login',
+                        '1' => 'Course',
+                    ],
+                ]
+            )
+            ->add('server_type', YesNoType::class)
+            ->add('show_full_skill_name_on_skill_wheel', YesNoType::class)
+            ->add('show_official_code_whoisonline', YesNoType::class)
         ;
     }
 }

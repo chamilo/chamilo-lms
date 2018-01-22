@@ -5,7 +5,7 @@ namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Chamilo\SettingsBundle\Transformer\ArrayToIdentifierTransformer;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -44,13 +44,13 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'use_custom_pages' => 'false',
                     'pdf_logo_header' => '',
                     'allow_my_files' => 'true',
-                    'chamilo_database_version' => '2.0.0',
                     'registered' => 'false',
                     'load_term_conditions_section' => 'login',
                     'server_type' => 'false',
                     'show_full_skill_name_on_skill_wheel' => 'false',
                     'show_official_code_whoisonline' => 'false',
-                    'show_tabs' => []
+                    'show_tabs' => [],
+                    'chamilo_database_version' => '2.0.0'
                     //
 //('catalog_show_courses_sessions', '0', 'CatalogueShowOnlyCourses'),
 //('catalog_show_courses_sessions', '1', 'CatalogueShowOnlySessions'),
@@ -111,10 +111,10 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('gravatar_enabled', YesNoType::class)
             ->add(
                 'gravatar_type',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => [
-                        'mm' => 'mistery-man',
+                        'mistery-man' => 'mm',
                         'identicon' => 'identicon',
                         'monsterid' => 'monsterid',
                         'wavatar' => 'wavatar',
@@ -128,11 +128,11 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('course_catalog_hide_private', YesNoType::class)
             ->add(
                 'catalog_show_courses_sessions',
-                'choice',
+                ChoiceType::class,
                 ['choices' => [
-                    '0' => 'CatalogueShowOnlyCourses',
-                    '1' => 'CatalogueShowOnlySessions',
-                    '2' => 'CatalogueShowCoursesAndSessions',
+                    'CatalogueShowOnlyCourses' => '0',
+                    'CatalogueShowOnlySessions' => '1',
+                    'CatalogueShowCoursesAndSessions' => '2',
                 ]]
             )
             ->add('use_custom_pages', YesNoType::class)
@@ -143,11 +143,11 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('registered', YesNoType::class)
             ->add(
                 'load_term_conditions_section',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => [
-                        '0' => 'Login',
-                        '1' => 'Course',
+                        'Login' => '0',
+                        'Course' => '1',
                     ],
                 ]
             )
@@ -156,7 +156,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('show_official_code_whoisonline', YesNoType::class)
             ->add(
                 'show_tabs',
-                'choice',
+                ChoiceType::class,
                 [
                     'multiple' => true,
                     'choices' => $tabs,

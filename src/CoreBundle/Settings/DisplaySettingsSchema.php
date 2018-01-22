@@ -4,7 +4,7 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -72,12 +72,12 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
             ->add('show_teacher_data', YesNoType::class)
             ->add(
                 'showonline',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => [
-                        'course' => 'Course',
-                        'users' => 'Users',
-                        'world' => 'World',
+                        'Course' => 'course',
+                        'Users' => 'users',
+                        'World' => 'world',
                     ],
                 ]
             )
@@ -96,13 +96,13 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
             ->add('accessibility_font_resize', YesNoType::class)
             ->add(
                 'show_admin_toolbar',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => [
-                        'do_not_show' => 'DoNotShow',
-                        'show_to_admin' => 'ShowToAdminsOnly',
-                        'show_to_admin_and_teachers' => 'ShowToAdminsAndTeachers',
-                        'show_to_all' => 'ShowToAllUsers'
+                        'DoNotShow' => 'do_not_show',
+                        'ShowToAdminsOnly' => 'show_to_admin',
+                        'ShowToAdminsAndTeachers' => 'show_to_admin_and_teachers',
+                        'ShowToAllUsers' => 'show_to_all'
                     ]
                 ]
             )

@@ -4,7 +4,7 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -42,11 +42,11 @@ class SurveySettingsSchema extends AbstractSettingsSchema
         $builder
             ->add(
                 'survey_email_sender_noreply',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => [
-                        'coach' => 'CourseCoachEmailSender',
-                        'noreply' => 'NoReplyEmailSender',
+                        'CourseCoachEmailSender' => 'coach',
+                        'NoReplyEmailSender' => 'noreply',
                     ],
                 ]
             )

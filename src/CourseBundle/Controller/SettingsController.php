@@ -32,6 +32,7 @@ class SettingsController extends Controller
     public function updateAction(Request $request, $namespace, $course)
     {
         $manager = $this->getSettingsManager();
+
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
         $settings = $manager->load($namespace);
 

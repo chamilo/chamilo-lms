@@ -4,8 +4,8 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Chamilo\SettingsBundle\Transformer\ArrayToIdentifierTransformer;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -86,11 +86,11 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
             ->add('permanently_remove_deleted_files', YesNoType::class)
             ->add(
                 'upload_extensions_list_type',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => [
-                        'blacklist' => 'Blacklist',
-                        'whitelist' => 'Whitelist',
+                        'Blacklist' => 'blacklist',
+                        'Whitelist' => 'whitelist',
                     ],
                 ]
             )
@@ -102,12 +102,12 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
             ->add('permissions_for_new_files')
             ->add(
                 'show_glossary_in_documents',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => [
-                        'none' => 'ShowGlossaryInDocumentsIsNone',
-                        'ismanual' => 'ShowGlossaryInDocumentsIsManual',
-                        'isautomatic' => 'ShowGlossaryInDocumentsIsAutomatic',
+                        'ShowGlossaryInDocumentsIsNone' => 'none',
+                        'ShowGlossaryInDocumentsIsManual' => 'ismanual',
+                        'ShowGlossaryInDocumentsIsAutomatic' => 'isautomatic',
                     ]
                 ]
             )
@@ -126,7 +126,7 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
             ->add('enable_webcam_clip', YesNoType::class)
             ->add(
                 'tool_visible_by_default_at_creation',
-                'choice',
+                ChoiceType::class,
                 [
                     'multiple' => true,
                     'choices' => [
@@ -142,11 +142,11 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
             )
             ->add(
                 'if_file_exists_option',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => [
-                        'rename' => 'Rename',
-                        'overwrite' => 'Overwrite',
+                        'Rename' => 'rename',
+                        'Overwrite' => 'overwrite',
                     ]
                 ]
             )

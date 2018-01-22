@@ -4,7 +4,7 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -45,11 +45,11 @@ class SearchSettingsSchema extends AbstractSettingsSchema
             ->add('search_prefilter_prefix', YesNoType::class)
             ->add(
                 'search_show_unlinked_results',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => [
-                        'true' =>  'SearchShowUnlinkedResults',
-                        'false' =>  'SearchHideUnlinkedResults',
+                        'SearchShowUnlinkedResults' =>  'true',
+                        'SearchHideUnlinkedResults' =>  'false',
                     ],
                 ]
             )

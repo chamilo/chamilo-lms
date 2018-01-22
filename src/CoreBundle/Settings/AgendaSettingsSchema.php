@@ -4,9 +4,9 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * Class AgendaSettingsSchema
@@ -52,15 +52,14 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
             //->add('number_of_upcoming_events')
             ->add(
                 'default_calendar_view',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => [
-                        'month' => 'Month',
-                        'week' => 'Week'
+                        'Month' => 'month',
+                        'Week' => 'week'
                     ]
                 ]
             )
-
         ;
     }
 }

@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Manager\CourseManager;
 use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
@@ -146,18 +147,21 @@ class CourseSettingsSchema extends AbstractSettingsSchema
         $builder
             ->add(
                 'homepage_view',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => [
-                        'activity' => 'activity',
-                        'activity_big' => 'activity_big',
+                        'HomepageView2column' => '2column',
+                        'HomepageView3column' => '3column',
+                        'HomepageViewVerticalActivity' => 'vertical_activity',
+                        'HomepageViewActivity' => 'activity',
+                        'HomepageViewActivityBig' => 'activity_big',
                     ],
                 ]
             )
             ->add('show_tool_shortcuts', YesNoType::class)
             ->add(
                 'active_tools_on_create',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => $tools,
                     'multiple' => true,
@@ -170,26 +174,26 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add('go_to_course_after_login', YesNoType::class)
             ->add(
                 'show_navigation_menu',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => [
-                        'false' => 'No',
-                        'icons' => 'IconsOnly',
-                        'text' => 'TextOnly',
-                        'iconstext' => 'IconsText',
+                        'No' => 'false',
+                        'IconsOnly' => 'icons',
+                        'TextOnly' => 'text',
+                        'IconsText' => 'iconstext'
                     ],
                 ]
             )
             ->add('enable_tool_introduction', YesNoType::class)
             ->add(
                 'breadcrumbs_course_homepage',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => [
-                        'course_home' => 'CourseHomepage',
-                        'course_code' => 'CourseCode',
-                        'course_title' => 'CourseTitle',
-                        'session_name_and_course_title' => 'SessionNameAndCourseTitle',
+                        'CourseHomepage' => 'course_home',
+                        'CourseCode' => 'course_code',
+                        'CourseTitle' => 'course_title',
+                        'SessionNameAndCourseTitle' => 'session_name_and_course_title',
                     ],
                 ]
             )
@@ -203,7 +207,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add('course_validation_terms_and_conditions_url', 'url')
             ->add(
                 'course_hide_tools',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => $tools,
                     'multiple' => true,
@@ -213,13 +217,13 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add('scorm_cumulative_session_time', YesNoType::class)
             ->add(
                 'courses_default_creation_visibility',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => [
-                        '3' => 'Public',
-                        '2' => 'Open',
-                        '1' => 'Private',
-                        '0' => 'Closed',
+                        'Public' => '3',
+                        'Open' => '2',
+                        'Private' => '1',
+                        'Closed' => '0'
                     ],
                 ]
             )

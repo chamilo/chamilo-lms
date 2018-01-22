@@ -85,10 +85,10 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                 [
                     'multiple' => true,
                     'choices' => [
-                        'officialcode' => 'officialcode',
-                        'email' => 'email',
-                        'language' => 'language',
-                        'phone' => 'phone',
+                        'Official code' => 'officialcode',
+                        'E-mail' => 'email',
+                        'Language' => 'language',
+                        'Phone' => 'phone',
                     ],
                 ]
             )

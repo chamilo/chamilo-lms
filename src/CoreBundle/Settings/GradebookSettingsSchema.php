@@ -4,9 +4,9 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * Class GradebookSettingsSchema
@@ -76,11 +76,13 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
             ->add('my_display_coloring')
             ->add(
                 'student_publication_to_take_in_gradebook',
-                'choice',
-                ['choices' => [
-                    'first' => 'First',
-                    'last' => 'Last'
-                ]]
+                ChoiceType::class,
+                [
+                    'choices' => [
+                        'First' => 'first',
+                        'Last' => 'last',
+                    ],
+                ]
             )
             ->add('gradebook_detailed_admin_view')
             ->add('openbadges_backpack')

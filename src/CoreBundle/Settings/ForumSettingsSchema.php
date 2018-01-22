@@ -4,7 +4,7 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -42,12 +42,12 @@ class ForumSettingsSchema extends AbstractSettingsSchema
         $builder
             ->add(
                 'default_forum_view',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => [
-                        'flat' => 'Flat',
-                        'threaded' => 'Threaded',
-                        'nested' => 'Nested',
+                        'Flat' => 'flat',
+                        'Threaded' => 'threaded',
+                        'Nested' => 'nested',
                     ],
                 ]
             )

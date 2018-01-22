@@ -15,14 +15,14 @@ if (empty($survey_id)) {
 
 $survey_data = SurveyManager::get_survey($survey_id);
 
-$interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
+$interbreadcrumb[] = [
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
     'name' => get_lang('SurveyList'),
-);
-$interbreadcrumb[] = array(
-    'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id,
+];
+$interbreadcrumb[] = [
+    'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
     'name' => strip_tags($survey_data['title']),
-);
+];
 
 Display::display_header(get_lang('Survey'), 'Survey');
 

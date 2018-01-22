@@ -721,8 +721,8 @@ foreach ($questionList as $questionId) {
             $comnt = Event::get_comments($id, $questionId);
             if (!empty($comnt)) {
                 echo ExerciseLib::getFeedbackText($comnt);
-                echo ExerciseLib::getOralFeedbackAudio($id, $questionId, $student_id);
             }
+            echo ExerciseLib::getOralFeedbackAudio($id, $questionId, $student_id);
             echo '</div>';
 
             echo '<div id="'.$name.'" class="row hidden">';

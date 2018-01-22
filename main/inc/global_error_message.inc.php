@@ -57,15 +57,11 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 
     $root_rel = '';
     $installation_guide_url = $root_rel.'documentation/installation_guide.html';
-
-    $css_path = 'app/Resources/public/css/';
-    $css_web_assets = 'public/assets/';
-    $css_web_path = 'public/css/';
-    $themePath = $css_path.'themes/'.$theme.'/default.css';
-    $bootstrap_file = $css_web_assets.'bootstrap/dist/css/bootstrap.min.css';
-    $css_base_file = $css_web_path.'base.css';
-
-    $css_list = [$bootstrap_file, $css_base_file, $themePath];
+    $css_list = [
+        'public/build/chamilo.css',
+        'public/build/css/base.css',
+        'public/build/css/themes/'.$theme.'/default.css',
+    ];
 
     $web_img = 'main/img';
     $root_sys = str_replace('\\', '/', realpath(__DIR__.'/../../')).'/';
@@ -79,7 +75,6 @@ if (is_int($global_error_code) && $global_error_code > 0) {
     }
 
     $global_error_message = [];
-
     switch ($global_error_code) {
         case 1:
             $global_error_message['section'] = $SectionSystemRequirementsProblem;
@@ -147,10 +142,10 @@ if (is_int($global_error_code) && $global_error_code > 0) {
     $global_error_message['organisation'] = $Organisation;
     $global_error_message['powered_by'] = $PoweredBy;
     $global_error_message['encoding'] = 'UTF-8';
-    $global_error_message['chamilo_logo'] = "data:image/png;base64,".base64_encode(file_get_contents($root_sys.'web/css/themes/'.$theme.'/images/header-logo.png'));
-    $bgImage = base64_encode(file_get_contents("$root_sys/main/img/bg_space.png"));
-    $bgMoon = base64_encode(file_get_contents("$root_sys/main/img/bg_moon_two.png"));
-    $installChamiloImage = "data:image/png;base64,".base64_encode(file_get_contents("$root_sys/main/img/mr_chamilo_install.png"));
+    $global_error_message['chamilo_logo'] = "data:image/png;base64,".base64_encode(file_get_contents($root_sys.'public/build/css/themes/'.$theme.'/images/header-logo.png'));
+    $bgImage = base64_encode(file_get_contents("$root_sys/public/img/bg_space.png"));
+    $bgMoon = base64_encode(file_get_contents("$root_sys/public/img/bg_moon_two.png"));
+    $installChamiloImage = "data:image/png;base64,".base64_encode(file_get_contents("$root_sys/public/img/mr_chamilo_install.png"));
     $global_error_message['mr_chamilo'] = $installChamiloImage;
 
     if ($global_error_code == 2) {

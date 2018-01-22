@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo;
 
@@ -9,6 +10,10 @@ use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
+/**
+ * Class Kernel
+ * @package Chamilo
+ */
 class Kernel extends BaseKernel
 {
     use MicroKernelTrait;

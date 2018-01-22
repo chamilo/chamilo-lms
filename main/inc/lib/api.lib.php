@@ -700,6 +700,7 @@ function api_get_path($path = '', $configuration = [])
 
     $course_folder = 'courses/';
     static $root_web = '';
+
     $root_sys = Container::getRootDir();
 
     // If no $root_web has been set so far *and* no custom config has been passed to the function

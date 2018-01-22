@@ -301,8 +301,7 @@ $configurationFiles = [
     'course_info.conf.php',
     'add_course.conf.php',
     'events.conf.php',
-    'auth.conf.php',
-    'portfolio.conf.php'
+    'auth.conf.php'
 ];
 
 foreach ($configurationFiles as $file) {

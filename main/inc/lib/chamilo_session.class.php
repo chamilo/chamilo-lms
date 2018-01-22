@@ -15,6 +15,7 @@ class ChamiloSession implements \ArrayAccess
      */
     public static function read($variable, $default = null)
     {
+        //throw new Exception('"s"');
         $session = Container::getSession();
         $result = null;
         if (isset($session)) {

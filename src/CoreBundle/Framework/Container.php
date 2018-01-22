@@ -117,7 +117,11 @@ class Container
      */
     public static function getRootDir()
     {
-        return self::$container->get('kernel')->getRealRootDir();
+        if (isset(self::$container)) {
+            return self::$container->get('kernel')->getRealRootDir();
+        }
+
+        return str_replace('\\', '/', realpath(__DIR__.'/../../../')).'/';
     }
 
     /**

@@ -6,6 +6,7 @@ use Chamilo\Kernel;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Dotenv\Dotenv;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Chamilo installation
@@ -35,16 +36,26 @@ define('FORM_FIELD_DISPLAY_LENGTH', 40);
 define('DATABASE_FORM_FIELD_DISPLAY_LENGTH', 25);
 define('MAX_FORM_FIELD_LENGTH', 80);
 
-// Including necessary libraries.
 require_once '../inc/lib/api.lib.php';
 require_once '../inc/lib/text.lib.php';
 
 api_check_php_version('../inc/');
 
-/* INITIALIZATION SECTION */
+// Setting defaults
+putenv("APP_LOCALE=en");
+putenv("APP_URL_APPEND=''");
+putenv("APP_ENCRYPT_METHOD='bcrypt'");
+putenv("DATABASE_HOST=");
+putenv("DATABASE_PORT=");
+putenv("DATABASE_NAME=");
+putenv("DATABASE_USER=");
+putenv("DATABASE_PASSWORD=");
 
+$kernel = new Chamilo\Kernel('dev', true);
+$kernel->boot();
+$container = $kernel->getContainer();
+Container::setContainer($container);
 ob_implicit_flush(true);
-session_start();
 require_once api_get_path(LIBRARY_PATH).'database.constants.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'text.lib.php';
@@ -62,13 +73,40 @@ $_setting = [
     'stylesheets' => 'chamilo'
 ];
 
+$encryptPassForm = '';
+$urlAppendPath = '';
+$urlForm = '';
+$pathForm = '';
+$emailForm = '';
+$dbHostForm = '';
+$dbPortForm = '';
+$dbUsernameForm = '';
+$dbPassForm = '';
+$dbNameForm = '';
+$dbPortForm = 3306;
+$allowSelfReg = '';
+$allowSelfReg = 'approval';
+$allowSelfRegProf = 1;
+$adminLastName = '';
+$adminFirstName = '';
+$loginForm = 'admin';
+$passForm = '';
+$institutionUrlForm = 'http://www.chamilo.org';
+$languageForm = '';
+$campusForm = 'My campus';
+$educationForm = 'Albert Einstein';
+$adminPhoneForm = '(000) 001 02 03';
+$institutionForm = 'My Organisation';
+$session_lifetime = 360000;
+$installLanguage = Session::read('install_language');
+
 // Determination of the language during the installation procedure.
 if (!empty($_POST['language_list'])) {
     $search = ['../', '\\0'];
     $install_language = str_replace($search, '', urldecode($_POST['language_list']));
     Session::write('install_language', $install_language);
-} elseif (isset($_SESSION['install_language']) && $_SESSION['install_language']) {
-    $install_language = $_SESSION['install_language'];
+} elseif ($installLanguage) {
+    $install_language = $installLanguage;
 } else {
     // Trying to switch to the browser's language, it is covenient for most of the cases.
     $install_language = detect_browser_language();
@@ -226,8 +264,6 @@ if ($installType == 'update' && in_array($my_old_version, $update_from_version_8
     }
 }
 
-$session_lifetime = 360000;
-
 if (!isset($_GET['running'])) {
     $dbHostForm = 'localhost';
     $dbUsernameForm = 'root';
@@ -252,10 +288,7 @@ if (!isset($_GET['running'])) {
     $loginForm = 'admin';
     $passForm = api_generate_password();
 
-    $campusForm = 'My campus';
-    $educationForm = 'Albert Einstein';
-    $adminPhoneForm = '(000) 001 02 03';
-    $institutionForm = 'My Organisation';
+
     $institutionUrlForm = 'http://www.chamilo.org';
     $languageForm = api_get_interface_language();
 
@@ -357,10 +390,10 @@ if ($encryptPassForm == '1') {
             $(".advanced_parameters").click(function() {
                 if ($("#id_contact_form").css("display") == "none") {
                     $("#id_contact_form").css("display","block");
-                    $("#img_plus_and_minus").html('&nbsp;<img src="<?php echo Display::returnIconPath('div_hide.gif'); ?>" alt="<?php echo get_lang('Hide') ?>" title="<?php echo get_lang('Hide')?>" style ="vertical-align:middle" >&nbsp;<?php echo get_lang('ContactInformation') ?>');
+                    $("#img_plus_and_minus").html('&nbsp;<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;<?php echo get_lang('ContactInformation') ?>');
                 } else {
                     $("#id_contact_form").css("display","none");
-                    $("#img_plus_and_minus").html('&nbsp;<img src="<?php echo Display::returnIconPath('div_show.gif'); ?>" alt="<?php echo get_lang('Show') ?>" title="<?php echo get_lang('Show') ?>" style ="vertical-align:middle" >&nbsp;<?php echo get_lang('ContactInformation') ?>');
+                    $("#img_plus_and_minus").html('&nbsp;<i class="fa fa-eye-slash" aria-hidden="true"></i>&nbsp;<?php echo get_lang('ContactInformation') ?>');
                 }
             });
         });
@@ -704,7 +737,6 @@ if (@$_POST['step2']) {
             </td>
         </tr>
     </table>
-
     <?php
 } elseif (@$_POST['step6']) {
         //STEP 6 : INSTALLATION PROCESS
@@ -745,10 +777,8 @@ if (@$_POST['step2']) {
                 $dbPortForm
             );
             $manager = $database->getManager();
-
             $perm = api_get_permissions_for_new_directories();
             $perm_file = api_get_permissions_for_new_files();
-
             migrateSwitch($my_old_version, $manager);
         } else {
             set_file_folder_permissions();
@@ -773,12 +803,12 @@ if (@$_POST['step2']) {
                 $dbPortForm
             );
             $manager = $database->getManager();
-
-            $sql = getVersionTable();
-            $manager->getConnection()->executeQuery($sql);
-
             // Create .env file
             $envFile = api_get_path(SYS_PATH).'.env';
+            $distFile = api_get_path(SYS_PATH).'.env.dist';
+
+            Session::read('_id-1');
+            $oldSession = $container->get('session');
             $params = [
                 '{{DATABASE_HOST}}' => $dbHostForm,
                 '{{DATABASE_PORT}}' => $dbPortForm,
@@ -788,7 +818,7 @@ if (@$_POST['step2']) {
                 '{{APP_INSTALLED}}' => 1,
                 '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm
             ];
-            updateEnvFile($envFile, $params);
+            updateEnvFile($distFile, $envFile, $params);
             (new Dotenv())->load($envFile);
 
             // Load Symfony Kernel
@@ -799,15 +829,25 @@ if (@$_POST['step2']) {
             $input = new \Symfony\Component\Console\Input\ArrayInput([]);
             $command = $application->find('doctrine:schema:create');
             $result = $command->run($input, new ConsoleOutput());
-
+            Session::read('_id0');
             // No errors
             if ($result == 0) {
                 // Boot kernel and get the doctrine from Symfony container
                 $kernel->boot();
-                $doctrine = $kernel->getContainer()->get('doctrine');
+                $container = $kernel->getContainer();
+                Session::read('_id1');
+
+
+                $container->set('session', $oldSession);
+                Container::setContainer($container);
+                Session::read('_id2');
+
+                $doctrine = $container->get('doctrine');
                 $manager = $doctrine->getManager();
                 $sysPath = api_get_path(SYS_PATH);
-                finishInstallation(
+
+                finishInstallationWithContainer(
+                    $container,
                     $manager,
                     $sysPath,
                     $encryptPassForm,

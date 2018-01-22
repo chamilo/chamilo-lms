@@ -389,7 +389,13 @@ class Version20 extends AbstractMigrationChamilo
             'allow_coach_feedback_exercises' => 'exercise',
             'sessionadmin_autosubscribe' => 'registration',
             'sessionadmin_page_after_login' => 'registration',
-            'show_tutor_data' => 'display'
+            'show_tutor_data' => 'display',
+            'chamilo_database_version' => 'platform',
+            'add_gradebook_certificates_cron_task_enabled' => 'gradebook',
+            'icons_mode_svg' => 'display',
+            'server_type' => 'platform',
+            'show_official_code_whoisonline' => 'platform',
+            'show_terms_if_profile_completed' => 'ticket'
         ];
 
         foreach ($settings as $variable => $category) {
@@ -411,15 +417,16 @@ class Version20 extends AbstractMigrationChamilo
 
         // Delete settings
         $settings = [
-            'server_type',
             'use_session_mode',
             'show_toolshortcuts',
             'show_tabs',
-            //'session_page_enabled',
-            //'session_tutor_reports_visibility',
             'display_mini_month_calendar',
             'number_of_upcoming_events',
-            'chamilo_database_version'
+            'facebook_description',
+            'ldap_description',
+            'openid_authentication',
+            //'platform_charset',
+            'shibboleth_description'
         ];
 
         foreach ($settings as $setting) {

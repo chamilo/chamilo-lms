@@ -442,29 +442,6 @@ function & get_language_folder_list()
 }
 
 /**
- * TODO: my_directory_to_array() - maybe within the main API there is already a suitable function?
- * @param   string  $directory  Full path to a directory
- * @return  array   A list of files and dirs in the directory
- */
-function my_directory_to_array($directory)
-{
-    $array_items = [];
-    if ($handle = opendir($directory)) {
-        while (false !== ($file = readdir($handle))) {
-            if ($file != "." && $file != "..") {
-                if (is_dir($directory."/".$file)) {
-                    $array_items = array_merge($array_items, my_directory_to_array($directory.'/'.$file));
-                    $file = $directory."/".$file;
-                    $array_items[] = preg_replace("/\/\//si", '/', $file);
-                }
-            }
-        }
-        closedir($handle);
-    }
-    return $array_items;
-}
-
-/**
  * This function returns the value of a parameter from the configuration file
  *
  * WARNING - this function relies heavily on global variables $updateFromConfigFile
@@ -518,13 +495,6 @@ function get_config_param($param, $updatePath = '')
 
     error_log('Config array could not be found in get_config_param()', 0);
     return null;
-
-    /*if (file_exists($updatePath.$updateFromConfigFile)) {
-        return $val;
-    } else {
-        error_log('Config array could not be found in get_config_param()', 0);
-        return null;
-    }*/
 }
 
 /*      DATABASE RELATED FUNCTIONS */
@@ -1198,7 +1168,7 @@ function display_license_agreement()
     <!-- Contact information form -->
     <div class="section-parameters">
         <a href="javascript://" class = "advanced_parameters" >
-        <span id="img_plus_and_minus">&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_hide.gif" alt="<?php echo get_lang('Hide') ?>" title="<?php echo get_lang('Hide')?>" style ="vertical-align:middle" />&nbsp;<?php echo get_lang('ContactInformation') ?></span>
+        <span id="img_plus_and_minus">&nbsp;<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;<?php echo get_lang('ContactInformation') ?></span>
         </a>
     </div>
 
@@ -2723,12 +2693,13 @@ function fixIds(EntityManager $em)
 }
 
 /**
+ * @param string $distFile
  * @param string $envFile
  * @param array $params
  */
-function updateEnvFile($envFile, $params)
+function updateEnvFile($distFile, $envFile, $params)
 {
-    $contents = file_get_contents($envFile);
+    $contents = file_get_contents($distFile);
     $contents = str_replace(array_keys($params), array_values($params), $contents);
     file_put_contents($envFile, $contents);
 }
@@ -2737,7 +2708,7 @@ function updateEnvFile($envFile, $params)
  *
  * After the schema was created (table creation), the function adds
  * admin/platform information.
- *
+ * @param \Chamilo\CoreBundle\Framework\Container $container
  * @param EntityManager $manager
  * @param string $sysPath
  * @param string $encryptPassForm
@@ -2755,7 +2726,8 @@ function updateEnvFile($envFile, $params)
  * @param string $allowSelfRegProf
  * @param string $installationProfile Installation profile, if any was provided
  */
-function finishInstallation(
+function finishInstallationWithContainer(
+    $container,
     $manager,
     $sysPath,
     $encryptPassForm,
@@ -2803,11 +2775,6 @@ function finishInstallation(
     ];
 
     $i = 1;
-
-    /**
-     * @var string $category
-     * @var string $description
-     */
     foreach ($categories as $category => $description) {
         // Online evaluation requires a course
         $ticketCategory = new TicketCategory();
@@ -2870,11 +2837,25 @@ function finishInstallation(
         $i++;
     }
 
-    // Inserting data.sql
+    $accessUrl = new \Chamilo\CoreBundle\Entity\AccessUrl();
+    $accessUrl
+        ->setUrl('http://localhost/')
+        ->setDescription('')
+        ->setActive(1)
+    ;
+    $manager->persist($accessUrl);
+    $manager->flush();
+
+    $container = \Chamilo\CoreBundle\Framework\Container::$container;
+    $settingsManager = $container->get('chamilo.settings.manager');
+    $settingsManager->installSchemas($accessUrl);
+
+    /*
+    // Inserting data.sql replaced with new settings schema
     $data = file_get_contents($sysPath.'main/install/data.sql');
     $result = $manager->getConnection()->prepare($data);
     $result->execute();
-    $result->closeCursor();
+    $result->closeCursor();*/
 
     UserManager::setPasswordEncryption($encryptPassForm);
 
@@ -2897,7 +2878,11 @@ function finishInstallation(
         null,
         '',
         false, //$send_mail = false,
-        true //$isAdmin = false
+        true, //$isAdmin = false
+            '',
+        false,
+        '',
+        1
     );
 
     // Create anonymous user.
@@ -2919,7 +2904,11 @@ function finishInstallation(
         null,
         '',
         false, //$send_mail = false,
-        false //$isAdmin = false
+        false, //$isAdmin = false
+        '',
+        false,
+        '',
+        1
     );
 
     // Set default language
@@ -3169,8 +3158,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                         'course_info.conf.php',
                         'add_course.conf.php',
                         'events.conf.php',
-                        'auth.conf.php',
-                        'portfolio.conf.php'
+                        'auth.conf.php'
                     ];
 
                     error_log('Copy conf files');

@@ -3,6 +3,7 @@
 
 use Patchwork\Utf8;
 use Westsworld\TimeAgo;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * File: internationalization.lib.php
@@ -12,10 +13,6 @@ use Westsworld\TimeAgo;
  * @author Ivan Tcholakov, <ivantcholakov@gmail.com>, 2009, 2010
  * @author More authors, mentioned in the correpsonding fragments of this source.
  * @package chamilo.library
- */
-
-/**
- * Constants
  */
 
 // Special tags for marking untranslated variables.
@@ -59,28 +56,36 @@ define('PERSON_NAME_EMAIL_ADDRESS', PERSON_NAME_WESTERN_ORDER);
 define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);
 
 /**
- * Returns a translated (localized) string, called by its identificator.
- * @param string $variable This is the identificator (name) of the translated string to be retrieved.
- * @param string $reserved This parameter has been reserved for future use.
- * @param string $language (optional)    Language indentificator. If it is omited, the current interface language is assumed.
- *
- * @return string                        Returns the requested string in the correspondent language.
- *
- * @author Roan Embrechts
- * @author Patrick Cool
- * @author Ivan Tcholakov, 2009-2010 (caching functionality, additional parameter $language, other adaptations).
- *
- * Notes:
- * 1. If the name of a given language variable has the prefix "lang" it may be omited, i.e. get_lang('Yes') == get_lang('Yes').
- * 2. Untranslated variables might be indicated by special opening and closing tags  -  [=  =]
- * The special tags do not show up in these two cases:
- * - when the system has been switched to "production server mode";
- * - when a special platform setting 'hide_dltt_markup' is set to "true" (the name of this setting comes from history);
- * 3. Translations are created many contributors through using a special tool: Chamilo Translation Application.
- * @link http://translate.chamilo.org/
+ * Returns a translated (localized) string
+ * @param string $variable
+ * @return string
  */
-function get_lang($variable, $reserved = null, $language = null)
+function get_lang($variable)
 {
+    // Using symfony
+    /*$defaultDomain = 'messages';
+    $translated = Container::getTranslator()->trans(
+        $variable,
+        array(),
+        $defaultDomain
+    );
+
+    if ($translated == $variable) {
+        // Check the langVariable for BC
+        $translated = Container::getTranslator()->trans(
+            "lang$variable",
+            array(),
+            $defaultDomain
+        );
+
+        if ($translated == "lang$variable") {
+            return $variable;
+        }
+    }
+
+    return $translated;*/
+
+
     // For serving some old hacks:
     // By manipulating this global variable the translation may
     // be done in different languages too (not the elegant way).

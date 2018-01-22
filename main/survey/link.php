@@ -3,44 +3,44 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$survey_id = isset($_REQUEST['i']) ? intval($_REQUEST['i']) : null;
+$surveyId = isset($_REQUEST['i']) ? (int) $_REQUEST['i'] : 0;
+$sessionId = isset($_REQUEST['s']) ? (int) $_REQUEST['s'] : 0;
+$courseId = isset($_REQUEST['c']) ? (int) $_REQUEST['c'] : 0;
 
-if (empty($survey_id)) {
+if (empty($surveyId)) {
     api_not_allowed(true);
 }
 if (!SurveyManager::survey_generation_hash_available()) {
     api_not_allowed(true);
 }
-$course_info = api_get_course_info_by_id($_REQUEST['c']);
-
-$hash_is_valid = SurveyManager::validate_survey_hash(
-    $survey_id,
-    $_REQUEST['c'],
-    $_REQUEST['s'],
+$courseInfo = api_get_course_info_by_id($courseId);
+$hashIsValid = SurveyManager::validate_survey_hash(
+    $surveyId,
+    $courseId,
+    $sessionId,
     $_REQUEST['g'],
     $_REQUEST['h']
 );
-if ($hash_is_valid && $course_info) {
+if ($hashIsValid && $courseInfo) {
     $survey_data = SurveyManager::get_survey(
-        $survey_id,
+        $surveyId,
         null,
-        $course_info['code']
+        $courseInfo['code']
     );
 
     $invitation_code = api_get_unique_id();
-
-    $params = array(
-            'c_id' => $_REQUEST['c'],
-            'session_id' => $_REQUEST['s'],
-            'user' => $invitation_code,
-            'survey_code' => $survey_data['code'],
-            'invitation_code' => $invitation_code,
-            'invitation_date' => api_get_utc_datetime()
-    );
+    $params = [
+        'c_id' => $courseId,
+        'session_id' => $sessionId,
+        'user' => $invitation_code,
+        'survey_code' => $survey_data['code'],
+        'invitation_code' => $invitation_code,
+        'invitation_date' => api_get_utc_datetime()
+    ];
     $invitation_id = SurveyUtil::save_invitation($params);
 
     if ($invitation_id) {
-        $link = api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?invitationcode='.$invitation_code.'&course='.$course_info['code'];
+        $link = api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?invitationcode='.$invitation_code.'&course='.$courseInfo['code'].'&id_session='.$sessionId;
         header('Location: '.$link);
         exit;
     }

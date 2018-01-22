@@ -742,8 +742,14 @@ class MessageManager
             }
 
             $new_path = $path_message_attach.$new_file_name;
+
             if (is_uploaded_file($file_attach['tmp_name'])) {
                 @copy($file_attach['tmp_name'], $new_path);
+            } else {
+                // 'tmp_name' can be set by the ticket
+                if (file_exists($file_attach['tmp_name'])) {
+                    @copy($file_attach['tmp_name'], $new_path);
+                }
             }
 
             // Storing the attachments if any

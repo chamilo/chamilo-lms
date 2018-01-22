@@ -2222,12 +2222,7 @@ function get_work_user_list(
                     $link_to_download = '<a href="'.$url.'download.php?id='.$item_id.'&'.api_get_cidreq().'">'.$saveIcon.'</a> ';
                 }
 
-                $send_to = Portfolio::share(
-                    'work',
-                    $work['id'],
-                    ['style' => 'white-space:nowrap;']
-                );
-
+                $send_to = '';
                 $feedback = '';
                 $count = getWorkCommentCount($item_id, $course_info);
                 if (!is_null($count) && !empty($count)) {

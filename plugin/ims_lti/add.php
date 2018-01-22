@@ -72,7 +72,7 @@ if ($form->validate()) {
         ->setDescription(
             empty($formValues['description']) ? null : $formValues['description']
         )
-        ->isGlobal(false);
+        ->setIsGlobal(false);
     $em->persist($tool);
     $em->flush();
 
@@ -87,7 +87,7 @@ if ($form->validate()) {
 }
 
 $template = new Template($plugin->get_lang('AddExternalTool'));
-$template->assign('type', $baseTool->getId());
+$template->assign('type', $baseTool ? $baseTool->getId() : null);
 $template->assign('tools', $globalTools);
 $template->assign('form', $form->returnForm());
 

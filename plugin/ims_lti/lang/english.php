@@ -21,3 +21,4 @@ $strings['ToolNotAvailable'] = 'Tool not available';
 $strings['IsGlobal'] = 'Is global';
 $strings['EditExternalTool'] = 'Edit external tool';
 $strings['ToolDeleted'] = 'Tool deleted';
+$strings['ToolAdded'] = 'Tool added';

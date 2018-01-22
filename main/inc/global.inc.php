@@ -71,12 +71,7 @@ api_check_php_version($includePath.'/');
 // 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
 // 2. Empty username is formally valid, but it is reserved for the anonymous user.
 // 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
-
-$defaultUserNameLength = 50;
-if (api_get_setting('login_is_email') == 'true') {
-    $defaultUserNameLength = 100;
-}
-define('USERNAME_MAX_LENGTH', $defaultUserNameLength);
+define('USERNAME_MAX_LENGTH', 100);
 
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
 api_request_uri();

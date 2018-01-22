@@ -3,29 +3,26 @@ Feature: Settings update
   As an administrator
   I need to be able to update Chamilo settings
 
-  @common
-  @javascript
-
   Scenario: Update 'profile' setting
     Given I am a platform administrator
-    And I am on "/main/admin/settings.php?category=User"
-    And I check "Name"
-    And I check "e-mail"
-    And I check "Code"
-    And I check "Login"
-    And I press "Save settings"
-    Then I should see "Update successful"
+    And I am on "/public/admin/settings/search_settings?keyword=changeable_options"
+    And I select "Name" from "form_changeable_options"
+    And I additionally select "E-mail" from "form_changeable_options"
+    And I additionally select "Official code" from "form_changeable_options"
+    And I additionally select "Login" from "form_changeable_options"
+    And I press "Save"
+    Then I should see "Settings have been successfully updated"
 
   Scenario: Update 'allow_registration' setting
     Given I am a platform administrator
-    And I am on "/main/admin/settings.php"
-    And I check the "allow_registration" radio button with "true" value
-    And I press "Save settings"
-    Then I should see "Update successful"
+    And I am on "/public/admin/settings/search_settings?keyword=allow_registration"
+    And I select "Yes" from "form_allow_registration"
+    And I press "Save"
+    Then I should see "Settings have been successfully updated"
 
   Scenario: Update 'allow_group_categories' setting
     Given I am a platform administrator
-    And I am on "/main/admin/settings.php?search_field=allow_group_categories&category=search_setting"
-    And I check the "allow_group_categories" radio button with "true" value
-    And I press "Save settings"
-    Then I should see "Update successful"
+    And I am on "/public/admin/settings/search_settings?keyword=form_allow_group_categories"
+    And I select "Yes" from "form_allow_group_categories"
+    And I press "Save"
+    Then I should see "Settings have been successfully updated"

@@ -1,0 +1,21 @@
+{% macro create(url) %}
+<div class="form-actions">
+    <button type="submit" class="btn btn-primary btn-lg">
+        <i class="glyphicon glyphicon-ok"></i> {{ 'Create'|trans }}
+    </button>
+    <a href="{{ app.request.headers.get('referer', url) }}" class="btn btn-danger btn-lg">
+        <i class="glyphicon glyphicon-remove"></i> {{ 'Cancel'|trans }}
+    </a>
+</div>
+{% endmacro %}
+
+{% macro update(url) %}
+<div class="form-actions">
+    <button type="submit" class="btn btn-primary btn-lg">
+        <i class="glyphicon glyphicon-save"></i> {{ 'Save'|trans }}
+    </button>
+    <a href="{{ app.request.headers.get('referer', url) }}" class="btn btn-danger btn-lg">
+        <i class="glyphicon glyphicon-remove"></i> {{ 'Cancel'|trans }}
+    </a>
+</div>
+{% endmacro %}

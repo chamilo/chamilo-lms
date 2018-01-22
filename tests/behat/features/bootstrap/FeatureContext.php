@@ -118,10 +118,6 @@ class FeatureContext extends MinkContext
     {
         $this->visit('/index.php?logout=logout');
         $this->iAmOnHomepage();
-        /*$this->fillFields(new \Behat\Gherkin\Node\TableNode([
-            ['_username', $username],
-            ['_password', $username]
-        ]));*/
         $this->fillField('_username', $username);
         $this->fillField('_password', $username);
         $this->pressButton('submitAuth');

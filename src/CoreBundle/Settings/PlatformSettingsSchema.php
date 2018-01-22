@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
+use Chamilo\SettingsBundle\Transformer\ArrayToIdentifierTransformer;
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -48,13 +49,19 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'load_term_conditions_section' => 'login',
                     'server_type' => 'false',
                     'show_full_skill_name_on_skill_wheel' => 'false',
-                    'show_official_code_whoisonline' => 'false'
+                    'show_official_code_whoisonline' => 'false',
+                    'show_tabs' => []
                     //
 //('catalog_show_courses_sessions', '0', 'CatalogueShowOnlyCourses'),
 //('catalog_show_courses_sessions', '1', 'CatalogueShowOnlySessions'),
 //('catalog_show_courses_sessions', '2', 'CatalogueShowCoursesAndSessions'),
                 ]
-            );
+            )
+            ->setTransformer(
+                'show_tabs',
+                new ArrayToIdentifierTransformer()
+            )
+        ;
         $allowedTypes = [
             'institution' => ['string'],
             'institution_url' => ['string'],
@@ -65,9 +72,11 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
 //                    'administrator_phone' => array('string'),
             'timezone' => ['string'],
             'gravatar_enabled' => ['string'],
-            'gravatar_type' => ['string']
+            'gravatar_type' => ['string'],
+            'show_tabs' => ['array']
             //'gamification_mode' => array('string'),
         ];
+
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
 
@@ -76,6 +85,18 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
      */
     public function buildForm(FormBuilderInterface $builder)
     {
+        $tabs = [
+            'TabsCampusHomepage' => 'campus_homepage',
+            'TabsMyCourses' => 'my_courses',
+            'TabsReporting' => 'reporting',
+            'TabsPlatformAdministration' => 'platform_administration',
+            'mypersonalopenarea' => 'my_agenda',
+            'TabsMyAgenda' => 'my_profile',
+            'TabsMyGradebook' => 'my_gradebook',
+            'TabsSocial' => 'social',
+            'TabsDashboard' => 'dashboard'
+        ];
+
         $builder
             ->add('institution')
             ->add('institution_url', 'url')
@@ -88,7 +109,18 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('timezone', 'timezone')
             ->add('theme')
             ->add('gravatar_enabled', YesNoType::class)
-            ->add('gravatar_type')
+            ->add(
+                'gravatar_type',
+                'choice',
+                [
+                    'choices' => [
+                        'mm' => 'mistery-man',
+                        'identicon' => 'identicon',
+                        'monsterid' => 'monsterid',
+                        'wavatar' => 'wavatar',
+                    ],
+                ]
+            )
             ->add('gamification_mode')
             ->add('order_user_list_by_official_code', YesNoType::class)
             ->add('cookie_warning', YesNoType::class)
@@ -122,6 +154,16 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('server_type', YesNoType::class)
             ->add('show_full_skill_name_on_skill_wheel', YesNoType::class)
             ->add('show_official_code_whoisonline', YesNoType::class)
+            ->add(
+                'show_tabs',
+                'choice',
+                [
+                    'multiple' => true,
+                    'choices' => $tabs,
+                    'label' => 'ShowTabsTitle',
+                    'help_block' => 'ShowTabsComment'
+                ]
+            )
         ;
     }
 }

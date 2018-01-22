@@ -431,7 +431,7 @@ class SettingsManager implements SettingsManagerInterface
             'allow_show_linkedin_url' => 'Platform',
             'enable_profile_user_address_geolocalization' => 'User',
             'show_official_code_whoisonline' => 'User',
-            'icons_mode_svg' => 'Tuning',
+            'icons_mode_svg' => 'display',
             'user_name_order' => 'display',
             'user_name_sort_by' => 'display',
             'default_calendar_view' => 'agenda',
@@ -622,7 +622,8 @@ class SettingsManager implements SettingsManagerInterface
             'messaging_gdc_project_number' => 'webservice',
             'messaging_gdc_api_key' => 'webservice',
             'allow_download_documents_by_api_key' => 'webservice',
-            'profiling_filter_adding_users' => 'profile'
+            'profiling_filter_adding_users' => 'profile',
+            'hide_dltt_markup' => 'language',
         ];
 
         return isset($settings[$variable]) ? $settings[$variable] : $defaultCategory;
@@ -657,6 +658,7 @@ class SettingsManager implements SettingsManagerInterface
         }
 
         list($category, $name) = explode('.', $name);
+        //var_dump($category, $name);
         $settings = $this->load($category, $name);
 
         return $settings->get($name);
@@ -680,7 +682,6 @@ class SettingsManager implements SettingsManagerInterface
         return str_replace('chamilo_core.settings.', '', $category);
     }
 
-
     /**
      * {@inheritdoc}
      */
@@ -692,16 +693,9 @@ class SettingsManager implements SettingsManagerInterface
         /** @var SchemaInterface $schema */
         $schema = $this->schemaRegistry->get($schemaAlias);
 
-        /** @var SettingsResolverInterface $resolver */
-        $resolver = $this->resolverRegistry->get($schemaAlias);
-
-        // try to resolve settings for schema alias and namespace
-        //$settings = $resolver->resolve($schemaAlias, $namespace);
-
-        //if (!$settings) {
+        /** @var \Sylius\Bundle\SettingsBundle\Model\Settings  $settings */
         $settings = $this->settingsFactory->createNew();
         $settings->setSchemaAlias($schemaAlias);
-        //}
 
         // We need to get a plain parameters array since we use the options resolver on it
         $parameters = $this->getParameters($schemaAliasNoPrefix);
@@ -722,8 +716,8 @@ class SettingsManager implements SettingsManagerInterface
                 $parameters[$parameter] = $transformer->reverseTransform($parameters[$parameter]);
             }
         }
-        $parameters = $settingsBuilder->resolve($parameters);
 
+        $parameters = $settingsBuilder->resolve($parameters);
         $settings->setParameters($parameters);
 
         return $settings;
@@ -880,25 +874,53 @@ class SettingsManager implements SettingsManagerInterface
         $parameters = [];
         /** @var  SettingsCurrent $parameter */
         foreach ($this->repository->findBy(['category' => $namespace]) as $parameter) {
-            $parameters[$parameter->getTitle()] = $parameter->getSelectedValue();
+            $parameters[$parameter->getVariable()] = $parameter->getSelectedValue();
         }
 
         return $parameters;
     }
 
-    public function getParametersFromKeyword($namespace, $keyword = '')
+    public function getParametersFromKeywordOrderedByCategory($keyword)
     {
-        $criteria = ['category' => $namespace];
-        if (!empty($keyword)) {
-            $criteria['variable'] = $keyword;
-        }
-
-        $parametersFromDb = $this->parameterRepository->findBy($criteria);
-
+        $query = $this->repository->createQueryBuilder('s')
+            ->where('s.variable LIKE :keyword')
+            ->setParameter('keyword', "%$keyword%")
+        ;
+        $parametersFromDb = $query->getQuery()->getResult();
         $parameters = [];
         /** @var \Chamilo\CoreBundle\Entity\SettingsCurrent $parameter */
         foreach ($parametersFromDb as $parameter) {
-            $parameters[$parameter->getName()] = $parameter->getValue();
+            $parameters[$parameter->getCategory()][] = $parameter;
+        }
+        return $parameters;
+    }
+
+    /**
+     * @param string $namespace
+     * @param string $keyword
+     * @param bool $returnObjects
+     * @return array
+     */
+    public function getParametersFromKeyword($namespace, $keyword = '', $returnObjects = false)
+    {
+        if (empty($keyword)) {
+            $criteria = ['category' => $namespace];
+            $parametersFromDb = $this->repository->findBy($criteria);
+        } else {
+            $query = $this->repository->createQueryBuilder('s')
+                ->where('s.variable LIKE :keyword')
+                ->setParameter('keyword', "%$keyword%")
+            ;
+            $parametersFromDb = $query->getQuery()->getResult();
+        }
+
+        if ($returnObjects) {
+            return $parametersFromDb;
+        }
+        $parameters = [];
+        /** @var \Chamilo\CoreBundle\Entity\SettingsCurrent $parameter */
+        foreach ($parametersFromDb as $parameter) {
+            $parameters[$parameter->getVariable()] = $parameter->getSelectedValue();
         }
 
         return $parameters;

@@ -264,8 +264,10 @@ function return_navigation_array()
     $menu_navigation = [];
     $possible_tabs = get_tabs();
 
+    $tabs = api_get_setting('show_tabs');
+
     // Campus Homepage
-    if (api_get_setting('show_tabs', 'campus_homepage') == 'true') {
+    if (in_array('campus_homepage', $tabs)) {
         $navigation[SECTION_CAMPUS] = $possible_tabs[SECTION_CAMPUS];
     } else {
         $menu_navigation[SECTION_CAMPUS] = $possible_tabs[SECTION_CAMPUS];
@@ -277,14 +279,14 @@ function return_navigation_array()
 
     if (api_get_user_id() && !api_is_anonymous()) {
         // My Courses
-        if (api_get_setting('show_tabs', 'my_courses') == 'true') {
+        if (in_array('my_courses', $tabs)) {
             $navigation['mycourses'] = $possible_tabs['mycourses'];
         } else {
             $menu_navigation['mycourses'] = $possible_tabs['mycourses'];
         }
 
         // My Profile
-        if (api_get_setting('show_tabs', 'my_profile') == 'true' &&
+        if (in_array('my_profile', $tabs) &&
             api_get_setting('allow_social_tool') != 'true'
         ) {
             $navigation['myprofile'] = $possible_tabs['myprofile'];
@@ -293,7 +295,7 @@ function return_navigation_array()
         }
 
         // My Agenda
-        if (api_get_setting('show_tabs', 'my_agenda') == 'true') {
+        if (in_array('my_agenda', $tabs)) {
             $navigation['myagenda'] = $possible_tabs['myagenda'];
         } else {
             $menu_navigation['myagenda'] = $possible_tabs['myagenda'];
@@ -301,7 +303,7 @@ function return_navigation_array()
 
         // Gradebook
         if (api_get_setting('gradebook_enable') == 'true') {
-            if (api_get_setting('show_tabs', 'my_gradebook') == 'true') {
+            if (in_array('my_gradebook', $tabs)) {
                 $navigation['mygradebook'] = $possible_tabs['mygradebook'];
             } else {
                 $menu_navigation['mygradebook'] = $possible_tabs['mygradebook'];
@@ -309,7 +311,7 @@ function return_navigation_array()
         }
 
         // Reporting
-        if (api_get_setting('show_tabs', 'reporting') == 'true') {
+        if (in_array('reporting', $tabs)) {
             if (api_is_teacher() || api_is_drh() || api_is_session_admin() || api_is_student_boss()) {
                 $navigation['session_my_space'] = $possible_tabs['session_my_space'];
             } else {
@@ -324,7 +326,7 @@ function return_navigation_array()
         }
 
         // Social Networking
-        if (api_get_setting('show_tabs', 'social') == 'true') {
+        if (in_array('social', $tabs)) {
             if (api_get_setting('allow_social_tool') == 'true') {
                 $navigation['social'] = isset($possible_tabs['social']) ? $possible_tabs['social'] : null;
             }
@@ -333,7 +335,7 @@ function return_navigation_array()
         }
 
         // Dashboard
-        if (api_get_setting('show_tabs', 'dashboard') == 'true') {
+        if (in_array('dashboard', $tabs)) {
             if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
                 $navigation['dashboard'] = isset($possible_tabs['dashboard']) ? $possible_tabs['dashboard'] : null;
             }
@@ -361,7 +363,7 @@ function return_navigation_array()
 
         // Administration
         if (api_is_platform_admin(true)) {
-            if (api_get_setting('show_tabs', 'platform_administration') == 'true') {
+            if (in_array('platform_administration', $tabs)) {
                 $navigation['platform_admin'] = $possible_tabs['platform_admin'];
             } else {
                 $menu_navigation['platform_admin'] = $possible_tabs['platform_admin'];

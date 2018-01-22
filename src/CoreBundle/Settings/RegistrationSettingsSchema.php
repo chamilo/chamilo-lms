@@ -4,10 +4,10 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Chamilo\SettingsBundle\Transformer\ArrayToIdentifierTransformer;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * Class RegistrationSettingsSchema
@@ -72,16 +72,16 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
     public function buildForm(FormBuilderInterface $builder)
     {
         $extendedProfileOptions = [
-            'mycompetences' => 'MyCompetences',
-            'mydiplomas' => 'MyDiplomas',
-            'myteach' => 'MyTeach',
-            'mypersonalopenarea' => 'MyPersonalOpenArea',
+            'MyCompetences' => 'mycompetences',
+            'MyDiplomas' => 'mydiplomas',
+            'MyTeach' => 'myteach',
+            'MyPersonalOpenArea' => 'mypersonalopenarea'
         ];
 
         $builder
             ->add(
                 'required_profile_fields',
-                'choice',
+                ChoiceType::class,
                 [
                     'multiple' => true,
                     'choices' => [
@@ -94,13 +94,13 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
             )
             ->add(
                 'allow_registration',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => [
-                        'true' => 'Yes',
-                        'false' => 'No',
-                        'confirmation' => 'MailConfirmation',
-                        'approval' => 'Approval',
+                        'Yes' => 'true',
+                        'No' => 'false',
+                        'MailConfirmation' => 'confirmation',
+                        'Approval' => 'approval',
                     ],
                 ]
             )
@@ -108,18 +108,18 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
             ->add('allow_lostpassword', YesNoType::class)
             ->add(
                 'page_after_login',
-                'choice',
+                ChoiceType::class,
                 [
                     'choices' => [
-                        'index.php' => 'CampusHomepage',
-                        'user_portal.php' => 'MyCourses',
-                        'main/auth/courses.php' => 'CourseCatalog',
-                    ],
+                        'CampusHomepage' => 'index.php',
+                        'MyCourses' => 'user_portal.php',
+                        'CourseCatalog' => 'main/auth/courses.php'
+                    ]
                 ]
             )
             ->add(
                 'extendedprofile_registration',
-                'choice',
+                ChoiceType::class,
                 [
                     'multiple' => true,
                     'choices' => $extendedProfileOptions,
@@ -129,7 +129,7 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
             )
             ->add(
                 'extendedprofile_registrationrequired',
-                'choice',
+                ChoiceType::class,
                 [
                     'multiple' => true,
                     'choices' => $extendedProfileOptions,

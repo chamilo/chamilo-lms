@@ -5,8 +5,8 @@ namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Chamilo\SettingsBundle\Transformer\ArrayToIdentifierTransformer;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
@@ -57,22 +57,22 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
         $builder
             ->add(
                 'changeable_options',
-                'choice',
+                ChoiceType::class,
                 [
                     'multiple' => true,
                     'choices' => [
-                        'name' => 'name',
-                        'officialcode' => 'officialcode',
-                        'email' => 'email',
-                        'picture' => 'picture',
-                        'login' => 'login',
-                        'password' => 'password',
-                        'language' => 'language',
-                        'phone' => 'phone',
-                        'openid' => 'openid',
-                        'theme' => 'theme',
-                        'apikeys' => 'apikeys',
-                    ]
+                        'Name' => 'name',
+                        'Official code' => 'officialcode',
+                        'E-mail' => 'email',
+                        'Picture' => 'picture',
+                        'Login' => 'login',
+                        'Password' => 'password',
+                        'Language' => 'language',
+                        'Phone' => 'phone',
+                        //'openid' => 'openid',
+                        'Theme' => 'theme',
+                        //'apikeys' => 'apikeys',
+                    ],
                 ]
             )
             ->add(

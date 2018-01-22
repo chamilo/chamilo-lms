@@ -70,18 +70,18 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 
         $response = null;
         /* Possible values: index.php, user_portal.php, main/auth/courses.php */
-        $pageAfterLogin = api_get_setting('registration.page_after_login');
+        $pageAfterLogin = api_get_setting('page_after_login');
 
-        $url = null;
+        $url = 'index.php';
         if ($this->checker->isGranted('ROLE_STUDENT') && !empty($pageAfterLogin)) {
             switch ($pageAfterLogin) {
                 case 'index.php':
                     //$url = $this->router->generate('home');
-                    $url = $this->router->generate('home').'/../index.php';
+                    $url = $this->router->generate('home').'/../../index.php';
                     break;
                 case 'user_portal.php':
                     //$url = $this->router->generate('userportal');
-                    $url = $this->router->generate('home').'/../user_portal.php';
+                    $url = $this->router->generate('home').'/../../user_portal.php';
                     break;
                 case 'main/auth/courses.php':
                     $url = api_get_path(WEB_PUBLIC_PATH).$pageAfterLogin;
@@ -95,7 +95,6 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         Session::write('is_allowedCreateCourse', (bool) ($userInfo['status'] == 1));
 
         //$url = $this->router->generate('userportal');
-
         // Redirecting to a course or a session.
         if (api_get_setting('course.go_to_course_after_login') == 'true') {
             // Get the courses list

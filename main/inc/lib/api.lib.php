@@ -2526,8 +2526,71 @@ function api_get_session_condition(
  * @author René Haentjens
  * @author Bart Mollet
  */
-function api_get_setting($variable, $key = null)
+function api_get_setting($variable)
 {
+    $variable = trim($variable);
+
+    switch ($variable) {
+        case 'header_extra_content':
+            $filename = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content.txt';
+            if (file_exists($filename)) {
+                $value = file_get_contents($filename);
+                return $value ;
+            } else {
+                return '';
+            }
+            break;
+        case 'footer_extra_content':
+            $filename = api_get_path(SYS_PATH).api_get_home_path().'footer_extra_content.txt';
+            if (file_exists($filename)) {
+                $value = file_get_contents($filename);
+                return $value ;
+            } else {
+                return '';
+            }
+            break;
+        case 'server_type':
+            $test = ['dev', 'test'];
+            $environment = Container::getEnvironment();
+            if (in_array($environment, $test)) {
+                return 'test';
+            }
+            return 'prod';
+        case 'stylesheets':
+            $variable = 'platform.theme';
+        // deprecated settings
+        case 'openid_authentication':
+        case 'sso_authentication':
+        case 'service_ppt2lp':
+        case 'add_cas_login_button_cas_button_label':
+        case 'add_cas_login_button_cas_button_comment':
+        case 'add_cas_login_button_cas_image_url':
+        case 'add_cas_logout_button_cas_logout_label':
+        case 'add_cas_logout_button_cas_logout_comment':
+        case 'add_cas_logout_button_cas_logout_image_url':
+        case 'add_facebook_login_button_facebook_button_url':
+        case 'add_shibboleth_login_button_shibboleth_button_label':
+        case 'add_shibboleth_login_button_shibboleth_button_comment':
+        case 'add_shibboleth_login_button_shibboleth_image_url':
+        case 'formLogin_hide_unhide_label':
+            return false;
+            break;
+        case 'tool_visible_by_default_at_creation':
+            $values = Container::getSettingsManager()->getSetting($variable);
+            $newResult = [];
+            foreach ($values as $parameter) {
+                $newResult[$parameter] = 'true';
+            }
+            return $newResult;
+            break;
+        default:
+            /** @var \Doctrine\ORM\EntityManager $em */
+            return Container::getSettingsManager()->getSetting($variable);
+    }
+
+    // Old code
+    var_dump($variable);
+
     global $_setting;
     if ($variable == 'header_extra_content') {
         $filename = api_get_home_path().'header_extra_content.txt';
@@ -2566,6 +2629,29 @@ function api_get_setting($variable, $key = null)
  */
 function api_get_plugin_setting($plugin, $variable)
 {
+    $variableName = $plugin.'_'.$variable;
+    $params = [
+        'category = ? AND subkey = ? AND variable = ?' => [
+            'Plugins',
+            $plugin,
+            $variableName,
+        ],
+    ];
+    $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $result = Database::select(
+        'selected_value',
+        $table,
+        array('where' => $params),
+        'one'
+    );
+    if ($result) {
+        $result = $result['selected_value'];
+        return $result;
+    }
+
+    return null;
+    /// Old code
+
     $variableName = $plugin.'_'.$variable;
     $result = api_get_setting($variableName);
 
@@ -4352,7 +4438,8 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
 {
     // Retrieve a complete list of all the languages.
     $language_list = api_get_languages();
-    if (count($language_list['name']) <= 1 && $hide_if_no_choice) {
+
+    if (count($language_list) <= 1 && $hide_if_no_choice) {
         return; //don't show any form
     }
 
@@ -4486,9 +4573,7 @@ function api_get_languages()
     $result = Database::query($sql);
     $language_list = [];
     while ($row = Database::fetch_array($result)) {
-        $language_list['name'][] = $row['original_name'];
-        $language_list['folder'][] = $row['dokeos_folder'];
-        $language_list['all'][] = $row;
+        $language_list[$row['isocode']] = $row['original_name'];
     }
     return $language_list;
 }

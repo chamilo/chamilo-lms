@@ -2838,6 +2838,7 @@ function finishInstallationWithContainer(
         $i++;
     }
 
+    // Creating AccessUrl
     $accessUrl = new \Chamilo\CoreBundle\Entity\AccessUrl();
     $accessUrl
         ->setUrl('http://localhost/')
@@ -2846,14 +2847,15 @@ function finishInstallationWithContainer(
     ;
     $manager->persist($accessUrl);
     $manager->flush();
+
+    // Creating settings
     $settingsManager->installSchemas($accessUrl);
 
-    /*
-    // Inserting data.sql replaced with new settings schema
+    // Inserting data
     $data = file_get_contents($sysPath.'main/install/data.sql');
     $result = $manager->getConnection()->prepare($data);
     $result->execute();
-    $result->closeCursor();*/
+    $result->closeCursor();
 
     UserManager::setPasswordEncryption($encryptPassForm);
 

@@ -807,7 +807,6 @@ if (@$_POST['step2']) {
             $envFile = api_get_path(SYS_PATH).'.env';
             $distFile = api_get_path(SYS_PATH).'.env.dist';
 
-            Session::read('_id-1');
             $oldSession = $container->get('session');
             $params = [
                 '{{DATABASE_HOST}}' => $dbHostForm,
@@ -829,19 +828,13 @@ if (@$_POST['step2']) {
             $input = new \Symfony\Component\Console\Input\ArrayInput([]);
             $command = $application->find('doctrine:schema:create');
             $result = $command->run($input, new ConsoleOutput());
-            Session::read('_id0');
             // No errors
             if ($result == 0) {
                 // Boot kernel and get the doctrine from Symfony container
                 $kernel->boot();
                 $container = $kernel->getContainer();
-                Session::read('_id1');
-
-
                 $container->set('session', $oldSession);
                 Container::setContainer($container);
-                Session::read('_id2');
-
                 $doctrine = $container->get('doctrine');
                 $manager = $doctrine->getManager();
                 $sysPath = api_get_path(SYS_PATH);

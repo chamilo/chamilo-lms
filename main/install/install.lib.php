@@ -2727,7 +2727,7 @@ function updateEnvFile($distFile, $envFile, $params)
  * @param string $installationProfile Installation profile, if any was provided
  */
 function finishInstallationWithContainer(
-    $container,
+    Container $container,
     $manager,
     $sysPath,
     $encryptPassForm,
@@ -2752,6 +2752,7 @@ function finishInstallationWithContainer(
     Database::setManager($manager);
 
     $sql = getVersionTable();
+
     // Add version table
     $connection->executeQuery($sql);
 
@@ -2846,7 +2847,6 @@ function finishInstallationWithContainer(
     $manager->persist($accessUrl);
     $manager->flush();
 
-    $container = \Chamilo\CoreBundle\Framework\Container::$container;
     $settingsManager = $container->get('chamilo.settings.manager');
     $settingsManager->installSchemas($accessUrl);
 

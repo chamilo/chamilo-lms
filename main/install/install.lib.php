@@ -2708,7 +2708,7 @@ function updateEnvFile($distFile, $envFile, $params)
  *
  * After the schema was created (table creation), the function adds
  * admin/platform information.
- * @param \Chamilo\CoreBundle\Framework\Container $container
+ * @param \Chamilo\CourseBundle\Manager\SettingsManager $settingsManager
  * @param EntityManager $manager
  * @param string $sysPath
  * @param string $encryptPassForm
@@ -2727,7 +2727,7 @@ function updateEnvFile($distFile, $envFile, $params)
  * @param string $installationProfile Installation profile, if any was provided
  */
 function finishInstallationWithContainer(
-    $container,
+    $settingsManager,
     $manager,
     $sysPath,
     $encryptPassForm,
@@ -2846,8 +2846,6 @@ function finishInstallationWithContainer(
     ;
     $manager->persist($accessUrl);
     $manager->flush();
-
-    $settingsManager = $container->get('chamilo.settings.manager');
     $settingsManager->installSchemas($accessUrl);
 
     /*

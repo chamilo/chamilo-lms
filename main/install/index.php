@@ -4,6 +4,7 @@
 use ChamiloSession as Session;
 use Chamilo\Kernel;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Dotenv\Dotenv;
 use Chamilo\CoreBundle\Framework\Container;
@@ -825,7 +826,7 @@ if (@$_POST['step2']) {
             $application = new Application($kernel);
 
             // Create database
-            $input = new \Symfony\Component\Console\Input\ArrayInput([]);
+            $input = new ArrayInput([]);
             $command = $application->find('doctrine:schema:create');
             $result = $command->run($input, new ConsoleOutput());
             // No errors
@@ -838,9 +839,9 @@ if (@$_POST['step2']) {
                 $doctrine = $container->get('doctrine');
                 $manager = $doctrine->getManager();
                 $sysPath = api_get_path(SYS_PATH);
-
+                $settingsManager = $container->get('chamilo.settings.manager');
                 finishInstallationWithContainer(
-                    $container,
+                    $settingsManager,
                     $manager,
                     $sysPath,
                     $encryptPassForm,

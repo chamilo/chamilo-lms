@@ -158,7 +158,7 @@ class SettingsManager implements SettingsManagerInterface
             'show_toolshortcuts' => 'Course',
             'allow_group_categories' => 'Course',
             'server_type' => 'Platform',
-            'platformLanguage' => 'Languages',
+            'platformLanguage' => 'language',
             'showonline' => 'Platform',
             'profile' => 'User',
             'default_document_quotum' => 'Course',
@@ -235,7 +235,7 @@ class SettingsManager implements SettingsManagerInterface
             'allow_social_tool' => 'Tools',
             'allow_students_to_browse_courses' => 'Platform',
             'show_session_data' => 'Session',
-            'allow_use_sub_language' => 'Languages',
+            'allow_use_sub_language' => 'language',
             'show_glossary_in_documents' => 'Course',
             'allow_terms_conditions' => 'Platform',
             'search_enabled' => 'Search',
@@ -319,10 +319,10 @@ class SettingsManager implements SettingsManagerInterface
             'allow_users_to_change_email_with_no_password' => 'User',
             'show_admin_toolbar' => 'display',
             'allow_global_chat' => 'Platform',
-            'languagePriority1' => 'Languages',
-            'languagePriority2' => 'Languages',
-            'languagePriority3' => 'Languages',
-            'languagePriority4' => 'Languages',
+            'languagePriority1' => 'language',
+            'languagePriority2' => 'language',
+            'languagePriority3' => 'language',
+            'languagePriority4' => 'language',
             'login_is_email' => 'Platform',
             'courses_default_creation_visibility' => 'Course',
             'gradebook_enable_grade_model' => 'Gradebook',
@@ -440,8 +440,7 @@ class SettingsManager implements SettingsManagerInterface
             'allow_download_documents_by_api_key' => 'Webservices',
             'ProfilingFilterAddingUsers' => 'profile',
             'donotlistcampus' => 'platform',
-            'gradebook_show_percentage_in_reports' => 'gradebook',
-
+            'gradebook_show_percentage_in_reports' => 'gradebook'
         ];
 
         return $oldItems;

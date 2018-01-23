@@ -2529,7 +2529,6 @@ function api_get_session_condition(
 function api_get_setting($variable)
 {
     $variable = trim($variable);
-
     switch ($variable) {
         case 'header_extra_content':
             $filename = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content.txt';
@@ -4574,7 +4573,9 @@ function api_get_languages()
     $result = Database::query($sql);
     $language_list = [];
     while ($row = Database::fetch_array($result)) {
-        $language_list[$row['isocode']] = $row['original_name'];
+        $language_list['name'][] = $row['original_name'];
+        $language_list['folder'][] = $row['dokeos_folder'];
+        $language_list['all'][] = $row;
     }
     return $language_list;
 }

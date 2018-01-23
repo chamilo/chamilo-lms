@@ -13,7 +13,7 @@ use Chamilo\CoreBundle\Framework\Container;
  * Chamilo installation
  *
  * As seen from the user, the installation proceeds in 6 steps.
- * The user is presented with several webpages where he/she has to make choices
+ * The user is presented with several pages where he/she has to make choices
  * and/or fill in data.
  *
  * The aim is, as always, to have good default settings and suggestions.
@@ -42,7 +42,7 @@ require_once '../inc/lib/text.lib.php';
 
 api_check_php_version('../inc/');
 
-// Setting defaults
+// Defaults settings
 putenv("APP_LOCALE=en");
 putenv("APP_URL_APPEND=''");
 putenv("APP_ENCRYPT_METHOD='bcrypt'");
@@ -52,11 +52,15 @@ putenv("DATABASE_NAME=");
 putenv("DATABASE_USER=");
 putenv("DATABASE_PASSWORD=");
 
+// Calling Symfony container
 $kernel = new Chamilo\Kernel('dev', true);
 $kernel->boot();
 $container = $kernel->getContainer();
+// Set container to use with chamilo legacy code
 Container::setContainer($container);
+
 ob_implicit_flush(true);
+
 require_once api_get_path(LIBRARY_PATH).'database.constants.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'text.lib.php';
@@ -79,8 +83,7 @@ $urlAppendPath = '';
 $urlForm = '';
 $pathForm = '';
 $emailForm = '';
-$dbHostForm = '';
-$dbPortForm = '';
+$dbHostForm = 'localhost';
 $dbUsernameForm = '';
 $dbPassForm = '';
 $dbNameForm = '';
@@ -146,7 +149,7 @@ $language_interface_initial_value = $install_language;
 // Character set during the installation, it is always to be 'UTF-8'.
 $charset = 'UTF-8';
 
-// Enables the portablity layer and configures PHP for UTF-8
+// Enables the portability layer and configures PHP for UTF-8
 \Patchwork\Utf8\Bootup::initAll();
 
 // Page encoding initialization.
@@ -198,12 +201,6 @@ if (!empty($_POST['old_version'])) {
 }
 
 require_once __DIR__.'/version.php';
-
-// Try to delete old symfony folder (generates conflicts with composer)
-$oldSymfonyFolder = '../inc/lib/symfony';
-if (is_dir($oldSymfonyFolder)) {
-    @rmdir($oldSymfonyFolder);
-}
 
 // A protection measure for already installed systems.
 if (isAlreadyInstalledSystem()) {
@@ -266,11 +263,9 @@ if ($installType == 'update' && in_array($my_old_version, $update_from_version_8
 }
 
 if (!isset($_GET['running'])) {
-    $dbHostForm = 'localhost';
     $dbUsernameForm = 'root';
     $dbPassForm = '';
     $dbNameForm = 'chamilo';
-    $dbPortForm = 3306;
 
     // Extract the path to append to the url if Chamilo is not installed on the web root directory.
     $urlAppendPath = api_remove_trailing_slash(api_get_path(REL_PATH));

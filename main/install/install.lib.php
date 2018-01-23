@@ -2727,7 +2727,7 @@ function updateEnvFile($distFile, $envFile, $params)
  * @param string $installationProfile Installation profile, if any was provided
  */
 function finishInstallationWithContainer(
-    Container $container,
+    $container,
     $manager,
     $sysPath,
     $encryptPassForm,

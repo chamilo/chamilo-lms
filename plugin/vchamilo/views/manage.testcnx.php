@@ -39,14 +39,14 @@ $dbParams = [
 
 try {
     $database = new \Database();
-    $connection = $database->connect(
+    $database->connect(
         $dbParams,
         $_configuration['root_sys'],
         $_configuration['root_sys'],
         true
     );
 
-    $list = $connection->getSchemaManager()->listDatabases();
+    $list = $database->getConnection()->getSchemaManager()->listDatabases();
     echo $plugin->get_lang('connectionok');
 } catch (Exception $e) {
     echo $plugin->get_lang('badconnection');

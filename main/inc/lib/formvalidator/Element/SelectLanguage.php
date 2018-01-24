@@ -3,7 +3,7 @@
 
 /**
  * Class SelectLanguage
- * A dropdownlist with all languages to use with QuickForm
+ * A dropdown list with all languages to use with QuickForm
  */
 class SelectLanguage extends HTML_QuickForm_select
 {
@@ -22,16 +22,16 @@ class SelectLanguage extends HTML_QuickForm_select
 
         // Get all languages
         $languages = api_get_languages();
-        foreach ($languages['name'] as $index => $name) {
+        foreach ($languages as $index => $name) {
             if (!empty($default)) {
                 $defaultValue = $default;
             } else {
                 $defaultValue = api_get_setting('platformLanguage');
             }
-            if ($languages['folder'][$index] == $defaultValue) {
-                $this->addOption($name, $languages['folder'][$index], ['selected'=>'selected']);
+            if ($languages[$index] == $defaultValue) {
+                $this->addOption($name, $languages[$index], ['selected'=>'selected']);
             } else {
-                $this->addOption($name, $languages['folder'][$index]);
+                $this->addOption($name, $languages[$index]);
             }
         }
     }

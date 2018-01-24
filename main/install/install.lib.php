@@ -251,7 +251,7 @@ function detect_browser_language()
         'yo' => 'yoruba'
     ];
 
-    $system_available_languages = & get_language_folder_list();
+    $system_available_languages = get_language_folder_list();
     $accept_languages = strtolower(str_replace('_', '-', $_SERVER['HTTP_ACCEPT_LANGUAGE']));
     foreach ($language_index as $code => $language) {
         if (strpos($accept_languages, $code) === 0) {
@@ -411,34 +411,65 @@ function write_system_config_file($path)
 /**
  * Returns a list of language directories.
  */
-function & get_language_folder_list()
+function get_language_folder_list()
 {
-    static $result;
-    if (!is_array($result)) {
-        $result = [];
-        $exceptions = ['.', '..', 'CVS', '.svn'];
-        $search       = ['_latin', '_unicode', '_corporate', '_org', '_KM', '_'];
-        $replace_with = [' (Latin)', ' (unicode)', ' (corporate)', ' (org)', ' (KM)', ' '];
-        $dirname = api_get_path(SYS_LANG_PATH);
-        $handle = opendir($dirname);
-        while ($entries = readdir($handle)) {
-            if (in_array($entries, $exceptions)) {
-                continue;
-            }
-            if (is_dir($dirname.$entries)) {
-                if (is_file($dirname.$entries.'/install_disabled')) {
-                    // Skip all languages that have this file present, just for
-                    // the install process (languages incomplete)
-                    continue;
-                }
-                $result[$entries] = ucwords(str_replace($search, $replace_with, $entries));
-            }
-        }
-        closedir($handle);
-        asort($result);
-    }
+    return [
+        'ar' => 'arabic',
+        'ast' => 'asturian',
+        'bg' => 'bulgarian',
+        'bs' => 'bosnian',
+        'ca' => 'catalan',
+        'zh' => 'simpl_chinese',
+        'zh-tw' => 'trad_chinese',
+        'cs' => 'czech',
+        'da' => 'danish',
+        'prs' => 'dari',
+        'de' => 'german',
+        'el' => 'greek',
+        'en' => 'english',
+        'es' => 'spanish',
+        'eo' => 'esperanto',
+        'eu' => 'basque',
+        'fa' => 'persian',
+        'fr' => 'french',
+        'fur' => 'friulian',
+        'gl' => 'galician',
+        'ka' => 'georgian',
+        'hr' => 'croatian',
+        'he' => 'hebrew',
+        'hi' => 'hindi',
+        'id' => 'indonesian',
+        'it' => 'italian',
+        'ko' => 'korean',
+        'lv' => 'latvian',
+        'lt' => 'lithuanian',
+        'mk' => 'macedonian',
+        'hu' => 'hungarian',
+        'ms' => 'malay',
+        'nl' => 'dutch',
+        'ja' => 'japanese',
+        'no' => 'norwegian',
+        'oc' => 'occitan',
+        'ps' => 'pashto',
+        'pl' => 'polish',
+        'pt' => 'portuguese',
+        'pt-br' => 'brazilian',
+        'ro' => 'romanian',
+        'qu' => 'quechua_cusco',
+        'ru' => 'russian',
+        'sk' => 'slovak',
+        'sl' => 'slovenian',
+        'sr' => 'serbian',
+        'fi' => 'finnish',
+        'sv' => 'swedish',
+        'th' => 'thai',
+        'tr' => 'turkish',
+        'uk' => 'ukrainian',
+        'vi' => 'vietnamese',
+        'sw' => 'swahili',
+        'yo' => 'yoruba'
+    ];
 
-    return $result;
 }
 
 /**
@@ -582,20 +613,9 @@ function display_language_selection_box(
     // Reading language list.
     $language_list = get_language_folder_list();
 
-    /*
-    // Reduction of the number of languages shown. Enable this fragment of code for customization purposes.
-    // Modify the language list according to your preference. Don't exclude the 'english' item.
-    $language_to_display = array('asturian', 'bulgarian', 'english', 'italian', 'french', 'slovenian', 'slovenian_unicode', 'spanish');
-    foreach ($language_list as $key => & $value) {
-        if (!in_array($key, $language_to_display)) {
-            unset($language_list[$key]);
-        }
-    }
-    */
-
     // Sanity checks due to the possibility for customizations.
     if (!is_array($language_list) || empty($language_list)) {
-        $language_list = ['english' => 'English'];
+        $language_list = ['en' => 'English'];
     }
 
     // Sorting again, if it is necessary.
@@ -603,8 +623,8 @@ function display_language_selection_box(
 
     // More sanity checks.
     if (!array_key_exists($default_language, $language_list)) {
-        if (array_key_exists('english', $language_list)) {
-            $default_language = 'english';
+        if (array_key_exists('en', $language_list)) {
+            $default_language = 'en';
         } else {
             $language_keys = array_keys($language_list);
             $default_language = $language_keys[0];
@@ -706,7 +726,6 @@ function display_requirements(
 
     //  SERVER REQUIREMENTS
     echo '<div class="RequirementHeading"><h4>'.get_lang('ServerRequirements').'</h4>';
-
     $timezone = checkPhpSettingExists("date.timezone");
     if (!$timezone) {
         echo "<div class='alert alert-warning'>".
@@ -1026,8 +1045,8 @@ function display_requirements(
     } else {
         $error = false;
         // First, attempt to set writing permissions if we don't have them yet
-        $perm = api_get_permissions_for_new_directories();
-        $perm_file = api_get_permissions_for_new_files();
+        $perm = octdec('0770');
+        $perm_file = octdec('0770');
         $notWritable = [];
 
         $checked_writable = api_get_path(SYS_APP_PATH);
@@ -1059,7 +1078,6 @@ function display_requirements(
         }
 
         // Second, if this fails, report an error
-
         //--> The user would have to adjust the permissions manually
         if (count($notWritable) > 0) {
             $error = true; ?>
@@ -2727,6 +2745,7 @@ function updateEnvFile($distFile, $envFile, $params)
  * @param string $installationProfile Installation profile, if any was provided
  */
 function finishInstallationWithContainer(
+    $siteManager,
     $settingsManager,
     $manager,
     $sysPath,
@@ -2856,6 +2875,17 @@ function finishInstallationWithContainer(
     $result = $manager->getConnection()->prepare($data);
     $result->execute();
     $result->closeCursor();
+
+    /** @var Chamilo\PageBundle\Entity\Site $site */
+    $site = $siteManager->create();
+    $site->setHost('localhost');
+    $site->setEnabled(true);
+    $site->setName('localhost');
+    $site->setEnabledFrom(new \DateTime('now'));
+    $site->setEnabledTo(new \DateTime('+20 years'));
+    $site->setRelativePath("");
+    $site->setIsDefault(true);
+    $siteManager->save($site);
 
     UserManager::setPasswordEncryption($encryptPassForm);
 

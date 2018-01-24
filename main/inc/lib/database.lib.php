@@ -17,7 +17,31 @@ class Database
      */
     private static $em;
     private static $connection;
-    public static $utcDateTimeClass;
+
+    /**
+     * Only used by the installer
+     *
+     * @param array  $params
+     * @param string $entityRootPath
+     *
+     * @throws \Doctrine\ORM\ORMException
+     *
+     * @return
+     */
+    public function connect(
+        $params = [],
+        $entityRootPath = ''
+    ) {
+        $config = self::getDoctrineConfig($entityRootPath);
+        $config->setAutoGenerateProxyClasses(true);
+
+        $params['charset'] = 'utf8';
+        $entityManager = EntityManager::create($params, $config);
+        $connection = $entityManager->getConnection();
+
+        $this->setConnection($connection);
+        $this->setManager($entityManager);
+    }
 
     /**
      * @param EntityManager $em
@@ -108,117 +132,6 @@ class Database
     public static function affected_rows(Statement $result)
     {
         return $result->rowCount();
-    }
-
-    /**
-     * @return string
-     */
-    public static function getUTCDateTimeTypeClass()
-    {
-        return isset(self::$utcDateTimeClass) ? self::$utcDateTimeClass : 'Application\DoctrineExtensions\DBAL\Types\UTCDateTimeType';
-    }
-
-    /**
-     * Connect to the database sets the entity manager.
-     *
-     * @param array  $params
-     * @param string $sysPath
-     * @param string $entityRootPath
-     * @param bool $returnConnection
-     * @param bool $returnManager
-     *
-     * @throws \Doctrine\ORM\ORMException
-     *
-     * @return
-     */
-    public function connect(
-        $params = [],
-        $sysPath = '',
-        $entityRootPath = '',
-        $returnConnection = false,
-        $returnManager = false
-    ) {
-        $config = self::getDoctrineConfig($entityRootPath);
-        $config->setAutoGenerateProxyClasses(true);
-
-        $config->setEntityNamespaces(
-            [
-                'ChamiloCoreBundle' => 'Chamilo\CoreBundle\Entity',
-                'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
-                'ChamiloPageBundle' => 'Chamilo\PageBundle\Entity',
-                'ChamiloPluginBundle' => 'Chamilo\PluginBundle\Entity',
-                'ChamiloSkillBundle' => 'Chamilo\SkillBundle\Entity',
-                'ChamiloTicketBundle' => 'Chamilo\TicketBundle\Entity',
-                'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity'
-            ]
-        );
-
-        $params['charset'] = 'utf8';
-        $entityManager = EntityManager::create($params, $config);
-        $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
-
-        $uniqueEntityPath = $sysPath.'vendor/symfony/symfony/src/Symfony/Bridge/Doctrine/Validator/Constraints/UniqueEntity.php';
-
-        // Folder symfony/symfony/src doesn't exists in chash use the component folder
-        if (!file_exists($uniqueEntityPath)) {
-            $uniqueEntityPath = $sysPath.'vendor/symfony/doctrine-bridge/Validator/Constraints/UniqueEntity.php';
-
-            AnnotationRegistry::registerLoader(
-                function ($class) use ($sysPath) {
-                    $file = str_replace("\\", DIRECTORY_SEPARATOR, $class).".php";
-                    $file = str_replace('Symfony/Component/Validator', '', $file);
-                    $file = $sysPath.'vendor/symfony/validator'.$file;
-                    if (file_exists($file)) {
-                        // file exists makes sure that the loader fails silently
-                        require_once $file;
-                        return true;
-                    }
-                }
-            );
-        } else {
-            // Registering Constraints
-            AnnotationRegistry::registerAutoloadNamespace(
-                'Symfony\Component\Validator\Constraint',
-                $sysPath.'vendor/symfony/symfony/src'
-            );
-        }
-
-        AnnotationRegistry::registerFile(
-            $uniqueEntityPath
-        );
-
-        // Registering gedmo extensions
-        AnnotationRegistry::registerAutoloadNamespace(
-            'Gedmo\Mapping\Annotation',
-            $sysPath."vendor/gedmo/doctrine-extensions/lib"
-        );
-
-        Type::overrideType(
-            Type::DATETIME,
-            self::getUTCDateTimeTypeClass()
-        );
-
-        $listener = new \Gedmo\Timestampable\TimestampableListener();
-        $entityManager->getEventManager()->addEventSubscriber($listener);
-
-        $listener = new \Gedmo\Tree\TreeListener();
-        $entityManager->getEventManager()->addEventSubscriber($listener);
-
-        $listener = new \Gedmo\Sortable\SortableListener();
-        $entityManager->getEventManager()->addEventSubscriber($listener);
-        $connection = $entityManager->getConnection();
-        $connection->executeQuery('SET sql_mode = "";');
-
-        if ($returnConnection) {
-            return $connection;
-        }
-
-        if ($returnManager) {
-            return $entityManager;
-        }
-
-        $this->setConnection($connection);
-        $this->setManager($entityManager);
     }
 
     /**
@@ -490,13 +403,10 @@ class Database
             }
 
             if (!empty($updateSql)) {
-                //Parsing and cleaning the where conditions
+                // Parsing and cleaning the where conditions
                 $whereReturn = self::parse_where_conditions($whereConditions);
-
                 $sql = "UPDATE $tableName SET $updateSql $whereReturn ";
-
                 $statement = self::getManager()->getConnection()->prepare($sql);
-
                 $result = $statement->execute($attributes);
 
                 if ($showQuery) {

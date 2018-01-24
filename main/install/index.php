@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Dotenv\Dotenv;
 use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Chamilo installation
@@ -25,8 +26,8 @@ use Chamilo\CoreBundle\Framework\Container;
 
 ini_set('display_errors', '1');
 ini_set('log_errors', '1');
-ini_set('memory_limit', -1);
-ini_set('max_execution_time', 0);
+//ini_set('memory_limit', -1);
+//ini_set('max_execution_time', 0);
 error_reporting(-1);
 
 require_once __DIR__.'/../../vendor/autoload.php';
@@ -43,6 +44,7 @@ require_once '../inc/lib/text.lib.php';
 api_check_php_version('../inc/');
 
 // Defaults settings
+
 putenv("APP_LOCALE=en");
 putenv("APP_URL_APPEND=''");
 putenv("APP_ENCRYPT_METHOD='bcrypt'");
@@ -51,21 +53,40 @@ putenv("DATABASE_PORT=");
 putenv("DATABASE_NAME=");
 putenv("DATABASE_USER=");
 putenv("DATABASE_PASSWORD=");
+putenv("APP_ENV=dev");
+putenv("APP_DEBUG=1");
 
 // Calling Symfony container
 $kernel = new Chamilo\Kernel('dev', true);
-$kernel->boot();
-$container = $kernel->getContainer();
-// Set container to use with chamilo legacy code
-Container::setContainer($container);
-
-ob_implicit_flush(true);
 
 require_once api_get_path(LIBRARY_PATH).'database.constants.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'text.lib.php';
 require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 require_once 'install.lib.php';
+
+$installationLanguage = 'en';
+
+// Determination of the language during the installation procedure.
+if (!empty($_POST['language_list'])) {
+    $search = ['../', '\\0'];
+    $installationLanguage = str_replace($search, '', urldecode($_POST['language_list']));
+    $_SESSION['install_language'] = $installationLanguage;
+} else {
+    // Trying to switch to the browser's language, it is covenient for most of the cases.
+    $installationLanguage = detect_browser_language();
+}
+
+// Language validation.
+if (!array_key_exists($installationLanguage, get_language_folder_list())) {
+    $installationLanguage = 'en';
+}
+
+// Set translation
+$translator = new Translator($installationLanguage);
+$translator->addLoader('po', new \Symfony\Component\Translation\Loader\PoFileLoader());
+$translator->addResource('po', "../../translations/installation.$installationLanguage.po", $installationLanguage);
+Container::$translator = $translator;
 
 // The function api_get_setting() might be called within the installation scripts.
 // We need to provide some limited support for it through initialization of the
@@ -84,9 +105,9 @@ $urlForm = '';
 $pathForm = '';
 $emailForm = '';
 $dbHostForm = 'localhost';
-$dbUsernameForm = '';
+$dbUsernameForm = 'root';
 $dbPassForm = '';
-$dbNameForm = '';
+$dbNameForm = 'chamilo';
 $dbPortForm = 3306;
 $allowSelfReg = '';
 $allowSelfReg = 'approval';
@@ -102,32 +123,16 @@ $educationForm = 'Albert Einstein';
 $adminPhoneForm = '(000) 001 02 03';
 $institutionForm = 'My Organisation';
 $session_lifetime = 360000;
-$installLanguage = Session::read('install_language');
+$installLanguage = isset($_SESSION['install_language']) ? $_SESSION['install_language'] : 'english';
 
-// Determination of the language during the installation procedure.
-if (!empty($_POST['language_list'])) {
-    $search = ['../', '\\0'];
-    $install_language = str_replace($search, '', urldecode($_POST['language_list']));
-    Session::write('install_language', $install_language);
-} elseif ($installLanguage) {
-    $install_language = $installLanguage;
-} else {
-    // Trying to switch to the browser's language, it is covenient for most of the cases.
-    $install_language = detect_browser_language();
-}
-
-// Language validation.
-if (!array_key_exists($install_language, get_language_folder_list())) {
-    $install_language = 'english';
-}
 
 $installationGuideLink = '../../documentation/installation_guide.html';
-
+/*
 // Loading language files.
 require api_get_path(SYS_LANG_PATH).'english/trad4all.inc.php';
-if ($install_language != 'english') {
-    include_once api_get_path(SYS_LANG_PATH).$install_language.'/trad4all.inc.php';
-    switch ($install_language) {
+if ($installationLanguage != 'english') {
+    include_once api_get_path(SYS_LANG_PATH).$installationLanguage.'/trad4all.inc.php';
+    switch ($installationLanguage) {
         case 'french':
             $installationGuideLink = '../../documentation/installation_guide_fr_FR.html';
             break;
@@ -140,11 +145,7 @@ if ($install_language != 'english') {
         default:
             break;
     }
-}
-
-// These global variables must be set for proper working of the function get_lang(...) during the installation.
-$language_interface = $install_language;
-$language_interface_initial_value = $install_language;
+}*/
 
 // Character set during the installation, it is always to be 'UTF-8'.
 $charset = 'UTF-8';
@@ -159,7 +160,8 @@ header('Content-Type: text/html; charset='.$charset);
 error_reporting(E_ALL);
 
 // Overriding the timelimit (for large campusses that have to be migrated).
-@set_time_limit(0);
+//@set_time_limit(0);
+
 
 // Upgrading from any subversion of 1.9
 $update_from_version_8 = [
@@ -251,7 +253,6 @@ if (@$_POST['step2_install'] || @$_POST['step2_update_8'] || @$_POST['step2_upda
     $installType = isset($_GET['installType']) ? $_GET['installType'] : null;
     $updateFromConfigFile = isset($_GET['updateFromConfigFile']) ? $_GET['updateFromConfigFile'] : false;
 }
-
 if ($installType == 'update' && in_array($my_old_version, $update_from_version_8)) {
     // This is the main configuration file of the system before the upgrade.
     // Old configuration file.
@@ -263,10 +264,6 @@ if ($installType == 'update' && in_array($my_old_version, $update_from_version_8
 }
 
 if (!isset($_GET['running'])) {
-    $dbUsernameForm = 'root';
-    $dbPassForm = '';
-    $dbNameForm = 'chamilo';
-
     // Extract the path to append to the url if Chamilo is not installed on the web root directory.
     $urlAppendPath = api_remove_trailing_slash(api_get_path(REL_PATH));
     $urlForm = api_get_path(WEB_PATH);
@@ -279,15 +276,16 @@ if (!isset($_GET['running'])) {
     if (isset($email_parts[1]) && $email_parts[1] == 'localhost') {
         $emailForm .= '.localdomain';
     }
-    $adminLastName = get_lang('DefaultInstallAdminLastname');
-    $adminFirstName = get_lang('DefaultInstallAdminFirstname');
+    //$adminLastName = get_lang('DefaultInstallAdminLastname');
+    //$adminFirstName = get_lang('DefaultInstallAdminFirstname');
+    $adminLastName = 'admin';
+    $adminFirstName = 'admin';
+
     $loginForm = 'admin';
     $passForm = api_generate_password();
 
-
     $institutionUrlForm = 'http://www.chamilo.org';
     $languageForm = api_get_interface_language();
-
     $checkEmailByHashSent = 0;
     $ShowEmailNotCheckedToStudent = 1;
     $userMailCanBeEmpty = 1;
@@ -320,7 +318,6 @@ if (!isset($_GET['running'])) {
 }
 
 /* NEXT STEPS IMPLEMENTATION */
-
 $total_steps = 7;
 if (!$_POST) {
     $current_step = 1;
@@ -354,6 +351,7 @@ if ($encryptPassForm == '1') {
         @import "../../public/build/css/base.css";
         @import "../../public/build/css/themes/chamilo/default.css";
     </style>
+
     <script type="text/javascript" src="../../public/build/chamilo.js"></script>
     <script type="text/javascript">
         $(document).ready( function() {
@@ -460,12 +458,14 @@ if ($installType == 'new') {
 if (!empty($instalation_type_label) && empty($_POST['step6'])) {
     echo '<div class="page-header"><h2>'.$instalation_type_label.'</h2></div>';
 }
+
 if (empty($installationProfile)) {
     $installationProfile = '';
     if (!empty($_POST['installationProfile'])) {
         $installationProfile = api_htmlentities($_POST['installationProfile']);
     }
 }
+
     ?>
     <input type="hidden" name="updatePath"         value="<?php if (!$badUpdatePath) {
         echo api_htmlentities($proposedUpdatePath, ENT_QUOTES);
@@ -502,7 +502,7 @@ if (empty($installationProfile)) {
 <?php
 
 if (@$_POST['step2']) {
-    //STEP 3 : LICENSE
+    // STEP 3 : LICENSE
     display_license_agreement();
 } elseif (@$_POST['step3']) {
     //STEP 4 : MYSQL DATABASE SETTINGS
@@ -516,8 +516,8 @@ if (@$_POST['step2']) {
         $installationProfile
     );
 } elseif (@$_POST['step4']) {
-    //STEP 5 : CONFIGURATION SETTINGS
 
+    //STEP 5 : CONFIGURATION SETTINGS
     //if update, try getting settings from the database...
     if ($installType == 'update') {
         $db_name = $dbNameForm;
@@ -763,7 +763,6 @@ if (@$_POST['step2']) {
         if (!empty($f)) {
             ob_flush(); //#5565
         }
-
         if ($installType == 'update') {
             $database = connectToDatabase(
                 $dbHostForm,
@@ -803,7 +802,7 @@ if (@$_POST['step2']) {
             $envFile = api_get_path(SYS_PATH).'.env';
             $distFile = api_get_path(SYS_PATH).'.env.dist';
 
-            $oldSession = $container->get('session');
+            //$oldSession = $container->get('session');
             $params = [
                 '{{DATABASE_HOST}}' => $dbHostForm,
                 '{{DATABASE_PORT}}' => $dbPortForm,
@@ -815,7 +814,7 @@ if (@$_POST['step2']) {
             ];
             updateEnvFile($distFile, $envFile, $params);
             (new Dotenv())->load($envFile);
-
+exit;
             // Load Symfony Kernel
             $kernel = new Kernel('dev', true);
             $application = new Application($kernel);
@@ -824,6 +823,7 @@ if (@$_POST['step2']) {
             $input = new ArrayInput([]);
             $command = $application->find('doctrine:schema:create');
             $result = $command->run($input, new ConsoleOutput());
+var_dump($result);exit;
             // No errors
             if ($result == 0) {
                 // Boot kernel and get the doctrine from Symfony container
@@ -832,10 +832,12 @@ if (@$_POST['step2']) {
                 $container->set('session', $oldSession);
                 Container::setContainer($container);
                 $doctrine = $container->get('doctrine');
+                $siteManager = $container->get('sonata.page.manager.site');
                 $manager = $doctrine->getManager();
                 $sysPath = api_get_path(SYS_PATH);
                 $settingsManager = $container->get('chamilo.settings.manager');
                 finishInstallationWithContainer(
+                    $siteManager,
                     $settingsManager,
                     $manager,
                     $sysPath,
@@ -872,19 +874,21 @@ if (@$_POST['step2']) {
     } else {
         // This is the start screen.
         display_language_selection();
+
         if (!empty($_GET['profile'])) {
             $installationProfile = api_htmlentities($_GET['profile'], ENT_QUOTES);
         }
         echo '<input type="hidden" name="installationProfile" value="'.api_htmlentities($installationProfile, ENT_QUOTES).'" />';
     }
 
-$poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chamilo </a> &copy; '.date('Y');
+    $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chamilo </a> &copy; '.date('Y');
+
 ?>
           </form>
         </div>
         <div class="col-md-4">
             <div class="logo-install">
-                <img src="<?php echo api_get_path(WEB_CSS_PATH) ?>themes/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
+                <img src="header-logo.png" hspace="10" vspace="10" alt="Chamilo" />
             </div>
             <div class="well install-steps-menu">
                 <ol>
@@ -905,7 +909,6 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
         </div>
         </div>
         </div>
-
         <div class="panel panel-default">
         <div class="panel-body">
             <div class="col-md-12">

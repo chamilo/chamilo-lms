@@ -1,0 +1,4 @@
+msgid "InstallationLanguage"
+msgstr "Installation language"
+
+

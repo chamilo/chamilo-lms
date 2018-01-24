@@ -1,0 +1,9 @@
+msgid "InstallationLanguage"
+msgstr "Langue d'installation"
+
+msgid "Requirements"
+msgstr "Pré-requis"
+
+msgid "PleaseSelectInstallationProcessLanguage"
+msgstr "Veuillez sélectionner la langue de l'installateur"
+

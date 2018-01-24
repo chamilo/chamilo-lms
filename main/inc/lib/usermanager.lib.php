@@ -337,9 +337,8 @@ class UserManager
         // Checking the user language
         $languages = api_get_languages();
         $language = strtolower($language);
-
-        if (isset($languages['folder'])) {
-            if (!in_array($language, $languages['folder'])) {
+        if (isset($languages)) {
+            if (!in_array($language, $languages)) {
                 $language = api_get_setting('platformLanguage');
             }
         }
@@ -1067,7 +1066,7 @@ class UserManager
 
         // Checking the user language
         $languages = api_get_languages();
-        if (!in_array($language, $languages['folder'])) {
+        if (!in_array($language, $languages)) {
             $language = api_get_setting('platformLanguage');
         }
 

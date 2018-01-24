@@ -62,8 +62,15 @@ define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);
  */
 function get_lang($variable)
 {
+    $translator = Container::getTranslator();
+
+    if (!$translator) {
+        return $variable;
+    }
+
+    //return $variable;
     // Using symfony
-    /*$defaultDomain = 'messages';
+    $defaultDomain = 'messages';
     $translated = Container::getTranslator()->trans(
         $variable,
         array(),
@@ -83,7 +90,7 @@ function get_lang($variable)
         }
     }
 
-    return $translated;*/
+    return $translated;
 
 
     // For serving some old hacks:
@@ -176,7 +183,7 @@ function api_get_interface_language(
     global $language_interface;
 
     if (empty($language_interface)) {
-        return 'english';
+        return 'en';
     }
 
     if ($check_sub_language) {
@@ -239,45 +246,11 @@ function api_purify_language_id($language)
 }
 
 /**
- * Gets language isocode column from the language table, taking the given language as a query parameter.
- * @param string $language This is the name of the folder containing translations for the corresponding language (e.g arabic, english).
- * @param string $default_code This is the value to be returned if there was no code found corresponding to the given language.
- * If $language is omitted, interface language is assumed then.
- * @return string The found isocode or null on error.
- * Returned codes are according to the following standards (in order of preference):
- * -  ISO 639-1 : Alpha-2 code (two-letters code - en, fr, es, ...)
- * -  RFC 4646  : five-letter code based on the ISO 639 two-letter language codes
- *    and the ISO 3166 two-letter territory codes (pt-BR, ...)
- * -  ISO 639-2 : Alpha-3 code (three-letters code - ast, fur, ...)
+ * Gets language isocode
  */
-function api_get_language_isocode($language = null, $default_code = 'en')
+function api_get_language_isocode()
 {
-    static $iso_code = [];
-    if (empty($language)) {
-        $language = api_get_interface_language(false, true);
-    }
-    if (!isset($iso_code[$language])) {
-        if (!class_exists('Database')) {
-            // This might happen, in case of calling this function early during the global initialization.
-            return $default_code; // This might happen, in case of calling this function early during the global initialization.
-        }
-        $sql = "SELECT isocode 
-                FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." 
-                WHERE dokeos_folder = '$language'";
-        $sql_result = Database::query($sql);
-        if (Database::num_rows($sql_result)) {
-            $result = Database::fetch_array($sql_result);
-            $iso_code[$language] = trim($result['isocode']);
-        } else {
-            $language_purified_id = api_purify_language_id($language);
-            $iso_code[$language] = isset($iso_code[$language_purified_id]) ? $iso_code[$language_purified_id] : null;
-        }
-        if (empty($iso_code[$language])) {
-            $iso_code[$language] = $default_code;
-        }
-    }
-
-    return $iso_code[$language];
+    return Container::getTranslator()->getLocale();
 }
 
 /**
@@ -858,6 +831,7 @@ function api_get_person_name(
         if (is_int($format)) {
             switch ($format) {
                 case PERSON_NAME_COMMON_CONVENTION:
+
                     $valid[$format][$language] = _api_get_person_name_convention($language, 'format');
                     $usernameOrderFromDatabase = api_get_setting('user_name_order');
                     if (isset($usernameOrderFromDatabase) && !empty($usernameOrderFromDatabase)) {
@@ -883,6 +857,7 @@ function api_get_person_name(
     }
 
     $format = $valid[$format][$language];
+
 
     $keywords = [
         '%firstname',
@@ -1938,7 +1913,8 @@ function &_api_get_day_month_names($language = null)
 function _api_get_person_name_convention($language, $type)
 {
     static $conventions;
-    $language = api_purify_language_id($language);
+    $language = api_get_language_from_iso($language);
+    $language = $language->getOriginalName();
     if (!isset($conventions)) {
         $file = __DIR__.'/internationalization_database/name_order_conventions.php';
         if (file_exists($file)) {
@@ -1951,9 +1927,9 @@ function _api_get_person_name_convention($language, $type)
                 ]
             ];
         }
+
         // Overwrite classic conventions
         $customConventions = api_get_configuration_value('name_order_conventions');
-
         if (!empty($customConventions)) {
             foreach ($customConventions as $key => $data) {
                 $conventions[$key] = $data;

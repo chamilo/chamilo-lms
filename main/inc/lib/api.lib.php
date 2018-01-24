@@ -4399,7 +4399,7 @@ function api_get_languages_combo($name = 'language')
     // Retrieve a complete list of all the languages.
     $language_list = api_get_languages();
 
-    if (count($language_list['name']) < 2) {
+    if (count($language_list) < 2) {
         return $ret;
     }
 
@@ -4410,17 +4410,14 @@ function api_get_languages_combo($name = 'language')
         $default = $platformLanguage;
     }
 
-    $languages = $language_list['name'];
-    $folder = $language_list['folder'];
-
     $ret .= '<select name="'.$name.'" id="language_chosen" class="selectpicker show-tick form-control">';
-    foreach ($languages as $key => $value) {
-        if ($folder[$key] == $default) {
+    foreach ($language_list as $key => $value) {
+        if ($key == $default) {
             $selected = ' selected="selected"';
         } else {
             $selected = '';
         }
-        $ret .= sprintf('<option value=%s" %s>%s</option>', $folder[$key], $selected, $value);
+        $ret .= sprintf('<option value=%s" %s>%s</option>', $key, $selected, $value);
     }
     $ret .= '</select>';
 
@@ -4451,15 +4448,15 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
         $user_selected_language = api_get_setting('platformLanguage');
     }
 
-    $currentLanguageId = api_get_language_id($user_selected_language);
-    $currentLanguageInfo = api_get_language_info($currentLanguageId);
-    $countryCode = languageToCountryIsoCode($currentLanguageInfo['isocode']);
+    $countryCode = languageToCountryIsoCode($user_selected_language);
+    $language = api_get_language_from_iso($user_selected_language);
+
     $url = api_get_self();
     if ($showAsButton) {
         $html = '<div class="btn-group">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 <span class="flag-icon flag-icon-'.$countryCode.'"></span>
-                '.$currentLanguageInfo['original_name'].'
+                '.$language->getOriginalName().'
                 <span class="caret">
                 </span>
               </button>';
@@ -4467,16 +4464,17 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
         $html = '
             <a href="'.$url.'" class="dropdown-toggle" data-toggle="dropdown" role="button">
                 <span class="flag-icon flag-icon-'.$countryCode.'"></span> 
-                '.$currentLanguageInfo['original_name'].'
+                '.$language->getOriginalName().'
                 <span class="caret"></span>
             </a>
             ';
     }
 
     $html .= '<ul class="dropdown-menu" role="menu">';
-    foreach ($language_list['all'] as $key => $data) {
-        $urlLink = $url.'?language='.$data['english_name'];
-        $html .= '<li><a href="'.$urlLink.'"><span class="flag-icon flag-icon-'.languageToCountryIsoCode($data['isocode']).'"></span> '.$data['original_name'].'</a></li>';
+    foreach ($language_list as $iso => $data) {
+        $urlLink = $url.'?language='.$data;
+        $html .= '<li><a href="'.$urlLink.'">';
+        $html .= '<span class="flag-icon flag-icon-'.languageToCountryIsoCode($iso).'"></span> '.$data.'</a></li>';
     }
     $html .= '</ul>';
 
@@ -4572,10 +4570,8 @@ function api_get_languages()
             ORDER BY original_name ASC";
     $result = Database::query($sql);
     $language_list = [];
-    while ($row = Database::fetch_array($result)) {
-        $language_list['name'][] = $row['original_name'];
-        $language_list['folder'][] = $row['dokeos_folder'];
-        $language_list['all'][] = $row;
+    while ($row = Database::fetch_array($result, 'ASSOC')) {
+        $language_list[$row['isocode']] = $row['original_name'];
     }
     return $language_list;
 }
@@ -4703,6 +4699,17 @@ function api_get_language_info($languageId)
         'available' => $language->getAvailable(),
         'parent_id' => $language->getParent() ? $language->getParent()->getId() : null
     ];
+}
+
+/**
+ * @param string $code
+ * @return \Chamilo\CoreBundle\Entity\Language
+ */
+function api_get_language_from_iso($code)
+{
+    $em = Database::getManager();
+    $language = $em->getRepository('ChamiloCoreBundle:Language')->findOneBy(['isocode' => $code]);
+    return $language;
 }
 
 /**

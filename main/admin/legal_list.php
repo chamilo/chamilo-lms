@@ -24,7 +24,7 @@ echo '</div>';
 
 $legal_count = LegalManager::count();
 $languages = api_get_languages();
-$available_languages = count($languages['folder']);
+$available_languages = count($languages);
 if ($legal_count != $available_languages) {
     echo Display::return_message(get_lang('YouShouldCreateTermAndConditionsForAllAvailableLanguages'), 'warning');
 }

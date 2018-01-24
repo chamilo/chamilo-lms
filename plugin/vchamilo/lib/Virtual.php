@@ -212,12 +212,13 @@ class Virtual
 
         try {
             $database = new \Database();
-            $connection = $database->connect(
+            $database->connect(
                 $dbParams,
                 $_configuration['root_sys'],
                 $_configuration['root_sys'],
                 true
             );
+            $connection = $database->getConnection();
         } catch (Exception $e) {
             echo('Side connection failure with '.$_configuration['db_host'].', '.$_configuration['db_user'].', ******** ');
             die();
@@ -886,7 +887,7 @@ class Virtual
 
         try {
             $database = new \Database();
-            $manager = $database->connect(
+            $database->connect(
                 $dbParams,
                 api_get_configuration_value('root_sys'),
                 api_get_configuration_value('root_sys'),
@@ -894,11 +895,12 @@ class Virtual
                 true
             );
 
+            $manager = $database->getManager();
             if ($getManager) {
                 return $manager;
             }
 
-            return $manager->getConnection();
+            return $database->getConnection();
         } catch (Exception $e) {
             error_log($e->getMessage());
         }

@@ -15,7 +15,6 @@ class ChamiloSession implements \ArrayAccess
      */
     public static function read($variable, $default = null)
     {
-        //throw new Exception('"s"');
         $session = Container::getSession();
         $result = null;
         if (isset($session)) {
@@ -39,7 +38,6 @@ class ChamiloSession implements \ArrayAccess
      */
     public static function write($variable, $value)
     {
-        //$_SESSION[$variable] = $value;
         $session = Container::getSession();
         // Writing the session in 2 instances because
         $_SESSION[$variable] = $value;

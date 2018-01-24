@@ -601,7 +601,7 @@ if ($form->validate()) {
 
     //Checking the user language
     $languages = api_get_languages();
-    if (!in_array($user_data['language'], $languages['folder'])) {
+    if (!in_array($user_data['language'], $languages)) {
         $user_data['language'] = api_get_setting('platformLanguage');
     }
     $_SESSION['_user']['language'] = $user_data['language'];

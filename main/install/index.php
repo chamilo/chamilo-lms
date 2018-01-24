@@ -814,7 +814,7 @@ if (@$_POST['step2']) {
             ];
             updateEnvFile($distFile, $envFile, $params);
             (new Dotenv())->load($envFile);
-exit;
+
             // Load Symfony Kernel
             $kernel = new Kernel('dev', true);
             $application = new Application($kernel);
@@ -823,7 +823,7 @@ exit;
             $input = new ArrayInput([]);
             $command = $application->find('doctrine:schema:create');
             $result = $command->run($input, new ConsoleOutput());
-var_dump($result);exit;
+
             // No errors
             if ($result == 0) {
                 // Boot kernel and get the doctrine from Symfony container

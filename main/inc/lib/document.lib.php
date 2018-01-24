@@ -2055,7 +2055,7 @@ class DocumentManager
         if (isset($is_certificate_array[0]) && $is_certificate_array[0] == 'certificates') {
             $is_certificate_mode = true;
         }
-        return $is_certificate_mode;
+        return $is_certificate_mode || (isset($_GET['certificate']) && $_GET['certificate'] === 'true');
     }
 
     /**
@@ -5169,7 +5169,7 @@ class DocumentManager
         }
 
         if ($isCertificateMode) {
-            $url .= '&certificate=true';
+            $url .= '&certificate=true&selectcat='.(isset($_GET['selectcat']) ? $_GET['selectcat'] : '');
         }
 
         // The little download icon
@@ -5838,7 +5838,7 @@ class DocumentManager
                         api_get_self()."?$courseParams&curdirpath=$curdirpath&add_as_template=$id"
                     );
                 }
-                if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates') {//allow attach certificate to course
+                if ((isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates') || $is_certificate_mode) {//allow attach certificate to course
                     $visibility_icon_certificate = 'nocertificate';
                     if (self::get_default_certificate_id(api_get_course_id()) == $id) {
                         $visibility_icon_certificate = 'certificate';

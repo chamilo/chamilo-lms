@@ -88,11 +88,6 @@ if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
     $is_certificate_mode = true;
 }
 
-$certificateLink = '';
-if ($is_certificate_mode) {
-    $certificateLink = '&certificate=true';
-}
-
 // Removing sessions
 Session::erase('draw_dir');
 Session::erase('paint_dir');
@@ -127,6 +122,11 @@ $dbl_click_id = 0;
 $selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : null;
 $moveTo = isset($_POST['move_to']) ? Security::remove_XSS($_POST['move_to']) : null;
 $moveFile = isset($_POST['move_file']) && is_int($_POST['move_file']) ? $_POST['move_file'] : null;
+
+$certificateLink = '';
+if ($is_certificate_mode) {
+    $certificateLink = '&certificate=true&selectcat='.$selectcat;
+}
 
 /* Constants and variables */
 $userId = api_get_user_id();
@@ -1516,7 +1516,7 @@ if ($isAllowedToEdit ||
 // END ACTION MENU
 // Attach certificate in the gradebook
 if (isset($_GET['curdirpath']) &&
-    $_GET['curdirpath'] == '/certificates' &&
+    strpos($_GET['curdirpath'],'/certificates') !== false &&
     isset($_GET['set_certificate']) &&
     $_GET['set_certificate'] == strval(intval($_GET['set_certificate']))
 ) {

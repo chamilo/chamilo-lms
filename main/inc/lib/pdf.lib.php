@@ -298,7 +298,6 @@ class PDF
 
                 if (!empty($course_data['path'])) {
                     $document_html = str_replace('../', '', $document_html);
-                    $document_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document/';
 
                     // Fix app/upload links convert web to system paths
                     $document_html = str_replace(
@@ -306,83 +305,9 @@ class PDF
                         api_get_path(SYS_UPLOAD_PATH),
                         $document_html
                     );
-
-                    $doc = new DOMDocument();
-                    $result = @$doc->loadHTML($document_html);
-
-                    // Fixing only images @todo do the same thing with other elements
-                    $elements = $doc->getElementsByTagName('img');
-                    $protocol = api_get_protocol();
-                    if (!empty($elements)) {
-                        foreach ($elements as $item) {
-                            $old_src = $item->getAttribute('src');
-                            $old_src = trim($old_src);
-
-                            if (strpos($old_src, $protocol) === false) {
-                                if (strpos($old_src, '/main/default_course_document') === false) {
-                                    $old_src_fixed = '';
-                                    if (strpos($old_src, '/main/img') === false) {
-                                        if (api_get_path(REL_PATH) != '/') {
-                                            $old_src_fixed = str_replace(
-                                                api_get_path(REL_PATH).'courses/'.$course_data['path'].'/document/',
-                                                '',
-                                                $old_src
-                                            );
-
-                                            // Try with the dirname if exists
-                                            if ($old_src_fixed == $old_src) {
-                                                if (file_exists($dirName.'/'.$old_src)) {
-                                                    $document_path = '';
-                                                    $old_src_fixed = $dirName.'/'.$old_src;
-                                                }
-                                            }
-                                        } else {
-                                            if (strpos($old_src, 'courses/'.$course_data['path'].'/document/') !== false) {
-                                                $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src);
-                                            } else {
-                                                // Try with the dirname if exists
-                                                if (file_exists($dirName.'/'.$old_src)) {
-                                                    $document_path = '';
-                                                    $old_src_fixed = $dirName.'/'.$old_src;
-                                                } else {
-                                                    $document_path = '';
-                                                    $old_src_fixed = $old_src;
-                                                }
-                                            }
-                                        }
-
-                                        $new_path = $document_path.$old_src_fixed;
-                                    } else {
-                                        $new_path = str_replace(
-                                            '/main/img/',
-                                            api_get_path(SYS_CODE_PATH).'img/',
-                                            $old_src
-                                        );
-                                    }
-                                    $item->setAttribute('src', $new_path);
-                                } else {
-                                    $new_path = str_replace(
-                                        '/main/default_course_document',
-                                        api_get_path(SYS_CODE_PATH).'default_course_document',
-                                        $old_src
-                                    );
-                                    $item->setAttribute('src', $new_path);
-                                }
-                            } else {
-                                //Check if this is a complete URL
-                                /*if (strpos($old_src, 'courses/'.$course_data['path'].'/document/') === false) {
-
-                                } else {
-                                    $old_src_fixed = str_replace(api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document/', '', $old_src);
-                                    $new_path = $document_path.$old_src_fixed;
-                                    $document_html= str_replace($old_src, $new_path, $document_html);
-                                }*/
-                            }
-                        }
-                    }
                 }
 
-                $document_html = $doc->saveHTML();
+                $document_html = self::fixImagesPaths($document_html, $course_data, $dirName);
 
                 api_set_encoding_html($document_html, 'UTF-8'); // The library mPDF expects UTF-8 encoded input data.
                 // TODO: Maybe it is better idea the title to be passed through
@@ -412,6 +337,106 @@ class PDF
         // F to save the pdf in a file
         $this->pdf->Output($output_file, 'D');
         exit;
+    }
+
+    /**
+     * Fix images source paths to allow export to pdf
+     * @param string $documentHtml
+     * @param array $courseInfo
+     * @param string $dirName
+     * @return string
+     */
+    private static function fixImagesPaths($documentHtml, array $courseInfo, $dirName = '')
+    {
+        $doc = new DOMDocument();
+        @$doc->loadHTML($documentHtml);
+
+        $elements = $doc->getElementsByTagName('img');
+
+        if (empty($elements)) {
+            return $doc->saveHTML();
+        }
+
+        $protocol = api_get_protocol();
+        $sysCodePath = api_get_path(SYS_CODE_PATH);
+        $sysCoursePath = api_get_path(SYS_COURSE_PATH);
+        $sysUploadPath = api_get_path(SYS_UPLOAD_PATH);
+
+        $documentPath = $courseInfo ? $sysCoursePath.$courseInfo['path'].'/document/' : '';
+
+        /** @var \DOMElement $element */
+        foreach ($elements as $element) {
+            $src = $element->getAttribute('src');
+            $src = trim($src);
+
+            if (strpos($src, $protocol) !== false) {
+                continue;
+            }
+
+            if (strpos($src, '/main/default_course_document') === 0) {
+                $element->setAttribute(
+                    'src',
+                    str_replace('/main/default_course_document', $sysCodePath.'default_course_document', $src)
+                );
+
+                continue;
+            }
+
+            if (strpos($src, '/main/img') === 0) {
+                $element->setAttribute(
+                    'src',
+                    str_replace('/main/img/', $sysCodePath.'img/', $src)
+                );
+
+                continue;
+            }
+
+            if (strpos($src, '/app/upload/') === 0) {
+                $element->setAttribute(
+                    'src',
+                    str_replace('/app/upload/', $sysUploadPath, $src)
+                );
+
+                continue;
+            }
+
+            if (empty($courseInfo)) {
+                continue;
+            }
+
+            if (api_get_path(REL_PATH) != '/') {
+                $oldSrcFixed = str_replace(
+                    api_get_path(REL_PATH).'courses/'.$courseInfo['path'].'/document/',
+                    '',
+                    $src
+                );
+
+                // Try with the dirname if exists
+                if ($oldSrcFixed == $src) {
+                    if (file_exists($dirName.'/'.$src)) {
+                        $documentPath = '';
+                        $oldSrcFixed = $dirName.'/'.$src;
+                    }
+                }
+            } else {
+                if (strpos($src, 'courses/'.$courseInfo['path'].'/document/') !== false) {
+                    $oldSrcFixed = str_replace('courses/'.$courseInfo['path'].'/document/', '', $src);
+                } else {
+                    // Try with the dirname if exists
+                    if (file_exists($dirName.'/'.$src)) {
+                        $documentPath = '';
+                        $oldSrcFixed = $dirName.'/'.$src;
+                    } else {
+                        $documentPath = '';
+                        $oldSrcFixed = $src;
+                    }
+                }
+            }
+
+            $element->setAttribute('src', $documentPath.$oldSrcFixed);
+        }
+
+        return $doc->saveHTML();
     }
 
     /**

@@ -587,7 +587,7 @@ class UserManager
                 ]);
                 $hook->notifyCreateUser(HOOK_EVENT_TYPE_POST);
             }
-            Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $userId);
+            Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $userId, null, $creatorId);
         } else {
             Display::addFlash(
                 Display::return_message(get_lang('ErrorContactPlatformAdmin'))

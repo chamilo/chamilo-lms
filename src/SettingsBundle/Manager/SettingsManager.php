@@ -689,10 +689,14 @@ class SettingsManager implements SettingsManagerInterface
         $schemaAliasNoPrefix = $schemaAlias;
         $schemaAlias = 'chamilo_core.settings.'.$schemaAlias;
 
-        /** @var SchemaInterface $schema */
-        $schema = $this->schemaRegistry->get($schemaAlias);
+        if ($this->schemaRegistry->has($schemaAlias)) {
+            /** @var SchemaInterface $schema */
+            $schema = $this->schemaRegistry->get($schemaAlias);
+        } else {
+            return [];
+        }
 
-        /** @var \Sylius\Bundle\SettingsBundle\Model\Settings  $settings */
+        /** @var \Sylius\Bundle\SettingsBundle\Model\Settings $settings */
         $settings = $this->settingsFactory->createNew();
         $settings->setSchemaAlias($schemaAlias);
 

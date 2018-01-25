@@ -3,7 +3,6 @@
 
 namespace Chamilo\ThemeBundle;
 
-use Chamilo\ThemeBundle\DependencyInjection\AssetsCompilerPass;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**

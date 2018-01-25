@@ -310,19 +310,20 @@ function api_get_timezone()
     if ($timezone_value != null) {
         $to_timezone = $timezone_value;
     }
-    // If allowed by the administrator
-    $use_users_timezone = api_get_setting('use_users_timezone');
 
-    if ($use_users_timezone === 'true') {
+    // If allowed by the administrator
+    $useUsersTimezone = api_get_setting('use_users_timezone');
+
+    if ($useUsersTimezone === 'true') {
         if (!api_is_anonymous()) {
             $userId = api_get_user_id();
             // Get the timezone based on user preference, if it exists
-            $timezone_user = UserManager::get_extra_user_data_by_field(
+            $userTimezone = UserManager::get_extra_user_data_by_field(
                 $userId,
                 'timezone'
             );
-            if (isset($timezone_user['timezone']) && $timezone_user['timezone'] != null) {
-                $to_timezone = $timezone_user['timezone'];
+            if (isset($userTimezone['timezone']) && $userTimezone['timezone'] != null) {
+                $to_timezone = $userTimezone['timezone'];
             }
         }
     }
@@ -368,6 +369,7 @@ function api_get_utc_datetime(
 
         return gmdate('Y-m-d H:i:s', $time);
     }
+
     try {
         $date = new DateTime($time, new DateTimezone($from_timezone));
         $date->setTimezone(new DateTimeZone($to_timezone));
@@ -792,7 +794,6 @@ function api_get_person_name(
         if (is_int($format)) {
             switch ($format) {
                 case PERSON_NAME_COMMON_CONVENTION:
-
                     $valid[$format][$language] = _api_get_person_name_convention($language, 'format');
                     $usernameOrderFromDatabase = api_get_setting('user_name_order');
                     if (isset($usernameOrderFromDatabase) && !empty($usernameOrderFromDatabase)) {
@@ -1874,8 +1875,10 @@ function &_api_get_day_month_names($language = null)
 function _api_get_person_name_convention($language, $type)
 {
     static $conventions;
+
     $language = api_get_language_from_iso($language);
-    $language = $language->getOriginalName();
+    $language = $language->getEnglishName();
+
     if (!isset($conventions)) {
         $file = __DIR__.'/internationalization_database/name_order_conventions.php';
         if (file_exists($file)) {

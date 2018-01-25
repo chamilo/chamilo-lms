@@ -1,20 +1,18 @@
 <?php
-/**
- * ExceptionController.php
- * avanzu-admin
- * Date: 01.03.14
- */
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\ThemeBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
-
+use Symfony\Bundle\TwigBundle\Controller\ExceptionController as BaseExceptionController;
 use Symfony\Component\HttpFoundation\Request;
 
-class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\ExceptionController
+/**
+ * Class ExceptionController
+ * @package Chamilo\ThemeBundle\Controller
+ */
+class ExceptionController extends BaseExceptionController
 {
-
-
     /**
      * @param Request $request
      * @param string  $format

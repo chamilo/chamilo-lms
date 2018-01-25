@@ -37,7 +37,7 @@ class SettingsHelper extends Helper implements SettingsHelperInterface
 
     /**
      * @param string $schemaAlias Example: admin, agenda, etc
-     * @return object|\Sylius\Bundle\SettingsBundle\Model\SettingsInterface
+     * @return \Sylius\Bundle\SettingsBundle\Model\Settings
      */
     public function getSettings($schemaAlias)
     {

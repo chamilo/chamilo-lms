@@ -675,7 +675,6 @@ class Template
         ];
     }
 
-
     /**
      * Set theme, include mainstream CSS files
      * @return void

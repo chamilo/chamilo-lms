@@ -2089,7 +2089,6 @@ function migrate($chamiloVersion, EntityManager $manager)
 {
     $debug = true;
     $connection = $manager->getConnection();
-
     $config = new \Doctrine\DBAL\Migrations\Configuration\Configuration($connection);
 
     // Table name that will store migrations log (will be created automatically,
@@ -2109,9 +2108,7 @@ function migrate($chamiloVersion, EntityManager $manager)
     foreach ($versions as $version) {
         $version->getMigration()->setEntityManager($manager);
     }
-
     $to = null; // if $to == null then schema will be migrated to latest version
-
     echo "<pre>";
     try {
         // Execute migration!
@@ -2131,7 +2128,6 @@ function migrate($chamiloVersion, EntityManager $manager)
                     $counter++;
                 }
             }
-
             echo "<br>DONE!<br>";
         }
 
@@ -2142,7 +2138,6 @@ function migrate($chamiloVersion, EntityManager $manager)
             return false;
         }
     }
-
     echo "</pre>";
 
     return false;

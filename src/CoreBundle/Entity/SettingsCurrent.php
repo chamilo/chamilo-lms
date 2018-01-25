@@ -120,12 +120,6 @@ class SettingsCurrent
      */
     protected $url;
 
-    private $parameters;
-    /**
-     * @var string
-     **/
-    private $schemaAlias;
-
     /**
      * Constructor
      */

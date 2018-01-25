@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Dotenv\Dotenv;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Translation\Loader\PoFileLoader;
 
 /**
  * Chamilo installation
@@ -44,7 +45,6 @@ require_once '../inc/lib/text.lib.php';
 api_check_php_version('../inc/');
 
 // Defaults settings
-
 putenv("APP_LOCALE=en");
 putenv("APP_URL_APPEND=''");
 putenv("APP_ENCRYPT_METHOD='bcrypt'");
@@ -58,6 +58,11 @@ putenv("APP_DEBUG=1");
 
 // Calling Symfony container
 $kernel = new Chamilo\Kernel('dev', true);
+$kernel->boot();
+$container = $kernel->getContainer();
+$oldSession = $container->get('session');
+$oldSession->set('s', 's');
+Container::setContainer($container);
 
 require_once api_get_path(LIBRARY_PATH).'database.constants.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
@@ -66,7 +71,6 @@ require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 require_once 'install.lib.php';
 
 $installationLanguage = 'en';
-
 // Determination of the language during the installation procedure.
 if (!empty($_POST['language_list'])) {
     $search = ['../', '\\0'];
@@ -84,7 +88,7 @@ if (!array_key_exists($installationLanguage, get_language_folder_list())) {
 
 // Set translation
 $translator = new Translator($installationLanguage);
-$translator->addLoader('po', new \Symfony\Component\Translation\Loader\PoFileLoader());
+$translator->addLoader('po', new PoFileLoader());
 $translator->addResource('po', "../../translations/installation.$installationLanguage.po", $installationLanguage);
 Container::$translator = $translator;
 
@@ -125,7 +129,6 @@ $institutionForm = 'My Organisation';
 $session_lifetime = 360000;
 $installLanguage = isset($_SESSION['install_language']) ? $_SESSION['install_language'] : 'english';
 
-
 $installationGuideLink = '../../documentation/installation_guide.html';
 /*
 // Loading language files.
@@ -161,7 +164,6 @@ error_reporting(E_ALL);
 
 // Overriding the timelimit (for large campusses that have to be migrated).
 //@set_time_limit(0);
-
 
 // Upgrading from any subversion of 1.9
 $update_from_version_8 = [
@@ -213,9 +215,6 @@ if (isAlreadyInstalledSystem()) {
 }
 
 /* STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT */
-
-// Is valid request
-$is_valid_request = isset($_REQUEST['is_executable']) ? $_REQUEST['is_executable'] : null;
 $badUpdatePath = false;
 $emptyUpdatePath = true;
 $proposedUpdatePath = '';
@@ -276,14 +275,10 @@ if (!isset($_GET['running'])) {
     if (isset($email_parts[1]) && $email_parts[1] == 'localhost') {
         $emailForm .= '.localdomain';
     }
-    //$adminLastName = get_lang('DefaultInstallAdminLastname');
-    //$adminFirstName = get_lang('DefaultInstallAdminFirstname');
-    $adminLastName = 'admin';
-    $adminFirstName = 'admin';
-
+    $adminLastName = get_lang('DefaultInstallAdminLastname');
+    $adminFirstName = get_lang('DefaultInstallAdminFirstname');
     $loginForm = 'admin';
     $passForm = api_generate_password();
-
     $institutionUrlForm = 'http://www.chamilo.org';
     $languageForm = api_get_interface_language();
     $checkEmailByHashSent = 0;
@@ -797,12 +792,12 @@ if (@$_POST['step2']) {
                 $dbNameForm,
                 $dbPortForm
             );
+
             $manager = $database->getManager();
             // Create .env file
             $envFile = api_get_path(SYS_PATH).'.env';
             $distFile = api_get_path(SYS_PATH).'.env.dist';
 
-            //$oldSession = $container->get('session');
             $params = [
                 '{{DATABASE_HOST}}' => $dbHostForm,
                 '{{DATABASE_PORT}}' => $dbPortForm,

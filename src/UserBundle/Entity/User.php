@@ -789,7 +789,6 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * @todo don't use api_get_person_name
      * @return string
      */
     public function getCompleteName()
@@ -1347,6 +1346,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
+     * @param int $size
      * @return string
      */
     public function getAvatarOrAnonymous($size = 22)

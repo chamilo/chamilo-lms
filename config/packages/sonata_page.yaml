@@ -1,12 +1,4 @@
 # more information can be found here http://sonata-project.org/bundles/page
-cmf_routing:
-    chain:
-        routers_by_id:
-            # enable the DynamicRouter with high priority to allow overwriting configured routes with content
-            #symfony_cmf_routing_extra.dynamic_router: 200
-            # enable the symfony default router with a lower priority
-            router.default: 150 # First chamilo/symfony2 router
-            sonata.page.router: 100 # then the page router
 sonata_page:
     class:
         page: Chamilo\PageBundle\Entity\Page

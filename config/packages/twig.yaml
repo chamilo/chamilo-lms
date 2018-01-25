@@ -1,5 +1,5 @@
 twig:
-    paths: ['%kernel.project_dir%/templates']
+#    paths: ['%kernel.project_dir%/templates']
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
@@ -24,3 +24,25 @@ twig:
         header:
         message:
         show_media_element: 1
+        plugin_content_bottom:
+        plugin_content_top:
+        plugin_main_bottom:
+        plugin_course_tool_plugin:
+        plugin_footer_center:
+        plugin_footer_left:
+        plugin_footer_right:
+        plugin_header_center:
+        plugin_header_left:
+        plugin_header_right:
+        plugin_header_main:
+        plugin_login_bottom:
+        plugin_login_top:
+        plugin_login_left:
+        plugin_login_right:
+        plugin_main_top:
+        plugin_main_bottom:
+        plugin_menu_administrator:
+        plugin_menu_bottom:
+        plugin_menu_top:
+        plugin_pre_footer:
+        footer_extra_content:

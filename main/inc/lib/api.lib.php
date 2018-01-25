@@ -1002,8 +1002,6 @@ function api_is_facebook_auth_activated()
 function api_add_trailing_slash($path)
 {
     return substr($path, -1) == '/' ? $path : $path.'/';
-    // This code is about 20% faster than the preg_replace equivalent
-    //return preg_replace('/([^\/])$/', '$1/', $path);
 }
 
 /**
@@ -3425,32 +3423,18 @@ function api_is_allowed($tool, $action, $task_id = 0)
  */
 function api_is_anonymous($user_id = null, $db_check = false)
 {
-    if (!isset($user_id)) {
-        $user_id = api_get_user_id();
-    }
-
     if ($db_check) {
+        if (!isset($user_id)) {
+            $user_id = api_get_user_id();
+        }
         $info = api_get_user_info($user_id);
-        if ($info['status'] == ANONYMOUS) {
+
+        if ($info['status'] == 6 || $user_id == 0 || empty($info)) {
             return true;
         }
     }
 
-    $_user = api_get_user_info();
-
-    if (isset($_user['status']) && $_user['status'] == ANONYMOUS) {
-        //if ($_user['user_id'] == 0) {
-        // In some cases, api_set_anonymous doesn't seem to be triggered in local.inc.php. Make sure it is.
-        // Occurs in agenda for admin links - YW
-        global $use_anonymous;
-        if (isset($use_anonymous) && $use_anonymous) {
-            api_set_anonymous();
-        }
-
-        return true;
-    }
-
-    return (isset($_user['is_anonymous']) && $_user['is_anonymous'] === true) || $_user === false;
+    return Session::read('IS_AUTHENTICATED_FULLY', false);
 }
 
 /**
@@ -4429,7 +4413,7 @@ function api_get_languages_combo($name = 'language')
  * The form works with or without javascript
  * @param  boolean Hide form if only one language available (defaults to false = show the box anyway)
  * @param bool $showAsButton
- * @return null|string Display the box directly
+ * @return string Display the box directly
  */
 function api_display_language_form($hide_if_no_choice = false, $showAsButton = false)
 {
@@ -4437,7 +4421,8 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
     $language_list = api_get_languages();
 
     if (count($language_list) <= 1 && $hide_if_no_choice) {
-        return; //don't show any form
+        // don't show any form
+        return '';
     }
 
     // The the current language of the user so that his/her language occurs as selected in the dropdown menu.
@@ -4448,6 +4433,7 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
         $user_selected_language = api_get_setting('platformLanguage');
     }
 
+    $user_selected_language = 'en';
     $countryCode = languageToCountryIsoCode($user_selected_language);
     $language = api_get_language_from_iso($user_selected_language);
 

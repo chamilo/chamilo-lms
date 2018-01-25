@@ -47,18 +47,23 @@ class LegacyLoginListener implements EventSubscriberInterface
             return;
         }
 
+        $container = $this->container;
         $token = $this->tokenStorage->getToken();
+        $session = $request->getSession();
         if ($token) {
-            $isGranted = $this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY');
-            if (!$isGranted) {
+            $isGranted = $container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY');
+            if ($isGranted) {
+                $session->set('IS_AUTHENTICATED_FULLY', true);
+            } else {
+                $session->set('IS_AUTHENTICATED_FULLY', false);
                 if (isset($_SESSION) && isset($_SESSION['_user'])) {
                     if ($_SESSION['_user']['active'] == 1) {
                         $username = $_SESSION['_user']['username'];
                         $criteria = ['username' => $username];
                         /** @var User $user */
-                        $user = $this->container->get('sonata.user.user_manager')->findOneBy($criteria);
+                        $user = $container->get('sonata.user.user_manager')->findOneBy($criteria);
                         if ($user) {
-                            $em = $this->container->get('doctrine');
+                            $em = $container->get('doctrine');
                             /** @var User $completeUser */
                             $completeUser = $em->getRepository('ChamiloUserBundle:User')->findOneBy($criteria);
                             $user->setLanguage($completeUser->getLanguage());
@@ -88,8 +93,8 @@ class LegacyLoginListener implements EventSubscriberInterface
 
                             //now dispatch the login event
                             $event = new InteractiveLoginEvent($request, $token);
-                            $this->container->get('event_dispatcher')->dispatch("security.interactive_login", $event);
-                            $this->container->get('event_dispatcher')->addListener(
+                            $container->get('event_dispatcher')->dispatch("security.interactive_login", $event);
+                            $container->get('event_dispatcher')->addListener(
                                 KernelEvents::RESPONSE,
                                 [$this, 'redirectUser']
                             );

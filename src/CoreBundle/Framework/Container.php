@@ -233,7 +233,15 @@ class Container
      */
     public static function getTranslator()
     {
-        return self::$container->get('translator.default');
+        if (isset(self::$translator)) {
+            return self::$translator;
+        }
+
+        if (self::$container) {
+            return self::$container->get('translator.default');
+        }
+
+        return false;
     }
 
     /**

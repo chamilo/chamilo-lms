@@ -46,7 +46,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'allow_my_files' => 'true',
                     'registered' => 'false',
                     'load_term_conditions_section' => 'login',
-                    'server_type' => 'false',
+                    //'server_type' => 'prod', replaced by value in .env
                     'show_full_skill_name_on_skill_wheel' => 'false',
                     'show_official_code_whoisonline' => 'false',
                     'show_tabs' => [],
@@ -151,7 +151,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     ],
                 ]
             )
-            ->add('server_type', YesNoType::class)
             ->add('show_full_skill_name_on_skill_wheel', YesNoType::class)
             ->add('show_official_code_whoisonline', YesNoType::class)
             ->add(

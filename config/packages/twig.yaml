@@ -1,8 +1,7 @@
 twig:
-#    paths: ['%kernel.project_dir%/templates']
+    paths: ['%kernel.project_dir%/templates']
     debug: '%kernel.debug%'
-    strict_variables: '%kernel.debug%'
-    exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
+    exception_controller: 'Chamilo\ThemeBundle\Controller\ExceptionController::showAction'
     globals:
         show_toolbar: true
         show_footer: true

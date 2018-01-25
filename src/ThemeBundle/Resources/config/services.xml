@@ -10,20 +10,18 @@
         <parameter key="chamilo_admin_theme.navbar_msg_listener.class">Chamilo\ThemeBundle\EventListener\NavbarMessageListDemoListener</parameter>
         <parameter key="chamilo_admin_theme.setup_menu_listener.class">Chamilo\ThemeBundle\EventListener\SidebarSetupMenuDemoListener</parameter>
         <parameter key="chamilo_admin_theme.exception_controller.class">Chamilo\ThemeBundle\Controller\ExceptionController</parameter>
-        <parameter key="twig.controller.exception.class">Chamilo\ThemeBundle\Controller\ExceptionController</parameter>
         <parameter key="chamilo_admin_theme.widget_extension.class">Chamilo\ThemeBundle\Twig\WidgetExtension</parameter>
         <parameter key="chamilo_admin_theme.theme_manager.class">Chamilo\ThemeBundle\Theme\ThemeManager</parameter>
         <parameter key="chamilo_admin_theme.setup_theme_listener.class">Chamilo\ThemeBundle\EventListener\SetupThemeListener</parameter>
         <parameter key="chamilo_admin_theme.dependency_resolver.class" />
         <parameter key="chamilo_admin_theme.css_base" />
-        <parameter key="chamilo_admin_theme.lte_admin" />
-
     </parameters>
 
     <services>
-        <service id="chamilo_admin_theme.exception_controller" class="%chamilo_admin_theme.exception_controller.class%">
-            <argument type="service" id="twig"/>
-            <argument>%kernel.debug%</argument>
+        <defaults autowire="true" />
+
+        <service id="Chamilo\ThemeBundle\Controller\ExceptionController" public="true">
+            <argument key="$debug">%kernel.debug%</argument>
         </service>
 
         <service id="chamilo_admin_theme.widget_extension.class" class="%chamilo_admin_theme.widget_extension.class%">
@@ -35,12 +33,12 @@
             <argument>%chamilo_admin_theme.dependency_resolver.class%</argument>
         </service>
 
-        <service id="chamilo_admin_theme.setup_theme_listener" class="%chamilo_admin_theme.setup_theme_listener.class%">
-            <argument type="service" id="chamilo_admin_theme.theme_manager"/>
-            <argument>%chamilo_admin_theme.css_base%</argument>
-            <argument>%chamilo_admin_theme.lte_admin%</argument>
-            <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" />
-        </service>
+        <!--<service id="chamilo_admin_theme.setup_theme_listener" class="%chamilo_admin_theme.setup_theme_listener.class%">-->
+            <!--<argument type="service" id="chamilo_admin_theme.theme_manager"/>-->
+            <!--<argument>%chamilo_admin_theme.css_base%</argument>-->
+            <!--<argument>%chamilo_admin_theme.lte_admin%</argument>-->
+            <!--<tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" />-->
+        <!--</service>-->
         <service id="chamilo_admin_theme.context_listener" class="Chamilo\ThemeBundle\EventListener\ContextListener">
             <argument type="service" id="service_container" />
             <tag name="kernel.event_listener" event="kernel.request" method="onRequest" />

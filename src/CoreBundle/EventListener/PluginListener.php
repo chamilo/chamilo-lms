@@ -3,11 +3,11 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Class PluginListener
@@ -15,16 +15,7 @@ use Chamilo\CoreBundle\Framework\Container;
  */
 class PluginListener
 {
-    /** @var ContainerInterface */
-    protected $container;
-
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
+    use ContainerAwareTrait;
 
     /**
      * @param GetResponseEvent $event
@@ -63,9 +54,7 @@ class PluginListener
         }
 
         // Legacy way of detect current access_url
-
         $request = $event->getRequest();
-
         if (!$request->hasPreviousSession()) {
             return;
         }
@@ -93,6 +82,7 @@ class PluginListener
         $container = $this->container;
         $installed = $this->container->getParameter('installed');
         if (!empty($installed)) {
+            return;
             //$result = & api_get_settings('Plugins', 'list', $_configuration['access_url']);
             $result = & api_get_settings('Plugins', 'list', 1);
 

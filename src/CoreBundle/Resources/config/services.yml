@@ -135,10 +135,11 @@ services:
     # Setting user and platform locale
     chamilo_core.listener.plugin:
         class: Chamilo\CoreBundle\EventListener\PluginListener
-        arguments: ['@service_container']
+        calls:
+            - [setContainer, ['@service_container']]
         tags:
             - {name: kernel.event_listener, event: kernel.request, method: onKernelRequest}
-            - {name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 9}
+            - {name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 11}
 
 #    chamilo_core.listener.legacy_login_listener:
 #        class: Chamilo\CoreBundle\EventListener\LegacyLoginListener

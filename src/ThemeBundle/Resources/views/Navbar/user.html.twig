@@ -2,7 +2,8 @@
 {% import "ChamiloThemeBundle:Macros:image.html.twig" as macro_image %}
 <li class="dropdown user user-menu">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-        <img class="img-circle" src="{{ asset(user.avatarOrAnonymous(32)) }}" alt="{{ user.completeName }}" />
+        <img class="img-circle" src="{{ asset(user.avatarOrAnonymous(32)) }}"
+             alt="{{ user.completeName }}" />
         <span class="caret"></span>
     </a>
 

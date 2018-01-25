@@ -1516,7 +1516,7 @@ if ($isAllowedToEdit ||
 // END ACTION MENU
 // Attach certificate in the gradebook
 if (isset($_GET['curdirpath']) &&
-    strpos($_GET['curdirpath'],'/certificates') !== false &&
+    strpos($_GET['curdirpath'], '/certificates') !== false &&
     isset($_GET['set_certificate']) &&
     $_GET['set_certificate'] == strval(intval($_GET['set_certificate']))
 ) {

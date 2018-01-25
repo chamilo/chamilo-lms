@@ -8038,4 +8038,6 @@ $SessionTemplate = "Modèle de session";
 $CloudFileLink = "Lien vers un fichier Cloud";
 $ResetFieldX = "Réinitialiser %s";
 $MyGeneralCertificate = "Mon certificat global";
+$ScoreNote = "Note";
+$ScoreTest = "Test";
 ?>

@@ -180,48 +180,7 @@ function api_get_interface_language(
     $check_sub_language = false,
     $setParentLanguageName = true
 ) {
-    global $language_interface;
-
-    if (empty($language_interface)) {
-        return 'en';
-    }
-
-    if ($check_sub_language) {
-        static $parent_language_name = null;
-
-        if (!isset($parent_language_name)) {
-            // 2. The current language is a sub language so we grab the father's
-            // setting according to the internalization_database/name_order_convetions.php file
-            $language_id = api_get_language_id($language_interface);
-            $language_info = api_get_language_info($language_id);
-
-            if (!empty($language_id) &&
-                !empty($language_info)
-            ) {
-                if (!empty($language_info['parent_id'])) {
-                    $language_info = api_get_language_info($language_info['parent_id']);
-                    if ($setParentLanguageName) {
-                        $parent_language_name = $language_info['english_name'];
-                    }
-
-                    if (!empty($parent_language_name)) {
-                        return $parent_language_name;
-                    }
-                }
-
-                return $language_info['english_name'];
-            }
-
-            return 'english';
-        } else {
-            return $parent_language_name;
-        }
-    } else {
-        // 2. Normal way
-        $interface_language = $purified ? api_purify_language_id($language_interface) : $language_interface;
-    }
-
-    return $interface_language;
+    return api_get_language_isocode();
 }
 
 /**
@@ -346,23 +305,25 @@ function api_get_timezone()
     // First, get the default timezone of the server
     $to_timezone = date_default_timezone_get();
     // Second, see if a timezone has been chosen for the platform
-    $timezone_value = api_get_setting('timezone_value', 'timezones');
+    $timezone_value = api_get_setting('timezone_value');
 
     if ($timezone_value != null) {
         $to_timezone = $timezone_value;
     }
     // If allowed by the administrator
-    $use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
+    $use_users_timezone = api_get_setting('use_users_timezone');
 
     if ($use_users_timezone === 'true') {
-        $userId = api_get_user_id();
-        // Get the timezone based on user preference, if it exists
-        $timezone_user = UserManager::get_extra_user_data_by_field(
-            $userId,
-            'timezone'
-        );
-        if (isset($timezone_user['timezone']) && $timezone_user['timezone'] != null) {
-            $to_timezone = $timezone_user['timezone'];
+        if (!api_is_anonymous()) {
+            $userId = api_get_user_id();
+            // Get the timezone based on user preference, if it exists
+            $timezone_user = UserManager::get_extra_user_data_by_field(
+                $userId,
+                'timezone'
+            );
+            if (isset($timezone_user['timezone']) && $timezone_user['timezone'] != null) {
+                $to_timezone = $timezone_user['timezone'];
+            }
         }
     }
 

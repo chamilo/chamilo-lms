@@ -469,7 +469,6 @@ function get_language_folder_list()
         'sw' => 'swahili',
         'yo' => 'yoruba'
     ];
-
 }
 
 /**

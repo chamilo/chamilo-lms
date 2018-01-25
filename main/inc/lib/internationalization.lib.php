@@ -73,7 +73,7 @@ function get_lang($variable)
     $defaultDomain = 'messages';
     $translated = Container::getTranslator()->trans(
         $variable,
-        array(),
+        [],
         $defaultDomain
     );
 
@@ -81,7 +81,7 @@ function get_lang($variable)
         // Check the langVariable for BC
         $translated = Container::getTranslator()->trans(
             "lang$variable",
-            array(),
+            [],
             $defaultDomain
         );
 

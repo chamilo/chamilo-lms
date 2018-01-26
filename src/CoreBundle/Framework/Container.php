@@ -3,18 +3,17 @@
 
 namespace Chamilo\CoreBundle\Framework;
 
+use Sonata\PageBundle\Entity\SiteManager;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
-use Symfony\Component\Security\Core\SecurityContextInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Bundle\FrameworkBundle\Translation\Translator;
-use Symfony\Component\Templating\Helper\CoreAssetsHelper;
 use Chamilo\CoreBundle\Component\Editor\Editor;
 use Symfony\Component\Translation\TranslatorInterface;
+use Chamilo\SettingsBundle\Manager\SettingsManager;
+use Sonata\UserBundle\Entity\UserManager;
 
 /**
  * Class Container
@@ -36,6 +35,9 @@ class Container
     public static $translator;
     public static $mailer;
     public static $template;
+    private static $settingsManager;
+    private static $userManager;
+    private static $siteManager;
 
     public static $rootDir;
     public static $logDir;
@@ -205,11 +207,14 @@ class Container
     }
 
     /**
-     * @return Session
+     * @return Session|false
      */
     public static function getSession()
     {
-        return self::$container->get('session');
+        if (self::$container && self::$container->has('session')) {
+            return self::$container->get('session');
+        }
+        return false;
     }
 
     /**
@@ -269,11 +274,19 @@ class Container
     }
 
     /**
-     * @return \Chamilo\SettingsBundle\Manager\SettingsManager
+     * @return SettingsManager
      */
     public static function getSettingsManager()
     {
-        return self::$container->get('chamilo.settings.manager');
+        return self::$settingsManager;
+    }
+
+    /**
+     * @param SettingsManager $manager
+     */
+    public static function setSettingsManager($manager)
+    {
+        self::$settingsManager = $manager;
     }
 
     /**
@@ -293,12 +306,36 @@ class Container
     }
 
     /**
-     * @return \Sonata\UserBundle\Entity\UserManager
+     * @return UserManager
      */
     public static function getUserManager()
     {
-        //return self::$container->get('sonata.user.user_manager');
-        return self::$container->get('sonata.user.user_manager');
+        return self::$userManager;
+    }
+
+    /**
+     * @param UserManager
+     */
+    public static function setUserManager($manager)
+    {
+        self::$userManager = $manager;
+    }
+
+
+    /**
+     * @return SiteManager
+     */
+    public static function getSiteManager()
+    {
+        return self::$siteManager;
+    }
+
+    /**
+     * @param UserManager
+     */
+    public static function setSiteManager($manager)
+    {
+        self::$siteManager = $manager;
     }
 
     /**
@@ -349,5 +386,21 @@ class Container
     public static function getToolChain()
     {
         return self::$container->get('chamilo_course.tool_chain');
+    }
+
+    /**
+     * @param ContainerInterface $container
+     */
+    public static function setLegacyServices($container)
+    {
+        \Database::setConnection($container->get('doctrine.dbal.default_connection'));
+        \Database::setManager($container->get('doctrine.orm.entity_manager'));
+
+        Container::setSettingsManager($container->get('chamilo.settings.manager'));
+        Container::setUserManager($container->get('sonata.user.user_manager'));
+        Container::setSiteManager($container->get('sonata.page.manager.site'));
+        Container::$session = $container->get('session');
+
+
     }
 }

@@ -297,7 +297,6 @@ function api_get_timezones()
 
 /**
  * Returns the timezone to be converted to/from, based on user or admin preferences
- *
  * @return string The timezone chosen
  */
 function api_get_timezone()
@@ -350,7 +349,6 @@ function api_get_utc_datetime(
     $return_null_if_invalid_date = false,
     $returnObj = false
 ) {
-    $from_timezone = api_get_timezone();
     $to_timezone = 'UTC';
     if (is_null($time) || empty($time) || $time === '0000-00-00 00:00:00') {
         if ($return_null_if_invalid_date) {
@@ -371,7 +369,8 @@ function api_get_utc_datetime(
     }
 
     try {
-        $date = new DateTime($time, new DateTimezone($from_timezone));
+        $fromTimezone = api_get_timezone();
+        $date = new DateTime($time, new DateTimezone($fromTimezone));
         $date->setTimezone(new DateTimeZone($to_timezone));
         if ($returnObj) {
             return $date;
@@ -379,6 +378,7 @@ function api_get_utc_datetime(
             return $date->format('Y-m-d H:i:s');
         }
     } catch (Exception $e) {
+        error_log($e->getMessage());
         return null;
     }
 }

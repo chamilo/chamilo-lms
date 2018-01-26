@@ -701,6 +701,8 @@ function api_get_path($path = '', $configuration = [])
     $course_folder = 'courses/';
     static $root_web = '';
 
+    //var_dump(Container::getRouter()->generate('legacy_index'));exit;
+
     $root_sys = Container::getRootDir();
 
     // If no $root_web has been set so far *and* no custom config has been passed to the function
@@ -2618,6 +2620,18 @@ function api_get_setting($variable)
     }
 
     return $value;
+}
+
+/**
+ * @param string $variable
+ * @param string $option
+ * @return bool
+ */
+function api_get_setting_in_list($variable, $option)
+{
+    $value = api_get_setting($variable);
+
+    return in_array($option, $value);
 }
 
 /**
@@ -4555,11 +4569,11 @@ function api_get_languages()
     $sql = "SELECT * FROM $tbl_language WHERE available='1' 
             ORDER BY original_name ASC";
     $result = Database::query($sql);
-    $language_list = [];
+    $languages = [];
     while ($row = Database::fetch_array($result, 'ASSOC')) {
-        $language_list[$row['isocode']] = $row['original_name'];
+        $languages[$row['isocode']] = $row['original_name'];
     }
-    return $language_list;
+    return $languages;
 }
 
 /**
@@ -7030,7 +7044,6 @@ function api_check_archive_dir()
 function api_get_locked_settings()
 {
     return [
-        'server_type',
         'permanently_remove_deleted_files',
         'account_valid_duration',
         'service_ppt2lp',

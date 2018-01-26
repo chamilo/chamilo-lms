@@ -54,6 +54,7 @@ class LegacyListener
 
         // Setting container
         Container::setContainer($container);
+        Container::setLegacyServices($container);
         Container::setRequest($request);
 
         // Setting database.

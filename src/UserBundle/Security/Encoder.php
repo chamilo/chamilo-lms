@@ -21,6 +21,7 @@ class Encoder extends BasePasswordEncoder
      */
     public function __construct($method)
     {
+        $method = str_replace("'", '', trim($method));
         $this->method = $method;
     }
 

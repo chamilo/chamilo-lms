@@ -1,4 +1,9 @@
 msgid "InstallationLanguage"
 msgstr "Installation language"
 
+msgid "DefaultInstallAdminFirstname"
+msgstr "Joe"
+
+msgid "DefaultInstallAdminLastname"
+msgstr "Doe"
 

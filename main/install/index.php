@@ -57,12 +57,13 @@ putenv("APP_ENV=dev");
 putenv("APP_DEBUG=1");
 
 // Calling Symfony container
-$kernel = new Chamilo\Kernel('dev', true);
-$kernel->boot();
+//$kernel = new Chamilo\Kernel('dev', true);
+/*$kernel->boot();
 $container = $kernel->getContainer();
 $oldSession = $container->get('session');
-$oldSession->set('s', 's');
-Container::setContainer($container);
+Container::setContainer($container);*/
+
+session_start();
 
 require_once api_get_path(LIBRARY_PATH).'database.constants.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
@@ -75,7 +76,7 @@ $installationLanguage = 'en';
 if (!empty($_POST['language_list'])) {
     $search = ['../', '\\0'];
     $installationLanguage = str_replace($search, '', urldecode($_POST['language_list']));
-    $_SESSION['install_language'] = $installationLanguage;
+    //$_SESSION['install_language'] = $installationLanguage;
 } else {
     // Trying to switch to the browser's language, it is covenient for most of the cases.
     $installationLanguage = detect_browser_language();
@@ -103,7 +104,7 @@ $_setting = [
     'stylesheets' => 'chamilo'
 ];
 
-$encryptPassForm = '';
+$encryptPassForm = 'bcrypt';
 $urlAppendPath = '';
 $urlForm = '';
 $pathForm = '';
@@ -116,8 +117,8 @@ $dbPortForm = 3306;
 $allowSelfReg = '';
 $allowSelfReg = 'approval';
 $allowSelfRegProf = 1;
-$adminLastName = '';
-$adminFirstName = '';
+$adminLastName = get_lang('DefaultInstallAdminLastname');
+$adminFirstName = get_lang('DefaultInstallAdminFirstname');
 $loginForm = 'admin';
 $passForm = '';
 $institutionUrlForm = 'http://www.chamilo.org';
@@ -127,8 +128,8 @@ $educationForm = 'Albert Einstein';
 $adminPhoneForm = '(000) 001 02 03';
 $institutionForm = 'My Organisation';
 $session_lifetime = 360000;
-$installLanguage = isset($_SESSION['install_language']) ? $_SESSION['install_language'] : 'english';
-
+//$installLanguage = isset($_SESSION['install_language']) ? $_SESSION['install_language'] : 'english';
+$installLanguage = '';
 $installationGuideLink = '../../documentation/installation_guide.html';
 /*
 // Loading language files.
@@ -275,8 +276,7 @@ if (!isset($_GET['running'])) {
     if (isset($email_parts[1]) && $email_parts[1] == 'localhost') {
         $emailForm .= '.localdomain';
     }
-    $adminLastName = get_lang('DefaultInstallAdminLastname');
-    $adminFirstName = get_lang('DefaultInstallAdminFirstname');
+
     $loginForm = 'admin';
     $passForm = api_generate_password();
     $institutionUrlForm = 'http://www.chamilo.org';
@@ -286,24 +286,16 @@ if (!isset($_GET['running'])) {
     $userMailCanBeEmpty = 1;
     $allowSelfReg = 'approval';
     $allowSelfRegProf = 1; //by default, a user can register as teacher (but moderation might be in place)
-    $encryptPassForm = 'bcrypt';
     if (!empty($_GET['profile'])) {
         $installationProfile = api_htmlentities($_GET['profile'], ENT_QUOTES);
     }
 } else {
     foreach ($_POST as $key => $val) {
-        $magic_quotes_gpc = ini_get('magic_quotes_gpc');
         if (is_string($val)) {
-            if ($magic_quotes_gpc) {
-                $val = stripslashes($val);
-            }
             $val = trim($val);
             $_POST[$key] = $val;
         } elseif (is_array($val)) {
             foreach ($val as $key2 => $val2) {
-                if ($magic_quotes_gpc) {
-                    $val2 = stripslashes($val2);
-                }
                 $val2 = trim($val2);
                 $_POST[$key][$key2] = $val2;
             }
@@ -654,10 +646,10 @@ if (@$_POST['step2']) {
         <p><?php echo get_lang('CRSTablesIntro') ?></p>
         <p>
             <button type="button" class="btn btn-warning btn-xs" id="btn-remove-crs-table" data-removing-text="<?php echo get_lang('Removing') ?>" autocomplete="off">
-                    <span class="fa-stack" aria-hidden="true">
-                        <span class="fa fa-circle-thin fa-stack-2x"></span>
-                        <span class="fa fa-trash-o fa-stack-1x"></span>
-                    </span>
+                <span class="fa-stack" aria-hidden="true">
+                    <span class="fa fa-circle-thin fa-stack-2x"></span>
+                    <span class="fa fa-trash-o fa-stack-1x"></span>
+                </span>
                 <?php echo get_lang('CheckForCRSTables') ?>
             </button>
         </p>
@@ -678,7 +670,6 @@ if (@$_POST['step2']) {
                 }
 
                 $('#pnl-check-crs-tables').removeClass('hide');
-
                 $('#btn-remove-crs-table').on('click', function (e) {
                     e.preventDefault();
 
@@ -702,14 +693,12 @@ if (@$_POST['step2']) {
                         db_port: '<?php echo $dbPortForm; ?>'
                     }, function () {
                         $btnRemove.remove();
-
                         $btnNext.prop('disabled', false);
                     });
                 });
             });
         });
     </script>
-
     <table width="100%">
         <tr>
             <td>
@@ -807,6 +796,7 @@ if (@$_POST['step2']) {
                 '{{APP_INSTALLED}}' => 1,
                 '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm
             ];
+
             updateEnvFile($distFile, $envFile, $params);
             (new Dotenv())->load($envFile);
 
@@ -823,18 +813,10 @@ if (@$_POST['step2']) {
             if ($result == 0) {
                 // Boot kernel and get the doctrine from Symfony container
                 $kernel->boot();
-                $container = $kernel->getContainer();
-                $container->set('session', $oldSession);
-                Container::setContainer($container);
-                $doctrine = $container->get('doctrine');
-                $siteManager = $container->get('sonata.page.manager.site');
-                $manager = $doctrine->getManager();
+                $containerDatabase = $kernel->getContainer();
                 $sysPath = api_get_path(SYS_PATH);
-                $settingsManager = $container->get('chamilo.settings.manager');
                 finishInstallationWithContainer(
-                    $siteManager,
-                    $settingsManager,
-                    $manager,
+                    $containerDatabase,
                     $sysPath,
                     $encryptPassForm,
                     $passForm,

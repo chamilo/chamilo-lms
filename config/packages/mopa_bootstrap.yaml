@@ -18,3 +18,12 @@ mopa_bootstrap:
                 icon: plus-sign
                 attr:
                     class: btn btn-primary
+    icons:
+        icon_set: fontawesome4
+        shortcut: icon
+
+
+
+
+
+

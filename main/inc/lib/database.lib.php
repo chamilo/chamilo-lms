@@ -26,7 +26,6 @@ class Database
      *
      * @throws \Doctrine\ORM\ORMException
      *
-     * @return
      */
     public function connect(
         $params = [],
@@ -287,17 +286,15 @@ class Database
     public static function query($query)
     {
         $connection = self::getManager()->getConnection();
-        if (api_get_setting('server_type') == 'test') {
+        $result = null;
+        try {
             $result = $connection->executeQuery($query);
-        } else {
-            try {
-                $result = $connection->executeQuery($query);
-            } catch (Exception $e) {
-                error_log($e->getMessage());
-                api_not_allowed(false, get_lang('GeneralError'));
-            }
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            api_not_allowed(false, get_lang('GeneralError'));
+        } finally {
+            return $result;
         }
-
         return $result;
     }
 

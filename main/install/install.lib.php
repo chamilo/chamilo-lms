@@ -6,6 +6,8 @@ use Chamilo\TicketBundle\Entity\Project as TicketProject;
 use Chamilo\TicketBundle\Entity\Category as TicketCategory;
 use Chamilo\TicketBundle\Entity\Priority as TicketPriority;
 use Doctrine\ORM\EntityManager;
+use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Chamilo LMS
@@ -56,7 +58,8 @@ function isAlreadyInstalledSystem()
  * @param   string  $returnSuccess Text to show when extension is available (defaults to 'Yes')
  * @param   string  $returnFailure Text to show when extension is available (defaults to 'No')
  * @param   boolean $optional Whether this extension is optional (then show unavailable text in orange rather than red)
- * @param   string  $enabledTerm If this string is not null, then use to check if the corresponding parameter is = 1. If not, mention it's present but not enabled. For example, for opcache, this should be 'opcache.enable'
+ * @param   string  $enabledTerm If this string is not null, then use to check if the corresponding parameter is = 1.
+ * If not, mention it's present but not enabled. For example, for opcache, this should be 'opcache.enable'
  * @return  string  HTML string reporting the status of this extension. Language-aware.
  * @author  Christophe Gesch??
  * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -712,12 +715,10 @@ function display_requirements(
     echo '</div>';
 
     $properlyAccessUrl = checkAccessUrl();
-
     if (!$properlyAccessUrl) {
         echo '
             <div class="alert alert-danger">
-                ' . Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_MEDIUM, true, false, true).
-            ' '.
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp;'.
             sprintf(get_lang('InstallMultiURLDetectedNotMainURL'), api_get_configuration_value('root_web')).'
             </div>
         ';
@@ -725,19 +726,11 @@ function display_requirements(
 
     //  SERVER REQUIREMENTS
     echo '<div class="RequirementHeading"><h4>'.get_lang('ServerRequirements').'</h4>';
-    $timezone = checkPhpSettingExists("date.timezone");
+    $timezone = checkPhpSettingExists('date.timezone');
     if (!$timezone) {
-        echo "<div class='alert alert-warning'>".
-            Display::return_icon(
-                'warning.png',
-                get_lang('Warning'),
-                '',
-                ICON_SIZE_MEDIUM,
-                true,
-                false,
-                false
-            ).
-            get_lang("DateTimezoneSettingNotSet")."</div>";
+        echo "<div class='alert alert-warning'>
+            <i class=\"fa fa-exclamation-triangle\" aria-hidden=\"true\"></i>&nbsp;".
+            get_lang('DateTimezoneSettingNotSet')."</div>";
     }
 
     echo '<div class="RequirementText">'.get_lang('ServerRequirementsInfo').'</div>';
@@ -1880,9 +1873,9 @@ function get_countries_list_from_array($combo = false)
  */
 function lockSettings()
 {
-    $access_url_locked_settings = api_get_locked_settings();
+    $settings = api_get_locked_settings();
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-    foreach ($access_url_locked_settings as $setting) {
+    foreach ($settings as $setting) {
         $sql = "UPDATE $table SET access_url_locked = 1 WHERE variable  = '$setting'";
         Database::query($sql);
     }
@@ -2053,15 +2046,14 @@ function installSettings(
 ) {
     $allowTeacherSelfRegistration = $allowTeacherSelfRegistration ? 'true' : 'false';
 
-    // Use PHP 5.3 to avoid issue with weird peripherical auto-installers like travis-ci
     $settings = [
-        'Institution' => $organizationName,
-        'InstitutionUrl' => $organizationUrl,
-        'siteName' => $siteName,
-        'emailAdministrator' => $adminEmail,
-        'administratorSurname' => $adminLastName,
-        'administratorName' => $adminFirstName,
-        'platformLanguage' => $language,
+        'institution' => $organizationName,
+        'institution_url' => $organizationUrl,
+        'site_name' => $siteName,
+        'administrator_email' => $adminEmail,
+        'administrator_surname' => $adminLastName,
+        'administrator_name' => $adminFirstName,
+        'platform_language' => $language,
         'allow_registration' => $allowRegistration,
         'allow_registration_as_teacher' => $allowTeacherSelfRegistration,
     ];
@@ -2720,8 +2712,7 @@ function updateEnvFile($distFile, $envFile, $params)
  *
  * After the schema was created (table creation), the function adds
  * admin/platform information.
- * @param \Chamilo\CourseBundle\Manager\SettingsManager $settingsManager
- * @param EntityManager $manager
+ * @param \Psr\Container\ContainerInterface $container
  * @param string $sysPath
  * @param string $encryptPassForm
  * @param string $passForm
@@ -2739,9 +2730,7 @@ function updateEnvFile($distFile, $envFile, $params)
  * @param string $installationProfile Installation profile, if any was provided
  */
 function finishInstallationWithContainer(
-    $siteManager,
-    $settingsManager,
-    $manager,
+    $container,
     $sysPath,
     $encryptPassForm,
     $passForm,
@@ -2759,10 +2748,13 @@ function finishInstallationWithContainer(
     $installationProfile = ''
 ) {
     $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
-    $connection = $manager->getConnection();
+    Container::setContainer($container);
+    Container::setLegacyServices($container);
 
-    Database::setConnection($connection);
-    Database::setManager($manager);
+    $manager = Database::getManager();
+    $connection = $manager->getConnection();
+    $siteManager = Container::getSiteManager();
+    $settingsManager = Container::getSettingsManager();
 
     $sql = getVersionTable();
 
@@ -2852,7 +2844,7 @@ function finishInstallationWithContainer(
     }
 
     // Creating AccessUrl
-    $accessUrl = new \Chamilo\CoreBundle\Entity\AccessUrl();
+    $accessUrl = new AccessUrl();
     $accessUrl
         ->setUrl('http://localhost/')
         ->setDescription('')
@@ -2877,7 +2869,7 @@ function finishInstallationWithContainer(
     $site->setName('localhost');
     $site->setEnabledFrom(new \DateTime('now'));
     $site->setEnabledTo(new \DateTime('+20 years'));
-    $site->setRelativePath("");
+    $site->setRelativePath('');
     $site->setIsDefault(true);
     $siteManager->save($site);
 
@@ -2957,7 +2949,7 @@ function finishInstallationWithContainer(
     updateDirAndFilesPermissions();
 
     // Set the latest version
-    $path = $sysPath.'app/Migrations/Schema/V111/';
+    /*$path = $sysPath.'app/Migrations/Schema/V111/';
     $finder = new \Symfony\Component\Finder\Finder();
     $files = $finder->files()->in($path);
 
@@ -2968,7 +2960,7 @@ function finishInstallationWithContainer(
         $version = str_replace(['Version', '.php'], '', $version->getFilename());
         $sql = "INSERT INTO version (version) VALUES ('$version')";
         Database::query($sql);
-    }
+    }*/
 }
 
 /**

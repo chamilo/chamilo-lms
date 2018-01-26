@@ -1,5 +1,5 @@
 twig:
-    paths: ['%kernel.project_dir%/templates']
+    paths: ['%kernel.project_dir%/templates', '%kernel.project_dir%/main/template/']
     debug: '%kernel.debug%'
     exception_controller: 'Chamilo\ThemeBundle\Controller\ExceptionController::showAction'
     globals:

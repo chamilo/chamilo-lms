@@ -1,0 +1,2 @@
+knp_menu:
+    default_renderer: twig

@@ -32,7 +32,8 @@ services:
     # Chamilo custom password encoder (depends on the password_encryption param)
     chamilo_user.security.encoder:
         class: Chamilo\UserBundle\Security\Encoder
-        arguments: ['%password_encryption%']
+        arguments:
+            - '%password_encryption%'
 
     # Course voter checks if a user has permissions to do actions in a course
     chamilo_core.security.authorization.voter.course_voter:
@@ -194,15 +195,18 @@ services:
 #        class: Chamilo\CoreBundle\Menu\SimpleMenuBuilder
 #        arguments: ['@service_container']
 
-#    chamilo_core.menu.nav_builder:
-#        class: Chamilo\CoreBundle\Menu\NavBuilder
-#        arguments: ['@knp_menu.factory', '@router']
-#        tags:
-#         - {name: mopa_bootstrap.menu, alias: chamilo_core.menu.nav}
+    chamilo_core.menu.nav_builder:
+        class: Chamilo\CoreBundle\Menu\NavBuilder
+        calls:
+            - [setContainer, ['@service_container']]
+        tags:
+         - {name: mopa_bootstrap.menu, alias: chamilo_core.menu.nav}
 
-#    chamilo_core.menu.course_menu_builder:
-#        class: Chamilo\CoreBundle\Menu\LeftMenuBuilder
-#        arguments: ['@knp_menu.factory', '@chamilo_core.entity.manager.course_manager', '@router']
+    chamilo_core.menu.course_menu_builder:
+        class: Chamilo\CoreBundle\Menu\LeftMenuBuilder
+        calls:
+            - [setContainer, ['@service_container']]
+        arguments: ['@knp_menu.factory', '@chamilo_core.entity.manager.course_manager', '@router']
 
     # Auth listeners
     chamilo_core.listener.login_success_handler:

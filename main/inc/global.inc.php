@@ -38,8 +38,12 @@ $kernel = new Chamilo\Kernel($env, true);
 // Include the main Chamilo platform configuration file.
 $alreadyInstalled = false;
 
-// Boot Symfony container
-$kernel->boot();
+require_once __DIR__.'/../../public/legacy.php';
+
+$request = Sonata\PageBundle\Request\RequestFactory::createFromGlobals(
+    'host_with_path_by_locale'
+);
+$response = $kernel->handle($request);
 
 if ($kernel->isInstalled()) {
     require_once $kernel->getConfigurationFile();
@@ -90,13 +94,21 @@ require_once $libraryPath.'fileDisplay.lib.php';
 require_once $libraryPath.'course_category.lib.php';
 
 $container = $kernel->getContainer();
-$doctrine = $container->get('doctrine');
 
 // Connect Chamilo with the Symfony container
-$database = new \Database();
-$database->setManager($doctrine->getManager());
-$database->setConnection($doctrine->getConnection());
 Container::setContainer($container);
+Container::setLegacyServices($container);
+
+$router = $container->get('router');
+$context = $container->get('router.request_context');
+$append = $kernel->getUrlAppend();
+$baseUrl = '..';
+if (!empty($append)) {
+    $baseUrl = $append;
+}
+$context->setBaseUrl($baseUrl);
+$router->setContext($context);
+//$container->setParameter('router', $router);
 
 \CourseManager::setCourseManager(
     $container->get('chamilo_core.entity.manager.course_manager')

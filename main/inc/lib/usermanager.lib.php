@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\CoreBundle\Entity\Repository\AccessUrlRepository;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  *
@@ -61,29 +62,11 @@ class UserManager
      * Create/update/delete methods are available in the UserManager
      * (based in the Sonata\UserBundle\Entity\UserManager)
      *
-     * @return Chamilo\UserBundle\Entity\Manager\UserManager
+     * @return \Sonata\UserBundle\Entity\UserManager
      */
     public static function getManager()
     {
-        static $userManager;
-
-        if (!isset($userManager)) {
-            $encoderFactory = self::getEncoderFactory();
-            $passwordUpdater = new FOS\UserBundle\Util\PasswordUpdater($encoderFactory);
-            $canonicalUpdater = new FOS\UserBundle\Util\CanonicalFieldsUpdater(
-                new \FOS\UserBundle\Util\Canonicalizer(),
-                new \FOS\UserBundle\Util\Canonicalizer()
-            );
-
-            $userManager = new Chamilo\UserBundle\Entity\Manager\UserManager(
-                $passwordUpdater,
-                $canonicalUpdater,
-                Database::getManager(),
-                User::class
-            );
-        }
-
-        return $userManager;
+        return Container::getUserManager();
     }
 
     /**
@@ -345,7 +328,6 @@ class UserManager
 
         $currentDate = api_get_utc_datetime();
         $now = new DateTime();
-
         if (empty($expirationDate) || $expirationDate == '0000-00-00 00:00:00') {
             // Default expiration date
             // if there is a default duration of a valid account then
@@ -367,7 +349,7 @@ class UserManager
 
         /** @var User $user */
         $user = $userManager->createUser();
-
+        error_log('langua5');
         $user
             ->setLastname($lastName)
             ->setFirstname($firstName)
@@ -391,9 +373,13 @@ class UserManager
         if (!empty($expirationDate)) {
             $user->setExpirationDate($expirationDate);
         }
+        try {
 
         $userManager->updateUser($user);
         $userId = $user->getId();
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }
 
         if (!empty($userId)) {
             $return = $userId;

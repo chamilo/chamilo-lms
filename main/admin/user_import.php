@@ -24,7 +24,6 @@ function validate_data($users, $checkUniqueEmail = false)
 
     // 1. Check if mandatory fields are set.
     $mandatory_fields = ['LastName', 'FirstName'];
-
     if (api_get_setting('registration', 'email') == 'true' || $checkUniqueEmail) {
         $mandatory_fields[] = 'Email';
     }
@@ -217,6 +216,21 @@ function save_data($users)
                     }
                 }
             }
+
+            if (isset($user['Sessions']) && is_array($user['Sessions'])) {
+                foreach ($user['Sessions'] as $sessionId) {
+                    $sessionInfo = api_get_session_info($sessionId);
+                    if (!empty($sessionInfo)) {
+                        SessionManager::subscribe_users_to_session(
+                            $sessionId,
+                            [$user_id],
+                            SESSION_VISIBLE_READ_ONLY,
+                            false
+                        );
+                    }
+                }
+            }
+
             if (!empty($user['ClassId'])) {
                 $classId = explode('|', trim($user['ClassId']));
                 foreach ($classId as $id) {
@@ -250,6 +264,10 @@ function parse_csv_data($file)
     foreach ($users as $index => $user) {
         if (isset($user['Courses'])) {
             $user['Courses'] = explode('|', trim($user['Courses']));
+        }
+
+        if (isset($user['Sessions'])) {
+            $user['Sessions'] = explode('|', trim($user['Sessions']));
         }
 
         // Lastname is needed.
@@ -535,10 +553,10 @@ if ($count_fields > 0) {
 <pre>
 <b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;<span style="color:red;"><?php if (count($list) > 0) {
     echo implode(';', $list).';';
-} ?></span>Courses;ClassId;
+} ?></span>Courses;Sessions;ClassId;
 <b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;<?php echo implode('/', $defined_auth_sources); ?>;xxx;xxx;user/teacher/drh;0000-00-00 00:00:00;<span style="color:red;"><?php if (count($list_reponse) > 0) {
     echo implode(';', $list_reponse).';';
-} ?></span>xxx1|xxx2|xxx3;1;<br />
+} ?></span>xxx1|xxx2|xxx3;sessionId|sessionId|sessionId;1;<br />
 </pre>
 </blockquote>
 <p><?php echo get_lang('XMLMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
@@ -560,6 +578,7 @@ if ($count_fields > 0) {
     echo '</span>';
 } ?>&lt;/Status&gt;
         &lt;Courses&gt;xxx1|xxx2|xxx3&lt;/Courses&gt;
+        &lt;Sessions&gt;sessionId|sessionId|sessionId&lt;/Courses&gt;
         &lt;ClassId&gt;1&lt;/ClassId&gt;
         &lt;/Contact&gt;
 &lt;/Contacts&gt;

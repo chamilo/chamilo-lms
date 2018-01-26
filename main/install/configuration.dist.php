@@ -725,12 +725,16 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Show skills as a hierarchical table
 //$_configuration['table_of_hierarchical_skill_presentation'] = false;
 
+// Restrict course chat only for course coach in sessions
+// Course coaches will can chat with students only. And students will can chat with all course coaches
+//$_configuration['course_chat_restrict_to_coach'] = false;
+
+// Allow teachers, drhs and admins to access blocked LP's because a prerequisite.
+//$_configuration['allow_teachers_to_access_blocked_lp_by_prerequisite'] = false;
+
 // ------ Custom DB changes
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
 // ------ (End) Custom DB changes
-// Restrict course chat only for course coach in sessions
-// Course coaches will can chat with students only. And students will can chat with all course coaches
-//$_configuration['course_chat_restrict_to_coach'] = false;

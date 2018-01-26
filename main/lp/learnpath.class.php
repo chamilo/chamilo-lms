@@ -2311,6 +2311,13 @@ class learnpath
         $courseInfo,
         $sessionId
     ) {
+        $allow = api_get_configuration_value('allow_teachers_to_access_blocked_lp_by_prerequisite');
+        if ($allow) {
+            if (api_is_allowed_to_edit() || api_is_platform_admin() || api_is_drh()) {
+                return false;
+            }
+        }
+
         $isBlocked = false;
 
         if (!empty($prerequisite)) {

@@ -578,7 +578,7 @@ if ($count_fields > 0) {
     echo '</span>';
 } ?>&lt;/Status&gt;
         &lt;Courses&gt;xxx1|xxx2|xxx3&lt;/Courses&gt;
-        &lt;Sessions&gt;sessionId|sessionId|sessionId&lt;/Courses&gt;
+        &lt;Sessions&gt;sessionId|sessionId|sessionId&lt;/Sessions&gt;
         &lt;ClassId&gt;1&lt;/ClassId&gt;
         &lt;/Contact&gt;
 &lt;/Contacts&gt;

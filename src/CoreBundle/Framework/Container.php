@@ -400,7 +400,5 @@ class Container
         Container::setUserManager($container->get('sonata.user.user_manager'));
         Container::setSiteManager($container->get('sonata.page.manager.site'));
         Container::$session = $container->get('session');
-
-
     }
 }

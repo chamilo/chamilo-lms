@@ -19,9 +19,6 @@
             <button class="btn btn-danger hidden" type="button" id="btn-stop-record-{{ question_id }}" disabled>
                 <span class="fa fa-square fa-fw" aria-hidden="true"></span> {{ 'StopRecordingAudio'|get_lang }}
             </button>
-            <button class="btn btn-success hidden" type="button" id="btn-save-record-{{ question_id }}" disabled>
-                <span class="fa fa-send fa-fw" aria-hidden="true"></span> {{ 'SaveRecordedAudio'|get_lang }}
-            </button>
             <button id="hide_description_{{ question_id }}" type="button" class="btn btn-default advanced_options" data-toggle="button" aria-pressed="false" autocomplete="off">
                 <em class="fa fa-bars"></em> {{ 'AddText' | get_lang }}
             </button>
@@ -49,7 +46,6 @@ $(document).on('ready', function () {
         btnPauseId: '#btn-pause-record-{{ question_id }}',
         btnPlayId: '#btn-play-record-{{ question_id }}',
         btnStopId: '#btn-stop-record-{{ question_id }}',
-        btnSaveId: '#btn-save-record-{{ question_id }}',
         plyrPreviewId: '#record-preview-{{ question_id }}',
         directory: '{{ directory }}'
     }, {

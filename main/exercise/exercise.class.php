@@ -7839,6 +7839,9 @@ class Exercise
                                 $answer['question_id']
                             );
                             break;
+                        case ORAL_EXPRESSION:
+                            $isCorrect = false;
+                            break;
                         default:
                             $isCorrect = $objAnswer->isCorrectByAutoId($answer['answer']);
                     }

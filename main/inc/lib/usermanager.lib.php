@@ -374,9 +374,8 @@ class UserManager
             $user->setExpirationDate($expirationDate);
         }
         try {
-
-        $userManager->updateUser($user);
-        $userId = $user->getId();
+            $userManager->updateUser($user);
+            $userId = $user->getId();
         } catch (Exception $e) {
             error_log($e->getMessage());
         }

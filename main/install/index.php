@@ -76,7 +76,7 @@ $installationLanguage = 'en';
 if (!empty($_POST['language_list'])) {
     $search = ['../', '\\0'];
     $installationLanguage = str_replace($search, '', urldecode($_POST['language_list']));
-    //$_SESSION['install_language'] = $installationLanguage;
+//$_SESSION['install_language'] = $installationLanguage;
 } else {
     // Trying to switch to the browser's language, it is covenient for most of the cases.
     $installationLanguage = detect_browser_language();

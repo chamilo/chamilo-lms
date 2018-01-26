@@ -2713,7 +2713,11 @@ class DocumentManager
             $pageFormat = 'A4';
             $pdfOrientation = 'P';
         }
-        $pdf = new PDF($pageFormat, $pdfOrientation);
+        $pdf = new PDF(
+            $pageFormat,
+            $pdfOrientation,
+            $showHeaderAndFooter ? [] : ['top' => 0, 'left' => 0, 'bottom' => 0, 'right' => 0]
+        );
 
         if (api_get_configuration_value('use_alternative_document_pdf_footer')) {
             $view = new Template('', false, false, false, true, false, false);

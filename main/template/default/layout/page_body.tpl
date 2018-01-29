@@ -1,3 +1,4 @@
+{% autoescape false %}
 {% if actions != '' %}
     {{ actions }}
 {% endif %}
@@ -25,3 +26,4 @@
         {{ message}}
     </section>
 {% endif %}
+{% endautoescape %}

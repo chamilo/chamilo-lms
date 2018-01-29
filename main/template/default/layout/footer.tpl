@@ -1,3 +1,4 @@
+{% autoescape false %}
 <footer id="footer-section" class="sticky-footer bgfooter">
     <div class="container">
         <div class="pre-footer">
@@ -78,3 +79,4 @@
 {% include template ~ '/layout/footer.js.tpl' %}
 
 {{ execution_stats }}
+{% endautoescape %}

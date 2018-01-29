@@ -1,3 +1,4 @@
+{% autoescape false %}
 <meta charset="{{ system_charset }}" />
 <link href="https://chamilo.org/chamilo-lms/" rel="help" />
 <link href="https://chamilo.org/the-association/" rel="author" />
@@ -48,3 +49,4 @@ $(document).ready(function () {
 
 {{ css_custom_file_to_string }}
 {{ css_style_print }}
+{% endautoescape %}

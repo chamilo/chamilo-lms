@@ -1,3 +1,4 @@
+{% autoescape false %}
 <div id="navigation" class="notification-panel">
     {{ help_content }}
     {{ bug_notification }}
@@ -56,3 +57,4 @@
     {% include template ~ "/layout/menu.tpl" %}
 {% endblock %}
 {% include template ~ "/layout/course_navigation.tpl" %}
+{% endautoescape %}

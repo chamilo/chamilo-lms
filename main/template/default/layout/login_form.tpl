@@ -1,3 +1,4 @@
+{% autoescape false %}
 {% if _u.logged  == 0 %}
     {% if login_form %}
         <div id="login_block" class="panel panel-default">
@@ -33,3 +34,4 @@
         </div>
     {% endif %}
 {% endif %}
+{% endautoescape %}

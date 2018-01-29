@@ -1,3 +1,4 @@
+{% autoescape false %}
 <footer id="footer-section" class="sticky-footer bgfooter">
     <div class="container">
         <div class="pre-footer">
@@ -91,3 +92,4 @@
 </div>
 
 {{ execution_stats }}
+{% endautoescape %}

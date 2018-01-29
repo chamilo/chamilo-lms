@@ -352,8 +352,11 @@ class Template
      * */
     public function display_one_col_template()
     {
-        $tpl = $this->get_template('layout/layout_1_col.tpl');
-        $this->display($tpl);
+        $tpl = $this->get_template('layout/layout_1_col.html.twig');
+        echo \Chamilo\CoreBundle\Framework\Container::getTemplating()->render($tpl, $this->params);
+
+        /*$tpl = $this->get_template('layout/layout_1_col.tpl');
+        $this->display($tpl);*/
     }
 
     /**
@@ -361,8 +364,10 @@ class Template
      **/
     public function display_two_col_template()
     {
-        $tpl = $this->get_template('layout/layout_2_col.tpl');
-        $this->display($tpl);
+        $tpl = $this->get_template('layout/layout_2_col.html.twig');
+        echo \Chamilo\CoreBundle\Framework\Container::getTemplating()->render($tpl, $this->params);
+
+        //$this->display($tpl);
     }
 
     /**
@@ -868,10 +873,9 @@ class Template
             //$js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"></script>'."\n";
         }
 
-
         $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'build/chamilo.js"></script>'."\n";
         $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'libs/ckeditor/ckeditor.js"></script>'."\n";
-        $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'libs/readmore/readmore.js"></script>'."\n";
+        $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'libs/readmore-js/readmore.js"></script>'."\n";
 
         foreach ($js_files as $file) {
             //$js_file_to_string .= api_get_js($file);
@@ -1063,7 +1067,7 @@ class Template
         if (api_get_setting('show_link_ticket_notification') == 'true' && $this->user_is_logged_in) {
             // by default is project_id = 1
             $iconTicket = Display::return_icon(
-                'bug.png',
+                'help.png',
                 get_lang('Ticket'),
                 [],
                 ICON_SIZE_LARGE
@@ -1074,7 +1078,7 @@ class Template
                 $courseParams = api_get_cidreq();
             }
             $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id=1&'.$courseParams;
-            $rightFloatMenu .= '<div class="report">
+            $rightFloatMenu .= '<div class="help">
 		        <a href="'.$url.'" target="_blank">
                     '.$iconTicket.'
                 </a>
@@ -1170,6 +1174,15 @@ class Template
                 'X-Powered-By: '.$_configuration['software_name'].' '.substr($_configuration['system_version'], 0, 1)
             );
             self::addHTTPSecurityHeaders();
+
+            $responseCode = $this->getResponseCode();
+            if (!empty($responseCode)) {
+                switch ($responseCode) {
+                    case '404':
+                        header("HTTP/1.0 404 Not Found");
+                        break;
+                }
+            }
         }
 
         $socialMeta = '';

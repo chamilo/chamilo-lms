@@ -57,7 +57,6 @@ class CourseSettingsSchema extends AbstractSettingsSchema
         /** @var BaseTool $tool */
         foreach ($this->toolChain->getTools() as $tool) {
             $name = $tool->getName();
-            //$key = $tool->getName();
             $tools[$name] = $name;
         }
 

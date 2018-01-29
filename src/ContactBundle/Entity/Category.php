@@ -29,6 +29,12 @@ class Category
 
     /**
      * @var string
+     * @ORM\Column(name="name", type="string", nullable=false)
+     */
+    protected $name;
+
+    /**
+     * @var string
      * @ORM\Column(name="email", type="string")
      */
     protected $email;
@@ -49,6 +55,24 @@ class Category
     public function __toString()
     {
         return (string) $this->getName();
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return Category
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
     }
 
     /**

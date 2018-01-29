@@ -1093,7 +1093,6 @@ if (!empty($error)) {
             });
 
             $(\'button[name="save_now"]\').on(\'click\', function (e) {
-                
                 e.preventDefault();
                 e.stopPropagation();
                 

@@ -820,7 +820,6 @@ function api_get_person_name(
 
     $format = $valid[$format][$language];
 
-
     $keywords = [
         '%firstname',
         '%f',

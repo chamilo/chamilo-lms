@@ -10,8 +10,55 @@ window.RecordAudio = (function () {
             btnPause = $(rtcInfo.btnPauseId),
             btnPlay = $(rtcInfo.btnPlayId),
             btnStop = $(rtcInfo.btnStopId),
-            btnSave = $(rtcInfo.btnSaveId),
+            btnSave = rtcInfo.btnSaveId ? $(rtcInfo.btnSaveId) : null,
             tagAudio = $(rtcInfo.plyrPreviewId);
+
+        function saveAudio () {
+            var recordedBlob = recordRTC.getBlob();
+
+            if (!recordedBlob) {
+                return;
+            }
+
+            var btnSaveText = btnSave ? btnSave.html() : '';
+            var fileExtension = '.' + recordedBlob.type.split('/')[1];
+
+            var formData = new FormData();
+            formData.append('audio_blob', recordedBlob, fileName + fileExtension);
+            formData.append('audio_dir', rtcInfo.directory);
+
+            $.ajax({
+                url: _p.web_ajax + 'record_audio_rtc.ajax.php?tool=' + (!!txtName.length ? 'document' : 'exercise'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                beforeSend: function () {
+                    btnStart.prop('disabled', true);
+                    btnPause.prop('disabled', true);
+                    btnPlay.prop('disabled', true);
+                    btnStop.prop('disabled', true);
+                    if (btnSave) {
+                        btnSave.prop('disabled', true).text(btnSave.data('loadingtext'));
+                    }
+                }
+            }).done(function (response) {
+                if (!!txtName.length) {
+                    window.location.reload();
+                    return;
+                }
+
+                $(response.message).insertAfter($(rtcInfo.blockId).find('.well'));
+            }).always(function () {
+                if (btnSave) {
+                    btnSave.prop('disabled', true).addClass('hidden').html(btnSaveText);
+                }
+                btnStop.prop('disabled', true).addClass('hidden');
+                btnPause.prop('disabled', true).addClass('hidden');
+                btnStart.prop('disabled', false).removeClass('hidden');
+                txtName.prop('readonly', false);
+            });
+        }
 
         btnStart.on('click', function () {
             if (!fileName) {
@@ -32,7 +79,9 @@ window.RecordAudio = (function () {
                 recordRTC.startRecording();
 
                 txtName.prop('readonly', true);
-                btnSave.prop('disabled', true).addClass('hidden');
+                if (btnSave) {
+                    btnSave.prop('disabled', true).addClass('hidden');
+                }
                 btnStop.prop('disabled', false).removeClass('hidden');
                 btnStart.prop('disabled', true).addClass('hidden');
                 btnPause.prop('disabled', false).removeClass('hidden');
@@ -83,7 +132,12 @@ window.RecordAudio = (function () {
                 btnStart.prop('disabled', false).removeClass('hidden');
                 btnPause.prop('disabled', true).addClass('hidden');
                 btnStop.prop('disabled', true).addClass('hidden');
-                btnSave.prop('disabled', false).removeClass('hidden');
+
+                if (btnSave) {
+                    btnSave.prop('disabled', false).removeClass('hidden');
+                } else {
+                    saveAudio();
+                }
 
                 tagAudio
                     .removeClass('hidden')
@@ -92,52 +146,15 @@ window.RecordAudio = (function () {
             });
         });
 
-        btnSave.on('click', function () {
-            if (!recordRTC) {
-                return;
-            }
-
-            var recordedBlob = recordRTC.getBlob();
-
-            if (!recordedBlob) {
-                return;
-            }
-
-            var btnSaveText = btnSave.html();
-            var fileExtension = '.' + recordedBlob.type.split('/')[1];
-
-            var formData = new FormData();
-            formData.append('audio_blob', recordedBlob, fileName + fileExtension);
-            formData.append('audio_dir', rtcInfo.directory);
-
-            $.ajax({
-                url: _p.web_ajax + 'record_audio_rtc.ajax.php?tool=' + (!!txtName.length ? 'document' : 'exercise'),
-                data: formData,
-                processData: false,
-                contentType: false,
-                type: 'POST',
-                beforeSend: function () {
-                    btnStart.prop('disabled', true);
-                    btnPause.prop('disabled', true);
-                    btnPlay.prop('disabled', true);
-                    btnStop.prop('disabled', true);
-                    btnSave.prop('disabled', true).text(btnSave.data('loadingtext'));
-                }
-            }).done(function (response) {
-                if (!!txtName.length) {
-                    window.location.reload();
+        if (btnSave) {
+            btnSave.on('click', function () {
+                if (!recordRTC) {
                     return;
                 }
 
-                $(response.message).insertAfter($(rtcInfo.blockId).find('.well'));
-            }).always(function () {
-                btnSave.prop('disabled', true).addClass('hidden').html(btnSaveText);
-                btnStop.prop('disabled', true).addClass('hidden');
-                btnPause.prop('disabled', true).addClass('hidden');
-                btnStart.prop('disabled', false).removeClass('hidden');
-                txtName.prop('readonly', false);
+                saveAudio();
             });
-        });
+        }
     }
 
     function useWami(wamiInfo, fileName) {

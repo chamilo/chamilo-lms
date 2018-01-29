@@ -701,4 +701,13 @@ abstract class AbstractLink implements GradebookItem
 
         return [];
     }
+
+    /**
+     * @return string
+     */
+    public function getSkillsFromItem()
+    {
+        $skillToString = Skill::getSkillRelItemsToString(ITEM_TYPE_EXERCISE, $this->get_ref_id());
+        return $skillToString;
+    }
 }

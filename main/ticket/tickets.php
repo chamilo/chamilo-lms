@@ -308,7 +308,7 @@ if (!empty($projectId)) {
 
     if ($isAllow) {
         echo Display::toolbarAction(
-            'options',
+            'toolbar-options',
             [
                 $options
             ]

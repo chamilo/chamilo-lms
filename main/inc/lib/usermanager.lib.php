@@ -2831,7 +2831,6 @@ class UserManager
                 ['user' => $user_id, 'url' => api_get_current_access_url_id()]
             )
         ;
-
         $sessionData = $dql->getResult();
         $categories = [];
 

@@ -52,7 +52,6 @@ $(document).on('ready', function () {
         btnPauseId: '#btn-pause-record-{{ question_id }}',
         btnPlayId: '#btn-play-record-{{ question_id }}',
         btnStopId: '#btn-stop-record-{{ question_id }}',
-        btnSaveId: '#btn-save-record-{{ question_id }}',
         plyrPreviewId: '#record-preview-{{ question_id }}',
         directory: '{{ directory }}'
     }, {
@@ -61,5 +60,9 @@ $(document).on('ready', function () {
         directory: '{{ directory }}',
         userId: {{ user_id }}
     }, '{{ file_name }}');
+
+    if (0 === $('#hide_description_{{ question_id }}_options').length) {
+        $('#hide_description_{{ question_id }}').remove();
+    }
 });
 </script>

@@ -499,6 +499,13 @@ define('EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED', 8);
 define('EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED', 9);
 define('EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM', 10);
 
+// Used to save the skill_rel_item table
+define('ITEM_TYPE_EXERCISE', 1);
+define('ITEM_TYPE_HOTPOTATOES', 2);
+define('ITEM_TYPE_LINK', 3);
+define('ITEM_TYPE_LEARNPATH', 4);
+define('ITEM_TYPE_GRADEBOOK', 5);
+
 // one big string with all question types, for the validator in pear/HTML/QuickForm/Rule/QuestionType
 define(
     'QUESTION_TYPES',

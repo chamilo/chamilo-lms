@@ -1111,6 +1111,22 @@ class TicketManager
     }
 
     /**
+     * @param int $id
+     * @return array
+     */
+    public static function getTicketMessageAttachmentsByTicketId($id)
+    {
+        $id = (int) $id;
+        $em = Database::getManager();
+        $items = $em->getRepository('ChamiloTicketBundle:MessageAttachment')->findBy(['ticket' => $id]);
+        if ($items) {
+            return $items;
+        }
+
+        return false;
+    }
+
+    /**
      * @param int $ticketId
      * @return array
      */
@@ -1287,8 +1303,31 @@ class TicketManager
         $messageEmail .= get_lang('Priority').": $priority <br />";
         $messageEmail .= '<hr /><br />';
         $messageEmail .= $message;
-
         $currentUserId = api_get_user_id();
+        $attachmentList = [];
+        $attachments = self::getTicketMessageAttachmentsByTicketId($ticketId);
+        if (!empty($attachments)) {
+            /** @var MessageAttachment $attachment */
+            foreach ($attachments as $attachment) {
+                $file = api_get_uploaded_file(
+                    'ticket_attachment',
+                    $ticketId,
+                    $attachment->getPath()
+                );
+                if (!empty($file)) {
+                    $attachmentList[] = [
+                        'tmp_name' => api_get_uploaded_file(
+                            'ticket_attachment',
+                            $ticketId,
+                            $attachment->getPath()
+                        ),
+                        'size' => $attachment->getSize(),
+                        'name' => $attachment->getFilename(),
+                        'error' => 0
+                    ];
+                }
+            }
+        }
 
         if (!empty($onlyToUserId)) {
             // Send only to specific user
@@ -1296,7 +1335,13 @@ class TicketManager
                 MessageManager::send_message_simple(
                     $onlyToUserId,
                     $titleEmail,
-                    $messageEmail
+                    $messageEmail,
+                     0,
+                    false,
+                    false,
+                    [],
+                    false,
+                    $attachmentList
                 );
             }
         } else {
@@ -1305,7 +1350,13 @@ class TicketManager
                 MessageManager::send_message_simple(
                     $requestUserInfo['id'],
                     $titleEmail,
-                    $messageEmail
+                    $messageEmail,
+                    0,
+                    false,
+                    false,
+                    [],
+                    false,
+                    $attachmentList
                 );
             }
 
@@ -1316,7 +1367,13 @@ class TicketManager
                 MessageManager::send_message_simple(
                     $assignedUserInfo['id'],
                     $titleEmail,
-                    $messageEmail
+                    $messageEmail,
+                    0,
+                    false,
+                    false,
+                    [],
+                    false,
+                    $attachmentList
                 );
             }
         }

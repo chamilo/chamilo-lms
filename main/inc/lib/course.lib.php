@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use ChamiloSession as Session;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+use Chamilo\CourseBundle\Manager\SettingsManager;
 
 /**
  * Class CourseManager

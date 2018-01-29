@@ -942,7 +942,6 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $exportToPdf
                 );
 
-
                 $model = ExerciseLib::getCourseScoreModel();
 
                 if (api_is_allowed_to_edit()) {

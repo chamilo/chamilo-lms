@@ -101,14 +101,12 @@ class ExtraFieldValue extends Model
         }
 
         $type = $this->getExtraField()->getExtraFieldType();
-
         $extraField = new ExtraField($this->type);
         $extraFields = $extraField->get_all(null, 'option_order');
 
         // Parse params.
         foreach ($extraFields as $fieldDetails) {
             $field_variable = $fieldDetails['variable'];
-
             // if the field is not visible to the user in the end, we need to apply special rules
             if ($fieldDetails['visible_to_self'] != 1) {
                 //only admins should be able to add those values

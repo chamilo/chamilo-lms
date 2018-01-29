@@ -15,6 +15,9 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class ToolCompilerClass implements CompilerPassInterface
 {
+    /**
+     * @param ContainerBuilder $container
+     */
     public function process(ContainerBuilder $container)
     {
         if (!$container->hasDefinition('chamilo_course.tool_chain')) {

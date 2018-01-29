@@ -520,7 +520,6 @@ class SessionManager
 
         if ($showCountUsers) {
             $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-            //$tableUserUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
             $inject_joins .= " LEFT JOIN $table su ON (su.session_id = s.id)";
         }
 
@@ -4661,13 +4660,10 @@ class SessionManager
 
                 if (!empty($sessionDescription)) {
                     $extraParams['description'] = $sessionDescription;
-                    //$extraSessionParameters = " , description = '".Database::escape_string($sessionDescription)."'";
                 }
 
-                //$sessionCondition = '';
                 if (!empty($session_category_id)) {
                     $extraParams['session_category_id'] = $session_category_id;
-                    //$sessionCondition = " , session_category_id = '$session_category_id' ";
                 }
 
                 // Searching a general coach.
@@ -4693,7 +4689,7 @@ class SessionManager
                 }
 
                 if (!$updateSession) {
-                    // Always create a session.
+                    // Create a session.
                     $unique_name = false;
                     $i = 0;
                     // Change session name, verify that session doesn't exist.
@@ -4730,16 +4726,8 @@ class SessionManager
                     if (!empty($extraParams)) {
                         $sessionParams = array_merge($sessionParams, $extraParams);
                     }
-                    $session_id = Database::insert($tbl_session, $sessionParams);
-
                     // Creating the session.
-                    /*$sql = "INSERT IGNORE INTO $tbl_session SET
-
-                            $sessionCondition
-                            $extraParameters
-                            $extraSessionParameters";
-                    Database::query($sql);
-                    $session_id = Database::insert_id();*/
+                    $session_id = Database::insert($tbl_session, $sessionParams);
                     if ($debug) {
                         if ($session_id) {
                             foreach ($enreg as $key => $value) {
@@ -4768,6 +4756,18 @@ class SessionManager
                     }
 
                     if ($my_session_result === false) {
+                        // One more check
+                        $sessionExistsWithName = self::get_session_by_name($session_name);
+
+                        if ($sessionExistsWithName) {
+                            if ($debug) {
+                                $logger->addError(
+                                    "Sessions - Trying to update a session, but name already exists: $session_name"
+                                );
+                            }
+                            continue;
+                        }
+
                         $sessionParams = [
                             'name' => $session_name,
                             'id_coach' => $coach_id,
@@ -4787,7 +4787,7 @@ class SessionManager
                         Database::insert($tbl_session, $sessionParams);
 
                         // We get the last insert id.
-                        $my_session_result = self::get_session_by_name($enreg['SessionName']);
+                        $my_session_result = self::get_session_by_name($session_name);
                         $session_id = $my_session_result['id'];
 
                         if ($session_id) {

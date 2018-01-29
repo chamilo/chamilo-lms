@@ -3,12 +3,9 @@
 
 namespace Chamilo\CourseBundle\Manager;
 
-use Doctrine\Common\Cache\Cache;
-use Doctrine\Common\Persistence\ObjectManager;
-use Sylius\Bundle\SettingsBundle\Model\Settings;
 use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaRegistryInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilder;
+use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
@@ -16,8 +13,6 @@ use Symfony\Component\Validator\ValidatorInterface;
 use Chamilo\SettingsBundle\Manager\SettingsManager as ChamiloSettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CoreBundle\Entity\Course;
-use Sylius\Bundle\SettingsBundle\Manager\SettingsManagerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class SettingsManager
@@ -49,32 +44,22 @@ class SettingsManager extends ChamiloSettingsManager
      */
     public function load($schemaAlias, $namespace = null, $ignoreUnknown = true)
     {
-        /*blog_management
-        blog
-        course_maintenance //maintenance
-        course_setting settings*/
-
         $schemaAliasNoPrefix = $schemaAlias;
-        $schemaAlias = 'chamilo_course.settings.'.$schemaAlias;
+        $schemaAlias = 'chamilo_core.settings.'.$schemaAlias;
 
-        /** @var SchemaInterface $schema */
-        $schema = $this->schemaRegistry->get($schemaAlias);
-
-        /** @var SettingsResolverInterface $resolver */
-        $resolver = $this->resolverRegistry->get($schemaAlias);
-
-        // try to resolve settings for schema alias and namespace
-        $settings = $resolver->resolve($schemaAlias, $namespace);
-
-        if (!$settings) {
-            $settings = $this->settingsFactory->createNew();
-            $settings->setSchemaAlias($schemaAlias);
+        if ($this->schemaRegistry->has($schemaAlias)) {
+            /** @var SchemaInterface $schema */
+            $schema = $this->schemaRegistry->get($schemaAlias);
+        } else {
+            return [];
         }
 
-        // We need to get a plain parameters array since we use the options resolver on it
-        //$parameters = $settings->getParameters();
-        $parameters = $this->getParameters($schemaAliasNoPrefix);
+        /** @var \Sylius\Bundle\SettingsBundle\Model\Settings $settings */
+        $settings = $this->settingsFactory->createNew();
+        $settings->setSchemaAlias($schemaAlias);
 
+        // We need to get a plain parameters array since we use the options resolver on it
+        $parameters = $this->getParameters($schemaAliasNoPrefix);
         $settingsBuilder = new SettingsBuilder();
         $schema->buildSettings($settingsBuilder);
 
@@ -84,6 +69,12 @@ class SettingsManager extends ChamiloSettingsManager
                 if (!$settingsBuilder->isDefined($name)) {
                     unset($parameters[$name]);
                 }
+            }
+        }
+
+        foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
+            if (array_key_exists($parameter, $parameters)) {
+                $parameters[$parameter] = $transformer->reverseTransform($parameters[$parameter]);
             }
         }
 
@@ -105,20 +96,18 @@ class SettingsManager extends ChamiloSettingsManager
 
         $settingsBuilder = new SettingsBuilder();
         $schema->buildSettings($settingsBuilder);
-
         $parameters = $settingsBuilder->resolve($settings->getParameters());
-        $settings->setParameters($parameters);
 
-        /*foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
+        // Transform value. Example array to string using transformer. Example:
+        // 1. Setting "tool_visible_by_default_at_creation" it's a multiple select
+        // 2. Is defined as an array in class DocumentSettingsSchema
+        // 3. Add transformer for that variable "ArrayToIdentifierTransformer"
+        // 4. Here we recover the transformer and convert the array to string
+        foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
             if (array_key_exists($parameter, $parameters)) {
                 $parameters[$parameter] = $transformer->transform($parameters[$parameter]);
             }
-        }*/
-
-        /*if (isset($this->resolvedSettings[$namespace])) {
-            $transformedParameters = $this->transformParameters($settingsBuilder, $parameters);
-            $this->resolvedSettings[$namespace]->setParameters($transformedParameters);
-        }*/
+        }
 
         $repo = $this->manager->getRepository('ChamiloCoreBundle:SettingsCurrent');
         $persistedParameters = $repo->findBy(['category' => $settings->getSchemaAlias()]);
@@ -127,12 +116,6 @@ class SettingsManager extends ChamiloSettingsManager
         foreach ($persistedParameters as $parameter) {
             $persistedParametersMap[$parameter->getTitle()] = $parameter;
         }
-
-        /** @var SettingsEvent $event */
-        /*$event = $this->eventDispatcher->dispatch(
-            SettingsEvent::PRE_SAVE,
-            new SettingsEvent($settings, $parameters)
-        );*/
 
         /** @var \Chamilo\CoreBundle\Entity\SettingsCurrent $url */
         //$url = $event->getArgument('url');

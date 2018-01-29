@@ -383,7 +383,7 @@ class SettingsManager implements SettingsManagerInterface
             'session_days_after_coach_access' => 'Session',
             'pdf_logo_header' => 'Course',
             'order_user_list_by_official_code' => 'Platform',
-            'email_alert_manager_on_new_quiz' => 'Tools',
+            'email_alert_manager_on_new_quiz' => 'exercise',
             'show_official_code_exercise_result_list' => 'Tools',
             'course_catalog_hide_private' => 'Platform',
             'catalog_show_courses_sessions' => 'Platform',
@@ -623,6 +623,7 @@ class SettingsManager implements SettingsManagerInterface
             'allow_download_documents_by_api_key' => 'webservice',
             'profiling_filter_adding_users' => 'profile',
             'hide_dltt_markup' => 'language',
+            'active_tools_on_create' => 'course'
         ];
 
         return isset($settings[$variable]) ? $settings[$variable] : $defaultCategory;
@@ -657,6 +658,7 @@ class SettingsManager implements SettingsManagerInterface
         }
 
         list($category, $name) = explode('.', $name);
+
         //var_dump($category, $name);
         $settings = $this->load($category, $name);
 
@@ -883,6 +885,10 @@ class SettingsManager implements SettingsManagerInterface
         return $parameters;
     }
 
+    /**
+     * @param string $keyword
+     * @return array
+     */
     public function getParametersFromKeywordOrderedByCategory($keyword)
     {
         $query = $this->repository->createQueryBuilder('s')

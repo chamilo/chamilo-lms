@@ -52,6 +52,9 @@ class CourseManager
         return self::$em;
     }
 
+    /**
+     * @param $manager
+     */
     public static function setCourseManager($manager)
     {
         self::$manager = $manager;
@@ -133,25 +136,24 @@ class CourseManager
                 $params['wanted_code'] = self::generate_course_code($substring);
             }
         }
+
         // Create the course keys
         $keys = AddCourse::define_course_keys($params['wanted_code']);
-
         $params['exemplary_content'] = isset($params['exemplary_content']) ? $params['exemplary_content'] : false;
 
         if (count($keys)) {
             $params['code'] = $keys['currentCourseCode'];
             $params['visual_code'] = $keys['currentCourseId'];
             $params['directory'] = $keys['currentCourseRepository'];
+            $courseInfo = api_get_course_info($params['code']);
+            if (empty($courseInfo)) {
+                $courseId = AddCourse::register_course($params);
+                $courseInfo = api_get_course_info_by_id($courseId);
 
-            $course_info = api_get_course_info($params['code']);
-            if (empty($course_info)) {
-                $course_id = AddCourse::register_course($params);
-                $course_info = api_get_course_info_by_id($course_id);
+                if (!empty($courseInfo)) {
+                    self::fillCourse($courseInfo, $params, $authorId);
 
-                if (!empty($course_info)) {
-                    self::fillCourse($course_info, $params, $authorId);
-
-                    return $course_info;
+                    return $courseInfo;
                 }
             }
         }
@@ -4968,8 +4970,7 @@ class CourseManager
             $my_course['is_registered'] = $userRegistered;
             $my_course['title_cut'] = cut($course_info['title'], 45);
 
-
-            //Course visibility
+            // Course visibility
             if ($access_link && in_array('register', $access_link)) {
                 $my_course['register_button'] = Display::url(
                     get_lang('Subscribe').' '.

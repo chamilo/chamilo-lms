@@ -69,7 +69,7 @@ services:
 
     chamilo_course.repository.parameter:
         class: Chamilo\CourseBundle\Entity\Repository\CCourseSettingRepository
-        factory: ["@doctrine", getRepository]
+        factory: ['@doctrine', getRepository]
         arguments: [Chamilo\CourseBundle\Entity\CCourseSetting]
 
 #    chamilo_settings.repository.parameter:
@@ -83,15 +83,25 @@ services:
             - Sylius\Bundle\SettingsBundle\Schema\SchemaInterface
             - 'Course settings'
 
+#    chamilo_course.settings.manager:
+#        class: '%chamilo_course.settings.manager.class%'
+#        arguments:
+#            - '@chamilo_course.registry.settings_schema'
+#            - '@sylius.registry.settings_resolver'
+#            - '@doctrine.orm.entity_manager'
+#            - '@chamilo_course.repository.parameter'
+#            - '@sylius.factory.settings'
+#            - '@event_dispatcher'
     chamilo_course.settings.manager:
         class: '%chamilo_course.settings.manager.class%'
         arguments:
-            - '@chamilo_course.registry.settings_schema'
+            - '@sylius.registry.settings_schema'
             - '@sylius.registry.settings_resolver'
             - '@doctrine.orm.entity_manager'
             - '@chamilo_course.repository.parameter'
             - '@sylius.factory.settings'
             - '@event_dispatcher'
+
 
     # Tool chain loads the list of tool services with the tag "chamilo_course.tool"
     # Tool chain is filled in file DependencyInjection/Compiler/ToolCompilerClass.php
@@ -102,7 +112,7 @@ services:
     chamilo_course.tool.agenda:
         class: Chamilo\CourseBundle\Tool\Agenda
         arguments:
-            - agenda
+            - calendar_event
             - authoring
             - calendar/agenda.php
             - agenda.gif
@@ -137,7 +147,7 @@ services:
     chamilo_course.tool.assignment:
         class: Chamilo\CourseBundle\Tool\Assignment
         arguments:
-            - assignment
+            - student_publication
             - interaction
             - work/work.php
             - works.gif
@@ -171,7 +181,7 @@ services:
     chamilo_course.tool.blog:
         class: Chamilo\CourseBundle\Tool\Blog
         arguments:
-            - blog
+            - blog_management
             - admin
             - blog/blog_admin.php
             - blog_admin.gif
@@ -277,7 +287,7 @@ services:
         arguments:
             - quiz
             - authoring
-            - exercise/exercice.php
+            - exercise/exercise.php
             - quiz.gif
             - '@chamilo_course.settings.exercise'
 
@@ -391,16 +401,21 @@ services:
         tags:
             - {name: chamilo_course.tool}
 
-    # Course settings
     chamilo_course.settings.link:
         class: Chamilo\CourseBundle\Settings\LinkCourseSettingsSchema
         tags:
             - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.link, namespace: link}
 
+    # Maintenance
+    chamilo_course.settings.maintenance:
+        class: Chamilo\CourseBundle\Settings\MaintenanceCourseSettingsSchema
+        tags:
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.maintenance, namespace: maintenance}
+
     chamilo_course.tool.maintenance:
         class: Chamilo\CourseBundle\Tool\Maintenance
         arguments:
-            - maintenance
+            - course_maintenance
             - admin
             - course_info/maintenance.php
             - backup.gif
@@ -408,16 +423,27 @@ services:
         tags:
             - {name: chamilo_course.tool}
 
-    # Course settings
-    chamilo_course.settings.maintenance:
-        class: Chamilo\CourseBundle\Settings\MaintenanceCourseSettingsSchema
+    # Notebook
+    chamilo_course.settings.notebook:
+        class: Chamilo\CourseBundle\Settings\NotebookCourseSettingsSchema
         tags:
-            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.maintenance, namespace: maintenance}
+            - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.notebook, namespace: notebook}
+
+    chamilo_course.tool.notebook:
+        class: Chamilo\CourseBundle\Tool\Notebook
+        arguments:
+            - notebook
+            - interaction
+            - notebook/index.php
+            - notebook.gif
+            - '@chamilo_course.settings.notebook'
+        tags:
+            - {name: chamilo_course.tool}
 
     chamilo_course.tool.settings:
         class: Chamilo\CourseBundle\Tool\Settings
         arguments:
-            - settings
+            - course_setting
             - admin
             - course_info/infocours.php
             - reference.gif
@@ -431,7 +457,7 @@ services:
         class: Chamilo\CourseBundle\Settings\SettingsCourseSettingsSchema
         tags:
             - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.settings, namespace: settings}
-
+        # Survey
     chamilo_course.tool.survey:
         class: Chamilo\CourseBundle\Tool\Survey
         arguments:
@@ -440,11 +466,9 @@ services:
             - survey/survey_list.php
             - survey.gif
             - '@chamilo_course.settings.survey'
-
         tags:
             - {name: chamilo_course.tool}
 
-    # Course settings
     chamilo_course.settings.survey:
         class: Chamilo\CourseBundle\Settings\SurveyCourseSettingsSchema
         tags:

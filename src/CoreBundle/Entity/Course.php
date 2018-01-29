@@ -400,7 +400,7 @@ class Course
     }
 
     /**
-     * @param $tools
+     * @param array $tools
      */
     public function setTools($tools)
     {

@@ -3,6 +3,7 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -127,12 +128,25 @@ class CTool
     private $customIcon;
 
     /**
+     * @var Course
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="tools")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     private $course;
 
     protected $originalImage;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        // Default values
+        $this->id = 0;
+        $this->sessionId = 0;
+        $this->address = 'squaregrey.gif';
+    }
 
     /**
     * @return int
@@ -153,24 +167,20 @@ class CTool
         return $this;
     }
 
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        // Default values
-        $this->id = 0;
-        $this->sessionId = 0;
-        $this->address = 'squaregrey.gif';
-    }
-
     /**
      * @param Course $course
      */
     public function setCourse($course)
     {
         $this->course = $course;
+    }
+
+    /**
+     * @return Course
+     */
+    public function getCourse()
+    {
+        return $this->course;
     }
 
     /**
@@ -187,14 +197,6 @@ class CTool
             new Assert\Image(['maxWidth' => 64, 'minHeight' => 64])
         );
         $metadata->addPropertyConstraint('cId', new Assert\NotBlank());
-    }
-
-    /**
-     * @return Course
-     */
-    public function getCourse()
-    {
-        return $this->course;
     }
 
     /**

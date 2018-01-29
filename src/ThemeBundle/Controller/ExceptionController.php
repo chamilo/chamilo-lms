@@ -23,9 +23,14 @@ class ExceptionController extends BaseExceptionController
      */
     protected function findTemplate(Request $request, $format, $code, $debug)
     {
-        if (strpos($request->getPathInfo(), '/admin') !== 0) {
+        // Only show custom error when APP_DEBUG = 0
+        if ($debug) {
             return parent::findTemplate($request, $format, $code, $debug);
         }
+
+        /*if (strpos($request->getPathInfo(), '/admin') !== 0) {
+            return parent::findTemplate($request, $format, $code, $debug);
+        }*/
 
         $name = $debug ? 'exception' : 'error';
         if ($debug && 'html' == $format) {

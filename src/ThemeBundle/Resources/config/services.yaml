@@ -1,0 +1,18 @@
+services:
+    _defaults:
+        autowire: true
+
+    Chamilo\ThemeBundle\Controller\ExceptionController:
+        public: true
+        arguments:
+            $twig: '@twig'
+            $debug: '%kernel.debug%'
+
+    chamilo_theme_widget_extension:
+        class: 'Chamilo\ThemeBundle\Twig\WidgetExtension'
+        tags:
+            - 'twig.extension'
+
+#    chamilo_theme.context_listener:
+#        class:
+

@@ -33,12 +33,13 @@
             <argument>%chamilo_admin_theme.dependency_resolver.class%</argument>
         </service>
 
-        <!--<service id="chamilo_admin_theme.setup_theme_listener" class="%chamilo_admin_theme.setup_theme_listener.class%">-->
-            <!--<argument type="service" id="chamilo_admin_theme.theme_manager"/>-->
-            <!--<argument>%chamilo_admin_theme.css_base%</argument>-->
-            <!--<argument>%chamilo_admin_theme.lte_admin%</argument>-->
-            <!--<tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" />-->
-        <!--</service>-->
+        <service id="chamilo_admin_theme.setup_theme_listener" class="%chamilo_admin_theme.setup_theme_listener.class%">
+            <argument type="service" id="chamilo_admin_theme.theme_manager"/>
+            <argument>%chamilo_admin_theme.css_base%</argument>
+            <argument>%chamilo_admin_theme.lte_admin%</argument>
+            <tag name="kernel.event_listener" event="kernel.controller" method="onKernelController" />
+        </service>
+
         <service id="chamilo_admin_theme.context_listener" class="Chamilo\ThemeBundle\EventListener\ContextListener">
             <argument type="service" id="service_container" />
             <tag name="kernel.event_listener" event="kernel.request" method="onRequest" />

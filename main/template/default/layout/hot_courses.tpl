@@ -1,5 +1,5 @@
+{% autoescape false %}
 {% if hot_courses is not null and hot_courses is not empty %}
-
 <script>
 $(document).ready( function() {
     $('.star-rating li a').on('click', function(event) {
@@ -40,3 +40,4 @@ $(document).ready( function() {
     </div>
 </section>
 {% endif %}
+{% endautoescape %}

@@ -14,48 +14,62 @@ use Chamilo\CoreBundle\Framework\Container;
  *
  * @package chamilo.include
  * @todo remove the code that displays the button that links to the install page
- * but use a redirect immediately. By doing so the $alreadyInstalled variable can be removed.
  *
  */
 
 // Showing/hiding error codes in global error messages.
 define('SHOW_ERROR_CODES', false);
 
+// Specification for usernames:
+// 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
+// 2. Empty username is formally valid, but it is reserved for the anonymous user.
+// 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
+define('USERNAME_MAX_LENGTH', 100);
+define('_MPDF_TEMP_PATH', __DIR__.'/../../var/cache/mpdf/');
+define('_MPDF_TTFONTDATAPATH', __DIR__.'/../../var/cache/mpdf/');
+
 require_once __DIR__.'/../../vendor/autoload.php';
+require_once __DIR__.'/../../public/legacy.php';
+
+// Check the PHP version
+api_check_php_version(__DIR__.'/');
 
 // Get settings from .env file created when installation Chamilo
 $envFile = __DIR__.'/../../.env';
 if (file_exists($envFile)) {
     (new Dotenv())->load($envFile);
 } else {
-    throw new \RuntimeException('APP_ENV environment variable is not defined. 
+    throw new \RuntimeException('APP_ENV environment variable is not defined.
     You need to define environment variables for configuration to load variables from a .env file.');
 }
 
 $env = $_SERVER['APP_ENV'] ?? 'dev';
 $kernel = new Chamilo\Kernel($env, true);
 
-// Include the main Chamilo platform configuration file.
-$alreadyInstalled = false;
-
-require_once __DIR__.'/../../public/legacy.php';
-
 $request = Sonata\PageBundle\Request\RequestFactory::createFromGlobals(
     'host_with_path_by_locale'
 );
+
 $response = $kernel->handle($request);
+//$kernel->boot();
+//var_dump($request->getBasePath());
 
 if ($kernel->isInstalled()) {
     require_once $kernel->getConfigurationFile();
 } else {
     $_configuration = [];
     // Redirects to the main/install/ page
-
     $global_error_code = 2;
     // The system has not been installed yet.
     require_once __DIR__.'/../inc/global_error_message.inc.php';
     exit;
 }
+
+$append = $kernel->getUrlAppend();
+/*$baseUrl = '..';
+if (!empty($append)) {
+    $request->setBaseUrl("/$append/");
+}*/
 
 $kernel->setApi($_configuration);
 
@@ -71,48 +85,35 @@ $libraryPath = __DIR__.'/lib/';
 // Include the main Chamilo platform library file.
 require_once $libraryPath.'api.lib.php';
 
-// Check the PHP version
-api_check_php_version(__DIR__.'/');
-
-// Specification for usernames:
-// 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
-// 2. Empty username is formally valid, but it is reserved for the anonymous user.
-// 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
-define('USERNAME_MAX_LENGTH', 100);
-define('_MPDF_TEMP_PATH', __DIR__.'/../../var/cache/mpdf/');
-define('_MPDF_TTFONTDATAPATH', __DIR__.'/../../var/cache/mpdf/');
-
-// @todo convert this libs in classes
-require_once $libraryPath.'database.constants.inc.php';
-require_once $libraryPath.'text.lib.php';
-require_once $libraryPath.'array.lib.php';
-require_once $libraryPath.'online.inc.php';
-require_once $libraryPath.'banner.lib.php';
-require_once $libraryPath.'fileManage.lib.php';
-require_once $libraryPath.'fileUpload.lib.php';
-require_once $libraryPath.'fileDisplay.lib.php';
-require_once $libraryPath.'course_category.lib.php';
-
 $container = $kernel->getContainer();
+
+// Fix chamilo URL when used inside a folder: example.com/chamilo
+$append = $kernel->getUrlAppend();
+$baseUrl = '..';
+if (!empty($append)) {
+    $router = $container->get('router');
+    $requestStack = $container->get('request_stack');
+    $context = $container->get('router.request_context');
+
+    $host = $router->getContext()->getHost();
+    $context->setBaseUrl("/$append/");
+    $container->set('router.request_context', $context);
+
+    $packages = $container->get('assets.packages');
+    $routerContext = $container->get('router')->getContext();
+
+    $version = new Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy();
+    $newDefault = new Symfony\Component\Asset\PathPackage("/$append/public/", $version);
+    $packages = $container->get('assets.packages');
+    $packages->setDefaultPackage($newDefault);
+}
 
 // Connect Chamilo with the Symfony container
 Container::setContainer($container);
 Container::setLegacyServices($container);
-
-$router = $container->get('router');
-$context = $container->get('router.request_context');
-$append = $kernel->getUrlAppend();
-$baseUrl = '..';
-if (!empty($append)) {
-    $baseUrl = $append;
-}
-$context->setBaseUrl($baseUrl);
-$router->setContext($context);
-//$container->setParameter('router', $router);
-
-\CourseManager::setCourseManager(
-    $container->get('chamilo_core.entity.manager.course_manager')
-);
+//$kernel->boot();
+//var_dump($container->get('assets.context')->getBasePath());
+//var_dump($container->get('assets.empty_package')->getUrl('/build/'));
 
 if (!is_dir(_MPDF_TEMP_PATH)) {
     mkdir(_MPDF_TEMP_PATH, api_get_permissions_for_new_directories(), true);
@@ -306,7 +307,6 @@ foreach ($configurationFiles as $file) {
 }
 
 /*  LOAD LANGUAGE FILES SECTION */
-
 // if we use the javascript version (without go button) we receive a get
 // if we use the non-javascript version (with the go button) we receive a post
 $user_language = '';

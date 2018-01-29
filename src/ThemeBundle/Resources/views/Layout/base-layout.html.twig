@@ -24,7 +24,7 @@
     <link href="https://chamilo.org/the-association/" rel="author"/>
     <link href="https://chamilo.org/the-association/" rel="copyright"/>
     <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}"/>
-    <link rel="icon" type="image/x-icon" href="{{ asset('build/css/themes/'~ theme ~'/favicon.ico') }}"/>julio
+    <link rel="icon" type="image/x-icon" href="{{ asset('build/css/themes/'~ theme ~'/favicon.ico') }}"/>
     <title>
     {% block title %}
     {{ chamilo_settings_get('platform.institution') }} - {{ chamilo_settings_get('platform.site_name') }}
@@ -57,6 +57,7 @@
     <link rel="stylesheet" href="{{ asset('build/css/base.css') }}"/>
     <link rel="stylesheet" href="{{ asset('build/css/themes/'~ theme ~'/default.css') }}"/>
     <link rel="stylesheet" media="print" href="{{ asset('build/css/print.css') }}"/>
+
     <script src="{{ asset('build/chamilo.js') }}"></script>
     <script src="{{ asset('libs/ckeditor/ckeditor.js') }}"></script>
     <script src="{{ asset('libs/readmore-js/readmore.min.js') }}"></script>

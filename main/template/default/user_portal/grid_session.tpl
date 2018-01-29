@@ -1,3 +1,4 @@
+{% autoescape false %}
 {% set group_courses = 'view_grid_courses_grouped_categories_in_sessions'| api_get_configuration_value %}
 
 {% macro course_block(course, show_category) %}
@@ -170,3 +171,4 @@
         </div>
     </div>
 {% endfor %}
+{% endautoescape %}

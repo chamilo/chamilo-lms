@@ -1,3 +1,4 @@
+{% autoescape false %}
 {% for item in hot_courses %}
     {% if item.title %}
         <div class="col-xs-12 col-sm-6 col-md-4">
@@ -99,3 +100,4 @@
         </div>
     {% endif %}
 {% endfor %}
+{% endautoescape %}

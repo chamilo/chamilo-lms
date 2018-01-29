@@ -226,7 +226,8 @@ class Database
     /**
      * Frees all the memory associated with the provided result identifier.
      * @return boolean|null     Returns TRUE on success or FALSE on failure.
-     * Notes: Use this method if you are concerned about how much memory is being used for queries that return large result sets.
+     * Notes: Use this method if you are concerned about how much memory is being
+     * used for queries that return large result sets.
      * Anyway, all associated result memory is automatically freed at the end of the script's execution.
      */
     public static function free_result(Statement $result)
@@ -281,7 +282,6 @@ class Database
      *
      * @return Statement
      *
-     * @throws \Doctrine\DBAL\DBALException
      */
     public static function query($query)
     {
@@ -335,9 +335,9 @@ class Database
 
     /**
      * Database insert
-     * @param string    $table_name
-     * @param array     $attributes
-     * @param bool      $show_query
+     * @param string $table_name
+     * @param array $attributes
+     * @param bool $show_query
      *
      * @return false|int
      */

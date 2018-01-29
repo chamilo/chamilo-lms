@@ -129,6 +129,7 @@ class Template
         }
 
         $this->twig = new Twig_Environment($loader, $options);
+        //$this->twig = \Chamilo\CoreBundle\Framework\Container::getTemplating();
 
         if ($isTestMode) {
             $this->twig->addExtension(new Twig_Extension_Debug());
@@ -354,9 +355,6 @@ class Template
     {
         $tpl = $this->get_template('layout/layout_1_col.html.twig');
         echo \Chamilo\CoreBundle\Framework\Container::getTemplating()->render($tpl, $this->params);
-
-        /*$tpl = $this->get_template('layout/layout_1_col.tpl');
-        $this->display($tpl);*/
     }
 
     /**
@@ -366,8 +364,6 @@ class Template
     {
         $tpl = $this->get_template('layout/layout_2_col.html.twig');
         echo \Chamilo\CoreBundle\Framework\Container::getTemplating()->render($tpl, $this->params);
-
-        //$this->display($tpl);
     }
 
     /**
@@ -617,6 +613,8 @@ class Template
             $this->theme = $this->preview_theme;
         }
 
+        $this->assign('theme', $this->theme);
+
         $this->themeDir = self::getThemeDir($this->theme);
 
         // Setting app paths/URLs
@@ -762,8 +760,9 @@ class Template
 
         $css_file_to_string = null;
         foreach ($css as $file) {
-            $css_file_to_string .= api_get_css($file);
+           // $css_file_to_string .= api_get_css($file);
         }
+
         // @todo move this somewhere else. Special fix when using tablets in order to see the text near icons
         if (SHOW_TEXT_NEAR_ICONS == true) {
             //hack in order to fix the actions buttons
@@ -873,9 +872,10 @@ class Template
             //$js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"></script>'."\n";
         }
 
-        $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'build/chamilo.js"></script>'."\n";
+        /*$js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'build/chamilo.js"></script>'."\n";
         $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'libs/ckeditor/ckeditor.js"></script>'."\n";
         $js_file_to_string .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'libs/readmore-js/readmore.js"></script>'."\n";
+        */
 
         foreach ($js_files as $file) {
             //$js_file_to_string .= api_get_js($file);

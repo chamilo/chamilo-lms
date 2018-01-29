@@ -1,5 +1,6 @@
-{% for hot_course in hot_courses %}               
-    {% if hot_course.extra_info.title %}        
+{% autoescape false %}
+{% for hot_course in hot_courses %}
+    {% if hot_course.extra_info.title %}
         <div class="row">
             <div class="col-sm-3">
                 <div class="thumbnail">
@@ -21,3 +22,4 @@
         </div>
     {% endif %}
 {% endfor %}
+{% endautoescape %}

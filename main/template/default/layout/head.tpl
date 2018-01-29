@@ -18,7 +18,18 @@
 <title>{{ title_string }}</title>
 {{ social_meta }}
 {{ css_static_file_to_string }}
-{{ js_file_to_string }}
+{#{{ js_file_to_string }}#}
+
+<link rel="stylesheet" href="{{ asset('build/chamilo.css') }}"/>
+<link rel="stylesheet" href="{{ asset('build/css/base.css') }}"/>
+<link rel="stylesheet" href="{{ asset('build/css/themes/'~ theme ~'/default.css') }}"/>
+<link rel="stylesheet" media="print" href="{{ asset('build/css/print.css') }}"/>
+
+<script src="{{ asset('build/chamilo.js') }}"></script>
+<script src="{{ asset('libs/ckeditor/ckeditor.js') }}"></script>
+<script src="{{ asset('libs/readmore-js/readmore.min.js') }}"></script>
+<script src="{{ asset('libs/js-cookie/src/js.cookie.js') }}"></script>
+
 {{ extra_headers }}
 <script>
 /* Global chat variables */
@@ -27,7 +38,6 @@ var online_button = '{{ online_button }}';
 var offline_button = '{{ offline_button }}';
 var connect_lang = '{{ "ChatConnected"|get_lang }}';
 var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';
-
 var logOutUrl = '{{ _p.web_ajax }}course.ajax.php?a=course_logout';
 
 $(document).ready(function () {

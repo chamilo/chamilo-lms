@@ -399,6 +399,12 @@ class Container
         Container::setSettingsManager($container->get('chamilo.settings.manager'));
         Container::setUserManager($container->get('sonata.user.user_manager'));
         Container::setSiteManager($container->get('sonata.page.manager.site'));
+        \CourseManager::setCourseSettingsManager($container->get('chamilo_course.settings.manager'));
+        \CourseManager::setCourseManager($container->get('chamilo_core.entity.manager.course_manager'));
+
+        // Setting course tool chain (in order to create tools to a course)
+        \CourseManager::setToolList($container->get('chamilo_course.tool_chain'));
+
         Container::$session = $container->get('session');
     }
 }

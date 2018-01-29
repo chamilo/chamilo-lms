@@ -233,12 +233,14 @@ class Exercise
             //overload questions list with recorded questions list
             //load questions only for exercises of type 'one question per page'
             //this is needed only is there is no questions
-            /*
+
             // @todo not sure were in the code this is used somebody mess with the exercise tool
             // @todo don't know who add that config and why $_configuration['live_exercise_tracking']
-            global $_configuration, $questionList;
-            if ($this->type == ONE_PER_PAGE && $_SERVER['REQUEST_METHOD'] != 'POST' && defined('QUESTION_LIST_ALREADY_LOGGED') &&
-            isset($_configuration['live_exercise_tracking']) && $_configuration['live_exercise_tracking']) {
+            /*global $_configuration, $questionList;
+            if ($this->type == ONE_PER_PAGE && $_SERVER['REQUEST_METHOD'] != 'POST'
+                && defined('QUESTION_LIST_ALREADY_LOGGED') &&
+                isset($_configuration['live_exercise_tracking']) && $_configuration['live_exercise_tracking']
+            ) {
                 $this->questionList = $questionList;
             }*/
             return true;
@@ -738,13 +740,13 @@ class Exercise
      */
     public function getQuestionOrderedListByName()
     {
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $exerciseQuestionTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
         // Getting question list from the order (question list drag n drop interface ).
         $sql = "SELECT e.question_id
-                FROM $TBL_EXERCICE_QUESTION e 
-                INNER JOIN $TBL_QUESTIONS q
+                FROM $exerciseQuestionTable e 
+                INNER JOIN $questionTable q
                 ON (e.question_id= q.id AND e.c_id = q.c_id)
                 WHERE 
                     e.c_id = {$this->course_id} AND 
@@ -847,10 +849,9 @@ class Exercise
                     // How many question will be picked from this category.
                     $count = $category_info['count_questions'];
                     // -1 means all questions
+                    $categoryCountArray[$category_id] = $count;
                     if ($count == -1) {
                         $categoryCountArray[$category_id] = 999;
-                    } else {
-                        $categoryCountArray[$category_id] = $count;
                     }
                 }
             }
@@ -860,10 +861,9 @@ class Exercise
             $temp_question_list = [];
             foreach ($questions_by_category as $category_id => & $categoryQuestionList) {
                 if (isset($categoryCountArray) && !empty($categoryCountArray)) {
+                    $numberOfQuestions = 0;
                     if (isset($categoryCountArray[$category_id])) {
                         $numberOfQuestions = $categoryCountArray[$category_id];
-                    } else {
-                        $numberOfQuestions = 0;
                     }
                 }
 
@@ -1342,7 +1342,7 @@ class Exercise
     /**
      * @param string $text
      */
-    public function updateEmailNotificationTemplateToUser($text)
+    public function setEmailNotificationTemplateToUser($text)
     {
         $this->emailNotificationTemplateToUser = $text;
     }
@@ -2093,8 +2093,6 @@ class Exercise
                         null,
                         [get_lang('FeedbackType'), get_lang('FeedbackDisplayOptions')]
                     );
-
-                    //$form->addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
                     $radios_results_disabled = [];
                     $radios_results_disabled[] = $form->createElement(
                         'radio',
@@ -2567,8 +2565,8 @@ class Exercise
                 } else {
                     $defaults['enabletimercontroltotalminutes'] = 0;
                 }
+                // $defaults['skills'] = array_keys($skillList);
                 $defaults['notifications'] = $this->getNotifications();
-                //$defaults['skills'] = array_keys($skillList);
             } else {
                 $defaults['exerciseType'] = 2;
                 $defaults['exerciseAttempts'] = 0;
@@ -2648,7 +2646,7 @@ class Exercise
         $this->setOnSuccessMessage($form->getSubmitValue('on_success_message'));
         $this->setOnFailedMessage($form->getSubmitValue('on_failed_message'));
         $this->updateEmailNotificationTemplate($form->getSubmitValue('email_notification_template'));
-        $this->updateEmailNotificationTemplateToUser($form->getSubmitValue('email_notification_template_to_user'));
+        $this->setEmailNotificationTemplateToUser($form->getSubmitValue('email_notification_template_to_user'));
         $this->setNotifyUserByEmail($form->getSubmitValue('notify_user_by_email'));
         $this->setModelType($form->getSubmitValue('model_type'));
         $this->setQuestionSelectionType($form->getSubmitValue('question_selection_type'));
@@ -3379,7 +3377,8 @@ class Exercise
 
 			$(document).ready(function() {
 				var current_time = new Date().getTime();
-                var time_left    = parseInt(".$time_left."); // time in seconds when using minutes there are some seconds lost
+				// time in seconds when using minutes there are some seconds lost
+                var time_left    = parseInt(".$time_left."); 
 				var expired_time = current_time + (time_left*1000);
 				var expired_date = get_expired_date_string(expired_time);
 
@@ -3887,7 +3886,8 @@ class Exercise
                                     // adds the word in green at the end of the string
                                     $answer .= $correct_tags[$i];
                                 } elseif (!empty($user_tags[$i])) {
-                                    // else if the word entered by the student IS NOT the same as the one defined by the professor
+                                    // else if the word entered by the student IS NOT the same as
+                                    // the one defined by the professor
                                     // adds the word in red at the end of the string, and strikes it
                                     $answer .= '<font color="red"><s>'.$user_tags[$i].'</s></font>';
                                 } else {
@@ -3906,7 +3906,8 @@ class Exercise
                                     // adds the word in green at the end of the string
                                     $answer .= $user_tags[$i];
                                 } elseif (!empty($user_tags[$i])) {
-                                    // else if the word entered by the student IS NOT the same as the one defined by the professor
+                                    // else if the word entered by the student IS NOT the same
+                                    // as the one defined by the professor
                                     // adds the word in red at the end of the string, and strikes it
                                     $answer .= '<font color="red"><s>'.$user_tags[$i].'</s></font>';
                                 } else {
@@ -3949,7 +3950,7 @@ class Exercise
                                 $studentAnswer = isset($choice[$i]) ? $choice[$i] : '';
                                 $correctAnswer = $listCorrectAnswers['words'][$i];
 
-                                // This value is the user input, not escaped while correct answer is escaped by fckeditor
+                                // This value is the user input, not escaped while correct answer is escaped by ckeditor
                                 // Works with cyrillic alphabet and when using ">" chars see #7718 #7610 #7618
                                 // ENT_QUOTES is used in order to transform ' to &#039;
                                 if (!$from_database) {
@@ -4129,7 +4130,8 @@ class Exercise
                             // adds the word in green at the end of the string
                             $answer .= $correctTags[$i];
                         } elseif (!empty($userTags[$i])) {
-                            // else if the word entered by the student IS NOT the same as the one defined by the professor
+                            // else if the word entered by the student IS NOT the same as
+                            // the one defined by the professor
                             // adds the word in red at the end of the string, and strikes it
                             $answer .= '<font color="red"><s>'.$userTags[$i].'</s></font>';
                         } else {
@@ -5102,11 +5104,9 @@ class Exercise
                                     if ($final_overlap >= $threadhold1) {
                                         $overlap_color = true; //echo 'a';
                                     }
-                                    //echo $excess.'-'.$threadhold2;
                                     if ($final_excess <= $threadhold2) {
                                         $excess_color = true; //echo 'b';
                                     }
-                                    //echo '--------'.$missing.'-'.$threadhold3;
                                     if ($final_missing <= $threadhold3) {
                                         $missing_color = true; //echo 'c';
                                     }
@@ -5144,10 +5144,7 @@ class Exercise
                                     //echo 'official';print_r($x_list);print_r($y_list);
                                     //$result = get_intersection_data($x_list,$y_list,$x_user_list,$y_user_list);
                                     $inter = $result['success'];
-
-                                    //$delineation_cord=$objAnswerTmp->selectHotspotCoordinates($answerId);
                                     $delineation_cord = $objAnswerTmp->selectHotspotCoordinates($answerId);
-
                                     $poly_answer = convert_coordinates($delineation_cord, '|');
                                     $max_coord = poly_get_max($poly_user, $poly_answer);
                                     $poly_answer_compiled = poly_compile($poly_answer, $max_coord);
@@ -5174,7 +5171,8 @@ class Exercise
                                         $url_hotspot = $destination_items[4];
                                     }
                                 }
-                            } else {	// the first delineation feedback
+                            } else {
+                                // the first delineation feedback
                                 if ($debug > 0) {
                                     error_log(__LINE__.' first', 0);
                                 }
@@ -5443,9 +5441,7 @@ class Exercise
 
             if ($answerType == HOT_SPOT || $answerType == HOT_SPOT_ORDER) {
                 // We made an extra table for the answers
-
                 if ($show_result) {
-
                     //	if ($origin != 'learnpath') {
                     echo '</table></td></tr>';
                     echo "
@@ -5633,7 +5629,6 @@ class Exercise
                         );
                     }
                 }
-
                 Event::saveQuestionAttempt($questionScore, implode('|', $answer), $quesId, $exeId, 0, $this->id);
             } else {
                 Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);

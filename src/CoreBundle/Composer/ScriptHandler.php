@@ -15,13 +15,13 @@ class ScriptHandler
      */
     public static function dumpCssFiles()
     {
-        $appCss = __DIR__.'/../../../assets/libs';
+        /*$appCss = __DIR__.'/../../../assets/libs';
         $newPath = __DIR__.'/../../../public/libs/';
         if (!is_dir($newPath)) {
             mkdir($newPath);
         }
         $fs = new Filesystem();
-        $fs->mirror($appCss, $newPath, null, ['override' => true]);
+        $fs->mirror($appCss, $newPath, null, ['override' => true]);*/
     }
 
     /**

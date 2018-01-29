@@ -82,6 +82,7 @@ before_install:
   - pwd
   # Install vendors
   - composer update
+  - composer show
   - yarn install
   - ./node_modules/.bin/encore dev
   # Install chamilo

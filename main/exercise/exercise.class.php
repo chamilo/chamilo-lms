@@ -17,6 +17,7 @@ use Chamilo\CourseBundle\Entity\CQuizCategory;
  */
 class Exercise
 {
+    public $iId;
     public $id;
     public $name;
     public $title;
@@ -87,6 +88,7 @@ class Exercise
      */
     public function __construct($courseId = 0)
     {
+        $this->iId = 0;
         $this->id = 0;
         $this->exercise = '';
         $this->description = '';
@@ -153,6 +155,7 @@ class Exercise
 
         // if the exercise has been found
         if ($object = Database::fetch_object($result)) {
+            $this->iId = $object->iid;
             $this->id = $id;
             $this->exercise = $object->title;
             $this->name = $object->title;
@@ -681,7 +684,7 @@ class Exercise
                             '<a href="#" style="padding:0px; margin:0px;">'.$category_labels.'</a>'
                         ),
                         'score' => $objQuestionTmp->selectWeighting(),
-                        'level' => $objQuestionTmp->level
+                        'level' => $objQuestionTmp->level,
                     ];
 
                     if (!empty($extraFields)) {
@@ -907,7 +910,7 @@ class Exercise
     ) {
         $result = [
             'question_list' => [],
-            'category_with_questions_list' => []
+            'category_with_questions_list' => [],
         ];
 
         // Order/random categories
@@ -1107,7 +1110,7 @@ class Exercise
                 $cat['parent_info'] = $categoryParentInfo;
                 $newCategoryList[$categoryId] = [
                     'category' => $cat,
-                    'question_list' => $questionList
+                    'question_list' => $questionList,
                 ];
             }
 
@@ -1621,7 +1624,7 @@ class Exercise
                     'pass_percentage' => $pass_percentage,
                     'results_disabled' => $results_disabled,
                     'question_selection_type' => $this->getQuestionSelectionType(),
-                    'hide_question_title' => $this->getHideQuestionTitle()
+                    'hide_question_title' => $this->getHideQuestionTitle(),
                 ];
 
                 $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
@@ -1700,7 +1703,7 @@ class Exercise
                 'pass_percentage' => $pass_percentage,
                 'save_correct_answers' => (int) $saveCorrectAnswers,
                 'propagate_neg' => $propagate_neg,
-                'hide_question_title' => $this->getHideQuestionTitle()
+                'hide_question_title' => $this->getHideQuestionTitle(),
             ];
 
             $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
@@ -1718,7 +1721,7 @@ class Exercise
                 }
             }
 
-            $this->id = Database::insert($TBL_EXERCISES, $params);
+            $this->id = $this->iId = Database::insert($TBL_EXERCISES, $params);
 
             if ($this->id) {
                 $sql = "UPDATE $TBL_EXERCISES SET id = iid WHERE iid = {$this->id} ";
@@ -1757,6 +1760,8 @@ class Exercise
 
         // Updates the question position
         $this->update_question_positions();
+
+        return $this->iId;
     }
 
     /**
@@ -1930,6 +1935,8 @@ class Exercise
             $editor_config
         );
 
+        $skillList = [];
+
         if ($type == 'full') {
             //Can't modify a DirectFeedback question
             if ($this->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_DIRECT) {
@@ -2033,7 +2040,7 @@ class Exercise
                     '1',
                     [
                         'onclick' => 'check_per_page_all()',
-                        'id' => 'option_page_all'
+                        'id' => 'option_page_all',
                     ]
                 );
                 $radios[] = $form->createElement(
@@ -2044,7 +2051,7 @@ class Exercise
                     '2',
                     [
                         'onclick' => 'check_per_page_one()',
-                        'id' => 'option_page_one'
+                        'id' => 'option_page_one',
                     ]
                 );
 
@@ -2231,7 +2238,7 @@ class Exercise
                 $option,
                 [
                     'id' => 'questionSelection',
-                    'onchange' => 'checkQuestionSelection()'
+                    'onchange' => 'checkQuestionSelection()',
                 ]
             );
 
@@ -2261,7 +2268,7 @@ class Exercise
                 'randomQuestions',
                 [
                     get_lang('RandomQuestions'),
-                    get_lang('RandomQuestionsHelp')
+                    get_lang('RandomQuestionsHelp'),
                 ],
                 $option,
                 ['id' => 'randomQuestions']
@@ -2285,21 +2292,21 @@ class Exercise
             // Category name.
             $radio_display_cat_name = [
                 $form->createElement('radio', 'display_category_name', null, get_lang('Yes'), '1'),
-                $form->createElement('radio', 'display_category_name', null, get_lang('No'), '0')
+                $form->createElement('radio', 'display_category_name', null, get_lang('No'), '0'),
             ];
             $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'));
 
             // Random answers.
             $radios_random_answers = [
                 $form->createElement('radio', 'randomAnswers', null, get_lang('Yes'), '1'),
-                $form->createElement('radio', 'randomAnswers', null, get_lang('No'), '0')
+                $form->createElement('radio', 'randomAnswers', null, get_lang('No'), '0'),
             ];
             $form->addGroup($radios_random_answers, null, get_lang('RandomAnswers'));
 
             // Hide question title.
             $group = [
                 $form->createElement('radio', 'hide_question_title', null, get_lang('Yes'), '1'),
-                $form->createElement('radio', 'hide_question_title', null, get_lang('No'), '0')
+                $form->createElement('radio', 'hide_question_title', null, get_lang('No'), '0'),
             ];
             $form->addGroup($group, null, get_lang('HideQuestionTitle'));
 
@@ -2321,7 +2328,7 @@ class Exercise
                         null,
                         get_lang('No'),
                         '0'
-                    )
+                    ),
                 ];
                 $form->addGroup($group, null, get_lang('ShowPreviousButton'));
             }
@@ -2419,7 +2426,7 @@ class Exercise
                 false,
                 [
                     'id' => 'enabletimercontroltotalminutes',
-                    'cols-size' => [2, 2, 8]
+                    'cols-size' => [2, 2, 8],
                 ]
             );
             $form->addElement('html', '</div>');
@@ -2481,7 +2488,7 @@ class Exercise
                         'c_id' => api_get_course_int_id(),
                         'field_id' => $specific_field['id'],
                         'ref_id' => $this->id,
-                        'tool_id' => "'".TOOL_QUIZ."'"
+                        'tool_id' => "'".TOOL_QUIZ."'",
                     ];
                     $values = get_specific_field_values_list($filter, ['value']);
                     if (!empty($values)) {
@@ -2493,6 +2500,8 @@ class Exercise
                     }
                 }
             }
+
+            //$skillList = Skill::addSkillsToForm($form, ITEM_TYPE_EXERCISE, $this->iId);
 
             $form->addElement('html', '</div>'); //End advanced setting
             $form->addElement('html', '</div>');
@@ -2559,6 +2568,7 @@ class Exercise
                     $defaults['enabletimercontroltotalminutes'] = 0;
                 }
                 $defaults['notifications'] = $this->getNotifications();
+                //$defaults['skills'] = array_keys($skillList);
             } else {
                 $defaults['exerciseType'] = 2;
                 $defaults['exerciseAttempts'] = 0;
@@ -2598,7 +2608,7 @@ class Exercise
                 'exerciseAttempts',
                 'propagate_neg',
                 'enabletimercontrol',
-                'review_answers'
+                'review_answers',
             ];
 
             foreach ($elementsToFreeze as $elementName) {
@@ -2613,6 +2623,7 @@ class Exercise
      * function which process the creation of exercises
      * @param FormValidator $form
      * @param string
+     * @return int c_quiz.iid
      */
     public function processCreation($form, $type = '')
     {
@@ -2701,6 +2712,11 @@ class Exercise
         }
 
         $this->save($type);
+
+        //$iId = $this->save($type);
+        /*if (!empty($iId)) {
+            Skill::saveSkills($form, ITEM_TYPE_EXERCISE, $iId);
+        }*/
     }
 
     public function search_engine_save()
@@ -3118,7 +3134,7 @@ class Exercise
             'steps_counter' => 0,
             'exe_duration' => 0,
             'expired_time_control' => $clock_expired_time,
-            'questions_to_check' => ''
+            'questions_to_check' => '',
         ];
 
         $id = Database::insert($track_exercises, $params);
@@ -3165,12 +3181,12 @@ class Exercise
                     'num' => $questionNum,
                     'exerciseType' => $this->type,
                     'exerciseId' => $this->id,
-                    'reminder' => empty($myRemindList) ? null : 2
+                    'reminder' => empty($myRemindList) ? null : 2,
                 ]),
                 [
                     'class' => 'ajax btn btn-default',
                     'data-title' => $urlTitle,
-                    'data-size' => 'md'
+                    'data-size' => 'md',
                 ]
             );
             $html .= '<br />';
@@ -3235,7 +3251,7 @@ class Exercise
                                         'type' => 'button',
                                         'class' => 'btn btn-default',
                                         'data-prev' => $prev_question,
-                                        'data-question' => $question_id
+                                        'data-question' => $question_id,
                                     ]
                                 );
                             }
@@ -3250,7 +3266,7 @@ class Exercise
                             [
                                 'type' => 'button',
                                 'class' => $class,
-                                'data-list' => implode(",", $questions_in_media)
+                                'data-list' => implode(",", $questions_in_media),
                             ]
                         );
                     } else {
@@ -5598,8 +5614,8 @@ class Exercise
                             'hotspot_exe_id = ? AND hotspot_question_id = ? AND c_id = ?' => [
                                 $exeId,
                                 $questionId,
-                                api_get_course_int_id()
-                            ]
+                                api_get_course_int_id(),
+                            ],
                         ]
                     );
 
@@ -5807,7 +5823,7 @@ class Exercise
             '#email#' => $user_info['email'],
             '#exercise#' => $this->exercise,
             '#student_complete_name#' => $user_info['complete_name'],
-            '#course#' => $courseInfo['title']
+            '#course#' => $courseInfo['title'],
         ];
         if ($origin != 'learnpath' && $sendEnd) {
             $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
@@ -6024,16 +6040,16 @@ class Exercise
         if (!empty($user_data)) {
             $array[] = [
                 'title' => get_lang('Name'),
-                'content' => $user_data['complete_name']
+                'content' => $user_data['complete_name'],
             ];
             $array[] = [
                 'title' => get_lang('Username'),
-                'content' => $user_data['username']
+                'content' => $user_data['username'],
             ];
             if (!empty($user_data['official_code'])) {
                 $array[] = [
                     'title' => get_lang('OfficialCode'),
-                    'content' => $user_data['official_code']
+                    'content' => $user_data['official_code'],
                 ];
             }
         }
@@ -6200,7 +6216,7 @@ class Exercise
             }
             $result = [
                 'score' => $totalScore,
-                'weight' => $track_exercise_info['exe_weighting']
+                'weight' => $track_exercise_info['exe_weighting'],
             ];
         }
         return $result;
@@ -6245,7 +6261,7 @@ class Exercise
                     'warning',
                     false
                 ),
-                'rawMessage' => get_lang('ExerciseNotFound')
+                'rawMessage' => get_lang('ExerciseNotFound'),
             ];
         }
 
@@ -6272,7 +6288,7 @@ class Exercise
                         'warning',
                         false
                     ),
-                    'rawMessage' => get_lang('ExerciseNotFound')
+                    'rawMessage' => get_lang('ExerciseNotFound'),
                 ];
             }
         } else {
@@ -6287,7 +6303,7 @@ class Exercise
                         'warning',
                         false
                     ),
-                    'rawMessage' => get_lang('ExerciseNotFound')
+                    'rawMessage' => get_lang('ExerciseNotFound'),
                 ];
             }
         }
@@ -6430,7 +6446,7 @@ class Exercise
         return [
             'value' => $isVisible,
             'message' => $message,
-            'rawMessage' => $rawMessage
+            'rawMessage' => $rawMessage,
         ];
     }
 
@@ -6993,7 +7009,7 @@ class Exercise
                         'c_id' => $this->course_id,
                         'exercise_id' => $this->id,
                         'category_id' => $category_id,
-                        'count_questions' => $count_questions
+                        'count_questions' => $count_questions,
                     ];
                     Database::insert($table, $params);
                 }
@@ -7099,7 +7115,7 @@ class Exercise
                 $selectionType,
                 [
                     EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED,
-                    EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM
+                    EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM,
                 ]
             )) {
                 $useRootAsCategoryTitle = true;
@@ -7355,7 +7371,7 @@ class Exercise
                 'i' => $i,
                 'current_question' => $current_question,
                 'questions_in_media' => $questions_in_media,
-                'last_question_in_media' => $last_question_in_media
+                'last_question_in_media' => $last_question_in_media,
             ];
             $params = json_encode($params);
 
@@ -7437,7 +7453,7 @@ class Exercise
                             get_lang('SaveForNow'),
                             ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
                         ),
-                        '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>'
+                        '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>',
                     ];
                     $exercise_actions .= Display::div(
                         implode(PHP_EOL, $button),
@@ -7455,7 +7471,7 @@ class Exercise
                             get_lang('SaveForNow'),
                             ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
                         ),
-                        '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;'
+                        '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;',
                     ];
                     $exercise_actions = Display::div(
                         implode(PHP_EOL, $button),
@@ -7482,7 +7498,7 @@ class Exercise
                     ).get_lang('ReviewQuestionLater'),
                     [
                         'class' => 'checkbox',
-                        'for' => 'remind_list['.$questionId.']'
+                        'for' => 'remind_list['.$questionId.']',
                     ]
                 );
                 $exercise_actions .= Display::div(

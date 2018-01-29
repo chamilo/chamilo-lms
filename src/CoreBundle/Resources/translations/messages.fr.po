@@ -1,0 +1,4 @@
+msgid "test"
+msgstr "test in french --> l'étéééé"
+
+

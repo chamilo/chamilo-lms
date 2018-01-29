@@ -156,6 +156,9 @@ class Kernel extends BaseKernel
         return !empty($this->getContainer()->getParameter('installed'));
     }
 
+    /**
+     * @return string
+     */
     public function getUrlAppend()
     {
         return $this->getContainer()->getParameter('url_append');

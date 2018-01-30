@@ -243,7 +243,7 @@ class Container
         }
 
         if (self::$container) {
-            return self::$container->get('translator.default');
+            return self::$container->get('translator');
         }
 
         return false;

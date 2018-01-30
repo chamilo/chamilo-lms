@@ -788,7 +788,7 @@ function api_get_path($path = '', $configuration = [])
             REL_HOME_PATH => 'app/home/',
             SYS_APP_PATH => 'var/',
             WEB_APP_PATH => 'app/',
-            SYS_UPLOAD_PATH => 'app/upload/',
+            SYS_UPLOAD_PATH => 'var/upload/',
             SYS_INC_PATH => 'inc/',
             CONFIGURATION_PATH => 'app/config/',
             LIBRARY_PATH => 'inc/lib/',
@@ -1351,10 +1351,12 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
     $result['firstname'] = null;
     $result['lastname'] = null;
 
-    if (isset($user['firstname']) && isset($user['lastname'])) { // with only lowercase
+    if (isset($user['firstname']) && isset($user['lastname'])) {
+        // with only lowercase
         $result['firstname'] = $user['firstname'];
         $result['lastname'] = $user['lastname'];
-    } elseif (isset($user['firstName']) && isset($user['lastName'])) { // with uppercase letters
+    } elseif (isset($user['firstName']) && isset($user['lastName'])) {
+        // with uppercase letters
         $result['firstname'] = isset($user['firstName']) ? $user['firstName'] : null;
         $result['lastname'] = isset($user['lastName']) ? $user['lastName'] : null;
     }
@@ -3448,8 +3450,8 @@ function api_is_anonymous($user_id = null, $db_check = false)
         if (!isset($user_id)) {
             $user_id = api_get_user_id();
         }
-        $info = api_get_user_info($user_id);
 
+        $info = api_get_user_info($user_id);
         if ($info['status'] == 6 || $user_id == 0 || empty($info)) {
             return true;
         }

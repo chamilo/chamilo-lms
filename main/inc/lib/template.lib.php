@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Class Template
@@ -91,15 +92,13 @@ class Template
         ];
 
         $urlId = api_get_current_access_url_id();
-
         $cache_folder = api_get_path(SYS_ARCHIVE_PATH).'twig/'.$urlId.'/';
 
         if (!is_dir($cache_folder)) {
-            mkdir($cache_folder, api_get_permissions_for_new_directories(), true);
+            //mkdir($cache_folder, api_get_permissions_for_new_directories(), true);
         }
 
         $loader = new Twig_Loader_Filesystem($template_paths);
-
         $isTestMode = api_get_setting('server_type') === 'test';
 
         //Setting Twig options depending on the server see http://twig.sensiolabs.org/doc/api.html#environment-options
@@ -354,7 +353,7 @@ class Template
     public function display_one_col_template()
     {
         $tpl = $this->get_template('layout/layout_1_col.html.twig');
-        echo \Chamilo\CoreBundle\Framework\Container::getTemplating()->render($tpl, $this->params);
+        echo Container::getTemplating()->render($tpl, $this->params);
     }
 
     /**
@@ -363,7 +362,7 @@ class Template
     public function display_two_col_template()
     {
         $tpl = $this->get_template('layout/layout_2_col.html.twig');
-        echo \Chamilo\CoreBundle\Framework\Container::getTemplating()->render($tpl, $this->params);
+        echo Container::getTemplating()->render($tpl, $this->params);
     }
 
     /**
@@ -494,6 +493,7 @@ class Template
                 return 'default/'.$name;
             }
         }
+        $name = str_replace('tpl', 'html.twig', $name);
 
         return $this->templateFolder.'/'.$name;
     }
@@ -744,11 +744,11 @@ class Template
     {
         global $disable_js_and_css_files;
         // chamilo CSS
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'../chamilo.css');
+        //$css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'../chamilo.css');
 
         // Base CSS
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
-
+        //$css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
+        $css = [];
         if ($this->show_learnpath) {
             $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'scorm.css');
             if (is_file(api_get_path(SYS_CSS_PATH).$this->themeDir.'learnpath.css')) {
@@ -756,11 +756,10 @@ class Template
             }
         }
 
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->themeDir.'default.css');
-
-        $css_file_to_string = null;
+        //$css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->themeDir.'default.css');
+        $css_file_to_string = '';
         foreach ($css as $file) {
-           // $css_file_to_string .= api_get_css($file);
+            $css_file_to_string .= api_get_css($file);
         }
 
         // @todo move this somewhere else. Special fix when using tablets in order to see the text near icons
@@ -1419,8 +1418,15 @@ class Template
         if ($clearFlashMessages) {
             Display::cleanFlashMessages();
         }
+        $template = str_replace('tpl', 'html.twig', $template);
+        $templateFile = api_get_path(SYS_PATH).'main/template/'.$template;
 
-        echo $this->twig->render($template, $this->params);
+        if (!file_exists($templateFile)) {
+            $e = new \Gaufrette\Exception\FileNotFound($templateFile);
+            echo $e->getMessage();
+            exit;
+        }
+        echo Container::getTemplating()->render($template, $this->params);
     }
 
     /**

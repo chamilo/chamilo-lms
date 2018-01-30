@@ -1,4 +1,4 @@
-{% extends template ~ "/layout/page.tpl" %}
+{% extends template ~ "/layout/page.html.twig" %}
 
 {% block body %}
     {% autoescape false %}
@@ -19,7 +19,7 @@
 
     <div class="row">
         <div class="col-xs-12 col-md-12">
-            {% include template ~ "/layout/page_body.tpl" %}
+            {% include template ~ "/layout/page_body.html.twig" %}
             {% block content %}
                 {% if content is not null %}
                     <section id="main_content">

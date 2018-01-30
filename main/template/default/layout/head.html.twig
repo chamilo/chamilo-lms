@@ -1,0 +1,62 @@
+{% autoescape false %}
+<meta charset="{{ system_charset }}" />
+<link href="https://chamilo.org/chamilo-lms/" rel="help" />
+<link href="https://chamilo.org/the-association/" rel="author" />
+<link href="https://www.gnu.org/licenses/gpl-3.0.en.html" rel="license" />
+<!-- Force latest IE rendering engine or ChromeFrame if installed -->
+<!--[if IE]>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<![endif]-->
+{{ prefetch }}
+{{ favico }}
+<link rel="apple-touch-icon" href="{{ _p.web }}apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="generator" content="{{ _s.software_name }} {{ _s.system_version|slice(0,1) }}" />
+{#  Use the latest engine in ie8/ie9 or use google chrome engine if available  #}
+{#  Improve usability in portal devices #}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ title_string }}</title>
+{{ social_meta }}
+{{ css_static_file_to_string }}
+{#{{ js_file_to_string }}#}
+
+<link rel="stylesheet" href="{{ asset('build/chamilo.css') }}"/>
+<link rel="stylesheet" href="{{ asset('build/css/base.css') }}"/>
+<link rel="stylesheet" href="{{ asset('build/css/themes/'~ theme ~'/default.css') }}"/>
+<link rel="stylesheet" media="print" href="{{ asset('build/css/print.css') }}"/>
+
+<script src="{{ asset('build/chamilo.js') }}"></script>
+<script src="{{ asset('libs/ckeditor/ckeditor.js') }}"></script>
+<script src="{{ asset('libs/readmore-js/readmore.min.js') }}"></script>
+<script src="{{ asset('libs/js-cookie/src/js.cookie.js') }}"></script>
+
+{{ extra_headers }}
+<script>
+/* Global chat variables */
+var ajax_url = '{{ _p.web_ajax }}chat.ajax.php';
+var online_button = '{{ online_button }}';
+var offline_button = '{{ offline_button }}';
+var connect_lang = '{{ "ChatConnected"|get_lang }}';
+var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';
+var logOutUrl = '{{ _p.web_ajax }}course.ajax.php?a=course_logout';
+
+$(document).ready(function () {
+    // Executes course logout when user close the browser tab/window
+    $(window).on('beforeunload', function () {
+        // Logout of course just in case
+        $.ajax({
+            url: logOutUrl,
+            success: function (data) {
+                return 1;
+            }
+        });
+    });
+});
+
+</script>
+
+{% include template ~ '/layout/header.js.html.twig' %}
+
+{{ css_custom_file_to_string }}
+{{ css_style_print }}
+{% endautoescape %}

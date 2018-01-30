@@ -1,4 +1,4 @@
-{% extends template ~ "/layout/page.tpl" %}
+{% extends template ~ "/layout/page.html.twig" %}
 
 {% block body %}
     {% autoescape false %}
@@ -27,7 +27,7 @@
                 {% endif %}
 
                 {% block page_body %}
-                    {% include template ~ "/layout/page_body.tpl" %}
+                    {% include template ~ "/layout/page_body.html.twig" %}
                 {% endblock %}
 
                 {% if welcome_to_course_block %}
@@ -56,7 +56,7 @@
                     </article>
                 {% endif %}
 
-                {% include template ~ "/layout/hot_courses.tpl" %}
+                {% include template ~ "/layout/hot_courses.html.twig" %}
 
                 {% if plugin_content_bottom %}
                     <div id="plugin_content_bottom">
@@ -73,7 +73,7 @@
                     </div>
                 {% endif %}
 
-                {% include template ~ "/layout/login_form.tpl" %}
+                {% include template ~ "/layout/login_form.html.twig" %}
 
                 {% if _u.logged  == 1 %}
                     {{ user_image_block }}

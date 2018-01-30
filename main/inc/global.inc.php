@@ -97,34 +97,28 @@ try {
 
     // Fix chamilo URL when used inside a folder: example.com/chamilo
     $append = $kernel->getUrlAppend();
-    $baseUrl = '..';
+    $appendValue = '/';
     if (!empty($append)) {
-        $router = $container->get('router');
-        $requestStack = $container->get('request_stack');
-        $context = $container->get('router.request_context');
-
-        $host = $router->getContext()->getHost();
-        $context->setBaseUrl("/$append/");
-        $baseUrl = $router->getContext()->getBaseUrl();
-        $container->set('router.request_context', $context);
-
-        $packages = $container->get('assets.packages');
-
-        $version = new Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy();
-        $newDefault = new Symfony\Component\Asset\PathPackage("/$append/public/", $version);
-        $packages = $container->get('assets.packages');
-        $packages->setDefaultPackage($newDefault);
-
-        $container->get('chamilo_core.menu.nav_builder')->setContainer($container);
-
-        $checker = $container->get('security.authorization_checker');
-        //var_dump($container->get('session')->get('a'));
-        //var_dump($checker->isGranted('IS_AUTHENTICATED_FULLY'));
+        $appendValue = "/$append/";
     }
 
-    //$kernel->boot();
-    //var_dump($container->get('assets.context')->getBasePath());
-    //var_dump($container->get('assets.empty_package')->getUrl('/build/'));
+    $router = $container->get('router');
+    $requestStack = $container->get('request_stack');
+    $context = $container->get('router.request_context');
+
+    $host = $router->getContext()->getHost();
+    $context->setBaseUrl($appendValue);
+    $baseUrl = $router->getContext()->getBaseUrl();
+    $container->set('router.request_context', $context);
+
+    $packages = $container->get('assets.packages');
+
+    $version = new Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy();
+    $newDefault = new Symfony\Component\Asset\PathPackage($appendValue.'public/', $version);
+    $packages = $container->get('assets.packages');
+    $packages->setDefaultPackage($newDefault);
+    $container->get('chamilo_core.menu.nav_builder')->setContainer($container);
+    $checker = $container->get('security.authorization_checker');
 
     if (!is_dir(_MPDF_TEMP_PATH)) {
         mkdir(_MPDF_TEMP_PATH, api_get_permissions_for_new_directories(), true);

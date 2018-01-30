@@ -25,7 +25,7 @@ class NavBuilder implements ContainerAwareInterface
      * @param array  $itemOptions The options given to the created menuItem
      * @param string $currentUri  The current URI
      *
-     * @return \Knp\Menu\ItemInterface
+     * @return ItemInterface
      */
     public function createCategoryMenu(array $itemOptions = [], $currentUri = null)
     {
@@ -38,9 +38,9 @@ class NavBuilder implements ContainerAwareInterface
     }
 
     /**
-     * @param \Knp\Menu\ItemInterface $menu        The item to fill with $routes
-     * @param array                   $options     The item options
-     * @param string                  $currentUri  The current URI
+     * @param ItemInterface $menu The item to fill with $routes
+     * @param array $options The item options
+     * @param string $currentUri The current URI
      */
     public function buildCategoryMenu(ItemInterface $menu, array $options = [], $currentUri = null)
     {
@@ -54,7 +54,7 @@ class NavBuilder implements ContainerAwareInterface
      * Top menu left
      * @param FactoryInterface $factory
      * @param array $options
-     * @return \Knp\Menu\ItemInterface
+     * @return ItemInterface
      */
     public function leftMenu(FactoryInterface $factory, array $options)
     {
@@ -63,16 +63,22 @@ class NavBuilder implements ContainerAwareInterface
 
         $menu = $factory->createItem('root');
         $menu->setChildrenAttribute('class', 'nav navbar-nav');
-
         $menu->addChild(
             $translator->trans('Home'),
-            ['route' => 'home']
+            [
+                'route' => 'legacy_index'
+            ]
         );
 
         if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $menu->addChild(
                 $translator->trans('MyCourses'),
-                ['route' => 'userportal']
+                [
+                    'route' => 'main',
+                    'routeParameters' => [
+                        'name' => '../user_portal.php',
+                    ],
+                ]
             );
 
             $menu->addChild(
@@ -115,11 +121,13 @@ class NavBuilder implements ContainerAwareInterface
                         ],
                     ]
                 );
-
                 $menu->addChild(
                     $translator->trans('Administration'),
                     [
-                        'route' => 'administration',
+                        'route' => 'main',
+                        'routeParameters' => [
+                            'name' => 'admin/index.php',
+                        ],
                     ]
                 );
             }

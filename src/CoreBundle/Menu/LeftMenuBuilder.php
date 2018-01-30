@@ -4,9 +4,9 @@
 namespace Chamilo\CoreBundle\Menu;
 
 use Knp\Menu\FactoryInterface;
-use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Knp\Menu\ItemInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Class LeftMenuBuilder
@@ -21,16 +21,17 @@ class LeftMenuBuilder implements ContainerAwareInterface
      *
      * @param FactoryInterface $factory
      * @param array $options
-     * @return \Knp\Menu\ItemInterface
+     * @return ItemInterface
      */
     public function courseMenu(FactoryInterface $factory, array $options)
     {
         $checker = $this->container->get('security.authorization_checker');
         $menu = $factory->createItem('root');
         $translator = $this->container->get('translator');
+        $checked = $this->container->get('session')->get('IS_AUTHENTICATED_FULLY');
         $settingsManager = $this->container->get('chamilo.settings.manager');
 
-        if ($checker->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($checked) {
             $menu->setChildrenAttribute('class', 'nav nav-pills nav-stacked');
             $menu->addChild(
                 $translator->trans('MyCourses'),
@@ -39,6 +40,8 @@ class LeftMenuBuilder implements ContainerAwareInterface
                     'routeParameters' => ['type' => 'courses'],
                 ]
             );
+
+            return $menu;
 
             if (api_is_allowed_to_create_course()) {
                 $lang = $translator->trans('CreateCourse');
@@ -103,7 +106,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
      *
      * @param FactoryInterface $factory
      * @param array $options
-     * @return \Knp\Menu\ItemInterface
+     * @return ItemInterface
      */
     public function sessionMenu(FactoryInterface $factory, array $options)
     {
@@ -140,7 +143,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
     /**
      * @param FactoryInterface $factory
      * @param array $options
-     * @return \Knp\Menu\ItemInterface
+     * @return ItemInterface
      */
     public function profileMenu(FactoryInterface $factory, array $options)
     {
@@ -318,7 +321,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
      * Skills menu
      * @param FactoryInterface $factory
      * @param array $options
-     * @return \Knp\Menu\ItemInterface
+     * @return ItemInterface
      */
     public function skillsMenu(FactoryInterface $factory, array $options)
     {
@@ -383,7 +386,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
      * Register/reset password menu
      * @param FactoryInterface $factory
      * @param array $options
-     * @return \Knp\Menu\ItemInterface
+     * @return ItemInterface
      */
     public function loginMenu(FactoryInterface $factory, array $options)
     {
@@ -428,7 +431,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
     /**
      * @param FactoryInterface $factory
      * @param array $options
-     * @return \Knp\Menu\ItemInterface
+     * @return ItemInterface
      */
     public function helpMenu(FactoryInterface $factory, array $options)
     {

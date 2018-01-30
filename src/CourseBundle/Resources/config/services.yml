@@ -94,6 +94,7 @@ services:
 #            - '@event_dispatcher'
     chamilo_course.settings.manager:
         class: '%chamilo_course.settings.manager.class%'
+        public: true
         arguments:
             - '@sylius.registry.settings_schema'
             - '@sylius.registry.settings_resolver'
@@ -107,6 +108,7 @@ services:
     # Tool chain is filled in file DependencyInjection/Compiler/ToolCompilerClass.php
     chamilo_course.tool_chain:
         class: '%chamilo_course.tool_chain.class%'
+        public: true
 
     # Agenda tool
     chamilo_course.tool.agenda:

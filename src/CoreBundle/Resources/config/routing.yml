@@ -26,9 +26,13 @@ legacy_javascript:
     resource: '@ChamiloCoreBundle/Controller/JavascriptLegacyController.php'
     type: annotation
     prefix: /js
+
+legacy_index:
+    path: ../
+
 # Legacy routes
 main:
-    path: /main/{name}
+    path: ../main/{name}
     defaults: {_controller: 'ChamiloCoreBundle:Legacy:classic'}
     requirements:
         name: .+
@@ -38,6 +42,7 @@ legacy_plugin:
     defaults: {_controller: 'ChamiloCoreBundle:Legacy:plugin'}
     requirements:
         name: .+
+
 # web url shortcuts for legacy templates
 web.ajax:
     path: main/inc/ajax/

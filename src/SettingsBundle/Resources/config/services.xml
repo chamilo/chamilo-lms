@@ -18,7 +18,7 @@
             <argument>%chamilo_settings.repository.parameter.entity.class%</argument>
         </service>
 
-        <service id="chamilo.settings.manager" class="%chamilo_settings.settings.manager.class%">
+        <service id="chamilo.settings.manager" class="%chamilo_settings.settings.manager.class%" public="true">
             <argument type="service" id="sylius.registry.settings_schema" />
             <argument type="service" id="sylius.registry.settings_resolver" />
             <argument type="service" id="doctrine.orm.entity_manager" />
@@ -27,7 +27,7 @@
             <argument type="service" id="event_dispatcher" />
         </service>
 
-        <service id="chamilo_settings.templating.helper.settings" class="%chamilo_settings.templating.helper.settings.class%">
+        <service id="chamilo_settings.templating.helper.settings" class="%chamilo_settings.templating.helper.settings.class%" public="true">
             <argument type="service" id="chamilo.settings.manager" />
             <tag name="templating.helper" alias="chamilo_settings" />
         </service>

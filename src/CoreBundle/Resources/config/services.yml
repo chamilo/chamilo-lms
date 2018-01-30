@@ -14,14 +14,17 @@ services:
     chamilo_core.entity.manager.course_manager:
         class: '%chamilo_core.entity.manager.course_manager.class%'
         arguments: ['%chamilo_core.entity.course%', '@doctrine']
+        public: true
 
     chamilo_core.entity.manager.session_manager:
         class: '%chamilo_core.entity.manager.session_manager.class%'
         arguments: ['%chamilo_core.entity.session%', '@doctrine']
+        public: true
 
     chamilo_core.manager.access_url:
         class: '%chamilo_core.entity.manager.access_url_manager.class%'
         arguments: ['%chamilo_core.entity.access_url%', '@doctrine']
+        public: true
 
     # Chamilo Twig extension
     twig.extension.chamilo_extension:
@@ -98,6 +101,7 @@ services:
     chamilo_core.html_editor:
         class: Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor
         arguments: ['@translator.default', '@router']
+        public: true
     # Listeners
 #    chamilo.doctrine.entity_listener_resolver:
 #        class: Chamilo\CoreBundle\Doctrine\EntityListenerResolver
@@ -200,13 +204,14 @@ services:
         calls:
             - [setContainer, ['@service_container']]
         tags:
-         - {name: mopa_bootstrap.menu, alias: chamilo_core.menu.nav}
+            - {name: mopa_bootstrap.menu, alias: chamilo_core.menu.nav}
 
     chamilo_core.menu.course_menu_builder:
         class: Chamilo\CoreBundle\Menu\LeftMenuBuilder
         calls:
             - [setContainer, ['@service_container']]
-        arguments: ['@knp_menu.factory', '@chamilo_core.entity.manager.course_manager', '@router']
+        tags:
+          - {name: mopa_bootstrap.menu, alias: chamilo_core.left.nav}
 
     # Auth listeners
     chamilo_core.listener.login_success_handler:

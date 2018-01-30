@@ -1,5 +1,5 @@
-{% extends template ~ "/layout/layout_1_col.tpl" %}
-
+{% extends template ~ "/layout/layout_1_col.html.twig" %}
+{% autoescape false %}
 {% block content %}
 <div class="row">
     <div class="col-md-3">
@@ -101,3 +101,4 @@
     {{ form_modals }}
 {% endif %}
 {% endblock %}
+{% endautoescape %}

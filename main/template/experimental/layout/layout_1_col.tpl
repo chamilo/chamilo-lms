@@ -1,1 +1,1 @@
-{% extends "default/layout/layout_1_col.tpl" %}
+{% extends "default/layout/layout_1_col.html.twig" %}

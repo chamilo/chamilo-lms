@@ -1,4 +1,4 @@
-{% extends "default/layout/layout_2_col.tpl" %}
+{% extends "default/layout/layout_2_col.html.twig" %}
 
 {% block header %}
     {% embed "default/layout/main_header.tpl" %}

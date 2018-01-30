@@ -1,6 +1,7 @@
-{% extends template ~ "/layout/layout_1_col.tpl" %}
+{% extends template ~ "/layout/layout_1_col.html.twig" %}
 
 {% block content %}
+{% autoescape false %}
 <div class="row">
     <div class="col-md-3">
         <div class="social-network-menu">
@@ -12,4 +13,5 @@
         {{ social_invitations_block }}
     </div>
 </div>
+{% endautoescape %}
 {% endblock %}

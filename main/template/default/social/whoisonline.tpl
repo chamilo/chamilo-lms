@@ -1,4 +1,4 @@
-{% extends template ~ "/layout/layout_1_col.tpl" %}
+{% extends template ~ "/layout/layout_1_col.html.twig" %}
 
 {% block content %}
     <div class="row">

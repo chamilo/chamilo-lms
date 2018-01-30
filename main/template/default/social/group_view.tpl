@@ -1,4 +1,4 @@
-{% extends template ~ "/layout/layout_1_col.tpl" %}
+{% extends template ~ "/layout/layout_1_col.html.twig" %}
 
 {% block content %}
 <div class="row" xmlns="http://www.w3.org/1999/html">
@@ -6,8 +6,8 @@
         <div class="sm-groups">
             {{ social_avatar_block }}
             {{ social_menu_block }}
-            
-            <!-- Block chat list -->    
+
+            <!-- Block chat list -->
             <div class="chat-friends">
                 <div class="panel-group" id="blocklistFriends" role="tablist" aria-multiselectable="true">
                     <div class="panel panel-default">
@@ -26,13 +26,13 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
     <div class="col-md-9">
         <div class="sm-groups-content">
         {{ create_link }}
-        
+
         {% if is_group_member == false %}
             <div class="social-group-details-info">
                 {{ 'Privacy' | get_lang }}
@@ -44,7 +44,7 @@
                 {% endif %}
             </div>
         {% endif %}
-        
+
         <div class="group-info">
             <h2 class="title">{{ group_info.name }}</h2>
             <p class="description">{{ group_info.description }}</p>
@@ -52,7 +52,7 @@
         <div class="group-list">
             {{ social_forum }}
         </div>
-        
+
         {{ social_right_content }}
 
         <div id="display_response_id" class="col-md-5"></div>

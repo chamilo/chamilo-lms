@@ -1,7 +1,7 @@
 {%
     extends hide_header == true
     ? template ~ "/layout/blank.tpl"
-    : template ~ "/layout/layout_1_col.tpl"
+    : template ~ "/layout/layout_1_col.html.twig"
 %}
 
 {% block content %}

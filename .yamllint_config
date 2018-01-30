@@ -3,6 +3,8 @@ ignore: |
     app/*
     .travis.yml
     .codeclimate.yml
+    public/libs/*
+
 
 extends: default
 rules:

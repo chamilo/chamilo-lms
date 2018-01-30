@@ -71,4 +71,5 @@ filter:
         - 'var/log/*'
         - 'vendor/*'
         - 'web/*'
-        - 'public/*'
+        - 'public/libs/*'
+        - 'public/img/*'

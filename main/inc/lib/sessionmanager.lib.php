@@ -4854,9 +4854,17 @@ class SessionManager
                         if (isset($sessionId) && !empty($sessionId)) {
                             $session_id = $sessionId;
                             if (!empty($enreg['SessionName'])) {
-                                $sessionName = Database::escape_string($enreg['SessionName']);
-                                $sql = "UPDATE $tbl_session SET name = '$sessionName' WHERE id = $session_id";
-                                Database::query($sql);
+                                $sessionExistsWithName = self::get_session_by_name($session_name);
+                                if ($sessionExistsWithName === false) {
+                                    $sessionName = Database::escape_string($enreg['SessionName']);
+                                    $sql = "UPDATE $tbl_session SET name = '$sessionName' WHERE id = $session_id";
+                                    Database::query($sql);
+                                } else {
+                                    if ($debug) {
+                                        $logger->addError("Sessions - Error while trying to update session #$session_id with name '$session_name'");
+                                    }
+                                    continue;
+                                }
                             }
                         } else {
                             $my_session_result = self::get_session_by_name($session_name);

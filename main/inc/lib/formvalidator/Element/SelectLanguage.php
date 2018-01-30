@@ -29,9 +29,9 @@ class SelectLanguage extends HTML_QuickForm_select
                 $defaultValue = api_get_setting('platformLanguage');
             }
             if ($languages[$index] == $defaultValue) {
-                $this->addOption($name, $languages[$index], ['selected'=>'selected']);
+                $this->addOption($name, $index, ['selected'=>'selected']);
             } else {
-                $this->addOption($name, $languages[$index]);
+                $this->addOption($name, $index);
             }
         }
     }

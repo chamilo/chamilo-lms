@@ -24,6 +24,7 @@ var/courses/*
 
 # Home
 app/home/*
+components/*
 
 # Upload content
 var/upload/*

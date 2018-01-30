@@ -56,7 +56,6 @@ return [
     Chamilo\MediaBundle\ChamiloMediaBundle::class => ['all' => true],
     Chamilo\NotificationBundle\ChamiloNotificationBundle::class => ['all' => true],
     Chamilo\SettingsBundle\ChamiloSettingsBundle::class => ['all' => true],
-    Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle::class => ['all' => true],
     HWI\Bundle\OAuthBundle\HWIOAuthBundle::class => ['all' => true],
     winzou\Bundle\StateMachineBundle\winzouStateMachineBundle::class => ['all' => true],
     Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle::class => ['all' => true],

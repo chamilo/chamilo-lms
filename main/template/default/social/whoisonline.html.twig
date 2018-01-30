@@ -1,6 +1,7 @@
 {% extends template ~ "/layout/layout_1_col.html.twig" %}
 
 {% block content %}
+{% autoescape false %}
     <div class="row">
         <div class="col-md-12">
             {% if social_search %}
@@ -49,5 +50,5 @@
             });
         });
     </script>
+{% endautoescape %}
 {% endblock %}
-

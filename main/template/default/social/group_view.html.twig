@@ -1,6 +1,7 @@
 {% extends template ~ "/layout/layout_1_col.html.twig" %}
 
 {% block content %}
+{% autoescape false %}
 <div class="row" xmlns="http://www.w3.org/1999/html">
     <div class="col-md-3">
         <div class="sm-groups">
@@ -60,4 +61,5 @@
         </div>
     </div>
 </div>
+{% endautoescape %}
 {% endblock %}

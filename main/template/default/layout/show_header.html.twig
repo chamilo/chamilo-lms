@@ -8,12 +8,13 @@
 <!--[if gt IE 8]><!-->
 <html lang="{{ document_language }}" class="no-js"> <!--<![endif]-->
 <head>
-    {% block head %}
-        {% include template ~ "/layout/head.html.twig" %}
-    {% endblock %}
+{% block head %}
+    {% include template ~ "/layout/head.html.twig" %}
+{% endblock %}
 </head>
 <body dir="{{ text_direction }}" class="{{ section_name }} {{ login_class }}">
 <noscript>{{ "NoJavascript"|get_lang }}</noscript>
+{% autoescape false %}
 {% if show_header == true %}
     <div class="wrap">
         {% if displayCookieUsageWarning == true %}
@@ -51,3 +52,4 @@
                 {% endblock %}
                 {{ flash_messages }}
 {% endif %}
+{% endautoescape %}

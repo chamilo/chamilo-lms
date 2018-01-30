@@ -1,7 +1,7 @@
 {% extends template ~ "/layout/page.html.twig" %}
 
 {% block body %}
-    {% autoescape false %}
+{% autoescape false %}
     {% if plugin_main_top %}
         <div class="row">
             <div id="plugin_main_top" class="col-md-12">
@@ -45,5 +45,5 @@
             </div>
         </div>
     {% endif %}
-    {% endautoescape %}
+{% endautoescape %}
 {% endblock %}

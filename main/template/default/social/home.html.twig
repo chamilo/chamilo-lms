@@ -1,6 +1,7 @@
 {% extends template ~ "/layout/layout_1_col.html.twig" %}
 
 {% block content %}
+{% autoescape false %}
     <div class="row">
         <div class="col-md-3">
             {{ social_avatar_block }}
@@ -66,4 +67,5 @@
              {% endif %}
         </div>
     </div>
+{% endautoescape %}
 {% endblock %}

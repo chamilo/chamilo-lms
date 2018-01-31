@@ -22,7 +22,7 @@ Feature: Settings update
 
   Scenario: Update 'allow_group_categories' setting
     Given I am a platform administrator
-    And I am on "/public/admin/settings/search_settings?keyword=form_allow_group_categories"
+    And I am on "/public/admin/settings/search_settings?keyword=allow_group_categories"
     And I select "Yes" from "form_allow_group_categories"
     And I press "Save"
     Then I should see "Settings have been successfully updated"

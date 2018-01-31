@@ -17,7 +17,7 @@ require("font-awesome-webpack");
 
 // require("ckeditor"); // version 4.x doesnt have webpack support
 require("mediaelement");
-require("js-cookie");
+//require("js-cookie");
 require("fullcalendar");
 require("qtip2");
 require("image-map-resizer");
@@ -34,8 +34,10 @@ require('bootstrap-select/dist/js/bootstrap-select.js');
 require('bootstrap-select/dist/css/bootstrap-select.css');
 
 
+// Don't work with webpack
+//require("js-cookie");
 /*
 
 require("jquery-ui-timepicker-addon");
-require("chosen-js");*/
+*/
 //require("bootstrap-daterangepicker");

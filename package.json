@@ -24,7 +24,6 @@
     "jquery": "^3.0",
     "jquery-ui-timepicker-addon": "^1.6.3",
     "jquery.scrollbar": "^0.2.11",
-    "js-cookie": "^2.2.0",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
     "mathjax": "^2.7.2",

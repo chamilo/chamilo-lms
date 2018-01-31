@@ -1,4 +1,5 @@
 var Encore = require('@symfony/webpack-encore');
+var copyWebpackPlugin = require('copy-webpack-plugin');
 
 Encore
     .setOutputPath('public/build/')
@@ -23,7 +24,6 @@ Encore
     .addStyleEntry('css/base', './assets/css/main.scss')
     .addStyleEntry('css/editor', './assets/css/editor.css')
     .addStyleEntry('css/print', './assets/css/print.css')
-
     .enableSourceMaps(!Encore.isProduction())
     .autoProvideVariables({
         $: 'jquery',
@@ -68,10 +68,14 @@ var chamiloThemes = [
 chamiloThemes.forEach(function (theme) {
     Encore
         .addStyleEntry('css/themes/'+theme+'/default', './assets/css/themes/'+theme+'/default.css')
-        .addStyleEntry('css/themes/'+theme+'/images/header-logo.png', './assets/css/themes/'+theme+'/images/header-logo.png')
-        .addStyleEntry('css/themes/'+theme+'/images/favicon.ico', './assets/css/themes/'+theme+'/images/favicon.ico')
     ;
+
+    // Copy images from themes into public/build
+    Encore.addPlugin(new copyWebpackPlugin([{
+        from: 'assets/css/themes/'+theme+'/images',
+        to: 'css/themes/'+theme+'/images'
+    },
+    ]));
 });
 
 module.exports = Encore.getWebpackConfig();
-

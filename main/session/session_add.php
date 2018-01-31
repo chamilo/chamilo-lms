@@ -23,8 +23,8 @@ $formSent = 0;
 $errorMsg = '';
 
 // Crop picture plugin for session images
-$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
-$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
+//$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
+//$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 
 $interbreadcrumb[] = [
     'url' => 'session_list.php',

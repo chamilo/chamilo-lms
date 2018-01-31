@@ -20,14 +20,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_CALENDAR_EVENT;
 $this_section = SECTION_MYAGENDA;
 
-$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-ui-i18n']);
-$htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = api_get_asset('fullcalendar/dist/fullcalendar.js');
 $htmlHeadXtra[] = api_get_asset('fullcalendar/dist/locale-all.js');
 $htmlHeadXtra[] = api_get_asset('fullcalendar/dist/gcal.js');
 $htmlHeadXtra[] = api_get_css_asset('fullcalendar/dist/fullcalendar.min.css');
-$htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
-$htmlHeadXtra[] = api_get_asset('js-cookie/src/js.cookie.js');
 
 if (api_is_platform_admin() && ($type == 'admin' || $type == 'platform')) {
     $type = 'admin';

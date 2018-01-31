@@ -24,7 +24,9 @@ if (api_get_setting('allow_social_tool') == 'true') {
 
 $_SESSION['this_section'] = $this_section;
 
-if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
+if (!(isset($_user['user_id']) && $_user['user_id']) ||
+    api_is_anonymous($_user['user_id'], true)
+) {
     api_not_allowed(true);
 }
 
@@ -37,8 +39,8 @@ if ($geolocalization) {
 }
 
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#password1');
-$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
-$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
+//$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
+//$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
     $("#id_generate_api_key").on("click", function (e) {
@@ -771,8 +773,7 @@ if (api_get_setting('allow_social_tool') === 'true') {
 
     $tpl->assign('social_menu_block', $menu);
     $tpl->assign('social_right_content', $form->returnForm());
-    $social_layout = $tpl->get_template('social/edit_profile.tpl');
-
+    $social_layout = $tpl->get_template('social/edit_profile.html.twig');
     $tpl->display($social_layout);
 } else {
     $bigImage = UserManager::getUserPicture(api_get_user_id(), USER_IMAGE_SIZE_BIG);

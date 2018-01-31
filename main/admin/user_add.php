@@ -43,8 +43,8 @@ if ($checkPass == 'true') {
     });
     </script>';
 }
-$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
-$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
+//$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
+//$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $htmlHeadXtra[] = '
 <script>
 $("#status_select").ready(function() {

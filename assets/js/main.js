@@ -18,7 +18,8 @@ require("font-awesome-webpack");
 // require("ckeditor"); // version 4.x doesnt have webpack support
 require("mediaelement");
 //require("js-cookie");
-require("fullcalendar");
+// full calendar added in lib
+//require("fullcalendar");
 require("qtip2");
 require("image-map-resizer");
 
@@ -32,7 +33,6 @@ require("select2");
 require("select2/dist/css/select2.css");
 require('bootstrap-select/dist/js/bootstrap-select.js');
 require('bootstrap-select/dist/css/bootstrap-select.css');
-
 
 // Don't work with webpack
 //require("js-cookie");

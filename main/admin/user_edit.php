@@ -74,8 +74,8 @@ if ($geolocalization) {
     $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='.$gmapsApiKey.'" ></script>';
 }
 
-$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
-$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
+//$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
+//$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $tool_name = get_lang('ModifyUserInfo');
 
 $interbreadcrumb[] = ['url' => 'index.php', "name" => get_lang('PlatformAdmin')];

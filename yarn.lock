@@ -3440,17 +3440,9 @@ jquery@>=1.10, jquery@>=1.2.3, jquery@>=1.6.0, jquery@>=1.8, jquery@>=2.0.0, jqu
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
 
-jquery@~2.1.4:
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-2.1.4.tgz#228bde698a0c61431dc2630a6a154f15890d2317"
-
 js-base64@^2.1.8, js-base64@^2.1.9:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.4.0.tgz#9e566fee624751a1d720c966cd6226d29d4025aa"
-
-js-cookie@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/js-cookie/-/js-cookie-2.2.0.tgz#1b2c279a6eece380a12168b92485265b35b1effb"
 
 js-tokens@^3.0.0, js-tokens@^3.0.2:
   version "3.0.2"
@@ -5057,12 +5049,6 @@ readdirp@^2.0.0:
     minimatch "^3.0.2"
     readable-stream "^2.0.2"
     set-immediate-shim "^1.0.1"
-
-readmore-js@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/readmore-js/-/readmore-js-2.1.0.tgz#0cf33cfc6f1f06af2a58e8e4fc4704db8c77fb57"
-  dependencies:
-    jquery "~2.1.4"
 
 redent@^1.0.0:
   version "1.0.0"

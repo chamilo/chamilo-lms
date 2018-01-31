@@ -28,8 +28,8 @@ if (!empty($users)) {
 }
 
 api_protect_admin_script(true);
-$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
-$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
+//$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
+//$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 
 //view
 $interbreadcrumb[] = [

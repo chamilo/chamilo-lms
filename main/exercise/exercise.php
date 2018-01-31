@@ -20,8 +20,8 @@ $current_course_tool = TOOL_QUIZ;
 // Setting the tabs
 $this_section = SECTION_COURSES;
 
-$htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
-$htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
+//$htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
+//$htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
 
 // Access control
 api_protect_course_script(true);

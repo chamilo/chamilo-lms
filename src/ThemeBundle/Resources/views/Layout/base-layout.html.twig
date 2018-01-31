@@ -24,7 +24,9 @@
     <link href="https://chamilo.org/the-association/" rel="author"/>
     <link href="https://chamilo.org/the-association/" rel="copyright"/>
     <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}"/>
-    <link rel="icon" type="image/x-icon" href="{{ asset('build/css/themes/'~ theme ~'/favicon.ico') }}"/>
+    {% autoescape false %}
+    {{ favico }}
+    {% endautoescape %}
     <title>
     {% block title %}
     {{ chamilo_settings_get('platform.institution') }} - {{ chamilo_settings_get('platform.site_name') }}

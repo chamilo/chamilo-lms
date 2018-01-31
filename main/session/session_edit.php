@@ -14,8 +14,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $formSent = 0;
 
 // Crop picture plugin for session images
-$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
-$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
+//$htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
+//$htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 
 // Database Table Definitions
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);

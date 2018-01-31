@@ -394,11 +394,14 @@ class Container
     public static function setLegacyServices($container)
     {
         \Database::setConnection($container->get('doctrine.dbal.default_connection'));
-        \Database::setManager($container->get('doctrine.orm.entity_manager'));
+        $em = $container->get('doctrine.orm.entity_manager');
+        \Database::setManager($em);
+        \CourseManager::setEntityManager($em);
 
         Container::setSettingsManager($container->get('chamilo.settings.manager'));
         Container::setUserManager($container->get('sonata.user.user_manager'));
         Container::setSiteManager($container->get('sonata.page.manager.site'));
+
         \CourseManager::setCourseSettingsManager($container->get('chamilo_course.settings.manager'));
         \CourseManager::setCourseManager($container->get('chamilo_core.entity.manager.course_manager'));
 
@@ -406,5 +409,9 @@ class Container
         \CourseManager::setToolList($container->get('chamilo_course.tool_chain'));
 
         Container::$session = $container->get('session');
+
+        // Setting legacy properties.
+        Container::$dataDir = $container->get('kernel')->getDataDir();
+        Container::$courseDir = $container->get('kernel')->getDataDir();
     }
 }

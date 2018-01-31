@@ -57,21 +57,10 @@ class LegacyListener
         Container::setLegacyServices($container);
         Container::setRequest($request);
 
-        // Setting database.
-        $connection = $container->get('database_connection');
-
-        // Setting DB connection and Doctrine Manager.
-        $database = new \Database();
-        $database->setConnection($connection);
-        $entityManager = $container->get('doctrine')->getManager();
-        $database->setManager($entityManager);
-
-        \CourseManager::setEntityManager($entityManager);
-        \CourseManager::setCourseSettingsManager($container->get('chamilo_course.settings.manager'));
-
         // Legacy way of detect current access_url
         $installed = $this->container->getParameter('installed');
         $urlId = 1;
+
         if (!empty($installed)) {
             $access_urls = api_get_access_urls();
             $root_rel = api_get_self();
@@ -123,6 +112,9 @@ class LegacyListener
 
             $container->get('twig')->addGlobal('_admin', $_admin);
 
+            $theme = api_get_visual_theme();
+            $container->get('twig')->addGlobal('favico', \Template::getPortalIcon($theme));
+
             $extraFooter = trim(api_get_setting('footer_extra_content'));
             $container->get('twig')->addGlobal('footer_extra_content', $extraFooter);
 
@@ -139,19 +131,6 @@ class LegacyListener
         }
 
         $session->set('access_url_id', $urlId);
-
-        // Setting course tool chain (in order to create tools to a course)
-        \CourseManager::setToolList(
-            $container->get('chamilo_course.tool_chain')
-        );
-
-        \CourseManager::setCourseManager(
-            $container->get('chamilo_core.entity.manager.course_manager')
-        );
-
-        // Setting legacy properties.
-        Container::$dataDir = $container->get('kernel')->getDataDir();
-        Container::$courseDir = $container->get('kernel')->getDataDir();
     }
 
     /**

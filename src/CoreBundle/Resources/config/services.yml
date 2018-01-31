@@ -211,7 +211,7 @@ services:
         calls:
             - [setContainer, ['@service_container']]
         tags:
-          - {name: mopa_bootstrap.menu, alias: chamilo_core.left.nav}
+            - {name: mopa_bootstrap.menu, alias: chamilo_core.left.nav}
 
     # Auth listeners
     chamilo_core.listener.login_success_handler:

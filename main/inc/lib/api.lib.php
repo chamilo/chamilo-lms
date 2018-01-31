@@ -712,6 +712,11 @@ function api_get_path($path = '', $configuration = [])
 
     $root_sys = Container::getRootDir();
 
+    //$root_web = Container::$container->get('templating.helper.assets')->getUrl('legacy_index');
+
+    $root_web = '';
+
+
     // If no $root_web has been set so far *and* no custom config has been passed to the function
     // then re-use the previously-calculated (run-specific) $root_web and skip this complex calculation
     if (empty($root_web) || $emptyConfigurationParam === false || empty($configuration)) {
@@ -744,6 +749,10 @@ function api_get_path($path = '', $configuration = [])
                 // Here we give up, so we don't touch anything.
             }
         }
+    }
+
+    if (isset(Container::$container)) {
+        $root_web = Container::$container->get('router')->generate('legacy_index');
     }
 
     if (isset($configuration['multiple_access_urls']) &&
@@ -6725,7 +6734,7 @@ function api_get_js($file)
  */
 function api_get_asset($file)
 {
-    return '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"></script>'."\n";
+    return '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'libs/'.$file.'"></script>'."\n";
 }
 
 /**
@@ -6734,7 +6743,7 @@ function api_get_asset($file)
  */
 function api_get_css_asset($file, $media = 'screen')
 {
-    return '<link href="'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'" rel="stylesheet" media="'.$media.'" type="text/css" />'."\n";
+    return '<link href="'.api_get_path(WEB_PUBLIC_PATH).'libs/'.$file.'" rel="stylesheet" media="'.$media.'" type="text/css" />'."\n";
 }
 
 /**

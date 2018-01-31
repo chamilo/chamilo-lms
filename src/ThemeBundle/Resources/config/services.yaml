@@ -12,7 +12,3 @@ services:
         class: 'Chamilo\ThemeBundle\Twig\WidgetExtension'
         tags:
             - 'twig.extension'
-
-#    chamilo_theme.context_listener:
-#        class:
-

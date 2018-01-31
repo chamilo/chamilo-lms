@@ -53,6 +53,7 @@ class SettingsController extends SyliusSettingsController
         $manager = $this->getSettingsManager();
         $formList = [];
         $keyword = $request->get('keyword');
+
         $searchForm = $this->getSearchForm();
         if ($searchForm->handleRequest($request)->isValid()) {
             $values = $searchForm->getData();
@@ -67,6 +68,7 @@ class SettingsController extends SyliusSettingsController
             $keyword
         );
 
+        $settings = [];
         if (!empty($settingsFromKeyword)) {
             foreach ($settingsFromKeyword as $category => $parameterList) {
                 $list = [];
@@ -88,7 +90,6 @@ class SettingsController extends SyliusSettingsController
                 $formList[$category] = $form->createView();
             }
         }
-
 
         $schemas = $manager->getSchemas();
 

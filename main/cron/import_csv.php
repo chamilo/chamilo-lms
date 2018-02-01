@@ -206,14 +206,12 @@ class ImportCsv
             ];
 
             foreach ($sections as $section) {
-                $this->logger->addInfo("-- Import $section --");
-
                 if (isset($fileToProcess[$section]) && !empty($fileToProcess[$section])) {
+                    $this->logger->addInfo("-- Import $section --");
                     $files = $fileToProcess[$section];
                     foreach ($files as $fileInfo) {
                         $method = $fileInfo['method'];
                         $file = $fileInfo['file'];
-
                         echo 'File: '.$file.PHP_EOL;
                         echo 'Method : '.$method.PHP_EOL;
                         echo PHP_EOL;
@@ -247,11 +245,10 @@ class ImportCsv
             ];
 
             foreach ($sections as $section) {
-                $this->logger->addInfo("-- Import static files $section --");
-
                 if (isset($fileToProcessStatic[$section]) &&
                     !empty($fileToProcessStatic[$section])
                 ) {
+                    $this->logger->addInfo("-- Import static files $section --");
                     $files = $fileToProcessStatic[$section];
                     foreach ($files as $fileInfo) {
                         $method = $fileInfo['method'];

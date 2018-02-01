@@ -2688,7 +2688,7 @@ class SurveyUtil
         if (api_get_configuration_value('allow_mandatory_survey')) {
             $table->set_header(9, get_lang('IsMandatory'));
             $table->set_header(10, get_lang('Modify'), false, 'width="150"');
-            $table->set_column_filter(9, 'anonymous_filter');
+            $table->set_column_filter(8, 'anonymous_filter');
             $table->set_column_filter(10, 'modify_filter');
         } else {
             $table->set_header(9, get_lang('Modify'), false, 'width="150"');
@@ -2726,8 +2726,6 @@ class SurveyUtil
         $table->set_header(2, get_lang('SurveyCode'));
         $table->set_header(3, get_lang('NumberOfQuestions'));
         $table->set_header(4, get_lang('Author'));
-        //$table->set_header(5, get_lang('Language'));
-        //$table->set_header(6, get_lang('Shared'));
         $table->set_header(5, get_lang('AvailableFrom'));
         $table->set_header(6, get_lang('AvailableUntil'));
         $table->set_header(7, get_lang('Invite'));
@@ -2736,7 +2734,7 @@ class SurveyUtil
         if (api_get_configuration_value('allow_mandatory_survey')) {
             $table->set_header(9, get_lang('Modify'), false, 'width="130"');
             $table->set_header(10, get_lang('Modify'), false, 'width="130"');
-            $table->set_column_filter(9, 'anonymous_filter');
+            $table->set_column_filter(8, 'anonymous_filter');
             $table->set_column_filter(10, 'modify_filter_for_coach');
         } else {
             $table->set_header(9, get_lang('Modify'), false, 'width="130"');
@@ -3015,7 +3013,7 @@ class SurveyUtil
                 survey.avail_till AS col6,
                 survey.invited AS col7,
                 survey.anonymous AS col8,
-                survey.survey_id AS col9,
+                survey.iid AS col9,
                 survey.session_id AS session_id,
                 survey.answered,
                 survey.invited
@@ -3067,9 +3065,8 @@ class SurveyUtil
                     api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey[0].'&'
                         .api_get_cidreq()
                 );
-
-            $array[8] = $survey[8];
-
+            // Anon
+            $array[8] = $survey['col8'];
             if ($mandatoryAllowed) {
                 $efvMandatory = $efv->get_values_by_handler_and_field_variable(
                     $survey[9],
@@ -3077,9 +3074,11 @@ class SurveyUtil
                 );
 
                 $array[9] = $efvMandatory ? $efvMandatory['value'] : 0;
-                $array[10] = $survey[9];
+                // Survey id
+                $array[10] = $survey['col9'];
             } else {
-                $array[9] = $survey[9];
+                // Survey id
+                $array[9] = $survey['col9'];
             }
 
             if ($isDrh) {

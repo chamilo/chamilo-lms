@@ -4205,6 +4205,13 @@ class learnpath
      */
     public function prerequisites_match($itemId = null)
     {
+        $allow = api_get_configuration_value('allow_teachers_to_access_blocked_lp_by_prerequisite');
+        if ($allow) {
+            if (api_is_allowed_to_edit() || api_is_platform_admin() || api_is_drh()) {
+                return true;
+            }
+        }
+
         $debug = $this->debug;
         if ($debug > 0) {
             error_log('In learnpath::prerequisites_match()', 0);

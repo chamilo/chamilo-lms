@@ -318,7 +318,7 @@ class AnnouncementEmail
 
         foreach ($users as $user) {
             if (!empty($this->logger)) {
-                $this->logger->addInfo('Announcement: #'.$this->announcement.'. Send email to user: #'.$user['user_id']);
+                $this->logger->addInfo('Announcement: #'.$this->announcement('id').'. Send email to user: #'.$user['user_id']);
             }
             $message = $this->message($user['user_id']);
             MessageManager::send_message_simple(

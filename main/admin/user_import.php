@@ -53,13 +53,13 @@ function validate_data($users, $checkUniqueEmail = false)
                 $errors[] = $user;
             }
             // 2.2. Check whether the username was used twice in import file.
-            if (isset($usernames[$user['UserName']])) {
+            if (isset($usernames[$username])) {
                 $user['error'] = get_lang('UserNameUsedTwice');
                 $errors[] = $user;
             }
-            $usernames[$user['UserName']] = 1;
+            $usernames[$username] = 1;
             // 2.3. Check whether username is already occupied.
-            if (!UserManager::is_username_available($user['UserName'])) {
+            if (!UserManager::is_username_available($username)) {
                 $user['error'] = get_lang('UserNameNotAvailable');
                 $errors[] = $user;
             }
@@ -260,8 +260,21 @@ function save_data($users)
  */
 function parse_csv_data($file)
 {
-    $users = Import :: csvToArray($file);
+    $users = Import::csvToArray($file);
+    $allowRandom = api_get_configuration_value('generate_random_login');
+    if ($allowRandom) {
+        $factory = new RandomLib\Factory;
+        $generator = $factory->getLowStrengthGenerator();
+        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    }
+
     foreach ($users as $index => $user) {
+        if (isset($user['UserName'])) {
+            if ($allowRandom) {
+                $username = $generator->generateString(10, $chars);
+                $user['UserName'] = $username;
+            }
+        }
         if (isset($user['Courses'])) {
             $user['Courses'] = explode('|', trim($user['Courses']));
         }
@@ -485,7 +498,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
     }
 }
 
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 $form = new FormValidator('user_import', 'post', api_get_self());
 $form->addElement('header', '', $tool_name);

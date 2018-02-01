@@ -732,6 +732,12 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Allow teachers, drhs and admins to access blocked LP's because a prerequisite.
 //$_configuration['allow_teachers_to_access_blocked_lp_by_prerequisite'] = false;
 
+// Allow connect skills with course tools
+//$_configuration['allow_skill_rel_items'] = false;
+
+// Generate random login when importing users
+//$_configuration['generate_random_login'] = false;
+
 // ------ Custom DB changes
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

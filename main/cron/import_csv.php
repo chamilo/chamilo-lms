@@ -1216,7 +1216,8 @@ class ImportCsv
                                 $announcementId,
                                 false,
                                 false,
-                                $this->logger
+                                $this->logger,
+                                $this->defaultAdminId
                             );
                         } else {
                             $this->logger->addError("Error when trying to add announcement with title ".$subject." here: $info");

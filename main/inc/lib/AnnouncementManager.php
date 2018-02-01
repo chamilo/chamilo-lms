@@ -1375,6 +1375,7 @@ class AnnouncementManager
      * @param bool $sendToUsersInSession
      * @param bool $sendToDrhUsers
      * @param Monolog\Handler\HandlerInterface logger
+     * @param int $senderId
      */
     public static function sendEmail(
         $courseInfo,
@@ -1382,10 +1383,11 @@ class AnnouncementManager
         $id,
         $sendToUsersInSession = false,
         $sendToDrhUsers = false,
-        $logger = null
+        $logger = null,
+        $senderId = 0
     ) {
         $email = new AnnouncementEmail($courseInfo, $sessionId, $id, $logger);
-        $email->send($sendToUsersInSession, $sendToDrhUsers);
+        $email->send($sendToUsersInSession, $sendToDrhUsers, $senderId);
     }
 
     /**

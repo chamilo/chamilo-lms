@@ -1076,7 +1076,7 @@ class ImportCsv
                 $item = $event['item'];
                 $update = $event['update'];
                 $externalEventId = $event['external_event_id'];
-                $info = 'Course: '.$courseInfo['real_id'].' ('.$courseInfo['code'].') - Session: '.$event['session_id'];
+                $info = 'Course: '.$courseInfo['real_id'].' ('.$courseInfo['code'].') - Session: '.$event['session_id'].' external event id: '.$externalEventId;
 
                 $agenda = new Agenda(
                     'course',
@@ -1125,15 +1125,19 @@ class ImportCsv
                 $days = 5;
                 $startDatePlusDays = api_strtotime("$days weekdays");
 
+                /*
+                $timePart = date('H:i:s', api_strtotime('now'));
+                $datePart = date('Y-m-d', api_strtotime("$days weekdays"));
+                $startDatePlusDays = "$timePart $datePart";
+                */
                 $this->logger->addInfo(
                     "startDatePlusDays: ".api_get_utc_datetime($startDatePlusDays).' - First date: '.$firstDate
                 );
 
                 // Send
+                $sendMail = false;
                 if ($startDatePlusDays > api_strtotime($firstDate)) {
                     $sendMail = true;
-                } else {
-                    $sendMail = false;
                 }
 
                 // Send announcement to users
@@ -1207,13 +1211,8 @@ class ImportCsv
                         );
 
                         if ($announcementId) {
-                            $this->logger->addInfo(
-                                "Announcement added: ".(int) ($announcementId)." in $info"
-                            );
-                            $this->logger->addInfo(
-                                "<<--SENDING MAIL-->>"
-                            );
-
+                            $this->logger->addInfo("Announcement added: ".(int) ($announcementId)." in $info");
+                            $this->logger->addInfo("<<--SENDING MAIL-->>");
                             $report['mail_sent']++;
                             AnnouncementManager::sendEmail(
                                 $courseInfo,

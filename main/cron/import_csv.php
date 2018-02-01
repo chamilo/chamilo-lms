@@ -1162,7 +1162,6 @@ class ImportCsv
                     }
 
                     $courseTitle = $courseInfo['title'].$sessionName;
-
                     $emailBody = get_lang('Dear').' ((user_firstname)) <br />'.
                         sprintf(
                             get_lang('YouHaveBeenSubscribedToCourseXTheStartDateXAndCommentX'),
@@ -1222,6 +1221,8 @@ class ImportCsv
                                 false,
                                 $this->logger
                             );
+                        } else {
+                            $this->logger->addError("Error when trying to add announcement with title ".$subject." here: $info");
                         }
                     } else {
                         $report['mail_not_sent_announcement_exists']++;
@@ -1230,6 +1231,9 @@ class ImportCsv
                         );
                     }
                 } else {
+                    $this->logger->addInfo(
+                        "Send Mail: ".intval($sendMail).' - Already added: '.intval($alreadyAdded)
+                    );
                     if ($sendMail == false) {
                         $report['mail_not_sent_because_date']++;
                     }

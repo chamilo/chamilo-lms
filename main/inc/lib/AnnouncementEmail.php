@@ -12,38 +12,28 @@ class AnnouncementEmail
     protected $course = null;
     protected $announcement = null;
     public $session_id = null;
-
-    /**
-     *
-     * @param array $courseInfo
-     * @param int $sessionId
-     * @param int $announcementId
-     *
-     * @return AnnouncementEmail
-     */
-    public static function create($courseInfo, $sessionId, $announcementId)
-    {
-        return new self($courseInfo, $sessionId, $announcementId);
-    }
+    public $logger;
 
     /**
      * @param array $courseInfo
      * @param int $sessionId
      * @param int $announcementId
+     * @param \Monolog\Logger $logger
      */
-    public function __construct($courseInfo, $sessionId, $announcementId)
+    public function __construct($courseInfo, $sessionId, $announcementId, $logger = null)
     {
         if (empty($courseInfo)) {
             $courseInfo = api_get_course_info();
         }
 
         $this->course = $courseInfo;
-        $this->session_id = !empty($sessionId) ? (int) $sessionId : api_get_session_id();
+        $this->session_id = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
 
         if (is_numeric($announcementId)) {
             $announcementId = AnnouncementManager::get_by_id($courseInfo['real_id'], $announcementId);
         }
         $this->announcement = $announcementId;
+        $this->logger = $logger;
     }
 
     /**
@@ -101,6 +91,9 @@ class AnnouncementEmail
                 $courseCode,
                 $this->session_id
             );
+        }
+        if (!empty($this->logger)) {
+            $this->logger->addInfo('UserList: '.print_r($userList, 1));
         }
 
         return $userList;
@@ -181,6 +174,9 @@ class AnnouncementEmail
         }
 
         if (empty($users)) {
+            if (!empty($this->logger)) {
+                $this->logger->addInfo('User list is empty. No users found. Trying all_users()');
+            }
             $users = self::all_users();
         }
 
@@ -316,7 +312,14 @@ class AnnouncementEmail
         $counter = 1;
         $em = Database::getManager();
 
+        if (empty($users) && !empty($this->logger)) {
+            $this->logger->addInfo('User list is empty. No emails will be sent.');
+        }
+
         foreach ($users as $user) {
+            if (!empty($this->logger)) {
+                $this->logger->addInfo('Announcement: #'.$this->announcement.'. Send email to user: #'.$user['user_id']);
+            }
             $message = $this->message($user['user_id']);
             MessageManager::send_message_simple(
                 $user['user_id'],

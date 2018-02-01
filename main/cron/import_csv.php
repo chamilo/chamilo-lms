@@ -1218,7 +1218,9 @@ class ImportCsv
                                 $courseInfo,
                                 $event['session_id'],
                                 $announcementId,
-                                false
+                                false,
+                                false,
+                                $this->logger
                             );
                         }
                     } else {

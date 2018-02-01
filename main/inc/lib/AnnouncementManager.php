@@ -1374,15 +1374,17 @@ class AnnouncementManager
      * @param int $id
      * @param bool $sendToUsersInSession
      * @param bool $sendToDrhUsers
+     * @param Monolog\Handler\HandlerInterface logger
      */
     public static function sendEmail(
         $courseInfo,
         $sessionId,
         $id,
         $sendToUsersInSession = false,
-        $sendToDrhUsers = false
+        $sendToDrhUsers = false,
+        $logger = null
     ) {
-        $email = AnnouncementEmail::create($courseInfo, $sessionId, $id);
+        $email = new AnnouncementEmail($courseInfo, $sessionId, $id, $logger);
         $email->send($sendToUsersInSession, $sendToDrhUsers);
     }
 

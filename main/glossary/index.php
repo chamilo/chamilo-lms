@@ -355,11 +355,16 @@ switch ($action) {
             'ASC'
         );
 
-        usort($data, "sorter");
+        usort($data, 'sorter');
         $list = [];
         $list[] = ['term', 'definition'];
+        $allowStrip = api_get_configuration_value('allow_remove_tags_in_glossary_export');
         foreach ($data as $line) {
-            $list[] = [$line[0], $line[1]];
+            $definition = $line[1];
+            if ($allowStrip) {
+                $definition = strip_tags($definition);
+            }
+            $list[] = [$line[0], $definition];
         }
         $filename = 'glossary_course_'.api_get_course_id();
         Export::arrayToCsv($list, $filename);

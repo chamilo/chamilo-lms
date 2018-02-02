@@ -738,6 +738,9 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Generate random login when importing users
 //$_configuration['generate_random_login'] = false;
 
+// Remove html tags when exporting glossary definitions in a CSV file
+//$_configuration['allow_remove_tags_in_glossary_export'] = false;
+
 // ------ Custom DB changes
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

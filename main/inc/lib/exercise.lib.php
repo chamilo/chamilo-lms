@@ -4210,9 +4210,9 @@ EOT;
                 if ($show_results) {
                     $question_content .= '</div>';
                 }
-                if (!$show_only_score) {
+                //if (!$show_only_score) {
                     $exercise_content .= Display::div(Display::panel($question_content),array('class' => 'question-panel'));
-                }
+                //}
             } // end foreach() block that loops over all questions
         }
 
@@ -4253,6 +4253,12 @@ EOT;
         );
 
         echo $total_score_text;
+
+        // Ofaj change BT#11784
+        if (!empty($objExercise->description)) {
+            echo Display::div($objExercise->description, array('class'=>'exercise_description'));
+        }
+
         echo $exercise_content;
 
         if (!$show_only_score) {

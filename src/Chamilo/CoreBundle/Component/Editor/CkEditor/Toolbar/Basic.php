@@ -146,7 +146,7 @@ class Basic extends Toolbar
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
 
-        $config['customConfig'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/config_js.php';
+        $config['customConfig'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/config_js.php?'.api_get_cidreq();
         $config['flash_flvPlayer'] = api_get_path(WEB_LIBRARY_JS_PATH).'ckeditor/plugins/flash/swf/player.swf';
 
         /*filebrowserFlashBrowseUrl

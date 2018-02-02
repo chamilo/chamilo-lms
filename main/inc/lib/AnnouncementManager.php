@@ -400,9 +400,10 @@ class AnnouncementManager
             $html .= "<tr><th style='text-align:right'>$modify_icons</th></tr>";
         }
 
-        $toUser = $itemProperty->getToUser();
-        $toUserId = !empty($toUser) ? $toUser->getId() : 0;
-
+        //$toUser = $itemProperty->getToUser();
+        //$toUserId = !empty($toUser) ? $toUser->getId() : 0;
+        // The user id is always the current one.
+        $toUserId = api_get_user_id();
         $content = self::parse_content(
             $toUserId,
             $content,

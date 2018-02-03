@@ -714,9 +714,6 @@ function api_get_path($path = '', $configuration = [])
 
     //$root_web = Container::$container->get('templating.helper.assets')->getUrl('legacy_index');
 
-    $root_web = '';
-
-
     // If no $root_web has been set so far *and* no custom config has been passed to the function
     // then re-use the previously-calculated (run-specific) $root_web and skip this complex calculation
     if (empty($root_web) || $emptyConfigurationParam === false || empty($configuration)) {
@@ -752,7 +749,13 @@ function api_get_path($path = '', $configuration = [])
     }
 
     if (isset(Container::$container)) {
-        $root_web = Container::$container->get('router')->generate('legacy_index');
+        $root_web = Container::$container->get('router')->generate(
+            'legacy_index',
+            [],
+            \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
+        );
+        $root_web = urldecode($root_web);
+        $root_web = str_replace('/../', '', $root_web);
     }
 
     if (isset($configuration['multiple_access_urls']) &&

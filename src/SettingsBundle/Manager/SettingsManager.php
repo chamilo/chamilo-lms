@@ -168,7 +168,7 @@ class SettingsManager implements SettingsManagerInterface
             'allow_registration_as_teacher' => 'Platform',
             'allow_lostpassword' => 'Platform',
             'allow_user_headings' => 'Course',
-            'allow_personal_agenda' => 'User',
+            'allow_personal_agenda' => 'agenda',
             'display_coursecode_in_courselist' => 'Platform',
             'display_teacher_in_courselist' => 'Platform',
             'permanently_remove_deleted_files' => 'Tools',
@@ -719,6 +719,7 @@ class SettingsManager implements SettingsManagerInterface
         foreach ($settingsBuilder->getTransformers() as $parameter => $transformer) {
             if (array_key_exists($parameter, $parameters)) {
                 $parameters[$parameter] = $transformer->reverseTransform($parameters[$parameter]);
+
             }
         }
 

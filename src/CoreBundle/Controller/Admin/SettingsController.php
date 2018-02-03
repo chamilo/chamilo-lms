@@ -85,7 +85,6 @@ class SettingsController extends SyliusSettingsController
                         $settings->remove($name);
                     }
                 }
-
                 $form->setData($settings);
                 $formList[$category] = $form->createView();
             }

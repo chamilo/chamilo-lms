@@ -46,7 +46,7 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
-            //->add('allow_personal_agenda', YesNoType::class)
+            ->add('allow_personal_agenda', YesNoType::class)
             //->add('display_mini_month_calendar', YesNoType::class)
             ->add('display_upcoming_events', YesNoType::class)
             //->add('number_of_upcoming_events')

@@ -17,6 +17,7 @@ use Chamilo\CourseBundle\Entity\CQuizCategory;
  */
 class Exercise
 {
+    public $iId;
     public $id;
     public $name;
     public $title;
@@ -49,7 +50,7 @@ class Exercise
     public $edit_exercise_in_lp = false;
     public $is_gradebook_locked = false;
     public $exercise_was_added_in_lp = false;
-    public $lpList = array();
+    public $lpList = [];
     public $force_edit_exercise_in_lp = false;
     public $categories;
     public $categories_grouping = true;
@@ -87,6 +88,7 @@ class Exercise
      */
     public function __construct($courseId = 0)
     {
+        $this->iId = 0;
         $this->id = 0;
         $this->exercise = '';
         $this->description = '';
@@ -95,7 +97,7 @@ class Exercise
         $this->random = 0;
         $this->random_answers = 0;
         $this->active = 1;
-        $this->questionList = array();
+        $this->questionList = [];
         $this->timeLimit = 0;
         $this->end_time = '';
         $this->start_time = '';
@@ -113,6 +115,7 @@ class Exercise
         $this->endButton = 0;
         $this->scoreTypeModel = 0;
         $this->globalCategoryId = null;
+        $this->notifications = [];
 
         if (!empty($courseId)) {
             $course_info = api_get_course_info_by_id($courseId);
@@ -152,6 +155,7 @@ class Exercise
 
         // if the exercise has been found
         if ($object = Database::fetch_object($result)) {
+            $this->iId = $object->iid;
             $this->id = $id;
             $this->exercise = $object->title;
             $this->name = $object->title;
@@ -229,14 +233,16 @@ class Exercise
             //overload questions list with recorded questions list
             //load questions only for exercises of type 'one question per page'
             //this is needed only is there is no questions
-            /*
-			// @todo not sure were in the code this is used somebody mess with the exercise tool
-			// @todo don't know who add that config and why $_configuration['live_exercise_tracking']
-			global $_configuration, $questionList;
-			if ($this->type == ONE_PER_PAGE && $_SERVER['REQUEST_METHOD'] != 'POST' && defined('QUESTION_LIST_ALREADY_LOGGED') &&
-			isset($_configuration['live_exercise_tracking']) && $_configuration['live_exercise_tracking']) {
-				$this->questionList = $questionList;
-			}*/
+
+            // @todo not sure were in the code this is used somebody mess with the exercise tool
+            // @todo don't know who add that config and why $_configuration['live_exercise_tracking']
+            /*global $_configuration, $questionList;
+            if ($this->type == ONE_PER_PAGE && $_SERVER['REQUEST_METHOD'] != 'POST'
+                && defined('QUESTION_LIST_ALREADY_LOGGED') &&
+                isset($_configuration['live_exercise_tracking']) && $_configuration['live_exercise_tracking']
+            ) {
+                $this->questionList = $questionList;
+            }*/
             return true;
         }
 
@@ -458,11 +464,11 @@ class Exercise
     {
         if (in_array(
             $random,
-            array(
+            [
                 EXERCISE_CATEGORY_RANDOM_SHUFFLED,
                 EXERCISE_CATEGORY_RANDOM_ORDERED,
                 EXERCISE_CATEGORY_RANDOM_DISABLED,
-            )
+            ]
         )) {
             $this->randomByCat = $random;
         } else {
@@ -604,8 +610,8 @@ class Exercise
         $limit,
         $sidx,
         $sord,
-        $whereCondition = array(),
-        $extraFields = array()
+        $whereCondition = [],
+        $extraFields = []
     ) {
         if (!empty($this->id)) {
             $category_list = TestCategory::getListOfCategoriesNameForTest(
@@ -625,7 +631,7 @@ class Exercise
 
             if (!empty($sidx) && !empty($sord)) {
                 if ($sidx == 'question') {
-                    if (in_array(strtolower($sord), array('desc', 'asc'))) {
+                    if (in_array(strtolower($sord), ['desc', 'asc'])) {
                         $orderCondition = " ORDER BY q.$sidx $sord";
                     }
                 }
@@ -640,7 +646,7 @@ class Exercise
             }
             $sql .= $limitCondition;
             $result = Database::query($sql);
-            $questions = array();
+            $questions = [];
             if (Database::num_rows($result)) {
                 if (!empty($extraFields)) {
                     $extraFieldValue = new ExtraFieldValue('question');
@@ -731,20 +737,20 @@ class Exercise
      */
     public function getQuestionOrderedListByName()
     {
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $exerciseQuestionTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
         // Getting question list from the order (question list drag n drop interface ).
         $sql = "SELECT e.question_id
-                FROM $TBL_EXERCICE_QUESTION e 
-                INNER JOIN $TBL_QUESTIONS q
+                FROM $exerciseQuestionTable e 
+                INNER JOIN $questionTable q
                 ON (e.question_id= q.id AND e.c_id = q.c_id)
                 WHERE 
                     e.c_id = {$this->course_id} AND 
                     e.exercice_id = '".$this->id."'
                 ORDER BY q.question";
         $result = Database::query($sql);
-        $list = array();
+        $list = [];
         if (Database::num_rows($result)) {
             $list = Database::store_result($result, 'ASSOC');
         }
@@ -757,7 +763,7 @@ class Exercise
      */
     private function getQuestionOrderedList()
     {
-        $questionList = array();
+        $questionList = [];
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
@@ -788,7 +794,7 @@ class Exercise
 
         // Fills the array with the question ID for this exercise
         // the key of the array is the question position
-        $temp_question_list = array();
+        $temp_question_list = [];
         $counter = 1;
         while ($new_object = Database::fetch_object($result)) {
             // Correct order.
@@ -901,10 +907,10 @@ class Exercise
         $question_list,
         $questionSelectionType
     ) {
-        $result = array(
-            'question_list' => array(),
-            'category_with_questions_list' => array()
-        );
+        $result = [
+            'question_list' => [],
+            'category_with_questions_list' => [],
+        ];
 
         // Order/random categories
         $cat = new TestCategory();
@@ -1707,11 +1713,14 @@ class Exercise
             $allow = api_get_configuration_value('allow_notification_setting_per_exercise');
             if ($allow === true) {
                 $notifications = $this->getNotifications();
-                $notifications = implode(',', $notifications);
-                $params['notifications'] = $notifications;
+                $params['notifications'] = '';
+                if (!empty($notifications)) {
+                    $notifications = implode(',', $notifications);
+                    $params['notifications'] = $notifications;
+                }
             }
 
-            $this->id = Database::insert($TBL_EXERCISES, $params);
+            $this->id = $this->iId = Database::insert($TBL_EXERCISES, $params);
 
             if ($this->id) {
                 $sql = "UPDATE $TBL_EXERCISES SET id = iid WHERE iid = {$this->id} ";
@@ -1750,6 +1759,8 @@ class Exercise
 
         // Updates the question position
         $this->update_question_positions();
+
+        return $this->iId;
     }
 
     /**
@@ -1899,18 +1910,18 @@ class Exercise
                 'text',
                 'exerciseTitle',
                 get_lang('ExerciseName'),
-                array('id' => 'exercise_title')
+                ['id' => 'exercise_title']
             );
         }
 
         $form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
         $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
-        $editor_config = array(
+        $editor_config = [
             'ToolbarSet' => 'TestQuestionDescription',
             'Width' => '100%',
             'Height' => '150',
-        );
+        ];
         if (is_array($type)) {
             $editor_config = array_merge($editor_config, $type);
         }
@@ -2452,7 +2463,6 @@ class Exercise
                 }
 
                 $form->addGroup($group, '', [get_lang('EmailNotifications')]);
-
             }
 
             $form->addCheckBox(
@@ -2461,7 +2471,7 @@ class Exercise
                 get_lang('UpdateTitleInLps')
             );
 
-            $defaults = array();
+            $defaults = [];
             if (api_get_setting('search_enabled') === 'true') {
                 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
@@ -2471,15 +2481,15 @@ class Exercise
 
                 foreach ($specific_fields as $specific_field) {
                     $form->addElement('text', $specific_field['code'], $specific_field['name']);
-                    $filter = array(
+                    $filter = [
                         'c_id' => api_get_course_int_id(),
                         'field_id' => $specific_field['id'],
                         'ref_id' => $this->id,
-                        'tool_id' => "'".TOOL_QUIZ."'"
-                    );
-                    $values = get_specific_field_values_list($filter, array('value'));
+                        'tool_id' => "'".TOOL_QUIZ."'",
+                    ];
+                    $values = get_specific_field_values_list($filter, ['value']);
                     if (!empty($values)) {
-                        $arr_str_values = array();
+                        $arr_str_values = [];
                         foreach ($values as $value) {
                             $arr_str_values[] = $value['value'];
                         }
@@ -3513,12 +3523,12 @@ class Exercise
                 WHERE c_id = $course_id AND question_id = $questionId";
         $res_answer = Database::query($sql);
 
-        $answerMatching = array();
+        $answerMatching = [];
         while ($real_answer = Database::fetch_array($res_answer)) {
             $answerMatching[$real_answer['id_auto']] = $real_answer['answer'];
         }
 
-        $real_answers = array();
+        $real_answers = [];
         $quiz_question_options = Question::readQuestionOption(
             $questionId,
             $course_id
@@ -3526,7 +3536,7 @@ class Exercise
 
         $organs_at_risk_hit = 0;
         $questionScore = 0;
-        $answer_correct_array = array();
+        $answer_correct_array = [];
         $orderedHotspots = [];
 
         if ($answerType == HOT_SPOT || $answerType == ANNOTATION) {
@@ -3723,16 +3733,15 @@ class Exercise
                     break;
                 case MULTIPLE_ANSWER_COMBINATION:
                     if ($from_database) {
+                        $choice = [];
                         $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
                                 WHERE exe_id = $exeId AND question_id= $questionId";
                         $resultans = Database::query($sql);
                         while ($row = Database::fetch_array($resultans)) {
-                            $ind = $row['answer'];
-                            $choice[$ind] = 1;
+                            $choice[$row['answer']] = 1;
                         }
 
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
-
                         if ($answerCorrect == 1) {
                             if ($studentChoice) {
                                 $real_answers[$answerId] = true;
@@ -3748,7 +3757,6 @@ class Exercise
                         }
                     } else {
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
-
                         if ($answerCorrect == 1) {
                             if ($studentChoice) {
                                 $real_answers[$answerId] = true;
@@ -3805,7 +3813,7 @@ class Exercise
                         $answer = '';
                         $j = 0;
                         //initialise answer tags
-                        $user_tags = $correct_tags = $real_text = array();
+                        $user_tags = $correct_tags = $real_text = [];
                         // the loop will stop at the end of the text
                         while (1) {
                             // quits the loop if there are no more blanks (detect '[')
@@ -3855,7 +3863,7 @@ class Exercise
                         }
                         $answer = '';
                         $real_correct_tags = $correct_tags;
-                        $chosen_list = array();
+                        $chosen_list = [];
 
                         for ($i = 0; $i < count($real_correct_tags); $i++) {
                             if ($i == 0) {
@@ -3872,7 +3880,8 @@ class Exercise
                                     // adds the word in green at the end of the string
                                     $answer .= $correct_tags[$i];
                                 } elseif (!empty($user_tags[$i])) {
-                                    // else if the word entered by the student IS NOT the same as the one defined by the professor
+                                    // else if the word entered by the student IS NOT the same as
+                                    // the one defined by the professor
                                     // adds the word in red at the end of the string, and strikes it
                                     $answer .= '<font color="red"><s>'.$user_tags[$i].'</s></font>';
                                 } else {
@@ -3890,8 +3899,9 @@ class Exercise
                                     $totalScore += $answerWeighting[$i];
                                     // adds the word in green at the end of the string
                                     $answer .= $user_tags[$i];
-                                } elseif (!empty ($user_tags[$i])) {
-                                    // else if the word entered by the student IS NOT the same as the one defined by the professor
+                                } elseif (!empty($user_tags[$i])) {
+                                    // else if the word entered by the student IS NOT the same
+                                    // as the one defined by the professor
                                     // adds the word in red at the end of the string, and strikes it
                                     $answer .= '<font color="red"><s>'.$user_tags[$i].'</s></font>';
                                 } else {
@@ -3942,14 +3952,28 @@ class Exercise
                                 }
 
                                 $isAnswerCorrect = 0;
-                                if (FillBlanks::isGoodStudentAnswer($studentAnswer, $correctAnswer)) {
+                                if (FillBlanks::isStudentAnswerGood($studentAnswer, $correctAnswer, $from_database)) {
                                     // gives the related weighting to the student
                                     $questionScore += $answerWeighting[$i];
                                     // increments total score
                                     $totalScore += $answerWeighting[$i];
                                     $isAnswerCorrect = 1;
                                 }
-                                $listCorrectAnswers['studentanswer'][$i] = $studentAnswer;
+
+                                $studentAnswerToShow = $studentAnswer;
+                                $type = FillBlanks::getFillTheBlankAnswerType($correctAnswer);
+                                if ($type == FillBlanks::FILL_THE_BLANK_MENU) {
+                                    $listMenu = FillBlanks::getFillTheBlankMenuAnswers($correctAnswer, false);
+                                    if ($studentAnswer != '') {
+                                        foreach ($listMenu as $item) {
+                                            if (sha1($item) == $studentAnswer) {
+                                                $studentAnswerToShow = $item;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                $listCorrectAnswers['studentanswer'][$i] = $studentAnswerToShow;
                                 $listCorrectAnswers['studentscore'][$i] = $isAnswerCorrect;
                             }
                         } else {
@@ -3959,13 +3983,30 @@ class Exercise
                             // for every teacher answer, check if there is a student answer
                             for ($i = 0; $i < count($listStudentAnswerTemp); $i++) {
                                 $studentAnswer = trim($listStudentAnswerTemp[$i]);
+                                $studentAnswerToShow = $studentAnswer;
+
                                 $found = false;
                                 for ($j = 0; $j < count($listTeacherAnswerTemp); $j++) {
                                     $correctAnswer = $listTeacherAnswerTemp[$j];
+                                    $type = FillBlanks::getFillTheBlankAnswerType($correctAnswer);
+                                    if ($type == FillBlanks::FILL_THE_BLANK_MENU) {
+                                        $listMenu = FillBlanks::getFillTheBlankMenuAnswers($correctAnswer, false);
+                                        if (!empty($studentAnswer)) {
+                                            //var_dump($listMenu, $correctAnswer);
+                                            foreach ($listMenu as $key => $item) {
+                                                if ($key == $correctAnswer) {
+                                                    $studentAnswerToShow = $item;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+
                                     if (!$found) {
-                                        if (FillBlanks::isGoodStudentAnswer(
+                                        if (FillBlanks::isStudentAnswerGood(
                                             $studentAnswer,
-                                            $correctAnswer
+                                            $correctAnswer,
+                                            $from_database
                                         )
                                         ) {
                                             $questionScore += $answerWeighting[$i];
@@ -3975,7 +4016,7 @@ class Exercise
                                         }
                                     }
                                 }
-                                $listCorrectAnswers['studentanswer'][$i] = $studentAnswer;
+                                $listCorrectAnswers['studentanswer'][$i] = $studentAnswerToShow;
                                 if (!$found) {
                                     $listCorrectAnswers['studentscore'][$i] = 0;
                                 } else {
@@ -3986,6 +4027,10 @@ class Exercise
                         $answer = FillBlanks::getAnswerInStudentAttempt(
                             $listCorrectAnswers
                         );
+
+                        if ($saved_results) {
+                            //var_dump($listCorrectAnswers);
+                        }
                     }
                     break;
                 case CALCULATED_ANSWER:
@@ -3996,13 +4041,13 @@ class Exercise
                     for ($k = 0; $k < $last; $k++) {
                         $answer .= $preArray[$k];
                     }
-                    $answerWeighting = array($answerWeighting);
+                    $answerWeighting = [$answerWeighting];
                     // we save the answer because it will be modified
                     $temp = $answer;
                     $answer = '';
                     $j = 0;
                     //initialise answer tags
-                    $userTags = $correctTags = $realText = array();
+                    $userTags = $correctTags = $realText = [];
                     // the loop will stop at the end of the text
                     while (1) {
                         // quits the loop if there are no more blanks (detect '[')

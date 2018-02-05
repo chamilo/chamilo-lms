@@ -1936,7 +1936,6 @@ class Exercise
         );
 
         $skillList = [];
-
         if ($type == 'full') {
             //Can't modify a DirectFeedback question
             if ($this->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_DIRECT) {
@@ -2565,7 +2564,7 @@ class Exercise
                 } else {
                     $defaults['enabletimercontroltotalminutes'] = 0;
                 }
-                // $defaults['skills'] = array_keys($skillList);
+                //$defaults['skills'] = array_keys($skillList);
                 $defaults['notifications'] = $this->getNotifications();
             } else {
                 $defaults['exerciseType'] = 2;
@@ -2709,9 +2708,7 @@ class Exercise
             }
         }
 
-        $this->save($type);
-
-        //$iId = $this->save($type);
+        $iId = $this->save($type);
         /*if (!empty($iId)) {
             Skill::saveSkills($form, ITEM_TYPE_EXERCISE, $iId);
         }*/
@@ -5468,13 +5465,14 @@ class Exercise
             } elseif ($answerType == ANNOTATION) {
                 if ($show_result) {
                     echo '
-                        <p><em>' . get_lang('Annotation').'</em></p>
+                        <p><em>'.get_lang('Annotation').'</em></p>
                         <div id="annotation-canvas-'.$questionId.'"></div>
                         <script>
                             AnnotationQuestion({
                                 questionId: parseInt('.$questionId.'),
                                 exerciseId: parseInt('.$exeId.'),
-                                relPath: \''.$relPath.'\'
+                                relPath: \''.$relPath.'\',
+                                courseId: parseInt('.$course_id.')
                             });
                         </script>
                     ';

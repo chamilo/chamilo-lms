@@ -48,8 +48,9 @@ class Annotation extends Question
             }
         }
 
+        global $text;
         if (isset($_GET['editQuestion'])) {
-            $form->addButtonUpdate(get_lang('ModifyExercise'), 'submitQuestion');
+            $form->addButtonUpdate($text, 'submitQuestion');
 
             return;
         }
@@ -108,7 +109,6 @@ class Annotation extends Question
      */
     public function createAnswersForm($form)
     {
-        // nothing
     }
 
     /**

@@ -7,8 +7,9 @@ session_cache_limiter("none");
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$questionId = isset($_GET['question_id']) ? intval($_GET['question_id']) : 0;
-$exerciseId = isset($_GET['exe_id']) ? intval($_GET['exe_id']) : 0;
+$questionId = isset($_GET['question_id']) ? (int) $_GET['question_id'] : 0;
+$exerciseId = isset($_GET['exe_id']) ? (int) $_GET['exe_id'] : 0;
+$courseId = isset($_GET['exe_id']) ? (int) $_GET['exe_id'] : 0;
 
 $objQuestion = Question::read($questionId);
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';

@@ -57,7 +57,6 @@ class HotSpot extends Question
             // setting the save button here and not in the question class.php
             // Saving a question
             $form->addButtonSave(get_lang('GoToQuestion'), 'submitQuestion');
-            //$form->addButtonSave(get_lang('GoToQuestion'), 'submitQuestion');
             $form->addRule(
                 'imageUpload',
                 get_lang('OnlyImagesAllowed'),
@@ -136,7 +135,6 @@ class HotSpotDelineation extends HotSpot
      */
     public function processCreation($form, $exercise)
     {
-        $file_info = $form->getSubmitValue('imageUpload');
         parent::processCreation($form, $exercise);
     }
 

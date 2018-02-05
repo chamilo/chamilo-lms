@@ -337,7 +337,8 @@
             $container = $('#annotation-canvas-' + settings.questionId);
             $.getJSON(settings.relPath + xhrUrl, {
                 question_id: parseInt(settings.questionId),
-                exe_id: parseInt(settings.exerciseId)
+                exe_id: parseInt(settings.exerciseId),
+                course_id: parseInt(settings.courseId)
             })
             .done(function (questionInfo) {
                 var image = new Image();

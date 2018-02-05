@@ -1298,7 +1298,8 @@ HOTSPOT;
                                     AnnotationQuestion({
                                         questionId: '.$questionId.',
                                         exerciseId: '.$exe_id.',
-                                        relPath: \''.$relPath.'\'
+                                        relPath: \''.$relPath.'\',
+                                        courseId: '.$course_id.',
                                     });
                                 </script>
                             </div>

@@ -1011,9 +1011,11 @@ class Answer
     public function isCorrectByAutoId($needle)
     {
         $key = 0;
-        foreach ($this->autoId as $autoIdKey => $autoId) {
-            if ($autoId == $needle) {
-                $key = $autoIdKey;
+        if (is_array($this->autoId)) {
+            foreach ($this->autoId as $autoIdKey => $autoId) {
+                if ($autoId == $needle) {
+                    $key = $autoIdKey;
+                }
             }
         }
 

@@ -613,7 +613,7 @@ foreach ($questionList as $questionId) {
 
                 //showing the score
                 $queryfree = "SELECT marks from ".$TBL_TRACK_ATTEMPT." 
-                              WHERE exe_id = ".intval($id)." AND question_id= ".intval($questionId)."";
+                              WHERE exe_id = ".intval($id)." AND question_id= ".intval($questionId);
                 $resfree = Database::query($queryfree);
                 $questionScore = Database::result($resfree, 0, "marks");
                 $totalScore += $questionScore;
@@ -664,7 +664,8 @@ foreach ($questionList as $questionId) {
                         AnnotationQuestion({
                             questionId: '.(int) $questionId.',
                             exerciseId: '.(int) $id.',
-                            relPath: \''.$relPath.'\'
+                            relPath: \''.$relPath.'\',
+                            courseId: '.(int) $courseInfo['real_id'].'
                         });
                     </script>
                 ';

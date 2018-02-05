@@ -1,18 +1,21 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
-session_cache_limiter("none");
+session_cache_limiter('none');
 
 require_once __DIR__.'/../inc/global.inc.php';
 
 $questionId = isset($_GET['question_id']) ? (int) $_GET['question_id'] : 0;
 $exerciseId = isset($_GET['exe_id']) ? (int) $_GET['exe_id'] : 0;
-$courseId = isset($_GET['exe_id']) ? (int) $_GET['exe_id'] : 0;
+$courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
+$courseInfo = api_get_course_info_by_id($courseId);
 
-$objQuestion = Question::read($questionId);
-$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
+if (empty($courseInfo)) {
+    return '';
+}
+
+$objQuestion = Question::read($questionId, $courseId);
+$documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
 $picturePath = $documentPath.'/images';
 $pictureSize = getimagesize($picturePath.'/'.$objQuestion->getPictureFilename());
 $pictureWidth = $pictureSize[0];
@@ -35,10 +38,8 @@ $attemptList = Event::getAllExerciseEventByExeId($exerciseId);
 
 if (!empty($attemptList) && isset($attemptList[$questionId])) {
     $questionAttempt = $attemptList[$questionId][0];
-
     if (!empty($questionAttempt['answer'])) {
         $answers = explode('|', $questionAttempt['answer']);
-
         foreach ($answers as $answer) {
             $parts = explode(')(', $answer);
             $type = array_shift($parts);
@@ -46,7 +47,6 @@ if (!empty($attemptList) && isset($attemptList[$questionId])) {
             switch ($type) {
                 case 'P':
                     $points = [];
-
                     foreach ($parts as $partPoint) {
                         $points[] = Geometry::decodePoint($partPoint);
                     }

@@ -8103,4 +8103,6 @@ $ResetFieldX = "Reset %s";
 $MyGeneralCertificate = "My global certificate";
 $ScoreNote = "Note";
 $ScoreTest = "Test";
+$MessageTracking = "Message tracking";
+$MessagesExchangeBetweenXAndY = "Messages exchange between %s and %s";
 ?>

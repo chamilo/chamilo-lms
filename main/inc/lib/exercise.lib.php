@@ -4317,15 +4317,43 @@ EOT;
      *
      * @return string
      */
-    public static function getQuestionRibbon($class, $scoreLabel, $result)
+    public static function getQuestionRibbon($class, $scoreLabel, $result, $array)
     {
+        // ofaj
+        $html = null;
+        $hideLabel = api_get_configuration_value('exercise_hide_label');
+        $label = '<div class="rib rib-'.$class.'">
+                        <h3>'.$scoreLabel.'</h3>
+                  </div> 
+                  <h4>'.get_lang('Score').': '.$result.'</h4>';
+        if ($hideLabel === true) {
+
+            $answerUsed = (int)$array['used'];
+            $answerMissing = (int)$array['missing'] - $answerUsed;
+
+            for ($i = 1; $i <= $answerUsed; $i++) {
+                $html.= '<span class="score-img">'.Display::return_icon('attempt-check.png',null,null,ICON_SIZE_SMALL).'</span>';
+            }
+            for ($i = 1; $i <= $answerMissing; $i++) {
+                $html.= '<span class="score-img">'.Display::return_icon('attempt-nocheck.png',null,null,ICON_SIZE_SMALL).'</span>';
+            }
+            $label = '<div class="score-title">'.get_lang('CorrectAnswers').': '.$result.'</div>';
+            $label .= '<div class="score-limits">';
+            $label .= $html;
+            $label .= '</div>';
+        }
         return '<div class="ribbon">
+                '.$label.'
+                </div>'
+            ;
+
+        /*return '<div class="ribbon">
                     <div class="rib rib-'.$class.'">
                         <h3>'.$scoreLabel.'</h3>
                     </div>
                     <h4>'.get_lang('Score').': '.$result.'</h4>
                 </div>'
-        ;
+        ;*/
     }
 
     /**

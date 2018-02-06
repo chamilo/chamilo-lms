@@ -80,6 +80,7 @@ $interbreadcrumb[] = [
 ];
 
 Display::display_header($tool_name);
+$urlId = api_get_current_access_url_id();
 
 if ($action == 'add' || $action == 'edit') {
     echo '<div class="actions">';
@@ -168,7 +169,7 @@ if ($action == 'add' || $action == 'edit') {
     $form->display();
 } else {
     // If multiple URLs and not main URL, prevent deletion and inform user
-    if ($action == 'delete' && api_get_multiple_access_url() && api_get_current_access_url_id() != 1) {
+    if ($action == 'delete' && api_get_multiple_access_url() && $urlId != 1) {
         echo Display::return_message(get_lang('CourseCategoriesAreGlobal'), 'warning');
     }
     echo '<div class="actions">';
@@ -176,18 +177,22 @@ if ($action == 'add' || $action == 'edit') {
     if (!empty($parentInfo)) {
         $parentCode = $parentInfo['parent_id'];
         echo Display::url(
-            Display::return_icon('back.png', get_lang("Back"), '', ICON_SIZE_MEDIUM),
+            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.$parentCode
         );
     }
 
     if (empty($parentInfo) || $parentInfo['auth_cat_child'] == 'TRUE') {
-        echo Display::url(
-            Display::return_icon('new_folder.png', get_lang("AddACategory"), '', ICON_SIZE_MEDIUM),
+        $newCategoryLink = Display::url(
+            Display::return_icon('new_folder.png', get_lang('AddACategory'), '', ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'admin/course_category.php?action=add&category='.Security::remove_XSS($category)
         );
-    }
 
+        if (!empty($parentInfo) && $parentInfo['access_url_id'] != $urlId) {
+            $newCategoryLink = '';
+        }
+        echo $newCategoryLink;
+    }
     echo '</div>';
     if (!empty($parentInfo)) {
         echo Display::page_subheader($parentInfo['name'].' ('.$parentInfo['code'].')');

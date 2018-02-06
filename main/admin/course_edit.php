@@ -145,7 +145,10 @@ $form->addText(
 $form->applyFilter('visual_code', 'strtoupper');
 $form->applyFilter('visual_code', 'html_filter');
 
-$countCategories = $courseCategoriesRepo->countAllInAccessUrl($urlId);
+$countCategories = $courseCategoriesRepo->countAllInAccessUrl(
+    $urlId,
+    api_get_configuration_value('allow_base_course_category')
+);
 if ($countCategories >= 100) {
     // Category code
     $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
@@ -164,7 +167,10 @@ if ($countCategories >= 100) {
     }
 } else {
     $courseInfo['category_code'] = $courseInfo['categoryCode'];
-    $categories = $courseCategoriesRepo->findAllInAccessUrl($urlId);
+    $categories = $courseCategoriesRepo->findAllInAccessUrl(
+        $urlId,
+        api_get_configuration_value('allow_base_course_category')
+    );
     $categoriesOptions = [null => get_lang('None')];
 
     /** @var CourseCategory $category */

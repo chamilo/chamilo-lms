@@ -741,6 +741,9 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Remove html tags when exporting glossary definitions in a CSV file
 //$_configuration['allow_remove_tags_in_glossary_export'] = false;
 
+// Show base course categories in portal children
+//$_configuration['allow_base_course_category'] = false;
+
 // ------ Custom DB changes
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

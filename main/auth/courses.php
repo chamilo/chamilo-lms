@@ -4,7 +4,7 @@
 use Chamilo\CoreBundle\Entity\SequenceResource;
 
 /**
-* Template (front controller in MVC pattern) used for distpaching
+* Template (front controller in MVC pattern) used for dispatching
  * to the controllers depend on the current action
 * @author Christian Fasanando <christian1827@gmail.com> - Beeznest
 * @package chamilo.auth

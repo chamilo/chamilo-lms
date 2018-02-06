@@ -56,13 +56,11 @@ $code = isset($code) ? $code : null;
             return parseInt(parts[1], 10);
         };
 
-        <?php if ($showSessions) {
-    ?>
+        <?php if ($showSessions) { ?>
         $('#date').datepicker({
             dateFormat: 'yy-mm-dd'
         });
-        <?php
-} ?>
+        <?php } ?>
     });
 </script>
 <div class="row">
@@ -70,11 +68,9 @@ $code = isset($code) ? $code : null;
         <h2 class="title-courses"><?php echo get_lang('CourseManagement'); ?></h2>
         <div class="search-courses">
             <div class="row">
-                <?php if ($showCourses) {
-        ?>
+<?php if ($showCourses) { ?>
                     <div class="col-md-<?php echo($showSessions ? '4' : '6'); ?>">
-                        <?php if (!isset($_GET['hidden_links']) || intval($_GET['hidden_links']) != 1) {
-            ?>
+                        <?php if (!isset($_GET['hidden_links']) || intval($_GET['hidden_links']) != 1) { ?>
                             <form method="post"
                                   action="<?php echo CourseCategory::getCourseCategoryUrl(1, $pageLength, 'ALL', 0, 'subscribe'); ?>">
                                 <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
@@ -92,195 +88,196 @@ $code = isset($code) ? $code : null;
                                     </div>
                                 </div>
                             </form>
-                        <?php
-        } ?>
+                        <?php } ?>
                     </div>
                     <div class="col-md-<?php echo($showSessions ? '4' : '6'); ?>">
-                        <?php
-                        $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
-        $form = '<form action="'.$webAction.'" method="GET">';
-        $form .= '<input type="hidden" name="action" value="'.$action.'">';
-        $form .= '<input type="hidden" name="pageCurrent" value="'.$pageCurrent.'">';
-        $form .= '<input type="hidden" name="pageLength" value="'.$pageLength.'">';
-        $form .= '<div class="form-group">';
-        $form .= '<label>'.get_lang('CourseCategories').'</label>';
-        $form .= '<select name="category_code" onchange="submit();" class="selectpicker show-tick form-control">';
+<?php
+    $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
+    $form = '<form action="'.$webAction.'" method="GET">';
+    $form .= '<input type="hidden" name="action" value="'.$action.'">';
+    $form .= '<input type="hidden" name="pageCurrent" value="'.$pageCurrent.'">';
+    $form .= '<input type="hidden" name="pageLength" value="'.$pageLength.'">';
+    $form .= '<div class="form-group">';
+    $form .= '<label>'.get_lang('CourseCategories').'</label>';
+    $form .= '<select name="category_code" onchange="submit();" class="selectpicker show-tick form-control">';
 
-        foreach ($browse_course_categories[0] as $category) {
-            $categoryCode = $category['code'];
-            $countCourse = $category['count_courses'];
-            $form .= '<option '.($categoryCode == $codeType ? 'selected="selected" ' : '')
-                                .' value="'.$category['code'].'">'.$category['name'].' ('.$countCourse.') </option>';
-            if (!empty($browse_course_categories[$categoryCode])) {
-                foreach ($browse_course_categories[$categoryCode] as $subCategory) {
-                    $subCategoryCode = $subCategory['code'];
-                    $form .= '<option '
-                                        .($subCategoryCode == $codeType
-                                            ? 'selected="selected" '
-                                            : '')
-                                        .' value="'.$subCategory['code'].'">---'.$subCategory['name'].' ('.$subCategory['count_courses'].')</option>';
-                }
+    foreach ($browse_course_categories[0] as $category) {
+        $categoryCode = $category['code'];
+        $countCourse = $category['count_courses'];
+        $form .= '<option '.($categoryCode == $codeType ? 'selected="selected" ' : '')
+                            .' value="'.$category['code'].'">'.$category['name'].' ('.$countCourse.') </option>';
+        if (!empty($browse_course_categories[$categoryCode])) {
+            foreach ($browse_course_categories[$categoryCode] as $subCategory) {
+                $subCategoryCode = $subCategory['code'];
+                $form .= '<option '.($subCategoryCode == $codeType
+                                        ? 'selected="selected" '
+                                        : '')
+                                    .' value="'.$subCategory['code'].'">---';
+                echo $subCategory['name'].' ('.$subCategory['count_courses'].')</option>';
             }
         }
-        $form .= '</select>';
-        $form .= '</div>';
-        $form .= '</form>';
-        echo $form; ?>
-                    </div>
-                <?php
-    } ?>
-                <?php if ($showSessions) {
-        ?>
-                    <div class="col-md-4">
-                        <div class="return-catalog">
-                            <a class="btn btn-default btn-lg btn-block"
-                               href="<?php echo CourseCategory::getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions'); ?>">
-                                <em class="fa fa-arrow-right"></em> <?php echo get_lang('SessionList'); ?>
-                            </a>
-                        </div>
-                    </div>
-                <?php
-    } ?>
+    }
+    $form .= '</select>';
+    $form .= '</div>';
+    $form .= '</form>';
+    echo $form;
+    echo '</div>';
+}
+
+if ($showSessions) { ?>
+    <div class="col-md-4">
+        <div class="return-catalog">
+            <a class="btn btn-default btn-lg btn-block"
+               href="<?php echo CourseCategory::getCourseCategoryUrl(1, $pageLength, null, 0, 'display_sessions'); ?>">
+                <em class="fa fa-arrow-right"></em> <?php echo get_lang('SessionList'); ?>
+            </a>
+        </div>
+    </div>
+<?php } ?>
             </div>
         </div>
     </div>
 </div>
 <?php
 if ($showCourses && $action != 'display_sessions') {
-        if (!empty($message)) {
-            echo Display::return_message($message, 'confirmation', false);
+    if (!empty($message)) {
+        echo Display::return_message($message, 'confirmation', false);
+    }
+    if (!empty($error)) {
+        echo Display::return_message($error, 'error', false);
+    }
+
+    if (!empty($content)) {
+        echo $content;
+    }
+
+    if (!empty($searchTerm)) {
+        echo "<p><strong>".get_lang('SearchResultsFor')." ".$searchTerm."</strong><br />";
+    }
+
+    $showTeacher = api_get_setting('display_teacher_in_courselist') === 'true';
+    $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
+    $user_id = api_get_user_id();
+    $categoryListFromDatabase = CourseCategory::getCategories();
+
+    $categoryList = [];
+    if (!empty($categoryListFromDatabase)) {
+        foreach ($categoryListFromDatabase as $categoryItem) {
+            $categoryList[$categoryItem['code']] = $categoryItem['name'];
         }
-        if (!empty($error)) {
-            echo Display::return_message($error, 'error', false);
-        }
+    }
 
-        if (!empty($content)) {
-            echo $content;
-        }
+    if (!empty($browse_courses_in_category)) {
+        echo '<div class="grid-courses row">';
+        foreach ($browse_courses_in_category as $course) {
+            $course_hidden = $course['visibility'] == COURSE_VISIBILITY_HIDDEN;
 
-        if (!empty($searchTerm)) {
-            echo "<p><strong>".get_lang('SearchResultsFor')." ".$searchTerm."</strong><br />";
-        }
+            if ($course_hidden) {
+                continue;
+            }
 
-        $showTeacher = api_get_setting('display_teacher_in_courselist') === 'true';
+            $userRegisteredInCourse = CourseManager::is_user_subscribed_in_course($user_id, $course['code']);
+            $userRegisteredInCourseAsTeacher = CourseManager::is_course_teacher($user_id, $course['code']);
+            $userRegistered = $userRegisteredInCourse && $userRegisteredInCourseAsTeacher;
 
-        $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
-        $user_id = api_get_user_id();
-        $categoryList = CourseManager::getCategoriesList();
+            $course_public = $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD;
+            $course_open = $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM;
+            $course_private = $course['visibility'] == COURSE_VISIBILITY_REGISTERED;
+            $course_closed = $course['visibility'] == COURSE_VISIBILITY_CLOSED;
 
-        if (!empty($browse_courses_in_category)) {
-            echo '<div class="grid-courses row">';
-            foreach ($browse_courses_in_category as $course) {
-                $course_hidden = $course['visibility'] == COURSE_VISIBILITY_HIDDEN;
+            $course_subscribe_allowed = $course['subscribe'] == 1;
+            $course_unsubscribe_allowed = $course['unsubscribe'] == 1;
+            $count_connections = $course['count_connections'];
+            $creation_date = substr($course['creation_date'], 0, 10);
 
-                if ($course_hidden) {
-                    continue;
-                }
+            // display the course bloc
+            $html = '<div class="col-xs-12 col-sm-6 col-md-4"><div class="items items-courses">';
 
-                $userRegisteredInCourse = CourseManager::is_user_subscribed_in_course($user_id, $course['code']);
-                $userRegisteredInCourseAsTeacher = CourseManager::is_course_teacher($user_id, $course['code']);
-                $userRegistered = $userRegisteredInCourse && $userRegisteredInCourseAsTeacher;
+            $course['category_title'] = '';
+            if (isset($course['category'])) {
+                $course['category_title'] = isset($categoryList[$course['category']]) ? $categoryList[$course['category']] : '';
+            }
 
-                $course_public = $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD;
-                $course_open = $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM;
-                $course_private = $course['visibility'] == COURSE_VISIBILITY_REGISTERED;
-                $course_closed = $course['visibility'] == COURSE_VISIBILITY_CLOSED;
+            // Display thumbnail
+            $html .= returnThumbnail($course, $userRegistered);
 
-                $course_subscribe_allowed = $course['subscribe'] == 1;
-                $course_unsubscribe_allowed = $course['unsubscribe'] == 1;
-                $count_connections = $course['count_connections'];
-                $creation_date = substr($course['creation_date'], 0, 10);
-
-                // display the course bloc
-                $html = '<div class="col-xs-12 col-sm-6 col-md-4"><div class="items items-courses">';
-
-                $course['category_title'] = '';
-                if (isset($course['category'])) {
-                    $course['category_title'] = isset($categoryList[$course['category']]) ? $categoryList[$course['category']] : '';
-                }
-
-                // Display thumbnail
-                $html .= returnThumbnail($course, $userRegistered);
-
-                $separator = null;
-                $subscribeButton = return_register_button($course, $stok, $code, $searchTerm);
-
-                // Start buy course validation
-                // display the course price and buy button if the buycourses plugin is enabled and this course is configured
-                $plugin = BuyCoursesPlugin::create();
-                $isThisCourseInSale = $plugin->buyCoursesForGridCatalogValidator(
+            $separator = null;
+            $subscribeButton = return_register_button($course, $stok, $code, $searchTerm);
+            // Start buy course validation
+            // display the course price and buy button if the buycourses plugin is enabled and this course is configured
+            $plugin = BuyCoursesPlugin::create();
+            $isThisCourseInSale = $plugin->buyCoursesForGridCatalogValidator(
                 $course['real_id'],
                 BuyCoursesPlugin::PRODUCT_TYPE_COURSE
             );
 
-                if ($isThisCourseInSale) {
-                    // set the Price label
-                    $separator = $isThisCourseInSale['html'];
-                    // set the Buy button instead register.
-                    if ($isThisCourseInSale['verificator']) {
-                        $subscribeButton = $plugin->returnBuyCourseButton(
+            if ($isThisCourseInSale) {
+                // set the Price label
+                $separator = $isThisCourseInSale['html'];
+                // set the Buy button instead register.
+                if ($isThisCourseInSale['verificator']) {
+                    $subscribeButton = $plugin->returnBuyCourseButton(
                         $course['real_id'],
                         BuyCoursesPlugin::PRODUCT_TYPE_COURSE
                     );
-                    }
                 }
-                // end buy course validation
+            }
+            // end buy course validation
 
-                // display course title and button bloc
-                $html .= '<div class="description">';
-                $html .= return_title($course, $userRegisteredInCourse);
+            // display course title and button bloc
+            $html .= '<div class="description">';
+            $html .= return_title($course, $userRegisteredInCourse);
 
-                if ($showTeacher) {
-                    $html .= return_teacher($course);
-                }
+            if ($showTeacher) {
+                $html .= return_teacher($course);
+            }
 
-                // display button line
-                $html .= '<div class="toolbar row">';
-                $html .= $separator ? '<div class="col-sm-4">'.$separator.'</div>' : '';
-                $html .= '<div class="col-sm-8">';
-                // if user registered as student
-                if ($userRegisteredInCourse) {
-                    $html .= return_already_registered_label('student');
-                    if (!$course_closed) {
-                        if ($course_unsubscribe_allowed) {
-                            $html .= return_unregister_button($course, $stok, $searchTerm, $code);
-                        }
-                    }
-                } elseif ($userRegisteredInCourseAsTeacher) {
-                    // if user registered as teacher
+            // display button line
+            $html .= '<div class="toolbar row">';
+            $html .= $separator ? '<div class="col-sm-4">'.$separator.'</div>' : '';
+            $html .= '<div class="col-sm-8">';
+            // if user registered as student
+            if ($userRegisteredInCourse) {
+                $html .= return_already_registered_label('student');
+                if (!$course_closed) {
                     if ($course_unsubscribe_allowed) {
                         $html .= return_unregister_button($course, $stok, $searchTerm, $code);
                     }
-                } else {
-                    // if user not registered in the course
-                    if (!$course_closed) {
-                        if (!$course_private) {
-                            if ($course_subscribe_allowed) {
-                                $html .= $subscribeButton;
-                            }
+                }
+            } elseif ($userRegisteredInCourseAsTeacher) {
+                // if user registered as teacher
+                if ($course_unsubscribe_allowed) {
+                    $html .= return_unregister_button($course, $stok, $searchTerm, $code);
+                }
+            } else {
+                // if user not registered in the course
+                if (!$course_closed) {
+                    if (!$course_private) {
+                        if ($course_subscribe_allowed) {
+                            $html .= $subscribeButton;
                         }
                     }
                 }
-                $html .= '</div>';
-                $html .= '</div>';
-                $html .= '</div>';
-                $html .= '</div>';
-                $html .= '</div>';
-                echo $html;
             }
-
-            echo '</div>';
-        } else {
-            if (!isset($_REQUEST['subscribe_user_with_password']) &&
+            $html .= '</div>';
+            $html .= '</div>';
+            $html .= '</div>';
+            $html .= '</div>';
+            $html .= '</div>';
+            echo $html;
+        }
+        echo '</div>';
+    } else {
+        if (!isset($_REQUEST['subscribe_user_with_password']) &&
             !isset($_REQUEST['subscribe_course'])
         ) {
-                echo Display::return_message(
+            echo Display::return_message(
                 get_lang('ThereAreNoCoursesInThisCategory'),
                 'warning'
             );
-            }
         }
     }
+}
 
 echo '<div class="col-md-12">';
 echo $cataloguePagination;
@@ -409,9 +406,7 @@ function return_teacher($courseInfo)
 function return_title($course, $registeredUser)
 {
     $linkCourse = api_get_course_url($course['code']);
-
     $html = '<div class="block-title"><h4 class="title">';
-
     if (!$registeredUser) {
         $html .= $course['title'];
     } else {

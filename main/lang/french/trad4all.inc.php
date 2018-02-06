@@ -8040,4 +8040,6 @@ $ResetFieldX = "Réinitialiser %s";
 $MyGeneralCertificate = "Mon certificat global";
 $ScoreNote = "Note";
 $ScoreTest = "Test";
+$YouWillReceivedASecondEmail = "Vous allez recevoir un autre mail avec votre mot de passe.";
+$YouReceivedAnEmailWithTheUsername = "Vous avez du recevoir un autre mail avec votre identifiant.";
 ?>

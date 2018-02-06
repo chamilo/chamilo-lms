@@ -8105,4 +8105,6 @@ $ScoreNote = "Note";
 $ScoreTest = "Test";
 $MessageTracking = "Message tracking";
 $MessagesExchangeBetweenXAndY = "Messages exchange between %s and %s";
+$YouWillReceivedASecondEmail = "You will receive another email with your password";
+$YouReceivedAnEmailWithTheUsername = "You must have received another email with your username.";
 ?>

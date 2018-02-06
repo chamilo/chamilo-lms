@@ -633,7 +633,7 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Default glossary view "table" or "list"
 //$_configuration['default_glossary_view'] = 'table';
 
-// Allow or block user subcriptions to a lp/lp category
+// Allow or block user subscriptions to a lp/lp category
 /*$_configuration['lp_subscription_settings'] = [
     'options' => [
         'allow_add_users_to_lp' => true,

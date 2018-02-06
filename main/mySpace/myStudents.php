@@ -1653,6 +1653,37 @@ if ($allowMessages === true) {
     $form->display();
 }
 
+$allow = api_get_configuration_value('allow_user_message_tracking');
+if ($allow && api_is_drh() || api_is_platform_admin()) {
+    $users = MessageManager::getUsersThatHadConversationWithUser($student_id);
+
+    echo Display::page_subheader2(get_lang('MessageTracking'));
+
+    $table = new HTML_Table(['class' => 'table']);
+    $column = 0;
+    $row = 0;
+    $headers = [
+        get_lang('User')
+    ];
+    foreach ($headers as $header) {
+        $table->setHeaderContents($row, $column, $header);
+        $column++;
+    }
+    $column = 0;
+    $row++;
+    foreach ($users as $userFollowed) {
+        $followedUserId = $userFollowed['user_id'];
+        $url = api_get_path(WEB_CODE_PATH).'tracking/messages.php?from_user='.$student_id.'&to_user='.$followedUserId;
+        $link = Display::url(
+            $userFollowed['complete_name'],
+            $url
+        );
+        $table->setCellContents($row, $column, $link);
+        $row++;
+    }
+    $table->display();
+}
+
 if ($export) {
     ob_end_clean();
     switch ($export) {
@@ -1666,4 +1697,4 @@ if ($export) {
     exit;
 }
 
-Display :: display_footer();
+Display::display_footer();

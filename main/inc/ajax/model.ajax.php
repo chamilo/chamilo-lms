@@ -2203,6 +2203,9 @@ if (in_array($action, $allowed_actions)) {
 
         switch ($exportFormat) {
             case 'xls':
+                Export::arrayToXls($array, $fileName);
+                break;
+            case 'xls_html':
                 //TODO add date if exists
                 $browser = new Browser();
                 if ($browser->getPlatform() == Browser::PLATFORM_WINDOWS) {
@@ -2213,7 +2216,6 @@ if (in_array($action, $allowed_actions)) {
                 break;
             case 'csv':
             default:
-                //TODO add date if exists
                 Export::arrayToCsv($array, $fileName);
                 break;
         }

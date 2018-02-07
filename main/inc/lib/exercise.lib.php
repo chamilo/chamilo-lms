@@ -2881,7 +2881,7 @@ EOT;
         $course_id = 0,
         $only_active_exercises = true
     ) {
-        $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
+        $table = Database::get_course_table(TABLE_QUIZ_TEST);
 
         if ($only_active_exercises) {
             // Only active exercises.
@@ -2900,9 +2900,9 @@ EOT;
             $course_id
         ];
 
-        if ($session_id == 0) {
+        if (empty($session_id)) {
             $conditions = [
-                'where' => ["$sql_active_exercises session_id = ? AND c_id = ?" => $params],
+                'where' => ["$sql_active_exercises (session_id = 0 OR session_id IS NULL) AND c_id = ?" => [$course_id]],
                 'order' => 'title'
             ];
         } else {
@@ -2913,7 +2913,7 @@ EOT;
             ];
         }
 
-        return Database::select('*', $TBL_EXERCISES, $conditions);
+        return Database::select('*', $table, $conditions);
     }
 
     /**

@@ -4499,6 +4499,7 @@ div#chat-remote-video video {
 }
 .forum-post .tools-icons a{
     padding: 2px;
+    white-space: normal;
 }
 /* Sequence */
 .title-sequence{

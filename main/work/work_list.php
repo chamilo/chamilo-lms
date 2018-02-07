@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CStudentPublication;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
@@ -10,19 +12,20 @@ require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 
 $workId = isset($_GET['id']) ? intval($_GET['id']) : null;
+$courseInfo = api_get_course_info();
 
-if (empty($workId)) {
+if (empty($workId) || empty($courseInfo)) {
     api_not_allowed(true);
 }
-
-$courseInfo = api_get_course_info();
 
 // Student publications are saved with the iid in a LP
 $origin = api_get_origin();
 if ($origin == 'learnpath') {
     $em = Database::getManager();
-    /** @var \Chamilo\CourseBundle\Entity\CStudentPublication $work */
-    $work = $em->getRepository('ChamiloCourseBundle:CStudentPublication')->find($workId);
+    /** @var CStudentPublication $work */
+    $work = $em->getRepository('ChamiloCourseBundle:CStudentPublication')->findOneBy(
+        ['iid' => $workId, 'cId' => $courseInfo['real_id']]
+    );
     if ($work) {
         $workId = $work->getId();
     }

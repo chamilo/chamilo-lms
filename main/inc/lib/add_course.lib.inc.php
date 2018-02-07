@@ -427,7 +427,7 @@ class AddCourse
         /*    Course tools  */
         Database::query(
             "INSERT INTO $tbl_course_homepage (c_id, id, name, link, image, visibility, admin, address, added_tool, target, category, session_id)
-            VALUES ($course_id, 1, '".TOOL_COURSE_DESCRIPTION."','course_description/','info.gif','".self::string2binary(
+            VALUES ($course_id, 1, '".TOOL_COURSE_DESCRIPTION."','course_description/index.php','info.gif','".self::string2binary(
                 api_get_setting(
                     'course_create_active_tools',
                     'course_description'

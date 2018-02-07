@@ -1,9 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 /**
  * Responses to AJAX calls
  */
-use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 require_once __DIR__.'/../global.inc.php';
 
@@ -349,6 +351,7 @@ switch ($action) {
             'cid' => api_get_course_int_id(),
             'sid' => api_get_session_id()
         ];
+
         $result = (int) Event::courseLogout($logoutInfo);
         echo $result;
         break;

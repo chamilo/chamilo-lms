@@ -27,7 +27,7 @@ var offline_button = '{{ offline_button }}';
 var connect_lang = '{{ "ChatConnected"|get_lang }}';
 var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';
 
-var logOutUrl = '{{ _p.web_ajax }}course.ajax.php?a=course_logout';
+var logOutUrl = '{{ _p.web_ajax }}course.ajax.php?a=course_logout&{{ _p.web_cid_query }}';
 
 $(document).ready(function () {
     // Executes course logout when user close the browser tab/window

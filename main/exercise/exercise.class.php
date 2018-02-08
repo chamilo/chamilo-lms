@@ -2990,16 +2990,19 @@ class Exercise
         $question_list = $exercise_obj->selectQuestionList();
 
         if (!empty($question_list)) {
-            //Question creation
-
+            // Question creation
             foreach ($question_list as $old_question_id) {
                 $old_question_obj = Question::read($old_question_id);
                 $new_id = $old_question_obj->duplicate();
                 if ($new_id) {
                     $new_question_obj = Question::read($new_id);
-
                     if (isset($new_question_obj) && $new_question_obj) {
                         $new_question_obj->addToList($new_exercise_id);
+
+                        if (!empty($old_question_obj->category)) {
+                            $new_question_obj->saveCategory($old_question_obj->category);
+                        }
+
                         // This should be moved to the duplicate function
                         $new_answer_obj = new Answer($old_question_id);
                         $new_answer_obj->read();

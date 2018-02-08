@@ -6748,7 +6748,7 @@ $AddQuestionToTest = "Ajouter des questions au test";
 $QuestionByCategory = "question(s) par catégories";
 $QuestionUpperCaseFirstLetter = "Question";
 $QuestionCategory = "Catégories de questions";
-$AddACategory = "Ajouter une catégorie de questions";
+$AddACategory = "Ajouter une catégorie";
 $AddTestCategory = "Ajouter la catégorie";
 $AddCategoryDone = "La catégorie a été ajoutée.";
 $NbCategory = " question(s) de cette catégorie.";
@@ -8040,6 +8040,8 @@ $ResetFieldX = "Réinitialiser %s";
 $MyGeneralCertificate = "Mon certificat global";
 $ScoreNote = "Note";
 $ScoreTest = "Test";
+$MessageTracking = "Suivi des messages";
+$MessagesExchangeBetweenXAndY = "Échange de messages entre %s et %s";
 $YouWillReceivedASecondEmail = "Vous allez recevoir un autre mail avec votre mot de passe.";
 $YouReceivedAnEmailWithTheUsername = "Vous avez du recevoir un autre mail avec votre identifiant.";
 ?>

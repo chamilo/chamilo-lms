@@ -254,6 +254,11 @@ if (!empty($clone_question) && !empty($objExercise->id)) {
     $new_question_obj = Question::read($new_id);
     $new_question_obj->addToList($exerciseId);
 
+    // Save category to the destination course
+    if (!empty($old_question_obj->category)) {
+        $new_question_obj->saveCategory($old_question_obj->category, api_get_course_int_id());
+    }
+
     // This should be moved to the duplicate function
     $new_answer_obj = new Answer($clone_question);
     $new_answer_obj->read();

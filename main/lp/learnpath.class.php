@@ -6095,10 +6095,13 @@ class learnpath
                         $edit_icon .= '</a>';
 
                         if (!in_array($arrLP[$i]['item_type'], ['forum', 'thread'])) {
-                            $forumThread = $this->items[$arrLP[$i]['id']]->getForumThread(
-                                $this->course_int_id,
-                                $this->lp_session_id
-                            );
+                            $forumThread = null;
+                            if (isset($this->items[$arrLP[$i]['id']])) {
+                                $forumThread = $this->items[$arrLP[$i]['id']]->getForumThread(
+                                    $this->course_int_id,
+                                    $this->lp_session_id
+                                );
+                            }
                             if ($forumThread) {
                                 $forumIconUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
                                     'action' => 'dissociate_forum',

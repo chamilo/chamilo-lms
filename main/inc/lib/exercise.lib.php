@@ -4210,9 +4210,9 @@ EOT;
                 if ($show_results) {
                     $question_content .= '</div>';
                 }
-                if (!$show_only_score) {
+                //if (!$show_only_score) {
                     $exercise_content .= Display::div(Display::panel($question_content),array('class' => 'question-panel'));
-                }
+                //}
             } // end foreach() block that loops over all questions
         }
 
@@ -4253,6 +4253,12 @@ EOT;
         );
 
         echo $total_score_text;
+
+        // Ofaj change BT#11784
+        if (!empty($objExercise->description)) {
+            echo Display::div($objExercise->description, array('class'=>'exercise_description'));
+        }
+
         echo $exercise_content;
 
         if (!$show_only_score) {
@@ -4311,15 +4317,43 @@ EOT;
      *
      * @return string
      */
-    public static function getQuestionRibbon($class, $scoreLabel, $result)
+    public static function getQuestionRibbon($class, $scoreLabel, $result, $array)
     {
+        // ofaj
+        $html = null;
+        $hideLabel = api_get_configuration_value('exercise_hide_label');
+        $label = '<div class="rib rib-'.$class.'">
+                        <h3>'.$scoreLabel.'</h3>
+                  </div> 
+                  <h4>'.get_lang('Score').': '.$result.'</h4>';
+        if ($hideLabel === true) {
+
+            $answerUsed = (int)$array['used'];
+            $answerMissing = (int)$array['missing'] - $answerUsed;
+
+            for ($i = 1; $i <= $answerUsed; $i++) {
+                $html.= '<span class="score-img">'.Display::return_icon('attempt-check.png',null,null,ICON_SIZE_SMALL).'</span>';
+            }
+            for ($i = 1; $i <= $answerMissing; $i++) {
+                $html.= '<span class="score-img">'.Display::return_icon('attempt-nocheck.png',null,null,ICON_SIZE_SMALL).'</span>';
+            }
+            $label = '<div class="score-title">'.get_lang('CorrectAnswers').': '.$result.'</div>';
+            $label .= '<div class="score-limits">';
+            $label .= $html;
+            $label .= '</div>';
+        }
         return '<div class="ribbon">
+                '.$label.'
+                </div>'
+            ;
+
+        /*return '<div class="ribbon">
                     <div class="rib rib-'.$class.'">
                         <h3>'.$scoreLabel.'</h3>
                     </div>
                     <h4>'.get_lang('Score').': '.$result.'</h4>
                 </div>'
-        ;
+        ;*/
     }
 
     /**

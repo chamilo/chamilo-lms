@@ -609,7 +609,7 @@ abstract class Question
      */
     public function updateType($type)
     {
-        $TBL_REPONSES = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $course_id = $this->course['real_id'];
 
         if (empty($course_id)) {
@@ -622,7 +622,7 @@ abstract class Question
                 !in_array($type, [UNIQUE_ANSWER, MULTIPLE_ANSWER])
             ) {
                 // removes old answers
-                $sql = "DELETE FROM $TBL_REPONSES
+                $sql = "DELETE FROM $table
                         WHERE c_id = $course_id AND question_id = ".intval($this->id);
                 Database::query($sql);
             }
@@ -1439,7 +1439,6 @@ abstract class Question
         $type = $this->type;
         $level = (int) $this->level;
         $extra = $this->extra;
-        $categoryId = $this->category;
 
         // Using the same method used in the course copy to transform URLs
         if ($this->course['id'] != $courseInfo['id']) {
@@ -1719,7 +1718,6 @@ abstract class Question
                 $form->addTextarea('feedback', get_lang('FeedbackIfNotCorrect'));
             }
         }
-
 
         // default values
         $defaults = [];
@@ -2204,11 +2202,11 @@ abstract class Question
     }
 
     /**
-     * @return integer[]
+     * @return array
      */
     public static function get_default_levels()
     {
-        $select_level = [
+        $levels = [
             1 => 1,
             2 => 2,
             3 => 3,
@@ -2216,7 +2214,7 @@ abstract class Question
             5 => 5
         ];
 
-        return $select_level;
+        return $levels;
     }
 
     /**

@@ -8,6 +8,7 @@
 */
 
 @import url(../assets/fontawesome/css/font-awesome.min.css);
+@import url(../assets/bootstrap/dist/css/bootstrap.min.css);
 
 @font-face {
   font-family: 'Open Sans';
@@ -39,7 +40,7 @@ body{
     color: #666;
     font-family: 'Open Sans', sans-serif;
     line-height: 30px;
-   
+
 }
 .ck{
     display: block;
@@ -92,7 +93,7 @@ body{
     height: 2px;
     display: block;
     content: "";
-    
+
 }
 
 figure .image.alignleft{
@@ -104,7 +105,7 @@ figure .image.alignright{
 figure .image{
     margin: 0 20px 0px 20px;
 }
-figure figcaption{   
+figure figcaption{
     text-align: left;
     background-color: #f3f3f3;
     padding-top: 0px;
@@ -152,19 +153,19 @@ blockquote p {
     background: url(../../main/img/document/hr-2.png) repeat-x 0 0;
     border: 0;
 }
-.ck-style3 { 
-  border-top: 1px dashed #8c8b8b; 
-} 
-.ck-style3:after { 
-  content: '\002702'; 
-  display: inline-block; 
-  position: relative; 
-  top: -12px; 
-  left: 40px; 
-  padding: 0 3px; 
+.ck-style3 {
+  border-top: 1px dashed #8c8b8b;
+}
+.ck-style3:after {
+  content: '\002702';
+  display: inline-block;
+  position: relative;
+  top: -12px;
+  left: 40px;
+  padding: 0 3px;
   background: #FFF;
-  color: #8c8b8b; 
-  font-size: 18px; 
+  color: #8c8b8b;
+  font-size: 18px;
 }
 .alert {
   padding: 15px;

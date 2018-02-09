@@ -714,9 +714,17 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' &&
             $path_image_in_default_course,
             $new_content_html
         );
+
         $new_content_html = str_replace(
             SYS_CODE_PATH.'img/',
             api_get_path(WEB_IMG_PATH),
+            $new_content_html
+        );
+
+        // Remove media=screen to be available when printing a document
+        $new_content_html = str_replace(
+            api_get_path(WEB_CSS_PATH).'editor.css" media="screen"',
+            api_get_path(WEB_CSS_PATH).'editor.css" ',
             $new_content_html
         );
 

@@ -623,6 +623,13 @@ class Certificate extends Model
         if (file_exists($user_certificate)) {
             $certificateContent = (string) file_get_contents($user_certificate);
 
+            // Remove media=screen to be available when printing a document
+            $certificateContent = str_replace(
+                api_get_path(WEB_CSS_PATH).'editor.css" media="screen"',
+                api_get_path(WEB_CSS_PATH).'editor.css" ',
+                $certificateContent
+            );
+
             if ($this->user_id == api_get_user_id() && !empty($this->certificate_data)) {
                 $certificateId = $this->certificate_data['id'];
                 $extraFieldValue = new ExtraFieldValue('user_certificate');

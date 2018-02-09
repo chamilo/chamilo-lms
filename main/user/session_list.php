@@ -135,15 +135,17 @@ $(function() {
     sgrid.triggerToolbar();
 });
 </script>
-<?php if (api_is_platform_admin()) {
-        ?>
-    <div class="actions">
-    <?php
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.Display::return_icon('new_session.png', get_lang('AddSession'), '', ICON_SIZE_MEDIUM).'</a>';
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/add_many_session_to_category.php">'.Display::return_icon('session_to_category.png', get_lang('AddSessionsInCategories'), '', ICON_SIZE_MEDIUM).'</a>';
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_list.php">'.Display::return_icon('folder.png', get_lang('ListSessionCategory'), '', ICON_SIZE_MEDIUM).'</a>';
-        echo '</div>';
-    }
+<?php
 
+if (api_is_platform_admin()) {
+    echo '<div class="actions">';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.
+        Display::return_icon('new_session.png', get_lang('AddSession'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/add_many_session_to_category.php">'.
+        Display::return_icon('session_to_category.png', get_lang('AddSessionsInCategories'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_list.php">'.
+        Display::return_icon('folder.png', get_lang('ListSessionCategory'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '</div>';
+}
 echo Display::grid_html('sessions');
 Display::display_footer();

@@ -235,7 +235,6 @@ class CatForm extends FormValidator
                 $skills = $this->category_object->get_skills();
                 foreach ($skills as $skill) {
                     $skillsDefaults[] = $skill['id'];
-
                     $skillSelect->addOption($skill['name'], $skill['id']);
                 }
             }

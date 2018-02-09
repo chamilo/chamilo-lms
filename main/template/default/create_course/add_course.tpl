@@ -10,7 +10,7 @@
         <div class="thumbnail">
             {{ 'info.png' | img(64, 'AddCourseDescription'|get_lang ) }}
             <div class="caption">
-                <a href="{{ _p.web_main }}course_description/?cidReq={{ course_id }}" class="btn btn-default">
+                <a href="{{ _p.web_main }}course_description/index.php?cidReq={{ course_id }}" class="btn btn-default">
                     <em class="fa fa-info-circle"></em> {{'AddCourseDescription'|get_lang}}
                 </a>
             </div>

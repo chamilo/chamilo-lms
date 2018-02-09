@@ -21,10 +21,8 @@ class SelectAjax extends HTML_QuickForm_select
     public function toHtml()
     {
         $iso = api_get_language_isocode(api_get_interface_language());
-
         $formatResult = $this->getAttribute('formatResult');
-
-        $formatCondition = null;
+        $formatCondition = '';
 
         if (!empty($formatResult)) {
             $formatCondition = ',

@@ -247,6 +247,7 @@ switch ($action) {
     case 'attendance_delete':
         if ($allowToEdit) {
             $attendanceController->attendance_delete($attendance_id);
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
         } else {
             api_not_allowed(true);
         }

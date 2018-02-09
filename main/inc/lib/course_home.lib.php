@@ -588,7 +588,6 @@ class CourseHome
                 if (!empty($temp_row['session_id'])) {
                     continue;
                 }
-                //$temp_row = $toolWithSessionValue[$temp_row['name']];
             }
 
             if ($allowEditionInSession && !empty($sessionId)) {

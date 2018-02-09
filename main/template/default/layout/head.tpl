@@ -26,22 +26,21 @@ var online_button = '{{ online_button }}';
 var offline_button = '{{ offline_button }}';
 var connect_lang = '{{ "ChatConnected"|get_lang }}';
 var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';
-
 var logOutUrl = '{{ _p.web_ajax }}course.ajax.php?a=course_logout&{{ _p.web_cid_query }}';
 
-$(document).ready(function () {
-    // Executes course logout when user close the browser tab/window
+// Executes course logout when user close the browser tab/window
+$(function() {
     $(window).on('beforeunload', function () {
         // Logout of course just in case
         $.ajax({
             url: logOutUrl,
+            async: false,
             success: function (data) {
                 return 1;
             }
         });
     });
 });
-
 </script>
 
 {% include template ~ '/layout/header.js.tpl' %}

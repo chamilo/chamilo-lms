@@ -621,7 +621,9 @@ class Certificate extends Model
 
         $user_certificate = $this->certification_user_path.basename($this->certificate_data['path_certificate']);
         if (file_exists($user_certificate)) {
-            $certificateContent = (string) file_get_contents($user_certificate);
+            // Needed in order to browsers don't add custom CSS
+            $certificateContent = '<!DOCTYPE html>';
+            $certificateContent .= (string) file_get_contents($user_certificate);
 
             // Remove media=screen to be available when printing a document
             $certificateContent = str_replace(

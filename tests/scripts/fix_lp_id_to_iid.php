@@ -130,6 +130,9 @@ foreach ($res as $course) {
 
                 $sql = "UPDATE $tblCLpItem SET lp_id = $lpIid WHERE iid = $itemIid";
                 Database::query($sql);
+
+                $sql = "UPDATE $tblCLpItem SET id = iid";
+                Database::query($sql);
                 var_dump($sql);
             }
 

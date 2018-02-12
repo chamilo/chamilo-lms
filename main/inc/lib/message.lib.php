@@ -1173,6 +1173,7 @@ class MessageManager
             $source
         );
 
+        $row['content'] = str_replace('</br>', '<br />', $row['content']);
         $title = Security::remove_XSS($row['title'], STUDENT, true);
         $content = Security::remove_XSS($row['content'], STUDENT, true);
 

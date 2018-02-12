@@ -2417,7 +2417,6 @@ class Skill extends Model
                 $form->addHtml($html);
                 $form->addLabel(get_lang('Skills'), $skills);
             }
-
         }
     }
 

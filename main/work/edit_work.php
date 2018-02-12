@@ -119,7 +119,7 @@ if ($form->validate()) {
         updateWork($workData['iid'], $params, $courseInfo, $sessionId);
         updatePublicationAssignment($workId, $params, $courseInfo, $groupId);
         updateDirName($workData, $params['new_dir']);
-
+        Skill::saveSkills($form, ITEM_TYPE_STUDENT_PUBLICATION, $workData['iid']);
         Display::addFlash(Display::return_message(get_lang('Updated'), 'success'));
         header('Location: '.$currentUrl);
         exit;

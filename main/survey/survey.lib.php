@@ -653,6 +653,8 @@ class SurveyManager
             api_get_user_id()
         );
 
+        Skill::deleteSkillsFromItem($survey_id, ITEM_TYPE_SURVEY);
+
         return true;
     }
 

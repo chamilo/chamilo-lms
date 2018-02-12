@@ -733,6 +733,10 @@ $_configuration['gradebook_badge_sidebar'] = [
 //$_configuration['allow_teachers_to_access_blocked_lp_by_prerequisite'] = false;
 
 // Allow connect skills with course tools
+// Uncomment doctrine tags for Entities:
+//SkillRelItemRelUser|SkillRelItem|SkillRelUser.validation_status|Skill.items
+// DB changes:
+
 //$_configuration['allow_skill_rel_items'] = false;
 
 // Generate random login when importing users

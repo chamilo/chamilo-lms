@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once __DIR__.'/../inc/global.inc.php';
+use Chamilo\SkillBundle\Entity\SkillRelItem;
 
-exit;
+require_once __DIR__.'/../inc/global.inc.php';
 
 if (api_get_configuration_value('allow_skill_rel_items') == false) {
     api_not_allowed(true);
@@ -15,6 +15,7 @@ $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 
 $userId = isset($_GET['user_id']) ? (int) $_GET['user_id'] : 0;
+$categoryId = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 $userInfo = api_get_user_info($userId);
 
 if (empty($userInfo)) {
@@ -35,14 +36,21 @@ if (!empty($userSkills)) {
     }
 }
 
-/** @var \Chamilo\SkillBundle\Entity\SkillRelItem $skill */
+$em = Database::getManager();
+
+/** @var SkillRelItem $skill */
 foreach ($skills as $skill) {
     $skillId = $skill->getSkill()->getId();
     $uniqueSkills[$skillId] = $skill->getSkill();
     $itemInfo = Skill::getItemInfo($skill->getItemId(), $skill->getItemType());
 
-    $itemInfo['status'] = in_array($skillId, $userSkillsList);
-    $itemInfo['status'] = false;
+    $criteria = [
+        'user' => $userId,
+        'skillRelItem' => $skill
+    ];
+    $skillRelItemRelUser = $em->getRepository('ChamiloSkillBundle:SkillRelItemRelUser')->findOneBy($criteria);
+    $itemInfo['status'] = $skillRelItemRelUser ? true : false;
+
     $itemsPerSkill[$skillId][]['info'] = $itemInfo;
 }
 
@@ -56,6 +64,15 @@ foreach ($itemsPerSkill as $skillId => $skillList) {
     }
     $uniqueSkillsConclusion[$skillId] = $allSkillsCompleted;
 }
+
+$interbreadcrumb[] = [
+    'url' => Category::getUrl(),
+    'name' => get_lang('Gradebook')
+];
+$interbreadcrumb[] = [
+    'url' => api_get_path(WEB_CODE_PATH).'gradebook/gradebook_display_summary.php?'.api_get_cidreq().'&selectcat='.$categoryId,
+    'name' => get_lang('GradebookListOfStudentsReports')
+];
 
 $template = new Template(get_lang('SkillUserList'));
 $template->assign('conclusion_list', $uniqueSkillsConclusion);

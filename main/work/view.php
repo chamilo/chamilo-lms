@@ -162,12 +162,10 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
         $commentForm = getWorkCommentForm($work, $my_folder_data);
 
         $tpl = new Template();
-
         $tpl->assign('work', $work);
         $tpl->assign('comments', $comments);
 
         $actions = '';
-
         if (isset($work['contains_file']) && !empty($work['contains_file'])) {
             if (isset($work['download_url']) && !empty($work['download_url'])) {
                 $actions = Display::url(

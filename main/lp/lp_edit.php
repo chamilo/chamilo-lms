@@ -10,10 +10,11 @@ require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
 api_protect_course_script();
 
-$show_description_field = false; //for now
 $nameTools = get_lang('Doc');
 $this_section = SECTION_COURSES;
 Event::event_access_tool(TOOL_LEARNPATH);
+
+$lpId = $_SESSION['oLP']->get_id();
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
@@ -26,7 +27,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('LearningPaths')
 ];
 $interbreadcrumb[] = [
-    'url' => api_get_self()."?action=build&lp_id=".$_SESSION['oLP']->get_id().'&'.api_get_cidreq(),
+    'url' => api_get_self()."?action=build&lp_id=".$lpId.'&'.api_get_cidreq(),
     'name' => $_SESSION['oLP']->get_name()
 ];
 
@@ -214,15 +215,17 @@ $form->addElement(
 $enableLpExtraFields = false;
 if ($enableLpExtraFields) {
     $extraField = new ExtraField('lp');
-    $extra = $extraField->addElements($form, $_SESSION['oLP']->get_id());
+    $extra = $extraField->addElements($form, $lpId);
 }
+
+$skillList = Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, $lpId);
 
 // Submit button
 $form->addButtonSave(get_lang('SaveLPSettings'));
 
 // Hidden fields
 $form->addElement('hidden', 'action', 'update_lp');
-$form->addElement('hidden', 'lp_id', $_SESSION['oLP']->get_id());
+$form->addElement('hidden', 'lp_id', $lpId);
 
 if ($enableLpExtraFields) {
     $htmlHeadXtra[] = '<script>
@@ -235,6 +238,7 @@ if ($enableLpExtraFields) {
 $defaults['publicated_on'] = !empty($publicated_on) && $publicated_on !== '0000-00-00 00:00:00' ? api_get_local_time($publicated_on) : null;
 $defaults['expired_on'] = (!empty($expired_on)) ? api_get_local_time($expired_on) : date('Y-m-d 12:00:00', time() + 84600);
 $defaults['subscribe_users'] = $_SESSION['oLP']->getSubscribeUsers();
+$defaults['skills'] = array_keys($skillList);
 $form->setDefaults($defaults);
 
 Display::display_header(get_lang('CourseSettings'), 'Path');

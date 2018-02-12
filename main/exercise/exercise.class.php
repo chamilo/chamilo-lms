@@ -1850,8 +1850,8 @@ class Exercise
      */
     public function delete()
     {
-        $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "UPDATE $TBL_EXERCISES SET active='-1'
+        $table = Database::get_course_table(TABLE_QUIZ_TEST);
+        $sql = "UPDATE $table SET active='-1'
                 WHERE c_id = ".$this->course_id." AND id = ".intval($this->id);
         Database::query($sql);
 
@@ -1869,6 +1869,8 @@ class Exercise
             'delete',
             api_get_user_id()
         );
+
+        Skill::deleteSkillsFromItem($this->iId, ITEM_TYPE_EXERCISE);
 
         if (api_get_setting('search_enabled') == 'true' &&
             extension_loaded('xapian')
@@ -2498,7 +2500,7 @@ class Exercise
                 }
             }
 
-            //$skillList = Skill::addSkillsToForm($form, ITEM_TYPE_EXERCISE, $this->iId);
+            $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_EXERCISE, $this->iId);
 
             $form->addElement('html', '</div>'); //End advanced setting
             $form->addElement('html', '</div>');
@@ -2564,7 +2566,7 @@ class Exercise
                 } else {
                     $defaults['enabletimercontroltotalminutes'] = 0;
                 }
-                //$defaults['skills'] = array_keys($skillList);
+                $defaults['skills'] = array_keys($skillList);
                 $defaults['notifications'] = $this->getNotifications();
             } else {
                 $defaults['exerciseType'] = 2;
@@ -2709,9 +2711,9 @@ class Exercise
         }
 
         $iId = $this->save($type);
-        /*if (!empty($iId)) {
+        if (!empty($iId)) {
             Skill::saveSkills($form, ITEM_TYPE_EXERCISE, $iId);
-        }*/
+        }
     }
 
     public function search_engine_save()
@@ -6077,7 +6079,6 @@ class Exercise
         );
 
         $html = '<div class="question-result">';
-
         if (api_get_configuration_value('save_titles_as_html')) {
             $html .= $this->get_formated_title();
             $html .= Display::page_header(get_lang('Result'));

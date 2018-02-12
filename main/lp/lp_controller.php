@@ -283,21 +283,21 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
 
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         if (is_numeric($lp_id)) {
-            $sel = "SELECT lp_type FROM $lp_table WHERE c_id = $course_id AND id = $lp_id";
+            $sel = "SELECT iid, lp_type FROM $lp_table WHERE c_id = $course_id AND id = $lp_id";
             if ($debug > 0) {
                 error_log('New LP - querying '.$sel, 0);
             }
             $res = Database::query($sel);
-
             if (Database::num_rows($res)) {
                 $row = Database::fetch_array($res);
+                $lpIid = $row['iid'];
                 $type = $row['lp_type'];
                 if ($debug > 0) {
                     error_log('New LP - found row - type '.$type.' - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                 }
                 switch ($type) {
                     case 1:
-                        $oLP = new learnpath(api_get_course_id(), $lp_id, api_get_user_id());
+                        $oLP = new learnpath(api_get_course_id(), $lpIid, api_get_user_id());
                         if ($oLP !== false) {
                             $lp_found = true;
                         } else {
@@ -305,7 +305,7 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                         }
                         break;
                     case 2:
-                        $oLP = new scorm(api_get_course_id(), $lp_id, api_get_user_id());
+                        $oLP = new scorm(api_get_course_id(), $lpIid, api_get_user_id());
                         if ($oLP !== false) {
                             $lp_found = true;
                         } else {
@@ -313,7 +313,7 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                         }
                         break;
                     case 3:
-                        $oLP = new aicc(api_get_course_id(), $lp_id, api_get_user_id());
+                        $oLP = new aicc(api_get_course_id(), $lpIid, api_get_user_id());
                         if ($oLP !== false) {
                             $lp_found = true;
                         } else {
@@ -321,7 +321,7 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                         }
                         break;
                     default:
-                        $oLP = new learnpath(api_get_course_id(), $lp_id, api_get_user_id());
+                        $oLP = new learnpath(api_get_course_id(), $lpIid, api_get_user_id());
                         if ($oLP !== false) {
                             $lp_found = true;
                         } else {
@@ -605,6 +605,11 @@ switch ($action) {
                 );
 
                 if (is_numeric($new_lp_id)) {
+                    // Create temp form validator to save skills
+                    $form = new FormValidator('lp_add');
+                    $form->addSelect('skills', 'skills');
+                    Skill::saveSkills($form, ITEM_TYPE_LEARNPATH, $new_lp_id);
+
                     // TODO: Maybe create a first directory directly to avoid bugging the user with useless queries
                     $_SESSION['oLP'] = new learnpath(
                         api_get_course_id(),
@@ -863,6 +868,9 @@ switch ($action) {
         } else {
             Session::write('refresh', 1);
             $_SESSION['oLP']->delete(null, $_GET['lp_id'], 'remove');
+
+            Skill::deleteSkillsFromItem($_GET['lp_id'], ITEM_TYPE_LEARNPATH);
+
             Display::addFlash(Display::return_message(get_lang('Deleted')));
             Session::erase('oLP');
             require 'lp_list.php';
@@ -1027,6 +1035,10 @@ switch ($action) {
             if ($_FILES['lp_preview_image']['size'] > 0) {
                 $_SESSION['oLP']->upload_image($_FILES['lp_preview_image']);
             }
+
+            $form = new FormValidator('form1');
+            $form->addSelect('skills', 'skills');
+            Skill::saveSkills($form, ITEM_TYPE_LEARNPATH, $_SESSION['oLP']->get_id());
 
             if (api_get_setting('search_enabled') === 'true') {
                 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';

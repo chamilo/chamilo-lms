@@ -3439,7 +3439,6 @@ class learnpath
     public function get_link($type = 'http', $item_id = null, $provided_toc = false)
     {
         $course_id = $this->get_course_int_id();
-
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_link('.$type.','.$item_id.')', 0);
         }
@@ -3456,7 +3455,7 @@ class learnpath
             }
             //still empty, this means there was no item_id given and we are not in an object context or
             //the object property is empty, return empty link
-            $item_id = $this->first();
+            $this->first();
             return '';
         }
 
@@ -12322,6 +12321,7 @@ EOD;
         $main_course_path = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/';
         $link = '';
         $extraParams = api_get_cidreq(true, true, 'learnpath').'&session_id='.$session_id;
+
         switch ($type) {
             case 'dir':
                 return $main_dir_path.'lp/blank.php';

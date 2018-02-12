@@ -498,6 +498,18 @@ define('EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED', 8);
 define('EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED', 9);
 define('EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM', 10);
 
+// Used to save the skill_rel_item table
+define('ITEM_TYPE_EXERCISE', 1);
+define('ITEM_TYPE_HOTPOTATOES', 2);
+define('ITEM_TYPE_LINK', 3);
+define('ITEM_TYPE_LEARNPATH', 4);
+define('ITEM_TYPE_GRADEBOOK', 5);
+define('ITEM_TYPE_STUDENT_PUBLICATION', 6);
+//define('ITEM_TYPE_FORUM', 7);
+define('ITEM_TYPE_ATTENDANCE', 8);
+define('ITEM_TYPE_SURVEY', 9);
+define('ITEM_TYPE_FORUM_THREAD', 10);
+
 // one big string with all question types, for the validator in pear/HTML/QuickForm/Rule/QuestionType
 define(
     'QUESTION_TYPES',
@@ -1934,6 +1946,18 @@ function api_get_course_info($course_code = null, $strict = false)
     }
 
     return $_course;
+}
+
+/**
+ * @param int $courseId
+ * @return \Chamilo\CoreBundle\Entity\Course
+ */
+function api_get_course_entity($courseId)
+{
+    if (empty($courseId)) {
+        $courseId = api_get_course_int_id();
+    }
+    return Database::getManager()->getRepository('ChamiloCoreBundle:Course')->find($courseId);
 }
 
 /**
@@ -6613,6 +6637,8 @@ function api_get_asset($file)
 
 /**
  * Returns the <script> HTML tag
+ * @param string $file
+ * @param string $media
  * @return string
  */
 function api_get_css_asset($file, $media = 'screen')
@@ -6623,6 +6649,7 @@ function api_get_css_asset($file, $media = 'screen')
 /**
  * Returns the <link> HTML tag
  * @param string $file
+ * @param string $media
  */
 function api_get_css($file, $media = 'screen')
 {

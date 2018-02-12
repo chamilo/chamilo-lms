@@ -45,7 +45,6 @@ class AttendanceController
     {
         $attendance = new Attendance();
         $data = [];
-
         if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
             if (!empty($_POST['title'])) {
                 $check = Security::check_token();
@@ -62,10 +61,15 @@ class AttendanceController
                         $link_to_gradebook = true;
                     }
                     $attendance->category_id = isset($_POST['category_id']) ? $_POST['category_id'] : 0;
-                    $last_id = $attendance->attendance_add($link_to_gradebook);
+                    $attendanceId = $attendance->attendance_add($link_to_gradebook);
+
+                    if ($attendanceId) {
+                        $form = new FormValidator('attendance_add');
+                        Skill::saveSkills($form, ITEM_TYPE_ATTENDANCE, $attendanceId);
+                    }
                     Security::clear_token();
                 }
-                header('Location: index.php?action=calendar_add&attendance_id='.$last_id.'&'.api_get_cidreq());
+                header('Location: index.php?action=calendar_add&attendance_id='.$attendanceId.'&'.api_get_cidreq());
                 exit;
             } else {
                 $data['error'] = true;
@@ -119,8 +123,13 @@ class AttendanceController
                         $link_to_gradebook = true;
                     }
                     $attendance->attendance_edit($attendance_id, $link_to_gradebook);
+
+                    $form = new FormValidator('attendance_edit');
+                    Skill::saveSkills($form, ITEM_TYPE_ATTENDANCE, $attendance_id);
+                    Display::addFlash(Display::return_message(get_lang('Updated')));
+
                     Security::clear_token();
-                    header('location:index.php?action=attendance_list&'.api_get_cidreq());
+                    header('Location:index.php?action=attendance_list&'.api_get_cidreq());
                     exit;
                 }
             } else {
@@ -167,6 +176,7 @@ class AttendanceController
         $attendance = new Attendance();
         if (!empty($attendance_id)) {
             $affected_rows = $attendance->attendance_delete($attendance_id);
+            Skill::deleteSkillsFromItem($attendance_id, ITEM_TYPE_ATTENDANCE);
         }
 
         if ($affected_rows) {

@@ -40,6 +40,7 @@ foreach ($list as $toc) {
         $dir = true;
     }
 }
+
 if ($dir) {
     $src = 'blank.php';
 } else {

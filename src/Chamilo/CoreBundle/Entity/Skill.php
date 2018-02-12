@@ -5,7 +5,9 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\SkillBundle\Entity\Profile;
+use Chamilo\SkillBundle\Entity\SkillRelItem;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -94,6 +96,12 @@ class Skill
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="skill", cascade={"persist"})
      */
     protected $issuedSkills;
+
+    /**
+     * // uncomment if api_get_configuration_value('allow_skill_rel_items')
+     * ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelItem", mappedBy="skill", cascade={"persist"})
+     */
+    protected $items;
 
     /**
      * @return string
@@ -357,5 +365,54 @@ class Skill
     public function getIssuedSkills()
     {
         return $this->issuedSkills;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param ArrayCollection $items
+     * @return Skill
+     */
+    public function setItems($items)
+    {
+        $this->items = $items;
+        return $this;
+    }
+
+    /**
+     * @param int $itemId
+     * @return bool
+     */
+    public function hasItem($typeId, $itemId)
+    {
+        if ($this->getItems()->count()) {
+            $found = false;
+            /** @var SkillRelItem $item */
+            foreach ($this->getItems() as $item) {
+                if ($item->getItemId() == $itemId && $item->getItemType() == $typeId) {
+                    $found = true;
+                    break;
+                }
+            }
+
+            return $found;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param SkillRelItem $skillRelItem
+     */
+    public function addItem(SkillRelItem $skillRelItem)
+    {
+        $skillRelItem->setSkill($this);
+        $this->items[] = $skillRelItem;
     }
 }

@@ -105,14 +105,19 @@ $code = isset($code) ? $code : null;
         $form .= '<div class="form-group">';
         $form .= '<label>'.get_lang('CourseCategories').'</label>';
         $form .= '<select name="category_code" onchange="submit();" class="selectpicker show-tick form-control">';
-
         foreach ($browse_course_categories[0] as $category) {
             $categoryCode = $category['code'];
             $countCourse = $category['count_courses'];
+            if (empty($countCourse)) {
+                continue;
+            }
             $form .= '<option '.($categoryCode == $codeType ? 'selected="selected" ' : '')
                             .' value="'.$category['code'].'">'.$category['name'].' ('.$countCourse.') </option>';
             if (!empty($browse_course_categories[$categoryCode])) {
                 foreach ($browse_course_categories[$categoryCode] as $subCategory) {
+                    if (empty($subCategory['count_courses'])) {
+                        continue;
+                    }
                     $subCategoryCode = $subCategory['code'];
                     $form .= '<option '.($subCategoryCode == $codeType
                                         ? 'selected="selected" '

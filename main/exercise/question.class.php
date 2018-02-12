@@ -1988,7 +1988,10 @@ abstract class Question
         }
 
         // display question category, if any
-        $header = TestCategory::returnCategoryAndTitle($this->id);
+        $header = '';
+        if ($exercise->display_category_name) {
+            $header = TestCategory::returnCategoryAndTitle($this->id);
+        }
         $show_media = null;
         if ($show_media) {
             $header .= $this->show_media_content();

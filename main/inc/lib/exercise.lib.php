@@ -67,7 +67,9 @@ class ExerciseLib
             if (!$only_questions) {
                 $questionDescription = $objQuestionTmp->selectDescription();
                 if ($show_title) {
-                    TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
+                    if ($exercise->display_category_name) {
+                        TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
+                    }
                     $titleToDisplay = null;
                     if ($answerType == READING_COMPREHENSION) {
                         // In READING_COMPREHENSION, the title of the question
@@ -1214,8 +1216,9 @@ HTML;
 
             if (!$only_questions) {
                 if ($show_title) {
-                    TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
-
+                    if ($exercise->display_category_name) {
+                        TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
+                    }
                     echo $objQuestionTmp->getTitleToDisplay($current_item);
                 }
                 //@todo I need to the get the feedback type
@@ -1283,7 +1286,9 @@ HOTSPOT;
 
             if (!$only_questions) {
                 if ($show_title) {
-                    TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
+                    if ($exercise->display_category_name) {
+                        TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
+                    }
                     echo $objQuestionTmp->getTitleToDisplay($current_item);
                 }
                 echo '
@@ -1326,10 +1331,8 @@ HOTSPOT;
                     </div>
                 ';
             }
-
             $objAnswerTmp = new Answer($questionId);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
-
             unset($objAnswerTmp, $objQuestionTmp);
         }
         return $nbrAnswers;
@@ -3996,7 +3999,6 @@ EOT;
         }
 
         $showTotalScoreAndUserChoicesInLastAttempt = true;
-
         if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
             $show_only_score = true;
             $show_results = true;

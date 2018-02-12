@@ -377,7 +377,7 @@ $objExercise->export = $action === 'export';
 
 $countPendingQuestions = 0;
 foreach ($questionList as $questionId) {
-    $choice = $exerciseResult[$questionId];
+    $choice = isset($exerciseResult[$questionId]) ? $exerciseResult[$questionId] : '';
     // destruction of the Question object
     unset($objQuestionTmp);
 

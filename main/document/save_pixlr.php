@@ -16,30 +16,23 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script();
 api_block_anonymous_users();
 
-if ($_user['user_id'] != api_get_user_id() || api_get_user_id() == 0 || $_user['user_id'] == 0) {
-    api_not_allowed();
-    die();
-}
-
 if (!isset($_GET['title']) || !isset($_GET['type']) || !isset($_GET['image'])) {
-    api_not_allowed();
-    die();
+    echo 'No title';
+    exit;
 }
 
 $paintDir = Session::read('paint_dir');
 if (empty($paintDir)) {
-    api_not_allowed();
-    die();
+    echo 'No directory to save';
+    exit;
 }
 
-//pixlr return
-
+// pixlr return
 $filename = Security::remove_XSS($_GET['title']); //The user preferred file name of the image.
 $extension = Security::remove_XSS($_GET['type']); //The image type, "pdx", "jpg", "bmp" or "png".
 $urlcontents = Security::remove_XSS($_GET['image']); //A URL to the image on Pixlr.com server or the raw file post of the saved image.
 
-//make variables
-
+// make variables
 $title = Database::escape_string(str_replace('_', ' ', $filename));
 $current_session_id = api_get_session_id();
 $groupId = api_get_group_id();
@@ -158,8 +151,8 @@ if ($currentTool == 'document/createpaint') {
 
     //check path
     if (empty($paintFile)) {
-        api_not_allowed();
-        die();
+        echo 'No attribute paint_file';
+        exit;
     }
     if ($paintFile == $paintFileName) {
         $document_id = DocumentManager::get_document_id($_course, $relativeUrlPath.'/'.$paintFileName);

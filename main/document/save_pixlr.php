@@ -105,9 +105,10 @@ if (strpos($current_mime, 'image') === false) {
 //path, file and title
 $paintFileName = $filename.'.'.$extension;
 $title = $title.'.'.$extension;
+$temp_file_2delete = Session::read('temp_realpath_image');
 
-if ($currentTool == 'document/createpaint') {
-    //check save as and prevent rewrite an older file with same name
+if (empty($temp_file_2delete)) {
+    // Create file
     if (0 != $groupId) {
         $group_properties = GroupManager :: get_group_properties($groupId);
         $groupPath = $group_properties['directory'];
@@ -142,11 +143,10 @@ if ($currentTool == 'document/createpaint') {
         null,
         $current_session_id
     );
-} elseif ($currentTool == 'document/editpaint') {
+} else {
+    // Update
     $documentPath = $saveDir.'/'.$paintFileName;
-    //add new document to disk
     file_put_contents($documentPath, $contents);
-
     $paintFile = Session::read('paint_file');
 
     //check path
@@ -193,10 +193,10 @@ if ($currentTool == 'document/createpaint') {
     }
 }
 
-
-//delete temporal file
-$temp_file_2delete = Session::read('temp_realpath_image');
-unlink($temp_file_2delete);
+if (!empty($temp_file_2delete)) {
+    // Delete temporal file
+    unlink($temp_file_2delete);
+}
 
 //Clean sessions and return to Chamilo file list
 Session::erase('paint_dir');

@@ -2056,19 +2056,20 @@ $table = new SortableTableFromArrayConfig(
     'ASC',
     true
 );
-$query_vars = [];
+$queryVars = [];
 if (isset($_GET['keyword'])) {
-    $query_vars['keyword'] = Security::remove_XSS($_GET['keyword']);
+    $queryVars['keyword'] = Security::remove_XSS($_GET['keyword']);
 } else {
-    $query_vars['curdirpath'] = $curdirpath;
+    $queryVars['curdirpath'] = $curdirpath;
 }
 
 if ($groupId) {
-    $query_vars['gidReq'] = $groupId;
+    $queryVars['gidReq'] = $groupId;
 }
-$query_vars['cidReq'] = api_get_course_id();
-$table->set_additional_parameters($query_vars);
-
+$queryVars['cidReq'] = api_get_course_id();
+$queryVars['id_session'] = api_get_session_id();
+$queryVars['id'] = $document_id;
+$table->set_additional_parameters($queryVars);
 $column = 0;
 
 if (($isAllowedToEdit || $group_member_with_upload_rights) &&

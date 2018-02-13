@@ -40,10 +40,10 @@ $urlcontents = Security::remove_XSS($_GET['image']); //A URL to the image on Pix
 
 // make variables
 $title = Database::escape_string(str_replace('_', ' ', $filename));
-$current_session_id = api_get_session_id();
+$sessionId = api_get_session_id();
 $groupId = api_get_group_id();
 $groupInfo = GroupManager::get_group_properties($groupId);
-$dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
+$dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
 $saveDir = $dirBaseDocuments.$paintDir;
 $contents = file_get_contents($urlcontents);
 
@@ -133,19 +133,19 @@ if (empty($temp_file_2delete)) {
     //add new document to disk
     file_put_contents($documentPath, $contents);
     //add document to database
-    $documentId = add_document($_course, $paintDir.'/'.$paintFileName, 'file', filesize($documentPath), $title);
+    $documentId = add_document($courseInfo, $paintDir.'/'.$paintFileName, 'file', filesize($documentPath), $title);
     if ($documentId) {
         api_item_property_update(
-            $_course,
+            $courseInfo,
             TOOL_DOCUMENT,
-            $doc_id,
+            $documentId,
             'DocumentAdded',
-            $_user['user_id'],
+            api_get_user_id(),
             $groupInfo,
             null,
             null,
             null,
-            $current_session_id
+            $sessionId
         );
         Display::addFlash(Display::return_message(get_lang('Saved')));
     }
@@ -161,24 +161,24 @@ if (empty($temp_file_2delete)) {
         exit;
     }
     if ($paintFile == $paintFileName) {
-        $document_id = DocumentManager::get_document_id($_course, $paintDir.'/'.$paintFileName);
-        update_existing_document($_course, $document_id, filesize($documentPath), null);
+        $documentId = DocumentManager::get_document_id($courseInfo, $paintDir.'/'.$paintFileName);
+        update_existing_document($courseInfo, $documentId, filesize($documentPath), null);
         api_item_property_update(
-            $_course,
+            $courseInfo,
             TOOL_DOCUMENT,
-            $document_id,
+            $documentId,
             'DocumentUpdated',
             $_user['user_id'],
             $groupInfo,
             null,
             null,
             null,
-            $current_session_id
+            $sessionId
         );
     } else {
         //add a new document
         $documentId = add_document(
-            $_course,
+            $courseInfo,
             $paintDir.'/'.$paintFileName,
             'file',
             filesize($documentPath),
@@ -186,16 +186,16 @@ if (empty($temp_file_2delete)) {
         );
         if ($documentId) {
             api_item_property_update(
-                $_course,
+                $courseInfo,
                 TOOL_DOCUMENT,
-                $doc_id,
+                $documentId,
                 'DocumentAdded',
-                $_user['user_id'],
+                api_get_user_id(),
                 $groupInfo,
                 null,
                 null,
                 null,
-                $current_session_id
+                $sessionId
             );
             Display::addFlash(Display::return_message(get_lang('Updated')));
         }

@@ -5895,7 +5895,7 @@ class DocumentManager
         $form = new FormValidator('move_to', 'post', api_get_self().'?'.api_get_cidreq());
 
         // Form title
-        $form->addElement('hidden', 'move_file', $move_file);
+        $form->addHidden('move_file', $move_file);
 
         $options = [];
 

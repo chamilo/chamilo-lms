@@ -136,8 +136,8 @@ if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login
 }
 
 // parameters passed via GET
-$logout = isset($_GET["logout"]) ? $_GET["logout"] : '';
-$gidReq = isset($_GET["gidReq"]) ? intval($_GET["gidReq"]) : '';
+$logout = isset($_GET['logout']) ? $_GET['logout'] : '';
+$gidReq = isset($_GET['gidReq']) ? (int) $_GET['gidReq'] : '';
 
 // Keep a trace of the course and session from which we are getting out, to
 // enable proper course logout tracking in courseLogout()
@@ -652,7 +652,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             }
         } elseif (!$logout) {
             // Handle cookie from Master Server
-
             $forceSsoRedirect = api_get_setting('sso_force_redirect');
             if ($forceSsoRedirect === 'true') {
                 // all users to be redirected unless they are connected (removed req on sso_cookie)

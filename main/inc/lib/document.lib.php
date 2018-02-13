@@ -2756,10 +2756,10 @@ class DocumentManager
     public static function upload_document(
         $files,
         $path,
-        $title = null,
-        $comment = null,
+        $title = '',
+        $comment = '',
         $unzip = 0,
-        $if_exists = null,
+        $if_exists = '',
         $index_document = false,
         $show_output = false,
         $fileKey = 'file',
@@ -2773,7 +2773,6 @@ class DocumentManager
 
         if (isset($files[$fileKey])) {
             $upload_ok = process_uploaded_file($files[$fileKey], $show_output);
-
             if ($upload_ok) {
                 $new_path = handle_uploaded_document(
                     $course_info,

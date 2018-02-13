@@ -42,6 +42,9 @@ $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 // path for pixlr save
 $paintDir = Security::remove_XSS($dir);
+if (empty($paintDir)) {
+    $paintDir = '/';
+}
 Session::write('paint_dir', $paintDir);
 Session::write('paint_file', get_lang('NewImage'));
 

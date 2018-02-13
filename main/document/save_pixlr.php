@@ -27,16 +27,19 @@ if (empty($paintDir)) {
     exit;
 }
 
-$_course = api_get_course_info();
-if (empty($_course)) {
+$courseInfo = api_get_course_info();
+if (empty($courseInfo)) {
     echo 'Course not set';
     exit;
 }
 
 // pixlr return
-$filename = Security::remove_XSS($_GET['title']); //The user preferred file name of the image.
-$extension = Security::remove_XSS($_GET['type']); //The image type, "pdx", "jpg", "bmp" or "png".
-$urlcontents = Security::remove_XSS($_GET['image']); //A URL to the image on Pixlr.com server or the raw file post of the saved image.
+//The user preferred file name of the image.
+$filename = Security::remove_XSS($_GET['title']);
+//The image type, "pdx", "jpg", "bmp" or "png".
+$extension = Security::remove_XSS($_GET['type']);
+//A URL to the image on Pixlr.com server or the raw file post of the saved image.
+$urlcontents = Security::remove_XSS($_GET['image']);
 
 // make variables
 $title = Database::escape_string(str_replace('_', ' ', $filename));
@@ -47,7 +50,8 @@ $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document
 $saveDir = $dirBaseDocuments.$paintDir;
 $contents = file_get_contents($urlcontents);
 
-//Security. Verify that the URL is pointing to a file @ pixlr.com domain or an ip @ pixlr.com. Comment because sometimes return a ip number
+//Security. Verify that the URL is pointing to a file @ pixlr.com domain or an ip @ pixlr.com.
+// Comment because sometimes return a ip number
 /*
 if (strpos($urlcontents, "pixlr.com") === 0){
     echo "Invalid referrer";
@@ -70,7 +74,8 @@ $filename = api_replace_dangerous_char($filename);
 $filename = disable_dangerous_file($filename);
 
 if (strlen(trim($filename)) == 0) {
-    echo "The title is empty"; //if title is empty, headers Content-Type = application/octet-stream, then not create a new title here please
+    echo "The title is empty"; //if title is empty, headers Content-Type = application/octet-stream,
+    // then not create a new title here please
     exit;
 }
 
@@ -85,7 +90,8 @@ if ($extension != 'jpg' && $extension != 'png' && $extension != 'pxd') {
     die();
 }
 if ($extension == 'pxd') {
-    echo "pxd file type does not supported"; // not secure because check security headers and finfo() return  Content-Type = application/octet-stream
+    echo "pxd file type does not supported";
+    // not secure because check security headers and finfo() return  Content-Type = application/octet-stream
     exit;
 }
 

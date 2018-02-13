@@ -37,7 +37,6 @@ if (empty($document_data)) {
 
 $document_id = $document_data['id'];
 $dir = $document_data['path'];
-// $dir = isset($_GET['dir']) ? Security::remove_XSS($_GET['dir']) : Security::remove_XSS($_POST['dir']);
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 // path for pixlr save
@@ -45,6 +44,7 @@ $paintDir = Security::remove_XSS($dir);
 if (empty($paintDir)) {
     $paintDir = '/';
 }
+
 Session::write('paint_dir', $paintDir);
 Session::write('paint_file', get_lang('NewImage'));
 

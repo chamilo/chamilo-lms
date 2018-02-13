@@ -27,6 +27,12 @@ if (empty($paintDir)) {
     exit;
 }
 
+$_course = api_get_course_info();
+if (empty($_course)) {
+    echo 'Course not set';
+    exit;
+}
+
 // pixlr return
 $filename = Security::remove_XSS($_GET['title']); //The user preferred file name of the image.
 $extension = Security::remove_XSS($_GET['type']); //The image type, "pdx", "jpg", "bmp" or "png".
@@ -37,7 +43,6 @@ $title = Database::escape_string(str_replace('_', ' ', $filename));
 $current_session_id = api_get_session_id();
 $groupId = api_get_group_id();
 $groupInfo = GroupManager::get_group_properties($groupId);
-$relativeUrlPath = Session::read('paint_dir');
 $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $saveDir = $dirBaseDocuments.$paintDir;
 $contents = file_get_contents($urlcontents);
@@ -101,7 +106,6 @@ if (strpos($current_mime, 'image') === false) {
     exit;
 }
 
-
 //path, file and title
 $paintFileName = $filename.'.'.$extension;
 $title = $title.'.'.$extension;
@@ -125,24 +129,26 @@ if (empty($temp_file_2delete)) {
         $title = $filename.'_'.$i.'.'.$extension;
     }
 
-    //
     $documentPath = $saveDir.'/'.$paintFileName;
     //add new document to disk
     file_put_contents($documentPath, $contents);
     //add document to database
-    $doc_id = add_document($_course, $relativeUrlPath.'/'.$paintFileName, 'file', filesize($documentPath), $title);
-    api_item_property_update(
-        $_course,
-        TOOL_DOCUMENT,
-        $doc_id,
-        'DocumentAdded',
-        $_user['user_id'],
-        $groupInfo,
-        null,
-        null,
-        null,
-        $current_session_id
-    );
+    $documentId = add_document($_course, $paintDir.'/'.$paintFileName, 'file', filesize($documentPath), $title);
+    if ($documentId) {
+        api_item_property_update(
+            $_course,
+            TOOL_DOCUMENT,
+            $doc_id,
+            'DocumentAdded',
+            $_user['user_id'],
+            $groupInfo,
+            null,
+            null,
+            null,
+            $current_session_id
+        );
+        Display::addFlash(Display::return_message(get_lang('Saved')));
+    }
 } else {
     // Update
     $documentPath = $saveDir.'/'.$paintFileName;
@@ -155,7 +161,7 @@ if (empty($temp_file_2delete)) {
         exit;
     }
     if ($paintFile == $paintFileName) {
-        $document_id = DocumentManager::get_document_id($_course, $relativeUrlPath.'/'.$paintFileName);
+        $document_id = DocumentManager::get_document_id($_course, $paintDir.'/'.$paintFileName);
         update_existing_document($_course, $document_id, filesize($documentPath), null);
         api_item_property_update(
             $_course,
@@ -171,25 +177,28 @@ if (empty($temp_file_2delete)) {
         );
     } else {
         //add a new document
-        $doc_id = add_document(
+        $documentId = add_document(
             $_course,
-            $relativeUrlPath.'/'.$paintFileName,
+            $paintDir.'/'.$paintFileName,
             'file',
             filesize($documentPath),
             $title
         );
-        api_item_property_update(
-            $_course,
-            TOOL_DOCUMENT,
-            $doc_id,
-            'DocumentAdded',
-            $_user['user_id'],
-            $groupInfo,
-            null,
-            null,
-            null,
-            $current_session_id
-        );
+        if ($documentId) {
+            api_item_property_update(
+                $_course,
+                TOOL_DOCUMENT,
+                $doc_id,
+                'DocumentAdded',
+                $_user['user_id'],
+                $groupInfo,
+                null,
+                null,
+                null,
+                $current_session_id
+            );
+            Display::addFlash(Display::return_message(get_lang('Updated')));
+        }
     }
 }
 

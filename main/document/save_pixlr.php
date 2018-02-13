@@ -136,10 +136,10 @@ if (empty($temp_file_2delete)) {
     }
 
     $documentPath = $saveDir.'/'.$paintFileName;
-    //add new document to disk
+    // Add new document to disk
     file_put_contents($documentPath, $contents);
-    //add document to database
-    $documentId = add_document($courseInfo, $paintDir.'/'.$paintFileName, 'file', filesize($documentPath), $title);
+    // Add document to database
+    $documentId = add_document($courseInfo, $paintDir.$paintFileName, 'file', filesize($documentPath), $title);
     if ($documentId) {
         api_item_property_update(
             $courseInfo,
@@ -167,7 +167,7 @@ if (empty($temp_file_2delete)) {
         exit;
     }
     if ($paintFile == $paintFileName) {
-        $documentId = DocumentManager::get_document_id($courseInfo, $paintDir.'/'.$paintFileName);
+        $documentId = DocumentManager::get_document_id($courseInfo, $paintDir.$paintFileName);
         update_existing_document($courseInfo, $documentId, filesize($documentPath), null);
         api_item_property_update(
             $courseInfo,
@@ -185,7 +185,7 @@ if (empty($temp_file_2delete)) {
         //add a new document
         $documentId = add_document(
             $courseInfo,
-            $paintDir.'/'.$paintFileName,
+            $paintDir.$paintFileName,
             'file',
             filesize($documentPath),
             $title

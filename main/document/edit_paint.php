@@ -39,14 +39,14 @@ if (empty($document_data)) {
 
 //and urlencode each url $curdirpath (hack clean $curdirpath under Windows - Bug #3261)
 $dir = str_replace('\\', '/', $dir);
+if (empty($dir)) {
+    $dir = '/';
+}
 
 /* Constants & Variables */
 $current_session_id = api_get_session_id();
 //path for pixlr save
 Session::write('paint_dir', Security::remove_XSS($dir));
-if ($dir == '/') {
-    Session::write('paint_dir', '');
-}
 Session::write('paint_file', basename(Security::remove_XSS($file_path)));
 $get_file = Security::remove_XSS($file_path);
 $file = basename($get_file);

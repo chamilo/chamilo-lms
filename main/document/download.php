@@ -82,7 +82,7 @@ if (isset($path_info['extension']) && $path_info['extension'] == 'swf') {
 }
 
 if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/')) {
-    $full_file_name = $sys_course_path.$doc_url;
+    $fullFileName = $sys_course_path.$doc_url;
     if ($fix_file_name) {
         $doc_url = $fixed_url;
     }
@@ -102,8 +102,8 @@ if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/')) {
     }
     // Launch event
     Event::event_download($doc_url);
-    $download = (!empty($_GET['dl']) ? true : false);
-    $result = DocumentManager::file_send_for_download($full_file_name, $download);
+    $download = !empty($_GET['dl']) ? true : false;
+    $result = DocumentManager::file_send_for_download($fullFileName, $download);
     if ($result === false) {
         api_not_allowed(true);
     }

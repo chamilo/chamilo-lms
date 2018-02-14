@@ -210,13 +210,12 @@ if (api_is_platform_admin()) {
         $blocks['platform']['extraContent'] = file_get_contents($platformBlockExtraFile);
     }
 
-    $search_form = ' <form method="get" action="settings.php" class="form-inline">
+    $search_form = ' <form method="get" action="'.api_get_path(WEB_PUBLIC_PATH).'admin/settings/search_settings'.'" class="form-inline">
             <div class="form-group">
                 <input class="form-control"
                 type="text"
-                name="search_field" value=""
+                name="keyword" value=""
                 aria-label="'.get_lang('Search').'" >
-                <input type="hidden" value="search_setting" name="category">
                 <button class="btn btn-default" type="submit">
                     <em class="fa fa-search"></em> ' . get_lang('Search').'
                 </button>

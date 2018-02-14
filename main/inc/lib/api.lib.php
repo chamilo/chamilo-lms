@@ -752,7 +752,13 @@ function api_get_path($path = '', $configuration = [])
     }
 
     if (isset(Container::$container)) {
-        $root_web = urldecode(Container::$container->get('router')->generate('legacy_index'));
+        $root_web = Container::$container->get('router')->generate(
+            'legacy_index',
+            [],
+            \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL
+        );
+        $root_web = urldecode($root_web);
+        $root_web = str_replace('/../', '', $root_web);
     }
 
     if (isset($configuration['multiple_access_urls']) &&

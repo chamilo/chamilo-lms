@@ -85,7 +85,6 @@ class SettingsController extends SyliusSettingsController
                         $settings->remove($name);
                     }
                 }
-
                 $form->setData($settings);
                 $formList[$category] = $form->createView();
             }
@@ -96,6 +95,7 @@ class SettingsController extends SyliusSettingsController
         return $this->render(
             '@ChamiloCore/Admin/Settings/search.html.twig',
             [
+                'keyword' => $keyword,
                 'schemas' => $schemas,
                 'settings' => $settings,
                 'form_list' => $formList,
@@ -208,12 +208,16 @@ class SettingsController extends SyliusSettingsController
         $manager->installSchemas($url);
     }
 
+    /**
+     * @return \Symfony\Component\Form\FormInterface
+     */
     private function getSearchForm()
     {
         $builder = $this->container->get('form.factory')->createNamedBuilder('search');
         $builder->add('keyword', 'text');
         $builder->add('search', 'submit');
         $searchForm = $builder->getForm();
+
         return $searchForm;
     }
 

@@ -29,7 +29,6 @@ class SearchSettingsSchema extends AbstractSettingsSchema
                 ]
             );
         $allowedTypes = [
-            //'allow_personal_agenda' => array('string'),
             'number_of_upcoming_events' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);

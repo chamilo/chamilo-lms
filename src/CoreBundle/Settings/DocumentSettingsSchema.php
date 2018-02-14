@@ -81,6 +81,7 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
     public function buildForm(FormBuilderInterface $builder)
     {
         $builder
+            ->add('allow_personal_user_files', YesNoType::class)
             ->add('default_document_quotum')
             ->add('default_group_quotum')
             ->add('permanently_remove_deleted_files', YesNoType::class)

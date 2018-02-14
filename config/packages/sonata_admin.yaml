@@ -6,7 +6,7 @@ sonata_admin:
     security:
         handler: sonata.admin.security.handler.role
     title: Chamilo #%sonata_admin.title%
-    title_logo: css/themes/chamilo/images/header-logo.png #%sonata_admin.logo_title%
+    title_logo: build/css/themes/chamilo/images/header-logo.png #%sonata_admin.logo_title%
     options:
         html5_validate: false # does not use html5 validation
         pager_links: 5 # pager max links to display

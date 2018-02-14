@@ -101,16 +101,6 @@ class SkillRelUser
     protected $comments;
 
     /**
-     * Whether this has been confirmed by a teacher or not
-     * Only set to 0 when the skill_rel_item says requires_validation = 1
-     * @var integer
-     *
-     * // uncomment if api_get_configuration_value('allow_skill_rel_items')
-     * ORM\Column(name="validation_status", type="integer")
-     */
-    protected $validationStatus;
-
-    /**
      * SkillRelUser constructor.
      */
     public function __construct()
@@ -419,23 +409,5 @@ class SkillRelUser
         $average = $countValues > 0 ? $sum / $countValues : 0;
 
         return number_format($average, 2);
-    }
-
-    /**
-     * @return int
-     */
-    public function getValidationStatus()
-    {
-        return $this->validationStatus;
-    }
-
-    /**
-     * @param int $validationStatus
-     * @return SkillRelUser
-     */
-    public function setValidationStatus($validationStatus)
-    {
-        $this->validationStatus = $validationStatus;
-        return $this;
     }
 }

@@ -734,7 +734,7 @@ $_configuration['gradebook_badge_sidebar'] = [
 
 // Allow connect skills with course tools
 // Uncomment doctrine tags for Entities:
-//SkillRelItemRelUser|SkillRelItem|SkillRelUser.validation_status|Skill.items
+//SkillRelItemRelUser|SkillRelItem|Skill.items
 // DB changes:
 /*
 CREATE TABLE skill_rel_item_rel_user (id INT AUTO_INCREMENT NOT NULL, skill_rel_item_id INT NOT NULL, user_id INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, created_by INT NOT NULL, updated_by INT NOT NULL, INDEX IDX_D1133E0DFD4B12DC (skill_rel_item_id), INDEX IDX_D1133E0DA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
@@ -742,7 +742,6 @@ CREATE TABLE skill_rel_item (id INT AUTO_INCREMENT NOT NULL, skill_id INT DEFAUL
 ALTER TABLE skill_rel_item_rel_user ADD CONSTRAINT FK_D1133E0DFD4B12DC FOREIGN KEY (skill_rel_item_id) REFERENCES skill_rel_item (id);
 ALTER TABLE skill_rel_item_rel_user ADD CONSTRAINT FK_D1133E0DA76ED395 FOREIGN KEY (user_id) REFERENCES user (id);
 ALTER TABLE skill_rel_item ADD CONSTRAINT FK_EB5B2A0D5585C142 FOREIGN KEY (skill_id) REFERENCES skill (id);
-ALTER TABLE skill_rel_user ADD validation_status INT NOT NULL, CHANGE acquired_skill_at acquired_skill_at DATETIME NOT NULL, CHANGE argumentation argumentation LONGTEXT NOT NULL, CHANGE argumentation_author_id argumentation_author_id INT NOT NULL;
 */
 //$_configuration['allow_skill_rel_items'] = false;
 

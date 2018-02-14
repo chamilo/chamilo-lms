@@ -3027,11 +3027,11 @@ class SurveyUtil
             WHERE survey.c_id = $course_id
             $search_restriction
             $condition_session 
-            GROUP BY survey.survey_id
+            GROUP BY 
+                survey.survey_id, survey_question.question_id
             ORDER BY col$column $direction 
             LIMIT $from,$number_of_items
         ";
-
         $res = Database::query($sql);
         $surveys = [];
         $array = [];

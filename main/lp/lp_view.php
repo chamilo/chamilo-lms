@@ -140,8 +140,8 @@ if ($lp->mode == 'impress') {
 }
 
 // Prepare variables for the test tool (just in case) - honestly, this should disappear later on.
-$_SESSION['scorm_view_id'] = $lp->get_view_id();
-$_SESSION['scorm_item_id'] = $lp_item_id;
+Session::write('scorm_view_id', $lp->get_view_id());
+Session::write('scorm_item_id', $lp_item_id);
 
 // Reinit exercises variables to avoid spacename clashes (see exercise tool)
 if (isset($exerciseResult) || isset($_SESSION['exerciseResult'])) {
@@ -328,7 +328,6 @@ if (!empty($_REQUEST['exeId']) &&
                         score = $score,
                         total_time = $mytime
                     WHERE iid = $lp_item_view_id";
-
             if ($debug) {
                 error_log($sql);
             }
@@ -361,18 +360,13 @@ $scorm_css_header = true;
 $lp_theme_css = $lp->get_theme();
 // Sets the css theme of the LP this call is also use at the frames (toc, nav, message).
 if ($lp->mode == 'fullscreen') {
-    $htmlHeadXtra[] = "<script>window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');</script>";
-}
-
-// Not in fullscreen mode.
-// Check if audio recorder needs to be in studentview.
-$audio_recorder_studentview = false;
-if (isset($_SESSION['status']) && $_SESSION['status'][$course_code] == 5) {
-    $audio_recorder_studentview = true;
+    $htmlHeadXtra[] = "<script>
+        window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
+    </script>";
 }
 
 // Set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php).
-$_SESSION['loaded_lp_view'] = true;
+Session::write('loaded_lp_view', true);
 $display_none = '';
 $margin_left = '340px';
 

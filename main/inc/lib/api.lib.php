@@ -505,6 +505,11 @@ define('ITEM_TYPE_HOTPOTATOES', 2);
 define('ITEM_TYPE_LINK', 3);
 define('ITEM_TYPE_LEARNPATH', 4);
 define('ITEM_TYPE_GRADEBOOK', 5);
+define('ITEM_TYPE_STUDENT_PUBLICATION', 6);
+//define('ITEM_TYPE_FORUM', 7);
+define('ITEM_TYPE_ATTENDANCE', 8);
+define('ITEM_TYPE_SURVEY', 9);
+define('ITEM_TYPE_FORUM_THREAD', 10);
 
 // one big string with all question types, for the validator in pear/HTML/QuickForm/Rule/QuestionType
 define(

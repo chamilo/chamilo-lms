@@ -130,6 +130,7 @@ if (api_is_invitee()) {
 // Deleting group session
 Session::erase('toolgroup');
 Session::erase('_gid');
+//$check = \Chamilo\CoreBundle\Framework\Container::$container->get('security.authorization_checker');
 
 $isSpecialCourse = CourseManager::isSpecialCourse($courseId);
 

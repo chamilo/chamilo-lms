@@ -526,7 +526,7 @@ class Plugin
         if (empty($courseId)) {
             return false;
         }
-        $plugin_name = $this->get_name();
+        $pluginName = $this->get_name();
 
         $t_course = Database::get_course_table(TABLE_COURSE_SETTING);
         $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
@@ -546,9 +546,14 @@ class Plugin
             }
         }
 
-        $plugin_name = Database::escape_string($plugin_name);
+        $pluginName = Database::escape_string($pluginName);
         $sql = "DELETE FROM $t_tool
-                WHERE c_id = $courseId AND name = '$plugin_name'";
+                WHERE c_id = $courseId AND 
+                (
+                  name = '$pluginName' OR
+                  name = '$pluginName:student' OR
+                  name = '$pluginName:teacher'  
+                )";
         Database::query($sql);
     }
 
@@ -570,6 +575,8 @@ class Plugin
             return null;
         }
 
+        $visibility = $this->getToolIconVisibility();
+
         $em = Database::getManager();
 
         /** @var CTool $tool */
@@ -588,7 +595,7 @@ class Plugin
             $tool
                 ->setId($cToolId)
                 ->setCId($courseId)
-                ->setName($name)
+                ->setName($name.$visibility)
                 ->setLink($link ?: "$pluginName/start.php")
                 ->setImage($iconName ?: "$pluginName.png")
                 ->setVisibility(true)
@@ -893,6 +900,19 @@ class Plugin
     public function performActionsAfterConfigure()
     {
         return $this;
+    }
+
+    /**
+     * This function allows to change the visibility of the icon inside a course
+     * :student tool will be visible only for students
+     * :teacher tool will be visible only for teachers
+     * If nothing it's set then tool will be visible for both as a normal icon.
+     *
+     * @return string
+     */
+    public function getToolIconVisibility()
+    {
+        return '';
     }
 
     /**

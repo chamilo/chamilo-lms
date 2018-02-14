@@ -82,7 +82,7 @@ class Export
         $writer = new ExcelWriter($file);
         $writer->prepare();
 
-        foreach ($data as $index => $row) {
+        foreach ($data as $row) {
             $writer->writeItem($row);
         }
 

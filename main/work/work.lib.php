@@ -885,6 +885,8 @@ function deleteDirWork($id)
                     WHERE c_id = $course_id AND publication_id = $id";
             Database::query($sql);
 
+            Skill::deleteSkillsFromItem($id, ITEM_TYPE_STUDENT_PUBLICATION);
+
             Event::addEvent(
                 LOG_WORK_DIR_DELETE,
                 LOG_WORK_DATA,
@@ -3590,6 +3592,7 @@ function getWorkCommentForm($work, $workParent)
         }
     }
 
+    Skill::addSkillsToUserForm($form, ITEM_TYPE_STUDENT_PUBLICATION, $workParent['id'], $work['user_id']);
     $form->addHtmlEditor('comment', get_lang('Comment'), false);
     $form->addFile('attachment', get_lang('Attachment'));
     $form->addElement('hidden', 'id', $work['id']);
@@ -4795,7 +4798,11 @@ function getFormWork($form, $defaults = [], $workId = 0)
         </script>';
 
     $form->addHtml('</div>');
+
+    $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_STUDENT_PUBLICATION, $workId);
+
     if (!empty($defaults)) {
+        $defaults['skills'] = array_keys($skillList);
         $form->setDefaults($defaults);
     }
 

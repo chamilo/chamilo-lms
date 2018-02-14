@@ -385,6 +385,7 @@ foreach ($categories as $item) {
             $copy = null;
             $lp_auto_launch_icon = null;
             $actionSeriousGame = null;
+            $actionUpdateScormFile = '';
 
             if ($is_allowed_to_edit) {
                 // EDIT LP
@@ -618,7 +619,7 @@ foreach ($categories as $item) {
                 }
 
                 /*  DEBUG  */
-                if ($test_mode == 'test' or api_is_platform_admin()) {
+                if ($test_mode == 'test' || api_is_platform_admin()) {
                     if ($details['lp_scorm_debug'] == 1) {
                         $dsp_debug = Display::url(
                             Display::return_icon(
@@ -769,6 +770,14 @@ foreach ($categories as $item) {
                     }
                 }
 
+                if ($details['lp_type'] == 2) {
+                    $url = api_get_path(WEB_CODE_PATH)."lp/lp_update_scorm.php?".api_get_cidreq()."&lp_id=$id";
+                    $actionUpdateScormFile = Display::url(
+                        Display::return_icon('upload_file.png', get_lang('Update')),
+                        $url
+                    );
+                }
+
                 if ($is_allowed_to_edit) {
                     $start_time = $start_time;
                     $end_time = $end_time;
@@ -852,6 +861,7 @@ foreach ($categories as $item) {
                 'action_order' => $dsp_order,
                 'action_serious_game' => $actionSeriousGame,
                 'action_subscribe_users' => $subscribeUsers,
+                'action_update_scorm' => $actionUpdateScormFile
             ];
 
             $lpIsShown = true;

@@ -3142,24 +3142,6 @@ class CourseManager
     }
 
     /**
-     * Returns the details of a course category
-     *
-     * @param string Category code
-     * @return array Course category list
-     */
-    public static function getCategoriesList()
-    {
-        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT * FROM $table";
-        $result = Database::query($sql);
-        $categoryList = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $categoryList[$row['code']] = $row['name'];
-        }
-        return $categoryList;
-    }
-
-    /**
      * Subscribes courses to human resource manager (Dashboard feature)
      * @param    int   $hr_manager_id      Human Resource Manager id
      * @param    array $courses_list       Courses code

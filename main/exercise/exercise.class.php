@@ -1850,8 +1850,8 @@ class Exercise
      */
     public function delete()
     {
-        $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "UPDATE $TBL_EXERCISES SET active='-1'
+        $table = Database::get_course_table(TABLE_QUIZ_TEST);
+        $sql = "UPDATE $table SET active='-1'
                 WHERE c_id = ".$this->course_id." AND id = ".intval($this->id);
         Database::query($sql);
 
@@ -1869,6 +1869,8 @@ class Exercise
             'delete',
             api_get_user_id()
         );
+
+        Skill::deleteSkillsFromItem($this->iId, ITEM_TYPE_EXERCISE);
 
         if (api_get_setting('search_enabled') == 'true' &&
             extension_loaded('xapian')
@@ -1936,7 +1938,6 @@ class Exercise
         );
 
         $skillList = [];
-
         if ($type == 'full') {
             //Can't modify a DirectFeedback question
             if ($this->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_DIRECT) {
@@ -2499,7 +2500,7 @@ class Exercise
                 }
             }
 
-            //$skillList = Skill::addSkillsToForm($form, ITEM_TYPE_EXERCISE, $this->iId);
+            $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_EXERCISE, $this->iId);
 
             $form->addElement('html', '</div>'); //End advanced setting
             $form->addElement('html', '</div>');
@@ -2565,7 +2566,7 @@ class Exercise
                 } else {
                     $defaults['enabletimercontroltotalminutes'] = 0;
                 }
-                // $defaults['skills'] = array_keys($skillList);
+                $defaults['skills'] = array_keys($skillList);
                 $defaults['notifications'] = $this->getNotifications();
             } else {
                 $defaults['exerciseType'] = 2;
@@ -2709,12 +2710,10 @@ class Exercise
             }
         }
 
-        $this->save($type);
-
-        //$iId = $this->save($type);
-        /*if (!empty($iId)) {
+        $iId = $this->save($type);
+        if (!empty($iId)) {
             Skill::saveSkills($form, ITEM_TYPE_EXERCISE, $iId);
-        }*/
+        }
     }
 
     public function search_engine_save()
@@ -2993,16 +2992,19 @@ class Exercise
         $question_list = $exercise_obj->selectQuestionList();
 
         if (!empty($question_list)) {
-            //Question creation
-
+            // Question creation
             foreach ($question_list as $old_question_id) {
                 $old_question_obj = Question::read($old_question_id);
                 $new_id = $old_question_obj->duplicate();
                 if ($new_id) {
                     $new_question_obj = Question::read($new_id);
-
                     if (isset($new_question_obj) && $new_question_obj) {
                         $new_question_obj->addToList($new_exercise_id);
+
+                        if (!empty($old_question_obj->category)) {
+                            $new_question_obj->saveCategory($old_question_obj->category);
+                        }
+
                         // This should be moved to the duplicate function
                         $new_answer_obj = new Answer($old_question_id);
                         $new_answer_obj->read();
@@ -3377,7 +3379,8 @@ class Exercise
 
 			$(document).ready(function() {
 				var current_time = new Date().getTime();
-                var time_left    = parseInt(".$time_left."); // time in seconds when using minutes there are some seconds lost
+				// time in seconds when using minutes there are some seconds lost
+                var time_left    = parseInt(".$time_left."); 
 				var expired_time = current_time + (time_left*1000);
 				var expired_date = get_expired_date_string(expired_time);
 
@@ -5467,13 +5470,14 @@ class Exercise
             } elseif ($answerType == ANNOTATION) {
                 if ($show_result) {
                     echo '
-                        <p><em>' . get_lang('Annotation').'</em></p>
+                        <p><em>'.get_lang('Annotation').'</em></p>
                         <div id="annotation-canvas-'.$questionId.'"></div>
                         <script>
                             AnnotationQuestion({
                                 questionId: parseInt('.$questionId.'),
                                 exerciseId: parseInt('.$exeId.'),
-                                relPath: \''.$relPath.'\'
+                                relPath: \''.$relPath.'\',
+                                courseId: parseInt('.$course_id.')
                             });
                         </script>
                     ';
@@ -6074,7 +6078,6 @@ class Exercise
         );
 
         $html = '<div class="question-result">';
-
         if (api_get_configuration_value('save_titles_as_html')) {
             $html .= $this->get_formated_title();
             $html .= Display::page_header(get_lang('Result'));

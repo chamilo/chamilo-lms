@@ -179,7 +179,7 @@ $form->addElement('text', 'thread_title', get_lang('Title'));
 $form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
 $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
-if ((api_is_course_admin() || api_is_session_general_coach() || api_is_course_tutor()) && ($threadId)) {
+if ((api_is_course_admin() || api_is_session_general_coach() || api_is_course_tutor()) && $threadId) {
     // Thread qualify
     if (Gradebook::is_active()) {
         //Loading gradebook select
@@ -224,6 +224,8 @@ if ($forumSettings['allow_sticky'] && api_is_allowed_to_edit(null, true)) {
 
 $form->addElement('html', '</div>');
 
+$skillList = Skill::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, $threadId);
+
 if (!empty($threadData)) {
     $defaults['thread_qualify_gradebook'] = ($threadData['threadQualifyMax'] > 0 && empty($_POST)) ? 1 : 0;
     $defaults['thread_title'] = prepare4display($threadData['threadTitle']);
@@ -240,16 +242,20 @@ if (!empty($threadData)) {
     $defaults['thread_peer_qualify'] = 0;
 }
 
+$defaults['skills'] = array_keys($skillList);
+
 $form->addButtonUpdate(get_lang('ModifyThread'), 'SubmitPost');
 
 if ($form->validate()) {
     $redirectUrl = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq();
-
     $check = Security::check_token('post');
     if ($check) {
         $values = $form->exportValues();
         Security::clear_token();
         updateThread($values);
+
+        Skill::saveSkills($form, ITEM_TYPE_FORUM_THREAD, $threadId);
+
         header('Location: '.$redirectUrl);
         exit;
     }

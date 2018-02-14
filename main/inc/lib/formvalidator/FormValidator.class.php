@@ -301,6 +301,7 @@ EOT;
      * @param string $size large|default|small|extra-small
      * @param string $class Example plus is transformed to icon fa fa-plus
      * @param array  $attributes
+     * @param bool $createElement
      *
      * @return HTML_QuickForm_button
      */
@@ -942,9 +943,8 @@ EOT;
 
         if ($geolocalization) {
             $gmapsApiKey = $gMapsPlugin->get('api_key');
-            $this->addHtml(
-                '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key='.$gmapsApiKey.'" ></script>'
-            );
+            $url = '//maps.googleapis.com/maps/api/js?key='.$gmapsApiKey;
+            $this->addHtml('<script type="text/javascript" src="'.$url.'" ></script>');
         }
         $this->addElement(
             'text',
@@ -958,10 +958,10 @@ EOT;
             <div class="form-group">
                 <label for="geolocalization_'.$name.'" class="col-sm-2 control-label"></label>
                 <div class="col-sm-8">
-                    <button class="null btn btn-default " id="geolocalization_'.$name.'" name="geolocalization_'.$name.'" type="submit">
+                    <button class="null btn btn-default" id="geolocalization_'.$name.'" name="geolocalization_'.$name.'" type="submit">
                         <em class="fa fa-map-marker"></em> '.get_lang('Geolocalization').'
                     </button>
-                    <button class="null btn btn-default " id="myLocation_'.$name.'" name="myLocation_'.$name.'" type="submit">
+                    <button class="null btn btn-default" id="myLocation_'.$name.'" name="myLocation_'.$name.'" type="submit">
                     <em class="fa fa-crosshairs"></em> 
                     '.get_lang('MyLocation').'
                     </button>
@@ -982,7 +982,7 @@ EOT;
         ');
 
         $this->addHtml('<script>
-            $(document).ready(function() {
+            $(function() {
                 if (typeof google === "object") {
                     var address = $("#' . $name.'").val();
                     initializeGeo'.$name.'(address, false);
@@ -1044,9 +1044,7 @@ EOT;
                 };
 
                 map_'.$name.' = new google.maps.Map(document.getElementById("map_'.$name.'"), myOptions);
-
                 var parameter = address ? { "address": address } : latLng ? { "latLng": latLng } : false;
-
                 if (geocoder && parameter) {
                     geocoder.geocode(parameter, function(results, status) {
                         if (status == google.maps.GeocoderStatus.OK) {
@@ -1072,7 +1070,7 @@ EOT;
                                 alert("' . get_lang("NotFound").'");
                             }
                         } else {
-                            alert("Geocode ' . get_lang('Error').': '.get_lang("AddressField").' '.get_lang("NotFound").'");
+                            alert("Geocode '.get_lang('Error').': '.get_lang("AddressField").' '.get_lang("NotFound").'");
                         }
                     });
                 }
@@ -1626,7 +1624,6 @@ EOT;
                 .on('click', function () {
                     var \$this = $(this),
                     data = \$this.data();
-
                     \$this
                         .off('click')
                         .text('".addslashes(get_lang('Cancel'))."')
@@ -1688,11 +1685,15 @@ EOT;
                             .prop('href', file.url);
                         $(data.context.children()[index]).parent().wrap(link);
                         // Update file name with new one from Chamilo
-                        $(data.context.children()[index]).parent().find('.file_name').html(file.name);                        
-                        var successMessage = $('<div class=\"col-sm-3\">').html($('<span class=\"message-image-success\"/>').text('".addslashes(get_lang('UplUploadSucceeded'))."'));
+                        $(data.context.children()[index]).parent().find('.file_name').html(file.name);
+                        var successMessage = $('<div class=\"col-sm-3\">').html(
+                            $('<span class=\"message-image-success\"/>').text('".addslashes(get_lang('UplUploadSucceeded'))."')
+                        );
                         $(data.context.children()[index]).parent().append(successMessage);                    
                     } else if (file.error) {
-                        var error = $('<div class=\"col-sm-3\">').html($('<span class=\"message-image-danger\"/>').text(file.error));
+                        var error = $('<div class=\"col-sm-3\">').html(
+                            $('<span class=\"message-image-danger\"/>').text(file.error)
+                        );
                         $(data.context.children()[index]).parent().append(error);                        
                     }
                 });                
@@ -1701,11 +1702,13 @@ EOT;
             }).on('fileuploadfail', function (e, data) {
                 $.each(data.files, function (index) {
                     var failedMessage = '" . addslashes(get_lang('UplUploadFailed'))."';
-                    var error = $('<div class=\"col-sm-3\">').html($('<span class=\"alert alert-danger\"/>').text(failedMessage));
+                    var error = $('<div class=\"col-sm-3\">').html(
+                        $('<span class=\"alert alert-danger\"/>').text(failedMessage)
+                    );
                     $(data.context.children()[index]).parent().append(error);
                 });
                 $('#dropzone').removeClass('hover');
-            }).prop('disabled', !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : 'disabled');            
+            }).prop('disabled', !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : 'disabled');           
             
             $('#dropzone').on('dragover', function (e) {
                 // dragleave callback implementation                

@@ -47,8 +47,8 @@ if (empty($lp)) {
 }
 
 $mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : 'fullpage';
-if (isset($_SESSION['oLP']) && isset($_GET['id'])) {
-    $_SESSION['oLP']->current = intval($_GET['id']);
+if (isset($lp) && isset($_GET['id'])) {
+    $lp->current = intval($_GET['id']);
 }
 $this_section = SECTION_COURSES;
 /* Header and action code */
@@ -114,6 +114,7 @@ function confirmation(name) {
 </script>
 <?php
 
+Session::write('oLP', $lp);
 $id = isset($new_item_id) ? $new_item_id : $_GET['id'];
 if (is_object($lp)) {
     switch ($mode) {

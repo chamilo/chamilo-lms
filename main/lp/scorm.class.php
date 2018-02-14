@@ -85,8 +85,10 @@ class scorm extends learnpath
             if ($this->debug > 0) {
                 error_log('In scorm::parse_manifest() - Parsing using PHP5 method');
             }
-            //$this->manifest_encoding = api_detect_encoding_xml($xml); // This is the usual way for reading the encoding.
-            // This method reads the encoding, it tries to be correct even in cases of wrong or missing encoding declarations.
+            // $this->manifest_encoding = api_detect_encoding_xml($xml);
+            // This is the usual way for reading the encoding.
+            // This method reads the encoding, it tries to be correct even in cases
+            // of wrong or missing encoding declarations.
             $this->manifest_encoding = self::detect_manifest_encoding($xml);
 
             // UTF-8 is supported by DOMDocument class, this is for sure.
@@ -217,8 +219,8 @@ class scorm extends learnpath
                     }
                 }
             }
-            // End parsing using PHP5 DOMXML methods.
             unset($doc);
+        // End parsing using PHP5 DOMXML methods.
         } else {
             if ($this->debug > 1) {
                 error_log('New LP - Could not open/read file '.$file);
@@ -226,6 +228,85 @@ class scorm extends learnpath
             $this->set_error_msg("File $file could not be read");
             return null;
         }
+
+        $fixTemplate = api_get_configuration_value('learnpath_fix_xerte_template');
+        $proxyPath = api_get_configuration_value('learnpath_proxy_url');
+        if ($fixTemplate && !empty($proxyPath)) {
+            // Check organisations:
+            if (isset($this->manifest['organizations'])) {
+                foreach ($this->manifest['organizations'] as $data) {
+                    if (strpos(strtolower($data), 'xerte') !== false) {
+                        // Check if template.xml exists:
+                        $templatePath = str_replace('imsmanifest.xml', 'template.xml', $file);
+                        if (file_exists($templatePath) && is_file($templatePath)) {
+                            $templateContent = file_get_contents($templatePath);
+                            $find = [
+                                'href="www.',
+                                'href="https://',
+                                'href="http://',
+                                'url="www.',
+                                'pdfs/download.php?'
+                            ];
+
+                            $replace = [
+                                'href="http://www.',
+                                'target = "_blank" href="'.$proxyPath.'?type=link&src=https://',
+                                'target = "_blank" href="'.$proxyPath.'?type=link&src=http://',
+                                'url="http://www.',
+                                'pdfs/download.php&'
+                            ];
+                            $templateContent = str_replace($find, $replace, $templateContent);
+                            file_put_contents($templatePath, $templateContent);
+                        }
+
+                        // Fix link generation:
+                        $linkPath = str_replace('imsmanifest.xml', 'models_html5/links.html', $file);
+                        if (file_exists($linkPath) && is_file($linkPath)) {
+                            $linkContent = file_get_contents($linkPath);
+                            $find = [
+                                ':this.getAttribute("url")'
+                            ];
+                            $replace = [
+                                ':"'.$proxyPath.'?type=link&src=" + this.getAttribute("url")'
+                            ];
+                            $linkContent = str_replace($find, $replace, $linkContent);
+                            file_put_contents($linkPath, $linkContent);
+                        }
+
+                        // Fix iframe generation
+                        $framePath = str_replace('imsmanifest.xml', 'models_html5/embedDiv.html', $file);
+
+                        if (file_exists($framePath) && is_file($framePath)) {
+                            $content = file_get_contents($framePath);
+                            $find = [
+                                '$iFrameHolder.html(iFrameTag);'
+                            ];
+                            $replace = [
+                                'iFrameTag = \'<a target ="_blank" href="'.$proxyPath.'?type=link&src=\'+ pageSrc + \'">Open website. <img src="'.api_get_path(WEB_CODE_PATH).'img/link-external.png"></a>\'; $iFrameHolder.html(iFrameTag); '
+                            ];
+                            $content = str_replace($find, $replace, $content);
+                            file_put_contents($framePath, $content);
+                        }
+
+                        // Fix new window generation
+                        $newWindowPath = str_replace('imsmanifest.xml', 'models_html5/newWindow.html', $file);
+
+                        if (file_exists($newWindowPath) && is_file($newWindowPath)) {
+                            $content = file_get_contents($newWindowPath);
+                            $find = [
+                                'var src = x_currentPageXML'
+                            ];
+                            $replace = [
+                                'var src = "'.$proxyPath.'?type=link&src=" + x_currentPageXML'
+                            ];
+                            $content = str_replace($find, $replace, $content);
+                            file_put_contents($newWindowPath, $content);
+                        }
+                    }
+                }
+            }
+        }
+
 
         // TODO: Close the DOM handler.
         return $this->manifest;
@@ -527,28 +608,32 @@ class scorm extends learnpath
      * @param  string    Current path (optional)
      * @return string    Absolute path to the imsmanifest.xml file or empty string on error
      */
-    public function import_local_package($file_path, $current_dir = '')
+    public function import_local_package($file_path, $currentDir = '')
     {
         // TODO: Prepare info as given by the $_FILES[''] vector.
-        $file_info = [];
-        $file_info['tmp_name'] = $file_path;
-        $file_info['name'] = basename($file_path);
+        $fileInfo = [];
+        $fileInfo['tmp_name'] = $file_path;
+        $fileInfo['name'] = basename($file_path);
         // Call the normal import_package function.
-        return $this->import_package($file_info, $current_dir);
+        return $this->import_package($fileInfo, $currentDir);
     }
 
     /**
      * Imports a zip file into the Chamilo structure
-     * @param  string $zip_file_info Zip file info as given by $_FILES['userFile']
-     * @param  string
-     * @param  array
+     * @param string $zip_file_info Zip file info as given by $_FILES['userFile']
+     * @param string $current_dir
+     * @param array $courseInfo
+     * @param bool $updateDirContents
+     * @param learnpath $lpToCheck
      *
      * @return string    $current_dir Absolute path to the imsmanifest.xml file or empty string on error
      */
     public function import_package(
         $zip_file_info,
         $current_dir = '',
-        $courseInfo = []
+        $courseInfo = [],
+        $updateDirContents = false,
+        $lpToCheck = null
     ) {
         if ($this->debug > 0) {
             error_log('In scorm::import_package('.print_r($zip_file_info, true).',"'.$current_dir.'") method', 0);
@@ -587,15 +672,12 @@ class scorm extends learnpath
         }
 
         $zipFile = new PclZip($zip_file_path);
-
         // Check the zip content (real size and file extension).
         $zipContentArray = $zipFile->listContent();
-
         $package_type = '';
         $at_root = false;
         $manifest = '';
         $manifest_list = [];
-
         // The following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?).
         $realFileSize = 0;
         foreach ($zipContentArray as $thisContent) {
@@ -654,6 +736,14 @@ class scorm extends learnpath
             );
 
             return false;
+        }
+
+        if ($updateDirContents && $lpToCheck) {
+            $originalPath = str_replace('/.', '', $lpToCheck->path);
+            if ($originalPath != $new_dir) {
+                Display::addFlash(Display::return_message(get_lang('FileError')));
+                return false;
+            }
         }
 
         // It happens on Linux that $new_dir sometimes doesn't start with '/'
@@ -760,7 +850,7 @@ class scorm extends learnpath
                 }
             }
         } else {
-            return '';
+            return false;
         }
 
         return $course_sys_dir.$new_dir.$manifest;

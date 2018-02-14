@@ -39,7 +39,7 @@ $allowToEdit = (
 );
 
 $sessionId = api_get_session_id();
-$drhHasAccessToSessionContent = api_get_configuration_value('drh_can_access_all_session_content');
+$drhHasAccessToSessionContent = api_drh_can_access_all_session_content();
 
 if (!empty($sessionId) && $drhHasAccessToSessionContent) {
     $allowToEdit = $allowToEdit || api_is_drh();

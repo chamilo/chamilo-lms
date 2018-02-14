@@ -53,7 +53,8 @@ switch ($action) {
         //Only course gradebook with certificate
         if (!empty($gradebooks)) {
             foreach ($gradebooks as $gradebook) {
-                if ($gradebook['parent_id'] == 0 && !empty($gradebook['certif_min_score']) &&
+                if ($gradebook['parent_id'] == 0 &&
+                    !empty($gradebook['certif_min_score']) &&
                     !empty($gradebook['document_id'])
                 ) {
                     $gradebook_list[] = $gradebook;
@@ -131,7 +132,6 @@ switch ($action) {
             $template = Display::$global_template->get_template('skill/skill_info.tpl');
             $html = Display::$global_template->fetch($template);
         }
-
         echo $html;
         break;
     case 'get_skills_tree_json':
@@ -171,7 +171,6 @@ switch ($action) {
         $id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
         $load_user_data = isset($_REQUEST['load_user_data']) ? $_REQUEST['load_user_data'] : null;
         $skills = $skill->getChildren($id, $load_user_data);
-
         $return = [];
         foreach ($skills as $skill) {
             if (isset($skill['data']) && !empty($skill['data'])) {
@@ -265,10 +264,8 @@ switch ($action) {
         Display::$global_template->assign('total_search_skills', $count_skills);
 
         $skill_list = [];
-
         if (!empty($total_skills_to_search)) {
             $total_skills_to_search = $skill->getSkillsInfo($total_skills_to_search);
-
             foreach ($total_skills_to_search as $skill_info) {
                 $skill_list[$skill_info['id']] = $skill_info;
             }
@@ -364,6 +361,68 @@ switch ($action) {
         echo json_encode([
             'items' => $returnSkills
         ]);
+        break;
+    case 'update_skill_rel_user':
+        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        if (empty($allowSkillInTools)) {
+            exit;
+        }
+
+        if (!api_is_allowed_to_edit()) {
+            exit;
+        }
+
+        $creatorId = api_get_user_id();
+        $typeId = isset($_REQUEST['type_id']) ? (int) $_REQUEST['type_id'] : 0;
+        $itemId = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : 0;
+        $skillId = isset($_REQUEST['skill_id']) ? (int) $_REQUEST['skill_id'] : 0;
+        $userId = isset($_REQUEST['user_id']) ? (int) $_REQUEST['user_id'] : 0;
+        $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;
+        $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : 0;
+
+        if (!empty($typeId) && !empty($itemId) && !empty($skillId) && !empty($userId) && !empty($courseId)) {
+            $em = Database::getManager();
+            $user = api_get_user_entity($userId);
+            $skill = $em->getRepository('ChamiloCoreBundle:Skill')->find($skillId);
+            if (empty($user) || empty($skill)) {
+                exit;
+            }
+            $course = api_get_course_entity($courseId);
+            if (empty($course)) {
+                exit;
+            }
+
+            $session = $em->getRepository('ChamiloCoreBundle:Session')->find($sessionId);
+
+            /** @var \Chamilo\SkillBundle\Entity\SkillRelItem $skillRelItem */
+            $skillRelItem = $em->getRepository('ChamiloSkillBundle:SkillRelItem')->findOneBy(
+                ['itemId' => $itemId, 'itemType' => $typeId, 'skill' => $skillId]
+            );
+
+            if ($skillRelItem) {
+                $criteria = [
+                    'user' => $userId,
+                    'skillRelItem' => $skillRelItem
+                ];
+                $skillRelItemRelUser = $em->getRepository('ChamiloSkillBundle:SkillRelItemRelUser')->findOneBy($criteria);
+                if ($skillRelItemRelUser) {
+                    $em->remove($skillRelItemRelUser);
+                    $em->flush();
+                    $skillRelItemRelUser = null;
+                } else {
+                    $skillRelItemRelUser = new Chamilo\SkillBundle\Entity\SkillRelItemRelUser();
+                    $skillRelItemRelUser
+                        ->setUser($user)
+                        ->setSkillRelItem($skillRelItem)
+                        ->setCreatedBy($creatorId)
+                        ->setUpdatedBy($creatorId)
+                    ;
+                    $em->persist($skillRelItemRelUser);
+                    $em->flush();
+                }
+            }
+            echo Skill::getUserSkillStatusLabel($skillRelItem, $skillRelItemRelUser, false);
+        }
         break;
     default:
         echo '';

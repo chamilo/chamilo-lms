@@ -57,9 +57,9 @@ if ($form->validate()) {
     }
 
     $cat->set_session_id(api_get_session_id());
-    //Always add the gradebook to the course
-    $cat->set_course_code(api_get_course_id());
 
+    // Always add the gradebook to the course
+    $cat->set_course_code(api_get_course_id());
     if (isset($values['skills'])) {
         $cat->set_skills($values['skills']);
     }

@@ -640,7 +640,6 @@ class Skill extends Model
         }
 
         $path = api_get_path(WEB_UPLOAD_PATH).'badges/';
-
         if (!empty($result['icon'])) {
             $iconSmall = sprintf(
                 "%s-small.png",
@@ -2324,6 +2323,102 @@ class Skill extends Model
         return $actions;
     }
 
+    /**
+     * @param \Chamilo\SkillBundle\Entity\SkillRelItem $skillRelItem
+     * @param \Chamilo\SkillBundle\Entity\SkillRelItemRelUser $skillRelItemRelUser
+     * @param bool $addHeader
+     * @return string
+     */
+    public static function getUserSkillStatusLabel($skillRelItem, $skillRelItemRelUser, $addHeader = true)
+    {
+        if (empty($skillRelItem)) {
+            return '';
+        }
+        $type = 'success';
+        if (empty($skillRelItemRelUser)) {
+            $type = 'danger';
+        }
+        $label = '';
+        $skill = $skillRelItem->getSkill();
+        if ($addHeader) {
+            $label .= '<span id="'.$skill->getId().'" class="user_skill" style="cursor:pointer">';
+        }
+        $label .= Display::label($skill->getName(), $type);
+        if ($addHeader) {
+            $label .= '</span>&nbsp;';
+        }
+
+        return $label;
+    }
+
+    /**
+     * Assign a user with a SkilRelItem object
+     *
+     * @param FormValidator $form
+     * @param int $typeId see ITEM_TYPE_* constants
+     * @param int $itemId
+     * @param int $userId
+     */
+    public static function addSkillsToUserForm(FormValidator $form, $typeId, $itemId, $userId)
+    {
+        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        if ($allowSkillInTools && !empty($typeId) && !empty($itemId) && !empty($userId)) {
+            $em = Database::getManager();
+            $items = $em->getRepository('ChamiloSkillBundle:SkillRelItem')->findBy(
+                ['itemId' => $itemId, 'itemType' => $typeId]
+            );
+
+            $skillRelUser = new SkillRelUser();
+            $skillUserList = $skillRelUser->getUserSkills($userId);
+            if (!empty($skillUserList)) {
+                $skillUserList = array_column($skillUserList, 'skill_id');
+            }
+
+            $skills = '';
+            /** @var SkillRelItem $skillRelItem */
+            foreach ($items as $skillRelItem) {
+                $criteria = [
+                    'user' => $userId,
+                    'skillRelItem' => $skillRelItem
+                ];
+                $skillRelItemRelUser = $em->getRepository('ChamiloSkillBundle:SkillRelItemRelUser')->findOneBy($criteria);
+                $skills .= self::getUserSkillStatusLabel($skillRelItem, $skillRelItemRelUser);
+            }
+
+            if (!empty($skills)) {
+                $url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=update_skill_rel_user&'.api_get_cidreq();
+                $params = [
+                    'item_id' => $itemId,
+                    'type_id' => $typeId,
+                    'user_id' => $userId,
+                    'course_id' => api_get_course_int_id(),
+                    'session_id' => api_get_session_id()
+                ];
+                $params = json_encode($params);
+                $html = '
+                <script>
+                    $(function() {
+                        $(".user_skill").on("click", function() {
+                            var skillId = this.id;
+                            var params = '.$params.';
+                            $.ajax({
+                                type: "GET",
+                                async: false,
+                                data: params,
+                                url: "'.$url.'&skill_id="+skillId,
+                                success: function(result) {
+                                    $("#" +skillId+ ".user_skill").html(result);
+                                }
+                            });                            
+                        });                        
+                    });
+                </script>
+                ';
+                $form->addHtml($html);
+                $form->addLabel(get_lang('Skills'), $skills);
+            }
+        }
+    }
 
     /**
      * Add skills select ajax for an item (exercise, lp)
@@ -2364,6 +2459,103 @@ class Skill extends Model
 
         return $skillList;
     }
+
+    /**
+     * @param int $courseId
+     * @param int $sessionId
+     * @return array
+     */
+    public static function getSkillRelItemsPerCourse($courseId, $sessionId = null)
+    {
+        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        $skills = [];
+
+        if (empty($sessionId)) {
+            $sessionId = null;
+        }
+
+        if ($allowSkillInTools) {
+            $em = Database::getManager();
+            $skills = $em->getRepository('ChamiloSkillBundle:SkillRelItem')->findBy(
+                ['courseId' => $courseId, 'sessionId' => $sessionId]
+            );
+        }
+
+        return $skills;
+    }
+
+    /**
+     * @param int $itemId
+     * @param int $itemType
+     * @return array
+     */
+    public static function getItemInfo($itemId, $itemType)
+    {
+        $itemInfo = [];
+        $itemId = (int) $itemId;
+        $itemType = (int) $itemType;
+        $em = Database::getManager();
+
+        switch ($itemType) {
+            case ITEM_TYPE_EXERCISE:
+                /** @var \Chamilo\CourseBundle\Entity\CQuiz $item */
+                $item = $em->getRepository('ChamiloCourseBundle:CQuiz')->find($itemId);
+                if ($item) {
+                    $itemInfo['name'] = $item->getTitle();
+                }
+                break;
+            case ITEM_TYPE_HOTPOTATOES:
+                break;
+            case ITEM_TYPE_LINK:
+                /** @var \Chamilo\CourseBundle\Entity\CLink $item */
+                $item = $em->getRepository('ChamiloCourseBundle:CLink')->find($itemId);
+                if ($item) {
+                    $itemInfo['name'] = $item->getTitle();
+                }
+                break;
+            case ITEM_TYPE_LEARNPATH:
+                /** @var \Chamilo\CourseBundle\Entity\CLp $item */
+                $item = $em->getRepository('ChamiloCourseBundle:CLp')->find($itemId);
+                if ($item) {
+                    $itemInfo['name'] = $item->getName();
+                }
+                break;
+            case ITEM_TYPE_GRADEBOOK:
+                break;
+            case ITEM_TYPE_STUDENT_PUBLICATION:
+                /** @var \Chamilo\CourseBundle\Entity\CStudentPublication $item */
+                $item = $em->getRepository('ChamiloCourseBundle:CStudentPublication')->find($itemId);
+                if ($item) {
+                    $itemInfo['name'] = $item->getTitle();
+                }
+                break;
+            //ITEM_TYPE_FORUM', 7);
+            case ITEM_TYPE_ATTENDANCE:
+                /** @var \Chamilo\CourseBundle\Entity\CAttendance $item */
+                $item = $em->getRepository('ChamiloCourseBundle:CAttendance')->find($itemId);
+                if ($item) {
+                    $itemInfo['name'] = $item->getName();
+                }
+                break;
+            case ITEM_TYPE_SURVEY:
+                /** @var \Chamilo\CourseBundle\Entity\CSurvey $item */
+                $item = $em->getRepository('ChamiloCourseBundle:CSurvey')->find($itemId);
+                if ($item) {
+                    $itemInfo['name'] = strip_tags($item->getTitle());
+                }
+                break;
+            case ITEM_TYPE_FORUM_THREAD:
+                /** @var \Chamilo\CourseBundle\Entity\CForumThread $item */
+                $item = $em->getRepository('ChamiloCourseBundle:CForumThread')->find($itemId);
+                if ($item) {
+                    $itemInfo['name'] = $item->getThreadTitle();
+                }
+                break;
+        }
+
+        return $itemInfo;
+    }
+
 
     /**
      * @param int $typeId
@@ -2407,6 +2599,31 @@ class Skill extends Model
     }
 
     /**
+     * @param int $itemId
+     * @param int $typeId
+     */
+    public static function deleteSkillsFromItem($itemId, $typeId)
+    {
+        $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
+        if ($allowSkillInTools) {
+            $itemId = (int) $itemId;
+            $typeId = (int) $typeId;
+
+            $em = Database::getManager();
+            // Delete old ones
+            $items = $em->getRepository('ChamiloSkillBundle:SkillRelItem')->findBy(
+                ['itemId' => $itemId, 'itemType' => $typeId]
+            );
+
+            /** @var SkillRelItem $skillRelItem */
+            foreach ($items as $skillRelItem) {
+                $em->remove($skillRelItem);
+            }
+            $em->flush();
+        }
+    }
+
+    /**
      * Relate skill with an item (exercise, gradebook, lp, etc)
      * @param FormValidator $form
      * @param int $typeId
@@ -2418,6 +2635,15 @@ class Skill extends Model
         $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
         if ($allowSkillInTools) {
             $userId = api_get_user_id();
+            $courseId = api_get_course_int_id();
+            if (empty($courseId)) {
+                $courseId = null;
+            }
+            $sessionId = api_get_session_id();
+            if (empty($sessionId)) {
+                $sessionId = null;
+            }
+
             $em = Database::getManager();
             $skills = (array) $form->getSubmitValue('skills');
 
@@ -2426,7 +2652,7 @@ class Skill extends Model
                 ['itemId' => $itemId, 'itemType' => $typeId]
             );
             if (!empty($items)) {
-                /** @var \Chamilo\SkillBundle\Entity\SkillRelItem $skillRelItem */
+                /** @var SkillRelItem $skillRelItem */
                 foreach ($items as $skillRelItem) {
                     if (!in_array($skillRelItem->getSkill()->getId(), $skills)) {
                         $em->remove($skillRelItem);
@@ -2442,10 +2668,12 @@ class Skill extends Model
                     $skill = $em->getRepository('ChamiloCoreBundle:Skill')->find($skillId);
                     if ($skill) {
                         if (!$skill->hasItem($typeId, $itemId)) {
-                            $skillRelItem = new \Chamilo\SkillBundle\Entity\SkillRelItem();
+                            $skillRelItem = new SkillRelItem();
                             $skillRelItem
                                 ->setItemType($typeId)
                                 ->setItemId($itemId)
+                                ->setCourseId($courseId)
+                                ->setSessionId($sessionId)
                                 ->setCreatedBy($userId)
                                 ->setUpdatedBy($userId)
                             ;

@@ -121,7 +121,7 @@ DocumentManager::create_directory_certificate_in_course($courseInfo);
 $dbl_click_id = 0;
 $selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : null;
 $moveTo = isset($_POST['move_to']) ? Security::remove_XSS($_POST['move_to']) : null;
-$moveFile = isset($_POST['move_file']) && is_int($_POST['move_file']) ? $_POST['move_file'] : null;
+$moveFile = isset($_POST['move_file']) ? (int) $_POST['move_file'] : 0;
 
 $certificateLink = '';
 if ($is_certificate_mode) {
@@ -596,17 +596,17 @@ if (isset($document_id) && empty($action)) {
             $groupIid
         );
 
-        if (!empty($document_data['filetype']) && $document_data['filetype'] == 'file' || $document_data['filetype'] == 'link') {
+        if (!empty($document_data['filetype']) &&
+            ($document_data['filetype'] == 'file' || $document_data['filetype'] == 'link')
+        ) {
             if ($visibility && api_is_allowed_to_session_edit()) {
-                $url = api_get_path(WEB_COURSE_PATH).
-                    $courseInfo['path'].'/document'.$document_data['path'].'?'
-                    .api_get_cidreq();
+                $url = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$document_data['path'].'?'.api_get_cidreq();
                 header("Location: $url");
+                exit;
             }
-            exit;
         } else {
             if (!$visibility && !$isAllowedToEdit) {
-                api_not_allowed();
+                api_not_allowed(true);
             }
         }
         $_GET['curdirpath'] = $document_data['path'];
@@ -621,7 +621,6 @@ if (isset($document_id) && empty($action)) {
     } else {
         $curdirpath = '/';
     }
-
     $curdirpathurl = urlencode($curdirpath);
 } else {
     // What's the current path?
@@ -714,9 +713,17 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' &&
             $path_image_in_default_course,
             $new_content_html
         );
+
         $new_content_html = str_replace(
             SYS_CODE_PATH.'img/',
             api_get_path(WEB_IMG_PATH),
+            $new_content_html
+        );
+
+        // Remove media=screen to be available when printing a document
+        $new_content_html = str_replace(
+            api_get_path(WEB_CSS_PATH).'editor.css" media="screen"',
+            api_get_path(WEB_CSS_PATH).'editor.css" ',
             $new_content_html
         );
 
@@ -954,10 +961,11 @@ if ($isAllowedToEdit || $group_member_with_upload_rights ||
         }
 
         if (!$isAllowedToEdit) {
-            if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), $my_get_move)) {
+            if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), '', $my_get_move)) {
                 api_not_allowed(true);
             }
         }
+
         // Get the document data from the ID
         $document_to_move = DocumentManager::get_document_data_by_id(
             $my_get_move,
@@ -975,6 +983,7 @@ if ($isAllowedToEdit || $group_member_with_upload_rights ||
                 false,
                 $curdirpath
             );
+            $moveForm .= '<legend>'.get_lang('Move').': '.$document_to_move['title'].'</legend>';
 
             // filter if is my shared folder. TODO: move this code to build_move_to_selector function
             if (DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) &&
@@ -992,8 +1001,6 @@ if ($isAllowedToEdit || $group_member_with_upload_rights ||
                         $user_shared_folders[] = $fold;
                     }
                 }
-
-                $moveForm .= '<legend>'.get_lang('Move').'</legend>';
                 $moveForm .= DocumentManager::build_move_to_selector(
                     $user_shared_folders,
                     $move_path,
@@ -1001,7 +1008,6 @@ if ($isAllowedToEdit || $group_member_with_upload_rights ||
                     $group_properties['directory']
                 );
             } else {
-                $moveForm .= '<legend>'.get_lang('Move').'</legend>';
                 $moveForm .= DocumentManager::build_move_to_selector(
                     $folders,
                     $move_path,
@@ -1014,7 +1020,7 @@ if ($isAllowedToEdit || $group_member_with_upload_rights ||
 
     if (!empty($moveTo) && isset($moveFile)) {
         if (!$isAllowedToEdit) {
-            if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), $moveFile)) {
+            if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), '', $moveFile)) {
                 api_not_allowed(true);
             }
         }
@@ -1039,7 +1045,12 @@ if ($isAllowedToEdit || $group_member_with_upload_rights ||
                 $real_path_target = $base_work_dir.$moveTo.'/';
                 if (!DocumentManager::cloudLinkExists($_course, $moveTo, $document_to_move['comment'])) {
                     $doc_id = $moveFile;
-                    DocumentManager::updateDBInfoCloudLink($document_to_move['path'], $moveTo.'/', $doc_id);
+                    //DocumentManager::updateDbInfo($document_to_move['path'], $moveTo.'/', $doc_id);
+                    DocumentManager::updateDbInfo(
+                        'update',
+                        $document_to_move['path'],
+                        $moveTo.'/'.basename($document_to_move['path'])
+                    );
 
                     // Update database item property
                     api_item_property_update(
@@ -1048,7 +1059,7 @@ if ($isAllowedToEdit || $group_member_with_upload_rights ||
                         $doc_id,
                         'FileMoved',
                         api_get_user_id(),
-                        $to_group_id,
+                        $group_properties,
                         null,
                         null,
                         null,
@@ -2045,19 +2056,20 @@ $table = new SortableTableFromArrayConfig(
     'ASC',
     true
 );
-$query_vars = [];
+$queryVars = [];
 if (isset($_GET['keyword'])) {
-    $query_vars['keyword'] = Security::remove_XSS($_GET['keyword']);
+    $queryVars['keyword'] = Security::remove_XSS($_GET['keyword']);
 } else {
-    $query_vars['curdirpath'] = $curdirpath;
+    $queryVars['curdirpath'] = $curdirpath;
 }
 
 if ($groupId) {
-    $query_vars['gidReq'] = $groupId;
+    $queryVars['gidReq'] = $groupId;
 }
-$query_vars['cidReq'] = api_get_course_id();
-$table->set_additional_parameters($query_vars);
-
+$queryVars['cidReq'] = api_get_course_id();
+$queryVars['id_session'] = api_get_session_id();
+$queryVars['id'] = $document_id;
+$table->set_additional_parameters($queryVars);
 $column = 0;
 
 if (($isAllowedToEdit || $group_member_with_upload_rights) &&

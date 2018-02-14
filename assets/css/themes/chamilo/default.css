@@ -5,6 +5,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * Based on Bootstrap v3
 */
+
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
@@ -33,7 +34,7 @@ body {
   margin: 0;
   font-family: 'Open Sans', sans-serif;
 }
- 
+
 a {
   color: #0099FF;
   text-decoration: none;

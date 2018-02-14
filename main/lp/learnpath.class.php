@@ -1970,8 +1970,8 @@ class learnpath
             $idBar = 'control-top';
         }
 
-        $navbar = null;
-        $lp_id = $this->lp_id;
+        $navbar = '';
+        $lpId = $this->lp_id;
         $mycurrentitemid = $this->get_current_item_id();
 
         $reportingText = get_lang('Reporting');
@@ -1979,34 +1979,53 @@ class learnpath
         $nextText = get_lang('ScormNext');
         $fullScreenText = get_lang('ScormExitFullScreen');
 
+        $settings = api_get_configuration_value('lp_view_settings');
+        $display = isset($settings['display']) ? $settings['display'] : false;
+        $reportingIcon = '
+            <a class="icon-toolbar" 
+                id="stats_link"
+                href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lpId.'" 
+                onclick="window.parent.API.save_asset(); return true;" 
+                target="content_name" title="'.$reportingText.'">
+                <span class="fa fa-info"></span><span class="sr-only">'.$reportingText.'</span>
+            </a>';
+
+        if (!empty($display)) {
+            $showReporting = isset($display['show_reporting_icon']) ? $display['show_reporting_icon'] : true;
+            if ($showReporting == false) {
+                $reportingIcon = '';
+            }
+        }
+
+        $previousIcon = '
+            <a class="icon-toolbar" id="scorm-previous" href="#" 
+                onclick="switch_item('.$mycurrentitemid.',\'previous\');return false;" title="'.$previousText.'">
+                <span class="fa fa-chevron-left"></span><span class="sr-only">'.$previousText.'</span>
+            </a>';
+
+        $nextIcon = '
+            <a class="icon-toolbar" id="scorm-next" href="#" 
+                onclick="switch_item('.$mycurrentitemid.',\'next\');return false;" title="'.$nextText.'">
+                <span class="fa fa-chevron-right"></span><span class="sr-only">' . $nextText.'</span>
+            </a>';
+
         if ($this->mode == 'fullscreen') {
             $navbar = '
                   <span id="'.$idBar.'" class="buttons">
-                    <a class="icon-toolbar" href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onclick="window.parent.API.save_asset();return true;" target="content_name" title="'.$reportingText.'" id="stats_link">
-                        <span class="fa fa-info"></span><span class="sr-only">' . $reportingText.'</span>
-                    </a>
-                    <a class="icon-toolbar" id="scorm-previous" href="#" onclick="switch_item(' . $mycurrentitemid.',\'previous\');return false;" title="'.$previousText.'">
-                        <span class="fa fa-chevron-left"></span><span class="sr-only">' . $previousText.'</span>
-                    </a>
-                    <a class="icon-toolbar" id="scorm-next" href="#" onclick="switch_item(' . $mycurrentitemid.',\'next\');return false;" title="'.$nextText.'">
-                        <span class="fa fa-chevron-right"></span><span class="sr-only">' . $nextText.'</span>
-                    </a>
-                    <a class="icon-toolbar" id="view-embedded" href="lp_controller.php?action=mode&mode=embedded" target="_top" title="'.$fullScreenText.'">
-                        <span class="fa fa-columns"></span><span class="sr-only">' . $fullScreenText.'</span>
+                    '.$reportingIcon.'
+                    '.$previousIcon.'                    
+                    '.$nextIcon.'
+                    <a class="icon-toolbar" id="view-embedded" 
+                        href="lp_controller.php?action=mode&mode=embedded" target="_top" title="'.$fullScreenText.'">
+                        <span class="fa fa-columns"></span><span class="sr-only">'.$fullScreenText.'</span>
                     </a>
                   </span>';
         } else {
             $navbar = '
             <span id="'.$idBar.'" class="buttons text-right">
-                <a class="icon-toolbar" href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onclick="window.parent.API.save_asset();return true;" target="content_name" title="'.$reportingText.'" id="stats_link">
-                    <span class="fa fa-info"></span><span class="sr-only">' . $reportingText.'</span>
-                </a>
-                <a class="icon-toolbar" id="scorm-previous" href="#" onclick="switch_item(' . $mycurrentitemid.',\'previous\');return false;" title="'.$previousText.'">
-                    <span class="fa fa-chevron-left"></span><span class="sr-only">' . $previousText.'</span>
-                </a>
-                <a class="icon-toolbar" id="scorm-next" href="#" onclick="switch_item(' . $mycurrentitemid.',\'next\');return false;" title="'.$nextText.'">
-                    <span class="fa fa-chevron-right"></span><span class="sr-only">' . $nextText.'</span>
-                </a>
+                '.$reportingIcon.'
+                '.$previousIcon.'
+                '.$nextIcon.'               
             </span>';
         }
 
@@ -3439,7 +3458,6 @@ class learnpath
     public function get_link($type = 'http', $item_id = null, $provided_toc = false)
     {
         $course_id = $this->get_course_int_id();
-
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_link('.$type.','.$item_id.')', 0);
         }
@@ -3456,7 +3474,7 @@ class learnpath
             }
             //still empty, this means there was no item_id given and we are not in an object context or
             //the object property is empty, return empty link
-            $item_id = $this->first();
+            $this->first();
             return '';
         }
 
@@ -4205,6 +4223,13 @@ class learnpath
      */
     public function prerequisites_match($itemId = null)
     {
+        $allow = api_get_configuration_value('allow_teachers_to_access_blocked_lp_by_prerequisite');
+        if ($allow) {
+            if (api_is_allowed_to_edit() || api_is_platform_admin() || api_is_drh()) {
+                return true;
+            }
+        }
+
         $debug = $this->debug;
         if ($debug > 0) {
             error_log('In learnpath::prerequisites_match()', 0);
@@ -6084,10 +6109,13 @@ class learnpath
                         $edit_icon .= '</a>';
 
                         if (!in_array($arrLP[$i]['item_type'], ['forum', 'thread'])) {
-                            $forumThread = $this->items[$arrLP[$i]['id']]->getForumThread(
-                                $this->course_int_id,
-                                $this->lp_session_id
-                            );
+                            $forumThread = null;
+                            if (isset($this->items[$arrLP[$i]['id']])) {
+                                $forumThread = $this->items[$arrLP[$i]['id']]->getForumThread(
+                                    $this->course_int_id,
+                                    $this->lp_session_id
+                                );
+                            }
                             if ($forumThread) {
                                 $forumIconUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
                                     'action' => 'dissociate_forum',
@@ -7704,8 +7732,6 @@ class learnpath
         $arrHide = [
             $id
         ];
-
-        //$parent_item_id = $_SESSION['parent_item_id'];
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
                 if ($arrLP[$i]['item_type'] == 'dir' &&
@@ -12308,6 +12334,7 @@ EOD;
         $main_course_path = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/';
         $link = '';
         $extraParams = api_get_cidreq(true, true, 'learnpath').'&session_id='.$session_id;
+
         switch ($type) {
             case 'dir':
                 return $main_dir_path.'lp/blank.php';

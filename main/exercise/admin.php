@@ -254,6 +254,11 @@ if (!empty($clone_question) && !empty($objExercise->id)) {
     $new_question_obj = Question::read($new_id);
     $new_question_obj->addToList($exerciseId);
 
+    // Save category to the destination course
+    if (!empty($old_question_obj->category)) {
+        $new_question_obj->saveCategory($old_question_obj->category, api_get_course_int_id());
+    }
+
     // This should be moved to the duplicate function
     $new_answer_obj = new Answer($clone_question);
     $new_answer_obj->read();
@@ -329,7 +334,6 @@ function multiple_answer_true_false_onchange(variable) {
     document.getElementById(weight_id).value = array_result[result];
 }
 
-
 </script>';
 
 $htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
@@ -349,14 +353,6 @@ if (isset($_GET['message'])) {
 }
 
 Display::display_header($nameTools, 'Exercise');
-/*
-if ($objExercise->exercise_was_added_in_lp) {
-    if ($objExercise->force_edit_exercise_in_lp == true) {
-        Display::addFlash(Display::return_message(get_lang('ForceEditingExerciseInLPWarning'), 'warning'));
-    } else {
-        Display::addFlash(Display::return_message(get_lang('EditingExerciseCauseProblemsInLP'), 'warning'));
-    }
-}*/
 
 // If we are in a test
 $inATest = isset($exerciseId) && $exerciseId > 0;

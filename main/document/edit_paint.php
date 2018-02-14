@@ -19,6 +19,7 @@ $groupRights = Session::read('group_member_with_upload_rights');
 
 api_protect_course_script(true);
 api_block_anonymous_users();
+$_course = api_get_course_info();
 $groupId = api_get_group_id();
 $document_data = DocumentManager::get_document_data_by_id(
     $_GET['id'],
@@ -36,15 +37,16 @@ if (empty($document_data)) {
     $my_cur_dir_path = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
 }
 
-$dir = str_replace('\\', '/', $dir); //and urlencode each url $curdirpath (hack clean $curdirpath under Windows - Bug #3261)
+//and urlencode each url $curdirpath (hack clean $curdirpath under Windows - Bug #3261)
+$dir = str_replace('\\', '/', $dir);
+if (empty($dir)) {
+    $dir = '/';
+}
 
 /* Constants & Variables */
 $current_session_id = api_get_session_id();
 //path for pixlr save
 Session::write('paint_dir', Security::remove_XSS($dir));
-if ($dir == '/') {
-    Session::write('paint_dir', '');
-}
 Session::write('paint_file', basename(Security::remove_XSS($file_path)));
 $get_file = Security::remove_XSS($file_path);
 $file = basename($get_file);
@@ -53,9 +55,7 @@ $filename = $temp_file[0];
 $nameTools = get_lang('EditDocument').': '.$filename;
 $courseDir = $_course['path'].'/document';
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-
-/*	Other initialization code */
-
+/* Other initialization code */
 /* Please, do not modify this dirname formatting */
 if (strstr($dir, '..')) {
     $dir = '/';
@@ -131,9 +131,9 @@ echo '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.'&'.api_
     Display::return_icon('edit.png', get_lang('Rename').'/'.get_lang('Comment'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
-///pixlr
+// pixlr
 $title = $file; //disk name. No sql name because pixlr return this when save
-$pixlr_code_translation_table = ['' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn'];
+
 $langpixlr = api_get_language_isocode();
 $langpixlr = isset($pixlr_code_translation_table[$langpixlr]) ? $pixlredit_code_translation_table[$langpixlr] : $langpixlr;
 $loc = $langpixlr; // deprecated ?? TODO:check pixlr read user browser
@@ -212,12 +212,12 @@ $pixlr_url = '//pixlr.com/editor/?title='.$title.'&image='.$image.'&loc='.$loc.'
 <script>
 document.write ('<iframe id="frame" frameborder="0" scrolling="no" src="<?php echo  $pixlr_url; ?>" width="100%" height="100%"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>');
 function resizeIframe() {
-	var height = window.innerHeight;
-	//max lower size
-	if (height<600) {
-		height=600;
-	}
-	document.getElementById('frame').style.height = height +"px";
+    var height = window.innerHeight;
+    //max lower size
+    if (height<600) {
+        height=600;
+    }
+    document.getElementById('frame').style.height = height +"px";
 };
 document.getElementById('frame').onload = resizeIframe;
 window.onresize = resizeIframe;

@@ -167,15 +167,13 @@ class Link extends Model
             $description = Security::remove_XSS($_POST['description']);
             $selectcategory = Security::remove_XSS($_POST['category_id']);
 
-            if (!isset($_POST['on_homepage'])) {
-                $onhomepage = 0;
-            } else {
+            $onhomepage = 0;
+            if (isset($_POST['on_homepage'])) {
                 $onhomepage = Security::remove_XSS($_POST['on_homepage']);
             }
 
-            if (empty($_POST['target'])) {
-                $target = '_self'; // Default target.
-            } else {
+            $target = '_self'; // Default target.
+            if (!empty($_POST['target'])) {
                 $target = Security::remove_XSS($_POST['target']);
             }
 
@@ -201,7 +199,6 @@ class Link extends Model
                 return false;
             } else {
                 // Looking for the largest order number for this category.
-
                 $link = new Link();
                 $params = [
                     'c_id' => $course_id,
@@ -317,6 +314,7 @@ class Link extends Model
                     }
                 }
                 Display::addFlash(Display::return_message(get_lang('LinkAdded')));
+                return $link_id;
             }
         } elseif ($type == 'category') {
             $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
@@ -366,6 +364,7 @@ class Link extends Model
                 }
 
                 Display::addFlash(Display::return_message(get_lang('CategoryAdded')));
+                return $linkId;
             }
         }
 
@@ -393,7 +392,6 @@ class Link extends Model
         }
 
         $result = false;
-
         switch ($type) {
             case 'link':
                 // -> Items are no longer physically deleted,
@@ -411,6 +409,7 @@ class Link extends Model
                     api_get_user_id()
                 );
                 self::delete_link_from_search_engine(api_get_course_id(), $id);
+                Skill::deleteSkillsFromItem($id, ITEM_TYPE_LINK);
                 Display::addFlash(Display::return_message(get_lang('LinkDeleted')));
                 $result = true;
                 break;
@@ -1798,8 +1797,10 @@ class Link extends Model
             }
         }
 
+        $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_LINK, $linkId);
         $form->addHidden('lp_id', $lpId);
         $form->addButtonSave(get_lang('SaveLink'), 'submitLink');
+        $defaults['skills'] = array_keys($skillList);
         $form->setDefaults($defaults);
 
         return $form;

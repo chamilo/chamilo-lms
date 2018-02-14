@@ -509,23 +509,26 @@ abstract class Question
      * in this version, a question can only have 1 category
      * if category is 0, then question has no category then delete the category entry
      * @param int $categoryId
+     * @param int $courseId
      * @return bool
      *
      * @author Hubert Borderiou 12-10-2011
      */
-    public function saveCategory($categoryId)
+    public function saveCategory($categoryId, $courseId = 0)
     {
-        $courseId = api_get_course_int_id();
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
+
         if (empty($courseId)) {
             return false;
         }
+
         if ($categoryId <= 0) {
-            $this->deleteCategory();
+            $this->deleteCategory($courseId);
         } else {
             // update or add category for a question
             $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-            $categoryId = intval($categoryId);
-            $question_id = intval($this->id);
+            $categoryId = (int) $categoryId;
+            $question_id = (int) $this->id;
             $sql = "SELECT count(*) AS nb FROM $table
                     WHERE
                         question_id = $question_id AND
@@ -551,18 +554,25 @@ abstract class Question
 
     /**
      * @author hubert borderiou 12-10-2011
+     * @param int $courseId
      * delete any category entry for question id
      * delete the category for question
+     * @return bool
      */
-    public function deleteCategory()
+    public function deleteCategory($courseId = 0)
     {
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
         $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $question_id = intval($this->id);
+        $questionId = (int) $this->id;
+        if (empty($courseId) || empty($questionId)) {
+            return false;
+        }
         $sql = "DELETE FROM $table
                 WHERE
-                    question_id = $question_id AND
-                    c_id = ".api_get_course_int_id();
+                    question_id = $questionId AND
+                    c_id = ".$courseId;
         Database::query($sql);
+        return true;
     }
 
     /**
@@ -599,7 +609,7 @@ abstract class Question
      */
     public function updateType($type)
     {
-        $TBL_REPONSES = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $course_id = $this->course['real_id'];
 
         if (empty($course_id)) {
@@ -612,7 +622,7 @@ abstract class Question
                 !in_array($type, [UNIQUE_ANSWER, MULTIPLE_ANSWER])
             ) {
                 // removes old answers
-                $sql = "DELETE FROM $TBL_REPONSES
+                $sql = "DELETE FROM $table
                         WHERE c_id = $course_id AND question_id = ".intval($this->id);
                 Database::query($sql);
             }
@@ -1409,17 +1419,17 @@ abstract class Question
      * Duplicates the question
      *
      * @author Olivier Brouckaert
-     * @param  array   $course_info Course info of the destination course
+     * @param  array   $courseInfo Course info of the destination course
      * @return false|string     ID of the new question
      */
-    public function duplicate($course_info = [])
+    public function duplicate($courseInfo = [])
     {
-        if (empty($course_info)) {
-            $course_info = $this->course;
-        } else {
-            $course_info = $course_info;
+        $courseInfo = empty($courseInfo) ? $this->course : $courseInfo;
+
+        if (empty($courseInfo)) {
+            return false;
         }
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $TBL_QUESTION_OPTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
 
         $question = $this->question;
@@ -1427,24 +1437,24 @@ abstract class Question
         $weighting = $this->weighting;
         $position = $this->position;
         $type = $this->type;
-        $level = intval($this->level);
+        $level = (int) $this->level;
         $extra = $this->extra;
 
         // Using the same method used in the course copy to transform URLs
-        if ($this->course['id'] != $course_info['id']) {
+        if ($this->course['id'] != $courseInfo['id']) {
             $description = DocumentManager::replaceUrlWithNewCourseCode(
                 $description,
                 $this->course['code'],
-                $course_info['id']
+                $courseInfo['id']
             );
             $question = DocumentManager::replaceUrlWithNewCourseCode(
                 $question,
                 $this->course['code'],
-                $course_info['id']
+                $courseInfo['id']
             );
         }
 
-        $course_id = $course_info['real_id'];
+        $course_id = $courseInfo['real_id'];
 
         // Read the source options
         $options = self::readQuestionOption($this->id, $this->course['real_id']);
@@ -1460,10 +1470,10 @@ abstract class Question
             'level' => $level,
             'extra' => $extra
         ];
-        $newQuestionId = Database::insert($TBL_QUESTIONS, $params);
+        $newQuestionId = Database::insert($questionTable, $params);
 
         if ($newQuestionId) {
-            $sql = "UPDATE $TBL_QUESTIONS 
+            $sql = "UPDATE $questionTable 
                     SET id = iid
                     WHERE iid = $newQuestionId";
             Database::query($sql);
@@ -1486,7 +1496,7 @@ abstract class Question
             }
 
             // Duplicates the picture of the hotspot
-            $this->exportPicture($newQuestionId, $course_info);
+            $this->exportPicture($newQuestionId, $courseInfo);
         }
 
         return $newQuestionId;
@@ -1708,7 +1718,6 @@ abstract class Question
                 $form->addTextarea('feedback', get_lang('FeedbackIfNotCorrect'));
             }
         }
-
 
         // default values
         $defaults = [];
@@ -1979,7 +1988,10 @@ abstract class Question
         }
 
         // display question category, if any
-        $header = TestCategory::returnCategoryAndTitle($this->id);
+        $header = '';
+        if ($exercise->display_category_name) {
+            $header = TestCategory::returnCategoryAndTitle($this->id);
+        }
         $show_media = null;
         if ($show_media) {
             $header .= $this->show_media_content();
@@ -2193,11 +2205,11 @@ abstract class Question
     }
 
     /**
-     * @return integer[]
+     * @return array
      */
     public static function get_default_levels()
     {
-        $select_level = [
+        $levels = [
             1 => 1,
             2 => 2,
             3 => 3,
@@ -2205,7 +2217,7 @@ abstract class Question
             5 => 5
         ];
 
-        return $select_level;
+        return $levels;
     }
 
     /**

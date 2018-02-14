@@ -4566,6 +4566,8 @@ class SessionManager
             }
 
             $sessionList = [];
+            $report = [];
+
             // Looping the sessions.
             foreach ($sessions as $enreg) {
                 $user_counter = 0;
@@ -4627,19 +4629,13 @@ class SessionManager
 
                 $coachBefore = '';
                 $coachAfter = '';
-
                 if (!empty($daysCoachAccessBeforeBeginning) && !empty($daysCoachAccessAfterBeginning)) {
                     $date = new \DateTime($dateStart);
-                    $interval = new DateInterval(
-                        'P'.$daysCoachAccessBeforeBeginning.'D'
-                    );
+                    $interval = new DateInterval('P'.$daysCoachAccessBeforeBeginning.'D');
                     $date->sub($interval);
                     $coachBefore = $date->format('Y-m-d h:i');
                     $coachAccessStartDate = $coachBefore;
                     $coachBefore = api_get_utc_datetime($coachBefore);
-
-                    //$extraParameters .= " , coach_access_start_date = '$coachBefore'";
-                    //$extraParams['coach_access_start_date'] = $coachBefore;
 
                     $date = new \DateTime($dateEnd);
                     $interval = new DateInterval('P'.$daysCoachAccessAfterBeginning.'D');
@@ -4647,8 +4643,6 @@ class SessionManager
                     $coachAfter = $date->format('Y-m-d h:i');
                     $coachAccessEndDate = $coachAfter;
                     $coachAfter = api_get_utc_datetime($coachAfter);
-                    //$extraParameters .= " , coach_access_end_date = '$coachAfter'";
-                    //$extraParams['coach_access_end_date'] = $coachAfter;
                 }
 
                 $dateStart = api_get_utc_datetime($dateStart);
@@ -4701,7 +4695,6 @@ class SessionManager
                         $sql = 'SELECT 1 FROM '.$tbl_session.'
                                 WHERE name="' . Database::escape_string($session_name).$suffix.'"';
                         $rs = Database::query($sql);
-
                         if (Database::result($rs, 0, 0)) {
                             $i++;
                         } else {
@@ -4735,7 +4728,6 @@ class SessionManager
                                     self::update_session_extra_field_value($session_id, substr($key, 6), $value);
                                 }
                             }
-
                             $logger->addInfo("Sessions - Session created: #$session_id - $session_name");
                         } else {
                             $logger->addError("Sessions - Session NOT created: $session_name");
@@ -4854,9 +4846,17 @@ class SessionManager
                         if (isset($sessionId) && !empty($sessionId)) {
                             $session_id = $sessionId;
                             if (!empty($enreg['SessionName'])) {
-                                $sessionName = Database::escape_string($enreg['SessionName']);
-                                $sql = "UPDATE $tbl_session SET name = '$sessionName' WHERE id = $session_id";
-                                Database::query($sql);
+                                $sessionExistsWithName = self::get_session_by_name($session_name);
+                                if ($sessionExistsWithName === false) {
+                                    $sessionName = Database::escape_string($enreg['SessionName']);
+                                    $sql = "UPDATE $tbl_session SET name = '$sessionName' WHERE id = $session_id";
+                                    Database::query($sql);
+                                } else {
+                                    if ($debug) {
+                                        $report[] = "Error when update session: Name already exists: Session #$session_id Name: '$session_name' External id: ".$enreg['extra_'.$extraFieldId];
+                                    }
+                                    continue;
+                                }
                             }
                         } else {
                             $my_session_result = self::get_session_by_name($session_name);
@@ -4961,7 +4961,6 @@ class SessionManager
                 if ($deleteUsersNotInList) {
                     // Getting user in DB in order to compare to the new list.
                     $usersListInDatabase = self::get_users_by_session($session_id, 0);
-
                     if (!empty($usersListInDatabase)) {
                         if (empty($userList)) {
                             foreach ($usersListInDatabase as $userInfo) {
@@ -4983,7 +4982,6 @@ class SessionManager
                     if (count($courses) >= 2) {
                         // Only first teacher in course session;
                         $onlyAddFirstCoachOrTeacher = true;
-
                         // Remove all teachers from course.
                         $removeAllTeachersFromCourse = false;
                     }
@@ -5368,7 +5366,6 @@ class SessionManager
 
                         // Adding Students, updating relationship "Session - Course - User".
                         $course_users = array_filter($course_users);
-
                         if (!empty($course_users)) {
                             foreach ($course_users as $user) {
                                 $user_id = UserManager::get_user_id_from_username($user);
@@ -5387,7 +5384,6 @@ class SessionManager
                                 }
                             }
                         }
-
                         $inserted_in_course[$course_code] = $courseInfo['title'];
                     }
                 }
@@ -5398,6 +5394,15 @@ class SessionManager
                 Database::query($sql);
 
                 self::addClassesByName($session_id, $classes, false);
+            }
+
+            if (!empty($report)) {
+                if ($debug) {
+                    $logger->addInfo("--Summary--");
+                    foreach ($report as $line) {
+                        $logger->addInfo($line);
+                    }
+                }
             }
         }
 

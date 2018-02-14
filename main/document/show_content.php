@@ -86,18 +86,16 @@ if (!api_is_allowed_to_edit() && !$is_visible) {
 }
 
 //TODO:clean all code
-
-/*	Main section */
+/* Main section */
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 //header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 header('Last-Modified: Wed, 01 Jan 2100 00:00:00 GMT');
 header('Cache-Control: no-cache, must-revalidate');
 header('Pragma: no-cache');
-$browser_display_title = 'Documents - '.Security::remove_XSS($_GET['cidReq']).' - '.$file;
-$file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
-$pathinfo = pathinfo($header_file);
+$url = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
+$pathInfo = pathinfo($header_file);
 
-if ($pathinfo['extension'] == 'swf') {
+if ($pathInfo['extension'] == 'swf') {
     $width = '83%';
     $height = '83%';
 } else {
@@ -105,4 +103,4 @@ if ($pathinfo['extension'] == 'swf') {
     $height = '100%';
 }
 
-echo '<iframe border="0" frameborder="0" scrolling="no" style="width:'.$width.'; height:'.$height.';background-color:#ffffff;" id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 1000).'"></iframe>';
+echo '<iframe border="0" frameborder="0" scrolling="no" style="width:'.$width.'; height:'.$height.';background-color:#ffffff;" id="mainFrame" name="mainFrame" src="'.$url.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 1000).'"></iframe>';

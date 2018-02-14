@@ -20,14 +20,14 @@ $this_section = SECTION_COURSES;
 api_protect_course_script();
 
 $isStudentView = isset($_REQUEST['isStudentView']) ? $_REQUEST['isStudentView'] : null;
-$learnpath_id = isset($_REQUEST['lp_id']) ? intval($_REQUEST['lp_id']) : null;
+$lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
 $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 $type = isset($_GET['type']) ? $_GET['type'] : null;
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, false);
 
-$listUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=view&lp_id='.$learnpath_id.'&'.api_get_cidreq().'&isStudentView=true';
+$listUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=view&lp_id='.$lpId.'&'.api_get_cidreq().'&isStudentView=true';
 if (!$is_allowed_to_edit) {
     header("Location: $listUrl");
     exit;
@@ -98,7 +98,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('LearningPaths'),
 ];
 $interbreadcrumb[] = [
-    'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
+    'url' => api_get_self()."?action=build&lp_id=$lpId&".api_get_cidreq(),
     'name' => $learnPath->get_name(),
 ];
 
@@ -192,7 +192,6 @@ $(document).ready(function() {
 
     // hide the current template list for new documment until it tab clicked
     $('#frmModel').hide();
-
 });
 
 // document template for new document tab handler

@@ -205,8 +205,6 @@ if ($formUsers->validate()) {
         get_lang('SubscribeGroupsToLpCategory')
     ];
     $tabs = Display::tabs($headers, [$formUsers->toHtml(), $form->toHtml()]);
-    $tpl->assign('tabs', $tabs);
+    $tpl->assign('content', $tabs);
+    $tpl->display_one_col_template();
 }
-
-$layout = $tpl->get_template('learnpath/subscribe_users.tpl');
-$tpl->display($layout);

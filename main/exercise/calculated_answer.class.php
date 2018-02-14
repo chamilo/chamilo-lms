@@ -173,7 +173,7 @@ class CalculatedAnswer extends Question
         $form->addButtonSave($text, 'submitQuestion');
 
         if (!empty($this->id)) {
-            $form -> setDefaults($defaults);
+            $form->setDefaults($defaults);
         } else {
             if ($this->isContent == 1) {
                 $form->setDefaults($defaults);

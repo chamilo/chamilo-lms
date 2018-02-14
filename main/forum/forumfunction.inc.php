@@ -101,7 +101,7 @@ function handle_forum_and_forumcategories($lp_id = null)
     $get_id = isset($_GET['id']) ? intval($_GET['id']) : '';
     $forum_categories_list = get_forum_categories();
 
-    //Verify if forum category exists
+    // Verify if forum category exists
     if (empty($forum_categories_list)) {
         $get_content = 'forumcategory';
     }
@@ -117,10 +117,9 @@ function handle_forum_and_forumcategories($lp_id = null)
     if ((($action_forum_cat == 'add' || $action_forum_cat == 'edit') && $get_content == 'forum') ||
         $post_submit_forum
     ) {
+        $inputvalues = [];
         if ($action_forum_cat == 'edit' && $get_id || $post_submit_forum) {
             $inputvalues = get_forums($get_id);
-        } else {
-            $inputvalues = [];
         }
         $content = show_add_forum_form($inputvalues, $lp_id);
     }
@@ -246,10 +245,9 @@ function show_add_forum_form($inputvalues = [], $lp_id)
     $form = new FormValidator('forumcategory', 'post', 'index.php?'.api_get_cidreq());
 
     // The header for the form
+    $form_title = get_lang('AddForum');
     if (!empty($inputvalues)) {
         $form_title = get_lang('EditForum');
-    } else {
-        $form_title = get_lang('AddForum');
     }
 
     $form->addElement('header', $form_title);
@@ -439,8 +437,15 @@ function show_add_forum_form($inputvalues = [], $lp_id)
         $check = Security::check_token('post');
         if ($check) {
             $values = $form->getSubmitValues();
-            $return_message = store_forum($values);
-            Display::addFlash(Display::return_message($return_message, 'confirmation'));
+            $forumId = store_forum($values, '', true);
+            if ($forumId) {
+                // Skill::saveSkills($form, ITEM_TYPE_FORUM, $forumId);
+                if (isset($values['forum_id'])) {
+                    Display::addFlash(Display::return_message(get_lang('ForumEdited'), 'confirmation'));
+                } else {
+                    Display::addFlash(Display::return_message(get_lang('ForumAdded'), 'confirmation'));
+                }
+            }
         }
         Security::clear_token();
     } else {
@@ -647,11 +652,9 @@ function store_forum($values, $courseInfo = [], $returnId = false)
     $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
     $course_id = $courseInfo['real_id'];
     $session_id = api_get_session_id();
-
+    $group_id = api_get_group_id();
     if (isset($values['group_id']) && !empty($values['group_id'])) {
         $group_id = $values['group_id'];
-    } else {
-        $group_id = api_get_group_id();
     }
     $groupInfo = [];
     if (!empty($group_id)) {
@@ -677,11 +680,10 @@ function store_forum($values, $courseInfo = [], $returnId = false)
     // Forum images
     $image_moved = false;
     $has_attachment = false;
+    $image_moved = true;
     if (!empty($_FILES['picture']['name'])) {
         $upload_ok = process_uploaded_file($_FILES['picture']);
         $has_attachment = true;
-    } else {
-        $image_moved = true;
     }
 
     // Remove existing picture if it was requested.
@@ -765,6 +767,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         );
 
         $return_message = get_lang('ForumEdited');
+        $forumId = $values['forum_id'];
     } else {
         if ($image_moved) {
             $new_file_name = isset($new_file_name) ? $new_file_name : '';
@@ -793,31 +796,32 @@ function store_forum($values, $courseInfo = [], $returnId = false)
             'forum_id' => 0
         ];
 
-        $last_id = Database::insert($table_forums, $params);
-        if ($last_id > 0) {
-            $sql = "UPDATE $table_forums SET forum_id = iid WHERE iid = $last_id";
+        $forumId = Database::insert($table_forums, $params);
+        if ($forumId > 0) {
+            $sql = "UPDATE $table_forums SET forum_id = iid WHERE iid = $forumId";
             Database::query($sql);
 
             api_item_property_update(
                 $courseInfo,
                 TOOL_FORUM,
-                $last_id,
+                $forumId,
                 'ForumAdded',
                 api_get_user_id(),
                 $groupInfo
             );
 
             api_set_default_visibility(
-                $last_id,
+                $forumId,
                 TOOL_FORUM,
                 $group_id,
                 $courseInfo
             );
         }
         $return_message = get_lang('ForumAdded');
-        if ($returnId) {
-            return $last_id;
-        }
+    }
+
+    if ($returnId) {
+        return $forumId;
     }
 
     return $return_message;
@@ -911,6 +915,7 @@ function deleteForumCategoryThread($content, $id)
     if ($content == 'thread') {
         $tool_constant = TOOL_FORUM_THREAD;
         $return_message = get_lang('ThreadDeleted');
+        Skill::deleteSkillsFromItem($id, ITEM_TYPE_FORUM_THREAD);
     }
 
     api_item_property_update(
@@ -2624,8 +2629,8 @@ function store_thread(
         $visible = 1;
     }
     $clean_post_title = $values['post_title'];
-    // We first store an entry in the forum_thread table because the thread_id is used in the forum_post table.
 
+    // We first store an entry in the forum_thread table because the thread_id is used in the forum_post table.
     $lastThread = new CForumThread();
     $lastThread
         ->setCId($course_id)
@@ -2975,6 +2980,10 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
         $form->addElement('html', '</div>');
     }
 
+    if ($action == 'newthread') {
+        Skill::addSkillsToForm($form, ITEM_TYPE_FORUM_THREAD, 0);
+    }
+
     if ($forum_setting['allow_sticky'] && api_is_allowed_to_edit(null, true) && $action == 'newthread') {
         $form->addElement('checkbox', 'thread_sticky', '', get_lang('StickyPost'));
     }
@@ -3082,6 +3091,7 @@ function show_add_post_form($current_forum, $forum_setting, $action, $id = '', $
             switch ($action) {
                 case 'newthread':
                     $myThread = store_thread($current_forum, $values);
+                    Skill::saveSkills($form, ITEM_TYPE_FORUM_THREAD, $myThread);
                     break;
                 case 'quote':
                 case 'replythread':

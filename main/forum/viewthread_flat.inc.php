@@ -354,9 +354,7 @@ if (isset($current_thread['thread_id'])) {
             unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']]);
             unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);
             unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']]);
-
             $increment++;
-
             $html .= '</div>';
             $html .= '</div>';
             echo $html;

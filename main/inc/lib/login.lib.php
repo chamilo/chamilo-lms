@@ -37,10 +37,13 @@ class Login
                 $secret_word = self::get_secret_word($user['email']);
                 if ($reset) {
                     $reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secret_word."&id=".$user['uid'];
+                    $reset_link = Display::url($reset_link, $reset_link);
                 } else {
                     $reset_link = get_lang('Pass')." : $user[password]";
                 }
-                $user_account_list = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$user['loginName']."\n".get_lang('ResetLink').' : '.$reset_link.'';
+                $user_account_list = get_lang('YourRegistrationData')." : \n".
+                    get_lang('UserName').' : '.$user['loginName']."\n".
+                    get_lang('ResetLink').' : '.$reset_link;
 
                 if ($user_account_list) {
                     $user_account_list = "\n-----------------------------------------------\n".$user_account_list;
@@ -50,10 +53,14 @@ class Login
                     $secret_word = self::get_secret_word($this_user['email']);
                     if ($reset) {
                         $reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secret_word."&id=".$this_user['uid'];
+                        $reset_link = Display::url($reset_link, $reset_link);
                     } else {
                         $reset_link = get_lang('Pass')." : $this_user[password]";
                     }
-                    $user_account_list[] = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$this_user['loginName']."\n".get_lang('ResetLink').' : '.$reset_link.'';
+                    $user_account_list[] =
+                        get_lang('YourRegistrationData')." : \n".
+                        get_lang('UserName').' : '.$this_user['loginName']."\n".
+                        get_lang('ResetLink').' : '.$reset_link;
                 }
                 if ($user_account_list) {
                     $user_account_list = implode("\n-----------------------------------------------\n", $user_account_list);
@@ -64,7 +71,10 @@ class Login
                 $user = $user[0];
             }
             $reset_link = get_lang('Pass')." : $user[password]";
-            $user_account_list = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$user['loginName']."\n".$reset_link.'';
+            $user_account_list =
+                get_lang('YourRegistrationData')." : \n".
+                get_lang('UserName').' : '.$user['loginName']."\n".
+                $reset_link.'';
         }
         return $user_account_list;
     }
@@ -149,8 +159,12 @@ class Login
         $email_body = get_lang('DearUser')." :\n".get_lang('password_request')."\n";
         $email_body .= $user_account_list."\n-----------------------------------------------\n\n";
         $email_body .= get_lang('PasswordEncryptedForSecurity');
-
-        $email_body .= "\n\n".get_lang('SignatureFormula').",\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname')."\n".get_lang('PlataformAdmin')." - ".api_get_setting('siteName');
+        $email_body .= "\n\n".
+            get_lang('SignatureFormula').",\n".
+            api_get_setting('administratorName')." ".
+            api_get_setting('administratorSurname')."\n".
+            get_lang('PlataformAdmin')." - ".
+            api_get_setting('siteName');
 
         $sender_name = api_get_person_name(
             api_get_setting('administratorName'),
@@ -205,16 +219,16 @@ class Login
         $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
         $mailSubject = get_lang('ResetPasswordInstructions');
         $mailBody = sprintf(
-                get_lang('ResetPasswordCommentWithUrl'),
-                $url
-            );
+            get_lang('ResetPasswordCommentWithUrl'),
+            $url
+        );
 
         api_mail_html(
-                $user->getCompleteName(),
-                $user->getEmail(),
-                $mailSubject,
-                $mailBody
-            );
+            $user->getCompleteName(),
+            $user->getEmail(),
+            $mailSubject,
+            $mailBody
+        );
         Display::addFlash(Display::return_message(get_lang('CheckYourEmailAndFollowInstructions')));
         //}
     }

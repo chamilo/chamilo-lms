@@ -98,13 +98,13 @@ class DateTimePicker extends HTML_QuickForm_text
                         timeFormat: 'HH:mm',
                         altField: '#{$id}_alt',
                         altFormat: \"".get_lang('DateFormatLongNoDayJS')."\",
-                        altTimeFormat: \"" . get_lang('TimeFormatNoSecJS')."\",
-                        altSeparator: \" " . get_lang('AtTime')." \",
+                        altTimeFormat: \"".get_lang('TimeFormatNoSecJS')."\",
+                        altSeparator: \" ".get_lang('AtTime')." \",
                         altFieldTimeOnly: false,
                         showOn: 'both',
-                        buttonImage: '" . Display::return_icon('attendance.png', null, [], ICON_SIZE_TINY, true, true)."',
+                        buttonImage: '".Display::return_icon('attendance.png', null, [], ICON_SIZE_TINY, true, true)."',
                         buttonImageOnly: true,
-                        buttonText: '" . get_lang('SelectDate')."',
+                        buttonText: '".get_lang('SelectDate')."',
                         changeMonth: true,
                         changeYear: true
                     })

@@ -129,17 +129,35 @@ if (count($userList) > 0) {
 }
 echo '</div>';
 
+$allowSkillRelItem = api_get_configuration_value('allow_skill_rel_items');
+
 if (count($userList) == 0) {
     echo Display::return_message(get_lang('NoResultsAvailable'), 'warning');
 } else {
     echo '<br /><br /><table class="data_table">';
+    echo '<tr><th>';
+    echo get_lang('Student');
+    echo '</th>';
+    echo '<th>';
+    echo get_lang('Action');
+    echo '</th></tr>';
     foreach ($userList as $index => $value) {
         echo '<tr>
-                <td width="100%" >'.
-                get_lang('Student').' : '.api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].') </td>';
+                <td width="70%">'
+                .api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].') </td>';
         echo '<td>';
+        $link = '';
+        if ($allowSkillRelItem) {
+            $url = api_get_path(WEB_CODE_PATH).'gradebook/skill_rel_user.php?'.api_get_cidreq().'&user_id='.$value['user_id'].'&selectcat='.$cat_id;
+            $link = Display::url(
+                get_lang('Skills'),
+                $url,
+                ['class' => 'btn btn-default']
+            ).'&nbsp;';
+        }
+
         $url = api_get_self().'?'.api_get_cidreq().'&action=download&user_id='.$value['user_id'].'&selectcat='.$cat_id;
-        $link = Display::url(
+        $link .= Display::url(
             get_lang('ExportToPDF'),
             $url,
             ['target' => '_blank', 'class' => 'btn btn-default']

@@ -36,7 +36,7 @@ if (!api_is_allowed_to_edit()) {
 }
 
 // Getting the survey information
-$survey_id = isset($_GET['survey_id']) ? intval($_GET['survey_id']) : null;
+$survey_id = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : null;
 $survey_data = SurveyManager::get_survey($survey_id);
 
 // Additional information
@@ -160,8 +160,20 @@ if (api_get_configuration_value('hide_survey_reporting_button')) {
     $form->addElement('select', 'visible_results', get_lang('ResultsVisibility'), $visibleResults);
 }
 //$defaults['visible_results'] = 0;
-$form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'), null, ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false]);
-$form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'), null, ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false]);
+$form->addElement(
+    'html_editor',
+    'survey_introduction',
+    get_lang('SurveyIntroduction'),
+    null,
+    ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false]
+);
+$form->addElement(
+    'html_editor',
+    'survey_thanks',
+    get_lang('SurveyThanks'),
+    null,
+    ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false]
+);
 
 $extraField = new ExtraField('survey');
 $extraField->addElements($form, $survey_id);
@@ -261,20 +273,17 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit' && !empty($survey_id)) {
                 }
             }
         }
-
         $form->addElement('html', '</div>');
     }
 }
 
+$skillList = Skill::addSkillsToForm($form, ITEM_TYPE_SURVEY, $survey_id);
+
 $form->addElement('html', '</div><br />');
 
 if (isset($_GET['survey_id']) && $_GET['action'] == 'edit') {
-    $class = 'save';
-    $text = get_lang('ModifySurvey');
     $form->addButtonUpdate(get_lang('ModifySurvey'), 'submit_survey');
 } else {
-    $class = 'add';
-    $text = get_lang('CreateSurvey');
     $form->addButtonCreate(get_lang('CreateSurvey'), 'submit_survey');
 }
 
@@ -293,6 +302,8 @@ $form->addRule(
     'lte'
 );
 
+$defaults['skills'] = array_keys($skillList);
+
 // Setting the default values
 $form->setDefaults($defaults);
 
@@ -302,13 +313,14 @@ if ($form->validate()) {
     $values = $form->getSubmitValues();
     // Storing the survey
     $return = SurveyManager::store_survey($values);
+    Skill::saveSkills($form, ITEM_TYPE_SURVEY, $return['id']);
 
     $values['item_id'] = $return['id'];
     $extraFieldValue = new ExtraFieldValue('survey');
     $extraFieldValue->saveFieldValues($values);
 
     // Redirecting to the survey page (whilst showing the return message)
-    header('location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$return['id'].'&'.api_get_cidreq());
+    header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$return['id'].'&'.api_get_cidreq());
     exit;
 } else {
     // Displaying the header

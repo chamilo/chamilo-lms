@@ -43,6 +43,7 @@ class MessageManager
 
         return $count;
     }
+
     /**
      * Execute the SQL necessary to know the number of messages in the database
      * @param   int $userId The user for which we need the unread messages count
@@ -110,10 +111,12 @@ class MessageManager
         $from,
         $number_of_items,
         $column,
-        $direction
+        $direction,
+        $userId = 0
     ) {
-        $from = (int) $from;
-        $number_of_items = (int) $number_of_items;
+        $from = (int)$from;
+        $number_of_items = (int)$number_of_items;
+        $userId = empty($userId) ? api_get_user_id() : (int)$userId;
 
         //forcing this order
         if (!isset($direction)) {
@@ -146,7 +149,7 @@ class MessageManager
                     user_sender_id
                 FROM $table
                 WHERE
-                    user_receiver_id=".api_get_user_id()." AND
+                    user_receiver_id=".$userId." AND
                     msg_status IN (".MESSAGE_STATUS_NEW.", ".MESSAGE_STATUS_UNREAD.")
                     $keywordCondition
                 ORDER BY col$column $direction
@@ -179,7 +182,7 @@ class MessageManager
                     Display::url(
                         Display::returnFontAwesomeIcon('reply', 2),
                         $newMessageLink.'?re_id='.$messageId,
-                        ['title' => get_lang('ReplyToMessage') ]
+                        ['title' => get_lang('ReplyToMessage')]
                     );
             } else {
                 $message[1] = '<a '.$class.' href="view_message.php?id='.$messageId.'">'.$title.'</a><br />';
@@ -199,9 +202,13 @@ class MessageManager
                 Display::url(
                     Display::returnFontAwesomeIcon('share', 2),
                     $newMessageLink.'?forward_id='.$messageId,
-                    ['title' => get_lang('ForwardMessage') ]
+                    ['title' => get_lang('ForwardMessage')]
                 ).
-                '&nbsp;&nbsp;<a title="'.addslashes(get_lang('DeleteMessage')).'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" href="inbox.php?action=deleteone&id='.$messageId.'">'.
+                '&nbsp;&nbsp;<a title="'.addslashes(
+                    get_lang('DeleteMessage')
+                ).'" onclick="javascript:if(!confirm('."'".addslashes(
+                    api_htmlentities(get_lang('ConfirmDeleteMessage'))
+                )."'".')) return false;" href="inbox.php?action=deleteone&id='.$messageId.'">'.
                 Display::returnFontAwesomeIcon('trash', 2).'</a>';
             foreach ($message as $key => $value) {
                 $message[$key] = api_xml_http_response_encode($value);
@@ -262,8 +269,8 @@ class MessageManager
     {
         if (!empty($aboutUserInfo)) {
             $criteria = [
-              'userReceiverId' => $aboutUserInfo['id'],
-              'msgStatus' => MESSAGE_STATUS_CONVERSATION
+                'userReceiverId' => $aboutUserInfo['id'],
+                'msgStatus' => MESSAGE_STATUS_CONVERSATION
             ];
             $repo = Database::getManager()->getRepository('ChamiloCoreBundle:Message');
             $messages = $repo->findBy($criteria, ['sendDate' => 'DESC']);
@@ -648,7 +655,7 @@ class MessageManager
                       SET msg_status = ".MESSAGE_STATUS_DELETED."
                       WHERE 
                         user_receiver_id=".$user_receiver_id." AND 
-                        id = " . $id;
+                        id = ".$id;
             Database::query($query);
 
             return true;
@@ -1135,15 +1142,15 @@ class MessageManager
                 $query = "UPDATE $table SET
                           msg_status = '".MESSAGE_STATUS_NEW."'
                           WHERE
-                            user_receiver_id=" . api_get_user_id()." AND
-                            id='" . $messageId."'";
+                            user_receiver_id=".api_get_user_id()." AND
+                            id='".$messageId."'";
                 Database::query($query);
 
                 $query = "SELECT * FROM $table
                           WHERE
                             msg_status<> ".MESSAGE_STATUS_OUTBOX." AND
                             user_receiver_id=".api_get_user_id()." AND
-                            id='" . $messageId."'";
+                            id='".$messageId."'";
                 $result = Database::query($query);
             }
         }
@@ -1156,6 +1163,7 @@ class MessageManager
             $source
         );
 
+        $row['content'] = str_replace('</br>', '<br />', $row['content']);
         $title = Security::remove_XSS($row['title'], STUDENT, true);
         $content = Security::remove_XSS($row['content'], STUDENT, true);
 
@@ -1188,7 +1196,9 @@ class MessageManager
                 $message_content .= '<li>'.$userImage.'</li>';
                 $message_content .= '<li>'.$name.'&nbsp;';
                 if (!empty($receiverUserInfo)) {
-                    $message_content .= api_strtolower(get_lang('To')).'&nbsp;<b>'.$receiverUserInfo['complete_name_with_username'].'</b></li>';
+                    $message_content .= api_strtolower(
+                            get_lang('To')
+                        ).'&nbsp;<b>'.$receiverUserInfo['complete_name_with_username'].'</b></li>';
                 } else {
                     $message_content .= api_strtolower(get_lang('To')).'&nbsp;<b>-</b></li>';
                 }
@@ -1201,7 +1211,9 @@ class MessageManager
                 $message_content .= '<ul class="list-message">';
                 if (!empty($user_sender_id)) {
                     $message_content .= '<li>'.$userImage.'</li>';
-                    $message_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a>';
+                    $message_content .= '<li><a href="'.api_get_path(
+                            WEB_PATH
+                        ).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a>';
                 } else {
                     $message_content .= '<li>'.$name;
                 }
@@ -1226,10 +1238,10 @@ class MessageManager
 		        <hr style="color:#ddd" />
 		        <table width="100%">
 		            <tr>
-		              <td valign=top class="view-message-content">' . str_replace("\\", "", $content).'</td>
+		              <td valign=top class="view-message-content">'.str_replace("\\", "", $content).'</td>
 		            </tr>
 		        </table>
-		        <div id="message-attach">' . (!empty($files_attachments) ? implode('<br />', $files_attachments) : '').'</div>
+		        <div id="message-attach">'.(!empty($files_attachments) ? implode('<br />', $files_attachments) : '').'</div>
 		        <div style="padding: 15px 0px 5px 0px">';
         $social_link = '';
         if (isset($_GET['f']) && $_GET['f'] == 'social') {
@@ -1264,7 +1276,7 @@ class MessageManager
     {
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $sql = 'SELECT user_id FROM '.$tbl_user.'
-                WHERE email="' . Database::escape_string($user_email).'";';
+                WHERE email="'.Database::escape_string($user_email).'";';
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs, 'ASSOC');
         if (isset($row['user_id'])) {
@@ -1345,19 +1357,25 @@ class MessageManager
                     $my_group_role == GROUP_USER_PERMISSION_MODERATOR
                 ) {
                     $actions = '<br />'.Display::url(
-                        get_lang('Delete'),
-                        api_get_path(WEB_CODE_PATH).'social/group_topics.php?action=delete&id='.$group_id.'&topic_id='.$topic['id'],
-                        ['class' => 'btn btn-default']
-                    );
+                            get_lang('Delete'),
+                            api_get_path(
+                                WEB_CODE_PATH
+                            ).'social/group_topics.php?action=delete&id='.$group_id.'&topic_id='.$topic['id'],
+                            ['class' => 'btn btn-default']
+                        );
                 }
 
                 $date = '';
                 if ($topic['send_date'] != $topic['update_date']) {
                     if (!empty($topic['update_date'])) {
-                        $date .= '<i class="fa fa-calendar"></i> '.get_lang('LastUpdate').' '.Display::dateToStringAgoAndLongDate($topic['update_date']);
+                        $date .= '<i class="fa fa-calendar"></i> '.get_lang(
+                                'LastUpdate'
+                            ).' '.Display::dateToStringAgoAndLongDate($topic['update_date']);
                     }
                 } else {
-                    $date .= '<i class="fa fa-calendar"></i> '.get_lang('Created').' '.Display::dateToStringAgoAndLongDate($topic['send_date']);
+                    $date .= '<i class="fa fa-calendar"></i> '.get_lang(
+                            'Created'
+                        ).' '.Display::dateToStringAgoAndLongDate($topic['send_date']);
                 }
                 $html .= '<div class="date">'.$label.' - '.$date.$actions.'</div>';
                 $html .= '</div>';
@@ -1365,7 +1383,9 @@ class MessageManager
                 $image = $user_sender_info['avatar'];
 
                 $user_info = '<div class="author"><img class="img-responsive img-circle" src="'.$image.'" alt="'.$name.'"  width="64" height="64" title="'.$name.'" /></div>';
-                $user_info .= '<div class="name"><a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a></div>';
+                $user_info .= '<div class="name"><a href="'.api_get_path(
+                        WEB_PATH
+                    ).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a></div>';
 
                 $html .= '<div class="col-xs-4 col-md-2">';
                 $html .= $user_info;
@@ -1438,16 +1458,18 @@ class MessageManager
         ) {
             $urlEdit = api_get_path(WEB_CODE_PATH);
             $urlEdit .= 'social/message_for_group_form.inc.php?';
-            $urlEdit .= http_build_query([
-                'user_friend' => $current_user_id,
-                'group_id' => $group_id,
-                'message_id' => $main_message['id'],
-                'action' => 'edit_message_group',
-                'anchor_topic' => 'topic_'.$main_message['id'],
-                'topics_page_nr' => $topic_page_nr,
-                'items_page_nr' => $items_page_nr,
-                'topic_id' => $main_message['id']
-            ]);
+            $urlEdit .= http_build_query(
+                [
+                    'user_friend' => $current_user_id,
+                    'group_id' => $group_id,
+                    'message_id' => $main_message['id'],
+                    'action' => 'edit_message_group',
+                    'anchor_topic' => 'topic_'.$main_message['id'],
+                    'topics_page_nr' => $topic_page_nr,
+                    'items_page_nr' => $items_page_nr,
+                    'topic_id' => $main_message['id']
+                ]
+            );
 
             $links .= Display::url(
                 Display::returnFontAwesomeIcon('pencil'),
@@ -1463,15 +1485,17 @@ class MessageManager
 
         $urlReply = api_get_path(WEB_CODE_PATH);
         $urlReply .= 'social/message_for_group_form.inc.php?';
-        $urlReply .= http_build_query([
-            'user_friend' => api_get_user_id(),
-            'group_id' => $group_id,
-            'message_id' => $main_message['id'],
-            'action' => 'reply_message_group',
-            'anchor_topic' => 'topic_'.$main_message['id'],
-            'topics_page_nr' => $topic_page_nr,
-            'topic_id' => $main_message['id']
-        ]);
+        $urlReply .= http_build_query(
+            [
+                'user_friend' => api_get_user_id(),
+                'group_id' => $group_id,
+                'message_id' => $main_message['id'],
+                'action' => 'reply_message_group',
+                'anchor_topic' => 'topic_'.$main_message['id'],
+                'topics_page_nr' => $topic_page_nr,
+                'topic_id' => $main_message['id']
+            ]
+        );
 
         $links .= Display::url(
             Display::returnFontAwesomeIcon('commenting'),
@@ -1521,9 +1545,14 @@ class MessageManager
                 Display::dateToStringAgoAndLongDate($main_message['send_date']).
                 '</div>';
         }
-        $attachment = '<div class="message-attach">'.(!empty($files_attachments) ? implode('<br />', $files_attachments) : '').'</div>';
+        $attachment = '<div class="message-attach">'.(!empty($files_attachments) ? implode(
+                '<br />',
+                $files_attachments
+            ) : '').'</div>';
         $main_content .= '<div class="col-md-10">';
-        $user_link = '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$main_message['user_sender_id'].'">'.$name.'</a>';
+        $user_link = '<a href="'.api_get_path(
+                WEB_PATH
+            ).'main/social/profile.php?u='.$main_message['user_sender_id'].'">'.$name.'</a>';
         $main_content .= '<div class="message-content"> ';
         $main_content .= '<div class="username">'.$user_link.'</div>';
         $main_content .= $date;
@@ -1794,6 +1823,7 @@ class MessageManager
     }
 
     //@todo this functions should be in the message class
+
     /**
      * @param string $keyword
      * @return string
@@ -2202,5 +2232,70 @@ class MessageManager
         fclose($file);
 
         return array_reverse($mail_queue);
+    }
+
+    /**
+     * @param int $userId
+     * @return array
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public static function getUsersThatHadConversationWithUser($userId)
+    {
+        $messagesTable = Database::get_main_table(TABLE_MESSAGE);
+        $userId = (int) $userId;
+
+        $sql = "SELECT DISTINCT
+                    user_sender_id
+                FROM $messagesTable
+                WHERE
+                    user_receiver_id = ".$userId;
+        $result = Database::query($sql);
+        $users = Database::store_result($result);
+        $userList = [];
+        foreach ($users as $userData) {
+            $userId = $userData['user_sender_id'];
+            if (empty($userId)) {
+                continue;
+            }
+            $userInfo = api_get_user_info($userId);
+            if ($userInfo) {
+                $userList[$userId] = $userInfo;
+            }
+        }
+
+        return $userList;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $otherUserId
+     * @return array
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public static function getAllMessagesBetweenStudents($userId, $otherUserId)
+    {
+        $messagesTable = Database::get_main_table(TABLE_MESSAGE);
+        $userId = (int) $userId;
+        $otherUserId = (int) $otherUserId;
+
+        if (empty($otherUserId) || empty($userId)) {
+            return [];
+        }
+
+        $sql = "SELECT DISTINCT * 
+                FROM $messagesTable
+                WHERE
+                    (user_receiver_id = $userId AND user_sender_id = $otherUserId) OR
+                    (user_receiver_id = $otherUserId AND user_sender_id = $userId)
+                ORDER BY send_date DESC
+            ";
+        $result = Database::query($sql);
+        $messages = Database::store_result($result);
+        $list = [];
+        foreach ($messages as $message) {
+            $list[] = $message;
+        }
+
+        return $list;
     }
 }

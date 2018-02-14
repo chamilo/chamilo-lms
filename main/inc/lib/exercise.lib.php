@@ -67,7 +67,9 @@ class ExerciseLib
             if (!$only_questions) {
                 $questionDescription = $objQuestionTmp->selectDescription();
                 if ($show_title) {
-                    TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
+                    if ($exercise->display_category_name) {
+                        TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
+                    }
                     $titleToDisplay = null;
                     if ($answerType == READING_COMPREHENSION) {
                         // In READING_COMPREHENSION, the title of the question
@@ -1214,8 +1216,9 @@ HTML;
 
             if (!$only_questions) {
                 if ($show_title) {
-                    TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
-
+                    if ($exercise->display_category_name) {
+                        TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
+                    }
                     echo $objQuestionTmp->getTitleToDisplay($current_item);
                 }
                 //@todo I need to the get the feedback type
@@ -1283,7 +1286,9 @@ HOTSPOT;
 
             if (!$only_questions) {
                 if ($show_title) {
-                    TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
+                    if ($exercise->display_category_name) {
+                        TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
+                    }
                     echo $objQuestionTmp->getTitleToDisplay($current_item);
                 }
                 echo '
@@ -1298,7 +1303,8 @@ HOTSPOT;
                                     AnnotationQuestion({
                                         questionId: '.$questionId.',
                                         exerciseId: '.$exe_id.',
-                                        relPath: \''.$relPath.'\'
+                                        relPath: \''.$relPath.'\',
+                                        courseId: '.$course_id.',
                                     });
                                 </script>
                             </div>
@@ -1325,10 +1331,8 @@ HOTSPOT;
                     </div>
                 ';
             }
-
             $objAnswerTmp = new Answer($questionId);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
-
             unset($objAnswerTmp, $objQuestionTmp);
         }
         return $nbrAnswers;
@@ -2880,7 +2884,7 @@ EOT;
         $course_id = 0,
         $only_active_exercises = true
     ) {
-        $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
+        $table = Database::get_course_table(TABLE_QUIZ_TEST);
 
         if ($only_active_exercises) {
             // Only active exercises.
@@ -2899,9 +2903,9 @@ EOT;
             $course_id
         ];
 
-        if ($session_id == 0) {
+        if (empty($session_id)) {
             $conditions = [
-                'where' => ["$sql_active_exercises session_id = ? AND c_id = ?" => $params],
+                'where' => ["$sql_active_exercises (session_id = 0 OR session_id IS NULL) AND c_id = ?" => [$course_id]],
                 'order' => 'title'
             ];
         } else {
@@ -2912,7 +2916,7 @@ EOT;
             ];
         }
 
-        return Database::select('*', $TBL_EXERCISES, $conditions);
+        return Database::select('*', $table, $conditions);
     }
 
     /**
@@ -3995,7 +3999,6 @@ EOT;
         }
 
         $showTotalScoreAndUserChoicesInLastAttempt = true;
-
         if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
             $show_only_score = true;
             $show_results = true;

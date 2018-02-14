@@ -1073,18 +1073,18 @@ class GradebookTable extends SortableTable
 
                 $url = $item->get_link();
 
+                $text = $item->get_name();
                 if (isset($url) && $show_message === false) {
                     $text = '&nbsp;<a href="'.$item->get_link().'">'
                         .$item->get_name()
                         .'</a>';
-                } else {
-                    $text = $item->get_name();
                 }
 
                 $extra = Display::label($item->get_type_name(), 'info');
                 if ($type == 'simple') {
                     $extra = '';
                 }
+                $extra .= $item->getSkillsFromItem();
 
                 $text .= "&nbsp;".$extra.$show_message;
                 $cc = $this->currentcat->get_course_code();

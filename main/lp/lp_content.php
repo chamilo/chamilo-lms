@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Script that displays an error message when no content could be loaded
  * @package chamilo.learnpath
@@ -20,9 +22,12 @@ if (empty($lp_controller_touched)) {
     header('location: lp_controller.php?action=content&lp_id='.intval($_REQUEST['lp_id']).'&item_id='.intval($_REQUEST['item_id']).'&'.api_get_cidreq());
     exit;
 }
-$_SESSION['oLP']->error = '';
-$lp_type = $_SESSION['oLP']->get_type();
-$lp_item_id = $_SESSION['oLP']->get_current_item_id();
+
+/** @var learnpath $learnPath */
+$learnPath = Session::read('oLP');
+$learnPath->error = '';
+$lp_type = $learnPath->get_type();
+$lp_item_id = $learnPath->get_current_item_id();
 
 /**
  * Get a link to the corresponding document
@@ -32,7 +37,7 @@ if ($debug > 0) {
     error_log('New lp - In lp_content.php - Looking for file url', 0);
 }
 
-$list = $_SESSION['oLP']->get_toc();
+$list = $learnPath->get_toc();
 $dir = false;
 
 foreach ($list as $toc) {
@@ -40,18 +45,19 @@ foreach ($list as $toc) {
         $dir = true;
     }
 }
+
 if ($dir) {
     $src = 'blank.php';
 } else {
     switch ($lp_type) {
         case 1:
-            $_SESSION['oLP']->stop_previous_item();
-            $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
+            $learnPath->stop_previous_item();
+            $prereq_check = $learnPath->prerequisites_match($lp_item_id);
 
             if ($prereq_check === true) {
-                $src = $_SESSION['oLP']->get_link('http', $lp_item_id);
-                $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
-                $src = $_SESSION['oLP']->fixBlockedLinks($src);
+                $src = $learnPath->get_link('http', $lp_item_id);
+                $learnPath->start_current_item(); // starts time counter manually if asset
+                $src = $learnPath->fixBlockedLinks($src);
 
                 break;
             }
@@ -59,23 +65,23 @@ if ($dir) {
             $src = 'blank.php?error=prerequisites';
             break;
         case 2:
-            $_SESSION['oLP']->stop_previous_item();
-            $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
+            $learnPath->stop_previous_item();
+            $prereq_check = $learnPath->prerequisites_match($lp_item_id);
 
             if ($prereq_check === true) {
-                $src = $_SESSION['oLP']->get_link('http', $lp_item_id);
-                $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
+                $src = $learnPath->get_link('http', $lp_item_id);
+                $learnPath->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php?error=prerequisites';
             }
             break;
         case 3:
             // save old if asset
-            $_SESSION['oLP']->stop_previous_item(); // save status manually if asset
-            $prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
+            $learnPath->stop_previous_item(); // save status manually if asset
+            $prereq_check = $learnPath->prerequisites_match($lp_item_id);
             if ($prereq_check === true) {
-                $src = $_SESSION['oLP']->get_link('http', $lp_item_id);
-                $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
+                $src = $learnPath->get_link('http', $lp_item_id);
+                $learnPath->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php';
             }
@@ -88,7 +94,7 @@ if ($dir) {
 if ($debug > 0) {
     error_log('New lp - In lp_content.php - File url is '.$src, 0);
 }
-$_SESSION['oLP']->set_previous_item($lp_item_id);
+$learnPath->set_previous_item($lp_item_id);
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
@@ -97,7 +103,7 @@ if (api_is_in_gradebook()) {
     ];
 }
 // Define the 'doc.inc.php' as language file.
-$nameTools = $_SESSION['oLP']->get_name();
+$nameTools = $learnPath->get_name();
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'lp/lp_list.php?'.api_get_cidreq(),
     'name' => get_lang('Doc'),
@@ -109,5 +115,6 @@ $_setting['show_navigation_menu'] = false;
 if ($debug > 0) {
     error_log('New LP - In lp_content.php - Loading '.$src, 0);
 }
+Session::write('oLP', $learnPath);
 header("Location: ".urldecode($src));
 exit;

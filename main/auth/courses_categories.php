@@ -105,14 +105,19 @@ $code = isset($code) ? $code : null;
         $form .= '<div class="form-group">';
         $form .= '<label>'.get_lang('CourseCategories').'</label>';
         $form .= '<select name="category_code" onchange="submit();" class="selectpicker show-tick form-control">';
-
         foreach ($browse_course_categories[0] as $category) {
             $categoryCode = $category['code'];
             $countCourse = $category['count_courses'];
+            if (empty($countCourse)) {
+                continue;
+            }
             $form .= '<option '.($categoryCode == $codeType ? 'selected="selected" ' : '')
                                 .' value="'.$category['code'].'">'.$category['name'].' ('.$countCourse.') </option>';
             if (!empty($browse_course_categories[$categoryCode])) {
                 foreach ($browse_course_categories[$categoryCode] as $subCategory) {
+                    if (empty($subCategory['count_courses'])) {
+                        continue;
+                    }
                     $subCategoryCode = $subCategory['code'];
                     $form .= '<option '
                                         .($subCategoryCode == $codeType
@@ -163,10 +168,16 @@ if ($showCourses && $action != 'display_sessions') {
         }
 
         $showTeacher = api_get_setting('display_teacher_in_courselist') === 'true';
-
         $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
         $user_id = api_get_user_id();
-        $categoryList = CourseManager::getCategoriesList();
+        $categoryListFromDatabase = CourseCategory::getCategories();
+
+        $categoryList = [];
+        if (!empty($categoryListFromDatabase)) {
+            foreach ($categoryListFromDatabase as $categoryItem) {
+                $categoryList[$categoryItem['code']] = $categoryItem['name'];
+            }
+        }
 
         if (!empty($browse_courses_in_category)) {
             echo '<div class="grid-courses row">';
@@ -204,7 +215,6 @@ if ($showCourses && $action != 'display_sessions') {
 
                 $separator = null;
                 $subscribeButton = return_register_button($course, $stok, $code, $searchTerm);
-
                 // Start buy course validation
                 // display the course price and buy button if the buycourses plugin is enabled and this course is configured
                 $plugin = BuyCoursesPlugin::create();
@@ -268,7 +278,6 @@ if ($showCourses && $action != 'display_sessions') {
                 $html .= '</div>';
                 echo $html;
             }
-
             echo '</div>';
         } else {
             if (!isset($_REQUEST['subscribe_user_with_password']) &&
@@ -409,9 +418,7 @@ function return_teacher($courseInfo)
 function return_title($course, $registeredUser)
 {
     $linkCourse = api_get_course_url($course['code']);
-
     $html = '<div class="block-title"><h4 class="title">';
-
     if (!$registeredUser) {
         $html .= $course['title'];
     } else {

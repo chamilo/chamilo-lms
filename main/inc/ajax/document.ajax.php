@@ -17,7 +17,7 @@ switch ($action) {
         break;
     case 'get_document_quota':
         // Getting the course quota
-        $course_quota = DocumentManager::get_course_quota();
+        $courseQuota = DocumentManager::get_course_quota();
 
         // Calculating the total space
         $already_consumed_space_course = DocumentManager::documents_total_space(
@@ -26,7 +26,7 @@ switch ($action) {
 
         // Displaying the quota
         echo DocumentManager::displaySimpleQuota(
-            $course_quota,
+            $courseQuota,
             $already_consumed_space_course
         );
 
@@ -110,11 +110,9 @@ switch ($action) {
                         api_htmlentities($result['url']),
                         ['target'=>'_blank']
                     );
-
                     $json['url'] = $result['url'];
                     $json['size'] = format_file_size($file['size']);
                     $json['type'] = api_htmlentities($file['type']);
-
                     $json['result'] = Display::return_icon(
                         'accept.png',
                         get_lang('Uploaded')

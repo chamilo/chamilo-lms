@@ -36,7 +36,17 @@ class CourseCategory
         $sql = "SELECT * FROM $table WHERE code ='$category'";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
-            return Database::fetch_array($result, 'ASSOC');
+            $category = Database::fetch_array($result, 'ASSOC');
+            // Get access url id
+            $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+            $sql = "SELECT * FROM $table WHERE course_category_id = ".$category['id'];
+            $result = Database::query($sql);
+            $result = Database::fetch_array($result);
+            if ($result) {
+                $category['access_url_id'] = $result['access_url_id'];
+            }
+
+            return $category;
         }
 
         return [];
@@ -46,7 +56,7 @@ class CourseCategory
      * @param string $category Optional. Parent category code
      * @return array
      */
-    public static function getCategories($category = null)
+    public static function getCategories($category = '')
     {
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -54,8 +64,13 @@ class CourseCategory
         $conditions = null;
 
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+
         $conditions = " INNER JOIN $table a ON (t1.id = a.course_category_id)";
         $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
+        $allowBaseCategories = api_get_configuration_value('allow_base_course_category');
+        if ($allowBaseCategories) {
+            $whereCondition = " AND (a.access_url_id = ".api_get_current_access_url_id()." OR a.access_url_id = 1) ";
+        }
 
         $parentIdCondition = " AND (t1.parent_id IS NULL OR t1.parent_id = '' )";
         if (!empty($category)) {
@@ -68,7 +83,8 @@ class CourseCategory
                 t1.parent_id,
                 t1.tree_pos,
                 t1.children_count,
-                COUNT(DISTINCT t3.code) AS nbr_courses
+                COUNT(DISTINCT t3.code) AS nbr_courses,
+                a.access_url_id
                 FROM $tbl_category t1
                 $conditions
                 LEFT JOIN $tbl_category t2
@@ -87,7 +103,7 @@ class CourseCategory
                 ORDER BY t1.tree_pos";
 
         $result = Database::query($sql);
-        $categories = Database::store_result($result);
+        $categories = Database::store_result($result, 'ASSOC');
 
         return $categories;
     }
@@ -437,14 +453,19 @@ class CourseCategory
                 ICON_SIZE_SMALL
             );
 
+            $urlId = api_get_current_access_url_id();
             foreach ($categories as $category) {
                 $editUrl = $mainUrl.'&id='.$category['code'].'&action=edit';
                 $moveUrl = $mainUrl.'&id='.$category['code'].'&action=moveUp&tree_pos='.$category['tree_pos'];
                 $deleteUrl = $mainUrl.'&id='.$category['code'].'&action=delete';
 
-                $actions = Display::url($editIcon, $editUrl).
-                    Display::url($moveIcon, $moveUrl).
-                    Display::url($deleteIcon, $deleteUrl);
+                $actions = [];
+
+                if ($urlId == $category['access_url_id']) {
+                    $actions[] = Display::url($editIcon, $editUrl);
+                    $actions[] = Display::url($moveIcon, $moveUrl);
+                    $actions[] = Display::url($deleteIcon, $deleteUrl);
+                }
 
                 $url = api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.$category['code'];
                 $title = Display::url(
@@ -460,7 +481,7 @@ class CourseCategory
                     $title,
                     $category['children_count'],
                     $category['nbr_courses'],
-                    $actions
+                    implode('', $actions)
                 ];
                 $column = 0;
                 foreach ($content as $value) {
@@ -536,18 +557,6 @@ class CourseCategory
      */
     public static function browseCourseCategories()
     {
-        $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $conditions = null;
-
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-        $conditions = " INNER JOIN $table a ON (c.id = a.course_category_id)";
-        $whereCondition = " WHERE a.access_url_id = ".api_get_current_access_url_id();
-
-        $sql = "SELECT c.* FROM $tbl_category c
-                $conditions
-                $whereCondition
-                ORDER BY tree_pos ASC";
-        $result = Database::query($sql);
         $url_access_id = 1;
         if (api_is_multiple_url_enabled()) {
             $url_access_id = api_get_current_access_url_id();
@@ -565,18 +574,17 @@ class CourseCategory
             'count_courses' => $countCourses
         ];
 
-        while ($row = Database::fetch_array($result)) {
+        $categoriesFromDatabase = self::getCategories();
+        foreach ($categoriesFromDatabase as $row) {
             $count_courses = self::countCoursesInCategory($row['code']);
             $row['count_courses'] = $count_courses;
-            if (!isset($row['parent_id'])) {
+            if (empty($row['parent_id'])) {
                 $categories[0][$row['tree_pos']] = $row;
             } else {
                 $categories[$row['parent_id']][$row['tree_pos']] = $row;
             }
         }
-
         $count_courses = self::countCoursesInCategory();
-
         $categories[0][count($categories[0]) + 1] = [
             'id' => 0,
             'name' => get_lang('None'),
@@ -625,9 +633,11 @@ class CourseCategory
 
         $searchFilter = '';
         if (!empty($searchTerm)) {
-            $searchFilter = ' AND (code LIKE "%'.$searchTerm.'%"
-            OR title LIKE "%'.$searchTerm.'%"
-            OR tutor_name LIKE "%'.$searchTerm.'%") ';
+            $searchFilter = ' AND (
+                code LIKE "%'.$searchTerm.'%" OR 
+                title LIKE "%'.$searchTerm.'%" OR 
+                tutor_name LIKE "%'.$searchTerm.'%"
+            ) ';
         }
 
         $url_access_id = api_get_current_access_url_id();
@@ -1171,7 +1181,6 @@ class CourseCategory
         }
 
         $extension = getextension($fileData['name']);
-
         $dirName = 'course_category/';
         $fileDir = api_get_path(SYS_UPLOAD_PATH).$dirName;
         $fileName = "cc_$categoryId.{$extension[0]}";

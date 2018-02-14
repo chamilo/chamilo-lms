@@ -16,40 +16,42 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script();
 api_block_anonymous_users();
 
-if ($_user['user_id'] != api_get_user_id() || api_get_user_id() == 0 || $_user['user_id'] == 0) {
-    api_not_allowed();
-    die();
-}
-
 if (!isset($_GET['title']) || !isset($_GET['type']) || !isset($_GET['image'])) {
-    api_not_allowed();
-    die();
+    echo 'No title';
+    exit;
 }
 
 $paintDir = Session::read('paint_dir');
 if (empty($paintDir)) {
-    api_not_allowed();
-    die();
+    echo 'No directory to save';
+    exit;
 }
 
-//pixlr return
+$courseInfo = api_get_course_info();
+if (empty($courseInfo)) {
+    echo 'Course not set';
+    exit;
+}
 
-$filename = Security::remove_XSS($_GET['title']); //The user preferred file name of the image.
-$extension = Security::remove_XSS($_GET['type']); //The image type, "pdx", "jpg", "bmp" or "png".
-$urlcontents = Security::remove_XSS($_GET['image']); //A URL to the image on Pixlr.com server or the raw file post of the saved image.
+// pixlr return
+//The user preferred file name of the image.
+$filename = Security::remove_XSS($_GET['title']);
+//The image type, "pdx", "jpg", "bmp" or "png".
+$extension = Security::remove_XSS($_GET['type']);
+//A URL to the image on Pixlr.com server or the raw file post of the saved image.
+$urlcontents = Security::remove_XSS($_GET['image']);
 
-//make variables
-
+// make variables
 $title = Database::escape_string(str_replace('_', ' ', $filename));
-$current_session_id = api_get_session_id();
+$sessionId = api_get_session_id();
 $groupId = api_get_group_id();
 $groupInfo = GroupManager::get_group_properties($groupId);
-$relativeUrlPath = Session::read('paint_dir');
-$dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
+$dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
 $saveDir = $dirBaseDocuments.$paintDir;
 $contents = file_get_contents($urlcontents);
 
-//Security. Verify that the URL is pointing to a file @ pixlr.com domain or an ip @ pixlr.com. Comment because sometimes return a ip number
+//Security. Verify that the URL is pointing to a file @ pixlr.com domain or an ip @ pixlr.com.
+// Comment because sometimes return a ip number
 /*
 if (strpos($urlcontents, "pixlr.com") === 0){
     echo "Invalid referrer";
@@ -72,7 +74,8 @@ $filename = api_replace_dangerous_char($filename);
 $filename = disable_dangerous_file($filename);
 
 if (strlen(trim($filename)) == 0) {
-    echo "The title is empty"; //if title is empty, headers Content-Type = application/octet-stream, then not create a new title here please
+    echo "The title is empty"; //if title is empty, headers Content-Type = application/octet-stream,
+    // then not create a new title here please
     exit;
 }
 
@@ -87,7 +90,8 @@ if ($extension != 'jpg' && $extension != 'png' && $extension != 'pxd') {
     die();
 }
 if ($extension == 'pxd') {
-    echo "pxd file type does not supported"; // not secure because check security headers and finfo() return  Content-Type = application/octet-stream
+    echo "pxd file type does not supported";
+    // not secure because check security headers and finfo() return  Content-Type = application/octet-stream
     exit;
 }
 
@@ -108,13 +112,13 @@ if (strpos($current_mime, 'image') === false) {
     exit;
 }
 
-
 //path, file and title
 $paintFileName = $filename.'.'.$extension;
 $title = $title.'.'.$extension;
+$temp_file_2delete = Session::read('temp_realpath_image');
 
-if ($currentTool == 'document/createpaint') {
-    //check save as and prevent rewrite an older file with same name
+if (empty($temp_file_2delete)) {
+    // Create file
     if (0 != $groupId) {
         $group_properties = GroupManager :: get_group_properties($groupId);
         $groupPath = $group_properties['directory'];
@@ -131,79 +135,83 @@ if ($currentTool == 'document/createpaint') {
         $title = $filename.'_'.$i.'.'.$extension;
     }
 
-    //
     $documentPath = $saveDir.'/'.$paintFileName;
-    //add new document to disk
+    // Add new document to disk
     file_put_contents($documentPath, $contents);
-    //add document to database
-    $doc_id = add_document($_course, $relativeUrlPath.'/'.$paintFileName, 'file', filesize($documentPath), $title);
-    api_item_property_update(
-        $_course,
-        TOOL_DOCUMENT,
-        $doc_id,
-        'DocumentAdded',
-        $_user['user_id'],
-        $groupInfo,
-        null,
-        null,
-        null,
-        $current_session_id
-    );
-} elseif ($currentTool == 'document/editpaint') {
+    // Add document to database
+    $documentId = add_document($courseInfo, $paintDir.$paintFileName, 'file', filesize($documentPath), $title);
+    if ($documentId) {
+        api_item_property_update(
+            $courseInfo,
+            TOOL_DOCUMENT,
+            $documentId,
+            'DocumentAdded',
+            api_get_user_id(),
+            $groupInfo,
+            null,
+            null,
+            null,
+            $sessionId
+        );
+        Display::addFlash(Display::return_message(get_lang('Saved')));
+    }
+} else {
+    // Update
     $documentPath = $saveDir.'/'.$paintFileName;
-    //add new document to disk
     file_put_contents($documentPath, $contents);
-
     $paintFile = Session::read('paint_file');
 
     //check path
     if (empty($paintFile)) {
-        api_not_allowed();
-        die();
+        echo 'No attribute paint_file';
+        exit;
     }
     if ($paintFile == $paintFileName) {
-        $document_id = DocumentManager::get_document_id($_course, $relativeUrlPath.'/'.$paintFileName);
-        update_existing_document($_course, $document_id, filesize($documentPath), null);
+        $documentId = DocumentManager::get_document_id($courseInfo, $paintDir.$paintFileName);
+        update_existing_document($courseInfo, $documentId, filesize($documentPath), null);
         api_item_property_update(
-            $_course,
+            $courseInfo,
             TOOL_DOCUMENT,
-            $document_id,
+            $documentId,
             'DocumentUpdated',
             $_user['user_id'],
             $groupInfo,
             null,
             null,
             null,
-            $current_session_id
+            $sessionId
         );
     } else {
         //add a new document
-        $doc_id = add_document(
-            $_course,
-            $relativeUrlPath.'/'.$paintFileName,
+        $documentId = add_document(
+            $courseInfo,
+            $paintDir.$paintFileName,
             'file',
             filesize($documentPath),
             $title
         );
-        api_item_property_update(
-            $_course,
-            TOOL_DOCUMENT,
-            $doc_id,
-            'DocumentAdded',
-            $_user['user_id'],
-            $groupInfo,
-            null,
-            null,
-            null,
-            $current_session_id
-        );
+        if ($documentId) {
+            api_item_property_update(
+                $courseInfo,
+                TOOL_DOCUMENT,
+                $documentId,
+                'DocumentAdded',
+                api_get_user_id(),
+                $groupInfo,
+                null,
+                null,
+                null,
+                $sessionId
+            );
+            Display::addFlash(Display::return_message(get_lang('Updated')));
+        }
     }
 }
 
-
-//delete temporal file
-$temp_file_2delete = Session::read('temp_realpath_image');
-unlink($temp_file_2delete);
+if (!empty($temp_file_2delete)) {
+    // Delete temporal file
+    unlink($temp_file_2delete);
+}
 
 //Clean sessions and return to Chamilo file list
 Session::erase('paint_dir');
@@ -214,7 +222,7 @@ $exit = Session::read('exit_pixlr');
 if (empty($exit)) {
     $location = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq();
     echo '<script>window.parent.location.href="'.$location.'"</script>';
-    api_not_allowed(true);
+    exit;
 } else {
     echo '<div align="center" style="padding-top:150; font-family:Arial, Helvetica, Sans-serif;font-size:25px;color:#aaa;font-weight:bold;">'.get_lang('PleaseStandBy').'</div>';
     $location = api_get_path(WEB_CODE_PATH).'document/document.php?id='.Security::remove_XSS($exit).'&'.api_get_cidreq();

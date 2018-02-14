@@ -48,7 +48,7 @@ if (empty($objExercise) && !empty($fromExercise)) {
 }
 
 $nameTools = get_lang('QuestionPool');
-$interbreadcrumb[] = ["url" => "exercise.php", "name" => get_lang('Exercises')];
+$interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises')];
 
 if (!empty($objExercise)) {
     $interbreadcrumb[] = [

@@ -14,6 +14,11 @@ use ChamiloSession as Session;
 */
 
 require_once __DIR__.'/../inc/global.inc.php';
+
+if (api_get_setting('enabled_support_paint') === 'false') {
+    api_not_allowed(true);
+}
+
 $this_section = SECTION_COURSES;
 $nameTools = get_lang('PhotoRetouching');
 $groupRights = Session::read('group_member_with_upload_rights');
@@ -21,11 +26,6 @@ $groupRights = Session::read('group_member_with_upload_rights');
 api_protect_course_script();
 api_block_anonymous_users();
 $_course = api_get_course_info();
-
-if (api_get_setting('enabled_support_paint') === 'false') {
-    api_not_allowed(true);
-}
-
 $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
 if (empty($document_data)) {
     if (api_is_in_group()) {
@@ -37,15 +37,14 @@ if (empty($document_data)) {
 
 $document_id = $document_data['id'];
 $dir = $document_data['path'];
-
-//$dir = isset($_GET['dir']) ? Security::remove_XSS($_GET['dir']) : Security::remove_XSS($_POST['dir']);
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-//path for pixlr save
+// path for pixlr save
 $paintDir = Security::remove_XSS($dir);
-if ($paintDir == '/') {
-    $paintDir = '';
+if (empty($paintDir)) {
+    $paintDir = '/';
 }
+
 Session::write('paint_dir', $paintDir);
 Session::write('paint_file', get_lang('NewImage'));
 
@@ -102,7 +101,7 @@ if (!($is_allowed_to_edit || $groupRights ||
     api_not_allowed(true);
 }
 
-/*	Header */
+/* Header */
 Event::event_access_tool(TOOL_DOCUMENT);
 $display_dir = $dir;
 if (isset($group)) {
@@ -123,8 +122,8 @@ if (empty($document_data['parents'])) {
         ];
     }
 }
-Display :: display_header($nameTools, 'Doc');
 
+Display::display_header($nameTools, 'Doc');
 echo '<div class="actions">';
 echo '<a href="document.php?id='.$document_id.'">'.
     Display::return_icon(
@@ -139,21 +138,14 @@ echo '</div>';
 // pixlr
 // max size 1 Mb ??
 $title = urlencode(utf8_encode(get_lang('NewImage'))); //TODO:check
-//
 $image = Display::returnIconPath('canvas1024x768.png');
-//
-$pixlr_code_translation_table = ['' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn'];
-$langpixlr = api_get_language_isocode();
-$langpixlr = isset($pixlr_code_translation_table[$langpixlr]) ? $pixlredit_code_translation_table[$langpixlr] : $langpixlr;
-$loc = $langpixlr; // deprecated ?? TODO:check pixlr read user browser
-
 $exit_path = api_get_path(WEB_CODE_PATH).'document/exit_pixlr.php';
 Session::write('exit_pixlr', $document_data['path']);
-$referrer = "Chamilo";
 $target_path = api_get_path(WEB_CODE_PATH).'document/save_pixlr.php';
 $target = $target_path;
-$locktarget = "true";
-$locktitle = "false";
+$locktarget = 'true';
+$locktitle = 'false';
+$referrer = 'Chamilo';
 
 if ($_SERVER['HTTP_HOST'] == "localhost") {
     $path_and_file = api_get_path(SYS_PATH).'/crossdomain.xml';
@@ -167,28 +159,26 @@ if ($_SERVER['HTTP_HOST'] == "localhost") {
 			</cross-domain-policy>';//more open domain="*"
         @file_put_contents($path_and_file, $crossdomain);
     }
-    $credentials = "true";
+    $credentials = 'true';
 } else {
-    $credentials = "false";
+    $credentials = 'false';
 }
-$pixlr_url = '//pixlr.com/editor/?title='.$title.'&image='.$image.'&loc='.$loc.'&referrer='.$referrer.'&target='.$target.'&exit='.$exit_path.'&locktarget='.$locktarget.'&locktitle='.$locktitle.'&credentials='.$credentials;
+$pixlr_url = '//pixlr.com/editor/?title='.$title.'&image='.$image.'&referrer='.$referrer.'&target='.$target.'&exit='.$exit_path.'&locktarget='.$locktarget.'&locktitle='.$locktitle.'&credentials='.$credentials;
 ?>
 <script>
-
-document.write ('<iframe id="frame" frameborder="0" scrolling="no" src="<?php echo  $pixlr_url; ?>" width="100%" height="100%"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe></div>');
+document.write('<iframe id="frame" frameborder="0" scrolling="no" src="<?php echo $pixlr_url; ?>" width="100%" height="100%"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe></div>');
 function resizeIframe() {
-	var height = window.innerHeight;
-	//max lower size
-	if (height<600) {
-		height=600;
-	}
-	document.getElementById('frame').style.height = height +"px";
+    var height = window.innerHeight;
+    //max lower size
+    if (height<600) {
+        height=600;
+    }
+    document.getElementById('frame').style.height = height +"px";
 };
 document.getElementById('frame').onload = resizeIframe;
 window.onresize = resizeIframe;
 </script>
 <?php
-
 echo '<noscript>';
 echo '<iframe style="height: 600px; width: 100%;" scrolling="no" frameborder="0" src="'.$pixlr_url.'"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>';
 echo '</noscript>';

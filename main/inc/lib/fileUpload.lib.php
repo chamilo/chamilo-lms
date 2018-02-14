@@ -231,11 +231,9 @@ function handle_uploaded_document(
     $uploadedFile['name'] = stripslashes($uploadedFile['name']);
     // Add extension to files without one (if possible)
     $uploadedFile['name'] = add_ext_on_mime($uploadedFile['name'], $uploadedFile['type']);
-
+    $sessionId = (int) $sessionId;
     if (empty($sessionId)) {
         $sessionId = api_get_session_id();
-    } else {
-        $sessionId = intval($sessionId);
     }
 
     $groupInfo = [];
@@ -379,7 +377,7 @@ function handle_uploaded_document(
                 }*/
 
                 //if ($found == false) {
-                $whatIfFileExists = 'rename';
+                //$whatIfFileExists = 'rename';
                 //}
             }
 

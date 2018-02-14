@@ -2394,12 +2394,9 @@ class Exercise
             );
             $form->addElement('html', '<div class="clear">&nbsp;</div>');
             $form->addElement('checkbox', 'review_answers', null, get_lang('ReviewAnswers'));
-
             $form->addElement('html', '<div id="divtimecontrol"  style="display:'.$display.';">');
 
             // Timer control
-            //$time_hours_option = range(0,12);
-            //$time_minutes_option = range(0,59);
             $form->addElement(
                 'checkbox',
                 'enabletimercontrol',
@@ -2450,7 +2447,6 @@ class Exercise
             );
 
             $allow = api_get_configuration_value('allow_notification_setting_per_exercise');
-
             if ($allow === true) {
                 $settings = ExerciseLib::getNotificationSettings();
                 $group = [];
@@ -2463,7 +2459,6 @@ class Exercise
                         ['value' => $itemId]
                     );
                 }
-
                 $form->addGroup($group, '', [get_lang('EmailNotifications')]);
             }
 
@@ -2979,38 +2974,44 @@ class Exercise
      */
     public function copy_exercise()
     {
-        $exercise_obj = $this;
-
-        // force the creation of a new exercise
-        $exercise_obj->updateTitle($exercise_obj->selectTitle().' - '.get_lang('Copy'));
-        //Hides the new exercise
-        $exercise_obj->updateStatus(false);
-        $exercise_obj->updateId(0);
-        $exercise_obj->save();
-
-        $new_exercise_id = $exercise_obj->selectId();
-        $question_list = $exercise_obj->selectQuestionList();
-
-        if (!empty($question_list)) {
+        $exerciseObject = $this;
+        $categories = $exerciseObject->get_categories_in_exercise();
+        // Get all questions no matter the order/category settings
+        $questionList = $exerciseObject->getQuestionOrderedList();
+        // Force the creation of a new exercise
+        $exerciseObject->updateTitle($exerciseObject->selectTitle().' - '.get_lang('Copy'));
+        // Hides the new exercise
+        $exerciseObject->updateStatus(false);
+        $exerciseObject->updateId(0);
+        $exerciseObject->save();
+        $newId = $exerciseObject->selectId();
+        if ($newId && !empty($questionList)) {
             // Question creation
-            foreach ($question_list as $old_question_id) {
-                $old_question_obj = Question::read($old_question_id);
-                $new_id = $old_question_obj->duplicate();
-                if ($new_id) {
-                    $new_question_obj = Question::read($new_id);
-                    if (isset($new_question_obj) && $new_question_obj) {
-                        $new_question_obj->addToList($new_exercise_id);
+            foreach ($questionList as $oldQuestionId) {
+                $oldQuestionObj = Question::read($oldQuestionId);
+                $newQuestionId = $oldQuestionObj->duplicate();
+                if ($newQuestionId) {
+                    $newQuestionObj = Question::read($newQuestionId);
+                    if (isset($newQuestionObj) && $newQuestionObj) {
+                        $newQuestionObj->addToList($newId);
 
-                        if (!empty($old_question_obj->category)) {
-                            $new_question_obj->saveCategory($old_question_obj->category);
+                        if (!empty($oldQuestionObj->category)) {
+                            $newQuestionObj->saveCategory($oldQuestionObj->category);
                         }
 
                         // This should be moved to the duplicate function
-                        $new_answer_obj = new Answer($old_question_id);
-                        $new_answer_obj->read();
-                        $new_answer_obj->duplicate($new_question_obj);
+                        $newAnswerObj = new Answer($oldQuestionId);
+                        $newAnswerObj->read();
+                        $newAnswerObj->duplicate($newQuestionObj);
                     }
                 }
+            }
+            if (!empty($categories)) {
+                $newCategoryList = [];
+                foreach ($categories as $category) {
+                    $newCategoryList[$category['category_id']] = $category['count_questions'];
+                }
+                $exerciseObject->save_categories_in_exercise($newCategoryList);
             }
         }
     }
@@ -4001,7 +4002,6 @@ class Exercise
                                     if ($type == FillBlanks::FILL_THE_BLANK_MENU) {
                                         $listMenu = FillBlanks::getFillTheBlankMenuAnswers($correctAnswer, false);
                                         if (!empty($studentAnswer)) {
-                                            //var_dump($listMenu, $correctAnswer);
                                             foreach ($listMenu as $key => $item) {
                                                 if ($key == $correctAnswer) {
                                                     $studentAnswerToShow = $item;
@@ -4036,10 +4036,6 @@ class Exercise
                         $answer = FillBlanks::getAnswerInStudentAttempt(
                             $listCorrectAnswers
                         );
-
-                        if ($saved_results) {
-                            //var_dump($listCorrectAnswers);
-                        }
                     }
                     break;
                 case CALCULATED_ANSWER:
@@ -7001,12 +6997,12 @@ class Exercise
                     WHERE exercise_id = {$this->id} AND c_id = {$this->course_id}";
             Database::query($sql);
             if (!empty($categories)) {
-                foreach ($categories as $category_id => $count_questions) {
+                foreach ($categories as $categoryId => $countQuestions) {
                     $params = [
                         'c_id' => $this->course_id,
                         'exercise_id' => $this->id,
-                        'category_id' => $category_id,
-                        'count_questions' => $count_questions,
+                        'category_id' => $categoryId,
+                        'count_questions' => $countQuestions,
                     ];
                     Database::insert($table, $params);
                 }

@@ -752,7 +752,7 @@ function api_get_path($path = '', $configuration = [])
     }
 
     if (isset(Container::$container)) {
-        $root_web = Container::$container->get('router')->generate('legacy_index');
+        $root_web = urldecode(Container::$container->get('router')->generate('legacy_index'));
     }
 
     if (isset($configuration['multiple_access_urls']) &&

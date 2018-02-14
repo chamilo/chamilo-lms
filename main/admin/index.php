@@ -1,5 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * Index page of the admin tools
  * @package chamilo.admin
@@ -221,8 +224,10 @@ if (api_is_platform_admin()) {
         </form>';
     $blocks['platform']['search_form'] = $search_form;
 
+    //$url = Container::getRouter()->generate('chamilo_platform_settings', ['namespace' => 'platform']);
+    $url = api_get_path(WEB_PUBLIC_PATH).'admin/settings/platform';
     $items = [];
-    $items[] = ['url' => 'settings.php', 'label' => get_lang('PlatformConfigSettings')];
+    $items[] = ['url' => $url, 'label' => get_lang('PlatformConfigSettings')];
     $items[] = ['url' => 'languages.php', 'label' => get_lang('Languages')];
     $items[] = ['url' => 'settings.php?category=Plugins', 'label' => get_lang('Plugins')];
     $items[] = ['url' => 'settings.php?category=Regions', 'label' => get_lang('Regions')];

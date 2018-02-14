@@ -7736,8 +7736,6 @@ class learnpath
         $arrHide = [
             $id
         ];
-
-        //$parent_item_id = $_SESSION['parent_item_id'];
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
                 if ($arrLP[$i]['item_type'] == 'dir' &&

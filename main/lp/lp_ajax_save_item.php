@@ -444,7 +444,7 @@ function save_item(
     }
     $return .= "update_progress_bar('$myComplete', '$myTotal', '$myProgressMode');";
 
-    if (!isset($_SESSION['login_as'])) {
+    if (!Session::read('login_as')) {
         // If $_SESSION['login_as'] is set, then the user is an admin logged as the user.
         $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 

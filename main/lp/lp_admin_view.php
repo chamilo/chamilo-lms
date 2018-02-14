@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php
  *
@@ -17,6 +19,9 @@ api_protect_course_script();
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
+/** @var learnpath $learnPath */
+$learnPath = Session::read('oLP');
+
 $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
@@ -29,14 +34,6 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
     error_log('New LP - User not authorized in lp_admin_view.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
 }
-// From here on, we are admin because of the previous condition, so don't check anymore.
-
-$course_id = api_get_course_int_id();
-
-$sql_query = "SELECT * FROM $tbl_lp 
-              WHERE iid = $learnpath_id";
-$result = Database::query($sql_query);
-$therow = Database::fetch_array($result);
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
@@ -51,7 +48,7 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
-    "name" => stripslashes("{$therow['name']}"),
+    "name" => Security::remove_XSS($learnPath->get_name()),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
@@ -66,12 +63,12 @@ if (isset($_REQUEST['updateaudio'])) {
 
 // Theme calls.
 $show_learn_path = true;
-$lp_theme_css = $_SESSION['oLP']->get_theme();
+$lp_theme_css = $learnPath->get_theme();
 
 // POST action handling (uploading mp3, deleting mp3)
 if (isset($_POST['save_audio'])) {
     //Updating the lp.modified_on
-    $_SESSION['oLP']->set_modified_on();
+    $learnPath->set_modified_on();
 
     $lp_items_to_remove_audio = [];
     $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -150,7 +147,7 @@ if (isset($_POST['save_audio'])) {
         }
     }
     //echo Display::return_message(get_lang('ItemUpdated'), 'confirm');
-    $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
+    $url = api_get_self().'?action=add_item&type=step&lp_id='.$learnPath->get_id().'&'.api_get_cidreq();
     header('Location: '.$url);
     exit;
 }
@@ -162,7 +159,6 @@ $suredel = trim(get_lang('AreYouSureToDeleteJS'));
 <script>
 var newOrderData= "";
 //source code found in http://www.swartzfager.org/blog/dspNestedList.cfm
-
 $(function() {
     <?php
     if (!isset($_REQUEST['updateaudio'])) {
@@ -264,11 +260,11 @@ function confirmation(name) {
 </script>
 <?php
 
-echo $_SESSION['oLP']->build_action_menu();
+echo $learnPath->build_action_menu();
 
 echo '<div class="row">';
 echo '<div class="col-md-4">';
-echo $_SESSION['oLP']->return_new_tree(null, true);
+echo $learnPath->return_new_tree(null, true);
 echo '</div>';
 
 echo '<div class="col-md-8">';
@@ -280,7 +276,7 @@ switch ($_GET['action']) {
                 'confirm'
             );
         } else {
-            echo $_SESSION['oLP']->display_edit_item($_GET['id']);
+            echo $learnPath->display_edit_item($_GET['id']);
         }
         break;
     case 'delete_item':
@@ -294,7 +290,7 @@ switch ($_GET['action']) {
 }
 if (!empty($_GET['updateaudio'])) {
     // list of items to add audio files
-    echo $_SESSION['oLP']->overview();
+    echo $learnPath->overview();
 }
 
 echo '</div>';

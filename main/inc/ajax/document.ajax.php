@@ -110,7 +110,6 @@ switch ($action) {
                         api_htmlentities($result['url']),
                         ['target'=>'_blank']
                     );
-
                     $json['url'] = $result['url'];
                     $json['size'] = format_file_size($file['size']);
                     $json['type'] = api_htmlentities($file['type']);

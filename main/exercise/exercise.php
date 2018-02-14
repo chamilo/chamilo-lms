@@ -27,7 +27,7 @@ $htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
 api_protect_course_script(true);
 require_once 'hotpotatoes.lib.php';
 
-/* 	Constants and variables */
+/*  Constants and variables */
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $is_tutor = api_is_allowed_to_edit(true);
 $is_tutor_course = api_is_course_tutor();

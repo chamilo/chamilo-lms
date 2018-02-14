@@ -5,7 +5,9 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\SkillBundle\Entity\Profile;
+use Chamilo\SkillBundle\Entity\SkillRelItem;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -95,6 +97,11 @@ class Skill
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="skill", cascade={"persist"})
      */
     protected $issuedSkills;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelItem", mappedBy="skill", cascade={"persist"})
+     */
+    protected $items;
 
     /**
      * Constructor

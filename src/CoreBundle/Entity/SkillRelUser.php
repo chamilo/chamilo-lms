@@ -38,6 +38,7 @@ class SkillRelUser
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     private $user;
+
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", inversedBy="issuedSkills", cascade={"persist"})
      * @ORM\JoinColumn(name="skill_id", referencedColumnName="id", nullable=false)
@@ -98,6 +99,16 @@ class SkillRelUser
      * @ORM\OneToMany(targetEntity="SkillRelUserComment", mappedBy="skillRelUser")
      */
     protected $comments;
+
+    /**
+     * Whether this has been confirmed by a teacher or not
+     * Only set to 0 when the skill_rel_item says requires_validation = 1
+     * @var integer
+     *
+     * // uncomment if api_get_configuration_value('allow_skill_rel_items')
+     * @ORM\Column(name="validation_status", type="integer")
+     */
+    protected $validationStatus;
 
     /**
      * SkillRelUser constructor.
@@ -408,5 +419,23 @@ class SkillRelUser
         $average = $countValues > 0 ? $sum / $countValues : 0;
 
         return number_format($average, 2);
+    }
+
+    /**
+     * @return int
+     */
+    public function getValidationStatus()
+    {
+        return $this->validationStatus;
+    }
+
+    /**
+     * @param int $validationStatus
+     * @return SkillRelUser
+     */
+    public function setValidationStatus($validationStatus)
+    {
+        $this->validationStatus = $validationStatus;
+        return $this;
     }
 }

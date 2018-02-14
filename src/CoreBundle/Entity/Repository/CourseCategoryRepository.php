@@ -15,35 +15,43 @@ class CourseCategoryRepository extends EntityRepository
     /**
      * Get all course categories in an access url
      * @param int $accessUrl
+     * @param bool $allowBaseCategories
+     *
      * @return array
      */
-    public function findAllInAccessUrl($accessUrl)
+    public function findAllInAccessUrl($accessUrl, $allowBaseCategories = false)
     {
         $qb = $this->createQueryBuilder('c');
-        $query = $qb
+        $qb
             ->innerJoin(
                 'ChamiloCoreBundle:AccessUrlRelCourseCategory',
                 'a',
                 Join::WITH,
                 'c = a.courseCategoryId'
             )
-            ->where(
-                $qb->expr()->eq('a.accessUrlId', $accessUrl)
-            )->orderBy('c.treePos', 'ASC')
-            ->getQuery();
+            ->where($qb->expr()->eq('a.accessUrlId', $accessUrl))
+            ->orderBy('c.treePos', 'ASC')
+           ;
+
+        if ($allowBaseCategories) {
+            $qb->orWhere($qb->expr()->eq('a.accessUrlId', 1));
+        }
+
+        $query = $qb->getQuery();
 
         return $query->getResult();
     }
 
     /**
      * Get the number of course categories in an access url
+     * @param int $accessUrl
+     * @param bool $allowBaseCategories
      * @return int
      */
-    public function countAllInAccessUrl($accessUrl)
+    public function countAllInAccessUrl($accessUrl, $allowBaseCategories = false)
     {
         $qb = $this->createQueryBuilder('c');
-        $query = $qb
-            ->select('COUNT(c)')
+        $qb->select('COUNT(c)')
             ->innerJoin(
                 'ChamiloCoreBundle:AccessUrlRelCourseCategory',
                 'a',
@@ -52,8 +60,11 @@ class CourseCategoryRepository extends EntityRepository
             )
             ->where(
                 $qb->expr()->eq('a.accessUrlId', $accessUrl)
-            )
-            ->getQuery();
+            );
+
+        if ($allowBaseCategories) {
+            $qb->orWhere($qb->expr()->eq('a.accessUrlId', 1));
+        }
 
         $count = $qb->getQuery()->getSingleScalarResult();
 

@@ -62,7 +62,7 @@ class CkEditor extends Editor
             } else {
                 $cssFile = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/editor.css';
             }
-            $style = '<link href="'.$cssFile.'" rel="stylesheet" media="screen" type="text/css" />';
+            $style = '<link href="'.$cssFile.'" rel="stylesheet" type="text/css" />';
         }
 
         $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor">

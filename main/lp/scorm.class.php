@@ -635,7 +635,6 @@ class scorm extends learnpath
         $updateDirContents = false,
         $lpToCheck = null
     ) {
-        $this->debug = 100;
         if ($this->debug > 0) {
             error_log('In scorm::import_package('.print_r($zip_file_info, true).',"'.$current_dir.'") method', 0);
         }

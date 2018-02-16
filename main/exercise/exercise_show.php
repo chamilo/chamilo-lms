@@ -1062,6 +1062,15 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
             .'&id_session='.api_get_session_id();
     }
 
+    Skill::addSkillsToUserForm(
+        $emailForm,
+        ITEM_TYPE_EXERCISE,
+        $exercise_id,
+        $student_id,
+        $track_exercise_info['exe_id'],
+        true
+    );
+
     $content = ExerciseLib::getEmailNotification(
         $currentUserId,
         api_get_course_info(),
@@ -1069,6 +1078,7 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
         $url
     );
     $emailForm->setDefaults(['notification_content' => $content]);
+
     $emailForm->addButtonSend(
         get_lang('CorrectTest'),
         'submit',

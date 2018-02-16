@@ -2359,7 +2359,7 @@ class Skill extends Model
      * @param int $itemId
      * @param int $userId
      */
-    public static function addSkillsToUserForm(FormValidator $form, $typeId, $itemId, $userId)
+    public static function addSkillsToUserForm(FormValidator $form, $typeId, $itemId, $userId, $resultId = 0, $addHeader = false)
     {
         $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
         if ($allowSkillInTools && !empty($typeId) && !empty($itemId) && !empty($userId)) {
@@ -2392,9 +2392,13 @@ class Skill extends Model
                     'type_id' => $typeId,
                     'user_id' => $userId,
                     'course_id' => api_get_course_int_id(),
-                    'session_id' => api_get_session_id()
+                    'session_id' => api_get_session_id(),
+                    'result_id' => $resultId
                 ];
                 $params = json_encode($params);
+                if ($addHeader) {
+                    $form->addHtml(Display::page_subheader2(get_lang('Skills')));
+                }
                 $html = '
                 <script>
                     $(function() {
@@ -2416,6 +2420,9 @@ class Skill extends Model
                 ';
                 $form->addHtml($html);
                 $form->addLabel(get_lang('Skills'), $skills);
+                if ($addHeader) {
+                    $form->addHtml('<br />');
+                }
             }
         }
     }

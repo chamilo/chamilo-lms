@@ -26,7 +26,6 @@ $skills = Skill::getSkillRelItemsPerCourse($courseId, $sessionId);
 $uniqueSkills = [];
 $itemsPerSkill = [];
 $uniqueSkillsConclusion = [];
-
 $skillRelUser = new SkillRelUser();
 $userSkills = $skillRelUser->getUserSkills($userId, api_get_course_int_id(), api_get_session_id());
 $userSkillsList = [];
@@ -37,7 +36,7 @@ if (!empty($userSkills)) {
 }
 
 $em = Database::getManager();
-
+$codePath = api_get_path(WEB_CODE_PATH);
 /** @var SkillRelItem $skill */
 foreach ($skills as $skill) {
     $skillId = $skill->getSkill()->getId();
@@ -48,21 +47,19 @@ foreach ($skills as $skill) {
         'user' => $userId,
         'skillRelItem' => $skill
     ];
+    /** @var \Chamilo\SkillBundle\Entity\SkillRelItemRelUser $skillRelItemRelUser */
     $skillRelItemRelUser = $em->getRepository('ChamiloSkillBundle:SkillRelItemRelUser')->findOneBy($criteria);
+
     $itemInfo['status'] = $skillRelItemRelUser ? true : false;
+    $itemInfo['url_activity'] = '';
+    if ($skillRelItemRelUser) {
+        $itemInfo['url_activity'] = $codePath.$skillRelItemRelUser->getUserItemResultUrl(api_get_cidreq());
+    }
 
     $itemsPerSkill[$skillId][]['info'] = $itemInfo;
 }
-
 foreach ($itemsPerSkill as $skillId => $skillList) {
-    $allSkillsCompleted = true;
-    foreach ($skillList as $itemInfo) {
-        if ($itemInfo['info']['status'] === false) {
-            $allSkillsCompleted = false;
-            break;
-        }
-    }
-    $uniqueSkillsConclusion[$skillId] = $allSkillsCompleted;
+    $uniqueSkillsConclusion[$skillId] = in_array($skillId, $userSkillsList);
 }
 
 $interbreadcrumb[] = [
@@ -74,11 +71,16 @@ $interbreadcrumb[] = [
     'name' => get_lang('GradebookListOfStudentsReports')
 ];
 
+$url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=assign_user_to_skill';
+
 $template = new Template(get_lang('SkillUserList'));
 $template->assign('conclusion_list', $uniqueSkillsConclusion);
 $template->assign('skills', $uniqueSkills);
 $template->assign('items', $itemsPerSkill);
 $template->assign('user', $userInfo);
+$template->assign('course_id', api_get_course_int_id());
+$template->assign('session_id', api_get_session_id());
+$template->assign('assign_user_url', $url);
 
 $templateName = $template->get_template('gradebook/skill_rel_user.tpl');
 $content = $template->fetch($templateName);

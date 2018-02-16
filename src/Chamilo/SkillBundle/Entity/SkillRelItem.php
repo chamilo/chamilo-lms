@@ -360,4 +360,22 @@ class SkillRelItem
         $this->sessionId = $sessionId;
         return $this;
     }
+
+    /**
+     * @param string $cidReq
+     * @return string
+     */
+    public function getItemResultUrl($cidReq)
+    {
+        $url = '';
+        switch ($this->getItemType()) {
+            case ITEM_TYPE_EXERCISE:
+                $url = 'exercise/exercise_show.php?action=qualify&'.$cidReq;
+                break;
+            case ITEM_TYPE_STUDENT_PUBLICATION:
+                $url = 'work/view.php?'.$cidReq;
+                break;
+        }
+        return $url;
+    }
 }

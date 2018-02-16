@@ -39,6 +39,13 @@ class SkillRelItemRelUser
     protected $user;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="result_id", type="integer", nullable=true)
+     */
+    protected $resultId;
+
+    /**
      * @var \DateTime $created
      *
      * @Gedmo\Timestampable(on="create")
@@ -165,5 +172,34 @@ class SkillRelItemRelUser
     {
         $this->updatedBy = $updatedBy;
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getResultId()
+    {
+        return $this->resultId;
+    }
+
+    /**
+     * @param int $resultId
+     * @return SkillRelItemRelUser
+     */
+    public function setResultId($resultId)
+    {
+        $this->resultId = $resultId;
+        return $this;
+    }
+
+    /**
+     * @param string $cidReq
+     * @return string
+     */
+    public function getUserItemResultUrl($cidReq)
+    {
+        $resultId = $this->getResultId();
+        $url = $this->getSkillRelItem()->getItemResultUrl($cidReq).'&id='.$resultId;
+        return $url;
     }
 }

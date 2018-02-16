@@ -334,7 +334,7 @@ while ($row = Database::fetch_array($result)) {
     $exerciseResult[$row['question_id']] = $row['answer'];
 }
 
-//Fixing #2073 Fixing order of questions
+// Fixing #2073 Fixing order of questions
 if (!empty($track_exercise_info['data_tracking'])) {
     $temp_question_list = explode(',', $track_exercise_info['data_tracking']);
 
@@ -361,7 +361,9 @@ if (!empty($end_of_message) && ($origin == 'learnpath')) {
 $total_weighting = 0;
 foreach ($questionList as $questionId) {
     $objQuestionTmp = Question::read($questionId);
-    $total_weighting += $objQuestionTmp->selectWeighting();
+    if ($objQuestionTmp) {
+        $total_weighting += $objQuestionTmp->selectWeighting();
+    }
 }
 
 $counter = 1;
@@ -380,9 +382,14 @@ foreach ($questionList as $questionId) {
     $choice = isset($exerciseResult[$questionId]) ? $exerciseResult[$questionId] : '';
     // destruction of the Question object
     unset($objQuestionTmp);
-
-    // creates a temporary Question object
+    $questionWeighting = 0;
+    $answerType = 0;
+    $questionScore = 0;
+    // Creates a temporary Question object
     $objQuestionTmp = Question::read($questionId);
+    if (empty($objQuestionTmp)) {
+        continue;
+    }
     $questionWeighting = $objQuestionTmp->selectWeighting();
     $answerType = $objQuestionTmp->selectType();
 
@@ -907,7 +914,7 @@ foreach ($questionList as $questionId) {
 
     $contents = ob_get_clean();
     $question_content = '<div class="question_row">';
-    if ($show_results) {
+    if ($show_results && $objQuestionTmp) {
         $objQuestionTmp->export = $action == 'export';
         // Shows question title an description
         $question_content .= $objQuestionTmp->return_header(

@@ -4208,9 +4208,7 @@ class Exercise
                     }
                     break;
                 case DRAGGABLE:
-                    //no break
                 case MATCHING_DRAGGABLE:
-                    //no break
                 case MATCHING:
                     if ($from_database) {
                         $sql = "SELECT id, answer, id_auto
@@ -4332,7 +4330,7 @@ class Exercise
                                 if ($showTotalScoreAndUserChoicesInLastAttempt === false) {
                                     $user_answer = '';
                                 }
-                                 switch ($answerType) {
+                                switch ($answerType) {
                                     case MATCHING:
                                     case MATCHING_DRAGGABLE:
                                         echo '<tr>';
@@ -4939,17 +4937,11 @@ class Exercise
 
                     switch ($answerType) {
                         case UNIQUE_ANSWER:
-                            //no break
                         case UNIQUE_ANSWER_IMAGE:
-                            //no break
                         case UNIQUE_ANSWER_NO_OPTION:
-                            //no break
                         case MULTIPLE_ANSWER:
-                            //no break
                         case GLOBAL_MULTIPLE_ANSWER:
-                            //no break
                         case MULTIPLE_ANSWER_COMBINATION:
-                            //no break
                         case READING_COMPREHENSION:
                             if ($answerId == 1) {
                                 ExerciseShowFunctions::display_unique_or_multiple_answer(
@@ -5275,9 +5267,7 @@ class Exercise
                             );
                             break;
                         case DRAGGABLE:
-                            //no break
                         case MATCHING_DRAGGABLE:
-                            //no break
                         case MATCHING:
                             echo '<tr>';
                             echo Display::tag('td', $answerMatching[$answerId]);
@@ -7957,9 +7947,7 @@ class Exercise
                             $isCorrect = FillBlanks::isCorrect($answer['answer']);
                             break;
                         case MATCHING:
-                            //no break
                         case DRAGGABLE:
-                            //no break
                         case MATCHING_DRAGGABLE:
                             $isCorrect = Matching::isCorrect(
                                 $answer['position'],

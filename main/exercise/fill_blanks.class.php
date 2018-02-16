@@ -554,7 +554,6 @@ class FillBlanks extends Question
                 );
                 break;
             case self::FILL_THE_BLANK_SEVERAL_ANSWER:
-                //no break
             case self::FILL_THE_BLANK_STANDARD:
             default:
                 $attributes['id'] = 'choice_id_'.$currentQuestion.'_'.$inBlankNumber;
@@ -1273,7 +1272,6 @@ class FillBlanks extends Question
                 $correctAnswerHtml = "<span class='feedback-red'>".$firstCorrect."</span>";
                 break;
             case self::FILL_THE_BLANK_STANDARD:
-                // no break
             default:
                 $correctAnswerHtml = "<span class='feedback-green'>".$correct."</span>";
         }

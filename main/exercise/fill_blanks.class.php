@@ -544,12 +544,19 @@ class FillBlanks extends Question
                         break;
                     }
                 }
+                $width = '';
+                if (!empty($attributes['style'])) {
+                    $width = str_replace('width:', '', $attributes['style']);
+                }
 
                 $result = Display::select(
                     "choice[$questionId][]",
                     $resultOptions,
                     $selected,
-                    ['class' => 'selectpicker'],
+                    [
+                        'class' => 'selectpicker',
+                        'data-width' => $width
+                    ],
                     false
                 );
                 break;

@@ -396,20 +396,35 @@ foreach ($questionList as $questionId) {
     $relPath = api_get_path(WEB_CODE_PATH);
     switch ($answerType) {
         case MULTIPLE_ANSWER_COMBINATION:
+            //no break
         case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:
+            //no break
         case UNIQUE_ANSWER:
+            //no break;
         case UNIQUE_ANSWER_NO_OPTION:
+            //no break
         case UNIQUE_ANSWER_IMAGE:
+            //no break
         case MULTIPLE_ANSWER:
+            //no break
         case MULTIPLE_ANSWER_TRUE_FALSE:
+            //no break
         case FILL_IN_BLANKS:
+            //no break
         case CALCULATED_ANSWER:
+            //no break
         case GLOBAL_MULTIPLE_ANSWER:
+            //no break
         case FREE_ANSWER:
+            //no break
         case ORAL_EXPRESSION:
+            //no break
         case MATCHING:
+            //no break
         case DRAGGABLE:
+            //no break
         case READING_COMPREHENSION:
+            //no break
         case MATCHING_DRAGGABLE:
             $question_result = $objExercise->manage_answer(
                 $id,

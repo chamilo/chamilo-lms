@@ -760,7 +760,8 @@ ALTER TABLE skill_rel_item ADD CONSTRAINT FK_EB5B2A0D5585C142 FOREIGN KEY (skill
 // LP view custom settings
 // $_configuration['lp_view_settings'] = ['display' => ['show_reporting_icon' => true]];
 
-
+// Show more expected choice and status in exercise results BT#13950
+//$_configuration['show_exercise_expected_choice'] = false;
 
 // ------ Custom DB changes
 // Add user activation by confirmation email

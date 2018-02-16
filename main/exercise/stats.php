@@ -185,6 +185,7 @@ if (!empty($question_list)) {
                     }
                     break;
                 case MATCHING:
+                    //no break
                 case MATCHING_DRAGGABLE:
                     if ($is_correct == 0) {
                         if ($answer_id == 1) {

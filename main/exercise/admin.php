@@ -24,7 +24,6 @@ use ChamiloSession as Session;
  * - $objExercise : exercise object
  * - $objQuestion : question object
  * - $objAnswer : answer object
- * - $aType : array with answer types
  * - $exerciseId : the exercise ID
  * - $picturePath : the path of question pictures
  * - $newQuestion : ask to create a new question
@@ -135,17 +134,7 @@ $picturePath = $documentPath.'/images';
 // audio path
 $audioPath = $documentPath.'/audio';
 
-// the 5 types of answers
-$aType = [
-    get_lang('UniqueSelect'),
-    get_lang('MultipleSelect'),
-    get_lang('FillBlanks'),
-    get_lang('Matching'),
-    get_lang('FreeAnswer')
-];
-
 // tables used in the exercise tool
-
 if (!empty($_GET['action']) && $_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
     require_once 'export/qti2/qti2_export.php';
     $export = export_question_qti($_GET['questionId'], true);
@@ -264,7 +253,7 @@ if (!empty($clone_question) && !empty($objExercise->id)) {
     $new_answer_obj->read();
     $new_answer_obj->duplicate($new_question_obj);
 
-    //Reloading tne $objExercise obj
+    // Reloading tne $objExercise obj
     $objExercise->read($objExercise->id);
 
     header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id);
@@ -317,25 +306,6 @@ if ($modifyIn == 'thisExercise') {
         $modifyIn = 'allExercises';
     }
 }
-$htmlHeadXtra[] = '<script>
-function multiple_answer_true_false_onchange(variable) {
-    var result = variable.checked;
-    var id = variable.id;
-    var weight_id = "weighting_" + id;
-    var array_result=new Array();
-    array_result[1]="1";
-    array_result[0]= "-0.50";
-    array_result[-1]= "0";
-    if (result) {
-        result = 1;
-    } else {
-        result = 0;
-    }
-    document.getElementById(weight_id).value = array_result[result];
-}
-
-</script>';
-
 $htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
 $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 
@@ -391,11 +361,9 @@ if ($inATest) {
     }
 
     echo '</div>';
-
     if ($objExercise->added_in_lp()) {
         echo Display::return_message(get_lang('AddedToLPCannotBeAccessed'), 'warning');
     }
-
     echo '<div class="alert alert-info">';
     echo sprintf(
         get_lang('XQuestionsWithTotalScoreY'),
@@ -404,8 +372,7 @@ if ($inATest) {
     );
 
     if ($objExercise->random > 0) {
-        echo '<br />'.
-            sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
+        echo '<br />'.sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
     }
     echo '</div>';
 } elseif (isset($_GET['newQuestion'])) {

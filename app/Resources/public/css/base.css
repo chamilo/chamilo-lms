@@ -7327,3 +7327,47 @@ input.form-control[type="color"] {
 .popover-content .popover-teacher .teachers-details{
     text-align: left;
 }
+
+
+
+.feedback-green {
+    color: green;
+}
+
+.feedback-red {
+    color: red;
+    text-decoration: line-through;
+}
+
+.feedback-question {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.feedback-separator {
+    font-size:120%;
+}
+
+.score-title {
+    color: #162a83;
+    font-weight: bold;
+    font-size: 16px;
+}
+.score-limits{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.score-limits .score-img{
+    display: inline-block;
+    padding-right: 5px;
+}
+
+.feedback-question img {
+    padding-right: 5px;
+}
+
+.question_row_answer img, .question_row img {
+    max-width: 80%;
+    height: auto !important;
+}

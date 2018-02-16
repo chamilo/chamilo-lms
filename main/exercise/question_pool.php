@@ -48,7 +48,7 @@ if (empty($objExercise) && !empty($fromExercise)) {
 }
 
 $nameTools = get_lang('QuestionPool');
-$interbreadcrumb[] = ["url" => "exercise.php", "name" => get_lang('Exercises')];
+$interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises')];
 
 if (!empty($objExercise)) {
     $interbreadcrumb[] = [
@@ -299,7 +299,6 @@ if (empty($selected_course) || $selected_course == '-1') {
 } else {
     $course_info = api_get_course_info_by_id($selected_course);
 }
-
 // If course has changed, reset the menu default
 if ($course_id_changed) {
     reset_menu_exo_lvl_type();

@@ -647,10 +647,8 @@ class Answer
             $hotspot_coordinates = isset($this->new_hotspot_coordinates[$i]) ? $this->new_hotspot_coordinates[$i] : '';
             $hotspot_type = isset($this->new_hotspot_type[$i]) ? $this->new_hotspot_type[$i] : '';
             $destination = isset($this->new_destination[$i]) ? $this->new_destination[$i] : '';
-
             $autoId = $this->selectAutoId($i);
             $iid = isset($this->iid[$i]) ? $this->iid[$i] : 0;
-            $questionType = $this->getQuestionType();
 
             if (!isset($this->position[$i])) {
                 $quizAnswer = new CQuizAnswer();
@@ -672,7 +670,6 @@ class Answer
 
                 $iid = $quizAnswer->getIid();
 
-
                 if ($iid) {
                     $quizAnswer
                         ->setId($iid)
@@ -681,7 +678,12 @@ class Answer
                     $em->merge($quizAnswer);
                     $em->flush();
 
-                    if (in_array($questionType, [MATCHING, MATCHING_DRAGGABLE])) {
+                    $questionType = $this->getQuestionType();
+
+                    if (in_array(
+                        $questionType,
+                        [MATCHING, MATCHING_DRAGGABLE]
+                    )) {
                         $answer = new Answer($this->questionId);
                         $answer->read();
                         $correctAnswerId = $answer->selectAnswerIdByPosition($correct);

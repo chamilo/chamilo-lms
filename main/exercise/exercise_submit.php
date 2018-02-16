@@ -1369,10 +1369,13 @@ if (!empty($error)) {
             false,
             $origin,
             $i,
-            true,
+            $objExercise->getHideQuestionTitle() ? false : true,
             false,
             $user_choice,
-            false
+            false,
+            null,
+            false,
+            true
         );
 
         // Button save and continue

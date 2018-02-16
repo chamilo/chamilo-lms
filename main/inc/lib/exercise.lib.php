@@ -39,7 +39,8 @@ class ExerciseLib
         $freeze = false,
         $user_choice = [],
         $show_comment = false,
-        $show_answers = false
+        $show_answers = false,
+        $show_icon = false
     ) {
         $course_id = empty($exercise->course_id) ? api_get_course_int_id() : $exercise->course_id;
         $course = api_get_course_info_by_id($course_id);
@@ -309,8 +310,11 @@ class ExerciseLib
 
                 switch ($answerType) {
                     case UNIQUE_ANSWER:
+                        //no break
                     case UNIQUE_ANSWER_NO_OPTION:
+                        //no break
                     case UNIQUE_ANSWER_IMAGE:
+                        //no break
                     case READING_COMPREHENSION:
                         $input_id = 'choice-'.$questionId.'-'.$answerId;
                         if (isset($user_choice[0]['answer']) && $user_choice[0]['answer'] == $numAnswer) {
@@ -390,7 +394,9 @@ class ExerciseLib
                         }
                         break;
                     case MULTIPLE_ANSWER:
+                        //no break
                     case MULTIPLE_ANSWER_TRUE_FALSE:
+                        //no break
                     case GLOBAL_MULTIPLE_ANSWER:
                         $input_id = 'choice-'.$questionId.'-'.$answerId;
                         $answer = Security::remove_XSS($answer, STUDENT);
@@ -986,7 +992,6 @@ HTML;
                             foreach ($select_items as $key => $selectItem) {
                                 $draggableSelectOptions[$selectItem['id']] = $selectItem['letter'];
                             }
-
 
                             foreach ($draggableSelectOptions as $value => $text) {
                                 if ($value == $selectedValue) {
@@ -3643,7 +3648,9 @@ EOT;
                 $select_condition = " e.exe_id, answer ";
                 break;
             case MATCHING:
+                //no break
             case MATCHING_DRAGGABLE:
+                //no break
             default:
                 $answer_condition = " answer = $answer_id AND ";
                 $select_condition = " DISTINCT exe_user_id ";
@@ -3700,7 +3707,9 @@ EOT;
                     return $good_answers;
                     break;
                 case MATCHING:
+                    //no break
                 case MATCHING_DRAGGABLE:
+                    //no break
                 default:
                     $return = Database::num_rows($result);
             }
@@ -4225,11 +4234,18 @@ EOT;
                 if ($show_results) {
                     $question_content .= '</div>';
                 }
-                if (!$show_only_score) {
+                if ($objExercise->showExpectedChoice()) {
                     $exercise_content .= Display::div(
                         Display::panel($question_content),
                         ['class' => 'question-panel']
                     );
+                } else {
+                    if (!$show_only_score) {
+                        $exercise_content .= Display::div(
+                            Display::panel($question_content),
+                            ['class' => 'question-panel']
+                        );
+                    }
                 }
             } // end foreach() block that loops over all questions
         }
@@ -4271,6 +4287,12 @@ EOT;
         );
 
         echo $total_score_text;
+
+        // Ofaj change BT#11784
+        if (!empty($objExercise->description)) {
+            echo Display::div($objExercise->description, array('class'=>'exercise_description'));
+        }
+
         echo $exercise_content;
 
         if (!$show_only_score) {
@@ -4320,24 +4342,6 @@ EOT;
                 );
             }
         }
-    }
-
-    /**
-     * @param string $class
-     * @param string $scoreLabel
-     * @param string $result
-     *
-     * @return string
-     */
-    public static function getQuestionRibbon($class, $scoreLabel, $result)
-    {
-        return '<div class="ribbon">
-                    <div class="rib rib-'.$class.'">
-                        <h3>'.$scoreLabel.'</h3>
-                    </div>
-                    <h4>'.get_lang('Score').': '.$result.'</h4>
-                </div>'
-        ;
     }
 
     /**

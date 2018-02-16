@@ -223,9 +223,7 @@ if (!empty($choice_value)) {
                 break;
         }
 
-
         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
-            //display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect);
             if ($studentChoice) {
                 $destination = $answerDestination;
                 $comment = $answerComment;

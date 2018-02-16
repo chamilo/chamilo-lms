@@ -67,7 +67,7 @@ class HotSpot extends Question
         } else {
             // setting the save button here and not in the question class.php
             // Editing a question
-            $form->addButtonUpdate(get_lang('ModifyExercise'), 'submitQuestion');
+            $form->addButtonUpdate(get_lang('ModifyQuestion'), 'submitQuestion');
         }
     }
 

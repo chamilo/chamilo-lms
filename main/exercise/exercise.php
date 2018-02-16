@@ -296,7 +296,7 @@ if ($is_allowedToEdit) {
                         }
                         break;
                     case 'copy_exercise': //copy an exercise
-                        $objExerciseTmp->copy_exercise();
+                        $objExerciseTmp->copyExercise();
                         echo Display::return_message(
                             get_lang('ExerciseCopied'),
                             'confirmation'

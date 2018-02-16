@@ -763,6 +763,9 @@ ALTER TABLE skill_rel_item ADD CONSTRAINT FK_EB5B2A0D5585C142 FOREIGN KEY (skill
 // Show more expected choice and status in exercise results BT#13950
 //$_configuration['show_exercise_expected_choice'] = false;
 
+// Hide exercise question label (ribbon) BT#13950
+//$_configuration['exercise_hide_label'] = false;
+
 // ------ Custom DB changes
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

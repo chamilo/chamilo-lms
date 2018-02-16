@@ -18,6 +18,7 @@ $rules = [
     'ordered_class_elements' => true,
     'ordered_imports' => true,
     'phpdoc_order' => true,
+    'no_break_comment' => true,
     '@PHP56Migration' => true,
     '@PHP56Migration:risky' => true,
     '@PHPUnit57Migration:risky' => true,

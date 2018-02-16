@@ -49,9 +49,8 @@ foreach ($skills as $skill) {
     ];
     /** @var \Chamilo\SkillBundle\Entity\SkillRelItemRelUser $skillRelItemRelUser */
     $skillRelItemRelUser = $em->getRepository('ChamiloSkillBundle:SkillRelItemRelUser')->findOneBy($criteria);
-
     $itemInfo['status'] = $skillRelItemRelUser ? true : false;
-    $itemInfo['url_activity'] = '';
+    $itemInfo['url_activity'] = $codePath.$skill->getItemResultList(api_get_cidreq());
     if ($skillRelItemRelUser) {
         $itemInfo['url_activity'] = $codePath.$skillRelItemRelUser->getUserItemResultUrl(api_get_cidreq());
     }

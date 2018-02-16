@@ -117,9 +117,8 @@ class ExerciseShowFunctions
                 echo Security::remove_XSS($answer);
                 if (!api_is_allowed_to_edit(null, true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
                     echo '<td>';
-                        $comm = Event::get_comments($id, $questionId);
+                    $comm = Event::get_comments($id, $questionId);
                     echo '</td>';
-
                 }
                 echo '</tr>';
             }

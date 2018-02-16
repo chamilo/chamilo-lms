@@ -310,11 +310,8 @@ class ExerciseLib
 
                 switch ($answerType) {
                     case UNIQUE_ANSWER:
-                        //no break
                     case UNIQUE_ANSWER_NO_OPTION:
-                        //no break
                     case UNIQUE_ANSWER_IMAGE:
-                        //no break
                     case READING_COMPREHENSION:
                         $input_id = 'choice-'.$questionId.'-'.$answerId;
                         if (isset($user_choice[0]['answer']) && $user_choice[0]['answer'] == $numAnswer) {
@@ -394,9 +391,7 @@ class ExerciseLib
                         }
                         break;
                     case MULTIPLE_ANSWER:
-                        //no break
                     case MULTIPLE_ANSWER_TRUE_FALSE:
-                        //no break
                     case GLOBAL_MULTIPLE_ANSWER:
                         $input_id = 'choice-'.$questionId.'-'.$answerId;
                         $answer = Security::remove_XSS($answer, STUDENT);
@@ -3648,9 +3643,7 @@ EOT;
                 $select_condition = " e.exe_id, answer ";
                 break;
             case MATCHING:
-                //no break
             case MATCHING_DRAGGABLE:
-                //no break
             default:
                 $answer_condition = " answer = $answer_id AND ";
                 $select_condition = " DISTINCT exe_user_id ";
@@ -3707,9 +3700,7 @@ EOT;
                     return $good_answers;
                     break;
                 case MATCHING:
-                    //no break
                 case MATCHING_DRAGGABLE:
-                    //no break
                 default:
                     $return = Database::num_rows($result);
             }
@@ -4290,7 +4281,7 @@ EOT;
 
         // Ofaj change BT#11784
         if (!empty($objExercise->description)) {
-            echo Display::div($objExercise->description, array('class'=>'exercise_description'));
+            echo Display::div($objExercise->description, ['class'=>'exercise_description']);
         }
 
         echo $exercise_content;

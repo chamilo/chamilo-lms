@@ -4218,11 +4218,11 @@ class Exercise
                                     question_id = $questionId AND
                                     correct = 0
                                 ";
-                        $res_answer = Database::query($sql);
+                        $result = Database::query($sql);
                         // Getting the real answer
                         $real_list = [];
-                        while ($real_answer = Database::fetch_array($res_answer)) {
-                            $real_list[$real_answer['id_auto']] = $real_answer['answer'];
+                        while ($realAnswer = Database::fetch_array($result)) {
+                            $real_list[$realAnswer['id_auto']] = $realAnswer['answer'];
                         }
 
                         $sql = "SELECT id, answer, correct, id_auto, ponderation
@@ -4232,10 +4232,10 @@ class Exercise
                                     question_id = $questionId AND
                                     correct <> 0
                                 ORDER BY id_auto";
-                        $res_answers = Database::query($sql);
+                        $result = Database::query($sql);
                         $options = [];
-                        while ($a_answers = Database::fetch_array($res_answers)) {
-                            $options[] = $a_answers;
+                        while ($row = Database::fetch_array($result, 'ASSOC')) {
+                            $options[] = $row;
                         }
 
                         $questionScore = 0;
@@ -4245,27 +4245,20 @@ class Exercise
                             $s_answer_label = $a_answers['answer']; // your daddy - your mother
                             $i_answer_correct_answer = $a_answers['correct']; //1 - 2
                             $i_answer_id_auto = $a_answers['id_auto']; // 3 - 4
-
                             $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
                                     WHERE
                                         exe_id = '$exeId' AND
                                         question_id = '$questionId' AND
                                         position = '$i_answer_id_auto'";
-
-                            $res_user_answer = Database::query($sql);
-
-                            if (Database::num_rows($res_user_answer) > 0) {
+                            $result = Database::query($sql);
+                            $s_user_answer = 0;
+                            if (Database::num_rows($result) > 0) {
                                 //  rich - good looking
-                                $s_user_answer = Database::result($res_user_answer, 0, 0);
-                            } else {
-                                $s_user_answer = 0;
+                                $s_user_answer = Database::result($result, 0, 0);
                             }
-
                             $i_answerWeighting = $a_answers['ponderation'];
-
                             $user_answer = '';
                             $status = Display::label(get_lang('Incorrect'), 'danger');
-
                             if (!empty($s_user_answer)) {
                                 if ($answerType == DRAGGABLE) {
                                     if ($s_user_answer == $i_answer_correct_answer) {
@@ -4297,9 +4290,12 @@ class Exercise
                                         // Try with $i_answer_id_auto
                                         if (empty($user_answer)) {
                                             if (isset($real_list[$i_answer_id_auto])) {
-                                                $user_answer = Display::span(
-                                                    $real_list[$i_answer_id_auto]
-                                                );
+                                                $user_answer = Display::span($real_list[$i_answer_id_auto]);
+                                            }
+                                        }
+                                        if ($this->showExpectedChoice()) {
+                                            if (isset($real_list[$i_answer_correct_answer])) {
+                                                $user_answer = Display::span($real_list[$i_answer_correct_answer]);
                                             }
                                         }
                                     } else {
@@ -4308,9 +4304,7 @@ class Exercise
                                             ['style' => 'color: #FF0000; text-decoration: line-through;']
                                         );
                                         if ($this->showExpectedChoice()) {
-                                            $user_answer = Display::span(
-                                                $real_list[$s_user_answer]
-                                            );
+                                            $user_answer = '';
                                         }
                                     }
                                 }
@@ -4324,6 +4318,9 @@ class Exercise
                                     get_lang('Incorrect').' &nbsp;',
                                     ['style' => 'color: #FF0000; text-decoration: line-through;']
                                 );
+                                if ($this->showExpectedChoice()) {
+                                    $user_answer = '';
+                                }
                             }
 
                             if ($show_result) {

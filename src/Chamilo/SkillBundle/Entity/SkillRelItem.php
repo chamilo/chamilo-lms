@@ -396,5 +396,4 @@ class SkillRelItem
         }
         return $url;
     }
-
 }

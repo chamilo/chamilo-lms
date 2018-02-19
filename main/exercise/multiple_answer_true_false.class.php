@@ -25,7 +25,7 @@ class MultipleAnswerTrueFalse extends Question
         parent::__construct();
         $this->type = MULTIPLE_ANSWER_TRUE_FALSE;
         $this->isContent = $this-> getIsContent();
-        $this->options = array(1 => 'True', 2 => 'False', 3 => 'DoubtScore');
+        $this->options = [1 => 'True', 2 => 'False', 3 => 'DoubtScore'];
     }
 
     /**
@@ -40,7 +40,7 @@ class MultipleAnswerTrueFalse extends Question
         $course_id = api_get_course_int_id();
         $obj_ex = Session::read('objExercise');
         $renderer = & $form->defaultRenderer();
-        $defaults = array();
+        $defaults = [];
 
         $html = '<table class="table table-striped table-hover">';
         $html .= '<thead>';
@@ -153,12 +153,12 @@ class MultipleAnswerTrueFalse extends Question
                     'html_editor',
                     'comment['.$i.']',
                     null,
-                    array(),
-                    array(
+                    [],
+                    [
                         'ToolbarSet' => 'TestProposedAnswer',
                         'Width' => '100%',
                         'Height' => '100',
-                    )
+                    ]
                 );
             }
 
@@ -197,9 +197,9 @@ class MultipleAnswerTrueFalse extends Question
         $renderer->setElementTemplate($doubtScoreInputTemplate, 'option[3]');
 
         // 3 scores
-        $form->addElement('text', 'option[1]', get_lang('Correct'), array('class' => 'span1', 'value' => '1'));
-        $form->addElement('text', 'option[2]', get_lang('Wrong'), array('class' => 'span1', 'value' => '-0.5'));
-        $form->addElement('text', 'option[3]', get_lang('DoubtScore'), array('class' => 'span1', 'value' => '0'));
+        $form->addElement('text', 'option[1]', get_lang('Correct'), ['class' => 'span1', 'value' => '1']);
+        $form->addElement('text', 'option[2]', get_lang('Wrong'), ['class' => 'span1', 'value' => '-0.5']);
+        $form->addElement('text', 'option[3]', get_lang('DoubtScore'), ['class' => 'span1', 'value' => '0']);
 
         $form->addRule('option[1]', get_lang('ThisFieldIsRequired'), 'required');
         $form->addRule('option[2]', get_lang('ThisFieldIsRequired'), 'required');
@@ -233,7 +233,7 @@ class MultipleAnswerTrueFalse extends Question
         } else {
             $form->setDefaults($defaults);
         }
-        $form->setConstants(array('nb_answers' => $nb_answers));
+        $form->setConstants(['nb_answers' => $nb_answers]);
     }
 
     /**
@@ -246,7 +246,7 @@ class MultipleAnswerTrueFalse extends Question
         $nb_answers = $form->getSubmitValue('nb_answers');
         $course_id = api_get_course_int_id();
 
-        $correct = array();
+        $correct = [];
         $options = Question::readQuestionOption($this->id, $course_id);
 
         if (!empty($options)) {
@@ -271,15 +271,15 @@ class MultipleAnswerTrueFalse extends Question
         it's possible that there are more options in the future */
 
         $new_options = Question::readQuestionOption($this->id, $course_id);
-        $sorted_by_position = array();
+        $sorted_by_position = [];
         foreach ($new_options as $item) {
-        	$sorted_by_position[$item['position']] = $item;
+            $sorted_by_position[$item['position']] = $item;
         }
 
         /* Saving quiz_question.extra values that has the correct scores of
         the true, false, doubt options registered in this format
         XX:YY:ZZZ where XX is a float score value.*/
-        $extra_values = array();
+        $extra_values = [];
         for ($i = 1; $i <= 3; $i++) {
             $score = trim($form -> getSubmitValue('option['.$i.']'));
             $extra_values[] = $score;
@@ -295,7 +295,7 @@ class MultipleAnswerTrueFalse extends Question
                 // change the default values from the form 1 and 2 by the correct "option id" registered
                 $goodAnswer = $sorted_by_position[$goodAnswer]['id'];
             }
-    	    $questionWeighting += $extra_values[0]; //By default 0 has the correct answers
+            $questionWeighting += $extra_values[0]; //By default 0 has the correct answers
             $objAnswer->createAnswer($answer, $goodAnswer, $comment, '', $i);
         }
 
@@ -309,7 +309,7 @@ class MultipleAnswerTrueFalse extends Question
     /**
      * @inheritdoc
      */
-    function return_header($exercise = null, $counter = null, $score = null)
+    public function return_header($exercise, $counter = null, $score = null)
     {
         $header = parent::return_header($exercise, $counter, $score);
   	    $header .= '<table class="'.$this->question_table_class .'">

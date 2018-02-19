@@ -20,7 +20,7 @@ class OralExpression extends Question
     private $storePath;
     private $fileName;
     private $filePath;
-    public $available_extensions = array('wav', 'ogg');
+    public $available_extensions = ['wav', 'ogg'];
 
     /**
      * Constructor
@@ -40,16 +40,16 @@ class OralExpression extends Question
         $form->addText(
             'weighting',
             get_lang('Weighting'),
-            array('class' => 'span1')
+            ['class' => 'span1']
         );
         global $text;
         // setting the save button here and not in the question class.php
         $form->addButtonSave($text, 'submitQuestion');
         if (!empty($this->id)) {
-            $form -> setDefaults(array('weighting' => float_format($this->weighting, 1)));
+            $form -> setDefaults(['weighting' => float_format($this->weighting, 1)]);
         } else {
             if ($this->isContent == 1) {
-                $form->setDefaults(array('weighting' => '10'));
+                $form->setDefaults(['weighting' => '10']);
             }
         }
     }

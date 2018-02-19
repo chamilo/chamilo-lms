@@ -35,11 +35,11 @@ class UniqueAnswerNoOption extends Question
         // getting the exercise list
         $obj_ex = Session::read('objExercise');
 
-        $editor_config = array(
+        $editor_config = [
             'ToolbarSet' => 'TestProposedAnswer',
             'Width' => '100%',
             'Height' => '125'
-        );
+        ];
         //this line define how many question by default appear when creating a choice question
         $nb_answers = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : 3; // The previous default value was 2. See task #1759.
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
@@ -77,7 +77,7 @@ class UniqueAnswerNoOption extends Question
         $form->addHeader(get_lang('Answers'));
         $form->addHtml($html);
 
-        $defaults = array();
+        $defaults = [];
         $correct = 0;
         $answer = false;
         if (!empty($this->id)) {
@@ -88,7 +88,7 @@ class UniqueAnswerNoOption extends Question
             }
         }
 
-        $temp_scenario = array();
+        $temp_scenario = [];
         if ($nb_answers < 1) {
             $nb_answers = 1;
             echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
@@ -96,7 +96,7 @@ class UniqueAnswerNoOption extends Question
         $editQuestion = isset($_GET['editQuestion']) ? $_GET['editQuestion'] : false;
         if ($editQuestion) {
             //fixing $nb_answers
-            $new_list = array();
+            $new_list = [];
             $count = 1;
             if (isset($_POST['lessAnswers'])) {
                 if (!isset($_SESSION['less_answer'])) {
@@ -193,10 +193,10 @@ class UniqueAnswerNoOption extends Question
 
 
             $form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
-            $form->addElement('html_editor', 'answer['.$i.']', null, array(), $editor_config);
+            $form->addElement('html_editor', 'answer['.$i.']', null, [], $editor_config);
 
-            $form->addElement('html_editor', 'comment['.$i.']', null, array(), $editor_config);
-            $form->addElement('text', 'weighting['.$i.']', null, array('style' => 'width: 60px;', 'value' => '0'));
+            $form->addElement('html_editor', 'comment['.$i.']', null, [], $editor_config);
+            $form->addElement('text', 'weighting['.$i.']', null, ['style' => 'width: 60px;', 'value' => '0']);
             $form->addElement('html', '</tr>');
             $i++;
         }
@@ -244,10 +244,10 @@ class UniqueAnswerNoOption extends Question
         $form->addElement('hidden', 'position['.$i.']', '666');
 
         $form->addElement('radio', 'correct', null, null, $i, ['class' => 'checkbox', 'disabled' => true]);
-        $form->addElement('html_editor', 'answer['.$i.']', null, array(), $editor_config);
+        $form->addElement('html_editor', 'answer['.$i.']', null, [], $editor_config);
 
         $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
-        $form->addElement('html_editor', 'comment['.$i.']', null, array(), $editor_config);
+        $form->addElement('html_editor', 'comment['.$i.']', null, [], $editor_config);
 
         //$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
 
@@ -284,7 +284,7 @@ class UniqueAnswerNoOption extends Question
         }
 
         $form->addElement('hidden', 'nb_answers');
-        $form->setConstants(array('nb_answers' => $nb_answers));
+        $form->setConstants(['nb_answers' => $nb_answers]);
     }
 
     /**

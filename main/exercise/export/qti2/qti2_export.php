@@ -394,7 +394,7 @@ class ImsItem
     * @return string string, the XML flow for an Item.
     * @author Amand Tihon <amand@alrj.org>
     */
-    public function export($standalone = False)
+    public function export($standalone = false)
     {
         global $charset;
         $head = $foot = "";

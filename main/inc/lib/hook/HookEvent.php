@@ -30,7 +30,7 @@ abstract class HookEvent implements HookEventInterface
     {
         $this->observers = new SplObjectStorage();
         $this->eventName = $eventName;
-        $this->eventData = array();
+        $this->eventData = [];
         $this->manager = HookManagement::create();
         $this->loadAttachments();
     }

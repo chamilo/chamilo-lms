@@ -52,7 +52,7 @@ class GlobalMultipleAnswer extends Question
             '<br /> '.Display::return_icon('fill_field.png'),
             $html
         );
-        $defaults = array();
+        $defaults = [];
         $correct = 0;
         $answer = false;
         if (!empty($this->id)) {
@@ -66,7 +66,7 @@ class GlobalMultipleAnswer extends Question
         //  le nombre de r�ponses est bien enregistr� sous la forme int(nb)
         /* Ajout mise en forme nb reponse */
         $form->addElement('hidden', 'nb_answers');
-        $boxes_names = array();
+        $boxes_names = [];
 
         if ($nb_answers < 1) {
             $nb_answers = 1;
@@ -131,24 +131,24 @@ class GlobalMultipleAnswer extends Question
                 'html_editor',
                 'answer['.$i.']',
                 null,
-                array(),
-                array(
+                [],
+                [
                     'ToolbarSet' => 'TestProposedAnswer',
                     'Width' => '100%',
                     'Height' => '100',
-                )
+                ]
             );
             $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
             $form->addElement(
                 'html_editor',
                 'comment['.$i.']',
                 null,
-                array(),
-                array(
+                [],
+                [
                     'ToolbarSet' => 'TestProposedAnswer',
                     'Width' => '100%',
                     'Height' => '100',
-                )
+                ]
             );
 
             $form->addElement('html', '</tr>');
@@ -196,7 +196,7 @@ class GlobalMultipleAnswer extends Question
                 $form->setDefaults($defaults);
             }
         }
-        $form->setConstants(array('nb_answers' => $nb_answers));
+        $form->setConstants(['nb_answers' => $nb_answers]);
     }
 
     /**

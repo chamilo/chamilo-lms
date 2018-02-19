@@ -41,15 +41,16 @@ class Annotation extends Question
         );
 
         if (!empty($this->id)) {
-            $form->setDefaults(array('weighting' => float_format($this->weighting, 1)));
+            $form->setDefaults(['weighting' => float_format($this->weighting, 1)]);
         } else {
             if ($this->isContent == 1) {
-                $form->setDefaults(array('weighting' => '10'));
+                $form->setDefaults(['weighting' => '10']);
             }
         }
 
+        global $text;
         if (isset($_GET['editQuestion'])) {
-            $form->addButtonUpdate(get_lang('ModifyExercise'), 'submitQuestion');
+            $form->addButtonUpdate($text, 'submitQuestion');
 
             return;
         }
@@ -57,7 +58,7 @@ class Annotation extends Question
         $form->addElement(
             'file',
             'imageUpload',
-            array(
+            [
                 Display::img(
                     Display::return_icon(
                         'annotation.png',
@@ -69,7 +70,7 @@ class Annotation extends Question
                     )
                 ),
                 get_lang('UploadJpgPicture'),
-            )
+            ]
         );
 
         $form->addButtonSave(get_lang('GoToQuestion'), 'submitQuestion');
@@ -77,7 +78,7 @@ class Annotation extends Question
             'imageUpload',
             get_lang('OnlyImagesAllowed'),
             'filetype',
-            array('jpg', 'jpeg', 'png', 'gif')
+            ['jpg', 'jpeg', 'png', 'gif']
         );
         $form->addRule('imageUpload', get_lang('NoImage'), 'uploadedfile');
     }
@@ -108,7 +109,6 @@ class Annotation extends Question
      */
     public function createAnswersForm($form)
     {
-        // nothing
     }
 
     /**

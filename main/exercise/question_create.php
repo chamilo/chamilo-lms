@@ -14,7 +14,7 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 // breadcrumbs
-$interbreadcrumb[] = array("url" => "exercise.php", "name" => get_lang('Exercises'));
+$interbreadcrumb[] = ["url" => "exercise.php", "name" => get_lang('Exercises')];
 
 // Tool name
 $nameTools = get_lang('AddQuestionToExercise');
@@ -25,7 +25,7 @@ $form = new FormValidator('add_question', 'post', api_get_self().'?'.api_get_cid
 $form->addElement('header', '', get_lang('AddQuestionToExercise'));
 
 $question_list = Question::get_question_type_list();
-$question_list_options = array();
+$question_list_options = [];
 foreach ($question_list as $key=> $value) {
     $question_list_options[$key] = addslashes(get_lang($value[1]));
 }
@@ -34,7 +34,7 @@ $form->addElement(
     'question_type_hidden',
     get_lang('QuestionType'),
     $question_list_options,
-    array('id' => 'question_type_hidden')
+    ['id' => 'question_type_hidden']
 );
 
 //session id
@@ -61,7 +61,7 @@ $form->addElement(
     'is_content',
     null,
     get_lang('GenerateDefaultContent'),
-    array('checked' => true)
+    ['checked' => true]
 );
 
 // the submit button

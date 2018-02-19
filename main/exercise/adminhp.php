@@ -38,16 +38,16 @@ if (!$is_allowedToEdit) {
 }
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook'),
-    );
+    ];
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => "exercise.php",
     "name" => get_lang('Exercises')
-);
+];
 $nameTools = get_lang('adminHP');
 
 Display::display_header($nameTools, "Exercise");

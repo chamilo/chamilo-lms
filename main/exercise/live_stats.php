@@ -17,17 +17,17 @@ $objExercise = new Exercise();
 $result = $objExercise->read($exercise_id);
 
 if (!$result) {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => "exercise.php?".api_get_cidreq(),
     "name" => get_lang('Exercises'),
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     "url" => "admin.php?exerciseId=$exercise_id&".api_get_cidreq(),
     "name" => $objExercise->selectTitle(true),
-);
+];
 
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -41,43 +41,43 @@ $minutes = 60;
 $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=get_live_stats&exercise_id='.$objExercise->id.'&minutes='.$minutes;
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = array(get_lang('FirstName'), get_lang('LastName'), get_lang('Time'), get_lang('QuestionsAlreadyAnswered'), get_lang('Score'));
+$columns = [get_lang('FirstName'), get_lang('LastName'), get_lang('Time'), get_lang('QuestionsAlreadyAnswered'), get_lang('Score')];
 
 //Column config
-$column_model = array(
-    array(
+$column_model = [
+    [
         'name' => 'firstname',
         'index' => 'firstname',
         'width' => '100',
         'align' => 'left',
-    ),
-    array(
+    ],
+    [
         'name' => 'lastname',
         'index' => 'lastname',
         'width' => '100',
         'align' => 'left',
-    ),
-    array(
+    ],
+    [
         'name' => 'start_date',
         'index' => 'start_date',
         'width' => '100',
         'align' => 'left',
-    ),
-    array(
+    ],
+    [
         'name' => 'question',
         'index' => 'count_questions',
         'width' => '60',
         'align' => 'left',
         'sortable' => 'false',
-    ),
-    array(
+    ],
+    [
         'name' => 'score',
         'index' => 'score',
         'width' => '50',
         'align' => 'left',
         'sortable' => 'false',
-    ),
-);
+    ],
+];
 //Autowidth
 $extra_params['autowidth'] = 'true';
 //height auto
@@ -99,7 +99,7 @@ $(function() {
         $columns,
         $column_model,
         $extra_params,
-        array(),
+        [],
         null,
         true
     );
@@ -111,7 +111,7 @@ $(function() {
 
 $actions = '<a href="exercise_report.php?exerciseId='.intval($_GET['exerciseId']).'&'.api_get_cidreq().'">'.
     Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
-echo $actions = Display::div($actions, array('class'=> 'actions'));
+echo $actions = Display::div($actions, ['class'=> 'actions']);
 
 echo Display::grid_html('live_stats');
 

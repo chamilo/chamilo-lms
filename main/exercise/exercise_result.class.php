@@ -45,7 +45,7 @@ class ExerciseResult
         $filter = 0,
         $exercise_id = 0
     ) {
-        $return = array();
+        $return = [];
         $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_TABLE_LP_MAIN = Database::get_course_table(TABLE_LP_MAIN);
         $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
@@ -124,9 +124,9 @@ class ExerciseResult
                     ORDER BY userpart2, te.c_id ASC, ce.title ASC, te.exe_date DESC";
         }
 
-        $results = array();
+        $results = [];
         $resx = Database::query($sql);
-        $bestAttemptPerUser = array();
+        $bestAttemptPerUser = [];
         while ($rowx = Database::fetch_array($resx, 'ASSOC')) {
             if ($this->onlyBestAttempts) {
                 if (!isset($bestAttemptPerUser[$rowx['excruid']])) {
@@ -172,7 +172,7 @@ class ExerciseResult
         $studentsUserIdList = array_keys($students);
 
         // Print the results of tests
-        $userWithResults = array();
+        $userWithResults = [];
         if (is_array($results)) {
             $i = 0;
             foreach ($results as $result) {
@@ -198,7 +198,7 @@ class ExerciseResult
                     continue;
                 }
 
-                $return[$i] = array();
+                $return[$i] = [];
                 if (empty($user_id)) {
                     $return[$i]['official_code'] = $result['official_code'];
                     if (api_is_western_name_order()) {

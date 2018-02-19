@@ -51,7 +51,7 @@ class MultipleAnswerCombination extends Question
         $form->addHeader(get_lang('Answers'));
         $form->addHtml($html);
 
-        $defaults = array();
+        $defaults = [];
         $correct = 0;
         $answer = false;
 
@@ -64,7 +64,7 @@ class MultipleAnswerCombination extends Question
         }
 
         $form->addElement('hidden', 'nb_answers');
-        $boxes_names = array();
+        $boxes_names = [];
 
         if ($nb_answers < 1) {
             $nb_answers = 1;
@@ -125,8 +125,8 @@ class MultipleAnswerCombination extends Question
                 'html_editor',
                 'answer['.$i.']',
                 null,
-                array(),
-                array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100')
+                [],
+                ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
             );
             $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
@@ -134,8 +134,8 @@ class MultipleAnswerCombination extends Question
                 'html_editor',
                 'comment['.$i.']',
                 null,
-                array(),
-                array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100')
+                [],
+                ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
             );
 
             $form->addHtml('</tr>');
@@ -173,12 +173,12 @@ class MultipleAnswerCombination extends Question
             }
         }
 
-        $form->setConstants(array('nb_answers' => $nb_answers));
+        $form->setConstants(['nb_answers' => $nb_answers]);
     }
 
     /**
-	 * @inheritdoc
-	 */
+     * @inheritdoc
+     */
     public function processAnswersCreation($form, $exercise)
     {
         $questionWeighting = $nbrGoodAnswers = 0;

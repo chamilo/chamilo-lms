@@ -18,8 +18,8 @@ class SelectTheme extends HTML_QuickForm_select
         parent::__construct($elementName, $elementLabel, $options, $attributes);
         // Get all languages
         $themes = api_get_themes();
-        $this->_options = array();
-        $this->_values = array();
+        $this->_options = [];
+        $this->_values = [];
         $this->addOption('--', ''); // no theme select
         foreach ($themes as $themeValue => $themeName) {
             $this->addOption($themeName, $themeValue);

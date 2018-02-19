@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once __DIR__.'/../../global.inc.php';
-
 use Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
+
+require_once __DIR__.'/../../global.inc.php';
 
 $template = new Template();
 

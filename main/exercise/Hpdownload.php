@@ -13,7 +13,7 @@ $this_section = SECTION_COURSES;
 
 $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
 
-$doc_url = str_replace(array('../', '\\..', '\\0', '..\\'), array('', '', '', ''), urldecode($_GET['doc_url']));
+$doc_url = str_replace(['../', '\\..', '\\0', '..\\'], ['', '', '', ''], urldecode($_GET['doc_url']));
 $filename = basename($doc_url);
 
 // launch event
@@ -87,7 +87,7 @@ header('Last-Modified: '.gmdate('D, d M Y H:i:s', time() + 10).' GMT');
 if ($content_type == 'text/html') {
     $directory_name = dirname($full_file_name);
     $coursePath = api_get_path(SYS_COURSE_PATH);
-    $dir = str_replace(array('\\', $coursePath.$_course['path'].'/document'), array('/', ''), $directory_name);
+    $dir = str_replace(['\\', $coursePath.$_course['path'].'/document'], ['/', ''], $directory_name);
 
     if ($dir[strlen($dir) - 1] != '/') {
         $dir .= '/';

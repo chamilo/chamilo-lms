@@ -138,7 +138,7 @@ class ScormQuestion extends Question
             throw new \Exception('Question not supported. Exercise: '.$this->selectTitle());
         }
 
-        return array($js, $html);
+        return [$js, $html];
     }
 
     /**
@@ -311,7 +311,7 @@ class ScormAnswerMultipleChoice extends Answer
         }
         $html .= '</table></td></tr>';
 
-        return array($js, $html);
+        return [$js, $html];
     }
 }
 
@@ -364,7 +364,7 @@ class ScormAnswerTrueFalse extends Answer
         $jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][1] = '.$this->weighting[1].";\n";
         $js .= $jstmpw;
 
-        return array($js, $html);
+        return [$js, $html];
     }
 }
 
@@ -386,7 +386,7 @@ class ScormAnswerFillInBlanks extends Answer
         $js = '';
         $html = '<tr><td colspan="2"><table width="100%">';
         // get all enclosed answers
-        $blankList = array();
+        $blankList = [];
         foreach ($this->answer as $i => $answer) {
             $blankList[] = '['.$answer.']';
         }
@@ -440,7 +440,7 @@ class ScormAnswerFillInBlanks extends Answer
         $js .= 'questions_types['.$this->questionJSId.'] = \'fib\';'."\n";
         $js .= $jstmpw;
 
-        return array($js, $html);
+        return [$js, $html];
     }
 }
 
@@ -467,7 +467,7 @@ class ScormAnswerMatching extends Answer
         $nbrAnswers = $this->selectNbrAnswers();
         $cpt1 = 'A';
         $cpt2 = 1;
-        $Select = array();
+        $Select = [];
         $qId = $this->questionJSId;
         $s = '';
         $jstmp = '';
@@ -540,7 +540,7 @@ class ScormAnswerMatching extends Answer
         $html .= $s;
         $html .= '</table></td></tr>'."\n";
 
-        return array($js, $html);
+        return [$js, $html];
     }
 }
 
@@ -576,7 +576,7 @@ class ScormAnswerFree extends Answer
 
             $html = '<tr><td colspan="2">'.get_lang('ThisItemIsNotExportable').'</td></tr>';
 
-            return array($js, $html);
+            return [$js, $html];
         }
 
         $html .= '<textarea minlength="20" name="'.$identifier.'" id="'.$identifier.'" ></textarea>';
@@ -587,7 +587,7 @@ class ScormAnswerFree extends Answer
         $jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = "0";';
         $js .= $jstmpw;
 
-        return array($js, $html);
+        return [$js, $html];
     }
 }
 
@@ -679,7 +679,7 @@ HTML;
         // currently the free answers cannot be displayed, so ignore the textarea
         $html = '<tr><td colspan="2">'.get_lang('ThisItemIsNotExportable').'</td></tr>';
 
-        return array($js, $html);
+        return [$js, $html];
     }
 }
 
@@ -791,7 +791,7 @@ class ScormAssessmentItem
      * Start the itemBody
      *
      */
-    function start_js()
+    public function start_js()
     {
         $js = '<script type="text/javascript" src="assets/api_wrapper.js"></script>';
         if ($this->standalone) {
@@ -803,7 +803,7 @@ class ScormAssessmentItem
     /**
      * Common JS functions
      */
-    function common_js()
+    public function common_js()
     {
         $js = 'var questions = new Array();';
         $js .= 'var questions_answers = new Array();';
@@ -857,7 +857,7 @@ class ScormAssessmentItem
      * End the itemBody part.
      *
      */
-    function end_js()
+    public function end_js()
     {
         if ($this->standalone) {
             return '</script>';
@@ -870,7 +870,7 @@ class ScormAssessmentItem
      * Start the itemBody
      *
      */
-    function start_body()
+    public function start_body()
     {
         if ($this->standalone) {
             return '<body><form id="dokeos_scorm_form" method="post" action="">';
@@ -883,7 +883,7 @@ class ScormAssessmentItem
      * End the itemBody part.
      *
      */
-    function end_body()
+    public function end_body()
     {
         if ($this->standalone) {
             return '<br /><input class="btn" type="button" id="dokeos_scorm_submit" name="dokeos_scorm_submit" value="OK" /></form></body>';
@@ -897,7 +897,7 @@ class ScormAssessmentItem
      * This is a default behaviour, some classes may want to override this.
      * @return string|array A string, the XML flow for an Item.
      */
-    function export()
+    public function export()
     {
         list($js, $html) = $this->question->export();
         if ($this->standalone) {
@@ -915,7 +915,7 @@ class ScormAssessmentItem
                 . $this->end_page();
             return $res;
         } else {
-            return array($js, $html);
+            return [$js, $html];
         }
     }
 }
@@ -970,7 +970,7 @@ class ScormSection
      * This opens the <item> block, with correct attributes.
      *
      */
-    function start_page()
+    public function start_page()
     {
         $charset = 'UTF-8';
         $head = '<?xml version="1.0" encoding="'.$charset.'" standalone="no"?><html>';
@@ -982,7 +982,7 @@ class ScormSection
      * End the XML flow, closing the </item> tag.
      *
      */
-    function end_page()
+    public function end_page()
     {
         return '</html>';
     }
@@ -990,7 +990,7 @@ class ScormSection
     /**
      * Start document header
      */
-    function start_header()
+    public function start_header()
     {
         return '<head>';
     }
@@ -1083,7 +1083,7 @@ class ScormSection
      * End the itemBody part.
      *
      */
-    function end_js()
+    public function end_js()
     {
         return '</script>';
     }
@@ -1092,7 +1092,7 @@ class ScormSection
      * Start the itemBody
      *
      */
-    function start_body()
+    public function start_body()
     {
         return '<body>'.
         '<h1>'.$this->exercise->selectTitle().'</h1><p>'.$this->exercise->selectDescription()."</p>".
@@ -1104,7 +1104,7 @@ class ScormSection
      * End the itemBody part.
      *
      */
-    function end_body()
+    public function end_body()
     {
         return '</table><br /><input class="btn btn-primary" type="button" id="dokeos_scorm_submit" name="dokeos_scorm_submit" value="OK" /></form></body>';
     }
@@ -1117,7 +1117,7 @@ class ScormSection
      * @param $standalone: Boolean stating if it should be exported as a stand-alone question
      * @return string string, the XML flow for an Item.
      */
-    function export()
+    public function export()
     {
         global $charset;
 
@@ -1161,7 +1161,7 @@ class ScormSection
      * Export the questions, as a succession of <items>
      * @author Amand Tihon <amand@alrj.org>
      */
-    function export_questions()
+    public function export_questions()
     {
         $js = $html = "";
         $js_id = 0;
@@ -1172,6 +1172,6 @@ class ScormSection
             ++$js_id;
         }
 
-        return array($js, $html);
+        return [$js, $html];
     }
 }

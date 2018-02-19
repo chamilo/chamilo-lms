@@ -1,9 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Ddeboer\DataImport\Workflow;
-use Ddeboer\DataImport\Reader\CsvReader;
-use Ddeboer\DataImport\Writer\ArrayWriter;
+use League\Csv\Reader;
 
 /**
  * Class Import
@@ -17,22 +15,11 @@ class Import
     /**
      * @param string $path
      * @param bool $setFirstRowAsHeader
-     * @return CsvReader
+     * @return array
      */
     public static function csv_reader($path, $setFirstRowAsHeader = true)
     {
-        if (empty($path)) {
-            return false;
-        }
-
-        $file = new \SplFileObject($path);
-        $csvReader = new CsvReader($file, ';');
-
-        if ($setFirstRowAsHeader) {
-            $csvReader->setHeaderRowNumber(0);
-        }
-
-        return $csvReader;
+        return self::csvToArray($path);
     }
 
     /**
@@ -55,14 +42,13 @@ class Import
      */
     public static function csvToArray($filename)
     {
-        $csvReader = self::csv_reader($filename);
-        $resultArray = [];
-        if ($csvReader) {
-            $workflow = new Workflow\StepAggregator($csvReader);
-            $writer = new ArrayWriter($resultArray);
-            $workflow->addWriter($writer)->process();
+        if (empty($filename)) {
+            return [];
         }
+        $reader = Reader::createFromPath($filename, 'r');
+        $reader->setDelimiter(';');
+        $reader->stripBom(true);
 
-        return $resultArray;
+        return $reader->fetchAssoc(0);
     }
 }

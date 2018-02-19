@@ -95,6 +95,7 @@
         "sylius/translation": "0.13.0",
         "patchwork/utf8": "~1.2",
         "ddeboer/data-import": "@stable",
+        "league/csv": "~8.0",
         "phpoffice/phpexcel": "~1.8",
         "webit/eval-math": "1.0.1",
         "clue/graph": "~0.9.0",

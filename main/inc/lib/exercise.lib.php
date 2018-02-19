@@ -661,18 +661,16 @@ class ExerciseLib
                             global $exe_id;
                             $trackAttempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
                             $sql = 'SELECT answer FROM '.$trackAttempts.'
-                                    WHERE exe_id=' . $exe_id.' AND question_id='.$questionId;
+                                    WHERE exe_id='.$exe_id.' AND question_id='.$questionId;
                             $rsLastAttempt = Database::query($sql);
                             $rowLastAttempt = Database::fetch_array($rsLastAttempt);
                             $answer = $rowLastAttempt['answer'];
                             if (empty($answer)) {
-                                $_SESSION['calculatedAnswerId'][$questionId] = mt_rand(
-                                    1,
-                                    $nbrAnswers
-                                );
-                                $answer = $objAnswerTmp->selectAnswer(
-                                    $_SESSION['calculatedAnswerId'][$questionId]
-                                );
+                                $randomValue = mt_rand(1, $nbrAnswers);
+                                $answer = $objAnswerTmp->selectAnswer($randomValue);
+                                $calculatedAnswer = Session::read('calculatedAnswerId');
+                                $calculatedAnswer[$questionId] = $randomValue;
+                                Session::write('calculatedAnswerId', $calculatedAnswer);
                             }
                         }
 
@@ -684,7 +682,8 @@ class ExerciseLib
                             $correctAnswerList
                         );
 
-                        // get student answer to display it if student go back to previous calculated answer question in a test
+                        // get student answer to display it if student go back to
+                        // previous calculated answer question in a test
                         if (isset($user_choice[0]['answer'])) {
                             api_preg_match_all(
                                 '/\[[^]]+\]/',
@@ -694,9 +693,7 @@ class ExerciseLib
                             $studentAnswerListTobecleaned = $studentAnswerList[0];
                             $studentAnswerList = [];
 
-                            for ($i = 0; $i < count(
-                                $studentAnswerListTobecleaned
-                            ); $i++) {
+                            for ($i = 0; $i < count($studentAnswerListTobecleaned); $i++) {
                                 $answerCorrected = $studentAnswerListTobecleaned[$i];
                                 $answerCorrected = api_preg_replace(
                                     '| / <font color="green"><b>.*$|',
@@ -723,7 +720,8 @@ class ExerciseLib
                             }
                         }
 
-                        // If display preview of answer in test view for exemple, set the student answer to the correct answers
+                        // If display preview of answer in test view for exaemple,
+                        // set the student answer to the correct answers
                         if ($debug_mark_answer) {
                             // contain the rights answers surronded with brackets
                             $studentAnswerList = $correctAnswerList[0];
@@ -742,7 +740,7 @@ class ExerciseLib
                             ' '.$answer.' '
                         );
                         if (!empty($correctAnswerList) && !empty($studentAnswerList)) {
-                            $answer = "";
+                            $answer = '';
                             $i = 0;
                             foreach ($studentAnswerList as $studentItem) {
                                 // remove surronding brackets

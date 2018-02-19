@@ -4027,120 +4027,135 @@ class Exercise
                     }
                     break;
                 case CALCULATED_ANSWER:
-                    $answer = $objAnswerTmp->selectAnswer($_SESSION['calculatedAnswerId'][$questionId]);
-                    $preArray = explode('@@', $answer);
-                    $last = count($preArray) - 1;
-                    $answer = '';
-                    for ($k = 0; $k < $last; $k++) {
-                        $answer .= $preArray[$k];
-                    }
-                    $answerWeighting = [$answerWeighting];
-                    // we save the answer because it will be modified
-                    $temp = $answer;
-                    $answer = '';
-                    $j = 0;
-                    //initialise answer tags
-                    $userTags = $correctTags = $realText = [];
-                    // the loop will stop at the end of the text
-                    while (1) {
-                        // quits the loop if there are no more blanks (detect '[')
-                        if ($temp == false || ($pos = api_strpos($temp, '[')) === false) {
-                            // adds the end of the text
-                            $answer = $temp;
-                            $realText[] = $answer;
-                            break; //no more "blanks", quit the loop
+                    $calculatedAnswerList = Session::read('calculatedAnswerId');
+                    if (!empty($calculatedAnswerList)) {
+                        $answer = $objAnswerTmp->selectAnswer($calculatedAnswerList[$questionId]);
+                        $preArray = explode('@@', $answer);
+                        $last = count($preArray) - 1;
+                        $answer = '';
+                        for ($k = 0; $k < $last; $k++) {
+                            $answer .= $preArray[$k];
                         }
-                        // adds the piece of text that is before the blank
-                        //and ends with '[' into a general storage array
-                        $realText[] = api_substr($temp, 0, $pos + 1);
-                        $answer .= api_substr($temp, 0, $pos + 1);
-                        //take the string remaining (after the last "[" we found)
-                        $temp = api_substr($temp, $pos + 1);
-                        // quit the loop if there are no more blanks, and update $pos to the position of next ']'
-                        if (($pos = api_strpos($temp, ']')) === false) {
-                            // adds the end of the text
-                            $answer .= $temp;
-                            break;
-                        }
+                        $answerWeighting = [$answerWeighting];
+                        // we save the answer because it will be modified
+                        $temp = $answer;
+                        $answer = '';
+                        $j = 0;
+                        //initialise answer tags
+                        $userTags = $correctTags = $realText = [];
+                        // the loop will stop at the end of the text
+                        while (1) {
+                            // quits the loop if there are no more blanks (detect '[')
+                            if ($temp == false || ($pos = api_strpos($temp, '[')) === false) {
+                                // adds the end of the text
+                                $answer = $temp;
+                                $realText[] = $answer;
+                                break; //no more "blanks", quit the loop
+                            }
+                            // adds the piece of text that is before the blank
+                            //and ends with '[' into a general storage array
+                            $realText[] = api_substr($temp, 0, $pos + 1);
+                            $answer .= api_substr($temp, 0, $pos + 1);
+                            //take the string remaining (after the last "[" we found)
+                            $temp = api_substr($temp, $pos + 1);
+                            // quit the loop if there are no more blanks, and update $pos to the position of next ']'
+                            if (($pos = api_strpos($temp, ']')) === false) {
+                                // adds the end of the text
+                                $answer .= $temp;
+                                break;
+                            }
 
-                        if ($from_database) {
-                            $sql = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
+                            if ($from_database) {
+                                $sql = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
                                     WHERE
                                         exe_id = '".$exeId."' AND
                                         question_id = ".intval($questionId);
-                            $result = Database::query($sql);
-                            $str = Database::result($result, 0, 'answer');
+                                $result = Database::query($sql);
+                                $str = Database::result($result, 0, 'answer');
 
-                            api_preg_match_all('#\[([^[]*)\]#', $str, $arr);
-                            $str = str_replace('\r\n', '', $str);
-                            $choice = $arr[1];
-                            if (isset($choice[$j])) {
-                                $tmp = api_strrpos($choice[$j], ' / ');
+                                api_preg_match_all('#\[([^[]*)\]#', $str, $arr);
+                                $str = str_replace('\r\n', '', $str);
+                                $choice = $arr[1];
+                                if (isset($choice[$j])) {
+                                    $tmp = api_strrpos($choice[$j], ' / ');
 
-                                if ($tmp) {
-                                    $choice[$j] = api_substr($choice[$j], 0, $tmp);
+                                    if ($tmp) {
+                                        $choice[$j] = api_substr($choice[$j], 0, $tmp);
+                                    } else {
+                                        $tmp = ltrim($tmp, '[');
+                                        $tmp = rtrim($tmp, ']');
+                                    }
+
+                                    $choice[$j] = trim($choice[$j]);
+                                    // Needed to let characters ' and " to work as part of an answer
+                                    $choice[$j] = stripslashes($choice[$j]);
                                 } else {
-                                    $tmp = ltrim($tmp, '[');
-                                    $tmp = rtrim($tmp, ']');
+                                    $choice[$j] = null;
                                 }
-
-                                $choice[$j] = trim($choice[$j]);
-                                // Needed to let characters ' and " to work as part of an answer
-                                $choice[$j] = stripslashes($choice[$j]);
                             } else {
-                                $choice[$j] = null;
+                                // This value is the user input, not escaped while correct answer is escaped by fckeditor
+                                $choice[$j] = api_htmlentities(trim($choice[$j]));
                             }
-                        } else {
-                            // This value is the user input, not escaped while correct answer is escaped by fckeditor
-                            $choice[$j] = api_htmlentities(trim($choice[$j]));
+                            $userTags[] = $choice[$j];
+                            //put the contents of the [] answer tag into correct_tags[]
+                            $correctTags[] = api_substr($temp, 0, $pos);
+                            $j++;
+                            $temp = api_substr($temp, $pos + 1);
                         }
-                        $userTags[] = $choice[$j];
-                        //put the contents of the [] answer tag into correct_tags[]
-                        $correctTags[] = api_substr($temp, 0, $pos);
-                        $j++;
-                        $temp = api_substr($temp, $pos + 1);
-                    }
-                    $answer = '';
-                    $realCorrectTags = $correctTags;
-                    $calculatedStatus = Display::label(get_lang('Incorrect'), 'danger');
-                    $expectedAnswer = '';
-                    $calculatedChoice = '';
+                        $answer = '';
+                        $realCorrectTags = $correctTags;
+                        $calculatedStatus = Display::label(get_lang('Incorrect'), 'danger');
+                        $expectedAnswer = '';
+                        $calculatedChoice = '';
 
-                    for ($i = 0; $i < count($realCorrectTags); $i++) {
-                        if ($i == 0) {
-                            $answer .= $realText[0];
-                        }
-                        // Needed to parse ' and " characters
-                        $userTags[$i] = stripslashes($userTags[$i]);
-                        if ($correctTags[$i] == $userTags[$i]) {
-                            // gives the related weighting to the student
-                            $questionScore += $answerWeighting[$i];
-                            // increments total score
-                            $totalScore += $answerWeighting[$i];
-                            // adds the word in green at the end of the string
-                            $answer .= $correctTags[$i];
-                            $calculatedChoice = $correctTags[$i];
-                        } elseif (!empty($userTags[$i])) {
-                            // else if the word entered by the student IS NOT the same as
-                            // the one defined by the professor
-                            // adds the word in red at the end of the string, and strikes it
-                            $answer .= '<font color="red"><s>' . $userTags[$i] . '</s></font>';
-                            $calculatedChoice = $userTags[$i];
-                        } else {
-                            // adds a tabulation if no word has been typed by the student
-                            $answer .= ''; // remove &nbsp; that causes issue
-                        }
-                        // adds the correct word, followed by ] to close the blank
+                        for ($i = 0; $i < count($realCorrectTags); $i++) {
+                            if ($i == 0) {
+                                $answer .= $realText[0];
+                            }
+                            // Needed to parse ' and " characters
+                            $userTags[$i] = stripslashes($userTags[$i]);
+                            if ($correctTags[$i] == $userTags[$i]) {
+                                // gives the related weighting to the student
+                                $questionScore += $answerWeighting[$i];
+                                // increments total score
+                                $totalScore += $answerWeighting[$i];
+                                // adds the word in green at the end of the string
+                                $answer .= $correctTags[$i];
+                                $calculatedChoice = $correctTags[$i];
+                            } elseif (!empty($userTags[$i])) {
+                                // else if the word entered by the student IS NOT the same as
+                                // the one defined by the professor
+                                // adds the word in red at the end of the string, and strikes it
+                                $answer .= '<font color="red"><s>' . $userTags[$i] . '</s></font>';
+                                $calculatedChoice = $userTags[$i];
+                            } else {
+                                // adds a tabulation if no word has been typed by the student
+                                $answer .= ''; // remove &nbsp; that causes issue
+                            }
+                            // adds the correct word, followed by ] to close the blank
 
-                        if ($this->results_disabled != EXERCISE_FEEDBACK_TYPE_EXAM) {
-                            $answer .= ' / <font color="green"><b>'.$realCorrectTags[$i].'</b></font>';
-                            $calculatedStatus = Display::label(get_lang('Correct'), 'success');
-                            $expectedAnswer = $realCorrectTags[$i];
-                        }
-                        $answer .= ']';
+                            if ($this->results_disabled != EXERCISE_FEEDBACK_TYPE_EXAM) {
+                                $answer .= ' / <font color="green"><b>'.$realCorrectTags[$i].'</b></font>';
+                                $calculatedStatus = Display::label(get_lang('Correct'), 'success');
+                                $expectedAnswer = $realCorrectTags[$i];
+                            }
+                            $answer .= ']';
 
-                        if (isset($realText[$i + 1])) {
-                            $answer .= $realText[$i + 1];
+                            if (isset($realText[$i + 1])) {
+                                $answer .= $realText[$i + 1];
+                            }
+                        }
+                    } else {
+                        if ($from_database) {
+                            $sql = "SELECT *
+                                FROM $TBL_TRACK_ATTEMPT
+                                WHERE
+                                    exe_id = $exeId AND
+                                    question_id= ".intval($questionId);
+                            $result = Database::query($sql);
+                            $resultData = Database::fetch_array($result, 'ASSOC');
+                            $answer = $resultData['answer'];
+                            $questionScore = $resultData['marks'];
                         }
                     }
                     break;
@@ -5676,7 +5691,12 @@ class Exercise
                     false,
                     $objQuestionTmp->getAbsoluteFilePath()
                 );
-            } elseif (in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION, READING_COMPREHENSION])) {
+            } elseif (
+                in_array(
+                    $answerType,
+                    [UNIQUE_ANSWER, UNIQUE_ANSWER_IMAGE, UNIQUE_ANSWER_NO_OPTION, READING_COMPREHENSION]
+                )
+            ) {
                 $answer = $choice;
                 Event::saveQuestionAttempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
             //            } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {

@@ -544,18 +544,35 @@ class UserManager
                             $additionalParameters
                         );
                     } else {
-                        api_mail_html(
-                            $recipient_name,
-                            $email,
-                            $emailSubject,
-                            $emailBody,
-                            $sender_name,
-                            $email_admin,
-                            null,
-                            null,
-                            null,
-                            $additionalParameters
-                        );
+                        $sendToInbox = api_get_configuration_value('send_inscription_msg_to_inbox');
+                        if ($sendToInbox) {
+                            $adminList = UserManager::get_all_administrators();
+                            $senderId = 1;
+                            if (!empty($adminList)) {
+                                $adminInfo = current($adminList);
+                                $senderId = $adminInfo['user_id'];
+                            }
+
+                            MessageManager::send_message_simple(
+                                $userId,
+                                $emailSubject,
+                                $emailBody,
+                                $senderId
+                            );
+                        } else {
+                            api_mail_html(
+                                $recipient_name,
+                                $email,
+                                $emailSubject,
+                                $emailBody,
+                                $sender_name,
+                                $email_admin,
+                                null,
+                                null,
+                                null,
+                                $additionalParameters
+                            );
+                        }
                     }
 
                     $notification = api_get_configuration_value('send_notification_when_user_added');

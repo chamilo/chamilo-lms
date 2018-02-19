@@ -768,6 +768,10 @@ ALTER TABLE skill_rel_item_rel_user ADD result_id INT DEFAULT NULL;
 // Hide exercise question label (ribbon) BT#13950
 //$_configuration['exercise_hide_label'] = false;
 
+// Send welcome message by email and to the chamilo inbox BT#14034
+//$_configuration['send_inscription_msg_to_inbox'] = false;
+
+
 // ------ Custom DB changes
 // Add user activation by confirmation email
 // This option prevents the new user to login in the platform if your account is not confirmed via email

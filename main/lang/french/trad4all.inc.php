@@ -113,7 +113,7 @@ $GiveAnswerVariations = "Veuillez indiquer le nombre de variantes à générer";
 $AnswerVariations = "Variantes";
 $GiveFormula = "Merci d'écrire la formule";
 $SignatureFormula = "Cordialement";
-$FormulaExample = "Exemple de formule";
+$FormulaExample = "Exemple de formule: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )";
 $VariableRanges = "Plages de valeurs des variables";
 $ExampleValue = "Plage de valeurs";
 $CalculatedAnswer = "Question calculée";
@@ -8044,4 +8044,5 @@ $MessageTracking = "Suivi des messages";
 $MessagesExchangeBetweenXAndY = "Échange de messages entre %s et %s";
 $YouWillReceivedASecondEmail = "Vous allez recevoir un autre mail avec votre mot de passe.";
 $YouReceivedAnEmailWithTheUsername = "Vous avez du recevoir un autre mail avec votre identifiant.";
+$YourChoice = "Votre choix";
 ?>

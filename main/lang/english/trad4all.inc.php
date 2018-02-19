@@ -8108,4 +8108,5 @@ $MessagesExchangeBetweenXAndY = "Messages exchange between %s and %s";
 $YouWillReceivedASecondEmail = "You will receive another email with your password";
 $YouReceivedAnEmailWithTheUsername = "You must have received another email with your username.";
 $TheScormPackageWillBeUpdatedYouMustUploadTheFileWithTheSameName = "You must upload a zip file with the same name as the original SCORM file.";
+$YourChoice = "Your choice";
 ?>

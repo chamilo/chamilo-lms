@@ -8125,4 +8125,11 @@ $SessionTemplate = "Plantilla de sesión";
 $CloudFileLink = "Enlace a fichero en la nube";
 $ResetFieldX = "Reiniciar %s";
 $MyGeneralCertificate = "Mi certificado principal";
+$ScoreNote = "Nota";
+$MessageTracking = "Seguimiento de mensajes";
+$MessagesExchangeBetweenXAndY = "Intercambio de mensajes entre %s y %s";
+$YouWillReceivedASecondEmail = "Recibirás otro correo electrónico con tu contraseña";
+$YouReceivedAnEmailWithTheUsername = "Debe haber recibido otro correo electrónico con su nombre de usuario.";
+$TheScormPackageWillBeUpdatedYouMustUploadTheFileWithTheSameName = "Debe cargar un archivo zip con el mismo nombre que el archivo SCORM original.";
+$YourChoice = "su eleccion";
 ?>

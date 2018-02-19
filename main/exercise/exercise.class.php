@@ -4324,7 +4324,9 @@ class Exercise
                             }
 
                             if ($show_result) {
-                                if ($showTotalScoreAndUserChoicesInLastAttempt === false) {
+                                if ($this->showExpectedChoice() == false &&
+                                    $showTotalScoreAndUserChoicesInLastAttempt === false
+                                ) {
                                     $user_answer = '';
                                 }
                                 switch ($answerType) {

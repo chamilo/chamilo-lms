@@ -1008,7 +1008,13 @@ class Display
 
     /**
      * Displays an HTML select tag
-     *
+     * @param string $name
+     * @param array $values
+     * @param int $default
+     * @param array $extra_attributes
+     * @param bool $show_blank_item
+     * @param null $blank_item_text
+     * @return string
      */
     public static function select(
         $name,
@@ -1016,7 +1022,7 @@ class Display
         $default = -1,
         $extra_attributes = [],
         $show_blank_item = true,
-        $blank_item_text = null
+        $blank_item_text = ''
     ) {
         $html = '';
         $extra = '';

@@ -3,14 +3,8 @@
 
 use Ddeboer\DataImport\Writer\ExcelWriter;
 use Ddeboer\DataImport\Writer\CsvWriter;
-use Ddeboer\DataImport\Workflow;
-
-use Ddeboer\DataImport\Reader\CsvReader;
-use Ddeboer\DataImport\Reader\ArrayReader;
-use Ddeboer\DataImport\Writer\ArrayWriter;
 use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Filesystem\Data;
-use ChamiloSession as Session;
 use MediaAlchemyst\Alchemyst;
 use MediaAlchemyst\DriversContainer;
 use Neutron\TemporaryFilesystem\Manager;

@@ -43,7 +43,7 @@ function sorter($item1, $item2)
 }
 
 // Displaying the header
-$action = isset($_GET['action']) ? $_GET['action'] : '';
+$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 $currentUrl = api_get_self().'?'.api_get_cidreq();
 $interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq(), 'name' => get_lang('Glossary')];
 
@@ -58,7 +58,7 @@ switch ($action) {
         $form = new FormValidator(
             'glossary',
             'post',
-            api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&'.api_get_cidreq()
+            api_get_self().'?action=addglossary&'.api_get_cidreq()
         );
         // Setting the form elements
         $form->addElement('header', get_lang('TermAddNew'));
@@ -106,12 +106,13 @@ switch ($action) {
             api_not_allowed(true);
         }
         $tool_name = get_lang('Edit');
-        if (is_numeric($_GET['glossary_id'])) {
+        $glossaryId = isset($_GET['glossary_id']) ? (int) $_GET['glossary_id'] : 0;
+        if (!empty($glossaryId)) {
             // initiate the object
             $form = new FormValidator(
                 'glossary',
                 'post',
-                api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&glossary_id='.intval($_GET['glossary_id']).'&'.api_get_cidreq()
+                api_get_self().'?action=edit_glossary&glossary_id='.$glossaryId.'&'.api_get_cidreq()
             );
             // Setting the form elements
             $form->addElement('header', get_lang('TermEdit'));
@@ -137,7 +138,7 @@ switch ($action) {
             );
 
             // setting the defaults
-            $glossary_data = GlossaryManager::get_glossary_information($_GET['glossary_id']);
+            $glossary_data = GlossaryManager::get_glossary_information($glossaryId);
 
             // Date treatment for timezones
             if (!empty($glossary_data['insert_date'])) {
@@ -222,13 +223,12 @@ switch ($action) {
 
         if ($form->validate()) {
             $termsDeleted = [];
-
             //this is a bad idea //jm
             if (isset($_POST['replace']) && $_POST['replace']) {
                 foreach (GlossaryManager::get_glossary_terms() as $term) {
                     if (!GlossaryManager::delete_glossary($term['id'], false)) {
                         Display::addFlash(
-                            Display::return_message(get_lang("CannotDeleteGlossary").':'.$term['id'], 'error')
+                            Display::return_message(get_lang('CannotDeleteGlossary').':'.$term['id'], 'error')
                         );
                     } else {
                         $termsDeleted[] = $term['name'];
@@ -238,7 +238,7 @@ switch ($action) {
 
             $updateTerms = isset($_POST['update']) && $_POST['update'] ? true : false;
 
-            $data = Import::csv_reader($_FILES['file']['tmp_name']);
+            $data = Import::csvToArray($_FILES['file']['tmp_name']);
             $goodList = [];
             $updatedList = [];
             $addedList = [];

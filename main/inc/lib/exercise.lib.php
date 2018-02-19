@@ -46,7 +46,6 @@ class ExerciseLib
         $course = api_get_course_info_by_id($course_id);
         // Change false to true in the following line to enable answer hinting
         $debug_mark_answer = $show_answers;
-
         // Reads question information
         if (!$objQuestionTmp = Question::read($questionId)) {
             // Question not found
@@ -71,7 +70,7 @@ class ExerciseLib
                     if ($exercise->display_category_name) {
                         TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
                     }
-                    $titleToDisplay = null;
+                    $titleToDisplay = $objQuestionTmp->getTitleToDisplay($current_item);
                     if ($answerType == READING_COMPREHENSION) {
                         // In READING_COMPREHENSION, the title of the question
                         // contains the question itself, which can only be
@@ -80,8 +79,6 @@ class ExerciseLib
                             $current_item.'. '.get_lang('ReadingComprehension'),
                             ['class' => 'question_title']
                         );
-                    } else {
-                        $titleToDisplay = $objQuestionTmp->getTitleToDisplay($current_item);
                     }
                     echo $titleToDisplay;
                 }
@@ -93,9 +90,7 @@ class ExerciseLib
                 }
             }
 
-            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION]) &&
-                $freeze
-            ) {
+            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION]) && $freeze) {
                 return '';
             }
 
@@ -192,7 +187,6 @@ class ExerciseLib
                 if (api_get_setting('enable_record_audio') == 'true') {
                     //@todo pass this as a parameter
                     global $exercise_stat_info, $exerciseId;
-
                     if (!empty($exercise_stat_info)) {
                         $objQuestionTmp->initFile(
                             api_get_session_id(),
@@ -291,9 +285,7 @@ class ExerciseLib
 
             $hidingClass = '';
             if ($answerType == READING_COMPREHENSION) {
-                $objQuestionTmp->processText(
-                    $objQuestionTmp->selectDescription()
-                );
+                $objQuestionTmp->processText($objQuestionTmp->selectDescription());
                 $hidingClass = 'hide-reading-answers';
                 $s .= Display::div(
                     $objQuestionTmp->selectTitle(),
@@ -586,10 +578,8 @@ class ExerciseLib
                         // or filled to display the answer in the Question preview of the exercise/admin.php page
                         $displayForStudent = true;
                         $listAnswerInfo = FillBlanks::getAnswerInfo($answer);
-
                         // Correct answers
                         $correctAnswerList = $listAnswerInfo['words'];
-
                         // Student's answer
                         $studentAnswerList = [];
                         if (isset($user_choice[0]['answer'])) {
@@ -600,8 +590,8 @@ class ExerciseLib
                             $studentAnswerList = $arrayStudentAnswer['student_answer'];
                         }
 
-                        // If the question must be shown with the answer (in page exercise/admin.php) for teacher preview
-                        // set the student-answer to the correct answer
+                        // If the question must be shown with the answer (in page exercise/admin.php)
+                        // for teacher preview set the student-answer to the correct answer
                         if ($debug_mark_answer) {
                             $studentAnswerList = $correctAnswerList;
                             $displayForStudent = false;

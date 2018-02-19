@@ -1011,24 +1011,24 @@ legend{
 .exercise-btn{
     margin-top: 10px;
 }
-.mejs-container.svg.mejs-audio{
+.mejs__container.mejs__audio{
     width: 100%!important;
     height: 250px!important;
     margin-bottom: 30px;
 }
-.mejs-container.mejs-audio .mejs-layers{
+.mejs__container.mejs__audio .mejs__layers{
     background: url(images/audio-background.jpg) center center;
     background-size: cover;
     height: 250px!important;
     width: 100%!important;
 }
-.mejs-container.mejs-audio .mejs-layers .mejs-poster.mejs-layer{
+.mejs__container.mejs__audio .mejs__layers .mejs__poster.mejs__layer{
     background: url(images/icon-sound.png) no-repeat center center;
     display: inline-block !important;
     height: 250px!important;
     width: 100%!important;
 }
-.mejs-container.mejs-audio .mejs-controls{
+.mejs__container.mejs__audio .mejs__controls{
     background: rgba(255,255,255,0.45)
 }
 #exercise-description.panel-default{
@@ -1175,7 +1175,7 @@ svg circle{
     border:1px solid #162A83;
     border-radius: 0;
 }
-.mejs-overlay-button {
+.mejs__overlay-button {
     position: absolute;
     top: 40%;
     left: 45%;
@@ -1184,14 +1184,14 @@ svg circle{
     margin: -50px 0 0 -50px;
     background: url(images/bigplay.svg) no-repeat;
 }
-.mejs-overlay:hover .mejs-overlay-button {
+.mejs__overlay:hover .mejs__overlay-button {
     background-position: 0 -200px;
 }
-.mejs-container.svg.mejs-video{
+.mejs__container.mejs__video{
     margin-top: 20px;
     margin-bottom: 20px;
 }
-.mejs-container .mejs-controls {
+.mejs__container .mejs__controls {
     position: absolute;
     list-style-type: none;
     margin: 0;
@@ -1203,17 +1203,16 @@ svg circle{
     background: -webkit-linear-gradient(top, rgba(211,211,211,0.8) 0%,rgba(142,142,142,1) 100%); /* Chrome10-25,Safari5.1-6 */
     background: linear-gradient(to bottom, rgba(211,211,211,0.8) 0%,rgba(142,142,142,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ccd3d3d3', endColorstr='#8e8e8e',GradientType=0 ); /* IE6-9 */
-    height: 30px;
     width: 100%;
 }
-.mejs-controls .mejs-time-rail .mejs-time-loaded{
+.mejs__controls .mejs__time-rail .mejs__time-loaded{
     background: #0e0e0e; /* Old browsers */
     background: -moz-linear-gradient(top, #0e0e0e 0%, #4c4c4c 99%); /* FF3.6-15 */
     background: -webkit-linear-gradient(top, #0e0e0e 0%,#4c4c4c 99%); /* Chrome10-25,Safari5.1-6 */
     background: linear-gradient(to bottom, #0e0e0e 0%,#4c4c4c 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0e0e0e', endColorstr='#4c4c4c',GradientType=0 ); /* IE6-9 */
 }
-.mejs-controls .mejs-time-rail .mejs-time-current{
+.mejs__controls .mejs__time-rail .mejs__time-current{
     background: #9dd53a; /* Old browsers */
     background: -moz-linear-gradient(top, #9dd53a 0%, #7cbc0a 100%); /* FF3.6-15 */
     background: -webkit-linear-gradient(top, #9dd53a 0%,#7cbc0a 100%); /* Chrome10-25,Safari5.1-6 */

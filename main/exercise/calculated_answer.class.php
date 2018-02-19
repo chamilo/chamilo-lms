@@ -37,10 +37,9 @@ class CalculatedAnswer extends Question
             $preArray = explode('@@', $objAnswer->selectAnswer(1));
             $defaults['formula'] = array_pop($preArray);
             $defaults['answer'] = array_shift($preArray);
-            $defaults['answer'] = preg_replace("/\[.*\]/", "", $defaults['answer']);
+            $defaults['answer'] = preg_replace("/\[.*\]/", '', $defaults['answer']);
             $defaults['weighting'] = $this->weighting;
         }
-
         $lowestValue = '1.00';
         $highestValue = '20.00';
 

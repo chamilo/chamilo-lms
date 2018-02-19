@@ -279,7 +279,7 @@ if (api_is_in_gradebook()) {
     ];
 }
 
-$interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises')];
+$interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), 'name' => get_lang('Exercises')];
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
     $interbreadcrumb[] = [
         "url" => "admin.php?exerciseId=".$objExercise->id.'&'.api_get_cidreq(),

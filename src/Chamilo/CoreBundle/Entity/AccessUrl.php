@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * AccessUrl
  *
  * @ORM\Table(name="access_url")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\AccessUrlRepository")
  */
 class AccessUrl
 {

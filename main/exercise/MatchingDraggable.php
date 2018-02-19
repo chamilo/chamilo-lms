@@ -26,9 +26,9 @@ class MatchingDraggable extends Question
      */
     public function createAnswersForm($form)
     {
-        $defaults = array();
+        $defaults = [];
         $nb_matches = $nb_options = 2;
-        $matches = array();
+        $matches = [];
         $answer = null;
         $counter = 1;
         if (isset($this->id)) {
@@ -115,15 +115,14 @@ class MatchingDraggable extends Question
             echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'), 'normal');
         }
 
-        $editorConfig = array(
+        $editorConfig = [
             'ToolbarSet' => 'TestMatching',
             'Width' => '100%',
             'Height' => '125'
-        );
+        ];
 
         for ($i = 1; $i <= $nb_matches; ++$i) {
             $renderer = &$form->defaultRenderer();
-
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->{element}</td>',
                 "answer[$i]"
@@ -198,7 +197,7 @@ class MatchingDraggable extends Question
 
         $form->addHtml('</table>');
         global $text;
-        $group = array();
+        $group = [];
         // setting the save button here and not in the question class.php
         $group[] = $form->addButtonDelete(get_lang('DelElem'), 'lessOptions', true);
         $group[] = $form->addButtonCreate(get_lang('AddElem'), 'moreOptions', true);
@@ -214,10 +213,10 @@ class MatchingDraggable extends Question
         }
 
         $form->setConstants(
-            array(
+            [
                 'nb_matches' => $nb_matches,
                 'nb_options' => $nb_options
-            )
+            ]
         );
     }
 

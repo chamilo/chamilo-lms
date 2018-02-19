@@ -38,11 +38,11 @@ class UniqueAnswer extends Question
         // Getting the exercise list
         $obj_ex = Session::read('objExercise');
 
-        $editor_config = array(
+        $editor_config = [
             'ToolbarSet' => 'TestProposedAnswer',
             'Width' => '100%',
             'Height' => '125'
-        );
+        ];
 
         //this line defines how many questions by default appear when creating a choice question
         // The previous default value was 2. See task #1759.
@@ -82,7 +82,7 @@ class UniqueAnswer extends Question
         $form->addHeader(get_lang('Answers'));
         $form->addHtml($html);
 
-        $defaults = array();
+        $defaults = [];
         $correct = 0;
         if (!empty($this->id)) {
             $answer = new Answer($this->id);
@@ -95,7 +95,7 @@ class UniqueAnswer extends Question
 
         //Feedback SELECT
         $question_list = $obj_ex->selectQuestionList();
-        $select_question = array();
+        $select_question = [];
         $select_question[0] = get_lang('SelectTargetQuestion');
         if (is_array($question_list)) {
             foreach ($question_list as $key => $questionid) {
@@ -114,14 +114,14 @@ class UniqueAnswer extends Question
 
         $list = new LearnpathList(api_get_user_id());
         $flat_list = $list->get_flat_list();
-        $select_lp_id = array();
+        $select_lp_id = [];
         $select_lp_id[0] = get_lang('SelectTargetLP');
 
         foreach ($flat_list as $id => $details) {
             $select_lp_id[$id] = cut($details['lp_name'], 20);
         }
 
-        $temp_scenario = array();
+        $temp_scenario = [];
 
         if ($nb_answers < 1) {
             $nb_answers = 1;
@@ -133,17 +133,16 @@ class UniqueAnswer extends Question
         for ($i = 1; $i <= $nb_answers; ++$i) {
             $form->addHtml('<tr>');
             if (isset($answer) && is_object($answer)) {
-                if ($answer->correct[$i]) {
+                if (isset($answer->correct[$i]) && $answer->correct[$i]) {
                     $correct = $i;
                 }
-                $defaults['answer['.$i.']'] = $answer->answer[$i];
-                $defaults['comment['.$i.']'] = $answer->comment[$i];
-                $defaults['weighting['.$i.']'] = float_format(
-                    $answer->weighting[$i],
-                    1
-                );
-
-                $item_list = explode('@@', $answer->destination[$i]);
+                $defaults['answer['.$i.']'] = isset($answer->answer[$i]) ? $answer->answer[$i] : '';
+                $defaults['comment['.$i.']'] = isset($answer->comment[$i]) ? $answer->comment[$i] : '';
+                $defaults['weighting['.$i.']'] = isset($answer->weighting[$i]) ? float_format($answer->weighting[$i], 1) : 0;
+                $item_list = [];
+                if (isset($answer->destination[$i])) {
+                    $item_list = explode('@@', $answer->destination[$i]);
+                }
 
                 $try = isset($item_list[0]) ? $item_list[0] : '';
                 $lp = isset($item_list[1]) ? $item_list[1] : '';
@@ -171,8 +170,8 @@ class UniqueAnswer extends Question
                 $defaults['answer[2]'] = get_lang('DefaultUniqueAnswer2');
                 $defaults['weighting[2]'] = 0;
 
-                $temp_scenario['destination'.$i] = array('0');
-                $temp_scenario['lp'.$i] = array('0');
+                $temp_scenario['destination'.$i] = ['0'];
+                $temp_scenario['lp'.$i] = ['0'];
             }
             $defaults['scenario'] = $temp_scenario;
 
@@ -233,7 +232,7 @@ class UniqueAnswer extends Question
                 );
                 // Direct feedback
                 //Adding extra feedback fields
-                $group = array();
+                $group = [];
                 $group['try'.$i] = $form->createElement(
                     'checkbox',
                     'try'.$i,
@@ -256,10 +255,10 @@ class UniqueAnswer extends Question
                     'text',
                     'url'.$i,
                     get_lang('Other').': ',
-                    array(
+                    [
                         'class' => 'col-md-2',
                         'placeholder' => get_lang('Other')
-                    )
+                    ]
                 );
                 $form->addGroup($group, 'scenario');
 
@@ -270,7 +269,7 @@ class UniqueAnswer extends Question
             } else {
                 $form->addHtmlEditor('comment['.$i.']', null, null, false, $editor_config);
             }
-            $form->addText('weighting['.$i.']', null, null, array('value' => '0'));
+            $form->addText('weighting['.$i.']', null, null, ['value' => '0']);
             $form->addHtml('</tr>');
         }
 
@@ -311,10 +310,10 @@ class UniqueAnswer extends Question
                 // Default sample content.
                 $form->setDefaults($defaults);
             } else {
-                $form->setDefaults(array('correct' => 1));
+                $form->setDefaults(['correct' => 1]);
             }
         }
-        $form->setConstants(array('nb_answers' => $nb_answers));
+        $form->setConstants(['nb_answers' => $nb_answers]);
     }
 
     /**

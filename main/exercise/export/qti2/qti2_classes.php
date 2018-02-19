@@ -262,7 +262,7 @@ class ImsAnswerMatching extends Answer
         $out = '  <responseDeclaration identifier="'.$questionIdent.'" cardinality="single" baseType="identifier">'."\n";
         $out .= '    <correctResponse>'."\n";
 
-        $gradeArray = array();
+        $gradeArray = [];
         if (isset($this->leftList) && is_array($this->leftList)) {
             foreach ($this->leftList as $leftKey => $leftElement) {
                 $i = 0;
@@ -325,23 +325,23 @@ class ImsAnswerHotspot extends Answer
                 switch ($answer['hotspot_type']) {
                     case 'square':
                         $type = 'rect';
-                        $res = array();
+                        $res = [];
                         $coords = preg_match('/^\s*(\d+);(\d+)\|(\d+)\|(\d+)\s*$/', $answer['hotspot_coord'], $res);
                         $coords = $res[1].','.$res[2].','.((int) $res[1] + (int) $res[3]).",".((int) $res[2] + (int) $res[4]);
                         break;
                     case 'circle':
                         $type = 'circle';
-                        $res = array();
+                        $res = [];
                         $coords = preg_match('/^\s*(\d+);(\d+)\|(\d+)\|(\d+)\s*$/', $answer['hotspot_coord'], $res);
                         $coords = $res[1].','.$res[2].','.sqrt(pow(($res[1] - $res[3]), 2) + pow(($res[2] - $res[4])));
                         break;
                     case 'poly':
                         $type = 'poly';
-                        $coords = str_replace(array(';', '|'), array(',', ','), $answer['hotspot_coord']);
+                        $coords = str_replace([';', '|'], [',', ','], $answer['hotspot_coord']);
                         break;
                     case 'delineation':
                         $type = 'delineation';
-                        $coords = str_replace(array(';', '|'), array(',', ','), $answer['hotspot_coord']);
+                        $coords = str_replace([';', '|'], [',', ','], $answer['hotspot_coord']);
                         break;
                 }
                 $text .= '        <hotspotChoice shape="'.$type.'" coords="'.$coords.'" identifier="'.$key.'"/>'."\n";

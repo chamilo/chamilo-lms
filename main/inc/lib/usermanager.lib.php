@@ -507,10 +507,19 @@ class UserManager
                         'password' => $original_password
                     );
 
+                    // Ofaj
+                    $adminList = UserManager::get_all_administrators();
+                    $senderId = 1;
+                    if (!empty($adminList)) {
+                        $adminInfo = current($adminList);
+                        $senderId = $adminInfo['user_id'];
+                    }
+
                     MessageManager::send_message_simple(
                         $userId,
                         $emailSubject,
-                        $emailBody
+                        $emailBody,
+                        $senderId
                     );
 
                     /*api_mail_html(

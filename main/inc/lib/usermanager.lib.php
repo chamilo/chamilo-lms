@@ -110,9 +110,9 @@ class UserManager
     private static function getEncoderFactory()
     {
         $encryption = self::getPasswordEncryption();
-        $encoders = array(
+        $encoders = [
             'Chamilo\\UserBundle\\Entity\\User' => new \Chamilo\UserBundle\Security\Encoder($encryption)
-        );
+        ];
 
         $encoderFactory = new EncoderFactory($encoders);
 
@@ -151,12 +151,11 @@ class UserManager
      * @param string $raw
      * @param User   $user
      *
-     * @return bool
+     * @return string
      */
     public static function encryptPassword($raw, User $user)
     {
         $encoder = self::getEncoder($user);
-
         $encodedPassword = $encoder->encodePassword(
             $raw,
             $user->getSalt()
@@ -258,6 +257,17 @@ class UserManager
         $access_url_id = 1;
         if (api_get_multiple_access_url()) {
             $access_url_id = api_get_current_access_url_id();
+        } else {
+            // In some cases, the first access_url ID might be different from 1
+            // for example when using a DB cluster or hacking the DB manually.
+            // In this case, we want the first row, not necessarily "1".
+            $dbm = Database::getManager();
+            /** @var AccessUrlRepository $accessUrlRepository */
+            $accessUrlRepository = $dbm->getRepository('ChamiloCoreBundle:AccessUrl');
+            $accessUrl = $accessUrlRepository->getFirstId();
+            if (!empty($accessUrl[0]) && !empty($accessUrl[0][1])) {
+                $access_url_id = $accessUrl[0][1];
+            }
         }
 
         if (isset($_configuration[$access_url_id]) &&
@@ -494,46 +504,83 @@ class UserManager
                 if (EventsMail::check_if_using_class('user_registration')) {
                     $values["about_user"] = $return;
                     $values["password"] = $original_password;
-                    $values["send_to"] = array($return);
+                    $values["send_to"] = [$return];
                     $values["prior_lang"] = null;
                     EventsDispatcher::events('user_registration', $values);
                 } else {
                     $phoneNumber = isset($extra['mobile_phone_number']) ? $extra['mobile_phone_number'] : null;
 
-                    $additionalParameters = array(
+                    $additionalParameters = [
                         'smsType' => SmsPlugin::WELCOME_LOGIN_PASSWORD,
                         'userId' => $return,
                         'mobilePhoneNumber' => $phoneNumber,
                         'password' => $original_password
-                    );
+                    ];
 
-                    // Ofaj
-                    $adminList = UserManager::get_all_administrators();
-                    $senderId = 1;
-                    if (!empty($adminList)) {
-                        $adminInfo = current($adminList);
-                        $senderId = $adminInfo['user_id'];
+                    $twoEmail = api_get_configuration_value('send_two_inscription_confirmation_mail');
+                    if ($twoEmail === true) {
+                        $layoutContent = $tplContent->get_template('mail/new_user_first_email_confirmation.tpl');
+                        $emailBody = $tplContent->fetch($layoutContent);
+
+                        api_mail_html(
+                            $recipient_name,
+                            $email,
+                            $emailSubject,
+                            $emailBody,
+                            $sender_name,
+                            $email_admin,
+                            null,
+                            null,
+                            null,
+                            $additionalParameters
+                        );
+
+                        $layoutContent = $tplContent->get_template('mail/new_user_second_email_confirmation.tpl');
+                        $emailBody = $tplContent->fetch($layoutContent);
+
+                        api_mail_html(
+                            $recipient_name,
+                            $email,
+                            $emailSubject,
+                            $emailBody,
+                            $sender_name,
+                            $email_admin,
+                            null,
+                            null,
+                            null,
+                            $additionalParameters
+                        );
+                    } else {
+                        $sendToInbox = api_get_configuration_value('send_inscription_msg_to_inbox');
+                        if ($sendToInbox) {
+                            $adminList = UserManager::get_all_administrators();
+                            $senderId = 1;
+                            if (!empty($adminList)) {
+                                $adminInfo = current($adminList);
+                                $senderId = $adminInfo['user_id'];
+                            }
+
+                            MessageManager::send_message_simple(
+                                $userId,
+                                $emailSubject,
+                                $emailBody,
+                                $senderId
+                            );
+                        } else {
+                            api_mail_html(
+                                $recipient_name,
+                                $email,
+                                $emailSubject,
+                                $emailBody,
+                                $sender_name,
+                                $email_admin,
+                                null,
+                                null,
+                                null,
+                                $additionalParameters
+                            );
+                        }
                     }
-
-                    MessageManager::send_message_simple(
-                        $userId,
-                        $emailSubject,
-                        $emailBody,
-                        $senderId
-                    );
-
-                    /*api_mail_html(
-                        $recipient_name,
-                        $email,
-                        $emailSubject,
-                        $emailBody,
-                        $sender_name,
-                        $email_admin,
-                        null,
-                        null,
-                        null,
-                        $additionalParameters
-                    );*/
 
                     $notification = api_get_configuration_value('send_notification_when_user_added');
                     if (!empty($notification) && isset($notification['admins']) && is_array($notification['admins'])) {
@@ -557,15 +604,9 @@ class UserManager
                     );
                     // variables for the default template
                     $tplContent->assign('complete_name', stripslashes(api_get_person_name($firstName, $lastName)));
-                    /*$lang = $user->getLanguage();
-                    if ($lang === 'french2') {
-                        $user->setLanguage('french');
-                    }*/
-
                     $langData = api_get_language_info(api_get_language_id($user->getLanguage()));
                     $user->setLanguage($langData['original_name']);
                     $renderer = FormValidator::getDefaultRenderer();
-
                     $tplContent->assign('user_added', $user);
                     // ofaj
                     $elementTemplate = ' {label}: {element} <br />';
@@ -599,10 +640,10 @@ class UserManager
             }
 
             if (!empty($hook)) {
-                $hook->setEventData(array(
+                $hook->setEventData([
                     'return' => $userId,
-                    'originalPassword' => $original_password,
-                ));
+                    'originalPassword' => $original_password
+                ]);
                 $hook->notifyCreateUser(HOOK_EVENT_TYPE_POST);
             }
             Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $userId);
@@ -839,7 +880,7 @@ class UserManager
         $connection = Database::getManager()->getConnection();
         $tableExists = $connection->getSchemaManager()->tablesExist(['plugin_bbb_room']);
         if ($tableExists) {
-             // Delete user from database
+            // Delete user from database
             $sql = "DELETE FROM plugin_bbb_room WHERE participant_id = $user_id";
             Database::query($sql);
         }
@@ -1149,10 +1190,10 @@ class UserManager
             $res = true;
             foreach ($extra as $fname => $fvalue) {
                 $res = $res && self::update_extra_field_value(
-                    $user_id,
-                    $fname,
-                    $fvalue
-                );
+                        $user_id,
+                        $fname,
+                        $fvalue
+                    );
             }
         }
 
@@ -1174,7 +1215,7 @@ class UserManager
                     $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".
                         get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".
                         get_lang('Username')." : ".$username.(($reset_password > 0) ? "\n".
-                        get_lang('Pass')." : ".stripslashes($original_password) : "")."\n\n".
+                            get_lang('Pass')." : ".stripslashes($original_password) : "")."\n\n".
                         get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".$url['url']."\n\n".
                         get_lang('Problem')."\n\n".
                         get_lang('SignatureFormula').",\n\n".
@@ -1186,7 +1227,7 @@ class UserManager
                 $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".
                     get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".
                     get_lang('Username')." : ".$username.(($reset_password > 0) ? "\n".
-                    get_lang('Pass')." : ".stripslashes($original_password) : "")."\n\n".
+                        get_lang('Pass')." : ".stripslashes($original_password) : "")."\n\n".
                     get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path(WEB_PATH)."\n\n".
                     get_lang('Problem')."\n\n".
                     get_lang('SignatureFormula').",\n\n".
@@ -1505,20 +1546,20 @@ class UserManager
     }
 
     /**
-    * Get the users by ID
-    * @param array $ids student ids
-    * @param string $active
-    * @param string $order
-    * @param string $limit
-    * @return array $result student information
-    */
-    public static function get_user_list_by_ids($ids = array(), $active = null, $order = null, $limit = null)
+     * Get the users by ID
+     * @param array $ids student ids
+     * @param string $active
+     * @param string $order
+     * @param string $limit
+     * @return array $result student information
+     */
+    public static function get_user_list_by_ids($ids = [], $active = null, $order = null, $limit = null)
     {
         if (empty($ids)) {
-            return array();
+            return [];
         }
 
-        $ids = is_array($ids) ? $ids : array($ids);
+        $ids = is_array($ids) ? $ids : [$ids];
         $ids = array_map('intval', $ids);
         $ids = implode(',', $ids);
 
@@ -1539,7 +1580,7 @@ class UserManager
         }
 
         $rs = Database::query($sql);
-        $result = array();
+        $result = [];
         while ($row = Database::fetch_array($rs)) {
             $result[] = $row;
         }
@@ -1562,7 +1603,7 @@ class UserManager
     ) {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $userUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $return_array = array();
+        $return_array = [];
         $sql = "SELECT user.* FROM $user_table user ";
 
         if (api_is_multiple_url_enabled()) {
@@ -1608,14 +1649,14 @@ class UserManager
      * @todo security filter order_by
      */
     public static function get_user_list_like(
-        $conditions = array(),
-        $order_by = array(),
+        $conditions = [],
+        $order_by = [],
         $simple_like = false,
         $condition = 'AND'
     ) {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $tblAccessUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $return_array = array();
+        $return_array = [];
         $sql_query = "SELECT user.id FROM $user_table user ";
 
         if (api_is_multiple_url_enabled()) {
@@ -1624,7 +1665,7 @@ class UserManager
 
         if (count($conditions) > 0) {
             $sql_query .= ' WHERE ';
-            $temp_conditions = array();
+            $temp_conditions = [];
             foreach ($conditions as $field => $value) {
                 $field = Database::escape_string($field);
                 $value = Database::escape_string($value);
@@ -1689,11 +1730,11 @@ class UserManager
                 break;
         }
 
-        $anonymousPath = array(
+        $anonymousPath = [
             'dir' => $base.'img/',
             'file' => 'unknown.jpg',
             'email' => ''
-        );
+        ];
 
         if (empty($id) || empty($type)) {
             return $anonymousPath;
@@ -1721,11 +1762,11 @@ class UserManager
 
         $dir = self::getUserPathById($id, $type);
 
-        return array(
+        return [
             'dir' => $dir,
             'file' => $pictureFilename,
             'email' => $user['email']
-        );
+        ];
     }
 
     /**
@@ -1755,11 +1796,11 @@ class UserManager
                 break;
         }
 
-        $anonymousPath = array(
+        $anonymousPath = [
             'dir' => $base.'img/',
             'file' => 'unknown.jpg',
             'email' => ''
-        );
+        ];
 
         if (empty($id) || empty($type)) {
             return $anonymousPath;
@@ -1788,11 +1829,11 @@ class UserManager
 
         $dir = self::getUserPathById($id, $type);
 
-        return array(
+        return [
             'dir' => $dir,
             'file' => $pictureFilename,
             'email' => $user['email']
-        );
+        ];
     }
 
     /**
@@ -2182,7 +2223,7 @@ class UserManager
     public static function get_user_productions($user_id)
     {
         $production_repository = self::getUserPathById($user_id, 'system');
-        $productions = array();
+        $productions = [];
 
         if (is_dir($production_repository)) {
             $handle = opendir($production_repository);
@@ -2263,10 +2304,10 @@ class UserManager
         $all_visibility = true,
         $field_filter = null
     ) {
-        $fields = array();
+        $fields = [];
         $t_uf = Database::get_main_table(TABLE_EXTRA_FIELD);
         $t_ufo = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
-        $columns = array(
+        $columns = [
             'id',
             'variable',
             'field_type',
@@ -2274,10 +2315,10 @@ class UserManager
             'default_value',
             'field_order',
             'filter'
-        );
+        ];
         $column = intval($column);
         $sort_direction = '';
-        if (in_array(strtoupper($direction), array('ASC', 'DESC'))) {
+        if (in_array(strtoupper($direction), ['ASC', 'DESC'])) {
             $sort_direction = strtoupper($direction);
         }
         $extraFieldType = EntityExtraField::USER_FIELD_TYPE;
@@ -2296,7 +2337,7 @@ class UserManager
         $resf = Database::query($sqlf);
         if (Database::num_rows($resf) > 0) {
             while ($rowf = Database::fetch_array($resf)) {
-                $fields[$rowf['id']] = array(
+                $fields[$rowf['id']] = [
                     0 => $rowf['id'],
                     1 => $rowf['variable'],
                     2 => $rowf['field_type'],
@@ -2306,9 +2347,9 @@ class UserManager
                     6 => $rowf['visible_to_self'],
                     7 => $rowf['changeable'],
                     8 => $rowf['filter'],
-                    9 => array(),
+                    9 => [],
                     10 => '<a name="'.$rowf['id'].'"></a>',
-                );
+                ];
 
                 $sqlo = "SELECT * FROM $t_ufo
                          WHERE field_id = ".$rowf['id']."
@@ -2316,12 +2357,12 @@ class UserManager
                 $reso = Database::query($sqlo);
                 if (Database::num_rows($reso) > 0) {
                     while ($rowo = Database::fetch_array($reso)) {
-                        $fields[$rowf['id']][9][$rowo['id']] = array(
+                        $fields[$rowf['id']][9][$rowo['id']] = [
                             0 => $rowo['id'],
                             1 => $rowo['option_value'],
                             2 => empty($rowo['display_text']) ? '' : $rowo['display_text'],
                             3 => $rowo['option_order']
-                        );
+                        ];
                     }
                 }
             }
@@ -2495,10 +2536,11 @@ class UserManager
         if (empty($user_id)) {
             $user_id = 0;
         } else {
-            if ($user_id != strval(intval($user_id)))
-                return array();
+            if ($user_id != strval(intval($user_id))) {
+                return [];
+            }
         }
-        $extra_data = array();
+        $extra_data = [];
         $t_uf = Database::get_main_table(TABLE_EXTRA_FIELD);
         $t_ufv = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $user_id = intval($user_id);
@@ -2588,10 +2630,11 @@ class UserManager
         if (empty($user_id)) {
             $user_id = 0;
         } else {
-            if ($user_id != strval(intval($user_id)))
-                return array();
+            if ($user_id != strval(intval($user_id))) {
+                return [];
+            }
         }
-        $extra_data = array();
+        $extra_data = [];
         $t_uf = Database::get_main_table(TABLE_EXTRA_FIELD);
         $t_ufv = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $user_id = intval($user_id);
@@ -2705,7 +2748,7 @@ class UserManager
      *
      * @return array with extra data info of a user i.e array('field_variable'=>'value');
      */
-     public static function get_extra_user_data_by_value($variable, $value, $all_visibility = true)
+    public static function get_extra_user_data_by_value($variable, $value, $all_visibility = true)
     {
         $extraFieldValue = new ExtraFieldValue('user');
         $extraField = new ExtraField('user');
@@ -2807,7 +2850,13 @@ class UserManager
         $ignoreTimeLimit = false
     ) {
         if ($user_id != strval(intval($user_id))) {
-            return array();
+            return [];
+        }
+
+        $allowOrder = api_get_configuration_value('session_list_order');
+        $position = '';
+        if ($allowOrder) {
+            $position = ', s.position AS position ';
         }
 
         // Get the list of sessions per user
@@ -2847,17 +2896,14 @@ class UserManager
                 ['user' => $user_id, 'url' => api_get_current_access_url_id()]
             )
         ;
-
         $sessionData = $dql->getResult();
         $categories = [];
 
         foreach ($sessionData as $row) {
             $session_id = $row['id'];
             $coachList = SessionManager::getCoachesBySession($session_id);
-
             $categoryStart = $row['session_category_date_start'] ? $row['session_category_date_start']->format('Y-m-d') : '';
             $categoryEnd = $row['session_category_date_end'] ? $row['session_category_date_end']->format('Y-m-d') : '';
-
             $courseList = self::get_courses_list_by_session(
                 $user_id,
                 $session_id
@@ -2906,12 +2952,12 @@ class UserManager
                 }
             }
 
-            $categories[$row['session_category_id']]['session_category'] = array(
+            $categories[$row['session_category_id']]['session_category'] = [
                 'id' => $row['session_category_id'],
                 'name' => $row['session_category_name'],
                 'date_start' => $categoryStart,
                 'date_end' => $categoryEnd
-            );
+            ];
 
             $visibility = api_get_session_visibility(
                 $session_id,
@@ -2922,10 +2968,10 @@ class UserManager
             if ($visibility != SESSION_VISIBLE) {
                 // Course Coach session visibility.
                 $blockedCourseCount = 0;
-                $closedVisibilityList = array(
+                $closedVisibilityList = [
                     COURSE_VISIBILITY_CLOSED,
                     COURSE_VISIBILITY_HIDDEN
-                );
+                ];
 
                 foreach ($courseList as $course) {
                     // Checking session visibility
@@ -2963,7 +3009,7 @@ class UserManager
                     }
             }
 
-            $categories[$row['session_category_id']]['sessions'][$row['id']] = array(
+            $categories[$row['session_category_id']]['sessions'][$row['id']] = [
                 'session_name' => $row['name'],
                 'session_id' => $row['id'],
                 'access_start_date' => $row['access_start_date'] ? $row['access_start_date']->format('Y-m-d H:i:s') : null,
@@ -2971,7 +3017,7 @@ class UserManager
                 'coach_access_start_date' => $row['coach_access_start_date'] ? $row['coach_access_start_date']->format('Y-m-d H:i:s') : null,
                 'coach_access_end_date' => $row['coach_access_end_date'] ? $row['coach_access_end_date']->format('Y-m-d H:i:s') : null,
                 'courses' => $courseList
-            );
+            ];
         }
 
         return $categories;
@@ -2994,7 +3040,7 @@ class UserManager
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         if ($user_id != strval(intval($user_id))) {
-            return array();
+            return [];
         }
 
         // We filter the courses from the URL
@@ -3031,7 +3077,7 @@ class UserManager
 
         $course_list_sql_result = Database::query($sql);
 
-        $personal_course_list = array();
+        $personal_course_list = [];
         if (Database::num_rows($course_list_sql_result) > 0) {
             while ($result_row = Database::fetch_array($course_list_sql_result, 'ASSOC')) {
                 $course_info = api_get_course_info($result_row['code']);
@@ -3043,7 +3089,7 @@ class UserManager
         $coachCourseConditions = '';
         // Getting sessions that are related to a coach in the session_rel_course_rel_user table
         if (api_is_allowed_to_create_course()) {
-            $sessionListFromCourseCoach = array();
+            $sessionListFromCourseCoach = [];
             $sql = " SELECT DISTINCT session_id
                     FROM $tbl_session_course_user
                     WHERE user_id = $user_id AND status = 2 ";
@@ -3063,7 +3109,7 @@ class UserManager
 
         // Get the list of sessions where the user is subscribed
         // This is divided into two different queries
-        $sessions = array();
+        $sessions = [];
         $sessionLimitRestriction = '';
         if (!empty($sessionLimit)) {
             $sessionLimit = (int) $sessionLimit;
@@ -3242,8 +3288,8 @@ class UserManager
                     $where_access_url
                 ORDER BY sc.position ASC, c.id";
 
-        $personal_course_list = array();
-        $courses = array();
+        $personal_course_list = [];
+        $courses = [];
 
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -3330,7 +3376,6 @@ class UserManager
     public static function get_user_id_from_username($username)
     {
         if (empty($username)) {
-
             return false;
         }
         $username = trim($username);
@@ -3367,7 +3412,7 @@ class UserManager
             $user_id = intval($user_id);
             $path = api_get_path(SYS_COURSE_PATH).$course.'/document/shared_folder/sf_user_'.$user_id.'/';
             $web_path = api_get_path(WEB_COURSE_PATH).$course.'/document/shared_folder/sf_user_'.$user_id.'/';
-            $file_list = array();
+            $file_list = [];
 
             if (is_dir($path)) {
                 $handle = opendir($path);
@@ -3437,7 +3482,7 @@ class UserManager
         if ($num == 0) {
             return false;
         }
-        $list = array();
+        $list = [];
         while ($row = Database::fetch_array($res)) {
             $list[$row['id']] = $row['api_key'];
         }
@@ -3644,7 +3689,7 @@ class UserManager
         $sql_message_outbox = 'SELECT id from '.$table_user.' WHERE email="'.$email_administrator.'" ';
         //$num_row_query = Database::num_rows($sql_message_outbox);
         $res_message_outbox = Database::query($sql_message_outbox);
-        $array_users_administrator = array();
+        $array_users_administrator = [];
         while ($row_message_outbox = Database::fetch_array($res_message_outbox, 'ASSOC')) {
             $array_users_administrator[] = $row_message_outbox['id'];
         }
@@ -3691,10 +3736,10 @@ class UserManager
         $sql = "SELECT DISTINCT id, tag from $table_user_tag
                 WHERE field_id = $field_id AND tag LIKE '$tag%' ORDER BY tag LIMIT $limit";
         $result = Database::query($sql);
-        $return = array();
+        $return = [];
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                $return[] = array('id' => $row['tag'], 'text' => $row['tag']);
+                $return[] = ['id' => $row['tag'], 'text' => $row['tag']];
             }
         }
         if ($return_format === 'json') {
@@ -3726,7 +3771,7 @@ class UserManager
                 ORDER BY count DESC
                 LIMIT $limit";
         $result = Database::query($sql);
-        $return = array();
+        $return = [];
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $return[] = $row;
@@ -3758,10 +3803,10 @@ class UserManager
                 WHERE field_id = $field_id AND user_id = $user_id
                 ORDER BY tag";
         $result = Database::query($sql);
-        $return = array();
+        $return = [];
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                $return[$row['id']] = array('tag' => $row['tag'], 'count' => $row['count']);
+                $return[$row['id']] = ['tag' => $row['tag'], 'count' => $row['count']];
             }
         }
 
@@ -3792,19 +3837,19 @@ class UserManager
                 ORDER BY tag";
 
         $result = Database::query($sql);
-        $return = array();
+        $return = [];
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                $return[$row['id']] = array('tag' => $row['tag'], 'count' => $row['count']);
+                $return[$row['id']] = ['tag' => $row['tag'], 'count' => $row['count']];
             }
         }
         $user_tags = $return;
-        $tag_tmp = array();
+        $tag_tmp = [];
         foreach ($user_tags as $tag) {
             if ($show_links) {
                 $tag_tmp[] = '<a href="'.api_get_path(WEB_PATH).'main/search/index.php?q='.$tag['tag'].'">'.
                     $tag['tag'].
-                '</a>';
+                    '</a>';
             } else {
                 $tag_tmp[] = $tag['tag'];
             }
@@ -3813,7 +3858,6 @@ class UserManager
         if (is_array($user_tags) && count($user_tags) > 0) {
             $return = implode(', ', $tag_tmp);
         } else {
-
             return '';
         }
 
@@ -3840,7 +3884,6 @@ class UserManager
 
             return $row['id'];
         } else {
-
             return 0;
         }
     }
@@ -3908,12 +3951,12 @@ class UserManager
         if ($tag_id == 0) {
             //the tag doesn't exist
             $sql = "INSERT INTO $table_user_tag (tag, field_id,count) VALUES ('$tag','$field_id', count + 1)";
-             Database::query($sql);
+            Database::query($sql);
             $last_insert_id = Database::insert_id();
         } else {
             //the tag exists we update it
             $sql = "UPDATE $table_user_tag SET count = count + 1 WHERE id  = $tag_id";
-             Database::query($sql);
+            Database::query($sql);
             $last_insert_id = $tag_id;
         }
 
@@ -4002,7 +4045,7 @@ class UserManager
                     ON (u.id=admin.user_id)";
         }
         $result = Database::query($sql);
-        $return = array();
+        $return = [];
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $return[$row['user_id']] = $row;
@@ -4080,7 +4123,7 @@ class UserManager
         $sql .= " LIMIT $from , $number_of_items";
 
         $result = Database::query($sql);
-        $return = array();
+        $return = [];
 
         if (Database::num_rows($result) > 0) {
             if ($getCount) {
@@ -4094,7 +4137,7 @@ class UserManager
                     $url = Display::url(
                         $row['tag'],
                         api_get_path(WEB_PATH).'main/social/search.php?q='.$row['tag'],
-                        array('class' => 'tag')
+                        ['class' => 'tag']
                     );
                     $row['tag'] = $url;
                 }
@@ -4106,22 +4149,22 @@ class UserManager
     }
 
     /**
-      * Get extra filterable user fields (only type select)
-      * @return array
-      */
+     * Get extra filterable user fields (only type select)
+     * @return array
+     */
     public static function getExtraFilterableFields()
     {
         $extraFieldList = self::get_extra_fields();
-        $fields = array();
+        $fields = [];
         if (is_array($extraFieldList)) {
             foreach ($extraFieldList as $extraField) {
                 // If is enabled to filter and is a "<select>" field type
                 if ($extraField[8] == 1 && $extraField[2] == 4) {
-                    $fields[] = array(
+                    $fields[] = [
                         'name' => $extraField[3],
                         'variable' => $extraField[1],
                         'data' => $extraField[9]
-                    );
+                    ];
                 }
             }
         }
@@ -4132,14 +4175,14 @@ class UserManager
     }
 
     /**
-      * Get extra where clauses for finding users based on extra filtrable user fields (type select)
-      * @return string With AND clauses based on user's ID which have the values to search in extra user fields
-      */
+     * Get extra where clauses for finding users based on extra filtrable user fields (type select)
+     * @return string With AND clauses based on user's ID which have the values to search in extra user fields
+     */
     public static function get_search_form_where_extra_fields()
     {
         $useExtraFields = false;
         $extraFields = self::getExtraFilterableFields();
-        $extraFieldResult = array();
+        $extraFieldResult = [];
         if (is_array($extraFields) && count($extraFields) > 0) {
             foreach ($extraFields as $extraField) {
                 $varName = 'field_'.$extraField['variable'];
@@ -4156,10 +4199,10 @@ class UserManager
         }
 
         if ($useExtraFields) {
-            $finalResult = array();
+            $finalResult = [];
             if (count($extraFieldResult) > 1) {
                 for ($i = 0; $i < count($extraFieldResult) - 1; $i++) {
-                if (is_array($extraFieldResult[$i]) && is_array($extraFieldResult[$i + 1])) {
+                    if (is_array($extraFieldResult[$i]) && is_array($extraFieldResult[$i + 1])) {
                         $finalResult = array_intersect($extraFieldResult[$i], $extraFieldResult[$i + 1]);
                     }
                 }
@@ -4191,23 +4234,23 @@ class UserManager
             'get',
             api_get_path(WEB_PATH).'main/social/search.php',
             '',
-            array(),
+            [],
             FormValidator::LAYOUT_HORIZONTAL
         );
 
-        $form->addText('q', get_lang('UsersGroups'), false, array(
+        $form->addText('q', get_lang('UsersGroups'), false, [
             "id" => "q"
-        ));
-        $options = array(
+        ]);
+        $options = [
             0 => get_lang('Select'),
             1 => get_lang('User'),
             2 => get_lang('Group'),
-        );
+        ];
         $form->addSelect(
             'search_type',
             get_lang('Type'),
             $options,
-            array('onchange' => 'javascript: extra_field_toogle();', 'id' => 'search_type')
+            ['onchange' => 'javascript: extra_field_toogle();', 'id' => 'search_type']
         );
 
         // Extra fields
@@ -4262,7 +4305,7 @@ class UserManager
         echo '<a href="/main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Inbox').'</a>';
         echo '<a href="/main/messages/outbox.php">'.Display::return_icon('outbox.png').' '.get_lang('Outbox').'</a>';
         echo '<span style="float:right; padding-top:7px;">'.
-        '<a href="/main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';
+            '<a href="/main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';
         '</span>';
         echo '</div>';
     }
@@ -4461,23 +4504,23 @@ class UserManager
     }
 
     /**
-    * Get users followed by human resource manager
-    * @param int $userId
-    * @param int  $userStatus Filter users by status (STUDENT, COURSEMANAGER, etc)
-    * @param bool $getOnlyUserId
-    * @param bool $getSql
-    * @param bool $getCount
-    * @param int $from
-    * @param int $numberItems
-    * @param int $column
-    * @param string $direction
-    * @param int $active
-    * @param string $lastConnectionDate
-    * @param int $status the function is called by who? COURSEMANAGER, DRH?
-    * @param string $keyword
+     * Get users followed by human resource manager
+     * @param int $userId
+     * @param int  $userStatus Filter users by status (STUDENT, COURSEMANAGER, etc)
+     * @param bool $getOnlyUserId
+     * @param bool $getSql
+     * @param bool $getCount
+     * @param int $from
+     * @param int $numberItems
+     * @param int $column
+     * @param string $direction
+     * @param int $active
+     * @param string $lastConnectionDate
+     * @param int $status the function is called by who? COURSEMANAGER, DRH?
+     * @param string $keyword
      *
-    * @return array user list
-    */
+     * @return array user list
+     */
     public static function getUsersFollowedByUser(
         $userId,
         $userStatus = null,
@@ -4513,7 +4556,7 @@ class UserManager
         }
 
         $column = Database::escape_string($column);
-        $direction = in_array(strtolower($direction), array('asc', 'desc')) ? $direction : null;
+        $direction = in_array(strtolower($direction), ['asc', 'desc']) ? $direction : null;
 
         $userConditions = '';
         if (!empty($userStatus)) {
@@ -4581,7 +4624,7 @@ class UserManager
                 ";
 
                 $teacherSelect =
-                "UNION ALL (
+                    "UNION ALL (
                         $select
                         FROM $tbl_user u
                         INNER JOIN $tbl_session_rel_user sru ON (sru.user_id = u.id)
@@ -4674,9 +4717,8 @@ class UserManager
         $sql .= $limitCondition;
 
         $result = Database::query($sql);
-        $users = array();
+        $users = [];
         if (Database::num_rows($result) > 0) {
-
             while ($row = Database::fetch_array($result)) {
                 $users[$row['user_id']] = $row;
             }
@@ -4726,15 +4768,17 @@ class UserManager
     /**
      * Remove the requests for assign a user to a HRM
      * @param User $hrmId
+     * @param array $usersId List of user IDs from whom to remove all relations requests with HRM
      */
-    public static function clearHrmRequestsForUser(User $hrmId)
+    public static function clearHrmRequestsForUser(User $hrmId, $usersId)
     {
+        $users = implode(', ', $usersId);
         Database::getManager()
             ->createQuery('
                 DELETE FROM ChamiloCoreBundle:UserRelUser uru
-                WHERE uru.friendUserId = :hrm_id AND uru.relationType = :relation_type
+                WHERE uru.friendUserId = :hrm_id AND uru.relationType = :relation_type AND uru.userId IN (:users_ids)
             ')
-            ->execute(['hrm_id' => $hrmId, 'relation_type' => USER_RELATION_TYPE_HRM_REQUEST]);
+            ->execute(['hrm_id' => $hrmId, 'relation_type' => USER_RELATION_TYPE_HRM_REQUEST, 'users_ids' => $users]);
     }
 
     /**
@@ -4804,11 +4848,19 @@ class UserManager
         if (is_array($subscribedUsersId)) {
             foreach ($subscribedUsersId as $subscribedUserId) {
                 $subscribedUserId = intval($subscribedUserId);
-                $sql = "INSERT IGNORE INTO $userRelUserTable (user_id, friend_user_id, relation_type)
-                        VALUES ($subscribedUserId, $userId, $relationType)";
-
+                $sql = "SELECT id FROM $userRelUserTable
+                        WHERE user_id = $subscribedUserId
+                        AND friend_user_id = $userId
+                        AND relation_type = $relationType";
                 $result = Database::query($sql);
-                $affectedRows = Database::affected_rows($result);
+                $num = Database::num_rows($result);
+                if ($num === 0) {
+                    $date = api_get_utc_datetime();
+                    $sql = "INSERT INTO $userRelUserTable (user_id, friend_user_id, relation_type, last_edit)
+                        VALUES ($subscribedUserId, $userId, $relationType, '$date')";
+                    $result = Database::query($sql);
+                    $affectedRows += Database::affected_rows($result);
+                }
             }
         }
 
@@ -4944,12 +4996,12 @@ class UserManager
             $displayscore = ScoreDisplay::instance();
             if (isset($cat) && $displayscore->is_custom()) {
                 $grade = $displayscore->display_score(
-                    array($score, $cat[0]->get_weight()),
+                    [$score, $cat[0]->get_weight()],
                     SCORE_DIV_PERCENT_WITH_CUSTOM
                 );
             } else {
                 $grade = $displayscore->display_score(
-                    array($score, $cat[0]->get_weight())
+                    [$score, $cat[0]->get_weight()]
                 );
             }
             $row['grade'] = $grade;
@@ -4967,7 +5019,7 @@ class UserManager
      */
     public static function get_user_path_certificate($user_id)
     {
-        $my_certificate = array();
+        $my_certificate = [];
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $table_gradebook_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 
@@ -5400,7 +5452,7 @@ EOF;
      */
     public static function get_user_field_types()
     {
-        $types = array();
+        $types = [];
         $types[self::USER_FIELD_TYPE_TEXT] = get_lang('FieldTypeText');
         $types[self::USER_FIELD_TYPE_TEXTAREA] = get_lang('FieldTypeTextarea');
         $types[self::USER_FIELD_TYPE_RADIO] = get_lang('FieldTypeRadio');
@@ -5586,11 +5638,12 @@ EOF;
         $resultData = Database::select(
             'user_id, lastname, firstname, username',
             $userTable,
-            array(
-            'where' => array(
-                'status = ?' => COURSEMANAGER
-            )
-        ));
+            [
+                'where' => [
+                    'status = ?' => COURSEMANAGER
+                ]
+            ]
+        );
 
         foreach ($resultData as &$teacherData) {
             $teacherData['completeName'] = api_get_person_name(
@@ -5613,7 +5666,7 @@ EOF;
                 GROUP BY official_code";
         $result = Database::query($sql);
         $values = Database::store_result($result, 'ASSOC');
-        $result = array();
+        $result = [];
         foreach ($values as $value) {
             $result[$value['official_code']] = $value['official_code'];
         }
@@ -5635,7 +5688,7 @@ EOF;
                 ";
         $result = Database::query($sql);
 
-        $users = array();
+        $users = [];
         while ($row = Database::fetch_array($result)) {
             $users[] = $row['id'];
         }
@@ -5661,11 +5714,11 @@ EOF;
         $userId = intval($userId);
         $sessionId = intval($sessionId);
         $trackCourseAccessTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $whereConditions = array(
+        $whereConditions = [
             'user_id = ? ' => $userId,
             'AND c_id = ? ' => $courseId,
             'AND session_id = ? ' => $sessionId
-        );
+        ];
 
         if (!empty($from) && !empty($until)) {
             $whereConditions["AND (login_course_date >= '?' "] = $from;
@@ -5675,9 +5728,10 @@ EOF;
         $trackResult = Database::select(
             'SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as total_time',
             $trackCourseAccessTable,
-            array(
+            [
                 'where' => $whereConditions
-            ), 'first'
+            ],
+            'first'
         );
 
         if ($trackResult != false) {
@@ -5700,17 +5754,16 @@ EOF;
             $row = Database::select(
                 'DISTINCT friend_user_id AS boss_id',
                 $userRelTable,
-                array(
-                    'where' => array(
-                        'user_id = ? AND relation_type = ? LIMIT 1' => array(
+                [
+                    'where' => [
+                        'user_id = ? AND relation_type = ? LIMIT 1' => [
                             $userId,
                             USER_RELATION_TYPE_BOSS,
-                        )
-                    )
-                )
+                        ]
+                    ]
+                ]
             );
             if (!empty($row)) {
-
                 return $row[0]['boss_id'];
             }
         }
@@ -5721,31 +5774,30 @@ EOF;
     /**
      * Get the boss user ID from a followed user id
      * @param $userId
-     * @return bool
+     * @return array
      */
     public static function getStudentBossList($userId)
     {
-        $userId = intval($userId);
+        $userId = (int) $userId;
         if ($userId > 0) {
             $userRelTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
             $result = Database::select(
                 'DISTINCT friend_user_id AS boss_id',
                 $userRelTable,
-                array(
-                    'where' => array(
-                        'user_id = ? AND relation_type = ? ' => array(
+                [
+                    'where' => [
+                        'user_id = ? AND relation_type = ? ' => [
                             $userId,
                             USER_RELATION_TYPE_BOSS,
-                        )
-                    )
-                ),
-                'all'
+                        ]
+                    ]
+                ]
             );
 
             return $result;
         }
 
-        return false;
+        return [];
     }
 
     /**
@@ -5758,7 +5810,7 @@ EOF;
     {
         $result = false;
         $bossList = self::getStudentBossList($studentId);
-        if ($bossList) {
+        if (!empty($bossList)) {
             $bossList = array_column($bossList, 'boss_id');
             if (in_array($bossId, $bossList)) {
                 $result = true;
@@ -5786,7 +5838,7 @@ EOF;
         $d = 'mm',
         $r = 'g',
         $img = false,
-        $atts = array()
+        $atts = []
     ) {
         $url = 'http://www.gravatar.com/avatar/';
         if (!empty($_SERVER['HTTPS'])) {
@@ -5796,8 +5848,9 @@ EOF;
         $url .= "?s=$s&d=$d&r=$r";
         if ($img) {
             $url = '<img src="'.$url.'"';
-            foreach ($atts as $key => $val)
+            foreach ($atts as $key => $val) {
                 $url .= ' '.$key.'="'.$val.'"';
+            }
             $url .= ' />';
         }
         return $url;
@@ -5916,7 +5969,7 @@ SQL;
      * @return bool
      * @author Evie Embrechts
      * @author Yannick Warnier <yannick.warnier@dokeos.com>
-    */
+     */
     public static function loginAsUser($userId, $checkIfUserCanLoginAs = true)
     {
         $userId = intval($userId);
@@ -6067,6 +6120,7 @@ SQL;
 
         $url = api_get_path(WEB_CODE_PATH).'auth/user_mail_confirmation.php?token='.$uniqueId;
         $mailSubject = get_lang('RegistrationConfirmation');
+        // ofaj
         $mailBody = sprintf(
             get_lang('ToCompleteYourPlatformRegistrationYouNeedToConfirmYourAccountByClickingTheFollowingLinkX'),
             $url

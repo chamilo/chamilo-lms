@@ -3984,6 +3984,7 @@ function processWorkForm(
         $fileInfo = pathinfo($values['title']);
         if (isset($fileInfo['extension']) && !empty($fileInfo['extension'])) {
             $extension = '.'.$fileInfo['extension'];
+            $values['title'] = $fileInfo['filename'];
         }
     }
 

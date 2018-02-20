@@ -870,7 +870,7 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path
     .'jquery-jplayer/jplayer/jquery.jplayer.min.js"></script>';
 $mediaplayer_path = api_get_path(WEB_LIBRARY_PATH).'mediaplayer/player.swf';
 
-$documentAndFolders = DocumentManager::get_all_document_data(
+$documentAndFolders = DocumentManager::getAllDocumentData(
     $courseInfo,
     $curdirpath,
     $groupIid,
@@ -1544,7 +1544,7 @@ if (isset($_GET['curdirpath']) &&
 
 /* GET ALL DOCUMENT DATA FOR CURDIRPATH */
 if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
-    $documentAndFolders = DocumentManager::get_all_document_data(
+    $documentAndFolders = DocumentManager::getAllDocumentData(
         $courseInfo,
         $curdirpath,
         $groupIid,
@@ -1553,7 +1553,7 @@ if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
         true
     );
 } else {
-    $documentAndFolders = DocumentManager::get_all_document_data(
+    $documentAndFolders = DocumentManager::getAllDocumentData(
         $courseInfo,
         $curdirpath,
         $groupIid,

@@ -219,6 +219,21 @@ switch ($action) {
             exit;
         }
         break;
+    case 'generate_certificate':
+        // Delete old certificate
+        $myCertificate = GradebookUtils::get_certificate_by_user_id(
+            0,
+            $student_id
+        );
+        if ($myCertificate) {
+            $certificate = new Certificate($myCertificate['id'], $student_id);
+            $certificate->delete(true);
+        }
+        // Create new one
+        $certificate = new Certificate(0, $student_id);
+        $certificate->generatePdfFromCustomCertificate();
+        exit;
+        break;
     case 'send_legal':
         $subject = get_lang('SendLegalSubject');
         $content = sprintf(

@@ -41,13 +41,15 @@ class Certificate extends Model
      * @param int $certificate_id ID of the certificate.
      * @param int $userId
      * @param bool $sendNotification send message to student
+     * @param bool $updateCertificateData
      *
      * If no ID given, take user_id and try to generate one
      */
     public function __construct(
         $certificate_id = 0,
         $userId = 0,
-        $sendNotification = false
+        $sendNotification = false,
+        $updateCertificateData = true
     ) {
         $this->table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $this->user_id = !empty($userId) ? $userId : api_get_user_id();
@@ -117,7 +119,8 @@ class Certificate extends Model
                 self::updateUserCertificateInfo(
                     0,
                     $this->user_id,
-                    $path_certificate
+                    $path_certificate,
+                    $updateCertificateData
                 );
                 $this->certificate_data['path_certificate'] = $path_certificate;
 
@@ -447,23 +450,24 @@ class Certificate extends Model
 
     /**
      * Update user info about certificate
-     * @param int $cat_id category id
+     * @param int $categoryId category id
      * @param int $user_id user id
      * @param string $path_certificate the path name of the certificate
-     *
+     * @param bool $updateCertificateData
      */
     public function updateUserCertificateInfo(
-        $cat_id,
+        $categoryId,
         $user_id,
-        $path_certificate
+        $path_certificate,
+        $updateCertificateData = true
     ) {
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $now = api_get_utc_datetime();
-        if (!UserManager::is_user_certified($cat_id, $user_id)) {
+        if (!UserManager::is_user_certified($categoryId, $user_id) && $updateCertificateData) {
+            $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+            $now = api_get_utc_datetime();
             $sql = 'UPDATE '.$table.' SET 
                         path_certificate="'.Database::escape_string($path_certificate).'",
                         created_at = "'.$now.'"
-                    WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
+                    WHERE cat_id="'.intval($categoryId).'" AND user_id="'.intval($user_id).'" ';
             Database::query($sql);
         }
     }

@@ -41,13 +41,15 @@ class Certificate extends Model
      * @param int $certificate_id ID of the certificate.
      * @param int $userId
      * @param bool $sendNotification send message to student
+     * @param bool $updateCertificateData
      *
      * If no ID given, take user_id and try to generate one
      */
     public function __construct(
         $certificate_id = 0,
         $userId = 0,
-        $sendNotification = false
+        $sendNotification = false,
+        $updateCertificateData = true
     ) {
         $this->table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $this->user_id = !empty($userId) ? $userId : api_get_user_id();
@@ -117,10 +119,10 @@ class Certificate extends Model
                 self::updateUserCertificateInfo(
                     0,
                     $this->user_id,
-                    $path_certificate
+                    $path_certificate,
+                    $updateCertificateData
                 );
                 $this->certificate_data['path_certificate'] = $path_certificate;
-
                 if ($this->isHtmlFileGenerated()) {
                     if (!empty($file_info)) {
                         //$text = $this->parse_certificate_variables($new_content_html['variables']);
@@ -451,14 +453,16 @@ class Certificate extends Model
      * @param int $cat_id category id
      * @param int $user_id user id
      * @param string $path_certificate the path name of the certificate
+     * @param bool $updateCertificateData
      *
      */
     public function updateUserCertificateInfo(
         $cat_id,
         $user_id,
-        $path_certificate
+        $path_certificate,
+        $updateCertificateData = true
     ) {
-        if (!UserManager::is_user_certified($cat_id, $user_id)) {
+        if (!UserManager::is_user_certified($cat_id, $user_id) && $updateCertificateData) {
             $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
             $now = api_get_utc_datetime();
             $sql = 'UPDATE '.$table.' SET 

@@ -207,7 +207,7 @@ switch ($action) {
             'post',
             api_get_self().'?action=import&'.api_get_cidreq()
         );
-        $form->addElement('header', '', get_lang('ImportGlossary'));
+        $form->addHeader('header', get_lang('ImportGlossary'));
         $form->addElement('file', 'file', get_lang('ImportCSVFileLocation'));
         $form->addElement('checkbox', 'replace', null, get_lang('DeleteAllGlossaryTerms'));
         $form->addElement('checkbox', 'update', null, get_lang('UpdateExistingGlossaryTerms'));
@@ -237,7 +237,6 @@ switch ($action) {
             }
 
             $updateTerms = isset($_POST['update']) && $_POST['update'] ? true : false;
-
             $data = Import::csvToArray($_FILES['file']['tmp_name']);
             $goodList = [];
             $updatedList = [];
@@ -250,6 +249,9 @@ switch ($action) {
             if ($data) {
                 $termsToAdd = [];
                 foreach ($data as $item) {
+                    if (!isset($item['term'])) {
+                        continue;
+                    }
                     $items = [
                         'name' => $item['term'],
                         'description' => $item['definition']

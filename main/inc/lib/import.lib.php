@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use League\Csv\Reader;
+use Patchwork\Utf8;
 
 /**
  * Class Import
@@ -45,10 +46,20 @@ class Import
         if (empty($filename)) {
             return [];
         }
-        $reader = Reader::createFromPath($filename, 'r');
-        $reader->setDelimiter(';');
-        $reader->stripBom(true);
 
-        return $reader->fetchAssoc(0);
+        $reader = Reader::createFromPath($filename, 'r');
+        if ($reader) {
+            $reader->setDelimiter(';');
+            $contents = $reader->__toString();
+            if (!Utf8::isUtf8($contents)) {
+                // If file is not in utf8 try converting to ISO-8859-15
+                if ($reader->getStreamFilterMode() == 1) {
+                    $reader->appendStreamFilter('convert.iconv.ISO-8859-15/UTF-8');
+                }
+            }
+
+            return $reader->fetchAssoc(0);
+        }
+        return [];
     }
 }

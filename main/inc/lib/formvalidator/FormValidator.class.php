@@ -275,10 +275,11 @@ EOT;
     /**
      * @param string $name
      * @param string $value
+     * @param array $attributes
      */
-    public function addHidden($name, $value)
+    public function addHidden($name, $value, $attributes = [])
     {
-        $this->addElement('hidden', $name, $value);
+        $this->addElement('hidden', $name, $value, $attributes);
     }
 
     /**

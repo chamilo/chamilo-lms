@@ -762,6 +762,9 @@ ALTER TABLE skill_rel_item_rel_user ADD result_id INT DEFAULT NULL;
 // LP view custom settings
 // $_configuration['lp_view_settings'] = ['display' => ['show_reporting_icon' => true]];
 
+// Force to hide the invisible course documents in sessions
+//$_configuration['hide_invisible_course_documents_in_sessions'] = false;
+
 // Show more expected choice and status in exercise results BT#13950
 //$_configuration['show_exercise_expected_choice'] = false;
 

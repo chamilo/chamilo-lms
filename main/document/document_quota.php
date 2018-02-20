@@ -78,7 +78,7 @@ if (!empty($group_list)) {
     }
 }
 // Showing weight of documents uploaded by user
-$document_list = DocumentManager::get_all_document_data($_course);
+$document_list = DocumentManager::getAllDocumentData($_course);
 if (is_array($document_list)) {
     foreach ($document_list as $document_data) {
         if ($document_data['insert_user_id'] == api_get_user_id() && $document_data['filetype'] == 'file') {

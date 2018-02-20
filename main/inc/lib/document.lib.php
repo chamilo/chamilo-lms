@@ -427,38 +427,39 @@ class DocumentManager
     /**
      * Fetches all document data for the given user/group
      *
-     * @param array $_course
+     * @param array $courseInfo
      * @param string $path
-     * @param int $to_group_id iid
-     * @param int $to_user_id
-     * @param boolean $can_see_invisible
+     * @param int $toGroupId iid
+     * @param int $toUserId
+     * @param boolean $canSeeInvisible
      * @param boolean $search
      * @param int $sessionId
      * @return array with all document data
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public static function get_all_document_data(
-        $_course,
+    public static function getAllDocumentData(
+        $courseInfo,
         $path = '/',
-        $to_group_id = 0,
-        $to_user_id = null,
-        $can_see_invisible = false,
+        $toGroupId = 0,
+        $toUserId = null,
+        $canSeeInvisible = false,
         $search = false,
         $sessionId = 0
     ) {
-        $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
+        $tblItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $tblDocument = Database::get_course_table(TABLE_DOCUMENT);
 
         $userGroupFilter = '';
-        if (!is_null($to_user_id)) {
-            $to_user_id = intval($to_user_id);
-            $userGroupFilter = "last.to_user_id = $to_user_id";
-            if (empty($to_user_id)) {
+        if (!is_null($toUserId)) {
+            $toUserId = intval($toUserId);
+            $userGroupFilter = "last.to_user_id = $toUserId";
+            if (empty($toUserId)) {
                 $userGroupFilter = " (last.to_user_id = 0 OR last.to_user_id IS NULL) ";
             }
         } else {
-            $to_group_id = intval($to_group_id);
-            $userGroupFilter = "last.to_group_id = $to_group_id";
-            if (empty($to_group_id)) {
+            $toGroupId = intval($toGroupId);
+            $userGroupFilter = "last.to_group_id = $toGroupId";
+            if (empty($toGroupId)) {
                 $userGroupFilter = "( last.to_group_id = 0 OR last.to_group_id IS NULL) ";
             }
         }
@@ -467,20 +468,20 @@ class DocumentManager
         $originalPath = $path;
         $path = str_replace('_', '\_', $path);
 
-        $visibility_bit = ' <> 2';
+        $visibilityBit = ' <> 2';
 
         // The given path will not end with a slash, unless it's the root '/'
         // so no root -> add slash
-        $added_slash = $path == '/' ? '' : '/';
+        $addedSlash = $path == '/' ? '' : '/';
 
         // Condition for the session
         $sessionId = $sessionId ?: api_get_session_id();
-        $condition_session = " AND (last.session_id = '$sessionId' OR (last.session_id = '0' OR last.session_id IS NULL) )";
-        $condition_session .= self::getSessionFolderFilters($originalPath, $sessionId);
+        $conditionSession = " AND (last.session_id = '$sessionId' OR (last.session_id = '0' OR last.session_id IS NULL) )";
+        $conditionSession .= self::getSessionFolderFilters($originalPath, $sessionId);
 
         $sharedCondition = null;
         if ($originalPath == '/shared_folder') {
-            $students = CourseManager::get_user_list_from_course_code($_course['code'], $sessionId);
+            $students = CourseManager::get_user_list_from_course_code($courseInfo['code'], $sessionId);
             if (!empty($students)) {
                 $conditionList = [];
                 foreach ($students as $studentId => $studentInfo) {
@@ -503,134 +504,104 @@ class DocumentManager
                     last.lastedit_date,
                     last.visibility,
                     last.insert_user_id
-                FROM $TABLE_ITEMPROPERTY AS last
-                INNER JOIN $TABLE_DOCUMENT AS docs
+                FROM $tblItemProperty AS last
+                INNER JOIN $tblDocument AS docs
                 ON (
                     docs.id = last.ref AND
                     docs.c_id = last.c_id
                 )
                 WHERE                                
                     last.tool = '".TOOL_DOCUMENT."' AND 
-                    docs.c_id = {$_course['real_id']} AND
-                    last.c_id = {$_course['real_id']} AND
-                    docs.path LIKE '".Database::escape_string($path.$added_slash.'%')."' AND
-                    docs.path NOT LIKE '" . Database::escape_string($path.$added_slash.'%/%')."' AND
+                    docs.c_id = {$courseInfo['real_id']} AND
+                    last.c_id = {$courseInfo['real_id']} AND
+                    docs.path LIKE '".Database::escape_string($path.$addedSlash.'%')."' AND
+                    docs.path NOT LIKE '" . Database::escape_string($path.$addedSlash.'%/%')."' AND
                     docs.path NOT LIKE '%_DELETED_%' AND
                     $userGroupFilter AND
-                    last.visibility $visibility_bit
-                    $condition_session
+                    last.visibility $visibilityBit
+                    $conditionSession
                     $sharedCondition
+                ORDER BY last.iid DESC, last.session_id DESC
                 ";
         $result = Database::query($sql);
 
-        $doc_list = [];
-        $document_data = [];
-        $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+        $documentData = [];
+        $isAllowedToEdit = api_is_allowed_to_edit(null, true);
         $isCoach = api_is_coach();
         if ($result !== false && Database::num_rows($result) != 0) {
+            $rows = [];
+
+            $hideInvisibleDocuments = api_get_configuration_value('hide_invisible_course_documents_in_sessions');
+
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-                if ($isCoach) {
-                    // Looking for course items that are invisible to hide it in the session
-                    if (in_array($row['id'], array_keys($doc_list))) {
-                        if ($doc_list[$row['id']]['item_property_session_id'] == 0 &&
-                            $doc_list[$row['id']]['session_id'] == 0
-                        ) {
-                            if ($doc_list[$row['id']]['visibility'] == 0) {
-                                unset($document_data[$row['id']]);
-                                continue;
-                            }
-                        }
+                if (isset($rows[$row['id']])) {
+                    continue;
+                }
+
+                // If we are in session and hide_invisible_course_documents_in_sessions is enabled
+                // Then we avoid the documents that have visibility in session but that they come from a base course
+                if ($hideInvisibleDocuments && $sessionId) {
+                    if ($row['item_property_session_id'] == $sessionId && empty($row['session_id'])) {
+                        continue;
                     }
-                    $doc_list[$row['id']] = $row;
                 }
 
-                if (!$isCoach && !$is_allowed_to_edit) {
-                    $doc_list[] = $row;
-                }
+                $rows[$row['id']] = $row;
+            }
 
+            // If we are in session and hide_invisible_course_documents_in_sessions is enabled
+            // Or if we are students
+            // Then don't list the invisible or deleted documents
+            if (($sessionId && $hideInvisibleDocuments) || (!$isCoach && !$isAllowedToEdit)) {
+                $rows = array_filter($rows, function ($row) {
+                    if (in_array($row['visibility'], ['0', '2'])) {
+                        return false;
+                    }
+
+                    return true;
+                });
+            }
+
+            foreach ($rows as $row) {
                 if ($row['filetype'] == 'file' &&
                     pathinfo($row['path'], PATHINFO_EXTENSION) == 'html'
                 ) {
                     // Templates management
-                    $table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
-                    $sql = "SELECT id FROM $table_template
+                    $tblTemplate = Database::get_main_table(TABLE_MAIN_TEMPLATES);
+                    $sql = "SELECT id FROM $tblTemplate
                             WHERE
-                                course_code = '".$_course['code']."' AND
+                                course_code = '".$courseInfo['code']."' AND
                                 user_id = '".api_get_user_id()."' AND
                                 ref_doc = '".$row['id']."'";
-                    $template_result = Database::query($sql);
-                    $row['is_template'] = (Database::num_rows($template_result) > 0) ? 1 : 0;
+                    $templateResult = Database::query($sql);
+                    $row['is_template'] = (Database::num_rows($templateResult) > 0) ? 1 : 0;
                 }
                 $row['basename'] = basename($row['path']);
                 // Just filling $document_data.
-                $document_data[$row['id']] = $row;
+                $documentData[$row['id']] = $row;
             }
 
             // Only for the student we filter the results see BT#1652
-            if (!$isCoach && !$is_allowed_to_edit) {
-                $ids_to_remove = [];
-                $my_repeat_ids = $temp = [];
-
-                // Selecting repeated ids
-                foreach ($doc_list as $row) {
-                    if (in_array($row['id'], array_keys($temp))) {
-                        $my_repeat_ids[] = $row['id'];
-                    }
-                    $temp[$row['id']] = $row;
-                }
-
-                //@todo use the self::is_visible function
-                // Checking visibility in a session
-                foreach ($my_repeat_ids as $id) {
-                    foreach ($doc_list as $row) {
-                        if ($id == $row['id']) {
-                            if ($row['visibility'] == 0 && $row['item_property_session_id'] == 0) {
-                                $delete_repeated[$id] = true;
-                            }
-                            if ($row['visibility'] == 0 && $row['item_property_session_id'] != 0) {
-                                $delete_repeated[$id] = true;
-                            }
-                        }
-                    }
-                }
-
-                foreach ($doc_list as $key => $row) {
-                    if (in_array($row['visibility'], ['0', '2']) &&
-                        !in_array($row['id'], $my_repeat_ids)
-                    ) {
-                        $ids_to_remove[] = $row['id'];
-                        unset($doc_list[$key]);
-                    }
-                }
-
-                foreach ($document_data as $row) {
-                    if (in_array($row['id'], $ids_to_remove)) {
-                        unset($document_data[$row['id']]);
-                    }
-                    if (isset($delete_repeated[$row['id']]) && $delete_repeated[$row['id']]) {
-                        unset($document_data[$row['id']]);
-                    }
-                }
-
+            if (!$isCoach && !$isAllowedToEdit) {
                 // Checking parents visibility.
-                $final_document_data = [];
-                foreach ($document_data as $row) {
-                    $is_visible = self::check_visibility_tree(
+                $finalDocumentData = [];
+                foreach ($documentData as $row) {
+                    $isVisible = self::check_visibility_tree(
                         $row['id'],
-                        $_course['code'],
+                        $courseInfo['code'],
                         $sessionId,
                         api_get_user_id(),
-                        $to_group_id
+                        $toGroupId
                     );
-                    if ($is_visible) {
-                        $final_document_data[$row['id']] = $row;
+                    if ($isVisible) {
+                        $finalDocumentData[$row['id']] = $row;
                     }
                 }
             } else {
-                $final_document_data = $document_data;
+                $finalDocumentData = $documentData;
             }
 
-            return $final_document_data;
+            return $finalDocumentData;
         } else {
             return false;
         }

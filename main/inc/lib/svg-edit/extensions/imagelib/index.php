@@ -16,7 +16,7 @@ $curdirpath='/images/gallery'; //path of library directory
 $course_info = api_get_course_info();
 
 //get all files and folders
-$docs_and_folders = DocumentManager::get_all_document_data(
+$docs_and_folders = DocumentManager::getAllDocumentData(
     $course_info,
     $curdirpath,
     0,

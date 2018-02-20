@@ -108,7 +108,6 @@ if ($form->validate()) {
             api_get_configuration_value('assignment_prevent_duplicate_upload')
         );
 
-
         if ($allowRedirect) {
             header('Location: '.$urlToRedirect);
             exit;

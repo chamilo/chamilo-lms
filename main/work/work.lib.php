@@ -38,7 +38,6 @@ function displayWorkActionLinks($id, $action, $isTutor)
             '</a>';
     }
 
-
     if (($isTutor || api_is_allowed_to_edit(null, true)) &&
         $origin != 'learnpath'
     ) {
@@ -46,12 +45,12 @@ function displayWorkActionLinks($id, $action, $isTutor)
         if (empty($id)) {
             $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=create_dir">';
             $output .= Display::return_icon(
-                    'new_work.png',
-                    get_lang('CreateAssignment'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                ).
-                '</a>';
+                'new_work.png',
+                get_lang('CreateAssignment'),
+                '',
+                ICON_SIZE_MEDIUM
+            );
+            $output .= '</a>';
         }
     }
 
@@ -105,9 +104,8 @@ function displayWorkActionLinks($id, $action, $isTutor)
  */
 function settingsForm($defaults)
 {
-    $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-
-    if (!$is_allowed_to_edit) {
+    $allowed = api_is_allowed_to_edit(null, true);
+    if (!$allowed) {
         return;
     }
 
@@ -147,8 +145,8 @@ function get_work_data_by_path($path, $courseId = 0)
         $courseId = api_get_course_int_id();
     }
 
-    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $sql = "SELECT *  FROM  ".$work_table."
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $sql = "SELECT *  FROM $table
             WHERE url = '$path' AND c_id = $courseId ";
     $result = Database::query($sql);
     $return = [];
@@ -253,7 +251,7 @@ function get_work_count_by_student($user_id, $work_id)
  *
  * @return array
  */
-function get_work_assignment_by_id($id, $courseId = null)
+function get_work_assignment_by_id($id, $courseId = 0)
 {
     if (empty($courseId)) {
         $courseId = api_get_course_int_id();
@@ -593,9 +591,6 @@ function showTeacherWorkGrid()
         ['name'=>'amount', 'index'=>'amount', 'width'=>'110', 'align'=>'center', 'sortable' => 'false'],
         ['name'=>'actions', 'index'=>'actions', 'width'=>'110', 'align'=>'left', 'sortable'=>'false']
     ];
-
-    $token = null;
-
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_teacher&'.api_get_cidreq();
     $deleteUrl = api_get_path(WEB_AJAX_PATH).'work.ajax.php?a=delete_work&'.api_get_cidreq();
 
@@ -794,11 +789,9 @@ function deleteDirWork($id)
     $base_work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/work';
     $work_data_url = $base_work_dir.$work_data['url'];
     $check = Security::check_abs_path($work_data_url.'/', $base_work_dir.'/');
-
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $TSTDPUBASG = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $t_agenda = Database::get_course_table(TABLE_AGENDA);
-
     $course_id = api_get_course_int_id();
     $sessionId = api_get_session_id();
 
@@ -814,7 +807,6 @@ function deleteDirWork($id)
                 );
 
                 $workingTime = null;
-
                 foreach ($resultExtra as $field) {
                     $field = $field['value'];
                     if ($consideredWorkingTime == $field->getField()->getVariable()) {
@@ -901,14 +893,14 @@ function deleteDirWork($id)
                 $sessionId
             );
 
-            $link_info = GradebookUtils::isResourceInCourseGradebook(
+            $linkInfo = GradebookUtils::isResourceInCourseGradebook(
                 api_get_course_id(),
                 3,
                 $id,
                 api_get_session_id()
             );
-            $link_id = $link_info['id'];
-            if ($link_info !== false) {
+            $link_id = $linkInfo['id'];
+            if ($linkInfo !== false) {
                 GradebookUtils::remove_resource_from_course_gradebook($link_id);
             }
             return true;
@@ -1006,145 +998,13 @@ function updateDirName($work_data, $newPath)
 }
 
 /**
- * Return an array with all the folder's ids that are in the given path
- * @param   string Path of the directory
- * @return  array The list of ids of all the directories in the path
- * @author  Julio Montoya
- * @version April 2008
- */
-function get_parent_directories($id)
-{
-    $course_id = api_get_course_int_id();
-    $em = Database::getManager();
-
-    $directories = $em
-        ->getRepository('ChamiloCourseBundle:CStudentPublication')
-        ->findBy([
-            'cId' => $course_id,
-            'parentId' => $id
-        ]);
-
-    $list_id = [];
-    foreach ($directories as $directory) {
-        $list_id[] = $directory->getId();
-    }
-
-    return $list_id;
-}
-
-/**
- * Transform an all directory structure (only directories) in an array
- * @param   string path of the directory
- * @return  array the directory structure into an array
- * @author  Julio Montoya
- * @version April 2008
- */
-function directory_to_array($directory)
-{
-    $array_items = [];
-    if ($handle = @opendir($directory)) {
-        while (false !== ($file = readdir($handle))) {
-            if ($file != '.' && $file != '..') {
-                if (is_dir($directory.'/'.$file)) {
-                    $array_items = array_merge($array_items, directory_to_array($directory.'/'.$file));
-                    $file = $directory.'/'.$file;
-                    $array_items[] = preg_replace("/\/\//si", '/', $file);
-                }
-            }
-        }
-        closedir($handle);
-    }
-
-    return $array_items;
-}
-
-
-/**
- * Insert into the DB of the course all the directories
- * @param   string $base_work_dir path of the /work directory of the course
- * @return  mixed Int -1 on error, sql query result on success
- * @author  Julio Montoya
- * @version April 2008
- */
-
-function insert_all_directory_in_course_table($base_work_dir)
-{
-    $dir_to_array = directory_to_array($base_work_dir, true);
-    $only_dir = [];
-
-    for ($i = 0; $i < count($dir_to_array); $i++) {
-        $only_dir[] = substr($dir_to_array[$i], strlen($base_work_dir), strlen($dir_to_array[$i]));
-    }
-    $course_id = api_get_course_int_id();
-    $group_id  = api_get_group_id();
-    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $groupIid = 0;
-    if ($group_id) {
-        $groupInfo = GroupManager::get_group_properties($group_id);
-        $groupIid = $groupInfo['iid'];
-    }
-
-    for ($i = 0; $i < count($only_dir); $i++) {
-        $url = $only_dir[$i];
-
-        $params = [
-            'c_id' => $course_id,
-            'url' => $url,
-            'title' => '',
-            'description' => '',
-            'author' => '',
-            'active' => '1',
-            'accepted' => '1',
-            'filetype' => 'folder',
-            'post_group_id' => $groupIid,
-        ];
-
-        Database::insert($work_table, $params);
-    }
-}
-/**
- * This function displays the number of files contained in a directory
- *
- * @param   string the path of the directory
- * @param   boolean true if we want the total quantity of files
- * include in others child directories, false only  files in the directory
- * @return  array the first element is an integer with the number of files
- * in the folder, the second element is the number of directories
- * @author  Julio Montoya
- * @version April 2008
- */
-function count_dir($path_dir, $recurse)
-{
-    $count = 0;
-    $count_dir = 0;
-    $d = dir($path_dir);
-    while ($entry = $d->Read()) {
-        if (!(($entry == '..') || ($entry == '.'))) {
-            if (is_dir($path_dir.'/'.$entry)) {
-                $count_dir++;
-                if ($recurse) {
-                    $count += count_dir($path_dir.'/'.$entry, $recurse);
-                }
-            } else {
-                $count++;
-            }
-        }
-    }
-    $return_array = [];
-    $return_array[] = $count;
-    $return_array[] = $count_dir;
-    return $return_array;
-}
-
-/**
  * returns all the javascript that is required for easily
  * validation when you create a work
  * this goes into the $htmlHeadXtra[] array
  */
 function to_javascript_work()
 {
-    $js = '<script>
- 
+    $js = '<script> 
         function updateDocumentTitle(value) {
             var temp = value.indexOf("/");
             
@@ -4747,12 +4607,11 @@ function getFormWork($form, $defaults = [], $workId = 0)
     $htmlHeadXtra[] = '
         <script>
         $(function() {
-            ' . $extra['jquery_ready_content'].'
+            '.$extra['jquery_ready_content'].'
         });
         </script>';
 
     $form->addHtml('</div>');
-
 
     $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_STUDENT_PUBLICATION, $workId);
 
@@ -4806,7 +4665,6 @@ function updateSettings($courseInfo, $showScore, $studentDeleteOwnPublication)
     Session::write('_course', $courseInfo);
 
     // changing the tool setting: is a student allowed to delete his/her own document
-
     // counting the number of occurrences of this setting (if 0 => add, if 1 => update)
     $query = "SELECT * FROM $table_course_setting
               WHERE
@@ -4946,7 +4804,6 @@ function showStudentList($workId)
         ],
     ];
     $token = null;
-
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_student_list_overview&work_id='.$workId.'&'.api_get_cidreq();
 
     $columns = [
@@ -5181,7 +5038,6 @@ function getFileContents($id, $course_info, $sessionId = 0, $correction = false)
     }
 
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-
     if (!empty($course_info['real_id'])) {
         $sql = 'SELECT *
                 FROM '.$table.'
@@ -5356,7 +5212,6 @@ function exportAllStudentWorkFromPublication(
     }
 
     $workData = get_work_data_by_id($workId);
-
     if (empty($workData)) {
         return false;
     }
@@ -5488,9 +5343,7 @@ function downloadAllFilesPerUser($userId, $courseInfo)
 
     $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
     $coursePath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work/';
-
     $zip = new PclZip($tempZipFile);
-
     $workPerUser = getWorkPerUser($userId);
 
     if (!empty($workPerUser)) {

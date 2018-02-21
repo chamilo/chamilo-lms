@@ -41,13 +41,15 @@ class Certificate extends Model
      * @param int $certificate_id ID of the certificate.
      * @param int $userId
      * @param bool $sendNotification send message to student
+     * @param bool $updateCertificateData
      *
      * If no ID given, take user_id and try to generate one
      */
     public function __construct(
         $certificate_id = 0,
         $userId = 0,
-        $sendNotification = false
+        $sendNotification = false,
+        $updateCertificateData = true
     ) {
         $this->table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $this->user_id = !empty($userId) ? $userId : api_get_user_id();
@@ -117,10 +119,10 @@ class Certificate extends Model
                 self::updateUserCertificateInfo(
                     0,
                     $this->user_id,
-                    $path_certificate
+                    $path_certificate,
+                    $updateCertificateData
                 );
                 $this->certificate_data['path_certificate'] = $path_certificate;
-
                 if ($this->isHtmlFileGenerated()) {
                     if (!empty($file_info)) {
                         //$text = $this->parse_certificate_variables($new_content_html['variables']);
@@ -210,12 +212,13 @@ class Certificate extends Model
         }
 
         $params['hide_print_button'] = isset($params['hide_print_button']) ? true : false;
-
+        $categoryId = 0;
         if (isset($this->certificate_data) && isset($this->certificate_data['cat_id'])) {
-            $my_category = Category::load($this->certificate_data['cat_id']);
+            $categoryId = $this->certificate_data['cat_id'];
+            $my_category = Category::load($categoryId);
         }
 
-        if (isset($my_category[0]) &&
+        if (isset($my_category[0]) && !empty($categoryId) &&
             $my_category[0]->is_certificate_available($this->user_id)
         ) {
             $courseInfo = api_get_course_info($my_category[0]->get_course_code());
@@ -332,7 +335,7 @@ class Certificate extends Model
             $my_new_content_html = str_replace(
                 '((certificate_barcode))',
                 Display::img(
-                    +$this->certification_web_user_path.$file_info['filename'].'_qr.png',
+                    $this->certification_web_user_path.$file_info['filename'].'_qr.png',
                     'QR'
                 ),
                 $content
@@ -450,15 +453,18 @@ class Certificate extends Model
      * @param int $cat_id category id
      * @param int $user_id user id
      * @param string $path_certificate the path name of the certificate
+     * @param bool $updateCertificateData
+     *
      */
     public function updateUserCertificateInfo(
         $cat_id,
         $user_id,
-        $path_certificate
+        $path_certificate,
+        $updateCertificateData = true
     ) {
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $now = api_get_utc_datetime();
-        if (!UserManager::is_user_certified($cat_id, $user_id)) {
+        if (!UserManager::is_user_certified($cat_id, $user_id) && $updateCertificateData) {
+            $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+            $now = api_get_utc_datetime();
             $sql = 'UPDATE '.$table.' SET 
                         path_certificate="'.Database::escape_string($path_certificate).'",
                         created_at = "'.$now.'"
@@ -655,7 +661,6 @@ class Certificate extends Model
             0,
             $this->user_id
         );
-
         if (empty($myCertificate)) {
             GradebookUtils::registerUserInfoAboutCertificate(
                 0,
@@ -693,16 +698,9 @@ class Certificate extends Model
                     if (isset($gradebookCategories[0])) {
                         /** @var Category $category */
                         $category = $gradebookCategories[0];
-                        //  $categoryId = $category->get_id();
-                        // @todo how we check if user pass a gradebook?
-                        //$certificateInfo = GradebookUtils::get_certificate_by_user_id($categoryId, $this->user_id);
-
                         $result = Category::userFinishedCourse(
                             $this->user_id,
                             $category,
-                            null,
-                            $courseInfo['code'],
-                            $session['session_id'],
                             true
                         );
 

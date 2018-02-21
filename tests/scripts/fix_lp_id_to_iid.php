@@ -55,13 +55,15 @@ foreach ($res as $course) {
                 'prerequisite',
                 'previous_item_id'
             ];
+
             foreach ($items as $item) {
                 $itemIid = $item['iid'];
                 $itemId = $item['id'];
                 foreach ($variablesToFix as $variable) {
                     if (!empty($item[$variable]) && isset($itemList[$item[$variable]])) {
                         $newId = $itemList[$item[$variable]];
-                        $sql = "UPDATE $tblCLpItem SET $variable = $newId WHERE iid = $itemIid";
+                        $sql = "UPDATE $tblCLpItem SET $variable = $newId 
+                                WHERE iid = $itemIid AND c_id = $courseId";
                         Database::query($sql);
                         var_dump($sql);
                     }
@@ -75,7 +77,8 @@ foreach ($res as $course) {
                         $document = Database::fetch_array($resultDocument, 'ASSOC');
                         $newDocumentId = $document['iid'];
                         if (!empty($newDocumentId)) {
-                            $sql = "UPDATE $tblCLpItem SET path = $newDocumentId WHERE iid = $itemIid";
+                            $sql = "UPDATE $tblCLpItem SET path = $newDocumentId 
+                                    WHERE iid = $itemIid AND c_id = $courseId";
                             Database::query($sql);
                             var_dump($sql);
                         }
@@ -133,15 +136,15 @@ foreach ($res as $course) {
                     }
                 }
 
-                $sql = "UPDATE $tblCLpItem SET lp_id = $lpIid WHERE iid = $itemIid";
+                $sql = "UPDATE $tblCLpItem SET lp_id = $lpIid WHERE iid = $itemIid AND c_id = $courseId ";
                 Database::query($sql);
 
-                $sql = "UPDATE $tblCLpItem SET id = iid";
+                $sql = "UPDATE $tblCLpItem SET id = iid WHERE c_id = $courseId ";
                 Database::query($sql);
                 var_dump($sql);
             }
 
-            $sql = "UPDATE $tblCLp SET id = iid WHERE iid = $lpIid";
+            $sql = "UPDATE $tblCLp SET id = iid WHERE c_id = $courseId AND iid = $lpIid";
             Database::query($sql);
             var_dump($sql);
 

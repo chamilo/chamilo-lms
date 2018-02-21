@@ -313,42 +313,4 @@ class UserRepository extends EntityRepository
 
         return $queryBuilder->getQuery()->getResult();
     }
-
-    /**
-     * Get number of users in URL
-     * @param AccessUrl $url
-     *
-     * @return int
-     */
-    public function getCountUsersByUrl(AccessUrl $url)
-    {
-        return $this->createQueryBuilder('a')
-            ->select('COUNT(a)')
-            ->innerJoin('a.portals', 'u')
-            ->where('u.portal = :u')
-            ->setParameters(['u' => $url])
-            ->getQuery()
-            ->getSingleScalarResult();
-    }
-
-    /**
-     * Get number of users in URL
-     * @param AccessUrl $url
-     *
-     * @return int
-     */
-    public function getCountTeachersByUrl(AccessUrl $url)
-    {
-        $qb = $this->createQueryBuilder('a');
-
-        return $qb
-            ->select('COUNT(a)')
-            ->innerJoin('a.portals', 'u')
-            ->where('u.portal = :u and u.group = :g')
-            ->andWhere($qb->expr()->in('a.roles', ['ROLE_TEACHER']))
-            ->setParameters(['u' => $url, 'g' => $group])
-            ->getQuery()
-            ->getSingleScalarResult()
-        ;
-    }
 }

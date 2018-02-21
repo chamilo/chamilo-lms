@@ -741,4 +741,22 @@ class BranchSync
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     * @return BranchSync
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+        return $this;
+    }
 }

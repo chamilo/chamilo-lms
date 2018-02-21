@@ -1800,12 +1800,6 @@ class learnpath
             $this->index = 0;
         }
 
-        if ($this->debug > 0) {
-            if (isset($this->items[$this->last_item_seen])) {
-                $status = $this->items[$this->last_item_seen]->get_status();
-            }
-        }
-
         if (!empty($this->last_item_seen) &&
             !empty($this->items[$this->last_item_seen]) &&
             $this->items[$this->last_item_seen]->get_type() != 'dir'
@@ -1829,9 +1823,9 @@ class learnpath
                 }
                 return false;
             } else {
-                $this->last     = $this->last_item_seen;
-                $this->current  = $this->last_item_seen;
-                $this->index    = $index;
+                $this->last = $this->last_item_seen;
+                $this->current = $this->last_item_seen;
+                $this->index = $index;
             }
         } else {
             if ($this->debug > 2) {
@@ -1848,6 +1842,7 @@ class learnpath
                 ) && $index < $this->max_ordered_items) {
                 $index++;
             }
+
             $this->last = $this->current;
             // current is
             $this->current = isset($this->ordered_items[$index]) ? $this->ordered_items[$index] : null;
@@ -2252,6 +2247,7 @@ class learnpath
         }
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $tbl_lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $lpItemId = (int) $lpItemId;
 
         // Getting all the information about the item.
         $sql = "SELECT * FROM $tbl_lp_item as lpi

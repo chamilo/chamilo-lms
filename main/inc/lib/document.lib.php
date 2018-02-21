@@ -835,7 +835,7 @@ class DocumentManager
         $_course,
         $user_id,
         $file = null,
-        $document_id = '',
+        $document_id = 0,
         $to_delete = false,
         $sessionId = null,
         $documentId = null
@@ -1017,16 +1017,14 @@ class DocumentManager
     ) {
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 
+        $groupId = intval($groupId);
         if (empty($groupId)) {
             $groupId = api_get_group_id();
-        } else {
-            $groupId = intval($groupId);
         }
 
+        $sessionId = intval($sessionId);
         if (empty($sessionId)) {
             $sessionId = api_get_session_id();
-        } else {
-            $sessionId = intval($sessionId);
         }
 
         $course_id = $_course['real_id'];
@@ -1419,12 +1417,11 @@ class DocumentManager
         $course_code = Database::escape_string($course_code);
         $user_id = intval($user_id);
         $document_id = intval($document_id);
-
         $sql = 'SELECT id FROM '.$table_template.'
                 WHERE
-                    course_code="' . $course_code.'" AND
-                    user_id="' . $user_id.'" AND
-                    ref_doc="' . $document_id.'"';
+                    course_code="'.$course_code.'" AND
+                    user_id="'.$user_id.'" AND
+                    ref_doc="'.$document_id.'"';
         $result = Database::query($sql);
         $template_id = Database::result($result, 0, 0);
 
@@ -1432,9 +1429,9 @@ class DocumentManager
 
         $sql = 'DELETE FROM '.$table_template.'
                 WHERE
-                    course_code="' . $course_code.'" AND
-                    user_id="' . $user_id.'" AND
-                    ref_doc="' . $document_id.'"';
+                    course_code="'.$course_code.'" AND
+                    user_id="'.$user_id.'" AND
+                    ref_doc="'.$document_id.'"';
 
         Database::query($sql);
     }
@@ -1459,7 +1456,8 @@ class DocumentManager
         $propTable = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
         $course_id = $course['real_id'];
-        //note the extra / at the end of doc_path to match every path in the document table that is part of the document path
+        // note the extra / at the end of doc_path to match every path in
+        // the document table that is part of the document path
 
         $session_id = intval($session_id);
         $condition = "AND d.session_id IN  ('$session_id', '0') ";
@@ -1709,7 +1707,7 @@ class DocumentManager
             $sql_session = '';
         }
         $sql = 'SELECT document_id FROM '.$tbl_category.'
-                WHERE course_code="' . Database::escape_string($course_id).'" '.$sql_session;
+                WHERE course_code="'.Database::escape_string($course_id).'" '.$sql_session;
 
         $rs = Database::query($sql);
         $num = Database::num_rows($rs);
@@ -1727,7 +1725,7 @@ class DocumentManager
      * @param string $course_code
      * @param int $sessionId
      * @param bool $is_preview
-     * @return string The html content of the certificate
+     * @return array
      */
     public static function replace_user_info_into_html(
         $user_id,
@@ -1926,8 +1924,8 @@ class DocumentManager
 
             $sql = 'UPDATE '.$tbl_category.' SET document_id = null
                     WHERE
-                        course_code = "' . Database::escape_string($course_id).'" AND
-                        document_id="' . $default_certificate_id.'" '.$sql_session;
+                        course_code = "'.Database::escape_string($course_id).'" AND
+                        document_id="'.$default_certificate_id.'" '.$sql_session;
             Database::query($sql);
         }
     }
@@ -1945,7 +1943,6 @@ class DocumentManager
             $course_dir = $courseInfo['path']."/document/";
             $sys_course_path = api_get_path(SYS_COURSE_PATH);
             $base_work_dir = $sys_course_path.$course_dir;
-            $base_work_dir_test = $base_work_dir.'certificates';
             $dir_name = '/certificates';
             $post_dir_name = get_lang('CertificatesFiles');
             $visibility_command = 'invisible';
@@ -2088,8 +2085,12 @@ class DocumentManager
                     case 'shtml':
                     case 'css':
                         $file_content = file_get_contents($abs_path);
-                        //get an array of attributes from the HTML source
-                        $attributes = self::parse_HTML_attributes($file_content, $wanted_attributes, $explode_attributes);
+                        // get an array of attributes from the HTML source
+                        $attributes = self::parse_HTML_attributes(
+                            $file_content,
+                            $wanted_attributes,
+                            $explode_attributes
+                        );
                         break;
                     default:
                         break;
@@ -2407,11 +2408,11 @@ class DocumentManager
     /**
      * Parses the HTML attributes given as string.
      *
-     * @param    string  HTML attribute string
-     * @param	 array	 List of attributes that we want to get back
-     * @param    array
-     * @return   array   An associative array of attributes
-     * @author 	 Based on a function from the HTML_Common2 PEAR module     *
+     * @param string HTML attribute string
+     * @param array List of attributes that we want to get back
+     * @param array
+     * @return array   An associative array of attributes
+     * @author Based on a function from the HTML_Common2 PEAR module     *
      */
     public static function parse_HTML_attributes($attrString, $wanted = [], $explode_variables = [])
     {
@@ -2505,7 +2506,7 @@ class DocumentManager
      * @param string $origin_course_path_from_zip
      * @param string $origin_course_info_path
      *
-     * @return string	new content html with replaced urls or return false if content is not a string
+     * @return string    new content html with replaced urls or return false if content is not a string
      */
     public static function replaceUrlWithNewCourseCode(
         $content_html,
@@ -2577,7 +2578,11 @@ class DocumentManager
                                     $perm = api_get_permissions_for_new_directories();
                                     $result = @mkdir($filepath_dir, $perm, true);
                                     if ($result) {
-                                        $filepath_to_add = str_replace([$dest_course_path, 'document'], '', $filepath_dir);
+                                        $filepath_to_add = str_replace(
+                                            [$dest_course_path, 'document'],
+                                            '',
+                                            $filepath_dir
+                                        );
 
                                         //Add to item properties to the new folder
                                         $doc_id = add_document(
@@ -2604,7 +2609,11 @@ class DocumentManager
                                 if (!file_exists($destination_filepath)) {
                                     $result = @copy($origin_filepath, $destination_filepath);
                                     if ($result) {
-                                        $filepath_to_add = str_replace([$dest_course_path, 'document'], '', $destination_filepath);
+                                        $filepath_to_add = str_replace(
+                                            [$dest_course_path, 'document'],
+                                            '',
+                                            $destination_filepath
+                                        );
                                         $size = filesize($destination_filepath);
 
                                         // Add to item properties to the file
@@ -2632,12 +2641,13 @@ class DocumentManager
 
                             // Replace origin course path by destination course path.
                             if (strpos($content_html, $real_orig_url) !== false) {
-                                $url_course_path = str_replace($orig_course_info_path.'/'.$document_file, '', $real_orig_path);
-
-                                //$destination_url = $url_course_path . $destination_course_directory . '/' . $document_file . $dest_url_query;
+                                $url_course_path = str_replace(
+                                    $orig_course_info_path.'/'.$document_file,
+                                    '',
+                                    $real_orig_path
+                                );
                                 // See BT#7780
                                 $destination_url = $dest_course_path_rel.$document_file.$dest_url_query;
-
                                 // If the course code doesn't exist in the path? what we do? Nothing! see BT#1985
                                 if (strpos($real_orig_path, $origin_course_code) === false) {
                                     $url_course_path = $real_orig_path;
@@ -2935,12 +2945,12 @@ class DocumentManager
             $course_id = api_get_course_int_id();
         }
 
-        $group_condition = null;
+        $group_condition = '';
         if ($group_id) {
             $group_condition = " AND props.to_group_id='".$group_id."' ";
         }
 
-        $session_condition = null;
+        $session_condition = '';
         if ($session_id) {
             $session_condition = " AND props.session_id='".$session_id."' ";
         }
@@ -3042,7 +3052,7 @@ class DocumentManager
      * Shows a play icon next to the document title in the document list
      * @param int
      * @param string
-     * @return string	html content
+     * @return string    html content
      */
     public static function generate_media_preview($i, $type = 'simple')
     {
@@ -3073,7 +3083,6 @@ class DocumentManager
                         </div>
                     </div>
                 </div>';
-        //<div id="jplayer_inspector_'.$i.'"></div>
         return $html;
     }
 
@@ -3083,7 +3092,6 @@ class DocumentManager
      */
     public static function generate_video_preview($document_data = [])
     {
-        //<button class="jp-video-play-icon" role="button" tabindex="0">play</button>
         $html = '
         <div id="jp_container_1" class="jp-video center-block" role="application" aria-label="media player">
             <div class="jp-type-single">
@@ -3529,7 +3537,6 @@ class DocumentManager
         }
 
         $return .= '<div class="item_data" style="margin-left:'.($num * 5).'px;margin-right:5px;">';
-
         if ($add_move_button) {
             $return .= '<a class="moved" href="#">';
             $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
@@ -3576,22 +3583,7 @@ class DocumentManager
             return null;
         }
 
-        //trad some titles
-        /*
-        if ($key == 'images') {
-            $key = get_lang('Images');
-        } elseif ($key == 'gallery') {
-            $key = get_lang('Gallery');
-        } elseif ($key == 'flash') {
-            $key = get_lang('Flash');
-        } elseif ($key == 'audio') {
-            $key = get_lang('Audio');
-        } elseif ($key == 'video') {
-            $key = get_lang('Video');
-        }*/
-
         $onclick = '';
-
         // if in LP, hidden folder are displayed in grey
         $folder_class_hidden = '';
         if ($lp_id) {
@@ -4143,12 +4135,7 @@ class DocumentManager
         $formatTypesList = [];
         $formatTypes = ['text', 'spreadsheet', 'presentation', 'drawing'];
         foreach ($formatTypes as $formatType) {
-            if (
-            in_array(
-                $extension,
-                self::getJodconverterExtensionList($mode, $formatType)
-            )
-            ) {
+            if (in_array($extension, self::getJodconverterExtensionList($mode, $formatType))) {
                 $formatTypesList[] = $formatType;
             }
         }
@@ -5722,12 +5709,12 @@ class DocumentManager
 
     /**
      * Creates the row of edit icons for a file/folder
-     *
-     * @param string $curdirpath current path (cfr open folder)
-     * @param string $type (file/folder)
-     * @param string $path dbase path of file/folder
+     * @param array $document_data
+     * @param int $id
+     * @param bool $is_template
+     * @param int $is_read_only
      * @param int $visibility (1/0)
-     * @param int $id dbase id of the document
+     *
      * @return string html img tags with hyperlinks
      */
     public static function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, $visibility)
@@ -5978,7 +5965,7 @@ class DocumentManager
                 $path_displayed .= $tmp_folders_titles[$tmp_path];
             } else {
                 $sql = 'SELECT title FROM '.Database::get_course_table(TABLE_DOCUMENT).'
-                        WHERE c_id = ' . $course_id.' AND path LIKE BINARY "'.$tmp_path.'"';
+                        WHERE c_id = '.$course_id.' AND path LIKE BINARY "'.$tmp_path.'"';
                 $rs = Database::query($sql);
                 $tmp_title = '/'.Database::result($rs, 0, 0);
                 $path_displayed .= $tmp_title;
@@ -6028,15 +6015,15 @@ class DocumentManager
     /**
      * Checks whether the user is into any user shared folder
      * @param string $path
-     * @param int $current_session_id
+     * @param int $sessionId
      * @return bool Return true when user is in any user shared folder
      */
-    public static function is_any_user_shared_folder($path, $current_session_id)
+    public static function is_any_user_shared_folder($path, $sessionId)
     {
         $clean_path = Security::remove_XSS($path);
         if (strpos($clean_path, 'shared_folder/sf_user_')) {
             return true;
-        } elseif (strpos($clean_path, 'shared_folder_session_'.$current_session_id.'/sf_user_')) {
+        } elseif (strpos($clean_path, 'shared_folder_session_'.$sessionId.'/sf_user_')) {
             return true;
         } else {
             return false;
@@ -6121,16 +6108,16 @@ class DocumentManager
      * Checks whether the user is into his shared folder or into a subfolder
      * @param int $user_id
      * @param string $path
-     * @param int $current_session_id
+     * @param int $sessionId
      * @return bool Return true when user is in his user shared folder or into a subfolder
      */
-    public static function is_my_shared_folder($user_id, $path, $current_session_id)
+    public static function is_my_shared_folder($user_id, $path, $sessionId)
     {
         $clean_path = Security::remove_XSS($path).'/';
         //for security does not remove the last slash
         $main_user_shared_folder = '/shared_folder\/sf_user_'.$user_id.'\//';
         //for security does not remove the last slash
-        $main_user_shared_folder_session = '/shared_folder_session_'.$current_session_id.'\/sf_user_'.$user_id.'\//';
+        $main_user_shared_folder_session = '/shared_folder_session_'.$sessionId.'\/sf_user_'.$user_id.'\//';
 
         if (preg_match($main_user_shared_folder, $clean_path)) {
             return true;
@@ -6172,7 +6159,7 @@ class DocumentManager
 
         /*
           //TODO: make a admin switch to strict mode
-          1. global default $allowed_extensions only: 'htm', 'html', 'xhtml', 'gif', 'jpg', 'jpeg', 'png', 'bmp', 'txt', 'log'
+          1. global default $allowed_extensions
           if (in_array($file_extension, $allowed_extensions)) { // Assignment + a logical check.
           return true;
           }
@@ -6180,7 +6167,8 @@ class DocumentManager
           3. check plugins: quicktime, mediaplayer, vlc, acrobat, flash, java
          */
 
-        if (!($result = in_array($file_extension, $allowed_extensions))) { // Assignment + a logical check.
+        if (!($result = in_array($file_extension, $allowed_extensions))) {
+            // Assignment + a logical check.
             return false;
         }
 
@@ -6469,7 +6457,9 @@ class DocumentManager
                 $new_path = Database::escape_string($new_path);
                 $query = "UPDATE $dbTable SET
                             path = CONCAT('".$new_path."', SUBSTRING(path, LENGTH('".$old_path."')+1) )
-                          WHERE c_id = $course_id AND (path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%')";
+                          WHERE 
+                                c_id = $course_id AND 
+                                (path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%')";
                 Database::query($query);
                 break;
         }

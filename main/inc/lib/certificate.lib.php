@@ -698,16 +698,9 @@ class Certificate extends Model
                     if (isset($gradebookCategories[0])) {
                         /** @var Category $category */
                         $category = $gradebookCategories[0];
-                        //  $categoryId = $category->get_id();
-                        // @todo how we check if user pass a gradebook?
-                        //$certificateInfo = GradebookUtils::get_certificate_by_user_id($categoryId, $this->user_id);
-
                         $result = Category::userFinishedCourse(
                             $this->user_id,
                             $category,
-                            null,
-                            $courseInfo['code'],
-                            $session['session_id'],
                             true
                         );
 

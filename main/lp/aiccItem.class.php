@@ -32,8 +32,8 @@ class aiccItem extends learnpathItem
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormItem
      * object from database records or from the array given as second parameter
-     * @param	string	Type of construction needed ('db' or 'config', default = 'config')
-     * @param	mixed	Depending on the type given, DB id for the lp_item or parameters array
+     * @param    string    Type of construction needed ('db' or 'config', default = 'config')
+     * @param    mixed    Depending on the type given, DB id for the lp_item or parameters array
      */
     public function __construct($type = 'config', $params = [], $course_id = null)
     {
@@ -46,7 +46,6 @@ class aiccItem extends learnpathItem
                     // no break
                 case 'config': // Do the same as the default.
                 default:
-                    //if($first_item->type == XML_ELEMENT_NODE) this is already check prior to the call to this function
                     foreach ($params as $a => $value) {
                         switch ($a) {
                             case 'system_id':
@@ -104,10 +103,10 @@ class aiccItem extends learnpathItem
 
     /**
      * Builds a flat list with the current item and calls itself recursively on all children
-     * @param	array	Reference to the array to complete with the current item
-     * @param	integer	Optional absolute order (pointer) of the item in this learning path
-     * @param	integer	Optional relative order of the item at this level
-     * @param	integer	Optional level. If not given, assumes it's level 0
+     * @param    array    Reference to the array to complete with the current item
+     * @param    integer    Optional absolute order (pointer) of the item in this learning path
+     * @param    integer    Optional relative order of the item at this level
+     * @param    integer    Optional level. If not given, assumes it's level 0
      */
     public function get_flat_list(&$list, &$abs_order, $rel_order = 1, $level = 0)
     {
@@ -135,7 +134,7 @@ class aiccItem extends learnpathItem
 
     /**
      * Save function. Uses the parent save function and adds a layer for AICC.
-     * @param	boolean	Save from URL params (1) or from object attributes (0)
+     * @param    boolean    Save from URL params (1) or from object attributes (0)
      */
     public function save($from_outside = true, $prereqs_complete = false)
     {

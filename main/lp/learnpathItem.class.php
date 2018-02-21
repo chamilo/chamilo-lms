@@ -232,20 +232,6 @@ class learnpathItem
         if (($index + 1) > $this->interactions_count) {
             $this->interactions_count = $index + 1;
         }
-        /*
-        if (is_array($this->interactions[$index]) && count($this->interactions[$index]) > 0) {
-            $this->interactions[$index] = $params;
-            return false;
-        } else {
-            if (count($params)==8) {
-            // We rely on the calling script to provide parameters in the right order.
-                $this->interactions[$index] = $params;
-                return true;
-            } else {
-                return false;
-            }
-        }
-        */
     }
 
     /**
@@ -306,7 +292,6 @@ class learnpathItem
         }
         $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
-
         $course_id = api_get_course_int_id();
 
         $sql = "DELETE FROM $lp_item_view
@@ -739,10 +724,10 @@ class learnpathItem
     public function get_lesson_mode()
     {
         $mode = 'normal';
-        if ($this->get_prevent_reinit() != 0) { // If prevent_reinit == 0
+        if ($this->get_prevent_reinit() != 0) {
+            // If prevent_reinit == 0
             $my_status = $this->get_status();
-            if ($my_status != $this->possible_status[0]
-                    && $my_status != $this->possible_status[1]) {
+            if ($my_status != $this->possible_status[0] && $my_status != $this->possible_status[1]) {
                 $mode = 'review';
             }
         }
@@ -1735,9 +1720,8 @@ class learnpathItem
      */
     public function get_terms()
     {
-        $lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $course_id = api_get_course_int_id();
-        $sql = "SELECT * FROM $lp_item
+        $table = Database::get_course_table(TABLE_LP_ITEM);
+        $sql = "SELECT * FROM $table
                 WHERE iid = ".intval($this->db_id);
         $res = Database::query($sql);
         $row = Database::fetch_array($res);
@@ -1958,7 +1942,7 @@ class learnpathItem
 
     /**
      * Opens/launches the item. Initialises runtime values.
-     * @return    boolean    True on success, false on failure.
+     * @return bool True on success, false on failure.
      */
     public function open($allow_new_attempt = false)
     {
@@ -2423,7 +2407,9 @@ class learnpathItem
 
                                                     if (isset($minScore) && isset($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776
-                                                        if ($quiz['exe_result'] >= $minScore && $quiz['exe_result'] <= $maxScore) {
+                                                        if ($quiz['exe_result'] >= $minScore &&
+                                                            $quiz['exe_result'] <= $maxScore
+                                                        ) {
                                                             $returnstatus = true;
                                                         } else {
                                                             $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
@@ -2431,7 +2417,9 @@ class learnpathItem
                                                         }
                                                     } else {
                                                         // Classic way
-                                                        if ($quiz['exe_result'] >= $items[$refs_list[$prereqs_string]]->get_mastery_score()) {
+                                                        if ($quiz['exe_result'] >=
+                                                            $items[$refs_list[$prereqs_string]]->get_mastery_score()
+                                                        ) {
                                                             $returnstatus = true;
                                                         } else {
                                                             $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
@@ -2495,7 +2483,6 @@ class learnpathItem
                                     } else {
                                         $status = $items[$refs_list[$prereqs_string]]->get_status(false);
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
-
                                         if (!$returnstatus) {
                                             if (self::DEBUG > 1) {
                                                 error_log(
@@ -2523,9 +2510,9 @@ class learnpathItem
 
                                             $sql = 'SELECT iid FROM '.$lp_view.'
                                                     WHERE
-                                                        c_id = ' . $course_id.' AND
-                                                        user_id = ' . $user_id.'  AND
-                                                        lp_id = ' . $this->lp_id.' AND
+                                                        c_id = '.$course_id.' AND
+                                                        user_id = '.$user_id.'  AND
+                                                        lp_id = '.$this->lp_id.' AND
                                                         session_id = '.$sessionId.'
                                                     LIMIT 0, 1';
                                             $rs_lp = Database::query($sql);
@@ -2536,14 +2523,12 @@ class learnpathItem
 
                                             $sql = 'SELECT status FROM '.$lp_item_view.'
                                                    WHERE
-                                                        c_id = ' . $course_id.' AND
-                                                        lp_view_id = ' . $my_lp_id.' AND
-                                                        lp_item_id = ' . $refs_list[$prereqs_string].'
+                                                        c_id = '.$course_id.' AND
+                                                        lp_view_id = '.$my_lp_id.' AND
+                                                        lp_item_id = '.$refs_list[$prereqs_string].'
                                                     LIMIT 0, 1';
                                             $rs_lp = Database::query($sql);
-                                            $status_array = Database::fetch_row(
-                                                $rs_lp
-                                            );
+                                            $status_array = Database::fetch_row($rs_lp);
                                             $status = $status_array[0];
 
                                             $returnstatus = ($status == $this->possible_status[2]) || ($status == $this->possible_status[3]);
@@ -2705,8 +2690,6 @@ class learnpathItem
             //$this->current_score = 0;
             $this->current_start_time = 0;
             $this->current_stop_time = 0;
-            //$this->current_data = '';scorm
-            //$this->status = $this->possible_status[0];
             $this->interactions_count = $this->get_interactions_count(true);
         }
         return true;
@@ -2833,21 +2816,9 @@ class learnpathItem
                                 }
                                 break;
                             case 'interactions':
-                                //$interactions = unserialize($value);
-                                //foreach($interactions as $interaction){
-                                //	;
-                                //}
                                 break;
                             case 'objectives':
                                 break;
-                            //case 'maxtimeallowed':
-                            //$this->set_max_time_allowed($value);
-                            //break;
-                            /*
-                            case 'objectives._count':
-                                $this->attempt_id = $value;
-                                break;
-                            */
                             default:
                                 // Ignore.
                                 break;
@@ -3251,7 +3222,6 @@ class learnpathItem
     public function set_terms($terms)
     {
         global $charset;
-        $course_id = api_get_course_int_id();
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $a_terms = preg_split('/,/', $terms);
         $i_terms = preg_split('/,/', $this->get_terms());
@@ -3581,7 +3551,7 @@ class learnpathItem
     /**
      * Write objectives to DB. This method is separate from write_to_db() because otherwise
      * objectives are lost as a side effect to AJAX and session concurrent access
-     * @return boolean True or false on error
+     * @return bool True or false on error
      */
     public function write_objectives_to_db()
     {
@@ -4201,11 +4171,12 @@ class learnpathItem
             $course_info['code']
         );
 
+        $file_path = '';
         if (!empty($document_data)) {
             $file_path = basename($document_data['path']);
             // Store the mp3 file in the lp_item table.
-            $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-            $sql = "UPDATE $tbl_lp_item SET
+            $table = Database::get_course_table(TABLE_LP_ITEM);
+            $sql = "UPDATE $table SET
                         audio = '".Database::escape_string($file_path)."'
                     WHERE iid = ".intval($this->db_id);
             Database::query($sql);
@@ -4221,12 +4192,11 @@ class learnpathItem
      */
     public function remove_audio()
     {
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $course_id = api_get_course_int_id();
         if (empty($this->db_id)) {
             return false;
         }
-        $sql = "UPDATE $tbl_lp_item SET
+        $table = Database::get_course_table(TABLE_LP_ITEM);
+        $sql = "UPDATE $table SET
                 audio = ''
                 WHERE iid IN (".$this->db_id.")";
         Database::query($sql);
@@ -4424,7 +4394,7 @@ class learnpathItem
      */
     public function createForumThread($currentForumId)
     {
-        require_once api_get_path(SYS_CODE_PATH).'/forum/forumfunction.inc.php';
+        require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $em = Database::getManager();
         $threadRepo = $em->getRepository('ChamiloCourseBundle:CForumThread');
@@ -4471,7 +4441,7 @@ class learnpathItem
      */
     public function dissociateForumThread($threadIid)
     {
-        $threadIid = intval($threadIid);
+        $threadIid = (int) $threadIid;
         $em = Database::getManager();
 
         $forumThread = $em->find('ChamiloCourseBundle:CForumThread', $threadIid);
@@ -4480,9 +4450,7 @@ class learnpathItem
             return false;
         }
 
-        $forumThread->setThreadTitle(
-            "{$this->get_title()} - {$this->db_id}"
-        );
+        $forumThread->setThreadTitle("{$this->get_title()} - {$this->db_id}");
         $forumThread->setLpItemId(0);
 
         $em->persist($forumThread);

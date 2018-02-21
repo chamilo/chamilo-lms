@@ -174,11 +174,11 @@ class learnpath
                 if (empty($user_id)) {
                     $this->error = 'User ID is empty';
                 } else {
-                    $user_info = api_get_user_info($user_id);
-                    if (!empty($user_info)) {
-                        $this->user_id = $user_info['user_id'];
+                    $userInfo = api_get_user_info($user_id);
+                    if (!empty($userInfo)) {
+                        $this->user_id = $userInfo['user_id'];
                     } else {
-                        $this->error = 'User ID does not exist in database ('.$sql.')';
+                        $this->error = 'User ID does not exist in database #'.$user_id;
                     }
                 }
 
@@ -5410,8 +5410,6 @@ class learnpath
                             error_log('New LP - In learnpath::stop_previous_item() - '.$this->last.' in lp_type 3 is <> au', 0);
                         }
                         $this->items[$this->last]->close();
-                    //$this->autocomplete_parents($this->last);
-                        //$this->update_queue[$this->last] = $this->items[$this->last]->get_status();
                     } else {
                         if ($this->debug > 2) {
                             error_log('New LP - In learnpath::stop_previous_item() - Item is an AU, saving is managed by AICC signals', 0);
@@ -5424,8 +5422,6 @@ class learnpath
                             error_log('New LP - In learnpath::stop_previous_item() - '.$this->last.' in lp_type 2 is <> sco', 0);
                         }
                         $this->items[$this->last]->close();
-                        //$this->autocomplete_parents($this->last);
-                        //$this->update_queue[$this->last] = $this->items[$this->last]->get_status();
                     } else {
                         if ($this->debug > 2) {
                             error_log('New LP - In learnpath::stop_previous_item() - Item is a SCO, saving is managed by SCO signals', 0);

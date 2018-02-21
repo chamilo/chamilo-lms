@@ -46,8 +46,8 @@ foreach ($res as $course) {
             var_dump($sql);
             $items = Database::store_result(Database::query($sql),'ASSOC');
             $itemList = [];
-            foreach ($items as $item) {
-                $itemList[$item['id']] = $item['iid'];
+            foreach ($items as $subItem) {
+                $itemList[$subItem['id']] = $subItem['iid'];
             }
             $variablesToFix = [
                 'parent_item_id',
@@ -58,7 +58,6 @@ foreach ($res as $course) {
             foreach ($items as $item) {
                 $itemIid = $item['iid'];
                 $itemId = $item['id'];
-
                 foreach ($variablesToFix as $variable) {
                     if (!empty($item[$variable]) && isset($itemList[$item[$variable]])) {
                         $newId = $itemList[$item[$variable]];
@@ -82,6 +81,12 @@ foreach ($res as $course) {
                         }
                     }
                 }
+
+                // c_lp_view
+                $sql = "UPDATE c_lp_view SET last_item = $itemIid 
+                        WHERE c_id = $courseId AND last_item = $itemId AND lp_id = $oldId";
+                Database::query($sql);
+                var_dump($sql);
 
                 // c_lp_item_view
                 $sql = "UPDATE c_lp_item_view SET lp_item_id = $itemIid 

@@ -37,12 +37,11 @@ class learnpath
     public $default_status = 'not attempted';
     public $encoding = 'UTF-8';
     public $error = '';
-    public $extra_information = ''; // This string can be used by proprietary SCORM contents to store data about the current learnpath.
-    public $force_commit = false; // For SCORM only - if set to true, will send a scorm LMSCommit() request on each LMSSetValue().
+    public $force_commit = false; // For SCORM only- if true will send a scorm LMSCommit() request on each LMSSetValue()
     public $index; // The index of the active learnpath_item in $ordered_items array.
     public $items = [];
     public $last; // item_id of last item viewed in the learning path.
-    public $last_item_seen = 0; // In case we have already come in this learnpath, reuse the last item seen if authorized.
+    public $last_item_seen = 0; // In case we have already come in this lp, reuse the last item seen if authorized.
     public $license; // Which license this course has been given - not used yet on 20060522.
     public $lp_id; // DB iid for this learnpath.
     public $lp_view_id; // DB ID for lp_view
@@ -572,6 +571,7 @@ class learnpath
 
         $id = intval($id);
         $typeCleaned = Database::escape_string($type);
+        $max_score = 100;
         if ($type == 'quiz') {
             $sql = 'SELECT SUM(ponderation)
                     FROM '.Database::get_course_table(TABLE_QUIZ_QUESTION).' as quiz_question
@@ -591,8 +591,6 @@ class learnpath
             $exercise->read($id);
             $exercise->disable();
             $exercise->save();
-        } else {
-            $max_score = 100;
         }
 
         $params = [
@@ -919,7 +917,8 @@ class learnpath
                 // if $item points to an object and there is a parent.
                 if ($debug) {
                     error_log(
-                        'Autocompleting parent of item '.$item.' "'.$currentItem->get_title().'" (item '.$parent_id.' "'.$parent->get_title().'") ',
+                        'Autocompleting parent of item '.$item.' '.
+                        $currentItem->get_title().'" (item '.$parent_id.' "'.$parent->get_title().'") ',
                         0
                     );
                 }
@@ -1004,17 +1003,6 @@ class learnpath
             if ($debug) {
                 error_log("#$item is an item that doesn't have parents");
             }
-        }
-    }
-
-    /**
-     * Auto saves the current results into the database for the whole learnpath
-     * @todo: Add save operations for the learnpath itself.
-     */
-    public function autosave()
-    {
-        if ($this->debug > 0) {
-            error_log('New LP - In learnpath::autosave()', 0);
         }
     }
 
@@ -1849,7 +1837,8 @@ class learnpath
             $this->index = $index;
             if ($this->debug > 2) {
                 error_log('$index '.$index);
-                error_log('New LP - In learnpath::first() - No last item seen. New last = '.$this->last.'('.$this->ordered_items[$index].')', 0);
+                error_log('New LP - In learnpath::first() - No last item seen');
+                error_log('New last = '.$this->last.'('.$this->ordered_items[$index].')');
             }
         }
         if ($this->debug > 2) {
@@ -1964,8 +1953,6 @@ class learnpath
         if (empty($idBar)) {
             $idBar = 'control-top';
         }
-
-        $navbar = '';
         $lpId = $this->lp_id;
         $mycurrentitemid = $this->get_current_item_id();
 
@@ -2217,22 +2204,6 @@ class learnpath
     }
 
     /**
-     * Gets the progress value from the progress_db attribute
-     * @return	integer	Current progress value
-     * @deprecated This method does not seem to be used as of 20170514
-     */
-    public function get_progress()
-    {
-        if ($this->debug > 0) {
-            error_log('New LP - In learnpath::get_progress()', 0);
-        }
-        if (!empty($this->progress_db)) {
-            return $this->progress_db;
-        }
-        return 0;
-    }
-
-    /**
      * Returns the HTML necessary to print a mediaplayer block inside a page
      * @param int $lpItemId
      * @param string $autostart
@@ -2358,6 +2329,7 @@ class learnpath
      * @param int $student_id
      * @param string Course code (optional)
      * @param int $sessionId
+     *
      * @return	bool
      */
     public static function is_lp_visible_for_student(
@@ -2519,9 +2491,9 @@ class learnpath
     /**
      * Displays a progress bar
      * completed so far.
-     * @param	integer	$percentage Progress value to display
-     * @param	string	$text_add Text to display near the progress value
-     * @return	string	HTML string containing the progress bar
+     * @param integer $percentage Progress value to display
+     * @param string $text_add Text to display near the progress value
+     * @return string    HTML string containing the progress bar
      */
     public static function get_progress_bar($percentage = -1, $text_add = '')
     {
@@ -2551,9 +2523,9 @@ class learnpath
     /**
      * Gets the progress bar info to display inside the progress bar.
      * Also used by scorm_api.php
-     * @param	string	$mode Mode of display (can be '%' or 'abs').abs means
+     * @param   string $mode Mode of display (can be '%' or 'abs').abs means
      * we display a number of completed elements per total elements
-     * @param	integer	$add Additional steps to fake as completed
+     * @param   integer $add Additional steps to fake as completed
      * @return array Percentage or number and symbol (% or /xx)
      */
     public function get_progress_bar_text($mode = '', $add = 0)
@@ -2619,24 +2591,8 @@ class learnpath
     }
 
     /**
-     * Gets the learnpath proximity (remote or local)
-     * @return	string	Learnpath proximity
-     */
-    public function get_proximity()
-    {
-        if ($this->debug > 0) {
-            error_log('New LP - In learnpath::get_proximity()', 0);
-        }
-        if (!empty($this->proximity)) {
-            return $this->proximity;
-        } else {
-            return '';
-        }
-    }
-
-    /**
      * Gets the learnpath theme (remote or local)
-     * @return	string	Learnpath theme
+     * @return    string    Learnpath theme
      */
     public function get_theme()
     {
@@ -2719,7 +2675,7 @@ class learnpath
 
     /**
      * Gets the learnpath author
-     * @return string	LP's author
+     * @return string    LP's author
      */
     public function get_author()
     {
@@ -2748,8 +2704,8 @@ class learnpath
      * IDs, knowing that SCORM IDs are kept in the "ref" field of the lp_item table.
      * Prefix all item IDs that end-up in the prerequisites string by "ITEM_" to use the
      * same rule as the scorm_export() method
-     * @param	integer		Item ID
-     * @return	string		Prerequisites string ready for the export as SCORM
+     * @param    integer        Item ID
+     * @return    string        Prerequisites string ready for the export as SCORM
      */
     public function get_scorm_prereq_string($item_id)
     {
@@ -2827,9 +2783,9 @@ class learnpath
 
     /**
      * Returns the XML DOM document's node
-     * @param	resource	Reference to a list of objects to search for the given ITEM_*
-     * @param	string		The identifier to look for
-     * @return	mixed		The reference to the element found with that identifier. False if not found
+     * @param    resource    Reference to a list of objects to search for the given ITEM_*
+     * @param    string        The identifier to look for
+     * @return    mixed        The reference to the element found with that identifier. False if not found
      */
     public function get_scorm_xml_node(& $children, $id)
     {
@@ -2854,7 +2810,7 @@ class learnpath
 
     /**
      * Gets the status list for all LP's items
-     * @return	array	Array of [index] => [item ID => current status]
+     * @return    array    Array of [index] => [item ID => current status]
      */
     public function get_items_status_list()
     {
@@ -2873,9 +2829,9 @@ class learnpath
     /**
      * Return the number of interactions for the given learnpath Item View ID.
      * This method can be used as static.
-     * @param	integer	Item View ID
-     * @param   integer course id
-     * @return	integer	Number of interactions
+     * @param integer    Item View ID
+     * @param integer course id
+     * @return integer    Number of interactions
      */
     public static function get_interactions_count_from_db($lp_iv_id, $course_id)
     {
@@ -2897,9 +2853,9 @@ class learnpath
     /**
      * Return the interactions as an array for the given lp_iv_id.
      * This method can be used as static.
-     * @param	integer	Learnpath Item View ID
-     * @return	array
-     * @todo 	Transcode labels instead of switching to HTML (which requires to know the encoding of the LP)
+     * @param integer    Learnpath Item View ID
+     * @return array
+     * @todo    Transcode labels instead of switching to HTML (which requires to know the encoding of the LP)
      */
     public static function get_iv_interactions_array($lp_iv_id)
     {

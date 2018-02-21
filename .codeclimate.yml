@@ -19,6 +19,11 @@ checks:
     enabled: false
 
 plugins:
+  phan:
+    enabled: true
+    config:
+      file_extensions: "php"
+
   fixme:
     enabled: true
     config:

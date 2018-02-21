@@ -667,7 +667,6 @@ class Certificate extends Model
             0,
             $this->user_id
         );
-
         if (empty($myCertificate)) {
             GradebookUtils::registerUserInfoAboutCertificate(
                 0,
@@ -681,7 +680,6 @@ class Certificate extends Model
 
         $extraFieldValue = new ExtraFieldValue('user');
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($this->user_id, 'legal_accept');
-
         $termsValidationDate = '';
         if (isset($value) && !empty($value['value'])) {
             list($id, $id2, $termsValidationDate) = explode(':', $value['value']);
@@ -706,16 +704,9 @@ class Certificate extends Model
                     if (isset($gradebookCategories[0])) {
                         /** @var Category $category */
                         $category = $gradebookCategories[0];
-                        //  $categoryId = $category->get_id();
-                        // @todo how we check if user pass a gradebook?
-                        //$certificateInfo = GradebookUtils::get_certificate_by_user_id($categoryId, $this->user_id);
-
                         $result = Category::userFinishedCourse(
                             $this->user_id,
                             $category,
-                            null,
-                            $courseInfo['code'],
-                            $session['session_id'],
                             true
                         );
 
@@ -732,8 +723,12 @@ class Certificate extends Model
         }
 
         $skill = new Skill();
-        $skills = $skill->getStudentSkills($this->user_id);
-        $timeInSeconds = Tracking::get_time_spent_on_the_platform($this->user_id);
+        // Ofaj
+        $skills = $skill->getStudentSkills($this->user_id, 2);
+        $timeInSeconds = Tracking::get_time_spent_on_the_platform(
+            $this->user_id,
+            'ever'
+        );
         $time = api_time_to_hms($timeInSeconds);
 
         $tplContent = new Template(null, false, false, false, false, false);

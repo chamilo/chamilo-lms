@@ -7,8 +7,6 @@ Feature: Course tools basic testing
 
   Background:
     Given I am a platform administrator
-    And I am a "English" user
-    # This is executed just before each scenario below
 
   Scenario: See the courses list
     Given I am on "/main/admin/course_list.php"

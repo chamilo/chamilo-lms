@@ -12,6 +12,18 @@ Feature: Work tool
     And I press "submit"
     Then I should see "Directory created"
 
+  Scenario: Edit a work
+    Given I am a platform administrator
+    And I am on course "TEMP" homepage
+    And I am on "/main/work/work.php?cidReq=TEMP"
+    And wait for the page to be loaded
+    And I follow "Work 1"
+    Then I should see "Work description"
+    Then I follow "Edit"
+    Then I should see "Assignment name"
+    And I press "Validate"
+    Then I should see "Update successful"
+
   Scenario: Send work as student
     Given I am a student
     And I am on "/main/work/work.php?cidReq=TEMP"

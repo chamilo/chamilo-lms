@@ -21,6 +21,7 @@ Feature: Work tool
     Then I should see "Work description"
     Then I follow "Edit"
     Then I should see "Assignment name"
+    And wait for the page to be loaded
     And I press "Validate"
     Then I should see "Update successful"
 

@@ -3552,14 +3552,14 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
 
     if (empty($filesize)) {
         return [
-            'error' => Display:: return_message(
+            'error' => Display::return_message(
                 get_lang('UplUploadFailedSizeIsZero'),
                 'error'
             )
         ];
     } elseif (!filter_extension($new_file_name)) {
         return [
-            'error' => Display:: return_message(
+            'error' => Display::return_message(
                 get_lang('UplUnableToSaveFileFilteredExtension'),
                 'error'
             )
@@ -3572,7 +3572,7 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
 
     if ($total_size > $course_max_space) {
         return [
-            'error' => Display :: return_message(get_lang('NoSpace'), 'error')
+            'error' => Display::return_message(get_lang('NoSpace'), 'error')
         ];
     }
 
@@ -3604,7 +3604,6 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
         ];
     }
 
-    $url = null;
     if ($result) {
         $url = 'work/'.$curdirpath.'/'.$new_file_name;
     } else {
@@ -3615,7 +3614,7 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
         'url' => $url,
         'filename' => $filename,
         'filesize' => $filesize,
-        'error' => null
+        'error' => ''
     ];
 }
 
@@ -3774,6 +3773,7 @@ function processWorkForm(
     $message = null;
 
     if ($containsFile) {
+        $saveWork = false;
         if ($checkDuplicated) {
             if (checkExistingWorkFileName($file['name'], $workInfo['id'])) {
                 $saveWork = false;
@@ -3787,11 +3787,13 @@ function processWorkForm(
         }
 
         if (isset($result['error'])) {
+            $saveWork = false;
             if ($showFlashMessage) {
                 $message = $result['error'];
             }
-
-            $saveWork = false;
+            if (empty($result['error']) && isset($result['url']) && !empty($result['url'])) {
+                $saveWork = true;
+            }
         }
     }
 
@@ -3923,7 +3925,7 @@ function processWorkForm(
                 }
             }
             $workData = get_work_data_by_id($workId);
-            if ($showFlashMessage) {
+            if ($workData && $showFlashMessage) {
                 Display::addFlash(Display::return_message(get_lang('DocAdd')));
             }
         }

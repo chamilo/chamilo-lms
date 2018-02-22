@@ -50,16 +50,16 @@ Feature: Work tool
     Then I follow "Correct and rate"
     Then I follow "Download"
 
-  Scenario: Add a comment and a attachment to the work previously uploaded by student
-    Given I am a platform administrator
-    And I am on "/main/work/work.php?cidReq=TEMP"
-    And wait for the page to be loaded
-    And I follow "Work 1"
-    Then I should see "Work description"
-    And wait for the page to be loaded
-    Then I follow "Correct and rate"
-    Then I fill in ckeditor field "comment" with "This is a comment"
-    Then I attach the file "css/base.css" to "attachment"
-    And I press "Send message"
-    Then I should see "You comment has been added"
-    And I should see "Update successful"
+#  Scenario: Add a comment and a attachment to the work previously uploaded by student
+#    Given I am a platform administrator
+#    And I am on "/main/work/work.php?cidReq=TEMP"
+#    And wait for the page to be loaded
+#    And I follow "Work 1"
+#    Then I should see "Work description"
+#    And wait for the page to be loaded
+#    Then I follow "Correct and rate"
+#    Then I fill in ckeditor field "comment" with "This is a comment"
+#    Then I attach the file "css/base.css" to "attachment"
+#    And I press "Send message"
+#    Then I should see "You comment has been added"
+#    And I should see "Update successful"

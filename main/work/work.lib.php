@@ -2008,10 +2008,10 @@ function get_work_user_list(
                 $work['type'] = DocumentManager::build_document_icon_tag('file', $work['url']);
 
                 // File name.
-                $link_to_download = null;
+                $linkToDownload = '';
                 // If URL is present then there's a file to download keep BC.
                 if ($work['contains_file'] || !empty($work['url'])) {
-                    $link_to_download = '<a href="'.$url.'download.php?id='.$item_id.'&'.api_get_cidreq().'">'.$saveIcon.'</a> ';
+                    $linkToDownload = '<a href="'.$url.'download.php?id='.$item_id.'&'.api_get_cidreq().'">'.$saveIcon.'</a> ';
                 }
 
                 $send_to = Portfolio::share(
@@ -2188,7 +2188,7 @@ function get_work_user_list(
                     $qualificator_id = Display::label(get_lang('Revised'), 'success');
                 }
                 $work['qualificator_id'] = $qualificator_id.' '.$hasCorrection;
-                $work['actions'] = '<div class="work-action">'.$send_to.$link_to_download.$action.'</div>';
+                $work['actions'] = '<div class="work-action">'.$send_to.$linkToDownload.$action.'</div>';
                 $work['correction'] = $correction;
                 $works[] = $work;
             }

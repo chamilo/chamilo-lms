@@ -75,18 +75,6 @@ function displayWorkActionLinks($id, $action, $isTutor)
             '</a>';
     }
 
-    if (api_is_allowed_to_edit(null, true) &&
-        $origin != 'learnpath' &&
-        api_is_allowed_to_session_edit(false, true)
-    ) {
-        // Delete all files
-        if (api_get_setting('permanently_remove_deleted_files') == 'true') {
-            $message = get_lang('ConfirmYourChoiceDeleteAllfiles');
-        } else {
-            $message = get_lang('ConfirmYourChoice');
-        }
-    }
-
     if ($output != '') {
         echo '<div class="actions">';
         echo $output;
@@ -172,7 +160,7 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
     }
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
-    $sessionCondition = null;
+    $sessionCondition = '';
     if (!empty($sessionId)) {
         $sessionCondition = api_get_session_condition($sessionId, true);
     }
@@ -253,13 +241,11 @@ function get_work_count_by_student($user_id, $work_id)
  */
 function get_work_assignment_by_id($id, $courseId = 0)
 {
+    $courseId = intval($courseId);
     if (empty($courseId)) {
         $courseId = api_get_course_int_id();
-    } else {
-        $courseId = intval($courseId);
     }
     $id = intval($id);
-
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $sql = "SELECT * FROM $table
             WHERE c_id = $courseId AND publication_id = $id";
@@ -320,7 +306,6 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_i
     }
 
     $contains_file_query = '';
-
     // Get list from database
     if ($is_allowed_to_edit) {
         $active_condition = ' active IN (0, 1)';
@@ -668,7 +653,7 @@ function build_work_directory_selector($folders, $curdirpath, $group_dir = '')
 }
 
 /**
- * Builds the form thats enables the user to
+ * Builds the form that enables the user to
  * move a document from one directory to another
  * This function has been copied from the document/document.inc.php library
  *
@@ -798,7 +783,6 @@ function deleteDirWork($id)
     if (!empty($work_data['url'])) {
         if ($check) {
             $consideredWorkingTime = api_get_configuration_value('considered_working_time');
-
             if (!empty($consideredWorkingTime)) {
                 $fieldValue = new ExtraFieldValue('work');
                 $resultExtra = $fieldValue->getAllValuesForAnItem(
@@ -817,7 +801,6 @@ function deleteDirWork($id)
                 }
 
                 $courseUsers = CourseManager::get_user_list_from_course_code($_course['code'], $sessionId);
-
                 if (!empty($workingTime)) {
                     foreach ($courseUsers as $user) {
                         $userWorks = get_work_user_list(
@@ -836,7 +819,6 @@ function deleteDirWork($id)
                         if (count($userWorks) != 1) {
                             continue;
                         }
-
                         Event::eventRemoveVirtualCourseTime($course_id, $user['user_id'], $sessionId, $workingTime);
                     }
                 }
@@ -1006,8 +988,7 @@ function to_javascript_work()
 {
     $js = '<script> 
         function updateDocumentTitle(value) {
-            var temp = value.indexOf("/");
-            
+            var temp = value.indexOf("/");            
             //linux path
             if(temp != -1){
                 temp=value.split("/");
@@ -1072,7 +1053,8 @@ function to_javascript_work()
  * @param string $path
  * @return true if is found / false if not found
  */
-// TODO: The name of this function does not fit with the kind of information it returns. Maybe check_work_id() or is_work_id()?
+// TODO: The name of this function does not fit with the kind of information it returns.
+// Maybe check_work_id() or is_work_id()?
 function get_work_id($path)
 {
     $TBL_STUDENT_PUBLICATION = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -2356,9 +2338,9 @@ function sendEmailToStudentsOnHomeworkCreation($workId, $courseId, $sessionId = 
  */
 function is_work_exist_by_url($url)
 {
-    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $url = Database::escape_string($url);
-    $sql = "SELECT id FROM $work_table WHERE url='$url'";
+    $sql = "SELECT id FROM $table WHERE url='$url'";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $row = Database::fetch_row($result);
@@ -2530,7 +2512,6 @@ function get_list_users_without_publication($task_id, $studentId = 0)
  *
  * @param int task id
  * @param int $studentId
- * @return array
  * @author cvargas carlos.vargas@beeznest.com cfasanando, christian.fasanado@beeznest.com
  * @author Julio Montoya <gugli100@gmail.com> Fixes
  */
@@ -2625,7 +2606,9 @@ function getDocumentToWorkPerUser($documentId, $workId, $courseId, $sessionId, $
     $active = intval($active);
     $sessionCondition = api_get_session_condition($sessionId);
 
-    $sql = "SELECT w.* FROM $work w INNER JOIN $workRel rel ON (w.parent_id = rel.work_id)
+    $sql = "SELECT w.* FROM $work w 
+            INNER JOIN $workRel rel 
+            ON (w.parent_id = rel.work_id)
             WHERE
                 w.document_id = $documentId AND
                 w.parent_id = $workId AND
@@ -3101,6 +3084,7 @@ function getLastWorkStudentFromParent(
 
 /**
  * Get last work information from parent
+ * @param int $userId
  * @param array $parentInfo
  * @param array $courseInfo
  * @param int $sessionId
@@ -3694,13 +3678,6 @@ function sendAlertToUsers($workId, $courseInfo, $session_id)
     }
 
     if ($send) {
-        $senderEmail = api_get_setting('emailAdministrator');
-        $senderName = api_get_person_name(
-            api_get_setting('administratorName'),
-            api_get_setting('administratorSurname'),
-            null,
-            PERSON_NAME_EMAIL_ADDRESS
-        );
         $subject = "[".api_get_setting('siteName')."] ".get_lang('SendMailBody')."\n ".get_lang('CourseName').": ".$courseInfo['name']."  ";
         foreach ($user_list as $user_data) {
             $to_user_id = $user_data['user_id'];
@@ -3710,7 +3687,6 @@ function sendAlertToUsers($workId, $courseInfo, $session_id)
             $message .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."\n";
             $url = api_get_path(WEB_CODE_PATH)."work/work.php?cidReq=".$courseInfo['code']."&id_session=".$session_id."&id=".$workData['id'];
             $message .= get_lang('WorkName')." : ".$workData['title']."\n\n".'<a href="'.$url.'">'.get_lang('DownloadLink')."</a>\n";
-            //$message .= $url;
             MessageManager::send_message_simple(
                 $to_user_id,
                 $subject,
@@ -3721,18 +3697,6 @@ function sendAlertToUsers($workId, $courseInfo, $session_id)
                 [],
                 false
             );
-            /*api_mail_html(
-                api_get_person_name(
-                    $user_info['firstname'].' '.$user_info['lastname'],
-                    null,
-                    PERSON_NAME_EMAIL_ADDRESS
-                ),
-                $user_info['email'],
-                $subject,
-                $message,
-                $senderName,
-                $senderEmail
-            );*/
         }
     }
 }
@@ -3746,9 +3710,11 @@ function sendAlertToUsers($workId, $courseInfo, $session_id)
  */
 function checkExistingWorkFileName($filename, $workId)
 {
-    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $filename = Database::escape_string($filename);
-    $sql = "SELECT title FROM $work_table
+    $workId = (int) $workId;
+
+    $sql = "SELECT title FROM $table
             WHERE parent_id = $workId AND title = '$filename' AND active = 1";
     $result = Database::query($sql);
     return Database::fetch_assoc($result);
@@ -4724,10 +4690,10 @@ function makeInvisible($item_id, $course_info)
         return false;
     }
 
-    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $item_id = intval($item_id);
     $course_id = $course_info['real_id'];
-    $sql = "UPDATE  ".$work_table."
+    $sql = "UPDATE $table
             SET accepted = 0
             WHERE c_id = $course_id AND id = '".$item_id."'";
     Database::query($sql);
@@ -5016,7 +4982,6 @@ function getFile($id, $course_info, $download = true, $isCorrection = false)
 
     return false;
 }
-
 
 /**
  * Get the file contents for an assigment

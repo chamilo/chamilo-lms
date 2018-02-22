@@ -285,15 +285,18 @@ class ScoreDisplay
      *
      * @param float $score
      * @param bool $ignoreDecimals
+     * @param string $decimalSeparator
+     * @param string $thousandSeparator
+     *
      * @return float the score formatted
      */
-    public function format_score($score, $ignoreDecimals = false)
+    public function format_score($score, $ignoreDecimals = false, $decimalSeparator = '.', $thousandSeparator = ',')
     {
         $decimals = $this->get_number_decimals();
         if ($ignoreDecimals) {
             $decimals = 0;
         }
-        return api_number_format($score, $decimals);
+        return api_number_format($score, $decimals, $decimalSeparator, $thousandSeparator);
     }
 
     /**

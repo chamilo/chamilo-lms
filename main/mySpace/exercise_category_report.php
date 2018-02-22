@@ -54,7 +54,12 @@ if (empty($courseId)) {
     $courseInfo = api_get_course_info_by_id($courseId);
     if (!empty($courseInfo)) {
         $form->addHidden('course_id', $courseId);
-        $form->addLabel(get_lang('Course'), $courseInfo['name'].' ('.$courseInfo['code'].')');
+        $courseLabel = Display::url(
+            $courseInfo['name'].' ('.$courseInfo['code'].')',
+            $courseInfo['course_public_url'],
+            ['target' => '_blank']
+        );
+        $form->addLabel(get_lang('Course'), $courseLabel);
         $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
             $courseInfo,
             0,

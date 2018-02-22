@@ -43,11 +43,11 @@ Feature: Document tool
     And wait for the page to be loaded
     Then I should see "File upload succeeded"
 
-  Scenario: Create cloud link
-    Given I am on "/main/document/add_link.php?cidReq=TEMP"
-    Then I should see "Add a link"
-    And I fill in the following:
-      | name | My dropbox link |
-      | url | http://dropbox.com/sh/loremipsum/loremipsum?dl=0 |
-    And I press "Add link to Cloud file"
-    Then I should see "Cloud link added"
+#  Scenario: Create cloud link
+#    Given I am on "/main/document/add_link.php?cidReq=TEMP"
+#    Then I should see "Add a link"
+#    And I fill in the following:
+#      | name | My dropbox link |
+#      | url | http://dropbox.com/sh/loremipsum/loremipsum?dl=0 |
+#    And I press "Add link to Cloud file"
+#    Then I should see "Cloud link added"

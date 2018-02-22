@@ -55,8 +55,8 @@ Feature: Work tool
     And I am on "/main/work/work.php?cidReq=TEMP"
     And wait for the page to be loaded
     And I follow "Work 1"
-    And wait for the page to be loaded
     Then I should see "Work description"
+    Then wait for the page to be loaded
     Then I follow "Correct and rate"
     Then I fill in ckeditor field "comment" with "This is a comment"
     Then I attach the file "css/base.css" to "attachment"

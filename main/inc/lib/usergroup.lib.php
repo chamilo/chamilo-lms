@@ -206,7 +206,7 @@ class UserGroup extends Model
     /**
      * Gets a list of course ids by user group
      * @param int $id user group id
-     * @param array $loadCourseData
+     * @param bool $loadCourseData
      *
      * @return  array
      */

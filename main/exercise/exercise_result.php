@@ -202,6 +202,7 @@ if ($origin != 'learnpath') {
     if (api_is_allowed_to_session_edit()) {
         Session::erase('objExercise');
         Session::erase('exe_id');
+        Session::erase('calculatedAnswerId');
     }
     Display::display_footer();
 } else {
@@ -212,6 +213,7 @@ if ($origin != 'learnpath') {
     if (api_is_allowed_to_session_edit()) {
         Session::erase('objExercise');
         Session::erase('exe_id');
+        Session::erase('calculatedAnswerId');
     }
 
     Session::write('attempt_remaining', $remainingMessage);

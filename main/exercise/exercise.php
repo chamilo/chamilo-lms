@@ -70,6 +70,7 @@ Session::erase('objAnswer');
 Session::erase('questionList');
 Session::erase('exerciseResult');
 Session::erase('firstTime');
+Session::erase('calculatedAnswerId');
 
 //General POST/GET/SESSION/COOKIES parameters recovery
 $origin = api_get_origin();

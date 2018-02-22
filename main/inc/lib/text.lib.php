@@ -679,18 +679,30 @@ function cut($text, $maxchar, $embed = false)
  *
  * @param mixed     Number to convert
  * @param int       Decimal points 0=never, 1=if needed, 2=always
+ * @param string $decimalPoint
+ * @param string $thousandsSeparator
  * @return mixed    An integer or a float depends on the parameter
  */
-function float_format($number, $flag = 1)
+function float_format($number, $flag = 1, $decimalPoint = '.', $thousandsSeparator = ',')
 {
     if (is_numeric($number)) {
         if (!$number) {
             $result = ($flag == 2 ? '0.'.str_repeat('0', EXERCISE_NUMBER_OF_DECIMALS) : '0');
         } else {
             if (floor($number) == $number) {
-                $result = number_format($number, ($flag == 2 ? EXERCISE_NUMBER_OF_DECIMALS : 0));
+                $result = number_format(
+                    $number,
+                    ($flag == 2 ? EXERCISE_NUMBER_OF_DECIMALS : 0),
+                    $decimalPoint,
+                    $thousandsSeparator
+                );
             } else {
-                $result = number_format(round($number, 2), ($flag == 0 ? 0 : EXERCISE_NUMBER_OF_DECIMALS));
+                $result = number_format(
+                    round($number, 2),
+                    ($flag == 0 ? 0 : EXERCISE_NUMBER_OF_DECIMALS),
+                    $decimalPoint,
+                    $thousandsSeparator
+                );
             }
         }
         return $result;

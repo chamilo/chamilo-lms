@@ -1644,6 +1644,7 @@ HOTSPOT;
      * @param bool $showSessionField
      * @param bool $showExerciseCategories
      * @param array $userExtraFieldsToAdd
+     * @param bool $useCommaAsDecimalPoint
      *
      * @return array
      */
@@ -1658,7 +1659,8 @@ HOTSPOT;
         $courseCode = null,
         $showSessionField = false,
         $showExerciseCategories = false,
-        $userExtraFieldsToAdd = []
+        $userExtraFieldsToAdd = [],
+        $useCommaAsDecimalPoint = false
     ) {
         //@todo replace all this globals
         global $documentPath, $filter;
@@ -1908,6 +1910,16 @@ HOTSPOT;
             }
         }
 
+        $scoreDisplay = new ScoreDisplay();
+
+        $decimalSeparator = '.';
+        $thousandSeparator = ',';
+
+        if ($useCommaAsDecimalPoint) {
+            $decimalSeparator = ',';
+            $thousandSeparator = '';
+        }
+
         $listInfo = [];
         // Simple exercises
         if (empty($hotpotatoe_where)) {
@@ -2032,9 +2044,7 @@ HOTSPOT;
                     // we filter the results if we have the permission to
                     $result_disabled = 0;
                     if (isset($results[$i]['results_disabled'])) {
-                        $result_disabled = intval(
-                            $results[$i]['results_disabled']
-                        );
+                        $result_disabled = (int) $results[$i]['results_disabled'];
                     }
                     if ($result_disabled == 0) {
                         $my_res = $results[$i]['exe_result'];
@@ -2047,7 +2057,16 @@ HOTSPOT;
                             $my_res = 0;
                         }
 
-                        $score = self::show_score($my_res, $my_total);
+                        $score = self::show_score(
+                            $my_res,
+                            $my_total,
+                            true,
+                            true,
+                            false,
+                            false,
+                            $decimalSeparator,
+                            $thousandSeparator
+                        );
 
                         $actions = '<div class="pull-right">';
                         if ($is_allowedToEdit) {
@@ -2292,7 +2311,17 @@ HOTSPOT;
                             }
 
                             foreach ($category_list as $categoryId => $result) {
-                                $scoreToDisplay = self::show_score($result['score'], $result['total']);
+                                $scoreToDisplay = self::show_score(
+                                    $result['score'],
+                                    $result['total'],
+                                    true,
+                                    true,
+                                    false,
+                                    false,
+                                    $decimalSeparator,
+                                    $thousandSeparator
+                                );
+
                                 $results[$i]['category_'.$categoryId] = $scoreToDisplay;
                                 $results[$i]['category_'.$categoryId.'_score_percentage'] = self::show_score(
                                     $result['score'],
@@ -2300,7 +2329,9 @@ HOTSPOT;
                                     true,
                                     true,
                                     true, // $show_only_percentage = false
-                                    true // hide % sign
+                                    true, // hide % sign
+                                    $decimalSeparator,
+                                    $thousandSeparator
                                 );
                                 $results[$i]['category_'.$categoryId.'_only_score'] = $result['score'];
                                 $results[$i]['category_'.$categoryId.'_total'] = $result['total'];
@@ -2315,10 +2346,23 @@ HOTSPOT;
                                 true,
                                 true,
                                 true,
-                                true
+                                true,
+                                $decimalSeparator,
+                                $thousandSeparator
                             );
-                            $results[$i]['only_score'] = $my_res;
-                            $results[$i]['total'] = $my_total;
+
+                            $results[$i]['only_score'] = $scoreDisplay->format_score(
+                                $my_res,
+                                false,
+                                $decimalSeparator,
+                                $thousandSeparator
+                            );
+                            $results[$i]['total'] = $scoreDisplay->format_score(
+                                $my_total,
+                                false,
+                                $decimalSeparator,
+                                $thousandSeparator
+                            );
                             $results[$i]['lp'] = $lp_name;
                             $results[$i]['actions'] = $actions;
                             $listInfo[] = $results[$i];
@@ -2397,7 +2441,9 @@ HOTSPOT;
      * @param bool $show_percentage show percentage or not
      * @param bool $use_platform_settings use or not the platform settings
      * @param bool $show_only_percentage
-     * @param bool $hidePercetangeSign hide "%" sign
+     * @param bool $hidePercentageSign hide "%" sign
+     * @param string $decimalSeparator
+     * @param string $thousandSeparator
      * @return  string  an html with the score modified
      */
     public static function show_score(
@@ -2406,7 +2452,9 @@ HOTSPOT;
         $show_percentage = true,
         $use_platform_settings = true,
         $show_only_percentage = false,
-        $hidePercetangeSign = false
+        $hidePercentageSign = false,
+        $decimalSeparator = '.',
+        $thousandSeparator = ','
     ) {
         if (is_null($score) && is_null($weight)) {
             return '-';
@@ -2428,14 +2476,13 @@ HOTSPOT;
         $percentage = (100 * $score) / ($weight != 0 ? $weight : 1);
 
         // Formats values
-        $percentage = float_format($percentage, 1);
-        $score = float_format($score, 1);
-        $weight = float_format($weight, 1);
+        $percentage = float_format($percentage, 1, $decimalSeparator, $thousandSeparator);
+        $score = float_format($score, 1, $decimalSeparator, $thousandSeparator);
+        $weight = float_format($weight, 1, $decimalSeparator, $thousandSeparator);
 
-        $html = '';
         if ($show_percentage) {
             $percentageSign = '%';
-            if ($hidePercetangeSign) {
+            if ($hidePercentageSign) {
                 $percentageSign = '';
             }
             $html = $percentage."$percentageSign  ($score / $weight)";
@@ -2464,9 +2511,7 @@ HOTSPOT;
      */
     public static function getModelStyle($model, $percentage)
     {
-        //$modelWithStyle = get_lang($model['name']);
         $modelWithStyle = '<span class="'.$model['css_class'].'"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
-        //$modelWithStyle .= $percentage;
 
         return $modelWithStyle;
     }

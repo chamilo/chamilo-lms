@@ -1319,7 +1319,8 @@ switch ($action) {
             $courseInfo['code'],
             true,
             true,
-            $extraFieldsToAdd
+            $extraFieldsToAdd,
+            true
         );
         break;
     case 'get_hotpotatoes_exercise_results':

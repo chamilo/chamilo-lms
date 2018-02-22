@@ -2086,7 +2086,8 @@ function api_format_course_array($course_data)
             null,
             null,
             null,
-            true
+            true,
+            false
         );
     }
     $_course['course_image_large'] = $url_image;
@@ -4667,9 +4668,9 @@ function api_get_visual_theme()
         }
 
         $course_id = api_get_course_id();
-        if (!empty($course_id) && $course_id != -1) {
+        if (!empty($course_id)) {
             if (api_get_setting('allow_course_theme') == 'true') {
-                $course_theme = api_get_course_setting('course_theme');
+                $course_theme = api_get_course_setting('course_theme', $course_id);
 
                 if (!empty($course_theme) && $course_theme != -1) {
                     if (!empty($course_theme)) {

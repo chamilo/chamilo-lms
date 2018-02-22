@@ -774,6 +774,11 @@ ALTER TABLE skill_rel_item_rel_user ADD result_id INT DEFAULT NULL;
 // Send welcome message by email and to the chamilo inbox BT#14034
 //$_configuration['send_inscription_msg_to_inbox'] = false;
 
+// Allow administrators to see personal messages between a teacher and a student.
+// Please make sure you include a note in your terms and conditions as this might
+// affect privacy protection.
+//$_configuration['allow_user_message_tracking'] = false;
+
 
 // ------ Custom DB changes
 // Add user activation by confirmation email

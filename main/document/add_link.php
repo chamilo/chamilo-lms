@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * This script allows to add cloud file links to the document structure
  * @package chamilo.document
@@ -7,23 +8,24 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-api_protect_course_script();
-
 $fileLinkEnabled = api_get_configuration_value('enable_add_file_link');
-
 if (!$fileLinkEnabled) {
     api_not_allowed(true);
 }
+
+api_protect_course_script();
 
 $courseInfo = api_get_course_info();
 
 if (empty($courseInfo)) {
     api_not_allowed(true);
 }
+
+$documentId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $dir = '/';
-$document_data = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true);
+$document_data = DocumentManager::get_document_data_by_id($documentId, api_get_course_id(), true);
 if (empty($document_data)) {
-    $document_id = $parent_id =  0;
+    $document_id = $parent_id = 0;
     $path = '/';
 } else {
     if ($document_data['filetype'] == 'folder') {
@@ -35,7 +37,6 @@ if (empty($document_data)) {
 }
 
 $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
-
 if ($is_certificate_mode) {
     api_not_allowed(true);
 }
@@ -47,7 +48,7 @@ if (api_get_group_id()) {
     // If the group id is set, check if the user has the right to be here
     // Get group info
     $group_properties = GroupManager::get_group_properties(api_get_group_id());
-    if ($is_allowed_to_edit || GroupManager::is_user_in_group($_user['user_id'], api_get_group_id())) {
+    if ($is_allowed_to_edit || GroupManager::is_user_in_group(api_get_user_id(), $group_properties)) {
         // Only courseadmin or group members allowed
         $groupIid = $group_properties['iid'];
         $interbreadcrumb[] = [

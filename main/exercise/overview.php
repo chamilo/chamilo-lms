@@ -16,6 +16,7 @@ $current_course_tool = TOOL_QUIZ;
 
 // Clear the exercise session just in case
 Session::erase('objExercise');
+Session::erase('calculatedAnswerId');
 
 $this_section = SECTION_COURSES;
 

@@ -1673,7 +1673,12 @@ HOTSPOT;
         }
 
         $course_id = $courseInfo['real_id'];
-        $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit(true) || api_is_drh() || api_is_student_boss();
+        $is_allowedToEdit =
+            api_is_allowed_to_edit(null, true) ||
+            api_is_allowed_to_edit(true) ||
+            api_is_drh() ||
+            api_is_student_boss() ||
+            api_is_session_admin();
         $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
         $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_GROUP_REL_USER = Database::get_course_table(TABLE_GROUP_USER);
@@ -1900,9 +1905,7 @@ HOTSPOT;
             return $rowx[0];
         }
 
-        $teacher_list = CourseManager::get_teacher_list_from_course_code(
-            $courseCode
-        );
+        $teacher_list = CourseManager::get_teacher_list_from_course_code($courseCode);
         $teacher_id_list = [];
         if (!empty($teacher_list)) {
             foreach ($teacher_list as $teacher) {
@@ -1911,7 +1914,6 @@ HOTSPOT;
         }
 
         $scoreDisplay = new ScoreDisplay();
-
         $decimalSeparator = '.';
         $thousandSeparator = ',';
 
@@ -1937,7 +1939,6 @@ HOTSPOT;
             while ($rowx = Database::fetch_array($resx, 'ASSOC')) {
                 $results[] = $rowx;
             }
-
             $group_list = GroupManager::get_group_list(null, $courseInfo);
             $clean_group_list = [];
             if (!empty($group_list)) {
@@ -1950,7 +1951,7 @@ HOTSPOT;
             $lp_list = $lp_list_obj->get_flat_list();
             $oldIds = array_column($lp_list, 'lp_old_id', 'iid');
 
-            if (is_array($results)) {
+            if (!empty($results)) {
                 $users_array_id = [];
                 $from_gradebook = false;
                 if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
@@ -1958,11 +1959,7 @@ HOTSPOT;
                 }
                 $sizeof = count($results);
                 $user_list_id = [];
-                $locked = api_resource_is_locked_by_gradebook(
-                    $exercise_id,
-                    LINK_EXERCISE
-                );
-
+                $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
                 $timeNow = strtotime(api_get_utc_datetime());
                 // Looping results
                 for ($i = 0; $i < $sizeof; $i++) {
@@ -2046,6 +2043,7 @@ HOTSPOT;
                     if (isset($results[$i]['results_disabled'])) {
                         $result_disabled = (int) $results[$i]['results_disabled'];
                     }
+
                     if ($result_disabled == 0) {
                         $my_res = $results[$i]['exe_result'];
                         $my_total = $results[$i]['exe_weighting'];
@@ -2069,6 +2067,7 @@ HOTSPOT;
                         );
 
                         $actions = '<div class="pull-right">';
+
                         if ($is_allowedToEdit) {
                             if (isset($teacher_id_list)) {
                                 if (in_array(
@@ -2153,7 +2152,7 @@ HOTSPOT;
                             }
 
                             // Admin can always delete the attempt
-                            if (($locked == false || api_is_platform_admin()) && !api_is_student_boss()) {
+                            if (($locked == false || (api_is_platform_admin()) && !api_is_student_boss())) {
                                 $ip = Tracking::get_ip_from_user_event(
                                     $results[$i]['exe_user_id'],
                                     api_get_utc_datetime(),
@@ -2197,6 +2196,9 @@ HOTSPOT;
 
                                 if (api_is_drh() && !api_is_platform_admin()) {
                                     $delete_link = null;
+                                }
+                                if (api_is_session_admin()) {
+                                    $delete_link = '';
                                 }
                                 if ($revised == 3) {
                                     $delete_link = null;

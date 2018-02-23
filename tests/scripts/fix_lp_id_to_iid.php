@@ -2,7 +2,6 @@
 /**
  * This script fixes use of id instead of iid for the learning path
  */
-
 exit;
 require_once '../../main/inc/global.inc.php';
 
@@ -63,7 +62,7 @@ foreach ($res as $course) {
                     if (!empty($item[$variable]) && isset($itemList[$item[$variable]])) {
                         $newId = $itemList[$item[$variable]];
                         $sql = "UPDATE $tblCLpItem SET $variable = $newId 
-                                WHERE iid = $itemIid AND c_id = $courseId";
+                                WHERE iid = $itemIid AND c_id = $courseId AND lp_id = $oldId";
                         Database::query($sql);
                         var_dump($sql);
                     }
@@ -136,10 +135,12 @@ foreach ($res as $course) {
                     }
                 }
 
-                $sql = "UPDATE $tblCLpItem SET lp_id = $lpIid WHERE iid = $itemIid AND c_id = $courseId ";
+                $sql = "UPDATE $tblCLpItem SET lp_id = $lpIid 
+                        WHERE iid = $itemIid AND c_id = $courseId AND lp_id = $oldId";
                 Database::query($sql);
 
-                $sql = "UPDATE $tblCLpItem SET id = iid WHERE c_id = $courseId ";
+                $sql = "UPDATE $tblCLpItem SET id = iid 
+                        WHERE c_id = $courseId AND lp_id = $oldId";
                 Database::query($sql);
                 var_dump($sql);
             }
@@ -157,7 +158,8 @@ foreach ($res as $course) {
             var_dump($sql);
 
             // Update track_exercises
-            $sql = "UPDATE track_e_exercises SET orig_lp_id = $lpIid WHERE c_id = $courseId AND orig_lp_id = $oldId";
+            $sql = "UPDATE track_e_exercises SET orig_lp_id = $lpIid 
+                    WHERE c_id = $courseId AND orig_lp_id = $oldId";
             Database::query($sql);
             var_dump($sql);
         }

@@ -21,9 +21,15 @@ GradebookUtils::block_students();
 $cat_id = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : null;
 $action = isset($_GET['action']) && $_GET['action'] ? $_GET['action'] : null;
 
+$sessionId = api_get_session_id();
+$statusToFilter = empty($sessionId) ? STUDENT : 0;
+
 $userList = CourseManager::get_user_list_from_course_code(
     api_get_course_id(),
-    api_get_session_id()
+    $sessionId,
+    null,
+    null,
+    $statusFilter
 );
 
 switch ($action) {
@@ -33,17 +39,9 @@ switch ($action) {
 
         $pdfList = [];
         $cats = Category::load($cat_id, null, null, null, null, null, false);
-
-        $session_id = api_get_session_id();
-        if (empty($session_id)) {
-            $statusToFilter = STUDENT;
-        } else {
-            $statusToFilter = 0;
-        }
-
         $studentList = CourseManager::get_user_list_from_course_code(
             api_get_course_id(),
-            $session_id,
+            $sessionId,
             null,
             null,
             $statusToFilter
@@ -162,9 +160,6 @@ if (count($userList) == 0) {
             $url,
             ['target' => '_blank', 'class' => 'btn btn-default']
         );
-
-
-
         echo $link;
         echo '</td></tr>';
     }

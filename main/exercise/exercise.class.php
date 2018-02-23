@@ -3848,12 +3848,12 @@ class Exercise
                                     $choice[$j] = null;
                                 }
                             } else {
-                                // This value is the user input, not escaped while correct answer is escaped by fckeditor
+                                // This value is the user input, not escaped while correct answer is escaped by ckeditor
                                 $choice[$j] = api_htmlentities(trim($choice[$j]));
                             }
 
                             $user_tags[] = $choice[$j];
-                            //put the contents of the [] answer tag into correct_tags[]
+                            // Put the contents of the [] answer tag into correct_tags[]
                             $correct_tags[] = api_substr($temp, 0, $pos);
                             $j++;
                             $temp = api_substr($temp, $pos + 1);
@@ -3861,7 +3861,6 @@ class Exercise
                         $answer = '';
                         $real_correct_tags = $correct_tags;
                         $chosen_list = [];
-
                         for ($i = 0; $i < count($real_correct_tags); $i++) {
                             if ($i == 0) {
                                 $answer .= $real_text[0];
@@ -5575,11 +5574,9 @@ class Exercise
                 }
             }
 
-            //if ($origin != 'learnpath') {
             if ($show_result && $answerType != ANNOTATION) {
                 echo '</table>';
             }
-            //	}
         }
         unset($objAnswerTmp);
 
@@ -5739,14 +5736,14 @@ class Exercise
         }
 
         if ($saved_results) {
-            $stat_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-            $sql = 'UPDATE '.$stat_table.' SET
-                        exe_result = exe_result + ' . floatval($questionScore).'
-                    WHERE exe_id = ' . $exeId;
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+            $sql = 'UPDATE '.$table.' SET
+                        exe_result = exe_result + '.floatval($questionScore).'
+                    WHERE exe_id = '.$exeId;
             Database::query($sql);
         }
 
-        $return_array = [
+        $return = [
             'score' => $questionScore,
             'weight' => $questionWeighting,
             'extra' => $extra_data,
@@ -5755,7 +5752,7 @@ class Exercise
             'answer_type' => $answerType,
         ];
 
-        return $return_array;
+        return $return;
     }
 
     /**

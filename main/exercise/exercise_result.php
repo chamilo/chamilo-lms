@@ -83,8 +83,6 @@ if ($origin != 'learnpath') {
     Display::display_reduced_header();
 }
 
-/* DISPLAY AND MAIN PROCESS */
-
 // I'm in a preview mode as course admin. Display the action menu.
 if (api_is_course_admin() && $origin != 'learnpath') {
     echo '<div class="actions">';

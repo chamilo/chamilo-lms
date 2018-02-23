@@ -272,7 +272,6 @@ if (!empty($track_exercise_info)) {
             $showTotalScoreAndUserChoicesInLastAttempt = false;
         }
     }
-
 } else {
     echo Display::return_message(get_lang('CantViewResults'), 'warning');
     $show_results = false;

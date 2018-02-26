@@ -3491,6 +3491,7 @@ class learnpath
 
             // Now go through the specific cases to get the end of the path
             // @todo Use constants instead of int values.
+
             switch ($lp_type) {
                 case 1:
                     $file = self::rl_get_resource_link_for_learnpath(
@@ -3499,6 +3500,7 @@ class learnpath
                         $item_id,
                         $this->get_view_id()
                     );
+
                     if ($this->debug > 0) {
                         error_log('rl_get_resource_link_for_learnpath - file: '.$file, 0);
                     }
@@ -7144,7 +7146,7 @@ class learnpath
         ];
 
         echo Display::return_message(get_lang('ClickOnTheLearnerViewToSeeYourLearningPath'), 'normal');
-        $dir = $_SESSION['oLP']->display_item_form('dir', get_lang('EnterDataNewChapter'), 'add_item');
+        $dir = $this->display_item_form('dir', get_lang('EnterDataNewChapter'), 'add_item');
         echo Display::tabs(
             $headers,
             [
@@ -12260,15 +12262,13 @@ EOD;
      * @param int $learningPathId The learning path ID (in lp table)
      * @param int $id_in_path the unique index in the items table
      * @param int $lpViewId
-     * @param string $origin
      * @return string
      */
     public static function rl_get_resource_link_for_learnpath(
         $course_id,
         $learningPathId,
         $id_in_path,
-        $lpViewId,
-        $origin = 'learnpath'
+        $lpViewId
     ) {
         $session_id = api_get_session_id();
         $course_info = api_get_course_info_by_id($course_id);
@@ -12287,7 +12287,18 @@ EOD;
         ]);
 
         if (!$rowItem) {
-            return -1;
+            // Try one more time with iid
+            /** @var CLpItem $rowItem */
+            $rowItem = $lpItemRepo->findOneBy([
+                'cId' => $course_id,
+                'lpId' => $learningPathId,
+                'iid' => $id_in_path
+            ]);
+
+            if (!$rowItem) {
+
+                return -1;
+            }
         }
 
         $course_code = $course_info['code'];

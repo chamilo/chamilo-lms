@@ -2119,7 +2119,7 @@ class ExtraField extends Model
 
                                     $('#map_extra_{$field_details['variable']}')
                                         .html('<div class=\"alert alert-info\">"
-                                            .get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap')
+                                            .addslashes(get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap'))
                                             ."</div>');
                                 });
 
@@ -2140,7 +2140,6 @@ class ExtraField extends Model
                                         var geoOptions = {
                                             enableHighAccuracy: true
                                         };
-
                                         navigator.geolocation.getCurrentPosition(geoPosition, geoError, geoOptions);
                                     }
                                 }

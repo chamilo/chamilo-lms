@@ -22,8 +22,7 @@ switch ($action) {
             }
 
             $value = $_REQUEST[$selkey];
-
-            $setting = api_get_settings_params_simple(['id' => $settingId]);
+            $setting = api_get_settings_params_simple(['id = ?' => $settingId]);
 
             $params = [
                 'title' => $setting['title'],
@@ -48,18 +47,17 @@ switch ($action) {
                       WHERE id = $settingId";
                     Database::query($sql);
                 }
-                //$DB->set_field('settings_current', 'selected_value', $value, $params, 'id', $chm->main_database);
             }
         }
         break;
     case 'syncthis':
-        $settingId = isset($_GET['settingid']) ? $_GET['settingid'] : '';
+        $settingId = isset($_GET['settingid']) ? (int) $_GET['settingid'] : '';
 
-        if (is_numeric($settingId)) {
+        if (!empty($settingId) && is_numeric($settingId)) {
             $deleteIfEmpty = isset($_REQUEST['del']) ? $_REQUEST['del'] : '';
             $value = $_REQUEST['value'];
             // Getting the local setting record.
-            $setting = api_get_settings_params_simple(['id' => $settingId]);
+            $setting = api_get_settings_params_simple(['id = ?' => $settingId]);
             if (empty($setting)) {
                 return 0;
             }
@@ -88,25 +86,37 @@ switch ($action) {
                 ];
                 $connection = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);
                 try {
+                    $variable = $setting['variable'];
+                    $subKey = $setting['subkey'];
+                    $category = $setting['category'];
+                    $accessUrl = $setting['access_url'];
+
                     if ($deleteIfEmpty && empty($value)) {
                         $sql = "DELETE FROM $table 
-                            WHERE  
-                                selected_value = '$value' AND   
-                                variable = '{{$setting['variable']}}' AND 
-                                access_url = '{$setting['access_url']}'
+                                WHERE  
+                                    selected_value = '$value' AND   
+                                    variable = '$variable' AND 
+                                    access_url = '$accessUrl'
                         ";
                         $connection->executeQuery($sql);
                         $case = 'delete';
                     } else {
                         $sql = "SELECT * FROM $table 
                                 WHERE 
-                                    variable = '".$setting['variable']."' AND 
-                                    access_url = '{$setting['access_url']}'
+                                    variable = '$variable' AND 
+                                    access_url = '$accessUrl'
                                 ";
                         $result = $connection->fetchAll($sql);
 
                         if (!empty($result)) {
-                            $sql = "UPDATE $table SET selected_value = '$value' WHERE id = $settingId";
+                            //$sql = "UPDATE $table SET selected_value = '$value' WHERE id = $settingId";
+                            $sql = "UPDATE $table SET selected_value = '$value' WHERE variable = '$variable'";
+                            if (!empty($subKey)) {
+                                $sql .= " AND subkey = '$subKey' ";
+                            }
+                            if (!empty($category)) {
+                                $sql .= " AND category = '$category'";
+                            }
                             $connection->executeQuery($sql);
                         } else {
                             $connection->insert($table, $params);

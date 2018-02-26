@@ -283,7 +283,6 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_i
     }
 
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-
     $linkInfo = GradebookUtils::isResourceInCourseGradebook(
         api_get_course_id(),
         3,
@@ -626,7 +625,8 @@ function showTeacherWorkGrid()
 function build_work_directory_selector($folders, $curdirpath, $group_dir = '')
 {
     $form = '<form name="selector" action="'.api_get_self().'?'.api_get_cidreq().'" method="POST">';
-    $form .= get_lang('CurrentDirectory').' <select name="curdirpath" onchange="javascript: document.selector.submit();">';
+    $form .= get_lang('CurrentDirectory').' 
+             <select name="curdirpath" onchange="javascript: document.selector.submit();">';
     //group documents cannot be uploaded in the root
     if ($group_dir == '') {
         $form .= '<option value="/">/ ('.get_lang('Root').')</option>';
@@ -684,19 +684,18 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
     $form->addHidden('item_id', $move_file);
     $form->addHidden('action', 'move_to');
 
-    //group documents cannot be uploaded in the root
+    // Group documents cannot be uploaded in the root
     if ($group_dir == '') {
-        if ($curdirpath != '/') {
-            //$form .= '<option value="0">/ ('.get_lang('Root').')</option>';
-        }
         if (is_array($folders)) {
             foreach ($folders as $fid => $folder) {
                 //you cannot move a file to:
                 //1. current directory
                 //2. inside the folder you want to move
                 //3. inside a subfolder of the folder you want to move
-                if (($curdirpath != $folder) && ($folder != $move_file) && (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')) {
-                    //$form .= '<option value="'.$fid.'">'.$folder.'</option>';
+                if (($curdirpath != $folder) &&
+                    ($folder != $move_file) &&
+                    (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')
+                ) {
                     $options[$fid] = $folder;
                 }
             }
@@ -706,7 +705,9 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
             $form .= '<option value="0">/ ('.get_lang('Root').')</option>';
         }
         foreach ($folders as $fid => $folder) {
-            if (($curdirpath != $folder) && ($folder != $move_file) && (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')) {
+            if (($curdirpath != $folder) && ($folder != $move_file) &&
+                (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')
+            ) {
                 //cannot copy dir into his own subdir
                 $display_folder = substr($folder, strlen($group_dir));
                 $display_folder = ($display_folder == '') ? '/ ('.get_lang('Root').')' : $display_folder;
@@ -2052,17 +2053,22 @@ function get_work_user_list(
                 $date = date_to_str_ago($work['sent_date']).' '.$work_date;
                 $work['formatted_date'] = $work_date.' '.$add_string;
                 $work['sent_date_from_db'] = $work['sent_date'];
-                $work['sent_date'] = '<div class="work-date" title="'.$date.'">'.$add_string.' '.Display::dateToStringAgoAndLongDate($work['sent_date']).'</div>';
+                $work['sent_date'] = '<div class="work-date" title="'.$date.'">'.
+                    $add_string.' '.Display::dateToStringAgoAndLongDate($work['sent_date']).'</div>';
                 $work['status'] = $hasCorrection;
                 $work['has_correction'] = $hasCorrection;
 
                 // Actions.
                 $action = '';
                 if (api_is_allowed_to_edit()) {
-                    $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.$rateIcon.'</a> ';
+                    $action .= '<a 
+                        href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" 
+                        title="'.get_lang('View').'">'.$rateIcon.'</a> ';
 
                     if ($unoconv && empty($work['contains_file'])) {
-                        $action .= '<a href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'" title="'.get_lang('ExportToDoc').'" >'.
+                        $action .= '<a f
+                            href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=export_to_doc&item_id='.$item_id.'" 
+                            title="'.get_lang('ExportToDoc').'" >'.
                             Display::return_icon('export_doc.png', get_lang('ExportToDoc'), [], ICON_SIZE_SMALL).'</a> ';
                     }
 
@@ -2122,7 +2128,12 @@ function get_work_user_list(
 
                     if ($locked) {
                         if ($qualification_exists) {
-                            $action .= Display::return_icon('edit_na.png', get_lang('CorrectAndRate'), [], ICON_SIZE_SMALL);
+                            $action .= Display::return_icon(
+                                'edit_na.png',
+                                get_lang('CorrectAndRate'),
+                                [],
+                                ICON_SIZE_SMALL
+                            );
                         } else {
                             $action .= Display::return_icon('edit_na.png', get_lang('Comment'), [], ICON_SIZE_SMALL);
                         }

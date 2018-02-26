@@ -1493,7 +1493,8 @@ if (empty($details)) {
             echo '<tr>';
             echo '<td>'.$work->title.'</td>';
             $documentNumber = $key + 1;
-            echo '<td class="text-center"><a href="'.api_get_path(WEB_CODE_PATH).'work/view.php?cidReq='.$course_code.'&id_session='.$sessionId.'&id='.$results['id'].'">('.$documentNumber.')</a></td>';
+            $url = api_get_path(WEB_CODE_PATH).'work/view.php?cidReq='.$course_code.'&id_session='.$sessionId.'&id='.$results['id'];
+            echo '<td class="text-center"><a href="'.$url.'">('.$documentNumber.')</a></td>';
             $qualification = !empty($results['qualification']) ? $results['qualification'] : '-';
             echo '<td class="text-center">'.$qualification.'</td>';
             echo '<td class="text-center">'.$results['formatted_date'].'</td>';
@@ -1517,7 +1518,6 @@ if (empty($details)) {
                     echo '<td class="text-center">'.$field->getValue().'</td>';
                 }
             }
-
             echo '</tr>';
         }
     }

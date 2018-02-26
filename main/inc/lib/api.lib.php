@@ -2601,6 +2601,12 @@ function api_get_settings_params($params)
     return $result;
 }
 
+/**
+ *
+ * @param array $params example: [id = ? => '1']
+ *
+ * @return array
+ */
 function api_get_settings_params_simple($params)
 {
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);

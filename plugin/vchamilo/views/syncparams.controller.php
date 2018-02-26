@@ -130,7 +130,6 @@ switch ($action) {
         } else {
             return "Bad ID. Non numeric";
         }
-
         break;
 }
 

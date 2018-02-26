@@ -99,5 +99,7 @@ $form->addButtonSave($plugin->get_lang('Save'));
 
 $plugin_info['settings_form'] = $form;
 
-//set the templates that are going to be used
+// Set the templates that are going to be used
 $plugin_info['templates'] = ['template.tpl'];
+
+$plugin_info['plugin_class'] = get_class($plugin);

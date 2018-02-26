@@ -2,18 +2,28 @@
 /**
  * This script fixes use of id instead of iid for the learning path
  */
-exit;
+
 require_once '../../main/inc/global.inc.php';
+exit;
 
 /** @var The course id $courseId */
 $onlyCourseId = 0;
 /** @var The LP id $lpId */
 $lpId = 0;
-$res = Database::select('id, title, code', Database::get_main_table(TABLE_MAIN_COURSE));
+
+$courses = Database::select('id, title, code', Database::get_main_table(TABLE_MAIN_COURSE));
 $tblCLp = Database::get_course_table(TABLE_LP_MAIN);
 $tblCLpItem = Database::get_course_table(TABLE_LP_ITEM);
+$toolTable = Database::get_course_table(TABLE_TOOL_LIST);
 
-foreach ($res as $course) {
+$sessions = Database::select('id', Database::get_main_table(TABLE_MAIN_SESSION));
+if (!empty($sessions)) {
+    $sessions = array_column($sessions, 'id');
+} else {
+    $sessions = [0];
+}
+
+foreach ($courses as $course) {
     if (!empty($onlyCourseId)) {
         if ($onlyCourseId != $course['id']) {
             continue;
@@ -54,6 +64,16 @@ foreach ($res as $course) {
                 'prerequisite',
                 'previous_item_id'
             ];
+
+            foreach ($sessions as $sessionId) {
+                $correctLink = "lp/lp_controller.php?action=view&lp_id=$lpIid&id_session=$sessionId";
+                $link = "newscorm/lp_controller.php?action=view&lp_id=$oldId&id_session=$sessionId";
+                $secondLink = "lp/lp_controller.php?action=view&lp_id=$oldId&id_session=$sessionId";
+                $sql = "UPDATE $toolTable 
+                        SET link = '$correctLink'
+                        WHERE c_id = $courseId AND (link = '$link' OR link ='$secondLink')";
+                Database::query($sql);
+            }
 
             foreach ($items as $item) {
                 $itemIid = $item['iid'];

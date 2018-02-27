@@ -1057,15 +1057,15 @@ class AnnouncementManager
         $result = Database::query($sql);
         $to = [];
         while ($row = Database::fetch_array($result)) {
-            $to_group = $row['to_group_id'];
-            switch ($to_group) {
+            $toGroup = $row['to_group_id'];
+            switch ($toGroup) {
                 // it was send to one specific user
                 case null:
                     $to[] = "USER:".$row['to_user_id'];
                     break;
                 // it was sent to everyone
                 case 0:
-                    return "everyone";
+                    return 'everyone';
                     break;
                 default:
                     $to[] = "GROUP:".$row['to_group_id'];

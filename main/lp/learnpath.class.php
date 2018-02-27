@@ -12296,7 +12296,6 @@ EOD;
             ]);
 
             if (!$rowItem) {
-
                 return -1;
             }
         }

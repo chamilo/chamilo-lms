@@ -5889,7 +5889,7 @@ class CourseManager
         // adding the groups to the select form
         if ($groupList) {
             foreach ($groupList as $thisGroup) {
-                $groupId = $thisGroup['id'];
+                $groupId = $thisGroup['iid'];
                 if (is_array($alreadySelected)) {
                     if (!in_array(
                         "GROUP:".$groupId,

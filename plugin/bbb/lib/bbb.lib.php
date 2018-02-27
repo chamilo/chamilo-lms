@@ -73,11 +73,10 @@ class bbb
         $this->userSupport = isset($columns['user_id']) ? true : false;
         $this->accessUrl = api_get_current_access_url_id();
 
+        $this->enableGlobalConferencePerUser = false;
         if ($this->userSupport && !empty($isGlobalPerUser)) {
             $this->enableGlobalConferencePerUser = $this->plugin->get('enable_global_conference_per_user') === 'true' ? true : false;
             $this->userId = $isGlobalPerUser;
-        } else {
-            $this->enableGlobalConferencePerUser = false;
         }
 
         if ($this->groupSupport) {
@@ -304,11 +303,8 @@ class bbb
             $params['group_id'] = api_get_group_id();
         }
 
-        if ($this->isGlobalConferencePerUserEnabled()) {
-            $currentUserId = api_get_user_id();
-            if ($this->userId === $currentUserId) {
-                $params['user_id'] = $this->userId;
-            }
+        if ($this->isGlobalConferencePerUserEnabled() && !empty($this->userId)) {
+            $params['user_id'] = (int) $this->userId;
         }
 
         $params['attendee_pw'] = isset($params['attendee_pw']) ? $params['attendee_pw'] : $this->getUserMeetingPassword();

@@ -1952,12 +1952,25 @@ function api_get_course_info($course_code = null, $strict = false)
  * @param int $courseId
  * @return \Chamilo\CoreBundle\Entity\Course
  */
-function api_get_course_entity($courseId)
+function api_get_course_entity($courseId = 0)
 {
     if (empty($courseId)) {
         $courseId = api_get_course_int_id();
     }
     return Database::getManager()->getRepository('ChamiloCoreBundle:Course')->find($courseId);
+}
+
+
+/**
+ * @param int $id
+ * @return \Chamilo\CoreBundle\Entity\Session
+ */
+function api_get_session_entity($id = 0)
+{
+    if (empty($id)) {
+        $id = api_get_session_id();
+    }
+    return Database::getManager()->getRepository('ChamiloCoreBundle:Session')->find($id);
 }
 
 /**

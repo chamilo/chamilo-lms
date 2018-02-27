@@ -443,7 +443,8 @@ function HotPotGCt($folder, $flag, $user_id)
         }
         closedir($dir);
     }
-    while (list(, $val) = each($filelist)) {
+
+    foreach ($filelist as $val) {
         if (stristr($val, $user_id.'.t.html')) {
             if ($flag == 1) {
                 my_delete($folder.'/'.$val);

@@ -36,12 +36,12 @@ switch ($action) {
     case 'find_skills':
         $skills = $skill->find('all', ['where' => ['name LIKE %?% '=>$_REQUEST['q']]]);
         $return_skills = [[
-            'items' => []
+            'items' => [],
         ]];
         foreach ($skills as $skill) {
             $return_skills['items'][] = [
                 'id' => $skill['id'],
-                'text' => $skill['name']
+                'text' => $skill['name'],
             ];
         }
         header('Content-Type: application/json');
@@ -77,7 +77,7 @@ switch ($action) {
         $courseInfo = api_get_course_info($_REQUEST['code']);
         $courses = CourseManager::processHotCourseItem(
             [
-                ['c_id' => $courseInfo['real_id']]
+                ['c_id' => $courseInfo['real_id']],
             ]
         );
         Display::display_no_header();
@@ -177,7 +177,7 @@ switch ($action) {
                 $return[$skill['data']['id']] = [
                     'id'    => $skill['data']['id'],
                     'name'  => $skill['data']['name'],
-                    'passed'=> $skill['data']['passed']
+                    'passed'=> $skill['data']['passed'],
                 ];
             }
         }
@@ -188,7 +188,7 @@ switch ($action) {
 
         $result = [
             'success' => $success,
-            'data' => $return
+            'data' => $return,
         ];
         echo json_encode($result);
         break;
@@ -200,7 +200,7 @@ switch ($action) {
             $return [$skill['data']['id']] = [
                 'id'        => $skill['data']['id'],
                 'parent_id' => $skill['data']['parent_id'],
-                'name'      => $skill['data']['name']
+                'name'      => $skill['data']['name'],
             ];
         }
         echo json_encode($return);
@@ -240,7 +240,7 @@ switch ($action) {
                     if (!isset($user_skills[$my_skill['skill_id']])) {
                         $user_skills[$my_skill['skill_id']] = [
                             'skill_id' => $my_skill['skill_id'],
-                            'found' => false
+                            'found' => false,
                         ];
                     }
                     $total_skills_to_search[$my_skill['skill_id']] = $my_skill['skill_id'];
@@ -329,7 +329,7 @@ switch ($action) {
             $isDeleted = $skillProfile->delete($profileId);
 
             echo json_encode([
-                'status' => $isDeleted
+                'status' => $isDeleted,
             ]);
         }
         break;
@@ -345,18 +345,42 @@ switch ($action) {
         $skills = $skill->find(
             'all',
             [
-                'where' => ['name LIKE %?% ' => $_REQUEST['q']]
+                'where' => ['name LIKE %?% ' => $_REQUEST['q']],
             ]
         );
         $returnSkills = [];
         foreach ($skills as $skill) {
             $returnSkills[] = [
                 'id' => $skill['id'],
-                'text' => $skill['name']
+                'text' => $skill['name'],
             ];
         }
         echo json_encode([
-            'items' => $returnSkills
+            'items' => $returnSkills,
+        ]);
+        break;
+    case 'search_skills_in_course':
+        $courseId = isset($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : 0;
+        $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : null;
+
+        if (empty($courseId)) {
+            exit;
+        }
+        $em = Database::getManager();
+        $skills = $em->getRepository('ChamiloSkillBundle:SkillRelCourse')->findBy(
+            ['course' => $courseId, 'session' => $sessionId]
+        );
+
+        $returnSkills = [];
+        /** @var \Chamilo\SkillBundle\Entity\SkillRelCourse $skill */
+        foreach ($skills as $skill) {
+            $returnSkills[] = [
+                'id' => $skill->getSkill()->getId(),
+                'text' => $skill->getSkill()->getName(),
+            ];
+        }
+        echo json_encode([
+            'items' => $returnSkills,
         ]);
         break;
     case 'update_skill_rel_user':
@@ -399,7 +423,7 @@ switch ($action) {
             if ($skillRelItem) {
                 $criteria = [
                     'user' => $userId,
-                    'skillRelItem' => $skillRelItem
+                    'skillRelItem' => $skillRelItem,
                 ];
                 $skillRelItemRelUser = $em->getRepository('ChamiloSkillBundle:SkillRelItemRelUser')->findOneBy($criteria);
                 if ($skillRelItemRelUser) {

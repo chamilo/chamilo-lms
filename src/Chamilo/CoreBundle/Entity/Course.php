@@ -657,6 +657,14 @@ class Course
     }
 
     /**
+     * @return string
+     */
+    public function getTitleAndCode()
+    {
+        return $this->getTitle().' ('.$this->getCode().')';
+    }
+
+    /**
      * Set description
      *
      * @param string $description

@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\SkillBundle\Entity\Profile;
+use Chamilo\SkillBundle\Entity\SkillRelCourse;
 use Chamilo\SkillBundle\Entity\SkillRelItem;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -102,6 +103,12 @@ class Skill
      * ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelItem", mappedBy="skill", cascade={"persist"})
      */
     protected $items;
+
+    /**
+     * // uncomment if api_get_configuration_value('allow_skill_rel_items')
+     * ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelCourse", mappedBy="skill", cascade={"persist"})
+     */
+    protected $courses;
 
     /**
      * @return string
@@ -414,5 +421,66 @@ class Skill
     {
         $skillRelItem->setSkill($this);
         $this->items[] = $skillRelItem;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCourses()
+    {
+        return $this->courses;
+    }
+
+    /**
+     * @param ArrayCollection $courses
+     * @return Skill
+     */
+    public function setCourses($courses)
+    {
+        $this->courses = $courses;
+        return $this;
+    }
+
+    /**
+     * @param SkillRelCourse $searchItem
+     *
+     * @return bool
+     */
+    public function hasCourseAndSession(SkillRelCourse $searchItem)
+    {
+        if ($this->getCourses()->count()) {
+            $found = false;
+            /** @var SkillRelCourse $item */
+            foreach ($this->getCourses() as $item) {
+                $sessionPassFilter = false;
+                $session = $item->getSession();
+                $sessionId = !empty($session) ? $session->getId() : 0;
+                $searchSessionId = !empty($searchItem->getSession()) ? $searchItem->getSession()->getId() : 0;
+
+                if ($sessionId === $searchSessionId) {
+                    $sessionPassFilter = true;
+                }
+                if ($item->getCourse()->getId() == $searchItem->getCourse()->getId() &&
+                    $sessionPassFilter
+                ) {
+                    $found = true;
+                    break;
+                }
+            }
+
+            return $found;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * @param SkillRelCourse $item
+     */
+    public function addToCourse(SkillRelCourse $item)
+    {
+        $item->setSkill($this);
+        $this->courses[] = $item;
     }
 }

@@ -25,6 +25,10 @@ $form = new FormValidator('skills', 'post', $url);
 $sessionName = $course->getTitleAndCode();
 if (!empty($sessionId)) {
     $session = api_get_session_entity($sessionId);
+    $courseExistsInSession = SessionManager::sessionHasCourse($sessionId, $course->getCode());
+    if (!$courseExistsInSession) {
+        api_not_allowed(true);
+    }
     $sessionName = ' '.$session->getName().' - '.$course->getTitleAndCode();
 }
 
@@ -58,8 +62,10 @@ $form->addButtonSave(get_lang('Save'));
 $form->setDefaults(['skills' => array_keys($skillList)]);
 
 if ($form->validate()) {
-    Skill::saveSkillsToCourseFromForm($form);
-    Display::addFlash(Display::return_message(get_lang('Updated')));
+    $result = Skill::saveSkillsToCourseFromForm($form);
+    if ($result) {
+        Display::addFlash(Display::return_message(get_lang('Updated')));
+    }
     header('Location: '.$url);
     exit;
 }

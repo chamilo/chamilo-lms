@@ -2703,14 +2703,14 @@ class Skill extends Model
     /**
      * Relate skill with an item (exercise, gradebook, lp, etc)
      * @param FormValidator $form
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @return bool
      */
     public static function saveSkillsToCourseFromForm(FormValidator $form)
     {
         $skills = (array) $form->getSubmitValue('skills');
         $courseId = (int) $form->getSubmitValue('course_id');
         $sessionId = $form->getSubmitValue('session_id');
-        self::saveSkillsToCourse($skills, $courseId, $sessionId);
+        return self::saveSkillsToCourse($skills, $courseId, $sessionId);
     }
 
     /**
@@ -2720,7 +2720,7 @@ class Skill extends Model
      * @throws \Doctrine\ORM\OptimisticLockException
      * @return bool
      */
-    public function saveSkillsToCourse($skills, $courseId, $sessionId)
+    public static function saveSkillsToCourse($skills, $courseId, $sessionId)
     {
         $allowSkillInTools = api_get_configuration_value('allow_skill_rel_items');
         if (!$allowSkillInTools) {
@@ -2731,9 +2731,16 @@ class Skill extends Model
         $sessionId = empty($sessionId) ? null : (int) $sessionId;
 
         $course = api_get_course_entity($courseId);
+        if (empty($course)) {
+            return false;
+        }
         $session = null;
         if (!empty($sessionId)) {
             $session = api_get_session_entity($sessionId);
+            $courseExistsInSession = SessionManager::sessionHasCourse($sessionId, $course->getCode());
+            if (!$courseExistsInSession) {
+                return false;
+            }
         }
 
         // Delete old ones

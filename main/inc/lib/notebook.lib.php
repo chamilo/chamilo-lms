@@ -221,6 +221,7 @@ class NotebookManager
      */
     public static function display_notes()
     {
+        $sessionId = api_get_session_id();
         $_user = api_get_user_info();
         if (!isset($_GET['direction'])) {
             $sort_direction = 'ASC';
@@ -236,15 +237,7 @@ class NotebookManager
         // action links
         echo '<div class="actions">';
         if (!api_is_anonymous()) {
-            if (api_get_session_id() == 0) {
-                echo '<a href="index.php?'.api_get_cidreq().'&action=addnote">'.
-                    Display::return_icon(
-                        'new_note.png',
-                        get_lang('NoteAddNew'),
-                        '',
-                        '32'
-                    ).'</a>';
-            } elseif (api_is_allowed_to_session_edit(false, true)) {
+            if ($sessionId == 0 || api_is_allowed_to_session_edit(false, true)) {
                 echo '<a href="index.php?'.api_get_cidreq().'&action=addnote">'.
                     Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32').'</a>';
             }
@@ -272,8 +265,7 @@ class NotebookManager
         $order_by = " ORDER BY ".$notebookView." $sort_direction ";
 
         // Condition for the session
-        $session_id = api_get_session_id();
-        $condition_session = api_get_session_condition($session_id);
+        $condition_session = api_get_session_condition($sessionId);
 
         $cond_extra = $notebookView == 'update_date' ? " AND update_date <> ''" : " ";
         $course_id = api_get_course_int_id();

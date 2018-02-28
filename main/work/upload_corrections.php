@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
 use Symfony\Component\Finder\Finder;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -14,7 +13,7 @@ require_once 'work.lib.php';
 
 $this_section = SECTION_COURSES;
 
-$workId = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
+$workId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 
 $is_allowed_to_edit = api_is_allowed_to_edit();
 $course_id = api_get_course_int_id();
@@ -30,8 +29,11 @@ if (empty($workId)) {
 }
 
 protectWork($courseInfo, $workId);
-
 $workInfo = get_work_data_by_id($workId);
+
+if (empty($workInfo)) {
+    api_not_allowed(true);
+}
 
 $student_can_edit_in_session = api_is_allowed_to_session_edit(false, true);
 
@@ -103,7 +105,7 @@ if ($form->validate()) {
         $destinationDir = api_get_path(SYS_ARCHIVE_PATH).$folder;
         mkdir($destinationDir, api_get_permissions_for_new_directories(), true);
 
-        /*	Uncompress zip file*/
+        // Uncompress zip file
         // We extract using a callback function that "cleans" the path
         $result = $zip->extract(
             PCLZIP_OPT_PATH,

@@ -1889,8 +1889,7 @@ class Wiki
             }
             if ($exist == false) {
                 $sql = "INSERT INTO ".$tbl_wiki_mailcue." (c_id, id, user_id, type, group_id, session_id) VALUES
-                ($course_id, '".$id."','".api_get_user_id(
-                    )."','P','".$groupId."','".$session_id."')";
+                ($course_id, '".$id."','".api_get_user_id()."','P','".$groupId."','".$session_id."')";
                 Database::query($sql);
             }
             $status_notify = 1;
@@ -1941,8 +1940,7 @@ class Wiki
         $id = $row['id'];
         $sql = 'SELECT * FROM '.$tbl_wiki_mailcue.'
                 WHERE 
-                    c_id = '.$course_id.' AND id="'.$id.'" AND user_id="'.api_get_user_id(
-            ).'" AND type="D"';
+                    c_id = '.$course_id.' AND id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="D"';
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $idm = $row['id'];
@@ -2016,8 +2014,7 @@ class Wiki
             $status_notify_all == 0
         ) {
             $sql = "INSERT INTO ".$tbl_wiki_mailcue." (c_id, user_id, type, group_id, session_id) VALUES
-            ($course_id, '".api_get_user_id(
-                )."','F','".$groupId."','".$session_id."')";
+            ($course_id, '".api_get_user_id()."','F','".$groupId."','".$session_id."')";
             Database::query($sql);
             $status_notify_all = 1;
         }
@@ -2069,9 +2066,7 @@ class Wiki
             //first, current author and time
             //Who is the author?
             $userinfo = api_get_user_info($lastuser);
-            $email_user_author = get_lang(
-                    'EditedBy'
-                ).': '.$userinfo['complete_name'];
+            $email_user_author = get_lang('EditedBy').': '.$userinfo['complete_name'];
 
             //When ?
             $year = substr($lastime, 0, 4);
@@ -2114,9 +2109,7 @@ class Wiki
             //first, current author and time
             //Who is the author of last message?
             $userinfo = api_get_user_info($lastuser);
-            $email_user_author = get_lang(
-                    'AddedBy'
-                ).': '.$userinfo['complete_name'];
+            $email_user_author = get_lang('AddedBy').': '.$userinfo['complete_name'];
 
             //When ?
             $year = substr($lastime, 0, 4);
@@ -2167,9 +2160,7 @@ class Wiki
 
             //Who is the author?
             $userinfo = api_get_user_info($row['user_id']);
-            $email_user_author = get_lang(
-                    'AddedBy'
-                ).': '.$userinfo['complete_name'];
+            $email_user_author = get_lang('AddedBy').': '.$userinfo['complete_name'];
 
             //When ?
             $year = substr($row['dtime'], 0, 4);
@@ -2183,9 +2174,7 @@ class Wiki
             if ($row['assignment'] == 0) {
                 $allow_send_mail = true;
             } elseif ($row['assignment'] == 1) {
-                $email_assignment = get_lang(
-                        'AssignmentDescExtra'
-                    ).' ('.get_lang('AssignmentMode').')';
+                $email_assignment = get_lang('AssignmentDescExtra').' ('.get_lang('AssignmentMode').')';
                 $allow_send_mail = true;
             } elseif ($row['assignment'] == 2) {
                 $allow_send_mail = false; //Mode tasks: avoids notifications to all users about all users
@@ -2201,12 +2190,8 @@ class Wiki
 
             //type: P=page, D=discuss, F=full
             $result = Database::query($sql);
-
-            $emailtext = get_lang(
-                    'EmailWikiPageAdded'
-                ).' <strong>'.$email_page_name.'</strong> '.get_lang(
-                    'In'
-                ).' '.get_lang('Wiki');
+            $emailtext = get_lang('EmailWikiPageAdded').' <strong>'.
+                $email_page_name.'</strong> '.get_lang('In').' '.get_lang('Wiki');
         } elseif ($type == 'E') {
             $id = 0;
             $allow_send_mail = true;
@@ -2308,9 +2293,7 @@ class Wiki
             </body>
             </html>';
 
-        $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_setting(
-                'stylesheets'
-            ).'/default.css';
+        $css_file = api_get_path(SYS_CSS_PATH).'themes/'.api_get_setting('stylesheets').'/default.css';
         if (file_exists($css_file)) {
             $css = @file_get_contents($css_file);
         } else {

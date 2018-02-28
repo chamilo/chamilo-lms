@@ -58,7 +58,8 @@ function isAlreadyInstalledSystem()
  * @param   string  $returnSuccess Text to show when extension is available (defaults to 'Yes')
  * @param   string  $returnFailure Text to show when extension is available (defaults to 'No')
  * @param   boolean $optional Whether this extension is optional (then show unavailable text in orange rather than red)
- * @param   string  $enabledTerm If this string is not null, then use to check if the corresponding parameter is = 1. If not, mention it's present but not enabled. For example, for opcache, this should be 'opcache.enable'
+ * @param   string  $enabledTerm If this string is not null, then use to check if the corresponding parameter is = 1.
+ * If not, mention it's present but not enabled. For example, for opcache, this should be 'opcache.enable'
  * @return  string  HTML string reporting the status of this extension. Language-aware.
  * @author  Christophe Gesch??
  * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -390,19 +391,21 @@ function write_system_config_file($path)
     $fp = @ fopen($path, 'w');
 
     if (!$fp) {
-        echo '<strong><font color="red">Your script doesn\'t have write access to the config directory</font></strong><br />
-                        <em>('.str_replace('\\', '/', realpath($path)).')</em><br /><br />
-                        You probably do not have write access on Chamilo root directory,
-                        i.e. you should <em>CHMOD 777</em> or <em>755</em> or <em>775</em>.<br /><br />
-                        Your problems can be related on two possible causes:<br />
-                        <ul>
-                          <li>Permission problems.<br />Try initially with <em>chmod -R 777</em> and increase restrictions gradually.</li>
-                          <li>PHP is running in <a href="http://www.php.net/manual/en/features.safe-mode.php" target="_blank">Safe-Mode</a>. If possible, try to switch it off.</li>
-                        </ul>
-                        <a href="http://forum.chamilo.org/" target="_blank">Read about this problem in Support Forum</a><br /><br />
-                        Please go back to step 5.
-                        <p><input type="submit" name="step5" value="&lt; Back" /></p>
-                        </td></tr></table></form></body></html>';
+        echo '<strong>
+                <font color="red">Your script doesn\'t have write access to the config directory</font></strong><br />
+                <em>('.str_replace('\\', '/', realpath($path)).')</em><br /><br />
+                You probably do not have write access on Chamilo root directory,
+                i.e. you should <em>CHMOD 777</em> or <em>755</em> or <em>775</em>.<br /><br />
+                Your problems can be related on two possible causes:<br />
+                <ul>
+                  <li>Permission problems.<br />Try initially with <em>chmod -R 777</em> and increase restrictions gradually.</li>
+                  <li>PHP is running in <a href="http://www.php.net/manual/en/features.safe-mode.php" target="_blank">Safe-Mode</a>. 
+                  If possible, try to switch it off.</li>
+                </ul>
+                <a href="http://forum.chamilo.org/" target="_blank">Read about this problem in Support Forum</a><br /><br />
+                Please go back to step 5.
+                <p><input type="submit" name="step5" value="&lt; Back" /></p>
+                </td></tr></table></form></body></html>';
         exit;
     }
 
@@ -717,7 +720,8 @@ function display_requirements(
     echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Requirements')."</h2></div>";
     echo '<div class="RequirementText">';
     echo '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
-    echo get_lang('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">'.get_lang('ReadTheInstallationGuide').'</a>.<br />'."\n";
+    echo get_lang('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">'.
+        get_lang('ReadTheInstallationGuide').'</a>.<br />'."\n";
 
     if ($installType == 'update') {
         echo get_lang('IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog').'<br />';
@@ -729,7 +733,7 @@ function display_requirements(
     if (!$properlyAccessUrl) {
         echo '
             <div class="alert alert-danger">
-                ' . Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_MEDIUM, true, false, true).
+                '.Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_MEDIUM, true, false, true).
             ' '.
             sprintf(get_lang('InstallMultiURLDetectedNotMainURL'), api_get_configuration_value('root_web')).'
             </div>
@@ -738,7 +742,6 @@ function display_requirements(
 
     //  SERVER REQUIREMENTS
     echo '<div class="RequirementHeading"><h4>'.get_lang('ServerRequirements').'</h4>';
-
     $timezone = checkPhpSettingExists("date.timezone");
     if (!$timezone) {
         echo "<div class='alert alert-warning'>".
@@ -1660,7 +1663,13 @@ function display_configuration_settings_form(
 
     // Parameter 1: administrator's login
     $html = '';
-    $html .= display_configuration_parameter($installType, get_lang('AdminLogin'), 'loginForm', $loginForm, $installType == 'update');
+    $html .= display_configuration_parameter(
+        $installType,
+        get_lang('AdminLogin'),
+        'loginForm',
+        $loginForm,
+        $installType == 'update'
+    );
 
     // Parameter 2: administrator's password
     if ($installType != 'update') {
@@ -1669,7 +1678,12 @@ function display_configuration_settings_form(
 
     // Parameters 3 and 4: administrator's names
 
-    $html .= display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
+    $html .= display_configuration_parameter(
+        $installType,
+        get_lang('AdminFirstName'),
+        'adminFirstName',
+        $adminFirstName
+    );
     $html .= display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
 
     //Parameter 3: administrator's email
@@ -1873,8 +1887,6 @@ function get_countries_list_from_array($combo = false)
         "Yemen",
         "Zambia", "Zimbabwe"
     ];
-
-    $country_select = '';
     if ($combo) {
         $country_select = '<select class="selectpicker show-tick" id="country" name="country">';
         $country_select .= '<option value="">--- '.get_lang('SelectOne').' ---</option>';
@@ -2459,9 +2471,7 @@ function fixIds(EntityManager $em)
     $sql = "SELECT * FROM groups";
     $result = $connection->executeQuery($sql);
     $groups = $result->fetchAll();
-
     $oldGroups = [];
-
     if (!empty($groups)) {
         foreach ($groups as $group) {
             if (empty($group['name'])) {
@@ -2820,7 +2830,6 @@ function finishInstallation(
         TicketManager::PRIORITY_LOW => get_lang('PriorityLow')
     ];
 
-    $table = Database::get_main_table(TABLE_TICKET_PRIORITY);
     $i = 1;
     foreach ($defaultPriorities as $code => $priority) {
         $ticketPriority = new TicketPriority();

@@ -2726,7 +2726,7 @@ class DocumentManager
      * @param string $title
      * @param string $comment
      * @param int $unzip unzip or not the file
-     * @param string $if_exists overwrite, rename or warn (default)
+     * @param string $ifExists overwrite, rename or warn (default)
      * @param bool $index_document index document (search xapian module)
      * @param bool $show_output print html messages
      * @param string $fileKey
@@ -2740,7 +2740,7 @@ class DocumentManager
         $title = '',
         $comment = '',
         $unzip = 0,
-        $if_exists = '',
+        $ifExists = '',
         $index_document = false,
         $show_output = false,
         $fileKey = 'file',
@@ -2764,7 +2764,7 @@ class DocumentManager
                     api_get_group_id(),
                     null,
                     $unzip,
-                    $if_exists,
+                    $ifExists,
                     $show_output,
                     false,
                     null,
@@ -2826,7 +2826,7 @@ class DocumentManager
                             null,
                             $_POST['language'],
                             $_REQUEST,
-                            $if_exists
+                            $ifExists
                         );
                     }
 

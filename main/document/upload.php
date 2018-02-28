@@ -88,13 +88,13 @@ $htmlHeadXtra[] = '<script>
 
 function check_unzip() {
     if (document.upload.unzip.checked){
-        document.upload.if_exists[0].disabled=true;
+        //document.upload.if_exists[0].disabled=true;
         document.upload.if_exists[1].checked=true;
-        document.upload.if_exists[2].disabled=true;
+        //document.upload.if_exists[2].disabled=true;
     } else {
-        document.upload.if_exists[0].checked=true;
-        document.upload.if_exists[0].disabled=false;
-        document.upload.if_exists[2].disabled=false;
+        document.upload.if_exists[2].checked=true;
+        //document.upload.if_exists[0].disabled=false;
+        //document.upload.if_exists[2].disabled=false;
     }
 }
 
@@ -205,7 +205,6 @@ if (!empty($_FILES)) {
     );
 
     $redirectUrl = api_get_self().'?'.api_get_cidreq().$certificateLink;
-
     if ($document_data) {
         $redirectUrl .= '&'.http_build_query(
             [
@@ -261,10 +260,10 @@ $form = new FormValidator(
 $form->addElement('hidden', 'id', $document_id);
 $form->addElement('hidden', 'curdirpath', $path);
 
-$course_quota = format_file_size(DocumentManager::get_course_quota() - DocumentManager::documents_total_space());
+$courseQuota = format_file_size(DocumentManager::get_course_quota() - DocumentManager::documents_total_space());
 $label =
     get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.
-    get_lang('DocumentQuota').': '.$course_quota;
+    get_lang('DocumentQuota').': '.$courseQuota;
 
 $form->addElement('file', 'file', [get_lang('File'), $label], 'style="width: 250px" id="user_upload"');
 $form->addElement('text', 'title', get_lang('Title'), ['id' => 'title_file']);
@@ -285,12 +284,12 @@ $form->addElement(
 
 if (api_get_setting('search_enabled') === 'true') {
     //TODO: include language file
-    $supported_formats = get_lang('SupportedFormatsForIndex').': HTML, PDF, TXT, PDF, Postscript, MS Word, RTF, MS Power Point';
+    $supportedFormats = get_lang('SupportedFormatsForIndex').': HTML, PDF, TXT, PDF, Postscript, MS Word, RTF, MS Power Point';
     $form->addElement(
         'checkbox',
         'index_document',
         '',
-        get_lang('SearchFeatureDoIndexDocument').'<div style="font-size: 80%" >'.$supported_formats.'</div>'
+        get_lang('SearchFeatureDoIndexDocument').'<div style="font-size: 80%" >'.$supportedFormats.'</div>'
     );
     $form->addElement('html', '<br /><div class="sub-form">');
     $form->addElement('html', '<div class="label">'.get_lang('SearchFeatureDocumentLanguage').'</div>');

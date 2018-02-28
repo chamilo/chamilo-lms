@@ -59,7 +59,9 @@ class Import
                 }
             }*/
 
-            return $reader->fetchAssoc(0);
+            $iterator = $reader->fetchAssoc(0);
+
+            return iterator_to_array($iterator);
         }
         return [];
     }

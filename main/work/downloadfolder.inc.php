@@ -7,21 +7,26 @@
  * @package chamilo.work
  */
 
-$work_id = $_GET['id'];
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_course_script(true);
+
+$workId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 $_course = api_get_course_info();
 
-// Protection
-api_protect_course_script(true);
+if (empty($_course)) {
+    api_not_allowed();
+}
 
 require_once 'work.lib.php';
 
-$work_data = get_work_data_by_id($work_id);
+$work_data = get_work_data_by_id($workId);
 $groupId = api_get_group_id();
 
 if (empty($work_data)) {
-    exit;
+    api_not_allowed();
 }
 
 // Prevent some stuff.
@@ -86,7 +91,7 @@ if (api_is_allowed_to_edit() || api_is_coach()) {
  			    props.tool = 'work' AND
  			    props.c_id = $course_id AND
                 work.c_id = $course_id AND
-                work.parent_id = $work_id AND
+                work.parent_id = $workId AND
                 work.filetype = 'file' AND
                 props.visibility <> '2' AND
                 work.active IN (0, 1) AND
@@ -95,9 +100,8 @@ if (api_is_allowed_to_edit() || api_is_coach()) {
             ";
 } else {
     $courseInfo = api_get_course_info();
-    protectWork($courseInfo, $work_id);
-
-    $userCondition = null;
+    protectWork($courseInfo, $workId);
+    $userCondition = '';
 
     // All users
     if ($courseInfo['show_score'] == 0) {
@@ -128,7 +132,7 @@ if (api_is_allowed_to_edit() || api_is_coach()) {
                 props.tool = 'work' AND
                 work.accepted = 1 AND
                 work.active = 1 AND
-                work.parent_id = $work_id AND
+                work.parent_id = $workId AND
                 work.filetype = 'file' AND
                 props.visibility = '1' AND
                 work.post_group_id = $groupIid
@@ -139,7 +143,7 @@ $query = Database::query($sql);
 
 //add tem to the zip file
 while ($not_deleted_file = Database::fetch_assoc($query)) {
-    $user_info = api_get_user_info($not_deleted_file['insert_user_id']);
+    $userInfo = api_get_user_info($not_deleted_file['insert_user_id']);
     $insert_date = api_get_local_time($not_deleted_file['sent_date']);
     $insert_date = str_replace([':', '-', ' '], '_', $insert_date);
 
@@ -149,8 +153,8 @@ while ($not_deleted_file = Database::fetch_assoc($query)) {
             $title = $not_deleted_file['filename'];
         }
     }
-
-    $filename = $insert_date.'_'.$user_info['username'].'_'.$title;
+    $filename = $insert_date.'_'.$userInfo['username'].'_'.$title;
+    $filename = api_replace_dangerous_char($filename);
     // File exists
     if (file_exists($sys_course_path.$_course['path'].'/'.$not_deleted_file['url']) &&
         !empty($not_deleted_file['url'])
@@ -197,8 +201,7 @@ if (!empty($files)) {
     exit;
 }
 
-/*	Extra function (only used here) */
-
+/* Extra function (only used here) */
 function my_pre_add_callback($p_event, &$p_header)
 {
     global $files;

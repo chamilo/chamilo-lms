@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 /**
  *  @package chamilo.admin
  */
@@ -113,9 +111,9 @@ if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
 } else {
     Display::addFlash(
         Display::return_message(
-        sprintf(get_lang('CareerXDoesntHaveADiagram'), $careerInfo['name']),
-        'warning'
-    )
+            sprintf(get_lang('CareerXDoesntHaveADiagram'), $careerInfo['name']),
+            'warning'
+        )
     );
 }
 $tpl->assign('content', $html);

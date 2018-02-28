@@ -25,7 +25,7 @@ $docs_and_folders = DocumentManager::getAllDocumentData(
 );
 
 //get all filenames
-$array_to_search = is_array($docs_and_folders) ? $docs_and_folders : array();
+$array_to_search = !empty($docs_and_folders) ? $docs_and_folders : [];
 
 if (count($array_to_search) > 0) {
 	while (list($key) = each($array_to_search)) {

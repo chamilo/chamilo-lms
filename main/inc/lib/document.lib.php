@@ -484,7 +484,7 @@ class DocumentManager
             $students = CourseManager::get_user_list_from_course_code($courseInfo['code'], $sessionId);
             if (!empty($students)) {
                 $conditionList = [];
-                foreach ($students as $studentId => $studentInfo) {
+                foreach ($students as $studentInfo) {
                     $conditionList[] = '/shared_folder/sf_user_'.$studentInfo['user_id'];
                 }
                 $sharedCondition .= ' AND docs.path IN ("'.implode('","', $conditionList).'")';
@@ -603,7 +603,7 @@ class DocumentManager
 
             return $finalDocumentData;
         } else {
-            return false;
+            return [];
         }
     }
 

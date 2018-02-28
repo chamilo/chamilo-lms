@@ -1784,7 +1784,7 @@ $userIsSubscribed = CourseManager::is_user_subscribed_in_course(
 );
 
 $getSizeURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_dir_size&'.api_get_cidreq();
-if (isset($documentAndFolders) && is_array($documentAndFolders)) {
+if (!empty($documentAndFolders)) {
     if ($groupId == 0 || $userAccess) {
         $count = 1;
         $countedPaths = [];
@@ -1951,11 +1951,11 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
         }
     }
 } else {
-    $sortable_data = '';
+    $sortable_data = [];
     $table_footer = get_lang('NoDocsInFolder');
 }
 
-if (!is_null($documentAndFolders)) {
+if (!empty($documentAndFolders)) {
     // Show download zipped folder icon
     if (!$is_certificate_mode && $total_size != 0
         && (

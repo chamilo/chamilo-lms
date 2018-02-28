@@ -309,7 +309,7 @@ class Rest extends WebService
         );
         $results = [];
 
-        if (is_array($documents)) {
+        if (!empty($documents)) {
             $webPath = api_get_path(WEB_CODE_PATH).'document/document.php?';
 
             /** @var array $document */

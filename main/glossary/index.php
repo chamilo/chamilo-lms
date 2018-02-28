@@ -98,7 +98,16 @@ switch ($action) {
             $token = Security::get_token();
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(['sec_token' => $token]);
-            $content = $form->returnForm();
+            $content = Display::toolbarAction(
+                'add_glossary',
+                [
+                    Display::url(
+                        Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+                        api_get_self().'?'.api_get_cidreq()
+                    )
+                ]
+            );
+            $content .= $form->returnForm();
         }
         break;
     case 'edit_glossary':
@@ -176,7 +185,16 @@ switch ($action) {
                 $token = Security::get_token();
                 $form->addElement('hidden', 'sec_token');
                 $form->setConstants(['sec_token' => $token]);
-                $content = $form->returnForm();
+                $content = Display::toolbarAction(
+                    'edit_glossary',
+                    [
+                        Display::url(
+                            Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+                            api_get_self().'?'.api_get_cidreq()
+                        )
+                    ]
+                );
+                $content .= $form->returnForm();
             }
         }
         break;

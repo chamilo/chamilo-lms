@@ -107,16 +107,15 @@ if ($action === 'addnote') {
         Security::clear_token();
         NotebookManager::display_notes();
     } else {
-        echo '<div class="actions">';
-        echo '<a href="index.php">'.
-            Display::return_icon(
-                'back.png',
-                get_lang('BackToNotesList'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).
-            '</a>';
-        echo '</div>';
+        echo Display::toolbarAction(
+            'add_glossary',
+            [
+                Display::url(
+                    Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+                    api_get_self().'?'.api_get_cidreq()
+                )
+            ]
+        );
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
         $form->setConstants(['sec_token' => $token]);
@@ -171,16 +170,15 @@ if ($action === 'addnote') {
         Security::clear_token();
         NotebookManager::display_notes();
     } else {
-        echo '<div class="actions">';
-        echo '<a href="index.php">'.
-            Display::return_icon(
-                'back.png',
-                get_lang('BackToNotesList'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).
-            '</a>';
-        echo '</div>';
+        echo Display::toolbarAction(
+            'add_glossary',
+            [
+                Display::url(
+                    Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
+                    api_get_self().'?'.api_get_cidreq()
+                )
+            ]
+        );
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
         $form->setConstants(['sec_token' => $token]);

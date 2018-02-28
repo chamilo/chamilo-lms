@@ -294,7 +294,7 @@ class DocumentManager
         if (!is_file($full_file_name)) {
             return false;
         }
-        $filename = ($name == '') ? basename($full_file_name) : api_replace_dangerous_char($name);
+        $filename = $name == '' ? basename($full_file_name) : api_replace_dangerous_char($name);
         $len = filesize($full_file_name);
         // Fixing error when file name contains a ","
         $filename = str_replace(',', '', $filename);

@@ -35,7 +35,7 @@ Feature: Work tool
     Then I should see "Upload a document"
     Then I follow "Upload (Simple)"
     Then I should see "File extension"
-    Then I attach the file "css/base.css" to "file"
+    Then I attach the file "web/css/base.css" to "file"
     And I press "Upload"
     And wait for the page to be loaded
     Then I should see "The file has been added to the list of publications"
@@ -59,7 +59,7 @@ Feature: Work tool
 #    And wait for the page to be loaded
 #    Then I follow "Correct and rate"
 #    Then I fill in ckeditor field "comment" with "This is a comment"
-#    Then I attach the file "css/base.css" to "attachment"
+#    Then I attach the file "web/css/base.css" to "attachment"
 #    And I press "Send message"
 #    Then I should see "You comment has been added"
 #    And I should see "Update successful"

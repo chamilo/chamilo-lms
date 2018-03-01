@@ -9667,7 +9667,13 @@ class learnpath
             )
         ];
         $form->addGroup($group, null, get_lang('UplWhatIfFileExists'));
-        $form->setDefaults(['if_exists' => 'rename']);
+
+        $fileExistsOption = api_get_setting('document_if_file_exists_option');
+        $defaultFileExistsOption = 'rename';
+        if (!empty($fileExistsOption)) {
+            $defaultFileExistsOption = $fileExistsOption;
+        }
+        $form->setDefaults(['if_exists' => $defaultFileExistsOption]);
 
         // Check box options
         $form->addElement(

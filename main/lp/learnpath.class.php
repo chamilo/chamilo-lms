@@ -8103,7 +8103,6 @@ class learnpath
 
         $result = Database::query($sql);
         $arrLP = [];
-
         while ($row = Database::fetch_array($result)) {
             $arrLP[] = [
                 'id' => $row['iid'],
@@ -8123,7 +8122,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
         unset($this->arrMenu);
 
         $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&type='.$item_type.'&lp_id='.$this->lp_id;
@@ -8398,7 +8397,7 @@ class learnpath
         }
 
         $this->tree_array($arrLP);
-        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
         unset($this->arrMenu);
 
         if ($action == 'add') {

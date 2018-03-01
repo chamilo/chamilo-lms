@@ -6859,3 +6859,6 @@ input.form-control[type="color"] {
 .badge_sidebar_image_transparency{
     opacity: 0.5;
 }
+
+/* Fixes bootstrap select long text options BT#14082 */
+div.dropdown-menu.open { width: 100%; } ul.dropdown-menu.inner>li>a { white-space: initial; }

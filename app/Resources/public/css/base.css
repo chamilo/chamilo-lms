@@ -6302,10 +6302,12 @@ ul#toolnavbox-two li a.btn{
     position: relative;
     top: -30px;
 }
-panel-image:hover{
+
+.panel-image:hover {
     background-color: #f5f5f5;
 }
-panel-image{
+
+.panel-image {
     display: inline-block;
     width: 100%;
     border: 1px solid #DDD;

@@ -3240,10 +3240,7 @@ EOT;
         $avg_score = 0;
         if (!empty($user_results)) {
             foreach ($user_results as $result) {
-                if (!empty($result['exe_weighting']) && intval(
-                        $result['exe_weighting']
-                    ) != 0
-                ) {
+                if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
                     $score = $result['exe_result'] / $result['exe_weighting'];
                     $avg_score += $score;
                 }
@@ -3432,7 +3429,7 @@ EOT;
      *
      * @param int $question_id
      * @param int $exercise_id
-     * @return int
+     * @return array
      */
     public static function getNumberStudentsFillBlanksAnswerCount(
         $question_id,
@@ -3456,7 +3453,6 @@ EOT;
         );
 
         $arrayCount = [];
-
         foreach ($listFillTheBlankResult as $resultCount) {
             foreach ($resultCount as $index => $count) {
                 //this is only for declare the array index per answer
@@ -3913,41 +3909,6 @@ EOT;
     }
 
     /**
-     * @param string $in_name is the name and the id of the <select>
-     * @param string $in_default default value for option
-     * @param string $in_onchange
-     * @return string the html code of the <select>
-     */
-    public static function displayGroupMenu($in_name, $in_default, $in_onchange = "")
-    {
-        // check the default value of option
-        $tabSelected = [$in_default => " selected='selected' "];
-        $res = "";
-        $res .= "<select name='$in_name' id='$in_name' onchange='".$in_onchange."' >";
-        $res .= "<option value='-1'".$tabSelected["-1"].">-- ".get_lang(
-                'AllGroups'
-            )." --</option>";
-        $res .= "<option value='0'".$tabSelected["0"].">- ".get_lang(
-                'NotInAGroup'
-            )." -</option>";
-        $tabGroups = GroupManager::get_group_list();
-        $currentCatId = 0;
-        for ($i = 0; $i < count($tabGroups); $i++) {
-            $tabCategory = GroupManager::get_category_from_group(
-                $tabGroups[$i]['iid']
-            );
-            if ($tabCategory["id"] != $currentCatId) {
-                $res .= "<option value='-1' disabled='disabled'>".$tabCategory["title"]."</option>";
-                $currentCatId = $tabCategory["id"];
-            }
-            $res .= "<option ".$tabSelected[$tabGroups[$i]["id"]]."style='margin-left:40px' value='".$tabGroups[$i]["id"]."'>".
-                    $tabGroups[$i]["name"]."</option>";
-        }
-        $res .= "</select>";
-        return $res;
-    }
-
-    /**
      * @param int $exe_id
      */
     public static function create_chat_exercise_session($exe_id)
@@ -4302,7 +4263,8 @@ EOT;
         }
 
         if ($show_all_but_expected_answer) {
-            $exercise_content .= "<div class='normal-message'>".get_lang('ExerciseWithFeedbackWithoutCorrectionComment')."</div>";
+            $exercise_content .= "<div class='normal-message'>".
+                get_lang('ExerciseWithFeedbackWithoutCorrectionComment')."</div>";
         }
 
         // Remove audio auto play from questions on results page - refs BT#7939

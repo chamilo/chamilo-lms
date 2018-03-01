@@ -2753,8 +2753,8 @@ class DocumentManager
         $base_work_dir = $sys_course_path.$course_dir;
 
         if (isset($files[$fileKey])) {
-            $upload_ok = process_uploaded_file($files[$fileKey], $show_output);
-            if ($upload_ok) {
+            $uploadOk = process_uploaded_file($files[$fileKey], $show_output);
+            if ($uploadOk) {
                 $new_path = handle_uploaded_document(
                     $course_info,
                     $files[$fileKey],
@@ -2783,8 +2783,8 @@ class DocumentManager
                     }
 
                     return [
-                        'title' => $path,
-                        'url' => $path,
+                        'title' => $files[$fileKey]['name'],
+                        'url' => '#',
                     ];
                 }
 

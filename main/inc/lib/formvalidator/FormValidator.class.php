@@ -1683,15 +1683,20 @@ EOT;
                         $(data.context.children()[index]).parent().wrap(link);
                         // Update file name with new one from Chamilo
                         $(data.context.children()[index]).parent().find('.file_name').html(file.name);
-                        var successMessage = $('<div class=\"col-sm-3\">').html(
+                        var message = $('<div class=\"col-sm-3\">').html(
                             $('<span class=\"message-image-success\"/>').text('".addslashes(get_lang('UplUploadSucceeded'))."')
                         );
-                        $(data.context.children()[index]).parent().append(successMessage);                    
+                        $(data.context.children()[index]).parent().append(message);                    
                     } else if (file.error) {
-                        var error = $('<div class=\"col-sm-3\">').html(
+                        var link = $('<div>')
+                            .attr({class : 'panel-image'})                            ;
+                        $(data.context.children()[index]).parent().wrap(link);
+                        // Update file name with new one from Chamilo
+                        $(data.context.children()[index]).parent().find('.file_name').html(file.name);
+                        var message = $('<div class=\"col-sm-3\">').html(
                             $('<span class=\"message-image-danger\"/>').text(file.error)
                         );
-                        $(data.context.children()[index]).parent().append(error);                        
+                        $(data.context.children()[index]).parent().append(message);
                     }
                 });                
                 $('#dropzone').removeClass('hover');                

@@ -1093,7 +1093,7 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
  * @param int $groupId group.id
  * @param bool $output Optional. If no output not wanted on success, set to false.
  * @param bool $onlyUploadFile
- * @param string $whatIfFileExists
+ * @param string $whatIfFileExists (only works if $onlyUploadFile is false)
  *
  * @return boolean true if it succeeds false otherwise
  */

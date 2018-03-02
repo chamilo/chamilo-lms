@@ -18,7 +18,7 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 class ExtraFieldValue extends Model
 {
     public $type = '';
-    public $columns = array(
+    public $columns = [
         'id',
         'field_id',
         'value',
@@ -26,7 +26,7 @@ class ExtraFieldValue extends Model
         'item_id',
         'created_at',
         'updated_at',
-    );
+    ];
     /** @var ExtraField */
     public $extraField;
 
@@ -100,7 +100,7 @@ class ExtraFieldValue extends Model
 
             $tempKey = str_replace('__persist__', '', $key);
             if (!isset($params[$tempKey])) {
-                $params[$tempKey] = array();
+                $params[$tempKey] = [];
             }
         }
 
@@ -149,6 +149,7 @@ class ExtraFieldValue extends Model
 
             $commentVariable = 'extra_'.$field_variable.'_comment';
             $comment = isset($params[$commentVariable]) ? $params[$commentVariable] : null;
+            $dirPermissions = api_get_permissions_for_new_directories();
 
             switch ($extraFieldInfo['field_type']) {
                 case ExtraField::FIELD_TYPE_TAG:
@@ -231,7 +232,6 @@ class ExtraFieldValue extends Model
                     $em->flush();
                     break;
                 case ExtraField::FIELD_TYPE_FILE_IMAGE:
-                    $dirPermissions = api_get_permissions_for_new_directories();
                     switch ($this->type) {
                         case 'course':
                             $fileDir = api_get_path(SYS_UPLOAD_PATH)."courses/";
@@ -257,7 +257,7 @@ class ExtraFieldValue extends Model
                         mkdir($fileDir, $dirPermissions, true);
                     }
 
-                    if ($value['error'] == 0) {
+                    if (isset($value['error']) && $value['error'] == 0) {
                         //Crop the image to adjust 16:9 ratio
                         $crop = new Image($value['tmp_name']);
                         $crop->crop($params['extra_'.$field_variable.'_crop_result']);
@@ -265,25 +265,23 @@ class ExtraFieldValue extends Model
                         $imageExtraField = new Image($value['tmp_name']);
                         $imageExtraField->resize(400);
                         $imageExtraField->send_image($fileDir.$fileName, -1, 'png');
-                        $newParams = array(
+                        $newParams = [
                             'item_id' => $params['item_id'],
                             'field_id' => $extraFieldInfo['id'],
                             'value' => $fileDirStored.$fileName,
                             'comment' => $comment
-                        );
+                        ];
                         self::save($newParams);
                     }
                     break;
                 case ExtraField::FIELD_TYPE_FILE:
-                    $dirPermissions = api_get_permissions_for_new_directories();
-
                     switch ($this->type) {
                         case 'course':
-                            $fileDir = api_get_path(SYS_UPLOAD_PATH)."courses/";
+                            $fileDir = api_get_path(SYS_UPLOAD_PATH).'courses/';
                             $fileDirStored = "courses/";
                             break;
                         case 'session':
-                            $fileDir = api_get_path(SYS_UPLOAD_PATH)."sessions/";
+                            $fileDir = api_get_path(SYS_UPLOAD_PATH).'sessions/';
                             $fileDirStored = "sessions/";
                             break;
                         case 'user':
@@ -302,14 +300,14 @@ class ExtraFieldValue extends Model
                         mkdir($fileDir, $dirPermissions, true);
                     }
 
-                    if ($value['error'] == 0) {
+                    if (isset($value['error']) && $value['error'] == 0) {
                         moveUploadedFile($value, $fileDir.$fileName);
 
-                        $new_params = array(
+                        $new_params = [
                             'item_id' => $params['item_id'],
                             'field_id' => $extraFieldInfo['id'],
                             'value' => $fileDirStored.$fileName
-                        );
+                        ];
 
                         if ($this->type !== 'session' && $this->type !== 'course') {
                             $new_params['comment'] = $comment;
@@ -326,23 +324,23 @@ class ExtraFieldValue extends Model
                         }
                     }
 
-                    $newParams = array(
+                    $newParams = [
                         'item_id' => $params['item_id'],
                         'field_id' => $extraFieldInfo['id'],
                         'value' => $fieldToSave,
                         'comment' => $comment
-                    );
+                    ];
 
                     self::save($newParams);
 
                     break;
                 default:
-                    $newParams = array(
+                    $newParams = [
                         'item_id' => $params['item_id'],
                         'field_id' => $extraFieldInfo['id'],
                         'value' => $value,
                         'comment' => $comment
-                    );
+                    ];
                     self::save($newParams, $showQuery);
             }
         }

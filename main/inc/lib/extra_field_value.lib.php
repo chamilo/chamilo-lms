@@ -124,10 +124,9 @@ class ExtraFieldValue extends Model
                 continue;
             }
 
+            $value = '';
             if (isset($params['extra_'.$field_variable])) {
                 $value = $params['extra_'.$field_variable];
-            } else {
-                $value = '';
             }
             $extraFieldInfo = $this->getExtraField()->get_handler_field_info_by_field_variable($field_variable);
 
@@ -213,7 +212,6 @@ class ExtraFieldValue extends Model
                         $fieldRelTag->setFieldId($extraFieldInfo['id']);
                         $fieldRelTag->setItemId($params['item_id']);
                         $fieldRelTag->setTagId($tag->getId());
-
                         $em->persist($fieldRelTag);
                     }
 

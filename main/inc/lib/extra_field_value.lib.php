@@ -135,10 +135,9 @@ class ExtraFieldValue extends Model
                 }
             }
 
+            $value = '';
             if (isset($params['extra_'.$field_variable])) {
                 $value = $params['extra_'.$field_variable];
-            } else {
-                $value = '';
             }
 
             $resultsExist[$field_variable] = isset($value) && $value !== '' ? true : false;
@@ -226,7 +225,6 @@ class ExtraFieldValue extends Model
                         $fieldRelTag->setFieldId($extraFieldInfo['id']);
                         $fieldRelTag->setItemId($params['item_id']);
                         $fieldRelTag->setTagId($tag->getId());
-
                         $em->persist($fieldRelTag);
                     }
 

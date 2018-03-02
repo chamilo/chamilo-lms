@@ -90,6 +90,23 @@ class SessionManager
             'send_subscription_notification' => $session->getSendSubscriptionNotification(),
         ];
 
+        // Converted to local values
+        $variables = [
+            'display_start_date',
+            'display_end_date',
+            'access_start_date',
+            'access_end_date',
+            'coach_access_start_date',
+            'coach_access_end_date'
+        ];
+
+        foreach ($variables as $value) {
+            $result[$value."_to_local_time"] = null;
+            if (!empty($result[$value])) {
+                $result[$value."_to_local_time"] = api_get_local_time($result[$value]);
+            }
+        }
+
         return $result;
     }
 
@@ -104,7 +121,8 @@ class SessionManager
      * @param   string  $coachStartDate (YYYY-MM-DD hh:mm:ss)
      * @param   string  $coachEndDate (YYYY-MM-DD hh:mm:ss)
      * @param   integer $sessionCategoryId ID of the session category in which this session is registered
-     * @param   mixed   $coachId If integer, this is the session coach id, if string, the coach ID will be looked for from the user table
+     * @param   mixed   $coachId If int, this is the session coach id,
+     * if string, the coach ID will be looked for from the user table
      * @param   integer $visibility Visibility after end date (0 = read-only, 1 = invisible, 2 = accessible)
      * @param   bool    $fixSessionNameIfExists
      * @param   string  $duration
@@ -138,7 +156,7 @@ class SessionManager
     ) {
         global $_configuration;
 
-        //Check portal limits
+        // Check portal limits
         $access_url_id = 1;
 
         if (api_get_multiple_access_url()) {
@@ -167,10 +185,14 @@ class SessionManager
         if (empty($name)) {
             $msg = get_lang('SessionNameIsRequired');
             return $msg;
-        } elseif (!empty($startDate) && !api_is_valid_date($startDate, 'Y-m-d H:i') && !api_is_valid_date($startDate, 'Y-m-d H:i:s')) {
+        } elseif (!empty($startDate) && !api_is_valid_date($startDate, 'Y-m-d H:i') &&
+            !api_is_valid_date($startDate, 'Y-m-d H:i:s')
+        ) {
             $msg = get_lang('InvalidStartDate');
             return $msg;
-        } elseif (!empty($endDate) && !api_is_valid_date($endDate, 'Y-m-d H:i') && !api_is_valid_date($endDate, 'Y-m-d H:i:s')) {
+        } elseif (!empty($endDate) && !api_is_valid_date($endDate, 'Y-m-d H:i') &&
+            !api_is_valid_date($endDate, 'Y-m-d H:i:s')
+        ) {
             $msg = get_lang('InvalidEndDate');
             return $msg;
         } elseif (!empty($startDate) && !empty($endDate) && $startDate >= $endDate) {
@@ -258,7 +280,6 @@ class SessionManager
 
                 if (!empty($session_id)) {
                     $extraFields['item_id'] = $session_id;
-
                     $sessionFieldValue = new ExtraFieldValue('session');
                     $sessionFieldValue->saveFieldValues($extraFields);
 
@@ -3134,10 +3155,10 @@ class SessionManager
      */
     public static function get_session_category($id)
     {
-        $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+        $table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
         $id = intval($id);
         $sql = "SELECT id, name, date_start, date_end
-                FROM $tbl_session_category
+                FROM $table
                 WHERE id= $id";
         $result = Database::query($sql);
         $num = Database::num_rows($result);
@@ -3154,9 +3175,9 @@ class SessionManager
      */
     public static function get_all_session_category()
     {
-        $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+        $table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
         $id = api_get_current_access_url_id();
-        $sql = 'SELECT * FROM '.$tbl_session_category.'
+        $sql = 'SELECT * FROM '.$table.'
                 WHERE access_url_id = ' . $id.'
                 ORDER BY name ASC';
         $result = Database::query($sql);
@@ -3644,15 +3665,13 @@ class SessionManager
                     $row['access_end_date'] = null;
                 }
 
-                if (
-                    $row['coach_access_start_date'] == '0000-00-00 00:00:00' ||
+                if ($row['coach_access_start_date'] == '0000-00-00 00:00:00' ||
                     $row['coach_access_start_date'] == '0000-00-00'
                 ) {
                     $row['coach_access_start_date'] = null;
                 }
 
-                if (
-                    $row['coach_access_end_date'] == '0000-00-00 00:00:00' ||
+                if ($row['coach_access_end_date'] == '0000-00-00 00:00:00' ||
                     $row['coach_access_end_date'] == '0000-00-00'
                 ) {
                     $row['coach_access_end_date'] = null;
@@ -4131,8 +4150,8 @@ class SessionManager
 
     /**
      * Updates a session status
-     * @param	int 	session id
-     * @param	int 	status
+     * @param int session id
+     * @param int status
      */
     public static function set_session_status($session_id, $status)
     {
@@ -4311,9 +4330,9 @@ class SessionManager
     {
         $session_id = intval($session_id);
         $user_id = intval($user_id);
-        $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
+        $table = Database::get_main_table(TABLE_MAIN_SESSION);
         $sql = "SELECT DISTINCT id
-	         	FROM $session_table
+	         	FROM $table
 	         	WHERE session.id_coach =  '".$user_id."' AND id = '$session_id'";
         $result = Database::query($sql);
         if ($result && Database::num_rows($result)) {
@@ -4532,8 +4551,8 @@ class SessionManager
      *  false: if session exists a new session will be created adding a counter session1, session2, etc
      * @param int $defaultUserId
      * @param mixed $logger
-     * @param array $extraFields convert a file row to an extra field. Example in CSV file there's a SessionID then it will
-     * converted to extra_external_session_id if you set this: array('SessionId' => 'extra_external_session_id')
+     * @param array $extraFields convert a file row to an extra field. Example in CSV file there's a SessionID
+     * then it will converted to extra_external_session_id if you set: array('SessionId' => 'extra_external_session_id')
      * @param string $extraFieldId
      * @param int $daysCoachAccessBeforeBeginning
      * @param int $daysCoachAccessAfterBeginning
@@ -7567,7 +7586,7 @@ class SessionManager
             $sessionList = [];
             $sessionList[] = '';
             foreach ($sessions as $session) {
-                $sessionList[$session['id']] = $session['name'];
+                $sessionList[$session['id']] = strip_tags($session['name']);
             }
 
             $form->addSelect(
@@ -7623,7 +7642,7 @@ class SessionManager
             'id' => 'access',
         ));
 
-        $form->addHtml('<div id="duration" style="display:none">');
+        $form->addHtml('<div id="duration_div" style="display:none">');
 
         $form->addElement(
             'number',

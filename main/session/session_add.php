@@ -84,7 +84,6 @@ $xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = "
 <script>
-
 $(document).ready( function() {
     accessSwitcher(0);
 });
@@ -102,11 +101,10 @@ function accessSwitcher(accessFromReady) {
     }
 
     if (access == 1) {
-        $('#duration').hide();
+        $('#duration_div').hide();
         $('#date_fields').show();
     } else {
-
-        $('#duration').show();
+        $('#duration_div').show();
         $('#date_fields').hide();
     }
     emptyDuration();
@@ -139,13 +137,14 @@ $form->addElement('header', $tool_name);
 $result = SessionManager::setForm($form);
 
 $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php';
+$urlUpload = api_get_path(WEB_UPLOAD_PATH);
+$sysUploadPath = api_get_path(SYS_UPLOAD_PATH);
 $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
 
 $htmlHeadXtra[] ="
 <script>
 $(function() {
     ".$result['js']."
-
     $('#system_template').on('change', function() {
         var sessionId = $(this).find('option:selected').val();
 
@@ -168,13 +167,48 @@ $(function() {
                 if (data.duration > 0) {
                     $('#access').val(0);
                     $('#access').selectpicker('render');
-                    $('#duration').val(data.duration);
+                    accessSwitcher(0);
+                    $('#duration').val(parseInt(data.duration));                    
+                } else {                    
+                    $('#access').val(1);
+                    $('#access').selectpicker('render');
+                    accessSwitcher(1);
+                    
+                    var variables = [
+                        'display_start_date',
+                        'access_start_date',
+                        'coach_access_start_date',
+                        'display_end_date',
+                        'access_end_date',
+                        'coach_access_end_date'                        
+                    ];                    
+                    variables.forEach(function(variable) {
+                        var variableName = variable + '_to_local_time';                        
+                        if (data[variableName]) {                        
+                            var parsedDate = $.datepicker.parseDateTime(
+                                'yy-mm-dd', 
+                                'hh:mm:ss', 
+                                data[variableName]
+                            );         
+                            if (parsedDate) {
+                                $('#'+variable).datetimepicker('setDate', parsedDate);
+                            }           
+                        }
+                    });
                 }
+                
+                $('[name=\'show_description\']').prop('checked', false);
+                if (data.show_description) {
+                    $('[name=\'show_description\']').prop('checked', true);
+                }
+                
+                $('[name=\'send_subscription_notification\']').prop('checked', false);
+                if (data.send_subscription_notification) {
+                    $('[name=\'send_subscription_notification\']').prop('checked', true);
+                } 
 
                 $.each(data.extra_fields, function(i, item) {
-                    var fieldName = 'extra_'+item.variable; 
-                                
-
+                    var fieldName = 'extra_'+item.variable;
                     /*
                     const FIELD_TYPE_TEXT = 1;
                     const FIELD_TYPE_TEXTAREA = 2;
@@ -227,10 +261,8 @@ $(function() {
                             // item.value has format : 85::86
                             if (item.value) {
                                 var values = item.value.split('::');
-
                                 var firstFieldId = values[0];
                                 var secondFieldId = values[1];
-
                                 $('#'+first+'').val(firstFieldId);
                                 $('#'+first+'').selectpicker('render');
 
@@ -262,7 +294,6 @@ $(function() {
                             }
                             break;
                         case '10': // tags
-
                              // Remove all options
                             $('#'+fieldName+' option').each(function(i, optionItem) {
                                 $(this).remove();
@@ -294,6 +325,27 @@ $(function() {
                                $('[name=\''+check+'\']').prop('checked', true);
                             }
                             break;
+                        case '16':
+                            if (item.value) {
+                                //    $('input[name='+fieldName+']').val(item.value);
+                                var url = '".$urlUpload."';
+                                
+                                url = url + item.value;
+                                
+                                var divFormGroup = fieldName + '-form-group';
+                                var divWrapper = fieldName + '_crop_image';
+                                var divPreview = fieldName + '_preview_image';
+                                var divCropButton = fieldName + '_crop_button';
+                                var cropResult = fieldName + '_crop_result';
+                                                                
+                                $('[name=\''+cropResult+'\']').val('import_file_from_session::' + sessionId);
+                                $('#' + divFormGroup).show();
+                                $('#' + divWrapper).show();
+                                $('#' + divCropButton).hide();
+                                $('#' + divPreview).attr('src', url);                                
+                                //$('[name=\''+fieldName+'\']')
+                            }
+                            break;
                     }
                 });
             }
@@ -315,7 +367,6 @@ $form->setDefaults($formDefaults);
 
 if ($form->validate()) {
     $params = $form->getSubmitValues();
-
     $name = $params['name'];
     $startDate = $params['access_start_date'];
     $endDate = $params['access_end_date'];
@@ -342,8 +393,31 @@ if ($form->validate()) {
         }
     }
 
-    if (isset($extraFields['extra_image']) && $isThisImageCropped) {
+    if (isset($extraFields['extra_image']) && !empty($extraFields['extra_image']['name']) && $isThisImageCropped) {
         $extraFields['extra_image']['crop_parameters'] = $params['picture_crop_result'];
+    }
+
+    // Check if the session image will be copied from the template
+    $importImageFromSession = false;
+    $sessionIdToImport = explode('::', $params['extra_image_crop_result']);
+    $sessionIdToImport = isset($sessionIdToImport[1]) ? (int) $sessionIdToImport[1] : 0;
+    if (!empty($sessionIdToImport)) {
+        $extraField = new ExtraField('session');
+        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable('image');
+
+        $extraFieldValue = new ExtraFieldValue('session');
+        $extraFieldValueData = $extraFieldValue->get_values_by_handler_and_field_id(
+            $sessionIdToImport,
+            $extraFieldInfo['id']
+        );
+
+        if ($extraFieldValueData && file_exists($sysUploadPath.$extraFieldValueData['value'])) {
+            $extraFields['extra_image']['name'] = basename($extraFieldValueData['value']);
+            $extraFields['extra_image']['tmp_name'] = $sysUploadPath.$extraFieldValueData['value'];
+            $extraFields['extra_image']['type'] = 'image/png';
+            $extraFields['extra_image']['error'] = 0;
+            $extraFields['extra_image']['size'] = filesize($sysUploadPath.$extraFieldValueData['value']);
+        }
     }
 
     $return = SessionManager::create_session(

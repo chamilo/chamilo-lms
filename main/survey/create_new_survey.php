@@ -118,7 +118,7 @@ $survey_code = $form->addElement(
 );
 
 if ($_GET['action'] == 'edit') {
-    //$survey_code->freeze();
+    $survey_code->freeze();
     $form->applyFilter('survey_code', 'api_strtoupper');
 }
 

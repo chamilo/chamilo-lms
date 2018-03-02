@@ -57,7 +57,7 @@ class HTML_QuickForm_Rule_Compare extends HTML_QuickForm_Rule
     * @param  string     operator name
     * @return string     operator to use for validation
     */
-    function _findOperator($name)
+    public function _findOperator($name)
     {
         $name = trim($name);
         if (empty($name)) {
@@ -79,12 +79,38 @@ class HTML_QuickForm_Rule_Compare extends HTML_QuickForm_Rule
     public function validate($values, $operator = null)
     {
         $operator = $this->_findOperator($operator);
+
+        $a = $values[0];
+        $b = $values[1];
+
         if ('===' != $operator && '!==' != $operator) {
-            $compareFn = create_function('$a, $b', 'return floatval($a) ' . $operator . ' floatval($b);');
+            $a = floatval($a);
+            $b = floatval($b);
         } else {
-            $compareFn = create_function('$a, $b', 'return strval($a) ' . $operator . ' strval($b);');
+            $a = strval($a);
+            $b = strval($b);
         }
-        return $compareFn($values[0], $values[1]);
+
+        switch ($operator) {
+            case '===':
+                return $a === $b;
+                break;
+            case '!==':
+                return $a !== $b;
+                break;
+            case '>':
+                return $a > $b;
+                break;
+            case '>=':
+                return $a >= $b;
+                break;
+            case '<':
+                return $a < $b;
+                break;
+            case '<=':
+                return $a <= $b;
+                break;
+        }
     }
 
     public function getValidationScript($operator = null)

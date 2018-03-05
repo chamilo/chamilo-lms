@@ -173,6 +173,7 @@ class Exercise
             $this->results_disabled = $object->results_disabled;
             $this->attempts = $object->max_attempt;
             $this->feedback_type = $object->feedback_type;
+            $this->sessionId = $object->session_id;
             $this->propagate_neg = $object->propagate_neg;
             $this->saveCorrectAnswers = $object->save_correct_answers;
             $this->randomByCat = $object->random_by_category;

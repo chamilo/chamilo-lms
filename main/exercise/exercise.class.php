@@ -124,6 +124,7 @@ class Exercise
         }
         $this->course_id = $course_info['real_id'];
         $this->course = $course_info;
+        $this->sessionId = api_get_session_id();
 
         // ALTER TABLE c_quiz_question ADD COLUMN feedback text;
         $this->questionFeedbackEnabled = api_get_configuration_value('allow_quiz_question_feedback');

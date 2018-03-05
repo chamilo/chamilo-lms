@@ -124,6 +124,7 @@ class Exercise
         }
         $this->course_id = $course_info['real_id'];
         $this->course = $course_info;
+        $this->sessionId = api_get_session_id();
 
         // ALTER TABLE c_quiz_question ADD COLUMN feedback text;
         $this->questionFeedbackEnabled = api_get_configuration_value('allow_quiz_question_feedback');
@@ -172,6 +173,7 @@ class Exercise
             $this->results_disabled = $object->results_disabled;
             $this->attempts = $object->max_attempt;
             $this->feedback_type = $object->feedback_type;
+            $this->sessionId = $object->session_id;
             $this->propagate_neg = $object->propagate_neg;
             $this->saveCorrectAnswers = $object->save_correct_answers;
             $this->randomByCat = $object->random_by_category;

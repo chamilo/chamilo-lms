@@ -57,7 +57,7 @@ $formToDisplay = '';
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/skill.php', 'name' => get_lang('ManageSkillsLevels')];
-$interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('Level')];
+$interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('SkillLevel')];
 
 switch ($action) {
     case 'add':
@@ -75,8 +75,10 @@ switch ($action) {
                     $em->flush();
                     Display::addFlash(Display::return_message(get_lang('Added')));
                 } else {
-                    Display::addFlash(Display::return_message(get_lang('YouNeedToCreateASkillProfile')));
+                    Display::addFlash(Display::return_message(get_lang('Added')));
                 }
+            } else {
+                Display::addFlash(Display::return_message(get_lang('YouNeedToCreateASkillProfile')));
             }
             header('Location: '.$listAction);
             exit;

@@ -868,7 +868,6 @@ class ImportCsv
                     $this->logger->addInfo("external_sessionID: ".$externalSessionId." does not exists.");
                 }
                 $teacherId = null;
-
                 if (!empty($sessionId) && !empty($courseInfo)) {
                     $courseIncluded = SessionManager::relation_session_course_exist(
                         $sessionId,
@@ -944,9 +943,7 @@ class ImportCsv
             }
 
             if (empty($eventsToCreate)) {
-                $this->logger->addInfo(
-                    "No events to add"
-                );
+                $this->logger->addInfo("No events to add");
 
                 return 0;
             }
@@ -1043,6 +1040,34 @@ class ImportCsv
                             $itemProperty->setCourse($courseEntity);
                             $em->persist($itemProperty);
                             $em->flush();
+                        }
+                    }
+                    $this->logger->addInfo('Move from course #'.$calendarEvent->getCId().' to #'.$courseInfo['real_id']);
+
+                    // Checking if session still exists
+                    $calendarSessionId = (int) $calendarEvent->getSessionId();
+                    if (!empty($calendarSessionId)) {
+                        $calendarSessionInfo = api_get_session_info($calendarSessionId);
+                        if (empty($calendarSessionInfo)) {
+                            $calendarId = (int) $calendarEvent->getIid();
+
+                            // Delete calendar events because the session was deleted!
+                            $this->logger->addInfo(
+                                "Delete event # $calendarId because session # $calendarSessionId doesn't exist"
+                            );
+
+                            $sql = "DELETE FROM c_calendar_event 
+                                    WHERE iid = $calendarId AND session_id = $calendarSessionId";
+                            Database::query($sql);
+                            $this->logger->addInfo($sql);
+
+                            $sql = "DELETE FROM c_item_property 
+                                    WHERE 
+                                        tool = 'calendar_event' AND 
+                                        ref = $calendarSessionId AND 
+                                        session_id = $calendarSessionId";
+                            Database::query($sql);
+                            $this->logger->addInfo($sql);
                         }
                     }
                 } else {

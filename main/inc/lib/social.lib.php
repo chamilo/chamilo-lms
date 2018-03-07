@@ -1434,7 +1434,7 @@ class SocialManager extends UserManager
         $messageId,
         $fileComment = ''
     ) {
-        $tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
+        $table = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
         // create directory
         $social = '/social/';
@@ -1475,7 +1475,7 @@ class SocialManager extends UserManager
                 'message_id' => $messageId,
                 'size' => $fileAttach['size'],
             ];
-            Database::insert($tbl_message_attach, $params);
+            Database::insert($table, $params);
             $flag = true;
         }
 

@@ -682,13 +682,13 @@ if ($allowToEdit && api_get_group_id() == 0) {
         if (!isset($_GET['action']) ||
             isset($_GET['action']) && $_GET['action'] == 'list'
         ) {
-            $actionsLeft .= "<a href=\"" . api_get_self() . "?" . api_get_cidreq() . "&action=delete_all\" onclick=\"javascript:if(!confirm('" . get_lang("ConfirmYourChoice") . "')) return false;\">" .
+            $actionsLeft .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('" . get_lang("ConfirmYourChoice") . "')) return false;\">" .
                 Display::return_icon(
                     'delete_announce.png',
                     get_lang('AnnouncementDeleteAll'),
                     '',
                     ICON_SIZE_MEDIUM
-                ) . "</a>";
+                )."</a>";
         }
     }
 }

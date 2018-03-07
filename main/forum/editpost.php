@@ -48,9 +48,10 @@ $origin = api_get_origin();
 
 // We are getting all the information about the current forum and forum category.
 // Note pcool: I tried to use only one sql statement (and function) for this,
-// but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
-$current_thread = get_thread_information($_GET['forum'], $_GET['thread']);
-$current_forum = get_forum_information($_GET['forum']);
+// but the problem is that the visibility of the forum AND forum category are stored in the item_property table.
+$forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
+$current_thread = get_thread_information($forumId, $_GET['thread']);
+$current_forum = get_forum_information($forumId);
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 $current_post = get_post_information($_GET['post']);
 if (empty($current_post)) {
@@ -83,7 +84,7 @@ if ($origin == 'group') {
         'name' => get_lang('GroupSpace').' '.$group_properties['name'],
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId,
         'name' => prepare4display($current_forum['forum_title']),
     ];
     $interbreadcrumb[] = ['url' => 'javascript: void (0);', 'name' => get_lang('EditPost')];
@@ -97,11 +98,11 @@ if ($origin == 'group') {
         'name' => prepare4display($current_forum_category['cat_title'])
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.intval($_GET['forum']).'&'.api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq(),
         'name' => prepare4display($current_forum['forum_title'])
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&thread='.intval($_GET['thread']),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.intval($_GET['thread']),
         'name' => prepare4display($current_thread['thread_title'])
     ];
     $interbreadcrumb[] = ['url' => 'javascript: void (0);', 'name' => get_lang('EditPost')];
@@ -197,7 +198,7 @@ if ($origin != 'learnpath') {
             ).
             '</a>';
     }
-    echo '<a href="viewforum.php?forum='.intval($_GET['forum']).'&'.api_get_cidreq().'">'.
+    echo '<a href="viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'">'.
         Display::return_icon(
             'forum.png',
             get_lang('BackToForum'),

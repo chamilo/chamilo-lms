@@ -1298,7 +1298,6 @@ class Agenda
                         }
                     }
                 }
-
                 break;
         }
 

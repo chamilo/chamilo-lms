@@ -868,7 +868,6 @@ class ImportCsv
                     $this->logger->addInfo("external_sessionID: ".$externalSessionId." does not exists.");
                 }
                 $teacherId = null;
-
                 if (!empty($sessionId) && !empty($courseInfo)) {
                     $courseIncluded = SessionManager::relation_session_course_exist(
                         $sessionId,
@@ -944,9 +943,7 @@ class ImportCsv
             }
 
             if (empty($eventsToCreate)) {
-                $this->logger->addInfo(
-                    "No events to add"
-                );
+                $this->logger->addInfo("No events to add");
 
                 return 0;
             }
@@ -1043,6 +1040,34 @@ class ImportCsv
                             $itemProperty->setCourse($courseEntity);
                             $em->persist($itemProperty);
                             $em->flush();
+                        }
+                    }
+                    $this->logger->addInfo('Move from course #'.$calendarEvent->getCId().' to #'.$courseInfo['real_id']);
+
+                    // Checking if session still exists
+                    $calendarSessionId = (int) $calendarEvent->getSessionId();
+                    if (!empty($calendarSessionId)) {
+                        $calendarSessionInfo = api_get_session_info($calendarSessionId);
+                        if (empty($calendarSessionInfo)) {
+                            $calendarId = (int) $calendarEvent->getIid();
+
+                            // Delete calendar events because the session was deleted!
+                            $this->logger->addInfo(
+                                "Delete event # $calendarId because session # $calendarSessionId doesn't exist"
+                            );
+
+                            $sql = "DELETE FROM c_calendar_event 
+                                    WHERE iid = $calendarId AND session_id = $calendarSessionId";
+                            Database::query($sql);
+                            $this->logger->addInfo($sql);
+
+                            $sql = "DELETE FROM c_item_property 
+                                    WHERE 
+                                        tool = 'calendar_event' AND 
+                                        ref = $calendarSessionId AND 
+                                        session_id = $calendarSessionId";
+                            Database::query($sql);
+                            $this->logger->addInfo($sql);
                         }
                     }
                 } else {
@@ -1220,7 +1245,9 @@ class ImportCsv
                                 $this->defaultAdminId
                             );
                         } else {
-                            $this->logger->addError("Error when trying to add announcement with title ".$subject." here: $info");
+                            $this->logger->addError(
+                                "Error when trying to add announcement with title ".$subject." here: $info"
+                            );
                         }
                     } else {
                         $report['mail_not_sent_announcement_exists']++;
@@ -1274,7 +1301,8 @@ class ImportCsv
                                 ];
                                 $extraFieldValue->update($params);
                                 $this->logger->addInfo(
-                                    'Updating calendar extra field #'.$extraFieldValueItem['id'].' new item_id: '.$eventId.' old item_id: '.$item['item_id']
+                                    'Updating calendar extra field #'.$extraFieldValueItem['id'].' 
+                                    new item_id: '.$eventId.' old item_id: '.$item['item_id']
                                 );
                             }
                         } else {
@@ -2520,6 +2548,7 @@ class ImportCsv
                     $name = $row['CourseName'];
                     $notes = $row['Notes'];
                     $groupValue = $row['Group'];
+                    $boxColumn = $row['Column'];
                     $rowValue = $row['Row'];
                     $color = isset($row['DefinedColor']) ? $row['DefinedColor'] : '';
                     $arrow = isset($row['DrawArrowFrom']) ? $row['DrawArrowFrom'] : '';
@@ -2537,12 +2566,11 @@ class ImportCsv
                         $current->setAttribute('Notes', $notes);
                         $current->setAttribute('Row', $rowValue);
                         $current->setAttribute('Group', $groupValue);
+                        $current->setAttribute('Column', $boxColumn);
                         $current->setAttribute('DrawArrowFrom', $arrow);
                         $current->setAttribute('SubGroup', $subGroup);
                         $current->setAttribute('Connections', $connections);
                         $current->setAttribute('LinkedElement', $linkedElement);
-
-                        //$current->setAttribute('graphviz.color', 'blue');
                         $current->setAttribute('graphviz.shape', 'box');
                         $current->setGroup($column);
                     }

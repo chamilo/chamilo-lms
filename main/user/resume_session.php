@@ -238,8 +238,7 @@ if ($allowTutors === 'true') {
         $result = Database::query($sql);
         $courses = Database::store_result($result);
         foreach ($courses as $course) {
-            //select the number of users
-
+            // Select the number of users
             $sql = "SELECT count(*) FROM $tbl_session_rel_user sru, $tbl_session_rel_course_rel_user srcru
                     WHERE
                         srcru.user_id = sru.user_id AND

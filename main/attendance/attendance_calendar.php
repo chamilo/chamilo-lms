@@ -29,7 +29,6 @@ if (!$is_locked_attendance || api_is_platform_admin()) {
 }
 
 $message_information = get_lang('AttendanceCalendarDescription');
-
 if (!empty($message_information)) {
     $message = '<strong>'.get_lang('Information').'</strong><br />';
     $message .= $message_information;

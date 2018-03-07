@@ -2410,7 +2410,7 @@ class Display
         $style = !in_array($type, $typeList) ? 'default' : $type;
 
         if (!empty($id)) {
-            $id = " id = $id ";
+            $id = " id='$id'";
         }
 
         return '

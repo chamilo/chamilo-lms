@@ -4,8 +4,8 @@
 /**
  * @package chamilo.survey
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
- * @version $Id: question.php 21734 2009-07-02 17:12:41Z cvargas1 $
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
+ * refactoring and rewriting large parts of the code
  */
 
 require_once __DIR__.'/../inc/global.inc.php';

@@ -117,9 +117,27 @@ if (Security::check_token('post') && (
         $form->addGroup($group, '', get_lang('SelectOptionForBackup'));
 
         $group = [];
-        $group[] = $form->createElement('radio', 'same_file_name_option', null, get_lang('SameFilenameSkip'), FILE_SKIP);
-        $group[] = $form->createElement('radio', 'same_file_name_option', null, get_lang('SameFilenameRename'), FILE_RENAME);
-        $group[] = $form->createElement('radio', 'same_file_name_option', null, get_lang('SameFilenameOverwrite'), FILE_OVERWRITE);
+        $group[] = $form->createElement(
+            'radio',
+            'same_file_name_option',
+            null,
+            get_lang('SameFilenameSkip'),
+            FILE_SKIP
+        );
+        $group[] = $form->createElement(
+            'radio',
+            'same_file_name_option',
+            null,
+            get_lang('SameFilenameRename'),
+            FILE_RENAME
+        );
+        $group[] = $form->createElement(
+            'radio',
+            'same_file_name_option',
+            null,
+            get_lang('SameFilenameOverwrite'),
+            FILE_OVERWRITE
+        );
         $form->addGroup($group, '', get_lang('SameFilename'));
         $form->addProgress();
         $form->addButtonSave(get_lang('CopyCourse'));

@@ -48,7 +48,7 @@ class AttendanceController
         if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST') {
             if (!empty($_POST['title'])) {
                 $check = Security::check_token();
-                $last_id = 0;
+                $attendanceId = 0;
                 if ($check) {
                     $attendance->set_name($_POST['title']);
                     $attendance->set_description($_POST['description']);
@@ -366,13 +366,28 @@ class AttendanceController
                 $my_calendar_id,
                 $groupId
             );
-            $data['attendant_calendar_all'] = $attendance->get_attendance_calendar($attendance_id, 'all', null, $groupId);
+            $data['attendant_calendar_all'] = $attendance->get_attendance_calendar(
+                $attendance_id,
+                'all',
+                null,
+                $groupId
+            );
             $data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id, 0, $groupId);
             $data['next_attendance_calendar_id'] = $attendance->get_next_attendance_calendar_id($attendance_id);
             $data['next_attendance_calendar_datetime'] = $attendance->getNextAttendanceCalendarDatetime($attendance_id);
         } else {
-            $data['attendant_calendar_all'] = $attendance->get_attendance_calendar($attendance_id, 'all', null, $groupId);
-            $data['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id, $filter_type, null, $groupId);
+            $data['attendant_calendar_all'] = $attendance->get_attendance_calendar(
+                $attendance_id,
+                'all',
+                null,
+                $groupId
+            );
+            $data['attendant_calendar'] = $attendance->get_attendance_calendar(
+                $attendance_id,
+                $filter_type,
+                null,
+                $groupId
+            );
         }
 
         $data['edit_table'] = intval($edit);

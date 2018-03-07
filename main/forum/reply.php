@@ -40,10 +40,12 @@ $threadId = isset($_GET['thread']) ? (int) $_GET['thread'] : 0;
 /* Retrieving forum and forum categorie information */
 // We are getting all the information about the current forum and forum category.
 // Note pcool: I tried to use only one sql statement (and function) for this,
-// but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
-$current_thread = get_thread_information($forumId, $threadId); // Note: This has to be validated that it is an existing thread.
-$current_forum = get_forum_information($current_thread['forum_id']); // Note: This has to be validated that it is an existing forum.
-$current_forum_category = get_forumcategory_information(Security::remove_XSS($current_forum['forum_category']));
+// but the problem is that the visibility of the forum AND forum category are stored in the item_property table.
+// Note: This has to be validated that it is an existing thread.
+$current_thread = get_thread_information($forumId, $threadId);
+// Note: This has to be validated that it is an existing forum.
+$current_forum = get_forum_information($current_thread['forum_id']);
+$current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 
 /* Is the user allowed here? */
 // The user is not allowed here if
@@ -58,7 +60,8 @@ if (!api_is_allowed_to_edit(false, true) &&
     api_not_allowed(true);
 }
 if (!api_is_allowed_to_edit(false, true) &&
-    (($current_forum_category && $current_forum_category['locked'] <> 0) || $current_forum['locked'] <> 0 || $current_thread['locked'] <> 0)
+    (($current_forum_category && $current_forum_category['locked'] <> 0) ||
+        $current_forum['locked'] <> 0 || $current_thread['locked'] <> 0)
 ) {
     api_not_allowed(true);
 }

@@ -112,7 +112,6 @@ $(document).ready(function() {
 </script>';
 
 $htmlHeadXtra[] = '<script>
-
 function datetime_by_attendance(attendance_id, thematic_advance_id) {
 	$.ajax({
 		contentType: "application/x-www-form-urlencoded",
@@ -213,16 +212,31 @@ if ($action == 'thematic_plan_list' || $action == 'thematic_plan_delete') {
     }
 }
 if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
-    $interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl, 'name' => get_lang('ThematicControl')];
-    $interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic_id, 'name' => get_lang('ThematicPlan').' ('.$cleanThematicTitle.')'];
+    $interbreadcrumb[] = [
+        'url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl,
+        'name' => get_lang('ThematicControl'),
+    ];
+    $interbreadcrumb[] = [
+        'url' => 'index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic_id,
+        'name' => get_lang('ThematicPlan').' ('.$cleanThematicTitle.')',
+    ];
 }
 if ($action == 'thematic_advance_list' || $action == 'thematic_advance_delete') {
-    $interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl, 'name' => get_lang('ThematicControl')];
+    $interbreadcrumb[] = [
+        'url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl,
+        'name' => get_lang('ThematicControl'),
+    ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('ThematicAdvance').' ('.$cleanThematicTitle.')'];
 }
 if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
-    $interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl, 'name' => get_lang('ThematicControl')];
-    $interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic_id, 'name' => get_lang('ThematicAdvance').' ('.$cleanThematicTitle.')'];
+    $interbreadcrumb[] = [
+        'url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl,
+        'name' => get_lang('ThematicControl'),
+    ];
+    $interbreadcrumb[] = [
+        'url' => 'index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic_id,
+        'name' => get_lang('ThematicAdvance').' ('.$cleanThematicTitle.')',
+    ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewThematicAdvance')];
 }
 

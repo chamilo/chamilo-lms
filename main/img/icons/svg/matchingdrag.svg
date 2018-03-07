@@ -14,77 +14,11 @@
    height="124"
    id="svg7613"
    version="1.1"
-viewBox="0 0 124 124"
-   inkscape:version="0.91 r"
+   viewBox="0 0 124 124"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="matchingdrag.svg">
   <defs
      id="defs7615">
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient4799"
-       id="radialGradient7559"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.55758631,0,0,0.57073983,33.783815,180.81737)"
-       cx="55.21796"
-       cy="458.46527"
-       fx="55.21796"
-       fy="458.46527"
-       r="15.213428" />
-    <linearGradient
-       id="linearGradient4799">
-      <stop
-         style="stop-color:#ffde00;stop-opacity:1;"
-         offset="0"
-         id="stop4801" />
-      <stop
-         style="stop-color:#ffa700;stop-opacity:1;"
-         offset="1"
-         id="stop4803" />
-    </linearGradient>
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient4799-9"
-       id="radialGradient7557"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.55758631,0,0,0.57073983,104.95785,180.81737)"
-       cx="55.21796"
-       cy="458.46527"
-       fx="55.21796"
-       fy="458.46527"
-       r="15.213428" />
-    <linearGradient
-       id="linearGradient4799-9">
-      <stop
-         style="stop-color:#ffde00;stop-opacity:1;"
-         offset="0"
-         id="stop4801-0" />
-      <stop
-         style="stop-color:#ffa700;stop-opacity:1;"
-         offset="1"
-         id="stop4803-9" />
-    </linearGradient>
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient4799-6"
-       id="radialGradient7511"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.55758631,0,0,0.57073983,176.13186,180.81737)"
-       cx="55.21796"
-       cy="458.46527"
-       fx="55.21796"
-       fy="458.46527"
-       r="15.213428" />
-    <linearGradient
-       id="linearGradient4799-6">
-      <stop
-         style="stop-color:#ffde00;stop-opacity:1;"
-         offset="0"
-         id="stop4801-8" />
-      <stop
-         style="stop-color:#ffa700;stop-opacity:1;"
-         offset="1"
-         id="stop4803-96" />
-    </linearGradient>
     <radialGradient
        inkscape:collect="always"
        xlink:href="#linearGradient4799-2"
@@ -115,16 +49,16 @@ viewBox="0 0 124 124"
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.0124747"
-     inkscape:cx="90.491703"
-     inkscape:cy="45.49601"
+     inkscape:zoom="1.7721774"
+     inkscape:cx="102.74104"
+     inkscape:cy="77.210913"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1051"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-width="1323"
+     inkscape:window-height="744"
+     inkscape:window-x="43"
+     inkscape:window-y="24"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata7618">
@@ -134,7 +68,7 @@ viewBox="0 0 124 124"
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -147,9 +81,9 @@ viewBox="0 0 124 124"
        id="matching"
        transform="matrix(1.9374998,0,0,1.9374998,-510.30104,172.66905)"
        inkscape:label="#g6870"
-       inkscape:export-filename="/var/www/chamilo/main/img/icons/128/matchingdrag_na.png"
-       inkscape:export-xdpi="92.903229"
-       inkscape:export-ydpi="92.903229">
+       inkscape:export-filename="/var/www/chamilo11/main/img/icons/22/matchingdrag.png"
+       inkscape:export-xdpi="15.967743"
+       inkscape:export-ydpi="15.967743">
       <rect
          style="opacity:0;fill:#ffffff;fill-opacity:1;stroke:none"
          id="rect4392"

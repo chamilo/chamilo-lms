@@ -561,7 +561,6 @@ class Career extends Model
                                 ['Left', 'Right']
                             );
                         }
-
                     }
                 }
             }
@@ -609,15 +608,15 @@ class Career extends Model
             </style>
             ';
 
-                /*$graphHtml .= '<script>
-                jsPlumb.ready(function() {
-                    jsPlumb.addGroup({
-                      el:".subgroup_1",
-                      id:"aGroup"
-                    });
-                });
-                </script>
-                ';*/
+        /*$graphHtml .= '<script>
+        jsPlumb.ready(function() {
+            jsPlumb.addGroup({
+              el:".subgroup_1",
+              id:"aGroup"
+            });
+        });
+        </script>
+        ';*/
 
         return $graphHtml;
     }
@@ -666,7 +665,7 @@ class Career extends Model
                 }
             }
 
-            if (!empty($newGroup))  {
+            if (!empty($newGroup)) {
                 $graphHtml .= '<div 
                     id ="group_'.$newGroup.'"
                     class="group'.$newGroup.' group_class" 
@@ -692,7 +691,6 @@ class Career extends Model
             if (!empty($newGroup)) {
                 $graphHtml .= '</div >';
             }
-
         }
         return $graphHtml;
     }
@@ -791,7 +789,6 @@ class Career extends Model
                     $defaultArrow
                 );
             }
-
         }
         return $graphHtml;
     }

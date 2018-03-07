@@ -22,7 +22,7 @@ class WebServiceSettingsSchema extends AbstractSettingsSchema
         $builder
             ->setDefaults(
                 [
-                    'decode_utf8' => 'false',
+                    'decode_utf8' => 'true',
                     'messaging_allow_send_push_notification' => 'false',
                     'messaging_gdc_project_number' => '',
                     'messaging_gdc_api_key' => '',

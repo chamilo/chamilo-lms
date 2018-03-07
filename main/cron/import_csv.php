@@ -1220,7 +1220,9 @@ class ImportCsv
                                 $this->defaultAdminId
                             );
                         } else {
-                            $this->logger->addError("Error when trying to add announcement with title ".$subject." here: $info");
+                            $this->logger->addError(
+                                "Error when trying to add announcement with title ".$subject." here: $info"
+                            );
                         }
                     } else {
                         $report['mail_not_sent_announcement_exists']++;
@@ -1274,7 +1276,8 @@ class ImportCsv
                                 ];
                                 $extraFieldValue->update($params);
                                 $this->logger->addInfo(
-                                    'Updating calendar extra field #'.$extraFieldValueItem['id'].' new item_id: '.$eventId.' old item_id: '.$item['item_id']
+                                    'Updating calendar extra field #'.$extraFieldValueItem['id'].' 
+                                    new item_id: '.$eventId.' old item_id: '.$item['item_id']
                                 );
                             }
                         } else {
@@ -2520,6 +2523,7 @@ class ImportCsv
                     $name = $row['CourseName'];
                     $notes = $row['Notes'];
                     $groupValue = $row['Group'];
+                    $boxColumn = $row['Column'];
                     $rowValue = $row['Row'];
                     $color = isset($row['DefinedColor']) ? $row['DefinedColor'] : '';
                     $arrow = isset($row['DrawArrowFrom']) ? $row['DrawArrowFrom'] : '';
@@ -2537,12 +2541,11 @@ class ImportCsv
                         $current->setAttribute('Notes', $notes);
                         $current->setAttribute('Row', $rowValue);
                         $current->setAttribute('Group', $groupValue);
+                        $current->setAttribute('Column', $boxColumn);
                         $current->setAttribute('DrawArrowFrom', $arrow);
                         $current->setAttribute('SubGroup', $subGroup);
                         $current->setAttribute('Connections', $connections);
                         $current->setAttribute('LinkedElement', $linkedElement);
-
-                        //$current->setAttribute('graphviz.color', 'blue');
                         $current->setAttribute('graphviz.shape', 'box');
                         $current->setGroup($column);
                     }

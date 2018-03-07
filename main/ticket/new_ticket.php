@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.plugin.ticket
+ * @package chamilo.ticket
  */
 
 $cidReset = true;
@@ -403,7 +403,7 @@ $form->addLabel('', '<span id="filepaths"><div id="filepath_1"></div></span>');
 $form->addLabel(
     '',
     '<span id="link-more-attach">
-         <span class="btn btn-success" onclick="return add_image_form()">' . get_lang('AddOneMoreFile').'</span>
+         <span class="btn btn-success" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</span>
          </span>
          ('.sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))).')
     '

@@ -107,7 +107,7 @@ class NotebookManager
         }
 
         // Database table definition
-        $t_notebook = Database::get_course_table(TABLE_NOTEBOOK);
+        $table = Database::get_course_table(TABLE_NOTEBOOK);
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT
@@ -115,7 +115,7 @@ class NotebookManager
                 title				AS note_title,
                 description 		AS note_comment,
                 session_id			AS session_id
-               FROM $t_notebook
+               FROM $table
                WHERE c_id = $course_id AND notebook_id = '".intval($notebook_id)."' ";
         $result = Database::query($sql);
         if (Database::num_rows($result) != 1) {
@@ -189,11 +189,11 @@ class NotebookManager
         }
 
         // Database table definition
-        $t_notebook = Database::get_course_table(TABLE_NOTEBOOK);
+        $table = Database::get_course_table(TABLE_NOTEBOOK);
 
         $course_id = api_get_course_int_id();
 
-        $sql = "DELETE FROM $t_notebook
+        $sql = "DELETE FROM $table
                 WHERE
                     c_id = $course_id AND
                     notebook_id='".intval($notebook_id)."' AND
@@ -261,7 +261,7 @@ class NotebookManager
         }
 
         // Database table definition
-        $t_notebook = Database::get_course_table(TABLE_NOTEBOOK);
+        $table = Database::get_course_table(TABLE_NOTEBOOK);
         $order_by = " ORDER BY ".$notebookView." $sort_direction ";
 
         // Condition for the session
@@ -270,7 +270,7 @@ class NotebookManager
         $cond_extra = $notebookView == 'update_date' ? " AND update_date <> ''" : " ";
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT * FROM $t_notebook
+        $sql = "SELECT * FROM $table
                 WHERE
                     c_id = $course_id AND
                     user_id = '".api_get_user_id()."'

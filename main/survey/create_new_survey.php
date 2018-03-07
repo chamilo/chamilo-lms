@@ -81,7 +81,9 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
 
     if ($link_info) {
         $defaults['category_id'] = $link_info['category_id'];
-        if ($sql_result_array = Database::fetch_array(Database::query('SELECT weight FROM '.$table_gradebook_link.' WHERE id='.$gradebook_link_id))) {
+        if ($sql_result_array = Database::fetch_array(
+            Database::query('SELECT weight FROM '.$table_gradebook_link.' WHERE id='.$gradebook_link_id))
+        ) {
             $defaults['survey_qualify_gradebook'] = $gradebook_link_id;
             $defaults['survey_weight'] = number_format($sql_result_array['weight'], 2, '.', '');
         }
@@ -325,9 +327,7 @@ if ($form->validate()) {
 } else {
     // Displaying the header
     Display::display_header($tool_name);
-
     $form->display();
 }
 
-// Footer
-Display :: display_footer();
+Display::display_footer();

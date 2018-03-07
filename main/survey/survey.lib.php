@@ -489,7 +489,6 @@ class SurveyManager
         }
 
         $gradebook_link_type = 8;
-
         $link_info = GradebookUtils::isResourceInCourseGradebook(
             $courseCode,
             $gradebook_link_type,
@@ -991,7 +990,6 @@ class SurveyManager
         }
 
         // Getting the information of the question options
-
         $result = Database::query($sqlOption);
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             /** @todo this should be renamed to options instead of answers */
@@ -1364,7 +1362,7 @@ class SurveyManager
      * This function is normally only called when a survey is deleted
      *
      * @param int $survey_id the id of the survey that has to be deleted
-     * @return true
+     * @return bool
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @version January 2007
@@ -1392,6 +1390,8 @@ class SurveyManager
 
         // Deleting all the answers on this survey
         self::delete_all_survey_answers($survey_id);
+
+        return true;
     }
 
     /**

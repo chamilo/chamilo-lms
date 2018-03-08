@@ -8109,4 +8109,6 @@ $YouWillReceivedASecondEmail = "You will receive another email with your passwor
 $YouReceivedAnEmailWithTheUsername = "You must have received another email with your username.";
 $TheScormPackageWillBeUpdatedYouMustUploadTheFileWithTheSameName = "You must upload a zip file with the same name as the original SCORM file.";
 $YourChoice = "Your choice";
+$YouNeedToCreateASkillProfile = "You need to create a skill profile";
+$SkillLevel = "Skill level";
 ?>

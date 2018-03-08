@@ -30,8 +30,8 @@ class SkillVisualizer
      */
     public function __construct($skills, $type = 'read')
     {
-        $this->skills   = $skills;
-        $this->type     = $type;
+        $this->skills = $skills;
+        $this->type = $type;
         $this->center_x = intval($this->offset_x + $this->canvas_x / 2 - $this->block_size / 2);
     }
 

@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\SkillBundle\Entity\Profile;
+use Chamilo\SkillBundle\Entity\Level;
+
 /**
  * Add a skill Profile
  *
@@ -43,7 +46,7 @@ if (!empty($item)) {
 $formToDisplay = $form->returnForm();
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'skill.php', 'name' => get_lang('ManageSkillsLevels')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/skill.php', 'name' => get_lang('ManageSkillsLevels')];
 $interbreadcrumb[] = ['url' =>  api_get_self(), 'name' => get_lang('SkillProfile')];
 
 $toolbar = null;
@@ -51,29 +54,33 @@ $toolbar = null;
 $tpl = new Template($action);
 switch ($action) {
     case 'move_up':
-        /** @var \Chamilo\SkillBundle\Entity\Level $item */
+        /** @var Level $item */
         $item = $em->getRepository('ChamiloSkillBundle:Level')->find($_GET['level_id']);
-
-        $position = $item->getPosition();
-
-        if (!empty($position)) {
-            $item->setPosition($position - 1);
+        if ($item) {
+            $position = $item->getPosition();
+            if (!empty($position)) {
+                $item->setPosition($position - 1);
+            }
+            $em->persist($item);
+            $em->flush();
+            Display::addFlash(Display::return_message(get_lang('Updated')));
         }
-        $em->persist($item);
-        $em->flush();
+
+
         header('Location: '.$listAction);
         exit;
         break;
     case 'move_down':
-        /** @var \Chamilo\SkillBundle\Entity\Level $item */
+        /** @var Level $item */
         $item = $em->getRepository('ChamiloSkillBundle:Level')->find($_GET['level_id']);
+        if ($item) {
+            $position = $item->getPosition();
+            $item->setPosition($position + 1);
+            $em->persist($item);
+            $em->flush();
+            Display::addFlash(Display::return_message(get_lang('Updated')));
+        }
 
-        $position = $item->getPosition();
-
-        $item->setPosition($position + 1);
-
-        $em->persist($item);
-        $em->flush();
         header('Location: '.$listAction);
         exit;
         break;
@@ -81,10 +88,12 @@ switch ($action) {
         $tpl->assign('form', $formToDisplay);
         if ($form->validate()) {
             $values = $form->exportValues();
-            $item = new \Chamilo\SkillBundle\Entity\Profile();
+            $item = new Profile();
             $item->setName($values['name']);
             $em->persist($item);
             $em->flush();
+
+            Display::addFlash(Display::return_message(get_lang('Added')));
             header('Location: '.$listAction);
             exit;
         }
@@ -117,6 +126,7 @@ switch ($action) {
             $item->setName($values['name']);
             $em->persist($item);
             $em->flush();
+            Display::addFlash(Display::return_message(get_lang('Updated')));
             header('Location: '.$listAction);
             exit;
         }
@@ -133,11 +143,16 @@ switch ($action) {
             $listAction,
             ['title' => get_lang('List')]
         );
-        $em->remove($item);
-        $em->flush();
+
+        try {
+            $em->remove($item);
+            $em->flush();
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
+        } catch (Exception $e) {
+            Display::addFlash(Display::return_message(get_lang('DeleteError'), 'error'));
+        }
         header('Location: '.$listAction);
         exit;
-
         break;
     default:
         $toolbar = Display::url(

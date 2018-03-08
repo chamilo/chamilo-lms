@@ -65,16 +65,16 @@ switch ($action) {
 
         if ($form->validate()) {
             $values = $form->exportValues();
-
             $profile = $em->getRepository('ChamiloSkillBundle:Profile')->find($values['profile_id']);
-            $item->setProfile($profile);
-
-            $em->persist($item);
-            $em->flush();
+            if ($profile) {
+                $item->setProfile($profile);
+                $em->persist($item);
+                $em->flush();
+                Display::addFlash(Display::return_message(get_lang('Updated')));
+            }
             header('Location: '.$listAction);
             exit;
         }
-
         break;
     case 'delete':
         $toolbarAction = Display::toolbarAction('toolbar', [Display::url(get_lang('List'), $listAction)]);

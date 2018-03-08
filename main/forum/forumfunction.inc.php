@@ -53,6 +53,7 @@ $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 $threadId = isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : 0;
 $forumId = isset($_REQUEST['forum']) ? intval($_REQUEST['forum']) : 0;
 
+$ajaxUrl = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq();
 // The next javascript script is to delete file by ajax
 $htmlHeadXtra[] = '<script>
 $(function () {
@@ -62,10 +63,10 @@ $(function () {
         var l = $(this);
         var id = l.closest("tr").attr("id");
         var filename = l.closest("tr").find(".attachFilename").html();
-        if (confirm("' . get_lang('AreYouSureToDeleteJS').'", filename)) {
+        if (confirm("'.get_lang('AreYouSureToDeleteJS').'", filename)) {
             $.ajax({
                 type: "POST",
-                url: "'.api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq().'&a=delete_file&attachId=" + id +"&thread='.$threadId.'&forum='.$forumId.'",
+                url: "'.$ajaxUrl.'&a=delete_file&attachId=" + id +"&thread='.$threadId.'&forum='.$forumId.'",
                 dataType: "json",
                 success: function(data) {
                     if (data.error == false) {
@@ -6003,7 +6004,7 @@ function clearAttachedFiles($postId = null, $courseId = null)
  *
  * @return array
  */
-function getAttachmentIdsByPostId($postId, $courseId = null)
+function getAttachmentIdsByPostId($postId, $courseId = 0)
 {
     $array = [];
     $courseId = intval($courseId);
@@ -6081,6 +6082,7 @@ function getForumCategoryByTitle($title, $courseId, $sessionId = 0)
 /**
  * @param array $current_forum
  * @param array $row
+ * @param bool $addWrapper
  *
  * @return string
  */

@@ -201,7 +201,7 @@ if ($allowTutors == 'true') {
                     }
                 }
 
-                $xajax_response -> addAssign('ajax_list_users_single', 'innerHTML', api_utf8_encode($return));
+                $xajax_response->addAssign('ajax_list_users_single', 'innerHTML', api_utf8_encode($return));
             } else {
                 $return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
                 while ($user = Database :: fetch_array($rs)) {
@@ -209,7 +209,7 @@ if ($allowTutors == 'true') {
                     $return .= '<option value="'.$user['user_id'].'">'.$person_name.' ('.$user['username'].')</option>';
                 }
                 $return .= '</select>';
-                $xajax_response -> addAssign('ajax_list_users_multiple', 'innerHTML', api_utf8_encode($return));
+                $xajax_response->addAssign('ajax_list_users_multiple', 'innerHTML', api_utf8_encode($return));
             }
         }
 
@@ -217,14 +217,12 @@ if ($allowTutors == 'true') {
     }
 
     $xajax->processRequests();
-
     $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
     $htmlHeadXtra[] = '<script>
     function add_user_to_session (code, content) {
         document.getElementById("user_to_add").value = "";
         document.getElementById("ajax_list_users_single").innerHTML = "";
         destination = document.getElementById("destination_users");
-
         for (i=0;i<destination.length;i++) {
             if(destination.options[i].text == content) {
                     return false;
@@ -261,9 +259,7 @@ if ($allowTutors == 'true') {
         $("#user_with_any_session_id").attr("checked", false);
         xajax_search_users(val,"multiple");
     }
-
     </script>';
-
     $form_sent = 0;
     $firstLetterUser = $firstLetterSession = '';
     $UserList = $SessionList = [];
@@ -288,9 +284,7 @@ if ($allowTutors == 'true') {
 
     $session_info = SessionManager::fetch($id_session);
     Display::display_header($tool_name);
-
     $nosessionUsersList = $sessionUsersList = [];
-
     $ajax_search = $add_type === 'unique' ? true : false;
 
     $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
@@ -473,18 +467,21 @@ if ($allowTutors == 'true') {
     }
 
     if ($add_type === 'multiple') {
-        $link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
+        $link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.
+            Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
         $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
     } else {
         $link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
-        $link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
+        $link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.
+            Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
     }
     $link_add_group = '<a href="usergroups.php">'.
             Display::return_icon('multiple.gif', get_lang('RegistrationByUsersGroups')).get_lang('RegistrationByUsersGroups').'</a>'; ?>
     <div class="actions">
         <?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>&nbsp;|&nbsp;<?php echo $link_add_group; ?>
     </div>
-    <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($_GET['add'])) {
+    <form name="formulaire" method="post"
+          action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($_GET['add'])) {
                 echo '&add=true';
             } ?>" style="margin:0px;" <?php if ($ajax_search) {
                 echo ' onsubmit="valide();"';
@@ -523,7 +520,6 @@ if ($allowTutors == 'true') {
         <div class="span5">
             <div class="multiple_select_header">
                 <b><?php echo get_lang('UserListInPlatform') ?> :</b>
-
             <?php if ($add_type == 'multiple') {
         ?>
                 <?php echo get_lang('FirstLetterUser'); ?> :
@@ -652,7 +648,6 @@ if ($allowTutors == 'true') {
             options[i].selected = true;
         document.forms.formulaire.submit();
     }
-
 
     function loadUsersInSelect(select)
     {

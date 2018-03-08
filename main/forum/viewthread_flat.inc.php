@@ -234,9 +234,9 @@ if (isset($current_thread['thread_id'])) {
 
                     if ($increment > 0) {
                         $iconEdit .= "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".$clean_forum_id
-                            . "&thread=".$clean_thread_id."&action=move&post=".$row['post_id']."\">"
-                            . Display::return_icon('move.png', get_lang('MovePost'), [], ICON_SIZE_SMALL)
-                            . "</a>";
+                            ."&thread=".$clean_thread_id."&action=move&post=".$row['post_id']."\">"
+                            .Display::return_icon('move.png', get_lang('MovePost'), [], ICON_SIZE_SMALL)
+                            ."</a>";
                     }
                 }
             }
@@ -258,11 +258,11 @@ if (isset($current_thread['thread_id'])) {
 
                 if ($increment > 0 && $locked == false && $userCanEdit) {
                     $iconEdit .= "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".$my_forum_id
-                        . "&thread=".$clean_thread_id."&action=list&post=".$row['post_id']
-                        . "&user=".$row['poster_id']."&user_id=".$row['poster_id']
-                        . "&idtextqualify=".$current_qualify_thread."\" >"
-                        . Display::return_icon('quiz.png', get_lang('Qualify'))
-                        . "</a> ";
+                        ."&thread=".$clean_thread_id."&action=list&post=".$row['post_id']
+                        ."&user=".$row['poster_id']."&user_id=".$row['poster_id']
+                        ."&idtextqualify=".$current_qualify_thread."\" >"
+                        .Display::return_icon('quiz.png', get_lang('Qualify'))
+                        ."</a> ";
                 }
             }
 

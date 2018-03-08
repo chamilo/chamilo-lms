@@ -32,7 +32,13 @@ if (isset($_POST['convert'])) {
                             foreach ($values as $value) {
                                 $value = trim($value);
                                 if (!empty($value)) {
-                                    add_specific_field_value($specific_field['id'], api_get_course_id(), TOOL_LEARNPATH, $o_ppt->lp_id, $value);
+                                    add_specific_field_value(
+                                        $specific_field['id'],
+                                        api_get_course_id(),
+                                        TOOL_LEARNPATH,
+                                        $o_ppt->lp_id,
+                                        $value
+                                    );
                                 }
                             }
                         }

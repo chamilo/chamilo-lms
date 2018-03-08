@@ -4797,10 +4797,86 @@ div#chat-remote-video video {
     padding: 10px;
     color:#666666;
 }
-#about-session .teachers .img-circle{
-    border: 1px solid #ddd;
-    width: 100px;
-    height: 100px;
+#about-session .extrafield_dt{
+    margin-bottom: 10px;
+}
+#about-session .extrafield_dd{
+    color: #666666;
+}
+#about-session .socialshare{
+    text-align: center;
+}
+#about-session .socialshare .networks{
+    padding-left: 0;
+    list-style: none;
+}
+#about-session .socialshare .networks li{
+    padding-right: 2px;
+    padding-left: 2px;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+#about-session .socialshare .networks li a{
+    display: block;
+    width: 48px;
+    height: 48px;
+    font-size: 2.3rem;
+    line-height: 18px;
+    text-align: center;
+    color: #FFF;
+    background-color: #337AB7;
+    border-radius: 50%;
+    padding: 10px;
+ }
+#about-session .socialshare .networks li a:hover{
+    background-color: #286090;
+}
+#about-session .course-tags .tag-value {
+    display: inline-block;
+    margin-bottom: 15px;
+}
+#about-session .course-tags li span {
+    position: relative;
+    display: inline-block;
+    padding: 0 3px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+    letter-spacing: -.03em;
+    color: #FFF !important;
+    background: #337AB7 !important;
+    border-radius: 0 3px 3px 0 !important;
+    -webkit-transition: none 0.15s ease-in-out;
+    -o-transition: none 0.15s ease-in-out;
+    transition: none 0.15s ease-in-out;
+}
+#about-session .course-tags li span::before{
+    display: inline-block;
+    content: "";
+    top: 0;
+    left: -8px;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-right: 8px solid #337AB7;
+    border-bottom: 10px solid transparent;
+    border-top: 10px solid transparent;
+
+}
+#about-session .course-tags li span::after{
+    z-index: 1;
+    content: "";
+    top: 8px;
+    left: -3px;
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background-color: #F2F2F2;
+    border-radius: 10px;
+}
+#about-session .panel-tags .panel-body{
+    text-align: center;
 }
 /* list courses classic*/
 .classic-courses .list-teachers{

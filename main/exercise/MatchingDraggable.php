@@ -35,7 +35,7 @@ class MatchingDraggable extends Question
             $answer = new Answer($this->id);
             $answer->read();
 
-            if (count($answer->nbrAnswers) > 0) {
+            if (!empty($answer->nbrAnswers) && count($answer->nbrAnswers) > 0) {
                 for ($i = 1; $i <= $answer->nbrAnswers; $i++) {
                     $correct = $answer->isCorrect($i);
                     if (empty($correct)) {

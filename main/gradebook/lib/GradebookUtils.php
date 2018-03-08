@@ -245,13 +245,15 @@ class GradebookUtils
                             $modify_icons .= '&nbsp;<a onclick="javascript:if (!confirm(\''.addslashes(get_lang('ConfirmToUnlockElement')).'\')) return false;" href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$cat->get_id().'&action=unlock">'.
                                 Display::return_icon('lock.png', get_lang('UnLockEvaluation'), '', ICON_SIZE_SMALL).'</a>';
                         } else {
-                            $modify_icons .= '&nbsp;<a href="#">'.Display::return_icon('lock_na.png', get_lang('GradebookLockedAlert'), '', ICON_SIZE_SMALL).'</a>';
+                            $modify_icons .= '&nbsp;<a href="#">'.
+                                Display::return_icon('lock_na.png', get_lang('GradebookLockedAlert'), '', ICON_SIZE_SMALL).'</a>';
                         }
                         $modify_icons .= '&nbsp;<a href="gradebook_flatview.php?export_pdf=category&selectcat='.$cat->get_id().'" >'.Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_SMALL).'</a>';
                     } else {
                         $modify_icons .= '&nbsp;<a onclick="javascript:if (!confirm(\''.addslashes(get_lang('ConfirmToLockElement')).'\')) return false;" href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$cat->get_id().'&action=lock">'.
                             Display::return_icon('unlock.png', get_lang('LockEvaluation'), '', ICON_SIZE_SMALL).'</a>';
-                        $modify_icons .= '&nbsp;<a href="#" >'.Display::return_icon('pdf_na.png', get_lang('ExportToPDF'), '', ICON_SIZE_SMALL).'</a>';
+                        $modify_icons .= '&nbsp;<a href="#" >'.
+                            Display::return_icon('pdf_na.png', get_lang('ExportToPDF'), '', ICON_SIZE_SMALL).'</a>';
                     }
                 }
 

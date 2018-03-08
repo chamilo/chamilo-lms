@@ -21,28 +21,29 @@ class ScoreDisplayForm extends FormValidator
         $customdisplays = $displayscore->get_custom_score_display_settings();
 
         $nr_items = (count($customdisplays) != '0') ? count($customdisplays) : '1';
-        $this->setDefaults([
-            'scorecolpercent' => $displayscore->get_color_split_value()
-        ]);
+        $this->setDefaults(
+            [
+                'scorecolpercent' => $displayscore->get_color_split_value(),
+            ]
+        );
 
         $this->addElement('hidden', 'maxvalue', '100');
         $this->addElement('hidden', 'minvalue', '0');
         $counter = 1;
 
-        //setting the default values
-
+        // Setting the default values
         if (is_array($customdisplays)) {
             foreach ($customdisplays as $customdisplay) {
-                $this->setDefaults([
-                    'endscore['.$counter.']' => $customdisplay['score'],
-                    'displaytext['.$counter.']' => $customdisplay['display']
-                ]);
+                $this->setDefaults(
+                    [
+                        'endscore['.$counter.']' => $customdisplay['score'],
+                        'displaytext['.$counter.']' => $customdisplay['display'],
+                    ]
+                );
                 $counter++;
             }
         }
-        $scorecol = [];
-
-        //settings for the colored score
+        // Settings for the colored score
         $this->addElement('header', get_lang('ScoreEdit'));
 
         if ($displayscore->is_coloring_enabled()) {
@@ -67,8 +68,7 @@ class ScoreDisplayForm extends FormValidator
             $this->addRule(['scorecolpercent', 'minvalue'], get_lang('UnderMin'), 'compare', '>');
         }
 
-        //Settings for the scoring system
-
+        // Settings for the scoring system
         if ($displayscore->is_custom()) {
             $this->addElement('html', '<br /><b>'.get_lang('ScoringSystem').'</b>');
             $this->addElement('static', null, null, get_lang('ScoreInfo'));
@@ -85,30 +85,23 @@ class ScoreDisplayForm extends FormValidator
             for ($counter = 1; $counter <= 20; $counter++) {
                 $renderer = & $this->defaultRenderer();
                 $elementTemplateTwoLabel =
-                '<div id='.$counter.' style="display: '.(($counter <= $nr_items) ? 'inline' : 'none').';">
-    
-                <!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->
-    
+                '<div id='.$counter.' style="display: '.(($counter <= $nr_items) ? 'inline' : 'none').';">    
+                <!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->    
                 <label class="control-label">{label}</label>
                 <div class="form-group">
                 <label class="col-sm-2 control-label">
-                </label>
-    
+                </label>    
                 <div class="col-sm-1">
                 <!-- BEGIN error --><span class="form_error">{error}</span><br />
                 <!-- END error -->&nbsp<b>'.get_lang('And').'</b>
                 </div>
-    
+                    
                 <div class="col-sm-2">
                 {element}
-                </div>
-    
+                </div>    
                 <div class="col-sm-1">
                 =
-                </div>
-    
-    
-                ';
+                </div>';
 
                 $elementTemplateTwoLabel2 = '
                 <div class="col-sm-2">
@@ -125,13 +118,17 @@ class ScoreDisplayForm extends FormValidator
                 </div>
                 </div>';
 
-                $scorebetw = [];
-                $this->addElement('text', 'endscore['.$counter.']', null, [
-                    'size' => 5,
-                    'maxlength' => 5,
-                    'id' => 'txta-'.$counter,
-                    'input-size' => 2
-                ]);
+                $this->addElement(
+                    'text',
+                    'endscore['.$counter.']',
+                    null,
+                    [
+                        'size' => 5,
+                        'maxlength' => 5,
+                        'id' => 'txta-'.$counter,
+                        'input-size' => 2,
+                    ]
+                );
 
                 $this->addElement(
                     'text',

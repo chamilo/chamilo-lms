@@ -486,6 +486,7 @@ class Thematic
         global $thematic_id;
         $table = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
         $course_id = api_get_course_int_id();
+        $thematic_id = (int) $thematic_id;
 
         $sql = "SELECT COUNT(id) AS total_number_of_items 
                 FROM $table
@@ -517,6 +518,7 @@ class Thematic
         }
         $data = [];
         $course_id = api_get_course_int_id();
+        $thematic_id = (int) $thematic_id;
         if (api_is_allowed_to_edit(null, true)) {
             $sql = "SELECT id AS col0, start_date AS col1, duration AS col2, content AS col3
                     FROM $table
@@ -542,8 +544,10 @@ class Thematic
                     $thematic_advance[1] = api_get_local_time($thematic_advance[1]);
                     $thematic_advance[1] = api_format_date($thematic_advance[1], DATE_TIME_FORMAT_LONG);
                     $actions  = '';
-                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_edit&thematic_id='.$thematic_id.'&thematic_advance_id='.$thematic_advance[0].'">'.Display::return_icon('edit.png', get_lang('Edit'), '', 22).'</a>';
-                    $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_advance_delete&thematic_id='.$thematic_id.'&thematic_advance_id='.$thematic_advance[0].'">'.Display::return_icon('delete.png', get_lang('Delete'), '', 22).'</a></center>';
+                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_edit&thematic_id='.$thematic_id.'&thematic_advance_id='.$thematic_advance[0].'">'.
+                        Display::return_icon('edit.png', get_lang('Edit'), '', 22).'</a>';
+                    $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_advance_delete&thematic_id='.$thematic_id.'&thematic_advance_id='.$thematic_advance[0].'">'.
+                        Display::return_icon('delete.png', get_lang('Delete'), '', 22).'</a></center>';
                     $data[] = [$i, $thematic_advance[1], $thematic_advance[2], $thematic_advance[3], $actions];
                     $i++;
                 }
@@ -565,7 +569,7 @@ class Thematic
 
         // set current course
         $table = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
-        $thematic_id = intval($thematic_id);
+        $thematic_id = (int) $thematic_id;
         $data = [];
         $sql = "SELECT * FROM $table
                 WHERE c_id = $course_id AND thematic_id = $thematic_id ";
@@ -610,8 +614,9 @@ class Thematic
                     }
                 }
                 // DATE_TIME_FORMAT_LONG
-                $thematic_advance_item = '<div><strong>'.api_convert_and_format_date($thematic_advance['start_date'], DATE_TIME_FORMAT_LONG).$session_star.'</strong></div>';
-                //				$thematic_advance_item .= '<div>'.get_lang('DurationInHours').' : '.$thematic_advance['duration'].'</div>';
+                $thematic_advance_item = '<div><strong>'.
+                    api_convert_and_format_date($thematic_advance['start_date'], DATE_TIME_FORMAT_LONG).
+                    $session_star.'</strong></div>';
                 $thematic_advance_item .= '<div>'.$thematic_advance['duration'].' '.get_lang('HourShort').'</div>';
                 $thematic_advance_item .= '<div>'.Security::remove_XSS($thematic_advance['content'], STUDENT).'</div>';
                 $return_array[$thematic_id][$thematic_advance['id']] = $thematic_advance_item;
@@ -810,8 +815,7 @@ class Thematic
 
     /**
      * delete  thematic advance
-     * @param int        Thematic advance id
-     * @param integer $id
+     * @param int $id Thematic advance id
      * @return int        Affected rows
      */
     public function thematic_advance_destroy($id)

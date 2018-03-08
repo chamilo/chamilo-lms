@@ -8,7 +8,6 @@ addons:
         - libapache2-mod-fastcgi
         - libappindicator1
         - fonts-liberation
-    chrome: stable
 
 services:
     - mysql

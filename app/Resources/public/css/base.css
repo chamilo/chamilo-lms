@@ -4710,7 +4710,43 @@ div#chat-remote-video video {
 .install-steps-menu li.current-step{
     font-weight: bold;
 }
+#about-session .description-course{
+    font-size: 1.2em;
+}
+#about-session .panel-information{
+    font-size: 16px;
+}
+#about-session .panel-information ul{
+    margin: 20px 0;
+}
+.page-header{
+    margin-top: 0px;
+}
+#about-session .panel-course{
+    padding: 20px;
+    background: #EEF4FF;
+    border-radius: 10px;
+}
+#about-session .panel-body{
+    background: #F7F9FD;
+}
+#about-session .coach-avatar{
+    float: right;
+    width: 100px;
+}
+#about-session .coach-information{
+    width: 100%;
+    display: block;
+    border-bottom: 1px solid #cdcdcd;
+    margin-bottom: 20px;
+}
+#about-session .coach-information:last-child{
+    border-bottom: none;
+}
+#about-session .coach-information h4{
+    font-weight: bold;
 
+}
 #about-session .description-course{
     padding: 10px;
     color: #666666;

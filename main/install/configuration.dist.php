@@ -732,10 +732,11 @@ $_configuration['gradebook_badge_sidebar'] = [
 // Allow teachers, drhs and admins to access blocked LP's because a prerequisite.
 //$_configuration['allow_teachers_to_access_blocked_lp_by_prerequisite'] = false;
 
-// Allow connect skills with course tools
-// Uncomment doctrine tags for Entities:
-//SkillRelItemRelUser|SkillRelItem|Skill.items
-// DB changes:
+// Allow connect skills with course tools (exercises, forum threads, works, etc)
+// 1. Add "@ORM\Entity" in these Entities:
+//SkillRelItemRelUser/SkillRelItem
+// 2. Add "@ORM\OneToMany" in the "Skill.items" variable definition
+// 3. Run DB changes:
 /*
 CREATE TABLE skill_rel_item_rel_user (id INT AUTO_INCREMENT NOT NULL, skill_rel_item_id INT NOT NULL, user_id INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, created_by INT NOT NULL, updated_by INT NOT NULL, INDEX IDX_D1133E0DFD4B12DC (skill_rel_item_id), INDEX IDX_D1133E0DA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 CREATE TABLE skill_rel_item (id INT AUTO_INCREMENT NOT NULL, skill_id INT DEFAULT NULL, item_type INT NOT NULL, item_id INT NOT NULL, obtain_conditions VARCHAR(255) DEFAULT NULL, requires_validation TINYINT(1) NOT NULL, is_real TINYINT(1) NOT NULL, c_id INT DEFAULT NULL, session_id INT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, created_by INT NOT NULL, updated_by INT NOT NULL, INDEX IDX_EB5B2A0D5585C142 (skill_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
@@ -748,8 +749,8 @@ CREATE TABLE skill_rel_course (id INT AUTO_INCREMENT NOT NULL, skill_id INT DEFA
 ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA5585C142 FOREIGN KEY (skill_id) REFERENCES skill (id);
 ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);
 ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (session_id) REFERENCES session (id);
-
 */
+// 4. Set "allow_skill_rel_items" to true
 //$_configuration['allow_skill_rel_items'] = false;
 
 // Generate random login when importing users

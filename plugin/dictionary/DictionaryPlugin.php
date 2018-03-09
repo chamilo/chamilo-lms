@@ -8,9 +8,9 @@ class DictionaryPlugin extends Plugin
         parent::__construct(
             '1.0',
             'Julio Montoya',
-            array(
+            [
                 'enable_plugin_dictionary' => 'boolean'
-            )
+            ]
         );
     }
 

@@ -265,10 +265,17 @@ if (api_is_platform_admin()) {
         }
     }
 
+    if (api_get_plugin_setting('dictionary', 'enable_plugin_dictionary') == 'true') {
+        $items[] = [
+            'url' => api_get_path(WEB_PLUGIN_PATH).'dictionary/terms.php',
+            'label' => get_lang('Dictionary')
+        ];
+    }
 
     if (api_get_setting('allow_terms_conditions') == 'true') {
         $items[] = ['url' => 'legal_add.php', 'label' => get_lang('TermsAndConditions')];
     }
+
     $blocks['platform']['items'] = $items;
     $blocks['platform']['extra'] = null;
 }

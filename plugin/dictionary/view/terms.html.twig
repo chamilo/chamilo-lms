@@ -1,0 +1,34 @@
+
+{{ form }}
+
+<table class="data_table">
+    <tr>
+        <th>
+            {{ 'Term' | get_plugin_lang('DictionaryPlugin') }}
+        </th>
+        <th>
+            {{ 'Definition' | get_plugin_lang('DictionaryPlugin') }}
+        </th>
+        <th>
+            {{ 'Actions' | get_lang }}
+        </th>
+    </tr>
+{% for term in terms %}
+    <tr>
+        <td>
+            {{ term.term }}
+        </td>
+        <td>
+            {{ term.definition }}
+        </td>
+        <td>
+            <a href="{{ _p.web_plugin }}dictionary/terms.php?action=edit&{{ {'id': term.id}|url_encode() }}" class="btn btn-success">
+                <span class="fa fa-edit fa-fw" aria-hidden="true"></span> {{ 'Edit'|get_lang }}
+            </a>
+            <a href="{{ _p.web_plugin }}dictionary/terms.php?action=delete&{{ {'id': term.id}|url_encode() }}" class="btn btn-danger">
+                <span class="fa fa-times fa-fw" aria-hidden="true"></span> {{ 'Delete'|get_lang }}
+            </a>
+        </td>
+    </tr>
+{% endfor %}
+</table>

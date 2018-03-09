@@ -81,11 +81,13 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
 
     if ($link_info) {
         $defaults['category_id'] = $link_info['category_id'];
-        if ($sql_result_array = Database::fetch_array(
-            Database::query('SELECT weight FROM '.$table_gradebook_link.' WHERE id='.$gradebook_link_id))
-        ) {
+        $gradebook_link_id = (int) $gradebook_link_id;
+        $sql = "SELECT weight FROM $table_gradebook_link WHERE id = $gradebook_link_id";
+        $result = Database::query($sql);
+        $gradeBookData = Database::fetch_array($result);
+        if ($gradeBookData) {
             $defaults['survey_qualify_gradebook'] = $gradebook_link_id;
-            $defaults['survey_weight'] = number_format($sql_result_array['weight'], 2, '.', '');
+            $defaults['survey_weight'] = number_format($gradeBookData['weight'], 2, '.', '');
         }
     }
 } else {

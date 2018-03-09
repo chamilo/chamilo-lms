@@ -71,32 +71,33 @@
                 {% set course_video = extra_field.value.getValue() %}
             {% endif %}
         {% endfor %}
-
-        <div class="row">
-            {% if courses|length > 1 %}
-                <div class="col-xs-12">
-                    <h3 class="text-uppercase">{{ course_data.course.getTitle }}</h3>
-                </div>
-            {% endif %}
-
-            {% if course_video %}
-                <div class="col-sm-6 col-md-7">
-                    <div class="embed-responsive embed-responsive-16by9">
-                        {{ essence.replace(course_video) }}
+        <div class="panel-course">
+            <div class="row">
+                {% if courses|length > 1 %}
+                    <div class="col-xs-12">
+                        <h3 class="text-uppercase">{{ course_data.course.getTitle }}</h3>
                     </div>
-                </div>
-            {% endif %}
+                {% endif %}
 
-            <div class="{{ course_video ? 'col-sm-6 col-md-5' : 'col-sm-12' }}">
-                <div class="description-course">
-                    {{ course_data.description.getContent }}
+                {% if course_video %}
+                    <div class="col-sm-6 col-md-7">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            {{ essence.replace(course_video) }}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="{{ course_video ? 'col-sm-6 col-md-5' : 'col-sm-12' }}">
+                    <div class="description-course">
+                        {{ course_data.description.getContent }}
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="row info-course">
             <div class="col-xs-12 col-md-7">
-                <div class="panel panel-default">
+                <div class="panel panel-default panel-information">
                     <div class="panel-heading">
                         <h4>{{ "CourseInformation"|get_lang }}</h4>
                     </div>
@@ -171,27 +172,23 @@
 
             <div class="col-xs-12 col-md-5">
                 {% if course_data.coaches %}
-                    <div class="panel panel-default teachers">
+                    <div class="panel panel-default panel-teachers">
                         <div class="panel-heading">
                             <h4>{{ "Coaches"|get_lang }}</h4>
                         </div>
                         <div class="panel-body">
                             {% for coach in course_data.coaches %}
-                                <div class="row">
-                                    <div class="col-xs-7 col-md-7">
-                                        <h4>{{ coach.complete_name }}</h4>
-                                        {% for extra_field in coach.extra_fields %}
-                                            <dl>
-                                                <dt>{{ extra_field.value.getField().getDisplayText() }}</dt>
-                                                <dd>{{ extra_field.value.getValue() }}</dd>
-                                            </dl>
-                                        {% endfor %}
+                                <div class="coach-information">
+                                    <div class="coach-avatar">
+                                        <img class="img-circle img-responsive" src="{{ coach.image }}" alt="{{ coach.complete_name }}">
                                     </div>
-                                    <div class="col-xs-5 col-md-5">
-                                        <div class="text-center">
-                                            <img class="img-circle" src="{{ coach.image }}" alt="{{ coach.complete_name }}">
-                                        </div>
-                                    </div>
+                                    <h4>{{ coach.complete_name }}</h4>
+                                    {% for extra_field in coach.extra_fields %}
+                                        <dl class="coach-extrafield">
+                                            <dt class="extrafield_dt dt_{{extra_field.value.getField().getVariable()}}">{{ extra_field.value.getField().getDisplayText() }}</dt>
+                                            <dd class="extrafield_dd dd_{{extra_field.value.getField().getVariable()}}">{{ extra_field.value.getValue() }}</dd>
+                                        </dl>
+                                    {% endfor %}
                                 </div>
                             {% endfor %}
                         </div>
@@ -199,13 +196,13 @@
                 {% endif %}
 
                 {% if course_data.tags %}
-                    <div class="panel panel-default">
-                        <div class="panel-heading">{{ 'Tags'|get_lang }}</div>
+                    <div class="panel panel-default panel-tags">
+                        <div class="panel-heading"><h4>{{ 'Tags'|get_lang }}</h4></div>
                         <div class="panel-body">
-                            <ul class="list-inline">
+                            <ul class="list-inline course-tags">
                                 {% for tag in course_data.tags %}
-                                    <li>
-                                        <span class="label label-info">{{ tag.getTag }}</span>
+                                    <li class="tag-value">
+                                        <span>{{ tag.getTag }}</span>
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -213,19 +210,45 @@
                     </div>
                 {% endif %}
 
-                <div class="panel panel-default social-share">
-                    <div class="panel-heading">{{ "ShareWithYourFriends"|get_lang }}</div>
+                <div class="panel panel-default panel-social">
+                    <div class="panel-heading"><h4>{{ "ShareWithYourFriends"|get_lang }}</h4></div>
                     <div class="panel-body">
-                        <div class="icons-social text-center">
-                            <a href="https://www.facebook.com/sharer/sharer.php?{{ {'u': page_url }|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
-                                <em class="fa fa-facebook fa-2x"></em>
+                        <div class="socialshare">
+                            <ul class="networks">
+                                <li>
+                                    <a href="https://www.facebook.com/sharer/sharer.php?{{ {'u': page_url }|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
+                                        <em class="fa fa-facebook"></em>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://twitter.com/home?{{ {'status': session.getName() ~ ' ' ~ page_url }|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
+                                        <em class="fa fa-twitter"></em>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': page_url , 'title': session.getName() }|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
+                                        <em class="fa fa-linkedin"></em>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default panel-subscription">
+                    <div class="panel-heading">
+                        <h4>{{ 'CourseSubscription'|get_lang }}</h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="panel-subscribe text-center">
+                            {% if _u.logged and not is_subscribed %}
+                            {{ subscribe_button }}
+                            {% elseif not _u.logged %}
+                            {% if 'allow_registration'|api_get_setting != 'false' %}
+                            <a href="{{ _p.web_main ~ 'auth/inscription.php' ~ redirect_to_session }}" class="btn btn-success btn-block btn-lg">
+                                <i class="fa fa-pencil" aria-hidden="true"></i> {{ 'SignUp'|get_lang }}
                             </a>
-                            <a href="https://twitter.com/home?{{ {'status': session.getName() ~ ' ' ~ page_url }|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
-                                <em class="fa fa-twitter fa-2x"></em>
-                            </a>
-                            <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': page_url , 'title': session.getName() }|url_encode }}" target="_blank" class="btn bnt-link btn-lg">
-                                <em class="fa fa-linkedin fa-2x"></em>
-                            </a>
+                            {% endif %}
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -233,19 +256,5 @@
         </div>
     {% endfor %}
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="text-center">
-            {% if _u.logged and not is_subscribed %}
-                {{ subscribe_button }}
-            {% elseif not _u.logged %}
-                {% if 'allow_registration'|api_get_setting != 'false' %}
-                    <a href="{{ _p.web_main ~ 'auth/inscription.php' ~ redirect_to_session }}" class="btn btn-info btn-lg">
-                        <i class="fa fa-pencil" aria-hidden="true"></i> {{ 'SignUp'|get_lang }}
-                    </a>
-                {% endif %}
-            {% endif %}
-            </div>
-        </div>
-    </div>
+
 </div>

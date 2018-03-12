@@ -84,8 +84,9 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
         $buttonClass = 'btn btn-default btn-sm';
         foreach ($users as $user) {
             $user_info = api_get_user_info($user['id'], true);
-            $sendInvitation = '<button class="'.$buttonClass.' disabled "><em class="fa fa-user"></em> '.get_lang('SendInvitation').'</button>';
-            $relation_type = intval(SocialManager::get_relation_between_contacts(api_get_user_id(), $user_info['user_id']));
+            $sendInvitation = '<button class="'.$buttonClass.' disabled ">
+                <em class="fa fa-user"></em> '.get_lang('SendInvitation').'</button>';
+            $relation_type = SocialManager::get_relation_between_contacts(api_get_user_id(), $user_info['user_id']);
             $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_info['user_id'];
 
             // Show send invitation icon if they are not friends yet
@@ -195,10 +196,10 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
                         </div>
                         <div class="user-info">
                             '.$item_1.'
-                            <p>' . $members.'</p>    
-                            <p>' . $group['description'].'</p>
-                            <p>' . $tags.'</p>
-                            <p>' . $url_open.get_lang('SeeMore').$url_close.'</p>
+                            <p>'.$members.'</p>    
+                            <p>'.$group['description'].'</p>
+                            <p>'.$tags.'</p>
+                            <p>'.$url_open.get_lang('SeeMore').$url_close.'</p>
                         </div>
                     </div>
                 </div>';

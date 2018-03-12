@@ -585,7 +585,7 @@ class CourseHome
             }
 
             if (isset($toolWithSessionValue[$temp_row['name']])) {
-                if (!empty($temp_row['session_id'])) {
+                if (!empty($temp_row['session_id']) && $temp_row['session_id'] != api_get_session_id()) {
                     continue;
                 }
             }

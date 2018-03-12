@@ -604,21 +604,21 @@ class Career extends Model
 
         // Creates graph
         $graph = new stdClass();
-        $graph->blockWidth = 200;
+        $graph->blockWidth = 240;
         $graph->blockHeight = 120;
-        $graph->xGap = 60;
+        $graph->xGap = 70;
         $graph->yGap = 40;
-        $graph->xDiff = 60;
+        $graph->xDiff = 70;
         $graph->yDiff = 40;
         $graph->groupXGap = 50;
 
         foreach ($groupsBetweenColumns as $group => $items) {
-            $graphHtml .= self::parseColumnList($groupCourseList, $items, '', $graph, $simpleConnectionList);
+            self::parseColumnList($groupCourseList, $items, '', $graph, $simpleConnectionList);
         }
-
         $graphHtml .= '</div>';
-        /* $graphHtml .= $connections;
+//        $graphHtml .= $connections;
          $graphHtml .= '<style>
+            panel-title
              #career_grid {
                  display: grid;
                  grid-gap: 40px;
@@ -635,9 +635,12 @@ class Career extends Model
                  border: solid 2px;
                  padding: 8px;
              }
+             .panel-title {
+                font-size: 11px;
+             }
              </style>
              ';
-*/
+
         // Create groups
         if (!empty($graph->groupList)) {
             $groupList = [];
@@ -693,12 +696,11 @@ class Career extends Model
 
                 /*$originalRow--;
                 $column--;*/
-
                 $subGroupListData[$subGroupId]['max_width'] = ($column + 1) * ($width + $graph->xGap) - $subGroupListData[$subGroupId]['min_x'];
                 $subGroupListData[$subGroupId]['max_height'] = ($originalRow + 1) * ($height + $graph->yGap) - $subGroupListData[$subGroupId]['min_y'];
             }
 
-            $style = 'whiteSpace=wrap;rounded;dashed=1;strokeColor=blue;fillColor=none;strokeWidth=2;align=left;verticalAlign=top;';
+            $style = 'whiteSpace=wrap;rounded;dashed=1;strokeColor=blue;fillColor=none;strokeWidth=2;align=left;verticalAlign=bottom;';
             $subGroupDiffX = 5;
             foreach ($subGroupListData as $subGroupId => $data) {
                 $x = $data['min_x'] - $subGroupDiffX;
@@ -728,7 +730,7 @@ class Career extends Model
         $tpl->assign('subgroup_list', $subGroupList);
         $tpl->assign('vertex_list', $graph->elementList);
 
-        $graphHtml = '<div id="graphContainer"></div>';
+        $graphHtml .= '<div id="graphContainer"></div>';
 
         return $graphHtml;
     }
@@ -849,7 +851,7 @@ class Career extends Model
             if (!empty($vertex->getAttribute('DefinedColor'))) {
                 $color = $vertex->getAttribute('DefinedColor');
             }
-            $content = $vertex->getAttribute('Notes');
+            $content = '<div class="pull-left">'.$vertex->getAttribute('Notes').'</div>';
             $content .= '<div class="pull-right">['.$id.']</div>';
 
             $title = $vertex->getAttribute('graphviz.label');

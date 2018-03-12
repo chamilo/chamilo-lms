@@ -467,6 +467,8 @@ class Version20 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE session ADD COLUMN position INT DEFAULT 0 ');
         }
         $this->addSql("UPDATE settings_current SET selected_value = 'true' WHERE variable = 'decode_utf8'");
+
+        $this->addSql('ALTER TABLE extra_field_values CHANGE value value LONGTEXT DEFAULT NULL;');
     }
 
     /**

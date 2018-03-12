@@ -32,7 +32,7 @@ class ExtraFieldValues // extends BaseAttributeValue
 
     /**
      * @var string
-     * @ORM\Column(name="value", type="string", nullable=true, unique=false)
+     * @ORM\Column(name="value", type="text", nullable=true, unique=false)
      */
     protected $value;
 

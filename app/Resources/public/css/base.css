@@ -106,43 +106,43 @@ a.thumbnail:hover{
     padding-top: 10px;
     padding-left: 20px;
 }
-#formLogin .input-group{
+#form-login .input-group{
     margin-top: 10px;
     margin-bottom: 10px;
 }
-#formLogin label{
+#form-login label{
     display: none;
 }
-#loginBlock #formLogin .form-group{
+#login-block #formLogin .form-group{
     display: none;
 }
-#loginBlock .nav-pills{
+#login-block .nav-pills{
     margin-bottom: 5px;
     padding-top: 10px;
     margin-top: 5px;
 }
-#loginBlock .btn-group, .btn-group-vertical{
+#login-block .btn-group, .btn-group-vertical{
     width: 100%;
 }
-#loginBlock .btn-group > .btn{
+#login-block .btn-group > .btn{
     width: 100%;
     text-align: left;
 }
-#loginBlock .btn-group > .btn span.caret{
+#login-block .btn-group > .btn span.caret{
     right: 8px;
     top: 15px;
     position: absolute;
 }
-#loginBlock .dropdown-menu{
+#login-block .dropdown-menu{
     width: 100%;
 }
 /* links dropdown flag */
-#loginBlock .dropdown-toggle{
+#login-block .dropdown-toggle{
     display: block;
     width: 100%;
     padding: 5px;
 }
-#loginBlock .btn-language.open .dropdown-menu{
+#login-block .btn-language.open .dropdown-menu{
     display: block;
 }
 #toolbar-admin.navbar{

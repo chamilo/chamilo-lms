@@ -1,8 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+/**
+ * Class DictionaryPlugin
+ */
 class DictionaryPlugin extends Plugin
 {
+    /**
+     * DictionaryPlugin constructor.
+     */
     protected function __construct()
     {
         parent::__construct(
@@ -23,9 +29,12 @@ class DictionaryPlugin extends Plugin
         return $result ? $result : $result = new self();
     }
 
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function install()
     {
-        $sql = "CREATE TABLE plugin_dictionary (
+        $sql = "CREATE TABLE IF NOT EXISTS plugin_dictionary (
                 id INT NOT NULL AUTO_INCREMENT,
                 term VARCHAR(255) NOT NULL,
                 definition LONGTEXT NOT NULL,
@@ -34,6 +43,9 @@ class DictionaryPlugin extends Plugin
         Database::query($sql);
     }
 
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function uninstall()
     {
         $sql = "DROP TABLE IF EXISTS plugin_dictionary";

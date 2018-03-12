@@ -10,7 +10,7 @@
 ## Installation
 
 The installation instructions are located in the documentation here:
-[Installation](app/Resources/docs/installation.md)
+[Installation](documentation/installation_guide.html)
 
 ## Upgrade
 The upgrade instructions are located in the documentation here:

@@ -1028,7 +1028,7 @@ switch ($action) {
 
             $extraFieldValue = new ExtraFieldValue('lp');
             $params = [
-                'lp_id' => $_SESSION['oLP']->id
+                'lp_id' => $_SESSION['oLP']->lp_id
             ];
             $extraFieldValue->saveFieldValues($_REQUEST);
 

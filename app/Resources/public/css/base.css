@@ -113,36 +113,36 @@ a.thumbnail:hover{
 #formLogin label{
     display: none;
 }
-#login_block #formLogin .form-group{
+#loginBlock #formLogin .form-group{
     display: none;
 }
-#login_block .nav-pills{
+#loginBlock .nav-pills{
     margin-bottom: 5px;
     padding-top: 10px;
     margin-top: 5px;
 }
-#login_block .btn-group, .btn-group-vertical{
+#loginBlock .btn-group, .btn-group-vertical{
     width: 100%;
 }
-#login_block .btn-group > .btn{
+#loginBlock .btn-group > .btn{
     width: 100%;
     text-align: left;
 }
-#login_block .btn-group > .btn span.caret{
+#loginBlock .btn-group > .btn span.caret{
     right: 8px;
     top: 15px;
     position: absolute;
 }
-#login_block .dropdown-menu{
+#loginBlock .dropdown-menu{
     width: 100%;
 }
 /* links dropdown flag */
-#login_block .dropdown-toggle{
+#loginBlock .dropdown-toggle{
     display: block;
     width: 100%;
     padding: 5px;
 }
-#login_block .btn-language.open .dropdown-menu{
+#loginBlock .btn-language.open .dropdown-menu{
     display: block;
 }
 #toolbar-admin.navbar{

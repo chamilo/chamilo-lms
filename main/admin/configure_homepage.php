@@ -1011,7 +1011,7 @@ switch ($action) {
                 <div class="col-md-3">
 
                     <!-- login block -->
-                    <div id="login_block" class="panel panel-default">
+                    <div id="loginBlock" class="panel panel-default">
                         <div class="panel-body">
                             <?php echo api_display_language_form(false, true); ?>
                             <form id="formLogin" class="form-horizontal">

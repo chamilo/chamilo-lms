@@ -1472,7 +1472,7 @@ class Template
     public function displayLoginForm()
     {
         $form = new FormValidator(
-            'formLogin',
+            'form-login',
             'POST',
             null,
             null,

@@ -1011,10 +1011,10 @@ switch ($action) {
                 <div class="col-md-3">
 
                     <!-- login block -->
-                    <div id="login_block" class="panel panel-default">
+                    <div id="login-block" class="panel panel-default">
                         <div class="panel-body">
-                            <?php echo api_display_language_form(); ?>
-                            <form id="formLogin" class="form-horizontal">
+                            <?php echo api_display_language_form(false, true); ?>
+                            <form id="form-login" class="form-horizontal">
                                 <div class="input-group">
                                     <div class="input-group-addon"><em class="fa fa-user"></em></div>
                                     <input class="form-control" type="text" id="login" value="" disabled="disabled"/>

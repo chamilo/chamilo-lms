@@ -160,7 +160,14 @@ function checkAccessUrl()
  */
 function getPhpSetting($val)
 {
-    return ini_get($val) == '1' ? 'ON' : 'OFF';
+    $value = ini_get($val);
+    switch ($val) {
+        case 'display_errors':
+            global $originalDisplayErrors;
+            $value = $originalDisplayErrors;
+            break;
+    }
+    return $value == '1' ? 'ON' : 'OFF';
 }
 
 /**
@@ -703,7 +710,6 @@ function display_language_selection()
  *
  * @param string $installType
  * @param boolean $badUpdatePath
- * @param boolean $badUpdatePath
  * @param string $updatePath The updatePath given (if given)
  * @param array $update_from_version_8 The different subversions from version 1.9
  *
@@ -716,7 +722,7 @@ function display_requirements(
     $updatePath = '',
     $update_from_version_8 = []
 ) {
-    global $_setting;
+    global $_setting, $originalMemoryLimit;
     echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Requirements')."</h2></div>";
     echo '<div class="RequirementText">';
     echo '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
@@ -909,7 +915,7 @@ function display_requirements(
             <tr>
                 <td class="requirements-item"><a href="http://www.php.net/manual/en/ini.core.php#ini.memory-limit">Memory Limit</a></td>
                 <td class="requirements-recommended">'.Display::label('>= '.REQUIRED_MIN_MEMORY_LIMIT.'M', 'success').'</td>
-                <td class="requirements-value">'.compare_setting_values(ini_get('memory_limit'), REQUIRED_MIN_MEMORY_LIMIT).'</td>
+                <td class="requirements-value">'.compare_setting_values($originalMemoryLimit, REQUIRED_MIN_MEMORY_LIMIT).'</td>
             </tr>
           </table>';
     echo '  </div>';
@@ -2257,7 +2263,6 @@ function fixIds(EntityManager $em)
 
         if (!empty($sql) && !empty($newId) && !empty($iid)) {
             $sql = "UPDATE c_lp_item SET ref = $newId WHERE iid = $iid";
-
             $connection->executeQuery($sql);
         }
     }
@@ -2726,6 +2731,8 @@ function fixIds(EntityManager $em)
     $connection->executeQuery($sql);
     $sql = "ALTER TABLE c_item_property DROP INDEX tmpidx_ip";
     $connection->executeQuery($sql);
+
+
 
     if ($debug) {
         error_log('Finish fixId function');

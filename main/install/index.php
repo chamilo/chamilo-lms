@@ -17,6 +17,9 @@ use ChamiloSession as Session;
  * @package chamilo.install
  */
 
+$originalDisplayErrors = ini_get('display_errors');
+$originalMemoryLimit = ini_get('memory_limit');
+
 ini_set('display_errors', '1');
 ini_set('log_errors', '1');
 ini_set('memory_limit', -1);
@@ -103,7 +106,7 @@ $language_interface_initial_value = $install_language;
 // Character set during the installation, it is always to be 'UTF-8'.
 $charset = 'UTF-8';
 
-// Enables the portablity layer and configures PHP for UTF-8
+// Enables the portability layer and configures PHP for UTF-8
 \Patchwork\Utf8\Bootup::initAll();
 
 // Page encoding initialization.

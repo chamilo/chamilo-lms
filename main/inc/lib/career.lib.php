@@ -617,7 +617,7 @@ class Career extends Model
         }
         $graphHtml .= '</div>';
 //        $graphHtml .= $connections;
-         $graphHtml .= '<style>
+        $graphHtml .= '<style>
             panel-title
              #career_grid {
                  display: grid;

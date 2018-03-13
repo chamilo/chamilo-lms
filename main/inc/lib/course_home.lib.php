@@ -1333,14 +1333,18 @@ class CourseHome
                 }
 
                 $navigation_items[$row['id']] = $row;
-                if (stripos($row['link'], 'http://') === false && stripos($row['link'], 'https://') === false) {
+                if (stripos($row['link'], 'http://') === false &&
+                    stripos($row['link'], 'https://') === false
+                ) {
                     $navigation_items[$row['id']]['link'] = api_get_path(WEB_CODE_PATH);
 
                     if ($row['category'] == 'plugin') {
                         $plugin = new AppPlugin();
                         $pluginInfo = $plugin->getPluginInfo($row['name']);
-                        $navigation_items[$row['id']]['link'] = api_get_path(WEB_PLUGIN_PATH);
-                        $navigation_items[$row['id']]['name'] = $pluginInfo['title'];
+                        if (isset($pluginInfo['title'])) {
+                            $navigation_items[$row['id']]['link'] = api_get_path(WEB_PLUGIN_PATH);
+                            $navigation_items[$row['id']]['name'] = $pluginInfo['title'];
+                        }
                     } else {
                         $navigation_items[$row['id']]['name'] = self::translate_tool_name($row);
                     }

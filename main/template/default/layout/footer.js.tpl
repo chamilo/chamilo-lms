@@ -1,21 +1,16 @@
 <script>
     /* Makes row highlighting possible */
     $(document).ready( function() {
-         $("[data-toggle=popover]").each(function(i, obj) {
-
+        $("[data-toggle=popover]").each(function(i, obj) {
             $(this).popover({
-              html: true,
-              content: function() {
-                var id = $(this).attr('id')
-                return $('#popover-content-' + id).html();
-              }
+                html: true,
+                content: function() {
+                    var id = $(this).attr('id')
+                    return $('#popover-content-' + id).html();
+                }
             });
-            
-            
-            
+        });
 
-            });
-        
         // Date time settings.
         moment.locale('{{ locale }}');
         $.datepicker.setDefaults($.datepicker.regional["{{ locale }}"]);

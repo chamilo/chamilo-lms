@@ -300,6 +300,9 @@ class DocumentManager
         $filename = str_replace(',', '', $filename);
         $sendFileHeaders = api_get_configuration_value('enable_x_sendfile_headers');
 
+        // Allows chrome to make videos and audios seekable
+        header('Accept-Ranges: bytes');
+
         if ($forced) {
             // Force the browser to save the file instead of opening it
             if (isset($sendFileHeaders) &&
@@ -323,7 +326,8 @@ class DocumentManager
             header('Content-Transfer-Encoding: binary');
 
             if (function_exists('ob_end_clean')) {
-                // Use ob_end_clean() to avoid weird buffering situations where file is sent broken/incomplete for download
+                // Use ob_end_clean() to avoid weird buffering situations
+                // where file is sent broken/incomplete for download
                 ob_end_clean();
             }
 
@@ -332,8 +336,7 @@ class DocumentManager
 
             return true;
         } else {
-            //no forced download, just let the browser decide what to do according to the mimetype
-            $content_type = self::file_get_mime_type($filename);
+            // no forced download, just let the browser decide what to do according to the mimetype
             $lpFixedEncoding = api_get_configuration_value('lp_fixed_encoding');
 
             // Commented to let courses content to be cached in order to improve performance:
@@ -343,24 +346,25 @@ class DocumentManager
             // Commented to avoid double caching declaration when playing with IE and HTTPS
             //header('Cache-Control: no-cache, must-revalidate');
             //header('Pragma: no-cache');
-            switch ($content_type) {
+            $contentType = self::file_get_mime_type($filename);
+            switch ($contentType) {
                 case 'text/html':
                     if (isset($lpFixedEncoding) && $lpFixedEncoding === 'true') {
-                        $content_type .= '; charset=UTF-8';
+                        $contentType .= '; charset=UTF-8';
                     } else {
                         $encoding = @api_detect_encoding_html(file_get_contents($full_file_name));
                         if (!empty($encoding)) {
-                            $content_type .= '; charset='.$encoding;
+                            $contentType .= '; charset='.$encoding;
                         }
                     }
                     break;
                 case 'text/plain':
                     if (isset($lpFixedEncoding) && $lpFixedEncoding === 'true') {
-                        $content_type .= '; charset=UTF-8';
+                        $contentType .= '; charset=UTF-8';
                     } else {
                         $encoding = @api_detect_encoding(strip_tags(file_get_contents($full_file_name)));
                         if (!empty($encoding)) {
-                            $content_type .= '; charset='.$encoding;
+                            $contentType .= '; charset='.$encoding;
                         }
                     }
                     break;
@@ -369,7 +373,7 @@ class DocumentManager
                     header('Content-type: application/octet-stream');
                     break;
             }
-            header('Content-type: '.$content_type);
+            header('Content-type: '.$contentType);
             header('Content-Length: '.$len);
             $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
             if (strpos($user_agent, 'msie')) {
@@ -388,7 +392,8 @@ class DocumentManager
                 echo $content;
             } else {
                 if (function_exists('ob_end_clean')) {
-                    // Use ob_end_clean() to avoid weird buffering situations where file is sent broken/incomplete for download
+                    // Use ob_end_clean() to avoid weird buffering situations
+                    // where file is sent broken/incomplete for download
                     ob_end_clean();
                 }
 

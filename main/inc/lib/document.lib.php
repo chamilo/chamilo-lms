@@ -424,15 +424,12 @@ class DocumentManager
                 );
                 echo $content;
             } else {
-<<<<<<< HEAD
-=======
                 if (function_exists('ob_end_clean')) {
                     // Use ob_end_clean() to avoid weird buffering situations
                     // where file is sent broken/incomplete for download
                     ob_end_clean();
                 }
 
->>>>>>> 11ffa3a29f... Fix chrome issue when changing audio/video progress
                 readfile($full_file_name);
             }
 

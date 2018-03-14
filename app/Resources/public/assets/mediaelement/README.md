@@ -14,6 +14,7 @@ One file. Any browser. Same UI.
 [![Coverage Status](https://img.shields.io/coveralls/mediaelement/mediaelement.svg)](https://coveralls.io/github/mediaelement/mediaelement)
 [![MIT License](https://img.shields.io/npm/l/mediaelement.svg)](https://mediaelement.mit-license.org/)
 [![CDNJS](https://img.shields.io/cdnjs/v/mediaelement.svg)](https://cdnjs.com/libraries/mediaelement)
+[![jsDelivr Hits](https://data.jsdelivr.com/v1/package/npm/mediaelement/badge?style=rounded)](https://www.jsdelivr.com/package/npm/mediaelement)
 
 # Table of Contents
 
@@ -38,6 +39,13 @@ Instead of using Flash as a _fallback_, Flash is used to make the browser seem H
 In general, `MediaElement.js` supports **IE11+, MS Edge, Chrome, Firefox, Safari, iOS 8+** and **Android 4.0+**.
 
 **It is strongly recommended to read the entire documentation and check the `demo` folder to get the most out of this package**. Visit [here](docs) to start.
+
+## * IMPORTANT NOTE for Safari users (Jun 8, 2017)
+
+Since Sierra version, `autoplay` policies have changed. You may experience an error if you try to execute `play` programatically or via `autoplay` attribute with MediaElement, unless `muted` attribute is specified. 
+
+For more information, read https://webkit.org/blog/7734/auto-play-policy-changes-for-macos/
+
 
 ## * IMPORTANT CHANGES on `4.2.0` version
 

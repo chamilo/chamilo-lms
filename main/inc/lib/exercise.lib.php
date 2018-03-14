@@ -330,15 +330,17 @@ class ExerciseLib
                         if ($answerType == UNIQUE_ANSWER_IMAGE) {
                             if ($show_comment) {
                                 if (empty($comment)) {
-                                    $s .= '<div id="answer'.$questionId.$numAnswer.'" '
-                                        . 'class="exercise-unique-answer-image" style="text-align: center">';
+                                    $s .= '<div id="answer'.$questionId.$numAnswer.'" 
+                                            class="exercise-unique-answer-image" style="text-align: center">';
                                 } else {
-                                    $s .= '<div id="answer'.$questionId.$numAnswer.'" '
-                                        . 'class="exercise-unique-answer-image col-xs-6 col-sm-12" style="text-align: center">';
+                                    $s .= '<div id="answer'.$questionId.$numAnswer.'" 
+                                            class="exercise-unique-answer-image col-xs-6 col-sm-12" 
+                                            style="text-align: center">';
                                 }
                             } else {
-                                $s .= '<div id="answer'.$questionId.$numAnswer.'" '
-                                    . 'class="exercise-unique-answer-image col-xs-6 col-md-3" style="text-align: center">';
+                                $s .= '<div id="answer'.$questionId.$numAnswer.'" 
+                                        class="exercise-unique-answer-image col-xs-6 col-md-3" 
+                                        style="text-align: center">';
                             }
                         }
 
@@ -805,7 +807,9 @@ class ExerciseLib
                             // Id of select is # question + # of option
                             $s .= '<td width="10%" valign="top" align="center">
                                 <div class="select-matching">
-                                <select id="choice_id_'.$current_item.'_'.$lines_count.'" name="choice['.$questionId.']['.$numAnswer.']">';
+                                <select 
+                                    id="choice_id_'.$current_item.'_'.$lines_count.'" 
+                                    name="choice['.$questionId.']['.$numAnswer.']">';
 
                             // fills the list-box
                             foreach ($select_items as $key => $val) {
@@ -829,7 +833,12 @@ class ExerciseLib
                             $s .= '</select></div></td><td width="5%" class="separate">&nbsp;</td>';
                             $s .= '<td width="40%" valign="top" >';
                             if (isset($select_items[$lines_count])) {
-                                $s .= '<div class="text-right"><p class="indent">'.$select_items[$lines_count]['letter'].'.&nbsp; '.$select_items[$lines_count]['answer'].'</p></div>';
+                                $s .= '<div class="text-right">
+                                        <p class="indent">'.
+                                            $select_items[$lines_count]['letter'].'.&nbsp; '.
+                                            $select_items[$lines_count]['answer'].'
+                                        </p>
+                                        </div>';
                             } else {
                                 $s .= '&nbsp;';
                             }
@@ -844,7 +853,8 @@ class ExerciseLib
                                     $s .= '<tr>
                                       <td colspan="2"></td>
                                       <td valign="top">';
-                                    $s .= '<b>'.$select_items[$lines_count]['letter'].'.</b> '.$select_items[$lines_count]['answer'];
+                                    $s .= '<b>'.$select_items[$lines_count]['letter'].'.</b> '.
+                                                $select_items[$lines_count]['answer'];
                                     $s .= "</td>
                                 </tr>";
                                     $lines_count++;
@@ -951,7 +961,8 @@ class ExerciseLib
                             $s .= <<<HTML
                             <tr>
                                 <td width="45%">
-                                    <div id="window_{$windowId}" class="window window_left_question window{$questionId}_question">
+                                    <div id="window_{$windowId}" 
+                                        class="window window_left_question window{$questionId}_question">
                                         <strong>$lines_count.</strong> 
                                         $answer
                                     </div>
@@ -1023,7 +1034,8 @@ HTML;
                             if (isset($select_items[$lines_count])) {
                                 $s .= <<<HTML
                                 <div id="window_{$windowId}_answer" class="window window_right_question">
-                                    <strong>{$select_items[$lines_count]['letter']}.</strong> {$select_items[$lines_count]['answer']}
+                                    <strong>{$select_items[$lines_count]['letter']}.</strong> 
+                                    {$select_items[$lines_count]['answer']}
                                 </div>
 HTML;
                             } else {
@@ -1131,7 +1143,6 @@ HTML;
                     }
                 }
             }
-            $questionName = $objQuestionTmp->selectTitle();
             $questionDescription = $objQuestionTmp->selectDescription();
 
             // Get the answers, make a list
@@ -1302,12 +1313,16 @@ HOTSPOT;
                                         <div class="btn-group" data-toggle="buttons">
                                             <label class="btn btn-default active"
                                                 aria-label="'.get_lang('AddAnnotationPath').'">
-                                                <input type="radio" value="0" name="'.$questionId.'-options" autocomplete="off" checked>
+                                                <input 
+                                                    type="radio" value="0" 
+                                                    name="'.$questionId.'-options" autocomplete="off" checked>
                                                 <span class="fa fa-pencil" aria-hidden="true"></span>
                                             </label>
                                             <label class="btn btn-default"
                                                 aria-label="'.get_lang('AddAnnotationText').'">
-                                                <input type="radio" value="1" name="'.$questionId.'-options" autocomplete="off">
+                                                <input 
+                                                    type="radio" value="1" 
+                                                    name="'.$questionId.'-options" autocomplete="off">
                                                 <span class="fa fa-font fa-fw" aria-hidden="true"></span>
                                             </label>
                                         </div>
@@ -2287,7 +2302,9 @@ HOTSPOT;
                                                 $category_was_added_for_this_test = true;
                                             }
 
-                                            if (isset($objQuestionTmp->category_list) && !empty($objQuestionTmp->category_list)) {
+                                            if (isset($objQuestionTmp->category_list) &&
+                                                !empty($objQuestionTmp->category_list)
+                                            ) {
                                                 foreach ($objQuestionTmp->category_list as $category_id) {
                                                     $category_list[$category_id]['score'] += $my_total_score;
                                                     $category_list[$category_id]['total'] += $my_total_weight;
@@ -3665,7 +3682,6 @@ EOT;
         $answer_id = intval($answer_id);
         $exercise_id = intval($exercise_id);
         $courseId = api_get_course_int_id($course_code);
-        $course_code = Database::escape_string($course_code);
         $session_id = intval($session_id);
 
         switch ($question_type) {

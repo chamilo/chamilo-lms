@@ -93,7 +93,10 @@
 
         // Mediaelement
         if ( {{ show_media_element }} == 1) {
-            jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer(/* Options */);
+            $('video:not(.skip), audio:not(.skip)').mediaelementplayer({
+                success: function(mediaElement, originalNode, instance) {
+                }
+            });
         }
 
         // Table highlight.

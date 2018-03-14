@@ -3829,17 +3829,17 @@ function api_item_property_update(
 
     $to_group_id = 0;
     if (!empty($groupInfo) && isset($groupInfo['iid'])) {
-        $to_group_id = $groupInfo['iid'];
+        $to_group_id = (int) $groupInfo['iid'];
     }
 
     $em = Database::getManager();
 
     // Definition of variables.
     $tool = Database::escape_string($tool);
-    $item_id = intval($item_id);
+    $item_id = (int) $item_id;
     $lastEditTypeNoFilter = $last_edit_type;
     $last_edit_type = Database::escape_string($last_edit_type);
-    $user_id = intval($user_id);
+    $user_id = (int) $user_id;
 
     $startVisible = "NULL";
     if (!empty($start_visible)) {
@@ -4060,7 +4060,12 @@ function api_item_property_update(
             $user_id = api_get_anonymous_id();
             $objUser = api_get_user_entity($user_id);
         }
-        $objGroup = $em->find('ChamiloCourseBundle:CGroupInfo', intval($to_group_id));
+
+        $objGroup = null;
+        if (!empty($to_group_id)) {
+            $objGroup = $em->find('ChamiloCourseBundle:CGroupInfo', $to_group_id);
+        }
+
         $objToUser = api_get_user_entity($to_user_id);
         $objSession = $em->find('ChamiloCoreBundle:Session', intval($session_id));
 
@@ -7125,7 +7130,6 @@ function api_is_global_chat_enabled()
 
 /**
  * @todo Fix tool_visible_by_default_at_creation labels
- * @todo Add sessionId parameter to avoid using context
  *
  * @param int $item_id
  * @param int $tool_id
@@ -7148,11 +7152,17 @@ function api_set_default_visibility(
     $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
     $userId = empty($userId) ? api_get_user_id() : $userId;
 
-    if (empty($group_id)) {
-        $group_id = api_get_group_id();
+    // if group is null force group_id = 0, this force is needed to create a LP folder with group = 0
+    if (is_null($group_id)) {
+        $group_id = 0;
+    } else {
+        $group_id = empty($group_id) ?  api_get_group_id() : $group_id;
     }
 
-    $groupInfo = GroupManager::get_group_properties($group_id);
+    $groupInfo = [];
+    if (!empty($group_id)) {
+        $groupInfo = GroupManager::get_group_properties($group_id);
+    }
     $original_tool_id = $tool_id;
 
     switch ($tool_id) {

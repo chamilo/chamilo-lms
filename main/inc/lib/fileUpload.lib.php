@@ -1302,7 +1302,7 @@ function add_document(
     $comment = null,
     $readonly = 0,
     $saveVisibility = true,
-    $group_id = null,
+    $group_id = 0,
     $session_id = 0,
     $userId = 0
 ) {

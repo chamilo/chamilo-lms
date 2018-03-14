@@ -6532,7 +6532,7 @@ class learnpath
                 $course,
                 $creatorId,
                 0,
-                0,
+                null,
                 0,
                 $filepath,
                 $dir,

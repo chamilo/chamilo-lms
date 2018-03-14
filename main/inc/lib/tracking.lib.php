@@ -70,12 +70,15 @@ class Tracking
                         $courseInfo['real_id'],
                         $sessionId
                     );
-                    $avg_student_score += self::get_avg_student_score(
+                    $average = self::get_avg_student_score(
                         $user_data['user_id'],
                         $courseInfo['code'],
                         [],
                         $sessionId
                     );
+                    if (is_numeric($average)) {
+                        $avg_student_score += $average;
+                    }
                     $avg_student_progress += self::get_avg_student_progress(
                         $user_data['user_id'],
                         $courseInfo['code'],
@@ -2647,7 +2650,6 @@ class Tracking
 
             // Check the real number of LPs corresponding to the filter in the
             // database (and if no list was given, get them all)
-
             if (empty($session_id)) {
                 $sql = "SELECT DISTINCT(id), use_max_score
                         FROM $lp_table
@@ -2970,7 +2972,6 @@ class Tracking
                 if ($debug) {
                     echo '<h3>Final return</h3>';
                 }
-
                 if ($lp_with_quiz != 0) {
                     if (!$return_array) {
                         $score_of_scorm_calculate = round(($global_result / $lp_with_quiz), 2);

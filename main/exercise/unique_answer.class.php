@@ -57,7 +57,6 @@ class UniqueAnswer extends Question
          */
 
         $feedback_title = '';
-
         if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
             //Scenario
             $comment_title = '<th width="20%">'.get_lang('Comment').'</th>';
@@ -143,8 +142,6 @@ class UniqueAnswer extends Question
                 if (isset($answer->destination[$i])) {
                     $item_list = explode('@@', $answer->destination[$i]);
                 }
-
-
                 $try = isset($item_list[0]) ? $item_list[0] : '';
                 $lp = isset($item_list[1]) ? $item_list[1] : '';
                 $list_dest = isset($item_list[2]) ? $item_list[2] : '';

@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 /**
  * Class ReadingComprehension
  *
@@ -165,7 +163,6 @@ class ReadingComprehension extends UniqueAnswer
         $my_id = isset($_REQUEST['myid']) ? intval($_REQUEST['myid']) : null;
         $form->addElement('hidden', 'myid', $my_id);
         $form->addRule('questionName', get_lang('GiveQuestion'), 'required');
-
         $isContent = isset($_REQUEST['isContent']) ? intval($_REQUEST['isContent']) : null;
 
         // default values

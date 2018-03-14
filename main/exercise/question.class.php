@@ -1805,8 +1805,8 @@ abstract class Question
 
         echo '<div class="well">';
         echo '<ul class="question_menu">';
-
         foreach ($question_type_custom_list as $i => $a_type) {
+            // @todo remove require_once classes are already loaded using composer
             // include the class of the type
             require_once $a_type[0];
             // get the picture of the type and the langvar which describes it

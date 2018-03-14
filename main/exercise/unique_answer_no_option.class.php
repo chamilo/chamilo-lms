@@ -40,8 +40,9 @@ class UniqueAnswerNoOption extends Question
             'Width' => '100%',
             'Height' => '125'
         ];
-        //this line define how many question by default appear when creating a choice question
-        $nb_answers = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : 3; // The previous default value was 2. See task #1759.
+        // This line define how many question by default appear when creating a choice question
+        // The previous default value was 2. See task #1759.
+        $nb_answers = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : 3;
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
         /*
@@ -52,7 +53,6 @@ class UniqueAnswerNoOption extends Question
          */
 
         $feedback_title = '';
-        $comment_title = '';
         if ($obj_ex->selectFeedbackType() == 1) {
             $editor_config['Width'] = '250';
             $editor_config['Height'] = '110';
@@ -116,8 +116,6 @@ class UniqueAnswerNoOption extends Question
             }
         }
 
-        $i = 1;
-        //for ($k = 1 ; $k <= $real_nb_answers; $k++) {
         foreach ($new_list as $key) {
             $i = $key;
             $form->addElement('html', '<tr>');
@@ -242,18 +240,12 @@ class UniqueAnswerNoOption extends Question
             ->freeze();
 
         $form->addElement('hidden', 'position['.$i.']', '666');
-
         $form->addElement('radio', 'correct', null, null, $i, ['class' => 'checkbox', 'disabled' => true]);
         $form->addElement('html_editor', 'answer['.$i.']', null, [], $editor_config);
 
         $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
         $form->addElement('html_editor', 'comment['.$i.']', null, [], $editor_config);
-
-        //$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
-
-        $form
-            ->addElement('text', "weighting[$i]", null)
-            ->freeze();
+        $form ->addElement('text', "weighting[$i]", null)->freeze();
 
         $form->addHTml('</tr>');
         $form->addHtml('</tbody></table>');
@@ -335,7 +327,6 @@ class UniqueAnswerNoOption extends Question
             {
                 $destination_str.=$destination_id.';';
             }*/
-
             $goodAnswer = ($correct == $i) ? true : false;
 
             if ($goodAnswer) {

@@ -1328,7 +1328,8 @@ class FillBlanks extends Question
      * @param string $answer
      * @param string $correct
      * @param string $feedbackType
-     * @param bool   $resultsDisabled
+     * @param bool $resultsDisabled
+     * @param bool $showTotalScoreAndUserChoices
      *
      * @return string
      */

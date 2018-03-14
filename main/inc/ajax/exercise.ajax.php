@@ -537,8 +537,8 @@ switch ($action) {
             exit;
         }
 
-        $questionId = isset($_GET['question']) ? intval($_GET['question']) : 0;
-        $exerciseId = isset($_REQUEST['exercise']) ? intval($_REQUEST['exercise']) : 0;
+        $questionId = isset($_GET['question']) ? (int) $_GET['question'] : 0;
+        $exerciseId = isset($_REQUEST['exercise']) ? (int) $_REQUEST['exercise'] : 0;
 
         if (!$questionId || !$exerciseId) {
             break;
@@ -548,9 +548,15 @@ switch ($action) {
         $objExercise->read($exerciseId);
 
         $objQuestion = Question::read($questionId);
-        $objQuestion->get_question_type_name();
 
         echo '<p class="lead">'.$objQuestion->get_question_type_name().'</p>';
+        if ($objQuestion->type == FILL_IN_BLANKS) {
+            echo '<script>
+                $(function() {
+                    $(".selectpicker").selectpicker({});
+                });
+            </script>';
+        }
         ExerciseLib::showQuestion(
             $objExercise,
             $questionId,

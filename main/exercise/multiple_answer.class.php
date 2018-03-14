@@ -38,7 +38,8 @@ class MultipleAnswer extends Question
             'Height' => '125'
         ];
 
-        $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4; // The previous default value was 2. See task #1759.
+        // The previous default value was 2. See task #1759.
+        $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
         $obj_ex = Session::read('objExercise');
@@ -48,11 +49,11 @@ class MultipleAnswer extends Question
         $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th width="10">' . get_lang('Number').'</th>
-                    <th width="10">' . get_lang('True').'</th>
-                    <th width="50%">' . get_lang('Answer').'</th>
-                    <th width="50%">' . get_lang('Comment').'</th>
-                    <th width="10">' . get_lang('Weighting').'</th>
+                    <th width="10">'.get_lang('Number').'</th>
+                    <th width="10">'.get_lang('True').'</th>
+                    <th width="50%">'.get_lang('Answer').'</th>
+                    <th width="50%">'.get_lang('Comment').'</th>
+                    <th width="10">'.get_lang('Weighting').'</th>
                 </tr>
             </thead>
             <tbody>';

@@ -62,7 +62,6 @@ class MultipleAnswerTrueFalse extends Question
         $form->addHeader(get_lang('Answers'));
         $form->addHtml($html);
 
-        $correct = 0;
         $answer = null;
 
         if (!empty($this->id)) {

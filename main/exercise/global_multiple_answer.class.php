@@ -35,13 +35,13 @@ class GlobalMultipleAnswer extends Question
         $html = '<table class="data_table">
                 <tr>
                     <th width="10px">
-                        ' . get_lang('Number').'
+                        '.get_lang('Number').'
                     </th>
                     <th width="10px">
-                        ' . get_lang('True').'
+                        '.get_lang('True').'
                     </th>
                     <th width="50%">
-                        ' . get_lang('Answer').'
+                        '.get_lang('Answer').'
                     </th>';
 
         $html .= '<th>'.get_lang('Comment').'</th>';

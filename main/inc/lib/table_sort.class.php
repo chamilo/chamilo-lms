@@ -44,48 +44,100 @@ class TableSort
         }
 
         if ($type == SORT_REGULAR) {
+            $type = SORT_STRING;
             if (self::is_image_column($data, $column)) {
                 $type = SORT_IMAGE;
             } elseif (self::is_date_column($data, $column)) {
                 $type = SORT_DATE;
             } elseif (self::is_numeric_column($data, $column)) {
                 $type = SORT_NUMERIC;
-            } else {
-                $type = SORT_STRING;
             }
         }
-
-        $compare_operator = $direction == SORT_ASC ? '>' : '<=';
-        switch ($type) {
-            case SORT_NUMERIC:
-                $compare_function = 'return strip_tags($a['.$column.']) '.$compare_operator.' strip_tags($b['.$column.']);';
-                break;
-            case SORT_IMAGE:
-                $compare_function = 'return api_strnatcmp(api_strtolower(strip_tags($a['.$column.'], "<img>")), api_strtolower(strip_tags($b['.$column.'], "<img>"))) '.$compare_operator.' 0;';
-                break;
-            case SORT_DATE:
-                $compare_function = 'return strtotime(strip_tags($a['.$column.'])) '.$compare_operator.' strtotime(strip_tags($b['.$column.']));';
-                break;
-            case SORT_STRING:
-            default:
-                $compare_function = 'return api_strnatcmp(api_strtolower(strip_tags($a['.$column.'])), api_strtolower(strip_tags($b['.$column.']))) '.$compare_operator.' 0;';
-                break;
-        }
+        $function = self::getSortFunction($type, $direction, $column);
 
         // Sort the content
-        usort($data, create_function('$a, $b', $compare_function));
+        usort($data, $function);
 
         return $data;
     }
 
     /**
-     * Sorts 2-dimensional table. It is possile changing the columns that will be shown and the way that the columns are to be sorted.
+     * @param $type
+     * @param $direction
+     * @param $column
+     * @return Closure
+     */
+    public static function getSortFunction($type, $direction, $column)
+    {
+        $compareOperator = $direction == SORT_ASC ? '>' : '<=';
+
+        switch ($type) {
+            case SORT_NUMERIC:
+                $function = function ($a, $b) use ($column, $compareOperator) {
+                    $result = strip_tags($a[$column]) <= strip_tags($b[$column]);
+                    if ($compareOperator == '>') {
+                        $result = strip_tags($a[$column]) > strip_tags($b[$column]);
+                    }
+                    return $result;
+                };
+                break;
+            case SORT_IMAGE:
+                $function = function ($a, $b) use ($column, $compareOperator) {
+                    $result = api_strnatcmp(
+                        api_strtolower(strip_tags($a[$column], "<img>")),
+                        api_strtolower(strip_tags($b[$column], "<img>"))
+                    ) <= 0;
+                    if ($compareOperator == '>') {
+                        $result = api_strnatcmp(
+                            api_strtolower(strip_tags($a[$column], "<img>")),
+                            api_strtolower(strip_tags($b[$column], "<img>"))
+                        ) > 0;
+                    }
+                    return $result;
+                };
+
+                break;
+            case SORT_DATE:
+                $function = function ($a, $b) use ($column, $compareOperator) {
+                    $result = strtotime(strip_tags($a[$column])) <= strtotime(strip_tags($b[$column]));
+                    if ($compareOperator == '>') {
+                        $result = strtotime(strip_tags($a[$column])) > strtotime(strip_tags($b[$column]));
+                    }
+                    return $result;
+                };
+                break;
+            case SORT_STRING:
+            default:
+                $function = function ($a, $b) use ($column, $compareOperator) {
+                    $result = api_strnatcmp(
+                        api_strtolower(strip_tags($a[$column])),
+                        api_strtolower(strip_tags($b[$column]))
+                    ) <= 0;
+                    if ($compareOperator == '>') {
+                        $result = api_strnatcmp(
+                            api_strtolower(strip_tags($a[$column])),
+                            api_strtolower(strip_tags($b[$column]))
+                        ) > 0;
+                    }
+                    return $result;
+                };
+                break;
+        }
+
+        return $function;
+    }
+
+    /**
+     * Sorts 2-dimensional table. It is possible changing the columns that will be
+     * shown and the way that the columns are to be sorted.
      * @param array $data The data to be sorted.
      * @param int $column The column on which the data should be sorted (default = 0)
-     * @param string $direction The direction to sort (SORT_ASC (default) orSORT_DESC)
-     * @param array $column_show The columns that we will show in the table i.e: $column_show = array('1','0','1') we will show the 1st and the 3th column.
-     * @param array $column_order Changes how the columns will be sorted ie. $column_order = array('0','3','2','3') The column [1] will be sorted like the column [3]
-     * @param constant $type How should data be sorted (SORT_REGULAR, SORT_NUMERIC, SORT_STRING, SORT_DATE, SORT_IMAGE)
+     * @param int $direction The direction to sort (SORT_ASC (default) or SORT_DESC)
+     * @param array $column_show The columns that we will show in the table
+     * i.e: $column_show = array('1','0','1') we will show the 1st and the 3th column.
+     * @param array $column_order Changes how the columns will be sorted
+     * ie. $column_order = array('0','3','2','3') The column [1] will be sorted like the column [3]
+     * @param int $type How should data be sorted (SORT_REGULAR, SORT_NUMERIC, SORT_STRING, SORT_DATE, SORT_IMAGE)
      * @return array The sorted dataset
      * @author bart.mollet@hogent.be
      */
@@ -179,25 +231,10 @@ class TableSort
                 $data = $new_data_order;
             }
         } else {
-            $compare_operator = $direction == SORT_ASC ? '>' : '<=';
-            switch ($type) {
-                case SORT_NUMERIC:
-                    $compare_function = 'return strip_tags($a['.$column.']) '.$compare_operator.' strip_tags($b['.$column.']);';
-                    break;
-                case SORT_IMAGE:
-                    $compare_function = 'return api_strnatcmp(api_strtolower(strip_tags($a['.$column.'], "<img>")), api_strtolower(strip_tags($b['.$column.'], "<img>"))) '.$compare_operator.' 0;';
-                    break;
-                case SORT_DATE:
-                    $compare_function = 'return strtotime(strip_tags($a['.$column.'])) '.$compare_operator.' strtotime(strip_tags($b['.$column.']));';
-                    break;
-                case SORT_STRING:
-                default:
-                    $compare_function = 'return api_strnatcmp(api_strtolower(strip_tags($a['.$column.'])), api_strtolower(strip_tags($b['.$column.']))) '.$compare_operator.' 0;';
-                    break;
-            }
+            $function = self::getSortFunction($type, $direction, $column);
 
             // Sort the content
-            usort($data, create_function('$a, $b', $compare_function));
+            usort($data, $function);
         }
 
         if (is_array($column_show) && !empty($column_show)) {

@@ -142,7 +142,7 @@ $ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&
 <?php
 
 //we filter the type of questions we can add
-Question:: display_type_menu($objExercise);
+Question::display_type_menu($objExercise);
 // Re sets the question list
 $objExercise->setQuestionList();
 
@@ -246,7 +246,7 @@ if (!$inATest) {
                             [],
                             ICON_SIZE_TINY
                         ),
-                        api_get_self().'?'.api_get_cidreq()
+                        api_get_self().'?'.api_get_cidreq().'&'
                             .http_build_query([
                                 'exerciseId' => $exerciseId,
                                 'deleteQuestion' => $id

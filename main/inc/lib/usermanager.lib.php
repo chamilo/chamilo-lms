@@ -4954,7 +4954,7 @@ class UserManager
                     user_id="'.intval($user_id).'"';
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
-        if ($row['path_certificate'] == '' || is_null($row['path_certificate'])) {
+        if (empty($row['path_certificate']) || is_null($row['path_certificate'])) {
             return false;
         } else {
             return true;

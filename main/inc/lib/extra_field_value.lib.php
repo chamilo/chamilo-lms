@@ -278,6 +278,10 @@ class ExtraFieldValue extends Model
                             $fileDir = api_get_path(SYS_UPLOAD_PATH).'work/';
                             $fileDirStored = "work/";
                             break;
+                        case 'schedule_announcement':
+                            $fileDir = api_get_path(SYS_UPLOAD_PATH).'schedule_announcement/';
+                            $fileDirStored = 'schedule_announcement/';
+                            break;
                     }
 
                     $cleanedName = api_replace_dangerous_char($value['name']);
@@ -396,12 +400,11 @@ class ExtraFieldValue extends Model
                 case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
                 case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
                     if (is_array($value)) {
+                        $value_to_insert = null;
                         if (isset($value['extra_'.$extraFieldInfo['variable']]) &&
                             isset($value['extra_'.$extraFieldInfo['variable'].'_second'])
                         ) {
                             $value_to_insert = $value['extra_'.$extraFieldInfo['variable']].'::'.$value['extra_'.$extraFieldInfo['variable'].'_second'];
-                        } else {
-                            $value_to_insert = null;
                         }
                     }
                     break;
@@ -982,20 +985,33 @@ class ExtraFieldValue extends Model
      * @param int $itemId
      * @param int $fieldId
      * @param int $fieldValue
+     *
+     * @return bool
      */
     public function deleteValuesByHandlerAndFieldAndValue($itemId, $fieldId, $fieldValue)
     {
         $itemId = intval($itemId);
         $fieldId = intval($fieldId);
-        $fieldValue = Database::escape_string($fieldValue);
 
-        $sql = "DELETE FROM {$this->table}
+        $fieldData = $this->getExtraField()->get($fieldId);
+        if ($fieldData) {
+            $fieldValue = Database::escape_string($fieldValue);
+
+            $sql = "DELETE FROM {$this->table}
                 WHERE
                     item_id = '$itemId' AND
                     field_id = '$fieldId' AND
                     value = '$fieldValue'
                 ";
-        Database::query($sql);
+            Database::query($sql);
+
+            // Delete file from uploads
+            if ($fieldData['field_type'] == ExtraField::FIELD_TYPE_FILE) {
+                api_remove_uploaded_file($this->type, basename($fieldValue));
+            }
+            return true;
+        }
+        return false;
     }
 
     /**

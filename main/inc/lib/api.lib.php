@@ -8510,16 +8510,30 @@ function api_upload_file($type, $file, $itemId, $cropParameters = '')
  *
  * @return bool
  */
-function api_get_uploaded_file($type, $itemId, $file)
+function api_get_uploaded_web_url($type, $itemId, $file)
+{
+    return api_get_uploaded_file($type, $itemId, $file, true);
+}
+
+/**
+ * @param string $type
+ * @param int $itemId
+ * @param string $file
+ * @param bool $getUrl
+ *
+ * @return bool
+ */
+function api_get_uploaded_file($type, $itemId, $file, $getUrl = false)
 {
     $itemId = (int) $itemId;
     $pathId = '/'.substr((string) $itemId, 0, 1).'/'.$itemId.'/';
     $path = api_get_path(SYS_UPLOAD_PATH).$type.$pathId;
-
     $file = basename($file);
-
     $file = $path.'/'.$file;
-    if (file_exists($file)) {
+    if (Security::check_abs_path($file, $path) && is_file($file) && file_exists($file)) {
+        if ($getUrl) {
+            return str_replace(api_get_path(SYS_UPLOAD_PATH), api_get_path(WEB_UPLOAD_PATH), $file);
+        }
         return $file;
     }
     return false;
@@ -8549,8 +8563,9 @@ function api_download_uploaded_file($type, $itemId, $file, $title = '')
  */
 function api_remove_uploaded_file($type, $file)
 {
-    $path = api_get_path(SYS_UPLOAD_PATH).$type.'/'.$file;
-    if (file_exists($path)) {
+    $typePath = api_get_path(SYS_UPLOAD_PATH).$type;
+    $path = $typePath.'/'.$file;
+    if (Security::check_abs_path($path, $typePath) && file_exists($path) && is_file($path)) {
         unlink($path);
     }
 }

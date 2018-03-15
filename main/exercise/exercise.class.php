@@ -124,6 +124,7 @@ class Exercise
         }
         $this->course_id = $course_info['real_id'];
         $this->course = $course_info;
+        $this->sessionId = api_get_session_id();
 
         // ALTER TABLE c_quiz_question ADD COLUMN feedback text;
         $this->questionFeedbackEnabled = api_get_configuration_value('allow_quiz_question_feedback');
@@ -172,6 +173,7 @@ class Exercise
             $this->results_disabled = $object->results_disabled;
             $this->attempts = $object->max_attempt;
             $this->feedback_type = $object->feedback_type;
+            $this->sessionId = $object->session_id;
             $this->propagate_neg = $object->propagate_neg;
             $this->saveCorrectAnswers = $object->save_correct_answers;
             $this->randomByCat = $object->random_by_category;
@@ -462,6 +464,7 @@ class Exercise
      */
     public function updateRandomByCat($random)
     {
+        $this->randomByCat = EXERCISE_CATEGORY_RANDOM_DISABLED;
         if (in_array(
             $random,
             [
@@ -471,8 +474,6 @@ class Exercise
             ]
         )) {
             $this->randomByCat = $random;
-        } else {
-            $this->randomByCat = EXERCISE_CATEGORY_RANDOM_DISABLED;
         }
     }
 
@@ -495,11 +496,11 @@ class Exercise
      */
     public function isRandom()
     {
+        $isRandom = false;
         if ($this->random > 0 || $this->random == -1) {
-            return true;
-        } else {
-            return false;
+            $isRandom = true;
         }
+        return $isRandom;
     }
 
     /**
@@ -792,7 +793,6 @@ class Exercise
                     e.c_id = {$this->course_id} AND
                     e.exercice_id = '".$this->id."'
                 ORDER BY question_order";
-
         $result = Database::query($sql);
 
         // Fills the array with the question ID for this exercise
@@ -1065,6 +1065,7 @@ class Exercise
         // Adding category info in the category list with question list:
         if (!empty($questions_by_category)) {
             $newCategoryList = [];
+            $em = Database::getManager();
             foreach ($questions_by_category as $categoryId => $questionList) {
                 $cat = new TestCategory();
                 $cat = $cat->getCategory($categoryId);
@@ -1239,11 +1240,11 @@ class Exercise
      */
     public function isInList($questionId)
     {
+        $inList = false;
         if (is_array($this->questionList)) {
-            return in_array($questionId, $this->questionList);
-        } else {
-            return false;
+            $inList = in_array($questionId, $this->questionList);
         }
+        return $inList;
     }
 
     /**
@@ -1483,9 +1484,6 @@ class Exercise
      */
     public function setRandom($random)
     {
-        /*if ($random == 'all') {
-            $random = $this->selectNbrQuestions();
-        }*/
         $this->random = $random;
     }
 
@@ -1573,28 +1571,24 @@ class Exercise
         $pass_percentage = intval($this->pass_percentage);
         $session_id = $this->sessionId;
 
-        //If direct we do not show results
+        // If direct we do not show results
+        $results_disabled = intval($this->results_disabled);
         if ($feedback_type == EXERCISE_FEEDBACK_TYPE_DIRECT) {
             $results_disabled = 0;
-        } else {
-            $results_disabled = intval($this->results_disabled);
         }
-
         $expired_time = intval($this->expired_time);
 
         // Exercise already exists
         if ($id) {
             // we prepare date in the database using the api_get_utc_datetime() function
+            $start_time = null;
             if (!empty($this->start_time)) {
                 $start_time = $this->start_time;
-            } else {
-                $start_time = null;
             }
 
+            $end_time = null;
             if (!empty($this->end_time)) {
                 $end_time = $this->end_time;
-            } else {
-                $end_time = null;
             }
 
             $params = [
@@ -1662,22 +1656,19 @@ class Exercise
             }
         } else {
             // Creates a new exercise
-
             // In this case of new exercise, we don't do the api_get_utc_datetime()
             // for date because, bellow, we call function api_set_default_visibility()
             // In this function, api_set_default_visibility,
             // the Quiz is saved too, with an $id and api_get_utc_datetime() is done.
             // If we do it now, it will be done twice (cf. https://support.chamilo.org/issues/6586)
+            $start_time = null;
             if (!empty($this->start_time)) {
                 $start_time = $this->start_time;
-            } else {
-                $start_time = null;
             }
 
+            $end_time = null;
             if (!empty($this->end_time)) {
                 $end_time = $this->end_time;
-            } else {
-                $end_time = null;
             }
 
             $params = [
@@ -1956,7 +1947,8 @@ class Exercise
                 );
 
                 if (api_get_setting('enable_quiz_scenario') == 'true') {
-                    //Can't convert a question from one feedback to another if there is more than 1 question already added
+                    // Can't convert a question from one feedback to another
+                    // if there is more than 1 question already added
                     if ($this->selectNbrQuestions() == 0) {
                         $radios_feedback[] = $form->createElement(
                             'radio',
@@ -2133,7 +2125,7 @@ class Exercise
                     );
                     $form->addGroup($radios, null, get_lang('ExerciseType'));
                 } else {
-                    //Show options freeze
+                    // Show options freeze
                     $radios_results_disabled[] = $form->createElement(
                         'radio',
                         'results_disabled',
@@ -2165,7 +2157,7 @@ class Exercise
                     );
                     $result_disable_group->freeze();
 
-                    //we force the options to the DirectFeedback exercisetype
+                    // we force the options to the DirectFeedback exercisetype
                     $form->addElement('hidden', 'exerciseFeedbackType', EXERCISE_FEEDBACK_TYPE_DIRECT);
                     $form->addElement('hidden', 'exerciseType', ONE_PER_PAGE);
 
@@ -2471,7 +2463,6 @@ class Exercise
             $defaults = [];
             if (api_get_setting('search_enabled') === 'true') {
                 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
-
                 $form->addElement('checkbox', 'index_document', '', get_lang('SearchFeatureDoIndexDocument'));
                 $form->addSelectLanguage('language', get_lang('SearchFeatureDocumentLanguage'));
                 $specific_fields = get_specific_field_list();

@@ -24,7 +24,6 @@ use ChamiloSession as Session;
  * - $objExercise : exercise object
  * - $objQuestion : question object
  * - $objAnswer : answer object
- * - $aType : array with answer types
  * - $exerciseId : the exercise ID
  * - $picturePath : the path of question pictures
  * - $newQuestion : ask to create a new question
@@ -264,7 +263,7 @@ if (!empty($clone_question) && !empty($objExercise->id)) {
     $new_answer_obj->read();
     $new_answer_obj->duplicate($new_question_obj);
 
-    //Reloading tne $objExercise obj
+    // Reloading tne $objExercise obj
     $objExercise->read($objExercise->id);
 
     header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id);
@@ -290,7 +289,7 @@ if (api_is_in_gradebook()) {
     ];
 }
 
-$interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises')];
+$interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), 'name' => get_lang('Exercises')];
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
     $interbreadcrumb[] = [
         "url" => "admin.php?exerciseId=".$objExercise->id.'&'.api_get_cidreq(),
@@ -391,11 +390,9 @@ if ($inATest) {
     }
 
     echo '</div>';
-
     if ($objExercise->added_in_lp()) {
         echo Display::return_message(get_lang('AddedToLPCannotBeAccessed'), 'warning');
     }
-
     echo '<div class="alert alert-info">';
     echo sprintf(
         get_lang('XQuestionsWithTotalScoreY'),
@@ -474,7 +471,6 @@ if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspot
 
 // if we are in question authoring, display warning to user is feedback not shown at the end of the test -ref #6619
 // this test to display only message in the question authoring page and not in the question list page too
-// if (is_object($objQuestion) && $objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_EXAM && ($newQuestion || $modifyQuestion || $editQuestion)) {
 if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_EXAM) {
     echo Display::return_message(get_lang('TestFeedbackNotShown'), 'normal');
 }

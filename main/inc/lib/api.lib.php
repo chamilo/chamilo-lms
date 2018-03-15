@@ -220,7 +220,11 @@ define('LOG_CAREER_DELETE', 'career_deleted');
 define('LOG_USER_PERSONAL_DOC_DELETED', 'user_doc_deleted');
 define('LOG_WIKI_ACCESS', 'wiki_page_view');
 
+// All results from an exercise
 define('LOG_EXERCISE_RESULT_DELETE', 'exe_result_deleted');
+
+// Logs only the one attempt
+define('LOG_EXERCISE_ATTEMPT_DELETE', 'exe_attempt_deleted');
 define('LOG_LP_ATTEMPT_DELETE', 'lp_attempt_deleted');
 define('LOG_QUESTION_RESULT_DELETE', 'qst_attempt_deleted');
 
@@ -253,6 +257,7 @@ define('LOG_EXERCISE_ID', 'exercise_id');
 define('LOG_EXERCISE_AND_USER_ID', 'exercise_and_user_id');
 define('LOG_LP_ID', 'lp_id');
 define('LOG_EXERCISE_ATTEMPT_QUESTION_ID', 'exercise_a_q_id');
+define('LOG_EXERCISE_ATTEMPT', 'exe_id');
 
 define('LOG_WORK_DIR_DELETE', 'work_dir_delete');
 define('LOG_WORK_FILE_DELETE', 'work_file_delete');
@@ -307,6 +312,7 @@ define('WEB_PUBLIC_PATH', 'WEB_PUBLIC_PATH');
 define('SYS_CSS_PATH', 'SYS_CSS_PATH');
 define('SYS_PLUGIN_PATH', 'SYS_PLUGIN_PATH');
 define('WEB_PLUGIN_PATH', 'WEB_PLUGIN_PATH');
+define('WEB_PLUGIN_ASSET_PATH', 'WEB_PLUGIN_ASSET_PATH');
 define('SYS_ARCHIVE_PATH', 'SYS_ARCHIVE_PATH');
 define('WEB_ARCHIVE_PATH', 'WEB_ARCHIVE_PATH');
 define('SYS_INC_PATH', 'SYS_INC_PATH');
@@ -492,8 +498,21 @@ define('EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED', 8);
 define('EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED', 9);
 define('EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM', 10);
 
+// Used to save the skill_rel_item table
+define('ITEM_TYPE_EXERCISE', 1);
+define('ITEM_TYPE_HOTPOTATOES', 2);
+define('ITEM_TYPE_LINK', 3);
+define('ITEM_TYPE_LEARNPATH', 4);
+define('ITEM_TYPE_GRADEBOOK', 5);
+define('ITEM_TYPE_STUDENT_PUBLICATION', 6);
+//define('ITEM_TYPE_FORUM', 7);
+define('ITEM_TYPE_ATTENDANCE', 8);
+define('ITEM_TYPE_SURVEY', 9);
+define('ITEM_TYPE_FORUM_THREAD', 10);
+
 // one big string with all question types, for the validator in pear/HTML/QuickForm/Rule/QuestionType
-define('QUESTION_TYPES',
+define(
+    'QUESTION_TYPES',
     UNIQUE_ANSWER.':'.
     MULTIPLE_ANSWER.':'.
     FILL_IN_BLANKS.':'.
@@ -958,7 +977,8 @@ function api_get_cdn_path($web_path)
  * @return bool Return true if CAS authentification is activated
  *
  */
-function api_is_cas_activated() {
+function api_is_cas_activated()
+{
     return api_get_setting('cas_activate') == "true";
 }
 
@@ -966,7 +986,8 @@ function api_is_cas_activated() {
  * @return bool     Return true if LDAP authentification is activated
  *
  */
-function api_is_ldap_activated() {
+function api_is_ldap_activated()
+{
     global $extAuthSource;
     return is_array($extAuthSource[LDAP_AUTH_SOURCE]);
 }
@@ -1013,7 +1034,8 @@ function api_remove_trailing_slash($path)
  * Note: The built-in function filter_var($urs, FILTER_VALIDATE_URL) has a bug for some versions of PHP.
  * @link http://bugs.php.net/51192
  */
-function api_valid_url($url, $absolute = false) {
+function api_valid_url($url, $absolute = false)
+{
     if ($absolute) {
         if (preg_match("
             /^                                                      # Start at the beginning of the text
@@ -1209,12 +1231,13 @@ function api_block_anonymous_users($printHeaders = true)
 /**
  * @return array with the navigator name and version
  */
-function api_get_navigator() {
+function api_get_navigator()
+{
     $navigator = 'Unknown';
     $version = 0;
 
     if (!isset($_SERVER['HTTP_USER_AGENT'])) {
-        return array('name' => 'Unknown', 'version' => '0.0.0');
+        return ['name' => 'Unknown', 'version' => '0.0.0'];
     }
 
     if (strpos($_SERVER['HTTP_USER_AGENT'], 'Opera') !== false) {
@@ -1605,6 +1628,7 @@ function api_get_user_info(
  */
 function api_get_user_entity($userId)
 {
+    $userId = (int) $userId;
     /** @var \Chamilo\UserBundle\Repository\UserRepository $repo */
     $repo = Database::getManager()->getRepository('ChamiloUserBundle:User');
 
@@ -1922,6 +1946,31 @@ function api_get_course_info($course_code = null, $strict = false)
     }
 
     return $_course;
+}
+
+/**
+ * @param int $courseId
+ * @return \Chamilo\CoreBundle\Entity\Course
+ */
+function api_get_course_entity($courseId = 0)
+{
+    if (empty($courseId)) {
+        $courseId = api_get_course_int_id();
+    }
+    return Database::getManager()->getRepository('ChamiloCoreBundle:Course')->find($courseId);
+}
+
+
+/**
+ * @param int $id
+ * @return \Chamilo\CoreBundle\Entity\Session
+ */
+function api_get_session_entity($id = 0)
+{
+    if (empty($id)) {
+        $id = api_get_session_id();
+    }
+    return Database::getManager()->getRepository('ChamiloCoreBundle:Session')->find($id);
 }
 
 /**
@@ -2564,10 +2613,16 @@ function api_get_settings_params($params)
     return $result;
 }
 
+/**
+ *
+ * @param array $params example: [id = ? => '1']
+ *
+ * @return array
+ */
 function api_get_settings_params_simple($params)
 {
     $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-    $result = Database::select('*', $table, array('where' => $params), 'one');
+    $result = Database::select('*', $table, ['where' => $params], 'one');
     return $result;
 }
 
@@ -3345,6 +3400,7 @@ function api_is_anonymous($user_id = null, $db_check = false)
  * Displays message "You are not allowed here..." and exits the entire script.
  * @param bool   $print_headers    Whether or not to print headers (default = false -> does not print them)
  * @param string $message
+ * @param int $responseCode
  */
 function api_not_allowed(
     $print_headers = false,

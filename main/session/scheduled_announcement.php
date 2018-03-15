@@ -100,7 +100,7 @@ switch ($action) {
             $res = $object->save($values);
 
             if ($res) {
-                $extraFieldValue = new ExtraFieldValue('schedule_announcement');
+                $extraFieldValue = new ExtraFieldValue('scheduled_announcement');
                 $values['item_id'] = $res;
                 $extraFieldValue->saveFieldValues($values);
 
@@ -135,7 +135,7 @@ switch ($action) {
             $values['date'] = api_get_utc_datetime($values['date']);
             $res = $object->update($values);
 
-            $extraFieldValue = new ExtraFieldValue('schedule_announcement');
+            $extraFieldValue = new ExtraFieldValue('scheduled_announcement');
             $values['item_id'] = $id;
             $extraFieldValue->saveFieldValues($values);
 

@@ -278,9 +278,9 @@ class ExtraFieldValue extends Model
                             $fileDir = api_get_path(SYS_UPLOAD_PATH).'work/';
                             $fileDirStored = "work/";
                             break;
-                        case 'schedule_announcement':
-                            $fileDir = api_get_path(SYS_UPLOAD_PATH).'schedule_announcement/';
-                            $fileDirStored = 'schedule_announcement/';
+                        case 'scheduled_announcement':
+                            $fileDir = api_get_path(SYS_UPLOAD_PATH).'scheduled_announcement/';
+                            $fileDirStored = 'scheduled_announcement/';
                             break;
                     }
 

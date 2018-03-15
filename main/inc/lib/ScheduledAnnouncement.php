@@ -113,7 +113,7 @@ class ScheduledAnnouncement extends Model
         $form->addText('subject', get_lang('Subject'));
         $form->addHtmlEditor('message', get_lang('Message'));
 
-        $extraField = new ExtraField('schedule_announcement');
+        $extraField = new ExtraField('scheduled_announcement');
         $extra = $extraField->addElements($form, $id);
         $js = $extra['jquery_ready_content'];
         $form->addHtml("<script> $(function() { $js }); </script> ");
@@ -249,7 +249,7 @@ class ScheduledAnnouncement extends Model
         $form->addText('subject', get_lang('Subject'));
         $form->addHtmlEditor('message', get_lang('Message'));
 
-        $extraField = new ExtraField('schedule_announcement');
+        $extraField = new ExtraField('scheduled_announcement');
         $extra = $extraField->addElements($form);
         $js = $extra['jquery_ready_content'];
         $form->addHtml("<script> $(function() { $js }); </script> ");
@@ -286,7 +286,7 @@ class ScheduledAnnouncement extends Model
      */
     public function getAttachment($id)
     {
-        $extraFieldValue = new ExtraFieldValue('schedule_announcement');
+        $extraFieldValue = new ExtraFieldValue('scheduled_announcement');
         $attachment = $extraFieldValue->get_values_by_handler_and_field_variable($id, 'attachment');
 
         return $attachment;

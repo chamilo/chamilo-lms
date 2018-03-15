@@ -141,8 +141,8 @@ class ExtraField extends Model
             case 'survey':
                 $this->extraFieldType = EntityExtraField::SURVEY_FIELD_TYPE;
                 break;
-            case 'schedule_announcement':
-                $this->extraFieldType = EntityExtraField::SCHEDULE_ANNOUNCEMENT;
+            case 'scheduled_announcement':
+                $this->extraFieldType = EntityExtraField::SCHEDULED_ANNOUNCEMENT;
                 break;
         }
 
@@ -180,7 +180,7 @@ class ExtraField extends Model
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {
-            $result[] = 'schedule_announcement';
+            $result[] = 'scheduled_announcement';
         }
 
         return $result;

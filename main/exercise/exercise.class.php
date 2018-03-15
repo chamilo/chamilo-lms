@@ -3503,6 +3503,7 @@ class Exercise
             $nbrAnswers = 1;
         }
 
+        $generatedFile = '';
         if ($answerType == ORAL_EXPRESSION) {
             $exe_info = Event::get_exercise_results_by_attempt($exeId);
             $exe_info = isset($exe_info[$exeId]) ? $exe_info[$exeId] : null;
@@ -3518,6 +3519,7 @@ class Exercise
             if ($feedback_type == 0) {
                 $objQuestionTmp->replaceWithRealExe($exeId);
             }
+            $generatedFile = $objQuestionTmp->getFileUrl();
         }
 
         $user_answer = '';
@@ -5752,6 +5754,7 @@ class Exercise
             'open_question' => $arrques,
             'open_answer' => $arrans,
             'answer_type' => $answerType,
+            'generated_oral_file' => $generatedFile
         ];
 
         return $return;
@@ -6053,10 +6056,13 @@ class Exercise
         $oral_question_list = null;
         foreach ($question_list_answers as $item) {
             $question = $item['question'];
+            $file = $item['generated_oral_file'];
             $answer = $item['answer'];
             $answer_type = $item['answer_type'];
-
-            if (!empty($question) && !empty($answer) && $answer_type == ORAL_EXPRESSION) {
+            if (!empty($question) && (!empty($answer) || !empty($file)) && $answer_type == ORAL_EXPRESSION) {
+                if (!empty($file)) {
+                    $file = Display::url($file, $file);
+                }
                 $oral_question_list .= '<br /><table width="730" height="136" border="0" cellpadding="3" cellspacing="3">'
                     .'<tr>'
                         .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
@@ -6064,7 +6070,7 @@ class Exercise
                     .'</tr>'
                     .'<tr>'
                         .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
-                        .'<td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>'
+                        .'<td valign="top" bgcolor="#F3F3F3">'.$answer.$file.'</td>'
                     .'</tr></table>';
             }
         }

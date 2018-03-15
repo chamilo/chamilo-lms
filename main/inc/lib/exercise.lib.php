@@ -4127,7 +4127,8 @@ EOT;
                 $question_list_answers[] = [
                     'question' => $result['open_question'],
                     'answer' => $result['open_answer'],
-                    'answer_type' => $result['answer_type']
+                    'answer_type' => $result['answer_type'],
+                    'generated_oral_file' => $result['generated_oral_file'],
                 ];
 
                 $my_total_score = $result['score'];

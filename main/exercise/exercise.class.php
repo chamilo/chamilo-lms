@@ -3503,6 +3503,7 @@ class Exercise
             $nbrAnswers = 1;
         }
 
+        $generatedFile = '';
         if ($answerType == ORAL_EXPRESSION) {
             $exe_info = Event::get_exercise_results_by_attempt($exeId);
             $exe_info = isset($exe_info[$exeId]) ? $exe_info[$exeId] : null;
@@ -3518,6 +3519,7 @@ class Exercise
             if ($feedback_type == 0) {
                 $objQuestionTmp->replaceWithRealExe($exeId);
             }
+            $generatedFile = $objQuestionTmp->getFileUrl();
         }
 
         $user_answer = '';
@@ -5675,23 +5677,24 @@ class Exercise
         }
 
         if ($saved_results) {
-            $stat_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-            $sql = 'UPDATE '.$stat_table.' SET
-                        exe_result = exe_result + ' . floatval($questionScore).'
-                    WHERE exe_id = ' . $exeId;
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+            $sql = 'UPDATE '.$table.' SET
+                        exe_result = exe_result + '.floatval($questionScore).'
+                    WHERE exe_id = '.$exeId;
             Database::query($sql);
         }
 
-        $return_array = [
+        $return = [
             'score' => $questionScore,
             'weight' => $questionWeighting,
             'extra' => $extra_data,
             'open_question' => $arrques,
             'open_answer' => $arrans,
             'answer_type' => $answerType,
+            'generated_oral_file' => $generatedFile
         ];
 
-        return $return_array;
+        return $return;
     }
 
     /**

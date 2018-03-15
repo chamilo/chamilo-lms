@@ -46,7 +46,6 @@ class ExerciseLib
         $course = api_get_course_info_by_id($course_id);
         // Change false to true in the following line to enable answer hinting
         $debug_mark_answer = $show_answers;
-
         // Reads question information
         if (!$objQuestionTmp = Question::read($questionId)) {
             // Question not found
@@ -192,7 +191,6 @@ class ExerciseLib
                 if (api_get_setting('enable_record_audio') == 'true') {
                     //@todo pass this as a parameter
                     global $exercise_stat_info, $exerciseId;
-
                     if (!empty($exercise_stat_info)) {
                         $objQuestionTmp->initFile(
                             api_get_session_id(),
@@ -291,9 +289,7 @@ class ExerciseLib
 
             $hidingClass = '';
             if ($answerType == READING_COMPREHENSION) {
-                $objQuestionTmp->processText(
-                    $objQuestionTmp->selectDescription()
-                );
+                $objQuestionTmp->processText($objQuestionTmp->selectDescription());
                 $hidingClass = 'hide-reading-answers';
                 $s .= Display::div(
                     $objQuestionTmp->selectTitle(),
@@ -591,10 +587,8 @@ class ExerciseLib
                         // or filled to display the answer in the Question preview of the exercise/admin.php page
                         $displayForStudent = true;
                         $listAnswerInfo = FillBlanks::getAnswerInfo($answer);
-
                         // Correct answers
                         $correctAnswerList = $listAnswerInfo['words'];
-
                         // Student's answer
                         $studentAnswerList = [];
                         if (isset($user_choice[0]['answer'])) {
@@ -605,8 +599,8 @@ class ExerciseLib
                             $studentAnswerList = $arrayStudentAnswer['student_answer'];
                         }
 
-                        // If the question must be shown with the answer (in page exercise/admin.php) for teacher preview
-                        // set the student-answer to the correct answer
+                        // If the question must be shown with the answer (in page exercise/admin.php)
+                        // for teacher preview set the student-answer to the correct answer
                         if ($debug_mark_answer) {
                             $studentAnswerList = $correctAnswerList;
                             $displayForStudent = false;
@@ -757,7 +751,7 @@ class ExerciseLib
                             ' '.$answer.' '
                         );
                         if (!empty($correctAnswerList) && !empty($studentAnswerList)) {
-                            $answer = "";
+                            $answer = '';
                             $i = 0;
                             foreach ($studentAnswerList as $studentItem) {
                                 // remove surronding brackets
@@ -3402,7 +3396,7 @@ EOT;
      *
      * @param int $question_id
      * @param int $exercise_id
-     * @return int
+     * @return array
      */
     public static function getNumberStudentsFillBlanksAnswerCount(
         $question_id,
@@ -3426,7 +3420,6 @@ EOT;
         );
 
         $arrayCount = [];
-
         foreach ($listFillTheBlankResult as $resultCount) {
             foreach ($resultCount as $index => $count) {
                 //this is only for declare the array index per answer
@@ -4124,7 +4117,8 @@ EOT;
                 $question_list_answers[] = [
                     'question' => $result['open_question'],
                     'answer' => $result['open_answer'],
-                    'answer_type' => $result['answer_type']
+                    'answer_type' => $result['answer_type'],
+                    'generated_oral_file' => $result['generated_oral_file'],
                 ];
 
                 $my_total_score = $result['score'];

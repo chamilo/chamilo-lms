@@ -1,5 +1,72 @@
 ### Version History
 
+*4.2.8 (2018/01/16)*
+
+* Clarify effect of setting `toggleCaptionsButtonWhenOnlyOne` (https://github.com/mediaelement/mediaelement/pull/2471) @cjcolvar
+* Remember `startVolume` value even if video is muted (https://github.com/mediaelement/mediaelement/pull/2470) @D3nnisH
+* Fix @see links for hls.js renderer (https://github.com/mediaelement/mediaelement/pull/2478) @cjcolvar
+* UID filter for Flash files @johndyer
+
+*4.2.7 (2017/11/17)*
+
+* Fixed issue with `setFillMode` when using cross-domain URLs in iframe @rafa8626
+* Added new `proxyType` and `streamDelimiter` variables to Flash video to support RTMPS compatibility @rafa8626
+* Fixed issues with renderers when trying to use `muted` property while using `MediaElement` shim @rafa8626
+* Fixed typo with `Twitch` renderer related to trigger mouse events @rafa8626
+* Fixed typo when assigning options to `Dailymotion` renderer @rafa8626
+* Added missing workflow to set controls on YouTube, Facebook and Dailymotion renderers via `controls` property @rafa8626 
+* Added missing `playing` event on `Vimeo` and `Dailymotion` renderer @rafa8626
+* Expanded regexp to accept 3-letter country codes and underscore for 4-letter country codes @rafa8626
+* Added `init`, `getElement` and `buildfeatures` methods for WP compatibility @rafa8626
+* Make `setPoster` method to work on mobile devices with native controls (https://github.com/mediaelement/mediaelement/pull/2419) @lucash
+* Added missing conditional in native HLS and HTML5 renderer to test media files correctly to trigger error after testing all of them @rafa8626
+* Added jsDelivr badge (https://github.com/mediaelement/mediaelement/pull/2421) @LukasDrgon
+* Fixed issue with `visible` method when `getClientRects` is not a function @rafa8626
+* Fixed issues with `parseInt` method not setting radix in some calls @rafa8626
+* Added missing argument in `secondsToTimeCode` method to check the time format given and display accordingly @rafa8626 
+* Fixed issues related to duplicated calls when triggering error and fixed style for poster when error is displayed @rafa8626
+* Fixed issue with captions not being rendered inside video frame on any state @rafa8626
+* Integrated `destroy` method in `MediaElement` class @rafa8626
+* Added validation to modify `SoundCloud` iframe atributes when using `video` tag @rafa8626
+* Fixed issue when checking for native dimensions of `video` element to set responsive dimensions correctly @rafa8626
+* Added missing workflow to make `loop` work correctly in YouTube according to documentation @rafa8626
+* Changed paths for `hls.js` and `flv.js` renderers to always be up-to-date @rafa8626
+* Fixed issue with timecode displaying 60 seconds @rafa8626
+* Fixed JSDocs for some features @rafa8626
+
+*4.2.6 (2017/09/19)*
+
+* Fixed positioning of progress bar tooltip @rafa8626
+* Added style to avoid flickering when using volume on Chrome @rafa8626
+* Fixed broken UUT @rafa8626
+* Added `configs` parameter for native FLV according to documentation for flv.js (https://github.com/mediaelement/mediaelement/pull/2344) @xiaosongxiaosong
+* Added missing call to avoid further calls to attempt set the player's dimensions once removed @rafa8626
+* Fixed typo when checking error event and fixed workflow to loop multiple sources until valid one is found for `html5` and `native_hls` renderers @rafa8626
+* Fixed workflow to enable/disable controls once error occurs and once user recovers from error @rafa8626
+* Fixed issue when no `height` attribute but style is set to create proper player dimensions @rafa8626
+* Use local variable for `getComputedStyle` polyfill to avoid recursion on Firefox (https://github.com/mediaelement/mediaelement/pull/2351) @synthecypher
+* Fixed accessibility issues when using keyboard on focused progress bar and moved `keyActions` to their individual components @rafa8626
+* Fixed issues with progress bar tooltip when media duration is too long @rafa8626
+* Added new `mejs` variables needed for WordPress @rafa8626
+* Fixed issues with events fired in incorrect time for `flash_video` renderer @milax
+* Set specific settings for embedding flash object in Edge browser (https://github.com/mediaelement/mediaelement/pull/2364) @milax 
+* Added new constant to detect `passive events` and added conditional for `touchstart` events @rafa8626
+* Removed width and height from `embed` object to ensure Flash audio will play on Chrome (https://github.com/mediaelement/mediaelement/pull/2367) @milax
+* Fixed issue with Caption/Chapters menus not selecting options properly when using mouse @rafa8626 and @Instagit
+* Removed black area when Flash player is used in audio player (https://github.com/mediaelement/mediaelement/pull/2370) @milax
+* Fixed issue with `poster` option not being set if `poster` attribute is absent @rafa8626
+* Moved code inside `player.js` to corresponding features to restore original order or operations when creating layers @rafa8626
+* Added `unmute` command for Facebook renderer @rafa8626
+* Fixed events emitting and run handlers of active renderer only for Flash and HTML5 renderer (https://github.com/mediaelement/mediaelement/pull/2368) @milax
+* Fixed issues when setting sources for Flash HLS renderer and added missing events @rafa8626
+* Upgraded `hls.js` to 0.8.2 version and `flv.js` to 1.3.3 version @rafa8626
+* Refactor `Facebook` renderer to solve issues when instantiating multiple videos and added new `lang` parameter to load language on SDK @rafa8626
+* Fixed typos in `Twitch` renderer that caused channels not to play properly @rafa8626
+* Fixed typos in `Flash` renderer to avoid issues with `embed` dimensions @rafa8626
+* Reintegrated old workflow to deal only with `dash.js` play errors @rafa8626 
+* Updated documentation @rafa8626
+* Added documentation about MEJS installation through Bower (https://github.com/mediaelement/mediaelement/pull/2399) @thompsonemerson
+
 *4.2.5 (2017/08/09)*
 
 * Removed workflow that ignored MIME type to get a better media match @rafa8626
@@ -41,6 +108,7 @@
 * Added missing code to explain how to use `MediaElement` with `RequireJS` @rafa8626
 * Integrated Flashls events to be processed by the player @rafa8626
 * Fixed test file when using JSDom and Mocha Chai @rafa8626
+* Changed arguments in `M(PEG)-DASH` native renderer to trigger correctly events @rafa8626
 
 *4.2.1/4.2.2 (2017/06/28)*
 

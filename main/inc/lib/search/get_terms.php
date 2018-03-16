@@ -3,15 +3,16 @@
 /* For licensing terms, see /license.txt */
 /**
  * This script retrieves a list of terms that have xapian documents
- * related with the term passed
+ * related with the term passed.
+ *
  * @package chamilo.include.search
  */
-
 $terms_list = [];
 
 // verify parameter and return a right value to avoid problems parsing it
 if (empty($_GET['term']) || empty($_GET['prefix']) || !in_array($_GET['operator'], ['or', 'and'])) {
     echo json_encode($terms_list);
+
     return;
 }
 
@@ -19,9 +20,11 @@ require_once __DIR__.'../../../global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'search/ChamiloQuery.php';
 
 /**
- * Search with filter and build base array avoiding repeated terms
- * @param array $filter XapianQuery array
+ * Search with filter and build base array avoiding repeated terms.
+ *
+ * @param array $filter          XapianQuery array
  * @param array $specific_fields
+ *
  * @return array $sf_terms
  */
 function get_usual_sf_terms($filter, $specific_fields)
@@ -41,6 +44,7 @@ function get_usual_sf_terms($filter, $specific_fields)
             }
         }
     }
+
     return $sf_terms;
 }
 

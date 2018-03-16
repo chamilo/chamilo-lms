@@ -2,8 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Gradebook results class
+ * Gradebook results class.
+ *
  * @author Yannick Warnier
+ *
  * @package chamilo.gradebook
  */
 class GradeBookResult
@@ -12,16 +14,18 @@ class GradeBookResult
     private $results = []; //stores the results
 
     /**
-     * constructor of the class
+     * constructor of the class.
      */
     public function __construct($get_questions = false, $get_answers = false)
     {
     }
 
     /**
-     * Exports the complete report as a CSV file
-     * @param    string $dato Document path inside the document tool
-     * @return    boolean        False on error
+     * Exports the complete report as a CSV file.
+     *
+     * @param string $dato Document path inside the document tool
+     *
+     * @return bool False on error
      */
     public function exportCompleteReportCSV($dato)
     {
@@ -73,9 +77,11 @@ class GradeBookResult
     }
 
     /**
-     * Exports the complete report as an XLS file
+     * Exports the complete report as an XLS file.
+     *
      * @param array $data
-     * @return    boolean|null        False on error
+     *
+     * @return bool|null False on error
      */
     public function exportCompleteReportXLS($data)
     {
@@ -122,8 +128,10 @@ class GradeBookResult
     }
 
     /**
-     * Exports the complete report as a DOCX file
+     * Exports the complete report as a DOCX file.
+     *
      * @param array $data The table data
+     *
      * @return bool
      */
     public function exportCompleteReportDOC($data)
@@ -151,6 +159,7 @@ class GradeBookResult
         $doc->save($file, 'Word2007');
 
         DocumentManager::file_send_for_download($file, true, $filename);
+
         return true;
     }
 }

@@ -40,11 +40,11 @@ $content = Display::page_subheader2(sprintf(
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'mySpace/student.php',
-    'name' => get_lang('MyStudents')
+    'name' => get_lang('MyStudents'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$fromUserId,
-    'name' => get_lang('StudentDetails')
+    'name' => get_lang('StudentDetails'),
 ];
 
 $uniqueMessageList = [];

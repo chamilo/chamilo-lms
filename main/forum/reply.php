@@ -13,11 +13,10 @@
  *                      multiple forums per group
  * - sticky messages
  * - new view option: nested view
- * - quoting a message
+ * - quoting a message.
  *
  * @package chamilo.forum
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -60,8 +59,8 @@ if (!api_is_allowed_to_edit(false, true) &&
     api_not_allowed(true);
 }
 if (!api_is_allowed_to_edit(false, true) &&
-    (($current_forum_category && $current_forum_category['locked'] <> 0) ||
-        $current_forum['locked'] <> 0 || $current_thread['locked'] <> 0)
+    (($current_forum_category && $current_forum_category['locked'] != 0) ||
+        $current_forum['locked'] != 0 || $current_thread['locked'] != 0)
 ) {
     api_not_allowed(true);
 }
@@ -83,7 +82,7 @@ if ($current_forum['forum_of_group'] != 0) {
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
+        'name' => get_lang('ToolGradebook'),
     ];
 }
 $groupId = api_get_group_id();
@@ -96,16 +95,16 @@ if (!empty($groupId)) {
 
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('GroupSpace').' '.$group_properties['name']
+        'name' => get_lang('GroupSpace').' '.$group_properties['name'],
     ];
 
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq(),
-        'name' => $current_forum['forum_title']
+        'name' => $current_forum['forum_title'],
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
-        'name' => $current_thread['thread_title']
+        'name' => $current_thread['thread_title'],
     ];
 
     $interbreadcrumb[] = [
@@ -115,19 +114,19 @@ if (!empty($groupId)) {
 } else {
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq(),
-        'name' => $nameTools
+        'name' => $nameTools,
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&'.api_get_cidreq(),
-        'name' => $current_forum_category['cat_title']
+        'name' => $current_forum_category['cat_title'],
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq(),
-        'name' => $current_forum['forum_title']
+        'name' => $current_forum['forum_title'],
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&thread='.$threadId.'&'.api_get_cidreq(),
-        'name' => $current_thread['thread_title']
+        'name' => $current_thread['thread_title'],
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Reply')];
 }

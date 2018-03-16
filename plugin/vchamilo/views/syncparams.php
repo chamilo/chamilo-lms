@@ -13,7 +13,7 @@ $plugin = VChamiloPlugin::create();
 $thisUrl = api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php';
 
 if ($action) {
-    require_once(api_get_path(SYS_PLUGIN_PATH).'vchamilo/views/syncparams.controller.php');
+    require_once api_get_path(SYS_PLUGIN_PATH).'vchamilo/views/syncparams.controller.php';
 }
 
 $settings = api_get_settings();
@@ -56,7 +56,7 @@ foreach ($settings as $param) {
     $table->setRowAttributes($row, ['id' => 'row_'.$param['id']], true);
 }
 
-$content  = '<form name="settingsform" action="'.$thisUrl.'">';
+$content = '<form name="settingsform" action="'.$thisUrl.'">';
 $content .= '<input type="hidden" name="what" value="" />';
 $content .= $table->toHtml();
 $content .= '</form>';

@@ -4,8 +4,10 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * Class Document
+ * Class Document.
+ *
  * @author Bart Mollet <bart.mollet@hogent.be>
+ *
  * @package chamilo.backup
  */
 class Document extends Resource
@@ -17,13 +19,14 @@ class Document extends Resource
     public $title;
 
     /**
-     * Create a new Document
-     * @param int $id
+     * Create a new Document.
+     *
+     * @param int    $id
      * @param string $path
      * @param string $comment
      * @param string $title
      * @param string $file_type (DOCUMENT or FOLDER);
-     * @param int $size
+     * @param int    $size
      */
     public function __construct($id, $path, $comment, $title, $file_type, $size)
     {
@@ -36,7 +39,7 @@ class Document extends Resource
     }
 
     /**
-     * Show this document
+     * Show this document.
      */
     public function show()
     {

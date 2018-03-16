@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Form for group message
+ * Form for group message.
+ *
  * @package chamilo.social
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -94,7 +94,7 @@ if (api_get_setting('allow_message_tool') === 'true') {
         get_lang('AttachmentFiles'),
         '<div id="link-more-attach">
             <a class="btn btn-default" href="javascript://" onclick="return add_image_form()">
-                ' . get_lang('AddOneMoreFile').'
+                '.get_lang('AddOneMoreFile').'
             </a>
         </div>'
     );

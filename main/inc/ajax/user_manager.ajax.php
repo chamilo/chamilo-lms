@@ -1,12 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Doctrine\Common\Collections\Criteria;
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
 require_once __DIR__.'/../global.inc.php';
 
@@ -95,7 +95,7 @@ switch ($action) {
                 <div class="row">
                     <div class="col-sm-10 col-sm-offset-2">
                         <a class="btn btn-primary" id="send_message_link">
-                            <em class="fa fa-envelope"></em> ' . get_lang('Send').'
+                            <em class="fa fa-envelope"></em> '.get_lang('Send').'
                         </a>
                     </div>
                 </div>
@@ -207,7 +207,7 @@ switch ($action) {
 
                     $additionalParameters = [
                         'smsType' => SmsPlugin::ACCOUNT_APPROVED_CONNECT,
-                        'userId' => $user_id
+                        'userId' => $user_id,
                     ];
 
                     MessageManager::send_message_simple(
@@ -270,7 +270,7 @@ switch ($action) {
         foreach ($users as $user) {
             $items[] = [
                 'id' => $user->getId(),
-                'text' => $user->getCompleteNameWithUsername()
+                'text' => $user->getCompleteNameWithUsername(),
             ];
         }
 
@@ -320,7 +320,7 @@ switch ($action) {
         foreach ($users as $user) {
             $items[] = [
                 'id' => $user->getId(),
-                'text' => $user->getCompleteNameWithUsername()
+                'text' => $user->getCompleteNameWithUsername(),
             ];
         }
 

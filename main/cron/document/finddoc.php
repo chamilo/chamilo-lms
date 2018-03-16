@@ -1,9 +1,9 @@
 <?php
 /**
- * Script to find a document with a specific title or path in all courses
+ * Script to find a document with a specific title or path in all courses.
  */
 /**
- * Code init - comment die() call to enable
+ * Code init - comment die() call to enable.
  */
 die();
 require '../../inc/global.inc.php';

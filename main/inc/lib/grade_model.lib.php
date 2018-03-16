@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class GradeModel
+ * Class GradeModel.
+ *
  * @package chamilo.library
  */
 class GradeModel extends Model
@@ -11,7 +12,7 @@ class GradeModel extends Model
     public $columns = ['id', 'name', 'description'];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -49,7 +50,7 @@ class GradeModel extends Model
     }
 
     /**
-     * Displays the title + grid
+     * Displays the title + grid.
      */
     public function display()
     {
@@ -64,12 +65,14 @@ class GradeModel extends Model
     }
 
     /**
-     * Returns a Form validator Obj
-     * @todo the form should be auto generated
-     * @param   string  $url
-     * @param   string  $action add, edit
+     * Returns a Form validator Obj.
      *
-     * @return  FormValidator form validator obj
+     * @todo the form should be auto generated
+     *
+     * @param string $url
+     * @param string $action add, edit
+     *
+     * @return FormValidator form validator obj
      */
     public function return_form($url, $action)
     {
@@ -94,7 +97,7 @@ class GradeModel extends Model
             [
                 'ToolbarSet' => 'careers',
                 'Width' => '100%',
-                'Height' => '250'
+                'Height' => '250',
             ]
         );
 
@@ -118,10 +121,9 @@ class GradeModel extends Model
 
         $form->addElement('hidden', 'maxvalue', '100');
         $form->addElement('hidden', 'minvalue', '0');
-        $renderer = & $form->defaultRenderer();
+        $renderer = &$form->defaultRenderer();
 
         $component_array = [];
-
 
         for ($i = 0; $i <= $max; $i++) {
             $counter = $i;
@@ -145,10 +147,10 @@ class GradeModel extends Model
 
             $template_title =
             '&nbsp{element} <!-- BEGIN error --> <span class="form_error">{error}</span><!-- END error -->
-             <a href="javascript:plusItem(' . ($counter + 1).')">
+             <a href="javascript:plusItem('.($counter + 1).')">
                 '.Display::return_icon('add.png', get_lang('Add'), ['id' => 'plus-'.($counter + 1), 'style' => 'display: '.(($counter >= $nr_items) ? 'inline' : 'none')]).'
             </a>
-            <a href="javascript:minItem(' . ($counter).')">
+            <a href="javascript:minItem('.($counter).')">
                 '.Display::return_icon('delete.png', get_lang('Delete'), ['id' => 'min-'.($counter), 'style' => 'display: '.(($counter >= $nr_items) ? 'inline' : 'none')]).'
             </a>
             </div></div>';
@@ -197,20 +199,23 @@ class GradeModel extends Model
 
     /**
      * @param $id
+     *
      * @return array|null
      */
     public function get_components($id)
     {
         $obj = new GradeModelComponents();
         if (!empty($id)) {
-            return $obj->get_all(['where'=> ['grade_model_id = ?' => $id]]);
+            return $obj->get_all(['where' => ['grade_model_id = ?' => $id]]);
         }
+
         return null;
     }
 
     /**
      * @param array $params
-     * @param bool $show_query
+     * @param bool  $show_query
+     *
      * @return bool
      */
     public function save($params, $show_query = false)
@@ -231,7 +236,7 @@ class GradeModel extends Model
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function update($params, $showQuery = false)
     {
@@ -261,7 +266,8 @@ class GradeModel extends Model
     /**
      * @param $form
      * @param string $name
-     * @param null $default_value
+     * @param null   $default_value
+     *
      * @return bool
      */
     public function fill_grade_model_select_in_form(&$form, $name = 'gradebook_model_id', $default_value = null)
@@ -298,7 +304,7 @@ class GradeModel extends Model
 }
 
 /**
- * Class GradeModelComponents
+ * Class GradeModelComponents.
  */
 class GradeModelComponents extends Model
 {
@@ -316,7 +322,8 @@ class GradeModelComponents extends Model
 
     /**
      * @param array $params
-     * @param bool $showQuery
+     * @param bool  $showQuery
+     *
      * @return bool
      */
     public function save($params, $showQuery = false)

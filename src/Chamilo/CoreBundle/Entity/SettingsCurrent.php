@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SettingsCurrent
+ * SettingsCurrent.
  *
  * @ORM\Table(
  *     name="settings_current",
@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 class SettingsCurrent
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -89,28 +89,28 @@ class SettingsCurrent
     private $subkeytext;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="access_url", type="integer", nullable=false, options={"default": 1 } )
      */
     private $accessUrl;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="access_url_changeable", type="integer", nullable=false)
      */
     private $accessUrlChangeable;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="access_url_locked", type="integer", nullable=false, options={"default": 0 } )
      */
     private $accessUrlLocked = 0;
 
     /**
-     * Set variable
+     * Set variable.
      *
      * @param string $variable
      *
@@ -124,7 +124,7 @@ class SettingsCurrent
     }
 
     /**
-     * Get variable
+     * Get variable.
      *
      * @return string
      */
@@ -134,7 +134,7 @@ class SettingsCurrent
     }
 
     /**
-     * Set subkey
+     * Set subkey.
      *
      * @param string $subkey
      *
@@ -148,7 +148,7 @@ class SettingsCurrent
     }
 
     /**
-     * Get subkey
+     * Get subkey.
      *
      * @return string
      */
@@ -158,7 +158,7 @@ class SettingsCurrent
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @param string $type
      *
@@ -172,7 +172,7 @@ class SettingsCurrent
     }
 
     /**
-     * Get type
+     * Get type.
      *
      * @return string
      */
@@ -182,7 +182,7 @@ class SettingsCurrent
     }
 
     /**
-     * Set category
+     * Set category.
      *
      * @param string $category
      *
@@ -196,7 +196,7 @@ class SettingsCurrent
     }
 
     /**
-     * Get category
+     * Get category.
      *
      * @return string
      */
@@ -206,7 +206,7 @@ class SettingsCurrent
     }
 
     /**
-     * Set selectedValue
+     * Set selectedValue.
      *
      * @param string $selectedValue
      *
@@ -220,7 +220,7 @@ class SettingsCurrent
     }
 
     /**
-     * Get selectedValue
+     * Get selectedValue.
      *
      * @return string
      */
@@ -230,7 +230,7 @@ class SettingsCurrent
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
      *
@@ -244,7 +244,7 @@ class SettingsCurrent
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -254,7 +254,7 @@ class SettingsCurrent
     }
 
     /**
-     * Set comment
+     * Set comment.
      *
      * @param string $comment
      *
@@ -268,7 +268,7 @@ class SettingsCurrent
     }
 
     /**
-     * Get comment
+     * Get comment.
      *
      * @return string
      */
@@ -278,7 +278,7 @@ class SettingsCurrent
     }
 
     /**
-     * Set scope
+     * Set scope.
      *
      * @param string $scope
      *
@@ -292,7 +292,7 @@ class SettingsCurrent
     }
 
     /**
-     * Get scope
+     * Get scope.
      *
      * @return string
      */
@@ -302,7 +302,7 @@ class SettingsCurrent
     }
 
     /**
-     * Set subkeytext
+     * Set subkeytext.
      *
      * @param string $subkeytext
      *
@@ -316,7 +316,7 @@ class SettingsCurrent
     }
 
     /**
-     * Get subkeytext
+     * Get subkeytext.
      *
      * @return string
      */
@@ -326,9 +326,9 @@ class SettingsCurrent
     }
 
     /**
-     * Set accessUrl
+     * Set accessUrl.
      *
-     * @param integer $accessUrl
+     * @param int $accessUrl
      *
      * @return SettingsCurrent
      */
@@ -340,9 +340,9 @@ class SettingsCurrent
     }
 
     /**
-     * Get accessUrl
+     * Get accessUrl.
      *
-     * @return integer
+     * @return int
      */
     public function getAccessUrl()
     {
@@ -350,9 +350,9 @@ class SettingsCurrent
     }
 
     /**
-     * Set accessUrlChangeable
+     * Set accessUrlChangeable.
      *
-     * @param integer $accessUrlChangeable
+     * @param int $accessUrlChangeable
      *
      * @return SettingsCurrent
      */
@@ -364,9 +364,9 @@ class SettingsCurrent
     }
 
     /**
-     * Get accessUrlChangeable
+     * Get accessUrlChangeable.
      *
-     * @return integer
+     * @return int
      */
     public function getAccessUrlChangeable()
     {
@@ -374,9 +374,9 @@ class SettingsCurrent
     }
 
     /**
-     * Set accessUrlLocked
+     * Set accessUrlLocked.
      *
-     * @param integer $accessUrlLocked
+     * @param int $accessUrlLocked
      *
      * @return SettingsCurrent
      */
@@ -388,9 +388,9 @@ class SettingsCurrent
     }
 
     /**
-     * Get accessUrlLocked
+     * Get accessUrlLocked.
      *
-     * @return integer
+     * @return int
      */
     public function getAccessUrlLocked()
     {
@@ -398,9 +398,9 @@ class SettingsCurrent
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

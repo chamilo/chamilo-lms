@@ -3,8 +3,10 @@
 
 /**
  * Script opened in an iframe and containing the
- * learning path's navigation and progress bar
+ * learning path's navigation and progress bar.
+ *
  * @package chamilo.learnpath
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
@@ -63,5 +65,5 @@ session_write_close();
     });
 </script>
 <span>
-    <?php echo !empty($mediaplayer) ? $mediaplayer : '&nbsp;' ?>
+    <?php echo !empty($mediaplayer) ? $mediaplayer : '&nbsp;'; ?>
 </span>

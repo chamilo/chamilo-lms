@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Report
+ * Report.
+ *
  * @package chamilo.tracking
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -70,7 +70,7 @@ $form->addElement(
     'session_id',
     get_lang('Sessions'),
     $my_session_list,
-    ['id'=>'session_id', 'onchange'=>'load_courses();']
+    ['id' => 'session_id', 'onchange' => 'load_courses();']
 );
 $form->addElement(
     'select',
@@ -90,7 +90,7 @@ if (empty($course_code)) {
     $course_code = 0;
 }
 
-$form->setDefaults(['course_code'=>(string) $course_code]);
+$form->setDefaults(['course_code' => (string) $course_code]);
 
 $course_info = api_get_course_info($course_code);
 

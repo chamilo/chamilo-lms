@@ -2,11 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This is a learning path creation and player tool in Chamilo - previously
+ * This is a learning path creation and player tool in Chamilo - previously.
+ *
  * @author Julio Montoya  - Improving the list of templates
+ *
  * @package chamilo.learnpath
  */
-
 $this_section = SECTION_COURSES;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -24,17 +25,17 @@ $lp = new learnpath(api_get_course_id(), $lpId, api_get_user_id());
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
+        'name' => get_lang('ToolGradebook'),
     ];
 }
 
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths')
+    'name' => get_lang('LearningPaths'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$lpId&".api_get_cidreq(),
-    'name' => $lp->get_name()
+    'name' => $lp->get_name(),
 ];
 
 $form = new FormValidator(
@@ -44,7 +45,7 @@ $form = new FormValidator(
     '',
     [
         'id' => "upload_form",
-        'enctype' => "multipart/form-data"
+        'enctype' => "multipart/form-data",
     ]
 );
 $form->addHeader(get_lang('UpdateFile'));

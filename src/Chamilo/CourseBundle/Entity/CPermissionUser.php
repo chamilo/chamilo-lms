@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CPermissionUser
+ * CPermissionUser.
  *
  * @ORM\Table(
  *  name="c_permission_user",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CPermissionUser
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,21 +28,21 @@ class CPermissionUser
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
@@ -63,9 +63,10 @@ class CPermissionUser
     private $action;
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return CPermissionUser
      */
     public function setUserId($userId)
@@ -76,9 +77,9 @@ class CPermissionUser
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -86,9 +87,10 @@ class CPermissionUser
     }
 
     /**
-     * Set tool
+     * Set tool.
      *
      * @param string $tool
+     *
      * @return CPermissionUser
      */
     public function setTool($tool)
@@ -99,7 +101,7 @@ class CPermissionUser
     }
 
     /**
-     * Get tool
+     * Get tool.
      *
      * @return string
      */
@@ -109,9 +111,10 @@ class CPermissionUser
     }
 
     /**
-     * Set action
+     * Set action.
      *
      * @param string $action
+     *
      * @return CPermissionUser
      */
     public function setAction($action)
@@ -122,7 +125,7 @@ class CPermissionUser
     }
 
     /**
-     * Get action
+     * Get action.
      *
      * @return string
      */
@@ -132,9 +135,10 @@ class CPermissionUser
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CPermissionUser
      */
     public function setId($id)
@@ -145,9 +149,9 @@ class CPermissionUser
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -155,9 +159,10 @@ class CPermissionUser
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CPermissionUser
      */
     public function setCId($cId)
@@ -168,9 +173,9 @@ class CPermissionUser
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

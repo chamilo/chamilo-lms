@@ -3,26 +3,28 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Resource;
 use Database;
-use \CourseManager;
 use Display;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
 
 /**
- * Class to show a form to select resources
+ * Class to show a form to select resources.
+ *
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @author Julio Montoya <gugli100@gmail.com>
+ *
  * @package chamilo.backup
  */
 class CourseSelectForm
 {
     /**
-     * Display the form
+     * Display the form.
+     *
      * @param array $course
-     * @param array $hidden_fields Hidden fields to add to the form.
-     * @param boolean $avoid_serialize the document array will be serialize.
-     * This is used in the course_copy.php file
+     * @param array $hidden_fields   hidden fields to add to the form
+     * @param bool  $avoid_serialize the document array will be serialize.
+     *                               This is used in the course_copy.php file
      */
     public static function display_form(
         $course,
@@ -398,13 +400,15 @@ class CourseSelectForm
     }
 
     /**
-     * Get the posted course
-     * @param string $from who calls the function?
-     * It can be copy_course, create_backup, import_backup or recycle_course
-     * @param int $session_id
+     * Get the posted course.
+     *
+     * @param string $from        who calls the function?
+     *                            It can be copy_course, create_backup, import_backup or recycle_course
+     * @param int    $session_id
      * @param string $course_code
+     *
      * @return course The course-object with all resources selected by the user
-     * in the form given by display_form(...)
+     *                in the form given by display_form(...)
      */
     public static function get_posted_course($from = '', $session_id = 0, $course_code = '')
     {
@@ -599,10 +603,11 @@ class CourseSelectForm
     }
 
     /**
-     * Display the form session export
+     * Display the form session export.
+     *
      * @param array $list_course
-     * @param array $hidden_fields Hidden fields to add to the form.
-     * @param boolean $avoid_serialize the document array will be serialize. This is used in the course_copy.php file
+     * @param array $hidden_fields   hidden fields to add to the form
+     * @param bool  $avoid_serialize the document array will be serialize. This is used in the course_copy.php file
      */
     public static function display_form_session_export(
         $list_course,

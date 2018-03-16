@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Templates
+ * Templates.
  *
  * @ORM\Table(name="templates")
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\TemplatesRepository")
@@ -35,14 +35,14 @@ class Templates
     private $courseCode;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
     private $userId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="ref_doc", type="integer", nullable=false)
      */
@@ -56,7 +56,7 @@ class Templates
     private $image;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -64,12 +64,11 @@ class Templates
      */
     private $id;
 
-
-
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return Templates
      */
     public function setTitle($title)
@@ -80,7 +79,7 @@ class Templates
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -90,9 +89,10 @@ class Templates
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return Templates
      */
     public function setDescription($description)
@@ -103,7 +103,7 @@ class Templates
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -113,9 +113,10 @@ class Templates
     }
 
     /**
-     * Set courseCode
+     * Set courseCode.
      *
      * @param string $courseCode
+     *
      * @return Templates
      */
     public function setCourseCode($courseCode)
@@ -126,7 +127,7 @@ class Templates
     }
 
     /**
-     * Get courseCode
+     * Get courseCode.
      *
      * @return string
      */
@@ -136,9 +137,10 @@ class Templates
     }
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return Templates
      */
     public function setUserId($userId)
@@ -149,9 +151,9 @@ class Templates
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -159,9 +161,10 @@ class Templates
     }
 
     /**
-     * Set refDoc
+     * Set refDoc.
      *
-     * @param integer $refDoc
+     * @param int $refDoc
+     *
      * @return Templates
      */
     public function setRefDoc($refDoc)
@@ -172,9 +175,9 @@ class Templates
     }
 
     /**
-     * Get refDoc
+     * Get refDoc.
      *
-     * @return integer
+     * @return int
      */
     public function getRefDoc()
     {
@@ -182,9 +185,10 @@ class Templates
     }
 
     /**
-     * Set image
+     * Set image.
      *
      * @param string $image
+     *
      * @return Templates
      */
     public function setImage($image)
@@ -195,7 +199,7 @@ class Templates
     }
 
     /**
-     * Get image
+     * Get image.
      *
      * @return string
      */
@@ -205,9 +209,9 @@ class Templates
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

@@ -2,11 +2,12 @@
 /* For licensing terms, see /license.txt */
 /**
  * @author Mustapha Alouani
+ *
  * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
-require('../auth/ldap/authldap.php');
+require '../auth/ldap/authldap.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
@@ -133,7 +134,6 @@ if (isset($_POST['action'])) {
                     echo Display::return_message(get_lang('NoUserAdded'));
                 }
                 break;
-
         }
         Security::clear_token();
     }

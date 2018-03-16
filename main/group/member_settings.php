@@ -7,10 +7,11 @@
  *
  * @author various contributors
  * @author Roan Embrechts (VUB), partial code cleanup, initial virtual course support
+ *
  * @package chamilo.group
+ *
  * @todo course admin functionality to create groups based on who is in which course (or class).
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GROUP;
@@ -32,7 +33,7 @@ if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
 }
 
 /**
- *  List all users registered to the course
+ *  List all users registered to the course.
  */
 function search_members_keyword($firstname, $lastname, $username, $official_code, $keyword)
 {
@@ -49,7 +50,7 @@ function search_members_keyword($firstname, $lastname, $username, $official_code
 
 /**
  * Function to sort users after getting the list in the DB.
- * Necessary because there are 2 or 3 queries. Called by usort()
+ * Necessary because there are 2 or 3 queries. Called by usort().
  */
 function sort_users($user_a, $user_b)
 {
@@ -96,7 +97,7 @@ function sort_users($user_a, $user_b)
 }
 
 /**
- * Function to check if the number of selected group members is valid
+ * Function to check if the number of selected group members is valid.
  */
 function check_group_members($value)
 {

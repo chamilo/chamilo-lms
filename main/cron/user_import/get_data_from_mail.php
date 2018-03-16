@@ -2,11 +2,12 @@
 /**
  * This script gets users details of a given list of users
  * (given by e-mail) and prints the details in /tmp/list.txt
- * To enable script, prefix the first die(); with //
+ * To enable script, prefix the first die(); with //.
+ *
  * @package chamilo.cron.user_import
  */
 /**
- * Initialization
+ * Initialization.
  */
 /* Example of input file:
 sam@example.com

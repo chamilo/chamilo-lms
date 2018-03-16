@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CAttendanceSheet
+ * CAttendanceSheet.
  *
  * @ORM\Table(
  *  name="c_attendance_sheet",
@@ -21,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CAttendanceSheet
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -30,37 +30,38 @@ class CAttendanceSheet
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="presence", type="boolean", nullable=false)
      */
     private $presence;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer")
      */
     private $userId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="attendance_calendar_id", type="integer")
      */
     private $attendanceCalendarId;
 
     /**
-     * Set presence
+     * Set presence.
      *
-     * @param boolean $presence
+     * @param bool $presence
+     *
      * @return CAttendanceSheet
      */
     public function setPresence($presence)
@@ -71,9 +72,9 @@ class CAttendanceSheet
     }
 
     /**
-     * Get presence
+     * Get presence.
      *
-     * @return boolean
+     * @return bool
      */
     public function getPresence()
     {
@@ -81,9 +82,10 @@ class CAttendanceSheet
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CAttendanceSheet
      */
     public function setCId($cId)
@@ -94,9 +96,9 @@ class CAttendanceSheet
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -104,9 +106,10 @@ class CAttendanceSheet
     }
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return CAttendanceSheet
      */
     public function setUserId($userId)
@@ -117,9 +120,9 @@ class CAttendanceSheet
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -127,9 +130,10 @@ class CAttendanceSheet
     }
 
     /**
-     * Set attendanceCalendarId
+     * Set attendanceCalendarId.
      *
-     * @param integer $attendanceCalendarId
+     * @param int $attendanceCalendarId
+     *
      * @return CAttendanceSheet
      */
     public function setAttendanceCalendarId($attendanceCalendarId)
@@ -140,9 +144,9 @@ class CAttendanceSheet
     }
 
     /**
-     * Get attendanceCalendarId
+     * Get attendanceCalendarId.
      *
-     * @return integer
+     * @return int
      */
     public function getAttendanceCalendarId()
     {

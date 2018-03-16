@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Index of the admin tools
+ * Index of the admin tools.
  *
  * @package chamilo.admin
  */

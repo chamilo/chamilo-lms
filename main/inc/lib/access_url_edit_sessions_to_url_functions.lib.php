@@ -1,18 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Definition of the Accessurleditsessiontourl class
+ * Definition of the Accessurleditsessiontourl class.
+ *
  * @package chamilo.library
  */
-
 require_once 'xajax/xajax.inc.php';
 
 /**
  * Accessurleditsessiontourl class
  * Contains several functions dealing with displaying,
- * editing,... of a Access_url_edit_session_to_url_functions
+ * editing,... of a Access_url_edit_session_to_url_functions.
  *
  * @version 1.0
+ *
  * @author Toon Keppens <toon@vi-host.net>
  * @author Julio Montoya - Cleaning code
  * @author Ricardo Rodriguez - Separated the function and code
@@ -20,9 +21,11 @@ require_once 'xajax/xajax.inc.php';
 class Accessurleditsessionstourl
 {
     /**
-     * Search sessions by name, based on a search string
+     * Search sessions by name, based on a search string.
+     *
      * @param string Search string
      * @param int Deprecated param
+     *
      * @return string Xajax response block
      * @assert () === false
      */
@@ -58,6 +61,7 @@ class Accessurleditsessionstourl
             'innerHTML',
             api_utf8_encode($return)
         );
+
         return $xajax_response;
     }
 }

@@ -2,11 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Helper file for friends and groups profiles
+ * Helper file for friends and groups profiles.
+ *
  * @package chamilo.social
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -108,13 +109,13 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
                 $item_description = '';
                 if (!empty($result['description'])) {
                     $item_description = '<div class="box_shared_profile_group_description">
-                        <span class="social-groups-text2">' .
+                        <span class="social-groups-text2">'.
                         api_xml_http_response_encode(get_lang('Description')).'</span><p class="social-groups-text4">'.
                         cut(api_xml_http_response_encode($result['description']), 120, true).'</p></div>';
                 }
 
                 $result['picture_uri'] = '<div class="box_shared_profile_group_image">
-                                          <img class="social-groups-image" src="' . $picture['file'].'" /></div>';
+                                          <img class="social-groups-image" src="'.$picture['file'].'" /></div>';
                 $item_actions = '';
                 if (api_get_user_id() == $user_id) {
                     $item_actions = '<div class="box_shared_profile_group_actions"><a href="group_view.php?id='.$id.'">'.
@@ -123,7 +124,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
                 $grid_my_groups[] = [
                     $item_name,
                     $url_open.$result['picture_uri'].$url_close,
-                    $item_description.$item_actions
+                    $item_description.$item_actions,
                 ];
                 $i++;
             }

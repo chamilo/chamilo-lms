@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  * Search widget. Shows the search screen contents.
+ *
  * @package chamilo.include.search
  */
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -12,7 +13,7 @@ require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
  * Note that $htmlHeadXtra should be passed by reference and not value,
  * otherwise this function will have no effect and your form will be broken.
  *
- * @param   array $htmlHeadXtra     A reference to the doc $htmlHeadXtra
+ * @param array $htmlHeadXtra A reference to the doc $htmlHeadXtra
  */
 function search_widget_prepare(&$htmlHeadXtra)
 {
@@ -24,7 +25,7 @@ function search_widget_prepare(&$htmlHeadXtra)
 }
 
 /**
- * Get one term html select
+ * Get one term html select.
  */
 function format_one_specific_field_select($prefix, $sf_term_array, $op, $extra_select_attr = 'size="7" class="sf-select-multiple"')
 {
@@ -57,11 +58,12 @@ function format_one_specific_field_select($prefix, $sf_term_array, $op, $extra_s
         $multiple_select .= '<option value="'.$html_term.'" '.$selected.'>'.$html_term.'</option>';
     }
     $multiple_select .= '</select>';
+
     return $multiple_select;
 }
 
 /**
- * Get terms html selects
+ * Get terms html selects.
  */
 function format_specific_fields_selects($sf_terms, $op, $prefilter_prefix = '')
 {
@@ -100,6 +102,7 @@ function format_specific_fields_selects($sf_terms, $op, $prefilter_prefix = '')
         $multiple_selects .= $multiple_select;
         $i++;
     }
+
     return $multiple_selects;
 }
 
@@ -110,7 +113,7 @@ function format_specific_fields_selects($sf_terms, $op, $prefilter_prefix = '')
  */
 function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op)
 {
-    $thesaurus_icon = Display::return_icon('thesaurus.gif', get_lang('SearchAdvancedOptions'), ['id'=>'thesaurus-icon']);
+    $thesaurus_icon = Display::return_icon('thesaurus.gif', get_lang('SearchAdvancedOptions'), ['id' => 'thesaurus-icon']);
     $advanced_options = '<a id="tags-toggle" href="#">'.get_lang('SearchAdvancedOptions').'</a>';
     $display_thesaurus = ($show_thesaurus == true ? 'block' : 'none');
     $help = '<h3>'.get_lang('SearchKeywordsHelpTitle').'</h3>'.get_lang('SearchKeywordsHelpComment');
@@ -120,16 +123,15 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op)
     /**
      * POST avoid long urls, but we are using GET because
      * SortableTableFromArray pagination is done with simple links, so now we
-     * could not send a form in pagination
+     * could not send a form in pagination.
      */
-
     if (isset($_GET['action']) && strcmp(trim($_GET['action']), 'search') === 0) {
         $action = 'index.php';
     }
     $navigator_info = api_get_navigator();
 
     if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
-        $submit_button1	= '<input type="submit" id="submit" value="'.get_lang('Search').'" />';
+        $submit_button1 = '<input type="submit" id="submit" value="'.get_lang('Search').'" />';
         $submit_button2 = '<input class="lower-submit" type="submit" value="'.get_lang('Search').'" />';
         $reset_button = '<input type="submit" id="tags-clean" value="'.get_lang('SearchResetKeywords').'" />';
     } else {
@@ -141,9 +143,9 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op)
     $query = isset($_REQUEST['query']) ? Security::remove_XSS($_REQUEST['query']) : null;
 
     $form = '<form id="chamilo_search" action="'.$action.'" method="GET">
-            <input type="text" id="query" name="query" size="40" value="' . $query.'" />
-            <input type="hidden" name="mode" value="'. $mode.'"/>
-            <input type="hidden" name="type" value="'. $type.'"/>
+            <input type="text" id="query" name="query" size="40" value="'.$query.'" />
+            <input type="hidden" name="mode" value="'.$mode.'"/>
+            <input type="hidden" name="type" value="'.$type.'"/>
             <input type="hidden" name="tablename_page_nr" value="1" />
             '.$submit_button1.'
             <br /><br />';
@@ -151,8 +153,8 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op)
 
     if (!empty($list)) {
         $form .= '<span class="search-links-box">'.$advanced_options.'&nbsp;</span>
-            <div id="tags" class="tags" style="display:'. $display_thesaurus.';">
-                <div class="search-help-box">'. $help.'</div>
+            <div id="tags" class="tags" style="display:'.$display_thesaurus.';">
+                <div class="search-help-box">'.$help.'</div>
                 <table>
                 <tr>';
         $form .= format_specific_fields_selects($sf_terms, $op);
@@ -166,15 +168,15 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op)
         $form .= '</tr>
                     <tr>
                         <td id="operator-select">
-                            '. get_lang('SearchCombineSearchWith').':<br />
-                            <input type="radio" class="search-operator" name="operator" value="or" '. $or_checked.'>'.api_strtoupper(get_lang('Or')).'</input>
-                            <input type="radio" class="search-operator" name="operator" value="and" '. $and_checked.'>'.api_strtoupper(get_lang('And')).'</input>
+                            '.get_lang('SearchCombineSearchWith').':<br />
+                            <input type="radio" class="search-operator" name="operator" value="or" '.$or_checked.'>'.api_strtoupper(get_lang('Or')).'</input>
+                            <input type="radio" class="search-operator" name="operator" value="and" '.$and_checked.'>'.api_strtoupper(get_lang('And')).'</input>
                         </td>
                         <td></td>
                         <td>
                             <br />
                           '.$reset_button.'
-                            '. $submit_button2.'
+                            '.$submit_button2.'
                         </td>
                     </tr>
                     </table>
@@ -182,6 +184,7 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op)
     }
     $form .= '</form>
     <br style="clear: both;"/>';
+
     return $form;
 }
 
@@ -197,7 +200,7 @@ function search_widget_prefilter_form(
     $op,
     $prefilter_prefix = null
 ) {
-    $thesaurus_icon = Display::return_icon('thesaurus.gif', get_lang('SearchAdvancedOptions'), ['id'=>'thesaurus-icon']);
+    $thesaurus_icon = Display::return_icon('thesaurus.gif', get_lang('SearchAdvancedOptions'), ['id' => 'thesaurus-icon']);
     $advanced_options = '<a id="tags-toggle" href="#">'.get_lang('SearchAdvancedOptions').'</a>';
     $display_thesaurus = ($show_thesaurus == true ? 'block' : 'none');
     $help = '<h3>'.get_lang('SearchKeywordsHelpTitle').'</h3>'.get_lang('SearchKeywordsHelpComment');
@@ -207,25 +210,25 @@ function search_widget_prefilter_form(
     /**
      * POST avoid long urls, but we are using GET because
      * SortableTableFromArray pagination is done with simple links, so now we
-     * could not send a form in pagination
+     * could not send a form in pagination.
      */
     if (isset($_GET['action']) && strcmp(trim($_GET['action']), 'search') === 0) {
         $action = 'index.php';
     }
 
     $form = '
-        <form id="chamilo_search" action="'. $action.'" method="GET">
+        <form id="chamilo_search" action="'.$action.'" method="GET">
             <input type="text" id="query" name="query" size="40" />
-            <input type="hidden" name="mode" value="'. $mode.'"/>
-            <input type="hidden" name="type" value="'. $type.'"/>
+            <input type="hidden" name="mode" value="'.$mode.'"/>
+            <input type="hidden" name="type" value="'.$type.'"/>
             <input type="hidden" name="tablename_page_nr" value="1" />
-            <input type="submit" id="submit" value="'. get_lang("Search").'" />
+            <input type="submit" id="submit" value="'.get_lang("Search").'" />
             <br /><br />';
     $list = get_specific_field_list();
     if (!empty($list)) {
         $form .= ' <span class="search-links-box">'.$thesaurus_icon.$advanced_options.'&nbsp;</span>
-                <div id="tags" class="tags" style="display:'. $display_thesaurus.';">
-                    <div class="search-help-box">'. $help.'</div>
+                <div id="tags" class="tags" style="display:'.$display_thesaurus.';">
+                    <div class="search-help-box">'.$help.'</div>
                     <table>
                     <tr>';
         if (!is_null($prefilter_prefix)) {
@@ -260,15 +263,15 @@ function search_widget_prefilter_form(
                     </tr>
                     <tr>
                         <td id="operator-select">
-                            '. get_lang('SearchCombineSearchWith').':<br />
-                            <input type="radio" class="search-operator" name="operator" value="or" '. $or_checked.'>'.api_strtoupper(get_lang('Or')).'</input>
-                            <input type="radio" class="search-operator" name="operator" value="and" '. $and_checked.'>'.api_strtoupper(get_lang('And')).'</input>
+                            '.get_lang('SearchCombineSearchWith').':<br />
+                            <input type="radio" class="search-operator" name="operator" value="or" '.$or_checked.'>'.api_strtoupper(get_lang('Or')).'</input>
+                            <input type="radio" class="search-operator" name="operator" value="and" '.$and_checked.'>'.api_strtoupper(get_lang('And')).'</input>
                         </td>
                         <td></td>
                         <td>
                             <br />
-                            <input class="lower-submit" type="submit" value="'. get_lang('Search').'" />
-                            <input type="submit" id="tags-clean" value="'. get_lang('SearchResetKeywords').'" />
+                            <input class="lower-submit" type="submit" value="'.get_lang('Search').'" />
+                            <input type="submit" id="tags-clean" value="'.get_lang('SearchResetKeywords').'" />
                         </td>
                     </tr>
                     </table>
@@ -282,7 +285,7 @@ function search_widget_prefilter_form(
 }
 
 /**
- * Show search form
+ * Show search form.
  */
 function display_search_form($action, $show_thesaurus, $sf_terms, $op)
 {
@@ -315,15 +318,15 @@ function display_search_form($action, $show_thesaurus, $sf_terms, $op)
 }
 
 /**
- * Show the search widget
+ * Show the search widget.
  *
  * The form will post to index.php by default, you can pass a value to
  * $action to use a custom action.
  * IMPORTANT: you have to call search_widget_prepare() before calling this
  * function or otherwise the form will not behave correctly.
  *
- * @param   string $action     Just in case your action is not
- * index.php
+ * @param string $action Just in case your action is not
+ *                       index.php
  */
 function search_widget_show($action = 'index.php')
 {
@@ -336,7 +339,6 @@ function search_widget_show($action = 'index.php')
     $url_params = [];
 
     if (($cid = api_get_course_id()) != -1) { // with cid
-
         // get search engine terms
         $course_filter = chamilo_get_boolean_query(XAPIAN_PREFIX_COURSEID.$cid);
         $dkterms = chamilo_query_simple_query('', 0, 1000, [$course_filter]);

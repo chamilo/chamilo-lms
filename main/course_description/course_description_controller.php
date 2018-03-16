@@ -4,8 +4,10 @@
 /**
  * Class CourseDescriptionController
  * This file contains class used like controller,
- * it should be included inside a dispatcher file (e.g: index.php)
+ * it should be included inside a dispatcher file (e.g: index.php).
+ *
  * @author Christian Fasanando <christian1827@gmail.com>
+ *
  * @package chamilo.course_description
  */
 class CourseDescriptionController
@@ -14,7 +16,7 @@ class CourseDescriptionController
     private $view;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -24,8 +26,9 @@ class CourseDescriptionController
 
     /**
      * It's used for listing course description,
-     * render to listing view
-     * @param boolean    true for listing history (optional)
+     * render to listing view.
+     *
+     * @param bool    true for listing history (optional)
      * @param array    message for showing by action['edit','add','destroy'] (optional)
      */
     public function listing($history = false, $messages = [])
@@ -64,8 +67,9 @@ class CourseDescriptionController
 
     /**
      * It's used for editing a course description,
-     * render to listing or edit view
-     * @param int $id description item id
+     * render to listing or edit view.
+     *
+     * @param int $id               description item id
      * @param int $description_type description type id
      */
     public function edit($id, $description_type)
@@ -178,7 +182,7 @@ class CourseDescriptionController
 
     /**
      * It's used for adding a course description,
-     * render to listing or add view
+     * render to listing or add view.
      */
     public function add()
     {
@@ -239,7 +243,8 @@ class CourseDescriptionController
 
     /**
      * It's used for destroy a course description,
-     * render to listing view
+     * render to listing view.
+     *
      * @param int $id description type
      */
     public function destroy($id)

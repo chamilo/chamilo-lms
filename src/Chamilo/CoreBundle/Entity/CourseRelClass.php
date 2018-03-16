@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CourseRelClass
+ * CourseRelClass.
  *
  * @ORM\Table(name="course_rel_class")
  * @ORM\Entity
@@ -23,7 +23,7 @@ class CourseRelClass
     private $courseCode;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="class_id", type="integer")
      * @ORM\Id
@@ -31,11 +31,11 @@ class CourseRelClass
      */
     private $classId;
 
-
     /**
-     * Set courseCode
+     * Set courseCode.
      *
      * @param string $courseCode
+     *
      * @return CourseRelClass
      */
     public function setCourseCode($courseCode)
@@ -46,7 +46,7 @@ class CourseRelClass
     }
 
     /**
-     * Get courseCode
+     * Get courseCode.
      *
      * @return string
      */
@@ -56,9 +56,10 @@ class CourseRelClass
     }
 
     /**
-     * Set classId
+     * Set classId.
      *
-     * @param integer $classId
+     * @param int $classId
+     *
      * @return CourseRelClass
      */
     public function setClassId($classId)
@@ -69,9 +70,9 @@ class CourseRelClass
     }
 
     /**
-     * Get classId
+     * Get classId.
      *
-     * @return integer
+     * @return int
      */
     public function getClassId()
     {

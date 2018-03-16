@@ -2,7 +2,6 @@
 /**
  * @package chamilo.plugin.vchamilo
  */
-
 api_protect_admin_script();
 
 global $virtualChamilo;

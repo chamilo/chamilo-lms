@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class ch_multipleresponse
+ * Class ch_multipleresponse.
  */
 class ch_multipleresponse extends survey_question
 {
@@ -15,7 +15,7 @@ class ch_multipleresponse extends survey_question
         parent::createForm($surveyData, $formData);
         $options = [
             'horizontal' => get_lang('Horizontal'),
-            'vertical' => get_lang('Vertical')
+            'vertical' => get_lang('Vertical'),
         ];
         $this->getForm()->addRadio('horizontalvertical', get_lang('DisplayAnswersHorVert'), $options);
 
@@ -40,8 +40,8 @@ class ch_multipleresponse extends survey_question
 
     /**
      * @param FormValidator $form
-     * @param array $questionData
-     * @param array $answers
+     * @param array         $questionData
+     * @param array         $answers
      */
     public function render(
         FormValidator $form,

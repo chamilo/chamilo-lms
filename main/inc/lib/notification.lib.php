@@ -5,32 +5,11 @@
  * Notification class
  * This class provides methods for the Notification management.
  * Include/require it in your code to use its features.
+ *
  * @package chamilo.library
  */
 class Notification extends Model
 {
-    public $table;
-    public $columns = [
-        'id',
-        'dest_user_id',
-        'dest_mail',
-        'title',
-        'content',
-        'send_freq',
-        'created_at',
-        'sent_at'
-    ];
-
-    //Max length of the notification.content field
-    public $max_content_length = 254;
-    public $debug = false;
-
-    /* message, invitation, group messages */
-    public $type;
-    public $adminName;
-    public $adminEmail;
-    public $titlePrefix;
-
     // mail_notify_message ("At once", "Daily", "No")
     const NOTIFY_MESSAGE_AT_ONCE = 1;
     const NOTIFY_MESSAGE_DAILY = 8;
@@ -55,9 +34,30 @@ class Notification extends Model
     const NOTIFICATION_TYPE_GROUP = 3;
     const NOTIFICATION_TYPE_WALL_MESSAGE = 4;
     const NOTIFICATION_TYPE_DIRECT_MESSAGE = 5;
+    public $table;
+    public $columns = [
+        'id',
+        'dest_user_id',
+        'dest_mail',
+        'title',
+        'content',
+        'send_freq',
+        'created_at',
+        'sent_at',
+    ];
+
+    //Max length of the notification.content field
+    public $max_content_length = 254;
+    public $debug = false;
+
+    /* message, invitation, group messages */
+    public $type;
+    public $adminName;
+    public $adminEmail;
+    public $titlePrefix;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -104,7 +104,8 @@ class Notification extends Model
     }
 
     /**
-     *  Send the notifications
+     *  Send the notifications.
+     *
      *  @param int $frequency notification frequency
      */
     public function send($frequency = 8)
@@ -141,7 +142,7 @@ class Notification extends Model
 
     /**
      * @param string $title
-     * @param array $senderInfo
+     * @param array  $senderInfo
      *
      * @return string
      */
@@ -211,19 +212,19 @@ class Notification extends Model
     }
 
     /**
-     * Save message notification
-     * @param int $type message type
-     * NOTIFICATION_TYPE_MESSAGE,
-     * NOTIFICATION_TYPE_INVITATION,
-     * NOTIFICATION_TYPE_GROUP
-     * @param int $messageId
-     * @param array $userList recipients: user list of ids
+     * Save message notification.
+     *
+     * @param int    $type          message type
+     *                              NOTIFICATION_TYPE_MESSAGE,
+     *                              NOTIFICATION_TYPE_INVITATION,
+     *                              NOTIFICATION_TYPE_GROUP
+     * @param int    $messageId
+     * @param array  $userList      recipients: user list of ids
      * @param string $title
      * @param string $content
-     * @param array $senderInfo result of api_get_user_info() or GroupPortalManager:get_group_data()
-     * @param array $attachments
-     * @param array $smsParameters
-     *
+     * @param array  $senderInfo    result of api_get_user_info() or GroupPortalManager:get_group_data()
+     * @param array  $attachments
+     * @param array  $smsParameters
      */
     public function saveNotification(
         $messageId,
@@ -307,8 +308,8 @@ class Notification extends Model
                             $extraHeaders = [
                                 'reply_to' => [
                                     'name' => $senderInfo['complete_name'],
-                                    'mail' => $senderInfo['email']
-                                ]
+                                    'mail' => $senderInfo['email'],
+                                ],
                             ];
                         }
 
@@ -337,7 +338,7 @@ class Notification extends Model
                     'dest_mail' => $userInfo['email'],
                     'title' => $title,
                     'content' => $content,
-                    'send_freq' => $userSetting
+                    'send_freq' => $userSetting,
                 ];
 
                 $this->save($params);
@@ -349,11 +350,12 @@ class Notification extends Model
 
     /**
      * Formats the content in order to add the welcome message,
-     * the notification preference, etc
-     * @param int $messageId
+     * the notification preference, etc.
+     *
+     * @param int    $messageId
      * @param string $content
      * @param array  $senderInfo result of api_get_user_info() or
-     * GroupPortalManager:get_group_data()
+     *                           GroupPortalManager:get_group_data()
      *
      * @return string
      * */
@@ -479,10 +481,12 @@ class Notification extends Model
     }
 
     /**
-     * Send the push notifications to Chamilo Mobile app
-     * @param array $userIds The IDs of users who will be notified
-     * @param string $title The notification title
+     * Send the push notifications to Chamilo Mobile app.
+     *
+     * @param array  $userIds The IDs of users who will be notified
+     * @param string $title   The notification title
      * @param string $content The notification content
+     *
      * @return int The number of success notifications. Otherwise returns false
      */
     public static function sendPushNotification(array $userIds, $title, $content)
@@ -522,15 +526,15 @@ class Notification extends Model
 
         $headers = [
             'Authorization: key='.$gdcApiKey,
-            'Content-Type: application/json'
+            'Content-Type: application/json',
         ];
 
         $fields = json_encode([
             'registration_ids' => $gcmRegistrationIds,
             'data' => [
                 'title' => $title,
-                'message' => $content
-            ]
+                'message' => $content,
+            ],
         ]);
 
         $ch = curl_init();

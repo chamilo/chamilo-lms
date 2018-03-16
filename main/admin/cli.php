@@ -1,11 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-* Used for external support of chamilo's users
-*
-* @author Arnaud Ligot, CBlue SPRL
-* @package chamilo.admin.cli
-*/
+ * Used for external support of chamilo's users.
+ *
+ * @author Arnaud Ligot, CBlue SPRL
+ *
+ * @package chamilo.admin.cli
+ */
 
 // we are in the admin area so we do not need a course id
 $cidReset = true;

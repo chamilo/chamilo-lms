@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  * @package chamilo.admin
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 // resetting the course id
@@ -54,7 +55,7 @@ function add_user_to_url(code, content) {
 function send() {
 	if (document.formulaire.access_url_id.value!=0) {
 		document.formulaire.form_sent.value=0;
-		document.formulaire.add_type.value=\'' . $add_type.'\';
+		document.formulaire.add_type.value=\''.$add_type.'\';
 		document.formulaire.submit();
 	}
 }
@@ -140,7 +141,7 @@ if ($add_type == 'multiple') {
                 get_lang('SessionAddTypeUnique'),
                 api_get_self().'?'.http_build_query([
                     'add_type' => 'unique',
-                    'access_url_id' => $access_url_id
+                    'access_url_id' => $access_url_id,
                 ]),
                 'file-o',
                 'default',
@@ -150,7 +151,7 @@ if ($add_type == 'multiple') {
                 get_lang('SessionAddTypeMultiple'),
                 api_get_self().'?'.http_build_query([
                     'add_type' => 'multiple',
-                    'access_url_id' => $access_url_id
+                    'access_url_id' => $access_url_id,
                 ]),
                 'files-o',
                 'default',
@@ -172,11 +173,11 @@ $url_list = UrlManager::get_url_data();
     >
         <div class="row">
             <div class="col-xs-2">
-                <label for="access_url_id"><?php echo get_lang('SelectUrl') ?></label>
+                <label for="access_url_id"><?php echo get_lang('SelectUrl'); ?></label>
             </div>
             <div class="col-xs-5">
                 <select name="access_url_id" id="access_url_id" onchange="javascript:send();" class="form-control">
-                    <option value="0">-- <?php echo get_lang('SelectUrl') ?> --</option>
+                    <option value="0">-- <?php echo get_lang('SelectUrl'); ?> --</option>
                     <?php
                     $url_selected = '';
                     foreach ($url_list as $url_obj) {
@@ -200,7 +201,7 @@ $url_list = UrlManager::get_url_data();
             </div>
         </div>
         <input type="hidden" name="form_sent" value="1"/>
-        <input type="hidden" name="add_type" value="<?php echo $add_type ?>"/>
+        <input type="hidden" name="add_type" value="<?php echo $add_type; ?>"/>
         <?php
         if (!empty($errorMsg)) {
             echo Display::return_message($errorMsg, 'normal'); //main API
@@ -208,7 +209,7 @@ $url_list = UrlManager::get_url_data();
         ?>
         <div class="row">
             <div class="col-sm-5">
-                <label for="<?php echo $ajax_search ? 'course_to_add' : 'origin_users' ?>"><?php echo get_lang('UserGroupListInPlatform') ?></label>
+                <label for="<?php echo $ajax_search ? 'course_to_add' : 'origin_users'; ?>"><?php echo get_lang('UserGroupListInPlatform'); ?></label>
                 <div id="content_source">
                     <?php if ($ajax_search) {
             ?>
@@ -269,7 +270,7 @@ $url_list = UrlManager::get_url_data();
             <div class="col-xs-12 text-center">
                 <button class="save btn btn-primary" onclick="valide()">
                     <span class="fa fa-save fa-fw" aria-hidden="true"></span>
-                    <?php echo isset($_GET['add']) ? get_lang('AddUserGroupToURL') : get_lang('EditUserGroupToURL') ?>
+                    <?php echo isset($_GET['add']) ? get_lang('AddUserGroupToURL') : get_lang('EditUserGroupToURL'); ?>
                 </button>
             </div>
         </div>

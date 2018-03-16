@@ -3,15 +3,12 @@
 
 namespace Chamilo\TicketBundle\Entity;
 
-use Gedmo\Mapping\Annotation as Gedmo;
-use Doctrine\ORM\Mapping as ORM;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\TicketBundle\Entity\Project;
-use Chamilo\TicketBundle\Entity\Priority;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Ticket
+ * Ticket.
  *
  * @ORM\Table(name="ticket_ticket")
  * @ORM\Entity
@@ -19,7 +16,7 @@ use Chamilo\TicketBundle\Entity\Priority;
 class Ticket
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -53,7 +50,7 @@ class Ticket
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Project")
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
-     **/
+     */
     protected $project;
 
     /**
@@ -61,7 +58,7 @@ class Ticket
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     **/
+     */
     protected $category;
 
     /**
@@ -69,7 +66,7 @@ class Ticket
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Priority")
      * @ORM\JoinColumn(name="priority_id", referencedColumnName="id")
-     **/
+     */
     protected $priority;
 
     /**
@@ -77,7 +74,7 @@ class Ticket
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
      * @ORM\JoinColumn(name="course_id", referencedColumnName="id")
-     **/
+     */
     protected $course;
 
     /**
@@ -85,7 +82,7 @@ class Ticket
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
-     **/
+     */
     protected $session;
 
     /**
@@ -96,22 +93,22 @@ class Ticket
     protected $personalEmail;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="assigned_last_user", type="integer", nullable=true)
      */
     protected $assignedLastUser;
 
     /**
-    * @var Status
-    *
-    * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Status")
-    * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
-    **/
+     * @var Status
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Status")
+     * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
+     */
     protected $status;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="total_messages", type="integer", nullable=false)
      */
@@ -146,7 +143,7 @@ class Ticket
     protected $endDate;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false, unique=false)
      */
@@ -160,7 +157,7 @@ class Ticket
     protected $insertDateTime;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
@@ -183,6 +180,7 @@ class Ticket
 
     /**
      * @param int $id
+     *
      * @return Ticket
      */
     public function setId($id)
@@ -202,6 +200,7 @@ class Ticket
 
     /**
      * @param string $code
+     *
      * @return Ticket
      */
     public function setCode($code)
@@ -221,6 +220,7 @@ class Ticket
 
     /**
      * @param string $subject
+     *
      * @return Ticket
      */
     public function setSubject($subject)
@@ -240,6 +240,7 @@ class Ticket
 
     /**
      * @param string $message
+     *
      * @return Ticket
      */
     public function setMessage($message)

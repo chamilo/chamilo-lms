@@ -5,9 +5,9 @@
  * This script displays error messages on fatal errors during initialization.
  *
  * @package chamilo.include
+ *
  * @author Ivan Tcholakov, 2009-2010
  */
-
 $Organisation = '<a href="http://www.chamilo.org" target="_blank">Chamilo Homepage</a>';
 $PoweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chamilo </a> &copy; '.date('Y');
 

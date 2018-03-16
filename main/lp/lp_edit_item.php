@@ -4,16 +4,16 @@
 use ChamiloSession as Session;
 
 /**
- * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php
+ * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php.
  *
  * @author Patrick Cool
  * @author Denes Nagy
  * @author Roan Embrechts, refactoring and code cleaning
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
  * @author Julio Montoya  - Improving the list of templates
+ *
  * @package chamilo.learnpath
-*/
-
+ */
 $this_section = SECTION_COURSES;
 api_protect_course_script();
 
@@ -48,7 +48,7 @@ $htmlHeadXtra[] = '
         cbo.options[k].selected = true;
         $('#previous').selectpicker('refresh');
     }
-" .
+".
 '
 $(document).on("ready", function() {
     CKEDITOR.on("instanceReady", function (e) {
@@ -88,20 +88,20 @@ $therow = Database::fetch_array($result);
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
+        'name' => get_lang('ToolGradebook'),
     ];
 }
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths')
+    'name' => get_lang('LearningPaths'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
-    'name' => Security::remove_XSS($therow['name'])
+    'name' => Security::remove_XSS($therow['name']),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
-    'name' => get_lang('NewStep')
+    'name' => get_lang('NewStep'),
 ];
 
 // Theme calls.
@@ -139,7 +139,7 @@ $(document).ready(function() {
     });
 
     $('.lp-btn-associate-forum').on('click', function (e) {
-        var associate = confirm('<?php echo get_lang('ConfirmAssociateForumToLPItem') ?>');
+        var associate = confirm('<?php echo get_lang('ConfirmAssociateForumToLPItem'); ?>');
 
         if (!associate) {
             e.preventDefault();
@@ -147,7 +147,7 @@ $(document).ready(function() {
     });
 
     $('.lp-btn-dissociate-forum').on('click', function (e) {
-        var dissociate = confirm('<?php echo get_lang('ConfirmDissociateForumToLPItem') ?>');
+        var dissociate = confirm('<?php echo get_lang('ConfirmDissociateForumToLPItem'); ?>');
 
         if (!dissociate) {
             e.preventDefault();

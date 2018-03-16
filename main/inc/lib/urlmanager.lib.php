@@ -11,15 +11,16 @@
 class UrlManager
 {
     /**
-    * Creates a new url access
-    *
-    * @author Julio Montoya <gugli100@gmail.com>,
-    *
-     * @param string $url The URL of the site
+     * Creates a new url access.
+     *
+     * @author Julio Montoya <gugli100@gmail.com>,
+     *
+     * @param string $url         The URL of the site
      * @param string $description The description of the site
-     * @param int $active is active or not
-     * @return boolean if success
-    */
+     * @param int    $active      is active or not
+     *
+     * @return bool if success
+     */
     public static function add($url, $description, $active)
     {
         $tms = time();
@@ -36,14 +37,16 @@ class UrlManager
     }
 
     /**
-    * Updates an URL access
-    * @author Julio Montoya <gugli100@gmail.com>,
+     * Updates an URL access.
      *
-     * @param int $urlId The url id
+     * @author Julio Montoya <gugli100@gmail.com>,
+     *
+     * @param int    $urlId       The url id
      * @param string $url
      * @param string $description The description of the site
-     * @param int $active is active or not
-     * @return boolean if success
+     * @param int    $active      is active or not
+     *
+     * @return bool if success
      */
     public static function update($urlId, $url, $description, $active)
     {
@@ -63,12 +66,14 @@ class UrlManager
     }
 
     /**
-    * Deletes an url
-    * @author Julio Montoya
-    * @param int $id url id
+     * Deletes an url.
      *
-    * @return boolean true if success
-    * */
+     * @author Julio Montoya
+     *
+     * @param int $id url id
+     *
+     * @return bool true if success
+     * */
     public static function delete($id)
     {
         $id = intval($id);
@@ -132,8 +137,10 @@ class UrlManager
     }
 
     /**
-     * This function get the quantity of URLs
+     * This function get the quantity of URLs.
+     *
      * @author Julio Montoya
+     *
      * @return int count of urls
      * */
     public static function url_count()
@@ -148,8 +155,10 @@ class UrlManager
     }
 
     /**
-     * Gets the id, url, description, and active status of ALL URLs
+     * Gets the id, url, description, and active status of ALL URLs.
+     *
      * @author Julio Montoya
+     *
      * @return array
      * */
     public static function get_url_data()
@@ -168,9 +177,12 @@ class UrlManager
     }
 
     /**
-     * Gets the id, url, description, and active status of ALL URLs
+     * Gets the id, url, description, and active status of ALL URLs.
+     *
      * @author Julio Montoya
+     *
      * @param int $urlId
+     *
      * @return array
      * */
     public static function get_url_data_from_id($urlId)
@@ -186,12 +198,15 @@ class UrlManager
     }
 
     /**
-     * Gets the inner join of users and urls table
+     * Gets the inner join of users and urls table.
+     *
      * @author Julio Montoya
+     *
      * @param int  access url id
      * @param string $order_by
-     * @return array   Database::store_result of the result
-     **/
+     *
+     * @return array Database::store_result of the result
+     */
     public static function get_url_rel_user_data($urlId = 0, $order_by = null)
     {
         $where = '';
@@ -218,12 +233,14 @@ class UrlManager
     }
 
     /**
-    * Gets the inner join of access_url and the course table
-    *
-    * @author Julio Montoya
-    * @param int  access url id
-    * @return array   Database::store_result of the result
-    **/
+     * Gets the inner join of access_url and the course table.
+     *
+     * @author Julio Montoya
+     *
+     * @param int  access url id
+     *
+     * @return array Database::store_result of the result
+     */
     public static function get_url_rel_course_data($urlId = 0)
     {
         $where = '';
@@ -248,12 +265,14 @@ class UrlManager
     }
 
     /**
-     * Gets the number of rows with a specific course_code in access_url_rel_course table
+     * Gets the number of rows with a specific course_code in access_url_rel_course table.
+     *
      * @author Yoselyn Castillo
+     *
      * @param int $courseId
      *
      * @return int Database::num_rows($res);
-     **/
+     */
     public static function getCountUrlRelCourse($courseId)
     {
         $courseId = intval($courseId);
@@ -267,13 +286,14 @@ class UrlManager
     }
 
     /**
-     * Gets the inner join of access_url and the session table
+     * Gets the inner join of access_url and the session table.
+     *
      * @author Julio Montoya
-     * @param int  $urlId access url id
      *
-     * @return array   Database::store_result of the result
+     * @param int $urlId access url id
      *
-     **/
+     * @return array Database::store_result of the result
+     */
     public static function get_url_rel_session_data($urlId = 0)
     {
         $where = '';
@@ -298,13 +318,14 @@ class UrlManager
     }
 
     /**
-     * Gets the inner join of access_url and the usergroup table
+     * Gets the inner join of access_url and the usergroup table.
      *
      * @author Julio Montoya
-     * @param int  $urlId
      *
-     * @return array   Database::store_result of the result
-     **/
+     * @param int $urlId
+     *
+     * @return array Database::store_result of the result
+     */
     public static function get_url_rel_usergroup_data($urlId = 0)
     {
         $where = '';
@@ -329,12 +350,14 @@ class UrlManager
     }
 
     /**
-     * Gets the inner join of access_url and the usergroup table
+     * Gets the inner join of access_url and the usergroup table.
      *
      * @author Julio Montoya
-     * @param int  $urlId
-     * @return array   Database::store_result of the result
-     **/
+     *
+     * @param int $urlId
+     *
+     * @return array Database::store_result of the result
+     */
     public static function getUrlRelCourseCategory($urlId = 0)
     {
         $table_url_rel = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
@@ -359,8 +382,10 @@ class UrlManager
     }
 
     /**
-     * Sets the status of an URL 1 or 0
+     * Sets the status of an URL 1 or 0.
+     *
      * @author Julio Montoya
+     *
      * @param string $status lock || unlock
      * @param int url id
      * */
@@ -381,12 +406,15 @@ class UrlManager
     }
 
     /**
-    * Checks the relationship between an URL and a User (return the num_rows)
-    * @author Julio Montoya
-    * @param int user id
-    * @param int url id
-    * @return boolean true if success
-    * */
+     * Checks the relationship between an URL and a User (return the num_rows).
+     *
+     * @author Julio Montoya
+     *
+     * @param int user id
+     * @param int url id
+     *
+     * @return bool true if success
+     * */
     public static function relation_url_user_exist($user_id, $urlId)
     {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -399,12 +427,15 @@ class UrlManager
     }
 
     /**
-    * Checks the relationship between an URL and a Course (return the num_rows)
-    * @author Julio Montoya
-    * @param int $courseId
-    * @param int $urlId
-    * @return boolean true if success
-    * */
+     * Checks the relationship between an URL and a Course (return the num_rows).
+     *
+     * @author Julio Montoya
+     *
+     * @param int $courseId
+     * @param int $urlId
+     *
+     * @return bool true if success
+     * */
     public static function relation_url_course_exist($courseId, $urlId)
     {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -420,11 +451,14 @@ class UrlManager
 
     /**
      * Checks the relationship between an URL and a UserGr
-     * oup (return the num_rows)
+     * oup (return the num_rows).
+     *
      * @author Julio Montoya
+     *
      * @param int $userGroupId
      * @param int $urlId
-     * @return boolean true if success
+     *
+     * @return bool true if success
      * */
     public static function relationUrlUsergroupExist($userGroupId, $urlId)
     {
@@ -440,12 +474,15 @@ class UrlManager
     }
 
     /**
-    * Checks the relationship between an URL and a Session (return the num_rows)
-    * @author Julio Montoya
-    * @param int user id
-    * @param int url id
-    * @return boolean true if success
-    * */
+     * Checks the relationship between an URL and a Session (return the num_rows).
+     *
+     * @author Julio Montoya
+     *
+     * @param int user id
+     * @param int url id
+     *
+     * @return bool true if success
+     * */
     public static function relation_url_session_exist($session_id, $urlId)
     {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
@@ -462,10 +499,13 @@ class UrlManager
     }
 
     /**
-     * Add a group of users into a group of URLs
+     * Add a group of users into a group of URLs.
+     *
      * @author Julio Montoya
+     *
      * @param  array of user_ids
      * @param  array of url_ids
+     *
      * @return array
      * */
     public static function add_users_to_urls($user_list, $url_list)
@@ -496,14 +536,16 @@ class UrlManager
         return $result_array;
     }
 
-
     /**
-     * Add a group of courses into a group of URLs
+     * Add a group of courses into a group of URLs.
+     *
      * @author Julio Montoya
-     * @param  array $course_list of course ids
-     * @param  array $url_list of url_ids
+     *
+     * @param array $course_list of course ids
+     * @param array $url_list    of url_ids
+     *
      * @return array
-     **/
+     */
     public static function add_courses_to_urls($course_list, $url_list)
     {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -534,12 +576,15 @@ class UrlManager
     }
 
     /**
-     * Add a group of user group into a group of URLs
+     * Add a group of user group into a group of URLs.
+     *
      * @author Julio Montoya
-     * @param  array $userGroupList of course ids
-     * @param  array $urlList of url_ids
+     *
+     * @param array $userGroupList of course ids
+     * @param array $urlList       of url_ids
+     *
      * @return array
-     **/
+     */
     public static function addUserGroupListToUrl($userGroupList, $urlList)
     {
         $resultArray = [];
@@ -566,12 +611,15 @@ class UrlManager
     }
 
     /**
-     * Add a group of user group into a group of URLs
+     * Add a group of user group into a group of URLs.
+     *
      * @author Julio Montoya
+     *
      * @param  array of course ids
      * @param  array of url_ids
+     *
      * @return array
-     **/
+     */
     public static function addCourseCategoryListToUrl($courseCategoryList, $urlList)
     {
         $resultArray = [];
@@ -596,11 +644,14 @@ class UrlManager
 
     /**
      * Checks the relationship between an URL and a UserGr
-     * oup (return the num_rows)
+     * oup (return the num_rows).
+     *
      * @author Julio Montoya
+     *
      * @param int $categoryCourseId
      * @param int $urlId
-     * @return boolean true if success
+     *
+     * @return bool true if success
      * */
     public static function relationUrlCourseCategoryExist($categoryCourseId, $urlId)
     {
@@ -618,6 +669,7 @@ class UrlManager
     /**
      * @param int $userGroupId
      * @param int $urlId
+     *
      * @return int
      */
     public static function addUserGroupToUrl($userGroupId, $urlId)
@@ -635,6 +687,7 @@ class UrlManager
     /**
      * @param int $categoryId
      * @param int $urlId
+     *
      * @return int
      */
     public static function addCourseCategoryToUrl($categoryId, $urlId)
@@ -656,10 +709,13 @@ class UrlManager
     }
 
     /**
-     * Add a group of sessions into a group of URLs
+     * Add a group of sessions into a group of URLs.
+     *
      * @author Julio Montoya
-     * @param  array $session_list of session ids
-     * @param  array $url_list of url_ids
+     *
+     * @param array $session_list of session ids
+     * @param array $url_list     of url_ids
+     *
      * @return array
      * */
     public static function add_sessions_to_urls($session_list, $url_list)
@@ -692,12 +748,14 @@ class UrlManager
     }
 
     /**
-     * Add a user into a url
-     * @author Julio Montoya
-     * @param  int $user_id
-     * @param  int $urlId
+     * Add a user into a url.
      *
-     * @return boolean true if success
+     * @author Julio Montoya
+     *
+     * @param int $user_id
+     * @param int $urlId
+     *
+     * @return bool true if success
      * */
     public static function add_user_to_url($user_id, $urlId = 1)
     {
@@ -705,7 +763,7 @@ class UrlManager
         if (empty($urlId)) {
             $urlId = 1;
         }
-        $count  = self::relation_url_user_exist($user_id, $urlId);
+        $count = self::relation_url_user_exist($user_id, $urlId);
         $result = true;
         if (empty($count)) {
             $sql = "INSERT INTO $table (user_id, access_url_id)
@@ -739,11 +797,12 @@ class UrlManager
     }
 
     /**
-     * Inserts a session to a URL (access_url_rel_session table)
-     * @param   int     $session_id Session ID
+     * Inserts a session to a URL (access_url_rel_session table).
+     *
+     * @param int $session_id Session ID
      * @param   int     URL ID
      *
-     * @return  bool    True on success, false session already exists or insert failed
+     * @return bool True on success, false session already exists or insert failed
      */
     public static function add_session_to_url($session_id, $urlId = 1)
     {
@@ -765,13 +824,15 @@ class UrlManager
     }
 
     /**
-    * Deletes an url and user relationship
-    * @author Julio Montoya
-    * @param int user id
-    * @param int url id
+     * Deletes an url and user relationship.
      *
-    * @return boolean true if success
-    * */
+     * @author Julio Montoya
+     *
+     * @param int user id
+     * @param int url id
+     *
+     * @return bool true if success
+     * */
     public static function delete_url_rel_user($user_id, $urlId)
     {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -788,11 +849,13 @@ class UrlManager
     }
 
     /**
-     * Deletes user from all portals
+     * Deletes user from all portals.
+     *
      * @author Julio Montoya
+     *
      * @param int user id
      *
-     * @return boolean true if success
+     * @return bool true if success
      * */
     public static function deleteUserFromAllUrls($userId)
     {
@@ -808,13 +871,15 @@ class UrlManager
     }
 
     /**
-    * Deletes an url and course relationship
-    * @author Julio Montoya
-    * @param  int  $courseId
-    * @param  int  $urlId
+     * Deletes an url and course relationship.
      *
-    * @return boolean true if success
-    * */
+     * @author Julio Montoya
+     *
+     * @param int $courseId
+     * @param int $urlId
+     *
+     * @return bool true if success
+     * */
     public static function delete_url_rel_course($courseId, $urlId)
     {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -826,12 +891,14 @@ class UrlManager
     }
 
     /**
-     * Deletes an url and $userGroup relationship
-     * @author Julio Montoya
-     * @param  int $userGroupId
-     * @param  int $urlId
+     * Deletes an url and $userGroup relationship.
      *
-     * @return boolean true if success
+     * @author Julio Montoya
+     *
+     * @param int $userGroupId
+     * @param int $urlId
+     *
+     * @return bool true if success
      * */
     public static function delete_url_rel_usergroup($userGroupId, $urlId)
     {
@@ -845,12 +912,14 @@ class UrlManager
     }
 
     /**
-     * Deletes an url and $userGroup relationship
-     * @author Julio Montoya
-     * @param  int $userGroupId
-     * @param  int $urlId
+     * Deletes an url and $userGroup relationship.
      *
-     * @return boolean true if success
+     * @author Julio Montoya
+     *
+     * @param int $userGroupId
+     * @param int $urlId
+     *
+     * @return bool true if success
      * */
     public static function deleteUrlRelCourseCategory($userGroupId, $urlId)
     {
@@ -865,13 +934,15 @@ class UrlManager
     }
 
     /**
-    * Deletes an url and session relationship
-    * @author Julio Montoya
-    * @param  int  $session_id
-    * @param  int $urlId
+     * Deletes an url and session relationship.
      *
-    * @return boolean true if success
-    * */
+     * @author Julio Montoya
+     *
+     * @param int $session_id
+     * @param int $urlId
+     *
+     * @return bool true if success
+     * */
     public static function delete_url_rel_session($session_id, $urlId)
     {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
@@ -885,12 +956,15 @@ class UrlManager
     }
 
     /**
-     * Updates the access_url_rel_user table  with a given user list
+     * Updates the access_url_rel_user table  with a given user list.
+     *
      * @author Julio Montoya
+     *
      * @param array $user_list
-     * @param int $urlId
+     * @param int   $urlId
+     *
      * @return bool|array
-     **/
+     */
     public static function update_urls_rel_user($user_list, $urlId)
     {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -933,15 +1007,17 @@ class UrlManager
 
         return [
             'users_added' => $users_added,
-            'users_deleted' => $users_deleted
+            'users_deleted' => $users_deleted,
         ];
     }
 
     /**
-     * Updates the access_url_rel_course table  with a given user list
+     * Updates the access_url_rel_course table  with a given user list.
+     *
      * @author Julio Montoya
+     *
      * @param array $course_list
-     * @param int $urlId
+     * @param int   $urlId
      * */
     public static function update_urls_rel_course($course_list, $urlId)
     {
@@ -976,10 +1052,12 @@ class UrlManager
     }
 
     /**
-     * Updates the access_url_rel_course table  with a given user list
+     * Updates the access_url_rel_course table  with a given user list.
+     *
      * @author Julio Montoya
+     *
      * @param array $userGroupList user list
-     * @param int $urlId
+     * @param int   $urlId
      * */
     public static function update_urls_rel_usergroup($userGroupList, $urlId)
     {
@@ -1009,11 +1087,13 @@ class UrlManager
     }
 
     /**
-     * Updates the access_url_rel_course_category table with a given list
+     * Updates the access_url_rel_course_category table with a given list.
+     *
      * @author Julio Montoya
-     * @param array $list course category list
-     * @param int $urlId access_url_id
-     **/
+     *
+     * @param array $list  course category list
+     * @param int   $urlId access_url_id
+     */
     public static function updateUrlRelCourseCategory($list, $urlId)
     {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
@@ -1056,10 +1136,12 @@ class UrlManager
     }
 
     /**
-     * Updates the access_url_rel_session table with a given user list
+     * Updates the access_url_rel_session table with a given user list.
+     *
      * @author Julio Montoya
+     *
      * @param array $session_list
-     * @param int $urlId
+     * @param int   $urlId
      * */
     public static function update_urls_rel_session($session_list, $urlId)
     {
@@ -1118,6 +1200,7 @@ class UrlManager
 
     /**
      * @param int $courseId
+     *
      * @return array
      */
     public static function get_access_url_from_course($courseId)
@@ -1137,6 +1220,7 @@ class UrlManager
 
     /**
      * @param $sessionId
+     *
      * @return array
      */
     public static function get_access_url_from_session($sessionId)
@@ -1156,6 +1240,7 @@ class UrlManager
 
     /**
      * @param string $url
+     *
      * @return bool|mixed|null
      */
     public static function get_url_id($url)
@@ -1170,8 +1255,8 @@ class UrlManager
     }
 
     /**
-     *
      * @param string $needle
+     *
      * @return XajaxResponse
      */
     public static function searchCourseCategoryAjax($needle)

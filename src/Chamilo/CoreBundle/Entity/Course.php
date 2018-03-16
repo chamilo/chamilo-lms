@@ -13,7 +13,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class Course
+ * Class Course.
  *
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(
@@ -38,7 +38,51 @@ class Course
     const HIDDEN = 4;
 
     /**
-     * @var integer
+     * "orphanRemoval" is needed to delete the CourseRelUser relation
+     * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
+     * addUsers methods need to be added.
+     *
+     * @ORM\OneToMany(targetEntity="CourseRelUser", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
+     */
+    protected $users;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
+     */
+    protected $urls;
+
+    /**
+     * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="course", cascade={"persist"})
+     */
+    protected $sessions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="SessionRelCourseRelUser", mappedBy="course", cascade={"persist"})
+     */
+    protected $sessionUserSubscriptions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CItemProperty", mappedBy="course")
+     */
+    //protected $items;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CTool", mappedBy="course", cascade={"persist"})
+     */
+    protected $tools;
+
+    /**
+     * @var Session
+     */
+    protected $currentSession;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="course", cascade={"persist"})
+     */
+    protected $issuedSkills;
+
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
@@ -95,14 +139,14 @@ class Course
     private $categoryCode;
 
     /**
-     * @var boolean
+     * @var bool
      * @Assert\NotBlank()
      * @ORM\Column(name="visibility", type="integer", nullable=true, unique=false)
      */
     private $visibility;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="show_score", type="integer", nullable=true, unique=false)
      */
@@ -137,7 +181,7 @@ class Course
     private $departmentUrl;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="disk_quota", type="bigint", nullable=true, unique=false)
      */
@@ -172,14 +216,14 @@ class Course
     private $expirationDate;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="subscribe", type="boolean", nullable=true, unique=false)
      */
     private $subscribe;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="unsubscribe", type="boolean", nullable=true, unique=false)
      */
@@ -200,67 +244,34 @@ class Course
     private $legal;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="activate_legal", type="integer", nullable=true, unique=false)
      */
     private $activateLegal;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="add_teachers_to_sessions_courses", type="boolean", nullable=true)
      */
     private $addTeachersToSessionsCourses;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="course_type_id", type="integer", nullable=true, unique=false)
      */
     private $courseTypeId;
 
     /**
-     * "orphanRemoval" is needed to delete the CourseRelUser relation
-     * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
-     * addUsers methods need to be added.
-     * @ORM\OneToMany(targetEntity="CourseRelUser", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
-     **/
-    protected $users;
-
-    /**
-     * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
-     **/
-    protected $urls;
-
-    /**
-     * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="course", cascade={"persist"})
-     **/
-    protected $sessions;
-
-    /**
-     * @ORM\OneToMany(targetEntity="SessionRelCourseRelUser", mappedBy="course", cascade={"persist"})
-     **/
-    protected $sessionUserSubscriptions;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CItemProperty", mappedBy="course")
-     **/
-    //protected $items;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CTool", mappedBy="course", cascade={"persist"})
-     **/
-    protected $tools;
-
-    /**
      * @ORM\OneToMany(targetEntity="Chamilo\NotebookBundle\Entity\CNotebook", mappedBy="course")
-     **/
+     */
     //protected $notebooks;
 
     /**
-     * ORM\OneToMany(targetEntity="CurriculumCategory", mappedBy="course")
-     **/
+     * ORM\OneToMany(targetEntity="CurriculumCategory", mappedBy="course").
+     */
     //protected $curriculumCategories;
 
     /**
@@ -268,21 +279,11 @@ class Course
      *
      * @ORM\ManyToOne(targetEntity="Room")
      * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
-     **/
+     */
     private $room;
 
     /**
-     * @var Session
-     **/
-    protected $currentSession;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="course", cascade={"persist"})
-     */
-    protected $issuedSkills;
-
-    /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -433,30 +434,8 @@ class Course
     }
 
     /**
-     * @param CourseRelUser $subscription
-     * @return bool
-     */
-    private function hasSubscription(CourseRelUser $subscription)
-    {
-        if ($this->getUsers()->count()) {
-            $criteria = Criteria::create()->where(
-                Criteria::expr()->eq("user", $subscription->getUser())
-            )->andWhere(
-                Criteria::expr()->eq("status", $subscription->getStatus())
-            )->andWhere(
-                Criteria::expr()->eq("relationType", $subscription->getRelationType())
-            );
-
-            $relation = $this->getUsers()->matching($criteria);
-
-            return $relation->count() > 0;
-        }
-
-        return false;
-    }
-
-    /**
      * @param User $user
+     *
      * @return bool
      */
     public function hasUser(User $user)
@@ -470,6 +449,7 @@ class Course
 
     /**
      * @param User $user
+     *
      * @return bool
      */
     public function hasStudent(User $user)
@@ -483,6 +463,7 @@ class Course
 
     /**
      * @param User $user
+     *
      * @return bool
      */
     public function hasTeacher(User $user)
@@ -495,7 +476,7 @@ class Course
     }
 
     /**
-     * Remove $user
+     * Remove $user.
      *
      * @param CourseRelUser $user
      */
@@ -506,23 +487,6 @@ class Course
                 unset($this->users[$key]);
             }
         }
-    }
-
-    /**
-     * @param User $user
-     * @param string $relationType
-     * @param string $role
-     * @param string $status
-     */
-    private function addUser(User $user, $relationType, $role, $status)
-    {
-        $courseRelUser = new CourseRelUser();
-        $courseRelUser->setCourse($this);
-        $courseRelUser->setUser($user);
-        $courseRelUser->setRelationType($relationType);
-        $courseRelUser->setRole($role);
-        $courseRelUser->setStatus($status);
-        $this->addUsers($courseRelUser);
     }
 
     /**
@@ -542,9 +506,9 @@ class Course
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @return integer
+     * @return int
      */
     public function setId($id)
     {
@@ -552,9 +516,9 @@ class Course
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -562,9 +526,10 @@ class Course
     }
 
     /**
-     * Set code
+     * Set code.
      *
      * @param string $code
+     *
      * @return Course
      */
     public function setCode($code)
@@ -577,7 +542,7 @@ class Course
     }
 
     /**
-     * Get code
+     * Get code.
      *
      * @return string
      */
@@ -587,9 +552,10 @@ class Course
     }
 
     /**
-     * Set directory
+     * Set directory.
      *
      * @param string $directory
+     *
      * @return Course
      */
     public function setDirectory($directory)
@@ -600,7 +566,7 @@ class Course
     }
 
     /**
-     * Get directory
+     * Get directory.
      *
      * @return string
      */
@@ -609,11 +575,11 @@ class Course
         return $this->directory;
     }
 
-
     /**
-     * Set courseLanguage
+     * Set courseLanguage.
      *
      * @param string $courseLanguage
+     *
      * @return Course
      */
     public function setCourseLanguage($courseLanguage)
@@ -624,7 +590,7 @@ class Course
     }
 
     /**
-     * Get courseLanguage
+     * Get courseLanguage.
      *
      * @return string
      */
@@ -634,9 +600,10 @@ class Course
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return Course
      */
     public function setTitle($title)
@@ -647,7 +614,7 @@ class Course
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -665,9 +632,10 @@ class Course
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return Course
      */
     public function setDescription($description)
@@ -678,7 +646,7 @@ class Course
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -688,9 +656,10 @@ class Course
     }
 
     /**
-     * Set categoryCode
+     * Set categoryCode.
      *
      * @param string $categoryCode
+     *
      * @return Course
      */
     public function setCategoryCode($categoryCode)
@@ -701,7 +670,7 @@ class Course
     }
 
     /**
-     * Get categoryCode
+     * Get categoryCode.
      *
      * @return string
      */
@@ -711,9 +680,10 @@ class Course
     }
 
     /**
-     * Set visibility
+     * Set visibility.
      *
-     * @param boolean $visibility
+     * @param bool $visibility
+     *
      * @return Course
      */
     public function setVisibility($visibility)
@@ -724,9 +694,9 @@ class Course
     }
 
     /**
-     * Get visibility
+     * Get visibility.
      *
-     * @return boolean
+     * @return bool
      */
     public function getVisibility()
     {
@@ -734,9 +704,10 @@ class Course
     }
 
     /**
-     * Set showScore
+     * Set showScore.
      *
-     * @param integer $showScore
+     * @param int $showScore
+     *
      * @return Course
      */
     public function setShowScore($showScore)
@@ -747,9 +718,9 @@ class Course
     }
 
     /**
-     * Get showScore
+     * Get showScore.
      *
-     * @return integer
+     * @return int
      */
     public function getShowScore()
     {
@@ -757,9 +728,10 @@ class Course
     }
 
     /**
-     * Set tutorName
+     * Set tutorName.
      *
      * @param string $tutorName
+     *
      * @return Course
      */
     public function setTutorName($tutorName)
@@ -770,7 +742,7 @@ class Course
     }
 
     /**
-     * Get tutorName
+     * Get tutorName.
      *
      * @return string
      */
@@ -780,9 +752,10 @@ class Course
     }
 
     /**
-     * Set visualCode
+     * Set visualCode.
      *
      * @param string $visualCode
+     *
      * @return Course
      */
     public function setVisualCode($visualCode)
@@ -793,7 +766,7 @@ class Course
     }
 
     /**
-     * Get visualCode
+     * Get visualCode.
      *
      * @return string
      */
@@ -803,9 +776,10 @@ class Course
     }
 
     /**
-     * Set departmentName
+     * Set departmentName.
      *
      * @param string $departmentName
+     *
      * @return Course
      */
     public function setDepartmentName($departmentName)
@@ -816,7 +790,7 @@ class Course
     }
 
     /**
-     * Get departmentName
+     * Get departmentName.
      *
      * @return string
      */
@@ -826,9 +800,10 @@ class Course
     }
 
     /**
-     * Set departmentUrl
+     * Set departmentUrl.
      *
      * @param string $departmentUrl
+     *
      * @return Course
      */
     public function setDepartmentUrl($departmentUrl)
@@ -839,7 +814,7 @@ class Course
     }
 
     /**
-     * Get departmentUrl
+     * Get departmentUrl.
      *
      * @return string
      */
@@ -849,9 +824,10 @@ class Course
     }
 
     /**
-     * Set diskQuota
+     * Set diskQuota.
      *
-     * @param integer $diskQuota
+     * @param int $diskQuota
+     *
      * @return Course
      */
     public function setDiskQuota($diskQuota)
@@ -862,9 +838,9 @@ class Course
     }
 
     /**
-     * Get diskQuota
+     * Get diskQuota.
      *
-     * @return integer
+     * @return int
      */
     public function getDiskQuota()
     {
@@ -872,9 +848,10 @@ class Course
     }
 
     /**
-     * Set lastVisit
+     * Set lastVisit.
      *
      * @param \DateTime $lastVisit
+     *
      * @return Course
      */
     public function setLastVisit($lastVisit)
@@ -885,7 +862,7 @@ class Course
     }
 
     /**
-     * Get lastVisit
+     * Get lastVisit.
      *
      * @return \DateTime
      */
@@ -895,9 +872,10 @@ class Course
     }
 
     /**
-     * Set lastEdit
+     * Set lastEdit.
      *
      * @param \DateTime $lastEdit
+     *
      * @return Course
      */
     public function setLastEdit($lastEdit)
@@ -908,7 +886,7 @@ class Course
     }
 
     /**
-     * Get lastEdit
+     * Get lastEdit.
      *
      * @return \DateTime
      */
@@ -918,9 +896,10 @@ class Course
     }
 
     /**
-     * Set creationDate
+     * Set creationDate.
      *
      * @param \DateTime $creationDate
+     *
      * @return Course
      */
     public function setCreationDate($creationDate)
@@ -931,7 +910,7 @@ class Course
     }
 
     /**
-     * Get creationDate
+     * Get creationDate.
      *
      * @return \DateTime
      */
@@ -941,9 +920,10 @@ class Course
     }
 
     /**
-     * Set expirationDate
+     * Set expirationDate.
      *
      * @param \DateTime $expirationDate
+     *
      * @return Course
      */
     public function setExpirationDate($expirationDate)
@@ -954,7 +934,7 @@ class Course
     }
 
     /**
-     * Get expirationDate
+     * Get expirationDate.
      *
      * @return \DateTime
      */
@@ -964,9 +944,9 @@ class Course
     }
 
     /**
-     * Set subscribe
+     * Set subscribe.
      *
-     * @param boolean $subscribe
+     * @param bool $subscribe
      *
      * @return Course
      */
@@ -978,9 +958,9 @@ class Course
     }
 
     /**
-     * Get subscribe
+     * Get subscribe.
      *
-     * @return boolean
+     * @return bool
      */
     public function getSubscribe()
     {
@@ -988,9 +968,9 @@ class Course
     }
 
     /**
-     * Set unsubscribe
+     * Set unsubscribe.
      *
-     * @param boolean $unsubscribe
+     * @param bool $unsubscribe
      *
      * @return Course
      */
@@ -1002,9 +982,9 @@ class Course
     }
 
     /**
-     * Get unsubscribe
+     * Get unsubscribe.
      *
-     * @return boolean
+     * @return bool
      */
     public function getUnsubscribe()
     {
@@ -1012,7 +992,7 @@ class Course
     }
 
     /**
-     * Set registrationCode
+     * Set registrationCode.
      *
      * @param string $registrationCode
      *
@@ -1026,7 +1006,7 @@ class Course
     }
 
     /**
-     * Get registrationCode
+     * Get registrationCode.
      *
      * @return string
      */
@@ -1036,7 +1016,7 @@ class Course
     }
 
     /**
-     * Set legal
+     * Set legal.
      *
      * @param string $legal
      *
@@ -1050,7 +1030,7 @@ class Course
     }
 
     /**
-     * Get legal
+     * Get legal.
      *
      * @return string
      */
@@ -1060,9 +1040,9 @@ class Course
     }
 
     /**
-     * Set activateLegal
+     * Set activateLegal.
      *
-     * @param integer $activateLegal
+     * @param int $activateLegal
      *
      * @return Course
      */
@@ -1074,9 +1054,9 @@ class Course
     }
 
     /**
-     * Get activateLegal
+     * Get activateLegal.
      *
-     * @return integer
+     * @return int
      */
     public function getActivateLegal()
     {
@@ -1084,9 +1064,9 @@ class Course
     }
 
     /**
-     * Set courseTypeId
+     * Set courseTypeId.
      *
-     * @param integer $courseTypeId
+     * @param int $courseTypeId
      *
      * @return Course
      */
@@ -1098,9 +1078,9 @@ class Course
     }
 
     /**
-     * Get courseTypeId
+     * Get courseTypeId.
      *
-     * @return integer
+     * @return int
      */
     public function getCourseTypeId()
     {
@@ -1117,6 +1097,7 @@ class Course
 
     /**
      * @param Room $room
+     *
      * @return Course
      */
     public function setRoom($room)
@@ -1149,7 +1130,7 @@ class Course
     }
 
     /**
-     * Anybody can see this course
+     * Anybody can see this course.
      *
      * @return bool
      */
@@ -1182,6 +1163,7 @@ class Course
 
     /**
      * @param Session $session
+     *
      * @return $this
      */
     public function setCurrentSession(Session $session)
@@ -1190,11 +1172,13 @@ class Course
         if ($this->getSessions()->contains($session->getId())) {
             $this->currentSession = $session;
         }
+
         return $this;
     }
 
     /**
-     * Check if the course has a picture
+     * Check if the course has a picture.
+     *
      * @return bool
      */
     public function hasPicture()
@@ -1203,8 +1187,10 @@ class Course
     }
 
     /**
-     * Get the course picture path
+     * Get the course picture path.
+     *
      * @param bool $fullSize
+     *
      * @return null|string
      */
     public function getPicturePath($fullSize = false)
@@ -1218,5 +1204,46 @@ class Course
         }
 
         return api_get_path(WEB_COURSE_PATH).$this->directory.'/course-pic85x85.png';
+    }
+
+    /**
+     * @param CourseRelUser $subscription
+     *
+     * @return bool
+     */
+    private function hasSubscription(CourseRelUser $subscription)
+    {
+        if ($this->getUsers()->count()) {
+            $criteria = Criteria::create()->where(
+                Criteria::expr()->eq("user", $subscription->getUser())
+            )->andWhere(
+                Criteria::expr()->eq("status", $subscription->getStatus())
+            )->andWhere(
+                Criteria::expr()->eq("relationType", $subscription->getRelationType())
+            );
+
+            $relation = $this->getUsers()->matching($criteria);
+
+            return $relation->count() > 0;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param User   $user
+     * @param string $relationType
+     * @param string $role
+     * @param string $status
+     */
+    private function addUser(User $user, $relationType, $role, $status)
+    {
+        $courseRelUser = new CourseRelUser();
+        $courseRelUser->setCourse($this);
+        $courseRelUser->setUser($user);
+        $courseRelUser->setRelationType($relationType);
+        $courseRelUser->setRole($role);
+        $courseRelUser->setStatus($status);
+        $this->addUsers($courseRelUser);
     }
 }

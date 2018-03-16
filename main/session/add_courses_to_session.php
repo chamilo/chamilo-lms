@@ -5,6 +5,7 @@ use ChamiloSession as Session;
 
 /**
  * @package chamilo.admin
+ *
  * @todo use formvalidator
  */
 
@@ -27,11 +28,11 @@ $this_section = SECTION_PLATFORM_ADMIN;
 // setting breadcrumbs
 $interbreadcrumb[] = [
     'url' => 'session_list.php',
-    'name' => get_lang('SessionList')
+    'name' => get_lang('SessionList'),
 ];
 $interbreadcrumb[] = [
     'url' => "resume_session.php?id_session=".$sessionId,
-    'name' => get_lang('SessionOverview')
+    'name' => get_lang('SessionOverview'),
 ];
 
 // Database Table Definitions
@@ -218,7 +219,7 @@ unset($Courses);
     <input type="hidden" name="formSent" value="1" />
     <div id="multiple-add-session" class="row">
         <div class="col-md-4">
-            <label><?php echo get_lang('CourseListInPlatform') ?> :</label>
+            <label><?php echo get_lang('CourseListInPlatform'); ?> :</label>
             <?php
             if (!($add_type == 'multiple')) {
                 ?>
@@ -303,7 +304,7 @@ unset($Courses);
             </div>
         </div>
         <div class="col-md-4">
-            <label><?php echo get_lang('CourseListInSession') ?> :</label>
+            <label><?php echo get_lang('CourseListInSession'); ?> :</label>
             <select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" class="form-control">
 
                 <?php

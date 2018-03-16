@@ -4,13 +4,15 @@
 use ChamiloSession as Session;
 
 /**
- * API event handler functions for AICC / CMIv4 in API communication mode
+ * API event handler functions for AICC / CMIv4 in API communication mode.
  *
  * @author   Denes Nagy <darkden@freemail.hu>
  * @author   Yannick Warnier <ywarnier@beeznest.org>
+ *
  * @version  v 1.0
- * @access   public
+ *
  * @package  chamilo.learnpath
+ *
  * @license    GNU/GPL
  */
 
@@ -19,7 +21,7 @@ use ChamiloSession as Session;
  * The first section (below) is the initialisation part.
  * The second section is the AICC object part
  * The third section defines the event handlers for Chamilo's internal messaging
- * and frames refresh
+ * and frames refresh.
  *
  * This script implements the API messaging for AICC. The HACP messaging is
  * made by another set of scripts.
@@ -43,7 +45,7 @@ $autocomplete_when_80pct = 0;
 
 /* JavaScript Functions */
 
-?>var scorm_logs=<?php echo(empty($oLP->scorm_debug) ? '0' : '3'); ?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
+?>var scorm_logs=<?php echo empty($oLP->scorm_debug) ? '0' : '3'; ?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
 var lms_logs=0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
 //logit_lms('scormfunctions.php included',0);
 

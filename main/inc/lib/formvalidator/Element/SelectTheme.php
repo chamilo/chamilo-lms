@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* A dropdownlist with all themes to use with QuickForm
-*/
+ * A dropdownlist with all themes to use with QuickForm.
+ */
 class SelectTheme extends HTML_QuickForm_select
 {
     /**
-     * Class constructor
+     * Class constructor.
      */
     public function __construct(
         $elementName = null,

@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FieldRelTag
+ * FieldRelTag.
  *
  * @ORM\Table(
  *  name="extra_field_rel_tag",
@@ -22,28 +22,28 @@ use Doctrine\ORM\Mapping as ORM;
 class ExtraFieldRelTag
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="field_id", type="integer", nullable=false)
      */
     private $fieldId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="tag_id", type="integer", nullable=false)
      */
     private $tagId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="item_id", type="integer", nullable=false)
      */
     private $itemId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -52,8 +52,10 @@ class ExtraFieldRelTag
     private $id;
 
     /**
-     * Set fieldId
-     * @param integer $fieldId
+     * Set fieldId.
+     *
+     * @param int $fieldId
+     *
      * @return ExtraFieldRelTag
      */
     public function setFieldId($fieldId)
@@ -64,8 +66,10 @@ class ExtraFieldRelTag
     }
 
     /**
-     * Set tagId
-     * @param integer $tagId
+     * Set tagId.
+     *
+     * @param int $tagId
+     *
      * @return ExtraFieldRelTag
      */
     public function setTagId($tagId)
@@ -76,8 +80,10 @@ class ExtraFieldRelTag
     }
 
     /**
-     * Set itemId
-     * @param integer $itemId
+     * Set itemId.
+     *
+     * @param int $itemId
+     *
      * @return ExtraFieldRelTag
      */
     public function setItemId($itemId)
@@ -88,9 +94,9 @@ class ExtraFieldRelTag
     }
 
     /**
-     * Get fieldId
+     * Get fieldId.
      *
-     * @return integer
+     * @return int
      */
     public function getFieldId()
     {
@@ -98,8 +104,9 @@ class ExtraFieldRelTag
     }
 
     /**
-     * Get tagId
-     * @return integer
+     * Get tagId.
+     *
+     * @return int
      */
     public function getTagId()
     {
@@ -107,8 +114,9 @@ class ExtraFieldRelTag
     }
 
     /**
-     * Get itemId
-     * @return integer
+     * Get itemId.
+     *
+     * @return int
      */
     public function getItemId()
     {
@@ -116,8 +124,9 @@ class ExtraFieldRelTag
     }
 
     /**
-     * Get id
-     * @return integer
+     * Get id.
+     *
+     * @return int
      */
     public function getId()
     {

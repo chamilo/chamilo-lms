@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Add form
+ * Add form.
+ *
  * @package chamilo.admin
  */
 
@@ -62,7 +63,7 @@ $form->addButtonCreate(get_lang('Add'), 'submit');
 if ($form->validate()) {
     $field = $form->exportValues();
     $field_name = $field['field_name'];
-    if (is_numeric($field['field_id']) && $field['field_id'] <> 0 && !empty($field['field_id'])) {
+    if (is_numeric($field['field_id']) && $field['field_id'] != 0 && !empty($field['field_id'])) {
         edit_specific_field($field['field_id'], $field['field_name']);
         $message = get_lang('FieldEdited');
     } else {

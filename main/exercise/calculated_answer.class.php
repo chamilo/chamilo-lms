@@ -5,18 +5,19 @@ use Webit\Util\EvalMath\EvalMath;
 
 /**
  *  Class CalculatedAnswer
- *  This class contains calculated answer form and answer processing functions
+ *  This class contains calculated answer form and answer processing functions.
  *
  *  @author Imanol Losada
+ *
  *  @package chamilo.exercise
- **/
+ */
 class CalculatedAnswer extends Question
 {
     public static $typePicture = 'calculated_answer.png';
     public static $explanationLangVar = 'CalculatedAnswer';
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -26,7 +27,7 @@ class CalculatedAnswer extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createAnswersForm($form)
     {
@@ -143,7 +144,7 @@ class CalculatedAnswer extends Question
             [
                 'class' => 'btn btn-info ajax',
                 'data-title' => get_lang('NotationList'),
-                '_target' => '_blank'
+                '_target' => '_blank',
             ]
         );
         $form->addElement(
@@ -180,7 +181,7 @@ class CalculatedAnswer extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
@@ -191,8 +192,8 @@ class CalculatedAnswer extends Question
                 [
                     'c_id = ? AND question_id = ?' => [
                         $this->course['real_id'],
-                        $this->id
-                    ]
+                        $this->id,
+                    ],
                 ]
             );
             $answer = $form->getSubmitValue('answer');
@@ -242,7 +243,7 @@ class CalculatedAnswer extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function return_header($exercise, $counter = null, $score = null)
     {
@@ -260,8 +261,9 @@ class CalculatedAnswer extends Question
     }
 
     /**
-     * Returns true if the current question has been attempted to be answered
-     * @return boolean
+     * Returns true if the current question has been attempted to be answered.
+     *
+     * @return bool
      */
     public function isAnswered()
     {
@@ -273,9 +275,9 @@ class CalculatedAnswer extends Question
                 'where' => [
                     'question_id = ? AND c_id = ?' => [
                         $this->id,
-                        $this->course['real_id']
-                    ]
-                ]
+                        $this->course['real_id'],
+                    ],
+                ],
             ]
         );
 

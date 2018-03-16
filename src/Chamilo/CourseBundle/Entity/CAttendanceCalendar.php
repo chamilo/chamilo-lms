@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CAttendanceCalendar
+ * CAttendanceCalendar.
  *
  * @ORM\Table(
  *  name="c_attendance_calendar",
@@ -21,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CAttendanceCalendar
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -30,21 +30,21 @@ class CAttendanceCalendar
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="attendance_id", type="integer", nullable=false)
      */
@@ -58,16 +58,17 @@ class CAttendanceCalendar
     private $dateTime;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="done_attendance", type="boolean", nullable=false)
      */
     private $doneAttendance;
 
     /**
-     * Set attendanceId
+     * Set attendanceId.
      *
-     * @param integer $attendanceId
+     * @param int $attendanceId
+     *
      * @return CAttendanceCalendar
      */
     public function setAttendanceId($attendanceId)
@@ -78,9 +79,9 @@ class CAttendanceCalendar
     }
 
     /**
-     * Get attendanceId
+     * Get attendanceId.
      *
-     * @return integer
+     * @return int
      */
     public function getAttendanceId()
     {
@@ -88,9 +89,10 @@ class CAttendanceCalendar
     }
 
     /**
-     * Set dateTime
+     * Set dateTime.
      *
      * @param \DateTime $dateTime
+     *
      * @return CAttendanceCalendar
      */
     public function setDateTime($dateTime)
@@ -101,7 +103,7 @@ class CAttendanceCalendar
     }
 
     /**
-     * Get dateTime
+     * Get dateTime.
      *
      * @return \DateTime
      */
@@ -111,9 +113,10 @@ class CAttendanceCalendar
     }
 
     /**
-     * Set doneAttendance
+     * Set doneAttendance.
      *
-     * @param boolean $doneAttendance
+     * @param bool $doneAttendance
+     *
      * @return CAttendanceCalendar
      */
     public function setDoneAttendance($doneAttendance)
@@ -124,9 +127,9 @@ class CAttendanceCalendar
     }
 
     /**
-     * Get doneAttendance
+     * Get doneAttendance.
      *
-     * @return boolean
+     * @return bool
      */
     public function getDoneAttendance()
     {
@@ -134,9 +137,10 @@ class CAttendanceCalendar
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CAttendanceCalendar
      */
     public function setId($id)
@@ -147,9 +151,9 @@ class CAttendanceCalendar
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -157,9 +161,10 @@ class CAttendanceCalendar
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CAttendanceCalendar
      */
     public function setCId($cId)
@@ -170,9 +175,9 @@ class CAttendanceCalendar
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

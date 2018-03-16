@@ -3,19 +3,20 @@
 namespace Chamilo\CoreBundle\Admin;
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
- * Class SessionRelCourseAdmin
+ * Class SessionRelCourseAdmin.
+ *
  * @package Chamilo\CoreBundle\Admin
  */
 class SessionRelCourseAdmin extends AbstractAdmin
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function configureShowField(ShowMapper $showMapper)
     {
@@ -25,7 +26,7 @@ class SessionRelCourseAdmin extends AbstractAdmin
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -37,7 +38,7 @@ class SessionRelCourseAdmin extends AbstractAdmin
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
@@ -47,7 +48,7 @@ class SessionRelCourseAdmin extends AbstractAdmin
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function configureListFields(ListMapper $listMapper)
     {

@@ -7,7 +7,7 @@ use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CourseRelUser
+ * CourseRelUser.
  *
  * @ORM\Table(
  *      name="course_rel_user",
@@ -22,7 +22,18 @@ use Doctrine\ORM\Mapping as ORM;
 class CourseRelUser
 {
     /**
-     * @var integer
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="courses", cascade={"persist"})
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    protected $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="users", cascade={"persist"})
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     */
+    protected $course;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
@@ -31,15 +42,17 @@ class CourseRelUser
     private $id;
 
     /**
-     * @var integer
+     * @var int
+     *
      * @todo use status instead of this
+     *
      * @deprecated
      * @ORM\Column(name="relation_type", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $relationType;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="status", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
@@ -53,40 +66,28 @@ class CourseRelUser
     private $tutor;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="sort", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $sort;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_course_cat", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $userCourseCat;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="legal_agreement", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $legalAgreement;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", inversedBy="courses", cascade={"persist"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
-    protected $user;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", inversedBy="users", cascade={"persist"})
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
-     */
-    protected $course;
-
-    /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -119,6 +120,7 @@ class CourseRelUser
 
     /**
      * @param Course $course
+     *
      * @return $this
      */
     public function setCourse(Course $course)
@@ -129,7 +131,7 @@ class CourseRelUser
     }
 
     /**
-     * Get Course
+     * Get Course.
      *
      * @return Course
      */
@@ -140,6 +142,7 @@ class CourseRelUser
 
     /**
      * @param User $user
+     *
      * @return $this
      */
     public function setUser($user)
@@ -150,7 +153,7 @@ class CourseRelUser
     }
 
     /**
-     * Get User
+     * Get User.
      *
      * @return User
      */
@@ -160,9 +163,10 @@ class CourseRelUser
     }
 
     /**
-     * Set relationType
+     * Set relationType.
      *
-     * @param integer $relationType
+     * @param int $relationType
+     *
      * @return CourseRelUser
      */
     public function setRelationType($relationType)
@@ -173,9 +177,9 @@ class CourseRelUser
     }
 
     /**
-     * Get relationType
+     * Get relationType.
      *
-     * @return integer
+     * @return int
      */
     public function getRelationType()
     {
@@ -183,9 +187,10 @@ class CourseRelUser
     }
 
     /**
-     * Set status
+     * Set status.
      *
-     * @param boolean $status
+     * @param bool $status
+     *
      * @return CourseRelUser
      */
     public function setStatus($status)
@@ -196,20 +201,20 @@ class CourseRelUser
     }
 
     /**
-     * Get status
+     * Get status.
      *
-     * @return boolean
+     * @return bool
      */
     public function getStatus()
     {
         return $this->status;
     }
 
-
     /**
-     * Set sort
+     * Set sort.
      *
-     * @param integer $sort
+     * @param int $sort
+     *
      * @return CourseRelUser
      */
     public function setSort($sort)
@@ -220,9 +225,9 @@ class CourseRelUser
     }
 
     /**
-     * Get sort
+     * Get sort.
      *
-     * @return integer
+     * @return int
      */
     public function getSort()
     {
@@ -230,7 +235,7 @@ class CourseRelUser
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isTutor()
     {
@@ -238,7 +243,7 @@ class CourseRelUser
     }
 
     /**
-     * @param boolean $tutor
+     * @param bool $tutor
      */
     public function setTutor($tutor)
     {
@@ -246,9 +251,10 @@ class CourseRelUser
     }
 
     /**
-     * Set userCourseCat
+     * Set userCourseCat.
      *
-     * @param integer $userCourseCat
+     * @param int $userCourseCat
+     *
      * @return CourseRelUser
      */
     public function setUserCourseCat($userCourseCat)
@@ -259,9 +265,9 @@ class CourseRelUser
     }
 
     /**
-     * Get userCourseCat
+     * Get userCourseCat.
      *
-     * @return integer
+     * @return int
      */
     public function getUserCourseCat()
     {
@@ -269,9 +275,10 @@ class CourseRelUser
     }
 
     /**
-     * Set legalAgreement
+     * Set legalAgreement.
      *
-     * @param integer $legalAgreement
+     * @param int $legalAgreement
+     *
      * @return CourseRelUser
      */
     public function setLegalAgreement($legalAgreement)
@@ -282,9 +289,9 @@ class CourseRelUser
     }
 
     /**
-     * Get legalAgreement
+     * Get legalAgreement.
      *
-     * @return integer
+     * @return int
      */
     public function getLegalAgreement()
     {
@@ -292,7 +299,8 @@ class CourseRelUser
     }
 
     /**
-     * Get relation_type list
+     * Get relation_type list.
+     *
      * @deprecated
      *
      * @return array
@@ -306,14 +314,15 @@ class CourseRelUser
     }
 
     /**
-     * Get status list
+     * Get status list.
+     *
      * @return array
      */
     public static function getStatusList()
     {
         return [
             User::COURSE_MANAGER => 'Teacher',
-            User::STUDENT => 'Student'
+            User::STUDENT => 'Student',
             //User::DRH => 'DRH'
         ];
     }

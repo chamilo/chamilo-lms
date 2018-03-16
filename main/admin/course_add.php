@@ -1,13 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Entity\CourseCategory;
+use Chamilo\CoreBundle\Entity\Repository\CourseCategoryRepository;
 
 /**
  * @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -34,7 +33,7 @@ $form->addText(
     get_lang('Title'),
     true,
     [
-        'aria-label' => get_lang('Title')
+        'aria-label' => get_lang('Title'),
     ]
 );
 $form->applyFilter('title', 'html_filter');
@@ -45,14 +44,14 @@ $form->addText(
     'visual_code',
     [
         get_lang('CourseCode'),
-        get_lang('OnlyLettersAndNumbers')
+        get_lang('OnlyLettersAndNumbers'),
     ],
     false,
     [
         'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
         'pattern' => '[a-zA-Z0-9]+',
         'title' => get_lang('OnlyLettersAndNumbers'),
-        'id' => 'visual_code'
+        'id' => 'visual_code',
     ]
 );
 
@@ -108,7 +107,7 @@ $form->addSelectAjax(
     [
         'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=teacher_to_basis_course',
         'id' => 'course_teachers',
-        'multiple' => 'multiple'
+        'multiple' => 'multiple',
     ]
 );
 $form->applyFilter('course_teachers', 'html_filter');
@@ -181,7 +180,7 @@ $group[] = $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllow
 $form->addGroup($group, '', get_lang('Unsubscription'));
 
 $form->addElement('text', 'disk_quota', [get_lang('CourseQuota'), null, get_lang('MB')], [
-    'id' => 'disk_quota'
+    'id' => 'disk_quota',
 ]);
 $form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');
 

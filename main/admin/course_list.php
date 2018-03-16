@@ -3,10 +3,10 @@
 
 /**
  * This script shows a list of courses and allows searching for courses codes
- * and names
+ * and names.
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -16,9 +16,11 @@ api_protect_admin_script();
 $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
 
 /**
- * Get the number of courses which will be displayed
- * @return int The number of matching courses
+ * Get the number of courses which will be displayed.
+ *
  * @throws Exception
+ *
+ * @return int The number of matching courses
  */
 function get_number_of_courses()
 {
@@ -75,14 +77,16 @@ function get_number_of_courses()
 }
 
 /**
- * Get course data to display
- * @param int $from
- * @param int $number_of_items
- * @param int $column
+ * Get course data to display.
+ *
+ * @param int    $from
+ * @param int    $number_of_items
+ * @param int    $column
  * @param string $direction
  *
- * @return array
  * @throws Exception
+ *
+ * @return array
  */
 function get_course_data($from, $number_of_items, $column, $direction)
 {
@@ -193,7 +197,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
             $course[4],
             $course[5],
             $course[6],
-            $actions
+            $actions,
         ];
         $courses[] = $courseItem;
     }
@@ -202,13 +206,16 @@ function get_course_data($from, $number_of_items, $column, $direction)
 }
 
 /**
- * Get course data to display filtered by session name
- * @param int $from
- * @param int $number_of_items
- * @param int $column
+ * Get course data to display filtered by session name.
+ *
+ * @param int    $from
+ * @param int    $number_of_items
+ * @param int    $column
  * @param string $direction
- * @return array
+ *
  * @throws Exception
+ *
+ * @return array
  */
 function get_course_data_by_session($from, $number_of_items, $column, $direction)
 {
@@ -264,7 +271,7 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
             $course[4],
             $course[5],
             $course[6],
-            $course[7]
+            $course[7],
         ];
         $courses[] = $row;
     }
@@ -273,9 +280,10 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
 }
 
 /**
- * Return an icon representing the visibility of the course
+ * Return an icon representing the visibility of the course.
  *
  * @param string $visibility
+ *
  * @return string
  */
 function get_course_visibility_icon($visibility)
@@ -345,11 +353,11 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     // Get all course categories
     $interbreadcrumb[] = [
         'url' => 'index.php',
-        'name' => get_lang('PlatformAdmin')
+        'name' => get_lang('PlatformAdmin'),
     ];
     $interbreadcrumb[] = [
         'url' => 'course_list.php',
-        'name' => get_lang('CourseList')
+        'name' => get_lang('CourseList'),
     ];
     $tool_name = get_lang('SearchACourse');
     $form = new FormValidator('advanced_course_search', 'get');
@@ -366,7 +374,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
         get_lang('CourseFaculty'),
         null,
         [
-            'url' => $url
+            'url' => $url,
         ]
     );
 
@@ -394,7 +402,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
 } else {
     $interbreadcrumb[] = [
         'url' => 'index.php',
-        'name' => get_lang('PlatformAdmin')
+        'name' => get_lang('PlatformAdmin'),
     ];
     $tool_name = get_lang('CourseList');
     if (isset($_GET['delete_course'])) {

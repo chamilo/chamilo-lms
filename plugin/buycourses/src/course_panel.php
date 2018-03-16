@@ -2,10 +2,10 @@
 /* For license terms, see /license.txt */
 
 /**
- * User Panel
+ * User Panel.
+ *
  * @package chamilo.plugin.buycourses
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
@@ -34,7 +34,7 @@ foreach ($sales as $sale) {
             'price' => $sale['price'],
             'product_name' => $sale['product_name'],
             'product_type' => $productTypes[$sale['product_type']],
-            'payment_type' => $paymentTypes[$sale['payment_type']]
+            'payment_type' => $paymentTypes[$sale['payment_type']],
         ];
     }
 }

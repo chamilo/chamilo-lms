@@ -4,25 +4,27 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * TestQuestionDescription toolbar configuration
+ * TestQuestionDescription toolbar configuration.
+ *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class TestQuestionDescription extends Basic
 {
     /**
-     * Get the toolbar config
+     * Get the toolbar config.
+     *
      * @return array
      */
     public function getConfig()
     {
         $config['toolbarGroups'] = [
-            ['name' => 'document', 'groups' =>['document', 'doctools']],
-            ['name' => 'clipboard', 'groups' =>['clipboard', 'undo']],
-            ['name' => 'editing', 'groups' =>['clipboard', 'undo']],
+            ['name' => 'document', 'groups' => ['document', 'doctools']],
+            ['name' => 'clipboard', 'groups' => ['clipboard', 'undo']],
+            ['name' => 'editing', 'groups' => ['clipboard', 'undo']],
             //array('name' => 'forms',    'groups' =>array('clipboard', 'undo', )),
             '/',
-            ['name' => 'basicstyles', 'groups' =>['basicstyles', 'cleanup']],
-            ['name' => 'paragraph', 'groups' =>['list', 'indent', 'blocks', 'align']],
+            ['name' => 'basicstyles', 'groups' => ['basicstyles', 'cleanup']],
+            ['name' => 'paragraph', 'groups' => ['list', 'indent', 'blocks', 'align']],
             ['name' => 'links'],
             ['name' => 'insert'],
             '/',
@@ -30,7 +32,7 @@ class TestQuestionDescription extends Basic
             ['name' => 'colors'],
             ['name' => 'tools'],
             ['name' => 'others'],
-            ['name' => 'mode']
+            ['name' => 'mode'],
         ];
 
         $config['extraPlugins'] = $this->getPluginsToString();
@@ -41,6 +43,7 @@ class TestQuestionDescription extends Basic
 
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
+
         return $config;
     }
 
@@ -58,7 +61,8 @@ class TestQuestionDescription extends Basic
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is maximized
+     * Get the toolbar configuration when CKEditor is maximized.
+     *
      * @return array
      */
     protected function getMaximizedToolbar()
@@ -80,7 +84,7 @@ class TestQuestionDescription extends Basic
                 'Smiley',
                 'SpecialChar',
                 'Asciimath',
-                'Asciisvg'
+                'Asciisvg',
             ],
             '/',
             ['Table', '-', 'CreateDiv'],
@@ -95,7 +99,8 @@ class TestQuestionDescription extends Basic
     }
 
     /**
-     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false.
+     *
      * @return array
      */
     protected function getNormalToolbar()
@@ -109,12 +114,13 @@ class TestQuestionDescription extends Basic
             '/',
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight']
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
         ];
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is minimized
+     * Get the toolbar configuration when CKEditor is minimized.
+     *
      * @return array
      */
     protected function getMinimizedToolbar()
@@ -126,7 +132,7 @@ class TestQuestionDescription extends Basic
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
-            ['Source', 'Toolbarswitch']
+            ['Source', 'Toolbarswitch'],
         ];
     }
 }

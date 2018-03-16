@@ -4,11 +4,12 @@
 use ChamiloSession as Session;
 
 /**
- * Script that displays an error message when no content could be loaded
+ * Script that displays an error message when no content could be loaded.
+ *
  * @package chamilo.learnpath
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $debug = 0;
@@ -30,7 +31,7 @@ $lp_type = $learnPath->get_type();
 $lp_item_id = $learnPath->get_current_item_id();
 
 /**
- * Get a link to the corresponding document
+ * Get a link to the corresponding document.
  */
 $src = '';
 if ($debug > 0) {
@@ -99,7 +100,7 @@ $learnPath->set_previous_item($lp_item_id);
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
+        'name' => get_lang('ToolGradebook'),
     ];
 }
 // Define the 'doc.inc.php' as language file.

@@ -4,7 +4,6 @@
 /**
  * @package chamilo.tracking
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
@@ -38,7 +37,7 @@ $columns = [
     get_lang('Session'),
     get_lang('UserName'),
     get_lang('IPAddress'),
-    get_lang('Date')
+    get_lang('Date'),
 ];
 
 // Column config
@@ -48,7 +47,7 @@ $column_model = [
         'index' => 'col0',
         'width' => '70',
         'align' => 'left',
-        'sortable' => 'false'
+        'sortable' => 'false',
     ],
     [
         'name' => 'col1',
@@ -70,7 +69,7 @@ $column_model = [
         'width' => '50',
         'align' => 'left',
         'sortable' => 'false',
-        'hidden' => 'true'
+        'hidden' => 'true',
     ],
     [
         'name' => 'col4',
@@ -78,7 +77,7 @@ $column_model = [
         'width' => '50',
         'align' => 'left',
         'sortable' => 'false',
-        'hidden' => 'true'
+        'hidden' => 'true',
     ],
     [
         'name' => 'col5',
@@ -98,8 +97,8 @@ $column_model = [
         'name' => 'col7',
         'index' => '7',
         'width' => '50',
-        'align' => 'left'
-    ]
+        'align' => 'left',
+    ],
 ];
 
 // Autowidth

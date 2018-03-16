@@ -3,9 +3,9 @@
 
 /**
  * @package chamilo.social
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -93,7 +93,7 @@ foreach ($users as $user) {
     $userId = $user['user_info']['user_id'];
     switch ($user['relation_type']) {
         case GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER:
-            $user['link']  = '<a href="group_waiting_list.php?id='.$group_id.'&u='.$userId.'&action=accept">'.
+            $user['link'] = '<a href="group_waiting_list.php?id='.$group_id.'&u='.$userId.'&action=accept">'.
                 Display::return_icon('invitation_friend.png', get_lang('AddNormalUser')).'</a>';
             $user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$userId.'&action=set_moderator">'.
                 Display::return_icon('social_moderator_add.png', get_lang('AddModerator')).'</a>';

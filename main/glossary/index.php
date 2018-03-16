@@ -5,10 +5,10 @@ use ChamiloSession as Session;
 
 /**
  * @package chamilo.glossary
+ *
  * @author Christian Fasanando, initial version
  * @author Bas Wijnen import/export to CSV
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $current_course_tool = TOOL_GLOSSARY;
@@ -104,7 +104,7 @@ switch ($action) {
                     Display::url(
                         Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
                         api_get_self().'?'.api_get_cidreq()
-                    )
+                    ),
                 ]
             );
             $content .= $form->returnForm();
@@ -191,7 +191,7 @@ switch ($action) {
                         Display::url(
                             Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM),
                             api_get_self().'?'.api_get_cidreq()
-                        )
+                        ),
                     ]
                 );
                 $content .= $form->returnForm();
@@ -272,7 +272,7 @@ switch ($action) {
                     }
                     $items = [
                         'name' => $item['term'],
-                        'description' => $item['definition']
+                        'description' => $item['definition'],
                     ];
                     $termsToAdd[] = $items;
                     $termsPerKey[$item['term']] = $items;

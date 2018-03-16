@@ -3,7 +3,9 @@
 
 /**
  * Class to be used as basis for links referring to Evaluation objects.
+ *
  * @author Bert Steppé
+ *
  * @package chamilo.gradebook
  * @package chamilo.gradebook
  */
@@ -12,7 +14,7 @@ abstract class EvalLink extends AbstractLink
     protected $evaluation = null;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -30,7 +32,7 @@ abstract class EvalLink extends AbstractLink
     }
 
     /**
-     * @param int $userId
+     * @param int    $userId
      * @param string $type
      *
      * @return array
@@ -59,25 +61,29 @@ abstract class EvalLink extends AbstractLink
     public function get_name()
     {
         $eval = $this->get_evaluation();
+
         return $eval->get_name();
     }
 
     public function get_description()
     {
         $eval = $this->get_evaluation();
+
         return $eval->get_description();
     }
 
     public function get_max()
     {
         $eval = $this->get_evaluation();
+
         return $eval->get_max();
     }
 
     public function is_valid_link()
     {
         $eval = $this->get_evaluation();
-        return (isset($eval));
+
+        return isset($eval);
     }
 
     public function needs_name_and_description()
@@ -164,7 +170,7 @@ abstract class EvalLink extends AbstractLink
     }
 
     /**
-     * Lazy load function to get the linked evaluation
+     * Lazy load function to get the linked evaluation.
      */
     protected function get_evaluation()
     {

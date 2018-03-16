@@ -3,10 +3,12 @@
 /**
  * This script allows platform admins to add users to urls.
  * It displays a list of users and a list of courses;
- * you can select multiple users and courses and then click on
+ * you can select multiple users and courses and then click on.
+ *
  * @package chamilo.admin
+ *
  * @author Julio Montoya <gugli100@gmail.com>
-*/
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 

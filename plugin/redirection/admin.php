@@ -2,11 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Admin interface for the plugin configuration
+ * Admin interface for the plugin configuration.
+ *
  * @author Enrique Alcaraz Lopez
+ *
  * @package chamilo.plugin.redirection
  */
-
 require_once __DIR__.'/config.php';
 
 api_protect_admin_script();
@@ -64,14 +65,14 @@ foreach ($list as $item) {
     if (!empty($userInfo)) {
         $userName = $userInfo['complete_name_with_username'].' - '.$item['user_id'];
     }
-    $content.= '<tr>';
-    $content.= '<td>'.$userName.'</td>';
-    $content.= '<td>'.$item['url'].'</td>';
-    $content.= '<td><a class="btn btn-danger" href="'.$url.'?id='.$item['id'].'">Delete</a></td>';
-    $content.= '</tr>';
+    $content .= '<tr>';
+    $content .= '<td>'.$userName.'</td>';
+    $content .= '<td>'.$item['url'].'</td>';
+    $content .= '<td><a class="btn btn-danger" href="'.$url.'?id='.$item['id'].'">Delete</a></td>';
+    $content .= '</tr>';
 }
 
-$content.= '
+$content .= '
 </table>
 </div>';
 

@@ -3,7 +3,7 @@
 
 /**
  * Class ScheduledAnnouncement
- * Requires DB change:
+ * Requires DB change:.
  *
  * CREATE TABLE scheduled_announcements (id INT AUTO_INCREMENT NOT NULL, subject VARCHAR(255) NOT NULL, message LONGTEXT NOT NULL, date DATETIME DEFAULT NULL, sent TINYINT(1) NOT NULL, session_id INT NOT NULL, c_id INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
  *
@@ -24,7 +24,7 @@ class ScheduledAnnouncement extends Model
     public $columns = ['id', 'subject', 'message', 'date', 'sent', 'session_id'];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -62,8 +62,10 @@ class ScheduledAnnouncement extends Model
     }
 
     /**
-     * Displays the title + grid
+     * Displays the title + grid.
+     *
      * @param int $sessionId
+     *
      * @return string
      */
     public function getGrid($sessionId)
@@ -92,13 +94,14 @@ class ScheduledAnnouncement extends Model
     }
 
     /**
-     * Returns a Form validator Obj
-     * @param int $id
-     * @param   string  $url
-     * @param   string  $action add, edit
-     * @param array $sessionInfo
+     * Returns a Form validator Obj.
      *
-     * @return  FormValidator form validator obj
+     * @param int    $id
+     * @param string $url
+     * @param string $action      add, edit
+     * @param array  $sessionInfo
+     *
+     * @return FormValidator form validator obj
      */
     public function returnSimpleForm($id, $url, $action, $sessionInfo = [])
     {
@@ -130,27 +133,15 @@ class ScheduledAnnouncement extends Model
     }
 
     /**
-     * @param FormValidator $form
-     */
-    private function setTagsInForm(& $form)
-    {
-        $form->addLabel(
-            get_lang('Tags'),
-            Display::return_message(
-                implode('<br />', $this->getTags()),
-                'normal',
-                false
-            )
-        );
-    }
-
-    /**
-     * Returns a Form validator Obj
+     * Returns a Form validator Obj.
+     *
      * @todo the form should be auto generated
-     * @param   string  $url
-     * @param   string  $action add, edit
+     *
+     * @param string $url
+     * @param string $action add, edit
      * @param array
-     * @return  FormValidator form validator obj
+     *
+     * @return FormValidator form validator obj
      */
     public function returnForm($url, $action, $sessionInfo = [])
     {
@@ -188,7 +179,7 @@ class ScheduledAnnouncement extends Model
         }
 
         $typeOptions = [
-            'specific_date' => get_lang('SpecificDate')
+            'specific_date' => get_lang('SpecificDate'),
         ];
 
         if ($useBaseDate) {
@@ -208,7 +199,7 @@ class ScheduledAnnouncement extends Model
                         document.getElementById('options').style.display = 'none';
                         document.getElementById('specific_date').style.display = 'block';
                     }
-            "]
+            ", ]
         );
 
         $form->addHtml('<div id="specific_date">');
@@ -267,6 +258,7 @@ class ScheduledAnnouncement extends Model
 
     /**
      * @param int $id
+     *
      * @return string
      */
     public function getAttachmentToString($id)
@@ -275,13 +267,16 @@ class ScheduledAnnouncement extends Model
         if (!empty($file) && !empty($file['value'])) {
             //$file = api_get_uploaded_web_url('schedule_announcement', $id, basename($file['value']));
             $url = api_get_path(WEB_UPLOAD_PATH).$file['value'];
+
             return get_lang('Attachment').': '.Display::url(basename($file['value']), $url, ['target' => '_blank']);
         }
+
         return '';
     }
 
     /**
      * @param int $id
+     *
      * @return array
      */
     public function getAttachment($id)
@@ -329,8 +324,6 @@ class ScheduledAnnouncement extends Model
                     $attachments = $this->getAttachmentToString($result['id']);
 
                     self::update(['id' => $result['id'], 'sent' => 1]);
-
-
 
                     $subject = $result['subject'];
 
@@ -430,7 +423,7 @@ class ScheduledAnnouncement extends Model
             '((user_complete_name))',
             '((user_first_name))',
             '((user_last_name))',
-            '((lp_progress))'
+            '((lp_progress))',
         ];
 
         return $tags;
@@ -442,5 +435,20 @@ class ScheduledAnnouncement extends Model
     public function allowed()
     {
         return api_get_configuration_value('allow_scheduled_announcements');
+    }
+
+    /**
+     * @param FormValidator $form
+     */
+    private function setTagsInForm(&$form)
+    {
+        $form->addLabel(
+            get_lang('Tags'),
+            Display::return_message(
+                implode('<br />', $this->getTags()),
+                'normal',
+                false
+            )
+        );
     }
 }

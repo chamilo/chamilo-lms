@@ -8,10 +8,10 @@ use ChamiloSession as Session;
  * the platform's users.
  * It can be called from the JavaScript library email_links.lib.php which
  * overtakes the mailto: links to use the internal interface instead.
+ *
  * @author	Yannick Warnier <ywarnier@beeznest.org>
  * @author Julio Montoya <gugli100@gmail.com> Updating form with formvalidator
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 if (empty(api_get_user_id())) {
@@ -60,7 +60,7 @@ $defaults = [
     'dest' => $emailDest,
     'email_address' => $emailDest,
     'email_title' => $emailTitle,
-    'email_text' => $emailText
+    'email_text' => $emailText,
 ];
 
 $form->setDefaults($defaults);

@@ -14,6 +14,7 @@ use ChamiloSession as Session;
  * @author Roan Embrechts, initial self-unsubscribe code, code cleaning, virtual course support
  * @author Bart Mollet, code cleaning, use of Display-library, list of courseAdmin-tools, use of GroupManager
  * @author Isaac Flores, code cleaning and improvements
+ *
  * @package chamilo.group
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -47,7 +48,7 @@ $my_group_id = isset($_GET['group_id']) ? intval($_GET['group_id']) : null;
 $my_group = isset($_REQUEST['group']) ? Security::remove_XSS($_REQUEST['group']) : null;
 $my_get_id1 = isset($_GET['id1']) ? Security::remove_XSS($_GET['id1']) : null;
 $my_get_id2 = isset($_GET['id2']) ? Security::remove_XSS($_GET['id2']) : null;
-$my_get_id  = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
+$my_get_id = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
 
 $currentUrl = api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq();
 $groupInfo = GroupManager::get_group_properties($my_group_id);
@@ -223,7 +224,7 @@ if (api_get_setting('allow_group_categories') === 'true') {
         'id' => 0,
         'iid' => 0,
         'description' => '',
-        'title' => get_lang('DefaultGroupCategory')
+        'title' => get_lang('DefaultGroupCategory'),
     ];
     $group_cats = array_merge([$defaultCategory], $group_cats);
 
@@ -252,7 +253,7 @@ if (api_get_setting('allow_group_categories') === 'true') {
                 Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL),
                 'group.php?'.api_get_cidreq().'&action=delete_category&id='.$categoryId,
                 [
-                    'onclick' => 'javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;'
+                    'onclick' => 'javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;',
                 ]
             );
             // Move

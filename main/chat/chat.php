@@ -15,7 +15,7 @@ $externalCSS = [
     'jquery-textcomplete/jquery.textcomplete.css',
     'emojione/css/emojione.min.css',
     'emojione/css/autocomplete.css',
-    'highlight/styles/github.css'
+    'highlight/styles/github.css',
 ];
 
 foreach ($externalCSS as $css) {
@@ -29,7 +29,7 @@ $externalJS = [
     'highlight/highlight.pack.js',
     'jquery-textcomplete/jquery.textcomplete.js',
     'emojione/js/emojione.min.js',
-    'jquery-emojiarea/jquery.emojiarea.js'
+    'jquery-emojiarea/jquery.emojiarea.js',
 ];
 
 foreach ($externalJS as $js) {

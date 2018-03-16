@@ -3,14 +3,14 @@
 
 namespace Chamilo\UserBundle\Security;
 
-use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
-use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 use Symfony\Component\Security\Core\Encoder\PlaintextPasswordEncoder;
 
 /**
- * Class Encoder
+ * Class Encoder.
+ *
  * @package Chamilo\UserBundle\Security
  */
 class Encoder implements PasswordEncoderInterface
@@ -58,6 +58,7 @@ class Encoder implements PasswordEncoderInterface
      * @param string $encoded
      * @param string $raw
      * @param string $salt
+     *
      * @return bool
      */
     public function isPasswordValid($encoded, $raw, $salt)

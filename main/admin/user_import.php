@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * This tool allows platform admins to add users by uploading a CSV or XML file
+ * This tool allows platform admins to add users by uploading a CSV or XML file.
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -14,6 +14,7 @@ $purification_option_for_usernames = false;
 /**
  * @param array $users
  * @param bool  $checkUniqueEmail
+ *
  * @return array
  */
 function validate_data($users, $checkUniqueEmail = false)
@@ -167,10 +168,11 @@ function complete_missing_data($user)
 }
 
 /**
- * Save the imported data
- * @param   array   $users List of users
- * @return  void
- * @uses global variable $inserted_in_course, which returns the list of
+ * Save the imported data.
+ *
+ * @param array $users List of users
+ *
+ * @uses \global variable $inserted_in_course, which returns the list of
  * courses the user was inserted in
  */
 function save_data($users)
@@ -254,8 +256,10 @@ function save_data($users)
 }
 
 /**
- * Read the CSV-file
+ * Read the CSV-file.
+ *
  * @param string $file Path to the CSV-file
+ *
  * @return array All userinformation read from the file
  */
 function parse_csv_data($file)
@@ -263,7 +267,7 @@ function parse_csv_data($file)
     $users = Import::csvToArray($file);
     $allowRandom = api_get_configuration_value('generate_random_login');
     if ($allowRandom) {
-        $factory = new RandomLib\Factory;
+        $factory = new RandomLib\Factory();
         $generator = $factory->getLowStrengthGenerator();
         $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     }
@@ -301,9 +305,10 @@ function parse_csv_data($file)
     return $users;
 }
 /**
- * XML-parser: handle start of element
- * @param   string  $parser Deprecated?
- * @param   string  $data The data to be parsed
+ * XML-parser: handle start of element.
+ *
+ * @param string $parser Deprecated?
+ * @param string $data   The data to be parsed
  */
 function element_start($parser, $data)
 {
@@ -320,9 +325,10 @@ function element_start($parser, $data)
 }
 
 /**
- * XML-parser: handle end of element
- * @param   string  $parser Deprecated?
- * @param   string  $data   The data to be parsed
+ * XML-parser: handle end of element.
+ *
+ * @param string $parser Deprecated?
+ * @param string $data   The data to be parsed
  */
 function element_end($parser, $data)
 {
@@ -347,10 +353,10 @@ function element_end($parser, $data)
 }
 
 /**
- * XML-parser: handle character data
- * @param   string  $parser Parser (deprecated?)
- * @param   string  $data The data to be parsed
- * @return  void
+ * XML-parser: handle character data.
+ *
+ * @param string $parser Parser (deprecated?)
+ * @param string $data   The data to be parsed
  */
 function character_data($parser, $data)
 {
@@ -360,8 +366,10 @@ function character_data($parser, $data)
 }
 
 /**
- * Read the XML-file
+ * Read the XML-file.
+ *
  * @param string $file Path to the XML-file
+ *
  * @return array All user information read from the file
  */
 function parse_xml_data($file)
@@ -518,14 +526,14 @@ $group = [
         null,
         'XML (<a href="example.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)',
         'xml'
-    )
+    ),
 ];
 
 $form->addGroup($group, '', get_lang('FileType'));
 
 $group = [
     $form->createElement('radio', 'sendMail', '', get_lang('Yes'), 1),
-    $form->createElement('radio', 'sendMail', null, get_lang('No'), 0)
+    $form->createElement('radio', 'sendMail', null, get_lang('No'), 0),
 ];
 $form->addGroup($group, '', get_lang('SendMailToUsers'));
 

@@ -1,17 +1,18 @@
 <?php /* For licensing terms, see /license.txt */
 /**
- * Script to check that no language file has parse errors
+ * Script to check that no language file has parse errors.
+ *
  * @package chamilo.cron.lang
  */
 /**
- * Includes and declarations
+ * Includes and declarations.
  */
 //die();
 require_once '../../inc/global.inc.php';
 $path = api_get_path(SYS_LANG_PATH).'english';
 ini_set('memory_limit', '128M');
 /**
- * Main code
+ * Main code.
  */
 $terms = [];
 $list = SubLanguageManager::get_lang_folder_files_list($path);

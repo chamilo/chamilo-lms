@@ -4,8 +4,10 @@
 /**
  * Class aiccObjective
  * Class defining the Block elements in an AICC Course Structure file.
- * Container for the aiccResource class that deals with elemens from AICC Objectives file
+ * Container for the aiccResource class that deals with elemens from AICC Objectives file.
+ *
  * @package chamilo.learnpath
+ *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  * @license GNU/GPL
  */
@@ -16,7 +18,8 @@ class aiccObjective extends learnpathItem
 
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormResource
-     * object from database records or from the array given as second param
+     * object from database records or from the array given as second param.
+     *
      * @param    string    Type of construction needed ('db' or 'config', default = 'config')
      * @param    mixed    Depending on the type given, DB id for the lp_item or parameters array
      */

@@ -1,12 +1,14 @@
 <?php
 /**
- * Definition of the OpenMeetings user class
+ * Definition of the OpenMeetings user class.
+ *
  * @package chamilo.plugin.openmeetings
  */
+
 namespace Chamilo\Plugin\OpenMeetings;
 
 /**
- * Class User
+ * Class User.
  */
 class User
 {

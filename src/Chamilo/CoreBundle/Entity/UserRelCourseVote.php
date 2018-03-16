@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UserRelCourseVote
+ * UserRelCourseVote.
  *
  * @ORM\Table(name="user_rel_course_vote", indexes={
  *     @ORM\Index(name="idx_ucv_cid", columns={"c_id"}),
@@ -18,42 +18,42 @@ use Doctrine\ORM\Mapping as ORM;
 class UserRelCourseVote
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
     private $userId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="url_id", type="integer", nullable=false)
      */
     private $urlId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="vote", type="integer", nullable=false)
      */
     private $vote;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -61,12 +61,11 @@ class UserRelCourseVote
      */
     private $id;
 
-
-
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return UserRelCourseVote
      */
     public function setCId($cId)
@@ -77,9 +76,9 @@ class UserRelCourseVote
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -87,9 +86,10 @@ class UserRelCourseVote
     }
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return UserRelCourseVote
      */
     public function setUserId($userId)
@@ -100,9 +100,9 @@ class UserRelCourseVote
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -110,9 +110,10 @@ class UserRelCourseVote
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return UserRelCourseVote
      */
     public function setSessionId($sessionId)
@@ -123,9 +124,9 @@ class UserRelCourseVote
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -133,9 +134,10 @@ class UserRelCourseVote
     }
 
     /**
-     * Set urlId
+     * Set urlId.
      *
-     * @param integer $urlId
+     * @param int $urlId
+     *
      * @return UserRelCourseVote
      */
     public function setUrlId($urlId)
@@ -146,9 +148,9 @@ class UserRelCourseVote
     }
 
     /**
-     * Get urlId
+     * Get urlId.
      *
-     * @return integer
+     * @return int
      */
     public function getUrlId()
     {
@@ -156,9 +158,10 @@ class UserRelCourseVote
     }
 
     /**
-     * Set vote
+     * Set vote.
      *
-     * @param integer $vote
+     * @param int $vote
+     *
      * @return UserRelCourseVote
      */
     public function setVote($vote)
@@ -169,9 +172,9 @@ class UserRelCourseVote
     }
 
     /**
-     * Get vote
+     * Get vote.
      *
-     * @return integer
+     * @return int
      */
     public function getVote()
     {
@@ -179,9 +182,9 @@ class UserRelCourseVote
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

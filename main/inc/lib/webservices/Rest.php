@@ -3,15 +3,14 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
-use Chamilo\CourseBundle\Entity\Repository\CAnnouncementRepository;
-use Chamilo\CourseBundle\Entity\Repository\CNotebookRepository;
-use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CNotebook;
+use Chamilo\CourseBundle\Entity\Repository\CNotebookRepository;
+use Chamilo\UserBundle\Entity\User;
 
 /**
- * Class RestApi
+ * Class RestApi.
  */
 class Rest extends WebService
 {
@@ -57,6 +56,7 @@ class Rest extends WebService
 
     /**
      * Rest constructor.
+     *
      * @param string $username
      * @param string $apiKey
      */
@@ -66,8 +66,10 @@ class Rest extends WebService
     }
 
     /**
-     * Set the current course
+     * Set the current course.
+     *
      * @param int $id
+     *
      * @throws Exception
      */
     public function setCourse($id)
@@ -91,6 +93,7 @@ class Rest extends WebService
 
     /** Set the current session
      * @param int $id
+     *
      * @throws Exception
      */
     public function setSession($id)
@@ -115,8 +118,10 @@ class Rest extends WebService
     /**
      * @param string $username
      * @param string $apiKeyToValidate
-     * @return Rest
+     *
      * @throws Exception
+     *
+     * @return Rest
      */
     public static function validate($username, $apiKeyToValidate)
     {
@@ -130,7 +135,7 @@ class Rest extends WebService
     }
 
     /**
-     * Create the gcm_registration_id extra field for users
+     * Create the gcm_registration_id extra field for users.
      */
     public static function init()
     {
@@ -141,13 +146,14 @@ class Rest extends WebService
             $extraField->save([
                 'variable' => self::EXTRA_FIELD_GCM_REGISTRATION,
                 'field_type' => ExtraField::FIELD_TYPE_TEXT,
-                'display_text' => self::EXTRA_FIELD_GCM_REGISTRATION
+                'display_text' => self::EXTRA_FIELD_GCM_REGISTRATION,
             ]);
         }
     }
 
     /**
      * @param string $registrationId
+     *
      * @return bool
      */
     public function setGcmId($registrationId)
@@ -158,12 +164,13 @@ class Rest extends WebService
         return $extraFieldValue->save([
             'variable' => self::EXTRA_FIELD_GCM_REGISTRATION,
             'value' => $registrationId,
-            'item_id' => $this->user->getId()
+            'item_id' => $this->user->getId(),
         ]);
     }
 
     /**
      * @param int $lastMessageId
+     *
      * @return array
      */
     public function getUserMessages($lastMessageId = 0)
@@ -186,7 +193,7 @@ class Rest extends WebService
                 'sendDate' => $message['send_date'],
                 'content' => $message['content'],
                 'hasAttachments' => $hasAttachments,
-                'url' => ''
+                'url' => '',
             ];
         }
 
@@ -194,7 +201,8 @@ class Rest extends WebService
     }
 
     /**
-     * Get the user courses
+     * Get the user courses.
+     *
      * @return array
      */
     public function getUserCourses()
@@ -213,7 +221,7 @@ class Rest extends WebService
                 'code' => $course->getCode(),
                 'directory' => $course->getDirectory(),
                 'urlPicture' => $course->getPicturePath(true),
-                'teachers' => $teachers
+                'teachers' => $teachers,
             ];
         }
 
@@ -221,8 +229,9 @@ class Rest extends WebService
     }
 
     /**
-     * @return array
      * @throws Exception
+     *
+     * @return array
      */
     public function getCourseInfo()
     {
@@ -245,14 +254,16 @@ class Rest extends WebService
                     return ['type' => $tool['name']];
                 },
                 $tools
-            )
+            ),
         ];
     }
 
     /**
-     * Get the course descriptions
-     * @return array
+     * Get the course descriptions.
+     *
      * @throws Exception
+     *
+     * @return array
      */
     public function getCourseDescriptions()
     {
@@ -264,7 +275,7 @@ class Rest extends WebService
             $results[] = [
                 'id' => $description->get_description_type(),
                 'title' => $description->get_title(),
-                'content' => str_replace('src="/', 'src="'.api_get_path(WEB_PATH), $description->get_content())
+                'content' => str_replace('src="/', 'src="'.api_get_path(WEB_PATH), $description->get_content()),
             ];
         }
 
@@ -273,8 +284,10 @@ class Rest extends WebService
 
     /**
      * @param int $directoryId
-     * @return array
+     *
      * @throws Exception
+     *
+     * @return array
      */
     public function getCourseDocuments($directoryId = 0)
     {
@@ -336,10 +349,10 @@ class Rest extends WebService
                         'gradebook' => 0,
                         'origin' => '',
                         'action' => 'download',
-                        'id' => $document['id']
+                        'id' => $document['id'],
                     ]),
                     'icon' => $icon,
-                    'size' => format_file_size($document['size'])
+                    'size' => format_file_size($document['size']),
                 ];
             }
         }
@@ -348,8 +361,9 @@ class Rest extends WebService
     }
 
     /**
-     * @return array
      * @throws Exception
+     *
+     * @return array
      */
     public function getCourseAnnouncements()
     {
@@ -387,8 +401,10 @@ class Rest extends WebService
 
     /**
      * @param int $announcementId
-     * @return array
+     *
      * @throws Exception
+     *
+     * @return array
      */
     public function getCourseAnnouncement($announcementId)
     {
@@ -416,13 +432,14 @@ class Rest extends WebService
                 $announcement['announcement']->getContent(),
                 $this->course->getCode(),
                 $sessionId
-            )
+            ),
         ];
     }
 
     /**
-     * @return array
      * @throws Exception
+     *
+     * @return array
      */
     public function getCourseAgenda()
     {
@@ -469,7 +486,7 @@ class Rest extends WebService
                     'content' => str_replace('src="/', 'src="'.$webPath, $event['description']),
                     'startDate' => $event['start_date_localtime'],
                     'endDate' => $event['end_date_localtime'],
-                    'isAllDay' => $event['allDay'] ? true : false
+                    'isAllDay' => $event['allDay'] ? true : false,
                 ];
             },
             $events
@@ -477,8 +494,9 @@ class Rest extends WebService
     }
 
     /**
-     * @return array
      * @throws Exception
+     *
+     * @return array
      */
     public function getCourseNotebooks()
     {
@@ -498,7 +516,7 @@ class Rest extends WebService
                     ),
                     'updateDate' => api_format_date(
                         $notebook->getUpdateDate()->getTimestamp()
-                    )
+                    ),
                 ];
             },
             $notebooks
@@ -506,8 +524,9 @@ class Rest extends WebService
     }
 
     /**
-     * @return array
      * @throws Exception
+     *
+     * @return array
      */
     public function getCourseForumCategories()
     {
@@ -530,7 +549,7 @@ class Rest extends WebService
                 'description' => $forumInfo['forum_comment'],
                 'image' => $forumInfo['forum_image'] ? ($webCoursePath.$forumInfo['forum_image']) : '',
                 'numberOfThreads' => isset($forumInfo['number_of_threads']) ? intval($forumInfo['number_of_threads']) : 0,
-                'lastPost' => null
+                'lastPost' => null,
             ];
 
             $lastPostInfo = get_last_post_information($forumId, false, $this->course->getId(), $sessionId);
@@ -541,7 +560,7 @@ class Rest extends WebService
                     'user' => api_get_person_name(
                         $lastPostInfo['last_poster_firstname'],
                         $lastPostInfo['last_poster_lastname']
-                    )
+                    ),
                 ];
             }
 
@@ -566,7 +585,7 @@ class Rest extends WebService
                 'catId' => intval($category['cat_id']),
                 'description' => $category['cat_comment'],
                 'forums' => $categoryForums,
-                'courseId' => $this->course->getId()
+                'courseId' => $this->course->getId(),
             ];
         }
 
@@ -575,8 +594,10 @@ class Rest extends WebService
 
     /**
      * @param int $forumId
-     * @return array
+     *
      * @throws Exception
+     *
+     * @return array
      */
     public function getCourseForum($forumId)
     {
@@ -595,7 +616,7 @@ class Rest extends WebService
             'title' => $forumInfo['forum_title'],
             'description' => $forumInfo['forum_comment'],
             'image' => $forumInfo['forum_image'] ? ($webCoursePath.$forumInfo['forum_image']) : '',
-            'threads' => []
+            'threads' => [],
         ];
 
         $threads = get_threads($forumInfo['iid'], $this->course->getId(), $sessionId);
@@ -607,7 +628,7 @@ class Rest extends WebService
                 'lastEditDate' => api_convert_and_format_date($thread['lastedit_date'], DATE_TIME_FORMAT_LONG_24H),
                 'numberOfReplies' => $thread['thread_replies'],
                 'numberOfViews' => $thread['thread_views'],
-                'author' => api_get_person_name($thread['firstname'], $thread['lastname'])
+                'author' => api_get_person_name($thread['firstname'], $thread['lastname']),
             ];
         }
 
@@ -617,6 +638,7 @@ class Rest extends WebService
     /**
      * @param int $forumId
      * @param int $threadId
+     *
      * @return array
      */
     public function getCourseForumThread($forumId, $threadId)
@@ -631,7 +653,7 @@ class Rest extends WebService
             'cId' => intval($threadInfo['c_id']),
             'title' => $threadInfo['thread_title'],
             'forumId' => intval($threadInfo['forum_id']),
-            'posts' => []
+            'posts' => [],
         ];
 
         $forumInfo = get_forums($threadInfo['forum_id'], $this->course->getCode(), true, $sessionId);
@@ -644,7 +666,7 @@ class Rest extends WebService
                 'text' => $postInfo['post_text'],
                 'author' => api_get_person_name($postInfo['firstname'], $postInfo['lastname']),
                 'date' => api_convert_and_format_date($postInfo['post_date'], DATE_TIME_FORMAT_LONG_24H),
-                'parentId' => $postInfo['post_parent_id']
+                'parentId' => $postInfo['post_parent_id'],
             ];
         }
 
@@ -664,7 +686,7 @@ class Rest extends WebService
             'username' => $this->user->getUsername(),
             'officialCode' => $this->user->getOfficialCode(),
             'phone' => $this->user->getPhone(),
-            'extra' => []
+            'extra' => [],
         ];
 
         $fieldValue = new ExtraFieldValue('user');
@@ -676,7 +698,7 @@ class Rest extends WebService
 
             $result['extra'][] = [
                 'title' => $extraValue->getField()->getDisplayText(true),
-                'value' => $extraValue->getValue()
+                'value' => $extraValue->getValue(),
             ];
         }
 
@@ -684,8 +706,9 @@ class Rest extends WebService
     }
 
     /**
-     * @return array
      * @throws Exception
+     *
+     * @return array
      */
     public function getCourseLearnPaths()
     {
@@ -773,9 +796,9 @@ class Rest extends WebService
                             'action' => 'course_learnpath',
                             'lp_id' => $lpId,
                             'course' => $this->course->getId(),
-                            'session' => $sessionId
-                        ])
-                    ])
+                            'session' => $sessionId,
+                        ]),
+                    ]),
                 ];
             }
 
@@ -786,7 +809,7 @@ class Rest extends WebService
             $categoryData[] = [
                 'id' => $category->getId(),
                 'name' => $category->getName(),
-                'learnpaths' => $listData
+                'learnpaths' => $listData,
             ];
         }
 
@@ -794,24 +817,8 @@ class Rest extends WebService
     }
 
     /**
-     * @param array $additionalParams Optional
-     * @return string
-     */
-    private function encodeParams(array $additionalParams = [])
-    {
-        $params = array_merge($additionalParams, [
-            'api_key' => $this->apiKey,
-            'username' => $this->user->getUsername(),
-        ]);
-
-        $strParams = serialize($params);
-        $b64Encoded = base64_encode($strParams);
-
-        return str_replace(['+', '/', '='], ['-', '_', '.'], $b64Encoded);
-    }
-
-    /**
      * @param string $encoded
+     *
      * @return array
      */
     public static function decodeParams($encoded)
@@ -829,7 +836,8 @@ class Rest extends WebService
     }
 
     /**
-     * Start login for a user. Then make a redirect to show the learnpath
+     * Start login for a user. Then make a redirect to show the learnpath.
+     *
      * @param int $lpId
      */
     public function showLearningPath($lpId)
@@ -850,7 +858,7 @@ class Rest extends WebService
             'origin' => '',
             'action' => 'view',
             'lp_id' => intval($lpId),
-            'isStudentView' => 'true'
+            'isStudentView' => 'true',
         ]);
 
         header("Location: $url");
@@ -859,7 +867,8 @@ class Rest extends WebService
 
     /**
      * @param array $postValues
-     * @param int $forumId
+     * @param int   $forumId
+     *
      * @return array
      */
     public function saveForumPost(array $postValues, $forumId)
@@ -870,12 +879,13 @@ class Rest extends WebService
         store_reply($forum, $postValues, $this->course->getId(), $this->user->getId());
 
         return [
-            'registered' => true
+            'registered' => true,
         ];
     }
 
     /**
-     * Get the list of sessions for current user
+     * Get the list of sessions for current user.
+     *
      * @return array the sessions list
      */
     public function getUserSessions()
@@ -902,7 +912,7 @@ class Rest extends WebService
                         'code' => $courseInfo['code'],
                         'directory' => $courseInfo['directory'],
                         'pictureUrl' => $courseInfo['course_image_large'],
-                        'teachers' => $teachers
+                        'teachers' => $teachers,
                     ];
                 }
 
@@ -913,14 +923,14 @@ class Rest extends WebService
                     'id' => $sessions['session_id'],
                     'date' => $sessionBox['dates'],
                     'duration' => isset($sessionBox['duration']) ? $sessionBox['duration'] : null,
-                    'courses' => $sessionCourses
+                    'courses' => $sessionCourses,
                 ];
             }
 
             $data[] = [
                 'id' => $category['session_category']['id'],
                 'name' => $category['session_category']['name'],
-                'sessions' => $categorySessions
+                'sessions' => $categorySessions,
             ];
         }
 
@@ -930,7 +940,8 @@ class Rest extends WebService
     /**
      * @param string $subject
      * @param string $text
-     * @param array $receivers
+     * @param array  $receivers
+     *
      * @return array
      */
     public function saveUserMessage($subject, $text, array $receivers)
@@ -940,12 +951,13 @@ class Rest extends WebService
         }
 
         return [
-            'sent' => true
+            'sent' => true,
         ];
     }
 
     /**
      * @param string $search
+     *
      * @return array
      */
     public function getMessageUsers($search)
@@ -978,6 +990,7 @@ class Rest extends WebService
     /**
      * @param string $title
      * @param string $text
+     *
      * @return array
      */
     public function saveCourseNotebook($title, $text)
@@ -993,13 +1006,14 @@ class Rest extends WebService
         );
 
         return [
-            'registered' => $noteBookId
+            'registered' => $noteBookId,
         ];
     }
 
     /**
      * @param array $values
-     * @param int $forumId
+     * @param int   $forumId
+     *
      * @return array
      */
     public function saveForumThread(array $values, $forumId)
@@ -1012,18 +1026,19 @@ class Rest extends WebService
         $id = store_thread($forum, $values, $courseInfo, false, $this->user->getId(), $sessionId);
 
         return [
-            'registered' => $id
+            'registered' => $id,
         ];
     }
 
     /**
      * @param array $course_param
+     *
      * @return array
      */
     public function addCourse($course_param)
     {
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $extra_list= [];
+        $extra_list = [];
 
         $title = isset($course_param['title']) ? $course_param['title'] : '';
         $category_code = isset($course_param['category_code']) ? $course_param['category_code'] : '';
@@ -1125,7 +1140,7 @@ class Rest extends WebService
 
             if (is_array($extra_list) && count($extra_list) > 0) {
                 foreach ($extra_list as $extra) {
-                    $extra_field_name  = $extra['field_name'];
+                    $extra_field_name = $extra['field_name'];
                     $extra_field_value = $extra['field_value'];
                     // Save new fieldlabel into course_field table.
                     CourseManager::create_course_extra_field(
@@ -1152,6 +1167,7 @@ class Rest extends WebService
 
     /**
      * @param $user_param
+     *
      * @return array
      */
     public function addUser($user_param)
@@ -1274,8 +1290,10 @@ class Rest extends WebService
     }
 
     /**
-     * Subscribe User to Course
+     * Subscribe User to Course.
+     *
      * @param array $params
+     *
      * @return array
      */
     public function subscribeUserToCourse($params)
@@ -1294,6 +1312,25 @@ class Rest extends WebService
         } else {
             return [false];
         }
+
         return [true];
+    }
+
+    /**
+     * @param array $additionalParams Optional
+     *
+     * @return string
+     */
+    private function encodeParams(array $additionalParams = [])
+    {
+        $params = array_merge($additionalParams, [
+            'api_key' => $this->apiKey,
+            'username' => $this->user->getUsername(),
+        ]);
+
+        $strParams = serialize($params);
+        $b64Encoded = base64_encode($strParams);
+
+        return str_replace(['+', '/', '='], ['-', '_', '.'], $b64Encoded);
     }
 }

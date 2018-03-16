@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CDropboxFeedback
+ * CDropboxFeedback.
  *
  * @ORM\Table(
  *  name="c_dropbox_feedback",
@@ -21,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CDropboxFeedback
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -30,28 +30,28 @@ class CDropboxFeedback
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="feedback_id", type="integer")
      */
     private $feedbackId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="file_id", type="integer", nullable=false)
      */
     private $fileId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="author_user_id", type="integer", nullable=false)
      */
@@ -71,11 +71,11 @@ class CDropboxFeedback
      */
     private $feedbackDate;
 
-
     /**
-     * Set fileId
+     * Set fileId.
      *
-     * @param integer $fileId
+     * @param int $fileId
+     *
      * @return CDropboxFeedback
      */
     public function setFileId($fileId)
@@ -86,9 +86,9 @@ class CDropboxFeedback
     }
 
     /**
-     * Get fileId
+     * Get fileId.
      *
-     * @return integer
+     * @return int
      */
     public function getFileId()
     {
@@ -96,9 +96,10 @@ class CDropboxFeedback
     }
 
     /**
-     * Set authorUserId
+     * Set authorUserId.
      *
-     * @param integer $authorUserId
+     * @param int $authorUserId
+     *
      * @return CDropboxFeedback
      */
     public function setAuthorUserId($authorUserId)
@@ -109,9 +110,9 @@ class CDropboxFeedback
     }
 
     /**
-     * Get authorUserId
+     * Get authorUserId.
      *
-     * @return integer
+     * @return int
      */
     public function getAuthorUserId()
     {
@@ -119,9 +120,10 @@ class CDropboxFeedback
     }
 
     /**
-     * Set feedback
+     * Set feedback.
      *
      * @param string $feedback
+     *
      * @return CDropboxFeedback
      */
     public function setFeedback($feedback)
@@ -132,7 +134,7 @@ class CDropboxFeedback
     }
 
     /**
-     * Get feedback
+     * Get feedback.
      *
      * @return string
      */
@@ -142,9 +144,10 @@ class CDropboxFeedback
     }
 
     /**
-     * Set feedbackDate
+     * Set feedbackDate.
      *
      * @param \DateTime $feedbackDate
+     *
      * @return CDropboxFeedback
      */
     public function setFeedbackDate($feedbackDate)
@@ -155,7 +158,7 @@ class CDropboxFeedback
     }
 
     /**
-     * Get feedbackDate
+     * Get feedbackDate.
      *
      * @return \DateTime
      */
@@ -165,9 +168,10 @@ class CDropboxFeedback
     }
 
     /**
-     * Set feedbackId
+     * Set feedbackId.
      *
-     * @param integer $feedbackId
+     * @param int $feedbackId
+     *
      * @return CDropboxFeedback
      */
     public function setFeedbackId($feedbackId)
@@ -178,9 +182,9 @@ class CDropboxFeedback
     }
 
     /**
-     * Get feedbackId
+     * Get feedbackId.
      *
-     * @return integer
+     * @return int
      */
     public function getFeedbackId()
     {
@@ -188,9 +192,10 @@ class CDropboxFeedback
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CDropboxFeedback
      */
     public function setCId($cId)
@@ -201,9 +206,9 @@ class CDropboxFeedback
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

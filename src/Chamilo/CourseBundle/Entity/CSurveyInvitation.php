@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CSurveyInvitation
+ * CSurveyInvitation.
  *
  * @ORM\Table(
  *  name="c_survey_invitation",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CSurveyInvitation
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,15 +28,14 @@ class CSurveyInvitation
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="survey_invitation_id", type="integer")
      */
@@ -78,30 +77,31 @@ class CSurveyInvitation
     private $reminderDate;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="answered", type="integer", nullable=false)
      */
     private $answered;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="group_id", type="integer", nullable=false)
      */
     private $groupId;
 
     /**
-     * Set surveyCode
+     * Set surveyCode.
      *
      * @param string $surveyCode
+     *
      * @return CSurveyInvitation
      */
     public function setSurveyCode($surveyCode)
@@ -112,7 +112,7 @@ class CSurveyInvitation
     }
 
     /**
-     * Get surveyCode
+     * Get surveyCode.
      *
      * @return string
      */
@@ -122,9 +122,10 @@ class CSurveyInvitation
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param string $user
+     *
      * @return CSurveyInvitation
      */
     public function setUser($user)
@@ -135,7 +136,7 @@ class CSurveyInvitation
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return string
      */
@@ -145,9 +146,10 @@ class CSurveyInvitation
     }
 
     /**
-     * Set invitationCode
+     * Set invitationCode.
      *
      * @param string $invitationCode
+     *
      * @return CSurveyInvitation
      */
     public function setInvitationCode($invitationCode)
@@ -158,7 +160,7 @@ class CSurveyInvitation
     }
 
     /**
-     * Get invitationCode
+     * Get invitationCode.
      *
      * @return string
      */
@@ -168,9 +170,10 @@ class CSurveyInvitation
     }
 
     /**
-     * Set invitationDate
+     * Set invitationDate.
      *
      * @param \DateTime $invitationDate
+     *
      * @return CSurveyInvitation
      */
     public function setInvitationDate($invitationDate)
@@ -181,7 +184,7 @@ class CSurveyInvitation
     }
 
     /**
-     * Get invitationDate
+     * Get invitationDate.
      *
      * @return \DateTime
      */
@@ -191,9 +194,10 @@ class CSurveyInvitation
     }
 
     /**
-     * Set reminderDate
+     * Set reminderDate.
      *
      * @param \DateTime $reminderDate
+     *
      * @return CSurveyInvitation
      */
     public function setReminderDate($reminderDate)
@@ -204,7 +208,7 @@ class CSurveyInvitation
     }
 
     /**
-     * Get reminderDate
+     * Get reminderDate.
      *
      * @return \DateTime
      */
@@ -214,9 +218,10 @@ class CSurveyInvitation
     }
 
     /**
-     * Set answered
+     * Set answered.
      *
-     * @param integer $answered
+     * @param int $answered
+     *
      * @return CSurveyInvitation
      */
     public function setAnswered($answered)
@@ -227,9 +232,9 @@ class CSurveyInvitation
     }
 
     /**
-     * Get answered
+     * Get answered.
      *
-     * @return integer
+     * @return int
      */
     public function getAnswered()
     {
@@ -237,9 +242,10 @@ class CSurveyInvitation
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return CSurveyInvitation
      */
     public function setSessionId($sessionId)
@@ -250,9 +256,9 @@ class CSurveyInvitation
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -260,9 +266,10 @@ class CSurveyInvitation
     }
 
     /**
-     * Set groupId
+     * Set groupId.
      *
-     * @param integer $groupId
+     * @param int $groupId
+     *
      * @return CSurveyInvitation
      */
     public function setGroupId($groupId)
@@ -273,9 +280,9 @@ class CSurveyInvitation
     }
 
     /**
-     * Get groupId
+     * Get groupId.
      *
-     * @return integer
+     * @return int
      */
     public function getGroupId()
     {
@@ -283,9 +290,10 @@ class CSurveyInvitation
     }
 
     /**
-     * Set surveyInvitationId
+     * Set surveyInvitationId.
      *
-     * @param integer $surveyInvitationId
+     * @param int $surveyInvitationId
+     *
      * @return CSurveyInvitation
      */
     public function setSurveyInvitationId($surveyInvitationId)
@@ -296,9 +304,9 @@ class CSurveyInvitation
     }
 
     /**
-     * Get surveyInvitationId
+     * Get surveyInvitationId.
      *
-     * @return integer
+     * @return int
      */
     public function getSurveyInvitationId()
     {
@@ -306,9 +314,10 @@ class CSurveyInvitation
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CSurveyInvitation
      */
     public function setCId($cId)
@@ -319,9 +328,9 @@ class CSurveyInvitation
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

@@ -2,13 +2,12 @@
 /**
  * ExceptionController.php
  * avanzu-admin
- * Date: 01.03.14
+ * Date: 01.03.14.
  */
 
 namespace Chamilo\ThemeBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
-
 use Symfony\Component\HttpFoundation\Request;
 
 class ExceptionController extends \Symfony\Bundle\TwigBundle\Controller\ExceptionController

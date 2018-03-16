@@ -4,9 +4,9 @@
 /**
  * @author Julio Montoya <gugli100@gmail.com> BeezNest 2012
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -63,8 +63,8 @@ if (isset($form)) {
                     $accessUrlId,
                     $pluginName,
                     'setting',
-                    'status'
-                ]
+                    'status',
+                ],
             ]
         );
 
@@ -105,11 +105,11 @@ if (isset($form)) {
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
-    'name' => get_lang('PlatformAdmin')
+    'name' => get_lang('PlatformAdmin'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins',
-    'name' => get_lang('Plugins')
+    'name' => get_lang('Plugins'),
 ];
 
 $tpl = new Template($pluginName, true, true, false, true, false);

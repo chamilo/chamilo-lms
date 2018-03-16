@@ -4,8 +4,10 @@
 use ChamiloSession as Session;
 
 /**
- * Script that displays a blank page (with later a message saying why)
+ * Script that displays a blank page (with later a message saying why).
+ *
  * @package chamilo.learnpath
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 // Flag to allow for anonymous user - needs to be set before global.inc.php.

@@ -1,17 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Filesystem\Exception\IOException;
 
 /**
- * Chamilo LMS
+ * Chamilo LMS.
  *
  * Updates the Chamilo files from version 1.9.0 to version 1.10.0
  * This script operates only in the case of an update, and only to change the
  * active version number (and other things that might need a change) in the
  * current configuration file.
+ *
  * @package chamilo.install
  */
 error_log("Starting ".basename(__FILE__));
@@ -178,7 +179,7 @@ if (defined('SYSTEM_INSTALLATION')) {
         api_get_path(SYS_CODE_PATH).'upload/badges' => api_get_path(SYS_UPLOAD_PATH).'badges',
         api_get_path(SYS_PATH).'courses' => api_get_path(SYS_APP_PATH).'courses',
         api_get_path(SYS_PATH).'searchdb' => api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/',
-        api_get_path(SYS_PATH).'home' => api_get_path(SYS_APP_PATH).'home'
+        api_get_path(SYS_PATH).'home' => api_get_path(SYS_APP_PATH).'home',
     ];
 
     if ($debug) {

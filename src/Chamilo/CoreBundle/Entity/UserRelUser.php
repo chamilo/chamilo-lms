@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UserRelUser
+ * UserRelUser.
  *
  * @ORM\Table(name="user_rel_user", indexes={
  *     @ORM\Index(name="idx_user_rel_user__user", columns={"user_id"}),
@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 class UserRelUser
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="bigint")
      * @ORM\Id
@@ -27,21 +27,21 @@ class UserRelUser
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
     private $userId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="friend_user_id", type="integer", nullable=false)
      */
     private $friendUserId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="relation_type", type="integer", nullable=false)
      */
@@ -55,9 +55,10 @@ class UserRelUser
     private $lastEdit;
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return UserRelUser
      */
     public function setUserId($userId)
@@ -68,9 +69,9 @@ class UserRelUser
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -78,9 +79,10 @@ class UserRelUser
     }
 
     /**
-     * Set friendUserId
+     * Set friendUserId.
      *
-     * @param integer $friendUserId
+     * @param int $friendUserId
+     *
      * @return UserRelUser
      */
     public function setFriendUserId($friendUserId)
@@ -91,9 +93,9 @@ class UserRelUser
     }
 
     /**
-     * Get friendUserId
+     * Get friendUserId.
      *
-     * @return integer
+     * @return int
      */
     public function getFriendUserId()
     {
@@ -101,9 +103,10 @@ class UserRelUser
     }
 
     /**
-     * Set relationType
+     * Set relationType.
      *
-     * @param integer $relationType
+     * @param int $relationType
+     *
      * @return UserRelUser
      */
     public function setRelationType($relationType)
@@ -114,9 +117,9 @@ class UserRelUser
     }
 
     /**
-     * Get relationType
+     * Get relationType.
      *
-     * @return integer
+     * @return int
      */
     public function getRelationType()
     {
@@ -124,9 +127,10 @@ class UserRelUser
     }
 
     /**
-     * Set lastEdit
+     * Set lastEdit.
      *
      * @param \DateTime $lastEdit
+     *
      * @return UserRelUser
      */
     public function setLastEdit($lastEdit)
@@ -137,7 +141,7 @@ class UserRelUser
     }
 
     /**
-     * Get lastEdit
+     * Get lastEdit.
      *
      * @return \DateTime
      */
@@ -147,9 +151,9 @@ class UserRelUser
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

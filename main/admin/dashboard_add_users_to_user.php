@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *  Interface for assigning users to Human Resources Manager
+ *  Interface for assigning users to Human Resources Manager.
+ *
  *  @package chamilo.admin
  */
 
@@ -33,7 +34,7 @@ $tbl_access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_US
 // initializing variables
 $user_id = intval($_GET['user']);
 $user_info = api_get_user_info($user_id);
-$user_anonymous  = api_get_anonymous_id();
+$user_anonymous = api_get_anonymous_id();
 $current_user_id = api_get_user_id();
 
 $userStatus = api_get_user_status($user_id);
@@ -254,12 +255,12 @@ $filters = [
     ['type' => 'text', 'name' => 'firstname', 'label' => get_lang('FirstName')],
     ['type' => 'text', 'name' => 'lastname', 'label' => get_lang('LastName')],
     ['type' => 'text', 'name' => 'official_code', 'label' => get_lang('OfficialCode')],
-    ['type' => 'text', 'name' => 'email', 'label' => get_lang('Email')]
+    ['type' => 'text', 'name' => 'email', 'label' => get_lang('Email')],
 ];
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?user='.$user_id);
 $searchForm->addHeader(get_lang('AdvancedSearch'));
-$renderer = & $searchForm->defaultRenderer();
+$renderer = &$searchForm->defaultRenderer();
 
 $searchForm->addElement('hidden', 'user', $user_id);
 foreach ($filters as $param) {
@@ -410,13 +411,13 @@ if (api_is_multiple_url_enabled()) {
 }
 $result = Database::query($sql);
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id ?>" class="form-horizontal" <?php if ($ajax_search) {
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id; ?>" class="form-horizontal" <?php if ($ajax_search) {
     echo ' onsubmit="valide();"';
 }?>>
 <input type="hidden" name="formSent" value="1" />
 <div class="row">
     <div class="col-md-4">
-        <?php echo get_lang('UserListInPlatform') ?>
+        <?php echo get_lang('UserListInPlatform'); ?>
         <div class="form-group">
             <div class="col-sm-12">
                 <div id="ajax_list_users_multiple">

@@ -1,8 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Global events controller class
+ * Global events controller class.
+ *
  * @deprecated to be removed in 2.x
+ *
  * @package chamilo.admin
  */
 $cidReset = true;

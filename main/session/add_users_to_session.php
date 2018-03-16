@@ -81,7 +81,6 @@ function search_users($needle, $type)
     $return = '';
 
     if (!empty($needle) && !empty($type)) {
-
         // Normal behaviour
         if ($type == 'any_session' && $needle == 'false') {
             $type = 'multiple';
@@ -539,7 +538,7 @@ if ($ajax_search) {
                 'fn' => $user['firstname'],
                 'ln' => $user['lastname'],
                 'un' => $user['username'],
-                'official_code' => $user['official_code']
+                'official_code' => $user['official_code'],
             ];
             unset($users[$uid]);
         }
@@ -686,7 +685,7 @@ $newLinks .= Display::url(
         <div id="multiple-add-session" class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label><?php echo get_lang('UserListInPlatform') ?> </label>
+                    <label><?php echo get_lang('UserListInPlatform'); ?> </label>
                     <?php
                     if (!($add_type == 'multiple')) {
                         ?>
@@ -787,7 +786,7 @@ $newLinks .= Display::url(
             </div>
 
             <div class="col-md-4">
-                <label><?php echo get_lang('UserListInSession') ?> :</label>
+                <label><?php echo get_lang('UserListInSession'); ?> :</label>
                 <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15"
                         class="form-control">
                     <?php

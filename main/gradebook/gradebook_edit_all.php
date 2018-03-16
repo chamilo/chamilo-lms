@@ -2,11 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
+ *
  * @author Julio Montoya - fixes in order to use gradebook models + some code cleaning
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool = TOOL_GRADEBOOK;
@@ -223,7 +224,6 @@ if ($form->validate()) {
     exit;
 }
 
-
 // 	DISPLAY HEADERS AND MESSAGES
 if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
     if (isset($_GET['studentoverview'])) {
@@ -252,7 +252,7 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 }
 ?>
     <div class="actions">
-        <a href="<?php echo Category::getUrl(); ?>selectcat=<?php echo $my_selectcat ?>">
+        <a href="<?php echo Category::getUrl(); ?>selectcat=<?php echo $my_selectcat; ?>">
             <?php echo Display::return_icon(
                 'back.png',
                 get_lang('FolderView'),
@@ -285,8 +285,8 @@ echo Display::return_message($warning_message, 'warning', false);
     <input type="hidden" name="submitted" value="1"/>
     <br/>
     <button class="btn btn-primary" type="submit" name="name"
-            value="<?php echo get_lang('Save') ?>">
-        <?php echo get_lang('SaveScoringRules') ?>
+            value="<?php echo get_lang('Save'); ?>">
+        <?php echo get_lang('SaveScoringRules'); ?>
     </button>
 </form>
 <?php

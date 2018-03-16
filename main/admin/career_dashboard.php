@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Careers dashboard
+ * Careers dashboard.
+ *
  * @package chamilo.admin.career
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -21,11 +21,11 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 // setting breadcrumbs
 $interbreadcrumb[] = [
     'url' => 'index.php',
-    'name' => get_lang('PlatformAdmin')
+    'name' => get_lang('PlatformAdmin'),
 ];
 $interbreadcrumb[] = [
     'url' => 'career_dashboard.php',
-    'name' => get_lang('CareersAndPromotions')
+    'name' => get_lang('CareersAndPromotions'),
 ];
 $tpl = new Template(get_lang('CareersAndPromotions'));
 

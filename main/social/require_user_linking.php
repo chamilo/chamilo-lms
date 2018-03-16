@@ -48,13 +48,13 @@ $form->addSelectAjax(
     $requestOptions,
     [
         'multiple' => 'multiple',
-        'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_like'
+        'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_like',
     ]
 );
 $form->addButtonSave(get_lang('RequestLinkToStudent'));
 $form->setDefaults([
     'hrm' => $hrm,
-    'users' => array_keys($requestOptions)
+    'users' => array_keys($requestOptions),
 ]);
 
 if ($form->validate()) {

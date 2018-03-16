@@ -12,7 +12,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Skill
+ * Skill.
  *
  * @ORM\Table(name="skill")
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\SkillRepository")
@@ -23,7 +23,30 @@ class Skill
     const STATUS_ENABLED = 1;
 
     /**
-     * @var integer
+     * @ORM\ManyToOne(targetEntity="Chamilo\SkillBundle\Entity\Profile", inversedBy="skills")
+     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id")
+     */
+    protected $profile;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="skill", cascade={"persist"})
+     */
+    protected $issuedSkills;
+
+    /**
+     * // uncomment if api_get_configuration_value('allow_skill_rel_items')
+     * ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelItem", mappedBy="skill", cascade={"persist"}).
+     */
+    protected $items;
+
+    /**
+     * // uncomment if api_get_configuration_value('allow_skill_rel_items')
+     * ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelCourse", mappedBy="skill", cascade={"persist"}).
+     */
+    protected $courses;
+
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -53,7 +76,7 @@ class Skill
     private $description;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="access_url_id", type="integer", nullable=false)
      */
@@ -74,7 +97,7 @@ class Skill
     private $criteria;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="status", type="integer", nullable=false, options={"default": 1})
      */
@@ -88,29 +111,6 @@ class Skill
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Chamilo\SkillBundle\Entity\Profile", inversedBy="skills")
-     * @ORM\JoinColumn(name="profile_id", referencedColumnName="id")
-     **/
-    protected $profile;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="skill", cascade={"persist"})
-     */
-    protected $issuedSkills;
-
-    /**
-     * // uncomment if api_get_configuration_value('allow_skill_rel_items')
-     * ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelItem", mappedBy="skill", cascade={"persist"})
-     */
-    protected $items;
-
-    /**
-     * // uncomment if api_get_configuration_value('allow_skill_rel_items')
-     * ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\SkillRelCourse", mappedBy="skill", cascade={"persist"})
-     */
-    protected $courses;
-
-    /**
      * @return string
      */
     public function __toString()
@@ -119,9 +119,10 @@ class Skill
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return Skill
      */
     public function setName($name)
@@ -132,9 +133,10 @@ class Skill
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @param bool $translated Optional. Get the name translated when is it exists in a sub-language. By default is true
+     *
      * @return string
      */
     public function getName($translated = true)
@@ -149,9 +151,10 @@ class Skill
     }
 
     /**
-     * Set shortCode
+     * Set shortCode.
      *
      * @param string $shortCode
+     *
      * @return Skill
      */
     public function setShortCode($shortCode)
@@ -162,9 +165,10 @@ class Skill
     }
 
     /**
-     * Get shortCode
+     * Get shortCode.
      *
      * @param bool $translated Optional. Get the code translated when is it exists in a sub-language. By default is true
+     *
      * @return string
      */
     public function getShortCode($translated = true)
@@ -179,9 +183,10 @@ class Skill
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return Skill
      */
     public function setDescription($description)
@@ -192,7 +197,7 @@ class Skill
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -202,9 +207,10 @@ class Skill
     }
 
     /**
-     * Set accessUrlId
+     * Set accessUrlId.
      *
-     * @param integer $accessUrlId
+     * @param int $accessUrlId
+     *
      * @return Skill
      */
     public function setAccessUrlId($accessUrlId)
@@ -215,9 +221,9 @@ class Skill
     }
 
     /**
-     * Get accessUrlId
+     * Get accessUrlId.
      *
-     * @return integer
+     * @return int
      */
     public function getAccessUrlId()
     {
@@ -225,9 +231,10 @@ class Skill
     }
 
     /**
-     * Set icon
+     * Set icon.
      *
      * @param string $icon
+     *
      * @return Skill
      */
     public function setIcon($icon)
@@ -238,7 +245,7 @@ class Skill
     }
 
     /**
-     * Get icon
+     * Get icon.
      *
      * @return string
      */
@@ -248,8 +255,10 @@ class Skill
     }
 
     /**
-     * Get the icon (badge image) URL
-     * @param boolean $getSmall Optional. Allow get the small image
+     * Get the icon (badge image) URL.
+     *
+     * @param bool $getSmall Optional. Allow get the small image
+     *
      * @return string
      */
     public function getWebIconPath($getSmall = false)
@@ -270,9 +279,10 @@ class Skill
     }
 
     /**
-     * Set criteria
+     * Set criteria.
      *
      * @param string $criteria
+     *
      * @return Skill
      */
     public function setCriteria($criteria)
@@ -283,7 +293,7 @@ class Skill
     }
 
     /**
-     * Get criteria
+     * Get criteria.
      *
      * @return string
      */
@@ -293,8 +303,10 @@ class Skill
     }
 
     /**
-     * Set status
-     * @param integer $status
+     * Set status.
+     *
+     * @param int $status
+     *
      * @return Skill
      */
     public function setStatus($status)
@@ -305,8 +317,9 @@ class Skill
     }
 
     /**
-     * Get status
-     * @return integer
+     * Get status.
+     *
+     * @return int
      */
     public function getStatus()
     {
@@ -314,8 +327,10 @@ class Skill
     }
 
     /**
-     * Set updatedAt
+     * Set updatedAt.
+     *
      * @param \DateTime $updatedAt The update datetime
+     *
      * @return Skill
      */
     public function setUpdatedAt(\DateTime $updatedAt)
@@ -326,7 +341,8 @@ class Skill
     }
 
     /**
-     * Get updatedAt
+     * Get updatedAt.
+     *
      * @return \DateTime
      */
     public function getUpdatedAt()
@@ -335,9 +351,9 @@ class Skill
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -365,7 +381,7 @@ class Skill
     }
 
     /**
-     * Get issuedSkills
+     * Get issuedSkills.
      *
      * @return ArrayCollection
      */
@@ -384,16 +400,19 @@ class Skill
 
     /**
      * @param ArrayCollection $items
+     *
      * @return Skill
      */
     public function setItems($items)
     {
         $this->items = $items;
+
         return $this;
     }
 
     /**
      * @param int $itemId
+     *
      * @return bool
      */
     public function hasItem($typeId, $itemId)
@@ -433,11 +452,13 @@ class Skill
 
     /**
      * @param ArrayCollection $courses
+     *
      * @return Skill
      */
     public function setCourses($courses)
     {
         $this->courses = $courses;
+
         return $this;
     }
 
@@ -473,7 +494,6 @@ class Skill
 
         return false;
     }
-
 
     /**
      * @param SkillRelCourse $item

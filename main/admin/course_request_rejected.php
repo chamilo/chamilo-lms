@@ -2,15 +2,15 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * A list containing the rejected course requests
+ * A list containing the rejected course requests.
+ *
  * @package chamilo.admin
+ *
  * @author José Manuel Abuin Mosquera <chema@cesga.es>, 2010
  * @author Bruno Rubio Gayo <brubio@cesga.es>, 2010
  * Centro de Supercomputacion de Galicia (CESGA)
- *
  * @author Ivan Tcholakov <ivantcholakov@gmail.com> (technical adaptation for Chamilo 1.8.8), 2010
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -107,7 +107,7 @@ function get_number_of_requests()
 }
 
 /**
- * Get course data to display
+ * Get course data to display.
  */
 function get_request_data($from, $number_of_items, $column, $direction)
 {

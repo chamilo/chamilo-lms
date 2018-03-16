@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
 use Chamilo\CourseBundle\Entity\CForumPost;
+use ChamiloSession as Session;
 
 /**
  * These files are a complete rework of the forum. The database structure is
@@ -16,7 +16,7 @@ use Chamilo\CourseBundle\Entity\CForumPost;
  *                      multiple forums per group
  * - sticky messages
  * - new view option: nested view
- * - quoting a message
+ * - quoting a message.
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @copyright Ghent University
@@ -24,7 +24,6 @@ use Chamilo\CourseBundle\Entity\CForumPost;
  *
  * @package chamilo.forum
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_FORUM;
 $htmlHeadXtra[] = '<script>
@@ -211,8 +210,8 @@ if (!empty($forumsInNoCategory)) {
                 'cat_id' => 0,
                 'session_id' => 0,
                 'visibility' => 1,
-                'cat_comment' => null
-            ]
+                'cat_comment' => null,
+            ],
         ]
     );
 }

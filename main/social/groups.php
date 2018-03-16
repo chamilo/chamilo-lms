@@ -3,9 +3,9 @@
 
 /**
  * @package chamilo.social
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -22,19 +22,19 @@ $content = null;
 
 if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
     if ($_GET['view'] == 'mygroups') {
-        $interbreadcrumb[] = ['url' =>'groups.php', 'name' => get_lang('Groups')];
-        $interbreadcrumb[] = ['url' =>'#', 'name' => get_lang('MyGroups')];
+        $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('MyGroups')];
     } elseif ($_GET['view'] == 'newest') {
-        $interbreadcrumb[] = ['url' =>'groups.php', 'name' => get_lang('Groups')];
-        $interbreadcrumb[] = ['url' =>'#', 'name' => get_lang('Newest')];
+        $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Newest')];
     } else {
-        $interbreadcrumb[] = ['url' =>'groups.php', 'name' => get_lang('Groups')];
-        $interbreadcrumb[] = ['url' =>'#', 'name' => get_lang('Popular')];
+        $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Popular')];
     }
 } else {
-    $interbreadcrumb[] = ['url' =>'groups.php', 'name' => get_lang('Groups')];
+    $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
     if (!isset($_GET['id'])) {
-        $interbreadcrumb[] = ['url' =>'#', 'name' => get_lang('GroupList')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('GroupList')];
     }
 }
 

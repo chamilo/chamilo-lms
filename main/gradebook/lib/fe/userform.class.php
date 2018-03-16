@@ -3,8 +3,10 @@
 
 /**
  * Class UserForm
- * Extends formvalidator with import and export forms
+ * Extends formvalidator with import and export forms.
+ *
  * @author Stijn Konings
+ *
  * @package chamilo.gradebook
  */
 class UserForm extends FormValidator
@@ -13,7 +15,8 @@ class UserForm extends FormValidator
     const TYPE_SIMPLE_SEARCH = 3;
 
     /**
-     * Builds a form containing form items based on a given parameter
+     * Builds a form containing form items based on a given parameter.
+     *
      * @param int form_type 1 = user_info
      * @param user array
      * @param string form name
@@ -38,14 +41,24 @@ class UserForm extends FormValidator
         $this->setDefaults();
     }
 
+    public function display()
+    {
+        parent::display();
+    }
+
+    public function setDefaults($defaults = [], $filter = null)
+    {
+        parent::setDefaults($defaults, $filter);
+    }
+
     protected function build_simple_search()
     {
         if (isset($_GET['search']) && (!empty($_GET['search']))) {
             $this->setDefaults([
-                'keyword' => Security::remove_XSS($_GET['search'])
+                'keyword' => Security::remove_XSS($_GET['search']),
             ]);
         }
-        $renderer = & $this->defaultRenderer();
+        $renderer = &$this->defaultRenderer();
         $renderer->setCustomElementTemplate('<span>{element}</span> ');
         $this->addElement('text', 'keyword', '');
         $this->addButtonSearch(get_lang('Search'), 'submit');
@@ -70,15 +83,5 @@ class UserForm extends FormValidator
         $this->addElement('static', 'ofcode', get_lang('OfficialCode'), $this->user_info['official_code']);
         $this->addElement('static', 'phone', get_lang('Phone'), $this->user_info['phone']);
         $this->addButtonSave(get_lang('Back'), 'submit');
-    }
-
-    public function display()
-    {
-        parent::display();
-    }
-
-    public function setDefaults($defaults = [], $filter = null)
-    {
-        parent::setDefaults($defaults, $filter);
     }
 }

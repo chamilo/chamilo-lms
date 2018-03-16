@@ -6,7 +6,7 @@ namespace Chamilo\FaqBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * Class ChamiloFaqBundle
+ * Class ChamiloFaqBundle.
  *
  * Based in GenjFaqBundle
  *

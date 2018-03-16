@@ -2,10 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* View (MVC patter) for editing a course description
-* @author Christian Fasanando <christian1827@gmail.com>
-* @package chamilo.course_description
-*/
+ * View (MVC patter) for editing a course description.
+ *
+ * @author Christian Fasanando <christian1827@gmail.com>
+ *
+ * @package chamilo.course_description
+ */
 
 // protect a course script
 api_protect_course_script(true);

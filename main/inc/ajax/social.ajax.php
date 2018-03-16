@@ -4,7 +4,7 @@
 use ChamiloSession as Session;
 
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
 require_once __DIR__.'/../global.inc.php';
 
@@ -99,15 +99,15 @@ switch ($action) {
 
                         $friend_html .= '
                             <div class="col-md-3">
-                                <div class="thumbnail text-center" id="div_' . $friends[$j]['friend_user_id'].'">
-                                    <img src="' . $userPicture.'" class="img-responsive" id="imgfriend_'.$friend['friend_user_id'].'" title="$user_name">
+                                <div class="thumbnail text-center" id="div_'.$friends[$j]['friend_user_id'].'">
+                                    <img src="'.$userPicture.'" class="img-responsive" id="imgfriend_'.$friend['friend_user_id'].'" title="$user_name">
                                     <div class="caption">
                                         <h3>
-                                            <a href="profile.php?u=' . $friend['friend_user_id'].'">'.$user_name.'</a>
+                                            <a href="profile.php?u='.$friend['friend_user_id'].'">'.$user_name.'</a>
                                         </h3>
                                         <p>
-                                            <button class="btn btn-danger" onclick="delete_friend(this)" id=img_' . $friend['friend_user_id'].'>
-                                                ' . get_lang('Delete').'
+                                            <button class="btn btn-danger" onclick="delete_friend(this)" id=img_'.$friend['friend_user_id'].'>
+                                                '.get_lang('Delete').'
                                             </button>
                                         </p>
                                     </div>

@@ -11,5 +11,5 @@ $strings['DownloadOnlyAnswer'] = "Descargar respuestas";
 $strings['DownloadAll'] = "Descargar todo";
 $strings['PluginDisabledFromAdminPanel'] = "La herramienta está deshabilitada desde la administración";
 $strings['AnswersColumn'] = "Respuestas: ";
-$strings['Statement']= "Enunciado";
-$strings['PageX']= "Página %s";
+$strings['Statement'] = "Enunciado";
+$strings['PageX'] = "Página %s";

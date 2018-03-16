@@ -19,12 +19,6 @@ class OLPC_Peru_FilterPlugin extends Plugin
     public $course_settings_callback = true;
     public $error = '';
 
-    public static function create()
-    {
-        static $result = null;
-        return $result ? $result : $result = new self();
-    }
-
     protected function __construct()
     {
         parent::__construct('0.1', 'Yannick Warnier, Aliosh Neira', ['tool_enable' => 'boolean']);
@@ -33,7 +27,7 @@ class OLPC_Peru_FilterPlugin extends Plugin
         $list = $this->get_blacklist_options();
         foreach ($list as $k => $v) {
             $this->course_settings[] =
-              ['group'=> 'olpc_peru_filter_filter', 'name' => $k, 'type' => 'checkbox', 'init_value' => $v];
+              ['group' => 'olpc_peru_filter_filter', 'name' => $k, 'type' => 'checkbox', 'init_value' => $v];
         }
         require_once __DIR__.'/../config.php';
         if (!empty($blacklist_enabled_file)) {
@@ -42,6 +36,13 @@ class OLPC_Peru_FilterPlugin extends Plugin
         if (!empty($blacklists_dir)) {
             $this->blacklists_dir = $blacklists_dir;
         }
+    }
+
+    public static function create()
+    {
+        static $result = null;
+
+        return $result ? $result : $result = new self();
     }
 
     public function install()
@@ -57,10 +58,10 @@ class OLPC_Peru_FilterPlugin extends Plugin
     }
 
     /**
-     * Caller for the install_course_fields() function
+     * Caller for the install_course_fields() function.
+     *
      * @param int The course's integer ID
-     * @param boolean Whether to add a tool link on the course homepage
-     * @return void
+     * @param bool Whether to add a tool link on the course homepage
      */
     public function course_install($course_id, $add_tool_link = true)
     {
@@ -78,17 +79,19 @@ class OLPC_Peru_FilterPlugin extends Plugin
 
     /**
      * Get a list of options (checked and unchecked) for blacklists as coming
-     * from the Squid files
+     * from the Squid files.
      */
     public function get_blacklist_options()
     {
         $categories = $blacklists = [];
         if (!is_dir($this->blacklists_dir)) {
             $this->error = 'Could not find blacklists dir '.$this->blacklists_dir;
+
             return $blacklists;
         }
         if (!is_file($this->blacklist_enabled_file)) {
             $this->error = 'Could not find blacklists dir '.$this->blacklists_dir;
+
             return $blacklists;
         }
         $list = scandir($this->blacklists_dir);
@@ -112,13 +115,16 @@ class OLPC_Peru_FilterPlugin extends Plugin
                 $blacklists[$category] = $checked;
             }
         }
+
         return $blacklists;
     }
 
     /**
-     * Given an array of blacklist => 0/1, save the new blacklist file to disk
+     * Given an array of blacklist => 0/1, save the new blacklist file to disk.
+     *
      * @param array Array of blacklists names
-     * @return boolean False on error, True on success
+     *
+     * @return bool False on error, True on success
      */
     public function set_blacklist_options($values)
     {

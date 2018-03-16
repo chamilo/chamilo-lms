@@ -3,9 +3,10 @@
 
 /**
  * Class Kannelsms
- * This script handles incoming SMS information, process it and sends an SMS if everything is right
+ * This script handles incoming SMS information, process it and sends an SMS if everything is right.
  *
  * @package chamilo.plugin.kannelsms.lib
+ *
  * @author  Imanol Losada <imanol.losada@beeznest.com>
  *
  * Kannelsms-Chamilo connector class
@@ -20,7 +21,8 @@ class Kannelsms implements SmsPluginLibraryInterface
     public $plugin_enabled = false;
 
     /**
-     * Constructor (generates a connection to the API)
+     * Constructor (generates a connection to the API).
+     *
      * @param   string  Kannelsms API key required to use the plugin
      */
     public function __construct($apiKey = null)
@@ -39,9 +41,11 @@ class Kannelsms implements SmsPluginLibraryInterface
     }
 
     /**
-     * getMobilePhoneNumberById (retrieves a user mobile phone number by user id)
-     * @param   int $userId User id
-     * @return  int User's mobile phone number
+     * getMobilePhoneNumberById (retrieves a user mobile phone number by user id).
+     *
+     * @param int $userId User id
+     *
+     * @return int User's mobile phone number
      */
     public function getMobilePhoneNumberById($userId)
     {
@@ -60,7 +64,8 @@ class Kannelsms implements SmsPluginLibraryInterface
     }
 
     /**
-     * send (sends an SMS to the user)
+     * send (sends an SMS to the user).
+     *
      * @param   array   Data needed to send the SMS. It is mandatory to include the
      *                  'smsType' and 'userId' (or 'mobilePhoneNumber') fields at least.
      *                  More data may be neccesary depending on the message type
@@ -69,7 +74,6 @@ class Kannelsms implements SmsPluginLibraryInterface
      *              'userId' => $userId,
      *              'moreData' => $moreData
      *          );
-     * @return  void
      */
     public function send($additionalParameters)
     {
@@ -78,7 +82,7 @@ class Kannelsms implements SmsPluginLibraryInterface
             $message = [
                 "to" => array_key_exists("mobilePhoneNumber", $additionalParameters) ?
                     $additionalParameters['mobilePhoneNumber'] : $this->getMobilePhoneNumberById($additionalParameters['userId']),
-                "message" => $this->getSms($additionalParameters)
+                "message" => $this->getSms($additionalParameters),
             ];
 
             if (!empty($message['message'])) {
@@ -102,13 +106,15 @@ class Kannelsms implements SmsPluginLibraryInterface
     }
 
     /**
-     * buildSms (builds an SMS from a template and data)
+     * buildSms (builds an SMS from a template and data).
+     *
      * @param   object  KannelsmsPlugin object
      * @param   object  Template object
      * @param   string  Template file name
      * @param   string  Text key from lang file
      * @param   array   Data to fill message variables (if any)
-     * @return  object  Template object with message property updated
+     *
+     * @return object Template object with message property updated
      */
     public function buildSms($plugin, $tpl, $templateName, $messageKey, $parameters = null)
     {
@@ -116,7 +122,7 @@ class Kannelsms implements SmsPluginLibraryInterface
             'selected_value',
             'settings_current',
             [
-                'where'=> ['variable = ?' => ['kannelsms_message'.$messageKey]]
+                'where' => ['variable = ?' => ['kannelsms_message'.$messageKey]],
             ]
         );
 
@@ -136,7 +142,8 @@ class Kannelsms implements SmsPluginLibraryInterface
     }
 
     /**
-     * getSms (returns an SMS message depending of its type)
+     * getSms (returns an SMS message depending of its type).
+     *
      * @param   array   Data needed to send the SMS. It is mandatory to include the
      *                  'smsType' and 'userId' (or 'mobilePhoneNumber') fields at least.
      *                  More data may be neccesary depending on the message type
@@ -145,7 +152,8 @@ class Kannelsms implements SmsPluginLibraryInterface
      *              'userId' => $userId,
      *              'moreData' => $moreData
      *          );
-     * @return  string  A ready to be sent SMS
+     *
+     * @return string A ready to be sent SMS
      */
     public function getSms($additionalParameters)
     {
@@ -156,6 +164,7 @@ class Kannelsms implements SmsPluginLibraryInterface
         switch ($additionalParameters['smsType']) {
             case SmsPlugin::WELCOME_LOGIN_PASSWORD:
                 $userInfo = api_get_user_info($additionalParameters['userId']);
+
                 return $this->buildSms(
                     $plugin,
                     $tpl,
@@ -164,7 +173,7 @@ class Kannelsms implements SmsPluginLibraryInterface
                     [
                         api_get_setting('siteName'),
                         $userInfo['username'],
-                        $additionalParameters['password']
+                        $additionalParameters['password'],
                     ]
                 );
                 break;
@@ -177,7 +186,7 @@ class Kannelsms implements SmsPluginLibraryInterface
                     [
                         api_get_setting('siteName'),
                         $additionalParameters['courseTitle'],
-                        $additionalParameters['userUsername']
+                        $additionalParameters['userUsername'],
                     ]
                 );
                 break;
@@ -189,7 +198,7 @@ class Kannelsms implements SmsPluginLibraryInterface
                     'XAccountApprovedConnectX',
                     [
                         api_get_setting('siteName'),
-                        $tpl->params['_p']['web']
+                        $tpl->params['_p']['web'],
                     ]
                 );
                 break;
@@ -202,7 +211,7 @@ class Kannelsms implements SmsPluginLibraryInterface
                     [
                         api_get_setting('siteName'),
                         $additionalParameters['courseName'],
-                        $additionalParameters['creatorUsername']
+                        $additionalParameters['creatorUsername'],
                     ]
                 );
                 break;
@@ -215,7 +224,7 @@ class Kannelsms implements SmsPluginLibraryInterface
                     [
                         api_get_setting('siteName'),
                         $additionalParameters['userUsername'],
-                        $additionalParameters['courseCode']
+                        $additionalParameters['courseCode'],
                     ]
                 );
                 break;
@@ -227,7 +236,7 @@ class Kannelsms implements SmsPluginLibraryInterface
                     'XNewCourseSuggestedTeacherX',
                     [
                         api_get_setting('siteName'),
-                        $additionalParameters['userUsername']
+                        $additionalParameters['userUsername'],
                     ]
                 );
                 break;
@@ -239,7 +248,7 @@ class Kannelsms implements SmsPluginLibraryInterface
                     'XCourseOpeningRequestCodeXRegistered',
                     [
                         api_get_setting('siteName'),
-                        $additionalParameters['courseCode']
+                        $additionalParameters['courseCode'],
                     ]
                 );
                 break;
@@ -251,7 +260,7 @@ class Kannelsms implements SmsPluginLibraryInterface
                     'XCourseOpeningRequestCourseCodeXApproved',
                     [
                         api_get_setting('siteName'),
-                        $additionalParameters['courseCode']
+                        $additionalParameters['courseCode'],
                     ]
                 );
                 break;
@@ -263,7 +272,7 @@ class Kannelsms implements SmsPluginLibraryInterface
                     'XRequestOpenCourseCodeXReject',
                     [
                         api_get_setting('siteName'),
-                        $additionalParameters['courseCode']
+                        $additionalParameters['courseCode'],
                     ]
                 );
                 break;
@@ -275,7 +284,7 @@ class Kannelsms implements SmsPluginLibraryInterface
                     'XCourseOpeningRequestCourseCodeX',
                     [
                         api_get_setting('siteName'),
-                        $additionalParameters['courseCode']
+                        $additionalParameters['courseCode'],
                     ]
                 );
                 break;
@@ -287,7 +296,7 @@ class Kannelsms implements SmsPluginLibraryInterface
                     'XBeenSubscribedCourseX',
                     [
                         api_get_setting('siteName'),
-                        $additionalParameters['courseTitle']
+                        $additionalParameters['courseTitle'],
                     ]
                 );
                 break;
@@ -299,7 +308,7 @@ class Kannelsms implements SmsPluginLibraryInterface
                     'XAssignmentBeenCreatedCourseX',
                     [
                         api_get_setting('siteName'),
-                        $additionalParameters['courseTitle']
+                        $additionalParameters['courseTitle'],
                     ]
                 );
                 break;

@@ -3,20 +3,22 @@
 
 /**
  * This file is part of student graph block plugin for dashboard,
- * it should be required inside dashboard controller for showing it into dashboard interface from plattform
+ * it should be required inside dashboard controller for showing it into dashboard interface from plattform.
+ *
  * @package chamilo.dashboard
+ *
  * @author Christian Fasanando
  * @author Julio Montoya <gugli100@gmail.com>
  */
-
+use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
-use CpChart\Cache as pCache;
 
 /**
  * This class is used like controller for student graph block plugin,
  * the class name must be registered inside path.info file
- * (e.g: controller = "BlockStudentGraph"), so dashboard controller will be instantiate it
+ * (e.g: controller = "BlockStudentGraph"), so dashboard controller will be instantiate it.
+ *
  * @package chamilo.dashboard
  */
 class BlockStudentGraph extends Block
@@ -27,7 +29,7 @@ class BlockStudentGraph extends Block
     private $permission = [DRH];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct($user_id)
     {
@@ -43,9 +45,11 @@ class BlockStudentGraph extends Block
     }
 
     /**
-     * This method check if a user is allowed to see the block inside dashboard interface
+     * This method check if a user is allowed to see the block inside dashboard interface.
+     *
      * @param int        User id
-     * @return bool    Is block visible for user
+     *
+     * @return bool Is block visible for user
      */
     public function is_block_visible_for_user($user_id)
     {
@@ -55,14 +59,16 @@ class BlockStudentGraph extends Block
         if (UserManager::is_admin($user_id) || in_array($user_status, $this->permission)) {
             $is_block_visible_for_user = true;
         }
+
         return $is_block_visible_for_user;
     }
 
     /**
      * This method return content html containing information about students
      * and its position for showing it inside dashboard interface
-     * it's important to use the name 'get_block' for being used from dashboard controller
-     * @return array   column and content html
+     * it's important to use the name 'get_block' for being used from dashboard controller.
+     *
+     * @return array column and content html
      */
     public function get_block()
     {
@@ -85,13 +91,15 @@ class BlockStudentGraph extends Block
                 </div>';
         $data['column'] = $column;
         $data['content_html'] = $html;
+
         return $data;
     }
 
     /**
      * This method return a graph containing information about students evaluation,
-     * it's used inside get_block method for showing it inside dashboard interface
-     * @return string  img html
+     * it's used inside get_block method for showing it inside dashboard interface.
+     *
+     * @return string img html
      */
     public function get_students_attendance_graph()
     {
@@ -186,7 +194,7 @@ class BlockStudentGraph extends Block
                 $myPicture->setFontProperties(
                     [
                         'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
-                        'FontSize' => 10
+                        'FontSize' => 10,
                     ]
                 );
 
@@ -244,7 +252,8 @@ class BlockStudentGraph extends Block
     }
 
     /**
-     * Get number of students
+     * Get number of students.
+     *
      * @return int
      */
     public function get_number_of_students()

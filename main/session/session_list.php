@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * List sessions in an efficient and usable way
+ * List sessions in an efficient and usable way.
+ *
  * @package chamilo.admin
  */
 $cidReset = true;
@@ -135,7 +136,7 @@ if (!isset($_GET['keyword'])) {
                 array( "field" => "display_end_date", "op" => "gt", "data" => "")
             ),*/
             //'groups' => $groups
-        ]
+        ],
     ];
 }
 
@@ -302,7 +303,7 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
                         orderList.push({'order':index, 'id': e.id});
                     });
                     orderList = JSON.stringify(orderList);
-                    $.get("<?php echo $orderUrl ?>", "order="+orderList, function (result) {
+                    $.get("<?php echo $orderUrl; ?>", "order="+orderList, function (result) {
                         console.log(result);
                     });
                 }
@@ -384,7 +385,7 @@ if (api_is_platform_admin()) {
         FormValidator::LAYOUT_INLINE
     );
     $form->addElement('text', 'keyword', null, [
-        'aria-label' => get_lang('Search')
+        'aria-label' => get_lang('Search'),
     ]);
     $form->addButtonSearch(get_lang('Search'));
     $form->display();

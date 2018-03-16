@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *  HOME PAGE FOR EACH COURSE (BASIC TOOLS FIXED)
+ *  HOME PAGE FOR EACH COURSE (BASIC TOOLS FIXED).
  *
  *  This page, included in every course's index.php is the home
  *  page.To make administration simple, the professor edits his
@@ -12,7 +12,6 @@
  *
  * @package chamilo.course_home
  */
-
 $hide = isset($_GET['hide']) && $_GET['hide'] === 'yes' ? 'yes' : null;
 $restore = isset($_GET['restore']) && $_GET['restore'] === 'yes' ? 'yes' : null;
 $id = isset($_GET['id']) ? intval($_GET['id']) : null;
@@ -189,7 +188,6 @@ $content .= "<tr>\n<td colspan=\"6\">";
 $content .= CourseHome::show_tool_3column('Basic');
 $content .= CourseHome::show_tool_3column('External');
 $content .= "</td>\n</tr>\n";
-
 
 /*	PROF ONLY VIEW */
 

@@ -62,11 +62,11 @@ if (!empty($group_id)) {
     );
     $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
-        "name" => get_lang('Groups')
+        "name" => get_lang('Groups'),
     ];
     $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace').' '.$group_properties['name']
+        "name" => get_lang('GroupSpace').' '.$group_properties['name'],
     ];
 }
 
@@ -190,7 +190,7 @@ $agendaColors = array_merge(
         'session' => '#00496D', // kind of green
         'other_session' => '#999', // kind of green
         'personal' => 'steel blue', //steel blue
-        'student_publication' => '#FF8C00' //DarkOrange
+        'student_publication' => '#FF8C00', //DarkOrange
     ],
     api_get_configuration_value('agenda_colors') ?: []
 );
@@ -270,7 +270,7 @@ $form->addHtmlEditor(
     false,
     [
         'ToolbarSet' => 'TestProposedAnswer',
-        'Height' => '120'
+        'Height' => '120',
     ]
 );
 

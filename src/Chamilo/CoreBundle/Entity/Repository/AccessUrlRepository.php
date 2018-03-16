@@ -6,7 +6,8 @@ namespace Chamilo\CoreBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class AccessUrlRepository
+ * Class AccessUrlRepository.
+ *
  * @package Chamilo\CoreBundle\Entity\Repository
  */
 class AccessUrlRepository extends EntityRepository
@@ -14,6 +15,7 @@ class AccessUrlRepository extends EntityRepository
     /**
      * Select the first access_url ID in the list as a default setting for
      * the creation of new users.
+     *
      * @return mixed
      */
     public function getFirstId()
@@ -21,6 +23,7 @@ class AccessUrlRepository extends EntityRepository
         $qb = $this->createQueryBuilder('a');
         $qb->select('MIN (a.id)');
         $q = $qb->getQuery();
+
         return $q->execute();
     }
 }

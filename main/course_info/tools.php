@@ -64,7 +64,7 @@ switch ($action) {
             get_lang('LinkTarget'),
             [
                 '_self' => get_lang('LinkOpenSelf'),
-                '_blank' => get_lang('LinkOpenBlank')
+                '_blank' => get_lang('LinkOpenBlank'),
             ]
         );
         $form->addSelect(

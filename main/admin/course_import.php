@@ -3,7 +3,8 @@
 
 /**
  * This tool allows platform admins to create courses by uploading a CSV file
- * Copyright (c) 2005 Bart Mollet <bart.mollet@hogent.be>
+ * Copyright (c) 2005 Bart Mollet <bart.mollet@hogent.be>.
+ *
  * @package chamilo.admin
  */
 
@@ -11,6 +12,7 @@
  * Validates imported data.
  *
  * @param array $courses
+ *
  * @return array $errors
  */
 function validate_courses_data($courses)
@@ -79,9 +81,10 @@ function validate_courses_data($courses)
 }
 
 /**
- * Get the teacher list
+ * Get the teacher list.
  *
  * @param array $teachers
+ *
  * @return array
  */
 function getTeacherListInArray($teachers)
@@ -95,6 +98,7 @@ function getTeacherListInArray($teachers)
 
 /**
  * Saves imported data.
+ *
  * @param array $courses List of courses
  */
 function save_courses_data($courses)
@@ -147,13 +151,16 @@ function save_courses_data($courses)
 }
 
 /**
- * Read the CSV-file
+ * Read the CSV-file.
+ *
  * @param string $file Path to the CSV-file
+ *
  * @return array All course-information read from the file
  */
 function parse_csv_courses_data($file)
 {
     $courses = Import::csv_reader($file);
+
     return $courses;
 }
 

@@ -1,10 +1,10 @@
 <?php
 /**
 * PHPMailer language file: refer to English translation for definitive list
-* Traditional Chinese Version
+* Traditional Chinese Version.
+*
 * @author liqwei <liqwei@liqwei.com>
 */
-
 $PHPMAILER_LANG['authenticate'] = 'SMTP 錯誤：登錄失敗。';
 $PHPMAILER_LANG['connect_host'] = 'SMTP 錯誤：無法連接到 SMTP 主機。';
 $PHPMAILER_LANG['data_not_accepted'] = 'SMTP 錯誤：數據不被接受。';

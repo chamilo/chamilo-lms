@@ -6,7 +6,7 @@
 /**
  * Code
  * This tool allows platform admins to update class-user relations by uploading
- * a CSV file
+ * a CSV file.
  */
 
 /**
@@ -62,6 +62,7 @@ function validate_data($user_classes)
             }
         }
     }
+
     return $errors;
 }
 
@@ -112,17 +113,21 @@ function save_data($users_classes, $deleteUsersNotInList = false)
             );
         }
     }
+
     return $message;
 }
 
 /**
  * Reads a CSV-file.
+ *
  * @param string $file Path to the CSV-file
+ *
  * @return array All course-information read from the file
  */
 function parse_csv_data($file)
 {
     $courses = Import::csvToArray($file);
+
     return $courses;
 }
 $cidReset = true;

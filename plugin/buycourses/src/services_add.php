@@ -2,10 +2,10 @@
 /* For license terms, see /license.txt */
 
 /**
- * Create new Services for the Buy Courses plugin
+ * Create new Services for the Buy Courses plugin.
+ *
  * @package chamilo.plugin.buycourses
  */
-
 $cidReset = true;
 
 require_once '../../../main/inc/global.inc.php';
@@ -29,14 +29,14 @@ $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 //view
 $interbreadcrumb[] = [
     'url' => 'configuration.php',
-    'name' => $plugin->get_lang('Configuration')
+    'name' => $plugin->get_lang('Configuration'),
 ];
 
 $formDefaultValues = [
     'price' => 0,
     'duration_days' => 0,
     'applies_to' => 0,
-    'visibility' => true
+    'visibility' => true,
 ];
 
 $form = new FormValidator('Services');

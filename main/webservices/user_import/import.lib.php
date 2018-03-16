@@ -53,6 +53,7 @@ function validate_data($users)
             }
         }
     }
+
     return $errors;
 }
 
@@ -80,11 +81,12 @@ function complete_missing_data($user)
     if (!isset($user['AuthSource']) || strlen($user['AuthSource']) == 0) {
         $user['AuthSource'] = PLATFORM_AUTH_SOURCE;
     }
+
     return $user;
 }
 
 /**
- * Save the imported data
+ * Save the imported data.
  */
 function save_data($users)
 {
@@ -142,7 +144,9 @@ function save_data($users)
 
 /**
  * Reads the CSV-file.
+ *
  * @param string $file Path to the CSV-file
+ *
  * @return array All user information read from the file
  */
 function parse_csv_data($file)

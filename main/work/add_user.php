@@ -83,7 +83,6 @@ if (!empty($items)) {
     echo '</ul>';
 }
 
-
 if (empty($sessionId)) {
     $status = STUDENT;
 } else {

@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CSurveyQuestionOption
+ * CSurveyQuestionOption.
  *
  * @ORM\Table(
  *  name="c_survey_question_option",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CSurveyQuestionOption
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,28 +28,28 @@ class CSurveyQuestionOption
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="question_option_id", type="integer")
      */
     private $questionOptionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
     private $questionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="survey_id", type="integer", nullable=false)
      */
@@ -63,23 +63,24 @@ class CSurveyQuestionOption
     private $optionText;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="sort", type="integer", nullable=false)
      */
     private $sort;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="value", type="integer", nullable=false)
      */
     private $value;
 
     /**
-     * Set questionId
+     * Set questionId.
      *
-     * @param integer $questionId
+     * @param int $questionId
+     *
      * @return CSurveyQuestionOption
      */
     public function setQuestionId($questionId)
@@ -90,9 +91,9 @@ class CSurveyQuestionOption
     }
 
     /**
-     * Get questionId
+     * Get questionId.
      *
-     * @return integer
+     * @return int
      */
     public function getQuestionId()
     {
@@ -100,9 +101,10 @@ class CSurveyQuestionOption
     }
 
     /**
-     * Set surveyId
+     * Set surveyId.
      *
-     * @param integer $surveyId
+     * @param int $surveyId
+     *
      * @return CSurveyQuestionOption
      */
     public function setSurveyId($surveyId)
@@ -113,9 +115,9 @@ class CSurveyQuestionOption
     }
 
     /**
-     * Get surveyId
+     * Get surveyId.
      *
-     * @return integer
+     * @return int
      */
     public function getSurveyId()
     {
@@ -123,9 +125,10 @@ class CSurveyQuestionOption
     }
 
     /**
-     * Set optionText
+     * Set optionText.
      *
      * @param string $optionText
+     *
      * @return CSurveyQuestionOption
      */
     public function setOptionText($optionText)
@@ -136,7 +139,7 @@ class CSurveyQuestionOption
     }
 
     /**
-     * Get optionText
+     * Get optionText.
      *
      * @return string
      */
@@ -146,9 +149,10 @@ class CSurveyQuestionOption
     }
 
     /**
-     * Set sort
+     * Set sort.
      *
-     * @param integer $sort
+     * @param int $sort
+     *
      * @return CSurveyQuestionOption
      */
     public function setSort($sort)
@@ -159,9 +163,9 @@ class CSurveyQuestionOption
     }
 
     /**
-     * Get sort
+     * Get sort.
      *
-     * @return integer
+     * @return int
      */
     public function getSort()
     {
@@ -169,9 +173,10 @@ class CSurveyQuestionOption
     }
 
     /**
-     * Set value
+     * Set value.
      *
-     * @param integer $value
+     * @param int $value
+     *
      * @return CSurveyQuestionOption
      */
     public function setValue($value)
@@ -182,9 +187,9 @@ class CSurveyQuestionOption
     }
 
     /**
-     * Get value
+     * Get value.
      *
-     * @return integer
+     * @return int
      */
     public function getValue()
     {
@@ -192,9 +197,10 @@ class CSurveyQuestionOption
     }
 
     /**
-     * Set questionOptionId
+     * Set questionOptionId.
      *
-     * @param integer $questionOptionId
+     * @param int $questionOptionId
+     *
      * @return CSurveyQuestionOption
      */
     public function setQuestionOptionId($questionOptionId)
@@ -205,9 +211,9 @@ class CSurveyQuestionOption
     }
 
     /**
-     * Get questionOptionId
+     * Get questionOptionId.
      *
-     * @return integer
+     * @return int
      */
     public function getQuestionOptionId()
     {
@@ -215,9 +221,10 @@ class CSurveyQuestionOption
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CSurveyQuestionOption
      */
     public function setCId($cId)
@@ -228,9 +235,9 @@ class CSurveyQuestionOption
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

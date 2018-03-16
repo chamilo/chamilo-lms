@@ -9,13 +9,13 @@
  * the number of terms you want.
  */
 /**
- * Requires
+ * Requires.
  */
 die();
 require_once '../../inc/global.inc.php';
 require_once 'langstats.class.php';
 /**
- * Init
+ * Init.
  */
 $terms_limit = 10000 + 50;
 $x_most_popular = 2000;
@@ -30,7 +30,7 @@ if ($_GET['output'] == 1) {
     $variables_origin = $ls->get_variables_origin();
 }
 /**
- * Display
+ * Display.
  */
 if (count($list) == 0) {
     echo 'No terms loaded so far';

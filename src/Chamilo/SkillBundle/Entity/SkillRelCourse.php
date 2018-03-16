@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * SkillRelCourse
+ * SkillRelCourse.
  *
  * @ORM\Table(name="skill_rel_course")
  * ORM\Entity // uncomment if api_get_configuration_value('allow_skill_rel_items')
@@ -18,7 +18,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class SkillRelCourse
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -30,7 +30,7 @@ class SkillRelCourse
      * @var Skill
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Skill", inversedBy="courses")
      * @ORM\JoinColumn(name="skill_id", referencedColumnName="id")
-     **/
+     */
     protected $skill;
 
     /**
@@ -48,7 +48,7 @@ class SkillRelCourse
     protected $session;
 
     /**
-     * @var \DateTime $created
+     * @var \DateTime
      *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
@@ -56,7 +56,7 @@ class SkillRelCourse
     protected $createdAt;
 
     /**
-     * @var \DateTime $updated
+     * @var \DateTime
      *
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime")
@@ -82,11 +82,13 @@ class SkillRelCourse
 
     /**
      * @param int $id
+     *
      * @return SkillRelCourse
      */
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -100,11 +102,13 @@ class SkillRelCourse
 
     /**
      * @param Skill $skill
+     *
      * @return SkillRelCourse
      */
     public function setSkill($skill)
     {
         $this->skill = $skill;
+
         return $this;
     }
 
@@ -118,11 +122,13 @@ class SkillRelCourse
 
     /**
      * @param Course $course
+     *
      * @return SkillRelCourse
      */
     public function setCourse($course)
     {
         $this->course = $course;
+
         return $this;
     }
 
@@ -136,11 +142,13 @@ class SkillRelCourse
 
     /**
      * @param Session $session
+     *
      * @return SkillRelCourse
      */
     public function setSession($session)
     {
         $this->session = $session;
+
         return $this;
     }
 
@@ -154,11 +162,13 @@ class SkillRelCourse
 
     /**
      * @param \DateTime $createdAt
+     *
      * @return SkillRelCourse
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 
@@ -172,11 +182,13 @@ class SkillRelCourse
 
     /**
      * @param \DateTime $updatedAt
+     *
      * @return SkillRelCourse
      */
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
 }

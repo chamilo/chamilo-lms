@@ -7,7 +7,8 @@ use Chamilo\ThemeBundle\Event\TaskListEvent;
 use Chamilo\ThemeBundle\Model\TaskModel;
 
 /**
- * Class NavbarTaskListDemoListener
+ * Class NavbarTaskListDemoListener.
+ *
  * @package Chamilo\ThemeBundle\EventListener
  */
 class NavbarTaskListDemoListener

@@ -1,9 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
-
 require_once __DIR__.'/../global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
 
@@ -40,7 +39,7 @@ switch ($action) {
                 $values = [
                     'contains_file' => 1,
                     'title' => $file['name'],
-                    'description' => ''
+                    'description' => '',
                 ];
 
                 $result = processWorkForm(

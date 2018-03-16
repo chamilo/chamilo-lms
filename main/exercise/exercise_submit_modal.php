@@ -5,9 +5,9 @@ use ChamiloSession as Session;
 
 /**
  * @package chamilo.exercise
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script(false);
 
@@ -263,7 +263,7 @@ if (!empty($choice_value)) {
                     //shortcut to avoid complicated calculations
                     $final_overlap = 0;
                     $final_missing = 100;
-                    $final_excess  = 100;
+                    $final_excess = 100;
                 } else {
                     // the final overlap is the percentage of the initial polygon that is overlapped by the user's polygon
                     $final_overlap = round(((float) $overlap / (float) $poly_answer_area) * 100);

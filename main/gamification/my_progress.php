@@ -2,8 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * See the progress for a user when the gamification mode is active
+ * See the progress for a user when the gamification mode is active.
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.gamification
  */
 $cidReset = true;
@@ -43,7 +45,7 @@ if (empty($sessionId)) {
 
     if (!empty($lastSessionId) && $UserIsSubscribedToSession) {
         $urlWithSession = api_get_self().'?'.http_build_query([
-            'session_id' => $lastCourseAccess->getSessionId()
+            'session_id' => $lastCourseAccess->getSessionId(),
         ]);
 
         header("Location: $urlWithSession");
@@ -104,7 +106,7 @@ if ($currentSession) {
 
         $courseData = [
             'title' => $course->getTitle(),
-            'stats' => []
+            'stats' => [],
         ];
 
         $learningPathList = new LearnpathList(
@@ -121,8 +123,8 @@ if ($currentSession) {
                     'cidReq' => $course->getCode(),
                     'id_session' => $currentSession->getId(),
                     'gidReq' => 0,
-                    'lp_id' => $learningPathId
-                ]).api_get_cidreq()
+                    'lp_id' => $learningPathId,
+                ]).api_get_cidreq(),
             ];
         }
 

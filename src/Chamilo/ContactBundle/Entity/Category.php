@@ -6,7 +6,7 @@ namespace Chamilo\ContactBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class Category
+ * Class Category.
  *
  * @ORM\Entity
  * @ORM\Table(
@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Category
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -56,11 +56,13 @@ class Category
 
     /**
      * @param string $name
+     *
      * @return Category
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -74,11 +76,13 @@ class Category
 
     /**
      * @param string $email
+     *
      * @return Category
      */
     public function setEmail($email)
     {
         $this->email = $email;
+
         return $this;
     }
 }

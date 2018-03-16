@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Teacher report
+ * Teacher report.
+ *
  * @package chamilo.reporting
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -174,6 +174,7 @@ function get_users($from, $limit, $column, $direction)
         $row[] = $detailsLink;
         $all_datas[] = $row;
     }
+
     return $all_datas;
 }
 
@@ -215,7 +216,7 @@ $actionsRight = '';
 $actionsRight .= Display::url(
     Display::return_icon('printer.png', get_lang('Print'), [], ICON_SIZE_MEDIUM),
     'javascript: void(0);',
-    ['onclick'=>'javascript: window.print();']
+    ['onclick' => 'javascript: window.print();']
 );
 $actionsRight .= Display::url(
     Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
@@ -235,7 +236,7 @@ $table = new SortableTable(
 $params = [
     'keyword' => $keyword,
     'active' => $active,
-    'sleeping_days' => $sleepingDays
+    'sleeping_days' => $sleepingDays,
 ];
 $table->set_additional_parameters($params);
 
@@ -257,14 +258,14 @@ if ($export_csv) {
             get_lang('FirstName'),
             get_lang('LastName'),
             get_lang('FirstLogin'),
-            get_lang('LastConnexion')
+            get_lang('LastConnexion'),
         ];
     } else {
         $csv_header[] = [
             get_lang('LastName'),
             get_lang('FirstName'),
             get_lang('FirstLogin'),
-            get_lang('LastConnexion')
+            get_lang('LastConnexion'),
         ];
     }
 }

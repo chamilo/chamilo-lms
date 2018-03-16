@@ -65,11 +65,11 @@ $validationStatus = getWorkDateValidationStatus($homework);
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications')
+    'name' => get_lang('StudentPublications'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$work_id,
-    'name' => $workInfo['title']
+    'name' => $workInfo['title'],
 ];
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('UploadADocument')];
 

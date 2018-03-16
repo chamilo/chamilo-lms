@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*   @package chamilo.admin
-*/
+ *   @package chamilo.admin
+ */
 
 // resetting the course id
 $cidReset = true;
@@ -95,8 +95,8 @@ if (is_array($extra_field_list)) {
         //if is enabled to filter and is a "<select>" field type
         if ($extra_field[8] == 1 && $extra_field[2] == 4) {
             $new_field_list[] = [
-                'name'=> $extra_field[3],
-                'variable' => $extra_field[1], 'data'=> $extra_field[9]
+                'name' => $extra_field[3],
+                'variable' => $extra_field[1], 'data' => $extra_field[9],
             ];
         }
     }
@@ -146,7 +146,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'export') {
     $users = $usergroup->getUserListByUserGroup($id);
     if (!empty($users)) {
         $data = [
-            ['UserName', 'ClassName']
+            ['UserName', 'ClassName'],
         ];
         foreach ($users as $user) {
             $data[] = [$user['username'], $groupInfo['name']];
@@ -195,12 +195,12 @@ $filters = [
     ['type' => 'text', 'name' => 'firstname', 'label' => get_lang('FirstName')],
     ['type' => 'text', 'name' => 'lastname', 'label' => get_lang('LastName')],
     ['type' => 'text', 'name' => 'official_code', 'label' => get_lang('OfficialCode')],
-    ['type' => 'text', 'name' => 'email', 'label' => get_lang('Email')]
+    ['type' => 'text', 'name' => 'email', 'label' => get_lang('Email')],
 ];
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?id='.$id);
 $searchForm->addHeader(get_lang('AdvancedSearch'));
-$renderer = & $searchForm->defaultRenderer();
+$renderer = &$searchForm->defaultRenderer();
 
 $searchForm->addElement('hidden', 'id', $id);
 foreach ($filters as $param) {
@@ -389,23 +389,23 @@ echo Display::input('hidden', 'add_type', null);
         <?php if ($data['group_type'] == UserGroup::SOCIAL_CLASS) {
     ?>
         <select name="relation" id="relation">
-            <option value=""><?php echo get_lang('SelectARelationType')?></option>
-            <option value="<?php echo GROUP_USER_PERMISSION_ADMIN ?>" <?php echo((isset($relation) && $relation == GROUP_USER_PERMISSION_ADMIN) ? 'selected=selected' : '') ?> >
-                <?php echo get_lang('Admin') ?></option>
-            <option value="<?php echo GROUP_USER_PERMISSION_READER ?>" <?php echo((isset($relation) && $relation == GROUP_USER_PERMISSION_READER) ? 'selected=selected' : '') ?> >
-                <?php echo get_lang('Reader') ?></option>
-            <option value="<?php echo GROUP_USER_PERMISSION_PENDING_INVITATION ?>" <?php echo((isset($relation) && $relation == GROUP_USER_PERMISSION_PENDING_INVITATION) ? 'selected=selected' : '') ?> >
-                <?php echo get_lang('PendingInvitation') ?></option>
-            <option value="<?php echo GROUP_USER_PERMISSION_MODERATOR ?>" <?php echo((isset($relation) && $relation == GROUP_USER_PERMISSION_MODERATOR) ? 'selected=selected' : '') ?> >
-                <?php echo get_lang('Moderator') ?></option>
-            <option value="<?php echo GROUP_USER_PERMISSION_HRM ?>" <?php echo((isset($relation) && $relation == GROUP_USER_PERMISSION_HRM) ? 'selected=selected' : '') ?> >
-                <?php echo get_lang('Drh') ?></option>
+            <option value=""><?php echo get_lang('SelectARelationType'); ?></option>
+            <option value="<?php echo GROUP_USER_PERMISSION_ADMIN; ?>" <?php echo (isset($relation) && $relation == GROUP_USER_PERMISSION_ADMIN) ? 'selected=selected' : ''; ?> >
+                <?php echo get_lang('Admin'); ?></option>
+            <option value="<?php echo GROUP_USER_PERMISSION_READER; ?>" <?php echo (isset($relation) && $relation == GROUP_USER_PERMISSION_READER) ? 'selected=selected' : ''; ?> >
+                <?php echo get_lang('Reader'); ?></option>
+            <option value="<?php echo GROUP_USER_PERMISSION_PENDING_INVITATION; ?>" <?php echo (isset($relation) && $relation == GROUP_USER_PERMISSION_PENDING_INVITATION) ? 'selected=selected' : ''; ?> >
+                <?php echo get_lang('PendingInvitation'); ?></option>
+            <option value="<?php echo GROUP_USER_PERMISSION_MODERATOR; ?>" <?php echo (isset($relation) && $relation == GROUP_USER_PERMISSION_MODERATOR) ? 'selected=selected' : ''; ?> >
+                <?php echo get_lang('Moderator'); ?></option>
+            <option value="<?php echo GROUP_USER_PERMISSION_HRM; ?>" <?php echo (isset($relation) && $relation == GROUP_USER_PERMISSION_HRM) ? 'selected=selected' : ''; ?> >
+                <?php echo get_lang('Drh'); ?></option>
         </select>
         <?php
 } ?>
 
         <div class="multiple_select_header">
-        <b><?php echo get_lang('UsersInPlatform') ?> :</b>
+        <b><?php echo get_lang('UsersInPlatform'); ?> :</b>
         <?php echo get_lang('FirstLetterUser'); ?> :
         <select id="first_letter_user" name="firstLetterUser" onchange="change_select();">
             <option value = "%">--</option>
@@ -449,7 +449,7 @@ echo Display::input('hidden', 'add_type', null);
     </div>
     <div class="col-md-5">
         <div class="multiple_select_header">
-            <b><?php echo get_lang('UsersInGroup') ?> :</b>
+            <b><?php echo get_lang('UsersInGroup'); ?> :</b>
         </div>
     <?php
         echo Display::select(
@@ -460,7 +460,7 @@ echo Display::input('hidden', 'add_type', null);
                 'class' => 'form-control',
                 'multiple' => 'multiple',
                 'id' => 'elements_in',
-                'size' => '15px'
+                'size' => '15px',
             ],
             false
         );

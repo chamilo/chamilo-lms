@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Number element
+ * Number element.
  *
  * Class Number
  */

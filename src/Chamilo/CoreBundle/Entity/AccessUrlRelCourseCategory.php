@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * AccessUrlRelCourseCategory
+ * AccessUrlRelCourseCategory.
  *
  * @ORM\Table(name="access_url_rel_course_category")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class AccessUrlRelCourseCategory
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
@@ -23,23 +23,24 @@ class AccessUrlRelCourseCategory
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="access_url_id", type="integer")
      */
     private $accessUrlId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="course_category_id", type="integer")
      */
     private $courseCategoryId;
 
     /**
-     * Set accessUrlId
+     * Set accessUrlId.
      *
-     * @param integer $accessUrlId
+     * @param int $accessUrlId
+     *
      * @return AccessUrlRelSession
      */
     public function setAccessUrlId($accessUrlId)
@@ -50,9 +51,9 @@ class AccessUrlRelCourseCategory
     }
 
     /**
-     * Get accessUrlId
+     * Get accessUrlId.
      *
-     * @return integer
+     * @return int
      */
     public function getAccessUrlId()
     {
@@ -69,6 +70,7 @@ class AccessUrlRelCourseCategory
 
     /**
      * @param int $courseCategoryId
+     *
      * @return AccessUrlRelCourseCategory
      */
     public function setCourseCategoryId($courseCategoryId)

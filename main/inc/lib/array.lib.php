@@ -8,11 +8,11 @@
  */
 
 /**
- * Removes duplicate values from a dimensional array
+ * Removes duplicate values from a dimensional array.
  *
  * @param array $array dimensional array
- * @return array an array with unique values
  *
+ * @return array an array with unique values
  */
 function array_unique_dimensional($array)
 {
@@ -29,16 +29,18 @@ function array_unique_dimensional($array)
     foreach ($array as &$myvalue) {
         $myvalue = unserialize($myvalue);
     }
+
     return $array;
 }
 
 /**
- *
- * Sort multidimensional arrays
+ * Sort multidimensional arrays.
  *
  * @param    array    unsorted multidimensional array
  * @param    string    key to be sorted
- * @return    array    result array
+ *
+ * @return array result array
+ *
  * @author    found in http://php.net/manual/en/function.sort.php
  */
 function msort($array, $id = 'id', $order = 'desc')
@@ -68,11 +70,13 @@ function msort($array, $id = 'id', $order = 'desc')
             array_slice($array, $lowest_id + 1)
         );
     }
+
     return $temp_array;
 }
 
 /**
  * @param $array
+ *
  * @return mixed
  */
 function utf8_sort($array)
@@ -94,12 +98,14 @@ function utf8_sort($array)
         uasort($array, 'strcoll');
     }
     setlocale(LC_COLLATE, $old_locale);
+
     return $array;
 }
 
 /**
- * @param array $array
+ * @param array  $array
  * @param string $separator
+ *
  * @return string
  */
 function array_to_string($array, $separator = ',')
@@ -113,6 +119,7 @@ function array_to_string($array, $separator = ',')
 
 /**
  * @param array $array
+ *
  * @return array
  */
 function array_flatten(array $array)
@@ -129,8 +136,10 @@ function array_flatten(array $array)
 }
 
 /**
- * Shuffles an array keeping the associations
+ * Shuffles an array keeping the associations.
+ *
  * @param $array
+ *
  * @return bool
  */
 function shuffle_assoc(&$array)
@@ -142,5 +151,6 @@ function shuffle_assoc(&$array)
         $new[$key] = $array[$key];
     }
     $array = $new;
+
     return true;
 }

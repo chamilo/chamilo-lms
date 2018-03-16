@@ -1,22 +1,23 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
-use CpChart\Cache as pCache;
 
 /**
  * Class BlockEvaluationGraph
  * This class is used like controller for this evaluations graph block plugin,
  * the class name must be registered inside path.info file
  * (e.g: controller = "BlockEvaluationGraph"),
- * so dashboard controller will be instantiate it
+ * so dashboard controller will be instantiate it.
  *
  * This file is part of evaluation graph block plugin for dashboard,
  * it should be required inside dashboard controller for showing it
  * into dashboard interface from platform
  *
  * @package chamilo.dashboard
+ *
  * @author Christian Fasanando
  */
 class BlockEvaluationGraph extends Block
@@ -28,7 +29,7 @@ class BlockEvaluationGraph extends Block
     private $permission = [DRH, SESSIONADMIN];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct($user_id)
     {
@@ -45,9 +46,11 @@ class BlockEvaluationGraph extends Block
     }
 
     /**
-     * This method check if a user is allowed to see the block inside dashboard interface
+     * This method check if a user is allowed to see the block inside dashboard interface.
+     *
      * @param int        User id
-     * @return bool    Is block visible for user
+     *
+     * @return bool Is block visible for user
      */
     public function is_block_visible_for_user($user_id)
     {
@@ -57,14 +60,16 @@ class BlockEvaluationGraph extends Block
         if (UserManager::is_admin($user_id) || in_array($user_status, $this->permission)) {
             $is_block_visible_for_user = true;
         }
+
         return $is_block_visible_for_user;
     }
 
     /**
      * This method return content html containing
      * information about sessions and its position for showing it inside dashboard interface
-     * it's important to use the name 'get_block' for beeing used from dashboard controller
-     * @return array   column and content html
+     * it's important to use the name 'get_block' for beeing used from dashboard controller.
+     *
+     * @return array column and content html
      */
     public function get_block()
     {
@@ -116,8 +121,9 @@ class BlockEvaluationGraph extends Block
     /**
      * This method return a graph containing informations about evaluations
      * inside base courses, it's used inside get_block method for showing
-     * it inside dashboard interface
-     * @return string  img html
+     * it inside dashboard interface.
+     *
+     * @return string img html
      */
     public function get_evaluations_base_courses_graph()
     {
@@ -196,7 +202,7 @@ class BlockEvaluationGraph extends Block
                                 [
                                     'R' => 0,
                                     'G' => 0,
-                                    'B' => 0
+                                    'B' => 0,
                                 ]
                             );
 
@@ -204,7 +210,7 @@ class BlockEvaluationGraph extends Block
                             $myPicture->setFontProperties(
                                 [
                                     'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
-                                    'FontSize' => 10
+                                    'FontSize' => 10,
                                 ]
                             );
 
@@ -230,7 +236,7 @@ class BlockEvaluationGraph extends Block
                                     '0' => [
                                         'Min' => 0,
                                         'Max' => 100,
-                                    ]
+                                    ],
                                 ],
                                 'LabelRotation' => $angle,
                             ];
@@ -245,7 +251,7 @@ class BlockEvaluationGraph extends Block
                                     'R' => 0,
                                     'G' => 0,
                                     'B' => 0,
-                                    'Alpha' => 10
+                                    'Alpha' => 10,
                                 ]
                             );
 
@@ -258,7 +264,7 @@ class BlockEvaluationGraph extends Block
                                     'R' => 0,
                                     'G' => 0,
                                     'B' => 0,
-                                    'Alpha' => 10
+                                    'Alpha' => 10,
                                 ]
                             );
                             $settings = [
@@ -270,7 +276,7 @@ class BlockEvaluationGraph extends Block
                                 'DisplayOrientation' => ORIENTATION_HORIZONTAL,
                                 'Gradient' => false,
                                 'Surrounding' => 30,
-                                'InnerSurrounding' => 25
+                                'InnerSurrounding' => 25,
                             ];
                             $myPicture->drawStackedBarChart($settings);
 
@@ -294,14 +300,16 @@ class BlockEvaluationGraph extends Block
                 }
             } // end for
         }
+
         return $graphs;
     }
 
     /**
      * This method return a graph containing information about evaluations
      * inside courses in sessions, it's used inside get_block method for
-     * showing it inside dashboard interface
-     * @return string  img html
+     * showing it inside dashboard interface.
+     *
+     * @return string img html
      */
     public function get_evaluations_courses_in_sessions_graph()
     {
@@ -379,7 +387,7 @@ class BlockEvaluationGraph extends Block
                                     [
                                         'R' => 0,
                                         'G' => 0,
-                                        'B' => 0
+                                        'B' => 0,
                                     ]
                                 );
 
@@ -387,7 +395,7 @@ class BlockEvaluationGraph extends Block
                                 $myPicture->setFontProperties(
                                     [
                                         'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
-                                        'FontSize' => 10
+                                        'FontSize' => 10,
                                     ]
                                 );
 
@@ -408,7 +416,7 @@ class BlockEvaluationGraph extends Block
                                         '0' => [
                                             'Min' => 0,
                                             'Max' => 100,
-                                        ]
+                                        ],
                                     ],
                                     'LabelRotation' => $angle,
                                 ];
@@ -423,7 +431,7 @@ class BlockEvaluationGraph extends Block
                                         'R' => 0,
                                         'G' => 0,
                                         'B' => 0,
-                                        'Alpha' => 10
+                                        'Alpha' => 10,
                                     ]
                                 );
 
@@ -436,7 +444,7 @@ class BlockEvaluationGraph extends Block
                                         'R' => 0,
                                         'G' => 0,
                                         'B' => 0,
-                                        'Alpha' => 10
+                                        'Alpha' => 10,
                                     ]
                                 );
                                 $settings = [
@@ -448,7 +456,7 @@ class BlockEvaluationGraph extends Block
                                     'DisplayOrientation' => ORIENTATION_HORIZONTAL,
                                     'Gradient' => false,
                                     'Surrounding' => 30,
-                                    'InnerSurrounding' => 25
+                                    'InnerSurrounding' => 25,
                                 ];
                                 $myPicture->drawStackedBarChart($settings);
 
@@ -475,6 +483,7 @@ class BlockEvaluationGraph extends Block
                 }
             }
         }
+
         return $graphs;
     }
 }

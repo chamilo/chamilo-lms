@@ -9,9 +9,9 @@ use ChamiloSession as Session;
  * @package chamilo.document
  *
  * @author Juan Carlos Raña Trabado
+ *
  * @since 25/september/2010
-*/
-
+ */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -86,7 +86,7 @@ $groupId = api_get_group_id();
 if (!empty($groupId)) {
     $interbreadcrumb[] = [
         "url" => "../group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace')
+        "name" => get_lang('GroupSpace'),
     ];
     $group = GroupManager :: get_group_properties($groupId);
     $path = explode('/', $dir);
@@ -97,7 +97,7 @@ if (!empty($groupId)) {
 
 $interbreadcrumb[] = [
     "url" => "./document.php?".api_get_cidreq(),
-    "name" => get_lang('Documents')
+    "name" => get_lang('Documents'),
 ];
 
 if (!api_is_allowed_in_course()) {
@@ -113,7 +113,6 @@ if (!($is_allowed_to_edit || $groupRights ||
 ) {
     api_not_allowed(true);
 }
-
 
 /*	Header */
 Event::event_access_tool(TOOL_DOCUMENT);
@@ -137,7 +136,7 @@ if (empty($document_data['parents'])) {
     foreach ($document_data['parents'] as $document_sub_data) {
         $interbreadcrumb[] = [
             'url' => $document_sub_data['document_url'],
-            'name' => $document_sub_data['title']
+            'name' => $document_sub_data['title'],
         ];
     }
 }

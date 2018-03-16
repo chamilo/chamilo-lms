@@ -1,9 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-* @package chamilo.admin
-* @todo use formvalidator
-*/
+ * @package chamilo.admin
+ *
+ * @todo use formvalidator
+ */
 // resetting the course id
 $cidReset = true;
 
@@ -45,7 +46,7 @@ if (!api_is_platform_admin() && !api_is_session_admin()) {
     }
 }
 
-$xajax -> processRequests();
+$xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
 <script>
@@ -88,7 +89,6 @@ $categoryId = isset($_POST['CategorySessionId']) ? intval($_POST['CategorySessio
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     $formSent = $_POST['formSent'];
     $sessionCategoryList = $_POST['SessionCategoryList'];
-
 
     if ($categoryId != 0 && count($sessionCategoryList) > 0) {
         // Removing all
@@ -188,7 +188,7 @@ if (!empty($OkMsg)) {
     <td align="left"></td>
     <td align="left"></td>
     <td  align="center">
-    <b><?php echo get_lang('SessionCategoryName') ?> :</b><br />
+    <b><?php echo get_lang('SessionCategoryName'); ?> :</b><br />
     <select name="CategorySessionId" style="width: 320px;" onchange="javascript:send();" >
         <option value="0" ></option>
         <?php
@@ -206,9 +206,9 @@ if (!empty($OkMsg)) {
     </td>
 </tr>
 <tr>
-  <td width="45%" align="center"><b><?php echo get_lang('SessionListInPlatform') ?> :</b></td>
+  <td width="45%" align="center"><b><?php echo get_lang('SessionListInPlatform'); ?> :</b></td>
   <td width="10%">&nbsp;</td>
-  <td align="center" width="45%"><b><?php echo get_lang('SessionListInCategory') ?> :</b></td>
+  <td align="center" width="45%"><b><?php echo get_lang('SessionListInCategory'); ?> :</b></td>
 </tr>
 
 <?php if ($add_type == 'multiple') {

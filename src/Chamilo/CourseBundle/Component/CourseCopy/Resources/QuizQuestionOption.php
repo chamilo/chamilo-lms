@@ -4,8 +4,10 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * Class QuizQuestionOption
+ * Class QuizQuestionOption.
+ *
  * @author Bart Mollet <bart.mollet@hogent.be>
+ *
  * @package chamilo.backup
  */
 class QuizQuestionOption extends Resource
@@ -14,6 +16,7 @@ class QuizQuestionOption extends Resource
 
     /**
      * QuizQuestionOption constructor.
+     *
      * @param mixed $obj
      */
     public function __construct($obj)

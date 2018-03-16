@@ -43,24 +43,24 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 $url_dir = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq();
 
 if (!empty($group_id)) {
-    $group_properties  = GroupManager :: get_group_properties($group_id);
+    $group_properties = GroupManager :: get_group_properties($group_id);
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
-        'name' => get_lang('Groups')
+        'name' => get_lang('Groups'),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('GroupSpace').' '.$group_properties['name']
+        'name' => get_lang('GroupSpace').' '.$group_properties['name'],
     ];
 }
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications')
+    'name' => get_lang('StudentPublications'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$workId,
-    'name' => $my_folder_data['title']
+    'name' => $my_folder_data['title'],
 ];
 
 $documentsAddedInWork = getAllDocumentsFromWorkToString($workId, $courseInfo);
@@ -79,7 +79,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_in
             ICON_SIZE_MEDIUM
         ).get_lang('UploadMyAssignment'),
         $url,
-        ['class'=>'btn-toolbar']
+        ['class' => 'btn-toolbar']
     );
 }
 
@@ -126,7 +126,7 @@ if (!api_is_invitee()) {
             get_lang('Qualification'),
             get_lang('Date'),
             get_lang('Status'),
-            get_lang('Actions')
+            get_lang('Actions'),
         ];
 
         $columnModel = [
@@ -185,7 +185,7 @@ if (!api_is_invitee()) {
             get_lang('Title'),
             get_lang('Feedback'),
             get_lang('Date'),
-            get_lang('Actions')
+            get_lang('Actions'),
         ];
 
         $columnModel = [
@@ -233,10 +233,10 @@ if (!api_is_invitee()) {
     }
 
     $extraParams = [
-        'autowidth' =>  'true',
-        'height' =>  'auto',
+        'autowidth' => 'true',
+        'height' => 'auto',
         'sortname' => 'sent_date',
-        'sortorder' => 'desc'
+        'sortorder' => 'desc',
     ];
 
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_user_list&work_id='.$workId.'&type='.$type.'&'.api_get_cidreq();

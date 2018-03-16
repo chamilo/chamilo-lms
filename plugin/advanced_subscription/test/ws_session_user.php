@@ -1,12 +1,13 @@
 <?php
 /* For license terms, see /license.txt */
 /**
- * A script to test session details by user web service
+ * A script to test session details by user web service.
+ *
  * @package chamilo.plugin.advanced_subscription
  */
 
 /**
- * Init
+ * Init.
  */
 require_once __DIR__.'/../config.php';
 // Protect test
@@ -26,10 +27,10 @@ $params['profile_completed'] = 100;
 $params['is_connected'] = true;
 
 /**
- * Copied code from WSHelperVerifyKey function
+ * Copied code from WSHelperVerifyKey function.
  */
 /**
- * Start WSHelperVerifyKey
+ * Start WSHelperVerifyKey.
  */
 //error_log(print_r($params,1));
 $check_ip = false;
@@ -57,20 +58,19 @@ if ($check_ip) {
     //error_log($secret_key.'-'.$security_key);
 }
 /**
- * End WSHelperVerifyKey
+ * End WSHelperVerifyKey.
  */
-
 $params['secret_key'] = sha1($security_key);
 
 // Registration soap wsdl
 $wsUrl = api_get_path(WEB_CODE_PATH).'webservices/registration.soap.php?wsdl';
 $options = [
     'location' => $wsUrl,
-    'uri' => $wsUrl
+    'uri' => $wsUrl,
 ];
 
 /**
- * WS test
+ * WS test.
  */
 try {
     // Init soap client

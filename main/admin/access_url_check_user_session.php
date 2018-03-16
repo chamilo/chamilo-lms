@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 /**
  * @author Bart Mollet, Julio Montoya lot of fixes
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -78,7 +78,7 @@ foreach ($session_list as $session_item) {
             $order_clause";
 
     $result = Database::query($sql);
-    $users  = Database::store_result($result);
+    $users = Database::store_result($result);
 
     if (!empty($users)) {
         $html .= '<table class="data_table"><tr><th>'.get_lang('User').'<th>'.get_lang('Actions').'</th></tr>';

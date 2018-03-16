@@ -1,16 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\UserBundle\Entity\User;
 
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
+ *
  * @package chamilo.plugin.buycourses
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
@@ -202,7 +202,7 @@ switch ($action) {
         $paypalPassword = $paypalParams['password'];
         $paypalSignature = $paypalParams['signature'];
 
-        require_once("paypalfunctions.php");
+        require_once "paypalfunctions.php";
 
         $allPayouts = [];
         $totalAccounts = 0;
@@ -286,9 +286,9 @@ switch ($action) {
             break;
         }
 
-        require_once("Requests.php");
+        require_once "Requests.php";
         Requests::register_autoloader();
-        require_once("culqi.php");
+        require_once "culqi.php";
 
         $culqiParams = $plugin->getCulqiParams();
 
@@ -320,7 +320,7 @@ switch ($action) {
                 "nombres" => $user['firstname'],
                 "apellidos" => $user['lastname'],
                 "correo_electronico" => $user['email'],
-                "token" => $tokenId
+                "token" => $tokenId,
             ]);
 
             if (is_object($cargo)) {
@@ -378,9 +378,9 @@ switch ($action) {
             break;
         }
 
-        require_once("Requests.php");
+        require_once "Requests.php";
         Requests::register_autoloader();
-        require_once("culqi.php");
+        require_once "culqi.php";
 
         $culqiParams = $plugin->getCulqiParams();
 
@@ -410,7 +410,7 @@ switch ($action) {
                 "nombres" => $user['firstname'],
                 "apellidos" => $user['lastname'],
                 "correo_electronico" => $user['email'],
-                "token" => $tokenId
+                "token" => $tokenId,
             ]);
 
             if (is_object($cargo)) {

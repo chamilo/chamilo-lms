@@ -17,7 +17,9 @@
  *    - (removed) chamilo footer
  *
  * @version 0.6
+ *
  * @author Roan Embrechts (roan.embrechts@vub.ac.be)
+ *
  * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -61,7 +63,7 @@ if (empty($document_data)) {
     api_not_allowed(true);
 }
 
-$header_file  = $document_data['path'];
+$header_file = $document_data['path'];
 $name_to_show = $document_data['title'];
 $path_array = explode('/', str_replace('\\', '/', $header_file));
 $path_array = array_map('urldecode', $path_array);
@@ -158,7 +160,7 @@ $this_section = SECTION_COURSES;
 $nameTools = get_lang('Documents');
 
 /**
- * Main code section
+ * Main code section.
  */
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 //header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
@@ -340,7 +342,7 @@ if ($show_web_odf) {
     }
     echo '<div id="viewerJS">';
     echo '<iframe id="viewerJSContent" frameborder="0" allowfullscreen="allowfullscreen" webkitallowfullscreen style="width:100%;"
-            src="' . $pdfUrl.'">
+            src="'.$pdfUrl.'">
         </iframe>';
     echo '</div>';
 }
@@ -356,7 +358,7 @@ if ($jplayer_supported) {
 
 if ($is_freemind_available) {
     ?>
-    <script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH) ?>swfobject/swfobject.js"></script>
+    <script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH); ?>swfobject/swfobject.js"></script>
     <style type="text/css">
         #flashcontent {
             height: 500px;

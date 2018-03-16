@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * ODF document editor script
+ * ODF document editor script.
+ *
  * @package chamilo.document
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $documentId = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -96,7 +96,7 @@ $htmlHeadXtra[] = '
 // Interbreadcrumb for the current directory root path
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'document/document.php',
-    'name' => get_lang('Documents')
+    'name' => get_lang('Documents'),
 ];
 
 if (!empty($documentInfo['parents'])) {
@@ -107,7 +107,7 @@ if (!empty($documentInfo['parents'])) {
 
         $interbreadcrumb[] = [
             'url' => $documentParent['document_url'],
-            'name' => $documentParent['title']
+            'name' => $documentParent['title'],
         ];
     }
 }

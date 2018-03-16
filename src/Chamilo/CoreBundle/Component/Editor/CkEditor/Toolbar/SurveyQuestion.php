@@ -4,7 +4,7 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * Class SurveyQuestion
+ * Class SurveyQuestion.
  *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */

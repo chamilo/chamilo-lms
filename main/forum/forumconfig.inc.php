@@ -6,9 +6,9 @@
  * @todo make config settings out of $forum_setting
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ *
  * @version february 2006, dokeos 1.8
  */
-
 
 /*
     Database Variables

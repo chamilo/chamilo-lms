@@ -4,15 +4,15 @@
 use ChamiloSession as Session;
 
 /**
-* This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php
-*
-* @author Patrick Cool
-* @author Denes Nagy
-* @author Roan Embrechts, refactoring and code cleaning
-* @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
-* @package chamilo.learnpath
-*/
-
+ * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php.
+ *
+ * @author Patrick Cool
+ * @author Denes Nagy
+ * @author Roan Embrechts, refactoring and code cleaning
+ * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
+ *
+ * @package chamilo.learnpath
+ */
 $this_section = SECTION_COURSES;
 api_protect_course_script();
 
@@ -44,7 +44,7 @@ $learnPath->get_js_dropdown_array().
         cbo.options[k].selected = true;
         $('#previous').selectpicker('refresh');
     }
-" .
+".
 "\n".
 '$().ready(function() {'."\n".
   'if ($(\'#previous\')) {'."\n".
@@ -81,7 +81,7 @@ $therow = Database::fetch_array($result);
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
+        'name' => get_lang('ToolGradebook'),
     ];
 }
 

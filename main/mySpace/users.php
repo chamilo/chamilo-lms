@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Student report
+ * Student report.
+ *
  * @package chamilo.reporting
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -41,6 +41,7 @@ function get_count_users()
     if (!empty($sleepingDays)) {
         $lastConnectionDate = api_get_utc_datetime(strtotime($sleepingDays.' days ago'));
     }
+
     return SessionManager::getCountUserTracking(
         $keyword,
         $active,
@@ -186,7 +187,7 @@ if (api_is_drh()) {
         Display::url(Display::return_icon('user_na.png', get_lang('Students'), [], ICON_SIZE_MEDIUM), '#'),
         Display::url(Display::return_icon('teacher.png', get_lang('Trainers'), [], ICON_SIZE_MEDIUM), 'teachers.php'),
         Display::url(Display::return_icon('course.png', get_lang('Courses'), [], ICON_SIZE_MEDIUM), 'course.php'),
-        Display::url(Display::return_icon('session.png', get_lang('Sessions'), [], ICON_SIZE_MEDIUM), 'session.php')
+        Display::url(Display::return_icon('session.png', get_lang('Sessions'), [], ICON_SIZE_MEDIUM), 'session.php'),
     ];
 
     $nb_menu_items = count($menu_items);
@@ -200,7 +201,7 @@ if (api_is_drh()) {
 $actionsRight = Display::url(
     Display::return_icon('printer.png', get_lang('Print'), [], ICON_SIZE_MEDIUM),
     'javascript: void(0);',
-    ['onclick'=>'javascript: window.print();']
+    ['onclick' => 'javascript: window.print();']
 );
 $actionsRight .= Display::url(
     Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
@@ -220,7 +221,7 @@ $params = [
     'keyword' => $keyword,
     'active' => $active,
     'sleeping_days' => $sleepingDays,
-    'status' => $status
+    'status' => $status,
 ];
 $table->set_additional_parameters($params);
 
@@ -242,14 +243,14 @@ if ($export_csv) {
             get_lang('FirstName'),
             get_lang('LastName'),
             get_lang('FirstLogin'),
-            get_lang('LastConnexion')
+            get_lang('LastConnexion'),
         ];
     } else {
         $csv_header[] = [
             get_lang('LastName'),
             get_lang('FirstName'),
             get_lang('FirstLogin'),
-            get_lang('LastConnexion')
+            get_lang('LastConnexion'),
         ];
     }
 }
@@ -264,7 +265,7 @@ $form->addElement(
         '' => '',
         STUDENT => get_lang('Student'),
         COURSEMANAGER => get_lang('Teacher'),
-        DRH => get_lang('DRH')
+        DRH => get_lang('DRH'),
     ]
 );
 $form = Tracking::setUserSearchForm($form);

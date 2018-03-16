@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Tag
+ * Tag.
  *
  * @ORM\Table(name="tag")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Tag
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -30,23 +30,24 @@ class Tag
     private $tag;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="field_id", type="integer", nullable=false)
      */
     private $fieldId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="count", type="integer", nullable=false)
      */
     private $count;
 
     /**
-     * Set tag
+     * Set tag.
      *
      * @param string $tag
+     *
      * @return Tag
      */
     public function setTag($tag)
@@ -57,7 +58,7 @@ class Tag
     }
 
     /**
-     * Get tag
+     * Get tag.
      *
      * @return string
      */
@@ -67,9 +68,10 @@ class Tag
     }
 
     /**
-     * Set fieldId
+     * Set fieldId.
      *
-     * @param integer $fieldId
+     * @param int $fieldId
+     *
      * @return Tag
      */
     public function setFieldId($fieldId)
@@ -80,9 +82,9 @@ class Tag
     }
 
     /**
-     * Get fieldId
+     * Get fieldId.
      *
-     * @return integer
+     * @return int
      */
     public function getFieldId()
     {
@@ -90,9 +92,10 @@ class Tag
     }
 
     /**
-     * Set count
+     * Set count.
      *
-     * @param integer $count
+     * @param int $count
+     *
      * @return Tag
      */
     public function setCount($count)
@@ -103,9 +106,9 @@ class Tag
     }
 
     /**
-     * Get count
+     * Get count.
      *
-     * @return integer
+     * @return int
      */
     public function getCount()
     {
@@ -113,9 +116,9 @@ class Tag
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

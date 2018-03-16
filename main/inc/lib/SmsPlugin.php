@@ -2,10 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class SmsPlugin
+ * Class SmsPlugin.
  *
  * @author Julio Montoya
- *
  */
 class SmsPlugin extends Plugin
 {
@@ -58,8 +57,9 @@ class SmsPlugin extends Plugin
     public $isMailPlugin = true;
 
     /**
-     * getSmsTypeOptions (returns all SMS types)
-     * @return  array   SMS types
+     * getSmsTypeOptions (returns all SMS types).
+     *
+     * @return array SMS types
      */
     public function getSmsTypeOptions()
     {
@@ -106,14 +106,21 @@ class SmsPlugin extends Plugin
             'MessageXMessagesSentEditedGroupXAdded',
             'MessageXBeenInvitedCompleteSurveyXCourseX',
             'MessageXReminderAssignmentXCourseXDue',
-            'MessageXUserDetailsModified'
+            'MessageXUserDetailsModified',
         ];
     }
 
     /**
+     * install (installs the plugin).
+     */
+    public function install()
+    {
+        $this->addMobilePhoneNumberField();
+    }
+
+    /**
      * addMobilePhoneNumberField (adds a mobile phone number field if it is not
-     * already created)
-     * @return  void
+     * already created).
      */
     private function addMobilePhoneNumberField()
     {
@@ -129,17 +136,8 @@ class SmsPlugin extends Plugin
                 'field_order' => 2,
                 'visible' => 1,
                 'changeable' => 1,
-                'filter' => null
+                'filter' => null,
             ]);
         }
-    }
-
-    /**
-     * install (installs the plugin)
-     * @return  void
-     */
-    public function install()
-    {
-        $this->addMobilePhoneNumberField();
     }
 }

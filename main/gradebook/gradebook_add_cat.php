@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -95,7 +96,7 @@ if ($form->validate()) {
 if (!$_in_course) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl().'selectcat='.$get_select_cat,
-        'name' => get_lang('Gradebook')
+        'name' => get_lang('Gradebook'),
     ];
 }
 $interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq(), 'name' => get_lang('ToolGradebook')];

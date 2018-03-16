@@ -4,6 +4,7 @@
 /**
  * Certificate Class
  * Generate certificates based in the gradebook tool.
+ *
  * @package chamilo.library.certificates
  */
 class Certificate extends Model
@@ -14,15 +15,15 @@ class Certificate extends Model
         'cat_id',
         'score_certificate',
         'created_at',
-        'path_certificate'
+        'path_certificate',
     ];
     /**
-     * Certification data
+     * Certification data.
      */
     public $certificate_data = [];
 
     /**
-     * Student's certification path
+     * Student's certification path.
      */
     public $certification_user_path = null;
     public $certification_web_user_path = null;
@@ -32,15 +33,16 @@ class Certificate extends Model
 
     /** If true every time we enter to the certificate URL
      * we would generate a new certificate (good thing because we can edit the
-     * certificate and all users will have the latest certificate bad because we
+     * certificate and all users will have the latest certificate bad because we.
      * load the certificate every time */
     public $force_certificate_generation = true;
 
     /**
-     * Constructor
-     * @param int $certificate_id ID of the certificate.
-     * @param int $userId
-     * @param bool $sendNotification send message to student
+     * Constructor.
+     *
+     * @param int  $certificate_id        ID of the certificate
+     * @param int  $userId
+     * @param bool $sendNotification      send message to student
      * @param bool $updateCertificateData
      *
      * If no ID given, take user_id and try to generate one
@@ -137,7 +139,7 @@ class Certificate extends Model
     }
 
     /**
-     * Checks if the certificate user path directory is created
+     * Checks if the certificate user path directory is created.
      */
     public function check_certificate_path()
     {
@@ -164,7 +166,9 @@ class Certificate extends Model
      * Deletes the current certificate object. This is generally triggered by
      * the teacher from the gradebook tool to re-generate the certificate because
      * the original version wa flawed.
+     *
      * @param bool $force_delete
+     *
      * @return bool
      */
     public function delete($force_delete = false)
@@ -197,10 +201,11 @@ class Certificate extends Model
     }
 
     /**
-     *  Generates an HTML Certificate and fills the path_certificate field in the DB
+     *  Generates an HTML Certificate and fills the path_certificate field in the DB.
      *
      * @param array $params
-     * @param bool $sendNotification
+     * @param bool  $sendNotification
+     *
      * @return bool|int
      */
     public function generate($params = [], $sendNotification = false)
@@ -309,7 +314,7 @@ class Certificate extends Model
                                                 api_get_user_info($this->user_id),
                                                 $courseInfo,
                                                 [
-                                                    'score_certificate' => $score
+                                                    'score_certificate' => $score,
                                                 ]
                                             );
                                         }
@@ -384,7 +389,7 @@ class Certificate extends Model
             '((author_first_name))',
             '((author_last_name))',
             '((score))',
-            '((portal_name))'
+            '((portal_name))',
         ];
 
         return $tags;
@@ -393,9 +398,9 @@ class Certificate extends Model
     /**
      * @param string $subject
      * @param string $message
-     * @param array $userInfo
-     * @param array $courseInfo
-     * @param array $certificateInfo
+     * @param array  $userInfo
+     * @param array  $courseInfo
+     * @param array  $certificateInfo
      *
      * @return bool
      */
@@ -419,7 +424,7 @@ class Certificate extends Model
             $currentUserInfo['firstname'],
             $currentUserInfo['lastname'],
             $certificateInfo['score_certificate'],
-            api_get_setting('Institution')
+            api_get_setting('Institution'),
         ];
         $message = str_replace(self::notificationTags(), $replace, $message);
 
@@ -442,18 +447,19 @@ class Certificate extends Model
             $additionalParameters = [
                 'smsType' => SmsPlugin::CERTIFICATE_NOTIFICATION,
                 'userId' => $userInfo['id'],
-                'direct_message' => $message
+                'direct_message' => $message,
             ];
             $smsPlugin->send($additionalParameters);
         }
     }
 
     /**
-     * Update user info about certificate
-     * @param int $categoryId category id
-     * @param int $user_id user id
-     * @param string $path_certificate the path name of the certificate
-     * @param bool $updateCertificateData
+     * Update user info about certificate.
+     *
+     * @param int    $categoryId            category id
+     * @param int    $user_id               user id
+     * @param string $path_certificate      the path name of the certificate
+     * @param bool   $updateCertificateData
      */
     public function updateUserCertificateInfo(
         $categoryId,
@@ -473,9 +479,9 @@ class Certificate extends Model
     }
 
     /**
-     * Check if the file was generated
+     * Check if the file was generated.
      *
-     * @return boolean
+     * @return bool
      */
     public function isHtmlFileGenerated()
     {
@@ -488,15 +494,18 @@ class Certificate extends Model
         ) {
             return true;
         }
+
         return false;
     }
 
     /**
-     * Generates a QR code for the certificate. The QR code embeds the text given
+     * Generates a QR code for the certificate. The QR code embeds the text given.
+     *
      * @param string $text Text to be added in the QR code
      * @param string $path file path of the image
+     *
      * @return bool
-     **/
+     */
     public function generateQRImage($text, $path)
     {
         //Make sure HTML certificate is generated
@@ -504,14 +513,17 @@ class Certificate extends Model
             //L low, M - Medium, L large error correction
             return PHPQRCode\QRcode::png($text, $path, 'M', 2, 2);
         }
+
         return false;
     }
 
     /**
      * Transforms certificate tags into text values. This function is very static
      * (it doesn't allow for much flexibility in terms of what tags are printed).
+     *
      * @param array $array Contains two array entries: first are the headers,
-     * second is an array of contents
+     *                     second is an array of contents
+     *
      * @return string The translated string
      */
     public function parseCertificateVariables($array)
@@ -565,6 +577,7 @@ class Certificate extends Model
      * If the global allow_public_certificates is set to 'true' and the course setting allow_public_certificates
      * is set to 0, no certificate *in this course* can be printed (for anonymous users).
      * Connected users can always print them.
+     *
      * @return bool
      */
     public function isVisible()
@@ -598,7 +611,8 @@ class Certificate extends Model
     }
 
     /**
-     * Check if the certificate is available
+     * Check if the certificate is available.
+     *
      * @return bool
      */
     public function isAvailable()
@@ -617,8 +631,8 @@ class Certificate extends Model
     }
 
     /**
-    * Shows the student's certificate (HTML file)
-    */
+     * Shows the student's certificate (HTML file).
+     */
     public function show()
     {
         header('Content-Type: text/html; charset='.api_get_system_encoding());
@@ -653,6 +667,7 @@ class Certificate extends Model
             }
 
             echo $certificateContent;
+
             return;
         }
         api_not_allowed(true);
@@ -743,7 +758,7 @@ class Certificate extends Model
         $tplContent->assign('terms_validation_date', $termsValidationDate);
 
         // Ofaj
-        $tplContent->assign('time_in_platform_in_hours', round($timeInSeconds/3600, 1));
+        $tplContent->assign('time_in_platform_in_hours', round($timeInSeconds / 3600, 1));
         $tplContent->assign(
             'certificate_generated_date_no_time',
             api_get_local_time(
@@ -774,7 +789,7 @@ class Certificate extends Model
     }
 
     /**
-     * Ofaj
+     * Ofaj.
      */
     public function generatePdfFromCustomCertificate()
     {

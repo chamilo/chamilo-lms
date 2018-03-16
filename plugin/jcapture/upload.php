@@ -47,7 +47,7 @@ if (empty($path)) {
 }
 
 $files = [
-    'file' => $_FILES['Filedata']
+    'file' => $_FILES['Filedata'],
 ];
 
 DocumentManager::upload_document(

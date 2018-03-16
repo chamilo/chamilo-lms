@@ -15,7 +15,7 @@ if (!api_is_anonymous() &&
     }
     // the comm
     $logout_comment = api_htmlentities($plugin_info['settings']['add_cas_logout_button_cas_logout_comment']);
-    ;
+
     // URL of the image
     $logout_image_url = $plugin_info['settings']['add_cas_logout_button_cas_logout_image_url'];
 

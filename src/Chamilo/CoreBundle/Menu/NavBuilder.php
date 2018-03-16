@@ -9,10 +9,10 @@ use Chamilo\UserBundle\Entity\User;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Component\Routing\RouterInterface;
 
 /**
- * Class NavBuilder
+ * Class NavBuilder.
+ *
  * @package Chamilo\CoreBundle\Menu
  */
 class NavBuilder extends ContainerAware
@@ -33,9 +33,9 @@ class NavBuilder extends ContainerAware
     }
 
     /**
-     * @param \Knp\Menu\ItemInterface $menu        The item to fill with $routes
-     * @param array                   $options     The item options
-     * @param string                  $currentUri  The current URI
+     * @param \Knp\Menu\ItemInterface $menu       The item to fill with $routes
+     * @param array                   $options    The item options
+     * @param string                  $currentUri The current URI
      */
     public function buildCategoryMenu(ItemInterface $menu, array $options = [], $currentUri = null)
     {
@@ -46,9 +46,11 @@ class NavBuilder extends ContainerAware
     }
 
     /**
-     * Top menu left
+     * Top menu left.
+     *
      * @param FactoryInterface $factory
-     * @param array $options
+     * @param array            $options
+     *
      * @return \Knp\Menu\ItemInterface
      */
     public function leftMenu(FactoryInterface $factory, array $options)
@@ -117,7 +119,7 @@ class NavBuilder extends ContainerAware
                         'route' => 'main',
                         'routeParameters' => [
                             'name' => 'social/home.php',
-                        ]
+                        ],
                     ]
                 );
             }
@@ -153,7 +155,7 @@ class NavBuilder extends ContainerAware
         $siteManager = $this->container->get('sonata.page.manager.site');
         /** @var Site $site */
         $site = $siteManager->findOneBy([
-            'host'    => [$host, 'localhost'],
+            'host' => [$host, 'localhost'],
             'enabled' => true,
         ]);
 
@@ -205,14 +207,15 @@ class NavBuilder extends ContainerAware
             }
         }
 
-
         return $menu;
     }
 
     /**
-     * Top menu right
+     * Top menu right.
+     *
      * @param FactoryInterface $factory
-     * @param array $options
+     * @param array            $options
+     *
      * @return \Knp\Menu\ItemInterface
      */
     public function rightMenu(FactoryInterface $factory, array $options)
@@ -255,7 +258,7 @@ class NavBuilder extends ContainerAware
                         'uid' => $user->getId(),
                     ],
                     'query' => '1',
-                    'icon' => 'fa fa-sign-out'
+                    'icon' => 'fa fa-sign-out',
                 ]
             );
 

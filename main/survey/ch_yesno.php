@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class ch_yesno
+ * Class ch_yesno.
  */
 class ch_yesno extends survey_question
 {
@@ -16,7 +16,7 @@ class ch_yesno extends survey_question
 
         $options = [
             'horizontal' => get_lang('Horizontal'),
-            'vertical' => get_lang('Vertical')
+            'vertical' => get_lang('Vertical'),
         ];
         $this->getForm()->addRadio('horizontalvertical', get_lang('DisplayAnswersHorVert'), $options);
 
@@ -27,7 +27,7 @@ class ch_yesno extends survey_question
         $config = [
             'ToolbarSet' => 'Survey',
             'Width' => '100%',
-            'Height' => '120'
+            'Height' => '120',
         ];
         $this->getForm()->addHtmlEditor(
             'answers[0]',
@@ -47,8 +47,8 @@ class ch_yesno extends survey_question
 
     /**
      * @param FormValidator $form
-     * @param array $questionData
-     * @param array $answers
+     * @param array         $questionData
+     * @param array         $answers
      */
     public function render(FormValidator $form, $questionData = [], $answers = null)
     {

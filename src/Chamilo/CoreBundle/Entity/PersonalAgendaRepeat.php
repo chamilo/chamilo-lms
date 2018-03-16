@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * PersonalAgendaRepeat
+ * PersonalAgendaRepeat.
  *
  * @ORM\Table(name="personal_agenda_repeat")
  * @ORM\Entity
@@ -21,14 +21,14 @@ class PersonalAgendaRepeat
     private $calType;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="cal_end", type="integer", nullable=true)
      */
     private $calEnd;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="cal_frequency", type="integer", nullable=true)
      */
@@ -42,7 +42,7 @@ class PersonalAgendaRepeat
     private $calDays;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="cal_id", type="integer")
      * @ORM\Id
@@ -50,12 +50,11 @@ class PersonalAgendaRepeat
      */
     private $calId;
 
-
-
     /**
-     * Set calType
+     * Set calType.
      *
      * @param string $calType
+     *
      * @return PersonalAgendaRepeat
      */
     public function setCalType($calType)
@@ -66,7 +65,7 @@ class PersonalAgendaRepeat
     }
 
     /**
-     * Get calType
+     * Get calType.
      *
      * @return string
      */
@@ -76,9 +75,10 @@ class PersonalAgendaRepeat
     }
 
     /**
-     * Set calEnd
+     * Set calEnd.
      *
-     * @param integer $calEnd
+     * @param int $calEnd
+     *
      * @return PersonalAgendaRepeat
      */
     public function setCalEnd($calEnd)
@@ -89,9 +89,9 @@ class PersonalAgendaRepeat
     }
 
     /**
-     * Get calEnd
+     * Get calEnd.
      *
-     * @return integer
+     * @return int
      */
     public function getCalEnd()
     {
@@ -99,9 +99,10 @@ class PersonalAgendaRepeat
     }
 
     /**
-     * Set calFrequency
+     * Set calFrequency.
      *
-     * @param integer $calFrequency
+     * @param int $calFrequency
+     *
      * @return PersonalAgendaRepeat
      */
     public function setCalFrequency($calFrequency)
@@ -112,9 +113,9 @@ class PersonalAgendaRepeat
     }
 
     /**
-     * Get calFrequency
+     * Get calFrequency.
      *
-     * @return integer
+     * @return int
      */
     public function getCalFrequency()
     {
@@ -122,9 +123,10 @@ class PersonalAgendaRepeat
     }
 
     /**
-     * Set calDays
+     * Set calDays.
      *
      * @param string $calDays
+     *
      * @return PersonalAgendaRepeat
      */
     public function setCalDays($calDays)
@@ -135,7 +137,7 @@ class PersonalAgendaRepeat
     }
 
     /**
-     * Get calDays
+     * Get calDays.
      *
      * @return string
      */
@@ -145,9 +147,9 @@ class PersonalAgendaRepeat
     }
 
     /**
-     * Get calId
+     * Get calId.
      *
-     * @return integer
+     * @return int
      */
     public function getCalId()
     {

@@ -17,7 +17,7 @@ class EventEmailTemplate extends Model
     ];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -26,6 +26,7 @@ class EventEmailTemplate extends Model
 
     /**
      * @param array $where_conditions
+     *
      * @return array
      */
     public function get_all($where_conditions = [])
@@ -38,7 +39,7 @@ class EventEmailTemplate extends Model
     }
 
     /**
-     * Displays the title + grid
+     * Displays the title + grid.
      */
     public function display()
     {
@@ -52,11 +53,12 @@ class EventEmailTemplate extends Model
                         get_lang('Add'),
                         [],
                         ICON_SIZE_MEDIUM
-                    )
-                 ]
+                    ),
+                 ],
             ]
         );
         $content .= Display::grid_html('event_email_template');
+
         return $content;
     }
 
@@ -67,16 +69,17 @@ class EventEmailTemplate extends Model
     {
         return [
             EVENT_EMAIL_TEMPLATE_ACTIVE => get_lang('Enabled'),
-            EVENT_EMAIL_TEMPLATE_INACTIVE => get_lang('Disabled')
+            EVENT_EMAIL_TEMPLATE_INACTIVE => get_lang('Disabled'),
         ];
     }
 
     /**
-     * Returns a Form validator Obj
-     * @param   string  $url
-     * @param   string  $action add, edit
+     * Returns a Form validator Obj.
      *
-     * @return  FormValidator
+     * @param string $url
+     * @param string $action add, edit
+     *
+     * @return FormValidator
      */
     public function return_form($url, $action)
     {

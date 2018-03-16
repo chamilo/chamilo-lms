@@ -1,12 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 
 /**
  * @todo rework file in order to use addFlash
+ *
  * @package chamilo.backup
  */
 
@@ -29,7 +30,7 @@ if (function_exists('ini_set')) {
 // Breadcrumbs
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'course_info/maintenance.php?'.api_get_cidreq(),
-    'name' => get_lang('Maintenance')
+    'name' => get_lang('Maintenance'),
 ];
 
 // The section (for the tabs)
@@ -141,7 +142,7 @@ if (Security::check_token('post') && (
         $form->addGroup($group, '', get_lang('SameFilename'));
         $form->addProgress();
         $form->addButtonSave(get_lang('CopyCourse'));
-        $form->setDefaults(['copy_option' =>'select_items', 'same_file_name_option' => FILE_OVERWRITE]);
+        $form->setDefaults(['copy_option' => 'select_items', 'same_file_name_option' => FILE_OVERWRITE]);
 
         // Add Security token
         $token = Security::get_token();

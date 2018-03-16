@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * List sessions categories
+ * List sessions categories.
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -114,7 +114,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                     <div class="form-group">
                     <input class="form-control" type="text" name="keyword" value="<?php echo $keyword; ?>"
                     aria-label="<?php echo get_lang('Search'); ?>"/>
-                    <button class="btn btn-default" type="submit" name="name" value="<?php echo get_lang('Search') ?>"><em class="fa fa-search"></em> <?php echo get_lang('Search') ?></button>
+                    <button class="btn btn-default" type="submit" name="name" value="<?php echo get_lang('Search'); ?>"><em class="fa fa-search"></em> <?php echo get_lang('Search'); ?></button>
                     <!-- <a href="session_list.php?search=advanced"><?php echo get_lang('AdvancedSearch'); ?></a> -->
                     </div>
                 </form>
@@ -231,8 +231,8 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
         } ?>
         </div>
         <div class="btn-group">
-            <a class="btn btn-default" href="#" onclick="selectAll('idChecked',<?php echo $x; ?>,'true');return false;"><?php echo get_lang('SelectAll') ?></a>
-            <a class="btn btn-default" href="#" onclick="selectAll('idChecked',<?php echo $x; ?>,'false');return false;"><?php echo get_lang('UnSelectAll') ?></a>
+            <a class="btn btn-default" href="#" onclick="selectAll('idChecked',<?php echo $x; ?>,'true');return false;"><?php echo get_lang('SelectAll'); ?></a>
+            <a class="btn btn-default" href="#" onclick="selectAll('idChecked',<?php echo $x; ?>,'false');return false;"><?php echo get_lang('UnSelectAll'); ?></a>
         </div>
         <div class="list-category">
             <select class="selectpicker show-tick form-control" name="action">
@@ -240,7 +240,7 @@ if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
                 <option value="delete_on_session"><?php echo get_lang('DeleteSelectedFullSessionCategory'); ?></option>
             </select>
         </div>
-        <button class="btn btn-success" type="submit" name="name" value="<?php echo get_lang('Ok') ?>"><?php echo get_lang('Ok') ?></button>
+        <button class="btn btn-success" type="submit" name="name" value="<?php echo get_lang('Ok'); ?>"><?php echo get_lang('Ok'); ?></button>
     <?php
         } ?>
     </table>

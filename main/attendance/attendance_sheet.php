@@ -2,9 +2,11 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * View (MVC patter) for attendance sheet (list, edit, add)
+ * View (MVC patter) for attendance sheet (list, edit, add).
+ *
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Julio Montoya reworked 2010
+ *
  * @package chamilo.attendance
  */
 
@@ -34,7 +36,7 @@ if (api_is_allowed_to_edit(null, true) ||
         'all' => get_lang('All'),
         'today' => get_lang('Today'),
         'all_done' => get_lang('AllDone'),
-        'all_not_done' => get_lang('AllNotDone')
+        'all_not_done' => get_lang('AllNotDone'),
     ];
     $today = api_convert_and_format_date(null, DATE_FORMAT_SHORT);
     $exists_attendance_today = false;
@@ -101,7 +103,7 @@ if (api_is_allowed_to_edit(null, true) ||
     $form->setDefaults(
         [
             'filter' => $default_filter,
-            'group_id' => $groupId
+            'group_id' => $groupId,
         ]
     );
 
@@ -203,24 +205,24 @@ if (api_is_allowed_to_edit(null, true) ||
             });
         </script>
 
-        <form method="post" action="index.php?action=attendance_sheet_add&<?php echo api_get_cidreq().$param_filter ?>&attendance_id=<?php echo $attendance_id?>" >
+        <form method="post" action="index.php?action=attendance_sheet_add&<?php echo api_get_cidreq().$param_filter; ?>&attendance_id=<?php echo $attendance_id; ?>" >
             <div class="attendance-sheet-content" style="width:100%;background-color:#E1E1E1;margin-top:20px;">
                 <div class="divTableWithFloatingHeader attendance-users-table" style="width:45%;float:left;margin:0px;padding:0px;">
                     <table class="tableWithFloatingHeader data_table" width="100%">
                         <thead>
                         <tr class="tableFloatingHeader" style="position: absolute; top: 0px; left: 0px; visibility: hidden; margin:0px;padding:0px" >
                             <th width="10px"><?php echo '#'; ?></th>
-                            <th width="10px"><?php echo get_lang('Photo')?></th>
-                            <th width="100px"><?php echo get_lang('LastName')?></th>
-                            <th width="100px"><?php echo get_lang('FirstName')?></th>
-                            <th width="100px"><?php echo get_lang('AttendancesFaults')?></th>
+                            <th width="10px"><?php echo get_lang('Photo'); ?></th>
+                            <th width="100px"><?php echo get_lang('LastName'); ?></th>
+                            <th width="100px"><?php echo get_lang('FirstName'); ?></th>
+                            <th width="100px"><?php echo get_lang('AttendancesFaults'); ?></th>
                         </tr>
                         <tr class="tableFloatingHeaderOriginal" >
                             <th width="10px"><?php echo '#'; ?></th>
-                            <th width="10px"><?php echo get_lang('Photo')?></th>
-                            <th width="150px"><?php echo get_lang('LastName')?></th>
-                            <th width="140px"><?php echo get_lang('FirstName')?></th>
-                            <th width="100px"><?php echo get_lang('AttendancesFaults')?></th>
+                            <th width="10px"><?php echo get_lang('Photo'); ?></th>
+                            <th width="150px"><?php echo get_lang('LastName'); ?></th>
+                            <th width="140px"><?php echo get_lang('FirstName'); ?></th>
+                            <th width="100px"><?php echo get_lang('AttendancesFaults'); ?></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -238,14 +240,14 @@ if (api_is_allowed_to_edit(null, true) ||
                                 sprintf(get_lang('LoginX'), $data['username']),
                                 ENT_QUOTES
                             ); ?>
-                            <tr class="<?php echo $class ?>">
-                                <td><center><?php echo $i ?></center></td>
-                                <td><?php echo $data['photo'] ?></td>
-                                <td><span title="<?php echo $username ?>"><?php echo $data['lastname'] ?></span></td>
-                                <td><?php echo $data['firstname'] ?></td>
+                            <tr class="<?php echo $class; ?>">
+                                <td><center><?php echo $i; ?></center></td>
+                                <td><?php echo $data['photo']; ?></td>
+                                <td><span title="<?php echo $username; ?>"><?php echo $data['lastname']; ?></span></td>
+                                <td><?php echo $data['firstname']; ?></td>
                                 <td>
-                                    <div class="attendance-faults-bar" style="background-color:<?php echo(!empty($data['result_color_bar']) ? $data['result_color_bar'] : 'none') ?>">
-                                        <?php echo $data['attendance_result'] ?>
+                                    <div class="attendance-faults-bar" style="background-color:<?php echo !empty($data['result_color_bar']) ? $data['result_color_bar'] : 'none'; ?>">
+                                        <?php echo $data['attendance_result']; ?>
                                     </div>
                                 </td>
                             </tr>
@@ -281,7 +283,7 @@ if (api_is_allowed_to_edit(null, true) ||
                 if ($next_attendance_calendar_id == $calendar['id']) {
                     $input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="'.$calendar['id'].'" />';
                     $disabled_check = '';
-                    $img_lock = Display::return_icon('lock-closed.png', get_lang('DateLock'), ['class'=>'img_unlock', 'id'=>'datetime_column_'.$calendar['id']]);
+                    $img_lock = Display::return_icon('lock-closed.png', get_lang('DateLock'), ['class' => 'img_unlock', 'id' => 'datetime_column_'.$calendar['id']]);
                 }
 
                 $result .= '<th>';
@@ -297,7 +299,7 @@ if (api_is_allowed_to_edit(null, true) ||
                 }
             }
         } else {
-            $result  = '<th width="2000px"><span><a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.'">';
+            $result = '<th width="2000px"><span><a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.'">';
             $result .= Display::return_icon('attendance_calendar.png', get_lang('AttendanceCalendar'), '', ICON_SIZE_MEDIUM).' '.get_lang('GoToAttendanceCalendar').'</a></span></th>';
         }
 
@@ -400,7 +402,7 @@ if (api_is_allowed_to_edit(null, true) ||
                     <?php if (!$is_locked_attendance || api_is_platform_admin()) {
             if (api_is_allowed_to_edit(null, true)) {
                 ?>
-                            <button type="submit" class="btn btn-primary"><?php echo get_lang('Save') ?></button>
+                            <button type="submit" class="btn btn-primary"><?php echo get_lang('Save'); ?></button>
                     <?php
             }
         } ?>
@@ -424,10 +426,10 @@ if (api_is_allowed_to_edit(null, true) ||
         <div>
             <table width="250px;">
                 <tr>
-                    <td><?php echo get_lang('ToAttend').': ' ?></td>
+                    <td><?php echo get_lang('ToAttend').': '; ?></td>
                     <td>
-                        <center><div class="attendance-faults-bar" style="background-color:<?php echo(!empty($faults['color_bar']) ? $faults['color_bar'] : 'none') ?>">
-                        <?php echo $faults['faults'].'/'.$faults['total'].' ('.$faults['faults_porcent'].'%)' ?></div></center>
+                        <center><div class="attendance-faults-bar" style="background-color:<?php echo !empty($faults['color_bar']) ? $faults['color_bar'] : 'none'; ?>">
+                        <?php echo $faults['faults'].'/'.$faults['total'].' ('.$faults['faults_porcent'].'%)'; ?></div></center>
                     </td>
                 </tr>
             </table>
@@ -436,7 +438,7 @@ if (api_is_allowed_to_edit(null, true) ||
     } ?>
     <table class="data_table">
         <tr class="row_odd" >
-            <th><?php echo get_lang('Attendance')?></th>
+            <th><?php echo get_lang('Attendance'); ?></th>
         </tr>
         <?php
 
@@ -449,10 +451,10 @@ if (api_is_allowed_to_edit(null, true) ||
                 } else {
                     $class = 'row_odd';
                 } ?>
-                <tr class="<?php echo $class ?>">
+                <tr class="<?php echo $class; ?>">
                     <td>
-                        <?php echo $presence['presence'] ? Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Presence'), null, ICON_SIZE_TINY) ?>
-                        <?php echo "&nbsp; ".$presence['date_time'] ?>
+                        <?php echo $presence['presence'] ? Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Presence'), null, ICON_SIZE_TINY); ?>
+                        <?php echo "&nbsp; ".$presence['date_time']; ?>
                     </td>
                 </tr>
             <?php
@@ -460,7 +462,7 @@ if (api_is_allowed_to_edit(null, true) ||
         } else {
             ?>
             <tr><td>
-                <center><?php echo get_lang('YouDoNotHaveDoneAttendances')?></center></td>
+                <center><?php echo get_lang('YouDoNotHaveDoneAttendances'); ?></center></td>
             </tr>
         <?php
         } ?>

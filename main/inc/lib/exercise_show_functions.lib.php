@@ -38,8 +38,13 @@ class ExerciseShowFunctions
         $originalStudentAnswer = '',
         $showTotalScoreAndUserChoices
     ) {
-        $answerHTML = FillBlanks::getHtmlDisplayForAnswer($answer, $feedbackType, $resultsDisabled, $showTotalScoreAndUserChoices);
-        /*if (strpos($originalStudentAnswer, 'font color') !== false) {
+        $answerHTML = FillBlanks::getHtmlDisplayForAnswer(
+            $answer,
+            $feedbackType,
+            $resultsDisabled,
+            $showTotalScoreAndUserChoices
+        );
+/*        if (strpos($originalStudentAnswer, 'font color') !== false) {
             $answerHTML = $originalStudentAnswer;
         }*/
 
@@ -55,13 +60,14 @@ class ExerciseShowFunctions
                 </td>
 
                 <?php
-                if (!api_is_allowed_to_edit(null, true) && $feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
+                if (!api_is_allowed_to_edit(null, true) && $feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) {
+                    ?>
                     <td>
                         <?php
-                        $comm = Event::get_comments($id, $questionId);
-                        ?>
+                        $comm = Event::get_comments($id, $questionId); ?>
                     </td>
-                <?php } ?>
+                <?php
+                } ?>
             </tr>
         <?php
         }
@@ -178,8 +184,7 @@ class ExerciseShowFunctions
         $fileUrl = null,
         $results_disabled = 0,
         $questionScore = 0
-    )
-    {
+    ) {
         if (isset($fileUrl)) {
             echo '
                 <tr>
@@ -190,11 +195,11 @@ class ExerciseShowFunctions
 
         if (empty($id)) {
             echo '<tr>';
-            echo Display::tag('td', Security::remove_XSS($answer), array('width'=>'55%'));
+            echo Display::tag('td', Security::remove_XSS($answer), ['width'=>'55%']);
             echo '</tr>';
             if (!$questionScore && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
                 echo '<tr>';
-                echo Display::tag('td', ExerciseLib::getNotCorrectedYetText(), array('width'=>'45%'));
+                echo Display::tag('td', ExerciseLib::getNotCorrectedYetText(), ['width'=>'45%']);
                 echo '</tr>';
             } else {
                 echo '<tr><td>&nbsp;</td></tr>';
@@ -250,7 +255,7 @@ class ExerciseShowFunctions
             }
         }
 
-        $hotspot_colors = array(
+        $hotspot_colors = [
             "", // $i starts from 1 on next loop (ugly fix)
             "#4271B5",
             "#FE8E16",
@@ -265,9 +270,7 @@ class ExerciseShowFunctions
             "#ED2024",
             "#3B3B3B",
             "#F7BDE2"
-        );
-
-        ?>
+        ]; ?>
         <table class="data_table">
         <tr>
             <td class="text-center" width="5%">
@@ -354,29 +357,26 @@ class ExerciseShowFunctions
             }
         }
 
-        $icon = in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION)) ? 'radio' : 'checkbox';
+        $icon = in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION]) ? 'radio' : 'checkbox';
         $icon .= $studentChoice ? '_on' : '_off';
         $icon .= '.png';
-        $iconAnswer = in_array($answerType, array(UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION)) ? 'radio' : 'checkbox';
+        $iconAnswer = in_array($answerType, [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION]) ? 'radio' : 'checkbox';
         $iconAnswer .= $answerCorrect ? '_on' : '_off';
-        $iconAnswer .= '.png';
-
-        ?>
+        $iconAnswer .= '.png'; ?>
         <tr>
         <td width="5%">
             <?php echo Display::return_icon($icon, null, null, ICON_SIZE_TINY); ?>
         </td>
         <td width="5%">
             <?php if (!$hide_expected_answer) {
-                echo Display::return_icon($iconAnswer, null, null, ICON_SIZE_TINY);
-            } else {
-                echo "-";
-            } ?>
+            echo Display::return_icon($iconAnswer, null, null, ICON_SIZE_TINY);
+        } else {
+            echo "-";
+        } ?>
         </td>
         <td width="40%">
             <?php
-            echo $answer;
-            ?>
+            echo $answer; ?>
         </td>
 
          <?php

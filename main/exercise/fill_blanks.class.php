@@ -44,8 +44,8 @@ class FillBlanks extends Question
             }
             // Take the complete string except after the last '::'
             $defaults['answer'] = $listAnswersInfo['text'];
-            $defaults['select_separator'] = $listAnswersInfo['blankseparatornumber'];
-            $blankSeparatorNumber = $listAnswersInfo['blankseparatornumber'];
+            $defaults['select_separator'] = $listAnswersInfo['blank_separator_number'];
+            $blankSeparatorNumber = $listAnswersInfo['blank_separator_number'];
         } else {
             $defaults['answer'] = get_lang('DefaultTextInBlanks');
             $defaults['select_separator'] = 0;
@@ -55,18 +55,17 @@ class FillBlanks extends Question
         $blankSeparatorStart = self::getStartSeparator($blankSeparatorNumber);
         $blankSeparatorEnd = self::getEndSeparator($blankSeparatorNumber);
         $setWeightAndSize = '';
-        if (isset($listAnswersInfo) && count($listAnswersInfo['tabweighting']) > 0) {
-            foreach ($listAnswersInfo['tabweighting'] as $i => $weighting) {
+        if (isset($listAnswersInfo) && count($listAnswersInfo['weighting']) > 0) {
+            foreach ($listAnswersInfo['weighting'] as $i => $weighting) {
                 $setWeightAndSize .= 'document.getElementById("weighting['.$i.']").value = "'.$weighting.'";';
             }
-            foreach ($listAnswersInfo['tabinputsize'] as $i => $sizeOfInput) {
+            foreach ($listAnswersInfo['input_size'] as $i => $sizeOfInput) {
                 $setWeightAndSize .= 'document.getElementById("sizeofinput['.$i.']").value = "'.$sizeOfInput.'";';
                 $setWeightAndSize .= 'document.getElementById("samplesize['.$i.']").style.width = "'.$sizeOfInput.'px";';
             }
         }
 
-        echo '<script>
-            
+        echo '<script>            
             var firstTime = true;            
             var originalOrder = new Array();   
             var blankSeparatorStart = "'.$blankSeparatorStart.'";
@@ -519,7 +518,7 @@ class FillBlanks extends Question
         $displayForStudent,
         $inBlankNumber
     ) {
-        $inTabTeacherSolution = $listAnswersInfo['tabwords'];
+        $inTabTeacherSolution = $listAnswersInfo['words'];
         $inTeacherSolution = $inTabTeacherSolution[$inBlankNumber];
 
         switch (self::getFillTheBlankAnswerType($inTeacherSolution)) {
@@ -716,20 +715,20 @@ class FillBlanks extends Question
      *
      * @return array of information about the answer
      */
-    public static function getAnswerInfo($userAnswer = "", $isStudentAnswer = false)
+    public static function getAnswerInfo($userAnswer = '', $isStudentAnswer = false)
     {
-        $listAnswerResults = array();
+        $listAnswerResults = [];
         $listAnswerResults['text'] = '';
-        $listAnswerResults['wordsCount'] = 0;
-        $listAnswerResults['tabwordsbracket'] = array();
-        $listAnswerResults['tabwords'] = array();
-        $listAnswerResults['tabweighting'] = array();
-        $listAnswerResults['tabinputsize'] = array();
+        $listAnswerResults['words_count'] = 0;
+        $listAnswerResults['words_with_bracket'] = [];
+        $listAnswerResults['words'] = [];
+        $listAnswerResults['weighting'] = [];
+        $listAnswerResults['input_size'] = [];
         $listAnswerResults['switchable'] = '';
-        $listAnswerResults['studentanswer'] = array();
-        $listAnswerResults['studentscore'] = array();
-        $listAnswerResults['blankseparatornumber'] = 0;
-        $listDoubleColon = array();
+        $listAnswerResults['student_answer'] = [];
+        $listAnswerResults['student_score'] = [];
+        $listAnswerResults['blank_separator_number'] = 0;
+        $listDoubleColon = [];
 
         api_preg_match("/(.*)::(.*)$/s", $userAnswer, $listResult);
 
@@ -741,7 +740,7 @@ class FillBlanks extends Question
             $listDoubleColon[] = $listResult[2];
         }
 
-        $listAnswerResults['systemstring'] = $listDoubleColon[1];
+        $listAnswerResults['system_string'] = $listDoubleColon[1];
 
         // Make sure we only take the last bit to find special marks
         $listArobaseSplit = explode('@', $listDoubleColon[1]);
@@ -768,27 +767,27 @@ class FillBlanks extends Question
         }
 
         $listAnswerResults['text'] = $listDoubleColon[0];
-        $listAnswerResults['tabweighting'] = $listWeightings;
-        $listAnswerResults['tabinputsize'] = $listSizeOfInput;
+        $listAnswerResults['weighting'] = $listWeightings;
+        $listAnswerResults['input_size'] = $listSizeOfInput;
         $listAnswerResults['switchable'] = $listArobaseSplit[1];
-        $listAnswerResults['blankseparatorstart'] = self::getStartSeparator($blankSeparatorNumber);
-        $listAnswerResults['blankseparatorend'] = self::getEndSeparator($blankSeparatorNumber);
-        $listAnswerResults['blankseparatornumber'] = $blankSeparatorNumber;
+        $listAnswerResults['blank_separator_start'] = self::getStartSeparator($blankSeparatorNumber);
+        $listAnswerResults['blank_separator_end'] = self::getEndSeparator($blankSeparatorNumber);
+        $listAnswerResults['blank_separator_number'] = $blankSeparatorNumber;
 
         $blankCharStart = self::getStartSeparator($blankSeparatorNumber);
         $blankCharEnd = self::getEndSeparator($blankSeparatorNumber);
         $blankCharStartForRegexp = self::escapeForRegexp($blankCharStart);
         $blankCharEndForRegexp = self::escapeForRegexp($blankCharEnd);
 
-        // get all blanks words
-        $listAnswerResults['wordsCount'] = api_preg_match_all(
+        // Get all blanks words
+        $listAnswerResults['words_count'] = api_preg_match_all(
             '/'.$blankCharStartForRegexp.'[^'.$blankCharEndForRegexp.']*'.$blankCharEndForRegexp.'/',
             $listDoubleColon[0],
             $listWords
         );
 
-        if ($listAnswerResults['wordsCount'] > 0) {
-            $listAnswerResults['tabwordsbracket'] = $listWords[0];
+        if ($listAnswerResults['words_count'] > 0) {
+            $listAnswerResults['words_with_bracket'] = $listWords[0];
             // remove [ and ] in string
             array_walk(
                 $listWords[0],
@@ -801,7 +800,7 @@ class FillBlanks extends Question
                 },
                 [$blankCharStart, $blankCharEnd]
             );
-            $listAnswerResults['tabwords'] = $listWords[0];
+            $listAnswerResults['words'] = $listWords[0];
         }
 
         // Get all common words
@@ -816,28 +815,28 @@ class FillBlanks extends Question
         $listBrackets = [];
         $listWords = [];
         if ($isStudentAnswer) {
-            for ($i = 0; $i < count($listAnswerResults['tabwords']); $i++) {
-                $listBrackets[] = $listAnswerResults['tabwordsbracket'][$i];
-                $listWords[] = $listAnswerResults['tabwords'][$i];
-                if ($i + 1 < count($listAnswerResults['tabwords'])) {
+            for ($i = 0; $i < count($listAnswerResults['words']); $i++) {
+                $listBrackets[] = $listAnswerResults['words_with_bracket'][$i];
+                $listWords[] = $listAnswerResults['words'][$i];
+                if ($i + 1 < count($listAnswerResults['words'])) {
                     // should always be
                     $i++;
                 }
-                $listAnswerResults['studentanswer'][] = $listAnswerResults['tabwords'][$i];
-                if ($i + 1 < count($listAnswerResults['tabwords'])) {
+                $listAnswerResults['student_answer'][] = $listAnswerResults['words'][$i];
+                if ($i + 1 < count($listAnswerResults['words'])) {
                     // should always be
                     $i++;
                 }
-                $listAnswerResults['studentscore'][] = $listAnswerResults['tabwords'][$i];
+                $listAnswerResults['student_score'][] = $listAnswerResults['words'][$i];
             }
-            $listAnswerResults['tabwords'] = $listWords;
-            $listAnswerResults['tabwordsbracket'] = $listBrackets;
+            $listAnswerResults['words'] = $listWords;
+            $listAnswerResults['words_with_bracket'] = $listBrackets;
 
             // if we are in student view, we've got 3 times :::::: for common words
             $commonWords = api_preg_replace("/::::::/", "::", $commonWords);
         }
 
-        $listAnswerResults['commonwords'] = explode("::", $commonWords);
+        $listAnswerResults['common_words'] = explode("::", $commonWords);
 
         return $listAnswerResults;
     }
@@ -907,23 +906,23 @@ class FillBlanks extends Question
             $tabAnswer = self::getAnswerInfo($data['answer'], true);
 
             // for each bracket to find in this question
-            foreach ($tabAnswer['studentanswer'] as $bracketNumber => $studentAnswer) {
-                if ($tabAnswer['studentanswer'][$bracketNumber] != '') {
+            foreach ($tabAnswer['student_answer'] as $bracketNumber => $studentAnswer) {
+                if ($tabAnswer['student_answer'][$bracketNumber] != '') {
                     // student has answered this bracket, cool
-                    switch (self::getFillTheBlankAnswerType($tabAnswer['tabwords'][$bracketNumber])) {
+                    switch (self::getFillTheBlankAnswerType($tabAnswer['words'][$bracketNumber])) {
                         case self::FILL_THE_BLANK_MENU:
                             // get the indice of the choosen answer in the menu
                             // we know that the right answer is the first entry of the menu, ie 0
                             // (remember, menu entries are shuffled when taking the test)
                             $tabUserResult[$data['user_id']][$bracketNumber] = self::getFillTheBlankMenuAnswerNum(
-                                $tabAnswer['tabwords'][$bracketNumber],
-                                $tabAnswer['studentanswer'][$bracketNumber]
+                                $tabAnswer['words'][$bracketNumber],
+                                $tabAnswer['student_answer'][$bracketNumber]
                             );
                             break;
                         default:
-                            if (self::isGoodStudentAnswer(
-                                $tabAnswer['studentanswer'][$bracketNumber],
-                                $tabAnswer['tabwords'][$bracketNumber]
+                            if (self::isStudentAnswerGood(
+                                $tabAnswer['student_answer'][$bracketNumber],
+                                $tabAnswer['words'][$bracketNumber]
                             )
                             ) {
                                 $tabUserResult[$data['user_id']][$bracketNumber] = 0; //  right answer
@@ -980,20 +979,20 @@ class FillBlanks extends Question
      */
     public static function getAnswerInStudentAttempt($listWithStudentAnswer)
     {
-        $separatorStart = $listWithStudentAnswer['blankseparatorstart'];
-        $separatorEnd = $listWithStudentAnswer['blankseparatorend'];
+        $separatorStart = $listWithStudentAnswer['blank_separator_start'];
+        $separatorEnd = $listWithStudentAnswer['blank_separator_end'];
         // lets rebuild the sentence with [correct answer][student answer][answer is correct]
         $result = '';
-        for ($i = 0; $i < count($listWithStudentAnswer['commonwords']) - 1; $i++) {
-            $result .= $listWithStudentAnswer['commonwords'][$i];
-            $result .= $listWithStudentAnswer['tabwordsbracket'][$i];
-            $result .= $separatorStart.$listWithStudentAnswer['studentanswer'][$i].$separatorEnd;
-            $result .= $separatorStart.$listWithStudentAnswer['studentscore'][$i].$separatorEnd;
+        for ($i = 0; $i < count($listWithStudentAnswer['common_words']) - 1; $i++) {
+            $result .= $listWithStudentAnswer['common_words'][$i];
+            $result .= $listWithStudentAnswer['words_with_bracket'][$i];
+            $result .= $separatorStart.$listWithStudentAnswer['student_answer'][$i].$separatorEnd;
+            $result .= $separatorStart.$listWithStudentAnswer['student_score'][$i].$separatorEnd;
         }
-        $result .= $listWithStudentAnswer['commonwords'][$i];
+        $result .= $listWithStudentAnswer['common_words'][$i];
         $result .= "::";
         // add the system string
-        $result .= $listWithStudentAnswer['systemstring'];
+        $result .= $listWithStudentAnswer['system_string'];
 
         return $result;
     }
@@ -1181,19 +1180,19 @@ class FillBlanks extends Question
 
         // rebuild the answer with good HTML style
         // this is the student answer, right or wrong
-        for ($i = 0; $i < count($listStudentAnswerInfo['studentanswer']); $i++) {
-            if ($listStudentAnswerInfo['studentscore'][$i] == 1) {
-                $listStudentAnswerInfo['studentanswer'][$i] = self::getHtmlRightAnswer(
-                    $listStudentAnswerInfo['studentanswer'][$i],
-                    $listStudentAnswerInfo['tabwords'][$i],
+        for ($i = 0; $i < count($listStudentAnswerInfo['student_answer']); $i++) {
+            if ($listStudentAnswerInfo['student_score'][$i] == 1) {
+                $listStudentAnswerInfo['student_answer'][$i] = self::getHtmlRightAnswer(
+                    $listStudentAnswerInfo['student_answer'][$i],
+                    $listStudentAnswerInfo['words'][$i],
                     $feedbackType,
                     $resultsDisabled,
                     $showTotalScoreAndUserChoices
                 );
             } else {
-                $listStudentAnswerInfo['studentanswer'][$i] = self::getHtmlWrongAnswer(
-                    $listStudentAnswerInfo['studentanswer'][$i],
-                    $listStudentAnswerInfo['tabwords'][$i],
+                $listStudentAnswerInfo['student_answer'][$i] = self::getHtmlWrongAnswer(
+                    $listStudentAnswerInfo['student_answer'][$i],
+                    $listStudentAnswerInfo['words'][$i],
                     $feedbackType,
                     $resultsDisabled,
                     $showTotalScoreAndUserChoices
@@ -1202,13 +1201,13 @@ class FillBlanks extends Question
         }
 
         // rebuild the sentence with student answer inserted
-        for ($i = 0; $i < count($listStudentAnswerInfo['commonwords']); $i++) {
-            $result .= isset($listStudentAnswerInfo['commonwords'][$i]) ? $listStudentAnswerInfo['commonwords'][$i] : '';
-            $result .= isset($listStudentAnswerInfo['studentanswer'][$i]) ? $listStudentAnswerInfo['studentanswer'][$i] : '';
+        for ($i = 0; $i < count($listStudentAnswerInfo['common_words']); $i++) {
+            $result .= isset($listStudentAnswerInfo['common_words'][$i]) ? $listStudentAnswerInfo['common_words'][$i] : '';
+            $result .= isset($listStudentAnswerInfo['student_answer'][$i]) ? $listStudentAnswerInfo['student_answer'][$i] : '';
         }
 
         // the last common word (should be </p>)
-        $result .= isset($listStudentAnswerInfo['commonwords'][$i]) ? $listStudentAnswerInfo['commonwords'][$i] : '';
+        $result .= isset($listStudentAnswerInfo['common_words'][$i]) ? $listStudentAnswerInfo['common_words'][$i] : '';
 
         return $result;
     }
@@ -1352,8 +1351,8 @@ class FillBlanks extends Question
     public static function isCorrect($answerText)
     {
         $answerInfo = self::getAnswerInfo($answerText, true);
-        $correctAnswerList = $answerInfo['tabwords'];
-        $studentAnswer = $answerInfo['studentanswer'];
+        $correctAnswerList = $answerInfo['words'];
+        $studentAnswer = $answerInfo['student_answer'];
         $isCorrect = true;
 
         foreach ($correctAnswerList as $i => $correctAnswer) {

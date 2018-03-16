@@ -51,7 +51,8 @@ class UniqueAnswerImage extends UniqueAnswer
             $commentTitle = '<th >'.get_lang('Comment').'</th>';
         }
 
-        $html = '<div class="alert alert-success" role="alert">'.get_lang('UniqueAnswerImagePreferredSize200x150').'</div>';
+        $html = '<div class="alert alert-success" role="alert">'.
+                get_lang('UniqueAnswerImagePreferredSize200x150').'</div>';
         $html .= '<table class="table table-striped table-hover">
             <thead>
                 <tr style="text-align: center;">

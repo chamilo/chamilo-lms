@@ -6,9 +6,8 @@ use ChamiloSession as Session;
 /**
  * This page aims at requesting a password from a user to access a course
  * protected by password. If the password matches the course password, we
- * store the fact that user can access it during its session
+ * store the fact that user can access it during its session.
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
@@ -17,7 +16,7 @@ $session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : null;
 $user_id = api_get_user_id();
 
 /**
- * Security check
+ * Security check.
  */
 if (empty($course_id)) {
     api_not_allowed();
@@ -54,4 +53,3 @@ $tpl->assign('form', $form->toHtml());
 $content = $tpl->get_template('auth/set_temp_password.tpl');
 $tpl->assign('content', $tpl->fetch($content));
 $tpl->display_one_col_template();
-

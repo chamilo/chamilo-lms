@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * GradeModel
+ * GradeModel.
  *
  * @ORM\Table(name="grade_model")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class GradeModel
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -37,14 +37,14 @@ class GradeModel
     private $description;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="default_lowest_eval_exclude", type="boolean", nullable=true)
      */
     private $defaultLowestEvalExclude;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="default_external_eval", type="boolean", nullable=true)
      */
@@ -58,9 +58,10 @@ class GradeModel
     private $defaultExternalEvalPrefix;
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return GradeModel
      */
     public function setName($name)
@@ -71,7 +72,7 @@ class GradeModel
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -81,9 +82,10 @@ class GradeModel
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return GradeModel
      */
     public function setDescription($description)
@@ -94,7 +96,7 @@ class GradeModel
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -104,9 +106,10 @@ class GradeModel
     }
 
     /**
-     * Set defaultLowestEvalExclude
+     * Set defaultLowestEvalExclude.
      *
-     * @param boolean $defaultLowestEvalExclude
+     * @param bool $defaultLowestEvalExclude
+     *
      * @return GradeModel
      */
     public function setDefaultLowestEvalExclude($defaultLowestEvalExclude)
@@ -117,9 +120,9 @@ class GradeModel
     }
 
     /**
-     * Get defaultLowestEvalExclude
+     * Get defaultLowestEvalExclude.
      *
-     * @return boolean
+     * @return bool
      */
     public function getDefaultLowestEvalExclude()
     {
@@ -127,9 +130,10 @@ class GradeModel
     }
 
     /**
-     * Set defaultExternalEval
+     * Set defaultExternalEval.
      *
-     * @param boolean $defaultExternalEval
+     * @param bool $defaultExternalEval
+     *
      * @return GradeModel
      */
     public function setDefaultExternalEval($defaultExternalEval)
@@ -140,9 +144,9 @@ class GradeModel
     }
 
     /**
-     * Get defaultExternalEval
+     * Get defaultExternalEval.
      *
-     * @return boolean
+     * @return bool
      */
     public function getDefaultExternalEval()
     {
@@ -150,9 +154,10 @@ class GradeModel
     }
 
     /**
-     * Set defaultExternalEvalPrefix
+     * Set defaultExternalEvalPrefix.
      *
      * @param string $defaultExternalEvalPrefix
+     *
      * @return GradeModel
      */
     public function setDefaultExternalEvalPrefix($defaultExternalEvalPrefix)
@@ -163,7 +168,7 @@ class GradeModel
     }
 
     /**
-     * Get defaultExternalEvalPrefix
+     * Get defaultExternalEvalPrefix.
      *
      * @return string
      */
@@ -173,9 +178,9 @@ class GradeModel
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

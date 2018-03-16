@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*
-* @package chamilo.exercise
-* @author Toon Keppens
-* @version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
-*/
-
+ * @package chamilo.exercise
+ *
+ * @author Toon Keppens
+ *
+ * @version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
+ */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);

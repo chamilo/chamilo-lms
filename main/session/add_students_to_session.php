@@ -14,10 +14,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // setting breadcrumbs
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'session_list.php',
-    'name' => get_lang('SessionList')
-);
+    'name' => get_lang('SessionList'),
+];
 
 // Setting the name of the tool
 $tool_name = get_lang('SubscribeStudentsToSession');
@@ -25,9 +25,9 @@ $add_type = 'multiple';
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
-$form_sent  = 0;
-$errorMsg   = '';
-$users = $sessions = array();
+$form_sent = 0;
+$errorMsg = '';
+$users = $sessions = [];
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 SessionManager::protectSession($id);
 
@@ -47,8 +47,8 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     }
 }
 
-$session_list = SessionManager::get_sessions_list(array(), array('name'));
-$sessionList = array();
+$session_list = SessionManager::get_sessions_list([], ['name']);
+$sessionList = [];
 foreach ($session_list as $session) {
     $sessionList[$session['id']] = $session['name'];
 }
@@ -63,11 +63,11 @@ echo Display::input('hidden', 'form_sent', '1');
     <table border="0" cellpadding="5" cellspacing="0" width="100%">
         <tr>
             <td align="center">
-                <b><?php echo get_lang('Sessions') ?> :</b>
+                <b><?php echo get_lang('Sessions'); ?> :</b>
             </td>
             <td></td>
             <td align="center">
-                <b><?php echo get_lang('Sessions') ?> :</b>
+                <b><?php echo get_lang('Sessions'); ?> :</b>
             </td>
         </tr>
         <tr>
@@ -77,7 +77,7 @@ echo Display::input('hidden', 'form_sent', '1');
                      'sessions[]',
                      $sessionList,
                      '',
-                     array('style'=>'width:100%', 'multiple'=>'multiple', 'id'=>'sessions', 'size'=>'15px'),
+                     ['style' => 'width:100%', 'multiple' => 'multiple', 'id' => 'sessions', 'size' => '15px'],
                      false
                  );
                 ?>
@@ -90,7 +90,7 @@ echo Display::input('hidden', 'form_sent', '1');
                     'sessions_destination[]',
                     $sessionList,
                     '',
-                    array('style'=>'width:100%', 'id'=>'courses', 'size'=>'15px'),
+                    ['style' => 'width:100%', 'id' => 'courses', 'size' => '15px'],
                     false
                 );
                 ?>

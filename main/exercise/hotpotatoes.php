@@ -3,10 +3,11 @@
 
 /**
  * Code for HotPotatoes integration.
+ *
  * @package chamilo.exercise
+ *
  * @author Istvan Mandak (original author)
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 require_once 'hotpotatoes.lib.php';
 
@@ -22,13 +23,13 @@ if (!api_is_allowed_to_edit(null, true)) {
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
+        'name' => get_lang('ToolGradebook'),
     ];
 }
 // The breadcrumbs.
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq(),
-    'name' => get_lang('Exercises')
+    'name' => get_lang('Exercises'),
 ];
 
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);

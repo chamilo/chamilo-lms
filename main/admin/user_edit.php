@@ -3,8 +3,7 @@
 
 /**
  * @package chamilo.admin
-*/
-
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -79,8 +78,8 @@ $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $noPHP_SELF = true;
 $tool_name = get_lang('ModifyUserInfo');
 
-$interbreadcrumb[] = array('url' => 'index.php', "name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => "user_list.php", "name" => get_lang('UserList'));
+$interbreadcrumb[] = ['url' => 'index.php', "name" => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => "user_list.php", "name" => get_lang('UserList')];
 
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
@@ -137,7 +136,7 @@ if (api_is_western_name_order()) {
 }
 
 // Official code
-$form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => '40'));
+$form->addElement('text', 'official_code', get_lang('OfficialCode'), ['size' => '40']);
 $form->applyFilter('official_code', 'html_filter');
 $form->applyFilter('official_code', 'trim');
 
@@ -165,7 +164,7 @@ $form->addElement('text', 'phone', get_lang('PhoneNumber'));
 $form->addFile(
     'picture',
     get_lang('AddImage'),
-    array('id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '1 / 1')
+    ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '1 / 1']
 );
 $allowed_picture_types = api_get_supported_image_extensions(false);
 
@@ -181,7 +180,7 @@ if (strlen($user_data['picture_uri']) > 0) {
 
 // Username
 if (api_get_setting('login_is_email') != 'true') {
-    $form->addElement('text', 'username', get_lang('LoginName'), array('maxlength' => USERNAME_MAX_LENGTH));
+    $form->addElement('text', 'username', get_lang('LoginName'), ['maxlength' => USERNAME_MAX_LENGTH]);
     $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
     $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
@@ -199,7 +198,7 @@ if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0
 $form->addElement('radio', 'reset_password', get_lang('Password'), get_lang('DontResetPassword'), 0);
 $nb_ext_auth_source_added = 0;
 if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0) {
-    $auth_sources = array();
+    $auth_sources = [];
     foreach ($extAuthSource as $key => $info) {
         // @todo : make uniform external authentication configuration (ex : cas and external_login ldap)
         // Special case for CAS. CAS is activated from Chamilo > Administration > Configuration > CAS
@@ -219,20 +218,20 @@ if (isset($extAuthSource) && !empty($extAuthSource) && count($extAuthSource) > 0
     }
 }
 $form->addElement('radio', 'reset_password', null, get_lang('AutoGeneratePassword'), 1);
-$group = array();
+$group = [];
 $group[] = $form->createElement('radio', 'reset_password', null, get_lang('EnterPassword'), 2);
 $group[] = $form->createElement(
     'password',
     'password',
     null,
-    array('onkeydown' => 'javascript: password_switch_radio_button();')
+    ['onkeydown' => 'javascript: password_switch_radio_button();']
 );
 
 $form->addGroup($group, 'password', null, null, false);
 $form->addPasswordRule('password', 'password');
 
 // Status
-$status = array();
+$status = [];
 $status[COURSEMANAGER] = get_lang('Teacher');
 $status[STUDENT] = get_lang('Learner');
 $status[DRH] = get_lang('Drh');
@@ -245,17 +244,17 @@ $form->addElement(
     'status',
     get_lang('Profile'),
     $status,
-    array(
+    [
         'id' => 'status_select',
-        'onchange' => 'javascript: display_drh_list();'
-    )
+        'onchange' => 'javascript: display_drh_list();',
+    ]
 );
 
 $display = isset($user_data['status']) && ($user_data['status'] == STUDENT || (isset($_POST['status']) && $_POST['status'] == STUDENT)) ? 'block' : 'none';
 
 // Platform admin
 if (api_is_platform_admin()) {
-    $group = array();
+    $group = [];
     $group[] = $form->createElement('radio', 'platform_admin', null, get_lang('Yes'), 1);
     $group[] = $form->createElement('radio', 'platform_admin', null, get_lang('No'), 0);
 
@@ -270,7 +269,7 @@ if (api_is_platform_admin()) {
 $form->addSelectLanguage('language', get_lang('Language'));
 
 // Send email
-$group = array();
+$group = [];
 $group[] = $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
 $group[] = $form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
 $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), null, false);
@@ -283,9 +282,9 @@ $form->addElement('label', get_lang('RegistrationDate'), $date);
 if (!$user_data['platform_admin']) {
     // Expiration Date
     $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
-    $group = array();
+    $group = [];
     $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
-    $group[] = $form->createElement('DateTimePicker', 'expiration_date', null, array('onchange' => 'javascript: enable_expiration_date();'));
+    $group[] = $form->createElement('DateTimePicker', 'expiration_date', null, ['onchange' => 'javascript: enable_expiration_date();']);
     $form->addGroup($group, 'max_member_group', null, null, false);
 
     // Active account or inactive account
@@ -485,7 +484,7 @@ $actions = [
         Display::return_icon(
             'info.png',
             get_lang('Information'),
-            array(),
+            [],
             ICON_SIZE_MEDIUM
         ),
         api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$user_id
@@ -498,7 +497,7 @@ $actions = [
             ICON_SIZE_MEDIUM
         ),
         api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::getTokenFromSession()
-    )
+    ),
 ];
 
 $content = Display::toolbarAction('toolbar-user-information', [implode(PHP_EOL, $actions)]);

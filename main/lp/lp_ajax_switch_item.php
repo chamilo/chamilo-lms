@@ -7,7 +7,9 @@ use ChamiloSession as Session;
  * This script contains the server part of the xajax interaction process. The client part is located
  * in lp_api.php or other api's.
  * This is a first attempt at using xajax and AJAX in general, so the code might be a bit unsettling.
+ *
  * @package chamilo.learnpath
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
@@ -16,16 +18,17 @@ $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 /**
- * Get one item's details
- * @param   integer LP ID
- * @param   integer user ID
- * @param   integer View ID
- * @param   integer Current item ID
- * @param   integer New item ID
+ * Get one item's details.
+ *
+ * @param   int LP ID
+ * @param   int user ID
+ * @param   int View ID
+ * @param   int Current item ID
+ * @param   int New item ID
  */
 function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_item)
 {
-    $debug  = 0;
+    $debug = 0;
     $return = '';
     if ($debug > 0) {
         error_log(
@@ -107,17 +110,17 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
      * -suspend_data
      */
     $myscore = $mylpi->get_score();
-    $mymax   = $mylpi->get_max();
+    $mymax = $mylpi->get_max();
     if ($mymax === '') {
         $mymax = "''";
     }
-    $mymin              = $mylpi->get_min();
-    $mylesson_status    = $mylpi->get_status();
-    $mylesson_location  = $mylpi->get_lesson_location();
-    $mytotal_time       = $mylpi->get_scorm_time('js');
-    $mymastery_score    = $mylpi->get_mastery_score();
+    $mymin = $mylpi->get_min();
+    $mylesson_status = $mylpi->get_status();
+    $mylesson_location = $mylpi->get_lesson_location();
+    $mytotal_time = $mylpi->get_scorm_time('js');
+    $mymastery_score = $mylpi->get_mastery_score();
     $mymax_time_allowed = $mylpi->get_max_time_allowed();
-    $mylaunch_data      = $mylpi->get_launch_data();
+    $mylaunch_data = $mylpi->get_launch_data();
     /*
     if ($mylpi->get_type() == 'asset') {
         // Temporary measure to save completion of an asset. Later on, Chamilo should trigger something on unload, maybe... (even though that would mean the last item cannot be completed)
@@ -126,11 +129,11 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
         $mylpi->save();
     }
     */
-    $mysession_time    = $mylpi->get_total_time();
-    $mysuspend_data    = $mylpi->get_suspend_data();
+    $mysession_time = $mylpi->get_total_time();
+    $mysuspend_data = $mylpi->get_suspend_data();
     $mylesson_location = $mylpi->get_lesson_location();
-    $myic              = $mylpi->get_interactions_count();
-    $myistring         = '';
+    $myic = $mylpi->get_interactions_count();
+    $myistring = '';
     for ($i = 0; $i < $myic; $i++) {
         $myistring .= ",[".$i.",'','','','','','','']";
     }

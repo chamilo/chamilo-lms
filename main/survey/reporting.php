@@ -3,13 +3,14 @@
 
 /**
  * @package chamilo.survey
+ *
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
+ *
  * @version $Id: reporting.php 21652 2009-06-27 17:07:35Z herodoto $
  *
  * @todo The question has to be more clearly indicated (same style as when filling the survey)
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -111,22 +112,22 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
-    'name' => get_lang('SurveyList')
-);
-$interbreadcrumb[] = array(
+    'name' => get_lang('SurveyList'),
+];
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
-    'name' => $urlname
-);
+    'name' => $urlname,
+];
 
 if (!isset($_GET['action']) || isset($_GET['action']) && $_GET['action'] == 'overview') {
     $tool_name = get_lang('Reporting');
 } else {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$survey_id,
-        'name' => get_lang('Reporting')
-    );
+        'name' => get_lang('Reporting'),
+    ];
     switch ($_GET['action']) {
         case 'questionreport':
             $singlePage = isset($_GET['single_page']) ? intval($_GET['single_page']) : 0;
@@ -175,7 +176,7 @@ if (!isset($_GET['action']) ||
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('QuestionsOverallReport').'</h4><p>'.get_lang('QuestionsOverallReportDetail').'</p>',
         $url.'action=questionreport&survey_id='.$survey_id.'&'.$cidReq.'&single_page=1',
-        array('class' => 'list-group-item')
+        ['class' => 'list-group-item']
     );
 
     $html .= Display::url(
@@ -186,7 +187,7 @@ if (!isset($_GET['action']) ||
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('DetailedReportByQuestion').'</h4><p>'.get_lang('DetailedReportByQuestionDetail').'</p>',
         $url.'action=questionreport&survey_id='.$survey_id.'&'.$cidReq,
-        array('class' => 'list-group-item')
+        ['class' => 'list-group-item']
     );
 
     $html .= Display::url(
@@ -197,7 +198,7 @@ if (!isset($_GET['action']) ||
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('DetailedReportByUser').'</h4><p>'.get_lang('DetailedReportByUserDetail').'</p>',
         $url.'action=userreport&survey_id='.$survey_id.'&'.$cidReq,
-        array('class' => 'list-group-item')
+        ['class' => 'list-group-item']
     );
 
     $html .= Display::url(
@@ -208,7 +209,7 @@ if (!isset($_GET['action']) ||
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('ComparativeReport').'</h4><p>'.get_lang('ComparativeReportDetail').'</p>',
         $url.'action=comparativereport&survey_id='.$survey_id.'&'.$cidReq,
-        array('class' => 'list-group-item')
+        ['class' => 'list-group-item']
     );
 
     $html .= Display::url(
@@ -219,7 +220,7 @@ if (!isset($_GET['action']) ||
             ICON_SIZE_MEDIUM
         ).'<h4>'.get_lang('CompleteReport').'</h4><p>'.get_lang('CompleteReportDetail').'</p>',
         $url.'action=completereport&survey_id='.$survey_id.'&'.$cidReq,
-        array('class' => 'list-group-item')
+        ['class' => 'list-group-item']
     );
 
     $html .= '</div>';

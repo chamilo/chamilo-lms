@@ -2,34 +2,21 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Announcement Email
+ * Announcement Email.
  *
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  * @author Julio Montoya <gugli100@gmail.com> Adding session support
  */
 class AnnouncementEmail
 {
+    public $session_id = null;
     protected $course = null;
     protected $announcement = null;
-    public $session_id = null;
-
-    /**
-     *
-     * @param array $courseInfo
-     * @param int $sessionId
-     * @param int $announcementId
-     *
-     * @return AnnouncementEmail
-     */
-    public static function create($courseInfo, $sessionId, $announcementId)
-    {
-        return new self($courseInfo, $sessionId, $announcementId);
-    }
 
     /**
      * @param array $courseInfo
-     * @param int $sessionId
-     * @param int $announcementId
+     * @param int   $sessionId
+     * @param int   $announcementId
      */
     public function __construct($courseInfo, $sessionId, $announcementId)
     {
@@ -47,7 +34,19 @@ class AnnouncementEmail
     }
 
     /**
-     * Course info
+     * @param array $courseInfo
+     * @param int   $sessionId
+     * @param int   $announcementId
+     *
+     * @return AnnouncementEmail
+     */
+    public static function create($courseInfo, $sessionId, $announcementId)
+    {
+        return new self($courseInfo, $sessionId, $announcementId);
+    }
+
+    /**
+     * Course info.
      *
      * @param string $key
      *
@@ -62,9 +61,10 @@ class AnnouncementEmail
     }
 
     /**
-     * Announcement info
+     * Announcement info.
      *
      * @param string $key
+     *
      * @return array
      */
     public function announcement($key = '')
@@ -77,7 +77,7 @@ class AnnouncementEmail
 
     /**
      * Returns either all course users or all session users depending on whether
-     * session is turned on or not
+     * session is turned on or not.
      *
      * @return array
      */
@@ -90,9 +90,9 @@ class AnnouncementEmail
                 $userList = CourseManager::get_user_list_from_course_code($courseCode);
             } else {
                 $userList = GroupManager::get_users($group_id);
-                $new_user_list = array();
+                $new_user_list = [];
                 foreach ($userList as $user) {
-                    $new_user_list[] = array('user_id' => $user);
+                    $new_user_list[] = ['user_id' => $user];
                 }
                 $userList = $new_user_list;
             }
@@ -113,9 +113,9 @@ class AnnouncementEmail
      */
     public function sent_to_info()
     {
-        $result = array();
-        $result['groups'] = array();
-        $result['users'] = array();
+        $result = [];
+        $result['groups'] = [];
+        $result['users'] = [];
 
         $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tool = TOOL_ANNOUNCEMENT;
@@ -156,7 +156,7 @@ class AnnouncementEmail
     /**
      * Returns the list of user info to which an announcement was sent.
      * This function returns a list of actual users even when recipient
-     * are groups
+     * are groups.
      *
      * @return array
      */
@@ -164,7 +164,7 @@ class AnnouncementEmail
     {
         $sent_to = $this->sent_to_info();
         $users = $sent_to['users'];
-        $users = $users ? $users : array();
+        $users = $users ? $users : [];
         $groups = $sent_to['groups'];
 
         if ($users) {
@@ -196,10 +196,10 @@ class AnnouncementEmail
     }
 
     /**
-     * Sender info
+     * Sender info.
      *
      * @param string $key
-     * @param int $userId
+     * @param int    $userId
      *
      * @return array
      */
@@ -211,7 +211,7 @@ class AnnouncementEmail
     }
 
     /**
-     * Email subject
+     * Email subject.
      *
      * @return string
      */
@@ -224,7 +224,8 @@ class AnnouncementEmail
     }
 
     /**
-     * Email message
+     * Email message.
+     *
      * @param int $receiverUserId
      *
      * @return string
@@ -279,7 +280,7 @@ class AnnouncementEmail
      */
     public function attachment()
     {
-        $result = array();
+        $result = [];
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $id = $this->announcement('id');
         $course_id = $this->course('id');
@@ -290,19 +291,20 @@ class AnnouncementEmail
         while ($row = Database::fetch_array($rs)) {
             $path = api_get_path(SYS_COURSE_PATH).$course_path.'/upload/announcements/'.$row['path'];
             $filename = $row['filename'];
-            $result[] = array('path' => $path, 'filename' => $filename);
+            $result[] = ['path' => $path, 'filename' => $filename];
         }
 
-        $result = $result ? reset($result) : array();
+        $result = $result ? reset($result) : [];
 
         return $result;
     }
 
     /**
      * Send emails to users.
+     *
      * @param bool $sendToUsersInSession
-     * @param bool $sendToDrhUsers send a copy of the message to the DRH users
-     * related to the main user
+     * @param bool $sendToDrhUsers       send a copy of the message to the DRH users
+     *                                   related to the main user
      */
     public function send($sendToUsersInSession = false, $sendToDrhUsers = false)
     {
@@ -364,7 +366,7 @@ class AnnouncementEmail
     }
 
     /**
-     * Store that emails where sent
+     * Store that emails where sent.
      */
     public function logMailSent()
     {

@@ -6,13 +6,15 @@ namespace Chamilo\CoreBundle\Entity\Repository;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 
 /**
- * Class BranchSyncRepository
+ * Class BranchSyncRepository.
+ *
  * @package Chamilo\CoreBundle\Entity\Repository
  */
 class BranchSyncRepository extends NestedTreeRepository
 {
     /**
      * @param string $keyword
+     *
      * @return mixed
      */
     public function searchByKeyword($keyword)
@@ -32,6 +34,7 @@ class BranchSyncRepository extends NestedTreeRepository
         $qb->where('b.branchName LIKE :keyword');
         $qb->setParameter('keyword', "%$keyword%");
         $q = $qb->getQuery();
+
         return $q->execute();
     }
 }

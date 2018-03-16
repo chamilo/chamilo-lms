@@ -1,7 +1,7 @@
 <?php
 
 /**
- * DO vm_min_size_id/vm_max_size_id sizes
+ * DO vm_min_size_id/vm_max_size_id sizes.
  *
  * ID    Name
  * 66    512MB
@@ -17,22 +17,22 @@
  * 68    96GB
  */
 
-return array(
+return [
     'enabled' => true,
-    'vms' => array(
-        array(
+    'vms' => [
+        [
             'enabled' => true,
             'name' => 'DigitalOcean',
             'vm_client_id' => 'client_id',
             'api_key' => '123456',
             'vm_id' => '123456', // The VM ID we want to access
             'vm_min_size_id' => '66', // VM size ID example for 512mb use 66
-            'vm_max_size_id' => '65' // For 1GB use 63
-        ),
+            'vm_max_size_id' => '65', // For 1GB use 63
+        ],
         // The Amazon hook is not implemented yet
-        array(
+        [
             'enabled' => false,
-            'name' => 'Amazon'
-        )
-    )
-);
+            'name' => 'Amazon',
+        ],
+    ],
+];

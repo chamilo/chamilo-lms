@@ -8,10 +8,10 @@ use ChamiloSession as Session;
  * the platform's users.
  * It can be called from the JavaScript library email_links.lib.php which
  * overtakes the mailto: links to use the internal interface instead.
+ *
  * @author	Yannick Warnier <ywarnier@beeznest.org>
  * @author Julio Montoya <gugli100@gmail.com> Updating form with formvalidator
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 if (empty(api_get_user_id())) {
@@ -30,7 +30,7 @@ $form->addElement('hidden', 'dest');
 $form->addElement('text', 'email_address', get_lang('EmailDestination'));
 $form->addElement('text', 'email_title', get_lang('EmailTitle'));
 $form->freeze('email_address');
-$form->addElement('textarea', 'email_text', get_lang('EmailText'), array('rows' => '6'));
+$form->addElement('textarea', 'email_text', get_lang('EmailText'), ['rows' => '6']);
 $form->addRule('email_address', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('email_title', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('email_text', get_lang('ThisFieldIsRequired'), 'required');
@@ -56,12 +56,12 @@ switch ($action) {
         $emailText = Security::remove_XSS($_REQUEST['email_text']);
 }
 
-$defaults = array(
+$defaults = [
     'dest' => $emailDest,
     'email_address' => $emailDest,
     'email_title' => $emailTitle,
-    'email_text' => $emailText
-);
+    'email_text' => $emailText,
+];
 
 $form->setDefaults($defaults);
 

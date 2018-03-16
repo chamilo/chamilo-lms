@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TrackEHotspot
+ * TrackEHotspot.
  *
  * @ORM\Table(name="track_e_hotspot", indexes={
  *     @ORM\Index(name="hotspot_course_code", columns={"hotspot_course_code"}),
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackEHotspot
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="hotspot_id", type="integer")
      * @ORM\Id
@@ -28,7 +28,7 @@ class TrackEHotspot
     private $hotspotId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="hotspot_user_id", type="integer", nullable=false)
      */
@@ -42,35 +42,35 @@ class TrackEHotspot
     private $hotspotCourseCode;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=true)
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="hotspot_exe_id", type="integer", nullable=false)
      */
     private $hotspotExeId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="hotspot_question_id", type="integer", nullable=false)
      */
     private $hotspotQuestionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="hotspot_answer_id", type="integer", nullable=false)
      */
     private $hotspotAnswerId;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="hotspot_correct", type="boolean", nullable=false)
      */
@@ -84,9 +84,10 @@ class TrackEHotspot
     private $hotspotCoordinate;
 
     /**
-     * Set hotspotUserId
+     * Set hotspotUserId.
      *
-     * @param integer $hotspotUserId
+     * @param int $hotspotUserId
+     *
      * @return TrackEHotspot
      */
     public function setHotspotUserId($hotspotUserId)
@@ -97,9 +98,9 @@ class TrackEHotspot
     }
 
     /**
-     * Get hotspotUserId
+     * Get hotspotUserId.
      *
-     * @return integer
+     * @return int
      */
     public function getHotspotUserId()
     {
@@ -107,9 +108,10 @@ class TrackEHotspot
     }
 
     /**
-     * Set hotspotCourseCode
+     * Set hotspotCourseCode.
      *
      * @param string $hotspotCourseCode
+     *
      * @return TrackEHotspot
      */
     public function setHotspotCourseCode($hotspotCourseCode)
@@ -120,7 +122,7 @@ class TrackEHotspot
     }
 
     /**
-     * Get hotspotCourseCode
+     * Get hotspotCourseCode.
      *
      * @return string
      */
@@ -130,9 +132,10 @@ class TrackEHotspot
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return TrackEHotspot
      */
     public function setCId($cId)
@@ -143,9 +146,9 @@ class TrackEHotspot
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -153,9 +156,10 @@ class TrackEHotspot
     }
 
     /**
-     * Set hotspotExeId
+     * Set hotspotExeId.
      *
-     * @param integer $hotspotExeId
+     * @param int $hotspotExeId
+     *
      * @return TrackEHotspot
      */
     public function setHotspotExeId($hotspotExeId)
@@ -166,9 +170,9 @@ class TrackEHotspot
     }
 
     /**
-     * Get hotspotExeId
+     * Get hotspotExeId.
      *
-     * @return integer
+     * @return int
      */
     public function getHotspotExeId()
     {
@@ -176,9 +180,10 @@ class TrackEHotspot
     }
 
     /**
-     * Set hotspotQuestionId
+     * Set hotspotQuestionId.
      *
-     * @param integer $hotspotQuestionId
+     * @param int $hotspotQuestionId
+     *
      * @return TrackEHotspot
      */
     public function setHotspotQuestionId($hotspotQuestionId)
@@ -189,9 +194,9 @@ class TrackEHotspot
     }
 
     /**
-     * Get hotspotQuestionId
+     * Get hotspotQuestionId.
      *
-     * @return integer
+     * @return int
      */
     public function getHotspotQuestionId()
     {
@@ -199,9 +204,10 @@ class TrackEHotspot
     }
 
     /**
-     * Set hotspotAnswerId
+     * Set hotspotAnswerId.
      *
-     * @param integer $hotspotAnswerId
+     * @param int $hotspotAnswerId
+     *
      * @return TrackEHotspot
      */
     public function setHotspotAnswerId($hotspotAnswerId)
@@ -212,9 +218,9 @@ class TrackEHotspot
     }
 
     /**
-     * Get hotspotAnswerId
+     * Get hotspotAnswerId.
      *
-     * @return integer
+     * @return int
      */
     public function getHotspotAnswerId()
     {
@@ -222,9 +228,10 @@ class TrackEHotspot
     }
 
     /**
-     * Set hotspotCorrect
+     * Set hotspotCorrect.
      *
-     * @param boolean $hotspotCorrect
+     * @param bool $hotspotCorrect
+     *
      * @return TrackEHotspot
      */
     public function setHotspotCorrect($hotspotCorrect)
@@ -235,9 +242,9 @@ class TrackEHotspot
     }
 
     /**
-     * Get hotspotCorrect
+     * Get hotspotCorrect.
      *
-     * @return boolean
+     * @return bool
      */
     public function getHotspotCorrect()
     {
@@ -245,9 +252,10 @@ class TrackEHotspot
     }
 
     /**
-     * Set hotspotCoordinate
+     * Set hotspotCoordinate.
      *
      * @param string $hotspotCoordinate
+     *
      * @return TrackEHotspot
      */
     public function setHotspotCoordinate($hotspotCoordinate)
@@ -258,7 +266,7 @@ class TrackEHotspot
     }
 
     /**
-     * Get hotspotCoordinate
+     * Get hotspotCoordinate.
      *
      * @return string
      */
@@ -268,9 +276,9 @@ class TrackEHotspot
     }
 
     /**
-     * Get hotspotId
+     * Get hotspotId.
      *
-     * @return integer
+     * @return int
      */
     public function getHotspotId()
     {

@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Career
+ * Career.
  *
  * @ORM\Table(name="career")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Career
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -37,7 +37,7 @@ class Career
     private $description;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
@@ -57,10 +57,10 @@ class Career
      */
     private $updatedAt;
 
-     /**
-     * Get id
+    /**
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -68,9 +68,10 @@ class Career
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return Career
      */
     public function setName($name)
@@ -81,7 +82,7 @@ class Career
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -91,9 +92,10 @@ class Career
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return Career
      */
     public function setDescription($description)
@@ -104,7 +106,7 @@ class Career
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -114,9 +116,10 @@ class Career
     }
 
     /**
-     * Set status
+     * Set status.
      *
-     * @param integer $status
+     * @param int $status
+     *
      * @return Career
      */
     public function setStatus($status)
@@ -127,9 +130,9 @@ class Career
     }
 
     /**
-     * Get status
+     * Get status.
      *
-     * @return integer
+     * @return int
      */
     public function getStatus()
     {
@@ -137,9 +140,10 @@ class Career
     }
 
     /**
-     * Set createdAt
+     * Set createdAt.
      *
      * @param \DateTime $createdAt
+     *
      * @return Career
      */
     public function setCreatedAt($createdAt)
@@ -150,7 +154,7 @@ class Career
     }
 
     /**
-     * Get createdAt
+     * Get createdAt.
      *
      * @return \DateTime
      */
@@ -160,9 +164,10 @@ class Career
     }
 
     /**
-     * Set updatedAt
+     * Set updatedAt.
      *
      * @param \DateTime $updatedAt
+     *
      * @return Career
      */
     public function setUpdatedAt($updatedAt)
@@ -173,7 +178,7 @@ class Career
     }
 
     /**
-     * Get updatedAt
+     * Get updatedAt.
      *
      * @return \DateTime
      */

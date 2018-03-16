@@ -7,7 +7,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 require_once __DIR__.'/cm_webservice.php';
 
 /**
- * Description of cm_soap_inbox
+ * Description of cm_soap_inbox.
  *
  * @author marcosousa
  */
@@ -26,8 +26,10 @@ class WSCMInbox extends WSCM
 
             $sql_result = Database::query($sql_query);
             $result = Database::fetch_array($sql_result);
+
             return $result['number_messages'];
         }
+
         return "0";
     }
 
@@ -52,7 +54,6 @@ class WSCMInbox extends WSCM
             }
 
             return $message;
-
         } else {
             return get_lang('InvalidId');
         }
@@ -93,8 +94,8 @@ class WSCMInbox extends WSCM
 
             $sql_result = Database::query($sql_query);
             $result = Database::fetch_row($sql_result);
-            return $htmlcode ? html_entity_decode($result[0]) : $result[0];
 
+            return $htmlcode ? html_entity_decode($result[0]) : $result[0];
         } else {
             return get_lang('InvalidId');
         }
@@ -121,7 +122,6 @@ class WSCMInbox extends WSCM
             }
 
             return $message;
-
         } else {
             return get_lang('InvalidId');
         }
@@ -151,7 +151,6 @@ class WSCMInbox extends WSCM
                     break;
                 default:
                     $field_table = "title";
-
             }
             $user_id = UserManager::get_user_id_from_username($username);
             $table_message = Database::get_main_table(TABLE_MESSAGE);
@@ -184,7 +183,6 @@ class WSCMInbox extends WSCM
             $subject = htmlentities($subject);
             $content = htmlentities($content);
 
-
             $table_message = Database::get_main_table(TABLE_MESSAGE);
 
             $query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
@@ -198,7 +196,6 @@ class WSCMInbox extends WSCM
             $inbox_last_id = Database::insert_id();
 
             return $inbox_last_id;
-
         } else {
             return get_lang('InvalidId');
         }

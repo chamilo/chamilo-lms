@@ -1,23 +1,26 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
 use Chamilo\UserBundle\Entity\User;
+use ChamiloSession as Session;
 
 /**
- * Class Login
+ * Class Login.
+ *
  * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
  * @author Julio Montoya <gugli100@gmail.com>
+ *
  * @package chamilo.login
  */
 class Login
 {
     /**
-     * Get user account list
+     * Get user account list.
      *
-     * @param array $user array with keys: email, password, uid, loginName
-     * @param boolean $reset
-     * @param boolean $by_username
+     * @param array $user        array with keys: email, password, uid, loginName
+     * @param bool  $reset
+     * @param bool  $by_username
+     *
      * @return string
      */
     public static function get_user_account_list($user, $reset = false, $by_username = false)
@@ -66,14 +69,17 @@ class Login
             $reset_link = get_lang('Pass')." : $user[password]";
             $user_account_list = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$user['loginName']."\n".$reset_link.'';
         }
+
         return $user_account_list;
     }
 
     /**
-     * This function sends the actual password to the user
+     * This function sends the actual password to the user.
      *
      * @param int $user
+     *
      * @return string
+     *
      * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
      */
     public static function send_password_to_user($user, $by_username = false)
@@ -126,10 +132,11 @@ class Login
     }
 
     /**
-     * Handle encrypted password, send an email to a user with his password
+     * Handle encrypted password, send an email to a user with his password.
      *
      * @param int user id
      * @param bool $by_username
+     *
      * @return string
      *
      * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
@@ -139,7 +146,7 @@ class Login
         $email_subject = "[".api_get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
 
         if ($by_username) {
-        // Show only for lost password
+            // Show only for lost password
             $user_account_list = self::get_user_account_list($user, true, $by_username); // BODY
             $email_to = $user['email'];
         } else {
@@ -195,32 +202,33 @@ class Login
     public static function sendResetEmail(User $user)
     {
         //if (null === $user->getConfirmationToken()) {
-            $uniqueId = api_get_unique_id();
-            $user->setConfirmationToken($uniqueId);
-            $user->setPasswordRequestedAt(new \DateTime());
+        $uniqueId = api_get_unique_id();
+        $user->setConfirmationToken($uniqueId);
+        $user->setPasswordRequestedAt(new \DateTime());
 
-            Database::getManager()->persist($user);
-            Database::getManager()->flush();
+        Database::getManager()->persist($user);
+        Database::getManager()->flush();
 
-            $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
-            $mailSubject = get_lang('ResetPasswordInstructions');
-            $mailBody = sprintf(
+        $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
+        $mailSubject = get_lang('ResetPasswordInstructions');
+        $mailBody = sprintf(
                 get_lang('ResetPasswordCommentWithUrl'),
                 $url
             );
 
-            api_mail_html(
+        api_mail_html(
                 $user->getCompleteName(),
                 $user->getEmail(),
                 $mailSubject,
                 $mailBody
             );
-            Display::addFlash(Display::return_message(get_lang('CheckYourEmailAndFollowInstructions')));
+        Display::addFlash(Display::return_message(get_lang('CheckYourEmailAndFollowInstructions')));
         //}
     }
 
     /**
-     * Gets the secret word
+     * Gets the secret word.
+     *
      * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
      */
     public static function get_secret_word($add)
@@ -229,7 +237,8 @@ class Login
     }
 
     /**
-     * Resets a password
+     * Resets a password.
+     *
      * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
      */
     public static function reset_password($secret, $id, $by_username = false)
@@ -244,7 +253,7 @@ class Login
                     password,
                     email,
                     auth_source
-                FROM " . $tbl_user."
+                FROM ".$tbl_user."
                 WHERE user_id = $id";
         $result = Database::query($sql);
         $num_rows = Database::num_rows($result);
@@ -272,11 +281,11 @@ class Login
     }
 
     /**
-     *
      * @global bool   $is_platformAdmin
      * @global bool   $is_allowedCreateCourse
      * @global object $_user
-     * @param boolean $reset
+     *
+     * @param bool $reset
      */
     public static function init_user($user_id, $reset)
     {
@@ -324,7 +333,7 @@ class Login
                     $_user['status'] = $uData['status'];
 
                     $is_platformAdmin = (bool) (!is_null($uData['is_admin']));
-                    $is_allowedCreateCourse = (bool) (($uData ['status'] == 1) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == 4));
+                    $is_allowedCreateCourse = (bool) (($uData['status'] == 1) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == 4));
                     ConditionalLogin::check_conditions($uData);
 
                     Session::write('_user', $_user);
@@ -350,8 +359,8 @@ class Login
     }
 
     /**
-     *
      * @deprecated
+     *
      * @global bool $is_platformAdmin
      * @global bool $is_allowedCreateCourse
      * @global object $_user
@@ -367,9 +376,9 @@ class Login
      * @global type $is_allowed_in_course
      *
      * @param type $course_id
-     * @param boolean $reset
+     * @param bool $reset
      */
-    static function init_course($course_id, $reset)
+    public static function init_course($course_id, $reset)
     {
         global $is_platformAdmin;
         global $_user;
@@ -403,7 +412,7 @@ class Login
                     $_real_cid = $course_data['id'];
 
                     $_cid = $course_data['code'];
-                    $_course = array();
+                    $_course = [];
                     $_course['real_id'] = $course_data['id'];
                     $_course['id'] = $course_data['code']; //auto-assigned integer
                     $_course['code'] = $course_data['code'];
@@ -515,9 +524,9 @@ class Login
                     } else {
                         Event::courseLogout(
                             [
-                                'uid' => intval($_user ['user_id']),
+                                'uid' => intval($_user['user_id']),
                                 'cid' => api_get_course_int_id(),
-                                'sid' => api_get_session_id()
+                                'sid' => api_get_session_id(),
                             ]
                         );
                     }
@@ -543,7 +552,7 @@ class Login
                 $sql = "SELECT * FROM $course_user_table
                        WHERE
                         user_id  = '".$user_id."' AND
-                        relation_type <> " . COURSE_RELATION_TYPE_RRHH." AND
+                        relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
                         c_id = '".$_real_cid."'";
                 $result = Database::query($sql);
 
@@ -604,11 +613,11 @@ class Login
                         } else {
                             //Im a coach or a student?
                             $sql = "SELECT user_id, status
-                                    FROM " . $tbl_session_course_user."
+                                    FROM ".$tbl_session_course_user."
                                     WHERE
                                         c_id = '$_cid' AND
                                         user_id = '".$user_id."' AND
-                                        session_id = '" . $session_id."'
+                                        session_id = '".$session_id."'
                                     LIMIT 1";
                             $result = Database::query($sql);
 
@@ -736,15 +745,14 @@ class Login
     }
 
     /**
-     *
      * @global int $_cid
      * @global array $_course
      * @global int $_gid
      *
-     * @param int $group_id
+     * @param int  $group_id
      * @param bool $reset
      */
-    static function init_group($group_id, $reset)
+    public static function init_group($group_id, $reset)
     {
         global $_cid;
         global $_course;
@@ -757,7 +765,7 @@ class Login
                 $result = Database::query($sql);
                 if (Database::num_rows($result) > 0) { // This group has recorded status related to this course
                     $gpData = Database::fetch_array($result);
-                    $_gid = $gpData ['id'];
+                    $_gid = $gpData['id'];
                     Session::write('_gid', $_gid);
                 } else {
                     Session::erase('_gid');
@@ -767,7 +775,7 @@ class Login
                 Session::erase('_gid');
             }
         } elseif (isset($_SESSION['_gid'])) { // continue with the previous values
-            $_gid = $_SESSION ['_gid'];
+            $_gid = $_SESSION['_gid'];
         } else { //if no previous value, assign caracteristic undefined value
             $_gid = -1;
         }
@@ -790,7 +798,7 @@ class Login
                         }
                     }
                 }
-            //} elseif (!empty($_SESSION['studentview'])) {
+                //} elseif (!empty($_SESSION['studentview'])) {
                 //all is fine, no change to that, obviously
             } elseif (empty($_SESSION['studentview'])) {
                 // We are in teacherview here
@@ -800,10 +808,11 @@ class Login
     }
 
     /**
-     * Returns true if user exists in the platform when asking the password
+     * Returns true if user exists in the platform when asking the password.
      *
      * @param string $username (email or username)
-     * @return array|boolean
+     *
+     * @return array|bool
      */
     public static function get_user_accounts_by_username($username)
     {

@@ -4,16 +4,17 @@
 use ChamiloSession as Session;
 
 /**
- *  Shows the exercise results
+ *  Shows the exercise results.
  *
  * @author Julio Montoya - Added switchable fill in blank option added
+ *
  * @version $Id: exercise_show.php 22256 2009-07-20 17:40:20Z ivantcholakov $
+ *
  * @package chamilo.exercise
+ *
  * @todo remove the debug code and use the general debug library
  * @todo small letters for table variables
- *
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $debug = false;
 $origin = api_get_origin();
@@ -133,17 +134,17 @@ $allowTeacherCommentAudio = api_get_configuration_value('allow_teacher_comment_a
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
+        'name' => get_lang('ToolGradebook'),
     ];
 }
 
 $interbreadcrumb[] = [
     "url" => "exercise.php?".api_get_cidreq(),
-    'name' => get_lang('Exercises')
+    'name' => get_lang('Exercises'),
 ];
 $interbreadcrumb[] = [
     "url" => "overview.php?exerciseId=".$exercise_id.'&'.api_get_cidreq(),
-    "name" => $objExercise->selectTitle(true)
+    "name" => $objExercise->selectTitle(true),
 ];
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Result')];
 
@@ -178,7 +179,7 @@ if ($action != 'export') {
         Display::url(
             Display::return_icon('pdf.png', get_lang('Export')),
             api_get_self().'?'.api_get_cidreq().'&id='.$id.'&action=export&'
-        )
+        ),
     ]); ?>
     <script>
         <?php echo $scoreJsCode; ?>
@@ -396,35 +397,20 @@ foreach ($questionList as $questionId) {
     $relPath = api_get_path(WEB_CODE_PATH);
     switch ($answerType) {
         case MULTIPLE_ANSWER_COMBINATION:
-            //no break
         case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:
-            //no break
         case UNIQUE_ANSWER:
-            //no break;
         case UNIQUE_ANSWER_NO_OPTION:
-            //no break
         case UNIQUE_ANSWER_IMAGE:
-            //no break
         case MULTIPLE_ANSWER:
-            //no break
         case MULTIPLE_ANSWER_TRUE_FALSE:
-            //no break
         case FILL_IN_BLANKS:
-            //no break
         case CALCULATED_ANSWER:
-            //no break
         case GLOBAL_MULTIPLE_ANSWER:
-            //no break
         case FREE_ANSWER:
-            //no break
         case ORAL_EXPRESSION:
-            //no break
         case MATCHING:
-            //no break
         case DRAGGABLE:
-            //no break
         case READING_COMPREHENSION:
-            //no break
         case MATCHING_DRAGGABLE:
             $question_result = $objExercise->manage_answer(
                 $id,
@@ -761,7 +747,7 @@ foreach ($questionList as $questionId) {
                     [
                         'ToolbarSet' => 'TestAnswerFeedback',
                         'Width' => '100%',
-                        'Height' => '120'
+                        'Height' => '120',
                     ]
                 );
             } else {
@@ -769,7 +755,6 @@ foreach ($questionList as $questionId) {
             }
             $feedback_form->setDefaults($default);
             $feedback_form->display();
-
 
             echo '</div>';
 
@@ -909,7 +894,7 @@ foreach ($questionList as $questionId) {
     if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
         $scoreToReview = [
             'score' => $my_total_score,
-            'comments' => isset($comnt) ? $comnt : null
+            'comments' => isset($comnt) ? $comnt : null,
         ];
         $check = $objQuestionTmp->isQuestionWaitingReview($scoreToReview);
         if ($check === false) {
@@ -962,7 +947,7 @@ if (!empty($category_list) && ($show_results || $show_only_total_score || $showT
     // Adding total
     $category_list['total'] = [
         'score' => $my_total_score_temp,
-        'total' => $totalWeighting
+        'total' => $totalWeighting,
     ];
     echo TestCategory::get_stats_table_by_attempt(
         $objExercise->id,
@@ -995,7 +980,7 @@ if ($action == 'export') {
         'pdf_date' => '',
         'show_real_course_teachers' => false,
         'show_teacher_as_myself' => false,
-        'orientation' => 'P'
+        'orientation' => 'P',
     ];
     $pdf = new PDF('A4', $params['orientation'], $params);
     $pdf->html_to_pdf_with_template($content, false, false, true);
@@ -1019,7 +1004,7 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
             'exeid' => $id,
             'origin' => $origin,
             'details' => 'true',
-            'course' => Security::remove_XSS($_GET['cidReq'])
+            'course' => Security::remove_XSS($_GET['cidReq']),
         ]);
 
         $emailForm = new FormValidator('myform', 'post', $formUrl, '', ['id' => 'myform']);
@@ -1034,7 +1019,7 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
             'exerciseId' => $exercise_id,
             'filter' => 1,
             'comments' => 'update',
-            'exeid' => $id
+            'exeid' => $id,
         ]);
 
         $emailForm = new FormValidator(
@@ -1096,7 +1081,7 @@ if ($origin == 'student_progress') {
 } elseif ($origin == 'myprogress') {
         ?>
     <button type="button" class="save"
-            onclick="top.location.href='../auth/my_progress.php?course=<?php echo api_get_course_id() ?>'"
+            onclick="top.location.href='../auth/my_progress.php?course=<?php echo api_get_course_id(); ?>'"
             value="<?php echo get_lang('Finish'); ?>">
         <?php echo get_lang('Finish'); ?>
     </button>
@@ -1115,7 +1100,7 @@ if ($origin != 'learnpath') {
             'lp_id' => $learnpath_id,
             'lp_item_id' => $learnpath_item_id,
             'exeId' => $exeId,
-            'fb_type' => $feedback_type
+            'fb_type' => $feedback_type,
         ]);
         $href = ($lp_mode == 'fullscreen')
             ? ' window.opener.location.href="'.$url.'" '

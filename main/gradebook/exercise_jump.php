@@ -6,11 +6,12 @@
  * This intermediate page is needed because the user is not inside a course
  * when visiting the gradebook, and several course scripts rely on these
  * variables.
- * Most code here is ripped from /main/course_home/course_home.php
+ * Most code here is ripped from /main/course_home/course_home.php.
+ *
  * @author Bert Steppé
+ *
  * @package chamilo.gradebook
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 $this_section = SECTION_COURSES;
@@ -29,7 +30,7 @@ if (isset($_GET['doexercise'])) {
         'origin' => '',
         'learnpath_id' => '',
         'learnpath_item_id' => '',
-        'exerciseId' => intval($_GET['doexercise'])
+        'exerciseId' => intval($_GET['doexercise']),
     ]);
 }
 

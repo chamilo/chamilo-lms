@@ -21,11 +21,11 @@ $addProcess = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 SessionManager::protectSession($id_session);
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
+$interbreadcrumb[] = [
     'url' => "resume_session.php?id_session=".$id_session,
     "name" => get_lang('SessionOverview'),
-);
+];
 
 // Database Table Definitions
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -46,26 +46,26 @@ $page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
 
 $extra_field_list = UserManager::get_extra_fields();
 
-$new_field_list = array();
+$new_field_list = [];
 if (is_array($extra_field_list)) {
     foreach ($extra_field_list as $extra_field) {
         //if is enabled to filter and is a "<select>" field type
         if ($extra_field[8] == 1 && $extra_field[2] == ExtraField::FIELD_TYPE_SELECT) {
-            $new_field_list[] = array(
+            $new_field_list[] = [
                 'name' => $extra_field[3],
                 'type' => $extra_field[2],
                 'variable' => $extra_field[1],
                 'data' => $extra_field[9],
-            );
+            ];
         }
         if ($extra_field[8] == 1 && $extra_field[2] == ExtraField::FIELD_TYPE_TAG) {
             $options = UserManager::get_extra_user_data_for_tags($extra_field[1]);
-            $new_field_list[] = array(
+            $new_field_list[] = [
                 'name' => $extra_field[3],
                 'type' => $extra_field[2],
                 'variable' => $extra_field[1],
                 'data' => $options['options'],
-            );
+            ];
         }
     }
 }
@@ -81,7 +81,6 @@ function search_users($needle, $type)
     $return = '';
 
     if (!empty($needle) && !empty($type)) {
-
         // Normal behaviour
         if ($type == 'any_session' && $needle == 'false') {
             $type = 'multiple';
@@ -107,7 +106,7 @@ function search_users($needle, $type)
         $cond_user_id = '';
 
         // Only for single & multiple
-        if (in_array($type, array('single', 'multiple'))) {
+        if (in_array($type, ['single', 'multiple'])) {
             if (!empty($id_session)) {
                 $id_session = intval($id_session);
                 // check id_user from session_rel_user table
@@ -115,7 +114,7 @@ function search_users($needle, $type)
                     SELECT user_id FROM $tbl_session_rel_user
                     WHERE session_id = $id_session AND relation_type <> ".SESSION_RELATION_TYPE_RRHH;
                 $res = Database::query($sql);
-                $user_ids = array();
+                $user_ids = [];
                 if (Database::num_rows($res) > 0) {
                     while ($row = Database::fetch_row($res)) {
                         $user_ids[] = (int) $row[0];
@@ -315,8 +314,8 @@ function change_select(val) {
 
 $form_sent = 0;
 $errorMsg = $firstLetterUser = $firstLetterSession = '';
-$UserList = $SessionList = array();
-$sessions = array();
+$UserList = $SessionList = [];
+$sessions = [];
 $noPHP_SELF = true;
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
@@ -326,7 +325,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $UserList = $_POST['sessionUsersList'];
 
     if (!is_array($UserList)) {
-        $UserList = array();
+        $UserList = [];
     }
 
     if ($form_sent == 1) {
@@ -347,7 +346,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 $session_info = SessionManager::fetch($id_session);
 Display::display_header($tool_name);
 
-$nosessionUsersList = $sessionUsersList = array();
+$nosessionUsersList = $sessionUsersList = [];
 $where_filter = null;
 $ajax_search = $add_type == 'unique' ? true : false;
 
@@ -428,7 +427,7 @@ if ($ajax_search) {
     $use_extra_fields = false;
     if (is_array($extra_field_list)) {
         if (is_array($new_field_list) && count($new_field_list) > 0) {
-            $result_list = array();
+            $result_list = [];
             foreach ($new_field_list as $new_field) {
                 $varname = 'field_'.$new_field['variable'];
                 $fieldtype = $new_field['type'];
@@ -453,7 +452,7 @@ if ($ajax_search) {
     }
 
     if ($use_extra_fields) {
-        $final_result = array();
+        $final_result = [];
         if (count($extra_field_result) > 1) {
             for ($i = 0; $i < count($extra_field_result) - 1; $i++) {
                 if (is_array($extra_field_result[$i + 1])) {
@@ -537,12 +536,12 @@ if ($ajax_search) {
 
     foreach ($users as $uid => $user) {
         if ($user['session_id'] != $id_session) {
-            $nosessionUsersList[$user['id']] = array(
+            $nosessionUsersList[$user['id']] = [
                 'fn' => $user['firstname'],
                 'ln' => $user['lastname'],
                 'un' => $user['username'],
-                'official_code' => $user['official_code']
-            );
+                'official_code' => $user['official_code'],
+            ];
             unset($users[$uid]);
         }
     }
@@ -630,10 +629,10 @@ $newLinks .= Display::url(
     </div>
     <form name="formulaire" method="post"
           action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($addProcess)) {
-              echo '&add=true';
-          } ?>" <?php if ($ajax_search) {
-        echo ' onsubmit="valide();"';
-    } ?>>
+            echo '&add=true';
+        } ?>" <?php if ($ajax_search) {
+            echo ' onsubmit="valide();"';
+        } ?>>
         <?php echo '<legend>'.$tool_name.' ('.$session_info['name'].') </legend>'; ?>
         <?php
         if ($add_type == 'multiple') {
@@ -688,7 +687,7 @@ $newLinks .= Display::url(
         <div id="multiple-add-session" class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label><?php echo get_lang('UserListInPlatform') ?> </label>
+                    <label><?php echo get_lang('UserListInPlatform'); ?> </label>
                     <?php
                     if (!($add_type == 'multiple')) {
                         ?>
@@ -710,19 +709,17 @@ $newLinks .= Display::url(
                                         <?php
                                         $personName = $enreg['ln'].' '.$enreg['fn'].' ('.$enreg['un'].') '
                                             .$enreg['official_code'];
-                                        if ($showOfficialCode) {
-                                            $officialCode =
+                                    if ($showOfficialCode) {
+                                        $officialCode =
                                                 !empty($enreg['official_code']) ? $enreg['official_code'].' - '
                                                     : '? - ';
-                                            $personName =
+                                        $personName =
                                                 $officialCode.$enreg['ln'].' '.$enreg['fn'].' ('.$enreg['un'].')';
-                                        }
-                                        echo $personName;
-                                        ?>
+                                    }
+                                    echo $personName; ?>
                                     </option>
                                     <?php
-                                }
-                                ?>
+                                } ?>
                             </select>
                         </div>
                         <input type="checkbox" onchange="checked_in_no_session(this.checked);"
@@ -737,17 +734,18 @@ $newLinks .= Display::url(
             </div>
 
             <div class="col-md-4">
-                <?php if ($add_type == 'multiple') { ?>
+                <?php if ($add_type == 'multiple') {
+                        ?>
                     <?php echo get_lang('FirstLetterUser'); ?> :
                     <select id="first_letter_user" name="firstLetterUser" onchange="change_select(this.value);">
                         <option value="%">--</option>
                         <?php
-                        echo Display:: get_alphabet_options();
-                        ?>
+                        echo Display:: get_alphabet_options(); ?>
                     </select>
                     <br/>
                     <br/>
-                <?php } ?>
+                <?php
+                    } ?>
                 <div class="control-course">
                     <?php
                     if ($ajax_search) {
@@ -790,7 +788,7 @@ $newLinks .= Display::url(
             </div>
 
             <div class="col-md-4">
-                <label><?php echo get_lang('UserListInSession') ?> :</label>
+                <label><?php echo get_lang('UserListInSession'); ?> :</label>
                 <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15"
                         class="form-control">
                     <?php
@@ -800,15 +798,14 @@ $newLinks .= Display::url(
                             <?php
                             $personName = $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].') '
                                 .$enreg['official_code'];
-                            if ($showOfficialCode) {
-                                $officialCode =
+                        if ($showOfficialCode) {
+                            $officialCode =
                                     !empty($enreg['official_code']) ? $enreg['official_code'].' - ' : '? - ';
-                                $personName =
+                            $personName =
                                     $officialCode.$enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username']
                                     .')';
-                            }
-                            echo $personName;
-                            ?>
+                        }
+                        echo $personName; ?>
                         </option>
                         <?php
                     }

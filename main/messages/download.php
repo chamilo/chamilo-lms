@@ -9,7 +9,6 @@
  *
  * @package chamilo.messages
  */
-
 session_cache_limiter('public');
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -48,7 +47,7 @@ $current_uid = api_get_user_id();
 
 // get message user id for inbox/outbox
 $message_uid = '';
-$message_type = array('inbox', 'outbox');
+$message_type = ['inbox', 'outbox'];
 if (in_array($_GET['type'], $message_type)) {
     if ($_GET['type'] == 'inbox') {
         $message_uid = $row_users['user_receiver_id'];

@@ -4,15 +4,15 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * DocumentsStudent toolbar configuration
+ * DocumentsStudent toolbar configuration.
  *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar *
  */
 class DocumentsStudent extends Basic
 {
-
     /**
-     * Get the toolbar config
+     * Get the toolbar config.
+     *
      * @return array
      */
     public function getConfig()
@@ -31,7 +31,8 @@ class DocumentsStudent extends Basic
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is maximized
+     * Get the toolbar configuration when CKEditor is maximized.
+     *
      * @return array
      */
     protected function getMaximizedToolbar()
@@ -53,7 +54,7 @@ class DocumentsStudent extends Basic
                 'Smiley',
                 'SpecialChar',
                 'Asciimath',
-                'Asciisvg'
+                'Asciisvg',
             ],
             '/',
             ['Table', '-', 'CreateDiv'],
@@ -83,12 +84,13 @@ class DocumentsStudent extends Basic
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks'],
             api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
-            ['Toolbarswitch']
+            ['Toolbarswitch'],
         ];
     }
 
     /**
-     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false.
+     *
      * @return array
      */
     protected function getNormalToolbar()
@@ -121,12 +123,13 @@ class DocumentsStudent extends Basic
             ['Bold', 'Italic', 'Underline'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
             api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
-            ['ShowBlocks']
+            ['ShowBlocks'],
         ];
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is minimized
+     * Get the toolbar configuration when CKEditor is minimized.
+     *
      * @return array
      */
     protected function getMinimizedToolbar()
@@ -157,8 +160,7 @@ class DocumentsStudent extends Basic
                 'BGColor',
             ],
             api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
-            ['Toolbarswitch']
+            ['Toolbarswitch'],
         ];
     }
-
 }

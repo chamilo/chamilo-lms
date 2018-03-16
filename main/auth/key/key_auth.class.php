@@ -35,15 +35,19 @@ use ChamiloSession as Session;
  *      url = '...?access_token=' . $token ;
  *
  * @see AccessToken
+ *
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
 class KeyAuth
 {
-
     const PARAM_ACCESS_TOKEN = 'access_token';
 
-    protected static $services = array();
+    protected static $services = [];
+
+    protected function __construct()
+    {
+    }
 
     public static function create_temp_token($service = null, $duration = 60, $user_id = null)
     {
@@ -51,7 +55,7 @@ class KeyAuth
     }
 
     /**
-     * Returns enabled services
+     * Returns enabled services.
      *
      * @return array
      */
@@ -65,15 +69,16 @@ class KeyAuth
      * If empty it disables authentication.
      *
      * !! 10 chars max !!
+     *
      * @param string $_
      */
     public static function enable_services($_)
     {
         $args = func_get_args();
-        $names = array();
+        $names = [];
         foreach ($args as $arg) {
             if (is_object($arg)) {
-                $f = array($arg, 'get_service_name');
+                $f = [$arg, 'get_service_name'];
                 $name = call_user_func($f);
             } else {
                 $name = $arg;
@@ -86,7 +91,7 @@ class KeyAuth
     public static function disable_services($_)
     {
         $args = func_get_args();
-        $names = array();
+        $names = [];
         foreach ($args as $name) {
             $name = substr($name, 0, 10);
             unset(self::$services[$name]);
@@ -101,16 +106,17 @@ class KeyAuth
                 return true;
             }
         }
+
         return false;
     }
 
     public static function clear_services()
     {
-        self::$services[$name] = array();
+        self::$services[$name] = [];
     }
 
     /**
-     * Enable key authentication for the default service - i.e. chamilo
+     * Enable key authentication for the default service - i.e. chamilo.
      */
     public static function enable()
     {
@@ -119,7 +125,7 @@ class KeyAuth
 
     public static function disable()
     {
-        self::$services[$name] = array();
+        self::$services[$name] = [];
     }
 
     /**
@@ -142,23 +148,19 @@ class KeyAuth
         if (empty($result)) {
             $result = new self();
         }
+
         return $result;
-    }
-
-    protected function __construct()
-    {
-
     }
 
     /**
      * Returns true if authentication accepts to run otherwise returns false.
      *
-     * @return boolean
+     * @return bool
      */
     public function accept()
     {
         /**
-         * Authentication method must be enabled
+         * Authentication method must be enabled.
          */
         if (!self::is_enabled()) {
             return false;
@@ -183,7 +185,7 @@ class KeyAuth
         }
 
         /**
-         * User associated with the key must be active
+         * User associated with the key must be active.
          */
         $user = api_get_user_info($token->get_user_id());
         if (empty($user)) {
@@ -203,7 +205,7 @@ class KeyAuth
      * If accepted tear down session, log in user and returns true.
      * If not accepted do nothing and returns false.
      *
-     * @return boolean
+     * @return bool
      */
     public function login()
     {
@@ -211,12 +213,12 @@ class KeyAuth
             return false;
         }
         /**
-         * ! important this is to ensure we don't grant access for other parts
+         * ! important this is to ensure we don't grant access for other parts.
          */
         Session::destroy();
 
         /**
-         * We don't allow redirection since access is granted only for this call
+         * We don't allow redirection since access is granted only for this call.
          */
         global $no_redirection, $noredirection;
         $no_redirection = true;
@@ -235,13 +237,14 @@ class KeyAuth
     }
 
     /**
-     * Returns the request access token
+     * Returns the request access token.
      *
      * @return AccessToken
      */
     public function get_access_token()
     {
         $string = Request::get(self::PARAM_ACCESS_TOKEN);
+
         return AccessToken::parse($string);
     }
 
@@ -256,11 +259,10 @@ class KeyAuth
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function get_group_id()
     {
         return Request::get('gidReq', 0);
     }
-
 }

@@ -3,13 +3,14 @@
 
 namespace Chamilo\CourseBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Chamilo\CourseBundle\DependencyInjection\Compiler\ToolCompilerClass;
 use Chamilo\CourseBundle\DependencyInjection\Compiler\RegisterSchemasPass;
+use Chamilo\CourseBundle\DependencyInjection\Compiler\ToolCompilerClass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * Class ChamiloCourseBundle
+ * Class ChamiloCourseBundle.
+ *
  * @package Chamilo\CourseBundle
  */
 class ChamiloCourseBundle extends Bundle
@@ -19,9 +20,20 @@ class ChamiloCourseBundle extends Bundle
      */
     public static function getSupportedDrivers()
     {
-        return array(
-            SyliusResourceBundle::DRIVER_DOCTRINE_ORM
-        );
+        return [
+            SyliusResourceBundle::DRIVER_DOCTRINE_ORM,
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new ToolCompilerClass());
+        $container->addCompilerPass(new RegisterSchemasPass());
     }
 
     /**
@@ -30,16 +42,5 @@ class ChamiloCourseBundle extends Bundle
     protected function getBundlePrefix()
     {
         return 'chamilo_course';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function build(ContainerBuilder $container)
-    {
-        parent::build($container);
-
-        $container->addCompilerPass(new ToolCompilerClass());
-        $container->addCompilerPass(new RegisterSchemasPass());
     }
 }

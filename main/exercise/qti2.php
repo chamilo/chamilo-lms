@@ -3,11 +3,13 @@
 
 /**
  * Code for Qti2 import integration.
+ *
  * @package chamilo.exercise
+ *
  * @author Ronny Velasquez
+ *
  * @version $Id: qti2.php  2010-03-12 12:14:25Z $
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 // section (for the tabs)
@@ -21,12 +23,12 @@ if (!api_is_allowed_to_edit(null, true)) {
 // the breadcrumbs
 $interbreadcrumb[] = [
     "url" => api_get_path(WEB_CODE_PATH)."exercise/exercise.php?".api_get_cidreq(),
-    "name" => get_lang('Exercises')
+    "name" => get_lang('Exercises'),
 ];
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
 /**
- * This function displays the form to import the zip file with qti2
+ * This function displays the form to import the zip file with qti2.
  */
 function displayForm()
 {
@@ -49,8 +51,10 @@ function displayForm()
 }
 
 /**
- * This function will import the zip file with the respective qti2
+ * This function will import the zip file with the respective qti2.
+ *
  * @param array $array_file ($_FILES)
+ *
  * @return string|array
  */
 function importFile($array_file)

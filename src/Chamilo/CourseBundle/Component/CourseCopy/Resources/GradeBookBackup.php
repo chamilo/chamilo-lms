@@ -4,7 +4,7 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * Class GradeBookBackup
+ * Class GradeBookBackup.
  */
 class GradeBookBackup extends Resource
 {
@@ -12,6 +12,7 @@ class GradeBookBackup extends Resource
 
     /**
      * GradeBookBackup constructor.
+     *
      * @param array $categories
      */
     public function __construct($categories)

@@ -3,12 +3,13 @@
 
 /**
  * @TODO: Improve description
+ *
  * @package chamilo.hookmanagement
  */
 class HookManagement implements HookManagementInterface
 {
     /**
-     * Constructor
+     * Constructor.
      */
     protected function __construct()
     {
@@ -22,8 +23,10 @@ class HookManagement implements HookManagementInterface
     }
 
     /**
-     * Instance the hook manager
+     * Instance the hook manager.
+     *
      * @staticvar null $result
+     *
      * @return HookManagement
      */
     public static function create()
@@ -34,10 +37,11 @@ class HookManagement implements HookManagementInterface
     }
 
     /**
-     * Insert hook into Database. Return insert id
+     * Insert hook into Database. Return insert id.
+     *
      * @param string $eventName
      * @param string $observerClassName
-     * @param int $type
+     * @param int    $type
      *
      * @return int
      */
@@ -52,13 +56,13 @@ class HookManagement implements HookManagementInterface
             $row = Database::select(
                 'id, enabled',
                 $this->tables[TABLE_HOOK_CALL],
-                array(
-                    'where' => array(
+                [
+                    'where' => [
                         'hook_event_id = ? ' => $this->hookEvents[$eventName],
                         'AND hook_observer_id = ? ' => $this->hookObservers[$observerClassName],
                         'AND type = ? ' => $type,
-                    ),
-                ),
+                    ],
+                ],
                 'ASSOC'
             );
 
@@ -67,12 +71,12 @@ class HookManagement implements HookManagementInterface
                 if ((int) $row['enabled'] === 0) {
                     Database::update(
                         $this->tables[TABLE_HOOK_CALL],
-                        array(
+                        [
                             'enabled' => 1,
-                        ),
-                        array(
+                        ],
+                        [
                             'id = ?' => $row['id'],
-                        )
+                        ]
                     );
                 }
             }
@@ -80,10 +84,11 @@ class HookManagement implements HookManagementInterface
     }
 
     /**
-     * Delete hook from Database. Return deleted rows number
+     * Delete hook from Database. Return deleted rows number.
+     *
      * @param string $eventName
      * @param string $observerClassName
-     * @param int $type
+     * @param int    $type
      *
      * @return int
      */
@@ -97,18 +102,19 @@ class HookManagement implements HookManagementInterface
 
             Database::update(
                 $this->tables[TABLE_HOOK_CALL],
-                array(
+                [
                     'enabled' => 0,
-                ),
-                array(
+                ],
+                [
                     'id = ? ' => $this->hookCalls[$eventName][$observerClassName][$type],
-                )
+                ]
             );
         }
     }
 
     /**
-     * Update hook observer order by hook event
+     * Update hook observer order by hook event.
+     *
      * @param $eventName
      * @param $type
      * @param $hookOrders
@@ -121,13 +127,13 @@ class HookManagement implements HookManagementInterface
             foreach ($hookOrders as $oldOrder => $newOrder) {
                 $res = Database::update(
                     $this->tables[TABLE_HOOK_CALL],
-                    array(
+                    [
                         'hook_order ' => $newOrder,
-                    ),
-                    array(
+                    ],
+                    [
                         'id = ? ' => $types[$type],
                         'AND hook_order = ? ' => $oldOrder,
-                    )
+                    ]
                 );
 
                 if ($res) {
@@ -138,21 +144,22 @@ class HookManagement implements HookManagementInterface
     }
 
     /**
-     * Return a list an associative array where keys are the active hook observer class name
+     * Return a list an associative array where keys are the active hook observer class name.
+     *
      * @param string $eventName
      *
      * @return array
      */
     public function listHookObservers($eventName)
     {
-        $array = array();
+        $array = [];
         $joinTable = $this->tables[TABLE_HOOK_CALL].' hc'.
             ' INNER JOIN '.$this->tables[TABLE_HOOK_EVENT].' he'.
             ' ON hc.hook_event_id = he.id '.
             ' INNER JOIN '.$this->tables[TABLE_HOOK_OBSERVER].' ho '.
             ' ON hc.hook_observer_id = ho.id ';
         $columns = 'ho.class_name, ho.path, ho.plugin_name, hc.enabled';
-        $where = array('where' => array('he.class_name = ? ' => $eventName, 'AND hc.enabled = ? ' => 1));
+        $where = ['where' => ['he.class_name = ? ' => $eventName, 'AND hc.enabled = ? ' => 1]];
         $rows = Database::select($columns, $joinTable, $where);
 
         foreach ($rows as $row) {
@@ -163,12 +170,13 @@ class HookManagement implements HookManagementInterface
     }
 
     /**
-     * Return a list an associative array where keys are the active hook observer class name
+     * Return a list an associative array where keys are the active hook observer class name.
+     *
      * @return array
      */
     public function listAllHookObservers()
     {
-        $array = array();
+        $array = [];
         $columns = 'id, class_name';
         $rows = Database::select($columns, $this->tables[TABLE_HOOK_OBSERVER]);
 
@@ -180,12 +188,13 @@ class HookManagement implements HookManagementInterface
     }
 
     /**
-     * Return a list an associative array where keys are the active hook observer class name
+     * Return a list an associative array where keys are the active hook observer class name.
+     *
      * @return array
      */
     public function listAllHookEvents()
     {
-        $array = array();
+        $array = [];
         $columns = 'id, class_name';
         $rows = Database::select($columns, $this->tables[TABLE_HOOK_EVENT]);
 
@@ -197,12 +206,13 @@ class HookManagement implements HookManagementInterface
     }
 
     /**
-     * Return a list an associative array where keys are the active hook observer class name
+     * Return a list an associative array where keys are the active hook observer class name.
+     *
      * @return array
      */
     public function listAllHookCalls()
     {
-        $array = array();
+        $array = [];
         $joinTable = $this->tables[TABLE_HOOK_CALL].' hc'.
             ' INNER JOIN '.$this->tables[TABLE_HOOK_EVENT].' he'.
             ' ON hc.hook_event_id = he.id '.
@@ -220,7 +230,8 @@ class HookManagement implements HookManagementInterface
 
     /**
      * Check if hooks (event, observer, call) exist in Database, if not,
-     * Will insert them into their respective table
+     * Will insert them into their respective table.
+     *
      * @param string $eventName
      * @param string $observerClassName
      *
@@ -230,10 +241,10 @@ class HookManagement implements HookManagementInterface
     {
         // Check if exists hook event
         if (isset($eventName) && !isset($this->hookEvents[$eventName])) {
-            $attributes = array(
+            $attributes = [
                 'class_name' => $eventName,
                 'description' => get_lang('HookDescription'.$eventName),
-            );
+            ];
             $id = Database::insert($this->tables[TABLE_HOOK_EVENT], $attributes);
             $this->hookEvents[$eventName] = $id;
         }
@@ -243,11 +254,11 @@ class HookManagement implements HookManagementInterface
             !isset($this->hookObservers[$observerClassName])
         ) {
             $object = $observerClassName::create();
-            $attributes = array(
+            $attributes = [
                 'class_name' => $observerClassName,
                 'path' => $object->getPath(),
                 'plugin_name' => $object->getPluginName(),
-            );
+            ];
             $id = Database::insert($this->tables[TABLE_HOOK_OBSERVER], $attributes);
             $this->hookObservers[$observerClassName] = $id;
         }
@@ -261,25 +272,25 @@ class HookManagement implements HookManagementInterface
             $row = Database::select(
                 'MAX(hook_order) as hook_order',
                 $this->tables[TABLE_HOOK_CALL],
-                array(
-                    'where' => array(
-                        'hook_event_id = ? ' =>$this->hookEvents[$eventName],
+                [
+                    'where' => [
+                        'hook_event_id = ? ' => $this->hookEvents[$eventName],
                         'AND type = ? ' => HOOK_EVENT_TYPE_PRE,
-                    ),
-                ),
+                    ],
+                ],
                 'ASSOC'
             );
 
             // Check if exists hook call
             $id = Database::insert(
                 $this->tables[TABLE_HOOK_CALL],
-                array(
+                [
                     'hook_event_id' => $this->hookEvents[$eventName],
                     'hook_observer_id' => $this->hookObservers[$observerClassName],
                     'type' => HOOK_EVENT_TYPE_PRE,
                     'enabled' => 0,
                     'hook_order' => $row['hook_order'] + 1,
-                )
+                ]
             );
 
             $this->hookCalls[$eventName][$observerClassName][HOOK_EVENT_TYPE_PRE] = $id;
@@ -288,29 +299,28 @@ class HookManagement implements HookManagementInterface
             $row = Database::select(
                 'MAX(hook_order) as hook_order',
                 $this->tables[TABLE_HOOK_CALL],
-                array(
-                    'where' => array(
-                        'hook_event_id = ? ' =>$this->hookEvents[$eventName],
+                [
+                    'where' => [
+                        'hook_event_id = ? ' => $this->hookEvents[$eventName],
                         'AND type = ? ' => HOOK_EVENT_TYPE_POST,
-                    ),
-                ),
+                    ],
+                ],
                 'ASSOC'
             );
 
             // Check if exists hook call
             $id = Database::insert(
                 $this->tables[TABLE_HOOK_CALL],
-                array(
+                [
                     'hook_event_id' => $this->hookEvents[$eventName],
                     'hook_observer_id' => $this->hookObservers[$observerClassName],
                     'type' => HOOK_EVENT_TYPE_POST,
                     'enabled' => 0,
                     'hook_order' => $row['hook_order'] + 1,
-                )
+                ]
             );
 
             $this->hookCalls[$eventName][$observerClassName][HOOK_EVENT_TYPE_POST] = $id;
-
         } elseif (isset($eventName) && !isset($observerClassName)) {
             foreach ($this->hookObservers as $observer => $id) {
                 $this->insertHookIfNotExist($eventName, $observer);
@@ -325,10 +335,11 @@ class HookManagement implements HookManagementInterface
     }
 
     /**
-     * Return the hook call id identified by hook event, hook observer and type
+     * Return the hook call id identified by hook event, hook observer and type.
+     *
      * @param string $eventName
      * @param string $observerClassName
-     * @param int $type
+     * @param int    $type
      *
      * @return mixed
      */
@@ -345,13 +356,13 @@ class HookManagement implements HookManagementInterface
         $row = Database::select(
             'id',
             $joinTable,
-            array(
-                'where' => array(
+            [
+                'where' => [
                     'he.class_name = ? ' => $eventName,
                     'AND ho.class_name = ? ' => $observerClassName,
                     'AND hc.type = ? ' => $type,
-                ),
-            ),
+                ],
+            ],
             'ASSOC'
         );
 

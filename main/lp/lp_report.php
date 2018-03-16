@@ -2,9 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Report from students for learning path
+ * Report from students for learning path.
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $isAllowedToEdit = api_is_allowed_to_edit(null, true);
@@ -48,12 +47,12 @@ if (empty($sessionId)) {
 $lpInfo = Database::select(
     '*',
     $lpTable,
-    array(
-        'where' => array(
+    [
+        'where' => [
             'c_id = ? AND ' => $courseId,
-            'id = ?' => $lpId
-        )
-    ),
+            'id = ?' => $lpId,
+        ],
+    ],
     'first'
 );
 
@@ -66,21 +65,21 @@ if (!empty($users)) {
         $lpTime = Tracking::get_time_spent_in_lp(
             $user['user_id'],
             $courseCode,
-            array($lpId),
+            [$lpId],
             $sessionId
         );
 
         $lpScore = Tracking::get_avg_student_score(
             $user['user_id'],
             $courseCode,
-            array($lpId),
+            [$lpId],
             $sessionId
         );
 
         $lpProgress = Tracking::get_avg_student_progress(
             $user['user_id'],
             $courseCode,
-            array($lpId),
+            [$lpId],
             $sessionId
         );
 
@@ -104,7 +103,7 @@ if (!empty($users)) {
             'lp_time' => api_time_to_hms($lpTime),
             'lp_score' => is_numeric($lpScore) ? "$lpScore%" : $lpScore,
             'lp_progress' => "$lpProgress%",
-            'lp_last_connection' => $lpLastConnection
+            'lp_last_connection' => $lpLastConnection,
         ];
     }
 } else {
@@ -114,26 +113,25 @@ if (!empty($users)) {
 // View
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths')
+    'name' => get_lang('LearningPaths'),
 ];
 
 $actions = Display::url(
     Display::return_icon(
         'back.png',
         get_lang('Back'),
-        array(),
+        [],
         ICON_SIZE_MEDIUM
     ),
     api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq()
 );
-
 
 if (!empty($users)) {
     $actions .= Display::url(
         Display::return_icon(
             'pdf.png',
             get_lang('ExportToPdf'),
-            array(),
+            [],
             ICON_SIZE_MEDIUM
         ),
         api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=report&export=pdf&lp_id='.$lpId
@@ -159,13 +157,12 @@ $template->assign(
 $result = $template->fetch($layout);
 $template->assign('content', $result);
 
-
 if ($export) {
-    $pdfParams = array(
+    $pdfParams = [
         'filename' => get_lang('StudentScore').'_'.api_get_local_time(),
         //'pdf_title' => $title,
         //'course_code' => $course_code
-    );
+    ];
     $pdf = new PDF('A4', 'P', $pdfParams);
     $pdf->html_to_pdf_with_template(
         $result,

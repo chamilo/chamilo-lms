@@ -3,13 +3,10 @@
 
 namespace Chamilo\TicketBundle\Entity;
 
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
 
 /**
- * Priority
+ * Priority.
  *
  * @ORM\Table(name="ticket_priority")
  * @ORM\Entity
@@ -17,7 +14,7 @@ use Chamilo\CoreBundle\Entity\Session;
 class Priority
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -61,7 +58,7 @@ class Priority
     protected $urgency;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false, unique=false)
      */
@@ -75,7 +72,7 @@ class Priority
     protected $insertDateTime;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
@@ -108,6 +105,7 @@ class Priority
 
     /**
      * @param int $id
+     *
      * @return Priority
      */
     public function setId($id)
@@ -127,6 +125,7 @@ class Priority
 
     /**
      * @param string $name
+     *
      * @return Priority
      */
     public function setName($name)
@@ -146,6 +145,7 @@ class Priority
 
     /**
      * @param string $code
+     *
      * @return Priority
      */
     public function setCode($code)
@@ -165,6 +165,7 @@ class Priority
 
     /**
      * @param string $description
+     *
      * @return Priority
      */
     public function setDescription($description)
@@ -184,6 +185,7 @@ class Priority
 
     /**
      * @param string $color
+     *
      * @return Priority
      */
     public function setColor($color)
@@ -203,6 +205,7 @@ class Priority
 
     /**
      * @param string $urgency
+     *
      * @return Priority
      */
     public function setUrgency($urgency)
@@ -222,6 +225,7 @@ class Priority
 
     /**
      * @param int $insertUserId
+     *
      * @return Priority
      */
     public function setInsertUserId($insertUserId)
@@ -241,6 +245,7 @@ class Priority
 
     /**
      * @param \DateTime $insertDateTime
+     *
      * @return Priority
      */
     public function setInsertDateTime($insertDateTime)
@@ -260,6 +265,7 @@ class Priority
 
     /**
      * @param int $lastEditUserId
+     *
      * @return Priority
      */
     public function setLastEditUserId($lastEditUserId)
@@ -279,6 +285,7 @@ class Priority
 
     /**
      * @param \DateTime $lastEditDateTime
+     *
      * @return Priority
      */
     public function setLastEditDateTime($lastEditDateTime)
@@ -287,6 +294,4 @@ class Priority
 
         return $this;
     }
-
-
 }

@@ -3,8 +3,7 @@
 
 /**
  * @package chamilo.work
- **/
-
+ */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
@@ -49,74 +48,74 @@ if ($action === 'upload_form') {
 
 /*	Header */
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq(),
         'name' => get_lang('ToolGradebook'),
-    );
+    ];
 }
 
 if (!empty($groupId)) {
     api_protect_course_group(GroupManager::GROUP_TOOL_WORK);
     $group_properties = GroupManager::get_group_properties($groupId);
 
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
         'name' => get_lang('GroupSpace').' '.$group_properties['name'],
-    );
-    $interbreadcrumb[] = array(
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
         'name' => get_lang('StudentPublications'),
-    );
+    ];
     $url_dir = api_get_path(WEB_CODE_PATH).'work/work.php?&id='.$work_id.'&'.api_get_cidreq();
     if (!empty($my_folder_data)) {
-        $interbreadcrumb[] = array('url' => $url_dir, 'name' =>  $my_folder_data['title']);
+        $interbreadcrumb[] = ['url' => $url_dir, 'name' => $my_folder_data['title']];
     }
 
     if ($action == 'upload_form') {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
             'name' => get_lang('UploadADocument'),
-        );
+        ];
     }
 
     if ($action == 'create_dir') {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
             'name' => get_lang('CreateAssignment'),
-        );
+        ];
     }
 } else {
     if ($origin != 'learnpath') {
         if (isset($_GET['id']) &&
             !empty($_GET['id']) || $display_upload_form || $action == 'settings' || $action == 'create_dir'
         ) {
-            $interbreadcrumb[] = array(
+            $interbreadcrumb[] = [
                 'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
                 'name' => get_lang('StudentPublications'),
-            );
+            ];
         } else {
-            $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('StudentPublications'));
+            $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('StudentPublications')];
         }
 
         if (!empty($my_folder_data)) {
-            $interbreadcrumb[] = array(
+            $interbreadcrumb[] = [
                 'url' => api_get_path(WEB_CODE_PATH).'work/work.php?id='.$work_id.'&'.api_get_cidreq(),
                 'name' => $my_folder_data['title'],
-            );
+            ];
         }
 
         if ($action == 'upload_form') {
-            $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('UploadADocument'));
+            $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('UploadADocument')];
         }
         if ($action == 'settings') {
-            $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('EditToolOptions'));
+            $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('EditToolOptions')];
         }
         if ($action == 'create_dir') {
-            $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('CreateAssignment'));
+            $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('CreateAssignment')];
         }
     }
 }
@@ -138,7 +137,7 @@ $is_allowed_to_edit = api_is_allowed_to_edit();
 $student_can_edit_in_session = api_is_allowed_to_session_edit(false, true);
 
 /*	Display links to upload form and tool options */
-if (!in_array($action, array('add', 'create_dir'))) {
+if (!in_array($action, ['add', 'create_dir'])) {
     $token = Security::get_token();
 }
 
@@ -162,10 +161,10 @@ switch ($action) {
         $studentDeleteOwnPublication = api_get_course_setting('student_delete_own_publication') == 1 ? 1 : 0;
         /*	Display of tool options */
         $content = settingsForm(
-            array(
+            [
                 'show_score' => $courseInfo['show_score'],
-                'student_delete_own_publication' =>  $studentDeleteOwnPublication
-            )
+                'student_delete_own_publication' => $studentDeleteOwnPublication,
+            ]
         );
         break;
     case 'add':

@@ -5,7 +5,9 @@ use ChamiloSession as Session;
 
 /**
  * @author Patrick Cool
+ *
  * @package chamilo.document
+ *
  * @author Patrick Cool, patrick.cool@UGent.be, Ghent University, May 2004, http://icto.UGent.be
  * Please bear in mind that this is only an beta release.
  * I wrote this quite quick and didn't think too much about it in advance.
@@ -31,17 +33,17 @@ $pathurl = urlencode($path);
 // Breadcrumb navigation
 $url = 'document.php?curdirpath='.$pathurl;
 $originaltoolname = get_lang('Documents');
-$interbreadcrumb[] = array('url' => $url, 'name' => $originaltoolname);
+$interbreadcrumb[] = ['url' => $url, 'name' => $originaltoolname];
 
 $url = 'slideshow.php?curdirpath='.$pathurl;
 $originaltoolname = get_lang('SlideShow');
-$interbreadcrumb[] = array('url' => $url, 'name' => $originaltoolname);
+$interbreadcrumb[] = ['url' => $url, 'name' => $originaltoolname];
 
 // Because $nametools uses $_SERVER['PHP_SELF'] for the breadcrumbs instead of $_SERVER['REQUEST_URI'], I had to
 // bypass the $nametools thing and use <b></b> tags in the $interbreadcrump array
 $url = 'slideshowoptions.php?curdirpath='.$pathurl;
 $originaltoolname = '<b>'.get_lang('SlideshowOptions').'</b>';
-$interbreadcrumb[] = array('url' => $url, 'name' => $originaltoolname);
+$interbreadcrumb[] = ['url' => $url, 'name' => $originaltoolname];
 
 Display::display_header($originaltoolname, 'Doc');
 $image_resizing = Session::read('image_resizing');
@@ -65,12 +67,12 @@ window.onload = <?php echo $image_resizing == 'resizing' ? 'enableresizing' : 'd
 <?php
 $actions = '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
 $actions .= '<a href="slideshow.php?curdirpath='.$pathurl.'">'.Display::return_icon('slideshow.png', get_lang('BackTo').' '.get_lang('SlideShow'), '', ICON_SIZE_MEDIUM).'</a>';
-echo Display::toolbarAction('toolbar-slideshow', [$actions])
+echo Display::toolbarAction('toolbar-slideshow', [$actions]);
 ?>
 <div class="panel panel-default">
     <div class="panel-body">
     <form action="slideshow.php?curdirpath=<?php echo $pathurl; ?>" method="post" name="options" id="options" class="form-horizontal">
-	<legend><?php echo get_lang('SlideshowOptions') ?></legend>
+	<legend><?php echo get_lang('SlideshowOptions'); ?></legend>
         <div class="radio">
             <label>
                 <input name="radio_resizing" type="radio" onClick="disableresizing()" value="noresizing" <?php
@@ -85,7 +87,7 @@ echo Display::toolbarAction('toolbar-slideshow', [$actions])
             <label>
                 <input name="radio_resizing" type="radio" onClick="disableresizing()" value="autoresizing" <?php
                 if ($image_resizing == 'resizing_auto' || $image_resizing == '') {
-                        echo ' checked';
+                    echo ' checked';
                 }
         ?>>
             </label>
@@ -110,9 +112,9 @@ echo Display::toolbarAction('toolbar-slideshow', [$actions])
         if ($image_resizing == 'resizing') {
             echo ' value="'.$width.'"';
             echo ' class="enabled_input"';
-                    } else {
-                    echo ' class="disabled_input"';
-                }
+        } else {
+            echo ' class="disabled_input"';
+        }
         ?> >
             </div>
             <div class="col-sm-8"></div>

@@ -5,12 +5,12 @@
 function validate_data($users)
 {
     global $defined_auth_sources;
-    $errors = array();
-    $usernames = array();
+    $errors = [];
+    $usernames = [];
     if (is_array($users)) {
         foreach ($users as $index => $user) {
             // 1. Check whether mandatory fields have been set.
-            $mandatory_fields = array('LastName', 'FirstName');
+            $mandatory_fields = ['LastName', 'FirstName'];
             if (api_get_setting('registration', 'email') == 'true') {
                 $mandatory_fields[] = 'Email';
             }
@@ -53,6 +53,7 @@ function validate_data($users)
             }
         }
     }
+
     return $errors;
 }
 
@@ -80,11 +81,12 @@ function complete_missing_data($user)
     if (!isset($user['AuthSource']) || strlen($user['AuthSource']) == 0) {
         $user['AuthSource'] = PLATFORM_AUTH_SOURCE;
     }
+
     return $user;
 }
 
 /**
- * Save the imported data
+ * Save the imported data.
  */
 function save_data($users)
 {
@@ -142,7 +144,9 @@ function save_data($users)
 
 /**
  * Reads the CSV-file.
+ *
  * @param string $file Path to the CSV-file
+ *
  * @return array All user information read from the file
  */
 function parse_csv_data($file)

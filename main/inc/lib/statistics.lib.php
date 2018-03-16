@@ -2,14 +2,17 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* This class provides some functions for statistics
-* @package chamilo.statistics
-*/
+ * This class provides some functions for statistics.
+ *
+ * @package chamilo.statistics
+ */
 class Statistics
 {
     /**
-     * Converts a number of bytes in a formatted string
+     * Converts a number of bytes in a formatted string.
+     *
      * @param int $size
+     *
      * @return string Formatted file size
      */
     public static function makeSizeString($size)
@@ -29,9 +32,11 @@ class Statistics
     }
 
     /**
-     * Count courses
-     * @param string $categoryCode  Code of a course category.
-     * Default: count all courses.
+     * Count courses.
+     *
+     * @param string $categoryCode Code of a course category.
+     *                             Default: count all courses.
+     *
      * @return int Number of courses counted
      */
     public static function countCourses($categoryCode = null)
@@ -61,8 +66,10 @@ class Statistics
     }
 
     /**
-     * Count courses by visibility
-     * @param int $visibility Visibility (0 = closed, 1 = private, 2 = open, 3 = public) all courses.
+     * Count courses by visibility.
+     *
+     * @param int $visibility visibility (0 = closed, 1 = private, 2 = open, 3 = public) all courses
+     *
      * @return int Number of courses counted
      */
     public static function countCoursesByVisibility($visibility = null)
@@ -93,11 +100,13 @@ class Statistics
     }
 
     /**
-     * Count users
-     * @param int $status Optional user status (COURSEMANAGER or STUDENT), if it's not setted it'll count all users.
-     * @param string $categoryCode Optional, code of a course category. Default: count only users without filtering category
-     * @param bool $countInvisibleCourses Count invisible courses (todo)
-     * @param bool $onlyActive Count only active users (false to only return currently active users)
+     * Count users.
+     *
+     * @param int    $status                optional user status (COURSEMANAGER or STUDENT), if it's not setted it'll count all users
+     * @param string $categoryCode          Optional, code of a course category. Default: count only users without filtering category
+     * @param bool   $countInvisibleCourses Count invisible courses (todo)
+     * @param bool   $onlyActive            Count only active users (false to only return currently active users)
+     *
      * @return int Number of users counted
      */
     public static function countUsers(
@@ -156,7 +165,8 @@ class Statistics
     }
 
     /**
-     * Count sessions
+     * Count sessions.
+     *
      * @return int Number of sessions counted
      */
     public static function countSessions()
@@ -181,7 +191,8 @@ class Statistics
     }
 
     /**
-     * Count activities from track_e_default_table
+     * Count activities from track_e_default_table.
+     *
      * @return int Number of activities counted
      */
     public static function getNumberOfActivities()
@@ -220,11 +231,13 @@ class Statistics
     }
 
     /**
-     * Get activities data to display
-     * @param int $from
-     * @param int $numberOfItems
-     * @param int $column
+     * Get activities data to display.
+     *
+     * @param int    $from
+     * @param int    $numberOfItems
+     * @param int    $column
      * @param string $direction
+     *
      * @return array
      */
     public static function getActivitiesData(
@@ -241,7 +254,7 @@ class Statistics
         $from = intval($from);
         $numberOfItems = intval($numberOfItems);
 
-        if (!in_array($direction, array('ASC', 'DESC'))) {
+        if (!in_array($direction, ['ASC', 'DESC'])) {
             $direction = 'DESC';
         }
 
@@ -292,7 +305,7 @@ class Statistics
         $sql .= " LIMIT $from, $numberOfItems ";
 
         $res = Database::query($sql);
-        $activities = array();
+        $activities = [];
         while ($row = Database::fetch_row($res)) {
             if (strpos($row[1], '_object') === false &&
                 strpos($row[1], '_array') === false
@@ -338,7 +351,7 @@ class Statistics
                 $row[5] = Display::url(
                     $row[5],
                     api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$row[6],
-                    array('title' => get_lang('UserInfo'))
+                    ['title' => get_lang('UserInfo')]
                 );
 
                 $row[6] = Tracking::get_ip_from_user_event(
@@ -357,7 +370,8 @@ class Statistics
     }
 
     /**
-     * Get all course categories
+     * Get all course categories.
+     *
      * @return array All course categories (code => name)
      */
     public static function getCourseCategories()
@@ -367,7 +381,7 @@ class Statistics
                 FROM $categoryTable
                 ORDER BY tree_pos";
         $res = Database::query($sql);
-        $categories = array();
+        $categories = [];
         while ($category = Database::fetch_object($res)) {
             $categories[$category->code] = $category->name;
         }
@@ -376,9 +390,11 @@ class Statistics
     }
 
     /**
-     * Rescale data
+     * Rescale data.
+     *
      * @param array $data The data that should be rescaled
-     * @param int $max The maximum value in the rescaled data (default = 500);
+     * @param int   $max  The maximum value in the rescaled data (default = 500);
+     *
      * @return array The rescaled data, same key as $data
      */
     public static function rescale($data, $max = 500)
@@ -388,7 +404,7 @@ class Statistics
             $data_max = ($data_max < $value ? $value : $data_max);
         }
         reset($data);
-        $result = array();
+        $result = [];
         $delta = $max / $data_max;
         foreach ($data as $index => $value) {
             $result[$index] = (int) round($value * $delta);
@@ -398,11 +414,12 @@ class Statistics
     }
 
     /**
-     * Show statistics
-     * @param string $title The title
-     * @param array $stats
-     * @param bool $showTotal
-     * @param bool $isFileSize
+     * Show statistics.
+     *
+     * @param string $title      The title
+     * @param array  $stats
+     * @param bool   $showTotal
+     * @param bool   $isFileSize
      */
     public static function printStats(
         $title,
@@ -449,7 +466,8 @@ class Statistics
     }
 
     /**
-     * Show some stats about the number of logins
+     * Show some stats about the number of logins.
+     *
      * @param string $type month, hour or day
      */
     public static function printLoginStats($type)
@@ -513,7 +531,7 @@ class Statistics
 
         if ($sql_last_x) {
             $res_last_x = Database::query($sql_last_x);
-            $result_last_x = array();
+            $result_last_x = [];
             while ($obj = Database::fetch_object($res_last_x)) {
                 $stat_date = ($type === 'day') ? $periodCollection[$obj->stat_date] : $obj->stat_date;
                 $result_last_x[$stat_date] = $obj->number_of_logins;
@@ -523,7 +541,7 @@ class Statistics
             echo '<br />';
         }
         $res = Database::query($sql);
-        $result = array();
+        $result = [];
         while ($obj = Database::fetch_object($res)) {
             $stat_date = $obj->stat_date;
             switch ($type) {
@@ -542,9 +560,9 @@ class Statistics
     }
 
     /**
-     * Print the number of recent logins
-     * @param   bool    $distinct   Whether to only give distinct users stats, or *all* logins
-     * @return void
+     * Print the number of recent logins.
+     *
+     * @param bool $distinct Whether to only give distinct users stats, or *all* logins
      */
     public static function printRecentLoginStats($distinct = false)
     {
@@ -594,7 +612,7 @@ class Statistics
                     WHERE 
                         login_date BETWEEN '$startDate' AND '$endDate'
                         $where_url";
-             $sqlList[$label] = $sql;
+            $sqlList[$label] = $sql;
         }
         $sqlList[get_lang('Total')] = "SELECT count($field) AS number FROM $table $table_url WHERE 1=1 $where_url";
 
@@ -612,8 +630,10 @@ class Statistics
     }
 
     /**
-     * get the number of recent logins
-     * @param bool    $distinct   Whether to only give distinct users stats, or *all* logins
+     * get the number of recent logins.
+     *
+     * @param bool $distinct Whether to only give distinct users stats, or *all* logins
+     *
      * @return array
      */
     public static function getRecentLoginStats($distinct = false)
@@ -653,7 +673,7 @@ class Statistics
     }
 
     /**
-     * Show some stats about the accesses to the different course tools
+     * Show some stats about the accesses to the different course tools.
      */
     public static function printToolStats()
     {
@@ -661,7 +681,7 @@ class Statistics
         $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
 
-        $tools = array(
+        $tools = [
             'announcement',
             'assignment',
             'calendar_event',
@@ -675,9 +695,9 @@ class Statistics
             'quiz',
             'student_publication',
             'user',
-            'forum'
-        );
-        $tool_names = array();
+            'forum',
+        ];
+        $tool_names = [];
         foreach ($tools as $tool) {
             $tool_names[$tool] = get_lang(ucfirst($tool), '');
         }
@@ -698,7 +718,7 @@ class Statistics
         }
 
         $res = Database::query($sql);
-        $result = array();
+        $result = [];
         while ($obj = Database::fetch_object($res)) {
             $result[$tool_names[$obj->access_tool]] = $obj->number_of_logins;
         }
@@ -707,7 +727,7 @@ class Statistics
     }
 
     /**
-     * Show some stats about the number of courses per language
+     * Show some stats about the number of courses per language.
      */
     public static function printCourseByLanguageStats()
     {
@@ -726,7 +746,7 @@ class Statistics
                    ORDER BY number_of_courses DESC";
         }
         $res = Database::query($sql);
-        $result = array();
+        $result = [];
         while ($obj = Database::fetch_object($res)) {
             $result[$obj->course_language] = $obj->number_of_courses;
         }
@@ -764,7 +784,7 @@ class Statistics
     }
 
     /**
-     * Important activities
+     * Important activities.
      */
     public static function printActivitiesStats()
     {
@@ -778,7 +798,7 @@ class Statistics
             'width=200px',
             false
         );
-        $renderer = & $form->defaultRenderer();
+        $renderer = &$form->defaultRenderer();
         $renderer->setCustomElementTemplate('<span>{element}</span> ');
         $form->addElement('hidden', 'report', 'activities');
         $form->addElement('hidden', 'activities_direction', 'DESC');
@@ -786,18 +806,18 @@ class Statistics
         $form->addElement('text', 'keyword', get_lang('Keyword'));
         $form->addButtonSearch(get_lang('Search'), 'submit');
         echo '<div class="actions">';
-            $form->display();
+        $form->display();
         echo '</div>';
 
         $table = new SortableTable(
             'activities',
-            array('Statistics', 'getNumberOfActivities'),
-            array('Statistics', 'getActivitiesData'),
+            ['Statistics', 'getNumberOfActivities'],
+            ['Statistics', 'getActivitiesData'],
             5,
             50,
             'DESC'
         );
-        $parameters = array();
+        $parameters = [];
 
         $parameters['report'] = 'activities';
         if (isset($_GET['keyword'])) {
@@ -833,7 +853,7 @@ class Statistics
         $column = isset($_GET['column']) ? intval($_GET['column']) : 0;
         $direction = isset($_GET['direction']) ? $_GET['direction'] : SORT_ASC;
 
-        if (!in_array($direction, array(SORT_ASC, SORT_DESC))) {
+        if (!in_array($direction, [SORT_ASC, SORT_DESC])) {
             $direction = SORT_ASC;
         }
         $form = new FormValidator('courselastvisit', 'get');
@@ -872,10 +892,10 @@ class Statistics
         echo '<p>'.get_lang('LastAccess').' &gt;= '.$date_diff.' '.get_lang('Days').'</p>';
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
-            $courses = array();
+            $courses = [];
             while ($obj = Database::fetch_object($res)) {
                 $courseInfo = api_get_course_info_by_id($obj->c_id);
-                $course = array();
+                $course = [];
                 $course[] = '<a href="'.api_get_path(WEB_COURSE_PATH).$courseInfo['code'].'">'.$courseInfo['code'].' <a>';
                 // Allow sort by date hiding the numerical date
                 $course[] = '<span style="display:none;">'.$obj->access_date.'</span>'.api_convert_and_format_date($obj->access_date);
@@ -883,13 +903,13 @@ class Statistics
             }
             $parameters['date_diff'] = $date_diff;
             $parameters['report'] = 'courselastvisit';
-            $table_header[] = array(get_lang("CourseCode"), true);
-            $table_header[] = array(get_lang("LastAccess"), true);
+            $table_header[] = [get_lang("CourseCode"), true];
+            $table_header[] = [get_lang("LastAccess"), true];
             Display:: display_sortable_table(
                 $table_header,
                 $courses,
-                array('column' => $column, 'direction' => $direction),
-                array(),
+                ['column' => $column, 'direction' => $direction],
+                [],
                 $parameters
             );
         } else {
@@ -898,9 +918,11 @@ class Statistics
     }
 
     /**
-     * Displays the statistics of the messages sent and received by each user in the social network
-     * @param string    $messageType Type of message: 'sent' or 'received'
-     * @return array    Message list
+     * Displays the statistics of the messages sent and received by each user in the social network.
+     *
+     * @param string $messageType Type of message: 'sent' or 'received'
+     *
+     * @return array Message list
      */
     public static function getMessages($messageType)
     {
@@ -933,7 +955,7 @@ class Statistics
                 GROUP BY m.$field ORDER BY count_message DESC ";
         }
         $res = Database::query($sql);
-        $messages_sent = array();
+        $messages_sent = [];
         while ($messages = Database::fetch_array($res)) {
             if (empty($messages['username'])) {
                 $messages['username'] = get_lang('Unknown');
@@ -944,11 +966,12 @@ class Statistics
             ).'<br />('.$messages['username'].')';
             $messages_sent[$users] = $messages['count_message'];
         }
+
         return $messages_sent;
     }
 
     /**
-     * Count the number of friends for social network users
+     * Count the number of friends for social network users.
      */
     public static function getFriends()
     {
@@ -978,7 +1001,7 @@ class Statistics
                     ORDER BY count_friend DESC ";
         }
         $res = Database::query($sql);
-        $list_friends = array();
+        $list_friends = [];
         while ($friends = Database::fetch_array($res)) {
             $users = api_get_person_name($friends['firstname'], $friends['lastname']).'<br />('.$friends['username'].')';
             $list_friends[$users] = $friends['count_friend'];
@@ -988,11 +1011,11 @@ class Statistics
     }
 
     /**
-     * Print the number of users that didn't login for a certain period of time
+     * Print the number of users that didn't login for a certain period of time.
      */
     public static function printUsersNotLoggedInStats()
     {
-        $totalLogin = array();
+        $totalLogin = [];
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();

@@ -7,7 +7,7 @@
 
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
-$typeList = array('personal', 'course', 'admin', 'platform');
+$typeList = ['personal', 'course', 'admin', 'platform'];
 // Calendar type
 $type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], $typeList) ? $_REQUEST['type'] : 'personal';
 $userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
@@ -20,7 +20,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_CALENDAR_EVENT;
 $this_section = SECTION_MYAGENDA;
 
-$htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-ui-i18n'));
+$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-ui-i18n']);
 $htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = api_get_asset('fullcalendar/dist/fullcalendar.js');
 $htmlHeadXtra[] = api_get_asset('fullcalendar/dist/locale-all.js');
@@ -60,14 +60,14 @@ if (!empty($group_id)) {
         $group_properties,
         $courseId
     );
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
-        "name" => get_lang('Groups')
-    );
-    $interbreadcrumb[] = array(
+        "name" => get_lang('Groups'),
+    ];
+    $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace').' '.$group_properties['name']
-    );
+        "name" => get_lang('GroupSpace').' '.$group_properties['name'],
+    ];
 }
 
 $tpl = new Template(get_lang('Agenda'));
@@ -190,7 +190,7 @@ $agendaColors = array_merge(
         'session' => '#00496D', // kind of green
         'other_session' => '#999', // kind of green
         'personal' => 'steel blue', //steel blue
-        'student_publication' => '#FF8C00' //DarkOrange
+        'student_publication' => '#FF8C00', //DarkOrange
     ],
     api_get_configuration_value('agenda_colors') ?: []
 );
@@ -241,7 +241,7 @@ $form = new FormValidator(
     'get',
     api_get_self().'?'.api_get_cidreq(),
     null,
-    array('id' => 'add_event_form')
+    ['id' => 'add_event_form']
 );
 
 $form->addHtml('<span id="calendar_course_info"></span><div id="visible_to_input">');
@@ -253,7 +253,7 @@ if ($sendTo['everyone']) {
     $addOnlyItemsInSendTo = false;
 }
 
-$agenda->showToForm($form, $sendTo, array(), $addOnlyItemsInSendTo);
+$agenda->showToForm($form, $sendTo, [], $addOnlyItemsInSendTo);
 $form->addHtml('</div>');
 
 $form->addHtml('<div id="visible_to_read_only" style="display: none">');
@@ -262,7 +262,7 @@ $form->addHtml('</div>');
 
 $form->addElement('label', get_lang('Agenda'), '<div id ="color_calendar"></div>');
 $form->addElement('label', get_lang('Date'), '<span id="start_date"></span><span id="end_date"></span>');
-$form->addElement('text', 'title', get_lang('Title'), array('id' => 'title'));
+$form->addElement('text', 'title', get_lang('Title'), ['id' => 'title']);
 $form->addHtmlEditor(
     'content',
     get_lang('Description'),
@@ -270,7 +270,7 @@ $form->addHtmlEditor(
     false,
     [
         'ToolbarSet' => 'TestProposedAnswer',
-        'Height' => '120'
+        'Height' => '120',
     ]
 );
 
@@ -278,7 +278,7 @@ if ($agenda->type === 'course') {
     $form->addHtml('<div id="add_as_announcement_div" style="display: none">');
     $form->addElement('checkbox', 'add_as_annonuncement', null, get_lang('AddAsAnnouncement'));
     $form->addHtml('</div>');
-    $form->addElement('textarea', 'comment', get_lang('Comment'), array('id' => 'comment'));
+    $form->addElement('textarea', 'comment', get_lang('Comment'), ['id' => 'comment']);
 }
 
 $tpl->assign('form_add', $form->returnForm());

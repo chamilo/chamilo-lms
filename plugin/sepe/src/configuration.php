@@ -1,12 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \ChamiloSession as Session;
-
 /**
  * This script displays setting api key user.
  */
-
 require_once '../config.php';
 
 $course_plugin = 'sepe';
@@ -28,10 +25,10 @@ if (api_is_platform_admin()) {
         $info = '';
     }
     $templateName = $plugin->get_lang('Setting');
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => "/plugin/sepe/src/sepe-administration-menu.php",
         "name" => $plugin->get_lang('MenuSepe'),
-    );
+    ];
     $tpl = new Template($templateName);
 
     $tpl->assign('info', $info);

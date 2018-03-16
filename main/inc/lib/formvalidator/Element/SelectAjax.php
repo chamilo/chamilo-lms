@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* A drop down list with all languages to use with QuickForm
-*/
+ * A drop down list with all languages to use with QuickForm.
+ */
 class SelectAjax extends HTML_QuickForm_select
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function __construct($elementName, $elementLabel = '', $options = null, $attributes = null)
     {
@@ -15,7 +15,8 @@ class SelectAjax extends HTML_QuickForm_select
     }
 
     /**
-     * The ajax call must contain an array of id and text
+     * The ajax call must contain an array of id and text.
+     *
      * @return string
      */
     public function toHtml()
@@ -127,7 +128,7 @@ JS;
 
     /**
      * We check the options and return only the values that _could_ have been
-     * selected. We also return a scalar value if select is not "multiple"
+     * selected. We also return a scalar value if select is not "multiple".
      */
     public function exportValue(&$submitValues, $assoc = false)
     {

@@ -52,7 +52,6 @@ if (!empty($workData)) {
     } else {
         api_not_allowed(true);
     }
-
 } else {
     api_not_allowed(true);
 }

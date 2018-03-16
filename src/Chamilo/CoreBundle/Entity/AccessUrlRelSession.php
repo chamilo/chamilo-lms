@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * AccessUrlRelSession
+ * AccessUrlRelSession.
  *
  * @ORM\Table(name="access_url_rel_session")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class AccessUrlRelSession
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="access_url_id", type="integer")
      * @ORM\Id
@@ -23,7 +23,7 @@ class AccessUrlRelSession
     private $accessUrlId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer")
      * @ORM\Id
@@ -32,9 +32,10 @@ class AccessUrlRelSession
     private $sessionId;
 
     /**
-     * Set accessUrlId
+     * Set accessUrlId.
      *
-     * @param integer $accessUrlId
+     * @param int $accessUrlId
+     *
      * @return AccessUrlRelSession
      */
     public function setAccessUrlId($accessUrlId)
@@ -45,9 +46,9 @@ class AccessUrlRelSession
     }
 
     /**
-     * Get accessUrlId
+     * Get accessUrlId.
      *
-     * @return integer
+     * @return int
      */
     public function getAccessUrlId()
     {
@@ -55,9 +56,10 @@ class AccessUrlRelSession
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return AccessUrlRelSession
      */
     public function setSessionId($sessionId)
@@ -68,9 +70,9 @@ class AccessUrlRelSession
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {

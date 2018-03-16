@@ -2,14 +2,15 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class ch_personality
+ * Class ch_personality.
  */
 class ch_personality extends survey_question
 {
     /**
-     * This function creates the form elements for the multiple response questions
+     * This function creates the form elements for the multiple response questions.
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version January 2007
      */
     public function createForm($survey_data, $form_content)
@@ -47,20 +48,20 @@ class ch_personality extends survey_question
         $this->html .= '	</tr>';
         $total_number_of_answers = count($form_content['answers']);
 
-        $question_values = array();
+        $question_values = [];
 
         // Values of question options
         if (is_array($form_content['values'])) { // Check if data is correct
-            foreach ($form_content['values'] as $key => & $value) {
-                $question_values [] = '<input size="3" type="text" id="values['.$key.']" name="values['.$key.']" value="'.$value.'" />';
+            foreach ($form_content['values'] as $key => &$value) {
+                $question_values[] = '<input size="3" type="text" id="values['.$key.']" name="values['.$key.']" value="'.$value.'" />';
             }
         }
         $count = 0;
         if (is_array($form_content['answers'])) {
-            foreach ($form_content['answers'] as $key => & $value) {
+            foreach ($form_content['answers'] as $key => &$value) {
                 $this->html .= '<tr>';
                 $this->html .= '<td align="right"><label for="answers['.$key.']">'.($key + 1).'</label></td>';
-                $this->html .= '<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key])), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
+                $this->html .= '<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key])), '', '', null, ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120']).'</td>';
                 $this->html .= '<td>';
 
                 if ($total_number_of_answers > 2) {
@@ -87,10 +88,10 @@ class ch_personality extends survey_question
 
     /**
      * @param FormValidator $form
-     * @param array $questionData
-     * @param array $answers
+     * @param array         $questionData
+     * @param array         $answers
      */
-    public function render(FormValidator $form, $questionData = array(), $answers = array())
+    public function render(FormValidator $form, $questionData = [], $answers = [])
     {
         $question = new ch_yesno();
         $question->render($form, $questionData, $answers);

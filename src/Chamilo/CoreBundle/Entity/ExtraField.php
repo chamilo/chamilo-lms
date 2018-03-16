@@ -8,7 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Sylius\Component\Attribute\Model\Attribute as BaseAttribute;
 
 /**
- * Class ExtraField
+ * Class ExtraField.
  *
  * @ORM\Entity
  * @ORM\Table(name="extra_field")
@@ -31,7 +31,7 @@ class ExtraField extends BaseAttribute
     const SURVEY_FIELD_TYPE = 12;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
@@ -40,14 +40,14 @@ class ExtraField extends BaseAttribute
     protected $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="extra_field_type", type="integer", nullable=false, unique=false)
      */
     protected $extraFieldType;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="field_type", type="integer", nullable=false, unique=false)
      */
@@ -75,35 +75,35 @@ class ExtraField extends BaseAttribute
     protected $defaultValue;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="field_order", type="integer", nullable=true, unique=false)
      */
     protected $fieldOrder;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="visible_to_self", type="boolean", nullable=true, unique=false)
      */
     protected $visibleToSelf;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="visible_to_others", type="boolean", nullable=true, unique=false)
      */
     protected $visibleToOthers;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="changeable", type="boolean", nullable=true, unique=false)
      */
     protected $changeable;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="filter", type="boolean", nullable=true, unique=false)
      */
@@ -111,11 +111,11 @@ class ExtraField extends BaseAttribute
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ExtraFieldOptions", mappedBy="field")
-     **/
+     */
     protected $options;
 
     /**
-     * @var \DateTime $created
+     * @var \DateTime
      *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
@@ -133,9 +133,9 @@ class ExtraField extends BaseAttribute
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -204,6 +204,7 @@ class ExtraField extends BaseAttribute
 
     /**
      * @param bool $translated Optional. Whether translate the display text
+     *
      * @return string
      */
     public function getDisplayText($translated = true)
@@ -267,8 +268,8 @@ class ExtraField extends BaseAttribute
         return $this;
     }
 
-     /**
-     * @return boolean
+    /**
+     * @return bool
      */
     public function isChangeable()
     {
@@ -276,7 +277,7 @@ class ExtraField extends BaseAttribute
     }
 
     /**
-     * @param boolean $changeable
+     * @param bool $changeable
      *
      * @return $this
      */
@@ -288,7 +289,7 @@ class ExtraField extends BaseAttribute
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isFilter()
     {
@@ -296,7 +297,7 @@ class ExtraField extends BaseAttribute
     }
 
     /**
-     * @param boolean $filter
+     * @param bool $filter
      *
      * @return $this
      */
@@ -308,7 +309,7 @@ class ExtraField extends BaseAttribute
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isVisibleToSelf()
     {
@@ -316,7 +317,8 @@ class ExtraField extends BaseAttribute
     }
 
     /**
-     * @param boolean $visibleToSelf
+     * @param bool $visibleToSelf
+     *
      * @return ExtraField
      */
     public function setVisibleToSelf($visibleToSelf)
@@ -327,7 +329,7 @@ class ExtraField extends BaseAttribute
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isVisibleToOthers()
     {
@@ -335,7 +337,8 @@ class ExtraField extends BaseAttribute
     }
 
     /**
-     * @param boolean $visibleToOthers
+     * @param bool $visibleToOthers
+     *
      * @return ExtraField
      */
     public function setVisibleToOthers($visibleToOthers)

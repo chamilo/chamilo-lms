@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Doctrine\Common\Collections\Criteria;
 use Chamilo\PluginBundle\Entity\StudentFollowUp\CarePost;
+use Doctrine\Common\Collections\Criteria;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 

@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 /**
  * @author Bart Mollet, Julio Montoya lot of fixes
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -14,8 +14,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 $tool_name = get_lang('SessionOverview');
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'session_list.php', 'name' => get_lang('SessionList'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
 
 // Database Table Definitions
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -78,7 +78,7 @@ foreach ($session_list as $session_item) {
             $order_clause";
 
     $result = Database::query($sql);
-    $users  = Database::store_result($result);
+    $users = Database::store_result($result);
 
     if (!empty($users)) {
         $html .= '<table class="data_table"><tr><th>'.get_lang('User').'<th>'.get_lang('Actions').'</th></tr>';
@@ -92,8 +92,8 @@ foreach ($session_list as $session_item) {
             $link_to_add_user_in_url = '';
             if ($multiple_url_is_on) {
                 if ($user['access_url_id'] != $url_id) {
-                    $user_link .= ' '.Display::return_icon('warning.png', get_lang('UserNotAddedInURL'), array(), ICON_SIZE_MEDIUM);
-                    $add = Display::return_icon('add.png', get_lang('AddUsersToURL'), array(), ICON_SIZE_MEDIUM);
+                    $user_link .= ' '.Display::return_icon('warning.png', get_lang('UserNotAddedInURL'), [], ICON_SIZE_MEDIUM);
+                    $add = Display::return_icon('add.png', get_lang('AddUsersToURL'), [], ICON_SIZE_MEDIUM);
                     $link_to_add_user_in_url = '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&action=add_user_to_url&id_session='.$id_session.'&user_id='.$user['user_id'].'">'.$add.'</a>';
                 }
             }

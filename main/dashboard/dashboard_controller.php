@@ -6,9 +6,12 @@
  * variables to give to the scripts corresponding to
  * the requested action
  * This file contains class used like controller,
- * it should be included inside a dispatcher file (e.g: index.php)
+ * it should be included inside a dispatcher file (e.g: index.php).
+ *
  * @author Christian Fasanando <christian1827@gmail.com>
+ *
  * @todo move to main/inc/lib
+ *
  * @package chamilo.dashboard
  */
 class DashboardController
@@ -18,7 +21,7 @@ class DashboardController
     private $user_id;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -28,18 +31,19 @@ class DashboardController
     }
 
     /**
-     * Display blocks from dashboard plugin paths
+     * Display blocks from dashboard plugin paths.
+     *
      * @param string $msg (optional)
-     * render to dashboard.php view
+     *                    render to dashboard.php view
      */
     public function display($msg = false)
     {
-        $data = array();
+        $data = [];
         $user_id = $this->user_id;
 
         $block_data_without_plugin = DashboardManager::get_block_data_without_plugin();
         $dashboard_blocks = DashboardManager::get_enabled_dashboard_blocks();
-        $user_block_data  = DashboardManager::get_user_block_data($user_id);
+        $user_block_data = DashboardManager::get_user_block_data($user_id);
         $user_blocks_id = array_keys($user_block_data);
 
         $data_block = null;
@@ -90,11 +94,11 @@ class DashboardController
 
     /**
      * This method allow store user blocks from dashboard manager
-     * render to dashboard.php view
+     * render to dashboard.php view.
      */
     public function store_user_block()
     {
-        $data = array();
+        $data = [];
         $user_id = $this->user_id;
         if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
             $enabled_blocks = $_POST['enabled_blocks'];
@@ -116,7 +120,7 @@ class DashboardController
 
     /**
      * This method is used when you close a block from dashboard block interface
-     * render to dashboard.php view
+     * render to dashboard.php view.
      */
     public function close_user_block($path)
     {

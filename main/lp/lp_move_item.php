@@ -2,15 +2,15 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php
-*
-* @author Patrick Cool
-* @author Denes Nagy
-* @author Roan Embrechts, refactoring and code cleaning
-* @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
-* @package chamilo.learnpath
-*/
-
+ * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php.
+ *
+ * @author Patrick Cool
+ * @author Denes Nagy
+ * @author Roan Embrechts, refactoring and code cleaning
+ * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
+ *
+ * @package chamilo.learnpath
+ */
 $this_section = SECTION_COURSES;
 
 api_protect_course_script();
@@ -40,7 +40,7 @@ $_SESSION['oLP']->get_js_dropdown_array().
         cbo.options[k].selected = true;
         $('#previous').selectpicker('refresh');
     }
-" .
+".
 "\n".
 '$().ready(function() {'."\n".
   'if ($(\'#previous\')) {'."\n".
@@ -80,24 +80,24 @@ $therow = Database::fetch_array($result);
 */
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
-    );
+        'name' => get_lang('ToolGradebook'),
+    ];
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
     'name' => get_lang('LearningPaths'),
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
     'name' => stripslashes("{$therow['name']}"),
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
     'name' => get_lang('NewStep'),
-);
+];
 
 // Theme calls
 $show_learn_path = true;

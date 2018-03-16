@@ -4,37 +4,38 @@
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
- * Class PDF
- * @package chamilo.library
+ * Class PDF.
  *
+ * @package chamilo.library
  */
 class PDF
 {
     public $pdf;
-    public $custom_header = array();
-    public $custom_footer = array();
-    public $params = array();
+    public $custom_header = [];
+    public $custom_footer = [];
+    public $params = [];
     public $template;
 
     /**
-     * Creates the mPDF object
-     * @param string  $pageFormat format A4 A4-L see
-     * http://mpdf1.com/manual/index.php?tid=184&searchstring=format
-     * @param string  $orientation orientation "P" = Portrait "L" = Landscape
-     * @param array $params
+     * Creates the mPDF object.
+     *
+     * @param string   $pageFormat  format A4 A4-L see
+     *                              http://mpdf1.com/manual/index.php?tid=184&searchstring=format
+     * @param string   $orientation orientation "P" = Portrait "L" = Landscape
+     * @param array    $params
      * @param Template $template
      */
     public function __construct(
         $pageFormat = 'A4',
         $orientation = 'P',
-        $params = array(),
+        $params = [],
         $template = null
     ) {
         $this->template = $template;
         /* More info @ http://mpdf1.com/manual/index.php?tid=184&searchstring=mPDF
          * mPDF ([ string $mode [, mixed $format [, float $default_font_size [, string $default_font [, float $margin_left , float $margin_right , float $margin_top , float $margin_bottom , float $margin_header , float $margin_footer [, string $orientation ]]]]]])
          */
-        if (!in_array($orientation, array('P', 'L'))) {
+        if (!in_array($orientation, ['P', 'L'])) {
             $orientation = 'P';
         }
         //left, right, top, bottom, margin_header, margin footer
@@ -59,8 +60,8 @@ class PDF
         $this->params['pdf_date_only'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_FORMAT_LONG);
 
         // Ofaj set custom paths to load ttfonts and font configuration
-        define('_MPDF_SYSTEM_TTFONTS_CONFIG',  api_get_path(LIBRARY_PATH).'pdf_config.php');
-        define('_MPDF_SYSTEM_TTFONTS',  api_get_path(SYS_APP_PATH).'Resources/public/fonts/');
+        define('_MPDF_SYSTEM_TTFONTS_CONFIG', api_get_path(LIBRARY_PATH).'pdf_config.php');
+        define('_MPDF_SYSTEM_TTFONTS', api_get_path(SYS_APP_PATH).'Resources/public/fonts/');
 
         $this->pdf = new mPDF(
             'UTF-8',
@@ -84,14 +85,15 @@ class PDF
     }
 
     /**
-     * Export the given HTML to PDF, using a global template
+     * Export the given HTML to PDF, using a global template.
      *
-     * @uses export/table_pdf.tpl
+     * @uses \export/table_pdf.tpl
 
+     *
      * @param $content
      * @param bool|false $saveToFile
      * @param bool|false $returnHtml
-     * @param bool $addDefaultCss (bootstrap/default/base.css)
+     * @param bool       $addDefaultCss (bootstrap/default/base.css)
      *
      * @return string
      */
@@ -117,7 +119,7 @@ class PDF
             $visualTheme = api_get_visual_theme();
             $img = api_get_path(SYS_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
             if (file_exists($img)) {
-                $img = api_get_path(WEB_CSS_PATH) . 'themes/' . $visualTheme . '/images/pdf_logo_header.png';
+                $img = api_get_path(WEB_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
                 $organization = "<img src='$img'>";
             }
         }
@@ -134,7 +136,6 @@ class PDF
                 $teacher_list = SessionManager::getCoachesByCourseSessionToString(
                     $this->params['session_info']['id'],
                     $this->params['course_info']['real_id']
-
                 );
             } else {
                 $teacher_list = CourseManager::getTeacherListFromCourseCodeToString(
@@ -188,22 +189,23 @@ class PDF
     }
 
     /**
-     * Converts HTML files to PDF
-     * @param mixed $html_file_array could be an html file path or an array
-     * with paths example:
-     * /var/www/myfile.html or array('/myfile.html','myotherfile.html') or
-     * even an indexed array with both 'title' and 'path' indexes
-     * for each element like
-     * array(
-     *     0 => array('title'=>'Hello','path'=>'file.html'),
-     *     1 => array('title'=>'Bye','path'=>'file2.html')
-     * );
-     * @param string $pdf_name pdf name
-     * @param string $course_code (if you are using html that are located
-     * in the document tool you must provide this)
-     * @param bool $print_title add title
-     * @param bool $complete_style show header and footer if true
-     * @param bool $addStyle
+     * Converts HTML files to PDF.
+     *
+     * @param mixed  $html_file_array could be an html file path or an array
+     *                                with paths example:
+     *                                /var/www/myfile.html or array('/myfile.html','myotherfile.html') or
+     *                                even an indexed array with both 'title' and 'path' indexes
+     *                                for each element like
+     *                                array(
+     *                                0 => array('title'=>'Hello','path'=>'file.html'),
+     *                                1 => array('title'=>'Bye','path'=>'file2.html')
+     *                                );
+     * @param string $pdf_name        pdf name
+     * @param string $course_code     (if you are using html that are located
+     *                                in the document tool you must provide this)
+     * @param bool   $print_title     add title
+     * @param bool   $complete_style  show header and footer if true
+     * @param bool   $addStyle
      *
      * @return false|null
      */
@@ -228,7 +230,7 @@ class PDF
                 return false;
             }
             // Converting the string into an array
-            $html_file_array = array($html_file_array);
+            $html_file_array = [$html_file_array];
         }
 
         if (!empty($course_code)) {
@@ -238,10 +240,10 @@ class PDF
         }
 
         // Clean styles and javascript document
-        $clean_search = array(
+        $clean_search = [
             '@<script[^>]*?>.*?</script>@si',
-            '@<style[^>]*?>.*?</style>@si'
-        );
+            '@<style[^>]*?>.*?</style>@si',
+        ];
 
         // Formatting the pdf
         self::format_pdf($course_data, $complete_style);
@@ -296,7 +298,7 @@ class PDF
             $file_info = pathinfo($file);
             $extension = $file_info['extension'];
 
-            if (in_array($extension, array('html', 'htm'))) {
+            if (in_array($extension, ['html', 'htm'])) {
                 $dirName = $file_info['dirname'];
                 $filename = $file_info['basename'];
                 $filename = str_replace('_', ' ', $filename);
@@ -400,7 +402,7 @@ class PDF
                 if (!empty($document_html)) {
                     $this->pdf->WriteHTML($document_html.$page_break);
                 }
-            } elseif (in_array($extension, array('jpg', 'jpeg', 'png', 'gif'))) {
+            } elseif (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
                 // Images
                 $image = Display::img($file);
                 $this->pdf->WriteHTML('<html><body>'.$image.'</body></html>'.$page_break);
@@ -419,23 +421,25 @@ class PDF
     }
 
     /**
-     * Converts an html string to PDF
-     * @param   string $document_html valid html
-     * @param   string $css CSS content of a CSS file
-     * @param   string $pdf_name pdf name
-     * @param   string $course_code course code
-     * (if you are using html that are located in the document tool you must provide this)
-     * @param string $outputMode the MPDF output mode can be:
-     * @param bool $saveInFile
+     * Converts an html string to PDF.
+     *
+     * @param string $document_html valid html
+     * @param string $css           CSS content of a CSS file
+     * @param string $pdf_name      pdf name
+     * @param string $course_code   course code
+     *                              (if you are using html that are located in the document tool you must provide this)
+     * @param string $outputMode    the MPDF output mode can be:
+     * @param bool   $saveInFile
      * @param string $fileToSave
-     * @param bool $returnHtml
-     * @param bool $addDefaultCss
+     * @param bool   $returnHtml
+     * @param bool   $addDefaultCss
      *
      * 'I' (print on standard output),
      * 'D' (download file) (this is the default value),
      * 'F' (save to local file) or
      * 'S' (return as a string)
-     * @return  string  Web path
+     *
+     * @return string Web path
      */
     public function content_to_pdf(
         $document_html,
@@ -455,10 +459,10 @@ class PDF
         }
 
         //clean styles and javascript document
-        $clean_search = array(
+        $clean_search = [
             '@<script[^>]*?>.*?</script>@si',
-            '@<style[^>]*?>.*?</style>@siU'
-        );
+            '@<style[^>]*?>.*?</style>@siU',
+        ];
 
         // Formatting the pdf
         $course_data = api_get_course_info($course_code);
@@ -540,7 +544,7 @@ class PDF
             $basicStyles = [
                 api_get_path(SYS_PATH).'web/assets/bootstrap/dist/css/bootstrap.min.css',
                 api_get_path(SYS_PATH).'web/css/base.css',
-                api_get_path(SYS_PATH).'web/css/themes/'.api_get_visual_theme().'/default.css'
+                api_get_path(SYS_PATH).'web/css/themes/'.api_get_visual_theme().'/default.css',
             ];
             foreach ($basicStyles as $style) {
                 $cssContent = file_get_contents($style);
@@ -568,7 +572,6 @@ class PDF
                 $fileToSave,
                 $outputMode
             ); // F to save the pdf in a file
-
         } else {
             $this->pdf->Output(
                 $output_file,
@@ -584,9 +587,11 @@ class PDF
     }
 
     /**
-     * Gets the watermark from the platform or a course
+     * Gets the watermark from the platform or a course.
+     *
      * @param   string  course code (optional)
      * @param   mixed   web path of the watermark image, false if there is nothing to return
+     *
      * @return string
      */
     public static function get_watermark($course_code = null)
@@ -612,9 +617,11 @@ class PDF
     }
 
     /**
-     * Deletes the watermark from the Platform or Course
-     * @param   string  $course_code course code (optional)
+     * Deletes the watermark from the Platform or Course.
+     *
+     * @param string $course_code course code (optional)
      * @param   mixed   web path of the watermark image, false if there is nothing to return
+     *
      * @return bool
      */
     public function delete_watermark($course_code = null)
@@ -630,17 +637,21 @@ class PDF
         }
         if (file_exists($store_path)) {
             unlink($store_path);
+
             return true;
         }
+
         return false;
     }
 
     /**
-     * Uploads the pdf watermark in the main/default_course_document directory or in the course directory
-     * @param	string	$filename filename
-     * @param	string	$source_file path of the file
-     * @param	string	$course_code
-     * @return 	mixed	web path of the file if sucess, false otherwise
+     * Uploads the pdf watermark in the main/default_course_document directory or in the course directory.
+     *
+     * @param string $filename    filename
+     * @param string $source_file path of the file
+     * @param string $course_code
+     *
+     * @return mixed web path of the file if sucess, false otherwise
      */
     public function upload_watermark($filename, $source_file, $course_code = null)
     {
@@ -648,10 +659,10 @@ class PDF
         if (!empty($course_code) && api_get_setting('pdf_export_watermark_by_course') == 'true') {
             $course_info = api_get_course_info($course_code);
             $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path']; // course path
-            $web_path   = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/pdf_watermark.png';
+            $web_path = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/pdf_watermark.png';
         } else {
             $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images'; // course path
-            $web_path   = api_get_path(WEB_CODE_PATH).'default_course_document/images/'.$urlId.'_pdf_watermark.png';
+            $web_path = api_get_path(WEB_CODE_PATH).'default_course_document/images/'.$urlId.'_pdf_watermark.png';
         }
         $course_image = $store_path.'/'.$urlId.'_pdf_watermark.png';
 
@@ -663,11 +674,12 @@ class PDF
         if ($result) {
             $result = $web_path;
         }
+
         return $result;
     }
 
     /**
-     * Returns the default header
+     * Returns the default header.
      */
     public function get_header($course_code = null)
     {
@@ -679,75 +691,76 @@ class PDF
     }
 
     /**
-     * Sets the PDF footer
+     * Sets the PDF footer.
      */
     public function set_footer()
     {
         $this->pdf->defaultfooterfontsize = 12;   // in pts
         $this->pdf->defaultfooterfontstyle = 'B';   // blank, B, I, or BI
         $this->pdf->defaultfooterline = 1;        // 1 to include line below header/above footer
-        $platform_name   = api_get_setting('Institution');
-        $left_content    = $platform_name;
-        $center_content  = '';
-        $right_content   = '{PAGENO} / {nb}';
+        $platform_name = api_get_setting('Institution');
+        $left_content = $platform_name;
+        $center_content = '';
+        $right_content = '{PAGENO} / {nb}';
 
         //@todo remove this and use a simpler way
-        $footer = array(
-            'odd' => array(
-                'L' => array(
+        $footer = [
+            'odd' => [
+                'L' => [
                     'content' => $left_content,
                     'font-size' => 10,
                     'font-style' => 'B',
                     'font-family' => 'serif',
-                    'color' => '#000000'
-                ),
-                'C' => array(
+                    'color' => '#000000',
+                ],
+                'C' => [
                     'content' => $center_content,
                     'font-size' => 10,
                     'font-style' => 'B',
                     'font-family' => 'serif',
-                    'color' => '#000000'
-                ),
-                'R' => array(
+                    'color' => '#000000',
+                ],
+                'R' => [
                     'content' => $right_content,
                     'font-size' => 10,
                     'font-style' => 'B',
                     'font-family' => 'serif',
-                    'color' => '#000000'
-                ),
+                    'color' => '#000000',
+                ],
                 'line' => 1,
-            ),
-            'even' => array(
-                'L' => array(
+            ],
+            'even' => [
+                'L' => [
                     'content' => $left_content,
                     'font-size' => 10,
                     'font-style' => 'B',
                     'font-family' => 'serif',
-                    'color' => '#000000'
-                ),
-                'C' => array(
+                    'color' => '#000000',
+                ],
+                'C' => [
                     'content' => $center_content,
                     'font-size' => 10,
                     'font-style' => 'B',
                     'font-family' => 'serif',
-                    'color' => '#000000'
-                ),
-                'R' => array(
+                    'color' => '#000000',
+                ],
+                'R' => [
                     'content' => $right_content,
                     'font-size' => 10,
                     'font-style' => 'B',
                     'font-family' => 'serif',
-                    'color' => '#000000'
-                ),
+                    'color' => '#000000',
+                ],
                 'line' => 1,
-            ),
-        );
+            ],
+        ];
         // defines footer for Odd and Even Pages - placed at Outer margin see http://mpdf1.com/manual/index.php?tid=151&searchstring=setfooter
         $this->pdf->SetFooter($footer);
     }
 
     /**
-     * Sets the PDF header
+     * Sets the PDF header.
+     *
      * @param array $course_data
      */
     public function set_header($course_data)
@@ -818,9 +831,10 @@ class PDF
 
     /**
      * Pre-formats a PDF to the right size and, if not stated otherwise, with
-     * header, footer and watermark (if any)
+     * header, footer and watermark (if any).
+     *
      * @param array $course_data General course information (to fill headers)
-     * @param bool $complete Whether we want headers, footers and watermark or not
+     * @param bool  $complete    Whether we want headers, footers and watermark or not
      */
     public function format_pdf($course_data, $complete = true)
     {
@@ -893,11 +907,12 @@ class PDF
     }
 
     /**
-     * Generate a PDF file from $html in SYS_APP_PATH
+     * Generate a PDF file from $html in SYS_APP_PATH.
      *
-     * @param string $html PDF content
+     * @param string $html     PDF content
      * @param string $fileName File name
-     * @param string $dest Optional. Directory to move file
+     * @param string $dest     Optional. Directory to move file
+     *
      * @return string The PDF path
      */
     public function exportFromHtmlToFile($html, $fileName, $dest = null)
@@ -928,11 +943,12 @@ class PDF
     }
 
     /**
-     * Create a PDF and save it into the documents area
+     * Create a PDF and save it into the documents area.
+     *
      * @param string $htmlContent HTML Content
-     * @param string $fileName The file name
-     * @param integer $courseId The course ID
-     * @param int $sessionId Optional. The session ID
+     * @param string $fileName    The file name
+     * @param int    $courseId    The course ID
+     * @param int    $sessionId   Optional. The session ID
      */
     public function exportFromHtmlToDocumentsArea(
         $htmlContent,

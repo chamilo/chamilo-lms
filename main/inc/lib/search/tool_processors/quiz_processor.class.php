@@ -2,12 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Process exercises before pass it to search listing scripts
+ * Process exercises before pass it to search listing scripts.
+ *
  * @package chamilo.include.search
  */
 class quiz_processor extends search_processor
 {
-    public $exercices = array();
+    public $exercices = [];
+
     public function __construct($rows)
     {
         $this->rows = $rows;
@@ -19,12 +21,12 @@ class quiz_processor extends search_processor
                 case SE_DOCTYPE_EXERCISE_EXERCISE:
                     $exercise_id = $se_data['exercise_id'];
                     $question = null;
-                    $item = array(
+                    $item = [
                         'courseid' => $courseid,
                         'question' => $question,
                         'total_score' => $row_val['score'],
                         'row_id' => $row_id,
-                    );
+                    ];
                     $this->exercises[$courseid][$exercise_id] = $item;
                     $this->exercises[$courseid][$exercise_id]['total_score'] += $row_val['score'];
                     break;
@@ -32,12 +34,12 @@ class quiz_processor extends search_processor
                     if (is_array($se_data['exercise_ids'])) {
                         foreach ($se_data['exercise_ids'] as $exercise_id) {
                             $question = $se_data['question_id'];
-                            $item = array(
+                            $item = [
                                 'courseid' => $courseid,
                                 'question' => $question,
                                 'total_score' => $row_val['score'],
                                 'row_id' => $row_id,
-                            );
+                            ];
                             $this->exercises[$courseid][$exercise_id] = $item;
                             $this->exercises[$courseid][$exercise_id]['total_score'] += $row_val['score'];
                         }
@@ -49,10 +51,10 @@ class quiz_processor extends search_processor
 
     public function process()
     {
-        $results = array();
+        $results = [];
         foreach ($this->exercises as $courseid => $exercises) {
             $search_show_unlinked_results = (api_get_setting('search_show_unlinked_results') == 'true');
-            $course_visible_for_user = api_is_course_visible_for_user(NULL, $courseid);
+            $course_visible_for_user = api_is_course_visible_for_user(null, $courseid);
             // can view course?
             if ($course_visible_for_user || $search_show_unlinked_results) {
                 foreach ($exercises as $exercise_id => $exercise) {
@@ -62,7 +64,7 @@ class quiz_processor extends search_processor
                         list($thumbnail, $image, $name, $author) = $this->get_information($courseid, $exercise_id);
                         $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?cidReq=%s&exerciseId=%s';
                         $url = sprintf($url, $courseid, $exercise_id);
-                        $result = array(
+                        $result = [
                             'toolid' => TOOL_QUIZ,
                             'total_score' => $exercise['total_score'] / (count($exercise) - 1), // not count total_score array item
                             'url' => $url,
@@ -70,7 +72,7 @@ class quiz_processor extends search_processor
                             'image' => $image,
                             'title' => $name,
                             'author' => $author,
-                        );
+                        ];
                         if ($course_visible_for_user) {
                             $results[] = $result;
                         } else { // course not visible for user
@@ -90,11 +92,12 @@ class quiz_processor extends search_processor
         }
         // Sort results with score descending
         array_multisort($score, SORT_DESC, $results);
+
         return $results;
     }
 
     /**
-     * Get learning path information
+     * Get learning path information.
      */
     private function get_information($courseCode, $exercise_id)
     {
@@ -109,7 +112,7 @@ class quiz_processor extends search_processor
                 ->getRepository('ChamiloCourseBundle:CQuiz')
                 ->findOneBy([
                     'id' => $exercise_id,
-                    'cId' => $course_id
+                    'cId' => $course_id,
                 ]);
 
             $name = '';
@@ -125,16 +128,17 @@ class quiz_processor extends search_processor
                     ->findOneBy([
                         'ref' => $exercise_id,
                         'tool' => TOOL_QUIZ,
-                        'course' => $course_id
+                        'course' => $course_id,
                     ]);
 
                 if ($item_result) {
                     $author = $item_result->getInsertUser()->getCompleteName();
                 }
             }
-            return array($thumbnail, $image, $name, $author);
+
+            return [$thumbnail, $image, $name, $author];
         } else {
-            return array();
+            return [];
         }
     }
 }

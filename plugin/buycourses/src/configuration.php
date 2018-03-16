@@ -1,10 +1,10 @@
 <?php
 /* For license terms, see /license.txt */
 /**
- * Configuration script for the Buy Courses plugin
+ * Configuration script for the Buy Courses plugin.
+ *
  * @package chamilo.plugin.buycourses
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
@@ -27,7 +27,7 @@ $courses = $plugin->getCoursesForConfiguration();
 // breadcrumbs
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_PLUGIN_PATH).'buycourses/index.php',
-    'name' => $plugin->get_lang('plugin_title')
+    'name' => $plugin->get_lang('plugin_title'),
 ];
 
 $templateName = $plugin->get_lang('AvailableCourses');

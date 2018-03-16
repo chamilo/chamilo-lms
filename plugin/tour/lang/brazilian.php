@@ -1,8 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Strings para o português brasileiro L10n
+ * Strings para o português brasileiro L10n.
+ *
  * @author Igor Oliveira Souza <igor@igoroliveira.eng.br>
+ *
  * @package chamilo.plugin.tour
  */
 $strings['plugin_title'] = 'Tour';

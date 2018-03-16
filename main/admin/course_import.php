@@ -3,7 +3,8 @@
 
 /**
  * This tool allows platform admins to create courses by uploading a CSV file
- * Copyright (c) 2005 Bart Mollet <bart.mollet@hogent.be>
+ * Copyright (c) 2005 Bart Mollet <bart.mollet@hogent.be>.
+ *
  * @package chamilo.admin
  */
 
@@ -11,17 +12,18 @@
  * Validates imported data.
  *
  * @param array $courses
+ *
  * @return array $errors
  */
 function validate_courses_data($courses)
 {
-    $errors = array();
-    $coursecodes = array();
+    $errors = [];
+    $coursecodes = [];
     foreach ($courses as $index => $course) {
         $course['line'] = $index + 1;
 
         // 1. Check whether mandatory fields are set.
-        $mandatory_fields = array('Code', 'Title', 'CourseCategory');
+        $mandatory_fields = ['Code', 'Title', 'CourseCategory'];
         foreach ($mandatory_fields as $field) {
             if (empty($course[$field])) {
                 $course['error'] = get_lang($field.'Mandatory');
@@ -79,9 +81,10 @@ function validate_courses_data($courses)
 }
 
 /**
- * Get the teacher list
+ * Get the teacher list.
  *
  * @param array $teachers
+ *
  * @return array
  */
 function getTeacherListInArray($teachers)
@@ -90,11 +93,12 @@ function getTeacherListInArray($teachers)
         return explode('|', $teachers);
     }
 
-    return array();
+    return [];
 }
 
 /**
  * Saves imported data.
+ *
  * @param array $courses List of courses
  */
 function save_courses_data($courses)
@@ -103,7 +107,7 @@ function save_courses_data($courses)
     foreach ($courses as $course) {
         $course_language = $course['Language'];
         $teachers = getTeacherListInArray($course['Teacher']);
-        $teacherList = array();
+        $teacherList = [];
         $creatorId = api_get_user_id();
 
         if (!empty($teachers)) {
@@ -115,7 +119,7 @@ function save_courses_data($courses)
             }
         }
 
-        $params = array();
+        $params = [];
         $params['title'] = $course['Title'];
         $params['wanted_code'] = $course['Code'];
         $params['tutor_name'] = null;
@@ -147,13 +151,16 @@ function save_courses_data($courses)
 }
 
 /**
- * Read the CSV-file
+ * Read the CSV-file.
+ *
  * @param string $file Path to the CSV-file
+ *
  * @return array All course-information read from the file
  */
 function parse_csv_courses_data($file)
 {
     $courses = Import::csv_reader($file);
+
     return $courses;
 }
 
@@ -172,7 +179,7 @@ if (isset($extAuthSource) && is_array($extAuthSource)) {
 
 $tool_name = get_lang('ImportCourses').' CSV';
 
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
 set_time_limit(0);
 Display::display_header($tool_name);
@@ -182,7 +189,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $error_message = get_lang('UplUploadFailed');
         echo Display::return_message($error_message, 'error', false);
     } else {
-        $allowed_file_mimetype = array('csv');
+        $allowed_file_mimetype = ['csv'];
 
         $ext_import_file = substr($_FILES['import_file']['name'], (strrpos($_FILES['import_file']['name'], '.') + 1));
 
@@ -215,7 +222,7 @@ $form = new FormValidator(
     'post',
     api_get_self(),
     null,
-    array('enctype' => 'multipart/form-data')
+    ['enctype' => 'multipart/form-data']
 );
 $form->addHeader($tool_name);
 $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));

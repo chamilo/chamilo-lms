@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  * @package chamilo.admin
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset = true;
@@ -40,7 +41,7 @@ if ($form->validate()) {
             }
             // URL Images
             $url_images_dir = api_get_path(SYS_PATH).'custompages/url-images/';
-            $image_fields = array("url_image_1", "url_image_2", "url_image_3");
+            $image_fields = ["url_image_1", "url_image_2", "url_image_3"];
             foreach ($image_fields as $image_field) {
                 if ($_FILES[$image_field]['error'] == 0) {
                     // Hardcoded: only PNG files allowed
@@ -81,7 +82,7 @@ if ($form->validate()) {
             $url .= (substr($url, strlen($url) - 1, strlen($url)) == '/') ? '' : '/';
             $url_id = UrlManager::get_url_id($url);
             $url_images_dir = api_get_path(SYS_PATH).'custompages/url-images/';
-            $image_fields = array("url_image_1", "url_image_2", "url_image_3");
+            $image_fields = ["url_image_1", "url_image_2", "url_image_3"];
             foreach ($image_fields as $image_field) {
                 if ($_FILES[$image_field]['error'] == 0) {
                     // Hardcoded: only PNG files allowed
@@ -106,7 +107,7 @@ if ($form->validate()) {
     }
     $token = Security::get_token();
     $form->addElement('hidden', 'sec_token');
-    $form->setConstants(array('sec_token' => $token));
+    $form->setConstants(['sec_token' => $token]);
 }
 
 $form->addElement('text', 'url', 'URL');
@@ -142,8 +143,8 @@ if (!api_is_multiple_url_enabled()) {
 }
 
 $tool_name = get_lang('AddUrl');
-$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array("url" => 'access_urls.php', "name" => get_lang('MultipleAccessURLs'));
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ["url" => 'access_urls.php', "name" => get_lang('MultipleAccessURLs')];
 
 Display :: display_header($tool_name);
 

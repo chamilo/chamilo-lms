@@ -1,22 +1,26 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 namespace Chamilo\CoreBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use \Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
- * ExtraFieldValuesRepository class
+ * ExtraFieldValuesRepository class.
  *
  * @package Chamilo\CoreBundle\Entity\Repository
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 class ExtraFieldValuesRepository extends EntityRepository
 {
     /**
-     * Get the extra field values for visible extra fields
+     * Get the extra field values for visible extra fields.
+     *
      * @param int $extraFieldType The type of extra field
-     * @param int $itemId The item ID
+     * @param int $itemId         The item ID
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getVisibleValues($extraFieldType, $itemId)
@@ -38,6 +42,7 @@ class ExtraFieldValuesRepository extends EntityRepository
                 )
             )
         ;
+
         return $queryBuilder->getQuery()->getResult();
     }
 }

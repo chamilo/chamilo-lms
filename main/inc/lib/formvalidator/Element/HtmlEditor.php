@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
+use Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
 
 /**
- * A html editor field to use with QuickForm
+ * A html editor field to use with QuickForm.
  */
 class HtmlEditor extends HTML_QuickForm_textarea
 {
@@ -12,17 +12,17 @@ class HtmlEditor extends HTML_QuickForm_textarea
     public $editor;
 
     /**
-     * Full page
+     * Full page.
      */
     public $fullPage;
 
     /**
-     * Class Constructor
+     * Class Constructor.
+     *
      * @param string $name
      * @param string $elementLabel HTML editor  label
-     * @param array  $attributes Attributes for the textarea
-     * @param array  $config Optional configuration settings for the online editor.
-     *
+     * @param array  $attributes   Attributes for the textarea
+     * @param array  $config       optional configuration settings for the online editor
      */
     public function __construct(
         $name = null,
@@ -48,7 +48,8 @@ class HtmlEditor extends HTML_QuickForm_textarea
     }
 
     /**
-     * Return the HTML editor in HTML
+     * Return the HTML editor in HTML.
+     *
      * @return string
      */
     public function toHtml()
@@ -66,7 +67,6 @@ class HtmlEditor extends HTML_QuickForm_textarea
             }
         }
 
-
         if ($this->isFrozen()) {
             return $this->getFrozenHtml();
         } else {
@@ -82,7 +82,8 @@ class HtmlEditor extends HTML_QuickForm_textarea
     }
 
     /**
-     * Returns the html area content in HTML
+     * Returns the html area content in HTML.
+     *
      * @return string
      */
     public function getFrozenHtml()
@@ -106,7 +107,6 @@ class HtmlEditor extends HTML_QuickForm_textarea
             } else {
                 $result = $this->editor->createHtml();
             }
-
         }
 
         return $result;

@@ -1,13 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Michelf\MarkdownExtra;
-use Doctrine\Common\Collections\Criteria;
 use Chamilo\CourseBundle\Entity\CChatConnected;
+use Doctrine\Common\Collections\Criteria;
+use Michelf\MarkdownExtra;
 
 /**
  * Class CourseChat
- * Manage the chat for a course
+ * Manage the chat for a course.
  */
 class CourseChatUtils
 {
@@ -18,6 +18,7 @@ class CourseChatUtils
 
     /**
      * CourseChat constructor.
+     *
      * @param int $courseId
      * @param int $userId
      * @param int $sessionId
@@ -32,34 +33,10 @@ class CourseChatUtils
     }
 
     /**
-     * Get the users subscriptions (SessionRelCourseRelUser array or CourseRelUser array) for chat
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     */
-    private function getUsersSubscriptions()
-    {
-        $em = Database::getManager();
-        $course = $em->find('ChamiloCoreBundle:Course', $this->courseId);
-
-        if ($this->sessionId) {
-            $criteria = Criteria::create()->where(Criteria::expr()->eq('course', $course));
-
-            return $em
-                ->find('ChamiloCoreBundle:Session', $this->sessionId)
-                ->getUserCourseSubscriptions()
-                ->matching($criteria);
-        }
-
-        return $em
-            ->find('ChamiloCoreBundle:Course', $course)
-            ->getUsers();
-    }
-
-    /**
-     * Prepare a message. Clean and insert emojis
+     * Prepare a message. Clean and insert emojis.
+     *
      * @param string $message The message to prepare
+     *
      * @return string
      */
     public static function prepareMessage($message)
@@ -96,13 +73,16 @@ class CourseChatUtils
     }
 
     /**
-     * Save a chat message in a HTML file
+     * Save a chat message in a HTML file.
+     *
      * @param string$message
      * @param int $friendId
-     * @return bool
+     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return bool
      */
     public function saveMessage($message, $friendId = 0)
     {
@@ -183,23 +163,23 @@ class CourseChatUtils
             $fileContent = '
                 <div class="message-teacher">
                     <div class="content-message">
-                        <div class="chat-message-block-name">' . $user->getCompleteName().'</div>
-                        <div class="chat-message-block-content">' . $message.'</div>
-                        <div class="message-date">' . $timeNow.'</div>
+                        <div class="chat-message-block-name">'.$user->getCompleteName().'</div>
+                        <div class="chat-message-block-content">'.$message.'</div>
+                        <div class="message-date">'.$timeNow.'</div>
                     </div>
                     <div class="icon-message"></div>
-                    <img class="chat-image" src="' . $userPhoto.'">
+                    <img class="chat-image" src="'.$userPhoto.'">
                 </div>
             ';
         } else {
             $fileContent = '
                 <div class="message-student">
-                    <img class="chat-image" src="' . $userPhoto.'">
+                    <img class="chat-image" src="'.$userPhoto.'">
                     <div class="icon-message"></div>
                     <div class="content-message">
-                        <div class="chat-message-block-name">' . $user->getCompleteName().'</div>
-                        <div class="chat-message-block-content">' . $message.'</div>
-                        <div class="message-date">' . $timeNow.'</div>
+                        <div class="chat-message-block-name">'.$user->getCompleteName().'</div>
+                        <div class="chat-message-block-content">'.$message.'</div>
+                        <div class="message-date">'.$timeNow.'</div>
                     </div>
                 </div>
             ';
@@ -217,7 +197,8 @@ class CourseChatUtils
     }
 
     /**
-     * Disconnect a user from course chats
+     * Disconnect a user from course chats.
+     *
      * @param $userId
      */
     public static function exitChat($userId)
@@ -232,13 +213,13 @@ class CourseChatUtils
                 ')
                 ->execute([
                     'course' => intval($course['real_id']),
-                    'user' => intval($userId)
+                    'user' => intval($userId),
                 ]);
         }
     }
 
     /**
-     * Disconnect users who are more than 5 seconds inactive
+     * Disconnect users who are more than 5 seconds inactive.
      */
     public function disconnectInactiveUsers()
     {
@@ -279,13 +260,14 @@ class CourseChatUtils
                 ->execute([
                     'course' => $this->courseId,
                     'user' => $connection->getUserId(),
-                    'group' => $this->groupId
+                    'group' => $this->groupId,
                 ]);
         }
     }
 
     /**
-     * Keep registered to a user as connected
+     * Keep registered to a user as connected.
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function keepUserAsConnected()
@@ -308,7 +290,7 @@ class CourseChatUtils
             ")
             ->setParameters([
                 'user' => $this->userId,
-                'course' => $this->courseId
+                'course' => $this->courseId,
             ])
             ->getOneOrNullResult();
 
@@ -333,7 +315,8 @@ class CourseChatUtils
     }
 
     /**
-     * Get the emoji allowed on course chat
+     * Get the emoji allowed on course chat.
+     *
      * @return array
      */
     public static function getEmojiStrategy()
@@ -342,7 +325,8 @@ class CourseChatUtils
     }
 
     /**
-     * Get the emoji list to include in chat
+     * Get the emoji list to include in chat.
+     *
      * @return array
      */
     public static function getEmojisToInclude()
@@ -409,14 +393,16 @@ class CourseChatUtils
             ':neutral_face:',
             ':no_mouth:',
             ':innocent:',
-            ':alien:'
+            ':alien:',
         ];
     }
 
     /**
-     * Get the chat history file name
+     * Get the chat history file name.
+     *
      * @param bool $absolute Optional. Whether get the base or the absolute file path
-     * @param int $friendId Optional.
+     * @param int  $friendId optional
+     *
      * @return string
      */
     public function getFileName($absolute = false, $friendId = 0)
@@ -454,9 +440,11 @@ class CourseChatUtils
     }
 
     /**
-     * Get the chat history
+     * Get the chat history.
+     *
      * @param bool $reset
-     * @param int $friendId Optional.
+     * @param int  $friendId optional
+     *
      * @return string
      */
     public function readMessages($reset = false, $friendId = 0)
@@ -608,7 +596,7 @@ class CourseChatUtils
         }
 
         $remove = 0;
-        $content = array();
+        $content = [];
 
         if (file_exists($chat_path.$basename_chat.'.log.html')) {
             $content = file($chat_path.$basename_chat.'.log.html');
@@ -637,7 +625,7 @@ class CourseChatUtils
             $history .= '
                 <div id="clear-chat">
                     <button type="button" id="chat-reset" class="btn btn-danger btn-sm">
-                        ' . get_lang('ClearList').'
+                        '.get_lang('ClearList').'
                     </button>
                 </div>
             ';
@@ -647,7 +635,8 @@ class CourseChatUtils
     }
 
     /**
-     * Get the number of users connected in chat
+     * Get the number of users connected in chat.
+     *
      * @return mixed
      */
     public function countUsersOnline()
@@ -670,7 +659,7 @@ class CourseChatUtils
             ")
             ->setParameters([
                 'date' => $date,
-                'course' => $this->courseId
+                'course' => $this->courseId,
             ])
             ->getSingleScalarResult();
 
@@ -678,8 +667,68 @@ class CourseChatUtils
     }
 
     /**
-     * Check if a user is connected in course chat
+     * Get the users online data.
+     *
+     * @return string
+     */
+    public function listUsersOnline()
+    {
+        $subscriptions = $this->getUsersSubscriptions();
+        $usersInfo = [];
+
+        foreach ($subscriptions as $subscription) {
+            $user = $subscription->getUser();
+
+            $usersInfo[] = [
+                'id' => $user->getId(),
+                'firstname' => $user->getFirstname(),
+                'lastname' => $user->getLastname(),
+                'status' => !$this->sessionId ? $subscription->getStatus() : $user->getStatus(),
+                'image_url' => UserManager::getUserPicture($user->getId(), USER_IMAGE_SIZE_MEDIUM),
+                'profile_url' => api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user->getId(),
+                'complete_name' => $user->getCompleteName(),
+                'username' => $user->getUsername(),
+                'email' => $user->getEmail(),
+                'isConnected' => $this->userIsConnected($user->getId()),
+            ];
+        }
+
+        return $usersInfo;
+    }
+
+    /**
+     * Get the users subscriptions (SessionRelCourseRelUser array or CourseRelUser array) for chat.
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    private function getUsersSubscriptions()
+    {
+        $em = Database::getManager();
+        $course = $em->find('ChamiloCoreBundle:Course', $this->courseId);
+
+        if ($this->sessionId) {
+            $criteria = Criteria::create()->where(Criteria::expr()->eq('course', $course));
+
+            return $em
+                ->find('ChamiloCoreBundle:Session', $this->sessionId)
+                ->getUserCourseSubscriptions()
+                ->matching($criteria);
+        }
+
+        return $em
+            ->find('ChamiloCoreBundle:Course', $course)
+            ->getUsers();
+    }
+
+    /**
+     * Check if a user is connected in course chat.
+     *
      * @param int $userId
+     *
      * @return int
      */
     private function userIsConnected($userId)
@@ -703,39 +752,10 @@ class CourseChatUtils
             ->setParameters([
                 'date' => $date,
                 'course' => $this->courseId,
-                'user' => $userId
+                'user' => $userId,
             ])
             ->getSingleScalarResult();
 
         return intval($number);
-    }
-
-    /**
-     * Get the users online data
-     * @return string
-     */
-    public function listUsersOnline()
-    {
-        $subscriptions = $this->getUsersSubscriptions();
-        $usersInfo = [];
-
-        foreach ($subscriptions as $subscription) {
-            $user = $subscription->getUser();
-
-            $usersInfo[] = [
-                'id' => $user->getId(),
-                'firstname' => $user->getFirstname(),
-                'lastname' => $user->getLastname(),
-                'status' => !$this->sessionId ? $subscription->getStatus() : $user->getStatus(),
-                'image_url' => UserManager::getUserPicture($user->getId(), USER_IMAGE_SIZE_MEDIUM),
-                'profile_url' => api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user->getId(),
-                'complete_name' => $user->getCompleteName(),
-                'username' => $user->getUsername(),
-                'email' => $user->getEmail(),
-                'isConnected' => $this->userIsConnected($user->getId())
-            ];
-        }
-
-        return $usersInfo;
     }
 }

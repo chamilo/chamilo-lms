@@ -2,7 +2,8 @@
 
 /* For license terms, see /license.txt */
 /**
- * List of pending payments of the Buy Courses plugin
+ * List of pending payments of the Buy Courses plugin.
+ *
  * @package chamilo.plugin.buycourses
  */
 //Initialization
@@ -39,7 +40,7 @@ if ($form->validate()) {
 $form->addSelect('status', $plugin->get_lang('PayoutStatus'), $payoutStatuses);
 $form->addButtonFilter(get_lang('Search'));
 $form->setDefaults([
-    'status' => $selectedStatus
+    'status' => $selectedStatus,
 ]);
 
 switch ($selectedStatus) {
@@ -52,7 +53,6 @@ switch ($selectedStatus) {
 
         break;
     case '0':
-        //no break
     default:
         $payouts = $plugin->getPayouts();
 
@@ -75,7 +75,7 @@ foreach ($payouts as $payout) {
         'commission' => $payout['commission'],
         'beneficiary' => api_get_person_name($payout['firstname'], $payout['lastname']),
         'paypal_account' => $payout['paypal_account'],
-        'status' => $payout['status']
+        'status' => $payout['status'],
     ];
 }
 

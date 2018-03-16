@@ -6,38 +6,42 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 /**
  * Class Link
  * A WWW-link from the Links-module in a Chamilo-course.
+ *
  * @author Bart Mollet <bart.mollet@hogent.be>
+ *
  * @package chamilo.backup
  */
 class Link extends Resource
 {
     /**
-     * The title
+     * The title.
      */
     public $title;
     /**
-     * The URL
+     * The URL.
      */
     public $url;
     /**
-     * The description
+     * The description.
      */
     public $description;
     /**
-     * Id of this links category
+     * Id of this links category.
      */
     public $category_id;
     /**
-     * Display link on course homepage
+     * Display link on course homepage.
      */
     public $on_homepage;
     /**
      * @var string The link target
      */
     public $target;
+
     /**
-     * Create a new Link
-     * @param int $id The id of this link in the Chamilo-course
+     * Create a new Link.
+     *
+     * @param int    $id          The id of this link in the Chamilo-course
      * @param string $title
      * @param string $url
      * @param string $description
@@ -59,7 +63,7 @@ class Link extends Resource
     }
 
     /**
-     * Show this resource
+     * Show this resource.
      */
     public function show()
     {

@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\UserRelUser,
-    Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\UserBundle\Entity\User;
 
 $cidReset = true;
 
@@ -23,7 +23,7 @@ if ($action === 'accept' && $hrm && $assinedId) {
         ->findOneBy([
             'userId' => $assinedId,
             'friendUserId' => $hrm->getId(),
-            'relationType' => USER_RELATION_TYPE_HRM_REQUEST
+            'relationType' => USER_RELATION_TYPE_HRM_REQUEST,
         ]);
 
     if ($request) {
@@ -68,7 +68,7 @@ function getData(User $hrm)
             Display::url(
                 $iconAccept,
                 $urlAccept.$request['user_id']
-            )
+            ),
         ];
     }
 

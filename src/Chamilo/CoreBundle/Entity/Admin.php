@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Admin
+ * Admin.
  *
  * @ORM\Table(name="admin", uniqueConstraints={@ORM\UniqueConstraint(name="user_id", columns={"user_id"})})
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Admin
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -23,16 +23,17 @@ class Admin
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
     private $userId;
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return Admin
      */
     public function setUserId($userId)
@@ -43,9 +44,9 @@ class Admin
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -53,9 +54,9 @@ class Admin
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

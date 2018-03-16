@@ -19,7 +19,7 @@ $jwtPayload = json_decode(
     base64_decode($jwtPayload)
 );
 
-$u = array(
+$u = [
     'firstname' => $jwtPayload->given_name,
     'lastname' => $jwtPayload->family_name,
     'status' => STUDENT,
@@ -28,8 +28,8 @@ $u = array(
     'language' => 'en',
     'password' => 'azure_active_directory',
     'auth_source' => 'azure_active_directory '.$jwtPayload->idp,
-    'extra' => array()
-);
+    'extra' => [],
+];
 
 $userInfo = api_get_user_info_from_email($jwtPayload->emails[0]);
 

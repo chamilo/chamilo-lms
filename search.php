@@ -17,9 +17,9 @@ $em = Database::getManager();
 $form = new FormValidator('search', 'post', api_get_self());
 $form->addHeader(get_lang('Diagnosis'));
 
-/** @var ExtraFieldSavedSearch  $saved */
+/** @var ExtraFieldSavedSearch $saved */
 $search = [
-    'user' => $userId
+    'user' => $userId,
 ];
 
 $items = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findBy($search);
@@ -72,7 +72,7 @@ switch ($lang) {
         break;
 }
 
-$htmlHeadXtra[] ='<script>
+$htmlHeadXtra[] = '<script>
 $(document).ready(function() {  
     var themeDefault = "extra_'.$theme.'";
     var extraFiliere = $("input[name=\'extra_filiere[extra_filiere]\']").parent().parent().parent().parent();    
@@ -251,7 +251,7 @@ $extraField = new ExtraField('user');
 $userForm = new FormValidator('user_form', 'post', api_get_self());
 $jqueryExtra = '';
 
-$htmlHeadXtra[] ='<script>		
+$htmlHeadXtra[] = '<script>		
 $(document).ready(function() {
 	var blocks = [
         "#collapseOne",
@@ -315,22 +315,20 @@ $(document).ready(function() {
 });		
 </script>';
 
-
 $userForm->addHtml('<div class="panel-group" id="search_extrafield" role="tablist" aria-multiselectable="true">');
 $userForm->addHtml('<div class="panel panel-default">');
-$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseZero" aria-expanded="true" aria-controls="collapseZero">' .
-    get_lang('DiagnosticForm') . '</a></div>');
+$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseZero" aria-expanded="true" aria-controls="collapseZero">'.
+    get_lang('DiagnosticForm').'</a></div>');
 $userForm->addHtml('<div id="collapseZero" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingZero">');
 $userForm->addHtml('<div class="panel-body"><p class="text-info">');
 $userForm->addHtml(get_lang('DiagnosticIntroduction'));
 $userForm->addHtml('</div></div></div></div>');
 
-
 $userForm->addHtml('<div class="panel-group" id="search_extrafield" role="tablist" aria-multiselectable="true">');
 $userForm->addHtml('<div class="panel panel-default">');
-$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">' . get_lang('Filiere') . '</a></div>');
+$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">'.get_lang('Filiere').'</a></div>');
 $userForm->addHtml('<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">');
-$userForm->addHtml('<div class="panel-body"><p class="text-info">' . get_lang('FiliereExplanation') .'</p>');
+$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('FiliereExplanation').'</p>');
 
 $fieldsToShow = [
     'statusocial',
@@ -356,7 +354,7 @@ $extra = $extraField->addElements(
 $jqueryExtra .= $extra['jquery_ready_content'];
 
 $fieldsToShow = [
-    'filiere'
+    'filiere',
 ];
 
 $extra = $extraFieldSession->addElements(
@@ -379,9 +377,9 @@ $userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseOne]');
 $userForm->addHtml('</div></div></div>');
 
 $userForm->addHtml('<div class="panel panel-default">');
-$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">' . get_lang('DisponibiliteAvant') . '</a></div>');
+$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">'.get_lang('DisponibiliteAvant').'</a></div>');
 $userForm->addHtml('<div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">');
-$userForm->addHtml('<div class="panel-body"><p class="text-info">' . get_lang('DisponibiliteAvantExplanation') . '</p>');
+$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('DisponibiliteAvantExplanation').'</p>');
 
 $extra = $extraFieldSession->addElements(
     $userForm,
@@ -389,7 +387,7 @@ $extra = $extraFieldSession->addElements(
     [],
     $filter,
     true,
-    array('access_start_date', 'access_end_date'),
+    ['access_start_date', 'access_end_date'],
     [],
     [],
     [],
@@ -398,7 +396,7 @@ $extra = $extraFieldSession->addElements(
 );
 
 $userForm->addRule(
-    array('extra_access_start_date', 'extra_access_end_date'),
+    ['extra_access_start_date', 'extra_access_end_date'],
     get_lang('StartDateMustBeBeforeTheEndDate'),
     'compare_datetime_text',
     '< allow_empty'
@@ -437,16 +435,16 @@ $jqueryExtra .= $extra['jquery_ready_content'];
 $userForm->addHtml('</div></div></div>');
 
 $userForm->addHtml('<div class="panel panel-default">');
-$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">' . get_lang('DisponibilitePendantMonStage') . '</a></div>');
+$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">'.get_lang('DisponibilitePendantMonStage').'</a></div>');
 $userForm->addHtml('<div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">');
-$userForm->addHtml('<div class="panel-body"><p class="text-info">' . get_lang('DisponibilitePendantMonStageExplanation') . '</p>');
+$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('DisponibilitePendantMonStageExplanation').'</p>');
 
 $fieldsToShow = [
     'datedebutstage',
     'datefinstage',
     'je_ne_connais_pas_encore_mes_dates_de_stage',
     'poursuiteapprentissagestage',
-    'heures_disponibilite_par_semaine_stage'
+    'heures_disponibilite_par_semaine_stage',
 ];
 
 $extra = $extraField->addElements(
@@ -463,9 +461,8 @@ $extra = $extraField->addElements(
     $forceShowFields //$forceShowFields = false
 );
 
-
 $userForm->addRule(
-    array('extra_datedebutstage', 'extra_datefinstage'),
+    ['extra_datedebutstage', 'extra_datefinstage'],
     get_lang('StartDateMustBeBeforeTheEndDate'),
     'compare_datetime_text',
     '< allow_empty'
@@ -477,9 +474,9 @@ $userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseThree]');
 $userForm->addHtml('</div></div></div>');
 
 $userForm->addHtml('<div class="panel panel-default">');
-$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">' . get_lang('ThemesObjectifs') . '</a></div>');
+$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">'.get_lang('ThemesObjectifs').'</a></div>');
 $userForm->addHtml('<div id="collapseFour" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFour">');
-$userForm->addHtml('<div class="panel-body"><p class="text-info">' . get_lang('ThemesObjectifsExplanation') . '</p>');
+$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('ThemesObjectifsExplanation').'</p>');
 
 $introductionTextList = [
     'domaine' => get_lang('DomaineIntroduction'),
@@ -488,7 +485,7 @@ $introductionTextList = [
 
 $fieldsToShow = [
     'domaine',
-    $theme
+    $theme,
 ];
 $extra = $extraFieldSession->addElements(
     $userForm,
@@ -507,14 +504,14 @@ $extra = $extraFieldSession->addElements(
         'domaine' => [
             get_lang('Domaine').' 1',
             get_lang('Domaine').' 2',
-            get_lang('Domaine').' 3'
+            get_lang('Domaine').' 3',
         ],
         $theme => [
             get_lang('ThemeField').' 1',
             get_lang('ThemeField').' 2',
             get_lang('ThemeField').' 3',
             get_lang('ThemeField').' 4',
-            get_lang('ThemeField').' 5'
+            get_lang('ThemeField').' 5',
         ],
     ],
     [],
@@ -528,9 +525,9 @@ $userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseFour]');
 $userForm->addHtml('</div></div></div>');
 
 $userForm->addHtml('<div class="panel panel-default">');
-$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">' . get_lang('NiveauLangue') . '</a></div>');
+$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">'.get_lang('NiveauLangue').'</a></div>');
 $userForm->addHtml('<div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFive">');
-$userForm->addHtml('<div class="panel-body"><p class="text-info">' . get_lang('NiveauLangueExplanation') . '</p>');
+$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('NiveauLangueExplanation').'</p>');
 
 $fieldsToShow = [
     //'competenceniveau'
@@ -538,7 +535,7 @@ $fieldsToShow = [
     'lire',
     'participer_a_une_conversation',
     's_exprimer_oralement_en_continu',
-    'ecrire'
+    'ecrire',
 ];
 
 $extra = $extraFieldSession->addElements(
@@ -561,12 +558,12 @@ $userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseFive]');
 $userForm->addHtml('</div></div></div>');
 
 $userForm->addHtml('<div class="panel panel-default">');
-$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">' . get_lang('ObjectifsApprentissage') . '</a></div>');
+$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">'.get_lang('ObjectifsApprentissage').'</a></div>');
 $userForm->addHtml('<div id="collapseSix" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingSix">');
-$userForm->addHtml('<div class="panel-body"><p class="text-info">' . get_lang('ObjectifsApprentissageExplanation') . '</p>');
+$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('ObjectifsApprentissageExplanation').'</p>');
 
 $fieldsToShow = [
-    'objectif_apprentissage'
+    'objectif_apprentissage',
 ];
 
 $extra = $extraField->addElements(
@@ -589,13 +586,13 @@ $userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseSix]');
 $userForm->addHtml('</div></div></div>');
 
 $userForm->addHtml('<div class="panel panel-default">');
-$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">' . get_lang('MethodeTravail') . '</a></div>');
+$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">'.get_lang('MethodeTravail').'</a></div>');
 $userForm->addHtml('<div id="collapseSeven" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingSeven">');
-$userForm->addHtml('<div class="panel-body"><p class="text-info">' . get_lang('MethodeTravailExplanation') . '</p>');
+$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('MethodeTravailExplanation').'</p>');
 
 $fieldsToShow = [
     'methode_de_travaille',
-    'accompagnement'
+    'accompagnement',
 ];
 
 $extra = $extraField->addElements(
@@ -618,7 +615,7 @@ $userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseSeven]');
 $userForm->addHtml('</div></div></div>');
 $userForm->addHtml('</div>');
 
-$htmlHeadXtra[] ='<script>
+$htmlHeadXtra[] = '<script>
 $(document).ready(function(){
 	'.$jqueryExtra.'
 });
@@ -706,7 +703,7 @@ if ($userForm->validate()) {
         'extra_lire',
         'extra_participer_a_une_conversation',
         'extra_s_exprimer_oralement_en_continu',
-        'extra_ecrire'
+        'extra_ecrire',
     ];
 
     foreach ($userData as $key => $value) {
@@ -756,10 +753,10 @@ if ($userForm->validate()) {
 
         $search = [
             'field' => $extraFieldObj,
-            'user' => $user
+            'user' => $user,
         ];
 
-        /** @var ExtraFieldSavedSearch  $saved */
+        /** @var ExtraFieldSavedSearch $saved */
         $saved = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findOneBy($search);
 
         if ($saved) {
@@ -785,7 +782,7 @@ if ($userForm->validate()) {
 
     if ($superiorUserList && $isPartial == false) {
         $url = api_get_path(WEB_PATH).'load_search.php?user_id='.$userInfo['user_id'];
-        $urlContact = api_get_path(WEB_CODE_PATH) . 'messages/inbox.php?f=social';
+        $urlContact = api_get_path(WEB_CODE_PATH).'messages/inbox.php?f=social';
         $subject = sprintf(get_lang('DiagnosisFromUserX'), $userInfo['complete_name']);
         $message = sprintf(get_lang('DiagnosisFromUserXLangXWithLinkXContactAtX'), $userInfo['complete_name'], $userInfo['language'], $url, $urlContact);
         foreach ($superiorUserList as $bossData) {

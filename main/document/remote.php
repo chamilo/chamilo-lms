@@ -1,15 +1,19 @@
 <?php
 /* See license terms in /license.txt */
 /**
- * Script that allows download of a specific file from external applications
+ * Script that allows download of a specific file from external applications.
+ *
  * @author Arnaud Ligot <arnaud@cblue.be>, Based on work done for old videoconference application (I have about 30 minutes to write this peace of code so if somebody has more time, feel free to rewrite it...)
+ *
  * @package chamilo.document
  */
 /**
- * Script that allows remote download of a file
+ * Script that allows remote download of a file.
+ *
  * @param string Action parameter (action=...)
  * @param string Course code (cidReq=...)
  * @param string Current working directory (cwd=...)
+ *
  * @return string JSON output
  */
 /* FIX for IE cache when using https */
@@ -18,15 +22,15 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 /*==== Variables initialisation ====*/
 $action = $_REQUEST['action']; //safe as only used in if()'s
-$seek = array('/', '%2F', '..');
-$destroy = array('', '', '');
+$seek = ['/', '%2F', '..'];
+$destroy = ['', '', ''];
 $cidReq = str_replace($seek, $destroy, $_REQUEST["cidReq"]);
 $cidReq = Security::remove_XSS($cidReq);
 $user_id = api_get_user_id();
 $coursePath = api_get_path(SYS_COURSE_PATH).$cidReq.'/document';
 $_course = api_get_course_info($cidReq);
 if (empty($_course)) {
-    die ("problem when fetching course information");
+    die("problem when fetching course information");
 }
 // stupid variable initialisation for old version of DocumentManager functions.
 $_course['path'] = $_course['directory'];
@@ -41,7 +45,9 @@ $nParent = 0; // the number of /.. into the url
 while (substr($cwd, -3, 3) == '/..') {
     // go to parent directory
     $cwd = substr($cwd, 0, -3);
-    if (strlen($cwd) == 0) { $cwd = '/'; }
+    if (strlen($cwd) == 0) {
+        $cwd = '/';
+    }
     $nParent++;
 }
 for (; $nParent > 0; $nParent--) {
@@ -55,7 +61,9 @@ if (Security::check_abs_path($cwd, api_get_path(SYS_PATH))) {
 }
 if ($action == 'list') {
     /*==== List files ====*/
-    if ($debug > 0) { error_log("sending file list", 0); }
+    if ($debug > 0) {
+        error_log("sending file list", 0);
+    }
 
     // get files list
     $files = DocumentManager::get_all_document_data($_course, $cwd, 0, null, false);
@@ -65,7 +73,7 @@ if ($action == 'list') {
         if ($f['filetype'] == 'file') {
             $files[$k]['download'] = api_get_path(WEB_COURSE_PATH).$cidReq."/document".$f['path'];
         }
-        print json_encode($files);
+        echo json_encode($files);
         exit;
     }
 }

@@ -6,7 +6,6 @@
  * the records in track_e_course_access that is used to calculate the
  * total course time.
  */
-
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 exit;

@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CLpItem
+ * CLpItem.
  *
  * @ORM\Table(
  *  name="c_lp_item",
@@ -21,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CLpItem
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -30,21 +30,21 @@ class CLpItem
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="lp_id", type="integer", nullable=false)
      */
@@ -107,28 +107,28 @@ class CLpItem
     private $masteryScore;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="parent_item_id", type="integer", nullable=false)
      */
     private $parentItemId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="previous_item_id", type="integer", nullable=false)
      */
     private $previousItemId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="next_item_id", type="integer", nullable=false)
      */
     private $nextItemId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="display_order", type="integer", nullable=false)
      */
@@ -170,7 +170,7 @@ class CLpItem
     private $terms;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="search_did", type="integer", nullable=true)
      */
@@ -206,9 +206,10 @@ class CLpItem
     }
 
     /**
-     * Set lpId
+     * Set lpId.
      *
-     * @param integer $lpId
+     * @param int $lpId
+     *
      * @return CLpItem
      */
     public function setLpId($lpId)
@@ -219,9 +220,9 @@ class CLpItem
     }
 
     /**
-     * Get lpId
+     * Get lpId.
      *
-     * @return integer
+     * @return int
      */
     public function getLpId()
     {
@@ -229,9 +230,10 @@ class CLpItem
     }
 
     /**
-     * Set itemType
+     * Set itemType.
      *
      * @param string $itemType
+     *
      * @return CLpItem
      */
     public function setItemType($itemType)
@@ -242,7 +244,7 @@ class CLpItem
     }
 
     /**
-     * Get itemType
+     * Get itemType.
      *
      * @return string
      */
@@ -252,9 +254,10 @@ class CLpItem
     }
 
     /**
-     * Set ref
+     * Set ref.
      *
      * @param string $ref
+     *
      * @return CLpItem
      */
     public function setRef($ref)
@@ -265,7 +268,7 @@ class CLpItem
     }
 
     /**
-     * Get ref
+     * Get ref.
      *
      * @return string
      */
@@ -275,9 +278,10 @@ class CLpItem
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return CLpItem
      */
     public function setTitle($title)
@@ -288,7 +292,7 @@ class CLpItem
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -298,9 +302,10 @@ class CLpItem
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return CLpItem
      */
     public function setDescription($description)
@@ -311,7 +316,7 @@ class CLpItem
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -321,9 +326,10 @@ class CLpItem
     }
 
     /**
-     * Set path
+     * Set path.
      *
      * @param string $path
+     *
      * @return CLpItem
      */
     public function setPath($path)
@@ -334,7 +340,7 @@ class CLpItem
     }
 
     /**
-     * Get path
+     * Get path.
      *
      * @return string
      */
@@ -344,9 +350,10 @@ class CLpItem
     }
 
     /**
-     * Set minScore
+     * Set minScore.
      *
      * @param float $minScore
+     *
      * @return CLpItem
      */
     public function setMinScore($minScore)
@@ -357,7 +364,7 @@ class CLpItem
     }
 
     /**
-     * Get minScore
+     * Get minScore.
      *
      * @return float
      */
@@ -367,9 +374,10 @@ class CLpItem
     }
 
     /**
-     * Set maxScore
+     * Set maxScore.
      *
      * @param float $maxScore
+     *
      * @return CLpItem
      */
     public function setMaxScore($maxScore)
@@ -380,7 +388,7 @@ class CLpItem
     }
 
     /**
-     * Get maxScore
+     * Get maxScore.
      *
      * @return float
      */
@@ -390,9 +398,10 @@ class CLpItem
     }
 
     /**
-     * Set masteryScore
+     * Set masteryScore.
      *
      * @param float $masteryScore
+     *
      * @return CLpItem
      */
     public function setMasteryScore($masteryScore)
@@ -403,7 +412,7 @@ class CLpItem
     }
 
     /**
-     * Get masteryScore
+     * Get masteryScore.
      *
      * @return float
      */
@@ -413,9 +422,10 @@ class CLpItem
     }
 
     /**
-     * Set parentItemId
+     * Set parentItemId.
      *
-     * @param integer $parentItemId
+     * @param int $parentItemId
+     *
      * @return CLpItem
      */
     public function setParentItemId($parentItemId)
@@ -426,9 +436,9 @@ class CLpItem
     }
 
     /**
-     * Get parentItemId
+     * Get parentItemId.
      *
-     * @return integer
+     * @return int
      */
     public function getParentItemId()
     {
@@ -436,9 +446,10 @@ class CLpItem
     }
 
     /**
-     * Set previousItemId
+     * Set previousItemId.
      *
-     * @param integer $previousItemId
+     * @param int $previousItemId
+     *
      * @return CLpItem
      */
     public function setPreviousItemId($previousItemId)
@@ -449,9 +460,9 @@ class CLpItem
     }
 
     /**
-     * Get previousItemId
+     * Get previousItemId.
      *
-     * @return integer
+     * @return int
      */
     public function getPreviousItemId()
     {
@@ -459,9 +470,10 @@ class CLpItem
     }
 
     /**
-     * Set nextItemId
+     * Set nextItemId.
      *
-     * @param integer $nextItemId
+     * @param int $nextItemId
+     *
      * @return CLpItem
      */
     public function setNextItemId($nextItemId)
@@ -472,9 +484,9 @@ class CLpItem
     }
 
     /**
-     * Get nextItemId
+     * Get nextItemId.
      *
-     * @return integer
+     * @return int
      */
     public function getNextItemId()
     {
@@ -482,9 +494,10 @@ class CLpItem
     }
 
     /**
-     * Set displayOrder
+     * Set displayOrder.
      *
-     * @param integer $displayOrder
+     * @param int $displayOrder
+     *
      * @return CLpItem
      */
     public function setDisplayOrder($displayOrder)
@@ -495,9 +508,9 @@ class CLpItem
     }
 
     /**
-     * Get displayOrder
+     * Get displayOrder.
      *
-     * @return integer
+     * @return int
      */
     public function getDisplayOrder()
     {
@@ -505,9 +518,10 @@ class CLpItem
     }
 
     /**
-     * Set prerequisite
+     * Set prerequisite.
      *
      * @param string $prerequisite
+     *
      * @return CLpItem
      */
     public function setPrerequisite($prerequisite)
@@ -518,7 +532,7 @@ class CLpItem
     }
 
     /**
-     * Get prerequisite
+     * Get prerequisite.
      *
      * @return string
      */
@@ -528,9 +542,10 @@ class CLpItem
     }
 
     /**
-     * Set parameters
+     * Set parameters.
      *
      * @param string $parameters
+     *
      * @return CLpItem
      */
     public function setParameters($parameters)
@@ -541,7 +556,7 @@ class CLpItem
     }
 
     /**
-     * Get parameters
+     * Get parameters.
      *
      * @return string
      */
@@ -551,9 +566,10 @@ class CLpItem
     }
 
     /**
-     * Set launchData
+     * Set launchData.
      *
      * @param string $launchData
+     *
      * @return CLpItem
      */
     public function setLaunchData($launchData)
@@ -564,7 +580,7 @@ class CLpItem
     }
 
     /**
-     * Get launchData
+     * Get launchData.
      *
      * @return string
      */
@@ -574,9 +590,10 @@ class CLpItem
     }
 
     /**
-     * Set maxTimeAllowed
+     * Set maxTimeAllowed.
      *
      * @param string $maxTimeAllowed
+     *
      * @return CLpItem
      */
     public function setMaxTimeAllowed($maxTimeAllowed)
@@ -587,7 +604,7 @@ class CLpItem
     }
 
     /**
-     * Get maxTimeAllowed
+     * Get maxTimeAllowed.
      *
      * @return string
      */
@@ -597,9 +614,10 @@ class CLpItem
     }
 
     /**
-     * Set terms
+     * Set terms.
      *
      * @param string $terms
+     *
      * @return CLpItem
      */
     public function setTerms($terms)
@@ -610,7 +628,7 @@ class CLpItem
     }
 
     /**
-     * Get terms
+     * Get terms.
      *
      * @return string
      */
@@ -620,9 +638,10 @@ class CLpItem
     }
 
     /**
-     * Set searchDid
+     * Set searchDid.
      *
-     * @param integer $searchDid
+     * @param int $searchDid
+     *
      * @return CLpItem
      */
     public function setSearchDid($searchDid)
@@ -633,9 +652,9 @@ class CLpItem
     }
 
     /**
-     * Get searchDid
+     * Get searchDid.
      *
-     * @return integer
+     * @return int
      */
     public function getSearchDid()
     {
@@ -643,9 +662,10 @@ class CLpItem
     }
 
     /**
-     * Set audio
+     * Set audio.
      *
      * @param string $audio
+     *
      * @return CLpItem
      */
     public function setAudio($audio)
@@ -656,7 +676,7 @@ class CLpItem
     }
 
     /**
-     * Get audio
+     * Get audio.
      *
      * @return string
      */
@@ -666,9 +686,10 @@ class CLpItem
     }
 
     /**
-     * Set prerequisiteMinScore
+     * Set prerequisiteMinScore.
      *
      * @param float $prerequisiteMinScore
+     *
      * @return CLpItem
      */
     public function setPrerequisiteMinScore($prerequisiteMinScore)
@@ -679,7 +700,7 @@ class CLpItem
     }
 
     /**
-     * Get prerequisiteMinScore
+     * Get prerequisiteMinScore.
      *
      * @return float
      */
@@ -689,9 +710,10 @@ class CLpItem
     }
 
     /**
-     * Set prerequisiteMaxScore
+     * Set prerequisiteMaxScore.
      *
      * @param float $prerequisiteMaxScore
+     *
      * @return CLpItem
      */
     public function setPrerequisiteMaxScore($prerequisiteMaxScore)
@@ -702,7 +724,7 @@ class CLpItem
     }
 
     /**
-     * Get prerequisiteMaxScore
+     * Get prerequisiteMaxScore.
      *
      * @return float
      */
@@ -712,9 +734,10 @@ class CLpItem
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CLpItem
      */
     public function setId($id)
@@ -725,9 +748,9 @@ class CLpItem
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -735,9 +758,10 @@ class CLpItem
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CLpItem
      */
     public function setCId($cId)
@@ -748,9 +772,9 @@ class CLpItem
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

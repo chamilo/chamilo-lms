@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * List sessions in an efficient and usable way
+ * List sessions in an efficient and usable way.
+ *
  * @package chamilo.admin
  */
 $cidReset = true;
@@ -48,7 +49,7 @@ $sessionFilter = new FormValidator(
     'get',
     '',
     '',
-    array(),
+    [],
     FormValidator::LAYOUT_INLINE
 );
 $courseSelect = $sessionFilter->addElement(
@@ -56,7 +57,7 @@ $courseSelect = $sessionFilter->addElement(
     'course_name',
     get_lang('SearchCourse'),
     null,
-	    array('url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course')
+        ['url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course']
 );
 
 if (!empty($courseId)) {
@@ -126,8 +127,8 @@ $extra_params['autowidth'] = 'true';
 $extra_params['height'] = 'auto';
 
 if (!isset($_GET['keyword'])) {
-    $extra_params['postData'] = array(
-        'filters' => array(
+    $extra_params['postData'] = [
+        'filters' => [
             "groupOp" => "AND",
             "rules" => $result['rules'],
             /*array(
@@ -135,8 +136,8 @@ if (!isset($_GET['keyword'])) {
                 array( "field" => "display_end_date", "op" => "gt", "data" => "")
             ),*/
             //'groups' => $groups
-        )
-    );
+        ],
+    ];
 }
 
 $hideSearch = api_get_configuration_value('hide_search_form_in_session_list');
@@ -164,9 +165,7 @@ if (!empty($filters)) {
     }
 }
 
-
 $defaultValues = json_encode($defaultValues);
-
 
 // jqgrid will use this URL to do the selects
 if (!empty($courseId)) {
@@ -187,7 +186,6 @@ if (isset($_REQUEST['id_category'])) {
         $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=sc.name&searchString='.Security::remove_XSS($sessionCategory['name']).'&searchOper=bw';
     }
 }
-
 
 $url .= '&list_type='.$list_type;
 
@@ -289,7 +287,7 @@ $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
                 $columns,
                 $column_model,
                 $extra_params,
-                array(),
+                [],
                 $action_links,
                 true
             );
@@ -410,9 +408,9 @@ if (api_is_platform_admin()) {
         [],
         FormValidator::LAYOUT_INLINE
     );
-    $form->addElement('text', 'keyword', null, array(
-        'aria-label' => get_lang('Search')
-    ));
+    $form->addElement('text', 'keyword', null, [
+        'aria-label' => get_lang('Search'),
+    ]);
     $form->addButtonSearch(get_lang('Search'));
     $form->display();
     echo '</div>';
@@ -427,5 +425,3 @@ echo Display::grid_html('sessions');
 echo '</div>';
 
 Display::display_footer();
-
-

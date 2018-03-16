@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \ChamiloSession as Session;
-
 /**
  *    This script displays a formatives actions list.
  */
@@ -12,7 +10,7 @@ $plugin = SepePlugin::create();
 
 if (api_is_platform_admin()) {
     $templateName = $plugin->get_lang('FormativesActionsList');
-    $interbreadcrumb[] = array("url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe'));
+    $interbreadcrumb[] = ["url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe')];
     $tpl = new Template($templateName);
 
     if (isset($_SESSION['sepe_message_info'])) {

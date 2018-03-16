@@ -3,12 +3,13 @@
 
 /**
  * @package chamilo.survey
+ *
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
  * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modifications
+ *
  * @version $Id: survey_list.php 10680 2007-01-11 21:26:23Z pcool $
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -66,14 +67,14 @@ if (empty($survey_data)) {
 $urlname = strip_tags($survey_data['title']);
 if (api_is_allowed_to_edit()) {
     // Breadcrumbs
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
-        'name' => get_lang('SurveyList')
-    );
-    $interbreadcrumb[] = array(
+        'name' => get_lang('SurveyList'),
+    ];
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
         'name' => $urlname,
-    );
+    ];
 }
 $courseCode = isset($_GET['cidReq']) ? $_GET['cidReq'] : null;
 $surveyAnonymous = SurveyManager::get_survey($survey_id, 0, $courseCode);
@@ -119,13 +120,13 @@ if (api_is_course_admin() ||
         exit;
     }
 
-    $questions = array();
+    $questions = [];
     if (isset($_GET['show'])) {
         // Getting all the questions for this page and add them to a
         // multidimensional array where the first index is the page.
         // as long as there is no pagebreak fount we keep adding questions to the page
-        $questions_displayed = array();
-        $paged_questions = array();
+        $questions_displayed = [];
+        $paged_questions = [];
         $counter = 0;
         $sql = "SELECT * FROM $table_survey_question
                 WHERE c_id = $course_id AND survey_id = '".$survey_id."'
@@ -216,10 +217,10 @@ if (api_is_course_admin() ||
     );
 
     if (is_array($questions) && count($questions) > 0) {
-        foreach ($questions as $key => & $question) {
+        foreach ($questions as $key => &$question) {
             $ch_type = 'ch_'.$question['type'];
             /** @var survey_question $display */
-            $display = new $ch_type;
+            $display = new $ch_type();
             $form->addHtml('<div class="survey_question '.$ch_type.'">');
             $form->addHtml('<h5 class="title">'.$question['question_id'].'. '.strip_tags($question['survey_question']).'</h5>');
             $display->render($form, $question);

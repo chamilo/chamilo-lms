@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class View
+ * Class View.
  */
 class View
 {
@@ -12,8 +12,9 @@ class View
     private $tool_path;
 
     /**
-     * Constructor, init tool path for rendering
-     * @param string $toolname tool name (optional)
+     * Constructor, init tool path for rendering.
+     *
+     * @param string $toolname      tool name (optional)
      * @param string $template_path
      */
     public function __construct($toolname = '', $template_path = null)
@@ -33,7 +34,8 @@ class View
     }
 
     /**
-     * Set data sent from a controller
+     * Set data sent from a controller.
+     *
      * @param array data
      */
     public function set_data($data)
@@ -45,7 +47,8 @@ class View
     }
 
     /**
-     * Set layout view sent from a controller
+     * Set layout view sent from a controller.
+     *
      * @param string $layout view
      */
     public function set_layout($layout)
@@ -54,7 +57,8 @@ class View
     }
 
     /**
-     * Set template view sent from a controller
+     * Set template view sent from a controller.
+     *
      * @param string $template view
      */
     public function set_template($template)
@@ -63,7 +67,7 @@ class View
     }
 
     /**
-     * Render data to the template and layout views
+     * Render data to the template and layout views.
      */
     public function render()
     {
@@ -77,8 +81,9 @@ class View
     }
 
     /**
-     * It's used into render method for rendering data in the template and layout views
-     * @return  String  Rendered template (as HTML, most of the time)
+     * It's used into render method for rendering data in the template and layout views.
+     *
+     * @return string Rendered template (as HTML, most of the time)
      */
     private function render_template()
     {
@@ -88,6 +93,7 @@ class View
             @extract($this->data, EXTR_OVERWRITE); //pass the $this->data array into local scope
             require_once $target;
             $content = ob_get_clean();
+
             return $content;
         } else {
             throw new Exception('View::render_template() invalid file path '.$target);

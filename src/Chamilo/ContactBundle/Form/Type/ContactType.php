@@ -3,25 +3,26 @@
 
 namespace Chamilo\ContactBundle\Form\Type;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /**
- * Class ContactType
+ * Class ContactType.
+ *
  * @package Chamilo\ContactBundle\Form\Type
  */
 class ContactType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -51,34 +52,34 @@ class ContactType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $collectionConstraint = new Collection(array(
-            'category' => array(
-                new NotBlank(array('message' => 'Category should not be blank.'))
-            ),
-            'firstname' => array(
-                new NotBlank(array('message' => 'Firstname should not be blank.')),
-                new Length(array('min' => 2))
-            ),
-            'lastname' => array(
-                new NotBlank(array('message' => 'Lastname should not be blank.')),
-                new Length(array('min' => 2))
-            ),
-            'email' => array(
-                new NotBlank(array('message' => 'Email should not be blank.')),
-                new Email(array('message' => 'Invalid email address.'))
-            ),
-            'subject' => array(
-                new NotBlank(array('message' => 'Subject should not be blank.')),
-                new Length(array('min' => 3))
-            ),
-            'message' => array(
-                new NotBlank(array('message' => 'Message should not be blank.')),
-                new Length(array('min' => 5))
-            )
-        ));
+        $collectionConstraint = new Collection([
+            'category' => [
+                new NotBlank(['message' => 'Category should not be blank.']),
+            ],
+            'firstname' => [
+                new NotBlank(['message' => 'Firstname should not be blank.']),
+                new Length(['min' => 2]),
+            ],
+            'lastname' => [
+                new NotBlank(['message' => 'Lastname should not be blank.']),
+                new Length(['min' => 2]),
+            ],
+            'email' => [
+                new NotBlank(['message' => 'Email should not be blank.']),
+                new Email(['message' => 'Invalid email address.']),
+            ],
+            'subject' => [
+                new NotBlank(['message' => 'Subject should not be blank.']),
+                new Length(['min' => 3]),
+            ],
+            'message' => [
+                new NotBlank(['message' => 'Message should not be blank.']),
+                new Length(['min' => 5]),
+            ],
+        ]);
 
-        $resolver->setDefaults(array(
-            'constraints' => $collectionConstraint
-        ));
+        $resolver->setDefaults([
+            'constraints' => $collectionConstraint,
+        ]);
     }
 }

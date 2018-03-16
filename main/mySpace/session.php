@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Sessions reporting
+ * Sessions reporting.
+ *
  * @package chamilo.reporting
  */
-
 ob_start();
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -16,7 +16,7 @@ $this_section = SECTION_TRACKING;
 
 api_block_anonymous_users();
 $htmlHeadXtra[] = api_get_jqgrid_js();
-$interbreadcrumb[] = array("url" => "index.php", "name" => get_lang('MySpace'));
+$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
 Display::display_header(get_lang('Sessions'));
 
 $export_csv = false;
@@ -42,19 +42,19 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
             api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
         );
         $menu_items[] = Display::url(
-            Display::return_icon('user.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM),
+            Display::return_icon('user.png', get_lang('Students'), [], ICON_SIZE_MEDIUM),
             "index.php?view=drh_students&amp;display=yourstudents"
         );
         $menu_items[] = Display::url(
-            Display::return_icon('teacher.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM),
+            Display::return_icon('teacher.png', get_lang('Trainers'), [], ICON_SIZE_MEDIUM),
             'teachers.php'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_MEDIUM),
+            Display::return_icon('course.png', get_lang('Courses'), [], ICON_SIZE_MEDIUM),
             'course.php'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('session_na.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM),
+            Display::return_icon('session_na.png', get_lang('Sessions'), [], ICON_SIZE_MEDIUM),
             '#'
         );
     }
@@ -78,24 +78,23 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
     $actionsRight = '';
     if (count($a_sessions) > 0) {
         $actionsRight = Display::url(
-            Display::return_icon('printer.png', get_lang('Print'), array(), 32),
+            Display::return_icon('printer.png', get_lang('Print'), [], 32),
             'javascript: void(0);',
-            array('onclick' => 'javascript: window.print();')
+            ['onclick' => 'javascript: window.print();']
         );
         $actionsRight .= Display::url(
-            Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), 32),
+            Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], 32),
             api_get_self().'?export=csv'
         );
     }
 
     $toolbar = Display::toolbarAction(
         'toolbar-session',
-        array($actionsLeft, $actionsRight)
+        [$actionsLeft, $actionsRight]
     );
     echo $toolbar;
 
     echo Display::page_header(get_lang('YourSessionsList'));
-
 } elseif (api_is_teacher()) {
     $actionsRight = Display::url(
         Display::return_icon('clock.png', get_lang('TeacherTimeReportBySession'), [], ICON_SIZE_MEDIUM),
@@ -104,7 +103,7 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 
     $toolbar = Display::toolbarAction(
         'toolbar-session',
-        array('', $actionsRight)
+        ['', $actionsRight]
     );
     echo $toolbar;
 
@@ -124,31 +123,31 @@ $keyword = '';
 if ($form->validate()) {
     $keyword = $form->getSubmitValue('keyword');
 }
-$form->setDefaults(array('keyword' => $keyword));
+$form->setDefaults(['keyword' => $keyword]);
 
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions_tracking&keyword='.Security::remove_XSS($keyword);
 
-$columns = array(
+$columns = [
     get_lang('Title'),
     get_lang('Date'),
     get_lang('NbCoursesPerSession'),
     get_lang('NbStudentPerSession'),
-    get_lang('Details')
-);
+    get_lang('Details'),
+];
 
 // Column config
-$columnModel = array(
-    array('name'=>'name', 'index'=>'name', 'width'=>'255', 'align'=>'left'),
-    array('name'=>'date', 'index'=>'date', 'width'=>'150', 'align'=>'left', 'sortable'=>'false'),
-    array('name'=>'course_per_session', 'index'=>'course_per_session', 'width'=>'150', 'sortable'=>'false'),
-    array('name'=>'student_per_session', 'index'=>'student_per_session', 'width'=>'100', 'sortable'=>'false'),
-    array('name'=>'details', 'index'=>'details', 'width'=>'100', 'sortable'=>'false')
-);
+$columnModel = [
+    ['name' => 'name', 'index' => 'name', 'width' => '255', 'align' => 'left'],
+    ['name' => 'date', 'index' => 'date', 'width' => '150', 'align' => 'left', 'sortable' => 'false'],
+    ['name' => 'course_per_session', 'index' => 'course_per_session', 'width' => '150', 'sortable' => 'false'],
+    ['name' => 'student_per_session', 'index' => 'student_per_session', 'width' => '100', 'sortable' => 'false'],
+    ['name' => 'details', 'index' => 'details', 'width' => '100', 'sortable' => 'false'],
+];
 
-$extraParams = array(
+$extraParams = [
     'autowidth' => 'true',
-    'height' => 'auto'
-);
+    'height' => 'auto',
+];
 
 $js = '<script>
     $(function() {
@@ -158,7 +157,7 @@ $js = '<script>
         $columns,
         $columnModel,
         $extraParams,
-        array(),
+        [],
         null,
         true
     ).'

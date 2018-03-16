@@ -1,16 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\UserBundle\Entity\User;
 
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
+ *
  * @package chamilo.plugin.buycourses
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
@@ -202,7 +202,7 @@ switch ($action) {
         $paypalPassword = $paypalParams['password'];
         $paypalSignature = $paypalParams['signature'];
 
-        require_once("paypalfunctions.php");
+        require_once "paypalfunctions.php";
 
         $allPayouts = [];
         $totalAccounts = 0;
@@ -286,15 +286,15 @@ switch ($action) {
             break;
         }
 
-        require_once("Requests.php");
+        require_once "Requests.php";
         Requests::register_autoloader();
-        require_once("culqi.php");
+        require_once "culqi.php";
 
         $culqiParams = $plugin->getCulqiParams();
 
         // API Key y autenticación
         $SECRET_API_KEY = $culqiParams['api_key'];
-        $culqi = new Culqi\Culqi(array('api_key' => $SECRET_API_KEY));
+        $culqi = new Culqi\Culqi(['api_key' => $SECRET_API_KEY]);
 
         $environment = $culqiParams['integration'];
         $environment = $environment
@@ -307,7 +307,7 @@ switch ($action) {
         $currency = $plugin->getSelectedCurrency();
 
         try {
-            $cargo = $culqi->Cargos->create(array(
+            $cargo = $culqi->Cargos->create([
                 "moneda" => $currency['iso_code'],
                 "monto" => intval(floatval($sale['price']) * 100),
                 "usuario" => $user['username'],
@@ -320,8 +320,8 @@ switch ($action) {
                 "nombres" => $user['firstname'],
                 "apellidos" => $user['lastname'],
                 "correo_electronico" => $user['email'],
-                "token" => $tokenId
-            ));
+                "token" => $tokenId,
+            ]);
 
             if (is_object($cargo)) {
                 $saleIsCompleted = $plugin->completeSale($sale['id']);
@@ -378,15 +378,15 @@ switch ($action) {
             break;
         }
 
-        require_once("Requests.php");
+        require_once "Requests.php";
         Requests::register_autoloader();
-        require_once("culqi.php");
+        require_once "culqi.php";
 
         $culqiParams = $plugin->getCulqiParams();
 
         // API Key y autenticación
         $SECRET_API_KEY = $culqiParams['api_key'];
-        $culqi = new Culqi\Culqi(array('api_key' => $SECRET_API_KEY));
+        $culqi = new Culqi\Culqi(['api_key' => $SECRET_API_KEY]);
 
         $environment = $culqiParams['integration'];
         $environment = $environment
@@ -397,7 +397,7 @@ switch ($action) {
         $user = api_get_user_info();
 
         try {
-            $cargo = $culqi->Cargos->create(array(
+            $cargo = $culqi->Cargos->create([
                 "moneda" => $serviceSale['currency'],
                 "monto" => intval(floatval($serviceSale['price']) * 100),
                 "usuario" => $user['username'],
@@ -410,8 +410,8 @@ switch ($action) {
                 "nombres" => $user['firstname'],
                 "apellidos" => $user['lastname'],
                 "correo_electronico" => $user['email'],
-                "token" => $tokenId
-            ));
+                "token" => $tokenId,
+            ]);
 
             if (is_object($cargo)) {
                 $saleIsCompleted = $plugin->completeServiceSale($serviceSale['id']);

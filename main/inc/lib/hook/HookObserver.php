@@ -3,7 +3,8 @@
 /**
  * This file contains an abstract Hook observer class
  * Used for Hook Observers in plugins, called when a hook event happens
- * (e.g Create user, Webservice registration)
+ * (e.g Create user, Webservice registration).
+ *
  * @package chamilo.library.hook
  */
 
@@ -11,7 +12,7 @@
  * Class HookObserver
  * This abstract class implements Hook Observer Interface to build the base
  * for Hook Observer. This class have some public static method,
- * e.g for create Hook Observers
+ * e.g for create Hook Observers.
  */
 abstract class HookObserver implements HookObserverInterface
 {
@@ -21,7 +22,8 @@ abstract class HookObserver implements HookObserverInterface
     /**
      * Construct method
      * Save the path of Hook Observer class implementation and
-     * the plugin name where this class is included
+     * the plugin name where this class is included.
+     *
      * @param string $path
      * @param string $pluginName
      */
@@ -33,7 +35,8 @@ abstract class HookObserver implements HookObserverInterface
 
     /**
      * Return the singleton instance of Hook observer.
-     * If Hook Management plugin is not enabled, will return NULL
+     * If Hook Management plugin is not enabled, will return NULL.
+     *
      * @return HookObserver
      */
     public static function create()
@@ -46,8 +49,7 @@ abstract class HookObserver implements HookObserverInterface
             try {
                 $class = get_called_class();
 
-                return new $class;
-
+                return new $class();
             } catch (Exception $e) {
                 return null;
             }
@@ -56,6 +58,7 @@ abstract class HookObserver implements HookObserverInterface
 
     /**
      * Return the path from the class, needed to store location or autoload later.
+     *
      * @return string
      */
     public function getPath()
@@ -65,6 +68,7 @@ abstract class HookObserver implements HookObserverInterface
 
     /**
      * Return the plugin name where is the Hook Observer.
+     *
      * @return string
      */
     public function getPluginName()

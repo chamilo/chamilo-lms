@@ -3,13 +3,10 @@
 
 namespace Chamilo\TicketBundle\Entity;
 
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
 
 /**
- * Status
+ * Status.
  *
  * @ORM\Table(name="ticket_status")
  * @ORM\Entity
@@ -17,7 +14,7 @@ use Chamilo\CoreBundle\Entity\Session;
 class Status
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -56,6 +53,7 @@ class Status
 
     /**
      * @param int $id
+     *
      * @return Status
      */
     public function setId($id)
@@ -75,6 +73,7 @@ class Status
 
     /**
      * @param string $code
+     *
      * @return Status
      */
     public function setCode($code)
@@ -94,6 +93,7 @@ class Status
 
     /**
      * @param string $name
+     *
      * @return Status
      */
     public function setName($name)
@@ -113,6 +113,7 @@ class Status
 
     /**
      * @param string $description
+     *
      * @return Status
      */
     public function setDescription($description)
@@ -121,6 +122,4 @@ class Status
 
         return $this;
     }
-    
-    
 }

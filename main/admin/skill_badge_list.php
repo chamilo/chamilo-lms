@@ -2,12 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Show information about Mozilla OpenBadges
+ * Show information about Mozilla OpenBadges.
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.admin.openbadges
+ *
  * @deprecated use skill_list.php
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -20,16 +22,16 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $objSkill = new Skill();
 $skills = $objSkill->get_all();
 
-$interbreadcrumb = array(
-    array(
+$interbreadcrumb = [
+    [
         'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
-        'name' => get_lang('Administration')
-    ),
-    array(
+        'name' => get_lang('Administration'),
+    ],
+    [
         'url' => api_get_path(WEB_CODE_PATH).'admin/skill_badge.php',
-        'name' => get_lang('Badges')
-    )
-);
+        'name' => get_lang('Badges'),
+    ],
+];
 
 $toolbar = Display::url(
     Display::return_icon(

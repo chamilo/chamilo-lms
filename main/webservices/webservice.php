@@ -7,33 +7,32 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 /**
  * Error returned by one of the methods of the web service.
- * Contains an error code and an error message
+ * Contains an error code and an error message.
  */
 class WSError
 {
     /**
-     * Error handler. This needs to be a class that implements the interface WSErrorHandler
-     *
-     * @var WSErrorHandler
-     */
-    protected static $_handler;
-
-    /**
-     * Error code
+     * Error code.
      *
      * @var int
      */
     public $code;
 
     /**
-     * Error message
+     * Error message.
      *
      * @var string
      */
     public $message;
+    /**
+     * Error handler. This needs to be a class that implements the interface WSErrorHandler.
+     *
+     * @var WSErrorHandler
+     */
+    protected static $_handler;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param int Error code
      * @param string Error message
@@ -45,7 +44,7 @@ class WSError
     }
 
     /**
-     * Sets the error handler
+     * Sets the error handler.
      *
      * @param WSErrorHandler Error handler
      */
@@ -57,7 +56,7 @@ class WSError
     }
 
     /**
-     * Returns the error handler
+     * Returns the error handler.
      *
      * @return WSErrorHandler Error handler
      */
@@ -67,23 +66,23 @@ class WSError
     }
 
     /**
-     * Transforms the error into an array
+     * Transforms the error into an array.
      *
      * @return array Associative array with code and message
      */
     public function toArray()
     {
-        return array('code' => $this->code, 'message' => $this->message);
+        return ['code' => $this->code, 'message' => $this->message];
     }
 }
 
 /**
- * Interface that must be implemented by any error handler
+ * Interface that must be implemented by any error handler.
  */
 interface WSErrorHandler
 {
     /**
-     * Handle method
+     * Handle method.
      *
      * @param WSError Error
      */
@@ -91,19 +90,19 @@ interface WSErrorHandler
 }
 
 /**
- * Main class of the webservice. Webservice classes extend this class
+ * Main class of the webservice. Webservice classes extend this class.
  */
 class WS
 {
     /**
-     * Chamilo configuration
+     * Chamilo configuration.
      *
      * @var array
      */
     protected $_configuration;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -111,9 +110,20 @@ class WS
     }
 
     /**
-     * Verifies the API key
+     * Test function. Returns the string success.
+     *
+     * @return string Success
+     */
+    public function test()
+    {
+        return "success";
+    }
+
+    /**
+     * Verifies the API key.
      *
      * @param string Secret key
+     *
      * @return mixed WSError in case of failure, null in case of success
      */
     protected function verifyKey($secret_key)
@@ -140,10 +150,11 @@ class WS
     /**
      * Gets the real user id based on the user id field name and value.
      * Note that if the user id field name is "chamilo_user_id", it will use the user id
-     * in the system database
+     * in the system database.
      *
      * @param string User id field name
      * @param string User id value
+     *
      * @return mixed System user id if the user was found, WSError otherwise
      */
     protected function getUserId($user_id_field_name, $user_id_value)
@@ -170,10 +181,11 @@ class WS
     /**
      * Gets the real course id based on the course id field name and value.
      * Note that if the course id field name is "chamilo_course_id", it will use the course id
-     * in the system database
+     * in the system database.
      *
      * @param string Course id field name
      * @param string Course id value
+     *
      * @return mixed System course id if the course was found, WSError otherwise
      */
     protected function getCourseId($course_id_field_name, $course_id_value)
@@ -203,10 +215,11 @@ class WS
     /**
      * Gets the real session id based on the session id field name and value.
      * Note that if the session id field name is "chamilo_session_id", it will use the session id
-     * in the system database
+     * in the system database.
      *
      * @param string Session id field name
      * @param string Session id value
+     *
      * @return mixed System session id if the session was found, WSError otherwise
      */
     protected function getSessionId($session_id_field_name, $session_id_value)
@@ -232,7 +245,7 @@ class WS
     }
 
     /**
-     * Handles an error by calling the WSError error handler
+     * Handles an error by calling the WSError error handler.
      *
      * @param WSError Error
      */
@@ -243,22 +256,12 @@ class WS
     }
 
     /**
-     * Gets a successful result
+     * Gets a successful result.
      *
      * @return array Array with a code of 0 and a message 'Operation was successful'
      */
     protected function getSuccessfulResult()
     {
-        return array('code' => 0, 'message' => 'Operation was successful');
-    }
-
-    /**
-     * Test function. Returns the string success
-     *
-     * @return string Success
-     */
-    public function test()
-    {
-        return "success";
+        return ['code' => 0, 'message' => 'Operation was successful'];
     }
 }

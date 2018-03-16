@@ -2,16 +2,18 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* Template (view in MVC pattern) used for displaying blocks for dashboard
-* @author Christian Fasanando <christian1827@gmail.com>
-* @package chamilo.dashboard
-*/
+ * Template (view in MVC pattern) used for displaying blocks for dashboard.
+ *
+ * @author Christian Fasanando <christian1827@gmail.com>
+ *
+ * @package chamilo.dashboard
+ */
 
 // protect script
 api_block_anonymous_users();
 
 // menu actions for dashboard views
-$views = array('blocks', 'list');
+$views = ['blocks', 'list'];
 
 if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
     $dashboard_view = $_GET['view'];
@@ -40,10 +42,10 @@ echo '</div>';
 // block dashboard view
 if (isset($dashboard_view) && $dashboard_view == 'blocks') {
     if (isset($blocks) && count($blocks) > 0) {
-        $columns = array();
+        $columns = [];
         // group content html by number of column
         if (is_array($blocks)) {
-            $tmp_columns = array();
+            $tmp_columns = [];
             foreach ($blocks as $block) {
                 $tmp_columns[] = $block['column'];
                 if (in_array($block['column'], $tmp_columns)) {
@@ -85,7 +87,6 @@ if (isset($dashboard_view) && $dashboard_view == 'blocks') {
     } else {
         echo '<div style="margin-top:20px;">'.get_lang('YouHaveNotEnabledBlocks').'</div>';
     }
-
 } else {
     // block dashboard list
     if (isset($success)) {

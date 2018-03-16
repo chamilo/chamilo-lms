@@ -10,7 +10,6 @@ use Symfony\Component\DependencyInjection\Reference;
 /**
  * Register all the course settings schemas in the schema registry.
  * Save the configuration names in parameter for the provider.
- *
  */
 class RegisterSchemasPass implements CompilerPassInterface
 {
@@ -26,14 +25,13 @@ class RegisterSchemasPass implements CompilerPassInterface
         $schemaRegistry = $container->getDefinition('chamilo_course.settings.schema_registry');
 
         foreach ($container->findTaggedServiceIds('chamilo_course.settings_schema') as $id => $attributes) {
-
             if (!array_key_exists('namespace', $attributes[0])) {
                 throw new \InvalidArgumentException(sprintf('Service "%s" must define the "namespace" attribute on "chamilo_course.settings_schema" tags.', $id));
             }
 
             $namespace = $attributes[0]['namespace'];
 
-            $schemaRegistry->addMethodCall('registerSchema', array($namespace, new Reference($id)));
+            $schemaRegistry->addMethodCall('registerSchema', [$namespace, new Reference($id)]);
         }
     }
 }

@@ -3,8 +3,10 @@
 use Chamilo\UserBundle\Entity\User;
 
 /**
- * Base class for Web Services
+ * Base class for Web Services.
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.webservices
  */
 class WebService
@@ -19,7 +21,8 @@ class WebService
     protected $apiKey;
 
     /**
-     * Class constructor
+     * Class constructor.
+     *
      * @param $username
      * @param $apiKey
      */
@@ -33,6 +36,7 @@ class WebService
     /**
      * @param string $username
      * @param string $apiKeyToValidate
+     *
      * @return WebService
      */
     public static function validate($username, $apiKeyToValidate)
@@ -41,9 +45,11 @@ class WebService
     }
 
     /**
-     * Find the api key for a user. If the api key does not exists is created
+     * Find the api key for a user. If the api key does not exists is created.
+     *
      * @param string $username
      * @param string $serviceName
+     *
      * @return string
      */
     public static function findUserApiKey($username, $serviceName)
@@ -65,11 +71,14 @@ class WebService
     }
 
     /**
-     * Check whether the username and password are valid
+     * Check whether the username and password are valid.
+     *
      * @param string $username
      * @param string $password
-     * @return bool Return true if the password belongs to the username. Otherwise return false
+     *
      * @throws Exception
+     *
+     * @return bool Return true if the password belongs to the username. Otherwise return false
      */
     public static function isValidUser($username, $password)
     {

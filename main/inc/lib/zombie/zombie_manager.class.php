@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * ZombieQuery
+ * ZombieQuery.
  *
  * @copyright (c) 2012 University of Geneva
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
@@ -10,23 +10,25 @@
  */
 class ZombieManager
 {
-    static function last_year()
+    public static function last_year()
     {
         $today = time();
         $day = date('j', $today);
         $month = date('n', $today);
         $year = date('Y', $today) - 1;
+
         return mktime(0, 0, 0, $month, $day, $year);
     }
 
     /**
-     * Returns users whose last login is prior from $ceiling
+     * Returns users whose last login is prior from $ceiling.
      *
-     * @param int|string $ceiling last login date
-     * @param bool $active_only if true returns only active users. Otherwise returns all users.
+     * @param int|string $ceiling     last login date
+     * @param bool       $active_only if true returns only active users. Otherwise returns all users.
+     *
      * @return ResultSet
      */
-    static function listZombies($ceiling, $active_only = true, $count = 0, $from = 10, $column = 'user.firstname', $direction = 'desc')
+    public static function listZombies($ceiling, $active_only = true, $count = 0, $from = 10, $column = 'user.firstname', $direction = 'desc')
     {
         if (empty($column)) {
             $column = 'user.firstname';
@@ -90,10 +92,10 @@ class ZombieManager
     /**
      * @param $ceiling
      */
-    static function deactivate_zombies($ceiling)
+    public static function deactivate_zombies($ceiling)
     {
         $zombies = self::list_zombies($ceiling);
-        $ids = array();
+        $ids = [];
         foreach ($zombies as $zombie) {
             $ids[] = $zombie['user_id'];
         }

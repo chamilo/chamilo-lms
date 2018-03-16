@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Courses reporting
+ * Courses reporting.
+ *
  * @package chamilo.reporting
  */
-
 ob_start();
 $cidReset = true;
 
@@ -15,27 +15,28 @@ $this_section = SECTION_TRACKING;
 $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : null;
 
 api_block_anonymous_users();
-$interbreadcrumb[] = array("url" => "index.php", "name" => get_lang('MySpace'));
+$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
 
 if (isset($_GET["id_session"]) && $_GET["id_session"] != "") {
-    $interbreadcrumb[] = array("url" => "session.php", "name" => get_lang('Sessions'));
+    $interbreadcrumb[] = ["url" => "session.php", "name" => get_lang('Sessions')];
 }
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && isset($_GET["type"]) && $_GET["type"] == "coach") {
-    $interbreadcrumb[] = array("url" => "coaches.php", "name" => get_lang('Tutors'));
+    $interbreadcrumb[] = ["url" => "coaches.php", "name" => get_lang('Tutors')];
 }
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && isset($_GET["type"]) && $_GET["type"] == "student") {
-    $interbreadcrumb[] = array("url" => "student.php", "name" => get_lang('Students'));
+    $interbreadcrumb[] = ["url" => "student.php", "name" => get_lang('Students')];
 }
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) {
-    $interbreadcrumb[] = array("url" => "teachers.php", "name" => get_lang('Teachers'));
+    $interbreadcrumb[] = ["url" => "teachers.php", "name" => get_lang('Teachers')];
 }
 
 function count_courses()
 {
     global $nb_courses;
+
     return $nb_courses;
 }
 
@@ -83,19 +84,19 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
             api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
         );
         $menu_items[] = Display::url(
-            Display::return_icon('user.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM),
+            Display::return_icon('user.png', get_lang('Students'), [], ICON_SIZE_MEDIUM),
             "index.php?view=drh_students&amp;display=yourstudents"
         );
         $menu_items[] = Display::url(
-            Display::return_icon('teacher.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM),
+            Display::return_icon('teacher.png', get_lang('Trainers'), [], ICON_SIZE_MEDIUM),
             'teachers.php'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('course_na.png', get_lang('Courses'), array(), ICON_SIZE_MEDIUM),
+            Display::return_icon('course_na.png', get_lang('Courses'), [], ICON_SIZE_MEDIUM),
             '#'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM),
+            Display::return_icon('session.png', get_lang('Sessions'), [], ICON_SIZE_MEDIUM),
             'session.php'
         );
         if (api_can_login_as($user_id)) {
@@ -115,11 +116,10 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 
     if (count($a_courses) > 0) {
         $actionsRight .= Display::url(
-            Display::return_icon('printer.png', get_lang('Print'), array(), 32),
+            Display::return_icon('printer.png', get_lang('Print'), [], 32),
             'javascript: void(0);',
-            array('onclick'=>'javascript: window.print();')
+            ['onclick' => 'javascript: window.print();']
         );
-
     }
 
     $toolbar = Display::toolbarAction('toolbar-course', [$actionsLeft, $actionsRight]);
@@ -254,18 +254,15 @@ function get_courses($from, $limit, $column, $direction)
                 $follow
             );
         }
-
-
-
     }
 
-    $courseList = array();
+    $courseList = [];
     if (!empty($courses)) {
         foreach ($courses as $data) {
             $courseCode = $data['code'];
             $courseInfo = api_get_course_info($courseCode);
             $userList = CourseManager::get_user_list_from_course_code($data['code'], $sessionId);
-            $userIdList = array();
+            $userIdList = [];
             if (!empty($userList)) {
                 foreach ($userList as $user) {
                     $userIdList[] = $user['user_id'];
@@ -282,8 +279,8 @@ function get_courses($from, $limit, $column, $direction)
             if (count($userIdList) > 0) {
                 $countStudents = count($userIdList);
                 // tracking data
-                $avgProgressInCourse = Tracking :: get_avg_student_progress($userIdList, $courseCode, array(), $sessionId);
-                $avgScoreInCourse = Tracking :: get_avg_student_score($userIdList, $courseCode, array(), $sessionId);
+                $avgProgressInCourse = Tracking :: get_avg_student_progress($userIdList, $courseCode, [], $sessionId);
+                $avgScoreInCourse = Tracking :: get_avg_student_score($userIdList, $courseCode, [], $sessionId);
                 $avgTimeSpentInCourse = Tracking :: get_time_spent_on_the_course($userIdList, $courseInfo['real_id'], $sessionId);
                 $messagesInCourse = Tracking :: count_student_messages($userIdList, $courseCode, $sessionId);
                 $assignmentsInCourse = Tracking :: count_student_assignments($userIdList, $courseCode, $sessionId);
@@ -312,11 +309,11 @@ function get_courses($from, $limit, $column, $direction)
             );
 
             $attendanceLink = Display::url(
-                Display::return_icon('attendance_list.png', get_lang('Attendance'), array(), ICON_SIZE_MEDIUM),
+                Display::return_icon('attendance_list.png', get_lang('Attendance'), [], ICON_SIZE_MEDIUM),
                 api_get_path(WEB_CODE_PATH).'attendance/index.php?cidReq='.$courseCode.'&id_session='.$sessionId.'&action=calendar_logins'
             );
 
-            $courseList[] = array(
+            $courseList[] = [
                 $title,
                 $countStudents,
                 is_null($avgTimeSpentInCourse) ? '-' : $avgTimeSpentInCourse,
@@ -326,8 +323,8 @@ function get_courses($from, $limit, $column, $direction)
                 is_null($messagesInCourse) ? '-' : $messagesInCourse,
                 is_null($assignmentsInCourse) ? '-' : $assignmentsInCourse,
                 $attendanceLink,
-                $courseIcon
-            );
+                $courseIcon,
+            ];
         }
     }
 
@@ -344,10 +341,10 @@ $table = new SortableTable(
 
 $table->set_header(0, get_lang('CourseTitle'), false);
 $table->set_header(1, get_lang('NbStudents'), false);
-$table->set_header(2, get_lang('TimeSpentInTheCourse').Display::return_icon('info.png', get_lang('TimeOfActiveByTraining'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
+$table->set_header(2, get_lang('TimeSpentInTheCourse').Display::return_icon('info.png', get_lang('TimeOfActiveByTraining'), ['align' => 'absmiddle', 'hspace' => '3px']), false);
 $table->set_header(3, get_lang('ThematicAdvance'), false);
-$table->set_header(4, get_lang('AvgStudentsProgress').Display::return_icon('info.png', get_lang('AvgAllUsersInAllCourses'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
-$table->set_header(5, get_lang('AvgCourseScore').Display::return_icon('info.png', get_lang('AvgAllUsersInAllCourses'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
+$table->set_header(4, get_lang('AvgStudentsProgress').Display::return_icon('info.png', get_lang('AvgAllUsersInAllCourses'), ['align' => 'absmiddle', 'hspace' => '3px']), false);
+$table->set_header(5, get_lang('AvgCourseScore').Display::return_icon('info.png', get_lang('AvgAllUsersInAllCourses'), ['align' => 'absmiddle', 'hspace' => '3px']), false);
 $table->set_header(6, get_lang('AvgMessages'), false);
 $table->set_header(7, get_lang('AvgAssignments'), false);
 $table->set_header(8, get_lang('Attendances'), false);
@@ -360,10 +357,10 @@ $form->addElement('hidden', 'session_id', $sessionId);
 
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 
-$params = array(
+$params = [
     'session_id' => $sessionId,
-    'keyword' => $keyword
-);
+    'keyword' => $keyword,
+];
 $table->set_additional_parameters($params);
 
 $form->setDefaults($params);

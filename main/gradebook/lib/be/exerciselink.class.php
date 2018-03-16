@@ -4,7 +4,9 @@
 /**
  * Class ExerciseLink
  * Defines a gradebook ExerciseLink object.
+ *
  * @author Bert Steppé
+ *
  * @package chamilo.gradebook
  */
 class ExerciseLink extends AbstractLink
@@ -29,6 +31,7 @@ class ExerciseLink extends AbstractLink
 
     /**
      * Generate an array of exercises that a teacher hasn't created a link for.
+     *
      * @return array 2-dimensional array - every element contains 2 subelements (id, name)
      */
     public function get_not_created_links()
@@ -50,9 +53,9 @@ class ExerciseLink extends AbstractLink
                 exe.c_id = ".$this->course_id;
 
         $result = Database::query($sql);
-        $cats = array();
+        $cats = [];
         while ($data = Database::fetch_array($result)) {
-            $cats[] = array($data['id'], $data['title']);
+            $cats[] = [$data['id'], $data['title']];
         }
 
         return $cats;
@@ -60,6 +63,7 @@ class ExerciseLink extends AbstractLink
 
     /**
      * Generate an array of all exercises available.
+     *
      * @return array 2-dimensional array - every element contains 2 subelements (id, name)
      */
     public function get_all_links($getOnlyHotPotatoes = false)
@@ -111,7 +115,7 @@ class ExerciseLink extends AbstractLink
                 ";
 
         require_once api_get_path(SYS_CODE_PATH).'exercise/hotpotatoes.lib.php';
-        $exerciseInLP = array();
+        $exerciseInLP = [];
 
         if (!$this->is_hp) {
             $result = Database::query($sql);
@@ -121,11 +125,11 @@ class ExerciseLink extends AbstractLink
             $result2 = Database::query($sql2);
         }
 
-        $cats = array();
+        $cats = [];
         if (isset($result)) {
             if (Database::num_rows($result) > 0) {
                 while ($data = Database::fetch_array($result)) {
-                    $cats[] = array($data['id'], $data['title']);
+                    $cats[] = [$data['id'], $data['title']];
                 }
             }
         }
@@ -144,7 +148,7 @@ class ExerciseLink extends AbstractLink
                             if ($title == '') {
                                 $title = basename($path);
                             }
-                            $element = array($attribute['id'], $title.'(HP)');
+                            $element = [$attribute['id'], $title.'(HP)'];
                             $cats[] = $element;
                             $hotPotatoes[] = $element;
                         }
@@ -159,10 +163,10 @@ class ExerciseLink extends AbstractLink
 
         if (!empty($exerciseInLP)) {
             foreach ($exerciseInLP as $exercise) {
-                $cats[] = array(
+                $cats[] = [
                     $exercise['id'],
-                    $exercise['title'].' ('.get_lang('ToolLearnpath').')'
-                );
+                    $exercise['title'].' ('.get_lang('ToolLearnpath').')',
+                ];
             }
         }
 
@@ -186,16 +190,18 @@ class ExerciseLink extends AbstractLink
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
-        return ($number[0] != 0);
+        return $number[0] != 0;
     }
 
     /**
      * Get the score of this exercise. Only the first attempts are taken into account.
+     *
      * @param int $stud_id student id (default: all students who have results -
-     * then the average is returned)
-     * @return    array (score, max) if student is given
-     *            array (sum of scores, number of scores) otherwise
-     *            or null if no scores available
+     *                     then the average is returned)
+     *
+     * @return array (score, max) if student is given
+     *               array (sum of scores, number of scores) otherwise
+     *               or null if no scores available
      */
     public function calc_score($stud_id = null, $type = null)
     {
@@ -244,7 +250,6 @@ class ExerciseLink extends AbstractLink
                 $sql .= " AND exe_user_id = $stud_id ";
             }
             $sql .= ' ORDER BY exe_id DESC';
-
         } else {
             $sql = "SELECT * FROM $tblHp hp 
                     INNER JOIN $tblDoc doc
@@ -263,14 +268,14 @@ class ExerciseLink extends AbstractLink
         if (isset($stud_id) && empty($type)) {
             // for 1 student
             if ($data = Database::fetch_array($scores)) {
-                return array($data['exe_result'], $data['exe_weighting']);
+                return [$data['exe_result'], $data['exe_weighting']];
             } else {
                 return null;
             }
         } else {
             // all students -> get average
             // normal way of getting the info
-            $students = array(); // user list, needed to make sure we only
+            $students = []; // user list, needed to make sure we only
             // take first attempts into account
             $student_count = 0;
             $sum = 0;
@@ -298,20 +303,21 @@ class ExerciseLink extends AbstractLink
             } else {
                 switch ($type) {
                     case 'best':
-                        return array($bestResult, $weight);
+                        return [$bestResult, $weight];
                         break;
                     case 'average':
                         $count = count($this->getStudentList());
                         if (empty($count)) {
-                            return array(0, $weight);
+                            return [0, $weight];
                         }
-                        return array($sumResult / $count, $weight);
+
+                        return [$sumResult / $count, $weight];
                         break;
                     case 'ranking':
                         return AbstractLink::getCurrentUserRanking($stud_id, $students);
                         break;
                     default:
-                        return array($sum, $student_count);
+                        return [$sum, $student_count];
                         break;
                 }
             }
@@ -345,7 +351,7 @@ class ExerciseLink extends AbstractLink
     }
 
     /**
-     * Get name to display: same as exercise title
+     * Get name to display: same as exercise title.
      */
     public function get_name()
     {
@@ -367,7 +373,7 @@ class ExerciseLink extends AbstractLink
     }
 
     /**
-     * Get description to display: same as exercise description
+     * Get description to display: same as exercise description.
      */
     public function get_description()
     {
@@ -377,7 +383,7 @@ class ExerciseLink extends AbstractLink
     }
 
     /**
-     * Check if this still links to an exercise
+     * Check if this still links to an exercise.
      */
     public function is_valid_link()
     {
@@ -389,7 +395,7 @@ class ExerciseLink extends AbstractLink
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
-        return ($number[0] != 0);
+        return $number[0] != 0;
     }
 
     /**
@@ -425,7 +431,23 @@ class ExerciseLink extends AbstractLink
     }
 
     /**
-     * Lazy load function to get the database table of the exercise
+     * @return string
+     */
+    public function get_icon_name()
+    {
+        return 'exercise';
+    }
+
+    /**
+     * @param bool $hp
+     */
+    public function setHp($hp)
+    {
+        $this->hp = $hp;
+    }
+
+    /**
+     * Lazy load function to get the database table of the exercise.
      */
     private function get_exercise_table()
     {
@@ -435,7 +457,7 @@ class ExerciseLink extends AbstractLink
     }
 
     /**
-     * Lazy load function to get the database contents of this exercise
+     * Lazy load function to get the database contents of this exercise.
      */
     private function get_exercise_data()
     {
@@ -474,21 +496,5 @@ class ExerciseLink extends AbstractLink
         }
 
         return $this->exercise_data;
-    }
-
-    /**
-     * @return string
-     */
-    public function get_icon_name()
-    {
-        return 'exercise';
-    }
-
-    /**
-     * @param bool $hp
-     */
-    public function setHp($hp)
-    {
-        $this->hp = $hp;
     }
 }

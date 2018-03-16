@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TrackEOpen
+ * TrackEOpen.
  *
  * @ORM\Table(name="track_e_open")
  * @ORM\Entity
@@ -42,7 +42,7 @@ class TrackEOpen
     private $openDate;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="open_id", type="integer")
      * @ORM\Id
@@ -50,12 +50,11 @@ class TrackEOpen
      */
     private $openId;
 
-
-
     /**
-     * Set openRemoteHost
+     * Set openRemoteHost.
      *
      * @param string $openRemoteHost
+     *
      * @return TrackEOpen
      */
     public function setOpenRemoteHost($openRemoteHost)
@@ -66,7 +65,7 @@ class TrackEOpen
     }
 
     /**
-     * Get openRemoteHost
+     * Get openRemoteHost.
      *
      * @return string
      */
@@ -76,9 +75,10 @@ class TrackEOpen
     }
 
     /**
-     * Set openAgent
+     * Set openAgent.
      *
      * @param string $openAgent
+     *
      * @return TrackEOpen
      */
     public function setOpenAgent($openAgent)
@@ -89,7 +89,7 @@ class TrackEOpen
     }
 
     /**
-     * Get openAgent
+     * Get openAgent.
      *
      * @return string
      */
@@ -99,9 +99,10 @@ class TrackEOpen
     }
 
     /**
-     * Set openReferer
+     * Set openReferer.
      *
      * @param string $openReferer
+     *
      * @return TrackEOpen
      */
     public function setOpenReferer($openReferer)
@@ -112,7 +113,7 @@ class TrackEOpen
     }
 
     /**
-     * Get openReferer
+     * Get openReferer.
      *
      * @return string
      */
@@ -122,9 +123,10 @@ class TrackEOpen
     }
 
     /**
-     * Set openDate
+     * Set openDate.
      *
      * @param \DateTime $openDate
+     *
      * @return TrackEOpen
      */
     public function setOpenDate($openDate)
@@ -135,7 +137,7 @@ class TrackEOpen
     }
 
     /**
-     * Get openDate
+     * Get openDate.
      *
      * @return \DateTime
      */
@@ -145,9 +147,9 @@ class TrackEOpen
     }
 
     /**
-     * Get openId
+     * Get openId.
      *
-     * @return integer
+     * @return int
      */
     public function getOpenId()
     {

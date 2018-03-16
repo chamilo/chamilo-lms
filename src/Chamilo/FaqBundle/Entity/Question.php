@@ -3,16 +3,17 @@
 
 namespace Chamilo\FaqBundle\Entity;
 
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
- * Class Question
+ * Class Question.
  *
  * @ORM\Entity(repositoryClass="Chamilo\FaqBundle\Entity\QuestionRepository")
  * @ORM\Table(name="faq_question")
  * *
+ *
  * @package Chamilo\FaqBundle\Entity
  */
 class Question
@@ -51,7 +52,7 @@ class Question
     protected $updatedAt;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="only_auth_users", type="boolean", nullable=false)
      */
     protected $onlyAuthUsers;
@@ -64,6 +65,7 @@ class Question
     /**
      * @param $method
      * @param $arguments
+     *
      * @return mixed
      */
     public function __call($method, $arguments)
@@ -72,18 +74,27 @@ class Question
     }
 
     /**
-     * Get id
+     * Returns a string representation of this object.
      *
-     * @return integer
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getHeadline();
+    }
+
+    /**
+     * Get id.
+     *
+     * @return int
      */
     public function getId()
     {
         return $this->id;
     }
 
-
     /**
-     * Get rank
+     * Get rank.
      *
      * @return string
      */
@@ -93,7 +104,7 @@ class Question
     }
 
     /**
-     * Set rank
+     * Set rank.
      *
      * @param string $rank
      *
@@ -106,9 +117,8 @@ class Question
         return $this;
     }
 
-
     /**
-     * Set createdAt
+     * Set createdAt.
      *
      * @param \DateTime $createdAt
      *
@@ -122,7 +132,7 @@ class Question
     }
 
     /**
-     * Get createdAt
+     * Get createdAt.
      *
      * @return \DateTime
      */
@@ -132,7 +142,7 @@ class Question
     }
 
     /**
-     * Set updatedAt
+     * Set updatedAt.
      *
      * @param \DateTime $updatedAt
      *
@@ -146,7 +156,7 @@ class Question
     }
 
     /**
-     * Get updatedAt
+     * Get updatedAt.
      *
      * @return \DateTime
      */
@@ -156,7 +166,7 @@ class Question
     }
 
     /**
-     * Set category
+     * Set category.
      *
      * @param Category $category
      *
@@ -170,7 +180,7 @@ class Question
     }
 
     /**
-     * Get category
+     * Get category.
      *
      * @return Category
      */
@@ -180,17 +190,7 @@ class Question
     }
 
     /**
-     * Returns a string representation of this object
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getHeadline();
-    }
-
-    /**
-     * Returns the route name for url generation
+     * Returns the route name for url generation.
      *
      * @return string
      */
@@ -200,20 +200,20 @@ class Question
     }
 
     /**
-     * Returns the route parameters for url generation
+     * Returns the route parameters for url generation.
      *
      * @return array
      */
     public function getRouteParameters()
     {
-        return array(
+        return [
             'categorySlug' => $this->getCategory()->getSlug(),
-            'questionSlug' => $this->getSlug()
-        );
+            'questionSlug' => $this->getSlug(),
+        ];
     }
 
     /**
-     * Returns a string representation of the entity build out of BundleName + EntityName + EntityId
+     * Returns a string representation of the entity build out of BundleName + EntityName + EntityId.
      *
      * @return string
      */
@@ -223,7 +223,7 @@ class Question
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isOnlyAuthUsers()
     {
@@ -231,7 +231,8 @@ class Question
     }
 
     /**
-     * @param boolean $onlyAuthUsers
+     * @param bool $onlyAuthUsers
+     *
      * @return Question
      */
     public function setOnlyAuthUsers($onlyAuthUsers)
@@ -242,9 +243,9 @@ class Question
     }
 
     /**
-     * Set is_active
+     * Set is_active.
      *
-     * @param boolean $isActive
+     * @param bool $isActive
      *
      * @return Question
      */
@@ -256,9 +257,9 @@ class Question
     }
 
     /**
-     * Get isActive
+     * Get isActive.
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsActive()
     {

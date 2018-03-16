@@ -50,13 +50,13 @@ switch ($action) {
         // Removes everything.
         if (empty($automation)) {
             if (!empty($vidlist)) {
-                $todelete = Database::select('*', 'vchamilo', array('where' => array("id IN ('$vidlist')" => array())));
+                $todelete = Database::select('*', 'vchamilo', ['where' => ["id IN ('$vidlist')" => []]]);
             }
         } else {
             $todelete = Database::select(
                 '*',
                 'vchamilo',
-                array('where' => array("root_web = '{$n->root_web}' " => array()))
+                ['where' => ["root_web = '{$n->root_web}' " => []]]
             );
         }
 
@@ -107,11 +107,11 @@ switch ($action) {
         }
         break;
     case 'snapshotinstance':
-        $interbreadcrumb[] = array('url' => 'manage.php', 'name' => get_lang('VChamilo'));
+        $interbreadcrumb[] = ['url' => 'manage.php', 'name' => get_lang('VChamilo')];
 
         $vid = isset($_REQUEST['vid']) ? $_REQUEST['vid'] : '';
         if ($vid) {
-            $vhosts = Database::select('*', 'vchamilo', array('where' => array('id = ?' => $vid)));
+            $vhosts = Database::select('*', 'vchamilo', ['where' => ['id = ?' => $vid]]);
             $vhost = (object) array_pop($vhosts);
         } else {
             $vhost = (object) $_configuration;
@@ -183,7 +183,7 @@ switch ($action) {
                 $uploadPath = api_get_path(SYS_UPLOAD_PATH);
             } else {
                 // Get Vchamilo known record.
-                $vchamilo = Database::select('*', 'vchamilo', array('where' => array('root_web = ?' => array($wwwroot))), 'first');
+                $vchamilo = Database::select('*', 'vchamilo', ['where' => ['root_web = ?' => [$wwwroot]]], 'first');
                 $vchamilo = (object) $vchamilo;
                 $coursePath = Virtual::getConfig('vchamilo', 'course_real_root');
                 $homePath = Virtual::getConfig('vchamilo', 'home_real_root');
@@ -272,7 +272,7 @@ switch ($action) {
                             'category' => 'Plugins',
                             'variable' => 'vchamilo_default_template',
                             'selected_value' => $vhost->slug,
-                            'access_url_changeable' => 0
+                            'access_url_changeable' => 0,
                         ];
                         api_set_setting_simple($params);
                     } else {
@@ -300,11 +300,11 @@ switch ($action) {
         // Removes cache directory.
         if (empty($automation)) {
             if (array_key_exists('vids', $_REQUEST)) {
-                $toclear = Database::select('*', 'vchamilo', array('where' => array("id IN ('$vidlist')" => array())));
+                $toclear = Database::select('*', 'vchamilo', ['where' => ["id IN ('$vidlist')" => []]]);
             } else {
                 $vid = isset($_REQUEST['vid']) ? $_REQUEST['vid'] : 0;
                 if ($vid) {
-                    $vhosts = Database::select('*', 'vchamilo', array('where' => array('id = ?' => $vid)));
+                    $vhosts = Database::select('*', 'vchamilo', ['where' => ['id = ?' => $vid]]);
                     $vhost = (object) array_pop($vhosts);
                     $toclear[$vhost->id] = $vhost;
                 } else {
@@ -315,7 +315,7 @@ switch ($action) {
             $toclear = Database::select(
                 '*',
                 'vchamilo',
-                array('where' => array("root_web = '{$n->root_web}' " => array()))
+                ['where' => ["root_web = '{$n->root_web}' " => []]]
             );
         }
 

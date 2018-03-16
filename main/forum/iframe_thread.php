@@ -13,7 +13,7 @@
  *                      multiple forums per group
  * - sticky messages
  * - new view option: nested view
- * - quoting a message
+ * - quoting a message.
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @copyright Ghent University
@@ -83,7 +83,7 @@ while ($row = Database::fetch_array($result)) {
     } else {
         $name = api_get_person_name($row['firstname'], $row['lastname']);
     }
-    echo Display::tag('span', $name, array('title'=>$username)).'<br />';
+    echo Display::tag('span', $name, ['title' => $username]).'<br />';
     echo api_convert_and_format_date($row['post_date']).'<br /><br />';
 
     echo "</td>";

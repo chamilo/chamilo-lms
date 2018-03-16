@@ -5,6 +5,7 @@ use ChamiloSession as Session;
 
 /**
  * @package chamilo.admin
+ *
  * @todo use formvalidator
  */
 
@@ -19,20 +20,20 @@ $add = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 SessionManager::protectSession($sessionId);
 
 $xajax = new xajax();
-$xajax->registerFunction(array('search_courses', 'AddCourseToSession', 'search_courses'));
+$xajax->registerFunction(['search_courses', 'AddCourseToSession', 'search_courses']);
 
 // Setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // setting breadcrumbs
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'session_list.php',
-    'name' => get_lang('SessionList')
-);
-$interbreadcrumb[] = array(
+    'name' => get_lang('SessionList'),
+];
+$interbreadcrumb[] = [
     'url' => "resume_session.php?id_session=".$sessionId,
-    'name' => get_lang('SessionOverview')
-);
+    'name' => get_lang('SessionOverview'),
+];
 
 // Database Table Definitions
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -80,8 +81,8 @@ function remove_item(origin)
 }
 </script>';
 
-$CourseList = $SessionList = array();
-$courses = $sessions = array();
+$CourseList = $SessionList = [];
+$courses = $sessions = [];
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     $courseList = $_POST['SessionCoursesList'];
@@ -125,7 +126,7 @@ echo $link_add_type_unique.$link_add_type_multiple;
 echo '</div>';
 
 $ajax_search = $add_type == 'unique' ? true : false;
-$nosessionCourses = $sessionCourses = array();
+$nosessionCourses = $sessionCourses = [];
 if ($ajax_search) {
     $sql = "SELECT course.id, code, title, visual_code, session_id
 			FROM $tbl_course course
@@ -209,12 +210,16 @@ if (!api_is_platform_admin() && api_is_teacher()) {
 
 unset($Courses);
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $sessionId; ?><?php if (!empty($_GET['add'])) echo '&add=true'; ?>" style="margin:0px;" <?php if ($ajax_search) {echo ' onsubmit="valide();"'; }?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $sessionId; ?><?php if (!empty($_GET['add'])) {
+    echo '&add=true';
+} ?>" style="margin:0px;" <?php if ($ajax_search) {
+    echo ' onsubmit="valide();"';
+}?>>
     <legend><?php echo $tool_name.' ('.$session_info['name'].')'; ?></legend>
     <input type="hidden" name="formSent" value="1" />
     <div id="multiple-add-session" class="row">
         <div class="col-md-4">
-            <label><?php echo get_lang('CourseListInPlatform') ?> :</label>
+            <label><?php echo get_lang('CourseListInPlatform'); ?> :</label>
             <?php
             if (!($add_type == 'multiple')) {
                 ?>
@@ -225,11 +230,16 @@ unset($Courses);
                 ?>
                 <div id="ajax_list_courses_multiple">
                     <select id="origin" name="NoSessionCoursesList[]" multiple="multiple" size="20" class="form-control">
-                        <?php foreach ($nosessionCourses as $enreg) { ?>
-                            <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')', ENT_QUOTES).'"'; if (in_array($enreg['code'], $CourseList)) echo 'selected="selected"'; ?>>
+                        <?php foreach ($nosessionCourses as $enreg) {
+                    ?>
+                            <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')', ENT_QUOTES).'"';
+                    if (in_array($enreg['code'], $CourseList)) {
+                        echo 'selected="selected"';
+                    } ?>>
                                 <?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?>
                             </option>
-                        <?php } ?>
+                        <?php
+                } ?>
                     </select>
                 </div>
             <?php
@@ -238,7 +248,8 @@ unset($Courses);
             ?>
         </div>
         <div class="col-md-4">
-            <?php if ($add_type == 'multiple') { ?>
+            <?php if ($add_type == 'multiple') {
+                ?>
                 <div class="code-course">
                     <?php echo get_lang('FirstLetterCourse'); ?> :
 
@@ -246,11 +257,11 @@ unset($Courses);
                         <option value="%">--</option>
                         <?php
                         echo Display :: get_alphabet_options();
-                        echo Display :: get_numeric_options(0, 9, '');
-                        ?>
+                echo Display :: get_numeric_options(0, 9, ''); ?>
                     </select>
                 </div>
-            <?php } ?>
+            <?php
+            } ?>
             <div class="control-course">
             <?php
             if ($ajax_search) {
@@ -273,7 +284,8 @@ unset($Courses);
                         <em class="fa fa-chevron-left"></em>
                     </button>
                 </div>
-            <?php } ?>
+            <?php
+            } ?>
                 <div class="separate-action">
                     <label>
                         <input type="checkbox" name="copy_evaluation">
@@ -292,7 +304,7 @@ unset($Courses);
             </div>
         </div>
         <div class="col-md-4">
-            <label><?php echo get_lang('CourseListInSession') ?> :</label>
+            <label><?php echo get_lang('CourseListInSession'); ?> :</label>
             <select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" class="form-control">
 
                 <?php

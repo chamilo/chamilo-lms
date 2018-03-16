@@ -4,22 +4,22 @@
 use ChamiloSession as Session;
 
 /**
- * Code library for showing Who is online
+ * Code library for showing Who is online.
  *
  * @author Istvan Mandak, principal author
  * @author Denes Nagy, principal author
  * @author Bart Mollet
  * @author Roan Embrechts, cleaning and bugfixing
+ *
  * @package chamilo.whoisonline
  */
 
 /**
  * Insert a login reference for the current user into the track_e_online stats table.
- * This table keeps trace of the last login. Nothing else matters (we don't keep traces of anything older)
+ * This table keeps trace of the last login. Nothing else matters (we don't keep traces of anything older).
+ *
  * @param int user id
- * @return void
  */
-
 function LoginCheck($uid)
 {
     $uid = (int) $uid;
@@ -66,7 +66,7 @@ function preventMultipleLogin($userId)
                         LIMIT 1";
 
                 $result = Database::query($sql);
-                $loginData = array();
+                $loginData = [];
                 if (Database::num_rows($result)) {
                     $loginData = Database::fetch_array($result);
                 }
@@ -89,10 +89,11 @@ function preventMultipleLogin($userId)
 }
 
 /**
- * This function handles the logout and is called whenever there is a $_GET['logout']
- * @param int $user_id
+ * This function handles the logout and is called whenever there is a $_GET['logout'].
+ *
+ * @param int  $user_id
  * @param bool $logout_redirect
- * @return void  Directly redirects the user or leaves him where he is, but doesn't return anything
+ *
  * @author Fernando P. García <fernando@develcuy.com>
  */
 function online_logout($user_id = null, $logout_redirect = false)
@@ -142,7 +143,7 @@ function online_logout($user_id = null, $logout_redirect = false)
         if (is_array($extAuthSource[$uinfo['auth_source']])) {
             $subarray = $extAuthSource[$uinfo['auth_source']];
             if (!empty($subarray['logout']) && file_exists($subarray['logout'])) {
-                require_once($subarray['logout']);
+                require_once $subarray['logout'];
                 $logout_function = $uinfo['auth_source'].'_logout';
                 if (function_exists($logout_function)) {
                     $logout_function($uinfo);
@@ -172,9 +173,9 @@ function online_logout($user_id = null, $logout_redirect = false)
     }
 }
 
-
 /**
  * @param int $user_id
+ *
  * @return bool
  */
 function user_is_online($user_id)
@@ -205,11 +206,10 @@ function user_is_online($user_id)
     }
 
     return false;
-
 }
 
 /**
- * Gives a list of people online now (and in the last $valid minutes)
+ * Gives a list of people online now (and in the last $valid minutes).
  *
  * @param $from
  * @param $number_of_items
@@ -217,7 +217,8 @@ function user_is_online($user_id)
  * @param null $direction
  * @param null $time_limit
  * @param bool $friends
- * @return  array|bool For each line, a list of user IDs and login dates, or FALSE on error or empty results
+ *
+ * @return array|bool For each line, a list of user IDs and login dates, or FALSE on error or empty results
  */
 function who_is_online(
     $from,
@@ -247,7 +248,7 @@ function who_is_online(
     if (empty($direction)) {
         $direction = 'DESC';
     } else {
-        if (!in_array(strtolower($direction), array('asc', 'desc'))) {
+        if (!in_array(strtolower($direction), ['asc', 'desc'])) {
             $direction = 'DESC';
         }
     }
@@ -307,16 +308,16 @@ function who_is_online(
         }
     }
 
-	//This query will show all registered users. Only for dev purposes.
-	/*$query = "SELECT DISTINCT u.id as login_user_id, login_date
-	        FROM $track_online_table e, $table_user u
+    //This query will show all registered users. Only for dev purposes.
+    /*$query = "SELECT DISTINCT u.id as login_user_id, login_date
+            FROM $track_online_table e, $table_user u
             GROUP by u.id
             ORDER BY $column $direction
             LIMIT $from, $number_of_items";*/
 
     $result = Database::query($query);
     if ($result) {
-        $users_online = array();
+        $users_online = [];
         while (list($login_user_id, $login_date) = Database::fetch_row($result)) {
             $users_online[] = $login_user_id;
         }
@@ -400,14 +401,15 @@ function who_is_online_count($time_limit = null, $friends = false)
     }
 }
 
-
 /**
-* Returns a list (array) of users who are online and in this course.
-* @param    int User ID
-* @param    int Number of minutes
-* @param    string  Course code (could be empty, but then the function returns false)
-* @return   array   Each line gives a user id and a login time
-*/
+ * Returns a list (array) of users who are online and in this course.
+ *
+ * @param    int User ID
+ * @param    int Number of minutes
+ * @param    string  Course code (could be empty, but then the function returns false)
+ *
+ * @return array Each line gives a user id and a login time
+ */
 function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit, $course_code)
 {
     if (empty($course_code)) {
@@ -442,10 +444,11 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
 
     $result = Database::query($query);
     if ($result) {
-        $users_online = array();
+        $users_online = [];
         while (list($login_user_id, $login_date) = Database::fetch_row($result)) {
             $users_online[] = $login_user_id;
         }
+
         return $users_online;
     } else {
         return false;
@@ -453,7 +456,7 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
 }
 
 /**
- * @param integer $uid
+ * @param int    $uid
  * @param string $time_limit
  */
 function who_is_online_in_this_course_count(
@@ -496,7 +499,8 @@ function who_is_online_in_this_course_count(
 
 /**
  * @param string $timeLimit
- * @param int $sessionId
+ * @param int    $sessionId
+ *
  * @return bool
  */
 function whoIsOnlineInThisSessionCount($timeLimit, $sessionId)

@@ -4,7 +4,8 @@
 namespace Chamilo\CoreBundle\Component\Editor\Driver;
 
 /**
- * Class CourseUserDriver
+ * Class CourseUserDriver.
+ *
  * @package Chamilo\CoreBundle\Component\Editor\Driver
  */
 class CourseUserDriver extends CourseDriver
@@ -23,14 +24,14 @@ class CourseUserDriver extends CourseDriver
             $alias = $this->connector->course['code'].' '.get_lang('CourseUserDocument');
 
             if (!empty($userId)) {
-                return array(
+                return [
                     'driver' => 'CourseUserDriver',
                     'alias' => $alias,
                     'path' => $this->getCourseDocumentSysPath().$path,
                     //'alias' => $courseInfo['code'].' personal documents',
                     'URL' => $this->getCourseDocumentRelativeWebPath().$path,
-                    'accessControl' => 'access'
-                );
+                    'accessControl' => 'access',
+                ];
             }
         }
     }

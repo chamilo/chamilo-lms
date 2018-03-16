@@ -9,13 +9,12 @@ require_once __DIR__.'/../forum/forumfunction.inc.php';
 require_once __DIR__.'/cm_webservice.php';
 
 /**
- * Description of cm_soap_inbox
+ * Description of cm_soap_inbox.
  *
  * @author marcosousa
  */
 class WSCMForum extends WSCM
 {
-
     public function get_foruns_id($username, $password, $course_code)
     {
         if ($this->verifyUserPass($username, $password) == "valid") {
@@ -54,6 +53,7 @@ class WSCMForum extends WSCM
             $forum_info['approval_direct_post'] = 0; // we can't anymore change this option, so it should always be activated
 
             $forum_title = utf8_decode($forum_info['forum_title']);
+
             return $forum_title;
         } else {
             return get_lang('InvalidId');
@@ -76,7 +76,6 @@ class WSCMForum extends WSCM
             }
 
             return $threads_id;
-
         } else {
             return get_lang('InvalidId');
         }
@@ -123,7 +122,6 @@ class WSCMForum extends WSCM
             }
 
             return $thread_info[$field_table];
-
         } else {
             return get_lang('InvalidId');
         }
@@ -151,12 +149,10 @@ class WSCMForum extends WSCM
             $field_table = "thread_title";
 
             return $thread_info[$field_table];
-
         } else {
             return get_lang('InvalidId');
         }
     }
-
 
     public function get_posts_id($username, $password, $course_code, $thread_id)
     {
@@ -240,6 +236,7 @@ class WSCMForum extends WSCM
                     $htmlcode = true;
                     $field_table = "title";
             }
+
             return ($htmlcode) ? html_entity_decode($post_info[$field_table]) : $post_info[$field_table];
         } else {
             return get_lang('InvalidId');
@@ -294,7 +291,6 @@ class WSCMForum extends WSCM
         } else {
             return get_lang('InvalidId');
         }
-
     }
 }
 

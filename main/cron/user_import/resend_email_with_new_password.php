@@ -6,11 +6,12 @@
  * confirmation e-mail.
  * Note that the password generation has been simplified, which
  * means the password below is not really "safe"
- * To enable script, prefix the first die(); with //
+ * To enable script, prefix the first die(); with //.
+ *
  * @package chamilo.cron.user_import
  */
 /**
- * Initialization
+ * Initialization.
  */
 /* Example of input file:
   sam@example.com
@@ -26,7 +27,7 @@ $userManager = UserManager::getManager();
 $repository = UserManager::getRepository();
 
 /**
- * E-mails list loop
+ * E-mails list loop.
  */
 foreach ($list as $mail) {
     $mail = trim($mail);
@@ -43,7 +44,6 @@ foreach ($list as $mail) {
         $pass = api_substr($row['username'], 0, 4).rand(0, 9).rand(0, 9);
 
         if ($user) {
-
             /** @var User $user */
             $user = $repository->find($row['user_id']);
             $user->setPlainPassword($pass);
@@ -53,13 +53,13 @@ foreach ($list as $mail) {
             continue;
         }
 
-        $user = array(
+        $user = [
             'FirstName' => $row['firstname'],
             'LastName' => $row['lastname'],
             'UserName' => $row['username'],
             'Password' => $pass,
             'Email' => $mail,
-        );
+        ];
         $l = api_get_interface_language();
         if (!empty($row['language'])) {
             $l = $row['language'];

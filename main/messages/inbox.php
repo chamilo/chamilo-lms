@@ -4,7 +4,6 @@
 /**
  * @package chamilo.messages
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -28,8 +27,8 @@ if (isset($_GET['messages_page_nr'])) {
 $nameTools = get_lang('Messages');
 $show_message = null;
 if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
-    $info_reply = array();
-    $info_delete = array();
+    $info_reply = [];
+    $info_delete = [];
 
     if (isset($_GET['form_reply'])) {
         //allow to insert messages
@@ -88,23 +87,23 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 
 if ($allowSocial) {
     $this_section = SECTION_SOCIAL;
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_PATH).'main/social/home.php',
-        'name' => get_lang('SocialNetwork')
-    );
+        'name' => get_lang('SocialNetwork'),
+    ];
 } else {
     $this_section = SECTION_MYPROFILE;
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_PATH).'main/auth/profile.php',
-        'name' => get_lang('Profile')
-    );
+        'name' => get_lang('Profile'),
+    ];
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_PATH).'main/messages/inbox.php',
-    'name' => get_lang('Messages')
-);
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Inbox'));
+    'name' => get_lang('Messages'),
+];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Inbox')];
 
 $actions = '';
 
@@ -130,9 +129,9 @@ $social_right_content = '';
 $keyword = '';
 if (api_get_setting('allow_social_tool') === 'true') {
     $actionsLeft = '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
-        Display::return_icon('new-message.png', get_lang('ComposeMessage'), array(), 32).'</a>';
+        Display::return_icon('new-message.png', get_lang('ComposeMessage'), [], 32).'</a>';
     $actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
-        Display::return_icon('outbox.png', get_lang('Outbox'), array(), 32).'</a>';
+        Display::return_icon('outbox.png', get_lang('Outbox'), [], 32).'</a>';
 
     $form = MessageManager::getSearchForm(api_get_path(WEB_PATH).'main/messages/inbox.php');
     if ($form->validate()) {

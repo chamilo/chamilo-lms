@@ -4,15 +4,15 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * ProjectCommentStudent toolbar configuration
+ * ProjectCommentStudent toolbar configuration.
  *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class ProjectCommentStudent extends Basic
 {
-
     /**
-     * Get the toolbar config
+     * Get the toolbar config.
+     *
      * @return array
      */
     public function getConfig()
@@ -28,7 +28,8 @@ class ProjectCommentStudent extends Basic
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is maximized
+     * Get the toolbar configuration when CKEditor is maximized.
+     *
      * @return array
      */
     protected function getMaximizedToolbar()
@@ -49,7 +50,7 @@ class ProjectCommentStudent extends Basic
                 'leaflet',
                 'Smiley',
                 'SpecialChar',
-                'Asciimath'
+                'Asciimath',
             ],
             '/',
             ['Table', '-', 'CreateDiv'],
@@ -59,12 +60,13 @@ class ProjectCommentStudent extends Basic
             [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks'],
-            ['Toolbarswitch']
+            ['Toolbarswitch'],
         ];
     }
 
     /**
-     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false.
+     *
      * @return array
      */
     protected function getNormalToolbar()
@@ -76,12 +78,13 @@ class ProjectCommentStudent extends Basic
             ['Table', 'leaflet'],
             ['Bold', 'Italic', 'Underline'],
             ['JustifyLeft', 'JustifyCenter', '-', 'NumberedList', 'BulletedList', '-', 'TextColor', 'BGColor'],
-            ['ShowBlocks']
+            ['ShowBlocks'],
         ];
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is minimized
+     * Get the toolbar configuration when CKEditor is minimized.
+     *
      * @return array
      */
     protected function getMinimizedToolbar()
@@ -93,8 +96,7 @@ class ProjectCommentStudent extends Basic
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
             ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'TextColor'],
-            ['Toolbarswitch']
+            ['Toolbarswitch'],
         ];
     }
-
 }

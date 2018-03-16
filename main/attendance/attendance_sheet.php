@@ -2,9 +2,11 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * View (MVC patter) for attendance sheet (list, edit, add)
+ * View (MVC patter) for attendance sheet (list, edit, add).
+ *
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Julio Montoya reworked 2010
+ *
  * @package chamilo.attendance
  */
 
@@ -26,16 +28,16 @@ if (api_is_allowed_to_edit(null, true) ||
         'post',
         'index.php?action=attendance_sheet_list&'.api_get_cidreq().'&attendance_id='.$attendance_id,
         null,
-        array(),
+        [],
         'inline'
     );
 
-    $values = array(
+    $values = [
         'all' => get_lang('All'),
         'today' => get_lang('Today'),
         'all_done' => get_lang('AllDone'),
-        'all_not_done' => get_lang('AllNotDone')
-    );
+        'all_not_done' => get_lang('AllNotDone'),
+    ];
     $today = api_convert_and_format_date(null, DATE_FORMAT_SHORT);
     $exists_attendance_today = false;
 
@@ -78,7 +80,7 @@ if (api_is_allowed_to_edit(null, true) ||
     );
 
     $groupList = GroupManager::get_group_list(null, null, 1);
-    $groupIdList = array('--');
+    $groupIdList = ['--'];
     foreach ($groupList as $group) {
         $groupIdList[$group['id']] = $group['name'];
     }
@@ -99,10 +101,10 @@ if (api_is_allowed_to_edit(null, true) ||
     $renderer->setCustomElementTemplate('<div class="col-md-2">{label}</div><div class="col-md-10"> {element} </div>');
 
     $form->setDefaults(
-        array(
+        [
             'filter' => $default_filter,
-            'group_id' => $groupId
-        )
+            'group_id' => $groupId,
+        ]
     );
 
     if (!$is_locked_attendance || api_is_platform_admin()) {
@@ -112,7 +114,7 @@ if (api_is_allowed_to_edit(null, true) ||
             Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
 
         $actionsRight = $form->returnForm();
-        $toolbar = Display::toolbarAction('toolbar-attendance', array($actionsLeft, $actionsRight));
+        $toolbar = Display::toolbarAction('toolbar-attendance', [$actionsLeft, $actionsRight]);
         echo $toolbar;
     }
 
@@ -203,168 +205,166 @@ if (api_is_allowed_to_edit(null, true) ||
             });
         </script>
 
-        <form method="post" action="index.php?action=attendance_sheet_add&<?php echo api_get_cidreq().$param_filter ?>&attendance_id=<?php echo $attendance_id?>" >
+        <form method="post" action="index.php?action=attendance_sheet_add&<?php echo api_get_cidreq().$param_filter; ?>&attendance_id=<?php echo $attendance_id; ?>" >
             <div class="attendance-sheet-content" style="width:100%;background-color:#E1E1E1;margin-top:20px;">
                 <div class="divTableWithFloatingHeader attendance-users-table" style="width:45%;float:left;margin:0px;padding:0px;">
                     <table class="tableWithFloatingHeader data_table" width="100%">
                         <thead>
                         <tr class="tableFloatingHeader" style="position: absolute; top: 0px; left: 0px; visibility: hidden; margin:0px;padding:0px" >
                             <th width="10px"><?php echo '#'; ?></th>
-                            <th width="10px"><?php echo get_lang('Photo')?></th>
-                            <th width="100px"><?php echo get_lang('LastName')?></th>
-                            <th width="100px"><?php echo get_lang('FirstName')?></th>
-                            <th width="100px"><?php echo get_lang('AttendancesFaults')?></th>
+                            <th width="10px"><?php echo get_lang('Photo'); ?></th>
+                            <th width="100px"><?php echo get_lang('LastName'); ?></th>
+                            <th width="100px"><?php echo get_lang('FirstName'); ?></th>
+                            <th width="100px"><?php echo get_lang('AttendancesFaults'); ?></th>
                         </tr>
                         <tr class="tableFloatingHeaderOriginal" >
                             <th width="10px"><?php echo '#'; ?></th>
-                            <th width="10px"><?php echo get_lang('Photo')?></th>
-                            <th width="150px"><?php echo get_lang('LastName')?></th>
-                            <th width="140px"><?php echo get_lang('FirstName')?></th>
-                            <th width="100px"><?php echo get_lang('AttendancesFaults')?></th>
+                            <th width="10px"><?php echo get_lang('Photo'); ?></th>
+                            <th width="150px"><?php echo get_lang('LastName'); ?></th>
+                            <th width="140px"><?php echo get_lang('FirstName'); ?></th>
+                            <th width="100px"><?php echo get_lang('AttendancesFaults'); ?></th>
                         </tr>
                         </thead>
                         <tbody>
                         <?php
                         $i = 1;
-                        $class = '';
-                        foreach ($users_in_course as $data) {
-                            $faults = 0;
-                            if ($i % 2 == 0) {
-                                $class = 'row_odd';
-                            } else {
-                                $class = 'row_even';
-                            }
-                            $username = api_htmlentities(
+        $class = '';
+        foreach ($users_in_course as $data) {
+            $faults = 0;
+            if ($i % 2 == 0) {
+                $class = 'row_odd';
+            } else {
+                $class = 'row_even';
+            }
+            $username = api_htmlentities(
                                 sprintf(get_lang('LoginX'), $data['username']),
                                 ENT_QUOTES
-                            );
-                            ?>
-                            <tr class="<?php echo $class ?>">
-                                <td><center><?php echo $i ?></center></td>
-                                <td><?php echo $data['photo'] ?></td>
-                                <td><span title="<?php echo $username ?>"><?php echo $data['lastname'] ?></span></td>
-                                <td><?php echo $data['firstname'] ?></td>
+                            ); ?>
+                            <tr class="<?php echo $class; ?>">
+                                <td><center><?php echo $i; ?></center></td>
+                                <td><?php echo $data['photo']; ?></td>
+                                <td><span title="<?php echo $username; ?>"><?php echo $data['lastname']; ?></span></td>
+                                <td><?php echo $data['firstname']; ?></td>
                                 <td>
-                                    <div class="attendance-faults-bar" style="background-color:<?php echo (!empty($data['result_color_bar']) ? $data['result_color_bar'] : 'none') ?>">
-                                        <?php echo $data['attendance_result'] ?>
+                                    <div class="attendance-faults-bar" style="background-color:<?php echo !empty($data['result_color_bar']) ? $data['result_color_bar'] : 'none'; ?>">
+                                        <?php echo $data['attendance_result']; ?>
                                     </div>
                                 </td>
                             </tr>
                             <?php
                             $i++;
-                        }
-                        ?>
+        } ?>
                         </tbody>
                     </table>
                 </div>
                 <?php
 
                 echo '<div class="divTableWithFloatingHeader attendance-calendar-table" style="margin:0px;padding:0px;float:left;width:55%;overflow:auto;overflow-y:hidden;">';
-                echo '<table class="tableWithFloatingHeader data_table" width="100%">';
-                echo '<thead>';
-                $result = null;
-                if (count($attendant_calendar) > 0) {
-                    foreach ($attendant_calendar as $calendar) {
-                        $date = $calendar['date'];
-                        $time = $calendar['time'];
-                        $datetime = '<div class="grey">'.$date.' - '.$time.'</div>';
+        echo '<table class="tableWithFloatingHeader data_table" width="100%">';
+        echo '<thead>';
+        $result = null;
+        if (count($attendant_calendar) > 0) {
+            foreach ($attendant_calendar as $calendar) {
+                $date = $calendar['date'];
+                $time = $calendar['time'];
+                $datetime = '<div class="grey">'.$date.' - '.$time.'</div>';
 
-                        $img_lock = Display::return_icon(
+                $img_lock = Display::return_icon(
                             'lock-closed.png',
                             get_lang('DateUnLock'),
-                            array('class' => 'img_lock', 'id' => 'datetime_column_'.$calendar['id'])
+                            ['class' => 'img_lock', 'id' => 'datetime_column_'.$calendar['id']]
                         );
 
-                        if (!empty($calendar['done_attendance'])) {
-                            $datetime = '<div class="blue">'.$date.' - '.$time.'</div>';
-                        }
-                        $disabled_check = 'disabled = "true"';
-                        $input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="" disabled />';
-                        if ($next_attendance_calendar_id == $calendar['id']) {
-                            $input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="'.$calendar['id'].'" />';
-                            $disabled_check = '';
-                            $img_lock = Display::return_icon('lock-closed.png', get_lang('DateLock'), array('class'=>'img_unlock', 'id'=>'datetime_column_'.$calendar['id']));
-                        }
-
-                        $result .= '<th>';
-                        $result .= '<div class="date-attendance">'.$datetime.'&nbsp;';
-                        if (api_is_allowed_to_edit(null, true)) {
-                            $result .= '<span id="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin() ? $img_lock : '').'</span>';
-                        }
-
-                        if ($is_locked_attendance == false) {
-                            if (api_is_allowed_to_edit(null, true)) {
-                                $result .= '<input type="checkbox" class="checkbox_head_'.$calendar['id'].'" id="checkbox_head_'.$calendar['id'].'" '.$disabled_check.' checked="checked" />'.$input_hidden.'</div></th>';
-                            }
-                        }
-                    }
-                } else {
-                    $result  = '<th width="2000px"><span><a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.'">';
-                    $result .= Display::return_icon('attendance_calendar.png', get_lang('AttendanceCalendar'), '', ICON_SIZE_MEDIUM).' '.get_lang('GoToAttendanceCalendar').'</a></span></th>';
+                if (!empty($calendar['done_attendance'])) {
+                    $datetime = '<div class="blue">'.$date.' - '.$time.'</div>';
+                }
+                $disabled_check = 'disabled = "true"';
+                $input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="" disabled />';
+                if ($next_attendance_calendar_id == $calendar['id']) {
+                    $input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="'.$calendar['id'].'" />';
+                    $disabled_check = '';
+                    $img_lock = Display::return_icon('lock-closed.png', get_lang('DateLock'), ['class' => 'img_unlock', 'id' => 'datetime_column_'.$calendar['id']]);
                 }
 
-                echo '<tr class="tableFloatingHeader row_odd" style="position: absolute; top: 0px; left: 0px; visibility: hidden; margin:0px;padding:0px">';
-                echo $result;
-                echo '</tr>';
-                echo '<tr class="tableWithFloatingHeader row_odd tableFloatingHeaderOriginal">';
-                echo $result;
-                echo '</tr>';
-                echo '</thead>';
-                echo '<tbody>';
-                $i = 0;
-                foreach ($users_in_course as $user) {
-                    $class = '';
-                    if ($i % 2 == 0) {
-                        $class = 'row_even';
-                    } else {
-                        $class = 'row_odd';
+                $result .= '<th>';
+                $result .= '<div class="date-attendance">'.$datetime.'&nbsp;';
+                if (api_is_allowed_to_edit(null, true)) {
+                    $result .= '<span id="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin() ? $img_lock : '').'</span>';
+                }
+
+                if ($is_locked_attendance == false) {
+                    if (api_is_allowed_to_edit(null, true)) {
+                        $result .= '<input type="checkbox" class="checkbox_head_'.$calendar['id'].'" id="checkbox_head_'.$calendar['id'].'" '.$disabled_check.' checked="checked" />'.$input_hidden.'</div></th>';
                     }
-                    echo '<tr class="'.$class.'">';
+                }
+            }
+        } else {
+            $result = '<th width="2000px"><span><a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.'">';
+            $result .= Display::return_icon('attendance_calendar.png', get_lang('AttendanceCalendar'), '', ICON_SIZE_MEDIUM).' '.get_lang('GoToAttendanceCalendar').'</a></span></th>';
+        }
 
-                    if (count($attendant_calendar) > 0) {
-                        foreach ($attendant_calendar as $calendar) {
+        echo '<tr class="tableFloatingHeader row_odd" style="position: absolute; top: 0px; left: 0px; visibility: hidden; margin:0px;padding:0px">';
+        echo $result;
+        echo '</tr>';
+        echo '<tr class="tableWithFloatingHeader row_odd tableFloatingHeaderOriginal">';
+        echo $result;
+        echo '</tr>';
+        echo '</thead>';
+        echo '<tbody>';
+        $i = 0;
+        foreach ($users_in_course as $user) {
+            $class = '';
+            if ($i % 2 == 0) {
+                $class = 'row_even';
+            } else {
+                $class = 'row_odd';
+            }
+            echo '<tr class="'.$class.'">';
+
+            if (count($attendant_calendar) > 0) {
+                foreach ($attendant_calendar as $calendar) {
+                    $checked = 'checked';
+                    $presence = -1;
+
+                    if (isset($users_presence[$user['user_id']][$calendar['id']]['presence'])) {
+                        $presence = $users_presence[$user['user_id']][$calendar['id']]['presence'];
+                        if (intval($presence) == 1) {
                             $checked = 'checked';
-                            $presence = -1;
-
-                            if (isset($users_presence[$user['user_id']][$calendar['id']]['presence'])) {
-                                $presence = $users_presence[$user['user_id']][$calendar['id']]['presence'];
-                                if (intval($presence) == 1) {
-                                    $checked = 'checked';
-                                } else {
-                                    $checked = '';
-                                }
-                            } else {
-                                //if the user wasn't registered at that time, consider unchecked
-                                if ($next_attendance_calendar_datetime == 0 ||
+                        } else {
+                            $checked = '';
+                        }
+                    } else {
+                        //if the user wasn't registered at that time, consider unchecked
+                        if ($next_attendance_calendar_datetime == 0 ||
                                     $calendar['date_time'] < $next_attendance_calendar_datetime
                                 ) {
-                                    $checked = '';
-                                }
-                            }
-                            $disabled = 'disabled';
-                            $style_td = '';
+                            $checked = '';
+                        }
+                    }
+                    $disabled = 'disabled';
+                    $style_td = '';
 
-                            if ($next_attendance_calendar_id == $calendar['id']) {
-                                if ($i % 2 == 0) {
-                                    $style_td = 'background-color:#eee;';
-                                } else {
-                                    $style_td = 'background-color:#dcdcdc;';
-                                }
-                                $disabled = '';
-                            }
+                    if ($next_attendance_calendar_id == $calendar['id']) {
+                        if ($i % 2 == 0) {
+                            $style_td = 'background-color:#eee;';
+                        } else {
+                            $style_td = 'background-color:#dcdcdc;';
+                        }
+                        $disabled = '';
+                    }
 
-                            echo '<td style="'.$style_td.'" class="checkboxes_col_'.$calendar['id'].'">';
-                            echo '<div class="check">';
+                    echo '<td style="'.$style_td.'" class="checkboxes_col_'.$calendar['id'].'">';
+                    echo '<div class="check">';
 
-                            if (api_is_allowed_to_edit(null, true)) {
-                                if (!$is_locked_attendance || api_is_platform_admin()) {
-                                    echo '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" '.$disabled.' '.$checked.' />';
-                                    echo '<span class="anchor_'.$calendar['id'].'"></span>';
-                                } else {
-                                    echo $presence ? Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Presence'), null, ICON_SIZE_TINY);
-                                }
-                            } else {
-                                switch ($presence) {
+                    if (api_is_allowed_to_edit(null, true)) {
+                        if (!$is_locked_attendance || api_is_platform_admin()) {
+                            echo '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" '.$disabled.' '.$checked.' />';
+                            echo '<span class="anchor_'.$calendar['id'].'"></span>';
+                        } else {
+                            echo $presence ? Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Presence'), null, ICON_SIZE_TINY);
+                        }
+                    } else {
+                        switch ($presence) {
                                     case 1:
                                         echo Display::return_icon('accept.png', get_lang('Attended'));
                                         break;
@@ -375,36 +375,37 @@ if (api_is_allowed_to_edit(null, true) ||
                                         //echo Display::return_icon('warning.png',get_lang('NotAttended'));
                                         break;
                                 }
-                            }
+                    }
 
-                            echo '</div>';
-                            echo '</td>';
-                        }
-                    } else {
-                        $calendarClass = null;
-                        if (isset($calendar)) {
-                            $calendarClass = "checkboxes_col_".$calendar['id'];
-                        }
-                        echo '<td class="'.$calendarClass.'">';
-                        echo '<div>';
-                        echo '<center>&nbsp;</center>
+                    echo '</div>';
+                    echo '</td>';
+                }
+            } else {
+                $calendarClass = null;
+                if (isset($calendar)) {
+                    $calendarClass = "checkboxes_col_".$calendar['id'];
+                }
+                echo '<td class="'.$calendarClass.'">';
+                echo '<div>';
+                echo '<center>&nbsp;</center>
                         </div>
                         </td>';
-                    }
-                    echo '</tr>';
-                    $i++;
-                }
-                echo '</tbody></table>';
-                echo '</div></div>';
-                ?>
+            }
+            echo '</tr>';
+            $i++;
+        }
+        echo '</tbody></table>';
+        echo '</div></div>'; ?>
 
                 <div class="row">
                     <div class="col-md-12">
                     <?php if (!$is_locked_attendance || api_is_platform_admin()) {
-                        if (api_is_allowed_to_edit(null, true)) { ?>
-                            <button type="submit" class="btn btn-primary"><?php echo get_lang('Save') ?></button>
-                    <?php }
-                    } ?>
+            if (api_is_allowed_to_edit(null, true)) {
+                ?>
+                            <button type="submit" class="btn btn-primary"><?php echo get_lang('Save'); ?></button>
+                    <?php
+            }
+        } ?>
                     </div>
                 </div>
         </form>
@@ -419,24 +420,25 @@ if (api_is_allowed_to_edit(null, true) ||
     }
 } else {
     echo Display::page_header(get_lang('AttendanceSheetReport'));
-    // View for students
-    ?>
-    <?php if (!empty($users_presence)) { ?>
+    // View for students ?>
+    <?php if (!empty($users_presence)) {
+        ?>
         <div>
             <table width="250px;">
                 <tr>
-                    <td><?php echo get_lang('ToAttend').': ' ?></td>
+                    <td><?php echo get_lang('ToAttend').': '; ?></td>
                     <td>
-                        <center><div class="attendance-faults-bar" style="background-color:<?php echo (!empty($faults['color_bar']) ? $faults['color_bar'] : 'none') ?>">
-                        <?php echo $faults['faults'].'/'.$faults['total'].' ('.$faults['faults_porcent'].'%)' ?></div></center>
+                        <center><div class="attendance-faults-bar" style="background-color:<?php echo !empty($faults['color_bar']) ? $faults['color_bar'] : 'none'; ?>">
+                        <?php echo $faults['faults'].'/'.$faults['total'].' ('.$faults['faults_porcent'].'%)'; ?></div></center>
                     </td>
                 </tr>
             </table>
         </div>
-    <?php } ?>
+    <?php
+    } ?>
     <table class="data_table">
         <tr class="row_odd" >
-            <th><?php echo get_lang('Attendance')?></th>
+            <th><?php echo get_lang('Attendance'); ?></th>
         </tr>
         <?php
 
@@ -448,20 +450,22 @@ if (api_is_allowed_to_edit(null, true) ||
                     $class = 'row_even';
                 } else {
                     $class = 'row_odd';
-                }
-                ?>
-                <tr class="<?php echo $class ?>">
+                } ?>
+                <tr class="<?php echo $class; ?>">
                     <td>
-                        <?php echo $presence['presence'] ? Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Presence'), null, ICON_SIZE_TINY) ?>
-                        <?php echo "&nbsp; ".$presence['date_time'] ?>
+                        <?php echo $presence['presence'] ? Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Presence'), null, ICON_SIZE_TINY); ?>
+                        <?php echo "&nbsp; ".$presence['date_time']; ?>
                     </td>
                 </tr>
-            <?php }
-        } else { ?>
+            <?php
+            }
+        } else {
+            ?>
             <tr><td>
-                <center><?php echo get_lang('YouDoNotHaveDoneAttendances')?></center></td>
+                <center><?php echo get_lang('YouDoNotHaveDoneAttendances'); ?></center></td>
             </tr>
-        <?php }
-        ?>
+        <?php
+        } ?>
     </table>
-<?php } ?>
+<?php
+} ?>

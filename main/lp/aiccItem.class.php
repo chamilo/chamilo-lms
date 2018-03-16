@@ -4,10 +4,13 @@
 /**
  * Class aiccItem
  * This class handles the elements from an AICC Descriptor file.
- * Container for the aiccItem class that deals with AICC Assignable Units (AUs)
+ * Container for the aiccItem class that deals with AICC Assignable Units (AUs).
+ *
  * @package chamilo.learnpath
+ *
  * @author  Yannick Warnier    <ywarnier@beeznest.org>
  * @license GNU/GPL
+ *
  * @package chamilo.learnpath
  */
 class aiccItem extends learnpathItem
@@ -16,7 +19,7 @@ class aiccItem extends learnpathItem
     public $identifierref = '';
     public $parameters = ''; // AICC AU's web_launch
     public $title = ''; // no AICC equivalent
-    public $sub_items = array(); // AICC elements (des)
+    public $sub_items = []; // AICC elements (des)
     //public $prerequisites = ''; // defined in learnpathItem.class.php
     //public $max_score = ''; // defined in learnpathItem
     //public $path = ''; // defined in learnpathItem
@@ -31,11 +34,12 @@ class aiccItem extends learnpathItem
 
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormItem
-     * object from database records or from the array given as second parameter
+     * object from database records or from the array given as second parameter.
+     *
      * @param	string	Type of construction needed ('db' or 'config', default = 'config')
      * @param	mixed	Depending on the type given, DB id for the lp_item or parameters array
      */
-    public function __construct($type = 'config', $params = array(), $course_id = null)
+    public function __construct($type = 'config', $params = [], $course_id = null)
     {
         if (isset($params)) {
             switch ($type) {
@@ -43,6 +47,7 @@ class aiccItem extends learnpathItem
                     parent::__construct($params, api_get_user_id(), $course_id);
                     $this->aicc_contact = false;
                     //TODO: Implement this way of metadata object creation.
+                    // no break
                 case 'config': // Do the same as the default.
                 default:
                     //if($first_item->type == XML_ELEMENT_NODE) this is already check prior to the call to this function
@@ -102,15 +107,16 @@ class aiccItem extends learnpathItem
     }
 
     /**
-     * Builds a flat list with the current item and calls itself recursively on all children
+     * Builds a flat list with the current item and calls itself recursively on all children.
+     *
      * @param	array	Reference to the array to complete with the current item
-     * @param	integer	Optional absolute order (pointer) of the item in this learning path
-     * @param	integer	Optional relative order of the item at this level
-     * @param	integer	Optional level. If not given, assumes it's level 0
+     * @param	int	Optional absolute order (pointer) of the item in this learning path
+     * @param	int	Optional relative order of the item at this level
+     * @param	int	Optional level. If not given, assumes it's level 0
      */
-    function get_flat_list(&$list, &$abs_order, $rel_order = 1, $level = 0)
+    public function get_flat_list(&$list, &$abs_order, $rel_order = 1, $level = 0)
     {
-        $list[] = array(
+        $list[] = [
             'au_type' => $this->au_type,
             'command_line' => $this->command_line,
             'core_vendor' => $this->core_vendor,
@@ -122,11 +128,11 @@ class aiccItem extends learnpathItem
             'parameters' => $this->parameters,
             'prerequisites' => (!empty($this->prereq_string) ? $this->prereq_string : ''),
             'timelimitaction' => $this->timelimitaction,
-        );
+        ];
         $abs_order++;
         $i = 1;
         foreach ($this->sub_items as $id => $dummy) {
-            $oSubitem = & $this->sub_items[$id];
+            $oSubitem = &$this->sub_items[$id];
             $oSubitem->get_flat_list($list, $abs_order, $i, $level + 1);
             $i++;
         }
@@ -134,9 +140,10 @@ class aiccItem extends learnpathItem
 
     /**
      * Save function. Uses the parent save function and adds a layer for AICC.
-     * @param	boolean	Save from URL params (1) or from object attributes (0)
+     *
+     * @param	bool	Save from URL params (1) or from object attributes (0)
      */
-    function save($from_outside = true, $prereqs_complete = false)
+    public function save($from_outside = true, $prereqs_complete = false)
     {
         parent::save($from_outside, $prereqs_complete = false);
         // Under certain conditions, the scorm_contact should not be set, because no scorm signal was sent.

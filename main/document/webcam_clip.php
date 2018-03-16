@@ -9,9 +9,10 @@ use ChamiloSession as Session;
  * @package chamilo.document
  *
  * @author Juan Carlos Raña Trabado herodoto@telefonica.net
+ *
  * @since 7/jun/2012
  * @Updated 04/09/2015 Upgrade to WebCamJS
-*/
+ */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -78,10 +79,10 @@ if (!is_dir($filepath)) {
 $groupId = api_get_group_id();
 
 if (!empty($groupId)) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => "../group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace')
-    );
+        "name" => get_lang('GroupSpace'),
+    ];
     $noPHP_SELF = true;
     $group = GroupManager :: get_group_properties($groupId);
     $path = explode('/', $dir);
@@ -90,10 +91,10 @@ if (!empty($groupId)) {
     }
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => "./document.php?id=".$document_id."&".api_get_cidreq(),
-    "name" => get_lang('Documents')
-);
+    "name" => get_lang('Documents'),
+];
 
 if (!api_is_allowed_in_course()) {
     api_not_allowed(true);
@@ -126,10 +127,10 @@ if (isset($document_data['parents'])) {
                 continue;
             }
         }
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => $document_sub_data['document_url'],
-            'name' => $document_sub_data['title']
-        );
+            'name' => $document_sub_data['title'],
+        ];
         $counter++;
     }
 }

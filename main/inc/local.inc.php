@@ -1,12 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use ChamiloSession as Session;
 
 /**
- *
- *                             SCRIPT PURPOSE
+ *                             SCRIPT PURPOSE.
  *
  * This script initializes and manages Chamilo session information. It
  * keeps available session information up to date.
@@ -61,56 +60,56 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
  *
  * COURSE VARIABLES
  * see the function get_course_info_with_category
-* boolean $is_courseMember
-* boolean $is_courseTutor
-* boolean $is_courseAdmin
-*
-*
-* GROUP VARIABLES
-*
-* int     $_gid (the group id)
-*
-*
-*                       IMPORTANT ADVICE FOR DEVELOPERS
-*
-* We strongly encourage developers to use a connection layer at the top of
-* their scripts rather than use these variables, as they are, inside the core
-* of their scripts. It will make code maintenance much easier.
-*
-*    Many if the functions you need you can already find in the
-*    main_api.lib.php
-*
-* We encourage you to use functions to access these global "kernel" variables.
-* You can add them to e.g. the main API library.
-*
-*
-*                               SCRIPT STRUCTURE
-*
-* 1. The script determines if there is an authentication attempt. This part
-* only chek if the login name and password are valid. Afterwards, it set the
-* $_user['user_id'] (user id) and the $uidReset flag. Other user informations are retrieved
-* later. It's also in this section that optional external authentication
-* devices step in.
-*
-* 2. The script determines what other session informations have to be set or
-* reset, setting correctly $cidReset (for course) and $gidReset (for group).
-*
-* 3. If needed, the script retrieves the other user informations (first name,
-*   last name, ...) and stores them in session.
-*
-* 4. If needed, the script retrieves the course information and stores them
-* in session
-*
-* 5. The script initializes the user permission status and permission for the
-* course level
-*
-* 6. If needed, the script retrieves group informations an store them in
-* session.
-*
-* 7. The script initializes the user status and permission for the group level.
-*
-*    @package chamilo.include
-*/
+ * boolean $is_courseMember
+ * boolean $is_courseTutor
+ * boolean $is_courseAdmin
+ *
+ *
+ * GROUP VARIABLES
+ *
+ * int     $_gid (the group id)
+ *
+ *
+ *                       IMPORTANT ADVICE FOR DEVELOPERS
+ *
+ * We strongly encourage developers to use a connection layer at the top of
+ * their scripts rather than use these variables, as they are, inside the core
+ * of their scripts. It will make code maintenance much easier.
+ *
+ *    Many if the functions you need you can already find in the
+ *    main_api.lib.php
+ *
+ * We encourage you to use functions to access these global "kernel" variables.
+ * You can add them to e.g. the main API library.
+ *
+ *
+ *                               SCRIPT STRUCTURE
+ *
+ * 1. The script determines if there is an authentication attempt. This part
+ * only chek if the login name and password are valid. Afterwards, it set the
+ * $_user['user_id'] (user id) and the $uidReset flag. Other user informations are retrieved
+ * later. It's also in this section that optional external authentication
+ * devices step in.
+ *
+ * 2. The script determines what other session informations have to be set or
+ * reset, setting correctly $cidReset (for course) and $gidReset (for group).
+ *
+ * 3. If needed, the script retrieves the other user informations (first name,
+ *   last name, ...) and stores them in session.
+ *
+ * 4. If needed, the script retrieves the course information and stores them
+ * in session
+ *
+ * 5. The script initializes the user permission status and permission for the
+ * course level
+ *
+ * 6. If needed, the script retrieves group informations an store them in
+ * session.
+ *
+ * 7. The script initializes the user status and permission for the group level.
+ *
+ *    @package chamilo.include
+ */
 
 // Verified if exists the username and password in session current
 
@@ -154,7 +153,7 @@ if (!empty($logout) || !empty($cidReset)) {
     $logoutInfo = [
         'uid' => $uid,
         'cid' => $cid,
-        'sid' => api_get_session_id()
+        'sid' => api_get_session_id(),
     ];
 }
 
@@ -183,7 +182,7 @@ if (isset($cDir) && empty($cidReq)) {
         $cidReq = $c;
     }
     if (empty($cidReset)) {
-        if (!isset($_SESSION['_cid']) OR (isset($_SESSION['_cid']) && $cidReq != $_SESSION['_cid'])) {
+        if (!isset($_SESSION['_cid']) or (isset($_SESSION['_cid']) && $cidReq != $_SESSION['_cid'])) {
             $cidReset = $cidReq;
         }
     }
@@ -272,7 +271,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
     $cas_login = false;
     if ($cas_activated && !isset($_user['user_id']) && !isset($_POST['login']) && !$logout) {
-        require_once(api_get_path(SYS_PATH).'main/auth/cas/authcas.php');
+        require_once api_get_path(SYS_PATH).'main/auth/cas/authcas.php';
         $cas_login = cas_is_authenticated();
     }
 
@@ -338,7 +337,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 if (isset($blockedUntilDate) && !empty($blockedUntilDate)) {
                     if (time() > api_strtotime($blockedUntilDate, 'UTC')) {
                         api_clean_account_captcha($login);
-
                     } else {
                         $loginFailed = true;
                         Session::erase('_uid');
@@ -430,7 +428,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         //Check if this admin have the access_url_id = 1 which means the principal
                                         ConditionalLogin::check_conditions($uData);
                                         $_user['user_id'] = $uData['user_id'];
-                                        $_user['status']  = $uData['status'];
+                                        $_user['status'] = $uData['status'];
                                         Session::write('_user', $_user);
                                         Event::eventLogin($_user['user_id']);
                                         $logging_in = true;
@@ -438,7 +436,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         //This means a secondary admin wants to login so we check as he's a normal user
                                         if (in_array($current_access_url_id, $my_url_list)) {
                                             $_user['user_id'] = $uData['user_id'];
-                                            $_user['status']  = $uData['status'];
+                                            $_user['status'] = $uData['status'];
                                             Session::write('_user', $_user);
                                             Event::eventLogin($_user['user_id']);
                                             $logging_in = true;
@@ -462,7 +460,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                 Session::write('_user', $_user);
                                 Event::eventLogin($uData['user_id']);
                                 $logging_in = true;
-
                             }
                         } else {
                             $loginFailed = true;
@@ -541,8 +538,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
                 /* >>>>>>>> External authentication modules <<<<<<<<< */
                 // see configuration.php to define these
-                include_once($extAuthSource[$key]['login']);
-                /* >>>>>>>> External authentication modules <<<<<<<<< */
+                include_once $extAuthSource[$key]['login'];
+            /* >>>>>>>> External authentication modules <<<<<<<<< */
             } else { // no standard Chamilo login - try external authentification
                 //huh... nothing to do... we shouldn't get here
                 error_log(
@@ -575,7 +572,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
                     /* >>>>>>>> External authentication modules <<<<<<<<< */
                     // see configuration.php to define these
-                    include_once($extAuthSource[$key]['login']);
+                    include_once $extAuthSource[$key]['login'];
                 }
             } else {
                 // change after the external authentication
@@ -606,10 +603,10 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             if (isset($extAuthSource) && is_array($extAuthSource)) {
                 foreach ($extAuthSource as $thisAuthSource) {
                     if (!empty($thisAuthSource['login']) && file_exists($thisAuthSource['login'])) {
-                        include_once($thisAuthSource['login']);
+                        include_once $thisAuthSource['login'];
                     }
                     if (isset($thisAuthSource['newUser']) && file_exists($thisAuthSource['newUser'])) {
-                        include_once($thisAuthSource['newUser']);
+                        include_once $thisAuthSource['newUser'];
                     } else {
                         error_log(
                             'Chamilo Authentication external file'.
@@ -637,7 +634,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         ) {
         /**
          * TODO:
-         * - Work on a better validation for webservices paths. Current is very poor and exit
+         * - Work on a better validation for webservices paths. Current is very poor and exit.
          */
         $subsso = api_get_setting('sso_authentication_subclass');
         if (!empty($subsso)) {
@@ -670,7 +667,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 // Redirect to master server
                 $osso->ask_master();
             } elseif (isset($_REQUEST['sso_cookie'])) {
-
                 // Here we are going to check the origin of
                 // what the call says should be used for
                 // authentication, and ensure  we know it
@@ -732,8 +728,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             openid_begin(trim($_POST['openid_url']), api_get_path(WEB_PATH).'index.php');
             //this last function should trigger a redirect, so we can die here safely
             die('Openid login redirection should be in progress');
-        } elseif (!empty($_GET['openid_identity'])) {
-            //it's usual for PHP to replace '.' (dot) by '_' (underscore) in URL parameters
+        } elseif (!empty($_GET['openid_identity'])) { //it's usual for PHP to replace '.' (dot) by '_' (underscore) in URL parameters
             include(api_get_path(SYS_CODE_PATH).'auth/openid/login.php');
             $res = openid_complete($_GET);
             if ($res['status'] == 'success') {
@@ -880,7 +875,7 @@ if (isset($uidReset) && $uidReset) {
             $uData = Database::fetch_array($result);
             $_user = _api_format_user($uData, false);
             $is_platformAdmin = (bool) (!is_null($uData['is_admin']));
-            $is_allowedCreateCourse = (bool) (($uData ['status'] == COURSEMANAGER) || (api_get_setting('drhCourseManagerRights') && $uData['status'] == DRH));
+            $is_allowedCreateCourse = (bool) (($uData['status'] == COURSEMANAGER) || (api_get_setting('drhCourseManagerRights') && $uData['status'] == DRH));
             ConditionalLogin::check_conditions($uData);
 
             Session::write('_user', $_user);
@@ -955,7 +950,6 @@ if (isset($cidReset) && $cidReset) {
                 } else {
                     api_not_allowed(true);
                 }
-
             } else {
                 Session::erase('session_name');
                 Session::erase('id_session');
@@ -1060,7 +1054,7 @@ if (isset($cidReset) && $cidReset) {
             $result = Database::query($sql);
             if (Database::num_rows($result) > 0) { // This group has recorded status related to this course
                 $gpData = Database::fetch_array($result);
-                $_gid = $gpData ['id'];
+                $_gid = $gpData['id'];
                 Session::write('_gid', $_gid);
             }
         }
@@ -1116,8 +1110,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
             $termAndConditionStatus = api_check_term_condition($user_id);
             // @todo not sure why we need the login password and update_term_status
             if ($termAndConditionStatus === false) {
-                Session::write('term_and_condition', array('user_id' => $user_id));
-
+                Session::write('term_and_condition', ['user_id' => $user_id]);
             } else {
                 Session::erase('term_and_condition');
             }
@@ -1173,7 +1166,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                 ) {
                     $redirect = false;
                 }
-                if ($redirect && !api_is_platform_admin())  {
+                if ($redirect && !api_is_platform_admin()) {
                     $url = api_get_path(WEB_CODE_PATH).'auth/inscription.php';
                     header("Location:".$url);
                     exit;
@@ -1228,11 +1221,11 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 
                 // Am I a session admin?
                 if (isset($row) && isset($row[0]) && $row[0]['session_admin_id'] == $user_id) {
-                    $is_courseMember     = false;
-                    $is_courseTutor      = false;
-                    $is_courseAdmin      = false;
+                    $is_courseMember = false;
+                    $is_courseTutor = false;
+                    $is_courseAdmin = false;
                     $is_session_general_coach = false;
-                    $is_sessionAdmin     = true;
+                    $is_sessionAdmin = true;
                 } else {
                     // Am I a session coach for this session?
                     $sql = "SELECT session.id, session.id_coach 
@@ -1473,7 +1466,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     $is_courseTutor = isset($_SESSION['is_courseTutor']) ? $_SESSION['is_courseTutor'] : false;
     $is_session_general_coach = isset($_SESSION['is_session_general_coach']) ? $_SESSION['is_session_general_coach'] : false;
     $is_courseMember = isset($_SESSION['is_courseMember']) ? $_SESSION['is_courseMember'] : false;
-    $is_allowed_in_course = isset($_SESSION ['is_allowed_in_course']) ? $_SESSION ['is_allowed_in_course'] : false;
+    $is_allowed_in_course = isset($_SESSION['is_allowed_in_course']) ? $_SESSION['is_allowed_in_course'] : false;
 }
 
 //set variable according to student_view_enabled choices

@@ -4,23 +4,25 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * A SurveyQuestion
+ * A SurveyQuestion.
+ *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ *
  * @package chamilo.backup
  */
 class SurveyQuestion extends Resource
 {
     /**
-     * Survey ID
+     * Survey ID.
      */
     public $survey_id;
     /**
-     * Question and question comment
+     * Question and question comment.
      */
     public $survey_question;
     public $survey_question_comment;
     /**
-     * Question type
+     * Question type.
      */
     public $survey_question_type;
     /**
@@ -28,39 +30,41 @@ class SurveyQuestion extends Resource
      */
     public $display;
     /**
-     * Sorting order
+     * Sorting order.
      */
     public $sort;
     /**
-     * Shared question ID
+     * Shared question ID.
      */
     public $shared_question_id;
     /**
-     * Maximum value for the vote
+     * Maximum value for the vote.
      */
     public $max_value;
 
     /**
-     * Question's options
+     * Question's options.
      */
     public $options;
 
     /**
-     * Is this question required (0: no, 1: yes)
+     * Is this question required (0: no, 1: yes).
      */
     public $is_required;
+
     /**
-     * Create a new SurveyQuestion
-     * @param int $id
-     * @param int $survey_id
+     * Create a new SurveyQuestion.
+     *
+     * @param int    $id
+     * @param int    $survey_id
      * @param string $survey_question
      * @param string $survey_question_comment
      * @param string $type
      * @param string $display
-     * @param int $sort
-     * @param int $shared_question_id
-     * @param int $max_value
-     * @param int $is_required
+     * @param int    $sort
+     * @param int    $shared_question_id
+     * @param int    $max_value
+     * @param int    $is_required
      */
     public function __construct(
         $id,
@@ -83,26 +87,28 @@ class SurveyQuestion extends Resource
         $this->sort = $sort;
         $this->shared_question_id = $shared_question_id;
         $this->max_value = $max_value;
-        $this->answers = array();
+        $this->answers = [];
         if (api_get_configuration_value('allow_required_survey_questions')) {
             $this->is_required = $is_required;
         }
     }
 
     /**
-     * Add an answer option to this SurveyQuestion
+     * Add an answer option to this SurveyQuestion.
+     *
      * @param string $option_text
-     * @param int $sort
+     * @param int    $sort
      */
     public function add_answer($option_text, $sort)
     {
-        $answer = array();
+        $answer = [];
         $answer['option_text'] = $option_text;
         $answer['sort'] = $sort;
         $this->answers[] = $answer;
     }
+
     /**
-     * Show this question
+     * Show this question.
      */
     public function show()
     {

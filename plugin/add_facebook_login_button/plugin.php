@@ -1,12 +1,14 @@
 <?php
 /**
  * This script is a configuration file for the date plugin. You can use it as a master for other platform plugins (course plugins are slightly different).
- * These settings will be used in the administration interface for plugins (Chamilo configuration settings->Plugins)
+ * These settings will be used in the administration interface for plugins (Chamilo configuration settings->Plugins).
+ *
  * @package chamilo.plugin
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 /**
- * Plugin details (must be present)
+ * Plugin details (must be present).
  */
 
 //the plugin title
@@ -37,4 +39,4 @@ $form->setDefaults($defaults);
 $plugin_info['settings_form'] = $form;
 
 // Set the templates that are going to be used
-$plugin_info['templates'] = array('template.tpl');
+$plugin_info['templates'] = ['template.tpl'];

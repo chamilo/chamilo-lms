@@ -6,20 +6,21 @@ use Chamilo\CourseBundle\Entity\CLp;
 /**
  * Class LearnpathList
  * This class is only a learning path list container with several practical methods for sorting the list and
- * provide links to specific paths
- * @uses    Database.lib.php to use the database
- * @uses    learnpath.class.php to generate learnpath objects to get in the list
- * @author Yannick Warnier <ywarnier@beeznest.org>
+ * provide links to specific paths.
  *
+ * @uses    \Database.lib.php to use the database
+ * @uses    \learnpath.class.php to generate learnpath objects to get in the list
+ *
+ * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 class LearnpathList
 {
     // Holds a flat list of learnpaths data from the database.
-    public $list = array();
+    public $list = [];
     // Holds a list of references to the learnpaths objects (only filled by get_refs()).
-    public $ref_list = array();
+    public $ref_list = [];
     // Holds a flat list of learnpaths sorted by alphabetical name order.
-    public $alpha_list = array();
+    public $alpha_list = [];
     public $course_code;
     public $user_id;
     public $refs_active = false;
@@ -28,13 +29,14 @@ class LearnpathList
      * This method is the constructor for the learnpathList. It gets a list of available learning paths from
      * the database and creates the learnpath objects. This list depends on the user that is connected
      * (only displays) items if he has enough permissions to view them.
-     * @param   integer $user_id
-     * @param   string $course_code Optional course code (otherwise we use api_get_course_id())
-     * @param   int $session_id Optional session id (otherwise we use api_get_session_id())
-     * @param   string $order_by
-     * @param   bool $check_publication_dates
-     * @param   int     $categoryId
-     * @param bool $ignoreCategoryFilter
+     *
+     * @param int    $user_id
+     * @param string $course_code             Optional course code (otherwise we use api_get_course_id())
+     * @param int    $session_id              Optional session id (otherwise we use api_get_session_id())
+     * @param string $order_by
+     * @param bool   $check_publication_dates
+     * @param int    $categoryId
+     * @param bool   $ignoreCategoryFilter
      */
     public function __construct(
         $user_id,
@@ -72,7 +74,7 @@ class LearnpathList
 
         $order = "ORDER BY lp.displayOrder ASC, lp.name ASC";
         if (isset($order_by)) {
-            $order = Database::parse_conditions(array('order' => $order_by));
+            $order = Database::parse_conditions(['order' => $order_by]);
         }
 
         $now = api_get_utc_datetime();
@@ -132,7 +134,6 @@ class LearnpathList
             if (Database::num_rows($res2) > 0) {
                 $row2 = Database::fetch_array($res2);
                 $pub = $row2['visibility'];
-
             } else {
                 $pub = 'i';
             }
@@ -157,7 +158,7 @@ class LearnpathList
                 }
             }
 
-            $this->list[$row->getIid()] = array(
+            $this->list[$row->getIid()] = [
                 'lp_type' => $row->getLpType(),
                 'lp_session' => $row->getSessionId(),
                 'lp_name' => stripslashes($row->getName()),
@@ -185,8 +186,8 @@ class LearnpathList
                 'subscribe_users' => $row->getSubscribeUsers(),
                 'lp_old_id' => $row->getId(),
                 'iid' => $row->getIid(),
-                'prerequisite' => $row->getPrerequisite()
-            );
+                'prerequisite' => $row->getPrerequisite(),
+            ];
             $names[$row->getName()] = $row->getIid();
         }
         asort($names);
@@ -195,8 +196,9 @@ class LearnpathList
 
     /**
      * Gets references to learnpaths for all learnpaths IDs kept in the local list.
-     * This applies a transformation internally on list and ref_list and returns a copy of the refs list
-     * @return array    List of references to learnpath objects
+     * This applies a transformation internally on list and ref_list and returns a copy of the refs list.
+     *
+     * @return array List of references to learnpath objects
      */
     public function get_refs()
     {
@@ -204,12 +206,14 @@ class LearnpathList
             $this->ref_list[$id] = new learnpath($this->course_code, $id, $this->user_id);
         }
         $this->refs_active = true;
+
         return $this->ref_list;
     }
 
     /**
-     * Gets a table of the different learnpaths we have at the moment
-     * @return array    Learnpath info as [lp_id] => ([lp_type]=> ..., [lp_name]=>...,[lp_desc]=>...,[lp_path]=>...)
+     * Gets a table of the different learnpaths we have at the moment.
+     *
+     * @return array Learnpath info as [lp_id] => ([lp_type]=> ..., [lp_name]=>...,[lp_desc]=>...,[lp_path]=>...)
      */
     public function get_flat_list()
     {
@@ -218,9 +222,11 @@ class LearnpathList
 
     /**
      *  Gets a list of lessons  of the given course_code and session_id
-     *  This functions doesn't need user_id
+     *  This functions doesn't need user_id.
+     *
      *  @param string $course_code Text code of the course
      *  @param int  $session_id Id of session
+     *
      *  @return array List of lessons with lessons id as keys
      */
     public static function get_course_lessons($course_code, $session_id)
@@ -232,7 +238,7 @@ class LearnpathList
         $sql_query = sprintf($sql, $course['real_id']);
         $result = Database::query($sql_query);
 
-        $lessons = array();
+        $lessons = [];
         while ($row = Database::fetch_array($result)) {
             if (api_get_item_visibility($course, 'learnpath', $row['id'], $session_id)) {
                 $lessons[$row['id']] = $row;

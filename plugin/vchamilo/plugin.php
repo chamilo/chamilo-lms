@@ -3,15 +3,16 @@
  * This script is a configuration file for the vchamilo plugin.
  * You can use it as a master for other platform plugins (course plugins are slightly different).
  * These settings will be used in the administration interface for plugins
- * (Chamilo configuration settings->Plugins)
+ * (Chamilo configuration settings->Plugins).
+ *
  * @package chamilo.plugin
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
-
 global $_configuration;
 
 /**
- * Plugin details (must be present)
+ * Plugin details (must be present).
  */
 
 /* Plugin config */
@@ -36,7 +37,7 @@ $form = new FormValidator('vchamilo_form');
 
 $plugin = VChamiloPlugin::create();
 
-$form_settings = array(
+$form_settings = [
     'enable_virtualisation' => Virtual::getConfig('vchamilo', 'enable_virtualisation', true),
     'httpproxyhost' => Virtual::getConfig('vchamilo', 'httpproxyhost', true),
     'httpproxyport' => Virtual::getConfig('vchamilo', 'httpproxyport', true),
@@ -49,14 +50,14 @@ $form_settings = array(
     'archive_real_root' => Virtual::getConfig('vchamilo', 'archive_real_root', true),
     'home_real_root' => Virtual::getConfig('vchamilo', 'home_real_root', true),
     'upload_real_root' => Virtual::getConfig('vchamilo', 'upload_real_root', true),
-);
+];
 
 $form->setDefaults($form_settings);
 
 $wwwroot = $_configuration['root_web'];
 
 //A simple select
-$options = array(0 => $plugin->get_lang('no'), 1 => $plugin->get_lang('yes'));
+$options = [0 => $plugin->get_lang('no'), 1 => $plugin->get_lang('yes')];
 $form->addLabel(
     '',
     '<a class="btn btn-primary" href="'.api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php">'.
@@ -100,4 +101,4 @@ $form->addButtonSave($plugin->get_lang('Save'));
 $plugin_info['settings_form'] = $form;
 
 //set the templates that are going to be used
-$plugin_info['templates'] = array('template.tpl');
+$plugin_info['templates'] = ['template.tpl'];

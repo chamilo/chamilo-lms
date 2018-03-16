@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CSurvey
+ * CSurvey.
  *
  * @ORM\Table(
  *  name="c_survey",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CSurvey
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -29,14 +29,14 @@ class CSurvey
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="survey_id", type="integer")
      */
@@ -127,14 +127,14 @@ class CSurvey
     private $creationDate;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="invited", type="integer", nullable=false)
      */
     private $invited;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="answered", type="integer", nullable=false)
      */
@@ -176,14 +176,14 @@ class CSurvey
     private $accessCondition;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="shuffle", type="boolean", nullable=false)
      */
     private $shuffle;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="one_question_per_page", type="boolean", nullable=false)
      */
@@ -197,21 +197,21 @@ class CSurvey
     private $surveyVersion;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="parent_id", type="integer", nullable=false)
      */
     private $parentId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="survey_type", type="integer", nullable=false)
      */
     private $surveyType;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="show_form_profile", type="integer", nullable=false)
      */
@@ -225,23 +225,24 @@ class CSurvey
     private $formFields;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="visible_results", type="integer", nullable=true)
      */
     private $visibleResults;
 
     /**
-     * Set code
+     * Set code.
      *
      * @param string $code
+     *
      * @return CSurvey
      */
     public function setCode($code)
@@ -252,7 +253,7 @@ class CSurvey
     }
 
     /**
-     * Get code
+     * Get code.
      *
      * @return string
      */
@@ -262,9 +263,10 @@ class CSurvey
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return CSurvey
      */
     public function setTitle($title)
@@ -275,7 +277,7 @@ class CSurvey
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -285,9 +287,10 @@ class CSurvey
     }
 
     /**
-     * Set subtitle
+     * Set subtitle.
      *
      * @param string $subtitle
+     *
      * @return CSurvey
      */
     public function setSubtitle($subtitle)
@@ -298,7 +301,7 @@ class CSurvey
     }
 
     /**
-     * Get subtitle
+     * Get subtitle.
      *
      * @return string
      */
@@ -308,9 +311,10 @@ class CSurvey
     }
 
     /**
-     * Set author
+     * Set author.
      *
      * @param string $author
+     *
      * @return CSurvey
      */
     public function setAuthor($author)
@@ -321,7 +325,7 @@ class CSurvey
     }
 
     /**
-     * Get author
+     * Get author.
      *
      * @return string
      */
@@ -331,9 +335,10 @@ class CSurvey
     }
 
     /**
-     * Set lang
+     * Set lang.
      *
      * @param string $lang
+     *
      * @return CSurvey
      */
     public function setLang($lang)
@@ -344,7 +349,7 @@ class CSurvey
     }
 
     /**
-     * Get lang
+     * Get lang.
      *
      * @return string
      */
@@ -354,9 +359,10 @@ class CSurvey
     }
 
     /**
-     * Set availFrom
+     * Set availFrom.
      *
      * @param \DateTime $availFrom
+     *
      * @return CSurvey
      */
     public function setAvailFrom($availFrom)
@@ -367,7 +373,7 @@ class CSurvey
     }
 
     /**
-     * Get availFrom
+     * Get availFrom.
      *
      * @return \DateTime
      */
@@ -377,9 +383,10 @@ class CSurvey
     }
 
     /**
-     * Set availTill
+     * Set availTill.
      *
      * @param \DateTime $availTill
+     *
      * @return CSurvey
      */
     public function setAvailTill($availTill)
@@ -390,7 +397,7 @@ class CSurvey
     }
 
     /**
-     * Get availTill
+     * Get availTill.
      *
      * @return \DateTime
      */
@@ -400,9 +407,10 @@ class CSurvey
     }
 
     /**
-     * Set isShared
+     * Set isShared.
      *
      * @param string $isShared
+     *
      * @return CSurvey
      */
     public function setIsShared($isShared)
@@ -413,7 +421,7 @@ class CSurvey
     }
 
     /**
-     * Get isShared
+     * Get isShared.
      *
      * @return string
      */
@@ -423,9 +431,10 @@ class CSurvey
     }
 
     /**
-     * Set template
+     * Set template.
      *
      * @param string $template
+     *
      * @return CSurvey
      */
     public function setTemplate($template)
@@ -436,7 +445,7 @@ class CSurvey
     }
 
     /**
-     * Get template
+     * Get template.
      *
      * @return string
      */
@@ -446,9 +455,10 @@ class CSurvey
     }
 
     /**
-     * Set intro
+     * Set intro.
      *
      * @param string $intro
+     *
      * @return CSurvey
      */
     public function setIntro($intro)
@@ -459,7 +469,7 @@ class CSurvey
     }
 
     /**
-     * Get intro
+     * Get intro.
      *
      * @return string
      */
@@ -469,9 +479,10 @@ class CSurvey
     }
 
     /**
-     * Set surveythanks
+     * Set surveythanks.
      *
      * @param string $surveythanks
+     *
      * @return CSurvey
      */
     public function setSurveythanks($surveythanks)
@@ -482,7 +493,7 @@ class CSurvey
     }
 
     /**
-     * Get surveythanks
+     * Get surveythanks.
      *
      * @return string
      */
@@ -492,9 +503,10 @@ class CSurvey
     }
 
     /**
-     * Set creationDate
+     * Set creationDate.
      *
      * @param \DateTime $creationDate
+     *
      * @return CSurvey
      */
     public function setCreationDate($creationDate)
@@ -505,7 +517,7 @@ class CSurvey
     }
 
     /**
-     * Get creationDate
+     * Get creationDate.
      *
      * @return \DateTime
      */
@@ -515,9 +527,10 @@ class CSurvey
     }
 
     /**
-     * Set invited
+     * Set invited.
      *
-     * @param integer $invited
+     * @param int $invited
+     *
      * @return CSurvey
      */
     public function setInvited($invited)
@@ -528,9 +541,9 @@ class CSurvey
     }
 
     /**
-     * Get invited
+     * Get invited.
      *
-     * @return integer
+     * @return int
      */
     public function getInvited()
     {
@@ -538,9 +551,10 @@ class CSurvey
     }
 
     /**
-     * Set answered
+     * Set answered.
      *
-     * @param integer $answered
+     * @param int $answered
+     *
      * @return CSurvey
      */
     public function setAnswered($answered)
@@ -551,9 +565,9 @@ class CSurvey
     }
 
     /**
-     * Get answered
+     * Get answered.
      *
-     * @return integer
+     * @return int
      */
     public function getAnswered()
     {
@@ -561,9 +575,10 @@ class CSurvey
     }
 
     /**
-     * Set inviteMail
+     * Set inviteMail.
      *
      * @param string $inviteMail
+     *
      * @return CSurvey
      */
     public function setInviteMail($inviteMail)
@@ -574,7 +589,7 @@ class CSurvey
     }
 
     /**
-     * Get inviteMail
+     * Get inviteMail.
      *
      * @return string
      */
@@ -584,9 +599,10 @@ class CSurvey
     }
 
     /**
-     * Set reminderMail
+     * Set reminderMail.
      *
      * @param string $reminderMail
+     *
      * @return CSurvey
      */
     public function setReminderMail($reminderMail)
@@ -597,7 +613,7 @@ class CSurvey
     }
 
     /**
-     * Get reminderMail
+     * Get reminderMail.
      *
      * @return string
      */
@@ -607,9 +623,10 @@ class CSurvey
     }
 
     /**
-     * Set mailSubject
+     * Set mailSubject.
      *
      * @param string $mailSubject
+     *
      * @return CSurvey
      */
     public function setMailSubject($mailSubject)
@@ -620,7 +637,7 @@ class CSurvey
     }
 
     /**
-     * Get mailSubject
+     * Get mailSubject.
      *
      * @return string
      */
@@ -630,9 +647,10 @@ class CSurvey
     }
 
     /**
-     * Set anonymous
+     * Set anonymous.
      *
      * @param string $anonymous
+     *
      * @return CSurvey
      */
     public function setAnonymous($anonymous)
@@ -643,7 +661,7 @@ class CSurvey
     }
 
     /**
-     * Get anonymous
+     * Get anonymous.
      *
      * @return string
      */
@@ -653,9 +671,10 @@ class CSurvey
     }
 
     /**
-     * Set accessCondition
+     * Set accessCondition.
      *
      * @param string $accessCondition
+     *
      * @return CSurvey
      */
     public function setAccessCondition($accessCondition)
@@ -666,7 +685,7 @@ class CSurvey
     }
 
     /**
-     * Get accessCondition
+     * Get accessCondition.
      *
      * @return string
      */
@@ -676,9 +695,10 @@ class CSurvey
     }
 
     /**
-     * Set shuffle
+     * Set shuffle.
      *
-     * @param boolean $shuffle
+     * @param bool $shuffle
+     *
      * @return CSurvey
      */
     public function setShuffle($shuffle)
@@ -689,9 +709,9 @@ class CSurvey
     }
 
     /**
-     * Get shuffle
+     * Get shuffle.
      *
-     * @return boolean
+     * @return bool
      */
     public function getShuffle()
     {
@@ -699,9 +719,10 @@ class CSurvey
     }
 
     /**
-     * Set oneQuestionPerPage
+     * Set oneQuestionPerPage.
      *
-     * @param boolean $oneQuestionPerPage
+     * @param bool $oneQuestionPerPage
+     *
      * @return CSurvey
      */
     public function setOneQuestionPerPage($oneQuestionPerPage)
@@ -712,9 +733,9 @@ class CSurvey
     }
 
     /**
-     * Get oneQuestionPerPage
+     * Get oneQuestionPerPage.
      *
-     * @return boolean
+     * @return bool
      */
     public function getOneQuestionPerPage()
     {
@@ -722,9 +743,10 @@ class CSurvey
     }
 
     /**
-     * Set surveyVersion
+     * Set surveyVersion.
      *
      * @param string $surveyVersion
+     *
      * @return CSurvey
      */
     public function setSurveyVersion($surveyVersion)
@@ -735,7 +757,7 @@ class CSurvey
     }
 
     /**
-     * Get surveyVersion
+     * Get surveyVersion.
      *
      * @return string
      */
@@ -745,9 +767,10 @@ class CSurvey
     }
 
     /**
-     * Set parentId
+     * Set parentId.
      *
-     * @param integer $parentId
+     * @param int $parentId
+     *
      * @return CSurvey
      */
     public function setParentId($parentId)
@@ -758,9 +781,9 @@ class CSurvey
     }
 
     /**
-     * Get parentId
+     * Get parentId.
      *
-     * @return integer
+     * @return int
      */
     public function getParentId()
     {
@@ -768,9 +791,10 @@ class CSurvey
     }
 
     /**
-     * Set surveyType
+     * Set surveyType.
      *
-     * @param integer $surveyType
+     * @param int $surveyType
+     *
      * @return CSurvey
      */
     public function setSurveyType($surveyType)
@@ -781,9 +805,9 @@ class CSurvey
     }
 
     /**
-     * Get surveyType
+     * Get surveyType.
      *
-     * @return integer
+     * @return int
      */
     public function getSurveyType()
     {
@@ -791,9 +815,10 @@ class CSurvey
     }
 
     /**
-     * Set showFormProfile
+     * Set showFormProfile.
      *
-     * @param integer $showFormProfile
+     * @param int $showFormProfile
+     *
      * @return CSurvey
      */
     public function setShowFormProfile($showFormProfile)
@@ -804,9 +829,9 @@ class CSurvey
     }
 
     /**
-     * Get showFormProfile
+     * Get showFormProfile.
      *
-     * @return integer
+     * @return int
      */
     public function getShowFormProfile()
     {
@@ -814,9 +839,10 @@ class CSurvey
     }
 
     /**
-     * Set formFields
+     * Set formFields.
      *
      * @param string $formFields
+     *
      * @return CSurvey
      */
     public function setFormFields($formFields)
@@ -827,7 +853,7 @@ class CSurvey
     }
 
     /**
-     * Get formFields
+     * Get formFields.
      *
      * @return string
      */
@@ -837,9 +863,10 @@ class CSurvey
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return CSurvey
      */
     public function setSessionId($sessionId)
@@ -850,9 +877,9 @@ class CSurvey
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -860,9 +887,10 @@ class CSurvey
     }
 
     /**
-     * Set visibleResults
+     * Set visibleResults.
      *
-     * @param integer $visibleResults
+     * @param int $visibleResults
+     *
      * @return CSurvey
      */
     public function setVisibleResults($visibleResults)
@@ -873,9 +901,9 @@ class CSurvey
     }
 
     /**
-     * Get visibleResults
+     * Get visibleResults.
      *
-     * @return integer
+     * @return int
      */
     public function getVisibleResults()
     {
@@ -883,9 +911,10 @@ class CSurvey
     }
 
     /**
-     * Set surveyId
+     * Set surveyId.
      *
-     * @param integer $surveyId
+     * @param int $surveyId
+     *
      * @return CSurvey
      */
     public function setSurveyId($surveyId)
@@ -896,9 +925,9 @@ class CSurvey
     }
 
     /**
-     * Get surveyId
+     * Get surveyId.
      *
-     * @return integer
+     * @return int
      */
     public function getSurveyId()
     {
@@ -906,9 +935,10 @@ class CSurvey
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CSurvey
      */
     public function setCId($cId)
@@ -919,9 +949,9 @@ class CSurvey
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

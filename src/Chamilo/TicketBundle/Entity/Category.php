@@ -3,13 +3,10 @@
 
 namespace Chamilo\TicketBundle\Entity;
 
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
 
 /**
- * Category
+ * Category.
  *
  * @ORM\Table(name="ticket_category")
  * @ORM\Entity
@@ -17,7 +14,7 @@ use Chamilo\CoreBundle\Entity\Session;
 class Category
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -40,7 +37,7 @@ class Category
     protected $description;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="total_tickets", type="integer", nullable=false)
      */
@@ -58,11 +55,11 @@ class Category
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Project")
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
-     **/
+     */
     protected $project;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false, unique=false)
      */
@@ -76,7 +73,7 @@ class Category
     protected $insertDateTime;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="sys_lastedit_user_id", type="integer", nullable=true, unique=false)
      */
@@ -108,11 +105,13 @@ class Category
 
     /**
      * @param int $id
+     *
      * @return Category
      */
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -126,11 +125,13 @@ class Category
 
     /**
      * @param string $name
+     *
      * @return Category
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -144,11 +145,13 @@ class Category
 
     /**
      * @param string $description
+     *
      * @return Category
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -162,16 +165,18 @@ class Category
 
     /**
      * @param int $totalTickets
+     *
      * @return Category
      */
     public function setTotalTickets($totalTickets)
     {
         $this->totalTickets = $totalTickets;
+
         return $this;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isCourseRequired()
     {
@@ -179,12 +184,14 @@ class Category
     }
 
     /**
-     * @param boolean $courseRequired
+     * @param bool $courseRequired
+     *
      * @return Category
      */
     public function setCourseRequired($courseRequired)
     {
         $this->courseRequired = $courseRequired;
+
         return $this;
     }
 
@@ -198,11 +205,13 @@ class Category
 
     /**
      * @param Project $project
+     *
      * @return Category
      */
     public function setProject($project)
     {
         $this->project = $project;
+
         return $this;
     }
 
@@ -216,11 +225,13 @@ class Category
 
     /**
      * @param int $insertUserId
+     *
      * @return Category
      */
     public function setInsertUserId($insertUserId)
     {
         $this->insertUserId = $insertUserId;
+
         return $this;
     }
 
@@ -234,11 +245,13 @@ class Category
 
     /**
      * @param \DateTime $insertDateTime
+     *
      * @return Category
      */
     public function setInsertDateTime($insertDateTime)
     {
         $this->insertDateTime = $insertDateTime;
+
         return $this;
     }
 
@@ -252,11 +265,13 @@ class Category
 
     /**
      * @param int $lastEditUserId
+     *
      * @return Category
      */
     public function setLastEditUserId($lastEditUserId)
     {
         $this->lastEditUserId = $lastEditUserId;
+
         return $this;
     }
 
@@ -270,11 +285,13 @@ class Category
 
     /**
      * @param \DateTime $lastEditDateTime
+     *
      * @return Category
      */
     public function setLastEditDateTime($lastEditDateTime)
     {
         $this->lastEditDateTime = $lastEditDateTime;
+
         return $this;
     }
 }

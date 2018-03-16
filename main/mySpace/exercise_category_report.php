@@ -12,7 +12,7 @@ $exportCSV = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
 // the section (for the tabs)
 $this_section = SECTION_TRACKING;
 
-$csv_content = array();
+$csv_content = [];
 $nameTools = get_lang('MySpace');
 
 $is_platform_admin = api_is_platform_admin();
@@ -24,7 +24,6 @@ $courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
 $defaults = [];
 $defaults['start_date'] = isset($_GET['start_date']) ? Security::remove_XSS($_GET['start_date']) : '';
 $defaults['course_id'] = $courseId;
-
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = '<script>
@@ -50,7 +49,7 @@ if (empty($courseId)) {
         get_lang('Course'),
         null,
         [
-            'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course'
+            'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
         ]
     );
 } else {
@@ -87,15 +86,15 @@ if ($form->validate()) {
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_results_report&exercise_id='.$exerciseId.'&course_id='.$courseId.'&start_date='.$startDate;
 
     $categoryList = TestCategory::getListOfCategoriesIDForTest($exerciseId, $courseId);
-    $columns = array(
+    $columns = [
         get_lang('FirstName'),
         get_lang('LastName'),
         get_lang('LoginName'),
         get_lang('Session'),
         get_lang('StartDate'),
         get_lang('EndDate'),
-        get_lang('Score')
-    );
+        get_lang('Score'),
+    ];
 
     if (!empty($categoryList)) {
         foreach ($categoryList as $categoryInfo) {
@@ -104,35 +103,35 @@ if ($form->validate()) {
     }
     $columns[] = get_lang('Actions');
 
-    $columnModel = array(
-        array('name' => 'firstname', 'index' => 'firstname', 'width' => '50', 'align' => 'left', 'search' => 'true'),
-        array('name' => 'lastname', 'index' => 'lastname', 'width' => '50', 'align' => 'left', 'formatter' => 'action_formatter', 'search' => 'true'),
-        array('name' => 'login', 'index' => 'username', 'width' => '40', 'align' => 'left', 'search' => 'true', 'hidden' => 'true'),
-        array('name' => 'session', 'index' => 'session', 'width' => '40', 'align' => 'left', 'search' => 'false'),
-        array('name' => 'start_date', 'index' => 'start_date', 'width' => '60', 'align' => 'left', 'search' => 'true'),
-        array('name' => 'exe_date', 'index' => 'exe_date', 'width' => '60', 'align' => 'left', 'search' => 'true'),
-        array('name' => 'score', 'index' => 'exe_result', 'width' => '50', 'align' => 'center', 'search' => 'true')
-    );
+    $columnModel = [
+        ['name' => 'firstname', 'index' => 'firstname', 'width' => '50', 'align' => 'left', 'search' => 'true'],
+        ['name' => 'lastname', 'index' => 'lastname', 'width' => '50', 'align' => 'left', 'formatter' => 'action_formatter', 'search' => 'true'],
+        ['name' => 'login', 'index' => 'username', 'width' => '40', 'align' => 'left', 'search' => 'true', 'hidden' => 'true'],
+        ['name' => 'session', 'index' => 'session', 'width' => '40', 'align' => 'left', 'search' => 'false'],
+        ['name' => 'start_date', 'index' => 'start_date', 'width' => '60', 'align' => 'left', 'search' => 'true'],
+        ['name' => 'exe_date', 'index' => 'exe_date', 'width' => '60', 'align' => 'left', 'search' => 'true'],
+        ['name' => 'score', 'index' => 'exe_result', 'width' => '50', 'align' => 'center', 'search' => 'true'],
+    ];
 
     if (!empty($categoryList)) {
         foreach ($categoryList as $categoryInfo) {
-            $columnModel[] = array('name' => 'category_'.$categoryInfo['id'], 'index' => 'exe_result', 'width' => '50', 'align' => 'center', 'search' => 'true');
+            $columnModel[] = ['name' => 'category_'.$categoryInfo['id'], 'index' => 'exe_result', 'width' => '50', 'align' => 'center', 'search' => 'true'];
         }
     }
 
-    $columnModel[] = array(
+    $columnModel[] = [
         'name' => 'actions',
         'index' => 'actions',
         'width' => '60',
         'align' => 'left',
         'search' => 'false',
         'sortable' => 'false',
-        'hidden' => 'true'
-    );
+        'hidden' => 'true',
+    ];
 
     $extra_params['autowidth'] = 'true';
 
-//height auto
+    //height auto
     $extra_params['height'] = 'auto';
     $actionLinks = '
     // add username as title in lastname filed - ref 4226
@@ -144,8 +143,7 @@ if ($form->validate()) {
         // may be empty string but is defined
         return "<span title=\""+tabLoginx[0]+rowObject[2]+tabLoginx[1]+"\">"+cellvalue+"</span>";
     }';
-    $tableId = 'results';
-    ?>
+    $tableId = 'results'; ?>
     <script>
         $(function() {
             <?php
@@ -155,11 +153,10 @@ if ($form->validate()) {
                 $columns,
                 $columnModel,
                 $extra_params,
-                array(),
+                [],
                 $actionLinks,
                 true
-            );
-            ?>
+            ); ?>
         });
     </script>
     <?php
@@ -185,7 +182,7 @@ if ($form->validate()) {
             
             jQuery("#'.$tableId.'").jqGrid("navButtonAdd","#'.$tableId.'_pager",{       
                caption: "",
-               title:"' . get_lang('ExportExcel').'",
+               title:"'.get_lang('ExportExcel').'",
                onClickButton : function() {
                    jQuery("#'.$tableId.'").jqGrid(
                     "excelExport",{
@@ -200,8 +197,8 @@ if ($form->validate()) {
         [
             'url' => '  ',
             'url_attributes' => ['id' => 'excel_export'],
-            'content' => Display::return_icon('export_excel.png')
-        ]
+            'content' => Display::return_icon('export_excel.png'),
+        ],
     ];
 
     echo Display::actions($items);
@@ -210,4 +207,3 @@ if ($form->validate()) {
 }
 
 Display::display_footer();
-

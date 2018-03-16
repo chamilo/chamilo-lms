@@ -5,16 +5,17 @@
  * @author Claro Team <cvs@claroline.net>
  * @author Yannick Warnier <yannick.warnier@beeznest.com> - updated ImsAnswerHotspot to match QTI norms
  * @author César Perales <cesar.perales@gmail.com> Updated function names and import files for Aiken format support
+ *
  * @package chamilo.exercise
  */
 
 /**
- * Aiken2Question transformation class
+ * Aiken2Question transformation class.
  */
 class Aiken2Question extends Question
 {
     /**
-     * Include the correct answer class and create answer
+     * Include the correct answer class and create answer.
      */
     public function setAnswer()
     {
@@ -37,7 +38,7 @@ class Aiken2Question extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
@@ -45,9 +46,9 @@ class Aiken2Question extends Question
     }
 }
 
-
 /**
- * Class
+ * Class.
+ *
  * @package chamilo.exercise
  */
 class AikenAnswerMultipleChoice extends Answer

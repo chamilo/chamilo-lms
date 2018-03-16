@@ -4,9 +4,8 @@
 use ChamiloSession as Session;
 
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
-
 require_once __DIR__.'/../global.inc.php';
 $debug = false;
 api_protect_course_script(true);
@@ -35,7 +34,7 @@ switch ($action) {
         $sidx = $_REQUEST['sidx']; //index to filter
         $sord = $_REQUEST['sord']; //asc or desc
 
-        if (!in_array($sord, array('asc', 'desc'))) {
+        if (!in_array($sord, ['asc', 'desc'])) {
             $sord = 'desc';
         }
         // get index row - i.e. user click to sort $sord = $_GET['sord'];
@@ -57,8 +56,8 @@ switch ($action) {
                 FROM $track_exercise
                 WHERE $where_condition ";
         $result = Database::query($sql);
-        $count  = Database::fetch_row($result);
-        $count  = $count[0];
+        $count = Database::fetch_row($result);
+        $count = $count[0];
 
         //3. Calculating first, end, etc
         $total_pages = 0;
@@ -114,7 +113,7 @@ switch ($action) {
                 LIMIT $start, $limit";
 
         $result = Database::query($sql);
-        $results = array();
+        $results = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $results[] = $row;
         }
@@ -164,13 +163,13 @@ switch ($action) {
                             DATE_TIME_FORMAT_LONG
                     );
                 }
-                $array = array(
+                $array = [
                     $row['firstname'],
                     $row['lastname'],
                     $timeInfo,
                     $row['count_questions'],
-                    round($row['score'] * 100).'%'
-                );
+                    round($row['score'] * 100).'%',
+                ];
                 $response->rows[$i]['cell'] = $array;
                 $i++;
             }
@@ -189,12 +188,12 @@ switch ($action) {
             foreach ($new_list as $new_order_id) {
                 Database::insert(
                     $table,
-                    array(
+                    [
                         'exercise_order' => $counter,
                         'session_id' => $session_id,
                         'exercise_id' => intval($new_order_id),
-                        'c_id' => $course_id
-                    )
+                        'c_id' => $course_id,
+                    ]
                 );
                 $counter++;
             }
@@ -216,16 +215,16 @@ switch ($action) {
             foreach ($new_question_list as $new_order_id) {
                 Database::update(
                     $TBL_QUESTIONS,
-                    array('question_order' => $counter),
-                    array(
-                        'question_id = ? AND c_id = ? AND exercice_id = ? ' => array(
+                    ['question_order' => $counter],
+                    [
+                        'question_id = ? AND c_id = ? AND exercice_id = ? ' => [
                             intval(
                                 $new_order_id
                             ),
                             $course_id,
-                            $exercise_id
-                        )
-                    )
+                            $exercise_id,
+                        ],
+                    ]
                 )
                 ;
                 $counter++;
@@ -305,7 +304,7 @@ switch ($action) {
             // Getting information of the current exercise.
             $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
             $exercise_id = $exercise_stat_info['exe_exo_id'];
-            $attemptList = array();
+            $attemptList = [];
 
             // First time here we create an attempt (getting the exe_id).
             if (!empty($exercise_stat_info)) {
@@ -323,7 +322,7 @@ switch ($action) {
 
                 if (empty($remind_list)) {
                     $remind_list = $bd_reminder_list;
-                    $new_list = array();
+                    $new_list = [];
                     foreach ($bd_reminder_list as $item) {
                         if ($item != $question_id) {
                             $new_list[] = $item;
@@ -410,12 +409,12 @@ switch ($action) {
                         $my_question_id,
                         null,
                         'exercise_show',
-                        array(),
+                        [],
                         false,
                         true,
                         false,
                         $objExercise->selectPropagateNeg(),
-                        array()
+                        []
                     );
 
                     // Removing old score.
@@ -515,7 +514,7 @@ switch ($action) {
                     $remind_list
                 );
 
-                 // Destruction of the Question object
+                // Destruction of the Question object
                 unset($objQuestionTmp);
                 if ($debug) {
                     error_log(" -- end question -- ");

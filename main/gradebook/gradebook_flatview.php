@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -27,10 +28,10 @@ if (isset($_POST['submit']) && isset($_POST['keyword'])) {
     exit;
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat=1',
-    'name' => get_lang('ToolGradebook')
-);
+    'name' => get_lang('ToolGradebook'),
+];
 
 $showeval = isset($_POST['showeval']) ? '1' : '0';
 $showlink = isset($_POST['showlink']) ? '1' : '0';
@@ -98,7 +99,7 @@ if (!empty($keyword)) {
 }
 $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
 
-$addparams = array('selectcat' => $cat[0]->get_id());
+$addparams = ['selectcat' => $cat[0]->get_id()];
 if (isset($_GET['search'])) {
     $addparams['search'] = $keyword;
 }
@@ -125,10 +126,10 @@ $flatViewTable = new FlatViewTable(
 );
 
 $flatViewTable->setAutoFill(false);
-$parameters = array('selectcat' => intval($_GET['selectcat']));
+$parameters = ['selectcat' => intval($_GET['selectcat'])];
 $flatViewTable->set_additional_parameters($parameters);
 
-$params = array();
+$params = [];
 if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
     $params['only_total_category'] = true;
     $params['join_firstname_lastname'] = true;
@@ -149,10 +150,10 @@ if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
 }
 
 if (isset($_GET['exportpdf'])) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_self().'?selectcat='.Security::remove_XSS($_GET['selectcat']).'&'.api_get_cidreq(),
-        'name' => get_lang('FlatView')
-    );
+        'name' => get_lang('FlatView'),
+    ];
 
     $pageNum = isset($_GET['flatviewlist_page_nr']) ? intval($_GET['flatviewlist_page_nr']) : null;
     $perPage = isset($_GET['flatviewlist_per_page']) ? intval($_GET['flatviewlist_per_page']) : null;
@@ -161,7 +162,7 @@ if (isset($_GET['exportpdf'])) {
         'offset' => $offset,
         'selectcat' => intval($_GET['selectcat']),
         'flatviewlist_page_nr' => $pageNum,
-        'flatviewlist_per_page' => $perPage
+        'flatviewlist_per_page' => $perPage,
     ]);
 
     $export_pdf_form = new DataForm(

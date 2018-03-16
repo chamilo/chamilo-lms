@@ -2,8 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Redirection plugin. Allows the configuration of redirection of specific users right after they login
+ * Redirection plugin. Allows the configuration of redirection of specific users right after they login.
+ *
  * @author Enrique Alcaraz Lopez
+ *
  * @package chamilo.plugin.redirection
  */
 class RedirectionPlugin extends Plugin
@@ -11,7 +13,7 @@ class RedirectionPlugin extends Plugin
     public $isAdminPlugin = true;
 
     /**
-     * Class constructor
+     * Class constructor.
      */
     protected function __construct()
     {
@@ -27,13 +29,16 @@ class RedirectionPlugin extends Plugin
     public static function create()
     {
         static $result = null;
+
         return $result ? $result : $result = new self();
     }
 
     /**
-     * Inser a new redirection (and delete the previous one for this user, if any)
-     * @param int $userId
+     * Inser a new redirection (and delete the previous one for this user, if any).
+     *
+     * @param int    $userId
      * @param string $url
+     *
      * @return false|string
      */
     public static function insert($userId, $url)
@@ -63,10 +68,13 @@ class RedirectionPlugin extends Plugin
     }
 
     /**
-     * Get the current redirection for a given user (if any)
+     * Get the current redirection for a given user (if any).
+     *
      * @param $userId
-     * @return array
+     *
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return array
      */
     public static function getUrlFromUser($userId)
     {
@@ -77,11 +85,13 @@ class RedirectionPlugin extends Plugin
         }
         $sql = "SELECT * FROM plugin_redirection WHERE user_id = $userId LIMIT 1";
         $result = Database::query($sql);
+
         return Database::fetch_array($result, 'ASSOC');
     }
 
     /**
-     * Deletes an existing redirection
+     * Deletes an existing redirection.
+     *
      * @param int $id
      */
     public static function delete($id)
@@ -89,12 +99,13 @@ class RedirectionPlugin extends Plugin
         $table = Database::get_main_table('plugin_redirection');
         Database::delete(
             $table,
-            array('id = ?' => array($id))
+            ['id = ?' => [$id]]
         );
     }
 
     /**
-     * Get all current redirection records
+     * Get all current redirection records.
+     *
      * @return array
      */
     public static function getAll()
@@ -105,7 +116,7 @@ class RedirectionPlugin extends Plugin
     }
 
     /**
-     * Install the required DB structure to store the plugin data
+     * Install the required DB structure to store the plugin data.
      */
     public static function install()
     {
@@ -121,7 +132,7 @@ class RedirectionPlugin extends Plugin
     }
 
     /**
-     * Uninstall the plugin, cleaning up the database structure created on install
+     * Uninstall the plugin, cleaning up the database structure created on install.
      */
     public static function uninstall()
     {
@@ -131,7 +142,8 @@ class RedirectionPlugin extends Plugin
     }
 
     /**
-     * Redirect user if plugin is installed
+     * Redirect user if plugin is installed.
+     *
      * @param int $userId
      */
     public static function redirectUser($userId)

@@ -4,11 +4,12 @@
 use ChamiloSession as Session;
 
 /**
-*   Session view
-*   @package chamilo.session
-*   @author Julio Montoya <gugli100@gmail.com>  Beeznest
-*/
-
+ *   Session view.
+ *
+ *   @package chamilo.session
+ *
+ *   @author Julio Montoya <gugli100@gmail.com>  Beeznest
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -44,7 +45,7 @@ $course_list = SessionManager::get_course_list_by_session_id($session_id);
 
 $userIsGeneralCoach = SessionManager::user_is_general_coach($userId, $session_id);
 
-$user_course_list = array();
+$user_course_list = [];
 foreach ($course_list as $course) {
     $status = SessionManager::get_user_status_in_course_session(
         $userId,
@@ -60,9 +61,9 @@ if (empty($user_course_list)) {
     api_not_allowed(true);
 }
 
-$my_session_list = array();
-$final_array = array();
-$new_course_list = array();
+$my_session_list = [];
+$final_array = [];
+$new_course_list = [];
 
 if (!empty($course_list)) {
     foreach ($course_list as $course_data) {
@@ -151,13 +152,13 @@ if (!empty($course_list)) {
             }
         }
 
-        $new_course_list[] = array(
+        $new_course_list[] = [
             'title' => $course_data['title'].$icons,
             //  'recent_lps' => $icons,
             //'max_mutation_date' => substr(api_get_local_time($max_mutation_date),0,10),
             'exercise_count' => $exercise_count,
-            'lp_count' => $lp_count
-        );
+            'lp_count' => $lp_count,
+        ];
     }
 }
 
@@ -178,7 +179,7 @@ if ($sessionTitleLink == 2 && $session->getNbrCourses() === 1) {
     $sessionCourse = $sessionCourses[0]->getCourse();
     $courseUrl = $sessionCourse->getDirectory().'/index.php?';
     $courseUrl .= http_build_query([
-        'id_session' => $session->getId()
+        'id_session' => $session->getId(),
     ]);
 
     header('Location: '.api_get_path(WEB_COURSE_PATH).$courseUrl);
@@ -187,7 +188,7 @@ if ($sessionTitleLink == 2 && $session->getNbrCourses() === 1) {
 
 Display::display_header(get_lang('Session'));
 
-$session_select = array();
+$session_select = [];
 foreach ($session_list as $item) {
     $session_select[$item['id']] = $item['name'];
 }
@@ -218,7 +219,7 @@ if (empty($session_id)) {
 }
 
 //Final data to be show
-$my_real_array = $new_exercises = array();
+$my_real_array = $new_exercises = [];
 $now = time();
 $courseList = SessionManager::get_course_list_by_session_id($session_id);
 
@@ -285,14 +286,14 @@ if (!empty($courseList)) {
                     $name = Display::url(
                         $exerciseInfo['title'],
                         api_get_path(WEB_CODE_PATH)."exercise/overview.php?cidReq=$courseCode&exerciseId={$exerciseId}&id_session=$session_id",
-                        array('target' => SESSION_LINK_TARGET)
+                        ['target' => SESSION_LINK_TARGET]
                     );
 
-                    $new_exercises[] = array(
+                    $new_exercises[] = [
                         'status' => Display::return_icon(
                             'star.png',
                             get_lang('New'),
-                            array('width' => ICON_SIZE_SMALL)
+                            ['width' => ICON_SIZE_SMALL]
                         ),
                         'date' => $exerciseInfo['start_time'],
                         'course' => $courseInfo['title'],
@@ -300,8 +301,8 @@ if (!empty($courseList)) {
                         'attempt' => '-',
                         'result' => '-',
                         'best_result' => '-',
-                        'position' => '-'
-                    );
+                        'position' => '-',
+                    ];
                     continue;
                 }
 
@@ -330,10 +331,10 @@ if (!empty($courseList)) {
                     $name = Display::url(
                         $exerciseInfo['title'],
                         api_get_path(WEB_CODE_PATH)."exercise/result.php?cidReq=$courseCode&id={$result['exe_id']}&id_session=$session_id&show_headers=1",
-                        array('target' => SESSION_LINK_TARGET, 'class'=>'exercise-result-link')
+                        ['target' => SESSION_LINK_TARGET, 'class' => 'exercise-result-link']
                     );
 
-                    $my_real_array[] = array(
+                    $my_real_array[] = [
                         'status' => Display::return_icon(
                             'quiz.png',
                             get_lang('Attempted'),
@@ -347,7 +348,7 @@ if (!empty($courseList)) {
                         'result' => $platform_score,
                         'best_result' => $best_score,
                         'position' => $position,
-                    );
+                    ];
                     $counter++;
                 }
             }
@@ -391,7 +392,7 @@ echo $dates.'<br />';
 $allow = api_get_setting('show_session_description') === 'true';
 
 if ($session_info['show_description'] == 1 && $allow) {
-?>
+    ?>
     <div class="home-course-intro">
         <div class="page-course">
             <div class="page-course-intro">
@@ -403,86 +404,86 @@ if ($session_info['show_description'] == 1 && $allow) {
 }
 
 // All Learnpaths grid settings (First tab, first subtab)
-$columns_courses = array(
+$columns_courses = [
     get_lang('Title'),
     get_lang('NumberOfPublishedExercises'),
     get_lang('NumberOfPublishedLps'),
-);
-$column_model_courses = array(
-    array('name'=>'title', 'index'=>'title', 'width'=>'400px', 'align'=>'left', 'sortable'=>'true'),
+];
+$column_model_courses = [
+    ['name' => 'title', 'index' => 'title', 'width' => '400px', 'align' => 'left', 'sortable' => 'true'],
     //array('name'=>'recent_lps',         'index'=>'recent_lps',          'width'=>'10px',  'align'=>'left',  'sortable'=>'false'),
 //    array('name'=>'max_mutation_date',  'index'=>'max_mutation_date',   'width'=>'120px',  'align'=>'left',  'sortable'=>'true'),
-    array('name'=>'exercise_count', 'index'=>'exercise_count', 'width'=>'180px', 'align'=>'left', 'sortable'=>'true'),
-    array('name'=>'lp_count', 'index'=>'lp_count', 'width'=>'180px', 'align'=>'left', 'sortable'=>'true')
-);
+    ['name' => 'exercise_count', 'index' => 'exercise_count', 'width' => '180px', 'align' => 'left', 'sortable' => 'true'],
+    ['name' => 'lp_count', 'index' => 'lp_count', 'width' => '180px', 'align' => 'left', 'sortable' => 'true'],
+];
 
 $extra_params_courses['height'] = '100%';
 $extra_params_courses['autowidth'] = 'true'; //use the width of the parent
 
 $url = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_default&session_id='.$session_id.'&course_id='.$course_id;
-$columns = array(
+$columns = [
     get_lang('PublicationDate'),
     get_lang('Course'),
-    get_lang('LearningPaths')
-);
+    get_lang('LearningPaths'),
+];
 
-$column_model = array(
-    array('name'=>'date', 'index'=>'date', 'width'=>'120', 'align'=>'left', 'sortable'=>'true'),
-    array('name'=>'course', 'index'=>'course', 'width'=>'300', 'align'=>'left', 'sortable'=>'true', 'wrap_cell' => 'true'),
-    array('name'=>'lp', 'index'=>'lp', 'width'=>'440', 'align'=>'left', 'sortable'=>'true')
-);
+$column_model = [
+    ['name' => 'date', 'index' => 'date', 'width' => '120', 'align' => 'left', 'sortable' => 'true'],
+    ['name' => 'course', 'index' => 'course', 'width' => '300', 'align' => 'left', 'sortable' => 'true', 'wrap_cell' => 'true'],
+    ['name' => 'lp', 'index' => 'lp', 'width' => '440', 'align' => 'left', 'sortable' => 'true'],
+];
 
-$extra_params = array();
+$extra_params = [];
 $extra_params['sortname'] = 'date';
 $extra_params['height'] = '100%';
 $extra_params['autowidth'] = 'true'; //use the width of the parent
 
 //Per course grid settings
 $url_by_course = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_course&session_id='.$session_id.'&course_id='.$course_id;
-$extra_params_course = array();
+$extra_params_course = [];
 $extra_params_course['grouping'] = 'true';
-$extra_params_course['groupingView'] = array(
-    'groupCollapse'    => false,
-    'groupField'       => array('course'),
-    'groupColumnShow'  => array('false'),
-    'groupText'        => array('<b>'.get_lang('Course').' {0}</b>')
-);
+$extra_params_course['groupingView'] = [
+    'groupCollapse' => false,
+    'groupField' => ['course'],
+    'groupColumnShow' => ['false'],
+    'groupText' => ['<b>'.get_lang('Course').' {0}</b>'],
+];
 $extra_params_course['autowidth'] = 'true'; //use the width of the parent
 $extra_params_course['height'] = "100%";
 
 //Per Week grid
 $url_week = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_week&session_id='.$session_id.'&course_id='.$course_id;
-$column_week = array(
+$column_week = [
     get_lang('PeriodWeek'),
     get_lang('PublicationDate'),
     get_lang('Course'),
-    get_lang('LearningPaths')
-);
+    get_lang('LearningPaths'),
+];
 
-$column_week_model = array(
-    array('name'=>'week', 'index'=>'week', 'width'=>'40', 'align'=>'left', 'sortable'=>'false'),
-    array('name'=>'date', 'index'=>'date', 'width'=>'120', 'align'=>'left', 'sortable'=>'false'),
-    array('name'=>'course', 'index'=>'course', 'width'=>'300', 'align'=>'left', 'sortable'=>'true', 'wrap_cell' => 'true'),
-    array('name'=>'lp', 'index'=>'lp', 'width'=>'440', 'align'=>'left', 'sortable'=>'true')
-);
+$column_week_model = [
+    ['name' => 'week', 'index' => 'week', 'width' => '40', 'align' => 'left', 'sortable' => 'false'],
+    ['name' => 'date', 'index' => 'date', 'width' => '120', 'align' => 'left', 'sortable' => 'false'],
+    ['name' => 'course', 'index' => 'course', 'width' => '300', 'align' => 'left', 'sortable' => 'true', 'wrap_cell' => 'true'],
+    ['name' => 'lp', 'index' => 'lp', 'width' => '440', 'align' => 'left', 'sortable' => 'true'],
+];
 
-$extra_params_week = array();
+$extra_params_week = [];
 $extra_params_week['grouping'] = 'true';
 //For more details see http://www.trirand.com/jqgridwiki/doku.php?id=wiki:grouping
-$extra_params_week['groupingView'] = array(
+$extra_params_week['groupingView'] = [
     'groupCollapse' => false,
     'groupDataSorted' => false,
-    'groupField' => array('week'),
-    'groupOrder' => array('desc'),
+    'groupField' => ['week'],
+    'groupOrder' => ['desc'],
     'groupColumnShow' => 'false',
-    'groupText' => array('<b>'.get_lang('PeriodWeek').' {0}</b>')
-);
+    'groupText' => ['<b>'.get_lang('PeriodWeek').' {0}</b>'],
+];
 $extra_params_week['autowidth'] = 'true'; //use the width of the parent
 $extra_params_week['height'] = '100%';
 
 // MyQCM grid
 if (!api_is_anonymous()) {
-    $column_exercise = array(
+    $column_exercise = [
         get_lang('Status'),
         get_lang('ExerciseStartDate'),
         get_lang('Course'),
@@ -490,18 +491,18 @@ if (!api_is_anonymous()) {
         get_lang('Attempts'),
         get_lang('Result'),
         get_lang('BestResultInCourse'),
-        get_lang('Ranking')
-    );
-    $column_exercise_model = array(
-        array('name'=>'status', 'index'=>'status', 'width'=>'40', 'align'=>'left', 'sortable'=>'false'),
-        array('name'=>'date', 'index'=>'date', 'width'=>'130', 'align'=>'left', 'sortable'=>'true'),
-        array('name'=>'course', 'index'=>'course', 'width'=>'200', 'align'=>'left', 'sortable'=>'true', 'wrap_cell' => 'true'),
-        array('name'=>'exercise', 'index'=>'exercise', 'width'=>'200', 'align'=>'left', 'sortable'=>'false'),
-        array('name'=>'attempt', 'index'=>'attempt', 'width'=>'60', 'align'=>'center', 'sortable'=>'true'),
-        array('name'=>'result', 'index'=>'result', 'width'=>'120', 'align'=>'center', 'sortable'=>'true'),
-        array('name'=>'best_result', 'index'=>'best_result', 'width'=>'140', 'align'=>'center', 'sortable'=>'true'),
-        array('name'=>'position', 'index'=>'position', 'width'=>'55', 'align'=>'center', 'sortable'=>'true')
-    );
+        get_lang('Ranking'),
+    ];
+    $column_exercise_model = [
+        ['name' => 'status', 'index' => 'status', 'width' => '40', 'align' => 'left', 'sortable' => 'false'],
+        ['name' => 'date', 'index' => 'date', 'width' => '130', 'align' => 'left', 'sortable' => 'true'],
+        ['name' => 'course', 'index' => 'course', 'width' => '200', 'align' => 'left', 'sortable' => 'true', 'wrap_cell' => 'true'],
+        ['name' => 'exercise', 'index' => 'exercise', 'width' => '200', 'align' => 'left', 'sortable' => 'false'],
+        ['name' => 'attempt', 'index' => 'attempt', 'width' => '60', 'align' => 'center', 'sortable' => 'true'],
+        ['name' => 'result', 'index' => 'result', 'width' => '120', 'align' => 'center', 'sortable' => 'true'],
+        ['name' => 'best_result', 'index' => 'best_result', 'width' => '140', 'align' => 'center', 'sortable' => 'true'],
+        ['name' => 'position', 'index' => 'position', 'width' => '55', 'align' => 'center', 'sortable' => 'true'],
+    ];
     $extra_params_exercise['height'] = '100%';
     $extra_params_exercise['autowidth'] = 'true';
     //$extra_params_exercise['sortname'] = 'status';
@@ -565,7 +566,7 @@ $(function() {
         $columns,
         $column_model,
         $extra_params,
-        array(),
+        [],
         ''
     );
     echo Display::grid_js(
@@ -574,7 +575,7 @@ $(function() {
         $columns,
         $column_model,
         $extra_params_course,
-        array(),
+        [],
         ''
     );
     echo Display::grid_js(
@@ -583,7 +584,7 @@ $(function() {
         $column_week,
         $column_week_model,
         $extra_params_week,
-        array(),
+        [],
         ''
     );
 
@@ -627,11 +628,11 @@ if (!api_is_anonymous()) {
 }
 
 // Main headers
-$headers = array(
+$headers = [
     Display::return_icon('moderator_star.png'),
     get_lang('Courses'),
-    get_lang('LearningPaths')
-);
+    get_lang('LearningPaths'),
+];
 
 if (!api_is_anonymous()) {
     $headers[] = get_lang('MyQCM');
@@ -641,13 +642,13 @@ if (!api_is_anonymous()) {
 $coursesTab = Display::grid_html('courses');
 $starTab = Display::grid_html('list_default');
 
-$tabs = array(
+$tabs = [
     $starTab,
     $coursesTab,
     Display::grid_html('list_course'),
     Display::grid_html('exercises'),
-    $reportingTab
-);
+    $reportingTab,
+];
 
 $tabToHide = api_get_configuration_value('session_hide_tab_list');
 
@@ -671,4 +672,3 @@ Session::erase('lpobject');
 api_remove_in_gradebook();
 
 Display::display_footer();
-

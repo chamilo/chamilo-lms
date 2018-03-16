@@ -2,8 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * View (MVC patter) for attendance calendar (list, edit, add)
+ * View (MVC patter) for attendance calendar (list, edit, add).
+ *
  * @author Christian Fasanando <christian1827@gmail.com>
+ *
  * @package chamilo.attendance
  */
 
@@ -48,7 +50,7 @@ if (isset($error_checkdate) && $error_checkdate) {
 
 if (isset($action) && $action == 'calendar_add') {
     $groupList = GroupManager::get_group_list(null, null, 1);
-    $groupIdList = array('--');
+    $groupIdList = ['--'];
     foreach ($groupList as $group) {
         $groupIdList[$group['id']] = $group['name'];
     }
@@ -63,8 +65,8 @@ if (isset($action) && $action == 'calendar_add') {
     $form->addElement('header', get_lang('AddADateTime'));
     $form->addDateTimePicker(
         'date_time',
-        array(get_lang('StartDate')),
-        array('id' => 'date_time')
+        [get_lang('StartDate')],
+        ['id' => 'date_time']
     );
 
     $defaults['date_time'] = date('Y-m-d H:i', api_strtotime(api_get_local_time()));
@@ -74,9 +76,9 @@ if (isset($action) && $action == 'calendar_add') {
         'repeat',
         null,
         get_lang('RepeatDate'),
-        array(
+        [
             'onclick' => "javascript: if(this.checked){document.getElementById('repeat-date-attendance').style.display='block';}else{document.getElementById('repeat-date-attendance').style.display='none';}",
-        )
+        ]
     );
 
     $defaults['repeat'] = isset($repeat) ? $repeat : null;
@@ -87,18 +89,18 @@ if (isset($action) && $action == 'calendar_add') {
         $form->addElement('html', '<div id="repeat-date-attendance" style="display:none">');
     }
 
-    $a_repeat_type = array(
+    $a_repeat_type = [
         'daily' => get_lang('RepeatDaily'),
         'weekly' => get_lang('RepeatWeekly'),
-        'monthlyByDate' => get_lang('RepeatMonthlyByDate')
-    );
+        'monthlyByDate' => get_lang('RepeatMonthlyByDate'),
+    ];
     $form->addElement('select', 'repeat_type', get_lang('RepeatType'), $a_repeat_type);
 
     $form->addElement(
         'date_picker',
         'end_date_time',
         get_lang('RepeatEnd'),
-        array('form_name'=>'attendance_calendar_add')
+        ['form_name' => 'attendance_calendar_add']
     );
     $defaults['end_date_time'] = date('Y-m-d');
     $form->addElement('html', '</div>');
@@ -114,7 +116,7 @@ if (isset($action) && $action == 'calendar_add') {
     // Calendar list
 
     $groupList = GroupManager::get_group_list();
-    $groupIdList = array('--');
+    $groupIdList = ['--'];
     foreach ($groupList as $group) {
         $groupIdList[$group['id']] = $group['name'];
     }
@@ -137,8 +139,8 @@ if (isset($action) && $action == 'calendar_add') {
                 );
                 $form->addDateTimePicker(
                     'date_time',
-                    array(get_lang('Date')),
-                    array('form_name'=>'attendance_calendar_edit'),
+                    [get_lang('Date')],
+                    ['form_name' => 'attendance_calendar_edit'],
                     5
                 );
                 $defaults['date_time'] = $calendar['date_time'];
@@ -171,9 +173,9 @@ if (isset($action) && $action == 'calendar_add') {
                     if (api_is_allowed_to_edit()) {
                         echo '<div class="pull-right">';
                         echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_edit&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.'">'.
-                            Display::return_icon('edit.png', get_lang('Edit'), array('style'=>'vertical-align:middle'), ICON_SIZE_SMALL).'</a>&nbsp;';
+                            Display::return_icon('edit.png', get_lang('Edit'), ['style' => 'vertical-align:middle'], ICON_SIZE_SMALL).'</a>&nbsp;';
                         echo '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_delete&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.'">'.
-                            Display::return_icon('delete.png', get_lang('Delete'), array('style'=>'vertical-align:middle'), ICON_SIZE_SMALL).'</a>';
+                            Display::return_icon('delete.png', get_lang('Delete'), ['style' => 'vertical-align:middle'], ICON_SIZE_SMALL).'</a>';
                         echo '</div>';
                     }
                 }

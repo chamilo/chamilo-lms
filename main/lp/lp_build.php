@@ -2,15 +2,15 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php
+ * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php.
  *
  * @author Patrick Cool
  * @author Denes Nagy
  * @author Roan Embrechts, refactoring and code cleaning
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
+ *
  * @package chamilo.learnpath
  */
-
 $this_section = SECTION_COURSES;
 
 api_protect_course_script();
@@ -53,13 +53,13 @@ $result = Database::query($sql_query);
 $therow = Database::fetch_array($result);
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
-    );
+        'name' => get_lang('ToolGradebook'),
+    ];
 }
-$interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
-$interbreadcrumb[] = array('url' => '#', "name" => $therow['name']);
+$interbreadcrumb[] = ['url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths')];
+$interbreadcrumb[] = ['url' => '#', "name" => $therow['name']];
 
 // Theme calls.
 $lp_theme_css = $_SESSION['oLP']->get_theme();
@@ -129,13 +129,14 @@ function show_block($link, $title, $subtitle, $icon)
     $html = '<li class="col-md-4">';
     $html .= '<div class="thumbnail">';
     $html .= '<a href="'.$link.'" title="'.$title.'">';
-    $html .= Display::return_icon($icon, $title, array(), ICON_SIZE_BIG);
+    $html .= Display::return_icon($icon, $title, [], ICON_SIZE_BIG);
     $html .= '</a>';
     $html .= '<div class="caption">';
     $html .= '<strong>'.$title.'</strong></a> '.$subtitle;
     $html .= '</div>';
     $html .= '</div>';
     $html .= '</li>';
+
     return $html;
 }
 

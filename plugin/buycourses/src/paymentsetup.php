@@ -2,7 +2,8 @@
 /* For license terms, see /license.txt */
 
 /**
- * Configuration page for payment methods for the Buy Courses plugin
+ * Configuration page for payment methods for the Buy Courses plugin.
+ *
  * @package chamilo.plugin.buycourses
  */
 $cidReset = true;
@@ -54,7 +55,7 @@ $currencySelect = $currencyForm->addSelect(
     'currency',
     [
         $plugin->get_lang('CurrencyType'),
-        $plugin->get_lang('InfoCurrency')
+        $plugin->get_lang('InfoCurrency'),
     ],
     [get_lang('Select')]
 );
@@ -64,7 +65,7 @@ foreach ($currencies as $currency) {
         ' => ',
         [
             $currency['country_name'],
-            $currency['iso_code']
+            $currency['iso_code'],
         ]
     );
     $currencyValue = $currency['id'];
@@ -79,7 +80,7 @@ foreach ($currencies as $currency) {
 $currencyForm->addTextarea(
     'terms_and_conditions',
     [get_lang('TermsAndConditions'),
-     $plugin->get_lang('WriteHereTheTermsAndConditionsOfYourECommerce')],
+     $plugin->get_lang('WriteHereTheTermsAndConditionsOfYourECommerce'), ],
     []
 );
 $currencyForm->addButtonSave(get_lang('Save'));
@@ -147,7 +148,6 @@ $commissionForm->addElement(
     [$plugin->get_lang('Commission'), null, '%'],
     ['step' => 1, 'cols-size' => [3, 7, 1], 'min' => 0, 'max' => 100]
 );
-
 
 $commissionForm->addButtonSave(get_lang('Save'));
 $commissionForm->setDefaults($plugin->getPlatformCommission());
@@ -225,7 +225,7 @@ $culqiForm->setDefaults($plugin->getCulqiParams());
 // breadcrumbs
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_PLUGIN_PATH).'buycourses/index.php',
-    'name' => $plugin->get_lang('plugin_title')
+    'name' => $plugin->get_lang('plugin_title'),
 ];
 
 $templateName = $plugin->get_lang('PaymentsConfiguration');

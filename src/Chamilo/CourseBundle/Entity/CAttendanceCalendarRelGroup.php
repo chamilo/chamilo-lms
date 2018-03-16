@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CAttendanceCalendarRelGroup
+ * CAttendanceCalendarRelGroup.
  *
  * @ORM\Table(
  *  name="c_attendance_calendar_rel_group",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CAttendanceCalendarRelGroup
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -29,37 +29,38 @@ class CAttendanceCalendarRelGroup
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="group_id", type="integer", nullable=false)
      */
     private $groupId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="calendar_id", type="integer", nullable=false)
      */
     private $calendarId;
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CAttendanceCalendarRelGroup
      */
     public function setCId($cId)
@@ -70,9 +71,9 @@ class CAttendanceCalendarRelGroup
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -80,9 +81,10 @@ class CAttendanceCalendarRelGroup
     }
 
     /**
-     * Set groupId
+     * Set groupId.
      *
-     * @param integer $groupId
+     * @param int $groupId
+     *
      * @return CAttendanceCalendarRelGroup
      */
     public function setGroupId($groupId)
@@ -93,9 +95,9 @@ class CAttendanceCalendarRelGroup
     }
 
     /**
-     * Get groupId
+     * Get groupId.
      *
-     * @return integer
+     * @return int
      */
     public function getGroupId()
     {
@@ -103,9 +105,10 @@ class CAttendanceCalendarRelGroup
     }
 
     /**
-     * Set calendarId
+     * Set calendarId.
      *
-     * @param integer $calendarId
+     * @param int $calendarId
+     *
      * @return CAttendanceCalendarRelGroup
      */
     public function setCalendarId($calendarId)
@@ -116,9 +119,9 @@ class CAttendanceCalendarRelGroup
     }
 
     /**
-     * Get calendarId
+     * Get calendarId.
      *
-     * @return integer
+     * @return int
      */
     public function getCalendarId()
     {
@@ -126,9 +129,9 @@ class CAttendanceCalendarRelGroup
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

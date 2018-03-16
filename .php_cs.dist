@@ -4,23 +4,31 @@ $header = '/* For licensing terms, see /license.txt */';
 
 $rules = [
     '@Symfony' => true,
-    '@Symfony:risky' => true,
+    //'@Symfony:risky' => true,
     'array_syntax' => [
         'syntax' => 'short',
     ],
-    'header_comment' => [
+    /*'header_comment' => [
         'header' => $header,
-    ],
+    ],*/
+    'blank_line_after_opening_tag' => false,
     'no_extra_consecutive_blank_lines' => true,
-    'no_php4_constructor' => true,
-    'no_useless_else' => true,
+    'multiline_comment_opening_closing' => true,
+    'yoda_style' => false,
+    'phpdoc_to_comment' => false,
+    'phpdoc_no_package' => false,
+    'increment_style' => false,
+    'no_useless_else' => false,
+    //'no_php4_constructor' => true,
+    'single_quote' => false,
     'no_useless_return' => true,
     'ordered_class_elements' => true,
     'ordered_imports' => true,
     'phpdoc_order' => true,
-    '@PHP56Migration' => true,
-    '@PHP56Migration:risky' => true,
-    '@PHPUnit57Migration:risky' => true,
+    'no_break_comment' => true,
+    //'@PHP56Migration' => true,
+    //'@PHP56Migration:risky' => true,
+    //'@PHPUnit57Migration:risky' => true,
     // To be tested before insertion:
 //    'strict_comparison' => true,
 //    'strict_param' => true,
@@ -67,6 +75,7 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude('plugin/bbb/lib')
     ->exclude('plugin/ims_lti')
     ->exclude('plugin/sepe/src/wsse')
+    ->exclude('plugin/test2pdf/class')
     ->exclude('tests')
     ->exclude('var')
     ->exclude('vendor')
@@ -80,10 +89,6 @@ $finder = PhpCsFixer\Finder::create()
 
 return PhpCsFixer\Config::create()
     ->setRules(
-        [
-            '@PSR2' => true,
-            //'strict_param' => true,
-            'array_syntax' => ['syntax' => 'short'],
-        ]
+        $rules
     )
     ->setFinder($finder);

@@ -34,14 +34,6 @@
     },
     "repositories": [
         {
-            "type": "vcs",
-            "url": "https://github.com/ywarnier/iCalcreator"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/jmontoyaa/PHPWord"
-        },
-        {
           "type": "vcs",
           "url": "https://github.com/chamilo/SyliusSettingsBundle.git"
         }
@@ -116,7 +108,6 @@
         "sylius/resource-bundle": "1.0.4",
         "sylius/resource": "~1.0",
 
-
         "friendsofsymfony/jsrouting-bundle": "~2.0",
         "gedmo/doctrine-extensions": "~2.4",
         "gregwar/captcha-bundle": "^2.0",
@@ -159,7 +150,7 @@
         "jeroendesloovere/vcard": "~1.5",
         "jimmiw/php-time-ago": "2.0.*",
         "phpoffice/phpword": "^0.14.0",
-        "kigkonsult/icalcreator": "2.*",
+        "kigkonsult/icalcreator": "2.24",
         "essence/essence": "~3.0",
         "paragonie/random-lib": "2.0.0",
         "lunetics/locale-bundle": "2.5.*",

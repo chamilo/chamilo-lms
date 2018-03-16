@@ -2373,8 +2373,8 @@ class MessageManager
     /**
      * @param string $subject
      * @param string $message
-     * @param array $courseInfo
-     * @param int $sessionId
+     * @param array  $courseInfo
+     * @param int    $sessionId
      *
      * @return bool
      */

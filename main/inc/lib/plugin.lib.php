@@ -4,7 +4,7 @@
 use ChamiloSession as Session;
 
 /**
- * Class AppPlugin
+ * Class AppPlugin.
  */
 class AppPlugin
 {
@@ -26,21 +26,22 @@ class AppPlugin
         'footer_center',
         'footer_right',
         'menu_administrator',
-        'course_tool_plugin'
+        'course_tool_plugin',
     ];
 
     public $installedPluginListName = [];
     public $installedPluginListObject = [];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
     }
 
     /**
-     * Read plugin from path
+     * Read plugin from path.
+     *
      * @return array
      */
     public function read_plugins_from_path()
@@ -101,8 +102,6 @@ class AppPlugin
         return $this->installedPluginListObject;
     }
 
-    /**
-     */
     public function setInstalledPluginListObject()
     {
         $pluginListName = $this->getInstalledPluginListName();
@@ -126,7 +125,7 @@ class AppPlugin
         $installedPlugins = [];
         $plugins = api_get_settings_params(
             [
-                "variable = ? AND selected_value = ? AND category = ? " => ['status', 'installed', 'Plugins']
+                "variable = ? AND selected_value = ? AND category = ? " => ['status', 'installed', 'Plugins'],
             ]
         );
 
@@ -255,9 +254,9 @@ class AppPlugin
     }
 
     /**
-     * @param string $region
+     * @param string   $region
      * @param Template $template
-     * @param bool   $forced
+     * @param bool     $forced
      *
      * @return null|string
      */
@@ -277,7 +276,7 @@ class AppPlugin
 
     /**
      * Loads the translation files inside a plugin if exists.
-     * It loads by default english see the hello world plugin
+     * It loads by default english see the hello world plugin.
      *
      * @param string $plugin_name
      *
@@ -335,9 +334,9 @@ class AppPlugin
     }
 
     /**
-     * @param string $region
+     * @param string   $region
      * @param Template $template
-     * @param bool $forced
+     * @param bool     $forced
      *
      * @return bool
      *
@@ -398,13 +397,15 @@ class AppPlugin
     }
 
     /**
-     * Loads plugin info
+     * Loads plugin info.
      *
      * @staticvar array $plugin_data
-     * @param string    $plugin_name
-     * @param bool      $forced load from DB or from the static array
+     *
+     * @param string $plugin_name
+     * @param bool   $forced      load from DB or from the static array
      *
      * @return array
+     *
      * @todo filter setting_form
      */
     public function getPluginInfo($plugin_name, $forced = false)
@@ -428,8 +429,8 @@ class AppPlugin
                         $plugin_name,
                         'Plugins',
                         'setting',
-                        api_get_current_access_url_id()
-                    ]
+                        api_get_current_access_url_id(),
+                    ],
                 ]
             );
 
@@ -445,13 +446,15 @@ class AppPlugin
             $plugin_info['settings'] = $settings_filtered;
             $pluginData[$plugin_name] = $plugin_info;
             Session::write('plugin_data', $pluginData);
+
             return $plugin_info;
         }
     }
 
     /**
-     * Get the template list
-     * @param  string $pluginName
+     * Get the template list.
+     *
+     * @param string $pluginName
      *
      * @return bool
      */
@@ -466,7 +469,8 @@ class AppPlugin
     }
 
     /**
-     * Remove all regions of an specific plugin
+     * Remove all regions of an specific plugin.
+     *
      * @param string $plugin
      */
     public function remove_all_regions($plugin)
@@ -487,7 +491,8 @@ class AppPlugin
     }
 
     /**
-     * Add a plugin to a region
+     * Add a plugin to a region.
+     *
      * @param string $plugin
      * @param string $region
      */
@@ -532,7 +537,8 @@ class AppPlugin
     }
 
     /**
-     * Add the course settings to the course settings form
+     * Add the course settings to the course settings form.
+     *
      * @param FormValidator $form
      */
     public function add_course_settings_form($form)
@@ -561,9 +567,9 @@ class AppPlugin
 
                 $form->addHtml('<div class="panel panel-default">');
                 $form->addHtml('
-                    <div class="panel-heading" role="tab" id="heading-' . $plugin_name.'-settings">
+                    <div class="panel-heading" role="tab" id="heading-'.$plugin_name.'-settings">
                         <h4 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-' . $plugin_name.'-settings" aria-expanded="false" aria-controls="collapse-'.$plugin_name.'-settings">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-'.$plugin_name.'-settings" aria-expanded="false" aria-controls="collapse-'.$plugin_name.'-settings">
                 ');
                 $form->addHtml($icon.' '.$pluginTitle);
                 $form->addHtml('
@@ -572,7 +578,7 @@ class AppPlugin
                     </div>
                 ');
                 $form->addHtml('
-                    <div id="collapse-' . $plugin_name.'-settings" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-'.$plugin_name.'-settings">
+                    <div id="collapse-'.$plugin_name.'-settings" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-'.$plugin_name.'-settings">
                         <div class="panel-body">
                 ');
 
@@ -584,7 +590,7 @@ class AppPlugin
                     if ($setting['type'] != 'checkbox') {
                         $form->addElement($setting['type'], $setting['name'], $obj->get_lang($setting['name']));
                     } else {
-                        $element = & $form->createElement(
+                        $element = &$form->createElement(
                             $setting['type'],
                             $setting['name'],
                             '',
@@ -615,6 +621,7 @@ class AppPlugin
 
     /**
      * Get all course settings from all installed plugins.
+     *
      * @return array
      */
     public function getAllPluginCourseSettings()
@@ -634,7 +641,8 @@ class AppPlugin
 
     /**
      * When saving the plugin values in the course settings, check whether
-     * a callback method should be called and send it the updated settings
+     * a callback method should be called and send it the updated settings.
+     *
      * @param array $values The new settings the user just saved
      */
     public function saveCourseSettingsHook($values)
@@ -660,8 +668,9 @@ class AppPlugin
     }
 
     /**
-     * Get first SMS plugin name
-     * @return string|boolean
+     * Get first SMS plugin name.
+     *
+     * @return string|bool
      */
     public function getSMSPluginName()
     {
@@ -684,7 +693,7 @@ class AppPlugin
         $className = str_replace('Plugin', '', $className);
 
         if (class_exists($className)) {
-            return new $className;
+            return new $className();
         }
 
         return false;

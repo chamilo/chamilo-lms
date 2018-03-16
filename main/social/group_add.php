@@ -3,9 +3,9 @@
 
 /**
  * @package chamilo.social
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -38,9 +38,9 @@ if ($form->validate()) {
 $nameTools = get_lang('AddGroup');
 $this_section = SECTION_SOCIAL;
 
-$interbreadcrumb[] = ['url' =>'home.php', 'name' => get_lang('Social')];
-$interbreadcrumb[] = ['url' =>'groups.php', 'name' => get_lang('Groups')];
-$interbreadcrumb[] = ['url' =>'#', 'name' => $nameTools];
+$interbreadcrumb[] = ['url' => 'home.php', 'name' => get_lang('Social')];
+$interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
+$interbreadcrumb[] = ['url' => '#', 'name' => $nameTools];
 
 $social_avatar_block = SocialManager::show_social_avatar_block('group_add');
 $social_menu_block = SocialManager::show_social_menu('group_add');

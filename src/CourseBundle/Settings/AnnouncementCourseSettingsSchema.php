@@ -3,12 +3,13 @@
 
 namespace Chamilo\CourseBundle\Settings;
 
+use Chamilo\CoreBundle\Settings\AbstractSettingsSchema;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
-use Chamilo\CoreBundle\Settings\AbstractSettingsSchema;
 
 /**
- * Class AnnouncementCourseSettingsSchema
+ * Class AnnouncementCourseSettingsSchema.
+ *
  * @package Chamilo\CourseBundle\Settings
  */
 class AnnouncementCourseSettingsSchema extends AbstractSettingsSchema

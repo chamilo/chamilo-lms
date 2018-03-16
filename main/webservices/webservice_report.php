@@ -7,15 +7,16 @@ require_once __DIR__.'/../inc/global.inc.php';
 require_once __DIR__.'/webservice.php';
 
 /**
- * Web services available for the User module. This class extends the WS class
+ * Web services available for the User module. This class extends the WS class.
  */
 class WSReport extends WS
 {
     /**
-     * Gets the time spent on the platform by a given user
+     * Gets the time spent on the platform by a given user.
      *
      * @param string User id field name
      * @param string User id value
+     *
      * @return array Array of results
      */
     public function GetTimeSpentOnPlatform($user_id_field_name, $user_id_value)
@@ -29,12 +30,13 @@ class WSReport extends WS
     }
 
     /**
-     * Gets the time spent in a course by a given user
+     * Gets the time spent in a course by a given user.
      *
      * @param string User id field name
      * @param string User id value
      * @param string Course id field name
      * @param string Course id value
+     *
      * @return array Array of results
      */
     public function GetTimeSpentOnCourse(
@@ -63,12 +65,13 @@ class WSReport extends WS
     }
 
     /**
-     * Gets the time spent in a course by a given user
+     * Gets the time spent in a course by a given user.
      *
      * @param string User id field name
      * @param string User id value
      * @param string Course id field name
      * @param string Course id value
+     *
      * @return array Array of results
      */
     public function GetTimeSpentOnCourseInSession(
@@ -110,12 +113,13 @@ class WSReport extends WS
     }
 
     /**
-     * Gets a list of learning paths by course
+     * Gets a list of learning paths by course.
      *
      * @param string User id field name
      * @param string User id value
      * @param string Course id field name
      * @param string Course id value
+     *
      * @return array Array of id=>title of learning paths
      */
     public function GetLearnpathsByCourse(
@@ -152,14 +156,15 @@ class WSReport extends WS
     }
 
     /**
-     * Gets progress attained in the given learning path by the given user
+     * Gets progress attained in the given learning path by the given user.
      *
      * @param string User id field name
      * @param string User id value
      * @param string Course id field name
      * @param string Course id value
      * @param string Learnpath ID
-     * @return double   Between 0 and 100 (% of progress)
+     *
+     * @return float Between 0 and 100 (% of progress)
      */
     public function GetLearnpathProgress(
         $secret_key,
@@ -205,6 +210,7 @@ class WSReport extends WS
      * @param string Course id field name
      * @param string Course id value
      * @param string Learnpath ID
+     *
      * @return string The last item's lesson_location value
      */
     public function GetLearnpathHighestLessonLocation(
@@ -239,7 +245,7 @@ class WSReport extends WS
 
     /**
      * Gets score obtained in the given learning path by the given user,
-     * assuming there is only one item (SCO) in the learning path
+     * assuming there is only one item (SCO) in the learning path.
      *
      * @param string User id field name
      * @param string User id value
@@ -247,7 +253,8 @@ class WSReport extends WS
      * @param string Course id value
      * @param int Learnpath ID
      * @param int Learnpath *ITEM* ID
-     * @return double   Generally between 0 and 100
+     *
+     * @return float Generally between 0 and 100
      */
     public function GetLearnpathScoreSingleItem(
         $secret_key,
@@ -287,7 +294,7 @@ class WSReport extends WS
 
     /**
      * Gets status obtained in the given learning path by the given user,
-     * assuming there is only one item (SCO) in the learning path
+     * assuming there is only one item (SCO) in the learning path.
      *
      * @param string Secret key
      * @param string User id field name (use chamilo_user_id if none)
@@ -296,6 +303,7 @@ class WSReport extends WS
      * @param string Course id value
      * @param int Learnpath ID
      * @param int Learnpath *ITEM* ID
+     *
      * @return string "not attempted", "passed", "completed", "failed", "incomplete"
      */
     public function GetLearnpathStatusSingleItem(

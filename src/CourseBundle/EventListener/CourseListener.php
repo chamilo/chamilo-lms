@@ -4,29 +4,28 @@
 namespace Chamilo\CourseBundle\EventListener;
 
 use Chamilo\CoreBundle\Controller\LegacyController;
-use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
-use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
-use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
-use Chamilo\CoreBundle\Framework\Container;
-use Doctrine\ORM\EntityManager;
-use Chamilo\UserBundle\Entity\User;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Chamilo\CourseBundle\Controller\ToolInterface;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
+use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
+use Chamilo\CourseBundle\Controller\ToolInterface;
 use Chamilo\CourseBundle\Event\CourseAccess;
 use Chamilo\CourseBundle\Event\SessionAccess;
+use Chamilo\UserBundle\Entity\User;
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
- * Class CourseListener
+ * Class CourseListener.
+ *
  * @package Chamilo\CourseBundle\EventListener
  */
 class CourseListener
@@ -72,7 +71,6 @@ class CourseListener
         var_dump(get_class($user));
         var_dump(get_class($sessionHandler));
         var_dump(get_class($event));
-
 
         /*$user = $this->container->get('security.token_storage')->getToken()->getUser();
         var_dump(get_class($user));*/

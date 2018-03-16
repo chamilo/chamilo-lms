@@ -4,7 +4,8 @@
 namespace Chamilo\CourseBundle\Tool;
 
 /**
- * Class LearningPath
+ * Class LearningPath.
+ *
  * @package Chamilo\CourseBundle\Tool
  */
 class LearningPath extends BaseTool

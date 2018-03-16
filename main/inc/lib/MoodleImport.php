@@ -2,20 +2,20 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class MoodleImport
+ * Class MoodleImport.
  *
  * @author José Loguercio <jose.loguercio@beeznest.com>,
  * @author Julio Montoya <gugli100@gmail.com>
  *
  * @package chamilo.library
  */
-
 class MoodleImport
 {
     /**
-     * Import moodle file
+     * Import moodle file.
      *
      * @param resource $uploadedFile *.* mbz file moodle course backup
+     *
      * @return bool
      */
     public function import($uploadedFile)
@@ -318,6 +318,7 @@ class MoodleImport
                 }
             } else {
                 removeDir($destinationDir);
+
                 return false;
             }
         } else {
@@ -330,9 +331,10 @@ class MoodleImport
     }
 
     /**
-     * Read and validate the forum module XML
+     * Read and validate the forum module XML.
      *
      * @param resource $moduleXml XML file
+     *
      * @return mixed | array if is a valid xml file, false otherwise
      */
     public function readForumModule($moduleXml)
@@ -357,9 +359,10 @@ class MoodleImport
     }
 
     /**
-     * Read and validate the resource module XML
+     * Read and validate the resource module XML.
      *
      * @param resource $moduleXml XML file
+     *
      * @return mixed | array if is a valid xml file, false otherwise
      */
     public function readResourceModule($moduleXml)
@@ -388,9 +391,10 @@ class MoodleImport
     }
 
     /**
-     * Read and validate the url module XML
+     * Read and validate the url module XML.
      *
      * @param resource $moduleXml XML file
+     *
      * @return mixed | array if is a valid xml file, false otherwise
      */
     public function readUrlModule($moduleXml)
@@ -415,9 +419,10 @@ class MoodleImport
     }
 
     /**
-     * Read and validate the quiz module XML
+     * Read and validate the quiz module XML.
      *
      * @param resource $moduleXml XML file
+     *
      * @return mixed | array if is a valid xml file, false otherwise
      */
     public function readQuizModule($moduleXml)
@@ -448,6 +453,7 @@ class MoodleImport
                 }
             }
             $currentItem['question_instances'] = $questionList;
+
             return $currentItem;
         }
 
@@ -455,10 +461,11 @@ class MoodleImport
     }
 
     /**
-     * Search the current file resource in main Files XML
+     * Search the current file resource in main Files XML.
      *
-     * @param resource $filesXml XML file
-     * @param int $contextId
+     * @param resource $filesXml  XML file
+     * @param int      $contextId
+     *
      * @return mixed | array if is a valid xml file, false otherwise
      */
     public function readMainFilesXml($filesXml, $contextId)
@@ -513,10 +520,11 @@ class MoodleImport
     }
 
     /**
-     * Search the current question resource in main Questions XML
+     * Search the current question resource in main Questions XML.
      *
      * @param resource $questionsXml XML file
-     * @param int $questionId
+     * @param int      $questionId
+     *
      * @return mixed | array if is a valid xml file, false otherwise
      */
     public function readMainQuestionsXml($questionsXml, $questionId)
@@ -568,6 +576,7 @@ class MoodleImport
             }
 
             $this->traverseArray($currentItem, ['#text', 'question_hints', 'tags']);
+
             return $currentItem;
         }
 
@@ -575,9 +584,10 @@ class MoodleImport
     }
 
     /**
-     * return the correct question type options tag
+     * return the correct question type options tag.
      *
      * @param string $questionType name
+     *
      * @return string question type tag
      */
     public function getQuestionTypeOptionsTag($questionType)
@@ -594,9 +604,10 @@ class MoodleImport
     }
 
     /**
-     * return the correct question type answers tag
+     * return the correct question type answers tag.
      *
      * @param string $questionType name
+     *
      * @return string question type tag
      */
     public function getQuestionTypeAnswersTag($questionType)
@@ -613,9 +624,9 @@ class MoodleImport
     }
 
     /**
-     *
      * @param string $moodleQuestionType
-     * @return integer Chamilo question type
+     *
+     * @return int Chamilo question type
      */
     public function matchMoodleChamiloQuestionTypes($moodleQuestionType)
     {
@@ -638,9 +649,11 @@ class MoodleImport
     }
 
     /**
-     * Fix moodle files that contains spaces
-     * @param array $importedFiles
+     * Fix moodle files that contains spaces.
+     *
+     * @param array  $importedFiles
      * @param string $text
+     *
      * @return mixed
      */
     public function fixPathInText($importedFiles, &$text)
@@ -659,15 +672,16 @@ class MoodleImport
     }
 
     /**
-     * Process Moodle Answers to Chamilo
+     * Process Moodle Answers to Chamilo.
      *
      * @param Exercise $exercise
-     * @param array $questionList
-     * @param string $questionType
+     * @param array    $questionList
+     * @param string   $questionType
      * @param Question $questionInstance Question/Answer instance
-     * @param array $currentQuestion
-     * @param array $importedFiles
-     * @return integer db response
+     * @param array    $currentQuestion
+     * @param array    $importedFiles
+     *
+     * @return int db response
      */
     public function processAnswers(
         $exercise,
@@ -789,12 +803,14 @@ class MoodleImport
                 $questionInstance->updateWeighting($questionWeighting);
                 $questionInstance->updateDescription(get_lang('ThisQuestionIsNotSupportedYet'));
                 $questionInstance->save($exercise);
+
                 return false;
                 break;
             case 'essay':
                 $questionWeighting = $currentQuestion['defaultmark'];
                 $questionInstance->updateWeighting($questionWeighting);
                 $questionInstance->save($exercise);
+
                 return true;
                 break;
             case 'truefalse':
@@ -815,6 +831,7 @@ class MoodleImport
                 // sets the total weighting of the question
                 $questionInstance->updateWeighting($questionWeighting);
                 $questionInstance->save($exercise);
+
                 return false;
                 break;
             default:
@@ -824,14 +841,15 @@ class MoodleImport
     }
 
     /**
-     * Process Chamilo Unique Answer
+     * Process Chamilo Unique Answer.
      *
      * @param object $objAnswer
-     * @param array $answerValues
-     * @param integer $position
-     * @param integer $questionWeighting
-     * @param array $importedFiles
-     * @return integer db response
+     * @param array  $answerValues
+     * @param int    $position
+     * @param int    $questionWeighting
+     * @param array  $importedFiles
+     *
+     * @return int db response
      */
     public function processUniqueAnswer(
         $objAnswer,
@@ -865,15 +883,15 @@ class MoodleImport
     }
 
     /**
-     * Process Chamilo True False
+     * Process Chamilo True False.
      *
      * @param object $objAnswer
-     * @param array $answerValues
-     * @param integer $position
-     * @param integer $questionWeighting
-     * @param array $importedFiles
+     * @param array  $answerValues
+     * @param int    $position
+     * @param int    $questionWeighting
+     * @param array  $importedFiles
      *
-     * @return integer db response
+     * @return int db response
      */
     public function processTrueFalse(
         $objAnswer,
@@ -907,16 +925,16 @@ class MoodleImport
     }
 
     /**
-     * Process Chamilo FillBlanks
+     * Process Chamilo FillBlanks.
      *
      * @param object $objAnswer
-     * @param array $questionType
-     * @param array $answerValues
+     * @param array  $questionType
+     * @param array  $answerValues
      * @param string $placeholder
-     * @param integer $position
-     * @param array $importedFiles
-     * @return integer db response
+     * @param int    $position
+     * @param array  $importedFiles
      *
+     * @return int db response
      */
     public function processFillBlanks(
         $objAnswer,
@@ -1010,9 +1028,10 @@ class MoodleImport
     }
 
     /**
-     * get All files associated with a question
+     * get All files associated with a question.
      *
      * @param $filesXml
+     *
      * @return array
      */
     public function getAllQuestionFiles($filesXml)
@@ -1063,9 +1082,8 @@ class MoodleImport
         return $allFiles;
     }
 
-
     /**
-     * Litle utility to delete the unuseful tags
+     * Litle utility to delete the unuseful tags.
      *
      * @param $array
      * @param $keys

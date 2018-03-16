@@ -4,18 +4,18 @@
 namespace Chamilo\CoreBundle\Entity\Resource;
 
 use Chamilo\CoreBundle\Entity\Tool;
-use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\ORM\Mapping as ORM;
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Base entity for all resources.
+ *
  * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\MaterializedPathRepository")
  * @ORM\Table(name="resource_node")
  * @Gedmo\Tree(type="materializedPath")
- *
  */
 class ResourceNode
 {
@@ -31,18 +31,18 @@ class ResourceNode
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool")
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id")
-     **/
+     */
     protected $tool;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceLink", mappedBy="resourceNode", cascade={"remove"})
-     **/
+     */
     protected $links;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\AbstractResource", inversedBy="resourceNodes", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="resource_id", referencedColumnName="id")
-     **/
+     */
     //protected $resource;
 
     /**
@@ -75,7 +75,6 @@ class ResourceNode
     /**
      * @Gedmo\TreeLevel
      * @ORM\Column(name="level", type="integer", nullable=true)
-     *
      */
     protected $level;
 
@@ -91,7 +90,6 @@ class ResourceNode
     /**
      * @Gedmo\TreePath(separator="`")
      * @ORM\Column(name="path", type="string", length=3000, nullable=true)
-     *
      */
     protected $path;
 
@@ -110,7 +108,7 @@ class ResourceNode
     //private $pathForCreationLog = '';
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -123,13 +121,13 @@ class ResourceNode
      */
     public function __toString()
     {
-        return (string)$this->getPath();
+        return (string) $this->getPath();
     }
 
     /**
      * Returns the resource id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -138,6 +136,7 @@ class ResourceNode
 
     /**
      * @param int $id
+     *
      * @return $this
      */
     public function setId($id)
@@ -147,33 +146,21 @@ class ResourceNode
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUpdatedAt(\DateTime $updatedAt = null)
     {
         $this->updatedAt = $updatedAt;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getUpdatedAt()
     {
         return $this->updatedAt;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setCreatedAt(\DateTime $createdAt = null)
     {
         $this->createdAt = $createdAt;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCreatedAt()
     {
         return $this->createdAt;
@@ -191,6 +178,7 @@ class ResourceNode
 
     /**
      * Returns the resource type.
+     *
      * @param Tool $tool
      *
      * @return $this
@@ -263,7 +251,7 @@ class ResourceNode
     /**
      * Return the lvl value of the resource in the tree.
      *
-     * @return integer
+     * @return int
      */
     public function getLevel()
     {
@@ -273,7 +261,8 @@ class ResourceNode
     /**
      * Returns the "raw" path of the resource
      * (the path merge names and ids of all items).
-     * Eg.: "Root-1/subdir-2/file.txt-3/"
+     * Eg.: "Root-1/subdir-2/file.txt-3/".
+     *
      * @return string
      */
     public function getPath()
@@ -283,7 +272,8 @@ class ResourceNode
 
     /**
      * Returns the path cleaned from its ids.
-     * Eg.: "Root/subdir/file.txt"
+     * Eg.: "Root/subdir/file.txt".
+     *
      * @return
      */
     public function getPathForDisplay()
@@ -294,8 +284,9 @@ class ResourceNode
     /**
      * Sets the resource name.
      *
-     * @param  string $name
-     * @throws an     exception if the name contains the path separator ('/').
+     * @param string $name
+     *
+     * @throws an exception if the name contains the path separator ('/')
      *
      * @return $this
      */
@@ -344,7 +335,6 @@ class ResourceNode
         return $pathForDisplay;
     }
 
-
     /**
      * This is required for logging the resource path at the creation.
      * Do not use this function otherwise.
@@ -369,6 +359,7 @@ class ResourceNode
 
     /**
      * @param $resource
+     *
      * @return $this
      */
     public function setResource($resource)

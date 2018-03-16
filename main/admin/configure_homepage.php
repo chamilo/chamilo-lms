@@ -2,12 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Configure the portal homepage (manages multi-urls and languages)
+ * Configure the portal homepage (manages multi-urls and languages).
+ *
  * @package chamilo.admin
  */
 
 /**
- * Creates menu tabs for logged and anonymous users
+ * Creates menu tabs for logged and anonymous users.
  *
  * This function copies the file containing private a public tabs (home_tabs_logged_in_$language.html)
  * in to the public tab template (home_tabs_$language.html) but without the private tabs.
@@ -74,13 +75,13 @@ $_languages = api_get_languages();
 $selfUrl = api_get_self();
 $interbreadcrumb[] = [
     'url' => 'index.php',
-    'name' => get_lang('PlatformAdmin')
+    'name' => get_lang('PlatformAdmin'),
 ];
 
 if (!empty($action)) {
     $interbreadcrumb[] = [
         'url' => 'configure_homepage.php',
-        'name' => get_lang('ConfigureHomePage')
+        'name' => get_lang('ConfigureHomePage'),
     ];
 
     switch ($action) {
@@ -219,7 +220,6 @@ if (!empty($action)) {
             case 'edit_top':
                 // Filter
                 $home_top = trim(stripslashes($_POST['home_top']));
-
 
                 // Write
                 if (is_writable($homep)) {
@@ -724,7 +724,6 @@ if (!empty($action)) {
 
                 // For each line of the home_menu file
                 foreach ($home_menu as $key => $enreg) {
-
                     // Check if the current item is the one we want to update
                     if ($key == $link_index) {
                         // This is the link we want to update
@@ -851,7 +850,7 @@ switch ($action) {
         }
         $default = [];
         $form = new FormValidator('configure_homepage_'.$action, 'post', $selfUrl.'?action='.$action, '', ['style' => 'margin: 0px;']);
-        $renderer = & $form->defaultRenderer();
+        $renderer = &$form->defaultRenderer();
 
         $form->addElement('header', '', $tool_name);
         $form->addElement('hidden', 'formSent', '1');
@@ -950,7 +949,7 @@ switch ($action) {
             '',
             ['style' => 'margin: 0px;']
         );
-        $renderer = & $form->defaultRenderer();
+        $renderer = &$form->defaultRenderer();
         $renderer->setHeaderTemplate('');
         $renderer->setFormTemplate('<form{attributes}><table border="0" cellpadding="5" cellspacing="0" width="100%">{content}</table></form>');
         $renderer->setCustomElementTemplate('<tr><td>{element}</td></tr>');

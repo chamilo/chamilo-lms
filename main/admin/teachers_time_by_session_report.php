@@ -2,14 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session;
-use Doctrine\Common\Collections\Criteria;
 use Chamilo\CourseBundle\Entity\Repository\CStudentPublicationRepository;
+use Doctrine\Common\Collections\Criteria;
 
 /**
- * Generate a teacher time report in platform by session only
+ * Generate a teacher time report in platform by session only.
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -136,7 +136,7 @@ if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
             $row['complete_name'],
             $row['time_in_platform'],
             $row['first_connection'],
-            $row['last_connection']
+            $row['last_connection'],
         ];
 
         foreach ($row['courses'] as $course) {
@@ -170,7 +170,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'mySpace/', 'name' => get_lang('Reporting')];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'mySpace/session.php',
-    'name' => get_lang('FollowedSessions')
+    'name' => get_lang('FollowedSessions'),
 ];
 
 $view = new Template($toolName);

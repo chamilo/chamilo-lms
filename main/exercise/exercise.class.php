@@ -1,16 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
+use ChamiloSession as Session;
 
 /**
- * Class Exercise
+ * Class Exercise.
  *
  * Allows to instantiate an object of type Exercise
+ *
  * @package chamilo.exercise
+ *
  * @todo use doctrine object, use getters and setters correctly
+ *
  * @author Olivier Brouckaert
  * @author Julio Montoya Cleaning exercises
  * Modified by Hubert Borderiou #294
@@ -82,8 +85,10 @@ class Exercise
     public $export = false;
 
     /**
-     * Constructor of the class
+     * Constructor of the class.
+     *
      * @param int $courseId
+     *
      * @author Olivier Brouckaert
      */
     public function __construct($courseId = 0)
@@ -131,13 +136,14 @@ class Exercise
     }
 
     /**
-     * Reads exercise information from the data base
+     * Reads exercise information from the data base.
      *
      * @author Olivier Brouckaert
-     * @param integer $id - exercise Id
+     *
+     * @param int  $id                - exercise Id
      * @param bool $parseQuestionList
      *
-     * @return boolean - true if exercise exists, otherwise false
+     * @return bool - true if exercise exists, otherwise false
      */
     public function read($id, $parseQuestionList = true)
     {
@@ -260,9 +266,10 @@ class Exercise
     }
 
     /**
-     * returns the exercise ID
+     * returns the exercise ID.
      *
      * @author Olivier Brouckaert
+     *
      * @return int - exercise ID
      */
     public function selectId()
@@ -271,9 +278,12 @@ class Exercise
     }
 
     /**
-     * returns the exercise title
+     * returns the exercise title.
+     *
      * @author Olivier Brouckaert
+     *
      * @param bool $unformattedText Optional. Get the title without HTML tags
+     *
      * @return string - exercise title
      */
     public function selectTitle($unformattedText = false)
@@ -286,7 +296,7 @@ class Exercise
     }
 
     /**
-     * returns the number of attempts setted
+     * returns the number of attempts setted.
      *
      * @return int - exercise attempts
      */
@@ -296,7 +306,8 @@ class Exercise
     }
 
     /** returns the number of FeedbackType  *
-     *  0=>Feedback , 1=>DirectFeedback, 2=>NoFeedback
+     *  0=>Feedback , 1=>DirectFeedback, 2=>NoFeedback.
+     *
      * @return int - exercise attempts
      */
     public function selectFeedbackType()
@@ -305,7 +316,8 @@ class Exercise
     }
 
     /**
-     * returns the time limit
+     * returns the time limit.
+     *
      * @return int
      */
     public function selectTimeLimit()
@@ -314,9 +326,10 @@ class Exercise
     }
 
     /**
-     * returns the exercise description
+     * returns the exercise description.
      *
      * @author Olivier Brouckaert
+     *
      * @return string - exercise description
      */
     public function selectDescription()
@@ -325,9 +338,10 @@ class Exercise
     }
 
     /**
-     * returns the exercise sound file
+     * returns the exercise sound file.
      *
      * @author Olivier Brouckaert
+     *
      * @return string - exercise description
      */
     public function selectSound()
@@ -336,9 +350,10 @@ class Exercise
     }
 
     /**
-     * returns the exercise type
+     * returns the exercise type.
      *
      * @author Olivier Brouckaert
+     *
      * @return int - exercise type
      */
     public function selectType()
@@ -380,7 +395,8 @@ class Exercise
 
     /**
      * @author hubert borderiou 30-11-11
-     * @return integer : do we display the question category name for students
+     *
+     * @return int : do we display the question category name for students
      */
     public function selectDisplayCategoryName()
     {
@@ -396,9 +412,10 @@ class Exercise
     }
 
     /**
+     * Modify object to update the switch display_category_name.
      *
-     * Modify object to update the switch display_category_name
      * @author hubert borderiou 30-11-11
+     *
      * @param int $value is an integer 0 or 1
      */
     public function updateDisplayCategoryName($value)
@@ -408,7 +425,8 @@ class Exercise
 
     /**
      * @author hubert borderiou 28-11-11
-     * @return string html text : the text to display ay the end of the test.
+     *
+     * @return string html text : the text to display ay the end of the test
      */
     public function selectTextWhenFinished()
     {
@@ -417,6 +435,7 @@ class Exercise
 
     /**
      * @param string $text
+     *
      * @author hubert borderiou 28-11-11
      */
     public function updateTextWhenFinished($text)
@@ -425,9 +444,11 @@ class Exercise
     }
 
     /**
-     * return 1 or 2 if randomByCat
+     * return 1 or 2 if randomByCat.
+     *
      * @author hubert borderiou
-     * @return integer - quiz random by category
+     *
+     * @return int - quiz random by category
      */
     public function selectRandomByCat()
     {
@@ -437,9 +458,11 @@ class Exercise
     /**
      * return 0 if no random by cat
      * return 1 if random by cat, categories shuffled
-     * return 2 if random by cat, categories sorted by alphabetic order
+     * return 2 if random by cat, categories sorted by alphabetic order.
+     *
      * @author hubert borderiou
-     * @return integer - quiz random by category
+     *
+     * @return int - quiz random by category
      */
     public function isRandomByCat()
     {
@@ -455,7 +478,8 @@ class Exercise
 
     /**
      * return nothing
-     * update randomByCat value for object
+     * update randomByCat value for object.
+     *
      * @param int $random
      *
      * @author hubert borderiou
@@ -477,10 +501,11 @@ class Exercise
     }
 
     /**
-     * Tells if questions are selected randomly, and if so returns the draws
+     * Tells if questions are selected randomly, and if so returns the draws.
      *
      * @author Carlos Vargas
-     * @return integer - results disabled exercise
+     *
+     * @return int - results disabled exercise
      */
     public function selectResultsDisabled()
     {
@@ -488,10 +513,11 @@ class Exercise
     }
 
     /**
-     * tells if questions are selected randomly, and if so returns the draws
+     * tells if questions are selected randomly, and if so returns the draws.
      *
      * @author Olivier Brouckaert
-     * @return integer - 0 if not random, otherwise the draws
+     *
+     * @return int - 0 if not random, otherwise the draws
      */
     public function isRandom()
     {
@@ -513,7 +539,8 @@ class Exercise
     }
 
     /**
-     * Same as isRandom() but has a name applied to values different than 0 or 1
+     * Same as isRandom() but has a name applied to values different than 0 or 1.
+     *
      * @return int
      */
     public function getShuffle()
@@ -522,9 +549,10 @@ class Exercise
     }
 
     /**
-     * returns the exercise status (1 = enabled ; 0 = disabled)
+     * returns the exercise status (1 = enabled ; 0 = disabled).
      *
      * @author Olivier Brouckaert
+     *
      * @return int - 1 if enabled, otherwise 0
      */
     public function selectStatus()
@@ -535,9 +563,10 @@ class Exercise
     /**
      * If false the question list will be managed as always if true
      * the question will be filtered
-     * depending of the exercise settings (table c_quiz_rel_category)
+     * depending of the exercise settings (table c_quiz_rel_category).
+     *
      * @param bool $status active or inactive grouping
-     **/
+     */
     public function setCategoriesGrouping($status)
     {
         $this->categories_grouping = (bool) $status;
@@ -595,13 +624,12 @@ class Exercise
     }
 
     /**
-     *
-     * @param int $start
-     * @param int $limit
-     * @param int $sidx
+     * @param int    $start
+     * @param int    $limit
+     * @param int    $sidx
      * @param string $sord
-     * @param array $whereCondition
-     * @param array $extraFields
+     * @param array  $whereCondition
+     * @param array  $extraFields
      *
      * @return array
      */
@@ -686,7 +714,7 @@ class Exercise
                             '<a href="#" style="padding:0px; margin:0px;">'.$category_labels.'</a>'
                         ),
                         'score' => $objQuestionTmp->selectWeighting(),
-                        'level' => $objQuestionTmp->level
+                        'level' => $objQuestionTmp->level,
                     ];
 
                     if (!empty($extraFields)) {
@@ -705,12 +733,14 @@ class Exercise
                     $questions[] = $question;
                 }
             }
+
             return $questions;
         }
     }
 
     /**
-     * Get question count per exercise from DB (any special treatment)
+     * Get question count per exercise from DB (any special treatment).
+     *
      * @return int
      */
     public function getQuestionCount()
@@ -757,151 +787,17 @@ class Exercise
         if (Database::num_rows($result)) {
             $list = Database::store_result($result, 'ASSOC');
         }
+
         return $list;
     }
 
     /**
-     * Gets the question list ordered by the question_order setting (drag and drop)
-     * @return array
-     */
-    private function getQuestionOrderedList()
-    {
-        $questionList = [];
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-
-        // Getting question_order to verify that the question
-        // list is correct and all question_order's were set
-        $sql = "SELECT DISTINCT e.question_order
-                FROM $TBL_EXERCICE_QUESTION e
-                INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.id AND e.c_id = q.c_id)
-                WHERE
-                  e.c_id = {$this->course_id} AND
-                  e.exercice_id	= ".$this->id;
-
-        $result = Database::query($sql);
-        $count_question_orders = Database::num_rows($result);
-
-        // Getting question list from the order (question list drag n drop interface).
-        $sql = "SELECT DISTINCT e.question_id, e.question_order
-                FROM $TBL_EXERCICE_QUESTION e
-                INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.id AND e.c_id = q.c_id)
-                WHERE
-                    e.c_id = {$this->course_id} AND
-                    e.exercice_id = '".$this->id."'
-                ORDER BY question_order";
-
-        $result = Database::query($sql);
-
-        // Fills the array with the question ID for this exercise
-        // the key of the array is the question position
-        $temp_question_list = [];
-        $counter = 1;
-        while ($new_object = Database::fetch_object($result)) {
-            // Correct order.
-            $questionList[$new_object->question_order] = $new_object->question_id;
-            // Just in case we save the order in other array
-            $temp_question_list[$counter] = $new_object->question_id;
-            $counter++;
-        }
-
-        if (!empty($temp_question_list)) {
-            /* If both array don't match it means that question_order was not correctly set
-               for all questions using the default mysql order */
-            if (count($temp_question_list) != $count_question_orders) {
-                $questionList = $temp_question_list;
-            }
-        }
-
-        return $questionList;
-    }
-
-    /**
-     * Select N values from the questions per category array
-     *
-     * @param array $categoriesAddedInExercise
-     * @param array $question_list
-     * @param array $questions_by_category per category
-     * @param bool $flatResult
-     * @param bool $randomizeQuestions
-     *
-     * @return array
-     */
-    private function pickQuestionsPerCategory(
-        $categoriesAddedInExercise,
-        $question_list,
-        & $questions_by_category,
-        $flatResult = true,
-        $randomizeQuestions = false
-    ) {
-        $addAll = true;
-        $categoryCountArray = [];
-
-        // Getting how many questions will be selected per category.
-        if (!empty($categoriesAddedInExercise)) {
-            $addAll = false;
-            // Parsing question according the category rel exercise settings
-            foreach ($categoriesAddedInExercise as $category_info) {
-                $category_id = $category_info['category_id'];
-                if (isset($questions_by_category[$category_id])) {
-                    // How many question will be picked from this category.
-                    $count = $category_info['count_questions'];
-                    // -1 means all questions
-                    $categoryCountArray[$category_id] = $count;
-                    if ($count == -1) {
-                        $categoryCountArray[$category_id] = 999;
-                    }
-                }
-            }
-        }
-
-        if (!empty($questions_by_category)) {
-            $temp_question_list = [];
-            foreach ($questions_by_category as $category_id => & $categoryQuestionList) {
-                if (isset($categoryCountArray) && !empty($categoryCountArray)) {
-                    $numberOfQuestions = 0;
-                    if (isset($categoryCountArray[$category_id])) {
-                        $numberOfQuestions = $categoryCountArray[$category_id];
-                    }
-                }
-
-                if ($addAll) {
-                    $numberOfQuestions = 999;
-                }
-
-                if (!empty($numberOfQuestions)) {
-                    $elements = TestCategory::getNElementsFromArray(
-                        $categoryQuestionList,
-                        $numberOfQuestions,
-                        $randomizeQuestions
-                    );
-
-                    if (!empty($elements)) {
-                        $temp_question_list[$category_id] = $elements;
-                        $categoryQuestionList = $elements;
-                    }
-                }
-            }
-
-            if (!empty($temp_question_list)) {
-                if ($flatResult) {
-                    $temp_question_list = array_flatten($temp_question_list);
-                }
-                $question_list = $temp_question_list;
-            }
-        }
-
-        return $question_list;
-    }
-
-    /**
      * Selecting question list depending in the exercise-category
-     * relationship (category table in exercise settings)
+     * relationship (category table in exercise settings).
      *
      * @param array $question_list
-     * @param int $questionSelectionType
+     * @param int   $questionSelectionType
+     *
      * @return array
      */
     public function getQuestionListWithCategoryListFilteredByCategorySettings(
@@ -910,7 +806,7 @@ class Exercise
     ) {
         $result = [
             'question_list' => [],
-            'category_with_questions_list' => []
+            'category_with_questions_list' => [],
         ];
 
         // Order/random categories
@@ -1084,7 +980,7 @@ class Exercise
                     if ($this->categoryMinusOne) {
                         //$index = 1;
                     }
-                    /** @var \Chamilo\CourseBundle\Entity\CQuizCategory $categoryParent*/
+                    /** @var \Chamilo\CourseBundle\Entity\CQuizCategory $categoryParent */
                     foreach ($path as $categoryParent) {
                         $visibility = $categoryParent->getVisibility();
                         if ($visibility == 0) {
@@ -1110,7 +1006,7 @@ class Exercise
                 $cat['parent_info'] = $categoryParentInfo;
                 $newCategoryList[$categoryId] = [
                     'category' => $cat,
-                    'question_list' => $questionList
+                    'question_list' => $questionList,
                 ];
             }
 
@@ -1121,11 +1017,14 @@ class Exercise
     }
 
     /**
-     * returns the array with the question ID list
-     * @param   bool    $from_db    Whether the results should be fetched in the database or just from memory
-     * @param   bool    $adminView  Whether we should return all questions (admin view) or
-     * just a list limited by the max number of random questions
+     * returns the array with the question ID list.
+     *
+     * @param bool $from_db   Whether the results should be fetched in the database or just from memory
+     * @param bool $adminView Whether we should return all questions (admin view) or
+     *                        just a list limited by the max number of random questions
+     *
      * @author Olivier Brouckaert
+     *
      * @return array - question ID list
      */
     public function selectQuestionList($from_db = false, $adminView = false)
@@ -1164,10 +1063,11 @@ class Exercise
     }
 
     /**
-     * returns the number of questions in this exercise
+     * returns the number of questions in this exercise.
      *
      * @author Olivier Brouckaert
-     * @return integer - number of questions
+     *
+     * @return int - number of questions
      */
     public function selectNbrQuestions()
     {
@@ -1191,14 +1091,16 @@ class Exercise
     }
 
     /**
-     * Selects questions randomly in the question list
+     * Selects questions randomly in the question list.
      *
      * @author Olivier Brouckaert
      * @author Hubert Borderiou 15 nov 2011
-     * @param    bool $adminView Whether we should return all
-     * questions (admin view) or just a list limited by the max number of random questions
+     *
+     * @param bool $adminView Whether we should return all
+     *                        questions (admin view) or just a list limited by the max number of random questions
+     *
      * @return array - if the exercise is not set to take questions randomly, returns the question list
-     * without randomizing, otherwise, returns the list with questions selected randomly
+     *               without randomizing, otherwise, returns the list with questions selected randomly
      */
     public function selectRandomList($adminView = false)
     {
@@ -1231,11 +1133,13 @@ class Exercise
     }
 
     /**
-     * returns 'true' if the question ID is in the question list
+     * returns 'true' if the question ID is in the question list.
      *
      * @author Olivier Brouckaert
-     * @param integer $questionId - question ID
-     * @return boolean - true if in the list, otherwise false
+     *
+     * @param int $questionId - question ID
+     *
+     * @return bool - true if in the list, otherwise false
      */
     public function isInList($questionId)
     {
@@ -1247,9 +1151,10 @@ class Exercise
     }
 
     /**
-     * changes the exercise title
+     * changes the exercise title.
      *
      * @author Olivier Brouckaert
+     *
      * @param string $title - exercise title
      */
     public function updateTitle($title)
@@ -1258,7 +1163,7 @@ class Exercise
     }
 
     /**
-     * changes the exercise max attempts
+     * changes the exercise max attempts.
      *
      * @param int $attempts - exercise max attempts
      */
@@ -1268,7 +1173,7 @@ class Exercise
     }
 
     /**
-     * changes the exercise feedback type
+     * changes the exercise feedback type.
      *
      * @param int $feedback_type
      */
@@ -1278,9 +1183,10 @@ class Exercise
     }
 
     /**
-     * changes the exercise description
+     * changes the exercise description.
      *
      * @author Olivier Brouckaert
+     *
      * @param string $description - exercise description
      */
     public function updateDescription($description)
@@ -1289,9 +1195,10 @@ class Exercise
     }
 
     /**
-     * changes the exercise expired_time
+     * changes the exercise expired_time.
      *
      * @author Isaac flores
+     *
      * @param int $expired_time The expired time of the quiz
      */
     public function updateExpiredTime($expired_time)
@@ -1415,10 +1322,11 @@ class Exercise
     }
 
     /**
-     * changes the exercise sound file
+     * changes the exercise sound file.
      *
      * @author Olivier Brouckaert
-     * @param string $sound - exercise sound file
+     *
+     * @param string $sound  - exercise sound file
      * @param string $delete - ask to delete the file
      */
     public function updateSound($sound, $delete)
@@ -1464,10 +1372,11 @@ class Exercise
     }
 
     /**
-     * changes the exercise type
+     * changes the exercise type.
      *
      * @author Olivier Brouckaert
-     * @param integer $type - exercise type
+     *
+     * @param int $type - exercise type
      */
     public function updateType($type)
     {
@@ -1476,10 +1385,11 @@ class Exercise
 
     /**
      * sets to 0 if questions are not selected randomly
-     * if questions are selected randomly, sets the draws
+     * if questions are selected randomly, sets the draws.
      *
      * @author Olivier Brouckaert
-     * @param integer $random - 0 if not random, otherwise the draws
+     *
+     * @param int $random - 0 if not random, otherwise the draws
      */
     public function setRandom($random)
     {
@@ -1491,9 +1401,11 @@ class Exercise
 
     /**
      * sets to 0 if answers are not selected randomly
-     * if answers are selected randomly
+     * if answers are selected randomly.
+     *
      * @author Juan Carlos Rana
-     * @param integer $random_answers - random answers
+     *
+     * @param int $random_answers - random answers
      */
     public function updateRandomAnswers($random_answers)
     {
@@ -1501,7 +1413,7 @@ class Exercise
     }
 
     /**
-     * enables the exercise
+     * enables the exercise.
      *
      * @author Olivier Brouckaert
      */
@@ -1511,7 +1423,7 @@ class Exercise
     }
 
     /**
-     * disables the exercise
+     * disables the exercise.
      *
      * @author Olivier Brouckaert
      */
@@ -1521,7 +1433,7 @@ class Exercise
     }
 
     /**
-     * Set disable results
+     * Set disable results.
      */
     public function disable_results()
     {
@@ -1529,7 +1441,7 @@ class Exercise
     }
 
     /**
-     * Enable results
+     * Enable results.
      */
     public function enable_results()
     {
@@ -1545,8 +1457,10 @@ class Exercise
     }
 
     /**
-     * updates the exercise in the data base
+     * updates the exercise in the data base.
+     *
      * @param string $type_e
+     *
      * @author Olivier Brouckaert
      */
     public function save($type_e = '')
@@ -1624,7 +1538,7 @@ class Exercise
                     'pass_percentage' => $pass_percentage,
                     'results_disabled' => $results_disabled,
                     'question_selection_type' => $this->getQuestionSelectionType(),
-                    'hide_question_title' => $this->getHideQuestionTitle()
+                    'hide_question_title' => $this->getHideQuestionTitle(),
                 ];
 
                 $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
@@ -1703,7 +1617,7 @@ class Exercise
                 'pass_percentage' => $pass_percentage,
                 'save_correct_answers' => (int) $saveCorrectAnswers,
                 'propagate_neg' => $propagate_neg,
-                'hide_question_title' => $this->getHideQuestionTitle()
+                'hide_question_title' => $this->getHideQuestionTitle(),
             ];
 
             $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
@@ -1765,7 +1679,7 @@ class Exercise
     }
 
     /**
-     * Updates question position
+     * Updates question position.
      */
     public function update_question_positions()
     {
@@ -1786,11 +1700,13 @@ class Exercise
     }
 
     /**
-     * Adds a question into the question list
+     * Adds a question into the question list.
      *
      * @author Olivier Brouckaert
-     * @param integer $questionId - question ID
-     * @return boolean - true if the question has been added, otherwise false
+     *
+     * @param int $questionId - question ID
+     *
+     * @return bool - true if the question has been added, otherwise false
      */
     public function addToList($questionId)
     {
@@ -1813,11 +1729,13 @@ class Exercise
     }
 
     /**
-     * removes a question from the question list
+     * removes a question from the question list.
      *
      * @author Olivier Brouckaert
-     * @param integer $questionId - question ID
-     * @return boolean - true if the question has been removed, otherwise false
+     *
+     * @param int $questionId - question ID
+     *
+     * @return bool - true if the question has been removed, otherwise false
      */
     public function removeFromList($questionId)
     {
@@ -1844,7 +1762,7 @@ class Exercise
 
     /**
      * deletes the exercise from the database
-     * Notice : leaves the question in the data base
+     * Notice : leaves the question in the data base.
      *
      * @author Olivier Brouckaert
      */
@@ -1880,9 +1798,10 @@ class Exercise
     }
 
     /**
-     * Creates the form to create / edit an exercise
+     * Creates the form to create / edit an exercise.
+     *
      * @param FormValidator $form
-     * @param string $type
+     * @param string        $type
      */
     public function createForm($form, $type = 'full')
     {
@@ -2041,7 +1960,7 @@ class Exercise
                     '1',
                     [
                         'onclick' => 'check_per_page_all()',
-                        'id' => 'option_page_all'
+                        'id' => 'option_page_all',
                     ]
                 );
                 $radios[] = $form->createElement(
@@ -2052,7 +1971,7 @@ class Exercise
                     '2',
                     [
                         'onclick' => 'check_per_page_one()',
-                        'id' => 'option_page_one'
+                        'id' => 'option_page_one',
                     ]
                 );
 
@@ -2237,7 +2156,7 @@ class Exercise
                 $option,
                 [
                     'id' => 'questionSelection',
-                    'onchange' => 'checkQuestionSelection()'
+                    'onchange' => 'checkQuestionSelection()',
                 ]
             );
 
@@ -2267,7 +2186,7 @@ class Exercise
                 'randomQuestions',
                 [
                     get_lang('RandomQuestions'),
-                    get_lang('RandomQuestionsHelp')
+                    get_lang('RandomQuestionsHelp'),
                 ],
                 $option,
                 ['id' => 'randomQuestions']
@@ -2291,21 +2210,21 @@ class Exercise
             // Category name.
             $radio_display_cat_name = [
                 $form->createElement('radio', 'display_category_name', null, get_lang('Yes'), '1'),
-                $form->createElement('radio', 'display_category_name', null, get_lang('No'), '0')
+                $form->createElement('radio', 'display_category_name', null, get_lang('No'), '0'),
             ];
             $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'));
 
             // Random answers.
             $radios_random_answers = [
                 $form->createElement('radio', 'randomAnswers', null, get_lang('Yes'), '1'),
-                $form->createElement('radio', 'randomAnswers', null, get_lang('No'), '0')
+                $form->createElement('radio', 'randomAnswers', null, get_lang('No'), '0'),
             ];
             $form->addGroup($radios_random_answers, null, get_lang('RandomAnswers'));
 
             // Hide question title.
             $group = [
                 $form->createElement('radio', 'hide_question_title', null, get_lang('Yes'), '1'),
-                $form->createElement('radio', 'hide_question_title', null, get_lang('No'), '0')
+                $form->createElement('radio', 'hide_question_title', null, get_lang('No'), '0'),
             ];
             $form->addGroup($group, null, get_lang('HideQuestionTitle'));
 
@@ -2327,7 +2246,7 @@ class Exercise
                         null,
                         get_lang('No'),
                         '0'
-                    )
+                    ),
                 ];
                 $form->addGroup($group, null, get_lang('ShowPreviousButton'));
             }
@@ -2425,7 +2344,7 @@ class Exercise
                 false,
                 [
                     'id' => 'enabletimercontroltotalminutes',
-                    'cols-size' => [2, 2, 8]
+                    'cols-size' => [2, 2, 8],
                 ]
             );
             $form->addElement('html', '</div>');
@@ -2487,7 +2406,7 @@ class Exercise
                         'c_id' => api_get_course_int_id(),
                         'field_id' => $specific_field['id'],
                         'ref_id' => $this->id,
-                        'tool_id' => "'".TOOL_QUIZ."'"
+                        'tool_id' => "'".TOOL_QUIZ."'",
                     ];
                     $values = get_specific_field_values_list($filter, ['value']);
                     if (!empty($values)) {
@@ -2607,7 +2526,7 @@ class Exercise
                 'exerciseAttempts',
                 'propagate_neg',
                 'enabletimercontrol',
-                'review_answers'
+                'review_answers',
             ];
 
             foreach ($elementsToFreeze as $elementName) {
@@ -2619,9 +2538,11 @@ class Exercise
     }
 
     /**
-     * function which process the creation of exercises
+     * function which process the creation of exercises.
+     *
      * @param FormValidator $form
      * @param string
+     *
      * @return int c_quiz.iid
      */
     public function processCreation($form, $type = '')
@@ -2897,8 +2818,9 @@ class Exercise
     /**
      * Cleans the student's results only for the Exercise tool (Not from the LP)
      * The LP results are NOT deleted by default, otherwise put $cleanLpTests = true
-     * Works with exercises in sessions
-     * @param bool $cleanLpTests
+     * Works with exercises in sessions.
+     *
+     * @param bool   $cleanLpTests
      * @param string $cleanResultBeforeDate
      *
      * @return int quantity of user's exercises deleted
@@ -2937,7 +2859,7 @@ class Exercise
                     session_id = ".api_get_session_id()." ".
                     $sql_where;
 
-        $result   = Database::query($sql);
+        $result = Database::query($sql);
         $exe_list = Database::store_result($result);
 
         // deleting TRACK_E_ATTEMPT table
@@ -2975,7 +2897,7 @@ class Exercise
     }
 
     /**
-     * Copies an exercise (duplicate all questions and answers)
+     * Copies an exercise (duplicate all questions and answers).
      */
     public function copy_exercise()
     {
@@ -3016,17 +2938,7 @@ class Exercise
     }
 
     /**
-     * Changes the exercise id
-     *
-     * @param int $id - exercise id
-     */
-    private function updateId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Changes the exercise status
+     * Changes the exercise status.
      *
      * @param string $status - exercise status
      */
@@ -3036,10 +2948,11 @@ class Exercise
     }
 
     /**
-     * @param int $lp_id
-     * @param int $lp_item_id
-     * @param int $lp_item_view_id
+     * @param int    $lp_id
+     * @param int    $lp_item_id
+     * @param int    $lp_item_view_id
      * @param string $status
+     *
      * @return array
      */
     public function get_stat_track_exercise_info(
@@ -3059,13 +2972,13 @@ class Exercise
             $lp_item_view_id = 0;
         }
         $condition = ' WHERE exe_exo_id 	= '."'".$this->id."'".' AND
-					   exe_user_id 			= ' . "'".api_get_user_id()."'".' AND
-					   c_id                 = ' . api_get_course_int_id().' AND
-					   status 				= ' . "'".Database::escape_string($status)."'".' AND
-					   orig_lp_id 			= ' . "'".$lp_id."'".' AND
-					   orig_lp_item_id 		= ' . "'".$lp_item_id."'".' AND
-                       orig_lp_item_view_id = ' . "'".$lp_item_view_id."'".' AND
-					   session_id 			= ' . "'".api_get_session_id()."' LIMIT 1"; //Adding limit 1 just in case
+					   exe_user_id 			= '."'".api_get_user_id()."'".' AND
+					   c_id                 = '.api_get_course_int_id().' AND
+					   status 				= '."'".Database::escape_string($status)."'".' AND
+					   orig_lp_id 			= '."'".$lp_id."'".' AND
+					   orig_lp_item_id 		= '."'".$lp_item_id."'".' AND
+                       orig_lp_item_view_id = '."'".$lp_item_view_id."'".' AND
+					   session_id 			= '."'".api_get_session_id()."' LIMIT 1"; //Adding limit 1 just in case
 
         $sql_track = 'SELECT * FROM '.$track_exercises.$condition;
 
@@ -3080,9 +2993,9 @@ class Exercise
     }
 
     /**
-     * Saves a test attempt
+     * Saves a test attempt.
      *
-     * @param int  $clock_expired_time clock_expired_time
+     * @param int $clock_expired_time clock_expired_time
      * @param int  int lp id
      * @param int  int lp item id
      * @param int  int lp item_view id
@@ -3120,21 +3033,21 @@ class Exercise
             'exe_exo_id' => $this->id,
             'exe_user_id' => api_get_user_id(),
             'c_id' => api_get_course_int_id(),
-            'status' =>  'incomplete',
-            'session_id'  => api_get_session_id(),
-            'data_tracking'  => implode(',', $questionList),
+            'status' => 'incomplete',
+            'session_id' => api_get_session_id(),
+            'data_tracking' => implode(',', $questionList),
             'start_date' => api_get_utc_datetime(),
             'orig_lp_id' => $safe_lp_id,
-            'orig_lp_item_id'  => $safe_lp_item_id,
-            'orig_lp_item_view_id'  => $safe_lp_item_view_id,
-            'exe_weighting'=> $weight,
+            'orig_lp_item_id' => $safe_lp_item_id,
+            'orig_lp_item_view_id' => $safe_lp_item_view_id,
+            'exe_weighting' => $weight,
             'user_ip' => api_get_real_ip(),
             'exe_date' => api_get_utc_datetime(),
             'exe_result' => 0,
             'steps_counter' => 0,
             'exe_duration' => 0,
             'expired_time_control' => $clock_expired_time,
-            'questions_to_check' => ''
+            'questions_to_check' => '',
         ];
 
         $id = Database::insert($track_exercises, $params);
@@ -3143,11 +3056,12 @@ class Exercise
     }
 
     /**
-     * @param int $question_id
-     * @param int $questionNum
-     * @param array $questions_in_media
+     * @param int    $question_id
+     * @param int    $questionNum
+     * @param array  $questions_in_media
      * @param string $currentAnswer
-     * @param array $myRemindList
+     * @param array  $myRemindList
+     *
      * @return string
      */
     public function show_button(
@@ -3181,12 +3095,12 @@ class Exercise
                     'num' => $questionNum,
                     'exerciseType' => $this->type,
                     'exerciseId' => $this->id,
-                    'reminder' => empty($myRemindList) ? null : 2
+                    'reminder' => empty($myRemindList) ? null : 2,
                 ]),
                 [
                     'class' => 'ajax btn btn-default',
                     'data-title' => $urlTitle,
-                    'data-size' => 'md'
+                    'data-size' => 'md',
                 ]
             );
             $html .= '<br />';
@@ -3251,7 +3165,7 @@ class Exercise
                                         'type' => 'button',
                                         'class' => 'btn btn-default',
                                         'data-prev' => $prev_question,
-                                        'data-question' => $question_id
+                                        'data-question' => $question_id,
                                     ]
                                 );
                             }
@@ -3266,7 +3180,7 @@ class Exercise
                             [
                                 'type' => 'button',
                                 'class' => $class,
-                                'data-list' => implode(",", $questions_in_media)
+                                'data-list' => implode(",", $questions_in_media),
                             ]
                         );
                     } else {
@@ -3304,14 +3218,16 @@ class Exercise
     }
 
     /**
-     * So the time control will work
+     * So the time control will work.
      *
      * @param string $time_left
+     *
      * @return string
      */
     public function showTimeControlJS($time_left)
     {
         $time_left = intval($time_left);
+
         return "<script>
 
             function get_expired_date_string(expired_time) {
@@ -3397,22 +3313,24 @@ class Exercise
 	    </script>";
     }
 
-
     /**
-     * This function was originally found in the exercise_show.php
-     * @param int $exeId
-     * @param int $questionId
-     * @param int $choice the user selected
-     * @param string $from  function is called from 'exercise_show' or 'exercise_result'
-     * @param array $exerciseResultCoordinates the hotspot coordinates $hotspot[$question_id] = coordinates
-     * @param bool $saved_results save results in the DB or just show the reponse
-     * @param bool $from_database gets information from DB or from the current selection
-     * @param bool $show_result show results or not
-     * @param int $propagate_neg
-     * @param array $hotspot_delineation_result
-     * @param bool $showTotalScoreAndUserChoicesInLastAttempt
+     * This function was originally found in the exercise_show.php.
+     *
+     * @param int    $exeId
+     * @param int    $questionId
+     * @param int    $choice                                    the user selected
+     * @param string $from                                      function is called from 'exercise_show' or 'exercise_result'
+     * @param array  $exerciseResultCoordinates                 the hotspot coordinates $hotspot[$question_id] = coordinates
+     * @param bool   $saved_results                             save results in the DB or just show the reponse
+     * @param bool   $from_database                             gets information from DB or from the current selection
+     * @param bool   $show_result                               show results or not
+     * @param int    $propagate_neg
+     * @param array  $hotspot_delineation_result
+     * @param bool   $showTotalScoreAndUserChoicesInLastAttempt
+     *
      * @todo    reduce parameters of this function
-     * @return  string  html code
+     *
+     * @return string html code
      */
     public function manage_answer(
         $exeId,
@@ -3460,7 +3378,7 @@ class Exercise
         $threadhold2 = 0;
         $threadhold3 = 0;
         $arrques = null;
-        $arrans  = null;
+        $arrans = null;
         $questionId = intval($questionId);
         $exeId = intval($exeId);
         $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -4176,7 +4094,7 @@ class Exercise
                             $questionScore = 0;
                         }
                         $arrques = $questionName;
-                        $arrans  = $choice;
+                        $arrans = $choice;
                     } else {
                         $studentChoice = $choice;
                         if ($studentChoice) {
@@ -4206,7 +4124,7 @@ class Exercise
                             $totalScore += $questionScore;
                         }
                         $arrques = $questionName;
-                        $arrans  = $choice;
+                        $arrans = $choice;
                     } else {
                         $studentChoice = $choice;
                         if ($studentChoice) {
@@ -4334,7 +4252,7 @@ class Exercise
                                 echo '</tr>';
                             }
                         }
-                        break(2); // break the switch and the "for" condition
+                        break 2; // break the switch and the "for" condition
                     } else {
                         if ($answerCorrect) {
                             if (isset($choice[$answerAutoId]) &&
@@ -4471,8 +4389,8 @@ class Exercise
                 case HOT_SPOT_ORDER:
                     $studentChoice = $choice['order'][$answerId];
                     if ($studentChoice == $answerId) {
-                        $questionScore  += $answerWeighting;
-                        $totalScore     += $answerWeighting;
+                        $questionScore += $answerWeighting;
+                        $totalScore += $answerWeighting;
                         $studentChoice = true;
                     } else {
                         $studentChoice = false;
@@ -4652,7 +4570,7 @@ class Exercise
                             );
                         } elseif ($answerType == HOT_SPOT) {
                             /**
-                             * @var int $correctAnswerId
+                             * @var int
                              * @var TrackEHotspot $hotspot
                              */
                             foreach ($orderedHotspots as $correctAnswerId => $hotspot) {
@@ -5335,26 +5253,26 @@ class Exercise
                         $table_resume = '<table class="data_table">
                                 <tr class="row_odd" >
                                     <td></td>
-                                    <td ><b>' . get_lang('Requirements').'</b></td>
-                                    <td><b>' . get_lang('YourAnswer').'</b></td>
+                                    <td ><b>'.get_lang('Requirements').'</b></td>
+                                    <td><b>'.get_lang('YourAnswer').'</b></td>
                                 </tr>
                                 <tr class="row_even">
-                                    <td><b>' . get_lang('Overlap').'</b></td>
-                                    <td>' . get_lang('Min').' '.$threadhold1.'</td>
-                                    <td><div style="color:' . $overlap_color.'">'
-                                        . (($final_overlap < 0) ? 0 : intval($final_overlap)).'</div></td>
+                                    <td><b>'.get_lang('Overlap').'</b></td>
+                                    <td>'.get_lang('Min').' '.$threadhold1.'</td>
+                                    <td><div style="color:'.$overlap_color.'">'
+                                        .(($final_overlap < 0) ? 0 : intval($final_overlap)).'</div></td>
                                 </tr>
                                 <tr>
-                                    <td><b>' . get_lang('Excess').'</b></td>
-                                    <td>' . get_lang('Max').' '.$threadhold2.'</td>
-                                    <td><div style="color:' . $excess_color.'">'
-                                        . (($final_excess < 0) ? 0 : intval($final_excess)).'</div></td>
+                                    <td><b>'.get_lang('Excess').'</b></td>
+                                    <td>'.get_lang('Max').' '.$threadhold2.'</td>
+                                    <td><div style="color:'.$excess_color.'">'
+                                        .(($final_excess < 0) ? 0 : intval($final_excess)).'</div></td>
                                 </tr>
                                 <tr class="row_even">
-                                    <td><b>' . get_lang('Missing').'</b></td>
-                                    <td>' . get_lang('Max').' '.$threadhold3.'</td>
-                                    <td><div style="color:' . $missing_color.'">'
-                                        . (($final_missing < 0) ? 0 : intval($final_missing)).'</div></td>
+                                    <td><b>'.get_lang('Missing').'</b></td>
+                                    <td>'.get_lang('Max').' '.$threadhold3.'</td>
+                                    <td><div style="color:'.$missing_color.'">'
+                                        .(($final_missing < 0) ? 0 : intval($final_missing)).'</div></td>
                                 </tr>
                             </table>';
                         if ($next == 0) {
@@ -5449,7 +5367,7 @@ class Exercise
                     echo "
                         <tr>
                             <td colspan=\"2\">
-                                <p><em>" . get_lang('HotSpot')."</em></p>
+                                <p><em>".get_lang('HotSpot')."</em></p>
                                 <div id=\"hotspot-solution-$questionId\"></div>
                                 <script>
                                     $(document).on('ready', function () {
@@ -5612,8 +5530,8 @@ class Exercise
                             'hotspot_exe_id = ? AND hotspot_question_id = ? AND c_id = ?' => [
                                 $exeId,
                                 $questionId,
-                                api_get_course_int_id()
-                            ]
+                                api_get_course_int_id(),
+                            ],
                         ]
                     );
 
@@ -5644,8 +5562,8 @@ class Exercise
         if ($saved_results) {
             $stat_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
             $sql = 'UPDATE '.$stat_table.' SET
-                        exe_result = exe_result + ' . floatval($questionScore).'
-                    WHERE exe_id = ' . $exeId;
+                        exe_result = exe_result + '.floatval($questionScore).'
+                    WHERE exe_id = '.$exeId;
             Database::query($sql);
         }
 
@@ -5662,14 +5580,15 @@ class Exercise
     }
 
     /**
-     * Sends a notification when a user ends an examn
+     * Sends a notification when a user ends an examn.
      *
-     * @param string $type 'start' or 'end' of an exercise
-     * @param array $question_list_answers
+     * @param string $type                  'start' or 'end' of an exercise
+     * @param array  $question_list_answers
      * @param string $origin
-     * @param int $exe_id
-     * @param float $score
-     * @param float $weight
+     * @param int    $exe_id
+     * @param float  $score
+     * @param float  $weight
+     *
      * @return bool
      */
     public function send_mail_notification_for_exam(
@@ -5678,7 +5597,7 @@ class Exercise
         $origin,
         $exe_id,
         $score = null,
-        $weight  = null
+        $weight = null
     ) {
         $setting = api_get_course_setting('email_alert_manager_on_new_quiz');
 
@@ -5820,7 +5739,7 @@ class Exercise
             '#email#' => $user_info['email'],
             '#exercise#' => $this->exercise,
             '#student_complete_name#' => $user_info['complete_name'],
-            '#course#' => $courseInfo['title']
+            '#course#' => $courseInfo['title'],
         ];
         if ($origin != 'learnpath' && $sendEnd) {
             $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
@@ -5847,184 +5766,11 @@ class Exercise
     }
 
     /**
-     * Sends a notification when a user ends an examn
-     * @param array $question_list_answers
-     * @param string $origin
-     * @param int $exe_id
-     */
-    private function send_notification_for_open_questions(
-        $question_list_answers,
-        $origin,
-        $exe_id,
-        $user_info,
-        $url_email,
-        $teachers
-    ) {
-        // Email configuration settings
-        $courseCode = api_get_course_id();
-        $course_info = api_get_course_info($courseCode);
-
-        $msg = get_lang('OpenQuestionsAttempted').'<br /><br />'
-                    .get_lang('AttemptDetails').' : <br /><br />'
-                    .'<table>'
-                        .'<tr>'
-                            .'<td><em>'.get_lang('CourseName').'</em></td>'
-                            .'<td>&nbsp;<b>#course#</b></td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('TestAttempted').'</td>'
-                            .'<td>&nbsp;#exercise#</td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('StudentName').'</td>'
-                            .'<td>&nbsp;#firstName# #lastName#</td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('StudentEmail').'</td>'
-                            .'<td>&nbsp;#mail#</td>'
-                        .'</tr>'
-                    .'</table>';
-        $open_question_list = null;
-        foreach ($question_list_answers as $item) {
-            $question = $item['question'];
-            $answer = $item['answer'];
-            $answer_type = $item['answer_type'];
-
-            if (!empty($question) && !empty($answer) && $answer_type == FREE_ANSWER) {
-                $open_question_list .=
-                    '<tr>'
-                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
-                        .'<td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>'
-                    .'</tr>'
-                    .'<tr>'
-                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
-                        .'<td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>'
-                    .'</tr>';
-            }
-        }
-
-        if (!empty($open_question_list)) {
-            $msg .= '<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>'.
-                    '<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
-            $msg .= $open_question_list;
-            $msg .= '</table><br />';
-            $msg1 = str_replace("#exercise#", $this->exercise, $msg);
-            $msg = str_replace("#firstName#", $user_info['firstname'], $msg1);
-            $msg1 = str_replace("#lastName#", $user_info['lastname'], $msg);
-            $msg = str_replace("#mail#", $user_info['email'], $msg1);
-            $msg = str_replace("#course#", $course_info['name'], $msg1);
-
-            if ($origin != 'learnpath') {
-                $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
-            }
-            $msg1 = str_replace("#url#", $url_email, $msg);
-            $mail_content = $msg1;
-            $subject = get_lang('OpenQuestionsAttempted');
-
-            if (!empty($teachers)) {
-                foreach ($teachers as $user_id => $teacher_data) {
-                    MessageManager::send_message_simple(
-                        $user_id,
-                        $subject,
-                        $mail_content
-                    );
-                }
-            }
-        }
-    }
-
-    /**
-     * Send notification for oral questions
-     * @param array $question_list_answers
-     * @param string $origin
-     * @param int $exe_id
-     * @param array $user_info
-     * @param string $url_email
-     * @param array $teachers
-     */
-    private function send_notification_for_oral_questions(
-        $question_list_answers,
-        $origin,
-        $exe_id,
-        $user_info,
-        $url_email,
-        $teachers
-    ) {
-        // Email configuration settings
-        $courseCode = api_get_course_id();
-        $course_info = api_get_course_info($courseCode);
-
-        $oral_question_list = null;
-        foreach ($question_list_answers as $item) {
-            $question = $item['question'];
-            $answer = $item['answer'];
-            $answer_type = $item['answer_type'];
-
-            if (!empty($question) && !empty($answer) && $answer_type == ORAL_EXPRESSION) {
-                $oral_question_list .= '<br /><table width="730" height="136" border="0" cellpadding="3" cellspacing="3">'
-                    .'<tr>'
-                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
-                        .'<td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>'
-                    .'</tr>'
-                    .'<tr>'
-                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
-                        .'<td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>'
-                    .'</tr></table>';
-            }
-        }
-
-        if (!empty($oral_question_list)) {
-            $msg = get_lang('OralQuestionsAttempted').'<br /><br />
-                    '.get_lang('AttemptDetails').' : <br /><br />'
-                    .'<table>'
-                        .'<tr>'
-                            .'<td><em>'.get_lang('CourseName').'</em></td>'
-                            .'<td>&nbsp;<b>#course#</b></td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('TestAttempted').'</td>'
-                            .'<td>&nbsp;#exercise#</td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('StudentName').'</td>'
-                            .'<td>&nbsp;#firstName# #lastName#</td>'
-                        .'</tr>'
-                        .'<tr>'
-                            .'<td>'.get_lang('StudentEmail').'</td>'
-                            .'<td>&nbsp;#mail#</td>'
-                        .'</tr>'
-                    .'</table>';
-            $msg .= '<br />'.sprintf(get_lang('OralQuestionsAttemptedAreX'), $oral_question_list).'<br />';
-            $msg1 = str_replace("#exercise#", $this->exercise, $msg);
-            $msg = str_replace("#firstName#", $user_info['firstname'], $msg1);
-            $msg1 = str_replace("#lastName#", $user_info['lastname'], $msg);
-            $msg = str_replace("#mail#", $user_info['email'], $msg1);
-            $msg = str_replace("#course#", $course_info['name'], $msg1);
-
-            if ($origin != 'learnpath') {
-                $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
-            }
-            $msg1 = str_replace("#url#", $url_email, $msg);
-            $mail_content = $msg1;
-            $subject = get_lang('OralQuestionsAttempted');
-
-            if (!empty($teachers)) {
-                foreach ($teachers as $user_id => $teacher_data) {
-                    MessageManager::send_message_simple(
-                        $user_id,
-                        $subject,
-                        $mail_content
-                    );
-                }
-            }
-        }
-    }
-
-    /**
-     * @param array $user_data result of api_get_user_info()
+     * @param array  $user_data  result of api_get_user_info()
      * @param string $start_date
-     * @param null $duration
-     * @param string $ip Optional. The user IP
+     * @param null   $duration
+     * @param string $ip         Optional. The user IP
+     *
      * @return string
      */
     public function show_exercise_result_header(
@@ -6037,16 +5783,16 @@ class Exercise
         if (!empty($user_data)) {
             $array[] = [
                 'title' => get_lang('Name'),
-                'content' => $user_data['complete_name']
+                'content' => $user_data['complete_name'],
             ];
             $array[] = [
                 'title' => get_lang('Username'),
-                'content' => $user_data['username']
+                'content' => $user_data['username'],
             ];
             if (!empty($user_data['official_code'])) {
                 $array[] = [
                     'title' => get_lang('OfficialCode'),
-                    'content' => $user_data['official_code']
+                    'content' => $user_data['official_code'],
                 ];
             }
         }
@@ -6094,11 +5840,13 @@ class Exercise
         }
 
         $html .= "</div>";
+
         return $html;
     }
 
     /**
-     * Create a quiz from quiz data
+     * Create a quiz from quiz data.
+     *
      * @param string  Title
      * @param int     Time before it expires (in minutes)
      * @param int     Type of exercise
@@ -6107,8 +5855,10 @@ class Exercise
      * @param int     Whether the results are show to the user (0) or not (1)
      * @param int     Maximum number of attempts (0 if no limit)
      * @param int     Feedback type
+     *
      * @todo this was function was added due the import exercise via CSV
-     * @return    int New exercise ID
+     *
+     * @return int New exercise ID
      */
     public function createExercise(
         $title,
@@ -6176,9 +5926,11 @@ class Exercise
     }
 
     /**
-     * Returns the exercise result
+     * Returns the exercise result.
+     *
      * @param 	int		attempt id
-     * @return 	float 	exercise result
+     *
+     * @return float exercise result
      */
     public function get_exercise_result($exe_id)
     {
@@ -6212,9 +5964,10 @@ class Exercise
             }
             $result = [
                 'score' => $totalScore,
-                'weight' => $track_exercise_info['exe_weighting']
+                'weight' => $track_exercise_info['exe_weighting'],
             ];
         }
+
         return $result;
     }
 
@@ -6224,11 +5977,13 @@ class Exercise
      * Return associative array
      * value : true if exercise visible
      * message : HTML formatted message
-     * rawMessage : text message
-     * @param int $lpId
-     * @param int $lpItemId
-     * @param int $lpItemViewId
+     * rawMessage : text message.
+     *
+     * @param int  $lpId
+     * @param int  $lpItemId
+     * @param int  $lpItemViewId
      * @param bool $filterByAdmin
+     *
      * @return array
      */
     public function is_visible(
@@ -6257,7 +6012,7 @@ class Exercise
                     'warning',
                     false
                 ),
-                'rawMessage' => get_lang('ExerciseNotFound')
+                'rawMessage' => get_lang('ExerciseNotFound'),
             ];
         }
 
@@ -6284,7 +6039,7 @@ class Exercise
                         'warning',
                         false
                     ),
-                    'rawMessage' => get_lang('ExerciseNotFound')
+                    'rawMessage' => get_lang('ExerciseNotFound'),
                 ];
             }
         } else {
@@ -6299,7 +6054,7 @@ class Exercise
                         'warning',
                         false
                     ),
-                    'rawMessage' => get_lang('ExerciseNotFound')
+                    'rawMessage' => get_lang('ExerciseNotFound'),
                 ];
             }
         }
@@ -6442,7 +6197,7 @@ class Exercise
         return [
             'value' => $isVisible,
             'message' => $message,
-            'rawMessage' => $rawMessage
+            'rawMessage' => $rawMessage,
         ];
     }
 
@@ -6458,46 +6213,13 @@ class Exercise
         if (Database::num_rows($result) > 0) {
             return true;
         }
+
         return false;
     }
 
     /**
-     * Returns an array with the media list
-     * @param array question list
-     * @example there's 1 question with iid 5 that belongs to the media question with iid = 100
-     * <code>
-     * array (size=2)
-     *  999 =>
-     *    array (size=3)
-     *      0 => int 7
-     *      1 => int 6
-     *      2 => int 3254
-     *  100 =>
-     *   array (size=1)
-     *      0 => int 5
-     *  </code>
-     */
-    private function setMediaList($questionList)
-    {
-        $mediaList = [];
-        if (!empty($questionList)) {
-            foreach ($questionList as $questionId) {
-                $objQuestionTmp = Question::read($questionId, $this->course_id);
-
-                // If a media question exists
-                if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {
-                    $mediaList[$objQuestionTmp->parent_id][] = $objQuestionTmp->id;
-                } else {
-                    //Always the last item
-                    $mediaList[999][] = $objQuestionTmp->id;
-                }
-            }
-        }
-        $this->mediaList = $mediaList;
-    }
-
-    /**
-     * Returns an array with this form
+     * Returns an array with this form.
+     *
      * @example
      * <code>
      * array (size=3)
@@ -6516,6 +6238,7 @@ class Exercise
      * </code>
      * The array inside the key 999 means the question list that belongs to the media id = 999,
      * this case is special because 999 means "no media".
+     *
      * @return array
      */
     public function getMediaList()
@@ -6525,6 +6248,7 @@ class Exercise
 
     /**
      * Is media question activated?
+     *
      * @return bool
      */
     public function mediaIsActivated()
@@ -6548,7 +6272,7 @@ class Exercise
     }
 
     /**
-     * Gets question list from the exercise
+     * Gets question list from the exercise.
      *
      * @return array
      */
@@ -6558,7 +6282,8 @@ class Exercise
     }
 
     /**
-     * Question list with medias compressed like this
+     * Question list with medias compressed like this.
+     *
      * @example
      * <code>
      * array(
@@ -6568,6 +6293,7 @@ class Exercise
      *      question_id_3,
      * )
      * </code>
+     *
      * @return array
      */
     public function getQuestionListWithMediasCompressed()
@@ -6576,7 +6302,8 @@ class Exercise
     }
 
     /**
-     * Question list with medias uncompressed like this
+     * Question list with medias uncompressed like this.
+     *
      * @example
      * <code>
      * array(
@@ -6587,6 +6314,7 @@ class Exercise
      *      question_id,
      * )
      * </code>
+     *
      * @return array
      */
     public function getQuestionListWithMediasUncompressed()
@@ -6595,8 +6323,9 @@ class Exercise
     }
 
     /**
-     * Sets the question list when the exercise->read() is executed
-     * @param   bool    $adminView  Whether to view the set the list of *all* questions or just the normal student view
+     * Sets the question list when the exercise->read() is executed.
+     *
+     * @param bool $adminView Whether to view the set the list of *all* questions or just the normal student view
      */
     public function setQuestionList($adminView = false)
     {
@@ -6617,7 +6346,7 @@ class Exercise
      * @params array question list
      * @params bool expand or not question list (true show all questions,
      * false show media question id instead of the question ids)
-     **/
+     */
     public function transformQuestionListWithMedias(
         $question_list,
         $expand_media_questions = false
@@ -6737,6 +6466,7 @@ class Exercise
     {
         $question_list = $this->get_validated_question_list();
         $question_list = $this->transform_question_list_with_medias($question_list, $expand_media_questions);
+
         return $question_list;
     }
 
@@ -6779,11 +6509,13 @@ class Exercise
                 $new_question_list = $question_list;
             }
         }
+
         return $new_question_list;
     }
 
     /**
      * @param int $exe_id
+     *
      * @return array
      */
     public function get_stat_track_exercise_info_by_exe_id($exe_id)
@@ -6812,12 +6544,13 @@ class Exercise
                 }
             }
         }
+
         return $new_array;
     }
 
     /**
-     * @param int $exe_id
-     * @param int $question_id
+     * @param int    $exe_id
+     * @param int    $question_id
      * @param string $action
      */
     public function editQuestionToRemind($exe_id, $question_id, $action = 'add')
@@ -6877,17 +6610,20 @@ class Exercise
 
     /**
      * @param string $answer
+     *
      * @return mixed
      */
     public function fill_in_blank_answer_to_array($answer)
     {
         api_preg_match_all('/\[[^]]+\]/', $answer, $teacher_answer_list);
         $teacher_answer_list = $teacher_answer_list[0];
+
         return $teacher_answer_list;
     }
 
     /**
      * @param string $answer
+     *
      * @return string
      */
     public function fill_in_blank_answer_to_string($answer)
@@ -6909,6 +6645,7 @@ class Exercise
                 }
             }
         }
+
         return $result;
     }
 
@@ -6929,6 +6666,7 @@ class Exercise
         );
         $html .= '</div>';
         $html .= '<div id="exercise_clock_warning" class="count_down"></div>';
+
         return $html;
     }
 
@@ -6943,11 +6681,13 @@ class Exercise
         if (!empty($question_list)) {
             $question_count = count($question_list);
         }
+
         return $question_count;
     }
 
     /**
-     * Get categories added in the exercise--category matrix
+     * Get categories added in the exercise--category matrix.
+     *
      * @return array
      */
     public function get_categories_in_exercise()
@@ -6962,14 +6702,17 @@ class Exercise
                 while ($row = Database::fetch_array($result, 'ASSOC')) {
                     $list[$row['category_id']] = $row;
                 }
+
                 return $list;
             }
         }
+
         return [];
     }
 
     /**
-     * Get total number of question that will be parsed when using the category/exercise
+     * Get total number of question that will be parsed when using the category/exercise.
+     *
      * @return int
      */
     public function getNumberQuestionExerciseCategory()
@@ -6982,14 +6725,17 @@ class Exercise
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
+
                 return $row['count_questions'];
             }
         }
+
         return 0;
     }
 
     /**
-     * Save categories in the TABLE_QUIZ_REL_CATEGORY table
+     * Save categories in the TABLE_QUIZ_REL_CATEGORY table.
+     *
      * @param array $categories
      */
     public function save_categories_in_exercise($categories)
@@ -7005,7 +6751,7 @@ class Exercise
                         'c_id' => $this->course_id,
                         'exercise_id' => $this->id,
                         'category_id' => $category_id,
-                        'count_questions' => $count_questions
+                        'count_questions' => $count_questions,
                     ];
                     Database::insert($table, $params);
                 }
@@ -7014,10 +6760,11 @@ class Exercise
     }
 
     /**
-     * @param array $questionList
-     * @param int $currentQuestion
-     * @param array $conditions
+     * @param array  $questionList
+     * @param int    $currentQuestion
+     * @param array  $conditions
      * @param string $link
+     *
      * @return string
      */
     public function progressExercisePaginationBar(
@@ -7080,14 +6827,14 @@ class Exercise
         return $html;
     }
 
-
     /**
-     *  Shows a list of numbers that represents the question to answer in a exercise
+     *  Shows a list of numbers that represents the question to answer in a exercise.
      *
-     * @param array $categories
-     * @param int $current
-     * @param array $conditions
+     * @param array  $categories
+     * @param int    $current
+     * @param array  $conditions
      * @param string $link
+     *
      * @return string
      */
     public function progressExercisePaginationBarWithCategories(
@@ -7111,7 +6858,7 @@ class Exercise
                 $selectionType,
                 [
                     EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED,
-                    EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM
+                    EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM,
                 ]
             )) {
                 $useRootAsCategoryTitle = true;
@@ -7208,14 +6955,15 @@ class Exercise
                 }
             }
         }
+
         return $html;
     }
 
     /**
-     * Renders a question list
+     * Renders a question list.
      *
-     * @param array $questionList (with media questions compressed)
-     * @param int $currentQuestion
+     * @param array $questionList    (with media questions compressed)
+     * @param int   $currentQuestion
      * @param array $exerciseResult
      * @param array $attemptList
      * @param array $remindList
@@ -7333,15 +7081,15 @@ class Exercise
     }
 
     /**
-     * @param int $questionId
+     * @param int   $questionId
      * @param array $attemptList
      * @param array $remindList
-     * @param int $i
-     * @param int $current_question
+     * @param int   $i
+     * @param int   $current_question
      * @param array $questions_in_media
-     * @param bool $last_question_in_media
+     * @param bool  $last_question_in_media
      * @param array $realQuestionList
-     * @param bool $generateJS
+     * @param bool  $generateJS
      */
     public function renderQuestion(
         $questionId,
@@ -7362,12 +7110,12 @@ class Exercise
             $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=get_question&id='.$questionId.'&'.api_get_cidreq();
             $params = [
                 'questionId' => $questionId,
-                'attemptList'=> $attemptList,
+                'attemptList' => $attemptList,
                 'remindList' => $remindList,
                 'i' => $i,
                 'current_question' => $current_question,
                 'questions_in_media' => $questions_in_media,
-                'last_question_in_media' => $last_question_in_media
+                'last_question_in_media' => $last_question_in_media,
             ];
             $params = json_encode($params);
 
@@ -7402,7 +7150,7 @@ class Exercise
                 }
             }
 
-            $attributes = ['id' =>'remind_list['.$questionId.']'];
+            $attributes = ['id' => 'remind_list['.$questionId.']'];
             if (is_array($remindList) && in_array($questionId, $remindList)) {
                 //$attributes['checked'] = 1;
                 //$remind_highlight = ' remind_highlight ';
@@ -7449,11 +7197,11 @@ class Exercise
                             get_lang('SaveForNow'),
                             ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
                         ),
-                        '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>'
+                        '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>',
                     ];
                     $exercise_actions .= Display::div(
                         implode(PHP_EOL, $button),
-                        ['class'=>'exercise_save_now_button']
+                        ['class' => 'exercise_save_now_button']
                     );
                     break;
             }
@@ -7467,11 +7215,11 @@ class Exercise
                             get_lang('SaveForNow'),
                             ['type' => 'button', 'class' => 'btn btn-primary', 'data-question' => $questionId]
                         ),
-                        '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;'
+                        '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;',
                     ];
                     $exercise_actions = Display::div(
                         implode(PHP_EOL, $button),
-                        ['class'=>'exercise_save_now_button']
+                        ['class' => 'exercise_save_now_button']
                     );
                 }
 
@@ -7494,7 +7242,7 @@ class Exercise
                     ).get_lang('ReviewQuestionLater'),
                     [
                         'class' => 'checkbox',
-                        'for' => 'remind_list['.$questionId.']'
+                        'for' => 'remind_list['.$questionId.']',
                     ]
                 );
                 $exercise_actions .= Display::div(
@@ -7503,7 +7251,7 @@ class Exercise
                 );
             }
 
-            echo Display::div(' ', ['class'=>'clear']);
+            echo Display::div(' ', ['class' => 'clear']);
 
             $paginationCounter = null;
             if ($this->type == ONE_PER_PAGE) {
@@ -7523,7 +7271,7 @@ class Exercise
             }
 
             echo '<div class="row"><div class="pull-right">'.$paginationCounter.'</div></div>';
-            echo Display::div($exercise_actions, ['class'=>'form-actions']);
+            echo Display::div($exercise_actions, ['class' => 'form-actions']);
             echo '</div>';
         }
     }
@@ -7531,6 +7279,7 @@ class Exercise
     /**
      * Returns an array of categories details for the questions of the current
      * exercise.
+     *
      * @return array
      */
     public function getQuestionWithCategories()
@@ -7561,7 +7310,7 @@ class Exercise
     }
 
     /**
-     * Calculate the max_score of the quiz, depending of question inside, and quiz advanced option
+     * Calculate the max_score of the quiz, depending of question inside, and quiz advanced option.
      */
     public function get_max_score()
     {
@@ -7620,17 +7369,19 @@ class Exercise
     }
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function get_formated_title()
     {
         if (api_get_configuration_value('save_titles_as_html')) {
         }
+
         return api_html_entity_decode($this->selectTitle());
     }
 
     /**
      * @param string $title
+     *
      * @return string
      */
     public static function get_formated_title_variable($title)
@@ -7648,6 +7399,7 @@ class Exercise
 
     /**
      * @param string $title
+     *
      * @return string
      */
     public static function format_title_variable($title)
@@ -7658,6 +7410,7 @@ class Exercise
     /**
      * @param int $courseId
      * @param int $sessionId
+     *
      * @return array exercises
      */
     public function getExercisesByCourseSession($courseId, $sessionId)
@@ -7685,10 +7438,10 @@ class Exercise
     }
 
     /**
-     *
-     * @param int $courseId
-     * @param int $sessionId
+     * @param int   $courseId
+     * @param int   $sessionId
      * @param array $quizId
+     *
      * @return array exercises
      */
     public function getExerciseAndResult($courseId, $sessionId, $quizId = [])
@@ -7736,6 +7489,7 @@ class Exercise
      * @param $exercise_stat_info
      * @param $remindList
      * @param $currentQuestion
+     *
      * @return int|null
      */
     public static function getNextQuestionId(
@@ -7812,8 +7566,10 @@ class Exercise
     }
 
     /**
-     * Gets the position of a questionId in the question list
+     * Gets the position of a questionId in the question list.
+     *
      * @param $questionId
+     *
      * @return int
      */
     public function getPositionInCompressedQuestionList($questionId)
@@ -7837,13 +7593,16 @@ class Exercise
                 }
             }
         }
+
         return 1;
     }
 
     /**
-     * Get the correct answers in all attempts
+     * Get the correct answers in all attempts.
+     *
      * @param int $learnPathId
      * @param int $learnPathItemId
+     *
      * @return array
      */
     public function getCorrectAnswersInAllAttempts($learnPathId = 0, $learnPathItemId = 0)
@@ -7896,15 +7655,6 @@ class Exercise
     }
 
     /**
-     * Get the title without HTML tags
-     * @return string
-     */
-    private function getUnformattedTitle()
-    {
-        return strip_tags(api_html_entity_decode($this->title));
-    }
-
-    /**
      * @return bool
      */
     public function showPreviousButton()
@@ -7919,6 +7669,7 @@ class Exercise
 
     /**
      * @param bool $showPreviousButton
+     *
      * @return Exercise
      */
     public function setShowPreviousButton($showPreviousButton)
@@ -7942,5 +7693,375 @@ class Exercise
     public function getNotifications()
     {
         return $this->notifications;
+    }
+
+    /**
+     * Gets the question list ordered by the question_order setting (drag and drop).
+     *
+     * @return array
+     */
+    private function getQuestionOrderedList()
+    {
+        $questionList = [];
+        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+
+        // Getting question_order to verify that the question
+        // list is correct and all question_order's were set
+        $sql = "SELECT DISTINCT e.question_order
+                FROM $TBL_EXERCICE_QUESTION e
+                INNER JOIN $TBL_QUESTIONS q
+                ON (e.question_id = q.id AND e.c_id = q.c_id)
+                WHERE
+                  e.c_id = {$this->course_id} AND
+                  e.exercice_id	= ".$this->id;
+
+        $result = Database::query($sql);
+        $count_question_orders = Database::num_rows($result);
+
+        // Getting question list from the order (question list drag n drop interface).
+        $sql = "SELECT DISTINCT e.question_id, e.question_order
+                FROM $TBL_EXERCICE_QUESTION e
+                INNER JOIN $TBL_QUESTIONS q
+                ON (e.question_id = q.id AND e.c_id = q.c_id)
+                WHERE
+                    e.c_id = {$this->course_id} AND
+                    e.exercice_id = '".$this->id."'
+                ORDER BY question_order";
+
+        $result = Database::query($sql);
+
+        // Fills the array with the question ID for this exercise
+        // the key of the array is the question position
+        $temp_question_list = [];
+        $counter = 1;
+        while ($new_object = Database::fetch_object($result)) {
+            // Correct order.
+            $questionList[$new_object->question_order] = $new_object->question_id;
+            // Just in case we save the order in other array
+            $temp_question_list[$counter] = $new_object->question_id;
+            $counter++;
+        }
+
+        if (!empty($temp_question_list)) {
+            /* If both array don't match it means that question_order was not correctly set
+               for all questions using the default mysql order */
+            if (count($temp_question_list) != $count_question_orders) {
+                $questionList = $temp_question_list;
+            }
+        }
+
+        return $questionList;
+    }
+
+    /**
+     * Select N values from the questions per category array.
+     *
+     * @param array $categoriesAddedInExercise
+     * @param array $question_list
+     * @param array $questions_by_category     per category
+     * @param bool  $flatResult
+     * @param bool  $randomizeQuestions
+     *
+     * @return array
+     */
+    private function pickQuestionsPerCategory(
+        $categoriesAddedInExercise,
+        $question_list,
+        &$questions_by_category,
+        $flatResult = true,
+        $randomizeQuestions = false
+    ) {
+        $addAll = true;
+        $categoryCountArray = [];
+
+        // Getting how many questions will be selected per category.
+        if (!empty($categoriesAddedInExercise)) {
+            $addAll = false;
+            // Parsing question according the category rel exercise settings
+            foreach ($categoriesAddedInExercise as $category_info) {
+                $category_id = $category_info['category_id'];
+                if (isset($questions_by_category[$category_id])) {
+                    // How many question will be picked from this category.
+                    $count = $category_info['count_questions'];
+                    // -1 means all questions
+                    $categoryCountArray[$category_id] = $count;
+                    if ($count == -1) {
+                        $categoryCountArray[$category_id] = 999;
+                    }
+                }
+            }
+        }
+
+        if (!empty($questions_by_category)) {
+            $temp_question_list = [];
+            foreach ($questions_by_category as $category_id => &$categoryQuestionList) {
+                if (isset($categoryCountArray) && !empty($categoryCountArray)) {
+                    $numberOfQuestions = 0;
+                    if (isset($categoryCountArray[$category_id])) {
+                        $numberOfQuestions = $categoryCountArray[$category_id];
+                    }
+                }
+
+                if ($addAll) {
+                    $numberOfQuestions = 999;
+                }
+
+                if (!empty($numberOfQuestions)) {
+                    $elements = TestCategory::getNElementsFromArray(
+                        $categoryQuestionList,
+                        $numberOfQuestions,
+                        $randomizeQuestions
+                    );
+
+                    if (!empty($elements)) {
+                        $temp_question_list[$category_id] = $elements;
+                        $categoryQuestionList = $elements;
+                    }
+                }
+            }
+
+            if (!empty($temp_question_list)) {
+                if ($flatResult) {
+                    $temp_question_list = array_flatten($temp_question_list);
+                }
+                $question_list = $temp_question_list;
+            }
+        }
+
+        return $question_list;
+    }
+
+    /**
+     * Changes the exercise id.
+     *
+     * @param int $id - exercise id
+     */
+    private function updateId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * Sends a notification when a user ends an examn.
+     *
+     * @param array  $question_list_answers
+     * @param string $origin
+     * @param int    $exe_id
+     */
+    private function send_notification_for_open_questions(
+        $question_list_answers,
+        $origin,
+        $exe_id,
+        $user_info,
+        $url_email,
+        $teachers
+    ) {
+        // Email configuration settings
+        $courseCode = api_get_course_id();
+        $course_info = api_get_course_info($courseCode);
+
+        $msg = get_lang('OpenQuestionsAttempted').'<br /><br />'
+                    .get_lang('AttemptDetails').' : <br /><br />'
+                    .'<table>'
+                        .'<tr>'
+                            .'<td><em>'.get_lang('CourseName').'</em></td>'
+                            .'<td>&nbsp;<b>#course#</b></td>'
+                        .'</tr>'
+                        .'<tr>'
+                            .'<td>'.get_lang('TestAttempted').'</td>'
+                            .'<td>&nbsp;#exercise#</td>'
+                        .'</tr>'
+                        .'<tr>'
+                            .'<td>'.get_lang('StudentName').'</td>'
+                            .'<td>&nbsp;#firstName# #lastName#</td>'
+                        .'</tr>'
+                        .'<tr>'
+                            .'<td>'.get_lang('StudentEmail').'</td>'
+                            .'<td>&nbsp;#mail#</td>'
+                        .'</tr>'
+                    .'</table>';
+        $open_question_list = null;
+        foreach ($question_list_answers as $item) {
+            $question = $item['question'];
+            $answer = $item['answer'];
+            $answer_type = $item['answer_type'];
+
+            if (!empty($question) && !empty($answer) && $answer_type == FREE_ANSWER) {
+                $open_question_list .=
+                    '<tr>'
+                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
+                        .'<td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>'
+                    .'</tr>'
+                    .'<tr>'
+                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
+                        .'<td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>'
+                    .'</tr>';
+            }
+        }
+
+        if (!empty($open_question_list)) {
+            $msg .= '<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>'.
+                    '<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
+            $msg .= $open_question_list;
+            $msg .= '</table><br />';
+            $msg1 = str_replace("#exercise#", $this->exercise, $msg);
+            $msg = str_replace("#firstName#", $user_info['firstname'], $msg1);
+            $msg1 = str_replace("#lastName#", $user_info['lastname'], $msg);
+            $msg = str_replace("#mail#", $user_info['email'], $msg1);
+            $msg = str_replace("#course#", $course_info['name'], $msg1);
+
+            if ($origin != 'learnpath') {
+                $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
+            }
+            $msg1 = str_replace("#url#", $url_email, $msg);
+            $mail_content = $msg1;
+            $subject = get_lang('OpenQuestionsAttempted');
+
+            if (!empty($teachers)) {
+                foreach ($teachers as $user_id => $teacher_data) {
+                    MessageManager::send_message_simple(
+                        $user_id,
+                        $subject,
+                        $mail_content
+                    );
+                }
+            }
+        }
+    }
+
+    /**
+     * Send notification for oral questions.
+     *
+     * @param array  $question_list_answers
+     * @param string $origin
+     * @param int    $exe_id
+     * @param array  $user_info
+     * @param string $url_email
+     * @param array  $teachers
+     */
+    private function send_notification_for_oral_questions(
+        $question_list_answers,
+        $origin,
+        $exe_id,
+        $user_info,
+        $url_email,
+        $teachers
+    ) {
+        // Email configuration settings
+        $courseCode = api_get_course_id();
+        $course_info = api_get_course_info($courseCode);
+
+        $oral_question_list = null;
+        foreach ($question_list_answers as $item) {
+            $question = $item['question'];
+            $answer = $item['answer'];
+            $answer_type = $item['answer_type'];
+
+            if (!empty($question) && !empty($answer) && $answer_type == ORAL_EXPRESSION) {
+                $oral_question_list .= '<br /><table width="730" height="136" border="0" cellpadding="3" cellspacing="3">'
+                    .'<tr>'
+                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
+                        .'<td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>'
+                    .'</tr>'
+                    .'<tr>'
+                        .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
+                        .'<td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>'
+                    .'</tr></table>';
+            }
+        }
+
+        if (!empty($oral_question_list)) {
+            $msg = get_lang('OralQuestionsAttempted').'<br /><br />
+                    '.get_lang('AttemptDetails').' : <br /><br />'
+                    .'<table>'
+                        .'<tr>'
+                            .'<td><em>'.get_lang('CourseName').'</em></td>'
+                            .'<td>&nbsp;<b>#course#</b></td>'
+                        .'</tr>'
+                        .'<tr>'
+                            .'<td>'.get_lang('TestAttempted').'</td>'
+                            .'<td>&nbsp;#exercise#</td>'
+                        .'</tr>'
+                        .'<tr>'
+                            .'<td>'.get_lang('StudentName').'</td>'
+                            .'<td>&nbsp;#firstName# #lastName#</td>'
+                        .'</tr>'
+                        .'<tr>'
+                            .'<td>'.get_lang('StudentEmail').'</td>'
+                            .'<td>&nbsp;#mail#</td>'
+                        .'</tr>'
+                    .'</table>';
+            $msg .= '<br />'.sprintf(get_lang('OralQuestionsAttemptedAreX'), $oral_question_list).'<br />';
+            $msg1 = str_replace("#exercise#", $this->exercise, $msg);
+            $msg = str_replace("#firstName#", $user_info['firstname'], $msg1);
+            $msg1 = str_replace("#lastName#", $user_info['lastname'], $msg);
+            $msg = str_replace("#mail#", $user_info['email'], $msg1);
+            $msg = str_replace("#course#", $course_info['name'], $msg1);
+
+            if ($origin != 'learnpath') {
+                $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
+            }
+            $msg1 = str_replace("#url#", $url_email, $msg);
+            $mail_content = $msg1;
+            $subject = get_lang('OralQuestionsAttempted');
+
+            if (!empty($teachers)) {
+                foreach ($teachers as $user_id => $teacher_data) {
+                    MessageManager::send_message_simple(
+                        $user_id,
+                        $subject,
+                        $mail_content
+                    );
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns an array with the media list.
+     *
+     * @param array question list
+     *
+     * @example there's 1 question with iid 5 that belongs to the media question with iid = 100
+     * <code>
+     * array (size=2)
+     *  999 =>
+     *    array (size=3)
+     *      0 => int 7
+     *      1 => int 6
+     *      2 => int 3254
+     *  100 =>
+     *   array (size=1)
+     *      0 => int 5
+     *  </code>
+     */
+    private function setMediaList($questionList)
+    {
+        $mediaList = [];
+        if (!empty($questionList)) {
+            foreach ($questionList as $questionId) {
+                $objQuestionTmp = Question::read($questionId, $this->course_id);
+
+                // If a media question exists
+                if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {
+                    $mediaList[$objQuestionTmp->parent_id][] = $objQuestionTmp->id;
+                } else {
+                    //Always the last item
+                    $mediaList[999][] = $objQuestionTmp->id;
+                }
+            }
+        }
+        $this->mediaList = $mediaList;
+    }
+
+    /**
+     * Get the title without HTML tags.
+     *
+     * @return string
+     */
+    private function getUnformattedTitle()
+    {
+        return strip_tags(api_html_entity_decode($this->title));
     }
 }

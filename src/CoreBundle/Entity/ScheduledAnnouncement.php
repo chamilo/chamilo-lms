@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ScheduledAnnouncement
+ * ScheduledAnnouncement.
  *
  * @ORM\Table(name="scheduled_announcements")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ScheduledAnnouncement
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
@@ -65,7 +65,7 @@ class ScheduledAnnouncement
     private $cId;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -81,6 +81,7 @@ class ScheduledAnnouncement
 
     /**
      * @param int $id
+     *
      * @return ScheduledAnnouncement
      */
     public function setId(int $id): ScheduledAnnouncement
@@ -100,6 +101,7 @@ class ScheduledAnnouncement
 
     /**
      * @param string $subject
+     *
      * @return ScheduledAnnouncement
      */
     public function setSubject(string $subject): ScheduledAnnouncement
@@ -119,6 +121,7 @@ class ScheduledAnnouncement
 
     /**
      * @param string $message
+     *
      * @return ScheduledAnnouncement
      */
     public function setMessage(string $message): ScheduledAnnouncement
@@ -138,6 +141,7 @@ class ScheduledAnnouncement
 
     /**
      * @param \DateTime $date
+     *
      * @return ScheduledAnnouncement
      */
     public function setDate(\DateTime $date): ScheduledAnnouncement
@@ -157,6 +161,7 @@ class ScheduledAnnouncement
 
     /**
      * @param bool $sent
+     *
      * @return ScheduledAnnouncement
      */
     public function setSent(bool $sent): ScheduledAnnouncement
@@ -176,6 +181,7 @@ class ScheduledAnnouncement
 
     /**
      * @param int $sessionId
+     *
      * @return ScheduledAnnouncement
      */
     public function setSessionId(int $sessionId): ScheduledAnnouncement
@@ -195,6 +201,7 @@ class ScheduledAnnouncement
 
     /**
      * @param int $cId
+     *
      * @return ScheduledAnnouncement
      */
     public function setCId(int $cId): ScheduledAnnouncement

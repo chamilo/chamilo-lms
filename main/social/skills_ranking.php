@@ -3,9 +3,9 @@
 
 /**
  * @package chamilo.social
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -27,7 +27,7 @@ $columns = [
     get_lang('LastName'),
     get_lang('SkillsAcquired'),
     get_lang('CurrentlyLearning'),
-    get_lang('Rank')
+    get_lang('Rank'),
 ];
 
 $column_model = [

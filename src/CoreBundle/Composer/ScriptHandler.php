@@ -6,12 +6,12 @@ namespace Chamilo\CoreBundle\Composer;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Class DumpTheme
+ * Class DumpTheme.
  */
 class ScriptHandler
 {
     /**
-     * Dump files to the web/css folder
+     * Dump files to the web/css folder.
      */
     public static function dumpCssFiles()
     {
@@ -94,7 +94,7 @@ class ScriptHandler
             __DIR__.'/../../../../plugin/ticket',
             __DIR__.'/../../../../plugin/skype',
             __DIR__.'/../../../../main/newscorm',
-            __DIR__.'/../../../../main/exercice'
+            __DIR__.'/../../../../main/exercice',
         ];
 
         return $paths;
@@ -195,17 +195,36 @@ class ScriptHandler
             __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelGroup.php',
             __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelTag.php',
             __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/GroupRelUser.php',
-            __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/Groups.php'
+            __DIR__.'/../../../../src/Chamilo/CoreBundle/Entity/Groups.php',
         ];
 
         return $files;
     }
 
     /**
-     * Copied from chamilo rmdirr function
-     * @param string $dirname
+     * Update the basis css files.
+     * Avoid use the ScriptHandler::dumpCssFiles.
+     */
+    public static function updateCss()
+    {
+        $appCss = __DIR__.'/../../../../app/Resources/public/css/';
+        $newPath = __DIR__.'/../../../../web/css/';
+        $cssFiles = ['base.css', 'chat.css', 'editor.css', 'markdown.css', 'print.css', 'responsive.css', 'scorm.css'];
+
+        $fs = new Filesystem();
+
+        foreach ($cssFiles as $file) {
+            $fs->copy($appCss.$file, $newPath.$file, true);
+        }
+    }
+
+    /**
+     * Copied from chamilo rmdirr function.
+     *
+     * @param string     $dirname
      * @param bool|false $delete_only_content_in_folder
      * @param bool|false $strict
+     *
      * @return bool
      */
     private static function rmdirr($dirname, $delete_only_content_in_folder = false, $strict = false)
@@ -257,22 +276,5 @@ class ScriptHandler
         }
 
         return $res;
-    }
-
-    /**
-     * Update the basis css files.
-     * Avoid use the ScriptHandler::dumpCssFiles
-     */
-    public static function updateCss()
-    {
-        $appCss = __DIR__.'/../../../../app/Resources/public/css/';
-        $newPath = __DIR__.'/../../../../web/css/';
-        $cssFiles = ['base.css', 'chat.css', 'editor.css', 'markdown.css', 'print.css', 'responsive.css', 'scorm.css'];
-
-        $fs = new Filesystem();
-
-        foreach ($cssFiles as $file) {
-            $fs->copy($appCss.$file, $newPath.$file, true);
-        }
     }
 }

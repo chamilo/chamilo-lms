@@ -4,19 +4,18 @@
 use ChamiloSession as Session;
 
 /**
-* Main script for the documents tool
-*
-* This script allows the user to manage files and directories on a remote http server.
-*
-* The user can : - upload a file
-*
-* The script respects the strategical split between process and display, so the first
-* part is only processing code (init, process, display preparation) and the second
-* part is only display (HTML)
-*
-* @package chamilo.upload
-*/
-
+ * Main script for the documents tool.
+ *
+ * This script allows the user to manage files and directories on a remote http server.
+ *
+ * The user can : - upload a file
+ *
+ * The script respects the strategical split between process and display, so the first
+ * part is only processing code (init, process, display preparation) and the second
+ * part is only display (HTML)
+ *
+ * @package chamilo.upload
+ */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $_course = api_get_course_info();
@@ -60,12 +59,12 @@ if (isset($_REQUEST['tool'])) {
 }
 
 /**
- * Process
+ * Process.
  */
 Event::event_access_tool(TOOL_UPLOAD);
 
 /**
- *	Prepare the header
+ *	Prepare the header.
  */
 $htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';
 $htmlHeadXtra[] = '<script>

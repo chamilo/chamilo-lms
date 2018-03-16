@@ -7,7 +7,7 @@ use Chamilo\FaqBundle\Entity\Category;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Class CategoryRepository
+ * Class CategoryRepository.
  *
  * @package Genj\FaqBundle\Entity
  */
@@ -18,6 +18,7 @@ class CategoryRepository
 
     /**
      * CategoryRepository constructor.
+     *
      * @param EntityManagerInterface $entityManager
      */
     public function __construct(EntityManagerInterface $entityManager)

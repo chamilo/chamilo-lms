@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CStudentPublication
+ * CStudentPublication.
  *
  * @ORM\Table(
  *  name="c_student_publication",
@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CStudentPublication
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -31,14 +31,14 @@ class CStudentPublication
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
@@ -87,21 +87,21 @@ class CStudentPublication
     private $author;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=true)
      */
     private $active;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="accepted", type="boolean", nullable=true)
      */
     private $accepted;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="post_group_id", type="integer", nullable=false)
      */
@@ -122,14 +122,14 @@ class CStudentPublication
     private $filetype;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="has_properties", type="integer", nullable=false)
      */
     private $hasProperties;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="view_properties", type="boolean", nullable=true)
      */
@@ -150,14 +150,14 @@ class CStudentPublication
     private $dateOfQualification;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="parent_id", type="integer", nullable=false)
      */
     private $parentId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="qualificator_id", type="integer", nullable=false)
      */
@@ -178,38 +178,38 @@ class CStudentPublication
     private $session;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
     private $userId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="allow_text_assignment", type="integer", nullable=false)
      */
     private $allowTextAssignment;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="contains_file", type="integer", nullable=false)
      */
     private $containsFile;
 
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="document_id", type="integer", nullable=false)
      */
     private $documentId;
 
     /**
-     * Set url
+     * Set url.
      *
      * @param string $url
+     *
      * @return CStudentPublication
      */
     public function setUrl($url)
@@ -220,7 +220,7 @@ class CStudentPublication
     }
 
     /**
-     * Get url
+     * Get url.
      *
      * @return string
      */
@@ -230,9 +230,10 @@ class CStudentPublication
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return CStudentPublication
      */
     public function setTitle($title)
@@ -243,7 +244,7 @@ class CStudentPublication
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -253,9 +254,10 @@ class CStudentPublication
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return CStudentPublication
      */
     public function setDescription($description)
@@ -266,7 +268,7 @@ class CStudentPublication
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -276,9 +278,10 @@ class CStudentPublication
     }
 
     /**
-     * Set author
+     * Set author.
      *
      * @param string $author
+     *
      * @return CStudentPublication
      */
     public function setAuthor($author)
@@ -289,7 +292,7 @@ class CStudentPublication
     }
 
     /**
-     * Get author
+     * Get author.
      *
      * @return string
      */
@@ -299,9 +302,10 @@ class CStudentPublication
     }
 
     /**
-     * Set active
+     * Set active.
      *
-     * @param boolean $active
+     * @param bool $active
+     *
      * @return CStudentPublication
      */
     public function setActive($active)
@@ -312,9 +316,9 @@ class CStudentPublication
     }
 
     /**
-     * Get active
+     * Get active.
      *
-     * @return boolean
+     * @return bool
      */
     public function getActive()
     {
@@ -322,9 +326,10 @@ class CStudentPublication
     }
 
     /**
-     * Set accepted
+     * Set accepted.
      *
-     * @param boolean $accepted
+     * @param bool $accepted
+     *
      * @return CStudentPublication
      */
     public function setAccepted($accepted)
@@ -335,9 +340,9 @@ class CStudentPublication
     }
 
     /**
-     * Get accepted
+     * Get accepted.
      *
-     * @return boolean
+     * @return bool
      */
     public function getAccepted()
     {
@@ -345,9 +350,10 @@ class CStudentPublication
     }
 
     /**
-     * Set postGroupId
+     * Set postGroupId.
      *
-     * @param integer $postGroupId
+     * @param int $postGroupId
+     *
      * @return CStudentPublication
      */
     public function setPostGroupId($postGroupId)
@@ -358,9 +364,9 @@ class CStudentPublication
     }
 
     /**
-     * Get postGroupId
+     * Get postGroupId.
      *
-     * @return integer
+     * @return int
      */
     public function getPostGroupId()
     {
@@ -368,9 +374,10 @@ class CStudentPublication
     }
 
     /**
-     * Set sentDate
+     * Set sentDate.
      *
      * @param \DateTime $sentDate
+     *
      * @return CStudentPublication
      */
     public function setSentDate($sentDate)
@@ -381,7 +388,7 @@ class CStudentPublication
     }
 
     /**
-     * Get sentDate
+     * Get sentDate.
      *
      * @return \DateTime
      */
@@ -391,9 +398,10 @@ class CStudentPublication
     }
 
     /**
-     * Set filetype
+     * Set filetype.
      *
      * @param string $filetype
+     *
      * @return CStudentPublication
      */
     public function setFiletype($filetype)
@@ -404,7 +412,7 @@ class CStudentPublication
     }
 
     /**
-     * Get filetype
+     * Get filetype.
      *
      * @return string
      */
@@ -414,9 +422,10 @@ class CStudentPublication
     }
 
     /**
-     * Set hasProperties
+     * Set hasProperties.
      *
-     * @param integer $hasProperties
+     * @param int $hasProperties
+     *
      * @return CStudentPublication
      */
     public function setHasProperties($hasProperties)
@@ -427,9 +436,9 @@ class CStudentPublication
     }
 
     /**
-     * Get hasProperties
+     * Get hasProperties.
      *
-     * @return integer
+     * @return int
      */
     public function getHasProperties()
     {
@@ -437,9 +446,10 @@ class CStudentPublication
     }
 
     /**
-     * Set viewProperties
+     * Set viewProperties.
      *
-     * @param boolean $viewProperties
+     * @param bool $viewProperties
+     *
      * @return CStudentPublication
      */
     public function setViewProperties($viewProperties)
@@ -450,9 +460,9 @@ class CStudentPublication
     }
 
     /**
-     * Get viewProperties
+     * Get viewProperties.
      *
-     * @return boolean
+     * @return bool
      */
     public function getViewProperties()
     {
@@ -460,9 +470,10 @@ class CStudentPublication
     }
 
     /**
-     * Set qualification
+     * Set qualification.
      *
      * @param float $qualification
+     *
      * @return CStudentPublication
      */
     public function setQualification($qualification)
@@ -473,7 +484,7 @@ class CStudentPublication
     }
 
     /**
-     * Get qualification
+     * Get qualification.
      *
      * @return float
      */
@@ -483,9 +494,10 @@ class CStudentPublication
     }
 
     /**
-     * Set dateOfQualification
+     * Set dateOfQualification.
      *
      * @param \DateTime $dateOfQualification
+     *
      * @return CStudentPublication
      */
     public function setDateOfQualification($dateOfQualification)
@@ -496,7 +508,7 @@ class CStudentPublication
     }
 
     /**
-     * Get dateOfQualification
+     * Get dateOfQualification.
      *
      * @return \DateTime
      */
@@ -506,9 +518,10 @@ class CStudentPublication
     }
 
     /**
-     * Set parentId
+     * Set parentId.
      *
-     * @param integer $parentId
+     * @param int $parentId
+     *
      * @return CStudentPublication
      */
     public function setParentId($parentId)
@@ -519,9 +532,9 @@ class CStudentPublication
     }
 
     /**
-     * Get parentId
+     * Get parentId.
      *
-     * @return integer
+     * @return int
      */
     public function getParentId()
     {
@@ -529,9 +542,10 @@ class CStudentPublication
     }
 
     /**
-     * Set qualificatorId
+     * Set qualificatorId.
      *
-     * @param integer $qualificatorId
+     * @param int $qualificatorId
+     *
      * @return CStudentPublication
      */
     public function setQualificatorId($qualificatorId)
@@ -542,9 +556,9 @@ class CStudentPublication
     }
 
     /**
-     * Get qualificatorId
+     * Get qualificatorId.
      *
-     * @return integer
+     * @return int
      */
     public function getQualificatorId()
     {
@@ -552,9 +566,10 @@ class CStudentPublication
     }
 
     /**
-     * Set weight
+     * Set weight.
      *
      * @param float $weight
+     *
      * @return CStudentPublication
      */
     public function setWeight($weight)
@@ -565,7 +580,7 @@ class CStudentPublication
     }
 
     /**
-     * Get weight
+     * Get weight.
      *
      * @return float
      */
@@ -575,8 +590,10 @@ class CStudentPublication
     }
 
     /**
-     * Set session
+     * Set session.
+     *
      * @param Session $session
+     *
      * @return CStudentPublication
      */
     public function setSession(Session $session = null)
@@ -587,7 +604,8 @@ class CStudentPublication
     }
 
     /**
-     * Get session
+     * Get session.
+     *
      * @return Session
      */
     public function getSession()
@@ -596,9 +614,10 @@ class CStudentPublication
     }
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return CStudentPublication
      */
     public function setUserId($userId)
@@ -609,9 +628,9 @@ class CStudentPublication
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -619,9 +638,10 @@ class CStudentPublication
     }
 
     /**
-     * Set allowTextAssignment
+     * Set allowTextAssignment.
      *
-     * @param integer $allowTextAssignment
+     * @param int $allowTextAssignment
+     *
      * @return CStudentPublication
      */
     public function setAllowTextAssignment($allowTextAssignment)
@@ -632,9 +652,9 @@ class CStudentPublication
     }
 
     /**
-     * Get allowTextAssignment
+     * Get allowTextAssignment.
      *
-     * @return integer
+     * @return int
      */
     public function getAllowTextAssignment()
     {
@@ -642,9 +662,10 @@ class CStudentPublication
     }
 
     /**
-     * Set containsFile
+     * Set containsFile.
      *
-     * @param integer $containsFile
+     * @param int $containsFile
+     *
      * @return CStudentPublication
      */
     public function setContainsFile($containsFile)
@@ -655,9 +676,9 @@ class CStudentPublication
     }
 
     /**
-     * Get containsFile
+     * Get containsFile.
      *
-     * @return integer
+     * @return int
      */
     public function getContainsFile()
     {
@@ -665,9 +686,10 @@ class CStudentPublication
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CStudentPublication
      */
     public function setId($id)
@@ -678,9 +700,9 @@ class CStudentPublication
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -688,9 +710,10 @@ class CStudentPublication
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CStudentPublication
      */
     public function setCId($cId)
@@ -701,9 +724,9 @@ class CStudentPublication
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -759,7 +782,8 @@ class CStudentPublication
     }
 
     /**
-     * Get iid
+     * Get iid.
+     *
      * @return int
      */
     public function getIid()

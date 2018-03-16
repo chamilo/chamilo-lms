@@ -3,27 +3,23 @@
 
 namespace Chamilo\UserBundle\Form;
 
-use Chamilo\UserBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Class ProfileType
+ * Class ProfileType.
+ *
  * @deprecated is not being used
+ *
  * @package Chamilo\UserBundle\Form
  */
 class ProfileFosUserType extends AbstractType
 {
     /**
-     * @inheritdoc
-     **/
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder

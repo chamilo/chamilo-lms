@@ -2,18 +2,15 @@
 
 namespace Chamilo\UserBundle\Admin;
 
-use Sonata\UserBundle\Admin\Model\GroupAdmin as BaseGroupAdmin;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\UserBundle\Admin\Model\GroupAdmin as BaseGroupAdmin;
 
 class GroupAdmin extends BaseGroupAdmin
 {
     /**
      * {@inheritdoc}
      */
-    protected function configureListFields(ListMapper $listMapper):void
+    protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
             ->addIdentifier('name')

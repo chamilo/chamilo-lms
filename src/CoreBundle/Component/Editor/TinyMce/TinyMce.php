@@ -4,16 +4,16 @@
 namespace Chamilo\CoreBundle\Component\Editor\TinyMce;
 
 use Chamilo\CoreBundle\Component\Editor\Editor;
-use Chamilo\CoreBundle\Component\Editor\TinyMce\Toolbar;
 
 /**
- * Class TinyMce
+ * Class TinyMce.
+ *
  * @package Chamilo\CoreBundle\Component\Editor\TinyMce
  */
 class TinyMce extends Editor
 {
     /**
-     * Set js to be include in the template
+     * Set js to be include in the template.
      */
     public function setJavascriptToInclude()
     {

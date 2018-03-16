@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * AccessUrl
+ * AccessUrl.
  *
  * @ORM\Table(name="access_url")
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\AccessUrlRepository")
@@ -14,7 +14,26 @@ use Doctrine\ORM\Mapping as ORM;
 class AccessUrl
 {
     /**
-     * @var integer
+     * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     */
+    protected $course;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AccessUrlRelSession", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     */
+    protected $session;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SettingsCurrent", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     */
+    protected $settings;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionCategory", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     */
+    protected $sessionCategory;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
@@ -37,14 +56,14 @@ class AccessUrl
     private $description;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="active", type="integer", nullable=false, unique=false)
      */
     private $active;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="created_by", type="integer", nullable=false, unique=false)
      */
@@ -58,49 +77,49 @@ class AccessUrl
     private $tms;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="url_type", type="boolean", nullable=true)
      */
     private $urlType;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="limit_courses", type="integer", nullable=true, unique=false)
      */
     private $limitCourses;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="limit_active_courses", type="integer", nullable=true, unique=false)
      */
     private $limitActiveCourses;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="limit_sessions", type="integer", nullable=true, unique=false)
      */
     private $limitSessions;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="limit_users", type="integer", nullable=true, unique=false)
      */
     private $limitUsers;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="limit_teachers", type="integer", nullable=true, unique=false)
      */
     private $limitTeachers;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="limit_disk_space", type="integer", nullable=true, unique=false)
      */
@@ -114,27 +133,7 @@ class AccessUrl
     private $email;
 
     /**
-     * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
-     **/
-    protected $course;
-
-    /**
-     * @ORM\OneToMany(targetEntity="AccessUrlRelSession", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
-     **/
-    protected $session;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SettingsCurrent", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
-     **/
-    protected $settings;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionCategory", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
-     **/
-    protected $sessionCategory;
-
-    /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -151,9 +150,9 @@ class AccessUrl
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -161,9 +160,10 @@ class AccessUrl
     }
 
     /**
-     * Set url
+     * Set url.
      *
      * @param string $url
+     *
      * @return AccessUrl
      */
     public function setUrl($url)
@@ -174,7 +174,7 @@ class AccessUrl
     }
 
     /**
-     * Get url
+     * Get url.
      *
      * @return string
      */
@@ -184,9 +184,10 @@ class AccessUrl
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return AccessUrl
      */
     public function setDescription($description)
@@ -197,7 +198,7 @@ class AccessUrl
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -207,9 +208,10 @@ class AccessUrl
     }
 
     /**
-     * Set active
+     * Set active.
      *
-     * @param integer $active
+     * @param int $active
+     *
      * @return AccessUrl
      */
     public function setActive($active)
@@ -220,9 +222,9 @@ class AccessUrl
     }
 
     /**
-     * Get active
+     * Get active.
      *
-     * @return integer
+     * @return int
      */
     public function getActive()
     {
@@ -230,9 +232,10 @@ class AccessUrl
     }
 
     /**
-     * Set createdBy
+     * Set createdBy.
      *
-     * @param integer $createdBy
+     * @param int $createdBy
+     *
      * @return AccessUrl
      */
     public function setCreatedBy($createdBy)
@@ -243,9 +246,9 @@ class AccessUrl
     }
 
     /**
-     * Get createdBy
+     * Get createdBy.
      *
-     * @return integer
+     * @return int
      */
     public function getCreatedBy()
     {
@@ -253,9 +256,10 @@ class AccessUrl
     }
 
     /**
-     * Set tms
+     * Set tms.
      *
      * @param \DateTime $tms
+     *
      * @return AccessUrl
      */
     public function setTms($tms)
@@ -266,7 +270,7 @@ class AccessUrl
     }
 
     /**
-     * Get tms
+     * Get tms.
      *
      * @return \DateTime
      */
@@ -276,9 +280,10 @@ class AccessUrl
     }
 
     /**
-     * Set urlType
+     * Set urlType.
      *
-     * @param boolean $urlType
+     * @param bool $urlType
+     *
      * @return AccessUrl
      */
     public function setUrlType($urlType)
@@ -289,9 +294,9 @@ class AccessUrl
     }
 
     /**
-     * Get urlType
+     * Get urlType.
      *
-     * @return boolean
+     * @return bool
      */
     public function getUrlType()
     {
@@ -308,11 +313,13 @@ class AccessUrl
 
     /**
      * @param int $limitActiveCourses
+     *
      * @return AccessUrl
      */
     public function setLimitActiveCourses($limitActiveCourses)
     {
         $this->limitActiveCourses = $limitActiveCourses;
+
         return $this;
     }
 
@@ -326,11 +333,13 @@ class AccessUrl
 
     /**
      * @param int $limitSessions
+     *
      * @return AccessUrl
      */
     public function setLimitSessions($limitSessions)
     {
         $this->limitSessions = $limitSessions;
+
         return $this;
     }
 
@@ -344,11 +353,13 @@ class AccessUrl
 
     /**
      * @param int $limitUsers
+     *
      * @return AccessUrl
      */
     public function setLimitUsers($limitUsers)
     {
         $this->limitUsers = $limitUsers;
+
         return $this;
     }
 
@@ -362,11 +373,13 @@ class AccessUrl
 
     /**
      * @param int $limitTeachers
+     *
      * @return AccessUrl
      */
     public function setLimitTeachers($limitTeachers)
     {
         $this->limitTeachers = $limitTeachers;
+
         return $this;
     }
 
@@ -380,11 +393,13 @@ class AccessUrl
 
     /**
      * @param int $limitDiskSpace
+     *
      * @return AccessUrl
      */
     public function setLimitDiskSpace($limitDiskSpace)
     {
         $this->limitDiskSpace = $limitDiskSpace;
+
         return $this;
     }
 
@@ -398,11 +413,13 @@ class AccessUrl
 
     /**
      * @param string $email
+     *
      * @return AccessUrl
      */
     public function setEmail($email)
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -416,11 +433,13 @@ class AccessUrl
 
     /**
      * @param mixed $course
+     *
      * @return AccessUrl
      */
     public function setCourse($course)
     {
         $this->course = $course;
+
         return $this;
     }
 
@@ -434,11 +453,13 @@ class AccessUrl
 
     /**
      * @param mixed $settings
+     *
      * @return AccessUrl
      */
     public function setSettings($settings)
     {
         $this->settings = $settings;
+
         return $this;
     }
 
@@ -452,11 +473,13 @@ class AccessUrl
 
     /**
      * @param mixed $sessionCategory
+     *
      * @return AccessUrl
      */
     public function setSessionCategory($sessionCategory)
     {
         $this->sessionCategory = $sessionCategory;
+
         return $this;
     }
 
@@ -470,11 +493,13 @@ class AccessUrl
 
     /**
      * @param int $limitCourses
+     *
      * @return AccessUrl
      */
     public function setLimitCourses($limitCourses)
     {
         $this->limitCourses = $limitCourses;
+
         return $this;
     }
 }

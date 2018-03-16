@@ -4,12 +4,12 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class EditorSettingsSchema
+ * Class EditorSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class EditorSettingsSchema extends AbstractSettingsSchema
@@ -40,7 +40,7 @@ class EditorSettingsSchema extends AbstractSettingsSchema
                     'enabled_support_pixlr' => '',
                     'htmlpurifier_wiki' => '',
                     'enable_iframe_inclusion' => '',
-                    'enabled_mathjax' => ''
+                    'enabled_mathjax' => '',
                 ]
             )
             /*->setAllowedTypes(

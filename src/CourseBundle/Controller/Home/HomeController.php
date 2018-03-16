@@ -4,20 +4,19 @@
 namespace Chamilo\CourseBundle\Controller\Home;
 
 use Chamilo\CourseBundle\Controller\ToolBaseController;
+use Chamilo\CourseBundle\Entity\CTool;
+use CourseHome;
+use Display;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Chamilo\CourseBundle\Entity\CTool;
-use Display;
-use CourseHome;
-use Symfony\Component\HttpFoundation\Request;
-
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
- * Class HomeController
+ * Class HomeController.
+ *
  * @package Chamilo\CourseBundle\Controller\Home
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  * @Route("/")
  */
@@ -29,6 +28,7 @@ class HomeController extends ToolBaseController
      * @Method({"GET"})
      *
      * @param Request $request
+     *
      * @return Response
      */
     public function indexAction(Request $request)
@@ -118,15 +118,318 @@ class HomeController extends ToolBaseController
                 'edit_icons' => $editIcons,
                 'introduction_text' => $introduction,
                 'exercise_warning' => null,
-                'lp_warning' => null
+                'lp_warning' => null,
             ]
         );
+    }
+
+    /**
+     * @param string $courseCode
+     * @param string $fileName
+     *
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function getFileAction($courseCode, $fileName)
+    {
+        $courseInfo = api_get_course_info($courseCode);
+        $sessionId = $this->getRequest()->get('id_session');
+
+        $docId = \DocumentManager::get_document_id($courseInfo, "/".$fileName);
+
+        $filePath = null;
+
+        if ($docId) {
+            $isVisible = \DocumentManager::is_visible_by_id($docId, $courseInfo, $sessionId, api_get_user_id());
+            $documentData = \DocumentManager::get_document_data_by_id($docId, $courseCode);
+            $filePath = $documentData['absolute_path'];
+            event_download($filePath);
+        }
+
+        if (!api_is_allowed_to_edit() && !$isVisible) {
+            $this->abort(500);
+        }
+
+        return $this->sendFile($filePath);
+    }
+
+    /**
+     * @Route("/show/{iconId}")
+     * @Method({"GET"})
+     *
+     * @param $iconId
+     *
+     * @return null|string
+     */
+    public function showIconAction($iconId)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $criteria = ['cId' => api_get_course_int_id(), 'id' => $iconId];
+        $tool = $this->getRepository(
+            'Chamilo\CourseBundle\Entity\CTool'
+        )->findOneBy($criteria);
+        if ($tool) {
+            $tool->setVisibility(1);
+        }
+        $entityManager->persist($tool);
+        //$entityManager->flush();
+        return Display::return_message(get_lang('Visible'), 'confirmation');
+    }
+
+    /**
+     * @Route("/hide/{iconId}")
+     * @Method({"GET"})
+     *
+     * @param $iconId
+     *
+     * @return null|string
+     */
+    public function hideIconAction($iconId)
+    {
+        if (!$this->isCourseTeacher()) {
+            return $this->abort(404);
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $criteria = ['cId' => api_get_course_int_id(), 'id' => $iconId];
+        $tool = $this->getRepository(
+            'Chamilo\CourseBundle\Entity\CTool'
+        )->findOneBy($criteria);
+        if ($tool) {
+            $tool->setVisibility(0);
+        }
+        $entityManager->persist($tool);
+        //$entityManager->flush();
+        return Display::return_message(get_lang('ToolIsNowHidden'), 'confirmation');
+    }
+
+    /**
+     * @Route("/delete/{iconId}")
+     * @Method({"GET"})
+     *
+     * @param $iconId
+     *
+     * @return null|string
+     */
+    public function deleteIcon($iconId)
+    {
+        if (!$this->isCourseTeacher()) {
+            return $this->abort(404);
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $criteria = ['cId' => api_get_course_int_id(), 'id' => $iconId, 'added_tool' => 1];
+        $tool = $this->getRepository(
+            'Chamilo\CourseBundle\Entity\CTool'
+        )->findOneBy($criteria);
+        $entityManager->remove($tool);
+        //$entityManager->flush();
+        return Display::return_message(get_lang('Deleted'), 'confirmation');
+    }
+
+    /**
+     * @Route("/icon_list")
+     * @Method({"GET"})
+     *
+     * @param Request $request
+     */
+    public function iconListAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repo = $this->getDoctrine()->getRepository(
+            'ChamiloCourseBundle:CTool'
+        );
+
+        $sessionId = intval($request->get('id_session'));
+        $itemsFromSession = [];
+        if (!empty($sessionId)) {
+            $query = $repo->createQueryBuilder('a');
+            $query->select('s');
+            $query->from('Chamilo\CourseBundle\Entity\CTool', 's');
+            $query->where('s.cId  = :courseId AND s.sessionId = :sessionId')
+                ->setParameters(
+                    [
+                        'courseId' => $this->getCourse()->getId(),
+                        'sessionId' => $sessionId,
+                    ]
+                );
+            $itemsFromSession = $query->getQuery()->getResult();
+
+            $itemNameList = [];
+            foreach ($itemsFromSession as $item) {
+                $itemNameList[] = $item->getName();
+            }
+
+            //$itemsFromSession = $this->getRepository()->findBy($criteria);
+            $query = $repo->createQueryBuilder('a');
+            $query->select('s');
+            $query->from('Chamilo\CourseBundle\Entity\CTool', 's');
+            $query->where('s.cId  = :courseId AND s.sessionId = 0')
+                ->setParameters(
+                    [
+                        'courseId' => $this->getCourse()->getId(),
+                    ]
+                );
+            if (!empty($itemNameList)) {
+                $query->andWhere($query->expr()->notIn('s.name', $itemNameList));
+            }
+            $itemsFromCourse = $query->getQuery()->getResult();
+        } else {
+            $criteria = ['cId' => $this->getCourse()->getId(), 'sessionId' => 0];
+            $itemsFromCourse = $repo->findBy($criteria);
+        }
+
+        return $this->render(
+            '@ChamiloCourse/Home/list.html.twig',
+            [
+                'items_from_course' => $itemsFromCourse,
+                'items_from_session' => $itemsFromSession,
+                'links' => '',
+            ]
+        );
+    }
+
+    /**
+     * @Route("/{itemName}/add")
+     * @Method({"GET|POST"})
+     *
+     * @param $itemName
+     *
+     * @return mixed
+     */
+    public function addIconAction($itemName)
+    {
+        if (!$this->isCourseTeacher()) {
+            return $this->abort(404);
+        }
+
+        $sessionId = intval($this->getRequest()->get('id_session'));
+
+        if (empty($sessionId)) {
+            return $this->abort(500);
+        }
+
+        $criteria = ['cId' => $this->getCourse()->getId(), 'sessionId' => 0, 'name' => $itemName];
+        $itemFromDatabase = $this->getRepository()->findOneBy($criteria);
+
+        if (!$itemFromDatabase) {
+            $this->createNotFoundException();
+        }
+        /** @var CTool $item */
+        $item = clone $itemFromDatabase;
+        $item->setId(null);
+        $item->setSessionId($sessionId);
+        $form = $this->createForm($this->getFormType(), $item);
+
+        $form->handleRequest($this->getRequest());
+
+        if ($form->isValid()) {
+            $query = $this->getDoctrine()->getManager()->createQueryBuilder('a');
+            $query->select('MAX(s.id) as id');
+            $query->from('Chamilo\CourseBundle\Entity\CTool', 's');
+            $query->where('s.cId  = :courseId')->setParameter('courseId', $this->getCourse()->getId());
+            $result = $query->getQuery()->getArrayResult();
+            $maxId = $result[0]['id'] + 1;
+            $item->setId($maxId);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($item);
+            $entityManager->flush();
+            $customIcon = $item->getCustomIcon();
+            if (!empty($customIcon)) {
+                $item->createGrayIcon($this->get('imagine'));
+            }
+
+            $this->get('session')->getFlashBag()->add('success', "Added");
+            $url = $this->generateUrl('course_home.controller:iconListAction', ['id_session' => $sessionId]);
+
+            return $this->redirect($url);
+        }
+
+        $this->getTemplate()->assign('item', $item);
+        $this->getTemplate()->assign('form', $form->createView());
+        $this->getTemplate()->assign('links', $this->generateLinks());
+
+        return $this->render('@ChamiloCourse/Home/add.html.twig');
+    }
+
+    /**
+     * @Route("/{itemId}/edit")
+     * @Method({"GET"})
+     */
+    public function editIconAction($itemId)
+    {
+        if (!$this->isCourseTeacher()) {
+            return $this->abort(404);
+        }
+
+        $sessionId = intval($this->getRequest()->get('id_session'));
+
+        $criteria = ['cId' => $this->getCourse()->getId(), 'id' => $itemId];
+        /** @var CTool $item */
+        $item = $this->getRepository()->findOneBy($criteria);
+
+        $form = $this->createForm($this->getFormType(), $item);
+        $form->handleRequest($this->getRequest());
+
+        if ($form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($item);
+            $entityManager->flush();
+
+            $customIcon = $item->getCustomIcon();
+            if (!empty($customIcon)) {
+                $item->createGrayIcon($this->get('imagine'));
+            }
+
+            $this->get('session')->getFlashBag()->add('success', "Updated");
+            $url = $this->generateUrl('course_home.controller:iconListAction', ['id_session' => $sessionId]);
+
+            return $this->redirect($url);
+        }
+
+        $this->getTemplate()->assign('item', $item);
+        $this->getTemplate()->assign('form', $form->createView());
+        $this->getTemplate()->assign('links', $this->generateLinks());
+
+        return $this->render('@ChamiloCourse/Home/edit.html.twig');
+    }
+
+    /**
+     * @Route("/{itemId}/delete")
+     * @Method({"GET"})
+     */
+    public function deleteIconAction($itemId)
+    {
+        if (!$this->isCourseTeacher()) {
+            return $this->abort(404);
+        }
+
+        $criteria = ['cId' => $this->getCourse()->getId(), 'id' => $itemId];
+
+        /** @var CTool $item */
+        $item = $this->getRepository()->findOneBy($criteria);
+        $entityManager = $this->getDoctrine()->getManager();
+        $sessionId = $item->getSessionId();
+        if (!empty($sessionId)) {
+            $entityManager->remove($item);
+        } else {
+            $item->setCustomIcon(null);
+            $entityManager->persist($item);
+        }
+        $entityManager->flush();
+        $this->get('session')->getFlashBag()->add('success', "Deleted");
+
+        $this->getTemplate()->assign('links', $this->generateLinks());
+        $url = $this->generateUrl('course_home.controller:iconListAction');
+
+        return $this->redirect($url);
     }
 
     /**
      * @param string $title
      * @param string $content
      * @param string $class
+     *
      * @return string
      */
     private function return_block($title, $content, $class = null)
@@ -190,7 +493,7 @@ class HomeController extends ToolBaseController
             $blocks[] = [
                 'title' => get_lang('Authoring'),
                 'class' => 'course-tools-author',
-                'content' => CourseHome::show_tools_category($my_list)
+                'content' => CourseHome::show_tools_category($my_list),
             ];
 
             $list1 = CourseHome::get_tools_category(TOOL_INTERACTION);
@@ -200,7 +503,7 @@ class HomeController extends ToolBaseController
             $blocks[] = [
                 'title' => get_lang('Interaction'),
                 'class' => 'course-tools-interaction',
-                'content' => CourseHome::show_tools_category($my_list)
+                'content' => CourseHome::show_tools_category($my_list),
             ];
 
             $my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
@@ -208,7 +511,7 @@ class HomeController extends ToolBaseController
             $blocks[] = [
                 'title' => get_lang('Administration'),
                 'class' => 'course-tools-administration',
-                'content' => CourseHome::show_tools_category($my_list)
+                'content' => CourseHome::show_tools_category($my_list),
             ];
         } elseif (api_is_coach()) {
             $content .= $pluginExtra;
@@ -224,7 +527,7 @@ class HomeController extends ToolBaseController
             $my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
 
             $blocks[] = [
-                'content' => CourseHome::show_tools_category($my_list)
+                'content' => CourseHome::show_tools_category($my_list),
             ];
 
             $sessionsCopy = api_get_setting('allow_session_course_copy_for_teachers');
@@ -243,7 +546,7 @@ class HomeController extends ToolBaseController
 
                 $blocks[] = [
                     'title' => get_lang('Administration'),
-                    'content' => CourseHome::show_tools_category($onlyMaintenanceList)
+                    'content' => CourseHome::show_tools_category($onlyMaintenanceList),
                 ];
             }
         } else {
@@ -276,7 +579,7 @@ class HomeController extends ToolBaseController
                         'added_tool' => '0',
                         'target' => '_self',
                         'category' => 'interaction',
-                        'session_id' => api_get_session_id()
+                        'session_id' => api_get_session_id(),
                     ];
                 }
             }
@@ -340,13 +643,13 @@ class HomeController extends ToolBaseController
                 $course_id = api_get_course_int_id();
                 $condition = '';
                 if (!empty($session_id)) {
-                    $condition =  api_get_session_condition($session_id);
+                    $condition = api_get_session_condition($session_id);
                     $sql = "SELECT iid FROM $table
                             WHERE c_id = $course_id AND autolaunch = 1 $condition
                             LIMIT 1";
                     $result = \Database::query($sql);
                     //If we found nothing in the session we just called the session_id =  0 autolaunch
-                    if (\Database::num_rows($result) ==  0) {
+                    if (\Database::num_rows($result) == 0) {
                         $condition = '';
                     } else {
                         //great, there is an specific auto lunch for this session we leave the $condition
@@ -357,7 +660,7 @@ class HomeController extends ToolBaseController
                         WHERE c_id = $course_id AND autolaunch = 1 $condition
                         LIMIT 1";
                 $result = \Database::query($sql);
-                if (\Database::num_rows($result) >  0) {
+                if (\Database::num_rows($result) > 0) {
                     $data = \Database::fetch_array($result, 'ASSOC');
                     if (!empty($data['iid'])) {
                         if (api_is_platform_admin() || api_is_allowed_to_edit()) {
@@ -402,11 +705,11 @@ class HomeController extends ToolBaseController
                 $course_id = api_get_course_int_id();
                 $condition = '';
                 if (!empty($session_id)) {
-                    $condition =  api_get_session_condition($session_id);
+                    $condition = api_get_session_condition($session_id);
                     $sql = "SELECT id FROM $lp_table WHERE c_id = $course_id AND autolunch = 1 $condition LIMIT 1";
                     $result = \Database::query($sql);
                     //If we found nothing in the session we just called the session_id =  0 autolunch
-                    if (\Database::num_rows($result) ==  0) {
+                    if (\Database::num_rows($result) == 0) {
                         $condition = '';
                     } else {
                         //great, there is an specific auto lunch for this session we leave the $condition
@@ -417,7 +720,7 @@ class HomeController extends ToolBaseController
                         WHERE c_id = $course_id AND autolunch = 1 $condition
                         LIMIT 1";
                 $result = \Database::query($sql);
-                if (\Database::num_rows($result) >  0) {
+                if (\Database::num_rows($result) > 0) {
                     $lp_data = \Database::fetch_array($result, 'ASSOC');
                     if (!empty($lp_data['id'])) {
                         if (api_is_platform_admin() || api_is_allowed_to_edit()) {
@@ -440,297 +743,7 @@ class HomeController extends ToolBaseController
 
         return [
             'show_autolaunch_exercise_warning' => $showAutoLaunchExerciseWarning,
-            'show_autolaunch_lp_warning' => $showAutoLaunchLpWarning
+            'show_autolaunch_lp_warning' => $showAutoLaunchLpWarning,
         ];
-    }
-
-    /**
-     * @param string $courseCode
-     * @param string $fileName
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
-     */
-    public function getFileAction($courseCode, $fileName)
-    {
-        $courseInfo = api_get_course_info($courseCode);
-        $sessionId = $this->getRequest()->get('id_session');
-
-        $docId = \DocumentManager::get_document_id($courseInfo, "/".$fileName);
-
-        $filePath = null;
-
-        if ($docId) {
-            $isVisible = \DocumentManager::is_visible_by_id($docId, $courseInfo, $sessionId, api_get_user_id());
-            $documentData = \DocumentManager::get_document_data_by_id($docId, $courseCode);
-            $filePath = $documentData['absolute_path'];
-            event_download($filePath);
-        }
-
-        if (!api_is_allowed_to_edit() && !$isVisible) {
-            $this->abort(500);
-        }
-        return $this->sendFile($filePath);
-    }
-
-    /**
-     * @Route("/show/{iconId}")
-     * @Method({"GET"})
-     * @param $iconId
-     * @return null|string
-     */
-    public function showIconAction($iconId)
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-        $criteria = ['cId' => api_get_course_int_id(), 'id' => $iconId];
-        $tool = $this->getRepository(
-            'Chamilo\CourseBundle\Entity\CTool'
-        )->findOneBy($criteria);
-        if ($tool) {
-            $tool->setVisibility(1);
-        }
-        $entityManager->persist($tool);
-        //$entityManager->flush();
-        return Display::return_message(get_lang('Visible'), 'confirmation');
-    }
-
-    /**
-     * @Route("/hide/{iconId}")
-     * @Method({"GET"})
-     * @param $iconId
-     * @return null|string
-     */
-    public function hideIconAction($iconId)
-    {
-        if (!$this->isCourseTeacher()) {
-            return $this->abort(404);
-        }
-
-        $entityManager = $this->getDoctrine()->getManager();
-        $criteria = ['cId' => api_get_course_int_id(), 'id' => $iconId];
-        $tool = $this->getRepository(
-            'Chamilo\CourseBundle\Entity\CTool'
-        )->findOneBy($criteria);
-        if ($tool) {
-            $tool->setVisibility(0);
-        }
-        $entityManager->persist($tool);
-        //$entityManager->flush();
-        return Display::return_message(get_lang('ToolIsNowHidden'), 'confirmation');
-    }
-
-    /**
-     * @Route("/delete/{iconId}")
-     * @Method({"GET"})
-     * @param $iconId
-     * @return null|string
-     */
-    public function deleteIcon($iconId)
-    {
-        if (!$this->isCourseTeacher()) {
-            return $this->abort(404);
-        }
-
-        $entityManager = $this->getDoctrine()->getManager();
-        $criteria = ['cId' => api_get_course_int_id(), 'id' => $iconId, 'added_tool' => 1];
-        $tool = $this->getRepository(
-            'Chamilo\CourseBundle\Entity\CTool'
-        )->findOneBy($criteria);
-        $entityManager->remove($tool);
-        //$entityManager->flush();
-        return Display::return_message(get_lang('Deleted'), 'confirmation');
-    }
-
-    /**
-     * @Route("/icon_list")
-     * @Method({"GET"})
-     * @param Request $request
-     */
-    public function iconListAction(Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $repo = $this->getDoctrine()->getRepository(
-            'ChamiloCourseBundle:CTool'
-        );
-
-        $sessionId = intval($request->get('id_session'));
-        $itemsFromSession = [];
-        if (!empty($sessionId)) {
-            $query = $repo->createQueryBuilder('a');
-            $query->select('s');
-            $query->from('Chamilo\CourseBundle\Entity\CTool', 's');
-            $query->where('s.cId  = :courseId AND s.sessionId = :sessionId')
-                ->setParameters(
-                    [
-                        'courseId' => $this->getCourse()->getId(),
-                        'sessionId' => $sessionId
-                    ]
-                );
-            $itemsFromSession = $query->getQuery()->getResult();
-
-            $itemNameList = [];
-            foreach ($itemsFromSession as $item) {
-                $itemNameList[] = $item->getName();
-            }
-
-            //$itemsFromSession = $this->getRepository()->findBy($criteria);
-            $query = $repo->createQueryBuilder('a');
-            $query->select('s');
-            $query->from('Chamilo\CourseBundle\Entity\CTool', 's');
-            $query->where('s.cId  = :courseId AND s.sessionId = 0')
-                ->setParameters(
-                    [
-                        'courseId' => $this->getCourse()->getId()
-                    ]
-                );
-            if (!empty($itemNameList)) {
-                $query->andWhere($query->expr()->notIn('s.name', $itemNameList));
-            }
-            $itemsFromCourse = $query->getQuery()->getResult();
-        } else {
-            $criteria = ['cId' => $this->getCourse()->getId(), 'sessionId' => 0];
-            $itemsFromCourse = $repo->findBy($criteria);
-        }
-
-
-        return $this->render(
-            '@ChamiloCourse/Home/list.html.twig',
-            [
-                'items_from_course' => $itemsFromCourse,
-                'items_from_session' => $itemsFromSession,
-                'links' => '',
-            ]
-        );
-    }
-
-    /**
-     *
-     * @Route("/{itemName}/add")
-     * @Method({"GET|POST"})
-     * @param $itemName
-     * @return mixed
-     */
-    public function addIconAction($itemName)
-    {
-        if (!$this->isCourseTeacher()) {
-            return $this->abort(404);
-        }
-
-        $sessionId = intval($this->getRequest()->get('id_session'));
-
-        if (empty($sessionId)) {
-            return $this->abort(500);
-        }
-
-        $criteria = ['cId' => $this->getCourse()->getId(), 'sessionId' => 0, 'name' => $itemName];
-        $itemFromDatabase = $this->getRepository()->findOneBy($criteria);
-
-        if (!$itemFromDatabase) {
-            $this->createNotFoundException();
-        }
-        /** @var CTool $item */
-        $item = clone $itemFromDatabase;
-        $item->setId(null);
-        $item->setSessionId($sessionId);
-        $form = $this->createForm($this->getFormType(), $item);
-
-        $form->handleRequest($this->getRequest());
-
-        if ($form->isValid()) {
-            $query = $this->getDoctrine()->getManager()->createQueryBuilder('a');
-            $query->select('MAX(s.id) as id');
-            $query->from('Chamilo\CourseBundle\Entity\CTool', 's');
-            $query->where('s.cId  = :courseId')->setParameter('courseId', $this->getCourse()->getId());
-            $result = $query->getQuery()->getArrayResult();
-            $maxId = $result[0]['id'] + 1;
-            $item->setId($maxId);
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($item);
-            $entityManager->flush();
-            $customIcon = $item->getCustomIcon();
-            if (!empty($customIcon)) {
-                $item->createGrayIcon($this->get('imagine'));
-            }
-
-            $this->get('session')->getFlashBag()->add('success', "Added");
-            $url = $this->generateUrl('course_home.controller:iconListAction', ['id_session' => $sessionId]);
-            return $this->redirect($url);
-        }
-
-        $this->getTemplate()->assign('item', $item);
-        $this->getTemplate()->assign('form', $form->createView());
-        $this->getTemplate()->assign('links', $this->generateLinks());
-
-        return $this->render('@ChamiloCourse/Home/add.html.twig');
-    }
-
-    /**
-     * @Route("/{itemId}/edit")
-     * @Method({"GET"})
-     */
-    public function editIconAction($itemId)
-    {
-        if (!$this->isCourseTeacher()) {
-            return $this->abort(404);
-        }
-
-        $sessionId = intval($this->getRequest()->get('id_session'));
-
-        $criteria = ['cId' => $this->getCourse()->getId(), 'id' => $itemId];
-        /** @var CTool $item */
-        $item = $this->getRepository()->findOneBy($criteria);
-
-        $form = $this->createForm($this->getFormType(), $item);
-        $form->handleRequest($this->getRequest());
-
-        if ($form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($item);
-            $entityManager->flush();
-
-            $customIcon = $item->getCustomIcon();
-            if (!empty($customIcon)) {
-                $item->createGrayIcon($this->get('imagine'));
-            }
-
-            $this->get('session')->getFlashBag()->add('success', "Updated");
-            $url = $this->generateUrl('course_home.controller:iconListAction', ['id_session' => $sessionId]);
-            return $this->redirect($url);
-        }
-
-        $this->getTemplate()->assign('item', $item);
-        $this->getTemplate()->assign('form', $form->createView());
-        $this->getTemplate()->assign('links', $this->generateLinks());
-
-        return $this->render('@ChamiloCourse/Home/edit.html.twig');
-    }
-
-    /**
-     * @Route("/{itemId}/delete")
-     * @Method({"GET"})
-     */
-    public function deleteIconAction($itemId)
-    {
-        if (!$this->isCourseTeacher()) {
-            return $this->abort(404);
-        }
-
-        $criteria = ['cId' => $this->getCourse()->getId(), 'id' => $itemId];
-
-        /** @var CTool $item */
-        $item = $this->getRepository()->findOneBy($criteria);
-        $entityManager = $this->getDoctrine()->getManager();
-        $sessionId = $item->getSessionId();
-        if (!empty($sessionId)) {
-            $entityManager->remove($item);
-        } else {
-            $item->setCustomIcon(null);
-            $entityManager->persist($item);
-        }
-        $entityManager->flush();
-        $this->get('session')->getFlashBag()->add('success', "Deleted");
-
-        $this->getTemplate()->assign('links', $this->generateLinks());
-        $url = $this->generateUrl('course_home.controller:iconListAction');
-        return $this->redirect($url);
     }
 }

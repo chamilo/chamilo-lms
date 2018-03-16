@@ -4,9 +4,11 @@
 use ChamiloSession as Session;
 
 /**
- * Class TestCategory
+ * Class TestCategory.
+ *
  * @author hubert.borderiou
  * @author Julio Montoya - several fixes
+ *
  * @todo rename to ExerciseCategory
  */
 class TestCategory
@@ -16,16 +18,18 @@ class TestCategory
     public $description;
 
     /**
-     * Constructor of the class Category
+     * Constructor of the class Category.
      */
     public function __construct()
     {
     }
 
     /**
-     * return the TestCategory object with id=in_id
+     * return the TestCategory object with id=in_id.
+     *
      * @param int $id
      * @param int $courseId
+     *
      * @return TestCategory
      */
     public function getCategory($id, $courseId = 0)
@@ -51,8 +55,10 @@ class TestCategory
     }
 
     /**
-     * Save TestCategory in the database if name doesn't exists
+     * Save TestCategory in the database if name doesn't exists.
+     *
      * @param int $courseId
+     *
      * @return bool
      */
     public function save($courseId = 0)
@@ -75,7 +81,7 @@ class TestCategory
             $params = [
                 'c_id' => $courseId,
                 'title' => (string) $this->name,
-                'description' => (string) $this->description
+                'description' => (string) $this->description,
             ];
             $newId = Database::insert($table, $params);
 
@@ -100,8 +106,10 @@ class TestCategory
 
     /**
      * Removes the category from the database
-     * if there were question in this category, the link between question and category is removed
+     * if there were question in this category, the link between question and category is removed.
+     *
      * @param int $id
+     *
      * @return bool
      */
     public function removeCategory($id)
@@ -138,8 +146,10 @@ class TestCategory
     }
 
     /**
-     * Modify category name or description of category with id=in_id
+     * Modify category name or description of category with id=in_id.
+     *
      * @param int $courseId
+     *
      * @return bool
      */
     public function modifyCategory($courseId = 0)
@@ -170,6 +180,7 @@ class TestCategory
                 'TestCategoryModified',
                 api_get_user_id()
             );
+
             return true;
         }
 
@@ -177,7 +188,7 @@ class TestCategory
     }
 
     /**
-     * Gets the number of question of category id=in_id
+     * Gets the number of question of category id=in_id.
      */
     public function getCategoryQuestionsNumber()
     {
@@ -196,10 +207,11 @@ class TestCategory
      * Return an array of all Category objects in the database
      * If $field=="" Return an array of all category objects in the database
      * Otherwise, return an array of all in_field value
-     * in the database (in_field = id or name or description)
+     * in the database (in_field = id or name or description).
      *
      * @param string $field
-     * @param int $courseId
+     * @param int    $courseId
+     *
      * @return array
      */
     public static function getCategoryListInfo($field = '', $courseId = 0)
@@ -227,13 +239,15 @@ class TestCategory
                 $categories[] = $row[$field];
             }
         }
+
         return $categories;
     }
 
     /**
      * Return the TestCategory id for question with question_id = $questionId
      * In this version, a question has only 1 TestCategory.
-     * Return the TestCategory id, 0 if none
+     * Return the TestCategory id, 0 if none.
+     *
      * @param int $questionId
      * @param int $courseId
      *
@@ -267,9 +281,10 @@ class TestCategory
     }
 
     /**
-     * true if question id has a category
+     * true if question id has a category.
      *
      * @param int $questionId
+     *
      * @return bool
      */
     public static function isQuestionHasCategory($questionId)
@@ -284,8 +299,10 @@ class TestCategory
     /**
      * Return the category name for question with question_id = $questionId
      * In this version, a question has only 1 category.
+     *
      * @param $questionId
      * @param int $courseId
+     *
      * @return string
      */
     public static function getCategoryNameForQuestion(
@@ -315,7 +332,8 @@ class TestCategory
      * Return the list of differents categories ID for a test in the current course
      * input : test_id
      * return : array of category id (integer)
-     * hubert.borderiou 07-04-2011
+     * hubert.borderiou 07-04-2011.
+     *
      * @param int $exerciseId
      * @param int $courseId
      *
@@ -340,6 +358,7 @@ class TestCategory
 
     /**
      * @param Exercise $exercise
+     *
      * @return array
      */
     public static function getListOfCategoriesIDForTestObject(Exercise $exercise)
@@ -368,9 +387,11 @@ class TestCategory
     }
 
     /**
-     * Return the list of different categories NAME for a test
+     * Return the list of different categories NAME for a test.
+     *
      * @param int $exerciseId
      * @param bool
+     *
      * @return array
      *
      * @author function rewrote by jmontoya
@@ -389,7 +410,7 @@ class TestCategory
                     'title' => $catInfo['title'],
                     //'parent_id' =>  $catInfo['parent_id'],
                     'parent_id' => '',
-                    'c_id' => $catInfo['c_id']
+                    'c_id' => $catInfo['c_id'],
                 ];
             }
         }
@@ -399,6 +420,7 @@ class TestCategory
 
     /**
      * @param Exercise $exercise
+     *
      * @return array
      */
     public static function getListOfCategoriesForTest(Exercise $exercise)
@@ -420,7 +442,7 @@ class TestCategory
      * return the number of differents categories for a test
      * input : test_id
      * return : integer
-     * hubert.borderiou 07-04-2011
+     * hubert.borderiou 07-04-2011.
      */
     public static function getNumberOfCategoriesForTest($id)
     {
@@ -428,11 +450,12 @@ class TestCategory
     }
 
     /**
-     * return the number of question of a category id in a test
+     * return the number of question of a category id in a test.
+     *
      * @param int $exerciseId
      * @param int $categoryId
      *
-     * @return integer
+     * @return int
      *
      * @author hubert.borderiou 07-04-2011
      */
@@ -454,12 +477,14 @@ class TestCategory
 
     /**
      * return the number of question for a test using random by category
-     * input  : test_id, number of random question (min 1)
+     * input  : test_id, number of random question (min 1).
+     *
      * @param int $exerciseId
      * @param int $random
+     *
      * @return int
-     * hubert.borderiou 07-04-2011
-     * question without categories are not counted
+     *             hubert.borderiou 07-04-2011
+     *             question without categories are not counted
      */
     public static function getNumberOfQuestionRandomByCategory($exerciseId, $random)
     {
@@ -487,12 +512,11 @@ class TestCategory
 
     /**
      * Return an array (id=>name)
-     * array[0] = get_lang('NoCategory');
+     * array[0] = get_lang('NoCategory');.
      *
      * @param int $courseId
      *
      * @return array
-     *
      */
     public static function getCategoriesIdAndName($courseId = 0)
     {
@@ -511,8 +535,9 @@ class TestCategory
     /**
      * Returns an array of question ids for each category
      * $categories[1][30] = 10, array with category id = 1 and question_id = 10
-     * A question has "n" categories
-     * @param int $exerciseId
+     * A question has "n" categories.
+     *
+     * @param int   $exerciseId
      * @param array $check_in_question_list
      * @param array $categoriesAddedInExercise
      *
@@ -596,7 +621,8 @@ class TestCategory
     }
 
     /**
-     * Returns an array of $numberElements from $array
+     * Returns an array of $numberElements from $array.
+     *
      * @param array
      * @param int
      *
@@ -623,6 +649,7 @@ class TestCategory
 
     /**
      * @param int $questionId
+     *
      * @return null|string
      */
     public static function returnCategoryAndTitle($questionId)
@@ -633,7 +660,7 @@ class TestCategory
             return '';
         }
 
-        $showCategoryName = !!$objExercise->display_category_name; //double negation to get a boolean value
+        $showCategoryName = (bool) $objExercise->display_category_name; //double negation to get a boolean value
         $categoryName = self::getCategoryNameForQuestion($questionId);
 
         if (empty($categoryName) || (!$showCategoryName && $isStudent)) {
@@ -649,7 +676,8 @@ class TestCategory
 
     /**
      * Display signs [+] and/or (>0) after question title if question has options
-     * scoreAlwaysPositive and/or uncheckedMayScore
+     * scoreAlwaysPositive and/or uncheckedMayScore.
+     *
      * @param $objQuestion
      */
     public function displayQuestionOption($objQuestion)
@@ -666,8 +694,8 @@ class TestCategory
      * sortTabByBracketLabel ($tabCategoryQuestions)
      * key of $tabCategoryQuestions are the category id (0 for not in a category)
      * value is the array of question id of this category
-     * Sort question by Category
-    */
+     * Sort question by Category.
+     */
     public static function sortTabByBracketLabel($in_tab)
     {
         $tabResult = [];
@@ -690,7 +718,7 @@ class TestCategory
 
     /**
      * return total score for test exe_id for all question in the category $in_cat_id for user
-     * If no question for this category, return ""
+     * If no question for this category, return "".
      */
     public static function getCatScoreForExeidForUserid($in_cat_id, $in_exe_id, $in_user_id)
     {
@@ -724,11 +752,14 @@ class TestCategory
 
     /**
      * Return the number max of question in a category
-     * count the number of questions in all categories, and return the max
+     * count the number of questions in all categories, and return the max.
+     *
      * @param int $exerciseId
+     *
      * @author - hubert borderiou
+     *
      * @return int
-    */
+     */
     public static function getNumberMaxQuestionByCat($exerciseId)
     {
         $res_num_max = 0;
@@ -753,11 +784,12 @@ class TestCategory
     }
 
     /**
-     * Returns a category summary report
-     * @param int $exerciseId
+     * Returns a category summary report.
+     *
+     * @param int   $exerciseId
      * @param array $category_list
-     * pre filled array with the category_id, score, and weight
-     * example: array(1 => array('score' => '10', 'total' => 20));
+     *                             pre filled array with the category_id, score, and weight
+     *                             example: array(1 => array('score' => '10', 'total' => 20));
      *
      * @return string
      */
@@ -860,6 +892,7 @@ class TestCategory
                     )
                 );
             }
+
             return $table->toHtml();
         }
 
@@ -884,10 +917,11 @@ class TestCategory
 
     /**
      * @param Exercise $exercise
-     * @param int $courseId
-     * @param string $order
-     * @param bool $shuffle
-     * @param bool $excludeCategoryWithNoQuestions
+     * @param int      $courseId
+     * @param string   $order
+     * @param bool     $shuffle
+     * @param bool     $excludeCategoryWithNoQuestions
+     *
      * @return array
      */
     public function getCategoryExerciseTree(
@@ -938,9 +972,9 @@ class TestCategory
 
     /**
      * @param FormValidator $form
-     * @param string $action
+     * @param string        $action
      */
-    public function getForm(& $form, $action = 'new')
+    public function getForm(&$form, $action = 'new')
     {
         switch ($action) {
             case 'new':
@@ -977,7 +1011,7 @@ class TestCategory
 
         $options = [
                 '1' => get_lang('Visible'),
-                '0' => get_lang('Hidden')
+                '0' => get_lang('Hidden'),
         ];
         $form->addElement(
             'select',
@@ -1012,7 +1046,9 @@ class TestCategory
 
     /**
      * Returns the category form.
+     *
      * @param Exercise $exercise
+     *
      * @return string
      */
     public function returnCategoryForm(Exercise $exercise)
@@ -1045,7 +1081,7 @@ class TestCategory
                 'name' => get_lang('NoCategory'),
                 'description' => '',
                 'iid' => '0',
-                'title' => get_lang('NoCategory')
+                'title' => get_lang('NoCategory'),
             ];
 
             $categories[] = $emptyCategory;
@@ -1067,12 +1103,15 @@ class TestCategory
             $return .= '</table>';
             $return .= get_lang('ZeroMeansNoQuestionWillBeSelectedMinusOneMeansThatAllQuestionsWillBeSelected');
         }
+
         return $return;
     }
 
     /**
-     * Sorts an array
+     * Sorts an array.
+     *
      * @param array $array
+     *
      * @return array
      */
     public function sort_tree_array($array)
@@ -1083,13 +1122,15 @@ class TestCategory
         if (count($array) > 0) {
             array_multisort($parent, SORT_ASC, $array);
         }
+
         return $array;
     }
 
     /**
-     * Return true if a category already exists with the same name
+     * Return true if a category already exists with the same name.
+     *
      * @param string $name
-     * @param int $courseId
+     * @param int    $courseId
      *
      * @return bool
      */
@@ -1106,9 +1147,10 @@ class TestCategory
     }
 
     /**
-     * Return the id of the test category with title = $in_title
+     * Return the id of the test category with title = $in_title.
+     *
      * @param string $title
-     * @param int $courseId
+     * @param int    $courseId
      *
      * @return int is id of test category
      */
@@ -1127,11 +1169,13 @@ class TestCategory
             $data = Database::fetch_array($res);
             $out_res = $data['id'];
         }
+
         return $out_res;
     }
 
     /**
-     * Add a relation between question and category in table c_quiz_question_rel_category
+     * Add a relation between question and category in table c_quiz_question_rel_category.
+     *
      * @param int $categoryId
      * @param int $questionId
      * @param int $courseId
@@ -1207,6 +1251,7 @@ class TestCategory
     /**
      * @param int $courseId
      * @param int $sessionId
+     *
      * @return string
      */
     public function displayCategories($courseId, $sessionId = 0)

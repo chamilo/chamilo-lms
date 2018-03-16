@@ -29,7 +29,7 @@ if (api_is_platform_admin() == false && $locked == true) {
 $htmlHeadXtra[] = to_javascript_work();
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications')
+    'name' => get_lang('StudentPublications'),
 ];
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
 

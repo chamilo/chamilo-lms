@@ -1,24 +1,28 @@
 <?php
 /* For license terms, see /license.txt */
 /**
- * Functions
+ * Functions.
+ *
  * @package chamilo.plugin.test2pdf
  */
 /**
- * Init
+ * Init.
  */
 require_once '../../../main/inc/global.inc.php';
 require_once '../config.php';
-require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';
+require_once api_get_path(LIBRARY_PATH).'plugin.class.php';
 
-$letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+$letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
 /**
- * List exercises
- * @param int $course_id Course ID
+ * List exercises.
+ *
+ * @param int $course_id  Course ID
  * @param int $session_id Session ID
- * @return array Results (list of exercice details)
+ *
  * @throws Exception
+ *
+ * @return array Results (list of exercice details)
  */
 function showExerciseCourse($course_id, $session_id = 0)
 {
@@ -42,13 +46,16 @@ function showExerciseCourse($course_id, $session_id = 0)
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row;
     }
+
     return $aux;
 }
 
 /**
- * List quiz details
- * @return array Results (list of quiz details)
+ * List quiz details.
+ *
  * @throws Exception
+ *
+ * @return array Results (list of quiz details)
  */
 function getInfoQuiz($c_id, $id)
 {
@@ -61,13 +68,16 @@ function getInfoQuiz($c_id, $id)
         die("Error Database $tableQuiz");
     }
     $row = Database::fetch_assoc($res);
+
     return $row;
 }
 
 /**
- * List question_id
- * @return array Results (list question ID)
+ * List question_id.
+ *
  * @throws Exception
+ *
+ * @return array Results (list question ID)
  */
 function getQuestions($c_id, $quizId)
 {
@@ -89,13 +99,16 @@ function getQuestions($c_id, $quizId)
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row['question_id'];
     }
+
     return $aux;
 }
 
 /**
- * List question details
- * @return array Results (list of question details)
+ * List question details.
+ *
  * @throws Exception
+ *
+ * @return array Results (list of question details)
  */
 function getInfoQuestion($c_id, $id)
 {
@@ -111,13 +124,16 @@ function getInfoQuestion($c_id, $id)
         die("Error Database $tableQuestion");
     }
     $row = Database::fetch_assoc($res);
+
     return $row;
 }
 
 /**
- * List answer details
- * @return array Results (list of answer by question_id)
+ * List answer details.
+ *
  * @throws Exception
+ *
+ * @return array Results (list of answer by question_id)
  */
 function getAnswers($c_id, $id)
 {
@@ -135,26 +151,29 @@ function getAnswers($c_id, $id)
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row;
     }
+
     return $aux;
 }
 
 /**
- * Remove all html tag
+ * Remove all html tag.
+ *
  * @param string $string The string to be stripped of HTML
+ *
  * @return string clean of html tag
  */
 function removeHtml($string)
 {
-    $txt=str_replace("<html>", "", $string);
-    $txt=str_replace("<head>", "", $txt);
-    $txt=str_replace("<title>", "", $txt);
-    $txt=str_replace("</title>", "", $txt);
-    $txt=str_replace("</head>", "", $txt);
-    $txt=str_replace("<body>", "", $txt);
-    $txt=str_replace("</body>", "", $txt);
-    $txt=str_replace("</html>", "", $txt);
-    $txt=strip_tags($txt);
-    $txt=str_replace(chr(13).chr(10), "", $txt);
+    $txt = str_replace("<html>", "", $string);
+    $txt = str_replace("<head>", "", $txt);
+    $txt = str_replace("<title>", "", $txt);
+    $txt = str_replace("</title>", "", $txt);
+    $txt = str_replace("</head>", "", $txt);
+    $txt = str_replace("<body>", "", $txt);
+    $txt = str_replace("</body>", "", $txt);
+    $txt = str_replace("</html>", "", $txt);
+    $txt = strip_tags($txt);
+    $txt = str_replace(chr(13).chr(10), "", $txt);
 
     /*
     $txt=str_replace("&nbsp;"," ",$txt);
@@ -186,53 +205,58 @@ function removeHtml($string)
     $txt=str_replace("&uuml;",'ü',$txt);
     $txt=str_replace("&Uuml;",'Ü',$txt);
     $txt=str_replace("&uml;",'¨',$txt);*/
-    
+
     return $txt;
 }
 
 /**
- * Remove all html tag
+ * Remove all html tag.
+ *
  * @param string $string The string to be stripped of accents
+ *
  * @return string clean of html tag
  */
 function removeQuotes($string)
 {
     //$txt=strip_tags($cadena);
-    $txt=str_replace("&nbsp;", " ", $string);
-    $txt=str_replace("&Aacute;", "Á", $txt);
-    $txt=str_replace("&aacute;", "á", $txt);
-    $txt=str_replace("&Eacute;", "É", $txt);
-    $txt=str_replace("&eacute;", "é", $txt);
-    $txt=str_replace("&Iacute;", "Í", $txt);
-    $txt=str_replace("&iacute;", "í", $txt);
-    $txt=str_replace("&Oacute;", "Ó", $txt);
-    $txt=str_replace("&oacute;", "ó", $txt);
-    $txt=str_replace("&Uacute;", "Ú", $txt);
-    $txt=str_replace("&uacute;", "ú", $txt);
-    $txt=str_replace("&Ntilde;", "Ñ", $txt);
-    $txt=str_replace("&ntilde;", "ñ", $txt);
-    $txt=str_replace("&quot;", '"', $txt);
-    $txt=str_replace("&ordf;", 'ª', $txt);
-    $txt=str_replace("&ordm;", 'º', $txt);
-    $txt=str_replace("&amp;", '&', $txt);
-    $txt=str_replace("&bull;", '•', $txt);
-    $txt=str_replace("&iquest; &", '¿', $txt);
-    $txt=str_replace("&agrave;", "à", $txt);
-    $txt=str_replace("&Agrave;", "À", $txt);
-    $txt=str_replace("&iexcl;", "¡", $txt);
-    $txt=str_replace("&middot;", "·", $txt);
-    $txt=str_replace("&Ccedil;", "Ç", $txt);
-    $txt=str_replace("&ccedil;", "ç", $txt);
-    $txt=str_replace("&euro;", 'EUR', $txt);
-    $txt=str_replace("&uuml;", 'ü', $txt);
-    $txt=str_replace("&Uuml;", 'Ü', $txt);
-    $txt=str_replace("uml;", '¨', $txt);
+    $txt = str_replace("&nbsp;", " ", $string);
+    $txt = str_replace("&Aacute;", "Á", $txt);
+    $txt = str_replace("&aacute;", "á", $txt);
+    $txt = str_replace("&Eacute;", "É", $txt);
+    $txt = str_replace("&eacute;", "é", $txt);
+    $txt = str_replace("&Iacute;", "Í", $txt);
+    $txt = str_replace("&iacute;", "í", $txt);
+    $txt = str_replace("&Oacute;", "Ó", $txt);
+    $txt = str_replace("&oacute;", "ó", $txt);
+    $txt = str_replace("&Uacute;", "Ú", $txt);
+    $txt = str_replace("&uacute;", "ú", $txt);
+    $txt = str_replace("&Ntilde;", "Ñ", $txt);
+    $txt = str_replace("&ntilde;", "ñ", $txt);
+    $txt = str_replace("&quot;", '"', $txt);
+    $txt = str_replace("&ordf;", 'ª', $txt);
+    $txt = str_replace("&ordm;", 'º', $txt);
+    $txt = str_replace("&amp;", '&', $txt);
+    $txt = str_replace("&bull;", '•', $txt);
+    $txt = str_replace("&iquest; &", '¿', $txt);
+    $txt = str_replace("&agrave;", "à", $txt);
+    $txt = str_replace("&Agrave;", "À", $txt);
+    $txt = str_replace("&iexcl;", "¡", $txt);
+    $txt = str_replace("&middot;", "·", $txt);
+    $txt = str_replace("&Ccedil;", "Ç", $txt);
+    $txt = str_replace("&ccedil;", "ç", $txt);
+    $txt = str_replace("&euro;", 'EUR', $txt);
+    $txt = str_replace("&uuml;", 'ü', $txt);
+    $txt = str_replace("&Uuml;", 'Ü', $txt);
+    $txt = str_replace("uml;", '¨', $txt);
+
     return $txt;
 }
 
 /**
- * Returns an associative array (keys: R,G,B) from a hex html code (e.g. #3FE5AA)
+ * Returns an associative array (keys: R,G,B) from a hex html code (e.g. #3FE5AA).
+ *
  * @param string $color
+ *
  * @return array
  */
 function hex2dec($color = '#000000')
@@ -247,27 +271,33 @@ function hex2dec($color = '#000000')
     $tbl_couleur['R'] = $rouge;
     $tbl_couleur['V'] = $vert;
     $tbl_couleur['B'] = $bleu;
+
     return $tbl_couleur;
 }
 
 /**
- * Conversion of pixel -> millimeter at 72 dpi
+ * Conversion of pixel -> millimeter at 72 dpi.
+ *
  * @param $px
+ *
  * @return float|int
  */
 function px2mm($px)
 {
-    return $px*25.4/72;
+    return $px * 25.4 / 72;
 }
 
 /**
- * Transform from HTML to text
+ * Transform from HTML to text.
+ *
  * @param string $html HTML string
+ *
  * @return string Pure text version of the given string
  */
 function txtentities($html)
 {
     $trans = get_html_translation_table(HTML_ENTITIES);
     $trans = array_flip($trans);
+
     return strtr($html, $trans);
 }

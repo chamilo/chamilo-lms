@@ -9,8 +9,9 @@ use ChamiloSession as Session;
  * @package chamilo.document
  *
  * @author Juan Carlos Raña Trabado
+ *
  * @since 30/january/2011
-*/
+ */
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();

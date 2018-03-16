@@ -40,7 +40,7 @@ if ($formSequence->validate()) {
 }
 
 $selectSequence = new FormValidator('');
-$selectSequence ->addHidden('sequence_type', 'session');
+$selectSequence->addHidden('sequence_type', 'session');
 $em = Database::getManager();
 
 $sequenceList = $em->getRepository('ChamiloCoreBundle:Sequence')->findAll();

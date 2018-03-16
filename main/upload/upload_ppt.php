@@ -5,10 +5,11 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 /**
  * Action controller for the upload process. The display scripts (web forms) redirect
  * the process here to do what needs to be done with each file.
+ *
  * @package chamilo.upload
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';
@@ -62,7 +63,7 @@ if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = ["url"=>"../lp/lp_controller.php?action=list", "name"=> get_lang("Doc")];
+$interbreadcrumb[] = ["url" => "../lp/lp_controller.php?action=list", "name" => get_lang("Doc")];
 
 $nameTools = get_lang("OogieConversionPowerPoint");
 Display :: display_header($nameTools);
@@ -82,7 +83,7 @@ $form->addElement('checkbox', 'take_slide_name', '', get_lang('TakeSlideName'));
 $options = ChamiloApi::getDocumentConversionSizes();
 $form->addElement('select', 'slide_size', get_lang('SlideSize'), $options);
 if (api_get_setting('search_enabled') === 'true') {
-    require_once(api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php');
+    require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
     $specific_fields = get_specific_field_list();
     $form->addElement('checkbox', 'index_document', '', get_lang('SearchFeatureDoIndexDocument'));
     $form->addSelectLanguage('language', get_lang('SearchFeatureDocumentLanguage'));
@@ -96,9 +97,9 @@ $form->addElement('hidden', 'ppt2lp', 'true');
 $form->addProgress();
 $size = api_get_setting('service_ppt2lp', 'size');
 $defaults = [
-    'take_slide_name'=>'checked="checked"',
-    'index_document'=>'checked="checked"',
-    'slide_size'=>$size,
+    'take_slide_name' => 'checked="checked"',
+    'index_document' => 'checked="checked"',
+    'slide_size' => $size,
 ];
 $form->setDefaults($defaults);
 

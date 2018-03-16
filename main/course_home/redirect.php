@@ -2,9 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Redirects a session name to a correct session id
+ * Redirects a session name to a correct session id.
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 

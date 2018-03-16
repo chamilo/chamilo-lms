@@ -1,11 +1,12 @@
 <?php
 /* For license terms, see /license.txt */
 /**
- * Script to show sessions terms and conditions
+ * Script to show sessions terms and conditions.
+ *
  * @package chamilo.plugin.advanced_subscription
  */
 /**
- * Init
+ * Init.
  */
 require_once __DIR__.'/../config.php';
 // start plugin

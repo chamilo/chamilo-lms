@@ -3,19 +3,20 @@
 
 namespace Chamilo\CoreBundle\Form\type;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Chamilo\CoreBundle\Entity\Course;
 
 /**
- * Class CourseType
+ * Class CourseType.
+ *
  * @package Chamilo\CoreBundle\Form\type
  */
 class CourseType extends AbstractType
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

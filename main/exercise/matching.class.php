@@ -3,13 +3,14 @@
 
 /**
  * Class Matching
- * Matching questions type class
+ * Matching questions type class.
  *
  * This class allows to instantiate an object of
  * type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER)
  * extending the class question
  *
  * @author Eric Marguin
+ *
  * @package chamilo.exercise
  */
 class Matching extends Question
@@ -18,7 +19,7 @@ class Matching extends Question
     public static $explanationLangVar = 'Matching';
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -28,7 +29,7 @@ class Matching extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createAnswersForm($form)
     {
@@ -105,10 +106,10 @@ class Matching extends Question
         $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th width="5%">' . get_lang('Number').'</th>
-                    <th width="70%">' . get_lang('Answer').'</th>
-                    <th width="15%">' . get_lang('MatchesTo').'</th>
-                    <th width="10%">' . get_lang('Weighting').'</th>
+                    <th width="5%">'.get_lang('Number').'</th>
+                    <th width="70%">'.get_lang('Answer').'</th>
+                    <th width="15%">'.get_lang('MatchesTo').'</th>
+                    <th width="10%">'.get_lang('Weighting').'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -126,7 +127,7 @@ class Matching extends Question
         $editorConfig = [
             'ToolbarSet' => 'TestMatching',
             'Width' => '100%',
-            'Height' => '125'
+            'Height' => '125',
         ];
 
         for ($i = 1; $i <= $nb_matches; ++$i) {
@@ -177,8 +178,8 @@ class Matching extends Question
         $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th width="15%">' . get_lang('Number').'</th>
-                    <th width="85%">' . get_lang('Answer').'</th>
+                    <th width="15%">'.get_lang('Number').'</th>
+                    <th width="85%">'.get_lang('Answer').'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -233,13 +234,13 @@ class Matching extends Question
         $form->setConstants(
             [
                 'nb_matches' => $nb_matches,
-                'nb_options' => $nb_options
+                'nb_options' => $nb_options,
             ]
         );
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
@@ -277,7 +278,7 @@ class Matching extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function return_header($exercise, $counter = null, $score = null)
     {
@@ -292,7 +293,8 @@ class Matching extends Question
     }
 
     /**
-     * Check if a answer is correct
+     * Check if a answer is correct.
+     *
      * @param int $position
      * @param int $answer
      * @param int $questionId
@@ -311,7 +313,7 @@ class Matching extends Question
             ->setParameters([
                 'position' => $position,
                 'answer' => $answer,
-                'question' => $questionId
+                'question' => $questionId,
             ])
             ->getSingleScalarResult();
 

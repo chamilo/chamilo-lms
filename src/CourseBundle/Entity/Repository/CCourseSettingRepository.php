@@ -6,7 +6,8 @@ namespace Chamilo\CourseBundle\Entity\Repository;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
- * Class CCourseSettingRepository
+ * Class CCourseSettingRepository.
+ *
  * @package Chamilo\CourseBundle\Entity\Repository
  */
 class CCourseSettingRepository extends EntityRepository

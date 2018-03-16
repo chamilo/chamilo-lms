@@ -4,7 +4,8 @@
 use ChamiloSession as Session;
 
 /**
- * Upload quiz: This script shows the upload quiz feature
+ * Upload quiz: This script shows the upload quiz feature.
+ *
  * @package chamilo.exercise
  */
 
@@ -34,7 +35,7 @@ lp_upload_quiz_action_handling();
 
 $interbreadcrumb[] = [
     "url" => "exercise.php?".api_get_cidreq(),
-    "name" => get_lang('Exercises')
+    "name" => get_lang('Exercises'),
 ];
 
 // Display the header
@@ -57,6 +58,7 @@ function lp_upload_quiz_actions()
             '',
             ICON_SIZE_MEDIUM
         ).'</a>';
+
     return $return;
 }
 
@@ -86,7 +88,7 @@ function lp_upload_quiz_main()
         FILL_IN_BLANKS => get_lang('FillBlanks'),
         MATCHING => get_lang('Matching'),
         FREE_ANSWER => get_lang('FreeAnswer'),
-        GLOBAL_MULTIPLE_ANSWER => get_lang('GlobalMultipleAnswer')
+        GLOBAL_MULTIPLE_ANSWER => get_lang('GlobalMultipleAnswer'),
     ];
 
     $table->setHeaderContents(0, 0, get_lang('QuestionType'));
@@ -123,7 +125,7 @@ function lp_upload_quiz_main()
 }
 
 /**
- * Handles a given Excel spreadsheets as in the template provided
+ * Handles a given Excel spreadsheets as in the template provided.
  */
 function lp_upload_quiz_action_handling()
 {
@@ -584,6 +586,7 @@ function lp_upload_quiz_action_handling()
 
 /**
  * @param array $answers_data
+ *
  * @return int
  */
 function detectQuestionType($answers_data)

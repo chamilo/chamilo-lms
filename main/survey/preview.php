@@ -3,12 +3,13 @@
 
 /**
  * @package chamilo.survey
+ *
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
  * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modifications
+ *
  * @version $Id: survey_list.php 10680 2007-01-11 21:26:23Z pcool $
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -67,7 +68,7 @@ if (api_is_allowed_to_edit()) {
     // Breadcrumbs
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
-        'name' => get_lang('SurveyList')
+        'name' => get_lang('SurveyList'),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
@@ -214,10 +215,10 @@ if (api_is_course_admin() ||
     );
 
     if (is_array($questions) && count($questions) > 0) {
-        foreach ($questions as $key => & $question) {
+        foreach ($questions as $key => &$question) {
             $ch_type = 'ch_'.$question['type'];
             /** @var survey_question $display */
-            $display = new $ch_type;
+            $display = new $ch_type();
             $form->addHtml('<div class="survey_question '.$ch_type.'">');
             $form->addHtml('<h5 class="title">'.$key.'. '.strip_tags($question['survey_question']).'</h5>');
             $display->render($form, $question);

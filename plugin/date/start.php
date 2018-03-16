@@ -1,9 +1,10 @@
 <?php
 /**
- * Controller for example date plugin
+ * Controller for example date plugin.
+ *
  * @package chamilo.plugin.date
  */
 /**
- * Code
+ * Code.
  */
 require 'index.php';

@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Url element
+ * Url element.
  *
  * Class Url
  */
@@ -10,9 +10,10 @@ class Url extends HTML_QuickForm_text
 {
     /**
      * Url constructor.
+     *
      * @param string $elementName
      * @param string $elementLabel
-     * @param array $attributes
+     * @param array  $attributes
      */
     public function __construct($elementName = null, $elementLabel = null, $attributes = null)
     {

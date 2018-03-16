@@ -1,12 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \ChamiloSession as Session;
-
 /**
  *    This script displays a administrator menu.
  */
-
 require_once '../config.php';
 
 $plugin = SepePlugin::create();

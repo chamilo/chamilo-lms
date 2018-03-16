@@ -1,10 +1,10 @@
 <?php
 /* For license terms, see /license.txt */
 /**
- * Functions for the Sepe plugin
+ * Functions for the Sepe plugin.
+ *
  * @package chamilo.plugin.sepe
  */
-
 require_once '../config.php';
 
 $plugin = SepePlugin::create();

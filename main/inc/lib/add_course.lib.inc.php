@@ -1,24 +1,27 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Tool\BaseTool;
 
 /**
- * Class AddCourse
+ * Class AddCourse.
  */
 class AddCourse
 {
     /**
      * Defines the four needed keys to create a course based on several parameters.
+     *
      * @param string    The code you want for this course
      * @param string    Prefix added for ALL keys
      * @param string    Prefix added for databases only
      * @param string    Prefix added for paths only
      * @param bool      Add unique prefix
      * @param bool      Use code-independent keys
-     * @return array    An array with the needed keys ['currentCourseCode'], ['currentCourseId'], ['currentCourseDbName'], ['currentCourseRepository']
+     *
+     * @return array An array with the needed keys ['currentCourseCode'], ['currentCourseId'], ['currentCourseDbName'], ['currentCourseRepository']
+     *
      * @todo Eliminate the global variables.
      * @assert (null) === false
      */
@@ -85,9 +88,11 @@ class AddCourse
 
     /**
      * Initializes a file repository for a newly created course.
+     *
      * @param string Course repository
      * @param string Course code
-     * @return int 0
+     *
+     * @return int
      * @assert (null,null) === false
      */
     public static function prepare_course_repository($course_repository)
@@ -198,7 +203,8 @@ class AddCourse
     }
 
     /**
-     * Gets an array with all the course tables (deprecated?)
+     * Gets an array with all the course tables (deprecated?).
+     *
      * @return string[]
      * @assert (null) !== null
      */
@@ -298,8 +304,8 @@ class AddCourse
     }
 
     /**
-     * Executed only before create_course_tables()
-     * @return void
+     * Executed only before create_course_tables().
+     *
      * @assert (null) === null
      */
     public static function drop_course_tables()
@@ -311,16 +317,17 @@ class AddCourse
         }
     }
 
-
     /**
      * Returns a list of all files in the given course directory. The requested
      * directory will be checked against a "checker" directory to avoid access to
-     * protected/unauthorized files
+     * protected/unauthorized files.
+     *
      * @param string Complete path to directory we want to list
      * @param array A list of files to which we want to add the files found
      * @param string Type of base directory from which we want to recover the files
      * @param string $path
      * @param string $media
+     *
      * @return array
      * @assert (null,null,null) === false
      * @assert ('abc',array(),'') === array()
@@ -365,13 +372,16 @@ class AddCourse
                 }
             }
         }
+
         return $files;
     }
 
     /**
-     * Sorts pictures by type (used?)
+     * Sorts pictures by type (used?).
+     *
      * @param array List of files (sthg like array(0=>array('png'=>1)))
      * @param string $type
+     *
      * @return array The received array without files not matching type
      * @assert (array(),null) === array()
      */
@@ -383,17 +393,21 @@ class AddCourse
                 $pictures[][$type] = $value[$type];
             }
         }
+
         return $pictures;
     }
 
     /**
      * Fills the course database with some required content and example content.
+     *
      * @param int Course (int) ID
      * @param string Course directory name (e.g. 'ABC')
      * @param string Language used for content (e.g. 'spanish')
      * @param bool Whether to fill the course with example content
      * @param int $authorId
+     *
      * @return bool False on error, true otherwise
+     *
      * @version 1.2
      * @assert (null, '', '', null) === false
      * @assert (1, 'ABC', null, null) === false
@@ -467,7 +481,6 @@ class AddCourse
             $em->refresh($course);
         }
         $em->flush($course);
-
 
         /*    Course tools  */
         /*
@@ -650,17 +663,17 @@ class AddCourse
             'course_theme' => ['default' => '', 'category' => 'theme'],
             'allow_learning_path_theme' => ['default' => 1, 'category' => 'theme'],
             'allow_open_chat_window' => ['default' => 1, 'category' => 'chat'],
-            'email_alert_to_teacher_on_new_user_in_course' => ['default' => 0, 'category' =>'registration'],
-            'allow_user_view_user_list' => ['default' =>1, 'category' =>'user'],
-            'display_info_advance_inside_homecourse' => ['default' => 1, 'category' =>'thematic_advance'],
-            'email_alert_students_on_new_homework' => ['default' => 0, 'category' =>'work'],
-            'enable_lp_auto_launch' => ['default' => 0, 'category' =>'learning_path'],
-            'pdf_export_watermark_text' => ['default' =>'', 'category' =>'learning_path'],
+            'email_alert_to_teacher_on_new_user_in_course' => ['default' => 0, 'category' => 'registration'],
+            'allow_user_view_user_list' => ['default' => 1, 'category' => 'user'],
+            'display_info_advance_inside_homecourse' => ['default' => 1, 'category' => 'thematic_advance'],
+            'email_alert_students_on_new_homework' => ['default' => 0, 'category' => 'work'],
+            'enable_lp_auto_launch' => ['default' => 0, 'category' => 'learning_path'],
+            'pdf_export_watermark_text' => ['default' => '', 'category' => 'learning_path'],
             'allow_public_certificates' => [
                 'default' => api_get_setting('allow_public_certificates') === 'true' ? 1 : '',
-                'category' =>'certificates',
+                'category' => 'certificates',
             ],
-            'documents_default_visibility' => ['default' =>'visible', 'category' =>'document'],
+            'documents_default_visibility' => ['default' => 'visible', 'category' => 'document'],
             'show_course_in_user_language' => ['default' => 2, 'category' => null],
         ];
         $counter = 1;
@@ -860,7 +873,7 @@ class AddCourse
                                             'lastedit_type' => 'DocumentAdded',
                                             'lastedit_user_id' => api_get_user_id(),
                                             'to_group_id' => null,
-                                            'to_user_id' =>  null,
+                                            'to_user_id' => null,
                                             'visibility' => 0,
                                         ]
                                     );
@@ -917,7 +930,7 @@ class AddCourse
                                                 'lastedit_type' => 'DocumentAdded',
                                                 'lastedit_user_id' => api_get_user_id(),
                                                 'to_group_id' => null,
-                                                'to_user_id' =>  null,
+                                                'to_user_id' => null,
                                                 'visibility' => 1,
                                             ]
                                         );
@@ -990,8 +1003,8 @@ class AddCourse
 
             /* Introduction text */
             $intro_text = '<p style="text-align: center;">
-                            <img src="' . api_get_path(REL_CODE_PATH).'img/mascot.png" alt="Mr. Chamilo" title="Mr. Chamilo" />
-                            <h2>' . get_lang('IntroductionText').'</h2>
+                            <img src="'.api_get_path(REL_CODE_PATH).'img/mascot.png" alt="Mr. Chamilo" title="Mr. Chamilo" />
+                            <h2>'.get_lang('IntroductionText').'</h2>
                          </p>';
 
             $toolIntro = new CToolIntro();
@@ -1026,9 +1039,9 @@ class AddCourse
             $html = '<table width="100%" border="0" cellpadding="0" cellspacing="0">
                         <tr>
                         <td width="220" valign="top" align="left">
-                            <img src="' . api_get_path(WEB_CODE_PATH).'default_course_document/images/mr_chamilo/doubts.png">
+                            <img src="'.api_get_path(WEB_CODE_PATH).'default_course_document/images/mr_chamilo/doubts.png">
                         </td>
-                        <td valign="top" align="left">' . get_lang('Antique').'</td></tr>
+                        <td valign="top" align="left">'.get_lang('Antique').'</td></tr>
                     </table>';
             $exercise->type = 1;
             $exercise->setRandom(0);
@@ -1113,14 +1126,15 @@ class AddCourse
         //Installing plugins in course
         $app_plugin = new AppPlugin();
         $app_plugin->install_course_plugins($course_id);
+
         return true;
     }
 
     /**
-     * @param int $course_id
-     * @param int $counter
+     * @param int   $course_id
+     * @param int   $counter
      * @param array $file
-     * @param int $authorId
+     * @param int   $authorId
      */
     public static function insertDocument($course_id, $counter, $file, $authorId = 0)
     {
@@ -1152,7 +1166,7 @@ class AddCourse
                     'lastedit_type' => 'DocumentAdded',
                     'lastedit_user_id' => $authorId,
                     'to_group_id' => null,
-                    'to_user_id' =>  null,
+                    'to_user_id' => null,
                     'visibility' => 0,
                 ]
             );
@@ -1168,9 +1182,12 @@ class AddCourse
      * string2binary converts the string "true" or "false" to the boolean true false (0 or 1)
      * This is used for the Chamilo Config Settings as these store true or false as string
      * and the api_get_setting('course_create_active_tools') should be 0 or 1 (used for
-     * the visibility of the tool)
+     * the visibility of the tool).
+     *
      * @param string $variable
+     *
      * @return bool
+     *
      * @author Patrick Cool, patrick.cool@ugent.be
      * @assert ('true') === true
      * @assert ('false') === false
@@ -1186,9 +1203,12 @@ class AddCourse
     }
 
     /**
-     * Function register_course to create a record in the course table of the main database
+     * Function register_course to create a record in the course table of the main database.
+     *
      * @param array Course details (see code for details)
-     * @return int  Created course ID
+     *
+     * @return int Created course ID
+     *
      * @todo use an array called $params instead of lots of params
      * @assert (null) === false
      */
@@ -1327,11 +1347,11 @@ class AddCourse
                     );
                     if (!empty($user_id)) {
                         $sql = "INSERT INTO ".$TABLECOURSUSER." SET
-                                c_id     = '" . $course_id."',
-                                user_id         = '" . intval($user_id)."',
+                                c_id     = '".$course_id."',
+                                user_id         = '".intval($user_id)."',
                                 status          = '1',
                                 is_tutor        = '0',
-                                sort            = '" . ($i_course_sort)."',
+                                sort            = '".($i_course_sort)."',
                                 relation_type = 0,
                                 user_course_cat = '0'";
                         Database::query($sql);
@@ -1351,11 +1371,11 @@ class AddCourse
                             continue;
                         }
                         $sql = "INSERT INTO ".$TABLECOURSUSER." SET
-                            c_id     = '" . Database::escape_string($course_id)."',
-                            user_id         = '" . Database::escape_string($key)."',
+                            c_id     = '".Database::escape_string($course_id)."',
+                            user_id         = '".Database::escape_string($key)."',
                             status          = '1',
                             is_tutor        = '0',
-                            sort            = '" . ($sort + 1)."',
+                            sort            = '".($sort + 1)."',
                             relation_type = 0,
                             user_course_cat = '0'";
                         Database::query($sql);
@@ -1441,8 +1461,10 @@ class AddCourse
     }
 
     /**
-     * Generate a new id for c_tool table
+     * Generate a new id for c_tool table.
+     *
      * @param int $courseId The course id
+     *
      * @return int the new id
      */
     public static function generateToolId($courseId)

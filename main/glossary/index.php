@@ -5,10 +5,10 @@ use ChamiloSession as Session;
 
 /**
  * @package chamilo.glossary
+ *
  * @author Christian Fasanando, initial version
  * @author Bas Wijnen import/export to CSV
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $current_course_tool = TOOL_GLOSSARY;
@@ -252,7 +252,7 @@ switch ($action) {
                 foreach ($data as $item) {
                     $items = [
                         'name' => $item['term'],
-                        'description' => $item['definition']
+                        'description' => $item['definition'],
                     ];
                     $termsToAdd[] = $items;
                     $termsPerKey[$item['term']] = $items;

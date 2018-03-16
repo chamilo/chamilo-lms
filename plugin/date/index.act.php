@@ -1,14 +1,15 @@
 <?php
 /**
- * Action script for example date plugin
+ * Action script for example date plugin.
+ *
  * @package chamilo.plugin.date
  */
 /**
- * Initialization
+ * Initialization.
  */
 $convert_lang_to_code = [
   "english" => "en_US",
-  "french"  => "fr_BE",
+  "french" => "fr_BE",
   "dutch" => "nl_NL",
   "german" => "de_DE",
   "japanese" => "ja_JP",

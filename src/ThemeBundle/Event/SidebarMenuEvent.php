@@ -2,7 +2,7 @@
 /**
  * SidebarMenuEvent.php
  * avanzu-admin
- * Date: 23.02.14
+ * Date: 23.02.14.
  */
 
 namespace Chamilo\ThemeBundle\Event;
@@ -11,13 +11,12 @@ use Chamilo\ThemeBundle\Model\MenuItemInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class SidebarMenuEvent
+ * Class SidebarMenuEvent.
  *
  * @package Chamilo\ThemeBundle\Event
  */
 class SidebarMenuEvent extends ThemeEvent
 {
-
     /**
      * @var array
      */
@@ -41,7 +40,6 @@ class SidebarMenuEvent extends ThemeEvent
         return $this->request;
     }
 
-
     /**
      * @return array
      */
@@ -60,8 +58,6 @@ class SidebarMenuEvent extends ThemeEvent
 
     /**
      * @param $id
-     *
-     * @return null
      */
     public function getRootItem($id)
     {
@@ -79,6 +75,7 @@ class SidebarMenuEvent extends ThemeEvent
                 return $item;
             }
         }
+
         return null;
     }
 }

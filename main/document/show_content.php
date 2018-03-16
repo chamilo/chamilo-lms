@@ -44,7 +44,7 @@ if (empty($document_data)) {
     api_not_allowed(true);
 }
 
-$header_file  = $document_data['path'];
+$header_file = $document_data['path'];
 $name_to_show = cut($header_file, 80);
 
 $path_array = explode('/', str_replace('\\', '/', $header_file));

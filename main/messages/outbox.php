@@ -3,8 +3,7 @@
 
 /**
  * @package chamilo.messages
-*/
-
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -37,7 +36,7 @@ if ($allowSocial) {
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_PATH).'main/messages/inbox.php',
-    'name' => get_lang('Messages')
+    'name' => get_lang('Messages'),
 ];
 
 $actions = '';

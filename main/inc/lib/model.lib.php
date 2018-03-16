@@ -17,16 +17,18 @@ class Model
     public $is_course_model = false;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
     }
 
     /**
-     * Useful finder - experimental akelos like only use in notification.lib.php send function
+     * Useful finder - experimental akelos like only use in notification.lib.php send function.
+     *
      * @param string $type
      * @param array  $options
+     *
      * @return array
      */
     public function find($type, $options = null)
@@ -44,7 +46,8 @@ class Model
     }
 
     /**
-     * Deletes an item
+     * Deletes an item.
+     *
      * @param int $id
      *
      * @return bool
@@ -69,33 +72,15 @@ class Model
     }
 
     /**
-     * @param array $params
-     *
-     * @return array
-     */
-    private function clean_parameters($params)
-    {
-        $clean_params = [];
-        if (!empty($params)) {
-            foreach ($params as $key => $value) {
-                if (in_array($key, $this->columns)) {
-                    $clean_params[$key] = $value;
-                }
-            }
-        }
-
-        return $clean_params;
-    }
-
-    /**
-     * Displays the title + grid
+     * Displays the title + grid.
      */
     public function display()
     {
     }
 
     /**
-     * Gets an element
+     * Gets an element.
+     *
      * @param int $id
      *
      * @return array|mixed
@@ -131,7 +116,7 @@ class Model
     }
 
     /**
-     * @param array  $options
+     * @param array $options
      *
      * @return array
      */
@@ -141,7 +126,8 @@ class Model
     }
 
     /**
-     * Get the count of elements
+     * Get the count of elements.
+     *
      * @return int
      */
     public function get_count()
@@ -157,18 +143,19 @@ class Model
     }
 
     /**
-     * a little bit of javascript to display
+     * a little bit of javascript to display.
      */
     public function javascript()
     {
     }
 
     /**
-     * Saves an element into the DB
+     * Saves an element into the DB.
+     *
      * @param array $params
      * @param bool  $show_query Whether to show the query in logs or not (passed to Database::insert())
-     * @return bool|int
      *
+     * @return bool|int
      */
     public function save($params, $show_query = false)
     {
@@ -212,11 +199,12 @@ class Model
     }
 
     /**
-     * Updates the obj in the database. The $params['id'] must exist in order to update a record
-     * @param array $params
-     * @param bool $showQuery
-     * @return bool
+     * Updates the obj in the database. The $params['id'] must exist in order to update a record.
      *
+     * @param array $params
+     * @param bool  $showQuery
+     *
+     * @return bool
      */
     public function update($params, $showQuery = false)
     {
@@ -254,5 +242,24 @@ class Model
         }
 
         return false;
+    }
+
+    /**
+     * @param array $params
+     *
+     * @return array
+     */
+    private function clean_parameters($params)
+    {
+        $clean_params = [];
+        if (!empty($params)) {
+            foreach ($params as $key => $value) {
+                if (in_array($key, $this->columns)) {
+                    $clean_params[$key] = $value;
+                }
+            }
+        }
+
+        return $clean_params;
     }
 }

@@ -1,19 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
+use ChamiloSession as Session;
 
 /**
  * Copy resources from one course in a session to another one.
  *
  * @author Christian Fasanando <christian.fasanando@dokeos.com>
  * @author Julio Montoya <gugli100@gmail.com> Lots of bug fixes/improvements
+ *
  * @package chamilo.backup
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
@@ -39,7 +39,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $nameTools = get_lang('CopyCourse');
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
-    'name' => get_lang('PlatformAdmin')
+    'name' => get_lang('PlatformAdmin'),
 ];
 
 // Database Table Definitions
@@ -51,8 +51,9 @@ $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
 /**
  * @param string $name
- * @param array $sessions
- * @param array $attr
+ * @param array  $sessions
+ * @param array  $attr
+ *
  * @return string
  */
 function make_select_session_list($name, $sessions, $attr = [])
@@ -147,8 +148,9 @@ function display_form()
 }
 
 /**
- * @param int $id_session
+ * @param int    $id_session
  * @param string $type
+ *
  * @return xajaxResponse
  */
 function search_courses($id_session, $type)
@@ -183,27 +185,27 @@ function search_courses($id_session, $type)
                 foreach ($sessions as $session) {
                     if ($id_session == $session['id']) {
                         continue;
-                    };
+                    }
                     if (!empty($session['category_name'])) {
                         $session['category_name'] = ' ('.$session['category_name'].') ';
                     }
                     $select_destination .= '<option value="'.$session['id'].'">'.$session['name'].' '.$session['category_name'].'</option>';
                 }
                 $select_destination .= '</select>';
-                $xajax_response -> addAssign('ajax_sessions_list_destination', 'innerHTML', api_utf8_encode($select_destination));
+                $xajax_response->addAssign('ajax_sessions_list_destination', 'innerHTML', api_utf8_encode($select_destination));
             } else {
                 $select_destination .= '<select name="sessions_list_destination" class="form-control" onchange = "javascript: xajax_search_courses(this.value,\'destination\');">';
                 $select_destination .= '<option value = "0">'.get_lang('ThereIsNotStillASession').'</option>';
                 $select_destination .= '</select>';
-                $xajax_response -> addAssign('ajax_sessions_list_destination', 'innerHTML', api_utf8_encode($select_destination));
+                $xajax_response->addAssign('ajax_sessions_list_destination', 'innerHTML', api_utf8_encode($select_destination));
             }
 
             // Select multiple destination empty
             $select_multiple_empty = '<select id="destination" name="SessionCoursesListDestination[]" class="form-control"></select>';
 
             // Send response by ajax
-            $xajax_response -> addAssign('ajax_list_courses_origin', 'innerHTML', api_utf8_encode($return));
-            $xajax_response -> addAssign('ajax_list_courses_destination', 'innerHTML', api_utf8_encode($select_multiple_empty));
+            $xajax_response->addAssign('ajax_list_courses_origin', 'innerHTML', api_utf8_encode($return));
+            $xajax_response->addAssign('ajax_list_courses_destination', 'innerHTML', api_utf8_encode($select_multiple_empty));
         } else {
             // Search courses by id_session where course codes is include en courses list destination
             $sql = "SELECT c.code, c.visual_code, c.title, src.session_id

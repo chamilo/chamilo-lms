@@ -4,7 +4,7 @@
 require_once __DIR__.'/../inc/global.inc.php';
 
 $type = $_REQUEST['type'];
-$src  = Security::remove_XSS($_REQUEST['source']);
+$src = Security::remove_XSS($_REQUEST['source']);
 if (empty($type) || empty($src)) {
     api_not_allowed();
 }

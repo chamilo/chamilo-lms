@@ -2,21 +2,18 @@
 /* For licensing terms, see /license.txt */
 
 use Cocur\Slugify\Slugify;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\StreamOutput;
-use Symfony\Component\Console\Application;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Console\Input\ArrayInput;
 
 /**
- * Class Virtual
+ * Class Virtual.
  */
 class Virtual
 {
     /**
      * @param array $_configuration
      */
-    public static function hookConfiguration(& $_configuration)
+    public static function hookConfiguration(&$_configuration)
     {
         global $virtualChamilo;
 
@@ -183,6 +180,7 @@ class Virtual
 
     /**
      * @param string $path
+     *
      * @return string
      */
     public static function addTrailingSlash($path)
@@ -191,11 +189,12 @@ class Virtual
     }
 
     /**
-    * provides a side connection to a vchamilo database
-    * @param array $_configuration
+     * provides a side connection to a vchamilo database.
      *
-    * @return \Doctrine\DBAL\Driver\Connection
-    */
+     * @param array $_configuration
+     *
+     * @return \Doctrine\DBAL\Driver\Connection
+     */
     public static function bootConnection(&$_configuration)
     {
         $dbParams = [
@@ -220,7 +219,7 @@ class Virtual
             );
             $connection = $database->getConnection();
         } catch (Exception $e) {
-            echo('Side connection failure with '.$_configuration['db_host'].', '.$_configuration['db_user'].', ******** ');
+            echo 'Side connection failure with '.$_configuration['db_host'].', '.$_configuration['db_user'].', ******** ';
             die();
         }
 
@@ -242,6 +241,7 @@ class Virtual
 
     /**
      * @param string $course_folder
+     *
      * @return string
      */
     public static function getHtaccessFragment($course_folder)
@@ -288,6 +288,7 @@ class Virtual
 
     /**
      * @param string $template
+     *
      * @return bool
      */
     public static function templateExists($template)
@@ -304,10 +305,11 @@ class Virtual
     }
 
     /**
-    * drop a vchamilo instance databases using the physical connection
-    * @param stdClass $params
-    * return an array of errors or false if ok
-    */
+     * drop a vchamilo instance databases using the physical connection.
+     *
+     * @param stdClass $params
+     *                         return an array of errors or false if ok
+     */
     public static function dropDatabase($params)
     {
         $params = clone $params;
@@ -353,6 +355,7 @@ class Virtual
 
     /**
      * @param stdClass $params
+     *
      * @return bool
      */
     public static function createDatabase($params)
@@ -378,14 +381,17 @@ class Virtual
 
             return true;
         }
+
         return false;
     }
 
     /**
-    * get a proper SQLdump command
-    * @param object $vchamilodata the complete new host information
-    * @return string the shell command
-    */
+     * get a proper SQLdump command.
+     *
+     * @param object $vchamilodata the complete new host information
+     *
+     * @return string the shell command
+     */
     public static function getDatabaseDumpCmd($vchamilodata)
     {
         $pgm = self::getConfig('vchamilo', 'mysql_cmd');
@@ -427,7 +433,8 @@ class Virtual
 
     /**
      * @param stdClass $vchamilo
-     * @param string $template
+     * @param string   $template
+     *
      * @return bool
      */
     public static function loadDbTemplate($vchamilo, $template)
@@ -467,9 +474,11 @@ class Virtual
 
     /**
      * Backups a database for having a snapshot.
-     * @param        $vchamilo    object        The Vchamilo object.
-     * @param        $outputfilerad    string        The output SQL file radical.
-     * @return        bool    If TRUE, dumping database was a success, otherwise FALSE.
+     *
+     * @param   $vchamilo      object        The Vchamilo object
+     * @param   $outputfilerad string        The output SQL file radical
+     *
+     * @return bool if TRUE, dumping database was a success, otherwise FALSE
      */
     public static function backupDatabase($vchamilo, $outputfilerad)
     {
@@ -542,8 +551,8 @@ class Virtual
     }
 
     /**
-    * read manifest values in vchamilo template.
-    */
+     * read manifest values in vchamilo template.
+     */
     public static function getVmanifest($version)
     {
         $templatewwwroot = '';
@@ -564,8 +573,8 @@ class Virtual
     }
 
     /**
-    * make a fake vchamilo that represents the current host
-    */
+     * make a fake vchamilo that represents the current host.
+     */
     public static function makeThis()
     {
         global $_configuration;
@@ -582,7 +591,8 @@ class Virtual
 
     /**
      * Get available templates for defining a new virtual host.
-     * @return        array        The available templates, or EMPTY array.
+     *
+     * @return array the available templates, or EMPTY array
      */
     public static function getAvailableTemplates()
     {
@@ -629,10 +639,10 @@ class Virtual
     }
 
     /**
-    * this function set will map standard moodle API calls to chamilo
-    * internal primitives. This avoids too many changes to do in imported
-    * code
-    */
+     * this function set will map standard moodle API calls to chamilo
+     * internal primitives. This avoids too many changes to do in imported
+     * code.
+     */
     public static function getConfig($module, $key, $isplugin = true)
     {
         if ($isplugin) {
@@ -650,7 +660,7 @@ class Virtual
 
     /**
      * @param stdClass $vchamilo
-     * @param string $template
+     * @param string   $template
      */
     public static function loadFilesFromTemplate($vchamilo, $template)
     {
@@ -731,6 +741,7 @@ class Virtual
      * @param $file
      * @param $component
      * @param bool $return
+     *
      * @return string
      */
     public static function requireJs($file, $component, $return = false)
@@ -763,6 +774,7 @@ class Virtual
      * @param $file
      * @param $component
      * @param bool $return
+     *
      * @return string
      */
     public static function requireCss($file, $component, $return = false)
@@ -792,6 +804,7 @@ class Virtual
 
     /**
      * @param string $url
+     *
      * @return string
      */
     public static function getSlugFromUrl($url)
@@ -800,6 +813,7 @@ class Virtual
         $urlInfo = parse_url($url);
         if (isset($urlInfo['host'])) {
             $path = $urlInfo['path'] != '/' ? '_'.$urlInfo['path'] : '';
+
             return $slugify->slugify($urlInfo['host'].$path);
         }
 
@@ -807,7 +821,7 @@ class Virtual
     }
 
     /**
-     * Check if all settings are complete
+     * Check if all settings are complete.
      */
     public static function checkSettings()
     {
@@ -844,7 +858,7 @@ class Virtual
             $homePath,
             $archivePath,
             $uploadPath,
-            $templatePath
+            $templatePath,
         ];
 
         foreach ($paths as $path) {
@@ -854,7 +868,7 @@ class Virtual
                     Display::addFlash(
                         Display::return_message("Directory must have writable permissions: '$path'", 'warning')
                     );
-                };
+                }
             } else {
                 Display::addFlash(
                     Display::return_message("Directory doesn't exist: '$path'", 'warning')
@@ -865,6 +879,7 @@ class Virtual
 
     /**
      * @param object $instance
+     *
      * @return bool|\Doctrine\DBAL\Connection
      */
     public static function getConnectionFromInstance($instance, $getManager = false)
@@ -965,6 +980,7 @@ class Virtual
                     'error'
                 )
             );
+
             return;
         }
 
@@ -995,6 +1011,7 @@ class Virtual
                 Display::addFlash(
                     Display::return_message('Cannot create slug from url: '.$data->root_web, 'error')
                 );
+
                 return;
             }
             Database::insert($tablename, (array) $data);
@@ -1047,7 +1064,7 @@ class Virtual
 
     /**
      * @param stdClass $data
-     * @param string $fromVersion
+     * @param string   $fromVersion
      */
     public static function importInstance($data, $fromVersion)
     {
@@ -1119,6 +1136,7 @@ class Virtual
             Display::addFlash(
                 Display::return_message('Instance was already added: '.$data->root_web, 'error')
             );
+
             return false;
         } else {
             /** @var EntityManager $em */
@@ -1157,6 +1175,7 @@ class Virtual
             Display::addFlash(
                 Display::return_message('Error while creating a DB', 'error')
             );
+
             return false;
         }
 
@@ -1209,7 +1228,7 @@ class Virtual
             'username' => $newDatabase->db_user,
             'password' => $newDatabase->db_password,
             'db_name' => $newDatabase->main_database,
-            'root_sys' => api_get_configuration_value('root_sys')
+            'root_sys' => api_get_configuration_value('root_sys'),
         ];
 
         $input = new ArrayInput($arguments);
@@ -1290,7 +1309,7 @@ class Virtual
         $dirs = [
             $homeDir,
             $archiveDir,
-            $uploadDir
+            $uploadDir,
         ];
 
         foreach ($dirs as $dir) {
@@ -1306,6 +1325,7 @@ class Virtual
 
     /**
      * @param $id
+     *
      * @return array|mixed
      */
     public static function getInstance($id)
@@ -1362,7 +1382,7 @@ class Virtual
             'bcrypt',
             'sha1',
             'md5',
-            'none'
+            'none',
         ];
 
         return array_combine($encryptList, $encryptList);

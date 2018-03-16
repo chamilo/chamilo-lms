@@ -5,11 +5,12 @@ namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class AgendaSettingsSchema
+ * Class AgendaSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class AgendaSettingsSchema extends AbstractSettingsSchema
@@ -56,8 +57,8 @@ class AgendaSettingsSchema extends AbstractSettingsSchema
                 [
                     'choices' => [
                         'Month' => 'month',
-                        'Week' => 'week'
-                    ]
+                        'Week' => 'week',
+                    ],
                 ]
             )
         ;

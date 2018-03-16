@@ -13,14 +13,13 @@
  *                      multiple forums per group
  * - sticky messages
  * - new view option: nested view
- * - quoting a message
+ * - quoting a message.
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Julio Montoya <gugli100@gmail.com> UI Improvements + lots of bugfixes
  *
  * @package chamilo.forum
  */
-
 $forumUrl = api_get_path(WEB_CODE_PATH).'forum/';
 $_user = api_get_user_info();
 $sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : 'ASC';
@@ -59,7 +58,7 @@ $counter = 0;
 $count = 0;
 $prev_next_array = [];
 
-$forumId  = intval($_GET['forum']);
+$forumId = intval($_GET['forum']);
 $threadId = intval($_GET['thread']);
 $groupId = api_get_group_id();
 
@@ -89,7 +88,7 @@ foreach ($rows as $post) {
             'viewthread.php?'.api_get_cidreq()."$count_loop&".http_build_query([
                 'forum' => $forumId,
                 'thread' => $threadId,
-                'post' => $post['post_id']
+                'post' => $post['post_id'],
             ]),
             ['class' => empty($post['visible']) ? 'text-muted' : null]
         );
@@ -249,7 +248,6 @@ if ((
     }
 }
 
-
 // Verified the post minor
 $my_post = getPosts($current_forum, $_GET['thread']);
 $id_posts = [];
@@ -292,7 +290,7 @@ if ((
         [
             'forum' => $forumId,
             'thread' => $threadId,
-            'post' => Security::remove_XSS($_GET['post'])
+            'post' => Security::remove_XSS($_GET['post']),
         ]
     );
 

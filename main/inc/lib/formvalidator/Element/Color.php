@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Input Color element
+ * Input Color element.
  *
  * Class Color
  */

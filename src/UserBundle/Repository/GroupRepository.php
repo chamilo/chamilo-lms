@@ -6,7 +6,8 @@ namespace Chamilo\UserBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class GroupRepository
+ * Class GroupRepository.
+ *
  * @package Entity\Repository
  */
 class GroupRepository extends EntityRepository

@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * This script allows to add cloud file links to the document structure
+ * This script allows to add cloud file links to the document structure.
+ *
  * @package chamilo.document
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
@@ -23,7 +23,7 @@ if (empty($courseInfo)) {
 $dir = '/';
 $document_data = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true);
 if (empty($document_data)) {
-    $document_id = $parent_id =  0;
+    $document_id = $parent_id = 0;
     $path = '/';
 } else {
     if ($document_data['filetype'] == 'folder') {
@@ -65,7 +65,7 @@ if (api_get_group_id()) {
 
 // Group docs can only be uploaded in the group directory
 if ($groupIid != 0 && $path == '/') {
-    $path = $group_properties['directory'] . "/";
+    $path = $group_properties['directory']."/";
 }
 
 // Breadcrumbs
@@ -147,7 +147,6 @@ if ($form->validate()) {
         exit;
     }
 }
-
 
 // Display the header
 Display::display_header($nameTools, 'Doc');

@@ -2,7 +2,8 @@
 /* For license terms, see /license.txt */
 
 /**
- * Process purchase confirmation script for the Buy Courses plugin
+ * Process purchase confirmation script for the Buy Courses plugin.
+ *
  * @package chamilo.plugin.buycourses
  */
 require_once '../config.php';
@@ -35,7 +36,7 @@ switch ($sale['payment_type']) {
         $paypalPassword = $paypalParams['password'];
         $paypalSignature = $paypalParams['signature'];
 
-        require_once("paypalfunctions.php");
+        require_once "paypalfunctions.php";
 
         $i = 0;
         $extra = "&L_PAYMENTREQUEST_0_NAME0={$sale['product_name']}";
@@ -112,7 +113,7 @@ switch ($sale['payment_type']) {
                     'product' => $sale['product_name'],
                     'currency' => $currency['iso_code'],
                     'price' => $sale['price'],
-                    'reference' => $sale['reference']
+                    'reference' => $sale['reference'],
                 ]
             );
             $messageTemplate->assign('transfer_accounts', $transferAccounts);

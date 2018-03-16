@@ -2,8 +2,10 @@
 /* For license terms, see /license.txt */
 
 /**
- * AzureActiveDirectory plugin class
+ * AzureActiveDirectory plugin class.
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.plugin.azure_active_directory
  */
 class AzureActiveDirectory extends Plugin
@@ -32,15 +34,17 @@ class AzureActiveDirectory extends Plugin
             self::SETTING_SIGNUP_POLICY => 'text',
             self::SETTING_SIGNIN_POLICY => 'text',
             self::SETTING_SIGNUNIFIED_POLICY => 'text',
-            self::SETTING_BLOCK_NAME => 'text'
+            self::SETTING_BLOCK_NAME => 'text',
         ];
 
         parent::__construct('1.1', 'Angel Fernando Quiroz Campos', $settings);
     }
 
     /**
-     * Instance the plugin
+     * Instance the plugin.
+     *
      * @staticvar null $result
+     *
      * @return $this
      */
     public static function create()
@@ -60,6 +64,7 @@ class AzureActiveDirectory extends Plugin
 
     /**
      * @param $urlType Type of URL to generate
+     *
      * @return string
      */
     public function getUrl($urlType)
@@ -80,7 +85,7 @@ class AzureActiveDirectory extends Plugin
             $action = 'logout';
             $urlParams = [
                 'p' => $settings[self::SETTING_SIGNIN_POLICY],
-                'post_logout_redirect_uri' => $callback
+                'post_logout_redirect_uri' => $callback,
             ];
         } else {
             $action = 'authorize';
@@ -100,7 +105,7 @@ class AzureActiveDirectory extends Plugin
                 'response_mode' => 'form_post',
                 'state' => time(),
                 'nonce' => time(),
-                'p' => $policy
+                'p' => $policy,
             ];
         }
 

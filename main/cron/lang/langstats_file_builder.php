@@ -10,7 +10,6 @@
  * When running the language_builder, please make sure this parameter is
  * set to 0 in the configuration.php file, otherwise it will take *ages*.
  */
-
 require_once '../../inc/global.inc.php';
 require_once 'langstats.class.php';
 global $_configuration;
@@ -18,7 +17,7 @@ $_configuration['language_measure_frequency'] = 0;
 $langstats = new langstats();
 $orig_lang = 'english';
 /**
- * Init
+ * Init.
  */
 $words_limit = 10000; //change this if you want more words
 $terms_limit = 3000; //change this if you think you'll need more terms
@@ -29,7 +28,7 @@ $terms_in_limit = [];
 $lang_dir = api_get_path(SYS_LANG_PATH);
 $arch_dir = api_get_path(SYS_ARCHIVE_PATH);
 /**
- * Code run
+ * Code run.
  */
 foreach ($terms as $row) {
     if ($words_counter > 10000) {
@@ -91,15 +90,14 @@ foreach ($list_files as $file) {
     echo "Writing ".$arch_dir.'/langstats/'.$orig_lang.'/'.$file."<br />\n";
     file_put_contents($arch_dir.'/langstats/'.$orig_lang.'/'.$file, $file_string);
     $global_var += $local_var;
-};
+}
 $terms_diff = count($global_var) - count($terms_in_limit);
 echo count(
         $global_var
     )." terms found in English files (summing up to $words_found words). Some terms ($terms_diff in this case) might have appeared in two different files<br />";
 /**
- * Display results
+ * Display results.
  */
-
 echo "Difference between filtered and found in English:<br />";
 //print_r($terms_found);
 echo "<pre>".print_r(array_diff($terms_in_limit, $terms_found), 1)."</pre>";

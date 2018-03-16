@@ -9,9 +9,9 @@ use ChamiloSession as Session;
  * @package chamilo.document
  *
  * @author Juan Carlos Ra�a Trabado
+ *
  * @since 25/september/2010
-*/
-
+ */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -103,7 +103,7 @@ if (!$is_certificate_mode) {
 } else {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('Gradebook')
+        'name' => get_lang('Gradebook'),
     ];
 }
 
@@ -117,7 +117,7 @@ if (empty($document_data['parents'])) {
         }
         $interbreadcrumb[] = [
             'url' => $document_sub_data['document_url'],
-            'name' => $document_sub_data['title']
+            'name' => $document_sub_data['title'],
         ];
     }
 }
@@ -143,7 +143,7 @@ if (api_browser_support('svg')) {
     $svgedit_code_translation_table = [
         '' => 'en',
         'pt' => 'pt-Pt',
-        'sr' => 'sr_latn'
+        'sr' => 'sr_latn',
     ];
     $langsvgedit = api_get_language_isocode();
     $langsvgedit = isset($svgedit_code_translation_table[$langsvgedit]) ? $svgedit_code_translation_table[$langsvgedit] : $langsvgedit;

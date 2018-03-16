@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CBlogAttachment
+ * CBlogAttachment.
  *
  * @ORM\Table(
  *  name="c_blog_attachment",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CBlogAttachment
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,14 +28,14 @@ class CBlogAttachment
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
@@ -56,14 +56,14 @@ class CBlogAttachment
     private $comment;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="size", type="integer", nullable=false)
      */
     private $size;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="post_id", type="integer", nullable=false)
      */
@@ -77,24 +77,24 @@ class CBlogAttachment
     private $filename;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="blog_id", type="integer", nullable=false)
      */
     private $blogId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="comment_id", type="integer", nullable=false)
      */
     private $commentId;
 
-
     /**
-     * Set path
+     * Set path.
      *
      * @param string $path
+     *
      * @return CBlogAttachment
      */
     public function setPath($path)
@@ -105,7 +105,7 @@ class CBlogAttachment
     }
 
     /**
-     * Get path
+     * Get path.
      *
      * @return string
      */
@@ -115,9 +115,10 @@ class CBlogAttachment
     }
 
     /**
-     * Set comment
+     * Set comment.
      *
      * @param string $comment
+     *
      * @return CBlogAttachment
      */
     public function setComment($comment)
@@ -128,7 +129,7 @@ class CBlogAttachment
     }
 
     /**
-     * Get comment
+     * Get comment.
      *
      * @return string
      */
@@ -138,9 +139,10 @@ class CBlogAttachment
     }
 
     /**
-     * Set size
+     * Set size.
      *
-     * @param integer $size
+     * @param int $size
+     *
      * @return CBlogAttachment
      */
     public function setSize($size)
@@ -151,9 +153,9 @@ class CBlogAttachment
     }
 
     /**
-     * Get size
+     * Get size.
      *
-     * @return integer
+     * @return int
      */
     public function getSize()
     {
@@ -161,9 +163,10 @@ class CBlogAttachment
     }
 
     /**
-     * Set postId
+     * Set postId.
      *
-     * @param integer $postId
+     * @param int $postId
+     *
      * @return CBlogAttachment
      */
     public function setPostId($postId)
@@ -174,9 +177,9 @@ class CBlogAttachment
     }
 
     /**
-     * Get postId
+     * Get postId.
      *
-     * @return integer
+     * @return int
      */
     public function getPostId()
     {
@@ -184,9 +187,10 @@ class CBlogAttachment
     }
 
     /**
-     * Set filename
+     * Set filename.
      *
      * @param string $filename
+     *
      * @return CBlogAttachment
      */
     public function setFilename($filename)
@@ -197,7 +201,7 @@ class CBlogAttachment
     }
 
     /**
-     * Get filename
+     * Get filename.
      *
      * @return string
      */
@@ -207,9 +211,10 @@ class CBlogAttachment
     }
 
     /**
-     * Set blogId
+     * Set blogId.
      *
-     * @param integer $blogId
+     * @param int $blogId
+     *
      * @return CBlogAttachment
      */
     public function setBlogId($blogId)
@@ -220,9 +225,9 @@ class CBlogAttachment
     }
 
     /**
-     * Get blogId
+     * Get blogId.
      *
-     * @return integer
+     * @return int
      */
     public function getBlogId()
     {
@@ -230,9 +235,10 @@ class CBlogAttachment
     }
 
     /**
-     * Set commentId
+     * Set commentId.
      *
-     * @param integer $commentId
+     * @param int $commentId
+     *
      * @return CBlogAttachment
      */
     public function setCommentId($commentId)
@@ -243,9 +249,9 @@ class CBlogAttachment
     }
 
     /**
-     * Get commentId
+     * Get commentId.
      *
-     * @return integer
+     * @return int
      */
     public function getCommentId()
     {
@@ -253,9 +259,10 @@ class CBlogAttachment
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CBlogAttachment
      */
     public function setId($id)
@@ -266,9 +273,9 @@ class CBlogAttachment
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -276,9 +283,10 @@ class CBlogAttachment
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CBlogAttachment
      */
     public function setCId($cId)
@@ -289,9 +297,9 @@ class CBlogAttachment
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

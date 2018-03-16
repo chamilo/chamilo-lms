@@ -4,12 +4,12 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class GradebookSettingsSchema
+ * Class GradebookSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class TicketSettingsSchema extends AbstractSettingsSchema
@@ -31,7 +31,7 @@ class TicketSettingsSchema extends AbstractSettingsSchema
             );
 
         $allowedTypes = [
-            'show_terms_if_profile_completed' => ['string']
+            'show_terms_if_profile_completed' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }

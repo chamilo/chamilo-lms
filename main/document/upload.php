@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Main script for the documents tool
+ * Main script for the documents tool.
  *
  * This script allows the user to manage files and directories on a remote http server.
  *
@@ -179,7 +179,7 @@ if ($document_data) {
         foreach ($document_data['parents'] as $document_sub_data) {
             $interbreadcrumb[] = [
                 'url' => $document_sub_data['document_url'].$certificateLink,
-                'name' => $document_sub_data['title']
+                'name' => $document_sub_data['title'],
             ];
         }
     }
@@ -322,7 +322,7 @@ if (!empty($fileExistsOption)) {
 
 $defaults = [
     'index_document' => 'checked="checked"',
-    'if_exists' => $defaultFileExistsOption
+    'if_exists' => $defaultFileExistsOption,
 ];
 
 $form->setDefaults($defaults);
@@ -339,7 +339,7 @@ $multipleForm->addMultipleUpload($url);
 
 $headers = [
     get_lang('Upload'),
-    get_lang('Upload').' ('.get_lang('Simple').')'
+    get_lang('Upload').' ('.get_lang('Simple').')',
 ];
 
 echo Display::tabs($headers, [$multipleForm->returnForm(), $form->returnForm()], 'tabs');

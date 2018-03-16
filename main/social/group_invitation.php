@@ -3,6 +3,7 @@
 
 /**
  * @package chamilo.social
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
@@ -40,9 +41,9 @@ if (empty($group_id)) {
     }
 }
 
-$interbreadcrumb[] = ['url' =>'groups.php', 'name' => get_lang('Groups')];
+$interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
 $interbreadcrumb[] = ['url' => 'group_view.php?id='.$group_id, 'name' => $group_info['name']];
-$interbreadcrumb[] = ['url' =>'#', 'name' => get_lang('SubscribeUsersToGroup')];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('SubscribeUsersToGroup')];
 
 $form_sent = 0;
 $errorMsg = $firstLetterUser = $firstLetterSession = '';
@@ -116,16 +117,16 @@ if (!$friends) {
                     'firstname' => $friend['firstName'],
                     'lastname' => $friend['lastName'],
                     'username' => $friend['username'],
-                    'group_id' => $friend_group_id
+                    'group_id' => $friend_group_id,
                 ];
             }
         } else {
             $Users[$friend['friend_user_id']] = [
                 'user_id' => $friend['friend_user_id'],
-                'firstname' =>$friend['firstName'],
+                'firstname' => $friend['firstName'],
                 'lastname' => $friend['lastName'],
-                'username' =>$friend['username'],
-                'group_id' => null
+                'username' => $friend['username'],
+                'group_id' => null,
             ];
         }
     }

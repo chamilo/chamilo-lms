@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*   @package chamilo.admin
-*/
+ *   @package chamilo.admin
+ */
 // resetting the course id
 $cidReset = true;
 
@@ -63,7 +63,6 @@ function validate_filter() {
         document.formulaire.submit();
 }
 </script>';
-
 
 $form_sent = 0;
 $errorMsg = '';
@@ -130,7 +129,6 @@ echo '</div>';
 }?>>
 <?php echo '<legend>'.$tool_name.' '.$promotion_data['name'].'</legend>';
 
-
 if ($add_type == 'multiple') {
     $extraField = new \ExtraField('session');
     $extra_field_list = $extraField->get_all_extra_field_by_type(ExtraField::FIELD_TYPE_SELECT);
@@ -168,10 +166,10 @@ if (!empty($errorMsg)) {
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>
-  <td align="center"><b><?php echo get_lang('SessionsInPlatform') ?> :</b>
+  <td align="center"><b><?php echo get_lang('SessionsInPlatform'); ?> :</b>
   </td>
   <td></td>
-  <td align="center"><b><?php echo get_lang('SessionsInPromotion') ?> :</b></td>
+  <td align="center"><b><?php echo get_lang('SessionsInPromotion'); ?> :</b></td>
 </tr>
 
 <?php if ($add_type == 'multiple') {
@@ -201,7 +199,7 @@ if (!empty($errorMsg)) {
       } else {
           ?>
       <div id="ajax_list_multiple">
-        <?php echo Display::select('session_not_in_promotion_name', $session_not_in_promotion, '', ['style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'session_not_in_promotion', 'size'=>'15px'], false); ?>
+        <?php echo Display::select('session_not_in_promotion_name', $session_not_in_promotion, '', ['style' => 'width:360px', 'multiple' => 'multiple', 'id' => 'session_not_in_promotion', 'size' => '15px'], false); ?>
       </div>
     <?php
       }
@@ -236,7 +234,7 @@ if (!empty($errorMsg)) {
         'session_in_promotion_name[]',
         $session_in_promotion,
         '',
-        ['style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'session_in_promotion', 'size'=>'15px'],
+        ['style' => 'width:360px', 'multiple' => 'multiple', 'id' => 'session_in_promotion', 'size' => '15px'],
         false
     );
     unset($sessionUsersList);
@@ -346,7 +344,7 @@ function search_sessions($needle, $type)
             }
         }
         $return .= '</select>';
-        $xajax_response -> addAssign('ajax_list_multiple', 'innerHTML', api_utf8_encode($return));
+        $xajax_response->addAssign('ajax_list_multiple', 'innerHTML', api_utf8_encode($return));
     }
 
     return $xajax_response;

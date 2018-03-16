@@ -3,18 +3,19 @@
 
 /**
  * This file contains a Hook Event class for Admin Block.
+ *
  * @package chamilo.library.hook
  */
 
 /**
  * Class HookAdminBlock
  * This class is a Hook event implementing Admin Block Event interface.
- * This class is used to modify admin block by notifying Hook Observer for Admin Block
+ * This class is used to modify admin block by notifying Hook Observer for Admin Block.
  */
 class HookAdminBlock extends HookEvent implements HookAdminBlockEventInterface
 {
     /**
-     * Constructor
+     * Constructor.
      */
     protected function __construct()
     {
@@ -22,9 +23,10 @@ class HookAdminBlock extends HookEvent implements HookAdminBlockEventInterface
     }
 
     /**
-     * Notify Hook observers for Admin Block event
+     * Notify Hook observers for Admin Block event.
+     *
      * @param int $type Set the type of hook event called.
-     * 0: HOOK_EVENT_TYPE_PRE, 1: HOOK_EVENT_TYPE_POST
+     *                  0: HOOK_EVENT_TYPE_PRE, 1: HOOK_EVENT_TYPE_POST
      *
      * @return array|int
      */

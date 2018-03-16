@@ -4,17 +4,17 @@
 /** @author Julio Montoya */
 
 /**
- * Class HTML_QuickForm_Rule_UploadFile
+ * Class HTML_QuickForm_Rule_UploadFile.
  */
 class HTML_QuickForm_Rule_UploadFile extends HTML_QuickForm_Rule
 {
     /**
-     * Checks if the given element contains an uploaded file of the filename regex
+     * Checks if the given element contains an uploaded file of the filename regex.
      *
-     * @param     array     Uploaded file info (from $_FILES)
+     * @param array     Uploaded file info (from $_FILES)
      * @param     string    Regular expression
-     * @access    private
-     * @return    bool      true if name matches regex, false otherwise
+     *
+     * @return bool true if name matches regex, false otherwise
      */
     public function validate($elementValue, $regex)
     {
@@ -24,5 +24,7 @@ class HTML_QuickForm_Rule_UploadFile extends HTML_QuickForm_Rule
         } else {
             return false;
         }
-    } // end func _ruleCheckFileName
+    }
+
+    // end func _ruleCheckFileName
 }

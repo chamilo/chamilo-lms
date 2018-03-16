@@ -3,12 +3,12 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
+use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 /**
  * Class LegacyListener
@@ -107,7 +107,7 @@ class LegacyListener
                 'email' => api_get_setting('emailAdministrator'),
                 'surname' => api_get_setting('administratorSurname'),
                 'name' => api_get_setting('administratorName'),
-                'telephone' => api_get_setting('administratorTelephone')
+                'telephone' => api_get_setting('administratorTelephone'),
             ];
 
             $container->get('twig')->addGlobal('_admin', $_admin);

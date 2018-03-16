@@ -101,25 +101,25 @@ if (!empty($my_folder_data)) {
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications')
+    'name' => get_lang('StudentPublications'),
 ];
 
 if (api_is_allowed_to_edit()) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$work_id,
-        'name' =>  $parent_data['title']
+        'name' => $parent_data['title'],
     ];
 } else {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$work_id,
-        'name' =>  $parent_data['title']
+        'name' => $parent_data['title'],
     ];
 }
 
 // form title
 $form_title = get_lang('Edit');
 
-$interbreadcrumb[] = ['url' => '#', 'name'  => $form_title];
+$interbreadcrumb[] = ['url' => '#', 'name' => $form_title];
 
 $form = new FormValidator(
     'form',

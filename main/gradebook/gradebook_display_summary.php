@@ -4,10 +4,10 @@
 use ChamiloSession as Session;
 
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GRADEBOOK;
 
@@ -61,7 +61,7 @@ switch ($action) {
             'student_info' => null,
             'show_grade_generated_date' => true,
             'show_real_course_teachers' => false,
-            'show_teacher_as_myself' => false
+            'show_teacher_as_myself' => false,
         ];
 
         $pdf = new PDF('A4', $params['orientation'], $params, $tpl);
@@ -110,11 +110,11 @@ $course_code = api_get_course_id();
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl(),
-    'name' => get_lang('Gradebook')
+    'name' => get_lang('Gradebook'),
 ];
 $interbreadcrumb[] = [
     'url' => '#',
-    'name' => get_lang('GradebookListOfStudentsReports')
+    'name' => get_lang('GradebookListOfStudentsReports'),
 ];
 
 $this_section = SECTION_COURSES;

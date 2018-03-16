@@ -2,7 +2,6 @@
 /**
  * @package chamilo.permissions
  */
-
 require '../inc/global.inc.php';
 require_once 'permissions_functions.inc.php';
 require_once 'all_permissions.inc.php';
@@ -11,7 +10,6 @@ $tool_name = get_lang('Roles'); // title of the page (should come from the langu
 
 Display::display_header($tool_name);
 // 			ACTIONS
-
 
 // storing all the permission for a given role when the checkbox approach is used
 if ($_POST['StoreRolePermissions']) {
@@ -110,7 +108,7 @@ if ($_GET['action'] == 'add') {
     echo "\t</tr>\n";
 
     // the main area with the checkboxes or images
-    foreach ($tool_rights as $tool=>$rights) { // $tool_rights contains all the possible tools and their rights
+    foreach ($tool_rights as $tool => $rights) { // $tool_rights contains all the possible tools and their rights
         echo "\t<tr>\n";
         echo "\t\t<td>\n";
         echo get_lang($tool);
@@ -182,7 +180,7 @@ if ($_GET['role_id']) {
     echo "\t</tr>\n";
 
     // the main area with the checkboxes or images
-    foreach ($tool_rights as $tool=>$rights) { // $tool_rights contains all the possible tools and their rights
+    foreach ($tool_rights as $tool => $rights) { // $tool_rights contains all the possible tools and their rights
         echo "\t<tr>\n";
         echo "\t\t<td>\n";
         echo get_lang($tool);

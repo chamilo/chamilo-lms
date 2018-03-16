@@ -4,7 +4,6 @@
 /**
  *  @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -86,14 +85,14 @@ $column_model = [
         'name' => 'name',
         'index' => 'name',
         'width' => '80',
-        'align' => 'left'
+        'align' => 'left',
     ],
     [
         'name' => 'description',
         'index' => 'description',
         'width' => '500',
         'align' => 'left',
-        'sortable' => 'false'
+        'sortable' => 'false',
     ],
     [
         'name' => 'actions',
@@ -101,8 +100,8 @@ $column_model = [
         'width' => '100',
         'align' => 'left',
         'formatter' => 'action_formatter',
-        'sortable' => 'false'
-    ]
+        'sortable' => 'false',
+    ],
 ];
 
 //Autowidth
@@ -144,13 +143,13 @@ switch ($action) {
             api_not_allowed();
         }
 
-        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
+        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
         $form = $obj->return_form($url, 'add');
         // The validation or display
         if ($form->validate()) {
             if ($check) {
                 $values = $form->exportValues();
-                $res    = $obj->save($values);
+                $res = $obj->save($values);
                 if ($res) {
                     echo Display::return_message(get_lang('ItemAdded'), 'confirm');
                 }
@@ -169,7 +168,7 @@ switch ($action) {
         break;
     case 'edit':
         // Action handling: Editing
-        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
+        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
         $form = $obj->return_form($url, 'edit');
 
         // The validation or display

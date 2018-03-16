@@ -3,17 +3,19 @@
 
 namespace Chamilo\CoreBundle\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\Request;
 use Chamilo\CoreBundle\Controller\BaseController;
-use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class Administrator
+ * Class Administrator.
+ *
  * @package Chamilo\CoreBundle\Controller
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 class AdminController extends BaseController
@@ -37,6 +39,7 @@ class AdminController extends BaseController
 
     /**
      * @param string $url
+     *
      * @return \FormValidator
      */
     private function getSearchForm($url)
@@ -55,7 +58,7 @@ class AdminController extends BaseController
     }
 
     /**
-     * Move in template.lib
+     * Move in template.lib.
      */
     private function loadAdminMenu()
     {

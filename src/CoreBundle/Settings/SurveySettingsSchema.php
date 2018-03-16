@@ -4,12 +4,13 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class SurveySettingsSchema
+ * Class SurveySettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class SurveySettingsSchema extends AbstractSettingsSchema
@@ -24,7 +25,6 @@ class SurveySettingsSchema extends AbstractSettingsSchema
                 [
                     'survey_email_sender_noreply' => 'coach',
                     'extend_rights_for_coach_on_survey' => 'true',
-
                 ]
             );
 //            ->setAllowedTypes(

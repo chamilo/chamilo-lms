@@ -4,8 +4,10 @@
 /**
  * Class GradebookDataGenerator
  * Class to select, sort and transform object data into array data,
- * used for the general gradebook view
+ * used for the general gradebook view.
+ *
  * @author Bert Steppé
+ *
  * @package chamilo.gradebook
  */
 class GradebookDataGenerator
@@ -61,7 +63,8 @@ class GradebookDataGenerator
     }
 
     /**
-     * Get total number of items (rows)
+     * Get total number of items (rows).
+     *
      * @return int
      */
     public function get_total_items_count()
@@ -70,15 +73,17 @@ class GradebookDataGenerator
     }
 
     /**
-     * Get actual array data
-     * @param integer $count
+     * Get actual array data.
+     *
+     * @param int $count
+     *
      * @return array 2-dimensional array - each array contains the elements:
-     * 0: cat/eval/link object
-     * 1: item name
-     * 2: description
-     * 3: weight
-     * 4: date
-     * 5: student's score (if student logged in)
+     *               0: cat/eval/link object
+     *               1: item name
+     *               2: description
+     *               3: weight
+     *               4: date
+     *               5: student's score (if student logged in)
      */
     public function get_data(
         $sorting = 0,
@@ -209,8 +214,132 @@ class GradebookDataGenerator
     }
 
     /**
-     * Get best result of an item
+     * Returns the link to the certificate generation, if the score is enough, otherwise
+     * returns an empty string. This only works with categories.
+     *
+     * @param    object Item
+     *
+     * @return string
+     */
+    public function get_certificate_link($item)
+    {
+        if (is_a($item, 'Category')) {
+            if ($item->is_certificate_available(api_get_user_id())) {
+                $link = '<a href="'.Category::getUrl().'export_certificate=1&cat='.$item->get_id().'&user='.api_get_user_id().'">'.
+                    get_lang('Certificate').'</a>';
+
+                return $link;
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * @param GradebookItem $item1
+     * @param GradebookItem $item2
+     *
+     * @return int
+     */
+    public function sort_by_name($item1, $item2)
+    {
+        return api_strnatcmp($item1->get_name(), $item2->get_name());
+    }
+
+    /**
+     * @param GradebookItem $item1
+     * @param GradebookItem $item2
+     *
+     * @return int
+     */
+    public function sort_by_id($item1, $item2)
+    {
+        return api_strnatcmp($item1->get_id(), $item2->get_id());
+    }
+
+    /**
+     * @param GradebookItem $item1
+     * @param GradebookItem $item2
+     *
+     * @return int
+     */
+    public function sort_by_type($item1, $item2)
+    {
+        if ($item1->get_item_type() == $item2->get_item_type()) {
+            return $this->sort_by_name($item1, $item2);
+        } else {
+            return $item1->get_item_type() < $item2->get_item_type() ? -1 : 1;
+        }
+    }
+
+    /**
+     * @param GradebookItem $item1
+     * @param GradebookItem $item2
+     *
+     * @return int
+     */
+    public function sort_by_description($item1, $item2)
+    {
+        $result = api_strcmp($item1->get_description(), $item2->get_description());
+        if ($result == 0) {
+            return $this->sort_by_name($item1, $item2);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param GradebookItem $item1
+     * @param GradebookItem $item2
+     *
+     * @return int
+     */
+    public function sort_by_weight($item1, $item2)
+    {
+        if ($item1->get_weight() == $item2->get_weight()) {
+            return $this->sort_by_name($item1, $item2);
+        } else {
+            return $item1->get_weight() < $item2->get_weight() ? -1 : 1;
+        }
+    }
+
+    /**
+     * @param GradebookItem $item1
+     * @param GradebookItem $item2
+     *
+     * @return int
+     */
+    public function sort_by_date($item1, $item2)
+    {
+        if (is_int($item1->get_date())) {
+            $timestamp1 = $item1->get_date();
+        } else {
+            $date = $item1->get_date();
+            if (!empty($date)) {
+                $timestamp1 = api_strtotime($date, 'UTC');
+            } else {
+                $timestamp1 = null;
+            }
+        }
+
+        if (is_int($item2->get_date())) {
+            $timestamp2 = $item2->get_date();
+        } else {
+            $timestamp2 = api_strtotime($item2->get_date(), 'UTC');
+        }
+
+        if ($timestamp1 == $timestamp2) {
+            return $this->sort_by_name($item1, $item2);
+        } else {
+            return $timestamp1 < $timestamp2 ? -1 : 1;
+        }
+    }
+
+    /**
+     * Get best result of an item.
+     *
      * @param GradebookItem $item
+     *
      * @return array
      */
     private function buildBestResultColumn(GradebookItem $item)
@@ -236,7 +365,7 @@ class GradebookDataGenerator
 
         return [
             'display' => $display,
-            'score' => $score
+            'score' => $score,
         ];
     }
 
@@ -263,14 +392,14 @@ class GradebookDataGenerator
 
         return [
             'display' => $display,
-            'score' => $score
+            'score' => $score,
         ];
     }
 
     /**
      * @param GradebookItem $item
-     * @param int $userId
-     * @param int $userCount
+     * @param int           $userId
+     * @param int           $userCount
      *
      * @return array
      */
@@ -292,14 +421,15 @@ class GradebookDataGenerator
 
         return [
             'display' => $scoreDisplay,
-            'score' => $score
+            'score' => $score,
         ];
     }
 
     /**
-     * @param int $userId
+     * @param int           $userId
      * @param GradebookItem $item
-     * @param boolean $ignore_score_color
+     * @param bool          $ignore_score_color
+     *
      * @return null|string
      */
     private function build_result_column(
@@ -310,7 +440,6 @@ class GradebookDataGenerator
     ) {
         $scoreDisplay = ScoreDisplay::instance();
         $score = $item->calc_score($userId);
-
 
         if (!empty($score)) {
             switch ($item->get_item_type()) {
@@ -324,7 +453,7 @@ class GradebookDataGenerator
                                     SCORE_DIV
                                 ),
                                 'score' => $score,
-                                'score_weight' => $score
+                                'score_weight' => $score,
                             ];
                         }
 
@@ -334,13 +463,13 @@ class GradebookDataGenerator
                                 SCORE_DIV
                             ),
                             'score' => $score,
-                            'score_weight' => $score
+                            'score_weight' => $score,
                         ];
                     } else {
                         return [
                             'display' => null,
                             'score' => $score,
-                            'score_weight' => $score
+                            'score_weight' => $score,
                         ];
                     }
                     break;
@@ -350,7 +479,7 @@ class GradebookDataGenerator
                     //if ($parentId == 0) {
                         $scoreWeight = [
                             ($score[1] > 0) ? $score[0] / $score[1] * $item->get_weight() : 0,
-                            $item->get_weight()
+                            $item->get_weight(),
                         ];
                     //}
                     $display = $scoreDisplay->display_score(
@@ -378,12 +507,13 @@ class GradebookDataGenerator
         return [
             'display' => null,
             'score' => null,
-            'score_weight' => null
+            'score_weight' => null,
         ];
     }
 
     /**
      * @param GradebookItem $item
+     *
      * @return string
      */
     private function build_date_column($item)
@@ -397,117 +527,6 @@ class GradebookDataGenerator
             } else {
                 return api_format_date($date);
             }
-        }
-    }
-
-    /**
-     * Returns the link to the certificate generation, if the score is enough, otherwise
-     * returns an empty string. This only works with categories.
-     * @param    object Item
-     * @return string
-     */
-    public function get_certificate_link($item)
-    {
-        if (is_a($item, 'Category')) {
-            if ($item->is_certificate_available(api_get_user_id())) {
-                $link = '<a href="'.Category::getUrl().'export_certificate=1&cat='.$item->get_id().'&user='.api_get_user_id().'">'.
-                    get_lang('Certificate').'</a>';
-                return $link;
-            }
-        }
-        return '';
-    }
-
-    /**
-     * @param GradebookItem $item1
-     * @param GradebookItem $item2
-     * @return int
-     */
-    public function sort_by_name($item1, $item2)
-    {
-        return api_strnatcmp($item1->get_name(), $item2->get_name());
-    }
-
-    /**
-     * @param GradebookItem $item1
-     * @param GradebookItem $item2
-     * @return int
-     */
-    public function sort_by_id($item1, $item2)
-    {
-        return api_strnatcmp($item1->get_id(), $item2->get_id());
-    }
-
-    /**
-     * @param GradebookItem $item1
-     * @param GradebookItem $item2
-     * @return int
-     */
-    public function sort_by_type($item1, $item2)
-    {
-        if ($item1->get_item_type() == $item2->get_item_type()) {
-            return $this->sort_by_name($item1, $item2);
-        } else {
-            return ($item1->get_item_type() < $item2->get_item_type() ? -1 : 1);
-        }
-    }
-
-    /**
-     * @param GradebookItem $item1
-     * @param GradebookItem $item2
-     * @return int
-     */
-    public function sort_by_description($item1, $item2)
-    {
-        $result = api_strcmp($item1->get_description(), $item2->get_description());
-        if ($result == 0) {
-            return $this->sort_by_name($item1, $item2);
-        }
-        return $result;
-    }
-
-    /**
-     * @param GradebookItem $item1
-     * @param GradebookItem $item2
-     * @return int
-     */
-    public function sort_by_weight($item1, $item2)
-    {
-        if ($item1->get_weight() == $item2->get_weight()) {
-            return $this->sort_by_name($item1, $item2);
-        } else {
-            return ($item1->get_weight() < $item2->get_weight() ? -1 : 1);
-        }
-    }
-
-    /**
-     * @param GradebookItem $item1
-     * @param GradebookItem $item2
-     * @return int
-     */
-    public function sort_by_date($item1, $item2)
-    {
-        if (is_int($item1->get_date())) {
-            $timestamp1 = $item1->get_date();
-        } else {
-            $date = $item1->get_date();
-            if (!empty($date)) {
-                $timestamp1 = api_strtotime($date, 'UTC');
-            } else {
-                $timestamp1 = null;
-            }
-        }
-
-        if (is_int($item2->get_date())) {
-            $timestamp2 = $item2->get_date();
-        } else {
-            $timestamp2 = api_strtotime($item2->get_date(), 'UTC');
-        }
-
-        if ($timestamp1 == $timestamp2) {
-            return $this->sort_by_name($item1, $item2);
-        } else {
-            return ($timestamp1 < $timestamp2 ? -1 : 1);
         }
     }
 }

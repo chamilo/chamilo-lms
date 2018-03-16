@@ -2,22 +2,22 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class ch_percentage
+ * Class ch_percentage.
  */
 class ch_percentage extends survey_question
 {
     /**
      * @param FormValidator $form
-     * @param array $questionData
-     * @param array $answers
+     * @param array         $questionData
+     * @param array         $answers
      */
     public function render(FormValidator $form, $questionData = [], $answers = '')
     {
         $options = [
-            '--' => '--'
+            '--' => '--',
         ];
 
-        foreach ($questionData['options'] as $key => & $value) {
+        foreach ($questionData['options'] as $key => &$value) {
             $options[$key] = $value;
         }
 

@@ -1,15 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 /**
  *	Exercise list: This script shows the list of exercises for administrators and students.
- *	@package chamilo.exercise
- *	@author hubert.borderiou
  *
+ *	@package chamilo.exercise
+ *
+ *	@author hubert.borderiou
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 // Setting the tabs
@@ -91,7 +89,6 @@ if ($is_allowedToEdit) {
             header("Location: $url");
             exit;
             break;
-
     }
 }
 
@@ -107,7 +104,7 @@ if ($is_allowedToEdit || $is_tutor) {
 }
 
 Display :: display_header($nameTools);
-$actions = Display::div($actions, ['class'=> 'actions']);
+$actions = Display::div($actions, ['class' => 'actions']);
 
 $extra = '<script>
 $(document).ready(function() {
@@ -180,7 +177,7 @@ if ($is_allowedToEdit || $is_tutor) {
         get_lang('Group'),
         get_lang('StartDate'),
         get_lang('Score'),
-        get_lang('Actions')
+        get_lang('Actions'),
     ];
 
     // Column config
@@ -224,7 +221,7 @@ if ($is_allowedToEdit || $is_tutor) {
     $columns = [
         get_lang('StartDate'),
         get_lang('Score'),
-        get_lang('Actions')
+        get_lang('Actions'),
     ];
 
     //Column config
@@ -324,7 +321,7 @@ $(function() {
 <form id="export_report_form" method="post" action="hotpotatoes_exercise_report.php?<?php echo api_get_cidreq(); ?>">
     <input type="hidden" name="csvBuffer" id="csvBuffer" value="" />
     <input type="hidden" name="export_report" id="export_report" value="1" />
-    <input type="hidden" name="path" id="path" value="<?php echo $hotpotatoes_path ?>" />
+    <input type="hidden" name="path" id="path" value="<?php echo $hotpotatoes_path; ?>" />
 </form>
 <?php
 

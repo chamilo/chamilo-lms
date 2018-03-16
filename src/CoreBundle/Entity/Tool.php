@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Tool
+ * Tool.
  *
  * @ORM\Table(name="tool")
  * @ORM\Entity
@@ -15,7 +15,16 @@ use Doctrine\ORM\Mapping as ORM;
 class Tool
 {
     /**
-     * @var integer
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="tool", cascade={"persist", "remove"})
+     */
+    protected $resourceNodes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ToolResourceRights", mappedBy="tool", cascade={"persist", "remove"})
+     */
+    protected $toolResourceRights;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
@@ -45,21 +54,11 @@ class Tool
     private $description;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="tool", cascade={"persist", "remove"})
-     **/
-    protected $resourceNodes;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\ToolResourceRights", mappedBy="tool", cascade={"persist", "remove"})
-     **/
-    protected $toolResourceRights;
-
-    /**
      * @return string
      */
     public function __toString()
     {
-        return (string)$this->getName();
+        return (string) $this->getName();
     }
 
     /**
@@ -84,6 +83,7 @@ class Tool
 
     /**
      * @param ToolResourceRights $toolResourceRight
+     *
      * @return $this
      */
     public function addToolResourceRights(ToolResourceRights $toolResourceRight)
@@ -111,9 +111,9 @@ class Tool
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -121,9 +121,10 @@ class Tool
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return Tool
      */
     public function setName($name)
@@ -134,7 +135,7 @@ class Tool
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -144,9 +145,10 @@ class Tool
     }
 
     /**
-     * Set image
+     * Set image.
      *
      * @param string $image
+     *
      * @return Tool
      */
     public function setImage($image)
@@ -157,7 +159,7 @@ class Tool
     }
 
     /**
-     * Get image
+     * Get image.
      *
      * @return string
      */
@@ -167,9 +169,10 @@ class Tool
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return Tool
      */
     public function setDescription($description)
@@ -180,7 +183,7 @@ class Tool
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */

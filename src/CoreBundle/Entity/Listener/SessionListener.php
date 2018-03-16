@@ -6,13 +6,13 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\Repository\SessionRepository;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Chamilo\CoreBundle\Entity\Session;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 
 /**
  * Class SessionListener
- * Session entity listener, when a session is created/updated
+ * Session entity listener, when a session is created/updated.
+ *
  * @package Chamilo\CoreBundle\EventListener
  */
 class SessionListener
@@ -23,7 +23,7 @@ class SessionListener
      * new object : prePersist
      * edited object: preUpdate
      *
-     * @param Session $session
+     * @param Session            $session
      * @param LifecycleEventArgs $args
      *
      * @throws \Exception
@@ -40,10 +40,11 @@ class SessionListener
     }
 
     /**
-     * This code is executed when a session is updated
+     * This code is executed when a session is updated.
      *
-     * @param Session $session
+     * @param Session            $session
      * @param LifecycleEventArgs $args
+     *
      * @throws \Exception
      */
     public function preUpdate(Session $session, LifecycleEventArgs $args)
@@ -52,7 +53,8 @@ class SessionListener
 
     /**
      * @param SessionRepository $repo
-     * @param AccessUrl $url
+     * @param AccessUrl         $url
+     *
      * @throws \Exception
      */
     private function checkLimit($repo, AccessUrl $url)

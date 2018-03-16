@@ -2,12 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Process exercises before pass it to search listing scripts
+ * Process exercises before pass it to search listing scripts.
+ *
  * @package chamilo.include.search
  */
 class quiz_processor extends search_processor
 {
     public $exercices = [];
+
     public function __construct($rows)
     {
         $this->rows = $rows;
@@ -90,11 +92,12 @@ class quiz_processor extends search_processor
         }
         // Sort results with score descending
         array_multisort($score, SORT_DESC, $results);
+
         return $results;
     }
 
     /**
-     * Get learning path information
+     * Get learning path information.
      */
     private function get_information($courseCode, $exercise_id)
     {
@@ -109,7 +112,7 @@ class quiz_processor extends search_processor
                 ->getRepository('ChamiloCourseBundle:CQuiz')
                 ->findOneBy([
                     'id' => $exercise_id,
-                    'cId' => $course_id
+                    'cId' => $course_id,
                 ]);
 
             $name = '';
@@ -125,13 +128,14 @@ class quiz_processor extends search_processor
                     ->findOneBy([
                         'ref' => $exercise_id,
                         'tool' => TOOL_QUIZ,
-                        'course' => $course_id
+                        'course' => $course_id,
                     ]);
 
                 if ($item_result) {
                     $author = $item_result->getInsertUser()->getCompleteName();
                 }
             }
+
             return [$thumbnail, $image, $name, $author];
         } else {
             return [];

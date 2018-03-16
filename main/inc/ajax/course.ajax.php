@@ -4,9 +4,8 @@
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
-
 require_once __DIR__.'/../global.inc.php';
 
 $action = $_REQUEST['a'];
@@ -97,7 +96,7 @@ switch ($action) {
 
                     $courseList['items'][] = [
                         'id' => $courseInfo['real_id'].'_'.$sessionId,
-                        'text' => $courseInfo['title'].$sessionName
+                        'text' => $courseInfo['title'].$sessionName,
                     ];
                 }
 
@@ -118,7 +117,7 @@ switch ($action) {
             foreach ($categories as $item) {
                 $list['items'][] = [
                     'id' => $item['code'],
-                    'text' => '('.$item['code'].') '.strip_tags($item['name'])
+                    'text' => '('.$item['code'].') '.strip_tags($item['name']),
                 ];
             }
 
@@ -169,7 +168,7 @@ switch ($action) {
 
                 $results['items'][] = [
                     'id' => $course['id'],
-                    'text' => $title
+                    'text' => $title,
                 ];
             }
 
@@ -235,7 +234,7 @@ switch ($action) {
             $course = api_get_course_info_by_id($_GET['course_id']);
 
             $json = [
-                'items' => []
+                'items' => [],
             ];
 
             $sql = "SELECT u.user_id as id, u.username, u.lastname, u.firstname
@@ -253,7 +252,7 @@ switch ($action) {
 
                 $json['items'][] = [
                     'id' => $user['id'],
-                    'text' => "{$user['username']} ($userCompleteName)"
+                    'text' => "{$user['username']} ($userCompleteName)",
                 ];
             }
 
@@ -306,7 +305,7 @@ switch ($action) {
                 $survey['title'] .= ($survey['anonymous'] == 1) ? ' ('.get_lang('Anonymous').')' : '';
                 $data[] = [
                     'id' => $survey['id'],
-                    'text' => strip_tags(html_entity_decode($survey['title']))
+                    'text' => strip_tags(html_entity_decode($survey['title'])),
                 ];
             }
             if (!empty($data)) {
@@ -329,8 +328,8 @@ switch ($action) {
             if (!empty($coachData)) {
                 $userResult = Database::select('lastname,firstname', $userTable, [
                     'where' => [
-                        'user_id = ?' => $coachData[0]
-                    ]
+                        'user_id = ?' => $coachData[0],
+                    ],
                 ], 'first');
 
                 $coachName = api_get_person_name($userResult['firstname'], $userResult['lastname']);
@@ -349,7 +348,7 @@ switch ($action) {
         $logoutInfo = [
             'uid' => api_get_user_id(),
             'cid' => api_get_course_int_id(),
-            'sid' => api_get_session_id()
+            'sid' => api_get_session_id(),
         ];
 
         $result = (int) Event::courseLogout($logoutInfo);

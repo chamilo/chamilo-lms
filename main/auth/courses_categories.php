@@ -2,11 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * View (MVC patter) for courses categories
+ * View (MVC patter) for courses categories.
+ *
  * @author Christian Fasanando <christian1827@gmail.com> - Beeznest
+ *
  * @package chamilo.auth
  */
-
 if (isset($_REQUEST['action']) && Security::remove_XSS($_REQUEST['action']) !== 'subscribe') {
     $stok = Security::get_token();
 } else {
@@ -72,7 +73,7 @@ $code = isset($code) ? $code : null;
             <div class="row">
                 <?php if ($showCourses) {
         ?>
-                    <div class="col-md-<?php echo($showSessions ? '4' : '6'); ?>">
+                    <div class="col-md-<?php echo $showSessions ? '4' : '6'; ?>">
                         <?php if (!isset($_GET['hidden_links']) || intval($_GET['hidden_links']) != 1) {
             ?>
                             <form method="post"
@@ -82,9 +83,9 @@ $code = isset($code) ? $code : null;
                                 <label><?php echo get_lang('Search'); ?></label>
                                 <div class="input-group">
                                     <input class="form-control" type="text" name="search_term"
-                                           value="<?php echo(empty($_POST['search_term'])
+                                           value="<?php echo empty($_POST['search_term'])
                                                ? ''
-                                               : api_htmlentities($searchTerm)); ?>"/>
+                                               : api_htmlentities($searchTerm); ?>"/>
                                     <div class="input-group-btn">
                                         <button class="btn btn-default" type="submit">
                                             <em class="fa fa-search"></em> <?php echo get_lang('Search'); ?>
@@ -95,7 +96,7 @@ $code = isset($code) ? $code : null;
                         <?php
         } ?>
                     </div>
-                    <div class="col-md-<?php echo($showSessions ? '4' : '6'); ?>">
+                    <div class="col-md-<?php echo $showSessions ? '4' : '6'; ?>">
                         <?php
                         $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
         $form = '<form action="'.$webAction.'" method="GET">';
@@ -296,9 +297,10 @@ echo $cataloguePagination;
 echo '</div>';
 
 /**
- * Display the course catalog image of a course
+ * Display the course catalog image of a course.
+ *
  * @param array $course
- * @param bool $registeredUser
+ * @param bool  $registeredUser
  *
  * @return string HTML string
  */
@@ -352,6 +354,7 @@ function returnThumbnail($course, $registeredUser)
 
 /**
  * @param array $courseInfo
+ *
  * @return string
  */
 function return_teacher($courseInfo)
@@ -384,7 +387,7 @@ function return_teacher($courseInfo)
                         <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
             $html .= '<div class="teachers-details"><h5>
                         <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
-                        . $name.'</a></h5></div>';
+                        .$name.'</a></h5></div>';
             $html .= '</div>';
         }
         $html .= '</div>';
@@ -399,7 +402,7 @@ function return_teacher($courseInfo)
                         <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
                 $html .= '<div class="teachers-details"><h5>
                         <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
-                        . $name.'</a></h5><p>'.get_lang('Teacher').'</p></div>';
+                        .$name.'</a></h5><p>'.get_lang('Teacher').'</p></div>';
             }
         }
     }
@@ -409,9 +412,10 @@ function return_teacher($courseInfo)
 }
 
 /**
- * Display the title of a course in course catalog
+ * Display the title of a course in course catalog.
+ *
  * @param array $course
- * @param bool $registeredUser
+ * @param bool  $registeredUser
  *
  * @return string HTML string
  */
@@ -441,8 +445,10 @@ function return_title($course, $registeredUser)
 }
 
 /**
- * Display the goto course button of a course in the course catalog
+ * Display the goto course button of a course in the course catalog.
+ *
  * @param $course
+ *
  * @return string HTML string
  */
 function return_goto_button($course)
@@ -457,11 +463,13 @@ function return_goto_button($course)
             'aria-label' => $title,
         ]
     );
+
     return $html.PHP_EOL;
 }
 
 /**
- * Display the already registerd text in a course in the course catalog
+ * Display the already registerd text in a course in the course catalog.
+ *
  * @param $in_status
  *
  * @return string HTML string
@@ -490,7 +498,8 @@ function return_already_registered_label($in_status)
 }
 
 /**
- * Display the register button of a course in the course catalog
+ * Display the register button of a course in the course catalog.
+ *
  * @param $course
  * @param $stok
  * @param $code
@@ -507,11 +516,13 @@ function return_register_button($course, $stok, $code, $search_term)
         '&subscribe_course='.$course['code'].'&search_term='.$search_term.'&category_code='.$code,
         ['class' => 'btn btn-success btn-sm', 'title' => $title, 'aria-label' => $title]
     );
+
     return $html;
 }
 
 /**
- * Display the unregister button of a course in the course catalog
+ * Display the unregister button of a course in the course catalog.
+ *
  * @param $course
  * @param $stok
  * @param $search_term

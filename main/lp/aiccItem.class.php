@@ -4,10 +4,13 @@
 /**
  * Class aiccItem
  * This class handles the elements from an AICC Descriptor file.
- * Container for the aiccItem class that deals with AICC Assignable Units (AUs)
+ * Container for the aiccItem class that deals with AICC Assignable Units (AUs).
+ *
  * @package chamilo.learnpath
+ *
  * @author  Yannick Warnier    <ywarnier@beeznest.org>
  * @license GNU/GPL
+ *
  * @package chamilo.learnpath
  */
 class aiccItem extends learnpathItem
@@ -31,7 +34,8 @@ class aiccItem extends learnpathItem
 
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormItem
-     * object from database records or from the array given as second parameter
+     * object from database records or from the array given as second parameter.
+     *
      * @param	string	Type of construction needed ('db' or 'config', default = 'config')
      * @param	mixed	Depending on the type given, DB id for the lp_item or parameters array
      */
@@ -103,11 +107,12 @@ class aiccItem extends learnpathItem
     }
 
     /**
-     * Builds a flat list with the current item and calls itself recursively on all children
+     * Builds a flat list with the current item and calls itself recursively on all children.
+     *
      * @param	array	Reference to the array to complete with the current item
-     * @param	integer	Optional absolute order (pointer) of the item in this learning path
-     * @param	integer	Optional relative order of the item at this level
-     * @param	integer	Optional level. If not given, assumes it's level 0
+     * @param	int	Optional absolute order (pointer) of the item in this learning path
+     * @param	int	Optional relative order of the item at this level
+     * @param	int	Optional level. If not given, assumes it's level 0
      */
     public function get_flat_list(&$list, &$abs_order, $rel_order = 1, $level = 0)
     {
@@ -127,7 +132,7 @@ class aiccItem extends learnpathItem
         $abs_order++;
         $i = 1;
         foreach ($this->sub_items as $id => $dummy) {
-            $oSubitem = & $this->sub_items[$id];
+            $oSubitem = &$this->sub_items[$id];
             $oSubitem->get_flat_list($list, $abs_order, $i, $level + 1);
             $i++;
         }
@@ -135,7 +140,8 @@ class aiccItem extends learnpathItem
 
     /**
      * Save function. Uses the parent save function and adds a layer for AICC.
-     * @param	boolean	Save from URL params (1) or from object attributes (0)
+     *
+     * @param	bool	Save from URL params (1) or from object attributes (0)
      */
     public function save($from_outside = true, $prereqs_complete = false)
     {

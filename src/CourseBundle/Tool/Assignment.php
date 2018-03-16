@@ -4,7 +4,8 @@
 namespace Chamilo\CourseBundle\Tool;
 
 /**
- * Class Assignment
+ * Class Assignment.
+ *
  * @package Chamilo\CourseBundle\Tool
  */
 class Assignment extends BaseTool

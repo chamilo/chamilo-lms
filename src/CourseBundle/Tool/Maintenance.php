@@ -4,7 +4,8 @@
 namespace Chamilo\CourseBundle\Tool;
 
 /**
- * Class Maintenance
+ * Class Maintenance.
+ *
  * @package Chamilo\CourseBundle\Tool
  */
 class Maintenance extends BaseTool

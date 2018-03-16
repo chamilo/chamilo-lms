@@ -5,18 +5,19 @@ namespace Chamilo\CoreBundle\Admin;
 
 use Chamilo\CoreBundle\Entity\ToolResourceRights;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Form\FormMapper;
 
 /**
- * Class ToolResourceRightsAdmin
+ * Class ToolResourceRightsAdmin.
+ *
  * @package Chamilo\CoreBundle\Admin
  */
 class ToolResourceRightsAdmin extends AbstractAdmin
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -36,7 +37,7 @@ class ToolResourceRightsAdmin extends AbstractAdmin
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
@@ -46,7 +47,7 @@ class ToolResourceRightsAdmin extends AbstractAdmin
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function configureListFields(ListMapper $listMapper)
     {

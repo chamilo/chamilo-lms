@@ -3,12 +3,13 @@
 
 namespace Chamilo\CourseBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
-use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\UserBundle\Entity\User;
+use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class CourseAccess
+ * Class CourseAccess.
+ *
  * @package Chamilo\CourseBundle\Event
  */
 class CourseAccess extends Event

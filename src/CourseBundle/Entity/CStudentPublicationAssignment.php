@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CStudentPublicationAssignment
+ * CStudentPublicationAssignment.
  *
  * @ORM\Table(
  *  name="c_student_publication_assignment",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CStudentPublicationAssignment
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,14 +28,14 @@ class CStudentPublicationAssignment
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
@@ -56,30 +56,31 @@ class CStudentPublicationAssignment
     private $endsOn;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="add_to_calendar", type="integer", nullable=false)
      */
     private $addToCalendar;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="enable_qualification", type="boolean", nullable=false)
      */
     private $enableQualification;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="publication_id", type="integer", nullable=false)
      */
     private $publicationId;
 
     /**
-     * Set expiresOn
+     * Set expiresOn.
      *
      * @param \DateTime $expiresOn
+     *
      * @return CStudentPublicationAssignment
      */
     public function setExpiresOn($expiresOn)
@@ -90,7 +91,7 @@ class CStudentPublicationAssignment
     }
 
     /**
-     * Get expiresOn
+     * Get expiresOn.
      *
      * @return \DateTime
      */
@@ -100,9 +101,10 @@ class CStudentPublicationAssignment
     }
 
     /**
-     * Set endsOn
+     * Set endsOn.
      *
      * @param \DateTime $endsOn
+     *
      * @return CStudentPublicationAssignment
      */
     public function setEndsOn($endsOn)
@@ -113,7 +115,7 @@ class CStudentPublicationAssignment
     }
 
     /**
-     * Get endsOn
+     * Get endsOn.
      *
      * @return \DateTime
      */
@@ -123,9 +125,10 @@ class CStudentPublicationAssignment
     }
 
     /**
-     * Set addToCalendar
+     * Set addToCalendar.
      *
-     * @param boolean $addToCalendar
+     * @param bool $addToCalendar
+     *
      * @return CStudentPublicationAssignment
      */
     public function setAddToCalendar($addToCalendar)
@@ -136,9 +139,9 @@ class CStudentPublicationAssignment
     }
 
     /**
-     * Get addToCalendar
+     * Get addToCalendar.
      *
-     * @return boolean
+     * @return bool
      */
     public function getAddToCalendar()
     {
@@ -146,9 +149,10 @@ class CStudentPublicationAssignment
     }
 
     /**
-     * Set enableQualification
+     * Set enableQualification.
      *
-     * @param boolean $enableQualification
+     * @param bool $enableQualification
+     *
      * @return CStudentPublicationAssignment
      */
     public function setEnableQualification($enableQualification)
@@ -159,9 +163,9 @@ class CStudentPublicationAssignment
     }
 
     /**
-     * Get enableQualification
+     * Get enableQualification.
      *
-     * @return boolean
+     * @return bool
      */
     public function getEnableQualification()
     {
@@ -169,9 +173,10 @@ class CStudentPublicationAssignment
     }
 
     /**
-     * Set publicationId
+     * Set publicationId.
      *
-     * @param integer $publicationId
+     * @param int $publicationId
+     *
      * @return CStudentPublicationAssignment
      */
     public function setPublicationId($publicationId)
@@ -182,9 +187,9 @@ class CStudentPublicationAssignment
     }
 
     /**
-     * Get publicationId
+     * Get publicationId.
      *
-     * @return integer
+     * @return int
      */
     public function getPublicationId()
     {
@@ -192,9 +197,10 @@ class CStudentPublicationAssignment
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CStudentPublicationAssignment
      */
     public function setId($id)
@@ -205,9 +211,9 @@ class CStudentPublicationAssignment
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -215,9 +221,10 @@ class CStudentPublicationAssignment
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CStudentPublicationAssignment
      */
     public function setCId($cId)
@@ -228,9 +235,9 @@ class CStudentPublicationAssignment
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

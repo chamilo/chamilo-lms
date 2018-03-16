@@ -1,20 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
-use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Promotion;
-use Chamilo\CoreBundle\Entity\Session;
-use Doctrine\Common\Collections\Criteria;
-use Chamilo\CoreBundle\Entity\SessionRelUser;
+use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Entity\Repository\SessionRepository;
+use Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 
 /**
  * @author Bart Mollet, Julio Montoya lot of fixes
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -32,7 +30,7 @@ SessionManager::protectSession($sessionId);
 $tool_name = get_lang('SessionOverview');
 $interbreadcrumb[] = [
     'url' => 'session_list.php',
-    'name' => get_lang('SessionList')
+    'name' => get_lang('SessionList'),
 ];
 
 $orig_param = '&origin=resume_session';
@@ -213,7 +211,7 @@ if ($sessionInfo['nbr_courses'] == 0) {
         $courseItem .= '<td>'.$numberOfUsers.'</td>';
         $courseItem .= '
 			<td>
-                <a href="'. $courseUrl.'">'.
+                <a href="'.$courseUrl.'">'.
                 Display::return_icon('course_home.gif', get_lang('Course')).'</a>
                 '.$orderButtons.'
                 <a href="session_course_user_list.php?id_session='.$sessionId.'&course_code='.$course->getCode().'">'.

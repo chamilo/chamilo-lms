@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Manage the "versioning" of a conditional survey
+ * Manage the "versioning" of a conditional survey.
  *
  *	@package chamilo.survey
  */
@@ -13,7 +13,7 @@ class SurveyTree
     public $numbersurveys;
 
     /**
-     * Sets the surveylist and the plainsurveylist
+     * Sets the surveylist and the plainsurveylist.
      */
     public function __construct()
     {
@@ -68,12 +68,14 @@ class SurveyTree
     }
 
     /**
-     * This function gets the parent id of a survey
+     * This function gets the parent id of a survey.
      *
-     * @param  int $id survey id
+     * @param int $id survey id
+     *
      * @return int survey parent id
      *
      * @author Julio Montoya <gugli100@gmail.com>, Dokeos
+     *
      * @version September 2008
      */
     public function getParentId($id)
@@ -87,10 +89,14 @@ class SurveyTree
     }
 
     /**
-     * This function creates a list of all surveys id
-     * @param  array $list of nodes
+     * This function creates a list of all surveys id.
+     *
+     * @param array $list of nodes
+     *
      * @return array with the structure survey_id => survey_name
+     *
      * @author Julio Montoya <gugli100@gmail.com>
+     *
      * @version September 2008
      */
     public function createList($list)

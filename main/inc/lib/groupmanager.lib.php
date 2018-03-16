@@ -5,8 +5,11 @@ use Chamilo\CourseBundle\Entity\CGroupRelUser;
 
 /**
  * This library contains some functions for group-management.
+ *
  * @author Bart Mollet
+ *
  * @package chamilo.library
+ *
  * @todo Add $course_code parameter to all functions. So this GroupManager can
  * be used outside a session.
  */
@@ -22,28 +25,28 @@ class GroupManager
     const DEFAULT_GROUP_CATEGORY = 2;
 
     /**
-     * infinite
+     * infinite.
      */
     const INFINITE = 99999;
     /**
-     * No limit on the number of users in a group
+     * No limit on the number of users in a group.
      */
     const MEMBER_PER_GROUP_NO_LIMIT = 0;
     /**
-     * No limit on the number of groups per user
+     * No limit on the number of groups per user.
      */
     const GROUP_PER_MEMBER_NO_LIMIT = 0;
     /**
      * The tools of a group can have 3 states
      * - not available
      * - public
-     * - private
+     * - private.
      */
     const TOOL_NOT_AVAILABLE = 0;
     const TOOL_PUBLIC = 1;
     const TOOL_PRIVATE = 2;
     /**
-     * Constants for the available group tools
+     * Constants for the available group tools.
      */
     const GROUP_TOOL_FORUM = 0;
     const GROUP_TOOL_DOCUMENTS = 1;
@@ -70,18 +73,21 @@ class GroupManager
 
         $sql = "SELECT * FROM $table_group WHERE c_id = $courseId  ";
         $result = Database::query($sql);
+
         return Database::store_result($result, 'ASSOC');
     }
 
     /**
      * Get list of groups for current course.
-     * @param int $categoryId The id of the category from which the groups are
-     * requested
+     *
+     * @param int   $categoryId  The id of the category from which the groups are
+     *                           requested
      * @param array $course_info Default is current course
-     * @param int $status group status
-     * @param int $sessionId
-     * @param bool $getCount
-     * @return array An array with all information about the groups.
+     * @param int   $status      group status
+     * @param int   $sessionId
+     * @param bool  $getCount
+     *
+     * @return array an array with all information about the groups
      */
     public static function get_group_list(
         $categoryId = null,
@@ -143,6 +149,7 @@ class GroupManager
 
         if ($getCount) {
             $row = Database::fetch_array($result);
+
             return $row['count'];
         }
 
@@ -164,11 +171,12 @@ class GroupManager
     }
 
     /**
-     * Create a group
-     * @param string $name The name for this group
-     * @param int $category_id
-     * @param int $tutor The user-id of the group's tutor
-     * @param int $places How many people can subscribe to the new group
+     * Create a group.
+     *
+     * @param string $name        The name for this group
+     * @param int    $category_id
+     * @param int    $tutor       The user-id of the group's tutor
+     * @param int    $places      How many people can subscribe to the new group
      *
      * @return int
      */
@@ -176,7 +184,7 @@ class GroupManager
     {
         $_course = api_get_course_info();
         $session_id = api_get_session_id();
-        $course_id  = $_course['real_id'];
+        $course_id = $_course['real_id'];
         $currentCourseRepository = $_course['path'];
         $category = self::get_category($category_id);
         $places = intval($places);
@@ -316,8 +324,9 @@ class GroupManager
      * Create subgroups.
      * This function creates new groups based on an existing group. It will
      * create the specified number of groups and fill those groups with users
-     * from the base group
-     * @param int $group_id The group from which subgroups have to be created.
+     * from the base group.
+     *
+     * @param int $group_id         the group from which subgroups have to be created
      * @param int $number_of_groups The number of groups that have to be created
      */
     public static function create_subgroups($group_id, $number_of_groups)
@@ -365,8 +374,10 @@ class GroupManager
     }
 
     /**
-     * Create a group for every class subscribed to the current course
+     * Create a group for every class subscribed to the current course.
+     *
      * @param int $category_id The category in which the groups should be created
+     *
      * @return array
      */
     public static function create_class_groups($category_id)
@@ -387,17 +398,21 @@ class GroupManager
             self::subscribe_users($users_ids, $groupInfo);
             $group_ids[] = $group_id;
         }
+
         return $group_ids;
     }
 
     /**
      * Deletes groups and their data.
+     *
      * @author Christophe Gesche <christophe.gesche@claroline.net>
      * @author Hugues Peeters <hugues.peeters@claroline.net>
      * @author Bart Mollet
-     * @param  array  $groupInfo iid
+     *
+     * @param array  $groupInfo   iid
      * @param string $course_code Default is current course
-     * @return integer              - number of groups deleted.
+     *
+     * @return int - number of groups deleted
      */
     public static function delete_groups($groupInfo, $course_code = null)
     {
@@ -463,12 +478,14 @@ class GroupManager
     }
 
     /**
-     * Get group properties
-     * @param int $group_id The group from which properties are requested.
+     * Get group properties.
+     *
+     * @param int  $group_id the group from which properties are requested
      * @param bool $useIid
+     *
      * @return array All properties. Array-keys are:
-     * name, tutor_id, description, maximum_number_of_students,
-     * directory and visibility of tools
+     *               name, tutor_id, description, maximum_number_of_students,
+     *               directory and visibility of tools
      */
     public static function get_group_properties($group_id, $useIid = false)
     {
@@ -522,7 +539,8 @@ class GroupManager
     /**
      * @param string $name
      * @param string $courseCode
-     * @param int $sessionId
+     * @param int    $sessionId
+     *
      * @return array
      */
     public static function getGroupByName($name, $courseCode = null, $sessionId = 0)
@@ -556,9 +574,10 @@ class GroupManager
     }
 
     /**
-     * @param int $courseId
-     * @param int $categoryId
+     * @param int    $courseId
+     * @param int    $categoryId
      * @param string $name
+     *
      * @return array
      */
     public static function getGroupListFilterByName($name, $categoryId, $courseId)
@@ -586,6 +605,7 @@ class GroupManager
     /**
      * Set group properties
      * Changes the group's properties.
+     *
      * @param int       Group Id
      * @param string    Group name
      * @param string    Group description
@@ -600,6 +620,7 @@ class GroupManager
      * @param bool Whether self registration is allowed or not
      * @param bool Whether self unregistration is allowed or not
      * @param int $categoryId
+     *
      * @return bool TRUE if properties are successfully changed, false otherwise
      */
     public static function set_group_properties(
@@ -654,12 +675,14 @@ class GroupManager
         }
         $sql2 .= " WHERE c_id = $course_id AND forum_of_group=".$group_id;
         Database::query($sql2);
+
         return $result;
     }
 
     /**
      * Get the total number of groups for the current course.
-     * @return int The number of groups for the current course.
+     *
+     * @return int the number of groups for the current course
      */
     public static function get_number_of_groups()
     {
@@ -675,8 +698,10 @@ class GroupManager
     }
 
     /**
-     * Get all categories
+     * Get all categories.
+     *
      * @param string $course_code The course (default = current course)
+     *
      * @return array
      */
     public static function get_categories($course_code = null)
@@ -692,13 +717,16 @@ class GroupManager
         while ($cat = Database::fetch_array($res)) {
             $cats[] = $cat;
         }
+
         return $cats;
     }
 
     /**
-     * Get a group category
-     * @param int $id The category id
+     * Get a group category.
+     *
+     * @param int    $id          The category id
      * @param string $course_code The course (default = current course)
+     *
      * @return array
      */
     public static function get_category($id, $course_code = null)
@@ -720,9 +748,11 @@ class GroupManager
     }
 
     /**
-     * Get a group category
+     * Get a group category.
+     *
      * @param string $title
      * @param string $course_code The course (default = current course)
+     *
      * @return array
      */
     public static function getCategoryByTitle($title, $course_code = null)
@@ -745,14 +775,17 @@ class GroupManager
         if (Database::num_rows($res)) {
             $category = Database::fetch_array($res, 'ASSOC');
         }
+
         return $category;
     }
 
     /**
-     * Get the unique category of a given group
-     * @param int $group_id The iid of the group
+     * Get the unique category of a given group.
+     *
+     * @param int    $group_id    The iid of the group
      * @param string $course_code The course in which the group is (default =
-     * current course)
+     *                            current course)
+     *
      * @return array The category
      */
     public static function get_category_from_group($group_id, $course_code = '')
@@ -785,14 +818,17 @@ class GroupManager
         if (Database::num_rows($res)) {
             $cat = Database::fetch_array($res);
         }
+
         return $cat;
     }
 
     /**
-     * Delete a group category
-     * @param int $cat_id The id of the category to delete
+     * Delete a group category.
+     *
+     * @param int    $cat_id      The id of the category to delete
      * @param string $course_code The code in which the category should be
-     * deleted (default = current course)
+     *                            deleted (default = current course)
+     *
      * @return bool
      */
     public static function delete_category($cat_id, $course_code = '')
@@ -828,20 +864,22 @@ class GroupManager
     }
 
     /**
-     * Create group category
-     * @param string $title The title of the new category
-     * @param string $description The description of the new category
-     * @param int $doc_state
-     * @param int $work_state
-     * @param int $calendar_state
-     * @param int $announcements_state
-     * @param int $forum_state
-     * @param int $wiki_state
-     * @param int $chat_state
-     * @param int $self_registration_allowed
-     * @param int $self_unregistration_allowed
-     * @param int $maximum_number_of_students
-     * @param int $groups_per_user
+     * Create group category.
+     *
+     * @param string $title                       The title of the new category
+     * @param string $description                 The description of the new category
+     * @param int    $doc_state
+     * @param int    $work_state
+     * @param int    $calendar_state
+     * @param int    $announcements_state
+     * @param int    $forum_state
+     * @param int    $wiki_state
+     * @param int    $chat_state
+     * @param int    $self_registration_allowed
+     * @param int    $self_unregistration_allowed
+     * @param int    $maximum_number_of_students
+     * @param int    $groups_per_user
+     *
      * @return mixed
      */
     public static function create_category(
@@ -889,7 +927,7 @@ class GroupManager
             'groups_per_user' => $groups_per_user,
             'self_reg_allowed' => $self_registration_allowed,
             'self_unreg_allowed' => $self_unregistration_allowed,
-            'max_student' => $maximum_number_of_students
+            'max_student' => $maximum_number_of_students,
         ];
 
         $categoryId = Database::insert($table, $params);
@@ -905,9 +943,9 @@ class GroupManager
     }
 
     /**
-     * Update group category
+     * Update group category.
      *
-     * @param int $id
+     * @param int    $id
      * @param string $title
      * @param string $description
      * @param $doc_state
@@ -988,7 +1026,7 @@ class GroupManager
 
     /**
      * Returns the number of groups of the user with the greatest number of
-     * subscriptions in the given category
+     * subscriptions in the given category.
      */
     public static function get_current_max_groups_per_user(
         $category_id = null,
@@ -1014,7 +1052,8 @@ class GroupManager
     }
 
     /**
-     * Swaps the display-order of two categories
+     * Swaps the display-order of two categories.
+     *
      * @param int $id1 The id of the first category
      * @param int $id2 The id of the second category
      */
@@ -1042,15 +1081,17 @@ class GroupManager
     }
 
     /**
-     * Get all users from a given group
-     * @param int $group_id The group
+     * Get all users from a given group.
+     *
+     * @param int  $group_id        The group
      * @param bool $load_extra_info
-     * @param int $start
-     * @param int $limit
+     * @param int  $start
+     * @param int  $limit
      * @param bool $getCount
-     * @param int $courseId
+     * @param int  $courseId
      * @param $column
      * @param $direction
+     *
      * @return array list of user id
      */
     public static function get_users(
@@ -1118,6 +1159,7 @@ class GroupManager
 
     /**
      * @param int $group_id id
+     *
      * @return array
      */
     public static function getStudentsAndTutors($group_id)
@@ -1154,8 +1196,10 @@ class GroupManager
     }
 
     /**
-     * Get only tutors from a group
+     * Get only tutors from a group.
+     *
      * @param array $groupInfo
+     *
      * @return array
      */
     public static function getTutors($groupInfo)
@@ -1181,8 +1225,10 @@ class GroupManager
     }
 
     /**
-     * Get only students from a group (not tutors)
+     * Get only students from a group (not tutors).
+     *
      * @param int $group_id iid
+     *
      * @return array
      */
     public static function getStudents($group_id)
@@ -1198,7 +1244,7 @@ class GroupManager
             ')
             ->setParameters([
                 'course' => api_get_course_int_id(),
-                'group' => intval($group_id)
+                'group' => intval($group_id),
             ])
             ->getResult();
 
@@ -1213,9 +1259,10 @@ class GroupManager
     }
 
     /**
-     * Returns users belonging to any of the group
+     * Returns users belonging to any of the group.
      *
      * @param array $groups list of group ids
+     *
      * @return array list of user ids
      */
     public static function get_groups_users($groups = [])
@@ -1256,10 +1303,12 @@ class GroupManager
      * The databases are als very inconsistent in this.
      *
      * @param array $groupInfo
+     *
      * @author Chrisptophe Gesche <christophe.geshe@claroline.net>,
      *         Hugues Peeters     <hugues.peeters@claroline.net> - original version
      * @author Roan Embrechts - virtual course support, code cleaning
      * @author Bart Mollet - code cleaning, use other GroupManager-functions
+     *
      * @return bool
      */
     public static function fillGroupWithUsers($groupInfo)
@@ -1314,8 +1363,10 @@ class GroupManager
 
     /**
      * Get the number of students in a group.
+     *
      * @param int $group_id id
-     * @return int Number of students in the given group.
+     *
+     * @return int number of students in the given group
      */
     public static function number_of_students($group_id, $course_id = null)
     {
@@ -1336,9 +1387,11 @@ class GroupManager
     }
 
     /**
-     * Maximum number of students in a group
+     * Maximum number of students in a group.
+     *
      * @param int $group_id iid
-     * @return int Maximum number of students in the given group.
+     *
+     * @return int maximum number of students in the given group
      */
     public static function maximum_number_of_students($group_id)
     {
@@ -1352,14 +1405,17 @@ class GroupManager
         if ($db_object->max_student == 0) {
             return self::INFINITE;
         }
+
         return $db_object->max_student;
     }
 
     /**
-     * Number of groups of a user
+     * Number of groups of a user.
+     *
      * @param int $user_id
      * @param int $cat_id
-     * @return int The number of groups the user is subscribed in.
+     *
+     * @return int the number of groups the user is subscribed in
      */
     public static function user_in_number_of_groups($user_id, $cat_id = 0)
     {
@@ -1392,9 +1448,11 @@ class GroupManager
 
     /**
      * Is sef-registration allowed?
-     * @param int $user_id
+     *
+     * @param int   $user_id
      * @param array $groupInfo
-     * @return bool TRUE if self-registration is allowed in the given group.
+     *
+     * @return bool TRUE if self-registration is allowed in the given group
      */
     public static function is_self_registration_allowed($user_id, $groupInfo)
     {
@@ -1423,9 +1481,11 @@ class GroupManager
 
     /**
      * Is sef-unregistration allowed?
-     * @param int $user_id
+     *
+     * @param int   $user_id
      * @param array $groupInfo
-     * @return bool TRUE if self-unregistration is allowed in the given group.
+     *
+     * @return bool TRUE if self-unregistration is allowed in the given group
      */
     public static function is_self_unregistration_allowed($user_id, $groupInfo)
     {
@@ -1451,8 +1511,10 @@ class GroupManager
 
     /**
      * Is user subscribed in group?
-     * @param int $user_id
+     *
+     * @param int   $user_id
      * @param array $groupInfo
+     *
      * @return bool TRUE if given user is subscribed in given group
      */
     public static function is_subscribed($user_id, $groupInfo)
@@ -1477,10 +1539,11 @@ class GroupManager
     }
 
     /**
-     * Can a user subscribe to a specified group in a course
-     * @param int $user_id
+     * Can a user subscribe to a specified group in a course.
+     *
+     * @param int   $user_id
      * @param array $groupInfo
-     * @param bool $checkMaxNumberStudents
+     * @param bool  $checkMaxNumberStudents
      *
      * @return bool TRUE if given user  can be subscribed in given group
      */
@@ -1526,8 +1589,10 @@ class GroupManager
     }
 
     /**
-     * Get all subscribed users (members) from a group
+     * Get all subscribed users (members) from a group.
+     *
      * @param array $groupInfo
+     *
      * @return array An array with information of all users from the given group.
      *               (user_id, firstname, lastname, email)
      */
@@ -1567,11 +1632,11 @@ class GroupManager
         $users = [];
         while ($user = Database::fetch_object($db_result)) {
             $users[$user->user_id] = [
-                'user_id'   => $user->user_id,
+                'user_id' => $user->user_id,
                 'firstname' => $user->firstname,
-                'lastname'  => $user->lastname,
-                'email'     => $user->email,
-                'username'  => $user->username
+                'lastname' => $user->lastname,
+                'email' => $user->email,
+                'username' => $user->username,
             ];
         }
 
@@ -1581,7 +1646,9 @@ class GroupManager
     /**
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * Get all subscribed tutors of a group
+     *
      * @param array $groupInfo
+     *
      * @return array An array with information of all users from the given group.
      *               (user_id, firstname, lastname, email)
      */
@@ -1625,10 +1692,12 @@ class GroupManager
     }
 
     /**
-     * Subscribe user(s) to a specified group in current course (as a student)
-     * @param mixed $user_ids Can be an array with user-id's or a single user-id
+     * Subscribe user(s) to a specified group in current course (as a student).
+     *
+     * @param mixed $user_ids  Can be an array with user-id's or a single user-id
      * @param array $groupInfo
-     * @param int $course_id
+     * @param int   $course_id
+     *
      * @return bool TRUE if successful
      */
     public static function subscribe_users($user_ids, $groupInfo, $course_id = null)
@@ -1653,13 +1722,16 @@ class GroupManager
     }
 
     /**
-     * Subscribe tutor(s) to a specified group in current course
-     * @param mixed $user_ids Can be an array with user-id's or a single user-id
+     * Subscribe tutor(s) to a specified group in current course.
+     *
+     * @param mixed $user_ids  Can be an array with user-id's or a single user-id
      * @param array $groupInfo
-     * @param int $course_id
+     * @param int   $course_id
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @see subscribe_users. This function is almost an exact copy of that function.
+     *
      * @return bool TRUE if successful
      */
     public static function subscribe_tutors($user_ids, $groupInfo, $course_id = 0)
@@ -1683,9 +1755,11 @@ class GroupManager
     }
 
     /**
-     * Unsubscribe user(s) from a specified group in current course
-     * @param mixed $user_ids Can be an array with user-id's or a single user-id
+     * Unsubscribe user(s) from a specified group in current course.
+     *
+     * @param mixed $user_ids  Can be an array with user-id's or a single user-id
      * @param array $groupInfo
+     *
      * @return bool TRUE if successful
      */
     public static function unsubscribe_users($user_ids, $groupInfo)
@@ -1704,8 +1778,10 @@ class GroupManager
     }
 
     /**
-     * Unsubscribe all users from one or more groups
+     * Unsubscribe all users from one or more groups.
+     *
      * @param array $groupInfo
+     *
      * @return bool TRUE if successful
      */
     public static function unsubscribe_all_users($groupInfo)
@@ -1727,10 +1803,14 @@ class GroupManager
     }
 
     /**
-     * Unsubscribe all tutors from one or more groups
+     * Unsubscribe all tutors from one or more groups.
+     *
      * @param int $groupId iid
+     *
      * @see unsubscribe_all_users. This function is almost an exact copy of that function.
+     *
      * @return bool TRUE if successful
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      */
     public static function unsubscribe_all_tutors($groupId)
@@ -1747,18 +1827,24 @@ class GroupManager
             $sql = "DELETE FROM $table_group_tutor
                     WHERE group_id = $groupId AND c_id = $courseId";
             $result = Database::query($sql);
+
             return $result;
         }
+
         return true;
     }
 
     /**
      * Is the user a tutor of this group?
-     * @param int $user_id the id of the user
+     *
+     * @param int   $user_id   the id of the user
      * @param array $groupInfo
-     * @param int $courseId
-     * @return boolean true/false
+     * @param int   $courseId
+     *
+     * @return bool true/false
+     *
      * @todo use the function user_has_access that includes this function
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      */
     public static function is_tutor_of_group($user_id, $groupInfo, $courseId = 0)
@@ -1796,10 +1882,13 @@ class GroupManager
      * restricted to the people who are actually in the group
      * before you had to check if the user was
      * 1. a member of the group OR
-     * 2. a tutor of the group. This function combines both
-     * @param int $user_id the id of the user
+     * 2. a tutor of the group. This function combines both.
+     *
+     * @param int   $user_id   the id of the user
      * @param array $groupInfo
-     * @return boolean true/false
+     *
+     * @return bool true/false
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      */
     public static function is_user_in_group($user_id, $groupInfo)
@@ -1814,10 +1903,13 @@ class GroupManager
     }
 
     /**
-     * Get all group's from a given course in which a given user is unsubscribed
+     * Get all group's from a given course in which a given user is unsubscribed.
+     *
      * @author  Patrick Cool
-     * @param int  $course_id retrieve the groups for
-     * @param int $user_id the ID of the user you want to know all its group memberships
+     *
+     * @param int $course_id retrieve the groups for
+     * @param int $user_id   the ID of the user you want to know all its group memberships
+     *
      * @return array
      */
     public static function get_group_ids($course_id, $user_id)
@@ -1857,7 +1949,9 @@ class GroupManager
     /**
      * Remove all users that are not students and all users who have tutor status
      * from  the list.
+     *
      * @param array $user_array_in
+     *
      * @return array
      */
     public static function filter_only_students($user_array_in)
@@ -1874,17 +1968,20 @@ class GroupManager
                 }
             }
         }
+
         return $user_array_out;
     }
 
     /**
-     * Check if a user has access to a certain group tool
-     * @param int $user_id The user id
-     * @param int $group_id The group iid
-     * @param string $tool The tool to check the access rights. This should be
-     * one of constants: GROUP_TOOL_DOCUMENTS
-     * @return bool True if the given user has access to the given tool in the
-     * given course.
+     * Check if a user has access to a certain group tool.
+     *
+     * @param int    $user_id  The user id
+     * @param int    $group_id The group iid
+     * @param string $tool     The tool to check the access rights. This should be
+     *                         one of constants: GROUP_TOOL_DOCUMENTS
+     *
+     * @return bool true if the given user has access to the given tool in the
+     *              given course
      */
     public static function user_has_access($user_id, $group_id, $tool)
     {
@@ -1964,9 +2061,9 @@ class GroupManager
     }
 
     /**
-     * @param int $userId
+     * @param int   $userId
      * @param array $groupInfo
-     * @param int $sessionId
+     * @param int   $sessionId
      *
      * @return bool
      */
@@ -2013,10 +2110,11 @@ class GroupManager
         return false;
     }
 
-
     /**
-     * Get all groups where a specific user is subscribed
+     * Get all groups where a specific user is subscribed.
+     *
      * @param int $user_id
+     *
      * @return array
      */
     public static function get_user_group_name($user_id)
@@ -2038,12 +2136,15 @@ class GroupManager
         while ($group = Database::fetch_array($res)) {
             $groups[] .= $group['name'];
         }
+
         return $groups;
     }
 
     /**
-     * Get all groups where a specific user is subscribed
+     * Get all groups where a specific user is subscribed.
+     *
      * @param int $user_id
+     *
      * @return array
      */
     public static function getAllGroupPerUserSubscription($user_id)
@@ -2074,6 +2175,7 @@ class GroupManager
     /**
      * @param array $userList
      * @param array $groupInfo
+     *
      * @return mixed
      */
     public static function getNumberLeftFromGroupFromUserList($userList, $groupInfo)
@@ -2111,7 +2213,7 @@ class GroupManager
 
     /**
      * @param array $group_list
-     * @param int $category_id
+     * @param int   $category_id
      *
      * @return string
      */
@@ -2194,7 +2296,7 @@ class GroupManager
                                     $tutor['mail'],
                                     $tutor['complete_name_with_username']
                                 ),
-                                ['title'=>$username]
+                                ['title' => $username]
                             ).', ';
                         } else {
                             $tutor_info .= Display::tag(
@@ -2311,7 +2413,8 @@ class GroupManager
 
     /**
      * @param array $groupData
-     * @param bool $deleteNotInArray
+     * @param bool  $deleteNotInArray
+     *
      * @return array
      */
     public static function importCategoriesAndGroupsFromArray(
@@ -2321,7 +2424,7 @@ class GroupManager
         $result = [];
         $elementsFound = [
             'categories' => [],
-            'groups' => []
+            'groups' => [],
         ];
 
         $courseCode = api_get_course_id();
@@ -2330,6 +2433,7 @@ class GroupManager
 
         if (empty($groupCategories)) {
             $result['error'][] = get_lang('CreateACategory');
+
             return $result;
         }
 
@@ -2551,8 +2655,10 @@ class GroupManager
     /**
      * Export all categories/group from a course to an array.
      * This function works only in a context of a course.
-     * @param int $groupId
+     *
+     * @param int  $groupId
      * @param bool $loadUsers
+     *
      * @return array
      */
     public static function exportCategoriesAndGroupsToArray($groupId = null, $loadUsers = false)
@@ -2572,7 +2678,7 @@ class GroupManager
             'max_student',
             'self_reg_allowed',
             'self_unreg_allowed',
-            'groups_per_user'
+            'groups_per_user',
         ];
 
         $count = 1;
@@ -2600,7 +2706,7 @@ class GroupManager
                     $categoryInfo['max_student'],
                     $categoryInfo['self_reg_allowed'],
                     $categoryInfo['self_unreg_allowed'],
-                    $categoryInfo['groups_per_user']
+                    $categoryInfo['groups_per_user'],
                 ];
                 $count++;
             }
@@ -2654,7 +2760,7 @@ class GroupManager
                 $groupSettings['maximum_number_of_students'],
                 $groupSettings['self_registration_allowed'],
                 $groupSettings['self_unregistration_allowed'],
-                null
+                null,
             ];
 
             if ($loadUsers) {
@@ -2717,8 +2823,9 @@ class GroupManager
     }
 
     /**
-     * @param int $courseId
+     * @param int    $courseId
      * @param string $keyword
+     *
      * @return string
      */
     public static function getOverview($courseId, $keyword = null)
@@ -2790,7 +2897,8 @@ class GroupManager
     }
 
     /**
-     * Returns the search form
+     * Returns the search form.
+     *
      * @return string
      */
     public static function getSearchForm()
@@ -2806,6 +2914,7 @@ class GroupManager
         );
         $form->addElement('text', 'keyword');
         $form->addButtonSearch();
+
         return $form->toHtml();
     }
 
@@ -2821,7 +2930,7 @@ class GroupManager
         if (!empty($groupInfo)) {
             $table = Database::get_course_table(TABLE_GROUP);
             $params = [
-                'status' => intval($status)
+                'status' => intval($status),
             ];
             Database::update(
                 $table,

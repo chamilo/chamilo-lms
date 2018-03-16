@@ -19,6 +19,7 @@ class SearchCourseWidget
      *
      * @param string $key
      * @param object $default
+     *
      * @return string
      */
     public static function post($key, $default = '')
@@ -31,6 +32,7 @@ class SearchCourseWidget
      *
      * @param string $key
      * @param object $default
+     *
      * @return string
      */
     public static function get($key, $default = '')
@@ -49,7 +51,6 @@ class SearchCourseWidget
     }
 
     /**
-     *
      * @return bool
      */
     public function is_homepage()
@@ -68,7 +69,6 @@ class SearchCourseWidget
     }
 
     /**
-     *
      * @return bool
      */
     public function is_user_portal()
@@ -86,16 +86,13 @@ class SearchCourseWidget
         return $url == $index_url || $url == $root;
     }
 
-    /**
-     *
-     */
     public function accept()
     {
         return $this->is_homepage() || $this->is_user_portal();
     }
 
     /**
-     * Display the search course widget:
+     * Display the search course widget:.
      *
      * Title
      * Search form
@@ -130,6 +127,7 @@ class SearchCourseWidget
         echo '</div>';
 
         $this->display_footer();
+
         return $result;
     }
 
@@ -142,11 +140,12 @@ class SearchCourseWidget
         }
         $parameters = implode('&', $parameters);
         $parameters = $parameters ? '?'.$parameters : '';
+
         return $self.$parameters;
     }
 
     /**
-     * Handle the display action
+     * Handle the display action.
      */
     public function action_display()
     {
@@ -161,6 +160,7 @@ class SearchCourseWidget
             $courses = $this->retrieve_courses($search_term);
             $this->display_list($courses);
         }
+
         return true;
     }
 
@@ -200,8 +200,8 @@ EOT;
     }
 
     /**
-     *
      * @param array $courses
+     *
      * @return bool
      */
     public function display_list($courses)
@@ -247,11 +247,13 @@ EOT;
 
     /**
      * Displays the subscribe icon if subscribing is allowed and
-     * if the user is not yet subscribed to this course
+     * if the user is not yet subscribed to this course.
      *
      * @global type $stok
+     *
      * @param array $current_course
      * @param array $user_courses
+     *
      * @return bool
      */
     public function display_subscribe_icon($current_course, $user_courses)
@@ -262,12 +264,14 @@ EOT;
         $code = $current_course['code'];
         if (isset($user_courses[$code])) {
             echo self::get_lang('AlreadySubscribed');
+
             return false;
         }
 
         //Not authorized to subscribe
         if ($current_course['subscribe'] != SUBSCRIBE_ALLOWED) {
             echo self::get_lang('SubscribingNotAllowed');
+
             return false;
         }
 
@@ -291,11 +295,12 @@ EOT;
                 '.get_lang('Subscribe').'
                 </form>
         ';
+
         return true;
     }
 
     /**
-     * DB functions - DB functions - DB functions
+     * DB functions - DB functions - DB functions.
      */
 
     /**
@@ -303,6 +308,7 @@ EOT;
      * Search is done on the code, title and tutor fields.
      *
      * @param string $search_term
+     *
      * @return array
      */
     public function retrieve_courses($search_term)
@@ -338,7 +344,7 @@ EOT;
                 'title' => $row['title'],
                 'tutor' => $row['tutor_name'],
                 'subscribe' => $row['subscribe'],
-                'unsubscribe' => $row['unsubscribe']
+                'unsubscribe' => $row['unsubscribe'],
             ];
         }
 
@@ -346,9 +352,10 @@ EOT;
     }
 
     /**
-     * Retrieves courses that the user is subscribed to
+     * Retrieves courses that the user is subscribed to.
      *
      * @param int $user_id
+     *
      * @return array
      */
     public function retrieve_user_courses($user_id = null)
@@ -382,7 +389,7 @@ EOT;
                 'subscribe' => $row['subscr'],
                 'unsubscribe' => $row['unsubscr'],
                 'sort' => $row['sort'],
-                'user_course_category' => $row['user_course_cat']];
+                'user_course_category' => $row['user_course_cat'], ];
         }
 
         return $result;
@@ -396,7 +403,9 @@ EOT;
      * Removes from $courses all courses the user is subscribed to.
      *
      * @global array $_user
+     *
      * @param array $courses
+     *
      * @return array
      */
     public function filter_out_user_courses($courses)
@@ -412,6 +421,7 @@ EOT;
         foreach ($user_courses as $key => $value) {
             unset($courses[$key]);
         }
+
         return $courses;
     }
 }

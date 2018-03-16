@@ -4,12 +4,12 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class WebServiceSettingsSchema
+ * Class WebServiceSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class WebServiceSettingsSchema extends AbstractSettingsSchema
@@ -34,7 +34,7 @@ class WebServiceSettingsSchema extends AbstractSettingsSchema
             //'header_extra_content' => array('string'),
             //'footer_extra_content' => array('string'),
             'messaging_gdc_project_number' => ['string'],
-            'messaging_gdc_api_key' => ['string']
+            'messaging_gdc_api_key' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }

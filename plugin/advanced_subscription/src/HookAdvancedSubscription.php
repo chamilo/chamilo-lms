@@ -1,21 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Hook Observer for Advanced subscription plugin
+ * Hook Observer for Advanced subscription plugin.
+ *
  * @author Daniel Alejandro Barreto Alva <daniel.barreto@beeznest.com>
+ *
  * @package chamilo.plugin.advanced_subscription
  */
-
 require_once __DIR__.'/../config.php';
 
 /**
  * Class HookAdvancedSubscription extends the HookObserver to implements
- * specific behaviour when the AdvancedSubscription plugin is enabled
+ * specific behaviour when the AdvancedSubscription plugin is enabled.
  */
-class HookAdvancedSubscription extends HookObserver implements
-    HookAdminBlockObserverInterface,
-    HookWSRegistrationObserverInterface,
-    HookNotificationContentObserverInterface
+class HookAdvancedSubscription extends HookObserver implements HookAdminBlockObserverInterface, HookWSRegistrationObserverInterface, HookNotificationContentObserverInterface
 {
     public static $plugin;
 
@@ -33,6 +31,7 @@ class HookAdvancedSubscription extends HookObserver implements
 
     /**
      * @param HookAdminBlockEventInterface $hook
+     *
      * @return array
      */
     public function hookAdminBlock(HookAdminBlockEventInterface $hook)
@@ -52,8 +51,10 @@ class HookAdvancedSubscription extends HookObserver implements
     }
 
     /**
-     * Add Webservices to registration.soap.php
+     * Add Webservices to registration.soap.php.
+     *
      * @param HookWSRegistrationEventInterface $hook
+     *
      * @return mixed (int or false)
      */
     public function hookWSRegistration(HookWSRegistrationEventInterface $hook)
@@ -104,8 +105,8 @@ class HookAdvancedSubscription extends HookObserver implements
                 'SOAP-ENC:Array',
                 [],
                 [
-                    ['ref'=>'SOAP-ENC:arrayType',
-                        'wsdl:arrayType'=>'tns:sessionBrief[]']
+                    ['ref' => 'SOAP-ENC:arrayType',
+                        'wsdl:arrayType' => 'tns:sessionBrief[]', ],
                 ],
                 'tns:sessionBrief'
             );
@@ -121,7 +122,7 @@ class HookAdvancedSubscription extends HookObserver implements
                     'id' => ['name' => 'id', 'type' => 'xsd:string'], // session_category.id
                     'name' => ['name' => 'name', 'type' => 'xsd:string'], // session_category.name
                     'target' => ['name' => 'target', 'type' => 'xsd:string'], // session.target
-                    'secret_key'   => ['name' => 'secret_key', 'type' => 'xsd:string']
+                    'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
                 ]
             );
 
@@ -182,7 +183,7 @@ class HookAdvancedSubscription extends HookObserver implements
                 ]
             );
 
-            /** WSListSessionsDetailsByCategory **/
+            /** WSListSessionsDetailsByCategory */
 
             // Input params for WSListSessionsDetailsByCategory
             $server->wsdl->addComplexType(
@@ -222,7 +223,6 @@ class HookAdvancedSubscription extends HookObserver implements
                 ]
             );
 
-
             // Output array for sessionDetails WSListSessionsDetailsByCategory
             $server->wsdl->addComplexType(
                 'sessionDetailsCourseList',
@@ -235,7 +235,7 @@ class HookAdvancedSubscription extends HookObserver implements
                     [
                         'ref' => 'SOAP-ENC:arrayType',
                         'wsdl:arrayType' => 'tns:sessionDetailsCourse[]',
-                    ]
+                    ],
                 ],
                 'tns:sessionDetailsCourse'
             );
@@ -251,94 +251,94 @@ class HookAdvancedSubscription extends HookObserver implements
                     // session.id
                     'id' => [
                         'name' => 'id',
-                        'type' => 'xsd:int'
+                        'type' => 'xsd:int',
                     ],
                     // session.id_coach
                     'coach_id' => [
                         'name' => 'coach_id',
-                        'type' => 'xsd:int'
+                        'type' => 'xsd:int',
                     ],
                     // session.name
                     'name' => [
                         'name' => 'name',
-                        'type' => 'xsd:string'
+                        'type' => 'xsd:string',
                     ],
                     // session.nbr_courses
                     'courses_num' => [
                         'name' => 'courses_num',
-                        'type' => 'xsd:int'
+                        'type' => 'xsd:int',
                     ],
                     // session.nbr_users
                     'users_num' => [
                         'name' => 'users_num',
-                        'type' => 'xsd:int'
+                        'type' => 'xsd:int',
                     ],
                     // session.nbr_classes
                     'classes_num' => [
                         'name' => 'classes_num',
-                        'type' => 'xsd:int'
+                        'type' => 'xsd:int',
                     ],
                     // session.date_start
                     'date_start' => [
                         'name' => 'date_start',
-                        'type' => 'xsd:string'
+                        'type' => 'xsd:string',
                     ],
                     // session.date_end
                     'date_end' => [
                         'name' => 'date_end',
-                        'type' => 'xsd:string'
+                        'type' => 'xsd:string',
                     ],
                     // session.nb_days_access_before_beginning
                     'access_days_before_num' => [
                         'name' => 'access_days_before_num',
-                        'type' => 'xsd:int'
+                        'type' => 'xsd:int',
                     ],
                     // session.nb_days_access_after_end
                     'access_days_after_num' => [
                         'name' => 'access_days_after_num',
-                        'type' => 'xsd:int'
+                        'type' => 'xsd:int',
                     ],
                     // session.session_admin_id
                     'session_admin_id' => [
                         'name' => 'session_admin_id',
-                        'type' => 'xsd:int'
+                        'type' => 'xsd:int',
                     ],
                     // session.visibility
                     'visibility' => [
                         'name' => 'visibility',
-                        'type' => 'xsd:int'
+                        'type' => 'xsd:int',
                     ],
                     // session.session_category_id
                     'session_category_id' => [
                         'name' => 'session_category_id',
-                        'type' => 'xsd:int'
+                        'type' => 'xsd:int',
                     ],
                     // session.promotion_id
                     'promotion_id' => [
                         'name' => 'promotion_id',
-                        'type' => 'xsd:int'
+                        'type' => 'xsd:int',
                     ],
                     // session.number of registered users validated
                     'validated_user_num' => [
                         'name' => 'validated_user_num',
-                        'type' => 'xsd:int'
+                        'type' => 'xsd:int',
                     ],
                     // session.number of registered users from waiting queue
                     'waiting_user_num' => [
                         'name' => 'waiting_user_num',
-                        'type' => 'xsd:int'
+                        'type' => 'xsd:int',
                     ],
                     // extra fields
                     // Array(field_name, field_value)
                     'extra' => [
                         'name' => 'extra',
-                        'type' => 'tns:extrasList'
+                        'type' => 'tns:extrasList',
                     ],
                     // course and coaches data
                     // Array(course_id, course_code, course_title, coach_username, coach_firstname, coach_lastname)
                     'course' => [
                         'name' => 'courses',
-                        'type' => 'tns:sessionDetailsCourseList'
+                        'type' => 'tns:sessionDetailsCourseList',
                     ],
                 ]
             );
@@ -355,7 +355,7 @@ class HookAdvancedSubscription extends HookObserver implements
                     [
                         'ref' => 'SOAP-ENC:arrayType',
                         'wsdl:arrayType' => 'tns:sessionDetails[]',
-                    ]
+                    ],
                 ],
                 'tns:sessionDetails'
             );
@@ -404,6 +404,7 @@ class HookAdvancedSubscription extends HookObserver implements
 
     /**
      * @param $params
+     *
      * @return null|soap_fault
      */
     public static function WSSessionListInCategory($params)
@@ -454,6 +455,7 @@ class HookAdvancedSubscription extends HookObserver implements
 
     /**
      * @param $params
+     *
      * @return null|soap_fault
      */
     public static function WSSessionGetDetailsByUser($params)
@@ -552,8 +554,10 @@ class HookAdvancedSubscription extends HookObserver implements
      * used when have the plugin for advance incsription enables.
      * The extra data (field_name, field_value)
      * The course data (course_id, course_code, course_title,
-     * coach_username, coach_firstname, coach_lastname)
+     * coach_username, coach_firstname, coach_lastname).
+     *
      * @param array $params List of parameters (id, category_name, access_url_id, secret_key)
+     *
      * @return array|soap_fault Sessions list (id=>[title=>'title',url='http://...',date_start=>'...',date_end=>''])
      */
     public static function WSListSessionsDetailsByCategory($params)
@@ -602,8 +606,7 @@ class HookAdvancedSubscription extends HookObserver implements
             $session['validated_user_num'] = self::$plugin->countQueueByParams(
                 [
                     'sessions' => [$session['id']],
-                    'status' => [ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED]
-
+                    'status' => [ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED],
                 ]
             );
             $session['waiting_user_num'] = self::$plugin->countQueueByParams(
@@ -621,8 +624,10 @@ class HookAdvancedSubscription extends HookObserver implements
     }
 
     /**
-     * Return notification content when the hook has been triggered
+     * Return notification content when the hook has been triggered.
+     *
      * @param HookNotificationContentEventInterface $hook
+     *
      * @return mixed (int or false)
      */
     public function hookNotificationContent(HookNotificationContentEventInterface $hook)
@@ -655,8 +660,10 @@ class HookAdvancedSubscription extends HookObserver implements
     }
 
     /**
-     * Return the notification data title if the hook was triggered
+     * Return the notification data title if the hook was triggered.
+     *
      * @param HookNotificationTitleEventInterface $hook
+     *
      * @return array|bool
      */
     public function hookNotificationTitle(HookNotificationTitleEventInterface $hook)

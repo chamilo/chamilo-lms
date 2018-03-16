@@ -3,9 +3,10 @@
 /**
  * This script provides the caller service with user details.
  * It is set to work with the Chamilo module for Drupal:
- * http://drupal.org/project/chamilo
+ * http://drupal.org/project/chamilo.
  *
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
+ *
  * @package chamilo.webservices
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -72,8 +73,10 @@ $server->register(
  * Get a list of courses (code, url, title, teacher, language) for a specific
  * user and return to caller
  * Function registered as service. Returns strings in UTF-8.
+ *
  * @param string User name in Chamilo
  * @param string Signature (composed of the sha1(username+apikey)
+ *
  * @return array Courses list (code=>[title=>'title',url='http://...',teacher=>'...',language=>''],code=>[...],...)
  */
 function WSCourseListOfUser($username, $signature)
@@ -176,10 +179,12 @@ $server->register(
 /**
  * Get a list of events between two dates for the given username
  * Function registered as service. Returns strings in UTF-8.
+ *
  * @param string Username
  * @param string User's API key (the user's API key)
  * @param int    Start date, in YYYYMMDD format
  * @param int    End date, in YYYYMMDD format
+ *
  * @return array Events list
  */
 function WSEventsList($username, $signature, $datestart = 0, $dateend = 0)
@@ -214,6 +219,7 @@ function WSEventsList($username, $signature, $datestart = 0, $dateend = 0)
         $ds,
         $de
     );
+
     return $events_list;
 }
 

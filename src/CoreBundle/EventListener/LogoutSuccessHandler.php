@@ -3,17 +3,16 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
-use Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
-use Symfony\Component\Routing\Router;
 use Database;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface;
 
 /**
- * Class LogoutSuccessHandler
+ * Class LogoutSuccessHandler.
  */
 class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
 {
@@ -23,8 +22,8 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
 
     /**
      * @param UrlGeneratorInterface $urlGenerator
-     * @param AuthorizationChecker $checker
-     * @param Storage $storage
+     * @param AuthorizationChecker  $checker
+     * @param Storage               $storage
      */
     public function __construct(
         UrlGeneratorInterface $urlGenerator,
@@ -38,6 +37,7 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
 
     /**
      * @param Request $request
+     *
      * @return null|RedirectResponse
      */
     public function onLogoutSuccess(Request $request)
@@ -62,7 +62,7 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
                 LIMIT 0,1";
         $row = Database::query($sql);
         $loginId = null;
-        if (Database::num_rows($row)>0) {
+        if (Database::num_rows($row) > 0) {
             $loginId = Database::result($row, 0, "login_id");
         }
 
@@ -77,7 +77,7 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
 
         $online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 
-        $query = "DELETE FROM " . $online_table . " WHERE login_user_id = $userId";
+        $query = "DELETE FROM ".$online_table." WHERE login_user_id = $userId";
         Database::query($query);
 
         /*require_once api_get_path(SYS_PATH) . 'main/chat/chat_functions.lib.php';

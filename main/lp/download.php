@@ -5,9 +5,9 @@ use ChamiloSession as Session;
 
 /**
  * This file is responsible for  passing requested documents to the browser.
+ *
  * @package chamilo.document
  */
-
 session_cache_limiter('none');
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;

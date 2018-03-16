@@ -1,18 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-use Chamilo\Kernel;
-use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Dotenv\Dotenv;
 use Chamilo\CoreBundle\Framework\Container;
-use Symfony\Component\Translation\Translator;
+use Chamilo\Kernel;
+use ChamiloSession as Session;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Translation\Loader\PoFileLoader;
+use Symfony\Component\Translation\Translator;
 
 /**
- * Chamilo installation
+ * Chamilo installation.
  *
  * As seen from the user, the installation proceeds in 6 steps.
  * The user is presented with several pages where he/she has to make choices
@@ -22,9 +22,9 @@ use Symfony\Component\Translation\Loader\PoFileLoader;
  *
  * @todo reduce high level of duplication in this code
  * @todo (busy) organise code into functions
+ *
  * @package chamilo.install
  */
-
 ini_set('display_errors', '1');
 ini_set('log_errors', '1');
 //ini_set('memory_limit', -1);
@@ -101,7 +101,7 @@ $_setting = [
     'server_type' => 'production', // 'production' | 'test'
     'permissions_for_new_directories' => '0770',
     'permissions_for_new_files' => '0660',
-    'stylesheets' => 'chamilo'
+    'stylesheets' => 'chamilo',
 ];
 
 $encryptPassForm = 'bcrypt';
@@ -371,10 +371,10 @@ if ($encryptPassForm == '1') {
             $(".advanced_parameters").click(function() {
                 if ($("#id_contact_form").css("display") == "none") {
                     $("#id_contact_form").css("display","block");
-                    $("#img_plus_and_minus").html('&nbsp;<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;<?php echo get_lang('ContactInformation') ?>');
+                    $("#img_plus_and_minus").html('&nbsp;<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;<?php echo get_lang('ContactInformation'); ?>');
                 } else {
                     $("#id_contact_form").css("display","none");
-                    $("#img_plus_and_minus").html('&nbsp;<i class="fa fa-eye-slash" aria-hidden="true"></i>&nbsp;<?php echo get_lang('ContactInformation') ?>');
+                    $("#img_plus_and_minus").html('&nbsp;<i class="fa fa-eye-slash" aria-hidden="true"></i>&nbsp;<?php echo get_lang('ContactInformation'); ?>');
                 }
             });
         });
@@ -399,18 +399,18 @@ if ($encryptPassForm == '1') {
                     contentType: "application/x-www-form-urlencoded",
                     beforeSend: function(objeto) {},
                     type: "POST",
-                    url: "<?php echo api_get_path(WEB_AJAX_PATH) ?>install.ajax.php?a=send_contact_information",
+                    url: "<?php echo api_get_path(WEB_AJAX_PATH); ?>install.ajax.php?a=send_contact_information",
                     beforeSend : function() {
                         $('#loader-button').append('  <em class="fa fa-spinner fa-pulse fa-fw"></em>');
                     },
                     data: data_post,
                     success: function(datos) {
                         if (datos == 'required_field_error') {
-                            message = "<?php echo get_lang('FormHasErrorsPleaseComplete') ?>";
+                            message = "<?php echo get_lang('FormHasErrorsPleaseComplete'); ?>";
                         } else if (datos == '1') {
-                            message = "<?php echo get_lang('ContactInformationHasBeenSent') ?>";
+                            message = "<?php echo get_lang('ContactInformationHasBeenSent'); ?>";
                         } else {
-                            message = "<?php echo get_lang('Error').': '.get_lang('ContactInformationHasNotBeenSent') ?>";
+                            message = "<?php echo get_lang('Error').': '.get_lang('ContactInformationHasNotBeenSent'); ?>";
                         }
                         alert(message);
                         $('#license-next').trigger('click');
@@ -503,7 +503,6 @@ if (@$_POST['step2']) {
         $installationProfile
     );
 } elseif (@$_POST['step4']) {
-
     //STEP 5 : CONFIGURATION SETTINGS
     //if update, try getting settings from the database...
     if ($installType == 'update') {
@@ -643,14 +642,14 @@ if (@$_POST['step2']) {
     } ?>
 
     <div id="pnl-check-crs-tables" class="alert alert-warning hide">
-        <p><?php echo get_lang('CRSTablesIntro') ?></p>
+        <p><?php echo get_lang('CRSTablesIntro'); ?></p>
         <p>
-            <button type="button" class="btn btn-warning btn-xs" id="btn-remove-crs-table" data-removing-text="<?php echo get_lang('Removing') ?>" autocomplete="off">
+            <button type="button" class="btn btn-warning btn-xs" id="btn-remove-crs-table" data-removing-text="<?php echo get_lang('Removing'); ?>" autocomplete="off">
                 <span class="fa-stack" aria-hidden="true">
                     <span class="fa fa-circle-thin fa-stack-2x"></span>
                     <span class="fa fa-trash-o fa-stack-1x"></span>
                 </span>
-                <?php echo get_lang('CheckForCRSTables') ?>
+                <?php echo get_lang('CheckForCRSTables'); ?>
             </button>
         </p>
     </div>
@@ -661,9 +660,9 @@ if (@$_POST['step2']) {
                 db_host: '<?php echo $dbHostForm; ?>',
                 db_username: '<?php echo $dbUsernameForm; ?>',
                 db_pass: '<?php echo $dbPassForm; ?>',
-                db_name: '<?php echo $dbNameForm ?>',
+                db_name: '<?php echo $dbNameForm; ?>',
                 db_port: '<?php echo $dbPortForm; ?>',
-                install_type: '<?php echo $installType ?>'
+                install_type: '<?php echo $installType; ?>'
             }, function (response) {
                 if (!parseInt(response)) {
                     return;
@@ -673,7 +672,7 @@ if (@$_POST['step2']) {
                 $('#btn-remove-crs-table').on('click', function (e) {
                     e.preventDefault();
 
-                    var sure = confirm('<?php echo get_lang('AreYouSureToDelete') ?>');
+                    var sure = confirm('<?php echo get_lang('AreYouSureToDelete'); ?>');
 
                     if (!sure) {
                         return;
@@ -684,12 +683,12 @@ if (@$_POST['step2']) {
 
                     $btnNext.prop('disabled', true);
 
-                    $.post('<?php echo api_get_path(WEB_CODE_PATH) ?>install/ajax.php', {
+                    $.post('<?php echo api_get_path(WEB_CODE_PATH); ?>install/ajax.php', {
                         a: 'remove_crs_tables',
                         db_host: '<?php echo $dbHostForm; ?>',
                         db_username: '<?php echo $dbUsernameForm; ?>',
                         db_pass: '<?php echo $dbPassForm; ?>',
-                        db_name: '<?php echo $dbNameForm ?>',
+                        db_name: '<?php echo $dbNameForm; ?>',
                         db_port: '<?php echo $dbPortForm; ?>'
                     }, function () {
                         $btnRemove.remove();
@@ -794,7 +793,7 @@ if (@$_POST['step2']) {
                 '{{DATABASE_USER}}' => $dbUsernameForm,
                 '{{DATABASE_PASSWORD}}' => $dbPassForm,
                 '{{APP_INSTALLED}}' => 1,
-                '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm
+                '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm,
             ];
 
             updateEnvFile($distFile, $envFile, $params);

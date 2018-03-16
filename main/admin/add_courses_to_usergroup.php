@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*   @package chamilo.admin
-*/
+ *   @package chamilo.admin
+ */
 
 // Resetting the course id.
 $cidReset = true;
@@ -68,12 +68,12 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 // Filters
 $filters = [
     ['type' => 'text', 'name' => 'code', 'label' => get_lang('CourseCode')],
-    ['type' => 'text', 'name' => 'title', 'label' => get_lang('Title')]
+    ['type' => 'text', 'name' => 'title', 'label' => get_lang('Title')],
 ];
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?id='.$id);
 $searchForm->addHeader(get_lang('AdvancedSearch'));
-$renderer = & $searchForm->defaultRenderer();
+$renderer = &$searchForm->defaultRenderer();
 $searchForm->addElement('hidden', 'id', $id);
 foreach ($filters as $param) {
     $searchForm->addElement($param['type'], $param['name'], $param['label']);
@@ -157,6 +157,7 @@ function search($needle, $type)
             $xajax_response->addAssign('ajax_list_multiple', 'innerHTML', api_utf8_encode($return));
         }
     }
+
     return $xajax_response;
 }
 
@@ -199,10 +200,10 @@ if (!empty($errorMsg)) {
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>
-  <td align="center"><b><?php echo get_lang('CoursesInPlatform') ?> :</b>
+  <td align="center"><b><?php echo get_lang('CoursesInPlatform'); ?> :</b>
   </td>
   <td></td>
-  <td align="center"><b><?php echo get_lang('CoursesInGroup') ?> :</b></td>
+  <td align="center"><b><?php echo get_lang('CoursesInGroup'); ?> :</b></td>
 </tr>
 
 <?php if ($add_type == 'multiple') {

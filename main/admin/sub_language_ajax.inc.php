@@ -1,10 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraField;
 
 /**
- * Sub language AJAX script to update variables
+ * Sub language AJAX script to update variables.
+ *
  * @package chamilo.admin.sub_language
  */
 $this_script = 'sub_language';

@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php
+ * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php.
  *
  * @author Patrick Cool
  * @author Denes Nagy
@@ -12,7 +12,6 @@
  *
  * @package chamilo.learnpath
  */
-
 $this_section = SECTION_COURSES;
 api_protect_course_script();
 
@@ -57,13 +56,13 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
+        'name' => get_lang('ToolGradebook'),
     ];
 }
 
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list',
-    'name' => get_lang('LearningPaths')
+    'name' => get_lang('LearningPaths'),
 ];
 
 Display::display_header(get_lang('LearnpathAddLearnpath'), 'Path');
@@ -155,12 +154,12 @@ Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, 0);
 
 $form->addElement('html', '</div>');
 
-$defaults['activate_start_date_check']  = 1;
+$defaults['activate_start_date_check'] = 1;
 
 if (api_get_setting('scorm_cumulative_session_time') == 'true') {
-    $defaults['accumulate_scorm_time']  = 1;
+    $defaults['accumulate_scorm_time'] = 1;
 } else {
-    $defaults['accumulate_scorm_time']  = 0;
+    $defaults['accumulate_scorm_time'] = 0;
 }
 
 $defaults['publicated_on'] = date('Y-m-d 08:00:00');

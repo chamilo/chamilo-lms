@@ -6,7 +6,7 @@ use ChamiloSession as Session;
 /**
  * This file contains the necessary elements to implement a Single Sign On
  * mechanism with an external Drupal application (on which the Chamilo module
- * 7.x-1.0-alpha3 or above must be implemented)
+ * 7.x-1.0-alpha3 or above must be implemented).
  *
  * To use this class, set variable "sso_authentication_subclass" to "Drupal"
  * in Chamilo settings.  If not yet available in the "Security" tab, execute the
@@ -18,7 +18,7 @@ use ChamiloSession as Session;
  */
 
 /**
- * The SSO class allows for management of remote Single Sign On resources
+ * The SSO class allows for management of remote Single Sign On resources.
  */
 class ssoDrupal
 {
@@ -29,27 +29,27 @@ class ssoDrupal
     public $referer; // http://my.chamilo.com/main/auth/profile.php
 
     /**
-     * Instanciates the object, initializing all relevant URL strings
+     * Instanciates the object, initializing all relevant URL strings.
      */
     public function __construct()
     {
-        $this->protocol   = api_get_setting('sso_authentication_protocol');
+        $this->protocol = api_get_setting('sso_authentication_protocol');
         // There can be multiple domains, so make sure to take only the first
         // This might be later extended with a decision process
-        $domains          = preg_split('/,/', api_get_setting('sso_authentication_domain'));
-        $this->domain     = trim($domains[0]);
-        $this->auth_uri   = api_get_setting('sso_authentication_auth_uri');
+        $domains = preg_split('/,/', api_get_setting('sso_authentication_domain'));
+        $this->domain = trim($domains[0]);
+        $this->auth_uri = api_get_setting('sso_authentication_auth_uri');
         $this->deauth_uri = api_get_setting('sso_authentication_unauth_uri');
         //cut the string to avoid recursive URL construction in case of failure
-        $this->referer    = $this->protocol.$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], 'sso'));
+        $this->referer = $this->protocol.$_SERVER['HTTP_HOST'].substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], 'sso'));
         $this->deauth_url = $this->protocol.$this->domain.$this->deauth_uri;
         $this->master_url = $this->protocol.$this->domain.$this->auth_uri;
         $this->referrer_uri = base64_encode($_SERVER['REQUEST_URI']);
-        $this->target     = api_get_path(WEB_PATH);
+        $this->target = api_get_path(WEB_PATH);
     }
 
     /**
-     * Unlogs the user from the remote server
+     * Unlogs the user from the remote server.
      */
     public function logout()
     {
@@ -65,7 +65,7 @@ class ssoDrupal
     }
 
     /**
-     * Sends the user to the master URL for a check of active connection
+     * Sends the user to the master URL for a check of active connection.
      */
     public function ask_master()
     {
@@ -89,8 +89,9 @@ class ssoDrupal
     }
 
     /**
-     * Validates the received active connection data with the database
-     * @return	null|false	Return the loginFailed variable value to local.inc.php
+     * Validates the received active connection data with the database.
+     *
+     * @return null|false Return the loginFailed variable value to local.inc.php
      */
     public function check_user()
     {
@@ -120,12 +121,10 @@ class ssoDrupal
             if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
                 if ($sso['secret'] === sha1($uData['username'].$sso_challenge.api_get_security_key())
                     && ($sso['username'] == $uData['username'])) {
-
                     //Check if the account is active (not locked)
                     if ($uData['active'] == '1') {
                         // check if the expiration date has not been reached
                         if (empty($uData['expiration_date']) or $uData['expiration_date'] > date('Y-m-d H:i:s') or $uData['expiration_date'] == '0000-00-00 00:00:00') {
-
                             //If Multiple URL is enabled
                             if (api_get_multiple_access_url()) {
                                 //Check the access_url configuration setting if the user is registered in the access_url_rel_user table
@@ -241,24 +240,16 @@ class ssoDrupal
             header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_not_found');
             exit;
         }
+
         return $loginFailed;
     }
 
     /**
-     * Decode the cookie (this function may vary depending on the
-     * Single Sign On implementation
-     * @param	string	Encoded cookie
-     * @return  array   Parsed and unencoded cookie
-     */
-    private function decode_cookie($cookie)
-    {
-        return unserialize(base64_decode($cookie));
-    }
-
-    /**
-     * Generate the URL for profile editing for a any user or the current user
-     * @param int $userId Optional. The user id
-     * @param boolean $asAdmin Optional. Whether get the URL for the platform admin
+     * Generate the URL for profile editing for a any user or the current user.
+     *
+     * @param int  $userId  Optional. The user id
+     * @param bool $asAdmin Optional. Whether get the URL for the platform admin
+     *
      * @return string If the URL is obtained return the drupal_user_id. Otherwise return false
      */
     public function generateProfileEditingURL($userId = 0, $asAdmin = false)
@@ -288,6 +279,20 @@ class ssoDrupal
         // In all other cases, generate a link to the Drupal profile edition
         $drupalUserId = $drupalUserIdData['value'];
         $url = "{$this->protocol}{$this->domain}/user/{$drupalUserId}/edit";
+
         return $url;
+    }
+
+    /**
+     * Decode the cookie (this function may vary depending on the
+     * Single Sign On implementation.
+     *
+     * @param	string	Encoded cookie
+     *
+     * @return array Parsed and unencoded cookie
+     */
+    private function decode_cookie($cookie)
+    {
+        return unserialize(base64_decode($cookie));
     }
 }

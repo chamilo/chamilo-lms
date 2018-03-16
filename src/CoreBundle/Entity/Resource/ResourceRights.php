@@ -3,12 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
-use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Chamilo\UserBundle\Entity\User;
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
 
 /**
  * @ORM\Entity
@@ -61,6 +56,7 @@ class ResourceRights
 
     /**
      * @param string $mask
+     *
      * @return $this
      */
     public function setMask($mask)
@@ -80,6 +76,7 @@ class ResourceRights
 
     /**
      * @param mixed $resourceLink
+     *
      * @return $this
      */
     public function setResourceLink($resourceLink)
@@ -99,6 +96,7 @@ class ResourceRights
 
     /**
      * @param string $role
+     *
      * @return $this
      */
     public function setRole($role)

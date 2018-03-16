@@ -9,7 +9,8 @@ use Doctrine\ORM\Query\Expr\Join;
  * Class Auth
  * Auth can be used to instantiate objects or as a library to manage courses
  * This file contains a class used like library provides functions for auth tool.
- * It's also used like model to courses_controller (MVC pattern)
+ * It's also used like model to courses_controller (MVC pattern).
+ *
  * @author Christian Fasanando <christian1827@gmail.com>
  *
  * @package chamilo.auth
@@ -17,16 +18,18 @@ use Doctrine\ORM\Query\Expr\Join;
 class Auth
 {
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
     }
 
     /**
-     * retrieves all the courses that the user has already subscribed to
-     * @param   int $user_id
-     * @return  array an array containing all the information of the courses of the given user
+     * retrieves all the courses that the user has already subscribed to.
+     *
+     * @param int $user_id
+     *
+     * @return array an array containing all the information of the courses of the given user
      */
     public function get_courses_of_user($user_id)
     {
@@ -77,7 +80,7 @@ class Auth
                 WHERE
                     course.id = course_rel_user.c_id AND
                     course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
-                    course_rel_user.user_id = '" . $user_id."' $without_special_courses
+                    course_rel_user.user_id = '".$user_id."' $without_special_courses
                 ORDER BY course_rel_user.sort ASC";
         $result = Database::query($sql);
         $courses = [];
@@ -94,7 +97,7 @@ class Auth
                 'category' => $row['cat'],
                 'unsubscribe' => $row['unsubscr'],
                 'sort' => $row['sort'],
-                'user_course_category' => $row['user_course_cat']
+                'user_course_category' => $row['user_course_cat'],
             ];
         }
 
@@ -102,7 +105,8 @@ class Auth
     }
 
     /**
-     * retrieves the user defined course categories
+     * retrieves the user defined course categories.
+     *
      * @return array containing all the IDs of the user defined courses categories, sorted by the "sort" field
      */
     public function get_user_course_categories()
@@ -111,7 +115,8 @@ class Auth
     }
 
     /**
-     * This function get all the courses in the particular user category;
+     * This function get all the courses in the particular user category;.
+     *
      * @return string The name of the user defined course category
      */
     public function get_courses_in_category()
@@ -157,7 +162,7 @@ class Auth
                 WHERE
                     course.id = course_rel_user.c_id AND
                     course_rel_user.user_id = '".$user_id."' AND
-                    course_rel_user.relation_type <> " . COURSE_RELATION_TYPE_RRHH."
+                    course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
                     $without_special_courses
                 ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
         $result = Database::query($sql);
@@ -171,10 +176,12 @@ class Auth
 
     /**
      * stores  the changes in a course category
-     * (moving a course to a different course category)
-     * @param  int    $courseId
+     * (moving a course to a different course category).
+     *
+     * @param int $courseId
      * @param  int       Category id
-     * @return bool      True if it success
+     *
+     * @return bool True if it success
      */
     public function updateCourseCategory($courseId, $newcategory)
     {
@@ -186,11 +193,11 @@ class Auth
         $max_sort_value = api_max_sort_value($newcategory, $current_user);
         $sql = "UPDATE $table SET
                     user_course_cat='".$newcategory."',
-                    sort='" . ($max_sort_value + 1)."'
+                    sort='".($max_sort_value + 1)."'
                 WHERE
-                    c_id ='" . $courseId."' AND
-                    user_id='" . $current_user."' AND
-                    relation_type<>" . COURSE_RELATION_TYPE_RRHH;
+                    c_id ='".$courseId."' AND
+                    user_id='".$current_user."' AND
+                    relation_type<>".COURSE_RELATION_TYPE_RRHH;
         $resultQuery = Database::query($sql);
 
         $result = false;
@@ -202,11 +209,13 @@ class Auth
     }
 
     /**
-     * moves the course one place up or down
+     * moves the course one place up or down.
+     *
      * @param   string    Direction (up/down)
      * @param   string    Course code
      * @param   int       Category id
-     * @return  bool      True if it success
+     *
+     * @return bool True if it success
      */
     public function move_course($direction, $course2move, $category)
     {
@@ -250,17 +259,17 @@ class Auth
             $sql = "UPDATE $table
                     SET sort='".$target_course['sort']."'
                     WHERE
-                        c_id = '" . $courseId."' AND
-                        user_id = '" . $current_user_id."' AND
-                        relation_type<>" . COURSE_RELATION_TYPE_RRHH;
+                        c_id = '".$courseId."' AND
+                        user_id = '".$current_user_id."' AND
+                        relation_type<>".COURSE_RELATION_TYPE_RRHH;
 
             $result1 = Database::query($sql);
 
             $sql = "UPDATE $table SET sort='".$source_course['sort']."'
                     WHERE
-                        c_id ='" . $targetCourseId."' AND
-                        user_id='" . $current_user_id."' AND
-                        relation_type<>" . COURSE_RELATION_TYPE_RRHH;
+                        c_id ='".$targetCourseId."' AND
+                        user_id='".$current_user_id."' AND
+                        relation_type<>".COURSE_RELATION_TYPE_RRHH;
 
             $result2 = Database::query($sql);
 
@@ -273,10 +282,12 @@ class Auth
     }
 
     /**
-     * Moves the course one place up or down
-     * @param string    $direction Direction up/down
-     * @param string    $category2move Category id
-     * @return bool     True If it success
+     * Moves the course one place up or down.
+     *
+     * @param string $direction     Direction up/down
+     * @param string $category2move Category id
+     *
+     * @return bool True If it success
      */
     public function move_category($direction, $category2move)
     {
@@ -309,11 +320,11 @@ class Auth
             $table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
             $sql = "UPDATE $table SET 
                     sort = '".Database::escape_string($target_category['sort'])."'
-                    WHERE id='" . intval($source_category['id'])."' AND user_id='".$userId."'";
+                    WHERE id='".intval($source_category['id'])."' AND user_id='".$userId."'";
             $resultFirst = Database::query($sql);
             $sql = "UPDATE $table SET 
                     sort = '".Database::escape_string($source_category['sort'])."'
-                    WHERE id='" . intval($target_category['id'])."' AND user_id='".$userId."'";
+                    WHERE id='".intval($target_category['id'])."' AND user_id='".$userId."'";
             $resultSecond = Database::query($sql);
             if (Database::affected_rows($resultFirst) && Database::affected_rows($resultSecond)) {
                 $result = true;
@@ -324,10 +335,12 @@ class Auth
     }
 
     /**
-     * Updates the user course category in the chamilo_user database
+     * Updates the user course category in the chamilo_user database.
+     *
      * @param   string  Category title
      * @param   int     Category id
-     * @return  bool    True if it success
+     *
+     * @return bool True if it success
      */
     public function store_edit_course_category($title, $category_id)
     {
@@ -338,18 +351,21 @@ class Auth
         $tucc = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "UPDATE $tucc
                 SET title='".api_htmlentities($title, ENT_QUOTES, api_get_system_encoding())."'
-                WHERE id='" . $category_id."'";
+                WHERE id='".$category_id."'";
         $resultQuery = Database::query($sql);
         if (Database::affected_rows($resultQuery)) {
             $result = true;
         }
+
         return $result;
     }
 
     /**
-     * deletes a course category and moves all the courses that were in this category to main category
+     * deletes a course category and moves all the courses that were in this category to main category.
+     *
      * @param   int     Category id
-     * @return  bool    True if it success
+     *
+     * @return bool True if it success
      */
     public function delete_course_category($category_id)
     {
@@ -361,7 +377,7 @@ class Auth
         $sql = "DELETE FROM $tucc
                 WHERE 
                     id='".$category_id."' AND 
-                    user_id='" . $current_user_id."'";
+                    user_id='".$current_user_id."'";
         $resultQuery = Database::query($sql);
         if (Database::affected_rows($resultQuery)) {
             $result = true;
@@ -370,8 +386,8 @@ class Auth
                 SET user_course_cat='0'
                 WHERE
                     user_course_cat='".$category_id."' AND
-                    user_id='" . $current_user_id."' AND
-                    relation_type<>" . COURSE_RELATION_TYPE_RRHH." ";
+                    user_id='".$current_user_id."' AND
+                    relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
         Database::query($sql);
 
         return $result;
@@ -380,10 +396,12 @@ class Auth
     /**
      * Search the courses database for a course that matches the search term.
      * The search is done on the code, title and tutor field of the course table.
+     *
      * @param string $search_term The string that the user submitted, what we are looking for
-     * @param array $limit
-     * @param boolean $justVisible search only on visible courses in the catalogue
-     * @return array An array containing a list of all the courses matching the the search term.
+     * @param array  $limit
+     * @param bool   $justVisible search only on visible courses in the catalogue
+     *
+     * @return array an array containing a list of all the courses matching the the search term
      */
     public function search_courses($search_term, $limit, $justVisible = false)
     {
@@ -419,8 +437,8 @@ class Auth
         $sql_find = "SELECT * FROM $courseTable
                     WHERE (
                             code LIKE '%".$search_term_safe."%' OR
-                            title LIKE '%" . $search_term_safe."%' OR
-                            tutor_name LIKE '%" . $search_term_safe."%'
+                            title LIKE '%".$search_term_safe."%' OR
+                            tutor_name LIKE '%".$search_term_safe."%'
                         )
                         $without_special_courses
                         $visibilityCondition
@@ -439,8 +457,8 @@ class Auth
                             WHERE
                                 access_url_id = $url_access_id AND (
                                     code LIKE '%".$search_term_safe."%' OR
-                                    title LIKE '%" . $search_term_safe."%' OR
-                                    tutor_name LIKE '%" . $search_term_safe."%'
+                                    title LIKE '%".$search_term_safe."%' OR
+                                    tutor_name LIKE '%".$search_term_safe."%'
                                 )
                                 $without_special_courses
                                 $visibilityCondition
@@ -476,16 +494,19 @@ class Auth
                 'creation_date' => $row['creation_date'],
                 'visibility' => $row['visibility'],
                 'count_users' => $count_users,
-                'count_connections' => $count_connections_last_month
+                'count_connections' => $count_connections_last_month,
             ];
         }
+
         return $courses;
     }
 
     /**
-     * unsubscribe the user from a given course
-     * @param   string  $course_code
-     * @return  bool    True if it success
+     * unsubscribe the user from a given course.
+     *
+     * @param string $course_code
+     *
+     * @return bool True if it success
      */
     public function remove_user_from_course($course_code)
     {
@@ -505,7 +526,7 @@ class Auth
         $sql = "SELECT * FROM $tbl_course_user
                 WHERE
                     user_id='".$current_user_id."' AND
-                    c_id ='" . $courseId."' AND
+                    c_id ='".$courseId."' AND
                     status='1' ";
         $result_check = Database::query($sql);
         $number_of_rows = Database::num_rows($result_check);
@@ -519,9 +540,11 @@ class Auth
     }
 
     /**
-     * stores the user course category in the chamilo_user database
+     * stores the user course category in the chamilo_user database.
+     *
      * @param   string  Category title
-     * @return  bool    True if it success
+     *
+     * @return bool True if it success
      */
     public function store_course_category($category_title)
     {
@@ -545,7 +568,7 @@ class Auth
         $sql = "SELECT * FROM $table 
                 WHERE 
                     user_id='".$current_user_id."' AND 
-                    title='" . $category_title."'
+                    title='".$category_title."'
                 ORDER BY sort DESC";
         $rs = Database::query($sql);
         if (Database::num_rows($rs) == 0) {
@@ -563,10 +586,12 @@ class Auth
     }
 
     /**
-     * Counts the number of courses in a given course category
-     * @param   string $categoryCode Category code
+     * Counts the number of courses in a given course category.
+     *
+     * @param string $categoryCode Category code
      * @param $searchTerm
-     * @return  int     Count of courses
+     *
+     * @return int Count of courses
      */
     public function count_courses_in_category($categoryCode, $searchTerm = '')
     {
@@ -574,8 +599,9 @@ class Auth
     }
 
     /**
-     * get the browsing of the course categories (faculties)
-     * @return array    array containing a list with all the categories and subcategories(if needed)
+     * get the browsing of the course categories (faculties).
+     *
+     * @return array array containing a list with all the categories and subcategories(if needed)
      */
     public function browse_course_categories()
     {
@@ -583,11 +609,13 @@ class Auth
     }
 
     /**
-     * Display all the courses in the given course category. I could have used a parameter here
+     * Display all the courses in the given course category. I could have used a parameter here.
+     *
      * @param string $categoryCode Category code
-     * @param int $randomValue
-     * @param array $limit will be used if $random_value is not set.
-     * This array should contains 'start' and 'length' keys
+     * @param int    $randomValue
+     * @param array  $limit        will be used if $random_value is not set.
+     *                             This array should contains 'start' and 'length' keys
+     *
      * @return array Courses data
      */
     public function browse_courses_in_category($categoryCode, $randomValue = null, $limit = [])
@@ -596,9 +624,11 @@ class Auth
     }
 
     /**
-     * Subscribe the user to a given course
+     * Subscribe the user to a given course.
+     *
      * @param string $course_code Course code
-     * @return string  Message about results
+     *
+     * @return string Message about results
      */
     public function subscribe_user($course_code)
     {
@@ -636,6 +666,7 @@ class Auth
             } else {
                 $message = get_lang('ErrorContactPlatformAdmin');
             }
+
             return ['message' => $message];
         } else {
             if (isset($_POST['course_registration_code']) &&
@@ -646,7 +677,7 @@ class Auth
             $message = get_lang('CourseRequiresPassword').'<br />';
             $message .= $all_course_information['title'].' ('.$all_course_information['visual_code'].') ';
 
-            $action  = api_get_path(WEB_CODE_PATH)."auth/courses.php?action=subscribe_user_with_password&sec_token=".Security::getTokenFromSession();
+            $action = api_get_path(WEB_CODE_PATH)."auth/courses.php?action=subscribe_user_with_password&sec_token=".Security::getTokenFromSession();
             $form = new FormValidator(
                 'subscribe_user_with_password',
                 'post',
@@ -663,9 +694,11 @@ class Auth
     }
 
     /**
-     * List the sessions
-     * @param string $date (optional) The date of sessions
-     * @param array $limit
+     * List the sessions.
+     *
+     * @param string $date  (optional) The date of sessions
+     * @param array  $limit
+     *
      * @return array The session list
      */
     public function browseSessions($date = null, $limit = [])
@@ -698,27 +731,29 @@ class Auth
                 )
             ";
         }
-        
+
         if (!empty($limit)) {
             $sql .= "LIMIT {$limit['start']}, {$limit['length']} ";
         }
-        
+
         $ids = Database::store_result(
             Database::query($sql)
         );
-        
+
         $sessions = [];
-        
+
         foreach ($ids as $id) {
             $sessions[] = $em->find('ChamiloCoreBundle:Session', $id);
         }
-        
+
         return $sessions;
     }
 
     /**
-     * Return a COUNT from Session table
+     * Return a COUNT from Session table.
+     *
      * @param string $date in Y-m-d format
+     *
      * @return int
      */
     public function countSessions($date = null)
@@ -751,9 +786,11 @@ SQL;
     }
 
     /**
-     * Search sessions by the tags in their courses
+     * Search sessions by the tags in their courses.
+     *
      * @param string $termTag Term for search in tags
-     * @param array $limit Limit info
+     * @param array  $limit   Limit info
+     *
      * @return array The sessions
      */
     public function browseSessionsByTags($termTag, array $limit)
@@ -812,9 +849,11 @@ SQL;
     }
 
     /**
-     * Search sessions by searched term by session name
+     * Search sessions by searched term by session name.
+     *
      * @param string $queryTerm Term for search
-     * @param array $limit Limit info
+     * @param array  $limit     Limit info
+     *
      * @return array The sessions
      */
     public function browseSessionsBySearch($queryTerm, array $limit)

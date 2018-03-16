@@ -9,7 +9,7 @@ api_protect_admin_script();
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
-    'name' => get_lang('MyTickets')
+    'name' => get_lang('MyTickets'),
 ];
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'projects';
@@ -29,7 +29,5 @@ foreach ($sections as $item) {
     );
 }
 echo '</div>';
-
-
 
 Display::display_footer();

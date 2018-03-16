@@ -4,11 +4,12 @@
 use ChamiloSession as Session;
 
 /**
- * List all certificates filtered by session/course and month/year
+ * List all certificates filtered by session/course and month/year.
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.gradebook
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -19,7 +20,7 @@ api_block_anonymous_users();
 
 $interbreadcrumb[] = [
     "url" => api_is_student_boss() ? "#" : api_get_path(WEB_CODE_PATH)."mySpace/index.php?".api_get_cidreq(),
-    "name" => get_lang("MySpace")
+    "name" => get_lang("MySpace"),
 ];
 
 $selectedSession = isset($_POST['session']) && !empty($_POST['session']) ? intval($_POST['session']) : 0;
@@ -132,7 +133,7 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
             "cidReq" => $selectedCourseInfo['code'],
             "id_session" => 0,
             "gidReq" => 0,
-            "cat_id" => $gradebook->get_id()
+            "cat_id" => $gradebook->get_id(),
         ]);
 
         $sessionName = api_get_session_name($selectedSession);
@@ -152,7 +153,7 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
                     'fullName' => api_get_person_name($student['firstname'], $student['lastname']),
                     'sessionName' => $sessionName,
                     'courseName' => $courseName,
-                    'certificates' => []
+                    'certificates' => [],
                 ];
 
                 $studentCertificates = GradebookUtils::get_list_gradebook_certificates_by_user_id(
@@ -186,7 +187,7 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
 
                     $certificateStudent['certificates'][] = [
                         'createdAt' => api_convert_and_format_date($certificate['created_at']),
-                        'id' => $certificate['id']
+                        'id' => $certificate['id'],
                     ];
                 }
 
@@ -235,7 +236,7 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
                     'fullName' => $selectedStudentInfo['complete_name'],
                     'sessionName' => $sessionName,
                     'courseName' => $courseName,
-                    'certificates' => []
+                    'certificates' => [],
                 ];
 
                 $studentCertificates = GradebookUtils::get_list_gradebook_certificates_by_user_id(
@@ -250,7 +251,7 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
                 foreach ($studentCertificates as $certificate) {
                     $certificateStudent['certificates'][] = [
                         'createdAt' => api_convert_and_format_date($certificate['created_at']),
-                        'id' => $certificate['id']
+                        'id' => $certificate['id'],
                     ];
                 }
 
@@ -296,7 +297,7 @@ $form->setDefaults([
     'session' => $selectedSession,
     'course' => $selectedCourse,
     'month' => $selectedMonth,
-    'year' => $selectedYear
+    'year' => $selectedYear,
 ]);
 
 if (api_is_student_boss()) {
@@ -312,7 +313,7 @@ if (api_is_student_boss()) {
     $searchForm->addSelect('student', get_lang('Students'), $students, ['id' => 'student']);
     $searchForm->addButtonSearch();
     $searchForm->setDefaults([
-        'student' => $selectedStudent
+        'student' => $selectedStudent,
     ]);
 
     $template->assign('search_form', $searchForm->returnForm());

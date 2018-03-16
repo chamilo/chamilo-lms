@@ -39,7 +39,6 @@ class SettingsExtension extends \Twig_Extension
     }
 
     /**
-     *
      * {@inheritdoc}
      */
     public function getFilters()
@@ -66,6 +65,7 @@ class SettingsExtension extends \Twig_Extension
 
     /**
      * @param $name
+     *
      * @return mixed
      */
     public function getSettingsParameter($name)

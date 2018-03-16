@@ -2,7 +2,7 @@
 /* See license terms in /license.txt */
 
 /**
- * Class OpenMeetingsPlugin
+ * Class OpenMeetingsPlugin.
  */
 class OpenMeetingsPlugin extends Plugin
 {
@@ -11,18 +11,19 @@ class OpenMeetingsPlugin extends Plugin
     //When creating a new course this settings are added to the course
     public $course_settings = [[
         'name' => 'openmeetings_record_and_store',
-        'type' => 'checkbox'
+        'type' => 'checkbox',
     ]];
+
+    protected function __construct()
+    {
+        parent::__construct('2.0', 'Francis Gonzales', ['tool_enable' => 'boolean', 'host' => 'text', 'user' => 'text', 'pass' => 'text']);
+    }
 
     public static function create()
     {
         static $result = null;
-        return $result ? $result : $result = new self();
-    }
 
-    protected function __construct()
-    {
-        parent::__construct('2.0', 'Francis Gonzales', ['tool_enable' => 'boolean', 'host' =>'text', 'user' => 'text', 'pass' => 'text']);
+        return $result ? $result : $result = new self();
     }
 
     public function install()
@@ -92,7 +93,7 @@ class OpenMeetingsPlugin extends Plugin
     }
 
     /**
-     * @param int $course_id
+     * @param int  $course_id
      * @param bool $add_tool_link
      */
     public function course_install($course_id, $add_tool_link = true)

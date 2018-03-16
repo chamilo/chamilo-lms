@@ -1,12 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \ChamiloSession as Session;
-
 /**
  * This script displays a data center edit form.
  */
-
 require_once '../config.php';
 $plugin = SepePlugin::create();
 

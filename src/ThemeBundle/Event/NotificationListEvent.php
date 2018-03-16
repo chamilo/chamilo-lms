@@ -2,7 +2,7 @@
 /**
  * NotificationListEvent.php
  * avanzu-admin
- * Date: 23.02.14
+ * Date: 23.02.14.
  */
 
 namespace Chamilo\ThemeBundle\Event;
@@ -10,7 +10,7 @@ namespace Chamilo\ThemeBundle\Event;
 use Chamilo\ThemeBundle\Model\NotificationInterface;
 
 /**
- * Class NotificationListEvent
+ * Class NotificationListEvent.
  *
  * @package Chamilo\ThemeBundle\Event
  */

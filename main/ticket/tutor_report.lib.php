@@ -2,12 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Helper library for weekly reports
+ * Helper library for weekly reports.
+ *
  * @package chamilo.plugin.ticket
  */
 
 /**
  * @param $course_code
+ *
  * @return array|bool
  */
 function initializeReport($course_code)
@@ -44,7 +46,6 @@ function initializeReport($course_code)
         }
     }
 
-
     $sql = "REPLACE INTO $table_students_report (user_id, week_report_id, work_ok , thread_ok , quiz_ok , pc_ok)
 			SELECT cu.user_id, rs.id, 0, 0, 0, 0
 			FROM $table_course_rel_user cu
@@ -75,6 +76,7 @@ function initializeReport($course_code)
  * @param $courseInfo
  * @param $weeksCount
  * @param $page
+ *
  * @return array
  */
 function showResults($courseInfo, $weeksCount, $page)
@@ -117,12 +119,12 @@ function showResults($courseInfo, $weeksCount, $page)
         if ($rowe['week_id'] > (($page - 1) * 7) && $rowe['week_id'] <= (7 * $page)) {
             $ids[$rowe['week_id']] = $rowe['id'];
             $line .= '<th>
-                <a href="#" onClick="showContent(' . "'tarea".$rowe['week_id']."'".');">Work'.$rowe['week_id'].'
-                        <div class="blackboard_hide" id="tarea' . $rowe['week_id'].'">'.$rowe['work_title'].'</div>
+                <a href="#" onClick="showContent('."'tarea".$rowe['week_id']."'".');">Work'.$rowe['week_id'].'
+                        <div class="blackboard_hide" id="tarea'.$rowe['week_id'].'">'.$rowe['work_title'].'</div>
                 </a></th>';
             $line .= '<th>
-                <a href="#" onClick="showContent(' . "'foro".$rowe['week_id']."'".');">Forum'.$rowe['week_id'].'
-                        <div class="blackboard_hide" id="foro' . $rowe['week_id'].'">'.$rowe['thread_title'].'</div>
+                <a href="#" onClick="showContent('."'foro".$rowe['week_id']."'".');">Forum'.$rowe['week_id'].'
+                        <div class="blackboard_hide" id="foro'.$rowe['week_id'].'">'.$rowe['thread_title'].'</div>
                 </a>
                 </th>';
         }
@@ -133,10 +135,10 @@ function showResults($courseInfo, $weeksCount, $page)
 
     $html = '<form action="tutor.php" name="semanas" id="semanas" method="POST">
             <div class="row">
-            ' . get_lang('SelectWeeksSpan').'
+            '.get_lang('SelectWeeksSpan').'
             <select name="weeksNumber" id="weeksNumber" onChange="submit();">
-            <option value="7" ' . (($weeksCount == 7) ? 'selected="selected"' : "").'>7 weeks</option>
-            <option value="14" ' . (($weeksCount == 14) ? 'selected="selected"' : "").'>14 weeks</option>
+            <option value="7" '.(($weeksCount == 7) ? 'selected="selected"' : "").'>7 weeks</option>
+            <option value="14" '.(($weeksCount == 14) ? 'selected="selected"' : "").'>14 weeks</option>
             </select>';
 
     if ($weeksCount == 14) {
@@ -182,6 +184,7 @@ function showResults($courseInfo, $weeksCount, $page)
 /**
  * @param $datos
  * @param $pagina
+ *
  * @return string
  */
 function showStudentResult($datos, $pagina)
@@ -202,6 +205,7 @@ function showStudentResult($datos, $pagina)
 /**
  * @param $data
  * @param $numero_semanas
+ *
  * @return array
  */
 function showStudentResultExport($data, $numero_semanas)

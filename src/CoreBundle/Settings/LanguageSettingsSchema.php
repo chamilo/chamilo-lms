@@ -4,12 +4,12 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class LanguageSettingsSchema
+ * Class LanguageSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class LanguageSettingsSchema extends AbstractSettingsSchema
@@ -30,7 +30,7 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
                     'language_priority_2' => '',
                     'language_priority_3' => '',
                     'language_priority_4' => '',
-                    'hide_dltt_markup' => 'false'
+                    'hide_dltt_markup' => 'false',
                 ]
             );
 
@@ -38,7 +38,7 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
             'platform_language' => ['string'],
             'allow_use_sub_language' => ['string'],
             'auto_detect_language_custom_pages' => ['string'],
-            'show_different_course_language' => ['string']
+            'show_different_course_language' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }

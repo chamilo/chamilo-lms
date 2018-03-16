@@ -11,7 +11,7 @@ class DatePicker extends HTML_QuickForm_text
     /**
      * @param string $elementName
      * @param string $elementLabel
-     * @param array $attributes
+     * @param array  $attributes
      */
     public function __construct($elementName = null, $elementLabel = null, $attributes = null)
     {
@@ -25,7 +25,7 @@ class DatePicker extends HTML_QuickForm_text
     }
 
     /**
-     * HTML code to display this datepicker
+     * HTML code to display this datepicker.
      *
      * @return string
      */
@@ -69,62 +69,9 @@ class DatePicker extends HTML_QuickForm_text
         $value = substr($value, 0, 16);
         $this->updateAttributes(
             [
-                'value' => $value
+                'value' => $value,
             ]
         );
-    }
-
-    /**
-     * Get the necessary javascript for this datepicker
-     * @return string
-     */
-    private function getElementJS()
-    {
-        $js = null;
-        $id = $this->getAttribute('id');
-
-        $js .= "<script>                    
-            $(function() {
-                var txtDate = $('#$id'),
-                    inputGroup = txtDate.parents('.input-group'),
-                    txtDateAlt = $('#{$id}_alt'),
-                    txtDateAltText = $('#{$id}_alt_text');
-                    
-                txtDate
-                    .hide()
-                    .datepicker({
-                        defaultDate: '".$this->getValue()."',
-                        dateFormat: 'yy-mm-dd',
-                        altField: '#{$id}_alt',
-                        altFormat: \"".get_lang('DateFormatLongNoDayJS')."\",
-                        showOn: 'both',
-                        buttonImage: '".Display::return_icon('attendance.png', null, [], ICON_SIZE_TINY, true, true)."',
-                        buttonImageOnly: true,
-                        buttonText: '".get_lang('SelectDate')."',
-                        changeMonth: true,
-                        changeYear: true,
-                        yearRange: 'c-60y:c+5y'
-                    })
-                    .on('change', function (e) {
-                        txtDateAltText.text(txtDateAlt.val());
-                    });
-                    
-                txtDateAltText.on('click', function () {
-                    txtDate.datepicker('show');
-                });
-
-                inputGroup
-                    .find('button')
-                    .on('click', function (e) {
-                        e.preventDefault();
-
-                        $('#$id, #{$id}_alt').val('');
-                        $('#{$id}_alt_text').html('');
-                    });
-            });
-        </script>";
-
-        return $js;
     }
 
     /**
@@ -206,5 +153,59 @@ class DatePicker extends HTML_QuickForm_text
                 return '{element}';
                 break;
         }
+    }
+
+    /**
+     * Get the necessary javascript for this datepicker.
+     *
+     * @return string
+     */
+    private function getElementJS()
+    {
+        $js = null;
+        $id = $this->getAttribute('id');
+
+        $js .= "<script>                    
+            $(function() {
+                var txtDate = $('#$id'),
+                    inputGroup = txtDate.parents('.input-group'),
+                    txtDateAlt = $('#{$id}_alt'),
+                    txtDateAltText = $('#{$id}_alt_text');
+                    
+                txtDate
+                    .hide()
+                    .datepicker({
+                        defaultDate: '".$this->getValue()."',
+                        dateFormat: 'yy-mm-dd',
+                        altField: '#{$id}_alt',
+                        altFormat: \"".get_lang('DateFormatLongNoDayJS')."\",
+                        showOn: 'both',
+                        buttonImage: '".Display::return_icon('attendance.png', null, [], ICON_SIZE_TINY, true, true)."',
+                        buttonImageOnly: true,
+                        buttonText: '".get_lang('SelectDate')."',
+                        changeMonth: true,
+                        changeYear: true,
+                        yearRange: 'c-60y:c+5y'
+                    })
+                    .on('change', function (e) {
+                        txtDateAltText.text(txtDateAlt.val());
+                    });
+                    
+                txtDateAltText.on('click', function () {
+                    txtDate.datepicker('show');
+                });
+
+                inputGroup
+                    .find('button')
+                    .on('click', function (e) {
+                        e.preventDefault();
+
+                        $('#$id, #{$id}_alt').val('');
+                        $('#{$id}_alt_text').html('');
+                    });
+            });
+        </script>";
+
+        return $js;
     }
 }

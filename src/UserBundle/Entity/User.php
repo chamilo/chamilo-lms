@@ -7,20 +7,20 @@ namespace Chamilo\UserBundle\Entity;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
-use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\CoreBundle\Entity\UsergroupRelUser;
+use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Model\GroupInterface;
+use FOS\UserBundle\Model\UserInterface;
+//use Symfony\Component\Security\Core\User\UserInterface;
 use Sonata\UserBundle\Entity\BaseUser;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
-//use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
-use FOS\UserBundle\Model\UserInterface;
-use FOS\UserBundle\Model\GroupInterface;
-use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
 
 //use Chamilo\CoreBundle\Component\Auth;
 //use FOS\MessageBundle\Model\ParticipantInterface;
@@ -33,7 +33,6 @@ use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
 //use Sylius\Component\Variation\Model\VariantInterface as BaseVariantInterface;
 
 /**
- *
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(
  *  name="user",
@@ -71,7 +70,6 @@ use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
  *         )
  *     )
  * })
- *
  */
 class User extends BaseUser implements ThemeUser //implements ParticipantInterface, ThemeUser
 {
@@ -83,7 +81,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     const ANONYMOUS = 6;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -92,7 +90,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     protected $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=true)
      */
@@ -126,25 +124,25 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     //protected $email;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="locked", type="boolean")
      */
     protected $locked;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="enabled", type="boolean")
      */
     //protected $enabled;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="expired", type="boolean")
      */
     protected $expired;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="credentials_expired", type="boolean")
      */
     protected $credentialsExpired;
@@ -160,6 +158,169 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
      * @ORM\Column(name="expires_at", type="datetime", nullable=true, unique=false)
      */
     protected $expiresAt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phone", type="string", length=30, nullable=true, unique=false)
+     */
+    //protected $phone;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="address", type="string", length=250, nullable=true, unique=false)
+     */
+    protected $address;
+
+    /**
+     * Vich\UploadableField(mapping="user_image", fileNameProperty="picture_uri").
+     *
+     * note This is not a mapped field of entity metadata, just a simple property.
+     *
+     * @var File
+     */
+    protected $imageFile;
+
+    /**
+     * @var AccessUrl
+     */
+    protected $currentUrl;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    //protected $salt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="last_login", type="datetime", nullable=true, unique=false)
+     */
+    //protected $lastLogin;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="created_at", type="datetime", nullable=true, unique=false)
+     */
+    //protected $createdAt;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true, unique=false)
+     */
+    //protected $updatedAt;
+
+    /**
+     * Random string sent to the user email address in order to verify it.
+     *
+     * @var string
+     * @ORM\Column(name="confirmation_token", type="string", length=255, nullable=true)
+     */
+    //protected $confirmationToken;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="password_requested_at", type="datetime", nullable=true, unique=false)
+     */
+    //protected $passwordRequestedAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user")
+     */
+    protected $courses;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CItemProperty", mappedBy="user")
+     */
+    //protected $items;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UsergroupRelUser", mappedBy="user")
+     */
+    protected $classes;
+
+    /**
+     * ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CDropboxPost", mappedBy="user").
+     */
+    protected $dropBoxReceivedFiles;
+
+    /**
+     * ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CDropboxFile", mappedBy="userSent").
+     */
+    protected $dropBoxSentFiles;
+
+    /**
+     * @ORM\Column(type="array")
+     */
+    //protected $roles;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="profile_completed", type="boolean", nullable=true)
+     */
+    protected $profileCompleted;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\JuryMembers", mappedBy="user")
+     */
+    //protected $jurySubscriptions;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Chamilo\UserBundle\Entity\Group")
+     * @ORM\JoinTable(name="fos_user_user_group",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
+     * )
+     */
+    protected $groups;
+
+    //private $isActive;
+
+    /**
+     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CurriculumItemRelUser", mappedBy="user").
+     */
+    protected $curriculumItems;
+
+    /*
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelUser", mappedBy="user")
+     *
+     */
+    protected $portals;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="generalCoach")
+     */
+    protected $sessionAsGeneralCoach;
+
+    /**
+     * @var ArrayCollection
+     *                      ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user", orphanRemoval=true, cascade={"persist"})
+     */
+    protected $extraFields;
+
+    /**
+     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="creator").
+     */
+    protected $resourceNodes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourseRelUser", mappedBy="user", cascade={"persist"})
+     */
+    protected $sessionCourseSubscriptions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="user", cascade={"persist"})
+     */
+    protected $achievedSkills;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUserComment", mappedBy="feedbackGiver")
+     */
+    protected $commentedUserSkills;
 
     /**
      * @var string
@@ -205,41 +366,19 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="phone", type="string", length=30, nullable=true, unique=false)
-     */
-    //protected $phone;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="address", type="string", length=250, nullable=true, unique=false)
-     */
-    protected $address;
-
-    /**
-     * Vich\UploadableField(mapping="user_image", fileNameProperty="picture_uri")
-     *
-     * note This is not a mapped field of entity metadata, just a simple property.
-     *
-     * @var File $imageFile
-     */
-    protected $imageFile;
-
-    /**
-     * @var string
      * @ORM\Column(name="picture_uri", type="string", length=250, nullable=true, unique=false)
      */
     private $pictureUri;
 
     /**
-     * ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"all"} )
+     * ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"all"} ).
+     *
      * @ORM\JoinColumn(name="picture_uri", referencedColumnName="id")
      */
     //protected $pictureUri;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="creator_id", type="integer", nullable=true, unique=false)
      */
@@ -302,7 +441,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     private $expirationDate;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false, unique=false)
      */
@@ -323,154 +462,14 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     private $theme;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="hr_dept_id", type="smallint", nullable=true, unique=false)
      */
     private $hrDeptId;
 
     /**
-     * @var AccessUrl
-     **/
-    protected $currentUrl;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    //protected $salt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="last_login", type="datetime", nullable=true, unique=false)
-     */
-    //protected $lastLogin;
-
-    /**
-     * @var \DateTime
-     * @ORM\Column(name="created_at", type="datetime", nullable=true, unique=false)
-     */
-    //protected $createdAt;
-
-    /**
-     * @var \DateTime
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true, unique=false)
-     */
-    //protected $updatedAt;
-
-    /**
-     * Random string sent to the user email address in order to verify it
-     *
-     * @var string
-     * @ORM\Column(name="confirmation_token", type="string", length=255, nullable=true)
-     */
-    //protected $confirmationToken;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="password_requested_at", type="datetime", nullable=true, unique=false)
-     */
-    //protected $passwordRequestedAt;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CourseRelUser", mappedBy="user")
-     **/
-    protected $courses;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CItemProperty", mappedBy="user")
-     **/
-    //protected $items;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UsergroupRelUser", mappedBy="user")
-     **/
-    protected $classes;
-
-    /**
-     * ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CDropboxPost", mappedBy="user")
-     **/
-    protected $dropBoxReceivedFiles;
-
-    /**
-     * ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CDropboxFile", mappedBy="userSent")
-     **/
-    protected $dropBoxSentFiles;
-
-    /**
-     * @ORM\Column(type="array")
-     */
-    //protected $roles;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="profile_completed", type="boolean", nullable=true)
-     */
-    protected $profileCompleted;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\JuryMembers", mappedBy="user")
-     **/
-    //protected $jurySubscriptions;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Chamilo\UserBundle\Entity\Group")
-     * @ORM\JoinTable(name="fos_user_user_group",
-     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
-     * )
-     */
-    protected $groups;
-
-    //private $isActive;
-
-    /**
-     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\CurriculumItemRelUser", mappedBy="user")
-     **/
-    protected $curriculumItems;
-
-    /*
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\AccessUrlRelUser", mappedBy="user")
-     *
-     */
-    protected $portals;
-
-    /**
-     * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Session", mappedBy="generalCoach")
-     **/
-    protected $sessionAsGeneralCoach;
-
-    /**
-     * @var ArrayCollection
-     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\UserFieldValues", mappedBy="user", orphanRemoval=true, cascade={"persist"})
-     **/
-    protected $extraFields;
-
-    /**
-     * ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="creator")
-     **/
-    protected $resourceNodes;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SessionRelCourseRelUser", mappedBy="user", cascade={"persist"})
-     **/
-    protected $sessionCourseSubscriptions;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUser", mappedBy="user", cascade={"persist"})
-     */
-    protected $achievedSkills;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\SkillRelUserComment", mappedBy="feedbackGiver")
-     */
-    protected $commentedUserSkills;
-
-    /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -508,7 +507,8 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Updates the id with the user_id
+     * Updates the id with the user_id.
+     *
      *  @ORM\PostPersist()
      */
     public function postPersist(LifecycleEventArgs $args)
@@ -592,7 +592,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
                 new Assert\Regex(
                     [
                         'pattern' => '/^[a-z\-_0-9]+$/i',
-                        'htmlPattern' => '/^[a-z\-_0-9]+$/i']
+                        'htmlPattern' => '/^[a-z\-_0-9]+$/i', ]
                 ),
                 // Min 3 letters - not needed
                 /*new Assert\Regex(array(
@@ -603,7 +603,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
                 new Assert\Regex(
                     [
                         'pattern' => '/[0-9]{2}/',
-                        'htmlPattern' => '/[0-9]{2}/']
+                        'htmlPattern' => '/[0-9]{2}/', ]
                 ),
             ]
             ;
@@ -639,7 +639,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function isEqualTo(UserInterface $user)
     {
@@ -711,7 +711,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function isEnabled()
     {
@@ -719,7 +719,6 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     *
      * @return ArrayCollection
      */
     /*public function getRolesObj()
@@ -728,7 +727,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }*/
 
     /**
-     * Set salt
+     * Set salt.
      *
      * @param string $salt
      *
@@ -742,7 +741,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get salt
+     * Get salt.
      *
      * @return string
      */
@@ -759,9 +758,6 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
         return $this->classes;
     }
 
-    /**
-     *
-     */
     public function getLps()
     {
         //return $this->lps;
@@ -779,7 +775,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Return Complete Name with the Username
+     * Return Complete Name with the Username.
      *
      * @return string
      */
@@ -797,7 +793,8 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Returns the list of classes for the user
+     * Returns the list of classes for the user.
+     *
      * @return string
      */
     public function getCompleteNameWithClasses()
@@ -815,9 +812,9 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -825,7 +822,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set lastname
+     * Set lastname.
      *
      * @param string $lastname
      *
@@ -839,7 +836,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set firstname
+     * Set firstname.
      *
      * @param string $firstname
      *
@@ -853,9 +850,10 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set password
+     * Set password.
      *
      * @param string $password
+     *
      * @return User
      */
     public function setPassword($password)
@@ -866,7 +864,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get password
+     * Get password.
      *
      * @return string
      */
@@ -876,9 +874,10 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set authSource
+     * Set authSource.
      *
      * @param string $authSource
+     *
      * @return User
      */
     public function setAuthSource($authSource)
@@ -889,7 +888,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get authSource
+     * Get authSource.
      *
      * @return string
      */
@@ -899,9 +898,10 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set email
+     * Set email.
      *
      * @param string $email
+     *
      * @return User
      */
     public function setEmail($email)
@@ -912,7 +912,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get email
+     * Get email.
      *
      * @return string
      */
@@ -922,7 +922,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set status
+     * Set status.
      *
      * @param int $status
      *
@@ -936,7 +936,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get status
+     * Get status.
      *
      * @return int
      */
@@ -946,9 +946,10 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set officialCode
+     * Set officialCode.
      *
      * @param string $officialCode
+     *
      * @return User
      */
     public function setOfficialCode($officialCode)
@@ -959,7 +960,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get officialCode
+     * Get officialCode.
      *
      * @return string
      */
@@ -969,9 +970,10 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set phone
+     * Set phone.
      *
      * @param string $phone
+     *
      * @return User
      */
     public function setPhone($phone)
@@ -982,7 +984,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get phone
+     * Get phone.
      *
      * @return string
      */
@@ -992,9 +994,10 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set address
+     * Set address.
      *
      * @param string $address
+     *
      * @return User
      */
     public function setAddress($address)
@@ -1005,7 +1008,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get address
+     * Get address.
      *
      * @return string
      */
@@ -1015,9 +1018,10 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set pictureUri
+     * Set pictureUri.
      *
      * @param string $pictureUri
+     *
      * @return User
      */
     public function setPictureUri($pictureUri)
@@ -1028,7 +1032,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get pictureUri
+     * Get pictureUri.
      *
      * @return Media
      */
@@ -1038,9 +1042,10 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set creatorId
+     * Set creatorId.
      *
-     * @param integer $creatorId
+     * @param int $creatorId
+     *
      * @return User
      */
     public function setCreatorId($creatorId)
@@ -1051,9 +1056,9 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get creatorId
+     * Get creatorId.
      *
-     * @return integer
+     * @return int
      */
     public function getCreatorId()
     {
@@ -1061,9 +1066,10 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set competences
+     * Set competences.
      *
      * @param string $competences
+     *
      * @return User
      */
     public function setCompetences($competences)
@@ -1074,7 +1080,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get competences
+     * Get competences.
      *
      * @return string
      */
@@ -1084,9 +1090,10 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set diplomas
+     * Set diplomas.
      *
      * @param string $diplomas
+     *
      * @return User
      */
     public function setDiplomas($diplomas)
@@ -1097,7 +1104,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get diplomas
+     * Get diplomas.
      *
      * @return string
      */
@@ -1107,9 +1114,10 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set openarea
+     * Set openarea.
      *
      * @param string $openarea
+     *
      * @return User
      */
     public function setOpenarea($openarea)
@@ -1120,7 +1128,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get openarea
+     * Get openarea.
      *
      * @return string
      */
@@ -1130,9 +1138,10 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set teach
+     * Set teach.
      *
      * @param string $teach
+     *
      * @return User
      */
     public function setTeach($teach)
@@ -1143,7 +1152,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get teach
+     * Get teach.
      *
      * @return string
      */
@@ -1153,9 +1162,10 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set productions
+     * Set productions.
      *
      * @param string $productions
+     *
      * @return User
      */
     public function setProductions($productions)
@@ -1166,7 +1176,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get productions
+     * Get productions.
      *
      * @return string
      */
@@ -1176,9 +1186,10 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set language
+     * Set language.
      *
      * @param string $language
+     *
      * @return User
      */
     public function setLanguage($language)
@@ -1189,7 +1200,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get language
+     * Get language.
      *
      * @return string
      */
@@ -1199,9 +1210,10 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set registrationDate
+     * Set registrationDate.
      *
      * @param \DateTime $registrationDate
+     *
      * @return User
      */
     public function setRegistrationDate($registrationDate)
@@ -1212,7 +1224,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get registrationDate
+     * Get registrationDate.
      *
      * @return \DateTime
      */
@@ -1222,7 +1234,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set expirationDate
+     * Set expirationDate.
      *
      * @param \DateTime $expirationDate
      *
@@ -1236,7 +1248,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get expirationDate
+     * Get expirationDate.
      *
      * @return \DateTime
      */
@@ -1246,9 +1258,10 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set active
+     * Set active.
      *
-     * @param boolean $active
+     * @param bool $active
+     *
      * @return User
      */
     public function setActive($active)
@@ -1259,9 +1272,9 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get active
+     * Get active.
      *
-     * @return boolean
+     * @return bool
      */
     public function getActive()
     {
@@ -1269,9 +1282,10 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set openid
+     * Set openid.
      *
      * @param string $openid
+     *
      * @return User
      */
     public function setOpenid($openid)
@@ -1282,7 +1296,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get openid
+     * Get openid.
      *
      * @return string
      */
@@ -1292,9 +1306,10 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set theme
+     * Set theme.
      *
      * @param string $theme
+     *
      * @return User
      */
     public function setTheme($theme)
@@ -1305,7 +1320,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get theme
+     * Get theme.
      *
      * @return string
      */
@@ -1315,9 +1330,10 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set hrDeptId
+     * Set hrDeptId.
      *
-     * @param integer $hrDeptId
+     * @param int $hrDeptId
+     *
      * @return User
      */
     public function setHrDeptId($hrDeptId)
@@ -1328,9 +1344,9 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get hrDeptId
+     * Get hrDeptId.
      *
-     * @return integer
+     * @return int
      */
     public function getHrDeptId()
     {
@@ -1347,6 +1363,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
 
     /**
      * @param int $size
+     *
      * @return string
      */
     public function getAvatarOrAnonymous($size = 22)
@@ -1438,6 +1455,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
 
     /**
      * @param $slug
+     *
      * @return User
      */
     public function setSlug($slug)
@@ -1446,7 +1464,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Set lastLogin
+     * Set lastLogin.
      *
      * @param \DateTime $lastLogin
      *
@@ -1460,7 +1478,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get lastLogin
+     * Get lastLogin.
      *
      * @return \DateTime
      */
@@ -1567,7 +1585,8 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get sessionCourseSubscription
+     * Get sessionCourseSubscription.
+     *
      * @return ArrayCollection
      */
     public function getSessionCourseSubscriptions()
@@ -1603,9 +1622,9 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
         return $this->passwordRequestedAt;
     }
 
-
     /**
      * @param int $ttl
+     *
      * @return bool
      */
     public function isPasswordRequestNonExpired($ttl)
@@ -2126,7 +2145,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Returns the user roles
+     * Returns the user roles.
      *
      * @return array The roles
      */
@@ -2154,7 +2173,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
      *
      * @param string $role
      *
-     * @return boolean
+     * @return bool
      */
     public function hasRole($role)
     {
@@ -2228,7 +2247,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * @param boolean $boolean
+     * @param bool $boolean
      *
      * @return User
      */
@@ -2241,7 +2260,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
 
     public function setEnabled($boolean)
     {
-        $this->enabled = (Boolean) $boolean;
+        $this->enabled = (bool) $boolean;
 
         return $this;
     }
@@ -2249,13 +2268,13 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     /**
      * Sets this user to expired.
      *
-     * @param Boolean $boolean
+     * @param bool $boolean
      *
      * @return User
      */
     public function setExpired($boolean)
     {
-        $this->expired = (Boolean) $boolean;
+        $this->expired = (bool) $boolean;
 
         return $this;
     }
@@ -2303,7 +2322,6 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
 
         return $this;
     }
-
 
     public function setRoles(array $roles)
     {
@@ -2421,7 +2439,8 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get achievedSkills
+     * Get achievedSkills.
+     *
      * @return ArrayCollection
      */
     public function getAchievedSkills()
@@ -2430,9 +2449,11 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Check if the user has the skill
+     * Check if the user has the skill.
+     *
      * @param Skill $skill The skill
-     * @return boolean
+     *
+     * @return bool
      */
     public function hasSkill(Skill $skill)
     {
@@ -2442,6 +2463,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
             if ($userSkill->getSkill()->getId() !== $skill->getId()) {
                 continue;
             }
+
             return true;
         }
     }
@@ -2456,6 +2478,7 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
 
     /**
      * @param mixed $profileCompleted
+     *
      * @return User
      */
     public function setProfileCompleted($profileCompleted)
@@ -2466,7 +2489,8 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Sets the AccessUrl for the current user in memory
+     * Sets the AccessUrl for the current user in memory.
+     *
      * @param AccessUrl $url
      *
      * @return $this
@@ -2493,9 +2517,9 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
         return $this->currentUrl;
     }
 
-
     /**
-     * Get sessionAsGeneralCoach
+     * Get sessionAsGeneralCoach.
+     *
      * @return ArrayCollection
      */
     public function getSessionAsGeneralCoach()
@@ -2504,7 +2528,8 @@ class User extends BaseUser implements ThemeUser //implements ParticipantInterfa
     }
 
     /**
-     * Get the list of HRM who have assigned this user
+     * Get the list of HRM who have assigned this user.
+     *
      * @return array
      */
     public function getHrm()

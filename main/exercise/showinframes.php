@@ -3,10 +3,11 @@
 
 /**
  * Code library for HotPotatoes integration.
+ *
  * @package chamilo.exercise
+ *
  * @author Istvan Mandak
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'exercise/hotpotatoes.lib.php';
 $_course = api_get_course_info();
@@ -38,9 +39,9 @@ if ($content == '') {
         if (SaveScoreVariable==0) {
             SaveScoreVariable = 1;
             if (C.ie) {
-                document.location.href = '" . api_get_path(WEB_CODE_PATH)."exercise/savescores.php?lp_view_id=$lpViewId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=".Security::remove_XSS($time)."&test=".$doc_url."&uid=".$user_id."&cid=".$cid."&score='+Score;
+                document.location.href = '".api_get_path(WEB_CODE_PATH)."exercise/savescores.php?lp_view_id=$lpViewId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=".Security::remove_XSS($time)."&test=".$doc_url."&uid=".$user_id."&cid=".$cid."&score='+Score;
             } else {
-                window.location.href = '" . api_get_path(WEB_CODE_PATH)."exercise/savescores.php?lp_view_id=$lpViewId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=".Security::remove_XSS($time)."&test=".$doc_url."&uid=".$user_id."&cid=".$cid."&score='+Score;
+                window.location.href = '".api_get_path(WEB_CODE_PATH)."exercise/savescores.php?lp_view_id=$lpViewId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=".Security::remove_XSS($time)."&test=".$doc_url."&uid=".$user_id."&cid=".$cid."&score='+Score;
             }
         }
     }
@@ -85,7 +86,7 @@ $htmlHeadXtra[] = /** @lang HTML */<<<HTML
     </script>
 HTML;
 
-$interbreadcrumb[] = ["url"=>"./exercise.php", "name"=> get_lang('Exercises')];
+$interbreadcrumb[] = ["url" => "./exercise.php", "name" => get_lang('Exercises')];
 if ($origin == 'learnpath') {
     Display::display_reduced_header($nameTools, "Exercise");
 } else {

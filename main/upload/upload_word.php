@@ -4,10 +4,11 @@
  * Action controller for the upload process. The display scripts (web forms)
  * redirect
  * the process here to do what needs to be done with each file.
+ *
  * @package chamilo.upload
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $form_style = '<style>
@@ -37,11 +38,11 @@ if (isset($_POST['convert'])) {
     if (isset($_FILES['user_file'])) {
         $allowed_extensions = ['doc', 'docx', 'odt', 'txt', 'sxw', 'rtf'];
         if (in_array(strtolower(pathinfo($_FILES['user_file']['name'], PATHINFO_EXTENSION)), $allowed_extensions)) {
-            require('../lp/lp_upload.php');
+            require '../lp/lp_upload.php';
             if (isset($o_doc) && $first_item_id != 0) {
                 // Search-related section
                 if (api_get_setting('search_enabled') == 'true') {
-                    require_once(api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php');
+                    require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
                     $specific_fields = get_specific_field_list();
 
                     foreach ($specific_fields as $specific_field) {
@@ -77,7 +78,7 @@ if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = ["url"=>"../lp/lp_controller.php?action=list", "name"=> get_lang("Doc")];
+$interbreadcrumb[] = ["url" => "../lp/lp_controller.php?action=list", "name" => get_lang("Doc")];
 $nameTools = get_lang("WoogieConversionPowerPoint");
 Display :: display_header($nameTools);
 
@@ -110,7 +111,6 @@ $s_style_error = "border-width: 1px;
          border-color: #FF0000;
          color: #000;";
 
-
 echo '<div style="'.$s_style.'"><div style="float:left; margin-right:10px;">
 <img src="'.Display::returnIconPath('message_normal.gif').'" alt="'.$alt_text.'" '.$attribute_list.'  /></div><div style="margin-left: 43px">'.$message.'</div></div>';
 
@@ -123,7 +123,7 @@ $form = new FormValidator('update_course', 'POST', '', '', 'style="margin: 0;"')
 
 // build the form
 
-$form -> addElement('html', '<br>');
+$form->addElement('html', '<br>');
 
 $div_upload_limit = '&nbsp;&nbsp;'.get_lang('UploadMaxSize').' : '.ini_get('post_max_size');
 
@@ -174,9 +174,9 @@ $form->addElement('hidden', 'split_steps', 'per_page');
 $form->addElement('submit', 'convert', get_lang('ConvertToLP'), 'class="convert_button"');
 $form->addElement('hidden', 'woogie', 'true');
 $form->addProgress();
-$defaults = ['split_steps'=>'per_page', 'index_document'=>'checked="checked"'];
-$form -> setDefaults($defaults);
+$defaults = ['split_steps' => 'per_page', 'index_document' => 'checked="checked"'];
+$form->setDefaults($defaults);
 
 // display the form
-$form -> display();
+$form->display();
 Display::display_footer();

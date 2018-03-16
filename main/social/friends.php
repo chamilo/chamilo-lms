@@ -3,9 +3,9 @@
 
 /**
  * @package chamilo.social
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -103,7 +103,7 @@ if (count($friends) == 0) {
         false,
         [
             'onkeyup' => 'search_image_social()',
-            'id' => 'id_search_image'
+            'id' => 'id_search_image',
         ]
     );
 
@@ -119,7 +119,7 @@ if (count($friends) == 0) {
             if (isset($friends[$j])) {
                 $friend = $friends[$j];
                 $toolBar = '<button class="btn btn-danger" onclick="delete_friend(this)" id=img_'.$friend['friend_user_id'].'>
-                    ' . get_lang('Delete').'
+                    '.get_lang('Delete').'
                 </button>';
                 $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$friend['friend_user_id'];
                 $friend['user_info']['complete_name'] = Display::url($friend['user_info']['complete_name'], $url);

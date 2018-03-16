@@ -4,11 +4,12 @@
 use Chamilo\CourseBundle\Entity\CForumPost;
 
 /**
- * Responses to AJAX calls for forum attachments
+ * Responses to AJAX calls for forum attachments.
+ *
  * @package chamilo/forum
+ *
  * @author Daniel Barreto Alva <daniel.barreto@beeznest.com>
  */
-
 require_once __DIR__.'/../global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
@@ -48,8 +49,8 @@ if (!empty($action)) {
                 }
                 if (!api_is_allowed_to_edit(null, true) &&
                     (
-                        ($current_forum_category && $current_forum_category['locked'] <> 0) ||
-                        $current_forum['locked'] <> 0 || $current_thread['locked'] <> 0
+                        ($current_forum_category && $current_forum_category['locked'] != 0) ||
+                        $current_forum['locked'] != 0 || $current_thread['locked'] != 0
                     )
                 ) {
                     $json['errorMessage'] = '2. the forum category, forum or thread is locked (locked <>0)';
@@ -122,8 +123,8 @@ if (!empty($action)) {
                 }
                 if (!api_is_allowed_to_edit(null, true) &&
                     (
-                        ($current_forum_category && $current_forum_category['locked'] <> 0) ||
-                        $current_forum['locked'] <> 0 || $current_thread['locked'] <> 0
+                        ($current_forum_category && $current_forum_category['locked'] != 0) ||
+                        $current_forum['locked'] != 0 || $current_thread['locked'] != 0
                     )
                 ) {
                     $json['errorMessage'] = '2. the forum category, forum or thread is locked (locked <>0)';

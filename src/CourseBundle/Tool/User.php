@@ -4,7 +4,8 @@
 namespace Chamilo\CourseBundle\Tool;
 
 /**
- * Class User
+ * Class User.
+ *
  * @package Chamilo\CourseBundle\Tool
  */
 class User extends BaseTool

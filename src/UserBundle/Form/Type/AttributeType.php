@@ -24,7 +24,7 @@ class AttributeType extends AbstractResourceType
 
     /**
      * @param string $dataClass
-     * @param array $validationGroups
+     * @param array  $validationGroups
      * @param string $subjectName
      */
     public function __construct($dataClass, array $validationGroups, $subjectName)
@@ -47,7 +47,7 @@ class AttributeType extends AbstractResourceType
                 'label' => 'sylius.form.attribute.translations',
             ))*/
             ->add('type', 'sylius_attribute_type_choice', [
-                'label'    => 'sylius.form.attribute.type',
+                'label' => 'sylius.form.attribute.type',
                 'disabled' => true,
             ])
         ;
@@ -59,6 +59,7 @@ class AttributeType extends AbstractResourceType
     public function getName()
     {       //chamilo_user_extra_field_choice
         return 'chamilo_user_attribute_type';
+
         return sprintf('%s_extra_field', $this->subjectName);
     }
 }

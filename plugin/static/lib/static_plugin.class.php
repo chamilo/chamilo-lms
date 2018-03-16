@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Description of static_plugin
+ * Description of static_plugin.
  *
  * @copyright (c) 2012 University of Geneva
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
@@ -9,13 +9,18 @@
  */
 class StaticPlugin extends Plugin
 {
+    protected function __construct()
+    {
+        parent::__construct('1.1', 'Laurent Opprecht', ['block_title' => 'text', 'content' => 'wysiwyg']);
+    }
+
     /**
-     *
      * @return StaticPlugin
      */
     public static function create()
     {
         static $result = null;
+
         return $result ? $result : $result = new self();
     }
 
@@ -27,10 +32,5 @@ class StaticPlugin extends Plugin
     public function get_content()
     {
         return $this->get('content');
-    }
-
-    protected function __construct()
-    {
-        parent::__construct('1.1', 'Laurent Opprecht', ['block_title' => 'text', 'content' => 'wysiwyg']);
     }
 }

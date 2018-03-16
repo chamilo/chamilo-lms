@@ -3,18 +3,14 @@
 
 namespace Chamilo\CoreBundle\Controller\Admin;
 
-use Sylius\Bundle\SettingsBundle\Controller\SettingsController as SyliusSettingsController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Exception\ValidatorException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sylius\Bundle\SettingsBundle\Controller\SettingsController as SyliusSettingsController;
 
 /**
- * Class SettingsController
+ * Class SettingsController.
+ *
  * @package Chamilo\SettingsBundle\Controller
  */
 class PluginsController extends SyliusSettingsController
@@ -33,7 +29,7 @@ class PluginsController extends SyliusSettingsController
         return $this->render(
             '@ChamiloCore/Admin/Settings/plugins.html.twig',
             [
-                'plugins' => $installedPlugins
+                'plugins' => $installedPlugins,
             ]
         );
     }
@@ -60,8 +56,6 @@ class PluginsController extends SyliusSettingsController
             }
         }
 
-
-
         $installedPlugins = $appPlugin->get_installed_plugins();
 
         $manager = $this->getSettingsManager();
@@ -71,7 +65,7 @@ class PluginsController extends SyliusSettingsController
             '@ChamiloCore/Admin/Settings/pluginsAdd.html.twig',
             [
                 'plugins' => $allPluginsList,
-                'installed_plugins' =>$installedPlugins
+                'installed_plugins' => $installedPlugins,
             ]
         );
     }

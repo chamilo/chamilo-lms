@@ -4,7 +4,8 @@
 namespace Chamilo\CoreBundle\Component\Editor\Driver;
 
 /**
- * Class HomeDriver
+ * Class HomeDriver.
+ *
  * @package Chamilo\CoreBundle\Component\Editor\Driver
  */
 class HomeDriver extends Driver implements DriverInterface
@@ -12,7 +13,7 @@ class HomeDriver extends Driver implements DriverInterface
     public $name = 'HomeDriver';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setup()
     {

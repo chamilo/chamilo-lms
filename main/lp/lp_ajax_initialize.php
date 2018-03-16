@@ -5,7 +5,9 @@
  * This script contains the server part of the xajax interaction process.
  * This script, in particular, enables the process of SCO's initialization. It
  * resets the JavaScript values for each SCO to the current LMS status.
+ *
  * @package chamilo.learnpath
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
@@ -14,13 +16,15 @@ $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 /**
- * Get one item's details
- * @param   integer LP ID
- * @param   integer user ID
- * @param   integer View ID
- * @param   integer Current item ID
- * @param   integer New item ID
- * @return  string
+ * Get one item's details.
+ *
+ * @param   int LP ID
+ * @param   int user ID
+ * @param   int View ID
+ * @param   int Current item ID
+ * @param   int New item ID
+ *
+ * @return string
  */
 function initialize_item($lp_id, $user_id, $view_id, $next_item)
 {

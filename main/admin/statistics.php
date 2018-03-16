@@ -2,9 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*   @package chamilo.admin
-*/
-
+ *   @package chamilo.admin
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;

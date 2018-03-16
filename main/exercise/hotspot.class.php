@@ -2,15 +2,16 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class HotSpot
+ * Class HotSpot.
  *
  * This class allows to instantiate an object of
  * type HotSpot (MULTIPLE CHOICE, UNIQUE ANSWER)
  * extending the class question
  *
  * @author Eric Marguin
+ *
  * @package chamilo.exercise
- **/
+ */
 class HotSpot extends Question
 {
     public static $typePicture = 'hotspot.png';
@@ -30,8 +31,8 @@ class HotSpot extends Question
     }
 
     /**
-    * @inheritdoc
-    */
+     * {@inheritdoc}
+     */
     public function createForm(&$form, $exercise)
     {
         parent::createForm($form, $exercise);
@@ -72,7 +73,7 @@ class HotSpot extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processCreation($form, $exercise)
     {
@@ -83,11 +84,13 @@ class HotSpot extends Question
             $result = $this->uploadPicture($file_info['tmp_name']);
             if ($result) {
                 $this->save($exercise);
+
                 return true;
             } else {
                 return false;
             }
         }
+
         return false;
     }
 
@@ -97,7 +100,7 @@ class HotSpot extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
@@ -106,7 +109,7 @@ class HotSpot extends Question
 }
 
 /**
- * Class HotSpotDelineation
+ * Class HotSpotDelineation.
  */
 class HotSpotDelineation extends HotSpot
 {
@@ -123,7 +126,7 @@ class HotSpotDelineation extends HotSpot
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createForm(&$form, $exercise)
     {
@@ -131,7 +134,7 @@ class HotSpotDelineation extends HotSpot
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processCreation($form, $exercise)
     {
@@ -144,7 +147,7 @@ class HotSpotDelineation extends HotSpot
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {

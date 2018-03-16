@@ -14,7 +14,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Class SessionVoter
+ * Class SessionVoter.
+ *
  * @package Chamilo\CoreBundle\Security\Authorization\Voter
  */
 class SessionVoter extends Voter
@@ -28,8 +29,8 @@ class SessionVoter extends Voter
     private $container;
 
     /**
-     * @param EntityManager $entityManager
-     * @param CourseManager $courseManager
+     * @param EntityManager      $entityManager
+     * @param CourseManager      $courseManager
      * @param ContainerInterface $container
      */
     public function __construct(
@@ -59,22 +60,23 @@ class SessionVoter extends Voter
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function supports($attribute, $subject)
     {
         $options = [
             self::VIEW,
             self::EDIT,
-            self::DELETE
+            self::DELETE,
         ];
+
         return $subject instanceof Session && in_array($attribute, $options);
     }
 
     /**
-     * Check if user has access to a session
+     * Check if user has access to a session.
      *
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function voteOnAttribute($attribute, $session, TokenInterface $token)
     {
@@ -125,6 +127,7 @@ class SessionVoter extends Voter
                         return false;
                     }
                     $user->addRole('ROLE_CURRENT_SESSION_COURSE_TEACHER');
+
                     return true;
                 }
 
@@ -204,6 +207,7 @@ class SessionVoter extends Voter
 
                     return true;
                 }
+
                 return false;
                 break;
         }

@@ -5,11 +5,11 @@ use ChamiloSession as Session;
 
 /**
  * @package chamilo.notebook
+ *
  * @author Christian Fasanando, initial version
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium,
  * refactoring and tighter integration
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $current_course_tool = TOOL_NOTEBOOK;
@@ -44,14 +44,14 @@ if ($action === 'addnote') {
     $tool = 'NoteAddNew';
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq(),
-        'name' => get_lang('ToolNotebook')
+        'name' => get_lang('ToolNotebook'),
     ];
 }
 if ($action === 'editnote') {
     $tool = 'ModifyNote';
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq(),
-        'name' => get_lang('ToolNotebook')
+        'name' => get_lang('ToolNotebook'),
     ];
 }
 

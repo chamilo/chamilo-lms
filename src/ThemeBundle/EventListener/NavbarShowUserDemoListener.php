@@ -2,7 +2,7 @@
 /**
  * NavbarShowUserListener.php
  * avanzu-admin
- * Date: 23.02.14
+ * Date: 23.02.14.
  */
 
 namespace Chamilo\ThemeBundle\EventListener;

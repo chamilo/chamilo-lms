@@ -9,6 +9,7 @@ use ChamiloSession as Session;
  *
  * @author Patrick Cool
  * @author Julio Montoya - Multiple URL site
+ *
  * @package chamilo.admin
  */
 
@@ -36,14 +37,14 @@ $settings_to_avoid = [
     'use_session_mode' => 'true',
     'gradebook_enable' => 'false',
     // ON by default - now we have this option when  we create a course
-    'example_material_course_creation' => 'true'
+    'example_material_course_creation' => 'true',
 ];
 
 $convert_byte_to_mega_list = [
     'dropbox_max_filesize',
     'message_max_upload_filesize',
     'default_document_quotum',
-    'default_group_quotum'
+    'default_group_quotum',
 ];
 
 if (isset($_POST['style'])) {
@@ -82,7 +83,7 @@ $form_search = new FormValidator(
 );
 $form_search->addElement('text', 'search_field', null, [
     'id' => 'search_field',
-    'aria-label' => get_lang('Search')
+    'aria-label' => get_lang('Search'),
 ]);
 $form_search->addElement('hidden', 'category', 'search_setting');
 $form_search->addButtonSearch(get_lang('Search'), 'submit_button');

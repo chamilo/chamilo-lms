@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -86,7 +87,7 @@ if ($form->validate()) {
 $selectcat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : '';
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$selectcat,
-    'name' => get_lang('Gradebook')
+    'name' => get_lang('Gradebook'),
 ];
 $this_section = SECTION_COURSES;
 Display :: display_header(get_lang('EditCategory'));

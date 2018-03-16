@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Script for sub-language administration
+ * Script for sub-language administration.
+ *
  * @package chamilo.admin.sub_language
  */
-
 $cidReset = true;
 $this_script = 'sub_language';
 require_once __DIR__.'/../inc/global.inc.php';
@@ -36,27 +36,27 @@ $htmlHeadXtra[] = '<script>
                     \'new_language\': is_new_language,
                     \'variable_language\': is_variable_language,
                     \'file_id\': file_id,
-                    \'id\': ' . intval($_REQUEST['id']).',
-                    \'sub\': ' . intval($_REQUEST['sub_language_id']).',
-                    \'sub_language_id\': ' . intval($_REQUEST['sub_language_id']).'
+                    \'id\': '.intval($_REQUEST['id']).',
+                    \'sub\': '.intval($_REQUEST['sub_language_id']).',
+                    \'sub_language_id\': '.intval($_REQUEST['sub_language_id']).'
                 },
                 success: function(datos) {
                     if (datos == "1") {
-                        $("#div_message_information_id").html(\'' . Display::return_message(get_lang('TheNewWordHasBeenAdded'), 'success').'\');
+                        $("#div_message_information_id").html(\''.Display::return_message(get_lang('TheNewWordHasBeenAdded'), 'success').'\');
                     } else {
                         $("#div_message_information_id").html("<div class=\"alert alert-warning\">" + datos +"</div>");
                     }
                 }
             });
         } else {
-            $("#div_message_information_id").html(\'' . Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error').'\');
+            $("#div_message_information_id").html(\''.Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error').'\');
         }
     });
 });
 </script>';
 
 /**
- * Main code
+ * Main code.
  */
 // setting the name of the tool
 $tool_name = get_lang('CreateSubLanguage');
@@ -121,11 +121,13 @@ echo '<div id="div_message_information_id">&nbsp;</div>';
 
 /**
  * @param $term The term to search
- * @param bool $search_in_variable The search will include the variable definition of the term
- * @param bool $search_in_english The search will include the english language variables
- * @param bool $search_in_parent The search will include the parent language variables of the sub language
+ * @param bool $search_in_variable     The search will include the variable definition of the term
+ * @param bool $search_in_english      The search will include the english language variables
+ * @param bool $search_in_parent       The search will include the parent language variables of the sub language
  * @param bool $search_in_sub_language The search will include the sub language variables
+ *
  * @author Julio Montoya
+ *
  * @return array
  */
 function search_language_term(
@@ -185,7 +187,7 @@ function search_language_term(
                         $english_name_variable,
                         $parent_variable_value,
                         $obj_text,
-                        $obj_button
+                        $obj_button,
                     ];
                 }
             }
@@ -245,7 +247,7 @@ function search_language_term(
                         $english_name_variable,
                         $parent_variable_value,
                         $obj_text,
-                        $obj_button
+                        $obj_button,
                     ];
                 }
             }
@@ -281,13 +283,14 @@ function search_language_term(
                     $list_info[] = [$lang_file.'.inc.php',
                         $name_variable,
                         $english_name_variable,
-                        $parent_variable_value, $obj_text, $obj_button];
+                        $parent_variable_value, $obj_text, $obj_button, ];
                 }
             }
         }
     }
 
     $list_info = array_unique_dimensional($list_info);
+
     return $list_info;
 }
 
@@ -309,7 +312,7 @@ if (isset($_REQUEST['txt_search_word'])) {
 $parameters = [
     'id' => intval($_GET['id']),
     'sub_language_id' => intval($_GET['sub_language_id']),
-    'txt_search_word' => $txt_search_word
+    'txt_search_word' => $txt_search_word,
 ];
 $table = new SortableTableFromArrayConfig($list_info, 1, 20, 'data_info');
 $table->set_additional_parameters($parameters);

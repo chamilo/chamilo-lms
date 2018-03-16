@@ -1,7 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Student report
+ * Student report.
+ *
  * @package chamilo.reporting
  */
 $cidReset = true;
@@ -21,13 +22,13 @@ $this_section = SECTION_TRACKING;
 
 $interbreadcrumb[] = [
     "url" => api_is_student_boss() ? "#" : "index.php",
-    "name" => get_lang('MySpace')
+    "name" => get_lang('MySpace'),
 ];
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) {
     $interbreadcrumb[] = [
         "url" => "teachers.php",
-        "name" => get_lang('Teachers')
+        "name" => get_lang('Teachers'),
     ];
 }
 
@@ -195,6 +196,7 @@ function get_users($from, $limit, $column, $direction)
         $row[] = $lostPasswordLink.$detailsLink;
         $all_datas[] = $row;
     }
+
     return $all_datas;
 }
 
@@ -232,7 +234,7 @@ if (api_is_drh()) {
         Display::url(
             Display::return_icon('skills.png', get_lang('Skills'), [], ICON_SIZE_MEDIUM),
             'skills.php'
-        )
+        ),
     ];
 
     $nb_menu_items = count($menu_items);
@@ -269,7 +271,7 @@ $actionsRight = '';
 $actionsRight .= Display::url(
     Display::return_icon('printer.png', get_lang('Print'), [], ICON_SIZE_MEDIUM),
     'javascript: void(0);',
-    ['onclick'=>'javascript: window.print();']
+    ['onclick' => 'javascript: window.print();']
 );
 $actionsRight .= Display::url(
     Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
@@ -289,7 +291,7 @@ $table = new SortableTable(
 $params = [
     'keyword' => $keyword,
     'active' => $active,
-    'sleeping_days' => $sleepingDays
+    'sleeping_days' => $sleepingDays,
 ];
 $table->set_additional_parameters($params);
 
@@ -311,14 +313,14 @@ if ($export_csv) {
             get_lang('FirstName'),
             get_lang('LastName'),
             get_lang('FirstLogin'),
-            get_lang('LastConnexion')
+            get_lang('LastConnexion'),
         ];
     } else {
         $csv_header[] = [
             get_lang('LastName'),
             get_lang('FirstName'),
             get_lang('FirstLogin'),
-            get_lang('LastConnexion')
+            get_lang('LastConnexion'),
         ];
     }
 }

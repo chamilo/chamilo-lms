@@ -3,17 +3,17 @@
 
 namespace Chamilo\CoreBundle\Block;
 
-use Sonata\BlockBundle\Block\Service\AbstractBlockService;
-use Symfony\Component\HttpFoundation\Response;
-
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\CoreBundle\Validator\ErrorElement;
-use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\BlockContextInterface;
+use Sonata\BlockBundle\Block\Service\AbstractBlockService;
+use Sonata\BlockBundle\Model\BlockInterface;
+use Sonata\CoreBundle\Validator\ErrorElement;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class CourseBlockService
+ * Class CourseBlockService.
+ *
  * @package Chamilo\CoreBundle\Block
  */
 class CourseBlockService extends AbstractBlockService
@@ -29,10 +29,10 @@ class CourseBlockService extends AbstractBlockService
     public function configureSettings(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'url'      => false,
-            'title'    => 'Course block',
+            'url' => false,
+            'title' => 'Course block',
             'template' => 'ChamiloCoreBundle:Block:course.html.twig',
-            'ttl' => 0
+            'ttl' => 0,
         ]);
     }
 
@@ -46,7 +46,8 @@ class CourseBlockService extends AbstractBlockService
 
     /**
      * @param BlockContextInterface $blockContext
-     * @param Response|null $response
+     * @param Response|null         $response
+     *
      * @return Response
      */
     public function execute(BlockContextInterface $blockContext, Response $response = null)

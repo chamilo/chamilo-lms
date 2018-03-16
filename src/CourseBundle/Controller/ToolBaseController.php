@@ -4,13 +4,10 @@
 namespace Chamilo\CourseBundle\Controller;
 
 use Chamilo\CoreBundle\Controller\BaseController;
-use Knp\Menu\FactoryInterface as MenuFactoryInterface;
-use Knp\Menu\ItemInterface as MenuItemInterface;
-use Knp\Menu\Renderer\ListRenderer;
-use Symfony\Component\HttpFoundation\Request;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CourseBundle\Controller\ToolInterface;
+use Knp\Menu\ItemInterface as MenuItemInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Each entity controller must extends this class.
@@ -23,7 +20,7 @@ abstract class ToolBaseController extends BaseController implements ToolInterfac
     protected $session;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setCourse(Course $course)
     {
@@ -39,8 +36,7 @@ abstract class ToolBaseController extends BaseController implements ToolInterfac
     }
 
     /**
-     *
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function setSession(Session $session)
     {
@@ -58,6 +54,7 @@ abstract class ToolBaseController extends BaseController implements ToolInterfac
     /**
      * @param $action
      * @param MenuItemInterface $menu
+     *
      * @return MenuItemInterface
      */
     public function buildBreadcrumbs($action, MenuItemInterface $menu = null)
@@ -73,9 +70,9 @@ abstract class ToolBaseController extends BaseController implements ToolInterfac
                 'uri' => $this->generateControllerUrl(
                     'indexAction',
                     [
-                        'courseCode' => $this->getCourse()->getCode()
+                        'courseCode' => $this->getCourse()->getCode(),
                     ]
-                )
+                ),
             ]
         );
 
@@ -100,7 +97,7 @@ abstract class ToolBaseController extends BaseController implements ToolInterfac
 
     /**
      * Converts string 'Chamilo\CourseBundle\Controller\CourseHome\CourseHomeController' into
-     * 'tool/course_home'
+     * 'tool/course_home'.
      */
     public function getTemplatePath()
     {
@@ -117,11 +114,12 @@ abstract class ToolBaseController extends BaseController implements ToolInterfac
         }
 
         $template = implode('/', $newPath);
+
         return str_replace('_controller', '', $template);
     }
 
     /**
-     * Before middleware for the ToolBaseController
+     * Before middleware for the ToolBaseController.
      *
      * @param Request $request
      */
@@ -136,10 +134,10 @@ abstract class ToolBaseController extends BaseController implements ToolInterfac
         }
 
         $sessionId = $request->get('id_session');
-        $groupId   = $request->get('gidReq');
+        $groupId = $request->get('gidReq');
 
-        $tempCourseId  = api_get_course_id();
-        $tempGroupId   = api_get_group_id();
+        $tempCourseId = api_get_course_id();
+        $tempGroupId = api_get_group_id();
         $tempSessionId = api_get_session_id();
 
         $courseReset = false;
@@ -169,7 +167,7 @@ abstract class ToolBaseController extends BaseController implements ToolInterfac
 
                 if (!empty($courseInfo)) {
                     $courseCode = $courseInfo['code'];
-                    $courseId   = $courseInfo['real_id'];
+                    $courseId = $courseInfo['real_id'];
 
                     $sessionHandler->set('_real_cid', $courseId);
                     $sessionHandler->set('_cid', $courseCode);

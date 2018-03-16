@@ -1,23 +1,25 @@
 <?php
 /**
  * This script is a configuration file for the date plugin. You can use it as a master for other platform plugins (course plugins are slightly different).
- * These settings will be used in the administration interface for plugins (Chamilo configuration settings->Plugins)
+ * These settings will be used in the administration interface for plugins (Chamilo configuration settings->Plugins).
+ *
  * @package chamilo.plugin
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 /**
- * Plugin details (must be present)
+ * Plugin details (must be present).
  */
 
 //the plugin title
 $plugin_info['title'] = 'Enable or disable logout button';
 
 //the comments that go with the plugin
-$plugin_info['comment']     = "If you use some other authentication than local Chamilo authentication, you may have to disable the Chamilo logout button and give users information about your SSO logout.";
+$plugin_info['comment'] = "If you use some other authentication than local Chamilo authentication, you may have to disable the Chamilo logout button and give users information about your SSO logout.";
 //the plugin version
-$plugin_info['version']     = '1.0';
+$plugin_info['version'] = '1.0';
 //the plugin author
-$plugin_info['author']      = 'Hubert Borderiou';
+$plugin_info['author'] = 'Hubert Borderiou';
 //the plugin configuration
 $form = new FormValidator('eaclbb_form');
 $form->addElement("html", "<div class='normal-message'>Fill the text boxes below to overwrite the default values used in this plugin</div>");

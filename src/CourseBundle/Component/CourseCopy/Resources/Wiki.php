@@ -5,8 +5,10 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
  * Class for migrating the wiki
- * Wiki backup script
+ * Wiki backup script.
+ *
  * @package chamilo.backup
+ *
  * @author Matthias Crauwels <matthias.crauwels@UGent.be>, Ghent University
  */
 class Wiki extends Resource
@@ -24,6 +26,7 @@ class Wiki extends Resource
 
     /**
      * Wiki constructor.
+     *
      * @param int $id
      * @param int $page_id
      * @param $reflink

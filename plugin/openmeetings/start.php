@@ -1,9 +1,9 @@
 <?php
 /**
- * This script initiates a video conference session
+ * This script initiates a video conference session.
  */
 /**
- * Initialization
+ * Initialization.
  */
 $course_plugin = 'openmeetings'; //needed in order to load the plugin lang variables
 require_once __DIR__.'/config.php';

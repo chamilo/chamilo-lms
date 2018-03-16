@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use ChamiloSession as Session;
 
 /**
  * Class Display
@@ -17,7 +17,6 @@ use Chamilo\CoreBundle\Entity\ExtraField;
  * Display::return_message($message)
  *
  * @package chamilo.library
- *
  */
 class Display
 {
@@ -26,7 +25,7 @@ class Display
     public static $preview_style = null;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -46,16 +45,17 @@ class Display
             'gradebook',
             'attendance',
             'course_progress',
-            'notebook'
+            'notebook',
         ];
     }
 
     /**
-    * Displays the page header
-    * @param string The name of the page (will be showed in the page title)
-    * @param string Optional help file name
-    * @param string $page_header
-    */
+     * Displays the page header.
+     *
+     * @param string The name of the page (will be showed in the page title)
+     * @param string Optional help file name
+     * @param string $page_header
+     */
     public static function display_header(
         $tool_name = '',
         $help = null,
@@ -104,7 +104,7 @@ class Display
     }
 
     /**
-     * Displays the reduced page header (without banner)
+     * Displays the reduced page header (without banner).
      */
     public static function display_reduced_header()
     {
@@ -119,7 +119,7 @@ class Display
     }
 
     /**
-     * Display no header
+     * Display no header.
      */
     public static function display_no_header()
     {
@@ -134,7 +134,7 @@ class Display
     }
 
     /**
-     * Displays the reduced page header (without banner)
+     * Displays the reduced page header (without banner).
      */
     public static function set_header()
     {
@@ -148,7 +148,7 @@ class Display
     }
 
     /**
-     * Display the page footer
+     * Display the page footer.
      */
     public static function display_footer()
     {
@@ -156,7 +156,7 @@ class Display
     }
 
     /**
-     * Display the page footer
+     * Display the page footer.
      */
     public static function display_reduced_footer()
     {
@@ -168,9 +168,11 @@ class Display
      * Displays the tool introduction of a tool.
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @param string $tool These are the constants that are used for indicating the tools.
-     * @param array $editor_config Optional configuration settings for the online editor.
-     * return: $tool return a string array list with the "define" in main_api.lib
+     *
+     * @param string $tool          these are the constants that are used for indicating the tools
+     * @param array  $editor_config Optional configuration settings for the online editor.
+     *                              return: $tool return a string array list with the "define" in main_api.lib
+     *
      * @return string html code for adding an introduction
      */
     public static function display_introduction_section(
@@ -182,8 +184,7 @@ class Display
 
     /**
      * @param string $tool
-     * @param array $editor_config
-     * @return null
+     * @param array  $editor_config
      */
     public static function return_introduction_section(
         $tool,
@@ -193,30 +194,33 @@ class Display
         if (api_get_setting('enable_tool_introduction') == 'true' || $tool == TOOL_COURSE_HOMEPAGE) {
             $introduction_section = null;
             require api_get_path(SYS_INC_PATH).'introductionSection.inc.php';
+
             return $introduction_section;
         }
     }
 
     /**
-     * Displays a table
-     * @param array $header Titles for the table header
-     *                        each item in this array can contain 3 values
-     *                        - 1st element: the column title
-     *                        - 2nd element: true or false (column sortable?)
-     *                        - 3th element: additional attributes for
-     *                        th-tag (eg for column-width)
-     *                        - 4the element: additional attributes for the td-tags
-     * @param array $content 2D-array with the tables content
+     * Displays a table.
+     *
+     * @param array $header          Titles for the table header
+     *                               each item in this array can contain 3 values
+     *                               - 1st element: the column title
+     *                               - 2nd element: true or false (column sortable?)
+     *                               - 3th element: additional attributes for
+     *                               th-tag (eg for column-width)
+     *                               - 4the element: additional attributes for the td-tags
+     * @param array $content         2D-array with the tables content
      * @param array $sorting_options Keys are:
-     *                    'column' = The column to use as sort-key
-     *                    'direction' = SORT_ASC or SORT_DESC
-     * @param array $paging_options Keys are:
-     *                    'per_page_default' = items per page when switching from
-     *                                         full-    list to per-page-view
-     *                    'per_page' = number of items to show per page
-     *                    'page_nr' = The page to display
-     * @param array $query_vars Additional variables to add in the query-string
+     *                               'column' = The column to use as sort-key
+     *                               'direction' = SORT_ASC or SORT_DESC
+     * @param array $paging_options  Keys are:
+     *                               'per_page_default' = items per page when switching from
+     *                               full-    list to per-page-view
+     *                               'per_page' = number of items to show per page
+     *                               'page_nr' = The page to display
+     * @param array $query_vars      Additional variables to add in the query-string
      * @param string The style that the table will show. You can set 'table' or 'grid'
+     *
      * @author bart.mollet@hogent.be
      */
     public static function display_sortable_table(
@@ -254,14 +258,16 @@ class Display
     }
 
     /**
-     * Returns an HTML table with sortable column (through complete page refresh)
-     * @param array $header
-     * @param array $content Array of row arrays
-     * @param array $sorting_options
-     * @param array $paging_options
-     * @param array $query_vars
-     * @param array $form_actions
+     * Returns an HTML table with sortable column (through complete page refresh).
+     *
+     * @param array  $header
+     * @param array  $content         Array of row arrays
+     * @param array  $sorting_options
+     * @param array  $paging_options
+     * @param array  $query_vars
+     * @param array  $form_actions
      * @param string $style
+     *
      * @return string HTML string for array
      */
     public static function return_sortable_table(
@@ -285,22 +291,24 @@ class Display
         );
         $content = ob_get_contents();
         ob_end_clean();
+
         return $content;
     }
 
     /**
-     * Shows a nice grid
+     * Shows a nice grid.
+     *
      * @param string grid name (important to create css)
      * @param array header content
      * @param array array with the information to show
      * @param array $paging_options Keys are:
-     *                    'per_page_default' = items per page when switching from
-     *                                         full-    list to per-page-view
-     *                    'per_page' = number of items to show per page
-     *                    'page_nr' = The page to display
-     *                    'hide_navigation' =  true to hide the navigation
-     * @param array $query_vars Additional variables to add in the query-string
-     * @param array $form actions Additional variables to add in the query-string
+     *                              'per_page_default' = items per page when switching from
+     *                              full-    list to per-page-view
+     *                              'per_page' = number of items to show per page
+     *                              'page_nr' = The page to display
+     *                              'hide_navigation' =  true to hide the navigation
+     * @param array $query_vars     Additional variables to add in the query-string
+     * @param array $form           actions Additional variables to add in the query-string
      * @param mixed An array with bool values to know which columns show.
      * i.e: $visibility_options= array(true, false) we will only show the first column
      *                Can be also only a bool value. TRUE: show all columns, FALSE: show nothing
@@ -330,24 +338,26 @@ class Display
     }
 
     /**
-     * Gets a nice grid in html string
+     * Gets a nice grid in html string.
+     *
      * @param string grid name (important to create css)
      * @param array header content
      * @param array array with the information to show
      * @param array $paging_options Keys are:
-     *                    'per_page_default' = items per page when switching from
-     *                                         full-    list to per-page-view
-     *                    'per_page' = number of items to show per page
-     *                    'page_nr' = The page to display
-     *                    'hide_navigation' =  true to hide the navigation
-     * @param array $query_vars Additional variables to add in the query-string
-     * @param array $form actions Additional variables to add in the query-string
+     *                              'per_page_default' = items per page when switching from
+     *                              full-    list to per-page-view
+     *                              'per_page' = number of items to show per page
+     *                              'page_nr' = The page to display
+     *                              'hide_navigation' =  true to hide the navigation
+     * @param array $query_vars     Additional variables to add in the query-string
+     * @param array $form           actions Additional variables to add in the query-string
      * @param mixed An array with bool values to know which columns show. i.e:
      *  $visibility_options= array(true, false) we will only show the first column
      *    Can be also only a bool value. TRUE: show all columns, FALSE: show nothing
      * @param bool  true for sorting data or false otherwise
      * @param array grid classes
-     * @return    string   html grid
+     *
+     * @return string html grid
      */
     public static function return_sortable_grid(
         $name,
@@ -379,26 +389,27 @@ class Display
     }
 
     /**
-     * Displays a table with a special configuration
-     * @param array $header Titles for the table header
-     * each item in this array can contain 3 values
-     * - 1st element: the column title
-     * - 2nd element: true or false (column sortable?)
-     * - 3th element: additional attributes for th-tag (eg for column-width)
-     * - 4the element: additional attributes for the td-tags
-     * @param array $content 2D-array with the tables content
+     * Displays a table with a special configuration.
+     *
+     * @param array $header          Titles for the table header
+     *                               each item in this array can contain 3 values
+     *                               - 1st element: the column title
+     *                               - 2nd element: true or false (column sortable?)
+     *                               - 3th element: additional attributes for th-tag (eg for column-width)
+     *                               - 4the element: additional attributes for the td-tags
+     * @param array $content         2D-array with the tables content
      * @param array $sorting_options Keys are:
-     *  'column' = The column to use as sort-key
-     *  'direction' = SORT_ASC or SORT_DESC
-     * @param array $paging_options Keys are:
-     *  'per_page_default' = items per page when switching from full list to per-page-view
-     *  'per_page' = number of items to show per page
-     *  'page_nr' = The page to display
-     * @param array $query_vars Additional variables to add in the query-string
-     * @param array $column_show Array of binaries 1= show columns 0. hide a column
-     * @param array $column_order An array of integers that let us decide how the columns are going to be sort.
-     *    i.e:  $column_order=array('1''4','3','4'); The 2nd column will be order like the 4th column
-     * @param array $form_actions Set optional forms actions
+     *                               'column' = The column to use as sort-key
+     *                               'direction' = SORT_ASC or SORT_DESC
+     * @param array $paging_options  Keys are:
+     *                               'per_page_default' = items per page when switching from full list to per-page-view
+     *                               'per_page' = number of items to show per page
+     *                               'page_nr' = The page to display
+     * @param array $query_vars      Additional variables to add in the query-string
+     * @param array $column_show     Array of binaries 1= show columns 0. hide a column
+     * @param array $column_order    An array of integers that let us decide how the columns are going to be sort.
+     *                               i.e:  $column_order=array('1''4','3','4'); The 2nd column will be order like the 4th column
+     * @param array $form_actions    Set optional forms actions
      *
      * @author Julio Montoya
      */
@@ -447,14 +458,13 @@ class Display
     /**
      * Displays a normal message. It is recommended to use this public function
      * to display any normal information messages.
+     *
      * @param string $message
-     * @param bool $filter (true) or not (false)
-     * @param bool $returnValue
+     * @param bool   $filter      (true) or not (false)
+     * @param bool   $returnValue
      *
      * @deprecated Use <code>Display::addFlash(Display::return_message($message, 'normal'));</code>
      *  Or <code>echo Display::return_message($message, 'normal')</code>
-     *
-     * @return void
      */
     public static function display_normal_message(
         $message,
@@ -471,7 +481,7 @@ class Display
 
     /**
      * Displays an warning message. Use this if you want to draw attention to something
-     * This can also be used for instance with the hint in the exercises
+     * This can also be used for instance with the hint in the exercises.
      *
      * @deprecated use Display::addFlash(Display::return_message($message, 'warning'));
      */
@@ -489,10 +499,11 @@ class Display
     }
 
     /**
-     * Displays an confirmation message. Use this if something has been done successfully
+     * Displays an confirmation message. Use this if something has been done successfully.
+     *
      * @param bool    Filter (true) or not (false)
+     *
      * @deprecated use Display::addFlash(Display::return_message($message, 'confirm'));
-     * @return void
      */
     public static function display_confirmation_message(
         $message,
@@ -508,13 +519,13 @@ class Display
     }
 
     /**
-     * Displays an error message. It is recommended to use this public function if an error occurs
-     * @param string $message - include any additional html
-     *                          tags if you need them
-     * @param bool    Filter (true) or not (false)
-     * @deprecated use Display::addFlash(Display::return_message($message, 'error'));
+     * Displays an error message. It is recommended to use this public function if an error occurs.
      *
-     * @return void
+     * @param string $message - include any additional html
+     *                        tags if you need them
+     * @param bool    Filter (true) or not (false)
+     *
+     * @deprecated use Display::addFlash(Display::return_message($message, 'error'));
      */
     public static function display_error_message(
         $message,
@@ -532,7 +543,7 @@ class Display
     /**
      * @param string $message
      * @param string $type
-     * @param bool $filter
+     * @param bool   $filter
      */
     public static function return_message_and_translate(
         $message,
@@ -544,11 +555,13 @@ class Display
     }
 
     /**
-     * Returns a div html string with
-     * @param   string  $message
-     * @param   string  $type Example: confirm, normal, warning, error
-     * @param   bool    $filter Whether to XSS-filter or not
-     * @return  string  Message wrapped into an HTML div
+     * Returns a div html string with.
+     *
+     * @param string $message
+     * @param string $type    Example: confirm, normal, warning, error
+     * @param bool   $filter  Whether to XSS-filter or not
+     *
+     * @return string Message wrapped into an HTML div
      */
     public static function return_message(
         $message,
@@ -585,15 +598,16 @@ class Display
                 $class .= 'alert alert-info';
         }
 
-        return self::div($message, ['class'=> $class]);
+        return self::div($message, ['class' => $class]);
     }
 
     /**
-     * Returns an encrypted mailto hyperlink
+     * Returns an encrypted mailto hyperlink.
      *
      * @param string  e-mail
      * @param string  clickable text
      * @param string  optional, class from stylesheet
+     *
      * @return string encrypted mailto hyperlink
      */
     public static function encrypted_mailto_link(
@@ -615,15 +629,15 @@ class Display
         // Encrypt email
         $hmail = '';
         for ($i = 0; $i < strlen($email); $i++) {
-            $hmail .= '&#'.ord($email {
-            $i }).';';
+            $hmail .= '&#'.ord($email[
+            $i]).';';
         }
         $hclickable_text = null;
         // Encrypt clickable text if @ is present
         if (strpos($clickable_text, '@')) {
             for ($i = 0; $i < strlen($clickable_text); $i++) {
-                $hclickable_text .= '&#'.ord($clickable_text {
-                $i }).';';
+                $hclickable_text .= '&#'.ord($clickable_text[
+                $i]).';';
             }
         } else {
             $hclickable_text = @htmlspecialchars(
@@ -637,12 +651,13 @@ class Display
     }
 
     /**
-     * Returns an mailto icon hyperlink
+     * Returns an mailto icon hyperlink.
      *
      * @param string  e-mail
      * @param string  icon source file from the icon lib
-     * @param integer  icon size from icon lib
+     * @param int  icon size from icon lib
      * @param string  optional, class from stylesheet
+     *
      * @return string encrypted mailto hyperlink
      */
     public static function icon_mailto_link(
@@ -662,8 +677,8 @@ class Display
         // Encrypt email
         $hmail = '';
         for ($i = 0; $i < strlen($email); $i++) {
-            $hmail .= '&#'.ord($email {
-            $i }).';';
+            $hmail .= '&#'.ord($email[
+            $i]).';';
         }
         // icon html code
         $icon_html_source = self::return_icon(
@@ -679,9 +694,12 @@ class Display
 
     /**
      * Prints an <option>-list with all letters (A-Z).
+     *
      * @param string $selected_letter The letter that should be selected
+     *
      * @todo This is English language specific implementation.
      * It should be adapted for the other languages.
+     *
      * @return string
      */
     public static function get_alphabet_options($selectedLetter = '')
@@ -695,14 +713,17 @@ class Display
             }
             $result .= '>'.$letter.'</option>';
         }
+
         return $result;
     }
 
     /**
-     * Get the options withing a select box within the given values
+     * Get the options withing a select box within the given values.
+     *
      * @param int   Min value
      * @param int   Max value
      * @param int   Default value
+     *
      * @return string HTML select options
      */
     public static function get_numeric_options($min, $max, $selected_num = 0)
@@ -717,17 +738,18 @@ class Display
             }
             $result .= '>'.$i.'</option>';
         }
+
         return $result;
     }
 
     /**
-     * This public function displays an icon
+     * This public function displays an icon.
+     *
      * @param string   The filename of the file (in the main/img/ folder
      * @param string   The alt text (probably a language variable)
      * @param array    additional attributes (for instance height, width, onclick, ...)
-     * @param integer  The wanted width of the icon (to be looked for in the corresponding img/icons/ folder)
-     * @return void
-    */
+     * @param int  The wanted width of the icon (to be looked for in the corresponding img/icons/ folder)
+     */
     public static function display_icon(
         $image,
         $alt_text = '',
@@ -738,10 +760,10 @@ class Display
     }
 
     /**
-     * Gets the path of an icon
+     * Gets the path of an icon.
      *
      * @param string $icon
-     * @param int $size
+     * @param int    $size
      *
      * @return string
      */
@@ -751,19 +773,21 @@ class Display
     }
 
     /**
-     * This public function returns the htmlcode for an icon
+     * This public function returns the htmlcode for an icon.
      *
      * @param string   The filename of the file (in the main/img/ folder
      * @param string   The alt text (probably a language variable)
      * @param array    Additional attributes (for instance height, width, onclick, ...)
-     * @param integer  The wanted width of the icon (to be looked for in the corresponding img/icons/ folder)
-     * @return string  An HTML string of the right <img> tag
+     * @param int  The wanted width of the icon (to be looked for in the corresponding img/icons/ folder)
+     *
+     * @return string An HTML string of the right <img> tag
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University 2006
      * @author Julio Montoya 2010 Function improved, adding image constants
      * @author Yannick Warnier 2011 Added size handler
+     *
      * @version Feb 2011
-    */
+     */
     public static function return_icon(
         $image,
         $alt_text = '',
@@ -860,13 +884,15 @@ class Display
     }
 
     /**
-     * Returns the htmlcode for an image
+     * Returns the htmlcode for an image.
      *
-     * @param string $image_path the filename of the file (in the main/img/ folder
-     * @param string $alt_text the alt text (probably a language variable)
-     * @param array $additional_attributes (for instance height, width, onclick, ...)
-     * @param boolean $filterPath Optional. Whether filter the image path. Default is true
+     * @param string $image_path            the filename of the file (in the main/img/ folder
+     * @param string $alt_text              the alt text (probably a language variable)
+     * @param array  $additional_attributes (for instance height, width, onclick, ...)
+     * @param bool   $filterPath            Optional. Whether filter the image path. Default is true
+     *
      * @return string
+     *
      * @author Julio Montoya 2010
      */
     public static function img(
@@ -911,13 +937,14 @@ class Display
     }
 
     /**
-     * Returns the htmlcode for a tag (h3, h1, div, a, button), etc
+     * Returns the htmlcode for a tag (h3, h1, div, a, button), etc.
      *
-     * @param string $tag the tag name
-     * @param string $content the tag's content
-     * @param array $additional_attributes (for instance height, width, onclick, ...)
+     * @param string $tag                   the tag name
+     * @param string $content               the tag's content
+     * @param array  $additional_attributes (for instance height, width, onclick, ...)
      *
      * @return string
+     *
      * @author Julio Montoya 2010
      */
     public static function tag($tag, $content, $additional_attributes = [])
@@ -926,7 +953,7 @@ class Display
         // Managing the additional attributes
         if (!empty($additional_attributes) && is_array($additional_attributes)) {
             $attribute_list = '';
-            foreach ($additional_attributes as $key => & $value) {
+            foreach ($additional_attributes as $key => &$value) {
                 $attribute_list .= $key.'="'.$value.'" ';
             }
         }
@@ -936,14 +963,16 @@ class Display
         } else {
             $return_value = '<'.$tag.' '.$attribute_list.' >'.$content.'</'.$tag.'>';
         }
+
         return $return_value;
     }
 
     /**
-     * Creates a URL anchor
+     * Creates a URL anchor.
+     *
      * @param string $name
      * @param string $url
-     * @param array $attributes
+     * @param array  $attributes
      *
      * @return string
      */
@@ -954,14 +983,16 @@ class Display
             $url = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
             $attributes['href'] = $url;
         }
+
         return self::tag('a', $name, $attributes);
     }
 
     /**
-     * Creates a div tag
+     * Creates a div tag.
      *
      * @param string $content
-     * @param array $attributes
+     * @param array  $attributes
+     *
      * @return string
      */
     public static function div($content, $attributes = [])
@@ -970,7 +1001,7 @@ class Display
     }
 
     /**
-     * Creates a span tag
+     * Creates a span tag.
      */
     public static function span($content, $attributes = [])
     {
@@ -978,7 +1009,7 @@ class Display
     }
 
     /**
-     * Displays an HTML input tag
+     * Displays an HTML input tag.
      */
     public static function input($type, $name, $value, $attributes = [])
     {
@@ -991,6 +1022,7 @@ class Display
         if (isset($value)) {
             $attributes['value'] = $value;
         }
+
         return self::tag('input', '', $attributes);
     }
 
@@ -998,6 +1030,7 @@ class Display
      * @param $name
      * @param $value
      * @param array $attributes
+     *
      * @return string
      */
     public static function button($name, $value, $attributes = [])
@@ -1005,12 +1038,12 @@ class Display
         if (!empty($name)) {
             $attributes['name'] = $name;
         }
+
         return self::tag('button', $value, $attributes);
     }
 
     /**
-     * Displays an HTML select tag
-     *
+     * Displays an HTML select tag.
      */
     public static function select(
         $name,
@@ -1067,6 +1100,7 @@ class Display
             }
         }
         $html .= '</select>';
+
         return $html;
     }
 
@@ -1074,18 +1108,16 @@ class Display
      * Creates a tab menu
      * Requirements: declare the jquery, jquery-ui libraries + the jquery-ui.css
      * in the $htmlHeadXtra variable before the display_header
-     * Add this script
+     * Add this script.
+     *
      * @example
-             * <script>
-                    $(function() {
-                        $( "#tabs" ).tabs();
-                    });
+     * <script>
                 </script>
-     * @param   array   $headers list of the tab titles
-     * @param   array   $items
-     * @param   string  $id id of the container of the tab in the example "tabs"
-     * @param   array   $attributes for the ul
-     * @param array $ul_attributes
+     * @param array  $headers       list of the tab titles
+     * @param array  $items
+     * @param string $id            id of the container of the tab in the example "tabs"
+     * @param array  $attributes    for the ul
+     * @param array  $ul_attributes
      *
      * @return string
      */
@@ -1128,7 +1160,7 @@ class Display
             [
                 'class' => 'nav nav-tabs tabs-margin',
                 'role' => 'tablist',
-                'id' => 'ul_'.$id
+                'id' => 'ul_'.$id,
             ]
         );
 
@@ -1193,7 +1225,8 @@ class Display
     }
 
     /**
-     * In order to display a grid using jqgrid you have to:
+     * In order to display a grid using jqgrid you have to:.
+     *
      * @example
      * After your Display::display_header function you have to add the nex javascript code:
      * <script>
@@ -1205,26 +1238,29 @@ class Display
      * As you can see both function use the same "my_grid_name" this is very important otherwise nothing will work
      *
      * @param   string  the div id, this value must be the same with the first parameter of Display::grid_js()
-     * @return  string  html
      *
+     * @return string html
      */
     public static function grid_html($div_id)
     {
         $table = self::tag('table', '', ['id' => $div_id]);
         $table .= self::tag('div', '', ['id' => $div_id.'_pager']);
+
         return $table;
     }
 
     /**
      * @param string $label
      * @param string $form_item
+     *
      * @return string
      */
     public static function form_row($label, $form_item)
     {
-        $label = self::span($label, ['class' =>'control-label']);
-        $form_item = self::div($form_item, ['class' =>'controls']);
-        return self::div($label.$form_item, ['class'=>'control-group']);
+        $label = self::span($label, ['class' => 'control-label']);
+        $form_item = self::div($form_item, ['class' => 'controls']);
+
+        return self::div($label.$form_item, ['class' => 'control-group']);
     }
 
     /**
@@ -1232,23 +1268,23 @@ class Display
      * For the other jqgrid options visit http://www.trirand.com/jqgridwiki/doku.php?id=wiki:options
      * This function need to be in the ready jquery function
      * example --> $(function() { <?php echo Display::grid_js('grid' ...); ?> }
-     * In order to work this function needs the Display::grid_html function with the same div id
+     * In order to work this function needs the Display::grid_html function with the same div id.
      *
-     * @param   string $div_id div id
-     * @param   string $url url where the jqgrid will ask for data (if datatype = json)
-     * @param   array $column_names Visible columns (you should use get_lang).
-     * An array in which we place the names of the columns.
-     *                    This is the text that appears in the head of the grid (Header layer).
-     *                    Example: colname   {name:'date',     index:'date',   width:120, align:'right'},
-     * @param   array $column_model the column model :  Array which describes the parameters of the columns.
-     * This is the most important part of the grid.
-     *                    For a full description of all valid values see colModel API. See the url above.
-     * @param   array $extra_params extra parameters
-     * @param   array $data data that will be loaded
-     * @param    string $formatter A string that will be appended to the JSON returned
-     * @param    bool $fixed_width not implemented yet
-     * @return  string  the js code
+     * @param string $div_id       div id
+     * @param string $url          url where the jqgrid will ask for data (if datatype = json)
+     * @param array  $column_names Visible columns (you should use get_lang).
+     *                             An array in which we place the names of the columns.
+     *                             This is the text that appears in the head of the grid (Header layer).
+     *                             Example: colname   {name:'date',     index:'date',   width:120, align:'right'},
+     * @param array  $column_model the column model :  Array which describes the parameters of the columns.
+     *                             This is the most important part of the grid.
+     *                             For a full description of all valid values see colModel API. See the url above.
+     * @param array  $extra_params extra parameters
+     * @param array  $data         data that will be loaded
+     * @param string $formatter    A string that will be appended to the JSON returned
+     * @param bool   $fixed_width  not implemented yet
      *
+     * @return string the js code
      */
     public static function grid_js(
         $div_id,
@@ -1388,7 +1424,7 @@ class Display
             $json .= '$("#'.$div_id.'").jqGrid("setGroupHeaders", {
                 "useColSpanStyle" : false,
                 "groupHeaders"    : [
-                    ' . $groups.'
+                    '.$groups.'
                 ]
             });';
         }
@@ -1406,6 +1442,7 @@ class Display
      * @param array $headers
      * @param array $rows
      * @param array $attributes
+     *
      * @return string
      */
     public static function table($headers, $rows, $attributes = [])
@@ -1433,11 +1470,12 @@ class Display
                 $row++;
             }
         }
+
         return $table->toHtml();
     }
 
     /**
-     * Returns the "what's new" icon notifications
+     * Returns the "what's new" icon notifications.
      *
      * The general logic of this function is to track the last time the user
      * entered the course and compare to what has changed inside this course
@@ -1445,9 +1483,11 @@ class Display
      * if the user never entered the course before, he will not see notification
      * icons. This function takes session ID into account (if any) and only shows
      * the corresponding notifications.
+     *
      * @param array $courseInfo Course information array, containing at least elements 'db' and 'k'
-     * @param bool $loadAjax
-     * @return string   The HTML link to be shown next to the course
+     * @param bool  $loadAjax
+     *
+     * @return string The HTML link to be shown next to the course
      */
     public static function show_notification($courseInfo, $loadAjax = true)
     {
@@ -1627,10 +1667,12 @@ class Display
     }
 
     /**
-     * Get the session box details as an array
+     * Get the session box details as an array.
+     *
      * @param int       Session ID
-     * @return array    Empty array or session array
-     * ['title'=>'...','category'=>'','dates'=>'...','coach'=>'...','active'=>true/false,'session_category_id'=>int]
+     *
+     * @return array Empty array or session array
+     *               ['title'=>'...','category'=>'','dates'=>'...','coach'=>'...','active'=>true/false,'session_category_id'=>int]
      */
     public static function get_session_title_box($session_id)
     {
@@ -1707,26 +1749,28 @@ class Display
                 $session['extra_fields'][] = [
                     'field' => [
                         'variable' => $value->getField()->getVariable(),
-                        'display_text' => $value->getField()->getDisplayText()
+                        'display_text' => $value->getField()->getDisplayText(),
                     ],
-                    'value' => $value->getValue()
+                    'value' => $value->getValue(),
                 ];
             }
 
             $output = $session;
         }
+
         return $output;
     }
 
     /**
-     * Return the five star HTML
+     * Return the five star HTML.
      *
-     * @param string $id of the rating ul element
-     * @param string $url that will be added (for jquery see hot_courses.tpl)
-     * @param array $point_info point info array see function CourseManager::get_course_ranking()
-     * @param bool $add_div_wrapper add a div wrapper
+     * @param string $id              of the rating ul element
+     * @param string $url             that will be added (for jquery see hot_courses.tpl)
+     * @param array  $point_info      point info array see function CourseManager::get_course_ranking()
+     * @param bool   $add_div_wrapper add a div wrapper
+     *
      * @return string
-     **/
+     */
     public static function return_rating_system(
         $id,
         $url,
@@ -1761,8 +1805,8 @@ class Display
             $labels[] = self::tag('span', get_lang('LoginToVote'), ['class' => 'error']);
         }
 
-        $html .= self::div(implode(' | ', $labels), ['id' =>  'vote_label_'.$id, 'class' => 'vote_label_info']);
-        $html .= ' '.self::span(' ', ['id' =>  'vote_label2_'.$id]);
+        $html .= self::div(implode(' | ', $labels), ['id' => 'vote_label_'.$id, 'class' => 'vote_label_info']);
+        $html .= ' '.self::span(' ', ['id' => 'vote_label2_'.$id]);
 
         if ($add_div_wrapper) {
             $html = self::div($html, ['id' => 'rating_wrapper_'.$id]);
@@ -1775,7 +1819,8 @@ class Display
      * @param string $title
      * @param string $second_title
      * @param string $size
-     * @param bool $filter
+     * @param bool   $filter
+     *
      * @return string
      */
     public static function page_header($title, $second_title = null, $size = 'h2', $filter = true)
@@ -1790,18 +1835,21 @@ class Display
             }
             $title .= "<small> $second_title</small>";
         }
+
         return '<'.$size.' class="page-header">'.$title.'</'.$size.'>';
     }
 
     public static function page_header_and_translate($title, $second_title = null)
     {
         $title = get_lang($title);
+
         return self::page_header($title, $second_title);
     }
 
     public static function page_subheader_and_translate($title, $second_title = null)
     {
         $title = get_lang($title);
+
         return self::page_subheader($title, $second_title);
     }
 
@@ -1811,6 +1859,7 @@ class Display
             $second_title = Security::remove_XSS($second_title);
             $title .= "<small> $second_title<small>";
         }
+
         return '<'.$size.'>'.Security::remove_XSS($title).'</'.$size.'>';
     }
 
@@ -1826,6 +1875,7 @@ class Display
 
     /**
      * @param array $list
+     *
      * @return null|string
      */
     public static function description($list)
@@ -1839,6 +1889,7 @@ class Display
             }
             $html .= '</dl>';
         }
+
         return $html;
     }
 
@@ -1846,6 +1897,7 @@ class Display
      * @param $percentage
      * @param bool $show_percentage
      * @param null $extra_info
+     *
      * @return string
      */
     public static function bar_progress($percentage, $show_percentage = true, $extra_info = null)
@@ -1875,6 +1927,7 @@ class Display
     /**
      * @param string $count
      * @param string $type
+     *
      * @return null|string
      */
     public static function badge($count, $type = "warning")
@@ -1902,11 +1955,13 @@ class Display
         if (!empty($count)) {
             return ' <span class="badge '.$class.'">'.$count.'</span>';
         }
+
         return null;
     }
 
     /**
      * @param array $badge_list
+     *
      * @return string
      */
     public static function badge_group($badge_list)
@@ -1916,12 +1971,14 @@ class Display
             $html .= $badge;
         }
         $html .= '</div>';
+
         return $html;
     }
 
     /**
      * @param string $content
      * @param string $type
+     *
      * @return string
      */
     public static function label($content, $type = 'default')
@@ -1959,8 +2016,9 @@ class Display
     }
 
     /**
-     * @param array $items
+     * @param array  $items
      * @param string $class
+     *
      * @return null|string
      */
     public static function actions($items, $class = 'new_actions')
@@ -1990,7 +2048,8 @@ class Display
     }
 
     /**
-     * Prints a tooltip
+     * Prints a tooltip.
+     *
      * @param string $text
      * @param string $tip
      *
@@ -2009,9 +2068,10 @@ class Display
     }
 
     /**
-     * @param array $items
+     * @param array  $items
      * @param string $type
-     * @param null $id
+     * @param null   $id
+     *
      * @return null|string
      */
     public static function generate_accordion($items, $type = 'jquery', $id = null)
@@ -2050,6 +2110,7 @@ class Display
 
     /**
      * @param array $buttons
+     *
      * @return string
      */
     public static function groupButton($buttons)
@@ -2065,9 +2126,11 @@ class Display
 
     /**
      * @todo use twig
+     *
      * @param string $title
-     * @param array $elements
-     * @param bool $alignToRight
+     * @param array  $elements
+     * @param bool   $alignToRight
+     *
      * @return string
      */
     public static function groupButtonWithDropDown($title, $elements, $alignToRight = false)
@@ -2076,18 +2139,20 @@ class Display
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 '.$title.'
                 <span class="caret"></span></button>
-                <ul class="dropdown-menu ' . ($alignToRight ? 'dropdown-menu-right' : '').'">';
+                <ul class="dropdown-menu '.($alignToRight ? 'dropdown-menu-right' : '').'">';
         foreach ($elements as $item) {
             $html .= self::tag('li', self::url($item['title'], $item['href']));
         }
         $html .= '</ul>
             </div>';
+
         return $html;
     }
 
     /**
      * @param string $file
-     * @param array $params
+     * @param array  $params
+     *
      * @return null|string
      */
     public static function getMediaPlayer($file, $params = [])
@@ -2126,15 +2191,16 @@ class Display
     }
 
     /**
-     * @param int $nextValue
-     * @param array $list
-     * @param int $current
-     * @param int $fixedValue
-     * @param array $conditions
+     * @param int    $nextValue
+     * @param array  $list
+     * @param int    $current
+     * @param int    $fixedValue
+     * @param array  $conditions
      * @param string $link
-     * @param bool $isMedia
-     * @param bool $addHeaders
-     * @param array $linkAttributes
+     * @param bool   $isMedia
+     * @param bool   $addHeaders
+     * @param array  $linkAttributes
+     *
      * @return string
      */
     public static function progressPaginationBar(
@@ -2189,16 +2255,15 @@ class Display
     }
 
     /**
-     *
-     * @param int $itemId
-     * @param bool $isCurrent
-     * @param array $conditions
+     * @param int    $itemId
+     * @param bool   $isCurrent
+     * @param array  $conditions
      * @param string $link
-     * @param int $nextValue
-     * @param bool $isMedia
-     * @param int $localCounter
-     * @param int $fixedValue
-     * @param array $linkAttributes
+     * @param int    $nextValue
+     * @param bool   $isMedia
+     * @param int    $localCounter
+     * @param int    $fixedValue
+     * @param array  $linkAttributes
      *
      * @return string
      */
@@ -2265,6 +2330,7 @@ class Display
     /**
      * @param int $current
      * @param int $total
+     *
      * @return string
      */
     public static function paginationIndicator($current, $total)
@@ -2274,11 +2340,13 @@ class Display
             $label = sprintf(get_lang('PaginationXofY'), $current, $total);
             $html = self::url($label, '#', ['class' => 'btn disabled']);
         }
+
         return $html;
     }
 
     /**
-     * Adds a message in the queue
+     * Adds a message in the queue.
+     *
      * @param string $message
      */
     public static function addFlash($message)
@@ -2309,7 +2377,7 @@ class Display
     }
 
     /**
-     * Shows the message from the session
+     * Shows the message from the session.
      */
     public static function showFlash()
     {
@@ -2317,7 +2385,7 @@ class Display
     }
 
     /**
-     * Destroys the message session
+     * Destroys the message session.
      */
     public static function cleanFlashMessages()
     {
@@ -2325,9 +2393,11 @@ class Display
     }
 
     /**
-     * Get the profile edition link for a user
-     * @param int $userId The user id
-     * @param boolean $asAdmin Optional. Whether get the URL for the platform admin
+     * Get the profile edition link for a user.
+     *
+     * @param int  $userId  The user id
+     * @param bool $asAdmin Optional. Whether get the URL for the platform admin
+     *
      * @return string The link
      */
     public static function getProfileEditionLink($userId, $asAdmin = false)
@@ -2364,8 +2434,10 @@ class Display
     }
 
     /**
-     * Get the vCard for a user
+     * Get the vCard for a user.
+     *
      * @param int $userId The user id
+     *
      * @return string *.*vcf file
      */
     public static function getVCardUserLink($userId)
@@ -2379,7 +2451,7 @@ class Display
      * @param string $content
      * @param string $title
      * @param string $footer
-     * @param string $type primary|success|info|warning|danger
+     * @param string $type        primary|success|info|warning|danger
      * @param string $extra
      * @param string $id
      * @param string $customColor
@@ -2420,6 +2492,7 @@ class Display
 
     /**
      * @param string $content
+     *
      * @return string
      */
     public static function contentPanel($content)
@@ -2432,13 +2505,14 @@ class Display
     }
 
     /**
-     * Get the button HTML with an Awesome Font icon
-     * @param string $text The button content
-     * @param string $url The url to button
-     * @param string $icon The Awesome Font class for icon
-     * @param string $type Optional. The button Bootstrap class. Default 'default' class
-     * @param array $attributes The additional attributes
-     * @param bool $includeText
+     * Get the button HTML with an Awesome Font icon.
+     *
+     * @param string $text        The button content
+     * @param string $url         The url to button
+     * @param string $icon        The Awesome Font class for icon
+     * @param string $type        Optional. The button Bootstrap class. Default 'default' class
+     * @param array  $attributes  The additional attributes
+     * @param bool   $includeText
      *
      * @return string The button HTML
      */
@@ -2464,8 +2538,9 @@ class Display
 
     /**
      * @param string $id
-     * @param array $content
-     * @param array $colsWidth Optional. Columns width
+     * @param array  $content
+     * @param array  $colsWidth Optional. Columns width
+     *
      * @return string
      */
     public static function toolbarAction($id, $content, $colsWidth = [])
@@ -2503,11 +2578,12 @@ class Display
     }
 
     /**
-     * Get a HTML code for a icon by Font Awesome
-     * @param string $name The icon name
-     * @param int|string $size Optional. The size for the icon. (Example: lg, 2, 3, 4, 5)
-     * @param boolean $fixWidth Optional. Whether add the fw class
-     * @param string $additionalClass Optional. Additional class
+     * Get a HTML code for a icon by Font Awesome.
+     *
+     * @param string     $name            The icon name
+     * @param int|string $size            Optional. The size for the icon. (Example: lg, 2, 3, 4, 5)
+     * @param bool       $fixWidth        Optional. Whether add the fw class
+     * @param string     $additionalClass Optional. Additional class
      *
      * @return string
      */
@@ -2545,15 +2621,17 @@ class Display
     }
 
     /**
-     * @param string $title
-     * @param string $content
-     * @param null $id
-     * @param array $params
-     * @param null $idAccordion
-     * @param null $idCollapse
-     * @param bool|true $open
+     * @param string     $title
+     * @param string     $content
+     * @param null       $id
+     * @param array      $params
+     * @param null       $idAccordion
+     * @param null       $idCollapse
+     * @param bool|true  $open
      * @param bool|false $fullClickable
+     *
      * @return null|string
+     *
      * @todo rework function to easy use
      */
     public static function panelCollapse(
@@ -2600,11 +2678,13 @@ HTML;
             $html .= '<div class="panel-body">'.$content.'</div>'.PHP_EOL;
             $html = self::div($html, $params);
         }
+
         return $html;
     }
 
     /**
      * Returns the string "1 day ago" with a link showing the exact date time.
+     *
      * @param string $dateTime in UTC or a DateTime in UTC
      *
      * @return string
@@ -2627,7 +2707,7 @@ HTML;
     }
 
     /**
-     * @param array $userInfo
+     * @param array  $userInfo
      * @param string $status
      * @param string $toolbar
      *

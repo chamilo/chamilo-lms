@@ -3,14 +3,14 @@
 
 namespace Chamilo\FaqBundle\Controller;
 
+use Chamilo\FaqBundle\Entity\Category;
 use Chamilo\FaqBundle\Entity\CategoryRepository;
+use Chamilo\FaqBundle\Entity\Question;
 use Chamilo\FaqBundle\Entity\QuestionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Chamilo\FaqBundle\Entity\Category;
-use Chamilo\FaqBundle\Entity\Question;
 
 /**
- * Class FaqController
+ * Class FaqController.
  *
  * @package Chamilo\FaqBundle\Controller
  */
@@ -24,6 +24,7 @@ class FaqController extends Controller
      * @param string $questionSlug
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction($categorySlug, $questionSlug)
@@ -53,10 +54,10 @@ class FaqController extends Controller
         return $this->render(
             '@ChamiloFaq/Faq/index.html.twig',
             [
-                'categories'       => $categories,
-                'questions'        => $questions,
+                'categories' => $categories,
+                'questions' => $questions,
                 'selectedCategory' => $selectedCategory,
-                'selectedQuestion' => $selectedQuestion
+                'selectedQuestion' => $selectedQuestion,
             ]
         );
     }
@@ -67,6 +68,7 @@ class FaqController extends Controller
      * @param string $categorySlug
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexWithoutCollapseAction($categorySlug)
@@ -84,8 +86,8 @@ class FaqController extends Controller
         return $this->render(
             '@ChamiloFaq/Faq/index_without_collapse.html.twig',
             [
-                'categories'   => $categories,
-                'categorySlug' => $categorySlug
+                'categories' => $categories,
+                'categorySlug' => $categorySlug,
             ]
         );
     }
@@ -96,8 +98,9 @@ class FaqController extends Controller
      * @param string $categorySlug
      * @param string $questionSlug
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     protected function generateRedirectToDefaultSelection($categorySlug, $questionSlug)
     {
@@ -111,7 +114,7 @@ class FaqController extends Controller
             $firstCategory = $this->getCategoryRepository()->retrieveFirst();
             if ($firstCategory instanceof Category) {
                 $categorySlug = $firstCategory->getSlug();
-                $doRedirect   = true;
+                $doRedirect = true;
             } else {
                 throw $this->createNotFoundException('Tried to open the first faq category by default, but there was none.');
             }
@@ -121,7 +124,7 @@ class FaqController extends Controller
             $firstQuestion = $this->getQuestionRepository()->retrieveFirstByCategorySlug($categorySlug);
             if ($firstQuestion instanceof Question) {
                 $questionSlug = $firstQuestion->getSlug();
-                $doRedirect   = true;
+                $doRedirect = true;
             } else {
                 throw $this->createNotFoundException('Tried to open the first faq question by default, but there was none.');
             }

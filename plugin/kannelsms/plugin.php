@@ -3,6 +3,7 @@
 
 /**
  * @package chamilo.plugin.kannelsms
+ *
  * @author  Imanol Losada <imanol.losada@beeznest.com>
  */
 require_once __DIR__.'/config.php';

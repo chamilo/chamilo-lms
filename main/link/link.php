@@ -15,9 +15,9 @@
  * @author Julio Montoya code rewritten
  * @author Patrick Cool
  * @author René Haentjens, added CSV file import (October 2004)
+ *
  * @package chamilo.link
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_LINK;
 

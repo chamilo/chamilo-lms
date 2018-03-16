@@ -6,7 +6,8 @@ namespace Chamilo\UserBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * Class ChamiloUserBundle
+ * Class ChamiloUserBundle.
+ *
  * @package Chamilo\UserBundle
  */
 class ChamiloUserBundle extends Bundle

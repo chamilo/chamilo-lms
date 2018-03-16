@@ -8,40 +8,31 @@ use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Framework\PageController;
 use Chamilo\UserBundle\Entity\User;
-use Doctrine\Common\Annotations\Annotation\Attribute;
-use Sylius\Component\Attribute\AttributeType\TextAttributeType;
-use Sylius\Component\Attribute\Model\AttributeValue;
-use Sylius\Component\Attribute\Model\AttributeValueInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-use Chamilo\CoreBundle\Controller\BaseController;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\Finder\Finder;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sylius\Component\Attribute\AttributeType\TextAttributeType;
+use Sylius\Component\Attribute\Model\AttributeValueInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class IndexController
- * author Julio Montoya <gugli100@gmail.com>
+ * author Julio Montoya <gugli100@gmail.com>.
+ *
  * @package Chamilo\CoreBundle\Controller
  */
 class IndexController extends BaseController
 {
     /**
-     * The Chamilo index home page
+     * The Chamilo index home page.
+     *
      * @Route("/", name="home")
      * @Method({"GET"})
      *
-     * @param string $type courses|sessions|mycoursecategories
+     * @param string $type   courses|sessions|mycoursecategories
      * @param string $filter for the userportal courses page. Only works when setting 'history'
-     * @param int $page
+     * @param int    $page
      *
      * @return Response
      */
@@ -129,18 +120,19 @@ class IndexController extends BaseController
             '@ChamiloCore/Index/index.html.twig',
             [
                 'content' => '',
-                'announcements_block' => $announcementsBlock
+                'announcements_block' => $announcementsBlock,
                 //'home_page_block' => $pageController->returnHomePage()
             ]
         );
     }
 
     /**
-     * Toggle the student view action
+     * Toggle the student view action.
      *
      * @Route("/toggle_student_view")
      * @Security("has_role('ROLE_TEACHER')")
      * @Method({"GET"})
+     *
      * @param Request $request
      *
      * @return Response
@@ -153,9 +145,11 @@ class IndexController extends BaseController
         $studentView = $request->getSession()->get('studentview');
         if (empty($studentView) || $studentView == 'studentview') {
             $request->getSession()->set('studentview', 'teacherview');
+
             return 'teacherview';
         } else {
             $request->getSession()->set('studentview', 'studentview');
+
             return 'studentview';
         }
     }

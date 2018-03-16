@@ -3,20 +3,19 @@
 
 namespace Chamilo\CourseBundle\Manager;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CourseBundle\Entity\CCourseSetting;
+use Chamilo\SettingsBundle\Manager\SettingsManager as ChamiloSettingsManager;
 use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
-use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilder;
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilder;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
-use Symfony\Component\Validator\ValidatorInterface;
-use Chamilo\SettingsBundle\Manager\SettingsManager as ChamiloSettingsManager;
-use Chamilo\CourseBundle\Entity\CCourseSetting;
-use Chamilo\CoreBundle\Entity\Course;
 
 /**
  * Class SettingsManager
  * Course settings manager.
+ *
  * @package Chamilo\CourseBundle\Manager
  */
 class SettingsManager extends ChamiloSettingsManager
@@ -201,6 +200,16 @@ class SettingsManager extends ChamiloSettingsManager
     }
 
     /**
+     * @param string $category
+     *
+     * @return string
+     */
+    public function convertNameSpaceToService($category)
+    {
+        return 'chamilo_course.settings.'.$category;
+    }
+
+    /**
      * Load parameter from database.
      *
      * @param string $namespace
@@ -216,15 +225,5 @@ class SettingsManager extends ChamiloSettingsManager
         }
 
         return $parameters;
-    }
-
-
-    /**
-     * @param string $category
-     * @return string
-     */
-    public function convertNameSpaceToService($category)
-    {
-        return 'chamilo_course.settings.'.$category;
     }
 }

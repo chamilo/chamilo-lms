@@ -3,12 +3,13 @@
 
 namespace Chamilo\CourseBundle\Tool;
 
+use Sonata\CoreBundle\Model\BaseEntityManager;
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Sonata\CoreBundle\Model\BaseEntityManager;
 
 /**
- * Class BaseTool
+ * Class BaseTool.
+ *
  * @package Chamilo\CourseBundle\Tool
  */
 abstract class BaseTool implements ToolInterface

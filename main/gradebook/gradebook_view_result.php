@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -20,7 +21,7 @@ if (!$isDrhOfCourse) {
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl(),
-    'name' => get_lang('Gradebook')
+    'name' => get_lang('Gradebook'),
 ];
 
 //load the evaluation & category
@@ -94,7 +95,7 @@ $file_type = null;
 if (isset($_GET['import'])) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'gradebook/gradebook_view_result.php?selecteval='.$select_eval.'&'.api_get_cidreq(),
-        'name' => get_lang('ViewResult')
+        'name' => get_lang('ViewResult'),
     ];
     $import_result_form = new DataForm(
         DataForm::TYPE_IMPORT,
@@ -255,7 +256,7 @@ if (isset($_GET['export'])) {
                 'lastname',
                 'firstname',
                 'score',
-                'date'
+                'date',
             ];
         }
 
@@ -297,7 +298,7 @@ if (isset($_GET['export'])) {
                 ['#', 3],
                 [get_lang('Code'), 12],
                 [$head_ape_name, 40],
-                [get_lang('Score'), 12]
+                [get_lang('Score'), 12],
             ];
             if ($number_decimals == null) {
                 $head_table[] = [get_lang('Letters'), 15];
@@ -457,14 +458,14 @@ if (isset($_GET['print'])) {
                 get_lang('FirstName'),
                 get_lang('LastName'),
                 get_lang('Score'),
-                get_lang('Display')
+                get_lang('Display'),
             ];
         } else {
             $header_names = [
                 get_lang('LastName'),
                 get_lang('FirstName'),
                 get_lang('Score'),
-                get_lang('Display')
+                get_lang('Display'),
             ];
         }
     } else {
@@ -492,14 +493,14 @@ if (isset($_GET['print'])) {
 
 $htmlHeadXtra[] = '<script>
 function confirmationuser() {
-    if (confirm("' . get_lang('DeleteUser').'?"))
+    if (confirm("'.get_lang('DeleteUser').'?"))
     	{return true;}
     else
     	{return false;}
 }
 
 function confirmationall () {
-    if (confirm("' . get_lang('DeleteAll').'?"))
+    if (confirm("'.get_lang('DeleteAll').'?"))
     	{return true;}
     else
     	{return false;}
@@ -515,7 +516,7 @@ if (!isset($_GET['export']) && (!isset($_GET['import']))) {
     if (!isset($_GET['selectcat'])) {
         $interbreadcrumb[] = [
             'url' => Category::getUrl().'selectcat='.$currentcat[0]->get_id(),
-            'name' => get_lang('Details')
+            'name' => get_lang('Details'),
         ];
     }
     $interbreadcrumb[] = [

@@ -3,12 +3,13 @@
 
 namespace Chamilo\UserBundle\Admin;
 
-use Sonata\UserBundle\Admin\Model\UserAdmin as BaseUserAdmin;
-use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\UserBundle\Admin\Model\UserAdmin as BaseUserAdmin;
 
 /**
- * Class UserAdmin
+ * Class UserAdmin.
+ *
  * @package Chamilo\UserBundle\Admin
  */
 class UserAdmin extends BaseUserAdmin

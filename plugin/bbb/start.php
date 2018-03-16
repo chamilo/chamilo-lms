@@ -2,10 +2,10 @@
 /* For license terms, see /license.txt */
 
 /**
- * This script initiates a video conference session, calling the BigBlueButton API
+ * This script initiates a video conference session, calling the BigBlueButton API.
+ *
  * @package chamilo.plugin.bigbluebutton
  */
-
 require_once __DIR__.'/../../vendor/autoload.php';
 
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables

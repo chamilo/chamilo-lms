@@ -3,9 +3,11 @@
 
 /**
  * Class UserTable
- * Table to display flat view of a student's evaluations and links
+ * Table to display flat view of a student's evaluations and links.
+ *
  * @author Stijn Konings
  * @author Bert Steppé (refactored, optimised, use of caching, datagenerator class)
+ *
  * @package chamilo.gradebook
  */
 class UserTable extends SortableTable
@@ -14,7 +16,7 @@ class UserTable extends SortableTable
     private $datagen;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct($userid, $evals = [], $links = [], $addparams = null)
     {
@@ -39,7 +41,7 @@ class UserTable extends SortableTable
     }
 
     /**
-     * Function used by SortableTable to get total number of items in the table
+     * Function used by SortableTable to get total number of items in the table.
      */
     public function get_total_number_of_items()
     {
@@ -47,7 +49,7 @@ class UserTable extends SortableTable
     }
 
     /**
-     * Function used by SortableTable to generate the data to display
+     * Function used by SortableTable to generate the data to display.
      */
     public function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = null)
     {
@@ -107,6 +109,7 @@ class UserTable extends SortableTable
 
     /**
      * @param $item
+     *
      * @return string
      */
     private function build_type_column($item)
@@ -116,6 +119,7 @@ class UserTable extends SortableTable
 
     /**
      * @param $item
+     *
      * @return string
      */
     private function build_name_link($item)
@@ -124,15 +128,15 @@ class UserTable extends SortableTable
             // evaluation
             case 'E':
                 return '&nbsp;'
-                . '<a href="gradebook_view_result.php?selecteval='.$item->get_id().'&'.api_get_cidreq().'">'
-                . $item->get_name()
-                . '</a>';
+                .'<a href="gradebook_view_result.php?selecteval='.$item->get_id().'&'.api_get_cidreq().'">'
+                .$item->get_name()
+                .'</a>';
             // link
             case 'L':
                 return '&nbsp;<a href="'.$item->get_link().'">'
-                . $item->get_name()
-                . '</a>'
-                . '&nbsp;['.$item->get_type_name().']';
+                .$item->get_name()
+                .'</a>'
+                .'&nbsp;['.$item->get_type_name().']';
         }
     }
 }

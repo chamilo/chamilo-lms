@@ -4,7 +4,8 @@
 namespace Chamilo\CourseBundle\Tool;
 
 /**
- * Class Notebook
+ * Class Notebook.
+ *
  * @package Chamilo\CourseBundle\Tool
  */
 class Notebook extends BaseTool

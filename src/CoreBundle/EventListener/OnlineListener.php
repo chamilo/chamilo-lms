@@ -3,17 +3,17 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Chamilo\UserBundle\Entity\User;
+use DateTime;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\Security\Core\SecurityContext;
-use Doctrine\ORM\EntityManager;
-use Chamilo\UserBundle\Entity\User;
-use DateTime;
 
 /**
  * Class OnlineListener
- * Adds objects into the session like the old global.inc
+ * Adds objects into the session like the old global.inc.
+ *
  * @package Chamilo\CoreBundle\EventListener
  */
 class OnlineListener
@@ -23,7 +23,7 @@ class OnlineListener
 
     /**
      * @param SecurityContext $context
-     * @param EntityManager $em
+     * @param EntityManager   $em
      */
     public function __construct(SecurityContext $context, EntityManager $em)
     {
@@ -32,7 +32,8 @@ class OnlineListener
     }
 
     /**
-     * Update the user "lastActivity" on each request
+     * Update the user "lastActivity" on each request.
+     *
      * @param FilterControllerEvent $event
      */
     public function onCoreController(FilterControllerEvent $event)
@@ -57,7 +58,6 @@ class OnlineListener
             if ($user instanceof User && $user->getLastLogin() < $delay) {
                 // User
                 $user->setLastLogin(new DateTime());
-
 
                 $this->em->flush($user);
             }

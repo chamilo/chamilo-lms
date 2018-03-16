@@ -3,7 +3,7 @@
 
 /**
  *	Database constants definition for Chamilo
- *  This file is called by database.lib.php
+ *  This file is called by database.lib.php.
  *
  *  @todo the table constants have all to start with TABLE_
  *  This is because of the analogy with the tool constants TOOL_

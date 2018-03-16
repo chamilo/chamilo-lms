@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Maintenance mode facilitator plugin
+ * Maintenance mode facilitator plugin.
+ *
  * @package chamilo.plugin
  */
 
@@ -89,7 +90,7 @@ if ($editFile && $isPlatformAdmin) {
         'ToolbarSet' => 'Documents',
         'Width' => '100%',
         'Height' => '400',
-        'allowedContent' => true
+        'allowedContent' => true,
     ];
 
     $form->addHtmlEditor(

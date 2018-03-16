@@ -2,10 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* Layout (principal view) used for structuring other views
-* @author Christian Fasanando <christian1827@gmail.com>
-* @package chamilo.course_description
-*/
+ * Layout (principal view) used for structuring other views.
+ *
+ * @author Christian Fasanando <christian1827@gmail.com>
+ *
+ * @package chamilo.course_description
+ */
 
 // protect a course script
 api_protect_course_script(true);

@@ -1,13 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\TicketBundle\Entity\Project as TicketProject;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\TicketBundle\Entity\Category as TicketCategory;
 use Chamilo\TicketBundle\Entity\Priority as TicketPriority;
+use Chamilo\TicketBundle\Entity\Project as TicketProject;
 use Doctrine\ORM\EntityManager;
-use Chamilo\CoreBundle\Entity\AccessUrl;
-use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Chamilo LMS
@@ -25,7 +25,9 @@ define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
  * This function detects whether the system has been already installed.
  * It should be used for prevention from second running the installation
  * script and as a result - destroying a production system.
- * @return bool     The detected result;
+ *
+ * @return bool The detected result;
+ *
  * @author Ivan Tcholakov, 2010;
  */
 function isAlreadyInstalledSystem()
@@ -54,13 +56,15 @@ function isAlreadyInstalledSystem()
 /**
  * This function checks if a php extension exists or not and returns an HTML status string.
  *
- * @param   string  $extensionName Name of the PHP extension to be checked
- * @param   string  $returnSuccess Text to show when extension is available (defaults to 'Yes')
- * @param   string  $returnFailure Text to show when extension is available (defaults to 'No')
- * @param   boolean $optional Whether this extension is optional (then show unavailable text in orange rather than red)
- * @param   string  $enabledTerm If this string is not null, then use to check if the corresponding parameter is = 1.
- * If not, mention it's present but not enabled. For example, for opcache, this should be 'opcache.enable'
- * @return  string  HTML string reporting the status of this extension. Language-aware.
+ * @param string $extensionName Name of the PHP extension to be checked
+ * @param string $returnSuccess Text to show when extension is available (defaults to 'Yes')
+ * @param string $returnFailure Text to show when extension is available (defaults to 'No')
+ * @param bool   $optional      Whether this extension is optional (then show unavailable text in orange rather than red)
+ * @param string $enabledTerm   If this string is not null, then use to check if the corresponding parameter is = 1.
+ *                              If not, mention it's present but not enabled. For example, for opcache, this should be 'opcache.enable'
+ *
+ * @return string HTML string reporting the status of this extension. Language-aware.
+ *
  * @author  Christophe Gesch??
  * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author  Yannick Warnier <yannick.warnier@dokeos.com>
@@ -97,12 +101,15 @@ function checkExtension(
 }
 
 /**
- * This function checks whether a php setting matches the recommended value
- * @param   string $phpSetting A PHP setting to check
- * @param   string  $recommendedValue A recommended value to show on screen
- * @param   mixed  $returnSuccess What to show on success
- * @param   mixed  $returnFailure  What to show on failure
- * @return  string  A label to show
+ * This function checks whether a php setting matches the recommended value.
+ *
+ * @param string $phpSetting       A PHP setting to check
+ * @param string $recommendedValue A recommended value to show on screen
+ * @param mixed  $returnSuccess    What to show on success
+ * @param mixed  $returnFailure    What to show on failure
+ *
+ * @return string A label to show
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
 function checkPhpSetting(
@@ -119,12 +126,13 @@ function checkPhpSetting(
     }
 }
 
-
 /**
  * This function return the value of a php.ini setting if not "" or if exists,
- * otherwise return false
- * @param   string  $phpSetting The name of a PHP setting
- * @return  mixed   The value of the setting, or false if not found
+ * otherwise return false.
+ *
+ * @param string $phpSetting The name of a PHP setting
+ *
+ * @return mixed The value of the setting, or false if not found
  */
 function checkPhpSettingExists($phpSetting)
 {
@@ -136,7 +144,8 @@ function checkPhpSettingExists($phpSetting)
 }
 
 /**
- * Check if the current url is the same root_web when the multiple_access_url is enabled
+ * Check if the current url is the same root_web when the multiple_access_url is enabled.
+ *
  * @return bool
  */
 function checkAccessUrl()
@@ -155,7 +164,9 @@ function checkAccessUrl()
  * Returns a textual value ('ON' or 'OFF') based on a requester 2-state ini- configuration setting.
  *
  * @param string $val a php ini value
+ *
  * @return bool ON or OFF
+ *
  * @author Joomla <http://www.joomla.org>
  */
 function getPhpSetting($val)
@@ -166,8 +177,10 @@ function getPhpSetting($val)
 /**
  * This function returns a string "true" or "false" according to the passed parameter.
  *
- * @param integer  $var  The variable to present as text
- * @return  string  the string "true" or "false"
+ * @param int $var The variable to present as text
+ *
+ * @return string the string "true" or "false"
+ *
  * @author Christophe Gesch??
  */
 function trueFalse($var)
@@ -192,7 +205,9 @@ function remove_memory_and_time_limits()
 
 /**
  * Detects browser's language.
- * @return string       Returns a language identificator, i.e. 'english', 'spanish', ...
+ *
+ * @return string Returns a language identificator, i.e. 'english', 'spanish', ...
+ *
  * @author Ivan Tcholakov, 2010
  */
 function detect_browser_language()
@@ -251,7 +266,7 @@ function detect_browser_language()
         'uk' => 'ukrainian',
         'vi' => 'vietnamese',
         'sw' => 'swahili',
-        'yo' => 'yoruba'
+        'yo' => 'yoruba',
     ];
 
     $system_available_languages = get_language_folder_list();
@@ -279,10 +294,12 @@ function detect_browser_language()
 /*      FILESYSTEM RELATED FUNCTIONS */
 
 /**
- * This function checks if the given folder is writable
- * @param   string  $folder Full path to a folder
- * @param   bool    $suggestion Whether to show a suggestion or not
- * @return  string
+ * This function checks if the given folder is writable.
+ *
+ * @param string $folder     Full path to a folder
+ * @param bool   $suggestion Whether to show a suggestion or not
+ *
+ * @return string
  */
 function check_writable($folder, $suggestion = false)
 {
@@ -298,11 +315,12 @@ function check_writable($folder, $suggestion = false)
 }
 
 /**
- * This function checks if the given folder is readable
- * @param   string  $folder Full path to a folder
- * @param   bool    $suggestion Whether to show a suggestion or not
+ * This function checks if the given folder is readable.
  *
- * @return  string
+ * @param string $folder     Full path to a folder
+ * @param bool   $suggestion Whether to show a suggestion or not
+ *
+ * @return string
  */
 function checkReadable($folder, $suggestion = false)
 {
@@ -319,10 +337,11 @@ function checkReadable($folder, $suggestion = false)
 
 /**
  * This function is similar to the core file() function, except that it
- * works with line endings in Windows (which is not the case of file())
- * @param   string  $filename
+ * works with line endings in Windows (which is not the case of file()).
  *
- * @return  array   The lines of the file returned as an array
+ * @param string $filename
+ *
+ * @return array The lines of the file returned as an array
  */
 function file_to_array($filename)
 {
@@ -346,7 +365,8 @@ function set_file_folder_permissions()
 }
 
 /**
- * Write the main system config file
+ * Write the main system config file.
+ *
  * @param string $path Path to the config file
  */
 function write_system_config_file($path)
@@ -388,7 +408,7 @@ function write_system_config_file($path)
     foreach ($config as $key => $value) {
         $content = str_replace($key, $value, $content);
     }
-    $fp = @ fopen($path, 'w');
+    $fp = @fopen($path, 'w');
 
     if (!$fp) {
         echo '<strong><font color="red">Your script doesn\'t have write access to the config directory</font></strong><br />
@@ -470,19 +490,21 @@ function get_language_folder_list()
         'uk' => 'ukrainian',
         'vi' => 'vietnamese',
         'sw' => 'swahili',
-        'yo' => 'yoruba'
+        'yo' => 'yoruba',
     ];
 }
 
 /**
- * This function returns the value of a parameter from the configuration file
+ * This function returns the value of a parameter from the configuration file.
  *
  * WARNING - this function relies heavily on global variables $updateFromConfigFile
  * and $configFile, and also changes these globals. This can be rewritten.
  *
- * @param   string  $param  the parameter of which the value is returned
+ * @param string $param the parameter of which the value is returned
  * @param   string  If we want to give the path rather than take it from POST
- * @return  string  the value of the parameter
+ *
+ * @return string the value of the parameter
+ *
  * @author Olivier Brouckaert
  * @author Reworked by Ivan Tcholakov, 2010
  */
@@ -523,10 +545,12 @@ function get_config_param($param, $updatePath = '')
     ) {
         require $updatePath.$updateFromConfigFile;
         $config = new Zend\Config\Config($_configuration);
+
         return $config->get($param);
     }
 
     error_log('Config array could not be found in get_config_param()', 0);
+
     return null;
 }
 
@@ -534,27 +558,32 @@ function get_config_param($param, $updatePath = '')
 
 /**
  * Gets a configuration parameter from the database. Returns returns null on failure.
- * @param   string  $param Name of param we want
- * @return  mixed   The parameter value or null if not found
+ *
+ * @param string $param Name of param we want
+ *
+ * @return mixed The parameter value or null if not found
  */
 function get_config_param_from_db($param = '')
 {
     if (($res = Database::query("SELECT * FROM settings_current WHERE variable = '$param'")) !== false) {
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
+
             return $row['selected_value'];
         }
     }
+
     return null;
 }
 
 /**
- * Connect to the database and returns the entity manager
- * @param string  $dbHostForm DB host
- * @param string  $dbUsernameForm DB username
- * @param string  $dbPassForm DB password
- * @param string  $dbNameForm DB name
- * @param int     $dbPortForm DB port
+ * Connect to the database and returns the entity manager.
+ *
+ * @param string $dbHostForm     DB host
+ * @param string $dbUsernameForm DB username
+ * @param string $dbPassForm     DB password
+ * @param string $dbNameForm     DB name
+ * @param int    $dbPortForm     DB port
  *
  * @return Database
  */
@@ -571,7 +600,7 @@ function connectToDatabase(
         'port' => $dbPortForm,
         'user' => $dbUsernameForm,
         'password' => $dbPassForm,
-        'dbname' => $dbNameForm
+        'dbname' => $dbNameForm,
     ];
 
     $database = new \Database();
@@ -583,8 +612,10 @@ function connectToDatabase(
 /*      DISPLAY FUNCTIONS */
 
 /**
- * This function prints class=active_step $current_step=$param
- * @param   int $param  A step in the installer process
+ * This function prints class=active_step $current_step=$param.
+ *
+ * @param int $param A step in the installer process
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
 function step_active($param)
@@ -596,12 +627,14 @@ function step_active($param)
 }
 
 /**
- * This function displays the Step X of Y -
- * @return  string  String that says 'Step X of Y' with the right values
+ * This function displays the Step X of Y -.
+ *
+ * @return string String that says 'Step X of Y' with the right values
  */
 function display_step_sequence()
 {
     global $current_step;
+
     return get_lang('Step'.$current_step).' &ndash; ';
 }
 
@@ -647,12 +680,13 @@ function display_language_selection_box(
         $html .= "</option>\n";
     }
     $html .= "\t\t</select>\n";
+
     return $html;
 }
 
 /**
  * This function displays a language dropdown box so that the installatioin
- * can be done in the language of the user
+ * can be done in the language of the user.
  */
 function display_language_selection()
 {
@@ -689,10 +723,10 @@ function display_language_selection()
  * This function displays the requirements for installing Chamilo.
  *
  * @param string $installType
- * @param boolean $badUpdatePath
- * @param boolean $badUpdatePath
- * @param string $updatePath The updatePath given (if given)
- * @param array $update_from_version_8 The different subversions from version 1.9
+ * @param bool   $badUpdatePath
+ * @param bool   $badUpdatePath
+ * @param string $updatePath            The updatePath given (if given)
+ * @param array  $update_from_version_8 The different subversions from version 1.9
  *
  * @author unknow
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -1026,7 +1060,7 @@ function display_requirements(
                             <em class="fa fa-backward"> <?php echo get_lang('Back'); ?></em>
                         </button>
                         <input type="hidden" name="is_executable" id="is_executable" value="-" />
-                        <button type="submit" class="btn btn-success" name="<?php echo(isset($_POST['step2_update_6']) ? 'step2_update_6' : 'step2_update_8'); ?>" value="<?php echo get_lang('Next'); ?> &gt;" >
+                        <button type="submit" class="btn btn-success" name="<?php echo isset($_POST['step2_update_6']) ? 'step2_update_6' : 'step2_update_8'; ?>" value="<?php echo get_lang('Next'); ?> &gt;" >
                             <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
                         </button>
                     </p>
@@ -1074,7 +1108,7 @@ function display_requirements(
         if (count($notWritable) > 0) {
             $error = true; ?>
             <div class="text-danger">
-                <h3 class="text-center"><?php echo get_lang('Warning') ?></h3>
+                <h3 class="text-center"><?php echo get_lang('Warning'); ?></h3>
                 <p>
                     <?php printf(get_lang('NoWritePermissionPleaseReadInstallGuide'), '<a href="../../documentation/installation_guide.html" target="blank">', '</a>'); ?>
                 </p>
@@ -1096,7 +1130,7 @@ function display_requirements(
             api_get_path(SYS_CODE_PATH).'exercice/',
             api_get_path(SYS_CODE_PATH).'newscorm/',
             api_get_path(SYS_PLUGIN_PATH).'ticket/',
-            api_get_path(SYS_PLUGIN_PATH).'skype/'
+            api_get_path(SYS_PLUGIN_PATH).'skype/',
         ];
         $deprecatedToRemove = [];
 
@@ -1110,11 +1144,11 @@ function display_requirements(
 
         if (count($deprecatedToRemove) > 0) {
             $error = true; ?>
-            <p class="text-danger"><?php echo get_lang('WarningForDeprecatedDirectoriesForUpgrade') ?></p>
+            <p class="text-danger"><?php echo get_lang('WarningForDeprecatedDirectoriesForUpgrade'); ?></p>
             <ul>
                 <?php foreach ($deprecatedToRemove as $deprecatedDirectory) {
                 ?>
-                    <li class="text-danger"><?php echo $deprecatedDirectory ?></li>
+                    <li class="text-danger"><?php echo $deprecatedDirectory; ?></li>
                 <?php
             } ?>
             </ul>
@@ -1136,8 +1170,8 @@ function display_requirements(
             <em class="fa fa-forward"> </em> <?php echo get_lang('NewInstallation'); ?>
         </button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
-            <button type="submit" class="btn btn-default" <?php echo !$error ?: 'disabled="disabled"' ?> name="step2_update_8" value="Upgrade from Chamilo 1.9.x">
-                <em class="fa fa-forward" aria-hidden="true"></em> <?php echo get_lang('UpgradeVersion') ?>
+            <button type="submit" class="btn btn-default" <?php echo !$error ?: 'disabled="disabled"'; ?> name="step2_update_8" value="Upgrade from Chamilo 1.9.x">
+                <em class="fa fa-forward" aria-hidden="true"></em> <?php echo get_lang('UpgradeVersion'); ?>
             </button>
             </p>
         <?php
@@ -1149,7 +1183,6 @@ function display_requirements(
  * - an "I accept" button named step3 to proceed to step 3;
  * - a "Back" button named step1 to go back to the first step.
  */
-
 function display_license_agreement()
 {
     echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Licence').'</h2>';
@@ -1178,14 +1211,14 @@ function display_license_agreement()
     <!-- Contact information form -->
     <div class="section-parameters">
         <a href="javascript://" class = "advanced_parameters" >
-        <span id="img_plus_and_minus">&nbsp;<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;<?php echo get_lang('ContactInformation') ?></span>
+        <span id="img_plus_and_minus">&nbsp;<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;<?php echo get_lang('ContactInformation'); ?></span>
         </a>
     </div>
 
     <div id="id_contact_form" style="display:block">
-        <div class="normal-message"><?php echo get_lang('ContactInformationDescription') ?></div>
+        <div class="normal-message"><?php echo get_lang('ContactInformationDescription'); ?></div>
         <div id="contact_registration">
-            <p><?php echo get_contact_registration_form() ?></p><br />
+            <p><?php echo get_contact_registration_form(); ?></p><br />
         </div>
     </div>
     <div class="text-center">
@@ -1193,7 +1226,7 @@ function display_license_agreement()
         <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
     </button>
     <input type="hidden" name="is_executable" id="is_executable" value="-" />
-    <button type="submit" id="license-next" class="btn btn-success" name="step3" onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo get_lang('YouMustAcceptLicence')?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;" >
+    <button type="submit" id="license-next" class="btn btn-success" name="step3" onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo get_lang('YouMustAcceptLicence'); ?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;" >
         <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
     </button>
     </div>
@@ -1201,7 +1234,7 @@ function display_license_agreement()
 }
 
 /**
- * Get contact registration form
+ * Get contact registration form.
  */
 function get_contact_registration_form()
 {
@@ -1302,7 +1335,7 @@ function get_contact_registration_form()
         <div class="col-sm-9">
             <div class="radio">
                 <label>
-                    <input type="radio" name="financial_decision" id="financial_decision1" value="1" checked /> ' . get_lang('Yes').'
+                    <input type="radio" name="financial_decision" id="financial_decision1" value="1" checked /> '.get_lang('Yes').'
                 </label>
             </div>
             <div class="radio">
@@ -1329,14 +1362,14 @@ function get_contact_registration_form()
 /**
  * Displays a parameter in a table row.
  * Used by the display_database_settings_form function.
+ *
  * @param   string  Type of install
  * @param   string  Name of parameter
  * @param   string  Field name (in the HTML form)
  * @param   string  Field value
  * @param   string  Extra notice (to show on the right side)
- * @param   boolean Whether to display in update mode
+ * @param   bool Whether to display in update mode
  * @param   string  Additional attribute for the <tr> element
- * @return  void    Direct output
  */
 function displayDatabaseParameter(
     $installType,
@@ -1371,6 +1404,7 @@ function displayDatabaseParameter(
  * Displays step 3 - a form where the user can enter the installation settings
  * regarding the databases - login and password, names, prefixes, single
  * or multiple databases, tracking or not...
+ *
  * @param string $installType
  * @param string $dbHostForm
  * @param string $dbUsernameForm
@@ -1509,7 +1543,7 @@ function display_database_settings_form(
     }
 
     if ($manager && $manager->getConnection()->isConnected()): ?>
-        <?php echo $database_exists_text ?>
+        <?php echo $database_exists_text; ?>
         <div id="db_status" class="alert alert-success">
             Database host: <strong><?php echo $manager->getConnection()->getHost(); ?></strong><br/>
             Database port: <strong><?php echo $manager->getConnection()->getPort(); ?></strong><br/>
@@ -1518,7 +1552,7 @@ function display_database_settings_form(
     <?php else: ?>
         <div id="db_status" class="alert alert-danger">
             <p><?php echo get_lang('FailedConectionDatabase'); ?></strong></p>
-            <code><?php echo $database_exists_text ?></code>
+            <code><?php echo $database_exists_text; ?></code>
         </div>
     <?php endif; ?>
    <div class="form-group">
@@ -1563,12 +1597,14 @@ function panel($content = null, $title = null, $id = null, $style = null)
         $panelParent = Display::div($panelBody, ['id' => $id, 'class' => 'panel panel-'.$style]);
     }
     $html .= $panelParent;
+
     return $html;
 }
 
 /**
  * Displays a parameter in a table row.
  * Used by the display_configuration_settings_form function.
+ *
  * @param string $installType
  * @param string $parameterName
  * @param string $formFieldName
@@ -1596,6 +1632,7 @@ function display_configuration_parameter(
 
 /**
  * Displays step 4 of the installation - configuration settings about Chamilo itself.
+ *
  * @param string $installType
  * @param string $urlForm
  * @param string $languageForm
@@ -1607,8 +1644,8 @@ function display_configuration_parameter(
  * @param string $institutionForm
  * @param string $institutionUrlForm
  * @param string $encryptPassForm
- * @param bool $allowSelfReg
- * @param bool $allowSelfRegProf
+ * @param bool   $allowSelfReg
+ * @param bool   $allowSelfRegProf
  * @param string $loginForm
  * @param string $passForm
  */
@@ -1709,33 +1746,33 @@ function display_configuration_settings_form(
     );
 
     $html .= '<div class="form-group">
-            <label class="col-sm-6 control-label">' . get_lang("EncryptMethodUserPass").'</label>
+            <label class="col-sm-6 control-label">'.get_lang("EncryptMethodUserPass").'</label>
         <div class="col-sm-6">';
     if ($installType == 'update') {
         $html .= '<input type="hidden" name="encryptPassForm" value="'.$encryptPassForm.'" />'.$encryptPassForm;
     } else {
         $html .= '<div class="checkbox">
                     <label>
-                        <input  type="radio" name="encryptPassForm" value="bcrypt" id="encryptPass1" '. ($encryptPassForm == 'bcrypt' ? 'checked="checked" ' : '').'/> bcrypt
+                        <input  type="radio" name="encryptPassForm" value="bcrypt" id="encryptPass1" '.($encryptPassForm == 'bcrypt' ? 'checked="checked" ' : '').'/> bcrypt
                     </label>';
 
         $html .= '<label>
-                        <input  type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" '. ($encryptPassForm == 'sha1' ? 'checked="checked" ' : '').'/> sha1
+                        <input  type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" '.($encryptPassForm == 'sha1' ? 'checked="checked" ' : '').'/> sha1
                     </label>';
 
         $html .= '<label>
-                        <input type="radio" name="encryptPassForm" value="md5" id="encryptPass0" '. ($encryptPassForm == 'md5' ? 'checked="checked" ' : '').'/> md5
+                        <input type="radio" name="encryptPassForm" value="md5" id="encryptPass0" '.($encryptPassForm == 'md5' ? 'checked="checked" ' : '').'/> md5
                     </label>';
 
         $html .= '<label>
-                        <input type="radio" name="encryptPassForm" value="none" id="encryptPass2" '. ($encryptPassForm == 'none' ? 'checked="checked" ' : '').'/>'.get_lang('None').'
+                        <input type="radio" name="encryptPassForm" value="none" id="encryptPass2" '.($encryptPassForm == 'none' ? 'checked="checked" ' : '').'/>'.get_lang('None').'
                     </label>';
         $html .= '</div>';
     }
     $html .= '</div></div>';
 
     $html .= '<div class="form-group">
-            <label class="col-sm-6 control-label">' . get_lang('AllowSelfReg').'</label>
+            <label class="col-sm-6 control-label">'.get_lang('AllowSelfReg').'</label>
             <div class="col-sm-6">';
     if ($installType == 'update') {
         if ($allowSelfReg == 'true') {
@@ -1749,13 +1786,13 @@ function display_configuration_settings_form(
     } else {
         $html .= '<div class="control-group">';
         $html .= '<label class="checkbox-inline">
-                        <input type="radio" name="allowSelfReg" value="true" id="allowSelfReg1" '. ($allowSelfReg == 'true' ? 'checked="checked" ' : '').' /> '.get_lang('Yes').'
+                        <input type="radio" name="allowSelfReg" value="true" id="allowSelfReg1" '.($allowSelfReg == 'true' ? 'checked="checked" ' : '').' /> '.get_lang('Yes').'
                     </label>';
         $html .= '<label class="checkbox-inline">
-                        <input type="radio" name="allowSelfReg" value="false" id="allowSelfReg0" '. ($allowSelfReg == 'false' ? '' : 'checked="checked" ').' /> '.get_lang('No').'
+                        <input type="radio" name="allowSelfReg" value="false" id="allowSelfReg0" '.($allowSelfReg == 'false' ? '' : 'checked="checked" ').' /> '.get_lang('No').'
                     </label>';
         $html .= '<label class="checkbox-inline">
-                    <input type="radio" name="allowSelfReg" value="approval" id="allowSelfReg2" '. ($allowSelfReg == 'approval' ? '' : 'checked="checked" ').' /> '.get_lang('AfterApproval').'
+                    <input type="radio" name="allowSelfReg" value="approval" id="allowSelfReg2" '.($allowSelfReg == 'approval' ? '' : 'checked="checked" ').' /> '.get_lang('AfterApproval').'
                 </label>';
         $html .= '</div>';
     }
@@ -1775,12 +1812,12 @@ function display_configuration_settings_form(
     } else {
         $html .= '<div class="control-group">
                 <label class="checkbox-inline">
-                    <input type="radio" name="allowSelfRegProf" value="1" id="allowSelfRegProf1" '. ($allowSelfRegProf ? 'checked="checked" ' : '').'/>
-                ' . get_lang('Yes').'
+                    <input type="radio" name="allowSelfRegProf" value="1" id="allowSelfRegProf1" '.($allowSelfRegProf ? 'checked="checked" ' : '').'/>
+                '.get_lang('Yes').'
                 </label>';
         $html .= '<label class="checkbox-inline">
-                    <input type="radio" name="allowSelfRegProf" value="0" id="allowSelfRegProf0" '. ($allowSelfRegProf ? '' : 'checked="checked" ').' />
-                   '. get_lang('No').'
+                    <input type="radio" name="allowSelfRegProf" value="0" id="allowSelfRegProf0" '.($allowSelfRegProf ? '' : 'checked="checked" ').' />
+                   '.get_lang('No').'
                 </label>';
         $html .= '</div>';
     }
@@ -1803,6 +1840,7 @@ function display_configuration_settings_form(
 
 /**
  * After installation is completed (step 6), this message is displayed.
+ *
  * @param string $installType
  */
 function display_after_install_message($installType)
@@ -1821,9 +1859,11 @@ function display_after_install_message($installType)
 }
 
 /**
- * This function return countries list from array (hardcoded)
- * @param   bool  $combo  (Optional) True for returning countries list with select html
- * @return  array|string countries list
+ * This function return countries list from array (hardcoded).
+ *
+ * @param bool $combo (Optional) True for returning countries list with select html
+ *
+ * @return array|string countries list
  */
 function get_countries_list_from_array($combo = false)
 {
@@ -1851,7 +1891,7 @@ function get_countries_list_from_array($combo = false)
         "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan",
         "Vanuatu", "Vatican City", "Venezuela", "Vietnam",
         "Yemen",
-        "Zambia", "Zimbabwe"
+        "Zambia", "Zimbabwe",
     ];
 
     $country_select = '';
@@ -1862,6 +1902,7 @@ function get_countries_list_from_array($combo = false)
             $country_select .= '<option value="'.$country.'">'.$country.'</option>';
         }
         $country_select .= '</select>';
+
         return $country_select;
     }
 
@@ -1869,7 +1910,7 @@ function get_countries_list_from_array($combo = false)
 }
 
 /**
- * Lock settings that can't be changed in other portals
+ * Lock settings that can't be changed in other portals.
  */
 function lockSettings()
 {
@@ -1882,7 +1923,7 @@ function lockSettings()
 }
 
 /**
- * Update dir values
+ * Update dir values.
  */
 function updateDirAndFilesPermissions()
 {
@@ -1909,6 +1950,7 @@ function updateDirAndFilesPermissions()
 /**
  * @param $current_value
  * @param $wanted_value
+ *
  * @return string
  */
 function compare_setting_values($current_value, $wanted_value)
@@ -1928,6 +1970,7 @@ function compare_setting_values($current_value, $wanted_value)
  * @param $course_dir
  * @param $course_attempt_name
  * @param string $file
+ *
  * @return bool
  */
 function check_course_script_interpretation(
@@ -1975,7 +2018,7 @@ function check_course_script_interpretation(
                 //Check fsockopen (not sure it works with https). If that is your case, you might want to try the
                 // suggestion at https://support.chamilo.org/issues/8260#note-3 (although it ignores SSL peer checks)
                 if ($fp = @fsockopen(str_replace('http://', $scheme, $url), $port, $sock_errno, $sock_errmsg, 60)) {
-                    $out  = "GET $path HTTP/1.1\r\n";
+                    $out = "GET $path HTTP/1.1\r\n";
                     $out .= "Host: $host\r\n";
                     $out .= "Connection: Close\r\n\r\n";
 
@@ -2019,7 +2062,7 @@ function check_course_script_interpretation(
 }
 
 /**
- * Save settings values
+ * Save settings values.
  *
  * @param string $organizationName
  * @param string $organizationUrl
@@ -2030,7 +2073,7 @@ function check_course_script_interpretation(
  * @param string $language
  * @param string $allowRegistration
  * @param string $allowTeacherSelfRegistration
- * @param string $installationProfile The name of an installation profile file in main/install/profiles/
+ * @param string $installationProfile          The name of an installation profile file in main/install/profiles/
  */
 function installSettings(
     $organizationName,
@@ -2069,11 +2112,13 @@ function installSettings(
 
 /**
  * Executes DB changes based in the classes defined in
- * src/Chamilo/CoreBundle/Migrations/Schema/*
+ * src/Chamilo/CoreBundle/Migrations/Schema/*.
  *
- * @param string $chamiloVersion
+ * @param string        $chamiloVersion
  * @param EntityManager $manager
+ *
  * @throws \Doctrine\DBAL\DBALException
+ *
  * @return bool
  */
 function migrate($chamiloVersion, EntityManager $manager)
@@ -2126,6 +2171,7 @@ function migrate($chamiloVersion, EntityManager $manager)
     } catch (Exception $ex) {
         if ($debug) {
             echo "ERROR: {$ex->getMessage()}<br>";
+
             return false;
         }
     }
@@ -2135,9 +2181,9 @@ function migrate($chamiloVersion, EntityManager $manager)
 }
 
 /**
-* @param EntityManager $em
+ * @param EntityManager $em
  *
-* @throws \Doctrine\DBAL\DBALException
+ * @throws \Doctrine\DBAL\DBALException
  */
 function fixIds(EntityManager $em)
 {
@@ -2258,7 +2304,7 @@ function fixIds(EntityManager $em)
         'c_permission_group',
         'c_role_group',
         'c_survey_invitation',
-        'c_attendance_calendar_rel_group'
+        'c_attendance_calendar_rel_group',
     ];
 
     foreach ($groupTableToFix as $table) {
@@ -2450,7 +2496,7 @@ function fixIds(EntityManager $em)
                 'url' => $group['url'],
                 'visibility' => $group['visibility'],
                 'updated_at' => $group['updated_on'],
-                'created_at' => $group['created_on']
+                'created_at' => $group['created_on'],
             ];
             $connection->insert('usergroup', $params);
             $id = $connection->lastInsertId('id');
@@ -2591,7 +2637,7 @@ function fixIds(EntityManager $em)
                 'field_order' => $field['field_order'],
                 'visible' => $field['field_visible'],
                 'changeable' => $field['field_changeable'],
-                'filter' => $field['field_filter']
+                'filter' => $field['field_filter'],
             ];
 
             $connection->insert('extra_field', $params);
@@ -2639,7 +2685,7 @@ function fixIds(EntityManager $em)
                         'display_text' => $option['option_display_text'],
                         'field_id' => $newExtraFieldId,
                         'option_order' => $option['option_order'],
-                        'option_value' => $option['option_value']
+                        'option_value' => $option['option_value'],
                     ];
                     $connection->insert('extra_field_options', $params);
                 }
@@ -2664,7 +2710,7 @@ function fixIds(EntityManager $em)
                         $params = [
                             'field_id' => $newExtraFieldId,
                             'value' => $value['field_value'],
-                            'item_id' => $value[$handlerId]
+                            'item_id' => $value[$handlerId],
                         ];
                         $connection->insert('extra_field_values', $params);
                         if ($debug && ($k % 10000 == 0)) {
@@ -2699,7 +2745,7 @@ function fixIds(EntityManager $em)
 /**
  * @param string $distFile
  * @param string $envFile
- * @param array $params
+ * @param array  $params
  */
 function updateEnvFile($distFile, $envFile, $params)
 {
@@ -2709,25 +2755,25 @@ function updateEnvFile($distFile, $envFile, $params)
 }
 
 /**
- *
  * After the schema was created (table creation), the function adds
  * admin/platform information.
+ *
  * @param \Psr\Container\ContainerInterface $container
- * @param string $sysPath
- * @param string $encryptPassForm
- * @param string $passForm
- * @param string $adminLastName
- * @param string $adminFirstName
- * @param string $loginForm
- * @param string $emailForm
- * @param string $adminPhoneForm
- * @param string $languageForm
- * @param string $institutionForm
- * @param string $institutionUrlForm
- * @param string $siteName
- * @param string $allowSelfReg
- * @param string $allowSelfRegProf
- * @param string $installationProfile Installation profile, if any was provided
+ * @param string                            $sysPath
+ * @param string                            $encryptPassForm
+ * @param string                            $passForm
+ * @param string                            $adminLastName
+ * @param string                            $adminFirstName
+ * @param string                            $loginForm
+ * @param string                            $emailForm
+ * @param string                            $adminPhoneForm
+ * @param string                            $languageForm
+ * @param string                            $institutionForm
+ * @param string                            $institutionUrlForm
+ * @param string                            $siteName
+ * @param string                            $allowSelfReg
+ * @param string                            $allowSelfRegProf
+ * @param string                            $installationProfile Installation profile, if any was provided
  */
 function finishInstallationWithContainer(
     $container,
@@ -2777,7 +2823,7 @@ function finishInstallationWithContainer(
         get_lang('TicketRequestAndPapework') => get_lang('TicketsAboutRequestAndPapework'),
         get_lang('TicketAcademicIncidence') => get_lang('TicketsAboutAcademicIncidence'),
         get_lang('TicketVirtualCampus') => get_lang('TicketsAboutVirtualCampus'),
-        get_lang('TicketOnlineEvaluation') => get_lang('TicketsAboutOnlineEvaluation')
+        get_lang('TicketOnlineEvaluation') => get_lang('TicketsAboutOnlineEvaluation'),
     ];
 
     $i = 1;
@@ -2804,7 +2850,7 @@ function finishInstallationWithContainer(
     $defaultPriorities = [
         TicketManager::PRIORITY_NORMAL => get_lang('PriorityNormal'),
         TicketManager::PRIORITY_HIGH => get_lang('PriorityHigh'),
-        TicketManager::PRIORITY_LOW => get_lang('PriorityLow')
+        TicketManager::PRIORITY_LOW => get_lang('PriorityLow'),
     ];
 
     $i = 1;
@@ -2829,7 +2875,7 @@ function finishInstallationWithContainer(
         TicketManager::STATUS_PENDING => get_lang('StatusPending'),
         TicketManager::STATUS_UNCONFIRMED => get_lang('StatusUnconfirmed'),
         TicketManager::STATUS_CLOSE => get_lang('StatusClose'),
-        TicketManager::STATUS_FORWARDED => get_lang('StatusForwarded')
+        TicketManager::STATUS_FORWARDED => get_lang('StatusForwarded'),
     ];
 
     $i = 1;
@@ -2837,7 +2883,7 @@ function finishInstallationWithContainer(
         $attributes = [
             'id' => $i,
             'code' => $code,
-            'name' => $status
+            'name' => $status,
         ];
         Database::insert($table, $attributes);
         $i++;
@@ -2964,7 +3010,7 @@ function finishInstallationWithContainer(
 }
 
 /**
- * Creates 'version' table
+ * Creates 'version' table.
  */
 function createVersionTable()
 {
@@ -2973,7 +3019,8 @@ function createVersionTable()
 }
 
 /**
- * Get version creation table query
+ * Get version creation table query.
+ *
  * @return string
  */
 function getVersionTable()
@@ -2982,7 +3029,8 @@ function getVersionTable()
 }
 
 /**
- * Update settings based on installation profile defined in a JSON file
+ * Update settings based on installation profile defined in a JSON file.
+ *
  * @param string $installationProfile The name of the JSON file in main/install/profiles/ folder
  *
  * @return bool false on failure (no bad consequences anyway, just ignoring profile)
@@ -3030,7 +3078,8 @@ function installProfileSettings($installationProfile = '')
 }
 
 /**
- * Quick function to remove a directory with its subdirectories
+ * Quick function to remove a directory with its subdirectories.
+ *
  * @param $dir
  */
 function rrmdir($dir)
@@ -3103,10 +3152,12 @@ function get_group_picture_path_by_id($id, $type = 'web', $preview = false, $ano
 }
 
 /**
- * Control the different steps of the migration through a big switch
- * @param string $fromVersion
+ * Control the different steps of the migration through a big switch.
+ *
+ * @param string        $fromVersion
  * @param EntityManager $manager
- * @param bool $processFiles
+ * @param bool          $processFiles
+ *
  * @return bool Always returns true except if the process is broken
  */
 function migrateSwitch($fromVersion, $manager, $processFiles = true)
@@ -3174,7 +3225,7 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                         'course_info.conf.php',
                         'add_course.conf.php',
                         'events.conf.php',
-                        'auth.conf.php'
+                        'auth.conf.php',
                     ];
 
                     error_log('Copy conf files');

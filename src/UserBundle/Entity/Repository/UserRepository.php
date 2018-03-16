@@ -3,19 +3,18 @@
 
 namespace Chamilo\UserBundle\Entity\Repository;
 
-use Doctrine\ORM\EntityRepository;
-use Doctrine\Common\Collections\Criteria;
-use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\UserBundle\Entity\User;
-use Doctrine\ORM\Query\Expr\Join;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\UserBundle\Entity\User;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 
 //use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 //use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
 /**
- * Class UserRepository
+ * Class UserRepository.
  *
  * All functions that query the database (selects)
  * Functions should return query builders.
@@ -25,10 +24,10 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 class UserRepository extends EntityRepository
 {
     /**
-    * @param string $keyword
+     * @param string $keyword
      *
-    * @return mixed
-    */
+     * @return mixed
+     */
     public function searchUserByKeyword($keyword)
     {
         $qb = $this->createQueryBuilder('a');
@@ -52,6 +51,7 @@ class UserRepository extends EntityRepository
 
     /**
      * Get course user relationship based in the course_rel_user table.
+     *
      * @return array
      */
     /*public function getCourses(User $user)
@@ -112,10 +112,12 @@ class UserRepository extends EntityRepository
     }*/
 
     /**
-     * Get a filtered list of user by status and (optionally) access url
-     * @param string $query The query to filter
-     * @param int $status The status
-     * @param int $accessUrlId The access URL ID
+     * Get a filtered list of user by status and (optionally) access url.
+     *
+     * @param string $query       The query to filter
+     * @param int    $status      The status
+     * @param int    $accessUrlId The access URL ID
+     *
      * @return array
      */
     public function searchUsersByStatus($query, $status, $accessUrlId = null)
@@ -147,9 +149,11 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * Get the coaches for a course within a session
+     * Get the coaches for a course within a session.
+     *
      * @param Session $session The session
-     * @param Course $course The course
+     * @param Course  $course  The course
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getCoachesForSessionCourse(Session $session, Course $course)
@@ -175,8 +179,10 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * Get the sessions admins for a user
+     * Get the sessions admins for a user.
+     *
      * @param User $user The user
+     *
      * @return array
      */
     public function getSessionAdmins($user)
@@ -207,8 +213,10 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * Get the student bosses for a user
+     * Get the student bosses for a user.
+     *
      * @param User $user The user
+     *
      * @return array
      */
     public function getStudentBosses($user)
@@ -233,10 +241,12 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * Find potential users to send a message
-     * @param int $currentUserId The current user ID
-     * @param string $search The search text to filter the user list
-     * @param int $limit Optional. Sets the maximum number of results to retrieve
+     * Find potential users to send a message.
+     *
+     * @param int    $currentUserId The current user ID
+     * @param string $search        The search text to filter the user list
+     * @param int    $limit         Optional. Sets the maximum number of results to retrieve
+     *
      * @return mixed
      */
     public function findUsersToSendMessage($currentUserId, $search, $limit = 10)
@@ -266,7 +276,7 @@ class UserRepository extends EntityRepository
                         WHERE
                             U.active = 1 AND
                             U.status != 6 AND
-                            UF.relationType NOT IN(" . USER_RELATION_TYPE_DELETED.", ".USER_RELATION_TYPE_RRHH.") AND
+                            UF.relationType NOT IN(".USER_RELATION_TYPE_DELETED.", ".USER_RELATION_TYPE_RRHH.") AND
                             UF.userId = $currentUserId AND
                             UF.friendUserId != $currentUserId AND
                             U = R.user AND
@@ -296,7 +306,7 @@ class UserRepository extends EntityRepository
                         WITH U.id = T.loginUserId
                         WHERE 
                           U.active = 1 AND 
-                          T.loginDate >= '" . $limit_date."'";
+                          T.loginDate >= '".$limit_date."'";
             }
         }
 

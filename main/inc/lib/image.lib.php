@@ -3,9 +3,12 @@
 
 /**
  * Image class
- * This class provides a layer to manage images
+ * This class provides a layer to manage images.
+ *
  * @author Julio Montoya <gugli100@gmail.com>
+ *
  * @package chamilo.include.image
+ *
  * @todo move in a DB configuration setting
  */
 class Image
@@ -14,6 +17,7 @@ class Image
 
     /**
      * Image constructor.
+     *
      * @param string $path
      */
     public function __construct($path)
@@ -80,13 +84,15 @@ class Image
             $src_width,
             $src_height
         );
+
         return $image;
     }
 
     /**
      * @param string $file
-     * @param int $compress
-     * @param null $convert_file_to
+     * @param int    $compress
+     * @param null   $convert_file_to
+     *
      * @return bool
      */
     public function send_image(
@@ -124,7 +130,7 @@ class Image
 }
 
 /**
- * Image wrapper class
+ * Image wrapper class.
  *
  * @package chamilo.include.image
  */
@@ -148,10 +154,15 @@ abstract class ImageWrapper
     }
 
     abstract public function set_image_wrapper();
+
     abstract public function fill_image_info();
+
     abstract public function get_image_size();
+
     abstract public function resize($thumbw, $thumbh, $border, $specific_size = false);
+
     abstract public function crop($x, $y, $width, $height, $src_width, $src_height);
+
     abstract public function send_image($file = '', $compress = -1, $convert_file_to = null);
 
     /**
@@ -168,7 +179,7 @@ abstract class ImageWrapper
 }
 
 /**
- * Imagick Chamilo wrapper
+ * Imagick Chamilo wrapper.
  *
  * @author jmontoya
  *
@@ -181,6 +192,7 @@ class ImagickWrapper extends ImageWrapper
 
     /**
      * ImagickWrapper constructor.
+     *
      * @param $path
      */
     public function __construct($path)
@@ -188,9 +200,6 @@ class ImagickWrapper extends ImageWrapper
         parent::__construct($path);
     }
 
-    /**
-     *
-     */
     public function set_image_wrapper()
     {
         if ($this->debug) {
@@ -232,10 +241,11 @@ class ImagickWrapper extends ImageWrapper
 
     public function get_image_size()
     {
-        $imagesize = ['width'=>0, 'height'=>0];
+        $imagesize = ['width' => 0, 'height' => 0];
         if ($this->image_validated) {
             $imagesize = $this->image->getImageGeometry();
         }
+
         return $imagesize;
     }
 
@@ -250,22 +260,23 @@ class ImagickWrapper extends ImageWrapper
             $width = $thumbw;
             $height = $thumbh;
         } else {
-            $scale  = ($this->width > 0 && $this->height > 0) ? min($thumbw / $this->width, $thumbh / $this->height) : 0;
-            $width  = (int) ($this->width * $scale);
+            $scale = ($this->width > 0 && $this->height > 0) ? min($thumbw / $this->width, $thumbh / $this->height) : 0;
+            $width = (int) ($this->width * $scale);
             $height = (int) ($this->height * $scale);
         }
         $result = $this->image->resizeImage($width, $height, $this->filter, 1);
-        $this->width  = $thumbw;
+        $this->width = $thumbw;
         $this->height = $thumbh;
     }
 
     /**
      * @author José Loguercio <jose.loguercio@beeznest.com>
-     * @param int $x coordinate of the cropped region top left corner
-     * @param int $y coordinate of the cropped region top left corner
-     * @param int $width the width of the crop
-     * @param int $height the height of the crop
-     * @param int $src_width the source width of the original image
+     *
+     * @param int $x          coordinate of the cropped region top left corner
+     * @param int $y          coordinate of the cropped region top left corner
+     * @param int $width      the width of the crop
+     * @param int $height     the height of the crop
+     * @param int $src_width  the source width of the original image
      * @param int $src_height the source height of the original image
      */
     public function crop($x, $y, $width, $height, $src_width, $src_height)
@@ -324,13 +335,15 @@ class ImagickWrapper extends ImageWrapper
         } else {
             $this->image->clear();
             $this->image->destroy();
+
             return $result;
         }
     }
 }
 
 /**
- * php-gd wrapper
+ * php-gd wrapper.
+ *
  * @package chamilo.include.image
  */
 class GDWrapper extends ImageWrapper
@@ -339,6 +352,7 @@ class GDWrapper extends ImageWrapper
 
     /**
      * GDWrapper constructor.
+     *
      * @param $path
      */
     public function __construct($path)
@@ -381,10 +395,11 @@ class GDWrapper extends ImageWrapper
      */
     public function get_image_size()
     {
-        $return_array = ['width'=>0, 'height'=>0];
+        $return_array = ['width' => 0, 'height' => 0];
         if ($this->image_validated) {
-            $return_array = ['width'=>$this->width, 'height'=>$this->height];
+            $return_array = ['width' => $this->width, 'height' => $this->height];
         }
+
         return $return_array;
     }
 
@@ -433,7 +448,7 @@ class GDWrapper extends ImageWrapper
                 $height = $thumbh;
             } else {
                 $scale = ($this->width > 0 && $this->height > 0) ? min($thumbw / $this->width, $thumbh / $this->height) : 0;
-                $width  = (int) ($this->width * $scale);
+                $width = (int) ($this->width * $scale);
                 $height = (int) ($this->height * $scale);
             }
             $deltaw = 0;
@@ -463,11 +478,12 @@ class GDWrapper extends ImageWrapper
 
     /**
      * @author José Loguercio <jose.loguercio@beeznest.com>
-     * @param int $x coordinate of the cropped region top left corner
-     * @param int $y coordinate of the cropped region top left corner
-     * @param int $width the width of the crop
-     * @param int $height the height of the crop
-     * @param int $src_width the source width of the original image
+     *
+     * @param int $x          coordinate of the cropped region top left corner
+     * @param int $y          coordinate of the cropped region top left corner
+     * @param int $width      the width of the crop
+     * @param int $height     the height of the crop
+     * @param int $src_width  the source width of the original image
      * @param int $src_height the source height of the original image
      */
     public function crop($x, $y, $width, $height, $src_width, $src_height)
@@ -506,8 +522,9 @@ class GDWrapper extends ImageWrapper
 
     /**
      * @param string $file
-     * @param int $compress
-     * @param null $convert_file_to
+     * @param int    $compress
+     * @param null   $convert_file_to
+     *
      * @return bool|int
      */
     public function send_image($file = '', $compress = -1, $convert_file_to = null)
@@ -560,7 +577,7 @@ class GDWrapper extends ImageWrapper
     }
 
     /**
-     * Convert image to black & white
+     * Convert image to black & white.
      */
     public function convert2bw()
     {

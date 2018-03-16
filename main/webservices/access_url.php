@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\UserBundle\Entity\User;
 
 /**
@@ -16,7 +15,7 @@ define('WS_ERROR_INVALID_INPUT', 3);
 define('WS_ERROR_SETTING', 4);
 
 /**
- * @param integer $code
+ * @param int $code
  */
 function return_error($code)
 {
@@ -51,11 +50,13 @@ function return_error($code)
             );
             break;
     }
+
     return $fault;
 }
 
 /**
  * @param array $params
+ *
  * @return bool
  */
 function WSHelperVerifyKey($params)
@@ -111,6 +112,7 @@ function WSHelperVerifyKey($params)
     if ($debug) {
         error_log('WSHelperVerifyKey result: '.intval($result));
     }
+
     return $result;
 }
 
@@ -139,8 +141,8 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'id'   => ['name' => 'id', 'type' => 'xsd:string'],
-        'url' => ['name' => 'url', 'type' => 'xsd:string']
+        'id' => ['name' => 'id', 'type' => 'xsd:string'],
+        'url' => ['name' => 'url', 'type' => 'xsd:string'],
     ]
 );
 
@@ -167,7 +169,7 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'secret_key'   => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -213,9 +215,9 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'secret_key'   => ['name' => 'secret_key', 'type' => 'xsd:string'],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
         'user_id' => ['name' => 'user_id', 'type' => 'xsd:string'],
-        'portal_id' => ['name' => 'portal_id', 'type' => 'xsd:string']
+        'portal_id' => ['name' => 'portal_id', 'type' => 'xsd:string'],
     ]
 );
 
@@ -290,7 +292,7 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'secret_key'   => ['name' => 'secret_key', 'type' => 'xsd:string'],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
         'user_id' => ['name' => 'user_id', 'type' => 'xsd:string'],
     ]
 );
@@ -334,9 +336,9 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'secret_key'   => ['name' => 'secret_key', 'type' => 'xsd:string'],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
         'original_course_id_name' => ['name' => 'original_course_id_name', 'type' => 'xsd:string'],
-        'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string']
+        'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
     ]
 );
 
@@ -384,10 +386,10 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'secret_key'   => ['name' => 'secret_key', 'type' => 'xsd:string'],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
         'portal_id' => ['name' => 'portal_id', 'type' => 'xsd:string'],
         'original_course_id_name' => ['name' => 'original_course_id_name', 'type' => 'xsd:string'],
-        'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string']
+        'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
     ]
 );
 
@@ -458,9 +460,9 @@ function WSRemoveCourseFromPortal($params)
     if (empty($result)) {
         return true;
     }
+
     return false;
 }
-
 
 /* Delete user from group Web Service end */
 

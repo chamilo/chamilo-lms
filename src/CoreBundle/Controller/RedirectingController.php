@@ -8,13 +8,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class RedirectingController
- * Redirects /url/ to /url
+ * Redirects /url/ to /url.
+ *
  * @package Chamilo\CoreBundle\Controller
  */
 class RedirectingController extends Controller
 {
     /**
      * @param Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|void
      */
     public function removeTrailingSlashAction(Request $request)

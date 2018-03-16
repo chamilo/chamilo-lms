@@ -2,19 +2,19 @@
 /* For license terms, see /license.txt */
 /**
  * Plugin database installation script. Can only be executed if included
- * inside another script loading global.inc.php
+ * inside another script loading global.inc.php.
+ *
  * @package chamilo.plugin.test2pdf
  */
 /**
- * Check if script can be called
+ * Check if script can be called.
  */
 if (!function_exists('api_get_path')) {
     die('This script must be loaded through the Chamilo plugin installer sequence');
 }
 /**
- * Create the script context, then execute database queries to enable
+ * Create the script context, then execute database queries to enable.
  */
-
 $table = Database::get_main_table(TABLE_TEST2PDF);
 /*
 $sql = "CREATE TABLE IF NOT EXISTS $table (

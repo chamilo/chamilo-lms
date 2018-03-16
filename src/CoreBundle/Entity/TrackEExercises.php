@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TrackEExercises
+ * TrackEExercises.
  *
  * @ORM\Table(name="track_e_exercises", indexes={
  *     @ORM\Index(name="idx_tee_user_id", columns={"exe_user_id"}),
@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackEExercises
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="exe_user_id", type="integer", nullable=true)
      */
@@ -32,14 +32,14 @@ class TrackEExercises
     private $exeDate;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="exe_exo_id", type="integer", nullable=false)
      */
@@ -88,35 +88,35 @@ class TrackEExercises
     private $startDate;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="steps_counter", type="smallint", nullable=false)
      */
     private $stepsCounter;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="orig_lp_id", type="integer", nullable=false)
      */
     private $origLpId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="orig_lp_item_id", type="integer", nullable=false)
      */
     private $origLpItemId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="exe_duration", type="integer", nullable=false)
      */
@@ -130,7 +130,7 @@ class TrackEExercises
     private $expiredTimeControl;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="orig_lp_item_view_id", type="integer", nullable=false)
      */
@@ -144,7 +144,7 @@ class TrackEExercises
     private $questionsToCheck;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="exe_id", type="integer")
      * @ORM\Id
@@ -152,12 +152,11 @@ class TrackEExercises
      */
     private $exeId;
 
-
-
     /**
-     * Set exeUserId
+     * Set exeUserId.
      *
-     * @param integer $exeUserId
+     * @param int $exeUserId
+     *
      * @return TrackEExercises
      */
     public function setExeUserId($exeUserId)
@@ -168,9 +167,9 @@ class TrackEExercises
     }
 
     /**
-     * Get exeUserId
+     * Get exeUserId.
      *
-     * @return integer
+     * @return int
      */
     public function getExeUserId()
     {
@@ -178,9 +177,10 @@ class TrackEExercises
     }
 
     /**
-     * Set exeDate
+     * Set exeDate.
      *
      * @param \DateTime $exeDate
+     *
      * @return TrackEExercises
      */
     public function setExeDate($exeDate)
@@ -191,7 +191,7 @@ class TrackEExercises
     }
 
     /**
-     * Get exeDate
+     * Get exeDate.
      *
      * @return \DateTime
      */
@@ -201,9 +201,10 @@ class TrackEExercises
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return TrackEExercises
      */
     public function setCId($cId)
@@ -214,9 +215,9 @@ class TrackEExercises
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -224,9 +225,10 @@ class TrackEExercises
     }
 
     /**
-     * Set exeExoId
+     * Set exeExoId.
      *
-     * @param integer $exeExoId
+     * @param int $exeExoId
+     *
      * @return TrackEExercises
      */
     public function setExeExoId($exeExoId)
@@ -237,9 +239,9 @@ class TrackEExercises
     }
 
     /**
-     * Get exeExoId
+     * Get exeExoId.
      *
-     * @return integer
+     * @return int
      */
     public function getExeExoId()
     {
@@ -247,9 +249,10 @@ class TrackEExercises
     }
 
     /**
-     * Set exeResult
+     * Set exeResult.
      *
      * @param float $exeResult
+     *
      * @return TrackEExercises
      */
     public function setExeResult($exeResult)
@@ -260,7 +263,7 @@ class TrackEExercises
     }
 
     /**
-     * Get exeResult
+     * Get exeResult.
      *
      * @return float
      */
@@ -270,9 +273,10 @@ class TrackEExercises
     }
 
     /**
-     * Set exeWeighting
+     * Set exeWeighting.
      *
      * @param float $exeWeighting
+     *
      * @return TrackEExercises
      */
     public function setExeWeighting($exeWeighting)
@@ -283,7 +287,7 @@ class TrackEExercises
     }
 
     /**
-     * Get exeWeighting
+     * Get exeWeighting.
      *
      * @return float
      */
@@ -293,9 +297,10 @@ class TrackEExercises
     }
 
     /**
-     * Set userIp
+     * Set userIp.
      *
      * @param string $userIp
+     *
      * @return TrackEExercises
      */
     public function setUserIp($userIp)
@@ -306,7 +311,7 @@ class TrackEExercises
     }
 
     /**
-     * Get userIp
+     * Get userIp.
      *
      * @return string
      */
@@ -316,9 +321,10 @@ class TrackEExercises
     }
 
     /**
-     * Set status
+     * Set status.
      *
      * @param string $status
+     *
      * @return TrackEExercises
      */
     public function setStatus($status)
@@ -329,7 +335,7 @@ class TrackEExercises
     }
 
     /**
-     * Get status
+     * Get status.
      *
      * @return string
      */
@@ -339,9 +345,10 @@ class TrackEExercises
     }
 
     /**
-     * Set dataTracking
+     * Set dataTracking.
      *
      * @param string $dataTracking
+     *
      * @return TrackEExercises
      */
     public function setDataTracking($dataTracking)
@@ -352,7 +359,7 @@ class TrackEExercises
     }
 
     /**
-     * Get dataTracking
+     * Get dataTracking.
      *
      * @return string
      */
@@ -362,9 +369,10 @@ class TrackEExercises
     }
 
     /**
-     * Set startDate
+     * Set startDate.
      *
      * @param \DateTime $startDate
+     *
      * @return TrackEExercises
      */
     public function setStartDate($startDate)
@@ -375,7 +383,7 @@ class TrackEExercises
     }
 
     /**
-     * Get startDate
+     * Get startDate.
      *
      * @return \DateTime
      */
@@ -385,9 +393,10 @@ class TrackEExercises
     }
 
     /**
-     * Set stepsCounter
+     * Set stepsCounter.
      *
-     * @param integer $stepsCounter
+     * @param int $stepsCounter
+     *
      * @return TrackEExercises
      */
     public function setStepsCounter($stepsCounter)
@@ -398,9 +407,9 @@ class TrackEExercises
     }
 
     /**
-     * Get stepsCounter
+     * Get stepsCounter.
      *
-     * @return integer
+     * @return int
      */
     public function getStepsCounter()
     {
@@ -408,9 +417,10 @@ class TrackEExercises
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return TrackEExercises
      */
     public function setSessionId($sessionId)
@@ -421,9 +431,9 @@ class TrackEExercises
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -431,9 +441,10 @@ class TrackEExercises
     }
 
     /**
-     * Set origLpId
+     * Set origLpId.
      *
-     * @param integer $origLpId
+     * @param int $origLpId
+     *
      * @return TrackEExercises
      */
     public function setOrigLpId($origLpId)
@@ -444,9 +455,9 @@ class TrackEExercises
     }
 
     /**
-     * Get origLpId
+     * Get origLpId.
      *
-     * @return integer
+     * @return int
      */
     public function getOrigLpId()
     {
@@ -454,9 +465,10 @@ class TrackEExercises
     }
 
     /**
-     * Set origLpItemId
+     * Set origLpItemId.
      *
-     * @param integer $origLpItemId
+     * @param int $origLpItemId
+     *
      * @return TrackEExercises
      */
     public function setOrigLpItemId($origLpItemId)
@@ -467,9 +479,9 @@ class TrackEExercises
     }
 
     /**
-     * Get origLpItemId
+     * Get origLpItemId.
      *
-     * @return integer
+     * @return int
      */
     public function getOrigLpItemId()
     {
@@ -477,9 +489,10 @@ class TrackEExercises
     }
 
     /**
-     * Set exeDuration
+     * Set exeDuration.
      *
-     * @param integer $exeDuration
+     * @param int $exeDuration
+     *
      * @return TrackEExercises
      */
     public function setExeDuration($exeDuration)
@@ -490,9 +503,9 @@ class TrackEExercises
     }
 
     /**
-     * Get exeDuration
+     * Get exeDuration.
      *
-     * @return integer
+     * @return int
      */
     public function getExeDuration()
     {
@@ -500,9 +513,10 @@ class TrackEExercises
     }
 
     /**
-     * Set expiredTimeControl
+     * Set expiredTimeControl.
      *
      * @param \DateTime $expiredTimeControl
+     *
      * @return TrackEExercises
      */
     public function setExpiredTimeControl($expiredTimeControl)
@@ -513,7 +527,7 @@ class TrackEExercises
     }
 
     /**
-     * Get expiredTimeControl
+     * Get expiredTimeControl.
      *
      * @return \DateTime
      */
@@ -523,9 +537,10 @@ class TrackEExercises
     }
 
     /**
-     * Set origLpItemViewId
+     * Set origLpItemViewId.
      *
-     * @param integer $origLpItemViewId
+     * @param int $origLpItemViewId
+     *
      * @return TrackEExercises
      */
     public function setOrigLpItemViewId($origLpItemViewId)
@@ -536,9 +551,9 @@ class TrackEExercises
     }
 
     /**
-     * Get origLpItemViewId
+     * Get origLpItemViewId.
      *
-     * @return integer
+     * @return int
      */
     public function getOrigLpItemViewId()
     {
@@ -546,9 +561,10 @@ class TrackEExercises
     }
 
     /**
-     * Set questionsToCheck
+     * Set questionsToCheck.
      *
      * @param string $questionsToCheck
+     *
      * @return TrackEExercises
      */
     public function setQuestionsToCheck($questionsToCheck)
@@ -559,7 +575,7 @@ class TrackEExercises
     }
 
     /**
-     * Get questionsToCheck
+     * Get questionsToCheck.
      *
      * @return string
      */
@@ -569,9 +585,9 @@ class TrackEExercises
     }
 
     /**
-     * Get exeId
+     * Get exeId.
      *
-     * @return integer
+     * @return int
      */
     public function getExeId()
     {

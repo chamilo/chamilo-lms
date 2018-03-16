@@ -1,12 +1,13 @@
 <?php
 /**
- * Controller for example date plugin
+ * Controller for example date plugin.
+ *
  * @package chamilo.plugin.share_buttons
  */
 echo '
 <div class="well well-sm">
     <!-- AddThis Button BEGIN -->
-    <div class="addthis_toolbox addthis_default_style ' . $plugin_info['icon_class'].'">
+    <div class="addthis_toolbox addthis_default_style '.$plugin_info['icon_class'].'">
         <a class="addthis_button_preferred_1"></a>
         <a class="addthis_button_preferred_2"></a>
         <a class="addthis_button_preferred_3"></a>

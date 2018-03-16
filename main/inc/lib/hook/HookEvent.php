@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 /**
  * This file contains an abstract Hook event class
- * Used for Hook Events (e.g Create user, Webservice registration)
+ * Used for Hook Events (e.g Create user, Webservice registration).
+ *
  * @package chamilo.library.hook
  */
 
@@ -10,7 +11,7 @@
  * Class HookEvent
  * This abstract class implements Hook Event Interface to build the base
  * for Hook Events. This class have some public static method,
- * e.g for create Hook Events
+ * e.g for create Hook Events.
  */
 abstract class HookEvent implements HookEventInterface
 {
@@ -21,7 +22,8 @@ abstract class HookEvent implements HookEventInterface
     public static $hook;
 
     /**
-     * Construct Method
+     * Construct Method.
+     *
      * @param string $eventName
      *
      * @throws Exception
@@ -37,6 +39,7 @@ abstract class HookEvent implements HookEventInterface
 
     /**
      * Return the singleton instance of Hook event.
+     *
      * @return static
      */
     public static function create()
@@ -49,7 +52,7 @@ abstract class HookEvent implements HookEventInterface
             try {
                 $class = get_called_class();
 
-                return new $class;
+                return new $class();
             } catch (Exception $e) {
                 return null;
             }
@@ -57,12 +60,13 @@ abstract class HookEvent implements HookEventInterface
     }
 
     /**
-     * Attach an HookObserver
-     * @link http://php.net/manual/en/splsubject.attach.php
+     * Attach an HookObserver.
+     *
+     * @see http://php.net/manual/en/splsubject.attach.php
+     *
      * @param \HookObserverInterface| $observer <p>
-     * The <b>HookObserver</b> to attach.
-     * </p>
-     * @return void
+     *                                          The <b>HookObserver</b> to attach.
+     *                                          </p>
      */
     public function attach(HookObserverInterface $observer)
     {
@@ -77,12 +81,13 @@ abstract class HookEvent implements HookEventInterface
     }
 
     /**
-     * Detach an HookObserver
-     * @link http://php.net/manual/en/splsubject.detach.php
+     * Detach an HookObserver.
+     *
+     * @see http://php.net/manual/en/splsubject.detach.php
+     *
      * @param \HookObserverInterface| $observer <p>
-     * The <b>HookObserver</b> to detach.
-     * </p>
-     * @return void
+     *                                          The <b>HookObserver</b> to detach.
+     *                                          </p>
      */
     public function detach(HookObserverInterface $observer)
     {
@@ -93,9 +98,9 @@ abstract class HookEvent implements HookEventInterface
     }
 
     /**
-     * Notify an observer
-     * @link http://php.net/manual/en/splsubject.notify.php
-     * @return void
+     * Notify an observer.
+     *
+     * @see http://php.net/manual/en/splsubject.notify.php
      */
     public function notify()
     {
@@ -105,7 +110,8 @@ abstract class HookEvent implements HookEventInterface
     }
 
     /**
-     * Return the event name refer to where hook is used
+     * Return the event name refer to where hook is used.
+     *
      * @return string
      */
     public function getEventName()
@@ -114,7 +120,8 @@ abstract class HookEvent implements HookEventInterface
     }
 
     /**
-     * Return an array containing all data needed by the hook observer to update
+     * Return an array containing all data needed by the hook observer to update.
+     *
      * @return array
      */
     public function getEventData()
@@ -123,8 +130,10 @@ abstract class HookEvent implements HookEventInterface
     }
 
     /**
-     * Set an array with data needed by hooks
+     * Set an array with data needed by hooks.
+     *
      * @param array $data
+     *
      * @return $this
      */
     public function setEventData(array $data)
@@ -138,7 +147,8 @@ abstract class HookEvent implements HookEventInterface
     }
 
     /**
-     * Detach all hook observers
+     * Detach all hook observers.
+     *
      * @return $this
      */
     public function detachAll()
@@ -148,7 +158,8 @@ abstract class HookEvent implements HookEventInterface
     }
 
     /**
-     * Clear all hookObservers without detach them
+     * Clear all hookObservers without detach them.
+     *
      * @return mixed
      */
     public function clearAttachments()
@@ -157,7 +168,8 @@ abstract class HookEvent implements HookEventInterface
     }
 
     /**
-     * Load all hook observer already registered from Session or Database
+     * Load all hook observer already registered from Session or Database.
+     *
      * @return $this
      */
     public function loadAttachments()

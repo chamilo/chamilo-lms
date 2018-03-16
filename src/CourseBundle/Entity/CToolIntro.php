@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CToolIntro
+ * CToolIntro.
  *
  * @ORM\Table(
  *  name="c_tool_intro",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CToolIntro
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,14 +28,14 @@ class CToolIntro
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="string", nullable=false)
      */
@@ -49,16 +49,17 @@ class CToolIntro
     private $introText;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer")
      */
     private $sessionId;
 
     /**
-     * Set introText
+     * Set introText.
      *
      * @param string $introText
+     *
      * @return CToolIntro
      */
     public function setIntroText($introText)
@@ -69,7 +70,7 @@ class CToolIntro
     }
 
     /**
-     * Get introText
+     * Get introText.
      *
      * @return string
      */
@@ -79,9 +80,10 @@ class CToolIntro
     }
 
     /**
-     * Set id
+     * Set id.
      *
      * @param int $id
+     *
      * @return CToolIntro
      */
     public function setId($id)
@@ -92,9 +94,9 @@ class CToolIntro
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -102,9 +104,10 @@ class CToolIntro
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CToolIntro
      */
     public function setCId($cId)
@@ -115,9 +118,9 @@ class CToolIntro
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -125,9 +128,10 @@ class CToolIntro
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return CToolIntro
      */
     public function setSessionId($sessionId)
@@ -138,9 +142,9 @@ class CToolIntro
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {

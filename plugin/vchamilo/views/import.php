@@ -40,7 +40,7 @@ $form->addText(
     'configuration_file',
     [
         $plugin->get_lang('ConfigurationPath'),
-        get_lang('Example').': /var/www/site/app/config/configuration.php'
+        get_lang('Example').': /var/www/site/app/config/configuration.php',
     ],
     true
 );
@@ -58,7 +58,7 @@ $encryptList = Virtual::getEncryptList();
 $versionList = [
     '1.11.x',
     '1.10.x',
-    '1.9.x'
+    '1.9.x',
 ];
 
 $form->addSelect(
@@ -67,12 +67,11 @@ $form->addSelect(
     array_combine($versionList, $versionList)
 );
 
-
 $form->addText(
     'course_path',
     [
         $plugin->get_lang('CoursePath'),
-        get_lang('Example').': /var/www/site/virtual/var/courses'
+        get_lang('Example').': /var/www/site/virtual/var/courses',
     ],
     true
 );
@@ -81,7 +80,7 @@ $form->addText(
     'home_path',
     [
         $plugin->get_lang('HomePath'),
-        get_lang('Example').': /var/www/site/virtual/var/home'
+        get_lang('Example').': /var/www/site/virtual/var/home',
     ],
     true
 );
@@ -90,7 +89,7 @@ $form->addText(
     'upload_path',
     [
         $plugin->get_lang('UploadPath'),
-        get_lang('Example').': /var/www/site/virtual/var/upload'
+        get_lang('Example').': /var/www/site/virtual/var/upload',
     ],
     true
 );

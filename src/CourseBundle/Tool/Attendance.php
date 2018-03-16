@@ -4,7 +4,8 @@
 namespace Chamilo\CourseBundle\Tool;
 
 /**
- * Class Attendance
+ * Class Attendance.
+ *
  * @package Chamilo\CourseBundle\Tool
  */
 class Attendance extends BaseTool

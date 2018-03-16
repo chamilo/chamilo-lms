@@ -5,10 +5,10 @@ namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\ThemeBundle\Event\ShowUserEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 /**
- * Class ShowUserListener
+ * Class ShowUserListener.
+ *
  * @package Chamilo\CoreBundle\EventListener
  */
 class ShowUserListener

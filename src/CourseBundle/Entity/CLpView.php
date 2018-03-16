@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CLpView
+ * CLpView.
  *
  * @ORM\Table(
  *  name="c_lp_view",
@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CLpView
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -31,65 +31,66 @@ class CLpView
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="lp_id", type="integer", nullable=false)
      */
     private $lpId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
     private $userId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="view_count", type="integer", nullable=false)
      */
     private $viewCount;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="last_item", type="integer", nullable=false)
      */
     private $lastItem;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="progress", type="integer", nullable=true)
      */
     private $progress;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
 
     /**
-     * Set lpId
+     * Set lpId.
      *
-     * @param integer $lpId
+     * @param int $lpId
+     *
      * @return CLpView
      */
     public function setLpId($lpId)
@@ -100,9 +101,9 @@ class CLpView
     }
 
     /**
-     * Get lpId
+     * Get lpId.
      *
-     * @return integer
+     * @return int
      */
     public function getLpId()
     {
@@ -110,9 +111,10 @@ class CLpView
     }
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return CLpView
      */
     public function setUserId($userId)
@@ -123,9 +125,9 @@ class CLpView
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -133,9 +135,10 @@ class CLpView
     }
 
     /**
-     * Set viewCount
+     * Set viewCount.
      *
-     * @param integer $viewCount
+     * @param int $viewCount
+     *
      * @return CLpView
      */
     public function setViewCount($viewCount)
@@ -146,9 +149,9 @@ class CLpView
     }
 
     /**
-     * Get viewCount
+     * Get viewCount.
      *
-     * @return integer
+     * @return int
      */
     public function getViewCount()
     {
@@ -156,9 +159,10 @@ class CLpView
     }
 
     /**
-     * Set lastItem
+     * Set lastItem.
      *
-     * @param integer $lastItem
+     * @param int $lastItem
+     *
      * @return CLpView
      */
     public function setLastItem($lastItem)
@@ -169,9 +173,9 @@ class CLpView
     }
 
     /**
-     * Get lastItem
+     * Get lastItem.
      *
-     * @return integer
+     * @return int
      */
     public function getLastItem()
     {
@@ -179,9 +183,10 @@ class CLpView
     }
 
     /**
-     * Set progress
+     * Set progress.
      *
-     * @param integer $progress
+     * @param int $progress
+     *
      * @return CLpView
      */
     public function setProgress($progress)
@@ -192,9 +197,9 @@ class CLpView
     }
 
     /**
-     * Get progress
+     * Get progress.
      *
-     * @return integer
+     * @return int
      */
     public function getProgress()
     {
@@ -202,9 +207,10 @@ class CLpView
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return CLpView
      */
     public function setSessionId($sessionId)
@@ -215,9 +221,9 @@ class CLpView
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -225,9 +231,10 @@ class CLpView
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CLpView
      */
     public function setId($id)
@@ -238,9 +245,9 @@ class CLpView
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -248,9 +255,10 @@ class CLpView
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CLpView
      */
     public function setCId($cId)
@@ -261,9 +269,9 @@ class CLpView
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

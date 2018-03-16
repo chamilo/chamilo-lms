@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TrackCourseRanking
+ * TrackCourseRanking.
  *
  * @ORM\Table(name="track_course_ranking", indexes={
  *     @ORM\Index(name="idx_tcc_cid", columns={"c_id"}),
@@ -19,42 +19,42 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackCourseRanking
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="url_id", type="integer", nullable=false)
      */
     private $urlId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="accesses", type="integer", nullable=false)
      */
     private $accesses;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="total_score", type="integer", nullable=false)
      */
     private $totalScore;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="users", type="integer", nullable=false)
      */
@@ -68,7 +68,7 @@ class TrackCourseRanking
     private $creationDate;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -76,12 +76,11 @@ class TrackCourseRanking
      */
     private $id;
 
-
-
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return TrackCourseRanking
      */
     public function setCId($cId)
@@ -92,9 +91,9 @@ class TrackCourseRanking
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -102,9 +101,10 @@ class TrackCourseRanking
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return TrackCourseRanking
      */
     public function setSessionId($sessionId)
@@ -115,9 +115,9 @@ class TrackCourseRanking
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -125,9 +125,10 @@ class TrackCourseRanking
     }
 
     /**
-     * Set urlId
+     * Set urlId.
      *
-     * @param integer $urlId
+     * @param int $urlId
+     *
      * @return TrackCourseRanking
      */
     public function setUrlId($urlId)
@@ -138,9 +139,9 @@ class TrackCourseRanking
     }
 
     /**
-     * Get urlId
+     * Get urlId.
      *
-     * @return integer
+     * @return int
      */
     public function getUrlId()
     {
@@ -148,9 +149,10 @@ class TrackCourseRanking
     }
 
     /**
-     * Set accesses
+     * Set accesses.
      *
-     * @param integer $accesses
+     * @param int $accesses
+     *
      * @return TrackCourseRanking
      */
     public function setAccesses($accesses)
@@ -161,9 +163,9 @@ class TrackCourseRanking
     }
 
     /**
-     * Get accesses
+     * Get accesses.
      *
-     * @return integer
+     * @return int
      */
     public function getAccesses()
     {
@@ -171,9 +173,10 @@ class TrackCourseRanking
     }
 
     /**
-     * Set totalScore
+     * Set totalScore.
      *
-     * @param integer $totalScore
+     * @param int $totalScore
+     *
      * @return TrackCourseRanking
      */
     public function setTotalScore($totalScore)
@@ -184,9 +187,9 @@ class TrackCourseRanking
     }
 
     /**
-     * Get totalScore
+     * Get totalScore.
      *
-     * @return integer
+     * @return int
      */
     public function getTotalScore()
     {
@@ -194,9 +197,10 @@ class TrackCourseRanking
     }
 
     /**
-     * Set users
+     * Set users.
      *
-     * @param integer $users
+     * @param int $users
+     *
      * @return TrackCourseRanking
      */
     public function setUsers($users)
@@ -207,9 +211,9 @@ class TrackCourseRanking
     }
 
     /**
-     * Get users
+     * Get users.
      *
-     * @return integer
+     * @return int
      */
     public function getUsers()
     {
@@ -217,9 +221,10 @@ class TrackCourseRanking
     }
 
     /**
-     * Set creationDate
+     * Set creationDate.
      *
      * @param \DateTime $creationDate
+     *
      * @return TrackCourseRanking
      */
     public function setCreationDate($creationDate)
@@ -230,7 +235,7 @@ class TrackCourseRanking
     }
 
     /**
-     * Get creationDate
+     * Get creationDate.
      *
      * @return \DateTime
      */
@@ -240,9 +245,9 @@ class TrackCourseRanking
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

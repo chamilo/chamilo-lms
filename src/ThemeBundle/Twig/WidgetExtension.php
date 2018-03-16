@@ -6,7 +6,8 @@ namespace Chamilo\ThemeBundle\Twig;
 use Twig_Environment;
 
 /**
- * Class WidgetExtension
+ * Class WidgetExtension.
+ *
  * @package Chamilo\ThemeBundle\Twig
  */
 class WidgetExtension extends \Twig_Extension
@@ -35,7 +36,6 @@ class WidgetExtension extends \Twig_Extension
     {
         $this->env = $environment;
     }
-
 
     public function getName()
     {

@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\CourseRelUser;
-use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\Course;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -39,7 +37,7 @@ function formatCourseInfo(Course $course, $sessionId = 0, $showCourseCode = fals
                 ),
         'teachers' => api_get_setting('display_teacher_in_courselist') === 'true'
             ? $teachers = CourseManager::getTeachersFromCourse($course->getId(), true)
-            : []
+            : [],
     ];
 }
 
@@ -62,7 +60,7 @@ foreach ($assignedUsers as $assignedUserId => $assignedUserInfo) {
         'username' => $assignedUser->getUsername(),
         'complete_name' => $assignedUser->getCompleteName(),
         'picture_url' => UserManager::getUserPicture($assignedUserId),
-        'course_list' => $courseController->returnCoursesAndSessions($assignedUserId)['html']
+        'course_list' => $courseController->returnCoursesAndSessions($assignedUserId)['html'],
     ];
 
     $users[$assignedUser->getId()] = $userInfo;

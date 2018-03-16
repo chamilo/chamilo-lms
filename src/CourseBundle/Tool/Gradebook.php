@@ -4,7 +4,8 @@
 namespace Chamilo\CourseBundle\Tool;
 
 /**
- * Class Gradebook
+ * Class Gradebook.
+ *
  * @package Chamilo\CourseBundle\Tool
  */
 class Gradebook extends BaseTool

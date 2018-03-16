@@ -7,22 +7,13 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Tool
+ * Tool.
  *
  * @ORM\Table(name="tool_resource_rights")
  * @ORM\Entity
  */
 class ToolResourceRights
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    private $id;
-
     /**
      * @var string
      *
@@ -40,15 +31,23 @@ class ToolResourceRights
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool", inversedBy="toolResourceRights", cascade={"persist"})
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id")
-     **/
+     */
     protected $tool;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $id;
 
     /**
      * @return string
      */
     public function __toString()
     {
-        return (string)$this->getMask();
+        return (string) $this->getMask();
     }
 
     /**
@@ -112,9 +111,9 @@ class ToolResourceRights
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

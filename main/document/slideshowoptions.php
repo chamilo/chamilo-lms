@@ -5,7 +5,9 @@ use ChamiloSession as Session;
 
 /**
  * @author Patrick Cool
+ *
  * @package chamilo.document
+ *
  * @author Patrick Cool, patrick.cool@UGent.be, Ghent University, May 2004, http://icto.UGent.be
  * Please bear in mind that this is only an beta release.
  * I wrote this quite quick and didn't think too much about it in advance.
@@ -65,12 +67,12 @@ window.onload = <?php echo $image_resizing == 'resizing' ? 'enableresizing' : 'd
 <?php
 $actions = '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
 $actions .= '<a href="slideshow.php?curdirpath='.$pathurl.'">'.Display::return_icon('slideshow.png', get_lang('BackTo').' '.get_lang('SlideShow'), '', ICON_SIZE_MEDIUM).'</a>';
-echo Display::toolbarAction('toolbar-slideshow', [$actions])
+echo Display::toolbarAction('toolbar-slideshow', [$actions]);
 ?>
 <div class="panel panel-default">
     <div class="panel-body">
     <form action="slideshow.php?curdirpath=<?php echo $pathurl; ?>" method="post" name="options" id="options" class="form-horizontal">
-	<legend><?php echo get_lang('SlideshowOptions') ?></legend>
+	<legend><?php echo get_lang('SlideshowOptions'); ?></legend>
         <div class="radio">
             <label>
                 <input name="radio_resizing" type="radio" onClick="disableresizing()" value="noresizing" <?php

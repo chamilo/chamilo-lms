@@ -4,21 +4,12 @@
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Bundle\TwigBundle\TwigEngine;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Knp\Menu\Matcher\Matcher;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\DependencyInjection\Container;
-
 use Knp\Menu\FactoryInterface as MenuFactoryInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Knp\Menu\Renderer\ListRenderer;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\TwigBundle\TwigEngine;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Each entity controller must extends this class.
@@ -53,7 +44,7 @@ abstract class BaseController extends Controller
 
     /**
      * Converts string 'Chamilo\CoreBundle\Controller\Admin\QuestionManager' into
-     * 'admin/question_manager'
+     * 'admin/question_manager'.
      */
     public function getTemplatePath()
     {
@@ -70,11 +61,13 @@ abstract class BaseController extends Controller
         }
 
         $template = implode('/', $newPath);
+
         return str_replace('_controller', '', $template);
     }
 
     /**
-     * Transforms 'QuestionManagerController' to 'question_manager.controller'
+     * Transforms 'QuestionManagerController' to 'question_manager.controller'.
+     *
      * @return string
      */
     public function getControllerAlias()
@@ -82,12 +75,15 @@ abstract class BaseController extends Controller
         $parts = $this->classParts;
         $parts = array_reverse($parts);
         $alias = str_replace('_controller', '.controller', $parts[0]);
+
         return $alias;
     }
 
     /**
-     * Translator shortcut
+     * Translator shortcut.
+     *
      * @param string $variable
+     *
      * @return string
      */
     public function trans($variable)
@@ -96,7 +92,8 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * Returns the class name label
+     * Returns the class name label.
+     *
      * @example RoleController -> Role
      *
      * @return string the class name label
@@ -115,42 +112,9 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * @param string $action
-     * @return MenuItemInterface
-     */
-    protected function getBreadcrumbs($action)
-    {
-        $breadcrumbs = $this->buildBreadcrumbs($action);
-
-        return $breadcrumbs;
-    }
-
-    /** Main home URL
-     * @return MenuItemInterface
-     */
-    protected function getHomeBreadCrumb()
-    {
-        $menu = $this->getMenuFactory()->createItem(
-            'root',
-            [
-                'childrenAttributes' => [
-                    'class'        => 'breadcrumb',
-                    'currentClass' => 'active'
-                ]
-            ]
-        );
-
-        $menu->addChild(
-            $this->trans('Home'),
-            ['uri' => $this->generateUrl('home')]
-        );
-
-        return $menu;
-    }
-
-    /**
      * @param $action
      * @param MenuItemInterface $menu
+     *
      * @return MenuItemInterface
      */
     public function buildBreadcrumbs($action, MenuItemInterface $menu = null)
@@ -184,29 +148,11 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * @param array $breadCrumbList
-     * @return string
-     */
-    protected function parseLegacyBreadCrumb($breadCrumbList = [])
-    {
-        $menu = $this->getHomeBreadCrumb();
-        foreach ($breadCrumbList as $item) {
-            $menu->addChild(
-                $this->trans($item['title']),
-                ['uri' => $item['url']]
-            );
-        }
-
-        $renderer = new ListRenderer(new \Knp\Menu\Matcher\Matcher());
-        $result = $renderer->render($menu);
-
-        return $result;
-    }
-
-    /**
-     * Renders the current controller template
+     * Renders the current controller template.
+     *
      * @param string $name
-     * @param array $elements
+     * @param array  $elements
+     *
      * @return mixed
      */
     public function renderTemplate($name, $elements = [])
@@ -227,5 +173,61 @@ abstract class BaseController extends Controller
     public function getCourse()
     {
         return $this->getRequest()->getSession()->get('course');
+    }
+
+    /**
+     * @param string $action
+     *
+     * @return MenuItemInterface
+     */
+    protected function getBreadcrumbs($action)
+    {
+        $breadcrumbs = $this->buildBreadcrumbs($action);
+
+        return $breadcrumbs;
+    }
+
+    /** Main home URL
+     * @return MenuItemInterface
+     */
+    protected function getHomeBreadCrumb()
+    {
+        $menu = $this->getMenuFactory()->createItem(
+            'root',
+            [
+                'childrenAttributes' => [
+                    'class' => 'breadcrumb',
+                    'currentClass' => 'active',
+                ],
+            ]
+        );
+
+        $menu->addChild(
+            $this->trans('Home'),
+            ['uri' => $this->generateUrl('home')]
+        );
+
+        return $menu;
+    }
+
+    /**
+     * @param array $breadCrumbList
+     *
+     * @return string
+     */
+    protected function parseLegacyBreadCrumb($breadCrumbList = [])
+    {
+        $menu = $this->getHomeBreadCrumb();
+        foreach ($breadCrumbList as $item) {
+            $menu->addChild(
+                $this->trans($item['title']),
+                ['uri' => $item['url']]
+            );
+        }
+
+        $renderer = new ListRenderer(new \Knp\Menu\Matcher\Matcher());
+        $result = $renderer->render($menu);
+
+        return $result;
     }
 }

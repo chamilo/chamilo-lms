@@ -3,19 +3,32 @@
 
 namespace Chamilo\CoreBundle\Admin;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Chamilo\CoreBundle\Entity\Course;
 
 /**
- * Class UserGroupAdmin
+ * Class UserGroupAdmin.
+ *
  * @package Chamilo\CoreBundle\Admin
  */
 class UserGroupAdmin extends AbstractAdmin
 {
+    /**
+     * Very important in order to save the related entities!
+     *
+     * @param Course $userGroup
+     *
+     * @return mixed|void
+     */
+    public function preUpdate($userGroup)
+    {
+        //$userGroup->setUsers($userGroup->getUsers());
+    }
+
     /**
      * @param FormMapper $formMapper
      */
@@ -43,16 +56,6 @@ class UserGroupAdmin extends AbstractAdmin
                 ]
             )
         ;
-    }
-
-    /**
-     * Very important in order to save the related entities!
-     * @param Course $userGroup
-     * @return mixed|void
-     */
-    public function preUpdate($userGroup)
-    {
-        //$userGroup->setUsers($userGroup->getUsers());
     }
 
     /**

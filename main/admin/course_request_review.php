@@ -2,14 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * A list containing the pending course requests
+ * A list containing the pending course requests.
+ *
  * @package chamilo.admin
+ *
  * @author José Manuel Abuin Mosquera <chema@cesga.es>, 2010
  * Centro de Supercomputacion de Galicia (CESGA)
- *
  * @author Ivan Tcholakov <ivantcholakov@gmail.com> (technical adaptation for Chamilo 1.8.8), 2010
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -49,7 +49,7 @@ if ($course_validation_feature) {
         }
     } elseif (!empty($reject_course_request)) {
         /**
-         * Course rejection
+         * Course rejection.
          */
         $course_request_code = CourseRequestManager::get_course_request_code($reject_course_request);
         $result = CourseRequestManager::reject_course_request($reject_course_request);
@@ -61,7 +61,6 @@ if ($course_validation_feature) {
             $is_error_message = true;
         }
     } elseif (!empty($request_info)) {
-
         /**
          * Sending to the teacher a request for additional information about the proposed course.
          */
@@ -124,7 +123,7 @@ function get_number_of_requests()
 }
 
 /**
- * Get course data to display
+ * Get course data to display.
  */
 function get_request_data($from, $number_of_items, $column, $direction)
 {
@@ -174,7 +173,7 @@ function get_request_data($from, $number_of_items, $column, $direction)
 }
 
 /**
- * Enlace a la ficha del profesor
+ * Enlace a la ficha del profesor.
  */
 function email_filter($teacher)
 {
@@ -182,6 +181,7 @@ function email_filter($teacher)
             WHERE tutor_name LIKE '".$teacher."'";
     $res = Database::query($sql);
     $info = Database::fetch_array($res);
+
     return '<a href="./user_information.php?user_id='.$info[0].'">'.$teacher.'</a>';
 }
 

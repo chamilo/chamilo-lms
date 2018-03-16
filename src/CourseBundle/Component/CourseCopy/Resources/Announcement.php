@@ -4,26 +4,28 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * An announcement
+ * An announcement.
+ *
  * @author Bart Mollet <bart.mollet@hogent.be>
+ *
  * @package chamilo.backup
  */
 class Announcement extends Resource
 {
     /**
-     * The title of the announcement
+     * The title of the announcement.
      */
     public $title;
     /**
-     * The content of the announcement
+     * The content of the announcement.
      */
     public $content;
     /**
-     * The date on which this announcement was made
+     * The date on which this announcement was made.
      */
     public $date;
     /**
-     * The display order of this announcement
+     * The display order of this announcement.
      */
     public $display_order;
     /**
@@ -40,8 +42,9 @@ class Announcement extends Resource
     public $attachment_comment;
 
     /**
-     * Create a new announcement
-     * @param int $id
+     * Create a new announcement.
+     *
+     * @param int    $id
      * @param string $title
      * @param string $content
      * @param string $date
@@ -73,7 +76,7 @@ class Announcement extends Resource
     }
 
     /**
-     * Show this announcement
+     * Show this announcement.
      */
     public function show()
     {

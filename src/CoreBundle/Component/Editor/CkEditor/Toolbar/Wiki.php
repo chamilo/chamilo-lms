@@ -4,14 +4,15 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * Wiki toolbar configuration
+ * Wiki toolbar configuration.
  *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class Wiki extends Basic
 {
     /**
-     * Get the toolbar config
+     * Get the toolbar config.
+     *
      * @return array
      */
     public function getConfig()
@@ -32,7 +33,8 @@ class Wiki extends Basic
     }
 
     /**
-     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false.
+     *
      * @return array
      */
     protected function getNormalToolbar()
@@ -53,7 +55,7 @@ class Wiki extends Basic
                 '-',
                 'SelectAll',
                 '-',
-                'Find'
+                'Find',
             ],
             ['Wikilink', 'Link', 'Unlink', 'Anchor'],
             ['Image', 'Video', 'Flash', 'Oembed', 'Youtube', 'Audio', 'Asciimath'],
@@ -80,12 +82,13 @@ class Wiki extends Basic
                 api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : '',
             ],
             api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
-            ['Source']
+            ['Source'],
         ];
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is minimized
+     * Get the toolbar configuration when CKEditor is minimized.
+     *
      * @return array
      */
     protected function getMinimizedToolbar()
@@ -98,7 +101,7 @@ class Wiki extends Basic
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
             api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
-            ['Toolbarswitch']
+            ['Toolbarswitch'],
         ];
     }
 }

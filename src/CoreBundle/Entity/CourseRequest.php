@@ -3,11 +3,11 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CourseRequest
+ * CourseRequest.
  *
  * @todo fix objetives variable
  *
@@ -17,7 +17,14 @@ use Chamilo\UserBundle\Entity\User;
 class CourseRequest
 {
     /**
-     * @var integer
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", cascade={"persist"})
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    protected $user;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -31,14 +38,6 @@ class CourseRequest
      * @ORM\Column(name="code", type="string", length=40, nullable=false)
      */
     private $code;
-
-    /**
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User", cascade={"persist"})
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
-    protected $user;
 
     /**
      * @var string
@@ -118,28 +117,28 @@ class CourseRequest
     private $targetAudience;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
     private $status;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="info", type="integer", nullable=false)
      */
     private $info;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="exemplary_content", type="integer", nullable=false)
      */
     private $exemplaryContent;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -147,9 +146,10 @@ class CourseRequest
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param User $user
+     *
      * @return UsergroupRelUser
      */
     public function setUser(User $user)
@@ -160,7 +160,7 @@ class CourseRequest
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return User
      */
@@ -170,9 +170,10 @@ class CourseRequest
     }
 
     /**
-     * Set code
+     * Set code.
      *
      * @param string $code
+     *
      * @return CourseRequest
      */
     public function setCode($code)
@@ -183,7 +184,7 @@ class CourseRequest
     }
 
     /**
-     * Get code
+     * Get code.
      *
      * @return string
      */
@@ -193,9 +194,10 @@ class CourseRequest
     }
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return CourseRequest
      */
     public function setUserId($userId)
@@ -206,9 +208,9 @@ class CourseRequest
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -216,9 +218,10 @@ class CourseRequest
     }
 
     /**
-     * Set directory
+     * Set directory.
      *
      * @param string $directory
+     *
      * @return CourseRequest
      */
     public function setDirectory($directory)
@@ -229,7 +232,7 @@ class CourseRequest
     }
 
     /**
-     * Get directory
+     * Get directory.
      *
      * @return string
      */
@@ -239,9 +242,10 @@ class CourseRequest
     }
 
     /**
-     * Set dbName
+     * Set dbName.
      *
      * @param string $dbName
+     *
      * @return CourseRequest
      */
     public function setDbName($dbName)
@@ -252,7 +256,7 @@ class CourseRequest
     }
 
     /**
-     * Get dbName
+     * Get dbName.
      *
      * @return string
      */
@@ -262,9 +266,10 @@ class CourseRequest
     }
 
     /**
-     * Set courseLanguage
+     * Set courseLanguage.
      *
      * @param string $courseLanguage
+     *
      * @return CourseRequest
      */
     public function setCourseLanguage($courseLanguage)
@@ -275,7 +280,7 @@ class CourseRequest
     }
 
     /**
-     * Get courseLanguage
+     * Get courseLanguage.
      *
      * @return string
      */
@@ -285,9 +290,10 @@ class CourseRequest
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return CourseRequest
      */
     public function setTitle($title)
@@ -298,7 +304,7 @@ class CourseRequest
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -308,9 +314,10 @@ class CourseRequest
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return CourseRequest
      */
     public function setDescription($description)
@@ -321,7 +328,7 @@ class CourseRequest
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -331,9 +338,10 @@ class CourseRequest
     }
 
     /**
-     * Set categoryCode
+     * Set categoryCode.
      *
      * @param string $categoryCode
+     *
      * @return CourseRequest
      */
     public function setCategoryCode($categoryCode)
@@ -344,7 +352,7 @@ class CourseRequest
     }
 
     /**
-     * Get categoryCode
+     * Get categoryCode.
      *
      * @return string
      */
@@ -354,9 +362,10 @@ class CourseRequest
     }
 
     /**
-     * Set tutorName
+     * Set tutorName.
      *
      * @param string $tutorName
+     *
      * @return CourseRequest
      */
     public function setTutorName($tutorName)
@@ -367,7 +376,7 @@ class CourseRequest
     }
 
     /**
-     * Get tutorName
+     * Get tutorName.
      *
      * @return string
      */
@@ -377,9 +386,10 @@ class CourseRequest
     }
 
     /**
-     * Set visualCode
+     * Set visualCode.
      *
      * @param string $visualCode
+     *
      * @return CourseRequest
      */
     public function setVisualCode($visualCode)
@@ -390,7 +400,7 @@ class CourseRequest
     }
 
     /**
-     * Get visualCode
+     * Get visualCode.
      *
      * @return string
      */
@@ -400,9 +410,10 @@ class CourseRequest
     }
 
     /**
-     * Set requestDate
+     * Set requestDate.
      *
      * @param \DateTime $requestDate
+     *
      * @return CourseRequest
      */
     public function setRequestDate($requestDate)
@@ -413,7 +424,7 @@ class CourseRequest
     }
 
     /**
-     * Get requestDate
+     * Get requestDate.
      *
      * @return \DateTime
      */
@@ -423,9 +434,10 @@ class CourseRequest
     }
 
     /**
-     * Set objetives
+     * Set objetives.
      *
      * @param string $objetives
+     *
      * @return CourseRequest
      */
     public function setObjetives($objetives)
@@ -436,7 +448,7 @@ class CourseRequest
     }
 
     /**
-     * Get objetives
+     * Get objetives.
      *
      * @return string
      */
@@ -446,9 +458,10 @@ class CourseRequest
     }
 
     /**
-     * Set targetAudience
+     * Set targetAudience.
      *
      * @param string $targetAudience
+     *
      * @return CourseRequest
      */
     public function setTargetAudience($targetAudience)
@@ -459,7 +472,7 @@ class CourseRequest
     }
 
     /**
-     * Get targetAudience
+     * Get targetAudience.
      *
      * @return string
      */
@@ -469,9 +482,10 @@ class CourseRequest
     }
 
     /**
-     * Set status
+     * Set status.
      *
-     * @param integer $status
+     * @param int $status
+     *
      * @return CourseRequest
      */
     public function setStatus($status)
@@ -482,9 +496,9 @@ class CourseRequest
     }
 
     /**
-     * Get status
+     * Get status.
      *
-     * @return integer
+     * @return int
      */
     public function getStatus()
     {
@@ -492,9 +506,10 @@ class CourseRequest
     }
 
     /**
-     * Set info
+     * Set info.
      *
-     * @param integer $info
+     * @param int $info
+     *
      * @return CourseRequest
      */
     public function setInfo($info)
@@ -505,9 +520,9 @@ class CourseRequest
     }
 
     /**
-     * Get info
+     * Get info.
      *
-     * @return integer
+     * @return int
      */
     public function getInfo()
     {
@@ -515,9 +530,10 @@ class CourseRequest
     }
 
     /**
-     * Set exemplaryContent
+     * Set exemplaryContent.
      *
-     * @param integer $exemplaryContent
+     * @param int $exemplaryContent
+     *
      * @return CourseRequest
      */
     public function setExemplaryContent($exemplaryContent)
@@ -528,9 +544,9 @@ class CourseRequest
     }
 
     /**
-     * Get exemplaryContent
+     * Get exemplaryContent.
      *
-     * @return integer
+     * @return int
      */
     public function getExemplaryContent()
     {
@@ -538,9 +554,9 @@ class CourseRequest
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

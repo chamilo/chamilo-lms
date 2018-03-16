@@ -3,20 +3,20 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
+use Chamilo\UserBundle\Entity\User;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-
-use Chamilo\UserBundle\Entity\User;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 /**
- * Class LegacyLoginListener
+ * Class LegacyLoginListener.
+ *
  * @package Chamilo\CoreBundle\EventListener
  */
 class LegacyLoginListener implements EventSubscriberInterface
@@ -27,6 +27,7 @@ class LegacyLoginListener implements EventSubscriberInterface
 
     /**
      * LegacyLoginListener constructor.
+     *
      * @param $container
      * @param TokenStorage $tokenStorage
      */

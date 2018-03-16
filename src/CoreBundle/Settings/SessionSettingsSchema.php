@@ -4,12 +4,12 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class SessionSettingsSchema
+ * Class SessionSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class SessionSettingsSchema extends AbstractSettingsSchema
@@ -43,7 +43,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'my_courses_view_by_session' => 'false',
                     'session_days_after_coach_access' => '',
                     'session_days_before_coach_access' => '',
-                    'show_session_description' => 'false'
+                    'show_session_description' => 'false',
                 ]
             )
         ;
@@ -65,7 +65,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                 YesNoType::class,
                 [
                     'label' => 'AddUsersByCoachTitle',
-                    'help_block' => 'AddUsersByCoachComment'
+                    'help_block' => 'AddUsersByCoachComment',
                 ]
             )
             ->add('extend_rights_for_coach', YesNoType::class)
@@ -84,7 +84,7 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                 'text',
                 [
                     'label' => 'SessionCourseOrderingTitle',
-                    'help_block'=>'SessionCourseOrderingComment']
+                    'help_block' => 'SessionCourseOrderingComment', ]
             )
             ->add('limit_session_admin_role', YesNoType::class)
             ->add('allow_tutors_to_assign_students_to_session', YesNoType::class)

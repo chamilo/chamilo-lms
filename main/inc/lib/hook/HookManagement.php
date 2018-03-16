@@ -3,12 +3,13 @@
 
 /**
  * @TODO: Improve description
+ *
  * @package chamilo.hookmanagement
  */
 class HookManagement implements HookManagementInterface
 {
     /**
-     * Constructor
+     * Constructor.
      */
     protected function __construct()
     {
@@ -22,8 +23,10 @@ class HookManagement implements HookManagementInterface
     }
 
     /**
-     * Instance the hook manager
+     * Instance the hook manager.
+     *
      * @staticvar null $result
+     *
      * @return HookManagement
      */
     public static function create()
@@ -34,10 +37,11 @@ class HookManagement implements HookManagementInterface
     }
 
     /**
-     * Insert hook into Database. Return insert id
+     * Insert hook into Database. Return insert id.
+     *
      * @param string $eventName
      * @param string $observerClassName
-     * @param int $type
+     * @param int    $type
      *
      * @return int
      */
@@ -80,10 +84,11 @@ class HookManagement implements HookManagementInterface
     }
 
     /**
-     * Delete hook from Database. Return deleted rows number
+     * Delete hook from Database. Return deleted rows number.
+     *
      * @param string $eventName
      * @param string $observerClassName
-     * @param int $type
+     * @param int    $type
      *
      * @return int
      */
@@ -108,7 +113,8 @@ class HookManagement implements HookManagementInterface
     }
 
     /**
-     * Update hook observer order by hook event
+     * Update hook observer order by hook event.
+     *
      * @param $eventName
      * @param $type
      * @param $hookOrders
@@ -138,7 +144,8 @@ class HookManagement implements HookManagementInterface
     }
 
     /**
-     * Return a list an associative array where keys are the active hook observer class name
+     * Return a list an associative array where keys are the active hook observer class name.
+     *
      * @param string $eventName
      *
      * @return array
@@ -163,7 +170,8 @@ class HookManagement implements HookManagementInterface
     }
 
     /**
-     * Return a list an associative array where keys are the active hook observer class name
+     * Return a list an associative array where keys are the active hook observer class name.
+     *
      * @return array
      */
     public function listAllHookObservers()
@@ -180,7 +188,8 @@ class HookManagement implements HookManagementInterface
     }
 
     /**
-     * Return a list an associative array where keys are the active hook observer class name
+     * Return a list an associative array where keys are the active hook observer class name.
+     *
      * @return array
      */
     public function listAllHookEvents()
@@ -197,7 +206,8 @@ class HookManagement implements HookManagementInterface
     }
 
     /**
-     * Return a list an associative array where keys are the active hook observer class name
+     * Return a list an associative array where keys are the active hook observer class name.
+     *
      * @return array
      */
     public function listAllHookCalls()
@@ -220,7 +230,8 @@ class HookManagement implements HookManagementInterface
 
     /**
      * Check if hooks (event, observer, call) exist in Database, if not,
-     * Will insert them into their respective table
+     * Will insert them into their respective table.
+     *
      * @param string $eventName
      * @param string $observerClassName
      *
@@ -263,7 +274,7 @@ class HookManagement implements HookManagementInterface
                 $this->tables[TABLE_HOOK_CALL],
                 [
                     'where' => [
-                        'hook_event_id = ? ' =>$this->hookEvents[$eventName],
+                        'hook_event_id = ? ' => $this->hookEvents[$eventName],
                         'AND type = ? ' => HOOK_EVENT_TYPE_PRE,
                     ],
                 ],
@@ -290,7 +301,7 @@ class HookManagement implements HookManagementInterface
                 $this->tables[TABLE_HOOK_CALL],
                 [
                     'where' => [
-                        'hook_event_id = ? ' =>$this->hookEvents[$eventName],
+                        'hook_event_id = ? ' => $this->hookEvents[$eventName],
                         'AND type = ? ' => HOOK_EVENT_TYPE_POST,
                     ],
                 ],
@@ -324,10 +335,11 @@ class HookManagement implements HookManagementInterface
     }
 
     /**
-     * Return the hook call id identified by hook event, hook observer and type
+     * Return the hook call id identified by hook event, hook observer and type.
+     *
      * @param string $eventName
      * @param string $observerClassName
-     * @param int $type
+     * @param int    $type
      *
      * @return mixed
      */

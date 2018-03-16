@@ -4,7 +4,7 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * AgendaStudent toolbar configuration
+ * AgendaStudent toolbar configuration.
  *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar *
  */
@@ -13,7 +13,8 @@ class AgendaStudent extends Basic
     public $plugins = [];
 
     /**
-     * Get the toolbar config
+     * Get the toolbar config.
+     *
      * @return array
      */
     public function getConfig()
@@ -30,7 +31,8 @@ class AgendaStudent extends Basic
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is maximized
+     * Get the toolbar configuration when CKEditor is maximized.
+     *
      * @return array
      */
     protected function getMaximizedToolbar()
@@ -86,7 +88,8 @@ class AgendaStudent extends Basic
     }
 
     /**
-     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false.
+     *
      * @return array
      */
     protected function getNormalToolbar()
@@ -111,14 +114,15 @@ class AgendaStudent extends Basic
                 'Indent',
                 '-',
                 'TextColor',
-                'BGColor'
+                'BGColor',
             ],
-            ['ShowBlocks']
+            ['ShowBlocks'],
         ];
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is minimized
+     * Get the toolbar configuration when CKEditor is minimized.
+     *
      * @return array
      */
     protected function getMinimizedToolbar()
@@ -130,7 +134,7 @@ class AgendaStudent extends Basic
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter'],
             ['Format', 'Font', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
-            ['Toolbarswitch']
+            ['Toolbarswitch'],
         ];
     }
 }

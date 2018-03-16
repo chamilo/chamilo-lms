@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CGroupRelUser
+ * CGroupRelUser.
  *
  * @ORM\Table(
  *  name="c_group_rel_user",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CGroupRelUser
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,35 +28,35 @@ class CGroupRelUser
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
     private $userId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="group_id", type="integer", nullable=false)
      */
     private $groupId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="status", type="integer", nullable=false)
      */
@@ -70,9 +70,10 @@ class CGroupRelUser
     private $role;
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return CGroupRelUser
      */
     public function setUserId($userId)
@@ -83,9 +84,9 @@ class CGroupRelUser
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -93,9 +94,10 @@ class CGroupRelUser
     }
 
     /**
-     * Set groupId
+     * Set groupId.
      *
-     * @param integer $groupId
+     * @param int $groupId
+     *
      * @return CGroupRelUser
      */
     public function setGroupId($groupId)
@@ -106,9 +108,9 @@ class CGroupRelUser
     }
 
     /**
-     * Get groupId
+     * Get groupId.
      *
-     * @return integer
+     * @return int
      */
     public function getGroupId()
     {
@@ -116,9 +118,10 @@ class CGroupRelUser
     }
 
     /**
-     * Set status
+     * Set status.
      *
-     * @param integer $status
+     * @param int $status
+     *
      * @return CGroupRelUser
      */
     public function setStatus($status)
@@ -129,9 +132,9 @@ class CGroupRelUser
     }
 
     /**
-     * Get status
+     * Get status.
      *
-     * @return integer
+     * @return int
      */
     public function getStatus()
     {
@@ -139,9 +142,10 @@ class CGroupRelUser
     }
 
     /**
-     * Set role
+     * Set role.
      *
      * @param string $role
+     *
      * @return CGroupRelUser
      */
     public function setRole($role)
@@ -152,7 +156,7 @@ class CGroupRelUser
     }
 
     /**
-     * Get role
+     * Get role.
      *
      * @return string
      */
@@ -162,9 +166,10 @@ class CGroupRelUser
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CGroupRelUser
      */
     public function setId($id)
@@ -175,9 +180,9 @@ class CGroupRelUser
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -185,9 +190,10 @@ class CGroupRelUser
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CGroupRelUser
      */
     public function setCId($cId)
@@ -198,9 +204,9 @@ class CGroupRelUser
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

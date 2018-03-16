@@ -4,12 +4,13 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class ForumSettingsSchema
+ * Class ForumSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class ForumSettingsSchema extends AbstractSettingsSchema

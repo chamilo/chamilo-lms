@@ -59,7 +59,7 @@ $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$work_id,
     'name' => $workInfo['title'],
 ];
-$interbreadcrumb[] = ['url' => '#', 'name'  => get_lang('UploadFromTemplate')];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('UploadFromTemplate')];
 
 $form = new FormValidator(
     'form',

@@ -3,11 +3,11 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Language
+ * Language.
  *
  * @ORM\Table(name="language", indexes={@ORM\Index(name="idx_language_dokeos_folder", columns={"dokeos_folder"})})
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\LanguageRepository")
@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Language
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -52,7 +52,7 @@ class Language
     private $dokeosFolder;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="available", type="boolean", nullable=false)
      */
@@ -72,7 +72,7 @@ class Language
     private $subLanguages;
 
     /**
-     * Language constructor
+     * Language constructor.
      */
     public function __construct()
     {
@@ -80,9 +80,10 @@ class Language
     }
 
     /**
-     * Set originalName
+     * Set originalName.
      *
      * @param string $originalName
+     *
      * @return Language
      */
     public function setOriginalName($originalName)
@@ -93,7 +94,7 @@ class Language
     }
 
     /**
-     * Get originalName
+     * Get originalName.
      *
      * @return string
      */
@@ -103,9 +104,10 @@ class Language
     }
 
     /**
-     * Set englishName
+     * Set englishName.
      *
      * @param string $englishName
+     *
      * @return Language
      */
     public function setEnglishName($englishName)
@@ -116,7 +118,7 @@ class Language
     }
 
     /**
-     * Get englishName
+     * Get englishName.
      *
      * @return string
      */
@@ -126,9 +128,10 @@ class Language
     }
 
     /**
-     * Set isocode
+     * Set isocode.
      *
      * @param string $isocode
+     *
      * @return Language
      */
     public function setIsocode($isocode)
@@ -139,7 +142,7 @@ class Language
     }
 
     /**
-     * Get isocode
+     * Get isocode.
      *
      * @return string
      */
@@ -149,9 +152,10 @@ class Language
     }
 
     /**
-     * Set dokeosFolder
+     * Set dokeosFolder.
      *
      * @param string $dokeosFolder
+     *
      * @return Language
      */
     public function setDokeosFolder($dokeosFolder)
@@ -162,7 +166,7 @@ class Language
     }
 
     /**
-     * Get dokeosFolder
+     * Get dokeosFolder.
      *
      * @return string
      */
@@ -172,9 +176,10 @@ class Language
     }
 
     /**
-     * Set available
+     * Set available.
      *
-     * @param boolean $available
+     * @param bool $available
+     *
      * @return Language
      */
     public function setAvailable($available)
@@ -185,9 +190,9 @@ class Language
     }
 
     /**
-     * Get available
+     * Get available.
      *
-     * @return boolean
+     * @return bool
      */
     public function getAvailable()
     {
@@ -195,9 +200,10 @@ class Language
     }
 
     /**
-     * Set parent
+     * Set parent.
      *
      * @param Language $parent
+     *
      * @return Language
      */
     public function setParent(Language $parent)
@@ -208,7 +214,7 @@ class Language
     }
 
     /**
-     * Get parent
+     * Get parent.
      *
      * @return Language
      */
@@ -218,7 +224,7 @@ class Language
     }
 
     /**
-     * Get subLanguages
+     * Get subLanguages.
      *
      * @return ArrayCollection
      */
@@ -228,9 +234,9 @@ class Language
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

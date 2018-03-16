@@ -1,12 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \ChamiloSession as Session;
-
 /**
  * This script displays a basic info about data center.
  */
-
 require_once '../config.php';
 
 $plugin = SepePlugin::create();

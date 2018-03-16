@@ -3,17 +3,13 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
-use Chamilo\CoreBundle\Entity\SettingsCurrent;
+use Sylius\Bundle\SettingsBundle\Event\SettingsEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
-use Sylius\Bundle\SettingsBundle\Event\SettingsEvent;
 
 /**
- * Class SettingListener
+ * Class SettingListener.
+ *
  * @package Chamilo\CoreBundle\EventListener
  */
 class SettingListener

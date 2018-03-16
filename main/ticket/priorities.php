@@ -4,10 +4,10 @@
 use ChamiloSession as Session;
 
 /**
- * This script is the Tickets plugin main entry point
+ * This script is the Tickets plugin main entry point.
+ *
  * @package chamilo.plugin.ticket
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -37,12 +37,12 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
-    'name' => get_lang('MyTickets')
+    'name' => get_lang('MyTickets'),
 ];
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/settings.php',
-    'name' => get_lang('Settings')
+    'name' => get_lang('Settings'),
 ];
 
 switch ($action) {
@@ -61,7 +61,7 @@ switch ($action) {
         $toolName = get_lang('Add');
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'ticket/priorities.php',
-            'name' => get_lang('Priorities')
+            'name' => get_lang('Priorities'),
         ];
         $url = api_get_self().'?action=add';
         $form = TicketManager::getPriorityForm($url);
@@ -71,7 +71,7 @@ switch ($action) {
 
             $params = [
                 'name' => $values['name'],
-                'description' => $values['description']
+                'description' => $values['description'],
             ];
             TicketManager::addPriority($params);
             Display::addFlash(Display::return_message(get_lang('Added')));
@@ -84,7 +84,7 @@ switch ($action) {
         $toolName = get_lang('Edit');
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'ticket/priorities.php',
-            'name' => get_lang('Priorities')
+            'name' => get_lang('Priorities'),
         ];
         $url = api_get_self().'?action=edit&id='.$id;
         $form = TicketManager::getPriorityForm($url);
@@ -100,7 +100,7 @@ switch ($action) {
             $values = $form->getSubmitValues();
             $params = [
                 'name' => $values['name'],
-                'description' => $values['description']
+                'description' => $values['description'],
             ];
             $cat = TicketManager::updatePriority($_GET['id'], $params);
             Display::addFlash(Display::return_message(get_lang('Updated')));
@@ -116,10 +116,12 @@ $user_id = api_get_user_id();
 $isAdmin = api_is_platform_admin();
 
 /**
- * Build the modify-column of the table
+ * Build the modify-column of the table.
+ *
  * @param   int     The user id
  * @param   string  URL params to add to table links
  * @param   array   Row of elements to alter
+ *
  * @return string Some HTML-code with modify-buttons
  */
 function modify_filter($id, $params, $row)
@@ -152,7 +154,7 @@ Display::display_header($toolName);
 $items = [
     'icon' => 'new_folder.png',
     'url' => 'priorities.php?action=add',
-    'content' => get_lang('AddPriority')
+    'content' => get_lang('AddPriority'),
 ];
 echo '<div class="actions">';
 echo Display::url(

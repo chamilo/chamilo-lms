@@ -6,7 +6,7 @@ use ChamiloSession as Session;
 /**
  * Thematic Controller script.
  * Prepares the common background variables to give to the scripts corresponding to
- * the requested action
+ * the requested action.
  *
  * This file contains class used like controller for thematic,
  * it should be included inside a dispatcher file (e.g: index.php)
@@ -22,7 +22,7 @@ use ChamiloSession as Session;
 class ThematicController
 {
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -31,9 +31,10 @@ class ThematicController
     }
 
     /**
-     * This method is used for thematic control (update, insert or listing)
+     * This method is used for thematic control (update, insert or listing).
+     *
      * @param string $action
-     * render to thematic.php
+     *                       render to thematic.php
      */
     public function thematic($action)
     {
@@ -184,7 +185,7 @@ class ThematicController
                                 $csv[] = [
                                     'plan',
                                     strip_tags($plan['title']),
-                                    strip_tags($plan['description'])
+                                    strip_tags($plan['description']),
                                 ];
                             }
                         }
@@ -220,7 +221,7 @@ class ThematicController
                                 }
                                 $item[] = [
                                     'title' => $plan['title'],
-                                    'description' => $plan['description']
+                                    'description' => $plan['description'],
                                 ];
                             }
                             $theme['thematic_plan'] = $item;
@@ -249,7 +250,7 @@ class ThematicController
                             [
                                 'filename' => $fileName,
                                 'pdf_title' => $fileName,
-                                'add_signatures' => $signatures
+                                'add_signatures' => $signatures,
                             ]
                         );
                         $pdf->exportFromHtmlToDocumentsArea($view->fetch($template), $fileName, $courseId);
@@ -265,7 +266,7 @@ class ThematicController
                             'pdf_title' => $title,
                             'add_signatures' => $signatures,
                             'format' => $format,
-                            'orientation' => $orientation
+                            'orientation' => $orientation,
                         ]
                     );
                     break;
@@ -302,7 +303,7 @@ class ThematicController
                             [
                                 'filename' => $fileName,
                                 'pdf_title' => $fileName,
-                                'add_signatures' => $signatures
+                                'add_signatures' => $signatures,
                             ]
                         );
                         $pdf->exportFromHtmlToDocumentsArea(
@@ -322,7 +323,7 @@ class ThematicController
                             'pdf_title' => $title,
                             'add_signatures' => $signatures,
                             'format' => $format,
-                            'orientation' => $orientation
+                            'orientation' => $orientation,
                         ]
                     );
                     break;
@@ -387,9 +388,10 @@ class ThematicController
     }
 
     /**
-     * This method is used for thematic plan control (update, insert or listing)
+     * This method is used for thematic plan control (update, insert or listing).
+     *
      * @param string $action
-     * render to thematic_plan.php
+     *                       render to thematic_plan.php
      */
     public function thematic_plan($action)
     {
@@ -430,7 +432,7 @@ class ThematicController
 
                                 $saveRedirect .= http_build_query([
                                     'action' => 'thematic_plan_list',
-                                    'thematic_id' => $_REQUEST['thematic_id']
+                                    'thematic_id' => $_REQUEST['thematic_id'],
                                 ]);
                             } else {
                                 $saveRedirect .= 'thematic_plan_save_message=ok';
@@ -514,9 +516,9 @@ class ThematicController
 
     /**
      * This method is used for thematic advance control (update, insert or listing)
-     * render to thematic_advance.php
-     * @param    string $action
+     * render to thematic_advance.php.
      *
+     * @param string $action
      */
     public function thematic_advance($action)
     {

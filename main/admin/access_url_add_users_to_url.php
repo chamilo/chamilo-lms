@@ -3,8 +3,10 @@
 /**
  * This script allows platform admins to add users to urls.
  *    It displays a list of users and a list of courses;
- *    you can select multiple users and courses and then click on
+ *    you can select multiple users and courses and then click on.
+ *
  * @package chamilo.admin
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset = true;
@@ -84,9 +86,9 @@ $target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
 $target_name = 'lastname';
 $sql = "SELECT user_id,lastname,firstname,username FROM $tbl_user
 	    WHERE ".$target_name." LIKE '".$first_letter_user_lower."%' OR ".$target_name." LIKE '".$first_letter_user_lower."%'
-		ORDER BY ". (count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." ".$target_name;
-$result     = Database::query($sql);
-$db_users   = Database::store_result($result);
+		ORDER BY ".(count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." ".$target_name;
+$result = Database::query($sql);
+$db_users = Database::store_result($result);
 unset($result);
 
 $sql = "SELECT id, url FROM $tbl_access_url  WHERE active=1 ORDER BY url";

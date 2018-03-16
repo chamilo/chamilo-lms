@@ -2,13 +2,12 @@
 /**
  * SidebarController.php
  * avanzu-admin
- * Date: 23.02.14
+ * Date: 23.02.14.
  */
 
 namespace Chamilo\ThemeBundle\Controller;
 
 use Chamilo\ThemeBundle\Event\ShowUserEvent;
-use Chamilo\ThemeBundle\Event\SidebarMenuEvent;
 use Chamilo\ThemeBundle\Event\SidebarMenuKnpEvent;
 use Chamilo\ThemeBundle\Event\ThemeEvents;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -16,13 +15,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class SidebarController
+ * Class SidebarController.
+ *
  * @package Chamilo\ThemeBundle\Controller
  */
 class SidebarController extends Controller
 {
     /**
-     * Avatar user panel
+     * Avatar user panel.
+     *
      * @return Response
      */
     public function userPanelAction()
@@ -39,13 +40,14 @@ class SidebarController extends Controller
         return $this->render(
             'ChamiloThemeBundle:Sidebar:user-panel.html.twig',
             [
-                'user' => $userEvent->getUser()
+                'user' => $userEvent->getUser(),
             ]
         );
     }
 
     /**
-     * User social network section
+     * User social network section.
+     *
      * @return Response
      */
     public function socialPanelAction()
@@ -62,13 +64,14 @@ class SidebarController extends Controller
         return $this->render(
             'ChamiloThemeBundle:Sidebar:social-panel.html.twig',
             [
-                'user' => $userEvent->getUser()
+                'user' => $userEvent->getUser(),
             ]
         );
     }
 
     /**
-     * Search bar
+     * Search bar.
+     *
      * @return Response
      */
     public function searchFormAction()
@@ -77,15 +80,8 @@ class SidebarController extends Controller
     }
 
     /**
-     * @return object|\Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher|\Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher
-     */
-    protected function getDispatcher()
-    {
-        return $this->get('event_dispatcher');
-    }
-
-    /**
      * @param Request $request
+     *
      * @return Response
      */
     public function leftMenuAction(Request $request)
@@ -106,8 +102,16 @@ class SidebarController extends Controller
         return $this->render(
             'ChamiloThemeBundle:Sidebar:left_menu.html.twig',
             [
-                'menu' => $event->getMenu()
+                'menu' => $event->getMenu(),
             ]
         );
+    }
+
+    /**
+     * @return object|\Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher|\Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher
+     */
+    protected function getDispatcher()
+    {
+        return $this->get('event_dispatcher');
     }
 }

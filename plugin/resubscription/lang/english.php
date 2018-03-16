@@ -1,8 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Strings to english L10n
+ * Strings to english L10n.
+ *
  * @author Imanol Losada Oriol <imanol.losada@beeznest.com>
+ *
  * @package chamilo.plugin.resubscription
  */
 $strings['plugin_title'] = 'Resubscription';

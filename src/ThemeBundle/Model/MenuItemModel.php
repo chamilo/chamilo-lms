@@ -2,19 +2,18 @@
 /**
  * MenuItemModel.php
  * avanzu-admin
- * Date: 23.02.14
+ * Date: 23.02.14.
  */
 
 namespace Chamilo\ThemeBundle\Model;
 
 /**
- * Class MenuItemModel
+ * Class MenuItemModel.
  *
  * @package Chamilo\ThemeBundle\Model
  */
 class MenuItemModel implements MenuItemInterface
 {
-
     /**
      * @var mixed
      */
@@ -155,7 +154,7 @@ class MenuItemModel implements MenuItemInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getIsActive()
     {
@@ -163,7 +162,7 @@ class MenuItemModel implements MenuItemInterface
     }
 
     /**
-     * @param boolean $isActive
+     * @param bool $isActive
      *
      * @return $this
      */
@@ -183,7 +182,7 @@ class MenuItemModel implements MenuItemInterface
      */
     public function hasParent()
     {
-        return ($this->parent instanceof MenuItemInterface);
+        return $this->parent instanceof MenuItemInterface;
     }
 
     /**
@@ -271,7 +270,7 @@ class MenuItemModel implements MenuItemInterface
      */
     public function hasChildren()
     {
-        return (sizeof($this->children) > 0);
+        return sizeof($this->children) > 0;
     }
 
     /**

@@ -3,16 +3,16 @@
 
 namespace Chamilo\CoreBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
+use Entity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Doctrine\ORM\EntityRepository;
-use Entity;
 
 class SessionTreeType extends AbstractType
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -28,26 +28,10 @@ class SessionTreeType extends AbstractType
             [
                 'class' => 'Entity\SessionPath',
                 'property' => 'name',
-                'query_builder' =>
-                    function (EntityRepository $er) {
-                        return $er->createQueryBuilder('u')
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
                             ->orderBy('u.name', 'DESC');
-                    },
-            ]
-        );
-
-
-        $builder->add(
-            'tool',
-            'entity',
-            [
-                'class' => 'Entity\Tool',
-                'property' => 'name',
-                'query_builder' =>
-                    function (EntityRepository $er) {
-                        return $er->createQueryBuilder('u')
-                            ->orderBy('u.name', 'DESC');
-                    },
+                },
             ]
         );
 
@@ -57,11 +41,23 @@ class SessionTreeType extends AbstractType
             [
                 'class' => 'Entity\Tool',
                 'property' => 'name',
-                'query_builder' =>
-                    function (EntityRepository $er) {
-                        return $er->createQueryBuilder('u')
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
                             ->orderBy('u.name', 'DESC');
-                    },
+                },
+            ]
+        );
+
+        $builder->add(
+            'tool',
+            'entity',
+            [
+                'class' => 'Entity\Tool',
+                'property' => 'name',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                            ->orderBy('u.name', 'DESC');
+                },
             ]
         );
 
@@ -71,11 +67,10 @@ class SessionTreeType extends AbstractType
             [
                 'class' => 'Entity\Session',
                 'property' => 'name',
-                'query_builder' =>
-                    function (EntityRepository $er) {
-                        return $er->createQueryBuilder('u')
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
                             ->orderBy('u.name', 'DESC');
-                    },
+                },
             ]
         );
 
@@ -85,11 +80,10 @@ class SessionTreeType extends AbstractType
             [
                 'class' => 'Entity\Course',
                 'property' => 'title',
-                'query_builder' =>
-                    function (EntityRepository $er) {
-                        return $er->createQueryBuilder('u')
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
                             ->orderBy('u.title', 'DESC');
-                    },
+                },
             ]
         );
         $builder

@@ -5,17 +5,30 @@ namespace Chamilo\CoreBundle\Admin;
 
 use Chamilo\CoreBundle\Entity\Session;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
- * Class SessionAdmin
+ * Class SessionAdmin.
+ *
  * @package Chamilo\CoreBundle\Admin
  */
 class SessionAdmin extends AbstractAdmin
 {
+    /**
+     * Very important in order to save the related entities!
+     *
+     * @param Session $session
+     *
+     * @return mixed|void
+     */
+    public function preUpdate($session)
+    {
+        $session->setCourses($session->getCourses());
+    }
+
     /**
      * @param FormMapper $formMapper
      */
@@ -38,11 +51,11 @@ class SessionAdmin extends AbstractAdmin
                     'cascade_validation' => true,
                 ],
                 [
-                    'edit'              => 'inline',
-                    'inline'            => 'table',
+                    'edit' => 'inline',
+                    'inline' => 'table',
                     //'sortable'          => 'position',
                     //'link_parameters'   => array('context' => $context),
-                    'admin_code'        => 'sonata.admin.session_rel_course'
+                    'admin_code' => 'sonata.admin.session_rel_course',
                 ]
             )
             /*->add('users', 'sonata_type_collection', array(
@@ -99,18 +112,8 @@ class SessionAdmin extends AbstractAdmin
             ->addIdentifier('name')
             ->add('generalCoach')
             ->add('visibility', 'choice', [
-                'choices' => Session::getStatusList()
+                'choices' => Session::getStatusList(),
             ])
         ;
-    }
-
-    /**
-     * Very important in order to save the related entities!
-     * @param Session $session
-     * @return mixed|void
-     */
-    public function preUpdate($session)
-    {
-        $session->setCourses($session->getCourses());
     }
 }

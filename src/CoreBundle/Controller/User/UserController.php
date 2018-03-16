@@ -3,19 +3,20 @@
 
 namespace Chamilo\CoreBundle\Controller\User;
 
-use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Chamilo\CoreBundle\Controller\BaseController;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
- * Class UserController
+ * Class UserController.
+ *
  * @package Chamilo\CoreBundle\Controller
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 class UserController extends BaseController

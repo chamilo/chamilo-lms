@@ -5,7 +5,6 @@
  * This script checks that the c_lp_item_view.total_time field
  * doesn't have big values. The scripts updates it or send a message to the admin (depending the settings).
  */
-
 exit;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';

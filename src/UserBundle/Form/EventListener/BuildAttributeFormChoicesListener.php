@@ -2,13 +2,11 @@
 
 namespace Chamilo\UserBundle\Form\EventListener;
 
+use Sylius\Bundle\AttributeBundle\Form\EventListener\BuildAttributeFormChoicesListener as BaseBuildAttributeFormChoicesListener;
 use Sylius\Component\Attribute\Model\AttributeTypes;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormFactoryInterface;
-
-use Sylius\Bundle\AttributeBundle\Form\EventListener\BuildAttributeFormChoicesListener as BaseBuildAttributeFormChoicesListener;
 
 /**
  * Form event listener that builds choices for attribute form.

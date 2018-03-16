@@ -7,6 +7,7 @@ use ChamiloSession as Session;
  * @author Patrick Cool patrick.cool@UGent.be Ghent University Mai 2004
  * @author Julio Montoya Lots of improvements, cleaning, adding security
  * @author Juan Carlos Raña Trabado herodoto@telefonica.net	January 2008
+ *
  * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -297,7 +298,7 @@ if ($slide_id == 'all') {
                         if ($max_thumbnail_width < $original_image_size[0] || $max_thumbnail_height < $original_image_size[1]) {
                             $thumbnail_size = api_calculate_image_size($original_image_size[0], $original_image_size[1], $max_thumbnail_width, $max_thumbnail_height); //don't use resize_image because doesn't run with bmp files
                             $image_height = $thumbnail_size['height'];
-                            $image_width  = $thumbnail_size['width'];
+                            $image_width = $thumbnail_size['width'];
                         } else {
                             $image_height = $original_image_size[0];
                             $image_width = $original_image_size[1];
@@ -475,7 +476,7 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
                     'id' => $row['id'],
                     'origin' => 'slideshow',
                     'origin_opt' => $edit_slide_id,
-                    'curdirpath' => $pathurl
+                    'curdirpath' => $pathurl,
                 ]),
                 'edit',
                 'link',

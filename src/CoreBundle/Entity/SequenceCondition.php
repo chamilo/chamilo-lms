@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class SequenceCondition
+ * Class SequenceCondition.
  *
  * @ORM\Table(name="sequence_condition")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class SequenceCondition
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -58,9 +58,9 @@ class SequenceCondition
     private $actFalse;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -77,6 +77,7 @@ class SequenceCondition
 
     /**
      * @param string $description
+     *
      * @return SequenceCondition
      */
     public function setDescription($description)
@@ -96,6 +97,7 @@ class SequenceCondition
 
     /**
      * @param string $mathOperation
+     *
      * @return SequenceCondition
      */
     public function setMathOperation($mathOperation)
@@ -115,6 +117,7 @@ class SequenceCondition
 
     /**
      * @param string $param
+     *
      * @return SequenceCondition
      */
     public function setParam($param)
@@ -134,6 +137,7 @@ class SequenceCondition
 
     /**
      * @param string $actTrue
+     *
      * @return SequenceCondition
      */
     public function setActTrue($actTrue)
@@ -153,6 +157,7 @@ class SequenceCondition
 
     /**
      * @param string $actFalse
+     *
      * @return SequenceCondition
      */
     public function setActFalse($actFalse)

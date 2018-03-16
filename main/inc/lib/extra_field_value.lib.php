@@ -2,17 +2,16 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
-use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\Tag;
 
 /**
  * Class ExtraFieldValue
  * Declaration for the ExtraFieldValue class, managing the values in extra
- * fields for any data type
+ * fields for any data type.
  *
  * @package chamilo.library
- *
  */
 class ExtraFieldValue extends Model
 {
@@ -30,9 +29,10 @@ class ExtraFieldValue extends Model
     public $extraField;
 
     /**
-     * Formats the necessary elements for the given datatype
+     * Formats the necessary elements for the given datatype.
+     *
      * @param string $type The type of data to which this extra field
-     * applies (user, course, session, ...)
+     *                     applies (user, course, session, ...)
      *
      * @assert (-1) === false
      */
@@ -56,8 +56,9 @@ class ExtraFieldValue extends Model
 
     /**
      * Gets the number of values stored in the table (all fields together)
-     * for this type of resource
-     * @return integer Number of rows in the table
+     * for this type of resource.
+     *
+     * @return int Number of rows in the table
      * @assert () !== false
      */
     public function get_count()
@@ -74,10 +75,12 @@ class ExtraFieldValue extends Model
     /**
      * Save the extra fields values
      * In order to save this function needs a item_id (user id, course id, etc)
-     * This function is used with $extraField->addElements()
-     * @param array $params array for the insertion into the *_field_values table
-     * @param bool $onlySubmittedFields Only save parameters in the $param array
-     * @param bool $showQuery
+     * This function is used with $extraField->addElements().
+     *
+     * @param array $params              array for the insertion into the *_field_values table
+     * @param bool  $onlySubmittedFields Only save parameters in the $param array
+     * @param bool  $showQuery
+     *
      * @return mixed false on empty params, void otherwise
      * @assert (array()) === false
      */
@@ -159,7 +162,7 @@ class ExtraFieldValue extends Model
                         ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
                         ->findBy([
                             'fieldId' => $extraFieldInfo['id'],
-                            'itemId' => $params['item_id']
+                            'itemId' => $params['item_id'],
                         ]);
 
                     foreach ($currentTags as $extraFieldtag) {
@@ -179,7 +182,7 @@ class ExtraFieldValue extends Model
                         $tagsResult = $em->getRepository('ChamiloCoreBundle:Tag')
                             ->findBy([
                                 'tag' => $tagValue,
-                                'fieldId' => $extraFieldInfo['id']
+                                'fieldId' => $extraFieldInfo['id'],
                             ]);
 
                         if (empty($tagsResult)) {
@@ -197,7 +200,7 @@ class ExtraFieldValue extends Model
                         $tagUses = $em
                             ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
                             ->findBy([
-                                'tagId' => $tag->getId()
+                                'tagId' => $tag->getId(),
                             ]);
 
                         $tag->setCount(count($tagUses) + 1);
@@ -255,7 +258,7 @@ class ExtraFieldValue extends Model
                             'item_id' => $params['item_id'],
                             'field_id' => $extraFieldInfo['id'],
                             'value' => $fileDirStored.$fileName,
-                            'comment' => $comment
+                            'comment' => $comment,
                         ];
                         self::save($newParams);
                     }
@@ -292,7 +295,7 @@ class ExtraFieldValue extends Model
                         $new_params = [
                             'item_id' => $params['item_id'],
                             'field_id' => $extraFieldInfo['id'],
-                            'value' => $fileDirStored.$fileName
+                            'value' => $fileDirStored.$fileName,
                         ];
 
                         if ($this->type !== 'session' && $this->type !== 'course') {
@@ -314,7 +317,7 @@ class ExtraFieldValue extends Model
                         'item_id' => $params['item_id'],
                         'field_id' => $extraFieldInfo['id'],
                         'value' => $fieldToSave,
-                        'comment' => $comment
+                        'comment' => $comment,
                     ];
 
                     self::save($newParams);
@@ -325,7 +328,7 @@ class ExtraFieldValue extends Model
                         'item_id' => $params['item_id'],
                         'field_id' => $extraFieldInfo['id'],
                         'value' => $value,
-                        'comment' => $comment
+                        'comment' => $comment,
                     ];
                     self::save($newParams, $showQuery);
             }
@@ -333,9 +336,11 @@ class ExtraFieldValue extends Model
     }
 
     /**
-     * Save values in the *_field_values table
-     * @param array $params Structured array with the values to save
-     * @param boolean $showQuery Whether to show the insert query (passed to the parent save() method)
+     * Save values in the *_field_values table.
+     *
+     * @param array $params    Structured array with the values to save
+     * @param bool  $showQuery Whether to show the insert query (passed to the parent save() method)
+     *
      * @return mixed The result sent from the parent method
      * @assert (array()) === false
      */
@@ -471,7 +476,7 @@ class ExtraFieldValue extends Model
                         if (empty($optionExists)) {
                             $optionParams = [
                                 'field_id' => $params['field_id'],
-                                'option_value' => $params['value']
+                                'option_value' => $params['value'],
                             ];
                             $optionId = $option->saveOptions($optionParams);
                         } else {
@@ -546,10 +551,12 @@ class ExtraFieldValue extends Model
     }
 
     /**
-     * Returns the value of the given extra field on the given resource
-     * @param int $item_id Item ID (It could be a session_id, course_id or user_id)
-     * @param int $field_id Field ID (the ID from the *_field table)
+     * Returns the value of the given extra field on the given resource.
+     *
+     * @param int  $item_id   Item ID (It could be a session_id, course_id or user_id)
+     * @param int  $field_id  Field ID (the ID from the *_field table)
      * @param bool $transform Whether to transform the result to a human readable strings
+     *
      * @return mixed A structured array with the field_id and field_value, or false on error
      * @assert (-1,-1) === false
      */
@@ -630,8 +637,8 @@ class ExtraFieldValue extends Model
 
     /**
      * @param string $tag
-     * @param int   $field_id
-     * @param int   $limit
+     * @param int    $field_id
+     * @param int    $limit
      *
      * @return array
      */
@@ -664,12 +671,13 @@ class ExtraFieldValue extends Model
 
     /**
      * Gets a structured array of the original item and its extra values, using
-     * a specific original item and a field name (like "branch", or "birthdate")
-     * @param int $item_id Item ID from the original table
-     * @param string $field_variable The name of the field we are looking for
-     * @param bool $transform
-     * @param bool $filterByVisibility
-     * @param int $visibility
+     * a specific original item and a field name (like "branch", or "birthdate").
+     *
+     * @param int    $item_id            Item ID from the original table
+     * @param string $field_variable     The name of the field we are looking for
+     * @param bool   $transform
+     * @param bool   $filterByVisibility
+     * @param int    $visibility
      *
      * @return mixed Array of results, or false on error or not found
      * @assert (-1,'') === false
@@ -755,11 +763,13 @@ class ExtraFieldValue extends Model
 
     /**
      * Gets the ID from the item (course, session, etc) for which
-     * the given field is defined with the given value
+     * the given field is defined with the given value.
+     *
      * @param string $field_variable Field (type of data) we want to check
-     * @param string $field_value Data we are looking for in the given field
-     * @param bool $transform Whether to transform the result to a human readable strings
-     * @param bool $last Whether to return the last element or simply the first one we get
+     * @param string $field_value    Data we are looking for in the given field
+     * @param bool   $transform      Whether to transform the result to a human readable strings
+     * @param bool   $last           Whether to return the last element or simply the first one we get
+     *
      * @return mixed Give the ID if found, or false on failure or not found
      * @assert (-1,-1) === false
      */
@@ -805,7 +815,8 @@ class ExtraFieldValue extends Model
     }
 
     /**
-     * Get all the values stored for one specific field
+     * Get all the values stored for one specific field.
+     *
      * @param int $fieldId
      *
      * @return array|bool
@@ -832,10 +843,11 @@ class ExtraFieldValue extends Model
     }
 
     /**
-    * @param int $itemId
-    * @param int $fieldId
-    * @return array
-    */
+     * @param int $itemId
+     * @param int $fieldId
+     *
+     * @return array
+     */
     public function getAllValuesByItemAndField($itemId, $fieldId)
     {
         $fieldId = intval($fieldId);
@@ -888,8 +900,8 @@ class ExtraFieldValue extends Model
     }
 
     /**
-     * @param int $itemId
-     * @param int $fieldId
+     * @param int    $itemId
+     * @param int    $fieldId
      * @param string $fieldValue
      *
      * @return array|bool
@@ -920,10 +932,10 @@ class ExtraFieldValue extends Model
     }
 
     /**
-     * Deletes all the values related to a specific field ID
+     * Deletes all the values related to a specific field ID.
+     *
      * @param int $field_id
      *
-     * @return void
      * @assert ('a') == null
      */
     public function delete_all_values_by_field_id($field_id)
@@ -936,10 +948,10 @@ class ExtraFieldValue extends Model
     }
 
     /**
-     * Deletes values of a specific field for a specific item
-     * @param int $item_id (session id, course id, etc)
+     * Deletes values of a specific field for a specific item.
+     *
+     * @param int $item_id  (session id, course id, etc)
      * @param int $field_id
-     * @return void
      * @assert (-1,-1) == null
      */
     public function delete_values_by_handler_and_field_id($item_id, $field_id)
@@ -957,9 +969,9 @@ class ExtraFieldValue extends Model
     }
 
     /**
-     * Deletes all values from an item
+     * Deletes all values from an item.
+     *
      * @param int $itemId (session id, course id, etc)
-
      * @assert (-1,-1) == null
      */
     public function deleteValuesByItem($itemId)
@@ -999,10 +1011,13 @@ class ExtraFieldValue extends Model
     }
 
     /**
-     * Not yet implemented - Compares the field values of two items
-     * @param int $item_id Item 1
+     * Not yet implemented - Compares the field values of two items.
+     *
+     * @param int $item_id         Item 1
      * @param int $item_to_compare Item 2
+     *
      * @todo
+     *
      * @return mixed Differential array generated from the comparison
      */
     public function compareItemValues($item_id, $item_to_compare)
@@ -1010,10 +1025,11 @@ class ExtraFieldValue extends Model
     }
 
     /**
-     * Get all values for an item
-     * @param int $itemId The item ID
-     * @param boolean $visibleToSelf Get the visible extra field only
-     * @param boolean $visibleToOthers
+     * Get all values for an item.
+     *
+     * @param int  $itemId          The item ID
+     * @param bool $visibleToSelf   Get the visible extra field only
+     * @param bool $visibleToOthers
      *
      * @return array
      */
@@ -1052,13 +1068,13 @@ class ExtraFieldValue extends Model
         /** @var ExtraFieldValues $fieldValue */
         foreach ($fieldValues as $fieldValue) {
             $item = [
-                'value' => $fieldValue
+                'value' => $fieldValue,
             ];
             switch ($fieldValue->getField()->getFieldType()) {
                 case ExtraField::FIELD_TYPE_SELECT:
                     $item['option'] = $fieldOptionsRepo->findOneBy([
                         'field' => $fieldValue->getField(),
-                        'value' => $fieldValue->getValue()
+                        'value' => $fieldValue->getValue(),
                     ]);
                     break;
             }

@@ -5,11 +5,12 @@ namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class GradebookSettingsSchema
+ * Class GradebookSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class GradebookSettingsSchema extends AbstractSettingsSchema
@@ -41,7 +42,7 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
                     'hide_certificate_export_link' => 'false',
                     'add_gradebook_certificates_cron_task_enabled' => 'false',
                     'certificate_filter_by_official_code' => 'false',
-                    'hide_certificate_export_link_students' => 'false'
+                    'hide_certificate_export_link_students' => 'false',
                 ]
             );
         $allowedTypes = [
@@ -50,7 +51,7 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
             'gradebook_default_weight' => ['string'],
             'student_publication_to_take_in_gradebook' => ['string'],
             'gradebook_detailed_admin_view' => ['string'],
-            'certificate_filter_by_official_code' => ['string']
+            'certificate_filter_by_official_code' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }

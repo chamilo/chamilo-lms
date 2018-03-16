@@ -5,16 +5,14 @@ namespace Chamilo\CoreBundle\Menu;
 
 use Chamilo\PageBundle\Entity\Page;
 use Chamilo\PageBundle\Entity\Site;
-use Chamilo\UserBundle\Entity\User;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\Routing\RouterInterface;
-use Chamilo\FaqBundle\Repository\CategoryRepository;
 
 /**
- * Class NavBuilder
+ * Class NavBuilder.
+ *
  * @package Chamilo\CoreBundle\Menu
  */
 class NavBuilder implements ContainerAwareInterface
@@ -38,9 +36,9 @@ class NavBuilder implements ContainerAwareInterface
     }
 
     /**
-     * @param ItemInterface $menu The item to fill with $routes
-     * @param array $options The item options
-     * @param string $currentUri The current URI
+     * @param ItemInterface $menu       The item to fill with $routes
+     * @param array         $options    The item options
+     * @param string        $currentUri The current URI
      */
     public function buildCategoryMenu(ItemInterface $menu, array $options = [], $currentUri = null)
     {
@@ -51,9 +49,11 @@ class NavBuilder implements ContainerAwareInterface
     }
 
     /**
-     * Top menu left
+     * Top menu left.
+     *
      * @param FactoryInterface $factory
-     * @param array $options
+     * @param array            $options
+     *
      * @return ItemInterface
      */
     public function leftMenu(FactoryInterface $factory, array $options)
@@ -66,7 +66,7 @@ class NavBuilder implements ContainerAwareInterface
         $menu->addChild(
             $translator->trans('Home'),
             [
-                'route' => 'legacy_index'
+                'route' => 'legacy_index',
             ]
         );
 
@@ -162,7 +162,7 @@ class NavBuilder implements ContainerAwareInterface
         $siteManager = $this->container->get('sonata.page.manager.site');
         /** @var Site $site */
         $site = $siteManager->findOneBy([
-            'host'    => [$host, 'localhost'],
+            'host' => [$host, 'localhost'],
             'enabled' => true,
         ]);
 

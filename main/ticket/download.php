@@ -4,7 +4,6 @@
 /**
  * @package chamilo.plugin.ticket
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();

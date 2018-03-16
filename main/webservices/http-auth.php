@@ -78,5 +78,6 @@ function digestParse($digest)
         $data[$m[1]] = $m[2] ? $m[2] : $m[3];
         unset($needed_parts[$m[1]]);
     }
+
     return $needed_parts ? false : $data;
 }

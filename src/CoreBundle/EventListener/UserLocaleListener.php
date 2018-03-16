@@ -6,12 +6,10 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 /**
- * Class UserLocaleListener
+ * Class UserLocaleListener.
  *
  * Stores the locale of the user in the session after the
  * login. This can be used by the LocaleListener afterwards.
@@ -37,7 +35,8 @@ class UserLocaleListener
     }
 
     /**
-     * Set locale when user enters the platform
+     * Set locale when user enters the platform.
+     *
      * @param InteractiveLoginEvent $event
      */
     public function onInteractiveLogin(InteractiveLoginEvent $event)

@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This file exclusively export calendar items to iCal or similar formats
+ * This file exclusively export calendar items to iCal or similar formats.
+ *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 // we are not inside a course, so we reset the course id

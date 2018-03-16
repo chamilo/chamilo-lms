@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UsergroupRelSession
+ * UsergroupRelSession.
  *
  * @ORM\Table(name="usergroup_rel_session")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class UsergroupRelSession
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -23,23 +23,24 @@ class UsergroupRelSession
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="usergroup_id", type="integer", nullable=false)
      */
     private $usergroupId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
 
     /**
-     * Set usergroupId
+     * Set usergroupId.
      *
-     * @param integer $usergroupId
+     * @param int $usergroupId
+     *
      * @return UsergroupRelSession
      */
     public function setUsergroupId($usergroupId)
@@ -50,9 +51,9 @@ class UsergroupRelSession
     }
 
     /**
-     * Get usergroupId
+     * Get usergroupId.
      *
-     * @return integer
+     * @return int
      */
     public function getUsergroupId()
     {
@@ -60,9 +61,10 @@ class UsergroupRelSession
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return UsergroupRelSession
      */
     public function setSessionId($sessionId)
@@ -73,9 +75,9 @@ class UsergroupRelSession
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -83,9 +85,9 @@ class UsergroupRelSession
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

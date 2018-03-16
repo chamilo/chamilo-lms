@@ -8,7 +8,8 @@ use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class ChatCourseSettingsSchema
+ * Class ChatCourseSettingsSchema.
+ *
  * @package Chamilo\CourseBundle\Settings
  */
 class ChatCourseSettingsSchema extends AbstractSettingsSchema
@@ -21,7 +22,7 @@ class ChatCourseSettingsSchema extends AbstractSettingsSchema
         $builder
             ->setDefaults([
                 'enabled' => '',
-                'allow_open_chat_window' => ''
+                'allow_open_chat_window' => '',
             ])
         ;
         $allowedTypes = [

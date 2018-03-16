@@ -5,10 +5,10 @@ use ChamiloSession as Session;
 
 /**
  * @package chamilo.social
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  * @autor Alex Aragon <alex.aragon@beeznest.com> CSS Design and Template
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -128,7 +128,7 @@ if (!empty($results)) {
                 $group_url
             ),
             $result['name'],
-            $group_info.$group_actions
+            $group_info.$group_actions,
         ];
     }
 }
@@ -171,7 +171,7 @@ foreach ($results as $result) {
     $group_info = '<div class="description"><p>'.cut($result['description'], 120, true)."</p></div>";
     $groups_pop[] = [
         Display::url($result['picture_uri'], $group_url),
-        $result['name'], $group_info.$group_actions
+        $result['name'], $group_info.$group_actions,
     ];
 }
 

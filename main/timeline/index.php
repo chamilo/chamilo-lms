@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 /**
  *	@author Julio Montoya <gugli100@gmail.com> BeezNest 2011
+ *
  *	@package chamilo.timeline
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -39,15 +39,15 @@ switch ($action) {
 }
 
 //jqgrid will use this URL to do the selects
-$url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_timelines';
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_timelines';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns        = [get_lang('Name'), get_lang('Actions')];
+$columns = [get_lang('Name'), get_lang('Actions')];
 
 //Column config
-$column_model   = [
-                        ['name'=>'name', 'index'=>'name', 'width'=>'120', 'align'=>'left'],
-                        ['name'=>'actions', 'index'=>'actions', 'width'=>'100', 'align'=>'left', 'sortable'=>'false']
+$column_model = [
+                        ['name' => 'name', 'index' => 'name', 'width' => '120', 'align' => 'left'],
+                        ['name' => 'actions', 'index' => 'actions', 'width' => '100', 'align' => 'left', 'sortable' => 'false'],
                         ];
 //Autowidth
 $extra_params['autowidth'] = 'true';
@@ -71,14 +71,14 @@ switch ($action) {
         if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
             api_not_allowed();
         }
-        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
+        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
         $form = $timeline->return_form($url, 'add');
 
         // The validation or display
         if ($form->validate()) {
             if ($check) {
                 $values = $form->exportValues();
-                $res    = $timeline->save($values);
+                $res = $timeline->save($values);
                 if ($res) {
                     $message = Display::return_message(get_lang('ItemAdded'), 'success');
                 }
@@ -93,7 +93,7 @@ switch ($action) {
         break;
     case 'edit':
         // Action handling: Editing
-        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
+        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
         $form = $timeline->return_form($url, 'edit');
 
         // The validation or display
@@ -101,7 +101,7 @@ switch ($action) {
             if ($check) {
                 $values = $form->exportValues();
                 //$timeline->update_all_promotion_status_by_career_id($values['id'],$values['status']);
-                $res    = $timeline->update($values);
+                $res = $timeline->update($values);
                 $message = Display::return_message(sprintf(get_lang('ItemUpdated'), $values['name']), 'confirmation');
             }
             $timeline->display();
@@ -114,7 +114,7 @@ switch ($action) {
         break;
     case 'add_item':
            // Action handling: Editing
-        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&parent_id='.intval($_GET['parent_id']);
+        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&parent_id='.intval($_GET['parent_id']);
         $form = $timeline->return_item_form($url, 'edit');
 
         // The validation or display
@@ -123,7 +123,7 @@ switch ($action) {
                 $values = $form->exportValues();
                 $values['type'] = '';
                 //$timeline->update_all_promotion_status_by_career_id($values['id'],$values['status']);
-                $res    = $timeline->save_item($values);
+                $res = $timeline->save_item($values);
                 $message = Display::return_message(sprintf(get_lang('ItemUpdated'), $values['name']), 'confirmation');
             }
             $timeline->display();

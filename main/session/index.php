@@ -4,11 +4,12 @@
 use ChamiloSession as Session;
 
 /**
-*   Session view
-*   @package chamilo.session
-*   @author Julio Montoya <gugli100@gmail.com>  Beeznest
-*/
-
+ *   Session view.
+ *
+ *   @package chamilo.session
+ *
+ *   @author Julio Montoya <gugli100@gmail.com>  Beeznest
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -156,7 +157,7 @@ if (!empty($course_list)) {
             //  'recent_lps' => $icons,
             //'max_mutation_date' => substr(api_get_local_time($max_mutation_date),0,10),
             'exercise_count' => $exercise_count,
-            'lp_count' => $lp_count
+            'lp_count' => $lp_count,
         ];
     }
 }
@@ -178,7 +179,7 @@ if ($sessionTitleLink == 2 && $session->getNbrCourses() === 1) {
     $sessionCourse = $sessionCourses[0]->getCourse();
     $courseUrl = $sessionCourse->getDirectory().'/index.php?';
     $courseUrl .= http_build_query([
-        'id_session' => $session->getId()
+        'id_session' => $session->getId(),
     ]);
 
     header('Location: '.api_get_path(WEB_COURSE_PATH).$courseUrl);
@@ -300,7 +301,7 @@ if (!empty($courseList)) {
                         'attempt' => '-',
                         'result' => '-',
                         'best_result' => '-',
-                        'position' => '-'
+                        'position' => '-',
                     ];
                     continue;
                 }
@@ -330,7 +331,7 @@ if (!empty($courseList)) {
                     $name = Display::url(
                         $exerciseInfo['title'],
                         api_get_path(WEB_CODE_PATH)."exercise/result.php?cidReq=$courseCode&id={$result['exe_id']}&id_session=$session_id&show_headers=1",
-                        ['target' => SESSION_LINK_TARGET, 'class'=>'exercise-result-link']
+                        ['target' => SESSION_LINK_TARGET, 'class' => 'exercise-result-link']
                     );
 
                     $my_real_array[] = [
@@ -409,11 +410,11 @@ $columns_courses = [
     get_lang('NumberOfPublishedLps'),
 ];
 $column_model_courses = [
-    ['name'=>'title', 'index'=>'title', 'width'=>'400px', 'align'=>'left', 'sortable'=>'true'],
+    ['name' => 'title', 'index' => 'title', 'width' => '400px', 'align' => 'left', 'sortable' => 'true'],
     //array('name'=>'recent_lps',         'index'=>'recent_lps',          'width'=>'10px',  'align'=>'left',  'sortable'=>'false'),
 //    array('name'=>'max_mutation_date',  'index'=>'max_mutation_date',   'width'=>'120px',  'align'=>'left',  'sortable'=>'true'),
-    ['name'=>'exercise_count', 'index'=>'exercise_count', 'width'=>'180px', 'align'=>'left', 'sortable'=>'true'],
-    ['name'=>'lp_count', 'index'=>'lp_count', 'width'=>'180px', 'align'=>'left', 'sortable'=>'true']
+    ['name' => 'exercise_count', 'index' => 'exercise_count', 'width' => '180px', 'align' => 'left', 'sortable' => 'true'],
+    ['name' => 'lp_count', 'index' => 'lp_count', 'width' => '180px', 'align' => 'left', 'sortable' => 'true'],
 ];
 
 $extra_params_courses['height'] = '100%';
@@ -423,13 +424,13 @@ $url = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_de
 $columns = [
     get_lang('PublicationDate'),
     get_lang('Course'),
-    get_lang('LearningPaths')
+    get_lang('LearningPaths'),
 ];
 
 $column_model = [
-    ['name'=>'date', 'index'=>'date', 'width'=>'120', 'align'=>'left', 'sortable'=>'true'],
-    ['name'=>'course', 'index'=>'course', 'width'=>'300', 'align'=>'left', 'sortable'=>'true', 'wrap_cell' => 'true'],
-    ['name'=>'lp', 'index'=>'lp', 'width'=>'440', 'align'=>'left', 'sortable'=>'true']
+    ['name' => 'date', 'index' => 'date', 'width' => '120', 'align' => 'left', 'sortable' => 'true'],
+    ['name' => 'course', 'index' => 'course', 'width' => '300', 'align' => 'left', 'sortable' => 'true', 'wrap_cell' => 'true'],
+    ['name' => 'lp', 'index' => 'lp', 'width' => '440', 'align' => 'left', 'sortable' => 'true'],
 ];
 
 $extra_params = [];
@@ -442,10 +443,10 @@ $url_by_course = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_cou
 $extra_params_course = [];
 $extra_params_course['grouping'] = 'true';
 $extra_params_course['groupingView'] = [
-    'groupCollapse'    => false,
-    'groupField'       => ['course'],
-    'groupColumnShow'  => ['false'],
-    'groupText'        => ['<b>'.get_lang('Course').' {0}</b>']
+    'groupCollapse' => false,
+    'groupField' => ['course'],
+    'groupColumnShow' => ['false'],
+    'groupText' => ['<b>'.get_lang('Course').' {0}</b>'],
 ];
 $extra_params_course['autowidth'] = 'true'; //use the width of the parent
 $extra_params_course['height'] = "100%";
@@ -456,14 +457,14 @@ $column_week = [
     get_lang('PeriodWeek'),
     get_lang('PublicationDate'),
     get_lang('Course'),
-    get_lang('LearningPaths')
+    get_lang('LearningPaths'),
 ];
 
 $column_week_model = [
-    ['name'=>'week', 'index'=>'week', 'width'=>'40', 'align'=>'left', 'sortable'=>'false'],
-    ['name'=>'date', 'index'=>'date', 'width'=>'120', 'align'=>'left', 'sortable'=>'false'],
-    ['name'=>'course', 'index'=>'course', 'width'=>'300', 'align'=>'left', 'sortable'=>'true', 'wrap_cell' => 'true'],
-    ['name'=>'lp', 'index'=>'lp', 'width'=>'440', 'align'=>'left', 'sortable'=>'true']
+    ['name' => 'week', 'index' => 'week', 'width' => '40', 'align' => 'left', 'sortable' => 'false'],
+    ['name' => 'date', 'index' => 'date', 'width' => '120', 'align' => 'left', 'sortable' => 'false'],
+    ['name' => 'course', 'index' => 'course', 'width' => '300', 'align' => 'left', 'sortable' => 'true', 'wrap_cell' => 'true'],
+    ['name' => 'lp', 'index' => 'lp', 'width' => '440', 'align' => 'left', 'sortable' => 'true'],
 ];
 
 $extra_params_week = [];
@@ -475,7 +476,7 @@ $extra_params_week['groupingView'] = [
     'groupField' => ['week'],
     'groupOrder' => ['desc'],
     'groupColumnShow' => 'false',
-    'groupText' => ['<b>'.get_lang('PeriodWeek').' {0}</b>']
+    'groupText' => ['<b>'.get_lang('PeriodWeek').' {0}</b>'],
 ];
 $extra_params_week['autowidth'] = 'true'; //use the width of the parent
 $extra_params_week['height'] = '100%';
@@ -490,17 +491,17 @@ if (!api_is_anonymous()) {
         get_lang('Attempts'),
         get_lang('Result'),
         get_lang('BestResultInCourse'),
-        get_lang('Ranking')
+        get_lang('Ranking'),
     ];
     $column_exercise_model = [
-        ['name'=>'status', 'index'=>'status', 'width'=>'40', 'align'=>'left', 'sortable'=>'false'],
-        ['name'=>'date', 'index'=>'date', 'width'=>'130', 'align'=>'left', 'sortable'=>'true'],
-        ['name'=>'course', 'index'=>'course', 'width'=>'200', 'align'=>'left', 'sortable'=>'true', 'wrap_cell' => 'true'],
-        ['name'=>'exercise', 'index'=>'exercise', 'width'=>'200', 'align'=>'left', 'sortable'=>'false'],
-        ['name'=>'attempt', 'index'=>'attempt', 'width'=>'60', 'align'=>'center', 'sortable'=>'true'],
-        ['name'=>'result', 'index'=>'result', 'width'=>'120', 'align'=>'center', 'sortable'=>'true'],
-        ['name'=>'best_result', 'index'=>'best_result', 'width'=>'140', 'align'=>'center', 'sortable'=>'true'],
-        ['name'=>'position', 'index'=>'position', 'width'=>'55', 'align'=>'center', 'sortable'=>'true']
+        ['name' => 'status', 'index' => 'status', 'width' => '40', 'align' => 'left', 'sortable' => 'false'],
+        ['name' => 'date', 'index' => 'date', 'width' => '130', 'align' => 'left', 'sortable' => 'true'],
+        ['name' => 'course', 'index' => 'course', 'width' => '200', 'align' => 'left', 'sortable' => 'true', 'wrap_cell' => 'true'],
+        ['name' => 'exercise', 'index' => 'exercise', 'width' => '200', 'align' => 'left', 'sortable' => 'false'],
+        ['name' => 'attempt', 'index' => 'attempt', 'width' => '60', 'align' => 'center', 'sortable' => 'true'],
+        ['name' => 'result', 'index' => 'result', 'width' => '120', 'align' => 'center', 'sortable' => 'true'],
+        ['name' => 'best_result', 'index' => 'best_result', 'width' => '140', 'align' => 'center', 'sortable' => 'true'],
+        ['name' => 'position', 'index' => 'position', 'width' => '55', 'align' => 'center', 'sortable' => 'true'],
     ];
     $extra_params_exercise['height'] = '100%';
     $extra_params_exercise['autowidth'] = 'true';
@@ -630,7 +631,7 @@ if (!api_is_anonymous()) {
 $headers = [
     Display::return_icon('moderator_star.png'),
     get_lang('Courses'),
-    get_lang('LearningPaths')
+    get_lang('LearningPaths'),
 ];
 
 if (!api_is_anonymous()) {
@@ -646,7 +647,7 @@ $tabs = [
     $coursesTab,
     Display::grid_html('list_course'),
     Display::grid_html('exercises'),
-    $reportingTab
+    $reportingTab,
 ];
 
 $tabToHide = api_get_configuration_value('session_hide_tab_list');

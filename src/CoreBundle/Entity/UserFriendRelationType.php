@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UserFriendRelationType
+ * UserFriendRelationType.
  *
  * @ORM\Table(name="user_friend_relation_type")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class UserFriendRelationType
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -30,9 +30,10 @@ class UserFriendRelationType
     private $title;
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return UserFriendRelationType
      */
     public function setTitle($title)
@@ -43,7 +44,7 @@ class UserFriendRelationType
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -53,9 +54,9 @@ class UserFriendRelationType
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -63,9 +64,9 @@ class UserFriendRelationType
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @return integer
+     * @return int
      */
     public function setId($id)
     {

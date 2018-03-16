@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
@@ -19,11 +19,11 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$selectCat,
-    'name' => get_lang('Details')
+    'name' => get_lang('Details'),
 ];
 $interbreadcrumb[] = [
     'url' => 'gradebook_showlog_link.php?visiblelink='.Security::remove_XSS($_GET['visiblelink']).'&selectcat='.$selectCat,
-    'name' => get_lang('GradebookQualifyLog')
+    'name' => get_lang('GradebookQualifyLog'),
 ];
 $this_section = SECTION_COURSES;
 Display::display_header('');

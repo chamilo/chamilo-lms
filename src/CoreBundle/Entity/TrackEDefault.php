@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TrackEDefault
+ * TrackEDefault.
  *
  * @ORM\Table(
  *  name="track_e_default",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackEDefault
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="default_id", type="integer")
      * @ORM\Id
@@ -29,14 +29,14 @@ class TrackEDefault
     private $defaultId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="default_user_id", type="integer", nullable=false)
      */
     private $defaultUserId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=true)
      */
@@ -71,16 +71,17 @@ class TrackEDefault
     private $defaultValue;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
     private $sessionId;
 
     /**
-     * Set defaultUserId
+     * Set defaultUserId.
      *
-     * @param integer $defaultUserId
+     * @param int $defaultUserId
+     *
      * @return TrackEDefault
      */
     public function setDefaultUserId($defaultUserId)
@@ -91,9 +92,9 @@ class TrackEDefault
     }
 
     /**
-     * Get defaultUserId
+     * Get defaultUserId.
      *
-     * @return integer
+     * @return int
      */
     public function getDefaultUserId()
     {
@@ -101,9 +102,10 @@ class TrackEDefault
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return TrackEDefault
      */
     public function setCId($cId)
@@ -114,9 +116,9 @@ class TrackEDefault
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -124,9 +126,10 @@ class TrackEDefault
     }
 
     /**
-     * Set defaultDate
+     * Set defaultDate.
      *
      * @param \DateTime $defaultDate
+     *
      * @return TrackEDefault
      */
     public function setDefaultDate($defaultDate)
@@ -137,7 +140,7 @@ class TrackEDefault
     }
 
     /**
-     * Get defaultDate
+     * Get defaultDate.
      *
      * @return \DateTime
      */
@@ -147,9 +150,10 @@ class TrackEDefault
     }
 
     /**
-     * Set defaultEventType
+     * Set defaultEventType.
      *
      * @param string $defaultEventType
+     *
      * @return TrackEDefault
      */
     public function setDefaultEventType($defaultEventType)
@@ -160,7 +164,7 @@ class TrackEDefault
     }
 
     /**
-     * Get defaultEventType
+     * Get defaultEventType.
      *
      * @return string
      */
@@ -170,9 +174,10 @@ class TrackEDefault
     }
 
     /**
-     * Set defaultValueType
+     * Set defaultValueType.
      *
      * @param string $defaultValueType
+     *
      * @return TrackEDefault
      */
     public function setDefaultValueType($defaultValueType)
@@ -183,7 +188,7 @@ class TrackEDefault
     }
 
     /**
-     * Get defaultValueType
+     * Get defaultValueType.
      *
      * @return string
      */
@@ -193,9 +198,10 @@ class TrackEDefault
     }
 
     /**
-     * Set defaultValue
+     * Set defaultValue.
      *
      * @param string $defaultValue
+     *
      * @return TrackEDefault
      */
     public function setDefaultValue($defaultValue)
@@ -206,7 +212,7 @@ class TrackEDefault
     }
 
     /**
-     * Get defaultValue
+     * Get defaultValue.
      *
      * @return string
      */
@@ -216,9 +222,10 @@ class TrackEDefault
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return TrackEDefault
      */
     public function setSessionId($sessionId)
@@ -229,9 +236,9 @@ class TrackEDefault
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -239,9 +246,9 @@ class TrackEDefault
     }
 
     /**
-     * Get defaultId
+     * Get defaultId.
      *
-     * @return integer
+     * @return int
      */
     public function getDefaultId()
     {

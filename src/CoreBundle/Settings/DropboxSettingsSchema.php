@@ -4,12 +4,12 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class DropboxSettingsSchema
+ * Class DropboxSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class DropboxSettingsSchema extends AbstractSettingsSchema
@@ -29,7 +29,7 @@ class DropboxSettingsSchema extends AbstractSettingsSchema
                     'dropbox_allow_group' => 'true',
                     'dropbox_allow_mailing' => 'false',
                     'dropbox_hide_course_coach' => 'false',
-                    'dropbox_hide_general_coach' => 'false'
+                    'dropbox_hide_general_coach' => 'false',
                 ]
             );
 

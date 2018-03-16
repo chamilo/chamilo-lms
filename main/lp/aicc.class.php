@@ -3,10 +3,13 @@
 
 /**
  * Class aicc
- * Defines the AICC class, which is meant to contain the aicc items (nuclear elements)
+ * Defines the AICC class, which is meant to contain the aicc items (nuclear elements).
+ *
  * @package chamilo.learnpath
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  * @license GNU/GPL
+ *
  * @package chamilo.learnpath
  */
 class aicc extends learnpath
@@ -19,12 +22,12 @@ class aicc extends learnpath
     public $config_files = [];
     public $config_exts = [
         'crs' => 0, // Course description file (mandatory)
-        'au'  => 0, // Assignable Unit file (mandatory)
+        'au' => 0, // Assignable Unit file (mandatory)
         'des' => 0, // Descriptor file (mandatory)
         'cst' => 0, // Course structure file (mandatory)
         'ore' => 0, // Objectives relationshops file (optional)
         'pre' => 0, // Prerequisites file (optional)
-        'cmp' => 0  // Completion Requirements file (optional)
+        'cmp' => 0,  // Completion Requirements file (optional)
     ];
     public $aulist = [];
     public $au_order_list = [];
@@ -47,9 +50,10 @@ class aicc extends learnpath
 
     /**
      * Class constructor. Based on the parent constructor.
-     * @param    string $course_code
-     * @param    integer $resource_id Learnpath ID in DB
-     * @param    integer $user_id
+     *
+     * @param string $course_code
+     * @param int    $resource_id Learnpath ID in DB
+     * @param int    $user_id
      */
     public function __construct($course_code = null, $resource_id = null, $user_id = null)
     {
@@ -62,8 +66,9 @@ class aicc extends learnpath
     }
 
     /**
-     * Opens a resource
-     * @param integer Database ID of the resource
+     * Opens a resource.
+     *
+     * @param int Database ID of the resource
      */
     public function open($id)
     {
@@ -74,9 +79,11 @@ class aicc extends learnpath
     }
 
     /**
-     * Parses a set of AICC config files and puts everything into the $config array
+     * Parses a set of AICC config files and puts everything into the $config array.
+     *
      * @param string Path to the config files dir on the system.
      * If not defined, uses the base path of the course's scorm dir
+     *
      * @return array Structured array representing the config files' contents
      */
     public function parse_config_files($dir = '')
@@ -233,9 +240,11 @@ class aicc extends learnpath
     }
 
     /**
-     * Import the aicc object (as a result from the parse_config_files function) into the database structure
-     * @param    string $course_code
-     * @return    bool    Returns -1 on error
+     * Import the aicc object (as a result from the parse_config_files function) into the database structure.
+     *
+     * @param string $course_code
+     *
+     * @return bool Returns -1 on error
      */
     public function import_aicc($course_code)
     {
@@ -299,7 +308,7 @@ class aicc extends learnpath
 
         $previous = 0;
         foreach ($this->aulist as $identifier => $dummy) {
-            $oAu = & $this->aulist[$identifier];
+            $oAu = &$this->aulist[$identifier];
             //echo "Item ".$oAu->identifier;
             $field_add = '';
             $value_add = '';
@@ -346,10 +355,12 @@ class aicc extends learnpath
     }
 
     /**
-     * Intermediate to import_package only to allow import from local zip files
+     * Intermediate to import_package only to allow import from local zip files.
+     *
      * @param string    Path to the zip file, from the dokeos sys root
      * @param string    Current path (optional)
-     * @return string    Absolute path to the AICC description files or empty string on error
+     *
+     * @return string Absolute path to the AICC description files or empty string on error
      */
     public function import_local_package($file_path, $current_dir = '')
     {
@@ -362,9 +373,11 @@ class aicc extends learnpath
     }
 
     /**
-     * Imports a zip file (presumably AICC) into the Chamilo structure
-     * @param    string    Zip file info as given by $_FILES['userFile']
-     * @return    string    Absolute path to the AICC config files directory or empty string on error
+     * Imports a zip file (presumably AICC) into the Chamilo structure.
+     *
+     * @param string    Zip file info as given by $_FILES['userFile']
+     *
+     * @return string Absolute path to the AICC config files directory or empty string on error
      */
     public function import_package($zip_file_info, $current_dir = '')
     {
@@ -437,6 +450,7 @@ class aicc extends learnpath
                 Display::addFlash(
                     Display::return_message(get_lang('ZipNoPhp'))
                 );
+
                 return false;
             } elseif (preg_match('?.*/aicc/$?', $thisContent['filename'])) {
                 // If a directory named 'aicc' is found, package type = aicc, but continue,
@@ -632,8 +646,10 @@ class aicc extends learnpath
     }
 
     /**
-     * Sets the proximity setting in the database
+     * Sets the proximity setting in the database.
+     *
      * @param string $proxy Proximity setting
+     *
      * @return bool
      */
     public function set_proximity($proxy = '')
@@ -647,6 +663,7 @@ class aicc extends learnpath
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET content_local = '$proxy' WHERE c_id = ".$course_id." id = ".$lp;
             Database::query($sql);
+
             return true;
         } else {
             return false;
@@ -654,8 +671,10 @@ class aicc extends learnpath
     }
 
     /**
-     * Sets the theme setting in the database
+     * Sets the theme setting in the database.
+     *
      * @param    string    Theme setting
+     *
      * @return bool
      */
     public function set_theme($theme = '')
@@ -669,6 +688,7 @@ class aicc extends learnpath
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
             $sql = "UPDATE $tbl_lp SET theme = '$theme' WHERE c_id = ".$course_id." id = ".$lp;
             $res = Database::query($sql);
+
             return true;
         } else {
             return false;
@@ -676,8 +696,10 @@ class aicc extends learnpath
     }
 
     /**
-     * Sets the image LP in the database
-     * @param    string $preview_image Theme setting
+     * Sets the image LP in the database.
+     *
+     * @param string $preview_image Theme setting
+     *
      * @return bool
      */
     public function set_preview_image($preview_image = '')
@@ -692,6 +714,7 @@ class aicc extends learnpath
             $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' 
                     WHERE c_id = ".$course_id." id = ".$lp;
             Database::query($sql);
+
             return true;
         } else {
             return false;
@@ -699,8 +722,10 @@ class aicc extends learnpath
     }
 
     /**
-     * Sets the Author LP in the database
-     * @param    string $author
+     * Sets the Author LP in the database.
+     *
+     * @param string $author
+     *
      * @return true
      */
     public function set_author($author = '')
@@ -715,6 +740,7 @@ class aicc extends learnpath
             $sql = "UPDATE $tbl_lp SET author = '$author' 
                     WHERE c_id = ".$course_id." id = ".$lp;
             Database::query($sql);
+
             return true;
         } else {
             return false;
@@ -722,8 +748,10 @@ class aicc extends learnpath
     }
 
     /**
-     * Sets the content maker setting in the database
-     * @param    string $maker
+     * Sets the content maker setting in the database.
+     *
+     * @param string $maker
+     *
      * @return bool
      */
     public function set_maker($maker = '')
@@ -738,6 +766,7 @@ class aicc extends learnpath
             $sql = "UPDATE $tbl_lp SET content_maker = '$maker' 
                     WHERE c_id = ".$course_id." id = ".$lp;
             Database::query($sql);
+
             return true;
         } else {
             return false;
@@ -745,8 +774,10 @@ class aicc extends learnpath
     }
 
     /**
-     * Exports the current AICC object's files as a zip. Excerpts taken from learnpath_functions.inc.php::exportpath()
-     * @param    integer    Learnpath ID (optional, taken from object context if not defined)
+     * Exports the current AICC object's files as a zip. Excerpts taken from learnpath_functions.inc.php::exportpath().
+     *
+     * @param    int    Learnpath ID (optional, taken from object context if not defined)
+     *
      * @return bool
      */
     public function export_zip($lp_id = null)
@@ -803,9 +834,11 @@ class aicc extends learnpath
     }
 
     /**
-     * Gets a resource's path if available, otherwise return empty string
+     * Gets a resource's path if available, otherwise return empty string.
+     *
      * @param	string	Resource ID as used in resource array
-     * @return string	The resource's path as declared in config file course.crs
+     *
+     * @return string The resource's path as declared in config file course.crs
      */
     public function get_res_path($id)
     {
@@ -814,16 +847,19 @@ class aicc extends learnpath
         }
         $path = '';
         if (isset($this->resources[$id])) {
-            $oRes = & $this->resources[$id];
+            $oRes = &$this->resources[$id];
             $path = @$oRes->get_path();
         }
+
         return $path;
     }
 
     /**
-     * Gets a resource's type if available, otherwise return empty string
+     * Gets a resource's type if available, otherwise return empty string.
+     *
      * @param	string	Resource ID as used in resource array
-     * @return string	The resource's type as declared in the assignable unit (.au) file
+     *
+     * @return string The resource's type as declared in the assignable unit (.au) file
      */
     public function get_res_type($id)
     {
@@ -832,18 +868,20 @@ class aicc extends learnpath
         }
         $type = '';
         if (isset($this->resources[$id])) {
-            $oRes = & $this->resources[$id];
+            $oRes = &$this->resources[$id];
             $temptype = $oRes->get_scorm_type();
             if (!empty($temptype)) {
                 $type = $temptype;
             }
         }
+
         return $type;
     }
 
     /**
-     * Gets the default organisation's title
-     * @return	string	The organization's title
+     * Gets the default organisation's title.
+     *
+     * @return string The organization's title
      */
     public function get_title()
     {
@@ -860,6 +898,7 @@ class aicc extends learnpath
                 break;
             }
         }
+
         return $title;
     }
 
@@ -884,8 +923,10 @@ class aicc extends learnpath
     /**
      * Static function to parse AICC ini files.
      * Based on work by sinedeo at gmail dot com published on php.net (parse_ini_file()).
+     *
      * @param	string	File path
-     * @return	array	Structured array
+     *
+     * @return array Structured array
      */
     public function parse_ini_file_quotes_safe($f)
     {
@@ -929,16 +970,19 @@ class aicc extends learnpath
                 }
             }
         }
+
         return $r;
     }
 
     /**
      * Static function to parse AICC ini strings.
      * Based on work by sinedeo at gmail dot com published on php.net (parse_ini_file()).
+     *
      * @param		string	INI File string
      * @param		array	List of names of sections that should be considered
      * as containing only hard string data (no variables), provided in lower case
-     * @return	array	Structured array
+     *
+     * @return array Structured array
      */
     public function parse_ini_string_quotes_safe($s, $pure_strings = [])
     {
@@ -992,17 +1036,20 @@ class aicc extends learnpath
                 }
             }
         }
+
         return $r;
     }
 
     /**
      * Static function that parses CSV files into simple arrays, based on a function
      * by spam at cyber-space dot nl published on php.net (fgetcsv()).
+     *
      * @param	string	Filepath
      * @param	string	CSV delimiter
      * @param	string	CSV enclosure
-     * @param	boolean	Might one field name happen more than once on the same line? (then split by comma in the values)
-     * @return array	Simple structured array
+     * @param	bool	Might one field name happen more than once on the same line? (then split by comma in the values)
+     *
+     * @return array Simple structured array
      */
     public function parse_csv_file($f, $delim = ',', $enclosure = '"', $multiples = false)
     {
@@ -1013,10 +1060,10 @@ class aicc extends learnpath
         $linecount = 0;
         $fldval = '';
         for ($i = 0; $i < strlen($data); $i++) {
-            $chr = $data{$i};
+            $chr = $data[$i];
             switch ($chr) {
                 case $enclosure:
-                    if ($enclosed && $data{$i + 1} == $enclosure) {
+                    if ($enclosed && $data[$i + 1] == $enclosure) {
                         $fldval .= $chr;
                         ++$i; // Skip the next character.
                     } else {
@@ -1032,7 +1079,7 @@ class aicc extends learnpath
                     }
                     break;
                 case "\r":
-                    if (!$enclosed && $data{$i + 1} == "\n") {
+                    if (!$enclosed && $data[$i + 1] == "\n") {
                         continue;
                     }
                     // no break
@@ -1046,7 +1093,7 @@ class aicc extends learnpath
                     }
                     break;
                 case "\\r":
-                    if (!$enclosed && $data{$i + 1} == "\\n") {
+                    if (!$enclosed && $data[$i + 1] == "\\n") {
                         continue;
                     }
                     // no break

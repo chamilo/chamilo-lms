@@ -4,9 +4,8 @@
 use ChamiloSession as Session;
 
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
-
 require_once __DIR__.'/../global.inc.php';
 $debug = false;
 api_protect_course_script(true);
@@ -57,8 +56,8 @@ switch ($action) {
                 FROM $track_exercise
                 WHERE $where_condition ";
         $result = Database::query($sql);
-        $count  = Database::fetch_row($result);
-        $count  = $count[0];
+        $count = Database::fetch_row($result);
+        $count = $count[0];
 
         //3. Calculating first, end, etc
         $total_pages = 0;
@@ -169,7 +168,7 @@ switch ($action) {
                     $row['lastname'],
                     $timeInfo,
                     $row['count_questions'],
-                    round($row['score'] * 100).'%'
+                    round($row['score'] * 100).'%',
                 ];
                 $response->rows[$i]['cell'] = $array;
                 $i++;
@@ -193,7 +192,7 @@ switch ($action) {
                         'exercise_order' => $counter,
                         'session_id' => $session_id,
                         'exercise_id' => intval($new_order_id),
-                        'c_id' => $course_id
+                        'c_id' => $course_id,
                     ]
                 );
                 $counter++;
@@ -223,8 +222,8 @@ switch ($action) {
                                 $new_order_id
                             ),
                             $course_id,
-                            $exercise_id
-                        ]
+                            $exercise_id,
+                        ],
                     ]
                 )
                 ;

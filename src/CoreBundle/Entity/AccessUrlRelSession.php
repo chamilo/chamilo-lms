@@ -6,22 +6,13 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * AccessUrlRelSession
+ * AccessUrlRelSession.
  *
  * @ORM\Table(name="access_url_rel_session")
  * @ORM\Entity
  */
 class AccessUrlRelSession
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue()
-     */
-    private $id;
-
     /**
      * @ORM\ManyToOne(targetEntity="Session", inversedBy="urls", cascade={"persist"})
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
@@ -33,11 +24,19 @@ class AccessUrlRelSession
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
     protected $url;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue()
+     */
+    private $id;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -45,9 +44,10 @@ class AccessUrlRelSession
     }
 
     /**
-     * Set url
+     * Set url.
      *
      * @param $url
+     *
      * @return AccessUrlRelSession
      */
     public function setUrl($url)
@@ -67,6 +67,7 @@ class AccessUrlRelSession
 
     /**
      * @param Session $session
+     *
      * @return $this
      */
     public function setSession(Session $session)

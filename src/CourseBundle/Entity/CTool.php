@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CTool
+ * CTool.
  *
  * @ORM\Table(
  *  name="c_tool",
@@ -20,8 +20,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CTool
 {
+    protected $originalImage;
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -30,14 +31,14 @@ class CTool
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
@@ -65,7 +66,7 @@ class CTool
     private $image;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="visibility", type="boolean", nullable=true)
      */
@@ -86,7 +87,7 @@ class CTool
     private $address;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="added_tool", type="boolean", nullable=true)
      */
@@ -107,7 +108,7 @@ class CTool
     private $category;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
@@ -135,10 +136,8 @@ class CTool
      */
     private $course;
 
-    protected $originalImage;
-
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -149,8 +148,8 @@ class CTool
     }
 
     /**
-    * @return int
-    */
+     * @return int
+     */
     public function getIid()
     {
         return $this->iid;
@@ -158,6 +157,7 @@ class CTool
 
     /**
      * @param int $iid
+     *
      * @return CTool
      */
     public function setIid($iid)
@@ -200,7 +200,7 @@ class CTool
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -214,7 +214,7 @@ class CTool
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -224,9 +224,10 @@ class CTool
     }
 
     /**
-     * Set link
+     * Set link.
      *
      * @param string $link
+     *
      * @return CTool
      */
     public function setLink($link)
@@ -237,7 +238,7 @@ class CTool
     }
 
     /**
-     * Get link
+     * Get link.
      *
      * @return string
      */
@@ -247,9 +248,10 @@ class CTool
     }
 
     /**
-     * Set image
+     * Set image.
      *
      * @param string $image
+     *
      * @return CTool
      */
     public function setImage($image)
@@ -260,7 +262,7 @@ class CTool
     }
 
     /**
-     * Get image
+     * Get image.
      *
      * @return string
      */
@@ -270,9 +272,10 @@ class CTool
     }
 
     /**
-     * Set visibility
+     * Set visibility.
      *
-     * @param boolean $visibility
+     * @param bool $visibility
+     *
      * @return CTool
      */
     public function setVisibility($visibility)
@@ -283,9 +286,9 @@ class CTool
     }
 
     /**
-     * Get visibility
+     * Get visibility.
      *
-     * @return boolean
+     * @return bool
      */
     public function getVisibility()
     {
@@ -293,9 +296,10 @@ class CTool
     }
 
     /**
-     * Set admin
+     * Set admin.
      *
      * @param string $admin
+     *
      * @return CTool
      */
     public function setAdmin($admin)
@@ -306,7 +310,7 @@ class CTool
     }
 
     /**
-     * Get admin
+     * Get admin.
      *
      * @return string
      */
@@ -316,9 +320,10 @@ class CTool
     }
 
     /**
-     * Set address
+     * Set address.
      *
      * @param string $address
+     *
      * @return CTool
      */
     public function setAddress($address)
@@ -329,7 +334,7 @@ class CTool
     }
 
     /**
-     * Get address
+     * Get address.
      *
      * @return string
      */
@@ -339,9 +344,10 @@ class CTool
     }
 
     /**
-     * Set addedTool
+     * Set addedTool.
      *
-     * @param boolean $addedTool
+     * @param bool $addedTool
+     *
      * @return CTool
      */
     public function setAddedTool($addedTool)
@@ -352,9 +358,9 @@ class CTool
     }
 
     /**
-     * Get addedTool
+     * Get addedTool.
      *
-     * @return boolean
+     * @return bool
      */
     public function getAddedTool()
     {
@@ -362,9 +368,10 @@ class CTool
     }
 
     /**
-     * Set target
+     * Set target.
      *
      * @param string $target
+     *
      * @return CTool
      */
     public function setTarget($target)
@@ -375,7 +382,7 @@ class CTool
     }
 
     /**
-     * Get target
+     * Get target.
      *
      * @return string
      */
@@ -385,9 +392,10 @@ class CTool
     }
 
     /**
-     * Set category
+     * Set category.
      *
      * @param string $category
+     *
      * @return CTool
      */
     public function setCategory($category)
@@ -398,7 +406,7 @@ class CTool
     }
 
     /**
-     * Get category
+     * Get category.
      *
      * @return string
      */
@@ -408,9 +416,10 @@ class CTool
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return CTool
      */
     public function setSessionId($sessionId)
@@ -421,9 +430,9 @@ class CTool
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -431,9 +440,10 @@ class CTool
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CTool
      */
     public function setId($id)
@@ -444,9 +454,9 @@ class CTool
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -454,9 +464,10 @@ class CTool
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CTool
      */
     public function setCId($cId)
@@ -467,9 +478,9 @@ class CTool
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -486,6 +497,7 @@ class CTool
 
     /**
      * @param string $description
+     *
      * @return CTool
      */
     public function setDescription($description)
@@ -505,6 +517,7 @@ class CTool
 
     /**
      * @param string $customIcon
+     *
      * @return CTool
      */
     public function setCustomIcon($customIcon)

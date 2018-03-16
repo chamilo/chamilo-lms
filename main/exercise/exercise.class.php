@@ -5995,9 +5995,15 @@ class Exercise
             $question = $item['question'];
             $file = $item['generated_oral_file'];
             $answer = $item['answer'];
+            if ($answer == 0) {
+                $answer = '';
+            }
             $answer_type = $item['answer_type'];
 
             if (!empty($question) && (!empty($answer) || !empty($file)) && $answer_type == ORAL_EXPRESSION) {
+                if (!empty($file)) {
+                    $file = Display::url($file, $file);
+                }
                 $oral_question_list .= '<br /><table width="730" height="136" border="0" cellpadding="3" cellspacing="3">'
                     .'<tr>'
                     .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
@@ -6005,7 +6011,7 @@ class Exercise
                     .'</tr>'
                     .'<tr>'
                     .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
-                    .'<td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>'
+                    .'<td valign="top" bgcolor="#F3F3F3">'.$answer.$file.'</td>'
                     .'</tr></table>';
             }
         }

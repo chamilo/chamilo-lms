@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CourseType
+ * CourseType.
  *
  * @ORM\Table(name="course_type")
  * @ORM\Entity
@@ -42,7 +42,7 @@ class CourseType
     private $props;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -50,12 +50,11 @@ class CourseType
      */
     private $id;
 
-
-
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return CourseType
      */
     public function setName($name)
@@ -66,7 +65,7 @@ class CourseType
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -76,9 +75,10 @@ class CourseType
     }
 
     /**
-     * Set translationVar
+     * Set translationVar.
      *
      * @param string $translationVar
+     *
      * @return CourseType
      */
     public function setTranslationVar($translationVar)
@@ -89,7 +89,7 @@ class CourseType
     }
 
     /**
-     * Get translationVar
+     * Get translationVar.
      *
      * @return string
      */
@@ -99,9 +99,10 @@ class CourseType
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return CourseType
      */
     public function setDescription($description)
@@ -112,7 +113,7 @@ class CourseType
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -122,9 +123,10 @@ class CourseType
     }
 
     /**
-     * Set props
+     * Set props.
      *
      * @param string $props
+     *
      * @return CourseType
      */
     public function setProps($props)
@@ -135,7 +137,7 @@ class CourseType
     }
 
     /**
-     * Get props
+     * Get props.
      *
      * @return string
      */
@@ -145,9 +147,9 @@ class CourseType
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

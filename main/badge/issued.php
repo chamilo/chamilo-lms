@@ -4,9 +4,11 @@
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 
 /**
- * Show information about the issued badge
+ * Show information about the issued badge.
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  * @author José Loguercio Silva <jose.loguercio@beeznest.com>
+ *
  * @package chamilo.badge
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -52,7 +54,7 @@ $showLevels = api_get_configuration_value('hide_skill_levels') === false;
 
 $userInfo = [
     'id' => $user->getId(),
-    'complete_name' => $user->getCompleteName()
+    'complete_name' => $user->getCompleteName(),
 ];
 
 $skillInfo = [
@@ -62,7 +64,7 @@ $skillInfo = [
     'description' => $skill->getDescription(),
     'criteria' => $skill->getCriteria(),
     'badge_image' => $skill->getWebIconPath(),
-    'courses' => []
+    'courses' => [],
 ];
 
 // Open Graph Markup
@@ -104,7 +106,7 @@ $skillIssueInfo = [
     'skill_criteria' => $skillIssue->getSkill()->getCriteria(),
     'badge_assertion' => $skillIssue->getAssertionUrl(),
     'comments' => [],
-    'feedback_average' => $skillIssue->getAverage()
+    'feedback_average' => $skillIssue->getAverage(),
 ];
 
 $skillIssueComments = $skillIssue->getComments(true);
@@ -120,7 +122,7 @@ foreach ($skillIssueComments as $comment) {
         'text' => $comment->getFeedbackText(),
         'value' => $comment->getFeedbackValue(),
         'giver_complete_name' => $comment->getFeedbackGiver()->getCompleteName(),
-        'datetime' => api_format_date($commentDate, DATE_TIME_FORMAT_SHORT)
+        'datetime' => api_format_date($commentDate, DATE_TIME_FORMAT_SHORT),
     ];
 }
 
@@ -155,7 +157,7 @@ if ($profile) {
     $profileId = $profile->getId();
 
     $levels = $skillLevelRepo->findBy([
-        'profile' => $profileId
+        'profile' => $profileId,
     ]);
 
     foreach ($levels as $level) {
@@ -209,7 +211,7 @@ if ($form->validate() && $allowComment) {
     $values = $form->exportValues();
     $skillUserComment = new SkillRelUserComment();
     $skillUserComment
-        ->setFeedbackDateTime(new DateTime)
+        ->setFeedbackDateTime(new DateTime())
         ->setFeedbackGiver($currentUser)
         ->setFeedbackText($values['comment'])
         ->setFeedbackValue($values['value'] ? $values['value'] : null)

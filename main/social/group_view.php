@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 /**
  * @package chamilo.social
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -64,7 +64,7 @@ function add_image_form() {
 	document.getElementById("filepath_"+counter_image).innerHTML = "\n\
         <input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />\n\
         <a href=\"javascript:remove_image_form("+id_elem1+")\">\n\
-            <img src=\"' . Display::returnIconPath('delete.gif').'\">\n\
+            <img src=\"'.Display::returnIconPath('delete.gif').'\">\n\
         </a>\n\
     ";
 
@@ -83,19 +83,19 @@ $content = null;
 
 if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
     if ($_GET['view'] == 'mygroups') {
-        $interbreadcrumb[] = ['url' =>'groups.php', 'name' => get_lang('Groups')];
-        $interbreadcrumb[] = ['url' =>'#', 'name' => get_lang('MyGroups')];
+        $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('MyGroups')];
     } elseif ($_GET['view'] == 'newest') {
-        $interbreadcrumb[] = ['url' =>'groups.php', 'name' => get_lang('Groups')];
-        $interbreadcrumb[] = ['url' =>'#', 'name' => get_lang('Newest')];
+        $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Newest')];
     } else {
-        $interbreadcrumb[] = ['url' =>'groups.php', 'name' => get_lang('Groups')];
-        $interbreadcrumb[] = ['url' =>'#', 'name' => get_lang('Popular')];
+        $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Popular')];
     }
 } else {
-    $interbreadcrumb[] = ['url' =>'groups.php', 'name' => get_lang('Groups')];
+    $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
     if (!isset($_GET['id'])) {
-        $interbreadcrumb[] = ['url' =>'#', 'name' => get_lang('GroupList')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('GroupList')];
     } else {
         //$interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Group'));
     }
@@ -111,8 +111,7 @@ $usergroup = new UserGroup();
 if ($group_id != 0) {
     $group_info = $usergroup->get($group_id);
 
-
-    $interbreadcrumb[] = ['url' =>'#', 'name' => $group_info['name']];
+    $interbreadcrumb[] = ['url' => '#', 'name' => $group_info['name']];
 
     if (isset($_GET['action']) && $_GET['action'] == 'leave') {
         $user_leaved = intval($_GET['u']);
@@ -196,12 +195,12 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
     if ($is_group_member) {
         if (empty($content)) {
             $createThreadUrl = api_get_path(WEB_CODE_PATH)
-                . 'social/message_for_group_form.inc.php?'
-                . http_build_query([
+                .'social/message_for_group_form.inc.php?'
+                .http_build_query([
                     'view_panel' => 1,
                     'user_friend' => api_get_user_id(),
                     'group_id' => $group_id,
-                    'action' => 'add_message_group'
+                    'action' => 'add_message_group',
                 ]);
             $create_thread_link = Display::url(
                 Display::returnFontAwesomeIcon('commenting').' '.
@@ -211,13 +210,13 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
                     'class' => 'ajax btn btn-primary',
                     'title' => get_lang('ComposeMessage'),
                     'data-title' => get_lang('ComposeMessage'),
-                    'data-size' => 'lg'
+                    'data-size' => 'lg',
                 ]
             );
         } else {
             $createThreadUrl = api_get_path(WEB_CODE_PATH)
-                . 'social/message_for_group_form.inc.php?'
-                . http_build_query([
+                .'social/message_for_group_form.inc.php?'
+                .http_build_query([
                     'view_panel' => 1,
                     'user_friend' => api_get_user_id(),
                     'group_id' => $group_id,
@@ -231,7 +230,7 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
                     'class' => 'ajax btn btn-default',
                     'title' => get_lang('ComposeMessage'),
                     'data-title' => get_lang('ComposeMessage'),
-                    'data-size' => 'lg'
+                    'data-size' => 'lg',
                 ]
             );
         }
@@ -291,7 +290,7 @@ if ($is_group_member || $group_info['visibility'] == GROUP_PERMISSION_OPEN) {
     }
 
     if (!empty($create_thread_link)) {
-        $create_thread_link = Display::div($create_thread_link, ['class'=>'pull-right']);
+        $create_thread_link = Display::div($create_thread_link, ['class' => 'pull-right']);
     }
     $headers = [get_lang('Discussions'), get_lang('Members')];
     $socialForum = Display::tabs($headers, [$content, $member_content], 'tabs');

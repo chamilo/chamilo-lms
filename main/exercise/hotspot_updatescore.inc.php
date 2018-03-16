@@ -4,12 +4,14 @@
 use ChamiloSession as Session;
 
 /**
-*	This file saves every click in the hotspot tool into track_e_hotspots
-*	@package chamilo.exercise
-* 	@author Toon Keppens
-* 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
-*/
-
+ *	This file saves every click in the hotspot tool into track_e_hotspots.
+ *
+ *	@package chamilo.exercise
+ *
+ * 	@author Toon Keppens
+ *
+ * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
+ */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $courseCode = $_GET['coursecode'];

@@ -1,10 +1,11 @@
 <?php /* For licensing terms, see /license.txt */
 /**
- * Test script for soap.php
+ * Test script for soap.php.
+ *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ *
  * @package chamilo.webservices
  */
-
 exit; //remove to enable
 // Include the necessary files, assuming this script is located in main/lp/ or something like that
 require_once __DIR__.'/../inc/global.inc.php';
@@ -26,7 +27,7 @@ $lpiid = 1; // set to your learnpath item ID
 $server = api_get_path(WEB_CODE_PATH).'webservices/registration.soap.php?wsdl';
 
 /**
- * Call the webservice
+ * Call the webservice.
  */
 
 // Init the SOAP connection

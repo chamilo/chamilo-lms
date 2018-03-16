@@ -8,16 +8,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Class ExtraFieldSavedSearch
+ * Class ExtraFieldSavedSearch.
  *
  * @ORM\Entity
  * @ORM\Table(name="extra_field_saved_search")
- *
  */
 class ExtraFieldSavedSearch
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -48,7 +47,7 @@ class ExtraFieldSavedSearch
     protected $value;
 
     /**
-     * @var \DateTime $createdAt
+     * @var \DateTime
      *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
@@ -56,7 +55,7 @@ class ExtraFieldSavedSearch
     protected $createdAt;
 
     /**
-     * @var \DateTime $updatedAt
+     * @var \DateTime
      *
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime")
@@ -64,9 +63,9 @@ class ExtraFieldSavedSearch
     protected $updatedAt;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -83,11 +82,13 @@ class ExtraFieldSavedSearch
 
     /**
      * @param ExtraField $field
+     *
      * @return ExtraFieldSavedSearch
      */
     public function setField($field)
     {
         $this->field = $field;
+
         return $this;
     }
 
@@ -101,11 +102,13 @@ class ExtraFieldSavedSearch
 
     /**
      * @param User $user
+     *
      * @return ExtraFieldSavedSearch
      */
     public function setUser($user)
     {
         $this->user = $user;
+
         return $this;
     }
 
@@ -119,6 +122,7 @@ class ExtraFieldSavedSearch
 
     /**
      * @param string $value
+     *
      * @return ExtraFieldSavedSearch
      */
     public function setValue($value)
@@ -138,11 +142,13 @@ class ExtraFieldSavedSearch
 
     /**
      * @param \DateTime $createdAt
+     *
      * @return ExtraFieldSavedSearch
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 
@@ -156,11 +162,13 @@ class ExtraFieldSavedSearch
 
     /**
      * @param \DateTime $updatedAt
+     *
      * @return ExtraFieldSavedSearch
      */
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
 }

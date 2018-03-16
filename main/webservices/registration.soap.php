@@ -18,6 +18,7 @@ define('DEFAULT_ADMIN_USER_ID', 1);
 
 /**
  * @param string $code
+ *
  * @return null|soap_fault
  */
 function returnError($code)
@@ -53,11 +54,13 @@ function returnError($code)
             );
             break;
     }
+
     return $fault;
 }
 
 /**
  * @param array $params
+ *
  * @return bool
  */
 function WSHelperVerifyKey($params)
@@ -113,6 +116,7 @@ function WSHelperVerifyKey($params)
     if ($debug) {
         error_log('WSHelperVerifyKey result: '.intval($result));
     }
+
     return $result;
 }
 
@@ -145,8 +149,8 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'field_name'  => ['name' => 'field_name', 'type' => 'xsd:string'],
-        'field_value' => ['name' => 'field_value', 'type' => 'xsd:string']
+        'field_name' => ['name' => 'field_name', 'type' => 'xsd:string'],
+        'field_value' => ['name' => 'field_value', 'type' => 'xsd:string'],
     ]
 );
 
@@ -157,7 +161,7 @@ $server->wsdl->addComplexType(
     '',
     'SOAP-ENC:Array',
     [],
-    [['ref'=>'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:extras[]']],
+    [['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:extras[]']],
     'tns:extras'
 );
 
@@ -179,7 +183,7 @@ $server->wsdl->addComplexType(
         'expiration_date' => ['name' => 'expiration_date', 'type' => 'xsd:string'],
         'original_user_id_name' => ['name' => 'original_user_id_name', 'type' => 'xsd:string'],
         'original_user_id_value' => ['name' => 'original_user_id_value', 'type' => 'xsd:string'],
-        'extra' => ['name' => 'extra', 'type' => 'tns:extrasList']
+        'extra' => ['name' => 'extra', 'type' => 'tns:extrasList'],
     ]
 );
 
@@ -190,7 +194,7 @@ $server->wsdl->addComplexType(
     '',
     'SOAP-ENC:Array',
     [],
-    [['ref'=>'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:usersParams[]']],
+    [['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:usersParams[]']],
     'tns:usersParams'
 );
 
@@ -202,7 +206,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'users' => ['name' => 'users', 'type' => 'tns:usersParamsList'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -218,7 +222,7 @@ $server->wsdl->addComplexType(
             'name' => 'original_user_id_value',
             'type' => 'xsd:string',
         ],
-        'result' => ['name' => 'result', 'type' => 'xsd:string']
+        'result' => ['name' => 'result', 'type' => 'xsd:string'],
     ]
 );
 
@@ -232,8 +236,8 @@ $server->wsdl->addComplexType(
     [
         [
             'ref' => 'SOAP-ENC:arrayType',
-            'wsdl:arrayType' => 'tns:result_createUsers[]'
-        ]
+            'wsdl:arrayType' => 'tns:result_createUsers[]',
+        ],
     ],
     'tns:result_createUsers'
 );
@@ -249,7 +253,6 @@ $server->register(
     'encoded', // use
     'This service adds a user'                     // documentation
 );
-
 
 // Define the method WSCreateUsers
 function WSCreateUsers($params)
@@ -437,7 +440,7 @@ function WSCreateUsers($params)
     for ($i = 0; $i < $count_results; $i++) {
         $output[] = [
             'original_user_id_value' => $orig_user_id_value[$i],
-            'result' => $results[$i]
+            'result' => $results[$i],
         ];
     }
 
@@ -466,7 +469,7 @@ $server->wsdl->addComplexType(
         'original_user_id_value' => ['name' => 'original_user_id_value', 'type' => 'xsd:string'],
         'extra' => ['name' => 'extra', 'type' => 'tns:extrasList'],
         'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
-        'active' => ['name' => 'extra', 'type' => 'xsd:string']
+        'active' => ['name' => 'extra', 'type' => 'xsd:string'],
     ]
 );
 
@@ -573,6 +576,7 @@ function WSCreateUser($params)
         if ($debug) {
             error_log("Username $loginName is not available");
         }
+
         return 0;
     }
 
@@ -686,8 +690,8 @@ $server->wsdl->addComplexType(
         'expiration_date' => ['name' => 'expiration_date', 'type' => 'xsd:string'],
         'official_code' => ['name' => 'official_code', 'type' => 'xsd:string'],
         'original_user_id_name' => ['name' => 'original_user_id_name', 'type' => 'xsd:string'],
-        'original_user_id_value'=> ['name' => 'original_user_id_value', 'type' => 'xsd:string'],
-        'extra' => ['name' => 'extra', 'type' => 'tns:extrasList']
+        'original_user_id_value' => ['name' => 'original_user_id_value', 'type' => 'xsd:string'],
+        'extra' => ['name' => 'extra', 'type' => 'tns:extrasList'],
     ]
 );
 
@@ -701,8 +705,8 @@ $server->wsdl->addComplexType(
     [
         [
             'ref' => 'SOAP-ENC:arrayType',
-            'wsdl:arrayType' => 'tns:createUsersPassEncryptParams[]'
-        ]
+            'wsdl:arrayType' => 'tns:createUsersPassEncryptParams[]',
+        ],
     ],
     'tns:createUsersPassEncryptParams'
 );
@@ -717,9 +721,9 @@ $server->wsdl->addComplexType(
     [
         'users' => [
             'name' => 'users',
-            'type' => 'tns:createUsersPassEncryptParamsList'
+            'type' => 'tns:createUsersPassEncryptParamsList',
         ],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -733,9 +737,9 @@ $server->wsdl->addComplexType(
     [
         'original_user_id_value' => [
             'name' => 'original_user_id_value',
-            'type' => 'xsd:string'
+            'type' => 'xsd:string',
         ],
-        'result' => ['name' => 'result', 'type' => 'xsd:string']
+        'result' => ['name' => 'result', 'type' => 'xsd:string'],
     ]
 );
 
@@ -749,8 +753,8 @@ $server->wsdl->addComplexType(
     [
         [
             'ref' => 'SOAP-ENC:arrayType',
-            'wsdl:arrayType' => 'tns:result_createUsersPassEncrypt[]'
-        ]
+            'wsdl:arrayType' => 'tns:result_createUsersPassEncrypt[]',
+        ],
     ],
     'tns:result_createUsersPassEncrypt'
 );
@@ -1007,7 +1011,7 @@ function WSCreateUsersPasswordCrypted($params)
     for ($i = 0; $i < $count_results; $i++) {
         $output[] = [
             'original_user_id_value' => $orig_user_id_value[$i],
-            'result' => $results[$i]
+            'result' => $results[$i],
         ];
     }
 
@@ -1025,7 +1029,7 @@ $server->wsdl->addComplexType(
     [
         'user_id' => ['name' => 'course', 'type' => 'xsd:string'], // Chamilo user Id
         'session_id' => ['name' => 'user_id', 'type' => 'xsd:string'], // Current Session course ID
-        'course_id' =>['name' => 'courseId', 'type' => 'xsd:string'], // Course Real Id
+        'course_id' => ['name' => 'courseId', 'type' => 'xsd:string'], // Course Real Id
         'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
         // optional
         'original_user_id_name' => ['name' => 'original_user_id_name', 'type' => 'xsd:string'],
@@ -1033,12 +1037,13 @@ $server->wsdl->addComplexType(
         'original_course_id_name' => ['name' => 'original_course_id_name', 'type' => 'xsd:string'],
         'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
         'original_session_id_name' => ['name' => 'original_session_id_name', 'type' => 'xsd:string'],
-        'original_session_id_value' => ['name' => 'original_session_id_value', 'type' => 'xsd:string']
+        'original_session_id_value' => ['name' => 'original_session_id_value', 'type' => 'xsd:string'],
     ]
 );
 
 /**
  * @param array $params
+ *
  * @return array
  */
 function parseCourseSessionUserParams($params)
@@ -1110,9 +1115,10 @@ $server->register(
 );
 
 /**
- * Subscribe teacher to a session course
+ * Subscribe teacher to a session course.
  *
  * @param array $params - WSFunction parameters (include VerifyKey)
+ *
  * @return bool|null|soap_fault A simple boolean (true if teacher successful subscribed, false otherwise)
  */
 function WSSubscribeTeacherToSessionCourse($params)
@@ -1168,9 +1174,10 @@ $server->register(
 );
 
 /**
- * Subscribe teacher to a session course
+ * Subscribe teacher to a session course.
  *
  *  @param array $params - WSFunction parameters (include VerifyKey)
+ *
  *  @return bool|null|soap_fault A simple boolean (true if teacher successful unsubscribed, false otherwise)
  */
 function WSUnsubscribeTeacherFromSessionCourse($params)
@@ -1303,12 +1310,14 @@ function WSCreateUserPasswordCrypted($params)
                 if ($debug) {
                     error_log($msg);
                 }
+
                 return $msg;
             } elseif ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/', $password)) {
                 $msg = "Encryption $encrypt_method is invalid";
                 if ($debug) {
                     error_log($msg);
                 }
+
                 return $msg;
             }
         } else {
@@ -1316,6 +1325,7 @@ function WSCreateUserPasswordCrypted($params)
             if ($debug) {
                 error_log($msg);
             }
+
             return $msg;
         }
     } else {
@@ -1323,6 +1333,7 @@ function WSCreateUserPasswordCrypted($params)
         if ($debug) {
             error_log($msg);
         }
+
         return $msg;
     }
 
@@ -1395,11 +1406,13 @@ function WSCreateUserPasswordCrypted($params)
                     );
                 }
             }
+
             return $r_check_user[0];
         } else {
             if ($debug) {
                 error_log('User exists but is active. Cant be updated');
             }
+
             return 0;
         }
     } else {
@@ -1422,6 +1435,7 @@ function WSCreateUserPasswordCrypted($params)
         if ($debug) {
             error_log("Username $loginName is not available");
         }
+
         return 0;
     }
 
@@ -1509,6 +1523,7 @@ function WSCreateUserPasswordCrypted($params)
     if ($debug) {
         error_log("Return value: $return");
     }
+
     return $return;
 }
 
@@ -1531,7 +1546,7 @@ $server->wsdl->addComplexType(
         'status' => ['name' => 'status', 'type' => 'xsd:string'],
         'phone' => ['name' => 'phone', 'type' => 'xsd:string'],
         'expiration_date' => ['name' => 'expiration_date', 'type' => 'xsd:string'],
-        'extra' => ['name' => 'extra', 'type' => 'tns:extrasList']
+        'extra' => ['name' => 'extra', 'type' => 'tns:extrasList'],
     ]
 );
 
@@ -1554,7 +1569,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'users' => ['name' => 'users', 'type' => 'tns:editUsersParamsList'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -1571,7 +1586,7 @@ $server->wsdl->addComplexType(
         'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
         'password' => ['name' => 'password', 'type' => 'xsd:string'],
         'original_user_id_name' => ['name' => 'original_user_id_name', 'type' => 'xsd:string'],
-        'original_user_id_value' => ['name' => 'original_user_id_value', 'type' => 'xsd:string']
+        'original_user_id_value' => ['name' => 'original_user_id_value', 'type' => 'xsd:string'],
     ]
 );
 
@@ -1588,10 +1603,13 @@ $server->register(
 );
 
 /**
- * Define the method WSEditUser
+ * Define the method WSEditUser.
+ *
  * @param array $params
- * @return bool|int|null|soap_fault
+ *
  * @throws \Doctrine\DBAL\DBALException
+ *
+ * @return bool|int|null|soap_fault
  */
 function WSEditUserCredentials($params)
 {
@@ -1665,9 +1683,9 @@ $server->wsdl->addComplexType(
     [
         'original_user_id_value' => [
             'name' => 'original_user_id_value',
-            'type' => 'xsd:string'
+            'type' => 'xsd:string',
         ],
-        'result' => ['name' => 'result', 'type' => 'xsd:string']
+        'result' => ['name' => 'result', 'type' => 'xsd:string'],
     ]
 );
 
@@ -1681,8 +1699,8 @@ $server->wsdl->addComplexType(
     [
         [
             'ref' => 'SOAP-ENC:arrayType',
-            'wsdl:arrayType' => 'tns:result_editUsers[]'
-        ]
+            'wsdl:arrayType' => 'tns:result_editUsers[]',
+        ],
     ],
     'tns:result_editUsers'
 );
@@ -1870,7 +1888,7 @@ $server->wsdl->addComplexType(
         'enable' => ['name' => 'enable', 'type' => 'xsd:boolean'],
         'language' => ['name' => 'language', 'type' => 'xsd:string'],
         'extra' => ['name' => 'extra', 'type' => 'tns:extrasList'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -2041,7 +2059,7 @@ $server->wsdl->addComplexType(
         'expiration_date' => ['name' => 'expiration_date', 'type' => 'xsd:string'],
         'extra' => ['name' => 'extra', 'type' => 'tns:extrasList'],
         'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
-        'picture_url' => ['name' => 'picture_url', 'type' => 'xsd:string']
+        'picture_url' => ['name' => 'picture_url', 'type' => 'xsd:string'],
     ]
 );
 
@@ -2216,7 +2234,7 @@ $server->wsdl->addComplexType(
         'status' => ['name' => 'status', 'type' => 'xsd:string'],
         'phone' => ['name' => 'phone', 'type' => 'xsd:string'],
         'expiration_date' => ['name' => 'expiration_date', 'type' => 'xsd:string'],
-        'extra' => ['name' => 'extra', 'type' => 'tns:extrasList']
+        'extra' => ['name' => 'extra', 'type' => 'tns:extrasList'],
     ]
 );
 
@@ -2239,7 +2257,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'users' => ['name' => 'users', 'type' => 'tns:editUsersPasswordCryptedParamsList'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -2252,7 +2270,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'original_user_id_value' => ['name' => 'original_user_id_value', 'type' => 'xsd:string'],
-        'result' => ['name' => 'result', 'type' => 'xsd:string']
+        'result' => ['name' => 'result', 'type' => 'xsd:string'],
     ]
 );
 
@@ -2440,7 +2458,7 @@ function WSEditUsersPasswordCrypted($params)
     for ($i = 0; $i < $count_results; $i++) {
         $output[] = [
             'original_user_id_value' => $orig_user_id_value[$i],
-            'result' => $results[$i]
+            'result' => $results[$i],
         ];
     }
 
@@ -2468,7 +2486,7 @@ $server->wsdl->addComplexType(
         'phone' => ['name' => 'phone', 'type' => 'xsd:string'],
         'expiration_date' => ['name' => 'expiration_date', 'type' => 'xsd:string'],
         'extra' => ['name' => 'extra', 'type' => 'tns:extrasList'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -2526,13 +2544,16 @@ function WSEditUserPasswordCrypted($params)
         if ($_configuration['password_encryption'] === $encrypt_method) {
             if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
                 $msg = "Encryption $encrypt_method is invalid";
+
                 return $msg;
             } elseif ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/', $password)) {
                 $msg = "Encryption $encrypt_method is invalid";
+
                 return $msg;
             }
         } else {
             $msg = "This encryption $encrypt_method is not configured";
+
             return $msg;
         }
     } elseif (!empty($params['password']) && empty($params['encrypt_method'])) {
@@ -2657,7 +2678,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'original_user_id_value' => ['name' => 'original_user_id_value', 'type' => 'xsd:string'],
-        'result' => ['name' => 'result', 'type' => 'xsd:string']
+        'result' => ['name' => 'result', 'type' => 'xsd:string'],
     ]
 );
 
@@ -2672,7 +2693,7 @@ $server->wsdl->addComplexType(
     'tns:result_actionUsers'
 );
 
-/** WSDeleteUsers **/
+/** WSDeleteUsers */
 $server->wsdl->addComplexType(
     'user_id',
     'complexType',
@@ -2681,7 +2702,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'original_user_id_value' => ['name' => 'original_user_id_value', 'type' => 'xsd:string'],
-        'original_user_id_name' => ['name' => 'original_user_id_name', 'type' => 'xsd:string']
+        'original_user_id_name' => ['name' => 'original_user_id_name', 'type' => 'xsd:string'],
     ]
 );
 
@@ -2709,7 +2730,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'ids' => ['name' => 'user_ids', 'type' => 'tns:user_ids_array'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -2759,7 +2780,7 @@ function WSHelperActionOnUsers($params, $type)
     for ($i = 0; $i < $count_results; $i++) {
         $output[] = [
             'original_user_id_value' => $orig_user_id_value[$i],
-            'result' => $results[$i]
+            'result' => $results[$i],
         ];
     }
 
@@ -2782,7 +2803,7 @@ function WSDeleteUsers($params)
     return WSHelperActionOnUsers($params, 'delete');
 }
 
-/** WSDisableUsers **/
+/** WSDisableUsers */
 $server->register(
     'WSDisableUsers', // method name
     ['user_ids' => 'tns:user_ids'], // input parameters
@@ -2799,7 +2820,7 @@ function WSDisableUsers($params)
     return WSHelperActionOnUsers($params, "disable");
 }
 
-/** WSEnableUsers **/
+/** WSEnableUsers */
 $server->register(
     'WSEnableUsers', // method name
     ['user_ids' => 'tns:user_ids'], // input parameters
@@ -2827,7 +2848,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'original_course_id_name' => ['name' => 'original_course_id_name', 'type' => 'xsd:string'],
-        'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string']
+        'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
     ]
 );
 
@@ -2848,7 +2869,7 @@ $server->wsdl->addComplexType(
         'unsubscribe' => ['name' => 'unsubscribe', 'type' => 'xsd:string'],
         'original_course_id_name' => ['name' => 'original_course_id_name', 'type' => 'xsd:string'],
         'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
-        'extra' => ['name' => 'extra', 'type' => 'tns:extrasList']
+        'extra' => ['name' => 'extra', 'type' => 'tns:extrasList'],
     ]
 );
 
@@ -2877,7 +2898,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'courses' => ['name' => 'courses', 'type' => 'tns:createCourseParamsList'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -2890,7 +2911,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
-        'result' => ['name' => 'result', 'type' => 'xsd:string']
+        'result' => ['name' => 'result', 'type' => 'xsd:string'],
     ]
 );
 
@@ -2954,7 +2975,6 @@ function WSCreateCourse($params)
             }
         }
         $extra_list = isset($course_param['extra']) ? $course_param['extra'] : '';
-
 
         // Check whether exits $x_course_code into user_field_values table.
         $courseInfo = CourseManager::getCourseInfoFromOriginalId(
@@ -3039,7 +3059,7 @@ function WSCreateCourse($params)
 
             if (is_array($extra_list) && count($extra_list) > 0) {
                 foreach ($extra_list as $extra) {
-                    $extra_field_name  = $extra['field_name'];
+                    $extra_field_name = $extra['field_name'];
                     $extra_field_value = $extra['field_value'];
                     // Save new fieldlabel into course_field table.
                     CourseManager::create_course_extra_field(
@@ -3087,7 +3107,7 @@ $server->wsdl->addComplexType(
         'tutor_name' => ['name' => 'tutor_name', 'type' => 'xsd:string'],
         'original_course_id_name' => ['name' => 'original_course_id_name', 'type' => 'xsd:string'],
         'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
-        'extra' => ['name' => 'extra', 'type' => 'tns:extrasList']
+        'extra' => ['name' => 'extra', 'type' => 'tns:extrasList'],
     ]
 );
 
@@ -3111,7 +3131,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'courses' => ['name' => 'courses', 'type' => 'tns:createCourseByTitleParamsList'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -3124,7 +3144,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
-        'result' => ['name' => 'result', 'type' => 'xsd:string']
+        'result' => ['name' => 'result', 'type' => 'xsd:string'],
     ]
 );
 
@@ -3138,7 +3158,6 @@ $server->wsdl->addComplexType(
     [['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_createCourseByTitle[]']],
     'tns:result_createCourseByTitle'
 );
-
 
 // Register the method to expose
 $server->register(
@@ -3311,7 +3330,7 @@ $server->wsdl->addComplexType(
         'disk_quota' => ['name' => 'disk_quota', 'type' => 'xsd:string'], // disk_quota in MB
         'original_course_id_name' => ['name' => 'original_course_id_name', 'type' => 'xsd:string'],
         'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
-        'extra' => ['name' => 'extra', 'type' => 'tns:extrasList']
+        'extra' => ['name' => 'extra', 'type' => 'tns:extrasList'],
     ]
 );
 
@@ -3334,7 +3353,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'courses' => ['name' => 'courses', 'type' => 'tns:editCourseParamsList'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -3347,7 +3366,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
-        'result' => ['name' => 'result', 'type' => 'xsd:string']
+        'result' => ['name' => 'result', 'type' => 'xsd:string'],
     ]
 );
 
@@ -3496,7 +3515,7 @@ $server->wsdl->addComplexType(
     [
         'original_course_id_name' => ['name' => 'original_course_id_name', 'type' => 'xsd:string'],
         'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -3511,7 +3530,7 @@ $server->wsdl->addComplexType(
         'course_desc_id' => ['name' => 'course_desc_id', 'type' => 'xsd:string'],
         'course_desc_default_title' => ['name' => 'course_desc_default_title', 'type' => 'xsd:string'],
         'course_desc_title' => ['name' => 'course_desc_title', 'type' => 'xsd:string'],
-        'course_desc_content' => ['name' => 'course_desc_content', 'type' => 'xsd:string']
+        'course_desc_content' => ['name' => 'course_desc_content', 'type' => 'xsd:string'],
     ]
 );
 
@@ -3525,7 +3544,6 @@ $server->wsdl->addComplexType(
     [['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:fields_course_desc[]']],
     'tns:fields_course_desc'
 );
-
 
 // Register the method to expose
 $server->register(
@@ -3574,7 +3592,7 @@ function WSCourseDescription($params)
         get_lang('CourseMaterial'),
         get_lang('HumanAndTechnicalResources'),
         get_lang('Assessment'),
-        get_lang('AddCategory')
+        get_lang('AddCategory'),
     ];
 
     for ($x = 1; $x < 9; $x++) {
@@ -3597,7 +3615,7 @@ function WSCourseDescription($params)
             'course_desc_id' => $array_course_desc_id[$i],
             'course_desc_default_title' => $array_course_desc_default_title[$i],
             'course_desc_title' => $array_course_desc_title[$i],
-            'course_desc_content' => $array_course_desc_content[$i]
+            'course_desc_content' => $array_course_desc_content[$i],
         ];
     }
 
@@ -3618,7 +3636,7 @@ $server->wsdl->addComplexType(
         'course_desc_title' => ['name' => 'course_desc_title', 'type' => 'xsd:string'],
         'course_desc_content' => ['name' => 'course_desc_content', 'type' => 'xsd:string'],
         'original_course_id_name' => ['name' => 'original_course_id_name', 'type' => 'xsd:string'],
-        'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string']
+        'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
     ]
 );
 
@@ -3641,7 +3659,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'course_desc' => ['name' => 'course_desc', 'type' => 'tns:editCourseDescriptionParamsList'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -3655,7 +3673,7 @@ $server->wsdl->addComplexType(
     [
         'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
         'course_desc_id' => ['name' => 'course_desc_id', 'type' => 'xsd:string'],
-        'result' => ['name' => 'result', 'type' => 'xsd:string']
+        'result' => ['name' => 'result', 'type' => 'xsd:string'],
     ]
 );
 
@@ -3669,7 +3687,6 @@ $server->wsdl->addComplexType(
     [['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_editCourseDescription[]']],
     'tns:result_editCourseDescription'
 );
-
 
 // Register the method to expose
 $server->register(
@@ -3776,7 +3793,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
-        'original_course_id_name' => ['name' => 'original_course_id_name', 'type' => 'xsd:string']
+        'original_course_id_name' => ['name' => 'original_course_id_name', 'type' => 'xsd:string'],
     ]
 );
 
@@ -3800,7 +3817,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'courses' => ['name' => 'courses', 'type' => 'tns:deleteCourseParamsList'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -3813,7 +3830,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
-        'result' => ['name' => 'result', 'type' => 'xsd:string']
+        'result' => ['name' => 'result', 'type' => 'xsd:string'],
     ]
 );
 
@@ -3838,7 +3855,6 @@ $server->register(
     'encoded', // use
     'This service deletes a course '               // documentation
 );
-
 
 // Define the method WSDeleteCourse
 function WSDeleteCourse($params)
@@ -3907,7 +3923,7 @@ $server->wsdl->addComplexType(
         'duration' => ['name' => 'duration', 'type' => 'xsd:string'],
         'original_session_id_name' => ['name' => 'original_session_id_name', 'type' => 'xsd:string'],
         'original_session_id_value' => ['name' => 'original_session_id_value', 'type' => 'xsd:string'],
-        'extra' => ['name' => 'extra', 'type' => 'tns:extrasList']
+        'extra' => ['name' => 'extra', 'type' => 'tns:extrasList'],
     ]
 );
 
@@ -3931,7 +3947,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'sessions' => ['name' => 'sessions', 'type' => 'tns:createSessionParamList'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -3944,7 +3960,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'original_session_id_value' => ['name' => 'original_session_id_value', 'type' => 'xsd:string'],
-        'result' => ['name' => 'result', 'type' => 'xsd:string']
+        'result' => ['name' => 'result', 'type' => 'xsd:string'],
     ]
 );
 
@@ -3970,7 +3986,6 @@ $server->register(
     'encoded', // use
     'This service edits a session'                  // documentation
 );
-
 
 // define the method WSCreateSession
 function WSCreateSession($params)
@@ -4181,7 +4196,7 @@ $server->wsdl->addComplexType(
         'duration' => ['name' => 'duration', 'type' => 'xsd:string'],
         'original_session_id_name' => ['name' => 'original_session_id_name', 'type' => 'xsd:string'],
         'original_session_id_value' => ['name' => 'original_session_id_value', 'type' => 'xsd:string'],
-        'extra' => ['name' => 'extra', 'type' => 'tns:extrasList']
+        'extra' => ['name' => 'extra', 'type' => 'tns:extrasList'],
     ]
 );
 
@@ -4204,7 +4219,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'sessions' => ['name' => 'sessions', 'type' => 'tns:editSessionParamsList'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -4217,7 +4232,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'original_session_id_value' => ['name' => 'original_session_id_value', 'type' => 'xsd:string'],
-        'result' => ['name' => 'result', 'type' => 'xsd:string']
+        'result' => ['name' => 'result', 'type' => 'xsd:string'],
     ]
 );
 
@@ -4231,7 +4246,6 @@ $server->wsdl->addComplexType(
     [['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_editSession[]']],
     'tns:result_editSession'
 );
-
 
 // Register the method to expose
 $server->register(
@@ -4381,7 +4395,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'original_session_id_value' => ['name' => 'original_session_id_value', 'type' => 'xsd:string'],
-        'original_session_id_name' => ['name' => 'original_session_id_name', 'type' => 'xsd:string']
+        'original_session_id_name' => ['name' => 'original_session_id_name', 'type' => 'xsd:string'],
     ]
 );
 
@@ -4405,7 +4419,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'sessions' => ['name' => 'sessions', 'type' => 'tns:deleteSessionParamsList'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -4418,7 +4432,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'original_session_id_value' => ['name' => 'original_session_id_value', 'type' => 'xsd:string'],
-        'result' => ['name' => 'result', 'type' => 'xsd:string']
+        'result' => ['name' => 'result', 'type' => 'xsd:string'],
     ]
 );
 
@@ -4509,7 +4523,7 @@ function WSDeleteSession($params)
     return $output;
 }
 
-/** WSSubscribeUserToCourse **/
+/** WSSubscribeUserToCourse */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
     'user_course_status',
@@ -4519,8 +4533,8 @@ $server->wsdl->addComplexType(
     '',
     [
         'course_id' => ['name' => 'course_id', 'type' => 'tns:course_id'],
-        'user_id'   => ['name' => 'user_id', 'type' => 'tns:user_id'],
-        'status'    => ['name' => 'status', 'type' => 'xsd:int']
+        'user_id' => ['name' => 'user_id', 'type' => 'tns:user_id'],
+        'status' => ['name' => 'status', 'type' => 'xsd:int'],
     ]
 );
 
@@ -4531,8 +4545,8 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'userscourses'  => ['name' => 'userscourses', 'type' => 'tns:user_course_status_array'], //removed []
-        'secret_key'    => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'userscourses' => ['name' => 'userscourses', 'type' => 'tns:user_course_status_array'], //removed []
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -4544,7 +4558,7 @@ $server->wsdl->addComplexType(
     'SOAP-ENC:Array',
     [],
     [
-        ['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:user_course_status[]']
+        ['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:user_course_status[]'],
     ],
     'tns:user_course_status'
 );
@@ -4556,9 +4570,9 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'original_user_id_value'    => ['name' => 'original_user_id_value', 'type' => 'xsd:string'],
-        'original_course_id_value'  => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
-        'result'                    => ['name' => 'result', 'type' => 'xsd:int']
+        'original_user_id_value' => ['name' => 'original_user_id_value', 'type' => 'xsd:string'],
+        'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
+        'result' => ['name' => 'result', 'type' => 'xsd:int'],
     ]
 );
 
@@ -4600,7 +4614,7 @@ function WSSubscribeUserToCourse($params)
     $userscourses = $params['userscourses'];
     foreach ($userscourses as $usercourse) {
         $original_course_id = $usercourse['course_id'];
-        $original_user_id   = $usercourse['user_id'];
+        $original_user_id = $usercourse['user_id'];
         $status = STUDENT;
         if ($usercourse['status']) {
             $status = $usercourse['status'];
@@ -4653,15 +4667,14 @@ function WSSubscribeUserToCourse($params)
         $results[] = [
             'original_user_id_value' => $original_user_id['original_user_id_value'],
             'original_course_id_value' => $original_course_id['original_course_id_value'],
-            'result' => $resultValue
+            'result' => $resultValue,
         ];
     }
 
     return $results;
 }
 
-
-/** WSSubscribeUserToCourse **/
+/** WSSubscribeUserToCourse */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
     'subscribeUserToCourseSimple_arg',
@@ -4670,13 +4683,12 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'course'       => ['name' => 'course', 'type' => 'xsd:string'], //Course string code
-        'user_id'      => ['name' => 'user_id', 'type' => 'xsd:string'], //Chamilo user_id
-        'status'       => ['name' => 'status', 'type' => 'xsd:int'],
-        'secret_key'   => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'course' => ['name' => 'course', 'type' => 'xsd:string'], //Course string code
+        'user_id' => ['name' => 'user_id', 'type' => 'xsd:string'], //Chamilo user_id
+        'status' => ['name' => 'status', 'type' => 'xsd:int'],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
-
 
 // Prepare output params, in this case will return an array
 $server->wsdl->addComplexType(
@@ -4687,7 +4699,6 @@ $server->wsdl->addComplexType(
     '',
     ['message' => ['name' => 'message', 'type' => 'xsd:string']]
 );
-
 
 // Register the method to expose
 $server->register(
@@ -4702,8 +4713,10 @@ $server->register(
 );
 
 /**
- * define the method WSSubscribeUserToCourse
+ * define the method WSSubscribeUserToCourse.
+ *
  * @param array $params
+ *
  * @return array|int|null|soap_fault|string
  */
 function WSSubscribeUserToCourseSimple($params)
@@ -4736,6 +4749,7 @@ function WSSubscribeUserToCourseSimple($params)
         if ($debug) {
             error_log($result);
         }
+
         return $result;
     }
     if (!empty($course_code)) {
@@ -4763,6 +4777,7 @@ function WSSubscribeUserToCourseSimple($params)
             }
         }
     }
+
     return $result;
 }
 
@@ -4774,9 +4789,9 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'original_user_id_value'      => ['name' => 'original_user_id_value', 'type' => 'xsd:string'],
-        'original_user_id_name'       => ['name' => 'original_user_id_name', 'type' => 'xsd:string'],
-        'secret_key'                  => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'original_user_id_value' => ['name' => 'original_user_id_value', 'type' => 'xsd:string'],
+        'original_user_id_name' => ['name' => 'original_user_id_name', 'type' => 'xsd:string'],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -4840,6 +4855,7 @@ function WSGetUser($params)
         $result['firstname'] = $user_data['firstname'];
         $result['lastname'] = $user_data['lastname'];
     }
+
     return $result;
 }
 
@@ -4850,8 +4866,8 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'username'      => ['name' => 'username', 'type' => 'xsd:string'],
-        'secret_key'    => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'username' => ['name' => 'username', 'type' => 'xsd:string'],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 // Register the method to expose
@@ -4888,14 +4904,15 @@ function WSGetUserFromUsername($params)
 
     if (empty($user_data)) {
         // If user was not found, there was a problem
-        $result['user_id']    = '';
-        $result['firstname']  = '';
-        $result['lastname']   = '';
+        $result['user_id'] = '';
+        $result['firstname'] = '';
+        $result['lastname'] = '';
     } else {
-        $result['user_id']    = $user_data['user_id'];
-        $result['firstname']  = $user_data['firstname'];
-        $result['lastname']   = $user_data['lastname'];
+        $result['user_id'] = $user_data['user_id'];
+        $result['firstname'] = $user_data['firstname'];
+        $result['lastname'] = $user_data['lastname'];
     }
+
     return $result;
 }
 
@@ -4908,10 +4925,10 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'original_user_id_values'   => ['name' => 'original_user_id_values', 'type' => 'tns:originalUsersList'],
-        'original_user_id_name'     => ['name' => 'original_user_id_name', 'type' => 'xsd:string'],
-        'original_course_id_value'  => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
-        'original_course_id_name'   => ['name' => 'original_course_id_name', 'type' => 'xsd:string'],
+        'original_user_id_values' => ['name' => 'original_user_id_values', 'type' => 'tns:originalUsersList'],
+        'original_user_id_name' => ['name' => 'original_user_id_name', 'type' => 'xsd:string'],
+        'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
+        'original_course_id_name' => ['name' => 'original_course_id_name', 'type' => 'xsd:string'],
     ]
 );
 
@@ -4934,7 +4951,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'userscourses' => ['name' => 'userscourses', 'type' => 'tns:unsuscribeUserFromCourseParamsList'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -4948,7 +4965,7 @@ $server->wsdl->addComplexType(
     [
         'original_user_id_values' => ['name' => 'original_user_id_values', 'type' => 'xsd:string'],
         'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
-        'result' => ['name' => 'result', 'type' => 'xsd:string']
+        'result' => ['name' => 'result', 'type' => 'xsd:string'],
     ]
 );
 
@@ -5053,7 +5070,7 @@ function WSUnsubscribeUserFromCourse($params)
         $output[] = [
             'original_user_id_values' => $orig_user_id_value[$i],
             'original_course_id_value' => $orig_course_id_value[$i],
-            'result' => $results[$i]
+            'result' => $results[$i],
         ];
     }
 
@@ -5072,7 +5089,7 @@ $server->wsdl->addComplexType(
         'original_user_id_name' => ['name' => 'original_user_id_name', 'type' => 'xsd:string'],
         'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
         'original_course_id_name' => ['name' => 'original_course_id_name', 'type' => 'xsd:string'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -5083,9 +5100,9 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'original_user_id_value'    => ['name' => 'original_user_id_value', 'type' => 'xsd:string'],
-        'original_course_id_value'  => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
-        'result'                    => ['name' => 'result', 'type' => 'xsd:int']
+        'original_user_id_value' => ['name' => 'original_user_id_value', 'type' => 'xsd:string'],
+        'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
+        'result' => ['name' => 'result', 'type' => 'xsd:int'],
     ]
 );
 
@@ -5103,6 +5120,7 @@ $server->register(
 
 /**
  * @param array $params
+ *
  * @return array|null|soap_fault
  */
 function WSUnSubscribeUserFromCourseSimple($params)
@@ -5169,13 +5187,12 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'original_user_id_values'   => ['name' => 'original_user_id_values', 'type' => 'tns:originalUsersList'],
-        'original_user_id_name'     => ['name' => 'original_user_id_name', 'type' => 'xsd:string'],
-        'original_course_id_value'  => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
-        'original_course_id_name'   => ['name' => 'original_course_id_value', 'type' => 'xsd:string']
+        'original_user_id_values' => ['name' => 'original_user_id_values', 'type' => 'tns:originalUsersList'],
+        'original_user_id_name' => ['name' => 'original_user_id_name', 'type' => 'xsd:string'],
+        'original_course_id_value' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
+        'original_course_id_name' => ['name' => 'original_course_id_value', 'type' => 'xsd:string'],
     ]
 );
-
 
 // Prepare output params, in this case will return an array.
 $server->wsdl->addComplexType(
@@ -5187,7 +5204,7 @@ $server->wsdl->addComplexType(
     [
         'original_user_id_values' => ['name' => 'original_user_id_values', 'type' => 'xsd:string'],
         'original_session_id_value' => ['name' => 'original_session_id_value', 'type' => 'xsd:string'],
-        'result' => ['name' => 'result', 'type' => 'xsd:string']
+        'result' => ['name' => 'result', 'type' => 'xsd:string'],
     ]
 );
 
@@ -5209,7 +5226,7 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'original_user_id_value' => ['name' => 'original_user_id_value', 'type' => 'xsd:string']
+        'original_user_id_value' => ['name' => 'original_user_id_value', 'type' => 'xsd:string'],
     ]
 );
 
@@ -5237,7 +5254,7 @@ $server->wsdl->addComplexType(
         'original_user_id_values' => ['name' => 'original_user_id_values', 'type' => 'tns:originalUsersList'],
         'original_user_id_name' => ['name' => 'original_user_id_name', 'type' => 'xsd:string'],
         'original_session_id_value' => ['name' => 'original_session_id_value', 'type' => 'xsd:string'],
-        'original_session_id_name' => ['name' => 'original_session_id_name', 'type' => 'xsd:string']
+        'original_session_id_name' => ['name' => 'original_session_id_name', 'type' => 'xsd:string'],
     ]
 );
 
@@ -5265,7 +5282,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'userssessions' => ['name' => 'userssessions', 'type' => 'tns:subscribeUsersToSessionParamsList'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -5368,7 +5385,7 @@ function WSSuscribeUsersToSession($params)
         $output[] = [
             'original_user_id_values' => $orig_user_id_value[$i],
             'original_session_id_value' => $orig_session_id_value[$i],
-            'result' => $results[$i]
+            'result' => $results[$i],
         ];
     }
 
@@ -5383,9 +5400,9 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'session'    => ['name' => 'session', 'type' => 'xsd:string'], // Session ID
-        'user_id'    => ['name' => 'user_id', 'type' => 'xsd:string'], // Chamilo user_id
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'session' => ['name' => 'session', 'type' => 'xsd:string'], // Session ID
+        'user_id' => ['name' => 'user_id', 'type' => 'xsd:string'], // Chamilo user_id
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -5402,6 +5419,7 @@ $server->register(
 
 /**
  * @param array $params
+ *
  * @return int|null|soap_fault|string
  */
 function WSSubscribeUserToSessionSimple($params)
@@ -5419,7 +5437,7 @@ function WSSubscribeUserToSessionSimple($params)
 
     // Get input parameters
     $session_id = intval($params['session']); // Session ID
-    $user_id    = intval($params['user_id']); // Chamilo user id
+    $user_id = intval($params['user_id']); // Chamilo user id
 
     // Get user id
     $user_data = api_get_user_info($user_id);
@@ -5432,6 +5450,7 @@ function WSSubscribeUserToSessionSimple($params)
         if ($debug) {
             error_log($result);
         }
+
         return $result;
     }
     if (!empty($session_id) && is_numeric($session_id)) {
@@ -5454,6 +5473,7 @@ function WSSubscribeUserToSessionSimple($params)
             $result = 1;
         }
     }
+
     return $result;
 }
 
@@ -5466,10 +5486,10 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'original_user_id_values'   => ['name' => 'original_user_id_values', 'type' => 'tns:originalUsersList'],
-        'original_user_id_name'     => ['name' => 'original_user_id_name', 'type' => 'xsd:string'],
+        'original_user_id_values' => ['name' => 'original_user_id_values', 'type' => 'tns:originalUsersList'],
+        'original_user_id_name' => ['name' => 'original_user_id_name', 'type' => 'xsd:string'],
         'original_session_id_value' => ['name' => 'original_session_id_value', 'type' => 'xsd:string'],
-        'original_session_id_name'  => ['name' => 'original_session_id_name', 'type' => 'xsd:string']
+        'original_session_id_name' => ['name' => 'original_session_id_name', 'type' => 'xsd:string'],
     ]
 );
 
@@ -5492,7 +5512,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'userssessions' => ['name' => 'userssessions', 'type' => 'tns:subscribeUsersToSessionParamsList'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -5506,7 +5526,7 @@ $server->wsdl->addComplexType(
     [
         'original_user_id_values' => ['name' => 'original_user_id_values', 'type' => 'xsd:string'],
         'original_session_id_value' => ['name' => 'original_session_id_value', 'type' => 'xsd:string'],
-        'result' => ['name' => 'result', 'type' => 'xsd:string']
+        'result' => ['name' => 'result', 'type' => 'xsd:string'],
     ]
 );
 
@@ -5611,7 +5631,7 @@ function WSUnsuscribeUsersFromSession($params)
         $output[] = [
             'original_user_id_values' => $orig_user_id_value[$i],
             'original_session_id_value' => $orig_session_id_value[$i],
-            'result' => $results[$i]
+            'result' => $results[$i],
         ];
     }
 
@@ -5638,7 +5658,7 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'course_code'   => ['name' => 'course_code', 'type' => 'xsd:string'],
+        'course_code' => ['name' => 'course_code', 'type' => 'xsd:string'],
     ]
 );
 
@@ -5652,7 +5672,6 @@ $server->wsdl->addComplexType(
     [['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:course_code_type[]']],
     'tns:course_code_type'
 );
-
 
 $server->wsdl->addComplexType(
     'subscribeCoursesToSessionParamsList',
@@ -5673,9 +5692,9 @@ $server->wsdl->addComplexType(
     '',
     [
         'original_course_id_values' => ['name' => 'original_course_id_values', 'type' => 'tns:originalCoursesList'],
-        'original_course_id_name'   => ['name' => 'original_course_id_name', 'type' => 'xsd:string'],
+        'original_course_id_name' => ['name' => 'original_course_id_name', 'type' => 'xsd:string'],
         'original_session_id_value' => ['name' => 'original_session_id_value', 'type' => 'xsd:string'],
-        'original_session_id_name'  => ['name' => 'original_session_id_name', 'type' => 'xsd:string']
+        'original_session_id_name' => ['name' => 'original_session_id_name', 'type' => 'xsd:string'],
     ]
 );
 
@@ -5698,7 +5717,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'coursessessions' => ['name' => 'coursessessions', 'type' => 'tns:subscribeCoursesToSessionParamsList'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -5712,7 +5731,7 @@ $server->wsdl->addComplexType(
     [
         'original_course_id_values' => ['name' => 'original_course_id_values', 'type' => 'xsd:string'],
         'original_session_id_value' => ['name' => 'original_session_id_value', 'type' => 'xsd:string'],
-        'result' => ['name' => 'result', 'type' => 'xsd:string']
+        'result' => ['name' => 'result', 'type' => 'xsd:string'],
     ]
 );
 
@@ -5810,7 +5829,7 @@ function WSSuscribeCoursesToSession($params)
         $output[] = [
             'original_course_id_values' => $orig_course_id_value[$i],
             'original_session_id_value' => $orig_session_id_value[$i],
-            'result' => $results[$i]
+            'result' => $results[$i],
         ];
     }
 
@@ -5829,7 +5848,7 @@ $server->wsdl->addComplexType(
         'original_course_id_values' => ['name' => 'original_course_id_values', 'type' => 'tns:originalCoursesList'],
         'original_course_id_name' => ['name' => 'original_course_id_name', 'type' => 'xsd:string'],
         'original_session_id_value' => ['name' => 'original_session_id_value', 'type' => 'xsd:string'],
-        'original_session_id_name' => ['name' => 'original_session_id_name', 'type' => 'xsd:string']
+        'original_session_id_name' => ['name' => 'original_session_id_name', 'type' => 'xsd:string'],
     ]
 );
 
@@ -5852,7 +5871,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'coursessessions' => ['name' => 'coursessessions', 'type' => 'tns:unsubscribeCoursesFromSessionParamsList'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -5866,7 +5885,7 @@ $server->wsdl->addComplexType(
     [
         'original_course_id_values' => ['name' => 'original_course_id_values', 'type' => 'xsd:string'],
         'original_session_id_value' => ['name' => 'original_session_id_value', 'type' => 'xsd:string'],
-        'result' => ['name' => 'result', 'type' => 'xsd:string']
+        'result' => ['name' => 'result', 'type' => 'xsd:string'],
     ]
 );
 
@@ -5880,7 +5899,6 @@ $server->wsdl->addComplexType(
     [['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_unsubscribeCoursesFromSession[]']],
     'tns:result_unsubscribeCoursesFromSession'
 );
-
 
 // Register the method to expose
 $server->register(
@@ -6007,8 +6025,7 @@ function WSUnsuscribeCoursesFromSession($params)
     return $output;
 }
 
-/** WSListCourses **/
-
+/** WSListCourses */
 $server->wsdl->addComplexType(
     'listCourseInput',
     'complexType',
@@ -6019,7 +6036,7 @@ $server->wsdl->addComplexType(
         'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
         'original_course_id_name' => ['name' => 'original_course_id_name', 'type' => 'xsd:string'],
         'from' => ['name' => 'from', 'type' => 'xsd:int'],
-        'to' => ['name' => 'to', 'type' => 'xsd:int']
+        'to' => ['name' => 'to', 'type' => 'xsd:int'],
     ]
 );
 
@@ -6037,7 +6054,7 @@ $server->wsdl->addComplexType(
         'language' => ['name' => 'language', 'type' => 'xsd:string'],
         'category_name' => ['name' => 'category_name', 'type' => 'xsd:string'],
         'visibility' => ['name' => 'visibility', 'type' => 'xsd:int'],
-        'number_students' => ['name' => 'number_students', 'type' => 'xsd:int']
+        'number_students' => ['name' => 'number_students', 'type' => 'xsd:int'],
     ]
 );
 
@@ -6051,7 +6068,6 @@ $server->wsdl->addComplexType(
     [['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:course[]']],
     'tns:course'
 );
-
 
 // Register the method to expose
 $server->register(
@@ -6132,7 +6148,6 @@ function WSListCourses($params)
     return $courses_result;
 }
 
-
 /* Get user api key */
 $server->wsdl->addComplexType(
     'userApiKey',
@@ -6141,10 +6156,10 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'original_user_id_name'     => ['name' => 'original_user_id_name', 'type' => 'xsd:string'],
-        'original_user_id_value'    => ['name' => 'original_user_id_value', 'type' => 'xsd:string'],
-        'chamilo_username'          => ['name' => 'chamilo_username', 'type' => 'xsd:string'],
-        'secret_key'                => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'original_user_id_name' => ['name' => 'original_user_id_name', 'type' => 'xsd:string'],
+        'original_user_id_value' => ['name' => 'original_user_id_value', 'type' => 'xsd:string'],
+        'chamilo_username' => ['name' => 'chamilo_username', 'type' => 'xsd:string'],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -6162,6 +6177,7 @@ $server->register(
 
 /**
  * @param array $params
+ *
  * @return int|null|soap_fault
  */
 function WSUpdateUserApiKey($params)
@@ -6207,7 +6223,7 @@ function WSUpdateUserApiKey($params)
     return $apikey;
 }
 
-/** WSListSessions **/
+/** WSListSessions */
 $server->wsdl->addComplexType(
     'session_arg',
     'complexType',
@@ -6215,11 +6231,11 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'from'  => ['name' => 'from', 'type' => 'xsd:int'],
-        'to'    => ['name' => 'to', 'type' => 'xsd:int'],
-        'date_start'  => ['name' => 'date_start', 'type' => 'xsd:string'],
-        'date_end'    => ['name' => 'date_end', 'type' => 'xsd:string'],
-        'secret_key'  => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'from' => ['name' => 'from', 'type' => 'xsd:int'],
+        'to' => ['name' => 'to', 'type' => 'xsd:int'],
+        'date_start' => ['name' => 'date_start', 'type' => 'xsd:string'],
+        'date_end' => ['name' => 'date_end', 'type' => 'xsd:string'],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -6246,8 +6262,8 @@ $server->wsdl->addComplexType(
     'SOAP-ENC:Array',
     [],
     [
-        ['ref'=>'SOAP-ENC:arrayType',
-            'wsdl:arrayType'=>'tns:session[]']
+        ['ref' => 'SOAP-ENC:arrayType',
+            'wsdl:arrayType' => 'tns:session[]', ],
     ],
     'tns:session'
 );
@@ -6255,7 +6271,7 @@ $server->wsdl->addComplexType(
 // Register the method to expose
 $server->register(
     'WSListSessions', // method name
-    ['input'  => 'tns:session_arg'], // input parameters
+    ['input' => 'tns:session_arg'], // input parameters
     ['return' => 'tns:sessions'], // output parameters
     'urn:WSRegistration', // namespace
     'urn:WSRegistration#WSListSessions', // soapaction
@@ -6264,14 +6280,15 @@ $server->register(
     'This service returns a list of sessions' // documentation
 );
 
-
 /**
  * Get a list of sessions (id, title, url, date_start, date_end) and
  * return to caller. Date start can be set to ask only for the sessions
  * starting at or after this date. Date end can be set to ask only for the
  * sessions ending before or at this date.
  * Function registered as service. Returns strings in UTF-8.
+ *
  * @param array List of parameters (security key, date_start and date_end)
+ *
  * @return array Sessions list (id=>[title=>'title',url='http://...',date_start=>'...',date_end=>''])
  */
 function WSListSessions($params)
@@ -6340,8 +6357,10 @@ $server->register(
 );
 
 /**
- * Web service to tell if a given user is subscribed to the course
+ * Web service to tell if a given user is subscribed to the course.
+ *
  * @param array $params Array of parameters (course and user_id)
+ *
  * @return bool|null|soap_fault A simple boolean (true if user is subscribed, false otherwise)
  */
 function WSUserSubscribedInCourse($params)
@@ -6375,7 +6394,7 @@ $server->wsdl->addComplexType(
     [
         'term' => ['name' => 'term', 'type' => 'xsd:string'],
         'extrafields' => ['name' => 'extrafields', 'type' => 'xsd:string'],
-        'secret_key'   => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -6387,8 +6406,8 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'variable' => ['name'=>'variable', 'type'=>'xsd:string'],
-        'value' => ['name'=>'value', 'type'=>'xsd:string']
+        'variable' => ['name' => 'variable', 'type' => 'xsd:string'],
+        'value' => ['name' => 'value', 'type' => 'xsd:string'],
     ]
 );
 
@@ -6400,7 +6419,7 @@ $server->wsdl->addComplexType(
     'SOAP-ENC:Array',
     [],
     [
-        ['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:searchedSessionExtra[]']
+        ['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:searchedSessionExtra[]'],
     ],
     'tns:searchedSessionExtra'
 );
@@ -6442,7 +6461,7 @@ $server->wsdl->addComplexType(
     [],
     [
         ['ref' => 'SOAP-ENC:arrayType',
-            'wsdl:arrayType' => 'tns:searchedSession[]']
+            'wsdl:arrayType' => 'tns:searchedSession[]', ],
     ],
     'tns:searchedSession'
 );
@@ -6460,11 +6479,13 @@ $server->register(
 );
 
 /**
- * Web service to get a session list filtered by name, description or short description extra field
+ * Web service to get a session list filtered by name, description or short description extra field.
+ *
  * @param array $params Contains the following parameters
- *   string $params['term'] Search term
- *   string $params['extrafields'] Extrafields to include in request result
- *   string $params['secret_key'] Secret key to check
+ *                      string $params['term'] Search term
+ *                      string $params['extrafields'] Extrafields to include in request result
+ *                      string $params['secret_key'] Secret key to check
+ *
  * @return array The list
  */
 function WSSearchSession($params)
@@ -6501,7 +6522,7 @@ $server->wsdl->addComplexType(
     [
         'id' => ['name' => 'id', 'type' => 'xsd:int'],
         'extrafields' => ['name' => 'extrafields', 'type' => 'xsd:string'],
-        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
     ]
 );
 
@@ -6518,11 +6539,13 @@ $server->register(
 );
 
 /**
- * Web service to get a session by its id. Optionally can get its extra fields values
+ * Web service to get a session by its id. Optionally can get its extra fields values.
+ *
  * @param array $params Contains the following parameters:
- *   int $params['id'] The session id
- *   string $params['extrafields'] Extrafields to include in request result
- *   string $params['secret_key'] Secret key to check
+ *                      int $params['id'] The session id
+ *                      string $params['extrafields'] Extrafields to include in request result
+ *                      string $params['secret_key'] Secret key to check
+ *
  * @return array The session data
  */
 function WSFetchSession($params)
@@ -6571,7 +6594,7 @@ $server->wsdl->addComplexType(
         'session_id' => ['name' => 'session_id', 'type' => 'xsd:int'],
         'cat_id' => ['name' => 'cat_id', 'type' => 'xsd:int'],
         'created_at' => ['name' => 'created_at', 'type' => 'xsd:string'],
-        'path_certificate' => ['name' => 'path_certificate', 'type' => 'xsd:string']
+        'path_certificate' => ['name' => 'path_certificate', 'type' => 'xsd:string'],
     ]
 );
 
@@ -6583,8 +6606,8 @@ $server->wsdl->addComplexType(
     'SOAP-ENC:Array',
     [],
     [
-        ['ref'=>'SOAP-ENC:arrayType',
-            'wsdl:arrayType'=>'tns:certificateDetails[]']
+        ['ref' => 'SOAP-ENC:arrayType',
+            'wsdl:arrayType' => 'tns:certificateDetails[]', ],
     ],
     'tns:certificateDetails'
 );
@@ -6593,7 +6616,7 @@ $server->register(
     'WSCertificatesList', // method name
     [
         'startingDate' => 'xsd:string', // input parameters
-        'endingDate' => 'xsd:string'
+        'endingDate' => 'xsd:string',
     ],
     ['return' => 'tns:certificatesList'], // output parameters
     'urn:WSRegistration', // namespace
@@ -6659,7 +6682,7 @@ $server->wsdl->addComplexType(
     '',
     [
         'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
-        'name' => ['name' => 'name', 'type' => 'xsd:string']
+        'name' => ['name' => 'name', 'type' => 'xsd:string'],
     ]
 );
 
@@ -6683,8 +6706,9 @@ function WSCreateGroup($params)
     }
     $userGroup = new UserGroup();
     $params = [
-        'name' => $params['name']
+        'name' => $params['name'],
     ];
+
     return $userGroup->save($params);
 }
 
@@ -6701,14 +6725,14 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'secret_key'   => ['name' => 'secret_key', 'type' => 'xsd:string'],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
         'id' => ['name' => 'id', 'type' => 'xsd:string'],
         'name' => ['name' => 'name', 'type' => 'xsd:string'],
-        'description'   => ['name' => 'description', 'type' => 'xsd:string'],
+        'description' => ['name' => 'description', 'type' => 'xsd:string'],
         'url' => ['name' => 'url', 'type' => 'xsd:string'],
         'visibility' => ['name' => 'visibility', 'type' => 'xsd:string'],
         'picture_uri' => ['name' => 'picture_uri', 'type' => 'xsd:string'],
-        'allow_member_group_to_leave' => ['name' => 'allow_member_group_to_leave', 'type' => 'xsd:string']
+        'allow_member_group_to_leave' => ['name' => 'allow_member_group_to_leave', 'type' => 'xsd:string'],
     ]
 );
 
@@ -6749,8 +6773,8 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'secret_key'   => ['name' => 'secret_key', 'type' => 'xsd:string'],
-        'id' => ['name' => 'id', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
+        'id' => ['name' => 'id', 'type' => 'xsd:string'],
     ]
 );
 
@@ -6790,9 +6814,9 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'secret_key'   => ['name' => 'secret_key', 'type' => 'xsd:string'],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
         'id' => ['name' => 'id', 'type' => 'xsd:string'],
-        'parent_id' => ['name' => 'parent_id', 'type' => 'xsd:string']
+        'parent_id' => ['name' => 'parent_id', 'type' => 'xsd:string'],
     ]
 );
 
@@ -6832,8 +6856,8 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'secret_key'   => ['name' => 'secret_key', 'type' => 'xsd:string'],
-        'id' => ['name' => 'id', 'type' => 'xsd:string']
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
+        'id' => ['name' => 'id', 'type' => 'xsd:string'],
     ]
 );
 
@@ -6856,6 +6880,7 @@ function GroupUnbindFromParent($params)
         return returnError(WS_ERROR_SECRET_KEY);
     }
     $userGroup = new UserGroup();
+
     return $userGroup->setParentGroup($params['id'], 0);
 }
 
@@ -6872,10 +6897,10 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'secret_key'   => ['name' => 'secret_key', 'type' => 'xsd:string'],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
         'user_id' => ['name' => 'user_id', 'type' => 'xsd:string'],
         'group_id' => ['name' => 'group_id', 'type' => 'xsd:string'],
-        'relation_type' => ['name' => 'relation_type', 'type' => 'xsd:string']
+        'relation_type' => ['name' => 'relation_type', 'type' => 'xsd:string'],
     ]
 );
 
@@ -6921,10 +6946,10 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'secret_key'   => ['name' => 'secret_key', 'type' => 'xsd:string'],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
         'user_id' => ['name' => 'user_id', 'type' => 'xsd:string'],
         'group_id' => ['name' => 'group_id', 'type' => 'xsd:string'],
-        'relation_type' => ['name' => 'relation_type', 'type' => 'xsd:string']
+        'relation_type' => ['name' => 'relation_type', 'type' => 'xsd:string'],
     ]
 );
 
@@ -6968,9 +6993,9 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'secret_key'   => ['name' => 'secret_key', 'type' => 'xsd:string'],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
         'user_id' => ['name' => 'user_id', 'type' => 'xsd:string'],
-        'group_id' => ['name' => 'group_id', 'type' => 'xsd:string']
+        'group_id' => ['name' => 'group_id', 'type' => 'xsd:string'],
     ]
 );
 
@@ -7002,7 +7027,7 @@ function WSDeleteUserFromGroup($params)
 
 /* Delete user from group Web Service end */
 
-/** WSRegisterUserVisibilityToCourseCatalogue **/
+/** WSRegisterUserVisibilityToCourseCatalogue */
 // Register the data structures used by the service
 
 $server->wsdl->addComplexType(
@@ -7026,7 +7051,7 @@ $server->wsdl->addComplexType(
     'SOAP-ENC:Array',
     [],
     [
-        ['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:user_course_visibility[]']
+        ['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:user_course_visibility[]'],
     ],
     'tns:user_course_visibility'
 );
@@ -7095,7 +7120,7 @@ function WSAddUserVisibilityToCourseInCatalogue($params)
     $userscourses = $params['userscourses'];
     foreach ($userscourses as $usercourse) {
         $original_course_id = $usercourse['course_id'];
-        $original_user_id   = $usercourse['user_id'];
+        $original_user_id = $usercourse['user_id'];
         $visible = $usercourse['visible'];
 
         $resultValue = 0;
@@ -7145,7 +7170,7 @@ function WSAddUserVisibilityToCourseInCatalogue($params)
             'original_user_id_value' => $original_user_id['original_user_id_value'],
             'original_course_id_value' => $original_course_id['original_course_id_value'],
             'visible' => $visible,
-            'result' => $resultValue
+            'result' => $resultValue,
         ];
     }
 
@@ -7179,7 +7204,7 @@ function WSRemoveUserVisibilityToCourseInCatalogue($params)
     $userscourses = $params['userscourses'];
     foreach ($userscourses as $usercourse) {
         $original_course_id = $usercourse['course_id'];
-        $original_user_id   = $usercourse['user_id'];
+        $original_user_id = $usercourse['user_id'];
         $visible = $usercourse['visible'];
 
         $resultValue = 0;
@@ -7229,7 +7254,7 @@ function WSRemoveUserVisibilityToCourseInCatalogue($params)
             'original_user_id_value' => $original_user_id['original_user_id_value'],
             'original_course_id_value' => $original_course_id['original_course_id_value'],
             'visible' => $visible,
-            'result' => $resultValue
+            'result' => $resultValue,
         ];
     }
 

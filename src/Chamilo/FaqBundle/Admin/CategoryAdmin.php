@@ -4,12 +4,12 @@
 namespace Chamilo\FaqBundle\Admin;
 
 use Sonata\AdminBundle\Admin\Admin;
-use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 
 /**
- * Class QuestionAdmin
+ * Class QuestionAdmin.
  *
  * @package Chamilo\FaqBundle\Admin
  */
@@ -18,7 +18,7 @@ class CategoryAdmin extends Admin
     protected $datagridValues = [
         '_page' => 1,
         '_sort_by' => 'created_at',
-        '_sort_order' => 'Desc'
+        '_sort_order' => 'Desc',
     ];
 
     /**
@@ -51,8 +51,8 @@ class CategoryAdmin extends Admin
                         //'show' => array(),
                         'preview' => ['template' => 'ChamiloFaqBundle:Faq:preview_category_partial.html.twig'],
                         'edit' => [],
-                        'delete' => []
-                    ]
+                        'delete' => [],
+                    ],
                 ]
             )
         ;

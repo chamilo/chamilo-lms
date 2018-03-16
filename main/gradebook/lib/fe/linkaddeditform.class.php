@@ -2,9 +2,11 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Form used to add or edit links
+ * Form used to add or edit links.
+ *
  * @author Stijn Konings
  * @author Bert Steppé
+ *
  * @package chamilo.gradebook
  */
 class LinkAddEditForm extends FormValidator
@@ -15,7 +17,7 @@ class LinkAddEditForm extends FormValidator
     /**
      * Constructor
      * To add link, define category_object and link_type
-     * To edit link, define link_object
+     * To edit link, define link_object.
      */
     public function __construct(
         $form_type,
@@ -46,7 +48,7 @@ class LinkAddEditForm extends FormValidator
         // ELEMENT: name
         if ($form_type == self::TYPE_ADD || $link->is_allowed_to_change_name()) {
             if ($link->needs_name_and_description()) {
-                $this->addText('name', get_lang('Name'), true, ['size'=>'40', 'maxlength'=>'40']);
+                $this->addText('name', get_lang('Name'), true, ['size' => '40', 'maxlength' => '40']);
             } else {
                 $select = $this->addElement('select', 'select_link', get_lang('ChooseItem'));
                 foreach ($link->get_all_links() as $newlink) {
@@ -113,7 +115,7 @@ class LinkAddEditForm extends FormValidator
             true,
             [
                 'size' => '4',
-                'maxlength' => '5'
+                'maxlength' => '5',
             ]
         );
 

@@ -3,9 +3,8 @@
 /**
  *	@package chamilo.admin
  */
-
-use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 
 // resetting the course id
 $cidReset = true;
@@ -110,10 +109,10 @@ echo Display::page_header($session->getName().' - '.$user->getCompleteName());
     <div class="col-sm-8 col-sm-offset-2">
         <div class="row">
             <div class="col-sm-5">
-                <label for="courses_to_avoid-f"><?php echo get_lang('CourseListInSession') ?></label>
+                <label for="courses_to_avoid-f"><?php echo get_lang('CourseListInSession'); ?></label>
             </div>
             <div class="col-sm-5 col-sm-offset-2">
-                <label for="courses_to_avoid-t"><?php echo get_lang('CoursesToAvoid') ?></label>
+                <label for="courses_to_avoid-t"><?php echo get_lang('CoursesToAvoid'); ?></label>
             </div>
         </div>
     </div>
@@ -125,6 +124,7 @@ Display::display_footer();
 
 /**
  * @param Session $session
+ *
  * @return array
  */
 function getSessionCourseList(Session $session)
@@ -138,4 +138,4 @@ function getSessionCourseList(Session $session)
     }
 
     return $return;
-};
+}

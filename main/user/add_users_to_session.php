@@ -4,7 +4,6 @@
 /**
  * @package chamilo.admin
  */
-
 $cidReset = true;
 
 // including some necessary files
@@ -24,15 +23,15 @@ SessionManager::protect_teacher_session_edit($id_session);
 if (api_is_platform_admin()) {
     $interbreadcrumb[] = [
         'url' => 'index.php',
-        'name' => get_lang('PlatformAdmin')
+        'name' => get_lang('PlatformAdmin'),
     ];
     $interbreadcrumb[] = [
         'url' => 'session_list.php',
-        'name' => get_lang('SessionList')
+        'name' => get_lang('SessionList'),
     ];
     $interbreadcrumb[] = [
         'url' => "resume_session.php?id_session=".$id_session,
-        "name" => get_lang('SessionOverview')
+        "name" => get_lang('SessionOverview'),
     ];
 }
 $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
@@ -419,7 +418,7 @@ if ($allowTutors == 'true') {
                 $nosessionUsersList[$user['user_id']] = [
                     'fn' => $user['firstname'],
                     'ln' => $user['lastname'],
-                    'un' => $user['username']
+                    'un' => $user['username'],
                 ];
                 unset($users[$uid]);
             }
@@ -478,7 +477,7 @@ if ($allowTutors == 'true') {
     $link_add_group = '<a href="usergroups.php">'.
             Display::return_icon('multiple.gif', get_lang('RegistrationByUsersGroups')).get_lang('RegistrationByUsersGroups').'</a>'; ?>
     <div class="actions">
-        <?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>&nbsp;|&nbsp;<?php echo $link_add_group; ?>
+        <?php echo $link_add_type_unique; ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple; ?>&nbsp;|&nbsp;<?php echo $link_add_group; ?>
     </div>
     <form name="formulaire" method="post"
           action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if (!empty($_GET['add'])) {
@@ -519,7 +518,7 @@ if ($allowTutors == 'true') {
     <div class="row">
         <div class="span5">
             <div class="multiple_select_header">
-                <b><?php echo get_lang('UserListInPlatform') ?> :</b>
+                <b><?php echo get_lang('UserListInPlatform'); ?> :</b>
             <?php if ($add_type == 'multiple') {
         ?>
                 <?php echo get_lang('FirstLetterUser'); ?> :
@@ -591,7 +590,7 @@ if ($allowTutors == 'true') {
         </div>
         <div class="span5">
             <div class="multiple_select_header">
-                <b><?php echo get_lang('UserListInSession') ?> :</b>
+                <b><?php echo get_lang('UserListInSession'); ?> :</b>
             </div>
             <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" class="span5">
             <?php
@@ -659,7 +658,7 @@ if ($allowTutors == 'true') {
         else  // XMLHttpRequest non supporté par le navigateur
         alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
 
-        //xhr_object.open("GET", "loadUsersInSelect.ajax.php?id_session=<?php echo $id_session ?>&letter="+select.options[select.selectedIndex].text, false);
+        //xhr_object.open("GET", "loadUsersInSelect.ajax.php?id_session=<?php echo $id_session; ?>&letter="+select.options[select.selectedIndex].text, false);
         xhr_object.open("POST", "loadUsersInSelect.ajax.php");
         xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         nosessionUsers = makepost(document.getElementById('origin_users'));

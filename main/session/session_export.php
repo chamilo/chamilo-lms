@@ -3,8 +3,7 @@
 
 /**
  * @package chamilo.admin
-*/
-
+ */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -89,7 +88,7 @@ if (isset($_POST['formSent'])) {
                 'Visibility',
                 'SessionCategory',
                 'Users',
-                'Courses'
+                'Courses',
             ];
         } else {
             if (!file_exists($archivePath)) {
@@ -232,7 +231,7 @@ if (isset($_POST['formSent'])) {
                     $row['visibility'],
                     $row['session_category'],
                     $users,
-                    $courses
+                    $courses,
                 ];
             } else {
                 $add = "\t<Session>\n"

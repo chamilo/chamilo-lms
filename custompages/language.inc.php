@@ -6,13 +6,15 @@
  * to the best pick according to the visitor's browser's options.
  * 2011, Jean-Karim Bockstael, CBlue <jeankarim@cblue.be>
  * This requires the Chamilo system to be initialized
- * (note that it's easier to do the following include in the parent page)
+ * (note that it's easier to do the following include in the parent page).
+ *
  * @package chamilo.custompages
  */
 /**
- * Returns the best match between available languages and visitor preferences
+ * Returns the best match between available languages and visitor preferences.
+ *
  * @return string the best match as 2-chars code, null when none match
-*/
+ */
 function get_preferred_language($available_langs)
 {
     // Parsing the Accept-languages HTTP header
@@ -43,7 +45,7 @@ function get_preferred_language($available_langs)
 }
 
 /**
- * Get a language variable in a specific language
+ * Get a language variable in a specific language.
  */
 function custompages_get_lang($variable)
 {

@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookCategory;
-use Doctrine\Common\Collections\Criteria;
-use Knp\Component\Pager\Paginator;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -36,7 +34,7 @@ $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'admin/gradebook_list.php',
-    'name' => get_lang('Gradebook')
+    'name' => get_lang('Gradebook'),
 ];
 
 $tpl = new Template(get_lang('CourseList'));

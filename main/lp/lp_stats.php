@@ -3,11 +3,12 @@
 
 /**
  * This script displays statistics on the current learning path (scorm)
- * This script must be included by lp_controller.php to get basic initialisation
+ * This script must be included by lp_controller.php to get basic initialisation.
+ *
  * @package chamilo.learnpath
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 // When origin is not set that means that the lp_stats are viewed from the "man running" icon

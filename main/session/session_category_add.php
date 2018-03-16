@@ -3,9 +3,9 @@
 
 /**
  * @package chamilo.admin
+ *
  * @todo use formvalidator for the form
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $xajax = new xajax();
@@ -19,11 +19,11 @@ $formSent = 0;
 $errorMsg = '';
 $interbreadcrumb[] = [
     'url' => 'session_list.php',
-    'name' => get_lang('SessionList')
+    'name' => get_lang('SessionList'),
 ];
 $interbreadcrumb[] = [
     'url' => "session_category_list.php",
-    "name" => get_lang('ListSessionCategory')
+    "name" => get_lang('ListSessionCategory'),
 ];
 
 // Database Table Definitions
@@ -72,9 +72,9 @@ if (!empty($return)) {
             <input type="hidden" name="formSent" value="1">
             <legend><?php echo $tool_name; ?></legend>
             <div class="form-group">
-                <label class="col-sm-3 control-label"><?php echo get_lang('SessionCategoryName') ?></label>
+                <label class="col-sm-3 control-label"><?php echo get_lang('SessionCategoryName'); ?></label>
                 <div class="col-sm-6">
-                    <input type="text" class="form-control" name="name" placeholder="<?php echo get_lang('Category') ?>" size="50" maxlength="50" value="<?php if ($formSent) {
+                    <input type="text" class="form-control" name="name" placeholder="<?php echo get_lang('Category'); ?>" size="50" maxlength="50" value="<?php if ($formSent) {
     echo api_htmlentities($name, ENT_QUOTES, $charset);
 } ?>">
                 </div>
@@ -82,7 +82,7 @@ if (!empty($return)) {
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-6">
-                    <?php echo get_lang('TheTimeLimitsAreReferential'); ?> <a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('AddTimeLimit') ?></a>
+                    <?php echo get_lang('TheTimeLimitsAreReferential'); ?> <a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('AddTimeLimit'); ?></a>
                 </div>
                 <div class="col-md-3"></div>
             </div>
@@ -90,7 +90,7 @@ if (!empty($return)) {
             <div style="display: none" id="options">
 
             <div class="form-group">
-                <label class="col-sm-3 control-label"><?php echo get_lang('DateStart') ?></label>
+                <label class="col-sm-3 control-label"><?php echo get_lang('DateStart'); ?></label>
                 <div class="col-sm-6">
                     <select name="day_start">
                         <option value="1">01</option>
@@ -238,7 +238,7 @@ if (!empty($return)) {
                 <div class="col-md-3"></div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label"><?php echo get_lang('DateEnd') ?></label>
+                <label class="col-sm-3 control-label"><?php echo get_lang('DateEnd'); ?></label>
                 <div class="col-sm-6">
                     <select name="day_end">
                         <option value="0">--</option>
@@ -309,7 +309,7 @@ if (!empty($return)) {
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-6">
-                    <button class="btn btn-success" type="submit" value="<?php echo get_lang('AddACategory') ?>"><em class="fa fa-plus"></em> <?php echo get_lang('AddACategory') ?></button>
+                    <button class="btn btn-success" type="submit" value="<?php echo get_lang('AddACategory'); ?>"><em class="fa fa-plus"></em> <?php echo get_lang('AddACategory'); ?></button>
                 </div>
                 <div class="col-md-3"></div>
             </div>

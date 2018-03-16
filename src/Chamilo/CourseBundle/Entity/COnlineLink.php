@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * COnlineLink
+ * COnlineLink.
  *
  * @ORM\Table(
  *  name="c_online_link",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class COnlineLink
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,14 +28,14 @@ class COnlineLink
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
@@ -56,9 +56,10 @@ class COnlineLink
     private $url;
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return COnlineLink
      */
     public function setName($name)
@@ -69,7 +70,7 @@ class COnlineLink
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -79,9 +80,10 @@ class COnlineLink
     }
 
     /**
-     * Set url
+     * Set url.
      *
      * @param string $url
+     *
      * @return COnlineLink
      */
     public function setUrl($url)
@@ -92,7 +94,7 @@ class COnlineLink
     }
 
     /**
-     * Get url
+     * Get url.
      *
      * @return string
      */
@@ -102,9 +104,10 @@ class COnlineLink
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return COnlineLink
      */
     public function setId($id)
@@ -115,9 +118,9 @@ class COnlineLink
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -125,9 +128,10 @@ class COnlineLink
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return COnlineLink
      */
     public function setCId($cId)
@@ -138,9 +142,9 @@ class COnlineLink
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

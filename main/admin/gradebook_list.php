@@ -52,12 +52,11 @@ switch ($action) {
     case 'edit':
         $interbreadcrumb[] = [
             'url' => $currentUrl,
-            'name' => get_lang('Gradebook')
+            'name' => get_lang('Gradebook'),
         ];
         $toolName = get_lang(ucfirst($action));
         break;
 }
-
 
 $tpl = new Template($toolName);
 
@@ -79,7 +78,7 @@ switch ($action) {
             get_lang('Course'),
             null,
             [
-                'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course'
+                'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
             ]
         );
 
@@ -89,7 +88,7 @@ switch ($action) {
             null,
             [
                 'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
-                'multiple' => 'multiple'
+                'multiple' => 'multiple',
             ]
         );
 
@@ -202,7 +201,7 @@ switch ($action) {
                 $options,
                 [
                     'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
-                    'multiple' => 'multiple'
+                    'multiple' => 'multiple',
                 ]
             );
 
@@ -223,7 +222,7 @@ switch ($action) {
                 'weight' => $category->getWeight(),
                 'gradebooks_to_validate_in_dependence' => $categoryData['gradebooks_to_validate_in_dependence'],
                 'depends' => array_keys($options),
-                'minimum' => $categoryData['minimum_to_validate']
+                'minimum' => $categoryData['minimum_to_validate'],
             ];
             $form->setDefaults($defaults);
             $contentForm = $form->returnForm();

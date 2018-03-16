@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CQuizRelQuestion
+ * CQuizRelQuestion.
  *
  * @ORM\Table(
  *  name="c_quiz_rel_question",
@@ -21,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CQuizRelQuestion
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -30,37 +30,38 @@ class CQuizRelQuestion
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="question_order", type="integer", nullable=false)
      */
     private $questionOrder;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="question_id", type="integer")
      */
     private $questionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="exercice_id", type="integer")
      */
     private $exerciceId;
 
     /**
-     * Set questionOrder
+     * Set questionOrder.
      *
-     * @param integer $questionOrder
+     * @param int $questionOrder
+     *
      * @return CQuizRelQuestion
      */
     public function setQuestionOrder($questionOrder)
@@ -71,9 +72,9 @@ class CQuizRelQuestion
     }
 
     /**
-     * Get questionOrder
+     * Get questionOrder.
      *
-     * @return integer
+     * @return int
      */
     public function getQuestionOrder()
     {
@@ -81,9 +82,10 @@ class CQuizRelQuestion
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CQuizRelQuestion
      */
     public function setCId($cId)
@@ -94,9 +96,9 @@ class CQuizRelQuestion
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -104,9 +106,10 @@ class CQuizRelQuestion
     }
 
     /**
-     * Set questionId
+     * Set questionId.
      *
-     * @param integer $questionId
+     * @param int $questionId
+     *
      * @return CQuizRelQuestion
      */
     public function setQuestionId($questionId)
@@ -117,9 +120,9 @@ class CQuizRelQuestion
     }
 
     /**
-     * Get questionId
+     * Get questionId.
      *
-     * @return integer
+     * @return int
      */
     public function getQuestionId()
     {
@@ -127,9 +130,10 @@ class CQuizRelQuestion
     }
 
     /**
-     * Set exerciceId
+     * Set exerciceId.
      *
-     * @param integer $exerciceId
+     * @param int $exerciceId
+     *
      * @return CQuizRelQuestion
      */
     public function setExerciceId($exerciceId)
@@ -140,9 +144,9 @@ class CQuizRelQuestion
     }
 
     /**
-     * Get exerciceId
+     * Get exerciceId.
      *
-     * @return integer
+     * @return int
      */
     public function getExerciceId()
     {

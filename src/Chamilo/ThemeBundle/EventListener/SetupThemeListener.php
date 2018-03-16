@@ -7,7 +7,8 @@ use Chamilo\ThemeBundle\Theme\ThemeManager;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 
 /**
- * Class SetupThemeListener
+ * Class SetupThemeListener.
+ *
  * @package Chamilo\ThemeBundle\EventListener
  */
 class SetupThemeListener
@@ -23,9 +24,9 @@ class SetupThemeListener
 
     public function __construct($manager, $cssBase = null, $lteAdmin = null)
     {
-        $this->cssBase  = $cssBase ?: 'bundles/avanzuadmintheme/';
+        $this->cssBase = $cssBase ?: 'bundles/avanzuadmintheme/';
         $this->lteAdmin = $lteAdmin ?: 'vendor/AdminLTE/css/';
-        $this->manager  = $manager;
+        $this->manager = $manager;
     }
 
     public function onKernelController(FilterControllerEvent $event)

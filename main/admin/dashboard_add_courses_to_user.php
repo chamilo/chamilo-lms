@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Interface for assigning courses to Human Resources Manager
+ * Interface for assigning courses to Human Resources Manager.
+ *
  * @package chamilo.admin
  */
 // resetting the course id
@@ -31,7 +32,7 @@ $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_
 // initializing variables
 $user_id = intval($_GET['user']);
 $user_info = api_get_user_info($user_id);
-$user_anonymous  = api_get_anonymous_id();
+$user_anonymous = api_get_anonymous_id();
 $current_user_id = api_get_user_id();
 
 // setting the name of the tool
@@ -94,8 +95,9 @@ function search_courses($needle, $type)
             $return .= '<option value="'.$course['code'].'" title="'.htmlspecialchars($course['title'], ENT_QUOTES).'">'.$course['title'].' ('.$course['code'].')</option>';
         }
         $return .= '</select>';
-        $xajax_response -> addAssign('ajax_list_courses_multiple', 'innerHTML', api_utf8_encode($return));
+        $xajax_response->addAssign('ajax_list_courses_multiple', 'innerHTML', api_utf8_encode($return));
     }
+
     return $xajax_response;
 }
 
@@ -218,7 +220,7 @@ if (api_is_multiple_url_enabled()) {
 $result = Database::query($sql);
 
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id ?>" style="margin:0px;">
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id; ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1" />
 <?php
 if (!empty($msg)) {
@@ -228,7 +230,7 @@ if (!empty($msg)) {
 
 <div class="row">
     <div class="col-md-4">
-        <h5><?php echo get_lang('CoursesListInPlatform') ?> :</h5>
+        <h5><?php echo get_lang('CoursesListInPlatform'); ?> :</h5>
 
         <div id="ajax_list_courses_multiple">
     <select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" style="width:340px;">

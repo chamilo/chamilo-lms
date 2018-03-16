@@ -16,7 +16,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 // Setting breadcrumbs
 $interbreadcrumb[] = [
     'url' => 'session_list.php',
-    'name' => get_lang('SessionList')
+    'name' => get_lang('SessionList'),
 ];
 
 // Setting the name of the tool
@@ -66,11 +66,11 @@ echo Display::input('hidden', 'form_sent', '1');
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
     <tr>
         <td align="center">
-            <b><?php echo get_lang('Sessions') ?> :</b>
+            <b><?php echo get_lang('Sessions'); ?> :</b>
         </td>
         <td></td>
         <td align="center">
-            <b><?php echo get_lang('Courses') ?> :</b>
+            <b><?php echo get_lang('Courses'); ?> :</b>
         </td>
     </tr>
     <tr>
@@ -80,7 +80,7 @@ echo Display::input('hidden', 'form_sent', '1');
                     'sessions[]',
                     $sessionList,
                     '',
-                    ['style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'sessions', 'size'=>'15px'],
+                    ['style' => 'width:360px', 'multiple' => 'multiple', 'id' => 'sessions', 'size' => '15px'],
                     false
                 );
             ?>
@@ -93,7 +93,7 @@ echo Display::input('hidden', 'form_sent', '1');
                 'courses[]',
                 $courseOptions,
                 '',
-                ['style'=>'width:360px', 'id'=>'courses', 'size'=>'15px'],
+                ['style' => 'width:360px', 'id' => 'courses', 'size' => '15px'],
                 false
             );
             ?>

@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class DictionaryPlugin
+ * Class DictionaryPlugin.
  */
 class DictionaryPlugin extends Plugin
 {
@@ -15,7 +15,7 @@ class DictionaryPlugin extends Plugin
             '1.0',
             'Julio Montoya',
             [
-                'enable_plugin_dictionary' => 'boolean'
+                'enable_plugin_dictionary' => 'boolean',
             ]
         );
     }
@@ -26,6 +26,7 @@ class DictionaryPlugin extends Plugin
     public static function create()
     {
         static $result = null;
+
         return $result ? $result : $result = new self();
     }
 

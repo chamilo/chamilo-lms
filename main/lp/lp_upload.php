@@ -2,7 +2,9 @@
 /* For licensing terms, see /license.txt */
 /**
  * Script managing the learnpath upload. To best treat the uploaded file, make sure we can identify it.
+ *
  * @package chamilo.learnpath
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
@@ -30,6 +32,7 @@ if (isset($_POST) && $is_error) {
     Display::addFlash(
         Display::return_message(get_lang('UplFileTooBig'))
     );
+
     return false;
     unset($_FILES['user_file']);
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES['user_file']['name'])) {
@@ -101,6 +104,7 @@ if (isset($_POST) && $is_error) {
         case '':
         default:
             Display::addFlash(Display::return_message(get_lang('ScormUnknownPackageFormat'), 'warning'));
+
             return false;
             break;
     }
@@ -179,6 +183,7 @@ if (isset($_POST) && $is_error) {
             Display::addFlash(
                 Display::return_message(get_lang('ScormUnknownPackageFormat'), 'warning')
             );
+
             return false;
             break;
     }

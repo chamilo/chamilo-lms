@@ -6,7 +6,7 @@ namespace Chamilo\FaqBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class CategoryRepository
+ * Class CategoryRepository.
  *
  * @package Genj\FaqBundle\Entity
  */
@@ -64,7 +64,6 @@ class CategoryRepository extends EntityRepository
 
         return $query->getOneOrNullResult();
     }
-
 
     /**
      * @return Category|null

@@ -1,25 +1,26 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-use Symfony\Component\Filesystem\Filesystem;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\SystemTemplate;
+use ChamiloSession as Session;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Library of the settings.php file
+ * Library of the settings.php file.
  *
  * @author Julio Montoya <gugli100@gmail.com>
  * @author Guillaume Viguier <guillaume@viguierjust.com>
  *
  * @since Chamilo 1.8.7
+ *
  * @package chamilo.admin
  */
-
 define('CSS_UPLOAD_PATH', api_get_path(SYS_APP_PATH).'Resources/public/css/themes/');
 
 /**
- * This function allows easy activating and inactivating of regions
+ * This function allows easy activating and inactivating of regions.
+ *
  * @author Julio Montoya <gugli100@gmail.com> Beeznest 2012
  */
 function handleRegions()
@@ -117,8 +118,10 @@ function handleExtensions()
 }
 
 /**
- * This function allows easy activating and inactivating of plugins
+ * This function allows easy activating and inactivating of plugins.
+ *
  * @todo: a similar function needs to be written to activate or inactivate additional tools.
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Julio Montoya <gugli100@gmail.com> Beeznest 2012
  */
@@ -211,7 +214,7 @@ function handlePlugins()
                         'class' => 'btn btn-default ajax',
                         'data-title' => $plugin_info['title'],
                         'data-size' => 'lg',
-                        '_target' => '_blank'
+                        '_target' => '_blank',
                     ]
                 );
             }
@@ -225,7 +228,7 @@ function handlePlugins()
                         'class' => 'btn btn-default ajax',
                         'data-title' => $plugin_info['title'],
                         'data-size' => 'lg',
-                        '_target' => '_blank'
+                        '_target' => '_blank',
                     ]
                 );
             }
@@ -254,7 +257,8 @@ function handlePlugins()
 }
 
 /**
- * This function allows the platform admin to choose the default stylesheet
+ * This function allows the platform admin to choose the default stylesheet.
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Julio Montoya <gugli100@gmail.com>, Chamilo
  */
@@ -391,7 +395,7 @@ function handleStylesheets()
     if ($is_style_changeable) {
         $logoGroup = [
             $logoForm->addButtonUpload(get_lang('Upload'), 'logo_upload', true),
-            $logoForm->addButtonCancel(get_lang('Reset'), 'logo_reset', true)
+            $logoForm->addButtonCancel(get_lang('Reset'), 'logo_reset', true),
         ];
 
         $logoForm->addGroup($logoGroup);
@@ -402,8 +406,8 @@ function handleStylesheets()
             unlink($dir.$newLogoFileName);
             echo Display::return_message(get_lang('ResetToTheOriginalLogo'));
             echo '<script>'
-                . '$("#header-logo").attr("src","'.$url.$logoFileName.'");'
-            . '</script>';
+                .'$("#header-logo").attr("src","'.$url.$logoFileName.'");'
+            .'</script>';
         }
     } elseif (isset($_POST['logo_upload'])) {
         $logoForm->addRule(
@@ -435,8 +439,8 @@ function handleStylesheets()
                 if ($status) {
                     echo Display::return_message(get_lang('NewLogoUpdated'));
                     echo '<script>'
-                         . '$("#header-logo").attr("src","'.$url.$newLogoFileName.'");'
-                         . '</script>';
+                         .'$("#header-logo").attr("src","'.$url.$newLogoFileName.'");'
+                         .'</script>';
                 } else {
                     echo Display::return_message('Error - '.get_lang('UplNoFileUploaded'), 'error');
                 }
@@ -469,7 +473,7 @@ function handleStylesheets()
         $group = [
             $form_change->addButtonSave(get_lang('SaveSettings'), 'save', true),
             $form_change->addButtonPreview(get_lang('Preview'), 'preview', true),
-            $form_change->addButtonDownload(get_lang('Download'), 'download', true)
+            $form_change->addButtonDownload(get_lang('Download'), 'download', true),
         ];
 
         $form_change->addGroup($group);
@@ -486,12 +490,12 @@ function handleStylesheets()
         // Little hack to update the logo image in update form when submiting
         if (isset($_POST['logo_reset'])) {
             echo '<script>'
-                    . '$("#header-logo-custom").attr("src","'.$url.$logoFileName.'");'
-                . '</script>';
+                    .'$("#header-logo-custom").attr("src","'.$url.$logoFileName.'");'
+                .'</script>';
         } elseif (isset($_POST['logo_upload']) && is_file($dir.$newLogoFileName)) {
             echo '<script>'
-                    . '$("#header-logo-custom").attr("src","'.$url.$newLogoFileName.'");'
-                . '</script>';
+                    .'$("#header-logo-custom").attr("src","'.$url.$newLogoFileName.'");'
+                .'</script>';
         }
     } else {
         $form_change->freeze();
@@ -499,12 +503,17 @@ function handleStylesheets()
 }
 
 /**
- * Creates the folder (if needed) and uploads the stylesheet in it
- * @param array $values the values of the form
+ * Creates the folder (if needed) and uploads the stylesheet in it.
+ *
+ * @param array $values  the values of the form
  * @param array $picture the values of the uploaded file
+ *
  * @return bool
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ *
  * @version May 2008
+ *
  * @since v1.8.5
  */
 function uploadStylesheet($values, $picture)
@@ -660,7 +669,8 @@ function storeRegions()
 }
 
 /**
- * This function allows easy activating and inactivating of plugins
+ * This function allows easy activating and inactivating of plugins.
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
 function storePlugins()
@@ -689,7 +699,8 @@ function storePlugins()
 }
 
 /**
- * This function allows the platform admin to choose which should be the default stylesheet
+ * This function allows the platform admin to choose which should be the default stylesheet.
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
 function storeStylesheets()
@@ -704,14 +715,17 @@ function storeStylesheets()
             api_get_current_access_url_id()
         );
     }
+
     return true;
 }
 
 /**
  * This function checks if the given style is a recognize style that exists in the css directory as
  * a standalone directory.
+ *
  * @param string $style
- * @return bool     True if this style is recognized, false otherwise
+ *
+ * @return bool True if this style is recognized, false otherwise
  */
 function isStyle($style)
 {
@@ -722,7 +736,8 @@ function isStyle($style)
 
 /**
  * Search options
- * TODO: support for multiple site. aka $_configuration['access_url'] == 1
+ * TODO: support for multiple site. aka $_configuration['access_url'] == 1.
+ *
  * @author Marco Villegas <marvil07@gmail.com>
  */
 function handleSearch()
@@ -773,7 +788,7 @@ function handleSearch()
             'search_show_unlinked_results',
             [
                 get_lang('SearchShowUnlinkedResultsTitle'),
-                get_lang('SearchShowUnlinkedResultsComment')
+                get_lang('SearchShowUnlinkedResultsComment'),
             ],
             null,
             false
@@ -878,11 +893,13 @@ function handleSearch()
 }
 
 /**
- * Wrapper for the templates
+ * Wrapper for the templates.
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @author Julio Montoya.
+ *
  * @version August 2008
+ *
  * @since v1.8.6
  */
 function handleTemplates()
@@ -934,7 +951,9 @@ function handleTemplates()
  * Display a sortable table with all the templates that the platform administrator has defined.
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ *
  * @version August 2008
+ *
  * @since v1.8.6
  */
 function displayTemplates()
@@ -959,10 +978,12 @@ function displayTemplates()
 /**
  * Gets the number of templates that are defined by the platform admin.
  *
- * @return integer
+ * @return int
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ *
  * @version August 2008
+ *
  * @since v1.8.6
  */
 function getNumberOfTemplates()
@@ -982,14 +1003,17 @@ function getNumberOfTemplates()
 /**
  * Gets all the template data for the sortable table.
  *
- * @param integer $from the start of the limit statement
- * @param integer $number_of_items the number of elements that have to be retrieved from the database
- * @param integer $column the column that is
- * @param string $direction the sorting direction (ASC or DESC�
+ * @param int    $from            the start of the limit statement
+ * @param int    $number_of_items the number of elements that have to be retrieved from the database
+ * @param int    $column          the column that is
+ * @param string $direction       the sorting direction (ASC or DESC�
+ *
  * @return array
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ *
  * @version August 2008
+ *
  * @since v1.8.6
  */
 function getTemplateData($from, $number_of_items, $column, $direction)
@@ -1012,30 +1036,37 @@ function getTemplateData($from, $number_of_items, $column, $direction)
 }
 
 /**
- * display the edit and delete icons in the sortable table
+ * display the edit and delete icons in the sortable table.
  *
- * @param integer $id the id of the template
+ * @param int $id the id of the template
+ *
  * @return string code for the link to edit and delete the template
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ *
  * @version August 2008
+ *
  * @since v1.8.6
  */
 function actionsFilter($id)
 {
     $return = '<a href="settings.php?category=Templates&action=edit&id='.Security::remove_XSS($id).'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>';
     $return .= '<a href="settings.php?category=Templates&action=delete&id='.Security::remove_XSS($id).'" onClick="javascript:if(!confirm('."'".get_lang('ConfirmYourChoice')."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
+
     return $return;
 }
 
 /**
- * Display the image of the template in the sortable table
+ * Display the image of the template in the sortable table.
  *
  * @param string $image the image
+ *
  * @return string code for the image
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ *
  * @version August 2008
+ *
  * @since v1.8.6
  */
 function searchImageFilter($image)
@@ -1049,10 +1080,12 @@ function searchImageFilter($image)
 
 /**
  * Add (or edit) a template. This function displays the form and also takes
- * care of uploading the image and storing the information in the database
+ * care of uploading the image and storing the information in the database.
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ *
  * @version August 2008
+ *
  * @since v1.8.6
  */
 function addEditTemplate()
@@ -1229,12 +1262,14 @@ function addEditTemplate()
 }
 
 /**
- * Delete a template
+ * Delete a template.
  *
- * @param integer $id the id of the template that has to be deleted
+ * @param int $id the id of the template that has to be deleted
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ *
  * @version August 2008
+ *
  * @since v1.8.6
  */
 function deleteTemplate($id)
@@ -1260,9 +1295,11 @@ function deleteTemplate($id)
 /**
  * Returns the list of timezone identifiers used to populate the select
  * This function is called through a call_user_func() in the generate_settings_form function.
+ *
  * @return array List of timezone identifiers
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ *
  * @since Chamilo 1.8.7
  */
 function select_timezone_value()
@@ -1273,6 +1310,7 @@ function select_timezone_value()
 /**
  * Returns an array containing the list of options used to populate the gradebook_number_decimals variable
  * This function is called through a call_user_func() in the generate_settings_form function.
+ *
  * @return array List of gradebook_number_decimals options
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
@@ -1283,7 +1321,8 @@ function select_gradebook_number_decimals()
 }
 
 /**
- * Get the options for a select element to select gradebook default grade model
+ * Get the options for a select element to select gradebook default grade model.
+ *
  * @return array
  */
 function select_gradebook_default_grade_model_id()
@@ -1306,11 +1345,11 @@ function select_gradebook_default_grade_model_id()
  * @param array $settings
  * @param array $settings_by_access_list
  *
- * @return FormValidator
- *
  * @throws \Doctrine\ORM\ORMException
  * @throws \Doctrine\ORM\OptimisticLockException
  * @throws \Doctrine\ORM\TransactionRequiredException
+ *
+ * @return FormValidator
  */
 function generateSettingsForm($settings, $settings_by_access_list)
 {
@@ -1431,7 +1470,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         [
                             get_lang($row['title']),
                             get_lang($row['comment']),
-                            get_lang('MB')
+                            get_lang('MB'),
                         ],
                         ['maxlength' => '8', 'aria-label' => get_lang($row['title'])]
                     );
@@ -1461,7 +1500,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         $row['variable'],
                         [
                             get_lang($row['title']),
-                            get_lang($row['comment'])
+                            get_lang($row['comment']),
                         ],
                         $hideme
                     );
@@ -1503,7 +1542,7 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         'textarea',
                         $row['variable'],
                         [get_lang($row['title']),
-                        get_lang($row['comment'])],
+                        get_lang($row['comment']), ],
                         ['rows' => '10', 'id' => $row['variable']],
                         $hideme
                     );
@@ -1678,12 +1717,15 @@ function generateSettingsForm($settings, $settings_by_access_list)
     $form->addHtml('<div class="bottom_actions">');
     $form->addButtonSave(get_lang('SaveSettings'));
     $form->addHtml('</div>');
+
     return $form;
 }
 
 /**
- * Searches a platform setting in all categories except from the Plugins category
+ * Searches a platform setting in all categories except from the Plugins category.
+ *
  * @param string $search
+ *
  * @return array
  */
 function searchSetting($search)
@@ -1726,12 +1768,15 @@ function searchSetting($search)
             }
         }
     }
+
     return $settings;
 }
 /**
- * Helper function to generates a form elements group
- * @param object $form The form where the elements group has to be added
- * @param array $values Values to browse through
+ * Helper function to generates a form elements group.
+ *
+ * @param object $form   The form where the elements group has to be added
+ * @param array  $values Values to browse through
+ *
  * @return array
  */
 function formGenerateElementsGroup($form, $values = [], $elementName)
@@ -1743,11 +1788,13 @@ function formGenerateElementsGroup($form, $values = [], $elementName)
             $group[] = $element;
         }
     }
+
     return $group;
 }
 /**
- * Helper function with allowed file types for CSS
- * @return  array Array of file types (no indexes)
+ * Helper function with allowed file types for CSS.
+ *
+ * @return array Array of file types (no indexes)
  */
 function getAllowedFileTypes()
 {
@@ -1764,15 +1811,16 @@ function getAllowedFileTypes()
         'svg',
         'webp',
         'woff',
-        'woff2'
+        'woff2',
     ];
+
     return $allowedFiles;
 }
 /**
- * Helper function to set settings in the database
- * @param   array   $parameters     List of values
- * @param   int     $accessUrl      The current access URL
- * @return  void
+ * Helper function to set settings in the database.
+ *
+ * @param array $parameters List of values
+ * @param int   $accessUrl  The current access URL
  */
 function setConfigurationSettingsInDatabase($parameters, $accessUrl)
 {
@@ -1784,9 +1832,9 @@ function setConfigurationSettingsInDatabase($parameters, $accessUrl)
 }
 
 /**
- * Helper function to show the status of the search settings table
- * @param   array   $data   Data to show
- * @return void
+ * Helper function to show the status of the search settings table.
+ *
+ * @param array $data Data to show
  */
 function showSearchSettingsTable($data)
 {
@@ -1797,8 +1845,7 @@ function showSearchSettingsTable($data)
     echo $table->display();
 }
 /**
- * Helper function to show status table for each command line tool installed
- * @return void
+ * Helper function to show status table for each command line tool installed.
  */
 function showSearchToolsStatusTable()
 {
@@ -1834,9 +1881,9 @@ function showSearchToolsStatusTable()
     }
 }
 /**
- * Helper function to generate and show CSS Zip download message
- * @param   string $style Style path
- * @return void
+ * Helper function to generate and show CSS Zip download message.
+ *
+ * @param string $style Style path
  */
 function generateCSSDownloadLink($style)
 {
@@ -1862,7 +1909,8 @@ function generateCSSDownloadLink($style)
 }
 
 /**
- * Helper function to tell if the style is changeable in the current URL
+ * Helper function to tell if the style is changeable in the current URL.
+ *
  * @return bool $changeable Whether the style can be changed in this URL or not
  */
 function isStyleChangeable()
@@ -1878,12 +1926,15 @@ function isStyleChangeable()
     } else {
         $changeable = true;
     }
+
     return $changeable;
 }
 
 /**
- * Get all settings of one category prepared for display in admin/settings.php
+ * Get all settings of one category prepared for display in admin/settings.php.
+ *
  * @param string $category
+ *
  * @return array
  */
 function getCategorySettings($category = '')
@@ -1934,6 +1985,6 @@ function getCategorySettings($category = '')
 
     return [
         'settings' => $settings,
-        'settings_by_access_list' => $settings_by_access_list
+        'settings_by_access_list' => $settings_by_access_list,
     ];
 }

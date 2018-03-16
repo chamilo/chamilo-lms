@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CDropboxCategory
+ * CDropboxCategory.
  *
  * @ORM\Table(
  *  name="c_dropbox_category",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CDropboxCategory
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -29,14 +29,14 @@ class CDropboxCategory
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="cat_id", type="integer")
      */
@@ -50,38 +50,38 @@ class CDropboxCategory
     private $catName;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="received", type="boolean", nullable=false)
      */
     private $received;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="sent", type="boolean", nullable=false)
      */
     private $sent;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
     private $userId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
 
-
     /**
-     * Set catName
+     * Set catName.
      *
      * @param string $catName
+     *
      * @return CDropboxCategory
      */
     public function setCatName($catName)
@@ -92,7 +92,7 @@ class CDropboxCategory
     }
 
     /**
-     * Get catName
+     * Get catName.
      *
      * @return string
      */
@@ -102,9 +102,10 @@ class CDropboxCategory
     }
 
     /**
-     * Set received
+     * Set received.
      *
-     * @param boolean $received
+     * @param bool $received
+     *
      * @return CDropboxCategory
      */
     public function setReceived($received)
@@ -115,9 +116,9 @@ class CDropboxCategory
     }
 
     /**
-     * Get received
+     * Get received.
      *
-     * @return boolean
+     * @return bool
      */
     public function getReceived()
     {
@@ -125,9 +126,10 @@ class CDropboxCategory
     }
 
     /**
-     * Set sent
+     * Set sent.
      *
-     * @param boolean $sent
+     * @param bool $sent
+     *
      * @return CDropboxCategory
      */
     public function setSent($sent)
@@ -138,9 +140,9 @@ class CDropboxCategory
     }
 
     /**
-     * Get sent
+     * Get sent.
      *
-     * @return boolean
+     * @return bool
      */
     public function getSent()
     {
@@ -148,9 +150,10 @@ class CDropboxCategory
     }
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return CDropboxCategory
      */
     public function setUserId($userId)
@@ -161,9 +164,9 @@ class CDropboxCategory
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -171,9 +174,10 @@ class CDropboxCategory
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return CDropboxCategory
      */
     public function setSessionId($sessionId)
@@ -184,9 +188,9 @@ class CDropboxCategory
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -194,9 +198,10 @@ class CDropboxCategory
     }
 
     /**
-     * Set catId
+     * Set catId.
      *
-     * @param integer $catId
+     * @param int $catId
+     *
      * @return CDropboxCategory
      */
     public function setCatId($catId)
@@ -207,9 +212,9 @@ class CDropboxCategory
     }
 
     /**
-     * Get catId
+     * Get catId.
      *
-     * @return integer
+     * @return int
      */
     public function getCatId()
     {
@@ -217,9 +222,10 @@ class CDropboxCategory
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CDropboxCategory
      */
     public function setCId($cId)
@@ -230,9 +236,9 @@ class CDropboxCategory
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

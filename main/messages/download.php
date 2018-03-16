@@ -9,7 +9,6 @@
  *
  * @package chamilo.messages
  */
-
 session_cache_limiter('public');
 
 require_once __DIR__.'/../inc/global.inc.php';

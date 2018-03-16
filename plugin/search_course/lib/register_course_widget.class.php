@@ -20,6 +20,7 @@ class RegisterCourseWidget
      *
      * @param string $key
      * @param object $default
+     *
      * @return string
      */
     public static function post($key, $default = '')
@@ -32,6 +33,7 @@ class RegisterCourseWidget
      *
      * @param string $key
      * @param object $default
+     *
      * @return string
      */
     public static function get($key, $default = '')
@@ -40,7 +42,6 @@ class RegisterCourseWidget
     }
 
     /**
-     *
      * @return RegisterCourseWidget
      */
     public static function factory()
@@ -91,7 +92,8 @@ class RegisterCourseWidget
      *
      * @param string $course_code
      * @param string $registration_code
-     * @param int $user_id
+     * @param int    $user_id
+     *
      * @return bool
      */
     public function subscribe_user($course_code, $registration_code = '', $user_id = null)
@@ -107,7 +109,7 @@ class RegisterCourseWidget
             $user_id = $_user['user_id'];
         }
 
-        return (bool)CourseManager::add_user_to_course($user_id, $course_code);
+        return (bool) CourseManager::add_user_to_course($user_id, $course_code);
     }
 
     /**

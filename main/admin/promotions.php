@@ -4,7 +4,6 @@
 /**
  *  @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -135,14 +134,14 @@ switch ($action) {
             exit;
         }
 
-        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
+        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
         $form = $promotion->return_form($url, 'add');
 
         // The validation or display
         if ($form->validate()) {
             if ($check) {
                 $values = $form->exportValues();
-                $res    = $promotion->save($values);
+                $res = $promotion->save($values);
                 if ($res) {
                     echo Display::return_message(get_lang('ItemAdded'), 'confirm');
                 }
@@ -159,14 +158,14 @@ switch ($action) {
         break;
     case 'edit':
         //Editing
-        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
+        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
         $form = $promotion->return_form($url, 'edit');
 
         // The validation or display
         if ($form->validate()) {
             if ($check) {
                 $values = $form->exportValues();
-                $res    = $promotion->update($values);
+                $res = $promotion->update($values);
                 $promotion->update_all_sessions_status_by_promotion_id($values['id'], $values['status']);
                 if ($res) {
                     echo Display::return_message(get_lang('PromotionUpdated').': '.$values['name'], 'confirm');

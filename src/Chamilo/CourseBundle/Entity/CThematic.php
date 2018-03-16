@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CThematic
+ * CThematic.
  *
  * @ORM\Table(
  *  name="c_thematic",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CThematic
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -29,14 +29,14 @@ class CThematic
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
@@ -57,30 +57,31 @@ class CThematic
     private $content;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="display_order", type="integer", nullable=false)
      */
     private $displayOrder;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return CThematic
      */
     public function setTitle($title)
@@ -91,7 +92,7 @@ class CThematic
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -101,9 +102,10 @@ class CThematic
     }
 
     /**
-     * Set content
+     * Set content.
      *
      * @param string $content
+     *
      * @return CThematic
      */
     public function setContent($content)
@@ -114,7 +116,7 @@ class CThematic
     }
 
     /**
-     * Get content
+     * Get content.
      *
      * @return string
      */
@@ -124,9 +126,10 @@ class CThematic
     }
 
     /**
-     * Set displayOrder
+     * Set displayOrder.
      *
-     * @param integer $displayOrder
+     * @param int $displayOrder
+     *
      * @return CThematic
      */
     public function setDisplayOrder($displayOrder)
@@ -137,9 +140,9 @@ class CThematic
     }
 
     /**
-     * Get displayOrder
+     * Get displayOrder.
      *
-     * @return integer
+     * @return int
      */
     public function getDisplayOrder()
     {
@@ -147,9 +150,10 @@ class CThematic
     }
 
     /**
-     * Set active
+     * Set active.
      *
-     * @param boolean $active
+     * @param bool $active
+     *
      * @return CThematic
      */
     public function setActive($active)
@@ -160,9 +164,9 @@ class CThematic
     }
 
     /**
-     * Get active
+     * Get active.
      *
-     * @return boolean
+     * @return bool
      */
     public function getActive()
     {
@@ -170,9 +174,10 @@ class CThematic
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return CThematic
      */
     public function setSessionId($sessionId)
@@ -183,9 +188,9 @@ class CThematic
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -193,9 +198,10 @@ class CThematic
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CThematic
      */
     public function setId($id)
@@ -206,9 +212,9 @@ class CThematic
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -216,9 +222,10 @@ class CThematic
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CThematic
      */
     public function setCId($cId)
@@ -229,9 +236,9 @@ class CThematic
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

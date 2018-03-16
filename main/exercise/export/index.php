@@ -2,10 +2,11 @@
 /* For licensing terms, see /license.txt */
 /**
  * @package chamilo.exercise
+ *
  * @author Claro Team <cvs@claroline.net>
  */
 /**
- * Redirection
+ * Redirection.
  */
 header("Location: ../../../");
 exit();

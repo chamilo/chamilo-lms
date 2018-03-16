@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -18,7 +19,7 @@ if (!$isDrhOfCourse) {
 }
 $interbreadcrumb[] = [
     'url' => Category::getUrl(),
-    'name' => get_lang('Gradebook')
+    'name' => get_lang('Gradebook'),
 ];
 
 $categoryId = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
@@ -32,12 +33,12 @@ $alllinks = $category[0]->get_links($userId, true);
 if (!empty($categoryId)) {
     $addparams = [
         'userid' => $userId,
-        'selectcat' => $categoryId
+        'selectcat' => $categoryId,
     ];
 } else {
     $addparams = [
         'userid' => $userId,
-        'selecteval' => $evaluationId
+        'selecteval' => $evaluationId,
     ];
 }
 
@@ -105,7 +106,7 @@ $actions = '<div class="actions">';
 if (!empty($categoryId)) {
     $interbreadcrumb[] = [
         'url' => 'gradebook_flatview.php?selectcat='.$categoryId.'&'.api_get_cidreq(),
-        'name' => get_lang('FlatView')
+        'name' => get_lang('FlatView'),
     ];
     $actions .= '<a href=gradebook_flatview.php?selectcat='.$categoryId.'&'.api_get_cidreq().'>'.
         Display::return_icon(
@@ -120,14 +121,14 @@ if (!empty($categoryId)) {
 if (!empty($evaluationId)) {
     $interbreadcrumb[] = [
         'url' => 'gradebook_view_result.php?selecteval='.$evaluationId.'&'.api_get_cidreq(),
-        'name' => get_lang('ViewResult')
+        'name' => get_lang('ViewResult'),
     ];
     $actions .= '<a href="gradebook_view_result.php?selecteval='.$evaluationId.'&'.api_get_cidreq().'">
 	'.Display::return_icon('back.png', get_lang('BackToEvaluation'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 $actions .= '<a href="'.api_get_self().'?exportpdf=&userid='.$userId.'&selectcat='.$category[0]->get_id().'&'.api_get_cidreq().'" target="_blank">
-' . Display::return_icon('pdf.png', get_lang('ExportPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+'.Display::return_icon('pdf.png', get_lang('ExportPDF'), '', ICON_SIZE_MEDIUM).'</a>';
 
 $actions .= '</div>';
 

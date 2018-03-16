@@ -4,22 +4,23 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * UniqueAnswerImage toolbar configuration
+ * UniqueAnswerImage toolbar configuration.
  *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class UniqueAnswerImage extends Basic
 {
     /**
-     * Get the toolbar config
+     * Get the toolbar config.
+     *
      * @return array
      */
     public function getConfig()
     {
         $config['toolbarGroups'] = [
             '/',
-            ['name' => 'basicstyles', 'groups' =>['basicstyles', 'cleanup',]],
-            ['name' => 'paragraph', 'groups' =>['list', 'indent', 'blocks', 'align']],
+            ['name' => 'basicstyles', 'groups' => ['basicstyles', 'cleanup']],
+            ['name' => 'paragraph', 'groups' => ['list', 'indent', 'blocks', 'align']],
             ['name' => 'links'],
             ['name' => 'insert'],
             '/',
@@ -27,7 +28,7 @@ class UniqueAnswerImage extends Basic
             ['name' => 'colors'],
             ['name' => 'tools'],
             ['name' => 'others'],
-            ['name' => 'mode']
+            ['name' => 'mode'],
         ];
 
         $config['fullPage'] = true;

@@ -2,7 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
 
@@ -68,7 +69,7 @@ if (isset($_POST['submit_button'])) {
 $interbreadcrumb[] = ['url' => Category::getUrl(), 'name' => get_lang('Gradebook')];
 $interbreadcrumb[] = [
     'url' => 'gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq(),
-    'name' => get_lang('ViewResult')
+    'name' => get_lang('ViewResult'),
 ];
 Display :: display_header(get_lang('AddUserToEval'));
 if (isset($_GET['erroroneuser'])) {

@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UserApiKey
+ * UserApiKey.
  *
  * @ORM\Table(name="user_api_key", indexes={@ORM\Index(name="idx_user_api_keys_user", columns={"user_id"})})
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class UserApiKey
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -23,7 +23,7 @@ class UserApiKey
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
@@ -79,9 +79,10 @@ class UserApiKey
     private $description;
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return UserApiKey
      */
     public function setUserId($userId)
@@ -92,9 +93,9 @@ class UserApiKey
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -102,9 +103,10 @@ class UserApiKey
     }
 
     /**
-     * Set apiKey
+     * Set apiKey.
      *
      * @param string $apiKey
+     *
      * @return UserApiKey
      */
     public function setApiKey($apiKey)
@@ -115,7 +117,7 @@ class UserApiKey
     }
 
     /**
-     * Get apiKey
+     * Get apiKey.
      *
      * @return string
      */
@@ -125,9 +127,10 @@ class UserApiKey
     }
 
     /**
-     * Set apiService
+     * Set apiService.
      *
      * @param string $apiService
+     *
      * @return UserApiKey
      */
     public function setApiService($apiService)
@@ -138,7 +141,7 @@ class UserApiKey
     }
 
     /**
-     * Get apiService
+     * Get apiService.
      *
      * @return string
      */
@@ -148,9 +151,10 @@ class UserApiKey
     }
 
     /**
-     * Set apiEndPoint
+     * Set apiEndPoint.
      *
      * @param string $apiEndPoint
+     *
      * @return UserApiKey
      */
     public function setApiEndPoint($apiEndPoint)
@@ -161,7 +165,7 @@ class UserApiKey
     }
 
     /**
-     * Get apiEndPoint
+     * Get apiEndPoint.
      *
      * @return string
      */
@@ -171,9 +175,10 @@ class UserApiKey
     }
 
     /**
-     * Set createdDate
+     * Set createdDate.
      *
      * @param \DateTime $createdDate
+     *
      * @return UserApiKey
      */
     public function setCreatedDate($createdDate)
@@ -184,7 +189,7 @@ class UserApiKey
     }
 
     /**
-     * Get createdDate
+     * Get createdDate.
      *
      * @return \DateTime
      */
@@ -194,9 +199,10 @@ class UserApiKey
     }
 
     /**
-     * Set validityStartDate
+     * Set validityStartDate.
      *
      * @param \DateTime $validityStartDate
+     *
      * @return UserApiKey
      */
     public function setValidityStartDate($validityStartDate)
@@ -207,7 +213,7 @@ class UserApiKey
     }
 
     /**
-     * Get validityStartDate
+     * Get validityStartDate.
      *
      * @return \DateTime
      */
@@ -217,9 +223,10 @@ class UserApiKey
     }
 
     /**
-     * Set validityEndDate
+     * Set validityEndDate.
      *
      * @param \DateTime $validityEndDate
+     *
      * @return UserApiKey
      */
     public function setValidityEndDate($validityEndDate)
@@ -230,7 +237,7 @@ class UserApiKey
     }
 
     /**
-     * Get validityEndDate
+     * Get validityEndDate.
      *
      * @return \DateTime
      */
@@ -240,9 +247,10 @@ class UserApiKey
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return UserApiKey
      */
     public function setDescription($description)
@@ -253,7 +261,7 @@ class UserApiKey
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -263,9 +271,9 @@ class UserApiKey
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

@@ -2,8 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Show information about the OpenBadge class
+ * Show information about the OpenBadge class.
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.badge
  */
 header('Content-Type: application/json');

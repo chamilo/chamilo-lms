@@ -3,7 +3,6 @@
 
 namespace Chamilo\ThemeBundle\Controller;
 
-use Chamilo\ThemeBundle\Event\SidebarMenuEvent;
 use Chamilo\ThemeBundle\Event\SidebarMenuKnpEvent;
 use Chamilo\ThemeBundle\Event\ThemeEvents;
 use Chamilo\ThemeBundle\Model\MenuItemInterface;
@@ -12,8 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Controller to handle breadcrumb display inside the layout
- *
+ * Controller to handle breadcrumb display inside the layout.
  */
 class BreadcrumbController extends Controller
 {
@@ -28,7 +26,6 @@ class BreadcrumbController extends Controller
      * @param string  $title
      *
      * @return Response
-     *
      */
     public function breadcrumbAction(Request $request, $title = '')
     {
@@ -65,10 +62,9 @@ class BreadcrumbController extends Controller
 
         return $this->render('ChamiloThemeBundle:Breadcrumb:breadcrumb.html.twig', [
             'active' => $list,
-            'title'  => $title
+            'title' => $title,
         ]);
     }
-
 
     /**
      * @return EventDispatcher

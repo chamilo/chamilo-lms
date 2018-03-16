@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CAttendanceSheetLog
+ * CAttendanceSheetLog.
  *
  * @ORM\Table(
  *  name="c_attendance_sheet_log",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CAttendanceSheetLog
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,21 +28,21 @@ class CAttendanceSheetLog
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="attendance_id", type="integer", nullable=false)
      */
@@ -63,7 +63,7 @@ class CAttendanceSheetLog
     private $lasteditType;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="lastedit_user_id", type="integer", nullable=false)
      */
@@ -77,9 +77,10 @@ class CAttendanceSheetLog
     private $calendarDateValue;
 
     /**
-     * Set attendanceId
+     * Set attendanceId.
      *
-     * @param integer $attendanceId
+     * @param int $attendanceId
+     *
      * @return CAttendanceSheetLog
      */
     public function setAttendanceId($attendanceId)
@@ -90,9 +91,9 @@ class CAttendanceSheetLog
     }
 
     /**
-     * Get attendanceId
+     * Get attendanceId.
      *
-     * @return integer
+     * @return int
      */
     public function getAttendanceId()
     {
@@ -100,9 +101,10 @@ class CAttendanceSheetLog
     }
 
     /**
-     * Set lasteditDate
+     * Set lasteditDate.
      *
      * @param \DateTime $lasteditDate
+     *
      * @return CAttendanceSheetLog
      */
     public function setLasteditDate($lasteditDate)
@@ -113,7 +115,7 @@ class CAttendanceSheetLog
     }
 
     /**
-     * Get lasteditDate
+     * Get lasteditDate.
      *
      * @return \DateTime
      */
@@ -123,9 +125,10 @@ class CAttendanceSheetLog
     }
 
     /**
-     * Set lasteditType
+     * Set lasteditType.
      *
      * @param string $lasteditType
+     *
      * @return CAttendanceSheetLog
      */
     public function setLasteditType($lasteditType)
@@ -136,7 +139,7 @@ class CAttendanceSheetLog
     }
 
     /**
-     * Get lasteditType
+     * Get lasteditType.
      *
      * @return string
      */
@@ -146,9 +149,10 @@ class CAttendanceSheetLog
     }
 
     /**
-     * Set lasteditUserId
+     * Set lasteditUserId.
      *
-     * @param integer $lasteditUserId
+     * @param int $lasteditUserId
+     *
      * @return CAttendanceSheetLog
      */
     public function setLasteditUserId($lasteditUserId)
@@ -159,9 +163,9 @@ class CAttendanceSheetLog
     }
 
     /**
-     * Get lasteditUserId
+     * Get lasteditUserId.
      *
-     * @return integer
+     * @return int
      */
     public function getLasteditUserId()
     {
@@ -169,9 +173,10 @@ class CAttendanceSheetLog
     }
 
     /**
-     * Set calendarDateValue
+     * Set calendarDateValue.
      *
      * @param \DateTime $calendarDateValue
+     *
      * @return CAttendanceSheetLog
      */
     public function setCalendarDateValue($calendarDateValue)
@@ -182,7 +187,7 @@ class CAttendanceSheetLog
     }
 
     /**
-     * Get calendarDateValue
+     * Get calendarDateValue.
      *
      * @return \DateTime
      */
@@ -192,9 +197,10 @@ class CAttendanceSheetLog
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CAttendanceSheetLog
      */
     public function setId($id)
@@ -205,9 +211,9 @@ class CAttendanceSheetLog
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -215,9 +221,10 @@ class CAttendanceSheetLog
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CAttendanceSheetLog
      */
     public function setCId($cId)
@@ -228,9 +235,9 @@ class CAttendanceSheetLog
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

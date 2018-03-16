@@ -4,7 +4,7 @@
 use ChamiloSession as Session;
 
 /**
- * Homepage script for the documents tool
+ * Homepage script for the documents tool.
  *
  * This script allows the user to manage files and directories on a remote http
  * server.
@@ -28,7 +28,6 @@ use ChamiloSession as Session;
  *
  * @package chamilo.document
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $allowDownloadDocumentsByApiKey = api_get_setting('allow_download_documents_by_api_key') === 'true';
@@ -168,11 +167,11 @@ if (!empty($groupId)) {
             // Only courseadmin or group members (members + tutors) allowed
             $interbreadcrumb[] = [
                 'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
-                'name' => get_lang('Groups')
+                'name' => get_lang('Groups'),
             ];
             $interbreadcrumb[] = [
                 'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-                'name' => get_lang('GroupSpace').' '.$group_properties['name']
+                'name' => get_lang('GroupSpace').' '.$group_properties['name'],
             ];
             //they are allowed to upload
             $group_member_with_upload_rights = true;
@@ -183,11 +182,11 @@ if (!empty($groupId)) {
         // Documents are public
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
-            'name' => get_lang('Groups')
+            'name' => get_lang('Groups'),
         ];
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-            'name' => get_lang('GroupSpace').' '.$group_properties['name']
+            'name' => get_lang('GroupSpace').' '.$group_properties['name'],
         ];
 
         // Allowed to upload?
@@ -805,18 +804,18 @@ $image_files_only = '';
 if ($is_certificate_mode) {
     $interbreadcrumb[] = [
         'url' => '../gradebook/index.php?'.api_get_cidreq(),
-        'name' => get_lang('Gradebook')
+        'name' => get_lang('Gradebook'),
     ];
 } else {
     if ((isset($_GET['id']) && $_GET['id'] != 0) || isset($_GET['curdirpath']) || isset($_GET['createdir'])) {
         $interbreadcrumb[] = [
             'url' => 'document.php?'.api_get_cidreq(),
-            'name' => get_lang('Documents')
+            'name' => get_lang('Documents'),
         ];
     } else {
         $interbreadcrumb[] = [
             'url' => '#',
-            'name' => get_lang('Documents')
+            'name' => get_lang('Documents'),
         ];
     }
 }
@@ -833,7 +832,7 @@ if (empty($document_data['parents'])) {
         if ($document_data['filetype'] != 'link') {
             $interbreadcrumb[] = [
                 'url' => '#',
-                'name' => $document_data['title']
+                'name' => $document_data['title'],
             ];
         }
     }
@@ -919,7 +918,7 @@ if (!empty($documentAndFolders)) {
                 $params = [
                     'url' => $document_data['direct_url'],
                     'extension' => $extension,
-                    'count' => $count
+                    'count' => $count,
                 ];
                 $jquery .= DocumentManager::generate_jplayer_jquery($params);
                 $count++;
@@ -1171,7 +1170,7 @@ if ($isAllowedToEdit ||
             '/shared_folder',
             '/video',
             '/chat_files',
-            '/certificates'
+            '/certificates',
         ];
         foreach ($files as $documentId) {
             $data = DocumentManager::get_document_data_by_id($documentId, $courseInfo['code']);

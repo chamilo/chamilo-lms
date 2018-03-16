@@ -8,7 +8,7 @@ require_once __DIR__.'/cm_webservice_user.php';
 require_once __DIR__.'/cm_soap.php';
 
 /**
- * Configures the WSCourse SOAP service
+ * Configures the WSCourse SOAP service.
  */
 $s = WSCMSoapServer::singleton();
 

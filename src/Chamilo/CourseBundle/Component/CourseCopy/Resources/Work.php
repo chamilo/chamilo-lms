@@ -4,8 +4,10 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * Work/Assignment/Student publication backup script
+ * Work/Assignment/Student publication backup script.
+ *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ *
  * @package chamilo.backup
  */
 class Work extends Resource
@@ -13,7 +15,7 @@ class Work extends Resource
     public $params = [];
 
     /**
-     * Create a new Work
+     * Create a new Work.
      *
      * @param array $params
      */

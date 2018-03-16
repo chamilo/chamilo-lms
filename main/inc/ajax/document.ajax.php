@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Responses to AJAX calls for the document upload
+ * Responses to AJAX calls for the document upload.
  */
 require_once __DIR__.'/../global.inc.php';
 
@@ -108,7 +108,7 @@ switch ($action) {
                     $json['name'] = Display::url(
                         api_htmlentities($result['title']),
                         api_htmlentities($result['url']),
-                        ['target'=>'_blank']
+                        ['target' => '_blank']
                     );
                     $json['url'] = $result['url'];
                     $json['size'] = format_file_size($file['size']);

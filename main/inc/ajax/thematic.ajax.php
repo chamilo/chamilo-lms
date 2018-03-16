@@ -2,9 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Responses to AJAX calls for thematic
+ * Responses to AJAX calls for thematic.
  */
-
 require_once __DIR__.'/../global.inc.php';
 api_protect_course_script(true);
 
@@ -82,14 +81,14 @@ switch ($action) {
         echo $return[$_REQUEST['thematic_id']][$_REQUEST['thematic_advance_id']];*/
         break;
     case 'get_datetime_by_attendance':
-        $attendance_id       = intval($_REQUEST['attendance_id']);
+        $attendance_id = intval($_REQUEST['attendance_id']);
         $thematic_advance_id = intval($_REQUEST['thematic_advance_id']);
 
         $label = '';
         $input_select = '';
         if (!empty($attendance_id)) {
             $attendance = new Attendance();
-            $thematic   = new Thematic();
+            $thematic = new Thematic();
             $thematic_list = $thematic->get_thematic_list();
 
             $my_list = $thematic_list_temp = [];
@@ -138,8 +137,8 @@ switch ($action) {
         }
         ?>
         <div class="form-group">
-            <label class="col-sm-2 control-label"><?php echo $label ?></label>
-            <div class="col-sm-8"><?php echo $input_select ?></div>
+            <label class="col-sm-2 control-label"><?php echo $label; ?></label>
+            <div class="col-sm-8"><?php echo $input_select; ?></div>
         </div>
         <?php
         break;

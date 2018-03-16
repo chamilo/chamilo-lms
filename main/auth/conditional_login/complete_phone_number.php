@@ -14,7 +14,7 @@ if (!isset($_SESSION['conditional_login']['uid'])) {
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
   </head>
   <body>
-  <form id="data_completion" name="data_completion" method="post" action="<?php echo $url?>">
+  <form id="data_completion" name="data_completion" method="post" action="<?php echo $url; ?>">
         Téléphone : <input type="text" name="phone_number" />
         <input type="submit" name="submit" value="Submit" />
     </form>

@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CForumThread
+ * CForumThread.
  *
  * @ORM\Table(
  *  name="c_forum_thread",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CForumThread
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -29,14 +29,14 @@ class CForumThread
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="thread_id", type="integer")
      */
@@ -50,21 +50,21 @@ class CForumThread
     private $threadTitle;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="forum_id", type="integer", nullable=true)
      */
     private $forumId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="thread_replies", type="integer", nullable=false, options={"unsigned":true, "default" = 0})
      */
     private $threadReplies;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="thread_poster_id", type="integer", nullable=true)
      */
@@ -78,14 +78,14 @@ class CForumThread
     private $threadPosterName;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="thread_views", type="integer", nullable=false, options={"unsigned":true, "default" = 0})
      */
     private $threadViews;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="thread_last_post", type="integer", nullable=true)
      */
@@ -99,21 +99,21 @@ class CForumThread
     private $threadDate;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="thread_sticky", type="boolean", nullable=true)
      */
     private $threadSticky;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
     private $locked;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
@@ -155,14 +155,14 @@ class CForumThread
     private $threadPeerQualify;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="lp_item_id", type="integer", options={"unsigned":true})
      */
     private $lpItemId;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -172,7 +172,7 @@ class CForumThread
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isThreadPeerQualify()
     {
@@ -180,8 +180,10 @@ class CForumThread
     }
 
     /**
-     * set threadPeerQualify
+     * set threadPeerQualify.
+     *
      * @param bool $threadPeerQualify
+     *
      * @return $this
      */
     public function setThreadPeerQualify($threadPeerQualify)
@@ -192,7 +194,7 @@ class CForumThread
     }
 
     /**
-     * Set threadTitle
+     * Set threadTitle.
      *
      * @param string $threadTitle
      *
@@ -206,7 +208,7 @@ class CForumThread
     }
 
     /**
-     * Get threadTitle
+     * Get threadTitle.
      *
      * @return string
      */
@@ -216,9 +218,9 @@ class CForumThread
     }
 
     /**
-     * Set forumId
+     * Set forumId.
      *
-     * @param integer $forumId
+     * @param int $forumId
      *
      * @return CForumThread
      */
@@ -230,9 +232,9 @@ class CForumThread
     }
 
     /**
-     * Get forumId
+     * Get forumId.
      *
-     * @return integer
+     * @return int
      */
     public function getForumId()
     {
@@ -240,9 +242,9 @@ class CForumThread
     }
 
     /**
-     * Set threadReplies
+     * Set threadReplies.
      *
-     * @param integer $threadReplies
+     * @param int $threadReplies
      *
      * @return CForumThread
      */
@@ -254,9 +256,9 @@ class CForumThread
     }
 
     /**
-     * Get threadReplies
+     * Get threadReplies.
      *
-     * @return integer
+     * @return int
      */
     public function getThreadReplies()
     {
@@ -264,9 +266,9 @@ class CForumThread
     }
 
     /**
-     * Set threadPosterId
+     * Set threadPosterId.
      *
-     * @param integer $threadPosterId
+     * @param int $threadPosterId
      *
      * @return CForumThread
      */
@@ -278,9 +280,9 @@ class CForumThread
     }
 
     /**
-     * Get threadPosterId
+     * Get threadPosterId.
      *
-     * @return integer
+     * @return int
      */
     public function getThreadPosterId()
     {
@@ -288,7 +290,7 @@ class CForumThread
     }
 
     /**
-     * Set threadPosterName
+     * Set threadPosterName.
      *
      * @param string $threadPosterName
      *
@@ -302,7 +304,7 @@ class CForumThread
     }
 
     /**
-     * Get threadPosterName
+     * Get threadPosterName.
      *
      * @return string
      */
@@ -312,9 +314,9 @@ class CForumThread
     }
 
     /**
-     * Set threadViews
+     * Set threadViews.
      *
-     * @param integer $threadViews
+     * @param int $threadViews
      *
      * @return CForumThread
      */
@@ -326,9 +328,9 @@ class CForumThread
     }
 
     /**
-     * Get threadViews
+     * Get threadViews.
      *
-     * @return integer
+     * @return int
      */
     public function getThreadViews()
     {
@@ -336,9 +338,9 @@ class CForumThread
     }
 
     /**
-     * Set threadLastPost
+     * Set threadLastPost.
      *
-     * @param integer $threadLastPost
+     * @param int $threadLastPost
      *
      * @return CForumThread
      */
@@ -350,9 +352,9 @@ class CForumThread
     }
 
     /**
-     * Get threadLastPost
+     * Get threadLastPost.
      *
-     * @return integer
+     * @return int
      */
     public function getThreadLastPost()
     {
@@ -360,7 +362,7 @@ class CForumThread
     }
 
     /**
-     * Set threadDate
+     * Set threadDate.
      *
      * @param \DateTime $threadDate
      *
@@ -374,7 +376,7 @@ class CForumThread
     }
 
     /**
-     * Get threadDate
+     * Get threadDate.
      *
      * @return \DateTime
      */
@@ -384,9 +386,9 @@ class CForumThread
     }
 
     /**
-     * Set threadSticky
+     * Set threadSticky.
      *
-     * @param boolean $threadSticky
+     * @param bool $threadSticky
      *
      * @return CForumThread
      */
@@ -398,9 +400,9 @@ class CForumThread
     }
 
     /**
-     * Get threadSticky
+     * Get threadSticky.
      *
-     * @return boolean
+     * @return bool
      */
     public function getThreadSticky()
     {
@@ -408,9 +410,9 @@ class CForumThread
     }
 
     /**
-     * Set locked
+     * Set locked.
      *
-     * @param integer $locked
+     * @param int $locked
      *
      * @return CForumThread
      */
@@ -422,9 +424,9 @@ class CForumThread
     }
 
     /**
-     * Get locked
+     * Get locked.
      *
-     * @return integer
+     * @return int
      */
     public function getLocked()
     {
@@ -432,9 +434,9 @@ class CForumThread
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
      *
      * @return CForumThread
      */
@@ -446,9 +448,9 @@ class CForumThread
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -456,7 +458,7 @@ class CForumThread
     }
 
     /**
-     * Set threadTitleQualify
+     * Set threadTitleQualify.
      *
      * @param string $threadTitleQualify
      *
@@ -470,7 +472,7 @@ class CForumThread
     }
 
     /**
-     * Get threadTitleQualify
+     * Get threadTitleQualify.
      *
      * @return string
      */
@@ -480,7 +482,7 @@ class CForumThread
     }
 
     /**
-     * Set threadQualifyMax
+     * Set threadQualifyMax.
      *
      * @param float $threadQualifyMax
      *
@@ -494,7 +496,7 @@ class CForumThread
     }
 
     /**
-     * Get threadQualifyMax
+     * Get threadQualifyMax.
      *
      * @return float
      */
@@ -504,7 +506,7 @@ class CForumThread
     }
 
     /**
-     * Set threadCloseDate
+     * Set threadCloseDate.
      *
      * @param \DateTime $threadCloseDate
      *
@@ -518,7 +520,7 @@ class CForumThread
     }
 
     /**
-     * Get threadCloseDate
+     * Get threadCloseDate.
      *
      * @return \DateTime
      */
@@ -528,7 +530,7 @@ class CForumThread
     }
 
     /**
-     * Set threadWeight
+     * Set threadWeight.
      *
      * @param float $threadWeight
      *
@@ -542,7 +544,7 @@ class CForumThread
     }
 
     /**
-     * Get threadWeight
+     * Get threadWeight.
      *
      * @return float
      */
@@ -552,9 +554,9 @@ class CForumThread
     }
 
     /**
-     * Set threadId
+     * Set threadId.
      *
-     * @param integer $threadId
+     * @param int $threadId
      *
      * @return CForumThread
      */
@@ -566,9 +568,9 @@ class CForumThread
     }
 
     /**
-     * Get threadId
+     * Get threadId.
      *
-     * @return integer
+     * @return int
      */
     public function getThreadId()
     {
@@ -576,9 +578,9 @@ class CForumThread
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
      *
      * @return CForumThread
      */
@@ -590,9 +592,9 @@ class CForumThread
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -600,8 +602,9 @@ class CForumThread
     }
 
     /**
-     * Set lpItemId
-     * @param integer $lpItemId
+     * Set lpItemId.
+     *
+     * @param int $lpItemId
      *
      * @return $this
      */
@@ -613,8 +616,9 @@ class CForumThread
     }
 
     /**
-     * Get lpId
-     * @return integer
+     * Get lpId.
+     *
+     * @return int
      */
     public function getLpItemId()
     {
@@ -622,7 +626,8 @@ class CForumThread
     }
 
     /**
-     * Get iid
+     * Get iid.
+     *
      * @return int
      */
     public function getIid()

@@ -4,13 +4,14 @@
 use ChamiloSession as Session;
 
 /**
-* Exercise administration
-* This script allows to manage an exercise. It is included from
-* the script admin.php
-* @package chamilo.exercise
-* @author Olivier Brouckaert, Julio Montoya
-*/
-
+ * Exercise administration
+ * This script allows to manage an exercise. It is included from
+ * the script admin.php.
+ *
+ * @package chamilo.exercise
+ *
+ * @author Olivier Brouckaert, Julio Montoya
+ */
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
@@ -166,7 +167,7 @@ if ($form->validate()) {
     if (api_is_in_gradebook()) {
         $interbreadcrumb[] = [
             'url' => Category::getUrl(),
-            'name' => get_lang('ToolGradebook')
+            'name' => get_lang('ToolGradebook'),
         ];
     }
     $nameTools = get_lang('ExerciseManagement');

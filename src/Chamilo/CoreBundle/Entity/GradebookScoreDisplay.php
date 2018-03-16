@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * GradebookScoreDisplay
+ * GradebookScoreDisplay.
  *
  * @ORM\Table(name="gradebook_score_display", indexes={@ORM\Index(name="category_id", columns={"category_id"})})
  * @ORM\Entity
@@ -28,7 +28,7 @@ class GradebookScoreDisplay
     private $display;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="category_id", type="integer", nullable=false)
      */
@@ -42,7 +42,7 @@ class GradebookScoreDisplay
     private $scoreColorPercent;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -50,12 +50,11 @@ class GradebookScoreDisplay
      */
     private $id;
 
-
-
     /**
-     * Set score
+     * Set score.
      *
      * @param float $score
+     *
      * @return GradebookScoreDisplay
      */
     public function setScore($score)
@@ -66,7 +65,7 @@ class GradebookScoreDisplay
     }
 
     /**
-     * Get score
+     * Get score.
      *
      * @return float
      */
@@ -76,9 +75,10 @@ class GradebookScoreDisplay
     }
 
     /**
-     * Set display
+     * Set display.
      *
      * @param string $display
+     *
      * @return GradebookScoreDisplay
      */
     public function setDisplay($display)
@@ -89,7 +89,7 @@ class GradebookScoreDisplay
     }
 
     /**
-     * Get display
+     * Get display.
      *
      * @return string
      */
@@ -99,9 +99,10 @@ class GradebookScoreDisplay
     }
 
     /**
-     * Set categoryId
+     * Set categoryId.
      *
-     * @param integer $categoryId
+     * @param int $categoryId
+     *
      * @return GradebookScoreDisplay
      */
     public function setCategoryId($categoryId)
@@ -112,9 +113,9 @@ class GradebookScoreDisplay
     }
 
     /**
-     * Get categoryId
+     * Get categoryId.
      *
-     * @return integer
+     * @return int
      */
     public function getCategoryId()
     {
@@ -122,9 +123,10 @@ class GradebookScoreDisplay
     }
 
     /**
-     * Set scoreColorPercent
+     * Set scoreColorPercent.
      *
      * @param float $scoreColorPercent
+     *
      * @return GradebookScoreDisplay
      */
     public function setScoreColorPercent($scoreColorPercent)
@@ -135,7 +137,7 @@ class GradebookScoreDisplay
     }
 
     /**
-     * Get scoreColorPercent
+     * Get scoreColorPercent.
      *
      * @return float
      */
@@ -145,9 +147,9 @@ class GradebookScoreDisplay
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

@@ -8,7 +8,7 @@ require_once __DIR__.'/cm_webservice_courses.php';
 require_once __DIR__.'/cm_soap.php';
 
 /**
- * Configures the WSCourse SOAP service
+ * Configures the WSCourse SOAP service.
  */
 $s = WSCMSoapServer::singleton();
 
@@ -24,7 +24,6 @@ $s->register(
     '',
     '',
     'Retorna o CODE dos cursos do username.'
-
 );
 
 $s->register(
@@ -40,5 +39,4 @@ $s->register(
     '',
     '',
     'Retorna o titulo/nome do curso de course_code informado'
-
 );

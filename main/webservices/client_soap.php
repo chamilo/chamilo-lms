@@ -107,14 +107,14 @@ $params = [
             'year_end' => '',
             'month_end' => '',
             'day_end' => '',
-            'nb_days_access_before' =>  0,
+            'nb_days_access_before' => 0,
             'nb_days_access_after' => 0,
             'nolimit' => 1,
             'user_id' => 1,
             'original_session_id_name' => $sessionField,
             'original_session_id_value' => $sessionValueRandom,
-            'extra' => ''
-        ]
+            'extra' => '',
+        ],
     ],
     'secret_key' => $secret_key,
 ];
@@ -123,7 +123,6 @@ $sessionId = $client->call(
     'WSCreateSession',
     ['createSession' => $params]
 );
-
 
 $data = [
     'secret_key' => $secret_key,
@@ -134,9 +133,9 @@ $data = [
             'original_session_id_name' => $sessionField,
             'original_user_id_values' => [
                 [
-                    'original_user_id_value' => $random_user_id
-                ]
-            ]
+                    'original_user_id_value' => $random_user_id,
+                ],
+            ],
         ],
     ],
 ];
@@ -212,10 +211,10 @@ if (!empty($user_id) && is_numeric($user_id)) {
         'ids' => [
             [
                 'original_user_id_name' => $user_field,
-                'original_user_id_value' => $random_user_id
-            ]
+                'original_user_id_value' => $random_user_id,
+            ],
         ],
-        'secret_key' => $secret_key
+        'secret_key' => $secret_key,
     ];
 
     // Disable user
@@ -298,7 +297,7 @@ if (!empty($user_id) && is_numeric($user_id)) {
     $user_courses[] = [
         'course_id' => $course_array,
         'user_id' => $user_array,
-        'status' => '1'
+        'status' => '1',
     ];
 
     $params = [
@@ -313,7 +312,7 @@ if (!empty($user_id) && is_numeric($user_id)) {
         'ids' => [
             'original_user_id_value' => $random_user_id,
             'original_user_id_name' => $user_field,
-        ]
+        ],
     ];
 
     // Delete user
@@ -347,7 +346,6 @@ $result = $client->call(
     ['getPortalListFromUser' => ['user_id' => 1, 'secret_key' => $secret_key]]
 );
 
-
 $result = $client->call(
     'WSGetPortalListFromCourse',
     ['getPortalListFromCourse' => ['course_id' => 20, 'secret_key' => $secret_key]]
@@ -363,8 +361,6 @@ $result = $client->call(
     ['removeUserFromPortal' => ['course_id' => 20, 'portal_id' => 1, 'secret_key' => $secret_key]]
 );
 var_dump($user_id); exit;
-
-
 
 if ($client->fault) {
     echo '<h2>Fault</h2><pre>';

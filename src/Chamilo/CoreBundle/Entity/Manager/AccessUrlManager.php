@@ -3,11 +3,12 @@
 
 namespace Chamilo\CoreBundle\Entity\Manager;
 
-use Sonata\CoreBundle\Model\BaseEntityManager;
 use Chamilo\CoreBundle\Entity\Course;
+use Sonata\CoreBundle\Model\BaseEntityManager;
 
 /**
- * Class AccessUrlManager
+ * Class AccessUrlManager.
+ *
  * @package Chamilo\CoreBundle\Entity\Manager
  */
 class AccessUrlManager extends BaseEntityManager

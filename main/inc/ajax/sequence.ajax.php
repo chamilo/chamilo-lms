@@ -1,15 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
 use Chamilo\CoreBundle\Entity\Sequence;
 use Chamilo\CoreBundle\Entity\SequenceResource;
+use ChamiloSession as Session;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Graphp\GraphViz\GraphViz;
 
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
 require_once __DIR__.'/../global.inc.php';
 
@@ -73,7 +73,7 @@ switch ($action) {
                             'default',
                             [
                                 'class' => 'delete_vertex btn btn-block btn-xs',
-                                'data-id' => $id
+                                'data-id' => $id,
                             ]
                         );
 
@@ -85,7 +85,7 @@ switch ($action) {
                             [
                                 'class' => 'undo_delete btn btn-block btn-xs',
                                 'style' => 'display: none;',
-                                'data-id' => $id
+                                'data-id' => $id,
                             ]
                         );
                     }
@@ -165,7 +165,7 @@ switch ($action) {
                                 [
                                     'resourceId' => $vertexId,
                                     'type' => $type,
-                                    'sequence' => $sequence
+                                    'sequence' => $sequence,
                                 ]
                             );
                             $em->remove($sequenceResourceToDelete);
@@ -181,7 +181,7 @@ switch ($action) {
                                     [
                                         'resourceId' => $vertexId,
                                         'type' => $type,
-                                        'sequence' => $sequence
+                                        'sequence' => $sequence,
                                     ]
                                 );
                                 $em->remove($sequenceResourceToDelete);
@@ -192,7 +192,7 @@ switch ($action) {
                                     [
                                         'resourceId' => $vertexId,
                                         'type' => $type,
-                                        'sequence' => $sequence
+                                        'sequence' => $sequence,
                                     ]
                                 );
                                 $em->remove($sequenceResource);

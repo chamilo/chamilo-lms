@@ -6,9 +6,10 @@
  * of courses that have a certain level of visibility
  * on this chamilo portal.
  * It is set to work with the Chamilo module for Drupal:
- * http://drupal.org/project/chamilo
+ * http://drupal.org/project/chamilo.
  *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ *
  * @package chamilo.webservices
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -49,8 +50,8 @@ $server->wsdl->addComplexType(
     'SOAP-ENC:Array',
     [],
     [
-        ['ref'=>'SOAP-ENC:arrayType',
-        'wsdl:arrayType'=>'tns:courseDetails[]']
+        ['ref' => 'SOAP-ENC:arrayType',
+        'wsdl:arrayType' => 'tns:courseDetails[]', ],
     ],
     'tns:courseDetails'
 );
@@ -60,7 +61,7 @@ $server->register(
     'WSCourseList', // method name
     ['username' => 'xsd:string',
           'signature' => 'xsd:string',
-          'visibilities' => 'xsd:string'], // input parameters
+          'visibilities' => 'xsd:string', ], // input parameters
     ['return' => 'xsd:Array'], // output parameters
     'urn:WSCourseList', // namespace
     'urn:WSCourseList#WSCourseList', // soapaction
@@ -69,13 +70,14 @@ $server->register(
     'This service returns a list of courses'    // documentation
 );
 
-
 /**
  * Get a list of courses (code, url, title, teacher, language) and return to caller
  * Function registered as service. Returns strings in UTF-8.
+ *
  * @param string User name in Chamilo
  * @param string Signature (composed of the sha1(username+apikey)
  * @param mixed  Array or string. Type of visibility of course (public, public-registered, private, closed)
+ *
  * @return array Courses list (code=>[title=>'title',url='http://...',teacher=>'...',language=>''],code=>[...],...)
  */
 function WSCourseList($username, $signature, $visibilities = 'public')
@@ -135,6 +137,7 @@ function WSCourseList($username, $signature, $visibilities = 'public')
             ];
         }
     }
+
     return $courses_list;
 }
 

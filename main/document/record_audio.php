@@ -5,9 +5,9 @@ use ChamiloSession as Session;
 
 /**
  * This file allows record audio files.
+ *
  * @package chamilo.document
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $groupRights = Session::read('group_member_with_upload_rights');

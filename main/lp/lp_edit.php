@@ -4,11 +4,12 @@
 use ChamiloSession as Session;
 
 /**
- * Script allowing simple edition of learnpath information (title, description, etc)
+ * Script allowing simple edition of learnpath information (title, description, etc).
+ *
  * @package chamilo.learnpath
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
-*/
-
+ */
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
 api_protect_course_script();
@@ -25,16 +26,16 @@ $lpId = $learnPath->get_id();
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
+        'name' => get_lang('ToolGradebook'),
     ];
 }
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths')
+    'name' => get_lang('LearningPaths'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=".$lpId.'&'.api_get_cidreq(),
-    'name' => $learnPath->get_name()
+    'name' => $learnPath->get_name(),
 ];
 
 $htmlHeadXtra[] = '<script>
@@ -235,7 +236,7 @@ $form->addElement('hidden', 'lp_id', $lpId);
 if ($enableLpExtraFields) {
     $htmlHeadXtra[] = '<script>
     $(function() {
-        ' . $extra['jquery_ready_content'].'
+        '.$extra['jquery_ready_content'].'
     });
     </script>';
 }

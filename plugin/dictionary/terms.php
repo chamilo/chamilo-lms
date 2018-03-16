@@ -37,7 +37,7 @@ switch ($action) {
             $values = $form->getSubmitValues();
             $params = [
                 'term' => $values['term'],
-                'definition' => $values['definition']
+                'definition' => $values['definition'],
             ];
             $result = Database::insert($table, $params);
             if ($result) {
@@ -53,7 +53,7 @@ switch ($action) {
             $values = $form->getSubmitValues();
             $params = [
                 'term' => $values['term'],
-                'definition' => $values['definition']
+                'definition' => $values['definition'],
             ];
             Database::update($table, $params, ['id = ?' => $id]);
             Display::addFlash(Display::return_message(get_lang('Updated')));

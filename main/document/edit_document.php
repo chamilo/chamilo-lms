@@ -23,10 +23,10 @@ use ChamiloSession as Session;
  * comments or not.
  *
  * @package chamilo.document
+ *
  * @todo improve script structure (FormValidator is used to display form, but
  * not for validation at the moment)
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $groupRights = Session::read('group_member_with_upload_rights');
@@ -130,7 +130,7 @@ $editorConfig = [
     'CreateDocumentWebDir' => (empty($group_properties['directory']))
         ? api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/'
         : api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/',
-    'BaseHref' =>  api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir
+    'BaseHref' => api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir,
 ];
 
 if ($is_certificate_mode) {
@@ -161,7 +161,7 @@ if (!$is_certificate_mode) {
 } else {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('Gradebook')
+        'name' => get_lang('Gradebook'),
     ];
 }
 
@@ -437,7 +437,7 @@ if ($owner_id == api_get_user_id() ||
 
     if ($file_type != 'link') {
         if ($owner_id == api_get_user_id() || api_is_platform_admin()) {
-            $checked = & $form->addElement('checkbox', 'readonly', null, get_lang('ReadOnly'));
+            $checked = &$form->addElement('checkbox', 'readonly', null, get_lang('ReadOnly'));
             if ($readonly == 1) {
                 $checked->setChecked(true);
             }
@@ -552,7 +552,7 @@ function show_return($document_id, $path, $call_from_tool = '', $slide_id = 0, $
         $selectedCategory = (isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : '');
         $actionsLeft .= '<a href="document.php?curdirpath='.$selectedCategory.'&selectcat='.$selectedCategory.'">'.
             Display::return_icon('back.png', get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'), '', ICON_SIZE_MEDIUM).'</a>';
-        $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png', get_lang('Expand'), ['id'=>'expand'], ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Collapse'), ['id'=>'contract', 'class'=>'hide'], ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png', get_lang('Expand'), ['id' => 'expand'], ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Collapse'), ['id' => 'contract', 'class' => 'hide'], ICON_SIZE_MEDIUM).'</a>';
     } elseif ($call_from_tool == 'slideshow') {
         $actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.
             Display::return_icon('slideshow.png', get_lang('BackTo').' '.get_lang('ViewSlideshow'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -564,7 +564,7 @@ function show_return($document_id, $path, $call_from_tool = '', $slide_id = 0, $
         $actionsLeft .= '<a href="'.$url.'">'.
             Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('BackTo').' '.get_lang('Write'), [], 32).'</a>';
-        $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png', get_lang('Expand'), ['id'=>'expand'], ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Collapse'), ['id'=>'contract', 'class'=>'hide'], ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png', get_lang('Expand'), ['id' => 'expand'], ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Collapse'), ['id' => 'contract', 'class' => 'hide'], ICON_SIZE_MEDIUM).'</a>';
     } elseif ($call_from_tool == 'editpaint') {
         $actionsLeft .= '<a href="'.$url.'">'.
             Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), [], ICON_SIZE_MEDIUM).'</a>';
@@ -572,7 +572,7 @@ function show_return($document_id, $path, $call_from_tool = '', $slide_id = 0, $
     } else {
         $actionsLeft .= '<a href="'.$url.'">'.
             Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
-        $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png', get_lang('Expand'), ['id'=>'expand'], ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Collapse'), ['id'=>'contract', 'class'=>'hide'], ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png', get_lang('Expand'), ['id' => 'expand'], ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Collapse'), ['id' => 'contract', 'class' => 'hide'], ICON_SIZE_MEDIUM).'</a>';
     }
 
     echo $toolbar = Display::toolbarAction('actions-documents', [$actionsLeft]);

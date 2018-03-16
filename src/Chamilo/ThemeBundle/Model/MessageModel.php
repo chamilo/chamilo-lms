@@ -2,39 +2,39 @@
 /**
  * MessageModel.php
  * avanzu-admin
- * Date: 23.02.14
+ * Date: 23.02.14.
  */
 
 namespace Chamilo\ThemeBundle\Model;
 
 /**
- * Simple implementation of the MessageInterface
- *
+ * Simple implementation of the MessageInterface.
  */
 class MessageModel implements MessageInterface
 {
     /**
-     * Holds the sender
+     * Holds the sender.
      *
      * @var UserInterface
      */
     protected $from;
 
     /**
-     * holds the Recipient
+     * holds the Recipient.
      *
      * @var UserInterface
      */
     protected $to;
 
     /**
-     * holds the date sent
+     * holds the date sent.
+     *
      * @var \DateTime
      */
     protected $sentAt;
 
     /**
-     * holds the subject
+     * holds the subject.
      *
      * @var string
      */
@@ -52,15 +52,14 @@ class MessageModel implements MessageInterface
      */
     public function __construct(UserInterface $from = null, $subject = '', $sentAt = null, UserInterface $to = null)
     {
-        $this->to      = $to;
+        $this->to = $to;
         $this->subject = $subject;
-        $this->sentAt  = $sentAt ?: new \DateTime();
-        $this->from    = $from;
+        $this->sentAt = $sentAt ?: new \DateTime();
+        $this->from = $from;
     }
 
-
     /**
-     * Set the sender
+     * Set the sender.
      *
      * @param \Chamilo\ThemeBundle\Model\UserInterface $from
      *
@@ -69,11 +68,12 @@ class MessageModel implements MessageInterface
     public function setFrom(UserInterface $from)
     {
         $this->from = $from;
+
         return $this;
     }
 
     /**
-     * Get the Sender
+     * Get the Sender.
      *
      * @return \Chamilo\ThemeBundle\Model\UserInterface
      */
@@ -83,7 +83,7 @@ class MessageModel implements MessageInterface
     }
 
     /**
-     * Set the date sent
+     * Set the date sent.
      *
      * @param \DateTime $sentAt
      *
@@ -92,11 +92,12 @@ class MessageModel implements MessageInterface
     public function setSentAt(\DateTime $sentAt)
     {
         $this->sentAt = $sentAt;
+
         return $this;
     }
 
     /**
-     * Get the date sent
+     * Get the date sent.
      *
      * @return \DateTime
      */
@@ -106,7 +107,7 @@ class MessageModel implements MessageInterface
     }
 
     /**
-     * Set the subject
+     * Set the subject.
      *
      * @param string $subject
      *
@@ -115,11 +116,12 @@ class MessageModel implements MessageInterface
     public function setSubject($subject)
     {
         $this->subject = $subject;
+
         return $this;
     }
 
     /**
-     * Get the subject
+     * Get the subject.
      *
      * @return string
      */
@@ -129,7 +131,7 @@ class MessageModel implements MessageInterface
     }
 
     /**
-     * Set the recipient
+     * Set the recipient.
      *
      * @param \Chamilo\ThemeBundle\Model\UserInterface $to
      *
@@ -138,11 +140,12 @@ class MessageModel implements MessageInterface
     public function setTo(UserInterface $to)
     {
         $this->to = $to;
+
         return $this;
     }
 
     /**
-     * Get the recipient
+     * Get the recipient.
      *
      * @return \Chamilo\ThemeBundle\Model\UserInterface
      */
@@ -152,7 +155,7 @@ class MessageModel implements MessageInterface
     }
 
     /**
-     * Get the identifier
+     * Get the identifier.
      *
      * @return string
      */

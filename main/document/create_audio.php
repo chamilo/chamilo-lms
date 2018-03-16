@@ -9,10 +9,10 @@ use ChamiloSession as Session;
  * @package chamilo.document
  *
  * @author Juan Carlos Raña Trabado
+ *
  * @since 8/January/2011
  * TODO:clean all file
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
@@ -85,7 +85,7 @@ if (!is_dir($filepath)) {
 if (!empty($groupId)) {
     $interbreadcrumb[] = [
         "url" => "../group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace')
+        "name" => get_lang('GroupSpace'),
     ];
     $group = GroupManager:: get_group_properties($groupId);
     $path = explode('/', $dir);
@@ -96,7 +96,7 @@ if (!empty($groupId)) {
 
 $interbreadcrumb[] = [
     "url" => "./document.php?curdirpath=".urlencode($dir)."&".api_get_cidreq(),
-    "name" => get_lang('Documents')
+    "name" => get_lang('Documents'),
 ];
 
 if (!api_is_allowed_in_course()) {
@@ -112,7 +112,6 @@ if (!($is_allowed_to_edit || $groupRights ||
 ) {
     api_not_allowed(true);
 }
-
 
 /*	Header */
 Event::event_access_tool(TOOL_DOCUMENT);
@@ -242,11 +241,13 @@ if ($service == 'google') {
 Display::display_footer();
 
 /**
- * This function save a post into a file mp3 from google services
+ * This function save a post into a file mp3 from google services.
  *
  * @param $filepath
  * @param $dir
+ *
  * @author Juan Carlos Raña Trabado <herodoto@telefonica.net>
+ *
  * @version january 2011, chamilo 1.8.8
  */
 function downloadAudioGoogle($filepath, $dir)
@@ -256,6 +257,7 @@ function downloadAudioGoogle($filepath, $dir)
     //security
     if (!isset($_POST['lang']) && !isset($_POST['text']) && !isset($_POST['title']) && !isset($filepath) && !isset($dir)) {
         echo '<script>window.location.href="'.$location.'"</script>';
+
         return;
     }
 
@@ -314,6 +316,7 @@ function downloadAudioGoogle($filepath, $dir)
 
     if (empty($content)) {
         Display::addFlash(Display::return_message(get_lang('GoogleTranslateApiReturnedEmptyAnswer'), 'error'));
+
         return;
     }
 

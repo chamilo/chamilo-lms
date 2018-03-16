@@ -2,8 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 /**
- * Cron for send a email when the course are finished
+ * Cron for send a email when the course are finished.
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.cron
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -43,7 +45,7 @@ $administrator = [
         null,
         PERSON_NAME_EMAIL_ADDRESS
     ),
-    'email' => api_get_setting('emailAdministrator')
+    'email' => api_get_setting('emailAdministrator'),
 ];
 
 foreach ($sessions as $session) {

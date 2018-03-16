@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\PluginBundle\Entity\StudentFollowUp\CarePost;
 use Doctrine\Common\Collections\Criteria;
 use Gaufrette\Adapter\Ftp as FtpAdapter;
 use Gaufrette\Filesystem;
-use Chamilo\PluginBundle\Entity\StudentFollowUp\CarePost;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -74,7 +74,7 @@ if ($post) {
                 $response = new \Symfony\Component\HttpFoundation\Response();
                 $response->headers->set('Cache-Control', 'private');
                 $response->headers->set('Content-type', $contentType);
-                $response->headers->set('Content-Disposition', 'attachment; filename="'.basename($attachmentUrlData['path']) . '";');
+                $response->headers->set('Content-Disposition', 'attachment; filename="'.basename($attachmentUrlData['path']).'";');
                 //$response->headers->set('Content-length', filesize($filename));
                 // Send headers before outputting anything
                 $response->sendHeaders();

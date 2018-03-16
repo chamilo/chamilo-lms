@@ -2,11 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* View (MVC patter) for thematic advance
-* @author Christian Fasanando <christian1827@gmail.com>
-* @author Julio Montoya <gugli100@gmail.com> BeezNest 2011 Bug fixing
-* @package chamilo.course_progress
-*/
+ * View (MVC patter) for thematic advance.
+ *
+ * @author Christian Fasanando <christian1827@gmail.com>
+ * @author Julio Montoya <gugli100@gmail.com> BeezNest 2011 Bug fixing
+ *
+ * @package chamilo.course_progress
+ */
 
 // protect a course script
 api_protect_course_script(true);
@@ -54,7 +56,7 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
         '2',
         [
             'onclick' => 'check_per_custom_date(this)',
-            'id' => 'custom_date'
+            'id' => 'custom_date',
         ]
     );
     $form->addGroup($radios, null, get_lang('StartDateOptions'));
@@ -214,7 +216,7 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
         $redirectUrlParams = 'course_progress/index.php?'.api_get_cidreq().'&'.
             http_build_query([
                 'action' => 'thematic_advance_list',
-                'thematic_id' => $values['thematic_id']
+                'thematic_id' => $values['thematic_id'],
             ]);
 
         Display::addFlash(Display::return_message(get_lang('Updated')));
@@ -240,9 +242,9 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
         ['Thematic', 'get_thematic_advance_data']
     );
     //$table->set_additional_parameters($parameters);
-    $table->set_header(0, '', false, ['style'=>'width:20px;']);
+    $table->set_header(0, '', false, ['style' => 'width:20px;']);
     $table->set_header(1, get_lang('StartDate'), false);
-    $table->set_header(2, get_lang('DurationInHours'), false, ['style'=>'width:80px;']);
+    $table->set_header(2, get_lang('DurationInHours'), false, ['style' => 'width:80px;']);
     $table->set_header(3, get_lang('Content'), false);
 
     if (api_is_allowed_to_edit(null, true)) {

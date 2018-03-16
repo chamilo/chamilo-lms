@@ -4,8 +4,10 @@
 /**
  * Class scormItem
  * This class handles the <item> elements from an imsmanifest file.
- * Container for the scormItem class that deals with <item> elements in an imsmanifest file
+ * Container for the scormItem class that deals with <item> elements in an imsmanifest file.
+ *
  * @package	chamilo.learnpath.scorm
+ *
  * @author	Yannick Warnier	<ywarnier@beeznest.org>
  */
 class scormItem extends learnpathItem
@@ -21,7 +23,7 @@ class scormItem extends learnpathItem
     // Modified by Ivan Tcholakov, 06-FEB-2010.
     //public $max_time_allowed = ''; //should be something like HHHH:MM:SS.SS
     public $max_time_allowed = '00:00:00';
-    //
+
     public $timelimitaction = '';
     public $datafromlms = '';
     public $mastery_score = '';
@@ -29,10 +31,11 @@ class scormItem extends learnpathItem
 
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormItem
-     * object from database records or from the DOM element given as parameter
-     * @param    string $type Type of construction needed ('db' or 'manifest', default = 'manifest')
-     * @param    mixed $element Depending on the type given, DB id for the lp_item or reference to the DOM element
-     * @param int $course_id
+     * object from database records or from the DOM element given as parameter.
+     *
+     * @param string $type      Type of construction needed ('db' or 'manifest', default = 'manifest')
+     * @param mixed  $element   Depending on the type given, DB id for the lp_item or reference to the DOM element
+     * @param int    $course_id
      */
     public function __construct($type = 'manifest', &$element, $course_id = 0)
     {
@@ -141,11 +144,12 @@ class scormItem extends learnpathItem
     }
 
     /**
-     * Builds a flat list with the current item and calls itself recursively on all children
+     * Builds a flat list with the current item and calls itself recursively on all children.
+     *
      * @param    array    Reference to the array to complete with the current item
-     * @param    integer    Optional absolute order (pointer) of the item in this learning path
-     * @param    integer    Optional relative order of the item at this level
-     * @param    integer    Optional level. If not given, assumes it's level 0
+     * @param    int    Optional absolute order (pointer) of the item in this learning path
+     * @param    int    Optional relative order of the item at this level
+     * @param    int    Optional level. If not given, assumes it's level 0
      */
     public function get_flat_list(&$list, &$abs_order, $rel_order = 1, $level = 0)
     {
@@ -164,12 +168,12 @@ class scormItem extends learnpathItem
             'rel_order' => $rel_order,
             'timelimitaction' => $this->timelimitaction,
             'title' => $this->title,
-            'max_score' => $this->max_score
+            'max_score' => $this->max_score,
         ];
         $abs_order++;
         $i = 1;
         foreach ($this->sub_items as $id => $dummy) {
-            $oSubitem = & $this->sub_items[$id];
+            $oSubitem = &$this->sub_items[$id];
             $oSubitem->get_flat_list($list, $abs_order, $i, $level + 1);
             $i++;
         }
@@ -177,7 +181,8 @@ class scormItem extends learnpathItem
 
     /**
      * Save function. Uses the parent save function and adds a layer for SCORM.
-     * @param    boolean    Save from URL params (1) or from object attributes (0)
+     *
+     * @param    bool    Save from URL params (1) or from object attributes (0)
      */
     public function save($from_outside = true, $prereqs_complete = false)
     {

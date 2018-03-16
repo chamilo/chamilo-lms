@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Process documents before pass it to search listing scripts
+ * Process documents before pass it to search listing scripts.
+ *
  * @package chamilo.include.search
  */
 class document_processor extends search_processor
@@ -57,7 +58,7 @@ class document_processor extends search_processor
     }
 
     /**
-     * Get document information
+     * Get document information.
      */
     private function get_information($course_id, $doc_id)
     {
@@ -95,6 +96,7 @@ class document_processor extends search_processor
                     $author = api_get_person_name($user_data['firstName'], $user_data['lastName']);
                 }
             }
+
             return [$thumbnail, $image, $name, $author, $url]; // FIXME: is it posible to get an author here?
         } else {
             return [];

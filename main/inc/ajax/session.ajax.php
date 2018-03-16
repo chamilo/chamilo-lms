@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
 require_once __DIR__.'/../global.inc.php';
 
@@ -33,8 +33,8 @@ switch ($action) {
                 $table = Database::get_main_table(TABLE_MAIN_SESSION);
                 foreach ($order as $data) {
                     if (isset($data->order) && isset($data->id)) {
-                        $orderId = (int)$data->order;
-                        $sessionId = (int)$data->id;
+                        $orderId = (int) $data->order;
+                        $sessionId = (int) $data->id;
                         $sql = "UPDATE $table SET position = $orderId WHERE id = $sessionId ";
                         Database::query($sql);
                     }
@@ -48,13 +48,13 @@ switch ($action) {
                 [
                     's.name' => [
                         'operator' => 'LIKE',
-                        'value' => "%".$_REQUEST['q']."%"
-                    ]
+                        'value' => "%".$_REQUEST['q']."%",
+                    ],
                 ]
             );
 
             $list = [
-                'items' => []
+                'items' => [],
             ];
 
             if (empty($sessions)) {
@@ -65,7 +65,7 @@ switch ($action) {
             foreach ($sessions as $session) {
                 $list['items'][] = [
                     'id' => $session['id'],
-                    'text' => $session['name']
+                    'text' => $session['name'],
                 ];
             }
 
@@ -77,7 +77,7 @@ switch ($action) {
             $results = SessionManager::get_sessions_list(
                 [
                     's.name' => ['operator' => 'like', 'value' => "%".$_REQUEST['q']."%"],
-                    'c.id' => ['operator' => '=', 'value' => $_REQUEST['course_id']]
+                    'c.id' => ['operator' => '=', 'value' => $_REQUEST['course_id']],
                 ]
             );
             $results2 = [];
@@ -106,13 +106,13 @@ switch ($action) {
             $results = SessionManager::get_sessions_list(
                 [
                     's.name' => ['operator' => 'like', 'value' => "%".$_REQUEST['q']."%"],
-                    'c.id' => ['operator' => '=', 'value' => $_REQUEST['course_id']]
+                    'c.id' => ['operator' => '=', 'value' => $_REQUEST['course_id']],
                 ]
             );
             $json = [
                 'items' => [
-                    ['id' => 'T', 'text' => get_lang('All')]
-                ]
+                    ['id' => 'T', 'text' => get_lang('All')],
+                ],
             ];
             if (!empty($results)) {
                 foreach ($results as $item) {
@@ -180,7 +180,7 @@ switch ($action) {
         }
 
         $list = [
-            'items' => []
+            'items' => [],
         ];
 
         $entityManager = Database::getManager();
@@ -190,7 +190,7 @@ switch ($action) {
         foreach ($users as $user) {
             $list['items'][] = [
                 'id' => $user->getId(),
-                'text' => $user->getCompleteName()
+                'text' => $user->getCompleteName(),
             ];
         }
 
@@ -233,7 +233,7 @@ switch ($action) {
                 $courseInfo = api_get_course_info_by_id($courseId);
                 $courseListToSelect[] = [
                     'id' => $courseInfo['real_id'],
-                    'name' => $courseInfo['title']
+                    'name' => $courseInfo['title'],
                 ];
             }
         }

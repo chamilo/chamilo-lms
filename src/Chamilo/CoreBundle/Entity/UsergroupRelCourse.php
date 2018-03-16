@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UsergroupRelCourse
+ * UsergroupRelCourse.
  *
  * @ORM\Table(name="usergroup_rel_course")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class UsergroupRelCourse
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -23,23 +23,24 @@ class UsergroupRelCourse
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="usergroup_id", type="integer", nullable=false)
      */
     private $usergroupId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="course_id", type="integer", nullable=false)
      */
     private $courseId;
 
     /**
-     * Set usergroupId
+     * Set usergroupId.
      *
-     * @param integer $usergroupId
+     * @param int $usergroupId
+     *
      * @return UsergroupRelCourse
      */
     public function setUsergroupId($usergroupId)
@@ -50,9 +51,9 @@ class UsergroupRelCourse
     }
 
     /**
-     * Get usergroupId
+     * Get usergroupId.
      *
-     * @return integer
+     * @return int
      */
     public function getUsergroupId()
     {
@@ -60,9 +61,10 @@ class UsergroupRelCourse
     }
 
     /**
-     * Set courseId
+     * Set courseId.
      *
-     * @param integer $courseId
+     * @param int $courseId
+     *
      * @return UsergroupRelCourse
      */
     public function setCourseId($courseId)
@@ -73,9 +75,9 @@ class UsergroupRelCourse
     }
 
     /**
-     * Get courseId
+     * Get courseId.
      *
-     * @return integer
+     * @return int
      */
     public function getCourseId()
     {
@@ -83,9 +85,9 @@ class UsergroupRelCourse
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

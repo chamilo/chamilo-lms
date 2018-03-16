@@ -6,7 +6,6 @@ use ChamiloSession as Session;
 /**
  *  @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -99,7 +98,6 @@ if (api_is_platform_admin()) {
         return '".$diagramLink."';
     }";
 }
-
 
 $career = new Career();
 $content = '';

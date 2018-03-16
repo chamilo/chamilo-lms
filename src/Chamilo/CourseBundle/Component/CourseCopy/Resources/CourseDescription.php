@@ -4,30 +4,33 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * A course description
+ * A course description.
+ *
  * @author Bart Mollet <bart.mollet@hogent.be>
+ *
  * @package chamilo.backup
  */
 class CourseDescription extends Resource
 {
     /**
-     * The title
+     * The title.
      */
     public $title;
 
     /**
-     * The content
+     * The content.
      */
     public $content;
 
     /**
-     * The description type
+     * The description type.
      */
     public $description_type;
 
     /**
-     * Create a new course description
-     * @param int $id
+     * Create a new course description.
+     *
+     * @param int    $id
      * @param string $title
      * @param string $content
      */
@@ -40,7 +43,7 @@ class CourseDescription extends Resource
     }
 
     /**
-     * Show this Event
+     * Show this Event.
      */
     public function show()
     {

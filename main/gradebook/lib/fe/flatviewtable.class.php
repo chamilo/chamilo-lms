@@ -9,7 +9,8 @@ use CpChart\Image as pImage;
 
 /**
  * Class FlatViewTable
- * Table to display flat view (all evaluations and links for all students)
+ * Table to display flat view (all evaluations and links for all students).
+ *
  * @author Stijn Konings
  * @author Bert Steppé  - (refactored, optimised)
  * @author Julio Montoya Armas - Gradebook Graphics
@@ -26,12 +27,12 @@ class FlatViewTable extends SortableTable
 
     /**
      * @param Category $selectcat
-     * @param array $users
-     * @param array $evals
-     * @param array $links
-     * @param bool $limit_enabled
-     * @param int $offset
-     * @param null $addparams
+     * @param array    $users
+     * @param array    $evals
+     * @param array    $links
+     * @param bool     $limit_enabled
+     * @param int      $offset
+     * @param null     $addparams
      * @param Category $mainCourseCategory
      */
     public function __construct(
@@ -88,7 +89,7 @@ class FlatViewTable extends SortableTable
     }
 
     /**
-     * Display gradebook graphs
+     * Display gradebook graphs.
      */
     public function display_graph_by_resource()
     {
@@ -100,6 +101,7 @@ class FlatViewTable extends SortableTable
 
         if (empty($customdisplays)) {
             echo get_lang('ToViewGraphScoreRuleMustBeEnabled');
+
             return '';
         }
 
@@ -107,6 +109,7 @@ class FlatViewTable extends SortableTable
 
         if (empty($user_results) || empty($total_users)) {
             echo get_lang('NoResults');
+
             return '';
         }
 
@@ -157,7 +160,6 @@ class FlatViewTable extends SortableTable
                 $i++;
             }
         }
-
 
         //fixing $resource_list
         $max = 0;
@@ -225,7 +227,7 @@ class FlatViewTable extends SortableTable
                     [
                         'R' => 0,
                         'G' => 0,
-                        'B' => 0
+                        'B' => 0,
                     ]
                 );
 
@@ -233,7 +235,7 @@ class FlatViewTable extends SortableTable
                 $myPicture->setFontProperties(
                     [
                         'FontName' => api_get_path(SYS_FONTS_PATH).'opensans/OpenSans-Regular.ttf',
-                        'FontSize' => 10
+                        'FontSize' => 10,
                     ]
                 );
 
@@ -244,7 +246,7 @@ class FlatViewTable extends SortableTable
                     strip_tags($headerName[$i - 1]),
                     [
                         'FontSize' => 12,
-                        'Align' => TEXT_ALIGN_BOTTOMMIDDLE
+                        'Align' => TEXT_ALIGN_BOTTOMMIDDLE,
                     ]
                 );
 
@@ -258,7 +260,7 @@ class FlatViewTable extends SortableTable
                     'GridB' => 200,
                     'DrawSubTicks' => true,
                     'CycleBackground' => true,
-                    'Mode' => SCALE_MODE_START0
+                    'Mode' => SCALE_MODE_START0,
                 ];
                 $myPicture->drawScale($scaleSettings);
 
@@ -271,7 +273,7 @@ class FlatViewTable extends SortableTable
                         'R' => 0,
                         'G' => 0,
                         'B' => 0,
-                        'Alpha' => 10
+                        'Alpha' => 10,
                     ]
                 );
 
@@ -284,7 +286,7 @@ class FlatViewTable extends SortableTable
                         'R' => 0,
                         'G' => 0,
                         'B' => 0,
-                        'Alpha' => 10
+                        'Alpha' => 10,
                     ]
                 );
                 $settings = [
@@ -319,7 +321,7 @@ class FlatViewTable extends SortableTable
     }
 
     /**
-     * Function used by SortableTable to get total number of items in the table
+     * Function used by SortableTable to get total number of items in the table.
      */
     public function get_total_number_of_items()
     {
@@ -327,7 +329,7 @@ class FlatViewTable extends SortableTable
     }
 
     /**
-     * Function used by SortableTable to generate the data to display
+     * Function used by SortableTable to generate the data to display.
      */
     public function get_table_data(
         $from = 1,
@@ -350,23 +352,23 @@ class FlatViewTable extends SortableTable
         $header = null;
         if ($this->limit_enabled && $totalitems > GRADEBOOK_ITEM_LIMIT) {
             $header .= '<table style="width: 100%; text-align: right; margin-left: auto; margin-right: auto;" border="0" cellpadding="2">'
-                . '<tbody>'
-                . '<tr>';
+                .'<tbody>'
+                .'<tr>';
 
             // previous X
             $header .= '<td style="width:100%;">';
             if ($this->offset >= GRADEBOOK_ITEM_LIMIT) {
                 $header .= '<a href="'.api_get_self()
-                    . '?selectcat='.Security::remove_XSS($_GET['selectcat'])
-                    . '&offset='.(($this->offset) - GRADEBOOK_ITEM_LIMIT)
-                    . (isset($_GET['search']) ? '&search='.Security::remove_XSS($_GET['search']) : '').'">'
+                    .'?selectcat='.Security::remove_XSS($_GET['selectcat'])
+                    .'&offset='.(($this->offset) - GRADEBOOK_ITEM_LIMIT)
+                    .(isset($_GET['search']) ? '&search='.Security::remove_XSS($_GET['search']) : '').'">'
                     .Display::return_icon(
                         'action_prev.png',
                         get_lang('PreviousPage'),
                         [],
                         ICON_SIZE_MEDIUM
                     )
-                    . '</a>';
+                    .'</a>';
             } else {
                 $header .= Display::return_icon(
                     'action_prev_na.png',
@@ -382,11 +384,11 @@ class FlatViewTable extends SortableTable
 
             if ($calcnext > 0) {
                 $header .= '<a href="'.api_get_self()
-                    . '?selectcat='.Security::remove_XSS($_GET['selectcat'])
-                    . '&offset='.($this->offset + GRADEBOOK_ITEM_LIMIT)
-                    . (isset($_GET['search']) ? '&search='.Security::remove_XSS($_GET['search']) : '').'">'
-                    . Display::return_icon('action_next.png', get_lang('NextPage'), [], ICON_SIZE_MEDIUM)
-                    . '</a>';
+                    .'?selectcat='.Security::remove_XSS($_GET['selectcat'])
+                    .'&offset='.($this->offset + GRADEBOOK_ITEM_LIMIT)
+                    .(isset($_GET['search']) ? '&search='.Security::remove_XSS($_GET['search']) : '').'">'
+                    .Display::return_icon('action_next.png', get_lang('NextPage'), [], ICON_SIZE_MEDIUM)
+                    .'</a>';
             } else {
                 $header .= Display::return_icon(
                     'action_next_na.png',
@@ -497,6 +499,7 @@ class FlatViewTable extends SortableTable
 
             $table_data[] = $user_row;
         }
+
         return $table_data;
     }
 

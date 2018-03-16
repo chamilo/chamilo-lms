@@ -8,7 +8,7 @@ require_once __DIR__.'/cm_webservice_forum.php';
 require_once __DIR__.'/cm_soap.php';
 
 /**
- * Configures the WSCourse SOAP service
+ * Configures the WSCourse SOAP service.
  */
 $s = WSCMSoapServer::singleton();
 
@@ -92,7 +92,6 @@ $s->register(
     'Retorna o campo title de uma thread_id.'
 );
 
-
 $s->register(
     'WSCMForum.get_posts_id',
     [
@@ -125,7 +124,6 @@ $s->register(
     '',
     'Retorna o campo field de um post_id. Campos possiveis: title, text, date, sender ou sender_name.'
 );
-
 
 $s->register(
     'WSCMForum.send_post',

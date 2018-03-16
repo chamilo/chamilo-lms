@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*    LDAP module functions
-*
-*    If the application uses LDAP, these functions are used
-*    for logging in, searching user info, adding this info
-*    to the Chamilo database...
+ *    LDAP module functions.
+ *
+ *    If the application uses LDAP, these functions are used
+ *    for logging in, searching user info, adding this info
+ *    to the Chamilo database...
     - function ldap_authentication_check()
     - function ldap_find_user_info()
     - function ldap_login()
@@ -47,30 +47,33 @@
     - Michel Panckoucke for reporting and fixing a bug
     - Patrick Cool: fixing security hole
 
-    *    @author Roan Embrechts
-    *    @version 3.0
-    *    @package chamilo.auth.ldap
+ *    @author Roan Embrechts
+ *
+ *    @version 3.0
+ *
+ *    @package chamilo.auth.ldap
  * Note:
  * If you are using a firewall, you might need to check port 389 is open in
  * order for Chamilo to communicate with the LDAP server.
  * See http://support.chamilo.org/issues/4675 for details.
  */
 /**
- * Inclusions
+ * Inclusions.
  */
-use \ChamiloSession as Session;
+use ChamiloSession as Session;
 
 /**
- * Code
+ * Code.
  */
 require_once api_get_path(SYS_CODE_PATH).'auth/external_login/ldap.inc.php';
 require 'ldap_var.inc.php';
 /**
- *    Check login and password with LDAP
- *    @return boolean when login & password both OK, false otherwise
+ *    Check login and password with LDAP.
+ *
+ *    @return bool when login & password both OK, false otherwise
+ *
  *    @author Roan Embrechts (based on code from Universit� Jean Monet)
  */
-
 function ldap_login($login, $password)
 {
     //error_log('Entering ldap_login('.$login.','.$password.')',0);
@@ -100,12 +103,15 @@ function ldap_login($login, $password)
 
     //$result = "This is the result: $errorMessage";
     $result = $login_ldap_success;
+
     return $result;
 }
 
 /**
- *    Find user info in LDAP
+ *    Find user info in LDAP.
+ *
  *    @return array Array with indexes: "firstname", "name", "email", "employeenumber"
+ *
  *    @author Stefan De Wannemacker
  *    @author Roan Embrechts
  */
@@ -154,13 +160,13 @@ function ldap_find_user_info($login)
     return $result;
 }
 
-
 /**
-*    This function uses the data from ldap_find_user_info()
-*    to add the userdata to Chamilo
-*    "firstname", "name", "email", "isEmployee"
-*    @author Roan Embrechts
-*/
+ *    This function uses the data from ldap_find_user_info()
+ *    to add the userdata to Chamilo
+ *    "firstname", "name", "email", "isEmployee".
+ *
+ *    @author Roan Embrechts
+ */
 function ldap_put_user_info_locally($login, $info_array)
 {
     //error_log('Entering ldap_put_user_info_locally('.$login.',info_array)',0);
@@ -173,12 +179,12 @@ function ldap_put_user_info_locally($login, $info_array)
     /*----------------------------------------------------------
         1. set the necessary variables
     ------------------------------------------------------------ */
-    $uname      = $login;
-    $email      = $info_array["email"];
-    $nom        = $info_array["name"];
-    $prenom     = $info_array["firstname"];
-    $password   = $ldap_pass_placeholder;
-    $password1  = $ldap_pass_placeholder;
+    $uname = $login;
+    $email = $info_array["email"];
+    $nom = $info_array["name"];
+    $prenom = $info_array["firstname"];
+    $password = $ldap_pass_placeholder;
+    $password1 = $ldap_pass_placeholder;
     $official_code = '';
 
     define("STUDENT", 5);
@@ -252,14 +258,17 @@ function ldap_put_user_info_locally($login, $info_array)
  * The code of UGent uses these functions to authenticate.
  * function AuthVerifEnseignant ($uname, $passwd)
  * function AuthVerifEtudiant ($uname, $passwd)
- * function Authentif ($uname, $passwd)
+ * function Authentif ($uname, $passwd).
+ *
  * @todo translate the comments and code to english
  * @todo let these functions use the variables in config.inc instead of ldap_var.inc
  */
 /**
- * Checks the existence of a member in LDAP
+ * Checks the existence of a member in LDAP.
+ *
  * @param string username input on keyboard
  * @param string password given by user
+ *
  * @return int 0 if authentication succeeded, 1 if password was incorrect, -1 if it didn't belong to LDAP
  */
 function ldap_authentication_check($uname, $passwd)
@@ -298,11 +307,11 @@ function ldap_authentication_check($uname, $passwd)
 
     // test the Distinguish Name from the 1st connection
     if ($dn == "") {
-        return (-1); // doesn't belong to the addressbook
+        return -1; // doesn't belong to the addressbook
     }
     //bug ldap.. if password empty, return 1!
     if ($passwd == "") {
-        return(1);
+        return 1;
     }
     // Opening 2nd LDAP connection : Connection user for password check
     $ds = ldap_connect($ldap_host, $ldap_port);
@@ -313,15 +322,15 @@ function ldap_authentication_check($uname, $passwd)
     }
     // return in case of wrong password connection error
     if (@ldap_bind($ds, $dn, $passwd) === false) {
-        return (1); // invalid password
+        return 1; // invalid password
     } else {// connection successfull
-        return (0);
+        return 0;
     }
 } // end of check
 /**
- * Set the protocol version with version from config file (enables LDAP version 3)
- * @param    resource    resource LDAP connexion resource, passed by reference.
- * @return    void
+ * Set the protocol version with version from config file (enables LDAP version 3).
+ *
+ * @param    resource    resource LDAP connexion resource, passed by reference
  */
 function ldap_set_version(&$resource)
 {
@@ -334,11 +343,13 @@ function ldap_set_version(&$resource)
     }
 }
 /**
- * Handle bind (whether authenticated or not)
+ * Handle bind (whether authenticated or not).
+ *
  * @param    resource    The LDAP handler to which we are connecting (by reference)
  * @param    resource    The LDAP bind handler we will be modifying
- * @param boolean $ldap_bind
- * @return    boolean        Status of the bind assignment. True for success, false for failure.
+ * @param bool $ldap_bind
+ *
+ * @return bool Status of the bind assignment. True for success, false for failure.
  */
 function ldap_handle_bind(&$ldap_handler, &$ldap_bind)
 {
@@ -366,8 +377,10 @@ function ldap_handle_bind(&$ldap_handler, &$ldap_bind)
     }
 }
 /**
- * Get the total number of users on the platform
+ * Get the total number of users on the platform.
+ *
  * @see SortableTable#get_total_number_of_items()
+ *
  * @author    Mustapha Alouani
  */
 function ldap_get_users()
@@ -414,18 +427,22 @@ function ldap_get_users()
         $sr = ldap_search($ds, $ldap_basedn, $str_query);
         //echo "Le nombre de resultats est : ".ldap_count_entries($ds,$sr)."<p>";
         $info = ldap_get_entries($ds, $sr);
+
         return $info;
     } else {
         if (count($ldap_query) != 0) {
             echo Display::return_message(get_lang('LDAPConnectionError'), 'error');
         }
+
         return [];
     }
 }
 
 /**
- * Get the total number of users on the platform
+ * Get the total number of users on the platform.
+ *
  * @see SortableTable#get_total_number_of_items()
+ *
  * @author    Mustapha Alouani
  */
 function ldap_get_number_of_users()
@@ -440,7 +457,9 @@ function ldap_get_number_of_users()
 
 /**
  * Get the users to display on the current page.
+ *
  * @see SortableTable#get_table_data($from)
+ *
  * @author    Mustapha Alouani
  */
 function ldap_get_user_data($from, $number_of_items, $column, $direction)
@@ -477,14 +496,18 @@ function ldap_get_user_data($from, $number_of_items, $column, $direction)
             echo Display::return_message(get_lang('NoUser'), 'error');
         }
     }
+
     return $users;
 }
 
 /**
- * Build the modify-column of the table
- * @param int $user_id The user id
+ * Build the modify-column of the table.
+ *
+ * @param int    $user_id    The user id
  * @param string $url_params
+ *
  * @return string Some HTML-code with modify-buttons
+ *
  * @author    Mustapha Alouani
  */
 function modify_filter($user_id, $url_params, $row)
@@ -501,12 +524,15 @@ function modify_filter($user_id, $url_params, $row)
     }
     //$url_params_id="id=".$row[0];
     $result = '<a href="ldap_users_list.php?action=add_user&amp;user_id='.$user_id.'&amp;'.$query_string.'&amp;sec_token='.Security::getTokenFromSession().'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, api_get_system_encoding()))."'".')) return false;">'.Display::return_icon($icon, get_lang('AddUsers')).'</a>';
+
     return $result;
 }
 
 /**
- * Adds a user to the Chamilo database or updates its data
+ * Adds a user to the Chamilo database or updates its data.
+ *
  * @param    string    username (and uid inside LDAP)
+ *
  * @author    Mustapha Alouani
  */
 function ldap_add_user($login)
@@ -590,26 +616,26 @@ function ldap_add_user_by_array($data, $update_if_exists = true)
             );
         }
     }
+
     return $user_id;
 }
 
 /**
- * Adds a list of users to one session
+ * Adds a list of users to one session.
+ *
  * @param    array    Array of user ids
  * @param    string    Course code
- * @return    void
  */
 function ldap_add_user_to_session($UserList, $id_session)
 {
-
     // Database Table Definitions
-    $tbl_session                        = Database::get_main_table(TABLE_MAIN_SESSION);
+    $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
     $tbl_session_rel_class = Database::get_main_table(TABLE_MAIN_SESSION_CLASS);
-    $tbl_session_rel_course                = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-    $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-    $tbl_course                            = Database::get_main_table(TABLE_MAIN_COURSE);
-    $tbl_user                            = Database::get_main_table(TABLE_MAIN_USER);
-    $tbl_session_rel_user                = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+    $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+    $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+    $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+    $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
     $tbl_class = Database::get_main_table(TABLE_MAIN_CLASS);
     $tbl_class_user = Database::get_main_table(TABLE_MAIN_CLASS_USER);
 
@@ -657,11 +683,13 @@ function ldap_add_user_to_session($UserList, $id_session)
 
 /**
  * Synchronize users from the configured LDAP connection (in auth.conf.php). If
- * configured to disable old users,
- * @param   bool    $disableOldUsers Whether to disable users who have disappeared from LDAP (true) or just leave them be (default: false)
- * @param   bool    $deleteStudents Go one step further and delete completely students missing from LDAP
- * @param   bool    $deleteTeachers Go even one step further and also delete completely teachers missing from LDAP
- * @return  int     Total number of users added (not counting possible removals)
+ * configured to disable old users,.
+ *
+ * @param bool $disableOldUsers Whether to disable users who have disappeared from LDAP (true) or just leave them be (default: false)
+ * @param bool $deleteStudents  Go one step further and delete completely students missing from LDAP
+ * @param bool $deleteTeachers  Go even one step further and also delete completely teachers missing from LDAP
+ *
+ * @return int Total number of users added (not counting possible removals)
  */
 function syncro_users(
   $disableOldUsers = false,

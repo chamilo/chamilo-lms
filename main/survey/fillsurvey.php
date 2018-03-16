@@ -5,11 +5,13 @@ use ChamiloSession as Session;
 
 /**
  * @package chamilo.survey
+ *
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
  * refactoring and rewriting large parts of the code
  * @author Julio Montoya <gugli100@gmail.com>, Chamilo: Personality Test
  * modification and rewriting large parts of the code as well
+ *
  * @todo check if the user already filled the survey and if this
  * is the case then the answers have to be updated and not stored again.
  * @todo performance could be improved if not the survey_id was
@@ -59,7 +61,7 @@ $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : api_get_se
 if (!empty($userInfo)) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId,
-        'name' => get_lang('SurveyList')
+        'name' => get_lang('SurveyList'),
     ];
 }
 
@@ -176,7 +178,7 @@ if (Database::num_rows($result) > 1) {
         $frmLangUrl = api_get_self().'?'.api_get_cidreq().'&'
             .http_build_query([
                 'course' => Security::remove_XSS($_GET['course']),
-                'invitationcode' => Security::remove_XSS($_GET['invitationcode'])
+                'invitationcode' => Security::remove_XSS($_GET['invitationcode']),
             ]);
 
         echo '<form id="language" name="language" method="POST" action="'.$frmLangUrl.'">';
@@ -221,7 +223,7 @@ if (count($_POST) > 0) {
         }
 
         // Looping through all the post values
-        foreach ($_POST as $key => & $value) {
+        foreach ($_POST as $key => &$value) {
             // If the post value key contains the string 'question' then it is an answer on a question
             if (strpos($key, 'question') !== false && ($key != '_qf__question')) {
                 // Finding the question id by removing 'question'
@@ -244,7 +246,7 @@ if (count($_POST) > 0) {
                         $course_id
                     );
 
-                    foreach ($value as $answer_key => & $answer_value) {
+                    foreach ($value as $answer_key => &$answer_value) {
                         if ($types[$survey_question_id] == 'score') {
                             $option_id = $answer_key;
                             $option_value = $answer_value;
@@ -321,7 +323,7 @@ if (count($_POST) > 0) {
         }
 
         // Looping through all the post values
-        foreach ($_POST as $key => & $value) {
+        foreach ($_POST as $key => &$value) {
             // If the post value key contains the string 'question' then it is an answer to a question
             if (strpos($key, 'question') !== false) {
                 // Finding the question id by removing 'question'
@@ -559,7 +561,7 @@ if ($survey_data['form_fields'] &&
                     'official_code',
                     'email',
                     'phone',
-                    'language'
+                    'language',
                 ];
 
                 foreach ($user_data as $key => $value) {
@@ -834,7 +836,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
             $groups = array_keys($final_results);
             $result = [];
             $count_result = 0;
-            foreach ($final_results as $key => & $sub_result) {
+            foreach ($final_results as $key => &$sub_result) {
                 $result[] = ['group' => $key, 'value' => $sub_result];
                 $count_result++;
             }
@@ -1214,9 +1216,9 @@ $form = new FormValidator(
 $form->addHidden('language', $p_l);
 
 if (isset($questions) && is_array($questions)) {
-    foreach ($questions as $key => & $question) {
+    foreach ($questions as $key => &$question) {
         $ch_type = 'ch_'.$question['type'];
-        $display = new $ch_type;
+        $display = new $ch_type();
         // @todo move this in a function.
         $form->addHtml('<div class="survey_question '.$ch_type.'">');
         $form->addHtml('<h5 class="title">'.$question['sort'].'. '.strip_tags($question['survey_question']).'</h5>');
@@ -1370,7 +1372,8 @@ $form->display();
 Display::display_footer();
 
 /**
- * Check whether this survey has ended. If so, display message and exit rhis script
+ * Check whether this survey has ended. If so, display message and exit rhis script.
+ *
  * @param array $surveyData Survey data
  */
 function check_time_availability($surveyData)

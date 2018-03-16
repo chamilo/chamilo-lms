@@ -9,19 +9,21 @@ use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class CNotebookRepository
+ * Class CNotebookRepository.
+ *
  * @package Chamilo\CourseBundle\Entity\Repository
  */
 class CNotebookRepository extends EntityRepository
 {
-
     /**
-     * Get the user notebooks in a course
-     * @param User $user
-     * @param Course $course
+     * Get the user notebooks in a course.
+     *
+     * @param User         $user
+     * @param Course       $course
      * @param Session|null $session
-     * @param string $orderField
-     * @param string $orderDirection
+     * @param string       $orderField
+     * @param string       $orderDirection
+     *
      * @return array
      */
     public function findByUser(

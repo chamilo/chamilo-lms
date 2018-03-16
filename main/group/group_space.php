@@ -6,9 +6,9 @@
  * a list of users in the group, subscribe or unsubscribe option, tutors...
  *
  * @package chamilo.group
+ *
  * @todo    Display error message if no group ID specified
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GROUP;
 
@@ -32,7 +32,7 @@ $this_section = SECTION_COURSES;
 $nameTools = get_lang('GroupSpace');
 $interbreadcrumb[] = [
     'url' => 'group.php?'.api_get_cidreq(),
-    'name' => get_lang('Groups')
+    'name' => get_lang('Groups'),
 ];
 
 /*	Ensure all private groups // Juan Carlos Raña Trabado */
@@ -157,7 +157,7 @@ if (api_is_allowed_to_edit(false, true) ||
         // Link to the documents area of this group
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(),
-            'content' => Display::return_icon('folder.png', get_lang('GroupDocument'), [], 32)
+            'content' => Display::return_icon('folder.png', get_lang('GroupDocument'), [], 32),
         ];
     }
 
@@ -169,7 +169,7 @@ if (api_is_allowed_to_edit(false, true) ||
         // Link to a group-specific part of agenda
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?'.api_get_cidreq().$groupFilter,
-            'content' => Display::return_icon('agenda.png', get_lang('GroupCalendar'), [], 32)
+            'content' => Display::return_icon('agenda.png', get_lang('GroupCalendar'), [], 32),
         ];
     }
 
@@ -177,14 +177,14 @@ if (api_is_allowed_to_edit(false, true) ||
         // Link to the works area of this group
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-            'content' => Display::return_icon('work.png', get_lang('GroupWork'), [], 32)
+            'content' => Display::return_icon('work.png', get_lang('GroupWork'), [], 32),
         ];
     }
     if ($current_group['announcements_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
         // Link to a group-specific part of announcements
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
-            'content' => Display::return_icon('announce.png', get_lang('GroupAnnouncements'), [], 32)
+            'content' => Display::return_icon('announce.png', get_lang('GroupAnnouncements'), [], 32),
         ];
     }
 
@@ -192,7 +192,7 @@ if (api_is_allowed_to_edit(false, true) ||
         // Link to the wiki area of this group
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'wiki/index.php?'.api_get_cidreq().'&action=show&title=index&session_id='.api_get_session_id().'&group_id='.$current_group['id'],
-            'content' => Display::return_icon('wiki.png', get_lang('GroupWiki'), [], 32)
+            'content' => Display::return_icon('wiki.png', get_lang('GroupWiki'), [], 32),
         ];
     }
 
@@ -203,13 +203,13 @@ if (api_is_allowed_to_edit(false, true) ||
                 'url' => "javascript: void(0);",
                 'content' => Display::return_icon('chat.png', get_lang('Chat'), [], 32),
                 'url_attributes' => [
-                    'onclick' => " window.open('../chat/chat.php?".api_get_cidreq()."&toolgroup=".$current_group['id']."','window_chat_group_".api_get_course_id()."_".api_get_group_id()."','height=380, width=625, left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no')"
-                ]
+                    'onclick' => " window.open('../chat/chat.php?".api_get_cidreq()."&toolgroup=".$current_group['id']."','window_chat_group_".api_get_course_id()."_".api_get_group_id()."','height=380, width=625, left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no')",
+                ],
             ];
         } else {
             $actions_array[] = [
                 'url' => api_get_path(WEB_CODE_PATH)."chat/chat.php?".api_get_cidreq()."&toolgroup=".$current_group['id'],
-                'content' => Display::return_icon('chat.png', get_lang('Chat'), [], 32)
+                'content' => Display::return_icon('chat.png', get_lang('Chat'), [], 32),
             ];
         }
     }
@@ -220,7 +220,7 @@ if (api_is_allowed_to_edit(false, true) ||
         if ($bbb->hasGroupSupport()) {
             $actions_array[] = [
                 'url' => api_get_path(WEB_PLUGIN_PATH)."bbb/start.php?".api_get_cidreq(),
-                'content' => Display::return_icon('bbb.png', get_lang('VideoConference'), [], 32)
+                'content' => Display::return_icon('bbb.png', get_lang('VideoConference'), [], 32),
             ];
         }
     }
@@ -254,7 +254,7 @@ if (api_is_allowed_to_edit(false, true) ||
         // Link to the documents area of this group
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(),
-            'content' => Display::return_icon('folder.png', get_lang('GroupDocument'), [], ICON_SIZE_MEDIUM)
+            'content' => Display::return_icon('folder.png', get_lang('GroupDocument'), [], ICON_SIZE_MEDIUM),
         ];
     }
 
@@ -266,7 +266,7 @@ if (api_is_allowed_to_edit(false, true) ||
         // Link to a group-specific part of agenda
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?'.api_get_cidreq().$groupFilter,
-            'content' => Display::return_icon('agenda.png', get_lang('GroupCalendar'), [], 32)
+            'content' => Display::return_icon('agenda.png', get_lang('GroupCalendar'), [], 32),
         ];
     }
 
@@ -274,7 +274,7 @@ if (api_is_allowed_to_edit(false, true) ||
         // Link to the works area of this group
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-            'content' => Display::return_icon('work.png', get_lang('GroupWork'), [], ICON_SIZE_MEDIUM)
+            'content' => Display::return_icon('work.png', get_lang('GroupWork'), [], ICON_SIZE_MEDIUM),
         ];
     }
 
@@ -282,7 +282,7 @@ if (api_is_allowed_to_edit(false, true) ||
         // Link to a group-specific part of announcements
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
-            'content' => Display::return_icon('announce.png', get_lang('GroupAnnouncements'), [], ICON_SIZE_MEDIUM)
+            'content' => Display::return_icon('announce.png', get_lang('GroupAnnouncements'), [], ICON_SIZE_MEDIUM),
         ];
     }
 
@@ -290,7 +290,7 @@ if (api_is_allowed_to_edit(false, true) ||
         // Link to the wiki area of this group
         $actions_array[] = [
             'url' => api_get_path(WEB_CODE_PATH).'wiki/index.php?'.api_get_cidreq().'&action=show&title=index&session_id='.api_get_session_id().'&group_id='.$current_group['id'],
-            'content' => Display::return_icon('wiki.png', get_lang('GroupWiki'), [], 32)
+            'content' => Display::return_icon('wiki.png', get_lang('GroupWiki'), [], 32),
         ];
     }
 
@@ -299,12 +299,12 @@ if (api_is_allowed_to_edit(false, true) ||
         if (api_get_course_setting('allow_open_chat_window')) {
             $actions_array[] = [
                 'url' => "javascript: void(0);\" onclick=\"window.open('../chat/chat.php?".api_get_cidreq()."&toolgroup=".$current_group['id']."','window_chat_group_".api_get_course_id()."_".api_get_group_id()."','height=380, width=625, left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no') \"",
-                'content' => Display::return_icon('chat.png', get_lang('Chat'), [], 32)
+                'content' => Display::return_icon('chat.png', get_lang('Chat'), [], 32),
             ];
         } else {
             $actions_array[] = [
                 'url' => api_get_path(WEB_CODE_PATH)."chat/chat.php?".api_get_cidreq()."&toolgroup=".$current_group['id'],
-                'content' => Display::return_icon('chat.png', get_lang('Chat'), [], 32)
+                'content' => Display::return_icon('chat.png', get_lang('Chat'), [], 32),
             ];
         }
     }
@@ -355,7 +355,7 @@ $table = new SortableTable(
 $origin = api_get_origin();
 $my_cidreq = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
 $my_gidreq = isset($_GET['gidReq']) ? Security::remove_XSS($_GET['gidReq']) : '';
-$parameters = ['cidReq' => $my_cidreq, 'origin'=> $origin, 'gidReq' => $my_gidreq];
+$parameters = ['cidReq' => $my_cidreq, 'origin' => $origin, 'gidReq' => $my_gidreq];
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '');
 
@@ -383,11 +383,12 @@ $table->set_column_filter(0, 'user_icon_filter');
 $table->display();
 
 /**
- * Get the number of subscribed users to the group
+ * Get the number of subscribed users to the group.
  *
- * @return integer
+ * @return int
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ *
  * @version April 2008
  */
 function get_number_of_group_users()
@@ -415,15 +416,17 @@ function get_number_of_group_users()
 }
 
 /**
- * Get the details of the users in a group
+ * Get the details of the users in a group.
  *
- * @param integer $from starting row
- * @param integer $number_of_items number of items to be displayed
- * @param integer $column sorting colum
- * @param integer $direction sorting direction
+ * @param int $from            starting row
+ * @param int $number_of_items number of items to be displayed
+ * @param int $column          sorting colum
+ * @param int $direction       sorting direction
+ *
  * @return array
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ *
  * @version April 2008
  */
 function get_group_user_data($from, $number_of_items, $column, $direction)
@@ -486,7 +489,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
         } else {
             $sql = "SELECT DISTINCT
 						user.id 	AS col0,
-						". (
+						".(
                 api_is_western_name_order() ?
                     "user.firstname 	AS col1,
 						user.lastname 	AS col2 "
@@ -514,12 +517,15 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
     while ($row = Database::fetch_row($result)) {
         $return[] = $row;
     }
+
     return $return;
 }
 
 /**
- * Returns a mailto-link
+ * Returns a mailto-link.
+ *
  * @param string $email An email-address
+ *
  * @return string HTML-code with a mailto-link
  */
 function email_filter($email)
@@ -528,18 +534,21 @@ function email_filter($email)
 }
 
 /**
- * Display a user icon that links to the user page
+ * Display a user icon that links to the user page.
  *
- * @param integer $user_id the id of the user
+ * @param int $user_id the id of the user
+ *
  * @return string code
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ *
  * @version April 2008
  */
 function user_icon_filter($user_id)
 {
     $userInfo = api_get_user_info($user_id);
     $photo = '<img src="'.$userInfo['avatar'].'" alt="'.$userInfo['complete_name'].'" width="22" height="22" title="'.$userInfo['complete_name'].'" />';
+
     return Display::url($photo, $userInfo['profile_url']);
 }
 
@@ -548,14 +557,17 @@ function user_icon_filter($user_id)
  *
  * The parameters use a trick of the sorteable table, where the first param is
  * the original value of the column
+ *
  * @param   string  User name (value of the column at the time of calling)
  * @param   string  URL parameters
  * @param   array   Row of the "sortable table" as it is at the time of function call - we extract the user ID from there
- * @return  string  HTML link
+ *
+ * @return string HTML link
  */
 function user_name_filter($name, $url_params, $row)
 {
     $userInfo = api_get_user_info($row[0]);
+
     return UserManager::getUserProfileLink($userInfo);
 }
 

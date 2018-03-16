@@ -4,7 +4,8 @@
 require_once __DIR__.'/../inc/global.inc.php';
 
 /**
- * Checks total platform size
+ * Checks total platform size.
+ *
  * @param bool $debug
  *
  * @return bool

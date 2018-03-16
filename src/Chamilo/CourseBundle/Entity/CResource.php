@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CResource
+ * CResource.
  *
  * @ORM\Table(
  *  name="c_resource",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CResource
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,14 +28,14 @@ class CResource
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
@@ -49,7 +49,7 @@ class CResource
     private $sourceType;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="source_id", type="integer", nullable=true)
      */
@@ -63,16 +63,17 @@ class CResource
     private $resourceType;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="resource_id", type="integer", nullable=true)
      */
     private $resourceId;
 
     /**
-     * Set sourceType
+     * Set sourceType.
      *
      * @param string $sourceType
+     *
      * @return CResource
      */
     public function setSourceType($sourceType)
@@ -83,7 +84,7 @@ class CResource
     }
 
     /**
-     * Get sourceType
+     * Get sourceType.
      *
      * @return string
      */
@@ -93,9 +94,10 @@ class CResource
     }
 
     /**
-     * Set sourceId
+     * Set sourceId.
      *
-     * @param integer $sourceId
+     * @param int $sourceId
+     *
      * @return CResource
      */
     public function setSourceId($sourceId)
@@ -106,9 +108,9 @@ class CResource
     }
 
     /**
-     * Get sourceId
+     * Get sourceId.
      *
-     * @return integer
+     * @return int
      */
     public function getSourceId()
     {
@@ -116,9 +118,10 @@ class CResource
     }
 
     /**
-     * Set resourceType
+     * Set resourceType.
      *
      * @param string $resourceType
+     *
      * @return CResource
      */
     public function setResourceType($resourceType)
@@ -129,7 +132,7 @@ class CResource
     }
 
     /**
-     * Get resourceType
+     * Get resourceType.
      *
      * @return string
      */
@@ -139,9 +142,10 @@ class CResource
     }
 
     /**
-     * Set resourceId
+     * Set resourceId.
      *
-     * @param integer $resourceId
+     * @param int $resourceId
+     *
      * @return CResource
      */
     public function setResourceId($resourceId)
@@ -152,9 +156,9 @@ class CResource
     }
 
     /**
-     * Get resourceId
+     * Get resourceId.
      *
-     * @return integer
+     * @return int
      */
     public function getResourceId()
     {
@@ -162,9 +166,10 @@ class CResource
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CResource
      */
     public function setId($id)
@@ -175,9 +180,9 @@ class CResource
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -185,9 +190,10 @@ class CResource
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CResource
      */
     public function setCId($cId)
@@ -198,9 +204,9 @@ class CResource
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

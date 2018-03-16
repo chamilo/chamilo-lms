@@ -1,33 +1,34 @@
 <?php
 /* See license terms in /license.txt */
 /**
-* EVENTS LIBRARY
-*
-* This is the events library for Chamilo.
-* Functions of this library are used to record informations when some kind
-* of event occur. Each event has his own types of informations then each event
-* use its own function.
-*
-* @package chamilo.library
-* @todo convert queries to use Database API
-*/
+ * EVENTS LIBRARY.
+ *
+ * This is the events library for Chamilo.
+ * Functions of this library are used to record informations when some kind
+ * of event occur. Each event has his own types of informations then each event
+ * use its own function.
+ *
+ * @package chamilo.library
+ *
+ * @todo convert queries to use Database API
+ */
 /**
- * Class
+ * Class.
+ *
  * @package chamilo.library
  */
 class ExerciseShowFunctions
 {
     /**
-     * Shows the answer to a fill-in-the-blanks question, as HTML
-     * @param int $feedbackType
-     * @param string    $answer
-     * @param int $id       Exercise ID
-     * @param int $questionId      Question ID
-     * @param int $resultsDisabled
-     * @param string $originalStudentAnswer
-     * @param bool $showTotalScoreAndUserChoices
+     * Shows the answer to a fill-in-the-blanks question, as HTML.
      *
-     * @return void
+     * @param int    $feedbackType
+     * @param string $answer
+     * @param int    $id                           Exercise ID
+     * @param int    $questionId                   Question ID
+     * @param int    $resultsDisabled
+     * @param string $originalStudentAnswer
+     * @param bool   $showTotalScoreAndUserChoices
      */
     public static function display_fill_in_blanks_answer(
         $feedbackType,
@@ -66,12 +67,12 @@ class ExerciseShowFunctions
     }
 
     /**
-     * Shows the answer to a calculated question, as HTML
-    *  @param Exercise $exercise
+     * Shows the answer to a calculated question, as HTML.
+     *
+     *  @param Exercise $exercise
      * @param string    Answer text
      * @param int       Exercise ID
      * @param int       Question ID
-     * @return void
      */
     public static function display_calculated_answer(
         $exercise,
@@ -87,10 +88,10 @@ class ExerciseShowFunctions
     ) {
         if ($exercise->showExpectedChoice()) {
             if (empty($id)) {
-                echo '<tr><td>'. Security::remove_XSS($answer).'</td>';
-                echo '<td>'. Security::remove_XSS($choice).'</td>';
-                echo '<td>'. Security::remove_XSS($expectedChoice).'</td>';
-                echo '<td>'. Security::remove_XSS($status).'</td>';
+                echo '<tr><td>'.Security::remove_XSS($answer).'</td>';
+                echo '<td>'.Security::remove_XSS($choice).'</td>';
+                echo '<td>'.Security::remove_XSS($expectedChoice).'</td>';
+                echo '<td>'.Security::remove_XSS($status).'</td>';
                 echo '</tr>';
             } else {
                 echo '<tr><td>';
@@ -126,11 +127,11 @@ class ExerciseShowFunctions
     }
 
     /**
-     * Shows the answer to a free-answer question, as HTML
+     * Shows the answer to a free-answer question, as HTML.
+     *
      * @param string    Answer text
      * @param int       Exercise ID
      * @param int       Question ID
-     * @return void
      */
     public static function display_free_answer(
         $feedback_type,
@@ -164,8 +165,8 @@ class ExerciseShowFunctions
      * @param $id
      * @param $questionId
      * @param null $fileUrl
-     * @param int $results_disabled
-     * @param int $questionScore
+     * @param int  $results_disabled
+     * @param int  $questionScore
      */
     public static function display_oral_expression_answer(
         $feedback_type,
@@ -179,18 +180,18 @@ class ExerciseShowFunctions
         if (isset($fileUrl)) {
             echo '
                 <tr>
-                    <td><audio src="' . $fileUrl.'" controls></audio></td>
+                    <td><audio src="'.$fileUrl.'" controls></audio></td>
                 </tr>
             ';
         }
 
         if (empty($id)) {
             echo '<tr>';
-            echo Display::tag('td', Security::remove_XSS($answer), ['width'=>'55%']);
+            echo Display::tag('td', Security::remove_XSS($answer), ['width' => '55%']);
             echo '</tr>';
             if (!$questionScore && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
                 echo '<tr>';
-                echo Display::tag('td', ExerciseLib::getNotCorrectedYetText(), ['width'=>'45%']);
+                echo Display::tag('td', ExerciseLib::getNotCorrectedYetText(), ['width' => '45%']);
                 echo '</tr>';
             } else {
                 echo '<tr><td>&nbsp;</td></tr>';
@@ -213,15 +214,16 @@ class ExerciseShowFunctions
     }
 
     /**
-     * Displays the answer to a hotspot question
-     * @param int $feedback_type
-     * @param int $answerId
+     * Displays the answer to a hotspot question.
+     *
+     * @param int    $feedback_type
+     * @param int    $answerId
      * @param string $answer
      * @param string $studentChoice
      * @param string $answerComment
-     * @param int $resultsDisabled
-     * @param int $orderColor
-     * @param bool $showTotalScoreAndUserChoices
+     * @param int    $resultsDisabled
+     * @param int    $orderColor
+     * @param bool   $showTotalScoreAndUserChoices
      */
     public static function display_hotspot_answer(
         $feedback_type,
@@ -259,7 +261,7 @@ class ExerciseShowFunctions
             "#F4EB24",
             "#ED2024",
             "#3B3B3B",
-            "#F7BDE2"
+            "#F7BDE2",
         ];
         echo '<table class="data_table"><tr>';
         echo '<td class="text-center" width="5%">';
@@ -290,21 +292,21 @@ class ExerciseShowFunctions
     }
 
     /**
-     * Display the answers to a multiple choice question
+     * Display the answers to a multiple choice question.
+     *
      * @param Exercise $exercise
-     * @param int $feedback_type Feedback type
-     * @param int $answerType Answer type
-     * @param int $studentChoice Student choice
-     * @param string $answer Textual answer
-     * @param string $answerComment Comment on answer
-     * @param string $answerCorrect Correct answer comment
-     * @param int $id Exercise ID
-     * @param int $questionId Question ID
-     * @param boolean $ans Whether to show the answer comment or not
-     * @param bool $resultsDisabled
-     * @param bool $showTotalScoreAndUserChoices
-     * @param bool $export
-     * @return void
+     * @param int      $feedback_type                Feedback type
+     * @param int      $answerType                   Answer type
+     * @param int      $studentChoice                Student choice
+     * @param string   $answer                       Textual answer
+     * @param string   $answerComment                Comment on answer
+     * @param string   $answerCorrect                Correct answer comment
+     * @param int      $id                           Exercise ID
+     * @param int      $questionId                   Question ID
+     * @param bool     $ans                          Whether to show the answer comment or not
+     * @param bool     $resultsDisabled
+     * @param bool     $showTotalScoreAndUserChoices
+     * @param bool     $export
      */
     public static function display_unique_or_multiple_answer(
         $exercise,
@@ -328,7 +330,7 @@ class ExerciseShowFunctions
                 '<html>',
                 '</html>',
                 '<body>',
-                '</body>'
+                '</body>',
             ];
             $answer = str_replace($tags, '', $answer);
         }
@@ -400,18 +402,17 @@ class ExerciseShowFunctions
     }
 
     /**
-     * Display the answers to a multiple choice question
+     * Display the answers to a multiple choice question.
      *
      * @param Exercise $exercise
-     * @param integer Answer type
-     * @param integer Student choice
+     * @param int Answer type
+     * @param int Student choice
      * @param string  Textual answer
      * @param string  Comment on answer
      * @param string  Correct answer comment
-     * @param integer Exercise ID
-     * @param integer Question ID
-     * @param boolean Whether to show the answer comment or not
-     * @return void
+     * @param int Exercise ID
+     * @param int Question ID
+     * @param bool Whether to show the answer comment or not
      */
     public static function display_multiple_answer_true_false(
         $exercise,
@@ -496,19 +497,18 @@ class ExerciseShowFunctions
     }
 
     /**
-    * Display the answers to a multiple choice question
-    *
-    * @param Exercise $exercise
-    * @param integer Answer type
-    * @param integer Student choice
-    * @param string  Textual answer
-    * @param string  Comment on answer
-    * @param string  Correct answer comment
-    * @param integer Exercise ID
-    * @param integer Question ID
-    * @param boolean Whether to show the answer comment or not
-    * @return void
-    */
+     * Display the answers to a multiple choice question.
+     *
+     * @param Exercise $exercise
+     * @param int Answer type
+     * @param int Student choice
+     * @param string  Textual answer
+     * @param string  Comment on answer
+     * @param string  Correct answer comment
+     * @param int Exercise ID
+     * @param int Question ID
+     * @param bool Whether to show the answer comment or not
+     */
     public static function display_multiple_answer_combination_true_false(
         $exercise,
         $feedback_type,
@@ -597,12 +597,12 @@ class ExerciseShowFunctions
     }
 
     /**
-    * @param $feedback_type
-    * @param $exe_id
-    * @param $questionId
-    * @param null $questionScore
-    * @param int $results_disabled
-    */
+     * @param $feedback_type
+     * @param $exe_id
+     * @param $questionId
+     * @param null $questionScore
+     * @param int  $results_disabled
+     */
     public static function displayAnnotationAnswer(
         $feedback_type,
         $exe_id,

@@ -4,17 +4,19 @@
 //define('DEFAULT_PASSWORD', 'danonelearning');
 //TODO : Please implements this function for this module to work.
 /**
- * Gets user info from external source
+ * Gets user info from external source.
+ *
  * @param string login
  * @param string password
+ *
  * @return user array with at least the following fields:
- *       firstname
- *       lastname
- *       status
- *       email
- *       login
- *       password
- *   or false if no data
+ *              firstname
+ *              lastname
+ *              status
+ *              email
+ *              login
+ *              password
+ *              or false if no data
  * */
 function external_get_user_info($login, $password)
 {
@@ -81,7 +83,7 @@ function external_get_user_info($login, $password)
             'worldwide_bu' => $user_info['worldwide_bu'],
             'profile_link' => $user_info['profile_link'],
             'can_send_message' => $can_send_message,
-            'update_type' => 'external_logininfo']
+            'update_type' => 'external_logininfo', ],
     ];
 
     return $u; //Please return false if user does not exist
@@ -89,10 +91,11 @@ function external_get_user_info($login, $password)
 }
 
 /**
- * Return an array with all user info
+ * Return an array with all user info.
+ *
  * @param associative array with at least thes fields setted :
   firstname, lastname, status, email, login, password
- * @return mixed   new user id - if the new user creation succeeds, false otherwise
+ * @return mixed new user id - if the new user creation succeeds, false otherwise
  * */
 function external_add_user($u)
 {
@@ -152,12 +155,13 @@ function external_add_user($u)
         $u['extra'],
         $u['encrypt_method']
     );
+
     return $chamilo_uid;
 }
 
 /**
  * Update the user in chamilo database. It upgrade only info that is present in the
- * new_user array
+ * new_user array.
  *
  * @param $new_user associative array with the value to upgrade
  *    WARNING user_id key is MANDATORY
@@ -179,7 +183,9 @@ function external_add_user($u)
  *      - language
  *      - courses : string of all courses code separated by '|'
  *      - admin : boolean
- * @return boolean|null
+ *
+ * @return bool|null
+ *
  * @author ndiechburg <noel@cblue.be>
  * */
 function external_update_user($new_user)

@@ -1,14 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
+use Chamilo\UserBundle\Entity\User;
 
 /**
- * Show information about all issued badges with same skill by user
+ * Show information about all issued badges with same skill by user.
  *
  * @author José Loguercio Silva <jose.loguercio@beeznest.com>
+ *
  * @package chamilo.badge
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -37,19 +38,18 @@ if (!$user || !$skill) {
     exit;
 }
 
-
 $skillRepo = $em->getRepository('ChamiloCoreBundle:Skill');
 $skillUserRepo = $em->getRepository('ChamiloCoreBundle:SkillRelUser');
 $skillLevelRepo = $em->getRepository('ChamiloSkillBundle:Level');
 
 $userSkills = $skillUserRepo->findBy([
     'user' => $user,
-    'skill' => $skill
+    'skill' => $skill,
 ]);
 
 $userInfo = [
     'id' => $user->getId(),
-    'complete_name' => $user->getCompleteName()
+    'complete_name' => $user->getCompleteName(),
 ];
 
 $skillInfo = [
@@ -59,7 +59,7 @@ $skillInfo = [
     'description' => $skill->getDescription(),
     'criteria' => $skill->getCriteria(),
     'badge_image' => $skill->getWebIconPath(),
-    'courses' => []
+    'courses' => [],
 ];
 
 $allUserBadges = [];
@@ -93,7 +93,7 @@ foreach ($userSkills as $index => $skillIssue) {
         'skill_criteria' => $skillIssue->getSkill()->getCriteria(),
         'badge_assertion' => $skillIssue->getAssertionUrl(),
         'comments' => [],
-        'feedback_average' => $skillIssue->getAverage()
+        'feedback_average' => $skillIssue->getAverage(),
     ];
 
     $skillIssueComments = $skillIssue->getComments(true);
@@ -107,7 +107,7 @@ foreach ($userSkills as $index => $skillIssue) {
             'text' => $comment->getFeedbackText(),
             'value' => $comment->getFeedbackValue(),
             'giver_complete_name' => $comment->getFeedbackGiver()->getCompleteName(),
-            'datetime' => api_format_date($commentDate, DATE_TIME_FORMAT_SHORT)
+            'datetime' => api_format_date($commentDate, DATE_TIME_FORMAT_SHORT),
         ];
     }
 
@@ -138,7 +138,7 @@ foreach ($userSkills as $index => $skillIssue) {
     if ($profile) {
         $profileId = $profile->getId();
         $levels = $skillLevelRepo->findBy([
-            'profile' => $profileId
+            'profile' => $profileId,
         ]);
 
         foreach ($levels as $level) {
@@ -198,7 +198,7 @@ foreach ($userSkills as $index => $skillIssue) {
 
         $skillUserComment = new SkillRelUserComment();
         $skillUserComment
-            ->setFeedbackDateTime(new DateTime)
+            ->setFeedbackDateTime(new DateTime())
             ->setFeedbackGiver($currentUser)
             ->setFeedbackText($values['comment'])
             ->setFeedbackValue($values['value'] ? $values['value'] : null)

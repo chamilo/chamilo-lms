@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CForumPost
+ * CForumPost.
  *
  * @ORM\Table(
  *  name="c_forum_post",
@@ -27,7 +27,7 @@ class CForumPost
     const STATUS_REJECTED = 3;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -36,14 +36,14 @@ class CForumPost
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="post_id", type="integer")
      */
@@ -64,21 +64,21 @@ class CForumPost
     private $postText;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="thread_id", type="integer", nullable=true)
      */
     private $threadId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="forum_id", type="integer", nullable=true)
      */
     private $forumId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="poster_id", type="integer", nullable=true)
      */
@@ -99,37 +99,38 @@ class CForumPost
     private $postDate;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="post_notification", type="boolean", nullable=true)
      */
     private $postNotification;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="post_parent_id", type="integer", nullable=true)
      */
     private $postParentId;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="visible", type="boolean", nullable=true)
      */
     private $visible;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="status", type="integer", nullable=true)
      */
     private $status;
 
     /**
-     * Set postTitle
+     * Set postTitle.
      *
      * @param string $postTitle
+     *
      * @return CForumPost
      */
     public function setPostTitle($postTitle)
@@ -140,7 +141,7 @@ class CForumPost
     }
 
     /**
-     * Get postTitle
+     * Get postTitle.
      *
      * @return string
      */
@@ -150,9 +151,10 @@ class CForumPost
     }
 
     /**
-     * Set postText
+     * Set postText.
      *
      * @param string $postText
+     *
      * @return CForumPost
      */
     public function setPostText($postText)
@@ -163,7 +165,7 @@ class CForumPost
     }
 
     /**
-     * Get postText
+     * Get postText.
      *
      * @return string
      */
@@ -173,9 +175,10 @@ class CForumPost
     }
 
     /**
-     * Set threadId
+     * Set threadId.
      *
-     * @param integer $threadId
+     * @param int $threadId
+     *
      * @return CForumPost
      */
     public function setThreadId($threadId)
@@ -186,9 +189,9 @@ class CForumPost
     }
 
     /**
-     * Get threadId
+     * Get threadId.
      *
-     * @return integer
+     * @return int
      */
     public function getThreadId()
     {
@@ -196,9 +199,10 @@ class CForumPost
     }
 
     /**
-     * Set forumId
+     * Set forumId.
      *
-     * @param integer $forumId
+     * @param int $forumId
+     *
      * @return CForumPost
      */
     public function setForumId($forumId)
@@ -209,9 +213,9 @@ class CForumPost
     }
 
     /**
-     * Get forumId
+     * Get forumId.
      *
-     * @return integer
+     * @return int
      */
     public function getForumId()
     {
@@ -219,9 +223,10 @@ class CForumPost
     }
 
     /**
-     * Set posterId
+     * Set posterId.
      *
-     * @param integer $posterId
+     * @param int $posterId
+     *
      * @return CForumPost
      */
     public function setPosterId($posterId)
@@ -232,9 +237,9 @@ class CForumPost
     }
 
     /**
-     * Get posterId
+     * Get posterId.
      *
-     * @return integer
+     * @return int
      */
     public function getPosterId()
     {
@@ -242,9 +247,10 @@ class CForumPost
     }
 
     /**
-     * Set posterName
+     * Set posterName.
      *
      * @param string $posterName
+     *
      * @return CForumPost
      */
     public function setPosterName($posterName)
@@ -255,7 +261,7 @@ class CForumPost
     }
 
     /**
-     * Get posterName
+     * Get posterName.
      *
      * @return string
      */
@@ -265,9 +271,10 @@ class CForumPost
     }
 
     /**
-     * Set postDate
+     * Set postDate.
      *
      * @param \DateTime $postDate
+     *
      * @return CForumPost
      */
     public function setPostDate($postDate)
@@ -278,7 +285,7 @@ class CForumPost
     }
 
     /**
-     * Get postDate
+     * Get postDate.
      *
      * @return \DateTime
      */
@@ -288,9 +295,10 @@ class CForumPost
     }
 
     /**
-     * Set postNotification
+     * Set postNotification.
      *
-     * @param boolean $postNotification
+     * @param bool $postNotification
+     *
      * @return CForumPost
      */
     public function setPostNotification($postNotification)
@@ -301,9 +309,9 @@ class CForumPost
     }
 
     /**
-     * Get postNotification
+     * Get postNotification.
      *
-     * @return boolean
+     * @return bool
      */
     public function getPostNotification()
     {
@@ -311,9 +319,10 @@ class CForumPost
     }
 
     /**
-     * Set postParentId
+     * Set postParentId.
      *
-     * @param integer $postParentId
+     * @param int $postParentId
+     *
      * @return CForumPost
      */
     public function setPostParentId($postParentId)
@@ -324,9 +333,9 @@ class CForumPost
     }
 
     /**
-     * Get postParentId
+     * Get postParentId.
      *
-     * @return integer
+     * @return int
      */
     public function getPostParentId()
     {
@@ -334,9 +343,10 @@ class CForumPost
     }
 
     /**
-     * Set visible
+     * Set visible.
      *
-     * @param boolean $visible
+     * @param bool $visible
+     *
      * @return CForumPost
      */
     public function setVisible($visible)
@@ -347,9 +357,9 @@ class CForumPost
     }
 
     /**
-     * Get visible
+     * Get visible.
      *
-     * @return boolean
+     * @return bool
      */
     public function getVisible()
     {
@@ -357,9 +367,10 @@ class CForumPost
     }
 
     /**
-     * Set postId
+     * Set postId.
      *
-     * @param integer $postId
+     * @param int $postId
+     *
      * @return CForumPost
      */
     public function setPostId($postId)
@@ -370,9 +381,9 @@ class CForumPost
     }
 
     /**
-     * Get postId
+     * Get postId.
      *
-     * @return integer
+     * @return int
      */
     public function getPostId()
     {
@@ -380,9 +391,10 @@ class CForumPost
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CForumPost
      */
     public function setCId($cId)
@@ -393,9 +405,9 @@ class CForumPost
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -412,6 +424,7 @@ class CForumPost
 
     /**
      * @param int $status
+     *
      * @return CForumPost
      */
     public function setStatus($status)
@@ -422,7 +435,8 @@ class CForumPost
     }
 
     /**
-     * Get iid
+     * Get iid.
+     *
      * @return int
      */
     public function getIid()

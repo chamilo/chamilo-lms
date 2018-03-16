@@ -2,7 +2,7 @@
 /**
  * WidgetExtension.php
  * avanzu-admin
- * Date: 17.03.14
+ * Date: 17.03.14.
  */
 
 namespace Chamilo\ThemeBundle\Twig;
@@ -11,7 +11,6 @@ use Twig_Environment;
 
 class WidgetExtension extends \Twig_Extension
 {
-
     /**
      * @var Twig_Environment
      */
@@ -36,7 +35,6 @@ class WidgetExtension extends \Twig_Extension
     {
         $this->env = $environment;
     }
-
 
     public function getName()
     {

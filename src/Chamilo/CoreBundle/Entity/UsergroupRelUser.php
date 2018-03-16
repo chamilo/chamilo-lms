@@ -7,7 +7,7 @@ use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class UsergroupRelUser
+ * Class UsergroupRelUser.
  *
  * @ORM\Table(
  *     name="usergroup_rel_user",
@@ -21,20 +21,13 @@ use Doctrine\ORM\Mapping as ORM;
 class UsergroupRelUser
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue
      */
     protected $id;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="relation_type", type="integer", nullable=false)
-     */
-    private $relationType;
 
     /**
      * @var User
@@ -53,9 +46,16 @@ class UsergroupRelUser
     protected $usergroup;
 
     /**
-     * Get id
+     * @var int
      *
-     * @return integer
+     * @ORM\Column(name="relation_type", type="integer", nullable=false)
+     */
+    private $relationType;
+
+    /**
+     * Get id.
+     *
+     * @return int
      */
     public function getId()
     {
@@ -63,9 +63,10 @@ class UsergroupRelUser
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param User $user
+     *
      * @return UsergroupRelUser
      */
     public function setUser(User $user)
@@ -76,7 +77,7 @@ class UsergroupRelUser
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return User
      */
@@ -86,7 +87,7 @@ class UsergroupRelUser
     }
 
     /**
-     * Set usergroup
+     * Set usergroup.
      *
      * @param Usergroup $usergroup
      *
@@ -100,7 +101,7 @@ class UsergroupRelUser
     }
 
     /**
-     * Get usergroup
+     * Get usergroup.
      *
      * @return Usergroup
      */
@@ -110,9 +111,10 @@ class UsergroupRelUser
     }
 
     /**
-     * Set relationType
+     * Set relationType.
      *
-     * @param integer $relationType
+     * @param int $relationType
+     *
      * @return GroupRelUser
      */
     public function setRelationType($relationType)
@@ -123,9 +125,9 @@ class UsergroupRelUser
     }
 
     /**
-     * Get relationType
+     * Get relationType.
      *
-     * @return integer
+     * @return int
      */
     public function getRelationType()
     {

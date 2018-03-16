@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CBlogComment
+ * CBlogComment.
  *
  * @ORM\Table(
  *  name="c_blog_comment",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CBlogComment
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,14 +28,14 @@ class CBlogComment
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="comment_id", type="integer")
      */
     private $commentId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
@@ -56,7 +56,7 @@ class CBlogComment
     private $comment;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="author_id", type="integer", nullable=false)
      */
@@ -70,37 +70,38 @@ class CBlogComment
     private $dateCreation;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="blog_id", type="integer", nullable=false)
      */
     private $blogId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="post_id", type="integer", nullable=false)
      */
     private $postId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="task_id", type="integer", nullable=true)
      */
     private $taskId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="parent_comment_id", type="integer", nullable=false)
      */
     private $parentCommentId;
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return CBlogComment
      */
     public function setTitle($title)
@@ -111,7 +112,7 @@ class CBlogComment
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -121,9 +122,10 @@ class CBlogComment
     }
 
     /**
-     * Set comment
+     * Set comment.
      *
      * @param string $comment
+     *
      * @return CBlogComment
      */
     public function setComment($comment)
@@ -134,7 +136,7 @@ class CBlogComment
     }
 
     /**
-     * Get comment
+     * Get comment.
      *
      * @return string
      */
@@ -144,9 +146,10 @@ class CBlogComment
     }
 
     /**
-     * Set authorId
+     * Set authorId.
      *
-     * @param integer $authorId
+     * @param int $authorId
+     *
      * @return CBlogComment
      */
     public function setAuthorId($authorId)
@@ -157,9 +160,9 @@ class CBlogComment
     }
 
     /**
-     * Get authorId
+     * Get authorId.
      *
-     * @return integer
+     * @return int
      */
     public function getAuthorId()
     {
@@ -167,9 +170,10 @@ class CBlogComment
     }
 
     /**
-     * Set dateCreation
+     * Set dateCreation.
      *
      * @param \DateTime $dateCreation
+     *
      * @return CBlogComment
      */
     public function setDateCreation($dateCreation)
@@ -180,7 +184,7 @@ class CBlogComment
     }
 
     /**
-     * Get dateCreation
+     * Get dateCreation.
      *
      * @return \DateTime
      */
@@ -190,9 +194,10 @@ class CBlogComment
     }
 
     /**
-     * Set blogId
+     * Set blogId.
      *
-     * @param integer $blogId
+     * @param int $blogId
+     *
      * @return CBlogComment
      */
     public function setBlogId($blogId)
@@ -203,9 +208,9 @@ class CBlogComment
     }
 
     /**
-     * Get blogId
+     * Get blogId.
      *
-     * @return integer
+     * @return int
      */
     public function getBlogId()
     {
@@ -213,9 +218,10 @@ class CBlogComment
     }
 
     /**
-     * Set postId
+     * Set postId.
      *
-     * @param integer $postId
+     * @param int $postId
+     *
      * @return CBlogComment
      */
     public function setPostId($postId)
@@ -226,9 +232,9 @@ class CBlogComment
     }
 
     /**
-     * Get postId
+     * Get postId.
      *
-     * @return integer
+     * @return int
      */
     public function getPostId()
     {
@@ -236,9 +242,10 @@ class CBlogComment
     }
 
     /**
-     * Set taskId
+     * Set taskId.
      *
-     * @param integer $taskId
+     * @param int $taskId
+     *
      * @return CBlogComment
      */
     public function setTaskId($taskId)
@@ -249,9 +256,9 @@ class CBlogComment
     }
 
     /**
-     * Get taskId
+     * Get taskId.
      *
-     * @return integer
+     * @return int
      */
     public function getTaskId()
     {
@@ -259,9 +266,10 @@ class CBlogComment
     }
 
     /**
-     * Set parentCommentId
+     * Set parentCommentId.
      *
-     * @param integer $parentCommentId
+     * @param int $parentCommentId
+     *
      * @return CBlogComment
      */
     public function setParentCommentId($parentCommentId)
@@ -272,9 +280,9 @@ class CBlogComment
     }
 
     /**
-     * Get parentCommentId
+     * Get parentCommentId.
      *
-     * @return integer
+     * @return int
      */
     public function getParentCommentId()
     {
@@ -282,9 +290,10 @@ class CBlogComment
     }
 
     /**
-     * Set commentId
+     * Set commentId.
      *
-     * @param integer $commentId
+     * @param int $commentId
+     *
      * @return CBlogComment
      */
     public function setCommentId($commentId)
@@ -295,9 +304,9 @@ class CBlogComment
     }
 
     /**
-     * Get commentId
+     * Get commentId.
      *
-     * @return integer
+     * @return int
      */
     public function getCommentId()
     {
@@ -305,9 +314,10 @@ class CBlogComment
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CBlogComment
      */
     public function setCId($cId)
@@ -318,9 +328,9 @@ class CBlogComment
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

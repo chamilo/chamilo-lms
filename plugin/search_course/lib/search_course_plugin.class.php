@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Description of SearchCoursePlugin
+ * Description of SearchCoursePlugin.
  *
  * @copyright (c) 2012 University of Geneva
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
@@ -9,8 +9,12 @@
  */
 class SearchCoursePlugin extends Plugin
 {
+    protected function __construct()
+    {
+        parent::__construct('1.1', 'Laurent Opprecht');
+    }
+
     /**
-     *
      * @return SearchCoursePlugin
      */
     public static function create()
@@ -23,10 +27,5 @@ class SearchCoursePlugin extends Plugin
     public function get_name()
     {
         return 'search_course';
-    }
-
-    protected function __construct()
-    {
-        parent::__construct('1.1', 'Laurent Opprecht');
     }
 }

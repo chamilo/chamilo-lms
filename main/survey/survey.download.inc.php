@@ -3,13 +3,13 @@
 
 /**
  * @package chamilo.survey
+ *
  * @author Arnaud Ligot <arnaud@cblue.be>
  *
  * A small peace of code to enable user to access images included into survey
  * which are accessible by non authenticated users. This file is included
  * by document/download.php
  */
-
 function check_download_survey($course, $invitation, $doc_url)
 {
     // Getting all the course information

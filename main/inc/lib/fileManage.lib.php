@@ -6,15 +6,18 @@ use Symfony\Component\Filesystem\Filesystem;
 /**
  * This is the file manage library for Chamilo.
  * Include/require it in your code to use its functionality.
+ *
  * @package chamilo.library
  */
 
 /**
- * Cheks a file or a directory actually exist at this location
+ * Cheks a file or a directory actually exist at this location.
  *
  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
+ *
  * @param string $file_path Path of the presume existing file or dir
- * @return boolean TRUE if the file or the directory exists or FALSE otherwise.
+ *
+ * @return bool TRUE if the file or the directory exists or FALSE otherwise
  */
 function check_name_exist($file_path)
 {
@@ -28,19 +31,24 @@ function check_name_exist($file_path)
 
     if (file_exists($file_name)) {
         chdir($save_dir);
+
         return true;
     } else {
         chdir($save_dir);
+
         return false;
     }
 }
 
 /**
- * Deletes a file or a directory
+ * Deletes a file or a directory.
  *
  * @author - Hugues Peeters
+ *
  * @param  $file (String) - the path of file or directory to delete
- * @return boolean - true if the delete succeed, false otherwise.
+ *
+ * @return bool - true if the delete succeed, false otherwise
+ *
  * @see    - delete() uses check_name_exist() and removeDir() functions
  */
 function my_delete($file)
@@ -48,9 +56,11 @@ function my_delete($file)
     if (check_name_exist($file)) {
         if (is_file($file)) { // FILE CASE
             unlink($file);
+
             return true;
         } elseif (is_dir($file)) { // DIRECTORY CASE
             removeDir($file);
+
             return true;
         }
     } else {
@@ -59,7 +69,7 @@ function my_delete($file)
 }
 
 /**
- * Removes a directory recursively
+ * Removes a directory recursively.
  *
  * @returns true if OK, otherwise false
  *
@@ -98,11 +108,14 @@ function removeDir($dir)
 }
 
 /**
- * Return true if folder is empty
+ * Return true if folder is empty.
+ *
  * @author hubert.borderiou@grenet.fr
+ *
  * @param string $in_folder folder path on disk
+ *
  * @return int 1 if folder is empty, 0 otherwise
-*/
+ */
 function folder_is_empty($in_folder)
 {
     $folder_is_empty = 0;
@@ -123,12 +136,15 @@ function folder_is_empty($in_folder)
 }
 
 /**
- * Renames a file or a directory
+ * Renames a file or a directory.
  *
  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  string $file_path complete path of the file or the directory
- * @param  string $new_file_name new name for the file or the directory
- * @return boolean true if succeed, false otherwise
+ *
+ * @param string $file_path     complete path of the file or the directory
+ * @param string $new_file_name new name for the file or the directory
+ *
+ * @return bool true if succeed, false otherwise
+ *
  * @see rename() uses the check_name_exist() and php2phps() functions
  */
 function my_rename($file_path, $new_file_name)
@@ -168,14 +184,17 @@ function my_rename($file_path, $new_file_name)
 }
 
 /**
- * Moves a file or a directory to an other area
+ * Moves a file or a directory to an other area.
  *
  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  string $source the path of file or directory to move
- * @param  string $target the path of the new area
- * @param  bool $forceMove Whether to force a move or to make a copy (safer but slower) and then delete the original
- * @param	bool $moveContent In some cases (including migrations), we need to move the *content* and not the folder itself
- * @return bool true if the move succeed, false otherwise.
+ *
+ * @param string $source      the path of file or directory to move
+ * @param string $target      the path of the new area
+ * @param bool   $forceMove   Whether to force a move or to make a copy (safer but slower) and then delete the original
+ * @param bool   $moveContent In some cases (including migrations), we need to move the *content* and not the folder itself
+ *
+ * @return bool true if the move succeed, false otherwise
+ *
  * @see move() uses check_name_exist() and copyDirTo() functions
  */
 function move($source, $target, $forceMove = true, $moveContent = false)
@@ -205,6 +224,7 @@ function move($source, $target, $forceMove = true, $moveContent = false)
                 copy($source, $target.'/'.$file_name);
                 unlink($source);
             }
+
             return true;
         } elseif (is_dir($source)) {
             // move dir down will cause loop: mv a/b/ a/b/c/ not legal
@@ -228,12 +248,14 @@ function move($source, $target, $forceMove = true, $moveContent = false)
                     exec("mv $source $target", $out, $retVal);
                     if ($retVal !== 0) {
                         error_log("Chamilo error fileManage.lib.php: mv $source $target\n");
+
                         return false; // mv should return 0 on success
                     }
                 }
             } else {
                 return copyDirTo($source, $target);
             }
+
             return true;
         }
     } else {
@@ -242,11 +264,13 @@ function move($source, $target, $forceMove = true, $moveContent = false)
 }
 
 /**
- * Moves a directory and its content to an other area
+ * Moves a directory and its content to an other area.
  *
  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param string $source the path of the directory to move
+ *
+ * @param string $source      the path of the directory to move
  * @param string $destination the path of the new area
+ *
  * @return bool false on error
  */
 function copyDirTo($source, $destination, $move = true)
@@ -256,6 +280,7 @@ function copyDirTo($source, $destination, $move = true)
         $fs->mkdir($destination);
         if (!is_dir($destination)) {
             error_log("Chamilo copyDirTo cannot mkdir $destination\n");
+
             return false; // could not create destination dir
         }
         $fs->mirror($source, $destination);
@@ -263,14 +288,16 @@ function copyDirTo($source, $destination, $move = true)
             $fs->remove($source);
         }
     }
+
     return true;
 }
 
 /**
- * Copy a directory and its directories (not files) to an other area
+ * Copy a directory and its directories (not files) to an other area.
  *
- * @param string $source the path of the directory to move
+ * @param string $source      the path of the directory to move
  * @param string $destination the path of the new area
+ *
  * @return bool false on error
  */
 function copyDirWithoutFilesTo($source, $destination)
@@ -305,13 +332,15 @@ function copyDirWithoutFilesTo($source, $destination)
 }
 
 /**
- * Extracting extension of a filename
+ * Extracting extension of a filename.
  *
  * @returns array
- * @param    string $filename filename
+ *
+ * @param string $filename filename
  */
 function getextension($filename)
 {
     $bouts = explode('.', $filename);
+
     return [array_pop($bouts), implode('.', $bouts)];
 }

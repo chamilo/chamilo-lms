@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Special report for corporate users
+ * Special report for corporate users.
+ *
  * @package chamilo.reporting
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -34,7 +34,7 @@ $columns = [
     get_lang('CountOfSubscriptions'),
     get_lang('CountOfUsers'),
     get_lang('AverageHoursPerStudent'),
-    get_lang('CountCertificates')
+    get_lang('CountCertificates'),
 ];
 
 // Column config.
@@ -56,15 +56,14 @@ if (!empty($extra_fields)) {
             'name' => $extra['1'],
             'index' => $extra['1'],
             'width' => '120',
-            'sortable' =>'false',
-            'wrap_cell' => 'true'
+            'sortable' => 'false',
+            'wrap_cell' => 'true',
         ];
         $column_model[] = $col;
 
         $columns[] = $extra['3'];
     }
 }
-
 
 // Autowidth.
 $extra_params['autowidth'] = 'true';
@@ -121,7 +120,7 @@ if (!api_is_student_boss()) {
         get_lang("CompanyReport"),
         api_get_path(WEB_CODE_PATH)."mySpace/company_reports.php",
         [
-            'class' => 'btn btn-success'
+            'class' => 'btn btn-success',
         ]
     );
 }

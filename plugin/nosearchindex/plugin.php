@@ -81,7 +81,7 @@ if ($isPlatformAdmin) {
                         'nosearchindex',
                         'setting',
                         'nosearchindex_tool_enable',
-                    ]
+                    ],
                 ]
             );
             $form->setElementError('tool_enable', $plugin->get_lang('CheckTheWritingPermissionsOfRobotsFile'));

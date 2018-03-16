@@ -4,11 +4,13 @@
 use ChamiloSession as Session;
 
 /**
- * Class Evaluation
+ * Class Evaluation.
+ *
  * @package chamilo.gradebook
  */
 class Evaluation implements GradebookItem
 {
+    public $studentList;
     private $id;
     private $name;
     private $description;
@@ -21,10 +23,9 @@ class Evaluation implements GradebookItem
     private $eval_max;
     private $visible;
     private $sessionId;
-    public $studentList;
 
     /**
-     * Construct
+     * Construct.
      */
     public function __construct()
     {
@@ -206,12 +207,13 @@ class Evaluation implements GradebookItem
     }
 
     /**
-     * Retrieve evaluations and return them as an array of Evaluation objects
-     * @param int $id evaluation id
-     * @param int $user_id user id (evaluation owner)
+     * Retrieve evaluations and return them as an array of Evaluation objects.
+     *
+     * @param int    $id          evaluation id
+     * @param int    $user_id     user id (evaluation owner)
      * @param string $course_code course code
-     * @param int $category_id parent category
-     * @param integer $visible visible
+     * @param int    $category_id parent category
+     * @param int    $visible     visible
      *
      * @return array
      */
@@ -242,7 +244,7 @@ class Evaluation implements GradebookItem
             $paramcount++;
         }
 
-        if (isset($course_code) && $course_code <> '-1') {
+        if (isset($course_code) && $course_code != '-1') {
             if ($paramcount != 0) {
                 $sql .= ' AND';
             } else {
@@ -288,38 +290,7 @@ class Evaluation implements GradebookItem
     }
 
     /**
-     * @param array $result
-     * @return array
-     */
-    private static function create_evaluation_objects_from_sql_result($result)
-    {
-        $alleval = [];
-        if (Database::num_rows($result)) {
-            while ($data = Database::fetch_array($result)) {
-                $eval = new Evaluation();
-                $eval->set_id($data['id']);
-                $eval->set_name($data['name']);
-                $eval->set_description($data['description']);
-                $eval->set_user_id($data['user_id']);
-                $eval->set_course_code($data['course_code']);
-                $eval->set_category_id($data['category_id']);
-                $eval->set_date(api_get_local_time($data['created_at']));
-                $eval->set_weight($data['weight']);
-                $eval->set_max($data['max']);
-                $eval->set_visible($data['visible']);
-                $eval->set_type($data['type']);
-                $eval->set_locked($data['locked']);
-                $eval->setSessionId(api_get_session_id());
-
-                $alleval[] = $eval;
-            }
-        }
-
-        return $alleval;
-    }
-
-    /**
-     * Insert this evaluation into the database
+     * Insert this evaluation into the database.
      */
     public function add()
     {
@@ -398,7 +369,7 @@ class Evaluation implements GradebookItem
                     'weight' => $row_old_weight['weight'],
                     'visible' => $arreval['visible'],
                     'type' => 'evaluation',
-                    'user_id_log' => api_get_user_id()
+                    'user_id_log' => api_get_user_id(),
                 ];
                 Database::insert($tbl_grade_linkeval_log, $params);
             }
@@ -406,7 +377,7 @@ class Evaluation implements GradebookItem
     }
 
     /**
-     * Update the properties of this evaluation in the database
+     * Update the properties of this evaluation in the database.
      */
     public function save()
     {
@@ -444,7 +415,7 @@ class Evaluation implements GradebookItem
     }
 
     /**
-     * Delete this evaluation from the database
+     * Delete this evaluation from the database.
      */
     public function delete()
     {
@@ -455,9 +426,11 @@ class Evaluation implements GradebookItem
     }
 
     /**
-     * Check if an evaluation name (with the same parent category) already exists
+     * Check if an evaluation name (with the same parent category) already exists.
+     *
      * @param string $name to check (if not given, the name property of this object will be checked)
      * @param $parent parent category
+     *
      * @return bool
      */
     public function does_name_exist($name, $parent)
@@ -506,6 +479,7 @@ class Evaluation implements GradebookItem
     /**
      * Are there any results for this evaluation yet ?
      * The 'max' property should not be changed then.
+     *
      * @return bool
      */
     public function has_results()
@@ -521,7 +495,7 @@ class Evaluation implements GradebookItem
     }
 
     /**
-     * Delete all results for this evaluation
+     * Delete all results for this evaluation.
      */
     public function delete_results()
     {
@@ -541,7 +515,7 @@ class Evaluation implements GradebookItem
     }
 
     /**
-     * Check if the given score is possible for this evaluation
+     * Check if the given score is possible for this evaluation.
      */
     public function is_valid_score($score)
     {
@@ -549,12 +523,14 @@ class Evaluation implements GradebookItem
     }
 
     /**
-     * Calculate the score of this evaluation
-     * @param int $stud_id (default: all students who have results for this eval - then the average is returned)
-     * @param string $type (best, average, ranking)
-     * @return    array (score, max) if student is given
-     *            array (sum of scores, number of scores) otherwise
-     *            or null if no scores available
+     * Calculate the score of this evaluation.
+     *
+     * @param int    $stud_id (default: all students who have results for this eval - then the average is returned)
+     * @param string $type    (best, average, ranking)
+     *
+     * @return array (score, max) if student is given
+     *               array (sum of scores, number of scores) otherwise
+     *               or null if no scores available
      */
     public function calc_score($stud_id = null, $type = null)
     {
@@ -632,6 +608,7 @@ class Evaluation implements GradebookItem
                         $score = $res->get_score();
                         $students[$res->get_user_id()] = $score;
                     }
+
                     return AbstractLink::getCurrentUserRanking($stud_id, $students);
                     break;
                 default:
@@ -645,6 +622,7 @@ class Evaluation implements GradebookItem
      * Generate an array of possible categories where this evaluation can be moved to.
      * Notice: its own parent will be included in the list: it's up to the frontend
      * to disable this element.
+     *
      * @return array 2-dimensional array - every element contains 3 subelements (id, name, level)
      */
     public function get_target_categories()
@@ -685,26 +663,6 @@ class Evaluation implements GradebookItem
     }
 
     /**
-     * Internal function used by get_target_categories()
-     * @param integer $level
-     *
-     * @return array
-     */
-    private function addTargetSubcategories($targets, $level, $catid)
-    {
-        $subcats = Category::load(null, null, null, $catid);
-        foreach ($subcats as $cat) {
-            $targets[] = [$cat->get_id(), $cat->get_name(), $level + 1];
-            $targets = $this->addTargetSubcategories(
-                $targets,
-                $level + 1,
-                $cat->get_id()
-            );
-        }
-        return $targets;
-    }
-
-    /**
      * Move this evaluation to the given category.
      * If this evaluation moves from inside a course to outside,
      * its course code is also changed.
@@ -720,9 +678,11 @@ class Evaluation implements GradebookItem
 
     /**
      * Retrieve evaluations where a student has results for
-     * and return them as an array of Evaluation objects
-     * @param int $cat_id parent category (use 'null' to retrieve them in all categories)
+     * and return them as an array of Evaluation objects.
+     *
+     * @param int $cat_id  parent category (use 'null' to retrieve them in all categories)
      * @param int $stud_id student id
+     *
      * @return array
      */
     public static function get_evaluations_with_result_for_student($cat_id = null, $stud_id)
@@ -751,8 +711,10 @@ class Evaluation implements GradebookItem
     }
 
     /**
-     * Get a list of students that do not have a result record for this evaluation
+     * Get a list of students that do not have a result record for this evaluation.
+     *
      * @param string $first_letter_user
+     *
      * @return array
      */
     public function get_not_subscribed_students($first_letter_user = '')
@@ -777,9 +739,12 @@ class Evaluation implements GradebookItem
     }
 
     /**
-     * Find evaluations by name
+     * Find evaluations by name.
+     *
      * @param string $name_mask search string
+     *
      * @return array evaluation objects matching the search criterium
+     *
      * @todo can be written more efficiently using a new (but very complex) sql query
      */
     public function findEvaluations($name_mask, $selectcat)
@@ -795,6 +760,7 @@ class Evaluation implements GradebookItem
                 $foundevals[] = $eval;
             }
         }
+
         return $foundevals;
     }
 
@@ -810,9 +776,9 @@ class Evaluation implements GradebookItem
 
     /**
      * Locks an evaluation, only one who can unlock it is the platform administrator.
-     * @param int locked 1 or unlocked 0
      *
-     **/
+     * @param int locked 1 or unlocked 0
+     */
     public function lock($locked)
     {
         $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
@@ -845,5 +811,59 @@ class Evaluation implements GradebookItem
     public function setStudentList($list)
     {
         $this->studentList = $list;
+    }
+
+    /**
+     * @param array $result
+     *
+     * @return array
+     */
+    private static function create_evaluation_objects_from_sql_result($result)
+    {
+        $alleval = [];
+        if (Database::num_rows($result)) {
+            while ($data = Database::fetch_array($result)) {
+                $eval = new Evaluation();
+                $eval->set_id($data['id']);
+                $eval->set_name($data['name']);
+                $eval->set_description($data['description']);
+                $eval->set_user_id($data['user_id']);
+                $eval->set_course_code($data['course_code']);
+                $eval->set_category_id($data['category_id']);
+                $eval->set_date(api_get_local_time($data['created_at']));
+                $eval->set_weight($data['weight']);
+                $eval->set_max($data['max']);
+                $eval->set_visible($data['visible']);
+                $eval->set_type($data['type']);
+                $eval->set_locked($data['locked']);
+                $eval->setSessionId(api_get_session_id());
+
+                $alleval[] = $eval;
+            }
+        }
+
+        return $alleval;
+    }
+
+    /**
+     * Internal function used by get_target_categories().
+     *
+     * @param int $level
+     *
+     * @return array
+     */
+    private function addTargetSubcategories($targets, $level, $catid)
+    {
+        $subcats = Category::load(null, null, null, $catid);
+        foreach ($subcats as $cat) {
+            $targets[] = [$cat->get_id(), $cat->get_name(), $level + 1];
+            $targets = $this->addTargetSubcategories(
+                $targets,
+                $level + 1,
+                $cat->get_id()
+            );
+        }
+
+        return $targets;
     }
 }

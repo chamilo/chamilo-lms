@@ -10,7 +10,9 @@
  *
  * @author Patrick Cool, main author
  * @author Roan EMbrechts, code cleaning
+ *
  * @since Dokeos 1.6
+ *
  * @package chamilo.admin
  */
 
@@ -57,21 +59,21 @@ $htmlHeadXtra[] = '<script>
     var disabledLang = "'.$disabledLang.'"
 
     if (msgLang == 1) {
-        $("#id_content_message").html("<div class=\"warning-message alert alert-warning\">' . get_lang('ThereAreUsersUsingThisLanguagesDisableItManually').' <br /> " + disabledLang + "</div");
+        $("#id_content_message").html("<div class=\"warning-message alert alert-warning\">'.get_lang('ThereAreUsersUsingThisLanguagesDisableItManually').' <br /> " + disabledLang + "</div");
     }
 
     $("#disable_all_except_default").click(function () {
-        if(confirm("'. get_lang('ConfirmYourChoice').'")) {
+        if(confirm("'.get_lang('ConfirmYourChoice').'")) {
             $.ajax({
                 contentType: "application/x-www-form-urlencoded",
                 beforeSend: function(objeto) {
-                    $("#id_content_message").html("<div class=\"warning-message alert alert-warning\"><em class=\"fa fa-refresh fa-spin\"></em>  ' . get_lang('Loading').'</div>");
+                    $("#id_content_message").html("<div class=\"warning-message alert alert-warning\"><em class=\"fa fa-refresh fa-spin\"></em>  '.get_lang('Loading').'</div>");
                 },
                 type: "GET",
                 url: "../admin/languages.php",
                 data: "action=disable_all_except_default",
                 success: function(datos) {
-                    window.location.href = "' . api_get_self().'";
+                    window.location.href = "'.api_get_self().'";
                 }
             });
         }
@@ -107,7 +109,7 @@ $htmlHeadXtra[] = '<script>
 		$.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-				$("#id_content_message").html("<div class=\"warning-message alert alert-warning\"><em class=\"fa fa-refresh fa-spin\"></em>  ' . get_lang('Loading').'</div>");
+				$("#id_content_message").html("<div class=\"warning-message alert alert-warning\"><em class=\"fa fa-refresh fa-spin\"></em>  '.get_lang('Loading').'</div>");
 			},
 			type: "POST",
 			url: "../admin/languages.php",
@@ -118,19 +120,19 @@ $htmlHeadXtra[] = '<script>
                     $("#"+id_img_link_tool).attr("src",path_name_of_imglinktool);
 
                     if (my_image_tool=="visible.png") {
-                        $("#"+id_img_link_tool).attr("alt","' . get_lang('MakeAvailable', '').'");
-                        $("#"+id_img_link_tool).attr("title","' . get_lang('MakeAvailable', '').'");
+                        $("#"+id_img_link_tool).attr("alt","'.get_lang('MakeAvailable', '').'");
+                        $("#"+id_img_link_tool).attr("title","'.get_lang('MakeAvailable', '').'");
                     } else {
-                        $("#"+id_img_link_tool).attr("alt","' . get_lang('MakeUnavailable', '').'");
-                        $("#"+id_img_link_tool).attr("title","' . get_lang('MakeUnavailable', '').'");
+                        $("#"+id_img_link_tool).attr("alt","'.get_lang('MakeUnavailable', '').'");
+                        $("#"+id_img_link_tool).attr("title","'.get_lang('MakeUnavailable', '').'");
                     }
 
                     if (datos=="set_visible") {
-                        $("#id_content_message").html("<div class=\"confirmation-message alert alert-success\">' . get_lang('LanguageIsNowVisible', '').'</div>");
+                        $("#id_content_message").html("<div class=\"confirmation-message alert alert-success\">'.get_lang('LanguageIsNowVisible', '').'</div>");
                     }
 
                     if (datos=="set_hidden") {
-                        $("#id_content_message").html("<div class=\"confirmation-message alert alert-success\">' . get_lang('LanguageIsNowHidden', '').'</div>");
+                        $("#id_content_message").html("<div class=\"confirmation-message alert alert-success\">'.get_lang('LanguageIsNowHidden', '').'</div>");
                     }
                 }
 
@@ -199,7 +201,7 @@ if (isset($_POST['Submit']) && $_POST['Submit']) {
             WHERE id='{$_POST['edit_id']}'";
     $result = Database::query($sql);
     // changing the Platform language
-    if ($_POST['platformlanguage'] && $_POST['platformlanguage'] <> '') {
+    if ($_POST['platformlanguage'] && $_POST['platformlanguage'] != '') {
         //$sql_update_2 = "UPDATE $tbl_settings_current SET selected_value='{$_POST['platformlanguage']}' WHERE variable='platformLanguage'";
         //$result_2 = Database::query($sql_update_2);
         api_set_setting('platformLanguage', $_POST['platformlanguage'], null, null, $_configuration['access_url']);
@@ -273,7 +275,7 @@ while ($row = Database::fetch_array($result_select)) {
         }
 
         $row_td[] = '<input type="hidden" name="edit_id" value="'.Security::remove_XSS($_GET['id']).'" /><input type="text" name="txt_name" value="'.$row['original_name'].'" /> '
-                . '<input type="checkbox" '.$checked.'name="platformlanguage" id="platformlanguage" value="'.$row['english_name'].'" /><label for="platformlanguage">'.$row['original_name'].' '.get_lang('AsPlatformLanguage').'</label> <input type="submit" name="Submit" value="'.get_lang('Ok').'" /><a name="value" />';
+                .'<input type="checkbox" '.$checked.'name="platformlanguage" id="platformlanguage" value="'.$row['english_name'].'" /><label for="platformlanguage">'.$row['original_name'].' '.get_lang('AsPlatformLanguage').'</label> <input type="submit" name="Submit" value="'.get_lang('Ok').'" /><a name="value" />';
     } else {
         $row_td[] = $row['original_name'];
     }
@@ -317,7 +319,7 @@ while ($row = Database::fetch_array($result_select)) {
 
     if ($row['english_name'] == $row_lang['selected_value']) {
         $row_td[] = Display::return_icon('visible.png', get_lang('Visible'))."<a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>
-                     &nbsp;" . $setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
+                     &nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
     } else {
         if ($row['available'] == 1) {
             $row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'>".Display::return_icon('visible.png', get_lang('MakeUnavailable'), ['id' => 'imglinktool_'.$row['id']], ICON_SIZE_SMALL)."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;

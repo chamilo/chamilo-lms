@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CSurveyAnswer
+ * CSurveyAnswer.
  *
  * @ORM\Table(
  *  name="c_survey_answer",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CSurveyAnswer
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,28 +28,28 @@ class CSurveyAnswer
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="answer_id", type="integer")
      */
     private $answerId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="survey_id", type="integer", nullable=false)
      */
     private $surveyId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="question_id", type="integer", nullable=false)
      */
@@ -63,7 +63,7 @@ class CSurveyAnswer
     private $optionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="value", type="integer", nullable=false)
      */
@@ -77,9 +77,10 @@ class CSurveyAnswer
     private $user;
 
     /**
-     * Set surveyId
+     * Set surveyId.
      *
-     * @param integer $surveyId
+     * @param int $surveyId
+     *
      * @return CSurveyAnswer
      */
     public function setSurveyId($surveyId)
@@ -90,9 +91,9 @@ class CSurveyAnswer
     }
 
     /**
-     * Get surveyId
+     * Get surveyId.
      *
-     * @return integer
+     * @return int
      */
     public function getSurveyId()
     {
@@ -100,9 +101,10 @@ class CSurveyAnswer
     }
 
     /**
-     * Set questionId
+     * Set questionId.
      *
-     * @param integer $questionId
+     * @param int $questionId
+     *
      * @return CSurveyAnswer
      */
     public function setQuestionId($questionId)
@@ -113,9 +115,9 @@ class CSurveyAnswer
     }
 
     /**
-     * Get questionId
+     * Get questionId.
      *
-     * @return integer
+     * @return int
      */
     public function getQuestionId()
     {
@@ -123,9 +125,10 @@ class CSurveyAnswer
     }
 
     /**
-     * Set optionId
+     * Set optionId.
      *
      * @param string $optionId
+     *
      * @return CSurveyAnswer
      */
     public function setOptionId($optionId)
@@ -136,7 +139,7 @@ class CSurveyAnswer
     }
 
     /**
-     * Get optionId
+     * Get optionId.
      *
      * @return string
      */
@@ -146,9 +149,10 @@ class CSurveyAnswer
     }
 
     /**
-     * Set value
+     * Set value.
      *
-     * @param integer $value
+     * @param int $value
+     *
      * @return CSurveyAnswer
      */
     public function setValue($value)
@@ -159,9 +163,9 @@ class CSurveyAnswer
     }
 
     /**
-     * Get value
+     * Get value.
      *
-     * @return integer
+     * @return int
      */
     public function getValue()
     {
@@ -169,9 +173,10 @@ class CSurveyAnswer
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param string $user
+     *
      * @return CSurveyAnswer
      */
     public function setUser($user)
@@ -182,7 +187,7 @@ class CSurveyAnswer
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return string
      */
@@ -192,9 +197,10 @@ class CSurveyAnswer
     }
 
     /**
-     * Set answerId
+     * Set answerId.
      *
-     * @param integer $answerId
+     * @param int $answerId
+     *
      * @return CSurveyAnswer
      */
     public function setAnswerId($answerId)
@@ -205,9 +211,9 @@ class CSurveyAnswer
     }
 
     /**
-     * Get answerId
+     * Get answerId.
      *
-     * @return integer
+     * @return int
      */
     public function getAnswerId()
     {
@@ -215,9 +221,10 @@ class CSurveyAnswer
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CSurveyAnswer
      */
     public function setCId($cId)
@@ -228,9 +235,9 @@ class CSurveyAnswer
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

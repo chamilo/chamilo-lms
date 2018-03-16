@@ -2,9 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
-
 $_dont_save_user_course_access = true;
 
 require_once __DIR__.'/../global.inc.php';

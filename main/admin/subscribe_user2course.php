@@ -2,15 +2,15 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	This script allows platform admins to add users to courses.
-*	It displays a list of users and a list of courses;
-*	you can select multiple users and courses and then click on
-*	'Add to this(these) course(s)'.
-*
-*	@package chamilo.admin
-* 	@todo use formvalidator for the form
-*/
-
+ *	This script allows platform admins to add users to courses.
+ *	It displays a list of users and a list of courses;
+ *	you can select multiple users and courses and then click on
+ *	'Add to this(these) course(s)'.
+ *
+ *	@package chamilo.admin
+ *
+ * 	@todo use formvalidator for the form
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -98,7 +98,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             foreach ($courses as $course_code) {
                 foreach ($users as $user_id) {
                     $user = api_get_user_info($user_id);
-                    if ($user['status'] <> DRH) {
+                    if ($user['status'] != DRH) {
                         CourseManager::subscribe_user($user_id, $course_code);
                     } else {
                         $errorDrh = 1;
@@ -157,7 +157,6 @@ if (is_array($extra_field_list)) {
         }
     }
 }
-
 
 if ($use_extra_fields) {
     $final_result = [];
@@ -226,7 +225,7 @@ unset($result);
 $sql = "SELECT code,visual_code,title
         FROM $tbl_course
         WHERE visual_code LIKE '".$first_letter_course."%'
-        ORDER BY ". (count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
+        ORDER BY ".(count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
 
 if (api_is_multiple_url_enabled()) {
     $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -239,7 +238,7 @@ if (api_is_multiple_url_enabled()) {
                 WHERE
                     access_url_id =  $access_url_id  AND
                     (visual_code LIKE '".$first_letter_course."%' )
-                ORDER BY ". (count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
+                ORDER BY ".(count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
     }
 }
 

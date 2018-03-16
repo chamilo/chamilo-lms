@@ -25,7 +25,7 @@ if (!empty($action) && $hrm && $assignedId) {
                 ->findOneBy([
                     'userId' => $assignedId,
                     'friendUserId' => $hrm->getId(),
-                    'relationType' => USER_RELATION_TYPE_HRM_REQUEST
+                    'relationType' => USER_RELATION_TYPE_HRM_REQUEST,
                 ]);
 
             if ($request) {
@@ -47,7 +47,7 @@ if (!empty($action) && $hrm && $assignedId) {
                 ->findOneBy([
                     'userId' => $assignedId,
                     'friendUserId' => $hrm->getId(),
-                    'relationType' => USER_RELATION_TYPE_HRM_REQUEST
+                    'relationType' => USER_RELATION_TYPE_HRM_REQUEST,
                 ]);
 
             if ($request) {
@@ -59,7 +59,6 @@ if (!empty($action) && $hrm && $assignedId) {
                 );
             }
             /** Todo: notify the HRM that the request was rejected */
-
             header('Location: '.api_get_self().'?hrm='.$hrm->getId());
             exit;
         case 'remove':
@@ -68,7 +67,7 @@ if (!empty($action) && $hrm && $assignedId) {
                 ->findOneBy([
                     'userId' => $assignedId,
                     'friendUserId' => $hrm->getId(),
-                    'relationType' => USER_RELATION_TYPE_RRHH
+                    'relationType' => USER_RELATION_TYPE_RRHH,
                 ]);
 
             if ($request) {
@@ -80,16 +79,17 @@ if (!empty($action) && $hrm && $assignedId) {
                 );
             }
             /** Todo: notify the HRM that the request was rejected */
-
             header('Location: '.api_get_self().'?hrm='.$hrm->getId());
             exit;
     }
 }
 
 /**
- * Get the data to fill the tables on screen
+ * Get the data to fill the tables on screen.
+ *
  * @param User $hrm
- * @param int $status
+ * @param int  $status
+ *
  * @return array
  */
 function getData(User $hrm, $status = HRM_REQUEST)

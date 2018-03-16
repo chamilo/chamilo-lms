@@ -4,75 +4,78 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * Survey
+ * Survey.
+ *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ *
  * @package chamilo.backup
  */
 class Survey extends Resource
 {
     /**
-     * The survey code
+     * The survey code.
      */
     public $code;
     /**
-     * The title and subtitle
+     * The title and subtitle.
      */
     public $title;
     public $subtitle;
     /**
-     * The author's name
+     * The author's name.
      */
     public $author;
     /**
-     * The survey's language
+     * The survey's language.
      */
     public $lang;
     /**
-     * The availability period
+     * The availability period.
      */
     public $avail_from;
     public $avail_till;
     /**
-     * Flag for shared status
+     * Flag for shared status.
      */
     public $is_shared;
     /**
-     * Template used
+     * Template used.
      */
     public $template;
     /**
-     * Introduction text
+     * Introduction text.
      */
     public $intro;
     /**
-     * Thanks text
+     * Thanks text.
      */
     public $surveythanks;
     /**
-     * Creation date
+     * Creation date.
      */
     public $creation_date;
     /**
-     * Invitation status
+     * Invitation status.
      */
     public $invited;
     /**
-     * Answer status
+     * Answer status.
      */
     public $answered;
     /**
-     * Invitation and reminder mail contents
+     * Invitation and reminder mail contents.
      */
     public $invite_mail;
     public $reminder_mail;
     /**
-     * Questions and invitations lists
+     * Questions and invitations lists.
      */
     public $question_ids;
     public $invitation_ids;
 
     /**
-     * Create a new Survey
+     * Create a new Survey.
+     *
      * @param string $code
      * @param string $title
      * @param string $subtitle
@@ -85,8 +88,8 @@ class Survey extends Resource
      * @param string $intro
      * @param string $surveythanks
      * @param string $creation_date
-     * @param int $invited
-     * @param int $answered
+     * @param int    $invited
+     * @param int    $answered
      * @param string $invite_mail
      * @param string $reminder_mail
      */
@@ -131,7 +134,7 @@ class Survey extends Resource
     }
 
     /**
-     * Add a question to this survey
+     * Add a question to this survey.
      */
     public function add_question($id)
     {
@@ -139,7 +142,7 @@ class Survey extends Resource
     }
 
     /**
-     * Add an invitation to this survey
+     * Add an invitation to this survey.
      */
     public function add_invitation($id)
     {
@@ -147,7 +150,7 @@ class Survey extends Resource
     }
 
     /**
-     * Show this survey
+     * Show this survey.
      */
     public function show()
     {

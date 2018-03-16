@@ -3,19 +3,20 @@
 
 /**
  * This file contains a Hook Event class for Admin Block.
+ *
  * @package chamilo.library.hook
- **/
+ */
 
 /**
  * Class HookWSRegistration
  * This class is a Hook event implementing Webservice Registration Event interface.
  * This class is used to modify ws for registration by notifying Hook Observer
- * for Webservice registration
+ * for Webservice registration.
  */
 class HookWSRegistration extends HookEvent implements HookWSRegistrationEventInterface
 {
     /**
-     * Construct
+     * Construct.
      */
     protected function __construct()
     {
@@ -25,9 +26,10 @@ class HookWSRegistration extends HookEvent implements HookWSRegistrationEventInt
     /**
      * Notify all Hook observer for WS Registration.
      * This save "server" (soap server) and send to Hook observer to be modified
-     * (e.g. add more registration webservice)
+     * (e.g. add more registration webservice).
+     *
      * @param int $type Set the type of hook event called.
-     * 0: HOOK_EVENT_TYPE_PRE, 1: HOOK_EVENT_TYPE_POST
+     *                  0: HOOK_EVENT_TYPE_PRE, 1: HOOK_EVENT_TYPE_POST
      *
      * @return int
      */

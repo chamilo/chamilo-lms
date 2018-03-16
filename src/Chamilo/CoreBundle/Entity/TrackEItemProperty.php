@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TrackEItemProperty
+ * TrackEItemProperty.
  *
  * @ORM\Table(name="track_e_item_property", indexes={
  *     @ORM\Index(name="course_id", columns={"course_id", "item_property_id", "session_id"})
@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackEItemProperty
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -25,14 +25,14 @@ class TrackEItemProperty
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="course_id", type="integer", nullable=false)
      */
     private $courseId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="item_property_id", type="integer", nullable=false)
      */
@@ -53,7 +53,7 @@ class TrackEItemProperty
     private $content;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="progress", type="integer", nullable=false)
      */
@@ -67,23 +67,24 @@ class TrackEItemProperty
     private $lasteditDate;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="lastedit_user_id", type="integer", nullable=false)
      */
     private $lasteditUserId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
 
     /**
-     * Set courseId
+     * Set courseId.
      *
-     * @param integer $courseId
+     * @param int $courseId
+     *
      * @return TrackEItemProperty
      */
     public function setCourseId($courseId)
@@ -94,9 +95,9 @@ class TrackEItemProperty
     }
 
     /**
-     * Get courseId
+     * Get courseId.
      *
-     * @return integer
+     * @return int
      */
     public function getCourseId()
     {
@@ -104,9 +105,10 @@ class TrackEItemProperty
     }
 
     /**
-     * Set itemPropertyId
+     * Set itemPropertyId.
      *
-     * @param integer $itemPropertyId
+     * @param int $itemPropertyId
+     *
      * @return TrackEItemProperty
      */
     public function setItemPropertyId($itemPropertyId)
@@ -117,9 +119,9 @@ class TrackEItemProperty
     }
 
     /**
-     * Get itemPropertyId
+     * Get itemPropertyId.
      *
-     * @return integer
+     * @return int
      */
     public function getItemPropertyId()
     {
@@ -127,9 +129,10 @@ class TrackEItemProperty
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return TrackEItemProperty
      */
     public function setTitle($title)
@@ -140,7 +143,7 @@ class TrackEItemProperty
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -150,9 +153,10 @@ class TrackEItemProperty
     }
 
     /**
-     * Set content
+     * Set content.
      *
      * @param string $content
+     *
      * @return TrackEItemProperty
      */
     public function setContent($content)
@@ -163,7 +167,7 @@ class TrackEItemProperty
     }
 
     /**
-     * Get content
+     * Get content.
      *
      * @return string
      */
@@ -173,9 +177,10 @@ class TrackEItemProperty
     }
 
     /**
-     * Set progress
+     * Set progress.
      *
-     * @param integer $progress
+     * @param int $progress
+     *
      * @return TrackEItemProperty
      */
     public function setProgress($progress)
@@ -186,9 +191,9 @@ class TrackEItemProperty
     }
 
     /**
-     * Get progress
+     * Get progress.
      *
-     * @return integer
+     * @return int
      */
     public function getProgress()
     {
@@ -196,9 +201,10 @@ class TrackEItemProperty
     }
 
     /**
-     * Set lasteditDate
+     * Set lasteditDate.
      *
      * @param \DateTime $lasteditDate
+     *
      * @return TrackEItemProperty
      */
     public function setLasteditDate($lasteditDate)
@@ -209,7 +215,7 @@ class TrackEItemProperty
     }
 
     /**
-     * Get lasteditDate
+     * Get lasteditDate.
      *
      * @return \DateTime
      */
@@ -219,9 +225,10 @@ class TrackEItemProperty
     }
 
     /**
-     * Set lasteditUserId
+     * Set lasteditUserId.
      *
-     * @param integer $lasteditUserId
+     * @param int $lasteditUserId
+     *
      * @return TrackEItemProperty
      */
     public function setLasteditUserId($lasteditUserId)
@@ -232,9 +239,9 @@ class TrackEItemProperty
     }
 
     /**
-     * Get lasteditUserId
+     * Get lasteditUserId.
      *
-     * @return integer
+     * @return int
      */
     public function getLasteditUserId()
     {
@@ -242,9 +249,10 @@ class TrackEItemProperty
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return TrackEItemProperty
      */
     public function setSessionId($sessionId)
@@ -255,9 +263,9 @@ class TrackEItemProperty
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -265,9 +273,9 @@ class TrackEItemProperty
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

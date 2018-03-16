@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
@@ -33,11 +31,11 @@ if (!empty($group_id)) {
     $group_properties = GroupManager::get_group_properties($group_id);
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
-        'name' => get_lang('Groups')
+        'name' => get_lang('Groups'),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('GroupSpace').' '.$group_properties['name']
+        'name' => get_lang('GroupSpace').' '.$group_properties['name'],
     ];
 } else {
     if (!(api_is_allowed_to_edit() || api_is_coach())) {
@@ -76,11 +74,11 @@ switch ($action) {
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications')
+    'name' => get_lang('StudentPublications'),
 ];
 $interbreadcrumb[] = [
     'url' => '#',
-    'name' => $userInfo['complete_name']
+    'name' => $userInfo['complete_name'],
 ];
 
 Display :: display_header(null);
@@ -114,7 +112,7 @@ $headers = [
     get_lang('HandedOutDate'),
     get_lang('HandOutDateLimit'),
     get_lang('Feedback'),
-    get_lang('Actions')
+    get_lang('Actions'),
 ];
 foreach ($headers as $header) {
     $table->setHeaderContents($row, $column, $header);

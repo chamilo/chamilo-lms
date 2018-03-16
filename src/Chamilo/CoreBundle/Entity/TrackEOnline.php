@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TrackEOnline
+ * TrackEOnline.
  *
  * @ORM\Table(
  *  name="track_e_online",
@@ -21,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackEOnline
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="login_user_id", type="integer", nullable=false)
      */
@@ -42,28 +42,28 @@ class TrackEOnline
     private $userIp;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="access_url_id", type="integer", nullable=false)
      */
     private $accessUrlId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="login_id", type="integer")
      * @ORM\Id
@@ -71,12 +71,11 @@ class TrackEOnline
      */
     private $loginId;
 
-
-
     /**
-     * Set loginUserId
+     * Set loginUserId.
      *
-     * @param integer $loginUserId
+     * @param int $loginUserId
+     *
      * @return TrackEOnline
      */
     public function setLoginUserId($loginUserId)
@@ -87,9 +86,9 @@ class TrackEOnline
     }
 
     /**
-     * Get loginUserId
+     * Get loginUserId.
      *
-     * @return integer
+     * @return int
      */
     public function getLoginUserId()
     {
@@ -97,9 +96,10 @@ class TrackEOnline
     }
 
     /**
-     * Set loginDate
+     * Set loginDate.
      *
      * @param \DateTime $loginDate
+     *
      * @return TrackEOnline
      */
     public function setLoginDate($loginDate)
@@ -110,7 +110,7 @@ class TrackEOnline
     }
 
     /**
-     * Get loginDate
+     * Get loginDate.
      *
      * @return \DateTime
      */
@@ -120,9 +120,10 @@ class TrackEOnline
     }
 
     /**
-     * Set userIp
+     * Set userIp.
      *
      * @param string $userIp
+     *
      * @return TrackEOnline
      */
     public function setUserIp($userIp)
@@ -133,7 +134,7 @@ class TrackEOnline
     }
 
     /**
-     * Get userIp
+     * Get userIp.
      *
      * @return string
      */
@@ -143,9 +144,10 @@ class TrackEOnline
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return TrackEOnline
      */
     public function setCId($cId)
@@ -156,9 +158,9 @@ class TrackEOnline
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -166,9 +168,10 @@ class TrackEOnline
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return TrackEOnline
      */
     public function setSessionId($sessionId)
@@ -179,9 +182,9 @@ class TrackEOnline
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -189,9 +192,10 @@ class TrackEOnline
     }
 
     /**
-     * Set accessUrlId
+     * Set accessUrlId.
      *
-     * @param integer $accessUrlId
+     * @param int $accessUrlId
+     *
      * @return TrackEOnline
      */
     public function setAccessUrlId($accessUrlId)
@@ -202,9 +206,9 @@ class TrackEOnline
     }
 
     /**
-     * Get accessUrlId
+     * Get accessUrlId.
      *
-     * @return integer
+     * @return int
      */
     public function getAccessUrlId()
     {
@@ -212,9 +216,9 @@ class TrackEOnline
     }
 
     /**
-     * Get loginId
+     * Get loginId.
      *
-     * @return integer
+     * @return int
      */
     public function getLoginId()
     {

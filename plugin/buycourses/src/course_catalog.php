@@ -2,10 +2,10 @@
 /* For license terms, see /license.txt */
 
 /**
- * List of courses
+ * List of courses.
+ *
  * @package chamilo.plugin.buycourses
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
@@ -57,16 +57,16 @@ $courseList = $plugin->getCatalogCourseList($nameFilter, $minFilter, $maxFilter)
 if (api_is_platform_admin()) {
     $interbreadcrumb[] = [
         'url' => 'configuration.php',
-        'name' => $plugin->get_lang('AvailableCoursesConfiguration')
+        'name' => $plugin->get_lang('AvailableCoursesConfiguration'),
     ];
     $interbreadcrumb[] = [
         'url' => 'paymentsetup.php',
-        'name' => $plugin->get_lang('PaymentsConfiguration')
+        'name' => $plugin->get_lang('PaymentsConfiguration'),
     ];
 } else {
     $interbreadcrumb[] = [
         'url' => 'course_panel.php',
-        'name' => get_lang('TabsDashboard')
+        'name' => get_lang('TabsDashboard'),
     ];
 }
 

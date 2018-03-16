@@ -2,11 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Functions and main code for the download folder feature
+ * Functions and main code for the download folder feature.
+ *
  * @todo use ids instead of the path like the document tool
+ *
  * @package chamilo.work
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
@@ -216,7 +217,7 @@ function my_pre_add_callback($p_event, &$p_header)
 
 /**
  * Return the difference between two arrays, as an array of those key/values
- * Use this as array_diff doesn't give the
+ * Use this as array_diff doesn't give the.
  *
  * @param array $arr1 first array
  * @param array $arr2 second array

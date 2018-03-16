@@ -5,7 +5,7 @@ use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 
 /**
- * Class Career
+ * Class Career.
  */
 class Career extends Model
 {
@@ -20,7 +20,7 @@ class Career extends Model
     ];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -28,7 +28,8 @@ class Career extends Model
     }
 
     /**
-     * Get the count of elements
+     * Get the count of elements.
+     *
      * @return int
      */
     public function get_count()
@@ -39,11 +40,13 @@ class Career extends Model
             [],
             'first'
         );
+
         return $row['count'];
     }
 
     /**
      * @param array $where_conditions
+     *
      * @return array
      */
     public function get_all($where_conditions = [])
@@ -56,9 +59,10 @@ class Career extends Model
     }
 
     /**
-     * Update all promotion status by career
-     * @param   int     $career_id
-     * @param   int     $status (1 or 0)
+     * Update all promotion status by career.
+     *
+     * @param int $career_id
+     * @param int $status    (1 or 0)
      */
     public function update_all_promotion_status_by_career_id($career_id, $status)
     {
@@ -75,7 +79,8 @@ class Career extends Model
     }
 
     /**
-     * Returns HTML the title + grid
+     * Returns HTML the title + grid.
+     *
      * @return string
      */
     public function display()
@@ -105,11 +110,14 @@ class Career extends Model
     }
 
     /**
-     * Returns a Form validator Obj
+     * Returns a Form validator Obj.
+     *
      * @todo the form should be auto generated
-     * @param   string  $url
-     * @param   string  $action add, edit
-     * @return  FormValidator
+     *
+     * @param string $url
+     * @param string $action add, edit
+     *
+     * @return FormValidator
      */
     public function return_form($url, $action)
     {
@@ -166,10 +174,12 @@ class Career extends Model
     }
 
     /**
-     * Copies the career to a new one
-     * @param   integer     Career ID
-     * @param   boolean     Whether or not to copy the promotions inside
-     * @return  integer     New career ID on success, false on failure
+     * Copies the career to a new one.
+     *
+     * @param   int     Career ID
+     * @param   bool     Whether or not to copy the promotions inside
+     *
+     * @return int New career ID on success, false on failure
      */
     public function copy($id, $copy_promotions = false)
     {
@@ -210,6 +220,7 @@ class Career extends Model
 
     /**
      * @param int $career_id
+     *
      * @return bool
      */
     public function get_status($career_id)
@@ -220,6 +231,7 @@ class Career extends Model
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             $data = Database::fetch_array($result);
+
             return $data['status'];
         } else {
             return false;
@@ -228,7 +240,8 @@ class Career extends Model
 
     /**
      * @param array $params
-     * @param bool $show_query
+     * @param bool  $show_query
+     *
      * @return int
      */
     public function save($params, $show_query = false)
@@ -252,8 +265,10 @@ class Career extends Model
     }
 
     /**
-     * Delete a record from the career table and report in the default events log table
+     * Delete a record from the career table and report in the default events log table.
+     *
      * @param int $id The ID of the career to delete
+     *
      * @return bool True if the career could be deleted, false otherwise
      */
     public function delete($id)
@@ -270,11 +285,12 @@ class Career extends Model
                 api_get_user_id()
             );
         }
+
         return $res;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function update($params, $showQuery = false)
     {
@@ -361,7 +377,7 @@ class Career extends Model
                                     $pos = strpos($explode[0], 'G');
                                     if (is_numeric($pos)) {
                                         // group_123 id
-                                        $groupValueId = (int)str_replace(
+                                        $groupValueId = (int) str_replace(
                                             'G',
                                             '',
                                             $explode[0]
@@ -376,14 +392,14 @@ class Career extends Model
                                     }
                                 } else {
                                     // subgroup__123 id
-                                    $firstConnection = 'subgroup_'.(int)str_replace('SG', '', $explode[0]);
+                                    $firstConnection = 'subgroup_'.(int) str_replace('SG', '', $explode[0]);
                                 }
 
                                 $pos = strpos($explode[1], 'SG');
                                 if ($pos === false) {
                                     $pos = strpos($explode[1], 'G');
                                     if (is_numeric($pos)) {
-                                        $groupValueId = (int)str_replace(
+                                        $groupValueId = (int) str_replace(
                                             'G',
                                             '',
                                             $explode[1]
@@ -397,7 +413,7 @@ class Career extends Model
                                         }
                                     }
                                 } else {
-                                    $secondConnection = 'subgroup_'.(int)str_replace('SG', '', $explode[1]);
+                                    $secondConnection = 'subgroup_'.(int) str_replace('SG', '', $explode[1]);
                                 }
 
                                 if (!empty($firstConnection) && !empty($firstConnection)) {
@@ -437,7 +453,7 @@ class Career extends Model
     }
 
     /**
-     * @param Graph $graph
+     * @param Graph    $graph
      * @param Template $tpl
      *
      * @return string
@@ -529,7 +545,7 @@ class Career extends Model
                                 $firstConnection = 'row_'.(int) $rowId;
                                 $groupDrawLine[$groupValueId] = true;
 
-                                $simpleSecondConnection= 'g'.$groupValueId;
+                                $simpleSecondConnection = 'g'.$groupValueId;
                                 $simpleFirstConnection = 'v'.(int) $rowId;
                             } else {
                                 // Course block (row_123 id)
@@ -540,8 +556,8 @@ class Career extends Model
                             }
                         } else {
                             // subgroup__123 id
-                            $firstConnection = 'subgroup_'.(int)str_replace('SG', '', $explode[0]);
-                            $simpleFirstConnection = 'sg_'.(int)str_replace('SG', '', $explode[0]);
+                            $firstConnection = 'subgroup_'.(int) str_replace('SG', '', $explode[0]);
+                            $simpleFirstConnection = 'sg_'.(int) str_replace('SG', '', $explode[0]);
                         }
 
                         $pos = false;
@@ -554,7 +570,7 @@ class Career extends Model
                                 $value = $explode[1];
                             }
                             if (is_numeric($pos)) {
-                                $groupValueId = (int)str_replace(
+                                $groupValueId = (int) str_replace(
                                     'G',
                                     '',
                                     $value
@@ -565,19 +581,19 @@ class Career extends Model
                             } else {
                                 // Course block (row_123 id)
                                 if (!empty($explode[0]) && isset($explode[1])) {
-                                    $secondConnection = 'row_'.(int)$explode[1];
-                                    $simpleSecondConnection = 'v'.(int)$explode[1];
+                                    $secondConnection = 'row_'.(int) $explode[1];
+                                    $simpleSecondConnection = 'v'.(int) $explode[1];
                                 }
                             }
                         } else {
-                            $secondConnection = 'subgroup_'.(int)str_replace('SG', '', $explode[1]);
-                            $simpleSecondConnection = 'sg'.(int)str_replace('SG', '', $explode[1]);
+                            $secondConnection = 'subgroup_'.(int) str_replace('SG', '', $explode[1]);
+                            $simpleSecondConnection = 'sg'.(int) str_replace('SG', '', $explode[1]);
                         }
 
                         if (!empty($firstConnection) && !empty($firstConnection)) {
                             $simpleConnectionList[] = [
                                 'from' => $simpleFirstConnection,
-                                'to' => $simpleSecondConnection
+                                'to' => $simpleSecondConnection,
                             ];
                             $connections .= self::createConnection(
                                 $firstConnection,
@@ -654,8 +670,8 @@ class Career extends Model
 
                 $x = $data['min_x'] - $groupDiffX;
                 $y = $data['min_y'] - $groupDiffY;
-                $width = $data['max_width'] + ($groupDiffX*2);
-                $height = $data['max_height']  + $groupDiffY*2;
+                $width = $data['max_width'] + ($groupDiffX * 2);
+                $height = $data['max_height'] + $groupDiffY * 2;
                 $label = '<h4>'.$data['label'].'</h4>';
                 $vertexData = "var g$id = graph.insertVertex(parent, null, '$label', $x, $y, $width, $height, '$style');";
                 $groupList[] = $vertexData;
@@ -820,6 +836,7 @@ class Career extends Model
                 $graphHtml .= '</div >';
             }
         }
+
         return $graphHtml;
     }
 
@@ -835,7 +852,7 @@ class Career extends Model
             $column = $vertex->getAttribute('Column');
             $realRow = $originalRow = $vertex->getAttribute('Row');
             if ($addRow) {
-                $realRow =  $realRow + $addRow;
+                $realRow = $realRow + $addRow;
             }
             $id = $vertex->getId();
             $area = "$realRow/$column";
@@ -902,7 +919,7 @@ class Career extends Model
                 'height' => $height,
                 'row' => $originalRow,
                 'column' => $column,
-                'label' => $title
+                'label' => $title,
             ];
 
             if ($x < $graph->groupList[$group]['min_x']) {
@@ -935,7 +952,7 @@ class Career extends Model
                             $found = true;
                             $connections[] = [
                               'from' => "g$groupArrow",
-                              'to' => "v$id"
+                              'to' => "v$id",
                             ];
                         }
                     }
@@ -951,7 +968,7 @@ class Career extends Model
                         $found = true;
                         $connections[] = [
                             'from' => "sg$subGroupArrow",
-                            'to' => "v$id"
+                            'to' => "v$id",
                         ];
                     }
                 }
@@ -971,20 +988,23 @@ class Career extends Model
 
                     $connections[] = [
                         'from' => "v$arrow",
-                        'to' => "v$id"
+                        'to' => "v$id",
                     ];
                 }
             }
         }
+
         return $graphHtml;
     }
+
     /**
-     * @param array $groupCourseList list of groups and their courses
-     * @param int $group
+     * @param array  $groupCourseList list of groups and their courses
+     * @param int    $group
      * @param string $groupLabel
-     * @param bool $showGroupLine
-     * @param array $subGroupList
+     * @param bool   $showGroupLine
+     * @param array  $subGroupList
      * @param $widthGroup
+     *
      * @return string
      */
     public static function parseSubGroups(
@@ -1064,7 +1084,7 @@ class Career extends Model
                         if ($subGroup == '' || empty($subGroup)) {
                             $defaultSubGroup = 0;
                         } else {
-                            $defaultSubGroup = (int)$subGroup;
+                            $defaultSubGroup = (int) $subGroup;
                         }
                     }
                     $newRowList[$i + 1][$defaultSubGroup][] = $vertex;
@@ -1181,7 +1201,8 @@ class Career extends Model
     /**
      * @param string $source
      * @param string $target
-     * @param array $anchor
+     * @param array  $anchor
+     *
      * @return string
      */
     public static function createConnection($source, $target, $anchor = [])

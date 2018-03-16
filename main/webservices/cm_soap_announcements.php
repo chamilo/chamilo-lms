@@ -8,7 +8,7 @@ require_once __DIR__.'/cm_webservice_announcements.php';
 require_once __DIR__.'/cm_soap.php';
 
 /**
- * Configures the WSCourse SOAP service
+ * Configures the WSCourse SOAP service.
  */
 $s = WSCMSoapServer::singleton();
 
@@ -25,7 +25,6 @@ $s->register(
     '',
     '',
     'Retorna o ID dos anuncios visiveis a um usuario de uma disciplina.'
-
 );
 
 $s->register(

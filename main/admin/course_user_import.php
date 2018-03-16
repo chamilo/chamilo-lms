@@ -3,7 +3,8 @@
 
 /**
  * This tool allows platform admins to update course-user relations by uploading
- * a CSV file
+ * a CSV file.
+ *
  * @package chamilo.admin
  */
 
@@ -21,7 +22,7 @@ function validate_data($users_courses)
         foreach ($mandatory_fields as $key => $field) {
             if (!isset($user_course[$field]) || strlen($user_course[$field]) == 0) {
                 $user_course['error'] = get_lang($field.'Mandatory');
-                $errors[]             = $user_course;
+                $errors[] = $user_course;
             }
         }
 
@@ -36,7 +37,7 @@ function validate_data($users_courses)
                 $res = Database::query($sql);
                 if (Database::num_rows($res) == 0) {
                     $user_course['error'] = get_lang('CodeDoesNotExists');
-                    $errors[]             = $user_course;
+                    $errors[] = $user_course;
                 } else {
                     $coursecodes[$user_course['CourseCode']] = 1;
                 }
@@ -47,7 +48,7 @@ function validate_data($users_courses)
         if (isset($user_course['UserName']) && strlen($user_course['UserName']) != 0) {
             if (UserManager::is_username_available($user_course['UserName'])) {
                 $user_course['error'] = get_lang('UnknownUser');
-                $errors[]             = $user_course;
+                $errors[] = $user_course;
             }
         }
 
@@ -55,7 +56,7 @@ function validate_data($users_courses)
         if (isset($user_course['Status']) && strlen($user_course['Status']) != 0) {
             if ($user_course['Status'] != COURSEMANAGER && $user_course['Status'] != STUDENT) {
                 $user_course['error'] = get_lang('UnknownStatus');
-                $errors[]             = $user_course;
+                $errors[] = $user_course;
             }
         }
     }
@@ -99,7 +100,7 @@ function save_data($users_courses)
             $db_subscriptions[$obj->c_id] = $obj->status;
         }
 
-        $to_subscribe   = array_diff(array_keys($csv_subscriptions), array_keys($db_subscriptions));
+        $to_subscribe = array_diff(array_keys($csv_subscriptions), array_keys($db_subscriptions));
         $to_unsubscribe = array_diff(array_keys($db_subscriptions), array_keys($csv_subscriptions));
 
         if ($_POST['subscribe']) {
@@ -130,12 +131,15 @@ function save_data($users_courses)
 
 /**
  * Reads CSV-file.
+ *
  * @param string $file Path to the CSV-file
+ *
  * @return array All course-information read from the file
  */
 function parse_csv_data($file)
 {
     $courses = Import :: csvToArray($file);
+
     return $courses;
 }
 

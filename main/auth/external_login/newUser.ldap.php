@@ -6,7 +6,7 @@
  * and chamilo does not find his user
  * Variables that can be used :
  *    - $login : string containing the username posted by the user
- *    - $password : string containing the password posted by the user
+ *    - $password : string containing the password posted by the user.
  *
  * Please configure the exldap module in main/auth/external_login/ldap.conf.php
  *
@@ -36,7 +36,6 @@
  *          - index.php?loginFailed=1&error=user_password_incorrect
  *          - index.php?loginFailed=1&error=unrecognize_sso_origin');
  * */
-
 use ChamiloSession as Session;
 
 require_once __DIR__.'/ldap.inc.php';

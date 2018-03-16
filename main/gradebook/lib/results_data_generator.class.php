@@ -4,8 +4,10 @@
 /**
  * ResultsDataGenerator Class
  * Class to select, sort and transform object data into array data,
- * used for the teacher's evaluation results view
+ * used for the teacher's evaluation results view.
+ *
  * @author Bert Steppé
+ *
  * @package chamilo.gradebook
  */
 class ResultsDataGenerator
@@ -24,7 +26,7 @@ class ResultsDataGenerator
     private $include_edit;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct(
         $evaluation,
@@ -36,7 +38,7 @@ class ResultsDataGenerator
     }
 
     /**
-     * Get total number of results (rows)
+     * Get total number of results (rows).
      */
     public function get_total_results_count()
     {
@@ -44,15 +46,17 @@ class ResultsDataGenerator
     }
 
     /**
-     * Get actual array data
-     * @param integer $count
+     * Get actual array data.
+     *
+     * @param int $count
+     *
      * @return array 2-dimensional array - each array contains the elements:
-     * 0 ['id']        : user id
-     * 1 ['result_id'] : result id
-     * 2 ['lastname']  : user lastname
-     * 3 ['firstname'] : user firstname
-     * 4 ['score']     : student's score
-     * 5 ['display']   : custom score display (only if custom scoring enabled)
+     *               0 ['id']        : user id
+     *               1 ['result_id'] : result id
+     *               2 ['lastname']  : user lastname
+     *               3 ['firstname'] : user firstname
+     *               4 ['score']     : student's score
+     *               5 ['display']   : custom score display (only if custom scoring enabled)
      */
     public function get_data(
         $sorting = 0,
@@ -123,7 +127,6 @@ class ResultsDataGenerator
             $table[] = $user;
         }
 
-
         // sort array
         if ($sorting & self::RDG_SORT_LASTNAME) {
             usort($table, ['ResultsDataGenerator', 'sort_by_last_name']);
@@ -142,12 +145,67 @@ class ResultsDataGenerator
         return $return;
     }
 
+    // Sort functions - used internally
+
     /**
-     * Re-formats the score to show percentage ("2/4 (50 %)") or letters ("A")
+     * @param array $item1
+     * @param array $item2
+     *
+     * @return int
+     */
+    public function sort_by_last_name($item1, $item2)
+    {
+        return api_strcmp($item1['lastname'], $item2['lastname']);
+    }
+
+    /**
+     * @param array $item1
+     * @param array $item2
+     *
+     * @return int
+     */
+    public function sort_by_first_name($item1, $item2)
+    {
+        return api_strcmp($item1['firstname'], $item2['firstname']);
+    }
+
+    /**
+     * @param array $item1
+     * @param array $item2
+     *
+     * @return int
+     */
+    public function sort_by_score($item1, $item2)
+    {
+        if ($item1['percentage_score'] == $item2['percentage_score']) {
+            return 0;
+        } else {
+            return $item1['percentage_score'] < $item2['percentage_score'] ? -1 : 1;
+        }
+    }
+
+    /**
+     * @param array $item1
+     * @param array $item2
+     *
+     * @return int
+     */
+    public function sort_by_mask($item1, $item2)
+    {
+        $score1 = (isset($item1['score']) ? [$item1['score'], $this->evaluation->get_max()] : null);
+        $score2 = (isset($item2['score']) ? [$item2['score'], $this->evaluation->get_max()] : null);
+
+        return ScoreDisplay::compare_scores_by_custom_display($score1, $score2);
+    }
+
+    /**
+     * Re-formats the score to show percentage ("2/4 (50 %)") or letters ("A").
+     *
      * @param float Current absolute score (max score is taken from $this->evaluation->get_max()
      * @param bool  Whether we want the real score (2/4 (50 %)) or the transformation (A, B, C, etc)
      * @param bool  Whether we want to ignore the score color
      * @param bool $realscore
+     *
      * @return string The score as we want to show it
      */
     private function get_score_display(
@@ -171,53 +229,5 @@ class ResultsDataGenerator
         }
 
         return '';
-    }
-
-    // Sort functions - used internally
-
-    /**
-     * @param array $item1
-     * @param array $item2
-     * @return int
-     */
-    public function sort_by_last_name($item1, $item2)
-    {
-        return api_strcmp($item1['lastname'], $item2['lastname']);
-    }
-
-    /**
-     * @param array $item1
-     * @param array $item2
-     * @return int
-     */
-    public function sort_by_first_name($item1, $item2)
-    {
-        return api_strcmp($item1['firstname'], $item2['firstname']);
-    }
-
-    /**
-     * @param array $item1
-     * @param array $item2
-     * @return int
-     */
-    public function sort_by_score($item1, $item2)
-    {
-        if ($item1['percentage_score'] == $item2['percentage_score']) {
-            return 0;
-        } else {
-            return ($item1['percentage_score'] < $item2['percentage_score'] ? -1 : 1);
-        }
-    }
-
-    /**
-     * @param array $item1
-     * @param array $item2
-     * @return int
-     */
-    public function sort_by_mask($item1, $item2)
-    {
-        $score1 = (isset($item1['score']) ? [$item1['score'], $this->evaluation->get_max()] : null);
-        $score2 = (isset($item2['score']) ? [$item2['score'], $this->evaluation->get_max()] : null);
-        return ScoreDisplay::compare_scores_by_custom_display($score1, $score2);
     }
 }

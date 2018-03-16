@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Exercise results from Learning paths
+ * Exercise results from Learning paths.
  *
  * @todo implement pagination
+ *
  * @package chamilo.tracking
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_TRACKING;
@@ -158,7 +158,7 @@ foreach ($course_list as $current_course) {
             }
             $exercise_list_name[$exercise['id']] = $exercise['title'];
         }
-        $lps[$lp_id] = ['lp_name' =>$lp['lp_name'], 'exercises' =>$attempt_result];
+        $lps[$lp_id] = ['lp_name' => $lp['lp_name'], 'exercises' => $attempt_result];
         $lp_list_name[$lp_id] = $lp['lp_name'];
     }
     $main_result[$current_course['code']] = $lps;

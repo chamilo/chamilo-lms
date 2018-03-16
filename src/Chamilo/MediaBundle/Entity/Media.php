@@ -14,23 +14,22 @@ namespace Chamilo\MediaBundle\Entity;
 use Sonata\MediaBundle\Entity\BaseMedia as BaseMedia;
 
 /**
- *
  * References :
- *   working with object : http://www.doctrine-project.org/projects/orm/2.0/docs/reference/working-with-objects/en
+ *   working with object : http://www.doctrine-project.org/projects/orm/2.0/docs/reference/working-with-objects/en.
  *
  * @author <yourname> <youremail>
  */
 class Media extends BaseMedia
 {
     /**
-     * @var integer $id
+     * @var int
      */
     protected $id;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer $id
+     * @return int $id
      */
     public function getId()
     {

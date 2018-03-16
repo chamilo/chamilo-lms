@@ -6,14 +6,16 @@ namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 use Chamilo\CoreBundle\Component\Editor\Toolbar;
 
 /**
- * Class Basic
+ * Class Basic.
+ *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class Basic extends Toolbar
 {
     /**
      * Default plugins that will be use in all toolbars
-     * In order to add a new plugin you have to load it in default/layout/head.tpl
+     * In order to add a new plugin you have to load it in default/layout/head.tpl.
+     *
      * @var array
      */
     public $defaultPlugins = [
@@ -64,13 +66,14 @@ class Basic extends Toolbar
     ];
 
     /**
-     * Plugins this toolbar
+     * Plugins this toolbar.
+     *
      * @var array
      */
     public $plugins = [];
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function __construct(
         $toolbar = null,
@@ -135,7 +138,8 @@ class Basic extends Toolbar
     }
 
     /**
-     * Get the toolbar config
+     * Get the toolbar config.
+     *
      * @return array
      */
     public function getConfig()
@@ -186,7 +190,7 @@ class Basic extends Toolbar
             'img-va-super',
             'img-va-sub',
             'img-va-text-top',
-            'img-va-text-bottom'
+            'img-va-text-bottom',
         ];
         $config['startupOutlineBlocks'] = api_get_configuration_value('ckeditor_startup_outline_blocks') === true;
 
@@ -202,7 +206,16 @@ class Basic extends Toolbar
     }
 
     /**
-     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * @return array
+     */
+    public function getNewPageBlock()
+    {
+        return  ['NewPage', 'Templates', '-', 'PasteFromWord', 'inserthtml'];
+    }
+
+    /**
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false.
+     *
      * @return array
      */
     protected function getNormalToolbar()
@@ -211,7 +224,8 @@ class Basic extends Toolbar
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is minimized
+     * Get the toolbar configuration when CKEditor is minimized.
+     *
      * @return array
      */
     protected function getMinimizedToolbar()
@@ -224,12 +238,13 @@ class Basic extends Toolbar
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
             api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
-            ['Toolbarswitch']
+            ['Toolbarswitch'],
         ];
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is maximized
+     * Get the toolbar configuration when CKEditor is maximized.
+     *
      * @return array
      */
     protected function getMaximizedToolbar()
@@ -251,7 +266,7 @@ class Basic extends Toolbar
                 'Smiley',
                 'SpecialChar',
                 'Asciimath',
-                'Asciisvg'
+                'Asciisvg',
             ],
             '/',
             ['Table', '-', 'CreateDiv'],
@@ -264,13 +279,5 @@ class Basic extends Toolbar
             api_get_setting('enabled_wiris') == 'true' ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
             ['Toolbarswitch'],
         ];
-    }
-
-    /**
-     * @return array
-     */
-    public function getNewPageBlock()
-    {
-        return  ['NewPage', 'Templates', '-', 'PasteFromWord', 'inserthtml'];
     }
 }

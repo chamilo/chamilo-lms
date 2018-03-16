@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * HookObserver
+ * HookObserver.
  *
  * @ORM\Table(name="hook_observer", uniqueConstraints={@ORM\UniqueConstraint(name="class_name", columns={"class_name"})})
  * @ORM\Entity
@@ -35,7 +35,7 @@ class HookObserver
     private $pluginName;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -43,12 +43,11 @@ class HookObserver
      */
     private $id;
 
-
-
     /**
-     * Set className
+     * Set className.
      *
      * @param string $className
+     *
      * @return HookObserver
      */
     public function setClassName($className)
@@ -59,7 +58,7 @@ class HookObserver
     }
 
     /**
-     * Get className
+     * Get className.
      *
      * @return string
      */
@@ -69,9 +68,10 @@ class HookObserver
     }
 
     /**
-     * Set path
+     * Set path.
      *
      * @param string $path
+     *
      * @return HookObserver
      */
     public function setPath($path)
@@ -82,7 +82,7 @@ class HookObserver
     }
 
     /**
-     * Get path
+     * Get path.
      *
      * @return string
      */
@@ -92,9 +92,10 @@ class HookObserver
     }
 
     /**
-     * Set pluginName
+     * Set pluginName.
      *
      * @param string $pluginName
+     *
      * @return HookObserver
      */
     public function setPluginName($pluginName)
@@ -105,7 +106,7 @@ class HookObserver
     }
 
     /**
-     * Get pluginName
+     * Get pluginName.
      *
      * @return string
      */
@@ -115,9 +116,9 @@ class HookObserver
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

@@ -8,7 +8,7 @@ require_once __DIR__.'/cm_webservice_course.php';
 require_once __DIR__.'/cm_soap.php';
 
 /**
- * Configures the WSCourse SOAP service
+ * Configures the WSCourse SOAP service.
  */
 $s = WSCMSoapServer::singleton();
 
@@ -20,7 +20,7 @@ $s->wsdl->addComplexType(
     '',
     [
         'course_id_field_name' => ['name' => 'course_id_field_name', 'type' => 'xsd:string'],
-        'course_id_value' => ['name' => 'course_id_value', 'type' => 'xsd:string']
+        'course_id_value' => ['name' => 'course_id_value', 'type' => 'xsd:string'],
     ]
 );
 
@@ -32,7 +32,7 @@ $s->wsdl->addComplexType(
     '',
     [
         'course_id_value' => ['name' => 'course_id_value', 'type' => 'xsd:string'],
-        'result' => ['name' => 'result', 'type' => 'tns:result']
+        'result' => ['name' => 'result', 'type' => 'tns:result'],
     ]
 );
 
@@ -43,7 +43,7 @@ $s->wsdl->addComplexType(
     '',
     'SOAP-ENC:Array',
     [],
-    [['ref'=>'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:course_result[]']],
+    [['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:course_result[]']],
     'tns:course_result'
 );
 
@@ -71,7 +71,7 @@ $s->register(
         'language' => 'xsd:string',
         'course_id_field_name' => 'xsd:string',
         'course_id_value' => 'xsd:string',
-        'extras' => 'tns:extra_field[]'
+        'extras' => 'tns:extra_field[]',
     ],
     ['return' => 'xsd:int']
 );
@@ -92,7 +92,7 @@ $s->wsdl->addComplexType(
         'language' => ['name' => 'language', 'type' => 'xsd:string'],
         'course_id_field_name' => ['name' => 'course_id_field_name', 'type' => 'xsd:string'],
         'course_id_value' => ['name' => 'course_id_value', 'type' => 'xsd:string'],
-        'extras' => ['name' => 'extras', 'type' => 'tns:extra_field[]']
+        'extras' => ['name' => 'extras', 'type' => 'tns:extra_field[]'],
     ]
 );
 
@@ -105,7 +105,7 @@ $s->wsdl->addComplexType(
     [
         'course_id_value' => ['name' => 'course_id_value', 'type' => 'xsd:string'],
         'course_id_generated' => ['name' => 'course_id_generated', 'type' => 'xsd:int'],
-        'result' => ['name' => 'result', 'type' => 'tns:result']
+        'result' => ['name' => 'result', 'type' => 'tns:result'],
     ]
 );
 
@@ -116,7 +116,7 @@ $s->wsdl->addComplexType(
     '',
     'SOAP-ENC:Array',
     [],
-    [['ref'=>'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:course_create_result[]']],
+    [['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:course_create_result[]']],
     'tns:course_create_result'
 );
 
@@ -124,7 +124,7 @@ $s->register(
     'WSCMCourse.CreateCourses',
     [
         'secret_key' => 'xsd:string',
-        'courses' => 'tns:course_create[]'
+        'courses' => 'tns:course_create[]',
     ],
     ['return' => 'tns:course_create_result_array']
 );
@@ -144,7 +144,7 @@ $s->register(
         'subscribe' => 'xsd:int',
         'unsubscribe' => 'xsd:int',
         'visual_code' => 'xsd:string',
-        'extras' => 'tns:extra_field[]'
+        'extras' => 'tns:extra_field[]',
     ]
 );
 
@@ -173,7 +173,7 @@ $s->wsdl->addComplexType(
     '',
     'SOAP-ENC:Array',
     [],
-    [['ref'=>'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:course[]']],
+    [['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:course[]']],
     'tns:course'
 );
 
@@ -181,7 +181,7 @@ $s->register(
     'WSCMCourse.ListCourses',
     [
         'secret_key' => 'xsd:string',
-        'course_id_field_name' => 'xsd:string'
+        'course_id_field_name' => 'xsd:string',
     ],
     ['return' => 'tns:course_array']
 );
@@ -194,7 +194,7 @@ $s->register(
         'course_id_value' => 'xsd:string',
         'user_id_field_name' => 'xsd:string',
         'user_id_value' => 'xsd:string',
-        'status' => 'xsd:int'
+        'status' => 'xsd:int',
     ]
 );
 
@@ -205,7 +205,7 @@ $s->register(
         'course_id_field_name' => 'xsd:string',
         'course_id_value' => 'xsd:string',
         'user_id_field_name' => 'xsd:string',
-        'user_id_value' => 'xsd:string'
+        'user_id_value' => 'xsd:string',
     ]
 );
 
@@ -218,7 +218,7 @@ $s->wsdl->addComplexType(
     [
         'course_desc_id' => ['name' => 'course_desc_id', 'type' => 'xsd:int'],
         'course_desc_title' => ['name' => 'course_desc_title', 'type' => 'xsd:string'],
-        'course_desc_content' => ['name' => 'course_desc_content', 'type' => 'xsd:string']
+        'course_desc_content' => ['name' => 'course_desc_content', 'type' => 'xsd:string'],
     ]
 );
 
@@ -229,7 +229,7 @@ $s->wsdl->addComplexType(
     '',
     'SOAP-ENC:Array',
     [],
-    [['ref'=>'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:course_description[]']],
+    [['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:course_description[]']],
     'tns:course_description'
 );
 
@@ -238,7 +238,7 @@ $s->register(
     [
         'secret_key' => 'xsd:string',
         'course_id_field_name' => 'xsd:string',
-        'course_id_value' => 'xsd:string'
+        'course_id_value' => 'xsd:string',
     ],
     ['return' => 'tns:course_description_array']
 );
@@ -251,7 +251,7 @@ $s->register(
         'course_id_value' => 'xsd:string',
         'course_desc_id' => 'xsd:int',
         'course_desc_title' => 'xsd:string',
-        'course_desc_content' => 'xsd:string'
+        'course_desc_content' => 'xsd:string',
     ]
 );
 

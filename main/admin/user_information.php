@@ -1,15 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\UserBundle\Entity\User;
 
 /**
- * Script showing information about a user (name, e-mail, courses and sessions)
+ * Script showing information about a user (name, e-mail, courses and sessions).
+ *
  * @author Bart Mollet
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -60,10 +61,10 @@ $actions = [
             ICON_SIZE_MEDIUM
         ),
         api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?'.http_build_query([
-            'student' => intval($_GET['user_id'])
+            'student' => intval($_GET['user_id']),
         ]),
         ['title' => get_lang('Reporting')]
-    )
+    ),
 ];
 
 if (api_can_login_as($userId)) {
@@ -186,7 +187,7 @@ $table->setHeaderContents(0, 0, get_lang('Tracking'));
 $csvContent[] = [get_lang('Tracking')];
 $data = [
     get_lang('FirstLogin') => Tracking::get_first_connection_date($userId),
-    get_lang('LatestLogin') => Tracking::get_last_connection_date($userId, true)
+    get_lang('LatestLogin') => Tracking::get_last_connection_date($userId, true),
 ];
 
 if (api_get_setting('allow_terms_conditions') === 'true') {
@@ -227,7 +228,7 @@ $trackingInformation = $table->toHtml();
 $socialInformation = '';
 
 /**
- * Show social activity
+ * Show social activity.
  */
 if (api_get_setting('allow_social_tool') === 'true') {
     $userObject = api_get_user_entity($user['user_id']);
@@ -259,7 +260,7 @@ if (api_get_setting('allow_social_tool') === 'true') {
 }
 
 /**
- * Show the sessions in which this user is subscribed
+ * Show the sessions in which this user is subscribed.
  */
 $sessions = SessionManager::get_sessions_by_user($userId, true);
 $personal_course_list = [];
@@ -272,7 +273,7 @@ if (count($sessions) > 0) {
         [get_lang('Status'), true],
         [get_lang('TimeSpentInTheCourse'), true],
         [get_lang('TotalPostsInAllForums'), true],
-        ['', false]
+        ['', false],
     ];
 
     $headerList = [];
@@ -345,7 +346,7 @@ if (count($sessions) > 0) {
                 $status,
                 $timeSpent,
                 $totalForumMessages,
-                $tools
+                $tools,
             ];
 
             $csvContent[] = array_map('strip_tags', $row);
@@ -388,7 +389,7 @@ if (count($sessions) > 0) {
 $courseToolInformationTotal = '';
 
 /**
- * Show the courses in which this user is subscribed
+ * Show the courses in which this user is subscribed.
  */
 $sql = 'SELECT * FROM '.$table_course_user.' cu, '.$table_course.' c
         WHERE
@@ -403,7 +404,7 @@ if (Database::num_rows($res) > 0) {
         [get_lang('Status')],
         [get_lang('TimeSpentInTheCourse')],
         [get_lang('TotalPostsInAllForums')],
-        ['']
+        [''],
     ];
 
     $headerList = [];
@@ -484,7 +485,7 @@ if (Database::num_rows($res) > 0) {
 }
 
 /**
- * Show the URL in which this user is subscribed
+ * Show the URL in which this user is subscribed.
  */
 $urlInformation = '';
 if (api_is_multiple_url_enabled()) {

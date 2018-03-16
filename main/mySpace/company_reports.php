@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Special report for corporate users
+ * Special report for corporate users.
+ *
  * @package chamilo.reporting
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -35,18 +35,18 @@ $columns = [
     get_lang('ManHours'),
     get_lang('CertificateGenerated'),
     get_lang('Approved'),
-    get_lang('CourseAdvance')
+    get_lang('CourseAdvance'),
 ];
 
 //Column config
 $column_model = [
-    ['name'=>'course', 'index'=>'title', 'width'=>'180', 'align'=>'left', 'wrap_cell' => 'true'],
-    ['name'=>'user', 'index'=>'user', 'width'=>'100', 'align'=>'left', 'sortable'=>'false', 'wrap_cell' => 'true'],
-    ['name'=>'email', 'index'=>'email', 'width'=>'100', 'align'=>'left', 'sortable'=>'false', 'wrap_cell' => 'true'],
-    ['name'=>'time', 'index'=>'time', 'width'=>'50', 'align'=>'left', 'sortable'=>'false'],
-    ['name'=>'certificate', 'index'=>'certificate', 'width'=>'50', 'align'=>'left', 'sortable'=>'false'],
-    ['name'=>'progress_100', 'index'=>'progress_100', 'width'=>'50', 'align'=>'left', 'sortable'=>'false'],
-    ['name'=>'progress', 'index'=>'progress', 'width'=>'50', 'align'=>'left', 'sortable'=>'false']
+    ['name' => 'course', 'index' => 'title', 'width' => '180', 'align' => 'left', 'wrap_cell' => 'true'],
+    ['name' => 'user', 'index' => 'user', 'width' => '100', 'align' => 'left', 'sortable' => 'false', 'wrap_cell' => 'true'],
+    ['name' => 'email', 'index' => 'email', 'width' => '100', 'align' => 'left', 'sortable' => 'false', 'wrap_cell' => 'true'],
+    ['name' => 'time', 'index' => 'time', 'width' => '50', 'align' => 'left', 'sortable' => 'false'],
+    ['name' => 'certificate', 'index' => 'certificate', 'width' => '50', 'align' => 'left', 'sortable' => 'false'],
+    ['name' => 'progress_100', 'index' => 'progress_100', 'width' => '50', 'align' => 'left', 'sortable' => 'false'],
+    ['name' => 'progress', 'index' => 'progress', 'width' => '50', 'align' => 'left', 'sortable' => 'false'],
 ];
 
 if (!empty($extra_fields)) {
@@ -55,8 +55,8 @@ if (!empty($extra_fields)) {
             'name' => $extra['1'],
             'index' => $extra['1'],
             'width' => '120',
-            'sortable' =>'false',
-            'wrap_cell' => 'true'
+            'sortable' => 'false',
+            'wrap_cell' => 'true',
         ];
         $column_model[] = $col;
 
@@ -65,7 +65,7 @@ if (!empty($extra_fields)) {
 }
 
 if (api_is_student_boss()) {
-    $column_model[] = ['name'=>'group', 'index'=>'group', 'width'=>'50', 'align'=>'left', 'sortable'=>'false'];
+    $column_model[] = ['name' => 'group', 'index' => 'group', 'width' => '50', 'align' => 'left', 'sortable' => 'false'];
     $columns[] = get_lang('Group');
 }
 
@@ -130,7 +130,7 @@ $content .= Display::url(
     get_lang("CompanyReportResumed"),
     api_get_path(WEB_CODE_PATH)."mySpace/company_reports_resumed.php",
     [
-        'class' => 'btn btn-success'
+        'class' => 'btn btn-success',
     ]
 );
 $content .= '</div>';

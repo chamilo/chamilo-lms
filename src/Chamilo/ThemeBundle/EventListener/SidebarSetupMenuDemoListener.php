@@ -8,7 +8,8 @@ use Chamilo\ThemeBundle\Model\MenuItemModel;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class SidebarSetupMenuDemoListener
+ * Class SidebarSetupMenuDemoListener.
+ *
  * @package Chamilo\ThemeBundle\EventListener
  */
 class SidebarSetupMenuDemoListener
@@ -29,7 +30,7 @@ class SidebarSetupMenuDemoListener
             $dash = new MenuItemModel('dashboard', 'Dashboard', 'avanzu_admin_dash_demo', $earg, 'fa fa-dashboard'),
             $form = new MenuItemModel('forms', 'Forms', 'avanzu_admin_form_demo', $earg, 'fa fa-edit'),
             $widgets = new MenuItemModel('widgets', 'Widgets', 'avanzu_admin_demo', $earg, 'fa fa-th', 'new'),
-            $ui = new MenuItemModel('ui-elements', 'UI Elements', '', $earg, 'fa fa-laptop')
+            $ui = new MenuItemModel('ui-elements', 'UI Elements', '', $earg, 'fa fa-laptop'),
         ];
 
         $ui->addChild(new MenuItemModel('ui-elements-general', 'General', 'avanzu_admin_ui_gen_demo', $earg))

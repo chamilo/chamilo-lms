@@ -2,18 +2,19 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class ChamiloForm
+ * Class ChamiloForm.
  */
 abstract class ChamiloForm
 {
+    public $_definition_finalized;
     protected $_form;
     protected $_mode;
     protected $_cancelurl;
     protected $_customdata;
-    public $_definition_finalized;
 
     /**
      * ChamiloForm constructor.
+     *
      * @param $mode
      * @param $returnurl
      * @param $cancelurl
@@ -37,6 +38,7 @@ abstract class ChamiloForm
     }
 
     abstract public function definition();
+
     abstract public function validation($data, $files = null);
 
     public function validate()
@@ -68,11 +70,12 @@ abstract class ChamiloForm
      * if there is no submitted data.
      *
      * @param bool $slashed true means return data with addslashes applied
+     *
      * @return object submitted data; NULL if not valid or not submitted
      */
     public function get_data($slashed = true)
     {
-        $cform = & $this->_form;
+        $cform = &$this->_form;
 
         if ($this->is_submitted() and $this->is_validated()) {
             $data = $cform->exportValues(null, $slashed);
@@ -91,11 +94,12 @@ abstract class ChamiloForm
      * Return submitted data without validation or NULL if there is no submitted data.
      *
      * @param bool $slashed true means return data with addslashes applied
+     *
      * @return object submitted data; NULL if not submitted
      */
     public function get_submitted_data($slashed = true)
     {
-        $cform = & $this->_form;
+        $cform = &$this->_form;
 
         if ($this->is_submitted()) {
             $data = $cform->exportValues(null, $slashed);
@@ -127,7 +131,7 @@ abstract class ChamiloForm
      */
     public function is_cancelled()
     {
-        $cform = & $this->_form;
+        $cform = &$this->_form;
         if ($cform->isSubmitted()) {
             foreach ($cform->_cancelButtons as $cancelbutton) {
                 if (optional_param($cancelbutton, 0, PARAM_RAW)) {
@@ -141,7 +145,7 @@ abstract class ChamiloForm
 
     /**
      * Check that form data is valid.
-     * You should almost always use this, rather than {@see validate_defined_fields}
+     * You should almost always use this, rather than {@see validate_defined_fields}.
      *
      * @return bool true if form data valid
      */
@@ -168,16 +172,16 @@ abstract class ChamiloForm
      * for example, to selectively add new elements depending on a no_submit_button press,
      * but only when the form is valid when the no_submit_button is pressed,
      *
-     * @param boolean $validateonnosubmit optional, defaults to false.  The default behaviour
-     *                is NOT to validate the form when a no submit button has been pressed.
-     *                pass true here to override this behaviour
+     * @param bool $validateonnosubmit optional, defaults to false.  The default behaviour
+     *                                 is NOT to validate the form when a no submit button has been pressed.
+     *                                 pass true here to override this behaviour
      *
      * @return bool true if form data valid
      */
     public function validate_defined_fields($validateonnosubmit = false)
     {
         static $validated = null; // one validation is enough
-        $cform = & $this->_form;
+        $cform = &$this->_form;
 
         if ($this->no_submit_button_pressed() && empty($validateonnosubmit)) {
             return false;
@@ -222,7 +226,7 @@ abstract class ChamiloForm
             return $nosubmit;
         }
 
-        $cform = & $this->_form;
+        $cform = &$this->_form;
         $nosubmit = false;
         if (!$this->is_submitted()) {
             return false;
@@ -246,7 +250,7 @@ abstract class ChamiloForm
      * already exist and data is being edited (edit entry form).
      *
      * @param mixed $default_values object or array of default values
-     * @param bool $slashed true if magic quotes applied to data values
+     * @param bool  $slashed        true if magic quotes applied to data values
      */
     public function set_data($default_values, $slashed = false)
     {
@@ -271,7 +275,7 @@ abstract class ChamiloForm
         }
 
         $errors = [];
-        $mform = & $this->_form;
+        $mform = &$this->_form;
 
         // check the files
         $status = $this->_upload_manager->preprocess_files();
@@ -308,16 +312,17 @@ abstract class ChamiloForm
 }
 
 /**
- * Class InstanceForm
+ * Class InstanceForm.
  */
 class InstanceForm extends ChamiloForm
 {
-    /** @var  Plugin */
+    /** @var Plugin */
     public $_plugin;
     public $instance;
 
     /**
      * InstanceForm constructor.
+     *
      * @param $plugin
      * @param string $mode
      */
@@ -337,9 +342,6 @@ class InstanceForm extends ChamiloForm
         $this->definition();
     }
 
-    /**
-     *
-     */
     public function definition()
     {
         global $_configuration;
@@ -356,7 +358,7 @@ class InstanceForm extends ChamiloForm
             'sitename',
             [
                 $plugin->get_lang('sitename'),
-                $plugin->get_lang('SiteNameExample')
+                $plugin->get_lang('SiteNameExample'),
             ]
         );
         $form->applyFilter('sitename', 'trim');
@@ -364,7 +366,7 @@ class InstanceForm extends ChamiloForm
             'institution',
             [
                 $plugin->get_lang('institution'),
-                $plugin->get_lang('InstitutionExample')
+                $plugin->get_lang('InstitutionExample'),
             ]
         );
         $form->applyFilter('institution', 'trim');
@@ -549,7 +551,8 @@ class InstanceForm extends ChamiloForm
 
     /**
      * @param array $data
-     * @param null $files
+     * @param null  $files
+     *
      * @return array
      */
     public function validation($data, $files = null)

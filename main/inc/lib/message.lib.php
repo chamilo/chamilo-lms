@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
 use Chamilo\UserBundle\Entity\User;
+use ChamiloSession as Session;
 
 /**
- * Class MessageManager
+ * Class MessageManager.
  *
  * This class provides methods for messages management.
  * Include/require it in your code to use its features.
@@ -16,6 +16,7 @@ class MessageManager
 {
     /**
      * Get count new messages for the current user from the database.
+     *
      * @return int
      */
     public static function getCountNewMessages()
@@ -45,30 +46,10 @@ class MessageManager
     }
 
     /**
-     * Execute the SQL necessary to know the number of messages in the database
-     * @param   int $userId The user for which we need the unread messages count
-     * @return  int The number of unread messages in the database for the given user
-     */
-    private static function getCountNewMessagesFromDB($userId)
-    {
-        if (empty($userId)) {
-            return 0;
-        }
-        $table = Database::get_main_table(TABLE_MESSAGE);
-        $sql = "SELECT COUNT(id) as count 
-                FROM $table
-                WHERE
-                    user_receiver_id=".api_get_user_id()." AND
-                    msg_status = ".MESSAGE_STATUS_UNREAD;
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
-
-        return $row['count'];
-    }
-
-    /**
-     * Gets the total number of messages, used for the inbox sortable table
+     * Gets the total number of messages, used for the inbox sortable table.
+     *
      * @param bool $unread
+     *
      * @return int
      */
     public static function getNumberOfMessages($unread = false)
@@ -100,11 +81,13 @@ class MessageManager
     }
 
     /**
-     * Gets information about some messages, used for the inbox sortable table
-     * @param int $from
-     * @param int $number_of_items
+     * Gets information about some messages, used for the inbox sortable table.
+     *
+     * @param int    $from
+     * @param int    $number_of_items
      * @param string $column
      * @param string $direction
+     *
      * @return array
      */
     public static function get_message_data(
@@ -114,9 +97,9 @@ class MessageManager
         $direction,
         $userId = 0
     ) {
-        $from = (int)$from;
-        $number_of_items = (int)$number_of_items;
-        $userId = empty($userId) ? api_get_user_id() : (int)$userId;
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
+        $userId = empty($userId) ? api_get_user_id() : (int) $userId;
 
         //forcing this order
         if (!isset($direction)) {
@@ -220,10 +203,11 @@ class MessageManager
     }
 
     /**
-     * @param array $aboutUserInfo
-     * @param array $fromUserInfo
+     * @param array  $aboutUserInfo
+     * @param array  $fromUserInfo
      * @param string $subject
      * @param string $content
+     *
      * @return bool
      */
     public static function sendMessageAboutUser(
@@ -251,7 +235,7 @@ class MessageManager
             'content' => $content,
             'group_id' => 0,
             'parent_id' => 0,
-            'update_date' => $now
+            'update_date' => $now,
         ];
         $id = Database::insert($table, $params);
         if ($id) {
@@ -263,6 +247,7 @@ class MessageManager
 
     /**
      * @param array $aboutUserInfo
+     *
      * @return array
      */
     public static function getMessagesAboutUser($aboutUserInfo)
@@ -270,7 +255,7 @@ class MessageManager
         if (!empty($aboutUserInfo)) {
             $criteria = [
                 'userReceiverId' => $aboutUserInfo['id'],
-                'msgStatus' => MESSAGE_STATUS_CONVERSATION
+                'msgStatus' => MESSAGE_STATUS_CONVERSATION,
             ];
             $repo = Database::getManager()->getRepository('ChamiloCoreBundle:Message');
             $messages = $repo->findBy($criteria, ['sendDate' => 'DESC']);
@@ -282,21 +267,21 @@ class MessageManager
     }
 
     /**
-     * Sends a message to a user/group
+     * Sends a message to a user/group.
      *
-     * @param int $receiver_user_id
+     * @param int    $receiver_user_id
      * @param string $subject
      * @param string $content
-     * @param array $file_attachments files array($_FILES) (optional)
-     * @param array $file_comments about attachment files (optional)
-     * @param int $group_id (optional)
-     * @param int $parent_id (optional)
-     * @param int $editMessageId id for updating the message (optional)
-     * @param int $topic_id (optional) the default value is the current user_id
-     * @param int $sender_id
-     * @param bool $directMessage
-     * @param int $forwardId
-     * @param array $smsParameters
+     * @param array  $file_attachments files array($_FILES) (optional)
+     * @param array  $file_comments    about attachment files (optional)
+     * @param int    $group_id         (optional)
+     * @param int    $parent_id        (optional)
+     * @param int    $editMessageId    id for updating the message (optional)
+     * @param int    $topic_id         (optional) the default value is the current user_id
+     * @param int    $sender_id
+     * @param bool   $directMessage
+     * @param int    $forwardId
+     * @param array  $smsParameters
      *
      * @return bool
      */
@@ -316,11 +301,11 @@ class MessageManager
         $smsParameters = []
     ) {
         $table = Database::get_main_table(TABLE_MESSAGE);
-        $group_id = (int)$group_id;
-        $receiver_user_id = (int)$receiver_user_id;
-        $parent_id = (int)$parent_id;
-        $editMessageId = (int)$editMessageId;
-        $topic_id = (int)$topic_id;
+        $group_id = (int) $group_id;
+        $receiver_user_id = (int) $receiver_user_id;
+        $parent_id = (int) $parent_id;
+        $editMessageId = (int) $editMessageId;
+        $topic_id = (int) $topic_id;
 
         if (!empty($receiver_user_id)) {
             $receiverUserInfo = api_get_user_info($receiver_user_id);
@@ -331,9 +316,10 @@ class MessageManager
             }
         }
 
-        $user_sender_id = empty($sender_id) ? api_get_user_id() : (int)$sender_id;
+        $user_sender_id = empty($sender_id) ? api_get_user_id() : (int) $sender_id;
         if (empty($user_sender_id)) {
             Display::addFlash(Display::return_message(get_lang('UserDoesNotExist'), 'warning'));
+
             return false;
         }
 
@@ -359,6 +345,7 @@ class MessageManager
                     'warning'
                 )
             );
+
             return false;
         } elseif ($totalFileSize > intval(api_get_setting('message_max_upload_filesize'))) {
             $warning = sprintf(
@@ -394,7 +381,7 @@ class MessageManager
                     'content' => $content,
                     'group_id' => $group_id,
                     'parent_id' => $parent_id,
-                    'update_date' => $now
+                    'update_date' => $now,
                 ];
                 $messageId = Database::insert($table, $params);
             }
@@ -428,7 +415,7 @@ class MessageManager
                     'content' => $content,
                     'group_id' => $group_id,
                     'parent_id' => $parent_id,
-                    'update_date' => $now
+                    'update_date' => $now,
                 ];
                 $outbox_last_id = Database::insert($table, $params);
 
@@ -518,15 +505,15 @@ class MessageManager
     }
 
     /**
-     * @param int $receiver_user_id
-     * @param int $subject
+     * @param int    $receiver_user_id
+     * @param int    $subject
      * @param string $message
-     * @param int $sender_id
-     * @param bool $sendCopyToDrhUsers send copy to related DRH users
-     * @param bool $directMessage
-     * @param array $smsParameters
-     * @param bool $uploadFiles Do not upload files using the MessageManager class
-     * @param bool $attachmentList
+     * @param int    $sender_id
+     * @param bool   $sendCopyToDrhUsers send copy to related DRH users
+     * @param bool   $directMessage
+     * @param array  $smsParameters
+     * @param bool   $uploadFiles        Do not upload files using the MessageManager class
+     * @param bool   $attachmentList
      *
      * @return bool
      */
@@ -591,12 +578,13 @@ class MessageManager
     }
 
     /**
-     * Update parent ids for other receiver user from current message in groups
+     * Update parent ids for other receiver user from current message in groups.
+     *
      * @author Christian Fasanando Flores
-     * @param  int $parent_id
-     * @param  int $receiver_user_id
-     * @param  int $messageId
-     * @return void
+     *
+     * @param int $parent_id
+     * @param int $receiver_user_id
+     * @param int $messageId
      */
     public static function update_parent_ids_from_reply(
         $parent_id,
@@ -633,6 +621,7 @@ class MessageManager
     /**
      * @param int $user_receiver_id
      * @param int $id
+     *
      * @return bool
      */
     public static function delete_message_by_user_receiver($user_receiver_id, $id)
@@ -665,10 +654,13 @@ class MessageManager
     }
 
     /**
-     * Set status deleted
+     * Set status deleted.
+     *
      * @author Isaac FLores Paz <isaac.flores@dokeos.com>
+     *
      * @param  int
      * @param  int
+     *
      * @return bool
      */
     public static function delete_message_by_user_sender($user_sender_id, $id)
@@ -701,8 +693,9 @@ class MessageManager
     }
 
     /**
-     * Saves a message attachment files
-     * @param  array $file_attach $_FILES['name']
+     * Saves a message attachment files.
+     *
+     * @param array $file_attach $_FILES['name']
      * @param  string    a comment about the uploaded file
      * @param  int        message id
      * @param  int        receiver user id (optional)
@@ -773,14 +766,15 @@ class MessageManager
                 'comment' => $file_comment,
                 'path' => $new_file_name,
                 'message_id' => $message_id,
-                'size' => $file_attach['size']
+                'size' => $file_attach['size'],
             ];
             Database::insert($tbl_message_attach, $params);
         }
     }
 
     /**
-     * Delete message attachment files (logically updating the row with a suffix _DELETE_id)
+     * Delete message attachment files (logically updating the row with a suffix _DELETE_id).
+     *
      * @param  int    message id
      * @param  int    message user id (receiver user id or sender user id)
      * @param  int    group id (optional)
@@ -828,9 +822,11 @@ class MessageManager
     }
 
     /**
-     * update messages by user id and message id
-     * @param  int $user_id
-     * @param  int $message_id
+     * update messages by user id and message id.
+     *
+     * @param int $user_id
+     * @param int $message_id
+     *
      * @return bool
      */
     public static function update_message($user_id, $message_id)
@@ -847,13 +843,15 @@ class MessageManager
                     user_receiver_id = ".intval($user_id)." AND
                     id = '".intval($message_id)."'";
         Database::query($sql);
+
         return true;
     }
 
     /**
-     * @param int $user_id
-     * @param int $message_id
+     * @param int    $user_id
+     * @param int    $message_id
      * @param string $type
+     *
      * @return bool
      */
     public static function update_message_status($user_id, $message_id, $type)
@@ -872,9 +870,11 @@ class MessageManager
     }
 
     /**
-     * get messages by user id and message id
-     * @param  int $user_id
-     * @param  int $message_id
+     * get messages by user id and message id.
+     *
+     * @param int $user_id
+     * @param int $message_id
+     *
      * @return array
      */
     public static function get_message_by_user($user_id, $message_id)
@@ -891,8 +891,10 @@ class MessageManager
     }
 
     /**
-     * get messages by group id
-     * @param  int $group_id group id
+     * get messages by group id.
+     *
+     * @param int $group_id group id
+     *
      * @return array
      */
     public static function get_messages_by_group($group_id)
@@ -915,13 +917,16 @@ class MessageManager
                 $data[] = $row;
             }
         }
+
         return $data;
     }
 
     /**
-     * get messages by group id
-     * @param  int $group_id
+     * get messages by group id.
+     *
+     * @param int $group_id
      * @param int $message_id
+     *
      * @return array
      */
     public static function get_messages_by_group_by_message($group_id, $message_id)
@@ -953,11 +958,13 @@ class MessageManager
     }
 
     /**
-     * Get messages by parent id optionally with limit
+     * Get messages by parent id optionally with limit.
+     *
      * @param  int        parent id
      * @param  int        group id (optional)
      * @param  int        offset (optional)
      * @param  int        limit (optional)
+     *
      * @return array
      */
     public static function get_messages_by_parent($parent_id, $group_id = 0, $offset = 0, $limit = 0)
@@ -997,10 +1004,12 @@ class MessageManager
     }
 
     /**
-     * Gets information about messages sent
-     * @param  integer
-     * @param  integer
+     * Gets information about messages sent.
+     *
+     * @param  int
+     * @param  int
      * @param  string
+     *
      * @return array
      */
     public static function get_message_data_sent(
@@ -1098,10 +1107,13 @@ class MessageManager
     }
 
     /**
-     * Gets information about number messages sent
+     * Gets information about number messages sent.
+     *
      * @author Isaac FLores Paz <isaac.flores@dokeos.com>
+     *
      * @param void
-     * @return integer
+     *
+     * @return int
      */
     public static function getNumberOfMessagesSent()
     {
@@ -1127,10 +1139,13 @@ class MessageManager
     }
 
     /**
-     * display message box in the inbox
+     * display message box in the inbox.
+     *
      * @param int the message id
      * @param string inbox or outbox strings are available
+     *
      * @todo replace numbers with letters in the $row array pff...
+     *
      * @return string html with the message content
      */
     public static function showMessageBox($messageId, $source = 'inbox')
@@ -1278,8 +1293,10 @@ class MessageManager
     }
 
     /**
-     * get user id by user email
+     * get user id by user email.
+     *
      * @param string $user_email
+     *
      * @return int user id
      */
     public static function get_user_id_by_email($user_email)
@@ -1297,9 +1314,10 @@ class MessageManager
     }
 
     /**
-     * Displays messages of a group with nested view
+     * Displays messages of a group with nested view.
      *
      * @param int $group_id
+     *
      * @return string
      */
     public static function display_messages_for_group($group_id)
@@ -1413,7 +1431,7 @@ class MessageManager
                 $array_html,
                 [
                     'hide_navigation' => false,
-                    'per_page' => $topics_per_page
+                    'per_page' => $topics_per_page,
                 ],
                 $query_vars,
                 false,
@@ -1426,11 +1444,13 @@ class MessageManager
     }
 
     /**
-     * Displays messages of a group with nested view
+     * Displays messages of a group with nested view.
+     *
      * @param $group_id
      * @param $topic_id
      * @param $is_member
      * @param $messageId
+     *
      * @return string
      */
     public static function display_message_for_group($group_id, $topic_id, $is_member, $messageId)
@@ -1477,7 +1497,7 @@ class MessageManager
                     'anchor_topic' => 'topic_'.$main_message['id'],
                     'topics_page_nr' => $topic_page_nr,
                     'items_page_nr' => $items_page_nr,
-                    'topic_id' => $main_message['id']
+                    'topic_id' => $main_message['id'],
                 ]
             );
 
@@ -1488,7 +1508,7 @@ class MessageManager
                     'class' => 'btn btn-default ajax',
                     'title' => get_lang('Edit'),
                     'data-title' => get_lang('Edit'),
-                    'data-size' => 'lg'
+                    'data-size' => 'lg',
                 ]
             );
         }
@@ -1503,7 +1523,7 @@ class MessageManager
                 'action' => 'reply_message_group',
                 'anchor_topic' => 'topic_'.$main_message['id'],
                 'topics_page_nr' => $topic_page_nr,
-                'topic_id' => $main_message['id']
+                'topic_id' => $main_message['id'],
             ]
         );
 
@@ -1514,7 +1534,7 @@ class MessageManager
                 'class' => 'btn btn-default ajax',
                 'title' => get_lang('Reply'),
                 'data-title' => get_lang('Reply'),
-                'data-size' => 'lg'
+                'data-size' => 'lg',
             ]
         );
 
@@ -1523,7 +1543,7 @@ class MessageManager
                 Display::returnFontAwesomeIcon('trash'),
                 'group_topics.php?action=delete&id='.$group_id.'&topic_id='.$topic_id,
                 [
-                    'class' => 'btn btn-default'
+                    'class' => 'btn btn-default',
                 ]
             );
         }
@@ -1697,8 +1717,10 @@ class MessageManager
     }
 
     /**
-     * Add children to messages by id is used for nested view messages
+     * Add children to messages by id is used for nested view messages.
+     *
      * @param array $rows rows of messages
+     *
      * @return array $first_seed new list adding the item children
      */
     public static function calculate_children($rows, $first_seed)
@@ -1717,12 +1739,12 @@ class MessageManager
     }
 
     /**
-     * Sort recursively the messages, is used for for nested view messages
+     * Sort recursively the messages, is used for for nested view messages.
+     *
      * @param array  original rows of messages
      * @param array  list recursive of messages
      * @param int   seed for calculate the indent
      * @param int   indent for nested view
-     * @return void
      */
     public static function message_recursive_sort(
         $rows,
@@ -1744,9 +1766,11 @@ class MessageManager
     }
 
     /**
-     * Sort date by desc from a multi-dimensional array
+     * Sort date by desc from a multi-dimensional array.
+     *
      * @param array $array1 first array to compare
      * @param array $array2 second array to compare
+     *
      * @return bool
      */
     public function order_desc_date($array1, $array2)
@@ -1755,9 +1779,11 @@ class MessageManager
     }
 
     /**
-     * Get array of links (download) for message attachment files
-     * @param int $messageId
-     * @param string $type message list (inbox/outbox)
+     * Get array of links (download) for message attachment files.
+     *
+     * @param int    $messageId
+     * @param string $type      message list (inbox/outbox)
+     *
      * @return array
      */
     public static function get_links_message_attachment_files($messageId, $type = '')
@@ -1786,12 +1812,15 @@ class MessageManager
                 }
             }
         }
+
         return $links_attach_file;
     }
 
     /**
-     * Get message list by id
+     * Get message list by id.
+     *
      * @param int $messageId
+     *
      * @return array
      */
     public static function get_message_by_id($messageId)
@@ -1807,11 +1836,11 @@ class MessageManager
         if (Database::num_rows($res) > 0) {
             $item = Database::fetch_array($res, 'ASSOC');
         }
+
         return $item;
     }
 
     /**
-     *
      * @return string
      */
     public static function generate_message_form()
@@ -1835,6 +1864,7 @@ class MessageManager
     /**
      * @param $id
      * @param array $params
+     *
      * @return string
      */
     public static function generate_invitation_form($id, $params = [])
@@ -1845,6 +1875,7 @@ class MessageManager
             get_lang('AddPersonalMessage'),
             ['id' => 'content_invitation_id', 'rows' => 5]
         );
+
         return $form->returnForm();
     }
 
@@ -1852,6 +1883,7 @@ class MessageManager
 
     /**
      * @param string $keyword
+     *
      * @return string
      */
     public static function inbox_display($keyword = '')
@@ -1952,6 +1984,7 @@ class MessageManager
 
     /**
      * @param string $keyword
+     *
      * @return string
      */
     public static function outbox_display($keyword = '')
@@ -2007,9 +2040,11 @@ class MessageManager
     }
 
     /**
-     * Get the count of the last received messages for a user
+     * Get the count of the last received messages for a user.
+     *
      * @param int $userId The user id
      * @param int $lastId The id of the last received message
+     *
      * @return int The count of new messages
      */
     public static function countMessagesFromLastReceivedMessage($userId, $lastId = 0)
@@ -2027,8 +2062,8 @@ class MessageManager
             'where' => [
                 'user_receiver_id = ?' => $userId,
                 'AND msg_status = ?' => MESSAGE_STATUS_UNREAD,
-                'AND id > ?' => $lastId
-            ]
+                'AND id > ?' => $lastId,
+            ],
         ];
 
         $result = Database::select('COUNT(1) AS qty', $messagesTable, $conditions);
@@ -2043,9 +2078,11 @@ class MessageManager
     }
 
     /**
-     * Get the data of the last received messages for a user
+     * Get the data of the last received messages for a user.
+     *
      * @param int $userId The user id
      * @param int $lastId The id of the last received message
+     *
      * @return array
      */
     public static function getMessagesFromLastReceivedMessage($userId, $lastId = 0)
@@ -2083,9 +2120,11 @@ class MessageManager
     }
 
     /**
-     * Check whether a message has attachments
+     * Check whether a message has attachments.
+     *
      * @param int $messageId The message id
-     * @return boolean Whether the message has attachments return true. Otherwise return false
+     *
+     * @return bool Whether the message has attachments return true. Otherwise return false
      */
     public static function hasAttachments($messageId)
     {
@@ -2099,8 +2138,8 @@ class MessageManager
 
         $conditions = [
             'where' => [
-                'message_id = ?' => $messageId
-            ]
+                'message_id = ?' => $messageId,
+            ],
         ];
 
         $result = Database::select(
@@ -2149,7 +2188,8 @@ class MessageManager
     }
 
     /**
-     * Send a notification to all admins when a new user is registered
+     * Send a notification to all admins when a new user is registered.
+     *
      * @param User $user
      */
     public static function sendNotificationByRegisteredUser(User $user)
@@ -2197,8 +2237,10 @@ class MessageManager
      * Get the error log from failed mailing
      * This assumes a complex setup where you have a cron script regularly copying the mail queue log
      * into app/cache/mail/mailq.
-     * This can be done with a cron command like (check the location of your mail log file first):
+     * This can be done with a cron command like (check the location of your mail log file first):.
+     *
      * @example 0,30 * * * * root cp /var/log/exim4/mainlog /var/www/chamilo/app/cache/mail/mailq
+     *
      * @return array|bool
      */
     public static function failedSentMailErrors()
@@ -2233,7 +2275,7 @@ class MessageManager
 
             while (!feof($mailFile)) {
                 $mailLine = fgets($mailFile);
-                #if ($iX == 4 && preg_match('/(.*):\s(.*)$/', $mailLine, $matches)) {
+                //if ($iX == 4 && preg_match('/(.*):\s(.*)$/', $mailLine, $matches)) {
                 if ($iX == 2 &&
                     preg_match('/(.*)(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\s(.*)/', $mailLine, $detailsMatches)
                 ) {
@@ -2261,8 +2303,10 @@ class MessageManager
 
     /**
      * @param int $userId
-     * @return array
+     *
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return array
      */
     public static function getUsersThatHadConversationWithUser($userId)
     {
@@ -2294,8 +2338,10 @@ class MessageManager
     /**
      * @param int $userId
      * @param int $otherUserId
-     * @return array
+     *
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return array
      */
     public static function getAllMessagesBetweenStudents($userId, $otherUserId)
     {
@@ -2322,5 +2368,29 @@ class MessageManager
         }
 
         return $list;
+    }
+
+    /**
+     * Execute the SQL necessary to know the number of messages in the database.
+     *
+     * @param int $userId The user for which we need the unread messages count
+     *
+     * @return int The number of unread messages in the database for the given user
+     */
+    private static function getCountNewMessagesFromDB($userId)
+    {
+        if (empty($userId)) {
+            return 0;
+        }
+        $table = Database::get_main_table(TABLE_MESSAGE);
+        $sql = "SELECT COUNT(id) as count 
+                FROM $table
+                WHERE
+                    user_receiver_id=".api_get_user_id()." AND
+                    msg_status = ".MESSAGE_STATUS_UNREAD;
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
+
+        return $row['count'];
     }
 }

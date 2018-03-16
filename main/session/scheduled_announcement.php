@@ -27,24 +27,24 @@ $sessionUrl = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $interbreadcrumb[] = [
     'url' => "session_list.php",
-    "name" => get_lang('SessionList')
+    "name" => get_lang('SessionList'),
 ];
 $interbreadcrumb[] = [
     'url' => $sessionUrl,
-    "name" => get_lang('SessionOverview')
+    "name" => get_lang('SessionOverview'),
 ];
 
 if ($action == 'add') {
     $interbreadcrumb[] = [
         'url' => api_get_self()."?session_id=".$sessionId,
-        "name" => get_lang('ScheduledAnnouncements')
+        "name" => get_lang('ScheduledAnnouncements'),
     ];
     $tool_name = get_lang('Add');
 } elseif ($action == 'edit') {
     $tool_name = get_lang('Edit');
     $interbreadcrumb[] = [
         'url' => api_get_self()."?session_id=".$sessionId,
-        "name" => get_lang('ScheduledAnnouncements')
+        "name" => get_lang('ScheduledAnnouncements'),
     ];
 } else {
     $tool_name = get_lang('ScheduledAnnouncements');
@@ -64,7 +64,7 @@ switch ($action) {
 
         break;
     case 'add':
-        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&session_id='.$sessionId;
+        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&session_id='.$sessionId;
         $form = $object->returnForm($url, 'add', $sessionInfo);
 
         // The validation or display
@@ -126,7 +126,7 @@ switch ($action) {
         break;
     case 'edit':
         // Action handling: Editing
-        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.$id.'&session_id='.$sessionId;
+        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.$id.'&session_id='.$sessionId;
         $form = $object->returnSimpleForm($id, $url, 'edit', $sessionInfo);
         if ($form->validate()) {
             $values = $form->getSubmitValues();
@@ -166,7 +166,7 @@ $columns = [
     get_lang('Subject'),
     get_lang('Date'),
     get_lang('Sent'),
-    get_lang('Actions')
+    get_lang('Actions'),
 ];
 
 $columnModel = [
@@ -197,7 +197,7 @@ $columnModel = [
         'align' => 'left',
         'formatter' => 'action_formatter',
         'sortable' => 'false',
-    ]
+    ],
 ];
 
 $actionLinks = 'function action_formatter(cellvalue, options, rowObject) {

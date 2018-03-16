@@ -8,7 +8,6 @@ use ChamiloSession as Session;
  *
  * @package chamilo.document
  */
-
 session_cache_limiter('none');
 
 require_once __DIR__.'/../inc/global.inc.php';

@@ -1,10 +1,10 @@
 <?php
 /* For license terms, see /license.txt */
 /**
- * A script to render all mails templates
+ * A script to render all mails templates.
+ *
  * @package chamilo.plugin.advanced_subscription
  */
-
 require_once __DIR__.'/../config.php';
 
 // Protect test
@@ -25,7 +25,6 @@ $data['profile_completed'] = 90.0;
 $data['sessionId'] = 1;
 $data['studentUserId'] = 4;
 
-
 // Prepare data
 // Get session data
 // Assign variables
@@ -41,7 +40,7 @@ $extraSession = new ExtraFieldValue('session');
 $extraField = new ExtraField('session');
 // Get session fields
 $fieldList = $extraField->get_all([
-    'variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
+    'variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray,
 ]);
 $fields = [];
 // Index session fields
@@ -109,7 +108,7 @@ $tplParams = [
     'signature',
     'admin_view_url',
     'acceptUrl',
-    'rejectUrl'
+    'rejectUrl',
 ];
 foreach ($tplParams as $tplParam) {
     $tpl->assign($tplParam, $data[$tplParam]);
@@ -120,7 +119,7 @@ $files = scandir($dir);
 
 echo '<br>', '<pre>', print_r($files, 1), '</pre>';
 
-foreach ($files as $k =>&$file) {
+foreach ($files as $k => &$file) {
     if (
         is_file($dir.$file) &&
         strpos($file, '.tpl') &&

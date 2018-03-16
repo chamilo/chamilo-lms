@@ -1,25 +1,25 @@
 <?php
 /* For license terms, see /license.txt */
 /**
- * PayPal Express Checkout Module
+ * PayPal Express Checkout Module.
+ *
  * @package chamilo.plugin.buycourses
  */
 /**
- * Init
+ * Init.
  */
 require_once 'paypalfunctions.php';
 /**
- *
  * The paymentAmount is the total value of
  * the shopping cart, that was set
  * earlier in a session variable
- * by the shopping cart page
+ * by the shopping cart page.
  */
 $paymentAmount = $_SESSION["Payment_Amount"];
 
 /**
  * The currencyCodeType and paymentType
- * are set to the selections made on the Integration Assistant
+ * are set to the selections made on the Integration Assistant.
  */
 $paymentType = "Sale";
 

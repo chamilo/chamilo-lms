@@ -5,17 +5,18 @@ use Chamilo\CoreBundle\Entity\SequenceResource;
 
 /**
  * SequenceResourceManager class
- * Helper for SequenceResource
+ * Helper for SequenceResource.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 class SequenceResourceManager
 {
     /**
-     * Check if the ser has completed the requirements for the sequences
+     * Check if the ser has completed the requirements for the sequences.
+     *
      * @param array $sequences The sequences
-     * @param int $type The type of sequence resource
-     * @param int $userId Optional. The user ID
+     * @param int   $type      The type of sequence resource
+     * @param int   $userId    Optional. The user ID
      *
      * @return array
      */
@@ -32,9 +33,34 @@ class SequenceResourceManager
     }
 
     /**
-     * Check if the ser has completed the requirements for the session sequences
+     * Check if at least one sequence are completed.
+     *
      * @param array $sequences The sequences
-     * @param int $userId Optional. The user ID
+     *
+     * @return bool
+     */
+    public static function checkSequenceAreCompleted(array $sequences)
+    {
+        foreach ($sequences as $sequence) {
+            $status = true;
+
+            foreach ($sequence['requirements'] as $item) {
+                $status = $status && $item['status'];
+            }
+
+            if ($status) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if the ser has completed the requirements for the session sequences.
+     *
+     * @param array $sequences The sequences
+     * @param int   $userId    Optional. The user ID
      *
      * @return array
      */
@@ -47,13 +73,13 @@ class SequenceResourceManager
         foreach ($sequences as $sequenceId => $sequence) {
             $item = [
                 'name' => $sequence['name'],
-                'requirements' => []
+                'requirements' => [],
             ];
 
             foreach ($sequence['requirements'] as $sessionRequired) {
                 $itemSession = [
                     'name' => $sessionRequired->getName(),
-                    'status' => true
+                    'status' => true,
                 ];
 
                 $sessionsCourses = $sessionRequired->getCourses();
@@ -64,7 +90,7 @@ class SequenceResourceManager
                     $gradebooks = $gradebookCategoryRepo->findBy([
                         'courseCode' => $course->getCode(),
                         'sessionId' => $sessionRequired->getId(),
-                        'isRequirement' => true
+                        'isRequirement' => true,
                     ]);
 
                     foreach ($gradebooks as $gradebook) {
@@ -86,28 +112,5 @@ class SequenceResourceManager
         }
 
         return $sequenceList;
-    }
-
-    /**
-     * Check if at least one sequence are completed
-     * @param array $sequences The sequences
-     *
-     * @return boolean
-     */
-    public static function checkSequenceAreCompleted(array $sequences)
-    {
-        foreach ($sequences as $sequence) {
-            $status = true;
-
-            foreach ($sequence['requirements'] as $item) {
-                $status = $status && $item['status'];
-            }
-
-            if ($status) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

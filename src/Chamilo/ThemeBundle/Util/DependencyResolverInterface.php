@@ -4,7 +4,8 @@
 namespace Chamilo\ThemeBundle\Util;
 
 /**
- * Interface DependencyResolverInterface
+ * Interface DependencyResolverInterface.
+ *
  * @package Chamilo\ThemeBundle\Util
  */
 interface DependencyResolverInterface

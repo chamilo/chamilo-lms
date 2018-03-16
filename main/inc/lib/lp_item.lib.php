@@ -3,11 +3,10 @@
 
 /**
  * Class lp_item
- *  made to manipulate data of lp_item table
+ *  made to manipulate data of lp_item table.
  *
  * This class is still incomplete
  * You can add lp_item database manipulation function here
- *
  */
 class LpItem
 {
@@ -36,6 +35,7 @@ class LpItem
 
     /**
      * LpItem constructor.
+     *
      * @param int $in_c_id
      * @param int $in_id
      */
@@ -78,7 +78,7 @@ class LpItem
     }
 
     /**
-     * Update in database
+     * Update in database.
      */
     public function update()
     {

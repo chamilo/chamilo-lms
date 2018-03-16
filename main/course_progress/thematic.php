@@ -2,9 +2,11 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * View (MVC patter) for thematic control
+ * View (MVC patter) for thematic control.
+ *
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Julio Montoya <gugli100@gmail.com> Bug fixing
+ *
  * @package chamilo.course_progress
  */
 
@@ -151,7 +153,7 @@ if ($action == 'thematic_list') {
                         ICON_SIZE_TINY
                     ),
                     'index.php?'.api_get_cidreq().'&action=thematic_copy&thematic_id='.$my_thematic_id.$params.$url_token,
-                    ['class'=> 'btn btn-default']
+                    ['class' => 'btn btn-default']
                 );
                 if (api_get_session_id() == 0) {
                     if ($thematic['display_order'] > 1) {
@@ -174,7 +176,7 @@ if ($action == 'thematic_list') {
                         Display::return_icon('pdf.png', get_lang('ExportToPDF'), null, ICON_SIZE_TINY),
                         api_get_self().'?'.api_get_cidreq()."$url_token&".http_build_query([
                             'action' => 'export_single_thematic',
-                            'thematic_id' => $my_thematic_id
+                            'thematic_id' => $my_thematic_id,
                         ]),
                         ['class' => 'btn btn-default']
                     );

@@ -6,7 +6,9 @@ use ChamiloSession as Session;
 /**
  *    Users trying to login, who already exist in the Chamilo database
  *    and have ldap as authentication type get verified here.
+ *
  * @author Roan Embrechts
+ *
  * @package chamilo.auth.ldap
  */
 /**
@@ -14,7 +16,7 @@ use ChamiloSession as Session;
  * - $loginFailed
  * - $uidReset
  * - $_user['user_id']
- * - register the $_user['user_id'] in the session
+ * - register the $_user['user_id'] in the session.
  *
  * As the LDAP code shows, this is not as difficult as you might think.
  * LDAP authentification module

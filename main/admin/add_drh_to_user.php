@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\UserBundle\Entity\User as UserEntity;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\UserBundle\Entity\User as UserEntity;
 
 $cidReset = true;
 
@@ -50,14 +50,14 @@ $form->addSelectAjax(
 $form->addButtonSave(get_lang('Send'));
 $form->setDefaults([
     'u' => $user,
-    'hrm' => array_keys($hrmOptions)
+    'hrm' => array_keys($hrmOptions),
 ]);
 
 if ($form->validate()) {
     /** @var UserRelUser $subscribedUser */
     foreach ($subscribedUsers as $subscribedUser) {
         $em->remove($subscribedUser);
-    };
+    }
 
     $em->flush();
 

@@ -1,12 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Script to receipt request to subscribe and confirmation action to queue
+ * Script to receipt request to subscribe and confirmation action to queue.
+ *
  * @author Daniel Alejandro Barreto Alva <daniel.barreto@beeznest.com>
+ *
  * @package chamilo.plugin.advanced_subscription
  */
 /**
- * Init
+ * Init.
  */
 require_once __DIR__.'/../config.php';
 
@@ -75,14 +77,14 @@ if ($verified) {
                     'target',
                     'mode',
                     'publication_end_date',
-                    'recommended_number_of_participants'
+                    'recommended_number_of_participants',
                 ];
                 $sessionArray = api_get_session_info($data['sessionId']);
                 $extraSession = new ExtraFieldValue('session');
                 $extraField = new ExtraField('session');
                 // Get session fields
                 $fieldList = $extraField->get_all([
-                    'variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
+                    'variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray,
                 ]);
                 // Index session fields
                 foreach ($fieldList as $field) {
@@ -92,7 +94,7 @@ if ($verified) {
                 $mergedArray = array_merge([$data['sessionId']], array_keys($fields));
                 $sessionFieldValueList = $extraSession->get_all(
                     [
-                        'item_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray
+                        'item_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray,
                     ]
                 );
                 foreach ($sessionFieldValueList as $sessionFieldValue) {
@@ -233,14 +235,14 @@ if ($verified) {
                         'target',
                         'mode',
                         'publication_end_date',
-                        'recommended_number_of_participants'
+                        'recommended_number_of_participants',
                     ];
                     $sessionArray = api_get_session_info($data['sessionId']);
                     $extraSession = new ExtraFieldValue('session');
                     $extraField = new ExtraField('session');
                     // Get session fields
                     $fieldList = $extraField->get_all([
-                        'variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
+                        'variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray,
                     ]);
                     // Index session fields
                     foreach ($fieldList as $field) {
@@ -286,7 +288,7 @@ if ($verified) {
                     $data['session'] = $sessionArray;
                     $data['signature'] = api_get_setting('Institution');
                     $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH)
-                        . 'advanced_subscription/src/admin_view.php?s='.$data['sessionId'];
+                        .'advanced_subscription/src/admin_view.php?s='.$data['sessionId'];
                     // Check if exist and action in data
                     if (empty($data['mailAction'])) {
                         // set action in data by new status

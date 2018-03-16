@@ -6,7 +6,8 @@ namespace Chamilo\ThemeBundle\Event;
 use Chamilo\ThemeBundle\Model\UserInterface;
 
 /**
- * Class ShowUserEvent
+ * Class ShowUserEvent.
+ *
  * @package Chamilo\ThemeBundle\Event
  */
 class ShowUserEvent extends ThemeEvent

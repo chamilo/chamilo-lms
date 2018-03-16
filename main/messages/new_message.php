@@ -3,16 +3,16 @@
 
 /**
  * @package chamilo.messages
-*/
+ */
 
 /**
-* This script shows a compose area (wysiwyg editor if supported, otherwise
-* a simple textarea) where the user can type a message.
-* There are three modes
-* - standard: type a message, select a user to send it to, press send
-* - reply on message (when pressing reply when viewing a message)
-* - send to specific user (when pressing send message in the who is online list)
-*/
+ * This script shows a compose area (wysiwyg editor if supported, otherwise
+ * a simple textarea) where the user can type a message.
+ * There are three modes
+ * - standard: type a message, select a user to send it to, press send
+ * - reply on message (when pressing reply when viewing a message)
+ * - send to specific user (when pressing send message in the who is online list).
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -53,8 +53,8 @@ function add_image_form() {
 $nameTools = get_lang('ComposeMessage');
 
 /**
-* Shows the compose area + a list of users to select from.
-*/
+ * Shows the compose area + a list of users to select from.
+ */
 function show_compose_to_any($user_id)
 {
     $default['user_list'] = 0;
@@ -98,8 +98,9 @@ function show_compose_to_user($receiver_id)
 
 /**
  * @param $default
- * @param null $select_from_user_list
+ * @param null   $select_from_user_list
  * @param string $sent_to
+ *
  * @return string
  */
 function manageForm($default, $select_from_user_list = null, $sent_to = '')
@@ -121,14 +122,14 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '')
                 get_lang('SendMessageTo'),
                 true,
                 [
-                    'id'=>'id_text_name',
-                    'onkeyup'=>'send_request_and_search()',
-                    'autocomplete'=>'off'
+                    'id' => 'id_text_name',
+                    'onkeyup' => 'send_request_and_search()',
+                    'autocomplete' => 'off',
                 ]
             );
             $form->addRule('id_text_name', get_lang('ThisFieldIsRequired'), 'required');
             $form->addElement('html', '<div id="id_div_search" style="padding:0px" class="message-select-box" >&nbsp;</div>');
-            $form->addElement('hidden', 'user_list', 0, ['id'=>'user_list']);
+            $form->addElement('hidden', 'user_list', 0, ['id' => 'user_list']);
         } else {
             if (!empty($sent_to)) {
                 $form->addLabel(get_lang('SendMessageTo'), $sent_to);
@@ -142,7 +143,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '')
                     [],
                     [
                         'multiple' => 'multiple',
-                        'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users'
+                        'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users',
                     ]
                 );
             } else {
@@ -293,19 +294,19 @@ if ($allowSocial) {
     $this_section = SECTION_SOCIAL;
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_PATH).'main/social/home.php',
-        'name' => get_lang('SocialNetwork')
+        'name' => get_lang('SocialNetwork'),
     ];
 } else {
     $this_section = SECTION_MYPROFILE;
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_PATH).'main/auth/profile.php',
-        'name' => get_lang('Profile')
+        'name' => get_lang('Profile'),
     ];
 }
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_PATH).'main/messages/inbox.php',
-    'name' => get_lang('Messages')
+    'name' => get_lang('Messages'),
 ];
 
 $group_id = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;

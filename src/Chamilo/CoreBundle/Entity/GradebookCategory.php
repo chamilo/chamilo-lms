@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * GradebookCategory
+ * GradebookCategory.
  *
  * @ORM\Table(name="gradebook_category")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class GradebookCategory
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -37,7 +37,7 @@ class GradebookCategory
     private $description;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
@@ -51,7 +51,7 @@ class GradebookCategory
     private $courseCode;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="parent_id", type="integer", nullable=true)
      */
@@ -65,63 +65,63 @@ class GradebookCategory
     private $weight;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="visible", type="boolean", nullable=false)
      */
     private $visible;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="certif_min_score", type="integer", nullable=true)
      */
     private $certifMinScore;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
     private $sessionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="document_id", type="integer", nullable=true)
      */
     private $documentId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
     private $locked;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="default_lowest_eval_exclude", type="boolean", nullable=true)
      */
     private $defaultLowestEvalExclude;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="generate_certificates", type="boolean", nullable=false)
      */
     private $generateCertificates;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="grade_model_id", type="integer", nullable=true)
      */
     private $gradeModelId;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(
      *      name="is_requirement",
@@ -133,9 +133,10 @@ class GradebookCategory
     private $isRequirement;
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return GradebookCategory
      */
     public function setName($name)
@@ -146,7 +147,7 @@ class GradebookCategory
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -156,9 +157,10 @@ class GradebookCategory
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return GradebookCategory
      */
     public function setDescription($description)
@@ -169,7 +171,7 @@ class GradebookCategory
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -179,9 +181,10 @@ class GradebookCategory
     }
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return GradebookCategory
      */
     public function setUserId($userId)
@@ -192,9 +195,9 @@ class GradebookCategory
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -202,9 +205,10 @@ class GradebookCategory
     }
 
     /**
-     * Set courseCode
+     * Set courseCode.
      *
      * @param string $courseCode
+     *
      * @return GradebookCategory
      */
     public function setCourseCode($courseCode)
@@ -215,7 +219,7 @@ class GradebookCategory
     }
 
     /**
-     * Get courseCode
+     * Get courseCode.
      *
      * @return string
      */
@@ -225,9 +229,10 @@ class GradebookCategory
     }
 
     /**
-     * Set parentId
+     * Set parentId.
      *
-     * @param integer $parentId
+     * @param int $parentId
+     *
      * @return GradebookCategory
      */
     public function setParentId($parentId)
@@ -238,9 +243,9 @@ class GradebookCategory
     }
 
     /**
-     * Get parentId
+     * Get parentId.
      *
-     * @return integer
+     * @return int
      */
     public function getParentId()
     {
@@ -248,9 +253,10 @@ class GradebookCategory
     }
 
     /**
-     * Set weight
+     * Set weight.
      *
      * @param float $weight
+     *
      * @return GradebookCategory
      */
     public function setWeight($weight)
@@ -261,7 +267,7 @@ class GradebookCategory
     }
 
     /**
-     * Get weight
+     * Get weight.
      *
      * @return float
      */
@@ -271,9 +277,10 @@ class GradebookCategory
     }
 
     /**
-     * Set visible
+     * Set visible.
      *
-     * @param boolean $visible
+     * @param bool $visible
+     *
      * @return GradebookCategory
      */
     public function setVisible($visible)
@@ -284,9 +291,9 @@ class GradebookCategory
     }
 
     /**
-     * Get visible
+     * Get visible.
      *
-     * @return boolean
+     * @return bool
      */
     public function getVisible()
     {
@@ -294,9 +301,10 @@ class GradebookCategory
     }
 
     /**
-     * Set certifMinScore
+     * Set certifMinScore.
      *
-     * @param integer $certifMinScore
+     * @param int $certifMinScore
+     *
      * @return GradebookCategory
      */
     public function setCertifMinScore($certifMinScore)
@@ -307,9 +315,9 @@ class GradebookCategory
     }
 
     /**
-     * Get certifMinScore
+     * Get certifMinScore.
      *
-     * @return integer
+     * @return int
      */
     public function getCertifMinScore()
     {
@@ -317,9 +325,10 @@ class GradebookCategory
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return GradebookCategory
      */
     public function setSessionId($sessionId)
@@ -330,9 +339,9 @@ class GradebookCategory
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -340,9 +349,10 @@ class GradebookCategory
     }
 
     /**
-     * Set documentId
+     * Set documentId.
      *
-     * @param integer $documentId
+     * @param int $documentId
+     *
      * @return GradebookCategory
      */
     public function setDocumentId($documentId)
@@ -353,9 +363,9 @@ class GradebookCategory
     }
 
     /**
-     * Get documentId
+     * Get documentId.
      *
-     * @return integer
+     * @return int
      */
     public function getDocumentId()
     {
@@ -363,9 +373,10 @@ class GradebookCategory
     }
 
     /**
-     * Set locked
+     * Set locked.
      *
-     * @param integer $locked
+     * @param int $locked
+     *
      * @return GradebookCategory
      */
     public function setLocked($locked)
@@ -376,9 +387,9 @@ class GradebookCategory
     }
 
     /**
-     * Get locked
+     * Get locked.
      *
-     * @return integer
+     * @return int
      */
     public function getLocked()
     {
@@ -386,9 +397,10 @@ class GradebookCategory
     }
 
     /**
-     * Set defaultLowestEvalExclude
+     * Set defaultLowestEvalExclude.
      *
-     * @param boolean $defaultLowestEvalExclude
+     * @param bool $defaultLowestEvalExclude
+     *
      * @return GradebookCategory
      */
     public function setDefaultLowestEvalExclude($defaultLowestEvalExclude)
@@ -399,9 +411,9 @@ class GradebookCategory
     }
 
     /**
-     * Get defaultLowestEvalExclude
+     * Get defaultLowestEvalExclude.
      *
-     * @return boolean
+     * @return bool
      */
     public function getDefaultLowestEvalExclude()
     {
@@ -409,9 +421,10 @@ class GradebookCategory
     }
 
     /**
-     * Set generateCertificates
+     * Set generateCertificates.
      *
-     * @param boolean $generateCertificates
+     * @param bool $generateCertificates
+     *
      * @return GradebookCategory
      */
     public function setGenerateCertificates($generateCertificates)
@@ -422,9 +435,9 @@ class GradebookCategory
     }
 
     /**
-     * Get generateCertificates
+     * Get generateCertificates.
      *
-     * @return boolean
+     * @return bool
      */
     public function getGenerateCertificates()
     {
@@ -432,9 +445,10 @@ class GradebookCategory
     }
 
     /**
-     * Set gradeModelId
+     * Set gradeModelId.
      *
-     * @param integer $gradeModelId
+     * @param int $gradeModelId
+     *
      * @return GradebookCategory
      */
     public function setGradeModelId($gradeModelId)
@@ -445,9 +459,9 @@ class GradebookCategory
     }
 
     /**
-     * Get gradeModelId
+     * Get gradeModelId.
      *
-     * @return integer
+     * @return int
      */
     public function getGradeModelId()
     {
@@ -455,8 +469,10 @@ class GradebookCategory
     }
 
     /**
-     * Set isRequirement
-     * @param boolean $isRequirement
+     * Set isRequirement.
+     *
+     * @param bool $isRequirement
+     *
      * @return GradebookCategory
      */
     public function setIsRequirement($isRequirement)
@@ -467,8 +483,9 @@ class GradebookCategory
     }
 
     /**
-     * Get isRequirement
-     * @return boolean
+     * Get isRequirement.
+     *
+     * @return bool
      */
     public function getIsRequirement()
     {
@@ -476,9 +493,9 @@ class GradebookCategory
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

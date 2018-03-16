@@ -1,12 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Frontend script for multiple access urls
+ * Frontend script for multiple access urls.
+ *
  * @package chamilo.admin
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -142,7 +143,7 @@ $sortable_data = UrlManager::get_url_data();
 $urls = [];
 foreach ($sortable_data as $row) {
     //title
-    $url = Display::url($row['url'], $row['url'], ['target'=>'_blank']);
+    $url = Display::url($row['url'], $row['url'], ['target' => '_blank']);
     $description = $row['description'];
 
     //Status

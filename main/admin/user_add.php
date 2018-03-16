@@ -4,7 +4,6 @@
 /**
  * @package chamilo.admin
  */
-
 $cidReset = true;
 // Including necessary libraries.
 require_once __DIR__.'/../inc/global.inc.php';
@@ -106,7 +105,7 @@ if (api_is_western_name_order()) {
         'firstname',
         get_lang('FirstName'),
         [
-            'id' => 'firstname'
+            'id' => 'firstname',
         ]
     );
     $form->applyFilter('firstname', 'html_filter');
@@ -118,7 +117,7 @@ if (api_is_western_name_order()) {
         'lastname',
         get_lang('LastName'),
         [
-            'id' => 'lastname'
+            'id' => 'lastname',
         ]
     );
     $form->applyFilter('lastname', 'html_filter');
@@ -131,7 +130,7 @@ if (api_is_western_name_order()) {
         'lastname',
         get_lang('LastName'),
         [
-            'id' => 'lastname'
+            'id' => 'lastname',
         ]
     );
     $form->applyFilter('lastname', 'html_filter');
@@ -143,7 +142,7 @@ if (api_is_western_name_order()) {
         'firstname',
         get_lang('FirstName'),
         [
-            'id' => 'firstname'
+            'id' => 'firstname',
         ]
     );
     $form->applyFilter('firstname', 'html_filter');
@@ -157,7 +156,7 @@ $form->addElement(
     get_lang('OfficialCode'),
     [
         'size' => '40',
-        'id' => 'official_code'
+        'id' => 'official_code',
     ]
 );
 $form->applyFilter('official_code', 'html_filter');
@@ -188,7 +187,7 @@ $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allow
 
 // Username
 if (api_get_setting('login_is_email') != 'true') {
-    $form->addElement('text', 'username', get_lang('LoginName'), ['id'=> 'username', 'maxlength' => USERNAME_MAX_LENGTH, 'autocomplete' => 'off']);
+    $form->addElement('text', 'username', get_lang('LoginName'), ['id' => 'username', 'maxlength' => USERNAME_MAX_LENGTH, 'autocomplete' => 'off']);
     $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
     $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
@@ -273,7 +272,7 @@ $form->addElement(
     $status,
     [
         'id' => 'status_select',
-        'onchange' => 'javascript: display_drh_list();'
+        'onchange' => 'javascript: display_drh_list();',
     ]
 );
 
@@ -319,7 +318,7 @@ $group[] = $form->createElement(
     'expiration_date',
     null,
     [
-        'onchange' => 'javascript: enable_expiration_date();'
+        'onchange' => 'javascript: enable_expiration_date();',
     ]
 );
 $form->addGroup($group, 'max_member_group', null, null, false);

@@ -8111,4 +8111,6 @@ $TheScormPackageWillBeUpdatedYouMustUploadTheFileWithTheSameName = "You must upl
 $YourChoice = "Your choice";
 $YouNeedToCreateASkillProfile = "You need to create a skill profile";
 $SkillLevel = "Skill level";
+$Portfolio = "Portfolio";
+$AddPortfolioItem = "Add item to portfolio";
 ?>

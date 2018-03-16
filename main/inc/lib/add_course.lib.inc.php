@@ -553,6 +553,29 @@ class AddCourse
                 api_get_setting('course_create_active_tools', 'notebook')
             )."','0','squaregrey.gif',0,'_self','interaction','0')"
         );
+        if (api_get_configuration_value('allow_portfolio_tool')) {
+            $tId = Database::insert(
+                $tbl_course_homepage,
+                [
+                    'c_id' => $course_id,
+                    'name' => 'portfolio',
+                    'link' => 'portfolio/index.php',
+                    'image' => 'wiki_task.png',
+                    'visibility' => api_get_setting('course_create_active_tools', 'portfolio') == 'true' ? 1 : 0,
+                    'admin' => 0,
+                    'address' => 'squaregrey.gif',
+                    'added_tool' => 0,
+                    'target' => '_self',
+                    'category' => 'interaction',
+                    'session_id' => 0,
+                ]
+            );
+            Database::update(
+                $tbl_course_homepage,
+                ['id' => $tId],
+                ['iid = ?' => $tId]
+            );
+        }
 
         $setting = intval(self::string2binary(
             api_get_setting('course_create_active_tools', 'attendances')

@@ -3223,7 +3223,6 @@ function migrateSwitch($fromVersion, $manager, $processFiles = true)
                         'add_course.conf.php',
                         'events.conf.php',
                         'auth.conf.php',
-                        'portfolio.conf.php',
                     ];
 
                     error_log('Copy conf files');

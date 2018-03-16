@@ -35,10 +35,6 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/ywarnier/iCalcreator"
-        },
-        {
-            "type": "vcs",
             "url": "https://github.com/jmontoyaa/PHPWord"
         },
         {
@@ -110,7 +106,7 @@
         "jimmiw/php-time-ago": "^0.4.14",
         "phpoffice/phpword": "^0.13.0||dev-master",
         "facebook/php-sdk-v4": "~5.0",
-        "kigkonsult/icalcreator": "2.22.5",
+        "kigkonsult/icalcreator": "2.24",
         "essence/essence": "2.6.1",
         "chamilo/pclzip": "^2.8",
         "chamilo/chash": "0.1.1",

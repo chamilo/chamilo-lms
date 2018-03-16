@@ -5993,10 +5993,11 @@ class Exercise
         $oral_question_list = null;
         foreach ($question_list_answers as $item) {
             $question = $item['question'];
+            $file = $item['generated_oral_file'];
             $answer = $item['answer'];
             $answer_type = $item['answer_type'];
 
-            if (!empty($question) && !empty($answer) && $answer_type == ORAL_EXPRESSION) {
+            if (!empty($question) && (!empty($answer) || !empty($file)) && $answer_type == ORAL_EXPRESSION) {
                 $oral_question_list .= '<br /><table width="730" height="136" border="0" cellpadding="3" cellspacing="3">'
                     .'<tr>'
                     .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'

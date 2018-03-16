@@ -425,13 +425,12 @@ function api_get_utc_datetime(
     $returnObj = false
 ) {
     $from_timezone = api_get_timezone();
-    $to_timezone = 'UTC';
     if (is_null($time) || empty($time) || $time === '0000-00-00 00:00:00') {
         if ($return_null_if_invalid_date) {
             return null;
         }
         if ($returnObj) {
-            return $date = new DateTime(gmdate('Y-m-d H:i:s'));
+            return $date = new DateTime(gmdate('Y-m-d H:i:s'), new DateTimeZone('UTC'));
         }
 
         return gmdate('Y-m-d H:i:s');
@@ -445,7 +444,7 @@ function api_get_utc_datetime(
     }
     try {
         $date = new DateTime($time, new DateTimezone($from_timezone));
-        $date->setTimezone(new DateTimeZone($to_timezone));
+        $date->setTimezone(new DateTimeZone('UTC'));
         if ($returnObj) {
             return $date;
         } else {

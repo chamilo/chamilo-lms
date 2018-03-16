@@ -24,7 +24,6 @@ use ChamiloSession as Session;
  * - $objExercise : exercise object
  * - $objQuestion : question object
  * - $objAnswer : answer object
- * - $aType : array with answer types
  * - $exerciseId : the exercise ID
  * - $picturePath : the path of question pictures
  * - $newQuestion : ask to create a new question
@@ -136,13 +135,13 @@ $picturePath = $documentPath.'/images';
 $audioPath = $documentPath.'/audio';
 
 // the 5 types of answers
-$aType = array(
+$aType = [
     get_lang('UniqueSelect'),
     get_lang('MultipleSelect'),
     get_lang('FillBlanks'),
     get_lang('Matching'),
     get_lang('FreeAnswer')
-);
+];
 
 // tables used in the exercise tool
 
@@ -167,7 +166,6 @@ if (!empty($_GET['action']) && $_GET['action'] == 'exportqti2' && !empty($_GET['
     unlink($temp_zip_file);
     unlink($temp_xml_file);
     rmdir($temp_zip_dir);
-    //DocumentManager::string_send_for_download($export,true,'qti2export_q'.$_GET['questionId'].'.xml');
     exit; //otherwise following clicks may become buggy
 }
 
@@ -206,7 +204,7 @@ if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
         if ($editQuestion) {
             // question not found
             if (!$objQuestion = Question::read($editQuestion)) {
-                api_not_allowed();
+                api_not_allowed(true);
             }
             // saves the object into the session
             Session::write('objQuestion', $objQuestion);
@@ -251,16 +249,21 @@ if (!empty($clone_question) && !empty($objExercise->id)) {
     $old_question_obj = Question::read($clone_question);
     $old_question_obj->question = $old_question_obj->question.' - '.get_lang('Copy');
 
-    $new_id = $old_question_obj->duplicate();
+    $new_id = $old_question_obj->duplicate(api_get_course_info());
     $new_question_obj = Question::read($new_id);
     $new_question_obj->addToList($exerciseId);
+
+    // Save category to the destination course
+    if (!empty($old_question_obj->category)) {
+        $new_question_obj->saveCategory($old_question_obj->category, api_get_course_int_id());
+    }
 
     // This should be moved to the duplicate function
     $new_answer_obj = new Answer($clone_question);
     $new_answer_obj->read();
     $new_answer_obj->duplicate($new_question_obj);
 
-    //Reloading tne $objExercise obj
+    // Reloading tne $objExercise obj
     $objExercise->read($objExercise->id);
 
     header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id);
@@ -280,16 +283,16 @@ if ($editQuestion || $modifyQuestion || $newQuestion || $modifyAnswers) {
 }
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
-    );
+    ];
 }
 
-$interbreadcrumb[] = array("url" => "exercise.php", "name" => get_lang('Exercises'));
+$interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), 'name' => get_lang('Exercises')];
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
     $interbreadcrumb[] = [
-        "url" => "admin.php?exerciseId=".$objExercise->id,
+        "url" => "admin.php?exerciseId=".$objExercise->id.'&'.api_get_cidreq(),
         "name" => $objExercise->selectTitle(true),
     ];
 } else {
@@ -301,18 +304,16 @@ if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
 
 // shows a link to go back to the question pool
 if (!$exerciseId && $nameTools != get_lang('ExerciseManagement')) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."exercise/question_pool.php?fromExercise=$fromExercise&".api_get_cidreq(),
         "name" => get_lang('QuestionPool')
-    );
+    ];
 }
 
 // if the question is duplicated, disable the link of tool name
 if ($modifyIn == 'thisExercise') {
     if ($buttonBack) {
         $modifyIn = 'allExercises';
-    } else {
-        $noPHP_SELF = true;
     }
 }
 $htmlHeadXtra[] = '<script>
@@ -332,7 +333,6 @@ function multiple_answer_true_false_onchange(variable) {
     document.getElementById(weight_id).value = array_result[result];
 }
 
-
 </script>';
 
 $htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
@@ -346,29 +346,22 @@ $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PA
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 
 if (isset($_GET['message'])) {
-    if (in_array($_GET['message'], array('ExerciseStored', 'ItemUpdated', 'ItemAdded'))) {
+    if (in_array($_GET['message'], ['ExerciseStored', 'ItemUpdated', 'ItemAdded'])) {
         Display::addFlash(Display::return_message(get_lang($_GET['message']), 'confirmation'));
     }
 }
 
 Display::display_header($nameTools, 'Exercise');
-/*
-if ($objExercise->exercise_was_added_in_lp) {
-    if ($objExercise->force_edit_exercise_in_lp == true) {
-        Display::addFlash(Display::return_message(get_lang('ForceEditingExerciseInLPWarning'), 'warning'));
-    } else {
-        Display::addFlash(Display::return_message(get_lang('EditingExerciseCauseProblemsInLP'), 'warning'));
-    }
-}*/
 
 // If we are in a test
 $inATest = isset($exerciseId) && $exerciseId > 0;
 
 if ($inATest) {
     echo '<div class="actions">';
-    if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid']))
+    if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid'])) {
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
+    }
 
     if (!isset($_GET['hotspotadmin']) && !isset($_GET['newQuestion']) && !isset($_GET['myid']) && !isset($_GET['editQuestion'])) {
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">'.
@@ -397,11 +390,9 @@ if ($inATest) {
     }
 
     echo '</div>';
-
     if ($objExercise->added_in_lp()) {
         echo Display::return_message(get_lang('AddedToLPCannotBeAccessed'), 'warning');
     }
-
     echo '<div class="alert alert-info">';
     echo sprintf(
         get_lang('XQuestionsWithTotalScoreY'),
@@ -414,7 +405,6 @@ if ($inATest) {
             sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
     }
     echo '</div>';
-
 } elseif (isset($_GET['newQuestion'])) {
     // we are in create a new question from question pool not in a test
     echo '<div class="actions">';
@@ -444,7 +434,7 @@ if ($newQuestion || $editQuestion) {
         // Question preview if teacher clicked the "switch to student"
         if ($studentViewActive && $is_allowedToEdit) {
             echo '<div class="main-question">';
-            echo Display::div($objQuestion->selectTitle(), array('class' => 'question_title'));
+            echo Display::div($objQuestion->selectTitle(), ['class' => 'question_title']);
             ExerciseLib::showQuestion(
                 $objExercise,
                 $editQuestion,
@@ -481,7 +471,6 @@ if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspot
 
 // if we are in question authoring, display warning to user is feedback not shown at the end of the test -ref #6619
 // this test to display only message in the question authoring page and not in the question list page too
-// if (is_object($objQuestion) && $objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_EXAM && ($newQuestion || $modifyQuestion || $editQuestion)) {
 if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_EXAM) {
     echo Display::return_message(get_lang('TestFeedbackNotShown'), 'normal');
 }

@@ -15,11 +15,9 @@ $id = isset($_REQUEST['id']) ? intval($_GET['id']) : null; //exe id
 $show_headers = isset($_REQUEST['show_headers']) ? intval($_REQUEST['show_headers']) : null; //exe id
 $origin = api_get_origin();
 
-$class = 'result-body';
 if ($origin == 'learnpath') {
     $show_headers = false;
 }
-
 
 api_protect_course_script($show_headers);
 
@@ -59,11 +57,11 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'annotation/js/annotation.js"></script>';
 
 if ($show_headers) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => "exercise.php?".api_get_cidreq(),
         "name" => get_lang('Exercises')
-    );
-    $interbreadcrumb[] = array("url" => "#", "name" => get_lang('Result'));
+    ];
+    $interbreadcrumb[] = ["url" => "#", "name" => get_lang('Result')];
     $this_section = SECTION_COURSES;
     Display::display_header();
 } else {
@@ -75,14 +73,14 @@ if ($show_headers) {
 
 $message = Session::read('attempt_remaining');
 Session::erase('attempt_remaining');
-echo '<div class="'.$class.'">';
+
 ExerciseLib::displayQuestionListByAttempt(
     $objExercise,
     $id,
     false,
     $message
 );
-echo '</div>';
+
 if ($show_headers) {
     Display::display_footer();
 } else {

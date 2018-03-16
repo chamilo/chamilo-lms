@@ -37,11 +37,12 @@ $debug = false;
 api_protect_course_script(true);
 $origin = api_get_origin();
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
+$courseId = api_get_course_int_id();
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 
-$showGlossary = in_array($glossaryExtraTools, array('true', 'exercise', 'exercise_and_lp'));
+$showGlossary = in_array($glossaryExtraTools, ['true', 'exercise', 'exercise_and_lp']);
 if ($origin == 'learnpath') {
-    $showGlossary = in_array($glossaryExtraTools, array('true', 'lp', 'exercise_and_lp'));
+    $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
 }
 if ($showGlossary) {
     $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?add_ready=1&'.api_get_cidreq().'"></script>';
@@ -110,7 +111,7 @@ if (api_is_allowed_to_edit(null, true) &&
 $exerciseInSession = Session::read('objExercise');
 if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSession->id != $_GET['exerciseId'])) {
     // Construction of Exercise
-    $objExercise = new Exercise();
+    $objExercise = new Exercise($courseId);
     Session::write('firstTime', true);
     if ($debug) {
         error_log('1. Setting the $objExercise variable');
@@ -170,7 +171,7 @@ $templateName = $template->get_template('exercise/submit.js.tpl');
 $htmlHeadXtra[] = $template->fetch($templateName);
 
 $current_timestamp = time();
-$myRemindList = array();
+$myRemindList = [];
 
 $time_control = false;
 if ($objExercise->expired_time != 0) {
@@ -220,7 +221,7 @@ if ($objExercise->selectAttempts() > 0) {
                     $last_attempt_info = $exercise_stat_info[$max_exe_id];
                     $attempt_html .= Display::div(
                         get_lang('Date').': '.api_get_local_time($last_attempt_info['exe_date']),
-                        array('id' => '')
+                        ['id' => '']
                     );
 
                     $attempt_html .= Display::return_message(
@@ -242,11 +243,11 @@ if ($objExercise->selectAttempts() > 0) {
                                 $question_info = Question::read($question_id);
                                 $attempt_html .= Display::div(
                                     $question_info->question,
-                                    array('class' => 'question_title')
+                                    ['class' => 'question_title']
                                 );
                                 $attempt_html .= Display::div(
                                     get_lang('Score').' '.$marks,
-                                    array('id' => 'question_question_titlescore')
+                                    ['id' => 'question_question_titlescore']
                                 );
                             }
                         }
@@ -257,7 +258,7 @@ if ($objExercise->selectAttempts() > 0) {
                     );
                     $attempt_html .= Display::div(
                         get_lang('YourTotalScore').' '.$score,
-                        array('id' => 'question_score')
+                        ['id' => 'question_score']
                     );
                 } else {
                     $attempt_html .= Display::return_message(
@@ -431,7 +432,7 @@ if (!isset($questionListInSession)) {
     ) {
         $questionList = explode(',', $exercise_stat_info['data_tracking']);
     }
-        Session::write('questionList', $questionList);
+    Session::write('questionList', $questionList);
 
     if ($debug > 0) {
         error_log('$_SESSION[questionList] was set');
@@ -467,7 +468,7 @@ if ($debug) {
 if ($reminder == 2 && empty($myRemindList)) {
     if ($debug) {
         error_log("6.2 calling the exercise_reminder.php ");
-    };
+    }
     header('Location: exercise_reminder.php?'.$params);
     exit;
 }
@@ -592,24 +593,28 @@ if ($formSent && isset($_POST)) {
 
     // Initializing
     if (!is_array($exerciseResult)) {
-        $exerciseResult = array();
-        $exerciseResultCoordinates = array();
+        $exerciseResult = [];
+        $exerciseResultCoordinates = [];
     }
 
     //Only for hotspot
     if (!isset($choice) && isset($_REQUEST['hidden_hotspot_id'])) {
-        $hotspot_id = (int) ($_REQUEST['hidden_hotspot_id']);
-        $choice     = array($hotspot_id => '');
+        $hotspot_id = (int) $_REQUEST['hidden_hotspot_id'];
+        $choice = [$hotspot_id => ''];
     }
 
     // if the user has answered at least one question
     if (is_array($choice)) {
-        if ($debug) { error_log('9.1. $choice is an array '.print_r($choice, 1)); }
+        if ($debug) {
+            error_log('9.1. $choice is an array '.print_r($choice, 1));
+        }
         // Also store hotspot spots in the session ($exerciseResultCoordinates
         // will be stored in the session at the end of this script)
         if (isset($_POST['hotspot'])) {
             $exerciseResultCoordinates = $_POST['hotspot'];
-            if ($debug) { error_log('9.2. $_POST[hotspot] data '.print_r($exerciseResultCoordinates, 1)); }
+            if ($debug) {
+                error_log('9.2. $_POST[hotspot] data '.print_r($exerciseResultCoordinates, 1));
+            }
         }
         if ($objExercise->type == ALL_ON_ONE_PAGE) {
             // $exerciseResult receives the content of the form.
@@ -617,7 +622,7 @@ if ($formSent && isset($_POST)) {
             $exerciseResult = $choice;
         } else {
             // gets the question ID from $choice. It is the key of the array
-            list ($key) = array_keys($choice);
+            list($key) = array_keys($choice);
             // if the user didn't already answer this question
             if (!isset($exerciseResult[$key])) {
                 // stores the user answer into the array
@@ -643,7 +648,7 @@ if ($formSent && isset($_POST)) {
                             false,
                             false,
                             $objExercise->propagate_neg,
-                            array()
+                            []
                         );
                     }
                     //END of saving and qualifying
@@ -678,7 +683,7 @@ if ($formSent && isset($_POST)) {
                         $learnpath_item_view_id
                     );
                     if ($attempt_count >= $objExercise->selectAttempts()) {
-                        echo Display :: return_message(
+                        echo Display::return_message(
                             sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()),
                             'warning',
                             false
@@ -686,7 +691,7 @@ if ($formSent && isset($_POST)) {
                         if ($origin != 'learnpath') {
                             //so we are not in learnpath tool
                             echo '</div>'; //End glossary div
-                            Display :: display_footer();
+                            Display::display_footer();
                         } else {
                             echo '</body></html>';
                         }
@@ -702,7 +707,9 @@ if ($formSent && isset($_POST)) {
                 exit;
             }
         } else {
-            if ($debug) { error_log('10. Redirecting to exercise_submit.php'); }
+            if ($debug) {
+                error_log('10. Redirecting to exercise_submit.php');
+            }
             header("Location: exercise_submit.php?".api_get_cidreq()."&exerciseId=$exerciseId");
             exit;
         }
@@ -729,8 +736,8 @@ if (is_null($current_question)) {
 }
 
 if ($question_count != 0) {
-    if (($objExercise->type == ALL_ON_ONE_PAGE ||
-        $current_question > $question_count)
+    if ($objExercise->type == ALL_ON_ONE_PAGE ||
+        $current_question > $question_count
     ) {
         if (api_is_allowed_to_session_edit()) {
             // goes to the script that will show the result of the exercise
@@ -789,17 +796,17 @@ if ($question_count != 0) {
 }
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook')
-    );
+    ];
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => "exercise.php?".api_get_cidreq(),
     "name" => get_lang('Exercises')
-);
-$interbreadcrumb[] = array("url" => "#", "name" => $objExercise->selectTitle(true));
+];
+$interbreadcrumb[] = ["url" => "#", "name" => $objExercise->selectTitle(true)];
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
     if (!api_is_allowed_to_session_edit()) {
@@ -808,7 +815,7 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
         );
     }
 
-    Display :: display_header(null, 'Exercises');
+    Display::display_header(null, 'Exercises');
 } else {
     $htmlHeadXtra[] = "
     <style>
@@ -877,7 +884,7 @@ if ($limit_time_exists) {
                 'warning'
             );
             if ($origin != 'learnpath') {
-                Display :: display_footer();
+                Display::display_footer();
             }
             exit;
         } else {
@@ -985,7 +992,7 @@ if ($objExercise->review_answers) {
 if (!empty($error)) {
     echo Display::return_message($error, 'error', false);
 } else {
-    if (!empty ($exercise_sound)) {
+    if (!empty($exercise_sound)) {
         echo "<a href=\"../document/download.php?doc_url=%2Faudio%2F".Security::remove_XSS($exercise_sound)."\" target=\"_blank\">", "<img src=\"../img/sound.gif\" border=\"0\" align=\"absmiddle\" alt=", get_lang('Sound')."\" /></a>";
     }
     // Get number of hotspot questions for javascript validation
@@ -1031,7 +1038,7 @@ if (!empty($error)) {
             saveImage.src = \'' .  Display::return_icon(
                 'save.png',
                 get_lang('Saved'),
-                array(),
+                [],
                 ICON_SIZE_SMALL,
                 false,
                 true
@@ -1131,7 +1138,7 @@ if (!empty($error)) {
             } else {
                 url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
             }
-            //$("#save_for_now_"+question_id).html(\'' . Display::return_icon('save.png', get_lang('Saved'), array(), ICON_SIZE_SMALL).'\');
+            //$("#save_for_now_"+question_id).html(\'' . Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
             window.location = url;
         }
 
@@ -1171,9 +1178,9 @@ if (!empty($error)) {
                 data: "'.$params.'&type=simple&question_id="+question_id+"&"+my_choice+"&"+hotspot+"&"+remind_list,
                 success: function(return_value) {
                     if (return_value == "ok") {
-                        $("#save_for_now_"+question_id).html(\'' . Display::return_icon('save.png', get_lang('Saved'), array(), ICON_SIZE_SMALL).'\');
+                        $("#save_for_now_"+question_id).html(\'' . Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
                     } else if (return_value == "error") {
-                        $("#save_for_now_"+question_id).html(\'' . Display::return_icon('error.png', get_lang('Error'), array(), ICON_SIZE_SMALL).'\');
+                        $("#save_for_now_"+question_id).html(\'' . Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_SMALL).'\');
                     } else if (return_value == "one_per_page") {
                         var url = "";
                         if ('.$reminder.' == 1 ) {
@@ -1188,13 +1195,13 @@ if (!empty($error)) {
                             url = url_extra;
                         }
 
-                        $("#save_for_now_"+question_id).html(\'' . Display::return_icon('save.png', get_lang('Saved'), array(), ICON_SIZE_SMALL).'\');
+                        $("#save_for_now_"+question_id).html(\'' . Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
 
                         window.location = url;
                     }
                 },
                 error: function() {
-                    $("#save_for_now_"+question_id).html(\'' . Display::return_icon('error.png', get_lang('Error'), array(), ICON_SIZE_SMALL).'\');
+                    $("#save_for_now_"+question_id).html(\'' . Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_SMALL).'\');
                 }
             });
         }
@@ -1253,7 +1260,7 @@ if (!empty($error)) {
         }
     </script>';
 
-    echo '<form id="exercise_form" method="post" action="'.api_get_self().'?'.api_get_cidreq().'&reminder='.$reminder.'&autocomplete=off&&exerciseId='.$exerciseId.'" name="frm_exercise" '.$onsubmit.'>
+    echo '<form id="exercise_form" method="post" action="'.api_get_self().'?'.api_get_cidreq().'&reminder='.$reminder.'&autocomplete=off&exerciseId='.$exerciseId.'" name="frm_exercise" '.$onsubmit.'>
          <input type="hidden" name="formSent" value="1" />
          <input type="hidden" name="exerciseId" value="'.$exerciseId.'" />
          <input type="hidden" name="num" value="'.$current_question.'" id="num_current_id" />
@@ -1304,7 +1311,6 @@ if (!empty($error)) {
         }
 
         $user_choice = null;
-
         if (isset($attempt_list[$questionId])) {
             $user_choice = $attempt_list[$questionId];
         } elseif ($objExercise->saveCorrectAnswers) {
@@ -1330,7 +1336,7 @@ if (!empty($error)) {
         $exerciseActions = '';
         $is_remind_on = false;
 
-        $attributes = array('id' =>'remind_list['.$questionId.']');
+        $attributes = ['id' =>'remind_list['.$questionId.']'];
         if (in_array($questionId, $remind_list)) {
             $is_remind_on = true;
             $attributes['checked'] = 1;
@@ -1394,7 +1400,7 @@ if (!empty($error)) {
                 ];
                 $exerciseActions .= Display::div(
                     implode(PHP_EOL, $button),
-                    array('class'=>'exercise_save_now_button')
+                    ['class'=>'exercise_save_now_button']
                 );
                 break;
         }
@@ -1409,17 +1415,17 @@ if (!empty($error)) {
                     '',
                     $attributes
                 ).get_lang('ReviewQuestionLater'),
-                array(
+                [
                     'class' => 'checkbox',
                     'for' => 'remind_list['.$questionId.']'
-                )
+                ]
             );
             $exerciseActions .= Display::div(
                 $remind_question_div,
-                array('class' => 'exercise_save_now_button')
+                ['class' => 'exercise_save_now_button']
             );
         }
-        echo Display::div($exerciseActions, array('class'=>'form-actions'));
+        echo Display::div($exerciseActions, ['class'=>'form-actions']);
         echo '</div>';
 
         $i++;
@@ -1435,11 +1441,10 @@ if (!empty($error)) {
             $questionId,
             $current_question
         );
-        echo Display::div($exerciseActions, array('class'=>'exercise_actions'));
+        echo Display::div($exerciseActions, ['class'=>'exercise_actions']);
         echo '<br>';
     }
     echo '</form>';
-
 }
 
 if ($origin != 'learnpath') {

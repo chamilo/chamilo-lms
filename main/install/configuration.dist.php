@@ -488,6 +488,8 @@ ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
 //$_configuration['allow_career_diagram'] = false;
 // Allow scheduled emails to session users.
 //CREATE TABLE scheduled_announcements (id INT AUTO_INCREMENT NOT NULL, subject VARCHAR(255) NOT NULL, message LONGTEXT NOT NULL, date DATETIME DEFAULT NULL, sent TINYINT(1) NOT NULL, session_id INT NOT NULL, c_id INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+// sudo mkdir app/upload/scheduled_announcement
+// Add "attachment" file extra field in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
 //$_configuration['allow_scheduled_announcements'] = false;
 // Add the list of emails as a bcc when sending an email.
 /*
@@ -657,6 +659,9 @@ $_configuration['gradebook_badge_sidebar'] = [
 
 // Send email notification to admin when a user is created
 //$_configuration['send_notification_when_user_added'] = ['admins' => [1] ];
+
+// Send email notification to course members when document is added BT#13964
+//$_configuration['send_notification_when_document_added'] = false;
 
 // Hide email content forcing using to click in a link to visit the portal to check the message
 //$_configuration['messages_hide_mail_content'] = false;

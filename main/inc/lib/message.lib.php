@@ -2323,4 +2323,38 @@ class MessageManager
 
         return $list;
     }
+
+    /**
+     * @param string $subject
+     * @param string $message
+     * @param array $courseInfo
+     * @param int $sessionId
+     *
+     * @return bool
+     */
+    public static function sendMessageToAllUsersInCourse($subject, $message, $courseInfo, $sessionId = 0)
+    {
+        if (empty($courseInfo)) {
+            return false;
+        }
+        $senderId = api_get_user_id();
+        if (empty($senderId)) {
+            return false;
+        }
+        if (empty($sessionId)) {
+            // Course students and teachers
+            $users = CourseManager::get_user_list_from_course_code($courseInfo['code']);
+        } else {
+            // Course-session students and course session coaches
+            $users = CourseManager::get_user_list_from_course_code($courseInfo['code'], $sessionId);
+        }
+
+        if (empty($users)) {
+            return false;
+        }
+
+        foreach ($users as $userInfo) {
+            self::send_message_simple($userInfo['user_id'], $subject, $message, $senderId);
+        }
+    }
 }

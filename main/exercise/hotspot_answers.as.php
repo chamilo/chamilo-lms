@@ -1,13 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
 
 /**
  * This file generates the ActionScript variables code used by the
- * HotSpot .swf
+ * HotSpot .swf.
+ *
  * @package chamilo.exercise
+ *
  * @author Toon Keppens, Julio Montoya adding hotspot "medical" support
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -48,7 +50,7 @@ $data['lang'] = [
     'CloseDelineation' => get_lang('CloseDelineation'),
     'Oar' => get_lang('Oar'),
     'ClosePolygon' => get_lang('ClosePolygon'),
-    'DelineationStatus1' => get_lang('DelineationStatus1')
+    'DelineationStatus1' => get_lang('DelineationStatus1'),
 ];
 $data['image'] = $objQuestion->selectPicturePath();
 $data['image_width'] = $pictureWidth;
@@ -151,7 +153,7 @@ $rs = $em
         [
             'hotspotQuestionId' => $questionId,
             'cId' => $course_id,
-            'hotspotExeId' => $exe_id
+            'hotspotExeId' => $exe_id,
         ],
         ['hotspotAnswerId' => 'ASC']
     );

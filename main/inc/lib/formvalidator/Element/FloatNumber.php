@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Float element
+ * Float element.
  *
  * Accepts values like 3.1415 and 3,1415 (its processed and converted to 3.1415)
  *
@@ -29,16 +29,16 @@ class FloatNumber extends HTML_QuickForm_text
         $this->setType('float');
     }
 
-     /**
+    /**
      * @param string $value
      */
     public function setValue($value)
     {
         $value = api_float_val($value);
         $this->updateAttributes(
-            array(
-                'value'=>$value
-            )
+            [
+                'value' => $value,
+            ]
         );
     }
 
@@ -47,10 +47,10 @@ class FloatNumber extends HTML_QuickForm_text
      */
     public function getValue()
     {
-         $value = $this->getAttribute('value');
-         $value = api_float_val($value);
+        $value = $this->getAttribute('value');
+        $value = api_float_val($value);
 
-         return $value;
+        return $value;
     }
 
     /**
@@ -69,7 +69,7 @@ class FloatNumber extends HTML_QuickForm_text
 
     /**
      * We check the options and return only the values that _could_ have been
-     * selected. We also return a scalar value if select is not "multiple"
+     * selected. We also return a scalar value if select is not "multiple".
      */
     public function exportValue(&$submitValues, $assoc = false)
     {

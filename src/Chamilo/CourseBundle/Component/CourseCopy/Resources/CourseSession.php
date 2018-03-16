@@ -4,8 +4,10 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * Class CourseSession
+ * Class CourseSession.
+ *
  * @author Jhon Hinojosa <jhon.hinojosa@beeznest.com>
+ *
  * @package chamilo.backup
  */
 class CourseSession extends Resource
@@ -14,8 +16,9 @@ class CourseSession extends Resource
     public $title;
 
     /**
-     * Create a new Session
-     * @param int $id
+     * Create a new Session.
+     *
+     * @param int    $id
      * @param string $title
      */
     public function __construct($id, $title)
@@ -25,7 +28,7 @@ class CourseSession extends Resource
     }
 
     /**
-     * Show this Event
+     * Show this Event.
      */
     public function show()
     {

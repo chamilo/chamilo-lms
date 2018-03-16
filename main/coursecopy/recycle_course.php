@@ -1,17 +1,17 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRecycler;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 
 /**
  * Delete resources from a course.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
+ *
  * @package chamilo.backup
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true);
@@ -25,10 +25,10 @@ if (!api_is_allowed_to_edit()) {
 $this_section = SECTION_COURSES;
 
 // Breadcrumbs
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'course_info/maintenance.php',
-    'name' => get_lang('Maintenance')
-);
+    'name' => get_lang('Maintenance'),
+];
 
 // Displaying the header
 $nameTools = get_lang('RecycleCourse');
@@ -89,11 +89,11 @@ if (Security::check_token('post') && (
         $form->addElement('radio', 'recycle_option', null, get_lang('FullRecycle'), 'full_backup');
         $form->addElement('radio', 'recycle_option', null, get_lang('LetMeSelectItems'), 'select_items');
         $form->addButtonSave(get_lang('RecycleCourse'));
-        $form->setDefaults(array('recycle_option' => 'select_items'));
+        $form->setDefaults(['recycle_option' => 'select_items']);
         // Add Security token
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
-        $form->setConstants(array('sec_token' => $token));
+        $form->setConstants(['sec_token' => $token]);
         $form->display();
     }
 }

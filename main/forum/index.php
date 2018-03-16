@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
 use Chamilo\CourseBundle\Entity\CForumPost;
+use ChamiloSession as Session;
 
 /**
  * These files are a complete rework of the forum. The database structure is
@@ -16,7 +16,7 @@ use Chamilo\CourseBundle\Entity\CForumPost;
  *                      multiple forums per group
  * - sticky messages
  * - new view option: nested view
- * - quoting a message
+ * - quoting a message.
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @copyright Ghent University
@@ -24,7 +24,6 @@ use Chamilo\CourseBundle\Entity\CForumPost;
  *
  * @package chamilo.forum
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_FORUM;
 $htmlHeadXtra[] = '<script>
@@ -53,10 +52,10 @@ require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
         'name' => get_lang('ToolGradebook'),
-    );
+    ];
 }
 
 $search_forum = isset($_GET['search']) ? Security::remove_XSS($_GET['search']) : '';
@@ -67,33 +66,33 @@ $actions = isset($_GET['action']) ? $_GET['action'] : '';
 if ($actions === 'add') {
     switch ($_GET['content']) {
         case 'forum':
-            $interbreadcrumb[] = array(
+            $interbreadcrumb[] = [
                 'url' => 'index.php?search='.$search_forum.'&'.api_get_cidreq(),
                 'name' => get_lang('Forum'),
-            );
-            $interbreadcrumb[] = array(
+            ];
+            $interbreadcrumb[] = [
                 'url' => '#',
                 'name' => get_lang('AddForum'),
-            );
+            ];
             break;
         case 'forumcategory':
-            $interbreadcrumb[] = array(
+            $interbreadcrumb[] = [
                 'url' => 'index.php?search='.$search_forum.'&'.api_get_cidreq(),
                 'name' => get_lang('Forum'),
-            );
-            $interbreadcrumb[] = array(
+            ];
+            $interbreadcrumb[] = [
                 'url' => '#',
                 'name' => get_lang('AddForumCategory'),
-            );
+            ];
             break;
         default:
             break;
     }
 } else {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => '#',
         'name' => get_lang('ForumCategories'),
-    );
+    ];
 }
 
 // Tool introduction
@@ -141,7 +140,7 @@ $user_id = api_get_user_id();
 /* RETRIEVING ALL GROUPS AND THOSE OF THE USER */
 
 // The groups of the user.
-$groups_of_user = array();
+$groups_of_user = [];
 $groups_of_user = GroupManager::get_group_ids($_course['real_id'], $user_id);
 
 // All groups in the course (and sorting them as the
@@ -199,28 +198,28 @@ if (api_is_allowed_to_edit(false, true)) {
     }
 }
 
-$actions = Display::toolbarAction('toolbar-forum', array($actionLeft));
+$actions = Display::toolbarAction('toolbar-forum', [$actionLeft]);
 
 // Fixes error if there forums with no category.
 $forumsInNoCategory = get_forums_in_category(0);
 if (!empty($forumsInNoCategory)) {
     $forumCategories = array_merge(
         $forumCategories,
-        array(
-            array(
+        [
+            [
                 'cat_id' => 0,
                 'session_id' => 0,
                 'visibility' => 1,
-                'cat_comment' => null
-            )
-        )
+                'cat_comment' => null,
+            ],
+        ]
     );
 }
 
 /* Display Forum Categories and the Forums in it */
 // Step 3: We display the forum_categories first.
-$listForumCategory = array();
-$forumCategoryInfo = array();
+$listForumCategory = [];
+$forumCategoryInfo = [];
 if (is_array($forumCategories)) {
     foreach ($forumCategories as $forumCategory) {
         $forumCategoryInfo['id'] = $forumCategory['cat_id'];
@@ -253,7 +252,7 @@ if (is_array($forumCategories)) {
                 $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                     .'&action=edit&content=forumcategory&id='.intval($idCategory)
                     .'">'.Display::return_icon(
-                        'edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL
+                        'edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL
                     )
                     .'</a>';
 
@@ -265,7 +264,7 @@ if (is_array($forumCategories)) {
                     ))
                     ."')) return false;\">"
                     .Display::return_icon(
-                        'delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL
+                        'delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL
                     )
                     .'</a>';
                 $tools .= return_visible_invisible_icon(
@@ -288,7 +287,7 @@ if (is_array($forumCategories)) {
         $forumCategoryInfo['tools'] = $tools;
         $forumCategoryInfo['forums'] = [];
         // The forums in this category.
-        $forumInfo = array();
+        $forumInfo = [];
         $forumsInCategory = get_forums_in_category($forumCategory['cat_id']);
 
         if (!empty($forumsInCategory)) {
@@ -454,7 +453,7 @@ if (is_array($forumCategories)) {
                         ) {
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                                 .'&action=edit&content=forum&id='.$forum['forum_id'].'">'
-                                .Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL)
+                                .Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL)
                                 .'</a>';
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                                 .'&action=delete&content=forum&id='.$forum['forum_id']
@@ -462,7 +461,7 @@ if (is_array($forumCategories)) {
                                     api_htmlentities(get_lang('DeleteForum'), ENT_QUOTES)
                                 )
                                 ."')) return false;\">"
-                                .Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL)
+                                .Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL)
                                 .'</a>';
 
                             $toolActions .= return_visible_invisible_icon(

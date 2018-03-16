@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This file exclusively export calendar items to iCal or similar formats
+ * This file exclusively export calendar items to iCal or similar formats.
+ *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 // we are not inside a course, so we reset the course id
@@ -78,7 +79,7 @@ if (!empty($event)) {
             list($y, $m, $d, $h, $M, $s) = preg_split('/[\s:-]/', $event['start_date']);
             $vevent->setProperty(
                 'dtstart',
-                array('year' => $y, 'month' => $m, 'day' => $d, 'hour' => $h, 'min' => $M, 'sec' => $s)
+                ['year' => $y, 'month' => $m, 'day' => $d, 'hour' => $h, 'min' => $M, 'sec' => $s]
             );
             if (empty($event['end_date'])) {
                 $y2 = $y;
@@ -96,7 +97,7 @@ if (!empty($event)) {
             }
             $vevent->setProperty(
                 'dtend',
-                array('year' => $y2, 'month' => $m2, 'day' => $d2, 'hour' => $h2, 'min' => $M2, 'sec' => $s2)
+                ['year' => $y2, 'month' => $m2, 'day' => $d2, 'hour' => $h2, 'min' => $M2, 'sec' => $s2]
             );
             //$vevent->setProperty( 'LOCATION', get_lang('Unknown') ); // property name - case independent
             $vevent->setProperty('description', api_convert_encoding($event['description'], 'UTF-8', $charset));
@@ -117,7 +118,7 @@ if (!empty($event)) {
             list($y, $m, $d, $h, $M, $s) = preg_split('/[\s:-]/', $event['start_date']);
             $vevent->setProperty(
                 'dtstart',
-                array('year' => $y, 'month' => $m, 'day' => $d, 'hour' => $h, 'min' => $M, 'sec' => $s)
+                ['year' => $y, 'month' => $m, 'day' => $d, 'hour' => $h, 'min' => $M, 'sec' => $s]
             );
             if (empty($event['end_date'])) {
                 $y2 = $y;
@@ -135,7 +136,7 @@ if (!empty($event)) {
             }
             $vevent->setProperty(
                 'dtend',
-                array('year' => $y2, 'month' => $m2, 'day' => $d2, 'hour' => $h2, 'min' => $M2, 'sec' => $s2)
+                ['year' => $y2, 'month' => $m2, 'day' => $d2, 'hour' => $h2, 'min' => $M2, 'sec' => $s2]
             );
             $vevent->setProperty('description', api_convert_encoding($event['description'], 'UTF-8', $charset));
             //$vevent->setProperty( 'comment', 'This is a comment' );

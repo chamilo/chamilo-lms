@@ -1,11 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *	Hotspot languae conversion
+ *	Hotspot languae conversion.
+ *
  *	@package chamilo.exercise
  */
 /**
- * Code
+ * Code.
  */
 session_cache_limiter('none');
 

@@ -2,15 +2,15 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	This script allows platform admins to add users to courses.
-*	It displays a list of users and a list of courses;
-*	you can select multiple users and courses and then click on
-*	'Add to this(these) course(s)'.
-*
-*	@package chamilo.admin
-* 	@todo use formvalidator for the form
-*/
-
+ *	This script allows platform admins to add users to courses.
+ *	It displays a list of users and a list of courses;
+ *	you can select multiple users and courses and then click on
+ *	'Add to this(these) course(s)'.
+ *
+ *	@package chamilo.admin
+ *
+ * 	@todo use formvalidator for the form
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -22,15 +22,15 @@ api_protect_admin_script();
 $form_sent = 0;
 $first_letter_user = '';
 $first_letter_course = '';
-$courses = array();
-$users = array();
+$courses = [];
+$users = [];
 
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
 /* Header */
 $tool_name = get_lang('AddUsersToACourse');
-$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
 
 $htmlHeadXtra[] = '<script>
 function validate_filter() {
@@ -53,27 +53,27 @@ $form->display();
 //checking for extra field with filter on
 $extra_field_list = UserManager::get_extra_fields();
 
-$new_field_list = array();
+$new_field_list = [];
 if (is_array($extra_field_list)) {
     foreach ($extra_field_list as $extra_field) {
         //if is enabled to filter and is a "<select>" field type
         if ($extra_field[8] == 1 && $extra_field[2] == ExtraField::FIELD_TYPE_SELECT) {
-            $new_field_list[] = array(
+            $new_field_list[] = [
                 'name' => $extra_field[3],
                 'type' => $extra_field[2],
                 'variable' => $extra_field[1],
                 'data' => $extra_field[9],
-            );
+            ];
         }
         if ($extra_field[8] == 1 && $extra_field[2] == ExtraField::FIELD_TYPE_TAG) {
             $options = UserManager::get_extra_user_data_for_tags($extra_field[1]);
 
-            $new_field_list[] = array(
+            $new_field_list[] = [
                 'name' => $extra_field[3],
                 'type' => $extra_field[2],
                 'variable' => $extra_field[1],
                 'data' => $options['options'],
-            );
+            ];
         }
     }
 }
@@ -81,8 +81,8 @@ if (is_array($extra_field_list)) {
 /* React on POSTed request */
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
-    $users = isset($_POST['UserList']) && is_array($_POST['UserList']) ? $_POST['UserList'] : array();
-    $courses = isset($_POST['CourseList']) && is_array($_POST['CourseList']) ? $_POST['CourseList'] : array();
+    $users = isset($_POST['UserList']) && is_array($_POST['UserList']) ? $_POST['UserList'] : [];
+    $courses = isset($_POST['CourseList']) && is_array($_POST['CourseList']) ? $_POST['CourseList'] : [];
     $first_letter_user = $_POST['firstLetterUser'];
     $first_letter_course = $_POST['firstLetterCourse'];
 
@@ -98,7 +98,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             foreach ($courses as $course_code) {
                 foreach ($users as $user_id) {
                     $user = api_get_user_info($user_id);
-                    if ($user['status'] <> DRH) {
+                    if ($user['status'] != DRH) {
                         CourseManager::subscribe_user($user_id, $course_code);
                     } else {
                         $errorDrh = 1;
@@ -134,7 +134,7 @@ $extra_field_result = [];
 $use_extra_fields = false;
 if (is_array($extra_field_list)) {
     if (is_array($new_field_list) && count($new_field_list) > 0) {
-        $result_list = array();
+        $result_list = [];
         foreach ($new_field_list as $new_field) {
             $varname = 'field_'.$new_field['variable'];
             $fieldtype = $new_field['type'];
@@ -158,9 +158,8 @@ if (is_array($extra_field_list)) {
     }
 }
 
-
 if ($use_extra_fields) {
-    $final_result = array();
+    $final_result = [];
     if (count($extra_field_result) > 1) {
         for ($i = 0; $i < count($extra_field_result) - 1; $i++) {
             if (is_array($extra_field_result[$i + 1])) {
@@ -226,7 +225,7 @@ unset($result);
 $sql = "SELECT code,visual_code,title
         FROM $tbl_course
         WHERE visual_code LIKE '".$first_letter_course."%'
-        ORDER BY ". (count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
+        ORDER BY ".(count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
 
 if (api_is_multiple_url_enabled()) {
     $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -239,7 +238,7 @@ if (api_is_multiple_url_enabled()) {
                 WHERE
                     access_url_id =  $access_url_id  AND
                     (visual_code LIKE '".$first_letter_course."%' )
-                ORDER BY ". (count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
+                ORDER BY ".(count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
     }
 }
 
@@ -320,18 +319,21 @@ if (is_array($extra_field_list)) {
    <tr>
     <td width="40%" align="center">
      <select name="UserList[]" multiple="multiple" size="20" style="width:300px;">
-    <?php foreach ($db_users as $user) { ?>
-          <option value="<?php echo $user['user_id']; ?>" <?php if (in_array($user['user_id'], $users)) echo 'selected="selected"'; ?>>
+    <?php foreach ($db_users as $user) {
+          ?>
+          <option value="<?php echo $user['user_id']; ?>" <?php if (in_array($user['user_id'], $users)) {
+              echo 'selected="selected"';
+          } ?>>
       <?php
         $userName = $user['lastname'].' '.$user['firstname'].' ('.$user['username'].')';
-        if ($showOfficialCode) {
-            $officialCode = !empty($user['official_code']) ? $user['official_code'].' - ' : '? - ';
-            $userName = $officialCode.$userName;
-        }
-        echo $userName;
-      ?>
+          if ($showOfficialCode) {
+              $officialCode = !empty($user['official_code']) ? $user['official_code'].' - ' : '? - ';
+              $userName = $officialCode.$userName;
+          }
+          echo $userName; ?>
           </option>
-    <?php } ?>
+    <?php
+      } ?>
     </select>
    </td>
    <td width="20%" valign="middle" align="center">
@@ -341,11 +343,15 @@ if (is_array($extra_field_list)) {
    </td>
    <td width="40%" align="center">
     <select name="CourseList[]" multiple="multiple" size="20" style="width:300px;">
-    <?php foreach ($db_courses as $course) { ?>
-         <option value="<?php echo $course['code']; ?>" <?php if (in_array($course['code'], $courses)) echo 'selected="selected"'; ?>>
+    <?php foreach ($db_courses as $course) {
+          ?>
+         <option value="<?php echo $course['code']; ?>" <?php if (in_array($course['code'], $courses)) {
+              echo 'selected="selected"';
+          } ?>>
              <?php echo '('.$course['visual_code'].') '.$course['title']; ?>
          </option>
-    <?php } ?>
+    <?php
+      } ?>
     </select>
    </td>
   </tr>

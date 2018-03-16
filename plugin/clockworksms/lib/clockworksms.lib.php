@@ -3,14 +3,14 @@
 
 /**
  * Class Clockworksms
- * This script handles incoming SMS information, process it and sends an SMS if everything is right
+ * This script handles incoming SMS information, process it and sends an SMS if everything is right.
  *
  * @package chamilo.plugin.clockworksms.lib
+ *
  * @author  Imanol Losada <imanol.losada@beeznest.com>
  *
  * Clockworksms-Chamilo connector class
  */
-
 class Clockworksms implements SmsPluginLibraryInterface
 {
     public $apiKey;
@@ -18,7 +18,8 @@ class Clockworksms implements SmsPluginLibraryInterface
     public $plugin_enabled = false;
 
     /**
-     * Constructor (generates a connection to the API)
+     * Constructor (generates a connection to the API).
+     *
      * @param   string  Clockworksms API key required to use the plugin
      */
     public function __construct($apiKey = null)
@@ -67,7 +68,7 @@ class Clockworksms implements SmsPluginLibraryInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getMobilePhoneNumberById($userId)
     {
@@ -86,7 +87,8 @@ class Clockworksms implements SmsPluginLibraryInterface
     }
 
     /**
-     * send (sends an SMS to the user)
+     * send (sends an SMS to the user).
+     *
      * @param   array   Data needed to send the SMS. It is mandatory to include the
      *                  'smsType' and 'userId' (or 'mobilePhoneNumber') fields at least.
      *                  More data may be neccesary depending on the message type
@@ -95,7 +97,6 @@ class Clockworksms implements SmsPluginLibraryInterface
      *              'userId' => $userId,
      *              'moreData' => $moreData
      *          );
-     * @return  void
      */
     public function send($additionalParameters)
     {
@@ -104,10 +105,10 @@ class Clockworksms implements SmsPluginLibraryInterface
             $phoneExists = array_key_exists('mobilePhoneNumber', $additionalParameters);
             $to = $phoneExists ? $additionalParameters['mobilePhoneNumber'] : $this->getMobilePhoneNumberById($additionalParameters['userId']);
 
-            $message = array(
+            $message = [
                 'to' => $to,
-                'message' => $this->getSms($additionalParameters)
-            );
+                'message' => $this->getSms($additionalParameters),
+            ];
 
             if (!empty($message['message'])) {
                 $this->api->send($message);
@@ -116,12 +117,14 @@ class Clockworksms implements SmsPluginLibraryInterface
     }
 
     /**
-     * buildSms (builds an SMS from a template and data)
+     * buildSms (builds an SMS from a template and data).
+     *
      * @param ClockworksmsPlugin $plugin
-     * @param Template $tpl
+     * @param Template           $tpl
      * @param string  Template file name
      * @param string $messageKey Text key from lang file
-     * @param array $parameters  Data to fill message variables (if any)
+     * @param array  $parameters Data to fill message variables (if any)
+     *
      * @return string
      */
     public function buildSms(
@@ -140,11 +143,13 @@ class Clockworksms implements SmsPluginLibraryInterface
         if ($parameters !== null) {
             $message = vsprintf($message, $parameters);
         }
+
         return $message;
     }
 
     /**
-     * getSms (returns an SMS message depending of its type)
+     * getSms (returns an SMS message depending of its type).
+     *
      * @param   array   Data needed to send the SMS. It is mandatory to include the
      *                  'smsType' and 'userId' (or 'mobilePhoneNumber') fields at least.
      *                  More data may be neccesary depending on the message type
@@ -153,7 +158,8 @@ class Clockworksms implements SmsPluginLibraryInterface
      *              'userId' => $userId,
      *              'moreData' => $moreData
      *          );
-     * @return  string  A ready to be sent SMS
+     *
+     * @return string A ready to be sent SMS
      */
     public function getSms($additionalParameters)
     {
@@ -164,16 +170,17 @@ class Clockworksms implements SmsPluginLibraryInterface
         switch ($additionalParameters['smsType']) {
             case SmsPlugin::WELCOME_LOGIN_PASSWORD:
                 $userInfo = api_get_user_info($additionalParameters['userId']);
+
                 return $this->buildSms(
                     $plugin,
                     $tpl,
                     'welcome_login_password.tpl',
                     'WelcomeXLoginXPasswordX',
-                    array(
+                    [
                         api_get_setting('siteName'),
                         $userInfo['username'],
-                        $additionalParameters['password']
-                    )
+                        $additionalParameters['password'],
+                    ]
                 );
                 break;
             case SmsPlugin::NEW_FILE_SHARED_COURSE_BY:
@@ -182,11 +189,11 @@ class Clockworksms implements SmsPluginLibraryInterface
                     $tpl,
                     'new_file_shared_course_by.tpl',
                     'XNewFileSharedCourseXByX',
-                    array(
+                    [
                         api_get_setting('siteName'),
                         $additionalParameters['courseTitle'],
-                        $additionalParameters['userUsername']
-                    )
+                        $additionalParameters['userUsername'],
+                    ]
                 );
                 break;
             case SmsPlugin::ACCOUNT_APPROVED_CONNECT:
@@ -195,10 +202,10 @@ class Clockworksms implements SmsPluginLibraryInterface
                     $tpl,
                     'account_approved_connect.tpl',
                     'XAccountApprovedConnectX',
-                    array(
+                    [
                         api_get_setting('siteName'),
-                        $tpl->params['_p']['web']
-                    )
+                        $tpl->params['_p']['web'],
+                    ]
                 );
                 break;
             case SmsPlugin::NEW_COURSE_BEEN_CREATED:
@@ -207,11 +214,11 @@ class Clockworksms implements SmsPluginLibraryInterface
                     $tpl,
                     'new_course_been_created.tpl',
                     'XNewCourseXBeenCreatedX',
-                    array(
+                    [
                         api_get_setting('siteName'),
                         $additionalParameters['courseName'],
-                        $additionalParameters['creatorUsername']
-                    )
+                        $additionalParameters['creatorUsername'],
+                    ]
                 );
                 break;
             case SmsPlugin::NEW_USER_SUBSCRIBED_COURSE:
@@ -220,11 +227,11 @@ class Clockworksms implements SmsPluginLibraryInterface
                     $tpl,
                     'new_user_subscribed_course.tpl',
                     'XNewUserXSubscribedCourseX',
-                    array(
+                    [
                         api_get_setting('siteName'),
                         $additionalParameters['userUsername'],
-                        $additionalParameters['courseCode']
-                    )
+                        $additionalParameters['courseCode'],
+                    ]
                 );
                 break;
             case SmsPlugin::NEW_COURSE_SUGGESTED_TEACHER:
@@ -233,10 +240,10 @@ class Clockworksms implements SmsPluginLibraryInterface
                     $tpl,
                     'new_course_suggested_teacher.tpl',
                     'XNewCourseSuggestedTeacherX',
-                    array(
+                    [
                         api_get_setting('siteName'),
-                        $additionalParameters['userUsername']
-                    )
+                        $additionalParameters['userUsername'],
+                    ]
                 );
                 break;
             case SmsPlugin::COURSE_OPENING_REQUEST_CODE_REGISTERED:
@@ -245,10 +252,10 @@ class Clockworksms implements SmsPluginLibraryInterface
                     $tpl,
                     'course_opening_request_code_registered.tpl',
                     'XCourseOpeningRequestCodeXRegistered',
-                    array(
+                    [
                         api_get_setting('siteName'),
-                        $additionalParameters['courseCode']
-                    )
+                        $additionalParameters['courseCode'],
+                    ]
                 );
                 break;
             case SmsPlugin::COURSE_OPENING_REQUEST_CODE_APPROVED:
@@ -257,10 +264,10 @@ class Clockworksms implements SmsPluginLibraryInterface
                     $tpl,
                     'course_opening_request_course_code_approved.tpl',
                     'XCourseOpeningRequestCourseCodeXApproved',
-                    array(
+                    [
                         api_get_setting('siteName'),
-                        $additionalParameters['courseCode']
-                    )
+                        $additionalParameters['courseCode'],
+                    ]
                 );
                 break;
             case SmsPlugin::COURSE_OPENING_REQUEST_CODE_REJECTED:
@@ -269,10 +276,10 @@ class Clockworksms implements SmsPluginLibraryInterface
                     $tpl,
                     'request_open_course_code_rejected.tpl',
                     'XRequestOpenCourseCodeXReject',
-                    array(
+                    [
                         api_get_setting('siteName'),
-                        $additionalParameters['courseCode']
-                    )
+                        $additionalParameters['courseCode'],
+                    ]
                 );
                 break;
             case SmsPlugin::COURSE_OPENING_REQUEST_CODE:
@@ -281,10 +288,10 @@ class Clockworksms implements SmsPluginLibraryInterface
                     $tpl,
                     'course_opening_request_course_code.tpl',
                     'XCourseOpeningRequestCourseCodeX',
-                    array(
+                    [
                         api_get_setting('siteName'),
-                        $additionalParameters['courseCode']
-                    )
+                        $additionalParameters['courseCode'],
+                    ]
                 );
                 break;
             case SmsPlugin::BEEN_SUBSCRIBED_COURSE:
@@ -293,10 +300,10 @@ class Clockworksms implements SmsPluginLibraryInterface
                     $tpl,
                     'been_subscribed_course.tpl',
                     'XBeenSubscribedCourseX',
-                    array(
+                    [
                         api_get_setting('siteName'),
-                        $additionalParameters['courseTitle']
-                    )
+                        $additionalParameters['courseTitle'],
+                    ]
                 );
                 break;
             case SmsPlugin::ASSIGNMENT_BEEN_CREATED_COURSE:
@@ -305,10 +312,10 @@ class Clockworksms implements SmsPluginLibraryInterface
                     $tpl,
                     'assignment_been_created_course.tpl',
                     'XAssignmentBeenCreatedCourseX',
-                    array(
+                    [
                         api_get_setting('siteName'),
-                        $additionalParameters['courseTitle']
-                    )
+                        $additionalParameters['courseTitle'],
+                    ]
                 );
                 break;
             case SmsPlugin::CERTIFICATE_NOTIFICATION:

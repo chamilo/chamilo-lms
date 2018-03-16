@@ -1,9 +1,9 @@
 <?php
 
-$this->fontdata['couriersans-light'] = array(
+$this->fontdata['couriersans-light'] = [
     'R' => 'CourierSans-Light.ttf',
-);
+];
 
-$this->fontdata['couriersans-lightextra'] = array(
+$this->fontdata['couriersans-lightextra'] = [
     'R' => 'CourierSans-LightExtra.ttf',
-);
+];

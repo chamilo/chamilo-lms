@@ -4,7 +4,6 @@
 /**
  * @package chamilo.admin
  */
-
 $cidReset = true;
 // Including necessary libraries.
 require_once __DIR__.'/../inc/global.inc.php';
@@ -92,8 +91,8 @@ if (!empty($_GET['message'])) {
     $message = urldecode($_GET['message']);
 }
 
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array("url" => 'user_list.php', "name" => get_lang('UserList'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ["url" => 'user_list.php', "name" => get_lang('UserList')];
 $tool_name = get_lang('AddUsers');
 
 // Create the form
@@ -105,9 +104,9 @@ if (api_is_western_name_order()) {
         'text',
         'firstname',
         get_lang('FirstName'),
-        array(
-            'id' => 'firstname'
-        )
+        [
+            'id' => 'firstname',
+        ]
     );
     $form->applyFilter('firstname', 'html_filter');
     $form->applyFilter('firstname', 'trim');
@@ -117,9 +116,9 @@ if (api_is_western_name_order()) {
         'text',
         'lastname',
         get_lang('LastName'),
-        array(
-            'id' => 'lastname'
-        )
+        [
+            'id' => 'lastname',
+        ]
     );
     $form->applyFilter('lastname', 'html_filter');
     $form->applyFilter('lastname', 'trim');
@@ -130,9 +129,9 @@ if (api_is_western_name_order()) {
         'text',
         'lastname',
         get_lang('LastName'),
-        array(
-            'id' => 'lastname'
-        )
+        [
+            'id' => 'lastname',
+        ]
     );
     $form->applyFilter('lastname', 'html_filter');
     $form->applyFilter('lastname', 'trim');
@@ -142,9 +141,9 @@ if (api_is_western_name_order()) {
         'text',
         'firstname',
         get_lang('FirstName'),
-        array(
-            'id' => 'firstname'
-        )
+        [
+            'id' => 'firstname',
+        ]
     );
     $form->applyFilter('firstname', 'html_filter');
     $form->applyFilter('firstname', 'trim');
@@ -155,15 +154,15 @@ $form->addElement(
     'text',
     'official_code',
     get_lang('OfficialCode'),
-    array(
+    [
         'size' => '40',
-        'id' => 'official_code'
-    )
+        'id' => 'official_code',
+    ]
 );
 $form->applyFilter('official_code', 'html_filter');
 $form->applyFilter('official_code', 'trim');
 // Email
-$form->addElement('text', 'email', get_lang('Email'), array('size' => '40', 'autocomplete' => 'off', 'id' => 'email'));
+$form->addElement('text', 'email', get_lang('Email'), ['size' => '40', 'autocomplete' => 'off', 'id' => 'email']);
 $form->addRule('email', get_lang('EmailWrong'), 'email');
 if (api_get_setting('registration', 'email') == 'true') {
     $form->addRule('email', get_lang('EmailWrong'), 'required');
@@ -180,7 +179,7 @@ $form->addElement('text', 'phone', get_lang('PhoneNumber'), ['autocomplete' => '
 $form->addFile(
     'picture',
     get_lang('AddImage'),
-    array('id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '1 / 1')
+    ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '1 / 1']
 );
 $allowed_picture_types = api_get_supported_image_extensions(false);
 
@@ -188,7 +187,7 @@ $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allow
 
 // Username
 if (api_get_setting('login_is_email') != 'true') {
-    $form->addElement('text', 'username', get_lang('LoginName'), array('id'=> 'username', 'maxlength' => USERNAME_MAX_LENGTH, 'autocomplete' => 'off'));
+    $form->addElement('text', 'username', get_lang('LoginName'), ['id' => 'username', 'maxlength' => USERNAME_MAX_LENGTH, 'autocomplete' => 'off']);
     $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
     $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
@@ -196,11 +195,11 @@ if (api_get_setting('login_is_email') != 'true') {
 }
 
 // Password
-$group = array();
+$group = [];
 $auth_sources = 0; //make available wider as we need it in case of form reset (see below)
 $nb_ext_auth_source_added = 0;
 if (isset($extAuthSource) && count($extAuthSource) > 0) {
-    $auth_sources = array();
+    $auth_sources = [];
     foreach ($extAuthSource as $key => $info) {
         // @todo : make uniform external authentification configuration (ex : cas and external_login ldap)
         // Special case for CAS. CAS is activated from Chamilo > Administration > Configuration > CAS
@@ -236,12 +235,12 @@ $group[] = $form->createElement(
     'password',
     'password',
     null,
-    array(
+    [
         'id' => 'password',
         'autocomplete' => 'off',
         'onkeydown' => 'javascript: password_switch_radio_button();',
         //'required' => 'required'
-    )
+    ]
 );
 
 $form->addGroup($group, 'password', get_lang('Password'));
@@ -258,7 +257,7 @@ if ($checkPass) {
 }
 
 // Status
-$status = array();
+$status = [];
 $status[COURSEMANAGER] = get_lang('Teacher');
 $status[STUDENT] = get_lang('Learner');
 $status[DRH] = get_lang('Drh');
@@ -271,10 +270,10 @@ $form->addElement(
     'status',
     get_lang('Profile'),
     $status,
-    array(
+    [
         'id' => 'status_select',
-        'onchange' => 'javascript: display_drh_list();'
-    )
+        'onchange' => 'javascript: display_drh_list();',
+    ]
 );
 
 //drh list (display only if student)
@@ -295,7 +294,7 @@ $form->addElement('html', '</div>');
 
 if (api_is_platform_admin()) {
     // Platform admin
-    $group = array();
+    $group = [];
     $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('Yes'), 1);
     $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('No'), 0);
     $form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.';">');
@@ -306,21 +305,21 @@ if (api_is_platform_admin()) {
 $form->addSelectLanguage('language', get_lang('Language'), null);
 
 // Send email
-$group = array();
+$group = [];
 $group[] = $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
 $group[] = $form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
 $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'));
 // Expiration Date
 $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
-$group = array();
+$group = [];
 $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
 $group[] = $form->createElement(
     'DateTimePicker',
     'expiration_date',
     null,
-    array(
-        'onchange' => 'javascript: enable_expiration_date();'
-    )
+    [
+        'onchange' => 'javascript: enable_expiration_date();',
+    ]
 );
 $form->addGroup($group, 'max_member_group', null, null, false);
 // Active account or inactive account
@@ -406,7 +405,7 @@ if ($form->validate()) {
             $username = $email;
         }
 
-        $extra = array();
+        $extra = [];
         foreach ($user as $key => $value) {
             if (substr($key, 0, 6) == 'extra_') { //an extra field
                 $extra[substr($key, 6)] = $value;
@@ -493,7 +492,7 @@ if ($form->validate()) {
     }
     $token = Security::get_token();
     $form->addElement('hidden', 'sec_token');
-    $form->setConstants(array('sec_token' => $token));
+    $form->setConstants(['sec_token' => $token]);
 }
 
 if (!empty($message)) {

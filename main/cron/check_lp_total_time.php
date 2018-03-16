@@ -4,8 +4,7 @@
 /**
  * This script checks and propose a query fix for LP items with high time values
  * Only if the total LP time is bigger than the total course time.
- **/
-
+ */
 exit;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -76,7 +75,8 @@ foreach($courses as $courseInfo) {
 /**
  * @param array $user
  * @param array $courseInfo
- * @param int $sessionId
+ * @param int   $sessionId
+ *
  * @return bool
  */
 function compareLpTimeAndCourseTime($user, $courseInfo, $sessionId = 0)
@@ -89,7 +89,7 @@ function compareLpTimeAndCourseTime($user, $courseInfo, $sessionId = 0)
     $totalLpTime = Tracking::get_time_spent_in_lp(
         $userId,
         $courseCode,
-        array(),
+        [],
         $sessionId
     );
 

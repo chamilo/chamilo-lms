@@ -2,10 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *
  * @package chamilo.plugin.ticket
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script(true);
@@ -55,31 +53,30 @@ if ($form->validate()) {
     exit;
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId,
-    'name' => get_lang('MyTickets')
-);
+    'name' => get_lang('MyTickets'),
+];
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/settings.php',
-    'name' => get_lang('Settings')
-);
+    'name' => get_lang('Settings'),
+];
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/projects.php',
-    'name' => get_lang('Projects')
-);
+    'name' => get_lang('Projects'),
+];
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/projects.php',
-    'name' => $project->getName()
-);
+    'name' => $project->getName(),
+];
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php?project_id='.$projectId,
-    'name' => get_lang('Categories')
-);
-
+    'name' => get_lang('Categories'),
+];
 
 Display::display_header(get_lang('Users'));
 $form->display();

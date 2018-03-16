@@ -7,12 +7,16 @@
  * To implement specific links,
  * extend this class and define a type in LinkFactory.
  * Use the methods in LinkFactory to create link objects.
+ *
  * @author Bert Steppé
  * @author Julio Montoya <gugli100@gmail.com> security improvements
+ *
  * @package chamilo.gradebook
  */
 abstract class AbstractLink implements GradebookItem
 {
+    public $course_id;
+    public $studentList;
     protected $id;
     protected $type;
     protected $ref_id;
@@ -24,56 +28,54 @@ abstract class AbstractLink implements GradebookItem
     protected $weight;
     protected $visible;
     protected $session_id;
-    public $course_id;
-    public $studentList;
 
     /**
-     * @return bool
-     */
-    abstract function has_results();
-
-    /**
-     * @return string
-     */
-    abstract function get_link();
-
-    /**
-     * @return bool
-     */
-    abstract function is_valid_link();
-
-    /**
-     * @return string
-     */
-    abstract function get_type_name();
-
-    /**
-     * @return bool
-     */
-    abstract function needs_name_and_description();
-
-    /**
-     * @return bool
-     */
-    abstract function needs_max();
-
-    /**
-     * @return bool
-     */
-    abstract function needs_results();
-
-    /**
-     * @return bool
-     */
-    abstract function is_allowed_to_change_name();
-
-    /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         $this->course_id = api_get_course_int_id();
     }
+
+    /**
+     * @return bool
+     */
+    abstract public function has_results();
+
+    /**
+     * @return string
+     */
+    abstract public function get_link();
+
+    /**
+     * @return bool
+     */
+    abstract public function is_valid_link();
+
+    /**
+     * @return string
+     */
+    abstract public function get_type_name();
+
+    /**
+     * @return bool
+     */
+    abstract public function needs_name_and_description();
+
+    /**
+     * @return bool
+     */
+    abstract public function needs_max();
+
+    /**
+     * @return bool
+     */
+    abstract public function needs_results();
+
+    /**
+     * @return bool
+     */
+    abstract public function is_allowed_to_change_name();
 
     /**
      * @return int
@@ -236,7 +238,7 @@ abstract class AbstractLink implements GradebookItem
     }
 
     /**
-     * @param integer $id
+     * @param int $id
      */
     public function set_session_id($id)
     {
@@ -262,13 +264,15 @@ abstract class AbstractLink implements GradebookItem
     /**
      * Retrieve links and return them as an array of extensions of AbstractLink.
      * To keep consistency, do not call this method but LinkFactory::load instead.
-     * @param integer $id
-     * @param integer $type
-     * @param integer $ref_id
-     * @param integer $user_id
+     *
+     * @param int    $id
+     * @param int    $type
+     * @param int    $ref_id
+     * @param int    $user_id
      * @param string $course_code
-     * @param integer $category_id
-     * @param integer $visible
+     * @param int    $category_id
+     * @param int    $visible
+     *
      * @return array
      */
     public static function load(
@@ -348,36 +352,7 @@ abstract class AbstractLink implements GradebookItem
     }
 
     /**
-     * @param Doctrine\DBAL\Driver\Statement|null $result
-     * @return array
-     */
-    private static function create_objects_from_sql_result($result)
-    {
-        $links = array();
-        while ($data = Database::fetch_array($result)) {
-            $link = LinkFactory::create($data['type']);
-            $link->set_id($data['id']);
-            $link->set_type($data['type']);
-            $link->set_ref_id($data['ref_id']);
-            $link->set_user_id($data['user_id']);
-            $link->set_course_code($data['course_code']);
-            $link->set_category_id($data['category_id']);
-            $link->set_date($data['created_at']);
-            $link->set_weight($data['weight']);
-            $link->set_visible($data['visible']);
-            $link->set_locked($data['locked']);
-
-            //session id should depend of the category --> $data['category_id']
-            $session_id = api_get_session_id();
-
-            $link->set_session_id($session_id);
-            $links[] = $link;
-        }
-        return $links;
-    }
-
-    /**
-     * Insert this link into the database
+     * Insert this link into the database.
      */
     public function add()
     {
@@ -410,7 +385,7 @@ abstract class AbstractLink implements GradebookItem
                     'weight' => $this->get_weight(),
                     'visible' => $this->is_visible(),
                     'created_at' => api_get_utc_datetime(),
-                    'locked' => 0
+                    'locked' => 0,
                 ];
                 $id = Database::insert($table, $params);
                 $this->set_id($id);
@@ -423,7 +398,7 @@ abstract class AbstractLink implements GradebookItem
     }
 
     /**
-     * Update the properties of this link in the database
+     * Update the properties of this link in the database.
      */
     public function save()
     {
@@ -488,7 +463,7 @@ abstract class AbstractLink implements GradebookItem
     }
 
     /**
-     * Delete this link from the database
+     * Delete this link from the database.
      */
     public function delete()
     {
@@ -503,16 +478,17 @@ abstract class AbstractLink implements GradebookItem
      * Generate an array of possible categories where this link can be moved to.
      * Notice: its own parent will be included in the list: it's up to the frontend
      * to disable this element.
+     *
      * @return array 2-dimensional array - every element contains 3 subelements (id, name, level)
      */
     public function get_target_categories()
     {
         // links can only be moved to categories inside this course
-        $targets = array();
+        $targets = [];
         $level = 0;
         $categories = Category::load(null, null, $this->get_course_code(), 0);
         foreach ($categories as $cat) {
-            $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
+            $targets[] = [$cat->get_id(), $cat->get_name(), $level + 1];
             $targets = $this->addTargetSubcategories(
                 $targets,
                 $level + 1,
@@ -520,27 +496,6 @@ abstract class AbstractLink implements GradebookItem
             );
         }
 
-        return $targets;
-    }
-
-    /**
-     * Internal function used by get_target_categories()
-     * @param array $targets
-     * @param integer $level
-     * @param int $catid
-     * @return array
-     */
-    private function addTargetSubcategories($targets, $level, $catid)
-    {
-        $subcats = Category::load(null, null, null, $catid);
-        foreach ($subcats as $cat) {
-            $targets[] = array($cat->get_id(), $cat->get_name(), $level + 1);
-            $targets = $this->addTargetSubcategories(
-                $targets,
-                $level + 1,
-                $cat->get_id()
-            );
-        }
         return $targets;
     }
 
@@ -561,15 +516,18 @@ abstract class AbstractLink implements GradebookItem
     /**
      * Find links by name
      * To keep consistency, do not call this method but LinkFactory::find_links instead.
+     *
      * @todo can be written more efficiently using a new (but very complex) sql query
+     *
      * @param string $name_mask
+     *
      * @return array
      */
     public function find_links($name_mask, $selectcat)
     {
         $rootcat = Category::load($selectcat);
         $links = $rootcat[0]->get_links((api_is_allowed_to_edit() ? null : api_get_user_id()), true);
-        $foundlinks = array();
+        $foundlinks = [];
         foreach ($links as $link) {
             if (!(api_strpos(api_strtolower($link->get_name()), api_strtolower($name_mask)) === false)) {
                 $foundlinks[] = $link;
@@ -595,7 +553,6 @@ abstract class AbstractLink implements GradebookItem
         return 'link';
     }
 
-
     /* Seems to be not used anywhere */
     public function get_not_created_links()
     {
@@ -615,9 +572,6 @@ abstract class AbstractLink implements GradebookItem
     {
     }
 
-    /**
-     *
-     */
     public function delete_linked_data()
     {
     }
@@ -637,7 +591,7 @@ abstract class AbstractLink implements GradebookItem
     }
 
     /**
-     * @param integer $max
+     * @param int $max
      */
     public function set_max($max)
     {
@@ -649,7 +603,8 @@ abstract class AbstractLink implements GradebookItem
     }
 
     /**
-     * Locks a link
+     * Locks a link.
+     *
      * @param int $locked 1 or unlocked 0
      *
      * */
@@ -662,11 +617,12 @@ abstract class AbstractLink implements GradebookItem
     }
 
     /**
-     * Get current user ranking
+     * Get current user ranking.
      *
-     * @param int $userId
+     * @param int   $userId
      * @param array $studentList Array with user id and scores
-     * Example: [1 => 5.00, 2 => 8.00]
+     *                           Example: [1 => 5.00, 2 => 8.00]
+     *
      * @return array
      */
     public static function getCurrentUserRanking($userId, $studentList)
@@ -690,9 +646,64 @@ abstract class AbstractLink implements GradebookItem
                 return [];
             }
 
-            return array($ranking, $count);
+            return [$ranking, $count];
         }
 
-        return array();
+        return [];
+    }
+
+    /**
+     * @param Doctrine\DBAL\Driver\Statement|null $result
+     *
+     * @return array
+     */
+    private static function create_objects_from_sql_result($result)
+    {
+        $links = [];
+        while ($data = Database::fetch_array($result)) {
+            $link = LinkFactory::create($data['type']);
+            $link->set_id($data['id']);
+            $link->set_type($data['type']);
+            $link->set_ref_id($data['ref_id']);
+            $link->set_user_id($data['user_id']);
+            $link->set_course_code($data['course_code']);
+            $link->set_category_id($data['category_id']);
+            $link->set_date($data['created_at']);
+            $link->set_weight($data['weight']);
+            $link->set_visible($data['visible']);
+            $link->set_locked($data['locked']);
+
+            //session id should depend of the category --> $data['category_id']
+            $session_id = api_get_session_id();
+
+            $link->set_session_id($session_id);
+            $links[] = $link;
+        }
+
+        return $links;
+    }
+
+    /**
+     * Internal function used by get_target_categories().
+     *
+     * @param array $targets
+     * @param int   $level
+     * @param int   $catid
+     *
+     * @return array
+     */
+    private function addTargetSubcategories($targets, $level, $catid)
+    {
+        $subcats = Category::load(null, null, null, $catid);
+        foreach ($subcats as $cat) {
+            $targets[] = [$cat->get_id(), $cat->get_name(), $level + 1];
+            $targets = $this->addTargetSubcategories(
+                $targets,
+                $level + 1,
+                $cat->get_id()
+            );
+        }
+
+        return $targets;
     }
 }

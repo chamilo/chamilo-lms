@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Responses to AJAX calls for the document upload
+ * Responses to AJAX calls for the document upload.
  */
 require_once __DIR__.'/../global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'dropbox/dropbox_functions.inc.php';
@@ -50,12 +50,12 @@ switch ($action) {
                 /** @var Dropbox_SentWork $result */
                 $result = store_add_dropbox($file, $work);
 
-                $json = array();
+                $json = [];
                 if (!empty($result)) {
                     $json['name'] = Display::url(
                         api_htmlentities($result->title),
                         api_htmlentities(api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq()),
-                        array('target' => '_blank')
+                        ['target' => '_blank']
                     );
 
                     $json['url'] = api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq();

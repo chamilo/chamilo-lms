@@ -4,22 +4,22 @@
 namespace Chamilo\FaqBundle\Admin;
 
 use Sonata\AdminBundle\Admin\Admin;
-use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 
 /**
- * Class QuestionAdmin
+ * Class QuestionAdmin.
  *
  * @package Chamilo\FaqBundle\Admin
  */
 class CategoryAdmin extends Admin
 {
-    protected $datagridValues = array(
+    protected $datagridValues = [
         '_page' => 1,
         '_sort_by' => 'created_at',
-        '_sort_order' => 'Desc'
-    );
+        '_sort_order' => 'Desc',
+    ];
 
     /**
      * @param DatagridMapper $datagridMapper
@@ -41,17 +41,17 @@ class CategoryAdmin extends Admin
     {
         $listMapper
             //->add('headline', null, array('identifier' => true))
-            ->add('translations', null, array('identifier' => true))
+            ->add('translations', null, ['identifier' => true])
             ->add('rank')
             ->add('_action', 'actions',
-                array(
-                    'actions' => array(
+                [
+                    'actions' => [
                         //'show' => array(),
-                        'preview' => array('template' => 'ChamiloFaqBundle:Faq:preview_category_partial.html.twig'),
-                        'edit' => array(),
-                        'delete' => array()
-                    )
-                )
+                        'preview' => ['template' => 'ChamiloFaqBundle:Faq:preview_category_partial.html.twig'],
+                        'edit' => [],
+                        'delete' => [],
+                    ],
+                ]
             )
         ;
     }
@@ -62,8 +62,8 @@ class CategoryAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('translations', 'a2lix_translations', array())
-            ->add('rank', null, array('required' => false))
+            ->add('translations', 'a2lix_translations', [])
+            ->add('rank', null, ['required' => false])
 //            ->add('slug')
             ->add('isActive')
             ->end()

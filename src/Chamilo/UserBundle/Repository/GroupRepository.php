@@ -6,7 +6,8 @@ namespace Chamilo\UserBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class GroupRepository
+ * Class GroupRepository.
+ *
  * @package Entity\Repository
  */
 class GroupRepository extends EntityRepository
@@ -16,7 +17,7 @@ class GroupRepository extends EntityRepository
      */
     public function getAdmins()
     {
-        $criteria = array('name' => 'admins');
+        $criteria = ['name' => 'admins'];
         $group = $this->findOneBy($criteria);
 
         return $group->getUsers();

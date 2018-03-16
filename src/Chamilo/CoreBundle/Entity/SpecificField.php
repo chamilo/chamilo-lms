@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SpecificField
+ * SpecificField.
  *
  * @ORM\Table(
  *     name="specific_field",
@@ -30,7 +30,7 @@ class SpecificField
     private $name;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -38,12 +38,11 @@ class SpecificField
      */
     private $id;
 
-
-
     /**
-     * Set code
+     * Set code.
      *
      * @param string $code
+     *
      * @return SpecificField
      */
     public function setCode($code)
@@ -54,7 +53,7 @@ class SpecificField
     }
 
     /**
-     * Get code
+     * Get code.
      *
      * @return string
      */
@@ -64,9 +63,10 @@ class SpecificField
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return SpecificField
      */
     public function setName($name)
@@ -77,7 +77,7 @@ class SpecificField
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -87,9 +87,9 @@ class SpecificField
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

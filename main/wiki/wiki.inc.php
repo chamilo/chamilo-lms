@@ -1,18 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Filesystem\Data;
 use ChamiloSession as Session;
-use MediaAlchemyst\Alchemyst;
-use MediaAlchemyst\DriversContainer;
-use Neutron\TemporaryFilesystem\Manager;
-use Neutron\TemporaryFilesystem\TemporaryFilesystem;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class Wiki
- * Functions library for the wiki tool
+ * Functions library for the wiki tool.
+ *
  * @author Juan Carlos Raña <herodoto@telefonica.net>
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @author Julio Montoya <gugli100@gmail.com> using the pdf.lib.php library
@@ -35,11 +30,11 @@ class Wiki
     public $charset;
     public $page;
     public $action;
-    public $wikiData = array();
+    public $wikiData = [];
     public $url;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -66,13 +61,14 @@ class Wiki
     }
 
     /**
-     * Check whether this title is already used
+     * Check whether this title is already used.
+     *
      * @param string $link
      *
+     * @return bool False if title is already taken
      *
-     * @return bool  False if title is already taken
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
-     **/
+     */
     public function checktitle($link)
     {
         $tbl_wiki = $this->tbl_wiki;
@@ -97,12 +93,14 @@ class Wiki
     }
 
     /**
-     * check wikilinks that has a page
+     * check wikilinks that has a page.
+     *
      * @author Juan Carlos Raña <herodoto@telefonica.net>
+     *
      * @param string $input
      *
      * @return string
-     **/
+     */
     public function links_to($input)
     {
         $input_array = preg_split(
@@ -111,7 +109,7 @@ class Wiki
             -1,
             PREG_SPLIT_DELIM_CAPTURE
         );
-        $all_links = array();
+        $all_links = [];
 
         foreach ($input_array as $key => $value) {
             if (isset($input_array[$key - 1]) && $input_array[$key - 1] == '[[' &&
@@ -139,9 +137,10 @@ class Wiki
     }
 
     /**
-     * detect and add style to external links
+     * detect and add style to external links.
+     *
      * @author Juan Carlos Raña Trabado
-     **/
+     */
     public function detect_external_link($input)
     {
         $exlink = 'href=';
@@ -152,9 +151,10 @@ class Wiki
     }
 
     /**
-     * detect and add style to anchor links
+     * detect and add style to anchor links.
+     *
      * @author Juan Carlos Raña Trabado
-     **/
+     */
     public function detect_anchor_link($input)
     {
         $anchorlink = 'href="#';
@@ -166,8 +166,8 @@ class Wiki
 
     /**
      * detect and add style to mail links
-     * author Juan Carlos Raña Trabado
-     **/
+     * author Juan Carlos Raña Trabado.
+     */
     public function detect_mail_link($input)
     {
         $maillink = 'href="mailto';
@@ -178,9 +178,10 @@ class Wiki
     }
 
     /**
-     * detect and add style to ftp links
+     * detect and add style to ftp links.
+     *
      * @author Juan Carlos Raña Trabado
-     **/
+     */
     public function detect_ftp_link($input)
     {
         $ftplink = 'href="ftp';
@@ -191,9 +192,10 @@ class Wiki
     }
 
     /**
-     * detect and add style to news links
+     * detect and add style to news links.
+     *
      * @author Juan Carlos Raña Trabado
-     **/
+     */
     public function detect_news_link($input)
     {
         $newslink = 'href="news';
@@ -204,9 +206,10 @@ class Wiki
     }
 
     /**
-     * detect and add style to irc links
+     * detect and add style to irc links.
+     *
      * @author Juan Carlos Raña Trabado
-     **/
+     */
     public function detect_irc_link($input)
     {
         $irclink = 'href="irc';
@@ -220,10 +223,11 @@ class Wiki
      * This function allows users to have [link to a title]-style links like in most regular wikis.
      * It is true that the adding of links is probably the most anoying part of Wiki for the people
      * who know something about the wiki syntax.
+     *
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
      * Improvements [[]] and [[ | ]]by Juan Carlos Raña
      * Improvements internal wiki style and mark group by Juan Carlos Raña
-     **/
+     */
     public function make_wiki_link_clickable($input)
     {
         $groupId = api_get_group_id();
@@ -277,11 +281,14 @@ class Wiki
     }
 
     /**
-     * This function saves a change in a wiki page
+     * This function saves a change in a wiki page.
+     *
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
+     *
      * @param array $values
+     *
      * @return language string saying that the changes are stored
-     **/
+     */
     public function save_wiki($values)
     {
         $tbl_wiki = $this->tbl_wiki;
@@ -295,7 +302,7 @@ class Wiki
         $groupInfo = GroupManager::get_group_properties($groupId);
         $course_id = api_get_course_int_id();
 
-        $_clean = array(
+        $_clean = [
             'task' => '',
             'feedback1' => '',
             'feedback2' => '',
@@ -306,8 +313,8 @@ class Wiki
             'max_text' => 0,
             'max_version' => 0,
             'delayedsubmit' => '',
-            'assignment' => 0
-        );
+            'assignment' => 0,
+        ];
 
         $pageId = intval($values['page_id']);
 
@@ -388,7 +395,7 @@ class Wiki
             'editlock' => 0,
             'is_editing' => 0,
             'time_edit' => $time,
-            'tag' => ''
+            'tag' => '',
         ];
 
         $id = Database::insert($tbl_wiki, $params);
@@ -430,7 +437,7 @@ class Wiki
                 'max_version' => intval($_clean['max_version']),
                 'startdate_assig' => $_clean['startdate_assig'],
                 'enddate_assig' => $_clean['enddate_assig'],
-                'delayedsubmit' => $_clean['delayedsubmit']
+                'delayedsubmit' => $_clean['delayedsubmit'],
             ];
             Database::insert($tbl_wiki_conf, $params);
         } else {
@@ -446,7 +453,7 @@ class Wiki
                 'max_version' => intval($_clean['max_version']),
                 'startdate_assig' => $_clean['startdate_assig'],
                 'enddate_assig' => $_clean['enddate_assig'],
-                'delayedsubmit' => $_clean['delayedsubmit']
+                'delayedsubmit' => $_clean['delayedsubmit'],
             ];
             Database::update(
                 $tbl_wiki_conf,
@@ -470,10 +477,12 @@ class Wiki
     }
 
     /**
-     * This function restore a wikipage
+     * This function restore a wikipage.
+     *
      * @author Juan Carlos Raña <herodoto@telefonica.net>
+     *
      * @return string Message of success (to be printed on screen)
-     **/
+     */
     public function restore_wikipage(
         $r_page_id,
         $r_reflink,
@@ -534,10 +543,12 @@ class Wiki
     }
 
     /**
-     * This function delete a wiki
+     * This function delete a wiki.
+     *
      * @author Juan Carlos Raña <herodoto@telefonica.net>
-     * @return   string  Message of success (to be printed)
-     **/
+     *
+     * @return string Message of success (to be printed)
+     */
     public function delete_wiki()
     {
         $tbl_wiki = $this->tbl_wiki;
@@ -580,16 +591,19 @@ class Wiki
 
     /**
      * This function saves a new wiki page.
+     *
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
+     *
      * @todo consider merging this with the function save_wiki into one single function.
+     *
      * @return string Message of success
-     **/
+     */
     public function save_new_wiki($values)
     {
         $tbl_wiki = $this->tbl_wiki;
         $tbl_wiki_conf = $this->tbl_wiki_conf;
         $assig_user_id = $this->assig_user_id;
-        $_clean = array();
+        $_clean = [];
 
         // cleaning the variables
         $_clean['assignment'] = '';
@@ -712,7 +726,7 @@ class Wiki
                     'linksto' => $_clean['linksto'],
                     'user_ip' => $_SERVER['REMOTE_ADDR'],
                     'session_id' => $session_id,
-                    'addlock_disc' => 1
+                    'addlock_disc' => 1,
                 ];
                 $id = Database::insert($tbl_wiki, $params);
                 if ($id > 0) {
@@ -748,7 +762,7 @@ class Wiki
                         'max_version' => $_clean['max_version'],
                         'startdate_assig' => $_clean['startdate_assig'],
                         'enddate_assig' => $_clean['enddate_assig'],
-                        'delayedsubmit' => $_clean['delayedsubmit']
+                        'delayedsubmit' => $_clean['delayedsubmit'],
                     ];
 
                     Database::insert($tbl_wiki_conf, $params);
@@ -764,22 +778,22 @@ class Wiki
 
     /**
      * @param FormValidator $form
-     * @param array $row
+     * @param array         $row
      */
-    public function setForm($form, $row = array())
+    public function setForm($form, $row = [])
     {
         $toolBar = api_is_allowed_to_edit(null, true)
-            ? array(
+            ? [
                 'ToolbarSet' => 'Wiki',
                 'Width' => '100%',
-                'Height' => '400'
-            )
-            : array(
+                'Height' => '400',
+            ]
+            : [
                 'ToolbarSet' => 'WikiStudent',
                 'Width' => '100%',
                 'Height' => '400',
-                'UserStatus' => 'student'
-            );
+                'UserStatus' => 'student',
+            ];
 
         $form->addHtmlEditor(
             'content',
@@ -790,7 +804,7 @@ class Wiki
         );
         //$content
         $form->addElement('text', 'comment', get_lang('Comments'));
-        $progress = array('', 10, 20, 30, 40, 50, 60, 70, 80, 90, 100);
+        $progress = ['', 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
         $form->addElement(
             'select',
@@ -818,11 +832,11 @@ class Wiki
                 get_lang('DescriptionOfTheTask'),
                 false,
                 false,
-                array(
+                [
                     'ToolbarSet' => 'wiki_task',
                     'Width' => '100%',
                     'Height' => '200',
-                )
+                ]
             );
 
             $form->addElement('label', null, get_lang('AddFeedback'));
@@ -855,7 +869,7 @@ class Wiki
                 'initstartdate',
                 null,
                 get_lang('StartDate'),
-                array('id' => 'start_date_toggle')
+                ['id' => 'start_date_toggle']
             );
 
             $style = "display:block";
@@ -876,7 +890,7 @@ class Wiki
                 'initenddate',
                 null,
                 get_lang('EndDate'),
-                array('id' => 'end_date_toggle')
+                ['id' => 'end_date_toggle']
             );
 
             $style = "display:block";
@@ -914,9 +928,11 @@ class Wiki
 
     /**
      * This function displays the form for adding a new wiki page.
+     *
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
+     *
      * @return string html code
-     **/
+     */
     public function display_new_wiki_form()
     {
         $url = api_get_self().'?'.api_get_cidreq(
@@ -983,12 +999,15 @@ class Wiki
     }
 
     /**
-     * This function displays a wiki entry
+     * This function displays a wiki entry.
+     *
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
      * @author Juan Carlos Raña Trabado
+     *
      * @param string $newtitle
+     *
      * @return string html code
-     **/
+     */
     public function display_wiki_entry($newtitle)
     {
         $tbl_wiki = $this->tbl_wiki;
@@ -1190,7 +1209,6 @@ class Wiki
                         ICON_SIZE_MEDIUM
                     );
                     $lock_unlock_visibility = 'invisible';
-
                 } else {
                     $visibility_page = Display::return_icon(
                         'invisible.png',
@@ -1317,13 +1335,12 @@ class Wiki
                         Display::return_icon(
                             'export_doc.png',
                             get_lang('ExportToDoc'),
-                            array(),
+                            [],
                             ICON_SIZE_MEDIUM
                         ).'</a>';
                 }
 
-                //export to print
-                ?>
+                //export to print ?>
                 <script>
                     function goprint() {
                         var a = window.open('', '', 'width=800,height=600');
@@ -1342,7 +1359,7 @@ class Wiki
                         ICON_SIZE_MEDIUM
                     ),
                     '#',
-                    array('onclick' => "javascript: goprint();")
+                    ['onclick' => "javascript: goprint();"]
                 );
             }
 
@@ -1386,22 +1403,24 @@ class Wiki
     }
 
     /**
-     * This function counted the words in a document. Thanks Adeel Khan
+     * This function counted the words in a document. Thanks Adeel Khan.
+     *
      * @param   string  Document's text
-     * @return  int     Number of words
+     *
+     * @return int Number of words
      */
     public function word_count($document)
     {
-        $search = array(
+        $search = [
             '@<script[^>]*?>.*?</script>@si',
             '@<style[^>]*?>.*?</style>@siU',
             '@<div id="player.[^>]*?>.*?</div>@',
-            '@<![\s\S]*?--[ \t\n\r]*>@'
-        );
+            '@<![\s\S]*?--[ \t\n\r]*>@',
+        ];
 
         $document = preg_replace($search, '', $document);
 
-        # strip all html tags
+        // strip all html tags
         $wc = strip_tags($document);
         $wc = html_entity_decode(
             $wc,
@@ -1409,11 +1428,11 @@ class Wiki
             'UTF-8'
         ); // TODO:test also old html_entity_decode(utf8_encode($wc))
 
-        # remove 'words' that don't consist of alphanumerical characters or punctuation. And fix accents and some letters
+        // remove 'words' that don't consist of alphanumerical characters or punctuation. And fix accents and some letters
         $pattern = "#[^(\w|\d|\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@|á|é|í|ó|ú|à|è|ì|ò|ù|ä|ë|ï|ö|ü|Á|É|Í|Ó|Ú|À|È|Ò|Ù|Ä|Ë|Ï|Ö|Ü|â|ê|î|ô|û|Â|Ê|Î|Ô|Û|ñ|Ñ|ç|Ç)]+#";
         $wc = trim(preg_replace($pattern, " ", $wc));
 
-        # remove one-letter 'words' that consist only of punctuation
+        // remove one-letter 'words' that consist only of punctuation
         $wc = trim(
             preg_replace(
                 "#\s*[(\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@)]\s*#",
@@ -1422,21 +1441,21 @@ class Wiki
             )
         );
 
-        # remove superfluous whitespace
+        // remove superfluous whitespace
         $wc = preg_replace("/\s\s+/", " ", $wc);
 
-        # split string into an array of words
+        // split string into an array of words
         $wc = explode(" ", $wc);
 
-        # remove empty elements
+        // remove empty elements
         $wc = array_filter($wc);
 
-        # return the number of words
+        // return the number of words
         return count($wc);
     }
 
     /**
-     * This function checks if wiki title exist
+     * This function checks if wiki title exist.
      */
     public function wiki_exist($title)
     {
@@ -1461,7 +1480,8 @@ class Wiki
     }
 
     /**
-     * Checks if this navigation tab has to be set to active
+     * Checks if this navigation tab has to be set to active.
+     *
      * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
      *
      * @return string html code
@@ -1474,7 +1494,8 @@ class Wiki
     }
 
     /**
-     * Lock add pages
+     * Lock add pages.
+     *
      * @author Juan Carlos Raña <herodoto@telefonica.net>
      * return current database status of protect page and change it if get action
      */
@@ -1524,7 +1545,8 @@ class Wiki
     }
 
     /**
-     * Protect page
+     * Protect page.
+     *
      * @author Juan Carlos Raña <herodoto@telefonica.net>
      * return current database status of protect page and change it if get action
      */
@@ -1577,7 +1599,8 @@ class Wiki
     }
 
     /**
-     * Visibility page
+     * Visibility page.
+     *
      * @author Juan Carlos Raña <herodoto@telefonica.net>
      * return current database status of visibility and change it if get action
      */
@@ -1607,7 +1630,6 @@ class Wiki
                 $status_visibility == 0
             ) {
                 $status_visibility = 1;
-
             }
             if (isset($_GET['actionpage']) &&
                 $_GET['actionpage'] == 'invisible' &&
@@ -1647,10 +1669,12 @@ class Wiki
     }
 
     /**
-     * Visibility discussion
+     * Visibility discussion.
+     *
      * @author Juan Carlos Raña <herodoto@telefonica.net>
+     *
      * @return int current database status of discuss visibility
-     * and change it if get action page
+     *             and change it if get action page
      */
     public function check_visibility_discuss()
     {
@@ -1712,8 +1736,10 @@ class Wiki
     }
 
     /**
-     * Lock add discussion
+     * Lock add discussion.
+     *
      * @author Juan Carlos Raña <herodoto@telefonica.net>
+     *
      * @return int current database status of lock dicuss and change if get action
      */
     public function check_addlock_discuss()
@@ -1776,9 +1802,11 @@ class Wiki
     }
 
     /**
-     * Lock rating discussion
+     * Lock rating discussion.
+     *
      * @author Juan Carlos Raña <herodoto@telefonica.net>
-     * @return  int  current database status of rating discuss and change it if get action
+     *
+     * @return int current database status of rating discuss and change it if get action
      */
     public function check_ratinglock_discuss()
     {
@@ -1842,8 +1870,10 @@ class Wiki
     }
 
     /**
-     * Notify page changes
+     * Notify page changes.
+     *
      * @author Juan Carlos Raña <herodoto@telefonica.net>
+     *
      * @return int the current notification status
      */
     public function check_notify_page($reflink)
@@ -1920,9 +1950,12 @@ class Wiki
     }
 
     /**
-     * Notify discussion changes
+     * Notify discussion changes.
+     *
      * @author Juan Carlos Raña <herodoto@telefonica.net>
+     *
      * @param string $reflink
+     *
      * @return int current database status of rating discuss and change it if get action
      */
     public function check_notify_discuss($reflink)
@@ -1988,7 +2021,8 @@ class Wiki
     }
 
     /**
-     * Notify all changes
+     * Notify all changes.
+     *
      * @author Juan Carlos Raña <herodoto@telefonica.net>
      */
     public function check_notify_all()
@@ -2050,7 +2084,7 @@ class Wiki
     }
 
     /**
-     * Sends pending e-mails
+     * Sends pending e-mails.
      */
     public function check_emailcue(
         $id_or_ref,
@@ -2278,9 +2312,12 @@ class Wiki
     }
 
     /**
-     * Function export last wiki page version to document area
+     * Function export last wiki page version to document area.
+     *
      * @param int $doc_id wiki page id
+     *
      * @return mixed
+     *
      * @author Juan Carlos Raña <herodoto@telefonica.net>
      */
     public function export2doc($doc_id)
@@ -2346,22 +2383,22 @@ class Wiki
             ).'inc/lib/javascript/asciimath/ASCIIMathML.js" type="text/javascript"></script>'."\n" : '';
 
         $template = str_replace(
-            array(
+            [
                 '{LANGUAGE}',
                 '{ENCODING}',
                 '{TEXT_DIRECTION}',
                 '{TITLE}',
                 '{CSS}',
-                '{ASCIIMATHML_SCRIPT}'
-            ),
-            array(
+                '{ASCIIMATHML_SCRIPT}',
+            ],
+            [
                 api_get_language_isocode(),
                 api_get_system_encoding(),
                 api_get_text_direction(),
                 $wikiTitle,
                 $css,
-                $asciimathmal_script
-            ),
+                $asciimathmal_script,
+            ],
             $template
         );
 
@@ -2431,7 +2468,7 @@ class Wiki
     }
 
     /**
-     * Exports the wiki page to PDF
+     * Exports the wiki page to PDF.
      */
     public function export_to_pdf($id, $course_code)
     {
@@ -2503,8 +2540,7 @@ class Wiki
     }
 
     /**
-     * Function prevent double post (reload or F5)
-     *
+     * Function prevent double post (reload or F5).
      */
     public function double_post($wpost_id)
     {
@@ -2525,7 +2561,8 @@ class Wiki
     }
 
     /**
-     * Function wizard individual assignment
+     * Function wizard individual assignment.
+     *
      * @author Juan Carlos Raña <herodoto@telefonica.net>
      */
     public function auto_add_page_users($values)
@@ -2562,7 +2599,7 @@ class Wiki
             $a_users_to_add = array_unique($a_users_to_add);
         }
 
-        $all_students_pages = array();
+        $all_students_pages = [];
         // Data about teacher
         $userId = api_get_user_id();
         $userinfo = api_get_user_info($userId);
@@ -2588,7 +2625,7 @@ class Wiki
                     $userinfo['firstname'],
                     $userinfo['lastname']
                 ),
-                array('title' => $username)
+                ['title' => $username]
             ).'</td></tr>
         </table></div>';
 
@@ -2657,7 +2694,7 @@ class Wiki
                             strtoupper(
                                 $o_user_to_add['lastname']
                             ).', '.$o_user_to_add['firstname'],
-                            array('title' => $username)
+                            ['title' => $username]
                         ).
                         ' [['.Security::remove_XSS(
                             $_POST['title']
@@ -2696,7 +2733,8 @@ class Wiki
     }
 
     /**
-     * Displays the results of a wiki search
+     * Displays the results of a wiki search.
+     *
      * @param   string  Search term
      * @param   int     Whether to search the contents (1) or just the titles (0)
      * @param int
@@ -2730,7 +2768,7 @@ class Wiki
                             $search_term
                         )."%' AND
                                 ".$groupfilter.$condition_session."";
-                    //search all pages and all versions
+                //search all pages and all versions
                 } else {
                     $sql = "SELECT * FROM ".$tbl_wiki."
                             WHERE
@@ -2759,7 +2797,7 @@ class Wiki
                                         s2.c_id = $course_id AND
                                         s1.reflink = s2.reflink AND
                                         ".$groupfilter.$condition_session.")";
-                    // warning don't use group by reflink because don't return the last version
+                // warning don't use group by reflink because don't return the last version
                 } else {
                     $sql = "SELECT * FROM ".$tbl_wiki." s1
                             WHERE
@@ -2791,7 +2829,7 @@ class Wiki
                             $search_term
                         )."%' AND
                                 ".$groupfilter.$condition_session."";
-                    //search all pages and all versions
+                //search all pages and all versions
                 } else {
                     $sql = "SELECT * FROM ".$tbl_wiki."
                             WHERE
@@ -2821,7 +2859,7 @@ class Wiki
                                     WHERE s2.c_id = $course_id AND
                                     s1.reflink = s2.reflink AND
                                     ".$groupfilter.$condition_session.")";
-                    // warning don't use group by reflink because don't return the last version
+                // warning don't use group by reflink because don't return the last version
                 } else {
                     $sql = "SELECT * FROM ".$tbl_wiki." s1
                             WHERE
@@ -2843,7 +2881,7 @@ class Wiki
         $result = Database::query($sql);
 
         //show table
-        $rows = array();
+        $rows = [];
         if (Database::num_rows($result) > 0) {
             while ($obj = Database::fetch_object($result)) {
                 //get author
@@ -2877,7 +2915,7 @@ class Wiki
                         'px_transparent.gif'
                     );
                 }
-                $row = array();
+                $row = [];
                 $row[] = $ShowAssignment;
 
                 if ($all_vers == '1') {
@@ -2984,7 +3022,7 @@ class Wiki
                 'ASC'
             );
             $table->set_additional_parameters(
-                array(
+                [
                     'cidReq' => $_GET['cidReq'],
                     'action' => $_GET['action'],
                     'group_id' => intval($_GET['group_id']),
@@ -2992,13 +3030,13 @@ class Wiki
                     'search_term' => $search_term,
                     'search_content' => $search_content,
                     'all_vers' => $all_vers,
-                )
+                ]
             );
             $table->set_header(
                 0,
                 get_lang('Type'),
                 true,
-                array('style' => 'width:30px;')
+                ['style' => 'width:30px;']
             );
             $table->set_header(1, get_lang('Title'), true);
             if ($all_vers == '1') {
@@ -3020,7 +3058,7 @@ class Wiki
                     4,
                     get_lang('Actions'),
                     false,
-                    array('style' => 'width:130px;')
+                    ['style' => 'width:130px;']
                 );
             }
             $table->display();
@@ -3030,22 +3068,24 @@ class Wiki
     }
 
     /**
-     * Get wiki information
+     * Get wiki information.
+     *
      * @param   int|bool wiki id
-     * @return  array   wiki data
+     *
+     * @return array wiki data
      */
     public function getWikiDataFromDb($id)
     {
         $tbl_wiki = $this->tbl_wiki;
         $course_id = api_get_course_int_id();
         if ($id === false) {
-            return array();
+            return [];
         }
         $id = intval($id);
         $sql = 'SELECT * FROM '.$tbl_wiki.'
                 WHERE c_id = '.$course_id.' AND id = '.$id.' ';
         $result = Database::query($sql);
-        $data = array();
+        $data = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $data = $row;
         }
@@ -3055,6 +3095,7 @@ class Wiki
 
     /**
      * @param string $refLink
+     *
      * @return array
      */
     public function getLastWikiData($refLink)
@@ -3077,10 +3118,12 @@ class Wiki
     }
 
     /**
-     * Get wiki information
+     * Get wiki information.
+     *
      * @param   string     wiki id
      * @param int $courseId
-     * @return  array   wiki data
+     *
+     * @return array wiki data
      */
     public function getPageByTitle($title, $courseId = null)
     {
@@ -3092,14 +3135,14 @@ class Wiki
         }
 
         if (empty($title) || empty($courseId)) {
-            return array();
+            return [];
         }
 
         $title = Database::escape_string($title);
         $sql = "SELECT * FROM $tbl_wiki
                 WHERE c_id = $courseId AND reflink = '$title'";
         $result = Database::query($sql);
-        $data = array();
+        $data = [];
         if (Database::num_rows($result)) {
             $data = Database::fetch_array($result, 'ASSOC');
         }
@@ -3109,9 +3152,10 @@ class Wiki
 
     /**
      * @param string $title
-     * @param int $courseId
+     * @param int    $courseId
      * @param string
      * @param string
+     *
      * @return bool
      */
     public function deletePage(
@@ -3190,8 +3234,9 @@ class Wiki
     }
 
     /**
-     * Release of blocked pages to prevent concurrent editions
-     * @param int $userId
+     * Release of blocked pages to prevent concurrent editions.
+     *
+     * @param int    $userId
      * @param string $action
      */
     public function blockConcurrentEditions($userId, $action = null)
@@ -3222,7 +3267,7 @@ class Wiki
     }
 
     /**
-     * Showing wiki stats
+     * Showing wiki stats.
      */
     public function getStats()
     {
@@ -3529,7 +3574,7 @@ class Wiki
         $total_lock_disc = 0;
         $sql = 'SELECT * FROM '.$tbl_wiki.'
                 WHERE c_id = '.$course_id.' AND addlock_disc=0 AND '.$groupfilter.$condition_session.'
-                GROUP BY reflink';//group by because mark lock in all vers, then always is ok
+                GROUP BY reflink'; //group by because mark lock in all vers, then always is ok
         $allpages = Database::query($sql);
         while ($row = Database::fetch_array($allpages)) {
             $total_lock_disc = $total_lock_disc + 1;
@@ -3561,7 +3606,7 @@ class Wiki
                 WHERE c_id = '.$course_id.' AND
                 ratinglock_disc = 0 AND
                 '.$groupfilter.$condition_session.'
-                GROUP BY reflink';//group by because mark lock in all vers, then always is ok
+                GROUP BY reflink'; //group by because mark lock in all vers, then always is ok
         $allpages = Database::query($sql);
         while ($row = Database::fetch_array($allpages)) {
             $total_only_teachers_rating = $total_only_teachers_rating + 1;
@@ -3621,7 +3666,7 @@ class Wiki
         //Current Wiki status add new pages
         $sql = 'SELECT * FROM '.$tbl_wiki.'
                 WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.'
-                GROUP BY addlock';//group by because mark 0 in all vers, then always is ok
+                GROUP BY addlock'; //group by because mark 0 in all vers, then always is ok
         $allpages = Database::query($sql);
         $wiki_add_lock = null;
         while ($row = Database::fetch_array($allpages)) {
@@ -3927,7 +3972,7 @@ class Wiki
         if (Database::num_rows($allpages) > 0) {
             while ($obj = Database::fetch_object($allpages)) {
                 $userinfo = api_get_user_info($obj->user_id);
-                $row = array();
+                $row = [];
                 if ($obj->user_id != 0 && $userinfo !== false) {
                     $row[] = UserManager::getUserProfileLink($userinfo).'
                             <a href="'.api_get_self(
@@ -3963,19 +4008,19 @@ class Wiki
                 'DESC'
             );
             $table->set_additional_parameters(
-                array(
+                [
                     'cidReq' => Security::remove_XSS($_GET['cidReq']),
                     'action' => Security::remove_XSS($action),
                     'session_id' => Security::remove_XSS($_GET['session_id']),
-                    'group_id' => Security::remove_XSS($_GET['group_id'])
-                )
+                    'group_id' => Security::remove_XSS($_GET['group_id']),
+                ]
             );
             $table->set_header(0, get_lang('Author'), true);
             $table->set_header(
                 1,
                 get_lang('Contributions'),
                 true,
-                array('style' => 'width:30px;')
+                ['style' => 'width:30px;']
             );
             $table->display();
         }
@@ -4044,7 +4089,7 @@ class Wiki
                 'userc_id' => $message_author,
                 'comment' => $_POST['comment'],
                 'p_score' => $_POST['rating'],
-                'dtime' => $dtime
+                'dtime' => $dtime,
             ];
             $discussId = Database::insert($tbl_wiki_discuss, $params);
             if ($discussId) {
@@ -4082,7 +4127,6 @@ class Wiki
 
         $countWPost = null;
         $avg_WPost_score = null;
-
 
         // Show title and form to discuss if page exist
         if ($id != '') {
@@ -4223,8 +4267,7 @@ class Wiki
                         false,
                         true
                     ) || api_is_platform_admin()) {
-                    //show comments but students can't add theirs
-                    ?>
+                    //show comments but students can't add theirs ?>
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <form name="form1" method="post" action=""
@@ -4236,7 +4279,7 @@ class Wiki
                                     <div class="col-sm-10">
                                         <?php echo '<input type="hidden" name="wpost_id" value="'.md5(
                                                 uniqid(rand(), true)
-                                            ).'">'; //prevent double post ?>
+                                            ).'">'; //prevent double post?>
                                         <textarea class="form-control"
                                                   name="comment" cols="80"
                                                   rows="5"
@@ -4276,8 +4319,7 @@ class Wiki
                                         <?php
                                     } else {
                                         echo '<input type=hidden name="rating" value="-">'; // must pass a default value to avoid rate automatically
-                                    }
-                                    ?>
+                                    } ?>
 
                                 </div>
                                 <div class="form-group">
@@ -4323,7 +4365,7 @@ class Wiki
 
                 echo ' - '.get_lang(
                         'NumCommentsScore'
-                    ).': '.$countWPost_score; //
+                    ).': '.$countWPost_score;
 
                 if ($countWPost_score != 0) {
                     $avg_WPost_score = round(
@@ -4465,7 +4507,7 @@ class Wiki
     }
 
     /**
-     * Show all pages
+     * Show all pages.
      */
     public function allPages($action)
     {
@@ -4500,8 +4542,7 @@ class Wiki
                         s1.reflink = s2.reflink AND 
                         '.$groupfilter.' AND 
                         session_id='.$session_id.')';
-            // warning don't use group by reflink because does not return the last version
-
+        // warning don't use group by reflink because does not return the last version
         } else {
             $sql = 'SELECT  *  FROM '.$tbl_wiki.' s1
 				    WHERE visibility=1 AND s1.c_id = '.$course_id.' AND id=(
@@ -4559,7 +4600,7 @@ class Wiki
                     $icon_task = Display::return_icon('px_transparent.gif');
                 }
 
-                $row = array();
+                $row = [];
                 $row[] = $ShowAssignment.$icon_task;
                 $row[] = '<a href="'.api_get_self(
                     ).'?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(
@@ -4655,17 +4696,17 @@ class Wiki
                 'ASC'
             );
             $table->set_additional_parameters(
-                array(
+                [
                     'cidReq' => Security::remove_XSS($_GET['cidReq']),
                     'action' => Security::remove_XSS($action),
-                    'group_id' => Security::remove_XSS($_GET['group_id'])
-                )
+                    'group_id' => Security::remove_XSS($_GET['group_id']),
+                ]
             );
             $table->set_header(
                 0,
                 get_lang('Type'),
                 true,
-                array('style' => 'width:30px;')
+                ['style' => 'width:30px;']
             );
             $table->set_header(1, get_lang('Title'), true);
             $table->set_header(
@@ -4683,7 +4724,7 @@ class Wiki
                     4,
                     get_lang('Actions'),
                     true,
-                    array('style' => 'width:130px;')
+                    ['style' => 'width:130px;']
                 );
             }
             $table->display();
@@ -4691,10 +4732,10 @@ class Wiki
     }
 
     /**
-     * Get recent changes
+     * Get recent changes.
+     *
      * @param string $page
      * @param string $action
-     *
      */
     public function recentChanges($page, $action)
     {
@@ -4753,7 +4794,7 @@ class Wiki
 
         //show table
         if (Database::num_rows($allpages) > 0) {
-            $rows = array();
+            $rows = [];
             while ($obj = Database::fetch_object($allpages)) {
                 //get author
                 $userinfo = api_get_user_info($obj->user_id);
@@ -4791,7 +4832,7 @@ class Wiki
                     $icon_task = Display::return_icon('px_transparent.gif');
                 }
 
-                $row = array();
+                $row = [];
                 $row[] = api_get_local_time(
                     $obj->dtime
                 );
@@ -4825,31 +4866,31 @@ class Wiki
                 'DESC'
             );
             $table->set_additional_parameters(
-                array(
+                [
                     'cidReq' => api_get_course_id(),
                     'action' => Security::remove_XSS($action),
                     'session_id' => api_get_session_id(),
-                    'group_id' => api_get_group_id()
-                )
+                    'group_id' => api_get_group_id(),
+                ]
             );
             $table->set_header(
                 0,
                 get_lang('Date'),
                 true,
-                array('style' => 'width:200px;')
+                ['style' => 'width:200px;']
             );
             $table->set_header(
                 1,
                 get_lang('Type'),
                 true,
-                array('style' => 'width:30px;')
+                ['style' => 'width:30px;']
             );
             $table->set_header(2, get_lang('Title'), true);
             $table->set_header(
                 3,
                 get_lang('Actions'),
                 true,
-                array('style' => 'width:80px;')
+                ['style' => 'width:80px;']
             );
             $table->set_header(4, get_lang('Author'), true);
             $table->display();
@@ -4857,7 +4898,7 @@ class Wiki
     }
 
     /**
-     * What links here. Show pages that have linked this page
+     * What links here. Show pages that have linked this page.
      *
      * @param string $page
      */
@@ -4940,7 +4981,7 @@ class Wiki
                     )."%' AND id=(
                         SELECT MAX(s2.id) FROM ".$tbl_wiki." s2
                         WHERE s2.c_id = $course_id AND s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";
-                //add blank space after like '%" " %' to identify each word
+            //add blank space after like '%" " %' to identify each word
             } else {
                 $sql = "SELECT * FROM ".$tbl_wiki." s1
                         WHERE s1.c_id = $course_id AND visibility=1 AND linksto LIKE '%".Database::escape_string(
@@ -4955,7 +4996,7 @@ class Wiki
 
             //show table
             if (Database::num_rows($allpages) > 0) {
-                $rows = array();
+                $rows = [];
                 while ($obj = Database::fetch_object($allpages)) {
                     //get author
                     $userinfo = api_get_user_info($obj->user_id);
@@ -4989,7 +5030,7 @@ class Wiki
                         );
                     }
 
-                    $row = array();
+                    $row = [];
                     $row[] = $ShowAssignment;
                     $row[] = '<a href="'.api_get_self(
                         ).'?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(
@@ -5017,17 +5058,17 @@ class Wiki
                     'ASC'
                 );
                 $table->set_additional_parameters(
-                    array(
+                    [
                         'cidReq' => Security::remove_XSS($_GET['cidReq']),
                         'action' => Security::remove_XSS($action),
                         'group_id' => intval($_GET['group_id']),
-                    )
+                    ]
                 );
                 $table->set_header(
                     0,
                     get_lang('Type'),
                     true,
-                    array('style' => 'width:30px;')
+                    ['style' => 'width:30px;']
                 );
                 $table->set_header(1, get_lang('Title'), true);
                 $table->set_header(2, get_lang('Author'), true);
@@ -5055,7 +5096,6 @@ class Wiki
                 $_GET['all_vers']
             );
         } else {
-
             // initiate the object
             $form = new FormValidator(
                 'wiki_search',
@@ -5073,7 +5113,7 @@ class Wiki
                 'search_term',
                 get_lang('SearchTerm'),
                 true,
-                array('autofocus' => 'autofocus')
+                ['autofocus' => 'autofocus']
             );
             $form->addElement(
                 'checkbox',
@@ -5112,7 +5152,7 @@ class Wiki
     }
 
     /**
-     * @param int $userId
+     * @param int    $userId
      * @param string $action
      */
     public function getUserContributions($userId, $action)
@@ -5152,7 +5192,7 @@ class Wiki
 
         //show table
         if (Database::num_rows($allpages) > 0) {
-            $rows = array();
+            $rows = [];
             while ($obj = Database::fetch_object($allpages)) {
                 //get type assignment icon
                 $ShowAssignment = '';
@@ -5176,7 +5216,7 @@ class Wiki
                     );
                 }
 
-                $row = array();
+                $row = [];
                 $row[] = api_get_local_time($obj->dtime);
                 $row[] = $ShowAssignment;
                 $row[] = '<a href="'.api_get_self(
@@ -5202,55 +5242,55 @@ class Wiki
                 'ASC'
             );
             $table->set_additional_parameters(
-                array(
+                [
                     'cidReq' => Security::remove_XSS($_GET['cidReq']),
                     'action' => Security::remove_XSS($action),
                     'user_id' => intval($userId),
                     'session_id' => intval($_GET['session_id']),
                     'group_id' => intval($_GET['group_id']),
-                )
+                ]
             );
             $table->set_header(
                 0,
                 get_lang('Date'),
                 true,
-                array('style' => 'width:200px;')
+                ['style' => 'width:200px;']
             );
             $table->set_header(
                 1,
                 get_lang('Type'),
                 true,
-                array('style' => 'width:30px;')
+                ['style' => 'width:30px;']
             );
             $table->set_header(
                 2,
                 get_lang('Title'),
                 true,
-                array('style' => 'width:200px;')
+                ['style' => 'width:200px;']
             );
             $table->set_header(
                 3,
                 get_lang('Version'),
                 true,
-                array('style' => 'width:30px;')
+                ['style' => 'width:30px;']
             );
             $table->set_header(
                 4,
                 get_lang('Comment'),
                 true,
-                array('style' => 'width:200px;')
+                ['style' => 'width:200px;']
             );
             $table->set_header(
                 5,
                 get_lang('Progress'),
                 true,
-                array('style' => 'width:30px;')
+                ['style' => 'width:30px;']
             );
             $table->set_header(
                 6,
                 get_lang('Rating'),
                 true,
-                array('style' => 'width:30px;')
+                ['style' => 'width:30px;']
             );
             $table->display();
         }
@@ -5274,7 +5314,7 @@ class Wiki
         ) { //only by professors if page is hidden
             $sql = 'SELECT *, MAX(version) AS MAX FROM '.$tbl_wiki.'
                     WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.'
-                    GROUP BY reflink';//TODO:check MAX and group by return last version
+                    GROUP BY reflink'; //TODO:check MAX and group by return last version
         } else {
             $sql = 'SELECT *, MAX(version) AS MAX FROM '.$tbl_wiki.'
                     WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' AND visibility=1
@@ -5285,7 +5325,7 @@ class Wiki
 
         //show table
         if (Database::num_rows($allpages) > 0) {
-            $rows = array();
+            $rows = [];
             while ($obj = Database::fetch_object($allpages)) {
                 //get type assignment icon
                 $ShowAssignment = '';
@@ -5309,7 +5349,7 @@ class Wiki
                     );
                 }
 
-                $row = array();
+                $row = [];
                 $row[] = $ShowAssignment;
                 $row[] = '<a href="'.api_get_self(
                     ).'?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(
@@ -5332,18 +5372,18 @@ class Wiki
                 'DESC'
             );
             $table->set_additional_parameters(
-                array(
+                [
                     'cidReq' => Security::remove_XSS($_GET['cidReq']),
                     'action' => Security::remove_XSS($action),
                     'session_id' => intval($_GET['session_id']),
                     'group_id' => intval($_GET['group_id']),
-                )
+                ]
             );
             $table->set_header(
                 0,
                 get_lang('Type'),
                 true,
-                array('style' => 'width:30px;')
+                ['style' => 'width:30px;']
             );
             $table->set_header(1, get_lang('Title'), true);
             $table->set_header(2, get_lang('Changes'), true);
@@ -5352,7 +5392,8 @@ class Wiki
     }
 
     /**
-     * Restore page
+     * Restore page.
+     *
      * @return bool
      */
     public function restorePage()
@@ -5384,7 +5425,6 @@ class Wiki
                 )
             );
         } else {
-
             // check if is a wiki group
             if ($current_row['group_id'] != 0) {
                 $groupInfo = GroupManager::get_group_properties(
@@ -5526,8 +5566,10 @@ class Wiki
     }
 
     /**
-     * Check last version
+     * Check last version.
+     *
      * @param int $view
+     *
      * @return bool
      */
     public function checkLastVersion($view)
@@ -5583,7 +5625,7 @@ class Wiki
     }
 
     /**
-     *  Get most linked pages
+     *  Get most linked pages.
      */
     public function getMostLinked()
     {
@@ -5594,8 +5636,8 @@ class Wiki
         $_course = $this->courseInfo;
 
         echo '<div class="actions">'.get_lang('MostLinkedPages').'</div>';
-        $pages = array();
-        $linked = array();
+        $pages = [];
+        $linked = [];
 
         // Get name pages
         $sql = 'SELECT * FROM '.$tbl_wiki.'
@@ -5649,9 +5691,9 @@ class Wiki
         $linked = array_unique($linked);
         //make a unique list. TODO:delete this line and count how many for each page
         //show table
-        $rows = array();
+        $rows = [];
         foreach ($linked as $linked_show) {
-            $row = array();
+            $row = [];
             $row[] = '<a href="'.api_get_self(
                 ).'?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(
                     urlencode(str_replace('_', ' ', $linked_show))
@@ -5672,19 +5714,19 @@ class Wiki
             'DESC'
         );
         $table->set_additional_parameters(
-            array(
+            [
                 'cidReq' => Security::remove_XSS($_GET['cidReq']),
                 'action' => Security::remove_XSS($this->action),
                 'session_id' => intval($_GET['session_id']),
                 'group_id' => intval($_GET['group_id']),
-            )
+            ]
         );
         $table->set_header(0, get_lang('Title'), true);
         $table->display();
     }
 
     /**
-     * Get orphan pages
+     * Get orphan pages.
      */
     public function getOrphaned()
     {
@@ -5696,8 +5738,8 @@ class Wiki
 
         echo '<div class="actions">'.get_lang('OrphanedPages').'</div>';
 
-        $pages = array();
-        $orphaned = array();
+        $pages = [];
+        $orphaned = [];
 
         //get name pages
         $sql = 'SELECT * FROM '.$tbl_wiki.'
@@ -5719,7 +5761,7 @@ class Wiki
                     '.$groupfilter.$condition_session.'
                 )';
         $allpages = Database::query($sql);
-        $array_refs_linked = array();
+        $array_refs_linked = [];
         while ($row = Database::fetch_array($allpages)) {
             $row['linksto'] = str_replace(
                 $row["reflink"],
@@ -5747,7 +5789,7 @@ class Wiki
                 $orphaned[] = $v;
             }
         }
-        $rows = array();
+        $rows = [];
         foreach ($orphaned as $orphaned_show) {
             // get visibility status and title
             $sql = 'SELECT *
@@ -5788,7 +5830,7 @@ class Wiki
             }
 
             //show table
-            $row = array();
+            $row = [];
             $row[] = $ShowAssignment;
             $row[] = '<a href="'.api_get_self(
                 ).'?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(
@@ -5810,25 +5852,25 @@ class Wiki
             'DESC'
         );
         $table->set_additional_parameters(
-            array(
+            [
                 'cidReq' => Security::remove_XSS($_GET['cidReq']),
                 'action' => Security::remove_XSS($this->action),
                 'session_id' => intval($_GET['session_id']),
                 'group_id' => intval($_GET['group_id']),
-            )
+            ]
         );
         $table->set_header(
             0,
             get_lang('Type'),
             true,
-            array('style' => 'width:30px;')
+            ['style' => 'width:30px;']
         );
         $table->set_header(1, get_lang('Title'), true);
         $table->display();
     }
 
     /**
-     * Get wanted pages
+     * Get wanted pages.
      */
     public function getWantedPages()
     {
@@ -5838,8 +5880,8 @@ class Wiki
         $condition_session = $this->condition_session;
 
         echo '<div class="actions">'.get_lang('WantedPages').'</div>';
-        $pages = array();
-        $wanted = array();
+        $pages = [];
+        $wanted = [];
         //get name pages
         $sql = 'SELECT * FROM '.$tbl_wiki.'
                 WHERE  c_id = '.$course_id.' AND '.$groupfilter.$condition_session.'
@@ -5882,9 +5924,9 @@ class Wiki
         $wanted = array_unique($wanted); //make a unique list
 
         //show table
-        $rows = array();
+        $rows = [];
         foreach ($wanted as $wanted_show) {
-            $row = array();
+            $row = [];
             $wanted_show = Security::remove_XSS($wanted_show);
             $row[] = '<a href="'.api_get_path(
                     WEB_PATH
@@ -5914,19 +5956,19 @@ class Wiki
             'DESC'
         );
         $table->set_additional_parameters(
-            array(
+            [
                 'cidReq' => Security::remove_XSS($_GET['cidReq']),
                 'action' => Security::remove_XSS($this->action),
                 'session_id' => intval($_GET['session_id']),
                 'group_id' => intval($_GET['group_id']),
-            )
+            ]
         );
         $table->set_header(0, get_lang('Title'), true);
         $table->display();
     }
 
     /**
-     * Most visited
+     * Most visited.
      */
     public function getMostVisited()
     {
@@ -5956,7 +5998,7 @@ class Wiki
 
         //show table
         if (Database::num_rows($allpages) > 0) {
-            $rows = array();
+            $rows = [];
             while ($obj = Database::fetch_object($allpages)) {
                 //get type assignment icon
                 $ShowAssignment = '';
@@ -5980,7 +6022,7 @@ class Wiki
                     );
                 }
 
-                $row = array();
+                $row = [];
                 $row[] = $ShowAssignment;
                 $row[] = '<a href="'.api_get_self(
                     ).'?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(
@@ -6003,18 +6045,18 @@ class Wiki
                 'DESC'
             );
             $table->set_additional_parameters(
-                array(
+                [
                     'cidReq' => Security::remove_XSS($_GET['cidReq']),
                     'action' => Security::remove_XSS($this->action),
                     'session_id' => intval($_GET['session_id']),
                     'group_id' => intval($_GET['group_id']),
-                )
+                ]
             );
             $table->set_header(
                 0,
                 get_lang('Type'),
                 true,
-                array('style' => 'width:30px;')
+                ['style' => 'width:30px;']
             );
             $table->set_header(1, get_lang('Title'), true);
             $table->set_header(2, get_lang('Visits'), true);
@@ -6023,7 +6065,8 @@ class Wiki
     }
 
     /**
-     * Get actions bar
+     * Get actions bar.
+     *
      * @return string
      */
     public function showActionBar()
@@ -6112,7 +6155,7 @@ class Wiki
     }
 
     /**
-     * Showing warning
+     * Showing warning.
      */
     public function deletePageWarning()
     {
@@ -6189,7 +6232,7 @@ class Wiki
     }
 
     /**
-     * Edit page
+     * Edit page.
      */
     public function editPage()
     {
@@ -6231,7 +6274,6 @@ class Wiki
 
             return;
         } elseif ($row['content'] == '' && $row['title'] == '' && $page == 'index') {
-
             // Table structure for better export to pdf
             $default_table_for_content_Start = '<table align="center" border="0"><tr><td align="center">';
             $default_table_for_content_End = '</td></tr></table>';
@@ -6608,7 +6650,7 @@ class Wiki
     }
 
     /**
-     * Get history
+     * Get history.
      */
     public function getHistory()
     {
@@ -6788,7 +6830,7 @@ class Wiki
                     ).' '.get_lang('WordsDiff').'</button>';
                 echo '</ul></form>';
             } else { // We show the differences between two versions
-                $version_old = array();
+                $version_old = [];
                 if (isset($_POST['old'])) {
                     $sql_old = "SELECT * FROM $tbl_wiki
                                 WHERE c_id = $course_id AND id='".Database::escape_string(
@@ -6848,7 +6890,6 @@ class Wiki
                         ).'</span></font></div>';
                 }
 
-
                 if (isset($_POST['HistoryDifferences'])) {
                     echo '<table>'.diff(
                             $oldContent,
@@ -6880,12 +6921,12 @@ class Wiki
                 }
 
                 if (isset($_POST['HistoryDifferences2'])) {
-                    $lines1 = array(strip_tags($oldContent)); //without <> tags
-                    $lines2 = array(
+                    $lines1 = [strip_tags($oldContent)]; //without <> tags
+                    $lines2 = [
                         strip_tags(
                             $version_new['content']
-                        )
-                    ); //without <> tags
+                        ),
+                    ]; //without <> tags
                     $diff = new Text_Diff($lines1, $lines2);
                     $renderer = new Text_Diff_Renderer_inline();
                     echo '<style>del{background:#fcc}ins{background:#cfc}</style>'.$renderer->render(
@@ -6912,7 +6953,7 @@ class Wiki
     }
 
     /**
-     * Get stat tables
+     * Get stat tables.
      */
     public function getStatsTable()
     {
@@ -6970,7 +7011,8 @@ class Wiki
     }
 
     /**
-     * Kind of controller
+     * Kind of controller.
+     *
      * @param string $action
      */
     public function handleAction($action)
@@ -7194,7 +7236,7 @@ class Wiki
     }
 
     /**
-     * Redirect to home
+     * Redirect to home.
      */
     public function redirectHome()
     {
@@ -7204,9 +7246,11 @@ class Wiki
     }
 
     /**
-     * Export wiki content in a ODF
+     * Export wiki content in a ODF.
+     *
      * @param int $id
      * @param string int
+     *
      * @return bool
      */
     public function exportTo($id, $format = 'doc')

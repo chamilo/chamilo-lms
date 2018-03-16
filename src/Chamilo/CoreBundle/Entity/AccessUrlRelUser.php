@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * AccessUrlRelUser
+ * AccessUrlRelUser.
  *
  * @ORM\Table(
  *     name="access_url_rel_user",
@@ -21,22 +21,6 @@ use Doctrine\ORM\Mapping as ORM;
 class AccessUrlRelUser
 {
     /**
-     * @var integer
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\Column(name="access_url_id", type="integer")
-     */
-    private $accessUrlId;
-
-    /**
-     * @var integer
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\Column(name="user_id", type="integer")
-     */
-    private $userId;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
@@ -47,11 +31,27 @@ class AccessUrlRelUser
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
     protected $portal;
+    /**
+     * @var int
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\Column(name="access_url_id", type="integer")
+     */
+    private $accessUrlId;
 
     /**
-     * Set accessUrlId
+     * @var int
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\Column(name="user_id", type="integer")
+     */
+    private $userId;
+
+    /**
+     * Set accessUrlId.
      *
-     * @param integer $accessUrlId
+     * @param int $accessUrlId
+     *
      * @return AccessUrlRelUser
      */
     public function setAccessUrlId($accessUrlId)
@@ -62,9 +62,9 @@ class AccessUrlRelUser
     }
 
     /**
-     * Get accessUrlId
+     * Get accessUrlId.
      *
-     * @return integer
+     * @return int
      */
     public function getAccessUrlId()
     {
@@ -72,9 +72,10 @@ class AccessUrlRelUser
     }
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return AccessUrlRelUser
      */
     public function setUserId($userId)
@@ -85,9 +86,9 @@ class AccessUrlRelUser
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {

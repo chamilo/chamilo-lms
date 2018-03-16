@@ -3,9 +3,9 @@
 
 /**
  * @package chamilo.social
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -28,20 +28,20 @@ if (empty($group_id)) {
     }
     //only admin or moderator can do that
     $user_role = $usergroup->get_user_group_role(api_get_user_id(), $group_id);
-    if (!in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {
+    if (!in_array($user_role, [GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR])) {
         api_not_allowed();
     }
 }
 
-$interbreadcrumb[] = array('url' => 'groups.php', 'name' => get_lang('Groups'));
-$interbreadcrumb[] = array('url' => 'group_view.php?id='.$group_id, 'name' => $group_info['name']);
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('WaitingList'));
+$interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
+$interbreadcrumb[] = ['url' => 'group_view.php?id='.$group_id, 'name' => $group_info['name']];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('WaitingList')];
 
 // Group information
 $admins = $usergroup->get_users_by_group(
     $group_id,
     true,
-    array(GROUP_USER_PERMISSION_ADMIN),
+    [GROUP_USER_PERMISSION_ADMIN],
     0,
     1000
 );
@@ -80,12 +80,12 @@ if (isset($_GET['action']) && $_GET['action'] == 'set_moderator') {
 $users = $usergroup->get_users_by_group(
     $group_id,
     true,
-    array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER),
+    [GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER],
     0,
     1000
 );
 
-$new_member_list = array();
+$new_member_list = [];
 $social_left_content = SocialManager::show_social_menu('waiting_list', $group_id);
 
 // Display form
@@ -93,7 +93,7 @@ foreach ($users as $user) {
     $userId = $user['user_info']['user_id'];
     switch ($user['relation_type']) {
         case GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER:
-            $user['link']  = '<a href="group_waiting_list.php?id='.$group_id.'&u='.$userId.'&action=accept">'.
+            $user['link'] = '<a href="group_waiting_list.php?id='.$group_id.'&u='.$userId.'&action=accept">'.
                 Display::return_icon('invitation_friend.png', get_lang('AddNormalUser')).'</a>';
             $user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$userId.'&action=set_moderator">'.
                 Display::return_icon('social_moderator_add.png', get_lang('AddModerator')).'</a>';
@@ -120,4 +120,3 @@ $tpl->assign('social_right_content', $social_right_content);
 
 $social_layout = $tpl->get_template('social/group_waiting_list.tpl');
 $tpl->display($social_layout);
-

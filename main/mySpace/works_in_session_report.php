@@ -1,15 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\UserBundle\Entity\User;
-use Chamilo\CoreBundle\Entity\Course;
 
 /**
- * Courses reporting
+ * Courses reporting.
+ *
  * @package chamilo.reporting
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users(true);
@@ -67,7 +67,7 @@ if ($session) {
                         Tracking::get_time_spent_on_the_platform($user->getId(), 'ever')
                     ),
                     'first_connection' => Tracking::get_first_connection_date($user->getId()),
-                    'last_connection' => Tracking::get_last_connection_date($user->getId())
+                    'last_connection' => Tracking::get_last_connection_date($user->getId()),
                 ];
             }
 
@@ -87,7 +87,6 @@ if ($session) {
                 false,
                 false,
                 true
-
             );
             $usersInfo[$user->getId()][$course->getId().'_progress'] = Tracking::get_avg_student_progress(
                 $user->getId(),
@@ -148,7 +147,7 @@ if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'mySpace/index.php',
-    'name' => get_lang('MySpace')
+    'name' => get_lang('MySpace'),
 ];
 
 $actions = null;

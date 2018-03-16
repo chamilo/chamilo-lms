@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CForumCategory
+ * CForumCategory.
  *
  * @ORM\Table(
  *  name="c_forum_category",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CForumCategory
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -29,7 +29,7 @@ class CForumCategory
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
@@ -50,37 +50,38 @@ class CForumCategory
     private $catComment;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="cat_order", type="integer", nullable=false)
      */
     private $catOrder;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
     private $locked;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="cat_id", type="integer")
      */
     private $catId;
 
     /**
-     * Set catTitle
+     * Set catTitle.
      *
      * @param string $catTitle
+     *
      * @return CForumCategory
      */
     public function setCatTitle($catTitle)
@@ -91,7 +92,7 @@ class CForumCategory
     }
 
     /**
-     * Get catTitle
+     * Get catTitle.
      *
      * @return string
      */
@@ -101,9 +102,10 @@ class CForumCategory
     }
 
     /**
-     * Set catComment
+     * Set catComment.
      *
      * @param string $catComment
+     *
      * @return CForumCategory
      */
     public function setCatComment($catComment)
@@ -114,7 +116,7 @@ class CForumCategory
     }
 
     /**
-     * Get catComment
+     * Get catComment.
      *
      * @return string
      */
@@ -124,9 +126,10 @@ class CForumCategory
     }
 
     /**
-     * Set catOrder
+     * Set catOrder.
      *
-     * @param integer $catOrder
+     * @param int $catOrder
+     *
      * @return CForumCategory
      */
     public function setCatOrder($catOrder)
@@ -137,9 +140,9 @@ class CForumCategory
     }
 
     /**
-     * Get catOrder
+     * Get catOrder.
      *
-     * @return integer
+     * @return int
      */
     public function getCatOrder()
     {
@@ -147,9 +150,10 @@ class CForumCategory
     }
 
     /**
-     * Set locked
+     * Set locked.
      *
-     * @param integer $locked
+     * @param int $locked
+     *
      * @return CForumCategory
      */
     public function setLocked($locked)
@@ -160,9 +164,9 @@ class CForumCategory
     }
 
     /**
-     * Get locked
+     * Get locked.
      *
-     * @return integer
+     * @return int
      */
     public function getLocked()
     {
@@ -170,9 +174,10 @@ class CForumCategory
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return CForumCategory
      */
     public function setSessionId($sessionId)
@@ -183,9 +188,9 @@ class CForumCategory
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -193,9 +198,10 @@ class CForumCategory
     }
 
     /**
-     * Set catId
+     * Set catId.
      *
-     * @param integer $catId
+     * @param int $catId
+     *
      * @return CForumCategory
      */
     public function setCatId($catId)
@@ -206,9 +212,9 @@ class CForumCategory
     }
 
     /**
-     * Get catId
+     * Get catId.
      *
-     * @return integer
+     * @return int
      */
     public function getCatId()
     {
@@ -216,9 +222,10 @@ class CForumCategory
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CForumCategory
      */
     public function setCId($cId)
@@ -229,9 +236,9 @@ class CForumCategory
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

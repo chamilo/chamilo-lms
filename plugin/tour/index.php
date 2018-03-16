@@ -1,8 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Config the plugin
+ * Config the plugin.
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.plugin.tour
  */
 require_once __DIR__.'/config.php';
@@ -17,13 +19,13 @@ $config = $tourPlugin->getTourConfig();
 $showTour = $tourPlugin->get('show_tour') === 'true';
 
 if ($showTour) {
-    $pages = array();
+    $pages = [];
 
     foreach ($config as $pageContent) {
-        $pages[] = array(
+        $pages[] = [
             'pageClass' => $pageContent['pageClass'],
-            'show' => $tourPlugin->checkTourForUser($pageContent['pageClass'], $userId)
-        );
+            'show' => $tourPlugin->checkTourForUser($pageContent['pageClass'], $userId),
+        ];
     }
 
     $theme = $tourPlugin->get('theme');
@@ -32,13 +34,13 @@ if ($showTour) {
 
     $_template['pages'] = json_encode($pages);
 
-    $_template['web_path'] = array(
+    $_template['web_path'] = [
         'intro_css' => "{$pluginWebPath}intro.js/introjs.min.css",
         'intro_theme_css' => null,
         'intro_js' => "{$pluginWebPath}intro.js/intro.min.js",
         'steps_ajax' => "{$pluginWebPath}ajax/steps.ajax.php",
-        'save_ajax' => "{$pluginWebPath}ajax/save.ajax.php"
-    );
+        'save_ajax' => "{$pluginWebPath}ajax/save.ajax.php",
+    ];
 
     if (file_exists("{$pluginPath}intro.js/introjs-$theme.css")) {
         $_template['web_path']['intro_theme_css'] = "{$pluginWebPath}intro.js/introjs-$theme.css";

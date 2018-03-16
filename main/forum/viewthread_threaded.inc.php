@@ -13,14 +13,13 @@
  *                      multiple forums per group
  * - sticky messages
  * - new view option: nested view
- * - quoting a message
+ * - quoting a message.
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Julio Montoya <gugli100@gmail.com> UI Improvements + lots of bugfixes
  *
  * @package chamilo.forum
  */
-
 $forumUrl = api_get_path(WEB_CODE_PATH).'forum/';
 $_user = api_get_user_info();
 $sortDirection = isset($_GET['posts_order']) && $_GET['posts_order'] === 'desc' ? 'DESC' : 'ASC';
@@ -57,9 +56,9 @@ if (isset($_GET['action']) &&
 $thread_structure = "<div class=\"structure\">".get_lang('Structure')."</div>";
 $counter = 0;
 $count = 0;
-$prev_next_array = array();
+$prev_next_array = [];
 
-$forumId  = intval($_GET['forum']);
+$forumId = intval($_GET['forum']);
 $threadId = intval($_GET['thread']);
 $groupId = api_get_group_id();
 
@@ -89,7 +88,7 @@ foreach ($rows as $post) {
             'viewthread.php?'.api_get_cidreq()."$count_loop&".http_build_query([
                 'forum' => $forumId,
                 'thread' => $threadId,
-                'post' => $post['post_id']
+                'post' => $post['post_id'],
             ]),
             ['class' => empty($post['visible']) ? 'text-muted' : null]
         );
@@ -118,22 +117,22 @@ $prev_message = get_lang('PrevMessage');
 $first_img = Display::return_icon(
     'action_first.png',
     get_lang('FirstMessage'),
-    array('style' => 'vertical-align: middle;')
+    ['style' => 'vertical-align: middle;']
 );
 $last_img = Display::return_icon(
     'action_last.png',
     get_lang('LastMessage'),
-    array('style' => 'vertical-align: middle;')
+    ['style' => 'vertical-align: middle;']
 );
 $prev_img = Display::return_icon(
     'action_prev.png',
     get_lang('PrevMessage'),
-    array('style' => 'vertical-align: middle;')
+    ['style' => 'vertical-align: middle;']
 );
 $next_img = Display::return_icon(
     'action_next.png',
     get_lang('NextMessage'),
-    array('style' => 'vertical-align: middle;')
+    ['style' => 'vertical-align: middle;']
 );
 
 $class_prev = '';
@@ -242,16 +241,15 @@ if ((isset($groupInfo['iid']) &&
             Display::return_icon(
                 'edit.png',
                 get_lang('Edit'),
-                array(),
+                [],
                 ICON_SIZE_SMALL
             ).'</a>';
     }
 }
 
-
 // Verified the post minor
 $my_post = getPosts($current_forum, $_GET['thread']);
-$id_posts = array();
+$id_posts = [];
 
 if (!empty($my_post) && is_array($my_post)) {
     foreach ($my_post as $post_value) {
@@ -279,7 +277,7 @@ if ((isset($groupInfo['iid']) &&
             "')) return false;\">".Display::return_icon(
                 'delete.png',
                 get_lang('Delete'),
-                array(),
+                [],
                 ICON_SIZE_SMALL
             )."</a>";
     }
@@ -287,11 +285,11 @@ if ((isset($groupInfo['iid']) &&
         'post',
         $rows[$display_post_id]['post_id'],
         $rows[$display_post_id]['visible'],
-        array(
+        [
             'forum' => $forumId,
             'thread' => $threadId,
-            'post' => Security::remove_XSS($_GET['post'])
-        )
+            'post' => Security::remove_XSS($_GET['post']),
+        ]
     );
 
     if (!isset($_GET['id']) && $post_id > $post_minor) {
@@ -302,10 +300,9 @@ if ((isset($groupInfo['iid']) &&
             Display::return_icon(
                 'move.png',
                 get_lang('MovePost'),
-                array(),
+                [],
                 ICON_SIZE_SMALL
             )."</a>";
-
     }
 }
 

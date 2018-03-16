@@ -2,11 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script that displays an error message when no content could be loaded
+ * Script that displays an error message when no content could be loaded.
+ *
  * @package chamilo.learnpath
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $debug = 0;
@@ -25,7 +26,7 @@ $lp_type = $_SESSION['oLP']->get_type();
 $lp_item_id = $_SESSION['oLP']->get_current_item_id();
 
 /**
- * Get a link to the corresponding document
+ * Get a link to the corresponding document.
  */
 $src = '';
 if ($debug > 0) {
@@ -91,17 +92,17 @@ if ($debug > 0) {
 $_SESSION['oLP']->set_previous_item($lp_item_id);
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
-    );
+        'name' => get_lang('ToolGradebook'),
+    ];
 }
 // Define the 'doc.inc.php' as language file.
 $nameTools = $_SESSION['oLP']->get_name();
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'lp/lp_list.php?'.api_get_cidreq(),
     'name' => get_lang('Doc'),
-);
+];
 // Update global setting to avoid displaying right menu.
 $save_setting = api_get_setting('show_navigation_menu');
 global $_setting;

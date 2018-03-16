@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TrackEHotpotatoes
+ * TrackEHotpotatoes.
  *
  * @ORM\Table(name="track_e_hotpotatoes", indexes={
  *     @ORM\Index(name="idx_tehp_user_id", columns={"exe_user_id"}),
@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackEHotpotatoes
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -33,7 +33,7 @@ class TrackEHotpotatoes
     private $exeName;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="exe_user_id", type="integer", nullable=true)
      */
@@ -47,30 +47,31 @@ class TrackEHotpotatoes
     private $exeDate;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=false)
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="exe_result", type="smallint", nullable=false)
      */
     private $exeResult;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="exe_weighting", type="smallint", nullable=false)
      */
     private $exeWeighting;
 
     /**
-     * Set exeName
+     * Set exeName.
      *
      * @param string $exeName
+     *
      * @return TrackEHotpotatoes
      */
     public function setExeName($exeName)
@@ -81,7 +82,7 @@ class TrackEHotpotatoes
     }
 
     /**
-     * Get exeName
+     * Get exeName.
      *
      * @return string
      */
@@ -91,9 +92,10 @@ class TrackEHotpotatoes
     }
 
     /**
-     * Set exeUserId
+     * Set exeUserId.
      *
-     * @param integer $exeUserId
+     * @param int $exeUserId
+     *
      * @return TrackEHotpotatoes
      */
     public function setExeUserId($exeUserId)
@@ -104,9 +106,9 @@ class TrackEHotpotatoes
     }
 
     /**
-     * Get exeUserId
+     * Get exeUserId.
      *
-     * @return integer
+     * @return int
      */
     public function getExeUserId()
     {
@@ -114,9 +116,10 @@ class TrackEHotpotatoes
     }
 
     /**
-     * Set exeDate
+     * Set exeDate.
      *
      * @param \DateTime $exeDate
+     *
      * @return TrackEHotpotatoes
      */
     public function setExeDate($exeDate)
@@ -127,7 +130,7 @@ class TrackEHotpotatoes
     }
 
     /**
-     * Get exeDate
+     * Get exeDate.
      *
      * @return \DateTime
      */
@@ -137,9 +140,10 @@ class TrackEHotpotatoes
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return TrackEHotpotatoes
      */
     public function setCId($cId)
@@ -150,9 +154,9 @@ class TrackEHotpotatoes
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -160,9 +164,10 @@ class TrackEHotpotatoes
     }
 
     /**
-     * Set exeResult
+     * Set exeResult.
      *
-     * @param integer $exeResult
+     * @param int $exeResult
+     *
      * @return TrackEHotpotatoes
      */
     public function setExeResult($exeResult)
@@ -173,9 +178,9 @@ class TrackEHotpotatoes
     }
 
     /**
-     * Get exeResult
+     * Get exeResult.
      *
-     * @return integer
+     * @return int
      */
     public function getExeResult()
     {
@@ -183,9 +188,10 @@ class TrackEHotpotatoes
     }
 
     /**
-     * Set exeWeighting
+     * Set exeWeighting.
      *
-     * @param integer $exeWeighting
+     * @param int $exeWeighting
+     *
      * @return TrackEHotpotatoes
      */
     public function setExeWeighting($exeWeighting)
@@ -196,9 +202,9 @@ class TrackEHotpotatoes
     }
 
     /**
-     * Get exeWeighting
+     * Get exeWeighting.
      *
-     * @return integer
+     * @return int
      */
     public function getExeWeighting()
     {
@@ -206,9 +212,9 @@ class TrackEHotpotatoes
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

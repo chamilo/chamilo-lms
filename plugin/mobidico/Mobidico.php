@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class Mobidico
+ * Class Mobidico.
  */
 class Mobidico extends Plugin
 {
@@ -21,7 +21,7 @@ class Mobidico extends Plugin
             [
                 'tool_enable' => 'boolean',
                 'api_key' => 'text',
-                'mobidico_url' => 'text'
+                'mobidico_url' => 'text',
             ]
         );
     }
@@ -32,22 +32,21 @@ class Mobidico extends Plugin
     public static function create()
     {
         static $result = null;
+
         return $result ? $result : $result = new self();
     }
 
     /**
-     * Install
+     * Install.
      */
     public function install()
     {
-
     }
 
     /**
-     * Uninstall
+     * Uninstall.
      */
     public function uninstall()
     {
-
     }
 }

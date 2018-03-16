@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*   @package chamilo.admin
-*/
+ *   @package chamilo.admin
+ */
 
 // Resetting the course id.
 $cidReset = true;
@@ -20,8 +20,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 // Setting breadcrumbs.
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'usergroups.php', 'name' => get_lang('Classes'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 
 // Setting the name of the tool.
 $tool_name = get_lang('SubscribeClassToCourses');
@@ -47,7 +47,7 @@ function remove_item(origin) {
 
 $form_sent = 0;
 $errorMsg = '';
-$sessions = array();
+$sessions = [];
 $usergroup = new UserGroup();
 $id = intval($_GET['id']);
 
@@ -55,7 +55,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $elements_posted = $_POST['elements_in_name'];
     if (!is_array($elements_posted)) {
-        $elements_posted = array();
+        $elements_posted = [];
     }
     if ($form_sent == 1) {
         $usergroup->subscribe_courses_to_usergroup($id, $elements_posted);
@@ -66,26 +66,26 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 }
 
 // Filters
-$filters = array(
-    array('type' => 'text', 'name' => 'code', 'label' => get_lang('CourseCode')),
-    array('type' => 'text', 'name' => 'title', 'label' => get_lang('Title'))
-);
+$filters = [
+    ['type' => 'text', 'name' => 'code', 'label' => get_lang('CourseCode')],
+    ['type' => 'text', 'name' => 'title', 'label' => get_lang('Title')],
+];
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?id='.$id);
 $searchForm->addHeader(get_lang('AdvancedSearch'));
-$renderer = & $searchForm->defaultRenderer();
+$renderer = &$searchForm->defaultRenderer();
 $searchForm->addElement('hidden', 'id', $id);
 foreach ($filters as $param) {
     $searchForm->addElement($param['type'], $param['name'], $param['label']);
 }
 $searchForm->addButtonSearch();
 
-$filterData = array();
+$filterData = [];
 if ($searchForm->validate()) {
     $filterData = $searchForm->getSubmitValues();
 }
 
-$conditions = array();
+$conditions = [];
 if (!empty($filters) && !empty($filterData)) {
     foreach ($filters as $filter) {
         if (isset($filter['name']) && isset($filterData[$filter['name']])) {
@@ -111,7 +111,7 @@ $course_list = CourseManager::get_courses_list(
     $conditions
 );
 
-$elements_not_in = $elements_in = array();
+$elements_not_in = $elements_in = [];
 
 foreach ($course_list_in as $course) {
     $elements_in[$course['id']] = $course['title']." (".$course['visual_code'].")";
@@ -157,6 +157,7 @@ function search($needle, $type)
             $xajax_response->addAssign('ajax_list_multiple', 'innerHTML', api_utf8_encode($return));
         }
     }
+
     return $xajax_response;
 }
 
@@ -175,15 +176,19 @@ if ($add_type == 'multiple') {
 
 echo '<div class="actions">';
 echo '<a href="usergroups.php">';
-echo Display::return_icon('back.png', get_lang('Back'), array(), ICON_SIZE_MEDIUM).'</a>';
-echo Display::url(get_lang('AdvancedSearch'), '#', array('class' => 'advanced_options', 'id' => 'advanced_search'));
+echo Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM).'</a>';
+echo Display::url(get_lang('AdvancedSearch'), '#', ['class' => 'advanced_options', 'id' => 'advanced_search']);
 echo '</div>';
 
 echo '<div id="advanced_search_options" style="display:none">';
 $searchForm->display();
 echo '</div>';
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if (!empty($_GET['add'])) echo '&add=true'; ?>" style="margin:0px;" <?php if ($ajax_search) {echo ' onsubmit="valide();"'; }?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if (!empty($_GET['add'])) {
+    echo '&add=true';
+} ?>" style="margin:0px;" <?php if ($ajax_search) {
+    echo ' onsubmit="valide();"';
+}?>>
 <?php echo '<legend>'.$data['name'].': '.$tool_name.'</legend>';
 echo Display::input('hidden', 'id', $id);
 echo Display::input('hidden', 'form_sent', '1');
@@ -195,47 +200,47 @@ if (!empty($errorMsg)) {
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>
-  <td align="center"><b><?php echo get_lang('CoursesInPlatform') ?> :</b>
+  <td align="center"><b><?php echo get_lang('CoursesInPlatform'); ?> :</b>
   </td>
   <td></td>
-  <td align="center"><b><?php echo get_lang('CoursesInGroup') ?> :</b></td>
+  <td align="center"><b><?php echo get_lang('CoursesInGroup'); ?> :</b></td>
 </tr>
 
-<?php if ($add_type == 'multiple') { ?>
+<?php if ($add_type == 'multiple') {
+    ?>
 <tr>
 <td align="center">
 <?php echo get_lang('FirstLetterCourseTitle'); ?> :
     <select name="firstLetterUser" onchange = "xajax_search(this.value,'multiple')" >
     <option value = "%">--</option>
     <?php
-    echo Display :: get_alphabet_options();
-    ?>
+    echo Display :: get_alphabet_options(); ?>
     </select>
 </td>
 <td align="center">&nbsp;</td>
 </tr>
-<?php } ?>
+<?php
+} ?>
 <tr>
   <td align="center">
   <div id="content_source">
       <?php
       if (!($add_type == 'multiple')) {
-        ?>
+          ?>
         <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" />
         <div id="ajax_list_users_single"></div>
         <?php
       } else {
-      ?>
+          ?>
       <div id="ajax_list_multiple">
         <?php
         echo Display::select(
             'elements_not_in_name',
             $elements_not_in,
             '',
-            array('style' => 'width:360px', 'multiple' => 'multiple', 'id' => 'elements_not_in', 'size' => '15px'),
+            ['style' => 'width:360px', 'multiple' => 'multiple', 'id' => 'elements_not_in', 'size' => '15px'],
             false
-        );
-        ?>
+        ); ?>
       </div>
     <?php
       }
@@ -245,13 +250,13 @@ if (!empty($errorMsg)) {
   <td width="10%" valign="middle" align="center">
   <?php
   if ($ajax_search) {
-  ?>
+      ?>
     <button class="btn bt-default" type="button" onclick="remove_item(document.getElementById('elements_in'))" >
         <em class="fa fa-arrow-left"></em>
     </button>
   <?php
   } else {
-  ?>
+      ?>
     <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))">
         <em class="fa fa-arrow-right"></em>
     </button>
@@ -270,7 +275,7 @@ echo Display::select(
     'elements_in_name[]',
     $elements_in,
     '',
-    array('style' => 'width:360px', 'multiple' => 'multiple', 'id' => 'elements_in', 'size' => '15px'),
+    ['style' => 'width:360px', 'multiple' => 'multiple', 'id' => 'elements_in', 'size' => '15px'],
     false
 );
 unset($sessionUsersList);

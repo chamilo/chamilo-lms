@@ -16,12 +16,12 @@ $allowMessage = api_get_setting('allow_message_tool') == 'true';
 
 if ($allowSocial) {
     $this_section = SECTION_SOCIAL;
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_PATH).'main/social/home.php', 'name' => get_lang('SocialNetwork'));
+    $interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'main/social/home.php', 'name' => get_lang('SocialNetwork')];
 } else {
     $this_section = SECTION_MYPROFILE;
-    $interbreadcrumb[] = array('url' => api_get_path(WEB_PATH).'main/auth/profile.php', 'name' => get_lang('Profile'));
+    $interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'main/auth/profile.php', 'name' => get_lang('Profile')];
 }
-$interbreadcrumb[] = array('url' => 'inbox.php', 'name' => get_lang('Messages'));
+$interbreadcrumb[] = ['url' => 'inbox.php', 'name' => get_lang('Messages')];
 
 $social_right_content = '<div class="actions">';
 if (api_get_setting('allow_message_tool') === 'true') {

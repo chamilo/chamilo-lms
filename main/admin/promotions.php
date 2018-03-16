@@ -4,7 +4,6 @@
 /**
  *  @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -16,8 +15,8 @@ api_protect_admin_script();
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'career_dashboard.php', 'name' => get_lang('CareersAndPromotions'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'career_dashboard.php', 'name' => get_lang('CareersAndPromotions')];
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
@@ -25,19 +24,19 @@ $check = Security::check_token('request');
 $token = Security::get_token();
 
 if ($action == 'add') {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'promotions.php',
         'name' => get_lang('Promotions'),
-    );
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Add'));
+    ];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
 } elseif ($action == 'edit') {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'promotions.php',
         'name' => get_lang('Promotions'),
-    );
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
+    ];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
 } else {
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Promotions'));
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Promotions')];
 }
 
 // The header.
@@ -46,56 +45,56 @@ Display::display_header('');
 // Tool name
 if (isset($_GET['action']) && $_GET['action'] == 'add') {
     $tool = 'Add';
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_self(),
         'name' => get_lang('Promotion'),
-    );
+    ];
 }
 if (isset($_GET['action']) && $_GET['action'] == 'edit') {
     $tool = 'Modify';
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_self(),
         'name' => get_lang('Promotion'),
-    );
+    ];
 }
 
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_promotions';
 //The order is important you need to check the model.ajax.php the $column variable
-$columns = array(
+$columns = [
     get_lang('Name'),
     get_lang('Career'),
     get_lang('Description'),
     get_lang('Actions'),
-);
-$column_model = array(
-    array(
+];
+$column_model = [
+    [
         'name' => 'name',
         'index' => 'name',
         'width' => '180',
         'align' => 'left',
-    ),
-    array(
+    ],
+    [
         'name' => 'career',
         'index' => 'career',
         'width' => '100',
         'align' => 'left',
-    ),
-    array(
+    ],
+    [
         'name' => 'description',
         'index' => 'description',
         'width' => '500',
         'align' => 'left',
         'sortable' => 'false',
-    ),
-    array(
+    ],
+    [
         'name' => 'actions',
         'index' => 'actions',
         'width' => '100',
         'align' => 'left',
         'formatter' => 'action_formatter',
         'sortable' => 'false',
-    ),
-);
+    ],
+];
 $extra_params['autowidth'] = 'true'; //use the width of the parent
 //$extra_params['editurl'] = $url; //use the width of the parent
 
@@ -112,7 +111,7 @@ $action_links = 'function action_formatter (cellvalue, options, rowObject) {
 <script>
 $(function() {
 <?php
-     echo Display::grid_js('promotions', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+     echo Display::grid_js('promotions', $url, $columns, $column_model, $extra_params, [], $action_links, true);
 ?>
 });
 </script>
@@ -135,14 +134,14 @@ switch ($action) {
             exit;
         }
 
-        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
+        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
         $form = $promotion->return_form($url, 'add');
 
         // The validation or display
         if ($form->validate()) {
             if ($check) {
                 $values = $form->exportValues();
-                $res    = $promotion->save($values);
+                $res = $promotion->save($values);
                 if ($res) {
                     echo Display::return_message(get_lang('ItemAdded'), 'confirm');
                 }
@@ -153,20 +152,20 @@ switch ($action) {
             echo Display::url(Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM), api_get_self());
             echo '</div>';
             $form->addElement('hidden', 'sec_token');
-            $form->setConstants(array('sec_token' => $token));
+            $form->setConstants(['sec_token' => $token]);
             $form->display();
         }
         break;
     case 'edit':
         //Editing
-        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
+        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
         $form = $promotion->return_form($url, 'edit');
 
         // The validation or display
         if ($form->validate()) {
             if ($check) {
                 $values = $form->exportValues();
-                $res    = $promotion->update($values);
+                $res = $promotion->update($values);
                 $promotion->update_all_sessions_status_by_promotion_id($values['id'], $values['status']);
                 if ($res) {
                     echo Display::return_message(get_lang('PromotionUpdated').': '.$values['name'], 'confirm');
@@ -186,7 +185,7 @@ switch ($action) {
             );
             echo '</div>';
             $form->addElement('hidden', 'sec_token');
-            $form->setConstants(array('sec_token' => $token));
+            $form->setConstants(['sec_token' => $token]);
             $form->display();
         }
         break;

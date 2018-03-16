@@ -2,17 +2,19 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* Template (view in MVC pattern) used for listing course descriptions
-* @author Christian Fasanando <christian1827@gmail.com>
-* @package chamilo.course_description
-*/
+ * Template (view in MVC pattern) used for listing course descriptions.
+ *
+ * @author Christian Fasanando <christian1827@gmail.com>
+ *
+ * @package chamilo.course_description
+ */
 
 // protect a course script
 api_protect_course_script(true);
 
 // display actions menu
 if (api_is_allowed_to_edit(null, true)) {
-    $categories = array();
+    $categories = [];
     foreach ($default_description_titles as $id => $title) {
         $categories[$id] = $title;
     }
@@ -58,7 +60,7 @@ if ($history) {
     echo Display::return_icon(
         'info.png',
         get_lang('BackToCourseDesriptionList'),
-        array('style' => 'vertical-align:middle;'),
+        ['style' => 'vertical-align:middle;'],
         ICON_SIZE_SMALL
     );
     echo ' '.get_lang('BackToCourseDesriptionList').'</a></td></tr></table></div>';
@@ -79,7 +81,7 @@ if (isset($descriptions) && count($descriptions) > 0) {
                     $actions .= Display::return_icon(
                         'delete.png',
                         get_lang('Delete'),
-                        array('style' => 'vertical-align:middle;float:right;'),
+                        ['style' => 'vertical-align:middle;float:right;'],
                         ICON_SIZE_SMALL
                     );
                     $actions .= '</a> ';
@@ -89,7 +91,7 @@ if (isset($descriptions) && count($descriptions) > 0) {
                     $actions .= Display::return_icon(
                         'edit.png',
                         get_lang('Edit'),
-                        array('style' => 'vertical-align:middle;float:right; padding-right:4px;'),
+                        ['style' => 'vertical-align:middle;float:right; padding-right:4px;'],
                         ICON_SIZE_SMALL
                     );
                     $actions .= '</a> ';
@@ -97,7 +99,7 @@ if (isset($descriptions) && count($descriptions) > 0) {
                     $actions .= Display::return_icon(
                         'edit_na.png',
                         get_lang('EditionNotAvailableFromSession'),
-                        array('style' => 'vertical-align:middle;float:right;'),
+                        ['style' => 'vertical-align:middle;float:right;'],
                         ICON_SIZE_SMALL
                     );
                 }

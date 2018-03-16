@@ -4,7 +4,6 @@
 /**
  * @package chamilo.include.search
  */
-
 require_once 'xapian.php';
 //TODO: think another way without including specific fields here
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -13,36 +12,36 @@ define('XAPIAN_DB', api_get_path(SYS_UPLOAD_PATH).'plugins/xapian/searchdb/');
 /**
  * Queries the database.
  * The xapian_query function queries the database using both a query string
- * and application-defined terms. Based on drupal-xapian
+ * and application-defined terms. Based on drupal-xapian.
  *
- * @param   string          $query_string   The search string. This string will
- *                                          be parsed and stemmed automatically.
- * @param   XapianDatabase  $db             Xapian database to connect
- * @param   int             $start          An integer defining the first
- *                                          document to return
- * @param   int             $length         The number of results to return.
- * @param   array           $extra          An array containing arrays of
- *                                          extra terms to search for.
- * @param   int             $count_type     Number of items to retrieve
- * @return  array                           An array of nids corresponding to the results.
+ * @param string         $query_string The search string. This string will
+ *                                     be parsed and stemmed automatically.
+ * @param XapianDatabase $db           Xapian database to connect
+ * @param int            $start        An integer defining the first
+ *                                     document to return
+ * @param int            $length       the number of results to return
+ * @param array          $extra        an array containing arrays of
+ *                                     extra terms to search for
+ * @param int            $count_type   Number of items to retrieve
+ *
+ * @return array an array of nids corresponding to the results
  */
-function xapian_query($query_string, $db = NULL, $start = 0, $length = 10, $extra = array(), $count_type = 0) {
-
+function xapian_query($query_string, $db = null, $start = 0, $length = 10, $extra = [], $count_type = 0)
+{
     try {
         if (!is_object($db)) {
             $db = new XapianDatabase(XAPIAN_DB);
         }
 
         // Build subqueries from $extra array. Now only used by tags search filter on search widget
-        $subqueries = array();
+        $subqueries = [];
         foreach ($extra as $subquery) {
             if (!empty($subquery)) {
                 $subqueries[] = new XapianQuery($subquery);
             }
         }
 
-
-        $query = NULL;
+        $query = null;
         $enquire = new XapianEnquire($db);
 
         if (!empty($query_string)) {
@@ -55,7 +54,7 @@ function xapian_query($query_string, $db = NULL, $start = 0, $length = 10, $extr
             $query_parser->add_boolean_prefix('courseid', XAPIAN_PREFIX_COURSEID);
             $query_parser->add_boolean_prefix('toolid', XAPIAN_PREFIX_TOOLID);
             $query = $query_parser->parse_query($query_string);
-            $final_array = array_merge($subqueries, array($query));
+            $final_array = array_merge($subqueries, [$query]);
             $query = new XapianQuery(XapianQuery::OP_AND, $final_array);
         } else {
             $query = new XapianQuery(XapianQuery::OP_OR, $subqueries);
@@ -65,16 +64,13 @@ function xapian_query($query_string, $db = NULL, $start = 0, $length = 10, $extr
 
         $matches = $enquire->get_mset((int) $start, (int) $length);
 
-
-
         $specific_fields = get_specific_field_list();
 
-        $results = array();
+        $results = [];
         $i = $matches->begin();
 
         // Display the results.
         //echo $matches->get_matches_estimated().'results found';
-
 
         $count = 0;
 
@@ -115,29 +111,34 @@ function xapian_query($query_string, $db = NULL, $start = 0, $length = 10, $extr
                 $count = $matches->get_matches_estimated();
                 break;
         }
-        return array($count, $results);
+
+        return [$count, $results];
     } catch (Exception $e) {
         display_xapian_error($e->getMessage());
-        return NULL;
+
+        return null;
     }
 }
 
 /**
- * build a boolean query
+ * build a boolean query.
  */
-function xapian_get_boolean_query($term) {
+function xapian_get_boolean_query($term)
+{
     return new XapianQuery($term);
 }
 
 /**
- * Retrieve a list db terms
+ * Retrieve a list db terms.
  *
- * @param   int             $count  Number of terms to retrieve
- * @param   char            $prefix The prefix of the term to retrieve
- * @param   XapianDatabase  $db     Xapian database to connect
- * @return  array
+ * @param int            $count  Number of terms to retrieve
+ * @param char           $prefix The prefix of the term to retrieve
+ * @param XapianDatabase $db     Xapian database to connect
+ *
+ * @return array
  */
-function xapian_get_all_terms($count = 0, $prefix, $db = NULL) {
+function xapian_get_all_terms($count = 0, $prefix, $db = null)
+{
     try {
         if (!is_object($db)) {
             $db = new XapianDatabase(XAPIAN_DB);
@@ -149,29 +150,32 @@ function xapian_get_all_terms($count = 0, $prefix, $db = NULL) {
             $termi = $db->allterms_begin();
         }
 
-        $terms = array();
+        $terms = [];
         $i = 0;
         for (; !$termi->equals($db->allterms_end()) && (++$i <= $count || $count == 0); $termi->next()) {
-            $terms[] = array(
+            $terms[] = [
                 'frequency' => $termi->get_termfreq(),
                 'name' => $termi->get_term(),
-            );
+            ];
         }
 
         return $terms;
     } catch (Exception $e) {
         display_xapian_error($e->getMessage());
-        return NULL;
+
+        return null;
     }
 }
 
 /**
- * Retrieve all terms of a document
+ * Retrieve all terms of a document.
  *
  * @param   XapianDocument  document searched
- * @return  array
+ *
+ * @return array
  */
-function xapian_get_doc_terms($doc = NULL, $prefix) {
+function xapian_get_doc_terms($doc = null, $prefix)
+{
     try {
         if (!is_a($doc, 'XapianDocument')) {
             return;
@@ -180,12 +184,12 @@ function xapian_get_doc_terms($doc = NULL, $prefix) {
         //TODO: make the filter by prefix on xapian if possible
         //ojwb marvil07: use Document::termlist_begin() and then skip_to(prefix) on the TermIterator
         //ojwb you'll need to check the end condition by hand though
-        $terms = array();
+        $terms = [];
         for ($termi = $doc->termlist_begin(); !$termi->equals($doc->termlist_end()); $termi->next()) {
-            $term = array(
+            $term = [
                 'frequency' => $termi->get_termfreq(),
                 'name' => $termi->get_term(),
-            );
+            ];
             if ($term['name'][0] === $prefix) {
                 $terms[] = $term;
             }
@@ -194,19 +198,22 @@ function xapian_get_doc_terms($doc = NULL, $prefix) {
         return $terms;
     } catch (Exception $e) {
         display_xapian_error($e->getMessage());
-        return NULL;
+
+        return null;
     }
 }
 
 /**
- * Join xapian queries
+ * Join xapian queries.
  *
  * @param XapianQuery|array $query1
  * @param XapianQuery|array $query2
- * @param string $op
+ * @param string            $op
+ *
  * @return XapianQuery query joined
  */
-function xapian_join_queries($query1, $query2 = NULL, $op = 'or') {
+function xapian_join_queries($query1, $query2 = null, $op = 'or')
+{
     // let decide how to join, avoiding include xapian.php outside
     switch ($op) {
         case 'or':
@@ -222,14 +229,14 @@ function xapian_join_queries($query1, $query2 = NULL, $op = 'or') {
 
     // review parameters to decide how to join
     if (!is_array($query1)) {
-        $query1 = array($query1);
+        $query1 = [$query1];
     }
     if (is_null($query2)) {
         // join an array of queries with $op
         return new XapianQuery($op, $query1);
     }
     if (!is_array($query2)) {
-        $query2 = array($query2);
+        $query2 = [$query2];
     }
 
     return new XapianQuery($op, array_merge($query1, $query2));
@@ -237,10 +244,13 @@ function xapian_join_queries($query1, $query2 = NULL, $op = 'or') {
 
 /**
  * @author Isaac flores paz <florespaz@bidsoftperu.com>
- * @param String The xapian error message
- * @return String The chamilo error message
+ *
+ * @param string The xapian error message
+ *
+ * @return string The chamilo error message
  */
-function display_xapian_error($xapian_error_message) {
+function display_xapian_error($xapian_error_message)
+{
     $message = explode(':', $xapian_error_message);
     $type_error_message = $message[0];
     if ($type_error_message == 'DatabaseOpeningError') {

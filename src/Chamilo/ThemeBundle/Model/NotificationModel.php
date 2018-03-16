@@ -3,7 +3,8 @@
 namespace Chamilo\ThemeBundle\Model;
 
 /**
- * Class NotificationModel
+ * Class NotificationModel.
+ *
  * @package Chamilo\ThemeBundle\Model
  */
 class NotificationModel implements NotificationInterface
@@ -15,8 +16,8 @@ class NotificationModel implements NotificationInterface
     public function __construct($message = null, $type = 'info', $icon = 'fa fa-warning')
     {
         $this->message = $message;
-        $this->type    = $type;
-        $this->icon    = $icon;
+        $this->type = $type;
+        $this->icon = $icon;
     }
 
     /**
@@ -67,6 +68,7 @@ class NotificationModel implements NotificationInterface
     public function setIcon($icon)
     {
         $this->icon = $icon;
+
         return $this;
     }
 

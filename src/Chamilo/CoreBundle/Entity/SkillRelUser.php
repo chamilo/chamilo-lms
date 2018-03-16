@@ -4,13 +4,13 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\SkillBundle\Entity\Level;
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\Mapping as ORM;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SkillRelUser
+ * SkillRelUser.
  *
  * @ORM\Table(
  *  name="skill_rel_user",
@@ -25,7 +25,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 class SkillRelUser
 {
     /**
-     * @var integer
+     * @ORM\OneToMany(targetEntity="SkillRelUserComment", mappedBy="skillRelUser")
+     */
+    protected $comments;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -52,7 +56,7 @@ class SkillRelUser
     private $acquiredSkillAt;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="assigned_by", type="integer", nullable=false)
      */
@@ -88,16 +92,11 @@ class SkillRelUser
     private $argumentation;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="argumentation_author_id", type="integer")
      */
     private $argumentationAuthorId;
-
-    /**
-     * @ORM\OneToMany(targetEntity="SkillRelUserComment", mappedBy="skillRelUser")
-     */
-    protected $comments;
 
     /**
      * SkillRelUser constructor.
@@ -108,8 +107,10 @@ class SkillRelUser
     }
 
     /**
-     * Set user
+     * Set user.
+     *
      * @param User $user
+     *
      * @return SkillRelUser
      */
     public function setUser(User $user)
@@ -120,7 +121,8 @@ class SkillRelUser
     }
 
     /**
-     * Get user
+     * Get user.
+     *
      * @return User
      */
     public function getUser()
@@ -129,8 +131,10 @@ class SkillRelUser
     }
 
     /**
-     * Set skill
+     * Set skill.
+     *
      * @param Skill $skill
+     *
      * @return SkillRelUser
      */
     public function setSkill(Skill $skill)
@@ -141,7 +145,8 @@ class SkillRelUser
     }
 
     /**
-     * Get skill
+     * Get skill.
+     *
      * @return Skill
      */
     public function getSkill()
@@ -150,8 +155,10 @@ class SkillRelUser
     }
 
     /**
-     * Set course
+     * Set course.
+     *
      * @param Course $course
+     *
      * @return SkillRelUser
      */
     public function setCourse(Course $course)
@@ -162,7 +169,8 @@ class SkillRelUser
     }
 
     /**
-     * Get course
+     * Get course.
+     *
      * @return Course
      */
     public function getCourse()
@@ -171,8 +179,10 @@ class SkillRelUser
     }
 
     /**
-     * Set session
+     * Set session.
+     *
      * @param Session $session
+     *
      * @return SkillRelUser
      */
     public function setSession(Session $session)
@@ -183,7 +193,8 @@ class SkillRelUser
     }
 
     /**
-     * Get session
+     * Get session.
+     *
      * @return Session
      */
     public function getSession()
@@ -191,11 +202,11 @@ class SkillRelUser
         return $this->session;
     }
 
-
     /**
-     * Set acquiredSkillAt
+     * Set acquiredSkillAt.
      *
      * @param \DateTime $acquiredSkillAt
+     *
      * @return SkillRelUser
      */
     public function setAcquiredSkillAt($acquiredSkillAt)
@@ -206,7 +217,7 @@ class SkillRelUser
     }
 
     /**
-     * Get acquiredSkillAt
+     * Get acquiredSkillAt.
      *
      * @return \DateTime
      */
@@ -216,9 +227,10 @@ class SkillRelUser
     }
 
     /**
-     * Set assignedBy
+     * Set assignedBy.
      *
-     * @param integer $assignedBy
+     * @param int $assignedBy
+     *
      * @return SkillRelUser
      */
     public function setAssignedBy($assignedBy)
@@ -229,9 +241,9 @@ class SkillRelUser
     }
 
     /**
-     * Get assignedBy
+     * Get assignedBy.
      *
-     * @return integer
+     * @return int
      */
     public function getAssignedBy()
     {
@@ -239,9 +251,9 @@ class SkillRelUser
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -249,7 +261,8 @@ class SkillRelUser
     }
 
     /**
-     * Set acquiredLevel
+     * Set acquiredLevel.
+     *
      * @param Level $acquiredLevel
      *
      * @return SkillRelUser
@@ -262,7 +275,8 @@ class SkillRelUser
     }
 
     /**
-     * Get acquiredLevel
+     * Get acquiredLevel.
+     *
      * @return Level
      */
     public function getAcquiredLevel()
@@ -271,8 +285,10 @@ class SkillRelUser
     }
 
     /**
-     * Set argumentationAuthorId
+     * Set argumentationAuthorId.
+     *
      * @param int $argumentationAuthorId
+     *
      * @return SkillRelUser
      */
     public function setArgumentationAuthorId($argumentationAuthorId)
@@ -283,8 +299,9 @@ class SkillRelUser
     }
 
     /**
-     * Get argumentationAuthorId
-     * @return integer
+     * Get argumentationAuthorId.
+     *
+     * @return int
      */
     public function getArgumentationAuthorId()
     {
@@ -292,7 +309,8 @@ class SkillRelUser
     }
 
     /**
-     * Set argumentation
+     * Set argumentation.
+     *
      * @param string $argumentation
      *
      * @return SkillRelUser
@@ -305,7 +323,8 @@ class SkillRelUser
     }
 
     /**
-     * Get argumentation
+     * Get argumentation.
+     *
      * @return string
      */
     public function getArgumentation()
@@ -314,7 +333,8 @@ class SkillRelUser
     }
 
     /**
-     * Get the source which the skill was obtained
+     * Get the source which the skill was obtained.
+     *
      * @return string
      */
     public function getSourceName()
@@ -322,7 +342,6 @@ class SkillRelUser
         $source = '';
 
         if ($this->session && $this->session->getId() != 0) {
-
             $source .= "[{$this->session->getName()}] ";
         }
 
@@ -334,7 +353,8 @@ class SkillRelUser
     }
 
     /**
-     * Get the URL for the issue
+     * Get the URL for the issue.
+     *
      * @return string
      */
     public function getIssueUrl()
@@ -343,7 +363,8 @@ class SkillRelUser
     }
 
     /**
-     * Get the URL for the All issues page
+     * Get the URL for the All issues page.
+     *
      * @return string
      */
     public function getIssueUrlAll()
@@ -352,26 +373,29 @@ class SkillRelUser
     }
 
     /**
-     * Get the URL for the assertion
+     * Get the URL for the assertion.
+     *
      * @return string
      */
     public function getAssertionUrl()
     {
         $url = api_get_path(WEB_CODE_PATH)."badge/assertion.php?";
 
-        $url .= http_build_query(array(
+        $url .= http_build_query([
             'user' => $this->user->getId(),
             'skill' => $this->skill->getId(),
             'course' => $this->course ? $this->course->getId() : 0,
-            'session' => $this->session ? $this->session->getId() : 0
-        ));
+            'session' => $this->session ? $this->session->getId() : 0,
+        ]);
 
         return $url;
     }
 
     /**
-     * Get comments
-     * @param boolean $sortDescByDateTime
+     * Get comments.
+     *
+     * @param bool $sortDescByDateTime
+     *
      * @return ArrayCollection
      */
     public function getComments($sortDescByDateTime = false)
@@ -379,7 +403,7 @@ class SkillRelUser
         if ($sortDescByDateTime) {
             $criteria = Criteria::create();
             $criteria->orderBy([
-                'feedbackDateTime' => Criteria::DESC
+                'feedbackDateTime' => Criteria::DESC,
             ]);
 
             return $this->comments->matching($criteria);
@@ -389,7 +413,8 @@ class SkillRelUser
     }
 
     /**
-     * Calculate the average value from the feedback comments
+     * Calculate the average value from the feedback comments.
+     *
      * @return string
      */
     public function getAverage()

@@ -1,16 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
 
 /**
- * Prints an HTML page with a table containing the gradebook data
+ * Prints an HTML page with a table containing the gradebook data.
+ *
  * @param    array    Array containing the data to be printed in the table
  * @param    array    Table headers
  * @param    string    View to print as a title for the table
  * @param    string    Course name to print as title for the table
+ *
  * @return string
  */
 function print_table($data_array, $header_names, $view, $coursename)
@@ -81,7 +84,6 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
             $printdata .= '<td>'.$rowdata.'</td>';
         }
         $printdata .= '</tr>';
-
     }
     $printdata .= '</table></div></body></html>';
 
@@ -89,12 +91,12 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
 }
 
 /**
- * This function get a content html for export inside a pdf file
+ * This function get a content html for export inside a pdf file.
+ *
  * @param   array   table headers
  * @param   array   table body
  * @param   array   pdf headers
  * @param   array   pdf footers
- * @return void
  */
 function export_pdf_attendance($headers_table, $data_table, $headers_pdf, $footers_pdf, $title_pdf)
 {
@@ -224,12 +226,12 @@ function export_pdf_attendance($headers_table, $data_table, $headers_pdf, $foote
 }
 
 /**
- * This function get a content html for export inside a pdf file
+ * This function get a content html for export inside a pdf file.
+ *
  * @param    array    table headers
  * @param    array    table body
  * @param    array    pdf headers
  * @param    array    pdf footers
- * @return void
  */
 function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footers_pdf, $title_pdf)
 {
@@ -322,11 +324,11 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
     $pdf->set_custom_header($headers_in_pdf);
     $pdf->content_to_pdf($header.$content_table, $css, $title_pdf);
     exit;
-
 }
 
 /**
- * Exports the data as a table on a PDF page
+ * Exports the data as a table on a PDF page.
+ *
  * @param    resource    The PDF object (ezpdf class) used to generate the file
  * @param    array        The data array
  * @param    array        Table headers
@@ -346,12 +348,12 @@ function export_pdf($pdf, $newarray, $header_names, $format)
         $pdf->line(40, 40, 790, 40);
     }
     $pdf->ezSetY(($format == 'portrait') ? '750' : '520');
-    $pdf->ezTable($newarray, $header_names, '', array(
+    $pdf->ezTable($newarray, $header_names, '', [
         'showHeadings' => 1,
         'shaded' => 1,
         'showLines' => 1,
         'rowGap' => 3,
         'width' => (($format == 'portrait') ? '500' : '750'),
-    ));
+    ]);
     $pdf->ezStream();
 }

@@ -11,7 +11,6 @@
  */
 class SearchCourseWidget
 {
-
     const PARAM_ACTION = 'action';
     const ACTION_SUBSCRIBE = 'subscribe';
 
@@ -20,6 +19,7 @@ class SearchCourseWidget
      *
      * @param string $key
      * @param object $default
+     *
      * @return string
      */
     public static function post($key, $default = '')
@@ -32,6 +32,7 @@ class SearchCourseWidget
      *
      * @param string $key
      * @param object $default
+     *
      * @return string
      */
     public static function get($key, $default = '')
@@ -50,7 +51,6 @@ class SearchCourseWidget
     }
 
     /**
-     *
      * @return bool
      */
     public function is_homepage()
@@ -69,7 +69,6 @@ class SearchCourseWidget
     }
 
     /**
-     *
      * @return bool
      */
     public function is_user_portal()
@@ -87,16 +86,13 @@ class SearchCourseWidget
         return $url == $index_url || $url == $root;
     }
 
-    /**
-     *
-     */
     public function accept()
     {
         return $this->is_homepage() || $this->is_user_portal();
     }
 
     /**
-     * Display the search course widget:
+     * Display the search course widget:.
      *
      * Title
      * Search form
@@ -131,23 +127,25 @@ class SearchCourseWidget
         echo '</div>';
 
         $this->display_footer();
+
         return $result;
     }
 
     public function get_url($action = '')
     {
         $self = $_SERVER['PHP_SELF'];
-        $parameters = array();
+        $parameters = [];
         if ($action) {
             $parameters[self::PARAM_ACTION] = $action;
         }
         $parameters = implode('&', $parameters);
         $parameters = $parameters ? '?'.$parameters : '';
+
         return $self.$parameters;
     }
 
     /**
-     * Handle the display action
+     * Handle the display action.
      */
     public function action_display()
     {
@@ -162,6 +160,7 @@ class SearchCourseWidget
             $courses = $this->retrieve_courses($search_term);
             $this->display_list($courses);
         }
+
         return true;
     }
 
@@ -201,8 +200,8 @@ EOT;
     }
 
     /**
-     *
      * @param array $courses
+     *
      * @return bool
      */
     public function display_list($courses)
@@ -217,7 +216,7 @@ EOT;
 
         echo '<table cellpadding="4">';
         foreach ($courses as $key => $course) {
-            $details = array();
+            $details = [];
             if ($display_coursecode) {
                 $details[] = $course['visual_code'];
             }
@@ -234,7 +233,7 @@ EOT;
                     Display::display_icon(
                         'passwordprotected.png',
                         '',
-                        array('style' => 'float:left;')
+                        ['style' => 'float:left;']
                     );
                 }
                 $this->display_subscribe_icon($course, $user_courses);
@@ -248,11 +247,13 @@ EOT;
 
     /**
      * Displays the subscribe icon if subscribing is allowed and
-     * if the user is not yet subscribed to this course
+     * if the user is not yet subscribed to this course.
      *
      * @global type $stok
+     *
      * @param array $current_course
      * @param array $user_courses
+     *
      * @return bool
      */
     public function display_subscribe_icon($current_course, $user_courses)
@@ -263,12 +264,14 @@ EOT;
         $code = $current_course['code'];
         if (isset($user_courses[$code])) {
             echo self::get_lang('AlreadySubscribed');
+
             return false;
         }
 
         //Not authorized to subscribe
         if ($current_course['subscribe'] != SUBSCRIBE_ALLOWED) {
             echo self::get_lang('SubscribingNotAllowed');
+
             return false;
         }
 
@@ -281,8 +284,7 @@ EOT;
 EOT;
 
         $search_term = $this->post('search_term');
-        if ($search_term)
-        {
+        if ($search_term) {
             $search_term = Security::remove_XSS($search_term);
             echo <<<EOT
                     <input type="hidden" name="search_course" value="1" />
@@ -293,11 +295,12 @@ EOT;
                 '.get_lang('Subscribe').'
                 </form>
         ';
+
         return true;
     }
 
     /**
-     * DB functions - DB functions - DB functions
+     * DB functions - DB functions - DB functions.
      */
 
     /**
@@ -305,12 +308,13 @@ EOT;
      * Search is done on the code, title and tutor fields.
      *
      * @param string $search_term
+     *
      * @return array
      */
     public function retrieve_courses($search_term)
     {
         if (empty($search_term)) {
-            return array();
+            return [];
         }
         $search_term = Database::escape_string($search_term);
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -329,28 +333,29 @@ EOT;
                 ORDER BY title, visual_code ASC
 EOT;
 
-        $result = array();
+        $result = [];
         $resultset = Database::query($sql);
         while ($row = Database::fetch_array($resultset)) {
             $code = $row['code'];
-            $result[$code] = array(
+            $result[$code] = [
                 'code' => $code,
                 'directory' => $row['directory'],
                 'visual_code' => $row['visual_code'],
                 'title' => $row['title'],
                 'tutor' => $row['tutor_name'],
                 'subscribe' => $row['subscribe'],
-                'unsubscribe' => $row['unsubscribe']
-            );
+                'unsubscribe' => $row['unsubscribe'],
+            ];
         }
 
         return $result;
     }
 
     /**
-     * Retrieves courses that the user is subscribed to
+     * Retrieves courses that the user is subscribed to.
      *
      * @param int $user_id
+     *
      * @return array
      */
     public function retrieve_user_courses($user_id = null)
@@ -370,11 +375,11 @@ EOT;
                        WHERE course.id = course_rel_user.c_id
                              AND course_rel_user.user_id = $user_id
                        ORDER BY course_rel_user.sort ASC";
-        $result = array();
+        $result = [];
         $resultset = Database::query($sql_select_courses);
         while ($row = Database::fetch_array($resultset)) {
             $code = $row['k'];
-            $result[$code] = array(
+            $result[$code] = [
                 'code' => $code,
                 'visual_code' => $row['vc'],
                 'title' => $row['i'],
@@ -384,7 +389,7 @@ EOT;
                 'subscribe' => $row['subscr'],
                 'unsubscribe' => $row['unsubscr'],
                 'sort' => $row['sort'],
-                'user_course_category' => $row['user_course_cat']);
+                'user_course_category' => $row['user_course_cat'], ];
         }
 
         return $result;
@@ -398,7 +403,9 @@ EOT;
      * Removes from $courses all courses the user is subscribed to.
      *
      * @global array $_user
+     *
      * @param array $courses
+     *
      * @return array
      */
     public function filter_out_user_courses($courses)
@@ -414,6 +421,7 @@ EOT;
         foreach ($user_courses as $key => $value) {
             unset($courses[$key]);
         }
+
         return $courses;
     }
 }

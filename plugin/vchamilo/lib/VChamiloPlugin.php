@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Description of VChamilo
+ * Description of VChamilo.
  *
  * @copyright (c) 2014 VF Consulting
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
@@ -20,12 +20,12 @@ class VChamiloPlugin extends Plugin
     }
 
     /**
-     *
      * @return VChamiloPlugin
      */
     public static function create()
     {
         static $result = null;
+
         return $result ? $result : $result = new self();
     }
 

@@ -4,14 +4,15 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * AssessmentsIntroduction toolbar configuration
+ * AssessmentsIntroduction toolbar configuration.
  *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class AssessmentsIntroduction extends Basic
 {
     /**
-     * Get the toolbar config
+     * Get the toolbar config.
+     *
      * @return array
      */
     public function getConfig()
@@ -26,7 +27,8 @@ class AssessmentsIntroduction extends Basic
     }
 
     /**
-     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false.
+     *
      * @return array
      */
     protected function getNormalToolbar()
@@ -41,12 +43,13 @@ class AssessmentsIntroduction extends Basic
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
             ['Subscript', 'Superscript', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Source']
+            ['Source'],
         ];
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is minimized
+     * Get the toolbar configuration when CKEditor is minimized.
+     *
      * @return array
      */
     protected function getMinimizedToolbar()
@@ -58,7 +61,7 @@ class AssessmentsIntroduction extends Basic
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
-            ['Toolbarswitch']
+            ['Toolbarswitch'],
         ];
     }
 }

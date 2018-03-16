@@ -5,49 +5,51 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
  * Exercises questions backup script
- * Class QuizQuestion
+ * Class QuizQuestion.
+ *
  * @author Bart Mollet <bart.mollet@hogent.be>
+ *
  * @package chamilo.backup
  */
 class QuizQuestion extends Resource
 {
     /**
-     * The question
+     * The question.
      */
     public $question;
 
     /**
-     * The description
+     * The description.
      */
     public $description;
 
     /**
-     * Ponderation
+     * Ponderation.
      */
     public $ponderation;
 
     /**
-     * Type
+     * Type.
      */
     public $quiz_type;
 
     /**
-     * Position
+     * Position.
      */
     public $position;
 
     /**
-     * Level
+     * Level.
      */
     public $level;
 
     /**
-     * Answers
+     * Answers.
      */
     public $answers;
 
     /**
-     * Picture
+     * Picture.
      */
     public $picture;
     public $extra;
@@ -59,10 +61,11 @@ class QuizQuestion extends Resource
 
     /**
      * QuizQuestion constructor.
-     * @param int $id
+     *
+     * @param int    $id
      * @param string $question
      * @param string $description
-     * @param int $ponderation
+     * @param int    $ponderation
      * @param $type
      * @param $position
      * @param $picture
@@ -90,14 +93,15 @@ class QuizQuestion extends Resource
         $this->position = $position;
         $this->picture = $picture;
         $this->level = $level;
-        $this->answers = array();
+        $this->answers = [];
         $this->extra = $extra;
         $this->question_category = $question_category;
     }
 
     /**
-     * Add an answer to this QuizQuestion
-     * @param int $answer_id
+     * Add an answer to this QuizQuestion.
+     *
+     * @param int    $answer_id
      * @param string $answer_text
      * @param string $correct
      * @param string $comment
@@ -116,7 +120,7 @@ class QuizQuestion extends Resource
         $hotspot_coordinates,
         $hotspot_type
     ) {
-        $answer = array();
+        $answer = [];
         $answer['id'] = $answer_id;
         $answer['answer'] = $answer_text;
         $answer['correct'] = $correct;
@@ -137,7 +141,7 @@ class QuizQuestion extends Resource
     }
 
     /**
-     * Show this question
+     * Show this question.
      */
     public function show()
     {

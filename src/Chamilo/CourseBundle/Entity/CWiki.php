@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CWiki
+ * CWiki.
  *
  * @ORM\Table(
  *  name="c_wiki",
@@ -23,7 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CWiki
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -32,21 +32,21 @@ class CWiki
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="page_id", type="integer", nullable=true)
      */
@@ -74,14 +74,14 @@ class CWiki
     private $content;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
     private $userId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="group_id", type="integer", nullable=true)
      */
@@ -95,49 +95,49 @@ class CWiki
     private $dtime;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="addlock", type="integer", nullable=false)
      */
     private $addlock;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="editlock", type="integer", nullable=false)
      */
     private $editlock;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="visibility", type="integer", nullable=false)
      */
     private $visibility;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="addlock_disc", type="integer", nullable=false)
      */
     private $addlockDisc;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="visibility_disc", type="integer", nullable=false)
      */
     private $visibilityDisc;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="ratinglock_disc", type="integer", nullable=false)
      */
     private $ratinglockDisc;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="assignment", type="integer", nullable=false)
      */
@@ -158,21 +158,21 @@ class CWiki
     private $progress;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="score", type="integer", nullable=true)
      */
     private $score;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="version", type="integer", nullable=true)
      */
     private $version;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="is_editing", type="integer", nullable=false)
      */
@@ -186,7 +186,7 @@ class CWiki
     private $timeEdit;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="hits", type="integer", nullable=true)
      */
@@ -214,16 +214,17 @@ class CWiki
     private $userIp;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
     private $sessionId;
 
     /**
-     * Set pageId
+     * Set pageId.
      *
-     * @param integer $pageId
+     * @param int $pageId
+     *
      * @return CWiki
      */
     public function setPageId($pageId)
@@ -234,9 +235,9 @@ class CWiki
     }
 
     /**
-     * Get pageId
+     * Get pageId.
      *
-     * @return integer
+     * @return int
      */
     public function getPageId()
     {
@@ -244,9 +245,10 @@ class CWiki
     }
 
     /**
-     * Set reflink
+     * Set reflink.
      *
      * @param string $reflink
+     *
      * @return CWiki
      */
     public function setReflink($reflink)
@@ -257,7 +259,7 @@ class CWiki
     }
 
     /**
-     * Get reflink
+     * Get reflink.
      *
      * @return string
      */
@@ -267,9 +269,10 @@ class CWiki
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return CWiki
      */
     public function setTitle($title)
@@ -280,7 +283,7 @@ class CWiki
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -290,9 +293,10 @@ class CWiki
     }
 
     /**
-     * Set content
+     * Set content.
      *
      * @param string $content
+     *
      * @return CWiki
      */
     public function setContent($content)
@@ -303,7 +307,7 @@ class CWiki
     }
 
     /**
-     * Get content
+     * Get content.
      *
      * @return string
      */
@@ -313,9 +317,10 @@ class CWiki
     }
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return CWiki
      */
     public function setUserId($userId)
@@ -326,9 +331,9 @@ class CWiki
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -336,9 +341,10 @@ class CWiki
     }
 
     /**
-     * Set groupId
+     * Set groupId.
      *
-     * @param integer $groupId
+     * @param int $groupId
+     *
      * @return CWiki
      */
     public function setGroupId($groupId)
@@ -349,9 +355,9 @@ class CWiki
     }
 
     /**
-     * Get groupId
+     * Get groupId.
      *
-     * @return integer
+     * @return int
      */
     public function getGroupId()
     {
@@ -359,9 +365,10 @@ class CWiki
     }
 
     /**
-     * Set dtime
+     * Set dtime.
      *
      * @param \DateTime $dtime
+     *
      * @return CWiki
      */
     public function setDtime($dtime)
@@ -372,7 +379,7 @@ class CWiki
     }
 
     /**
-     * Get dtime
+     * Get dtime.
      *
      * @return \DateTime
      */
@@ -382,9 +389,10 @@ class CWiki
     }
 
     /**
-     * Set addlock
+     * Set addlock.
      *
-     * @param integer $addlock
+     * @param int $addlock
+     *
      * @return CWiki
      */
     public function setAddlock($addlock)
@@ -395,9 +403,9 @@ class CWiki
     }
 
     /**
-     * Get addlock
+     * Get addlock.
      *
-     * @return integer
+     * @return int
      */
     public function getAddlock()
     {
@@ -405,9 +413,10 @@ class CWiki
     }
 
     /**
-     * Set editlock
+     * Set editlock.
      *
-     * @param integer $editlock
+     * @param int $editlock
+     *
      * @return CWiki
      */
     public function setEditlock($editlock)
@@ -418,9 +427,9 @@ class CWiki
     }
 
     /**
-     * Get editlock
+     * Get editlock.
      *
-     * @return integer
+     * @return int
      */
     public function getEditlock()
     {
@@ -428,9 +437,10 @@ class CWiki
     }
 
     /**
-     * Set visibility
+     * Set visibility.
      *
-     * @param integer $visibility
+     * @param int $visibility
+     *
      * @return CWiki
      */
     public function setVisibility($visibility)
@@ -441,9 +451,9 @@ class CWiki
     }
 
     /**
-     * Get visibility
+     * Get visibility.
      *
-     * @return integer
+     * @return int
      */
     public function getVisibility()
     {
@@ -451,9 +461,10 @@ class CWiki
     }
 
     /**
-     * Set addlockDisc
+     * Set addlockDisc.
      *
-     * @param integer $addlockDisc
+     * @param int $addlockDisc
+     *
      * @return CWiki
      */
     public function setAddlockDisc($addlockDisc)
@@ -464,9 +475,9 @@ class CWiki
     }
 
     /**
-     * Get addlockDisc
+     * Get addlockDisc.
      *
-     * @return integer
+     * @return int
      */
     public function getAddlockDisc()
     {
@@ -474,9 +485,10 @@ class CWiki
     }
 
     /**
-     * Set visibilityDisc
+     * Set visibilityDisc.
      *
-     * @param integer $visibilityDisc
+     * @param int $visibilityDisc
+     *
      * @return CWiki
      */
     public function setVisibilityDisc($visibilityDisc)
@@ -487,9 +499,9 @@ class CWiki
     }
 
     /**
-     * Get visibilityDisc
+     * Get visibilityDisc.
      *
-     * @return integer
+     * @return int
      */
     public function getVisibilityDisc()
     {
@@ -497,9 +509,10 @@ class CWiki
     }
 
     /**
-     * Set ratinglockDisc
+     * Set ratinglockDisc.
      *
-     * @param integer $ratinglockDisc
+     * @param int $ratinglockDisc
+     *
      * @return CWiki
      */
     public function setRatinglockDisc($ratinglockDisc)
@@ -510,9 +523,9 @@ class CWiki
     }
 
     /**
-     * Get ratinglockDisc
+     * Get ratinglockDisc.
      *
-     * @return integer
+     * @return int
      */
     public function getRatinglockDisc()
     {
@@ -520,9 +533,10 @@ class CWiki
     }
 
     /**
-     * Set assignment
+     * Set assignment.
      *
-     * @param integer $assignment
+     * @param int $assignment
+     *
      * @return CWiki
      */
     public function setAssignment($assignment)
@@ -533,9 +547,9 @@ class CWiki
     }
 
     /**
-     * Get assignment
+     * Get assignment.
      *
-     * @return integer
+     * @return int
      */
     public function getAssignment()
     {
@@ -543,9 +557,10 @@ class CWiki
     }
 
     /**
-     * Set comment
+     * Set comment.
      *
      * @param string $comment
+     *
      * @return CWiki
      */
     public function setComment($comment)
@@ -556,7 +571,7 @@ class CWiki
     }
 
     /**
-     * Get comment
+     * Get comment.
      *
      * @return string
      */
@@ -566,9 +581,10 @@ class CWiki
     }
 
     /**
-     * Set progress
+     * Set progress.
      *
      * @param string $progress
+     *
      * @return CWiki
      */
     public function setProgress($progress)
@@ -579,7 +595,7 @@ class CWiki
     }
 
     /**
-     * Get progress
+     * Get progress.
      *
      * @return string
      */
@@ -589,9 +605,10 @@ class CWiki
     }
 
     /**
-     * Set score
+     * Set score.
      *
-     * @param integer $score
+     * @param int $score
+     *
      * @return CWiki
      */
     public function setScore($score)
@@ -602,9 +619,9 @@ class CWiki
     }
 
     /**
-     * Get score
+     * Get score.
      *
-     * @return integer
+     * @return int
      */
     public function getScore()
     {
@@ -612,9 +629,10 @@ class CWiki
     }
 
     /**
-     * Set version
+     * Set version.
      *
-     * @param integer $version
+     * @param int $version
+     *
      * @return CWiki
      */
     public function setVersion($version)
@@ -625,9 +643,9 @@ class CWiki
     }
 
     /**
-     * Get version
+     * Get version.
      *
-     * @return integer
+     * @return int
      */
     public function getVersion()
     {
@@ -635,9 +653,10 @@ class CWiki
     }
 
     /**
-     * Set isEditing
+     * Set isEditing.
      *
-     * @param integer $isEditing
+     * @param int $isEditing
+     *
      * @return CWiki
      */
     public function setIsEditing($isEditing)
@@ -648,9 +667,9 @@ class CWiki
     }
 
     /**
-     * Get isEditing
+     * Get isEditing.
      *
-     * @return integer
+     * @return int
      */
     public function getIsEditing()
     {
@@ -658,9 +677,10 @@ class CWiki
     }
 
     /**
-     * Set timeEdit
+     * Set timeEdit.
      *
      * @param \DateTime $timeEdit
+     *
      * @return CWiki
      */
     public function setTimeEdit($timeEdit)
@@ -671,7 +691,7 @@ class CWiki
     }
 
     /**
-     * Get timeEdit
+     * Get timeEdit.
      *
      * @return \DateTime
      */
@@ -681,9 +701,10 @@ class CWiki
     }
 
     /**
-     * Set hits
+     * Set hits.
      *
-     * @param integer $hits
+     * @param int $hits
+     *
      * @return CWiki
      */
     public function setHits($hits)
@@ -694,9 +715,9 @@ class CWiki
     }
 
     /**
-     * Get hits
+     * Get hits.
      *
-     * @return integer
+     * @return int
      */
     public function getHits()
     {
@@ -704,9 +725,10 @@ class CWiki
     }
 
     /**
-     * Set linksto
+     * Set linksto.
      *
      * @param string $linksto
+     *
      * @return CWiki
      */
     public function setLinksto($linksto)
@@ -717,7 +739,7 @@ class CWiki
     }
 
     /**
-     * Get linksto
+     * Get linksto.
      *
      * @return string
      */
@@ -727,9 +749,10 @@ class CWiki
     }
 
     /**
-     * Set tag
+     * Set tag.
      *
      * @param string $tag
+     *
      * @return CWiki
      */
     public function setTag($tag)
@@ -740,7 +763,7 @@ class CWiki
     }
 
     /**
-     * Get tag
+     * Get tag.
      *
      * @return string
      */
@@ -750,9 +773,10 @@ class CWiki
     }
 
     /**
-     * Set userIp
+     * Set userIp.
      *
      * @param string $userIp
+     *
      * @return CWiki
      */
     public function setUserIp($userIp)
@@ -763,7 +787,7 @@ class CWiki
     }
 
     /**
-     * Get userIp
+     * Get userIp.
      *
      * @return string
      */
@@ -773,9 +797,10 @@ class CWiki
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return CWiki
      */
     public function setSessionId($sessionId)
@@ -786,9 +811,9 @@ class CWiki
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -796,9 +821,10 @@ class CWiki
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CWiki
      */
     public function setId($id)
@@ -809,9 +835,9 @@ class CWiki
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -819,9 +845,10 @@ class CWiki
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CWiki
      */
     public function setCId($cId)
@@ -832,9 +859,9 @@ class CWiki
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

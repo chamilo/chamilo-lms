@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*   @package chamilo.admin
-*/
+ *   @package chamilo.admin
+ */
 // resetting the course id
 $cidReset = true;
 
@@ -19,8 +19,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'career_dashboard.php', 'name' => get_lang('CareersAndPromotions'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'career_dashboard.php', 'name' => get_lang('CareersAndPromotions')];
 
 // Setting the name of the tool
 $tool_name = get_lang('SubscribeSessionsToPromotions');
@@ -64,17 +64,16 @@ function validate_filter() {
 }
 </script>';
 
-
 $form_sent = 0;
 $errorMsg = '';
-$users = $sessions = array();
+$users = $sessions = [];
 $promotion = new Promotion();
 $id = intval($_GET['id']);
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $session_in_promotion_posted = $_POST['session_in_promotion_name'];
     if (!is_array($session_in_promotion_posted)) {
-        $session_in_promotion_posted = array($session_in_promotion_posted);
+        $session_in_promotion_posted = [$session_in_promotion_posted];
     }
     if ($form_sent == 1) {
         // Added a parameter to send emails when registering a user
@@ -85,8 +84,8 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 }
 
 $promotion_data = $promotion->get($id);
-$session_list = SessionManager::get_sessions_list(array(), array('name'));
-$session_not_in_promotion = $session_in_promotion = array();
+$session_list = SessionManager::get_sessions_list([], ['name']);
+$session_not_in_promotion = $session_in_promotion = [];
 
 if (!empty($session_list)) {
     foreach ($session_list as $session) {
@@ -123,14 +122,17 @@ echo '<a href="promotions.php">'.Display::return_icon('back.png', get_lang('Back
 echo '</div>';
 ?>
 
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if (!empty($_GET['add'])) echo '&add=true'; ?>" style="margin:0px;" <?php if ($ajax_search) {echo ' onsubmit="valide();"'; }?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if (!empty($_GET['add'])) {
+    echo '&add=true';
+} ?>" style="margin:0px;" <?php if ($ajax_search) {
+    echo ' onsubmit="valide();"';
+}?>>
 <?php echo '<legend>'.$tool_name.' '.$promotion_data['name'].'</legend>';
-
 
 if ($add_type == 'multiple') {
     $extraField = new \ExtraField('session');
     $extra_field_list = $extraField->get_all_extra_field_by_type(ExtraField::FIELD_TYPE_SELECT);
-    $new_field_list = array();
+    $new_field_list = [];
     if (is_array($extra_field_list) && (count($extra_field_list) > 0)) {
         echo '<h3>'.get_lang('FilterSessions').'</h3>';
         foreach ($extra_field_list as $new_field) {
@@ -164,39 +166,40 @@ if (!empty($errorMsg)) {
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>
-  <td align="center"><b><?php echo get_lang('SessionsInPlatform') ?> :</b>
+  <td align="center"><b><?php echo get_lang('SessionsInPlatform'); ?> :</b>
   </td>
   <td></td>
-  <td align="center"><b><?php echo get_lang('SessionsInPromotion') ?> :</b></td>
+  <td align="center"><b><?php echo get_lang('SessionsInPromotion'); ?> :</b></td>
 </tr>
 
-<?php if ($add_type == 'multiple') { ?>
+<?php if ($add_type == 'multiple') {
+    ?>
 <tr>
 <td align="center">
 <?php echo get_lang('FirstLetterSessions'); ?> :
      <select name="firstLetterUser" onchange = "xajax_search_sessions(this.value,'multiple')" >
       <option value = "%">--</option>
       <?php
-        echo Display :: get_alphabet_options();
-      ?>
+        echo Display :: get_alphabet_options(); ?>
      </select>
 </td>
 <td align="center">&nbsp;</td>
 </tr>
-<?php } ?>
+<?php
+} ?>
 <tr>
   <td align="center">
   <div id="content_source">
       <?php
       if (!($add_type == 'multiple')) {
-        ?>
+          ?>
         <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" />
         <div id="ajax_list_users_single"></div>
         <?php
       } else {
-      ?>
+          ?>
       <div id="ajax_list_multiple">
-        <?php echo Display::select('session_not_in_promotion_name', $session_not_in_promotion, '', array('style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'session_not_in_promotion', 'size'=>'15px'), false); ?>
+        <?php echo Display::select('session_not_in_promotion_name', $session_not_in_promotion, '', ['style' => 'width:360px', 'multiple' => 'multiple', 'id' => 'session_not_in_promotion', 'size' => '15px'], false); ?>
       </div>
     <?php
       }
@@ -206,13 +209,13 @@ if (!empty($errorMsg)) {
   <td width="10%" valign="middle" align="center">
   <?php
   if ($ajax_search) {
-  ?>
+      ?>
     <button class="btn btn-default" type="button" onclick="remove_item(document.getElementById('session_in_promotion'))" >
         <em class="fa fa-arrow-left"></em>
     </button>
   <?php
   } else {
-  ?>
+      ?>
     <button class="btn btn-default" type="button" onclick="moveItem(document.getElementById('session_not_in_promotion'), document.getElementById('session_in_promotion'))" onclick="moveItem(document.getElementById('session_not_in_promotion'), document.getElementById('session_in_promotion'))">
         <em class="fa fa-arrow-right"></em>
     </button>
@@ -231,7 +234,7 @@ if (!empty($errorMsg)) {
         'session_in_promotion_name[]',
         $session_in_promotion,
         '',
-        array('style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'session_in_promotion', 'size'=>'15px'),
+        ['style' => 'width:360px', 'multiple' => 'multiple', 'id' => 'session_in_promotion', 'size' => '15px'],
         false
     );
     unset($sessionUsersList);
@@ -332,7 +335,7 @@ function search_sessions($needle, $type)
     $return = '';
     if (!empty($needle) && !empty($type)) {
         $session_list = SessionManager::get_sessions_list(
-            array('s.name' => array('operator' => 'LIKE', 'value' => "$needle%"))
+            ['s.name' => ['operator' => 'LIKE', 'value' => "$needle%"]]
         );
         $return .= '<select id="session_not_in_promotion" name="session_not_in_promotion_name[]" multiple="multiple" size="15" style="width:360px;">';
         foreach ($session_list as $row) {
@@ -341,7 +344,7 @@ function search_sessions($needle, $type)
             }
         }
         $return .= '</select>';
-        $xajax_response -> addAssign('ajax_list_multiple', 'innerHTML', api_utf8_encode($return));
+        $xajax_response->addAssign('ajax_list_multiple', 'innerHTML', api_utf8_encode($return));
     }
 
     return $xajax_response;

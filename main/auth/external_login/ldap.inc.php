@@ -3,17 +3,19 @@
 
 /**
  * This files is included by newUser.ldap.php and login.ldap.php
- * It implements the functions nedded by both files
+ * It implements the functions nedded by both files.
  * */
 require_once __DIR__.'/../../inc/global.inc.php';
 
 $debug = false;
 
 /**
- * Returns a transcoded and trimmed string
+ * Returns a transcoded and trimmed string.
  *
  * @param string
+ *
  * @return string
+ *
  * @author ndiechburg <noel@cblue.be>
  * */
 function extldap_purify_string($string)
@@ -27,9 +29,10 @@ function extldap_purify_string($string)
 }
 
 /**
- * Establishes a connection to the LDAP server and sets the protocol version
+ * Establishes a connection to the LDAP server and sets the protocol version.
  *
- * @return boolean ldap link identifier or false
+ * @return bool ldap link identifier or false
+ *
  * @author ndiechburg <noel@cblue.be>
  * */
 function extldap_connect()
@@ -37,7 +40,7 @@ function extldap_connect()
     global $extldap_config, $debug;
 
     if (!is_array($extldap_config['host'])) {
-        $extldap_config['host'] = array($extldap_config['host']);
+        $extldap_config['host'] = [$extldap_config['host']];
     }
 
     foreach ($extldap_config['host'] as $host) {
@@ -62,6 +65,7 @@ function extldap_connect()
         if ($debug) {
             error_log('EXTLDAP ERROR : no valid server found');
         }
+
         return false;
     }
     // Setting protocol version
@@ -82,10 +86,12 @@ function extldap_connect()
 }
 
 /**
- * Authenticate user on external ldap server and return user ldap entry if that succeeds
+ * Authenticate user on external ldap server and return user ldap entry if that succeeds.
  *
  * @param string $password
+ *
  * @return mixed false if user cannot authenticate on ldap, user ldap entry if tha succeeds
+ *
  * @author ndiechburg <noel@cblue.be>
  * Modified by hubert.borderiou@grenet.fr
  * Add possibility to get user info from LDAP without check password (if CAS auth and LDAP profil update)
@@ -112,6 +118,7 @@ function extldap_authenticate($username, $password, $in_auth_with_no_password = 
                 'EXTLDAP ERROR : cannot connect with admin login/password'
             );
         }
+
         return false;
     }
     $user_search = extldap_get_user_search_string($username);
@@ -123,6 +130,7 @@ function extldap_authenticate($username, $password, $in_auth_with_no_password = 
                 'EXTLDAP ERROR : ldap_search('.$ds.', '.$extldap_config['base_dn'].", $user_search) failed"
             );
         }
+
         return false;
     }
 
@@ -134,6 +142,7 @@ function extldap_authenticate($username, $password, $in_auth_with_no_password = 
                 'EXTLDAP ERROR : more than one entry for that user ( ldap_search(ds, '.$extldap_config['base_dn'].", $user_search) )"
             );
         }
+
         return false;
     }
     if ($entries_count < 1) {
@@ -142,6 +151,7 @@ function extldap_authenticate($username, $password, $in_auth_with_no_password = 
                 'EXTLDAP ERROR :  No entry for that user ( ldap_search(ds, '.$extldap_config['base_dn'].", $user_search) )"
             );
         }
+
         return false;
     }
     $users = ldap_get_entries($ds, $sr);
@@ -160,17 +170,20 @@ function extldap_authenticate($username, $password, $in_auth_with_no_password = 
         if ($debug) {
             error_log('EXTLDAP : Wrong password for '.$user['dn']);
         }
+
         return false;
     }
 }
 
 /**
  * Return an array with userinfo compatible with chamilo using $extldap_user_correspondance
- * configuration array declared in ldap.conf.php file
+ * configuration array declared in ldap.conf.php file.
  *
  * @param array ldap user
  * @param array correspondance array (if not set use extldap_user_correspondance declared in auth.conf.php
+ *
  * @return array userinfo array
+ *
  * @author ndiechburg <noel@cblue.be>
  * */
 function extldap_get_chamilo_user($ldap_user, $cor = null)
@@ -180,7 +193,7 @@ function extldap_get_chamilo_user($ldap_user, $cor = null)
         $cor = $extldap_user_correspondance;
     }
 
-    $chamilo_user = array();
+    $chamilo_user = [];
     foreach ($cor as $chamilo_field => $ldap_field) {
         if (is_array($ldap_field)) {
             $chamilo_user[$chamilo_field] = extldap_get_chamilo_user($ldap_user, $ldap_field);
@@ -218,15 +231,15 @@ function extldap_get_chamilo_user($ldap_user, $cor = null)
                 break;
         }
     }
+
     return $chamilo_user;
 }
 
 /**
  * Please declare here all the function you use in extldap_user_correspondance
  * All these functions must have an $ldap_user parameter. This parameter is the
- * array returned by the ldap for the user
+ * array returned by the ldap for the user.
  * */
-
 function extldap_get_status($ldap_user)
 {
     return STUDENT;
@@ -238,10 +251,12 @@ function extldap_get_admin($ldap_user)
 }
 
 /**
- * return the string used to search a user in ldap
+ * return the string used to search a user in ldap.
  *
  * @param string username
+ *
  * @return string the serach string
+ *
  * @author ndiechburg <noel@cblue.be>
  * */
 function extldap_get_user_search_string($username)
@@ -260,7 +275,8 @@ function extldap_get_user_search_string($username)
 }
 
 /**
- * Imports all LDAP users into Chamilo
+ * Imports all LDAP users into Chamilo.
+ *
  * @return false|null false on error, true otherwise
  */
 function extldap_import_all_users()
@@ -281,11 +297,12 @@ function extldap_import_all_users()
                 'EXTLDAP ERROR : cannot connect with admin login/password'
             );
         }
+
         return false;
     }
     //browse ASCII values from a to z to avoid 1000 results limit of LDAP
-    $count    = 0;
-    $alphanum = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+    $count = 0;
+    $alphanum = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     for ($a = 97; $a <= 122; $a++) {
         $alphanum[] = chr($a);
     }
@@ -301,6 +318,7 @@ function extldap_import_all_users()
                         'EXTLDAP ERROR : ldap_search('.$ds.', '.$extldap_config['base_dn'].", $user_search) failed"
                     );
                 }
+
                 return false;
             }
             //echo "Getting entries\n";
@@ -317,16 +335,16 @@ function extldap_import_all_users()
 }
 
 /**
- * Insert users from an array of user fields
+ * Insert users from an array of user fields.
  */
 function extldap_add_user_by_array($data, $update_if_exists = true)
 {
     global $extldap_user_correspondance;
 
-    $lastname  = api_convert_encoding($data[$extldap_user_correspondance['lastname']][0], api_get_system_encoding(), 'UTF-8');
+    $lastname = api_convert_encoding($data[$extldap_user_correspondance['lastname']][0], api_get_system_encoding(), 'UTF-8');
     $firstname = api_convert_encoding($data[$extldap_user_correspondance['firstname']][0], api_get_system_encoding(), 'UTF-8');
-    $email     = $data[$extldap_user_correspondance['email']][0];
-    $username  = $data[$extldap_user_correspondance['username']][0];
+    $email = $data[$extldap_user_correspondance['email']][0];
+    $username = $data[$extldap_user_correspondance['username']][0];
 
     // TODO the password, if encrypted at the source, will be encrypted twice, which makes it useless. Try to fix that.
     $passwordKey = isset($extldap_user_correspondance['password']) ? $extldap_user_correspondance['password'] : 'userPassword';
@@ -335,11 +353,11 @@ function extldap_add_user_by_array($data, $update_if_exists = true)
     // To ease management, we add the step-year (etape-annee) code
     //$official_code = $etape."-".$annee;
     $official_code = api_convert_encoding($data[$extldap_user_correspondance['official_code']][0], api_get_system_encoding(), 'UTF-8');
-    $auth_source   = 'ldap';
+    $auth_source = 'ldap';
 
     // No expiration date for students (recover from LDAP's shadow expiry)
     $expiration_date = '';
-    $active          = 1;
+    $active = 1;
     $status = 5;
     $phone = '';
     $picture_uri = '';
@@ -384,6 +402,6 @@ function extldap_add_user_by_array($data, $update_if_exists = true)
             );
         }
     }
+
     return $user_id;
 }
-

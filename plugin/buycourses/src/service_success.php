@@ -2,7 +2,8 @@
 /* For license terms, see /license.txt */
 
 /**
- * Success page for the purchase of a service in the Buy Courses plugin
+ * Success page for the purchase of a service in the Buy Courses plugin.
+ *
  * @package chamilo.plugin.buycourses
  */
 require_once '../config.php';
@@ -29,7 +30,7 @@ $paypalUsername = $paypalParams['username'];
 $paypalPassword = $paypalParams['password'];
 $paypalSignature = $paypalParams['signature'];
 
-require_once("paypalfunctions.php");
+require_once "paypalfunctions.php";
 
 $buyerInformation = GetShippingDetails(urlencode($_SESSION['TOKEN']));
 
@@ -133,7 +134,6 @@ if ($form->validate()) {
                     $purchaseStatus = $plugin->get_lang('PendingReasonByVerify');
                     break;
                 case 'other':
-                    //no break
                 default:
                     $purchaseStatus = $plugin->get_lang('PendingReasonByOther');
                     break;
@@ -166,10 +166,10 @@ if (empty($token)) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => "service_catalog.php",
     "name" => $plugin->get_lang('ListOfServicesOnSale'),
-);
+];
 
 $templateName = $plugin->get_lang('PaymentMethods');
 $tpl = new Template($templateName);

@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * OpenidAssociation
+ * OpenidAssociation.
  *
  * @ORM\Table(name="openid_association")
  * @ORM\Entity
@@ -42,7 +42,7 @@ class OpenidAssociation
     private $assocType;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="expires_in", type="bigint", nullable=false)
      */
@@ -56,14 +56,14 @@ class OpenidAssociation
     private $macKey;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="created", type="bigint", nullable=false)
      */
     private $created;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -71,12 +71,11 @@ class OpenidAssociation
      */
     private $id;
 
-
-
     /**
-     * Set idpEndpointUri
+     * Set idpEndpointUri.
      *
      * @param string $idpEndpointUri
+     *
      * @return OpenidAssociation
      */
     public function setIdpEndpointUri($idpEndpointUri)
@@ -87,7 +86,7 @@ class OpenidAssociation
     }
 
     /**
-     * Get idpEndpointUri
+     * Get idpEndpointUri.
      *
      * @return string
      */
@@ -97,9 +96,10 @@ class OpenidAssociation
     }
 
     /**
-     * Set sessionType
+     * Set sessionType.
      *
      * @param string $sessionType
+     *
      * @return OpenidAssociation
      */
     public function setSessionType($sessionType)
@@ -110,7 +110,7 @@ class OpenidAssociation
     }
 
     /**
-     * Get sessionType
+     * Get sessionType.
      *
      * @return string
      */
@@ -120,9 +120,10 @@ class OpenidAssociation
     }
 
     /**
-     * Set assocHandle
+     * Set assocHandle.
      *
      * @param string $assocHandle
+     *
      * @return OpenidAssociation
      */
     public function setAssocHandle($assocHandle)
@@ -133,7 +134,7 @@ class OpenidAssociation
     }
 
     /**
-     * Get assocHandle
+     * Get assocHandle.
      *
      * @return string
      */
@@ -143,9 +144,10 @@ class OpenidAssociation
     }
 
     /**
-     * Set assocType
+     * Set assocType.
      *
      * @param string $assocType
+     *
      * @return OpenidAssociation
      */
     public function setAssocType($assocType)
@@ -156,7 +158,7 @@ class OpenidAssociation
     }
 
     /**
-     * Get assocType
+     * Get assocType.
      *
      * @return string
      */
@@ -166,9 +168,10 @@ class OpenidAssociation
     }
 
     /**
-     * Set expiresIn
+     * Set expiresIn.
      *
-     * @param integer $expiresIn
+     * @param int $expiresIn
+     *
      * @return OpenidAssociation
      */
     public function setExpiresIn($expiresIn)
@@ -179,9 +182,9 @@ class OpenidAssociation
     }
 
     /**
-     * Get expiresIn
+     * Get expiresIn.
      *
-     * @return integer
+     * @return int
      */
     public function getExpiresIn()
     {
@@ -189,9 +192,10 @@ class OpenidAssociation
     }
 
     /**
-     * Set macKey
+     * Set macKey.
      *
      * @param string $macKey
+     *
      * @return OpenidAssociation
      */
     public function setMacKey($macKey)
@@ -202,7 +206,7 @@ class OpenidAssociation
     }
 
     /**
-     * Get macKey
+     * Get macKey.
      *
      * @return string
      */
@@ -212,9 +216,10 @@ class OpenidAssociation
     }
 
     /**
-     * Set created
+     * Set created.
      *
-     * @param integer $created
+     * @param int $created
+     *
      * @return OpenidAssociation
      */
     public function setCreated($created)
@@ -225,9 +230,9 @@ class OpenidAssociation
     }
 
     /**
-     * Get created
+     * Get created.
      *
-     * @return integer
+     * @return int
      */
     public function getCreated()
     {
@@ -235,9 +240,9 @@ class OpenidAssociation
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

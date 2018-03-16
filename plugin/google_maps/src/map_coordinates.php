@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Show the map coordinates of all users geo extra field
+ * Show the map coordinates of all users geo extra field.
+ *
  * @author José Loguercio Silva <jose.loguercio@beeznest.com>
+ *
  * @package chamilo.plugin.google_maps
  */
-
-
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
@@ -66,4 +66,3 @@ $content = $tpl->fetch('google_maps/view/map_coordinates.tpl');
 $tpl->assign('header', $templateName);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
-

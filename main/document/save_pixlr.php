@@ -9,8 +9,9 @@ use ChamiloSession as Session;
  * @package chamilo.document
  *
  * @author Juan Carlos Raña Trabado
+ *
  * @since 30/january/2011
-*/
+ */
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script();
@@ -72,8 +73,8 @@ $filename = api_replace_dangerous_char($filename);
 $filename = disable_dangerous_file($filename);
 
 if (strlen(trim($filename)) == 0) {
-     echo "The title is empty"; //if title is empty, headers Content-Type = application/octet-stream, then not create a new title here please
-     exit;
+    echo "The title is empty"; //if title is empty, headers Content-Type = application/octet-stream, then not create a new title here please
+    exit;
 }
 
 //check file_get_contents
@@ -108,7 +109,6 @@ if (strpos($current_mime, 'image') === false) {
     exit;
 }
 
-
 //path, file and title
 $paintFileName = $filename.'.'.$extension;
 $title = $title.'.'.$extension;
@@ -124,12 +124,13 @@ if ($currentTool == 'document/createpaint') {
 
     if (file_exists($saveDir.'/'.$filename.'.'.$extension)) {
         $i = 1;
-        while (file_exists($saveDir.'/'.$filename.'_'.$i.'.'.$extension)) $i++;
+        while (file_exists($saveDir.'/'.$filename.'_'.$i.'.'.$extension)) {
+            $i++;
+        }
         $paintFileName = $filename.'_'.$i.'.'.$extension;
         $title = $filename.'_'.$i.'.'.$extension;
     }
 
-    //
     $documentPath = $saveDir.'/'.$paintFileName;
     //add new document to disk
     file_put_contents($documentPath, $contents);
@@ -197,7 +198,6 @@ if ($currentTool == 'document/createpaint') {
         );
     }
 }
-
 
 //delete temporal file
 $temp_file_2delete = Session::read('temp_realpath_image');

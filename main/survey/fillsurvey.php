@@ -5,9 +5,11 @@ use ChamiloSession as Session;
 
 /**
  * @package chamilo.survey
+ *
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
  * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts of the code as well
+ *
  * @todo check if the user already filled the survey and if this is the case then the answers have to be updated and not stored again.
  * @todo performance could be improved if not the survey_id was stored with the invitation but the survey_code
  */
@@ -55,7 +57,7 @@ $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : api_get_se
 if (!empty($userInfo)) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId,
-        'name' => get_lang('SurveyList')
+        'name' => get_lang('SurveyList'),
     ];
 }
 
@@ -172,7 +174,7 @@ if (Database::num_rows($result) > 1) {
         $frmLangUrl = api_get_self().'?'.api_get_cidreq().'&'
             .http_build_query([
                 'course' => Security::remove_XSS($_GET['course']),
-                'invitationcode' => Security::remove_XSS($_GET['invitationcode'])
+                'invitationcode' => Security::remove_XSS($_GET['invitationcode']),
             ]);
 
         echo '<form id="language" name="language" method="POST" action="'.$frmLangUrl.'">';
@@ -217,7 +219,7 @@ if (count($_POST) > 0) {
         }
 
         // Looping through all the post values
-        foreach ($_POST as $key => & $value) {
+        foreach ($_POST as $key => &$value) {
             // If the post value key contains the string 'question' then it is an answer on a question
             if (strpos($key, 'question') !== false && ($key != '_qf__question')) {
                 // Finding the question id by removing 'question'
@@ -240,7 +242,7 @@ if (count($_POST) > 0) {
                         $course_id
                     );
 
-                    foreach ($value as $answer_key => & $answer_value) {
+                    foreach ($value as $answer_key => &$answer_value) {
                         if ($types[$survey_question_id] == 'score') {
                             $option_id = $answer_key;
                             $option_value = $answer_value;
@@ -317,7 +319,7 @@ if (count($_POST) > 0) {
         }
 
         // Looping through all the post values
-        foreach ($_POST as $key => & $value) {
+        foreach ($_POST as $key => &$value) {
             // If the post value key contains the string 'question' then it is an answer to a question
             if (strpos($key, 'question') !== false) {
                 // Finding the question id by removing 'question'
@@ -372,7 +374,7 @@ if ($survey_data['form_fields'] != '' &&
     $survey_data['anonymous'] == 0 && is_array($user_data)
 ) {
     $form_fields = explode('@', $survey_data['form_fields']);
-    $list = array();
+    $list = [];
     foreach ($form_fields as $field) {
         $field_value = explode(':', $field);
         if (isset($field_value[1]) && $field_value[1] == 1) {
@@ -391,43 +393,43 @@ if ($survey_data['form_fields'] != '' &&
     if (api_is_western_name_order()) {
         if (isset($list['firstname']) && $list['firstname'] == 1) {
             //FIRST NAME
-            $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
+            $form->addElement('text', 'firstname', get_lang('FirstName'), ['size' => 40]);
             if (api_get_setting('profile', 'name') !== 'true') {
-                $form->freeze(array('firstname'));
+                $form->freeze(['firstname']);
             }
-            $form->applyFilter(array('firstname'), 'stripslashes');
-            $form->applyFilter(array('firstname'), 'trim');
+            $form->applyFilter(['firstname'], 'stripslashes');
+            $form->applyFilter(['firstname'], 'trim');
             $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
         }
         if (isset($list['lastname']) && $list['lastname'] == 1) {
             //    LAST NAME
-            $form->addElement('text', 'lastname', get_lang('LastName'), array('size' => 40));
+            $form->addElement('text', 'lastname', get_lang('LastName'), ['size' => 40]);
             if (api_get_setting('profile', 'name') !== 'true') {
-                $form->freeze(array('lastname'));
+                $form->freeze(['lastname']);
             }
-            $form->applyFilter(array('lastname'), 'stripslashes');
-            $form->applyFilter(array('lastname'), 'trim');
+            $form->applyFilter(['lastname'], 'stripslashes');
+            $form->applyFilter(['lastname'], 'trim');
             $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
         }
     } else {
         if (isset($list['lastname']) && $list['lastname'] == 1) {
             //    LAST NAME
-            $form->addElement('text', 'lastname', get_lang('LastName'), array('size' => 40));
+            $form->addElement('text', 'lastname', get_lang('LastName'), ['size' => 40]);
             if (api_get_setting('profile', 'name') !== 'true') {
-                $form->freeze(array('lastname'));
+                $form->freeze(['lastname']);
             }
-            $form->applyFilter(array('lastname'), 'stripslashes');
-            $form->applyFilter(array('lastname'), 'trim');
+            $form->applyFilter(['lastname'], 'stripslashes');
+            $form->applyFilter(['lastname'], 'trim');
             $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
         }
         if (isset($list['firstname']) && $list['firstname'] == 1) {
             //FIRST NAME
-            $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
+            $form->addElement('text', 'firstname', get_lang('FirstName'), ['size' => 40]);
             if (api_get_setting('profile', 'name') !== 'true') {
-                $form->freeze(array('firstname'));
+                $form->freeze(['firstname']);
             }
-            $form->applyFilter(array('firstname'), 'stripslashes');
-            $form->applyFilter(array('firstname'), 'trim');
+            $form->applyFilter(['firstname'], 'stripslashes');
+            $form->applyFilter(['firstname'], 'trim');
             $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
         }
     }
@@ -435,7 +437,7 @@ if ($survey_data['form_fields'] != '' &&
     if (isset($list['official_code']) && $list['official_code'] == 1) {
         //    OFFICIAL CODE
         if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
-            $form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => 40));
+            $form->addElement('text', 'official_code', get_lang('OfficialCode'), ['size' => 40]);
             if (api_get_setting('profile', 'officialcode') !== 'true') {
                 $form->freeze('official_code');
             }
@@ -451,7 +453,7 @@ if ($survey_data['form_fields'] != '' &&
 
     if (isset($list['email']) && $list['email'] == 1) {
         //    EMAIL
-        $form->addElement('text', 'email', get_lang('Email'), array('size' => 40));
+        $form->addElement('text', 'email', get_lang('Email'), ['size' => 40]);
         if (api_get_setting('profile', 'email') !== 'true') {
             $form->freeze('email');
         }
@@ -465,7 +467,7 @@ if ($survey_data['form_fields'] != '' &&
 
     if (isset($list['phone']) && $list['phone'] == 1) {
         // PHONE
-        $form->addElement('text', 'phone', get_lang('Phone'), array('size' => 20));
+        $form->addElement('text', 'phone', get_lang('Phone'), ['size' => 20]);
         if (api_get_setting('profile', 'phone') !== 'true') {
             $form->freeze('phone');
         }
@@ -523,7 +525,7 @@ if (!isset($_GET['show'])) {
     // The first thing we do is delete the session
     Session::erase('paged_questions');
     Session::erase('page_questions_sec');
-    $paged_questions_sec = array();
+    $paged_questions_sec = [];
 
     if (!empty($survey_data['survey_introduction'])) {
         echo '<div class="survey_content">'.$survey_data['survey_introduction'].'</div>';
@@ -540,7 +542,7 @@ if ($survey_data['form_fields'] &&
         $user_data = $form->exportValues();
         if (is_array($user_data)) {
             if (count($user_data) > 0) {
-                $extras = array();
+                $extras = [];
                 // Build SQL query
                 $sql = "UPDATE $table_user SET";
                 $update = false;
@@ -550,7 +552,7 @@ if ($survey_data['form_fields'] &&
                     'official_code',
                     'email',
                     'phone',
-                    'language'
+                    'language',
                 ];
 
                 foreach ($user_data as $key => $value) {
@@ -558,7 +560,6 @@ if ($survey_data['form_fields'] &&
                         $sql .= " $key = '".Database :: escape_string($value)."',";
                         $update = true;
                     }
-
                 }
                 // Remove trailing , from the query we have so far
                 $sql = rtrim($sql, ',');
@@ -579,13 +580,13 @@ if ($survey_data['form_fields'] &&
         // We unset the sessions
         Session::erase('paged_questions');
         Session::erase('page_questions_sec');
-        $paged_questions_sec = array();
+        $paged_questions_sec = [];
     } else {
         echo '<div id="survey_content" class="survey_content">'.get_lang('UpdateInformation').'</div>';
         // We unset the sessions
         Session::erase('paged_questions');
         Session::erase('page_questions_sec');
-        $paged_questions_sec = array();
+        $paged_questions_sec = [];
         $form->display();
     }
 }
@@ -630,7 +631,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
     // Getting all the questions for this page and add them to a
     // multidimensional array where the first index is the page.
     // As long as there is no pagebreak fount we keep adding questions to the page
-    $questions_displayed = array();
+    $questions_displayed = [];
     $counter = 0;
     $paged_questions = Session::read('paged_questions');
     // If non-conditional survey
@@ -722,7 +723,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
             $question_counter_max = Database::num_rows($result);
             $counter = 0;
             $limit = 0;
-            $questions = array();
+            $questions = [];
             while ($row = Database :: fetch_array($result, 'ASSOC')) {
                 // If the type is not a pagebreak we store it in the $questions array
                 if ($row['type'] != 'pagebreak') {
@@ -754,10 +755,10 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                 $order = $shuffle;
             }
 
-            $answer_list = array();
+            $answer_list = [];
 
             // Get current user results
-            $results = array();
+            $results = [];
             $sql = "SELECT survey_group_pri, user, SUM(value) as value
                     FROM $table_survey_answer as survey_answer
                     INNER JOIN $table_survey_question as survey_question
@@ -780,7 +781,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
 
             //echo '<br />'; print_r($results); echo '<br />';
             // Get the total score for each group of questions
-            $totals = array();
+            $totals = [];
             $sql = "SELECT SUM(temp.value) as value, temp.survey_group_pri FROM
                     (
                         SELECT
@@ -823,10 +824,10 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
             // Sort the results by score (getting a list of group IDs by score into $groups)
             arsort($final_results);
             $groups = array_keys($final_results);
-            $result = array();
+            $result = [];
             $count_result = 0;
-            foreach ($final_results as $key => & $sub_result) {
-                $result[] = array('group' => $key, 'value' => $sub_result);
+            foreach ($final_results as $key => &$sub_result) {
+                $result[] = ['group' => $key, 'value' => $sub_result];
                 $count_result++;
             }
 
@@ -1010,7 +1011,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
                         $question_counter_max = Database::num_rows($result);
                         $counter = 0;
                         $limit = 0;
-                        $questions = array();
+                        $questions = [];
                         while ($row = Database::fetch_array($result, 'ASSOC')) {
                             // If the type is not a pagebreak we store it in the $questions array
                             if ($row['type'] != 'pagebreak') {
@@ -1044,7 +1045,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
         } else {
             // We need this variable only in the 2nd set of questions when personality is set.
             Session::erase('page_questions_sec');
-            $paged_questions_sec = array();
+            $paged_questions_sec = [];
 
             // Only the questions from the basic group
             // the 50 questions A B C D E F G
@@ -1127,7 +1128,7 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
             if (!is_null($result)) {
                 $counter = 0;
                 $limit = 0;
-                $questions = array();
+                $questions = [];
                 while ($row = Database :: fetch_array($result, 'ASSOC')) {
                     // If the type is not a pagebreak we store it in the $questions array
                     if ($row['type'] != 'pagebreak') {
@@ -1201,9 +1202,9 @@ $form = new FormValidator(
 $form->addHidden('language', $p_l);
 
 if (isset($questions) && is_array($questions)) {
-    foreach ($questions as $key => & $question) {
+    foreach ($questions as $key => &$question) {
         $ch_type = 'ch_'.$question['type'];
-        $display = new $ch_type;
+        $display = new $ch_type();
         // @todo move this in a function.
         $form->addHtml('<div class="survey_question '.$ch_type.'">');
         $form->addHtml('<h5 class="title">'.$question['sort'].'. '.strip_tags($question['survey_question']).'</h5>');
@@ -1309,7 +1310,7 @@ if ($survey_data['survey_type'] === '0') {
         } else {
             // We need this variable only if personality == 1
             Session::erase('page_questions_sec');
-            $paged_questions_sec = array();
+            $paged_questions_sec = [];
         }
 
         if ($personality == 0) {
@@ -1359,7 +1360,8 @@ $form->display();
 Display::display_footer();
 
 /**
- * Check whether this survey has ended. If so, display message and exit rhis script
+ * Check whether this survey has ended. If so, display message and exit rhis script.
+ *
  * @param array $surveyData Survey data
  */
 function check_time_availability($surveyData)

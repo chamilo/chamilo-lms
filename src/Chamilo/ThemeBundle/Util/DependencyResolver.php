@@ -2,37 +2,34 @@
 /**
  * DependencyResolver.php
  * publisher
- * Date: 18.04.14
+ * Date: 18.04.14.
  */
 
 namespace Chamilo\ThemeBundle\Util;
 
-
 /**
- * Class DependencyResolver
+ * Class DependencyResolver.
  *
  * @package Chamilo\ThemeBundle\Util
  */
 class DependencyResolver implements DependencyResolverInterface
 {
-
     /**
      * @var array
      */
-    protected $queued = array();
+    protected $queued = [];
     /**
      * @var array
      */
-    protected $registered = array();
+    protected $registered = [];
     /**
      * @var array
      */
-    protected $resolved = array();
+    protected $resolved = [];
     /**
      * @var array
      */
-    protected $unresolved = array();
-
+    protected $unresolved = [];
 
     /**
      * @param $items
@@ -70,7 +67,7 @@ class DependencyResolver implements DependencyResolverInterface
                 continue;
             } // unregistered
             if (!$this->hasDependencies($id)) { // standalone
-                $this->queued[]      = $this->registered[$id];
+                $this->queued[] = $this->registered[$id];
                 $this->resolved[$id] = true;
 
                 continue;
@@ -83,13 +80,12 @@ class DependencyResolver implements DependencyResolverInterface
             $deps = $this->unresolved($this->getDependencies($id));
 
             if (empty($deps)) {
-                $this->queued[]      = $this->registered[$id];
+                $this->queued[] = $this->registered[$id];
                 $this->resolved[$id] = true;
 
                 continue;
             }
         }
-
     }
 
     /**
@@ -113,13 +109,11 @@ class DependencyResolver implements DependencyResolverInterface
             return false;
         }
 
-        return (!empty($this->registered[$id]['deps']));
+        return !empty($this->registered[$id]['deps']);
     }
 
     /**
      * @param $id
-     *
-     * @return null
      */
     protected function getDependencies($id)
     {
@@ -146,7 +140,6 @@ class DependencyResolver implements DependencyResolverInterface
         return in_array($needle, $deps);
     }
 
-
     /**
      * @throws \RuntimeException
      */
@@ -155,7 +148,6 @@ class DependencyResolver implements DependencyResolverInterface
         $ids = array_keys($this->registered);
 
         foreach ($ids as $id) {
-
             if (!$this->hasDependencies($id)) {
                 continue;
             }
@@ -173,8 +165,5 @@ class DependencyResolver implements DependencyResolverInterface
                 }
             }
         }
-
-
     }
-
 }

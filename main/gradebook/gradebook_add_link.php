@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -99,7 +100,7 @@ if (isset($typeSelected) && $typeSelected != '0') {
         // Update view_properties
         if (isset($typeSelected) &&
             5 == $typeSelected &&
-            (isset($addvalues['select_link']) && $addvalues['select_link'] <> "")
+            (isset($addvalues['select_link']) && $addvalues['select_link'] != "")
         ) {
             $sql1 = 'SELECT thread_title from '.$tbl_forum_thread.'
 					 WHERE 
@@ -129,7 +130,7 @@ if (isset($typeSelected) && $typeSelected != '0') {
         }
 
         $link->add();
-        $addvalue_result = !empty($addvalues['addresult']) ? $addvalues['addresult'] : array();
+        $addvalue_result = !empty($addvalues['addresult']) ? $addvalues['addresult'] : [];
         if ($addvalue_result == 1) {
             header('Location: gradebook_add_result.php?selecteval='.$link->get_ref_id().'&'.api_get_cidreq());
             exit;
@@ -140,10 +141,10 @@ if (isset($typeSelected) && $typeSelected != '0') {
     }
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$selectCat,
-    'name' => get_lang('Gradebook')
-);
+    'name' => get_lang('Gradebook'),
+];
 $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = '<script>

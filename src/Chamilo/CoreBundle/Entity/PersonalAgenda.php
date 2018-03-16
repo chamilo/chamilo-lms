@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * PersonalAgenda
+ * PersonalAgenda.
  *
  * @ORM\Table(name="personal_agenda", indexes={@ORM\Index(name="idx_personal_agenda_user", columns={"user"}),
  * @ORM\Index(name="idx_personal_agenda_parent", columns={"parent_event_id"})})
@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 class PersonalAgenda
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -24,7 +24,7 @@ class PersonalAgenda
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user", type="integer", nullable=true)
      */
@@ -66,14 +66,14 @@ class PersonalAgenda
     private $course;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="parent_event_id", type="integer", nullable=true)
      */
     private $parentEventId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="all_day", type="integer", nullable=false)
      */
@@ -87,9 +87,9 @@ class PersonalAgenda
     private $color;
 
     /**
-     * Set user
+     * Set user.
      *
-     * @param integer $user
+     * @param int $user
      *
      * @return PersonalAgenda
      */
@@ -101,9 +101,9 @@ class PersonalAgenda
     }
 
     /**
-     * Get user
+     * Get user.
      *
-     * @return integer
+     * @return int
      */
     public function getUser()
     {
@@ -111,9 +111,10 @@ class PersonalAgenda
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return PersonalAgenda
      */
     public function setTitle($title)
@@ -124,7 +125,7 @@ class PersonalAgenda
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -134,9 +135,10 @@ class PersonalAgenda
     }
 
     /**
-     * Set text
+     * Set text.
      *
      * @param string $text
+     *
      * @return PersonalAgenda
      */
     public function setText($text)
@@ -147,7 +149,7 @@ class PersonalAgenda
     }
 
     /**
-     * Get text
+     * Get text.
      *
      * @return string
      */
@@ -157,9 +159,10 @@ class PersonalAgenda
     }
 
     /**
-     * Set date
+     * Set date.
      *
      * @param \DateTime $date
+     *
      * @return PersonalAgenda
      */
     public function setDate($date)
@@ -170,7 +173,7 @@ class PersonalAgenda
     }
 
     /**
-     * Get date
+     * Get date.
      *
      * @return \DateTime
      */
@@ -180,9 +183,10 @@ class PersonalAgenda
     }
 
     /**
-     * Set enddate
+     * Set enddate.
      *
      * @param \DateTime $enddate
+     *
      * @return PersonalAgenda
      */
     public function setEnddate($enddate)
@@ -193,7 +197,7 @@ class PersonalAgenda
     }
 
     /**
-     * Get enddate
+     * Get enddate.
      *
      * @return \DateTime
      */
@@ -203,9 +207,10 @@ class PersonalAgenda
     }
 
     /**
-     * Set course
+     * Set course.
      *
      * @param string $course
+     *
      * @return PersonalAgenda
      */
     public function setCourse($course)
@@ -216,7 +221,7 @@ class PersonalAgenda
     }
 
     /**
-     * Get course
+     * Get course.
      *
      * @return string
      */
@@ -226,9 +231,10 @@ class PersonalAgenda
     }
 
     /**
-     * Set parentEventId
+     * Set parentEventId.
      *
-     * @param integer $parentEventId
+     * @param int $parentEventId
+     *
      * @return PersonalAgenda
      */
     public function setParentEventId($parentEventId)
@@ -239,9 +245,9 @@ class PersonalAgenda
     }
 
     /**
-     * Get parentEventId
+     * Get parentEventId.
      *
-     * @return integer
+     * @return int
      */
     public function getParentEventId()
     {
@@ -249,9 +255,10 @@ class PersonalAgenda
     }
 
     /**
-     * Set allDay
+     * Set allDay.
      *
-     * @param integer $allDay
+     * @param int $allDay
+     *
      * @return PersonalAgenda
      */
     public function setAllDay($allDay)
@@ -262,9 +269,9 @@ class PersonalAgenda
     }
 
     /**
-     * Get allDay
+     * Get allDay.
      *
-     * @return integer
+     * @return int
      */
     public function getAllDay()
     {
@@ -272,9 +279,9 @@ class PersonalAgenda
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

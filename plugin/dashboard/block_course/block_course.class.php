@@ -1,26 +1,28 @@
 <?php
 /**
  * This file is part of course block plugin for dashboard,
- * it should be required inside dashboard controller for showing it into dashboard interface from plattform
+ * it should be required inside dashboard controller for showing it into dashboard interface from plattform.
+ *
  * @package chamilo.dashboard
+ *
  * @author Christian Fasanando
  */
 /**
  * This class is used like controller for this course block plugin,
  * the class name must be registered inside path.info file
- * (e.g: controller = "BlockCourse"), so dashboard controller will be instantiate it
+ * (e.g: controller = "BlockCourse"), so dashboard controller will be instantiate it.
+ *
  * @package chamilo.dashboard
  */
 class BlockCourse extends Block
 {
-
     private $user_id;
     private $courses;
     private $path;
-    private $permission = array(DRH);
+    private $permission = [DRH];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct($user_id)
     {
@@ -32,9 +34,11 @@ class BlockCourse extends Block
     }
 
     /**
-     * This method check if a user is allowed to see the block inside dashboard interface
+     * This method check if a user is allowed to see the block inside dashboard interface.
+     *
      * @param    int        User id
-     * @return    bool    Is block visible for user
+     *
+     * @return bool Is block visible for user
      */
     public function is_block_visible_for_user($user_id)
     {
@@ -48,25 +52,27 @@ class BlockCourse extends Block
         ) {
             $is_block_visible_for_user = true;
         }
+
         return $is_block_visible_for_user;
     }
 
     /**
      * This method return content html containing information
      * about courses and its position for showing it inside dashboard interface
-     * it's important to use the name 'get_block' for beeing used from dashboard controller
-     * @return array   column and content html
+     * it's important to use the name 'get_block' for beeing used from dashboard controller.
+     *
+     * @return array column and content html
      */
     public function get_block()
     {
         global $charset;
         $column = 2;
-        $data = array();
+        $data = [];
         $content = $this->get_content_html();
         $html = '
 		            <div class="panel panel-default" id="intro">
-		                <div class="panel-heading">' . get_lang('CoursesInformation').'
-		                    <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\'' . addslashes(
+		                <div class="panel-heading">'.get_lang('CoursesInformation').'
+		                    <div class="pull-right"><a class="btn btn-danger btn-xs" onclick="javascript:if(!confirm(\''.addslashes(
                 api_htmlentities(
                     get_lang('ConfirmYourChoice'),
                     ENT_QUOTES,
@@ -77,7 +83,7 @@ class BlockCourse extends Block
                 </a></div>
 		                </div>
 		                <div class="panel-body">
-		                   ' . $content.'
+		                   '.$content.'
 		                </div>
 		            </div>
 				';
@@ -88,8 +94,9 @@ class BlockCourse extends Block
     }
 
     /**
-     * This method return a content html, it's used inside get_block method for showing it inside dashboard interface
-     * @return string  content html
+     * This method return a content html, it's used inside get_block method for showing it inside dashboard interface.
+     *
+     * @return string content html
      */
     public function get_content_html()
     {
@@ -99,10 +106,10 @@ class BlockCourse extends Block
         if (!empty($course_data)) {
             $data_table .= '<table class="data_table" width:"95%">';
             $data_table .= '<tr>
-	    						<th>' . get_lang('CourseTitle').'</th>
-	    						<th width="20%">' . get_lang('NbStudents').'</th>
-	    						<th width="20%">' . get_lang('AvgTimeSpentInTheCourse').'</th>
-	    						<th width="20%">' . get_lang('ThematicAdvance').'</th>
+	    						<th>'.get_lang('CourseTitle').'</th>
+	    						<th width="20%">'.get_lang('NbStudents').'</th>
+	    						<th width="20%">'.get_lang('AvgTimeSpentInTheCourse').'</th>
+	    						<th width="20%">'.get_lang('ThematicAdvance').'</th>
 	    					</tr>';
             $i = 1;
             foreach ($course_data as $course) {
@@ -135,22 +142,24 @@ class BlockCourse extends Block
     }
 
     /**
-     * Get number of courses
+     * Get number of courses.
+     *
      * @return int
      */
-    function get_number_of_courses()
+    public function get_number_of_courses()
     {
         return count($this->courses);
     }
 
     /**
-     * Get course information data
+     * Get course information data.
+     *
      * @return array
      */
-    function get_course_information_data()
+    public function get_course_information_data()
     {
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $course_data = array();
+        $course_data = [];
         $courses = $this->courses;
         $thematic = new Thematic();
 
@@ -164,7 +173,7 @@ class BlockCourse extends Block
             $sql = "SELECT user_id FROM $tbl_course_user as course_rel_user
                     WHERE course_rel_user.status=".STUDENT." AND course_rel_user.c_id='$courseId'";
             $rs = Database::query($sql);
-            $users = array();
+            $users = [];
             while ($row = Database::fetch_array($rs)) {
                 $users[] = $row['user_id'];
             }
@@ -187,7 +196,7 @@ class BlockCourse extends Block
                 $tematic_advance_progress = '0%';
             }
 
-            $table_row = array();
+            $table_row = [];
             $table_row[] = $row_course['title'];
             $table_row[] = $nb_students_in_course;
             $table_row[] = $avg_time_spent_in_course;

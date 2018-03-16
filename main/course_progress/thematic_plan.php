@@ -4,13 +4,15 @@
 use ChamiloSession as Session;
 
 /**
-* View (MVC patter) for thematic plan
-* @author Christian Fasanando <christian1827@gmail.com>
-* @package chamilo.course_progress
-*/
+ * View (MVC patter) for thematic plan.
+ *
+ * @author Christian Fasanando <christian1827@gmail.com>
+ *
+ * @package chamilo.course_progress
+ */
 
 // actions menu
-$new_thematic_plan_data = array();
+$new_thematic_plan_data = [];
 if (!empty($thematic_plan_data)) {
     foreach ($thematic_plan_data as $thematic_item) {
         $thematic_simple_list[] = $thematic_item['description_type'];
@@ -65,11 +67,11 @@ if ($action === 'thematic_plan_list') {
             get_lang('Description'),
             false,
             false,
-            array(
+            [
                 'ToolbarStartExpanded' => 'false',
                 'ToolbarSet' => 'TrainingDescription',
-                'Height' => '150'
-            )
+                'Height' => '150',
+            ]
         );
 
         if (!empty($thematic_simple_list) && in_array($id, $thematic_simple_list)) {
@@ -96,7 +98,7 @@ if ($action === 'thematic_plan_list') {
             [],
             true
         ),
-        $form->addButtonSave(get_lang('Save'), 'submit', true)
+        $form->addButtonSave(get_lang('Save'), 'submit', true),
     ]);
     $form->display();
 } elseif ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
@@ -128,18 +130,18 @@ if ($action === 'thematic_plan_list') {
         $form->addElement('hidden', 'description_type', $description_type);
     }
 
-    $form->addText('title', get_lang('Title'), true, array('size'=>'50'));
+    $form->addText('title', get_lang('Title'), true, ['size' => '50']);
     $form->addHtmlEditor(
         'description',
         get_lang('Description'),
         false,
         false,
-        array(
+        [
             'ToolbarStartExpanded' => 'false',
             'ToolbarSet' => 'TrainingDescription',
             'Width' => '80%',
-            'Height' => '150'
-        )
+            'Height' => '150',
+        ]
     );
     $form->addButtonSave(get_lang('Save'));
 

@@ -5,11 +5,11 @@ use ChamiloSession as Session;
 
 /**
  * @package chamilo.notebook
+ *
  * @author Christian Fasanando, initial version
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium,
  * refactoring and tighter integration
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $current_course_tool = TOOL_NOTEBOOK;
@@ -42,17 +42,17 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 // Tool name
 if ($action === 'addnote') {
     $tool = 'NoteAddNew';
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq(),
-        'name' => get_lang('ToolNotebook')
-    );
+        'name' => get_lang('ToolNotebook'),
+    ];
 }
 if ($action === 'editnote') {
     $tool = 'ModifyNote';
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq(),
-        'name' => get_lang('ToolNotebook')
-    );
+        'name' => get_lang('ToolNotebook'),
+    ];
 }
 
 // Displaying the header
@@ -81,13 +81,13 @@ if ($action === 'addnote') {
     );
     // Setting the form elements
     $form->addElement('header', '', get_lang('NoteAddNew'));
-    $form->addElement('text', 'note_title', get_lang('NoteTitle'), array('id' => 'note_title'));
+    $form->addElement('text', 'note_title', get_lang('NoteTitle'), ['id' => 'note_title']);
     $form->addElement(
         'html_editor',
         'note_comment',
         get_lang('NoteComment'),
         null,
-        api_is_allowed_to_edit() ? array('ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300') : array('ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student')
+        api_is_allowed_to_edit() ? ['ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300'] : ['ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student']
     );
     $form->addButtonCreate(get_lang('AddNote'), 'SubmitNote');
 
@@ -119,7 +119,7 @@ if ($action === 'addnote') {
         echo '</div>';
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
-        $form->setConstants(array('sec_token' => $token));
+        $form->setConstants(['sec_token' => $token]);
         $form->display();
     }
 } elseif ($action === 'editnote' && is_numeric($_GET['notebook_id'])) {
@@ -139,15 +139,15 @@ if ($action === 'addnote') {
     // Setting the form elements
     $form->addElement('header', '', get_lang('ModifyNote'));
     $form->addElement('hidden', 'notebook_id');
-    $form->addElement('text', 'note_title', get_lang('NoteTitle'), array('size' => '100'));
+    $form->addElement('text', 'note_title', get_lang('NoteTitle'), ['size' => '100']);
     $form->addElement(
         'html_editor',
         'note_comment',
         get_lang('NoteComment'),
         null,
         api_is_allowed_to_edit()
-        ? array('ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300')
-        : array('ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student')
+        ? ['ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300']
+        : ['ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student']
     );
     $form->addButtonUpdate(get_lang('ModifyNote'), 'SubmitNote');
 
@@ -167,7 +167,6 @@ if ($action === 'addnote') {
             if ($res) {
                 echo Display::return_message(get_lang('NoteUpdated'), 'confirmation');
             }
-
         }
         Security::clear_token();
         NotebookManager::display_notes();
@@ -184,7 +183,7 @@ if ($action === 'addnote') {
         echo '</div>';
         $token = Security::get_token();
         $form->addElement('hidden', 'sec_token');
-        $form->setConstants(array('sec_token' => $token));
+        $form->setConstants(['sec_token' => $token]);
         $form->display();
     }
 } elseif ($action === 'deletenote' && is_numeric($_GET['notebook_id'])) {
@@ -196,7 +195,7 @@ if ($action === 'addnote') {
 
     NotebookManager::display_notes();
 } elseif ($action === 'changeview' &&
-    in_array($_GET['view'], array('creation_date', 'update_date', 'title'))
+    in_array($_GET['view'], ['creation_date', 'update_date', 'title'])
 ) {
     // Action handling: changing the view (sorting order)
     switch ($_GET['view']) {

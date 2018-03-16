@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
-use Doctrine\Common\Collections\Criteria;
 
 /**
  * This is the index file displayed when a user is logged in on Chamilo.
@@ -11,7 +10,9 @@ use Doctrine\Common\Collections\Criteria;
  * - personal course list
  * - menu bar
  * Search for CONFIGURATION parameters to modify settings
+ *
  * @package chamilo.main
+ *
  * @todo Shouldn't the CONFVAL_ constant be moved to the config page? Has anybody any idea what the are used for?
  *       If these are really configuration settings then we can add those to the dokeos config settings.
  * @todo check for duplication of functions with index.php (user_portal.php is orginally a copy of index.php)

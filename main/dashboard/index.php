@@ -4,11 +4,13 @@
 use ChamiloSession as Session;
 
 /**
-* Template (front controller in MVC pattern) used for distpaching to
- * the controllers depend on the current action
-* @author Christian Fasanando <christian1827@gmail.com>
-* @package chamilo.dashboard
-*/
+ * Template (front controller in MVC pattern) used for distpaching to
+ * the controllers depend on the current action.
+ *
+ * @author Christian Fasanando <christian1827@gmail.com>
+ *
+ * @package chamilo.dashboard
+ */
 $cidReset = true;
 
 // including files
@@ -26,7 +28,7 @@ $this_section = SECTION_DASHBOARD;
 Session::erase('this_section'); //for hmtl editor repository
 
 // get actions
-$actions = array('listing', 'store_user_block', 'disable_block');
+$actions = ['listing', 'store_user_block', 'disable_block'];
 $action = 'listing';
 if (isset($_GET['action']) && in_array($_GET['action'], $actions)) {
     $action = $_GET['action'];

@@ -4,12 +4,12 @@
 use ChamiloSession as Session;
 
 /**
-* Exercise preview
-*
-* @package chamilo.exercise
-* @author Julio Montoya <gugli100@gmail.com>
-*/
-
+ * Exercise preview.
+ *
+ * @package chamilo.exercise
+ *
+ * @author Julio Montoya <gugli100@gmail.com>
+ */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $current_course_tool = TOOL_QUIZ;
@@ -37,7 +37,7 @@ $origin = api_get_origin();
 
 $interbreadcrumb[] = [
     "url" => "exercise.php?".api_get_cidreq(),
-    "name" => get_lang('Exercises')
+    "name" => get_lang('Exercises'),
 ];
 $interbreadcrumb[] = ["url" => "#", "name" => $objExercise->selectTitle(true)];
 
@@ -61,7 +61,7 @@ if ($time_control) {
 
 if ($origin != 'learnpath') {
     $fluid = false;
-    //Display::display_header();
+//Display::display_header();
 } else {
     $htmlHeadXtra[] = "
     <style>
@@ -72,7 +72,7 @@ if ($origin != 'learnpath') {
     //Display::display_reduced_header();
 }
 $tpl = new Template('Overview');
-$list = array();
+$list = [];
 $html = '';
 $message = '';
 
@@ -150,7 +150,7 @@ $attempts = Event::getExerciseResultsByUser(
 );
 $counter = count($attempts);
 
-$my_attempt_array = array();
+$my_attempt_array = [];
 $table_content = null;
 
 /* Make a special case for IE, which doesn't seem to be able to handle the
@@ -182,7 +182,7 @@ if (!empty($attempts)) {
         $attempt_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?';
         $attempt_url .= api_get_cidreq().'&show_headers=1&';
         $attempt_url .= http_build_query([
-            'id' => $attempt_result['exe_id']
+            'id' => $attempt_result['exe_id'],
         ]);
         $attempt_url .= $url_suffix;
         $attempt_link = '<div class="row">';
@@ -193,7 +193,7 @@ if (!empty($attempts)) {
             [
                 'class' => $btn_class.'btn btn-default btn-sm btn-block',
                 'data-title' => get_lang('Show'),
-                'data-size' => 'lg'
+                'data-size' => 'lg',
             ]
         );
         $attempt_link .= '</div>';
@@ -202,15 +202,15 @@ if (!empty($attempts)) {
         if ($attempt_result['attempt_revised'] == 0) {
             $teacher_revised = Display::label(get_lang('NotValidated'), 'info');
         }
-        
-        $row = array(
+
+        $row = [
             'count' => $i,
             'date' => api_convert_and_format_date(
                 $attempt_result['start_date'],
                 DATE_TIME_FORMAT_LONG
             ),
-            'userIp' => $attempt_result['user_ip']
-        );
+            'userIp' => $attempt_result['user_ip'],
+        ];
         $attempt_link .= $teacher_revised;
         $attempt_link .= '</div>';
         $attempt_link .= '</div>';
@@ -221,7 +221,7 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
                 RESULT_DISABLE_SHOW_SCORE_ONLY,
                 RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
-                RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT
+                RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
             ]
         )) {
             $row['result'] = $score;
@@ -316,7 +316,7 @@ if ($objExercise->selectAttempts() && $visible_return['value'] == true) {
 }
 
 if ($time_control) {
-    $tpl->assign('time_control',$objExercise->return_time_left_div());
+    $tpl->assign('time_control', $objExercise->return_time_left_div());
 }
 
 $tpl->assign('fluid', $fluid);

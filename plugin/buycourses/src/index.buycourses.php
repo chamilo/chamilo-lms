@@ -2,10 +2,10 @@
 /* For license terms, see /license.txt */
 
 /**
- * Index of the Buy Courses plugin courses list
+ * Index of the Buy Courses plugin courses list.
+ *
  * @package chamilo.plugin.buycourses
  */
-
 $plugin = BuyCoursesPlugin::create();
 $guess_enable = $plugin->get('unregistered_users_enable');
 

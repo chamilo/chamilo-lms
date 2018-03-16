@@ -4,14 +4,15 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * TestProposedAnswer toolbar configuration
+ * TestProposedAnswer toolbar configuration.
  *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class TestProposedAnswer extends Basic
 {
     /**
-     * Get the toolbar config
+     * Get the toolbar config.
+     *
      * @return array
      */
     public function getConfig()
@@ -30,7 +31,8 @@ class TestProposedAnswer extends Basic
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is maximized
+     * Get the toolbar configuration when CKEditor is maximized.
+     *
      * @return array
      */
     protected function getMaximizedToolbar()
@@ -39,7 +41,8 @@ class TestProposedAnswer extends Basic
     }
 
     /**
-     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false.
+     *
      * @return array
      */
     protected function getNormalToolbar()
@@ -53,15 +56,16 @@ class TestProposedAnswer extends Basic
                 'Table',
                 'PasteFromWord',
                 'inserthtml',
-                api_get_setting('enabled_mathjax') === 'true' ? 'Mathjax' : ''
+                api_get_setting('enabled_mathjax') === 'true' ? 'Mathjax' : '',
             ],
             ['Asciimath', 'Asciisvg'],
-            ['Maximize', 'Source']
+            ['Maximize', 'Source'],
         ];
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is minimized
+     * Get the toolbar configuration when CKEditor is minimized.
+     *
      * @return array
      */
     protected function getMinimizedToolbar()

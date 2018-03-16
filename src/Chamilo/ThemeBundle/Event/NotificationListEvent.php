@@ -6,7 +6,7 @@ namespace Chamilo\ThemeBundle\Event;
 use Chamilo\ThemeBundle\Model\NotificationInterface;
 
 /**
- * Class NotificationListEvent
+ * Class NotificationListEvent.
  *
  * @package Chamilo\ThemeBundle\Event
  */
@@ -15,7 +15,7 @@ class NotificationListEvent extends ThemeEvent
     /**
      * @var array
      */
-    protected $notifications = array();
+    protected $notifications = [];
 
     protected $total = 0;
 

@@ -6,7 +6,8 @@ namespace Chamilo\PageBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * Class ChamiloPageBundle
+ * Class ChamiloPageBundle.
+ *
  * @package Chamilo\PageBundle
  */
 class ChamiloPageBundle extends Bundle

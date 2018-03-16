@@ -4,7 +4,6 @@
 /**
  * @package chamilo.admin
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -20,11 +19,11 @@ $form_sent = 0;
 $tool_name = get_lang('ImportUsers');
 
 //$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => "session_list.php", "name" => get_lang('SessionList'));
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = ['url' => "session_list.php", "name" => get_lang('SessionList')];
+$interbreadcrumb[] = [
     'url' => "resume_session.php?id_session=".$session_id,
     "name" => get_lang('SessionOverview'),
-);
+];
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     if (isset($_FILES['import_file']['tmp_name']) &&
@@ -34,7 +33,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 
         // CSV
         $users = Import::csvToArray($_FILES['import_file']['tmp_name']);
-        $user_list = array();
+        $user_list = [];
         foreach ($users as $user_data) {
             $username = $user_data['username'];
             $user_id = UserManager::get_user_id_from_username($username);
@@ -51,7 +50,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                 false
             );
 
-            foreach ($user_list as & $user_id) {
+            foreach ($user_list as &$user_id) {
                 $user_info = api_get_user_info($user_id);
                 $user_id = $user_info['complete_name'];
             }
@@ -80,7 +79,7 @@ $form = new FormValidator(
     'post',
     api_get_self().'?id_session='.$session_id,
     null,
-    array('enctype' => 'multipart/form-data')
+    ['enctype' => 'multipart/form-data']
 );
 $form->addElement('hidden', 'formSent', 1);
 $form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));

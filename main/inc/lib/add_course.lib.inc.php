@@ -4,19 +4,22 @@
 use Chamilo\CourseBundle\Entity\CToolIntro;
 
 /**
- * Class AddCourse
+ * Class AddCourse.
  */
 class AddCourse
 {
     /**
      * Defines the four needed keys to create a course based on several parameters.
+     *
      * @param string    The code you want for this course
      * @param string    Prefix added for ALL keys
      * @param string    Prefix added for databases only
      * @param string    Prefix added for paths only
      * @param bool      Add unique prefix
      * @param bool      Use code-independent keys
-     * @return array    An array with the needed keys ['currentCourseCode'], ['currentCourseId'], ['currentCourseDbName'], ['currentCourseRepository']
+     *
+     * @return array An array with the needed keys ['currentCourseCode'], ['currentCourseId'], ['currentCourseDbName'], ['currentCourseRepository']
+     *
      * @todo Eliminate the global variables.
      * @assert (null) === false
      */
@@ -41,8 +44,8 @@ class AddCourse
             $unique_prefix = '';
         }
 
-        $keys = array();
-        $final_suffix = array('CourseId' => '', 'CourseDb' => '', 'CourseDir' => '');
+        $keys = [];
+        $final_suffix = ['CourseId' => '', 'CourseDb' => '', 'CourseDir' => ''];
         $limit_numb_try = 100;
         $keys_are_unique = false;
         $try_new_fsc_id = $try_new_fsc_db = $try_new_fsc_dir = 0;
@@ -83,9 +86,11 @@ class AddCourse
 
     /**
      * Initializes a file repository for a newly created course.
+     *
      * @param string Course repository
      * @param string Course code
-     * @return int 0
+     *
+     * @return int
      * @assert (null,null) === false
      */
     public static function prepare_course_repository($course_repository, $course_code)
@@ -196,13 +201,14 @@ class AddCourse
     }
 
     /**
-     * Gets an array with all the course tables (deprecated?)
+     * Gets an array with all the course tables (deprecated?).
+     *
      * @return string[]
      * @assert (null) !== null
      */
     public static function get_course_tables()
     {
-        $tables = array();
+        $tables = [];
         $tables[] = 'item_property';
         $tables[] = 'tool';
         $tables[] = 'tool_intro';
@@ -296,8 +302,8 @@ class AddCourse
     }
 
     /**
-     * Executed only before create_course_tables()
-     * @return void
+     * Executed only before create_course_tables().
+     *
      * @assert (null) === null
      */
     public static function drop_course_tables()
@@ -309,16 +315,17 @@ class AddCourse
         }
     }
 
-
     /**
      * Returns a list of all files in the given course directory. The requested
      * directory will be checked against a "checker" directory to avoid access to
-     * protected/unauthorized files
+     * protected/unauthorized files.
+     *
      * @param string Complete path to directory we want to list
      * @param array A list of files to which we want to add the files found
      * @param string Type of base directory from which we want to recover the files
      * @param string $path
      * @param string $media
+     *
      * @return array
      * @assert (null,null,null) === false
      * @assert ('abc',array(),'') === array()
@@ -363,36 +370,43 @@ class AddCourse
                 }
             }
         }
+
         return $files;
     }
 
     /**
-     * Sorts pictures by type (used?)
+     * Sorts pictures by type (used?).
+     *
      * @param array List of files (sthg like array(0=>array('png'=>1)))
      * @param string File type
      * @param string $type
+     *
      * @return array The received array without files not matching type
      * @assert (array(),null) === array()
      */
     public static function sort_pictures($files, $type)
     {
-        $pictures = array();
+        $pictures = [];
         foreach ($files as $key => $value) {
             if (isset($value[$type]) && $value[$type] != '') {
                 $pictures[][$type] = $value[$type];
             }
         }
+
         return $pictures;
     }
 
     /**
      * Fills the course database with some required content and example content.
+     *
      * @param int Course (int) ID
      * @param string Course directory name (e.g. 'ABC')
      * @param string Language used for content (e.g. 'spanish')
      * @param bool Whether to fill the course with example content
      * @param int $authorId
+     *
      * @return bool False on error, true otherwise
+     *
      * @version 1.2
      * @assert (null, '', '', null) === false
      * @assert (1, 'ABC', null, null) === false
@@ -611,17 +625,17 @@ class AddCourse
             'course_theme' => ['default' => '', 'category' => 'theme'],
             'allow_learning_path_theme' => ['default' => 1, 'category' => 'theme'],
             'allow_open_chat_window' => ['default' => 1, 'category' => 'chat'],
-            'email_alert_to_teacher_on_new_user_in_course' => ['default' => 0, 'category' =>'registration'],
-            'allow_user_view_user_list' => ['default' =>1, 'category' =>'user'],
-            'display_info_advance_inside_homecourse' => ['default' => 1, 'category' =>'thematic_advance'],
-            'email_alert_students_on_new_homework' => ['default' => 0, 'category' =>'work'],
-            'enable_lp_auto_launch' => ['default' => 0, 'category' =>'learning_path'],
-            'pdf_export_watermark_text' => ['default' =>'', 'category' =>'learning_path'],
+            'email_alert_to_teacher_on_new_user_in_course' => ['default' => 0, 'category' => 'registration'],
+            'allow_user_view_user_list' => ['default' => 1, 'category' => 'user'],
+            'display_info_advance_inside_homecourse' => ['default' => 1, 'category' => 'thematic_advance'],
+            'email_alert_students_on_new_homework' => ['default' => 0, 'category' => 'work'],
+            'enable_lp_auto_launch' => ['default' => 0, 'category' => 'learning_path'],
+            'pdf_export_watermark_text' => ['default' => '', 'category' => 'learning_path'],
             'allow_public_certificates' => [
                 'default' => api_get_setting('allow_public_certificates') === 'true' ? 1 : '',
-                'category' =>'certificates'
+                'category' => 'certificates',
             ],
-            'documents_default_visibility' => ['default' =>'visible', 'category' =>'document'],
+            'documents_default_visibility' => ['default' => 'visible', 'category' => 'document'],
             'show_course_in_user_language' => ['default' => 2, 'category' => null],
         ];
 
@@ -656,7 +670,7 @@ class AddCourse
                 'announcements_state' => 1,
                 'forum_state' => 1,
                 'wiki_state' => 1,
-                'chat_state' => 1
+                'chat_state' => 1,
             ]
         );
 
@@ -691,7 +705,7 @@ class AddCourse
                 ['path' => '/audio', 'title' => get_lang('Audio'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/flash', 'title' => get_lang('Flash'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/video', 'title' => get_lang('Video'), 'filetype' => 'folder', 'size' => 0],
-                ['path' => '/certificates', 'title' => get_lang('Certificates'), 'filetype' => 'folder', 'size' => 0]
+                ['path' => '/certificates', 'title' => get_lang('Certificates'), 'filetype' => 'folder', 'size' => 0],
             ];
 
             foreach ($files as $file) {
@@ -700,22 +714,22 @@ class AddCourse
             }
 
             // FILL THE COURSE DOCUMENT WITH DEFAULT COURSE PICTURES
-            $folders_to_copy_from_default_course = array(
+            $folders_to_copy_from_default_course = [
                 'images',
                 'audio',
                 'flash',
                 'video',
                 'certificates',
-            );
+            ];
 
             $default_course_path = api_get_path(SYS_CODE_PATH).'default_course_document/';
 
-            $default_document_array = array();
+            $default_document_array = [];
             foreach ($folders_to_copy_from_default_course as $folder) {
                 $default_course_folder_path = $default_course_path.$folder.'/';
                 $files = self::browse_folders(
                     $default_course_folder_path,
-                    array(),
+                    [],
                     $folder
                 );
 
@@ -823,8 +837,8 @@ class AddCourse
                                             'lastedit_type' => 'DocumentAdded',
                                             'lastedit_user_id' => api_get_user_id(),
                                             'to_group_id' => null,
-                                            'to_user_id' =>  null,
-                                            'visibility' => 0
+                                            'to_user_id' => null,
+                                            'visibility' => 0,
                                         ]
                                     );
                                 }
@@ -862,7 +876,6 @@ class AddCourse
                                     );
                                     $image_id = Database:: insert_id();
                                     if ($image_id) {
-
                                         $sql = "UPDATE $TABLETOOLDOCUMENT SET id = iid WHERE iid = $image_id";
                                         Database::query($sql);
 
@@ -881,8 +894,8 @@ class AddCourse
                                                 'lastedit_type' => 'DocumentAdded',
                                                 'lastedit_user_id' => api_get_user_id(),
                                                 'to_group_id' => null,
-                                                'to_user_id' =>  null,
-                                                'visibility' => 1
+                                                'to_user_id' => null,
+                                                'visibility' => 1,
                                             ]
                                         );
                                         if ($docId) {
@@ -920,7 +933,7 @@ class AddCourse
                     'category_id' => 0,
                     'on_homepage' => 0,
                     'target' => '_self',
-                    'session_id' => 0
+                    'session_id' => 0,
                 ],
                 [
                     'c_id' => $course_id,
@@ -930,8 +943,8 @@ class AddCourse
                     'category_id' => 0,
                     'on_homepage' => 0,
                     'target' => '_self',
-                    'session_id' => 0
-                ]
+                    'session_id' => 0,
+                ],
             ];
 
             foreach ($links as $params) {
@@ -954,8 +967,8 @@ class AddCourse
 
             /* Introduction text */
             $intro_text = '<p style="text-align: center;">
-                            <img src="' . api_get_path(REL_CODE_PATH).'img/mascot.png" alt="Mr. Chamilo" title="Mr. Chamilo" />
-                            <h2>' . get_lang('IntroductionText').'</h2>
+                            <img src="'.api_get_path(REL_CODE_PATH).'img/mascot.png" alt="Mr. Chamilo" title="Mr. Chamilo" />
+                            <h2>'.get_lang('IntroductionText').'</h2>
                          </p>';
 
             $toolIntro = new CToolIntro();
@@ -990,9 +1003,9 @@ class AddCourse
             $html = '<table width="100%" border="0" cellpadding="0" cellspacing="0">
                         <tr>
                         <td width="220" valign="top" align="left">
-                            <img src="' . api_get_path(WEB_CODE_PATH).'default_course_document/images/mr_chamilo/doubts.png">
+                            <img src="'.api_get_path(WEB_CODE_PATH).'default_course_document/images/mr_chamilo/doubts.png">
                         </td>
-                        <td valign="top" align="left">' . get_lang('Antique').'</td></tr>
+                        <td valign="top" align="left">'.get_lang('Antique').'</td></tr>
                     </table>';
             $exercise->type = 1;
             $exercise->setRandom(0);
@@ -1026,7 +1039,7 @@ class AddCourse
 
             $params = [
                 'forum_category_title' => get_lang('ExampleForumCategory'),
-                'forum_category_comment' => ''
+                'forum_category_comment' => '',
             ];
 
             $forumCategoryId = store_forumcategory($params, $courseInfo, false);
@@ -1077,14 +1090,15 @@ class AddCourse
         //Installing plugins in course
         $app_plugin = new AppPlugin();
         $app_plugin->install_course_plugins($course_id);
+
         return true;
     }
 
     /**
-     * @param int $course_id
-     * @param int $counter
+     * @param int   $course_id
+     * @param int   $counter
      * @param array $file
-     * @param int $authorId
+     * @param int   $authorId
      */
     public static function insertDocument($course_id, $counter, $file, $authorId = 0)
     {
@@ -1116,8 +1130,8 @@ class AddCourse
                     'lastedit_type' => 'DocumentAdded',
                     'lastedit_user_id' => $authorId,
                     'to_group_id' => null,
-                    'to_user_id' =>  null,
-                    'visibility' => 0
+                    'to_user_id' => null,
+                    'visibility' => 0,
                 ]
             );
 
@@ -1132,9 +1146,12 @@ class AddCourse
      * string2binary converts the string "true" or "false" to the boolean true false (0 or 1)
      * This is used for the Chamilo Config Settings as these store true or false as string
      * and the api_get_setting('course_create_active_tools') should be 0 or 1 (used for
-     * the visibility of the tool)
+     * the visibility of the tool).
+     *
      * @param string $variable
+     *
      * @return bool
+     *
      * @author Patrick Cool, patrick.cool@ugent.be
      * @assert ('true') === true
      * @assert ('false') === false
@@ -1150,9 +1167,12 @@ class AddCourse
     }
 
     /**
-     * Function register_course to create a record in the course table of the main database
+     * Function register_course to create a record in the course table of the main database.
+     *
      * @param array Course details (see code for details)
-     * @return int  Created course ID
+     *
+     * @return int Created course ID
+     *
      * @todo use an array called $params instead of lots of params
      * @assert (null) === false
      */
@@ -1270,13 +1290,13 @@ class AddCourse
                     'creation_date' => $time,
                     'expiration_date' => $expiration_date,
                     'last_edit' => $time,
-                    'last_visit' => NULL,
+                    'last_visit' => null,
                     'tutor_name' => $tutor_name,
                     'department_name' => $department_name,
                     'department_url' => $department_url,
                     'subscribe' => intval($subscribe),
                     'unsubscribe' => intval($unsubscribe),
-                    'visual_code' => $visual_code
+                    'visual_code' => $visual_code,
                 ]
             );
 
@@ -1285,18 +1305,17 @@ class AddCourse
                 // Default true
                 $addTeacher = isset($params['add_user_as_teacher']) ? $params['add_user_as_teacher'] : true;
                 if ($addTeacher) {
-
                     $i_course_sort = CourseManager:: userCourseSort(
                         $user_id,
                         $code
                     );
                     if (!empty($user_id)) {
                         $sql = "INSERT INTO ".$TABLECOURSUSER." SET
-                                c_id     = '" . $course_id."',
-                                user_id         = '" . intval($user_id)."',
+                                c_id     = '".$course_id."',
+                                user_id         = '".intval($user_id)."',
                                 status          = '1',
                                 is_tutor        = '0',
-                                sort            = '" . ($i_course_sort)."',
+                                sort            = '".($i_course_sort)."',
                                 relation_type = 0,
                                 user_course_cat = '0'";
                         Database::query($sql);
@@ -1305,7 +1324,7 @@ class AddCourse
 
                 if (!empty($teachers)) {
                     if (!is_array($teachers)) {
-                        $teachers = array($teachers);
+                        $teachers = [$teachers];
                     }
                     foreach ($teachers as $key) {
                         //just in case
@@ -1316,11 +1335,11 @@ class AddCourse
                             continue;
                         }
                         $sql = "INSERT INTO ".$TABLECOURSUSER." SET
-                            c_id     = '" . Database::escape_string($course_id)."',
-                            user_id         = '" . Database::escape_string($key)."',
+                            c_id     = '".Database::escape_string($course_id)."',
+                            user_id         = '".Database::escape_string($key)."',
                             status          = '1',
                             is_tutor        = '0',
-                            sort            = '" . ($sort + 1)."',
+                            sort            = '".($sort + 1)."',
                             relation_type = 0,
                             user_course_cat = '0'";
                         Database::query($sql);
@@ -1379,12 +1398,12 @@ class AddCourse
 
                     $userInfo = api_get_user_info($user_id);
 
-                    $additionalParameters = array(
+                    $additionalParameters = [
                         'smsType' => SmsPlugin::NEW_COURSE_BEEN_CREATED,
                         'userId' => $user_id,
                         'courseName' => $title,
-                        'creatorUsername' => $userInfo['username']
-                    );
+                        'creatorUsername' => $userInfo['username'],
+                    ];
 
                     api_mail_html(
                         $recipient_name,
@@ -1406,8 +1425,10 @@ class AddCourse
     }
 
     /**
-     * Generate a new id for c_tool table
+     * Generate a new id for c_tool table.
+     *
      * @param int $courseId The course id
+     *
      * @return int the new id
      */
     public static function generateToolId($courseId)
@@ -1418,7 +1439,7 @@ class AddCourse
             [
                 'where' => ['c_id = ?' => intval($courseId)],
                 'order' => 'id',
-                'limit' => 1
+                'limit' => 1,
             ],
             'first'
         );
@@ -1429,5 +1450,4 @@ class AddCourse
 
         return $newIdResultData['new_id'] > 0 ? $newIdResultData['new_id'] : 1;
     }
-
 }

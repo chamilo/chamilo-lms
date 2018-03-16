@@ -5,11 +5,11 @@ use ChamiloSession as Session;
 
 /**
  * @package chamilo.survey
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University:
  * cleanup, refactoring and rewriting large parts of the code
  * @author Julio Montoya
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -49,10 +49,10 @@ $course_id = api_get_course_int_id();
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 // Breadcrumbs
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
     'name' => get_lang('SurveyList'),
-);
+];
 
 // Getting the survey information
 if (!empty($_GET['survey_id'])) {
@@ -217,7 +217,7 @@ $question_counter = 1;
 $sql = "SELECT * FROM $table_survey_question_group
         WHERE c_id = '.$course_id.' AND survey_id = ".intval($survey_id)." ORDER BY id";
 $result = Database::query($sql);
-$groups = array();
+$groups = [];
 while ($row = Database::fetch_array($result)) {
     $groups[$row['id']] = $row['name'];
 }
@@ -247,7 +247,7 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
 
     if ($row['type'] == 'yesno') {
         $tool_name = get_lang('YesNo');
-    } else if ($row['type'] == 'multiplechoice') {
+    } elseif ($row['type'] == 'multiplechoice') {
         $tool_name = get_lang('UniqueSelect');
     } else {
         $tool_name = get_lang(api_ucfirst(Security::remove_XSS($row['type'])));
@@ -285,7 +285,7 @@ if ($is_survey_type_1) {
     echo '<br /><br /><b>'.get_lang('ManageGroups').'</b><br /><br />';
     if (in_array(
         $_GET['sendmsg'],
-        array('GroupUpdatedSuccessfully', 'GroupDeletedSuccessfully', 'GroupCreatedSuccessfully'))
+        ['GroupUpdatedSuccessfully', 'GroupDeletedSuccessfully', 'GroupCreatedSuccessfully'])
     ) {
         echo Display::return_message(
             get_lang($_GET['sendmsg']),
@@ -294,7 +294,7 @@ if ($is_survey_type_1) {
         );
     }
 
-    if (in_array($_GET['sendmsg'], array('GroupNeedName'))) {
+    if (in_array($_GET['sendmsg'], ['GroupNeedName'])) {
         echo Display::return_message(
             get_lang($_GET['sendmsg']),
             'warning',

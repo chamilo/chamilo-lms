@@ -6,7 +6,8 @@ use ChamiloSession as Session;
 /**
  * Class MultipleAnswerTrueFalse
  * This class allows to instantiate an object of type MULTIPLE_ANSWER
- * (MULTIPLE CHOICE, MULTIPLE ANSWER), extending the class question
+ * (MULTIPLE CHOICE, MULTIPLE ANSWER), extending the class question.
+ *
  * @author Julio Montoya
  *
  * @package chamilo.exercise
@@ -18,18 +19,18 @@ class MultipleAnswerTrueFalse extends Question
     public $options;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         parent::__construct();
         $this->type = MULTIPLE_ANSWER_TRUE_FALSE;
-        $this->isContent = $this-> getIsContent();
+        $this->isContent = $this->getIsContent();
         $this->options = [1 => 'True', 2 => 'False', 3 => 'DoubtScore'];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createAnswersForm($form)
     {
@@ -39,7 +40,7 @@ class MultipleAnswerTrueFalse extends Question
 
         $course_id = api_get_course_int_id();
         $obj_ex = Session::read('objExercise');
-        $renderer = & $form->defaultRenderer();
+        $renderer = &$form->defaultRenderer();
         $defaults = [];
 
         $html = '<table class="table table-striped table-hover">';
@@ -137,7 +138,7 @@ class MultipleAnswerTrueFalse extends Question
                 $defaults['correct['.$i.']'] = '';
             }
 
-            $boxes_names[] = 'correct[' . $i . ']';
+            $boxes_names[] = 'correct['.$i.']';
 
             $form->addHtmlEditor(
                 "answer[$i]",
@@ -237,7 +238,7 @@ class MultipleAnswerTrueFalse extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
@@ -281,7 +282,7 @@ class MultipleAnswerTrueFalse extends Question
         XX:YY:ZZZ where XX is a float score value.*/
         $extra_values = [];
         for ($i = 1; $i <= 3; $i++) {
-            $score = trim($form -> getSubmitValue('option['.$i.']'));
+            $score = trim($form->getSubmitValue('option['.$i.']'));
             $extra_values[] = $score;
         }
         $this->setExtra(implode(':', $extra_values));
@@ -307,16 +308,16 @@ class MultipleAnswerTrueFalse extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function return_header($exercise, $counter = null, $score = null)
     {
         $header = parent::return_header($exercise, $counter, $score);
-  	    $header .= '<table class="'.$this->question_table_class .'">
+        $header .= '<table class="'.$this->question_table_class.'">
 		            <tr>
                         <th width="10%">'.get_lang("Choice").'</th>
-                        <th width="15%">'. get_lang("ExpectedChoice").'</th>
-                        <th>'. get_lang("Answer").'</th>';
+                        <th width="15%">'.get_lang("ExpectedChoice").'</th>
+                        <th>'.get_lang("Answer").'</th>';
         $header .= '<th>'.get_lang('Status').'</th>';
         if ($exercise->feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
             $header .= '<th>'.get_lang("Comment").'</th>';
@@ -324,6 +325,7 @@ class MultipleAnswerTrueFalse extends Question
             $header .= '<th>&nbsp;</th>';
         }
         $header .= '</tr>';
+
         return $header;
     }
 }

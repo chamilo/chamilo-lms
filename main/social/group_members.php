@@ -3,9 +3,9 @@
 
 /**
  * @package chamilo.social
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -34,21 +34,21 @@ if (empty($group_id)) {
     );
     if (!in_array(
         $user_role,
-        array(
+        [
             GROUP_USER_PERMISSION_ADMIN,
             GROUP_USER_PERMISSION_MODERATOR,
-            GROUP_USER_PERMISSION_READER
-        )
+            GROUP_USER_PERMISSION_READER,
+        ]
     )
     ) {
         api_not_allowed();
     }
 }
 
-$interbreadcrumb[] = array('url' => 'home.php', 'name' => get_lang('Social'));
-$interbreadcrumb[] = array('url' => 'groups.php', 'name' => get_lang('Groups'));
-$interbreadcrumb[] = array('url' => 'group_view.php?id='.$group_id, 'name' => $group_info['name']);
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('MemberList'));
+$interbreadcrumb[] = ['url' => 'home.php', 'name' => get_lang('Social')];
+$interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
+$interbreadcrumb[] = ['url' => 'group_view.php?id='.$group_id, 'name' => $group_info['name']];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('MemberList')];
 
 //if i'm a moderator
 if (isset($_GET['action']) && $_GET['action'] == 'add') {
@@ -102,15 +102,15 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete_moderator') {
 $users = $userGroup->get_users_by_group(
     $group_id,
     false,
-    array(
+    [
         GROUP_USER_PERMISSION_ADMIN,
         GROUP_USER_PERMISSION_READER,
-        GROUP_USER_PERMISSION_MODERATOR
-    ),
+        GROUP_USER_PERMISSION_MODERATOR,
+    ],
     0,
     1000
 );
-$new_member_list = array();
+$new_member_list = [];
 
 $social_avatar_block = SocialManager::show_social_avatar_block(
     'member_list',
@@ -130,10 +130,10 @@ foreach ($users as $user) {
         case GROUP_USER_PERMISSION_READER:
             if (in_array(
                 $user_role,
-                array(
+                [
                     GROUP_USER_PERMISSION_ADMIN,
-                    GROUP_USER_PERMISSION_MODERATOR
-                )
+                    GROUP_USER_PERMISSION_MODERATOR,
+                ]
             )
             ) {
                 $user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['id'].'&action=delete">'.
@@ -178,12 +178,12 @@ foreach ($users as $user) {
 if (count($new_member_list) > 0) {
     $social_right_content .= Display::return_sortable_grid(
         'list_members',
-        array(),
+        [],
         $new_member_list,
-        array('hide_navigation' => true, 'per_page' => 100),
-        array(),
+        ['hide_navigation' => true, 'per_page' => 100],
+        [],
         false,
-        array(true, false, true, true, false, true, true)
+        [true, false, true, true, false, true, true]
     );
 }
 

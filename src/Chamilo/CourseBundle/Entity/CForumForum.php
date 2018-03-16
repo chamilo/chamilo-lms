@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CForumForum
+ * CForumForum.
  *
  * @ORM\Table(
  *  name="c_forum_forum",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CForumForum
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,14 +28,14 @@ class CForumForum
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="forum_id", type="integer")
      */
@@ -56,42 +56,42 @@ class CForumForum
     private $forumComment;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="forum_threads", type="integer", nullable=true)
      */
     private $forumThreads;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="forum_posts", type="integer", nullable=true)
      */
     private $forumPosts;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="forum_last_post", type="integer", nullable=true)
      */
     private $forumLastPost;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="forum_category", type="integer", nullable=true)
      */
     private $forumCategory;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="allow_anonymous", type="integer", nullable=true)
      */
     private $allowAnonymous;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="allow_edit", type="integer", nullable=true)
      */
@@ -105,14 +105,14 @@ class CForumForum
     private $approvalDirectPost;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="allow_attachments", type="integer", nullable=true)
      */
     private $allowAttachments;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="allow_new_threads", type="integer", nullable=true)
      */
@@ -140,21 +140,21 @@ class CForumForum
     private $forumGroupPublicPrivate;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="forum_order", type="integer", nullable=true)
      */
     private $forumOrder;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
     private $locked;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
@@ -182,23 +182,24 @@ class CForumForum
     private $endTime;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="lp_id", type="integer", options={"unsigned":true})
      */
     private $lpId;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="moderated", type="boolean", nullable=true)
      */
     private $moderated;
 
     /**
-     * Set forumTitle
+     * Set forumTitle.
      *
      * @param string $forumTitle
+     *
      * @return CForumForum
      */
     public function setForumTitle($forumTitle)
@@ -209,7 +210,7 @@ class CForumForum
     }
 
     /**
-     * Get forumTitle
+     * Get forumTitle.
      *
      * @return string
      */
@@ -219,9 +220,10 @@ class CForumForum
     }
 
     /**
-     * Set forumComment
+     * Set forumComment.
      *
      * @param string $forumComment
+     *
      * @return CForumForum
      */
     public function setForumComment($forumComment)
@@ -232,7 +234,7 @@ class CForumForum
     }
 
     /**
-     * Get forumComment
+     * Get forumComment.
      *
      * @return string
      */
@@ -242,9 +244,10 @@ class CForumForum
     }
 
     /**
-     * Set forumThreads
+     * Set forumThreads.
      *
-     * @param integer $forumThreads
+     * @param int $forumThreads
+     *
      * @return CForumForum
      */
     public function setForumThreads($forumThreads)
@@ -255,9 +258,9 @@ class CForumForum
     }
 
     /**
-     * Get forumThreads
+     * Get forumThreads.
      *
-     * @return integer
+     * @return int
      */
     public function getForumThreads()
     {
@@ -265,9 +268,10 @@ class CForumForum
     }
 
     /**
-     * Set forumPosts
+     * Set forumPosts.
      *
-     * @param integer $forumPosts
+     * @param int $forumPosts
+     *
      * @return CForumForum
      */
     public function setForumPosts($forumPosts)
@@ -278,9 +282,9 @@ class CForumForum
     }
 
     /**
-     * Get forumPosts
+     * Get forumPosts.
      *
-     * @return integer
+     * @return int
      */
     public function getForumPosts()
     {
@@ -288,9 +292,10 @@ class CForumForum
     }
 
     /**
-     * Set forumLastPost
+     * Set forumLastPost.
      *
-     * @param integer $forumLastPost
+     * @param int $forumLastPost
+     *
      * @return CForumForum
      */
     public function setForumLastPost($forumLastPost)
@@ -301,9 +306,9 @@ class CForumForum
     }
 
     /**
-     * Get forumLastPost
+     * Get forumLastPost.
      *
-     * @return integer
+     * @return int
      */
     public function getForumLastPost()
     {
@@ -311,9 +316,10 @@ class CForumForum
     }
 
     /**
-     * Set forumCategory
+     * Set forumCategory.
      *
-     * @param integer $forumCategory
+     * @param int $forumCategory
+     *
      * @return CForumForum
      */
     public function setForumCategory($forumCategory)
@@ -324,9 +330,9 @@ class CForumForum
     }
 
     /**
-     * Get forumCategory
+     * Get forumCategory.
      *
-     * @return integer
+     * @return int
      */
     public function getForumCategory()
     {
@@ -334,9 +340,10 @@ class CForumForum
     }
 
     /**
-     * Set allowAnonymous
+     * Set allowAnonymous.
      *
-     * @param integer $allowAnonymous
+     * @param int $allowAnonymous
+     *
      * @return CForumForum
      */
     public function setAllowAnonymous($allowAnonymous)
@@ -347,9 +354,9 @@ class CForumForum
     }
 
     /**
-     * Get allowAnonymous
+     * Get allowAnonymous.
      *
-     * @return integer
+     * @return int
      */
     public function getAllowAnonymous()
     {
@@ -357,9 +364,10 @@ class CForumForum
     }
 
     /**
-     * Set allowEdit
+     * Set allowEdit.
      *
-     * @param integer $allowEdit
+     * @param int $allowEdit
+     *
      * @return CForumForum
      */
     public function setAllowEdit($allowEdit)
@@ -370,9 +378,9 @@ class CForumForum
     }
 
     /**
-     * Get allowEdit
+     * Get allowEdit.
      *
-     * @return integer
+     * @return int
      */
     public function getAllowEdit()
     {
@@ -380,9 +388,10 @@ class CForumForum
     }
 
     /**
-     * Set approvalDirectPost
+     * Set approvalDirectPost.
      *
      * @param string $approvalDirectPost
+     *
      * @return CForumForum
      */
     public function setApprovalDirectPost($approvalDirectPost)
@@ -393,7 +402,7 @@ class CForumForum
     }
 
     /**
-     * Get approvalDirectPost
+     * Get approvalDirectPost.
      *
      * @return string
      */
@@ -403,9 +412,10 @@ class CForumForum
     }
 
     /**
-     * Set allowAttachments
+     * Set allowAttachments.
      *
-     * @param integer $allowAttachments
+     * @param int $allowAttachments
+     *
      * @return CForumForum
      */
     public function setAllowAttachments($allowAttachments)
@@ -416,9 +426,9 @@ class CForumForum
     }
 
     /**
-     * Get allowAttachments
+     * Get allowAttachments.
      *
-     * @return integer
+     * @return int
      */
     public function getAllowAttachments()
     {
@@ -426,9 +436,10 @@ class CForumForum
     }
 
     /**
-     * Set allowNewThreads
+     * Set allowNewThreads.
      *
-     * @param integer $allowNewThreads
+     * @param int $allowNewThreads
+     *
      * @return CForumForum
      */
     public function setAllowNewThreads($allowNewThreads)
@@ -439,9 +450,9 @@ class CForumForum
     }
 
     /**
-     * Get allowNewThreads
+     * Get allowNewThreads.
      *
-     * @return integer
+     * @return int
      */
     public function getAllowNewThreads()
     {
@@ -449,9 +460,10 @@ class CForumForum
     }
 
     /**
-     * Set defaultView
+     * Set defaultView.
      *
      * @param string $defaultView
+     *
      * @return CForumForum
      */
     public function setDefaultView($defaultView)
@@ -462,7 +474,7 @@ class CForumForum
     }
 
     /**
-     * Get defaultView
+     * Get defaultView.
      *
      * @return string
      */
@@ -472,9 +484,10 @@ class CForumForum
     }
 
     /**
-     * Set forumOfGroup
+     * Set forumOfGroup.
      *
      * @param string $forumOfGroup
+     *
      * @return CForumForum
      */
     public function setForumOfGroup($forumOfGroup)
@@ -485,7 +498,7 @@ class CForumForum
     }
 
     /**
-     * Get forumOfGroup
+     * Get forumOfGroup.
      *
      * @return string
      */
@@ -495,9 +508,10 @@ class CForumForum
     }
 
     /**
-     * Set forumGroupPublicPrivate
+     * Set forumGroupPublicPrivate.
      *
      * @param string $forumGroupPublicPrivate
+     *
      * @return CForumForum
      */
     public function setForumGroupPublicPrivate($forumGroupPublicPrivate)
@@ -508,7 +522,7 @@ class CForumForum
     }
 
     /**
-     * Get forumGroupPublicPrivate
+     * Get forumGroupPublicPrivate.
      *
      * @return string
      */
@@ -518,9 +532,10 @@ class CForumForum
     }
 
     /**
-     * Set forumOrder
+     * Set forumOrder.
      *
-     * @param integer $forumOrder
+     * @param int $forumOrder
+     *
      * @return CForumForum
      */
     public function setForumOrder($forumOrder)
@@ -531,9 +546,9 @@ class CForumForum
     }
 
     /**
-     * Get forumOrder
+     * Get forumOrder.
      *
-     * @return integer
+     * @return int
      */
     public function getForumOrder()
     {
@@ -541,9 +556,10 @@ class CForumForum
     }
 
     /**
-     * Set locked
+     * Set locked.
      *
-     * @param integer $locked
+     * @param int $locked
+     *
      * @return CForumForum
      */
     public function setLocked($locked)
@@ -554,9 +570,9 @@ class CForumForum
     }
 
     /**
-     * Get locked
+     * Get locked.
      *
-     * @return integer
+     * @return int
      */
     public function getLocked()
     {
@@ -564,9 +580,10 @@ class CForumForum
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return CForumForum
      */
     public function setSessionId($sessionId)
@@ -577,9 +594,9 @@ class CForumForum
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -587,9 +604,10 @@ class CForumForum
     }
 
     /**
-     * Set forumImage
+     * Set forumImage.
      *
      * @param string $forumImage
+     *
      * @return CForumForum
      */
     public function setForumImage($forumImage)
@@ -600,7 +618,7 @@ class CForumForum
     }
 
     /**
-     * Get forumImage
+     * Get forumImage.
      *
      * @return string
      */
@@ -610,9 +628,10 @@ class CForumForum
     }
 
     /**
-     * Set startTime
+     * Set startTime.
      *
      * @param \DateTime $startTime
+     *
      * @return CForumForum
      */
     public function setStartTime($startTime)
@@ -623,7 +642,7 @@ class CForumForum
     }
 
     /**
-     * Get startTime
+     * Get startTime.
      *
      * @return \DateTime
      */
@@ -633,9 +652,10 @@ class CForumForum
     }
 
     /**
-     * Set endTime
+     * Set endTime.
      *
      * @param \DateTime $endTime
+     *
      * @return CForumForum
      */
     public function setEndTime($endTime)
@@ -646,7 +666,7 @@ class CForumForum
     }
 
     /**
-     * Get endTime
+     * Get endTime.
      *
      * @return \DateTime
      */
@@ -656,9 +676,10 @@ class CForumForum
     }
 
     /**
-     * Set forumId
+     * Set forumId.
      *
-     * @param integer $forumId
+     * @param int $forumId
+     *
      * @return CForumForum
      */
     public function setForumId($forumId)
@@ -669,9 +690,9 @@ class CForumForum
     }
 
     /**
-     * Get forumId
+     * Get forumId.
      *
-     * @return integer
+     * @return int
      */
     public function getForumId()
     {
@@ -679,9 +700,10 @@ class CForumForum
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CForumForum
      */
     public function setCId($cId)
@@ -692,9 +714,9 @@ class CForumForum
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -702,8 +724,10 @@ class CForumForum
     }
 
     /**
-     * Set lpId
-     * @param integer $lpId
+     * Set lpId.
+     *
+     * @param int $lpId
+     *
      * @return CForumForum
      */
     public function setLpId($lpId)
@@ -714,8 +738,9 @@ class CForumForum
     }
 
     /**
-     * Get lpId
-     * @return integer
+     * Get lpId.
+     *
+     * @return int
      */
     public function getLpId()
     {
@@ -723,7 +748,7 @@ class CForumForum
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isModerated()
     {
@@ -732,6 +757,7 @@ class CForumForum
 
     /**
      * @param $moderated
+     *
      * @return $this
      */
     public function setModerated($moderated)

@@ -4,28 +4,30 @@
 /**
  * Class Block
  * This file contains class used parent class for blocks plugins
- * Parent class for controller Blocks from dashboard plugin
+ * Parent class for controller Blocks from dashboard plugin.
+ *
  * @author Christian Fasanando <christian1827@gmail.com>
+ *
  * @package chamilo.dashboard
  */
 class Block
 {
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
     }
 
     /**
-     * Display small blocks, @todo it will be implemented for next version
+     * Display small blocks, @todo it will be implemented for next version.
      */
     public function display_small()
     {
     }
 
     /**
-     * Display larges blocks, @todo it will be implemented for next version
+     * Display larges blocks, @todo it will be implemented for next version.
      */
     public function display_large()
     {

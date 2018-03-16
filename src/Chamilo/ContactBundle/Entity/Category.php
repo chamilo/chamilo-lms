@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
- * Class Category
+ * Class Category.
  *
  * @ORM\Entity
  * @ORM\Table(name="contact_category")
@@ -19,7 +19,7 @@ class Category
     use ORMBehaviors\Translatable\Translatable;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -36,6 +36,7 @@ class Category
     /**
      * @param $method
      * @param $arguments
+     *
      * @return mixed
      */
     public function __call($method, $arguments)
@@ -43,7 +44,7 @@ class Category
         return $this->proxyCurrentLocaleTranslation($method, $arguments);
     }
 
-     /**
+    /**
      * @return string
      */
     public function __toString()
@@ -61,11 +62,13 @@ class Category
 
     /**
      * @param string $email
+     *
      * @return Category
      */
     public function setEmail($email)
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -79,6 +82,7 @@ class Category
 
     /**
      * @param int $id
+     *
      * @return Category
      */
     public function setId($id)

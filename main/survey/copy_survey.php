@@ -15,7 +15,7 @@ if (!api_is_allowed_to_edit()) {
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array('url' => '../course_info/maintenance.php', 'name' => get_lang('Maintenance'));
+$interbreadcrumb[] = ['url' => '../course_info/maintenance.php', 'name' => get_lang('Maintenance')];
 
 // The section (for the tabs)
 $this_section = SECTION_COURSES;
@@ -54,14 +54,14 @@ if (count($courses) <= 1) {
 }
 if ($surveys && count($courses) > 1) {
     // Surveys select
-    $options = array();
+    $options = [];
     foreach ($surveys as $survey) {
         $options[$survey['survey_id']] = $survey['title'];
     }
     $form->addElement('select', 'surveys', get_lang('SelectSurvey'), $options);
     // All-courses-but-current select
     $currentCourseId = api_get_course_int_id();
-    $options = array();
+    $options = [];
     foreach ($courses as $course) {
         if ($course['id'] != $currentCourseId) {
             $options[$course['id']] = $course['title'];
@@ -74,7 +74,7 @@ if ($surveys && count($courses) > 1) {
 // Add Security token
 $token = Security::get_token();
 $form->addElement('hidden', 'sec_token');
-$form->setConstants(array('sec_token' => $token));
+$form->setConstants(['sec_token' => $token]);
 
 $form->display();
 

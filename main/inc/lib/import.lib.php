@@ -1,22 +1,23 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Ddeboer\DataImport\Workflow;
 use Ddeboer\DataImport\Reader\CsvReader;
+use Ddeboer\DataImport\Workflow;
 use Ddeboer\DataImport\Writer\ArrayWriter;
 
 /**
  * Class Import
  * This class provides some functions which can be used when importing data from
  * external files into Chamilo.
- * @package	 chamilo.library
  *
+ * @package	 chamilo.library
  */
 class Import
 {
     /**
      * @param string $path
-     * @param bool $setFirstRowAsHeader
+     * @param bool   $setFirstRowAsHeader
+     *
      * @return CsvReader
      */
     public static function csv_reader($path, $setFirstRowAsHeader = true)
@@ -49,9 +50,10 @@ class Import
      *   $result [0]['Email'] = 'john.doe@mail. com';
      *   $result [1]['FirstName'] = 'Adam';
      *   ...
-     * @param string $filename The path to the CSV-file which should be imported.
-     * @return array Returns an array (in the system encoding) that contains all data from the CSV-file.
      *
+     * @param string $filename the path to the CSV-file which should be imported
+     *
+     * @return array returns an array (in the system encoding) that contains all data from the CSV-file
      *
      * @deprecated use cvs_reader instead
      */

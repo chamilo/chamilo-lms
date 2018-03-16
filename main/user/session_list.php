@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * List sessions in an efficient and usable way
+ * List sessions in an efficient and usable way.
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -32,7 +32,7 @@ if (isset($_REQUEST['keyword'])) {
 }
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = array(
+$columns = [
     get_lang('Name'),
     get_lang('NumberOfCourses'),
     get_lang('NumberOfUsers'),
@@ -43,28 +43,28 @@ $columns = array(
     get_lang('Status'),
     get_lang('Visibility'),
     get_lang('Actions'),
-);
+];
 
 //Column config
-$column_model = array(
-    array('name'=>'name', 'index'=>'name', 'width'=>'160', 'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
-    array('name'=>'nbr_courses', 'index'=>'nbr_courses', 'width'=>'30', 'align'=>'left', 'search' => 'true'),
-    array('name'=>'nbr_users', 'index'=>'nbr_users', 'width'=>'30', 'align'=>'left', 'search' => 'true'),
-    array('name'=>'category_name', 'index'=>'category_name', 'width'=>'70', 'align'=>'left', 'search' => 'true'),
-    array('name'=>'access_start_date', 'index'=>'access_start_date', 'width'=>'40', 'align'=>'left', 'search' => 'true'),
-    array('name'=>'access_end_date', 'index'=>'access_end_date', 'width'=>'40', 'align'=>'left', 'search' => 'true'),
-    array('name'=>'coach_name', 'index'=>'coach_name', 'width'=>'80', 'align'=>'left', 'search' => 'false'),
-    array('name'=>'status', 'index'=>'session_active', 'width'=>'40', 'align'=>'left', 'search' => 'true', 'stype'=>'select',
+$column_model = [
+    ['name' => 'name', 'index' => 'name', 'width' => '160', 'align' => 'left', 'search' => 'true', 'wrap_cell' => "true"],
+    ['name' => 'nbr_courses', 'index' => 'nbr_courses', 'width' => '30', 'align' => 'left', 'search' => 'true'],
+    ['name' => 'nbr_users', 'index' => 'nbr_users', 'width' => '30', 'align' => 'left', 'search' => 'true'],
+    ['name' => 'category_name', 'index' => 'category_name', 'width' => '70', 'align' => 'left', 'search' => 'true'],
+    ['name' => 'access_start_date', 'index' => 'access_start_date', 'width' => '40', 'align' => 'left', 'search' => 'true'],
+    ['name' => 'access_end_date', 'index' => 'access_end_date', 'width' => '40', 'align' => 'left', 'search' => 'true'],
+    ['name' => 'coach_name', 'index' => 'coach_name', 'width' => '80', 'align' => 'left', 'search' => 'false'],
+    ['name' => 'status', 'index' => 'session_active', 'width' => '40', 'align' => 'left', 'search' => 'true', 'stype' => 'select',
       //for the bottom bar
-        'searchoptions' => array(
+        'searchoptions' => [
             'defaultValue' => '1',
-            'value' => '1:'.get_lang('Active').';0:'.get_lang('Inactive')
-        ),
+            'value' => '1:'.get_lang('Active').';0:'.get_lang('Inactive'),
+        ],
       //for the top bar
-      'editoptions' => array('value' => ':'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive'))),
-    array('name'=>'visibility', 'index'=>'visibility', 'width'=>'40', 'align'=>'left', 'search' => 'false'),
-    array('name'=>'actions', 'index'=>'actions', 'width'=>'100', 'align'=>'left', 'formatter'=>'action_formatter', 'sortable'=>'false', 'search' => 'false')
-);
+      'editoptions' => ['value' => ':'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive')], ],
+    ['name' => 'visibility', 'index' => 'visibility', 'width' => '40', 'align' => 'left', 'search' => 'false'],
+    ['name' => 'actions', 'index' => 'actions', 'width' => '100', 'align' => 'left', 'formatter' => 'action_formatter', 'sortable' => 'false', 'search' => 'false'],
+];
 //Autowidth
 $extra_params['autowidth'] = 'true';
 
@@ -96,7 +96,7 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
 
 $(function() {
     <?php
-        echo Display::grid_js('sessions', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+        echo Display::grid_js('sessions', $url, $columns, $column_model, $extra_params, [], $action_links, true);
     ?>
 
     setSearchSelect("status");
@@ -135,16 +135,15 @@ $(function() {
     sgrid.triggerToolbar();
 });
 </script>
-<?php if (api_is_platform_admin()) {?>
+<?php if (api_is_platform_admin()) {
+        ?>
     <div class="actions">
     <?php
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.Display::return_icon('new_session.png', get_lang('AddSession'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/add_many_session_to_category.php">'.Display::return_icon('session_to_category.png', get_lang('AddSessionsInCategories'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_list.php">'.Display::return_icon('folder.png', get_lang('ListSessionCategory'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo '</div>';
-}
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/add_many_session_to_category.php">'.Display::return_icon('session_to_category.png', get_lang('AddSessionsInCategories'), '', ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_list.php">'.Display::return_icon('folder.png', get_lang('ListSessionCategory'), '', ICON_SIZE_MEDIUM).'</a>';
+        echo '</div>';
+    }
 
 echo Display::grid_html('sessions');
 Display::display_footer();
-
-

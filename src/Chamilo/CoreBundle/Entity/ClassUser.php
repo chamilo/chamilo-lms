@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ClassUser
+ * ClassUser.
  *
  * @ORM\Table(name="class_user")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ClassUser
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="class_id", type="integer")
      * @ORM\Id
@@ -23,7 +23,7 @@ class ClassUser
     private $classId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer")
      * @ORM\Id
@@ -32,9 +32,10 @@ class ClassUser
     private $userId;
 
     /**
-     * Set classId
+     * Set classId.
      *
-     * @param integer $classId
+     * @param int $classId
+     *
      * @return ClassUser
      */
     public function setClassId($classId)
@@ -45,9 +46,9 @@ class ClassUser
     }
 
     /**
-     * Get classId
+     * Get classId.
      *
-     * @return integer
+     * @return int
      */
     public function getClassId()
     {
@@ -55,9 +56,10 @@ class ClassUser
     }
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return ClassUser
      */
     public function setUserId($userId)
@@ -68,9 +70,9 @@ class ClassUser
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {

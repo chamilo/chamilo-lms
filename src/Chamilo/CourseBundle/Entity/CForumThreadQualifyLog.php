@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CForumThreadQualifyLog
+ * CForumThreadQualifyLog.
  *
  * @ORM\Table(
  *  name="c_forum_thread_qualify_log",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CForumThreadQualifyLog
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -29,28 +29,28 @@ class CForumThreadQualifyLog
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
     private $userId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="thread_id", type="integer", nullable=false)
      */
@@ -64,7 +64,7 @@ class CForumThreadQualifyLog
     private $qualify;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="qualify_user_id", type="integer", nullable=true)
      */
@@ -78,16 +78,16 @@ class CForumThreadQualifyLog
     private $qualifyTime;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
     private $sessionId;
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
      *
      * @return CForumThreadQualifyLog
      */
@@ -99,9 +99,9 @@ class CForumThreadQualifyLog
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -109,9 +109,9 @@ class CForumThreadQualifyLog
     }
 
     /**
-     * Set threadId
+     * Set threadId.
      *
-     * @param integer $threadId
+     * @param int $threadId
      *
      * @return CForumThreadQualifyLog
      */
@@ -123,9 +123,9 @@ class CForumThreadQualifyLog
     }
 
     /**
-     * Get threadId
+     * Get threadId.
      *
-     * @return integer
+     * @return int
      */
     public function getThreadId()
     {
@@ -133,7 +133,7 @@ class CForumThreadQualifyLog
     }
 
     /**
-     * Set qualify
+     * Set qualify.
      *
      * @param float $qualify
      *
@@ -147,7 +147,7 @@ class CForumThreadQualifyLog
     }
 
     /**
-     * Get qualify
+     * Get qualify.
      *
      * @return float
      */
@@ -157,9 +157,9 @@ class CForumThreadQualifyLog
     }
 
     /**
-     * Set qualifyUserId
+     * Set qualifyUserId.
      *
-     * @param integer $qualifyUserId
+     * @param int $qualifyUserId
      *
      * @return CForumThreadQualifyLog
      */
@@ -171,9 +171,9 @@ class CForumThreadQualifyLog
     }
 
     /**
-     * Get qualifyUserId
+     * Get qualifyUserId.
      *
-     * @return integer
+     * @return int
      */
     public function getQualifyUserId()
     {
@@ -181,7 +181,7 @@ class CForumThreadQualifyLog
     }
 
     /**
-     * Set qualifyTime
+     * Set qualifyTime.
      *
      * @param \DateTime $qualifyTime
      *
@@ -195,7 +195,7 @@ class CForumThreadQualifyLog
     }
 
     /**
-     * Get qualifyTime
+     * Get qualifyTime.
      *
      * @return \DateTime
      */
@@ -205,9 +205,9 @@ class CForumThreadQualifyLog
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
      *
      * @return CForumThreadQualifyLog
      */
@@ -219,9 +219,9 @@ class CForumThreadQualifyLog
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -229,9 +229,9 @@ class CForumThreadQualifyLog
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
      *
      * @return CForumThreadQualifyLog
      */
@@ -243,9 +243,9 @@ class CForumThreadQualifyLog
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -253,9 +253,9 @@ class CForumThreadQualifyLog
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
      *
      * @return CForumThreadQualifyLog
      */
@@ -267,9 +267,9 @@ class CForumThreadQualifyLog
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

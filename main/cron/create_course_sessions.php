@@ -2,13 +2,15 @@
 /* For licensing terms, see /license.txt */
 /**
  * Create course sessions procedure. It creates sessions for courses that haven't it yet.
- * If today is greater than OFFSET, it will create them also for the next quarter
+ * If today is greater than OFFSET, it will create them also for the next quarter.
+ *
  * @package chamilo.cron
+ *
  * @author Imanol Losada <imanol.losada@beeznest.com>
  */
 
 /**
- * Initialization
+ * Initialization.
  */
 if (php_sapi_name() != 'cli') {
     exit; //do not run from browser
@@ -21,21 +23,26 @@ define("OFFSET", "15");
 /**
  * If no $initialDate is supplied, returns an array with the first and last days of the current
  * month. Otherwise, returns an array with the first and last days of the $initialDate month .
- * @param   array   $initialDate First day of the month
- * @return  array   First and last days of the month
+ *
+ * @param array $initialDate First day of the month
+ *
+ * @return array First and last days of the month
  */
 function getMonthFirstAndLastDates($initialDate = null)
 {
     $startDate = $initialDate ? $initialDate : date("Y-m-01");
     $nextMonthStartDate = date("Y-m-d", api_strtotime($startDate." + 1 month"));
     $endDate = date("Y-m-d", api_strtotime($nextMonthStartDate." - 1 minute"));
-    return array('startDate' => $startDate, 'endDate' => $endDate);
+
+    return ['startDate' => $startDate, 'endDate' => $endDate];
 }
 
 /**
- * Same as month, but for quarters
- * @param   array   $initialDate First day of the quarter
- * @return  array   First and last days of the quarter
+ * Same as month, but for quarters.
+ *
+ * @param array $initialDate First day of the quarter
+ *
+ * @return array First and last days of the quarter
  */
 function getQuarterFirstAndLastDates($initialDate = null)
 {
@@ -44,14 +51,17 @@ function getQuarterFirstAndLastDates($initialDate = null)
     $startDate = substr($startDate, 0, 5).$month.'-01';
     $nextQuarterStartDate = date('Y-m-d', api_strtotime($startDate.' + 3 month'));
     $endDate = date('Y-m-d', api_strtotime($nextQuarterStartDate.' - 1 minute'));
-    return array('startDate' => $startDate, 'endDate' => $endDate);
+
+    return ['startDate' => $startDate, 'endDate' => $endDate];
 }
 
 /**
- * Returns a quarter from a month
+ * Returns a quarter from a month.
+ *
  * @param   string  The month (digit), with or without leading 0
  * @param string $month
- * @return  int The yearly quarter (1, 2, 3 or 4) in which this month lies
+ *
+ * @return int The yearly quarter (1, 2, 3 or 4) in which this month lies
  */
 function getQuarter($month)
 {
@@ -63,42 +73,37 @@ function getQuarter($month)
     // reduce to 4 quarters: 1..3=1; 4..6=2
     switch ($month) {
         case 1:
-            //no break
         case 2:
-            //no break
         case 3:
             $quarter = 1;
             break;
         case 4:
-            //no break
         case 5:
-            //no break
         case 6:
             $quarter = 2;
             break;
         case 7:
-            //no break
         case 8:
-            //no break
         case 9:
             $quarter = 3;
             break;
         case 10:
-            //no break
         case 11:
-            //no break
         case 12:
             $quarter = 4;
             break;
     }
+
     return $quarter;
 }
 
 /**
- * Returns the first month of the quarter
+ * Returns the first month of the quarter.
+ *
  * @param   int Quarter
- * @param integer $quarter
- * @return  string Number of the month, with leading 0
+ * @param int $quarter
+ *
+ * @return string Number of the month, with leading 0
  */
 function getQuarterFirstMonth($quarter)
 {
@@ -112,14 +117,17 @@ function getQuarterFirstMonth($quarter)
         case 4:
             return '10';
     }
+
     return false;
 }
 
 /**
- * Get the quarter in Roman letters
+ * Get the quarter in Roman letters.
+ *
  * @param   int Quarter
- * @param integer $quarter
- * @return  string  Roman letters
+ * @param int $quarter
+ *
+ * @return string Roman letters
  */
 function getQuarterRoman($quarter)
 {
@@ -137,12 +145,12 @@ function getQuarterRoman($quarter)
 
 /**
  * Creates one session per course with $administratorId as the creator and
- * adds it to the session starting on $startDate and finishing on $endDate
- * @param   array   $courses Courses
- * @param   int     $administratorId Administrator id
- * @param   date    $startDate First day of the month
- * @param   date    $endDate Last day of the month
- * @return  void
+ * adds it to the session starting on $startDate and finishing on $endDate.
+ *
+ * @param array $courses         Courses
+ * @param int   $administratorId Administrator id
+ * @param date  $startDate       First day of the month
+ * @param date  $endDate         Last day of the month
  */
 function createCourseSessions($courses, $administratorId, $startDate, $endDate)
 {
@@ -171,7 +179,7 @@ function createCourseSessions($courses, $administratorId, $startDate, $endDate)
             0,
             SESSION_INVISIBLE
         );
-        SessionManager::add_courses_to_session($sessionId, array($course['id']));
+        SessionManager::add_courses_to_session($sessionId, [$course['id']]);
         echo "Session '".$sessionName."' created.\nCourse '".$course['title']."' added.\n\n";
     }
 }

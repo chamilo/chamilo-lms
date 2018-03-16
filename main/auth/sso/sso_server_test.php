@@ -21,9 +21,7 @@
  *
 */
 
-
 exit; //Uncomment this to execute the page
-
 
 //After you located this file in you new domain and you set the settings in step 2,
 //this page will be loaded when entering to the Chamilo site if the SSO option was set in step 1.
@@ -31,7 +29,7 @@ exit; //Uncomment this to execute the page
 //Getting the chamilo server
 $my_chamilo_server = filter_xss($_SERVER['HTTP_HOST']);
 
-$account = array();
+$account = [];
 
 if (isset($_SESSION['my_server_user_session'])) {
     //validate if the user is already logged in my external system in order to redirect to chamilo
@@ -40,12 +38,10 @@ if (isset($_SESSION['my_server_user_session'])) {
 //Login process
 
 if (isset($_POST['user']) && isset($_POST['password'])) {
-
     //1. Your Server validations
     $validate = validate_user($_POST['user'], $_POST['password']);
 
     if ($validate) {
-
         /* 2.Get the chamilo username and password from your system or from webservices */
 
         $account['username'] = 'jbrion525'; //username in Chamilo
@@ -54,14 +50,14 @@ if (isset($_POST['user']) && isset($_POST['password'])) {
         $master_auth_uri = $my_chamilo_server.'/?q=user';
 
         // Creating an array cookie that will be sent to Chamilo
-        $sso = array(
-            'username'          => $account['username'],
-            'secret'            => $account['password'],
-            'master_domain'     => $my_chamilo_server,
-            'master_auth_uri'   => $master_auth_uri,
-            'lifetime'          => time() + 3600,
-            'target'            => filter_xss($_GET['sso_target']),
-        );
+        $sso = [
+            'username' => $account['username'],
+            'secret' => $account['password'],
+            'master_domain' => $my_chamilo_server,
+            'master_auth_uri' => $master_auth_uri,
+            'lifetime' => time() + 3600,
+            'target' => filter_xss($_GET['sso_target']),
+        ];
 
         $cookie = base64_encode(serialize($sso));
         $url = chamilo_sso_protocol().$master_auth_uri;
@@ -84,15 +80,18 @@ if (isset($_POST['logout'])) {
     //echo do something to logout
 }
 
-function validate_user($user, $pass) {
+function validate_user($user, $pass)
+{
     return true;
 }
-function filter_xss($val) {
+function filter_xss($val)
+{
     //do some cleaning
     return $val;
 }
 
-function chamilo_sso_protocol() {
+function chamilo_sso_protocol()
+{
     //get the sso_protocol from chamilo using webservices
     return 'http://';
 }

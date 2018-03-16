@@ -51,7 +51,7 @@ if (api_drh_can_access_all_session_content()) {
     if (empty($students)) {
         api_not_allowed(true);
     }
-    $userIdList = array();
+    $userIdList = [];
     foreach ($students as $student) {
         $userIdList[] = $student['user_id'];
     }
@@ -74,58 +74,58 @@ $usernameInput = $form->addElement('text', 'username', get_lang('LoginName'));
 $usernameInput->freeze();
 
 // Password
-$group = array();
+$group = [];
 $auth_sources = 0; //make available wider as we need it in case of form reset (see below)
 /*if (count($extAuthSource) > 0) {
-	$group[] =& $form->createElement('radio', 'password_auto', null, get_lang('ExternalAuthentication').' ', 2);
-	$auth_sources = array();
-	foreach ($extAuthSource as $key => $info) {
-		$auth_sources[$key] = $key;
-	}
-	$group[] =& $form->createElement('select', 'auth_source', null, $auth_sources);
-	$group[] =& $form->createElement('static', '', '', '<br />');
+    $group[] =& $form->createElement('radio', 'password_auto', null, get_lang('ExternalAuthentication').' ', 2);
+    $auth_sources = array();
+    foreach ($extAuthSource as $key => $info) {
+        $auth_sources[$key] = $key;
+    }
+    $group[] =& $form->createElement('select', 'auth_source', null, $auth_sources);
+    $group[] =& $form->createElement('static', '', '', '<br />');
 }*/
-$group[] = & $form->createElement('radio', 'password_auto', get_lang('Password'), get_lang('AutoGeneratePassword').'<br />', 1);
-$group[] = & $form->createElement('radio', 'password_auto', 'id="radio_user_password"', null, 0);
-$group[] = & $form->createElement('password', 'password', null, array('onkeydown' => 'javascript: password_switch_radio_button(document.user_add,"password[password_auto]");'));
+$group[] = &$form->createElement('radio', 'password_auto', get_lang('Password'), get_lang('AutoGeneratePassword').'<br />', 1);
+$group[] = &$form->createElement('radio', 'password_auto', 'id="radio_user_password"', null, 0);
+$group[] = &$form->createElement('password', 'password', null, ['onkeydown' => 'javascript: password_switch_radio_button(document.user_add,"password[password_auto]");']);
 $form->addGroup($group, 'password', get_lang('Password'));
 
 // Send email
-$group = array();
-$group[] = & $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
-$group[] = & $form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
+$group = [];
+$group[] = &$form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
+$group[] = &$form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
 $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'));
 
 // Set default values
-$defaults = array();
+$defaults = [];
 $defaults['username'] = $userInfo['username'];
 $defaults['mail']['send_mail'] = 0;
 $defaults['password']['password_auto'] = 1;
 
 $form->setDefaults($defaults);
 // Submit button
-$select_level = array();
+$select_level = [];
 $html_results_enabled[] = $form->addButtonUpdate(get_lang('Update'), 'submit', true);
 $form->addGroup($html_results_enabled);
 // Validate form
 if ($form->validate()) {
-	$check = Security::check_token('post');
-	if ($check) {
-		$user = $form->exportValues();
-		$email = $userInfo['email'];
+    $check = Security::check_token('post');
+    if ($check) {
+        $user = $form->exportValues();
+        $email = $userInfo['email'];
         $username = $userInfo['username'];
-		$send_mail = intval($user['mail']['send_mail']);
+        $send_mail = intval($user['mail']['send_mail']);
         $auth_source = PLATFORM_AUTH_SOURCE;
 
         $resetPassword = $user['password']['password_auto'] == '1' ? 0 : 2;
 
-		if (count($extAuthSource) > 0 && $user['password']['password_auto'] == '2') {
-			//$auth_source = $user['password']['auth_source'];
-			//$password = 'PLACEHOLDER';
-		} else {
-			//$auth_source = PLATFORM_AUTH_SOURCE;
-			//$password = $user['password']['password_auto'] == '1' ? api_generate_password() : $user['password']['password'];
-		}
+        if (count($extAuthSource) > 0 && $user['password']['password_auto'] == '2') {
+            //$auth_source = $user['password']['auth_source'];
+            //$password = 'PLACEHOLDER';
+        } else {
+            //$auth_source = PLATFORM_AUTH_SOURCE;
+            //$password = $user['password']['password_auto'] == '1' ? api_generate_password() : $user['password']['password'];
+        }
 
         $auth_source = $userInfo['auth_source'];
         $password = $user['password']['password_auto'] == '1' ? api_generate_password() : $user['password']['password'];
@@ -153,18 +153,18 @@ if ($form->validate()) {
             $resetPassword
         );
 
-		if (!empty($email) && $send_mail) {
-			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
-			$portal_url = api_get_path(WEB_PATH);
-			if (api_is_multiple_url_enabled()) {
-				$access_url_id = api_get_current_access_url_id();
-				if ($access_url_id != -1) {
-					$url = api_get_access_url($access_url_id);
-					$portal_url = $url['url'];
-				}
-			}
+        if (!empty($email) && $send_mail) {
+            $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+            $portal_url = api_get_path(WEB_PATH);
+            if (api_is_multiple_url_enabled()) {
+                $access_url_id = api_get_current_access_url_id();
+                if ($access_url_id != -1) {
+                    $url = api_get_access_url($access_url_id);
+                    $portal_url = $url['url'];
+                }
+            }
 
-			$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($userInfo['firstname'], $userInfo['lastname'])).",\n\n".
+            $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($userInfo['firstname'], $userInfo['lastname'])).",\n\n".
                 get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".
                 get_lang('Username')." : ".$username."\n".get_lang('Pass')." : ".stripslashes($password)."\n\n".
                 get_lang('Address')." ".api_get_setting('siteName')." ".
@@ -178,35 +178,35 @@ if ($form->validate()) {
                 get_lang('Email')." : ".api_get_setting('emailAdministrator');
             $emailbody = nl2br($emailbody);
 
-			api_mail_html(
+            api_mail_html(
                 api_get_person_name($userInfo['firstname'], $userInfo['lastname'], null, PERSON_NAME_EMAIL_ADDRESS),
                 $email,
                 $emailsubject,
                 $emailbody
             );
-		}
+        }
 
-		Security::clear_token();
+        Security::clear_token();
         $tok = Security::get_token();
         header('Location: '.$url.'&message=1');
         exit();
-	}
+    }
 } else {
-	if (isset($_POST['submit'])) {
-		Security::clear_token();
-	}
-	$token = Security::get_token();
-	$form->addElement('hidden', 'sec_token');
-	$form->setConstants(array('sec_token' => $token));
+    if (isset($_POST['submit'])) {
+        Security::clear_token();
+    }
+    $token = Security::get_token();
+    $form->addElement('hidden', 'sec_token');
+    $form->setConstants(['sec_token' => $token]);
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH)."mySpace/student.php",
     "name" => get_lang('UserList'),
-);
+];
 
 if (isset($_REQUEST['message'])) {
-	Display::addFlash(Display::return_message(get_lang('Updated'), 'normal'));
+    Display::addFlash(Display::return_message(get_lang('Updated'), 'normal'));
 }
 
 Display::display_header($tool_name);

@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Block
+ * Block.
  *
  * @ORM\Table(name="block", uniqueConstraints={@ORM\UniqueConstraint(name="path", columns={"path"})})
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Block
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -51,16 +51,17 @@ class Block
     private $controller;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active;
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return Block
      */
     public function setName($name)
@@ -71,7 +72,7 @@ class Block
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -81,9 +82,10 @@ class Block
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return Block
      */
     public function setDescription($description)
@@ -94,7 +96,7 @@ class Block
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -104,9 +106,10 @@ class Block
     }
 
     /**
-     * Set path
+     * Set path.
      *
      * @param string $path
+     *
      * @return Block
      */
     public function setPath($path)
@@ -117,7 +120,7 @@ class Block
     }
 
     /**
-     * Get path
+     * Get path.
      *
      * @return string
      */
@@ -127,9 +130,10 @@ class Block
     }
 
     /**
-     * Set controller
+     * Set controller.
      *
      * @param string $controller
+     *
      * @return Block
      */
     public function setController($controller)
@@ -140,7 +144,7 @@ class Block
     }
 
     /**
-     * Get controller
+     * Get controller.
      *
      * @return string
      */
@@ -150,9 +154,10 @@ class Block
     }
 
     /**
-     * Set active
+     * Set active.
      *
-     * @param boolean $active
+     * @param bool $active
+     *
      * @return Block
      */
     public function setActive($active)
@@ -163,9 +168,9 @@ class Block
     }
 
     /**
-     * Get active
+     * Get active.
      *
-     * @return boolean
+     * @return bool
      */
     public function getActive()
     {
@@ -173,9 +178,9 @@ class Block
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

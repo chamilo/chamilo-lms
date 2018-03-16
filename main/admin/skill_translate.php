@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \Chamilo\CoreBundle\Entity\ExtraField;
-use Chamilo\CoreBundle\Entity\Skill;
-use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\Language;
+use Chamilo\CoreBundle\Entity\Skill;
 
 $cidReset = true;
 
@@ -94,7 +94,7 @@ $form->setDefaults([
     'variable_language' => '$'.$variableLanguage,
     'original_name' => $originalName,
     'sub_language' => $languageId,
-    'new_language' => $action === 'code' ? $skill->getShortCode() : $skill->getName()
+    'new_language' => $action === 'code' ? $skill->getShortCode() : $skill->getName(),
 ]);
 $form->addRule('sub_language', get_lang('Required'), 'required');
 $form->freeze(['variable_language', 'original_name']);

@@ -1,17 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * This file contains the Hook Event class for Title of Notifications
+ * This file contains the Hook Event class for Title of Notifications.
+ *
  * @package chamilo.library.hook
  */
 
 /**
- * Class HookNotificationTitle
+ * Class HookNotificationTitle.
  */
 class HookNotificationTitle extends HookEvent implements HookNotificationTitleEventInterface
 {
     /**
-     * Construct
+     * Construct.
      */
     protected function __construct()
     {

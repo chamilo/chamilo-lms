@@ -4,15 +4,18 @@
 require_once api_get_path(SYS_PATH).'main/inc/lib/kses-0.2.2/kses.php';
 
 /**
- * QuickForm rule to check a html
+ * QuickForm rule to check a html.
  */
 class HTML_QuickForm_Rule_HTML extends HTML_QuickForm_Rule
 {
     /**
-     * Function to validate HTML
+     * Function to validate HTML.
+     *
      * @see HTML_QuickForm_Rule
+     *
      * @param string $html
-     * @return boolean True if html is valid
+     *
+     * @return bool True if html is valid
      */
     public function validate($html, $mode = NO_HTML)
     {
@@ -23,20 +26,21 @@ class HTML_QuickForm_Rule_HTML extends HTML_QuickForm_Rule
     }
 
     /**
-     * Get allowed tags
-     * @param int $mode NO_HTML, STUDENT_HTML, TEACHER_HTML,
-     * STUDENT_HTML_FULLPAGE or TEACHER_HTML_FULLPAGE
-     * @param boolean $fullpage If true, the allowed tags for full-page editing
-     * are returned.
+     * Get allowed tags.
+     *
+     * @param int  $mode     NO_HTML, STUDENT_HTML, TEACHER_HTML,
+     *                       STUDENT_HTML_FULLPAGE or TEACHER_HTML_FULLPAGE
+     * @param bool $fullpage if true, the allowed tags for full-page editing
+     *                       are returned
      */
-    static function get_allowed_tags($mode)
+    public static function get_allowed_tags($mode)
     {
         // Include the allowed tags.
         //include __DIR__.'/allowed_tags.inc.php';
         global $allowed_tags_student, $allowed_tags_student_full_page, $allowed_tags_teacher, $allowed_tags_teacher_full_page;
         switch ($mode) {
             case NO_HTML:
-                return array();
+                return [];
                 break;
             case STUDENT_HTML:
                 return $allowed_tags_student;
@@ -51,7 +55,7 @@ class HTML_QuickForm_Rule_HTML extends HTML_QuickForm_Rule
                 return array_merge($allowed_tags_teacher, $allowed_tags_teacher_full_page);
                 break;
             default:
-                return array();
+                return [];
                 break;
         }
     }

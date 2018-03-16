@@ -2,10 +2,10 @@
 /* For license terms, see /license.txt */
 
 /**
- * Create new Services for the Buy Courses plugin
+ * Create new Services for the Buy Courses plugin.
+ *
  * @package chamilo.plugin.buycourses
  */
-
 $cidReset = true;
 
 require_once '../../../main/inc/global.inc.php';
@@ -34,7 +34,7 @@ $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 //view
 $interbreadcrumb[] = [
     'url' => 'configuration.php',
-    'name' => $plugin->get_lang('Configuration')
+    'name' => $plugin->get_lang('Configuration'),
 ];
 
 $service = $plugin->getServices($serviceId);
@@ -51,7 +51,7 @@ $formDefaultValues = [
             ? api_get_path(WEB_PLUGIN_PATH).'buycourses/uploads/services/images/simg-'.$serviceId.'.png'
             : api_get_path(WEB_CODE_PATH).'img/session_default.png',
     'video_url' => $service['video_url'],
-    'service_information' => $service['service_information']
+    'service_information' => $service['service_information'],
 ];
 
 $form = new FormValidator('Services');
@@ -113,7 +113,7 @@ $form->addCheckBox('visibility', $plugin->get_lang('VisibleInCatalog'));
 $form->addFile(
     'picture',
     $formDefaultValues['image'] != '' ? get_lang('UpdateImage') : get_lang('AddImage'),
-    array('id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '16 / 9')
+    ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '16 / 9']
 );
 $form->addText('video_url', get_lang('VideoUrl'), false);
 $form->addHtmlEditor('service_information', $plugin->get_lang('ServiceInformation'), false);

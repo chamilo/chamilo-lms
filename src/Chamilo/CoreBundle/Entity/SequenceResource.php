@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class SequenceResource
+ * Class SequenceResource.
  *
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\SequenceRepository")
  * @ORM\Table(name="sequence_resource")
@@ -17,7 +17,15 @@ class SequenceResource
     const SESSION_TYPE = 2;
 
     /**
-     * @var integer
+     * @var Sequence
+     *
+     * @ORM\ManyToOne(targetEntity="Sequence")
+     * @ORM\JoinColumn(name="sequence_id", referencedColumnName="id")
+     */
+    protected $sequence;
+
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -26,31 +34,23 @@ class SequenceResource
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="type", type="integer")
      */
     private $type;
 
     /**
-     * @var Sequence
-     *
-     * @ORM\ManyToOne(targetEntity="Sequence")
-     * @ORM\JoinColumn(name="sequence_id", referencedColumnName="id")
-     **/
-    protected $sequence;
-
-    /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="resource_id", type="integer")
      */
     private $resourceId;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -58,7 +58,7 @@ class SequenceResource
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getType()
     {
@@ -66,8 +66,10 @@ class SequenceResource
     }
 
     /**
-     * Set the integer type
+     * Set the integer type.
+     *
      * @param int $type
+     *
      * @return SequenceResource
      */
     public function setType($type)
@@ -91,6 +93,7 @@ class SequenceResource
     public function hasGraph()
     {
         $graph = $this->getSequence()->getGraph();
+
         return !empty($graph) ? true : false;
     }
 
@@ -124,6 +127,7 @@ class SequenceResource
 
     /**
      * @param Sequence $sequence
+     *
      * @return $this
      */
     public function setSequence(Sequence $sequence)

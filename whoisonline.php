@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* Who is online list
-*/
+ * Who is online list.
+ */
 if (!isset($_GET['cidReq'])) {
     $cidReset = true;
 }

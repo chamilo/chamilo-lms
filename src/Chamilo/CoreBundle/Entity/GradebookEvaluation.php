@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * GradebookEvaluation
+ * GradebookEvaluation.
  *
  * @ORM\Table(name="gradebook_evaluation")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class GradebookEvaluation
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -37,7 +37,7 @@ class GradebookEvaluation
     private $description;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
@@ -51,7 +51,7 @@ class GradebookEvaluation
     private $courseCode;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="category_id", type="integer", nullable=true)
      */
@@ -79,7 +79,7 @@ class GradebookEvaluation
     private $max;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="visible", type="integer", nullable=false)
      */
@@ -93,16 +93,17 @@ class GradebookEvaluation
     private $type;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
     private $locked;
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return GradebookEvaluation
      */
     public function setName($name)
@@ -113,7 +114,7 @@ class GradebookEvaluation
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -123,9 +124,10 @@ class GradebookEvaluation
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return GradebookEvaluation
      */
     public function setDescription($description)
@@ -136,7 +138,7 @@ class GradebookEvaluation
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -146,9 +148,10 @@ class GradebookEvaluation
     }
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return GradebookEvaluation
      */
     public function setUserId($userId)
@@ -159,9 +162,9 @@ class GradebookEvaluation
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -169,9 +172,10 @@ class GradebookEvaluation
     }
 
     /**
-     * Set courseCode
+     * Set courseCode.
      *
      * @param string $courseCode
+     *
      * @return GradebookEvaluation
      */
     public function setCourseCode($courseCode)
@@ -182,7 +186,7 @@ class GradebookEvaluation
     }
 
     /**
-     * Get courseCode
+     * Get courseCode.
      *
      * @return string
      */
@@ -192,9 +196,10 @@ class GradebookEvaluation
     }
 
     /**
-     * Set categoryId
+     * Set categoryId.
      *
-     * @param integer $categoryId
+     * @param int $categoryId
+     *
      * @return GradebookEvaluation
      */
     public function setCategoryId($categoryId)
@@ -205,9 +210,9 @@ class GradebookEvaluation
     }
 
     /**
-     * Get categoryId
+     * Get categoryId.
      *
-     * @return integer
+     * @return int
      */
     public function getCategoryId()
     {
@@ -215,9 +220,10 @@ class GradebookEvaluation
     }
 
     /**
-     * Set createdAt
+     * Set createdAt.
      *
      * @param \DateTime $createdAt
+     *
      * @return GradebookEvaluation
      */
     public function setCreatedAt($createdAt)
@@ -228,7 +234,7 @@ class GradebookEvaluation
     }
 
     /**
-     * Get createdAt
+     * Get createdAt.
      *
      * @return \DateTime
      */
@@ -238,9 +244,10 @@ class GradebookEvaluation
     }
 
     /**
-     * Set weight
+     * Set weight.
      *
      * @param float $weight
+     *
      * @return GradebookEvaluation
      */
     public function setWeight($weight)
@@ -251,7 +258,7 @@ class GradebookEvaluation
     }
 
     /**
-     * Get weight
+     * Get weight.
      *
      * @return float
      */
@@ -261,9 +268,10 @@ class GradebookEvaluation
     }
 
     /**
-     * Set max
+     * Set max.
      *
      * @param float $max
+     *
      * @return GradebookEvaluation
      */
     public function setMax($max)
@@ -274,7 +282,7 @@ class GradebookEvaluation
     }
 
     /**
-     * Get max
+     * Get max.
      *
      * @return float
      */
@@ -284,9 +292,10 @@ class GradebookEvaluation
     }
 
     /**
-     * Set visible
+     * Set visible.
      *
-     * @param integer $visible
+     * @param int $visible
+     *
      * @return GradebookEvaluation
      */
     public function setVisible($visible)
@@ -297,9 +306,9 @@ class GradebookEvaluation
     }
 
     /**
-     * Get visible
+     * Get visible.
      *
-     * @return integer
+     * @return int
      */
     public function getVisible()
     {
@@ -307,9 +316,10 @@ class GradebookEvaluation
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @param string $type
+     *
      * @return GradebookEvaluation
      */
     public function setType($type)
@@ -320,7 +330,7 @@ class GradebookEvaluation
     }
 
     /**
-     * Get type
+     * Get type.
      *
      * @return string
      */
@@ -330,9 +340,10 @@ class GradebookEvaluation
     }
 
     /**
-     * Set locked
+     * Set locked.
      *
-     * @param integer $locked
+     * @param int $locked
+     *
      * @return GradebookEvaluation
      */
     public function setLocked($locked)
@@ -343,9 +354,9 @@ class GradebookEvaluation
     }
 
     /**
-     * Get locked
+     * Get locked.
      *
-     * @return integer
+     * @return int
      */
     public function getLocked()
     {
@@ -353,9 +364,9 @@ class GradebookEvaluation
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

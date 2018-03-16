@@ -9,7 +9,6 @@ if (!ctype_alnum($token)) {
     $token = '';
 }
 
-
 // Build the form
 $form = new FormValidator('reset', 'POST', api_get_self().'?token='.$token);
 $form->addElement('header', get_lang('ResetPassword'));
@@ -19,11 +18,11 @@ $form->addElement(
     'password',
     'pass2',
     get_lang('Confirmation'),
-    array('id' => 'pass2', 'size' => 20, 'autocomplete' => 'off')
+    ['id' => 'pass2', 'size' => 20, 'autocomplete' => 'off']
 );
 $form->addRule('pass1', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule(array('pass1', 'pass2'), get_lang('PassTwo'), 'compare');
+$form->addRule(['pass1', 'pass2'], get_lang('PassTwo'), 'compare');
 $form->addButtonSave(get_lang('Update'));
 
 $ttl = api_get_setting('user_reset_password_token_limit');
@@ -71,4 +70,3 @@ $tpl->assign('form', $form->toHtml());
 $content = $tpl->get_template('auth/set_temp_password.tpl');
 $tpl->assign('content', $tpl->fetch($content));
 $tpl->display_one_col_template();
-

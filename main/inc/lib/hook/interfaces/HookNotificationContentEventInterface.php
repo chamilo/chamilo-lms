@@ -1,12 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * This file contains Hook event interface for notification content
+ * This file contains Hook event interface for notification content.
+ *
  * @package chamilo.library.hook
  */
 
 /**
- * Interface HookNotificationContentEventInterface
+ * Interface HookNotificationContentEventInterface.
  */
 interface HookNotificationContentEventInterface extends HookEventInterface
 {

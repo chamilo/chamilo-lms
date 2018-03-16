@@ -1,7 +1,9 @@
 <?php
 /**
- * Manage specific tools
+ * Manage specific tools.
+ *
  * @todo convert into a class
+ *
  * @package chamilo.library
  */
 
@@ -10,7 +12,8 @@ $table_sf = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
 $table_sf_val = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
 
 /**
- * Add a specific field
+ * Add a specific field.
+ *
  * @param string $name specific field name
  */
 function add_specific_field($name)
@@ -37,7 +40,8 @@ function add_specific_field($name)
 }
 
 /**
- * Delete a specific field
+ * Delete a specific field.
+ *
  * @param int $id specific field id
  */
 function delete_specific_field($id)
@@ -54,8 +58,9 @@ function delete_specific_field($id)
 }
 
 /**
- * Edit a specific field
- * @param int $id specific field id
+ * Edit a specific field.
+ *
+ * @param int    $id   specific field id
  * @param string $name new field name
  */
 function edit_specific_field($id, $name)
@@ -72,17 +77,18 @@ function edit_specific_field($id, $name)
 
 /**
  * @param array $conditions a list of condition (exemple : status=>STUDENT)
- * @param array $order_by a list of fields on which to sort
+ * @param array $order_by   a list of fields on which to sort
+ *
  * @return array An array with all specific fields, at platform level
  */
-function get_specific_field_list($conditions = array(), $order_by = array())
+function get_specific_field_list($conditions = [], $order_by = [])
 {
     $table_sf = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
-    $return_array = array();
+    $return_array = [];
     $sql = "SELECT * FROM $table_sf";
     if (count($conditions) > 0) {
         $sql .= ' WHERE ';
-        $conditions_string_array = array();
+        $conditions_string_array = [];
         foreach ($conditions as $field => $value) {
             $conditions_string_array[] = $field.' = '.$value;
         }
@@ -101,15 +107,16 @@ function get_specific_field_list($conditions = array(), $order_by = array())
 
 /**
  * @param array $conditions a list of condition (exemple : status=>STUDENT)
- * @param array $order_by a list of fields on which sort
- * @return array An array with all users of the platform.
+ * @param array $order_by   a list of fields on which sort
+ *
+ * @return array an array with all users of the platform
  */
 function get_specific_field_values_list(
-    $conditions = array(),
-    $order_by = array()
+    $conditions = [],
+    $order_by = []
 ) {
     $table_sfv = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
-    $return_array = array();
+    $return_array = [];
     $sql = "SELECT * FROM $table_sfv";
     if (count($conditions) > 0) {
         $sql .= ' WHERE ';
@@ -125,7 +132,7 @@ function get_specific_field_values_list(
             $conditions['course_code'] = " '".api_get_course_id()."' ";
         }
 
-        $conditions_string_array = array();
+        $conditions_string_array = [];
         foreach ($conditions as $field => $value) {
             $conditions_string_array[] = $field.' = '.$value;
         }
@@ -143,10 +150,11 @@ function get_specific_field_values_list(
 }
 
 /**
- * @param char $prefix xapian prefix
+ * @param char   $prefix      xapian prefix
  * @param string $course_code
- * @param string $tool_id Constant from mainapi.lib.php
- * @param int $ref_id representative id inside one tool item
+ * @param string $tool_id     Constant from mainapi.lib.php
+ * @param int    $ref_id      representative id inside one tool item
+ *
  * @return array
  */
 function get_specific_field_values_list_by_prefix(
@@ -177,12 +185,13 @@ function get_specific_field_values_list_by_prefix(
 }
 
 /**
- * Add a specific field value
- * @param int $id_specific_field specific field id
- * @param string $course_id course code
- * @param string $tool_id tool id, from main.api.lib
- * @param int $ref_id intern id inside specific tool table
- * @param string $value specific field value
+ * Add a specific field value.
+ *
+ * @param int    $id_specific_field specific field id
+ * @param string $course_id         course code
+ * @param string $tool_id           tool id, from main.api.lib
+ * @param int    $ref_id            intern id inside specific tool table
+ * @param string $value             specific field value
  */
 function add_specific_field_value(
     $id_specific_field,
@@ -217,13 +226,15 @@ function add_specific_field_value(
 }
 
 /**
- * Delete all values from a specific field id, course_id, ref_id and tool
- * @param string $course_id course code
- * @param int $id_specific_field specific field id
- * @param string $tool_id tool id, from main.api.lib
- * @param int $ref_id intern id inside specific tool table
+ * Delete all values from a specific field id, course_id, ref_id and tool.
+ *
+ * @param string $course_id         course code
+ * @param int    $id_specific_field specific field id
+ * @param string $tool_id           tool id, from main.api.lib
+ * @param int    $ref_id            intern id inside specific tool table
  */
-function delete_all_specific_field_value($course_id, $id_specific_field, $tool_id, $ref_id) {
+function delete_all_specific_field_value($course_id, $id_specific_field, $tool_id, $ref_id)
+{
     $table_sf_values = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
     $sql = 'DELETE FROM %s WHERE course_code = \'%s\' AND tool_id = \'%s\' AND ref_id = %s AND field_id = %s';
     $sql = sprintf($sql, $table_sf_values, $course_id, $tool_id, $ref_id, $id_specific_field);
@@ -232,29 +243,34 @@ function delete_all_specific_field_value($course_id, $id_specific_field, $tool_i
 
 /**
  * Delete all values from a specific item (course_id, tool_id and ref_id).
- * To be used when deleting such item from Dokeos
+ * To be used when deleting such item from Dokeos.
+ *
  * @param   string  Course code
  * @param   string  Tool ID
  * @param   int     Internal ID used in specific tool table
  */
-function delete_all_values_for_item($course_id, $tool_id, $ref_id) {
-  $table_sf_values = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
-  $sql = 'DELETE FROM %s WHERE course_code = \'%s\' AND tool_id = \'%s\' AND ref_id = %s';
-  $sql = sprintf($sql, $table_sf_values, $course_id, $tool_id, $ref_id);
-  Database::query($sql);
+function delete_all_values_for_item($course_id, $tool_id, $ref_id)
+{
+    $table_sf_values = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
+    $sql = 'DELETE FROM %s WHERE course_code = \'%s\' AND tool_id = \'%s\' AND ref_id = %s';
+    $sql = sprintf($sql, $table_sf_values, $course_id, $tool_id, $ref_id);
+    Database::query($sql);
 }
 
 /**
  * Generates a code (one-letter string) for a given field name
  * Defaults to the first letter of the name, otherwise iterate through available
- * letters
+ * letters.
+ *
  * @param   string  Name
- * @return  string  One-letter code, upper-case
+ *
+ * @return string One-letter code, upper-case
  */
-function get_specific_field_code_from_name($name) {
+function get_specific_field_code_from_name($name)
+{
     // Z is used internally by Xapian
     // O & C already used by tool_id and course_id
-    $list = array(
+    $list = [
         'A',
         'B',
         'D',
@@ -278,7 +294,7 @@ function get_specific_field_code_from_name($name) {
         'W',
         'X',
         'Y',
-    );
+    ];
     $table_sf = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
     $sql = "SELECT code FROM $table_sf ORDER BY code";
     $res = Database::query($sql);
@@ -288,7 +304,7 @@ function get_specific_field_code_from_name($name) {
         return $code;
     }
 
-    $existing_list = array();
+    $existing_list = [];
     while ($row = Database::fetch_array($res)) {
         $existing_list[] = $row['code'];
     }

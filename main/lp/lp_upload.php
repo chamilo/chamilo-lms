@@ -2,7 +2,9 @@
 /* For licensing terms, see /license.txt */
 /**
  * Script managing the learnpath upload. To best treat the uploaded file, make sure we can identify it.
+ *
  * @package chamilo.learnpath
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
@@ -23,13 +25,14 @@ $uncompress = 1;
  * because if the file size exceed the maximum file upload
  * size set in php.ini, all variables from POST are cleared !
  */
-$user_file = isset($_GET['user_file']) ? $_GET['user_file'] : array();
-$user_file = $user_file ? $user_file : array();
+$user_file = isset($_GET['user_file']) ? $_GET['user_file'] : [];
+$user_file = $user_file ? $user_file : [];
 $is_error = isset($user_file['error']) ? $user_file['error'] : false;
 if (isset($_POST) && $is_error) {
     Display::addFlash(
         Display::return_message(get_lang('UplFileTooBig'))
     );
+
     return false;
     unset($_FILES['user_file']);
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES['user_file']['name'])) {
@@ -77,21 +80,21 @@ if (isset($_POST) && $is_error) {
                                 if (file_exists($templatePath) && is_file($templatePath)) {
                                     $templateContent = file_get_contents($templatePath);
 
-                                    $find = array(
+                                    $find = [
                                         'href="www.',
                                         'href="https://',
                                         'href="http://',
                                         'url="www.',
-                                        'pdfs/download.php?'
-                                    );
+                                        'pdfs/download.php?',
+                                    ];
 
-                                    $replace = array(
+                                    $replace = [
                                         'href="http://www.',
                                         'target = "_blank" href="'.$proxyPath.'?type=link&src=https://',
                                         'target = "_blank" href="'.$proxyPath.'?type=link&src=http://',
                                         'url="http://www.',
-                                        'pdfs/download.php&'
-                                    );
+                                        'pdfs/download.php&',
+                                    ];
                                     $templateContent = str_replace($find, $replace, $templateContent);
                                     file_put_contents($templatePath, $templateContent);
                                 }
@@ -101,12 +104,12 @@ if (isset($_POST) && $is_error) {
 
                                 if (file_exists($linkPath) && is_file($linkPath)) {
                                     $linkContent = file_get_contents($linkPath);
-                                    $find = array(
-                                        ':this.getAttribute("url")'
-                                    );
-                                    $replace = array(
-                                        ':"'.$proxyPath.'?type=link&src=" + this.getAttribute("url")'
-                                    );
+                                    $find = [
+                                        ':this.getAttribute("url")',
+                                    ];
+                                    $replace = [
+                                        ':"'.$proxyPath.'?type=link&src=" + this.getAttribute("url")',
+                                    ];
                                     $linkContent = str_replace($find, $replace, $linkContent);
                                     file_put_contents($linkPath, $linkContent);
                                 }
@@ -116,12 +119,12 @@ if (isset($_POST) && $is_error) {
 
                                 if (file_exists($framePath) && is_file($framePath)) {
                                     $content = file_get_contents($framePath);
-                                    $find = array(
-                                        '$iFrameHolder.html(iFrameTag);'
-                                    );
-                                    $replace = array(
-                                        'iFrameTag = \'<a target ="_blank" href="'.$proxyPath.'?type=link&src=\'+ pageSrc + \'">Open website. <img src="'.api_get_path(WEB_CODE_PATH).'img/link-external.png"></a>\'; $iFrameHolder.html(iFrameTag); '
-                                    );
+                                    $find = [
+                                        '$iFrameHolder.html(iFrameTag);',
+                                    ];
+                                    $replace = [
+                                        'iFrameTag = \'<a target ="_blank" href="'.$proxyPath.'?type=link&src=\'+ pageSrc + \'">Open website. <img src="'.api_get_path(WEB_CODE_PATH).'img/link-external.png"></a>\'; $iFrameHolder.html(iFrameTag); ',
+                                    ];
                                     $content = str_replace($find, $replace, $content);
                                     file_put_contents($framePath, $content);
                                 }
@@ -131,12 +134,12 @@ if (isset($_POST) && $is_error) {
 
                                 if (file_exists($newWindowPath) && is_file($newWindowPath)) {
                                     $content = file_get_contents($newWindowPath);
-                                    $find = array(
-                                        'var src = x_currentPageXML'
-                                    );
-                                    $replace = array(
-                                        'var src = "'.$proxyPath.'?type=link&src=" + x_currentPageXML'
-                                    );
+                                    $find = [
+                                        'var src = x_currentPageXML',
+                                    ];
+                                    $replace = [
+                                        'var src = "'.$proxyPath.'?type=link&src=" + x_currentPageXML',
+                                    ];
                                     $content = str_replace($find, $replace, $content);
                                     file_put_contents($newWindowPath, $content);
                                 }
@@ -181,6 +184,7 @@ if (isset($_POST) && $is_error) {
         case '':
         default:
             Display::addFlash(Display::return_message(get_lang('ScormUnknownPackageFormat'), 'warning'));
+
             return false;
             break;
     }
@@ -259,6 +263,7 @@ if (isset($_POST) && $is_error) {
             Display::addFlash(
                 Display::return_message(get_lang('ScormUnknownPackageFormat'), 'warning')
             );
+
             return false;
             break;
     }

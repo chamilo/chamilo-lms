@@ -4,7 +4,7 @@
 use ChamiloSession as Session;
 
 /**
- * UniqueAnswerImage
+ * UniqueAnswerImage.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
@@ -24,7 +24,8 @@ class UniqueAnswerImage extends UniqueAnswer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     *
      * @throws Exception
      */
     public function createAnswersForm($form)
@@ -33,7 +34,7 @@ class UniqueAnswerImage extends UniqueAnswer
         $editorConfig = [
             'ToolbarSet' => 'TestProposedAnswer',
             'Width' => '100%',
-            'Height' => '125'
+            'Height' => '125',
         ];
 
         //this line defines how many questions by default appear when creating a choice question
@@ -56,12 +57,12 @@ class UniqueAnswerImage extends UniqueAnswer
         $html .= '<table class="table table-striped table-hover">
             <thead>
                 <tr style="text-align: center;">
-                    <th width="10">' . get_lang('Number').'</th>
+                    <th width="10">'.get_lang('Number').'</th>
                     <th>'.get_lang('True').'</th>
                     <th>'.get_lang('Answer').'</th>
                         '.$commentTitle.'
                         '.$feedbackTitle.'
-                    <th width="15">' . get_lang('Weighting').'</th>
+                    <th width="15">'.get_lang('Weighting').'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -227,7 +228,7 @@ class UniqueAnswerImage extends UniqueAnswer
                     get_lang('Other').': ',
                     [
                         'class' => 'col-md-2',
-                        'placeholder' => get_lang('Other')
+                        'placeholder' => get_lang('Other'),
                     ]
                 );
                 $form->addGroup($group, 'scenario');
@@ -278,7 +279,7 @@ class UniqueAnswerImage extends UniqueAnswer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
@@ -371,13 +372,13 @@ class UniqueAnswerImage extends UniqueAnswer
 
     public function return_header($feedback_type = null, $counter = null, $score = null)
     {
-        $header = '<table class="' . $this->question_table_class . '">
+        $header = '<table class="'.$this->question_table_class.'">
 			<tr>
-				<th>' . get_lang("Choice") . '</th>
-				<th>' . get_lang("ExpectedChoice") . '</th>
-				<th>' . get_lang("Answer") . '</th>';
-        $header .= '<th>' . get_lang('Status') . '</th>';
-        $header .= '<th>' . get_lang('Comment') . '</th>';
+				<th>'.get_lang("Choice").'</th>
+				<th>'.get_lang("ExpectedChoice").'</th>
+				<th>'.get_lang("Answer").'</th>';
+        $header .= '<th>'.get_lang('Status').'</th>';
+        $header .= '<th>'.get_lang('Comment').'</th>';
         $header .= '</tr>';
 
         return $header;

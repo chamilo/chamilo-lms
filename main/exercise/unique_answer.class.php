@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
+use ChamiloSession as Session;
 
 /**
- * Class UniqueAnswer
+ * Class UniqueAnswer.
  *
  * This class allows to instantiate an object of type UNIQUE_ANSWER
  * (MULTIPLE CHOICE, UNIQUE ANSWER),
@@ -13,15 +13,16 @@ use Chamilo\CourseBundle\Entity\CQuizAnswer;
  *
  * @author Eric Marguin
  * @author Julio Montoya
+ *
  * @package chamilo.exercise
- **/
+ */
 class UniqueAnswer extends Question
 {
     public static $typePicture = 'mcua.png';
     public static $explanationLangVar = 'UniqueSelect';
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -31,7 +32,7 @@ class UniqueAnswer extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createAnswersForm($form)
     {
@@ -41,7 +42,7 @@ class UniqueAnswer extends Question
         $editor_config = [
             'ToolbarSet' => 'TestProposedAnswer',
             'Width' => '100%',
-            'Height' => '125'
+            'Height' => '125',
         ];
 
         //this line defines how many questions by default appear when creating a choice question
@@ -69,12 +70,12 @@ class UniqueAnswer extends Question
         $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr style="text-align: center;">
-                    <th width="5%">' . get_lang('Number').'</th>
-                    <th width="5%"> ' . get_lang('True').'</th>
-                    <th width="40%">' . get_lang('Answer').'</th>
-                        ' . $comment_title.'
-                        ' . $feedback_title.'
-                    <th width="10%">' . get_lang('Weighting').'</th>
+                    <th width="5%">'.get_lang('Number').'</th>
+                    <th width="5%"> '.get_lang('True').'</th>
+                    <th width="40%">'.get_lang('Answer').'</th>
+                        '.$comment_title.'
+                        '.$feedback_title.'
+                    <th width="10%">'.get_lang('Weighting').'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -257,7 +258,7 @@ class UniqueAnswer extends Question
                     get_lang('Other').': ',
                     [
                         'class' => 'col-md-2',
-                        'placeholder' => get_lang('Other')
+                        'placeholder' => get_lang('Other'),
                     ]
                 );
                 $form->addGroup($group, 'scenario');
@@ -317,7 +318,7 @@ class UniqueAnswer extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
@@ -408,7 +409,7 @@ class UniqueAnswer extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function return_header(
         $exercise,
@@ -418,10 +419,10 @@ class UniqueAnswer extends Question
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">
 			<tr>
-				<th>' . get_lang("Choice") . '</th>
-				<th>' . get_lang("ExpectedChoice") . '</th>
-				<th>' . get_lang("Answer") . '</th>';
-        $header .= '<th>' . get_lang("Status") . '</th>';
+				<th>'.get_lang("Choice").'</th>
+				<th>'.get_lang("ExpectedChoice").'</th>
+				<th>'.get_lang("Answer").'</th>';
+        $header .= '<th>'.get_lang("Status").'</th>';
         $header .= '<th>'.get_lang('Comment').'</th>';
         $header .= '</tr>';
 
@@ -429,13 +430,14 @@ class UniqueAnswer extends Question
     }
 
     /**
-     * Saves one answer to the database
-     * @param int $id   The ID of the answer (has to be calculated for this course)
-     * @param int $question_id  The question ID (to which the answer is attached)
-     * @param string $title The text of the answer
-     * @param string $comment The feedback for the answer
-     * @param double $score  The score you get when picking this answer
-     * @param integer $correct  Whether this answer is considered *the* correct one (this is the unique answer type)
+     * Saves one answer to the database.
+     *
+     * @param int    $id          The ID of the answer (has to be calculated for this course)
+     * @param int    $question_id The question ID (to which the answer is attached)
+     * @param string $title       The text of the answer
+     * @param string $comment     The feedback for the answer
+     * @param float  $score       The score you get when picking this answer
+     * @param int    $correct     Whether this answer is considered *the* correct one (this is the unique answer type)
      */
     public function addAnswer(
         $id,

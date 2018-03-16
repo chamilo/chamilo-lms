@@ -4,8 +4,10 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * Add resource glossary
+ * Add resource glossary.
+ *
  * @author Isaac flores
+ *
  * @package chamilo.backup
  */
 class Glossary extends Resource
@@ -16,11 +18,12 @@ class Glossary extends Resource
     public $display_order;
 
     /**
-     * Create a new Glossary
-     * @param int $id
+     * Create a new Glossary.
+     *
+     * @param int    $id
      * @param string $name
      * @param string $description
-     * @param int $display_order
+     * @param int    $display_order
      */
     public function __construct($id, $name, $description, $display_order)
     {
@@ -32,7 +35,7 @@ class Glossary extends Resource
     }
 
     /**
-     * Show this glossary
+     * Show this glossary.
      */
     public function show()
     {

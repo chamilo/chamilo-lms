@@ -13,6 +13,7 @@ $bullet = api_get_path(WEB_PLUGIN_PATH).'rss/resources/arrow-bullet.png';
 
 if (empty($rss)) {
     echo Display::return_message(get_lang('NoRSSItem'), 'warning');
+
     return;
 }
 

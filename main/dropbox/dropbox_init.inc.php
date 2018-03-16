@@ -82,8 +82,7 @@ Version 1.1
   symbol and title of a work entry in the sent/received list
 - index.php: add filesize info in sent/received lists
 - dropbox_submit.php: resubmit prevention only for GET action, because it gives some annoying behaviour in POST
- * situation: white screen in IE6
-
+ * situation: white screen in IE6.
 Version 1.2
 -----------
 - adapted entire dropbox tool so it can be used as a default tool in Dokeos 1.5
@@ -110,15 +109,15 @@ Version 1.4 (Yannick Warnier)
 - removed all self-built database tables names
  */
 
-
 /**
  * First initialisation file with initialisation of variables and
  * without outputting anything to browser.
  * 1. Calls global.inc.php and lang file
  * 2. Initialises $dropbox_cnf array with all relevant vars
- * 3. Often used functions
+ * 3. Often used functions.
  *
  * @version 1.31
+ *
  * @copyright 2004-2005
  * @author Jan Bols <jan@ivpv.UGent.be>, main programmer
  * @author René Haentjens, severalcontributions <rene.haentjens@UGent.be>
@@ -131,9 +130,9 @@ Version 1.4 (Yannick Warnier)
  * download file / folder (download icon)
  * same action on multiple documents
  * extended feedback
+ *
  * @package chamilo.dropbox
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $is_allowed_in_course = api_is_allowed_in_course();
 $is_courseTutor = api_is_course_tutor();
@@ -237,7 +236,7 @@ if ($allowOverwrite == 'true') {
             $javascript .= "'".$dropbox_person->sentWork[$i]->title."'";
         }
     }
-	$javascript .= ");
+    $javascript .= ");
 
 		function checkfile(str)
 		{
@@ -287,7 +286,7 @@ $htmlHeadXtra[] = $javascript;
 $htmlHeadXtra[] = "<script>
 function confirmation (name)
 {
-	if (confirm(\" ". get_lang("AreYouSureToDeleteJS")." \"+ name + \" ?\"))
+	if (confirm(\" ".get_lang("AreYouSureToDeleteJS")." \"+ name + \" ?\"))
 		{return true;}
 	else
 		{return false;}
@@ -299,7 +298,7 @@ Session::write('javascript', $javascript);
 $htmlHeadXtra[] = '<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="expires" content="-1">';
-$htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-upload'));
+$htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 $htmlHeadXtra[] = "<script>
 $(function () {
     $('#recipient_form').on('change', function() {
@@ -344,33 +343,33 @@ if ((!$is_allowed_in_course || !$is_course_member) &&
 
 /*	BREADCRUMBS */
 if ($view == 'received') {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq(),
         'name' => get_lang('Dropbox', ''),
-    );
+    ];
     $nameTools = get_lang('ReceivedFiles');
 
     if ($action == 'addreceivedcategory') {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=received&'.api_get_cidreq(),
             'name' => get_lang('ReceivedFiles'),
-        );
+        ];
         $nameTools = get_lang('AddNewCategory');
     }
 }
 
 if ($view == 'sent' || empty($view)) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq(),
-        'name' => get_lang('Dropbox')
-    );
+        'name' => get_lang('Dropbox'),
+    ];
     $nameTools = get_lang('SentFiles');
 
     if ($action == 'addsentcategory') {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=sent&'.api_get_cidreq(),
             'name' => get_lang('SentFiles'),
-        );
+        ];
         $nameTools = get_lang('AddNewCategory');
     }
     if ($action == 'add') {
@@ -378,10 +377,10 @@ if ($view == 'sent' || empty($view)) {
     }
 
     if ($action == 'update') {
-        $interbreadcrumb[] = array(
+        $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=sent&'.api_get_cidreq(),
             'name' => get_lang('SentFiles'),
-        );
+        ];
         $nameTools = get_lang('UpdateFile');
     }
 }

@@ -5,7 +5,7 @@ use ChamiloSession as Session;
 
 /**
  * Exercise administration
- * This script allows to manage (create, modify) an exercise and its questions
+ * This script allows to manage (create, modify) an exercise and its questions.
  *
  *  Following scripts are includes for a best code understanding :
  *
@@ -42,10 +42,10 @@ use ChamiloSession as Session;
  * - $buttonBack : ask to go back to the previous page in answers of type "Fill in blanks"
  *
  * @package chamilo.exercise
+ *
  * @author Olivier Brouckaert
  * Modified by Hubert Borderiou 21-10-2011 Question by category
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 $this_section = SECTION_COURSES;
@@ -140,7 +140,7 @@ $aType = [
     get_lang('MultipleSelect'),
     get_lang('FillBlanks'),
     get_lang('Matching'),
-    get_lang('FreeAnswer')
+    get_lang('FreeAnswer'),
 ];
 
 // tables used in the exercise tool
@@ -285,7 +285,7 @@ if ($editQuestion || $modifyQuestion || $newQuestion || $modifyAnswers) {
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
+        'name' => get_lang('ToolGradebook'),
     ];
 }
 
@@ -306,7 +306,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
 if (!$exerciseId && $nameTools != get_lang('ExerciseManagement')) {
     $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."exercise/question_pool.php?fromExercise=$fromExercise&".api_get_cidreq(),
-        "name" => get_lang('QuestionPool')
+        "name" => get_lang('QuestionPool'),
     ];
 }
 

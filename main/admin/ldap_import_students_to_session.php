@@ -1,25 +1,26 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Edition script for sessions categories
+ * Edition script for sessions categories.
+ *
  * @package chamilo.admin
  * Copyright (c) 2007 Mustapha Alouani (supervised by Michel Moreau-Belliard)
  */
 
 // resetting the course id
 $cidReset = true;
-require_once('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 // Access restrictions
 api_protect_admin_script();
-require('../auth/ldap/authldap.php');
+ require('../auth/ldap/authldap.php');
 
 $annee_base = date('Y');
 
 $tool_name = get_lang('LDAPImport');
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
 $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
 var buttoncheck = 1;
@@ -46,7 +47,6 @@ function checkAll() {
 $annee = $_GET['annee'];
 $id_session = $_POST['id_session'];
 
-
 // form1 annee = 0; composante= 0 etape = 0
 //if ($annee == "" && $composante == "" && $etape == "") {
 if (empty($annee) && empty($id_session)) {
@@ -59,7 +59,6 @@ if (empty($annee) && empty($id_session)) {
     echo '<input type="submit" value="'.get_lang('Submit').'">';
     echo '</form>';
     echo '</div>';
-
 } elseif (!empty($annee) && empty($id_session)) {
     Display::display_header($tool_name);
     echo '<div style="align:center">';
@@ -103,7 +102,7 @@ elseif (!empty($annee) && !empty($id_session) && empty($_POST['confirmed'])) {
 
         //$sr = @ ldap_search($ds, "ou=people,$LDAPbasedn", "(|(edupersonprimaryorgunitdn=ou=$etape,ou=$annee,ou=diploma,o=Paris1,$LDAPbasedn)(edupersonprimaryorgunitdn=ou=02PEL,ou=$annee,ou=diploma,o=Paris1,$LDAPbasedn))");
         //echo "(ou=*$annee,ou=$composante)";
-        $sr = @ ldap_search($ds, $ldap_basedn, "(ou=*$annee)");
+        $sr = @ldap_search($ds, $ldap_basedn, "(ou=*$annee)");
 
         $info = ldap_get_entries($ds, $sr);
 
@@ -124,7 +123,7 @@ elseif (!empty($annee) && !empty($id_session) && empty($_POST['confirmed'])) {
         asort($nom_form);
         reset($nom_form);
         $statut = 5;
-        include('ldap_form_add_users_group.php');
+        include 'ldap_form_add_users_group.php';
     } else {
         echo '<h4>'.get_lang('UnableToConnectTo').' '.$host.'</h4>';
     }
@@ -134,8 +133,8 @@ elseif (!empty($annee) && !empty($id_session) && empty($_POST['confirmed'])) {
     echo '</div>';
 } elseif (!empty($annee) && !empty($id_session) && ($_POST['confirmed'] == 'yes')) {
     $id = $_POST['username_form'];
-    $UserList = array();
-    $userid_match_login = array();
+    $UserList = [];
+    $userid_match_login = [];
     foreach ($id as $form_index => $user_id) {
         if (is_array($_POST['checkboxes']) && in_array($form_index, array_values($_POST['checkboxes']))) {
             $tmp = ldap_add_user($user_id);

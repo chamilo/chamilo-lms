@@ -14,18 +14,19 @@ ini_set('max_execution_time', '80000');
 ini_set('max_input_time', '80000');
 */
 
-
 $debug = true;
 
 define('WS_ERROR_SECRET_KEY', 1);
 
-function return_error($code) {
+function return_error($code)
+{
     $fault = null;
     switch ($code) {
         case WS_ERROR_SECRET_KEY:
             $fault = new soap_fault('Server', '', 'Secret key is not correct or params are not correctly set');
             break;
     }
+
     return $fault;
 }
 
@@ -47,19 +48,22 @@ function WSHelperVerifyKey($params)
         list($ip1) = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
         $ip = trim($ip1);
     }
-    if ($debug)
+    if ($debug) {
         error_log("ip: $ip");
+    }
     // Check if a file that limits access from webservices exists and contains
     // the restraining check
     if (is_file('webservice-auth-ip.conf.php')) {
         include 'webservice-auth-ip.conf.php';
-        if ($debug)
+        if ($debug) {
             error_log("webservice-auth-ip.conf.php file included");
+        }
         if (!empty($ws_auth_ip)) {
             $check_ip = true;
             $ip_matches = api_check_ip_in_range($ip, $ws_auth_ip);
-            if ($debug)
+            if ($debug) {
                 error_log("ip_matches: $ip_matches");
+            }
         }
     }
 
@@ -75,8 +79,10 @@ function WSHelperVerifyKey($params)
     }
     $result = api_is_valid_secret_key($secret_key, $security_key);
     //error_log($secret_key.'-'.$security_key);
-    if ($debug)
+    if ($debug) {
         error_log('WSHelperVerifyKey result: '.intval($result));
+    }
+
     return $result;
 }
 
@@ -94,34 +100,34 @@ $server->wsdl->addComplexType(
     'struct',
     'all',
     '',
-    array(
-        'course_id_name' => array(
+    [
+        'course_id_name' => [
             'name' => 'course_id_name',
             'type' => 'xsd:string',
-        ),
-        'course_id_value' => array(
+        ],
+        'course_id_value' => [
             'name' => 'course_id_name',
             'type' => 'xsd:string',
-        ),
-        'session_id_name' => array(
+        ],
+        'session_id_name' => [
             'name' => 'session_id_name',
             'type' => 'xsd:string',
-        ),
-        'session_id_value' => array(
+        ],
+        'session_id_value' => [
             'name' => 'session_id_value',
             'type' => 'xsd:string',
-        ),
-        'file_data' => array('name' => 'file', 'type' => 'xsd:string'),
-        'filename' => array('name' => 'filename', 'type' => 'xsd:string'),
-        'lp_name' => array('name' => 'lp_name', 'type' => 'xsd:string'),
-        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string'),
-    )
+        ],
+        'file_data' => ['name' => 'file', 'type' => 'xsd:string'],
+        'filename' => ['name' => 'filename', 'type' => 'xsd:string'],
+        'lp_name' => ['name' => 'lp_name', 'type' => 'xsd:string'],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
+    ]
 );
 
 // Register the method to expose
 $server->register('WSImportLP', // method name
-    array('params' => 'tns:params'), // input parameters
-    array('return' => 'xsd:string'), // output parameters
+    ['params' => 'tns:params'], // input parameters
+    ['return' => 'xsd:string'], // output parameters
     'urn:WSLP', // namespace
     'urn:WSLP#WSImportLP', // soapaction
     'rpc', // style
@@ -131,6 +137,7 @@ $server->register('WSImportLP', // method name
 
 /**
  * @param array $params
+ *
  * @return int|string
  */
 function WSImportLP($params)
@@ -139,7 +146,9 @@ function WSImportLP($params)
     if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
-    if ($debug) error_log('WSImportLP');
+    if ($debug) {
+        error_log('WSImportLP');
+    }
 
     $courseIdName = $params['course_id_name'];
     $courseIdValue = $params['course_id_value'];
@@ -155,7 +164,10 @@ function WSImportLP($params)
     $courseId = $courseInfo['real_id'];
 
     if (empty($courseInfo)) {
-        if ($debug) error_log('Course not found');
+        if ($debug) {
+            error_log('Course not found');
+        }
+
         return 'Course not found';
     }
 
@@ -167,8 +179,10 @@ function WSImportLP($params)
         );
 
         if (empty($sessionId)) {
+            if ($debug) {
+                error_log('Session not found');
+            }
 
-            if ($debug) error_log('Session not found');
             return 'Session not found';
         }
     }
@@ -187,15 +201,18 @@ function WSImportLP($params)
 
     $fileName = $params['filename'];
 
-    $fileInfo = array(
+    $fileInfo = [
         'tmp_name' => $filePath,
         'name' => $fileName,
-    );
+    ];
 
     $manifest = $oScorm->import_package($fileInfo, '', $courseInfo);
 
     if (!$manifest) {
-        if ($debug) error_log('manifest.xml file not found');
+        if ($debug) {
+            error_log('manifest.xml file not found');
+        }
+
         return 'manifest.xml file not found';
     }
 
@@ -213,10 +230,16 @@ function WSImportLP($params)
         $oScorm->set_maker($maker, $courseId);
         //$oScorm->set_jslib('scorm_api.php');
 
-        if ($debug) error_log('scorm was added');
+        if ($debug) {
+            error_log('scorm was added');
+        }
+
         return 1;
     } else {
-        if ($debug) error_log('manifest data empty');
+        if ($debug) {
+            error_log('manifest data empty');
+        }
+
         return 'manifest data empty';
     }
 }
@@ -227,25 +250,25 @@ $server->wsdl->addComplexType(
     'struct',
     'all',
     '',
-    array(
-        'course_id_name' => array(
+    [
+        'course_id_name' => [
             'name' => 'course_id_name',
             'type' => 'xsd:string',
-        ),
-        'course_id_value' => array(
+        ],
+        'course_id_value' => [
             'name' => 'course_id_name',
             'type' => 'xsd:string',
-        ),
-        'session_id_name' => array(
+        ],
+        'session_id_name' => [
             'name' => 'session_id_name',
             'type' => 'xsd:string',
-        ),
-        'session_id_value' => array(
+        ],
+        'session_id_value' => [
             'name' => 'session_id_value',
             'type' => 'xsd:string',
-        ),
-        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string'),
-    )
+        ],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
+    ]
 );
 
 $server->wsdl->addComplexType(
@@ -254,10 +277,10 @@ $server->wsdl->addComplexType(
     'struct',
     'all',
     '',
-    array(
-        'id'    => array('name' => 'id', 'type' => 'xsd:string'),
-        'name'  => array('name' => 'name', 'type' => 'xsd:string'),
-    )
+    [
+        'id' => ['name' => 'id', 'type' => 'xsd:string'],
+        'name' => ['name' => 'name', 'type' => 'xsd:string'],
+    ]
 );
 
 $server->wsdl->addComplexType(
@@ -266,15 +289,15 @@ $server->wsdl->addComplexType(
     'array',
     '',
     'SOAP-ENC:Array',
-    array(),
-    array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:lpListItem[]')),
+    [],
+    [['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:lpListItem[]']],
     'tns:lpListItem'
 );
 
 // Register the method to expose
 $server->register('WSGetLpList', // method name
-    array('params' => 'tns:paramsGetLpList'), // input parameters
-    array('return' => 'tns:lpList'), // output parameters
+    ['params' => 'tns:paramsGetLpList'], // input parameters
+    ['return' => 'tns:lpList'], // output parameters
     'urn:WSLP', // namespace
     'urn:WSLP#WSGetLpList', // soapaction
     'rpc', // style
@@ -284,6 +307,7 @@ $server->register('WSGetLpList', // method name
 
 /**
  * @param array $params
+ *
  * @return int|string
  */
 function WSGetLpList($params)
@@ -309,7 +333,10 @@ function WSGetLpList($params)
     );
 
     if (empty($courseInfo)) {
-        if ($debug) error_log("Course not found: $courseIdName : $courseIdValue");
+        if ($debug) {
+            error_log("Course not found: $courseIdName : $courseIdValue");
+        }
+
         return 'Course not found';
     }
 
@@ -323,24 +350,26 @@ function WSGetLpList($params)
         );
 
         if (empty($sessionId)) {
-            if ($debug) error_log('Session not found');
+            if ($debug) {
+                error_log('Session not found');
+            }
+
             return 'Session not found';
         }
     }
 
     $list = new LearnpathList(null, $courseInfo['code'], $sessionId);
     $flatList = $list->get_flat_list();
-    $result = array();
+    $result = [];
     foreach ($flatList as $id => $lp) {
-        $result[] = array(
+        $result[] = [
             'id' => $id,
             'name' => $lp['lp_name'],
-        );
+        ];
     }
 
     return $result;
 }
-
 
 $server->wsdl->addComplexType(
     'paramsDeleteLp',
@@ -348,27 +377,27 @@ $server->wsdl->addComplexType(
     'struct',
     'all',
     '',
-    array(
-        'course_id_name' => array(
+    [
+        'course_id_name' => [
             'name' => 'course_id_name',
             'type' => 'xsd:string',
-        ),
-        'course_id_value' => array(
+        ],
+        'course_id_value' => [
             'name' => 'course_id_name',
             'type' => 'xsd:string',
-        ),
-        'lp_id' => array(
+        ],
+        'lp_id' => [
             'name' => 'lp_id',
             'type' => 'xsd:string',
-        ),
-        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string'),
-    )
+        ],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
+    ]
 );
 
 // Register the method to expose
 $server->register('WSDeleteLp', // method name
-    array('params' => 'tns:paramsDeleteLp'), // input parameters
-    array('return' => 'xsd:string'), // output parameters
+    ['params' => 'tns:paramsDeleteLp'], // input parameters
+    ['return' => 'xsd:string'], // output parameters
     'urn:WSLP', // namespace
     'urn:WSLP#WSDeleteLp', // soapaction
     'rpc', // style
@@ -378,6 +407,7 @@ $server->register('WSDeleteLp', // method name
 
 /**
  * @param array $params
+ *
  * @return int|string
  */
 function WSDeleteLp($params)
@@ -404,7 +434,10 @@ function WSDeleteLp($params)
     );
 
     if (empty($courseInfo)) {
-        if ($debug) error_log("Course not found: $courseIdName : $courseIdValue");
+        if ($debug) {
+            error_log("Course not found: $courseIdName : $courseIdValue");
+        }
+
         return 'Course not found';
     }
     $courseId = $courseInfo['real_id'];
@@ -429,7 +462,9 @@ function WSDeleteLp($params)
 
     $lp = new learnpath($courseCode, $lpId, null);
     if ($lp) {
-        if ($debug) error_log("LP deleted $lpId");
+        if ($debug) {
+            error_log("LP deleted $lpId");
+        }
 
         $course_dir = $courseInfo['directory'].'/document';
         $sys_course_path = api_get_path(SYS_COURSE_PATH);
@@ -445,7 +480,9 @@ function WSDeleteLp($params)
                 if ($item) {
                     $documentId = $item->get_path();
 
-                    if ($debug) error_log("lp item id found #$itemId");
+                    if ($debug) {
+                        error_log("lp item id found #$itemId");
+                    }
 
                     $documentInfo = DocumentManager::get_document_data_by_id(
                         $documentId,
@@ -471,7 +508,9 @@ function WSDeleteLp($params)
                         }
                     }
                 } else {
-                    if ($debug) error_log("Document not found #$itemId");
+                    if ($debug) {
+                        error_log("Document not found #$itemId");
+                    }
                 }
             }
         }
@@ -484,18 +523,17 @@ function WSDeleteLp($params)
     return 0;
 }
 
-
 $server->wsdl->addComplexType(
     'lpItem',
     'complexType',
     'struct',
     'all',
     '',
-    array(
-        'data'  => array('name' => 'data', 'type' => 'xsd:string'),
-        'title'  => array('name' => 'title', 'type' => 'xsd:string'),
-        'filename'  => array('name' => 'filename', 'type' => 'xsd:string'),
-    )
+    [
+        'data' => ['name' => 'data', 'type' => 'xsd:string'],
+        'title' => ['name' => 'title', 'type' => 'xsd:string'],
+        'filename' => ['name' => 'filename', 'type' => 'xsd:string'],
+    ]
 );
 
 $server->wsdl->addComplexType(
@@ -504,8 +542,8 @@ $server->wsdl->addComplexType(
     'array',
     '',
     'SOAP-ENC:Array',
-    array(),
-    array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:lpItem[]')),
+    [],
+    [['ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:lpItem[]']],
     'tns:lpItem'
 );
 
@@ -515,15 +553,15 @@ $server->wsdl->addComplexType(
     'struct',
     'all',
     '',
-    array(
-        'course_id_name' => array(
+    [
+        'course_id_name' => [
             'name' => 'course_id_name',
             'type' => 'xsd:string',
-        ),
-        'course_id_value' => array(
+        ],
+        'course_id_value' => [
             'name' => 'course_id_name',
             'type' => 'xsd:string',
-        ),
+        ],
         /*'session_id_name' => array(
             'name' => 'session_id_name',
             'type' => 'xsd:string',
@@ -532,22 +570,22 @@ $server->wsdl->addComplexType(
             'name' => 'session_id_value',
             'type' => 'xsd:string',
         ),*/
-        'lp_name' => array(
+        'lp_name' => [
             'name' => 'lp_name',
             'type' => 'xsd:string',
-        ),
-        'lp_item_list' => array(
+        ],
+        'lp_item_list' => [
             'name' => 'lp_item_list',
             'type' => 'tns:lpItemList',
-        ),
-        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string'),
-    )
+        ],
+        'secret_key' => ['name' => 'secret_key', 'type' => 'xsd:string'],
+    ]
 );
 
 // Register the method to expose
 $server->register('WSCreateLp', // method name
-    array('params' => 'tns:paramsCreateLp'), // input parameters
-    array('return' => 'xsd:string'), // output parameters
+    ['params' => 'tns:paramsCreateLp'], // input parameters
+    ['return' => 'xsd:string'], // output parameters
     'urn:WSLP', // namespace
     'urn:WSLP#WSCreateLp', // soapaction
     'rpc', // style
@@ -557,6 +595,7 @@ $server->register('WSCreateLp', // method name
 
 /**
  * @param array $params
+ *
  * @return null|soap_fault
  */
 function WSCreateLp($params)
@@ -578,7 +617,7 @@ function WSCreateLp($params)
     /*$sessionIdName = isset($params['session_id_name']) ? $params['session_id_name'] : null;
     $sessionIdValue = isset($params['session_id_value']) ? $params['session_id_value'] : null;*/
 
-     $courseInfo = CourseManager::getCourseInfoFromOriginalId(
+    $courseInfo = CourseManager::getCourseInfoFromOriginalId(
         $courseIdValue,
         $courseIdName
     );

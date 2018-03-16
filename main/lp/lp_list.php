@@ -1,18 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
 use Chamilo\CourseBundle\Entity\CLpCategory;
+use ChamiloSession as Session;
 
 /**
  * This file was originally the copy of document.php, but many modifications happened since then ;
  * the direct file view is not any more needed, if the user uploads a SCORM zip file, a directory
- * will be automatically created for it, and the files will be uncompressed there for example ;
+ * will be automatically created for it, and the files will be uncompressed there for example ;.
  *
  * @package chamilo.learnpath
+ *
  * @author  Yannick Warnier <ywarnier@beeznest.org>
  */
-
 $this_section = SECTION_COURSES;
 //@todo who turns on $lp_controller_touched?
 if (empty($lp_controller_touched) || $lp_controller_touched != 1) {
@@ -25,7 +25,7 @@ $courseDir = api_get_course_path().'/scorm';
 $baseWordDir = $courseDir;
 
 /**
- * Display initialisation and security checks
+ * Display initialisation and security checks.
  */
 // Extra javascript functions for in html head:
 $htmlHeadXtra[]
@@ -43,7 +43,7 @@ Event::event_access_tool(TOOL_LEARNPATH);
 api_protect_course_script();
 
 /**
- * Display
+ * Display.
  */
 /* Require the search widget and prepare the header with its stuff. */
 if (api_get_setting('search_enabled') === 'true') {
@@ -57,14 +57,14 @@ $subscriptionSettings = learnpath::getSubscriptionSettings();
 /* Introduction section (editable by course admins) */
 $introductionSection = Display::return_introduction_section(
     TOOL_LEARNPATH,
-    array(
+    [
         'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH)
             .api_get_course_path().'/document/',
         'CreateDocumentDir' => '../..'.api_get_path(REL_COURSE_PATH)
             .api_get_course_path().'/document/',
         'BaseHref' => api_get_path(WEB_COURSE_PATH)
             .api_get_course_path().'/',
-    )
+    ]
 );
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
@@ -95,7 +95,7 @@ if ($is_allowed_to_edit) {
             Display::return_icon(
                 'new_folder.png',
                 get_lang('AddCategory'),
-                array(),
+                [],
                 ICON_SIZE_MEDIUM
             ),
             api_get_self().'?'.api_get_cidreq().'&action=add_lp_category'
@@ -132,7 +132,7 @@ if ($is_allowed_to_edit) {
             '../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH
         );
     }
-    $actions = Display::toolbarAction('actions-lp', array($actionLeft));
+    $actions = Display::toolbarAction('actions-lp', [$actionLeft]);
 }
 
 $token = Security::get_token();
@@ -143,9 +143,9 @@ $categoryTest = new CLpCategory();
 $categoryTest->setId(0);
 $categoryTest->setName(get_lang('WithOutCategory'));
 $categoryTest->setPosition(0);
-$categories = array(
-    $categoryTest
-);
+$categories = [
+    $categoryTest,
+];
 
 if (!empty($categoriesTempList)) {
     $categories = array_merge($categories, $categoriesTempList);
@@ -324,7 +324,7 @@ foreach ($categories as $item) {
                 $my_title = Display::tag(
                     'font',
                     $name,
-                    array('class' => 'text-muted')
+                    ['class' => 'text-muted']
                 );
                 $icon_learnpath = Display::return_icon(
                     'learnpath_na.png',
@@ -339,7 +339,7 @@ foreach ($categories as $item) {
                 $my_title = Display::tag(
                     'font',
                     $name,
-                    array('class' => 'text-muted')
+                    ['class' => 'text-muted']
                 );
                 $icon_learnpath = Display::return_icon(
                     'learnpath_na.png',
@@ -729,7 +729,7 @@ foreach ($categories as $item) {
                         ."&action=delete&lp_id=$id",
                         [
                             'onclick' => "javascript: return confirmation('"
-                                .addslashes($name)."');"
+                                .addslashes($name)."');",
                         ]
                     );
                 } else {
@@ -858,7 +858,6 @@ foreach ($categories as $item) {
             $lpIsShown = true;
             // Counter for number of elements treated
             $current++;
-
         } // end foreach ($flat_list)
     }
 
@@ -874,7 +873,7 @@ foreach ($categories as $item) {
             $item,
             $courseInfo['real_id']
         ),
-        'lp_list' => $listData
+        'lp_list' => $listData,
     ];
 }
 

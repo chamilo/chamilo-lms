@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
 require_once __DIR__.'/../global.inc.php';
 $action = $_GET['a'];
@@ -39,7 +39,7 @@ switch ($action) {
 
         break;
     case 'access_detail_by_date':
-        $db = array('is_empty' => true);
+        $db = ['is_empty' => true];
         $start_date = isset($_REQUEST['startDate']) ? $_REQUEST['startDate'] : '';
         $end_date = isset($_REQUEST['endDate']) ? $_REQUEST['endDate'] : '';
         $user_id = isset($_REQUEST['student']) ? $_REQUEST['student'] : '';

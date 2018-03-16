@@ -4,8 +4,9 @@
 require_once __DIR__.'/../../inc/global.inc.php';
 $url = api_get_path(WEB_PATH).'main/auth/conditional_login/complete_phone_number.php';
 
-if (!isset($_SESSION['conditional_login']['uid']))
+if (!isset($_SESSION['conditional_login']['uid'])) {
     die("Not Authorised");
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html lang="fr" xml:lang="fr" xmlns="http://www.w3.org/1999/xhtml">
@@ -13,7 +14,7 @@ if (!isset($_SESSION['conditional_login']['uid']))
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
   </head>
   <body>
-  <form id="data_completion" name="data_completion" method="post" action="<?php echo $url?>">
+  <form id="data_completion" name="data_completion" method="post" action="<?php echo $url; ?>">
         Téléphone : <input type="text" name="phone_number" />
         <input type="submit" name="submit" value="Submit" />
     </form>

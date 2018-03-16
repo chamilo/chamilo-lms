@@ -4,8 +4,10 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * ScormDocument class
+ * ScormDocument class.
+ *
  * @author Olivier Brouckaert <oli.brouckaert@dokeos.com>
+ *
  * @package chamilo.backup
  */
 class ScormDocument extends Resource
@@ -14,8 +16,9 @@ class ScormDocument extends Resource
     public $title;
 
     /**
-     * Create a new Scorm Document
-     * @param int $id
+     * Create a new Scorm Document.
+     *
+     * @param int    $id
      * @param string $path
      * @param string $title
      */
@@ -27,7 +30,7 @@ class ScormDocument extends Resource
     }
 
     /**
-     * Show this document
+     * Show this document.
      */
     public function show()
     {

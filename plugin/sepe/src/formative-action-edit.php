@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \ChamiloSession as Session;
-
 /**
  *    This script displays a formative action edit form.
  */
@@ -146,9 +144,9 @@ if (!empty($_POST)) {
 
 if (api_is_platform_admin()) {
     if (isset($_GET['new_action']) && intval($_GET['new_action']) == 1) {
-        $info = array();
-        $interbreadcrumb[] = array("url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe'));
-        $interbreadcrumb[] = array("url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList'));
+        $info = [];
+        $interbreadcrumb[] = ["url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe')];
+        $interbreadcrumb[] = ["url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList')];
         $templateName = $plugin->get_lang('formativeActionNew');
         $tpl = new Template($templateName);
         $yearStart = $yearEnd = date("Y");
@@ -157,9 +155,9 @@ if (api_is_platform_admin()) {
         $tpl->assign('course_id', intval($_GET['cid']));
     } else {
         $courseId = getCourse(intval($_GET['action_id']));
-        $interbreadcrumb[] = array("url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe'));
-        $interbreadcrumb[] = array("url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList'));
-        $interbreadcrumb[] = array("url" => "formative-action.php?cid=".$courseId, "name" => $plugin->get_lang('FormativeAction'));
+        $interbreadcrumb[] = ["url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe')];
+        $interbreadcrumb[] = ["url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList')];
+        $interbreadcrumb[] = ["url" => "formative-action.php?cid=".$courseId, "name" => $plugin->get_lang('FormativeAction')];
         $info = getActionInfo(intval($_GET['action_id']));
         $templateName = $plugin->get_lang('formativeActionEdit');
         $tpl = new Template($templateName);
@@ -187,7 +185,7 @@ if (api_is_platform_admin()) {
         $tpl->assign('new_action', '0');
     }
 
-    $yearList = array();
+    $yearList = [];
     if ($yearStart > $yearEnd) {
         $tmp = $yearStart;
         $yearStart = $yearEnd;

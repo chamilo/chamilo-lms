@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CDocument
+ * CDocument.
  *
  * @ORM\Table(
  *  name="c_document",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CDocument
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,14 +28,14 @@ class CDocument
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
@@ -70,30 +70,31 @@ class CDocument
     private $filetype;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="size", type="integer", nullable=false)
      */
     private $size;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="readonly", type="boolean", nullable=false)
      */
     private $readonly;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
 
     /**
-     * Set path
+     * Set path.
      *
      * @param string $path
+     *
      * @return CDocument
      */
     public function setPath($path)
@@ -104,7 +105,7 @@ class CDocument
     }
 
     /**
-     * Get path
+     * Get path.
      *
      * @return string
      */
@@ -114,9 +115,10 @@ class CDocument
     }
 
     /**
-     * Set comment
+     * Set comment.
      *
      * @param string $comment
+     *
      * @return CDocument
      */
     public function setComment($comment)
@@ -127,7 +129,7 @@ class CDocument
     }
 
     /**
-     * Get comment
+     * Get comment.
      *
      * @return string
      */
@@ -137,9 +139,10 @@ class CDocument
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return CDocument
      */
     public function setTitle($title)
@@ -150,7 +153,7 @@ class CDocument
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -160,9 +163,10 @@ class CDocument
     }
 
     /**
-     * Set filetype
+     * Set filetype.
      *
      * @param string $filetype
+     *
      * @return CDocument
      */
     public function setFiletype($filetype)
@@ -173,7 +177,7 @@ class CDocument
     }
 
     /**
-     * Get filetype
+     * Get filetype.
      *
      * @return string
      */
@@ -183,9 +187,10 @@ class CDocument
     }
 
     /**
-     * Set size
+     * Set size.
      *
-     * @param integer $size
+     * @param int $size
+     *
      * @return CDocument
      */
     public function setSize($size)
@@ -196,9 +201,9 @@ class CDocument
     }
 
     /**
-     * Get size
+     * Get size.
      *
-     * @return integer
+     * @return int
      */
     public function getSize()
     {
@@ -206,9 +211,10 @@ class CDocument
     }
 
     /**
-     * Set readonly
+     * Set readonly.
      *
-     * @param boolean $readonly
+     * @param bool $readonly
+     *
      * @return CDocument
      */
     public function setReadonly($readonly)
@@ -219,9 +225,9 @@ class CDocument
     }
 
     /**
-     * Get readonly
+     * Get readonly.
      *
-     * @return boolean
+     * @return bool
      */
     public function getReadonly()
     {
@@ -229,9 +235,10 @@ class CDocument
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return CDocument
      */
     public function setSessionId($sessionId)
@@ -242,9 +249,9 @@ class CDocument
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -252,9 +259,10 @@ class CDocument
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CDocument
      */
     public function setId($id)
@@ -265,9 +273,9 @@ class CDocument
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -275,9 +283,10 @@ class CDocument
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CDocument
      */
     public function setCId($cId)
@@ -288,9 +297,9 @@ class CDocument
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

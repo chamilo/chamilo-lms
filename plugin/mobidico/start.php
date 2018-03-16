@@ -1,16 +1,14 @@
 <?php
 
-require_once __DIR__ . '/../../main/inc/global.inc.php';
+require_once __DIR__.'/../../main/inc/global.inc.php';
 
 $course_plugin = 'mobidico'; //needed in order to load the plugin lang variables
-
 
 $plugin = Mobidico::create();
 
 if ($plugin->get('tool_enable') !== 'true') {
     api_not_allowed(true);
 }
-
 
 $url = $plugin->get('mobidico_url');
 $key = $plugin->get('api_key');
@@ -19,7 +17,7 @@ $tool_name = get_lang('Videoconference');
 
 $params = [
     'chamiloid' => api_get_user_id(),
-    'API_KEY' => $key
+    'API_KEY' => $key,
 ];
 
 $redirect = '';
@@ -30,7 +28,7 @@ try {
         $url.'/app/desktop/php/authenticate.php',
         [
             'form_params' => $params,
-            'verify' => false
+            'verify' => false,
         ]
     );
 

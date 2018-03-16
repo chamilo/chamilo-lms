@@ -1,7 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Learning paths reporting
+ * Learning paths reporting.
+ *
  * @package chamilo.reporting
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -23,7 +24,7 @@ $user_id = isset($_GET['student_id']) ? intval($_GET['student_id']) : api_get_us
 $courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : api_get_course_id();
 $origin = api_get_origin();
 $lp_id = intval($_GET['lp_id']);
-$csv_content = array();
+$csv_content = [];
 $course_info = api_get_course_info($courseCode);
 
 if (empty($course_info) || empty($lp_id)) {
@@ -44,25 +45,25 @@ if (!api_is_platform_admin(true) &&
 }
 
 if ($origin == 'user_course') {
-    $interbreadcrumb[] = array("url" => api_get_path(WEB_COURSE_PATH).$course_info['directory'], 'name' => $course_info['name']);
-    $interbreadcrumb[] = array("url" => "../user/user.php?cidReq=".$courseCode, "name" => get_lang("Users"));
-} else if ($origin == 'tracking_course') {
-    $interbreadcrumb[] = array("url" => "../tracking/courseLog.php?cidReq=".$courseCode.'&id_session='.$session_id, "name" => get_lang("Tracking"));
+    $interbreadcrumb[] = ["url" => api_get_path(WEB_COURSE_PATH).$course_info['directory'], 'name' => $course_info['name']];
+    $interbreadcrumb[] = ["url" => "../user/user.php?cidReq=".$courseCode, "name" => get_lang("Users")];
+} elseif ($origin == 'tracking_course') {
+    $interbreadcrumb[] = ["url" => "../tracking/courseLog.php?cidReq=".$courseCode.'&id_session='.$session_id, "name" => get_lang("Tracking")];
 } else {
-    $interbreadcrumb[] = array("url" => "index.php", "name" => get_lang('MySpace'));
-    $interbreadcrumb[] = array("url" => "student.php", "name" => get_lang("MyStudents"));
-    $interbreadcrumb[] = array("url" => "myStudents.php?student=".$user_id, "name" => get_lang("StudentDetails"));
+    $interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
+    $interbreadcrumb[] = ["url" => "student.php", "name" => get_lang("MyStudents")];
+    $interbreadcrumb[] = ["url" => "myStudents.php?student=".$user_id, "name" => get_lang("StudentDetails")];
     $nameTools = get_lang("DetailsStudentInCourse");
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     "url" => "myStudents.php?student=".$user_id."&course=".$courseCode."&details=true&origin=".$origin,
     "name" => get_lang("DetailsStudentInCourse"),
-);
+];
 $nameTools = get_lang('LearningPathDetails');
 $sql = 'SELECT name	FROM '.Database::get_course_table(TABLE_LP_MAIN).' 
         WHERE c_id = '.$course_info['real_id'].' AND id='.$lp_id;
-$rs  = Database::query($sql);
+$rs = Database::query($sql);
 $lp_title = Database::result($rs, 0, 0);
 
 $origin = 'tracking';
@@ -80,16 +81,16 @@ echo '<a href="'.api_get_self().'?export=csv&'.Security::remove_XSS($_SERVER['QU
 echo '</div>';
 echo '<div class="clear"></div>';
 $session_name = api_get_session_name($session_id);
-$table_title = ($session_name ? Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.$session_name.' ' : ' ').
-    Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_info['name'].' '.
-    Display::return_icon('user.png', get_lang('User'), array(), ICON_SIZE_SMALL).' '.$name;
+$table_title = ($session_name ? Display::return_icon('session.png', get_lang('Session'), [], ICON_SIZE_SMALL).' '.$session_name.' ' : ' ').
+    Display::return_icon('course.png', get_lang('Course'), [], ICON_SIZE_SMALL).' '.$course_info['name'].' '.
+    Display::return_icon('user.png', get_lang('User'), [], ICON_SIZE_SMALL).' '.$name;
 
 echo Display::page_header($table_title);
 echo Display::page_subheader(
     '<h3>'.Display::return_icon(
         'learnpath.png',
         get_lang('ToolLearnpath'),
-        array(),
+        [],
         ICON_SIZE_SMALL
     ).' '.$lp_title.'</h3>'
 );

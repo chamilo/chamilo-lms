@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SkillRelGradebook
+ * SkillRelGradebook.
  *
  * @ORM\Table(name="skill_rel_gradebook")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class SkillRelGradebook
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -23,14 +23,14 @@ class SkillRelGradebook
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="gradebook_id", type="integer", nullable=false)
      */
     private $gradebookId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="skill_id", type="integer", nullable=false)
      */
@@ -44,9 +44,10 @@ class SkillRelGradebook
     private $type;
 
     /**
-     * Set gradebookId
+     * Set gradebookId.
      *
-     * @param integer $gradebookId
+     * @param int $gradebookId
+     *
      * @return SkillRelGradebook
      */
     public function setGradebookId($gradebookId)
@@ -57,9 +58,9 @@ class SkillRelGradebook
     }
 
     /**
-     * Get gradebookId
+     * Get gradebookId.
      *
-     * @return integer
+     * @return int
      */
     public function getGradebookId()
     {
@@ -67,9 +68,10 @@ class SkillRelGradebook
     }
 
     /**
-     * Set skillId
+     * Set skillId.
      *
-     * @param integer $skillId
+     * @param int $skillId
+     *
      * @return SkillRelGradebook
      */
     public function setSkillId($skillId)
@@ -80,9 +82,9 @@ class SkillRelGradebook
     }
 
     /**
-     * Get skillId
+     * Get skillId.
      *
-     * @return integer
+     * @return int
      */
     public function getSkillId()
     {
@@ -90,9 +92,10 @@ class SkillRelGradebook
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @param string $type
+     *
      * @return SkillRelGradebook
      */
     public function setType($type)
@@ -103,7 +106,7 @@ class SkillRelGradebook
     }
 
     /**
-     * Get type
+     * Get type.
      *
      * @return string
      */
@@ -113,9 +116,9 @@ class SkillRelGradebook
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

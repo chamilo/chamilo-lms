@@ -1,10 +1,11 @@
 <?php
 /**
- * OpenMeetings API
+ * OpenMeetings API.
+ *
  * @package chamilo.plugin.openmeetings
  */
 /**
- * Class OpenMeetingsAPI
+ * Class OpenMeetingsAPI.
  */
 class OpenMeetingsAPI
 {
@@ -13,7 +14,7 @@ class OpenMeetingsAPI
     private $_serverBaseUrl;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {

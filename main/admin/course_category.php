@@ -74,10 +74,10 @@ if (!empty($action)) {
 }
 
 $tool_name = get_lang('AdminCategories');
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'index.php',
     "name" => get_lang('PlatformAdmin'),
-);
+];
 
 Display::display_header($tool_name);
 
@@ -113,7 +113,7 @@ if ($action == 'add' || $action == 'edit') {
     }
 
     $form->addRule('code', get_lang('PleaseEnterCategoryInfo'), 'required');
-    $group = array(
+    $group = [
         $form->createElement(
             'radio',
             'auth_course_child',
@@ -128,7 +128,7 @@ if ($action == 'add' || $action == 'edit') {
             get_lang('No'),
             'FALSE'
         ),
-    );
+    ];
     $form->addGroup($group, null, get_lang("AllowCoursesInCategory"));
 
     if ($myCourseListAsCategory) {
@@ -162,11 +162,10 @@ if ($action == 'add' || $action == 'edit') {
     } else {
         $class = "add";
         $text = get_lang('AddCategory');
-        $form->setDefaults(array('auth_course_child' => 'TRUE'));
+        $form->setDefaults(['auth_course_child' => 'TRUE']);
         $form->addButtonCreate($text);
     }
     $form->display();
-
 } else {
     // If multiple URLs and not main URL, prevent deletion and inform user
     if ($action == 'delete' && api_get_multiple_access_url() && api_get_current_access_url_id() != 1) {

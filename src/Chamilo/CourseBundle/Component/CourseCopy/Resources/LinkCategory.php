@@ -4,28 +4,31 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * A LinkCategory
+ * A LinkCategory.
+ *
  * @author Bart Mollet <bart.mollet@hogent.be>
+ *
  * @package chamilo.backup
  */
 class LinkCategory extends Resource
 {
     /**
-     * The title
+     * The title.
      */
     public $title;
     /**
-     * The description
+     * The description.
      */
     public $description;
     /**
-     * The display order
+     * The display order.
      */
     public $display_order;
 
     /**
-     * Create a new LinkCategory
-     * @param int $id
+     * Create a new LinkCategory.
+     *
+     * @param int    $id
      * @param string $title
      * @param string $description
      */
@@ -38,7 +41,7 @@ class LinkCategory extends Resource
     }
 
     /**
-     * Show this LinkCategory
+     * Show this LinkCategory.
      */
     public function show()
     {

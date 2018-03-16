@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Suggest words to search
+ * Suggest words to search.
+ *
  * @package chamilo.search
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 function get_suggestions_from_search_engine($q)
@@ -23,30 +23,30 @@ function get_suggestions_from_search_engine($q)
     $sql = "SELECT * FROM $table_sfv where value LIKE '%$q%'".$sql_add."
             ORDER BY course_code, tool_id, ref_id, field_id";
     $sql_result = Database::query($sql);
-    $data = array();
+    $data = [];
     $i = 0;
     while ($row = Database::fetch_array($sql_result)) {
         $json[] = [
             'id' => api_convert_encoding($row['value'], 'UTF-8', $charset),
             'value' => api_convert_encoding($row['value'], 'UTF-8', $charset),
-            'label' => api_convert_encoding($row['value'], 'UTF-8', $charset)
+            'label' => api_convert_encoding($row['value'], 'UTF-8', $charset),
         ];
 
         if ($i < 20) {
-            $data[$row['course_code']] [$row['tool_id']] [$row['ref_id']] = 1;
+            $data[$row['course_code']][$row['tool_id']][$row['ref_id']] = 1;
         }
         $i++;
     }
     // now that we have all the values corresponding to this search, we want to
     // make sure we get all the associated values that could match this one
     // initial value...
-    $more_sugg = array();
+    $more_sugg = [];
     foreach ($data as $cc => $course_id) {
         foreach ($course_id as $ti => $item_tool_id) {
             foreach ($item_tool_id as $ri => $item_ref_id) {
                 //natsort($item_ref_id);
-                $output = array();
-                $field_val = array();
+                $output = [];
+                $field_val = [];
                 $sql2 = "SELECT * FROM $table_sfv
                          WHERE course_code = '$cc' AND tool_id = '$ti' AND ref_id = '$ri'
                          ORDER BY field_id";
@@ -94,15 +94,17 @@ function get_suggestions_from_search_engine($q)
                         $field_id = $row2['field_id'];
                     }
                 }
-                foreach ($output as $i=>$out) {
-                    if (api_stristr($out, $q) === false) {continue; }
+                foreach ($output as $i => $out) {
+                    if (api_stristr($out, $q) === false) {
+                        continue;
+                    }
                     $s = api_convert_encoding(substr($out, 0, -3), 'UTF-8', $charset);
                     if (!in_array($s, $more_sugg)) {
                         $more_sugg[] = $s;
                         $json[] = [
                             'id' => $s,
                             'value' => $s,
-                            'label' => $s
+                            'label' => $s,
                         ];
                     }
                 }

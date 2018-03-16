@@ -2,7 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
 
@@ -33,7 +34,7 @@ $add_user_form = new EvalForm(
 );
 
 if (isset($_POST['submit_button'])) {
-    $users = is_array($_POST['add_users']) ? $_POST['add_users'] : array();
+    $users = is_array($_POST['add_users']) ? $_POST['add_users'] : [];
     foreach ($users as $key => $value) {
         $users[$key] = intval($value);
     }
@@ -55,7 +56,7 @@ if (isset($_POST['submit_button'])) {
     exit;
 } elseif ($_POST['firstLetterUser']) {
     $firstletter = $_POST['firstLetterUser'];
-    if (!empty ($firstletter)) {
+    if (!empty($firstletter)) {
         header(
             'Location: '.api_get_self().'?firstletter='.Security::remove_XSS(
                 $firstletter
@@ -65,14 +66,14 @@ if (isset($_POST['submit_button'])) {
     }
 }
 
-$interbreadcrumb[] = array('url' => Category::getUrl(), 'name' => get_lang('Gradebook'));
-$interbreadcrumb[] = array(
-	'url' => 'gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq(),
-	'name' => get_lang('ViewResult')
-);
+$interbreadcrumb[] = ['url' => Category::getUrl(), 'name' => get_lang('Gradebook')];
+$interbreadcrumb[] = [
+    'url' => 'gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq(),
+    'name' => get_lang('ViewResult'),
+];
 Display :: display_header(get_lang('AddUserToEval'));
-if (isset ($_GET['erroroneuser'])) {
-	echo Display::return_message(get_lang('AtLeastOneUser'), 'warning', false);
+if (isset($_GET['erroroneuser'])) {
+    echo Display::return_message(get_lang('AtLeastOneUser'), 'warning', false);
 }
 DisplayGradebook :: display_header_result($evaluation[0], null, 0, 0);
 echo '<div class="main">';

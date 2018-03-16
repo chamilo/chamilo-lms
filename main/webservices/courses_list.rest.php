@@ -5,19 +5,21 @@
  * of courses that have a certain level of visibility
  * on this chamilo portal.
  * It is set to work with the Chamilo module for Drupal:
- * http://drupal.org/project/chamilo
+ * http://drupal.org/project/chamilo.
  *
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ *
  * @package chamilo.webservices
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 /**
  * Get a list of courses (code, url, title, teacher, language) and return to caller
  * Function registered as service. Returns strings in UTF-8.
+ *
  * @param string Security key (the Dokeos install's API key)
  * @param mixed  Array or string. Type of visibility of course (public, public-registered, private, closed)
+ *
  * @return array Courses list (code=>[title=>'title',url='http://...',teacher=>'...',language=>''],code=>[...],...)
  */
 function courses_list($security_key, $visibilities = 'public')
@@ -26,25 +28,25 @@ function courses_list($security_key, $visibilities = 'public')
 
     // Check if this script is launch by server and if security key is ok.
     if ($security_key != $_configuration['security_key']) {
-        return array('error_msg' => 'Security check failed');
+        return ['error_msg' => 'Security check failed'];
     }
 
-    $vis = array(
+    $vis = [
         'public' => '3',
         'public-registered' => '2',
         'private' => '1',
         'closed' => '0',
-    );
+    ];
 
-    $courses_list = array();
+    $courses_list = [];
 
     if (!is_array($visibilities)) {
         $tmp = $visibilities;
-        $visibilities = array($tmp);
+        $visibilities = [$tmp];
     }
     foreach ($visibilities as $visibility) {
         if (!in_array($visibility, array_keys($vis))) {
-            return array('error_msg' => 'Security check failed');
+            return ['error_msg' => 'Security check failed'];
         }
         $courses_list_tmp = CourseManager::get_courses_list(
             null,
@@ -57,14 +59,14 @@ function courses_list($security_key, $visibilities = 'public')
             $course_info = CourseManager::get_course_information(
                 $course['code']
             );
-            $courses_list[$course['code']] = array(
+            $courses_list[$course['code']] = [
                 'title' => api_utf8_encode(
                     $course_info['title']
                 ),
                 'url' => api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/',
                 'teacher' => api_utf8_encode($course_info['tutor_name']),
                 'language' => $course_info['course_language'],
-            );
+            ];
         }
     }
 

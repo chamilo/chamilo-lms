@@ -1,12 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Script to receipt request to subscribe and confirmation action to queue
+ * Script to receipt request to subscribe and confirmation action to queue.
+ *
  * @author Daniel Alejandro Barreto Alva <daniel.barreto@beeznest.com>
+ *
  * @package chamilo.plugin.advanced_subscription
  */
 /**
- * Init
+ * Init.
  */
 require_once __DIR__.'/../config.php';
 
@@ -27,7 +29,7 @@ $data['profile_completed'] = isset($_REQUEST['profile_completed']) ? floatval($_
 $data['accept_terms'] = isset($_REQUEST['accept_terms']) ? intval($_REQUEST['accept_terms']) : 0;
 $data['courseId'] = isset($_REQUEST['c']) ? intval($_REQUEST['c']) : 0;
 // Init result array
-$result = array('error' => true, 'errorMessage' => get_lang('ThereWasAnError'));
+$result = ['error' => true, 'errorMessage' => get_lang('ThereWasAnError')];
 $showJSON = true;
 // Check if data is valid or is for start subscription
 $verified = $plugin->checkHash($data, $hash) || $data['action'] == 'subscribe';
@@ -70,30 +72,30 @@ if ($verified) {
                 // Prepare data
                 // Get session data
                 // Assign variables
-                $fieldsArray = array(
+                $fieldsArray = [
                     'description',
                     'target',
                     'mode',
                     'publication_end_date',
-                    'recommended_number_of_participants'
-                );
+                    'recommended_number_of_participants',
+                ];
                 $sessionArray = api_get_session_info($data['sessionId']);
                 $extraSession = new ExtraFieldValue('session');
                 $extraField = new ExtraField('session');
                 // Get session fields
-                $fieldList = $extraField->get_all(array(
-                    'variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
-                ));
+                $fieldList = $extraField->get_all([
+                    'variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray,
+                ]);
                 // Index session fields
                 foreach ($fieldList as $field) {
                     $fields[$field['id']] = $field['variable'];
                 }
 
-                $mergedArray = array_merge(array($data['sessionId']), array_keys($fields));
+                $mergedArray = array_merge([$data['sessionId']], array_keys($fields));
                 $sessionFieldValueList = $extraSession->get_all(
-                    array(
-                        'item_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray
-                    )
+                    [
+                        'item_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray,
+                    ]
                 );
                 foreach ($sessionFieldValueList as $sessionFieldValue) {
                     // Check if session field value is set in session field list
@@ -154,7 +156,7 @@ if ($verified) {
                             // Check if exist an email to render
                             if (isset($result['mailIds']['render'])) {
                                 // Render mail
-                                $url = $plugin->getRenderMailUrl(array('queueId' => $result['mailIds']['render']));
+                                $url = $plugin->getRenderMailUrl(['queueId' => $result['mailIds']['render']]);
                                 header('Location: '.$url);
                                 exit;
                             }
@@ -178,7 +180,7 @@ if ($verified) {
                         // Check if exist an email to render
                         if (isset($result['mailIds']['render'])) {
                             // Render mail
-                            $url = $plugin->getRenderMailUrl(array('queueId' => $result['mailIds']['render']));
+                            $url = $plugin->getRenderMailUrl(['queueId' => $result['mailIds']['render']]);
                             header('Location: '.$url);
                             exit;
                         }
@@ -188,7 +190,7 @@ if ($verified) {
                 $lastMessageId = $plugin->getLastMessageId($data['studentUserId'], $data['sessionId']);
                 if ($lastMessageId !== false) {
                     // Render mail
-                    $url = $plugin->getRenderMailUrl(array('queueId' => $lastMessageId));
+                    $url = $plugin->getRenderMailUrl(['queueId' => $lastMessageId]);
                     header('Location: '.$url);
                     exit;
                 } else {
@@ -228,28 +230,28 @@ if ($verified) {
                 if ($res === true) {
                     // Prepare data
                     // Prepare session data
-                    $fieldsArray = array(
+                    $fieldsArray = [
                         'description',
                         'target',
                         'mode',
                         'publication_end_date',
-                        'recommended_number_of_participants'
-                    );
+                        'recommended_number_of_participants',
+                    ];
                     $sessionArray = api_get_session_info($data['sessionId']);
                     $extraSession = new ExtraFieldValue('session');
                     $extraField = new ExtraField('session');
                     // Get session fields
-                    $fieldList = $extraField->get_all(array(
-                        'variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray
-                    ));
+                    $fieldList = $extraField->get_all([
+                        'variable IN ( ?, ?, ?, ?, ?)' => $fieldsArray,
+                    ]);
                     // Index session fields
                     foreach ($fieldList as $field) {
                         $fields[$field['id']] = $field['variable'];
                     }
 
-                    $mergedArray = array_merge(array($data['sessionId']), array_keys($fields));
+                    $mergedArray = array_merge([$data['sessionId']], array_keys($fields));
                     $sessionFieldValueList = $extraSession->get_all(
-                        array('session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray)
+                        ['session_id = ? field_id IN ( ?, ?, ?, ?, ?, ?, ? )' => $mergedArray]
                     );
                     foreach ($sessionFieldValueList as $sessionFieldValue) {
                         // Check if session field value is set in session field list
@@ -286,7 +288,7 @@ if ($verified) {
                     $data['session'] = $sessionArray;
                     $data['signature'] = api_get_setting('Institution');
                     $data['admin_view_url'] = api_get_path(WEB_PLUGIN_PATH)
-                        . 'advanced_subscription/src/admin_view.php?s='.$data['sessionId'];
+                        .'advanced_subscription/src/admin_view.php?s='.$data['sessionId'];
                     // Check if exist and action in data
                     if (empty($data['mailAction'])) {
                         // set action in data by new status
@@ -312,7 +314,7 @@ if ($verified) {
                     if ($data['newStatus'] == ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED) {
                         SessionManager::subscribe_users_to_session(
                             $data['sessionId'],
-                            array($data['studentUserId']),
+                            [$data['studentUserId']],
                             null,
                             false
                         );
@@ -327,7 +329,7 @@ if ($verified) {
                         // Check if exist mail to render
                         if (isset($result['mailIds']['render'])) {
                             // Render mail
-                            $url = $plugin->getRenderMailUrl(array('queueId' => $result['mailIds']['render']));
+                            $url = $plugin->getRenderMailUrl(['queueId' => $result['mailIds']['render']]);
                             header('Location: '.$url);
                             exit;
                         }

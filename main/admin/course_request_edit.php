@@ -3,10 +3,11 @@
 
 /**
  * A page for detailed preview or edition of a given course request.
+ *
  * @package chamilo.admin
+ *
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>, 2010
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -48,7 +49,7 @@ if ($course_validation_feature) {
         $form->addElement('header', $tool_name);
 
         // Title.
-        $form->addElement('text', 'title', get_lang('CourseName'), array('size' => '60', 'id' => 'title'));
+        $form->addElement('text', 'title', get_lang('CourseName'), ['size' => '60', 'id' => 'title']);
         $form->applyFilter('title', 'html_filter');
         $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
@@ -60,7 +61,7 @@ if ($course_validation_feature) {
             'category_code',
             get_lang('CourseFaculty'),
             null,
-            array('url' => $url)
+            ['url' => $url]
         );
 
         if (!empty($course_request_info['category_code'])) {
@@ -69,13 +70,13 @@ if ($course_validation_feature) {
         }
 
         // Course code.
-        $form->addText('wanted_code', get_lang('Code'), false, array('size' => '$maxlength', 'maxlength' => $maxlength));
+        $form->addText('wanted_code', get_lang('Code'), false, ['size' => '$maxlength', 'maxlength' => $maxlength]);
         $form->applyFilter('wanted_code', 'html_filter');
         $form->addRule('wanted_code', get_lang('Max'), 'maxlength', $maxlength);
         $form->addRule('wanted_code', get_lang('ThisFieldIsRequired'), 'required');
 
         // The teacher.
-        $titular = $form->addText('tutor_name', get_lang('Professor'), null, array('size' => '60', 'disabled' => 'disabled'));
+        $titular = $form->addText('tutor_name', get_lang('Professor'), null, ['size' => '60', 'disabled' => 'disabled']);
 
         // Description of the requested course.
         $form->addElement('textarea', 'description', get_lang('Description'));
@@ -151,7 +152,7 @@ if ($course_validation_feature) {
                 : !CourseRequestManager::course_code_exists($course_request_values['wanted_code']);
 
             if ($course_code_ok) {
-                $message = array();
+                $message = [];
 
                 // Update the course request.
                 $update_ok = CourseRequestManager::update_course_request(
@@ -318,8 +319,8 @@ function get_caller_name($caller_id)
 }
 
 // The header.
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('CourseList')];
 
 Display :: display_header($tool_name);
 

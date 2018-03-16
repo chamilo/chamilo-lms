@@ -5,9 +5,9 @@ use ChamiloSession as Session;
 
 /**
  * This file is responsible for  passing requested documents to the browser.
+ *
  * @package chamilo.document
  */
-
 session_cache_limiter('none');
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
@@ -25,7 +25,7 @@ $doc_url = str_replace('///', '&', $doc_url);
 // Still a space present? it must be a '+' (that got replaced by mod_rewrite)
 $doc_url = str_replace(' ', '+', $doc_url);
 
-$doc_url = str_replace(array('../', '\\..', '\\0', '..\\'), array('', '', '', ''), $doc_url); //echo $doc_url;
+$doc_url = str_replace(['../', '\\..', '\\0', '..\\'], ['', '', '', ''], $doc_url); //echo $doc_url;
 
 if (strpos($doc_url, '../') || strpos($doc_url, '/..')) {
     $doc_url = '';

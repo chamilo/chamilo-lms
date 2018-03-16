@@ -10,7 +10,7 @@ require_once 'main/inc/global.inc.php';
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_PATH).'web/assets/cropper/dist/cropper.min.css" rel="stylesheet">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_PATH).'web/assets/cropper/dist/cropper.min.js"></script>';
 
-$htmlHeadXtra[] ='<script>		
+$htmlHeadXtra[] = '<script>		
 $(document).ready(function() {		
     /*$("#filiere_panel").hide();			
     $("#dispo_panel").hide();    		
@@ -128,9 +128,9 @@ $form = new FormValidator('search', 'post', api_get_self().'?user_id='.$userToLo
 $form->addHeader(get_lang('Diagnosis'));
 $form->addHidden('user_id', $userToLoad);
 
-/** @var ExtraFieldSavedSearch  $saved */
+/** @var ExtraFieldSavedSearch $saved */
 $search = [
-    'user' => $userToLoad
+    'user' => $userToLoad,
 ];
 
 $items = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findBy($search);
@@ -175,9 +175,9 @@ $userForm = new FormValidator('user_form', 'post', api_get_self());
 
 $userForm->addHtml('<div class="panel-group" id="search_extrafield" role="tablist" aria-multiselectable="true">');
 $userForm->addHtml('<div class="panel panel-default">');
-$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">' . get_lang('Filiere') . '</a></div>');
+$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">'.get_lang('Filiere').'</a></div>');
 $userForm->addHtml('<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">');
-$userForm->addHtml('<div class="panel-body"><p class="text-info">' . get_lang('FiliereExplanation') .'</p>');
+$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('FiliereExplanation').'</p>');
 
 $fieldsToShow = [
     'statusocial',
@@ -207,15 +207,15 @@ $extra = $extraFieldUser->addElements(
 $userForm->addHtml('</div></div></div>');
 
 $userForm->addHtml('<div class="panel panel-default">');
-$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">' . get_lang('DisponibilitePendantMonStage') . '</a></div>');
+$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">'.get_lang('DisponibilitePendantMonStage').'</a></div>');
 $userForm->addHtml('<div id="collapseThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree">');
-$userForm->addHtml('<div class="panel-body"><p class="text-info">' . get_lang('DisponibilitePendantMonStageExplanation') . '</p>');
+$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('DisponibilitePendantMonStageExplanation').'</p>');
 
 $fieldsToShow = [
     'datedebutstage',
     'datefinstage',
     'poursuiteapprentissagestage',
-    'heures_disponibilite_par_semaine_stage'
+    'heures_disponibilite_par_semaine_stage',
 ];
 
 $extra = $extraFieldUser->addElements(
@@ -237,14 +237,13 @@ $extra = $extraFieldUser->addElements(
 
 $userForm->addHtml('</div></div></div>');
 
-
 $userForm->addHtml('<div class="panel panel-default">');
-$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">' . get_lang('ObjectifsApprentissage') . '</a></div>');
+$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseSix" aria-expanded="true" aria-controls="collapseSix">'.get_lang('ObjectifsApprentissage').'</a></div>');
 $userForm->addHtml('<div id="collapseSix" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingSix">');
-$userForm->addHtml('<div class="panel-body"><p class="text-info">' . get_lang('ObjectifsApprentissageExplanation') . '</p>');
+$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('ObjectifsApprentissageExplanation').'</p>');
 
 $fieldsToShow = [
-    'objectif_apprentissage'
+    'objectif_apprentissage',
 ];
 
 $extra = $extraFieldUser->addElements(
@@ -264,17 +263,16 @@ $extra = $extraFieldUser->addElements(
     $fieldsToShow
 );
 
-
 $userForm->addHtml('</div></div></div>');
 
 $userForm->addHtml('<div class="panel panel-default">');
-$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">' . get_lang('MethodeTravail') . '</a></div>');
+$userForm->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">'.get_lang('MethodeTravail').'</a></div>');
 $userForm->addHtml('<div id="collapseSeven" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingSeven">');
-$userForm->addHtml('<div class="panel-body"><p class="text-info">' . get_lang('MethodeTravailExplanation') . '</p>');
+$userForm->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('MethodeTravailExplanation').'</p>');
 
 $fieldsToShow = [
     'methode_de_travaille',
-    'accompagnement'
+    'accompagnement',
 ];
 
 $extra = $extraFieldUser->addElements(
@@ -297,15 +295,14 @@ $extra = $extraFieldUser->addElements(
 $userForm->addHtml('</div></div></div>');
 
 $form->addHtml('<div class="panel panel-default">');
-$form->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">' . get_lang('DisponibiliteAvant') . '</a></div>');
+$form->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">'.get_lang('DisponibiliteAvant').'</a></div>');
 $form->addHtml('<div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">');
-$form->addHtml('<div class="panel-body"><p class="text-info">' . get_lang('DisponibiliteAvantExplanation') . '</p>');
-
+$form->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('DisponibiliteAvantExplanation').'</p>');
 
 // Session fields
 $showOnlyThisFields = [
     'access_start_date',
-    'access_end_date'
+    'access_end_date',
 ];
 
 $extra = $extraField->addElements(
@@ -342,13 +339,12 @@ $extra = $extraFieldUser->addElements(
     $forceShowFields //$forceShowFields = false
 );
 
-
 $form->addHtml('</div></div></div>');
 
 $form->addHtml('<div class="panel panel-default">');
-$form->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">' . get_lang('ThemesObjectifs') . '</a></div>');
+$form->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">'.get_lang('ThemesObjectifs').'</a></div>');
 $form->addHtml('<div id="collapseFour" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFour">');
-$form->addHtml('<div class="panel-body"><p class="text-info">' . get_lang('ThemesObjectifsExplanation') . '</p>');
+$form->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('ThemesObjectifsExplanation').'</p>');
 
 $showOnlyThisFields = [
     'domaine',
@@ -368,19 +364,19 @@ $extra = $extraField->addElements(
     [],
     false, //$orderDependingDefaults
     true, // force
-    [ 'domaine' => 3, $theme => 5], // $separateExtraMultipleSelect
+    ['domaine' => 3, $theme => 5], // $separateExtraMultipleSelect
     [
         'domaine' => [
             get_lang('Domaine').' 1',
             get_lang('Domaine').' 2',
-            get_lang('Domaine').' 3'
+            get_lang('Domaine').' 3',
         ],
-        $theme  => [
+        $theme => [
             get_lang('ThemeField').' 1',
             get_lang('ThemeField').' 2',
             get_lang('ThemeField').' 3',
             get_lang('ThemeField').' 4',
-            get_lang('ThemeField').' 5'
+            get_lang('ThemeField').' 5',
         ],
     ],
     [],
@@ -389,20 +385,17 @@ $extra = $extraField->addElements(
 
 $form->addHtml('</div></div></div>');
 
-
-
-
 $form->addHtml('<div class="panel panel-default">');
-$form->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">' . get_lang('NiveauLangue') . '</a></div>');
+$form->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">'.get_lang('NiveauLangue').'</a></div>');
 $form->addHtml('<div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFive">');
-$form->addHtml('<div class="panel-body"><p class="text-info">' . get_lang('NiveauLangueExplanation') . '</p>');
+$form->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('NiveauLangueExplanation').'</p>');
 
 $showOnlyThisFields = [
     'ecouter',
     'lire',
     'participer_a_une_conversation',
     's_exprimer_oralement_en_continu',
-    'ecrire'
+    'ecrire',
 ];
 
 $extra = $extraField->addElements(
@@ -417,19 +410,19 @@ $extra = $extraField->addElements(
     [],
     false, //$orderDependingDefaults
     true, // force
-    [ 'domaine' => 3, $theme => 5], // $separateExtraMultipleSelect
+    ['domaine' => 3, $theme => 5], // $separateExtraMultipleSelect
     [
         'domaine' => [
             get_lang('Domaine').' 1',
             get_lang('Domaine').' 2',
-            get_lang('Domaine').' 3'
+            get_lang('Domaine').' 3',
         ],
-        $theme  => [
+        $theme => [
             get_lang('Theme').' 1',
             get_lang('Theme').' 2',
             get_lang('Theme').' 3',
             get_lang('Theme').' 4',
-            get_lang('Theme').' 5'
+            get_lang('Theme').' 5',
         ],
     ]
 );
@@ -439,8 +432,8 @@ $form->addHtml('</div></div></div>');
 $form->addButtonSave(get_lang('SaveDiagnosticChanges'), 'save');
 $form->addButtonSearch(get_lang('SearchSessions'), 'search');
 
-$extraFieldsToFilter = $extraField->get_all(array('variable = ?' => 'temps_de_travail'));
-$extraFieldToSearch = array();
+$extraFieldsToFilter = $extraField->get_all(['variable = ?' => 'temps_de_travail']);
+$extraFieldToSearch = [];
 if (!empty($extraFieldsToFilter)) {
     foreach ($extraFieldsToFilter as $filter) {
         $extraFieldToSearch[] = $filter['id'];
@@ -563,7 +556,7 @@ if ($form->validate()) {
                             $filterToSend['rules'][] = [
                                 'field' => $column['name'],
                                 'op' => 'cn',
-                                'data' => $filters[$column['name']]
+                                'data' => $filters[$column['name']],
                             ];
                         }
                         $countExtraField++;
@@ -581,7 +574,7 @@ if ($form->validate()) {
         $extraFieldValue = new ExtraFieldValue('user');
         $userDataToSave = [
             'item_id' => $userToLoad,
-            'extra_heures_disponibilite_par_semaine' => isset($userData['extra_heures_disponibilite_par_semaine']) ? $userData['extra_heures_disponibilite_par_semaine'] : ''
+            'extra_heures_disponibilite_par_semaine' => isset($userData['extra_heures_disponibilite_par_semaine']) ? $userData['extra_heures_disponibilite_par_semaine'] : '',
         ];
         $extraFieldValue->saveFieldValues($userDataToSave, true, false, ['heures_disponibilite_par_semaine']);
 
@@ -605,7 +598,7 @@ if ($form->validate()) {
             'extra_lire',
             'extra_participer_a_une_conversation',
             'extra_s_exprimer_oralement_en_continu',
-            'extra_ecrire'
+            'extra_ecrire',
         ];
 
         foreach ($userData as $key => $value) {
@@ -651,7 +644,7 @@ if ($form->validate()) {
 
             $search = [
                 'field' => $extraFieldObj,
-                'user' => $user
+                'user' => $user,
             ];
 
             /** @var ExtraFieldSavedSearch $saved */
@@ -678,7 +671,6 @@ if ($form->validate()) {
         Display::addFlash(Display::return_message(get_lang('Saved'), 'success'));
         header('Location: '.api_get_self().'?user_id='.$userToLoad);
         exit;
-
     }
 }
 
@@ -689,12 +681,12 @@ if (!empty($tagsData)) {
     foreach ($tagsData as $extraField => $tags) {
         foreach ($tags as $tag) {
             $tag = api_htmlentities($tag);
-           // $jsTag .= "$('#$extraField')[0].addItem('$tag', '$tag');";
+            // $jsTag .= "$('#$extraField')[0].addItem('$tag', '$tag');";
         }
     }
 }
 
-$htmlHeadXtra[] ='<script>
+$htmlHeadXtra[] = '<script>
 $(function() {
     '.$extra['jquery_ready_content'].'
     '.$jsTag.'
@@ -720,7 +712,7 @@ if (!empty($filterToSend)) {
 
     // Ofaj fix
     $userStartDateMinus = api_get_utc_datetime(substr($userStartDateMinus, 0, 11).'00:00:00');
-    $userEndDatePlus = api_get_utc_datetime(substr($userEndDatePlus, 0, 11). '23:59:59');
+    $userEndDatePlus = api_get_utc_datetime(substr($userEndDatePlus, 0, 11).'23:59:59');
 
     // Special OFAJ date logic
     if ($userEndDate == '') {
@@ -743,8 +735,8 @@ if (!empty($filterToSend)) {
     // Special filters
     // see https://task.beeznest.com/issues/10849#change-81902
     foreach ($filterToSend['rules'] as &$filterItem) {
-        if (isset($filterItem['field']))
-        switch ($filterItem['field']) {
+        if (isset($filterItem['field'])) {
+            switch ($filterItem['field']) {
             case 'extra_ecouter':
             case 'extra_lire':
             case 'extra_participer_a_une_conversation':
@@ -781,14 +773,14 @@ if (!empty($filterToSend)) {
                 $searchOptions = [];
                 for ($i = 1; $i < count($newOptions); $i++) {
                     if ($selectedValue == $newOptions[$i]) {
-                        if (isset($newOptions[$i-1])) {
-                            $searchOptions[] = $newOptions[$i-1];
+                        if (isset($newOptions[$i - 1])) {
+                            $searchOptions[] = $newOptions[$i - 1];
                         }
                         if (isset($newOptions[$i])) {
                             $searchOptions[] = $newOptions[$i];
                         }
-                        if (isset($newOptions[$i+1])) {
-                            $searchOptions[] = $newOptions[$i+1];
+                        if (isset($newOptions[$i + 1])) {
+                            $searchOptions[] = $newOptions[$i + 1];
                         }
                         break;
                     }
@@ -800,10 +792,10 @@ if (!empty($filterToSend)) {
                 // Special condition see:
                 // https://task.beeznest.com/issues/10849#note-218
                 // Remove filiere
-                $list =  [
+                $list = [
                     'vie-quotidienne',
                     //'competente-dans-mon-domaine-de-specialite',
-                    'arrivee-sur-mon-poste-de-travail'
+                    'arrivee-sur-mon-poste-de-travail',
                 ];
 
                 $deleteFiliere = false;
@@ -821,6 +813,7 @@ if (!empty($filterToSend)) {
                     }
                 }
                 break;
+        }
         }
 
         if ($deleteFiliere) {
@@ -846,16 +839,16 @@ $extra_params['autowidth'] = 'true';
 
 // height auto
 $extra_params['height'] = 'auto';
-$extra_params['postData'] = array(
-    'filters' => array(
+$extra_params['postData'] = [
+    'filters' => [
         "groupOp" => "AND",
-        "rules" => $result['rules']
-    )
-);
+        "rules" => $result['rules'],
+    ],
+];
 
 $sessionByUserList = SessionManager::get_sessions_by_user($userToLoad, true, true);
 
-$sessionUserList = array();
+$sessionUserList = [];
 if (!empty($sessionByUserList)) {
     foreach ($sessionByUserList as $sessionByUser) {
         $sessionUserList[] = (string) $sessionByUser['session_id'];
@@ -865,9 +858,9 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
     var sessionList = '.json_encode($sessionUserList).';    
     var id = options.rowId.toString();    
     if (sessionList.indexOf(id) == -1) {
-        return \'<a href="'.api_get_self().'?action=subscribe_user&user_id='.$userToLoad.'&session_id=\'+id+\'">'.Display::return_icon('add.png', addslashes(get_lang('Subscribe')),'',ICON_SIZE_SMALL).'</a>'.'\';
+        return \'<a href="'.api_get_self().'?action=subscribe_user&user_id='.$userToLoad.'&session_id=\'+id+\'">'.Display::return_icon('add.png', addslashes(get_lang('Subscribe')), '', ICON_SIZE_SMALL).'</a>'.'\';
     } else {
-        return \'<a href="'.api_get_self().'?action=unsubscribe_user&user_id='.$userToLoad.'&session_id=\'+id+\'">'.Display::return_icon('delete.png', addslashes(get_lang('Delete')),'',ICON_SIZE_SMALL).'</a>'.'\';
+        return \'<a href="'.api_get_self().'?action=unsubscribe_user&user_id='.$userToLoad.'&session_id=\'+id+\'">'.Display::return_icon('delete.png', addslashes(get_lang('Delete')), '', ICON_SIZE_SMALL).'</a>'.'\';
     }
 }';
 
@@ -879,7 +872,7 @@ $griJs = Display::grid_js(
     $columns,
     $column_model,
     $extra_params,
-    array(),
+    [],
     $action_links,
     true
 );
@@ -887,13 +880,13 @@ $grid = '<div id="session-table" class="table-responsive">';
 $grid .= Display::grid_html('sessions');
 $grid .= '</div>';
 
-$htmlHeadXtra[] ='<style>
+$htmlHeadXtra[] = '<style>
 	.control-label {
 	    width: 25% !important;
 	}
 </style>';
 
-$htmlHeadXtra[] ='<script>		
+$htmlHeadXtra[] = '<script>		
 $(document).ready(function() {
 	var blocks = [
         "#collapseOne",
@@ -911,7 +904,6 @@ $(document).ready(function() {
 });		
 </script>';
 
-
 $tpl = new Template(get_lang('Diagnosis'));
 
 if (empty($items)) {
@@ -922,7 +914,7 @@ if (empty($items)) {
 $tpl->assign('form', $view);
 $tpl->assign('form_search', $formSearch->returnForm().$userForm->returnForm());
 
-$table = new HTML_Table(array('class' => 'data_table'));
+$table = new HTML_Table(['class' => 'data_table']);
 $column = 0;
 $row = 0;
 
@@ -988,11 +980,11 @@ if ($data) {
 }
 
 $numHours = $total - $sumHours;
-$headers = array(
+$headers = [
     get_lang('TotalAvailableHours') => $total,
     get_lang('SumHoursSessionsSubscribed') => $sumHours,
-    get_lang('CountHoursAvailable') => $numHours
-);
+    get_lang('CountHoursAvailable') => $numHours,
+];
 foreach ($headers as $header => $value) {
     $table->setCellContents($row, 0, $header);
     $table->updateCellAttributes($row, 0, 'width="250px"');

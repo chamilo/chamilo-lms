@@ -1,11 +1,9 @@
 <?php
 /**
- *
  * @copyright (c) 2014 Valery Fremaux
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author Valery Fremaux <valery.fremaux@gmail.com>
  */
-
 $strings['archiverealroot'] = 'Archive container real root (no symlinks here)';
 $strings['backtoindex'] = 'Back to instance index';
 $strings['badconnection'] = 'Connection FAILED';
@@ -123,6 +121,3 @@ $strings['UploadUrl'] = 'Upload URL';
 $strings['CourseUrl'] = 'Course URL';
 $strings['ThemeFolder'] = 'Theme folder';
 $strings['ThemeFolderExplanation'] = 'Theme folder should be located inside the web/css/themes/ folder';
-
-
-

@@ -6,7 +6,8 @@ use Chamilo\CourseBundle\Entity\CQuizAnswer;
 /**
  * Class Answer
  * Allows to instantiate an object of type Answer
- * 5 arrays are created to receive the attributes of each answer belonging to a specified question
+ * 5 arrays are created to receive the attributes of each answer belonging to a specified question.
+ *
  * @package chamilo.exercise
  *
  * @author Olivier Brouckaert
@@ -43,11 +44,12 @@ class Answer
     public $standalone;
 
     /**
-     * constructor of the class
+     * constructor of the class.
      *
      * @author Olivier Brouckaert
-     * @param int $questionId that answers belong to
-     * @param int $course_id
+     *
+     * @param int      $questionId that answers belong to
+     * @param int      $course_id
      * @param Exercise $exercise
      */
     public function __construct($questionId, $course_id = 0, $exercise = null)
@@ -90,7 +92,7 @@ class Answer
     }
 
     /**
-     * Clears $new_* arrays
+     * Clears $new_* arrays.
      *
      * @author Olivier Brouckaert
      */
@@ -108,7 +110,7 @@ class Answer
     }
 
     /**
-     * Reads answer information from the database
+     * Reads answer information from the database.
      *
      * @author Olivier Brouckaert
      */
@@ -167,11 +169,12 @@ class Answer
     }
 
     /**
-    * returns all answer ids from this question Id
-    *
-    * @author Yoselyn Castillo
-    * @return array - $id (answer ids)
-    */
+     * returns all answer ids from this question Id.
+     *
+     * @author Yoselyn Castillo
+     *
+     * @return array - $id (answer ids)
+     */
     public function selectAnswerId()
     {
         $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
@@ -194,9 +197,11 @@ class Answer
     }
 
     /**
-     * Reads answer information from the data base ordered by parameter
+     * Reads answer information from the data base ordered by parameter.
+     *
      * @param string $field Field we want to order by
      * @param string $order DESC or ASC
+     *
      * @return bool
      *
      * @author Frederic Vauthier
@@ -286,10 +291,11 @@ class Answer
     }
 
     /**
-     * returns the autoincrement id
+     * returns the autoincrement id.
      *
      * @author Juan Carlos Ra�a
-     * @return integer - answer num
+     *
+     * @return int - answer num
      */
     public function selectAutoId($id)
     {
@@ -297,10 +303,11 @@ class Answer
     }
 
     /**
-     * returns the number of answers in this question
+     * returns the number of answers in this question.
      *
      * @author Olivier Brouckaert
-     * @return integer - number of answers
+     *
+     * @return int - number of answers
      */
     public function selectNbrAnswers()
     {
@@ -308,10 +315,11 @@ class Answer
     }
 
     /**
-     * returns the question ID which the answers belong to
+     * returns the question ID which the answers belong to.
      *
      * @author Olivier Brouckaert
-     * @return integer - the question ID
+     *
+     * @return int - the question ID
      */
     public function selectQuestionId()
     {
@@ -319,11 +327,13 @@ class Answer
     }
 
     /**
-     * returns the question ID of the destination question
+     * returns the question ID of the destination question.
      *
      * @author Julio Montoya
-     * @param integer $id
-     * @return integer - the question ID
+     *
+     * @param int $id
+     *
+     * @return int - the question ID
      */
     public function selectDestination($id)
     {
@@ -331,10 +341,12 @@ class Answer
     }
 
     /**
-     * returns the answer title
+     * returns the answer title.
      *
      * @author Olivier Brouckaert
+     *
      * @param - integer $id - answer ID
+     *
      * @return string - answer title
      */
     public function selectAnswer($id)
@@ -343,8 +355,10 @@ class Answer
     }
 
     /**
-     * return array answer by id else return a bool
-     * @param integer $auto_id
+     * return array answer by id else return a bool.
+     *
+     * @param int $auto_id
+     *
      * @return array
      */
     public function selectAnswerByAutoId($auto_id)
@@ -366,10 +380,12 @@ class Answer
     }
 
     /**
-     * returns the answer title from an answer's position
+     * returns the answer title from an answer's position.
      *
      * @author Yannick Warnier
+     *
      * @param - integer $id - answer ID
+     *
      * @return bool - answer title
      */
     public function selectAnswerIdByPosition($pos)
@@ -386,11 +402,14 @@ class Answer
     }
 
     /**
-     * Returns a list of answers
+     * Returns a list of answers.
+     *
      * @author Yannick Warnier <ywarnier@beeznest.org>
+     *
      * @param bool $decode
-     * @return array    List of answers where each answer is an array
-     * of (id, answer, comment, grade) and grade=weighting
+     *
+     * @return array List of answers where each answer is an array
+     *               of (id, answer, comment, grade) and grade=weighting
      */
     public function getAnswersList($decode = false)
     {
@@ -428,9 +447,11 @@ class Answer
     }
 
     /**
-     * Returns a list of grades
+     * Returns a list of grades.
+     *
      * @author Yannick Warnier <ywarnier@beeznest.org>
-     * @return array    List of grades where grade=weighting (?)
+     *
+     * @return array List of grades where grade=weighting (?)
      */
     public function getGradesList()
     {
@@ -445,9 +466,11 @@ class Answer
     }
 
     /**
-     * Returns the question type
+     * Returns the question type.
+     *
      * @author    Yannick Warnier <ywarnier@beeznest.org>
-     * @return    integer    The type of the question this answer is bound to
+     *
+     * @return int The type of the question this answer is bound to
      */
     public function getQuestionType()
     {
@@ -463,13 +486,14 @@ class Answer
         return $row['type'];
     }
 
-
     /**
-     * tells if answer is correct or not
+     * tells if answer is correct or not.
      *
      * @author Olivier Brouckaert
+     *
      * @param - integer $id - answer ID
-     * @return integer - 0 if bad answer, not 0 if good answer
+     *
+     * @return int - 0 if bad answer, not 0 if good answer
      */
     public function isCorrect($id)
     {
@@ -477,10 +501,12 @@ class Answer
     }
 
     /**
-     * returns answer comment
+     * returns answer comment.
      *
      * @author Olivier Brouckaert
+     *
      * @param - integer $id - answer ID
+     *
      * @return string - answer comment
      */
     public function selectComment($id)
@@ -489,12 +515,13 @@ class Answer
     }
 
     /**
-     * returns answer weighting
+     * returns answer weighting.
      *
      * @author Olivier Brouckaert
+     *
      * @param - integer $id - answer ID
-
-     * @return integer - answer weighting
+     *
+     * @return int - answer weighting
      */
     public function selectWeighting($id)
     {
@@ -502,11 +529,13 @@ class Answer
     }
 
     /**
-     * returns answer position
+     * returns answer position.
      *
      * @author Olivier Brouckaert
+     *
      * @param - integer $id - answer ID
-     * @return integer - answer position
+     *
+     * @return int - answer position
      */
     public function selectPosition($id)
     {
@@ -514,11 +543,13 @@ class Answer
     }
 
     /**
-     * returns answer hotspot coordinates
+     * returns answer hotspot coordinates.
      *
      * @author Olivier Brouckaert
-     * @param integer $id Answer ID
-     * @return integer    Answer position
+     *
+     * @param int $id Answer ID
+     *
+     * @return int Answer position
      */
     public function selectHotspotCoordinates($id)
     {
@@ -526,11 +557,13 @@ class Answer
     }
 
     /**
-     * returns answer hotspot type
+     * returns answer hotspot type.
      *
      * @author Toon Keppens
-     * @param integer $id Answer ID
-     * @return integer        Answer position
+     *
+     * @param int $id Answer ID
+     *
+     * @return int Answer position
      */
     public function selectHotspotType($id)
     {
@@ -538,16 +571,17 @@ class Answer
     }
 
     /**
-     * Creates a new answer
+     * Creates a new answer.
      *
      * @author Olivier Brouckaert
-     * @param string $answer answer title
-     * @param integer $correct 0 if bad answer, not 0 if good answer
-     * @param string $comment answer comment
-     * @param integer $weighting answer weighting
-     * @param integer $position answer position
-     * @param array $new_hotspot_coordinates Coordinates for hotspot exercises (optional)
-     * @param integer $new_hotspot_type Type for hotspot exercises (optional)
+     *
+     * @param string $answer                  answer title
+     * @param int    $correct                 0 if bad answer, not 0 if good answer
+     * @param string $comment                 answer comment
+     * @param int    $weighting               answer weighting
+     * @param int    $position                answer position
+     * @param array  $new_hotspot_coordinates Coordinates for hotspot exercises (optional)
+     * @param int    $new_hotspot_type        Type for hotspot exercises (optional)
      * @param string $destination
      */
     public function createAnswer(
@@ -573,10 +607,11 @@ class Answer
     }
 
     /**
-     * Updates an answer
+     * Updates an answer.
      *
      * @author Toon Keppens
-     * @param int $iid
+     *
+     * @param int    $iid
      * @param string $answer
      * @param string $comment
      * @param string $correct
@@ -624,7 +659,7 @@ class Answer
     }
 
     /**
-     * Records answers into the data base
+     * Records answers into the data base.
      *
      * @author Olivier Brouckaert
      */
@@ -791,11 +826,12 @@ class Answer
     }
 
     /**
-     * Duplicates answers by copying them into another question
+     * Duplicates answers by copying them into another question.
      *
      * @author Olivier Brouckaert
-     * @param  Question $newQuestion
-     * @param  array $course_info destination course info (result of the function api_get_course_info() )
+     *
+     * @param Question $newQuestion
+     * @param array    $course_info destination course info (result of the function api_get_course_info() )
      */
     public function duplicate($newQuestion, $course_info = null)
     {
@@ -990,7 +1026,8 @@ class Answer
     }
 
     /**
-     * Get the necessary JavaScript for some answers
+     * Get the necessary JavaScript for some answers.
+     *
      * @return string
      */
     public function getJs()
@@ -1006,8 +1043,10 @@ class Answer
     }
 
     /**
-     * Check if a answer is correct by an answer auto id
+     * Check if a answer is correct by an answer auto id.
+     *
      * @param $needle int The answer auto id
+     *
      * @return bool
      */
     public function isCorrectByAutoId($needle)

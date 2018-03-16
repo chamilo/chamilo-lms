@@ -36,11 +36,9 @@ switch ($action) {
         break;
 }
 
-
-
 $order = " ORDER BY firstname, lastname";
 $userList = $legal->getUserAgreementList($courseId, $sessionId, $order);
-$table = new HTML_Table(array('class' => 'data_table'));
+$table = new HTML_Table(['class' => 'data_table']);
 $table->setHeaderContents(0, 0, get_lang('User'));
 $table->setHeaderContents(0, 1, $legal->get_lang('WebAgreement'));
 $table->setHeaderContents(0, 2, $legal->get_lang('MailAgreement'));
@@ -71,18 +69,17 @@ if (!empty($userList)) {
         $table->setCellContents($row, 3, $link.' '.$deleteLink);
 
         $row++;
-/*
-        'web_agreement' => string '1' (length=1)
-  'web_agreement_date' => string '2014-09-30 14:36:30' (length=19)
-  'mail_agreement' => string '1' (length=1)
-  'mail_agreement_date' => string '2014-09-30 14:43:16' (length=19)
-  'mail_agreement_link' => s*/
-
+        /*
+                'web_agreement' => string '1' (length=1)
+          'web_agreement_date' => string '2014-09-30 14:36:30' (length=19)
+          'mail_agreement' => string '1' (length=1)
+          'mail_agreement_date' => string '2014-09-30 14:43:16' (length=19)
+          'mail_agreement_link' => s*/
     }
 }
 $url = $pluginPath.'start.php?'.api_get_cidreq();
 
-$interbreadcrumb[] = array("url" => $url, "name" => $legal->get_lang('CourseLegal'));
+$interbreadcrumb[] = ["url" => $url, "name" => $legal->get_lang('CourseLegal')];
 Display::display_header($legal->get_lang('UserList'));
 
 $table->display();

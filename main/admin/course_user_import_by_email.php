@@ -3,7 +3,8 @@
 exit;
 /**
  * This tool allows platform admins to update course-user relations by uploading
- * a CSV file
+ * a CSV file.
+ *
  * @package chamilo.admin
  */
 /**
@@ -11,16 +12,16 @@ exit;
  */
 function validate_data($users_courses)
 {
-    $errors = array();
-    $coursecodes = array();
+    $errors = [];
+    $coursecodes = [];
     foreach ($users_courses as $index => $user_course) {
         $user_course['line'] = $index + 1;
         // 1. Check whether mandatory fields are set.
-        $mandatory_fields = array('Email', 'CourseCode', 'Status');
+        $mandatory_fields = ['Email', 'CourseCode', 'Status'];
         foreach ($mandatory_fields as $key => $field) {
             if (!isset($user_course[$field]) || strlen($user_course[$field]) == 0) {
                 $user_course['error'] = get_lang($field.'Mandatory');
-                $errors[]             = $user_course;
+                $errors[] = $user_course;
             }
         }
 
@@ -35,7 +36,7 @@ function validate_data($users_courses)
                 $res = Database::query($sql);
                 if (Database::num_rows($res) == 0) {
                     $user_course['error'] = get_lang('CodeDoesNotExists');
-                    $errors[]             = $user_course;
+                    $errors[] = $user_course;
                 } else {
                     $coursecodes[$user_course['CourseCode']] = 1;
                 }
@@ -47,7 +48,7 @@ function validate_data($users_courses)
             $user = api_get_user_info_from_email($user_course['Email']);
             if (empty($user)) {
                 $user_course['error'] = get_lang('UnknownUser');
-                $errors[]             = $user_course;
+                $errors[] = $user_course;
             }
         }
 
@@ -55,7 +56,7 @@ function validate_data($users_courses)
         if (isset($user_course['Status']) && strlen($user_course['Status']) != 0) {
             if ($user_course['Status'] != COURSEMANAGER && $user_course['Status'] != STUDENT) {
                 $user_course['error'] = get_lang('UnknownStatus');
-                $errors[]             = $user_course;
+                $errors[] = $user_course;
             }
         }
     }
@@ -70,8 +71,8 @@ function save_data($users_courses)
 {
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
     $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $csv_data = array();
-    $inserted_in_course = array();
+    $csv_data = [];
+    $inserted_in_course = [];
 
     foreach ($users_courses as $user_course) {
         $csv_data[$user_course['Email']][$user_course['CourseCode']] = $user_course['Status'];
@@ -87,12 +88,12 @@ function save_data($users_courses)
         $sql = "SELECT * FROM $course_user_table cu
                 WHERE cu.user_id = $user_id AND cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH." ";
         $res = Database::query($sql);
-        $db_subscriptions = array();
+        $db_subscriptions = [];
         while ($obj = Database::fetch_object($res)) {
             $db_subscriptions[$obj->c_id] = $obj->status;
         }
 
-        $to_subscribe   = array_diff(array_keys($csv_subscriptions), array_keys($db_subscriptions));
+        $to_subscribe = array_diff(array_keys($csv_subscriptions), array_keys($db_subscriptions));
         $to_unsubscribe = array_diff(array_keys($db_subscriptions), array_keys($csv_subscriptions));
 
         if (isset($_POST['subscribe']) && $_POST['subscribe']) {
@@ -132,12 +133,15 @@ function save_data($users_courses)
 
 /**
  * Reads CSV-file.
+ *
  * @param string $file Path to the CSV-file
+ *
  * @return array All course-information read from the file
  */
 function parse_csv_data($file)
 {
     $courses = Import::csv_reader($file);
+
     return $courses;
 }
 
@@ -153,7 +157,7 @@ api_protect_admin_script();
 
 $tool_name = get_lang('AddUsersToACourse').' CSV';
 
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
 set_time_limit(0);
 
@@ -164,8 +168,8 @@ $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 $form->addElement('checkbox', 'subscribe', get_lang('Action'), get_lang('SubscribeUserIfNotAllreadySubscribed'));
 $form->addElement('checkbox', 'unsubscribe', '', get_lang('UnsubscribeUserIfSubscriptionIsNotInFile'));
 $form->addButtonImport(get_lang('Import'));
-$form->setDefaults(array('subscribe' => '1', 'unsubscribe' => 1));
-$errors = array();
+$form->setDefaults(['subscribe' => '1', 'unsubscribe' => 1]);
+$errors = [];
 
 if ($form->validate()) {
     $users_courses = parse_csv_data($_FILES['import_file']['tmp_name']);

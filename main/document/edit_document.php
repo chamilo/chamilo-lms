@@ -23,10 +23,10 @@ use ChamiloSession as Session;
  * comments or not.
  *
  * @package chamilo.document
+ *
  * @todo improve script structure (FormValidator is used to display form, but
  * not for validation at the moment)
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $groupRights = Session::read('group_member_with_upload_rights');
@@ -119,7 +119,7 @@ for ($i = 0; $i < ($count_dir); $i++) {
     $relative_url .= '../';
 }
 
-$editorConfig = array(
+$editorConfig = [
     'ToolbarSet' => (api_is_allowed_to_edit(null, true) ? 'Documents' : 'DocumentsStudent'),
     'Width' => '100%',
     'Height' => '400',
@@ -130,8 +130,8 @@ $editorConfig = array(
     'CreateDocumentWebDir' => (empty($group_properties['directory']))
         ? api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/'
         : api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/',
-    'BaseHref' =>  api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir
-);
+    'BaseHref' => api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir,
+];
 
 if ($is_certificate_mode) {
     $editorConfig['CreateDocumentDir'] = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/';
@@ -149,34 +149,34 @@ $dbTable = Database::get_course_table(TABLE_DOCUMENT);
 $course_id = api_get_course_int_id();
 
 if (!empty($group_id)) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
         'name' => get_lang('GroupSpace'),
-    );
+    ];
     $group_document = true;
     $noPHP_SELF = true;
 }
 
 if (!$is_certificate_mode) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."document/document.php?curdirpath=".urlencode($currentDirPath).'&'.api_get_cidreq(),
         "name" => get_lang('Documents'),
-    );
+    ];
 } else {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('Gradebook')
-    );
+        'name' => get_lang('Gradebook'),
+    ];
 }
 
 if (empty($document_data['parents'])) {
-    $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
+    $interbreadcrumb[] = ['url' => '#', 'name' => $document_data['title']];
 } else {
     foreach ($document_data['parents'] as $document_sub_data) {
         if ($document_data['title'] == $document_sub_data['title']) {
             continue;
         }
-        $interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
+        $interbreadcrumb[] = ['url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']];
     }
 }
 
@@ -231,7 +231,7 @@ if ($is_allowed_to_edit) {
     if (isset($_POST['formSent']) && $_POST['formSent'] == 1) {
         $filename = stripslashes($_POST['filename']);
         $extension = $_POST['extension'];
-        $content = isset($_POST['content']) ? trim(str_replace(array("\r", "\n"), '', stripslashes($_POST['content']))) : null;
+        $content = isset($_POST['content']) ? trim(str_replace(["\r", "\n"], '', stripslashes($_POST['content']))) : null;
         $content = Security::remove_XSS($content, COURSEMANAGERLOWSECURITY);
 
         if ($dir == '/') {
@@ -251,7 +251,7 @@ if ($is_allowed_to_edit) {
                 if (!empty($content)) {
                     if ($fp = @fopen($document_data['absolute_path'], 'w')) {
                         // For flv player, change absolute path temporarily to prevent from erasing it in the following lines
-                        $content = str_replace(array('flv=h', 'flv=/'), array('flv=h|', 'flv=/|'), $content);
+                        $content = str_replace(['flv=h', 'flv=/'], ['flv=h|', 'flv=/|'], $content);
                         fputs($fp, $content);
                         fclose($fp);
 
@@ -285,7 +285,6 @@ if ($is_allowed_to_edit) {
                                 $dir,
                                 api_get_user_id()
                             );
-
                         } else {
                             Display::addFlash(Display::return_message(get_lang('Impossible'), 'warning'));
                         }
@@ -320,7 +319,7 @@ if (file_exists($document_data['absolute_path'])) {
     if (is_file($document_data['absolute_path'])) {
         $extension = $path_info['extension'];
 
-        if (in_array($extension, array('html', 'htm'))) {
+        if (in_array($extension, ['html', 'htm'])) {
             $content = file($document_data['absolute_path']);
             $content = implode('', $content);
         }
@@ -368,7 +367,7 @@ if ($owner_id == api_get_user_id() ||
         'post',
         $action,
         null,
-        array('class' => 'form-vertical')
+        ['class' => 'form-vertical']
     );
 
     // Form title
@@ -384,7 +383,7 @@ if ($owner_id == api_get_user_id() ||
         'title',
         get_lang('Title'),
         true,
-        array('cols-size' => [2, 10, 0], 'autofocus')
+        ['cols-size' => [2, 10, 0], 'autofocus']
     );
 
     $defaults['title'] = $document_data['title'];
@@ -422,7 +421,7 @@ if ($owner_id == api_get_user_id() ||
     $form->addElement('textarea', 'comment', get_lang('Comment'), ['cols-size' => [2, 10, 0]]);
 
     if ($owner_id == api_get_user_id() || api_is_platform_admin()) {
-        $checked = & $form->addElement('checkbox', 'readonly', null, get_lang('ReadOnly'));
+        $checked = &$form->addElement('checkbox', 'readonly', null, get_lang('ReadOnly'));
         if ($readonly == 1) {
             $checked->setChecked(true);
         }
@@ -496,7 +495,7 @@ Display::display_footer();
     It needs no global variables, it takes all info from parameters.
     It returns nothing.
     @todo check if this function is used
-*/
+ */
 function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc)
 {
     $file_name_for_change = $base_work_dir.$dir.$source_file;
@@ -533,28 +532,28 @@ function show_return($document_id, $path, $call_from_tool = '', $slide_id = 0, $
         $selectedCategory = (isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : '');
         $actionsLeft .= '<a href="document.php?curdirpath='.$selectedCategory.'&selectcat='.$selectedCategory.'">'.
             Display::return_icon('back.png', get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'), '', ICON_SIZE_MEDIUM).'</a>';
-        $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png', get_lang('Expand'), array('id'=>'expand'), ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Collapse'), array('id'=>'contract', 'class'=>'hide'), ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png', get_lang('Expand'), ['id' => 'expand'], ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Collapse'), ['id' => 'contract', 'class' => 'hide'], ICON_SIZE_MEDIUM).'</a>';
     } elseif ($call_from_tool == 'slideshow') {
         $actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.
             Display::return_icon('slideshow.png', get_lang('BackTo').' '.get_lang('ViewSlideshow'), '', ICON_SIZE_MEDIUM).'</a>';
     } elseif ($call_from_tool == 'editdraw') {
         $actionsLeft .= '<a href="'.$url.'">'.
             Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
-        $actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('BackTo').' '.get_lang('Draw'), array(), 32).'</a>';
+        $actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('BackTo').' '.get_lang('Draw'), [], 32).'</a>';
     } elseif ($call_from_tool == 'editodf') {
         $actionsLeft .= '<a href="'.$url.'">'.
             Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
-        $actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('BackTo').' '.get_lang('Write'), array(), 32).'</a>';
-        $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png', get_lang('Expand'), array('id'=>'expand'), ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Collapse'), array('id'=>'contract', 'class'=>'hide'), ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('BackTo').' '.get_lang('Write'), [], 32).'</a>';
+        $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png', get_lang('Expand'), ['id' => 'expand'], ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Collapse'), ['id' => 'contract', 'class' => 'hide'], ICON_SIZE_MEDIUM).'</a>';
     } elseif ($call_from_tool == 'editpaint') {
         $actionsLeft .= '<a href="'.$url.'">'.
-            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), array(), ICON_SIZE_MEDIUM).'</a>';
-        $actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('paint.png', get_lang('BackTo').' '.get_lang('Paint'), array(), 32).'</a>';
+            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), [], ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('paint.png', get_lang('BackTo').' '.get_lang('Paint'), [], 32).'</a>';
     } else {
         $actionsLeft .= '<a href="'.$url.'">'.
             Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
-        $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png', get_lang('Expand'), array('id'=>'expand'), ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Collapse'), array('id'=>'contract', 'class'=>'hide'), ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png', get_lang('Expand'), ['id' => 'expand'], ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Collapse'), ['id' => 'contract', 'class' => 'hide'], ICON_SIZE_MEDIUM).'</a>';
     }
 
-    echo $toolbar = Display::toolbarAction('actions-documents', array($actionsLeft));
+    echo $toolbar = Display::toolbarAction('actions-documents', [$actionsLeft]);
 }

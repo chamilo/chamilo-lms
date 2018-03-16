@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TrackStoredValuesStack
+ * TrackStoredValuesStack.
  *
  * @ORM\Table(
  *  name="track_stored_values_stack",
@@ -22,30 +22,30 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackStoredValuesStack
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
     private $id;
-    
+
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
     private $userId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="sco_id", type="integer", nullable=false)
      */
     private $scoId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="stack_order", type="integer", nullable=false)
      */
@@ -73,9 +73,10 @@ class TrackStoredValuesStack
     private $svValue;
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return TrackStoredValuesStack
      */
     public function setUserId($userId)
@@ -86,9 +87,9 @@ class TrackStoredValuesStack
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -96,9 +97,10 @@ class TrackStoredValuesStack
     }
 
     /**
-     * Set scoId
+     * Set scoId.
      *
-     * @param integer $scoId
+     * @param int $scoId
+     *
      * @return TrackStoredValuesStack
      */
     public function setScoId($scoId)
@@ -109,9 +111,9 @@ class TrackStoredValuesStack
     }
 
     /**
-     * Get scoId
+     * Get scoId.
      *
-     * @return integer
+     * @return int
      */
     public function getScoId()
     {
@@ -119,9 +121,10 @@ class TrackStoredValuesStack
     }
 
     /**
-     * Set stackOrder
+     * Set stackOrder.
      *
-     * @param integer $stackOrder
+     * @param int $stackOrder
+     *
      * @return TrackStoredValuesStack
      */
     public function setStackOrder($stackOrder)
@@ -132,9 +135,9 @@ class TrackStoredValuesStack
     }
 
     /**
-     * Get stackOrder
+     * Get stackOrder.
      *
-     * @return integer
+     * @return int
      */
     public function getStackOrder()
     {
@@ -142,9 +145,10 @@ class TrackStoredValuesStack
     }
 
     /**
-     * Set courseId
+     * Set courseId.
      *
      * @param string $courseId
+     *
      * @return TrackStoredValuesStack
      */
     public function setCourseId($courseId)
@@ -155,7 +159,7 @@ class TrackStoredValuesStack
     }
 
     /**
-     * Get courseId
+     * Get courseId.
      *
      * @return string
      */
@@ -165,9 +169,10 @@ class TrackStoredValuesStack
     }
 
     /**
-     * Set svKey
+     * Set svKey.
      *
      * @param string $svKey
+     *
      * @return TrackStoredValuesStack
      */
     public function setSvKey($svKey)
@@ -178,7 +183,7 @@ class TrackStoredValuesStack
     }
 
     /**
-     * Get svKey
+     * Get svKey.
      *
      * @return string
      */
@@ -188,9 +193,10 @@ class TrackStoredValuesStack
     }
 
     /**
-     * Set svValue
+     * Set svValue.
      *
      * @param string $svValue
+     *
      * @return TrackStoredValuesStack
      */
     public function setSvValue($svValue)
@@ -201,7 +207,7 @@ class TrackStoredValuesStack
     }
 
     /**
-     * Get svValue
+     * Get svValue.
      *
      * @return string
      */
@@ -211,9 +217,9 @@ class TrackStoredValuesStack
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

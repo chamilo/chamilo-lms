@@ -3,7 +3,7 @@
 
 /**
  * Class ScheduledAnnouncement
- * Requires DB change:
+ * Requires DB change:.
  *
  * CREATE TABLE scheduled_announcements (id INT AUTO_INCREMENT NOT NULL, subject VARCHAR(255) NOT NULL, message LONGTEXT NOT NULL, date DATETIME DEFAULT NULL, sent TINYINT(1) NOT NULL, session_id INT NOT NULL, c_id INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
  *
@@ -21,10 +21,10 @@
 class ScheduledAnnouncement extends Model
 {
     public $table;
-    public $columns = array('id', 'subject', 'message', 'date', 'sent', 'session_id');
+    public $columns = ['id', 'subject', 'message', 'date', 'sent', 'session_id'];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -37,12 +37,12 @@ class ScheduledAnnouncement extends Model
      *
      * @return array
      */
-    public function get_all($where_conditions = array())
+    public function get_all($where_conditions = [])
     {
         return Database::select(
             '*',
             $this->table,
-            array('where' => $where_conditions, 'order' => 'subject ASC')
+            ['where' => $where_conditions, 'order' => 'subject ASC']
         );
     }
 
@@ -54,7 +54,7 @@ class ScheduledAnnouncement extends Model
         $row = Database::select(
             'count(*) as count',
             $this->table,
-            array(),
+            [],
             'first'
         );
 
@@ -62,7 +62,8 @@ class ScheduledAnnouncement extends Model
     }
 
     /**
-     * Displays the title + grid
+     * Displays the title + grid.
+     *
      * @param int $sessionId
      */
     public function getGrid($sessionId)
@@ -91,12 +92,13 @@ class ScheduledAnnouncement extends Model
     }
 
     /**
-     * Returns a Form validator Obj
-     * @param   string  $url
-     * @param   string  $action add, edit
-     * @param array $sessionInfo
+     * Returns a Form validator Obj.
      *
-     * @return  FormValidator form validator obj
+     * @param string $url
+     * @param string $action      add, edit
+     * @param array  $sessionInfo
+     *
+     * @return FormValidator form validator obj
      */
     public function returnSimpleForm($url, $action, $sessionInfo = [])
     {
@@ -122,27 +124,15 @@ class ScheduledAnnouncement extends Model
     }
 
     /**
-     * @param FormValidator $form
-     */
-    private function setTagsInForm(& $form)
-    {
-        $form->addLabel(
-            get_lang('Tags'),
-            Display::return_message(
-                implode('<br />', $this->getTags()),
-                'normal',
-                false
-            )
-        );
-    }
-
-    /**
-     * Returns a Form validator Obj
+     * Returns a Form validator Obj.
+     *
      * @todo the form should be auto generated
-     * @param   string  $url
-     * @param   string  $action add, edit
+     *
+     * @param string $url
+     * @param string $action add, edit
      * @param array
-     * @return  FormValidator form validator obj
+     *
+     * @return FormValidator form validator obj
      */
     public function returnForm($url, $action, $sessionInfo = [])
     {
@@ -180,7 +170,7 @@ class ScheduledAnnouncement extends Model
         }
 
         $typeOptions = [
-            'specific_date' => get_lang('SpecificDate')
+            'specific_date' => get_lang('SpecificDate'),
         ];
 
         if ($useBaseDate) {
@@ -200,7 +190,7 @@ class ScheduledAnnouncement extends Model
                         document.getElementById('options').style.display = 'none';
                         document.getElementById('specific_date').style.display = 'block';
                     }
-            "]
+            ", ]
         );
 
         $form->addElement('html', '<div id="specific_date">');
@@ -385,7 +375,7 @@ class ScheduledAnnouncement extends Model
             '((user_complete_name))',
             '((user_first_name))',
             '((user_last_name))',
-            '((lp_progress))'
+            '((lp_progress))',
         ];
 
         return $tags;
@@ -397,5 +387,20 @@ class ScheduledAnnouncement extends Model
     public function allowed()
     {
         return api_get_configuration_value('allow_scheduled_announcements');
+    }
+
+    /**
+     * @param FormValidator $form
+     */
+    private function setTagsInForm(&$form)
+    {
+        $form->addLabel(
+            get_lang('Tags'),
+            Display::return_message(
+                implode('<br />', $this->getTags()),
+                'normal',
+                false
+            )
+        );
     }
 }

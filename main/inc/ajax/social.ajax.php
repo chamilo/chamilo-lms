@@ -4,7 +4,7 @@
 use ChamiloSession as Session;
 
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
 require_once __DIR__.'/../global.inc.php';
 
@@ -99,15 +99,15 @@ switch ($action) {
 
                         $friend_html .= '
                             <div class="col-md-3">
-                                <div class="thumbnail text-center" id="div_' . $friends[$j]['friend_user_id'].'">
-                                    <img src="' . $userPicture.'" class="img-responsive" id="imgfriend_'.$friend['friend_user_id'].'" title="$user_name">
+                                <div class="thumbnail text-center" id="div_'.$friends[$j]['friend_user_id'].'">
+                                    <img src="'.$userPicture.'" class="img-responsive" id="imgfriend_'.$friend['friend_user_id'].'" title="$user_name">
                                     <div class="caption">
                                         <h3>
-                                            <a href="profile.php?u=' . $friend['friend_user_id'].'">'.$user_name.'</a>
+                                            <a href="profile.php?u='.$friend['friend_user_id'].'">'.$user_name.'</a>
                                         </h3>
                                         <p>
-                                            <button class="btn btn-danger" onclick="delete_friend(this)" id=img_' . $friend['friend_user_id'].'>
-                                                ' . get_lang('Delete').'
+                                            <button class="btn btn-danger" onclick="delete_friend(this)" id=img_'.$friend['friend_user_id'].'>
+                                                '.get_lang('Delete').'
                                             </button>
                                         </p>
                                     </div>
@@ -181,15 +181,14 @@ switch ($action) {
                     if ($all_result_data == 0) {
                         echo api_xml_http_response_encode(get_lang('NoDataAvailable'));
                     }
-
                 } else {
-                        echo '<div class="clear"></div><br />';
-                        api_display_tool_title(api_xml_http_response_encode(get_lang('Details')));
-                        echo '<div style="background:#FAF9F6; padding:0px;">';
-                        echo api_xml_http_response_encode(get_lang('UserNonRegisteredAtTheCourse'));
-                        echo '<div class="clear"></div><br />';
-                        echo '</div>';
-                        echo '<div class="clear"></div><br />';
+                    echo '<div class="clear"></div><br />';
+                    api_display_tool_title(api_xml_http_response_encode(get_lang('Details')));
+                    echo '<div style="background:#FAF9F6; padding:0px;">';
+                    echo api_xml_http_response_encode(get_lang('UserNonRegisteredAtTheCourse'));
+                    echo '<div class="clear"></div><br />';
+                    echo '</div>';
+                    echo '<div class="clear"></div><br />';
                 }
                 break;
             case 'unload_course':
@@ -217,13 +216,13 @@ switch ($action) {
                     get_lang('SeeMore'),
                     api_get_self().'?u='.$userId.'&a=list_wall_message&start='.
                     ($start + $length + 1).'&length='.$length,
-                    array(
+                    [
                         'class' => 'nextPage',
-                    )
+                    ]
                 ),
-                array(
+                [
                     'class' => 'next',
-                )
+                ]
             );
             echo $html;
         }

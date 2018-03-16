@@ -5,7 +5,6 @@
   hubert.borderiou
   Manage tests category page
  */
-
 $htmlHeadXtra[] = '
 <script>
 	function confirmDelete(in_txt, in_id) {
@@ -105,8 +104,10 @@ function importCategoryForm()
 }
 
 /**
- * Form to edit a category
+ * Form to edit a category.
+ *
  * @todo move to TestCategory.class.php
+ *
  * @param string $action
  */
 function edit_category_form($action)
@@ -193,8 +194,10 @@ function delete_category_form()
 }
 
 /**
- * form to add a category
+ * form to add a category.
+ *
  * @todo move to TestCategory.class.php
+ *
  * @param string $action
  */
 function add_category_form($action)

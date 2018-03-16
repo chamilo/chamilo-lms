@@ -7,11 +7,10 @@ use Sonata\CoreBundle\Model\BaseEntityManager;
 
 /**
  * Class SequenceResourceManager
- * CRUD for the course
+ * CRUD for the course.
  *
  * @package Chamilo\CoreBundle\Entity\Repository
  */
 class SequenceResourceManager extends BaseEntityManager
 {
-
 }

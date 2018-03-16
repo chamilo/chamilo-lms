@@ -1,21 +1,24 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Library for the import of Aiken format
+ * Library for the import of Aiken format.
+ *
  * @author claro team <cvs@claroline.net>
  * @author Guillaume Lederer <guillaume@claroline.net>
  * @author César Perales <cesar.perales@gmail.com> Parse function for Aiken format
+ *
  * @package chamilo.exercise
  */
 
 /**
- * This function displays the form for import of the zip file with qti2
+ * This function displays the form for import of the zip file with qti2.
+ *
  * @param   string  Report message to show in case of error
  */
 function aiken_display_form()
 {
     $name_tools = get_lang('ImportAikenQuiz');
-    $form  = '<div class="actions">';
+    $form = '<div class="actions">';
     $form .= '<a href="exercise.php?show=test&'.api_get_cidreq().'">'.
         Display::return_icon(
             'back.png',
@@ -41,11 +44,13 @@ function aiken_display_form()
 }
 
 /**
- * Gets the uploaded file (from $_FILES) and unzip it to the given directory
+ * Gets the uploaded file (from $_FILES) and unzip it to the given directory.
+ *
  * @param string The directory where to do the work
  * @param string The path of the temporary directory where the exercise was uploaded and unzipped
  * @param string $baseWorkDir
  * @param string $uploadPath
+ *
  * @return bool True on success, false on failure
  */
 function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
@@ -99,8 +104,10 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
 }
 
 /**
- * Main function to import the Aiken exercise
+ * Main function to import the Aiken exercise.
+ *
  * @param string $file
+ *
  * @return mixed True on success, error message on failure
  */
 function aiken_import_exercise($file)
@@ -229,7 +236,8 @@ function aiken_import_exercise($file)
 
 /**
  * Parses an Aiken file and builds an array of exercise + questions to be
- * imported by the import_exercise() function
+ * imported by the import_exercise() function.
+ *
  * @param array The reference to the array in which to store the questions
  * @param string Path to the directory with the file to be parsed (without final /)
  * @param string Name of the last directory part for the file (without /)
@@ -237,7 +245,8 @@ function aiken_import_exercise($file)
  * @param string $exercisePath
  * @param string $file
  * @param string $questionFile
- * @return string|boolean True on success, error message on error
+ *
+ * @return string|bool True on success, error message on error
  * @assert ('','','') === false
  */
 function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
@@ -297,10 +306,12 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
             //moving to next question (tolerate \r\n or just \n)
             if (empty($exercise_info['question'][$question_index]['correct_answers'])) {
                 error_log('Aiken: Error in question index '.$question_index.': no correct answer defined');
+
                 return 'ExerciseAikenErrorNoCorrectAnswerDefined';
             }
             if (empty($exercise_info['question'][$question_index]['answer'])) {
                 error_log('Aiken: Error in question index '.$question_index.': no answer option given');
+
                 return 'ExerciseAikenErrorNoAnswerOptionGiven';
             }
             $question_index++;
@@ -326,12 +337,15 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
     foreach ($exercise_info['question'] as $key => $question) {
         $exercise_info['question'][$key]['weighting'][current(array_keys($exercise_info['question'][$key]['weighting']))] = $total_weight / $total_questions;
     }
+
     return true;
 }
 
 /**
- * Imports the zip file
+ * Imports the zip file.
+ *
  * @param array $array_file ($_FILES)
+ *
  * @return bool
  */
 function aiken_import_file($array_file)

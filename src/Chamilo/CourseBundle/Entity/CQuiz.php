@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CQuiz
+ * CQuiz.
  *
  * @ORM\Table(
  *  name="c_quiz",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CQuiz
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -29,14 +29,14 @@ class CQuiz
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
@@ -64,35 +64,35 @@ class CQuiz
     private $sound;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="type", type="boolean", nullable=false)
      */
     private $type;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="random", type="integer", nullable=false)
      */
     private $random;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="random_answers", type="boolean", nullable=false)
      */
     private $randomAnswers;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="results_disabled", type="integer", nullable=false)
      */
@@ -106,7 +106,7 @@ class CQuiz
     private $accessCondition;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="max_attempt", type="integer", nullable=false)
      */
@@ -127,48 +127,48 @@ class CQuiz
     private $endTime;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="feedback_type", type="integer", nullable=false)
      */
     private $feedbackType;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="expired_time", type="integer", nullable=false)
      */
     private $expiredTime;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=true)
      */
     private $sessionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="propagate_neg", type="integer", nullable=false)
      */
     private $propagateNeg;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORm\Column(name="save_correct_answers", type="boolean", nullable=false)
      */
     private $saveCorrectAnswers;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="review_answers", type="integer", nullable=false)
      */
     private $reviewAnswers;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="random_by_category", type="integer", nullable=false)
      */
@@ -182,28 +182,28 @@ class CQuiz
     private $textWhenFinished;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="display_category_name", type="integer", nullable=false)
      */
     private $displayCategoryName;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="pass_percentage", type="integer", nullable=true)
      */
     private $passPercentage;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="question_selection_type", type="integer", nullable=true)
      */
     private $questionSelectionType;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="hide_question_title", type="boolean", nullable=true)
      */
@@ -218,9 +218,10 @@ class CQuiz
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return CQuiz
      */
     public function setTitle($title)
@@ -231,7 +232,7 @@ class CQuiz
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -241,9 +242,10 @@ class CQuiz
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return CQuiz
      */
     public function setDescription($description)
@@ -254,7 +256,7 @@ class CQuiz
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -264,9 +266,10 @@ class CQuiz
     }
 
     /**
-     * Set sound
+     * Set sound.
      *
      * @param string $sound
+     *
      * @return CQuiz
      */
     public function setSound($sound)
@@ -277,7 +280,7 @@ class CQuiz
     }
 
     /**
-     * Get sound
+     * Get sound.
      *
      * @return string
      */
@@ -287,9 +290,10 @@ class CQuiz
     }
 
     /**
-     * Set type
+     * Set type.
      *
-     * @param boolean $type
+     * @param bool $type
+     *
      * @return CQuiz
      */
     public function setType($type)
@@ -300,9 +304,9 @@ class CQuiz
     }
 
     /**
-     * Get type
+     * Get type.
      *
-     * @return boolean
+     * @return bool
      */
     public function getType()
     {
@@ -310,9 +314,10 @@ class CQuiz
     }
 
     /**
-     * Set random
+     * Set random.
      *
-     * @param integer $random
+     * @param int $random
+     *
      * @return CQuiz
      */
     public function setRandom($random)
@@ -323,9 +328,9 @@ class CQuiz
     }
 
     /**
-     * Get random
+     * Get random.
      *
-     * @return integer
+     * @return int
      */
     public function getRandom()
     {
@@ -333,9 +338,10 @@ class CQuiz
     }
 
     /**
-     * Set randomAnswers
+     * Set randomAnswers.
      *
-     * @param boolean $randomAnswers
+     * @param bool $randomAnswers
+     *
      * @return CQuiz
      */
     public function setRandomAnswers($randomAnswers)
@@ -346,9 +352,9 @@ class CQuiz
     }
 
     /**
-     * Get randomAnswers
+     * Get randomAnswers.
      *
-     * @return boolean
+     * @return bool
      */
     public function getRandomAnswers()
     {
@@ -356,9 +362,10 @@ class CQuiz
     }
 
     /**
-     * Set active
+     * Set active.
      *
-     * @param boolean $active
+     * @param bool $active
+     *
      * @return CQuiz
      */
     public function setActive($active)
@@ -369,9 +376,9 @@ class CQuiz
     }
 
     /**
-     * Get active
+     * Get active.
      *
-     * @return boolean
+     * @return bool
      */
     public function getActive()
     {
@@ -379,9 +386,10 @@ class CQuiz
     }
 
     /**
-     * Set resultsDisabled
+     * Set resultsDisabled.
      *
-     * @param integer $resultsDisabled
+     * @param int $resultsDisabled
+     *
      * @return CQuiz
      */
     public function setResultsDisabled($resultsDisabled)
@@ -392,9 +400,9 @@ class CQuiz
     }
 
     /**
-     * Get resultsDisabled
+     * Get resultsDisabled.
      *
-     * @return integer
+     * @return int
      */
     public function getResultsDisabled()
     {
@@ -402,9 +410,10 @@ class CQuiz
     }
 
     /**
-     * Set accessCondition
+     * Set accessCondition.
      *
      * @param string $accessCondition
+     *
      * @return CQuiz
      */
     public function setAccessCondition($accessCondition)
@@ -415,7 +424,7 @@ class CQuiz
     }
 
     /**
-     * Get accessCondition
+     * Get accessCondition.
      *
      * @return string
      */
@@ -425,9 +434,10 @@ class CQuiz
     }
 
     /**
-     * Set maxAttempt
+     * Set maxAttempt.
      *
-     * @param integer $maxAttempt
+     * @param int $maxAttempt
+     *
      * @return CQuiz
      */
     public function setMaxAttempt($maxAttempt)
@@ -438,9 +448,9 @@ class CQuiz
     }
 
     /**
-     * Get maxAttempt
+     * Get maxAttempt.
      *
-     * @return integer
+     * @return int
      */
     public function getMaxAttempt()
     {
@@ -448,9 +458,10 @@ class CQuiz
     }
 
     /**
-     * Set startTime
+     * Set startTime.
      *
      * @param \DateTime $startTime
+     *
      * @return CQuiz
      */
     public function setStartTime($startTime)
@@ -461,7 +472,7 @@ class CQuiz
     }
 
     /**
-     * Get startTime
+     * Get startTime.
      *
      * @return \DateTime
      */
@@ -471,9 +482,10 @@ class CQuiz
     }
 
     /**
-     * Set endTime
+     * Set endTime.
      *
      * @param \DateTime $endTime
+     *
      * @return CQuiz
      */
     public function setEndTime($endTime)
@@ -484,7 +496,7 @@ class CQuiz
     }
 
     /**
-     * Get endTime
+     * Get endTime.
      *
      * @return \DateTime
      */
@@ -494,9 +506,10 @@ class CQuiz
     }
 
     /**
-     * Set feedbackType
+     * Set feedbackType.
      *
-     * @param integer $feedbackType
+     * @param int $feedbackType
+     *
      * @return CQuiz
      */
     public function setFeedbackType($feedbackType)
@@ -507,9 +520,9 @@ class CQuiz
     }
 
     /**
-     * Get feedbackType
+     * Get feedbackType.
      *
-     * @return integer
+     * @return int
      */
     public function getFeedbackType()
     {
@@ -517,9 +530,10 @@ class CQuiz
     }
 
     /**
-     * Set expiredTime
+     * Set expiredTime.
      *
-     * @param integer $expiredTime
+     * @param int $expiredTime
+     *
      * @return CQuiz
      */
     public function setExpiredTime($expiredTime)
@@ -530,9 +544,9 @@ class CQuiz
     }
 
     /**
-     * Get expiredTime
+     * Get expiredTime.
      *
-     * @return integer
+     * @return int
      */
     public function getExpiredTime()
     {
@@ -540,9 +554,10 @@ class CQuiz
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return CQuiz
      */
     public function setSessionId($sessionId)
@@ -553,9 +568,9 @@ class CQuiz
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -563,9 +578,10 @@ class CQuiz
     }
 
     /**
-     * Set propagateNeg
+     * Set propagateNeg.
      *
-     * @param integer $propagateNeg
+     * @param int $propagateNeg
+     *
      * @return CQuiz
      */
     public function setPropagateNeg($propagateNeg)
@@ -576,9 +592,9 @@ class CQuiz
     }
 
     /**
-     * Get propagateNeg
+     * Get propagateNeg.
      *
-     * @return integer
+     * @return int
      */
     public function getPropagateNeg()
     {
@@ -587,6 +603,7 @@ class CQuiz
 
     /**
      * @param $saveCorrectAnswers boolean
+     *
      * @return CQuiz
      */
     public function setSaveCorrectAnswers($saveCorrectAnswers)
@@ -597,7 +614,7 @@ class CQuiz
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getSaveCorrectAnswers()
     {
@@ -605,9 +622,10 @@ class CQuiz
     }
 
     /**
-     * Set reviewAnswers
+     * Set reviewAnswers.
      *
-     * @param integer $reviewAnswers
+     * @param int $reviewAnswers
+     *
      * @return CQuiz
      */
     public function setReviewAnswers($reviewAnswers)
@@ -618,9 +636,9 @@ class CQuiz
     }
 
     /**
-     * Get reviewAnswers
+     * Get reviewAnswers.
      *
-     * @return integer
+     * @return int
      */
     public function getReviewAnswers()
     {
@@ -628,9 +646,10 @@ class CQuiz
     }
 
     /**
-     * Set randomByCategory
+     * Set randomByCategory.
      *
-     * @param integer $randomByCategory
+     * @param int $randomByCategory
+     *
      * @return CQuiz
      */
     public function setRandomByCategory($randomByCategory)
@@ -641,9 +660,9 @@ class CQuiz
     }
 
     /**
-     * Get randomByCategory
+     * Get randomByCategory.
      *
-     * @return integer
+     * @return int
      */
     public function getRandomByCategory()
     {
@@ -651,9 +670,10 @@ class CQuiz
     }
 
     /**
-     * Set textWhenFinished
+     * Set textWhenFinished.
      *
      * @param string $textWhenFinished
+     *
      * @return CQuiz
      */
     public function setTextWhenFinished($textWhenFinished)
@@ -664,7 +684,7 @@ class CQuiz
     }
 
     /**
-     * Get textWhenFinished
+     * Get textWhenFinished.
      *
      * @return string
      */
@@ -674,9 +694,10 @@ class CQuiz
     }
 
     /**
-     * Set displayCategoryName
+     * Set displayCategoryName.
      *
-     * @param integer $displayCategoryName
+     * @param int $displayCategoryName
+     *
      * @return CQuiz
      */
     public function setDisplayCategoryName($displayCategoryName)
@@ -687,9 +708,9 @@ class CQuiz
     }
 
     /**
-     * Get displayCategoryName
+     * Get displayCategoryName.
      *
-     * @return integer
+     * @return int
      */
     public function getDisplayCategoryName()
     {
@@ -697,9 +718,10 @@ class CQuiz
     }
 
     /**
-     * Set passPercentage
+     * Set passPercentage.
      *
-     * @param integer $passPercentage
+     * @param int $passPercentage
+     *
      * @return CQuiz
      */
     public function setPassPercentage($passPercentage)
@@ -710,9 +732,9 @@ class CQuiz
     }
 
     /**
-     * Get passPercentage
+     * Get passPercentage.
      *
-     * @return integer
+     * @return int
      */
     public function getPassPercentage()
     {
@@ -720,9 +742,10 @@ class CQuiz
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CQuiz
      */
     public function setId($id)
@@ -733,9 +756,9 @@ class CQuiz
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -743,9 +766,10 @@ class CQuiz
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CQuiz
      */
     public function setCId($cId)
@@ -756,9 +780,9 @@ class CQuiz
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -775,6 +799,7 @@ class CQuiz
 
     /**
      * @param int $questionSelectionType
+     *
      * @return CQuiz
      */
     public function setQuestionSelectionType($questionSelectionType)
@@ -785,7 +810,7 @@ class CQuiz
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isHideQuestionTitle()
     {
@@ -793,7 +818,8 @@ class CQuiz
     }
 
     /**
-     * @param boolean $hideQuestionTitle
+     * @param bool $hideQuestionTitle
+     *
      * @return CQuiz
      */
     public function setHideQuestionTitle($hideQuestionTitle)
@@ -802,8 +828,4 @@ class CQuiz
 
         return $this;
     }
-
-
-
-
 }

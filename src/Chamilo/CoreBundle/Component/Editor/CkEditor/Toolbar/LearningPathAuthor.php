@@ -4,15 +4,15 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * LearningPathAuthor toolbar configuration
- * 
+ * LearningPathAuthor toolbar configuration.
+ *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class LearningPathAuthor extends Basic
 {
-
     /**
-     * Get the toolbar config
+     * Get the toolbar config.
+     *
      * @return array
      */
     public function getConfig()
@@ -30,38 +30,40 @@ class LearningPathAuthor extends Basic
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is maximized
+     * Get the toolbar configuration when CKEditor is maximized.
+     *
      * @return array
      */
     protected function getMaximizedToolbar()
     {
         return [
             ['PageBreak', 'ShowBlocks', 'Source'],
-            ['Toolbarswitch']
+            ['Toolbarswitch'],
         ];
     }
 
     /**
-     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false.
+     *
      * @return array
      */
     protected function getNormalToolbar()
     {
         return [
-            ['Link', 'Unlink', 'Bold', 'Italic', 'TextColor', 'BGColor', 'Source']
+            ['Link', 'Unlink', 'Bold', 'Italic', 'TextColor', 'BGColor', 'Source'],
         ];
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is minimized
+     * Get the toolbar configuration when CKEditor is minimized.
+     *
      * @return array
      */
     protected function getMinimizedToolbar()
     {
         return [
             ['Link', 'Unlink', 'Bold', 'Italic', 'TextColor', 'BGColor', 'Source'],
-            ['Toolbarswitch']
+            ['Toolbarswitch'],
         ];
     }
-
 }

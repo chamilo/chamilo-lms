@@ -6,7 +6,7 @@ use ChamiloSession as Session;
 /**
  * Thematic Controller script.
  * Prepares the common background variables to give to the scripts corresponding to
- * the requested action
+ * the requested action.
  *
  * This file contains class used like controller for thematic,
  * it should be included inside a dispatcher file (e.g: index.php)
@@ -22,7 +22,7 @@ use ChamiloSession as Session;
 class ThematicController
 {
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -31,14 +31,15 @@ class ThematicController
     }
 
     /**
-     * This method is used for thematic control (update, insert or listing)
+     * This method is used for thematic control (update, insert or listing).
+     *
      * @param string $action
-     * render to thematic.php
+     *                       render to thematic.php
      */
     public function thematic($action)
     {
         $thematic = new Thematic();
-        $data = array();
+        $data = [];
         $check = Security::check_token('request');
         $thematic_id = isset($_REQUEST['thematic_id']) ? intval($_REQUEST['thematic_id']) : null;
         $displayHeader = !empty($_REQUEST['display']) && $_REQUEST['display'] === 'no_header' ? false : true;
@@ -167,10 +168,10 @@ class ThematicController
                     break;
                 case 'thematic_export':
                     $list = $thematic->get_thematic_list();
-                    $csv = array();
-                    $csv[] = array('type', 'data1', 'data2', 'data3');
+                    $csv = [];
+                    $csv[] = ['type', 'data1', 'data2', 'data3'];
                     foreach ($list as $theme) {
-                        $csv[] = array('title', strip_tags($theme['title']), strip_tags($theme['content']));
+                        $csv[] = ['title', strip_tags($theme['title']), strip_tags($theme['content'])];
                         $data = $thematic->get_thematic_plan_data($theme['id']);
                         if (!empty($data)) {
                             foreach ($data as $plan) {
@@ -181,19 +182,19 @@ class ThematicController
                                 $csv[] = [
                                     'plan',
                                     strip_tags($plan['title']),
-                                    strip_tags($plan['description'])
+                                    strip_tags($plan['description']),
                                 ];
                             }
                         }
                         $data = $thematic->get_thematic_advance_by_thematic_id($theme['id']);
                         if (!empty($data)) {
                             foreach ($data as $advance) {
-                                $csv[] = array(
+                                $csv[] = [
                                     'progress',
                                     strip_tags($advance['start_date']),
                                     strip_tags($advance['duration']),
                                     strip_tags($advance['content']),
-                                );
+                                ];
                             }
                         }
                     }
@@ -202,13 +203,12 @@ class ThematicController
                     // Don't continue building a normal page.
                     return;
                 case 'export_documents':
-                    //no break
                 case 'thematic_export_pdf':
                     $pdfOrientation = api_get_configuration_value('thematic_pdf_orientation');
 
                     $list = $thematic->get_thematic_list();
-                    $item = array();
-                    $listFinish = array();
+                    $item = [];
+                    $listFinish = [];
                     foreach ($list as $theme) {
                         $dataPlan = $thematic->get_thematic_plan_data($theme['id']);
                         if (!empty($dataPlan)) {
@@ -216,13 +216,12 @@ class ThematicController
                                 if (empty($plan['description'])) {
                                     continue;
                                 }
-                                $item[] = array(
+                                $item[] = [
                                     'title' => $plan['title'],
-                                    'description' => $plan['description']
-                                );
+                                    'description' => $plan['description'],
+                                ];
                             }
                             $theme['thematic_plan'] = $item;
-
                         }
                         $dataAdvance = $thematic->get_thematic_advance_by_thematic_id($theme['id']);
                         if (!empty($dataAdvance)) {
@@ -248,7 +247,7 @@ class ThematicController
                             [
                                 'filename' => $fileName,
                                 'pdf_title' => $fileName,
-                                'add_signatures' => $signatures
+                                'add_signatures' => $signatures,
                             ]
                         );
                         $pdf->exportFromHtmlToDocumentsArea($view->fetch($template), $fileName, $courseId);
@@ -264,12 +263,11 @@ class ThematicController
                             'pdf_title' => $title,
                             'add_signatures' => $signatures,
                             'format' => $format,
-                            'orientation' => $orientation
+                            'orientation' => $orientation,
                         ]
                     );
                     break;
                 case 'export_single_documents':
-                    //no break
                 case 'export_single_thematic':
                     $theme = $thematic->get_thematic_list($thematic_id);
                     $plans = $thematic->get_thematic_plan_data($theme['id']);
@@ -302,7 +300,7 @@ class ThematicController
                             [
                                 'filename' => $fileName,
                                 'pdf_title' => $fileName,
-                                'add_signatures' => $signatures
+                                'add_signatures' => $signatures,
                             ]
                         );
                         $pdf->exportFromHtmlToDocumentsArea(
@@ -322,7 +320,7 @@ class ThematicController
                             'pdf_title' => $title,
                             'add_signatures' => $signatures,
                             'format' => $format,
-                            'orientation' => $orientation
+                            'orientation' => $orientation,
                         ]
                     );
                     break;
@@ -387,14 +385,15 @@ class ThematicController
     }
 
     /**
-     * This method is used for thematic plan control (update, insert or listing)
+     * This method is used for thematic plan control (update, insert or listing).
+     *
      * @param string $action
-     * render to thematic_plan.php
+     *                       render to thematic_plan.php
      */
     public function thematic_plan($action)
     {
         $thematic = new Thematic();
-        $data = array();
+        $data = [];
         if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
             if (isset($_POST['action']) &&
                 ($_POST['action'] == 'thematic_plan_add' || $_POST['action'] == 'thematic_plan_edit')
@@ -430,7 +429,7 @@ class ThematicController
 
                                 $saveRedirect .= http_build_query([
                                     'action' => 'thematic_plan_list',
-                                    'thematic_id' => $_REQUEST['thematic_id']
+                                    'thematic_id' => $_REQUEST['thematic_id'],
                                 ]);
                             } else {
                                 $saveRedirect .= 'thematic_plan_save_message=ok';
@@ -514,20 +513,20 @@ class ThematicController
 
     /**
      * This method is used for thematic advance control (update, insert or listing)
-     * render to thematic_advance.php
-     * @param    string $action
+     * render to thematic_advance.php.
      *
+     * @param string $action
      */
     public function thematic_advance($action)
     {
         $thematic = new Thematic();
         $attendance = new Attendance();
-        $data = array();
+        $data = [];
         $displayHeader = (!empty($_REQUEST['display']) && $_REQUEST['display'] === 'no_header') ? false : true;
 
         // get data for attendance input select
         $attendance_list = $attendance->get_attendances_list();
-        $attendance_select = array();
+        $attendance_select = [];
         $attendance_select[0] = get_lang('SelectAnAttendance');
         foreach ($attendance_list as $attendance_id => $attendance_data) {
             $attendance_select[$attendance_id] = $attendance_data['name'];
@@ -535,7 +534,7 @@ class ThematicController
 
         $thematic_id = intval($_REQUEST['thematic_id']);
         $thematic_advance_id = isset($_REQUEST['thematic_advance_id']) ? intval($_REQUEST['thematic_advance_id']) : null;
-        $thematic_advance_data = array();
+        $thematic_advance_data = [];
 
         switch ($action) {
             case 'thematic_advance_delete':
@@ -568,7 +567,7 @@ class ThematicController
         }
 
         // get calendar select by attendance id
-        $calendar_select = array();
+        $calendar_select = [];
         if (!empty($thematic_advance_data)) {
             if (!empty($thematic_advance_data['attendance_id'])) {
                 $attendance_calendar = $attendance->get_attendance_calendar($thematic_advance_data['attendance_id']);

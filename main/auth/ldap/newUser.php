@@ -4,13 +4,15 @@
  * Users trying to login, who do not yet exist in the Chamilo database,
  * can be added by this script which tries to retrieve ldap information
  * about them.
+ *
  * @author Roan Embrechts
+ *
  * @package chamilo.auth.ldap
  */
 /**
  * when a user does not exist yet in dokeos,
  * but he or she does exist in the LDAP,
- * we add him to the dokeos database
+ * we add him to the dokeos database.
  */
 //require_once('../../inc/global.inc.php'); - this script should be loaded by the /index.php script anyway, so global is already loaded
 require_once 'authldap.php';

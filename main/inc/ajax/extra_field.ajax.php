@@ -50,7 +50,7 @@ switch ($action) {
         foreach ($tags as $tag) {
             $result[] = [
                 'id' => $tag->getTag(),
-                'text' => $tag->getTag()
+                'text' => $tag->getTag(),
             ];
         }
 
@@ -73,14 +73,14 @@ switch ($action) {
         foreach ($result as $data) {
             $groups[$data['display_text']][] = [
                 'id' => $data['id'],
-                'text' => $data['tag']
+                'text' => $data['tag'],
             ];
         }
 
         foreach ($groups as $key => $data) {
             $options[] = [
                 'text' => $key,
-                'children' => $groups[$key]
+                'children' => $groups[$key],
             ];
         }
         echo json_encode($options);
@@ -96,7 +96,7 @@ switch ($action) {
 
         $search = [
             'user' => api_get_user_id(),
-            'field' => $extraFieldInfo['id']
+            'field' => $extraFieldInfo['id'],
         ];
 
         $extraFieldSavedSearch = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findOneBy($search);
@@ -111,7 +111,6 @@ switch ($action) {
         }
 
         if ($extraFieldInfo) {
-
             /** @var \Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch $options */
             $extraFieldSavedSearch = $em->getRepository('ChamiloCoreBundle:ExtraFieldSavedSearch')->findOneBy($search);
             $values = $extraFieldSavedSearch->getValue();

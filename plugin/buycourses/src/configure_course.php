@@ -2,10 +2,10 @@
 /* For license terms, see /license.txt */
 
 /**
- * Configuration script for the Buy Courses plugin
+ * Configuration script for the Buy Courses plugin.
+ *
  * @package chamilo.plugin.buycourses
  */
-
 $cidReset = true;
 
 require_once '../config.php';
@@ -58,7 +58,7 @@ if ($editingCourse) {
         $teacher = $courseTeacher->getUser();
         $teachersOptions[] = [
             'text' => $teacher->getCompleteName(),
-            'value' => $teacher->getId()
+            'value' => $teacher->getId(),
         ];
 
         $defaultBeneficiaries[] = $teacher->getId();
@@ -89,7 +89,7 @@ if ($editingCourse) {
         'visible' => $courseItem['visible'],
         'price' => $courseItem['price'],
         'beneficiaries' => $defaultBeneficiaries,
-        ($commissionsEnable == "true") ? 'commissions' : '' => ($commissionsEnable == "true") ? $commissions : ''
+        ($commissionsEnable == "true") ? 'commissions' : '' => ($commissionsEnable == "true") ? $commissions : '',
     ];
 } elseif ($editingSession) {
     if (!$includeSession) {
@@ -106,10 +106,10 @@ if ($editingCourse) {
     $generalCoach = $session->getGeneralCoach();
     $generalCoachOption = [
         'text' => $generalCoach->getCompleteName(),
-        'value' => $generalCoach->getId()
+        'value' => $generalCoach->getId(),
     ];
     $defaultBeneficiaries = [
-        $generalCoach->getId()
+        $generalCoach->getId(),
     ];
     $courseCoachesOptions = [];
     $sessionCourses = $session->getCourses();
@@ -124,7 +124,7 @@ if ($editingCourse) {
 
             $courseCoachesOptions[] = [
                 'text' => $courseCoach->getCompleteName(),
-                'value' => $courseCoach->getId()
+                'value' => $courseCoach->getId(),
             ];
             $defaultBeneficiaries[] = $courseCoach->getId();
         }
@@ -155,7 +155,7 @@ if ($editingCourse) {
         'visible' => $sessionItem['visible'],
         'price' => $sessionItem['price'],
         'beneficiaries' => $defaultBeneficiaries,
-        ($commissionsEnable == "true") ? 'commissions' : '' => ($commissionsEnable == "true") ? $commissions : ''
+        ($commissionsEnable == "true") ? 'commissions' : '' => ($commissionsEnable == "true") ? $commissions : '',
     ];
 } else {
     api_not_allowed(true);
@@ -262,7 +262,7 @@ if ($form->validate()) {
                 'currency_id' => (int) $currency['id'],
                 'product_type' => $formValues['t'],
                 'product_id' => intval($formValues['i']),
-                'price' => floatval($_POST['price'])
+                'price' => floatval($_POST['price']),
             ]);
             $productItem['id'] = $itemId;
         }
@@ -300,11 +300,11 @@ $templateName = $plugin->get_lang('AvailableCourse');
 
 $interbreadcrumb[] = [
     'url' => 'paymentsetup.php',
-    'name' => get_lang('Configuration')
+    'name' => get_lang('Configuration'),
 ];
 $interbreadcrumb[] = [
     'url' => 'configuration.php',
-    'name' => $plugin->get_lang('AvailableCourses')
+    'name' => $plugin->get_lang('AvailableCourses'),
 ];
 
 $template = new Template($templateName);

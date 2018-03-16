@@ -1,9 +1,10 @@
 <?php
 /**
- * Display script for example date plugin
+ * Display script for example date plugin.
+ *
  * @package chamilo.plugin.date
  */
 /**
- * Display
+ * Display.
  */
 echo '<div class="well">'.strip_tags($date).'</div>';

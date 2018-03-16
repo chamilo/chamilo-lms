@@ -4,9 +4,8 @@
 use ChamiloSession as Session;
 
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
-
 require_once __DIR__.'/../global.inc.php';
 api_protect_course_script(true);
 $action = $_REQUEST['a'];
@@ -69,7 +68,7 @@ switch ($action) {
         if (api_is_allowed_to_edit(null, true)) {
             $new_order = $_POST['new_order'];
             $sections = explode('^', $new_order);
-            $new_array = array();
+            $new_array = [];
 
             // We have to update parent_item_id, previous_item_id, next_item_id, display_order in the database
             $LP_item_list = new LP_item_order_list();
@@ -104,7 +103,7 @@ switch ($action) {
             }
 
             foreach ($LP_item_list->list as $LP_item) {
-                $params = array();
+                $params = [];
                 $params['display_order'] = $LP_item->display_order;
                 $params['previous_item_id'] = $LP_item->previous_item_id;
                 $params['next_item_id'] = $LP_item->next_item_id;
@@ -113,12 +112,12 @@ switch ($action) {
                 Database::update(
                     $tbl_lp_item,
                     $params,
-                    array(
-                        'id = ? AND c_id = ? ' => array(
+                    [
+                        'id = ? AND c_id = ? ' => [
                             intval($LP_item->id),
                             $course_id,
-                        ),
-                    )
+                        ],
+                    ]
                 );
             }
             echo Display::return_message(get_lang('Saved'), 'confirm');
@@ -138,7 +137,7 @@ switch ($action) {
             exit;
         }
 
-        foreach (array('video', 'audio') as $type) {
+        foreach (['video', 'audio'] as $type) {
             if (isset($_FILES["${type}-blob"])) {
                 $fileName = $_POST["${type}-filename"];
                 //$file = $_FILES["${type}-blob"]["tmp_name"];
@@ -207,7 +206,7 @@ switch ($action) {
 
         if (!$lpHasForum) {
             echo json_encode([
-                'error' => true
+                'error' => true,
             ]);
             break;
         }
@@ -227,7 +226,7 @@ switch ($action) {
                     [
                         'lp_id' => 0,
                         'forum_category_title' => get_lang('LearningPaths'),
-                        'forum_category_comment' => null
+                        'forum_category_comment' => null,
                     ],
                     [],
                     false
@@ -245,7 +244,7 @@ switch ($action) {
 
         if (!$lpItemHasThread) {
             echo json_encode([
-                'error' => true
+                'error' => true,
             ]);
             break;
         }
@@ -261,7 +260,7 @@ switch ($action) {
         echo json_encode([
             'error' => false,
             'forumId' => intval($forum['forum_id']),
-            'threadId' => intval($forumThreadId)
+            'threadId' => intval($forumThreadId),
         ]);
         break;
     case 'update_gamification':
@@ -269,7 +268,7 @@ switch ($action) {
 
         $jsonGamification = [
             'stars' => 0,
-            'score' => 0
+            'score' => 0,
         ];
 
         if ($lp) {
@@ -325,11 +324,11 @@ exit;
 
 class LP_item_order_list
 {
-    public $list = array();
+    public $list = [];
 
     public function __construct()
     {
-        $this->list = array();
+        $this->list = [];
     }
 
     public function add($in_LP_item_order_item)
@@ -351,7 +350,7 @@ class LP_item_order_list
 
     public function get_list_of_parents()
     {
-        $tab_out_res = array();
+        $tab_out_res = [];
         foreach ($this->list as $LP_item) {
             if (!in_array($LP_item->parent_item_id, $tab_out_res)) {
                 $tab_out_res[] = $LP_item->parent_item_id;

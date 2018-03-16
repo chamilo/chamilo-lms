@@ -31,7 +31,7 @@ if ($trackedExercise->getExeUserId() != intval($_REQUEST['user']) ||
 $attempts = $em->getRepository('ChamiloCoreBundle:TrackEAttempt')
     ->findBy([
         'exeId' => $trackedExercise->getExeId(),
-        'userId' => $trackedExercise->getExeUserId()
+        'userId' => $trackedExercise->getExeUserId(),
     ]);
 
 $newResult = 0;
@@ -47,7 +47,7 @@ foreach ($attempts as $attempt) {
 
     $answers = $em->getRepository('ChamiloCourseBundle:CQuizAnswer')->findBy([
         'questionId' => $questionId,
-        'correct' => 1
+        'correct' => 1,
     ]);
 
     $newMarks = 0;

@@ -45,7 +45,7 @@ if (empty($document_data)) {
     api_not_allowed(true);
 }
 
-$header_file  = $document_data['path'];
+$header_file = $document_data['path'];
 $name_to_show = cut($header_file, 80);
 
 $path_array = explode('/', str_replace('\\', '/', $header_file));
@@ -99,11 +99,11 @@ $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$head
 $pathinfo = pathinfo($header_file);
 
 if ($pathinfo['extension'] == 'swf') {
-	$width = '83%';
-	$height = '83%';
+    $width = '83%';
+    $height = '83%';
 } else {
-	$width = '100%';
-	$height = '100%';
+    $width = '100%';
+    $height = '100%';
 }
 
 echo '<iframe border="0" frameborder="0" scrolling="no" style="width:'.$width.'; height:'.$height.';background-color:#ffffff;" id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&amp;rand='.mt_rand(1, 1000).'"></iframe>';

@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CGroupRelTutor
+ * CGroupRelTutor.
  *
  * @ORM\Table(
  *  name="c_group_rel_tutor",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CGroupRelTutor
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,37 +28,38 @@ class CGroupRelTutor
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
     private $userId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="group_id", type="integer", nullable=false)
      */
     private $groupId;
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return CGroupRelTutor
      */
     public function setUserId($userId)
@@ -69,9 +70,9 @@ class CGroupRelTutor
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -79,9 +80,10 @@ class CGroupRelTutor
     }
 
     /**
-     * Set groupId
+     * Set groupId.
      *
-     * @param integer $groupId
+     * @param int $groupId
+     *
      * @return CGroupRelTutor
      */
     public function setGroupId($groupId)
@@ -92,9 +94,9 @@ class CGroupRelTutor
     }
 
     /**
-     * Get groupId
+     * Get groupId.
      *
-     * @return integer
+     * @return int
      */
     public function getGroupId()
     {
@@ -102,9 +104,10 @@ class CGroupRelTutor
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CGroupRelTutor
      */
     public function setId($id)
@@ -115,9 +118,9 @@ class CGroupRelTutor
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -125,9 +128,10 @@ class CGroupRelTutor
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CGroupRelTutor
      */
     public function setCId($cId)
@@ -138,9 +142,9 @@ class CGroupRelTutor
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

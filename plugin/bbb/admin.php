@@ -1,9 +1,9 @@
 <?php
 /**
- * This script initiates a video conference session, calling the BigBlueButton API
+ * This script initiates a video conference session, calling the BigBlueButton API.
+ *
  * @package chamilo.plugin.bigbluebutton
  */
-
 use Chamilo\UserBundle\Entity\User;
 
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
@@ -27,7 +27,7 @@ $dateEnd = isset($_REQUEST['search_meeting_end']) ? $_REQUEST['search_meeting_en
 
 $dateRange = [
     'search_meeting_start' => $dateStart,
-    'search_meeting_end' => $dateEnd
+    'search_meeting_end' => $dateEnd,
 ];
 
 $form = new FormValidator(get_lang('Search'));
@@ -49,7 +49,7 @@ foreach ($meetings as &$meeting) {
         /** @var User $participant */
         $participant = $meetingParticipant['participant'];
         $meeting['participants'][] = $participant->getCompleteName()
-            . ' ('.$participant->getEmail().')';
+            .' ('.$participant->getEmail().')';
     }
 }
 
@@ -66,7 +66,7 @@ if ($action) {
                     get_lang('Course'),
                     get_lang('Session'),
                     get_lang('Participants'),
-                ]
+                ],
             ];
 
             foreach ($meetings as $meeting) {
@@ -76,7 +76,7 @@ if ($action) {
                     $meeting['record'] == 1 ? get_lang('Yes') : get_lang('No'),
                     $meeting['course'] ? $meeting['course']->getTitle() : '-',
                     $meeting['session'] ? $meeting['session']->getName() : '-',
-                    isset($meeting['participants']) ? implode(PHP_EOL, $meeting['participants']) : null
+                    isset($meeting['participants']) ? implode(PHP_EOL, $meeting['participants']) : null,
                 ];
             }
 
@@ -112,7 +112,7 @@ if ($meetings) {
         api_get_self().'?'.http_build_query([
             'action' => 'export',
             'search_meeting_start' => $dateStart,
-            'search_meeting_end' => $dateEnd
+            'search_meeting_end' => $dateEnd,
         ]),
         'file-excel-o',
         'success'

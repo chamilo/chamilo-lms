@@ -4,17 +4,17 @@
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * Attendance backup script
+ * Attendance backup script.
+ *
  * @package chamilo.backup
  */
-
 class Attendance extends Resource
 {
-    public $params = array();
-    public $attendance_calendar = array();
+    public $params = [];
+    public $attendance_calendar = [];
 
     /**
-     * Create a new Thematic
+     * Create a new Thematic.
      *
      * @param array $params
      */
@@ -25,7 +25,7 @@ class Attendance extends Resource
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function show()
     {

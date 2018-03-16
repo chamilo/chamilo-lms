@@ -2,15 +2,15 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php
+ * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php.
  *
  * @author Patrick Cool
  * @author Denes Nagy
  * @author Roan Embrechts, refactoring and code cleaning
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
+ *
  * @package chamilo.learnpath
-*/
-
+ */
 $this_section = SECTION_COURSES;
 
 api_protect_course_script();
@@ -39,29 +39,29 @@ $result = Database::query($sql_query);
 $therow = Database::fetch_array($result);
 
 if (api_is_in_gradebook()) {
-    $interbreadcrumb[] = array(
+    $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
-    );
+        'name' => get_lang('ToolGradebook'),
+    ];
 }
 
-$interbreadcrumb[] = array(
+$interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths')
-);
-$interbreadcrumb[] = array(
+    'name' => get_lang('LearningPaths'),
+];
+$interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
     "name" => stripslashes("{$therow['name']}"),
-);
-$interbreadcrumb[] = array(
+];
+$interbreadcrumb[] = [
     'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
     'name' => get_lang('NewStep'),
-);
+];
 
 if (isset($_REQUEST['updateaudio'])) {
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('UpdateAllAudioFragments'));
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('UpdateAllAudioFragments')];
 } else {
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('BasicOverview'));
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('BasicOverview')];
 }
 
 // Theme calls.
@@ -166,7 +166,7 @@ var newOrderData= "";
 $(function() {
     <?php
     if (!isset($_REQUEST['updateaudio'])) {
-    ?>
+        ?>
     $("#lp_item_list").sortable({
         items: "li",
         handle: ".moved", //only the class "moved"
@@ -206,7 +206,7 @@ $(function() {
         //Write the newOrderData string out to the listResults form element
         //$("#listResults").val(newOrderData);
         var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
-        $.post("<?php echo api_get_path(WEB_AJAX_PATH)?>lp.ajax.php", order, function(reponse) {
+        $.post("<?php echo api_get_path(WEB_AJAX_PATH); ?>lp.ajax.php", order, function(reponse) {
             $("#message").html(reponse);
         });
 
@@ -217,7 +217,8 @@ $(function() {
         return false;
 
     }); //end of lp_item_list event assignment
-    <?php } ?>
+    <?php
+    } ?>
 
     function processChildren(parentId) {
         //Loop through the children of the UL element defined by the parentId

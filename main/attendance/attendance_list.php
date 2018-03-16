@@ -2,8 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * View (MVC patter) for listing attendances
+ * View (MVC patter) for listing attendances.
+ *
  * @author Christian Fasanando <christian1827@gmail.com>
+ *
  * @package chamilo.attendance
  */
 
@@ -26,22 +28,22 @@ $default_column = isset($default_column) ? $default_column : null;
 $parameters = isset($parameters) ? $parameters : null;
 $table = new SortableTable(
     'attendance_list',
-    array('Attendance', 'get_number_of_attendances'),
-    array('Attendance', 'get_attendance_data'),
+    ['Attendance', 'get_number_of_attendances'],
+    ['Attendance', 'get_attendance_data'],
     $default_column
 );
 $table->set_additional_parameters($parameters);
-$table->set_header(0, '', false, array('style'=>'width:20px;'));
+$table->set_header(0, '', false, ['style' => 'width:20px;']);
 $table->set_header(1, get_lang('Name'), true);
 $table->set_header(2, get_lang('Description'), true);
-$table->set_header(3, get_lang('CountDoneAttendance'), true, array('style'=>'width:90px;'));
+$table->set_header(3, get_lang('CountDoneAttendance'), true, ['style' => 'width:90px;']);
 
 if (api_is_allowed_to_edit(null, true)) {
-    $table->set_header(4, get_lang('Actions'), false, array('style'=>'text-align:center'));
-    $actions = array(
+    $table->set_header(4, get_lang('Actions'), false, ['style' => 'text-align:center']);
+    $actions = [
         'attendance_set_invisible_select' => get_lang('SetInvisible'),
-        'attendance_set_visible_select' => get_lang('SetVisible')
-    );
+        'attendance_set_visible_select' => get_lang('SetVisible'),
+    ];
 
     $allow = api_get_setting('allow_delete_attendance');
     if ($allow === 'true') {

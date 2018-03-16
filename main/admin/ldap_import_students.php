@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script to import students from LDAP
+ * Script to import students from LDAP.
+ *
  * @package chamilo.admin
  * Copyright (c) 2007 Mustapha Alouani (supervised by Michel Moreau-Belliard)
  */
@@ -14,13 +15,13 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 // Access restrictions
 api_protect_admin_script();
-require('../auth/ldap/authldap.php');
+require '../auth/ldap/authldap.php';
 
 $annee_base = date('Y');
 
 $tool_name = get_lang('LDAPImport');
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 
 $htmlHeadXtra[] = '<script>
 var buttoncheck = 1;
@@ -96,7 +97,7 @@ if (empty($annee) && empty($course)) {
 
         //$sr = @ ldap_search($ds, "ou=people,$LDAPbasedn", "(|(edupersonprimaryorgunitdn=ou=$etape,ou=$annee,ou=diploma,o=Paris1,$LDAPbasedn)(edupersonprimaryorgunitdn=ou=02PEL,ou=$annee,ou=diploma,o=Paris1,$LDAPbasedn))");
         //echo "(ou=*$annee,ou=$composante)";
-        $sr = @ ldap_search($ds, $ldap_basedn, "(ou=*$annee)");
+        $sr = @ldap_search($ds, $ldap_basedn, "(ou=*$annee)");
 
         $info = ldap_get_entries($ds, $sr);
 
@@ -128,8 +129,8 @@ if (empty($annee) && empty($course)) {
     echo '</div>';
 } elseif (!empty($annee) && !empty($course) && ($_POST['confirmed'] == 'yes')) {
     $id = $_POST['username_form'];
-    $UserList = array();
-    $userid_match_login = array();
+    $UserList = [];
+    $userid_match_login = [];
     foreach ($id as $form_index => $user_id) {
         if (is_array($_POST['checkboxes']) && in_array($form_index, array_values($_POST['checkboxes']))) {
             $tmp = ldap_add_user($user_id);

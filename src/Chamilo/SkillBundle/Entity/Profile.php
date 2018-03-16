@@ -6,7 +6,7 @@ namespace Chamilo\SkillBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Profile
+ * Profile.
  *
  * @ORM\Table(
  *  name="skill_level_profile"
@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Profile
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -33,13 +33,13 @@ class Profile
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Skill", mappedBy="profile", cascade={"persist"})
-     **/
+     */
     protected $skills;
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\SkillBundle\Entity\Level", mappedBy="profile", cascade={"persist"})
      * @ORM\OrderBy({"position" = "ASC"})
-     **/
+     */
     protected $levels;
 
     /**
@@ -60,6 +60,7 @@ class Profile
 
     /**
      * @param int $id
+     *
      * @return Profile
      */
     public function setId($id)
@@ -79,6 +80,7 @@ class Profile
 
     /**
      * @param string $name
+     *
      * @return Profile
      */
     public function setName($name)
@@ -98,6 +100,7 @@ class Profile
 
     /**
      * @param mixed $skills
+     *
      * @return Profile
      */
     public function setSkills($skills)
@@ -117,6 +120,7 @@ class Profile
 
     /**
      * @param mixed $levels
+     *
      * @return Profile
      */
     public function setLevels($levels)

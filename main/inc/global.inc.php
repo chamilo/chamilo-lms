@@ -10,9 +10,9 @@
  * - include of language files.
  *
  * @package chamilo.include
+ *
  * @todo remove the code that displays the button that links to the install page
  * but use a redirect immediately. By doing so the $alreadyInstalled variable can be removed.
- *
  */
 
 // Showing/hiding error codes in global error messages.
@@ -37,7 +37,7 @@ if (file_exists($kernel->getConfigurationFile())) {
     // Recalculate a system absolute path symlinks insensible.
     $includePath = $_configuration['root_sys'].'main/inc/';
 } else {
-    $_configuration = array();
+    $_configuration = [];
     //Redirects to the main/install/ page
     if (!$alreadyInstalled) {
         $global_error_code = 2;
@@ -122,7 +122,7 @@ $params = array(
 
 // Doctrine ORM configuration
 
-$dbParams = array(
+$dbParams = [
     'driver' => 'pdo_mysql',
     'host' => $_configuration['db_host'],
     'user' => $_configuration['db_user'],
@@ -131,8 +131,8 @@ $dbParams = array(
     // Only relevant for pdo_sqlite, specifies the path to the SQLite database.
     'path' => isset($_configuration['db_path']) ? $_configuration['db_path'] : '',
     // Only relevant for pdo_mysql, pdo_pgsql, and pdo_oci/oci8,
-    'port' => isset($_configuration['db_port']) ? $_configuration['db_port'] : ''
-);
+    'port' => isset($_configuration['db_port']) ? $_configuration['db_port'] : '',
+];
 
 try {
     $database = new \Database();
@@ -213,8 +213,8 @@ ChamiloSession::start($alreadyInstalled);
 if ($_configuration['access_url'] != 1) {
     $url_info = api_get_access_url($_configuration['access_url']);
     if ($url_info['active'] == 1) {
-        $settings_by_access = & api_get_settings(null, 'list', $_configuration['access_url'], 1);
-        foreach ($settings_by_access as & $row) {
+        $settings_by_access = &api_get_settings(null, 'list', $_configuration['access_url'], 1);
+        foreach ($settings_by_access as &$row) {
             if (empty($row['variable'])) {
                 $row['variable'] = 0;
             }
@@ -229,8 +229,8 @@ if ($_configuration['access_url'] != 1) {
     }
 }
 
-$result = & api_get_settings(null, 'list', 1);
-foreach ($result as & $row) {
+$result = &api_get_settings(null, 'list', 1);
+foreach ($result as &$row) {
     if ($_configuration['access_url'] != 1) {
         if ($url_info['active'] == 1) {
             $var = empty($row['variable']) ? 0 : $row['variable'];
@@ -270,12 +270,12 @@ foreach ($result as & $row) {
     }
 }
 
-$result = & api_get_settings('Plugins', 'list', $_configuration['access_url']);
-$_plugins = array();
-foreach ($result as & $row) {
-    $key = & $row['variable'];
+$result = &api_get_settings('Plugins', 'list', $_configuration['access_url']);
+$_plugins = [];
+foreach ($result as &$row) {
+    $key = &$row['variable'];
     if (isset($_setting[$key]) && is_string($_setting[$key])) {
-        $_setting[$key] = array();
+        $_setting[$key] = [];
     }
     if ($row['subkey'] == null) {
         $_setting[$key][] = $row['selected_value'];
@@ -315,15 +315,15 @@ $administrator['email'] = isset($administrator['email']) ? $administrator['email
 $administrator['name'] = isset($administrator['name']) ? $administrator['name'] : 'Admin';
 
 // Including configuration files
-$configurationFiles = array(
+$configurationFiles = [
     'mail.conf.php',
     'profile.conf.php',
     'course_info.conf.php',
     'add_course.conf.php',
     'events.conf.php',
     'auth.conf.php',
-    'portfolio.conf.php'
-);
+    'portfolio.conf.php',
+];
 
 foreach ($configurationFiles as $file) {
     $file = api_get_path(CONFIGURATION_PATH).$file;
@@ -374,7 +374,7 @@ if (isset($this_script) && $this_script == 'sub_language') {
     //getting sub language info
     $sub_language = SubLanguageManager::get_all_information_of_language($_REQUEST['sub_language_id']);
 
-    $english_language_array = $parent_language_array = $sub_language_array = array();
+    $english_language_array = $parent_language_array = $sub_language_array = [];
 
     foreach ($language_files_to_load as $language_file_item) {
         $lang_list_pre = array_keys($GLOBALS);
@@ -525,7 +525,7 @@ if (!empty($valid_languages)) {
 $language_interface_initial_value = $language_interface;
 
 /**
- * Include the trad4all language file
+ * Include the trad4all language file.
  */
 // if the sub-language feature is on
 $parent_path = SubLanguageManager::get_parent_language_path($language_interface);
@@ -601,7 +601,7 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
         if ($res_logout_date < time() - $lifeTime) {
             // it isn't, we should create a fresh entry
             Event::eventLogin($_user['user_id']);
-            // now that it's created, we can get its ID and carry on
+        // now that it's created, we can get its ID and carry on
         } else {
             $sql = "UPDATE $tbl_track_login SET logout_date = '$now'
                     WHERE login_id = '$i_id_last_connection'";

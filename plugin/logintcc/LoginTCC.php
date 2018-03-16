@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class LoginTCC
+ * Class LoginTCC.
  */
 class LoginTCC extends Plugin
 {
@@ -19,7 +19,7 @@ class LoginTCC extends Plugin
                 'tool_enable' => 'boolean',
                 'webservice_url' => 'text',
                 'sso_url' => 'text',
-                'hash' => 'text'
+                'hash' => 'text',
             ]
         );
     }
@@ -30,11 +30,12 @@ class LoginTCC extends Plugin
     public static function create()
     {
         static $result = null;
+
         return $result ? $result : $result = new self();
     }
 
     /**
-     * Install
+     * Install.
      */
     public function install()
     {
@@ -48,7 +49,7 @@ class LoginTCC extends Plugin
                 'default_value' => 0,
                 'visible' => false,
                 'changeable' => true,
-                'filter' => false
+                'filter' => false,
             ];
             $extraField->save($params);
         }
@@ -62,18 +63,16 @@ class LoginTCC extends Plugin
                 'default_value' => 0,
                 'visible' => false,
                 'changeable' => true,
-                'filter' => false
+                'filter' => false,
             ];
             $extraField->save($params);
         }
-
-     }
+    }
 
     /**
-     * Uninstall
+     * Uninstall.
      */
     public function uninstall()
     {
-
     }
 }

@@ -2,27 +2,29 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Defines the scorm class, which is meant to contain the scorm items (nuclear elements)
+ * Defines the scorm class, which is meant to contain the scorm items (nuclear elements).
+ *
  * @package chamilo.learnpath
+ *
  * @author    Yannick Warnier <ywarnier@beeznest.org>
  */
 class scorm extends learnpath
 {
-    public $manifest = array();
-    public $resources = array();
-    public $resources_att = array();
-    public $organizations = array();
-    public $organizations_att = array();
-    public $metadata = array();
+    public $manifest = [];
+    public $resources = [];
+    public $resources_att = [];
+    public $organizations = [];
+    public $organizations_att = [];
+    public $metadata = [];
     // Will hold the references to resources for each item ID found.
-    public $idrefs = array();
+    public $idrefs = [];
     // For each resource found, stores the file url/uri.
-    public $refurls = array();
+    public $refurls = [];
     /*  Path between the scorm/ directory and the imsmanifest.xml e.g.
     maritime_nav/maritime_nav. This is the path that will be used in the
     lp_path when importing a package. */
     public $subdir = '';
-    public $items = array();
+    public $items = [];
     // Keeps the zipfile safe for the object's life so that we can use it if no title avail.
     public $zipname = '';
     // Keeps an index of the number of uses of the zipname so far.
@@ -32,9 +34,10 @@ class scorm extends learnpath
 
     /**
      * Class constructor. Based on the parent constructor.
+     *
      * @param    string    Course code
-     * @param    integer    Learnpath ID in DB
-     * @param    integer    User ID
+     * @param    int    Learnpath ID in DB
+     * @param    int    User ID
      */
     public function __construct($course_code = null, $resource_id = null, $user_id = null)
     {
@@ -46,28 +49,33 @@ class scorm extends learnpath
     }
 
     /**
-     * Opens a resource
-     * @param    integer $id Database ID of the resource
+     * Opens a resource.
+     *
+     * @param int $id Database ID of the resource
      */
     public function open($id)
     {
-        if ($this->debug > 0) { error_log('New LP - scorm::open() - In scorm::open method', 0); }
+        if ($this->debug > 0) {
+            error_log('New LP - scorm::open() - In scorm::open method', 0);
+        }
         // redefine parent method
     }
 
     /**
-     * Possible SCO status: see CAM doc 2.3.2.5.1: passed, completed, browsed, failed, not attempted, incomplete
+     * Possible SCO status: see CAM doc 2.3.2.5.1: passed, completed, browsed, failed, not attempted, incomplete.
      */
 
     /**
-     * Prerequisites: see CAM doc 2.3.2.5.1 for pseudo-code
+     * Prerequisites: see CAM doc 2.3.2.5.1 for pseudo-code.
      */
 
     /**
-     * Parses an imsmanifest.xml file and puts everything into the $manifest array
+     * Parses an imsmanifest.xml file and puts everything into the $manifest array.
+     *
      * @param	string	Path to the imsmanifest.xml file on the system.
      * If not defined, uses the base path of the course's scorm dir
-     * @return	array	Structured array representing the imsmanifest's contents
+     *
+     * @return array Structured array representing the imsmanifest's contents
      */
     public function parse_manifest($file = '')
     {
@@ -216,12 +224,13 @@ class scorm extends learnpath
                 }
             }
             unset($doc);
-            // End parsing using PHP5 DOMXML methods.
+        // End parsing using PHP5 DOMXML methods.
         } else {
             if ($this->debug > 1) {
                 error_log('New LP - Could not open/read file '.$file);
             }
             $this->set_error_msg("File $file could not be read");
+
             return null;
         }
 
@@ -230,52 +239,14 @@ class scorm extends learnpath
     }
 
     /**
-     * Detects the encoding of a given manifest (a xml-text).
-     * It is possible the encoding of the manifest to be wrongly declared or
-     * not to be declared at all. The proposed method tries to resolve these problems.
-     * @param string $xml    The input xml-text.
-     * @return string        The detected value of the input xml.
-     */
-    private function detect_manifest_encoding(& $xml)
-    {
-        if (api_is_valid_utf8($xml)) {
-            return 'UTF-8';
-        }
-
-        if (preg_match(_PCRE_XML_ENCODING, $xml, $matches)) {
-            $declared_encoding = api_refine_encoding_id($matches[1]);
-        } else {
-            $declared_encoding = '';
-        }
-
-        if (!empty($declared_encoding) && !api_is_utf8($declared_encoding)) {
-            return $declared_encoding;
-        }
-
-        $test_string = '';
-        if (preg_match_all('/<langstring[^>]*>(.*)<\/langstring>/m', $xml, $matches)) {
-            $test_string = implode("\n", $matches[1]);
-            unset($matches);
-        }
-        if (preg_match_all('/<title[^>]*>(.*)<\/title>/m', $xml, $matches)) {
-            $test_string .= "\n".implode("\n", $matches[1]);
-            unset($matches);
-        }
-        if (empty($test_string)) {
-            $test_string = $xml;
-        }
-
-        return api_detect_encoding($test_string);
-    }
-
-    /**
-     * Import the scorm object (as a result from the parse_manifest function) into the database structure
-     * @param string $courseCode
-     * @param int $userMaxScore
-     * @param int $sessionId
-     * @param int $userId
+     * Import the scorm object (as a result from the parse_manifest function) into the database structure.
      *
-     * @return bool    Returns -1 on error
+     * @param string $courseCode
+     * @param int    $userMaxScore
+     * @param int    $sessionId
+     * @param int    $userId
+     *
+     * @return bool Returns -1 on error
      */
     public function import_manifest(
         $courseCode,
@@ -302,7 +273,7 @@ class scorm extends learnpath
 
         $sessionId = empty($sessionId) ? api_get_session_id() : intval($sessionId);
         foreach ($this->organizations as $id => $dummy) {
-            $oOrganization = & $this->organizations[$id];
+            $oOrganization = &$this->organizations[$id];
             // Prepare and execute insert queries:
             // -for learnpath
             // -for items
@@ -347,7 +318,7 @@ class scorm extends learnpath
                 'subscribe_users' => 0,
                 'created_on' => $now,
                 'modified_on' => $now,
-                'publicated_on' => $now
+                'publicated_on' => $now,
             ];
 
             $lp_id = Database::insert($new_lp, $params);
@@ -379,7 +350,7 @@ class scorm extends learnpath
             // Now insert all elements from inside that learning path.
             // Make sure we also get the href and sco/asset from the resources.
             $list = $oOrganization->get_flat_items_list();
-            $parents_stack = array(0);
+            $parents_stack = [0];
             $parent = 0;
             $previous = 0;
             $level = 0;
@@ -401,7 +372,7 @@ class scorm extends learnpath
                 $path = '';
                 $type = 'dir';
                 if (isset($this->resources[$item['identifierref']])) {
-                    $oRes = & $this->resources[$item['identifierref']];
+                    $oRes = &$this->resources[$item['identifierref']];
                     $path = @$oRes->get_path();
                     if (!empty($path)) {
                         $temptype = $oRes->get_scorm_type();
@@ -501,12 +472,12 @@ class scorm extends learnpath
                     $courseid = api_get_course_id();
                     $ic_slide->addCourseId($courseid);
                     $ic_slide->addToolId(TOOL_LEARNPATH);
-                    $xapian_data = array(
+                    $xapian_data = [
                         SE_COURSE_ID => $courseid,
                         SE_TOOL_ID => TOOL_LEARNPATH,
-                        SE_DATA => array('lp_id' => $lp_id, 'lp_item'=> $previous, 'document_id' => ''), // TODO: Unify with other lp types.
+                        SE_DATA => ['lp_id' => $lp_id, 'lp_item' => $previous, 'document_id' => ''], // TODO: Unify with other lp types.
                         SE_USER => (int) api_get_user_id(),
-                    );
+                    ];
                     $ic_slide->xapian_data = serialize($xapian_data);
                     $di->addChunk($ic_slide);
                     // Index and return search engine document id.
@@ -525,15 +496,17 @@ class scorm extends learnpath
     }
 
     /**
-     * Intermediate to import_package only to allow import from local zip files
+     * Intermediate to import_package only to allow import from local zip files.
+     *
      * @param  string    Path to the zip file, from the sys root
      * @param  string    Current path (optional)
-     * @return string    Absolute path to the imsmanifest.xml file or empty string on error
+     *
+     * @return string Absolute path to the imsmanifest.xml file or empty string on error
      */
     public function import_local_package($file_path, $current_dir = '')
     {
         // TODO: Prepare info as given by the $_FILES[''] vector.
-        $file_info = array();
+        $file_info = [];
         $file_info['tmp_name'] = $file_path;
         $file_info['name'] = basename($file_path);
         // Call the normal import_package function.
@@ -541,17 +514,18 @@ class scorm extends learnpath
     }
 
     /**
-     * Imports a zip file into the Chamilo structure
-     * @param  string $zip_file_info Zip file info as given by $_FILES['userFile']
+     * Imports a zip file into the Chamilo structure.
+     *
+     * @param string $zip_file_info Zip file info as given by $_FILES['userFile']
      * @param  string
      * @param  array
      *
-     * @return string    $current_dir Absolute path to the imsmanifest.xml file or empty string on error
+     * @return string $current_dir Absolute path to the imsmanifest.xml file or empty string on error
      */
     public function import_package(
         $zip_file_info,
         $current_dir = '',
-        $courseInfo = array()
+        $courseInfo = []
     ) {
         if ($this->debug > 0) {
             error_log('In scorm::import_package('.print_r($zip_file_info, true).',"'.$current_dir.'") method', 0);
@@ -598,7 +572,7 @@ class scorm extends learnpath
         $package_type = '';
         $at_root = false;
         $manifest = '';
-        $manifest_list = array();
+        $manifest_list = [];
 
         // The following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?).
         $realFileSize = 0;
@@ -723,8 +697,8 @@ class scorm extends learnpath
 
                         // TODO: RENAMING FILES CAN BE VERY DANGEROUS SCORM-WISE, avoid that as much as possible!
                         //$safe_file = api_replace_dangerous_char($file, 'strict');
-                        $find_str = array('\\', '.php', '.phtml');
-                        $repl_str = array('/', '.txt', '.txt');
+                        $find_str = ['\\', '.php', '.phtml'];
+                        $repl_str = ['/', '.txt', '.txt'];
                         $safe_file = str_replace($find_str, $repl_str, $file);
 
                         if ($this->debug >= 1) {
@@ -775,9 +749,11 @@ class scorm extends learnpath
     }
 
     /**
-     * Sets the proximity setting in the database
+     * Sets the proximity setting in the database.
+     *
      * @param string    Proximity setting
      * @param int $courseId
+     *
      * @return bool
      */
     public function set_proximity($proxy = '', $courseId = null)
@@ -792,6 +768,7 @@ class scorm extends learnpath
             $sql = "UPDATE $tbl_lp SET content_local = '$proxy'
                     WHERE c_id = ".$courseId." AND id = ".$lp;
             $res = Database::query($sql);
+
             return $res;
         } else {
             return false;
@@ -799,8 +776,10 @@ class scorm extends learnpath
     }
 
     /**
-     * Sets the theme setting in the database
+     * Sets the theme setting in the database.
+     *
      * @param string    theme setting
+     *
      * @return bool
      */
     public function set_theme($theme = '')
@@ -815,6 +794,7 @@ class scorm extends learnpath
             $sql = "UPDATE $tbl_lp SET theme = '$theme' 
                     WHERE c_id = ".$courseId." AND id = ".$lp;
             $res = Database::query($sql);
+
             return $res;
         } else {
             return false;
@@ -822,7 +802,8 @@ class scorm extends learnpath
     }
 
     /**
-     * Sets the image setting in the database
+     * Sets the image setting in the database.
+     *
      * @param string preview_image setting
      * @param bool
      */
@@ -838,6 +819,7 @@ class scorm extends learnpath
             $sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' 
                     WHERE c_id = ".$courseId." AND id = ".$lp;
             $res = Database::query($sql);
+
             return $res;
         } else {
             return false;
@@ -845,7 +827,8 @@ class scorm extends learnpath
     }
 
     /**
-     * Sets the author  setting in the database
+     * Sets the author  setting in the database.
+     *
      * @param string $author
      * @param bool
      */
@@ -861,6 +844,7 @@ class scorm extends learnpath
             $sql = "UPDATE $tbl_lp SET author = '$author' 
                     WHERE c_id = ".$courseId." AND id = ".$lp;
             $res = Database::query($sql);
+
             return $res;
         } else {
             return false;
@@ -868,7 +852,8 @@ class scorm extends learnpath
     }
 
     /**
-     * Sets the content maker setting in the database
+     * Sets the content maker setting in the database.
+     *
      * @param string    Proximity setting
      */
     public function set_maker($maker = '', $courseId = null)
@@ -883,6 +868,7 @@ class scorm extends learnpath
             $sql = "UPDATE $tbl_lp SET content_maker = '$maker'
                     WHERE c_id = ".$courseId." AND id = ".$lp;
             $res = Database::query($sql);
+
             return $res;
         } else {
             return false;
@@ -891,8 +877,9 @@ class scorm extends learnpath
 
     /**
      * Exports the current SCORM object's files as a zip.
-     * Excerpts taken from learnpath_functions.inc.php::exportpath()
-     * @param integer    Learnpath ID (optional, taken from object context if not defined)
+     * Excerpts taken from learnpath_functions.inc.php::exportpath().
+     *
+     * @param int    Learnpath ID (optional, taken from object context if not defined)
      */
     public function export_zip($lp_id = null)
     {
@@ -948,9 +935,11 @@ class scorm extends learnpath
     }
 
     /**
-     * Gets a resource's path if available, otherwise return empty string
+     * Gets a resource's path if available, otherwise return empty string.
+     *
      * @param	string	Resource ID as used in resource array
-     * @return string	The resource's path as declared in imsmanifest.xml
+     *
+     * @return string The resource's path as declared in imsmanifest.xml
      */
     public function get_res_path($id)
     {
@@ -959,16 +948,19 @@ class scorm extends learnpath
         }
         $path = '';
         if (isset($this->resources[$id])) {
-            $oRes = & $this->resources[$id];
+            $oRes = &$this->resources[$id];
             $path = @$oRes->get_path();
         }
+
         return $path;
     }
 
     /**
-     * Gets a resource's type if available, otherwise return empty string
+     * Gets a resource's type if available, otherwise return empty string.
+     *
      * @param  string    Resource ID as used in resource array
-     * @return string    The resource's type as declared in imsmanifest.xml
+     *
+     * @return string The resource's type as declared in imsmanifest.xml
      */
     public function get_res_type($id)
     {
@@ -977,18 +969,20 @@ class scorm extends learnpath
         }
         $type = '';
         if (isset($this->resources[$id])) {
-            $oRes = & $this->resources[$id];
+            $oRes = &$this->resources[$id];
             $temptype = $oRes->get_scorm_type();
             if (!empty($temptype)) {
                 $type = $temptype;
             }
         }
+
         return $type;
     }
 
     /**
-     * Gets the default organisation's title
-     * @return	string	The organization's title
+     * Gets the default organisation's title.
+     *
+     * @return string The organization's title
      */
     public function get_title()
     {
@@ -1005,26 +999,32 @@ class scorm extends learnpath
                 break;
             }
         }
+
         return $title;
     }
 
     /**
      * // TODO @TODO Implement this function to restore items data from an imsmanifest,
      * updating the existing table... This will prove very useful in case initial data
-     * from imsmanifest were not imported well enough
-     * @param string	$courseCode
+     * from imsmanifest were not imported well enough.
+     *
+     * @param string $courseCode
      * @param int	LP ID (in database)
      * @param string	Manifest file path (optional if lp_id defined)
-     * @return	integer	New LP ID or false on failure
-     * TODO @TODO Implement imsmanifest_path parameter
+     *
+     * @return int New LP ID or false on failure
+     *             TODO @TODO Implement imsmanifest_path parameter
      */
     public function reimport_manifest($courseCode, $lp_id = null, $imsmanifest_path = '')
     {
-        if ($this->debug > 0) { error_log('In scorm::reimport_manifest() method', 0); }
+        if ($this->debug > 0) {
+            error_log('In scorm::reimport_manifest() method', 0);
+        }
 
         $courseInfo = api_get_course_info($courseCode);
         if (empty($courseInfo)) {
             $this->error = 'Course code does not exist in database';
+
             return false;
         }
 
@@ -1081,6 +1081,48 @@ class scorm extends learnpath
                 error_log('New LP - In scorm::reimport_manifest() - Could not find manifest file at '.$manifest_file);
             }
         }
+
         return false;
+    }
+
+    /**
+     * Detects the encoding of a given manifest (a xml-text).
+     * It is possible the encoding of the manifest to be wrongly declared or
+     * not to be declared at all. The proposed method tries to resolve these problems.
+     *
+     * @param string $xml the input xml-text
+     *
+     * @return string the detected value of the input xml
+     */
+    private function detect_manifest_encoding(&$xml)
+    {
+        if (api_is_valid_utf8($xml)) {
+            return 'UTF-8';
+        }
+
+        if (preg_match(_PCRE_XML_ENCODING, $xml, $matches)) {
+            $declared_encoding = api_refine_encoding_id($matches[1]);
+        } else {
+            $declared_encoding = '';
+        }
+
+        if (!empty($declared_encoding) && !api_is_utf8($declared_encoding)) {
+            return $declared_encoding;
+        }
+
+        $test_string = '';
+        if (preg_match_all('/<langstring[^>]*>(.*)<\/langstring>/m', $xml, $matches)) {
+            $test_string = implode("\n", $matches[1]);
+            unset($matches);
+        }
+        if (preg_match_all('/<title[^>]*>(.*)<\/title>/m', $xml, $matches)) {
+            $test_string .= "\n".implode("\n", $matches[1]);
+            unset($matches);
+        }
+        if (empty($test_string)) {
+            $test_string = $xml;
+        }
+
+        return api_detect_encoding($test_string);
     }
 }

@@ -2,10 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* View (MVC patter) for editing a course description
-* @author Christian Fasanando <christian1827@gmail.com>
-* @package chamilo.course_description
-*/
+ * View (MVC patter) for editing a course description.
+ *
+ * @author Christian Fasanando <christian1827@gmail.com>
+ *
+ * @package chamilo.course_description
+ */
 
 // protect a course script
 api_protect_course_script(true);
@@ -29,7 +31,7 @@ if (empty($error)) {
     $token = Security::get_token();
 }
 // display categories
-$categories = array();
+$categories = [];
 foreach ($default_description_titles as $id => $title) {
     $categories[$id] = $title;
 }
@@ -95,11 +97,11 @@ $form->addHtmlEditor(
     get_lang('Content'),
     true,
     false,
-    array(
+    [
         'ToolbarSet' => 'TrainingDescription',
         'Width' => '100%',
         'Height' => '200',
-    )
+    ]
 );
 $form->addButtonCreate(get_lang('Save'));
 

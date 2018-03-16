@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CNotebook
+ * CNotebook.
  *
  * @ORM\Table(
  *  name="c_notebook",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CNotebook
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,21 +28,21 @@ class CNotebook
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="notebook_id", type="integer")
      */
     private $notebookId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
@@ -56,7 +56,7 @@ class CNotebook
     private $course;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
@@ -91,16 +91,17 @@ class CNotebook
     private $updateDate;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="status", type="integer", nullable=true)
      */
     private $status;
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return CNotebook
      */
     public function setUserId($userId)
@@ -111,9 +112,9 @@ class CNotebook
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -121,9 +122,10 @@ class CNotebook
     }
 
     /**
-     * Set course
+     * Set course.
      *
      * @param string $course
+     *
      * @return CNotebook
      */
     public function setCourse($course)
@@ -134,7 +136,7 @@ class CNotebook
     }
 
     /**
-     * Get course
+     * Get course.
      *
      * @return string
      */
@@ -144,9 +146,10 @@ class CNotebook
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return CNotebook
      */
     public function setSessionId($sessionId)
@@ -157,9 +160,9 @@ class CNotebook
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -167,9 +170,10 @@ class CNotebook
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return CNotebook
      */
     public function setTitle($title)
@@ -180,7 +184,7 @@ class CNotebook
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -190,9 +194,10 @@ class CNotebook
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return CNotebook
      */
     public function setDescription($description)
@@ -203,7 +208,7 @@ class CNotebook
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -213,9 +218,10 @@ class CNotebook
     }
 
     /**
-     * Set creationDate
+     * Set creationDate.
      *
      * @param \DateTime $creationDate
+     *
      * @return CNotebook
      */
     public function setCreationDate($creationDate)
@@ -226,7 +232,7 @@ class CNotebook
     }
 
     /**
-     * Get creationDate
+     * Get creationDate.
      *
      * @return \DateTime
      */
@@ -236,9 +242,10 @@ class CNotebook
     }
 
     /**
-     * Set updateDate
+     * Set updateDate.
      *
      * @param \DateTime $updateDate
+     *
      * @return CNotebook
      */
     public function setUpdateDate($updateDate)
@@ -249,7 +256,7 @@ class CNotebook
     }
 
     /**
-     * Get updateDate
+     * Get updateDate.
      *
      * @return \DateTime
      */
@@ -259,9 +266,10 @@ class CNotebook
     }
 
     /**
-     * Set status
+     * Set status.
      *
-     * @param integer $status
+     * @param int $status
+     *
      * @return CNotebook
      */
     public function setStatus($status)
@@ -272,9 +280,9 @@ class CNotebook
     }
 
     /**
-     * Get status
+     * Get status.
      *
-     * @return integer
+     * @return int
      */
     public function getStatus()
     {
@@ -282,9 +290,10 @@ class CNotebook
     }
 
     /**
-     * Set notebookId
+     * Set notebookId.
      *
-     * @param integer $notebookId
+     * @param int $notebookId
+     *
      * @return CNotebook
      */
     public function setNotebookId($notebookId)
@@ -295,9 +304,9 @@ class CNotebook
     }
 
     /**
-     * Get notebookId
+     * Get notebookId.
      *
-     * @return integer
+     * @return int
      */
     public function getNotebookId()
     {
@@ -305,9 +314,10 @@ class CNotebook
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CNotebook
      */
     public function setCId($cId)
@@ -318,9 +328,9 @@ class CNotebook
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -328,7 +338,8 @@ class CNotebook
     }
 
     /**
-     * Get iid
+     * Get iid.
+     *
      * @return int
      */
     public function getIid()

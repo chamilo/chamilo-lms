@@ -4,10 +4,9 @@
 namespace Chamilo\CoreBundle\Component\Editor\Driver;
 
 /**
- * Class CourseDriver
+ * Class CourseDriver.
  *
  * @package Chamilo\CoreBundle\Component\Editor\Driver
- *
  */
 class CourseDriver extends Driver implements DriverInterface
 {
@@ -16,7 +15,7 @@ class CourseDriver extends Driver implements DriverInterface
     private $coursePath;
 
     /**
-     * Setups the folder
+     * Setups the folder.
      */
     public function setup()
     {
@@ -95,9 +94,9 @@ class CourseDriver extends Driver implements DriverInterface
                         'read' => false,
                         'write' => false,
                         'hidden' => true,
-                        'locked' => false
-                    ]
-                ]
+                        'locked' => false,
+                    ],
+                ],
             ];
 
             // admin/teachers can create dirs from ckeditor
@@ -128,7 +127,7 @@ class CourseDriver extends Driver implements DriverInterface
                         'read' => false,
                         'write' => false,
                         'hidden' => true,
-                        'locked' => false
+                        'locked' => false,
                     ];
                 }
             }
@@ -139,7 +138,7 @@ class CourseDriver extends Driver implements DriverInterface
                 'read' => false,
                 'write' => false,
                 'hidden' => true,
-                'locked' => false
+                'locked' => false,
             ];
 
             // Allow only the groups I have access
@@ -157,7 +156,7 @@ class CourseDriver extends Driver implements DriverInterface
                             'read' => true,
                             'write' => false,
                             'hidden' => false,
-                            'locked' => false
+                            'locked' => false,
                         ];
                     }
                 }
@@ -171,7 +170,8 @@ class CourseDriver extends Driver implements DriverInterface
 
     /**
      * This is the absolute document course path like
-     * /var/www/portal/data/courses/XXX/document/
+     * /var/www/portal/data/courses/XXX/document/.
+     *
      * @return string
      */
     public function getCourseDocumentSysPath()
@@ -200,7 +200,6 @@ class CourseDriver extends Driver implements DriverInterface
         return $url;
     }
 
-
     /**
      * @return string
      */
@@ -216,7 +215,6 @@ class CourseDriver extends Driver implements DriverInterface
     }
 
     /**
-     *
      * @return string
      */
     public function getCourseDirectory()
@@ -318,7 +316,7 @@ class CourseDriver extends Driver implements DriverInterface
     }
 
     /**
-     * Allow to upload/delete folder or files
+     * Allow to upload/delete folder or files.
      *
      * @return bool
      */
@@ -330,7 +328,7 @@ class CourseDriver extends Driver implements DriverInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function mkdir($path, $name)
     {

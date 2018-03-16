@@ -19,7 +19,7 @@ if (!isset($_FILES['audio_blob'], $_REQUEST['audio_dir'])) {
         header('Content-Type: application/json');
         echo json_encode([
             'error' => true,
-            'message' => Display::return_message(get_lang('UploadError'), 'error')
+            'message' => Display::return_message(get_lang('UploadError'), 'error'),
         ]);
 
         Display::cleanFlashMessages();
@@ -78,7 +78,7 @@ if (!$error) {
         echo json_encode([
             'error' => $error,
             'message' => Display::getFlashToString(),
-            'fileUrl' => $data['document_url']
+            'fileUrl' => $data['document_url'],
         ]);
 
         Display::cleanFlashMessages();

@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CLpItemView
+ * CLpItemView.
  *
  * @ORM\Table(
  *  name="c_lp_item_view",
@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CLpItemView
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -31,49 +31,49 @@ class CLpItemView
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="lp_item_id", type="integer", nullable=false)
      */
     private $lpItemId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="lp_view_id", type="integer", nullable=false)
      */
     private $lpViewId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="view_count", type="integer", nullable=false)
      */
     private $viewCount;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="start_time", type="integer", nullable=false)
      */
     private $startTime;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="total_time", type="integer", nullable=false)
      */
@@ -131,9 +131,10 @@ class CLpItemView
     }
 
     /**
-     * Set lpItemId
+     * Set lpItemId.
      *
-     * @param integer $lpItemId
+     * @param int $lpItemId
+     *
      * @return CLpItemView
      */
     public function setLpItemId($lpItemId)
@@ -144,9 +145,9 @@ class CLpItemView
     }
 
     /**
-     * Get lpItemId
+     * Get lpItemId.
      *
-     * @return integer
+     * @return int
      */
     public function getLpItemId()
     {
@@ -154,9 +155,10 @@ class CLpItemView
     }
 
     /**
-     * Set lpViewId
+     * Set lpViewId.
      *
-     * @param integer $lpViewId
+     * @param int $lpViewId
+     *
      * @return CLpItemView
      */
     public function setLpViewId($lpViewId)
@@ -167,9 +169,9 @@ class CLpItemView
     }
 
     /**
-     * Get lpViewId
+     * Get lpViewId.
      *
-     * @return integer
+     * @return int
      */
     public function getLpViewId()
     {
@@ -177,9 +179,10 @@ class CLpItemView
     }
 
     /**
-     * Set viewCount
+     * Set viewCount.
      *
-     * @param integer $viewCount
+     * @param int $viewCount
+     *
      * @return CLpItemView
      */
     public function setViewCount($viewCount)
@@ -190,9 +193,9 @@ class CLpItemView
     }
 
     /**
-     * Get viewCount
+     * Get viewCount.
      *
-     * @return integer
+     * @return int
      */
     public function getViewCount()
     {
@@ -200,9 +203,10 @@ class CLpItemView
     }
 
     /**
-     * Set startTime
+     * Set startTime.
      *
-     * @param integer $startTime
+     * @param int $startTime
+     *
      * @return CLpItemView
      */
     public function setStartTime($startTime)
@@ -213,9 +217,9 @@ class CLpItemView
     }
 
     /**
-     * Get startTime
+     * Get startTime.
      *
-     * @return integer
+     * @return int
      */
     public function getStartTime()
     {
@@ -223,9 +227,10 @@ class CLpItemView
     }
 
     /**
-     * Set totalTime
+     * Set totalTime.
      *
-     * @param integer $totalTime
+     * @param int $totalTime
+     *
      * @return CLpItemView
      */
     public function setTotalTime($totalTime)
@@ -236,9 +241,9 @@ class CLpItemView
     }
 
     /**
-     * Get totalTime
+     * Get totalTime.
      *
-     * @return integer
+     * @return int
      */
     public function getTotalTime()
     {
@@ -246,9 +251,10 @@ class CLpItemView
     }
 
     /**
-     * Set score
+     * Set score.
      *
      * @param float $score
+     *
      * @return CLpItemView
      */
     public function setScore($score)
@@ -259,7 +265,7 @@ class CLpItemView
     }
 
     /**
-     * Get score
+     * Get score.
      *
      * @return float
      */
@@ -269,9 +275,10 @@ class CLpItemView
     }
 
     /**
-     * Set status
+     * Set status.
      *
      * @param string $status
+     *
      * @return CLpItemView
      */
     public function setStatus($status)
@@ -282,7 +289,7 @@ class CLpItemView
     }
 
     /**
-     * Get status
+     * Get status.
      *
      * @return string
      */
@@ -292,9 +299,10 @@ class CLpItemView
     }
 
     /**
-     * Set suspendData
+     * Set suspendData.
      *
      * @param string $suspendData
+     *
      * @return CLpItemView
      */
     public function setSuspendData($suspendData)
@@ -305,7 +313,7 @@ class CLpItemView
     }
 
     /**
-     * Get suspendData
+     * Get suspendData.
      *
      * @return string
      */
@@ -315,9 +323,10 @@ class CLpItemView
     }
 
     /**
-     * Set lessonLocation
+     * Set lessonLocation.
      *
      * @param string $lessonLocation
+     *
      * @return CLpItemView
      */
     public function setLessonLocation($lessonLocation)
@@ -328,7 +337,7 @@ class CLpItemView
     }
 
     /**
-     * Get lessonLocation
+     * Get lessonLocation.
      *
      * @return string
      */
@@ -338,9 +347,10 @@ class CLpItemView
     }
 
     /**
-     * Set coreExit
+     * Set coreExit.
      *
      * @param string $coreExit
+     *
      * @return CLpItemView
      */
     public function setCoreExit($coreExit)
@@ -351,7 +361,7 @@ class CLpItemView
     }
 
     /**
-     * Get coreExit
+     * Get coreExit.
      *
      * @return string
      */
@@ -361,9 +371,10 @@ class CLpItemView
     }
 
     /**
-     * Set maxScore
+     * Set maxScore.
      *
      * @param string $maxScore
+     *
      * @return CLpItemView
      */
     public function setMaxScore($maxScore)
@@ -374,7 +385,7 @@ class CLpItemView
     }
 
     /**
-     * Get maxScore
+     * Get maxScore.
      *
      * @return string
      */
@@ -384,9 +395,10 @@ class CLpItemView
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CLpItemView
      */
     public function setId($id)
@@ -397,9 +409,9 @@ class CLpItemView
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -407,9 +419,10 @@ class CLpItemView
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CLpItemView
      */
     public function setCId($cId)
@@ -420,9 +433,9 @@ class CLpItemView
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

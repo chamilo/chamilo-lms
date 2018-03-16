@@ -3,6 +3,7 @@
 
 /**
  *	This script displays a form for registering new users.
+ *
  *	@package	 chamilo.admin
  */
 $cidReset = true;
@@ -72,7 +73,6 @@ if (api_is_multiple_url_enabled()) {
         $clean_url = api_replace_dangerous_char($url);
         $clean_url = str_replace('/', '-', $clean_url);
         $clean_url .= '/';
-
 
         $homep = api_get_path(SYS_APP_PATH).'home/'; //homep for Home Path
         $homep_new = api_get_path(SYS_APP_PATH).'home/'.$clean_url; //homep for Home Path added the url
@@ -374,7 +374,7 @@ switch ($action) {
             '',
             ['style' => 'margin: 0px;']
         );
-        $renderer = & $form->defaultRenderer();
+        $renderer = &$form->defaultRenderer();
         $renderer->setHeaderTemplate('');
         $renderer->setFormTemplate('<form{attributes}><table border="0" cellpadding="5" cellspacing="0" width="100%">{content}</table></form>');
         $renderer->setCustomElementTemplate('<tr><td>{element}</td></tr>');
@@ -389,7 +389,7 @@ switch ($action) {
             [
                 'ToolbarSet' => 'PortalHomePage',
                 'Width' => '100%',
-                'Height' => '400'
+                'Height' => '400',
             ]
         );
         $form->addButtonSave(get_lang('Save'));

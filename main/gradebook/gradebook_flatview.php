@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -29,7 +30,7 @@ if (isset($_POST['submit']) && isset($_POST['keyword'])) {
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat=1',
-    'name' => get_lang('ToolGradebook')
+    'name' => get_lang('ToolGradebook'),
 ];
 
 $showeval = isset($_POST['showeval']) ? '1' : '0';
@@ -151,7 +152,7 @@ if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
 if (isset($_GET['exportpdf'])) {
     $interbreadcrumb[] = [
         'url' => api_get_self().'?selectcat='.Security::remove_XSS($_GET['selectcat']).'&'.api_get_cidreq(),
-        'name' => get_lang('FlatView')
+        'name' => get_lang('FlatView'),
     ];
 
     $pageNum = isset($_GET['flatviewlist_page_nr']) ? intval($_GET['flatviewlist_page_nr']) : null;
@@ -161,7 +162,7 @@ if (isset($_GET['exportpdf'])) {
         'offset' => $offset,
         'selectcat' => intval($_GET['selectcat']),
         'flatviewlist_page_nr' => $pageNum,
-        'flatviewlist_per_page' => $perPage
+        'flatviewlist_per_page' => $perPage,
     ]);
 
     $export_pdf_form = new DataForm(

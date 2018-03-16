@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TrackStoredValues
+ * TrackStoredValues.
  *
  * @ORM\Table(
  *  name="track_stored_values",
@@ -22,14 +22,14 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackStoredValues
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
     private $userId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="sco_id", type="integer", nullable=false)
      */
@@ -57,7 +57,7 @@ class TrackStoredValues
     private $svValue;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -65,12 +65,11 @@ class TrackStoredValues
      */
     private $id;
 
-
-
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return TrackStoredValues
      */
     public function setUserId($userId)
@@ -81,9 +80,9 @@ class TrackStoredValues
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -91,9 +90,10 @@ class TrackStoredValues
     }
 
     /**
-     * Set scoId
+     * Set scoId.
      *
-     * @param integer $scoId
+     * @param int $scoId
+     *
      * @return TrackStoredValues
      */
     public function setScoId($scoId)
@@ -104,9 +104,9 @@ class TrackStoredValues
     }
 
     /**
-     * Get scoId
+     * Get scoId.
      *
-     * @return integer
+     * @return int
      */
     public function getScoId()
     {
@@ -114,9 +114,10 @@ class TrackStoredValues
     }
 
     /**
-     * Set courseId
+     * Set courseId.
      *
      * @param string $courseId
+     *
      * @return TrackStoredValues
      */
     public function setCourseId($courseId)
@@ -127,7 +128,7 @@ class TrackStoredValues
     }
 
     /**
-     * Get courseId
+     * Get courseId.
      *
      * @return string
      */
@@ -137,9 +138,10 @@ class TrackStoredValues
     }
 
     /**
-     * Set svKey
+     * Set svKey.
      *
      * @param string $svKey
+     *
      * @return TrackStoredValues
      */
     public function setSvKey($svKey)
@@ -150,7 +152,7 @@ class TrackStoredValues
     }
 
     /**
-     * Get svKey
+     * Get svKey.
      *
      * @return string
      */
@@ -160,9 +162,10 @@ class TrackStoredValues
     }
 
     /**
-     * Set svValue
+     * Set svValue.
      *
      * @param string $svValue
+     *
      * @return TrackStoredValues
      */
     public function setSvValue($svValue)
@@ -173,7 +176,7 @@ class TrackStoredValues
     }
 
     /**
-     * Get svValue
+     * Get svValue.
      *
      * @return string
      */
@@ -183,9 +186,9 @@ class TrackStoredValues
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

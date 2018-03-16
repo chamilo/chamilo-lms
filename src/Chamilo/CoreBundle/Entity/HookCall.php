@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * HookCall
+ * HookCall.
  *
  * @ORM\Table(name="hook_call")
  * @ORM\Entity
@@ -14,42 +14,42 @@ use Doctrine\ORM\Mapping as ORM;
 class HookCall
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="hook_event_id", type="integer", nullable=false)
      */
     private $hookEventId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="hook_observer_id", type="integer", nullable=false)
      */
     private $hookObserverId;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="type", type="boolean", nullable=false)
      */
     private $type;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="hook_order", type="integer", nullable=false)
      */
     private $hookOrder;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
     private $enabled;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -57,12 +57,11 @@ class HookCall
      */
     private $id;
 
-
-
     /**
-     * Set hookEventId
+     * Set hookEventId.
      *
-     * @param integer $hookEventId
+     * @param int $hookEventId
+     *
      * @return HookCall
      */
     public function setHookEventId($hookEventId)
@@ -73,9 +72,9 @@ class HookCall
     }
 
     /**
-     * Get hookEventId
+     * Get hookEventId.
      *
-     * @return integer
+     * @return int
      */
     public function getHookEventId()
     {
@@ -83,9 +82,10 @@ class HookCall
     }
 
     /**
-     * Set hookObserverId
+     * Set hookObserverId.
      *
-     * @param integer $hookObserverId
+     * @param int $hookObserverId
+     *
      * @return HookCall
      */
     public function setHookObserverId($hookObserverId)
@@ -96,9 +96,9 @@ class HookCall
     }
 
     /**
-     * Get hookObserverId
+     * Get hookObserverId.
      *
-     * @return integer
+     * @return int
      */
     public function getHookObserverId()
     {
@@ -106,9 +106,10 @@ class HookCall
     }
 
     /**
-     * Set type
+     * Set type.
      *
-     * @param boolean $type
+     * @param bool $type
+     *
      * @return HookCall
      */
     public function setType($type)
@@ -119,9 +120,9 @@ class HookCall
     }
 
     /**
-     * Get type
+     * Get type.
      *
-     * @return boolean
+     * @return bool
      */
     public function getType()
     {
@@ -129,9 +130,10 @@ class HookCall
     }
 
     /**
-     * Set hookOrder
+     * Set hookOrder.
      *
-     * @param integer $hookOrder
+     * @param int $hookOrder
+     *
      * @return HookCall
      */
     public function setHookOrder($hookOrder)
@@ -142,9 +144,9 @@ class HookCall
     }
 
     /**
-     * Get hookOrder
+     * Get hookOrder.
      *
-     * @return integer
+     * @return int
      */
     public function getHookOrder()
     {
@@ -152,9 +154,10 @@ class HookCall
     }
 
     /**
-     * Set enabled
+     * Set enabled.
      *
-     * @param boolean $enabled
+     * @param bool $enabled
+     *
      * @return HookCall
      */
     public function setEnabled($enabled)
@@ -165,9 +168,9 @@ class HookCall
     }
 
     /**
-     * Get enabled
+     * Get enabled.
      *
-     * @return boolean
+     * @return bool
      */
     public function getEnabled()
     {
@@ -175,9 +178,9 @@ class HookCall
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

@@ -2,13 +2,13 @@
 /**
  * MenuItemInterface.php
  * avanzu-admin
- * Date: 23.02.14
+ * Date: 23.02.14.
  */
 
 namespace Chamilo\ThemeBundle\Model;
 
 /**
- * Interface MenuItemInterface
+ * Interface MenuItemInterface.
  *
  * @package Chamilo\ThemeBundle\Model
  */
@@ -30,19 +30,19 @@ interface MenuItemInterface
     public function getRoute();
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isActive();
 
     /**
-     * @param boolean $isActive
+     * @param bool $isActive
      *
      * @return MenuItemModel
      */
     public function setIsActive($isActive);
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function hasChildren();
 
@@ -86,7 +86,7 @@ interface MenuItemInterface
     public function getParent();
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function hasParent();
 

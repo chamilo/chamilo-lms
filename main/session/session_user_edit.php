@@ -27,11 +27,10 @@ if (empty($sessionId) || empty($userId)) {
     api_not_allowed(true);
 }
 
-
 $interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
 $interbreadcrumb[] = [
     'url' => "resume_session.php?id_session=".$sessionId,
-    "name" => get_lang('SessionOverview')
+    "name" => get_lang('SessionOverview'),
 ];
 
 $form = new FormValidator('edit', 'post', api_get_self().'?session_id='.$sessionId.'&user_id='.$userId);

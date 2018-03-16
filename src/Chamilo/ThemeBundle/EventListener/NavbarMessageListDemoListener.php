@@ -8,7 +8,8 @@ use Chamilo\ThemeBundle\Model\MessageModel;
 use Chamilo\ThemeBundle\Model\UserModel;
 
 /**
- * Class NavbarMessageListDemoListener
+ * Class NavbarMessageListDemoListener.
+ *
  * @package Chamilo\ThemeBundle\EventListener
  */
 class NavbarMessageListDemoListener

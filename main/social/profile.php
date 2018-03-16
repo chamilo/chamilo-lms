@@ -4,13 +4,15 @@
 use ChamiloSession as Session;
 
 /**
- * This is the profile social main page
+ * This is the profile social main page.
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  * @author Isaac Flores Paz <florespaz_isaac@hotmail.com>
+ *
  * @todo use Display::panel()
+ *
  * @package chamilo.social
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -116,7 +118,7 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
             if (in_array($my_status, [
                     USER_RELATION_TYPE_PARENT,
                     USER_RELATION_TYPE_FRIEND,
-                    USER_RELATION_TYPE_GOODFRIEND
+                    USER_RELATION_TYPE_GOODFRIEND,
                 ])
             ) {
                 $show_full_profile = true;
@@ -129,7 +131,7 @@ if (!empty($_POST['social_wall_new_msg_main']) || !empty($_FILES['picture']['tmp
             if (in_array($my_friend_status, [
                     USER_RELATION_TYPE_PARENT,
                     USER_RELATION_TYPE_FRIEND,
-                    USER_RELATION_TYPE_GOODFRIEND
+                    USER_RELATION_TYPE_GOODFRIEND,
                 ])
             ) {
                 $show_full_profile = true;
@@ -169,7 +171,7 @@ $htmlHeadXtra[] = '<script>
 $(document).ready(function(){
     var container = $("#wallMessages");
     container.jscroll({
-        loadingHtml: "<div class=\"well_border\">' . get_lang('Loading').' </div>",
+        loadingHtml: "<div class=\"well_border\">'.get_lang('Loading').' </div>",
         nextSelector: "a.nextPage:last",
         contentSelector: "",
         callback: timeAgo
@@ -201,7 +203,7 @@ if (isset($_GET['u']) && is_numeric($_GET['u']) && $_GET['u'] != api_get_user_id
     $info_user = api_get_user_info($_GET['u']);
     $interbreadcrumb[] = [
         'url' => '#',
-        'name' => $info_user['complete_name']
+        'name' => $info_user['complete_name'],
     ];
     $nametool = '';
 }
@@ -294,7 +296,7 @@ $(document).ready(function() {
                 '");
             },
             type: "POST",
-            url: "'. api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=read_url_with_open_graph",
+            url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=read_url_with_open_graph",
             data: "social_wall_new_msg_main=" + e.originalEvent.clipboardData.getData("text"),
             success: function(response) {
                 $("[name=\'wall_post_button\']").prop( "disabled", false );
@@ -480,7 +482,7 @@ if ($show_full_profile) {
                 break;
             }
             $id = $result['id'];
-            $url_open  = '<a href="group_view.php?id='.$id.'">';
+            $url_open = '<a href="group_view.php?id='.$id.'">';
             $url_close = '</a>';
             $icon = '';
             $name = cut($result['name'], CUT_GROUP_NAME, true);
@@ -488,13 +490,13 @@ if ($show_full_profile) {
                 $icon = Display::return_icon(
                     'social_group_admin.png',
                     get_lang('Admin'),
-                    ['style'=>'vertical-align:middle;width:16px;height:16px;']
+                    ['style' => 'vertical-align:middle;width:16px;height:16px;']
                 );
             } elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
                 $icon = Display::return_icon(
                     'social_group_moderator.png',
                     get_lang('Moderator'),
-                    ['style'=>'vertical-align:middle;width:16px;height:16px;']
+                    ['style' => 'vertical-align:middle;width:16px;height:16px;']
                 );
             }
             $count_users_group = count($userGroup->get_all_users_by_group($id));
@@ -629,7 +631,7 @@ if ($show_full_profile) {
                         api_get_path(WEB_AJAX_PATH).'social.ajax.php?'.http_build_query([
                             'a' => 'add_friend',
                             'friend_id' => $user_invitation_id,
-                            'is_my_friend' => 'friend'
+                            'is_my_friend' => 'friend',
                         ]),
                         'plus',
                         'default',

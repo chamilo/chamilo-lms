@@ -2,13 +2,15 @@
 /* For licensing terms, see /license.txt */
 /**
  * Course expiration reminder.
+ *
  * @package chamilo.cron
+ *
  * @author Imanol Losada <imanol.losada@beeznest.com>
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
 /**
- * Initialization
+ * Initialization.
  */
 if (php_sapi_name() != 'cli') {
     exit; //do not run from browser
@@ -76,7 +78,7 @@ foreach ($sessions as $sessionId => $userIds) {
     while ($row = Database::fetch_array($result)) {
         $usersToBeReminded[$row['user_id']][$row['session_id']] = [
             'name' => $row['name'],
-            'access_end_date' => $row['access_end_date']
+            'access_end_date' => $row['access_end_date'],
         ];
     }
 }
@@ -90,7 +92,7 @@ if ($usersToBeReminded) {
             null,
             PERSON_NAME_EMAIL_ADDRESS
         ),
-        'email' => api_get_setting("emailAdministrator")
+        'email' => api_get_setting("emailAdministrator"),
     ];
     echo "\n======================================================================\n\n";
     foreach ($usersToBeReminded as $userId => $sessions) {
@@ -110,10 +112,10 @@ if ($usersToBeReminded) {
                 [
                     'where' => [
                         'session_id = ?' => [
-                            $sessionId
-                        ]
+                            $sessionId,
+                        ],
                     ],
-                    'limit' => '1'
+                    'limit' => '1',
                 ]
             );
 

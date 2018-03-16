@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SysCalendar
+ * SysCalendar.
  *
  * @ORM\Table(name="sys_calendar")
  * @ORM\Entity
@@ -42,21 +42,21 @@ class SysCalendar
     private $endDate;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="access_url_id", type="integer", nullable=false)
      */
     private $accessUrlId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="all_day", type="integer", nullable=false)
      */
     private $allDay;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -64,12 +64,11 @@ class SysCalendar
      */
     private $id;
 
-
-
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return SysCalendar
      */
     public function setTitle($title)
@@ -80,7 +79,7 @@ class SysCalendar
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -90,9 +89,10 @@ class SysCalendar
     }
 
     /**
-     * Set content
+     * Set content.
      *
      * @param string $content
+     *
      * @return SysCalendar
      */
     public function setContent($content)
@@ -103,7 +103,7 @@ class SysCalendar
     }
 
     /**
-     * Get content
+     * Get content.
      *
      * @return string
      */
@@ -113,9 +113,10 @@ class SysCalendar
     }
 
     /**
-     * Set startDate
+     * Set startDate.
      *
      * @param \DateTime $startDate
+     *
      * @return SysCalendar
      */
     public function setStartDate($startDate)
@@ -126,7 +127,7 @@ class SysCalendar
     }
 
     /**
-     * Get startDate
+     * Get startDate.
      *
      * @return \DateTime
      */
@@ -136,9 +137,10 @@ class SysCalendar
     }
 
     /**
-     * Set endDate
+     * Set endDate.
      *
      * @param \DateTime $endDate
+     *
      * @return SysCalendar
      */
     public function setEndDate($endDate)
@@ -149,7 +151,7 @@ class SysCalendar
     }
 
     /**
-     * Get endDate
+     * Get endDate.
      *
      * @return \DateTime
      */
@@ -159,9 +161,10 @@ class SysCalendar
     }
 
     /**
-     * Set accessUrlId
+     * Set accessUrlId.
      *
-     * @param integer $accessUrlId
+     * @param int $accessUrlId
+     *
      * @return SysCalendar
      */
     public function setAccessUrlId($accessUrlId)
@@ -172,9 +175,9 @@ class SysCalendar
     }
 
     /**
-     * Get accessUrlId
+     * Get accessUrlId.
      *
-     * @return integer
+     * @return int
      */
     public function getAccessUrlId()
     {
@@ -182,9 +185,10 @@ class SysCalendar
     }
 
     /**
-     * Set allDay
+     * Set allDay.
      *
-     * @param integer $allDay
+     * @param int $allDay
+     *
      * @return SysCalendar
      */
     public function setAllDay($allDay)
@@ -195,9 +199,9 @@ class SysCalendar
     }
 
     /**
-     * Get allDay
+     * Get allDay.
      *
-     * @return integer
+     * @return int
      */
     public function getAllDay()
     {
@@ -205,9 +209,9 @@ class SysCalendar
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

@@ -2,12 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* Template (front controller in MVC pattern) used for distpaching
- * to the controllers depend on the current action
-* @author Christian Fasanando <christian1827@gmail.com>
-* @package chamilo.course_description
-*/
-
+ * Template (front controller in MVC pattern) used for distpaching
+ * to the controllers depend on the current action.
+ *
+ * @author Christian Fasanando <christian1827@gmail.com>
+ *
+ * @package chamilo.course_description
+ */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_DESCRIPTION;
 

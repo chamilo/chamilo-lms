@@ -8,7 +8,7 @@ use Knp\Menu\MenuItem;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class SidebarMenuKnpEvent
+ * Class SidebarMenuKnpEvent.
  *
  * @package Chamilo\ThemeBundle\Event
  */
@@ -73,8 +73,6 @@ class SidebarMenuKnpEvent extends ThemeEvent
 
     /**
      * @param $id
-     *
-     * @return null
      */
     public function getRootItem($id)
     {
@@ -91,6 +89,7 @@ class SidebarMenuKnpEvent extends ThemeEvent
                 return $child;
             }
         }
+
         return null;
     }
 }

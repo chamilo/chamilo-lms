@@ -8,7 +8,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Class FormDemoModelType
+ * Class FormDemoModelType.
+ *
  * @package Chamilo\ThemeBundle\Form
  */
 class FormDemoModelType extends AbstractType

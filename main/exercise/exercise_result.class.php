@@ -3,15 +3,17 @@
 
 /**
  * Class ExerciseResult
- * which allows you to export exercises results in multiple presentation forms
+ * which allows you to export exercises results in multiple presentation forms.
+ *
  * @package chamilo.exercise
+ *
  * @author Yannick Warnier
-*/
+ */
 class ExerciseResult
 {
-    private $results = [];
     public $includeAllUsers = false;
     public $onlyBestAttempts = false;
+    private $results = [];
 
     /**
      * @param bool $includeAllUsers
@@ -30,12 +32,12 @@ class ExerciseResult
     }
 
     /**
-     * Gets the results of all students (or just one student if access is limited)
+     * Gets the results of all students (or just one student if access is limited).
      *
      * @param string $document_path The document path (for HotPotatoes retrieval)
-     * @param int $user_id User ID. Optional. If no user ID is provided, we take all the results. Defauts to null
-     * @param int $filter
-     * @param int $exercise_id
+     * @param int    $user_id       User ID. Optional. If no user ID is provided, we take all the results. Defauts to null
+     * @param int    $filter
+     * @param int    $exercise_id
      *
      * @return bool
      */
@@ -278,14 +280,15 @@ class ExerciseResult
     }
 
     /**
-     * Exports the complete report as a CSV file
-     * @param    string $document_path Document path inside the document tool
-     * @param    integer $user_id Optional user ID
-     * @param    boolean $export_user_fields Whether to include user fields or not
-     * @param    int $export_filter
-     * @param    int $exercise_id
+     * Exports the complete report as a CSV file.
      *
-     * @return  boolean False on error
+     * @param string $document_path      Document path inside the document tool
+     * @param int    $user_id            Optional user ID
+     * @param bool   $export_user_fields Whether to include user fields or not
+     * @param int    $export_filter
+     * @param int    $exercise_id
+     *
+     * @return bool False on error
      */
     public function exportCompleteReportCSV(
         $document_path = '',
@@ -426,18 +429,20 @@ class ExerciseResult
         header('Content-Description: '.$filename);
         header('Content-transfer-encoding: binary');
         echo $data;
+
         return true;
     }
 
     /**
-     * Exports the complete report as an XLS file
+     * Exports the complete report as an XLS file.
      *
      * @param string $document_path
-     * @param null $user_id
-     * @param bool $export_user_fields
-     * @param int $export_filter
-     * @param int $exercise_id
-     * @param null $hotpotato_name
+     * @param null   $user_id
+     * @param bool   $export_user_fields
+     * @param int    $export_filter
+     * @param int    $exercise_id
+     * @param null   $hotpotato_name
+     *
      * @return bool
      */
     public function exportCompleteReportXLS(

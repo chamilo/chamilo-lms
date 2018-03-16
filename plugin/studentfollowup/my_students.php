@@ -106,7 +106,7 @@ $form->addText(
     get_lang('Search'),
     false,
     [
-        'aria-label' => get_lang("SearchUsers")
+        'aria-label' => get_lang("SearchUsers"),
     ]
 );
 $form->addButtonSearch(get_lang('Search'));

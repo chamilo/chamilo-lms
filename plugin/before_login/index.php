@@ -2,9 +2,7 @@
 /**
  * @package chamilo.plugin.before_login
  */
-
 if (api_is_anonymous()) {
-
     // Only available in the index.php page
     $loginAccepted = isset($_SESSION['before_login_accepted']) ? $_SESSION['before_login_accepted'] : null;
     $parsedUrl = parse_url($_SERVER['REQUEST_URI']);
@@ -34,7 +32,7 @@ if (api_is_anonymous()) {
 
     $form = new FormValidator('form');
 
-    $renderer = & $form->defaultRenderer();
+    $renderer = &$form->defaultRenderer();
     $renderer->setFormTemplate('<form{attributes}><table border="0" cellpadding="5" cellspacing="0" width="100%">{content}</table></form>');
     $renderersetCustomElementTemplate->setCustomElementTemplate('<tr><td>{element}</td></tr>');
 
@@ -54,7 +52,7 @@ if (api_is_anonymous()) {
     $form2 = new FormValidator('form');
 
     if (!empty($option2) && !empty($urlOption2)) {
-        $renderer = & $form2->defaultRenderer();
+        $renderer = &$form2->defaultRenderer();
         $renderer->setHeaderTemplate('');
         $renderer->setFormTemplate('<form{attributes}><table border="0" cellpadding="5" cellspacing="0" width="100%">{content}</table></form>');
         $renderer->setCustomElementTemplate('<tr><td>{element}</td></tr>');

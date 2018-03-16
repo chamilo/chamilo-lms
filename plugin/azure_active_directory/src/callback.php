@@ -28,7 +28,7 @@ $u = [
     'language' => 'en',
     'password' => 'azure_active_directory',
     'auth_source' => 'azure_active_directory '.$jwtPayload->idp,
-    'extra' => []
+    'extra' => [],
 ];
 
 $userInfo = api_get_user_info_from_email($jwtPayload->emails[0]);

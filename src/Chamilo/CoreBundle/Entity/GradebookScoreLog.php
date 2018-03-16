@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * GradebookScoreLog
+ * GradebookScoreLog.
  *
  * @ORM\Table(
  *      name="gradebook_score_log", indexes={
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class GradebookScoreLog
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -28,14 +28,14 @@ class GradebookScoreLog
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="category_id", type="integer", nullable=false)
      */
     private $categoryId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
@@ -56,7 +56,8 @@ class GradebookScoreLog
     private $registeredAt;
 
     /**
-     * Get the category id
+     * Get the category id.
+     *
      * @return int
      */
     public function getCategoryId()
@@ -65,7 +66,8 @@ class GradebookScoreLog
     }
 
     /**
-     * Get the user id
+     * Get the user id.
+     *
      * @return int
      */
     public function getUserId()
@@ -74,7 +76,8 @@ class GradebookScoreLog
     }
 
     /**
-     * Get the achieved score
+     * Get the achieved score.
+     *
      * @return float
      */
     public function getScore()
@@ -83,7 +86,8 @@ class GradebookScoreLog
     }
 
     /**
-     * Get the datetime of register
+     * Get the datetime of register.
+     *
      * @return \DateTime
      */
     public function getRegisteredAt()
@@ -92,8 +96,9 @@ class GradebookScoreLog
     }
 
     /**
-     * Get the id
-     * @return integer
+     * Get the id.
+     *
+     * @return int
      */
     public function getId()
     {
@@ -101,7 +106,8 @@ class GradebookScoreLog
     }
 
     /**
-     * Set the category id
+     * Set the category id.
+     *
      * @param int $categoryId
      *
      * @return $this
@@ -114,7 +120,8 @@ class GradebookScoreLog
     }
 
     /**
-     * Set the user id
+     * Set the user id.
+     *
      * @param int $userId
      *
      * @return $this
@@ -127,7 +134,8 @@ class GradebookScoreLog
     }
 
     /**
-     * Set the achieved score
+     * Set the achieved score.
+     *
      * @param float $score
      *
      * @return $this
@@ -140,7 +148,8 @@ class GradebookScoreLog
     }
 
     /**
-     * Set the datetime of register
+     * Set the datetime of register.
+     *
      * @param \DateTime $registeredAt
      *
      * @return $this
@@ -153,7 +162,8 @@ class GradebookScoreLog
     }
 
     /**
-     * Set the id
+     * Set the id.
+     *
      * @param int $id
      *
      * @return $this

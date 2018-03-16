@@ -1,9 +1,8 @@
 <?php
 /**
 * PHPMailer language file: refer to English translation for definitive list
-* Polish Version
+* Polish Version.
 */
-
 $PHPMAILER_LANG['authenticate'] = 'Błąd SMTP: Nie można przeprowadzić autentykacji.';
 $PHPMAILER_LANG['connect_host'] = 'Błąd SMTP: Nie można połączyć się z wybranym hostem.';
 $PHPMAILER_LANG['data_not_accepted'] = 'Błąd SMTP: Dane nie zostały przyjęte.';

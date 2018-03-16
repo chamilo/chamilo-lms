@@ -2,9 +2,10 @@
 /* For licensing terms, see /vendor/license.txt */
 
 /**
- * Kannel parameters that will be registered in the current settings
+ * Kannel parameters that will be registered in the current settings.
  *
  * @package chamilo.plugin.kannelsms
+ *
  * @author  Imanol Losada <imanol.losada@beeznest.com>
  */
 require_once __DIR__.'/../../main/inc/global.inc.php';

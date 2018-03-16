@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Management of legal conditions
+ * Management of legal conditions.
+ *
  * @package chamilo.admin
  */
 $cidReset = true;
@@ -22,7 +23,7 @@ $defaults = [];
 $term_preview = [
     'type' => 0,
     'content' => '',
-    'changes' => ''
+    'changes' => '',
 ];
 if ($form->validate()) {
     $check = Security::check_token('post');

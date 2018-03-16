@@ -5,16 +5,20 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
  * @copyright (c) 2001-2006 Universite catholique de Louvain (UCL)
+ *
  * @package chamilo.exercise
+ *
  * @author claro team <cvs@claroline.net>
  * @author Guillaume Lederer <guillaume@claroline.net>
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 
 /**
- * Unzip the exercise in the temp folder
+ * Unzip the exercise in the temp folder.
+ *
  * @param string $baseWorkDir The path of the temporary directory where the exercise was uploaded and unzipped
  * @param string $uploadPath
+ *
  * @return bool
  */
 function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
@@ -45,14 +49,18 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
             null,
             false
         );
+
         return $result;
     }
+
     return false;
 }
 
 /**
- * Imports an exercise in QTI format if the XML structure can be found in it
+ * Imports an exercise in QTI format if the XML structure can be found in it.
+ *
  * @param array $file
+ *
  * @return string|array as a backlog of what was really imported, and error or debug messages to display
  */
 function import_exercise($file)
@@ -274,18 +282,20 @@ function import_exercise($file)
 }
 
 /**
- * We assume the file charset is UTF8
- **/
+ * We assume the file charset is UTF8.
+ */
 function formatText($text)
 {
     return api_html_entity_decode($text);
 }
 
 /**
- * Parses a given XML file and fills global arrays with the elements
+ * Parses a given XML file and fills global arrays with the elements.
+ *
  * @param string $exercisePath
  * @param string $file
  * @param string $questionFile
+ *
  * @return bool
  */
 function qti_parse_file($exercisePath, $file, $questionFile)
@@ -330,7 +340,7 @@ function qti_parse_file($exercisePath, $file, $questionFile)
         'EXTENDEDTEXTINTERACTION',
         "ITEMBODY",
         "BR",
-        "IMG"
+        "IMG",
     ];
 
     $question_format_supported = true;
@@ -388,15 +398,16 @@ function qti_parse_file($exercisePath, $file, $questionFile)
 
         return false;
     }
+
     return true;
 }
 
 /**
- * Function used by the SAX xml parser when the parser meets a opening tag
+ * Function used by the SAX xml parser when the parser meets a opening tag.
  *
- * @param object $parser xml parser created with "xml_parser_create()"
- * @param string $name name of the element
- * @param array $attributes
+ * @param object $parser     xml parser created with "xml_parser_create()"
+ * @param string $name       name of the element
+ * @param array  $attributes
  */
 function startElementQti2($parser, $name, $attributes)
 {
@@ -554,7 +565,7 @@ function startElementQti2($parser, $name, $attributes)
 }
 
 /**
- * Function used by the SAX xml parser when the parser meets a closing tag
+ * Function used by the SAX xml parser when the parser meets a closing tag.
  *
  * @param $parser xml parser created with "xml_parser_create()"
  * @param $name name of the element
@@ -731,11 +742,11 @@ function elementDataQti2($parser, $data)
 }
 
 /**
- * Function used by the SAX xml parser when the parser meets a opening tag for QTI1
+ * Function used by the SAX xml parser when the parser meets a opening tag for QTI1.
  *
- * @param object $parser xml parser created with "xml_parser_create()"
- * @param string $name name of the element
- * @param array $attributes
+ * @param object $parser     xml parser created with "xml_parser_create()"
+ * @param string $name       name of the element
+ * @param array  $attributes
  */
 function startElementQti1($parser, $name, $attributes)
 {
@@ -867,11 +878,11 @@ function startElementQti1($parser, $name, $attributes)
 }
 
 /**
- * Function used by the SAX xml parser when the parser meets a closing tag for QTI1
+ * Function used by the SAX xml parser when the parser meets a closing tag for QTI1.
  *
- * @param object $parser xml parser created with "xml_parser_create()"
- * @param string $name name of the element
- * @param array $attributes The element attributes
+ * @param object $parser     xml parser created with "xml_parser_create()"
+ * @param string $name       name of the element
+ * @param array  $attributes The element attributes
  */
 function endElementQti1($parser, $name, $attributes)
 {
@@ -948,7 +959,8 @@ function endElementQti1($parser, $name, $attributes)
 }
 
 /**
- * QTI1 element parser
+ * QTI1 element parser.
+ *
  * @param $parser
  * @param $data
  */
@@ -1049,8 +1061,10 @@ function elementDataQti1($parser, $data)
 }
 
 /**
- * Check if a given file is an IMS/QTI question bank file
+ * Check if a given file is an IMS/QTI question bank file.
+ *
  * @param string $filePath The absolute filepath
+ *
  * @return bool Whether it is an IMS/QTI question bank or not
  */
 function isQtiQuestionBank($filePath)
@@ -1070,8 +1084,10 @@ function isQtiQuestionBank($filePath)
 }
 
 /**
- * Check if a given file is an IMS/QTI manifest file (listing of extra files)
+ * Check if a given file is an IMS/QTI manifest file (listing of extra files).
+ *
  * @param string $filePath The absolute filepath
+ *
  * @return bool Whether it is an IMS/QTI manifest file or not
  */
 function isQtiManifest($filePath)
@@ -1089,9 +1105,11 @@ function isQtiManifest($filePath)
 
 /**
  * Processes an IMS/QTI manifest file: store links to new files
- * to be able to transform them into the questions text
+ * to be able to transform them into the questions text.
+ *
  * @param string $filePath The absolute filepath
- * @param array $links List of filepaths changes
+ * @param array  $links    List of filepaths changes
+ *
  * @return bool
  */
 function qtiProcessManifest($filePath)
@@ -1140,5 +1158,6 @@ function qtiProcessManifest($filePath)
             $links['web'][] = $exercisesWebPath.$documentId;
         }
     }
+
     return $links;
 }

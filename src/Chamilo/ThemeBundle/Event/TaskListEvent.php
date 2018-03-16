@@ -6,7 +6,8 @@ namespace Chamilo\ThemeBundle\Event;
 use Chamilo\ThemeBundle\Model\TaskInterface;
 
 /**
- * Class TaskListEvent
+ * Class TaskListEvent.
+ *
  * @package Chamilo\ThemeBundle\Event
  */
 class TaskListEvent extends ThemeEvent
@@ -30,6 +31,7 @@ class TaskListEvent extends ThemeEvent
     public function addTask(TaskInterface $taskInterface)
     {
         $this->tasks[] = $taskInterface;
+
         return $this;
     }
 
@@ -41,6 +43,7 @@ class TaskListEvent extends ThemeEvent
     public function setTotal($total)
     {
         $this->total = $total;
+
         return $this;
     }
 

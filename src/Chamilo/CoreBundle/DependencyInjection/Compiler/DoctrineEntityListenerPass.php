@@ -7,7 +7,8 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Class DoctrineEntityListenerPass
+ * Class DoctrineEntityListenerPass.
+ *
  * @package Chamilo\CoreBundle\DependencyInjection\Compiler
  */
 class DoctrineEntityListenerPass implements CompilerPassInterface

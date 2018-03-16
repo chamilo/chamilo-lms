@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Exams script
+ * Exams script.
+ *
  * @package chamilo.tracking
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $toolTable = Database::get_course_table(TABLE_TOOL_LIST);
@@ -355,6 +355,7 @@ if ($exportToXLS) {
 /**
  * @param $a
  * @param $b
+ *
  * @return int
  */
 function sort_user($a, $b)
@@ -372,7 +373,7 @@ function sort_user($a, $b)
 
 /**
  * @param string $filename
- * @param array $array
+ * @param array  $array
  */
 function export_complete_report_xls($filename, $array)
 {
@@ -468,6 +469,7 @@ function export_complete_report_xls($filename, $array)
  * @param $courseInfo
  * @param $sessionId
  * @param $newSessionList
+ *
  * @return array
  */
 function processStudentList($filter_score, $global, $exercise, $courseInfo, $sessionId, $newSessionList)
@@ -477,8 +479,8 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
     ) {
         return [
             'html' => '',
-            'export_array_global' =>  [],
-            'total_students' => 0
+            'export_array_global' => [],
+            'total_students' => 0,
         ];
     }
 
@@ -529,7 +531,7 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
 
     $globalRow = [
         $courseInfo['title'],
-        $exercise['title']
+        $exercise['title'],
     ];
 
     $total_with_parameter_score = 0;
@@ -638,7 +640,7 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
                 'score' => $score,
                 'array' => $tempArray,
                 'user' => $userInfo['complete_name'],
-                'username' => $userInfo['username']
+                'username' => $userInfo['username'],
             ];
         }
     }
@@ -710,10 +712,11 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
         $html .= '</tr>';
         $export_array_global[] = $globalRow;
     }
+
     return [
         'html' => $html,
         'export_array_global' => $global ? $export_array_global : $export_array,
-        'total_students' => $totalStudents
+        'total_students' => $totalStudents,
     ];
 }
 Display :: display_footer();

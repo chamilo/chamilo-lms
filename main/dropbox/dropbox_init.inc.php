@@ -82,8 +82,7 @@ Version 1.1
   symbol and title of a work entry in the sent/received list
 - index.php: add filesize info in sent/received lists
 - dropbox_submit.php: resubmit prevention only for GET action, because it gives some annoying behaviour in POST
- * situation: white screen in IE6
-
+ * situation: white screen in IE6.
 Version 1.2
 -----------
 - adapted entire dropbox tool so it can be used as a default tool in Dokeos 1.5
@@ -110,15 +109,15 @@ Version 1.4 (Yannick Warnier)
 - removed all self-built database tables names
  */
 
-
 /**
  * First initialisation file with initialisation of variables and
  * without outputting anything to browser.
  * 1. Calls global.inc.php and lang file
  * 2. Initialises $dropbox_cnf array with all relevant vars
- * 3. Often used functions
+ * 3. Often used functions.
  *
  * @version 1.31
+ *
  * @copyright 2004-2005
  * @author Jan Bols <jan@ivpv.UGent.be>, main programmer
  * @author René Haentjens, severalcontributions <rene.haentjens@UGent.be>
@@ -131,9 +130,9 @@ Version 1.4 (Yannick Warnier)
  * download file / folder (download icon)
  * same action on multiple documents
  * extended feedback
+ *
  * @package chamilo.dropbox
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $is_allowed_in_course = api_is_allowed_in_course();
 $is_courseTutor = api_is_course_tutor();
@@ -287,7 +286,7 @@ $htmlHeadXtra[] = $javascript;
 $htmlHeadXtra[] = "<script>
 function confirmation (name)
 {
-	if (confirm(\" ". get_lang("AreYouSureToDeleteJS")." \"+ name + \" ?\"))
+	if (confirm(\" ".get_lang("AreYouSureToDeleteJS")." \"+ name + \" ?\"))
 		{return true;}
 	else
 		{return false;}
@@ -362,7 +361,7 @@ if ($view == 'received') {
 if ($view == 'sent' || empty($view)) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq(),
-        'name' => get_lang('Dropbox')
+        'name' => get_lang('Dropbox'),
     ];
     $nameTools = get_lang('SentFiles');
 

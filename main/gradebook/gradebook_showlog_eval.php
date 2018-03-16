@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 GradebookUtils::block_students();
@@ -13,15 +13,15 @@ $selectCat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl(),
-    'name' => get_lang('Gradebook')
+    'name' => get_lang('Gradebook'),
 ];
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$selectCat,
-    'name' => get_lang('Details')
+    'name' => get_lang('Details'),
 ];
 $interbreadcrumb[] = [
     'url' => 'gradebook_showlog_eval.php?visiblelog='.Security::remove_XSS($_GET['visiblelog']).'&amp;selectcat='.$selectCat,
-    'name' => get_lang('GradebookQualifyLog')
+    'name' => get_lang('GradebookQualifyLog'),
 ];
 $this_section = SECTION_COURSES;
 Display::display_header('');

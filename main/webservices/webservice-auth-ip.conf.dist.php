@@ -1,10 +1,10 @@
 <?php
 /**
  * This file allows a Chamilo portal admin to authorize access from specific
- * IPs or ranges of IPs
+ * IPs or ranges of IPs.
  */
 /**
- * Check no direct access to file using a constant defined in the calling script
+ * Check no direct access to file using a constant defined in the calling script.
  */
 if (!defined('WS_ERROR_SECRET_KEY')) {
     die();
@@ -17,7 +17,8 @@ if (!defined('WS_ERROR_SECRET_KEY')) {
  * against the IP or range provided. It doesn't support IPv6 yet.
  * If $ws_auth_ip is not defined, this file will be ignored. If $ws_auth_ip *is*
  * defined, then the only security key expected from the client is the
- * $_configuration['security_key'] encrypted through SHA1
+ * $_configuration['security_key'] encrypted through SHA1.
+ *
  * @example
  * <pre>
  * $ws_auth_ip = '192.168.1.1/22';

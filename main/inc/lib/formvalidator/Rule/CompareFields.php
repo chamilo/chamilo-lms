@@ -2,16 +2,18 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * QuickForm rule to check a date
+ * QuickForm rule to check a date.
  */
 class HTML_QuickForm_Compare_Fields extends HTML_QuickForm_Rule_Compare
 {
     /**
-     * Function to check an array of fields
+     * Function to check an array of fields.
+     *
      * @param   array of field names
      * @param   string operator ==, >=, etc
      * @param   string the value to compare
-     * @return boolean True if date is valid
+     *
+     * @return bool True if date is valid
      */
     public function validate($values = [], $operator_and_max_value = null)
     {

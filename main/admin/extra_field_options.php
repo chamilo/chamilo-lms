@@ -4,7 +4,6 @@
 /**
  *  @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -62,8 +61,8 @@ if ($action == 'add') {
 } else {
     $interbreadcrumb[] = ['url' => 'extra_fields.php?type='.$extra_field->type, 'name' => $extra_field->pageName];
     $interbreadcrumb[] = [
-        'url' =>  'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],
-        'name' => $extra_field_info['display_text']
+        'url' => 'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],
+        'name' => $extra_field_info['display_text'],
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('EditExtraFieldOptions')];
 }
@@ -152,7 +151,7 @@ switch ($action) {
         if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
             api_not_allowed();
         }
-        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&'.$params;
+        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&'.$params;
         $form = $obj->return_form($url, 'add');
 
         // The validation or display
@@ -173,7 +172,7 @@ switch ($action) {
         break;
     case 'edit':
         // Action handling: Editing
-        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']).'&'.$params;
+        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']).'&'.$params;
         $form = $obj->return_form($url, 'edit');
 
         // The validation or display

@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Suggest words to search
+ * Suggest words to search.
+ *
  * @package chamilo.search
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 function get_suggestions_from_search_engine($q)
@@ -29,11 +29,11 @@ function get_suggestions_from_search_engine($q)
         $json[] = [
             'id' => api_convert_encoding($row['value'], 'UTF-8', $charset),
             'value' => api_convert_encoding($row['value'], 'UTF-8', $charset),
-            'label' => api_convert_encoding($row['value'], 'UTF-8', $charset)
+            'label' => api_convert_encoding($row['value'], 'UTF-8', $charset),
         ];
 
         if ($i < 20) {
-            $data[$row['course_code']] [$row['tool_id']] [$row['ref_id']] = 1;
+            $data[$row['course_code']][$row['tool_id']][$row['ref_id']] = 1;
         }
         $i++;
     }
@@ -94,7 +94,7 @@ function get_suggestions_from_search_engine($q)
                         $field_id = $row2['field_id'];
                     }
                 }
-                foreach ($output as $i=>$out) {
+                foreach ($output as $i => $out) {
                     if (api_stristr($out, $q) === false) {
                         continue;
                     }
@@ -104,7 +104,7 @@ function get_suggestions_from_search_engine($q)
                         $json[] = [
                             'id' => $s,
                             'value' => $s,
-                            'label' => $s
+                            'label' => $s,
                         ];
                     }
                 }

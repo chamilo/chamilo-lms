@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Sessions list script
+ * Sessions list script.
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;

@@ -3,20 +3,18 @@
 
 namespace Chamilo\UserBundle\Repository;
 
-use Chamilo\CoreBundle\Entity\AccessUrl;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\Common\Collections\Criteria;
-use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Course;
-use Doctrine\ORM\Query\Expr\Join;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 
 //use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 //use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
 /**
- * Class UserRepository
+ * Class UserRepository.
  *
  * All functions that query the database (selects)
  * Functions should return query builders.
@@ -26,10 +24,10 @@ use Chamilo\UserBundle\Entity\User;
 class UserRepository extends EntityRepository
 {
     /**
-    * @param string $keyword
+     * @param string $keyword
      *
-    * @return mixed
-    */
+     * @return mixed
+     */
     public function searchUserByKeyword($keyword)
     {
         $qb = $this->createQueryBuilder('a');
@@ -53,6 +51,7 @@ class UserRepository extends EntityRepository
 
     /**
      * @param string $role
+     *
      * @return array
      */
     public function findByRole($role)
@@ -70,6 +69,7 @@ class UserRepository extends EntityRepository
 
     /**
      * Get course user relationship based in the course_rel_user table.
+     *
      * @return array
      */
     /*public function getCourses(User $user)
@@ -130,12 +130,14 @@ class UserRepository extends EntityRepository
     }*/
 
     /**
-     * Get a filtered list of user by status and (optionally) access url
+     * Get a filtered list of user by status and (optionally) access url.
+     *
      * @todo not use status
      *
-     * @param string $query The query to filter
-     * @param int $status The status
-     * @param int $accessUrlId The access URL ID
+     * @param string $query       The query to filter
+     * @param int    $status      The status
+     * @param int    $accessUrlId The access URL ID
+     *
      * @return array
      */
     public function searchUsersByStatus($query, $status, $accessUrlId = null)
@@ -167,9 +169,11 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * Get the coaches for a course within a session
+     * Get the coaches for a course within a session.
+     *
      * @param Session $session The session
-     * @param Course $course The course
+     * @param Course  $course  The course
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getCoachesForSessionCourse(Session $session, Course $course)
@@ -196,6 +200,7 @@ class UserRepository extends EntityRepository
 
     /**
      * Get course user relationship based in the course_rel_user table.
+     *
      * @return array
      */
     /*public function getCourses(User $user)
@@ -256,8 +261,10 @@ class UserRepository extends EntityRepository
     }*/
 
     /**
-     * Get the sessions admins for a user
+     * Get the sessions admins for a user.
+     *
      * @param User $user The user
+     *
      * @return array
      */
     public function getSessionAdmins(User $user)
@@ -289,8 +296,10 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * Get the student bosses for a user
+     * Get the student bosses for a user.
+     *
      * @param User $user The user
+     *
      * @return array
      */
     public function getStudentBosses(User $user)

@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Form to add users through LDAP (deprecated?)
+ * Form to add users through LDAP (deprecated?).
+ *
  * @package chamilo.admin
  * Copyright (c) 2007 Mustapha Alouani (supervised by Michel Moreau-Belliard)
  */
 
 /**
- * This form is included by ldap_import_students.php and ldap_import_students_to_session.php
+ * This form is included by ldap_import_students.php and ldap_import_students_to_session.php.
  */
 $nbre = 0;
 echo '<form name="form" method="post" action="'.api_get_self().'?annee='.Security::remove_XSS($annee).'">';

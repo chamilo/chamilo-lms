@@ -5,9 +5,12 @@ use ChamiloSession as Session;
 
 /**
  * Controller script. Prepares the common background variables to give to the scripts corresponding to
- * the requested action
+ * the requested action.
+ *
  * @todo remove repeated if $lp_found redirect
+ *
  * @package chamilo.learnpath
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
@@ -41,7 +44,7 @@ if ($showGlossary) {
     ) {
         $htmlHeadXtra[] = '<script>
     <!--
-        var jQueryFrameReadyConfigPath = \'' . api_get_jquery_web_path().'\';
+        var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
     -->
     </script>';
         $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>';
@@ -1028,7 +1031,7 @@ switch ($action) {
 
             $extraFieldValue = new ExtraFieldValue('lp');
             $params = [
-                'lp_id' => $_SESSION['oLP']->lp_id
+                'lp_id' => $_SESSION['oLP']->lp_id,
             ];
             $extraFieldValue->saveFieldValues($_REQUEST);
 
@@ -1356,7 +1359,7 @@ switch ($action) {
                         [
                             'lp_id' => 0,
                             'forum_category_title' => get_lang('LearningPaths'),
-                            'forum_category_comment' => null
+                            'forum_category_comment' => null,
                         ],
                         [],
                         false
@@ -1384,7 +1387,7 @@ switch ($action) {
         header('Location:'.api_get_self().'?'.http_build_query([
             'action' => 'add_item',
             'type' => 'step',
-            'lp_id' => $_SESSION['oLP']->lp_id
+            'lp_id' => $_SESSION['oLP']->lp_id,
         ]));
 
         break;
@@ -1424,7 +1427,7 @@ switch ($action) {
         header('Location:'.api_get_self().'?'.http_build_query([
             'action' => 'add_item',
             'type' => 'step',
-            'lp_id' => $_SESSION['oLP']->lp_id
+            'lp_id' => $_SESSION['oLP']->lp_id,
         ]));
         break;
     case 'add_final_item':
@@ -1444,7 +1447,7 @@ switch ($action) {
         $redirectTo = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
             'action' => 'add_item',
             'type' => 'step',
-            'lp_id' => intval($_SESSION['oLP']->lp_id)
+            'lp_id' => intval($_SESSION['oLP']->lp_id),
         ]);
         break;
     default:

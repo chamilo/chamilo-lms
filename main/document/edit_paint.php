@@ -7,11 +7,13 @@ use ChamiloSession as Session;
  * This file allows creating new svg and png documents with an online editor.
  *
  * @package chamilo.document
+ *
  * @todo used the document_id instead of the curdirpath
  *
  * @author Juan Carlos Raña Trabado
+ *
  * @since 30/january/2011
-*/
+ */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -93,12 +95,12 @@ $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
 if (!$is_certificate_mode) {
     $interbreadcrumb[] = [
         "url" => "./document.php?curdirpath=".urlencode($my_cur_dir_path).'&'.api_get_cidreq(),
-        "name" => get_lang('Documents')
+        "name" => get_lang('Documents'),
     ];
 } else {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('Gradebook')
+        'name' => get_lang('Gradebook'),
     ];
 }
 
@@ -155,7 +157,7 @@ if ($_SERVER['HTTP_HOST'] == "localhost") {
                 <allow-access-from domain="cdn.pixlr.com" />
                 <site-control permitted-cross-domain-policies="master-only"/>
                 <allow-http-request-headers-from domain="cnd.pixlr.com" headers="*" secure="true"/>
-            </cross-domain-policy>';//more open domain="*"
+            </cross-domain-policy>'; //more open domain="*"
         @file_put_contents($path_and_file, $crossdomain);
     }
     $credentials = "true";
@@ -173,7 +175,7 @@ if (!file_exists($temp_folder)) {
 $htaccess = api_get_path(SYS_ARCHIVE_PATH).'temp/images/.htaccess';
 if (!file_exists($htaccess)) {
     $htaccess_content = "order deny,allow\r\nallow from all\r\nOptions -Indexes";
-    $fp = @ fopen(api_get_path(SYS_ARCHIVE_PATH).'temp/images/.htaccess', 'w');
+    $fp = @fopen(api_get_path(SYS_ARCHIVE_PATH).'temp/images/.htaccess', 'w');
     if ($fp) {
         fwrite($fp, $htaccess_content);
         fclose($fp);
@@ -183,7 +185,7 @@ if (!file_exists($htaccess)) {
 $html_index = api_get_path(SYS_ARCHIVE_PATH).'temp/images/index.html';
 if (!file_exists($html_index)) {
     $html_index_content = "<html><head></head><body></body></html>";
-    $fp = @ fopen(api_get_path(SYS_ARCHIVE_PATH).'temp/images/index.html', 'w');
+    $fp = @fopen(api_get_path(SYS_ARCHIVE_PATH).'temp/images/index.html', 'w');
     if ($fp) {
         fwrite($fp, $html_index_content);
         fclose($fp);

@@ -3,7 +3,7 @@
 
 /**
  * This file contains class used like controller,
- * it should be included inside a dispatcher file (e.g: index.php)
+ * it should be included inside a dispatcher file (e.g: index.php).
  *
  * !!! WARNING !!! : ALL DATES IN THIS MODULE ARE STORED IN UTC !
  * DO NOT CONVERT DURING THE TRANSITION FROM CHAMILO 1.8.x TO 2.0
@@ -16,7 +16,7 @@
 class AttendanceController
 {
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -26,7 +26,7 @@ class AttendanceController
 
     /**
      * It's used for listing attendance,
-     * render to attendance_list view
+     * render to attendance_list view.
      */
     public function attendance_list()
     {
@@ -39,7 +39,7 @@ class AttendanceController
 
     /**
      * It's used for adding attendace,
-     * render to attendance_add or attendance_list view
+     * render to attendance_add or attendance_list view.
      */
     public function attendance_add()
     {
@@ -88,7 +88,8 @@ class AttendanceController
 
     /**
      * It's used for editing attendance,
-     * render to attendance_edit or attendance_list view
+     * render to attendance_edit or attendance_list view.
+     *
      * @param int $attendance_id
      */
     public function attendance_edit($attendance_id)
@@ -160,8 +161,10 @@ class AttendanceController
 
     /**
      * It's used for delete attendaces
-     * render to attendance_list view
+     * render to attendance_list view.
+     *
      * @param int $attendance_id
+     *
      * @return bool
      */
     public function attendance_delete($attendance_id)
@@ -183,12 +186,14 @@ class AttendanceController
             $message['message_attendance_delete'] = true;
         }
         $this->attendance_list();
+
         return true;
     }
 
     /**
      * It's used for make attendance visible
-     * render to attendance_list view
+     * render to attendance_list view.
+     *
      * @param int $attendanceId
      */
     public function attendanceSetVisible($attendanceId)
@@ -206,7 +211,8 @@ class AttendanceController
 
     /**
      * It's used for make attendance invisible
-     * render to attendance_list view
+     * render to attendance_list view.
+     *
      * @param int $attendanceId
      */
     public function attendanceSetInvisible($attendanceId)
@@ -222,7 +228,8 @@ class AttendanceController
     }
 
     /**
-     * Restores an attendance entry and fallback to attendances rendering
+     * Restores an attendance entry and fallback to attendances rendering.
+     *
      * @param int $attendance_id
      */
     public function attendance_restore($attendance_id)
@@ -240,10 +247,11 @@ class AttendanceController
 
     /**
      * Lock or unlock an attendance
-     * render to attendance_list view
-     * @param string  $action (lock_attendance or unlock_attendance)
-     * @param int     $attendance_id
-     * render to attendance_list view
+     * render to attendance_list view.
+     *
+     * @param string $action        (lock_attendance or unlock_attendance)
+     * @param int    $attendance_id
+     *                              render to attendance_list view
      */
     public function lock_attendance($action, $attendance_id)
     {
@@ -268,7 +276,8 @@ class AttendanceController
 
     /**
      * It's used for controlling attendance sheet (list, add),
-     * render to attendance_sheet view
+     * render to attendance_sheet view.
+     *
      * @param string $action
      * @param int    $attendance_id
      * @param int    $student_id
@@ -328,7 +337,7 @@ class AttendanceController
                 );
             }
 
-            $data['faults']  = $attendance->get_faults_of_user($user_id, $attendance_id, $groupId);
+            $data['faults'] = $attendance->get_faults_of_user($user_id, $attendance_id, $groupId);
             $data['user_id'] = $user_id;
         }
 
@@ -400,10 +409,11 @@ class AttendanceController
 
     /**
      * It's used for controlling attendance calendar (list, add, edit, delete),
-     * render to attendance_calendar view
-     * @param string $action (optional, by default 'calendar_list')
-     * @param int $attendance_id (optional)
-     * @param int $calendar_id (optional)
+     * render to attendance_calendar view.
+     *
+     * @param string $action        (optional, by default 'calendar_list')
+     * @param int    $attendance_id (optional)
+     * @param int    $calendar_id   (optional)
      */
     public function attendance_calendar($action = 'calendar_list', $attendance_id = 0, $calendar_id = 0)
     {
@@ -501,7 +511,8 @@ class AttendanceController
     }
 
     /**
-     * It's used to print attendance sheet
+     * It's used to print attendance sheet.
+     *
      * @param string $action
      * @param int    $attendance_id
      */
@@ -654,7 +665,7 @@ class AttendanceController
             'pdf_teachers' => $teacherName,
             'pdf_course_category' => $courseCategory['name'],
             'format' => 'A4-L',
-            'orientation' => 'L'
+            'orientation' => 'L',
         ];
 
         Export::export_html_to_pdf($content, $params);
@@ -663,7 +674,8 @@ class AttendanceController
 
     /**
      * Gets attendance base in the table:
-     * TABLE_STATISTIC_TRACK_E_COURSE_ACCESS
+     * TABLE_STATISTIC_TRACK_E_COURSE_ACCESS.
+     *
      * @param bool $showForm
      * @param bool $exportToPdf
      */
@@ -709,7 +721,7 @@ class AttendanceController
         $table = $attendance->getAttendanceLoginTable($startDate, $endDate);
         $data = [
             'form' => $formToDisplay,
-            'table' => $table
+            'table' => $table,
         ];
         $this->view->set_data($data);
         $this->view->set_layout('layout');

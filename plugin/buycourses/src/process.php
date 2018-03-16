@@ -4,7 +4,8 @@
 use ChamiloSession as Session;
 
 /**
- * Process payments for the Buy Courses plugin
+ * Process payments for the Buy Courses plugin.
+ *
  * @package chamilo.plugin.buycourses
  */
 require_once '../config.php';

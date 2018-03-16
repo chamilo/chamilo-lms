@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SkillRelSkill
+ * SkillRelSkill.
  *
  * @ORM\Table(name="skill_rel_skill")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class SkillRelSkill
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -23,37 +23,38 @@ class SkillRelSkill
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="skill_id", type="integer", nullable=false)
      */
     private $skillId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="parent_id", type="integer", nullable=false)
      */
     private $parentId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="relation_type", type="integer", nullable=false)
      */
     private $relationType;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="level", type="integer", nullable=false)
      */
     private $level;
 
     /**
-     * Set skillId
+     * Set skillId.
      *
-     * @param integer $skillId
+     * @param int $skillId
+     *
      * @return SkillRelSkill
      */
     public function setSkillId($skillId)
@@ -64,9 +65,9 @@ class SkillRelSkill
     }
 
     /**
-     * Get skillId
+     * Get skillId.
      *
-     * @return integer
+     * @return int
      */
     public function getSkillId()
     {
@@ -74,9 +75,10 @@ class SkillRelSkill
     }
 
     /**
-     * Set parentId
+     * Set parentId.
      *
-     * @param integer $parentId
+     * @param int $parentId
+     *
      * @return SkillRelSkill
      */
     public function setParentId($parentId)
@@ -87,9 +89,9 @@ class SkillRelSkill
     }
 
     /**
-     * Get parentId
+     * Get parentId.
      *
-     * @return integer
+     * @return int
      */
     public function getParentId()
     {
@@ -97,9 +99,10 @@ class SkillRelSkill
     }
 
     /**
-     * Set relationType
+     * Set relationType.
      *
-     * @param integer $relationType
+     * @param int $relationType
+     *
      * @return SkillRelSkill
      */
     public function setRelationType($relationType)
@@ -110,9 +113,9 @@ class SkillRelSkill
     }
 
     /**
-     * Get relationType
+     * Get relationType.
      *
-     * @return integer
+     * @return int
      */
     public function getRelationType()
     {
@@ -120,9 +123,10 @@ class SkillRelSkill
     }
 
     /**
-     * Set level
+     * Set level.
      *
-     * @param integer $level
+     * @param int $level
+     *
      * @return SkillRelSkill
      */
     public function setLevel($level)
@@ -133,9 +137,9 @@ class SkillRelSkill
     }
 
     /**
-     * Get level
+     * Get level.
      *
-     * @return integer
+     * @return int
      */
     public function getLevel()
     {
@@ -143,9 +147,9 @@ class SkillRelSkill
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

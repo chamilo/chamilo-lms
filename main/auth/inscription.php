@@ -5,6 +5,7 @@ use ChamiloSession as Session;
 
 /**
  *  This script displays a form for registering new users.
+ *
  *  @package    chamilo.auth
  */
 
@@ -21,7 +22,7 @@ $allowedFields = [
     'status',
     'language',
     'extra_fields',
-    'address'
+    'address',
 ];
 
 $allowedFieldsConfiguration = api_get_configuration_value('allow_fields_inscription');
@@ -157,7 +158,7 @@ if ($user_already_registered_show_terms === false) {
             [
                 'id' => 'username',
                 'size' => USERNAME_MAX_LENGTH,
-                'autocomplete' => 'off'
+                'autocomplete' => 'off',
             ]
         );
         $form->applyFilter('username', 'trim');
@@ -261,7 +262,7 @@ if ($user_already_registered_show_terms === false) {
                 'font_path' => api_get_path(SYS_FONTS_PATH).'opensans/',
                 'font_file' => 'OpenSans-Regular.ttf',
                 //'output' => 'gif'
-            ]
+            ],
         ];
 
         $captcha_question = $form->addElement(
@@ -450,7 +451,7 @@ if (api_is_multiple_url_enabled()) {
         $clean_url = api_replace_dangerous_char($url);
         $clean_url = str_replace('/', '-', $clean_url);
         $clean_url .= '/';
-        $home_old  = api_get_path(SYS_APP_PATH).'home/';
+        $home_old = api_get_path(SYS_APP_PATH).'home/';
         $home = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
     }
 }
@@ -722,7 +723,7 @@ if ($form->validate()) {
                         $course_info['visibility'],
                         [
                             COURSE_VISIBILITY_OPEN_PLATFORM,
-                            COURSE_VISIBILITY_OPEN_WORLD
+                            COURSE_VISIBILITY_OPEN_WORLD,
                         ]
                     )
                     ) {
@@ -889,7 +890,7 @@ if ($form->validate()) {
         ),
         'message' => '',
         'action' => api_get_path(WEB_PATH).'user_portal.php',
-        'go_button' => ''
+        'go_button' => '',
     ];
 
     if (api_get_setting('allow_terms_conditions') === 'true' && $user_already_registered_show_terms) {
@@ -1016,7 +1017,7 @@ if ($form->validate()) {
                         $course_info['visibility'],
                         [
                             COURSE_VISIBILITY_OPEN_PLATFORM,
-                            COURSE_VISIBILITY_OPEN_WORLD
+                            COURSE_VISIBILITY_OPEN_WORLD,
                         ]
                     )
                     ) {

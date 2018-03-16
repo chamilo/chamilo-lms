@@ -4,11 +4,12 @@
 namespace Chamilo\CoreBundle;
 
 use Chamilo\CoreBundle\DependencyInjection\Compiler\DoctrineEntityListenerPass;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * Class ChamiloCoreBundle
+ * Class ChamiloCoreBundle.
+ *
  * @package Chamilo\CoreBundle
  */
 class ChamiloCoreBundle extends Bundle

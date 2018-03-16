@@ -35,9 +35,11 @@
  *        . _orderBy        => private property used for determining the field by which the works have to be ordered
  *
  * @version 1.30
+ *
  * @copyright 2004
  * @author Jan Bols <jan@ivpv.UGent.be>
  * with contributions by René Haentjens <rene.haentjens@UGent.be>
+ *
  * @package chamilo.dropbox
  */
 class Dropbox_Work
@@ -57,14 +59,14 @@ class Dropbox_Work
 
     /**
      * Constructor calls private functions to create a new work or retreive an existing work from DB
-     * depending on the number of parameters
+     * depending on the number of parameters.
      *
-     * @param int $arg1
+     * @param int    $arg1
      * @param string $arg2
      * @param string $arg3
      * @param string $arg4
      * @param string $arg5
-     * @param int $arg6
+     * @param int    $arg6
      */
     public function __construct($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null)
     {
@@ -76,14 +78,14 @@ class Dropbox_Work
     }
 
     /**
-     * private function creating a new work object
+     * private function creating a new work object.
      *
-     * @param int $uploader_id
+     * @param int    $uploader_id
      * @param string $title
      * @param string $description
      * @param string $author
      * @param string $filename
-     * @param int $filesize
+     * @param int    $filesize
      *
      * @todo    $author was originally a field but this has now been replaced by the first and lastname of the uploader (to prevent anonymous uploads)
      *            As a consequence this parameter can be removed
@@ -124,7 +126,7 @@ class Dropbox_Work
                 'description' => $this->description,
                 'author' => $this->author,
                 'last_upload_date' => $this->last_upload_date,
-                'session_id' => api_get_session_id()
+                'session_id' => api_get_session_id(),
             ];
 
             Database::update(
@@ -145,7 +147,7 @@ class Dropbox_Work
                 'upload_date' => $this->upload_date,
                 'last_upload_date' => $this->last_upload_date,
                 'session_id' => api_get_session_id(),
-                'cat_id' => 0
+                'cat_id' => 0,
             ];
 
             $this->id = Database::insert(Database::get_course_table(TABLE_DROPBOX_FILE), $params);
@@ -156,7 +158,7 @@ class Dropbox_Work
         }
 
         $sql = "SELECT count(file_id) as count
-                FROM ". Database::get_course_table(TABLE_DROPBOX_PERSON)."
+                FROM ".Database::get_course_table(TABLE_DROPBOX_PERSON)."
                 WHERE c_id = $course_id AND file_id = ".intval($this->id)." AND user_id = ".$this->uploader_id;
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
@@ -169,7 +171,7 @@ class Dropbox_Work
     }
 
     /**
-     * private function creating existing object by retreiving info from db
+     * private function creating existing object by retreiving info from db.
      *
      * @param int $id
      */
@@ -183,7 +185,7 @@ class Dropbox_Work
 
         // Get the data from DB
         $sql = "SELECT uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date, cat_id
-                FROM ". Database::get_course_table(TABLE_DROPBOX_FILE)."
+                FROM ".Database::get_course_table(TABLE_DROPBOX_FILE)."
                 WHERE c_id = $course_id AND id = ".$id."";
         $result = Database::query($sql);
         $res = Database::fetch_array($result, 'ASSOC');
@@ -243,7 +245,7 @@ class Dropbox_Work
             'author' => $this->author,
             'upload_date' => $this->upload_date,
             'last_upload_date' => $this->last_upload_date,
-            'session_id' => api_get_session_id()
+            'session_id' => api_get_session_id(),
         ];
 
         Database::update(
@@ -251,6 +253,7 @@ class Dropbox_Work
             $params,
             ['c_id = ? AND id = ?' => [$course_id, $this->id]]
         );
+
         return true;
     }
 }
@@ -261,15 +264,15 @@ class Dropbox_SentWork extends Dropbox_Work
 
     /**
      * Constructor calls private functions to create a new work or retreive an existing work from DB
-     * depending on the number of parameters
+     * depending on the number of parameters.
      *
-     * @param int $arg1
+     * @param int    $arg1
      * @param string $arg2
      * @param string $arg3
      * @param string $arg4
      * @param string $arg5
-     * @param int $arg6
-     * @param array $arg7
+     * @param int    $arg6
+     * @param array  $arg7
      */
     public function __construct($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null)
     {
@@ -281,15 +284,15 @@ class Dropbox_SentWork extends Dropbox_Work
     }
 
     /**
-     * private function creating a new SentWork object
+     * private function creating a new SentWork object.
      *
-     * @param int $uploader_id
+     * @param int    $uploader_id
      * @param string $title
      * @param string $description
      * @param string $author
      * @param string $filename
-     * @param int $filesize
-     * @param array $recipient_ids
+     * @param int    $filesize
+     * @param array  $recipient_ids
      */
     public function createNewSentWork($uploader_id, $title, $description, $author, $filename, $filesize, $recipient_ids)
     {
@@ -350,7 +353,7 @@ class Dropbox_SentWork extends Dropbox_Work
             // If work already exists no error is generated
 
             /**
-             * Poster is already added when work is created - not so good to split logic
+             * Poster is already added when work is created - not so good to split logic.
              */
             if ($user_id != $user) {
                 // Insert entries into person table
@@ -383,7 +386,7 @@ class Dropbox_SentWork extends Dropbox_Work
     }
 
     /**
-     * private function creating existing object by retreiving info from db
+     * private function creating existing object by retreiving info from db.
      *
      * @param int $id
      */
@@ -413,7 +416,7 @@ class Dropbox_SentWork extends Dropbox_Work
                     'name' => $user_info['complete_name'],
                     'user_id' => $dest_user_id,
                     'feedback_date' => $res['feedback_date'],
-                    'feedback' => $res['feedback']
+                    'feedback' => $res['feedback'],
                 ];
             }
         }
@@ -432,9 +435,9 @@ class Dropbox_Person
     public $_orderBy = ''; // private property that determines by which field
 
     /**
-     * Constructor for recreating the Dropbox_Person object
+     * Constructor for recreating the Dropbox_Person object.
      *
-     * @param int $userId
+     * @param int  $userId
      * @param bool $isCourseAdmin
      * @param bool $isCourseTutor
      */
@@ -490,7 +493,7 @@ class Dropbox_Person
     }
 
     /**
-     * Deletes all the received work of this person
+     * Deletes all the received work of this person.
      */
     public function deleteAllReceivedWork()
     {
@@ -506,8 +509,10 @@ class Dropbox_Person
     }
 
     /**
-     * Deletes all the received categories and work of this person
-     * @param integer $id
+     * Deletes all the received categories and work of this person.
+     *
+     * @param int $id
+     *
      * @return bool
      */
     public function deleteReceivedWorkFolder($id)
@@ -531,9 +536,9 @@ class Dropbox_Person
     }
 
     /**
-     * Deletes a received dropbox file of this person with id=$id
+     * Deletes a received dropbox file of this person with id=$id.
      *
-     * @param integer $id
+     * @param int $id
      */
     public function deleteReceivedWork($id)
     {
@@ -562,7 +567,7 @@ class Dropbox_Person
     }
 
     /**
-     * Deletes all the sent dropbox files of this person
+     * Deletes all the sent dropbox files of this person.
      */
     public function deleteAllSentWork()
     {
@@ -581,7 +586,7 @@ class Dropbox_Person
     }
 
     /**
-     * Deletes a sent dropbox file of this person with id=$id
+     * Deletes a sent dropbox file of this person with id=$id.
      *
      * @param int $id
      */
@@ -614,10 +619,11 @@ class Dropbox_Person
     }
 
     /**
-     * Updates feedback for received work of this person with id=$id
+     * Updates feedback for received work of this person with id=$id.
      *
      * @param string $id
      * @param string $text
+     *
      * @return bool
      */
     public function updateFeedback($id, $text)
@@ -679,7 +685,8 @@ class Dropbox_Person
     }
 
     /**
-     * Filter the received work
+     * Filter the received work.
+     *
      * @param string $type
      * @param string $value
      */

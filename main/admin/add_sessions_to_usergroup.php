@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*   @package chamilo.admin
-*/
+ *   @package chamilo.admin
+ */
 // resetting the course id
 $cidReset = true;
 
@@ -65,10 +65,10 @@ function remove_item(origin) {
 function display_advanced_search () {
         if ($("#advancedSearch").css("display") == "none") {
                 $("#advancedSearch").css("display","block");
-                $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide'), ['style'=>'vertical-align:middle']).'&nbsp;'.get_lang('AdvancedSearch').'\');
+                $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide'), ['style' => 'vertical-align:middle']).'&nbsp;'.get_lang('AdvancedSearch').'\');
         } else {
                 $("#advancedSearch").css("display","none");
-                $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), ['style'=>'vertical-align:middle']).'&nbsp;'.get_lang('AdvancedSearch').'\');
+                $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), ['style' => 'vertical-align:middle']).'&nbsp;'.get_lang('AdvancedSearch').'\');
         }
 }
 
@@ -79,15 +79,14 @@ function validate_filter() {
 }
 </script>';
 
-
-$form_sent  = 0;
-$errorMsg   = '';
+$form_sent = 0;
+$errorMsg = '';
 $sessions = [];
 $usergroup = new UserGroup();
 $id = intval($_GET['id']);
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
-    $form_sent          = $_POST['form_sent'];
-    $elements_posted    = $_POST['elements_in_name'];
+    $form_sent = $_POST['form_sent'];
+    $elements_posted = $_POST['elements_in_name'];
     if (!is_array($elements_posted)) {
         $elements_posted = [];
     }
@@ -168,7 +167,7 @@ if ($add_type == 'multiple') {
 echo '<div class="actions">';
 echo '<a href="usergroups.php">'.Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '<a href="javascript://" class="advanced_parameters" style="margin-top: 8px" onclick="display_advanced_search();"><span id="img_plus_and_minus">&nbsp;'.
-    Display::return_icon('div_show.gif', get_lang('Show'), ['style'=>'vertical-align:middle']).' '.get_lang('AdvancedSearch').'</span></a>';
+    Display::return_icon('div_show.gif', get_lang('Show'), ['style' => 'vertical-align:middle']).' '.get_lang('AdvancedSearch').'</span></a>';
 echo '</div>';
 echo '<div id="advancedSearch" style="display: none">'.get_lang('SearchSessions'); ?> :
      <input name="SearchSession" onchange = "xajax_search_usergroup_sessions(this.value,'searchbox')" onkeyup="this.onchange()">
@@ -190,10 +189,10 @@ if (!empty($errorMsg)) {
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>
-  <td align="center"><b><?php echo get_lang('SessionsInPlatform') ?> :</b>
+  <td align="center"><b><?php echo get_lang('SessionsInPlatform'); ?> :</b>
   </td>
   <td></td>
-  <td align="center"><b><?php echo get_lang('SessionsInGroup') ?> :</b></td>
+  <td align="center"><b><?php echo get_lang('SessionsInGroup'); ?> :</b></td>
 </tr>
 
 <?php if ($add_type == 'multiple') {
@@ -224,7 +223,7 @@ if (!empty($errorMsg)) {
       } else {
           ?>
       <div id="ajax_list_multiple">
-        <?php echo Display::select('elements_not_in_name', $elements_not_in, '', ['style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'elements_not_in', 'size'=>'15px'], false); ?>
+        <?php echo Display::select('elements_not_in_name', $elements_not_in, '', ['style' => 'width:360px', 'multiple' => 'multiple', 'id' => 'elements_not_in', 'size' => '15px'], false); ?>
       </div>
     <?php
       }
@@ -255,7 +254,7 @@ if (!empty($errorMsg)) {
   </td>
   <td align="center">
 <?php
-    echo Display::select('elements_in_name[]', $elements_in, '', ['style'=>'width:360px', 'multiple'=>'multiple', 'id'=>'elements_in', 'size'=>'15px'], false);
+    echo Display::select('elements_in_name[]', $elements_in, '', ['style' => 'width:360px', 'multiple' => 'multiple', 'id' => 'elements_in', 'size' => '15px'], false);
     unset($sessionUsersList);
 ?>
  </td>

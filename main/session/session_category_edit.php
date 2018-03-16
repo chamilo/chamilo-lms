@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Edition script for sessions categories
+ * Edition script for sessions categories.
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -20,11 +20,11 @@ $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 $tool_name = get_lang('EditSessionCategory');
 $interbreadcrumb[] = [
     'url' => 'session_list.php',
-    "name" => get_lang('SessionList')
+    "name" => get_lang('SessionList'),
 ];
 $interbreadcrumb[] = [
     'url' => "session_category_list.php",
-    "name" => get_lang('ListSessionCategory')
+    "name" => get_lang('ListSessionCategory'),
 ];
 
 $sql = "SELECT * FROM $tbl_session_category WHERE id='".$id."' ORDER BY name";
@@ -83,7 +83,7 @@ if (!empty($return)) {
         <input type="hidden" name="formSent" value="1">
         <legend><?php echo $tool_name; ?> </legend>
         <div class="form-group">
-            <label class="col-sm-3 control-label"><?php echo get_lang('Name') ?></label>
+            <label class="col-sm-3 control-label"><?php echo get_lang('Name'); ?></label>
             <div class="col-sm-6">
                 <input class="form-control" type="text" name="name" size="50" maxlength="50" value="<?php if ($formSent) {
     echo api_htmlentities($name, ENT_QUOTES, $charset);
@@ -96,12 +96,12 @@ if (!empty($return)) {
         <div class="form-group">
             <div class="col-sm-offset-3 col-sm-6">
                 <?php echo get_lang('TheTimeLimitsAreReferential'); ?>
-                <a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('EditTimeLimit') ?></a>
+                <a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('EditTimeLimit'); ?></a>
             </div>
         </div>
         <div style="display: <?php echo $formSent ? 'display' : 'none'; ?>;" id="options">
             <div class="form-group">
-                <label class="col-sm-3 control-label"><?php echo get_lang('DateStart') ?></label>
+                <label class="col-sm-3 control-label"><?php echo get_lang('DateStart'); ?></label>
                 <div class="col-sm-6">
                     <select name="day_start">
                         <option value="1">01</option>
@@ -248,7 +248,7 @@ if (!empty($return)) {
                 <div class="col-sm-3"></div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label"><?php echo get_lang('DateEnd') ?></label>
+                <label class="col-sm-3 control-label"><?php echo get_lang('DateEnd'); ?></label>
                 <div class="col-sm-6">
                     <select name="day_end">
                         <option value="0">--</option>
@@ -404,8 +404,8 @@ if (!empty($return)) {
         </div>
         <div class="form-group">
             <div class="col-sm-offset-3 col-sm-6">
-                <button class="btn btn-success" type="submit" value="<?php echo get_lang('Edit') ?>">
-                    <?php echo get_lang('Edit') ?>
+                <button class="btn btn-success" type="submit" value="<?php echo get_lang('Edit'); ?>">
+                    <?php echo get_lang('Edit'); ?>
                 </button>
             </div>
         </div>

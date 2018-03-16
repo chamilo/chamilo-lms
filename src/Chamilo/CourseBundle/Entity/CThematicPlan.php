@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CThematicPlan
+ * CThematicPlan.
  *
  * @ORM\Table(
  *  name="c_thematic_plan",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CThematicPlan
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -29,21 +29,21 @@ class CThematicPlan
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="thematic_id", type="integer", nullable=false)
      */
@@ -64,16 +64,17 @@ class CThematicPlan
     private $description;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="description_type", type="integer", nullable=false)
      */
     private $descriptionType;
 
     /**
-     * Set thematicId
+     * Set thematicId.
      *
-     * @param integer $thematicId
+     * @param int $thematicId
+     *
      * @return CThematicPlan
      */
     public function setThematicId($thematicId)
@@ -84,9 +85,9 @@ class CThematicPlan
     }
 
     /**
-     * Get thematicId
+     * Get thematicId.
      *
-     * @return integer
+     * @return int
      */
     public function getThematicId()
     {
@@ -94,9 +95,10 @@ class CThematicPlan
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return CThematicPlan
      */
     public function setTitle($title)
@@ -107,7 +109,7 @@ class CThematicPlan
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -117,9 +119,10 @@ class CThematicPlan
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return CThematicPlan
      */
     public function setDescription($description)
@@ -130,7 +133,7 @@ class CThematicPlan
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -140,9 +143,10 @@ class CThematicPlan
     }
 
     /**
-     * Set descriptionType
+     * Set descriptionType.
      *
-     * @param integer $descriptionType
+     * @param int $descriptionType
+     *
      * @return CThematicPlan
      */
     public function setDescriptionType($descriptionType)
@@ -153,9 +157,9 @@ class CThematicPlan
     }
 
     /**
-     * Get descriptionType
+     * Get descriptionType.
      *
-     * @return integer
+     * @return int
      */
     public function getDescriptionType()
     {
@@ -163,9 +167,10 @@ class CThematicPlan
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CThematicPlan
      */
     public function setId($id)
@@ -176,9 +181,9 @@ class CThematicPlan
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -186,9 +191,10 @@ class CThematicPlan
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CThematicPlan
      */
     public function setCId($cId)
@@ -199,9 +205,9 @@ class CThematicPlan
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

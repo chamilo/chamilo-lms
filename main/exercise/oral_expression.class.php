@@ -4,7 +4,8 @@
 /**
  * Class OralExpression
  * This class allows to instantiate an object of type FREE_ANSWER,
- * extending the class question
+ * extending the class question.
+ *
  * @author Eric Marguin
  *
  * @package chamilo.exercise
@@ -13,6 +14,7 @@ class OralExpression extends Question
 {
     public static $typePicture = 'audio_question.png';
     public static $explanationLangVar = 'OralExpression';
+    public $available_extensions = ['wav', 'ogg'];
     private $sessionId;
     private $userId;
     private $exerciseId;
@@ -20,10 +22,9 @@ class OralExpression extends Question
     private $storePath;
     private $fileName;
     private $filePath;
-    public $available_extensions = ['wav', 'ogg'];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -33,7 +34,7 @@ class OralExpression extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createAnswersForm($form)
     {
@@ -46,7 +47,7 @@ class OralExpression extends Question
         // setting the save button here and not in the question class.php
         $form->addButtonSave($text, 'submitQuestion');
         if (!empty($this->id)) {
-            $form -> setDefaults(['weighting' => float_format($this->weighting, 1)]);
+            $form->setDefaults(['weighting' => float_format($this->weighting, 1)]);
         } else {
             if ($this->isContent == 1) {
                 $form->setDefaults(['weighting' => '10']);
@@ -55,7 +56,7 @@ class OralExpression extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
@@ -64,7 +65,7 @@ class OralExpression extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function return_header($exercise, $counter = null, $score = null)
     {
@@ -79,7 +80,8 @@ class OralExpression extends Question
     }
 
     /**
-     * initialize the attributes to generate the file path
+     * initialize the attributes to generate the file path.
+     *
      * @param $sessionId integer
      * @param $userId integer
      * @param $exerciseId integer
@@ -100,7 +102,144 @@ class OralExpression extends Question
     }
 
     /**
-     * Generate the necessary directory for audios. If them not exists, are created
+     * Return the HTML code to show the RecordRTC/Wami recorder.
+     *
+     * @return string
+     */
+    public function returnRecorder()
+    {
+        $directory = '/..'.$this->generateRelativeDirectory();
+        $recordAudioView = new Template(
+            '',
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        );
+
+        $recordAudioView->assign('directory', $directory);
+        $recordAudioView->assign('user_id', $this->userId);
+        $recordAudioView->assign('file_name', $this->fileName);
+        $recordAudioView->assign('question_id', $this->id);
+
+        $template = $recordAudioView->get_template('exercise/oral_expression.tpl');
+
+        return $recordAudioView->fetch($template);
+    }
+
+    /**
+     * Get the absolute file path. Return null if the file doesn't exists.
+     *
+     * @param bool $loadFromDatabase
+     *
+     * @return string
+     */
+    public function getAbsoluteFilePath($loadFromDatabase = false)
+    {
+        $fileName = $this->fileName;
+
+        if ($loadFromDatabase) {
+            $em = Database::getManager();
+            //Load the real filename just if exists
+            if (isset($this->exeId, $this->userId, $this->id, $this->sessionId, $this->course['real_id'])) {
+                $result = $em
+                    ->getRepository('ChamiloCoreBundle:TrackEAttempt')
+                    ->findOneBy([
+                        'exeId' => $this->exeId,
+                        'userId' => $this->userId,
+                        'questionId' => $this->id,
+                        'sessionId' => $this->sessionId,
+                        'cId' => $this->course['real_id'],
+                    ]);
+
+                if (!$result) {
+                    return '';
+                }
+
+                $fileName = $result->getFilename();
+
+                if (empty($fileName)) {
+                    return '';
+                }
+
+                return $this->storePath.$result->getFilename();
+            }
+        }
+
+        foreach ($this->available_extensions as $extension) {
+            $audioFile = $this->storePath.$fileName;
+            $file = "$audioFile.$extension";
+
+            if (is_file($file)) {
+                return $file;
+            }
+
+            // Function handle_uploaded_document() adds the session and group id by default.
+            $file = "$audioFile"."__".$this->sessionId."__0.$extension";
+
+            if (is_file($file)) {
+                return $file;
+            }
+
+            continue;
+        }
+
+        return '';
+    }
+
+    /**
+     * Get the URL for the audio file. Return null if the file doesn't exists.
+     *
+     * @param bool $loadFromDatabase
+     *
+     * @return string
+     */
+    public function getFileUrl($loadFromDatabase = false)
+    {
+        $filePath = $this->getAbsoluteFilePath($loadFromDatabase);
+
+        if (empty($filePath)) {
+            return null;
+        }
+
+        return str_replace(
+            api_get_path(SYS_COURSE_PATH),
+            api_get_path(WEB_COURSE_PATH),
+            $filePath
+        );
+    }
+
+    /**
+     * Tricky stuff to deal with the feedback = 0 in exercises (all question per page).
+     *
+     * @param $exe_id integer
+     */
+    public function replaceWithRealExe($exe_id)
+    {
+        $filename = null;
+        //ugly fix
+        foreach ($this->available_extensions as $extension) {
+            $items = explode('-', $this->fileName);
+            $items[5] = 'temp_exe';
+            $filename = implode('-', $items);
+
+            if (is_file($this->storePath.$filename.'.'.$extension)) {
+                $old_name = $this->storePath.$filename.'.'.$extension;
+                $items = explode('-', $this->fileName);
+                $items[5] = $exe_id;
+                $filename = $filename = implode('-', $items);
+                $new_name = $this->storePath.$filename.'.'.$extension;
+                rename($old_name, $new_name);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Generate the necessary directory for audios. If them not exists, are created.
+     *
      * @return string
      */
     private function generateDirectory()
@@ -142,7 +281,8 @@ class OralExpression extends Question
     }
 
     /**
-     * Generate the file name
+     * Generate the file name.
+     *
      * @return string
      */
     private function generateFileName()
@@ -155,13 +295,14 @@ class OralExpression extends Question
                 $this->userId,
                 $this->exerciseId,
                 $this->id,
-                $this->exeId
+                $this->exeId,
             ]
         );
     }
 
     /**
-     * Generate a relative directory path
+     * Generate a relative directory path.
+     *
      * @return string
      */
     private function generateRelativeDirectory()
@@ -177,136 +318,5 @@ class OralExpression extends Question
         $directory = '/exercises/'.$path.'/';
 
         return $directory;
-    }
-
-    /**
-     * Return the HTML code to show the RecordRTC/Wami recorder
-     * @return string
-     */
-    public function returnRecorder()
-    {
-        $directory = '/..'.$this->generateRelativeDirectory();
-        $recordAudioView = new Template(
-            '',
-            false,
-            false,
-            false,
-            false,
-            false,
-            false
-        );
-
-        $recordAudioView->assign('directory', $directory);
-        $recordAudioView->assign('user_id', $this->userId);
-        $recordAudioView->assign('file_name', $this->fileName);
-        $recordAudioView->assign('question_id', $this->id);
-
-        $template = $recordAudioView->get_template('exercise/oral_expression.tpl');
-
-        return $recordAudioView->fetch($template);
-    }
-
-    /**
-     * Get the absolute file path. Return null if the file doesn't exists
-     * @param bool $loadFromDatabase
-     * @return string
-     */
-    public function getAbsoluteFilePath($loadFromDatabase = false)
-    {
-        $fileName = $this->fileName;
-
-        if ($loadFromDatabase) {
-            $em = Database::getManager();
-            //Load the real filename just if exists
-            if (isset($this->exeId, $this->userId, $this->id, $this->sessionId, $this->course['real_id'])) {
-                $result = $em
-                    ->getRepository('ChamiloCoreBundle:TrackEAttempt')
-                    ->findOneBy([
-                        'exeId' => $this->exeId,
-                        'userId' => $this->userId,
-                        'questionId' => $this->id,
-                        'sessionId' => $this->sessionId,
-                        'cId' => $this->course['real_id']
-                    ]);
-
-                if (!$result) {
-                    return '';
-                }
-
-                $fileName = $result->getFilename();
-
-                if (empty($fileName)) {
-                    return '';
-                }
-
-                return $this->storePath.$result->getFilename();
-            }
-        }
-
-        foreach ($this->available_extensions as $extension) {
-            $audioFile = $this->storePath.$fileName;
-            $file = "$audioFile.$extension";
-
-            if (is_file($file)) {
-                return $file;
-            }
-
-            // Function handle_uploaded_document() adds the session and group id by default.
-            $file = "$audioFile"."__".$this->sessionId."__0.$extension";
-
-            if (is_file($file)) {
-                return $file;
-            }
-
-            continue;
-        }
-
-        return '';
-    }
-
-    /**
-     * Get the URL for the audio file. Return null if the file doesn't exists
-     * @param bool $loadFromDatabase
-     *
-     * @return string
-     */
-    public function getFileUrl($loadFromDatabase = false)
-    {
-        $filePath = $this->getAbsoluteFilePath($loadFromDatabase);
-
-        if (empty($filePath)) {
-            return null;
-        }
-
-        return str_replace(
-            api_get_path(SYS_COURSE_PATH),
-            api_get_path(WEB_COURSE_PATH),
-            $filePath
-        );
-    }
-
-    /**
-     * Tricky stuff to deal with the feedback = 0 in exercises (all question per page)
-     * @param $exe_id integer
-     */
-    public function replaceWithRealExe($exe_id)
-    {
-        $filename = null;
-        //ugly fix
-        foreach ($this->available_extensions as $extension) {
-            $items = explode('-', $this->fileName);
-            $items[5] = 'temp_exe';
-            $filename = implode('-', $items);
-
-            if (is_file($this->storePath.$filename.'.'.$extension)) {
-                $old_name = $this->storePath.$filename.'.'.$extension;
-                $items = explode('-', $this->fileName);
-                $items[5] = $exe_id;
-                $filename = $filename = implode('-', $items);
-                $new_name = $this->storePath.$filename.'.'.$extension;
-                rename($old_name, $new_name);
-                break;
-            }
-        }
     }
 }

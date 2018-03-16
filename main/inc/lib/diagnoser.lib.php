@@ -3,13 +3,13 @@
 
 /**
  * Class Diagnoser
- * Class that is responsible for generating diagnostic information about the system
+ * Class that is responsible for generating diagnostic information about the system.
  *
  * @package chamilo.diagnoser
+ *
  * @author Ivan Tcholakov, 2008, initial proposal and sample code.
  * @author spou595, 2009, implementation for Chamilo 2.x
  * @author Julio Montoya <gugli100@gmail.com>, 2010, port to chamilo 1.8.7, Some fixes
- *
  */
 class Diagnoser
 {
@@ -19,37 +19,37 @@ class Diagnoser
     const STATUS_INFORMATION = 4;
 
     /**
-     * Contructor
+     * Contructor.
      */
     public function __construct()
     {
     }
 
     /**
-     * Show html table
+     * Show html table.
      */
     public function show_html()
     {
         $sections = [
             'chamilo' => [
                 'lang' => 'Chamilo',
-                'info' => 'State of Chamilo requirements'
+                'info' => 'State of Chamilo requirements',
             ],
             'php' => [
                 'lang' => 'PHP',
-                'info' => 'State of PHP settings on the server'
+                'info' => 'State of PHP settings on the server',
             ],
             'database' => [
                 'lang' => 'Database',
-                'info' => 'Configuration settings of the database server. To check the database consistency after an upgrade, if you have access to the command line, you can use "php bin/doctrine.php orm:schema-tool:update --dump-sql". This will print a list of database changes that should be applied to your system in order to get the right structure. Index name changes can be ignored. Use "--force" instead of "--dump" to try and execute them in order.'
+                'info' => 'Configuration settings of the database server. To check the database consistency after an upgrade, if you have access to the command line, you can use "php bin/doctrine.php orm:schema-tool:update --dump-sql". This will print a list of database changes that should be applied to your system in order to get the right structure. Index name changes can be ignored. Use "--force" instead of "--dump" to try and execute them in order.',
             ],
             'webserver' => [
                 'lang' => get_lang('WebServer'),
-                'info' => 'Information about your webserver\'s configuration '
+                'info' => 'Information about your webserver\'s configuration ',
             ],
             'paths' => [
                 'lang' => 'Paths',
-                'info' => 'The following paths are called by their constant throughout Chamilo\'s code using the api_get_path() function. Here is a list of these paths and what they would be translated to on this portal.'
+                'info' => 'The following paths are called by their constant throughout Chamilo\'s code using the api_get_path() function. Here is a list of these paths and what they would be translated to on this portal.',
             ],
         ];
         $currentSection = isset($_GET['section']) ? $_GET['section'] : '';
@@ -129,14 +129,16 @@ class Diagnoser
         $list = $paths[api_get_path(WEB_PATH)];
         $list['url_append'] = api_get_configuration_value('url_append');
         asort($list);
+
         return [
             'headers' => ['Path', 'constant'],
-            'data' => $list
+            'data' => $list,
         ];
     }
 
     /**
-     * Functions to get the data for the chamilo diagnostics
+     * Functions to get the data for the chamilo diagnostics.
+     *
      * @return array of data
      */
     public function get_chamilo_data()
@@ -222,7 +224,8 @@ class Diagnoser
     }
 
     /**
-     * Functions to get the data for the php diagnostics
+     * Functions to get the data for the php diagnostics.
+     *
      * @return array of data
      */
     public function get_php_data()
@@ -404,7 +407,7 @@ class Diagnoser
         $setting = ini_get('memory_limit');
         $req_setting = '>= '.REQUIRED_MIN_MEMORY_LIMIT.'M';
         $status = self::STATUS_ERROR;
-        if ((float)$setting >= REQUIRED_MIN_MEMORY_LIMIT) {
+        if ((float) $setting >= REQUIRED_MIN_MEMORY_LIMIT) {
             $status = self::STATUS_OK;
         }
         $array[] = $this->build_setting(
@@ -421,7 +424,7 @@ class Diagnoser
         $setting = ini_get('post_max_size');
         $req_setting = '>= '.REQUIRED_MIN_POST_MAX_SIZE.'M';
         $status = self::STATUS_ERROR;
-        if ((float)$setting >= REQUIRED_MIN_POST_MAX_SIZE) {
+        if ((float) $setting >= REQUIRED_MIN_POST_MAX_SIZE) {
             $status = self::STATUS_OK;
         }
         $array[] = $this->build_setting(
@@ -438,7 +441,7 @@ class Diagnoser
         $setting = ini_get('upload_max_filesize');
         $req_setting = '>= '.REQUIRED_MIN_UPLOAD_MAX_FILESIZE.'M';
         $status = self::STATUS_ERROR;
-        if ((float)$setting >= REQUIRED_MIN_UPLOAD_MAX_FILESIZE) {
+        if ((float) $setting >= REQUIRED_MIN_UPLOAD_MAX_FILESIZE) {
             $status = self::STATUS_OK;
         }
         $array[] = $this->build_setting(
@@ -588,7 +591,8 @@ class Diagnoser
     }
 
     /**
-     * Functions to get the data for the mysql diagnostics
+     * Functions to get the data for the mysql diagnostics.
+     *
      * @return array of data
      */
     public function get_database_data()
@@ -634,7 +638,6 @@ class Diagnoser
             get_lang('Port')
         );
 
-
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION,
             '[Database]',
@@ -650,7 +653,8 @@ class Diagnoser
     }
 
     /**
-     * Functions to get the data for the webserver diagnostics
+     * Functions to get the data for the webserver diagnostics.
+     *
      * @return array of data
      */
     public function get_webserver_data()
@@ -752,7 +756,7 @@ class Diagnoser
     }
 
     /**
-     * Additional functions needed for fast integration
+     * Additional functions needed for fast integration.
      */
     public function build_setting(
         $status,
@@ -796,9 +800,11 @@ class Diagnoser
     }
 
     /**
-     * Create a link with a url and a title
+     * Create a link with a url and a title.
+     *
      * @param $title
      * @param $url
+     *
      * @return string the url
      */
     public function get_link($title, $url)
@@ -808,6 +814,7 @@ class Diagnoser
 
     /**
      * @param int $value
+     *
      * @return string
      */
     public function format_yes_no_optional($value)
@@ -824,11 +831,13 @@ class Diagnoser
                 $return = get_lang('Optional');
                 break;
         }
+
         return $return;
     }
 
     /**
      * @param $value
+     *
      * @return string
      */
     public function format_yes_no($value)
@@ -838,6 +847,7 @@ class Diagnoser
 
     /**
      * @param int $value
+     *
      * @return string
      */
     public function format_on_off($value)

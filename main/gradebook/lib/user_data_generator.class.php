@@ -4,8 +4,10 @@
 /**
  * Class UserDataGenerator
  * Class to select, sort and transform object data into array data,
- * used for a student's general view
+ * used for a student's general view.
+ *
  * @author Bert Steppé
+ *
  * @package chamilo.gradebook
  */
 class UserDataGenerator
@@ -32,7 +34,8 @@ class UserDataGenerator
 
     /**
      * UserDataGenerator constructor.
-     * @param int $userid
+     *
+     * @param int   $userid
      * @param array $evals
      * @param array $links
      */
@@ -67,7 +70,7 @@ class UserDataGenerator
     }
 
     /**
-     * Get total number of items (rows)
+     * Get total number of items (rows).
      */
     public function get_total_items_count()
     {
@@ -75,15 +78,16 @@ class UserDataGenerator
     }
 
     /**
-     * Get actual array data
+     * Get actual array data.
+     *
      * @return array 2-dimensional array - each array contains the elements:
-     * 0: eval/link object
-     * 1: item name
-     * 2: course name
-     * 3: category name
-     * 4: average score
-     * 5: student's score
-     * 6: student's score as custom display (only if custom scoring enabled)
+     *               0: eval/link object
+     *               1: item name
+     *               2: course name
+     *               3: category name
+     *               4: average score
+     *               5: student's score
+     *               6: student's score as custom display (only if custom scoring enabled)
      */
     public function get_data(
         $sorting = 0,
@@ -160,12 +164,14 @@ class UserDataGenerator
             }
             $data[] = $row;
         }
+
         return $data;
     }
 
     /**
      * @param $item1
      * @param $item2
+     *
      * @return int
      */
     public function sort_by_type($item1, $item2)
@@ -173,13 +179,14 @@ class UserDataGenerator
         if ($item1->get_item_type() == $item2->get_item_type()) {
             return $this->sort_by_name($item1, $item2);
         } else {
-            return ($item1->get_item_type() < $item2->get_item_type() ? -1 : 1);
+            return $item1->get_item_type() < $item2->get_item_type() ? -1 : 1;
         }
     }
 
     /**
      * @param $item1
      * @param $item2
+     *
      * @return int
      */
     public function sort_by_course($item1, $item2)
@@ -190,12 +197,14 @@ class UserDataGenerator
         $name2 = api_strtolower(
             $this->get_course_name_from_code_cached($item2->get_course_code())
         );
+
         return api_strnatcmp($name1, $name2);
     }
 
     /**
      * @param $item1
      * @param $item2
+     *
      * @return int
      */
     public function sort_by_category($item1, $item2)
@@ -211,6 +220,7 @@ class UserDataGenerator
     /**
      * @param $item1
      * @param $item2
+     *
      * @return int
      */
     public function sort_by_name($item1, $item2)
@@ -221,6 +231,7 @@ class UserDataGenerator
     /**
      * @param $item1
      * @param $item2
+     *
      * @return int
      */
     public function sort_by_average($item1, $item2)
@@ -234,6 +245,7 @@ class UserDataGenerator
     /**
      * @param $item1
      * @param $item2
+     *
      * @return int
      */
     public function sort_by_score($item1, $item2)
@@ -247,6 +259,7 @@ class UserDataGenerator
     /**
      * @param $item1
      * @param $item2
+     *
      * @return int
      */
     public function sort_by_mask($item1, $item2)
@@ -260,23 +273,25 @@ class UserDataGenerator
     /**
      * @param $score1
      * @param $score2
+     *
      * @return int
      */
     public function compare_scores($score1, $score2)
     {
         if (!isset($score1)) {
-            return (isset($score2) ? 1 : 0);
+            return isset($score2) ? 1 : 0;
         } elseif (!isset($score2)) {
             return -1;
         } elseif (($score1[0] / $score1[1]) == ($score2[0] / $score2[1])) {
             return 0;
         } else {
-            return (($score1[0] / $score1[1]) < ($score2[0] / $score2[1]) ? -1 : 1);
+            return ($score1[0] / $score1[1]) < ($score2[0] / $score2[1]) ? -1 : 1;
         }
     }
 
     /**
      * @param $item
+     *
      * @return mixed
      */
     private function build_course_name($item)
@@ -286,6 +301,7 @@ class UserDataGenerator
 
     /**
      * @param $item
+     *
      * @return string
      */
     private function build_category_name($item)
@@ -298,6 +314,7 @@ class UserDataGenerator
     /**
      * @param $item
      * @param $ignore_score_color
+     *
      * @return string
      */
     private function build_average_column($item, $ignore_score_color)
@@ -319,6 +336,7 @@ class UserDataGenerator
     /**
      * @param $item
      * @param $ignore_score_color
+     *
      * @return string
      */
     private function build_result_column($item, $ignore_score_color)
@@ -340,6 +358,7 @@ class UserDataGenerator
     /**
      * @param $item
      * @param $ignore_score_color
+     *
      * @return string
      */
     private function build_mask_column($item, $ignore_score_color)
@@ -360,6 +379,7 @@ class UserDataGenerator
 
     /**
      * @param $coursecode
+     *
      * @return mixed
      */
     private function get_course_name_from_code_cached($coursecode)
@@ -371,13 +391,13 @@ class UserDataGenerator
         } else {
             $name = CourseManager::getCourseNameFromCode($coursecode);
             $this->coursecodecache[$coursecode] = $name;
+
             return $name;
         }
     }
 
     /**
      * @param $category_id
-     * @return null
      */
     private function get_category_cached($category_id)
     {
@@ -399,6 +419,7 @@ class UserDataGenerator
 
     /**
      * @param $cat
+     *
      * @return string
      */
     private function get_category_name_to_display($cat)

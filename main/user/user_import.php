@@ -47,8 +47,8 @@ if ($form->validate()) {
         $unsubscribe_users = isset($_POST['unsubscribe_users']) ? true : false;
         //@todo : csvToArray deprecated
         $users = Import::csvToArray($_FILES['import_file']['tmp_name']);
-        $invalid_users  = [];
-        $clean_users    = [];
+        $invalid_users = [];
+        $clean_users = [];
 
         if (!empty($users)) {
             $empty_line = 0;

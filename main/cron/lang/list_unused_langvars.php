@@ -1,17 +1,18 @@
 <?php /* For licensing terms, see /license.txt */
 /**
- * Cron script to list unused, but defined, language variables
+ * Cron script to list unused, but defined, language variables.
+ *
  * @package chamilo.cron.lang
  */
 /**
- * Includes and declarations
+ * Includes and declarations.
  */
 die();
 require_once '../../inc/global.inc.php';
 $path = api_get_path(SYS_LANG_PATH).'english';
 ini_set('memory_limit', '128M');
 /**
- * Main code
+ * Main code.
  */
 $terms = [];
 $list = SubLanguageManager::get_lang_folder_files_list($path);
@@ -85,7 +86,6 @@ foreach ($defined_terms as $term => $file) {
 }
 echo "</table>\n";
 
-
 function get_all_php_files($base_path)
 {
     $list = scandir($base_path);
@@ -109,5 +109,6 @@ function get_all_php_files($base_path)
         }
     }
     $list = null;
+
     return $files;
 }

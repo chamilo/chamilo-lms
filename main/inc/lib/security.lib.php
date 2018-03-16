@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
 use Chamilo\CoreBundle\Component\HTMLPurifier\Filter\AllowIframes;
+use ChamiloSession as Session;
 
 /**
  * This is the security library for Chamilo.
@@ -23,11 +23,12 @@ use Chamilo\CoreBundle\Component\HTMLPurifier\Filter\AllowIframes;
  * For files inclusions (using dynamic paths) use check_rel_path() and check_abs_path()
  *
  * @package chamilo.library
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
 /**
- * Security class
+ * Security class.
  *
  * Include/require it in your code and call Security::function()
  * to use its functionalities.
@@ -43,11 +44,13 @@ class Security
 
     /**
      * Checks if the absolute path (directory) given is really under the
-     * checker path (directory)
+     * checker path (directory).
+     *
      * @param string    Absolute path to be checked (with trailing slash)
      * @param string    Checker path under which the path
      * should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
-     * @return bool    True if the path is under the checker, false otherwise
+     *
+     * @return bool True if the path is under the checker, false otherwise
      */
     public static function check_abs_path($abs_path, $checker_path)
     {
@@ -76,16 +79,19 @@ class Security
                 }
             }
         }
+
         return false;
     }
 
     /**
      * Checks if the relative path (directory) given is really under the
-     * checker path (directory)
+     * checker path (directory).
+     *
      * @param string    Relative path to be checked (relative to the current directory) (with trailing slash)
      * @param string    Checker path under which the path
      * should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
-     * @return bool    True if the path is under the checker, false otherwise
+     *
+     * @return bool True if the path is under the checker, false otherwise
      */
     public static function check_rel_path($rel_path, $checker_path)
     {
@@ -103,14 +109,17 @@ class Security
         if ($found === 0) {
             return true;
         }
+
         return false;
     }
 
     /**
      * Filters dangerous filenames (*.php[.]?* and .htaccess) and returns it in
      * a non-executable form (for PHP and htaccess, this is still vulnerable to
-     * other languages' files extensions)
-     * @param   string  $filename Unfiltered filename
+     * other languages' files extensions).
+     *
+     * @param string $filename Unfiltered filename
+     *
      * @return string
      */
     public static function filter_filename($filename)
@@ -128,9 +137,11 @@ class Security
 
     /**
      * This function checks that the token generated in get_token() has been kept (prevents
-     * Cross-Site Request Forgeries attacks)
+     * Cross-Site Request Forgeries attacks).
+     *
      * @param    string    The array in which to get the token ('get' or 'post')
-     * @return    bool    True if it's the right token, false otherwise
+     *
+     * @return bool True if it's the right token, false otherwise
      */
     public static function check_token($request_type = 'post')
     {
@@ -161,13 +172,15 @@ class Security
 
                 return false;
         }
+
         return false; // Just in case, don't let anything slip.
     }
 
     /**
      * Checks the user agent of the client as recorder by get_ua() to prevent
      * most session hijacking attacks.
-     * @return    bool    True if the user agent is the same, false otherwise
+     *
+     * @return bool True if the user agent is the same, false otherwise
      */
     public static function check_ua()
     {
@@ -182,8 +195,7 @@ class Security
     }
 
     /**
-     * Clear the security token from the session
-     * @return void
+     * Clear the security token from the session.
      */
     public static function clear_token()
     {
@@ -196,8 +208,9 @@ class Security
      * This later prevents Cross-Site Request Forgeries by checking that the user is really
      * the one that sent this form in knowingly (this form hasn't been generated from
      * another website visited by the user at the same time).
-     * Check the token with check_token()
-     * @return    string    Hidden-type input ready to insert into a form
+     * Check the token with check_token().
+     *
+     * @return string Hidden-type input ready to insert into a form
      */
     public static function get_HTML_token()
     {
@@ -214,8 +227,9 @@ class Security
      * This later prevents Cross-Site Request Forgeries by checking that the user is really
      * the one that sent this form in knowingly (this form hasn't been generated from
      * another website visited by the user at the same time).
-     * Check the token with check_token()
-     * @return    string    Token
+     * Check the token with check_token().
+     *
+     * @return string Token
      */
     public static function get_token()
     {
@@ -241,7 +255,6 @@ class Security
     /**
      * Gets the user agent in the session to later check it with check_ua() to prevent
      * most cases of session hijacking.
-     * @return void
      */
     public static function get_ua()
     {
@@ -252,9 +265,11 @@ class Security
 
     /**
      * This function returns a variable from the clean array. If the variable doesn't exist,
-     * it returns null
+     * it returns null.
+     *
      * @param string    Variable name
-     * @return mixed    Variable or NULL on error
+     *
+     * @return mixed Variable or NULL on error
      */
     public static function get($varname)
     {
@@ -269,10 +284,12 @@ class Security
      * This function tackles the XSS injections.
      * Filtering for XSS is very easily done by using the htmlentities() function.
      * This kind of filtering prevents JavaScript snippets to be understood as such.
+     *
      * @param string The variable to filter for XSS, this params can be a string or an array (example : array(x,y))
      * @param int The user status,constant allowed (STUDENT, COURSEMANAGER, ANONYMOUS, COURSEMANAGERLOWSECURITY)
      * @param bool $filter_terms
-     * @return mixed    Filtered string or array
+     *
+     * @return mixed Filtered string or array
      */
     public static function remove_XSS($var, $user_status = null, $filter_terms = false)
     {
@@ -314,7 +331,6 @@ class Security
             if (api_get_setting('enable_iframe_inclusion') == 'true') {
                 $config->set('Filter.Custom', [new AllowIframes()]);
             }
-
 
             // Shows _target attribute in anchors
             $config->set('Attr.AllowedFrameTargets', ['_blank', '_top', '_self', '_parent']);
@@ -371,12 +387,12 @@ class Security
                     'Optional: (source, Flow) | (Flow, source) | Flow',
                     'Common',
                     [
-                        'src'      => 'URI',
-                        'type'     => 'Text',
-                        'width'    => 'Length',
-                        'height'   => 'Length',
-                        'poster'   => 'URI',
-                        'preload'  => 'Enum#auto,metadata,none',
+                        'src' => 'URI',
+                        'type' => 'Text',
+                        'width' => 'Length',
+                        'height' => 'Length',
+                        'poster' => 'URI',
+                        'preload' => 'Enum#auto,metadata,none',
                         'controls' => 'Bool',
                     ]
                 );
@@ -388,11 +404,11 @@ class Security
                     'Common',
                     [
                         'autoplay' => 'Bool',
-                        'src'      => 'URI',
-                        'loop'     => 'Bool',
-                        'preload'  => 'Enum#auto,metadata,none',
+                        'src' => 'URI',
+                        'loop' => 'Bool',
+                        'preload' => 'Enum#auto,metadata,none',
                         'controls' => 'Bool',
-                        'muted'    => 'Bool',
+                        'muted' => 'Bool',
                     ]
                 );
                 $def->addElement(
@@ -400,7 +416,7 @@ class Security
                     'Block',
                     'Flow',
                     'Common',
-                    ['src' => 'URI', 'type' => 'Text',]
+                    ['src' => 'URI', 'type' => 'Text']
                 );
             }
 
@@ -415,8 +431,10 @@ class Security
     }
 
     /**
-     * Filter content
+     * Filter content.
+     *
      * @param string $text to be filter
+     *
      * @return string
      */
     public static function filter_terms($text)
@@ -458,8 +476,11 @@ class Security
      * Image paths are supposed to be given by programmers - people who know what they do, anyway,
      * this method encourages a safe practice for generating icon paths, without using heavy solutions
      * based on HTMLPurifier for example.
-     * @param string $img_path The input path of the image, it could be relative or absolute URL.
-     * @return string Returns sanitized image path or an empty string when the image path is not secure.
+     *
+     * @param string $img_path the input path of the image, it could be relative or absolute URL
+     *
+     * @return string returns sanitized image path or an empty string when the image path is not secure
+     *
      * @author Ivan Tcholakov, March 2011
      */
     public static function filter_img_path($image_path)
@@ -495,6 +516,7 @@ class Security
         } else {
             return '';
         }
+
         return $image_path;
     }
 
@@ -513,8 +535,8 @@ class Security
                 'lowercase' => 0,
                 'uppercase' => 0,
                 'numeric' => 2,
-                'length' => 5
-            ]
+                'length' => 5,
+            ],
         ];
 
         $passwordRequirements = api_get_configuration_value('password_requirements');
@@ -527,7 +549,8 @@ class Security
 
     /**
      * Gets password requirements in the platform language using get_lang
-     * based in platform settings. See function 'self::getPasswordRequirements'
+     * based in platform settings. See function 'self::getPasswordRequirements'.
+     *
      * @return string
      */
     public static function getPasswordRequirementsToString($passedConditions = [])

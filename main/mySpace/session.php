@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Sessions reporting
+ * Sessions reporting.
+ *
  * @package chamilo.reporting
  */
-
 ob_start();
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -132,21 +132,21 @@ $columns = [
     get_lang('Date'),
     get_lang('NbCoursesPerSession'),
     get_lang('NbStudentPerSession'),
-    get_lang('Details')
+    get_lang('Details'),
 ];
 
 // Column config
 $columnModel = [
-    ['name'=>'name', 'index'=>'name', 'width'=>'255', 'align'=>'left'],
-    ['name'=>'date', 'index'=>'date', 'width'=>'150', 'align'=>'left', 'sortable'=>'false'],
-    ['name'=>'course_per_session', 'index'=>'course_per_session', 'width'=>'150', 'sortable'=>'false'],
-    ['name'=>'student_per_session', 'index'=>'student_per_session', 'width'=>'100', 'sortable'=>'false'],
-    ['name'=>'details', 'index'=>'details', 'width'=>'100', 'sortable'=>'false']
+    ['name' => 'name', 'index' => 'name', 'width' => '255', 'align' => 'left'],
+    ['name' => 'date', 'index' => 'date', 'width' => '150', 'align' => 'left', 'sortable' => 'false'],
+    ['name' => 'course_per_session', 'index' => 'course_per_session', 'width' => '150', 'sortable' => 'false'],
+    ['name' => 'student_per_session', 'index' => 'student_per_session', 'width' => '100', 'sortable' => 'false'],
+    ['name' => 'details', 'index' => 'details', 'width' => '100', 'sortable' => 'false'],
 ];
 
 $extraParams = [
     'autowidth' => 'true',
-    'height' => 'auto'
+    'height' => 'auto',
 ];
 
 $js = '<script>

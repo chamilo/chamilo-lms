@@ -1,7 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Learning paths reporting
+ * Learning paths reporting.
+ *
  * @package chamilo.reporting
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -62,7 +63,7 @@ $interbreadcrumb[] = [
 $nameTools = get_lang('LearningPathDetails');
 $sql = 'SELECT name	FROM '.Database::get_course_table(TABLE_LP_MAIN).' 
         WHERE c_id = '.$course_info['real_id'].' AND id='.$lp_id;
-$rs  = Database::query($sql);
+$rs = Database::query($sql);
 $lp_title = Database::result($rs, 0, 0);
 
 $origin = 'tracking';

@@ -119,7 +119,7 @@ $tool_name = get_lang('Session').': '.$session_name.' - '.get_lang('Course').': 
 $interbreadcrumb[] = ["url" => "session_list.php", "name" => get_lang('SessionList')];
 $interbreadcrumb[] = [
     'url' => "resume_session.php?id_session=".$id_session,
-    "name" => get_lang('SessionOverview')
+    "name" => get_lang('SessionOverview'),
 ];
 
 Display::display_header($tool_name);

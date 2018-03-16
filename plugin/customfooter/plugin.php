@@ -1,14 +1,15 @@
 <?php
 /**
  * This plugin allows you to configure a footer note to plug some additional features. In a way, it works a bit like
- * any block plugin to be added in a region
+ * any block plugin to be added in a region.
+ *
  * @package chamilo.plugin
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
-
 /**
- * Plugin details (must be present)
+ * Plugin details (must be present).
  */
 
 /* Plugin config */
@@ -22,7 +23,6 @@ $plugin_info['comment'] = "Drives configuration parameters that plugs custom foo
 $plugin_info['version'] = '1.0';
 //the plugin author
 $plugin_info['author'] = 'Valery Fremaux, Julio Montoya';
-
 
 /* Plugin optional settings */
 

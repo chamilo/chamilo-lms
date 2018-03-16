@@ -1,15 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\SkillBundle\Entity\Profile;
 use Chamilo\SkillBundle\Entity\Level;
+use Chamilo\SkillBundle\Entity\Profile;
 
 /**
- * Add a skill Profile
+ * Add a skill Profile.
  *
  * @package chamilo.skill
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -47,7 +46,7 @@ $formToDisplay = $form->returnForm();
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/skill.php', 'name' => get_lang('ManageSkillsLevels')];
-$interbreadcrumb[] = ['url' =>  api_get_self(), 'name' => get_lang('SkillProfile')];
+$interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('SkillProfile')];
 
 $toolbar = null;
 
@@ -65,7 +64,6 @@ switch ($action) {
             $em->flush();
             Display::addFlash(Display::return_message(get_lang('Updated')));
         }
-
 
         header('Location: '.$listAction);
         exit;

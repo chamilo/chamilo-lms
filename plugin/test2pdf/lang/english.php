@@ -11,5 +11,5 @@ $strings['DownloadOnlyAnswer'] = "Download answers";
 $strings['DownloadAll'] = "Download all";
 $strings['PluginDisabledFromAdminPanel'] = "The plugin has been disabled from the admin panel";
 $strings['AnswersColumn'] = "Answers: ";
-$strings['Statement']= "Statement";
-$strings['PageX']= "Page %s";
+$strings['Statement'] = "Statement";
+$strings['PageX'] = "Page %s";

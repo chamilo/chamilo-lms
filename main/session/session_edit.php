@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Sessions edition script
+ * Sessions edition script.
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -85,7 +85,7 @@ $coaches = Database::store_result($result);
 $thisYear = date('Y');
 
 $coachesOption = [
-    '' => '----- '.get_lang('None').' -----'
+    '' => '----- '.get_lang('None').' -----',
 ];
 
 foreach ($coaches as $coach) {
@@ -96,7 +96,7 @@ foreach ($coaches as $coach) {
 $categoriesList = SessionManager::get_all_session_category();
 
 $categoriesOption = [
-    '0' => get_lang('None')
+    '0' => get_lang('None'),
 ];
 
 if ($categoriesList != false) {
@@ -108,7 +108,7 @@ if ($categoriesList != false) {
 $formAction = api_get_self().'?';
 $formAction .= http_build_query([
     'page' => Security::remove_XSS($_GET['page']),
-    'id' => $id
+    'id' => $id,
 ]);
 
 $form = new FormValidator('edit_session', 'post', $formAction);

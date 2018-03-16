@@ -9,6 +9,7 @@
  * @abstract The task of the internship was to integrate the 'send messages to specific users' with the
  *             Announcements tool and also add the resource linker here. The database also needed refactoring
  *             as there was no title field (the title was merged into the content field)
+ *
  * @package chamilo.announcements
  * multiple functions
  */
@@ -70,7 +71,7 @@ if (!empty($group_id)) {
     ];
     $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace').' '.$groupProperties['name']
+        "name" => get_lang('GroupSpace').' '.$groupProperties['name'],
     ];
 
     if ($allowToEdit === false) {
@@ -202,7 +203,7 @@ switch ($action) {
             get_lang('Title'),
             get_lang('By'),
             get_lang('LastUpdateDate'),
-            get_lang('Actions')
+            get_lang('Actions'),
         ];
 
         // Column config
@@ -234,8 +235,8 @@ switch ($action) {
                 'width' => '150',
                 'align' => 'left',
                 //'formatter' => 'action_formatter',
-                'sortable' => 'false'
-            ]
+                'sortable' => 'false',
+            ],
         ];
 
         // Autowidth
@@ -322,7 +323,7 @@ switch ($action) {
                 AnnouncementManager::delete_all_announcements($_course);
                 Display::addFlash(Display::return_message(get_lang('AnnouncementDeletedAll')));
             }
-            header('Location: ' . $homeUrl);
+            header('Location: '.$homeUrl);
             exit;
         }
         break;
@@ -682,7 +683,7 @@ if ($allowToEdit && api_get_group_id() == 0) {
         if (!isset($_GET['action']) ||
             isset($_GET['action']) && $_GET['action'] == 'list'
         ) {
-            $actionsLeft .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('" . get_lang("ConfirmYourChoice") . "')) return false;\">" .
+            $actionsLeft .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".
                 Display::return_icon(
                     'delete_announce.png',
                     get_lang('AnnouncementDeleteAll'),

@@ -3,10 +3,11 @@
 
 /**
  * A page for detailed preview or edition of a given course request.
+ *
  * @package chamilo.admin
+ *
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>, 2010
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;

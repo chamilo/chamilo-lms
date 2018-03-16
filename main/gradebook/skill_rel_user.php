@@ -45,7 +45,7 @@ foreach ($skills as $skill) {
 
     $criteria = [
         'user' => $userId,
-        'skillRelItem' => $skill
+        'skillRelItem' => $skill,
     ];
     /** @var \Chamilo\SkillBundle\Entity\SkillRelItemRelUser $skillRelItemRelUser */
     $skillRelItemRelUser = $em->getRepository('ChamiloSkillBundle:SkillRelItemRelUser')->findOneBy($criteria);
@@ -63,11 +63,11 @@ foreach ($itemsPerSkill as $skillId => $skillList) {
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl(),
-    'name' => get_lang('Gradebook')
+    'name' => get_lang('Gradebook'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'gradebook/gradebook_display_summary.php?'.api_get_cidreq().'&selectcat='.$categoryId,
-    'name' => get_lang('GradebookListOfStudentsReports')
+    'name' => get_lang('GradebookListOfStudentsReports'),
 ];
 
 $url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=assign_user_to_skill';

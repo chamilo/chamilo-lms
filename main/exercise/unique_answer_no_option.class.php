@@ -6,11 +6,12 @@ use ChamiloSession as Session;
 /**
  * Class UniqueAnswerNoOption
  * Allows to instantiate an object of type UNIQUE_ANSWER (MULTIPLE CHOICE, UNIQUE ANSWER),
- * extending the class question
+ * extending the class question.
+ *
  * @author Eric Marguin
  * @author Julio Montoya
- * @package chamilo.exercise
  *
+ * @package chamilo.exercise
  */
 class UniqueAnswerNoOption extends Question
 {
@@ -18,7 +19,7 @@ class UniqueAnswerNoOption extends Question
     public static $explanationLangVar = 'UniqueAnswerNoOption';
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -28,7 +29,7 @@ class UniqueAnswerNoOption extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createAnswersForm($form)
     {
@@ -38,7 +39,7 @@ class UniqueAnswerNoOption extends Question
         $editor_config = [
             'ToolbarSet' => 'TestProposedAnswer',
             'Width' => '100%',
-            'Height' => '125'
+            'Height' => '125',
         ];
         // This line define how many question by default appear when creating a choice question
         // The previous default value was 2. See task #1759.
@@ -163,7 +164,7 @@ class UniqueAnswerNoOption extends Question
             }
 
             $defaults['scenario'] = $temp_scenario;
-            $renderer = & $form->defaultRenderer();
+            $renderer = &$form->defaultRenderer();
 
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
@@ -189,7 +190,6 @@ class UniqueAnswerNoOption extends Question
             $answer_number = $form->addElement('text', 'counter['.$i.']', null, 'value="'.$i.'"');
             $answer_number->freeze();
 
-
             $form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
             $form->addElement('html_editor', 'answer['.$i.']', null, [], $editor_config);
 
@@ -212,7 +212,7 @@ class UniqueAnswerNoOption extends Question
         $defaults['answer['.$i.']'] = get_lang('DontKnow');
         $defaults['weighting['.$i.']'] = '0';
         $defaults['scenario'] = $temp_scenario;
-        $renderer = & $form->defaultRenderer();
+        $renderer = &$form->defaultRenderer();
 
         $renderer->setElementTemplate(
             '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
@@ -245,7 +245,7 @@ class UniqueAnswerNoOption extends Question
 
         $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
         $form->addElement('html_editor', 'comment['.$i.']', null, [], $editor_config);
-        $form ->addElement('text', "weighting[$i]", null)->freeze();
+        $form->addElement('text', "weighting[$i]", null)->freeze();
 
         $form->addHTml('</tr>');
         $form->addHtml('</tbody></table>');
@@ -280,7 +280,7 @@ class UniqueAnswerNoOption extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
@@ -289,7 +289,7 @@ class UniqueAnswerNoOption extends Question
         $objAnswer = new Answer($this->id);
         $nb_answers = $form->getSubmitValue('nb_answers');
         $minus = 1;
-        if ($form -> getSubmitValue('new_question')) {
+        if ($form->getSubmitValue('new_question')) {
             $minus = 0;
         }
 
@@ -395,7 +395,7 @@ class UniqueAnswerNoOption extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function return_header($exercise, $counter = null, $score = null)
     {

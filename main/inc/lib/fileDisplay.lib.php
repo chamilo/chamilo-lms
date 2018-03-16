@@ -3,7 +3,9 @@
 /**
  * This is the file display library for Dokeos.
  * Include/require it in your code to use its functionality.
+ *
  * @todo move this file to DocumentManager
+ *
  * @package chamilo.library
  */
 
@@ -13,7 +15,9 @@
  * This needs an existing image repository to work.
  *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  string $file_name (string) - Name of a file
+ *
+ * @param string $file_name (string) - Name of a file
+ *
  * @return string The gif image to chose
  */
 function choose_image($file_name)
@@ -172,8 +176,10 @@ function choose_image($file_name)
 }
 
 /**
- * Get the icon to display for a folder by its path
+ * Get the icon to display for a folder by its path.
+ *
  * @param string $folderPath
+ *
  * @return string
  */
 function chooseFolderIcon($folderPath)

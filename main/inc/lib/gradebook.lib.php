@@ -5,6 +5,7 @@
  * Class Gradebook
  * This class provides methods for the notebook management.
  * Include/require it in your code to use its features.
+ *
  * @package chamilo.library
  */
 class Gradebook extends Model
@@ -18,11 +19,11 @@ class Gradebook extends Model
         'grade_model_id',
         'session_id',
         'weight',
-        'user_id'
+        'user_id',
     ];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -37,7 +38,8 @@ class Gradebook extends Model
      * otherwise.
      *
      * @param int $c_id Course integer id, defaults to the current course
-     * @return boolean
+     *
+     * @return bool
      */
     public static function is_active($c_id = null)
     {
@@ -84,13 +86,15 @@ class Gradebook extends Model
                 $gradebook['name'] = $gradebook['course_code'];
             }
         }
+
         return $gradebooks;
     }
 
     /**
-     * @param int $gradebook_id
+     * @param int   $gradebook_id
      * @param array $skill_list
-     * @param bool $deleteSkillNotInList
+     * @param bool  $deleteSkillNotInList
+     *
      * @return bool
      */
     public function updateSkillsToGradeBook(
@@ -149,11 +153,14 @@ class Gradebook extends Model
     }
 
     /**
-     * Returns a Form validator Obj
+     * Returns a Form validator Obj.
+     *
      * @todo the form should be auto generated
+     *
      * @param   string  url
      * @param   string  action add, edit
-     * @return  FormValidator
+     *
+     * @return FormValidator
      */
     public function show_skill_form($gradebook_id, $url, $header = null)
     {
@@ -179,7 +186,7 @@ class Gradebook extends Model
             get_lang('Skills'),
             $clean_skill_list,
             [
-                'multiple' => 'multiple'
+                'multiple' => 'multiple',
             ]
         );
 
@@ -199,6 +206,7 @@ class Gradebook extends Model
 
     /**
      * @param int $gradebook_id
+     *
      * @return array|resource
      */
     public function getSkillsByGradebook($gradebook_id)
@@ -216,7 +224,7 @@ class Gradebook extends Model
     }
 
     /**
-     * Displays the title + grid
+     * Displays the title + grid.
      */
     public function display()
     {
@@ -225,7 +233,7 @@ class Gradebook extends Model
     }
 
     /**
-     * Displays the title + grid
+     * Displays the title + grid.
      */
     public function returnGrid()
     {

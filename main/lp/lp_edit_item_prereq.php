@@ -4,12 +4,13 @@
 use ChamiloSession as Session;
 
 /**
- * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php
+ * This is a learning path creation and player tool in Chamilo - previously learnpath_handler.php.
  *
  * @author Patrick Cool
  * @author Denes Nagy
  * @author Roan Embrechts, refactoring and code cleaning
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
+ *
  * @package chamilo.learnpath
  */
 $this_section = SECTION_COURSES;
@@ -39,13 +40,13 @@ $lp_theme_css = $lp->get_theme();
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
+        'name' => get_lang('ToolGradebook'),
     ];
 }
 
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list',
-    'name' => get_lang('LearningPaths')
+    'name' => get_lang('LearningPaths'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id",

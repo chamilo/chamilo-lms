@@ -4,7 +4,6 @@
 /**
  *  @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -38,40 +37,40 @@ if ($action == 'add') {
     $interbreadcrumb[] = ['url' => 'extra_fields.php?type='.$extraField->type, 'name' => $extraField->pageName];
     $interbreadcrumb[] = [
         'url' => 'extra_fields.php?type='.$extraField->type.'&action=edit&id='.$extraFieldInfo['id'],
-        'name' => $extraFieldInfo['display_text']
+        'name' => $extraFieldInfo['display_text'],
     ];
     $interbreadcrumb[] = [
         'url' => 'extra_field_options.php?type='.$extraField->type.'&field_id='.$extraFieldInfo['id'],
-        'name' => get_lang('EditExtraFieldOptions')
+        'name' => get_lang('EditExtraFieldOptions'),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
 } elseif ($action == 'edit') {
     $interbreadcrumb[] = [
         'url' => 'extra_fields.php?type='.$extraField->type,
-        'name' => $extraField->pageName
+        'name' => $extraField->pageName,
     ];
     $interbreadcrumb[] = [
         'url' => 'extra_fields.php?type='.$extraField->type.'&action=edit&id='.$extraFieldInfo['id'],
-        'name' => $extraFieldInfo['display_text']
+        'name' => $extraFieldInfo['display_text'],
     ];
     $interbreadcrumb[] = [
         'url' => 'extra_field_options.php?type='.$extraField->type.'&field_id='.$extraFieldInfo['id'],
-        'name' => get_lang('EditExtraFieldOptions')
+        'name' => get_lang('EditExtraFieldOptions'),
     ];
 
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
 } else {
     $interbreadcrumb[] = [
         'url' => 'extra_fields.php?type='.$extraField->type,
-        'name' => $extraField->pageName
+        'name' => $extraField->pageName,
     ];
     $interbreadcrumb[] = [
         'url' => 'extra_fields.php?type='.$extraField->type.'&action=edit&id='.$extraFieldInfo['id'],
-        'name' => $extraFieldInfo['display_text']
+        'name' => $extraFieldInfo['display_text'],
     ];
     $interbreadcrumb[] = [
         'url' => '#',
-        'name' => get_lang('EditExtraFieldOptions')
+        'name' => get_lang('EditExtraFieldOptions'),
     ];
 }
 
@@ -125,7 +124,7 @@ $result = Database::select(
     $obj->table,
     [
         'where' => ["field_id = ? " => $field_id],
-        'order' => "option_order ASC"
+        'order' => "option_order ASC",
     ]
 );
 
@@ -207,7 +206,7 @@ if ($form->validate()) {
                     'fieldId' => $field_id,
                     'fieldOptionId' => $subItemId,
                     'roleId' => $roleId,
-                    'relatedFieldOptionId' => $id
+                    'relatedFieldOptionId' => $id,
                     ]
                 );
 

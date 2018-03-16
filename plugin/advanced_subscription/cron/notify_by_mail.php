@@ -2,13 +2,13 @@
 /* For license terms, see /license.txt */
 /**
  * This script generates four session categories.
+ *
  * @package chamilo.plugin.advanced_subscription
  */
 
 /**
- * Init
+ * Init.
  */
-
 require_once __DIR__.'/../config.php';
 $plugin = AdvancedSubscriptionPlugin::create();
 $now = api_get_utc_datetime();
@@ -16,7 +16,7 @@ $weekAgo = api_get_utc_datetime('-1 week');
 $sessionExtraField = new ExtraField('session');
 $sessionExtraFieldValue = new ExtraFieldValue('session');
 /**
- * Get session list
+ * Get session list.
  */
 $joinTables = Database::get_main_table(TABLE_MAIN_SESSION).' s INNER JOIN '.
     Database::get_main_table(TABLE_MAIN_SESSION_USER).' su ON s.id = su.session_id INNER JOIN '.
@@ -29,7 +29,7 @@ $conditions = [
             $now,
             USER_RELATION_TYPE_BOSS,
             $weekAgo,
-        ]
+        ],
     ],
     'order' => 's.id',
 ];
@@ -37,7 +37,7 @@ $conditions = [
 $queueList = Database::select($columns, $joinTables, $conditions);
 
 /**
- * Remind students
+ * Remind students.
  */
 $sessionInfoList = [];
 foreach ($queueList as $queueItem) {
@@ -61,7 +61,7 @@ foreach ($queueList as $queueItem) {
 }
 
 /**
- * Remind superiors
+ * Remind superiors.
  */
 // Get recommended number of participants
 $sessionRecommendedNumber = [];
@@ -84,7 +84,6 @@ foreach ($queueBySuperior as $sessionId => $superiorStudents) {
         'sessionId' => $sessionId,
         'session' => $sessionInfoList[$sessionId],
         'students' => [],
-
     ];
     $dataUrl = [
         'action' => 'confirm',
@@ -125,7 +124,7 @@ foreach ($queueBySuperior as $sessionId => $superiorStudents) {
 }
 
 /**
- * Remind admins
+ * Remind admins.
  */
 $admins = UserManager::get_all_administrators();
 $isWesternNameOrder = api_is_western_name_order();

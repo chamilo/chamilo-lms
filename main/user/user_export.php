@@ -110,7 +110,7 @@ if ($export['addcsvheader'] == '1' && $export['file_type'] == 'csv') {
             'Status',
             'OfficialCode',
             'PhoneNumber',
-            'RegistrationDate'
+            'RegistrationDate',
         ];
     } else {
         $data[] = [
@@ -124,7 +124,7 @@ if ($export['addcsvheader'] == '1' && $export['file_type'] == 'csv') {
             'Status',
             'OfficialCode',
             'PhoneNumber',
-            'RegistrationDate'
+            'RegistrationDate',
         ];
     }
 

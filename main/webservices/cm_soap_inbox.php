@@ -8,7 +8,7 @@ require_once __DIR__.'/cm_webservice_inbox.php';
 require_once __DIR__.'/cm_soap.php';
 
 /**
- * Configures the WSCourse SOAP service
+ * Configures the WSCourse SOAP service.
  */
 $s = WSCMSoapServer::singleton();
 
@@ -24,7 +24,6 @@ $s->register(
     '',
     '',
     'Retorna a quantidade de mensagens nao lidas na caixa de entrada do usuario.'
-
 );
 
 $s->register(
@@ -41,9 +40,7 @@ $s->register(
     '',
     '',
     'Retorna o ID das mensagens de entrada entre o intervalo de from até number_of_items.'
-
 );
-
 
 $s->register(
     'WSCMInbox.get_message_data',
@@ -59,7 +56,6 @@ $s->register(
     '',
     '',
     'Retorna o conteudo do campo informado em field da mensagem de entrada id. Os campos retornados sao: sender, title, date, status e content.'
-
 );
 
 $s->register(
@@ -76,7 +72,6 @@ $s->register(
     '',
     '',
     'Retorna o ID das mensagens de saida entre o intervalo de from até number_of_items.'
-
 );
 
 $s->register(

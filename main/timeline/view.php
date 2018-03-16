@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 /**
     @author Julio Montoya <gugli100@gmail.com> BeezNest 2011
-*	@package chamilo.timeline
-*/
+ *	@package chamilo.timeline
+ */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Timeline')];

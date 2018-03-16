@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CBlogRelUser
+ * CBlogRelUser.
  *
  * @ORM\Table(
  *  name="c_blog_rel_user",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CBlogRelUser
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,31 +28,31 @@ class CBlogRelUser
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="blog_id", type="integer")
      */
     private $blogId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer")
      */
     private $userId;
 
-
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CBlogRelUser
      */
     public function setCId($cId)
@@ -63,9 +63,9 @@ class CBlogRelUser
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -73,9 +73,10 @@ class CBlogRelUser
     }
 
     /**
-     * Set blogId
+     * Set blogId.
      *
-     * @param integer $blogId
+     * @param int $blogId
+     *
      * @return CBlogRelUser
      */
     public function setBlogId($blogId)
@@ -86,9 +87,9 @@ class CBlogRelUser
     }
 
     /**
-     * Get blogId
+     * Get blogId.
      *
-     * @return integer
+     * @return int
      */
     public function getBlogId()
     {
@@ -96,9 +97,10 @@ class CBlogRelUser
     }
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return CBlogRelUser
      */
     public function setUserId($userId)
@@ -109,9 +111,9 @@ class CBlogRelUser
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {

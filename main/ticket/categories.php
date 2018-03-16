@@ -4,7 +4,8 @@
 use ChamiloSession as Session;
 
 /**
- * This script is the Tickets plugin main entry point
+ * This script is the Tickets plugin main entry point.
+ *
  * @package chamilo.plugin.ticket
  */
 
@@ -49,22 +50,22 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId,
-    'name' => get_lang('MyTickets')
+    'name' => get_lang('MyTickets'),
 ];
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/settings.php',
-    'name' => get_lang('Settings')
+    'name' => get_lang('Settings'),
 ];
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/projects.php',
-    'name' => get_lang('Projects')
+    'name' => get_lang('Projects'),
 ];
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/projects.php',
-    'name' => $project->getName()
+    'name' => $project->getName(),
 ];
 
 switch ($action) {
@@ -83,7 +84,7 @@ switch ($action) {
         $toolName = get_lang('Add');
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php',
-            'name' => get_lang('Categories')
+            'name' => get_lang('Categories'),
         ];
         $url = api_get_self().'?action=add&project_id='.$projectId;
         $form = TicketManager::getCategoryForm($url, $projectId);
@@ -98,7 +99,7 @@ switch ($action) {
                 'sys_insert_user_id' => api_get_user_id(),
                 'sys_insert_datetime' => api_get_utc_datetime(),
                 'course_required' => '',
-                'project_id' => $projectId
+                'project_id' => $projectId,
             ];
             TicketManager::addCategory($params);
 
@@ -116,7 +117,7 @@ switch ($action) {
         $toolName = get_lang('Edit');
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php?project_id='.$projectId,
-            'name' => get_lang('Categories')
+            'name' => get_lang('Categories'),
         ];
         $url = api_get_self().'?action=edit&project_id='.$projectId.'&id='.$id;
         $form = TicketManager::getCategoryForm($url, $projectId);
@@ -131,7 +132,7 @@ switch ($action) {
                 'name' => $values['name'],
                 'description' => $values['description'],
                 'sys_lastedit_datetime' => api_get_utc_datetime(),
-                'sys_lastedit_user_id' => api_get_user_id()
+                'sys_lastedit_user_id' => api_get_user_id(),
             ];
             $cat = TicketManager::updateCategory($_GET['id'], $params);
             Display::addFlash(Display::return_message(get_lang('Updated')));
@@ -144,10 +145,12 @@ switch ($action) {
 }
 
 /**
- * Build the modify-column of the table
+ * Build the modify-column of the table.
+ *
  * @param   int     The user id
  * @param   string  URL params to add to table links
  * @param   array   Row of elements to alter
+ *
  * @return string Some HTML-code with modify-buttons
  */
 function modify_filter($id, $params, $row)
@@ -188,8 +191,8 @@ Display::display_header($toolName);
 $items = [
     [
         'url' => 'categories.php?action=add&project_id='.$projectId,
-        'content' => Display::return_icon('new_folder.png', null, null, ICON_SIZE_MEDIUM)
-    ]
+        'content' => Display::return_icon('new_folder.png', null, null, ICON_SIZE_MEDIUM),
+    ],
 ];
 
 echo Display::actions($items);

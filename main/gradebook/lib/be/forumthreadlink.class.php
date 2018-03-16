@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class ForumThreadLink
+ * Class ForumThreadLink.
  *
  * @author Bert Steppé
  *
@@ -14,7 +14,7 @@ class ForumThreadLink extends AbstractLink
     private $itemprop_table = null;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -40,6 +40,7 @@ class ForumThreadLink extends AbstractLink
 
     /**
      * Generate an array of exercises that a teacher hasn't created a link for.
+     *
      * @return array 2-dimensional array - every element contains 2 subelements (id, name)
      */
     public function get_not_created_links()
@@ -78,6 +79,7 @@ class ForumThreadLink extends AbstractLink
 
     /**
      * Generate an array of all exercises available.
+     *
      * @return array 2-dimensional array - every element contains 2 subelements (id, name)
      */
     public function get_all_links()
@@ -121,9 +123,10 @@ class ForumThreadLink extends AbstractLink
     }
 
     /**
-    * Has anyone done this exercise yet ?
-    * @return boolean
-    */
+     * Has anyone done this exercise yet ?
+     *
+     * @return bool
+     */
     public function has_results()
     {
         $table = Database::get_course_table(TABLE_FORUM_POST);
@@ -191,7 +194,7 @@ class ForumThreadLink extends AbstractLink
                 if ($data = Database::fetch_array($scores)) {
                     return [
                         $data['qualify'],
-                        $assignment['thread_qualify_max']
+                        $assignment['thread_qualify_max'],
                     ];
                 } else {
                     // We sent the 0/thread_qualify_max instead of null for correct calculations
@@ -211,6 +214,7 @@ class ForumThreadLink extends AbstractLink
                 if (empty($counter) || $counter <= 2) {
                     return [0, $assignment['thread_qualify_max']];
                 }
+
                 return [$score / $counter, $assignment['thread_qualify_max']];
             }
         } else {
@@ -259,14 +263,6 @@ class ForumThreadLink extends AbstractLink
         }
     }
 
-    /**
-     * Lazy load function to get the database table of the student publications
-     */
-    private function get_forum_thread_table()
-    {
-        return $this->forum_thread_table = Database::get_course_table(TABLE_FORUM_THREAD);
-    }
-
     public function needs_name_and_description()
     {
         return false;
@@ -306,7 +302,7 @@ class ForumThreadLink extends AbstractLink
     }
 
     /**
-     * Check if this still links to an exercise
+     * Check if this still links to an exercise.
      */
     public function is_valid_link()
     {
@@ -317,7 +313,8 @@ class ForumThreadLink extends AbstractLink
                     session_id='.api_get_session_id();
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
-        return ($number[0] != 0);
+
+        return $number[0] != 0;
     }
 
     public function get_link()
@@ -330,32 +327,12 @@ class ForumThreadLink extends AbstractLink
                     thread_id = '".$this->get_ref_id()."' AND 
                     session_id = $sessionId ";
         $result = Database::query($sql);
-        $row    = Database::fetch_array($result, 'ASSOC');
+        $row = Database::fetch_array($result, 'ASSOC');
         $forum_id = $row['forum_id'];
 
         $url = api_get_path(WEB_PATH).'main/forum/viewthread.php?'.api_get_cidreq_params($this->get_course_code(), $sessionId).'&thread='.$this->get_ref_id().'&gradebook=view&forum='.$forum_id;
+
         return $url;
-    }
-
-    private function get_exercise_data()
-    {
-        $session_id = api_get_session_id();
-        if ($session_id) {
-            $session_condition = 'session_id='.api_get_session_id();
-        } else {
-            $session_condition = '(session_id = 0 OR session_id IS NULL)';
-        }
-
-        if (!isset($this->exercise_data)) {
-            $sql = 'SELECT * FROM '.$this->get_forum_thread_table().'
-                    WHERE 
-                        c_id = '.$this->course_id.' AND  
-                        thread_id = '.$this->get_ref_id().' AND 
-                        '.$session_condition;
-            $query = Database::query($sql);
-            $this->exercise_data = Database::fetch_array($query);
-        }
-        return $this->exercise_data;
     }
 
     public function get_icon_name()
@@ -388,5 +365,35 @@ class ForumThreadLink extends AbstractLink
                     WHERE c_id = '.$this->course_id.' AND thread_id= '.$ref_id;
             Database::query($sql);
         }
+    }
+
+    /**
+     * Lazy load function to get the database table of the student publications.
+     */
+    private function get_forum_thread_table()
+    {
+        return $this->forum_thread_table = Database::get_course_table(TABLE_FORUM_THREAD);
+    }
+
+    private function get_exercise_data()
+    {
+        $session_id = api_get_session_id();
+        if ($session_id) {
+            $session_condition = 'session_id='.api_get_session_id();
+        } else {
+            $session_condition = '(session_id = 0 OR session_id IS NULL)';
+        }
+
+        if (!isset($this->exercise_data)) {
+            $sql = 'SELECT * FROM '.$this->get_forum_thread_table().'
+                    WHERE 
+                        c_id = '.$this->course_id.' AND  
+                        thread_id = '.$this->get_ref_id().' AND 
+                        '.$session_condition;
+            $query = Database::query($sql);
+            $this->exercise_data = Database::fetch_array($query);
+        }
+
+        return $this->exercise_data;
     }
 }

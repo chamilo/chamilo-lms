@@ -4,13 +4,16 @@
 /**
  * This is a script used to automatically import a list of users from
  * a CSV file into Dokeos.
- * It is triggered by a cron task configured on the server
+ * It is triggered by a cron task configured on the server.
+ *
  * @uses /main/webservices/user_import/
+ *
  * @author Eric Marguin <eric.marguin@dokeos.com>
+ *
  * @package chamilo.cron
  */
 /**
- * Global cycle: init, execute, output
+ * Global cycle: init, execute, output.
  */
 require_once __DIR__.'/../../inc/global.inc.php';
 // check if this client has been called by php_cli (command line or cron)

@@ -7,14 +7,17 @@ use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class ExtraFieldOptionsRepository
+ * Class ExtraFieldOptionsRepository.
+ *
  * @package Chamilo\CoreBundle\Entity\Repository
  */
 class ExtraFieldOptionsRepository extends EntityRepository
 {
     /**
-     * Get the secondary options. For double select extra field
+     * Get the secondary options. For double select extra field.
+     *
      * @param ExtraFieldOptions $option
+     *
      * @return array
      */
     public function findSecondaryOptions(ExtraFieldOptions $option)

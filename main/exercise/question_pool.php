@@ -6,13 +6,14 @@ use ChamiloSession as Session;
 /**
  * Question Pool
  * This script allows administrators to manage questions and add them into their exercises.
- * One question can be in several exercises
+ * One question can be in several exercises.
+ *
  * @package chamilo.exercise
+ *
  * @author Olivier Brouckaert
  * @author Julio Montoya adding support to query all questions from all session, courses, exercises
  * @author Modify by hubert borderiou 2011-10-21 Question's category
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -53,7 +54,7 @@ $interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), "name" => get_l
 if (!empty($objExercise)) {
     $interbreadcrumb[] = [
         "url" => "admin.php?exerciseId=".$objExercise->id."&".api_get_cidreq(),
-        "name" => $objExercise->selectTitle(true)
+        "name" => $objExercise->selectTitle(true),
     ];
 }
 
@@ -170,7 +171,7 @@ if ($is_allowedToEdit) {
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
+        'name' => get_lang('ToolGradebook'),
     ];
 }
 
@@ -335,7 +336,7 @@ $exercise_list = ExerciseLib::get_all_exercises_for_course_id(
 );
 //Exercise List
 $my_exercise_list = [];
-$my_exercise_list['0']  = get_lang('AllExercises');
+$my_exercise_list['0'] = get_lang('AllExercises');
 $my_exercise_list['-1'] = get_lang('OrphanQuestions');
 if (is_array($exercise_list)) {
     foreach ($exercise_list as $row) {
@@ -368,7 +369,7 @@ $levels = [
     2 => 2,
     3 => 3,
     4 => 4,
-    5 => 5
+    5 => 5,
 ];
 $select_difficulty_html = Display::select(
     'exerciseLevel',
@@ -659,7 +660,7 @@ $nbrQuestions = count($mainQuestionList);
 +----------------------+---------------------+---------------------+----------------------+
 (*) this is the only way to delete or modify orphan questions
 */
-//
+
 if ($fromExercise <= 0) {
     // NOT IN A TEST - IN THE COURSE
     if ($selected_course == api_get_course_int_id()) {
@@ -696,36 +697,36 @@ $header = [
         get_lang('QuestionUpperCaseFirstLetter'),
         false,
         ["style" => "text-align:center"],
-        ''
+        '',
     ],
     [
         get_lang('Type'),
         false,
         ["style" => "text-align:center"],
         ["style" => "text-align:center"],
-        ''
+        '',
     ],
     [
         get_lang('QuestionCategory'),
         false,
         ["style" => "text-align:center"],
         ["style" => "text-align:center"],
-        ''
+        '',
     ],
     [
         get_lang('Difficulty'),
         false,
         ["style" => "text-align:center"],
         ["style" => "text-align:center"],
-        ''
+        '',
     ],
     [
         $actionLabel,
         false,
         ["style" => "text-align:center"],
         ["style" => "text-align:center"],
-        ''
-    ]
+        '',
+    ],
 ];
 
 $data = [];
@@ -809,7 +810,8 @@ Display::display_footer();
 
 /**
  * Put the menu entry for level and type to default "Choice"
- * It is useful if you change the exercise, you need to reset the other menus
+ * It is useful if you change the exercise, you need to reset the other menus.
+ *
  * @author hubert.borderiou 13-10-2011
  */
 function reset_menu_lvl_type()
@@ -821,7 +823,8 @@ function reset_menu_lvl_type()
 
 /**
  * Put the menu entry for exercise and level and type to default "Choice"
- * It is useful if you change the course, you need to reset the other menus
+ * It is useful if you change the course, you need to reset the other menus.
+ *
  * @author hubert.borderiou 13-10-2011
  */
 function reset_menu_exo_lvl_type()
@@ -833,14 +836,17 @@ function reset_menu_exo_lvl_type()
 }
 
 /**
- * return the <a> link to admin question, if needed
- * @param int $in_addA
- * @param int $in_fromex
- * @param int $in_questionid
- * @param int $in_questiontype
+ * return the <a> link to admin question, if needed.
+ *
+ * @param int    $in_addA
+ * @param int    $in_fromex
+ * @param int    $in_questionid
+ * @param int    $in_questiontype
  * @param string $in_questionname
- * @param int $sessionId
+ * @param int    $sessionId
+ *
  * @return string
+ *
  * @author hubert.borderiou
  */
 function get_a_tag_for_question(
@@ -861,6 +867,7 @@ function get_a_tag_for_question(
             $res.$sessionIcon.
             "</a>";
     }
+
     return $res;
 }
 
@@ -937,7 +944,8 @@ function get_action_icon_for_question(
 }
 
 /**
- * Return the icon for the question type
+ * Return the icon for the question type.
+ *
  * @author hubert.borderiou 13-10-2011
  */
 function get_question_type_for_question($in_selectedcourse, $in_questionid)
@@ -949,15 +957,18 @@ function get_question_type_for_question($in_selectedcourse, $in_questionid)
         $questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, [], 32), []);
         unset($myObjQuestion);
     }
+
     return $questionType;
 }
 
 /**
- * Return the name of the category for the question in a course
+ * Return the name of the category for the question in a course.
+ *
  * @author hubert.borderiou 13-10-2011
  */
 function get_question_categorie_for_question($in_courseid, $in_questionid)
 {
     $cat = TestCategory::getCategoryNameForQuestion($in_questionid, $in_courseid);
+
     return $cat;
 }

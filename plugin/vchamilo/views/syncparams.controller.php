@@ -126,6 +126,7 @@ switch ($action) {
                     echo $e->getMessage();
                 }
             }
+
             return $errors;
         } else {
             return "Bad ID. Non numeric";

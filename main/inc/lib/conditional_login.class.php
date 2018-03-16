@@ -4,12 +4,13 @@
 /**
  * Conditional login
  * Used to implement the loading of custom pages
- * 2011, Noel Dieschburg <noel@cblue.be>
+ * 2011, Noel Dieschburg <noel@cblue.be>.
  */
 class ConditionalLogin
 {
     /**
-     * Check conditions based in the $login_conditions see conditional_login.php file
+     * Check conditions based in the $login_conditions see conditional_login.php file.
+     *
      * @param type $user
      */
     public static function check_conditions($user)

@@ -13,14 +13,13 @@
  *                       multiple forums per group
  * - sticky messages
  * - new view option: nested view
- * - quoting a message
+ * - quoting a message.
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @copyright Ghent University
  *
  *  @package chamilo.forum
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 // The section (tabs).
@@ -42,7 +41,7 @@ $nameTools = get_lang('ToolForum');
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
+        'name' => get_lang('ToolGradebook'),
     ];
 }
 

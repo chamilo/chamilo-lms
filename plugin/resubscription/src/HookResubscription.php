@@ -2,15 +2,16 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Hook to limit session resubscriptions
+ * Hook to limit session resubscriptions.
  *
  * @author Imanol Losada Oriol <imanol.losada@beeznest.com>
+ *
  * @package chamilo.plugin.resubscription
  */
 class HookResubscription extends HookObserver implements HookResubscribeObserverInterface
 {
     /**
-     * Class constructor
+     * Class constructor.
      */
     public function __construct()
     {
@@ -21,7 +22,8 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
     }
 
     /**
-     * Limit session resubscription when a Chamilo user is resubscribed to a session
+     * Limit session resubscription when a Chamilo user is resubscribed to a session.
+     *
      * @param HookCreateUserEventInterface $hook The hook
      */
     public function hookResubscribe(HookResubscribeEventInterface $hook)
@@ -53,10 +55,10 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
                     'where' => [
                         'user_id = ? AND date_end >= ?' => [
                             api_get_user_id(),
-                            $limitDate
-                        ]
+                            $limitDate,
+                        ],
                     ],
-                    'order' => 'date_end DESC'
+                    'order' => 'date_end DESC',
                 ]
             );
             $userSessionCourses = [];
@@ -67,9 +69,9 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
                     [
                         'where' => [
                             'session_id = ?' => [
-                                $userSession['session_id']
-                            ]
-                        ]
+                                $userSession['session_id'],
+                            ],
+                        ],
                     ]
                 );
                 foreach ($userSessionCourseResult as $userSessionCourse) {
@@ -86,9 +88,9 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
                 [
                     'where' => [
                         'session_id = ?' => [
-                            $data['session_id']
-                        ]
-                    ]
+                            $data['session_id'],
+                        ],
+                    ],
                 ]
             );
 

@@ -4,13 +4,15 @@
 namespace Chamilo\ThemeBundle\Helper;
 
 /**
- * Class WidgetHelper
+ * Class WidgetHelper.
+ *
  * @package Chamilo\ThemeBundle\Helper
  */
 class WidgetHelper extends \Twig_Extension
 {
     /**
-     * Get widget helper name
+     * Get widget helper name.
+     *
      * @return string
      */
     public function getName()

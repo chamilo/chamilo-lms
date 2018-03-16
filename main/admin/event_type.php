@@ -1,11 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Definition of new system event types
+ * Definition of new system event types.
+ *
  * @deprecated to be removed in 2.x
+ *
  * @package chamilo.admin.events
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -60,7 +61,7 @@ $action_array = [
             [],
             ICON_SIZE_MEDIUM
         ),
-    ]
+    ],
 ];
 
 $key_lang = get_lang('YouHaveSomeUnsavedChanges');
@@ -74,7 +75,7 @@ foreach ($users as $user) {
 }
 
 /**
- * Header definition
+ * Header definition.
  */
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => 'event_controller.php', 'name' => get_lang('Events')];
@@ -85,18 +86,19 @@ Display::display_header($tool_name);
 echo Display::actions($action_array);
 
 /**
- * JavaScript code
+ * JavaScript code.
+ *
  * @todo move into HTML header
  */
 ?>
 <script>
-    var usersList = <?php echo json_encode($new_user_list) ?>;
-    var eventTypes = <?php echo json_encode($ets) ?>;
-    var eventsConfig = <?php echo json_encode($event_config) ?>;
-    var currentLanguage = <?php echo json_encode(api_get_interface_language()) ?>;
+    var usersList = <?php echo json_encode($new_user_list); ?>;
+    var eventTypes = <?php echo json_encode($ets); ?>;
+    var eventsConfig = <?php echo json_encode($event_config); ?>;
+    var currentLanguage = <?php echo json_encode(api_get_interface_language()); ?>;
     var flagContentHasChanged = false;
-    var key_lang = "<?php echo $key_lang ?>";
-    var event_type_name = "<?php echo $event_name ?>";
+    var key_lang = "<?php echo $key_lang; ?>";
+    var event_type_name = "<?php echo $event_name; ?>";
 
     $(document).ready(function() {
         confirmMessage("eventList");
@@ -107,7 +109,7 @@ echo Display::actions($action_array);
 
     function ajax(params,func) {
         $.ajax({
-            url: "<?php echo $ajaxPath ?>",
+            url: "<?php echo $ajaxPath; ?>",
             type: "POST",
             data: params,
             success: func
@@ -195,7 +197,7 @@ echo Display::actions($action_array);
         if (self_sent == false ) {
 
             $.ajax({
-                url: '<?php echo $ajaxPath ?>?action=get_event_users&eventName=' +currentEventName,
+                url: '<?php echo $ajaxPath; ?>?action=get_event_users&eventName=' +currentEventName,
                 dataType: 'json',
                 success: function(data) {
                     removeAllOption($('#usersSubList'));
@@ -309,12 +311,13 @@ echo Display::actions($action_array);
 </script>
 <?php
 /**
- * HTML body
+ * HTML body.
+ *
  * @todo move as template layout
  */
 ?>
 <div class="page-header">
-<h2><?php echo get_lang('EventMessageManagement') ?></h2>
+<h2><?php echo get_lang('EventMessageManagement'); ?></h2>
 </div>
 
 <form method="POST" onSubmit="return submitForm(); ">
@@ -369,7 +372,7 @@ echo Display::actions($action_array);
     <input type="hidden" name="action" value="modEventType" />
     <input type="hidden" name="eventId" id="eventId"  />
     <input type="hidden" name="eventUsers" id="eventUsers" />
-    <input type="hidden" id="eventName" value="<?php echo $event_name ?>"/>
+    <input type="hidden" id="eventName" value="<?php echo $event_name; ?>"/>
 
     <br />
     <br />

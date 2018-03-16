@@ -5,7 +5,7 @@ use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 
 /**
  * Class ExtraFieldOption
- * Handles the extra fields for various objects (users, sessions, courses)
+ * Handles the extra fields for various objects (users, sessions, courses).
  */
 class ExtraFieldOption extends Model
 {
@@ -17,14 +17,15 @@ class ExtraFieldOption extends Model
         'option_order',
         'priority',
         'priority_message',
-        'tms'
+        'tms',
     ];
 
     public $extraField;
     public $fieldId;
 
     /**
-     * Gets the table for the type of object for which we are using an extra field
+     * Gets the table for the type of object for which we are using an extra field.
+     *
      * @param string $type Type of object (course, user or session)
      */
     public function __construct($type)
@@ -46,7 +47,8 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * Gets the number of options already available in the table for this item type
+     * Gets the number of options already available in the table for this item type.
+     *
      * @return int Number of options available
      * @assert () >= 0
      */
@@ -58,7 +60,8 @@ class ExtraFieldOption extends Model
     }*/
 
     /**
-     * Gets the number of options available for this field
+     * Gets the number of options available for this field.
+     *
      * @param int $fieldId
      *
      * @return int Number of options
@@ -88,10 +91,12 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * Returns a list of options for a specific field, separated by ";"
-     * @param int $field_id
-     * @param bool $add_id_in_array Indicates whether we want the results to be given with their id
-     * @param string $ordered_by Order by clause (without the "order by") to be added to the SQL query
+     * Returns a list of options for a specific field, separated by ";".
+     *
+     * @param int    $field_id
+     * @param bool   $add_id_in_array Indicates whether we want the results to be given with their id
+     * @param string $ordered_by      Order by clause (without the "order by") to be added to the SQL query
+     *
      * @return string List of options separated by ;
      * @assert (-1, false, null) == ''
      */
@@ -112,10 +117,10 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * Delete all the options of a specific field
+     * Delete all the options of a specific field.
+     *
      * @param int $field_id
      *
-     * @return void
      * @assert (-1) === false
      */
     public function delete_all_options_by_field_id($field_id)
@@ -147,7 +152,7 @@ class ExtraFieldOption extends Model
                 'field_id' => $params['field_id'],
                 'value' => trim($optionValue),
                 'display_text' => trim($params['display_text']),
-                'option_order' => $order
+                'option_order' => $order,
             ];
 
             return parent::save($newParams, $showQuery);
@@ -157,9 +162,10 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * Saves an option into the corresponding *_field_options table
-     * @param array $params Parameters to be considered for the insertion
-     * @param bool $showQuery Whether to show the query (sent to the parent save() method)
+     * Saves an option into the corresponding *_field_options table.
+     *
+     * @param array $params    Parameters to be considered for the insertion
+     * @param bool  $showQuery Whether to show the query (sent to the parent save() method)
      *
      * @return bool True on success, false on error
      * @assert (array('field_id'=>0), false) === false
@@ -181,13 +187,13 @@ class ExtraFieldOption extends Model
                 ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
                 ExtraField::FIELD_TYPE_DOUBLE_SELECT,
                 ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD,
-                ExtraField::FIELD_TYPE_TRIPLE_SELECT
+                ExtraField::FIELD_TYPE_TRIPLE_SELECT,
             ]
         );
 
         if (empty($params['field_options']) || !$parseOptions) {
             return true;
-        };
+        }
 
         switch ($params['field_type']) {
             case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
@@ -288,7 +294,7 @@ class ExtraFieldOption extends Model
                             'field_id' => $field_id,
                             'option_value' => $level1Id,
                             'display_text' => $level2['label'],
-                            'display_order' => 0
+                            'display_order' => 0,
                         ];
                         $optionInfo = self::getFieldOptionByFieldIdAndOptionDisplayTextAndOptionValue(
                             $field_id,
@@ -310,7 +316,7 @@ class ExtraFieldOption extends Model
                                     'field_id' => $field_id,
                                     'option_value' => $level2Id,
                                     'display_text' => $item,
-                                    'display_order' => 0
+                                    'display_order' => 0,
                                 ];
                                 $optionInfo = self::getFieldOptionByFieldIdAndOptionDisplayTextAndOptionValue(
                                     $field_id,
@@ -360,10 +366,12 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * Save one option item at a time
-     * @param array $params Parameters specific to the option
-     * @param bool $show_query Whether to show the query (sent to parent save() method)
-     * @param bool $insert_repeated Whether to insert even if the option already exists
+     * Save one option item at a time.
+     *
+     * @param array $params          Parameters specific to the option
+     * @param bool  $show_query      Whether to show the query (sent to parent save() method)
+     * @param bool  $insert_repeated Whether to insert even if the option already exists
+     *
      * @return bool True on success, false on failure
      * @assert (array('field_id'=>0),false) === false
      * @assert (array('field_id'=>0),false) === true
@@ -403,9 +411,11 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * Get the complete row of a specific option of a specific field
-     * @param int $field_id
+     * Get the complete row of a specific option of a specific field.
+     *
+     * @param int    $field_id
      * @param string $option_value Value of the option
+     *
      * @return mixed The row on success or false on failure
      * @assert (0,'') === false
      */
@@ -432,9 +442,11 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * Get the complete row of a specific option's display text of a specific field
-     * @param int $field_id
+     * Get the complete row of a specific option's display text of a specific field.
+     *
+     * @param int    $field_id
      * @param string $option_display_text Display value of the option
+     *
      * @return mixed The row on success or false on failure
      * @assert (0, '') === false
      */
@@ -461,10 +473,11 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * Get the complete row of a specific option's display text of a specific field
-     * @param int $field_id
+     * Get the complete row of a specific option's display text of a specific field.
+     *
+     * @param int    $field_id
      * @param string $option_display_text Display value of the option
-     * @param string $option_value Value of the option
+     * @param string $option_value        Value of the option
      *
      * @return mixed The row on success or false on failure
      * @assert (0, '', '') === false
@@ -497,10 +510,12 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * Gets an array of options for a specific field
-     * @param int $field_id The field ID
+     * Gets an array of options for a specific field.
+     *
+     * @param int  $field_id        The field ID
      * @param bool $add_id_in_array Whether to add the row ID in the result
-     * @param null $ordered_by Extra ordering query bit
+     * @param null $ordered_by      Extra ordering query bit
+     *
      * @return array The options if they exists. Otherwise return false
      */
     public function get_field_options_by_field($field_id, $add_id_in_array = false, $ordered_by = null)
@@ -550,7 +565,7 @@ class ExtraFieldOption extends Model
                 'display_text' => self::translateDisplayName($row->getDisplayText()),
                 'priority' => $row->getPriority(),
                 'priority_message' => $row->getPriorityMessage(),
-                'option_order' => $row->getOptionOrder()
+                'option_order' => $row->getOptionOrder(),
             ];
 
             if ($add_id_in_array) {
@@ -564,9 +579,11 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * Get options for a specific field as array or in JSON format suited for the double-select format
-     * @param int $option_value_id Option value ID
-     * @param bool $to_json Return format (whether it should be formatted to JSON or not)
+     * Get options for a specific field as array or in JSON format suited for the double-select format.
+     *
+     * @param int  $option_value_id Option value ID
+     * @param bool $to_json         Return format (whether it should be formatted to JSON or not)
+     *
      * @return mixed Row/JSON on success
      */
     public function get_second_select_field_options_by_field($option_value_id, $to_json = false)
@@ -592,7 +609,7 @@ class ExtraFieldOption extends Model
                 'display_text' => $subOption->getDisplayText(),
                 'priority' => $subOption->getPriority(),
                 'priority_message' => $subOption->getPriorityMessage(),
-                'option_order' => $subOption->getOptionOrder()
+                'option_order' => $subOption->getOptionOrder(),
             ];
         }
 
@@ -610,9 +627,11 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * Get options for a specific field as string split by ;
-     * @param int $field_id
+     * Get options for a specific field as string split by ;.
+     *
+     * @param int    $field_id
      * @param string $ordered_by Extra query bit for reordering
+     *
      * @return string HTML string of options
      * @assert (0, '') === null
      */
@@ -648,8 +667,10 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * Get the maximum order value for a specific field
+     * Get the maximum order value for a specific field.
+     *
      * @param int $field_id
+     *
      * @return int Current max ID + 1 (we start from 0)
      * @assert (0, '') === 1
      */
@@ -670,8 +691,7 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * Display a form with the options for the field_id given in REQUEST
-     * @return void Prints output
+     * Display a form with the options for the field_id given in REQUEST.
      */
     public function display()
     {
@@ -700,6 +720,7 @@ class ExtraFieldOption extends Model
 
     /**
      * @param $priority
+     *
      * @return null|string
      */
     public function getPriorityMessageType($priority)
@@ -719,7 +740,8 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * Returns an HTML form for the current field
+     * Returns an HTML form for the current field.
+     *
      * @param string URL to send the form to (action=...)
      * @param string Type of action to offer through the form (edit, usually)
      *
@@ -744,7 +766,7 @@ class ExtraFieldOption extends Model
 
         if ($action == 'edit') {
             $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'.http_build_query([
-                'extra_field_option' => $id
+                'extra_field_option' => $id,
             ]);
             $translateButton = Display::toolbarButton(
                 get_lang('TranslateThisTerm'),
@@ -788,8 +810,9 @@ class ExtraFieldOption extends Model
 
     /**
      * @param string $tag
-     * @param int $field_id
-     * @param int $limit
+     * @param int    $field_id
+     * @param int    $limit
+     *
      * @return array
      */
     public function searchByField($tag, $field_id, $limit = 10)
@@ -814,11 +837,10 @@ class ExtraFieldOption extends Model
         return $values;
     }
 
-
     /**
      * @param string $tag
-     * @param int $field_id
-     * @param int $limit
+     * @param int    $field_id
+     * @param int    $limit
      *
      * @return string
      */
@@ -841,9 +863,11 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * Gets an element
-     * @param int $id
+     * Gets an element.
+     *
+     * @param int  $id
      * @param bool $translateDisplayText Optional
+     *
      * @return array
      */
     public function get($id, $translateDisplayText = true)
@@ -858,8 +882,10 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * Translate the display text for a extra field option
+     * Translate the display text for a extra field option.
+     *
      * @param string $defaultDisplayText
+     *
      * @return string
      */
     public static function translateDisplayName($defaultDisplayText)
@@ -871,6 +897,7 @@ class ExtraFieldOption extends Model
 
     /**
      * @param $defaultDisplayText
+     *
      * @return mixed|string
      */
     public static function getLanguageVariable($defaultDisplayText)
@@ -884,6 +911,7 @@ class ExtraFieldOption extends Model
 
     /**
      * @param null $options
+     *
      * @return array
      */
     public function get_all($options = null)

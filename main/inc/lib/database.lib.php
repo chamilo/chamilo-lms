@@ -8,16 +8,16 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 
 /**
- * Class Database
+ * Class Database.
  */
 class Database
 {
+    public static $utcDateTimeClass;
     /**
      * @var EntityManager
      */
     private static $em;
     private static $connection;
-    public static $utcDateTimeClass;
 
     /**
      * @param EntityManager $em
@@ -62,7 +62,7 @@ class Database
     }
 
     /**
-     * Get main table
+     * Get main table.
      *
      * @param string $table
      *
@@ -74,7 +74,7 @@ class Database
     }
 
     /**
-     * Get course table
+     * Get course table.
      *
      * @param string $table
      *
@@ -86,10 +86,12 @@ class Database
     }
 
     /**
-     * Counts the number of rows in a table
+     * Counts the number of rows in a table.
+     *
      * @param string $table The table of which the rows should be counted
      *
-     * @return int The number of rows in the given table.
+     * @return int the number of rows in the given table
+     *
      * @deprecated
      */
     public static function count_rows($table)
@@ -101,6 +103,7 @@ class Database
 
     /**
      * Returns the number of affected rows in the last database operation.
+     *
      * @param Statement $result
      *
      * @return int
@@ -124,8 +127,8 @@ class Database
      * @param array  $params
      * @param string $sysPath
      * @param string $entityRootPath
-     * @param bool $returnConnection
-     * @param bool $returnManager
+     * @param bool   $returnConnection
+     * @param bool   $returnManager
      *
      * @throws \Doctrine\ORM\ORMException
      *
@@ -148,7 +151,7 @@ class Database
                 'ChamiloCourseBundle' => 'Chamilo\CourseBundle\Entity',
                 'ChamiloSkillBundle' => 'Chamilo\SkillBundle\Entity',
                 'ChamiloTicketBundle' => 'Chamilo\TicketBundle\Entity',
-                'ChamiloPluginBundle' => 'Chamilo\PluginBundle\Entity'
+                'ChamiloPluginBundle' => 'Chamilo\PluginBundle\Entity',
             ]
         );
 
@@ -225,10 +228,11 @@ class Database
     }
 
     /**
-     * Escape MySQL wildchars _ and % in LIKE search
-     * @param string $text            The string to escape
+     * Escape MySQL wildchars _ and % in LIKE search.
      *
-     * @return string           The escaped string
+     * @param string $text The string to escape
+     *
+     * @return string The escaped string
      */
     public static function escape_sql_wildcards($text)
     {
@@ -239,7 +243,7 @@ class Database
     }
 
     /**
-     * Escapes a string to insert into the database as text
+     * Escapes a string to insert into the database as text.
      *
      * @param string $string
      *
@@ -257,7 +261,7 @@ class Database
     }
 
     /**
-     * Gets the array from a SQL result (as returned by Database::query)
+     * Gets the array from a SQL result (as returned by Database::query).
      *
      * @param Statement $result
      * @param string    $option Optional: "ASSOC","NUM" or "BOTH"
@@ -287,7 +291,7 @@ class Database
 
     /**
      * Gets the next row of the result of the SQL query
-     * (as returned by Database::query) in an object form
+     * (as returned by Database::query) in an object form.
      *
      * @param Statement $result
      *
@@ -300,7 +304,7 @@ class Database
 
     /**
      * Gets the array from a SQL result (as returned by Database::query)
-     * help achieving database independence
+     * help achieving database independence.
      *
      * @param Statement $result
      *
@@ -311,14 +315,16 @@ class Database
         if ($result === false) {
             return [];
         }
+
         return $result->fetch(PDO::FETCH_NUM);
     }
 
     /**
      * Frees all the memory associated with the provided result identifier.
-     * @return boolean|null     Returns TRUE on success or FALSE on failure.
-     * Notes: Use this method if you are concerned about how much memory is being used for queries that return large result sets.
-     * Anyway, all associated result memory is automatically freed at the end of the script's execution.
+     *
+     * @return bool|null Returns TRUE on success or FALSE on failure.
+     *                   Notes: Use this method if you are concerned about how much memory is being used for queries that return large result sets.
+     *                   Anyway, all associated result memory is automatically freed at the end of the script's execution.
      */
     public static function free_result(Statement $result)
     {
@@ -326,7 +332,7 @@ class Database
     }
 
     /**
-     * Gets the ID of the last item inserted into the database
+     * Gets the ID of the last item inserted into the database.
      *
      * @return string
      */
@@ -345,12 +351,13 @@ class Database
         if ($result === false) {
             return 0;
         }
+
         return $result->rowCount();
     }
 
     /**
      * Acts as the relative *_result() function of most DB drivers and fetches a
-     * specific line and a field
+     * specific line and a field.
      *
      * @param Statement $resource
      * @param int       $row
@@ -370,9 +377,9 @@ class Database
     /**
      * @param string $query
      *
-     * @return Statement
-     *
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return Statement
      */
     public static function query($query)
     {
@@ -416,8 +423,9 @@ class Database
      * Stores a query result into an array.
      *
      * @author Olivier Brouckaert
-     * @param  Statement $result - the return value of the query
-     * @param  string $option BOTH, ASSOC, or NUM
+     *
+     * @param Statement $result - the return value of the query
+     * @param string    $option BOTH, ASSOC, or NUM
      *
      * @return array - the value returned by the query
      */
@@ -427,10 +435,11 @@ class Database
     }
 
     /**
-     * Database insert
-     * @param string    $table_name
-     * @param array     $attributes
-     * @param bool      $show_query
+     * Database insert.
+     *
+     * @param string $table_name
+     * @param array  $attributes
+     * @param bool   $show_query
      *
      * @return false|int
      */
@@ -463,11 +472,11 @@ class Database
     }
 
     /**
-     * @param string $tableName use Database::get_main_table
-     * @param array $attributes Values to updates
-     * Example: $params['name'] = 'Julio'; $params['lastname'] = 'Montoya';
-     * @param array $whereConditions where conditions i.e array('id = ?' =>'4')
-     * @param bool $showQuery
+     * @param string $tableName       use Database::get_main_table
+     * @param array  $attributes      Values to updates
+     *                                Example: $params['name'] = 'Julio'; $params['lastname'] = 'Montoya';
+     * @param array  $whereConditions where conditions i.e array('id = ?' =>'4')
+     * @param bool   $showQuery
      *
      * @return bool|int
      */
@@ -518,18 +527,21 @@ class Database
     }
 
     /**
-     * Experimental useful database finder
+     * Experimental useful database finder.
+     *
      * @todo lot of stuff to do here
      * @todo known issues, it doesn't work when using LIKE conditions
+     *
      * @example array('where'=> array('course_code LIKE "?%"'))
      * @example array('where'=> array('type = ? AND category = ?' => array('setting', 'Plugins'))
      * @example array('where'=> array('name = "Julio" AND lastname = "montoya"'))
-     * @param array $columns
+     *
+     * @param array  $columns
      * @param string $table_name
-     * @param array $conditions
+     * @param array  $conditions
      * @param string $type_result
      * @param string $option
-     * @param bool $debug
+     * @param bool   $debug
      *
      * @return array
      */
@@ -577,10 +589,13 @@ class Database
     }
 
     /**
-     * Parses WHERE/ORDER conditions i.e array('where'=>array('id = ?' =>'4'), 'order'=>'id DESC')
+     * Parses WHERE/ORDER conditions i.e array('where'=>array('id = ?' =>'4'), 'order'=>'id DESC').
+     *
      * @todo known issues, it doesn't work when using
      * LIKE conditions example: array('where'=>array('course_code LIKE "?%"'))
-     * @param   array $conditions
+     *
+     * @param array $conditions
+     *
      * @return string Partial SQL string to add to longer query
      */
     public static function parse_conditions($conditions)
@@ -695,7 +710,7 @@ class Database
     public static function delete($table_name, $where_conditions, $show_query = false)
     {
         $where_return = self::parse_where_conditions($where_conditions);
-        $sql    = "DELETE FROM $table_name $where_return ";
+        $sql = "DELETE FROM $table_name $where_return ";
         if ($show_query) {
             echo $sql;
             echo '<br />';
@@ -707,7 +722,8 @@ class Database
     }
 
     /**
-     * Get Doctrine configuration
+     * Get Doctrine configuration.
+     *
      * @param string $path
      *
      * @return \Doctrine\ORM\Configuration
@@ -759,6 +775,7 @@ class Database
 
     /**
      * @param string $table
+     *
      * @return \Doctrine\DBAL\Schema\Column[]
      */
     public static function listTableColumns($table)

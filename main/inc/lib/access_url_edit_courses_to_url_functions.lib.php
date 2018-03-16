@@ -1,16 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Definition of the Accessurleditcoursestourl class
+ * Definition of the Accessurleditcoursestourl class.
+ *
  * @package chamilo.library
  */
 
 /**
  * Access_url_edit_courses_to_url class
  * Contains several functions dealing with displaying,
- * editing,... of a Access_url_edit_courses_to_url_functions
+ * editing,... of a Access_url_edit_courses_to_url_functions.
  *
  * @version 1.0
+ *
  * @author Toon Keppens <toon@vi-host.net>
  * @author Julio Montoya - Cleaning code
  * @author Ricardo Rodriguez - Separated the function and code
@@ -19,9 +21,11 @@ class Accessurleditcoursestourl
 {
     /**
      * Search for a list of available courses by title or code, based on
-     * a given string
+     * a given string.
+     *
      * @param string String to search for
      * @param int Deprecated param
+     *
      * @return xajaxResponse A formatted, xajax answer block
      * @assert () === false
      */

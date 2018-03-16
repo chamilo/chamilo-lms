@@ -9,11 +9,13 @@ use ChamiloSession as Session;
  * The first section (below) is the initialisation part.
  * The second section is the SCORM object part
  * The third section defines the event handlers for Chamilo's internal messaging
- * and frames refresh
+ * and frames refresh.
+ *
  * @author   Denes Nagy <darkden@freemail.hu> (original author - 2003-2004)
  * @author   Yannick Warnier <ywarnier@beeznest.org> (extended and maintained - 2005-2014)
+ *
  * @version  v 1.2
- * @access   public
+ *
  * @package  chamilo.learnpath.scorm
  */
 
@@ -43,7 +45,7 @@ $userId = api_get_user_id();
 
 header('Content-type: text/javascript');
 
-?>var scorm_logs=<?php echo((empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin())) ? '0' : '3'); ?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
+?>var scorm_logs=<?php echo (empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin())) ? '0' : '3'; ?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
 var lms_logs = 0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
 
 // API Object initialization (eases access later on)
@@ -1375,7 +1377,7 @@ function update_progress_bar(nbr_complete, nbr_total, mode) {
 function updateGamificationValues()
 {
     var fetchValues = $.ajax(
-        '<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php' + courseUrl,
+        '<?php echo api_get_path(WEB_AJAX_PATH); ?>lp.ajax.php' + courseUrl,
         {
         dataType: 'json',
         data: {
@@ -1694,7 +1696,7 @@ function switch_item(current_item, next_item){
  */
 var checkCurrentItemPosition = function(lpItemId) {
     var currentItem = $.getJSON(
-        '<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php' + courseUrl,
+        '<?php echo api_get_path(WEB_AJAX_PATH); ?>lp.ajax.php' + courseUrl,
     {
         a: 'check_item_position',
         lp_item: lpItemId
@@ -1723,7 +1725,7 @@ var checkCurrentItemPosition = function(lpItemId) {
  */
 var loadForumThread = function(lpId, lpItemId) {
     var loadForum = $.getJSON(
-        '<?php echo api_get_path(WEB_AJAX_PATH) ?>lp.ajax.php' + courseUrl, {
+        '<?php echo api_get_path(WEB_AJAX_PATH); ?>lp.ajax.php' + courseUrl, {
             a: 'get_forum_thread',
             lp: lpId,
             lp_item: lpItemId
@@ -1753,7 +1755,7 @@ var loadForumThread = function(lpId, lpItemId) {
             scrolling:'yes',
             tabindex:'0',
             id:'chamilo-disqus',
-            src: '<?php echo api_get_path(WEB_CODE_PATH) ?>forum/viewthread.php?<?php echo api_get_cidreq() ?>&' + $.param({
+            src: '<?php echo api_get_path(WEB_CODE_PATH); ?>forum/viewthread.php?<?php echo api_get_cidreq(); ?>&' + $.param({
                 gradebook: 0,
                 origin: 'learnpath',
                 forum: forumThreadData.forumId,
@@ -2104,7 +2106,7 @@ function attach_glossary_into_scorm(type) {
 
     my_protocol = location.protocol;
     my_pathname=location.pathname;
-    work_path = my_pathname.substr(0,my_pathname.indexOf('<?php echo api_get_path(REL_COURSE_PATH) ?>'));
+    work_path = my_pathname.substr(0,my_pathname.indexOf('<?php echo api_get_path(REL_COURSE_PATH); ?>'));
     var ajaxRequestUrl = '<?php echo api_get_path(WEB_CODE_PATH).'glossary/glossary_ajax_request.php'; ?>' + courseUrl;
 
     if (type == 'automatic') {

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Description of zombie_report
+ * Description of zombie_report.
  *
  * @copyright (c) 2012 University of Geneva
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
@@ -9,19 +9,21 @@
  */
 class ZombieReport implements Countable
 {
+    protected $additional_parameters = [];
+
+    protected $parameters_form = null;
+
+    public function __construct($additional_parameters = [])
+    {
+        $this->additional_parameters = $additional_parameters;
+    }
+
     /**
      * @return ZombieReport
      */
     public static function create($additional_parameters = [])
     {
         return new self($additional_parameters);
-    }
-
-    protected $additional_parameters = [];
-
-    public function __construct($additional_parameters = [])
-    {
-        $this->additional_parameters = $additional_parameters;
     }
 
     public function get_additional_parameters()
@@ -48,39 +50,37 @@ class ZombieReport implements Countable
 //                        ),
                         [
                             'type' => 'date',
-                            'message' => get_lang('Date')
-                        ]
-                    ]
+                            'message' => get_lang('Date'),
+                        ],
+                    ],
                 ],
                 [
                     'name' => 'active_only',
                     'label' => get_lang('ActiveOnly'),
                     'type' => 'checkbox',
-                    'default' => $this->get_active_only()
+                    'default' => $this->get_active_only(),
                 ],
                 [
                     'name' => 'submit_button',
                     'type' => 'button',
                     'value' => get_lang('Search'),
-                    'attributes' => ['class' => 'search']
-                ]
-            ]
+                    'attributes' => ['class' => 'search'],
+                ],
+            ],
         ];
         $additional_parameters = $this->get_additional_parameters();
         foreach ($additional_parameters as $key => $value) {
             $result['items'][] = [
                 'type' => 'hidden',
                 'name' => $key,
-                'value' => $value
+                'value' => $value,
             ];
         }
+
         return $result;
     }
 
-    protected $parameters_form = null;
-
     /**
-     *
      * @return FormValidator
      */
     public function get_parameters_form()
@@ -123,6 +123,7 @@ class ZombieReport implements Countable
         if (empty($form)) {
             return true;
         }
+
         return $form->isSubmitted() == false || $form->validate();
     }
 
@@ -138,6 +139,7 @@ class ZombieReport implements Countable
         if ($format) {
             $result = date($format, $result);
         }
+
         return $result;
     }
 
@@ -147,20 +149,21 @@ class ZombieReport implements Countable
         $result = $result === 'true' ? true : $result;
         $result = $result === 'false' ? false : $result;
         $result = (bool) $result;
+
         return $result;
     }
 
     public function get_action()
     {
-
         /**
-         * todo check token
+         * todo check token.
          */
         $check = Security::check_token('post');
         Security::clear_token();
         if (!$check) {
             return 'display';
         }
+
         return Request::post('action', 'display');
     }
 
@@ -176,6 +179,7 @@ class ZombieReport implements Countable
         if (is_callable($f)) {
             return call_user_func($f, $ids);
         }
+
         return false;
     }
 
@@ -203,6 +207,7 @@ class ZombieReport implements Countable
         $ceiling = $this->get_ceiling();
         $active_only = $this->get_active_only();
         $items = ZombieManager::listZombies($ceiling, $active_only);
+
         return count($items);
     }
 
@@ -232,6 +237,7 @@ class ZombieReport implements Countable
             $row[] = $item['active'];
             $result[] = $row;
         }
+
         return $result;
     }
 
@@ -270,7 +276,7 @@ class ZombieReport implements Countable
         $table->set_form_actions([
             'activate' => get_lang('Activate'),
             'deactivate' => get_lang('Deactivate'),
-            'delete' => get_lang('Delete')
+            'delete' => get_lang('Delete'),
         ]);
 
         if ($return) {
@@ -284,6 +290,7 @@ class ZombieReport implements Countable
      * Table formatter for the active column.
      *
      * @param string $active
+     *
      * @return string
      */
     public function format_active($active)
@@ -298,12 +305,14 @@ class ZombieReport implements Countable
         }
 
         $result = Display::return_icon($image.'.png', $text);
+
         return $result;
     }
 
     public function format_status($status)
     {
         $statusname = api_get_status_langvars();
+
         return $statusname[$status];
     }
 

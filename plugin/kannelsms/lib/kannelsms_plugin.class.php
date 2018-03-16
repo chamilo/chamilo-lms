@@ -3,27 +3,17 @@
 
 /**
  * Class KannelsmsPlugin
- * This script contains SMS type constants and basic plugin functions
+ * This script contains SMS type constants and basic plugin functions.
  *
  * @package chamilo.plugin.kannelsms.lib
+ *
  * @author  Imanol Losada <imanol.losada@beeznest.com>
  * @author Julio Montoya Refactor code
  */
 class KannelsmsPlugin extends SmsPlugin
 {
     /**
-     * create (a singleton function that ensures KannelsmsPlugin instance is
-     * created only once. If it is already created, it returns the instance)
-     * @return  object  KannelsmsPlugin instance
-     */
-    public static function create()
-    {
-        static $result = null;
-        return $result ? $result : $result = new self();
-    }
-
-    /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -32,7 +22,7 @@ class KannelsmsPlugin extends SmsPlugin
             'hostAddress' => 'text',
             'username' => 'text',
             'password' => 'text',
-            'from' => 'text'
+            'from' => 'text',
         ];
         $smsTypeOptions = $this->getSmsTypeOptions();
         foreach ($smsTypeOptions as $smsTypeOption) {
@@ -42,8 +32,20 @@ class KannelsmsPlugin extends SmsPlugin
     }
 
     /**
-     * install (uninstalls the plugin and removes all plugin's tables and/or rows)
-     * @return  void
+     * create (a singleton function that ensures KannelsmsPlugin instance is
+     * created only once. If it is already created, it returns the instance).
+     *
+     * @return object KannelsmsPlugin instance
+     */
+    public static function create()
+    {
+        static $result = null;
+
+        return $result ? $result : $result = new self();
+    }
+
+    /**
+     * install (uninstalls the plugin and removes all plugin's tables and/or rows).
      */
     public function uninstall()
     {

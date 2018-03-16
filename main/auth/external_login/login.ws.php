@@ -5,7 +5,6 @@ use ChamiloSession as Session;
 
 // External login module : WS (for Web Services)
 /**
- *
  * This file is included in main/inc/local.inc.php at user login if the user
  * have 'ws' in his auth_source field instead of 'platform'.
  */
@@ -40,7 +39,8 @@ if ($isValid === 1) {
 }
 
 /**
- * Checks whether a user has the right to enter on the platform or not
+ * Checks whether a user has the right to enter on the platform or not.
+ *
  * @param string The username, as provided in form
  * @param string The cleartext password, as provided in form
  * @param string The WS URL, as provided at the beginning of this script
@@ -99,6 +99,7 @@ function loginWSAuthenticate($username, $password, $wsUrl)
         } else {
             error_log('Could not connect to WS host');
         }
+
         return 0;
     }
 

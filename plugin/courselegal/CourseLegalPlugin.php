@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class CourseLegalPlugin
+ * Class CourseLegalPlugin.
  */
 class CourseLegalPlugin extends Plugin
 {
@@ -12,9 +12,20 @@ class CourseLegalPlugin extends Plugin
     public $course_settings = [
         [
             'name' => 'courselegal',
-            'type' => 'text'
-        ]
+            'type' => 'text',
+        ],
     ];
+
+    protected function __construct()
+    {
+        parent::__construct(
+            '0.1',
+            'Julio Montoya',
+            [
+                'tool_enable' => 'boolean',
+            ]
+        );
+    }
 
     /**
      * @return CourseLegalPlugin
@@ -22,21 +33,8 @@ class CourseLegalPlugin extends Plugin
     public static function create()
     {
         static $result = null;
-        return $result ? $result : $result = new self();
-    }
 
-    /**
-     *
-     */
-    protected function __construct()
-    {
-        parent::__construct(
-            '0.1',
-            'Julio Montoya',
-            [
-                'tool_enable' => 'boolean'
-            ]
-        );
+        return $result ? $result : $result = new self();
     }
 
     /**
@@ -84,9 +82,9 @@ class CourseLegalPlugin extends Plugin
     }
 
     /**
-     * @param int $userId
+     * @param int    $userId
      * @param string $courseCode
-     * @param int $sessionId
+     * @param int    $sessionId
      *
      * @return bool
      */
@@ -108,10 +106,11 @@ class CourseLegalPlugin extends Plugin
     }
 
     /**
-     * @param int $userId
-     * @param int $courseCode
-     * @param int $sessionId
-     * @param boolean $sendEmail Optional. Indicate whether the mail must be sent. Default is true
+     * @param int  $userId
+     * @param int  $courseCode
+     * @param int  $sessionId
+     * @param bool $sendEmail  Optional. Indicate whether the mail must be sent. Default is true
+     *
      * @return mixed
      */
     public function saveUserLegal($userId, $courseCode, $sessionId, $sendEmail = true)
@@ -132,7 +131,7 @@ class CourseLegalPlugin extends Plugin
                 'session_id' => $sessionId,
                 'web_agreement' => 1,
                 'web_agreement_date' => api_get_utc_datetime(),
-                'mail_agreement_link' => $uniqueId
+                'mail_agreement_link' => $uniqueId,
             ];
             $id = Database::insert($table, $values);
 
@@ -214,9 +213,9 @@ class CourseLegalPlugin extends Plugin
 
     /**
      * @param string $link
-     * @param int $userId
-     * @param int $courseId
-     * @param int $sessionId
+     * @param int    $userId
+     * @param int    $courseId
+     * @param int    $sessionId
      *
      * @return bool
      */
@@ -233,7 +232,7 @@ class CourseLegalPlugin extends Plugin
             $id = $data['id'];
             $values = [
                 'mail_agreement' => 1,
-                'mail_agreement_date' => api_get_utc_datetime()
+                'mail_agreement_date' => api_get_utc_datetime(),
             ];
             Database::update($table, $values, ['id = ?' => [$id]]);
         }
@@ -290,9 +289,10 @@ class CourseLegalPlugin extends Plugin
     }
 
     /**
-     * @param int $courseId
-     * @param int $sessionId
+     * @param int    $courseId
+     * @param int    $sessionId
      * @param string $order
+     *
      * @return array
      */
     public function getUserAgreementList($courseId, $sessionId, $order = null)
@@ -335,7 +335,7 @@ class CourseLegalPlugin extends Plugin
 
     /**
      * @param array $values
-     * @param array $file $_FILES['uploaded_file']
+     * @param array $file       $_FILES['uploaded_file']
      * @param bool  $deleteFile
      */
     public function save($values, $file = [], $deleteFile = false)
@@ -469,8 +469,8 @@ class CourseLegalPlugin extends Plugin
         $conditions = [
             'c_id  = ? AND session_id = ? ' => [
                 $courseId,
-                $sessionId
-            ]
+                $sessionId,
+            ],
         ];
 
         $result = Database::select('*', $table, ['where' => $conditions]);

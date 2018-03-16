@@ -13,7 +13,7 @@
  *                      multiple forums per group
  * - sticky messages
  * - new view option: nested view
- * - quoting a message
+ * - quoting a message.
  *
  * @Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @Copyright Ghent University
@@ -21,7 +21,6 @@
  *
  *  @package chamilo.forum
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 // The section (tabs).
@@ -68,7 +67,7 @@ if (!$isEditable) {
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
+        'name' => get_lang('ToolGradebook'),
     ];
 }
 
@@ -95,15 +94,15 @@ if ($origin == 'group') {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&'.api_get_cidreq(),
-        'name' => prepare4display($current_forum_category['cat_title'])
+        'name' => prepare4display($current_forum_category['cat_title']),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq(),
-        'name' => prepare4display($current_forum['forum_title'])
+        'name' => prepare4display($current_forum['forum_title']),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.intval($_GET['thread']),
-        'name' => prepare4display($current_thread['thread_title'])
+        'name' => prepare4display($current_thread['thread_title']),
     ];
     $interbreadcrumb[] = ['url' => 'javascript: void (0);', 'name' => get_lang('EditPost')];
 }
@@ -148,9 +147,9 @@ if (!api_is_allowed_to_edit(null, true) &&
 
 if (!api_is_allowed_to_edit(null, true) &&
     (
-        ($current_forum_category && $current_forum_category['locked'] <> 0) ||
-        $current_forum['locked'] <> 0 ||
-        $current_thread['locked'] <> 0
+        ($current_forum_category && $current_forum_category['locked'] != 0) ||
+        $current_forum['locked'] != 0 ||
+        $current_thread['locked'] != 0
     )
 ) {
     api_not_allowed(true);
@@ -218,7 +217,7 @@ echo Display::url(
     prepare4display($current_forum['forum_title']),
     'viewforum.php?'.api_get_cidreq().'&'.http_build_query([
         'origin' => $origin,
-        'forum' => $current_forum['forum_id']
+        'forum' => $current_forum['forum_id'],
     ]),
     ['class' => empty($current_forum['visibility']) ? 'text-muted' : null]
 );

@@ -4,21 +4,22 @@
 namespace Chamilo\TicketBundle\Entity;
 
 use Chamilo\UserBundle\Entity\User;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class AssignedLog
+ * Class AssignedLog.
+ *
  * @ORM\Table(
  *  name="ticket_assigned_log",
  * )
  * @ORM\Entity
+ *
  * @package Chamilo\TicketBundle\Entity
  */
 class AssignedLog
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -31,7 +32,7 @@ class AssignedLog
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\TicketBundle\Entity\Ticket")
      * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id")
-     **/
+     */
     protected $ticket;
 
     /**
@@ -39,11 +40,11 @@ class AssignedLog
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     **/
+     */
     protected $user;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="sys_insert_user_id", type="integer", nullable=false)
      */

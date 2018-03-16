@@ -1,18 +1,20 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Entity\CLpCategory;
+use Chamilo\CourseBundle\Entity\CTool;
 
 /**
- * Class CourseHome
+ * Class CourseHome.
  */
 class CourseHome
 {
     /**
-     * Gets the html content to show in the 3 column view
+     * Gets the html content to show in the 3 column view.
+     *
      * @param string $cat
-     * @param int $userId
+     * @param int    $userId
+     *
      * @return string
      */
     public static function show_tool_3column($cat, $userId = null)
@@ -127,7 +129,7 @@ class CourseHome
             $cell_number += $numcols;
         }
 
-        foreach ($all_tools as & $tool) {
+        foreach ($all_tools as &$tool) {
             if ($tool['image'] == 'scormbuilder.gif') {
                 // check if the published learnpath is visible for student
                 $published_lp_id = self::get_published_lp_id_from_link($tool['link']);
@@ -231,7 +233,7 @@ class CourseHome
                     $lnk[] = $link;
                 }
                 if (is_array($lnk)) {
-                    foreach ($lnk as & $this_lnk) {
+                    foreach ($lnk as &$this_lnk) {
                         if (isset($tool['adminlink']) && $tool['adminlink']) {
                             $cell_content .= '<a href="'.$properties['adminlink'].'">'.
                                 Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
@@ -253,7 +255,8 @@ class CourseHome
      * Displays the tools of a certain category.
      *
      * @param string $course_tool_category contains the category of tools to display:
-     * "Public", "PublicButHide", "courseAdmin", "claroAdmin"
+     *                                     "Public", "PublicButHide", "courseAdmin", "claroAdmin"
+     *
      * @return string
      */
     public static function show_tool_2column($course_tool_category)
@@ -332,7 +335,7 @@ class CourseHome
         }
         if (isset($all_tools_list)) {
             $lnk = [];
-            foreach ($all_tools_list as & $tool) {
+            foreach ($all_tools_list as &$tool) {
                 if ($tool['image'] == 'scormbuilder.gif') {
                     // check if the published learnpath is visible for student
                     $published_lp_id = self::get_published_lp_id_from_link($tool['link']);
@@ -447,7 +450,7 @@ class CourseHome
                     $html .= '<div class="pull-right">';
                     $html .= '<div class="btn-options">';
                     $html .= '<div class="btn-group btn-group-sm" role="group">';
-                    foreach ($lnk as & $this_link) {
+                    foreach ($lnk as &$this_link) {
                         if (!isset($tool['adminlink'])) {
                             $html .= '<a class="btn btn-default" title='.$this_link['title'].' href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$tool['id'].'&amp;'.$this_link['cmd'].'">'.$this_link['name'].'</a>';
                         }
@@ -475,11 +478,13 @@ class CourseHome
 
     /**
      * Gets the tools of a certain category. Returns an array expected
-     * by show_tools_category()
+     * by show_tools_category().
+     *
      * @param string $course_tool_category contains the category of tools to
-     * display: "toolauthoring", "toolinteraction", "tooladmin", "tooladminplatform", "toolplugin"
-     * @param int $courseId Optional
-     * @param int $sessionId Optional
+     *                                     display: "toolauthoring", "toolinteraction", "tooladmin", "tooladminplatform", "toolplugin"
+     * @param int    $courseId             Optional
+     * @param int    $sessionId            Optional
+     *
      * @return array
      */
     public static function get_tools_category(
@@ -758,62 +763,8 @@ class CourseHome
     }
 
     /**
-     * Filter tool icons. Only show if $patronKey is = :teacher
-     * Example dataIcons[i]['name']: parameter titleIcons1:teacher || titleIcons2 || titleIcons3:teacher
-     * @param array $dataIcons array Reference to icons
-     * @param string $courseToolCategory Current tools category
-     * @return array
-     */
-    private static function filterPluginTools($dataIcons, $courseToolCategory)
-    {
-        $patronKey = ':teacher';
-
-        if ($courseToolCategory == TOOL_STUDENT_VIEW) {
-            //Fix only coach can see external pages - see #8236 - icpna
-            if (api_is_coach()) {
-                foreach ($dataIcons as $index => $array) {
-                    if (isset($array['name'])) {
-                        $dataIcons[$index]['name'] = str_replace($patronKey, '', $array['name']);
-                    }
-                }
-
-                return $dataIcons;
-            }
-
-            $flagOrder = false;
-
-            foreach ($dataIcons as $index => $array) {
-                if (!isset($array['name'])) {
-                    continue;
-                }
-
-                $pos = strpos($array['name'], $patronKey);
-
-                if ($pos !== false) {
-                    unset($dataIcons[$index]);
-                    $flagOrder = true;
-                }
-            }
-
-            if ($flagOrder) {
-                return array_values($dataIcons);
-            }
-
-            return $dataIcons;
-        }
-
-        // clean patronKey of name icons
-        foreach ($dataIcons as $index => $array) {
-            if (isset($array['name'])) {
-                $dataIcons[$index]['name'] = str_replace($patronKey, '', $array['name']);
-            }
-        }
-
-        return $dataIcons;
-    }
-
-    /**
      * Displays the tools of a certain category.
+     *
      * @param array $all_tools_list List of tools as returned by get_tools_category()
      * @param bool  $rows
      *
@@ -829,7 +780,7 @@ class CourseHome
             if (is_array($all_tools_list) && count($all_tools_list) > 0) {
                 foreach ($all_tools_list as $key => $new_tool) {
                     $tool_name = self::translate_tool_name($new_tool);
-                    $order_tool_list [$key] = $tool_name;
+                    $order_tool_list[$key] = $tool_name;
                 }
                 natsort($order_tool_list);
                 $my_temp_tool_array = [];
@@ -861,7 +812,7 @@ class CourseHome
 
         if (isset($all_tools_list)) {
             $lnk = '';
-            foreach ($all_tools_list as & $tool) {
+            foreach ($all_tools_list as &$tool) {
                 $item = [];
                 $studentview = false;
                 $tool['original_link'] = $tool['link'];
@@ -924,7 +875,7 @@ class CourseHome
                         $criteria = [
                             'cId' => api_get_course_int_id(),
                             'name' => $tool['name'],
-                            'sessionId' => $session_id
+                            'sessionId' => $session_id,
                         ];
                         /** @var CTool $tool */
                         $toolObj = Database::getManager()->getRepository('ChamiloCourseBundle:CTool')->findOneBy($criteria);
@@ -1033,7 +984,7 @@ class CourseHome
                         'href' => '"javascript: void(0);"',
                         'class' => $class,
                         'onclick' => 'javascript: window.open(\''.$tool['link'].'\',\'window_visio'.api_get_course_id().'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')',
-                        'target' => $tool['target']
+                        'target' => $tool['target'],
                     ];
                 } elseif (strpos($tool['name'], 'chat') !== false &&
                     api_get_course_setting('allow_open_chat_window')
@@ -1043,14 +994,14 @@ class CourseHome
                         'class' => $class,
                         'href' => 'javascript: void(0);',
                         'onclick' => 'javascript: window.open(\''.$tool['link'].'\',\'window_chat'.api_get_course_id().'\',config=\'height=\'+600+\', width=\'+825+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')', //Chat Open Windows
-                        'target' => $tool['target']
+                        'target' => $tool['target'],
                     ];
                 } else {
                     $tool_link_params = [
                         'id' => 'tooldesc_'.$toolIid,
                         'href' => $tool['link'],
                         'class' => $class,
-                        'target' => $tool['target']
+                        'target' => $tool['target'],
                     ];
                 }
 
@@ -1132,51 +1083,11 @@ class CourseHome
     }
 
     /**
-     * Find the tool icon when homepage_view is activity_big
-     * @param array $item
-     * @return string
-     */
-    private static function getToolIcon(array $item)
-    {
-        $image = str_replace('.gif', '.png', $item['tool']['image']);
-        $toolIid = isset($item['tool']['iid']) ? $item['tool']['iid'] : null;
-
-        if (isset($item['tool']['custom_image'])) {
-            return Display::img(
-                $item['tool']['custom_image'],
-                $item['name'],
-                ['id' => 'toolimage_'.$toolIid]
-            );
-        }
-
-        if (isset($item['tool']['custom_icon']) && !empty($item['tool']['custom_icon'])) {
-            $customIcon = $item['tool']['custom_icon'];
-
-            if ($item['tool']['visibility'] == '0') {
-                $customIcon = self::getDisableIcon($item['tool']['custom_icon']);
-            }
-
-            return Display::img(
-                self::getCustomWebIconPath().$customIcon,
-                $item['name'],
-                ['id' => 'toolimage_'.$toolIid]
-            );
-        }
-
-        return Display::return_icon(
-            $image,
-            $item['name'],
-            ['id' => 'toolimage_'.$toolIid],
-            ICON_SIZE_BIG,
-            false
-        );
-    }
-
-    /**
-     * Shows the general data for a particular meeting
+     * Shows the general data for a particular meeting.
      *
      * @param int $id_session
-     * @return string    session data
+     *
+     * @return string session data
      */
     public static function show_session_data($id_session)
     {
@@ -1223,10 +1134,12 @@ class CourseHome
 
     /**
      * Retrieves the name-field within a tool-record and translates it on necessity.
-     * @param array $tool The input record.
-     * @return string Returns the name of the corresponding tool.
+     *
+     * @param array $tool the input record
+     *
+     * @return string returns the name of the corresponding tool
      */
-    public static function translate_tool_name(& $tool)
+    public static function translate_tool_name(&$tool)
     {
         static $already_translated_icons = [
             'file_html.gif',
@@ -1238,7 +1151,7 @@ class CourseHome
             'blog.gif',
             'blog_na.gif',
             'external.gif',
-            'external_na.gif'
+            'external_na.gif',
         ];
 
         $toolName = Security::remove_XSS(stripslashes($tool['name']));
@@ -1257,9 +1170,11 @@ class CourseHome
     }
 
     /**
-     * Get published learning path id from link inside course home
+     * Get published learning path id from link inside course home.
+     *
      * @param 	string	Link to published lp
-     * @return	int		Learning path id
+     *
+     * @return int Learning path id
      */
     public static function get_published_lp_id_from_link($published_lp_link)
     {
@@ -1276,8 +1191,10 @@ class CourseHome
     }
 
     /**
-     * Get published learning path category from link inside course home
+     * Get published learning path category from link inside course home.
+     *
      * @param string $link
+     *
      * @return CLpCategory
      */
     public static function getPublishedLpCategoryFromLink($link)
@@ -1294,6 +1211,7 @@ class CourseHome
 
     /**
      * @param bool $include_admin_tools
+     *
      * @return array
      */
     public static function get_navigation_items($include_admin_tools = false)
@@ -1387,7 +1305,7 @@ class CourseHome
     }
 
     /**
-     * Show a navigation menu
+     * Show a navigation menu.
      */
     public static function show_navigation_menu()
     {
@@ -1459,14 +1377,14 @@ class CourseHome
         }
         $html .= '</ul>';
         $html .= '<script>$(function() {
-                $("#toolnavbox a").stop().animate({"margin-left":"-' . $marginLeft.'px"},1000);
+                $("#toolnavbox a").stop().animate({"margin-left":"-'.$marginLeft.'px"},1000);
                 $("#toolnavbox > li").hover(
                     function () {
                         $("a",$(this)).stop().animate({"margin-left":"-2px"},200);
                         $("span",$(this)).css("display","block");
                     },
                     function () {
-                        $("a",$(this)).stop().animate({"margin-left":"-' . $marginLeft.'px"},200);
+                        $("a",$(this)).stop().animate({"margin-left":"-'.$marginLeft.'px"},200);
                         $("span",$(this)).css("display","initial");
                     }
                 );
@@ -1477,7 +1395,8 @@ class CourseHome
     }
 
     /**
-     * Show a toolbar with shortcuts to the course tool
+     * Show a toolbar with shortcuts to the course tool.
+     *
      * @param int $orientation
      *
      * @return string
@@ -1541,10 +1460,12 @@ class CourseHome
     }
 
     /**
-     * List course homepage tools from authoring and interaction sections
-     * @param   int $courseId The course ID (guessed from context if not provided)
-     * @param   int $sessionId The session ID (guessed from context if not provided)
-     * @return  array List of all tools data from the c_tools table
+     * List course homepage tools from authoring and interaction sections.
+     *
+     * @param int $courseId  The course ID (guessed from context if not provided)
+     * @param int $sessionId The session ID (guessed from context if not provided)
+     *
+     * @return array List of all tools data from the c_tools table
      */
     public static function toolsIconsAction($courseId = null, $sessionId = null)
     {
@@ -1580,6 +1501,7 @@ class CourseHome
 
     /**
      * @param int $editIcon
+     *
      * @return array
      */
     public static function getTool($editIcon)
@@ -1622,6 +1544,7 @@ class CourseHome
 
     /**
      * @param string $icon
+     *
      * @return string
      */
     public static function getDisableIcon($icon)
@@ -1632,7 +1555,7 @@ class CourseHome
     }
 
     /**
-     * @param int $id
+     * @param int   $id
      * @param array $values
      */
     public static function updateTool($id, $values)
@@ -1716,7 +1639,7 @@ class CourseHome
             }
 
             $params = [
-                'custom_icon' => ''
+                'custom_icon' => '',
             ];
 
             Database::update(
@@ -1725,5 +1648,105 @@ class CourseHome
                 [' iid = ?' => [$id]]
             );
         }
+    }
+
+    /**
+     * Filter tool icons. Only show if $patronKey is = :teacher
+     * Example dataIcons[i]['name']: parameter titleIcons1:teacher || titleIcons2 || titleIcons3:teacher.
+     *
+     * @param array  $dataIcons          array Reference to icons
+     * @param string $courseToolCategory Current tools category
+     *
+     * @return array
+     */
+    private static function filterPluginTools($dataIcons, $courseToolCategory)
+    {
+        $patronKey = ':teacher';
+
+        if ($courseToolCategory == TOOL_STUDENT_VIEW) {
+            //Fix only coach can see external pages - see #8236 - icpna
+            if (api_is_coach()) {
+                foreach ($dataIcons as $index => $array) {
+                    if (isset($array['name'])) {
+                        $dataIcons[$index]['name'] = str_replace($patronKey, '', $array['name']);
+                    }
+                }
+
+                return $dataIcons;
+            }
+
+            $flagOrder = false;
+
+            foreach ($dataIcons as $index => $array) {
+                if (!isset($array['name'])) {
+                    continue;
+                }
+
+                $pos = strpos($array['name'], $patronKey);
+
+                if ($pos !== false) {
+                    unset($dataIcons[$index]);
+                    $flagOrder = true;
+                }
+            }
+
+            if ($flagOrder) {
+                return array_values($dataIcons);
+            }
+
+            return $dataIcons;
+        }
+
+        // clean patronKey of name icons
+        foreach ($dataIcons as $index => $array) {
+            if (isset($array['name'])) {
+                $dataIcons[$index]['name'] = str_replace($patronKey, '', $array['name']);
+            }
+        }
+
+        return $dataIcons;
+    }
+
+    /**
+     * Find the tool icon when homepage_view is activity_big.
+     *
+     * @param array $item
+     *
+     * @return string
+     */
+    private static function getToolIcon(array $item)
+    {
+        $image = str_replace('.gif', '.png', $item['tool']['image']);
+        $toolIid = isset($item['tool']['iid']) ? $item['tool']['iid'] : null;
+
+        if (isset($item['tool']['custom_image'])) {
+            return Display::img(
+                $item['tool']['custom_image'],
+                $item['name'],
+                ['id' => 'toolimage_'.$toolIid]
+            );
+        }
+
+        if (isset($item['tool']['custom_icon']) && !empty($item['tool']['custom_icon'])) {
+            $customIcon = $item['tool']['custom_icon'];
+
+            if ($item['tool']['visibility'] == '0') {
+                $customIcon = self::getDisableIcon($item['tool']['custom_icon']);
+            }
+
+            return Display::img(
+                self::getCustomWebIconPath().$customIcon,
+                $item['name'],
+                ['id' => 'toolimage_'.$toolIid]
+            );
+        }
+
+        return Display::return_icon(
+            $image,
+            $item['name'],
+            ['id' => 'toolimage_'.$toolIid],
+            ICON_SIZE_BIG,
+            false
+        );
     }
 }

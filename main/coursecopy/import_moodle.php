@@ -5,9 +5,9 @@
  * Import a backup from moodle system.
  *
  * @author José Loguercio <jose.loguercio@beeznest.com>
+ *
  * @package chamilo.backup
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
@@ -30,7 +30,7 @@ $this_section = SECTION_COURSES;
 // Breadcrumbs
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'course_info/maintenance.php?'.api_get_cidreq(),
-    'name' => get_lang('Maintenance')
+    'name' => get_lang('Maintenance'),
 ];
 
 $form = new FormValidator('import_moodle', 'post', api_get_self().'?'.api_get_cidreq());

@@ -2,8 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Gradebook link to dropbox item
+ * Gradebook link to dropbox item.
+ *
  * @author Bert Steppé
+ *
  * @package chamilo.gradebook
  */
 class DropboxLink extends EvalLink
@@ -11,7 +13,7 @@ class DropboxLink extends EvalLink
     private $dropbox_table = null;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -20,9 +22,8 @@ class DropboxLink extends EvalLink
     }
 
     /**
-     *
      * Returns the URL of a document
-     * This function is loaded when using a gradebook as a tab (gradebook = -1) see issue #2705
+     * This function is loaded when using a gradebook as a tab (gradebook = -1) see issue #2705.
      */
     public function get_view_url($stud_id)
     {
@@ -52,17 +53,18 @@ class DropboxLink extends EvalLink
         return false;
     }
 
+    public function get_icon_name()
+    {
+        return 'dropbox';
+    }
+
     /**
-     * Lazy load function to get the dropbox database table
+     * Lazy load function to get the dropbox database table.
      */
     private function get_dropbox_table()
     {
         $this->dropbox_table = Database::get_course_table(TABLE_DROPBOX_FILE);
-        return $this->dropbox_table;
-    }
 
-    public function get_icon_name()
-    {
-        return 'dropbox';
+        return $this->dropbox_table;
     }
 }

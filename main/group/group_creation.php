@@ -246,7 +246,7 @@ EOT;
      */
     $create_groups_form = new FormValidator('create_groups', 'post', api_get_self().'?'.api_get_cidreq());
     $create_groups_form->addElement('header', $nameTools);
-    $create_groups_form->addText('number_of_groups', get_lang('NumberOfGroupsToCreate'), null, ['value'=>'1']);
+    $create_groups_form->addText('number_of_groups', get_lang('NumberOfGroupsToCreate'), null, ['value' => '1']);
     $create_groups_form->addButton('submit', get_lang('ProceedToCreateGroup'), 'plus', 'primary');
     $defaults = [];
     $defaults['number_of_groups'] = 1;
@@ -287,7 +287,7 @@ EOT;
     /*
      * Show form to generate groups from classes subscribed to the course
      */
-    $options['where'] = [" usergroup.course_id = ? " =>  api_get_course_int_id()];
+    $options['where'] = [" usergroup.course_id = ? " => api_get_course_int_id()];
     $obj = new UserGroup();
     $classes = $obj->getUserGroupInCourse($options);
     if (count($classes) > 0) {

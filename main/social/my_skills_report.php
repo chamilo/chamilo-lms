@@ -2,11 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Show the skills report
+ * Show the skills report.
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.social.skill
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $userId = api_get_user_id();
@@ -79,7 +80,7 @@ if ($isStudent) {
                     null,
                     true
                 ),
-                'course_name' => $resultData['title']
+                'course_name' => $resultData['title'],
             ];
 
             $imageSysPath = sprintf("%s%s/course-pic.png", api_get_path(SYS_COURSE_PATH), $resultData['directory']);

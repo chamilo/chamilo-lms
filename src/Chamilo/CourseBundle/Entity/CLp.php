@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CLp
+ * CLp.
  *
  * @ORM\Table(
  *  name="c_lp",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CLp
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -29,21 +29,21 @@ class CLp
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="lp_type", type="integer", nullable=false)
      */
@@ -78,7 +78,7 @@ class CLp
     private $path;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="force_commit", type="boolean", nullable=false)
      */
@@ -99,7 +99,7 @@ class CLp
     private $defaultEncoding;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="display_order", type="integer", nullable=false, options={"default":"0"})
      */
@@ -127,7 +127,7 @@ class CLp
     private $contentLicense;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="prevent_reinit", type="boolean", nullable=false, options={"default":"1"})
      */
@@ -141,7 +141,7 @@ class CLp
     private $jsLib;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="debug", type="boolean", nullable=false)
      */
@@ -169,63 +169,63 @@ class CLp
     private $author;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="prerequisite", type="integer", nullable=false)
      */
     private $prerequisite;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="hide_toc_frame", type="boolean", nullable=false)
      */
     private $hideTocFrame;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="seriousgame_mode", type="boolean", nullable=false)
      */
     private $seriousgameMode;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="use_max_score", type="integer", nullable=false, options={"default":"1"})
      */
     private $useMaxScore;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="autolaunch", type="integer", nullable=false)
      */
     private $autolaunch;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="category_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $categoryId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="max_attempts", type="integer", nullable=false)
      */
     private $maxAttempts;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="subscribe_users", type="integer", nullable=false)
      */
@@ -267,7 +267,7 @@ class CLp
     private $accumulateScormTime;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -281,9 +281,10 @@ class CLp
     }
 
     /**
-     * Set lpType
+     * Set lpType.
      *
-     * @param integer $lpType
+     * @param int $lpType
+     *
      * @return CLp
      */
     public function setLpType($lpType)
@@ -294,9 +295,9 @@ class CLp
     }
 
     /**
-     * Get lpType
+     * Get lpType.
      *
-     * @return integer
+     * @return int
      */
     public function getLpType()
     {
@@ -304,9 +305,10 @@ class CLp
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return CLp
      */
     public function setName($name)
@@ -317,7 +319,7 @@ class CLp
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -327,9 +329,10 @@ class CLp
     }
 
     /**
-     * Set ref
+     * Set ref.
      *
      * @param string $ref
+     *
      * @return CLp
      */
     public function setRef($ref)
@@ -340,7 +343,7 @@ class CLp
     }
 
     /**
-     * Get ref
+     * Get ref.
      *
      * @return string
      */
@@ -350,9 +353,10 @@ class CLp
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return CLp
      */
     public function setDescription($description)
@@ -363,7 +367,7 @@ class CLp
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -373,9 +377,10 @@ class CLp
     }
 
     /**
-     * Set path
+     * Set path.
      *
      * @param string $path
+     *
      * @return CLp
      */
     public function setPath($path)
@@ -386,7 +391,7 @@ class CLp
     }
 
     /**
-     * Get path
+     * Get path.
      *
      * @return string
      */
@@ -396,9 +401,10 @@ class CLp
     }
 
     /**
-     * Set forceCommit
+     * Set forceCommit.
      *
-     * @param boolean $forceCommit
+     * @param bool $forceCommit
+     *
      * @return CLp
      */
     public function setForceCommit($forceCommit)
@@ -409,9 +415,9 @@ class CLp
     }
 
     /**
-     * Get forceCommit
+     * Get forceCommit.
      *
-     * @return boolean
+     * @return bool
      */
     public function getForceCommit()
     {
@@ -419,9 +425,10 @@ class CLp
     }
 
     /**
-     * Set defaultViewMod
+     * Set defaultViewMod.
      *
      * @param string $defaultViewMod
+     *
      * @return CLp
      */
     public function setDefaultViewMod($defaultViewMod)
@@ -432,7 +439,7 @@ class CLp
     }
 
     /**
-     * Get defaultViewMod
+     * Get defaultViewMod.
      *
      * @return string
      */
@@ -442,9 +449,10 @@ class CLp
     }
 
     /**
-     * Set defaultEncoding
+     * Set defaultEncoding.
      *
      * @param string $defaultEncoding
+     *
      * @return CLp
      */
     public function setDefaultEncoding($defaultEncoding)
@@ -455,7 +463,7 @@ class CLp
     }
 
     /**
-     * Get defaultEncoding
+     * Get defaultEncoding.
      *
      * @return string
      */
@@ -465,9 +473,10 @@ class CLp
     }
 
     /**
-     * Set displayOrder
+     * Set displayOrder.
      *
-     * @param integer $displayOrder
+     * @param int $displayOrder
+     *
      * @return CLp
      */
     public function setDisplayOrder($displayOrder)
@@ -478,9 +487,9 @@ class CLp
     }
 
     /**
-     * Get displayOrder
+     * Get displayOrder.
      *
-     * @return integer
+     * @return int
      */
     public function getDisplayOrder()
     {
@@ -488,9 +497,10 @@ class CLp
     }
 
     /**
-     * Set contentMaker
+     * Set contentMaker.
      *
      * @param string $contentMaker
+     *
      * @return CLp
      */
     public function setContentMaker($contentMaker)
@@ -501,7 +511,7 @@ class CLp
     }
 
     /**
-     * Get contentMaker
+     * Get contentMaker.
      *
      * @return string
      */
@@ -511,9 +521,10 @@ class CLp
     }
 
     /**
-     * Set contentLocal
+     * Set contentLocal.
      *
      * @param string $contentLocal
+     *
      * @return CLp
      */
     public function setContentLocal($contentLocal)
@@ -524,7 +535,7 @@ class CLp
     }
 
     /**
-     * Get contentLocal
+     * Get contentLocal.
      *
      * @return string
      */
@@ -534,9 +545,10 @@ class CLp
     }
 
     /**
-     * Set contentLicense
+     * Set contentLicense.
      *
      * @param string $contentLicense
+     *
      * @return CLp
      */
     public function setContentLicense($contentLicense)
@@ -547,7 +559,7 @@ class CLp
     }
 
     /**
-     * Get contentLicense
+     * Get contentLicense.
      *
      * @return string
      */
@@ -557,9 +569,10 @@ class CLp
     }
 
     /**
-     * Set preventReinit
+     * Set preventReinit.
      *
-     * @param boolean $preventReinit
+     * @param bool $preventReinit
+     *
      * @return CLp
      */
     public function setPreventReinit($preventReinit)
@@ -570,9 +583,9 @@ class CLp
     }
 
     /**
-     * Get preventReinit
+     * Get preventReinit.
      *
-     * @return boolean
+     * @return bool
      */
     public function getPreventReinit()
     {
@@ -580,9 +593,10 @@ class CLp
     }
 
     /**
-     * Set jsLib
+     * Set jsLib.
      *
      * @param string $jsLib
+     *
      * @return CLp
      */
     public function setJsLib($jsLib)
@@ -593,7 +607,7 @@ class CLp
     }
 
     /**
-     * Get jsLib
+     * Get jsLib.
      *
      * @return string
      */
@@ -603,9 +617,10 @@ class CLp
     }
 
     /**
-     * Set debug
+     * Set debug.
      *
-     * @param boolean $debug
+     * @param bool $debug
+     *
      * @return CLp
      */
     public function setDebug($debug)
@@ -616,9 +631,9 @@ class CLp
     }
 
     /**
-     * Get debug
+     * Get debug.
      *
-     * @return boolean
+     * @return bool
      */
     public function getDebug()
     {
@@ -626,9 +641,10 @@ class CLp
     }
 
     /**
-     * Set theme
+     * Set theme.
      *
      * @param string $theme
+     *
      * @return CLp
      */
     public function setTheme($theme)
@@ -639,7 +655,7 @@ class CLp
     }
 
     /**
-     * Get theme
+     * Get theme.
      *
      * @return string
      */
@@ -649,9 +665,10 @@ class CLp
     }
 
     /**
-     * Set previewImage
+     * Set previewImage.
      *
      * @param string $previewImage
+     *
      * @return CLp
      */
     public function setPreviewImage($previewImage)
@@ -662,7 +679,7 @@ class CLp
     }
 
     /**
-     * Get previewImage
+     * Get previewImage.
      *
      * @return string
      */
@@ -672,9 +689,10 @@ class CLp
     }
 
     /**
-     * Set author
+     * Set author.
      *
      * @param string $author
+     *
      * @return CLp
      */
     public function setAuthor($author)
@@ -685,7 +703,7 @@ class CLp
     }
 
     /**
-     * Get author
+     * Get author.
      *
      * @return string
      */
@@ -695,9 +713,10 @@ class CLp
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return CLp
      */
     public function setSessionId($sessionId)
@@ -708,9 +727,9 @@ class CLp
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -718,9 +737,10 @@ class CLp
     }
 
     /**
-     * Set prerequisite
+     * Set prerequisite.
      *
-     * @param integer $prerequisite
+     * @param int $prerequisite
+     *
      * @return CLp
      */
     public function setPrerequisite($prerequisite)
@@ -731,9 +751,9 @@ class CLp
     }
 
     /**
-     * Get prerequisite
+     * Get prerequisite.
      *
-     * @return integer
+     * @return int
      */
     public function getPrerequisite()
     {
@@ -741,9 +761,10 @@ class CLp
     }
 
     /**
-     * Set hideTocFrame
+     * Set hideTocFrame.
      *
-     * @param boolean $hideTocFrame
+     * @param bool $hideTocFrame
+     *
      * @return CLp
      */
     public function setHideTocFrame($hideTocFrame)
@@ -754,9 +775,9 @@ class CLp
     }
 
     /**
-     * Get hideTocFrame
+     * Get hideTocFrame.
      *
-     * @return boolean
+     * @return bool
      */
     public function getHideTocFrame()
     {
@@ -764,9 +785,10 @@ class CLp
     }
 
     /**
-     * Set seriousgameMode
+     * Set seriousgameMode.
      *
-     * @param boolean $seriousgameMode
+     * @param bool $seriousgameMode
+     *
      * @return CLp
      */
     public function setSeriousgameMode($seriousgameMode)
@@ -777,9 +799,9 @@ class CLp
     }
 
     /**
-     * Get seriousgameMode
+     * Get seriousgameMode.
      *
-     * @return boolean
+     * @return bool
      */
     public function getSeriousgameMode()
     {
@@ -787,9 +809,10 @@ class CLp
     }
 
     /**
-     * Set useMaxScore
+     * Set useMaxScore.
      *
-     * @param integer $useMaxScore
+     * @param int $useMaxScore
+     *
      * @return CLp
      */
     public function setUseMaxScore($useMaxScore)
@@ -800,9 +823,9 @@ class CLp
     }
 
     /**
-     * Get useMaxScore
+     * Get useMaxScore.
      *
-     * @return integer
+     * @return int
      */
     public function getUseMaxScore()
     {
@@ -810,9 +833,10 @@ class CLp
     }
 
     /**
-     * Set autolaunch
+     * Set autolaunch.
      *
-     * @param integer $autolaunch
+     * @param int $autolaunch
+     *
      * @return CLp
      */
     public function setAutolaunch($autolaunch)
@@ -823,9 +847,9 @@ class CLp
     }
 
     /**
-     * Get autolaunch
+     * Get autolaunch.
      *
-     * @return integer
+     * @return int
      */
     public function getAutolaunch()
     {
@@ -833,9 +857,10 @@ class CLp
     }
 
     /**
-     * Set createdOn
+     * Set createdOn.
      *
      * @param \DateTime $createdOn
+     *
      * @return CLp
      */
     public function setCreatedOn($createdOn)
@@ -846,7 +871,7 @@ class CLp
     }
 
     /**
-     * Get createdOn
+     * Get createdOn.
      *
      * @return \DateTime
      */
@@ -856,9 +881,10 @@ class CLp
     }
 
     /**
-     * Set modifiedOn
+     * Set modifiedOn.
      *
      * @param \DateTime $modifiedOn
+     *
      * @return CLp
      */
     public function setModifiedOn($modifiedOn)
@@ -869,7 +895,7 @@ class CLp
     }
 
     /**
-     * Get modifiedOn
+     * Get modifiedOn.
      *
      * @return \DateTime
      */
@@ -879,9 +905,10 @@ class CLp
     }
 
     /**
-     * Set publicatedOn
+     * Set publicatedOn.
      *
      * @param \DateTime $publicatedOn
+     *
      * @return CLp
      */
     public function setPublicatedOn($publicatedOn)
@@ -892,7 +919,7 @@ class CLp
     }
 
     /**
-     * Get publicatedOn
+     * Get publicatedOn.
      *
      * @return \DateTime
      */
@@ -902,9 +929,10 @@ class CLp
     }
 
     /**
-     * Set expiredOn
+     * Set expiredOn.
      *
      * @param \DateTime $expiredOn
+     *
      * @return CLp
      */
     public function setExpiredOn($expiredOn)
@@ -915,7 +943,7 @@ class CLp
     }
 
     /**
-     * Get expiredOn
+     * Get expiredOn.
      *
      * @return \DateTime
      */
@@ -925,9 +953,10 @@ class CLp
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CLp
      */
     public function setId($id)
@@ -938,9 +967,9 @@ class CLp
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -948,9 +977,10 @@ class CLp
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CLp
      */
     public function setCId($cId)
@@ -961,9 +991,9 @@ class CLp
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -980,6 +1010,7 @@ class CLp
 
     /**
      * @param int $categoryId
+     *
      * @return CLp
      */
     public function setCategoryId($categoryId)
@@ -999,6 +1030,7 @@ class CLp
 
     /**
      * @param string $accumulateScormTime
+     *
      * @return CLp
      */
     public function setAccumulateScormTime($accumulateScormTime)
@@ -1009,7 +1041,8 @@ class CLp
     }
 
     /**
-     * Get iid
+     * Get iid.
+     *
      * @return int
      */
     public function getIid()
@@ -1018,7 +1051,8 @@ class CLp
     }
 
     /**
-     * Get subscribeUsers
+     * Get subscribeUsers.
+     *
      * @return int
      */
     public function getSubscribeUsers()

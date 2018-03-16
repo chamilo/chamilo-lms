@@ -3,9 +3,11 @@
 
 /**
  * Class ResultTable
- * Table to display results for an evaluation
+ * Table to display results for an evaluation.
+ *
  * @author Stijn Konings
  * @author Bert Steppé
+ *
  * @package chamilo.gradebook
  */
 class ResultTable extends SortableTable
@@ -17,11 +19,12 @@ class ResultTable extends SortableTable
 
     /**
      * ResultTable constructor.
-     * @param string $evaluation
-     * @param array $results
+     *
+     * @param string      $evaluation
+     * @param array       $results
      * @param null|string $iscourse
-     * @param array $addparams
-     * @param bool $forprint
+     * @param array       $addparams
+     * @param bool        $forprint
      */
     public function __construct(
         $evaluation,
@@ -51,7 +54,7 @@ class ResultTable extends SortableTable
         if ($this->iscourse == '1') {
             $this->set_header($column++, '', false);
             $this->set_form_actions([
-                    'delete' => get_lang('Delete')
+                    'delete' => get_lang('Delete'),
             ]);
         }
         if (api_is_western_name_order()) {
@@ -71,7 +74,7 @@ class ResultTable extends SortableTable
     }
 
     /**
-     * Function used by SortableTable to get total number of items in the table
+     * Function used by SortableTable to get total number of items in the table.
      */
     public function get_total_number_of_items()
     {
@@ -79,7 +82,7 @@ class ResultTable extends SortableTable
     }
 
     /**
-     * Function used by SortableTable to generate the data to display
+     * Function used by SortableTable to generate the data to display.
      */
     public function get_table_data(
         $from = 1,
@@ -96,7 +99,7 @@ class ResultTable extends SortableTable
 
         switch ($this->column) {
             // first name or last name
-            case (0 + $col_adjust):
+            case 0 + $col_adjust:
                 if ($isWesternNameOrder) {
                     $sorting = ResultsDataGenerator::RDG_SORT_FIRSTNAME;
                 } else {
@@ -104,7 +107,7 @@ class ResultTable extends SortableTable
                 }
                 break;
                 // first name or last name
-            case (1 + $col_adjust):
+            case 1 + $col_adjust:
                 if ($isWesternNameOrder) {
                     $sorting = ResultsDataGenerator::RDG_SORT_LASTNAME;
                 } else {
@@ -112,10 +115,10 @@ class ResultTable extends SortableTable
                 }
                 break;
                 // Score
-            case (2 + $col_adjust):
+            case 2 + $col_adjust:
                 $sorting = ResultsDataGenerator::RDG_SORT_SCORE;
                 break;
-            case (3 + $col_adjust):
+            case 3 + $col_adjust:
                 $sorting = ResultsDataGenerator::RDG_SORT_MASK;
                 break;
         }
@@ -163,6 +166,7 @@ class ResultTable extends SortableTable
 
     /**
      * @param array $item
+     *
      * @return string
      */
     private function build_edit_column($item)

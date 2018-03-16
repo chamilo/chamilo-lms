@@ -1,9 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
-
 require_once __DIR__.'/../global.inc.php';
 
 api_protect_course_script(true);
@@ -21,7 +20,7 @@ switch ($action) {
                 echo 0;
             }
         }
-        break;/*
+        break; /*
     case 'generate_custom_report':
         if (api_is_allowed_to_edit(null, true)) {
             $allow = api_get_configuration_value('gradebook_custom_student_report');

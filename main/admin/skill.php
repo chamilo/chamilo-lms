@@ -8,7 +8,6 @@ use Chamilo\CoreBundle\Entity\Skill;
  *
  * @package chamilo.skill
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 api_protect_admin_script();

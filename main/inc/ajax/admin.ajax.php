@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
 require_once __DIR__.'/../global.inc.php';
 
@@ -15,11 +15,11 @@ switch ($action) {
 
         if (api_is_global_platform_admin() && $url_id == 1) {
             if (isset($_GET['id']) && !empty($_GET['id'])) {
-                $params = ['variable = ? ' =>  [$_GET['id']]];
+                $params = ['variable = ? ' => [$_GET['id']]];
                 $data = api_get_settings_params($params);
                 if (!empty($data)) {
                     foreach ($data as $item) {
-                        $params = ['id' =>$item['id'], 'access_url_changeable' => $_GET['changeable']];
+                        $params = ['id' => $item['id'], 'access_url_changeable' => $_GET['changeable']];
                         api_set_setting_simple($params);
                     }
                 }
@@ -70,13 +70,15 @@ switch ($action) {
         break;
 }
 
-
 /**
- * Displays either the text for the registration or the message that the installation is (not) up to date
+ * Displays either the text for the registration or the message that the installation is (not) up to date.
  *
  * @return string html code
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ *
  * @version august 2006
+ *
  * @todo have a 6 monthly re-registration
  */
 function version_check()
@@ -99,16 +101,19 @@ function version_check()
         // site not registered. Call anyway
         $return .= check_system_version();
     }
+
     return $return;
 }
 
 /**
  * Check if the current installation is up to date
- * The code is borrowed from phpBB and slighlty modified
+ * The code is borrowed from phpBB and slighlty modified.
+ *
  * @author The phpBB Group <support@phpbb.com> (the code)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University (the modifications)
  * @author Yannick Warnier <ywarnier@beeznest.org> for the move to HTTP request
  * @copyright (C) 2001 The phpBB Group
+ *
  * @return string language string with some layout (color)
  */
 function check_system_version()
@@ -120,7 +125,7 @@ function check_system_version()
 
     $url = 'https://version.chamilo.org';
     $options = [
-        'verify' => false
+        'verify' => false,
     ];
 
     $urlValidated = false;

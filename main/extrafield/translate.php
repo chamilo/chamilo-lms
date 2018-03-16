@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraField;
 
 $cidReset = true;
 
@@ -73,7 +73,7 @@ if ($languageId) {
 $form->setDefaults([
     'variable_language' => $variableLanguage,
     'original_name' => $originalName,
-    'sub_language' => $languageId
+    'sub_language' => $languageId,
 ]);
 $form->addRule('sub_language', get_lang('Required'), 'required');
 $form->freeze(['variable_language', 'original_name']);
@@ -84,19 +84,19 @@ switch ($extraField->getExtraFieldType()) {
     case ExtraField::USER_FIELD_TYPE:
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'admin/extra_fields.php?type=user',
-            'name' => get_lang('UserFields')
+            'name' => get_lang('UserFields'),
         ];
         break;
     case ExtraField::COURSE_FIELD_TYPE:
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'admin/extra_fields.php?type=course',
-            'name' => get_lang('CourseFields')
+            'name' => get_lang('CourseFields'),
         ];
         break;
     case ExtraField::SESSION_FIELD_TYPE:
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'admin/extra_fields.php?type=session',
-            'name' => get_lang('SessionFields')
+            'name' => get_lang('SessionFields'),
         ];
         break;
 }

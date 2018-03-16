@@ -4,9 +4,8 @@
 use ChamiloSession as Session;
 
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
-
 require_once __DIR__.'/../global.inc.php';
 api_protect_course_script(true);
 $action = $_REQUEST['a'];
@@ -207,7 +206,7 @@ switch ($action) {
 
         if (!$lpHasForum) {
             echo json_encode([
-                'error' => true
+                'error' => true,
             ]);
             break;
         }
@@ -227,7 +226,7 @@ switch ($action) {
                     [
                         'lp_id' => 0,
                         'forum_category_title' => get_lang('LearningPaths'),
-                        'forum_category_comment' => null
+                        'forum_category_comment' => null,
                     ],
                     [],
                     false
@@ -245,7 +244,7 @@ switch ($action) {
 
         if (!$lpItemHasThread) {
             echo json_encode([
-                'error' => true
+                'error' => true,
             ]);
             break;
         }
@@ -261,7 +260,7 @@ switch ($action) {
         echo json_encode([
             'error' => false,
             'forumId' => intval($forum['forum_id']),
-            'threadId' => intval($forumThreadId)
+            'threadId' => intval($forumThreadId),
         ]);
         break;
     case 'update_gamification':
@@ -269,7 +268,7 @@ switch ($action) {
 
         $jsonGamification = [
             'stars' => 0,
-            'score' => 0
+            'score' => 0,
         ];
 
         if ($lp) {

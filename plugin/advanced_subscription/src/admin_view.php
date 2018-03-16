@@ -1,11 +1,12 @@
 <?php
 /* For license terms, see /license.txt */
 /**
- * Index of the Advanced subscription plugin courses list
+ * Index of the Advanced subscription plugin courses list.
+ *
  * @package chamilo.plugin.advanced_subscription
  */
 /**
- * Init
+ * Init.
  */
 require_once __DIR__.'/../config.php';
 // protect
@@ -40,13 +41,13 @@ if (!empty($sessionId)) {
     $extraField = new ExtraField('session');
     // Get session fields
     $fieldList = $extraField->get_all([
-        'variable IN ( ?, ?, ?, ?, ?, ?)' => $fieldsArray
+        'variable IN ( ?, ?, ?, ?, ?, ?)' => $fieldsArray,
     ]);
     // Index session fields
     foreach ($fieldList as $field) {
         $fields[$field['id']] = $field['variable'];
     }
-    $params = [' item_id = ? '  => $sessionId];
+    $params = [' item_id = ? ' => $sessionId];
     $sessionFieldValueList = $extraSession->get_all(['where' => $params]);
     foreach ($sessionFieldValueList as $sessionFieldValue) {
         // Check if session field value is set in session field list

@@ -2,17 +2,19 @@
 /* For licensing terms, see /license.txt */
 /**
  * This file contains all Hook interfaces and their relation.
- * They are used for Hook classes
+ * They are used for Hook classes.
+ *
  * @package chamilo.library.hook
  */
 
 /**
- * Interface HookSkypeEventInterface
+ * Interface HookSkypeEventInterface.
  */
 interface HookSkypeEventInterface extends HookEventInterface
 {
     /**
-     * Update all the observers
+     * Update all the observers.
+     *
      * @param int $type
      *
      * @return int

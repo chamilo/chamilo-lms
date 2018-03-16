@@ -4,11 +4,12 @@
 use ChamiloSession as Session;
 
 /**
- * This is a learning path creation and player tool in Chamilo - previously
+ * This is a learning path creation and player tool in Chamilo - previously.
+ *
  * @author Julio Montoya  - Improving the list of templates
+ *
  * @package chamilo.learnpath
  */
-
 $this_section = SECTION_COURSES;
 api_protect_course_script();
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
@@ -30,17 +31,17 @@ $lp = Session::read('oLP');
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
+        'name' => get_lang('ToolGradebook'),
     ];
 }
 
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths')
+    'name' => get_lang('LearningPaths'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
-    'name' => $lp->get_name()
+    'name' => $lp->get_name(),
 ];
 
 switch ($type) {

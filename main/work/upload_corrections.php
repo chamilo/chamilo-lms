@@ -48,7 +48,7 @@ $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$workId,
     'name' => $workInfo['title'],
 ];
-$interbreadcrumb[] = ['url' => '#', 'name'  => get_lang('UploadCorrections')];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('UploadCorrections')];
 
 $downloadLink = api_get_path(WEB_CODE_PATH).'work/downloadfolder.inc.php?id='.$workId.'&'.api_get_cidreq();
 
@@ -86,7 +86,7 @@ if ($form->validate()) {
         $zipFileList = (array) $zip->listContent();
 
         $realSize = 0;
-        foreach ($zipFileList as & $this_content) {
+        foreach ($zipFileList as &$this_content) {
             $realSize += $this_content['size'];
         }
 

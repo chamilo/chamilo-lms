@@ -2,10 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class EvalForm
+ * Class EvalForm.
  *
  * Extends FormValidator with add&edit forms for evaluations
+ *
  * @author Stijn Konings
+ *
  * @package chamilo.gradebook
  */
 class EvalForm extends FormValidator
@@ -23,13 +25,14 @@ class EvalForm extends FormValidator
     private $extra;
 
     /**
-     * Builds a form containing form items based on a given parameter
-     * @param int $form_type 1=add, 2=edit,3=move,4=result_add
+     * Builds a form containing form items based on a given parameter.
+     *
+     * @param int        $form_type         1=add, 2=edit,3=move,4=result_add
      * @param Evaluation $evaluation_object the category object
-     * @param obj $result_object the result object
-     * @param string $form_name
-     * @param string $method
-     * @param string $action
+     * @param obj        $result_object     the result object
+     * @param string     $form_name
+     * @param string     $method
+     * @param string     $action
      */
     public function __construct(
         $form_type,
@@ -79,8 +82,37 @@ class EvalForm extends FormValidator
         $this->setDefaults();
     }
 
+    public function display()
+    {
+        parent::display();
+    }
+
+    public function setDefaults($defaults = [], $filter = null)
+    {
+        parent::setDefaults($defaults, $filter);
+    }
+
+    public function sort_by_user($item1, $item2)
+    {
+        $user1 = $item1['user'];
+        $user2 = $item2['user'];
+        if (api_sort_by_first_name()) {
+            $result = api_strcmp($user1['firstname'], $user2['firstname']);
+            if ($result == 0) {
+                return api_strcmp($user1['lastname'], $user2['lastname']);
+            }
+        } else {
+            $result = api_strcmp($user1['lastname'], $user2['lastname']);
+            if ($result == 0) {
+                return api_strcmp($user1['firstname'], $user2['firstname']);
+            }
+        }
+
+        return $result;
+    }
+
     /**
-     * This form will build a form to add users to an evaluation
+     * This form will build a form to add users to an evaluation.
      */
     protected function build_add_user_to_eval()
     {
@@ -124,7 +156,7 @@ class EvalForm extends FormValidator
     }
 
     /**
-     * This function builds a form to edit all results in an evaluation
+     * This function builds a form to edit all results in an evaluation.
      */
     protected function build_all_results_edit_form()
     {
@@ -183,7 +215,7 @@ class EvalForm extends FormValidator
                 $this->build_stud_label($user['user_id'], $user['username'], $user['lastname'], $user['firstname']),
                 false,
                 [
-                    'maxlength' => 5
+                    'maxlength' => 5,
                 ],
                 false,
                 0,
@@ -216,8 +248,7 @@ class EvalForm extends FormValidator
     }
 
     /**
-     * This function builds a form to move an item to another category
-     *
+     * This function builds a form to move an item to another category.
      */
     protected function build_move_form()
     {
@@ -238,7 +269,7 @@ class EvalForm extends FormValidator
     }
 
     /**
-     * Builds a result form containing inputs for all students with a given course_code
+     * Builds a result form containing inputs for all students with a given course_code.
      */
     protected function build_result_add_form()
     {
@@ -334,7 +365,7 @@ class EvalForm extends FormValidator
     }
 
     /**
-     * Builds a form to edit a result
+     * Builds a form to edit a result.
      */
     protected function build_result_edit_form()
     {
@@ -369,7 +400,7 @@ class EvalForm extends FormValidator
     }
 
     /**
-     * Builds a form to add an evaluation
+     * Builds a form to add an evaluation.
      */
     protected function build_add_form()
     {
@@ -391,7 +422,7 @@ class EvalForm extends FormValidator
     }
 
     /**
-     * Builds a form to edit an evaluation
+     * Builds a form to edit an evaluation.
      */
     protected function build_editing_form()
     {
@@ -417,7 +448,7 @@ class EvalForm extends FormValidator
             'weight' => $weight,
             'weight_mask' => $weight_mask,
             'max' => $this->evaluation_object->get_max(),
-            'visible' => $this->evaluation_object->is_visible()
+            'visible' => $this->evaluation_object->is_visible(),
         ]);
         $id_current = isset($this->id) ? $this->id : null;
         $this->addElement('hidden', 'hid_id', $id_current);
@@ -426,7 +457,7 @@ class EvalForm extends FormValidator
     }
 
     /**
-     * Builds a basic form that is used in add and edit
+     * Builds a basic form that is used in add and edit.
      */
     private function build_basic_form($edit = 0)
     {
@@ -510,7 +541,7 @@ class EvalForm extends FormValidator
             true,
             [
                 'size' => '4',
-                'maxlength' => '5'
+                'maxlength' => '5',
             ]
         );
 
@@ -521,7 +552,7 @@ class EvalForm extends FormValidator
                     get_lang('QualificationNumeric'),
                     true,
                     [
-                        'maxlength' => '5'
+                        'maxlength' => '5',
                     ]
                 );
             } else {
@@ -531,7 +562,7 @@ class EvalForm extends FormValidator
                     false,
                     [
                         'maxlength' => '5',
-                        'disabled' => 'disabled'
+                        'disabled' => 'disabled',
                     ]
                 );
             }
@@ -571,21 +602,12 @@ class EvalForm extends FormValidator
         $this->setDefaults(['visible' => $visibility_default]);
     }
 
-    public function display()
-    {
-        parent::display();
-    }
-
-    public function setDefaults($defaults = [], $filter = null)
-    {
-        parent::setDefaults($defaults, $filter);
-    }
-
     /**
      * @param $id
      * @param $username
      * @param $lastname
      * @param $firstname
+     *
      * @return string
      */
     private function build_stud_label($id, $username, $lastname, $firstname)
@@ -603,24 +625,5 @@ class EvalForm extends FormValidator
         }
 
         return $opendocurl_start.api_get_person_name($firstname, $lastname).' ('.$username.')'.$opendocurl_end;
-    }
-
-    public function sort_by_user($item1, $item2)
-    {
-        $user1 = $item1['user'];
-        $user2 = $item2['user'];
-        if (api_sort_by_first_name()) {
-            $result = api_strcmp($user1['firstname'], $user2['firstname']);
-            if ($result == 0) {
-                return api_strcmp($user1['lastname'], $user2['lastname']);
-            }
-        } else {
-            $result = api_strcmp($user1['lastname'], $user2['lastname']);
-            if ($result == 0) {
-                return api_strcmp($user1['firstname'], $user2['firstname']);
-            }
-        }
-
-        return $result;
     }
 }

@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script to import students from LDAP
+ * Script to import students from LDAP.
+ *
  * @package chamilo.admin
  * Copyright (c) 2007 Mustapha Alouani (supervised by Michel Moreau-Belliard)
  */
@@ -14,7 +15,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 // Access restrictions
 api_protect_admin_script();
-require('../auth/ldap/authldap.php');
+require '../auth/ldap/authldap.php';
 
 $annee_base = date('Y');
 
@@ -96,7 +97,7 @@ if (empty($annee) && empty($course)) {
 
         //$sr = @ ldap_search($ds, "ou=people,$LDAPbasedn", "(|(edupersonprimaryorgunitdn=ou=$etape,ou=$annee,ou=diploma,o=Paris1,$LDAPbasedn)(edupersonprimaryorgunitdn=ou=02PEL,ou=$annee,ou=diploma,o=Paris1,$LDAPbasedn))");
         //echo "(ou=*$annee,ou=$composante)";
-        $sr = @ ldap_search($ds, $ldap_basedn, "(ou=*$annee)");
+        $sr = @ldap_search($ds, $ldap_basedn, "(ou=*$annee)");
 
         $info = ldap_get_entries($ds, $sr);
 

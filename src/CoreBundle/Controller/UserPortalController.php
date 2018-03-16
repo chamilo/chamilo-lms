@@ -4,22 +4,16 @@
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Framework\PageController;
-use Chamilo\CoreBundle\Controller\BaseController;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\Finder\Finder;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class UserPortalController
- * author Julio Montoya <gugli100@gmail.com>
+ * author Julio Montoya <gugli100@gmail.com>.
+ *
  * @package Chamilo\CoreBundle\Controller
  */
 class UserPortalController extends BaseController
@@ -120,7 +114,6 @@ class UserPortalController extends BaseController
 
         // The teacher
         if ($courseValidation) {
-
             // Description of the requested course.
             $form->addElement(
                 'textarea',
@@ -165,7 +158,6 @@ class UserPortalController extends BaseController
         );
 
         if ($courseValidation) {
-
             // A special URL to terms and conditions that is set
             // in the platform settings page.
             $terms_and_conditions_url = trim(
@@ -228,7 +220,7 @@ class UserPortalController extends BaseController
                     get_lang('PickACourseAsATemplateForThisNewCourse'),
                 ],
                 null,
-                ['url' => api_get_path(WEB_AJAX_PATH) . 'course.ajax.php?a=search_course']
+                ['url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course']
             );
         }
 
@@ -390,14 +382,15 @@ class UserPortalController extends BaseController
     }
 
     /**
-     * Userportal main page
+     * Userportal main page.
+     *
      * @Route("/{type}/{filter}", name="userportal")
      * @Method({"GET"})
      * @Security("has_role('ROLE_USER')")
      *
-     * @param string $type courses|sessions|mycoursecategories
-     * @param string $filter history|current for the userportal courses page
-     * @param int $coursePage
+     * @param string  $type       courses|sessions|mycoursecategories
+     * @param string  $filter     history|current for the userportal courses page
+     * @param int     $coursePage
      * @param Request $request
      *
      * @return Response
@@ -487,7 +480,7 @@ class UserPortalController extends BaseController
             'ChamiloCoreBundle:Index:userportal.html.twig',
             [
                 'content' => $items,
-                'count_courses' => $countCourses
+                'count_courses' => $countCourses,
             ]
         );
     }

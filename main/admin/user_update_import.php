@@ -2,14 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This tool allows platform admins to add users by uploading a CSV or XML file
+ * This tool allows platform admins to add users by uploading a CSV or XML file.
+ *
  * @package chamilo.admin
  */
 
 /**
  * Validate the imported data.
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -95,6 +95,7 @@ function validate_data($users)
             }
         }
     }
+
     return $errors;
 }
 
@@ -122,16 +123,19 @@ function complete_missing_data($user)
     if (empty($user['AuthSource'])) {
         $user['AuthSource'] = PLATFORM_AUTH_SOURCE;
     }
+
     return $user;
 }
 
 /**
- * Update users from the imported data
- * @param   array   $users List of users
- * @return  false|null
- * @uses global variable $inserted_in_course, which returns the list of courses the user was inserted in
+ * Update users from the imported data.
+ *
+ * @param array $users List of users
+ *
+ * @return false|null
+ *
+ * @uses \global variable $inserted_in_course, which returns the list of courses the user was inserted in
  */
-
 function updateUsers($users)
 {
     global $insertedIn_course;
@@ -188,7 +192,6 @@ function updateUsers($users)
                 '',
                 '',
                 ''
-
             );
             if (!is_array($user['Courses']) && !empty($user['Courses'])) {
                 $user['Courses'] = [$user['Courses']];
@@ -232,10 +235,11 @@ function updateUsers($users)
     }
 }
 
-
 /**
- * Read the CSV-file
+ * Read the CSV-file.
+ *
  * @param string $file Path to the CSV-file
+ *
  * @return array All userinformation read from the file
  */
 function parse_csv_data($file)
@@ -247,12 +251,14 @@ function parse_csv_data($file)
         }
         $users[$index] = $user;
     }
+
     return $users;
 }
 /**
- * XML-parser: handle start of element
- * @param   string  $parser Deprecated?
- * @param   string  $data The data to be parsed
+ * XML-parser: handle start of element.
+ *
+ * @param string $parser Deprecated?
+ * @param string $data   The data to be parsed
  */
 function element_start($parser, $data)
 {
@@ -269,9 +275,10 @@ function element_start($parser, $data)
 }
 
 /**
- * XML-parser: handle end of element
- * @param   string  $parser Deprecated?
- * @param   string  $data   The data to be parsed
+ * XML-parser: handle end of element.
+ *
+ * @param string $parser Deprecated?
+ * @param string $data   The data to be parsed
  */
 function element_end($parser, $data)
 {
@@ -296,10 +303,10 @@ function element_end($parser, $data)
 }
 
 /**
- * XML-parser: handle character data
- * @param   string  $parser Parser (deprecated?)
- * @param   string  $data The data to be parsed
- * @return  void
+ * XML-parser: handle character data.
+ *
+ * @param string $parser Parser (deprecated?)
+ * @param string $data   The data to be parsed
  */
 function character_data($parser, $data)
 {
@@ -309,8 +316,10 @@ function character_data($parser, $data)
 }
 
 /**
- * Read the XML-file
+ * Read the XML-file.
+ *
  * @param string $file Path to the XML-file
+ *
  * @return array All user information read from the file
  */
 function parse_xml_data($file)
@@ -323,12 +332,12 @@ function parse_xml_data($file)
     xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
     xml_parse($parser, api_utf8_encode_xml(file_get_contents($file)));
     xml_parser_free($parser);
+
     return $users;
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true, null, 'login');
-
 
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
 

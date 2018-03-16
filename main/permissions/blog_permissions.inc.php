@@ -4,10 +4,11 @@
  * in a course.
  *
  * @author Toon Keppens
+ *
  * @package chamilo.permissions
  */
 /**
- * Init
+ * Init.
  */
 $rights_full = [
     "article_add",
@@ -57,7 +58,7 @@ if (isset($mainUserInfo) && isset($mainUserInfo['status']) && $mainUserInfo['sta
     $course_admin = 1;
 }
 
-include_once('permissions_functions.inc.php');
+include_once 'permissions_functions.inc.php';
 // 			ACTIONS
 if (isset($_GET['do'])) {
     if (isset($_GET['permission']) and isset($_GET['tool']) and ($_GET['do'] == 'grant' or $_GET['do'] == 'revoke')) {

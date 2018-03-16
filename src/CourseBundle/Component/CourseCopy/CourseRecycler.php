@@ -7,22 +7,25 @@ use Database;
 use TestCategory;
 
 /**
- * Class to delete items from a Chamilo-course
+ * Class to delete items from a Chamilo-course.
+ *
  * @author Bart Mollet <bart.mollet@hogent.be>
+ *
  * @package chamilo.backup
  */
 class CourseRecycler
 {
     /**
-     * A course-object with the items to delete
+     * A course-object with the items to delete.
      */
     public $course;
     public $type;
 
     /**
-     * Create a new CourseRecycler
+     * Create a new CourseRecycler.
+     *
      * @param course $course The course-object which contains the items to
-     * delete
+     *                       delete
      */
     public function __construct($course)
     {
@@ -34,7 +37,8 @@ class CourseRecycler
     /**
      * Delete all items from the course.
      * This deletes all items in the course-object from the current Chamilo-
-     * course
+     * course.
+     *
      * @param string $backupType 'full_backup' or 'select_items'
      *
      * @return bool
@@ -85,7 +89,7 @@ class CourseRecycler
     }
 
     /**
-     * Delete documents
+     * Delete documents.
      */
     public function recycle_documents()
     {
@@ -121,7 +125,7 @@ class CourseRecycler
     }
 
     /**
-     * Delete wiki
+     * Delete wiki.
      */
     public function recycle_wiki()
     {
@@ -149,7 +153,7 @@ class CourseRecycler
     }
 
     /**
-     * Delete glossary
+     * Delete glossary.
      */
     public function recycle_glossary()
     {
@@ -165,7 +169,7 @@ class CourseRecycler
     }
 
     /**
-     * Delete links
+     * Delete links.
      */
     public function recycle_links()
     {
@@ -181,7 +185,7 @@ class CourseRecycler
     }
 
     /**
-     * Delete forums
+     * Delete forums.
      */
     public function recycle_forums()
     {
@@ -298,7 +302,7 @@ class CourseRecycler
 
     /**
      * Delete forum-categories
-     * Deletes all forum-categories from current course without forums
+     * Deletes all forum-categories from current course without forums.
      */
     public function recycle_forum_categories()
     {
@@ -321,7 +325,7 @@ class CourseRecycler
 
     /**
      * Delete link-categories
-     * Deletes all empty link-categories (=without links) from current course
+     * Deletes all empty link-categories (=without links) from current course.
      */
     public function recycle_link_categories()
     {
@@ -343,7 +347,7 @@ class CourseRecycler
     }
 
     /**
-     * Delete events
+     * Delete events.
      */
     public function recycle_events()
     {
@@ -365,7 +369,7 @@ class CourseRecycler
     }
 
     /**
-     * Delete announcements
+     * Delete announcements.
      */
     public function recycle_announcements()
     {
@@ -388,7 +392,7 @@ class CourseRecycler
 
     /**
      * Recycle quizzes - doesn't remove the questions and their answers,
-     * as they might still be used later
+     * as they might still be used later.
      */
     public function recycle_quizzes()
     {
@@ -480,7 +484,7 @@ class CourseRecycler
     }
 
     /**
-     * Recycle tests categories
+     * Recycle tests categories.
      */
     public function recycle_test_category()
     {
@@ -493,7 +497,7 @@ class CourseRecycler
     }
 
     /**
-     * Recycle surveys - removes everything
+     * Recycle surveys - removes everything.
      */
     public function recycle_surveys()
     {
@@ -529,7 +533,7 @@ class CourseRecycler
     }
 
     /**
-     * Recycle learning paths
+     * Recycle learning paths.
      */
     public function recycle_learnpaths()
     {
@@ -537,7 +541,7 @@ class CourseRecycler
             $table_main = Database::get_course_table(TABLE_LP_MAIN);
             $table_item = Database::get_course_table(TABLE_LP_ITEM);
             $table_view = Database::get_course_table(TABLE_LP_VIEW);
-            $table_iv   = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+            $table_iv = Database::get_course_table(TABLE_LP_ITEM_VIEW);
             $table_iv_int = Database::get_course_table(TABLE_LP_IV_INTERACTION);
             $table_tool = Database::get_course_table(TABLE_TOOL_LIST);
 
@@ -596,7 +600,7 @@ class CourseRecycler
     }
 
     /**
-     * Delete course description
+     * Delete course description.
      */
     public function recycle_cours_description()
     {
@@ -612,8 +616,8 @@ class CourseRecycler
     }
 
     /**
-    * Recycle Thematics
-    */
+     * Recycle Thematics.
+     */
     public function recycle_thematic($session_id = 0)
     {
         if ($this->course->has_resources(RESOURCE_THEMATIC)) {
@@ -628,8 +632,8 @@ class CourseRecycler
                         $cond = [
                             'id = ? AND  c_id = ?' => [
                                 $thematic_advance['id'],
-                                $this->course_id
-                            ]
+                                $this->course_id,
+                            ],
                         ];
                         api_item_property_update(
                             $this->course_info,
@@ -677,8 +681,8 @@ class CourseRecycler
     }
 
     /**
-    * Recycle Attendances
-    */
+     * Recycle Attendances.
+     */
     public function recycle_attendance($session_id = 0)
     {
         if ($this->course->has_resources(RESOURCE_ATTENDANCE)) {
@@ -689,10 +693,10 @@ class CourseRecycler
             foreach ($resources[RESOURCE_ATTENDANCE] as $last_id => $obj) {
                 if (is_numeric($last_id)) {
                     foreach ($obj->attendance_calendar as $attendance_calendar) {
-                        $cond = ['id = ? AND c_id = ? '=>[$attendance_calendar['id'], $this->course_id]];
+                        $cond = ['id = ? AND c_id = ? ' => [$attendance_calendar['id'], $this->course_id]];
                         Database::delete($table_attendance_calendar, $cond);
                     }
-                    $cond = ['id = ? AND c_id = ?'=>[$last_id, $this->course_id]];
+                    $cond = ['id = ? AND c_id = ?' => [$last_id, $this->course_id]];
                     Database::delete($table_attendance, $cond);
                     api_item_property_update(
                         $this->course_info,
@@ -707,7 +711,7 @@ class CourseRecycler
     }
 
     /**
-     * Recycle Works
+     * Recycle Works.
      */
     public function recycle_work($session_id = 0)
     {
@@ -718,13 +722,13 @@ class CourseRecycler
             $resources = $this->course->resources;
             foreach ($resources[RESOURCE_WORK] as $last_id => $obj) {
                 if (is_numeric($last_id)) {
-                    $cond = ['publication_id = ? AND c_id = ? '=>[$last_id, $this->course_id]];
+                    $cond = ['publication_id = ? AND c_id = ? ' => [$last_id, $this->course_id]];
                     Database::delete($table_work_assignment, $cond);
                     // The following also deletes student tasks
-                    $cond = ['parent_id = ? AND c_id = ?'=>[$last_id, $this->course_id]];
+                    $cond = ['parent_id = ? AND c_id = ?' => [$last_id, $this->course_id]];
                     Database::delete($table_work, $cond);
                     // Finally, delete the main task registry
-                    $cond = ['id = ? AND c_id = ?'=>[$last_id, $this->course_id]];
+                    $cond = ['id = ? AND c_id = ?' => [$last_id, $this->course_id]];
                     Database::delete($table_work, $cond);
                     api_item_property_update(
                         $this->course_info,

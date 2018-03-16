@@ -4,7 +4,6 @@
 /**
  * @package chamilo.plugin.ticket
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $userId = intval($_GET['user_id']);
@@ -26,7 +25,7 @@ $userInput = Display::tag(
     [
         'disabled' => 'disabled',
         'type' => 'text',
-        'value' => $personName
+        'value' => $personName,
     ]
 );
 $userControl = Display::div($userInput, ['class' => 'controls']);
@@ -34,8 +33,8 @@ $courseLabel = Display::tag('label', get_lang('Course'), ['class' => 'control-la
 $courseSelect = Display::select('course_id', $arrCourseList, 0, [], false);
 $courseControl = Display::div($courseSelect, ['class' => 'controls']);
 
-$userDiv = Display::div($userLabel . " " . $userControl, ['class' => 'control-group']);
-$courseDiv = Display::div($courseLabel . " " . $courseControl, ['class' => 'control-group']);
+$userDiv = Display::div($userLabel." ".$userControl, ['class' => 'control-group']);
+$courseDiv = Display::div($courseLabel." ".$courseControl, ['class' => 'control-group']);
 
 echo $userDiv;
 echo $courseDiv;

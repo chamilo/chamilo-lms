@@ -4,24 +4,24 @@
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
-use FM\ElFinderPHP\Connector\ElFinderConnector;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-
 use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Editor\Finder;
+use FM\ElFinderPHP\Connector\ElFinderConnector;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class FrontController
+ * Class FrontController.
+ *
  * @package Chamilo\CoreBundle\Controller
  */
 class FrontController extends Controller
 {
     /**
-     * Get templates (left column when creating a document)
+     * Get templates (left column when creating a document).
+     *
      * @Route("/editor/templates", name="editor_templates")
      * @Method({"GET"})
      */
@@ -54,7 +54,7 @@ class FrontController extends Controller
             '@ChamiloCore/default/javascript/editor/ckeditor/elfinder.html.twig',
             [
                 'course_id' => $courseId,
-                'session_id' => $sessionId
+                'session_id' => $sessionId,
             ]
         );
     }
@@ -108,7 +108,6 @@ class FrontController extends Controller
             ['content' => $content]
         );
     }
-
 
     /**
      * @Route("/login")

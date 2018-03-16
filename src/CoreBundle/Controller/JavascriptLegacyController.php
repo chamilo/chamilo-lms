@@ -3,22 +3,14 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Chamilo\CoreBundle\Framework\PageController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-use Chamilo\CoreBundle\Controller\BaseController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\Finder\Finder;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class JavascriptLegacyController
- * author Julio Montoya <gugli100@gmail.com>
+ * author Julio Montoya <gugli100@gmail.com>.
+ *
  * @package Chamilo\CoreBundle\Controller
  */
 class JavascriptLegacyController extends BaseController
@@ -46,7 +38,7 @@ class JavascriptLegacyController extends BaseController
             [
                 'more_buttons_in_max_mode' => $moreButtonsInMaximizedMode,
                 'course_id' => $courseId,
-                'session_id' => $sessionId
+                'session_id' => $sessionId,
             ]
         );
     }

@@ -1,9 +1,9 @@
 <?php
 /**
- * Functions
+ * Functions.
+ *
  * @package chamilo.plugin.sepe
  */
-
 $tableSepeCenter = Database::get_main_table(SepePlugin::TABLE_SEPE_CENTER);
 $tableSepeActions = Database::get_main_table(SepePlugin::TABLE_SEPE_ACTIONS);
 $tableSepeSpecialty = Database::get_main_table(SepePlugin::TABLE_SEPE_SPECIALTY);
@@ -40,6 +40,7 @@ function getInfoIdentificationData()
     } else {
         $row = false;
     }
+
     return $row;
 }
 
@@ -61,6 +62,7 @@ function getActionId($courseId)
     $sql = "SELECT action_id FROM $tableSepeCourseActions WHERE course_id = $courseId";
     $rs = Database::query($sql);
     $aux = Database::fetch_assoc($rs);
+
     return $aux['action_id'];
 }
 
@@ -70,6 +72,7 @@ function getCourse($actionId)
     $sql = "SELECT course_id FROM $tableSepeCourseActions WHERE action_id = $actionId";
     $rs = Database::query($sql);
     $aux = Database::fetch_assoc($rs);
+
     return $aux['course_id'];
 }
 function getCourseCode($actionId)
@@ -79,6 +82,7 @@ function getCourseCode($actionId)
     $sql = "SELECT code FROM $tableCourse WHERE id = $courseId";
     $rs = Database::query($sql);
     $aux = Database::fetch_assoc($rs);
+
     return $aux['code'];
 }
 
@@ -104,6 +108,7 @@ function getActionInfo($id)
         $row['contact_action'] = Security::remove_XSS(stripslashes($row['contact_action']));
         $row = Database::fetch_assoc($res);
     }
+
     return $row;
 }
 
@@ -122,6 +127,7 @@ function getSpecialtActionInfo($specialtyId)
         $row['modality_impartition'] = Security::remove_XSS(stripslashes($row['modality_impartition']));
         $row = Database::fetch_assoc($res);
     }
+
     return $row;
 }
 
@@ -139,6 +145,7 @@ function getInfoSpecialtyClassroom($classroomId)
         $row['center_code'] = Security::remove_XSS(stripslashes($row['center_code']));
         $row = Database::fetch_assoc($res);
     }
+
     return $row;
 }
 
@@ -153,6 +160,7 @@ function getInfoSpecialtyTutorial($tutorialId)
     } else {
         $row = false;
     }
+
     return $row;
 }
 
@@ -166,6 +174,7 @@ function list_tutor($specialtyId)
     } else {
         $row = false;
     }
+
     return $row;
 }
 
@@ -178,6 +187,7 @@ function getCentersList()
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row;
     }
+
     return $aux;
 }
 
@@ -197,6 +207,7 @@ function listTutorType($condition)
         }
         $aux[] = $tmp;
     }
+
     return $aux;
 }
 
@@ -227,6 +238,7 @@ function getTutorsSpecialty($specialtyId)
             $aux[] = $tutor;
         }
     }
+
     return $aux;
 }
 
@@ -248,6 +260,7 @@ function getInfoSpecialtyTutor($tutorId)
     } else {
         $row = false;
     }
+
     return $row;
 }
 
@@ -274,6 +287,7 @@ function freeTeacherList($teacherList, $specialtyId, $platform_user_id)
             }
         }
     }
+
     return $teacherList;
 }
 
@@ -300,6 +314,7 @@ function getInfoParticipantAction($participantId)
     } else {
         $result = false;
     }
+
     return $result;
 }
 
@@ -309,6 +324,7 @@ function getParticipantId($id)
     $sql = "SELECT participant_id FROM  $tableSepeParticipantsSpecialty WHERE id = $id";
     $rs = Database::query($sql);
     $aux = Database::fetch_assoc($rs);
+
     return $aux['participant_id'];
 }
 
@@ -331,6 +347,7 @@ function getInfoSpecialtyParticipant($specialtyId)
     } else {
         $row = false;
     }
+
     return $row;
 }
 
@@ -345,6 +362,7 @@ function specialtyList($actionId)
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row;
     }
+
     return $aux;
 }
 
@@ -360,6 +378,7 @@ function participantList($actionId)
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row;
     }
+
     return $aux;
 }
 
@@ -380,6 +399,7 @@ function listParticipantSpecialty($participantId)
         $row['final_score'] = Security::remove_XSS(stripslashes($row['final_score']));
         $aux[] = $row;
     }
+
     return $aux;
 }
 
@@ -395,6 +415,7 @@ function classroomList($specialtyId)
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row;
     }
+
     return $aux;
 }
 
@@ -412,6 +433,7 @@ function tutorsList($specialtyId)
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row;
     }
+
     return $aux;
 }
 
@@ -427,6 +449,7 @@ function getListSpecialtyTutorial($specialtyId)
         $row['training_teleforming'] = Security::remove_XSS(stripslashes($row['training_teleforming']));
         $aux[] = $row;
     }
+
     return $aux;
 }
 
@@ -443,6 +466,7 @@ function listCourseAction()
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row;
     }
+
     return $aux;
 }
 
@@ -458,6 +482,7 @@ function listCourseFree()
     while ($row = Database::fetch_assoc($res)) {
         $aux[] = $row;
     }
+
     return $aux;
 }
 
@@ -476,6 +501,7 @@ function listActionFree()
         $row['action_code'] = Security::remove_XSS(stripslashes($row['action_code']));
         $aux[] = $row;
     }
+
     return $aux;
 }
 
@@ -487,6 +513,7 @@ function getSpecialtyTutorId($specialtyId, $tutorId)
             WHERE specialty_id = $specialtyId AND tutor_id = $tutorId";
     $res = Database::query($sql);
     $row = Database::fetch_assoc($res);
+
     return $row['id'];
 }
 

@@ -4,13 +4,11 @@
 namespace Chamilo\ThemeBundle\Controller;
 
 use Chamilo\ThemeBundle\Form\FormDemoModelType;
-use Chamilo\ThemeBundle\Model\FormDemoModel;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
- * Class DefaultController
+ * Class DefaultController.
  *
  * @package Chamilo\ThemeBundle\Controller
  */
@@ -48,8 +46,9 @@ class DefaultController extends Controller
     public function formAction()
     {
         $form = $this->createForm(new FormDemoModelType());
+
         return $this->render('ChamiloThemeBundle:Default:form.html.twig', [
-                'form' => $form->createView()
+                'form' => $form->createView(),
             ]);
     }
 }

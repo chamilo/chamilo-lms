@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Responses to AJAX calls for install
+ * Responses to AJAX calls for install.
  */
 
 //require_once '../global.inc.php';
@@ -49,7 +49,7 @@ switch ($action) {
                                         'company_name' => $company_name,
                                         'company_activity' => $company_activity,
                                         'company_country' => $company_country,
-                                        'company_city' => $company_city
+                                        'company_city' => $company_city,
                                     ];
 
                 $result = $client->__soapCall(

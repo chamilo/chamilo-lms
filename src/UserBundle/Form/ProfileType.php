@@ -5,20 +5,21 @@ namespace Chamilo\UserBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * Class ProfileType
- * Located in web/app_dev.php/profile/edit-profile
+ * Located in web/app_dev.php/profile/edit-profile.
+ *
  * @package Chamilo\UserBundle\Form
  */
 class ProfileType extends AbstractType
 {
     /**
      * @todo replace hardcode values of locale.preferred_choices
-     * @inheritdoc
-     **/
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder

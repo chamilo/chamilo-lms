@@ -5,11 +5,12 @@ namespace Chamilo\CoreBundle\Menu;
 
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
- * Class LeftMenuBuilder
+ * Class LeftMenuBuilder.
+ *
  * @package Chamilo\CoreBundle\Menu
  */
 class LeftMenuBuilder implements ContainerAwareInterface
@@ -17,10 +18,11 @@ class LeftMenuBuilder implements ContainerAwareInterface
     use ContainerAwareTrait;
 
     /**
-     * Course menu
+     * Course menu.
      *
      * @param FactoryInterface $factory
-     * @param array $options
+     * @param array            $options
+     *
      * @return ItemInterface
      */
     public function courseMenu(FactoryInterface $factory, array $options)
@@ -102,10 +104,11 @@ class LeftMenuBuilder implements ContainerAwareInterface
     }
 
     /**
-     * Course menu
+     * Course menu.
      *
      * @param FactoryInterface $factory
-     * @param array $options
+     * @param array            $options
+     *
      * @return ItemInterface
      */
     public function sessionMenu(FactoryInterface $factory, array $options)
@@ -142,7 +145,8 @@ class LeftMenuBuilder implements ContainerAwareInterface
 
     /**
      * @param FactoryInterface $factory
-     * @param array $options
+     * @param array            $options
+     *
      * @return ItemInterface
      */
     public function profileMenu(FactoryInterface $factory, array $options)
@@ -220,8 +224,10 @@ class LeftMenuBuilder implements ContainerAwareInterface
 
     /**
      * @todo add validations
+     *
      * @param FactoryInterface $factory
-     * @param array $options
+     * @param array            $options
+     *
      * @return ItemInterface
      */
     public function socialMenu(FactoryInterface $factory, array $options)
@@ -318,9 +324,11 @@ class LeftMenuBuilder implements ContainerAwareInterface
     }
 
     /**
-     * Skills menu
+     * Skills menu.
+     *
      * @param FactoryInterface $factory
-     * @param array $options
+     * @param array            $options
+     *
      * @return ItemInterface
      */
     public function skillsMenu(FactoryInterface $factory, array $options)
@@ -383,9 +391,11 @@ class LeftMenuBuilder implements ContainerAwareInterface
     }
 
     /**
-     * Register/reset password menu
+     * Register/reset password menu.
+     *
      * @param FactoryInterface $factory
-     * @param array $options
+     * @param array            $options
+     *
      * @return ItemInterface
      */
     public function loginMenu(FactoryInterface $factory, array $options)
@@ -430,7 +440,8 @@ class LeftMenuBuilder implements ContainerAwareInterface
 
     /**
      * @param FactoryInterface $factory
-     * @param array $options
+     * @param array            $options
+     *
      * @return ItemInterface
      */
     public function helpMenu(FactoryInterface $factory, array $options)

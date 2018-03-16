@@ -1,41 +1,43 @@
 <?php
 /* For licensing terms, see license.txt */
 
-use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
 
 /**
  * GradebookTable Class
- * Table to display categories, evaluations and links
+ * Table to display categories, evaluations and links.
+ *
  * @author Stijn Konings
  * @author Bert Steppé (refactored, optimised)
+ *
  * @package chamilo.gradebook
  */
 class GradebookTable extends SortableTable
 {
-    private $currentcat;
-    private $datagen;
-    private $evals_links;
-    private $dataForGraph;
     public $cats;
     public $exportToPdf;
     public $teacherView;
     public $userId;
     public $studentList;
+    private $currentcat;
+    private $datagen;
+    private $evals_links;
+    private $dataForGraph;
 
     /**
      * GradebookTable constructor.
+     *
      * @param Category $currentcat
-     * @param array $cats
-     * @param array $evals
-     * @param array $links
-     * @param null $addparams
-     * @param bool $exportToPdf
-     * @param null $showTeacherView
-     * @param int $userId
-     * @param array $studentList
+     * @param array    $cats
+     * @param array    $evals
+     * @param array    $links
+     * @param null     $addparams
+     * @param bool     $exportToPdf
+     * @param null     $showTeacherView
+     * @param int      $userId
+     * @param array    $studentList
      */
     public function __construct(
         $currentcat,
@@ -125,7 +127,7 @@ class GradebookTable extends SortableTable
                 [
                     'setvisible' => get_lang('SetVisible'),
                     'setinvisible' => get_lang('SetInvisible'),
-                    'deleted' => get_lang('DeleteSelected')
+                    'deleted' => get_lang('DeleteSelected'),
                 ]
             );
         } else {
@@ -150,7 +152,8 @@ class GradebookTable extends SortableTable
     }
 
     /**
-     * Function used by SortableTable to get total number of items in the table
+     * Function used by SortableTable to get total number of items in the table.
+     *
      * @return int
      */
     public function get_total_number_of_items()
@@ -159,12 +162,14 @@ class GradebookTable extends SortableTable
     }
 
     /**
-     * Function used by SortableTable to generate the data to display
-     * @param int $from
-     * @param int $per_page
-     * @param int $column
+     * Function used by SortableTable to generate the data to display.
+     *
+     * @param int    $from
+     * @param int    $per_page
+     * @param int    $column
      * @param string $direction
-     * @param int $sort
+     * @param int    $sort
+     *
      * @return array|mixed
      */
     public function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = null)
@@ -178,22 +183,22 @@ class GradebookTable extends SortableTable
 
         switch ($this->column) {
             // Type
-            case (0 + $col_adjust):
+            case 0 + $col_adjust:
                 $sorting = GradebookDataGenerator::GDG_SORT_TYPE;
                 break;
-            case (1 + $col_adjust):
+            case 1 + $col_adjust:
                 $sorting = GradebookDataGenerator::GDG_SORT_NAME;
                 break;
-            case (2 + $col_adjust):
+            case 2 + $col_adjust:
                 $sorting = GradebookDataGenerator::GDG_SORT_DESCRIPTION;
                 break;
-            case (3 + $col_adjust):
+            case 3 + $col_adjust:
                 $sorting = GradebookDataGenerator::GDG_SORT_WEIGHT;
                 break;
-            case (4 + $col_adjust):
+            case 4 + $col_adjust:
                 $sorting = GradebookDataGenerator::GDG_SORT_DATE;
                 break;
-            case (5 + $col_adjust):
+            case 5 + $col_adjust:
                 $sorting = GradebookDataGenerator::GDG_SORT_ID;
                 break;
         }
@@ -309,7 +314,7 @@ class GradebookTable extends SortableTable
                 $weight = $scoredisplay->display_score(
                     [
                         $data['3'],
-                        $this->currentcat->get_weight()
+                        $this->currentcat->get_weight(),
                     ],
                     SCORE_SIMPLE,
                     SCORE_BOTH,
@@ -564,7 +569,7 @@ class GradebookTable extends SortableTable
                                     $total = GradebookUtils::score_badges(
                                         [
                                             $total_weight.' / '.$category_weight,
-                                            '100'
+                                            '100',
                                         ]
                                     );
                                 } else {
@@ -580,7 +585,7 @@ class GradebookTable extends SortableTable
                                     "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h5>".get_lang('SubTotal').'</h5>',
                                     null,
                                     $total.' '.$label,
-                                    'child_of' => $parent_id
+                                    'child_of' => $parent_id,
                                 ];
                                 $sortable_data[] = $row;
                             }
@@ -608,7 +613,7 @@ class GradebookTable extends SortableTable
                     $total = GradebookUtils::score_badges(
                         [
                             $total_categories_weight.' / '.$main_weight,
-                            '100'
+                            '100',
                         ]
                     );
                 } else {
@@ -619,7 +624,7 @@ class GradebookTable extends SortableTable
                     null,
                     '<strong>'.get_lang('Total').'</strong>',
                     null,
-                    $total
+                    $total,
                 ];
                 $sortable_data[] = $row;
             }
@@ -701,7 +706,7 @@ class GradebookTable extends SortableTable
                         $totalResult,
                         $totalRanking,
                         $totalBest,
-                        $totalAverage
+                        $totalAverage,
                     ];
                 } else {
                     $row = [
@@ -712,7 +717,7 @@ class GradebookTable extends SortableTable
                         $totalResult,
                         $totalRanking,
                         $totalBest,
-                        $totalAverage
+                        $totalAverage,
                     ];
                 }
 
@@ -726,7 +731,7 @@ class GradebookTable extends SortableTable
         if ($this->teacherView) {
             if (isset($_GET['selectcat']) &&
                 $_GET['selectcat'] > 0 &&
-                $view <> 'presence'
+                $view != 'presence'
             ) {
                 $id_cat = intval($_GET['selectcat']);
                 $category = Category::load($id_cat);
@@ -828,15 +833,6 @@ class GradebookTable extends SortableTable
         return $sortable_data;
     }
 
-
-    /**
-     * @return array
-     */
-    private function getDataForGraph()
-    {
-        return $this->dataForGraph;
-    }
-
     /**
      * @return string
      */
@@ -894,7 +890,7 @@ class GradebookTable extends SortableTable
                 "GridB" => 200,
                 "DrawSubTicks" => true,
                 "CycleBackground" => true,
-                'LabelRotation' => 10
+                'LabelRotation' => 10,
             ];
             $pChart->drawScale($scaleSettings);
 
@@ -945,7 +941,16 @@ class GradebookTable extends SortableTable
     }
 
     /**
+     * @return array
+     */
+    private function getDataForGraph()
+    {
+        return $this->dataForGraph;
+    }
+
+    /**
      * @param $item
+     *
      * @return mixed
      */
     private function build_certificate_min_score($item)
@@ -955,6 +960,7 @@ class GradebookTable extends SortableTable
 
     /**
      * @param $item
+     *
      * @return mixed
      */
     private function build_weight($item)
@@ -964,6 +970,7 @@ class GradebookTable extends SortableTable
 
     /**
      * @param $item
+     *
      * @return mixed
      */
     private function build_course_code($item)
@@ -973,6 +980,7 @@ class GradebookTable extends SortableTable
 
     /**
      * @param $item
+     *
      * @return string
      */
     private function build_id_column($item)
@@ -993,6 +1001,7 @@ class GradebookTable extends SortableTable
     /**
      * @param $item
      * @param array $attributes
+     *
      * @return string
      */
     private function build_type_column($item, $attributes = [])
@@ -1001,9 +1010,11 @@ class GradebookTable extends SortableTable
     }
 
     /**
-     * Generate name column
+     * Generate name column.
+     *
      * @param GradebookItem $item
-     * @param string $type simple|detail
+     * @param string        $type simple|detail
+     *
      * @return string
      */
     private function build_name_link($item, $type = 'detail')
@@ -1098,6 +1109,7 @@ class GradebookTable extends SortableTable
 
     /**
      * @param AbstractLink $item
+     *
      * @return null|string
      */
     private function build_edit_column($item)

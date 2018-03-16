@@ -2,8 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This script manages the display of forum threads in flat view
+ * This script manages the display of forum threads in flat view.
+ *
  * @copyright Julio Montoya <gugli100@gmail.com> UI Improvements + lots of bugfixes
+ *
  * @package chamilo.forum
  */
 
@@ -74,7 +76,7 @@ if (isset($current_thread['thread_id'])) {
                                 'forum' => $clean_forum_id,
                                 'thread' => $clean_thread_id,
                                 'post' => $row['post_id'],
-                                'action' => 'replymessage'
+                                'action' => 'replymessage',
                             ]),
                             'reply',
                             'primary',
@@ -87,7 +89,7 @@ if (isset($current_thread['thread_id'])) {
                                 'forum' => $clean_forum_id,
                                 'thread' => $clean_thread_id,
                                 'post' => $row['post_id'],
-                                'action' => 'quote'
+                                'action' => 'quote',
                             ]),
                             'quote-left',
                             'success',
@@ -144,7 +146,7 @@ if (isset($current_thread['thread_id'])) {
                     $name,
                     [
                         'title' => api_htmlentities($username, ENT_QUOTES),
-                        'class' => 'lead'
+                        'class' => 'lead',
                     ]
                 );
             }
@@ -182,9 +184,9 @@ if (isset($current_thread['thread_id'])) {
                 if (api_is_allowed_to_session_edit(false, true)) {
                     if ($locked == false && postIsEditableByStudent($current_forum, $row)) {
                         $iconEdit .= "<a href=\"editpost.php?".api_get_cidreq()."&forum=".$clean_forum_id
-                            . "&thread=".$clean_thread_id."&post=".$row['post_id']
-                            . "&edit=edition&id_attach=".$id_attach."\">"
-                            . Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL)."</a>";
+                            ."&thread=".$clean_thread_id."&post=".$row['post_id']
+                            ."&edit=edition&id_attach=".$id_attach."\">"
+                            .Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL)."</a>";
                     }
                 }
             }
@@ -200,16 +202,16 @@ if (isset($current_thread['thread_id'])) {
                             'thread' => $clean_thread_id,
                             'action' => 'delete',
                             'content' => 'post',
-                            'id' => $row['post_id']
+                            'id' => $row['post_id'],
                         ]);
                         $iconEdit .= Display::url(
                             Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL),
                             $deleteUrl,
                             [
                                 'onclick' => "javascript:if(!confirm('"
-                                    . addslashes(api_htmlentities(get_lang('DeletePost'), ENT_QUOTES))
-                                    . "')) return false;",
-                                'id' => "delete-post-{$row['post_id']}"
+                                    .addslashes(api_htmlentities(get_lang('DeletePost'), ENT_QUOTES))
+                                    ."')) return false;",
+                                'id' => "delete-post-{$row['post_id']}",
                             ]
                         );
                     }
@@ -230,15 +232,15 @@ if (isset($current_thread['thread_id'])) {
                         [
                             'forum' => $clean_forum_id,
                             'thread' => $clean_thread_id,
-                            'origin' => $origin
+                            'origin' => $origin,
                         ]
                     );
 
                     if ($increment > 0) {
                         $iconEdit .= "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".$clean_forum_id
-                            . "&thread=".$clean_thread_id."&action=move&post=".$row['post_id']."\">"
-                            . Display::return_icon('move.png', get_lang('MovePost'), [], ICON_SIZE_SMALL)
-                            . "</a>";
+                            ."&thread=".$clean_thread_id."&action=move&post=".$row['post_id']."\">"
+                            .Display::return_icon('move.png', get_lang('MovePost'), [], ICON_SIZE_SMALL)
+                            ."</a>";
                     }
                 }
             }
@@ -260,11 +262,11 @@ if (isset($current_thread['thread_id'])) {
 
                 if ($increment > 0 && $locked == false && $userCanEdit) {
                     $iconEdit .= "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".$my_forum_id
-                        . "&thread=".$clean_thread_id."&action=list&post=".$row['post_id']
-                        . "&user=".$row['poster_id']."&user_id=".$row['poster_id']
-                        . "&idtextqualify=".$current_qualify_thread."\" >"
-                        . Display::return_icon('quiz.png', get_lang('Qualify'))
-                        . "</a> ";
+                        ."&thread=".$clean_thread_id."&action=list&post=".$row['post_id']
+                        ."&user=".$row['poster_id']."&user_id=".$row['poster_id']
+                        ."&idtextqualify=".$current_qualify_thread."\" >"
+                        .Display::return_icon('quiz.png', get_lang('Qualify'))
+                        ."</a> ";
                 }
             }
 
@@ -332,12 +334,12 @@ if (isset($current_thread['thread_id'])) {
                         (api_is_allowed_to_edit(false, true) && !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId))
                     ) {
                         $html .= '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_attach&id_attach='
-                            . $attachment['iid'].'&forum='.$clean_forum_id.'&thread='.$clean_thread_id
-                            . '" onclick="javascript:if(!confirm(\''
-                            . addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))
-                            . '\')) return false;">'
-                            . Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL)
-                            . '</a><br />';
+                            .$attachment['iid'].'&forum='.$clean_forum_id.'&thread='.$clean_thread_id
+                            .'" onclick="javascript:if(!confirm(\''
+                            .addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))
+                            .'\')) return false;">'
+                            .Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL)
+                            .'</a><br />';
                     }
                     $html .= '<span class="forum_attach_comment" >'.$attachment['comment'].'</span>';
                 }

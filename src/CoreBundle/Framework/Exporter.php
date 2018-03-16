@@ -12,21 +12,20 @@
 namespace Chamilo\CoreBundle\Framework\Exporter;
 
 use Exporter\Source\SourceIteratorInterface;
-use Symfony\Component\HttpFoundation\StreamedResponse;
-
+use Exporter\Writer\CsvWriter;
+use Exporter\Writer\JsonWriter;
 use Exporter\Writer\XlsWriter;
 use Exporter\Writer\XmlWriter;
-use Exporter\Writer\JsonWriter;
-use Exporter\Writer\CsvWriter;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class Exporter
 {
     /**
-     * @throws \RuntimeException
-     *
      * @param string                  $format
      * @param string                  $filename
      * @param SourceIteratorInterface $source
+     *
+     * @throws \RuntimeException
      *
      * @return StreamedResponse
      */
@@ -34,19 +33,19 @@ class Exporter
     {
         switch ($format) {
             case 'xls':
-                $writer      = new XlsWriter('php://output');
+                $writer = new XlsWriter('php://output');
                 $contentType = 'application/vnd.ms-excel';
                 break;
             case 'xml':
-                $writer      = new XmlWriter('php://output');
+                $writer = new XmlWriter('php://output');
                 $contentType = 'text/xml';
                 break;
             case 'json':
-                $writer      = new JsonWriter('php://output');
+                $writer = new JsonWriter('php://output');
                 $contentType = 'application/json';
                 break;
             case 'csv':
-                $writer      = new CsvWriter('php://output', ',', '"', "", true, true);
+                $writer = new CsvWriter('php://output', ',', '"', "", true, true);
                 $contentType = 'text/csv';
                 break;
             default:
@@ -59,8 +58,8 @@ class Exporter
         };
 
         return new StreamedResponse($callback, 200, [
-            'Content-Type'        => $contentType,
-            'Content-Disposition' => sprintf('attachment; filename=%s', $filename)
+            'Content-Type' => $contentType,
+            'Content-Disposition' => sprintf('attachment; filename=%s', $filename),
         ]);
     }
 }

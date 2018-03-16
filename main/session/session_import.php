@@ -156,15 +156,15 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                     foreach ($root->Courses->Course as $courseNode) {
                         $params = [];
                         if (empty($courseNode->CourseTitle)) {
-                            $params['title']            = api_utf8_decode($courseNode->CourseCode);
+                            $params['title'] = api_utf8_decode($courseNode->CourseCode);
                         } else {
-                            $params['title']            = api_utf8_decode($courseNode->CourseTitle);
+                            $params['title'] = api_utf8_decode($courseNode->CourseTitle);
                         }
-                        $params['wanted_code']      = api_utf8_decode($courseNode->CourseCode);
-                        $params['tutor_name']       = null;
-                        $params['course_category']  = null;
-                        $params['course_language']  = api_utf8_decode($courseNode->CourseLanguage);
-                        $params['user_id']          = api_get_user_id();
+                        $params['wanted_code'] = api_utf8_decode($courseNode->CourseCode);
+                        $params['tutor_name'] = null;
+                        $params['course_category'] = null;
+                        $params['course_language'] = api_utf8_decode($courseNode->CourseLanguage);
+                        $params['user_id'] = api_get_user_id();
 
                         // Looking up for the teacher.
                         $username = trim(api_utf8_decode($courseNode->CourseTeacher));
@@ -305,7 +305,6 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                             // We fill by default the access_url_rel_session table.
                             UrlManager::add_session_to_url($session_id, 1);
                         }
-
 
                         // Adding users to the new session.
                         foreach ($node_session->User as $node_user) {
@@ -484,7 +483,7 @@ $form->addElement(
             get_lang('ExampleCSVFile'),
             api_get_path(WEB_CODE_PATH).'admin/example_session.csv',
             ['target' => '_blank']
-        )
+        ),
     ],
     'CSV',
     'csv'
@@ -498,7 +497,7 @@ $form->addElement(
             get_lang('ExampleXMLFile'),
             api_get_path(WEB_CODE_PATH).'admin/example_session.xml',
             ['target' => '_blank']
-        )
+        ),
     ],
     'XML',
     'xml'

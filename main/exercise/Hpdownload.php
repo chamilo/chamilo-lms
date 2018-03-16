@@ -2,10 +2,13 @@
 /* For licensing terms, see /license.txt */
 /**
  * This script shows the list of exercises for administrators and students.
+ *
  * @package chamilo.exercise
+ *
  * @author Istvan Mandak
+ *
  * @version $Id: Hpdownload.php 22201 2009-07-17 19:57:03Z cfasanando $
-*/
+ */
 session_cache_limiter('public');
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -92,7 +95,6 @@ if ($content_type == 'text/html') {
     if ($dir[strlen($dir) - 1] != '/') {
         $dir .= '/';
     }
-
 
     //Parse whole file at one
     $fp = fopen($full_file_name, "r");

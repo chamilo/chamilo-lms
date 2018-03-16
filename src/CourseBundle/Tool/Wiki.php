@@ -4,7 +4,8 @@
 namespace Chamilo\CourseBundle\Tool;
 
 /**
- * Class Wiki
+ * Class Wiki.
+ *
  * @package Chamilo\CourseBundle\Tool
  */
 class Wiki extends BaseTool

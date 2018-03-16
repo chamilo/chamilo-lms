@@ -4,7 +4,8 @@
 namespace Chamilo\CoreBundle\Twig\Extension;
 
 /**
- * Class ChamiloExtension
+ * Class ChamiloExtension.
+ *
  * @package Chamilo\CoreBundle\Twig\Extension
  */
 class ChamiloExtension extends \Twig_Extension

@@ -3,24 +3,18 @@
 
 namespace Chamilo\ThemeBundle\Theme;
 
-use Assetic\Asset\AssetCollection;
-use Assetic\Asset\AssetReference;
-use Assetic\Factory\AssetFactory;
-use Assetic\Factory\LazyAssetManager;
-use Assetic\Factory\Resource\FileResource;
 use Chamilo\FoundationBundle\Util\DependencyResolverInterface;
-use Symfony\Bundle\AsseticBundle\Config\AsseticResource;
 use Symfony\Component\DependencyInjection\Container;
-use Chamilo\FoundationBundle\Util\DependencyResolver;
 use Symfony\Component\HttpKernel\Config\FileLocator;
 
 /**
- * Class ThemeManager
+ * Class ThemeManager.
+ *
  * @package Chamilo\ThemeBundle\Theme
  */
 class ThemeManager
 {
-    /** @var  Container */
+    /** @var Container */
     protected $container;
 
     protected $stylesheets = [];
@@ -33,12 +27,13 @@ class ThemeManager
 
     /**
      * ThemeManager constructor.
+     *
      * @param $container
      * @param null $resolverClass
      */
     public function __construct($container, $resolverClass = null)
     {
-        $this->container     = $container;
+        $this->container = $container;
         $this->resolverClass = $resolverClass ?: 'Chamilo\ThemeBundle\Util\DependencyResolver';
     }
 
@@ -46,9 +41,9 @@ class ThemeManager
     {
         if (!isset($this->javascripts[$id])) {
             $this->javascripts[$id] = [
-                'src'      => $src,
-                'deps'     => $deps,
-                'location' => $location
+                'src' => $src,
+                'deps' => $deps,
+                'location' => $location,
             ];
         }
     }
@@ -57,8 +52,8 @@ class ThemeManager
     {
         if (!isset($this->stylesheets[$id])) {
             $this->stylesheets[$id] = [
-                'src'      => $src,
-                'deps'     => $deps,
+                'src' => $src,
+                'deps' => $deps,
             ];
         }
     }
@@ -78,6 +73,7 @@ class ThemeManager
         foreach ($queue as $def) {
             $srcList[] = $def['src'];
         }
+
         return $srcList;
     }
 
@@ -88,6 +84,7 @@ class ThemeManager
         foreach ($queue as $def) {
             $srcList[] = $def['src'];
         }
+
         return $srcList;
     }
 
@@ -97,7 +94,8 @@ class ThemeManager
     protected function getResolver()
     {
         $class = $this->resolverClass;
-        return new $class;
+
+        return new $class();
     }
 
     /**

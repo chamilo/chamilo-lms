@@ -4,13 +4,14 @@
 namespace Chamilo\CoreBundle\EventListener;
 
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 /**
- * Class PluginListener
+ * Class PluginListener.
+ *
  * @package Chamilo\CoreBundle\EventListener
  */
 class PluginListener
@@ -44,8 +45,8 @@ class PluginListener
         }*/
 
         $skipControllers = [
-            'web_profiler.controller.profiler:toolbarAction', //
-            'fos_js_routing.controller:indexAction'//
+            'web_profiler.controller.profiler:toolbarAction',
+            'fos_js_routing.controller:indexAction',
         ];
 
         // Skip legacy listener
@@ -70,7 +71,7 @@ class PluginListener
             'FOS\RestBundle\Controller\ExceptionController::showAction',
             'web_profiler.controller.profiler:panelAction',
             'web_profiler.controller.profiler:toolbarAction', // debug toolbar
-            'fos_js_routing.controller:indexAction' // js/routing?callback=fos.Router.setData
+            'fos_js_routing.controller:indexAction', // js/routing?callback=fos.Router.setData
         ];
 
         // Skip legacy listener
@@ -84,10 +85,10 @@ class PluginListener
         if (!empty($installed)) {
             return;
             //$result = & api_get_settings('Plugins', 'list', $_configuration['access_url']);
-            $result = & api_get_settings('Plugins', 'list', 1);
+            $result = &api_get_settings('Plugins', 'list', 1);
 
             $_plugins = [];
-            foreach ($result as & $row) {
+            foreach ($result as &$row) {
                 $key = $row['variable'];
                 $_plugins[$key][] = $row['selected_value'];
             }

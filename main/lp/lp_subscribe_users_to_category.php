@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\UserBundle\Entity\User;
-use Chamilo\CourseBundle\Entity\CLpCategory;
-use Chamilo\CourseBundle\Entity\CLpCategoryUser;
 use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
 use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
+use Chamilo\CourseBundle\Entity\CLpCategory;
+use Chamilo\CourseBundle\Entity\CLpCategoryUser;
+use Chamilo\UserBundle\Entity\User;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -42,7 +42,7 @@ if (!$category) {
 
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths')
+    'name' => get_lang('LearningPaths'),
 ];
 $interbreadcrumb[] = ['url' => '#', 'name' => strip_tags($category->getName())];
 
@@ -202,7 +202,7 @@ if ($formUsers->validate()) {
 } else {
     $headers = [
         get_lang('SubscribeUsersToLpCategory'),
-        get_lang('SubscribeGroupsToLpCategory')
+        get_lang('SubscribeGroupsToLpCategory'),
     ];
     $tabs = Display::tabs($headers, [$formUsers->toHtml(), $form->toHtml()]);
     $tpl->assign('content', $tabs);

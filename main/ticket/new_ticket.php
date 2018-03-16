@@ -4,7 +4,6 @@
 /**
  * @package chamilo.plugin.ticket
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -93,7 +92,7 @@ function add_image_form() {
     });
 
     img_remove = $("<img/>", {
-        src: "' . Display::returnIconPath('delete.png').'"
+        src: "'.Display::returnIconPath('delete.png').'"
     });
 
     new_filepath_id = $("#filepath_" + counter_image);
@@ -112,14 +111,15 @@ $projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : '';
 
 $types = TicketManager::get_all_tickets_categories($projectId, 'category.name ASC');
 $htmlHeadXtra[] = '<script language="javascript">
-    var projects = ' . js_array($types, 'projects', 'project_id').'
-    var course_required = ' . js_array($types, 'course_required', 'course_required').'
-    var other_area = ' . js_array($types, 'other_area', 'other_area').'
-    var email = ' . js_array($types, 'email', 'email').
+    var projects = '.js_array($types, 'projects', 'project_id').'
+    var course_required = '.js_array($types, 'course_required', 'course_required').'
+    var other_area = '.js_array($types, 'other_area', 'other_area').'
+    var email = '.js_array($types, 'email', 'email').
 '</script>';
 
 /**
  * @param $s
+ *
  * @return string
  */
 function js_str($s)
@@ -131,6 +131,7 @@ function js_str($s)
  * @param $array
  * @param $name
  * @param $key
+ *
  * @return string
  */
 function js_array($array, $name, $key)
@@ -143,9 +144,6 @@ function js_array($array, $name, $key)
     return $return;
 }
 
-/**
- *
- */
 function save_ticket()
 {
     $content = $_POST['content'];
@@ -190,7 +188,7 @@ function save_ticket()
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
-    'name' => get_lang('MyTickets')
+    'name' => get_lang('MyTickets'),
 ];
 
 $userId = api_get_user_id();
@@ -205,7 +203,7 @@ foreach ($types as $type) {
 $statusAttributes = [
     'style' => 'display: none;',
     'id' => 'status_id',
-    'for' => 'status_id'
+    'for' => 'status_id',
 ];
 
 $statusList = TicketManager::getStatusList();
@@ -215,13 +213,13 @@ $sourceList = [];
 $sourceAttributes = [
     'style' => 'display: none;',
     'id' => 'source_id',
-    'for' => 'source_id'
+    'for' => 'source_id',
 ];
 $sourceList[TicketManager::SOURCE_PLATFORM] = get_lang('SrcPlatform');
 if (api_is_platform_admin()) {
     $sourceAttributes = [
         'id' => 'source_id',
-        'for' => 'source_id'
+        'for' => 'source_id',
     ];
     $sourceList[TicketManager::SOURCE_EMAIL] = get_lang('SrcEmail');
     $sourceList[TicketManager::SOURCE_PHONE] = get_lang('SrcPhone');
@@ -248,7 +246,7 @@ $form->addElement(
     'user_id_request',
     '',
     [
-        'id' => 'user_id_request'
+        'id' => 'user_id_request',
     ]
 );
 
@@ -263,7 +261,7 @@ $form->addElement(
     'other_area',
     '',
     [
-        'id' => 'other_area'
+        'id' => 'other_area',
     ]
 );
 
@@ -272,7 +270,7 @@ $form->addElement(
     'email',
     '',
     [
-        'id' => 'email'
+        'id' => 'email',
     ]
 );
 
@@ -283,7 +281,7 @@ $form->addSelect(
     [
         'id' => 'category_id',
         'for' => 'category_id',
-        'style' => 'width: 562px;'
+        'style' => 'width: 562px;',
     ]
 );
 
@@ -292,7 +290,7 @@ $form->addElement(
     'subject',
     get_lang('Subject'),
     [
-        'id' => 'subject'
+        'id' => 'subject',
     ]
 );
 
@@ -303,7 +301,7 @@ $form->addHtmlEditor(
     false,
     [
         'ToolbarSet' => 'Profile',
-        'Height' => '250'
+        'Height' => '250',
     ]
 );
 
@@ -321,7 +319,7 @@ $form->addElement(
     'personal_email',
     get_lang('PersonalEmail'),
     [
-        'id' => 'personal_email'
+        'id' => 'personal_email',
     ]
 );
 
@@ -330,7 +328,7 @@ $form->addLabel(
     Display::div(
         '',
         [
-            'id' => 'user_request'
+            'id' => 'user_request',
         ]
     )
 );
@@ -350,7 +348,7 @@ $form->addElement(
     $priorityList,
     [
         'id' => 'priority_id',
-        'for' => 'priority_id'
+        'for' => 'priority_id',
     ]
 );
 
@@ -367,7 +365,7 @@ $form->addElement(
     'phone',
     get_lang('Phone').' ('.get_lang('Optional').')',
     [
-        'id' => 'phone'
+        'id' => 'phone',
     ]
 );
 
@@ -386,7 +384,7 @@ $params = [];
 
 if (!empty($courseInfo)) {
     $params = [
-        'course_id' => $courseInfo['real_id']
+        'course_id' => $courseInfo['real_id'],
     ];
 
     $sessionInfo = api_get_session_info(api_get_session_id());
@@ -403,7 +401,7 @@ $form->addLabel('', '<span id="filepaths"><div id="filepath_1"></div></span>');
 $form->addLabel(
     '',
     '<span id="link-more-attach">
-         <span class="btn btn-success" onclick="return add_image_form()">' . get_lang('AddOneMoreFile').'</span>
+         <span class="btn btn-success" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</span>
          </span>
          ('.sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))).')
     '
@@ -419,7 +417,7 @@ $form->addElement(
     null,
     'btn btn-primary',
     [
-        'id' => 'btnsubmit'
+        'id' => 'btnsubmit',
     ]
 );
 

@@ -4,15 +4,18 @@
 require_once api_get_path(SYS_PATH).'main/inc/lib/kses-0.2.2/kses.php';
 
 /**
- * QuickForm rule to check a html
+ * QuickForm rule to check a html.
  */
 class HTML_QuickForm_Rule_HTML extends HTML_QuickForm_Rule
 {
     /**
-     * Function to validate HTML
+     * Function to validate HTML.
+     *
      * @see HTML_QuickForm_Rule
+     *
      * @param string $html
-     * @return boolean True if html is valid
+     *
+     * @return bool True if html is valid
      */
     public function validate($html, $mode = NO_HTML)
     {
@@ -23,11 +26,12 @@ class HTML_QuickForm_Rule_HTML extends HTML_QuickForm_Rule
     }
 
     /**
-     * Get allowed tags
-     * @param int $mode NO_HTML, STUDENT_HTML, TEACHER_HTML,
-     * STUDENT_HTML_FULLPAGE or TEACHER_HTML_FULLPAGE
-     * @param boolean $fullpage If true, the allowed tags for full-page editing
-     * are returned.
+     * Get allowed tags.
+     *
+     * @param int  $mode     NO_HTML, STUDENT_HTML, TEACHER_HTML,
+     *                       STUDENT_HTML_FULLPAGE or TEACHER_HTML_FULLPAGE
+     * @param bool $fullpage if true, the allowed tags for full-page editing
+     *                       are returned
      */
     public static function get_allowed_tags($mode)
     {

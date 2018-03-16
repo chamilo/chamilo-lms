@@ -1,22 +1,24 @@
 <?php
 /**
  * This file is part of teacher graph block plugin for dashboard,
- * it should be required inside dashboard controller for showing it into dashboard interface from plattform
+ * it should be required inside dashboard controller for showing it into dashboard interface from plattform.
+ *
  * @package chamilo.dashboard
+ *
  * @author Christian Fasanando
  */
 
 /**
- * required files for getting data
+ * required files for getting data.
  */
-
+use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
-use CpChart\Cache as pCache;
 
 /**
  * This class is used like controller for teacher graph block plugin,
- * the class name must be registered inside path.info file (e.g: controller = "BlockTeacherGraph"), so dashboard controller will be instantiate it
+ * the class name must be registered inside path.info file (e.g: controller = "BlockTeacherGraph"), so dashboard controller will be instantiate it.
+ *
  * @package chamilo.dashboard
  */
 class BlockTeacherGraph extends Block
@@ -27,7 +29,7 @@ class BlockTeacherGraph extends Block
     private $permission = [DRH];
 
     /**
-     * Controller
+     * Controller.
      */
     public function __construct($user_id)
     {
@@ -39,9 +41,11 @@ class BlockTeacherGraph extends Block
     }
 
     /**
-     * This method check if a user is allowed to see the block inside dashboard interface
+     * This method check if a user is allowed to see the block inside dashboard interface.
+     *
      * @param int        User id
-     * @return bool    Is block visible for user
+     *
+     * @return bool Is block visible for user
      */
     public function is_block_visible_for_user($user_id)
     {
@@ -51,19 +55,21 @@ class BlockTeacherGraph extends Block
         if (UserManager::is_admin($user_id) || in_array($user_status, $this->permission)) {
             $is_block_visible_for_user = true;
         }
+
         return $is_block_visible_for_user;
     }
 
     /**
      * This method return content html containing information about teachers and its position for showing it inside dashboard interface
-     * it's important to use the name 'get_block' for beeing used from dashboard controller
-     * @return array   column and content html
+     * it's important to use the name 'get_block' for beeing used from dashboard controller.
+     *
+     * @return array column and content html
      */
     public function get_block()
     {
         global $charset;
         $column = 1;
-        $data   = [];
+        $data = [];
         $teacher_information_graph = $this->get_teachers_information_graph();
         $html = '
                 <div class="panel panel-default" id="intro">
@@ -86,8 +92,9 @@ class BlockTeacherGraph extends Block
     }
 
     /**
-     * This method return a content html, it's used inside get_block method for showing it inside dashboard interface
-     * @return string  content html
+     * This method return a content html, it's used inside get_block method for showing it inside dashboard interface.
+     *
+     * @return string content html
      */
     public function get_teachers_information_graph()
     {
@@ -97,7 +104,7 @@ class BlockTeacherGraph extends Block
         $a_last_week = get_last_week();
 
         if (is_array($user_ids) && count($user_ids) > 0) {
-            $dataSet = new pData;
+            $dataSet = new pData();
             foreach ($user_ids as $user_id) {
                 $teacher_info = api_get_user_info($user_id);
                 $username = $teacher_info['username'];
@@ -203,7 +210,8 @@ class BlockTeacherGraph extends Block
     }
 
     /**
-     * Get number of teachers
+     * Get number of teachers.
+     *
      * @return int
      */
     public function get_number_of_teachers()

@@ -14,7 +14,6 @@ ini_set('max_execution_time', '80000');
 ini_set('max_input_time', '80000');
 */
 
-
 $debug = true;
 
 define('WS_ERROR_SECRET_KEY', 1);
@@ -27,6 +26,7 @@ function return_error($code)
             $fault = new soap_fault('Server', '', 'Secret key is not correct or params are not correctly set');
             break;
     }
+
     return $fault;
 }
 
@@ -82,6 +82,7 @@ function WSHelperVerifyKey($params)
     if ($debug) {
         error_log('WSHelperVerifyKey result: '.intval($result));
     }
+
     return $result;
 }
 
@@ -137,6 +138,7 @@ $server->register(
 
 /**
  * @param array $params
+ *
  * @return int|string
  */
 function WSImportLP($params)
@@ -166,6 +168,7 @@ function WSImportLP($params)
         if ($debug) {
             error_log('Course not found');
         }
+
         return 'Course not found';
     }
 
@@ -180,6 +183,7 @@ function WSImportLP($params)
             if ($debug) {
                 error_log('Session not found');
             }
+
             return 'Session not found';
         }
     }
@@ -209,6 +213,7 @@ function WSImportLP($params)
         if ($debug) {
             error_log('manifest.xml file not found');
         }
+
         return 'manifest.xml file not found';
     }
 
@@ -229,11 +234,13 @@ function WSImportLP($params)
         if ($debug) {
             error_log('scorm was added');
         }
+
         return 1;
     } else {
         if ($debug) {
             error_log('manifest data empty');
         }
+
         return 'manifest data empty';
     }
 }
@@ -272,8 +279,8 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'id'    => ['name' => 'id', 'type' => 'xsd:string'],
-        'name'  => ['name' => 'name', 'type' => 'xsd:string'],
+        'id' => ['name' => 'id', 'type' => 'xsd:string'],
+        'name' => ['name' => 'name', 'type' => 'xsd:string'],
     ]
 );
 
@@ -302,6 +309,7 @@ $server->register(
 
 /**
  * @param array $params
+ *
  * @return int|string
  */
 function WSGetLpList($params)
@@ -326,6 +334,7 @@ function WSGetLpList($params)
         if ($debug) {
             error_log("Course not found: $courseIdName : $courseIdValue");
         }
+
         return 'Course not found';
     }
 
@@ -342,6 +351,7 @@ function WSGetLpList($params)
             if ($debug) {
                 error_log('Session not found');
             }
+
             return 'Session not found';
         }
     }
@@ -358,7 +368,6 @@ function WSGetLpList($params)
 
     return $result;
 }
-
 
 $server->wsdl->addComplexType(
     'paramsDeleteLp',
@@ -397,6 +406,7 @@ $server->register(
 
 /**
  * @param array $params
+ *
  * @return int|string
  */
 function WSDeleteLp($params)
@@ -422,6 +432,7 @@ function WSDeleteLp($params)
         if ($debug) {
             error_log("Course not found: $courseIdName : $courseIdValue");
         }
+
         return 'Course not found';
     }
     $courseId = $courseInfo['real_id'];
@@ -507,7 +518,6 @@ function WSDeleteLp($params)
     return 0;
 }
 
-
 $server->wsdl->addComplexType(
     'lpItem',
     'complexType',
@@ -515,9 +525,9 @@ $server->wsdl->addComplexType(
     'all',
     '',
     [
-        'data'  => ['name' => 'data', 'type' => 'xsd:string'],
-        'title'  => ['name' => 'title', 'type' => 'xsd:string'],
-        'filename'  => ['name' => 'filename', 'type' => 'xsd:string'],
+        'data' => ['name' => 'data', 'type' => 'xsd:string'],
+        'title' => ['name' => 'title', 'type' => 'xsd:string'],
+        'filename' => ['name' => 'filename', 'type' => 'xsd:string'],
     ]
 );
 
@@ -581,6 +591,7 @@ $server->register(
 
 /**
  * @param array $params
+ *
  * @return null|soap_fault
  */
 function WSCreateLp($params)

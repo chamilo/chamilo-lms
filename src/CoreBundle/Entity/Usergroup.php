@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Usergroup
+ * Usergroup.
  *
  * @ORM\Table(name="usergroup")
  * @ORM\Entity
@@ -16,7 +16,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class Usergroup
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -39,7 +39,7 @@ class Usergroup
     protected $description;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="group_type", type="integer", nullable=false)
      */
@@ -67,14 +67,14 @@ class Usergroup
     protected $visibility;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="allow_members_leave_group", type="integer")
      */
     protected $allowMembersToLeaveGroup;
 
     /**
-     * @var \DateTime $created
+     * @var \DateTime
      *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime")
@@ -82,7 +82,7 @@ class Usergroup
     protected $createdAt;
 
     /**
-     * @var \DateTime $updated
+     * @var \DateTime
      *
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated_at", type="datetime")
@@ -91,12 +91,9 @@ class Usergroup
 
     /**
      * @ORM\OneToMany(targetEntity="UsergroupRelUser", mappedBy="usergroup", cascade={"persist"}, orphanRemoval=true)
-     **/
+     */
     protected $users;
 
-    /**
-     *
-     */
     public function __construct()
     {
         //$this->users = new ArrayCollection();
@@ -140,7 +137,7 @@ class Usergroup
     }
 
     /**
-     * Remove $user
+     * Remove $user.
      *
      * @param UsergroupRelUser $user
      */
@@ -154,9 +151,9 @@ class Usergroup
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -164,9 +161,10 @@ class Usergroup
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return Usergroup
      */
     public function setName($name)
@@ -177,7 +175,7 @@ class Usergroup
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -187,9 +185,10 @@ class Usergroup
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return Usergroup
      */
     public function setDescription($description)
@@ -200,7 +199,7 @@ class Usergroup
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */

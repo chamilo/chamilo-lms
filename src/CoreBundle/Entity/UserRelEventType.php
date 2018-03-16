@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UserRelEventType
+ * UserRelEventType.
  *
  * @ORM\Table(name="user_rel_event_type", indexes={
  *     @ORM\Index(name="event_name_index", columns={"event_type_name"})
@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 class UserRelEventType
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -25,7 +25,7 @@ class UserRelEventType
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
@@ -39,9 +39,10 @@ class UserRelEventType
     private $eventTypeName;
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return UserRelEventType
      */
     public function setUserId($userId)
@@ -52,9 +53,9 @@ class UserRelEventType
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -62,9 +63,10 @@ class UserRelEventType
     }
 
     /**
-     * Set eventTypeName
+     * Set eventTypeName.
      *
      * @param string $eventTypeName
+     *
      * @return UserRelEventType
      */
     public function setEventTypeName($eventTypeName)
@@ -75,7 +77,7 @@ class UserRelEventType
     }
 
     /**
-     * Get eventTypeName
+     * Get eventTypeName.
      *
      * @return string
      */
@@ -85,9 +87,9 @@ class UserRelEventType
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

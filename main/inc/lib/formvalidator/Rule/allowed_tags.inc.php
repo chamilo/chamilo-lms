@@ -13,7 +13,7 @@
  *    $allowed_tags_XXXX['tagname']['attributename'] = array();
  * - please keep the content of this file alphabetically structured
  *
- * @link http://www.w3schools.com/tags/
+ * @see http://www.w3schools.com/tags/
  */
 
 // KSES-COMPATIBLE SETTINGS
@@ -303,7 +303,6 @@ $allowed_tags_student['embed']['allowscriptaccess'] = [];
 //$allowed_tags_student['embed']['allowfullscreen'] = array();
 //$allowed_tags_student['embed']['bgcolor'] = array();
 //$allowed_tags_student['embed']['pluginspage'] = array();
-
 
 // embed
 $allowed_tags_student['video'] = [];
@@ -914,7 +913,6 @@ $allowed_tags_student['var']['style'] = [];
 $allowed_tags_student['var']['title'] = [];
 $allowed_tags_student['var']['xml:lang'] = [];
 
-
 // ALLOWED HTML FOR TEACHERS
 
 // Allow all HTML allowed for students
@@ -958,17 +956,16 @@ unset($allowed_tags_anonymous['embed']);
 unset($allowed_tags_anonymous['object']);
 unset($allowed_tags_anonymous['param']);
 
-
 // HTMLPURIFIER-COMPATIBLE SETTINGS
 
 function convert_kses_to_htmlpurifier($allowed_tags)
 {
     $allowed_html = [];
-    foreach ($allowed_tags as $key1 => & $value1) {
+    foreach ($allowed_tags as $key1 => &$value1) {
         $result[0][] = $key1;
         if (count($value1) > 0) {
             $attr = [];
-            foreach ($value1 as $key2 => & $value2) {
+            foreach ($value1 as $key2 => &$value2) {
                 $attr[] = $key2;
             }
             $allowed_html[] = $key1.'['.implode('|', $attr).']';
@@ -976,6 +973,7 @@ function convert_kses_to_htmlpurifier($allowed_tags)
             $allowed_html[] = $key1;
         }
     }
+
     return implode(",\n", $allowed_html);
 }
 

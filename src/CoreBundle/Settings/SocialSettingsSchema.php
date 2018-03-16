@@ -4,12 +4,12 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class SocialSettingsSchema
+ * Class SocialSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class SocialSettingsSchema extends AbstractSettingsSchema
@@ -24,7 +24,6 @@ class SocialSettingsSchema extends AbstractSettingsSchema
                 [
                     'allow_social_tool' => 'true',
                     'allow_students_to_create_groups_in_social' => 'false',
-
                 ]
             );
         $allowedTypes = [

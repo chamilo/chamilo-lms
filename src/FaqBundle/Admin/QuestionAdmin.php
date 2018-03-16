@@ -4,12 +4,12 @@
 namespace Chamilo\FaqBundle\Admin;
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 
 /**
- * Class QuestionAdmin
+ * Class QuestionAdmin.
  *
  * @package Chamilo\FaqBundle\Admin
  */
@@ -18,7 +18,7 @@ class QuestionAdmin extends AbstractAdmin
     protected $datagridValues = [
         '_page' => 1,
         '_sort_by' => 'issueDate',
-        '_sort_order' => 'Desc'
+        '_sort_order' => 'Desc',
     ];
 
     /**

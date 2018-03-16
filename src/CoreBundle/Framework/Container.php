@@ -3,21 +3,21 @@
 
 namespace Chamilo\CoreBundle\Framework;
 
+use Chamilo\CoreBundle\Component\Editor\Editor;
+use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Sonata\PageBundle\Entity\SiteManager;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Sonata\UserBundle\Entity\UserManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
-use Chamilo\CoreBundle\Component\Editor\Editor;
 use Symfony\Component\Translation\TranslatorInterface;
-use Chamilo\SettingsBundle\Manager\SettingsManager;
-use Sonata\UserBundle\Entity\UserManager;
 
 /**
  * Class Container
  * This class is a way to access Symfony2 services in legacy Chamilo code.
+ *
  * @package Chamilo\CoreBundle\Framework
  */
 class Container
@@ -35,9 +35,6 @@ class Container
     public static $translator;
     public static $mailer;
     public static $template;
-    private static $settingsManager;
-    private static $userManager;
-    private static $siteManager;
 
     public static $rootDir;
     public static $logDir;
@@ -49,8 +46,11 @@ class Container
     public static $htmlEditor;
     public static $twig;
     public static $roles;
-    /** @var  string  */
+    /** @var string */
     public static $legacyTemplate = '@ChamiloTheme/Layout/layout_one_col.html.twig';
+    private static $settingsManager;
+    private static $userManager;
+    private static $siteManager;
 
     /**
      * @param ContainerInterface $container
@@ -198,6 +198,7 @@ class Container
         if (!empty(self::$request)) {
             return self::$request;
         }
+
         return self::$container->get('request');
     }
 
@@ -214,6 +215,7 @@ class Container
         if (self::$container && self::$container->has('session')) {
             return self::$container->get('session');
         }
+
         return false;
     }
 
@@ -321,7 +323,6 @@ class Container
         self::$userManager = $manager;
     }
 
-
     /**
      * @return SiteManager
      */
@@ -364,7 +365,7 @@ class Container
 
     /**
      * @param string $message
-     * @param string $type error|success|warning|danger
+     * @param string $type    error|success|warning|danger
      */
     public static function addFlash($message, $type = 'success')
     {

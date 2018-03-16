@@ -4,13 +4,14 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
-use Symfony\Component\Form\FormBuilderInterface;
 use Chamilo\SettingsBundle\Transformer\ArrayToIdentifierTransformer;
+use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class RegistrationSettingsSchema
+ * Class RegistrationSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class RegistrationSettingsSchema extends AbstractSettingsSchema
@@ -75,7 +76,7 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
             'MyCompetences' => 'mycompetences',
             'MyDiplomas' => 'mydiplomas',
             'MyTeach' => 'myteach',
-            'MyPersonalOpenArea' => 'mypersonalopenarea'
+            'MyPersonalOpenArea' => 'mypersonalopenarea',
         ];
 
         $builder
@@ -113,8 +114,8 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                     'choices' => [
                         'CampusHomepage' => 'index.php',
                         'MyCourses' => 'user_portal.php',
-                        'CourseCatalog' => 'main/auth/courses.php'
-                    ]
+                        'CourseCatalog' => 'main/auth/courses.php',
+                    ],
                 ]
             )
             ->add(
@@ -124,7 +125,7 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                     'multiple' => true,
                     'choices' => $extendedProfileOptions,
                     'label' => 'ExtendedProfileRegistrationTitle',
-                    'help_block' => 'ExtendedProfileRegistrationComment'
+                    'help_block' => 'ExtendedProfileRegistrationComment',
                 ]
             )
             ->add(
@@ -134,7 +135,7 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                     'multiple' => true,
                     'choices' => $extendedProfileOptions,
                     'label' => 'ExtendedProfileRegistrationRequiredTitle',
-                    'help_block' => 'ExtendedProfileRegistrationRequiredComment'
+                    'help_block' => 'ExtendedProfileRegistrationRequiredComment',
                 ]
             )
             ->add('allow_terms_conditions', YesNoType::class)

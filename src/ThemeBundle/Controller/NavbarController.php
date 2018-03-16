@@ -13,21 +13,15 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class NavbarController
+ * Class NavbarController.
+ *
  * @package Chamilo\ThemeBundle\Controller
  */
 class NavbarController extends Controller
 {
     /**
-     * @return EventDispatcher
-     */
-    protected function getDispatcher()
-    {
-        return $this->get('event_dispatcher');
-    }
-
-    /**
      * @param int $max
+     *
      * @return Response
      */
     public function notificationsAction($max = 5)
@@ -49,6 +43,7 @@ class NavbarController extends Controller
 
     /**
      * @param int $max
+     *
      * @return Response
      */
     public function messagesAction($max = 5)
@@ -70,6 +65,7 @@ class NavbarController extends Controller
 
     /**
      * @param int $max
+     *
      * @return Response
      */
     public function tasksAction($max = 5)
@@ -104,5 +100,13 @@ class NavbarController extends Controller
                 'user' => $userEvent->getUser(),
             ]
         );
+    }
+
+    /**
+     * @return EventDispatcher
+     */
+    protected function getDispatcher()
+    {
+        return $this->get('event_dispatcher');
     }
 }

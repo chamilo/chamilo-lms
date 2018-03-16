@@ -3,13 +3,13 @@
 
 namespace Chamilo\CoreBundle\Settings;
 
-use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class GlossarySettingsSchema
+ * Class GlossarySettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class GlossarySettingsSchema extends AbstractSettingsSchema
@@ -46,8 +46,8 @@ class GlossarySettingsSchema extends AbstractSettingsSchema
                         'None' => 'none',
                         'Exercise' => 'exercise',
                         'LearningPath' => 'lp',
-                        'ExerciseAndLearningPath' => 'exercise_and_lp'
-                    ]
+                        'ExerciseAndLearningPath' => 'exercise_and_lp',
+                    ],
                 ]
             )
         ;

@@ -4,14 +4,15 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * Announcements toolbar configuration
+ * Announcements toolbar configuration.
  *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar *
  */
 class Announcements extends Basic
 {
     /**
-     * Get the toolbar config
+     * Get the toolbar config.
+     *
      * @return array
      */
     public function getConfig()
@@ -26,7 +27,8 @@ class Announcements extends Basic
     }
 
     /**
-     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false.
+     *
      * @return array
      */
     protected function getNormalToolbar()
@@ -45,7 +47,7 @@ class Announcements extends Basic
                 '-',
                 'TextColor',
                 'BGColor',
-                'Source'
+                'Source',
             ],
             '/',
             ['Styles', 'Format', 'Font', 'FontSize'],
@@ -53,13 +55,14 @@ class Announcements extends Basic
             [
                 'JustifyLeft',
                 'JustifyCenter',
-                'JustifyRight'
-            ]
+                'JustifyRight',
+            ],
         ];
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is minimized
+     * Get the toolbar configuration when CKEditor is minimized.
+     *
      * @return array
      */
     protected function getMinimizedToolbar()
@@ -71,7 +74,7 @@ class Announcements extends Basic
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
             ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
-            ['Toolbarswitch']
+            ['Toolbarswitch'],
         ];
     }
 }

@@ -7,7 +7,7 @@ use Chamilo\FaqBundle\Entity\Question;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Class QuestionRepository
+ * Class QuestionRepository.
  *
  * @package Genj\FaqBundle\Entity
  */
@@ -17,6 +17,7 @@ class QuestionRepository
 
     /**
      * QuestionRepository constructor.
+     *
      * @param EntityManagerInterface $entityManager
      */
     public function __construct(EntityManagerInterface $entityManager)

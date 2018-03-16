@@ -5,28 +5,24 @@ namespace Chamilo\SettingsBundle\Manager;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Settings\PlatformSettingsSchema;
+use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
 use Sylius\Bundle\SettingsBundle\Event\SettingsEvent;
-use Doctrine\Common\Persistence\ObjectManager;
 use Sylius\Bundle\SettingsBundle\Manager\SettingsManagerInterface;
 use Sylius\Bundle\SettingsBundle\Model\Settings;
 use Sylius\Bundle\SettingsBundle\Model\SettingsInterface;
-use Sylius\Bundle\SettingsBundle\Resolver\SettingsResolverInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaRegistryInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilder;
 use Sylius\Component\Registry\ServiceRegistryInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
-use Sylius\Bundle\SettingsBundle\Manager\SettingsManager as SyliusSettingsManager;
-use Chamilo\CoreBundle\Entity\SettingsCurrent;
 
 /**
- * Class SettingsManager
+ * Class SettingsManager.
+ *
  * @package Chamilo\SettingsBundle\Manager
  */
 class SettingsManager implements SettingsManagerInterface
@@ -64,7 +60,7 @@ class SettingsManager implements SettingsManagerInterface
     protected $eventDispatcher;
 
     /**
-     * Runtime cache for resolved parameters
+     * Runtime cache for resolved parameters.
      *
      * @var Settings[]
      */
@@ -72,11 +68,12 @@ class SettingsManager implements SettingsManagerInterface
 
     /**
      * SettingsManager constructor.
+     *
      * @param ServiceRegistryInterface $schemaRegistry
      * @param ServiceRegistryInterface $resolverRegistry
-     * @param EntityManager $manager
-     * @param EntityRepository $repository
-     * @param FactoryInterface $settingsFactory
+     * @param EntityManager            $manager
+     * @param EntityRepository         $repository
+     * @param FactoryInterface         $settingsFactory
      * @param $eventDispatcher
      */
     public function __construct(
@@ -120,7 +117,7 @@ class SettingsManager implements SettingsManagerInterface
         $schemas = array_keys($this->getSchemas());
 
         /**
-         * @var string $key
+         * @var string
          * @var \Sylius\Bundle\SettingsBundle\Schema\SchemaInterface $schema
          */
         foreach ($schemas as $schema) {
@@ -138,7 +135,8 @@ class SettingsManager implements SettingsManagerInterface
     }
 
     /**
-     * Get variables and categories as in 1.11.x
+     * Get variables and categories as in 1.11.x.
+     *
      * @return array
      */
     public function getVariablesAndCategories()
@@ -147,7 +145,7 @@ class SettingsManager implements SettingsManagerInterface
             'Institution' => 'Platform',
             'InstitutionUrl' => 'Platform',
             'siteName' => 'Platform',
-            'emailAdministrator' => 'admin',//'emailAdministrator' => 'Platform',
+            'emailAdministrator' => 'admin', //'emailAdministrator' => 'Platform',
             'administratorSurname' => 'admin',
             'administratorTelephone' => 'admin',
             'administratorName' => 'admin',
@@ -258,11 +256,11 @@ class SettingsManager implements SettingsManagerInterface
             'allow_send_message_to_all_platform_users' => 'Tools',
             'message_max_upload_filesize' => 'Tools',
             'use_users_timezone' => 'profile', //'use_users_timezone' => 'Timezones',
-            'timezone_value' => 'platform',//'timezone_value' => 'Timezones',
+            'timezone_value' => 'platform', //'timezone_value' => 'Timezones',
             'allow_user_course_subscription_by_course_admin' => 'Security',
             'show_link_bug_notification' => 'Platform',
             'show_link_ticket_notification' => 'Platform',
-            'course_validation' => 'course',//'course_validation' => 'Platform',
+            'course_validation' => 'course', //'course_validation' => 'Platform',
             'course_validation_terms_and_conditions_url' => 'Platform',
             'sso_authentication' => 'Security',
             'sso_authentication_domain' => 'Security',
@@ -440,15 +438,17 @@ class SettingsManager implements SettingsManagerInterface
             'allow_download_documents_by_api_key' => 'Webservices',
             'ProfilingFilterAddingUsers' => 'profile',
             'donotlistcampus' => 'platform',
-            'gradebook_show_percentage_in_reports' => 'gradebook'
+            'gradebook_show_percentage_in_reports' => 'gradebook',
         ];
 
         return $oldItems;
     }
 
     /**
-     * Rename old variable with variable used in Chamilo 2.0
+     * Rename old variable with variable used in Chamilo 2.0.
+     *
      * @param string $variable
+     *
      * @return mixed
      */
     public function renameVariable($variable)
@@ -482,9 +482,11 @@ class SettingsManager implements SettingsManagerInterface
     }
 
     /**
-     * Replace old Chamilo 1.x category with 2.0 version
+     * Replace old Chamilo 1.x category with 2.0 version.
+     *
      * @param string $variable
      * @param string $defaultCategory
+     *
      * @return mixed
      */
     public function fixCategory($variable, $defaultCategory)
@@ -566,7 +568,7 @@ class SettingsManager implements SettingsManagerInterface
             'pdf_logo_header' => 'platform',
             'show_glossary_in_documents' => 'document',
             'show_glossary_in_extra_tools' => 'glossary',
-            'survey_email_sender_noreply'=> 'survey',
+            'survey_email_sender_noreply' => 'survey',
             'allow_coach_feedback_exercises' => 'exercise',
             'sessionadmin_autosubscribe' => 'registration',
             'sessionadmin_page_after_login' => 'registration',
@@ -623,7 +625,7 @@ class SettingsManager implements SettingsManagerInterface
             'allow_download_documents_by_api_key' => 'webservice',
             'profiling_filter_adding_users' => 'profile',
             'hide_dltt_markup' => 'language',
-            'active_tools_on_create' => 'course'
+            'active_tools_on_create' => 'course',
         ];
 
         return isset($settings[$variable]) ? $settings[$variable] : $defaultCategory;
@@ -631,8 +633,10 @@ class SettingsManager implements SettingsManagerInterface
 
     /**
      * @param $name
-     * @return mixed
+     *
      * @throws \InvalidArgumentException
+     *
+     * @return mixed
      */
     public function getSetting($name)
     {
@@ -667,6 +671,7 @@ class SettingsManager implements SettingsManagerInterface
 
     /**
      * @param string $category
+     *
      * @return string
      */
     public function convertNameSpaceToService($category)
@@ -676,6 +681,7 @@ class SettingsManager implements SettingsManagerInterface
 
     /**
      * @param string $category
+     *
      * @return string
      */
     public function convertServiceToNameSpace($category)
@@ -730,6 +736,7 @@ class SettingsManager implements SettingsManagerInterface
 
     /**
      * {@inheritdoc}
+     *
      * @throws ValidatorException
      */
     public function save(SettingsInterface $settings)
@@ -846,7 +853,6 @@ class SettingsManager implements SettingsManagerInterface
                     ->setAccessUrlChangeable(1)
                 ;
 
-
                 /* @var $errors ConstraintViolationListInterface */
                 /*$errors = $this->->validate($parameter);
                 if (0 < $errors->count()) {
@@ -868,25 +874,8 @@ class SettingsManager implements SettingsManagerInterface
     }
 
     /**
-     * Load parameter from database.
-     *
-     * @param string $namespace
-     *
-     * @return array
-     */
-    private function getParameters($namespace)
-    {
-        $parameters = [];
-        /** @var  SettingsCurrent $parameter */
-        foreach ($this->repository->findBy(['category' => $namespace]) as $parameter) {
-            $parameters[$parameter->getVariable()] = $parameter->getSelectedValue();
-        }
-
-        return $parameters;
-    }
-
-    /**
      * @param string $keyword
+     *
      * @return array
      */
     public function getParametersFromKeywordOrderedByCategory($keyword)
@@ -901,13 +890,15 @@ class SettingsManager implements SettingsManagerInterface
         foreach ($parametersFromDb as $parameter) {
             $parameters[$parameter->getCategory()][] = $parameter;
         }
+
         return $parameters;
     }
 
     /**
      * @param string $namespace
      * @param string $keyword
-     * @param bool $returnObjects
+     * @param bool   $returnObjects
+     *
      * @return array
      */
     public function getParametersFromKeyword($namespace, $keyword = '', $returnObjects = false)
@@ -929,6 +920,24 @@ class SettingsManager implements SettingsManagerInterface
         $parameters = [];
         /** @var \Chamilo\CoreBundle\Entity\SettingsCurrent $parameter */
         foreach ($parametersFromDb as $parameter) {
+            $parameters[$parameter->getVariable()] = $parameter->getSelectedValue();
+        }
+
+        return $parameters;
+    }
+
+    /**
+     * Load parameter from database.
+     *
+     * @param string $namespace
+     *
+     * @return array
+     */
+    private function getParameters($namespace)
+    {
+        $parameters = [];
+        /** @var SettingsCurrent $parameter */
+        foreach ($this->repository->findBy(['category' => $namespace]) as $parameter) {
             $parameters[$parameter->getVariable()] = $parameter->getSelectedValue();
         }
 

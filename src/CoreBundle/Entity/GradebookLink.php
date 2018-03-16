@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * GradebookLink
+ * GradebookLink.
  *
  * @ORM\Table(name="gradebook_link")
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\GradebookLinkRepository")
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class GradebookLink
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -23,21 +23,21 @@ class GradebookLink
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="type", type="integer", nullable=false)
      */
     private $type;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="ref_id", type="integer", nullable=false)
      */
     private $refId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
@@ -50,7 +50,7 @@ class GradebookLink
     private $course;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="category_id", type="integer", nullable=false)
      */
@@ -71,23 +71,23 @@ class GradebookLink
     private $weight;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="visible", type="integer", nullable=false)
      */
     private $visible;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
     private $locked;
 
     /**
-     * Set type
+     * Set type.
      *
-     * @param integer $type
+     * @param int $type
      *
      * @return GradebookLink
      */
@@ -99,9 +99,9 @@ class GradebookLink
     }
 
     /**
-     * Get type
+     * Get type.
      *
-     * @return integer
+     * @return int
      */
     public function getType()
     {
@@ -109,9 +109,10 @@ class GradebookLink
     }
 
     /**
-     * Set refId
+     * Set refId.
      *
-     * @param integer $refId
+     * @param int $refId
+     *
      * @return GradebookLink
      */
     public function setRefId($refId)
@@ -122,9 +123,9 @@ class GradebookLink
     }
 
     /**
-     * Get refId
+     * Get refId.
      *
-     * @return integer
+     * @return int
      */
     public function getRefId()
     {
@@ -132,9 +133,10 @@ class GradebookLink
     }
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return GradebookLink
      */
     public function setUserId($userId)
@@ -145,9 +147,9 @@ class GradebookLink
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -155,8 +157,10 @@ class GradebookLink
     }
 
     /**
-     * Set course
+     * Set course.
+     *
      * @param \Chamilo\CoreBundle\Entity\Course $course
+     *
      * @return \Chamilo\CoreBundle\Entity\GradebookLink
      */
     public function setCourse(Course $course)
@@ -167,7 +171,8 @@ class GradebookLink
     }
 
     /**
-     * Get course
+     * Get course.
+     *
      * @return \Chamilo\CoreBundle\Entity\Course
      */
     public function getCourse()
@@ -176,9 +181,10 @@ class GradebookLink
     }
 
     /**
-     * Set categoryId
+     * Set categoryId.
      *
-     * @param integer $categoryId
+     * @param int $categoryId
+     *
      * @return GradebookLink
      */
     public function setCategoryId($categoryId)
@@ -189,9 +195,9 @@ class GradebookLink
     }
 
     /**
-     * Get categoryId
+     * Get categoryId.
      *
-     * @return integer
+     * @return int
      */
     public function getCategoryId()
     {
@@ -199,9 +205,10 @@ class GradebookLink
     }
 
     /**
-     * Set createdAt
+     * Set createdAt.
      *
      * @param \DateTime $createdAt
+     *
      * @return GradebookLink
      */
     public function setCreatedAt($createdAt)
@@ -212,7 +219,7 @@ class GradebookLink
     }
 
     /**
-     * Get createdAt
+     * Get createdAt.
      *
      * @return \DateTime
      */
@@ -222,9 +229,10 @@ class GradebookLink
     }
 
     /**
-     * Set weight
+     * Set weight.
      *
      * @param float $weight
+     *
      * @return GradebookLink
      */
     public function setWeight($weight)
@@ -235,7 +243,7 @@ class GradebookLink
     }
 
     /**
-     * Get weight
+     * Get weight.
      *
      * @return float
      */
@@ -245,9 +253,10 @@ class GradebookLink
     }
 
     /**
-     * Set visible
+     * Set visible.
      *
-     * @param integer $visible
+     * @param int $visible
+     *
      * @return GradebookLink
      */
     public function setVisible($visible)
@@ -258,9 +267,9 @@ class GradebookLink
     }
 
     /**
-     * Get visible
+     * Get visible.
      *
-     * @return integer
+     * @return int
      */
     public function getVisible()
     {
@@ -268,9 +277,10 @@ class GradebookLink
     }
 
     /**
-     * Set locked
+     * Set locked.
      *
-     * @param integer $locked
+     * @param int $locked
+     *
      * @return GradebookLink
      */
     public function setLocked($locked)
@@ -281,9 +291,9 @@ class GradebookLink
     }
 
     /**
-     * Get locked
+     * Get locked.
      *
-     * @return integer
+     * @return int
      */
     public function getLocked()
     {
@@ -291,9 +301,9 @@ class GradebookLink
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

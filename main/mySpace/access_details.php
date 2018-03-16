@@ -7,13 +7,13 @@
  * @package chamilo.reporting
  *
  * Calculates the time spent on the course
- * @param integer $user_id the user id
+ *
+ * @param int    $user_id     the user id
  * @param string $course_code the course code
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  * @author Jorge Frisancho Jibaja - select between dates
- *
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
@@ -59,7 +59,7 @@ $group = [
             'javascript://',
             ['onclick' => 'loadGraph();', 'class' => 'btn btn-default']
         )
-    )
+    ),
 ];
 $form->addGroup($group);
 $from = null;

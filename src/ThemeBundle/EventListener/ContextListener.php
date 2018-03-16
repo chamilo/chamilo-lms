@@ -6,11 +6,10 @@ namespace Chamilo\ThemeBundle\EventListener;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\Security\Core\User\User;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Class ContextListener
+ * Class ContextListener.
+ *
  * @package Chamilo\ThemeBundle\EventListener
  */
 class ContextListener

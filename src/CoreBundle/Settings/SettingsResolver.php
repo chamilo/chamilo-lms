@@ -4,17 +4,17 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Doctrine\ORM\NonUniqueResultException;
-use Sylius\Bundle\SettingsBundle\Resolver\DefaultSettingsResolver;
 use Sylius\Bundle\SettingsBundle\Resolver\SettingsResolverInterface;
 
 /**
- * Class SessionSettingsSchema
+ * Class SessionSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class SettingsResolver implements SettingsResolverInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function resolve($schemaAlias, $namespace = null)
     {

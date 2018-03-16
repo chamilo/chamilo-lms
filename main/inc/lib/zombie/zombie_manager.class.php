@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * ZombieQuery
+ * ZombieQuery.
  *
  * @copyright (c) 2012 University of Geneva
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
@@ -16,14 +16,16 @@ class ZombieManager
         $day = date('j', $today);
         $month = date('n', $today);
         $year = date('Y', $today) - 1;
+
         return mktime(0, 0, 0, $month, $day, $year);
     }
 
     /**
-     * Returns users whose last login is prior from $ceiling
+     * Returns users whose last login is prior from $ceiling.
      *
-     * @param int|string $ceiling last login date
-     * @param bool $active_only if true returns only active users. Otherwise returns all users.
+     * @param int|string $ceiling     last login date
+     * @param bool       $active_only if true returns only active users. Otherwise returns all users.
+     *
      * @return ResultSet
      */
     public static function listZombies($ceiling, $active_only = true, $count = 0, $from = 10, $column = 'user.firstname', $direction = 'desc')

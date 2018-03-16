@@ -1,12 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \ChamiloSession as Session;
-
 /**
  * This script displays setting api key user.
  */
-
 require_once '../config.php';
 
 $course_plugin = 'sepe';

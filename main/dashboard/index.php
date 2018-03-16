@@ -4,11 +4,13 @@
 use ChamiloSession as Session;
 
 /**
-* Template (front controller in MVC pattern) used for distpaching to
- * the controllers depend on the current action
-* @author Christian Fasanando <christian1827@gmail.com>
-* @package chamilo.dashboard
-*/
+ * Template (front controller in MVC pattern) used for distpaching to
+ * the controllers depend on the current action.
+ *
+ * @author Christian Fasanando <christian1827@gmail.com>
+ *
+ * @package chamilo.dashboard
+ */
 $cidReset = true;
 
 // including files

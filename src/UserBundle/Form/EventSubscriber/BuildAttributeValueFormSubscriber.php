@@ -43,7 +43,7 @@ class BuildAttributeValueFormSubscriber implements EventSubscriberInterface
     {
         return [
             FormEvents::PRE_SET_DATA => 'preSetData',
-            FormEvents::PRE_SUBMIT   => 'preSubmit',
+            FormEvents::PRE_SUBMIT => 'preSubmit',
         ];
     }
 
@@ -80,14 +80,14 @@ class BuildAttributeValueFormSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param FormInterface $form
+     * @param FormInterface      $form
      * @param AttributeInterface $attribute
      */
     private function addValueField(FormInterface $form, AttributeInterface $attribute)
     {
         $options = [
             'auto_initialize' => false,
-            'label' => $attribute->getName()
+            'label' => $attribute->getName(),
         ];
 
         $form->add('attribute');

@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CRoleGroup
+ * CRoleGroup.
  *
  * @ORM\Table(
  *  name="c_role_group",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CRoleGroup
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -29,21 +29,21 @@ class CRoleGroup
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="role_id", type="integer", nullable=false)
      */
@@ -57,17 +57,17 @@ class CRoleGroup
     private $scope;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="group_id", type="integer")
      */
     private $groupId;
 
-
     /**
-     * Set roleId
+     * Set roleId.
      *
-     * @param integer $roleId
+     * @param int $roleId
+     *
      * @return CRoleGroup
      */
     public function setRoleId($roleId)
@@ -78,9 +78,9 @@ class CRoleGroup
     }
 
     /**
-     * Get roleId
+     * Get roleId.
      *
-     * @return integer
+     * @return int
      */
     public function getRoleId()
     {
@@ -88,9 +88,10 @@ class CRoleGroup
     }
 
     /**
-     * Set scope
+     * Set scope.
      *
      * @param string $scope
+     *
      * @return CRoleGroup
      */
     public function setScope($scope)
@@ -101,7 +102,7 @@ class CRoleGroup
     }
 
     /**
-     * Get scope
+     * Get scope.
      *
      * @return string
      */
@@ -111,9 +112,10 @@ class CRoleGroup
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CRoleGroup
      */
     public function setId($id)
@@ -124,9 +126,9 @@ class CRoleGroup
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -134,9 +136,10 @@ class CRoleGroup
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CRoleGroup
      */
     public function setCId($cId)
@@ -147,9 +150,9 @@ class CRoleGroup
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -157,9 +160,10 @@ class CRoleGroup
     }
 
     /**
-     * Set groupId
+     * Set groupId.
      *
-     * @param integer $groupId
+     * @param int $groupId
+     *
      * @return CRoleGroup
      */
     public function setGroupId($groupId)
@@ -170,9 +174,9 @@ class CRoleGroup
     }
 
     /**
-     * Get groupId
+     * Get groupId.
      *
-     * @return integer
+     * @return int
      */
     public function getGroupId()
     {

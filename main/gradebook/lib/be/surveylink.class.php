@@ -2,8 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Gradebook link to a survey item
+ * Gradebook link to a survey item.
+ *
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>, 2010
+ *
  * @package chamilo.gradebook
  */
 class SurveyLink extends AbstractLink
@@ -12,7 +14,7 @@ class SurveyLink extends AbstractLink
     private $survey_data = [];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -33,6 +35,7 @@ class SurveyLink extends AbstractLink
     public function get_description()
     {
         $this->get_survey_data();
+
         return $this->survey_data['subtitle'];
     }
 
@@ -63,6 +66,7 @@ class SurveyLink extends AbstractLink
 
     /**
      * Generates an array of all surveys available.
+     *
      * @return array 2-dimensional array - every element contains 2 subelements (id, name)
      */
     public function get_all_links()
@@ -82,7 +86,7 @@ class SurveyLink extends AbstractLink
                 api_trunc_str(
                     $data['code'].': '.self::html_to_text($data['title']),
                     80
-                )
+                ),
             ];
         }
 
@@ -91,6 +95,7 @@ class SurveyLink extends AbstractLink
 
     /**
      * Generates an array of surveys that a teacher hasn't created a link for.
+     *
      * @return array 2-dimensional array - every element contains 2 subelements (id, name)
      */
     public function get_not_created_links()
@@ -117,15 +122,16 @@ class SurveyLink extends AbstractLink
         while ($data = Database::fetch_array($result)) {
             $links[] = [
                 $data['survey_id'],
-                api_trunc_str($data['code'].': '.self::html_to_text($data['title']), 80)
+                api_trunc_str($data['code'].': '.self::html_to_text($data['title']), 80),
             ];
         }
+
         return $links;
     }
 
     /**
      * Has anyone done this survey yet?
-     * Implementation of the AbstractLink class, mainly used dynamically in gradebook/lib/fe
+     * Implementation of the AbstractLink class, mainly used dynamically in gradebook/lib/fe.
      */
     public function has_results()
     {
@@ -146,13 +152,15 @@ class SurveyLink extends AbstractLink
         $sql_result = Database::query($sql);
         $data = Database::fetch_array($sql_result);
 
-        return ($data[0] != 0);
+        return $data[0] != 0;
     }
 
     /**
-     * Calculate score for a student (to show in the gradebook)
-     * @param int $stud_id
-     * @param string $type Type of result we want (best|average|ranking)
+     * Calculate score for a student (to show in the gradebook).
+     *
+     * @param int    $stud_id
+     * @param string $type    Type of result we want (best|average|ranking)
+     *
      * @return array|null
      */
     public function calc_score($stud_id = null, $type = null)
@@ -190,6 +198,7 @@ class SurveyLink extends AbstractLink
             if ($data = Database::fetch_array($sql_result)) {
                 return [$data['answered'] ? $max_score : 0, $max_score];
             }
+
             return [0, $max_score];
         } else {
             // for all the students -> get average
@@ -227,16 +236,7 @@ class SurveyLink extends AbstractLink
     }
 
     /**
-     * Lazy load function to get the database table of the surveys
-     */
-    private function get_survey_table()
-    {
-        $this->survey_table = Database::get_course_table(TABLE_SURVEY);
-        return $this->survey_table;
-    }
-
-    /**
-     * Check if this still links to a survey
+     * Check if this still links to a survey.
      */
     public function is_valid_link()
     {
@@ -248,7 +248,8 @@ class SurveyLink extends AbstractLink
                     session_id = '.intval($session_id);
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
-        return ($number[0] != 0);
+
+        return $number[0] != 0;
     }
 
     public function get_link()
@@ -269,14 +270,37 @@ class SurveyLink extends AbstractLink
                 $result = Database::query($sql);
                 $row = Database::fetch_array($result, 'ASSOC');
                 $survey_id = $row['survey_id'];
+
                 return api_get_path(WEB_PATH).'main/survey/reporting.php?'.api_get_cidreq_params($this->get_course_code(), $session_id).'&survey_id='.$survey_id;
             }
         }
+
         return null;
     }
 
     /**
-     * Get the survey data from the c_survey table with the current object id
+     * Get the name of the icon for this tool.
+     *
+     * @return string
+     */
+    public function get_icon_name()
+    {
+        return 'survey';
+    }
+
+    /**
+     * Lazy load function to get the database table of the surveys.
+     */
+    private function get_survey_table()
+    {
+        $this->survey_table = Database::get_course_table(TABLE_SURVEY);
+
+        return $this->survey_table;
+    }
+
+    /**
+     * Get the survey data from the c_survey table with the current object id.
+     *
      * @return mixed
      */
     private function get_survey_data()
@@ -295,16 +319,8 @@ class SurveyLink extends AbstractLink
             $query = Database::query($sql);
             $this->survey_data = Database::fetch_array($query);
         }
-        return $this->survey_data;
-    }
 
-    /**
-     * Get the name of the icon for this tool
-     * @return string
-     */
-    public function get_icon_name()
-    {
-        return 'survey';
+        return $this->survey_data;
     }
 
     private static function html_to_text($string)

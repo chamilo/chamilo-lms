@@ -3,12 +3,12 @@
 
 namespace Chamilo\CoreBundle\Form;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Entity;
 use Doctrine\ORM\EntityRepository;
+use Entity;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class JuryMembersType extends AbstractType
 {
@@ -20,13 +20,12 @@ class JuryMembersType extends AbstractType
             [
                 'class' => 'Entity\Role',
                 'property' => 'name',
-                'query_builder' =>
-                    function (EntityRepository $er) {
-                        return $er->createQueryBuilder('u')
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
                             ->where('u.role LIKE :role')
                             ->setParameter(':role', 'ROLE_JURY%')
                             ->orderBy('u.name', 'DESC');
-                    },
+                },
             ]
         );
 

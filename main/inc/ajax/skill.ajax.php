@@ -1,9 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Responses to AJAX calls
+ * Responses to AJAX calls.
  */
-
 require_once __DIR__.'/../global.inc.php';
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
@@ -34,14 +33,14 @@ switch ($action) {
         }
         break;
     case 'find_skills':
-        $skills = $skill->find('all', ['where' => ['name LIKE %?% '=>$_REQUEST['q']]]);
+        $skills = $skill->find('all', ['where' => ['name LIKE %?% ' => $_REQUEST['q']]]);
         $return_skills = [[
-            'items' => []
+            'items' => [],
         ]];
         foreach ($skills as $skill) {
             $return_skills['items'][] = [
                 'id' => $skill['id'],
-                'text' => $skill['name']
+                'text' => $skill['name'],
             ];
         }
         header('Content-Type: application/json');
@@ -77,7 +76,7 @@ switch ($action) {
         $course_info = api_get_course_info($_REQUEST['code']);
         $courses = CourseManager::processHotCourseItem(
             [
-                ['c_id' => $course_info['real_id']]
+                ['c_id' => $course_info['real_id']],
             ]
         );
         Display::display_no_header();
@@ -175,9 +174,9 @@ switch ($action) {
         foreach ($skills as $skill) {
             if (isset($skill['data']) && !empty($skill['data'])) {
                 $return[$skill['data']['id']] = [
-                    'id'    => $skill['data']['id'],
-                    'name'  => $skill['data']['name'],
-                    'passed'=> $skill['data']['passed']
+                    'id' => $skill['data']['id'],
+                    'name' => $skill['data']['name'],
+                    'passed' => $skill['data']['passed'],
                 ];
             }
         }
@@ -188,7 +187,7 @@ switch ($action) {
 
         $result = [
             'success' => $success,
-            'data' => $return
+            'data' => $return,
         ];
         echo json_encode($result);
         break;
@@ -197,10 +196,10 @@ switch ($action) {
         $skills = $skill->getDirectParents($id);
         $return = [];
         foreach ($skills as $skill) {
-            $return [$skill['data']['id']] = [
-                'id'        => $skill['data']['id'],
+            $return[$skill['data']['id']] = [
+                'id' => $skill['data']['id'],
                 'parent_id' => $skill['data']['parent_id'],
-                'name'      => $skill['data']['name']
+                'name' => $skill['data']['name'],
             ];
         }
         echo json_encode($return);
@@ -209,7 +208,7 @@ switch ($action) {
         $skill_rel_user = new SkillRelUser();
         $skills = (!empty($_REQUEST['skill_id']) ? $_REQUEST['skill_id'] : []);
         $total_skills_to_search = $skills;
-        $users  = $skill_rel_user->getUserBySkills($skills);
+        $users = $skill_rel_user->getUserBySkills($skills);
         $user_list = [];
         $count_skills = count($skills);
         $ordered_user_list = null;
@@ -241,7 +240,7 @@ switch ($action) {
                     if (!isset($user_skills[$my_skill['skill_id']])) {
                         $user_skills[$my_skill['skill_id']] = [
                             'skill_id' => $my_skill['skill_id'],
-                            'found' => false
+                            'found' => false,
                         ];
                     }
                     $total_skills_to_search[$my_skill['skill_id']] = $my_skill['skill_id'];
@@ -330,7 +329,7 @@ switch ($action) {
             $isDeleted = $skillProfile->delete($profileId);
 
             echo json_encode([
-                'status' => $isDeleted
+                'status' => $isDeleted,
             ]);
         }
         break;
@@ -346,7 +345,7 @@ switch ($action) {
         $skills = $skill->find(
             'all',
             [
-                'where' => ['name LIKE %?% ' => $_REQUEST['q']]
+                'where' => ['name LIKE %?% ' => $_REQUEST['q']],
             ]
         );
         $returnSkills = [];
@@ -354,12 +353,12 @@ switch ($action) {
         foreach ($skills as $skill) {
             $returnSkills[] = [
                 'id' => $skill['id'],
-                'text' => $skill['name']
+                'text' => $skill['name'],
             ];
         }
 
         echo json_encode([
-            'items' => $returnSkills
+            'items' => $returnSkills,
         ]);
         break;
     case 'update_skill_rel_user':
@@ -402,7 +401,7 @@ switch ($action) {
             if ($skillRelItem) {
                 $criteria = [
                     'user' => $userId,
-                    'skillRelItem' => $skillRelItem
+                    'skillRelItem' => $skillRelItem,
                 ];
                 $skillRelItemRelUser = $em->getRepository('ChamiloSkillBundle:SkillRelItemRelUser')->findOneBy($criteria);
                 if ($skillRelItemRelUser) {

@@ -5,7 +5,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CPermissionGroup
+ * CPermissionGroup.
  *
  * @ORM\Table(
  *  name="c_permission_group",
@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CPermissionGroup
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -27,21 +27,21 @@ class CPermissionGroup
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="group_id", type="integer", nullable=false)
      */
@@ -62,9 +62,10 @@ class CPermissionGroup
     private $action;
 
     /**
-     * Set groupId
+     * Set groupId.
      *
-     * @param integer $groupId
+     * @param int $groupId
+     *
      * @return CPermissionGroup
      */
     public function setGroupId($groupId)
@@ -75,9 +76,9 @@ class CPermissionGroup
     }
 
     /**
-     * Get groupId
+     * Get groupId.
      *
-     * @return integer
+     * @return int
      */
     public function getGroupId()
     {
@@ -85,9 +86,10 @@ class CPermissionGroup
     }
 
     /**
-     * Set tool
+     * Set tool.
      *
      * @param string $tool
+     *
      * @return CPermissionGroup
      */
     public function setTool($tool)
@@ -98,7 +100,7 @@ class CPermissionGroup
     }
 
     /**
-     * Get tool
+     * Get tool.
      *
      * @return string
      */
@@ -108,9 +110,10 @@ class CPermissionGroup
     }
 
     /**
-     * Set action
+     * Set action.
      *
      * @param string $action
+     *
      * @return CPermissionGroup
      */
     public function setAction($action)
@@ -121,7 +124,7 @@ class CPermissionGroup
     }
 
     /**
-     * Get action
+     * Get action.
      *
      * @return string
      */
@@ -131,9 +134,10 @@ class CPermissionGroup
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CPermissionGroup
      */
     public function setId($id)
@@ -144,9 +148,9 @@ class CPermissionGroup
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -154,9 +158,10 @@ class CPermissionGroup
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CPermissionGroup
      */
     public function setCId($cId)
@@ -167,9 +172,9 @@ class CPermissionGroup
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

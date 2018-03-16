@@ -2,7 +2,7 @@
 /**
  * SetupThemeListener.php
  * publisher
- * Date: 01.05.14
+ * Date: 01.05.14.
  */
 
 namespace Chamilo\ThemeBundle\EventListener;
@@ -23,9 +23,9 @@ class SetupThemeListener
 
     public function __construct($manager, $cssBase = null, $lteAdmin = null)
     {
-        $this->cssBase  = $cssBase ?: 'bundles/avanzuadmintheme/';
+        $this->cssBase = $cssBase ?: 'bundles/avanzuadmintheme/';
         $this->lteAdmin = $lteAdmin ?: 'vendor/AdminLTE/css/';
-        $this->manager  = $manager;
+        $this->manager = $manager;
     }
 
     public function onKernelController(FilterControllerEvent $event)

@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CRole
+ * CRole.
  *
  * @ORM\Table(
  *  name="c_role",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CRole
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,7 +28,7 @@ class CRole
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
@@ -49,23 +49,24 @@ class CRole
     private $roleComment;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="default_role", type="boolean", nullable=true)
      */
     private $defaultRole;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="role_id", type="integer")
      */
     private $roleId;
 
     /**
-     * Set roleName
+     * Set roleName.
      *
      * @param string $roleName
+     *
      * @return CRole
      */
     public function setRoleName($roleName)
@@ -76,7 +77,7 @@ class CRole
     }
 
     /**
-     * Get roleName
+     * Get roleName.
      *
      * @return string
      */
@@ -86,9 +87,10 @@ class CRole
     }
 
     /**
-     * Set roleComment
+     * Set roleComment.
      *
      * @param string $roleComment
+     *
      * @return CRole
      */
     public function setRoleComment($roleComment)
@@ -99,7 +101,7 @@ class CRole
     }
 
     /**
-     * Get roleComment
+     * Get roleComment.
      *
      * @return string
      */
@@ -109,9 +111,10 @@ class CRole
     }
 
     /**
-     * Set defaultRole
+     * Set defaultRole.
      *
-     * @param boolean $defaultRole
+     * @param bool $defaultRole
+     *
      * @return CRole
      */
     public function setDefaultRole($defaultRole)
@@ -122,9 +125,9 @@ class CRole
     }
 
     /**
-     * Get defaultRole
+     * Get defaultRole.
      *
-     * @return boolean
+     * @return bool
      */
     public function getDefaultRole()
     {
@@ -132,9 +135,10 @@ class CRole
     }
 
     /**
-     * Set roleId
+     * Set roleId.
      *
-     * @param integer $roleId
+     * @param int $roleId
+     *
      * @return CRole
      */
     public function setRoleId($roleId)
@@ -145,9 +149,9 @@ class CRole
     }
 
     /**
-     * Get roleId
+     * Get roleId.
      *
-     * @return integer
+     * @return int
      */
     public function getRoleId()
     {
@@ -155,9 +159,10 @@ class CRole
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CRole
      */
     public function setCId($cId)
@@ -168,9 +173,9 @@ class CRole
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

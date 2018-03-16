@@ -1,12 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CourseBundle\Entity\CItemProperty;
-use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
-use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
+use Chamilo\CoreBundle\Entity\Repository\ItemPropertyRepository;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CourseBundle\Entity\CItemProperty;
+use Chamilo\UserBundle\Entity\User;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -33,12 +33,12 @@ $oLP = new learnpath(api_get_course_id(), $lpId, api_get_user_id());
 
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths')
+    'name' => get_lang('LearningPaths'),
 ];
 
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=".$oLP->get_id().'&'.api_get_cidreq(),
-    'name' => $oLP->get_name()
+    'name' => $oLP->get_name(),
 ];
 
 $courseId = api_get_course_int_id();
@@ -201,7 +201,7 @@ if ($form->validate()) {
     Display::addFlash(Display::return_message(get_lang('UserLpSubscriptionDescription')));
     $headers = [
         get_lang('SubscribeUsersToLp'),
-        get_lang('SubscribeGroupsToLp')
+        get_lang('SubscribeGroupsToLp'),
     ];
     $tpl = new Template();
     $tabs = Display::tabs($headers, [$formUsers->toHtml(), $form->toHtml()]);

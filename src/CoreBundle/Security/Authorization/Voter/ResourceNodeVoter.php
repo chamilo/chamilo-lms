@@ -6,32 +6,25 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
-use Chamilo\CoreBundle\Entity\Resource\ResourceRights;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\ToolResourceRights;
-use Doctrine\Common\Collections\ArrayCollection;
-use Sonata\AdminBundle\Security\Acl\Permission\AdminPermissionMap;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
+use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
+//use Zend\Permissions\Acl\Resource\GenericResource as Resource;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Role\GenericRole as Role;
-//use Zend\Permissions\Acl\Resource\GenericResource as Resource;
-use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-
-use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 //use Sonata\AdminBundle\Security\Acl\Permission\MaskBuilder;
 
 /**
- * Class ResourceNodeVoter
+ * Class ResourceNodeVoter.
+ *
  * @package Chamilo\CoreBundle\Security\Authorization\Voter
  */
 class ResourceNodeVoter extends Voter
 {
-    private $container;
-
     const VIEW = 'VIEW';
     const CREATE = 'CREATE';
     const EDIT = 'EDIT';
@@ -40,9 +33,11 @@ class ResourceNodeVoter extends Voter
 
     const ROLE_CURRENT_COURSE_TEACHER = 'ROLE_CURRENT_COURSE_TEACHER';
     const ROLE_CURRENT_COURSE_STUDENT = 'ROLE_CURRENT_COURSE_STUDENT';
+    private $container;
 
     /**
-     * Constructor
+     * Constructor.
+     *
      * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
@@ -51,7 +46,33 @@ class ResourceNodeVoter extends Voter
     }
 
     /**
-     * @inheritdoc
+     * @return int
+     */
+    public static function getReaderMask()
+    {
+        $builder = new MaskBuilder();
+        $builder
+            ->add(self::VIEW)
+        ;
+
+        return $builder->get();
+    }
+
+    /**
+     * @return int
+     */
+    public static function getEditorMask()
+    {
+        $builder = new MaskBuilder();
+        $builder
+            ->add(self::EDIT)
+        ;
+
+        return $builder->get();
+    }
+
+    /**
+     * {@inheritdoc}
      */
     protected function supports($attribute, $subject)
     {
@@ -60,7 +81,7 @@ class ResourceNodeVoter extends Voter
             self::CREATE,
             self::EDIT,
             self::DELETE,
-            self::EXPORT
+            self::EXPORT,
         ];
 
         // if the attribute isn't one we support, return false
@@ -77,7 +98,7 @@ class ResourceNodeVoter extends Voter
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function voteOnAttribute($attribute, $resourceNode, TokenInterface $token)
     {
@@ -223,7 +244,7 @@ class ResourceNodeVoter extends Voter
             null,
             [
                 self::getReaderMask(),
-                self::getEditorMask()
+                self::getEditorMask(),
             ]
         );
 
@@ -241,31 +262,5 @@ class ResourceNodeVoter extends Voter
         //dump('not allowed to '.$attribute);
 
         return false;
-    }
-
-    /**
-     * @return int
-     */
-    public static function getReaderMask()
-    {
-        $builder = new MaskBuilder();
-        $builder
-            ->add(self::VIEW)
-        ;
-
-        return $builder->get();
-    }
-
-    /**
-     * @return int
-     */
-    public static function getEditorMask()
-    {
-        $builder = new MaskBuilder();
-        $builder
-            ->add(self::EDIT)
-        ;
-
-        return $builder->get();
     }
 }

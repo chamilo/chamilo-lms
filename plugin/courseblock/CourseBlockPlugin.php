@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class CourseBlockPlugin
+ * Class CourseBlockPlugin.
  */
 class CourseBlockPlugin extends Plugin
 {
@@ -13,21 +13,32 @@ class CourseBlockPlugin extends Plugin
     public $course_settings = [
          [
             'name' => 'course_block_pre_footer',
-            'type' => 'textarea'
+            'type' => 'textarea',
         ],
         [
             'name' => 'course_block_footer_left',
-            'type' => 'textarea'
+            'type' => 'textarea',
         ],
         [
             'name' => 'course_block_footer_center',
-            'type' => 'textarea'
+            'type' => 'textarea',
         ],
         [
             'name' => 'course_block_footer_right',
-            'type' => 'textarea'
-        ]
+            'type' => 'textarea',
+        ],
     ];
+
+    protected function __construct()
+    {
+        parent::__construct(
+            '0.1',
+            'Julio Montoya',
+            [
+                'tool_enable' => 'boolean',
+            ]
+        );
+    }
 
     /**
      * @return CourseBlockPlugin
@@ -35,21 +46,8 @@ class CourseBlockPlugin extends Plugin
     public static function create()
     {
         static $result = null;
-        return $result ? $result : $result = new self();
-    }
 
-    /**
-     *
-     */
-    protected function __construct()
-    {
-        parent::__construct(
-            '0.1',
-            'Julio Montoya',
-            [
-                'tool_enable' => 'boolean'
-            ]
-        );
+        return $result ? $result : $result = new self();
     }
 
     ///public function
@@ -68,6 +66,7 @@ class CourseBlockPlugin extends Plugin
 
     /**
      * @param string $region
+     *
      * @return string
      */
     public function renderRegion($region)
@@ -91,6 +90,7 @@ class CourseBlockPlugin extends Plugin
                 $content = $content === -1 ? '' : $content;
                 break;
         }
+
         return $content;
     }
 }

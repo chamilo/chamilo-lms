@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Show the map coordinates of all users geo extra field
+ * Show the map coordinates of all users geo extra field.
+ *
  * @author José Loguercio Silva <jose.loguercio@beeznest.com>
+ *
  * @package chamilo.plugin.google_maps
  */
-
-
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';

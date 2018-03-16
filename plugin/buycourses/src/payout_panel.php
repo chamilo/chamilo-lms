@@ -1,12 +1,12 @@
 <?php
 /**
- * User Panel
+ * User Panel.
+ *
  * @package chamilo.plugin.buycourses
  */
 /**
- * Initialization
+ * Initialization.
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
@@ -33,7 +33,7 @@ foreach ($payouts as $payout) {
         'price' => $payout['item_price'],
         'commission' => $payout['commission'],
         'paypal_account' => $payout['paypal_account'],
-        'status' => $payout['status']
+        'status' => $payout['status'],
     ];
 }
 

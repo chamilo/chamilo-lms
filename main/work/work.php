@@ -3,8 +3,7 @@
 
 /**
  * @package chamilo.work
- **/
-
+ */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
@@ -72,7 +71,7 @@ if (!empty($groupId)) {
     ];
     $url_dir = api_get_path(WEB_CODE_PATH).'work/work.php?&id='.$work_id.'&'.api_get_cidreq();
     if (!empty($my_folder_data)) {
-        $interbreadcrumb[] = ['url' => $url_dir, 'name' =>  $my_folder_data['title']];
+        $interbreadcrumb[] = ['url' => $url_dir, 'name' => $my_folder_data['title']];
     }
 
     if ($action == 'upload_form') {
@@ -163,7 +162,7 @@ switch ($action) {
         $content = settingsForm(
             [
                 'show_score' => $courseInfo['show_score'],
-                'student_delete_own_publication' =>  $studentDeleteOwnPublication
+                'student_delete_own_publication' => $studentDeleteOwnPublication,
             ]
         );
         break;

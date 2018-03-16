@@ -69,9 +69,9 @@ while ($row = Database::fetch_array($res2)) {
             echo '<pre>';
             var_dump($sql4);
             echo 'Original:<br />';
-            echo($answerOriginal);
+            echo $answerOriginal;
             echo 'Fixed:<br />';
-            echo($answerFixedNotEscape);
+            echo $answerFixedNotEscape;
             echo '</pre>';
             echo '----------<br />';
         }

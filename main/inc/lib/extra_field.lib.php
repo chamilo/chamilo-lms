@@ -6,44 +6,10 @@ use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\Tag;
 
 /**
- * Class ExtraField
+ * Class ExtraField.
  */
 class ExtraField extends Model
 {
-    public $columns = [
-        'id',
-        'field_type',
-        'variable',
-        'display_text',
-        'default_value',
-        'field_order',
-        'visible_to_self',
-        'visible_to_others',
-        'changeable',
-        'filter',
-        'extra_field_type',
-        //Enable this when field_loggeable is introduced as a table field (2.0)
-        //'field_loggeable',
-        'created_at'
-    ];
-
-    public $ops = [
-        'eq' => '=', //equal
-        'ne' => '<>', //not equal
-        'lt' => '<', //less than
-        'le' => '<=', //less than or equal
-        'gt' => '>', //greater than
-        'ge' => '>=', //greater than or equal
-        'bw' => 'LIKE', //begins with
-        'bn' => 'NOT LIKE', //doesn't begin with
-        'in' => 'LIKE', //is in
-        'ni' => 'NOT LIKE', //is not in
-        'ew' => 'LIKE', //ends with
-        'en' => 'NOT LIKE', //doesn't end with
-        'cn' => 'LIKE', //contains
-        'nc' => 'NOT LIKE'  //doesn't contain
-    ];
-
     const FIELD_TYPE_TEXT = 1;
     const FIELD_TYPE_TEXTAREA = 2;
     const FIELD_TYPE_RADIO = 3;
@@ -71,6 +37,39 @@ class ExtraField extends Model
     const FIELD_TYPE_GEOLOCALIZATION_COORDINATES = 25;
     const FIELD_TYPE_SELECT_WITH_TEXT_FIELD = 26;
     const FIELD_TYPE_TRIPLE_SELECT = 27;
+    public $columns = [
+        'id',
+        'field_type',
+        'variable',
+        'display_text',
+        'default_value',
+        'field_order',
+        'visible_to_self',
+        'visible_to_others',
+        'changeable',
+        'filter',
+        'extra_field_type',
+        //Enable this when field_loggeable is introduced as a table field (2.0)
+        //'field_loggeable',
+        'created_at',
+    ];
+
+    public $ops = [
+        'eq' => '=', //equal
+        'ne' => '<>', //not equal
+        'lt' => '<', //less than
+        'le' => '<=', //less than or equal
+        'gt' => '>', //greater than
+        'ge' => '>=', //greater than or equal
+        'bw' => 'LIKE', //begins with
+        'bn' => 'NOT LIKE', //doesn't begin with
+        'in' => 'LIKE', //is in
+        'ni' => 'NOT LIKE', //is not in
+        'ew' => 'LIKE', //ends with
+        'en' => 'NOT LIKE', //doesn't end with
+        'cn' => 'LIKE', //contains
+        'nc' => 'NOT LIKE',  //doesn't contain
+    ];
 
     public $type = 'user';
     public $pageName;
@@ -173,7 +172,7 @@ class ExtraField extends Model
             'work',
             'career',
             'user_certificate',
-            'survey'
+            'survey',
         ];
     }
 
@@ -194,8 +193,8 @@ class ExtraField extends Model
     /**
      * @param string $sidx
      * @param string $sord
-     * @param int $start
-     * @param int $limit
+     * @param int    $start
+     * @param int    $limit
      *
      * @return array
      */
@@ -238,7 +237,7 @@ class ExtraField extends Model
 
     /**
      * @param array $conditions
-     * @param null $order_field_options_by
+     * @param null  $order_field_options_by
      *
      * @return array
      */
@@ -314,7 +313,8 @@ class ExtraField extends Model
     }
 
     /**
-     * Get all the field info for tags
+     * Get all the field info for tags.
+     *
      * @param string $variable
      *
      * @return array|bool
@@ -456,16 +456,16 @@ class ExtraField extends Model
     }
 
     /**
-     * Add elements to a form
+     * Add elements to a form.
      *
      * @param FormValidator $form
-     * @param int $itemId
-     * @param array $exclude variables of extra field to exclude
-     * @param bool $filter
-     * @param bool $useTagAsSelect
-     * @param array $showOnlyTheseFields
-     * @param array $orderFields
-     * @param bool $adminPermissions
+     * @param int           $itemId
+     * @param array         $exclude             variables of extra field to exclude
+     * @param bool          $filter
+     * @param bool          $useTagAsSelect
+     * @param array         $showOnlyTheseFields
+     * @param array         $orderFields
+     * @param bool          $adminPermissions
      *
      * @return array|bool
      */
@@ -649,8 +649,6 @@ class ExtraField extends Model
 
     /**
      * @param int $id
-     *
-     * @return null
      */
     public function get_field_type_by_id($id)
     {
@@ -671,7 +669,8 @@ class ExtraField extends Model
      *      array('Paris', 'Bretagne', 'Marseille'),
      *   'Belgique' =>
      *      array('Namur', 'Liège')
-     * ), etc
+     * ), etc.
+     *
      * @param string $string
      *
      * @return array
@@ -699,6 +698,7 @@ class ExtraField extends Model
 
     /**
      * @param $string
+     *
      * @return array
      */
     public static function tripleSelectConvertStringToArray($string)
@@ -714,7 +714,6 @@ class ExtraField extends Model
 
                     continue;
                 }
-
 
                 foreach (explode(':', $item1) as $k => $item2) {
                     if (0 === $k) {
@@ -758,18 +757,7 @@ class ExtraField extends Model
 
     /**
      * @param array $options
-     * @param int $parentId
-     * @return array
-     */
-    private static function getOptionsFromTripleSelect(array $options, $parentId)
-    {
-        return array_filter($options, function ($option) use ($parentId) {
-            return $option['option_value'] == $parentId;
-        });
-    }
-
-    /**
-     * @param array $options
+     *
      * @return array
      */
     public static function tripleSelectConvertArrayToOrderedArray(array $options)
@@ -824,6 +812,7 @@ class ExtraField extends Model
 
     /**
      * @param array $options The result of the get_field_options_by_field() array
+     *
      * @return string
      */
     public static function extrafieldSelectWithTextConvertArrayToString(array $options)
@@ -847,6 +836,7 @@ class ExtraField extends Model
 
     /**
      * @param array $options
+     *
      * @return string
      */
     public static function tripleSelectConvertArrayToString(array $options)
@@ -896,7 +886,7 @@ class ExtraField extends Model
 
     /**
      * @param array $params
-     * @param bool $show_query
+     * @param bool  $show_query
      *
      * @return int
      */
@@ -921,7 +911,7 @@ class ExtraField extends Model
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function update($params, $showQuery = false)
     {
@@ -963,512 +953,17 @@ class ExtraField extends Model
     }
 
     /**
-     * @param \FormValidator $form
-     * @param array $fieldDetails
-     * @param int $defaultValueId
-     * @param bool $freezeElement
-     */
-    private function addSelectElement(FormValidator $form, array $fieldDetails, $defaultValueId, $freezeElement = false)
-    {
-        $get_lang_variables = false;
-        if (in_array(
-            $fieldDetails['variable'],
-            ['mail_notify_message', 'mail_notify_invitation', 'mail_notify_group_message']
-        )) {
-            $get_lang_variables = true;
-        }
-
-        // Get extra field workflow
-        $userInfo = api_get_user_info();
-        $addOptions = [];
-        $optionsExists = false;
-        global $app;
-        // Check if exist $app['orm.em'] object
-        if (isset($app['orm.em']) && is_object($app['orm.em'])) {
-            $optionsExists = $app['orm.em']
-                ->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')
-                ->findOneBy(['fieldId' => $fieldDetails['id']]);
-        }
-
-        if ($optionsExists) {
-            if (isset($userInfo['status'])
-                && !empty($userInfo['status'])
-            ) {
-                $fieldWorkFlow = $app['orm.em']
-                    ->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')
-                    ->findBy(
-                        [
-                            'fieldId' => $fieldDetails['id'],
-                            'relatedFieldOptionId' => $defaultValueId,
-                            'roleId' => $userInfo['status']
-                        ]
-                    );
-                foreach ($fieldWorkFlow as $item) {
-                    $addOptions[] = $item->getFieldOptionId();
-                }
-            }
-        }
-
-        $options = [];
-        if (empty($defaultValueId)) {
-            $options[''] = get_lang('SelectAnOption');
-        }
-
-        $optionList = [];
-        if (!empty($fieldDetails['options'])) {
-            foreach ($fieldDetails['options'] as $option_details) {
-                $optionList[$option_details['id']] = $option_details;
-                if ($get_lang_variables) {
-                    $options[$option_details['option_value']] = $option_details['display_text'];
-                } else {
-                    if ($optionsExists) {
-                        // Adding always the default value
-                        if ($option_details['id'] == $defaultValueId) {
-                            $options[$option_details['option_value']] = $option_details['display_text'];
-                        } else {
-                            if (isset($addOptions) && !empty($addOptions)) {
-                                // Parsing filters
-                                if (in_array($option_details['id'], $addOptions)) {
-                                    $options[$option_details['option_value']] = $option_details['display_text'];
-                                }
-                            }
-                        }
-                    } else {
-                        // Normal behaviour
-                        $options[$option_details['option_value']] = $option_details['display_text'];
-                    }
-                }
-            }
-
-            if (isset($optionList[$defaultValueId])) {
-                if (isset($optionList[$defaultValueId]['option_value'])
-                    && $optionList[$defaultValueId]['option_value'] == 'aprobada'
-                ) {
-                    // @todo function don't exists api_is_question_manager
-                    /*if (api_is_question_manager() == false) {
-                        $form->freeze();
-                    }*/
-                }
-            }
-
-            // Setting priority message
-            if (isset($optionList[$defaultValueId])
-                && isset($optionList[$defaultValueId]['priority'])
-            ) {
-                if (!empty($optionList[$defaultValueId]['priority'])) {
-                    $priorityId = $optionList[$defaultValueId]['priority'];
-                    $option = new ExtraFieldOption($this->type);
-                    $messageType = $option->getPriorityMessageType($priorityId);
-                    $form->addElement(
-                        'label',
-                        null,
-                        Display::return_message(
-                            $optionList[$defaultValueId]['priority_message'],
-                            $messageType
-                        )
-                    );
-                }
-            }
-        }
-
-        /** @var \HTML_QuickForm_select $slct */
-        $slct = $form->addElement(
-            'select',
-            'extra_'.$fieldDetails['variable'],
-            $fieldDetails['display_text'],
-            [],
-            ['id' => 'extra_'.$fieldDetails['variable']]
-        );
-
-        foreach ($options as $value => $text) {
-            if (empty($value)) {
-                $slct->addOption($text, $value);
-                continue;
-            }
-
-            $valueParts = explode('#', $text);
-            $dataValue = count($valueParts) > 1 ? array_shift($valueParts) : '';
-
-            $slct->addOption(implode('', $valueParts), $value, ['data-value' => $dataValue]);
-        }
-
-        /* Enable this when field_loggeable is introduced as a table field (2.0)
-        if ($optionsExists && $field_details['field_loggeable'] && !empty($defaultValueId)) {
-
-            $form->addElement(
-                'textarea',
-                'extra_' . $field_details['variable'] . '_comment',
-                $field_details['display_text'] . ' ' . get_lang('Comment')
-            );
-
-            $extraFieldValue = new ExtraFieldValue($this->type);
-            $repo = $app['orm.em']->getRepository($extraFieldValue->entityName);
-            $repoLog = $app['orm.em']->getRepository('Gedmo\Loggable\Entity\LogEntry');
-            $newEntity = $repo->findOneBy(
-                array(
-                    $this->handlerEntityId => $itemId,
-                    'fieldId' => $field_details['id']
-                )
-            );
-            // @todo move this in a function inside the class
-            if ($newEntity) {
-                $logs = $repoLog->getLogEntries($newEntity);
-                if (!empty($logs)) {
-                    $html = '<b>' . get_lang('LatestChanges') . '</b><br /><br />';
-
-                    $table = new HTML_Table(array('class' => 'data_table'));
-                    $table->setHeaderContents(0, 0, get_lang('Value'));
-                    $table->setHeaderContents(0, 1, get_lang('Comment'));
-                    $table->setHeaderContents(0, 2, get_lang('ModifyDate'));
-                    $table->setHeaderContents(0, 3, get_lang('Username'));
-                    $row = 1;
-                    foreach ($logs as $log) {
-                        $column = 0;
-                        $data = $log->getData();
-                        $fieldValue = isset($data['fieldValue']) ? $data['fieldValue'] : null;
-                        $comment = isset($data['comment']) ? $data['comment'] : null;
-
-                        $table->setCellContents($row, $column, $fieldValue);
-                        $column++;
-                        $table->setCellContents($row, $column, $comment);
-                        $column++;
-                        $table->setCellContents($row, $column, api_get_local_time($log->getLoggedAt()->format('Y-m-d H:i:s')));
-                        $column++;
-                        $table->setCellContents($row, $column, $log->getUsername());
-                        $row++;
-                    }
-                    $form->addElement('label', null, $html.$table->toHtml());
-                }
-            }
-        }
-        */
-
-        if ($freezeElement) {
-            $form->freeze('extra_'.$fieldDetails['variable']);
-        }
-    }
-
-    /**
-     * @param \FormValidator $form
-     * @param array $fieldDetails
-     * @param array $extraData
-     * @param bool $freezeElement
-     * @return string JavaScript code
-     */
-    private function addDoubleSelectElement(FormValidator $form, $fieldDetails, $extraData, $freezeElement = false)
-    {
-        $firstSelectId = 'first_extra_'.$fieldDetails['variable'];
-        $secondSelectId = 'second_extra_'.$fieldDetails['variable'];
-
-        $jqueryReadyContent = "
-            $('#$firstSelectId').on('change', function() {
-                var id = $(this).val();
-
-                if (!id) {
-                    $('#$secondSelectId').empty().selectpicker('refresh');
-                    
-                    return;
-                }
-
-                $.getJSON(_p.web_ajax + 'extra_field.ajax.php?1=1&a=get_second_select_options', {
-                    'type': '{$this->type}',
-                    'field_id': {$fieldDetails['id']},
-                    'option_value_id': id
-                })
-                    .done(function(data) {
-                        $('#$secondSelectId').empty();
-                        $.each(data, function(index, value) {
-                            $('#second_extra_{$fieldDetails['variable']}').append(
-                                $('<option>', {value: index, text: value})
-                            );
-                        });
-                        $('#$secondSelectId').selectpicker('refresh');
-                    });
-            });
-        ";
-
-        $firstId = null;
-        if (!empty($extraData)) {
-            if (isset($extraData['extra_'.$fieldDetails['variable']])) {
-                $firstId = $extraData['extra_'.$fieldDetails['variable']]['extra_'.$fieldDetails['variable']];
-            }
-        }
-
-        $options = self::extra_field_double_select_convert_array_to_ordered_array($fieldDetails['options']);
-        $values = ['' => get_lang('Select')];
-
-        $second_values = [];
-        if (!empty($options)) {
-            foreach ($options as $option) {
-                foreach ($option as $sub_option) {
-                    if ($sub_option['option_value'] == '0') {
-                        $values[$sub_option['id']] = $sub_option['display_text'];
-
-                        continue;
-                    }
-
-                    if ($firstId === $sub_option['option_value']) {
-                        $second_values[$sub_option['id']] = $sub_option['display_text'];
-                    }
-                }
-            }
-        }
-        $form
-            ->defaultRenderer()
-            ->setGroupElementTemplate('<p>{element}</p>', 'extra_'.$fieldDetails['variable']);
-        $group = [];
-        $group[] = $form->createElement(
-            'select',
-            'extra_'.$fieldDetails['variable'],
-            null,
-            $values,
-            ['id' => $firstSelectId]
-        );
-        $group[] = $form->createElement(
-            'select',
-            'extra_'.$fieldDetails['variable'].'_second',
-            null,
-            $second_values,
-            ['id' => $secondSelectId]
-        );
-        $form->addGroup(
-            $group,
-            'extra_'.$fieldDetails['variable'],
-            $fieldDetails['display_text']
-        );
-
-        if ($freezeElement) {
-            $form->freeze('extra_'.$fieldDetails['variable']);
-        }
-
-        return $jqueryReadyContent;
-    }
-
-    /**
-     * @param \FormValidator $form
-     * @param array $fieldDetails
-     * @param bool $freezeElement Optional
-     * @return string JavaScript code
-     */
-    private function addSelectWithTextFieldElement(
-        FormValidator $form,
-        array $fieldDetails,
-        $freezeElement = false
-    ) {
-        $firstSelectId = 'slct_extra_'.$fieldDetails['variable'];
-        $txtSelectId = 'txt_extra_'.$fieldDetails['variable'];
-
-        $jqueryReadyContent = "
-            $('#$firstSelectId').on('change', function() {
-                var id = $(this).val();
-
-                if (!id) {
-                    $('#$txtSelectId').val('');
-                }
-            });
-        ";
-
-        $options = self::extra_field_double_select_convert_array_to_ordered_array($fieldDetails['options']);
-        $values = ['' => get_lang('Select')];
-
-        if (!empty($options)) {
-            foreach ($options as $option) {
-                foreach ($option as $sub_option) {
-                    if ($sub_option['option_value'] != '0') {
-                        continue;
-                    }
-
-                    $values[$sub_option['id']] = $sub_option['display_text'];
-                }
-            }
-        }
-
-        $form
-            ->defaultRenderer()
-            ->setGroupElementTemplate('<p>{element}</p>', 'extra_'.$fieldDetails['variable']);
-        $group = [];
-        $group[] = $form->createElement(
-            'select',
-            'extra_'.$fieldDetails['variable'],
-            null,
-            $values,
-            ['id' => $firstSelectId]
-        );
-        $group[] = $form->createElement(
-            'text',
-            'extra_'.$fieldDetails['variable'].'_second',
-            null,
-            ['id' => $txtSelectId]
-        );
-        $form->addGroup(
-            $group,
-            'extra_'.$fieldDetails['variable'],
-            $fieldDetails['display_text']
-        );
-
-        if ($freezeElement) {
-            $form->freeze('extra_'.$fieldDetails['variable']);
-        }
-
-        return $jqueryReadyContent;
-    }
-
-    /**
-     * @param \FormValidator $form
-     * @param array $fieldDetails
-     * @param array $extraData
-     * @param boolean $freezeElement
-     * @return string
-     */
-    private function addTripleSelectElement(
-        FormValidator $form,
-        array $fieldDetails,
-        array $extraData,
-        $freezeElement
-    ) {
-        $variable = $fieldDetails['variable'];
-        $id = $fieldDetails['id'];
-        $slctFirstId = "first_extra$variable";
-        $slctSecondId = "second_extra$variable";
-        $slctThirdId = "third_extra$variable";
-        $langSelect = get_lang('Select');
-
-        $js = "
-            (function () {
-                var slctFirst = $('#$slctFirstId'),
-                    slctSecond = $('#$slctSecondId'),
-                    slctThird = $('#$slctThirdId');
-                    
-                slctFirst.on('change', function () {
-                    slctSecond.empty().selectpicker('refresh');
-                    slctThird.empty().selectpicker('refresh');
-    
-                    var level = $(this).val();
-    
-                    if (!level) {
-                        return;
-                    }
-    
-                    $.getJSON(_p.web_ajax + 'extra_field.ajax.php', {
-                        'a': 'get_second_select_options',
-                        'type': '$this->type',
-                        'field_id': $id,
-                        'option_value_id': level
-                    })
-                        .done(function (data) {
-                            slctSecond.append(
-                                $('<option>', {value: '', text: '$langSelect'})
-                            );
-
-                            $.each(data, function (index, value) {
-                                var valueParts = value.split('#'),
-                                    dataValue = valueParts.length > 1 ? valueParts.shift() : '';
-
-                                slctSecond.append(
-                                    $('<option>', {value: index, text: valueParts.join(''), 'data-value': dataValue})
-                                );
-                            });
-    
-                            slctSecond.selectpicker('refresh');
-                        });
-                });
-                slctSecond.on('change', function () {
-                    slctThird.empty().selectpicker('refresh');
-    
-                    var level = $(this).val();
-                    
-                    if (!level) {
-                        return;
-                    }
-                    
-                    $.getJSON(_p.web_ajax + 'extra_field.ajax.php', {
-                        'a': 'get_second_select_options',
-                        'type': '$this->type',
-                        'field_id': $id,
-                        'option_value_id': level
-                    })
-                        .done(function (data) {
-                            slctThird.append(
-                                $('<option>', {value: '', text: '$langSelect'})
-                            );
-
-                            $.each(data, function (index, value) {
-                                var valueParts = value.split('#'),
-                                    dataValue = valueParts.length > 1 ? valueParts.shift() : '';
-
-                                slctThird.append(
-                                    $('<option>', {value: index, text: valueParts.join(''), 'data-value': dataValue})
-                                );
-                            });
-    
-                            slctThird.selectpicker('refresh');
-                        });
-                });
-            })();
-        ";
-
-        $firstId = isset($extraData["extra_$variable"]["extra_$variable"])
-            ? $extraData["extra_$variable"]["extra_$variable"]
-            : '';
-        $secondId = isset($extraData["extra_$variable"]["extra_{$variable}_second"])
-            ? $extraData["extra_$variable"]["extra_{$variable}_second"]
-            : '';
-
-        $options = self::tripleSelectConvertArrayToOrderedArray($fieldDetails['options']);
-        $values1 = ['' => $langSelect];
-        $values2 = ['' => $langSelect];
-        $values3 = ['' => $langSelect];
-        $level1 = self::getOptionsFromTripleSelect($options['level1'], 0);
-        $level2 = self::getOptionsFromTripleSelect($options['level2'], $firstId);
-        $level3 = self::getOptionsFromTripleSelect($options['level3'], $secondId);
-        /** @var \HTML_QuickForm_select $slctFirst */
-        $slctFirst = $form->createElement('select', "extra_$variable", null, $values1, ['id' => $slctFirstId]);
-        /** @var \HTML_QuickForm_select $slctFirst */
-        $slctSecond = $form->createElement('select', "extra_{$variable}_second", null, $values2, ['id' => $slctSecondId]);
-        /** @var \HTML_QuickForm_select $slctFirst */
-        $slctThird = $form->createElement('select', "extra_{$variable}_third", null, $values3, ['id' => $slctThirdId]);
-
-        foreach ($level1 as $item1) {
-            $valueParts = explode('#', $item1['display_text']);
-            $dataValue = count($valueParts) > 1 ? array_shift($valueParts) : '';
-            $slctFirst->addOption(implode('', $valueParts), $item1['id'], ['data-value' => $dataValue]);
-        }
-
-        foreach ($level2 as $item2) {
-            $valueParts = explode('#', $item2['display_text']);
-            $dataValue = count($valueParts) > 1 ? array_shift($valueParts) : '';
-            $slctSecond->addOption(implode('', $valueParts), $item2['id'], ['data-value' => $dataValue]);
-        }
-
-        foreach ($level3 as $item3) {
-            $valueParts = explode('#', $item3['display_text']);
-            $dataValue = count($valueParts) > 1 ? array_shift($valueParts) : '';
-            $slctThird->addOption(implode('', $valueParts), $item3['id'], ['data-value' => $dataValue]);
-        }
-
-        $form
-            ->defaultRenderer()
-            ->setGroupElementTemplate('<p>{element}</p>', "extra_$variable");
-        $form->addGroup([$slctFirst, $slctSecond, $slctThird], "extra_$variable", $fieldDetails['display_text']);
-
-        if ($freezeElement) {
-            $form->freeze('extra_'.$fieldDetails['variable']);
-        }
-
-        return $js;
-    }
-
-    /**
-     * Add an element that matches the given extra field to the given $form object
+     * Add an element that matches the given extra field to the given $form object.
+     *
      * @param FormValidator $form
-     * @param array $extraData
-     * @param bool $adminPermissions
-     * @param array $extra
-     * @param int $itemId
-     * @param array $exclude variables of extra field to exclude
-     * @param bool $useTagAsSelect
-     * @param array $showOnlyTheseFields
-     * @param array $orderFields
+     * @param array         $extraData
+     * @param bool          $adminPermissions
+     * @param array         $extra
+     * @param int           $itemId
+     * @param array         $exclude             variables of extra field to exclude
+     * @param bool          $useTagAsSelect
+     * @param array         $showOnlyTheseFields
+     * @param array         $orderFields
      *
      * @return array If relevant, returns a one-element array with JS code to be added to the page HTML headers
      */
@@ -1545,7 +1040,7 @@ class ExtraField extends Model
                             'extra_'.$field_details['variable'],
                             $field_details['display_text'],
                             [
-                                'id' => 'extra_'.$field_details['variable']
+                                'id' => 'extra_'.$field_details['variable'],
                             ]
                         );
                         $form->applyFilter(
@@ -1570,7 +1065,7 @@ class ExtraField extends Model
                                 'ToolbarSet' => 'Profile',
                                 'Width' => '100%',
                                 'Height' => '130',
-                                'id' => 'extra_'.$field_details['variable']
+                                'id' => 'extra_'.$field_details['variable'],
                             ]
                         );
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
@@ -1665,7 +1160,7 @@ class ExtraField extends Model
                             $options,
                             [
                                 'multiple' => 'multiple',
-                                'id' => 'extra_'.$field_details['variable']
+                                'id' => 'extra_'.$field_details['variable'],
                             ]
                         );
                         if ($freezeElement) {
@@ -1778,7 +1273,7 @@ class ExtraField extends Model
                                 $fieldTags = $em
                                     ->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
                                     ->findBy([
-                                        'fieldId' => $field_id
+                                        'fieldId' => $field_id,
                                     ]);
                                 $tagsAdded = [];
                                 foreach ($fieldTags as $fieldTag) {
@@ -1808,7 +1303,7 @@ class ExtraField extends Model
 
                         $form->setDefaults(
                             [
-                                'extra_'.$field_details['variable'] => $selectedOptions
+                                'extra_'.$field_details['variable'] => $selectedOptions,
                             ]
                         );
 
@@ -1876,9 +1371,9 @@ class ExtraField extends Model
                                         "background-image: url('$icon_path')",
                                         'background-repeat: no-repeat',
                                         "background-position: 0.4em {$top}em",
-                                        "padding-left: {$leftpad}em"
+                                        "padding-left: {$leftpad}em",
                                     ]
-                                )
+                                ),
                             ]
                         );
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
@@ -1925,7 +1420,7 @@ class ExtraField extends Model
                     case self::FIELD_TYPE_FILE_IMAGE:
                         $fieldVariable = "extra_{$field_details['variable']}";
                         $fieldTexts = [
-                            $field_details['display_text']
+                            $field_details['display_text'],
                         ];
 
                         if (is_array($extraData) && array_key_exists($fieldVariable, $extraData)) {
@@ -1982,7 +1477,7 @@ class ExtraField extends Model
                     case self::FIELD_TYPE_FILE:
                         $fieldVariable = "extra_{$field_details['variable']}";
                         $fieldTexts = [
-                            $field_details['display_text']
+                            $field_details['display_text'],
                         ];
 
                         if (is_array($extraData) &&
@@ -1994,7 +1489,7 @@ class ExtraField extends Model
                                     api_get_path(WEB_UPLOAD_PATH).$extraData[$fieldVariable],
                                     [
                                         'title' => $field_details['display_text'],
-                                        'target' => '_blank'
+                                        'target' => '_blank',
                                     ]
                                 );
                             }
@@ -2451,7 +1946,7 @@ class ExtraField extends Model
     }
 
     /**
-     * Displays the title + grid
+     * Displays the title + grid.
      */
     public function display()
     {
@@ -2491,7 +1986,7 @@ class ExtraField extends Model
             get_lang('VisibleToOthers'),
             get_lang('Filter'),
             get_lang('FieldOrder'),
-            get_lang('Actions')
+            get_lang('Actions'),
         ];
     }
 
@@ -2570,6 +2065,7 @@ class ExtraField extends Model
     /**
      * @param string $url
      * @param string $action
+     *
      * @return FormValidator
      */
     public function return_form($url, $action)
@@ -2631,7 +2127,7 @@ class ExtraField extends Model
             self::FIELD_TYPE_TAG,
             self::FIELD_TYPE_DOUBLE_SELECT,
             self::FIELD_TYPE_SELECT_WITH_TEXT_FIELD,
-            self::FIELD_TYPE_TRIPLE_SELECT
+            self::FIELD_TYPE_TRIPLE_SELECT,
         ];
 
         if ($action == 'edit') {
@@ -2718,6 +2214,7 @@ class ExtraField extends Model
 
     /**
      * @param $token
+     *
      * @return string
      */
     public function getJqgridActionLinks($token)
@@ -2752,13 +2249,14 @@ JAVASCRIPT;
      * @param array $columns
      * @param array $column_model
      * @param array $extraFields
+     *
      * @return array
      */
     public function getRules(&$columns, &$column_model, $extraFields = [], $checkExtraFieldExistence = false)
     {
         $fields = $this->get_all(
             [
-                'visible_to_self = ? AND filter = ?' => [1, 1]
+                'visible_to_self = ? AND filter = ?' => [1, 1],
             ],
             'display_text'
         );
@@ -2852,7 +2350,7 @@ JAVASCRIPT;
                 $columns[] = $field['display_text'];
                 $rules[] = [
                     'field' => 'extra_'.$field['variable'],
-                    'op' => 'cn'
+                    'op' => 'cn',
                 ];
             }
         }
@@ -2862,6 +2360,7 @@ JAVASCRIPT;
 
     /**
      * @param array $options
+     *
      * @return array
      */
     public function parseConditions($options)
@@ -2885,7 +2384,7 @@ JAVASCRIPT;
                             [
                                 self::FIELD_TYPE_SELECT,
                                 self::FIELD_TYPE_SELECT,
-                                self::FIELD_TYPE_DOUBLE_SELECT
+                                self::FIELD_TYPE_DOUBLE_SELECT,
                             ]
                         )
                     ) {
@@ -2940,7 +2439,7 @@ JAVASCRIPT;
                             [
                                 self::FIELD_TYPE_SELECT,
                                 self::FIELD_TYPE_SELECT,
-                                self::FIELD_TYPE_DOUBLE_SELECT
+                                self::FIELD_TYPE_DOUBLE_SELECT,
                             ]
                         )
                     ) {
@@ -3016,10 +2515,12 @@ JAVASCRIPT;
     }
 
     //@todo move this in the display_class or somewhere else
+
     /**
      * @param $col
      * @param $oper
      * @param $val
+     *
      * @return string
      */
     public function get_where_clause($col, $oper, $val)
@@ -3055,6 +2556,7 @@ JAVASCRIPT;
     /**
      * @param $filters
      * @param string $stringToSearch
+     *
      * @return array
      */
     public function getExtraFieldRules($filters, $stringToSearch = 'extra_')
@@ -3121,7 +2623,7 @@ JAVASCRIPT;
                             $extra_fields[] = [
                                 'field' => $rule->field,
                                 'id' => $field_option['id'],
-                                'data' => $rule->data
+                                'data' => $rule->data,
                             ];
                         }
                     }
@@ -3131,7 +2633,7 @@ JAVASCRIPT;
                     $field_option = $this->get_handler_field_info_by_field_variable($original_field);
                     $extra_fields[] = [
                         'field' => $rule->field,
-                        'id' => $field_option['id']
+                        'id' => $field_option['id'],
                     ];
                 }
             }
@@ -3139,13 +2641,15 @@ JAVASCRIPT;
 
         return [
             'extra_fields' => $extra_fields,
-            'condition_array' => $condition_array
+            'condition_array' => $condition_array,
         ];
     }
 
     /**
-     * Get the extra fields and their formatted values
+     * Get the extra fields and their formatted values.
+     *
      * @param int|string $itemId The item ID (It could be a session_id, course_id or user_id)
+     *
      * @return array The extra fields data
      */
     public function getDataAndFormattedValues($itemId)
@@ -3250,7 +2754,7 @@ JAVASCRIPT;
                         api_get_path(WEB_UPLOAD_PATH).$valueData['value'],
                         [
                             'title' => $field['display_text'],
-                            'target' => '_blank'
+                            'target' => '_blank',
                         ]
                     );
                     break;
@@ -3261,7 +2765,7 @@ JAVASCRIPT;
 
             $valuesData[] = [
                 'text' => $field['display_text'],
-                'value' => $displayedValue
+                'value' => $displayedValue,
             ];
         }
 
@@ -3269,9 +2773,11 @@ JAVASCRIPT;
     }
 
     /**
-     * Gets an element
-     * @param int $id
+     * Gets an element.
+     *
+     * @param int  $id
      * @param bool $translateDisplayText Optional
+     *
      * @return array
      */
     public function get($id, $translateDisplayText = true)
@@ -3286,9 +2792,11 @@ JAVASCRIPT;
     }
 
     /**
-     * Translate the display text for a extra field
+     * Translate the display text for a extra field.
+     *
      * @param string $variable
      * @param string $defaultDisplayText
+     *
      * @return string
      */
     public static function translateDisplayName($variable, $defaultDisplayText)
@@ -3299,7 +2807,7 @@ JAVASCRIPT;
     }
 
     /**
-     * @param int $fieldId
+     * @param int    $fieldId
      * @param string $tag
      *
      * @return array
@@ -3354,7 +2862,7 @@ JAVASCRIPT;
     /**
      * @param string $from
      * @param string $search
-     * @param array $options
+     * @param array  $options
      *
      * @return array
      */
@@ -3393,6 +2901,519 @@ JAVASCRIPT;
 
         $result = Database::query($sql);
         $result = Database::store_result($result);
+
         return $result;
+    }
+
+    /**
+     * @param array $options
+     * @param int   $parentId
+     *
+     * @return array
+     */
+    private static function getOptionsFromTripleSelect(array $options, $parentId)
+    {
+        return array_filter($options, function ($option) use ($parentId) {
+            return $option['option_value'] == $parentId;
+        });
+    }
+
+    /**
+     * @param \FormValidator $form
+     * @param array          $fieldDetails
+     * @param int            $defaultValueId
+     * @param bool           $freezeElement
+     */
+    private function addSelectElement(FormValidator $form, array $fieldDetails, $defaultValueId, $freezeElement = false)
+    {
+        $get_lang_variables = false;
+        if (in_array(
+            $fieldDetails['variable'],
+            ['mail_notify_message', 'mail_notify_invitation', 'mail_notify_group_message']
+        )) {
+            $get_lang_variables = true;
+        }
+
+        // Get extra field workflow
+        $userInfo = api_get_user_info();
+        $addOptions = [];
+        $optionsExists = false;
+        global $app;
+        // Check if exist $app['orm.em'] object
+        if (isset($app['orm.em']) && is_object($app['orm.em'])) {
+            $optionsExists = $app['orm.em']
+                ->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')
+                ->findOneBy(['fieldId' => $fieldDetails['id']]);
+        }
+
+        if ($optionsExists) {
+            if (isset($userInfo['status'])
+                && !empty($userInfo['status'])
+            ) {
+                $fieldWorkFlow = $app['orm.em']
+                    ->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')
+                    ->findBy(
+                        [
+                            'fieldId' => $fieldDetails['id'],
+                            'relatedFieldOptionId' => $defaultValueId,
+                            'roleId' => $userInfo['status'],
+                        ]
+                    );
+                foreach ($fieldWorkFlow as $item) {
+                    $addOptions[] = $item->getFieldOptionId();
+                }
+            }
+        }
+
+        $options = [];
+        if (empty($defaultValueId)) {
+            $options[''] = get_lang('SelectAnOption');
+        }
+
+        $optionList = [];
+        if (!empty($fieldDetails['options'])) {
+            foreach ($fieldDetails['options'] as $option_details) {
+                $optionList[$option_details['id']] = $option_details;
+                if ($get_lang_variables) {
+                    $options[$option_details['option_value']] = $option_details['display_text'];
+                } else {
+                    if ($optionsExists) {
+                        // Adding always the default value
+                        if ($option_details['id'] == $defaultValueId) {
+                            $options[$option_details['option_value']] = $option_details['display_text'];
+                        } else {
+                            if (isset($addOptions) && !empty($addOptions)) {
+                                // Parsing filters
+                                if (in_array($option_details['id'], $addOptions)) {
+                                    $options[$option_details['option_value']] = $option_details['display_text'];
+                                }
+                            }
+                        }
+                    } else {
+                        // Normal behaviour
+                        $options[$option_details['option_value']] = $option_details['display_text'];
+                    }
+                }
+            }
+
+            if (isset($optionList[$defaultValueId])) {
+                if (isset($optionList[$defaultValueId]['option_value'])
+                    && $optionList[$defaultValueId]['option_value'] == 'aprobada'
+                ) {
+                    // @todo function don't exists api_is_question_manager
+                    /*if (api_is_question_manager() == false) {
+                        $form->freeze();
+                    }*/
+                }
+            }
+
+            // Setting priority message
+            if (isset($optionList[$defaultValueId])
+                && isset($optionList[$defaultValueId]['priority'])
+            ) {
+                if (!empty($optionList[$defaultValueId]['priority'])) {
+                    $priorityId = $optionList[$defaultValueId]['priority'];
+                    $option = new ExtraFieldOption($this->type);
+                    $messageType = $option->getPriorityMessageType($priorityId);
+                    $form->addElement(
+                        'label',
+                        null,
+                        Display::return_message(
+                            $optionList[$defaultValueId]['priority_message'],
+                            $messageType
+                        )
+                    );
+                }
+            }
+        }
+
+        /** @var \HTML_QuickForm_select $slct */
+        $slct = $form->addElement(
+            'select',
+            'extra_'.$fieldDetails['variable'],
+            $fieldDetails['display_text'],
+            [],
+            ['id' => 'extra_'.$fieldDetails['variable']]
+        );
+
+        foreach ($options as $value => $text) {
+            if (empty($value)) {
+                $slct->addOption($text, $value);
+                continue;
+            }
+
+            $valueParts = explode('#', $text);
+            $dataValue = count($valueParts) > 1 ? array_shift($valueParts) : '';
+
+            $slct->addOption(implode('', $valueParts), $value, ['data-value' => $dataValue]);
+        }
+
+        /* Enable this when field_loggeable is introduced as a table field (2.0)
+        if ($optionsExists && $field_details['field_loggeable'] && !empty($defaultValueId)) {
+
+            $form->addElement(
+                'textarea',
+                'extra_' . $field_details['variable'] . '_comment',
+                $field_details['display_text'] . ' ' . get_lang('Comment')
+            );
+
+            $extraFieldValue = new ExtraFieldValue($this->type);
+            $repo = $app['orm.em']->getRepository($extraFieldValue->entityName);
+            $repoLog = $app['orm.em']->getRepository('Gedmo\Loggable\Entity\LogEntry');
+            $newEntity = $repo->findOneBy(
+                array(
+                    $this->handlerEntityId => $itemId,
+                    'fieldId' => $field_details['id']
+                )
+            );
+            // @todo move this in a function inside the class
+            if ($newEntity) {
+                $logs = $repoLog->getLogEntries($newEntity);
+                if (!empty($logs)) {
+                    $html = '<b>' . get_lang('LatestChanges') . '</b><br /><br />';
+
+                    $table = new HTML_Table(array('class' => 'data_table'));
+                    $table->setHeaderContents(0, 0, get_lang('Value'));
+                    $table->setHeaderContents(0, 1, get_lang('Comment'));
+                    $table->setHeaderContents(0, 2, get_lang('ModifyDate'));
+                    $table->setHeaderContents(0, 3, get_lang('Username'));
+                    $row = 1;
+                    foreach ($logs as $log) {
+                        $column = 0;
+                        $data = $log->getData();
+                        $fieldValue = isset($data['fieldValue']) ? $data['fieldValue'] : null;
+                        $comment = isset($data['comment']) ? $data['comment'] : null;
+
+                        $table->setCellContents($row, $column, $fieldValue);
+                        $column++;
+                        $table->setCellContents($row, $column, $comment);
+                        $column++;
+                        $table->setCellContents($row, $column, api_get_local_time($log->getLoggedAt()->format('Y-m-d H:i:s')));
+                        $column++;
+                        $table->setCellContents($row, $column, $log->getUsername());
+                        $row++;
+                    }
+                    $form->addElement('label', null, $html.$table->toHtml());
+                }
+            }
+        }
+        */
+
+        if ($freezeElement) {
+            $form->freeze('extra_'.$fieldDetails['variable']);
+        }
+    }
+
+    /**
+     * @param \FormValidator $form
+     * @param array          $fieldDetails
+     * @param array          $extraData
+     * @param bool           $freezeElement
+     *
+     * @return string JavaScript code
+     */
+    private function addDoubleSelectElement(FormValidator $form, $fieldDetails, $extraData, $freezeElement = false)
+    {
+        $firstSelectId = 'first_extra_'.$fieldDetails['variable'];
+        $secondSelectId = 'second_extra_'.$fieldDetails['variable'];
+
+        $jqueryReadyContent = "
+            $('#$firstSelectId').on('change', function() {
+                var id = $(this).val();
+
+                if (!id) {
+                    $('#$secondSelectId').empty().selectpicker('refresh');
+                    
+                    return;
+                }
+
+                $.getJSON(_p.web_ajax + 'extra_field.ajax.php?1=1&a=get_second_select_options', {
+                    'type': '{$this->type}',
+                    'field_id': {$fieldDetails['id']},
+                    'option_value_id': id
+                })
+                    .done(function(data) {
+                        $('#$secondSelectId').empty();
+                        $.each(data, function(index, value) {
+                            $('#second_extra_{$fieldDetails['variable']}').append(
+                                $('<option>', {value: index, text: value})
+                            );
+                        });
+                        $('#$secondSelectId').selectpicker('refresh');
+                    });
+            });
+        ";
+
+        $firstId = null;
+        if (!empty($extraData)) {
+            if (isset($extraData['extra_'.$fieldDetails['variable']])) {
+                $firstId = $extraData['extra_'.$fieldDetails['variable']]['extra_'.$fieldDetails['variable']];
+            }
+        }
+
+        $options = self::extra_field_double_select_convert_array_to_ordered_array($fieldDetails['options']);
+        $values = ['' => get_lang('Select')];
+
+        $second_values = [];
+        if (!empty($options)) {
+            foreach ($options as $option) {
+                foreach ($option as $sub_option) {
+                    if ($sub_option['option_value'] == '0') {
+                        $values[$sub_option['id']] = $sub_option['display_text'];
+
+                        continue;
+                    }
+
+                    if ($firstId === $sub_option['option_value']) {
+                        $second_values[$sub_option['id']] = $sub_option['display_text'];
+                    }
+                }
+            }
+        }
+        $form
+            ->defaultRenderer()
+            ->setGroupElementTemplate('<p>{element}</p>', 'extra_'.$fieldDetails['variable']);
+        $group = [];
+        $group[] = $form->createElement(
+            'select',
+            'extra_'.$fieldDetails['variable'],
+            null,
+            $values,
+            ['id' => $firstSelectId]
+        );
+        $group[] = $form->createElement(
+            'select',
+            'extra_'.$fieldDetails['variable'].'_second',
+            null,
+            $second_values,
+            ['id' => $secondSelectId]
+        );
+        $form->addGroup(
+            $group,
+            'extra_'.$fieldDetails['variable'],
+            $fieldDetails['display_text']
+        );
+
+        if ($freezeElement) {
+            $form->freeze('extra_'.$fieldDetails['variable']);
+        }
+
+        return $jqueryReadyContent;
+    }
+
+    /**
+     * @param \FormValidator $form
+     * @param array          $fieldDetails
+     * @param bool           $freezeElement Optional
+     *
+     * @return string JavaScript code
+     */
+    private function addSelectWithTextFieldElement(
+        FormValidator $form,
+        array $fieldDetails,
+        $freezeElement = false
+    ) {
+        $firstSelectId = 'slct_extra_'.$fieldDetails['variable'];
+        $txtSelectId = 'txt_extra_'.$fieldDetails['variable'];
+
+        $jqueryReadyContent = "
+            $('#$firstSelectId').on('change', function() {
+                var id = $(this).val();
+
+                if (!id) {
+                    $('#$txtSelectId').val('');
+                }
+            });
+        ";
+
+        $options = self::extra_field_double_select_convert_array_to_ordered_array($fieldDetails['options']);
+        $values = ['' => get_lang('Select')];
+
+        if (!empty($options)) {
+            foreach ($options as $option) {
+                foreach ($option as $sub_option) {
+                    if ($sub_option['option_value'] != '0') {
+                        continue;
+                    }
+
+                    $values[$sub_option['id']] = $sub_option['display_text'];
+                }
+            }
+        }
+
+        $form
+            ->defaultRenderer()
+            ->setGroupElementTemplate('<p>{element}</p>', 'extra_'.$fieldDetails['variable']);
+        $group = [];
+        $group[] = $form->createElement(
+            'select',
+            'extra_'.$fieldDetails['variable'],
+            null,
+            $values,
+            ['id' => $firstSelectId]
+        );
+        $group[] = $form->createElement(
+            'text',
+            'extra_'.$fieldDetails['variable'].'_second',
+            null,
+            ['id' => $txtSelectId]
+        );
+        $form->addGroup(
+            $group,
+            'extra_'.$fieldDetails['variable'],
+            $fieldDetails['display_text']
+        );
+
+        if ($freezeElement) {
+            $form->freeze('extra_'.$fieldDetails['variable']);
+        }
+
+        return $jqueryReadyContent;
+    }
+
+    /**
+     * @param \FormValidator $form
+     * @param array          $fieldDetails
+     * @param array          $extraData
+     * @param bool           $freezeElement
+     *
+     * @return string
+     */
+    private function addTripleSelectElement(
+        FormValidator $form,
+        array $fieldDetails,
+        array $extraData,
+        $freezeElement
+    ) {
+        $variable = $fieldDetails['variable'];
+        $id = $fieldDetails['id'];
+        $slctFirstId = "first_extra$variable";
+        $slctSecondId = "second_extra$variable";
+        $slctThirdId = "third_extra$variable";
+        $langSelect = get_lang('Select');
+
+        $js = "
+            (function () {
+                var slctFirst = $('#$slctFirstId'),
+                    slctSecond = $('#$slctSecondId'),
+                    slctThird = $('#$slctThirdId');
+                    
+                slctFirst.on('change', function () {
+                    slctSecond.empty().selectpicker('refresh');
+                    slctThird.empty().selectpicker('refresh');
+    
+                    var level = $(this).val();
+    
+                    if (!level) {
+                        return;
+                    }
+    
+                    $.getJSON(_p.web_ajax + 'extra_field.ajax.php', {
+                        'a': 'get_second_select_options',
+                        'type': '$this->type',
+                        'field_id': $id,
+                        'option_value_id': level
+                    })
+                        .done(function (data) {
+                            slctSecond.append(
+                                $('<option>', {value: '', text: '$langSelect'})
+                            );
+
+                            $.each(data, function (index, value) {
+                                var valueParts = value.split('#'),
+                                    dataValue = valueParts.length > 1 ? valueParts.shift() : '';
+
+                                slctSecond.append(
+                                    $('<option>', {value: index, text: valueParts.join(''), 'data-value': dataValue})
+                                );
+                            });
+    
+                            slctSecond.selectpicker('refresh');
+                        });
+                });
+                slctSecond.on('change', function () {
+                    slctThird.empty().selectpicker('refresh');
+    
+                    var level = $(this).val();
+                    
+                    if (!level) {
+                        return;
+                    }
+                    
+                    $.getJSON(_p.web_ajax + 'extra_field.ajax.php', {
+                        'a': 'get_second_select_options',
+                        'type': '$this->type',
+                        'field_id': $id,
+                        'option_value_id': level
+                    })
+                        .done(function (data) {
+                            slctThird.append(
+                                $('<option>', {value: '', text: '$langSelect'})
+                            );
+
+                            $.each(data, function (index, value) {
+                                var valueParts = value.split('#'),
+                                    dataValue = valueParts.length > 1 ? valueParts.shift() : '';
+
+                                slctThird.append(
+                                    $('<option>', {value: index, text: valueParts.join(''), 'data-value': dataValue})
+                                );
+                            });
+    
+                            slctThird.selectpicker('refresh');
+                        });
+                });
+            })();
+        ";
+
+        $firstId = isset($extraData["extra_$variable"]["extra_$variable"])
+            ? $extraData["extra_$variable"]["extra_$variable"]
+            : '';
+        $secondId = isset($extraData["extra_$variable"]["extra_{$variable}_second"])
+            ? $extraData["extra_$variable"]["extra_{$variable}_second"]
+            : '';
+
+        $options = self::tripleSelectConvertArrayToOrderedArray($fieldDetails['options']);
+        $values1 = ['' => $langSelect];
+        $values2 = ['' => $langSelect];
+        $values3 = ['' => $langSelect];
+        $level1 = self::getOptionsFromTripleSelect($options['level1'], 0);
+        $level2 = self::getOptionsFromTripleSelect($options['level2'], $firstId);
+        $level3 = self::getOptionsFromTripleSelect($options['level3'], $secondId);
+        /** @var \HTML_QuickForm_select $slctFirst */
+        $slctFirst = $form->createElement('select', "extra_$variable", null, $values1, ['id' => $slctFirstId]);
+        /** @var \HTML_QuickForm_select $slctFirst */
+        $slctSecond = $form->createElement('select', "extra_{$variable}_second", null, $values2, ['id' => $slctSecondId]);
+        /** @var \HTML_QuickForm_select $slctFirst */
+        $slctThird = $form->createElement('select', "extra_{$variable}_third", null, $values3, ['id' => $slctThirdId]);
+
+        foreach ($level1 as $item1) {
+            $valueParts = explode('#', $item1['display_text']);
+            $dataValue = count($valueParts) > 1 ? array_shift($valueParts) : '';
+            $slctFirst->addOption(implode('', $valueParts), $item1['id'], ['data-value' => $dataValue]);
+        }
+
+        foreach ($level2 as $item2) {
+            $valueParts = explode('#', $item2['display_text']);
+            $dataValue = count($valueParts) > 1 ? array_shift($valueParts) : '';
+            $slctSecond->addOption(implode('', $valueParts), $item2['id'], ['data-value' => $dataValue]);
+        }
+
+        foreach ($level3 as $item3) {
+            $valueParts = explode('#', $item3['display_text']);
+            $dataValue = count($valueParts) > 1 ? array_shift($valueParts) : '';
+            $slctThird->addOption(implode('', $valueParts), $item3['id'], ['data-value' => $dataValue]);
+        }
+
+        $form
+            ->defaultRenderer()
+            ->setGroupElementTemplate('<p>{element}</p>', "extra_$variable");
+        $form->addGroup([$slctFirst, $slctSecond, $slctThird], "extra_$variable", $fieldDetails['display_text']);
+
+        if ($freezeElement) {
+            $form->freeze('extra_'.$fieldDetails['variable']);
+        }
+
+        return $js;
     }
 }

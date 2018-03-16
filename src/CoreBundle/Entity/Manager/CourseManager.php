@@ -3,16 +3,12 @@
 
 namespace Chamilo\CoreBundle\Entity\Manager;
 
-use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
-use Sonata\CoreBundle\Model\BaseEntityManager;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\UserBundle\Entity\User;
-use Sonata\DatagridBundle\Pager\Doctrine\pager;
-use Sonata\DatagridBundle\ProxyQuery\Doctrine\ProxyQuery;
-use Doctrine\Common\Collections\Criteria;
+use Sonata\CoreBundle\Model\BaseEntityManager;
 
 /**
- * Class CourseManager
+ * Class CourseManager.
+ *
  * @package Chamilo\CoreBundle\Entity\Manager
  */
 class CourseManager extends BaseEntityManager
@@ -27,6 +23,7 @@ class CourseManager extends BaseEntityManager
 
     /**
      * @param string $code
+     *
      * @return mixed
      */
     public function findOneByCode($code)
@@ -36,6 +33,7 @@ class CourseManager extends BaseEntityManager
 
     /**
      * @param string $name
+     *
      * @return mixed
      */
     public function findOneByTitle($name)

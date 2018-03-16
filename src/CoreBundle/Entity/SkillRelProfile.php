@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SkillRelProfile
+ * SkillRelProfile.
  *
  * @ORM\Table(name="skill_rel_profile")
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class SkillRelProfile
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -23,23 +23,24 @@ class SkillRelProfile
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="skill_id", type="integer", nullable=false)
      */
     private $skillId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="profile_id", type="integer", nullable=false)
      */
     private $profileId;
 
     /**
-     * Set skillId
+     * Set skillId.
      *
-     * @param integer $skillId
+     * @param int $skillId
+     *
      * @return SkillRelProfile
      */
     public function setSkillId($skillId)
@@ -50,9 +51,9 @@ class SkillRelProfile
     }
 
     /**
-     * Get skillId
+     * Get skillId.
      *
-     * @return integer
+     * @return int
      */
     public function getSkillId()
     {
@@ -60,9 +61,10 @@ class SkillRelProfile
     }
 
     /**
-     * Set profileId
+     * Set profileId.
      *
-     * @param integer $profileId
+     * @param int $profileId
+     *
      * @return SkillRelProfile
      */
     public function setProfileId($profileId)
@@ -73,9 +75,9 @@ class SkillRelProfile
     }
 
     /**
-     * Get profileId
+     * Get profileId.
      *
-     * @return integer
+     * @return int
      */
     public function getProfileId()
     {
@@ -83,9 +85,9 @@ class SkillRelProfile
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

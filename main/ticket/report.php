@@ -21,8 +21,8 @@ Session::erase('this_section');
 
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){
-    $( "#keyword_start_date_start" ).datepicker({ dateFormat: ' . "'yy-mm-dd'".' });
-    $( "#keyword_start_date_end" ).datepicker({ dateFormat: ' . "'yy-mm-dd'".' });
+    $( "#keyword_start_date_start" ).datepicker({ dateFormat: '."'yy-mm-dd'".' });
+    $( "#keyword_start_date_end" ).datepicker({ dateFormat: '."'yy-mm-dd'".' });
 });
 
 function validate() {
@@ -88,7 +88,9 @@ $tools['forum'] = ['id' => 'forum', 'name' => get_lang('Forum')];
 
 /**
  * Returns the escaped string.
+ *
  * @param string $s
+ *
  * @return string
  */
 function js_str($s)
@@ -96,7 +98,8 @@ function js_str($s)
     return '"'.addcslashes($s, "\0..\37\"\\").'"';
 }
 /**
- * This function is to show the ticket form
+ * This function is to show the ticket form.
+ *
  * @global array $tools
  */
 function show_form()
@@ -110,7 +113,7 @@ function show_form()
     echo $select_course;
     //select status
     $select_tool = '<div class="row"  >
-	<div class="label2"  >' . get_lang('Tool').':</div>
+	<div class="label2"  >'.get_lang('Tool').':</div>
 	<div class="formw2">';
     $select_tool .= '<select style="width: 95%; " name = "tool" id="tool" >';
 
@@ -121,11 +124,11 @@ function show_form()
     $select_tool .= '</div></div>';
     echo $select_tool;
     echo '<div class="row">
-	      <div class="label2">' . get_lang('From').':</div>
+	      <div class="label2">'.get_lang('From').':</div>
               <div class="formw2"><input id="keyword_start_date_start" name="keyword_start_date_start" type="text"></div>
           </div>
 	  <div class="row">
-	      <div class="label2"> ' . get_lang('To').'</div>
+	      <div class="label2"> '.get_lang('To').'</div>
 	      <div class="formw2"><input id="keyword_start_date_end" name="keyword_start_date_end" type="text"></div>
 	  </div>';
     echo '</div>';
@@ -133,13 +136,14 @@ function show_form()
 		<div class="label2">
 		</div>
 		<div class="formw2">
-			<button class="save" name="report" type="submit" id="btnsubmit" disabled="disabled">' . get_lang('CompleteReport').'</button>
+			<button class="save" name="report" type="submit" id="btnsubmit" disabled="disabled">'.get_lang('CompleteReport').'</button>
 		</div>
 	</div>';
 }
 
 /**
- * Get the total number of users on the platform
+ * Get the total number of users on the platform.
+ *
  * @see SortableTable#get_total_number_of_items()
  */
 function get_number_of_users()
@@ -162,16 +166,20 @@ function get_number_of_users()
     }
     $res = Database::query($sql);
     $obj = Database::fetch_object($res);
+
     return $obj->total_number_of_items;
 }
 
 /**
- * Get the users to display on the current page (fill the sortable-table)
+ * Get the users to display on the current page (fill the sortable-table).
+ *
  * @param   int     offset of first user to recover
  * @param   int     Number of users to get
  * @param   int     Column to sort on
  * @param   string  Order (ASC,DESC)
+ *
  * @return array
+ *
  * @see SortableTable#get_table_data($from)
  */
 function get_user_data($from, $number_of_items, $column, $direction)
@@ -227,7 +235,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
         $photo = '<img src="'.$userPicture.'" alt="'.api_get_person_name($user[2], $user[3]).'" title="'.api_get_person_name($user[2], $user[3]).'" />';
         $user_id = $user[0];
         $button = '<a  href="javascript:void(0)" onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')">
-					<img onclick="load_course_list(\'div_' . $user_id.'\','.$user_id.')"  src="'.$webPath.'img/view_more_stats.gif" title="'.get_lang('Courses').'" alt="'.get_lang('Courses').'"/>
+					<img onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')"  src="'.$webPath.'img/view_more_stats.gif" title="'.get_lang('Courses').'" alt="'.get_lang('Courses').'"/>
 					</a>&nbsp;&nbsp;';
         $users[] = [
             $photo,
@@ -245,7 +253,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
 Display::display_header('Reports');
 echo '<div class="actions">
-    <form action="' . api_get_self().'" method="get" name="search_simple" id="search_simple">
+    <form action="'.api_get_self().'" method="get" name="search_simple" id="search_simple">
         <input name="user_id_request" id="user_id_request" type="hidden" value="">
         <span><label for="keyword">B&uacute;squeda del usuario: </label><input size="25" name="keyword" type="text" id="keyword"></span>
         <span><button class="search" name="submit" type="submit">Buscar</button></span>
@@ -279,10 +287,10 @@ if (isset($_POST['report'])) {
                 u.username , CONCAT(u.lastname, ' ', u.firstname) AS fullname,
                 DATE_SUB(access.access_date,INTERVAL 5 HOUR) AS  access_date,
                 c.title AS course, access_tool AS tool
-            FROM  " . Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS)." access
-            LEFT JOIN  " . Database::get_main_table(TABLE_MAIN_USER)." u ON access.access_user_id = u.user_id
-            LEFT JOIN  " . Database::get_main_table(TABLE_MAIN_COURSE)." c ON access.c_id = c.id
-            WHERE access.c_id = " . $course_info['real_id']." AND u.user_id = $user_id ";
+            FROM  ".Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS)." access
+            LEFT JOIN  ".Database::get_main_table(TABLE_MAIN_USER)." u ON access.access_user_id = u.user_id
+            LEFT JOIN  ".Database::get_main_table(TABLE_MAIN_COURSE)." c ON access.c_id = c.id
+            WHERE access.c_id = ".$course_info['real_id']." AND u.user_id = $user_id ";
     if ($tool != '') {
         $sql .= "AND access.access_tool = '$tool' ";
     }
@@ -313,7 +321,7 @@ if (isset($_POST['report'])) {
             $row['fullname'],
             $row['access_date'],
             $row['course'],
-            get_lang($tools[$row['tool']]['name'])
+            get_lang($tools[$row['tool']]['name']),
         ];
         $table_result->addRow($row);
     }

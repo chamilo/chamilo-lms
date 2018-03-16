@@ -3,13 +3,12 @@
 
 namespace Chamilo\CoreBundle\Settings;
 
-use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class TrackingSettingsSchema
+ * Class TrackingSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class TrackingSettingsSchema extends AbstractSettingsSchema
@@ -28,8 +27,7 @@ class TrackingSettingsSchema extends AbstractSettingsSchema
                     'meta_description' => '',
                     'meta_image_path' => '',
                     'meta_twitter_site' => '',
-                    'meta_twitter_creator' => ''
-
+                    'meta_twitter_creator' => '',
                 ]
             );
 //            ->setAllowedTypes(

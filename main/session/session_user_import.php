@@ -4,7 +4,6 @@
 /**
  * @package chamilo.admin
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -51,7 +50,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                 false
             );
 
-            foreach ($user_list as & $user_id) {
+            foreach ($user_list as &$user_id) {
                 $user_info = api_get_user_info($user_id);
                 $user_id = $user_info['complete_name'];
             }

@@ -2,12 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * FILE UPLOAD LIBRARY
+ * FILE UPLOAD LIBRARY.
  *
  * This is the file upload library for Chamilo.
  * Include/require it in your code to use its functionality.
  *
  * @package chamilo.library
+ *
  * @todo test and reorganise
  */
 
@@ -16,7 +17,9 @@
  * Useful for securing a site.
  *
  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
+ *
  * @param string $file_name Name of a file
+ *
  * @return string the filename phps'ized
  */
 function php2phps($file_name)
@@ -25,9 +28,10 @@ function php2phps($file_name)
 }
 
 /**
- * Renames .htaccess & .HTACCESS to htaccess.txt
+ * Renames .htaccess & .HTACCESS to htaccess.txt.
  *
  * @param string $filename
+ *
  * @return string
  */
 function htaccess2txt($filename)
@@ -37,10 +41,12 @@ function htaccess2txt($filename)
 
 /**
  * This function executes our safety precautions
- * more functions can be added
+ * more functions can be added.
  *
  * @param string $filename
+ *
  * @return string
+ *
  * @see php2phps()
  * @see htaccess2txt()
  */
@@ -50,9 +56,10 @@ function disable_dangerous_file($filename)
 }
 
 /**
- * Returns the name without extension, used for the title
+ * Returns the name without extension, used for the title.
  *
  * @param string $name
+ *
  * @return name without the extension
  */
 function get_document_title($name)
@@ -60,13 +67,15 @@ function get_document_title($name)
     // If they upload .htaccess...
     $name = disable_dangerous_file($name);
     $ext = substr(strrchr($name, '.'), 0);
+
     return substr($name, 0, strlen($name) - strlen(strstr($name, $ext)));
 }
 
 /**
- * This function checks if the upload succeeded
+ * This function checks if the upload succeeded.
  *
  * @param array $uploaded_file ($_FILES)
+ *
  * @return true if upload succeeded
  */
 function process_uploaded_file($uploaded_file, $show_output = true)
@@ -133,6 +142,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
         if ($show_output) {
             Display::addFlash(Display::return_message(get_lang('UplUploadFailed'), 'error'));
         }
+
         return false;
     }
 
@@ -184,27 +194,28 @@ function process_uploaded_file($uploaded_file, $show_output = true)
  * If we decide to save ALL kinds of documents in one database,
  * we could extend this with a $type='document', 'scormdocument',...
  *
- * @param array $courseInfo
- * @param array $uploadedFile ($_FILES)
- * array(
- *  'name' => 'picture.jpg',
- *  'tmp_name' => '...', // absolute path
- * );
- * @param string $documentDir Example: /var/www/chamilo/courses/ABC/document
- * @param string $uploadPath Example: /folder1/folder2/
- * @param int $userId
- * @param int $groupId group.id
- * @param int $toUserId User ID, or NULL for everybody
- * @param int $unzip 1/0
- * @param string $whatIfFileExists overwrite, rename or warn if exists (default)
- * @param boolean $output Optional output parameter.
- * @param bool $onlyUploadFile
+ * @param array  $courseInfo
+ * @param array  $uploadedFile            ($_FILES)
+ *                                        array(
+ *                                        'name' => 'picture.jpg',
+ *                                        'tmp_name' => '...', // absolute path
+ *                                        );
+ * @param string $documentDir             Example: /var/www/chamilo/courses/ABC/document
+ * @param string $uploadPath              Example: /folder1/folder2/
+ * @param int    $userId
+ * @param int    $groupId                 group.id
+ * @param int    $toUserId                User ID, or NULL for everybody
+ * @param int    $unzip                   1/0
+ * @param string $whatIfFileExists        overwrite, rename or warn if exists (default)
+ * @param bool   $output                  optional output parameter
+ * @param bool   $onlyUploadFile
  * @param string $comment
- * @param int $sessionId
- * @param bool $treat_spaces_as_hyphens
+ * @param int    $sessionId
+ * @param bool   $treat_spaces_as_hyphens
  *
  * So far only use for unzip_uploaded_document function.
  * If no output wanted on success, set to false.
+ *
  * @return string path of the saved file
  */
 function handle_uploaded_document(
@@ -740,11 +751,15 @@ function moveUploadedFile($file, $storePath)
  * Checks if there is enough place to add a file on a directory
  * on the base of a maximum directory size allowed
  * deprecated: use enough_space instead!
+ *
  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  int $file_size Size of the file in byte
- * @param  string $dir Path of the directory where the file should be added
- * @param  int $max_dir_space Maximum size of the diretory in byte
- * @return boolean true if there is enough space, false otherwise
+ *
+ * @param int    $file_size     Size of the file in byte
+ * @param string $dir           Path of the directory where the file should be added
+ * @param int    $max_dir_space Maximum size of the diretory in byte
+ *
+ * @return bool true if there is enough space, false otherwise
+ *
  * @see enough_size() uses  dir_total_space() function
  */
 function enough_size($file_size, $dir, $max_dir_space)
@@ -765,10 +780,12 @@ function enough_size($file_size, $dir, $max_dir_space)
 }
 
 /**
- * Computes the size already occupied by a directory and is subdirectories
+ * Computes the size already occupied by a directory and is subdirectories.
  *
  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
+ *
  * @param string $dir_path Size of the file in byte
+ *
  * @return int Return the directory size in bytes
  */
 function dir_total_space($dir_path)
@@ -814,8 +831,10 @@ function dir_total_space($dir_path)
  *
  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
  * @author Bert Vanderkimpen
- * @param  string $file_name Name of the file
- * @param  string $file_type Type of the file
+ *
+ * @param string $file_name Name of the file
+ * @param string $file_type Type of the file
+ *
  * @return string File name
  */
 function add_ext_on_mime($file_name, $file_type)
@@ -942,7 +961,7 @@ function add_ext_on_mime($file_name, $file_type)
         // Test on PC (files with no extension get application/octet-stream)
         //$mime_type[] = 'application/octet-stream';      $extension[] = '.ext';
         // Check whether the MIME type sent by the browser is within the table
-        foreach ($mime_type as $key => & $type) {
+        foreach ($mime_type as $key => &$type) {
             if ($type == $file_type) {
                 $file_name .= $extension[$key];
                 break;
@@ -956,18 +975,18 @@ function add_ext_on_mime($file_name, $file_type)
 }
 
 /**
- * Manages all the unzipping process of an uploaded file
+ * Manages all the unzipping process of an uploaded file.
  *
  * @author Hugues Peeters <hugues.peeters@claroline.net>
  *
- * @param  array  $uploaded_file - follows the $_FILES Structure
- * @param  string $upload_path   - destination of the upload.
- *                                This path is to append to $base_work_dir
- * @param  string $base_work_dir  - base working directory of the module
- * @param  int $max_filled_space  - amount of bytes to not exceed in the base
- *                                working directory
+ * @param array  $uploaded_file    - follows the $_FILES Structure
+ * @param string $upload_path      - destination of the upload.
+ *                                 This path is to append to $base_work_dir
+ * @param string $base_work_dir    - base working directory of the module
+ * @param int    $max_filled_space - amount of bytes to not exceed in the base
+ *                                 working directory
  *
- * @return boolean true if it succeeds false otherwise
+ * @return bool true if it succeeds false otherwise
  */
 function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_filled_space)
 {
@@ -978,7 +997,7 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
         $zip_content_array = $zip_file->listContent();
         $ok_scorm = false;
         $realFileSize = 0;
-        foreach ($zip_content_array as & $this_content) {
+        foreach ($zip_content_array as &$this_content) {
             if (preg_match('~.(php.*|phtml)$~i', $this_content['filename'])) {
                 Display::addFlash(
                     Display::return_message(get_lang('ZipNoPhp'))
@@ -1078,25 +1097,25 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
 
 /**
  * Manages all the unzipping process of an uploaded document
- * This uses the item_property table for properties of documents
+ * This uses the item_property table for properties of documents.
  *
  * @author Hugues Peeters <hugues.peeters@claroline.net>
  * @author Bert Vanderkimpen
  *
  * @param array  $courseInfo
  * @param array  $userInfo
- * @param array  $uploaded_file - follows the $_FILES Structure
- * @param string $uploadPath   - destination of the upload.
+ * @param array  $uploaded_file  - follows the $_FILES Structure
+ * @param string $uploadPath     - destination of the upload.
  *                               This path is to append to $base_work_dir
  * @param string $base_work_dir  - base working directory of the module
- * @param int    $maxFilledSpace  - amount of bytes to not exceed in the base
- *                                working directory
- * @param int $sessionId
- * @param int $groupId group.id
- * @param bool $output Optional. If no output not wanted on success, set to false.
- * @param bool $onlyUploadFile
+ * @param int    $maxFilledSpace - amount of bytes to not exceed in the base
+ *                               working directory
+ * @param int    $sessionId
+ * @param int    $groupId        group.id
+ * @param bool   $output         Optional. If no output not wanted on success, set to false.
+ * @param bool   $onlyUploadFile
  *
- * @return boolean true if it succeeds false otherwise
+ * @return bool true if it succeeds false otherwise
  */
 function unzip_uploaded_document(
     $courseInfo,
@@ -1115,12 +1134,13 @@ function unzip_uploaded_document(
     // Check the zip content (real size and file extension)
     $zip_content_array = (array) $zip->listContent();
     $realSize = 0;
-    foreach ($zip_content_array as & $this_content) {
+    foreach ($zip_content_array as &$this_content) {
         $realSize += $this_content['size'];
     }
 
     if (!DocumentManager::enough_space($realSize, $maxFilledSpace)) {
         echo Display::return_message(get_lang('UplNotEnoughSpace'), 'error');
+
         return false;
     }
 
@@ -1165,10 +1185,11 @@ function unzip_uploaded_document(
 
 /**
  * This function is a callback function that is used while extracting a zipfile
- * http://www.phpconcept.net/pclzip/man/en/index.php?options-pclzip_cb_pre_extract
+ * http://www.phpconcept.net/pclzip/man/en/index.php?options-pclzip_cb_pre_extract.
  *
  * @param array $p_event
  * @param array $p_header
+ *
  * @return int (If the function returns 1, then the extraction is resumed, if 0 the path was skipped)
  */
 function clean_up_files_in_zip($p_event, &$p_header)
@@ -1192,7 +1213,7 @@ function clean_up_files_in_zip($p_event, &$p_header)
 
 /**
  * This function cleans up a given path
- * by eliminating dangerous file names and cleaning them
+ * by eliminating dangerous file names and cleaning them.
  *
  * @param string $path
  *
@@ -1206,7 +1227,7 @@ function clean_up_path($path)
     // Split the path in folders and files
     $path_array = explode('/', $path);
     // Clean up every folder and filename in the path
-    foreach ($path_array as $key => & $val) {
+    foreach ($path_array as $key => &$val) {
         // We don't want to lose the dots in ././folder/file (cfr. zipfile)
         if ($val != '.') {
             $val = disable_dangerous_file(api_replace_dangerous_char($val));
@@ -1222,10 +1243,12 @@ function clean_up_path($path)
 /**
  * Checks if the file is dangerous, based on extension and/or mimetype.
  * The list of extensions accepted/rejected can be found from
- * api_get_setting('upload_extensions_exclude') and api_get_setting('upload_extensions_include')
+ * api_get_setting('upload_extensions_exclude') and api_get_setting('upload_extensions_include').
+ *
  * @param	string 	filename passed by reference. The filename will be modified
  * if filter rules say so! (you can include path but the filename should look like 'abc.html')
- * @return	int		0 to skip file, 1 to keep file
+ *
+ * @return int 0 to skip file, 1 to keep file
  */
 function filter_extension(&$filename)
 {
@@ -1248,6 +1271,7 @@ function filter_extension(&$filename)
             } else {
                 $new_ext = api_get_setting('upload_extensions_replace_by');
                 $filename = str_replace('.'.$ext, '.'.$new_ext, $filename);
+
                 return 1;
             }
         } else {
@@ -1267,6 +1291,7 @@ function filter_extension(&$filename)
             } else {
                 $new_ext = api_get_setting('upload_extensions_replace_by');
                 $filename = str_replace('.'.$ext, '.'.$new_ext, $filename);
+
                 return 1;
             }
         } else {
@@ -1276,19 +1301,19 @@ function filter_extension(&$filename)
 }
 
 /**
- * Adds a new document to the database
+ * Adds a new document to the database.
  *
- * @param array $courseInfo
+ * @param array  $courseInfo
  * @param string $path
  * @param string $fileType
- * @param int $fileSize
+ * @param int    $fileSize
  * @param string $title
  * @param string $comment
- * @param int $readonly
- * @param bool $saveVisibility
- * @param int $group_id group.id
- * @param int $session_id Session ID, if any
- * @param int $userId creator id
+ * @param int    $readonly
+ * @param bool   $saveVisibility
+ * @param int    $group_id       group.id
+ * @param int    $session_id     Session ID, if any
+ * @param int    $userId         creator id
  *
  * @return int id if inserted document
  */
@@ -1345,13 +1370,14 @@ function add_document(
 
 /**
  * Updates an existing document in the database
- * as the file exists, we only need to change the size
+ * as the file exists, we only need to change the size.
  *
  * @param array $_course
- * @param int $documentId
- * @param int $filesize
- * @param int $readonly
- * @return boolean true /false
+ * @param int   $documentId
+ * @param int   $filesize
+ * @param int   $readonly
+ *
+ * @return bool true /false
  */
 function update_existing_document($_course, $documentId, $filesize, $readonly = 0)
 {
@@ -1373,11 +1399,11 @@ function update_existing_document($_course, $documentId, $filesize, $readonly = 
 }
 
 /**
- * This function updates the last_edit_date, last edit user id on all folders in a given path
+ * This function updates the last_edit_date, last edit user id on all folders in a given path.
  *
- * @param array $_course
+ * @param array  $_course
  * @param string $path
- * @param int $user_id
+ * @param int    $user_id
  */
 function item_property_update_on_folder($_course, $path, $user_id)
 {
@@ -1405,7 +1431,7 @@ function item_property_update_on_folder($_course, $path, $user_id)
     $exploded_path = explode('/', $path);
     $course_id = api_get_course_int_id();
     $newpath = '';
-    foreach ($exploded_path as $key => & $value) {
+    foreach ($exploded_path as $key => &$value) {
         // We don't want a slash before our first slash
         if ($key != 0) {
             $newpath .= '/'.$value;
@@ -1429,11 +1455,12 @@ function item_property_update_on_folder($_course, $path, $user_id)
 
 /**
  * Adds file to document table in database
- * deprecated: use file_set_default_settings instead
+ * deprecated: use file_set_default_settings instead.
  *
  * @author	Olivier Cauberghe <olivier.cauberghe@ugent.be>
+ *
  * @param	path,filename
- * action:	Adds an entry to the document table with the default settings.
+ * action:	Adds an entry to the document table with the default settings
  */
 function set_default_settings($upload_path, $filename, $filetype = 'file')
 {
@@ -1478,10 +1505,12 @@ function set_default_settings($upload_path, $filename, $filetype = 'file')
 }
 
 /**
- * Retrieves the image path list in a html file
+ * Retrieves the image path list in a html file.
  *
  * @author Hugues Peeters <hugues.peeters@claroline.net>
- * @param  string $html_file
+ *
+ * @param string $html_file
+ *
  * @return array -  images path list
  */
 function search_img_from_html($html_file)
@@ -1497,7 +1526,6 @@ function search_img_from_html($html_file)
     if (isset($fp) && $fp !== false) {
         $buffer = fread($fp, $size_file);
         if (strlen($buffer) >= 0 && $buffer !== false) {
-            //
         } else {
             die('<center>Can not read file.</center>');
         }
@@ -1515,7 +1543,7 @@ function search_img_from_html($html_file)
     // Search the image file path from all the <IMG> tag detected
 
     if (sizeof($img_tag_list) > 0) {
-        foreach ($img_tag_list as & $this_img_tag) {
+        foreach ($img_tag_list as &$this_img_tag) {
             if (preg_match('~src[[:space:]]*=[[:space:]]*[\"]{1}([^\"]+)[\"]{1}~i', $this_img_tag, $matches)) {
                 $img_path_list[] = $matches[1];
             }
@@ -1528,23 +1556,25 @@ function search_img_from_html($html_file)
 
 /**
  * Creates a new directory trying to find a directory name
- * that doesn't already exist
+ * that doesn't already exist.
  *
  * @author  Hugues Peeters <hugues.peeters@claroline.net>
  * @author  Bert Vanderkimpen
- * @param   array   $_course current course information
- * @param   int     $user_id current user id
- * @param   int     $session_id
- * @param   int     $to_group_id group.id
- * @param   int     $to_user_id
- * @param   string  $base_work_dir /var/www/chamilo/courses/ABC/document
- * @param   string  $desired_dir_name complete path of the desired name
- * Example: /folder1/folder2
- * @param   string  $title "folder2"
- * @param   int     $visibility (0 for invisible, 1 for visible, 2 for deleted)
- * @param   bool $generateNewNameIfExists
- * @return  string  actual directory name if it succeeds,
- *          boolean false otherwise
+ *
+ * @param array  $_course                 current course information
+ * @param int    $user_id                 current user id
+ * @param int    $session_id
+ * @param int    $to_group_id             group.id
+ * @param int    $to_user_id
+ * @param string $base_work_dir           /var/www/chamilo/courses/ABC/document
+ * @param string $desired_dir_name        complete path of the desired name
+ *                                        Example: /folder1/folder2
+ * @param string $title                   "folder2"
+ * @param int    $visibility              (0 for invisible, 1 for visible, 2 for deleted)
+ * @param bool   $generateNewNameIfExists
+ *
+ * @return string actual directory name if it succeeds,
+ *                boolean false otherwise
  */
 function create_unexisting_directory(
     $_course,
@@ -1650,7 +1680,7 @@ function create_unexisting_directory(
                         $visibilities = [
                             0 => 'invisible',
                             1 => 'visible',
-                            2 => 'delete'
+                            2 => 'delete',
                         ];
                         api_item_property_update(
                             $_course,
@@ -1709,16 +1739,17 @@ function create_unexisting_directory(
 }
 
 /**
- * Handles uploaded missing images
+ * Handles uploaded missing images.
  *
  * @author Hugues Peeters <hugues.peeters@claroline.net>
  * @author Bert Vanderkimpen
- * @param array $_course
- * @param array $uploaded_file_collection - follows the $_FILES Structure
+ *
+ * @param array  $_course
+ * @param array  $uploaded_file_collection - follows the $_FILES Structure
  * @param string $base_work_dir
  * @param string $missing_files_dir
- * @param int $user_id
- * @param int $to_group_id group.id
+ * @param int    $user_id
+ * @param int    $to_group_id              group.id
  */
 function move_uploaded_file_collection_into_directory(
     $_course,
@@ -1756,12 +1787,14 @@ function move_uploaded_file_collection_into_directory(
         }
         unset($missing_file);
     }
+
     return $new_file_list;
 }
 
 /**
  * Opens the old html file and replace the src path into the img tag
  * This also works for files in subdirectories.
+ *
  * @param $original_img_path is an array
  * @param $new_img_path is an array
  */
@@ -1798,18 +1831,22 @@ function replace_img_path_in_html_file($original_img_path, $new_img_path, $html_
 
 /**
  * Checks the extension of a file, if it's .htm or .html
- * we use search_img_from_html to get all image paths in the file
+ * we use search_img_from_html to get all image paths in the file.
  *
  * @param string $file
+ *
  * @return array paths
+ *
  * @see check_for_missing_files() uses search_img_from_html()
  */
 function check_for_missing_files($file)
 {
     if (strrchr($file, '.') == '.htm' || strrchr($file, '.') == '.html') {
         $img_file_path = search_img_from_html($file);
+
         return $img_file_path;
     }
+
     return false;
 }
 
@@ -1817,9 +1854,10 @@ function check_for_missing_files($file)
  * This function builds a form that asks for the missing images in a html file
  * maybe we should do this another way?
  *
- * @param array $missing_files
+ * @param array  $missing_files
  * @param string $upload_path
  * @param string $file_name
+ *
  * @return string the form
  */
 function build_missing_files_form($missing_files, $upload_path, $file_name)
@@ -1835,7 +1873,7 @@ function build_missing_files_form($missing_files, $upload_path, $file_name)
         ."<input type=\"hidden\" name=\"upload_path\" value=\"".$upload_path."\" />"
         ."<input type=\"hidden\" name=\"id\" value=\"".$folder_id."\" />"
         ."<table border=\"0\">";
-    foreach ($missing_files as & $this_img_file_path) {
+    foreach ($missing_files as &$this_img_file_path) {
         $form .= "<tr>"
             ."<td>".basename($this_img_file_path)." : </td>"
             ."<td>"
@@ -1848,6 +1886,7 @@ function build_missing_files_form($missing_files, $upload_path, $file_name)
         ."<button type='submit' name=\"cancel_submit_image\" value=\"".get_lang('Cancel')."\" class=\"cancel\">".get_lang('Cancel')."</button>"
         ."<button type='submit' name=\"submit_image\" value=\"".get_lang('Ok')."\" class=\"save\">".get_lang('Ok')."</button>"
         ."</form>";
+
     return $form;
 }
 
@@ -1855,18 +1894,17 @@ function build_missing_files_form($missing_files, $upload_path, $file_name)
  * This recursive function can be used during the upgrade process form older
  * versions of Chamilo
  * It crawls the given directory, checks if the file is in the DB and adds
- * it if it's not
+ * it if it's not.
  *
- * @param array $courseInfo
- * @param array $userInfo
+ * @param array  $courseInfo
+ * @param array  $userInfo
  * @param string $base_work_dir
  * @param string $folderPath
- * @param int $sessionId
- * @param int $groupId group.id
- * @param bool $output
- * @param array $parent
+ * @param int    $sessionId
+ * @param int    $groupId       group.id
+ * @param bool   $output
+ * @param array  $parent
  * @param string $uploadPath
- *
  */
 function add_all_documents_in_folder_to_database(
     $courseInfo,
@@ -1959,7 +1997,7 @@ function add_all_documents_in_folder_to_database(
                     'size' => filesize($sysFolderPath),
                     'type' => null,
                     'from_file' => true,
-                    'move_file' => true
+                    'move_file' => true,
                 ];
 
                 handle_uploaded_document(

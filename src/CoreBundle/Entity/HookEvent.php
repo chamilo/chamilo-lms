@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * HookEvent
+ * HookEvent.
  *
  * @ORM\Table(name="hook_event", uniqueConstraints={@ORM\UniqueConstraint(name="class_name", columns={"class_name"})})
  * @ORM\Entity
@@ -28,7 +28,7 @@ class HookEvent
     private $description;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -36,12 +36,11 @@ class HookEvent
      */
     private $id;
 
-
-
     /**
-     * Set className
+     * Set className.
      *
      * @param string $className
+     *
      * @return HookEvent
      */
     public function setClassName($className)
@@ -52,7 +51,7 @@ class HookEvent
     }
 
     /**
-     * Get className
+     * Get className.
      *
      * @return string
      */
@@ -62,9 +61,10 @@ class HookEvent
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return HookEvent
      */
     public function setDescription($description)
@@ -75,7 +75,7 @@ class HookEvent
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -85,9 +85,9 @@ class HookEvent
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

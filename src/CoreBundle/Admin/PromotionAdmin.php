@@ -5,12 +5,13 @@ namespace Chamilo\CoreBundle\Admin;
 
 use Chamilo\CoreBundle\Entity\Promotion;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Form\FormMapper;
 
 /**
- * Class PromotionAdmin
+ * Class PromotionAdmin.
+ *
  * @package Chamilo\CoreBundle\Admin
  */
 class PromotionAdmin extends AbstractAdmin

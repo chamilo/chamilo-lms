@@ -4,14 +4,13 @@
 namespace Chamilo\CoreBundle\Entity\Resource;
 
 use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Mapping as ORM;
-use Chamilo\CoreBundle\Entity\Usergroup;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Chamilo\UserBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CourseBundle\Entity\CGroupInfo;
+use Chamilo\UserBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
@@ -35,13 +34,13 @@ class ResourceLink implements ResourceInterface
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
-     **/
+     */
     protected $session;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
-     **/
+     */
     protected $user;
 
     /**
@@ -64,23 +63,22 @@ class ResourceLink implements ResourceInterface
 
     /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceRights", mappedBy="resourceLink", cascade={"persist", "remove"})
-     **/
+     */
     protected $rights;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="private", type="boolean", nullable=true, unique=false)
      */
     protected $private;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="public", type="boolean", nullable=true, unique=false)
      */
     protected $public;
-
 
     /**
      * @ORM\Column(name="start_visibility_at", type="datetime", nullable=true)
@@ -93,11 +91,19 @@ class ResourceLink implements ResourceInterface
     protected $endVisibilityAt;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         $this->rights = new ArrayCollection();
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getId();
     }
 
     /**
@@ -110,6 +116,7 @@ class ResourceLink implements ResourceInterface
 
     /**
      * @param mixed $startVisibilityAt
+     *
      * @return ResourceLink
      */
     public function setStartVisibilityAt($startVisibilityAt)
@@ -129,6 +136,7 @@ class ResourceLink implements ResourceInterface
 
     /**
      * @param mixed $endVisibilityAt
+     *
      * @return ResourceLink
      */
     public function setEndVisibilityAt($endVisibilityAt)
@@ -138,17 +146,8 @@ class ResourceLink implements ResourceInterface
         return $this;
     }
 
-
     /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string)$this->getId();
-    }
-
-    /**
-     * @return boolean
+     * @return bool
      */
     public function isPrivate()
     {
@@ -156,7 +155,7 @@ class ResourceLink implements ResourceInterface
     }
 
     /**
-     * @param boolean $private
+     * @param bool $private
      */
     public function setPrivate($private)
     {
@@ -164,7 +163,7 @@ class ResourceLink implements ResourceInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isPublic()
     {
@@ -172,7 +171,7 @@ class ResourceLink implements ResourceInterface
     }
 
     /**
-     * @param boolean $public
+     * @param bool $public
      */
     public function setPublic($public)
     {
@@ -189,6 +188,7 @@ class ResourceLink implements ResourceInterface
 
     /**
      * @param ArrayCollection $rights
+     *
      * @return $this
      */
     public function setRights(ArrayCollection $rights)
@@ -204,6 +204,7 @@ class ResourceLink implements ResourceInterface
 
     /**
      * @param ResourceRights $right
+     *
      * @return $this
      */
     public function addRight(ResourceRights $right)
@@ -224,6 +225,7 @@ class ResourceLink implements ResourceInterface
 
     /**
      * @param int $id
+     *
      * @return $this
      */
     public function setId($id)
@@ -235,6 +237,7 @@ class ResourceLink implements ResourceInterface
 
     /**
      * @param User $user
+     *
      * @return $this
      */
     public function setUser(User $user)
@@ -246,6 +249,7 @@ class ResourceLink implements ResourceInterface
 
     /**
      * @param Course $course
+     *
      * @return $this
      */
     public function setCourse(Course $course)
@@ -257,6 +261,7 @@ class ResourceLink implements ResourceInterface
 
     /**
      * @param Session $session
+     *
      * @return $this
      */
     public function setSession(Session $session)
@@ -276,6 +281,7 @@ class ResourceLink implements ResourceInterface
 
     /**
      * @param CGroupInfo $group
+     *
      * @return $this
      */
     public function setGroup(CGroupInfo $group)
@@ -295,6 +301,7 @@ class ResourceLink implements ResourceInterface
 
     /**
      * @param Usergroup $group
+     *
      * @return $this
      */
     public function setUserGroup(Usergroup $group)
@@ -305,7 +312,7 @@ class ResourceLink implements ResourceInterface
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return User
      */
@@ -315,7 +322,7 @@ class ResourceLink implements ResourceInterface
     }
 
     /**
-     * Get course
+     * Get course.
      *
      * @return Course
      */
@@ -325,7 +332,7 @@ class ResourceLink implements ResourceInterface
     }
 
     /**
-     * Get session
+     * Get session.
      *
      * @return Session
      */
@@ -336,6 +343,7 @@ class ResourceLink implements ResourceInterface
 
     /**
      * @param ResourceNode $resourceNode
+     *
      * @return $this
      */
     public function setResourceNode(ResourceNode $resourceNode)

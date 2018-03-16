@@ -3,17 +3,17 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
-use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use ChamiloSession as Session;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Chamilo\UserBundle\Entity\User;
+use ChamiloSession as Session;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 
 /**
- * Class LoginSuccessHandler
+ * Class LoginSuccessHandler.
  */
 class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
@@ -22,7 +22,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 
     /**
      * @param UrlGeneratorInterface $urlGenerator
-     * @param AuthorizationChecker $checker
+     * @param AuthorizationChecker  $checker
      */
     public function __construct(
         UrlGeneratorInterface $urlGenerator,
@@ -33,8 +33,9 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
     }
 
     /**
-     * @param Request $request
+     * @param Request        $request
      * @param TokenInterface $token
+     *
      * @return null|RedirectResponse|\Symfony\Component\Security\Http\Authentication\Response
      */
     public function onAuthenticationSuccess(

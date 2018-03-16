@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Gradebook controller
+ * Gradebook controller.
+ *
  * @package chamilo.gradebook
  */
 
@@ -79,7 +80,7 @@ $(document).ready(function() {
 api_block_anonymous_users();
 $htmlHeadXtra[] = '<script type="text/javascript">
 function confirmation() {
-	if (confirm("' . get_lang('DeleteAll').'?")) {
+	if (confirm("'.get_lang('DeleteAll').'?")) {
 		return true;
 	} else {
 		return false;
@@ -173,8 +174,8 @@ if (isset($_GET['movecat'])) {
         );
         if ($move_form->validate()) {
             header('Location: '.api_get_self().'?selectcat='.$selectCat
-                . '&movecat='.intval($_GET['movecat'])
-                . '&targetcat='.$move_form->exportValue('move_cat'));
+                .'&movecat='.intval($_GET['movecat'])
+                .'&targetcat='.$move_form->exportValue('move_cat'));
             exit;
         }
     } else {
@@ -207,8 +208,8 @@ if (isset($_GET['moveeval'])) {
 
         if ($move_form->validate()) {
             header('Location: '.api_get_self().'?selectcat='.$selectCat
-                . '&moveeval='.Security::remove_XSS($_GET['moveeval'])
-                . '&targetcat='.$move_form->exportValue('move_cat'));
+                .'&moveeval='.Security::remove_XSS($_GET['moveeval'])
+                .'&targetcat='.$move_form->exportValue('move_cat'));
             exit;
         }
     } else {
@@ -577,19 +578,19 @@ if (!isset($_GET['exportpdf'])) {
     if (isset($_GET['studentoverview'])) {
         $interbreadcrumb[] = [
             'url' => Category::getUrl().'selectcat='.$selectCat,
-            'name' => get_lang('ToolGradebook')
+            'name' => get_lang('ToolGradebook'),
         ];
         $viewTitle = get_lang('FlatView');
     } elseif (isset($_GET['search'])) {
         $interbreadcrumb[] = [
             'url' => Category::getUrl().'selectcat='.$selectCat,
-            'name' => get_lang('ToolGradebook')
+            'name' => get_lang('ToolGradebook'),
         ];
         $viewTitle = get_lang('SearchResults');
     } elseif (!empty($selectCat)) {
         $interbreadcrumb[] = [
             'url' => '#',
-            'name' => get_lang('ToolGradebook')
+            'name' => get_lang('ToolGradebook'),
         ];
     } else {
         $viewTitle = get_lang('ToolGradebook');
@@ -616,7 +617,7 @@ if (isset($_GET['studentoverview'])) {
             get_lang('Description'),
             get_lang('Weight'),
             get_lang('Date'),
-            get_lang('Results')
+            get_lang('Results'),
         ];
         $data_array = $datagen->get_data(
             GradebookDataGenerator::GDG_SORT_NAME,
@@ -632,7 +633,7 @@ if (isset($_GET['studentoverview'])) {
         $pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
         $pdf->ezSetMargins(30, 30, 50, 30);
         $pdf->ezSetY(810);
-        $pdf->ezText(get_lang('FlatView').' ('.api_convert_and_format_date(null, DATE_FORMAT_SHORT).' '.api_convert_and_format_date(null, TIME_NO_SEC_FORMAT).')', 12, ['justification'=>'center']);
+        $pdf->ezText(get_lang('FlatView').' ('.api_convert_and_format_date(null, DATE_FORMAT_SHORT).' '.api_convert_and_format_date(null, TIME_NO_SEC_FORMAT).')', 12, ['justification' => 'center']);
         $pdf->line(50, 790, 550, 790);
         $pdf->line(50, 40, 550, 40);
         $pdf->ezSetY(750);
@@ -721,7 +722,7 @@ if (isset($_GET['studentoverview'])) {
         $stud_id = $stud_id;
     }
 
-    $allcat  = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
+    $allcat = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
     $alleval = $cats[0]->get_evaluations($stud_id);
     $alllink = $cats[0]->get_links($stud_id);
 }
@@ -854,7 +855,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                         $value = $form_grade->exportValue('grade_model_id');
 
                         $gradebook = new Gradebook();
-                        $gradebook->update(['id'=> $cats[0]->get_id(), 'grade_model_id' => $value], true);
+                        $gradebook->update(['id' => $cats[0]->get_id(), 'grade_model_id' => $value], true);
 
                         //do something
                         $obj = new GradeModel();
@@ -946,7 +947,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
 
                 if (api_is_allowed_to_edit()) {
                     $gradebookTable->td_attributes = [
-                        4 => 'class="text-center"'
+                        4 => 'class="text-center"',
                     ];
                 } else {
                     if (empty($model)) {
@@ -955,12 +956,12 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                             4 => 'class="text-center"',
                             5 => 'class="text-center"',
                             6 => 'class="text-center"',
-                            7 => 'class="text-center"'
+                            7 => 'class="text-center"',
                         ];
                     } else {
                         $gradebookTable->td_attributes = [
                             3 => 'class="text-right"',
-                            4 => 'class="text-center"'
+                            4 => 'class="text-center"',
                         ];
                     }
 
@@ -984,7 +985,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                         'show_grade_generated_date' => true,
                         'show_real_course_teachers' => false,
                         'show_teacher_as_myself' => false,
-                        'orientation' => 'P'
+                        'orientation' => 'P',
                     ];
 
                     $pdf = new PDF('A4', $params['orientation'], $params);

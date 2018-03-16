@@ -5,12 +5,13 @@ namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Chamilo\SettingsBundle\Transformer\ArrayToIdentifierTransformer;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class PlatformSettingsSchema
+ * Class PlatformSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class PlatformSettingsSchema extends AbstractSettingsSchema
@@ -50,7 +51,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'show_full_skill_name_on_skill_wheel' => 'false',
                     'show_official_code_whoisonline' => 'false',
                     'show_tabs' => [],
-                    'chamilo_database_version' => '2.0.0'
+                    'chamilo_database_version' => '2.0.0',
                     //
 //('catalog_show_courses_sessions', '0', 'CatalogueShowOnlyCourses'),
 //('catalog_show_courses_sessions', '1', 'CatalogueShowOnlySessions'),
@@ -73,7 +74,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             'timezone' => ['string'],
             'gravatar_enabled' => ['string'],
             'gravatar_type' => ['string'],
-            'show_tabs' => ['array']
+            'show_tabs' => ['array'],
             //'gamification_mode' => array('string'),
         ];
 
@@ -94,7 +95,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             'TabsMyAgenda' => 'my_profile',
             'TabsMyGradebook' => 'my_gradebook',
             'TabsSocial' => 'social',
-            'TabsDashboard' => 'dashboard'
+            'TabsDashboard' => 'dashboard',
         ];
 
         $builder
@@ -160,7 +161,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'multiple' => true,
                     'choices' => $tabs,
                     'label' => 'ShowTabsTitle',
-                    'help_block' => 'ShowTabsComment'
+                    'help_block' => 'ShowTabsComment',
                 ]
             )
         ;

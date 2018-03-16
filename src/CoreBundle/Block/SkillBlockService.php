@@ -3,17 +3,17 @@
 
 namespace Chamilo\CoreBundle\Block;
 
-use Symfony\Component\HttpFoundation\Response;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\CoreBundle\Validator\ErrorElement;
-use Sonata\BlockBundle\Model\BlockInterface;
-use Sonata\BlockBundle\Block\Service\AbstractBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
-
+use Sonata\BlockBundle\Block\Service\AbstractBlockService;
+use Sonata\BlockBundle\Model\BlockInterface;
+use Sonata\CoreBundle\Validator\ErrorElement;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class CourseBlockService
+ * Class CourseBlockService.
+ *
  * @package Chamilo\CoreBundle\Block
  */
 class SkillBlockService extends AbstractBlockService
@@ -48,7 +48,8 @@ class SkillBlockService extends AbstractBlockService
 
     /**
      * @param BlockContextInterface $blockContext
-     * @param Response|null $response
+     * @param Response|null         $response
+     *
      * @return Response
      */
     public function execute(

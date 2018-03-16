@@ -8,7 +8,8 @@ use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class CourseDescriptionCourseSettingsSchema
+ * Class CourseDescriptionCourseSettingsSchema.
+ *
  * @package Chamilo\CourseBundle\Settings
  */
 class CourseDescriptionCourseSettingsSchema extends AbstractSettingsSchema

@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Process learning paths before pass it to search listing scripts
+ * Process learning paths before pass it to search listing scripts.
+ *
  * @package chamilo.include.search
  */
 class learnpath_processor extends search_processor
@@ -80,11 +81,12 @@ class learnpath_processor extends search_processor
         }
         // Sort results with score descending
         array_multisort($score, SORT_DESC, $results);
+
         return $results;
     }
 
     /**
-     * Get learning path information
+     * Get learning path information.
      */
     private function get_information($course_id, $lp_id, $has_document_id = true)
     {
@@ -140,6 +142,7 @@ class learnpath_processor extends search_processor
                 }
                 $name = $row['name'];
             }
+
             return [$thumbnail, $image, $name, $row['author']];
         } else {
             return [];

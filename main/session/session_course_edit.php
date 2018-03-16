@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Implements the edition of course-session settings
+ * Implements the edition of course-session settings.
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';

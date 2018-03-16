@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -42,7 +43,7 @@ function minItem(item) {
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat=1',
-    'name' => get_lang('ToolGradebook')
+    'name' => get_lang('ToolGradebook'),
 ];
 
 $select_cat = intval($_GET['selectcat']);

@@ -5,6 +5,7 @@
  * Class Promotion
  * This class provides methods for the promotion management.
  * Include/require it in your code to use its features.
+ *
  * @package chamilo.library
  */
 class Promotion extends Model
@@ -21,7 +22,7 @@ class Promotion extends Model
     ];
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -30,7 +31,7 @@ class Promotion extends Model
     }
 
     /**
-     * Get the count of elements
+     * Get the count of elements.
      */
     public function get_count()
     {
@@ -45,11 +46,13 @@ class Promotion extends Model
     }
 
     /**
-     * Copies the promotion to a new one
-     * @param   integer     Promotion ID
-     * @param   integer     Career ID, in case we want to change it
-     * @param   boolean     Whether or not to copy the sessions inside
-     * @return  integer     New promotion ID on success, false on failure
+     * Copies the promotion to a new one.
+     *
+     * @param   int     Promotion ID
+     * @param   int     Career ID, in case we want to change it
+     * @param   bool     Whether or not to copy the sessions inside
+     *
+     * @return int New promotion ID on success, false on failure
      */
     public function copy($id, $career_id = null, $copy_sessions = false)
     {
@@ -87,7 +90,7 @@ class Promotion extends Model
                  * When copying a session we do:
                  * 1. Copy a new session from the source
                  * 2. Copy all courses from the session (no user data, no user list)
-                 * 3. Create the promotion
+                 * 3. Create the promotion.
                  */
                 $session_list = SessionManager::get_all_sessions_by_promotion($id);
 
@@ -124,10 +127,12 @@ class Promotion extends Model
     }
 
     /**
-     * Gets all promotions by career id
+     * Gets all promotions by career id.
+     *
      * @param   int     career id
      * @param bool $order
-     * @return  array   results
+     *
+     * @return array results
      */
     public function get_all_promotions_by_career_id($career_id, $order = false)
     {
@@ -153,8 +158,9 @@ class Promotion extends Model
     }
 
     /**
-     * Displays the title + grid
-     * @return  string  html code
+     * Displays the title + grid.
+     *
+     * @return string html code
      */
     public function display()
     {
@@ -187,9 +193,10 @@ class Promotion extends Model
     }
 
     /**
-     * Update all session status by promotion
-     * @param   int $promotion_id
-     * @param   int $status (1, 0)
+     * Update all session status by promotion.
+     *
+     * @param int $promotion_id
+     * @param int $status       (1, 0)
      */
     public function update_all_sessions_status_by_promotion_id(
         $promotion_id,
@@ -204,11 +211,12 @@ class Promotion extends Model
     }
 
     /**
-     * Returns a Form validator Obj
-     * @param   string $url
-     * @param   string $action
+     * Returns a Form validator Obj.
      *
-     * @return  FormValidator
+     * @param string $url
+     * @param string $action
+     *
+     * @return FormValidator
      */
     public function return_form($url, $action = 'add')
     {
@@ -236,7 +244,7 @@ class Promotion extends Model
             [
                 'ToolbarSet' => 'Careers',
                 'Width' => '100%',
-                'Height' => '250'
+                'Height' => '250',
             ]
         );
         $career = new Career();
@@ -281,8 +289,7 @@ class Promotion extends Model
 
     /**
      * @param array $params
-     *
-     * @param bool $show_query
+     * @param bool  $show_query
      *
      * @return bool
      */

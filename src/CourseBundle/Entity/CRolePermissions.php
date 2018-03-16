@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CRolePermissions
+ * CRolePermissions.
  *
  * @ORM\Table(
  *  name="c_role_permissions",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CRolePermissions
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -29,28 +29,28 @@ class CRolePermissions
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="default_perm", type="boolean", nullable=false)
      */
     private $defaultPerm;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="role_id", type="integer")
      */
@@ -71,9 +71,10 @@ class CRolePermissions
     private $action;
 
     /**
-     * Set defaultPerm
+     * Set defaultPerm.
      *
-     * @param boolean $defaultPerm
+     * @param bool $defaultPerm
+     *
      * @return CRolePermissions
      */
     public function setDefaultPerm($defaultPerm)
@@ -84,9 +85,9 @@ class CRolePermissions
     }
 
     /**
-     * Get defaultPerm
+     * Get defaultPerm.
      *
-     * @return boolean
+     * @return bool
      */
     public function getDefaultPerm()
     {
@@ -94,9 +95,10 @@ class CRolePermissions
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CRolePermissions
      */
     public function setId($id)
@@ -107,9 +109,9 @@ class CRolePermissions
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -117,9 +119,10 @@ class CRolePermissions
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CRolePermissions
      */
     public function setCId($cId)
@@ -130,9 +133,9 @@ class CRolePermissions
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -140,9 +143,10 @@ class CRolePermissions
     }
 
     /**
-     * Set roleId
+     * Set roleId.
      *
-     * @param integer $roleId
+     * @param int $roleId
+     *
      * @return CRolePermissions
      */
     public function setRoleId($roleId)
@@ -153,9 +157,9 @@ class CRolePermissions
     }
 
     /**
-     * Get roleId
+     * Get roleId.
      *
-     * @return integer
+     * @return int
      */
     public function getRoleId()
     {
@@ -163,9 +167,10 @@ class CRolePermissions
     }
 
     /**
-     * Set tool
+     * Set tool.
      *
      * @param string $tool
+     *
      * @return CRolePermissions
      */
     public function setTool($tool)
@@ -176,7 +181,7 @@ class CRolePermissions
     }
 
     /**
-     * Get tool
+     * Get tool.
      *
      * @return string
      */
@@ -186,9 +191,10 @@ class CRolePermissions
     }
 
     /**
-     * Set action
+     * Set action.
      *
      * @param string $action
+     *
      * @return CRolePermissions
      */
     public function setAction($action)
@@ -199,7 +205,7 @@ class CRolePermissions
     }
 
     /**
-     * Get action
+     * Get action.
      *
      * @return string
      */

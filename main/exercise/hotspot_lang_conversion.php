@@ -1,10 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Hotspot language conversion
+ * Hotspot language conversion.
+ *
  * @package chamilo.exercise
+ *
  * @author
+ *
  * @deprecated ?
+ *
  * @version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
  */
 require_once __DIR__.'/../inc/global.inc.php';

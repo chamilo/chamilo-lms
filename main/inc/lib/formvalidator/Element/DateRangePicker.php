@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Form element to select a range of dates (with popup datepicker)
+ * Form element to select a range of dates (with popup datepicker).
  */
 class DateRangePicker extends HTML_QuickForm_text
 {
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct($elementName = null, $elementLabel = null, $attributes = null)
     {
@@ -41,13 +41,80 @@ class DateRangePicker extends HTML_QuickForm_text
     {
         $this->updateAttributes(
             [
-                'value' => $value
+                'value' => $value,
             ]
         );
     }
 
     /**
-     * Get the necessary javascript for this datepicker
+     * @param array $dateRange
+     *
+     * @return array
+     */
+    public function parseDateRange($dateRange)
+    {
+        $dates = explode('/', $dateRange);
+        $dates = array_map('trim', $dates);
+        $start = isset($dates[0]) ? $dates[0] : '';
+        $end = isset($dates[1]) ? $dates[1] : '';
+
+        return [
+            'start' => $start,
+            'end' => $end,
+        ];
+    }
+
+    /**
+     * @param array $dates result of parseDateRange()
+     *
+     * @return bool
+     */
+    public function validateDates($dates, $format = null)
+    {
+        if (empty($dates['start']) || empty($dates['end'])) {
+            return false;
+        }
+
+        $format = $format ? $format : 'Y-m-d H:i';
+        $d = DateTime::createFromFormat($format, $dates['start']);
+        $resultStart = $d && $d->format($format) == $dates['start'];
+
+        $d = DateTime::createFromFormat($format, $dates['end']);
+        $resultEnd = $d && $d->format($format) == $dates['end'];
+
+        if (!($resultStart) || !$resultEnd) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param mixed $value
+     * @param array $submitValues
+     * @param array $errors
+     *
+     * @return string
+     */
+    public function getSubmitValue($value, &$submitValues, &$errors)
+    {
+        /** @var DateRangePicker $element */
+        $elementName = $this->getName();
+        $parsedDates = $this->parseDateRange($value);
+        $validateFormat = $this->getAttribute('validate_format');
+
+        if (!$this->validateDates($parsedDates, $validateFormat)) {
+            $errors[$elementName] = get_lang('CheckDates');
+        }
+        $submitValues[$elementName.'_start'] = $parsedDates['start'];
+        $submitValues[$elementName.'_end'] = $parsedDates['end'];
+
+        return $value;
+    }
+
+    /**
+     * Get the necessary javascript for this datepicker.
+     *
      * @return string
      */
     private function getElementJS()
@@ -133,70 +200,5 @@ class DateRangePicker extends HTML_QuickForm_text
         </script>";
 
         return $js;
-    }
-
-    /**
-     * @param array $dateRange
-     *
-     * @return array
-     */
-    public function parseDateRange($dateRange)
-    {
-        $dates = explode('/', $dateRange);
-        $dates = array_map('trim', $dates);
-        $start = isset($dates[0]) ? $dates[0] : '';
-        $end = isset($dates[1]) ? $dates[1] : '';
-
-        return [
-            'start' => $start,
-            'end' => $end
-        ];
-    }
-
-    /**
-     * @param array $dates result of parseDateRange()
-     *
-     * @return bool
-     */
-    public function validateDates($dates, $format = null)
-    {
-        if (empty($dates['start']) || empty($dates['end'])) {
-            return false;
-        }
-
-        $format = $format ? $format : 'Y-m-d H:i';
-        $d = DateTime::createFromFormat($format, $dates['start']);
-        $resultStart = $d && $d->format($format) == $dates['start'];
-
-        $d = DateTime::createFromFormat($format, $dates['end']);
-        $resultEnd = $d && $d->format($format) == $dates['end'];
-
-        if (!($resultStart) || !$resultEnd) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param mixed $value
-     * @param array $submitValues
-     * @param array $errors
-     * @return string
-     */
-    public function getSubmitValue($value, &$submitValues, &$errors)
-    {
-        /** @var DateRangePicker $element */
-        $elementName = $this->getName();
-        $parsedDates = $this->parseDateRange($value);
-        $validateFormat = $this->getAttribute('validate_format');
-
-        if (!$this->validateDates($parsedDates, $validateFormat)) {
-            $errors[$elementName] = get_lang('CheckDates');
-        }
-        $submitValues[$elementName.'_start'] = $parsedDates['start'];
-        $submitValues[$elementName.'_end'] = $parsedDates['end'];
-
-        return $value;
     }
 }

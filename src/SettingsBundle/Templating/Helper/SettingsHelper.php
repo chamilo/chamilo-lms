@@ -9,14 +9,15 @@ use Sylius\Bundle\SettingsBundle\Templating\Helper\SettingsHelperInterface;
 use Symfony\Component\Templating\Helper\Helper;
 
 /**
- * Class SettingsHelper
+ * Class SettingsHelper.
+ *
  * @package Chamilo\SettingsBundle\Templating\Helper
  */
 class SettingsHelper extends Helper implements SettingsHelperInterface
 {
     /**
-    * @var SettingsManager
-    */
+     * @var SettingsManager
+     */
     private $settingsManager;
 
     /**
@@ -37,6 +38,7 @@ class SettingsHelper extends Helper implements SettingsHelperInterface
 
     /**
      * @param string $schemaAlias Example: admin, agenda, etc
+     *
      * @return \Sylius\Bundle\SettingsBundle\Model\Settings
      */
     public function getSettings($schemaAlias)
@@ -46,6 +48,7 @@ class SettingsHelper extends Helper implements SettingsHelperInterface
 
     /**
      * @param string $parameter Example: admin.administrator_name
+     *
      * @return mixed
      */
     public function getSettingsParameter($parameter)

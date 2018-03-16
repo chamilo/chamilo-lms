@@ -5,7 +5,8 @@ use Chamilo\CourseBundle\Entity\CSurvey;
 use ChamiloSession as Session;
 
 /**
- * This class offers a series of general utility functions for survey querying and display
+ * This class offers a series of general utility functions for survey querying and display.
+ *
  * @package chamilo.survey
  */
 class SurveyUtil
@@ -13,11 +14,11 @@ class SurveyUtil
     /**
      * Checks whether the given survey has a pagebreak question as the first
      * or the last question.
-     * If so, break the current process, displaying an error message
-     * @param    integer $survey_id Survey ID (database ID)
-     * @param    boolean $continue Optional. Whether to continue the current
-     * process or exit when breaking condition found. Defaults to true (do not break).
-     * @return    void
+     * If so, break the current process, displaying an error message.
+     *
+     * @param int  $survey_id Survey ID (database ID)
+     * @param bool $continue  Optional. Whether to continue the current
+     *                        process or exit when breaking condition found. Defaults to true (do not break).
      */
     public static function check_first_last_question($survey_id, $continue = true)
     {
@@ -52,14 +53,15 @@ class SurveyUtil
     }
 
     /**
-     * This function removes an (or multiple) answer(s) of a user on a question of a survey
+     * This function removes an (or multiple) answer(s) of a user on a question of a survey.
      *
      * @param mixed   The user id or email of the person who fills the survey
-     * @param integer The survey id
-     * @param integer The question id
-     * @param integer The option id
+     * @param int The survey id
+     * @param int The question id
+     * @param int The option id
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version January 2007
      */
     public static function remove_answer($user, $survey_id, $question_id, $course_id)
@@ -77,17 +79,19 @@ class SurveyUtil
     }
 
     /**
-     * This function stores an answer of a user on a question of a survey
+     * This function stores an answer of a user on a question of a survey.
      *
      * @param mixed   The user id or email of the person who fills the survey
-     * @param integer Survey id
-     * @param integer Question id
-     * @param integer Option id
+     * @param int Survey id
+     * @param int Question id
+     * @param int Option id
      * @param string  Option value
      * @param array $survey_data Survey data settings
+     *
      * @return bool False if insufficient data, true otherwise
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version January 2007
      */
     public static function store_answer(
@@ -137,10 +141,12 @@ class SurveyUtil
     }
 
     /**
-     * This function checks the parameters that are used in this page
+     * This function checks the parameters that are used in this page.
      *
      * @return string $people_filled The header, an error and the footer if any parameter fails, else it returns true
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version February 2007
      */
     public static function check_parameters($people_filled)
@@ -162,7 +168,7 @@ class SurveyUtil
             'userreport',
             'comparativereport',
             'completereport',
-            'deleteuserreport'
+            'deleteuserreport',
         ];
         if (isset($_GET['action']) && !in_array($_GET['action'], $allowed_actions)) {
             $error = get_lang('ActionNotAllowed');
@@ -171,7 +177,7 @@ class SurveyUtil
         // User report
         if (isset($_GET['action']) && $_GET['action'] == 'userreport') {
             if ($survey_data['anonymous'] == 0) {
-                foreach ($people_filled as $key => & $value) {
+                foreach ($people_filled as $key => &$value) {
                     $people_filled_userids[] = $value['invited_user'];
                 }
             } else {
@@ -208,11 +214,13 @@ class SurveyUtil
     }
 
     /**
-     * This function deals with the action handling
+     * This function deals with the action handling.
+     *
      * @param array $survey_data
      * @param array $people_filled
-     * @return void
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version February 2007
      */
     public static function handle_reporting_actions($survey_data, $people_filled)
@@ -226,7 +234,7 @@ class SurveyUtil
         $my_temp_questions_data = $temp_questions_data == null ? [] : $temp_questions_data;
         $questions_data = [];
 
-        foreach ($my_temp_questions_data as $key => & $value) {
+        foreach ($my_temp_questions_data as $key => &$value) {
             if ($value['type'] != 'comment' && $value['type'] != 'pagebreak') {
                 $questions_data[$value['sort']] = $value;
             }
@@ -253,11 +261,13 @@ class SurveyUtil
     }
 
     /**
-     * This function deletes the report of an user who wants to retake the survey
-     * @param integer $survey_id
-     * @param integer $user_id
-     * @return void
+     * This function deletes the report of an user who wants to retake the survey.
+     *
+     * @param int $survey_id
+     * @param int $user_id
+     *
      * @author Christian Fasanando Flores <christian.fasanando@dokeos.com>
+     *
      * @version November 2008
      */
     public static function delete_user_report($survey_id, $user_id)
@@ -304,7 +314,9 @@ class SurveyUtil
      * of the survey that is filled with the answers of the person who filled the survey.
      *
      * @return string html code of the one-page survey with the answers of the selected user
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version February 2007 - Updated March 2008
      */
     public static function display_user_report($people_filled, $survey_data)
@@ -364,7 +376,7 @@ class SurveyUtil
             .Security::remove_XSS($_GET['action']).'&survey_id='.intval($_GET['survey_id']).'">'
             .get_lang('SelectUser').'</option>';
 
-        foreach ($people_filled as $key => & $person) {
+        foreach ($people_filled as $key => &$person) {
             if ($survey_data['anonymous'] == 0) {
                 $name = $person['user_info']['complete_name_with_username'];
                 $id = $person['user_id'];
@@ -443,13 +455,13 @@ class SurveyUtil
 
             // Displaying all the questions
 
-            foreach ($questions as & $question) {
+            foreach ($questions as &$question) {
                 // If the question type is a scoring then we have to format the answers differently
                 switch ($question['type']) {
                     case 'score':
                         $finalAnswer = [];
                         if (is_array($question) && is_array($all_answers)) {
-                            foreach ($all_answers[$question['question_id']] as $key => & $answer_array) {
+                            foreach ($all_answers[$question['question_id']] as $key => &$answer_array) {
                                 $finalAnswer[$answer_array['option_id']] = $answer_array['value'];
                             }
                         }
@@ -469,7 +481,7 @@ class SurveyUtil
 
                 $ch_type = 'ch_'.$question['type'];
                 /** @var survey_question $display */
-                $display = new $ch_type;
+                $display = new $ch_type();
 
                 $url = api_get_self();
                 $form = new FormValidator('question', 'post', $url);
@@ -492,12 +504,16 @@ class SurveyUtil
      * by user where you see all the answers of that user.
      *
      * @param    array    All the survey data
-     * @return   string    html code that displays the report by question
+     *
+     * @return string html code that displays the report by question
+     *
      * @todo allow switching between horizontal and vertical.
      * @todo multiple response: percentage are probably not OK
      * @todo the question and option text have to be shortened and should expand when the user clicks on it.
      * @todo the pagebreak and comment question types should not be shown => removed from $survey_data before
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version February 2007 - Updated March 2008
      */
     public static function display_question_report($survey_data)
@@ -642,7 +658,7 @@ class SurveyUtil
 
                 // Displaying the table: the content
                 if (is_array($options)) {
-                    foreach ($options as $key => & $value) {
+                    foreach ($options as $key => &$value) {
                         $absolute_number = null;
                         if (isset($data[$value['question_option_id']])) {
                             $absolute_number = $data[$value['question_option_id']]['total'];
@@ -727,10 +743,10 @@ class SurveyUtil
     }
 
     /**
-     * Display score data about a survey question
+     * Display score data about a survey question.
+     *
      * @param    array    Question info
-     * @param    integer    The offset of results shown
-     * @return   void    (direct output)
+     * @param    int    The offset of results shown
      */
     public static function display_question_report_score($survey_data, $question, $offset)
     {
@@ -781,7 +797,7 @@ class SurveyUtil
                     [
                         'serie' => $optionText,
                         'option' => $i,
-                        'votes' => $votes
+                        'votes' => $votes,
                     ]
                 );
             }
@@ -800,7 +816,7 @@ class SurveyUtil
         echo '		<th>'.get_lang('VisualRepresentation').'</th>';
         echo '	<tr>';
         // Displaying the table: the content
-        foreach ($options as $key => & $value) {
+        foreach ($options as $key => &$value) {
             for ($i = 1; $i <= $question['max_value']; $i++) {
                 $absolute_number = $data[$value['question_option_id']][$i]['total'];
                 echo '	<tr>';
@@ -832,10 +848,14 @@ class SurveyUtil
     }
 
     /**
-     * This functions displays the complete reporting
-     * @return string    HTML code
+     * This functions displays the complete reporting.
+     *
+     * @return string HTML code
+     *
      * @todo open questions are not in the complete report yet.
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version February 2007
      */
     public static function display_complete_report($survey_data)
@@ -967,7 +987,7 @@ class SurveyUtil
         if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter'] ||
                 isset($_POST['export_report']) && $_POST['export_report']) || !empty($_POST['fields_filter'])) {
             //show the fields names for user fields
-            foreach ($extra_user_fields as & $field) {
+            foreach ($extra_user_fields as &$field) {
                 echo '<th>'.$field[3].'</th>';
             }
         }
@@ -1010,7 +1030,7 @@ class SurveyUtil
                     $display_percentage_header = 0;
                 } elseif ($row['type'] == 'percentage') {
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
-                } elseif ($row['type'] <> 'comment' && $row['type'] <> 'pagebreak' && $row['type'] <> 'percentage') {
+                } elseif ($row['type'] != 'comment' && $row['type'] != 'pagebreak' && $row['type'] != 'percentage') {
                     echo '<th>';
                     echo $row['option_text'];
                     echo '</th>';
@@ -1083,8 +1103,10 @@ class SurveyUtil
      * @param array    Possible options
      * @param array    User answers
      * @param mixed    User ID or user details string
-     * @param boolean  Whether to show extra user fields or not
+     * @param bool  Whether to show extra user fields or not
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version February 2007 - Updated March 2008
      */
     public static function display_complete_report_row(
@@ -1125,19 +1147,19 @@ class SurveyUtil
                 false,
                 true
             );
-            foreach ($user_fields_values as & $value) {
+            foreach ($user_fields_values as &$value) {
                 echo '<td align="center">'.$value.'</td>';
             }
         }
         if (is_array($possible_options)) {
             // <hub> modified to display open answers and percentage
-            foreach ($possible_options as $question_id => & $possible_option) {
+            foreach ($possible_options as $question_id => &$possible_option) {
                 if ($questions[$question_id]['type'] == 'open') {
                     echo '<td align="center">';
                     echo $answers_of_user[$question_id]['0']['option_id'];
                     echo '</td>';
                 } else {
-                    foreach ($possible_option as $option_id => & $value) {
+                    foreach ($possible_option as $option_id => &$value) {
                         if ($questions[$question_id]['type'] == 'percentage') {
                             if (!empty($answers_of_user[$question_id][$option_id])) {
                                 echo "<td align='center'>";
@@ -1163,10 +1185,14 @@ class SurveyUtil
 
     /**
      * Quite similar to display_complete_report(), returns an HTML string
-     * that can be used in a csv file
+     * that can be used in a csv file.
+     *
      * @todo consider merging this function with display_complete_report
-     * @return    string    The contents of a csv file
+     *
+     * @return string The contents of a csv file
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version February 2007
      */
     public static function export_complete_report($survey_data, $user_id = 0)
@@ -1246,7 +1272,7 @@ class SurveyUtil
 
         // Show the fields names for user fields
         if (!empty($extra_user_fields)) {
-            foreach ($extra_user_fields as & $field) {
+            foreach ($extra_user_fields as &$field) {
                 $return .= '"'
                     .str_replace(
                         "\r\n",
@@ -1344,14 +1370,17 @@ class SurveyUtil
     }
 
     /**
-     * Add a line to the csv file
+     * Add a line to the csv file.
      *
      * @param array Possible answers
      * @param array User's answers
      * @param mixed User ID or user details as string - Used as a string in the result string
-     * @param boolean Whether to display user fields or not
+     * @param bool Whether to display user fields or not
+     *
      * @return string One line of the csv file
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version February 2007
      */
     public static function export_complete_report_row(
@@ -1387,7 +1416,7 @@ class SurveyUtil
                 false,
                 true
             );
-            foreach ($user_fields_values as & $value) {
+            foreach ($user_fields_values as &$value) {
                 $return .= '"'.str_replace('"', '""', api_html_entity_decode(strip_tags($value), ENT_QUOTES)).'";';
             }
         }
@@ -1395,7 +1424,7 @@ class SurveyUtil
         if (is_array($possible_options)) {
             foreach ($possible_options as $question_id => $possible_option) {
                 if (is_array($possible_option) && count($possible_option) > 0) {
-                    foreach ($possible_option as $option_id => & $value) {
+                    foreach ($possible_option as $option_id => &$value) {
                         $my_answer_of_user = !isset($answers_of_user[$question_id]) || isset($answers_of_user[$question_id]) && $answers_of_user[$question_id] == null ? [] : $answers_of_user[$question_id];
                         $key = array_keys($my_answer_of_user);
                         if (isset($key[0]) && substr($key[0], 0, 4) == 'open') {
@@ -1431,10 +1460,14 @@ class SurveyUtil
 
     /**
      * Quite similar to display_complete_report(), returns an HTML string
-     * that can be used in a csv file
+     * that can be used in a csv file.
+     *
      * @todo consider merging this function with display_complete_report
+     *
      * @return string The contents of a csv file
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version February 2007
      */
     public static function export_complete_report_xls($survey_data, $filename, $user_id = 0)
@@ -1532,7 +1565,7 @@ class SurveyUtil
         // Show extra field values
         if ($display_extra_user_fields) {
             // Show the fields names for user fields
-            foreach ($extra_user_fields as & $field) {
+            foreach ($extra_user_fields as &$field) {
                 $worksheet->setCellValueByColumnAndRow(
                     $column,
                     $line,
@@ -1654,12 +1687,13 @@ class SurveyUtil
     }
 
     /**
-     * Add a line to the csv file
+     * Add a line to the csv file.
      *
      * @param array Possible answers
      * @param array User's answers
      * @param mixed User ID or user details as string - Used as a string in the result string
-     * @param boolean Whether to display user fields or not
+     * @param bool Whether to display user fields or not
+     *
      * @return string One line of the csv file
      */
     public static function export_complete_report_row_xls(
@@ -1701,9 +1735,9 @@ class SurveyUtil
         }
 
         if (is_array($possible_options)) {
-            foreach ($possible_options as $question_id => & $possible_option) {
+            foreach ($possible_options as $question_id => &$possible_option) {
                 if (is_array($possible_option) && count($possible_option) > 0) {
-                    foreach ($possible_option as $option_id => & $value) {
+                    foreach ($possible_option as $option_id => &$value) {
                         $my_answers_of_user = isset($answers_of_user[$question_id])
                             ? $answers_of_user[$question_id]
                             : [];
@@ -1741,6 +1775,7 @@ class SurveyUtil
      * @return string HTML code
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version February 2007
      */
     public static function display_comparative_report()
@@ -1752,7 +1787,7 @@ class SurveyUtil
             'multipleresponse',
             'dropdown',
             'percentage',
-            'score'
+            'score',
         ];
 
         $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
@@ -1788,7 +1823,7 @@ class SurveyUtil
         $optionsX = ['----'];
         $optionsY = ['----'];
         $defaults = [];
-        foreach ($questions as $key => & $question) {
+        foreach ($questions as $key => &$question) {
             if (is_array($allowed_question_types)) {
                 if (in_array($question['type'], $allowed_question_types)) {
                     //echo '<option value="'.$question['question_id'].'"';
@@ -1882,7 +1917,7 @@ class SurveyUtil
                                             [
                                                 'serie' => [$currentYQuestion, $xOptions[$ii - 1]],
                                                 'option' => $x,
-                                                'votes' => $votes
+                                                'votes' => $votes,
                                             ]
                                         );
                                         $tableHtml .= '</td>';
@@ -1907,7 +1942,7 @@ class SurveyUtil
                                         [
                                             'serie' => [$currentYQuestion, $xOptions[$ii - 1]],
                                             'option' => $y,
-                                            'votes' => $votes
+                                            'votes' => $votes,
                                         ]
                                     );
                                     $tableHtml .= '</td>';
@@ -1941,7 +1976,7 @@ class SurveyUtil
                                         [
                                             'serie' => [$currentYQuestion, $xOptions[$ii - 1]],
                                             'option' => $x,
-                                            'votes' => $votes
+                                            'votes' => $votes,
                                         ]
                                     );
                                     $tableHtml .= '</td>';
@@ -1964,7 +1999,7 @@ class SurveyUtil
                                     [
                                         'serie' => $xOptions[$ii - 1],
                                         'option' => $currentYQuestion,
-                                        'votes' => $votes
+                                        'votes' => $votes,
                                     ]
                                 );
                                 $tableHtml .= '</td>';
@@ -1983,13 +2018,15 @@ class SurveyUtil
     }
 
     /**
-     * Get all the answers of a question grouped by user
+     * Get all the answers of a question grouped by user.
      *
-     * @param integer $survey_id Survey ID
-     * @param integer $question_id Question ID
+     * @param int $survey_id   Survey ID
+     * @param int $question_id Question ID
+     *
      * @return array Array containing all answers of all users, grouped by user
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version February 2007 - Updated March 2008
      */
     public static function get_answers_of_question_by_user($survey_id, $question_id)
@@ -2017,15 +2054,17 @@ class SurveyUtil
     }
 
     /**
-     * Count the number of users who answer positively on both options
+     * Count the number of users who answer positively on both options.
      *
      * @param array All answers of the x axis
      * @param array All answers of the y axis
-     * @param integer x axis value (= the option_id of the first question)
-     * @param integer y axis value (= the option_id of the second question)
-     * @return integer Number of users who have answered positively to both options
+     * @param int x axis value (= the option_id of the first question)
+     * @param int y axis value (= the option_id of the second question)
+     *
+     * @return int Number of users who have answered positively to both options
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version February 2007
      */
     public static function comparative_check(
@@ -2049,7 +2088,7 @@ class SurveyUtil
 
         $counter = 0;
         if (is_array($answers_x)) {
-            foreach ($answers_x as $user => & $answers) {
+            foreach ($answers_x as $user => &$answers) {
                 // Check if the user has given $option_x as answer
                 if (in_array($check_x, $answers)) {
                     // Check if the user has given $option_y as an answer
@@ -2066,11 +2105,12 @@ class SurveyUtil
     }
 
     /**
-     * Get all the information about the invitations of a certain survey
+     * Get all the information about the invitations of a certain survey.
      *
      * @return array Lines of invitation [user, code, date, empty element]
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version January 2007
      *
      * @todo use survey_id parameter instead of $_GET
@@ -2104,13 +2144,14 @@ class SurveyUtil
     }
 
     /**
-     * Get the total number of survey invitations for a given survey (through $_GET['survey_id'])
+     * Get the total number of survey invitations for a given survey (through $_GET['survey_id']).
      *
-     * @return integer Total number of survey invitations
+     * @return int Total number of survey invitations
      *
      * @todo use survey_id parameter instead of $_GET
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version January 2007
      */
     public static function get_number_of_survey_invitations()
@@ -2133,12 +2174,13 @@ class SurveyUtil
     }
 
     /**
-     * Save the invitation mail
+     * Save the invitation mail.
      *
      * @param string Text of the e-mail
-     * @param integer Whether the mail contents are for invite mail (0, default) or reminder mail (1)
+     * @param int Whether the mail contents are for invite mail (0, default) or reminder mail (1)
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version January 2007
      */
     public static function save_invite_mail($mailtext, $mail_subject, $reminder = 0)
@@ -2164,19 +2206,21 @@ class SurveyUtil
     /**
      * This function saves all the invitations of course users
      * and additional users in the database
-     * and sends the invitations by email
+     * and sends the invitations by email.
      *
      * @param $users_array Users $array array can be both a list of course uids AND a list of additional emailaddresses
      * @param $invitation_title Title $string of the invitation, used as the title of the mail
      * @param $invitation_text Text $string of the invitation, used as the text of the mail.
      *                         The text has to contain a **link** string or this will automatically be added to the end
-     * @param int $reminder
+     * @param int  $reminder
      * @param bool $sendmail
-     * @param int $remindUnAnswered
+     * @param int  $remindUnAnswered
+     *
      * @return bool $isAdditionalEmail
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @author Julio Montoya - Adding auto-generated link support
+     *
      * @version January 2007
      */
     public static function saveInvitations(
@@ -2224,7 +2268,7 @@ class SurveyUtil
                     'c_id' => $course_id,
                     'session_id' => $session_id,
                     'group_id' => $groupId,
-                    'survey_code' => $survey_data['code']
+                    'survey_code' => $survey_data['code'],
                 ];
 
                 $invitationExists = self::invitationExists(
@@ -2273,7 +2317,7 @@ class SurveyUtil
                         'user' => $value,
                         'survey_code' => $survey_data['code'],
                         'invitation_code' => $invitation_code,
-                        'invitation_date' => api_get_utc_datetime()
+                        'invitation_date' => api_get_utc_datetime(),
                     ];
                     self::save_invitation($params);
                 }
@@ -2302,6 +2346,7 @@ class SurveyUtil
 
     /**
      * @param $params
+     *
      * @return bool|int
      */
     public static function save_invitation($params)
@@ -2327,10 +2372,11 @@ class SurveyUtil
     }
 
     /**
-     * @param int $courseId
-     * @param int $sessionId
-     * @param int $groupId
+     * @param int    $courseId
+     * @param int    $sessionId
+     * @param int    $groupId
      * @param string $surveyCode
+     *
      * @return int
      */
     public static function invitationExists($courseId, $sessionId, $groupId, $surveyCode)
@@ -2358,7 +2404,6 @@ class SurveyUtil
      *
      * @param int invitedUser - the userId (course user) or emailaddress of additional user
      * $param string $invitation_code - the unique invitation code for the URL
-     * @return void
      */
     public static function send_invitation_mail(
         $invitedUser,
@@ -2435,8 +2480,11 @@ class SurveyUtil
      * @param string Survey code
      * @param int $courseId
      * @param int $sessionId
+     *
      * @return int
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version January 2007
      */
     public static function update_count_invited($survey_code, $courseId = 0, $sessionId = 0)
@@ -2480,12 +2528,14 @@ class SurveyUtil
      *
      * @param string Survey code
      * @param string optional - course database
+     *
      * @return array Array containing the course users and additional users (non course users)
      *
      * @todo consider making $defaults['additional_users'] also an array
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @author Julio Montoya, adding c_id fixes - Dec 2012
+     *
      * @version January 2007
      */
     public static function get_invited_users($survey_code, $course_code = '', $session_id = 0)
@@ -2554,12 +2604,14 @@ class SurveyUtil
     }
 
     /**
-     * Get all the invitations
+     * Get all the invitations.
      *
      * @param string Survey code
+     *
      * @return array Database rows matching the survey code
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version September 2007
      */
     public static function get_invitations($survey_code)
@@ -2584,11 +2636,11 @@ class SurveyUtil
     }
 
     /**
-     * This function displays the form for searching a survey
+     * This function displays the form for searching a survey.
      *
-     * @return void (direct output)
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version January 2007
      *
      * @todo use quickforms
@@ -2608,7 +2660,7 @@ class SurveyUtil
     }
 
     /**
-     * Show table only visible by DRH users
+     * Show table only visible by DRH users.
      */
     public static function displaySurveyListForDrh()
     {
@@ -2648,11 +2700,11 @@ class SurveyUtil
     }
 
     /**
-     * This function displays the sortable table with all the surveys
+     * This function displays the sortable table with all the surveys.
      *
-     * @return void (direct output)
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version January 2007
      */
     public static function display_survey_list()
@@ -2701,7 +2753,7 @@ class SurveyUtil
     }
 
     /**
-     * Survey list for coach
+     * Survey list for coach.
      */
     public static function display_survey_list_for_coach()
     {
@@ -2746,8 +2798,10 @@ class SurveyUtil
     }
 
     /**
-     * Check if the hide_survey_edition configurations setting is enabled
+     * Check if the hide_survey_edition configurations setting is enabled.
+     *
      * @param string $surveyCode
+     *
      * @return bool
      */
     public static function checkHideEditionToolsByCode($surveyCode)
@@ -2770,13 +2824,15 @@ class SurveyUtil
     }
 
     /**
-     * This function changes the modify column of the sortable table
+     * This function changes the modify column of the sortable table.
      *
-     * @param integer $survey_id the id of the survey
+     * @param int  $survey_id the id of the survey
      * @param bool $drh
+     *
      * @return string html code that are the actions that can be performed on any survey
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version January 2007
      */
     public static function modify_filter($survey_id, $drh = false)
@@ -2858,6 +2914,7 @@ class SurveyUtil
 
     /**
      * @param int $survey_id
+     *
      * @return string
      */
     public static function modify_filter_for_coach($survey_id)
@@ -2876,8 +2933,10 @@ class SurveyUtil
     }
 
     /**
-     * Returns "yes" when given parameter is one, "no" for any other value
-     * @param integer Whether anonymous or not
+     * Returns "yes" when given parameter is one, "no" for any other value.
+     *
+     * @param int Whether anonymous or not
+     *
      * @return string "Yes" or "No" in the current language
      */
     public static function anonymous_filter($anonymous)
@@ -2890,11 +2949,12 @@ class SurveyUtil
     }
 
     /**
-     * This function handles the search restriction for the SQL statements
+     * This function handles the search restriction for the SQL statements.
      *
      * @return string Part of a SQL statement or false on error
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version January 2007
      */
     public static function survey_search_restriction()
@@ -2919,11 +2979,12 @@ class SurveyUtil
     }
 
     /**
-     * This function calculates the total number of surveys
+     * This function calculates the total number of surveys.
      *
-     * @return integer Total number of surveys
+     * @return int Total number of surveys
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version January 2007
      */
     public static function get_number_of_surveys()
@@ -2956,17 +3017,19 @@ class SurveyUtil
     }
 
     /**
-     * This function gets all the survey data that is to be displayed in the sortable table
+     * This function gets all the survey data that is to be displayed in the sortable table.
      *
-     * @param int $from
-     * @param int $number_of_items
-     * @param int $column
+     * @param int    $from
+     * @param int    $number_of_items
+     * @param int    $column
      * @param string $direction
-     * @param bool $isDrh
+     * @param bool   $isDrh
+     *
      * @return array
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @author Julio Montoya <gugli100@gmail.com>, Beeznest - Adding intvals
+     *
      * @version January 2007
      */
     public static function get_survey_data(
@@ -3098,6 +3161,7 @@ class SurveyUtil
      * @param $number_of_items
      * @param $column
      * @param $direction
+     *
      * @return array
      */
     public static function get_survey_data_for_coach($from, $number_of_items, $column, $direction)
@@ -3107,7 +3171,7 @@ class SurveyUtil
         //$last_version_surveys = $survey_tree->get_last_children_from_branch($survey_tree->surveylist);
         $last_version_surveys = $survey_tree->surveylist;
         $list = [];
-        foreach ($last_version_surveys as & $survey) {
+        foreach ($last_version_surveys as &$survey) {
             $list[] = $survey['id'];
         }
         if (count($list) > 0) {
@@ -3173,11 +3237,12 @@ class SurveyUtil
     }
 
     /**
-     * Display all the active surveys for the given course user
+     * Display all the active surveys for the given course user.
      *
      * @param int $user_id
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version April 2007
      */
     public static function getSurveyList($user_id)
@@ -3273,7 +3338,7 @@ class SurveyUtil
                         $icon.PHP_EOL.$row['title'],
                         api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&'.http_build_query([
                             'action' => 'questionreport',
-                            'survey_id' => $row['survey_id']
+                            'survey_id' => $row['survey_id'],
                         ])
                     )
                     : $icon.PHP_EOL.$row['title'];
@@ -3299,8 +3364,10 @@ class SurveyUtil
      * Creates a multi array with the user fields that we can show.
      * We look the visibility with the api_get_setting function
      * The username is always NOT able to change it.
+     *
      * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification
-     * @return array  array[value_name][name], array[value_name][visibilty]
+     *
+     * @return array array[value_name][name], array[value_name][visibilty]
      */
     public static function make_field_list()
     {
@@ -3449,10 +3516,12 @@ class SurveyUtil
 
     /**
      * @author Isaac Flores Paz <florespaz@bidsoftperu.com>
-     * @param int $user_id User ID
+     *
+     * @param int    $user_id     User ID
      * @param string $survey_code
-     * @param int $user_answer User in survey answer table (user id or anonymous)
-     * @return boolean
+     * @param int    $user_answer User in survey answer table (user id or anonymous)
+     *
+     * @return bool
      */
     public static function show_link_available($user_id, $survey_code, $user_answer)
     {
@@ -3509,10 +3578,12 @@ class SurveyUtil
     }
 
     /**
-     * Display survey question chart
-     * @param array $chartData
-     * @param boolean $hasSerie Tells if the chart has a serie. False by default
+     * Display survey question chart.
+     *
+     * @param array  $chartData
+     * @param bool   $hasSerie         Tells if the chart has a serie. False by default
      * @param string $chartContainerId
+     *
      * @return string (direct output)
      */
     public static function drawChart(
@@ -3577,9 +3648,10 @@ class SurveyUtil
     }
 
     /**
-     * Set a flag to the current survey as answered by the current user
+     * Set a flag to the current survey as answered by the current user.
+     *
      * @param string $surveyCode The survey code
-     * @param int $courseId The course ID
+     * @param int    $courseId   The course ID
      */
     public static function flagSurveyAsAnswered($surveyCode, $courseId)
     {
@@ -3594,10 +3666,12 @@ class SurveyUtil
     }
 
     /**
-     * Check whether a survey was answered by the current user
+     * Check whether a survey was answered by the current user.
+     *
      * @param string $surveyCode The survey code
-     * @param int $courseId The course ID
-     * @return boolean
+     * @param int    $courseId   The course ID
+     *
+     * @return bool
      */
     public static function isSurveyAnsweredFlagged($surveyCode, $courseId)
     {
@@ -3624,10 +3698,11 @@ class SurveyUtil
     }
 
     /**
-     * Check if the current survey has answers
+     * Check if the current survey has answers.
      *
      * @param int $surveyId
-     * @return boolean return true if the survey has answers, false otherwise
+     *
+     * @return bool return true if the survey has answers, false otherwise
      */
     public static function checkIfSurveyHasAnswers($surveyId)
     {

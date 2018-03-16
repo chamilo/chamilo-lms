@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class ch_score
+ * Class ch_score.
  */
 class ch_score extends survey_question
 {
@@ -34,15 +34,15 @@ class ch_score extends survey_question
 
     /**
      * @param FormValidator $form
-     * @param array $questionData
-     * @param array $answers
+     * @param array         $questionData
+     * @param array         $answers
      */
     public function render(FormValidator $form, $questionData = [], $answers = [])
     {
         $defaults = [];
-        foreach ($questionData['options'] as $key => & $value) {
+        foreach ($questionData['options'] as $key => &$value) {
             $options = [
-                '--' => '--'
+                '--' => '--',
             ];
             for ($i = 1; $i <= $questionData['maximum_score']; $i++) {
                 $options[$i] = $i;

@@ -4,14 +4,13 @@
 namespace Chamilo\CourseBundle\Controller;
 
 use Chamilo\CourseBundle\Manager\SettingsManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sylius\Bundle\SettingsBundle\Form\Factory\SettingsFormFactoryInterface;
-use Sylius\Bundle\SettingsBundle\Manager\SettingsManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * Settings controller.
@@ -24,7 +23,7 @@ class SettingsController extends Controller
      * Edit configuration with given namespace.
      *
      * @param Request $request
-     * @param string $namespace
+     * @param string  $namespace
      * @ParamConverter("course", class="ChamiloCoreBundle:Course", options={"repository_method" = "findOneByCode"})
      *
      * @return Response

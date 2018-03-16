@@ -5,7 +5,9 @@ use ChamiloSession as Session;
 
 /**
  *    Code library for HotPotatoes integration.
+ *
  * @package chamilo.exercise
+ *
  * @author Olivier Brouckaert & Julio Montoya & Hubert Borderiou 21-10-2011 (Question by category)
  *    QUESTION LIST ADMINISTRATION
  *
@@ -113,7 +115,7 @@ $ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&
 
                 $pnlQuestion.html('<span class="fa fa-spinner fa-spin fa-3x fa-fw" aria-hidden="true"></span>');
 
-                $.get('<?php echo api_get_path(WEB_AJAX_PATH) ?>exercise.ajax.php?<?php echo api_get_cidreq() ?>', {
+                $.get('<?php echo api_get_path(WEB_AJAX_PATH); ?>exercise.ajax.php?<?php echo api_get_cidreq(); ?>', {
                     a: 'show_question',
                     exercise: exerciseId,
                     question: questionId
@@ -126,7 +128,7 @@ $ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&
             cursor: "move", // works?
             update: function (event, ui) {
                 var order = $(this).sortable("serialize") + "&a=update_question_order&exercise_id=<?php echo $exerciseId; ?>";
-                $.post("<?php echo $ajax_url ?>", order, function (result) {
+                $.post("<?php echo $ajax_url; ?>", order, function (result) {
                     $("#message").html(result);
                 });
             },
@@ -232,7 +234,7 @@ if (!$inATest) {
                             .http_build_query([
                                 'type' => $objQuestionTmp->selectType(),
                                 'myid' => 1,
-                                'editQuestion' => $id
+                                'editQuestion' => $id,
                             ]),
                         ['class' => 'btn btn-default btn-sm']
                     );
@@ -249,11 +251,11 @@ if (!$inATest) {
                         api_get_self().'?'.api_get_cidreq().'&'
                             .http_build_query([
                                 'exerciseId' => $exerciseId,
-                                'deleteQuestion' => $id
+                                'deleteQuestion' => $id,
                             ]),
                         [
                             'id' => "delete_$id",
-                            'class' => 'opener btn btn-default btn-sm'
+                            'class' => 'opener btn btn-default btn-sm',
                         ]
                     );
                 }

@@ -4,12 +4,12 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class PlatformSettingsSchema
+ * Class PlatformSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class CronSettingsSchema extends AbstractSettingsSchema
@@ -24,7 +24,7 @@ class CronSettingsSchema extends AbstractSettingsSchema
                 [
                     'cron_remind_course_finished_activate' => 'false',
                     'cron_remind_course_expiration_frequency' => '',
-                    'cron_remind_course_expiration_activate' => 'false'
+                    'cron_remind_course_expiration_activate' => 'false',
                 ]
             );
         $allowedTypes = [

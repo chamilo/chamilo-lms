@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Zend\Feed\Reader\Reader;
 use Zend\Feed\Reader\Feed\FeedInterface;
+use Zend\Feed\Reader\Reader;
 
 $plugin = RssPlugin::create();
 
@@ -13,6 +13,7 @@ $css = $plugin->get_css();
 
 if (empty($url)) {
     echo Display::return_message(get_lang('NoRSSItem'), 'warning');
+
     return;
 }
 

@@ -9,7 +9,7 @@ use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 abstract class AbstractSettingsSchema implements SchemaInterface
 {
     /**
-     * @param array $allowedTypes
+     * @param array                    $allowedTypes
      * @param SettingsBuilderInterface $builder
      */
     public function setMultipleAllowedTypes($allowedTypes, $builder)

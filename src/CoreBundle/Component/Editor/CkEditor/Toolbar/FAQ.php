@@ -4,14 +4,15 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * FAQ toolbar configuration
+ * FAQ toolbar configuration.
  *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class FAQ extends Basic
 {
     /**
-     * Get the toolbar config
+     * Get the toolbar config.
+     *
      * @return array
      */
     public function getConfig()
@@ -28,7 +29,8 @@ class FAQ extends Basic
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is maximized
+     * Get the toolbar configuration when CKEditor is maximized.
+     *
      * @return array
      */
     protected function getMaximizedToolbar()
@@ -48,7 +50,7 @@ class FAQ extends Basic
                 'Audio',
                 'leaflet',
                 'Smiley',
-                'SpecialChar'
+                'SpecialChar',
             ],
             '/',
             ['Table', '-', 'CreateDiv'],
@@ -58,23 +60,25 @@ class FAQ extends Basic
             [api_get_setting('allow_spellcheck') == 'true' ? 'Scayt' : ''],
             ['Styles', 'Format', 'Font', 'FontSize'],
             ['PageBreak', 'ShowBlocks', 'Source'],
-            ['Toolbarswitch']
+            ['Toolbarswitch'],
         ];
     }
 
     /**
-     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false
+     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false.
+     *
      * @return array
      */
     protected function getNormalToolbar()
     {
         return [
-            ['Save', 'Preview', 'Source']
+            ['Save', 'Preview', 'Source'],
         ];
     }
 
     /**
-     * Get the toolbar configuration when CKEditor is minimized
+     * Get the toolbar configuration when CKEditor is minimized.
+     *
      * @return array
      */
     protected function getMinimizedToolbar()
@@ -86,7 +90,7 @@ class FAQ extends Basic
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
             ['JustifyLeft', 'JustifyCenter'],
             ['Format', 'Font', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
-            ['Toolbarswitch']
+            ['Toolbarswitch'],
         ];
     }
 }

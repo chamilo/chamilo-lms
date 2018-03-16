@@ -50,7 +50,7 @@ switch ($action) {
         foreach ($tags as $tag) {
             $result[] = [
                 'id' => $tag->getTag(),
-                'text' => $tag->getTag()
+                'text' => $tag->getTag(),
             ];
         }
 

@@ -6,7 +6,6 @@ use ChamiloSession as Session;
 /**
  * @package chamilo.tracking
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
@@ -109,7 +108,7 @@ $js = "<script>
         $('#reporting_table .data_table tr th').each(
             function(index) {
                 $(this).prepend(
-                    '<div style=\"cursor:pointer\" onclick=\"foldup(' + index + ')\">" . Display::return_icon(
+                    '<div style=\"cursor:pointer\" onclick=\"foldup(' + index + ')\">".Display::return_icon(
                         'visible.png',
                         get_lang('HideColumn'),
                         ['align' => 'absmiddle', 'hspace' => '3px'],
@@ -151,15 +150,15 @@ $sessionId = api_get_session_id();
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
     $interbreadcrumb[] = [
         'url' => '../admin/index.php',
-        'name' => get_lang('PlatformAdmin')
+        'name' => get_lang('PlatformAdmin'),
     ];
     $interbreadcrumb[] = [
         'url' => '../session/session_list.php',
-        'name' => get_lang('SessionList')
+        'name' => get_lang('SessionList'),
     ];
     $interbreadcrumb[] = [
         'url' => '../session/resume_session.php?id_session='.$sessionId,
-        'name' => get_lang('SessionOverview')
+        'name' => get_lang('SessionOverview'),
     ];
 }
 
@@ -221,7 +220,7 @@ $actionsRight .= '<a href="javascript: void(0);" onclick="javascript: window.pri
 $addional_param = '';
 if (isset($_GET['additional_profile_field'])) {
     foreach ($_GET['additional_profile_field'] as $fieldId) {
-        $addional_param .= '&additional_profile_field[]='. (int) $fieldId;
+        $addional_param .= '&additional_profile_field[]='.(int) $fieldId;
     }
 }
 
@@ -349,7 +348,7 @@ if (count($a_students) > 0) {
         7 => sprintf($getLangXDays, 7),
         15 => sprintf($getLangXDays, 15),
         30 => sprintf($getLangXDays, 30),
-        'never' => get_lang('Never')
+        'never' => get_lang('Never'),
     ];
     $el = $form->addSelect(
         'since',
@@ -489,7 +488,7 @@ if (count($a_students) > 0) {
             [
                 'title' => htmlentities("$getLangDisplayColumn \"$header\"", ENT_QUOTES),
                 'class' => 'hide',
-                'onclick' => "foldup($index); return false;"
+                'onclick' => "foldup($index); return false;",
             ]
         );
 

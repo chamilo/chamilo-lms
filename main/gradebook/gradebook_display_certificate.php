@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -18,7 +19,7 @@ ini_set('max_execution_time', 0);
 //extra javascript functions for in html head:
 $htmlHeadXtra[] = "<script>
 function confirmation() {
-	if (confirm(\" " . trim(get_lang('AreYouSureToDelete'))." ?\")) {
+	if (confirm(\" ".trim(get_lang('AreYouSureToDelete'))." ?\")) {
 	    return true;
 	} else {
 	    return false;

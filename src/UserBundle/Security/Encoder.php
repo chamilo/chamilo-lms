@@ -9,7 +9,8 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Symfony\Component\Security\Core\Encoder\PlaintextPasswordEncoder;
 
 /**
- * Class Encoder
+ * Class Encoder.
+ *
  * @package Chamilo\UserBundle\Security
  */
 class Encoder extends BasePasswordEncoder
@@ -28,6 +29,7 @@ class Encoder extends BasePasswordEncoder
     /**
      * @param string $raw
      * @param string $salt
+     *
      * @return string
      */
     public function encodePassword($raw, $salt)
@@ -36,6 +38,24 @@ class Encoder extends BasePasswordEncoder
         $encoded = $defaultEncoder->encodePassword($raw, $salt);
 
         return $encoded;
+    }
+
+    /**
+     * @param string $encoded
+     * @param string $raw
+     * @param string $salt
+     *
+     * @return bool
+     */
+    public function isPasswordValid($encoded, $raw, $salt)
+    {
+        if ($this->isPasswordTooLong($raw)) {
+            return false;
+        }
+
+        $encoder = $this->getEncoder();
+
+        return $encoder->isPasswordValid($encoded, $raw, $salt);
     }
 
     /**
@@ -57,21 +77,5 @@ class Encoder extends BasePasswordEncoder
         }
 
         return $defaultEncoder;
-    }
-
-    /**
-     * @param string $encoded
-     * @param string $raw
-     * @param string $salt
-     * @return bool
-     */
-    public function isPasswordValid($encoded, $raw, $salt)
-    {
-        if ($this->isPasswordTooLong($raw)) {
-            return false;
-        }
-
-        $encoder = $this->getEncoder();
-        return $encoder->isPasswordValid($encoded, $raw, $salt);
     }
 }

@@ -4,7 +4,8 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * Class ToolbarStartExpanded
+ * Class ToolbarStartExpanded.
+ *
  * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
 class ToolbarStartExpanded extends Basic

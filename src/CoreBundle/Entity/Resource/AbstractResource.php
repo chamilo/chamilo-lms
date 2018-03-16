@@ -3,10 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\MappedSuperclass
@@ -37,7 +34,7 @@ abstract class AbstractResource
     /**
      * Returns the resource id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -47,7 +44,7 @@ abstract class AbstractResource
     /**
      * Sets the resource id.
      *
-     * @param integer $id
+     * @param int $id
      */
     public function setId($id)
     {

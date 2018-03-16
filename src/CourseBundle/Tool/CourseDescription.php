@@ -4,7 +4,8 @@
 namespace Chamilo\CourseBundle\Tool;
 
 /**
- * Class CourseDescription
+ * Class CourseDescription.
+ *
  * @package Chamilo\CourseBundle\Tool
  */
 class CourseDescription extends BaseTool

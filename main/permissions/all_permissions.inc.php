@@ -2,14 +2,15 @@
 /**
 * In this page all the possible rights inside a course are defined.
 * This is the start for the Matrix that you'll use to assign rights to
-* a user, group or role
+* a user, group or role.
+*
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
+*
 * @package chamilo.permissions
 */
 // possible permissions
 $rights_full = ["View", "Add", "Edit", "Delete", "Visibility", "Move"];
 $rights_limited = ["Add", "Edit", "Delete"];
-
 
 // first we determine what can be done in each tool. We do this for each tool.
 $tool_rights[TOOL_LINK] = [

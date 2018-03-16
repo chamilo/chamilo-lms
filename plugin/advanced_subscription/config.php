@@ -1,11 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Config the plugin
+ * Config the plugin.
+ *
  * @author Daniel Alejandro Barreto Alva <daniel.barreto@beeznest.com>
+ *
  * @package chamilo.plugin.advanced_subscription
  */
-
 define('TABLE_ADVANCED_SUBSCRIPTION_QUEUE', 'plugin_advanced_subscription_queue');
 
 define('ADVANCED_SUBSCRIPTION_ACTION_STUDENT_REQUEST', 0);
@@ -30,7 +31,5 @@ define('ADVANCED_SUBSCRIPTION_QUEUE_STATUS_ADMIN_APPROVED', 10);
 define('ADVANCED_SUBSCRIPTION_TERMS_MODE_POPUP', 0);
 define('ADVANCED_SUBSCRIPTION_TERMS_MODE_REJECT', 1);
 define('ADVANCED_SUBSCRIPTION_TERMS_MODE_FINAL', 2);
-
-
 
 require_once __DIR__.'/../../main/inc/global.inc.php';

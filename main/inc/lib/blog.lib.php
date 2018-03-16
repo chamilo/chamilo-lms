@@ -2,20 +2,25 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class Blog
+ * Class Blog.
  *
  * Contains several functions dealing with displaying,
  * editing,... of a blog
+ *
  * @package chamilo.blogs
+ *
  * @author Toon Keppens <toon@vi-host.net>
  * @author Julio Montoya - Cleaning code
  */
 class Blog
 {
     /**
-     * Get the title of a blog
+     * Get the title of a blog.
+     *
      * @author Toon Keppens
+     *
      * @param int $blog_id The internal ID of the blog
+     *
      * @return string Blog Title
      */
     public static function getBlogTitle($blog_id)
@@ -37,9 +42,12 @@ class Blog
     }
 
     /**
-     * Get the description of a blog
+     * Get the description of a blog.
+     *
      * @author Toon Keppens
+     *
      * @param int $blog_id The internal ID of the blog
+     *
      * @return string Blog description
      */
     public static function getBlogSubtitle($blog_id)
@@ -55,9 +63,12 @@ class Blog
     }
 
     /**
-     * Get the users of a blog
+     * Get the users of a blog.
+     *
      * @author Toon Keppens
+     *
      * @param int $blog_id The ID of the blog
+     *
      * @return array Returns an array with [userid]=>[username]
      */
     public static function getBlogUsers($blog_id)
@@ -89,11 +100,12 @@ class Blog
     }
 
     /**
-     * Creates a new blog in the given course
+     * Creates a new blog in the given course.
+     *
      * @author Toon Keppens
-     * @param string $title The title of the new blog
+     *
+     * @param string $title    The title of the new blog
      * @param string $subtitle The description (or subtitle) of the new blog
-     * @return void
      */
     public static function addBlog($title, $subtitle)
     {
@@ -169,7 +181,7 @@ class Blog
                 'address' => 'pastillegris.gif',
                 'added_tool' => 0,
                 'session_id' => $session_id,
-                'target' => ''
+                'target' => '',
             ];
             $toolId = Database::insert($tbl_tool, $params);
             if ($toolId) {
@@ -183,11 +195,12 @@ class Blog
     }
 
     /**
-     * Subscribes a user to a given blog
+     * Subscribes a user to a given blog.
+     *
      * @author Toon Keppens
+     *
      * @param int $blog_id The internal blog ID
      * @param int $user_id The internal user ID (of the user to be subscribed)
-     * @return void
      */
     public static function subscribeUser($blog_id, $user_id)
     {
@@ -226,12 +239,13 @@ class Blog
     }
 
     /**
-     * Update title and subtitle of a blog in the given course
+     * Update title and subtitle of a blog in the given course.
+     *
      * @author Toon Keppens
-     * @param int $blog_id The internal ID of the blog
-     * @param string $title The title to be set
+     *
+     * @param int    $blog_id  The internal ID of the blog
+     * @param string $title    The title to be set
      * @param string $subtitle The subtitle (or description) to be set
-     * @return void
      */
     public static function editBlog($blog_id, $title, $subtitle = '')
     {
@@ -272,10 +286,11 @@ class Blog
     }
 
     /**
-     * Deletes a blog and it's posts from the course database
+     * Deletes a blog and it's posts from the course database.
+     *
      * @author Toon Keppens
-     * @param Integer $blog_id The internal blog ID
-     * @return void
+     *
+     * @param int $blog_id The internal blog ID
      */
     public static function deleteBlog($blog_id)
     {
@@ -327,12 +342,15 @@ class Blog
     }
 
     /**
-     * Creates a new post in a given blog
+     * Creates a new post in a given blog.
+     *
      * @author Toon Keppens
-     * @param string $title The title of the new post
-     * @param string $full_text The full text of the new post
+     *
+     * @param string $title        The title of the new post
+     * @param string $full_text    The full text of the new post
      * @param string $file_comment The text of the comment (if any)
-     * @param int $blog_id The internal blog ID
+     * @param int    $blog_id      The internal blog ID
+     *
      * @return int
      */
     public static function createPost($title, $full_text, $file_comment, $blog_id)
@@ -411,17 +429,20 @@ class Blog
             return $last_post_id;
         } else {
             echo Display::return_message(get_lang('UplNoFileUploaded'), 'error');
+
             return 0;
         }
     }
 
     /**
-     * Edits a post in a given blog
+     * Edits a post in a given blog.
+     *
      * @author Toon Keppens
-     * @param int $post_id The internal ID of the post to edit
-     * @param string $title The title
+     *
+     * @param int    $post_id   The internal ID of the post to edit
+     * @param string $title     The title
      * @param string $full_text The full post text
-     * @param int $blog_id The internal ID of the blog in which the post is located
+     * @param int    $blog_id   The internal ID of the blog in which the post is located
      */
     public static function editPost($post_id, $title, $full_text, $blog_id)
     {
@@ -442,8 +463,10 @@ class Blog
     }
 
     /**
-     * Deletes an article and its comments
+     * Deletes an article and its comments.
+     *
      * @author Toon Keppens
+     *
      * @param int $blog_id The internal blog ID
      * @param int $post_id The internal post ID
      */
@@ -477,15 +500,17 @@ class Blog
     }
 
     /**
-     * Creates a comment on a post in a given blog
+     * Creates a comment on a post in a given blog.
+     *
      * @author Toon Keppens
-     * @param string $title The comment title
-     * @param string $full_text The full text of the comment
+     *
+     * @param string $title        The comment title
+     * @param string $full_text    The full text of the comment
      * @param string $file_comment A comment on a file, if any was uploaded
-     * @param int $blog_id The internal blog ID
-     * @param int $post_id The internal post ID
-     * @param int $parent_id The internal parent post ID
-     * @param int $task_id The internal task ID (if any)
+     * @param int    $blog_id      The internal blog ID
+     * @param int    $post_id      The internal post ID
+     * @param int    $parent_id    The internal parent post ID
+     * @param int    $task_id      The internal task ID (if any)
      */
     public static function createComment(
         $title,
@@ -575,10 +600,12 @@ class Blog
     }
 
     /**
-     * Deletes a comment from a blogpost
+     * Deletes a comment from a blogpost.
+     *
      * @author Toon Keppens
-     * @param int $blog_id The internal blog ID
-     * @param int $post_id The internal post ID
+     *
+     * @param int $blog_id    The internal blog ID
+     * @param int $post_id    The internal post ID
      * @param int $comment_id The internal comment ID
      */
     public static function deleteComment($blog_id, $post_id, $comment_id)
@@ -618,13 +645,15 @@ class Blog
     }
 
     /**
-     * Creates a new task in a blog
+     * Creates a new task in a blog.
+     *
      * @author Toon Keppens
-     * @param int $blog_id
+     *
+     * @param int    $blog_id
      * @param string $title
      * @param string $description
-     * @param string $articleDelete Set to 'on' to register as 'article_delete' in tasks_permissions
-     * @param string $articleEdit Set to 'on' to register as 'article_edit' in tasks_permissions
+     * @param string $articleDelete  Set to 'on' to register as 'article_delete' in tasks_permissions
+     * @param string $articleEdit    Set to 'on' to register as 'article_edit' in tasks_permissions
      * @param string $commentsDelete Set to 'on' to register as 'article_comments_delete' in tasks permissions
      * @param string $color
      */
@@ -701,16 +730,18 @@ class Blog
     }
 
     /**
-     * Edit a task in a blog
+     * Edit a task in a blog.
+     *
      * @author Toon Keppens
-     * @param int $blog_id The internal blog ID
-     * @param int $task_id The internal task ID
-     * @param string $title The task title
-     * @param string $description The task description
-     * @param string $articleDelete Set to 'on' to register as 'article_delete' in tasks_permissions
-     * @param string $articleEdit Set to 'on' to register as 'article_edit' in tasks_permissions
+     *
+     * @param int    $blog_id        The internal blog ID
+     * @param int    $task_id        The internal task ID
+     * @param string $title          The task title
+     * @param string $description    The task description
+     * @param string $articleDelete  Set to 'on' to register as 'article_delete' in tasks_permissions
+     * @param string $articleEdit    Set to 'on' to register as 'article_edit' in tasks_permissions
      * @param string $commentsDelete Set to 'on' to register as 'article_comments_delete' in tasks permissions
-     * @param string $color The color code
+     * @param string $color          The color code
      */
     public static function editTask(
         $blog_id,
@@ -783,10 +814,10 @@ class Blog
     }
 
     /**
-     * Deletes a task from a blog
+     * Deletes a task from a blog.
+     *
      * @param int $blog_id
      * @param int $task_id
-     * @return void
      */
     public static function deleteTask($blog_id, $task_id)
     {
@@ -802,11 +833,11 @@ class Blog
     }
 
     /**
-     * Deletes an assigned task from a blog
+     * Deletes an assigned task from a blog.
+     *
      * @param int $blog_id
      * @param int $task_id
      * @param int $user_id
-     * @return void
      */
     public static function deleteAssignedTask($blog_id, $task_id, $user_id)
     {
@@ -827,8 +858,10 @@ class Blog
     }
 
     /**
-     * Get personal task list
+     * Get personal task list.
+     *
      * @author Toon Keppens
+     *
      * @return string Returns an unsorted list (<ul></ul>) with the users' tasks
      */
     public static function getPersonalTasksList()
@@ -878,10 +911,11 @@ class Blog
     }
 
     /**
-     * Changes the visibility of a blog
+     * Changes the visibility of a blog.
+     *
      * @author Toon Keppens
-     * @param Integer $blog_id
-     * @return void
+     *
+     * @param int $blog_id
      */
     public static function changeBlogVisibility($blog_id)
     {
@@ -926,9 +960,11 @@ class Blog
     }
 
     /**
-     * Display the search results
-     * @param int $blog_id
+     * Display the search results.
+     *
+     * @param int    $blog_id
      * @param string $query_string
+     *
      * @return string|array
      */
     public static function getSearchResults($blog_id, $query_string)
@@ -946,11 +982,14 @@ class Blog
     }
 
     /**
-     * Shows the posts of a blog
+     * Shows the posts of a blog.
+     *
      * @author Toon Keppens
-     * @param int $blog_id
+     *
+     * @param int    $blog_id
      * @param string $filter
-     * @param int $max_number_of_posts
+     * @param int    $max_number_of_posts
+     *
      * @return string|array
      */
     public static function getPosts($blog_id, $filter = '1=1', $max_number_of_posts = 20)
@@ -1010,7 +1049,7 @@ class Blog
                     'post_date' => Display::dateToStringAgoAndLongDate($blog_post['date_creation']),
                     'n_comments' => $blog_post_comments['number_of_comments'],
                     'files' => $fileArray,
-                    'score_ranking' => $scoreRanking
+                    'score_ranking' => $scoreRanking,
                 ];
 
                 $listArticle[] = $article;
@@ -1027,9 +1066,11 @@ class Blog
     }
 
     /**
-     * Display posts from a certain date
-     * @param int $blog_id
+     * Display posts from a certain date.
+     *
+     * @param int    $blog_id
      * @param string $query_string
+     *
      * @return string|array
      */
     public static function getDailyResults($blog_id, $query_string)
@@ -1045,9 +1086,11 @@ class Blog
     }
 
     /**
-     * Displays a post and his comments
+     * Displays a post and his comments.
+     *
      * @param int $blog_id
      * @param int $post_id
+     *
      * @return array
      */
     public static function getSinglePost($blog_id, $post_id)
@@ -1143,7 +1186,7 @@ class Blog
             'score_ranking' => (int) $scoreRanking,
             'frm_rating' => api_is_allowed('BLOG_'.$blog_id, 'article_rate')
                 ? self::displayRatingCreateForm('post', $blog_id, $post_id)
-                : null
+                : null,
         ];
 
         return $article;
@@ -1157,6 +1200,7 @@ class Blog
      * @param int $blog_id
      * @param int $post_id
      * @param int $task_id
+     *
      * @return array
      */
     public static function getThreadedComments(
@@ -1262,7 +1306,7 @@ class Blog
                     $next_level,
                     $blog_id,
                     $post_id
-                )
+                ),
             ];
 
             $listComments[] = $comments;
@@ -1272,12 +1316,15 @@ class Blog
     }
 
     /**
-     * Shows the rating form if not already rated by that user
+     * Shows the rating form if not already rated by that user.
+     *
      * @author Toon Keppens
+     *
      * @param string $type
-     * @param int $blog_id
-     * @param int $post_id
-     * @param int $comment_id
+     * @param int    $blog_id
+     * @param int    $post_id
+     * @param int    $comment_id
+     *
      * @return string
      */
     public static function displayRatingCreateForm($type, $blog_id, $post_id, $comment_id = null)
@@ -1351,10 +1398,12 @@ class Blog
     }
 
     /**
-     * Shows the rating of user
+     * Shows the rating of user.
+     *
      * @param string $type
-     * @param integer $blog_id
-     * @param integer $item_id
+     * @param int    $blog_id
+     * @param int    $item_id
+     *
      * @return float
      */
     public static function displayRating($type, $blog_id, $item_id)
@@ -1379,11 +1428,13 @@ class Blog
     }
 
     /**
-     * Displays the form to create a new post
+     * Displays the form to create a new post.
+     *
      * @author Toon Keppens
      *
      * @param int $blog_id
      * @param int $post_id
+     *
      * @return string HTML form
      */
     public static function displayCommentCreateForm($blog_id, $post_id)
@@ -1399,7 +1450,7 @@ class Blog
                 'action' => 'view_post',
                 'blog_id' => $blog_id,
                 'post_id' => $post_id,
-                'task_id' => $taskId
+                'task_id' => $taskId,
             ]),
             null,
             ['enctype' => 'multipart/form-data']
@@ -1456,7 +1507,7 @@ class Blog
                     'blog_id' => $blog_id,
                     'post_id' => $post_id,
                     'action' => 'view_post',
-                    'task_id' => $taskId
+                    'task_id' => $taskId,
                 ])
             );
             exit;
@@ -1466,15 +1517,16 @@ class Blog
     }
 
     /**
-     * Adds rating to a certain post or comment
+     * Adds rating to a certain post or comment.
+     *
      * @author Toon Keppens
      *
      * @param string $type
-     * @param int $blog_id
-     * @param int $item_id
-     * @param int $rating
+     * @param int    $blog_id
+     * @param int    $item_id
+     * @param int    $rating
      *
-     * @return Boolean success
+     * @return bool success
      */
     public static function addRating($type, $blog_id, $item_id, $rating)
     {
@@ -1515,10 +1567,12 @@ class Blog
     }
 
     /**
-     * Displays the form to create a new post
+     * Displays the form to create a new post.
+     *
      * @author Toon Keppens
      *
-     * @param Integer $blog_id
+     * @param int $blog_id
+     *
      * @return string
      */
     public static function displayPostCreateForm($blog_id)
@@ -1574,11 +1628,13 @@ class Blog
     }
 
     /**
-     * Displays the form to edit a post
+     * Displays the form to edit a post.
+     *
      * @author Toon Keppens
      *
      * @param int $blog_id
      * @param int $post_id
+     *
      * @return string
      */
     public static function displayPostEditForm($blog_id, $post_id)
@@ -1629,10 +1685,12 @@ class Blog
     }
 
     /**
-     * Displays a list of tasks in this blog
+     * Displays a list of tasks in this blog.
+     *
      * @author Toon Keppens
      *
      * @param int $blog_id
+     *
      * @return string
      */
     public static function displayTasksList($blog_id)
@@ -1657,7 +1715,7 @@ class Blog
                 Display::return_icon('blog_admin_users.png', get_lang('RightsManager')),
                 api_get_self().'?'.http_build_query([
                     'action' => 'manage_rights',
-                    'blog_id' => $blog_id
+                    'blog_id' => $blog_id,
                 ]),
                 ['title' => get_lang('ManageRights')]
             );
@@ -1671,7 +1729,6 @@ class Blog
                 ."<th><b>".get_lang('Description')."</b></th>"
                 ."<th><b>".get_lang('Color')."</b></th>"
                 ."<th width='50'><b>".get_lang('Modify')."</b></th></tr>";
-
 
             $sql = " SELECT
                         blog_id,
@@ -1719,10 +1776,12 @@ class Blog
     }
 
     /**
-     * Displays a list of tasks assigned to a user in this blog
+     * Displays a list of tasks assigned to a user in this blog.
+     *
      * @author Toon Keppens
      *
      * @param int $blog_id
+     *
      * @return string
      */
     public static function displayAssignedTasksList($blog_id)
@@ -1797,10 +1856,14 @@ class Blog
     }
 
     /**
-     * Displays new task form
+     * Displays new task form.
+     *
      * @todo use FormValidator
+     *
      * @author Toon Keppens
+     *
      * @param int $blog_id
+     *
      * @return string HTML form
      */
     public static function displayTaskCreateForm($blog_id)
@@ -1876,7 +1939,6 @@ class Blog
         $return .= '		</div>
                 </div>';
 
-
         // task color
         $return .= '	<div class="control-group">
                     <label class="control-label">
@@ -1908,10 +1970,13 @@ class Blog
     }
 
     /**
-     * Displays edit task form
+     * Displays edit task form.
+     *
      * @author Toon Keppens
+     *
      * @param int $blog_id
      * @param int $task_id
+     *
      * @return string
      */
     public static function displayTaskEditForm($blog_id, $task_id)
@@ -2029,9 +2094,9 @@ class Blog
     }
 
     /**
-     * Displays assign task form
-     * @author Toon Keppens
+     * Displays assign task form.
      *
+     * @author Toon Keppens
      */
     public static function displayTaskAssignmentForm($blog_id)
     {
@@ -2039,13 +2104,15 @@ class Blog
         $form->addHidden('assign_task_submit', 'true');
 
         return $form->returnForm()
-            . PHP_EOL
-            . '<div style="clear: both; margin-bottom:10px;"></div>';
+            .PHP_EOL
+            .'<div style="clear: both; margin-bottom:10px;"></div>';
     }
 
     /**
-     * Returns an HTML form to assign a task
+     * Returns an HTML form to assign a task.
+     *
      * @param $blog_id
+     *
      * @return FormValidator
      */
     public static function getTaskAssignmentForm($blog_id)
@@ -2108,11 +2175,14 @@ class Blog
     }
 
     /**
-     * Displays assign task form
+     * Displays assign task form.
+     *
      * @author Toon Keppens
+     *
      * @param int $blog_id
      * @param int $task_id
      * @param int $user_id
+     *
      * @return string HTML form
      */
     public static function displayAssignedTaskEditForm($blog_id, $task_id, $user_id)
@@ -2153,12 +2223,12 @@ class Blog
     }
 
     /**
-     * Assigns a task to a user in a blog
-     * @param int $blog_id
-     * @param int $user_id
-     * @param int $task_id
+     * Assigns a task to a user in a blog.
+     *
+     * @param int    $blog_id
+     * @param int    $user_id
+     * @param int    $task_id
      * @param string $target_date date
-     * @return void
      */
     public static function assignTask($blog_id, $user_id, $task_id, $target_date)
     {
@@ -2201,7 +2271,8 @@ class Blog
     }
 
     /**
-     * Edit an assigned task
+     * Edit an assigned task.
+     *
      * @param $blog_id
      * @param $user_id
      * @param $task_id
@@ -2209,7 +2280,6 @@ class Blog
      * @param $old_user_id
      * @param $old_task_id
      * @param $old_target_date
-     * @return void
      */
     public static function updateAssignedTask(
         $blog_id,
@@ -2266,6 +2336,7 @@ class Blog
      *
      * @param int $blog_id
      * @param int $task_id
+     *
      * @return string
      */
     public static function displayPostSelectionForTask($blog_id, $task_id)
@@ -2318,12 +2389,12 @@ class Blog
     }
 
     /**
-     * Unsubscribe a user from a given blog
+     * Unsubscribe a user from a given blog.
+     *
      * @author Toon Keppens
      *
      * @param int $blog_id
      * @param int $user_id
-     * @return void
      */
     public static function unsubscribeUser($blog_id, $user_id)
     {
@@ -2346,11 +2417,12 @@ class Blog
     /**
      * Displays the form to register users in a blog (in a course)
      * The listed users are users subscribed in the course.
+     *
      * @author Toon Keppens
      *
-     * @param Integer $blog_id
+     * @param int $blog_id
      *
-     * @return string Html Form with sortable table with users to subcribe in a blog, in a course.
+     * @return string html Form with sortable table with users to subcribe in a blog, in a course
      */
     public static function displayUserSubscriptionForm($blog_id)
     {
@@ -2463,15 +2535,19 @@ class Blog
         $html .= '<button class="btn btn-default" type="submit">'.get_lang('Ok').'</button>';
         $html .= '</div>';
         $html .= '</form>';
+
         return $html;
     }
 
     /**
      * Displays the form to register users in a blog (in a course)
      * The listed users are users subcribed in the course.
+     *
      * @author Toon Keppens
+     *
      * @param int $blog_id
-     * @return false|null Form with sortable table with users to unsubcribe from a blog.
+     *
+     * @return false|null form with sortable table with users to unsubcribe from a blog
      */
     public static function displayUserUnsubscriptionForm($blog_id)
     {
@@ -2593,9 +2669,10 @@ class Blog
 
     /**
      * Displays a matrix with selectboxes. On the left: users, on top: possible rights.
-     * The blog admin can thus select what a certain user can do in the current blog
+     * The blog admin can thus select what a certain user can do in the current blog.
      *
      * @param int $blog_id
+     *
      * @return string
      */
     public static function displayUserRightsForm($blog_id)
@@ -2608,17 +2685,20 @@ class Blog
         require_once api_get_path(SYS_CODE_PATH).'permissions/blog_permissions.inc.php';
         $content = ob_get_contents();
         ob_get_clean();
+
         return $content;
     }
 
     /**
-     * show the calender of the given month
+     * show the calender of the given month.
+     *
      * @author Patrick Cool
      * @author Toon Keppens
      *
-     * @param int $month The integer value of the month we are viewing
-     * @param int $year The 4-digit year indication e.g. 2005
+     * @param int $month   The integer value of the month we are viewing
+     * @param int $year    The 4-digit year indication e.g. 2005
      * @param int $blog_id
+     *
      * @return string html code
      */
     public static function displayMiniMonthCalendar($month, $year, $blog_id)
@@ -2646,7 +2726,7 @@ class Blog
         //Handle leap year
         $numberofdays = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-        if (($year % 400 == 0) or ($year % 4 == 0 and $year % 100 <> 0)) {
+        if (($year % 400 == 0) or ($year % 4 == 0 and $year % 100 != 0)) {
             $numberofdays[2] = 29;
         }
 
@@ -2655,7 +2735,7 @@ class Blog
         $monthName = $MonthsLong[$month - 1];
 
         //Start the week on monday
-        $startdayofweek = $dayone['wday'] <> 0 ? ($dayone['wday'] - 1) : 6;
+        $startdayofweek = $dayone['wday'] != 0 ? ($dayone['wday'] - 1) : 6;
         $blogId = isset($_GET['blog_id']) ? intval($_GET['blog_id']) : null;
         $filter = isset($_GET['filter']) ? Security::remove_XSS($_GET['filter']) : null;
         $backwardsURL = api_get_self(
@@ -2789,7 +2869,6 @@ class Blog
 
     /**
      * Blog admin | Display the form to add a new blog.
-     * @return void (direct output)
      */
     public static function displayBlogCreateForm()
     {
@@ -2814,8 +2893,8 @@ class Blog
 
     /**
      * Blog admin | Display the form to edit a blog.
+     *
      * @param int $blog_id
-     * @return void Direct output
      */
     public static function displayBlogEditForm($blog_id)
     {
@@ -2855,8 +2934,7 @@ class Blog
     }
 
     /**
-     * Blog admin | Returns table with blogs in this course
-     * @return void Direct output
+     * Blog admin | Returns table with blogs in this course.
      */
     public static function displayBlogsList()
     {
@@ -2913,7 +2991,6 @@ class Blog
                 $my_image .= Display::return_icon('delete.png', get_lang('DeleteBlog'));
                 $my_image .= "</a>";
 
-
                 $list_body_blog[] = $my_image;
                 $list_content_blog[] = $list_body_blog;
                 $list_body_blog = [];
@@ -2933,12 +3010,16 @@ class Blog
     }
 
     /**
-     * Show a list with all the attachments according the parameter's
-     * @param int $blog_id the blog's id
-     * @param int $post_id the post's id
+     * Show a list with all the attachments according the parameter's.
+     *
+     * @param int $blog_id    the blog's id
+     * @param int $post_id    the post's id
      * @param int $comment_id the comment's id
+     *
      * @return array with the post info according the parameters
+     *
      * @author Julio Montoya
+     *
      * @version avril 2008, dokeos 1.8.5
      */
     public static function getBlogAttachments($blog_id, $post_id = 0, $comment_id = 0)
@@ -2978,11 +3059,13 @@ class Blog
 
     /**
      * Delete the all the attachments according the parameters.
+     *
      * @param int $blog_id
-     * @param int $post_id post's id
+     * @param int $post_id    post's id
      * @param int $comment_id the comment's id
-     * @return void
+     *
      * @author Julio Montoya
+     *
      * @version avril 2008, dokeos 1.8.5
      */
     public static function deleteAllBlogAttachments(
@@ -3023,7 +3106,7 @@ class Blog
         while ($row = Database::fetch_row($result)) {
             $file = $updir.'/'.$row[0];
             if (Security::check_abs_path($file, $updir)) {
-                @ unlink($file);
+                @unlink($file);
             }
         }
         $sql = "DELETE FROM $blog_table_attachment
@@ -3032,10 +3115,12 @@ class Blog
     }
 
     /**
-     * Gets all the post from a given user id
-     * @param int $courseId
-     * @param int $userId
+     * Gets all the post from a given user id.
+     *
+     * @param int    $courseId
+     * @param int    $userId
      * @param string $courseCode
+     *
      * @return string
      */
     public static function getBlogPostFromUser($courseId, $userId, $courseCode)
@@ -3078,10 +3163,12 @@ class Blog
     }
 
     /**
-     * Gets all the post comments from a given user id
-     * @param int $courseId
-     * @param int $userId
+     * Gets all the post comments from a given user id.
+     *
+     * @param int    $courseId
+     * @param int    $userId
      * @param string $courseCode
+     *
      * @return string
      */
     public static function getBlogCommentsFromUser($courseId, $userId, $courseCode)
@@ -3119,9 +3206,11 @@ class Blog
     }
 
     /**
-     * Filter the post $fullText to get a extract of $length characters
+     * Filter the post $fullText to get a extract of $length characters.
+     *
      * @param string $fullText
-     * @param int $length
+     * @param int    $length
+     *
      * @return null|string
      */
     private static function getPostExtract($fullText, $length = BLOG_MAX_PREVIEW_CHARS)

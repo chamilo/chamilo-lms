@@ -4,7 +4,6 @@
 /**
  * @package chamilo.tracking
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
@@ -61,7 +60,7 @@ if ($export_csv || $exportXls) {
             get_lang('UserName'),
             get_lang('IPAddress'),
             get_lang('Document'),
-            get_lang('Date')
+            get_lang('Date'),
         ]
     );
 
@@ -152,7 +151,7 @@ $table = new SortableTable(
 
 $parameters = [
     'id_session' => $session_id,
-    'cidReq' => api_get_course_id()
+    'cidReq' => api_get_course_id(),
 ];
 
 $table->set_additional_parameters($parameters);

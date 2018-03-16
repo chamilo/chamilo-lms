@@ -4,12 +4,12 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class ExerciseSettingsSchema
+ * Class ExerciseSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class ExerciseSettingsSchema extends AbstractSettingsSchema
@@ -30,7 +30,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
                     'email_alert_manager_on_new_quiz' => 'true',
                     'exercise_max_ckeditors_in_page' => '0',
                     'configure_exercise_visibility_in_course' => 'false',
-                    'exercise_invisible_in_session' => 'false'
+                    'exercise_invisible_in_session' => 'false',
                 ]
             )
         ;

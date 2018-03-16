@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CStudentPublicationComment
+ * CStudentPublicationComment.
  *
  * @ORM\Table(
  *  name="c_student_publication_comment",
@@ -21,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CStudentPublicationComment
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -30,21 +30,21 @@ class CStudentPublicationComment
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="work_id", type="integer", nullable=false)
      */
@@ -65,7 +65,7 @@ class CStudentPublicationComment
     private $file;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
@@ -79,9 +79,10 @@ class CStudentPublicationComment
     private $sentAt;
 
     /**
-     * Set workId
+     * Set workId.
      *
-     * @param integer $workId
+     * @param int $workId
+     *
      * @return CStudentPublicationComment
      */
     public function setWorkId($workId)
@@ -92,9 +93,9 @@ class CStudentPublicationComment
     }
 
     /**
-     * Get workId
+     * Get workId.
      *
-     * @return integer
+     * @return int
      */
     public function getWorkId()
     {
@@ -102,9 +103,10 @@ class CStudentPublicationComment
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CStudentPublicationComment
      */
     public function setCId($cId)
@@ -115,9 +117,9 @@ class CStudentPublicationComment
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -125,9 +127,10 @@ class CStudentPublicationComment
     }
 
     /**
-     * Set comment
+     * Set comment.
      *
      * @param string $comment
+     *
      * @return CStudentPublicationComment
      */
     public function setComment($comment)
@@ -138,7 +141,7 @@ class CStudentPublicationComment
     }
 
     /**
-     * Get comment
+     * Get comment.
      *
      * @return string
      */
@@ -148,9 +151,10 @@ class CStudentPublicationComment
     }
 
     /**
-     * Set file
+     * Set file.
      *
      * @param string $file
+     *
      * @return CStudentPublicationComment
      */
     public function setFile($file)
@@ -161,7 +165,7 @@ class CStudentPublicationComment
     }
 
     /**
-     * Get file
+     * Get file.
      *
      * @return string
      */
@@ -171,9 +175,10 @@ class CStudentPublicationComment
     }
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return CStudentPublicationComment
      */
     public function setUserId($userId)
@@ -184,9 +189,9 @@ class CStudentPublicationComment
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -194,9 +199,10 @@ class CStudentPublicationComment
     }
 
     /**
-     * Set sentAt
+     * Set sentAt.
      *
      * @param \DateTime $sentAt
+     *
      * @return CStudentPublicationComment
      */
     public function setSentAt($sentAt)
@@ -207,7 +213,7 @@ class CStudentPublicationComment
     }
 
     /**
-     * Get sentAt
+     * Get sentAt.
      *
      * @return \DateTime
      */
@@ -217,9 +223,9 @@ class CStudentPublicationComment
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {

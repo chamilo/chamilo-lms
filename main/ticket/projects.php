@@ -4,10 +4,10 @@
 use ChamiloSession as Session;
 
 /**
- * This script is the Tickets plugin main entry point
+ * This script is the Tickets plugin main entry point.
+ *
  * @package chamilo.plugin.ticket
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -35,17 +35,17 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
-    'name' => get_lang('MyTickets')
+    'name' => get_lang('MyTickets'),
 ];
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/settings.php',
-    'name' => get_lang('Settings')
+    'name' => get_lang('Settings'),
 ];
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/projects.php',
-    'name' => get_lang('Projects')
+    'name' => get_lang('Projects'),
 ];
 
 switch ($action) {
@@ -71,7 +71,7 @@ switch ($action) {
 
             $params = [
                 'name' => $values['name'],
-                'description' => $values['description']
+                'description' => $values['description'],
             ];
             TicketManager::addProject($params);
 
@@ -92,7 +92,7 @@ switch ($action) {
 
         $form->setDefaults([
             'name' => $item->getName(),
-            'description' => $item->getDescription()
+            'description' => $item->getDescription(),
         ]);
 
         $formToString = $form->returnForm();
@@ -103,7 +103,7 @@ switch ($action) {
                 'name' => $values['name'],
                 'description' => $values['description'],
                 'sys_lastedit_datetime' => api_get_utc_datetime(),
-                'sys_lastedit_user_id' => api_get_user_id()
+                'sys_lastedit_user_id' => api_get_user_id(),
             ];
             TicketManager::updateProject($_GET['id'], $params);
             Display::addFlash(Display::return_message(get_lang('Updated')));
@@ -119,10 +119,12 @@ $user_id = api_get_user_id();
 $isAdmin = api_is_platform_admin();
 
 /**
- * Build the modify-column of the table
+ * Build the modify-column of the table.
+ *
  * @param   int     The user id
  * @param   string  URL params to add to table links
  * @param   array   Row of elements to alter
+ *
  * @return string Some HTML-code with modify-buttons
  */
 function modify_filter($id, $params, $row)
@@ -163,7 +165,7 @@ Display::display_header('');
 $items = [
     'icon' => 'new_folder.png',
     'url' => 'projects.php?action=add',
-    'content' => get_lang('AddProject')
+    'content' => get_lang('AddProject'),
 ];
 
 echo '<div class="actions">';

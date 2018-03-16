@@ -11,7 +11,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 /**
  * Class CourseAccessListener
  * In and outs of a course
- * This listeners is always called when user enters the course home
+ * This listeners is always called when user enters the course home.
+ *
  * @package Chamilo\CourseBundle\EventListener
  */
 class CourseAccessListener

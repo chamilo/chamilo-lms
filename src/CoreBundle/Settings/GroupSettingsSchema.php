@@ -4,12 +4,12 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class GroupSettingsSchema
+ * Class GroupSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class GroupSettingsSchema extends AbstractSettingsSchema

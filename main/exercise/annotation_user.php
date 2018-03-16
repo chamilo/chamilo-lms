@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 session_cache_limiter('none');
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -28,12 +26,12 @@ $data = [
     'image' => [
         'path' => $objQuestion->selectPicturePath(),
         'width' => $pictureSize[0],
-        'height' => $pictureSize[1]
+        'height' => $pictureSize[1],
     ],
     'answers' => [
         'paths' => [],
-        'texts' => []
-    ]
+        'texts' => [],
+    ],
 ];
 
 $attemptList = Event::getAllExerciseEventByExeId($exerciseId);
@@ -56,7 +54,7 @@ if (!empty($attemptList) && isset($attemptList[$questionId])) {
                     break;
                 case 'T':
                     $text = [
-                        'text' => array_shift($parts)
+                        'text' => array_shift($parts),
                     ];
                     $data['answers']['texts'][] = $text + Geometry::decodePoint($parts[0]);
                     break;

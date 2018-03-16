@@ -9,7 +9,8 @@ use Chamilo\UserBundle\Entity\User;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
- * Class SessionAccess
+ * Class SessionAccess.
+ *
  * @package Chamilo\CourseBundle\Event
  */
 class SessionAccess extends Event

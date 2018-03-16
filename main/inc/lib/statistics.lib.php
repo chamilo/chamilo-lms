@@ -2,14 +2,17 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* This class provides some functions for statistics
-* @package chamilo.statistics
-*/
+ * This class provides some functions for statistics.
+ *
+ * @package chamilo.statistics
+ */
 class Statistics
 {
     /**
-     * Converts a number of bytes in a formatted string
+     * Converts a number of bytes in a formatted string.
+     *
      * @param int $size
+     *
      * @return string Formatted file size
      */
     public static function makeSizeString($size)
@@ -29,9 +32,11 @@ class Statistics
     }
 
     /**
-     * Count courses
-     * @param string $categoryCode  Code of a course category.
-     * Default: count all courses.
+     * Count courses.
+     *
+     * @param string $categoryCode Code of a course category.
+     *                             Default: count all courses.
+     *
      * @return int Number of courses counted
      */
     public static function countCourses($categoryCode = null)
@@ -61,8 +66,10 @@ class Statistics
     }
 
     /**
-     * Count courses by visibility
-     * @param int $visibility Visibility (0 = closed, 1 = private, 2 = open, 3 = public) all courses.
+     * Count courses by visibility.
+     *
+     * @param int $visibility visibility (0 = closed, 1 = private, 2 = open, 3 = public) all courses
+     *
      * @return int Number of courses counted
      */
     public static function countCoursesByVisibility($visibility = null)
@@ -93,11 +100,13 @@ class Statistics
     }
 
     /**
-     * Count users
-     * @param int $status Optional user status (COURSEMANAGER or STUDENT), if it's not setted it'll count all users.
-     * @param string $categoryCode Optional, code of a course category. Default: count only users without filtering category
-     * @param bool $countInvisibleCourses Count invisible courses (todo)
-     * @param bool $onlyActive Count only active users (false to only return currently active users)
+     * Count users.
+     *
+     * @param int    $status                optional user status (COURSEMANAGER or STUDENT), if it's not setted it'll count all users
+     * @param string $categoryCode          Optional, code of a course category. Default: count only users without filtering category
+     * @param bool   $countInvisibleCourses Count invisible courses (todo)
+     * @param bool   $onlyActive            Count only active users (false to only return currently active users)
+     *
      * @return int Number of users counted
      */
     public static function countUsers(
@@ -156,7 +165,8 @@ class Statistics
     }
 
     /**
-     * Count sessions
+     * Count sessions.
+     *
      * @return int Number of sessions counted
      */
     public static function countSessions()
@@ -181,7 +191,8 @@ class Statistics
     }
 
     /**
-     * Count activities from track_e_default_table
+     * Count activities from track_e_default_table.
+     *
      * @return int Number of activities counted
      */
     public static function getNumberOfActivities($courseId = 0, $sessionId = 0)
@@ -226,13 +237,14 @@ class Statistics
     }
 
     /**
-     * Get activities data to display
-     * @param int $from
-     * @param int $numberOfItems
-     * @param int $column
+     * Get activities data to display.
+     *
+     * @param int    $from
+     * @param int    $numberOfItems
+     * @param int    $column
      * @param string $direction
-     * @param int $courseId
-     * @param int $sessionId
+     * @param int    $courseId
+     * @param int    $sessionId
      *
      * @return array
      */
@@ -335,7 +347,6 @@ class Statistics
             }
 
             if (!empty($row[5])) {
-
                 // Course
                 if (!empty($row[3])) {
                     $row[3] = Display::url(
@@ -379,7 +390,8 @@ class Statistics
     }
 
     /**
-     * Get all course categories
+     * Get all course categories.
+     *
      * @return array All course categories (code => name)
      */
     public static function getCourseCategories()
@@ -398,9 +410,11 @@ class Statistics
     }
 
     /**
-     * Rescale data
+     * Rescale data.
+     *
      * @param array $data The data that should be rescaled
-     * @param int $max The maximum value in the rescaled data (default = 500);
+     * @param int   $max  The maximum value in the rescaled data (default = 500);
+     *
      * @return array The rescaled data, same key as $data
      */
     public static function rescale($data, $max = 500)
@@ -420,11 +434,12 @@ class Statistics
     }
 
     /**
-     * Show statistics
-     * @param string $title The title
-     * @param array $stats
-     * @param bool $showTotal
-     * @param bool $isFileSize
+     * Show statistics.
+     *
+     * @param string $title      The title
+     * @param array  $stats
+     * @param bool   $showTotal
+     * @param bool   $isFileSize
      */
     public static function printStats(
         $title,
@@ -471,7 +486,8 @@ class Statistics
     }
 
     /**
-     * Show some stats about the number of logins
+     * Show some stats about the number of logins.
+     *
      * @param string $type month, hour or day
      */
     public static function printLoginStats($type)
@@ -564,9 +580,9 @@ class Statistics
     }
 
     /**
-     * Print the number of recent logins
-     * @param   bool    $distinct   Whether to only give distinct users stats, or *all* logins
-     * @return void
+     * Print the number of recent logins.
+     *
+     * @param bool $distinct Whether to only give distinct users stats, or *all* logins
      */
     public static function printRecentLoginStats($distinct = false)
     {
@@ -634,8 +650,10 @@ class Statistics
     }
 
     /**
-     * get the number of recent logins
-     * @param bool    $distinct   Whether to only give distinct users stats, or *all* logins
+     * get the number of recent logins.
+     *
+     * @param bool $distinct Whether to only give distinct users stats, or *all* logins
+     *
      * @return array
      */
     public static function getRecentLoginStats($distinct = false)
@@ -675,7 +693,7 @@ class Statistics
     }
 
     /**
-     * Show some stats about the accesses to the different course tools
+     * Show some stats about the accesses to the different course tools.
      */
     public static function printToolStats()
     {
@@ -697,7 +715,7 @@ class Statistics
             'quiz',
             'student_publication',
             'user',
-            'forum'
+            'forum',
         ];
         $tool_names = [];
         foreach ($tools as $tool) {
@@ -729,7 +747,7 @@ class Statistics
     }
 
     /**
-     * Show some stats about the number of courses per language
+     * Show some stats about the number of courses per language.
      */
     public static function printCourseByLanguageStats()
     {
@@ -786,7 +804,7 @@ class Statistics
     }
 
     /**
-     * Important activities
+     * Important activities.
      */
     public static function printActivitiesStats()
     {
@@ -800,7 +818,7 @@ class Statistics
             'width=200px',
             false
         );
-        $renderer = & $form->defaultRenderer();
+        $renderer = &$form->defaultRenderer();
         $renderer->setCustomElementTemplate('<span>{element}</span> ');
         $form->addHidden('report', 'activities');
         $form->addHidden('activities_direction', 'DESC');
@@ -920,9 +938,11 @@ class Statistics
     }
 
     /**
-     * Displays the statistics of the messages sent and received by each user in the social network
-     * @param string    $messageType Type of message: 'sent' or 'received'
-     * @return array    Message list
+     * Displays the statistics of the messages sent and received by each user in the social network.
+     *
+     * @param string $messageType Type of message: 'sent' or 'received'
+     *
+     * @return array Message list
      */
     public static function getMessages($messageType)
     {
@@ -966,11 +986,12 @@ class Statistics
             ).'<br />('.$messages['username'].')';
             $messages_sent[$users] = $messages['count_message'];
         }
+
         return $messages_sent;
     }
 
     /**
-     * Count the number of friends for social network users
+     * Count the number of friends for social network users.
      */
     public static function getFriends()
     {
@@ -1010,7 +1031,7 @@ class Statistics
     }
 
     /**
-     * Print the number of users that didn't login for a certain period of time
+     * Print the number of users that didn't login for a certain period of time.
      */
     public static function printUsersNotLoggedInStats()
     {

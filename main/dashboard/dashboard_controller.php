@@ -4,9 +4,12 @@
 /**
  * Controller script. Prepares the common background
  * variables to give to the scripts corresponding to
- * the requested action
+ * the requested action.
+ *
  * @author Christian Fasanando <christian1827@gmail.com>
+ *
  * @todo move to main/inc/lib
+ *
  * @package chamilo.dashboard
  */
 class DashboardController
@@ -14,7 +17,7 @@ class DashboardController
     private $user_id;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -23,13 +26,13 @@ class DashboardController
 
     /**
      * Display blocks from dashboard plugin paths
-     * render to dashboard.php view
+     * render to dashboard.php view.
      */
     public function display()
     {
         $user_id = $this->user_id;
         $dashboard_blocks = DashboardManager::get_enabled_dashboard_blocks();
-        $user_block_data  = DashboardManager::get_user_block_data($user_id);
+        $user_block_data = DashboardManager::get_user_block_data($user_id);
         $user_blocks_id = array_keys($user_block_data);
         $blocks = null;
         if (!empty($dashboard_blocks)) {
@@ -143,7 +146,7 @@ class DashboardController
 
     /**
      * This method allow store user blocks from dashboard manager
-     * render to dashboard.php view
+     * render to dashboard.php view.
      */
     public function store_user_block()
     {
@@ -159,7 +162,7 @@ class DashboardController
 
     /**
      * This method is used when you close a block from dashboard block interface
-     * render to dashboard.php view
+     * render to dashboard.php view.
      */
     public function close_user_block($path)
     {

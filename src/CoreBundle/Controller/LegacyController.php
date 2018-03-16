@@ -3,46 +3,32 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Chamilo\CourseBundle\Controller\ToolBaseController;
-use Doctrine\DBAL\Connection;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Display;
+use Doctrine\DBAL\Connection;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class LegacyController
- * Manages the chamilo pages starting with Display::display_header and $tpl = new Template();
+ * Manages the chamilo pages starting with Display::display_header and $tpl = new Template();.
+ *
  * @package Chamilo\CoreBundle\Controller
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 class LegacyController extends ToolBaseController
 {
     public $section;
 
-    private function setContainerValuesToLegacy($request)
-    {
-        /** @var Connection $dbConnection */
-        $dbConnection = $this->container->get('database_connection');
-        $em = $this->get('kernel')->getContainer()->get('doctrine.orm.entity_manager');
-
-        $database = new \Database($dbConnection, []);
-
-        $database->setConnection($dbConnection);
-        $database->setManager($em);
-        Container::$container = $this->container;
-        Container::setRequest($request);
-        Container::$dataDir = $this->container->get('kernel')->getDataDir();
-        Container::$courseDir = $this->container->get('kernel')->getDataDir();
-        $this->container->get('twig')->addGlobal('api_get_cidreq', api_get_cidreq());
-    }
-
     /**
-     * Handles all request in old legacy files inside 'main/' folder
-     * @param string $name
+     * Handles all request in old legacy files inside 'main/' folder.
+     *
+     * @param string  $name
      * @param Request $request
+     *
      * @return Response
      */
     public function classicAction($name, Request $request, $folder = 'main')
@@ -64,7 +50,7 @@ class LegacyController extends ToolBaseController
             /**
              * Some legacy Chamilo files still use this variables directly,
              * instead of using a function.
-            **/
+             */
             $is_allowed_in_course = api_is_allowed_in_course();
             $is_courseAdmin = api_is_course_admin();
             $is_platformAdmin = api_is_platform_admin();
@@ -85,7 +71,7 @@ class LegacyController extends ToolBaseController
             // No browser cache when executing an exercise.
             if ($name == 'exercise/exercise_submit.php') {
                 $responseHeaders = [
-                    'cache-control' => 'no-store, no-cache, must-revalidate'
+                    'cache-control' => 'no-store, no-cache, must-revalidate',
                 ];
             }
 
@@ -100,7 +86,7 @@ class LegacyController extends ToolBaseController
             $template = Container::$legacyTemplate;
             $params = [
                 'legacy_breadcrumb' => $interbreadcrumb,
-                'js' => $js
+                'js' => $js,
             ];
 
             // This means the page comes from legacy use Display::display_header
@@ -129,5 +115,22 @@ class LegacyController extends ToolBaseController
     public function pluginAction($name, Request $request)
     {
         return $this->classicAction($name, $request, 'plugin');
+    }
+
+    private function setContainerValuesToLegacy($request)
+    {
+        /** @var Connection $dbConnection */
+        $dbConnection = $this->container->get('database_connection');
+        $em = $this->get('kernel')->getContainer()->get('doctrine.orm.entity_manager');
+
+        $database = new \Database($dbConnection, []);
+
+        $database->setConnection($dbConnection);
+        $database->setManager($em);
+        Container::$container = $this->container;
+        Container::setRequest($request);
+        Container::$dataDir = $this->container->get('kernel')->getDataDir();
+        Container::$courseDir = $this->container->get('kernel')->getDataDir();
+        $this->container->get('twig')->addGlobal('api_get_cidreq', api_get_cidreq());
     }
 }

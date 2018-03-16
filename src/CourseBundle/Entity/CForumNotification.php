@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CForumNotification
+ * CForumNotification.
  *
  * @ORM\Table(
  *  name="c_forum_notification",
@@ -23,7 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CForumNotification
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -32,51 +32,52 @@ class CForumNotification
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="user_id", type="integer")
      */
     private $userId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="forum_id", type="integer")
      */
     private $forumId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="thread_id", type="integer")
      */
     private $threadId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="post_id", type="integer")
      */
     private $postId;
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CForumNotification
      */
     public function setId($id)
@@ -87,9 +88,9 @@ class CForumNotification
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -97,9 +98,10 @@ class CForumNotification
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CForumNotification
      */
     public function setCId($cId)
@@ -110,9 +112,9 @@ class CForumNotification
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -120,9 +122,10 @@ class CForumNotification
     }
 
     /**
-     * Set userId
+     * Set userId.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return CForumNotification
      */
     public function setUserId($userId)
@@ -133,9 +136,9 @@ class CForumNotification
     }
 
     /**
-     * Get userId
+     * Get userId.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
@@ -143,9 +146,10 @@ class CForumNotification
     }
 
     /**
-     * Set forumId
+     * Set forumId.
      *
-     * @param integer $forumId
+     * @param int $forumId
+     *
      * @return CForumNotification
      */
     public function setForumId($forumId)
@@ -156,9 +160,9 @@ class CForumNotification
     }
 
     /**
-     * Get forumId
+     * Get forumId.
      *
-     * @return integer
+     * @return int
      */
     public function getForumId()
     {
@@ -166,9 +170,10 @@ class CForumNotification
     }
 
     /**
-     * Set threadId
+     * Set threadId.
      *
-     * @param integer $threadId
+     * @param int $threadId
+     *
      * @return CForumNotification
      */
     public function setThreadId($threadId)
@@ -179,9 +184,9 @@ class CForumNotification
     }
 
     /**
-     * Get threadId
+     * Get threadId.
      *
-     * @return integer
+     * @return int
      */
     public function getThreadId()
     {
@@ -189,9 +194,10 @@ class CForumNotification
     }
 
     /**
-     * Set postId
+     * Set postId.
      *
-     * @param integer $postId
+     * @param int $postId
+     *
      * @return CForumNotification
      */
     public function setPostId($postId)
@@ -202,9 +208,9 @@ class CForumNotification
     }
 
     /**
-     * Get postId
+     * Get postId.
      *
-     * @return integer
+     * @return int
      */
     public function getPostId()
     {

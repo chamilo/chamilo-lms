@@ -4,13 +4,14 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Chamilo\SettingsBundle\Transformer\ArrayToIdentifierTransformer;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class DocumentSettingsSchema
+ * Class DocumentSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class DocumentSettingsSchema extends AbstractSettingsSchema
@@ -54,11 +55,11 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                         'announcements',
                         'forums',
                         'quiz',
-                        'gradebook'
+                        'gradebook',
                     ],
                     'documents_default_visibility_defined_in_course' => 'false', // ?
                     'allow_personal_user_files' => '', // ?
-                    'if_file_exists_option' => 'rename'
+                    'if_file_exists_option' => 'rename',
                 ]
             )
             ->setTransformer(
@@ -70,7 +71,7 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
         $allowedTypes = [
             'tool_visible_by_default_at_creation' => ['array'],
             'default_document_quotum' => ['string'],
-            'default_group_quotum' => ['string']
+            'default_group_quotum' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
@@ -109,7 +110,7 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                         'ShowGlossaryInDocumentsIsNone' => 'none',
                         'ShowGlossaryInDocumentsIsManual' => 'ismanual',
                         'ShowGlossaryInDocumentsIsAutomatic' => 'isautomatic',
-                    ]
+                    ],
                 ]
             )
             ->add('students_download_folders', YesNoType::class)
@@ -137,8 +138,8 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                         'Announcements' => 'announcements',
                         'Forums' => 'forums',
                         'Quiz' => 'quiz',
-                        'Gradebook' => 'gradebook'
-                    ]
+                        'Gradebook' => 'gradebook',
+                    ],
                 ]
             )
             ->add(
@@ -148,7 +149,7 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                     'choices' => [
                         'Rename' => 'rename',
                         'Overwrite' => 'overwrite',
-                    ]
+                    ],
                 ]
             )
         ;

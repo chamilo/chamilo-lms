@@ -4,15 +4,15 @@
  * @package chamilo.admin
  */
 /**
- * Code
+ * Code.
  */
 exit(); //not yet functional, needs to be revised
 
 $cidReset = true;
 
-require('../inc/global.inc.php');
+require '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
-require("../auth/ldap/authldap.php");
+require "../auth/ldap/authldap.php";
 $annee_base = date('Y');
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -59,7 +59,7 @@ Display::display_header($tool_name);
 <?php
 if (isset($action) && ($action == "synchro")) {
     $included = true;
-    require('ldap_synchro.php');
+    require 'ldap_synchro.php';
     echo Display::return_message($message, 'normal', false);
 }
 Display::display_footer();

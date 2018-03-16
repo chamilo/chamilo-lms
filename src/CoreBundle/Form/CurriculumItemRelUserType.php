@@ -6,15 +6,20 @@ namespace Chamilo\CoreBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Entity;
 
 /**
- * Class CurriculumItemRelUserType
+ * Class CurriculumItemRelUserType.
+ *
  * @package Chamilo\CoreBundle\Form
  */
 class CurriculumItemRelUserType extends AbstractType
 {
     public $itemId;
+
+    public function __construct($itemId = null)
+    {
+        $this->itemId = $itemId;
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -42,10 +47,5 @@ class CurriculumItemRelUserType extends AbstractType
     public function getName()
     {
         return 'curriculumItemRelUser';
-    }
-
-    public function __construct($itemId = null)
-    {
-        $this->itemId = $itemId;
     }
 }

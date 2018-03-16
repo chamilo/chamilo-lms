@@ -2,16 +2,18 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CSurveyInvitation;
-use Doctrine\Common\Collections\Criteria;
 
 /**
- * Class SurveyManager
+ * Class SurveyManager.
+ *
  * @package chamilo.survey
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University:
  * cleanup, refactoring and rewriting large parts (if not all) of the code
  * @author Julio Montoya <gugli100@gmail.com>, Personality Test modification
  * and rewriting large parts of the code
  * @author cfasanando
+ *
  * @todo move this file to inc/lib
  * @todo use consistent naming for the functions (save vs store for instance)
  */
@@ -48,10 +50,11 @@ class SurveyManager
     }
 
     /**
-     * Deletes all survey invitations of a user
+     * Deletes all survey invitations of a user.
+     *
      * @param int $user_id
      *
-     * @return boolean
+     * @return bool
      * @assert ('') === false
      */
     public static function delete_all_survey_invitations_by_user($user_id)
@@ -81,9 +84,8 @@ class SurveyManager
     }
 
     /**
-     *
      * @param string $course_code
-     * @param int $session_id
+     * @param int    $session_id
      *
      * @return array
      * @assert ('') === false
@@ -111,17 +113,19 @@ class SurveyManager
     }
 
     /**
-     * Retrieves all the survey information
+     * Retrieves all the survey information.
      *
-     * @param integer $survey_id the id of the survey
-     * @param boolean $shared this parameter determines if
-     * we have to get the information of a survey from the central (shared) database or from the
-     *          course database
+     * @param int  $survey_id the id of the survey
+     * @param bool $shared    this parameter determines if
+     *                        we have to get the information of a survey from the central (shared) database or from the
+     *                        course database
      * @param string course code optional
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version February 2007
      * @assert ('') === false
+     *
      * @return array
      *
      * @todo this is the same function as in create_new_survey.php
@@ -193,6 +197,7 @@ class SurveyManager
 
     /**
      * @param string $code
+     *
      * @return string
      */
     public static function generateSurveyCode($code)
@@ -208,6 +213,7 @@ class SurveyManager
      * @return array $return the type of return message that has to be displayed and the message in it
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version February 2007
      */
     public static function store_survey($values)
@@ -257,7 +263,7 @@ class SurveyManager
                     // Input_name_list
                     $fields = explode(',', $values['input_name_list']);
                     $field_values = '';
-                    foreach ($fields as & $field) {
+                    foreach ($fields as &$field) {
                         if ($field != '') {
                             if ($values[$field] == '') {
                                 $values[$field] = 0;
@@ -343,7 +349,7 @@ class SurveyManager
                 'creation_date' => api_get_utc_datetime(),
                 'anonymous' => $values['anonymous'],
                 'session_id' => api_get_session_id(),
-                'visible_results' => $values['visible_results']
+                'visible_results' => $values['visible_results'],
             ];
 
             $params = array_merge($params, $extraParams);
@@ -543,9 +549,11 @@ class SurveyManager
      * This function stores a shared survey in the central database.
      *
      * @param array $values
+     *
      * @return array $return the type of return message that has to be displayed and the message in it
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version February 2007
      */
     public function store_shared_survey($values)
@@ -595,14 +603,16 @@ class SurveyManager
     }
 
     /**
-     * This function deletes a survey (and also all the question in that survey
+     * This function deletes a survey (and also all the question in that survey.
      *
-     * @param int $survey_id id of the survey that has to be deleted
+     * @param int  $survey_id id of the survey that has to be deleted
      * @param bool $shared
-     * @param int $course_id
+     * @param int  $course_id
+     *
      * @return true
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version January 2007
      */
     public static function delete_survey($survey_id, $shared = false, $course_id = 0)
@@ -725,7 +735,7 @@ class SurveyManager
                 'c_id' => $targetCourseId,
                 'name' => $row['name'],
                 'description' => $row['description'],
-                'survey_id' => $new_survey_id
+                'survey_id' => $new_survey_id,
             ];
             $insertId = Database::insert($table_survey_question_group, $params);
 
@@ -753,7 +763,7 @@ class SurveyManager
                 'max_value' => $row['max_value'],
                 'survey_group_pri' => $row['survey_group_pri'],
                 'survey_group_sec1' => $row['survey_group_sec1'],
-                'survey_group_sec2' => $row['survey_group_sec2']
+                'survey_group_sec2' => $row['survey_group_sec2'],
             ];
             $insertId = Database::insert($table_survey_question, $params);
             $sql = "UPDATE $table_survey_question SET question_id = iid WHERE iid = $insertId";
@@ -774,7 +784,7 @@ class SurveyManager
                 'survey_id' => $new_survey_id,
                 'option_text' => $row['option_text'],
                 'sort' => $row['sort'],
-                'value' => $row['value']
+                'value' => $row['value'],
             ];
             $insertId = Database::insert($table_survey_options, $params);
 
@@ -787,13 +797,15 @@ class SurveyManager
     }
 
     /**
-     * This function duplicates a survey (and also all the question in that survey
+     * This function duplicates a survey (and also all the question in that survey.
      *
      * @param int $survey_id id of the survey that has to be duplicated
-     * @param int $courseId id of the course which survey has to be duplicated
+     * @param int $courseId  id of the course which survey has to be duplicated
+     *
      * @return true
      *
      * @author Eric Marguin <e.marguin@elixir-interactive.com>, Elixir Interactive
+     *
      * @version October 2007
      */
     public static function empty_survey($survey_id, $courseId = 0)
@@ -830,14 +842,16 @@ class SurveyManager
     }
 
     /**
-     * This function recalculates the number of people who have taken the survey (=filled at least one question)
+     * This function recalculates the number of people who have taken the survey (=filled at least one question).
      *
-     * @param array $survey_data
-     * @param array $user
+     * @param array  $survey_data
+     * @param array  $user
      * @param string $survey_code
+     *
      * @return bool
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version February 2007
      */
     public static function update_survey_answered($survey_data, $user, $survey_code)
@@ -883,14 +897,15 @@ class SurveyManager
         Database::query($sql);
     }
 
-    /***
+    /*
      * SURVEY QUESTION FUNCTIONS
      */
 
     /**
-     * This function return the "icon" of the question type
+     * This function return the "icon" of the question type.
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version February 2007
      */
     public static function icon_question($type)
@@ -931,13 +946,15 @@ class SurveyManager
     }
 
     /**
-     * This function retrieves all the information of a question
+     * This function retrieves all the information of a question.
      *
-     * @param integer $question_id the id of the question
+     * @param int  $question_id the id of the question
      * @param bool $shared
+     *
      * @return array
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version January 2007
      *
      * @todo one sql call should do the trick
@@ -1010,13 +1027,15 @@ class SurveyManager
     }
 
     /**
-     * This function gets all the question of any given survey
+     * This function gets all the question of any given survey.
      *
-     * @param integer $survey_id the id of the survey
+     * @param int $survey_id the id of the survey
      * @param int $course_id
+     *
      * @return array containing all the questions of the survey
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version February 2007
      *
      * @todo one sql call should do the trick
@@ -1060,11 +1079,13 @@ class SurveyManager
 
     /**
      * This function saves a question in the database.
-     * This can be either an update of an existing survey or storing a new survey
+     * This can be either an update of an existing survey or storing a new survey.
+     *
      * @param array $survey_data
      * @param array $form_content all the information of the form
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version January 2007
      */
     public static function save_question($survey_data, $form_content)
@@ -1250,13 +1271,15 @@ class SurveyManager
     }
 
     /**
-     * This function saves the question in the shared database
+     * This function saves the question in the shared database.
      *
      * @param array $form_content all the information of the form
-     * @param array $survey_data all the information of the survey
+     * @param array $survey_data  all the information of the survey
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version February 2007
+     *
      * @return int
      *
      * @todo editing of a shared question
@@ -1309,13 +1332,14 @@ class SurveyManager
     }
 
     /**
-     * This functions moves a question of a survey up or down
+     * This functions moves a question of a survey up or down.
      *
      * @param string $direction
-     * @param integer $survey_question_id
-     * @param integer $survey_id
+     * @param int    $survey_question_id
+     * @param int    $survey_id
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version January 2007
      */
     public static function move_survey_question(
@@ -1365,12 +1389,14 @@ class SurveyManager
 
     /**
      * This function deletes all the questions of a given survey
-     * This function is normally only called when a survey is deleted
+     * This function is normally only called when a survey is deleted.
      *
      * @param int $survey_id the id of the survey that has to be deleted
+     *
      * @return true
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version January 2007
      */
     public static function delete_all_survey_questions($survey_id, $shared = false)
@@ -1399,15 +1425,16 @@ class SurveyManager
     }
 
     /**
-     * This function deletes a survey question and all its options
+     * This function deletes a survey question and all its options.
      *
-     * @param int $survey_id the id of the survey
-     * @param int $question_id the id of the question
+     * @param int  $survey_id   the id of the survey
+     * @param int  $question_id the id of the question
      * @param bool $shared
      *
      * @todo also delete the answers to this question
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version March 2007
      */
     public static function delete_survey_question($survey_id, $question_id, $shared = false)
@@ -1432,13 +1459,14 @@ class SurveyManager
     }
 
     /**
-     * This function deletes a shared survey question from the main database and all its options
+     * This function deletes a shared survey question from the main database and all its options.
      *
      * @param int $question_id the id of the question
      *
      * @todo delete all the options of this question
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version March 2007
      */
     public static function delete_shared_survey_question($survey_id, $question_id)
@@ -1462,10 +1490,12 @@ class SurveyManager
     }
 
     /**
-     * This function stores the options of the questions in the table
+     * This function stores the options of the questions in the table.
      *
      * @param array $form_content
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version January 2007
      *
      * @todo writing the update statement when editing a question
@@ -1521,11 +1551,12 @@ class SurveyManager
     }
 
     /**
-     * This function stores the options of the questions in the shared table
+     * This function stores the options of the questions in the shared table.
      *
      * @param array $form_content
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version February 2007
      *
      * @todo writing the update statement when editing a question
@@ -1542,7 +1573,7 @@ class SurveyManager
             Database::query($sql);
 
             $counter = 1;
-            foreach ($form_content['answers'] as & $answer) {
+            foreach ($form_content['answers'] as &$answer) {
                 $params = [
                     'question_id' => $form_content['shared_question_id'],
                     'survey_id' => $survey_data['is_shared'],
@@ -1558,12 +1589,14 @@ class SurveyManager
 
     /**
      * This function deletes all the options of the questions of a given survey
-     * This function is normally only called when a survey is deleted
+     * This function is normally only called when a survey is deleted.
      *
      * @param $survey_id the id of the survey that has to be deleted
+     *
      * @return true
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version January 2007
      */
     public static function delete_all_survey_questions_options($survey_id, $shared = false)
@@ -1587,16 +1620,17 @@ class SurveyManager
     }
 
     /**
-     * This function deletes the options of a given question
+     * This function deletes the options of a given question.
      *
-     * @param int $survey_id
-     * @param int $question_id
+     * @param int  $survey_id
+     * @param int  $question_id
      * @param bool $shared
      *
      * @return bool
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @author Julio Montoya
+     *
      * @version March 2007
      */
     public static function delete_survey_question_option(
@@ -1625,19 +1659,21 @@ class SurveyManager
     }
 
     /**
-     * SURVEY ANSWERS FUNCTIONS
+     * SURVEY ANSWERS FUNCTIONS.
      */
 
     /**
      * This function deletes all the answers anyone has given on this survey
-     * This function is normally only called when a survey is deleted
+     * This function is normally only called when a survey is deleted.
      *
      * @param $survey_id the id of the survey that has to be deleted
+     *
      * @return true
      *
      * @todo write the function
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version January 2007,december 2008
      */
     public static function delete_all_survey_answers($survey_id)
@@ -1656,6 +1692,7 @@ class SurveyManager
      * @param int $user_id
      * @param int $survey_id
      * @param int $course_id
+     *
      * @return bool
      */
     public static function is_user_filled_survey($user_id, $survey_id, $course_id)
@@ -1680,12 +1717,14 @@ class SurveyManager
     }
 
     /**
-     * This function gets all the persons who have filled the survey
+     * This function gets all the persons who have filled the survey.
      *
-     * @param integer $survey_id
+     * @param int $survey_id
+     *
      * @return array
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
      * @version February 2007
      */
     public static function get_people_who_filled_survey(
@@ -1757,6 +1796,7 @@ class SurveyManager
      * @param int $course_id
      * @param int $session_id
      * @param int $group_id
+     *
      * @return string
      */
     public static function generate_survey_hash($survey_id, $course_id, $session_id, $group_id)
@@ -1767,10 +1807,10 @@ class SurveyManager
     }
 
     /**
-     * @param int $survey_id
-     * @param int $course_id
-     * @param int $session_id
-     * @param int $group_id
+     * @param int    $survey_id
+     * @param int    $course_id
+     * @param int    $session_id
+     * @param int    $group_id
      * @param string $hash
      *
      * @return bool
@@ -1812,7 +1852,7 @@ class SurveyManager
 
     /**
      * Check if the current user has mandatory surveys no-answered
-     * and redirect to fill the first found survey
+     * and redirect to fill the first found survey.
      */
     public static function protectByMandatory()
     {
@@ -1855,7 +1895,7 @@ class SurveyManager
                     'user' => $userId,
                     'session' => $sessionId,
                     'now' => new DateTime('UTC', new DateTimeZone('UTC')),
-                    'variable' => 'is_mandatory'
+                    'variable' => 'is_mandatory',
                 ])
                 ->getSingleResult();
         } catch (Exception $e) {
@@ -1868,7 +1908,7 @@ class SurveyManager
 
         $urlParams = http_build_query([
             'course' => api_get_course_id(),
-            'invitationcode' => $invitation->getInvitationCode()
+            'invitationcode' => $invitation->getInvitationCode(),
         ]);
 
         Display::addFlash(
@@ -1880,9 +1920,10 @@ class SurveyManager
     }
 
     /**
-     * This function empty surveys (invitations and answers)
+     * This function empty surveys (invitations and answers).
      *
      * @param int $surveyId id of the survey to empty
+     *
      * @return bool
      */
     public static function emptySurveyFromId($surveyId)
@@ -1918,10 +1959,10 @@ class SurveyManager
     }
 
     /**
-     * This function copy survey specifying course id and session id where will be copied
+     * This function copy survey specifying course id and session id where will be copied.
      *
      * @param int $surveyId
-     * @param int $courseId target course id
+     * @param int $courseId  target course id
      * @param int $sessionId target session id
      *
      * @return bool|int when fails or return the new survey id
@@ -1933,9 +1974,9 @@ class SurveyManager
         $surveyQuestionGroupTable = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
         $surveyQuestionTable = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $surveyOptionsTable = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-        $surveyId = (int)$surveyId;
-        $targetCourseId = (int)$targetCourseId;
-        $targetSessionId = (int)$targetSessionId;
+        $surveyId = (int) $surveyId;
+        $targetCourseId = (int) $targetCourseId;
+        $targetSessionId = (int) $targetSessionId;
 
         $surveyData = self::get_survey($surveyId, 0, '', true);
         if (empty($surveyData) || empty($targetCourseId)) {
@@ -1970,7 +2011,7 @@ class SurveyManager
                     'c_id' => $targetCourseId,
                     'name' => $row['name'],
                     'description' => $row['description'],
-                    'survey_id' => $newSurveyId
+                    'survey_id' => $newSurveyId,
                 ];
                 $insertId = Database::insert($surveyQuestionGroupTable, $params);
                 if ($insertId) {
@@ -1997,7 +2038,7 @@ class SurveyManager
                     'max_value' => $row['max_value'],
                     'survey_group_pri' => $row['survey_group_pri'],
                     'survey_group_sec1' => $row['survey_group_sec1'],
-                    'survey_group_sec2' => $row['survey_group_sec2']
+                    'survey_group_sec2' => $row['survey_group_sec2'],
                 ];
                 $insertId = Database::insert($surveyQuestionTable, $params);
                 if ($insertId) {
@@ -2022,7 +2063,7 @@ class SurveyManager
                     'survey_id' => $newSurveyId,
                     'option_text' => $row['option_text'],
                     'sort' => $row['sort'],
-                    'value' => $row['value']
+                    'value' => $row['value'],
                 ];
                 $insertId = Database::insert($surveyOptionsTable, $params);
                 if ($insertId) {

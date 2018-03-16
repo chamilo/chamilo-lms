@@ -4,12 +4,13 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class DisplaySettingsSchema
+ * Class DisplaySettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class DisplaySettingsSchema extends AbstractSettingsSchema
@@ -44,13 +45,13 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
                     'user_name_order' => '', // ?
                     'user_name_sort_by' => '', // ?
                     'use_virtual_keyboard' => '', //?
-                    'disable_copy_paste' => '',//?
+                    'disable_copy_paste' => '', //?
                     //'breadcrumb_navigation_display' => '',//?
                     'bug_report_link' => '', //?
                     'hide_home_top_when_connected' => 'false',
                     'hide_logout_button' => 'false',
                     'show_link_ticket_notification' => 'false',
-                    'icons_mode_svg' => 'false'
+                    'icons_mode_svg' => 'false',
                 ]
             );
 
@@ -102,8 +103,8 @@ class DisplaySettingsSchema extends AbstractSettingsSchema
                         'DoNotShow' => 'do_not_show',
                         'ShowToAdminsOnly' => 'show_to_admin',
                         'ShowToAdminsAndTeachers' => 'show_to_admin_and_teachers',
-                        'ShowToAllUsers' => 'show_to_all'
-                    ]
+                        'ShowToAllUsers' => 'show_to_all',
+                    ],
                 ]
             )
             ->add('show_hot_courses', YesNoType::class)

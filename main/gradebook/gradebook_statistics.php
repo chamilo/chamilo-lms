@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -20,13 +21,13 @@ if ($eval[0]->get_category_id() < 0) {
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$currentcat[0]->get_id(),
-    'name' => get_lang('ToolGradebook')
+    'name' => get_lang('ToolGradebook'),
 ];
 
 if (api_is_allowed_to_edit()) {
     $interbreadcrumb[] = [
         'url' => 'gradebook_view_result.php?selecteval='.intval($_GET['selecteval']).'&'.api_get_cidreq(),
-        'name' => get_lang('ViewResult')
+        'name' => get_lang('ViewResult'),
     ];
 }
 $displayScore = ScoreDisplay::instance();

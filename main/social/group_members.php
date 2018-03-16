@@ -3,9 +3,9 @@
 
 /**
  * @package chamilo.social
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -37,7 +37,7 @@ if (empty($group_id)) {
         [
             GROUP_USER_PERMISSION_ADMIN,
             GROUP_USER_PERMISSION_MODERATOR,
-            GROUP_USER_PERMISSION_READER
+            GROUP_USER_PERMISSION_READER,
         ]
     )
     ) {
@@ -105,7 +105,7 @@ $users = $userGroup->get_users_by_group(
     [
         GROUP_USER_PERMISSION_ADMIN,
         GROUP_USER_PERMISSION_READER,
-        GROUP_USER_PERMISSION_MODERATOR
+        GROUP_USER_PERMISSION_MODERATOR,
     ],
     0,
     1000
@@ -132,7 +132,7 @@ foreach ($users as $user) {
                 $user_role,
                 [
                     GROUP_USER_PERMISSION_ADMIN,
-                    GROUP_USER_PERMISSION_MODERATOR
+                    GROUP_USER_PERMISSION_MODERATOR,
                 ]
             )
             ) {

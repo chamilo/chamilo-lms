@@ -3,15 +3,16 @@
  * This script is a configuration file for the vchamilo plugin.
  * You can use it as a master for other platform plugins (course plugins are slightly different).
  * These settings will be used in the administration interface for plugins
- * (Chamilo configuration settings->Plugins)
+ * (Chamilo configuration settings->Plugins).
+ *
  * @package chamilo.plugin
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
-
 global $_configuration;
 
 /**
- * Plugin details (must be present)
+ * Plugin details (must be present).
  */
 
 /* Plugin config */

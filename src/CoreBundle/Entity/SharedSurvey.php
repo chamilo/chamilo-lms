@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SharedSurvey
+ * SharedSurvey.
  *
  * @ORM\Table(name="shared_survey", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"survey_id"})})
  * @ORM\Entity
@@ -84,7 +84,7 @@ class SharedSurvey
     private $courseCode;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="survey_id", type="integer")
      * @ORM\Id
@@ -92,12 +92,11 @@ class SharedSurvey
      */
     private $surveyId;
 
-
-
     /**
-     * Set code
+     * Set code.
      *
      * @param string $code
+     *
      * @return SharedSurvey
      */
     public function setCode($code)
@@ -108,7 +107,7 @@ class SharedSurvey
     }
 
     /**
-     * Get code
+     * Get code.
      *
      * @return string
      */
@@ -118,9 +117,10 @@ class SharedSurvey
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return SharedSurvey
      */
     public function setTitle($title)
@@ -131,7 +131,7 @@ class SharedSurvey
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -141,9 +141,10 @@ class SharedSurvey
     }
 
     /**
-     * Set subtitle
+     * Set subtitle.
      *
      * @param string $subtitle
+     *
      * @return SharedSurvey
      */
     public function setSubtitle($subtitle)
@@ -154,7 +155,7 @@ class SharedSurvey
     }
 
     /**
-     * Get subtitle
+     * Get subtitle.
      *
      * @return string
      */
@@ -164,9 +165,10 @@ class SharedSurvey
     }
 
     /**
-     * Set author
+     * Set author.
      *
      * @param string $author
+     *
      * @return SharedSurvey
      */
     public function setAuthor($author)
@@ -177,7 +179,7 @@ class SharedSurvey
     }
 
     /**
-     * Get author
+     * Get author.
      *
      * @return string
      */
@@ -187,9 +189,10 @@ class SharedSurvey
     }
 
     /**
-     * Set lang
+     * Set lang.
      *
      * @param string $lang
+     *
      * @return SharedSurvey
      */
     public function setLang($lang)
@@ -200,7 +203,7 @@ class SharedSurvey
     }
 
     /**
-     * Get lang
+     * Get lang.
      *
      * @return string
      */
@@ -210,9 +213,10 @@ class SharedSurvey
     }
 
     /**
-     * Set template
+     * Set template.
      *
      * @param string $template
+     *
      * @return SharedSurvey
      */
     public function setTemplate($template)
@@ -223,7 +227,7 @@ class SharedSurvey
     }
 
     /**
-     * Get template
+     * Get template.
      *
      * @return string
      */
@@ -233,9 +237,10 @@ class SharedSurvey
     }
 
     /**
-     * Set intro
+     * Set intro.
      *
      * @param string $intro
+     *
      * @return SharedSurvey
      */
     public function setIntro($intro)
@@ -246,7 +251,7 @@ class SharedSurvey
     }
 
     /**
-     * Get intro
+     * Get intro.
      *
      * @return string
      */
@@ -256,9 +261,10 @@ class SharedSurvey
     }
 
     /**
-     * Set surveythanks
+     * Set surveythanks.
      *
      * @param string $surveythanks
+     *
      * @return SharedSurvey
      */
     public function setSurveythanks($surveythanks)
@@ -269,7 +275,7 @@ class SharedSurvey
     }
 
     /**
-     * Get surveythanks
+     * Get surveythanks.
      *
      * @return string
      */
@@ -279,9 +285,10 @@ class SharedSurvey
     }
 
     /**
-     * Set creationDate
+     * Set creationDate.
      *
      * @param \DateTime $creationDate
+     *
      * @return SharedSurvey
      */
     public function setCreationDate($creationDate)
@@ -292,7 +299,7 @@ class SharedSurvey
     }
 
     /**
-     * Get creationDate
+     * Get creationDate.
      *
      * @return \DateTime
      */
@@ -302,9 +309,10 @@ class SharedSurvey
     }
 
     /**
-     * Set courseCode
+     * Set courseCode.
      *
      * @param string $courseCode
+     *
      * @return SharedSurvey
      */
     public function setCourseCode($courseCode)
@@ -315,7 +323,7 @@ class SharedSurvey
     }
 
     /**
-     * Get courseCode
+     * Get courseCode.
      *
      * @return string
      */
@@ -325,9 +333,9 @@ class SharedSurvey
     }
 
     /**
-     * Get surveyId
+     * Get surveyId.
      *
-     * @return integer
+     * @return int
      */
     public function getSurveyId()
     {

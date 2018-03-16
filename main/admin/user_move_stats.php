@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * User move script (to move between courses and sessions)
+ * User move script (to move between courses and sessions).
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -44,7 +44,7 @@ function compare_data($result_message)
                     $array = [
                         'exe_date' => get_lang('Date'),
                         'exe_result' => get_lang('Score'),
-                        'exe_weighting' => get_lang('Weighting')
+                        'exe_weighting' => get_lang('Weighting'),
                     ];
                     foreach ($item as $key => $value) {
                         if (in_array($key, array_keys($array))) {
@@ -301,7 +301,7 @@ if (isset($_REQUEST['load_ajax'])) {
                             );
                             $result_message['LP_VIEW'][$data['lp_id']] = [
                                 'score' => $score,
-                                'progress' => $progress
+                                'progress' => $progress,
                             ];
                         }
                     }
@@ -340,7 +340,7 @@ if (isset($_REQUEST['load_ajax'])) {
                             );
                             $result_message_compare['LP_VIEW'][$data['lp_id']] = [
                                 'score' => $score,
-                                'progress' => $progress
+                                'progress' => $progress,
                             ];
                         }
                     }
@@ -419,8 +419,8 @@ if (isset($_REQUEST['load_ajax'])) {
 
                             if ($num_rows > 0) {
                                 $new_result = Database::fetch_array($sub_res, 'ASSOC');
-                                $created_dir    = $new_result['url'];
-                                $new_parent_id  = $new_result['id'];
+                                $created_dir = $new_result['url'];
+                                $new_parent_id = $new_result['id'];
                             } else {
                                 if ($update_database) {
                                     $dir_name = substr($parent_data['url'], 1);
@@ -682,8 +682,9 @@ function get_courses_list_by_user_id_based_in_exercises($user_id)
     $res = Database::query($sql);
     $course_list = [];
     while ($row = Database::fetch_array($res, 'ASSOC')) {
-        $course_list [] = $row;
+        $course_list[] = $row;
     }
+
     return $course_list;
 }
 
@@ -774,7 +775,7 @@ if (!empty($user_list)) {
             }
         }
 
-        foreach ($course_list_registered as & $course) {
+        foreach ($course_list_registered as &$course) {
             $courseInfo = api_get_course_info_by_id($course['real_id']);
             $course['name'] = $courseInfo['name'];
         }
@@ -817,7 +818,7 @@ if (!empty($user_list)) {
                 echo get_lang('MoveTo');
                 echo '<br />';
                 $unique_id = uniqid();
-                $combinations[$unique_id] = ['course_code' =>$course_code, 'session_id'=>$session_id];
+                $combinations[$unique_id] = ['course_code' => $course_code, 'session_id' => $session_id];
 
                 echo '<select id="'.$unique_id.'" name="'.$unique_id.'">';
                 echo $options;

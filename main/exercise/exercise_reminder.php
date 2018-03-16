@@ -4,11 +4,13 @@
 use ChamiloSession as Session;
 
 /**
-* Exercise reminder overview
-* Then it shows the results on the screen.
-* @package chamilo.exercise
-* @author Julio Montoya switchable fill in blank option added
-*/
+ * Exercise reminder overview
+ * Then it shows the results on the screen.
+ *
+ * @package chamilo.exercise
+ *
+ * @author Julio Montoya switchable fill in blank option added
+ */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -130,7 +132,7 @@ if ($time_control) {
     echo $objExercise->return_time_left_div();
 }
 
-echo Display::div('', ['id'=>'message']);
+echo Display::div('', ['id' => 'message']);
 echo '<script>
     var lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
 
@@ -234,15 +236,15 @@ foreach ($question_list as $questionId) {
         $question_title = Display::label($question_title, 'warning');
     }
     $question_title = Display::tag('label', $checkbox.$question_title, $label_attributes);
-    $table .= Display::div($question_title, ['class'=>'exercise_reminder_item']);
+    $table .= Display::div($question_title, ['class' => 'exercise_reminder_item']);
 } // end foreach() block that loops over all questions
 
-echo Display::div($table, ['class'=>'question-check-test']);
+echo Display::div($table, ['class' => 'question-check-test']);
 
 $exerciseActions = Display::url(
     get_lang('ReviewQuestions'),
     'javascript://',
-    ['onclick'=>'review_questions();', 'class'=>'btn btn-success']
+    ['onclick' => 'review_questions();', 'class' => 'btn btn-success']
 );
 
 $exerciseActions .= '&nbsp;'.Display::url(
@@ -251,8 +253,8 @@ $exerciseActions .= '&nbsp;'.Display::url(
     ['onclick' => 'final_submit();', 'class' => 'btn btn-warning']
 );
 
-echo Display::div('', ['class'=>'clear']);
-echo Display::div($exerciseActions, ['class'=>'form-actions']);
+echo Display::div('', ['class' => 'clear']);
+echo Display::div($exerciseActions, ['class' => 'form-actions']);
 
 if ($origin != 'learnpath') {
     // We are not in learnpath tool

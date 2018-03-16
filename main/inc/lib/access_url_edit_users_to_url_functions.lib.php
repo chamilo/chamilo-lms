@@ -4,21 +4,25 @@
 /**
  * AccessUrlEditUsersToUrl class definition
  * Contains several functions dealing with displaying,
- * editing,... of a Access_url_edit_users_to_url_functions
+ * editing,... of a Access_url_edit_users_to_url_functions.
  *
  * @version 1.0
+ *
  * @author Toon Keppens <toon@vi-host.net>
  * @author Julio Montoya - Cleaning code
  * @author Ricardo Rodriguez - Separated the function and code
+ *
  * @package chamilo.library
  */
 class AccessUrlEditUsersToUrl
 {
     /**
      * Search users by username, firstname or lastname, based on the given
-     * search string
+     * search string.
+     *
      * @param string Search string
      * @param int Deprecated param
+     *
      * @return xajaxResponse Xajax response block
      * @assert () === false
      */
@@ -57,6 +61,7 @@ class AccessUrlEditUsersToUrl
             'innerHTML',
             api_utf8_encode($return)
         );
+
         return $xajax_response;
     }
 }

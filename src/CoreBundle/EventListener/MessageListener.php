@@ -3,11 +3,12 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Chamilo\ThemeBundle\Event\MessageListEvent;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class MessageListener
+ * Class MessageListener.
+ *
  * @package Chamilo\CoreBundle\EventListener
  */
 class MessageListener

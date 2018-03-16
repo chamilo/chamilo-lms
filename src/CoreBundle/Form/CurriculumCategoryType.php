@@ -3,10 +3,10 @@
 
 namespace Chamilo\CoreBundle\Form;
 
+use Chamilo\CoreBundle\Entity\CurriculumCategory;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Chamilo\CoreBundle\Entity\CurriculumCategory;
 
 class CurriculumCategoryType extends AbstractType
 {

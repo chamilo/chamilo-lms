@@ -4,12 +4,12 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class SecuritySettingsSchema
+ * Class SecuritySettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class SecuritySettingsSchema extends AbstractSettingsSchema
@@ -30,13 +30,13 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
                 'user_reset_password_token_limit' => '3600',
                 'captcha_number_mistakes_to_block_account' => '',
                 'captcha_time_to_block' => '',
-                'prevent_multiple_simultaneous_login' => 'false'
+                'prevent_multiple_simultaneous_login' => 'false',
             ]
         );
         $allowedTypes = [
             'allow_browser_sniffer' => ['string'],
             'allow_strength_pass_checker' => ['string'],
-            'captcha_number_mistakes_to_block_account'=> ['string']
+            'captcha_number_mistakes_to_block_account' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }

@@ -6,7 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TrackEUploads
+ * TrackEUploads.
  *
  * @ORM\Table(
  *  name="track_e_uploads",
@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 class TrackEUploads
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="upload_user_id", type="integer", nullable=true)
      */
@@ -43,28 +43,28 @@ class TrackEUploads
     private $uploadCoursId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer", nullable=true)
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="upload_work_id", type="integer", nullable=false)
      */
     private $uploadWorkId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="upload_session_id", type="integer", nullable=false)
      */
     private $uploadSessionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="upload_id", type="integer")
      * @ORM\Id
@@ -72,12 +72,11 @@ class TrackEUploads
      */
     private $uploadId;
 
-
-
     /**
-     * Set uploadUserId
+     * Set uploadUserId.
      *
-     * @param integer $uploadUserId
+     * @param int $uploadUserId
+     *
      * @return TrackEUploads
      */
     public function setUploadUserId($uploadUserId)
@@ -88,9 +87,9 @@ class TrackEUploads
     }
 
     /**
-     * Get uploadUserId
+     * Get uploadUserId.
      *
-     * @return integer
+     * @return int
      */
     public function getUploadUserId()
     {
@@ -98,9 +97,10 @@ class TrackEUploads
     }
 
     /**
-     * Set uploadDate
+     * Set uploadDate.
      *
      * @param \DateTime $uploadDate
+     *
      * @return TrackEUploads
      */
     public function setUploadDate($uploadDate)
@@ -111,7 +111,7 @@ class TrackEUploads
     }
 
     /**
-     * Get uploadDate
+     * Get uploadDate.
      *
      * @return \DateTime
      */
@@ -121,9 +121,10 @@ class TrackEUploads
     }
 
     /**
-     * Set uploadCoursId
+     * Set uploadCoursId.
      *
      * @param string $uploadCoursId
+     *
      * @return TrackEUploads
      */
     public function setUploadCoursId($uploadCoursId)
@@ -134,7 +135,7 @@ class TrackEUploads
     }
 
     /**
-     * Get uploadCoursId
+     * Get uploadCoursId.
      *
      * @return string
      */
@@ -144,9 +145,10 @@ class TrackEUploads
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return TrackEUploads
      */
     public function setCId($cId)
@@ -157,9 +159,9 @@ class TrackEUploads
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -167,9 +169,10 @@ class TrackEUploads
     }
 
     /**
-     * Set uploadWorkId
+     * Set uploadWorkId.
      *
-     * @param integer $uploadWorkId
+     * @param int $uploadWorkId
+     *
      * @return TrackEUploads
      */
     public function setUploadWorkId($uploadWorkId)
@@ -180,9 +183,9 @@ class TrackEUploads
     }
 
     /**
-     * Get uploadWorkId
+     * Get uploadWorkId.
      *
-     * @return integer
+     * @return int
      */
     public function getUploadWorkId()
     {
@@ -190,9 +193,10 @@ class TrackEUploads
     }
 
     /**
-     * Set uploadSessionId
+     * Set uploadSessionId.
      *
-     * @param integer $uploadSessionId
+     * @param int $uploadSessionId
+     *
      * @return TrackEUploads
      */
     public function setUploadSessionId($uploadSessionId)
@@ -203,9 +207,9 @@ class TrackEUploads
     }
 
     /**
-     * Get uploadSessionId
+     * Get uploadSessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getUploadSessionId()
     {
@@ -213,9 +217,9 @@ class TrackEUploads
     }
 
     /**
-     * Get uploadId
+     * Get uploadId.
      *
-     * @return integer
+     * @return int
      */
     public function getUploadId()
     {

@@ -1,14 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 /**
- * Show information about Mozilla OpenBadges
+ * Show information about Mozilla OpenBadges.
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.admin.openbadges
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -30,12 +29,12 @@ $badgeStudio = [
     'media' => api_get_path(WEB_LIBRARY_JS_PATH).'badge-studio/media/',
     'templates' => api_get_path(WEB_LIBRARY_JS_PATH).'badge-studio/media/images/templates/',
     'masks' => api_get_path(WEB_LIBRARY_JS_PATH).'badge-studio/media/images/masks/',
-    'script_js' => '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'badge-studio/media/js/studio.js?"></script>'
+    'script_js' => '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'badge-studio/media/js/studio.js?"></script>',
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $params = [
-        'id' => $skillId
+        'id' => $skillId,
     ];
 
     if ((isset($_FILES['image']) && $_FILES['image']['error'] == 0) ||
@@ -93,8 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $interbreadcrumb = [
     [
         'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
-        'name' => get_lang('Administration')
-    ]
+        'name' => get_lang('Administration'),
+    ],
 ];
 $interbreadcrumb[] = ['url' => 'skill_list.php', 'name' => get_lang('ManageSkills')];
 

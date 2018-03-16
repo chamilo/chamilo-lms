@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 /**
  * This tool allows platform admins to upload a massive amount of PDFs to be
- * uploaded in each course
+ * uploaded in each course.
+ *
  * @package chamilo.admin
  */
 $cidReset = true;
@@ -94,8 +95,10 @@ ENG101_Introduction_to_English-101.pdf
 Display::display_footer();
 
 /**
- * Import PDFs
- * @param   string $subDir  The subdirectory in which to put the files in each course
+ * Import PDFs.
+ *
+ * @param string $subDir The subdirectory in which to put the files in each course
+ *
  * @return array List of possible errors found
  */
 function import_pdfs($subDir = '/')
@@ -108,6 +111,7 @@ function import_pdfs($subDir = '/')
     }
     if (!unzip_uploaded_file($_FILES['import_file'], $uploadPath, $baseDir, 1024 * 1024 * 1024)) {
         error_log('Could not unzip uploaded file in '.__FILE__.', line '.__LINE__);
+
         return $errors;
     }
     $list = scandir($baseDir.$uploadPath);

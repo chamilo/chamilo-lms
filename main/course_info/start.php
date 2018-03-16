@@ -12,8 +12,8 @@ if (!api_is_allowed_to_edit()) {
 
 $course_info = api_get_course_info();
 
-$directory  = $course_info['directory'];
-$title      = $course_info['title'];
+$directory = $course_info['directory'];
+$title = $course_info['title'];
 
 // Preparing a confirmation message.
 $link = api_get_path(WEB_COURSE_PATH).$directory.'/';

@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Symfony\Component\Dotenv\Dotenv;
 use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\Dotenv\Dotenv;
 
 /**
  * It is recommended that ALL Chamilo scripts include this important file.
@@ -13,8 +13,8 @@ use Chamilo\CoreBundle\Framework\Container;
  * - include of language files.
  *
  * @package chamilo.include
- * @todo remove the code that displays the button that links to the install page
  *
+ * @todo remove the code that displays the button that links to the install page
  */
 
 // Showing/hiding error codes in global error messages.
@@ -193,8 +193,8 @@ try {
     if ($_configuration['access_url'] != 1) {
         $url_info = api_get_access_url($_configuration['access_url']);
         if ($url_info['active'] == 1) {
-            $settings_by_access = & api_get_settings(null, 'list', $_configuration['access_url'], 1);
-            foreach ($settings_by_access as & $row) {
+            $settings_by_access = &api_get_settings(null, 'list', $_configuration['access_url'], 1);
+            foreach ($settings_by_access as &$row) {
                 if (empty($row['variable'])) {
                     $row['variable'] = 0;
                 }
@@ -209,8 +209,8 @@ try {
         }
     }
 
-    $result = & api_get_settings(null, 'list', 1);
-    foreach ($result as & $row) {
+    $result = &api_get_settings(null, 'list', 1);
+    foreach ($result as &$row) {
         if ($_configuration['access_url'] != 1) {
             if ($url_info['active'] == 1) {
                 $var = empty($row['variable']) ? 0 : $row['variable'];
@@ -250,10 +250,10 @@ try {
         }
     }
 
-    $result = & api_get_settings('Plugins', 'list', $_configuration['access_url']);
+    $result = &api_get_settings('Plugins', 'list', $_configuration['access_url']);
     $_plugins = [];
-    foreach ($result as & $row) {
-        $key = & $row['variable'];
+    foreach ($result as &$row) {
+        $key = &$row['variable'];
         if (isset($_setting[$key]) && is_string($_setting[$key])) {
             $_setting[$key] = [];
         }
@@ -301,7 +301,7 @@ try {
         'course_info.conf.php',
         'add_course.conf.php',
         'events.conf.php',
-        'auth.conf.php'
+        'auth.conf.php',
     ];
 
     foreach ($configurationFiles as $file) {
@@ -497,7 +497,7 @@ try {
     }
 
     /**
-     * Include the trad4all language file
+     * Include the trad4all language file.
      */
     // if the sub-language feature is on
     $parent_path = SubLanguageManager::get_parent_language_path($language_interface);

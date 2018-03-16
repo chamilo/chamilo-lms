@@ -386,7 +386,7 @@ if ($action != 'add') {
         $column_order[3] = 8;
         $column_order[5] = 7;
         // The content of the sortable table = the received files
-        foreach ($dropbox_person -> receivedWork as $dropbox_file) {
+        foreach ($dropbox_person->receivedWork as $dropbox_file) {
             $dropbox_file_data = [];
             if ($view_dropbox_category_received == $dropbox_file->category) {
                 // we only display the files that are in the category that we are in.
@@ -443,7 +443,7 @@ if ($action != 'add') {
                 // This is a hack to have an additional row in a sortable table
                 if ($action == 'viewfeedback' && isset($_GET['id']) && is_numeric($_GET['id']) && $dropbox_file->id == $_GET['id']) {
                     $action_icons .= "</td></tr>"; // Ending the normal row of the sortable table
-                    $url= api_get_path(WEB_CODE_PATH).'dropbox/index.php?"'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory."&view_sent_category=".$viewSentCategory."&view=".$view.'&'.$sort_params;
+                    $url = api_get_path(WEB_CODE_PATH).'dropbox/index.php?"'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory."&view_sent_category=".$viewSentCategory."&view=".$view.'&'.$sort_params;
                     $action_icons .= "        
                         <tr>
                         <td colspan=\"9\">".
@@ -502,7 +502,7 @@ if ($action != 'add') {
         ];
         $selectlist = [
             'delete_received' => get_lang('Delete'),
-            'download_received' => get_lang('Download')
+            'download_received' => get_lang('Download'),
         ];
 
         if (is_array($movelist)) {
@@ -675,12 +675,12 @@ if ($action != 'add') {
         $additional_get_parameters = [
             'view' => $view,
             'view_received_category' => $viewReceivedCategory,
-            'view_sent_category' => $viewSentCategory
+            'view_sent_category' => $viewSentCategory,
         ];
 
         $selectlist = [
             'delete_received' => get_lang('Delete'),
-            'download_received' => get_lang('Download')
+            'download_received' => get_lang('Download'),
         ];
 
         if (!empty($moveList)) {

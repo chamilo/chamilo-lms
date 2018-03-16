@@ -4,9 +4,11 @@
 use ChamiloSession as Session;
 
 /**
- * Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action
+ * Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action.
+ *
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Julio Montoya <gugli100@gmail.com> Bugfixes session support
+ *
  * @package chamilo.course_progress
  */
 
@@ -46,7 +48,7 @@ $actions = [
     'thematic_advance_edit',
     'thematic_advance_delete',
     'export_single_thematic',
-    'export_single_documents'
+    'export_single_documents',
 ];
 
 $action = 'thematic_details';
@@ -186,14 +188,14 @@ if ($action == 'thematic_list') {
 if ($action == 'thematic_add') {
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl,
-        'name' => get_lang('ThematicControl')
+        'name' => get_lang('ThematicControl'),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewThematicSection')];
 }
 if ($action == 'thematic_edit') {
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl,
-        'name' => get_lang('ThematicControl')
+        'name' => get_lang('ThematicControl'),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('EditThematicSection')];
 }
@@ -203,12 +205,12 @@ if ($action == 'thematic_details') {
 if ($action == 'thematic_plan_list' || $action == 'thematic_plan_delete') {
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action='.$thematicControl,
-        'name' => get_lang('ThematicControl')
+        'name' => get_lang('ThematicControl'),
     ];
     if (!empty($thematic_data)) {
         $interbreadcrumb[] = [
             'url' => '#',
-            'name' => get_lang('ThematicPlan').' ('.$cleanThematicTitle.') '
+            'name' => get_lang('ThematicPlan').' ('.$cleanThematicTitle.') ',
         ];
     }
 }

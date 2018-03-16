@@ -2,9 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Generate a teacher time report in platform or sessions/courses
+ * Generate a teacher time report in platform or sessions/courses.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.admin
  */
 
@@ -19,7 +20,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 $interbreadcrumb[] = [
     'url' => 'index.php',
-    'name' => get_lang('PlatformAdmin')
+    'name' => get_lang('PlatformAdmin'),
 ];
 $toolName = get_lang('TeacherTimeReport');
 
@@ -112,7 +113,7 @@ if (!empty($selectedCourse)) {
             'session' => null,
             'course' => [
                 'id' => $course['real_id'],
-                'name' => $course['title']
+                'name' => $course['title'],
             ],
             'coach' => [
                 'userId' => $teacher['user_id'],
@@ -122,9 +123,9 @@ if (!empty($selectedCourse)) {
                 'complete_name' => api_get_person_name(
                     $teacher['firstname'],
                     $teacher['lastname']
-                )
+                ),
             ],
-            'total_time' => $formattedTime
+            'total_time' => $formattedTime,
         ];
     }
 
@@ -150,11 +151,11 @@ if (!empty($selectedCourse)) {
                 $timeReport->data[] = [
                     'session' => [
                         'id' => $session['id'],
-                        'name' => $session['name']
+                        'name' => $session['name'],
                     ],
                     'course' => [
                         'id' => $course['real_id'],
-                        'name' => $course['title']
+                        'name' => $course['title'],
                     ],
                     'coach' => [
                         'userId' => $coach['user_id'],
@@ -164,9 +165,9 @@ if (!empty($selectedCourse)) {
                         'complete_name' => api_get_person_name(
                             $coach['firstname'],
                             $coach['lastname']
-                        )
+                        ),
                     ],
-                    'total_time' => $formattedTime
+                    'total_time' => $formattedTime,
                 ];
             }
         }
@@ -179,7 +180,7 @@ if (!empty($selectedSession)) {
     $session = api_get_session_info($selectedSession);
     $sessionData = [
         'id' => $session['id'],
-        'name' => $session['name']
+        'name' => $session['name'],
     ];
 
     $reportTitle = sprintf(get_lang('TimeReportForSessionX'), $session['name']);
@@ -188,7 +189,7 @@ if (!empty($selectedSession)) {
     foreach ($courses as $course) {
         $courseData = [
             'id' => $course['id'],
-            'name' => $course['title']
+            'name' => $course['title'],
         ];
 
         $coaches = CourseManager::get_coachs_from_course(
@@ -218,9 +219,9 @@ if (!empty($selectedSession)) {
                         'complete_name' => api_get_person_name(
                             $coach['firstname'],
                             $coach['lastname']
-                        )
+                        ),
                     ],
-                    'total_time' => $formattedTime
+                    'total_time' => $formattedTime,
                 ];
             }
         }
@@ -235,7 +236,7 @@ if (!empty($selectedTeacher)) {
         'lastname' => $teacher['lastname'],
         'firstname' => $teacher['firstname'],
         'username' => $teacher['username'],
-        'complete_name' => $teacher['complete_name']
+        'complete_name' => $teacher['complete_name'],
     ];
 
     $reportTitle = sprintf(
@@ -264,10 +265,10 @@ if (!empty($selectedTeacher)) {
                 'session' => null,
                 'course' => [
                     'id' => $courseInfo['real_id'],
-                    'name' => $courseInfo['title']
+                    'name' => $courseInfo['title'],
                 ],
                 'coach' => $teacherData,
-                'total_time' => $formattedTime
+                'total_time' => $formattedTime,
             ];
         }
     }
@@ -290,14 +291,14 @@ if (!empty($selectedTeacher)) {
         $timeReport->data[] = [
             'session' => [
                 'id' => $session->getId(),
-                'name' => $session->getName()
+                'name' => $session->getName(),
             ],
             'course' => [
                 'id' => $course->getId(),
-                'name' => $course->getTitle()
+                'name' => $course->getTitle(),
             ],
             'coach' => $teacherData,
-            'total_time' => $formattedTime
+            'total_time' => $formattedTime,
         ];
     }
 }
@@ -315,7 +316,7 @@ if (empty($selectedCourse) && empty($selectedSession) &&
                 $teacher['user_id'],
                 $selectedFrom,
                 $selectedUntil
-            )
+            ),
         ];
     }
 }
@@ -333,7 +334,7 @@ if (isset($_GET['export'])) {
                 'pdf_title' => "$reportTitle - $reportSubTitle",
                 'pdf_description' => get_lang('TeacherTimeReport'),
                 'format' => 'A4-L',
-                'orientation' => 'L'
+                'orientation' => 'L',
             ];
 
             $pdfContent = Export::convert_array_to_html($dataToExport);
@@ -342,9 +343,9 @@ if (isset($_GET['export'])) {
             break;
         case 'xls':
             array_unshift($dataToExport, [
-                $reportTitle
+                $reportTitle,
             ], [
-                $reportSubTitle
+                $reportSubTitle,
             ], []);
 
             Export::export_table_xls_html($dataToExport, $fileName);
@@ -380,7 +381,7 @@ $form->addDateRangePicker(
         'maxDate' => $limitDate->format('Y-m-d'),
         'format' => 'YYYY-MM-DD',
         'timePicker' => 'false',
-        'value' => "$selectedFrom / $selectedUntil"
+        'value' => "$selectedFrom / $selectedUntil",
     ]
 );
 $form->addButtonFilter(get_lang('Filter'));
@@ -392,7 +393,7 @@ $form->setDefaults([
     'teacher' => $selectedTeacher,
     'date_range' => "$selectedFrom / $selectedUntil",
     'from' => $selectedFrom,
-    'until' => $selectedUntil
+    'until' => $selectedUntil,
 ]);
 
 $leftActions = Display::url(
@@ -410,7 +411,7 @@ $exportUrlParams = [
     'course' => $selectedCourse,
     'session' => $selectedSession,
     'teacher' => $selectedTeacher,
-    '_qf__teacher_time_report' => ''
+    '_qf__teacher_time_report' => '',
 ];
 $rightActions = Display::url(
     Display::return_icon(

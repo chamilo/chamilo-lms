@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class FOSUBUserProvider extends BaseFOSUBProvider
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function connect(UserInterface $user, UserResponseInterface $response)
     {
@@ -57,14 +57,16 @@ class FOSUBUserProvider extends BaseFOSUBProvider
             $user->setPassword($username);
             $user->setEnabled(true);
             $this->userManager->updateUser($user);
+
             return $user;
         }
         //if user exists - go with the HWIOAuth way
         $user = parent::loadUserByOAuthUserResponse($response);
         $serviceName = $response->getResourceOwner()->getName();
-        $setter = 'set' . ucfirst($serviceName) . 'AccessToken';
+        $setter = 'set'.ucfirst($serviceName).'AccessToken';
         //update access token
         $user->$setter($response->getAccessToken());
+
         return $user;
     }
 }

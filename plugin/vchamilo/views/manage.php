@@ -49,7 +49,7 @@ $headers = [
     $plugin->get_lang('coursefolder'),
     $plugin->get_lang('enabled'),
     $plugin->get_lang('lastcron'),
-    ''
+    '',
 ];
 $attrs = ['center' => 'left'];
 $table->addRow($headers, $attrs, 'th');
@@ -82,7 +82,6 @@ foreach ($instances as $instance) {
         $cmd .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="'.$thisurl.'?what=deleteinstances&vids[]='.$instance->id.'" title="'.$plugin->get_lang('deleteinstances').'">
          &nbsp;'.Display::returnFontAwesomeIcon('remove', 2).' </a>';
     }
-
 
     $crondate = $instance->lastcron ? date('r', $instance->lastcron) : '';
     $data = [

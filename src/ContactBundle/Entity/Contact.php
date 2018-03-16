@@ -3,8 +3,6 @@
 
 namespace Chamilo\ContactBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 class Contact
 {
 }

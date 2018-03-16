@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Special reporting page for admins
+ * Special reporting page for admins.
+ *
  * @package chamilo.reporting
  */
-
 ob_start();
 $cidReset = true;
 
@@ -103,8 +103,8 @@ if (isset($_POST['export'])) {
 echo "
     <br /><br />
     <form method='post' action='admin.php'>
-        <button type='submit' class='save' name='export' value='" . get_lang('ExportExcel')."'>
-            " . get_lang('ExportExcel')."
+        <button type='submit' class='save' name='export' value='".get_lang('ExportExcel')."'>
+            ".get_lang('ExportExcel')."
         </button>
     <form>
 ";

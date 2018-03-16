@@ -2,8 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *  This tool allows platform admins to add classes by uploading a CSV file
+ *  This tool allows platform admins to add classes by uploading a CSV file.
+ *
  * @todo Add some langvars to DLTT
+ *
  * @package chamilo.admin
  */
 
@@ -35,7 +37,7 @@ function validate_data($classes)
 }
 
 /**
- * Save imported class data to database
+ * Save imported class data to database.
  *
  * @param $classes
  *

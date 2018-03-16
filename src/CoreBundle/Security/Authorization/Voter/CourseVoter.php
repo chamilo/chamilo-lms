@@ -10,11 +10,11 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Class CourseVoter
+ * Class CourseVoter.
+ *
  * @package Chamilo\CoreBundle\Security\Authorization\Voter
  */
 class CourseVoter extends Voter
@@ -28,8 +28,8 @@ class CourseVoter extends Voter
     private $container;
 
     /**
-     * @param EntityManager $entityManager
-     * @param CourseManager $courseManager
+     * @param EntityManager      $entityManager
+     * @param CourseManager      $courseManager
      * @param ContainerInterface $container
      */
     public function __construct(
@@ -59,14 +59,14 @@ class CourseVoter extends Voter
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function supports($attribute, $subject)
     {
         $options = [
             self::VIEW,
             self::EDIT,
-            self::DELETE
+            self::DELETE,
         ];
 
         // if the attribute isn't one we support, return false
@@ -83,7 +83,7 @@ class CourseVoter extends Voter
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function voteOnAttribute($attribute, $course, TokenInterface $token)
     {
@@ -103,7 +103,6 @@ class CourseVoter extends Voter
 
         // Course is active?
         /** @var Course $course */
-
         switch ($attribute) {
             case self::VIEW:
                 // "Open to the world" no need to check if user is registered
@@ -126,6 +125,7 @@ class CourseVoter extends Voter
                 if ($course->getVisibility() == Course::OPEN_PLATFORM) {
                     $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT);
                     $token->setUser($user);
+
                     return true;
                 }
 
@@ -134,6 +134,7 @@ class CourseVoter extends Voter
                 if ($course->hasUser($user)) {
                     $user->addRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_STUDENT);
                     $token->setUser($user);
+
                     return true;
                 }
                 break;

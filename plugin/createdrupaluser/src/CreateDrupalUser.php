@@ -2,9 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Create a user in Drupal website when a user is registered in Chamilo LMS
+ * Create a user in Drupal website when a user is registered in Chamilo LMS.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.plugin.createDrupalUser
  */
 class CreateDrupalUser extends Plugin implements HookPluginInterface
@@ -12,20 +13,22 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
     const EXTRAFIELD_VARIABLE_NAME = 'drupal_user_id';
 
     /**
-     * Class constructor
+     * Class constructor.
      */
     protected function __construct()
     {
         $parameters = [
-            'drupal_domain' => 'text'
+            'drupal_domain' => 'text',
         ];
 
         parent::__construct('1.0', 'Angel Fernando Quiroz Campos', $parameters);
     }
 
     /**
-     * Instance the plugin
+     * Instance the plugin.
+     *
      * @staticvar null $result
+     *
      * @return CreateDrupalUser
      */
     public static function create()
@@ -36,7 +39,7 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
     }
 
     /**
-     * Install the plugin
+     * Install the plugin.
      */
     public function install()
     {
@@ -45,8 +48,7 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
     }
 
     /**
-     * Uninstall the plugin
-     * @return void
+     * Uninstall the plugin.
      */
     public function uninstall()
     {
@@ -55,7 +57,7 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
     }
 
     /**
-     * Install the Create User hook
+     * Install the Create User hook.
      */
     public function installHook()
     {
@@ -65,7 +67,7 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
     }
 
     /**
-     * Uninstall the Create User hook
+     * Uninstall the Create User hook.
      */
     public function uninstallHook()
     {
@@ -79,7 +81,8 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
     }
 
     /**
-     * Get the drupal_user_id extra field information
+     * Get the drupal_user_id extra field information.
+     *
      * @return array The info
      */
     private function getExtraFieldInfo()
@@ -93,7 +96,7 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
     }
 
     /**
-     * Create the drupal_user_id when it not exists
+     * Create the drupal_user_id when it not exists.
      */
     private function createExtraField()
     {
@@ -110,14 +113,14 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
                     'field_order' => null,
                     'visible_to_self' => false,
                     'changeable' => false,
-                    'filter' => null
+                    'filter' => null,
                 ]
             );
         }
     }
 
     /**
-     * Delete the drupal_user_id and values
+     * Delete the drupal_user_id and values.
      */
     private function deleteExtraField()
     {

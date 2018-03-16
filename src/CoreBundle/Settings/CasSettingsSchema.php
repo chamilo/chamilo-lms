@@ -4,18 +4,12 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Manager\CourseManager;
-use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
-use Chamilo\CourseBundle\Tool\BaseTool;
-use Chamilo\CourseBundle\ToolChain;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
-use Chamilo\SettingsBundle\Transformer\ArrayToIdentifierTransformer;
 
 /**
- * Class CasSettingsSchema
+ * Class CasSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class CasSettingsSchema extends AbstractSettingsSchema

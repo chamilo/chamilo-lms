@@ -4,13 +4,14 @@
 /** @author Julio Montoya */
 
 /**
- * Class HTML_QuickForm_Rule_MaxFileSize
+ * Class HTML_QuickForm_Rule_MaxFileSize.
  */
 class HTML_QuickForm_Rule_MaxFileSize extends HTML_QuickForm_Rule
 {
     /**
      * @param $value array     Uploaded file info (from $_FILES)
      * @param null $options
+     *
      * @return bool
      */
     public function validate($elementValue, $maxSize)
@@ -24,6 +25,6 @@ class HTML_QuickForm_Rule_MaxFileSize extends HTML_QuickForm_Rule
             return true;
         }
 
-        return ($maxSize >= @filesize($elementValue['tmp_name']));
+        return $maxSize >= @filesize($elementValue['tmp_name']);
     }
 }

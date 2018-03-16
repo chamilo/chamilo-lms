@@ -4,10 +4,10 @@
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 
 /**
- * Download script for course info
+ * Download script for course info.
+ *
  * @package chamilo.course_info
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 

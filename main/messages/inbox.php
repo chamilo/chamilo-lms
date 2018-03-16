@@ -4,7 +4,6 @@
 /**
  * @package chamilo.messages
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -90,19 +89,19 @@ if ($allowSocial) {
     $this_section = SECTION_SOCIAL;
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_PATH).'main/social/home.php',
-        'name' => get_lang('SocialNetwork')
+        'name' => get_lang('SocialNetwork'),
     ];
 } else {
     $this_section = SECTION_MYPROFILE;
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_PATH).'main/auth/profile.php',
-        'name' => get_lang('Profile')
+        'name' => get_lang('Profile'),
     ];
 }
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_PATH).'main/messages/inbox.php',
-    'name' => get_lang('Messages')
+    'name' => get_lang('Messages'),
 ];
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Inbox')];
 

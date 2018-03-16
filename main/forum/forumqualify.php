@@ -3,9 +3,9 @@
 
 /**
  * @package chamilo.forum
+ *
  * @todo fix all this qualify files avoid including files, use classes POO jmontoya
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
@@ -63,7 +63,7 @@ if (isset($_POST['idtextqualify'])) {
                 'action' => 'liststd',
                 'content' => 'thread',
                 'id' => $threadId,
-                'list' => 'qualify'
+                'list' => 'qualify',
             ])
         );
         exit;
@@ -93,7 +93,7 @@ $groupId = api_get_group_id();
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
+        'name' => get_lang('ToolGradebook'),
     ];
 }
 
@@ -106,26 +106,26 @@ if ($origin == 'learnpath') {
         $group_properties = GroupManager::get_group_properties($groupId);
         $interbreadcrumb[] = [
             "url" => "../group/group.php?".api_get_cidreq(),
-            "name" => get_lang('Groups')
+            "name" => get_lang('Groups'),
         ];
         $interbreadcrumb[] = [
             "url" => "../group/group_space.php?".api_get_cidreq(),
-            "name" => get_lang('GroupSpace').' ('.$group_properties['name'].')'
+            "name" => get_lang('GroupSpace').' ('.$group_properties['name'].')',
         ];
         $interbreadcrumb[] = [
             "url" => "viewforum.php?".api_get_cidreq()."&forum=".intval($_GET['forum'])."&search=".$search,
-            "name" => prepare4display($currentForum['forum_title'])
+            "name" => prepare4display($currentForum['forum_title']),
         ];
-        if ($message <> 'PostDeletedSpecial') {
+        if ($message != 'PostDeletedSpecial') {
             $interbreadcrumb[] = [
                 "url" => "viewthread.php?".api_get_cidreq()."&forum=".intval($_GET['forum'])."&thread=".intval($_GET['thread']),
-                "name" => prepare4display($currentThread['thread_title'])
+                "name" => prepare4display($currentThread['thread_title']),
             ];
         }
 
         $interbreadcrumb[] = [
             "url" => "#",
-            "name" => get_lang('QualifyThread')
+            "name" => get_lang('QualifyThread'),
         ];
 
         // the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
@@ -135,27 +135,27 @@ if ($origin == 'learnpath') {
         $info_thread = get_thread_information($currentForum['forum_id'], $_GET['thread']);
         $interbreadcrumb[] = [
             "url" => "index.php?".api_get_cidreq()."&search=".$search,
-            "name" => $nameTools
+            "name" => $nameTools,
         ];
         $interbreadcrumb[] = [
             "url" => "viewforumcategory.php?".api_get_cidreq()."&forumcategory=".$currentForumCategory['cat_id']."&search=".$search,
-            "name" => prepare4display($currentForumCategory['cat_title'])
+            "name" => prepare4display($currentForumCategory['cat_title']),
         ];
         $interbreadcrumb[] = [
             "url" => "viewforum.php?".api_get_cidreq()."&forum=".intval($_GET['forum'])."&search=".$search,
-            "name" => prepare4display($currentForum['forum_title'])
+            "name" => prepare4display($currentForum['forum_title']),
         ];
 
-        if ($message <> 'PostDeletedSpecial') {
+        if ($message != 'PostDeletedSpecial') {
             $interbreadcrumb[] = [
                 "url" => "viewthread.php?".api_get_cidreq()."&forum=".$info_thread['forum_id']."&thread=".intval($_GET['thread']),
-                "name" => prepare4display($currentThread['thread_title'])
+                "name" => prepare4display($currentThread['thread_title']),
             ];
         }
         // the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
         $interbreadcrumb[] = [
             "url" => "#",
-            "name" => get_lang('QualifyThread')
+            "name" => get_lang('QualifyThread'),
         ];
         Display::display_header('');
     }

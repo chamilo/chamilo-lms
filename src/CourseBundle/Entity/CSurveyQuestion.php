@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CSurveyQuestion
+ * CSurveyQuestion.
  *
  * @ORM\Table(
  *  name="c_survey_question",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CSurveyQuestion
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,21 +28,21 @@ class CSurveyQuestion
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="question_id", type="integer")
      */
     private $questionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="survey_id", type="integer", nullable=false)
      */
@@ -77,42 +77,42 @@ class CSurveyQuestion
     private $display;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="sort", type="integer", nullable=false)
      */
     private $sort;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="shared_question_id", type="integer", nullable=true)
      */
     private $sharedQuestionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="max_value", type="integer", nullable=true)
      */
     private $maxValue;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="survey_group_pri", type="integer", nullable=false)
      */
     private $surveyGroupPri;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="survey_group_sec1", type="integer", nullable=false)
      */
     private $surveyGroupSec1;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="survey_group_sec2", type="integer", nullable=false)
      */
@@ -125,9 +125,10 @@ class CSurveyQuestion
     private $isMandatory = false;
 
     /**
-     * Set surveyId
+     * Set surveyId.
      *
-     * @param integer $surveyId
+     * @param int $surveyId
+     *
      * @return CSurveyQuestion
      */
     public function setSurveyId($surveyId)
@@ -138,9 +139,9 @@ class CSurveyQuestion
     }
 
     /**
-     * Get surveyId
+     * Get surveyId.
      *
-     * @return integer
+     * @return int
      */
     public function getSurveyId()
     {
@@ -148,9 +149,10 @@ class CSurveyQuestion
     }
 
     /**
-     * Set surveyQuestion
+     * Set surveyQuestion.
      *
      * @param string $surveyQuestion
+     *
      * @return CSurveyQuestion
      */
     public function setSurveyQuestion($surveyQuestion)
@@ -161,7 +163,7 @@ class CSurveyQuestion
     }
 
     /**
-     * Get surveyQuestion
+     * Get surveyQuestion.
      *
      * @return string
      */
@@ -171,9 +173,10 @@ class CSurveyQuestion
     }
 
     /**
-     * Set surveyQuestionComment
+     * Set surveyQuestionComment.
      *
      * @param string $surveyQuestionComment
+     *
      * @return CSurveyQuestion
      */
     public function setSurveyQuestionComment($surveyQuestionComment)
@@ -184,7 +187,7 @@ class CSurveyQuestion
     }
 
     /**
-     * Get surveyQuestionComment
+     * Get surveyQuestionComment.
      *
      * @return string
      */
@@ -194,9 +197,10 @@ class CSurveyQuestion
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @param string $type
+     *
      * @return CSurveyQuestion
      */
     public function setType($type)
@@ -207,7 +211,7 @@ class CSurveyQuestion
     }
 
     /**
-     * Get type
+     * Get type.
      *
      * @return string
      */
@@ -217,9 +221,10 @@ class CSurveyQuestion
     }
 
     /**
-     * Set display
+     * Set display.
      *
      * @param string $display
+     *
      * @return CSurveyQuestion
      */
     public function setDisplay($display)
@@ -230,7 +235,7 @@ class CSurveyQuestion
     }
 
     /**
-     * Get display
+     * Get display.
      *
      * @return string
      */
@@ -240,9 +245,10 @@ class CSurveyQuestion
     }
 
     /**
-     * Set sort
+     * Set sort.
      *
-     * @param integer $sort
+     * @param int $sort
+     *
      * @return CSurveyQuestion
      */
     public function setSort($sort)
@@ -253,9 +259,9 @@ class CSurveyQuestion
     }
 
     /**
-     * Get sort
+     * Get sort.
      *
-     * @return integer
+     * @return int
      */
     public function getSort()
     {
@@ -263,9 +269,10 @@ class CSurveyQuestion
     }
 
     /**
-     * Set sharedQuestionId
+     * Set sharedQuestionId.
      *
-     * @param integer $sharedQuestionId
+     * @param int $sharedQuestionId
+     *
      * @return CSurveyQuestion
      */
     public function setSharedQuestionId($sharedQuestionId)
@@ -276,9 +283,9 @@ class CSurveyQuestion
     }
 
     /**
-     * Get sharedQuestionId
+     * Get sharedQuestionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSharedQuestionId()
     {
@@ -286,9 +293,10 @@ class CSurveyQuestion
     }
 
     /**
-     * Set maxValue
+     * Set maxValue.
      *
-     * @param integer $maxValue
+     * @param int $maxValue
+     *
      * @return CSurveyQuestion
      */
     public function setMaxValue($maxValue)
@@ -299,9 +307,9 @@ class CSurveyQuestion
     }
 
     /**
-     * Get maxValue
+     * Get maxValue.
      *
-     * @return integer
+     * @return int
      */
     public function getMaxValue()
     {
@@ -309,9 +317,10 @@ class CSurveyQuestion
     }
 
     /**
-     * Set surveyGroupPri
+     * Set surveyGroupPri.
      *
-     * @param integer $surveyGroupPri
+     * @param int $surveyGroupPri
+     *
      * @return CSurveyQuestion
      */
     public function setSurveyGroupPri($surveyGroupPri)
@@ -322,9 +331,9 @@ class CSurveyQuestion
     }
 
     /**
-     * Get surveyGroupPri
+     * Get surveyGroupPri.
      *
-     * @return integer
+     * @return int
      */
     public function getSurveyGroupPri()
     {
@@ -332,9 +341,10 @@ class CSurveyQuestion
     }
 
     /**
-     * Set surveyGroupSec1
+     * Set surveyGroupSec1.
      *
-     * @param integer $surveyGroupSec1
+     * @param int $surveyGroupSec1
+     *
      * @return CSurveyQuestion
      */
     public function setSurveyGroupSec1($surveyGroupSec1)
@@ -345,9 +355,9 @@ class CSurveyQuestion
     }
 
     /**
-     * Get surveyGroupSec1
+     * Get surveyGroupSec1.
      *
-     * @return integer
+     * @return int
      */
     public function getSurveyGroupSec1()
     {
@@ -355,9 +365,10 @@ class CSurveyQuestion
     }
 
     /**
-     * Set surveyGroupSec2
+     * Set surveyGroupSec2.
      *
-     * @param integer $surveyGroupSec2
+     * @param int $surveyGroupSec2
+     *
      * @return CSurveyQuestion
      */
     public function setSurveyGroupSec2($surveyGroupSec2)
@@ -368,9 +379,9 @@ class CSurveyQuestion
     }
 
     /**
-     * Get surveyGroupSec2
+     * Get surveyGroupSec2.
      *
-     * @return integer
+     * @return int
      */
     public function getSurveyGroupSec2()
     {
@@ -378,9 +389,10 @@ class CSurveyQuestion
     }
 
     /**
-     * Set questionId
+     * Set questionId.
      *
-     * @param integer $questionId
+     * @param int $questionId
+     *
      * @return CSurveyQuestion
      */
     public function setQuestionId($questionId)
@@ -391,9 +403,9 @@ class CSurveyQuestion
     }
 
     /**
-     * Get questionId
+     * Get questionId.
      *
-     * @return integer
+     * @return int
      */
     public function getQuestionId()
     {
@@ -401,9 +413,10 @@ class CSurveyQuestion
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CSurveyQuestion
      */
     public function setCId($cId)
@@ -414,9 +427,9 @@ class CSurveyQuestion
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -424,7 +437,8 @@ class CSurveyQuestion
     }
 
     /**
-     * Set isMandatory
+     * Set isMandatory.
+     *
      * @return bool
      */
     public function isMandatory(): bool
@@ -433,8 +447,10 @@ class CSurveyQuestion
     }
 
     /**
-     * Get isMandatory
+     * Get isMandatory.
+     *
      * @param bool $isMandatory
+     *
      * @return CSurveyQuestion
      */
     public function setIsMandatory(bool $isMandatory): CSurveyQuestion

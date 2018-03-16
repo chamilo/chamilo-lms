@@ -3,15 +3,15 @@
 
 namespace Chamilo\CoreBundle\Form;
 
+use Chamilo\CoreBundle\Entity\Session;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Chamilo\CoreBundle\Entity\Session;
 
 class SessionType extends AbstractType
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

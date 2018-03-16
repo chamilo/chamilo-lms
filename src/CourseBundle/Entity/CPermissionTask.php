@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CPermissionTask
+ * CPermissionTask.
  *
  * @ORM\Table(
  *  name="c_permission_task",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CPermissionTask
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,21 +28,21 @@ class CPermissionTask
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="task_id", type="integer", nullable=false)
      */
@@ -63,9 +63,10 @@ class CPermissionTask
     private $action;
 
     /**
-     * Set taskId
+     * Set taskId.
      *
-     * @param integer $taskId
+     * @param int $taskId
+     *
      * @return CPermissionTask
      */
     public function setTaskId($taskId)
@@ -76,9 +77,9 @@ class CPermissionTask
     }
 
     /**
-     * Get taskId
+     * Get taskId.
      *
-     * @return integer
+     * @return int
      */
     public function getTaskId()
     {
@@ -86,9 +87,10 @@ class CPermissionTask
     }
 
     /**
-     * Set tool
+     * Set tool.
      *
      * @param string $tool
+     *
      * @return CPermissionTask
      */
     public function setTool($tool)
@@ -99,7 +101,7 @@ class CPermissionTask
     }
 
     /**
-     * Get tool
+     * Get tool.
      *
      * @return string
      */
@@ -109,9 +111,10 @@ class CPermissionTask
     }
 
     /**
-     * Set action
+     * Set action.
      *
      * @param string $action
+     *
      * @return CPermissionTask
      */
     public function setAction($action)
@@ -122,7 +125,7 @@ class CPermissionTask
     }
 
     /**
-     * Get action
+     * Get action.
      *
      * @return string
      */
@@ -132,9 +135,10 @@ class CPermissionTask
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CPermissionTask
      */
     public function setId($id)
@@ -145,9 +149,9 @@ class CPermissionTask
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -155,9 +159,10 @@ class CPermissionTask
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CPermissionTask
      */
     public function setCId($cId)
@@ -168,9 +173,9 @@ class CPermissionTask
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

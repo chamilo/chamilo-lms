@@ -4,12 +4,12 @@
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class MessageSettingsSchema
+ * Class MessageSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class MessageSettingsSchema extends AbstractSettingsSchema
@@ -25,7 +25,6 @@ class MessageSettingsSchema extends AbstractSettingsSchema
                     'allow_message_tool' => 'true',
                     'allow_send_message_to_all_platform_users' => 'false',
                     'message_max_upload_filesize' => '20971520',
-
                 ]
             );
         $allowedTypes = [

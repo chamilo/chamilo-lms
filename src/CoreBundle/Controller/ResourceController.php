@@ -3,22 +3,25 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use League\Flysystem\Filesystem;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
  * Class ResourceController
- * author Julio Montoya <gugli100@gmail.com>
+ * author Julio Montoya <gugli100@gmail.com>.
+ *
  * @package Chamilo\CoreBundle\Controller
  */
 class ResourceController extends BaseController
 {
     /**
-     * Gets a document from the courses/MATHS/document/file.jpg to the user
+     * Gets a document from the courses/MATHS/document/file.jpg to the user.
      *
      * @todo check permissions
+     *
      * @param string $course
      * @param string $file
+     *
      * @return \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function getDocumentAction($course, $file)
@@ -44,11 +47,14 @@ class ResourceController extends BaseController
     }
 
     /**
-     * Gets a document from the data/courses/MATHS/document/file.jpg to the user
+     * Gets a document from the data/courses/MATHS/document/file.jpg to the user.
+     *
      * @todo check permissions
+     *
      * @param Application $app
-     * @param string $courseCode
-     * @param string $file
+     * @param string      $courseCode
+     * @param string      $file
+     *
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
      */
     public function getCourseUploadFileAction(
@@ -69,11 +75,14 @@ class ResourceController extends BaseController
     }
 
     /**
-     * Gets a document from the data/courses/MATHS/scorm/file.jpg to the user
+     * Gets a document from the data/courses/MATHS/scorm/file.jpg to the user.
+     *
      * @todo check permissions
+     *
      * @param Application $app
-     * @param string $courseCode
-     * @param string $file
+     * @param string      $courseCode
+     * @param string      $file
+     *
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
      */
     public function getScormDocumentAction($app, $courseCode, $file)
@@ -91,9 +100,11 @@ class ResourceController extends BaseController
     }
 
     /**
-     * Gets a document from the data/default_platform_document/* folder
+     * Gets a document from the data/default_platform_document/* folder.
+     *
      * @param Application $app
-     * @param string $file
+     * @param string      $file
+     *
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
      */
     public function getDefaultCourseDocumentAction($app, $file)
@@ -113,6 +124,7 @@ class ResourceController extends BaseController
      * @param Application $app
      * @param $groupId
      * @param $file
+     *
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
      */
     public function getGroupFile($app, $groupId, $file)
@@ -131,6 +143,7 @@ class ResourceController extends BaseController
     /**
      * @param Application $app
      * @param $file
+     *
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
      */
     public function getUserFile($app, $file)

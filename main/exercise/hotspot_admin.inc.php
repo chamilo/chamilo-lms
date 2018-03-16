@@ -5,11 +5,12 @@ use ChamiloSession as Session;
 
 /**
  * This script allows to manage answers. It is included from the
- * script admin.php
+ * script admin.php.
+ *
  * @package chamilo.exercise
+ *
  * @author Toon Keppens
  */
-
 $modifyAnswers = intval($_GET['hotspotadmin']);
 
 if (!is_object($objQuestion)) {
@@ -546,7 +547,7 @@ if ($modifyAnswers) {
             "#4F9242",
             "#F4EB24",
             "#ED2024",
-            "#3B3B3B"
+            "#3B3B3B",
         ];
     } else {
         $hotspot_colors = [
@@ -563,7 +564,7 @@ if ($modifyAnswers) {
             "#F4EB24",
             "#ED2024",
             "#3B3B3B",
-            "#F7BDE2"
+            "#F7BDE2",
         ];
     }
 
@@ -726,13 +727,13 @@ if ($modifyAnswers) {
                                 <p>
                                     <textarea class="form-control" wrap="virtual" rows="3" cols="25"
                                               name="comment[<?php echo $i; ?>]"
-                                              aria-describedBy="comment-<?php echo $i ?>-help"><?php echo Security::remove_XSS($comment[$i]); ?></textarea>
-                                    <span id="comment-<?php echo $i ?>-help"
+                                              aria-describedBy="comment-<?php echo $i; ?>-help"><?php echo Security::remove_XSS($comment[$i]); ?></textarea>
+                                    <span id="comment-<?php echo $i; ?>-help"
                                           class="help-block"><?php echo get_lang('LearnerIsInformed'); ?></span>
                                 </p>
                                 <input type="hidden" name="hotspot_type[<?php echo $i; ?>]" value="delineation"/>
                                 <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php
-                                echo(empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]); ?>"/>
+                                echo empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]; ?>"/>
                             </td>
                             <?php if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
                                     ?>
@@ -882,7 +883,7 @@ if ($modifyAnswers) {
                                         ? Security::remove_XSS($comment[$i]) : ''; ?></textarea>
                                 <input type="hidden" name="hotspot_type[<?php echo $i; ?>]" value="oar"/>
                                 <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php
-                                echo(empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]); ?>"/>
+                                echo empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]; ?>"/>
                             </td>
                             <?php if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
                                     ?>
@@ -942,7 +943,7 @@ if ($modifyAnswers) {
                         $form = new FormValidator('form_'.$i);
             $config = [
                             'ToolbarSet' => 'TestProposedAnswer',
-                            'cols-size' => [0, 12, 0]
+                            'cols-size' => [0, 12, 0],
                         ];
             $form->addHtmlEditor('comment['.$i.']', null, false, false, $config);
             $renderer = $form->defaultRenderer();
@@ -968,20 +969,20 @@ if ($modifyAnswers) {
                             } else {
                                 ?>
                                 <input class="form-control" type="text" name="weighting[<?php echo $i; ?>]"
-                                       value="<?php echo(isset($weighting[$i]) ? $weighting[$i] : 10); ?>"/>
+                                       value="<?php echo isset($weighting[$i]) ? $weighting[$i] : 10; ?>"/>
                                 <?php
                             }
                         }
         if ($answerType == HOT_SPOT) {
             ?>
                             <input class="form-control" type="text" name="weighting[<?php echo $i; ?>]"
-                                   value="<?php echo(isset($weighting[$i]) ? $weighting[$i] : 10); ?>"/>
+                                   value="<?php echo isset($weighting[$i]) ? $weighting[$i] : 10; ?>"/>
                             <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]"
-                                   value="<?php echo(empty($hotspot_coordinates[$i])
+                                   value="<?php echo empty($hotspot_coordinates[$i])
                                        ? '0;0|0|0'
-                                       : $hotspot_coordinates[$i]); ?>"/>
+                                       : $hotspot_coordinates[$i]; ?>"/>
                             <input type="hidden" name="hotspot_type[<?php echo $i; ?>]"
-                                   value="<?php echo(empty($hotspot_type[$i]) ? 'square' : $hotspot_type[$i]); ?>"/>
+                                   value="<?php echo empty($hotspot_type[$i]) ? 'square' : $hotspot_type[$i]; ?>"/>
                         <?php
         } ?>
                     </td>
@@ -1113,19 +1114,19 @@ if ($modifyAnswers) {
             <?php if ($answerType == HOT_SPOT_DELINEATION) {
         ?>
             new DelineationQuestion({
-                questionId: <?php echo $modifyAnswers ?>,
+                questionId: <?php echo $modifyAnswers; ?>,
                 selector: '#hotspot-container',
                 for: 'admin',
-                relPath: '<?php echo $relPath ?>'
+                relPath: '<?php echo $relPath; ?>'
             });
             <?php
     } else {
         ?>
             new HotspotQuestion({
-                questionId: <?php echo $modifyAnswers ?>,
+                questionId: <?php echo $modifyAnswers; ?>,
                 selector: '#hotspot-container',
                 for: 'admin',
-                relPath: '<?php echo $relPath ?>'
+                relPath: '<?php echo $relPath; ?>'
             });
             <?php
     } ?>

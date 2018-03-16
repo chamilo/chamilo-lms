@@ -5,12 +5,11 @@ namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\ThemeBundle\Event\SidebarMenuKnpEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class MenuListener
  * This is needed to load theme events to be executed.
+ *
  * @package Chamilo\CoreBundle\EventListener
  */
 class MenuListener
@@ -37,6 +36,7 @@ class MenuListener
     /**
      * @param $route
      * @param $items
+     *
      * @return mixed
      */
     protected function activateByRoute($route, $items)

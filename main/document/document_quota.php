@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Document quota management script
+ * Document quota management script.
+ *
  * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -23,12 +24,12 @@ $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.pieRenderer.js');
 $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.donutRenderer.js');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/jqplot/jquery.jqplot.css');
 
-$course_code    = api_get_course_id();
-$course_id      = api_get_course_int_id();
-$session_id     = api_get_session_id();
-$group_id       = api_get_group_id();
-$user_id        = api_get_user_id();
-$user_info      = api_get_user_info($user_id);
+$course_code = api_get_course_id();
+$course_id = api_get_course_int_id();
+$session_id = api_get_session_id();
+$group_id = api_get_group_id();
+$user_id = api_get_user_id();
+$user_info = api_get_user_info($user_id);
 
 $session = [];
 $user_name = $user_info['complete_name'];
@@ -56,7 +57,7 @@ if (!empty($session_list)) {
         $used_quota_bytes += $quota_bytes;
         $session[] = [
             addslashes(get_lang('Session').': '.$session_data['name']).' ('.format_file_size($quota_bytes).')',
-            $quota_percentage
+            $quota_percentage,
         ];
     }
 }

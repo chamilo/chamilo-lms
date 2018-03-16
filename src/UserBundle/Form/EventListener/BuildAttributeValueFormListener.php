@@ -6,10 +6,10 @@ namespace Chamilo\UserBundle\Form\EventListener;
 use Sylius\Component\Attribute\Model\AttributeValueInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormFactoryInterface;
 
 /**
- * Class BuildAttributeValueFormListener
+ * Class BuildAttributeValueFormListener.
+ *
  * @package Chamilo\UserBundle\Form\EventListener
  */
 class BuildAttributeValueFormListener implements EventSubscriberInterface
@@ -18,7 +18,7 @@ class BuildAttributeValueFormListener implements EventSubscriberInterface
     {
         return [
             FormEvents::PRE_SET_DATA => 'onPreSetData',
-            FormEvents::PRE_SUBMIT   => 'onPreSubmit',
+            FormEvents::PRE_SUBMIT => 'onPreSubmit',
         ];
     }
 
@@ -43,6 +43,7 @@ class BuildAttributeValueFormListener implements EventSubscriberInterface
                     ['auto_initialize' => false]
                 )
             );
+
             return;
         }
 
@@ -70,7 +71,7 @@ class BuildAttributeValueFormListener implements EventSubscriberInterface
     }
 
     /**
-     * Verify value before set to form
+     * Verify value before set to form.
      *
      * @param AttributeValueInterface $attributeValue
      */

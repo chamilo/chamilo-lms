@@ -272,7 +272,7 @@ switch ($action) {
                             'category' => 'Plugins',
                             'variable' => 'vchamilo_default_template',
                             'selected_value' => $vhost->slug,
-                            'access_url_changeable' => 0
+                            'access_url_changeable' => 0,
                         ];
                         api_set_setting_simple($params);
                     } else {

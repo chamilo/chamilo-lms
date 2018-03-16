@@ -3,21 +3,21 @@
 
 namespace Chamilo\CourseBundle\Controller;
 
+use APY\DataGridBundle\Grid\Action\RowAction;
+use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar\Introduction;
-use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CToolIntro;
-use Chamilo\CourseBundle\Form\Type\CToolIntroType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\HttpFoundation\Request;
-use APY\DataGridBundle\Grid\Source\Entity;
-use APY\DataGridBundle\Grid\Action\RowAction;
 
 /**
- * Class CToolIntroController
+ * Class CToolIntroController.
+ *
  * @package Chamilo\CourseBundle\Controller
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  * @Route("/introduction")
  */
@@ -78,6 +78,7 @@ class CToolIntroController extends ToolBaseController
     /**
      * @Route("/{tool}/create")
      * @Template("ChamiloCourseBundle:CToolIntro:create.html.twig")
+     *
      * @return array
      */
     public function createAction(Request $request, $tool)
@@ -187,11 +188,11 @@ class CToolIntroController extends ToolBaseController
     /**
      * @Route("/{iid}/delete")
      * @Method({"GET"})
-     * @param int $iid
+     *
+     * @param int     $iid
      * @param Request $request
      *
      * @return Response
-     *
      */
     public function deleteAction($iid, Request $request)
     {

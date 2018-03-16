@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 /**
  * Definition of language-related functions for cases where th user isn't
- * logged in yet
+ * logged in yet.
+ *
  * @package chamilo.custompages
  */
 // Get helper functions
@@ -19,7 +20,7 @@ $chamilo_langs = [
     'de' => 'german',
     'es' => 'spanish',
     'gl' => 'galician',
-    'eu' => 'basque'
+    'eu' => 'basque',
 ];
 $lang_match = $chamilo_langs[get_preferred_language($available_langs)];
 // recover previous value ...

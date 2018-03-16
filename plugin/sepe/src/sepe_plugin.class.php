@@ -2,8 +2,10 @@
 /* For license terms, see /license.txt */
 
 /**
- * Plugin class for the SEPE plugin
+ * Plugin class for the SEPE plugin.
+ *
  * @package chamilo.plugin.sepe
+ *
  * @author Jose Angel Ruiz    <jaruiz@nosolored.com>
  * @author Julio Montoya <gugli100@gmail.com>
  */
@@ -28,15 +30,6 @@ class SepePlugin extends Plugin
 
     public $isAdminPlugin = true;
 
-    /**
-     * @return SepePlugin
-     */
-    public static function create()
-    {
-        static $result = null;
-        return $result ? $result : $result = new self();
-    }
-
     protected function __construct()
     {
         parent::__construct(
@@ -50,7 +43,17 @@ class SepePlugin extends Plugin
     }
 
     /**
-     * This method creates the tables required to this plugin
+     * @return SepePlugin
+     */
+    public static function create()
+    {
+        static $result = null;
+
+        return $result ? $result : $result = new self();
+    }
+
+    /**
+     * This method creates the tables required to this plugin.
      */
     public function install()
     {
@@ -70,7 +73,7 @@ class SepePlugin extends Plugin
             self::TABLE_SEPE_TEACHING_COMPETENCE,
             self::TABLE_SEPE_LOG_PARTICIPANT,
             self::TABLE_SEPE_LOG_MOD_PARTICIPANT,
-            self::TABLE_SEPE_LOG
+            self::TABLE_SEPE_LOG,
         ];
         $em = Database::getManager();
         $cn = $em->getConnection();
@@ -85,7 +88,7 @@ class SepePlugin extends Plugin
     }
 
     /**
-     * This method drops the plugin tables
+     * This method drops the plugin tables.
      */
     public function uninstall()
     {
@@ -105,7 +108,7 @@ class SepePlugin extends Plugin
             self::TABLE_SEPE_TEACHING_COMPETENCE,
             self::TABLE_SEPE_LOG_PARTICIPANT,
             self::TABLE_SEPE_LOG_MOD_PARTICIPANT,
-            self::TABLE_SEPE_LOG
+            self::TABLE_SEPE_LOG,
         ];
 
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {
@@ -125,9 +128,9 @@ class SepePlugin extends Plugin
         $oldTableTutorsCompany = 'plugin_sepe_tutors_empresa';
         $oldTableCompetence = 'plugin_sepe_competencia_docente';
         $sql = "RENAME TABLE "
-                   . $oldTableCenters." TO ".self::TABLE_SEPE_CENTERS.", "
-                   . $oldTableTutorsCompany." TO ".self::TABLE_SEPE_TUTORS_COMPANY.", "
-                   . $oldTableCompetence." TO ".self::TABLE_SEPE_TEACHING_COMPETENCE.";";
+                   .$oldTableCenters." TO ".self::TABLE_SEPE_CENTERS.", "
+                   .$oldTableTutorsCompany." TO ".self::TABLE_SEPE_TUTORS_COMPANY.", "
+                   .$oldTableCompetence." TO ".self::TABLE_SEPE_TEACHING_COMPETENCE.";";
         Database::query($sql);
 
         $sepeCourseActionsTable = self::TABLE_SEPE_COURSE_ACTIONS;

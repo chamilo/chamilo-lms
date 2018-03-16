@@ -3,20 +3,21 @@
 
 namespace Chamilo\CoreBundle\Framework;
 
+use ChamiloSession as Session;
+use CourseManager;
+use Display;
 use Pagerfanta\Adapter\FixedAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\View\TwitterBootstrapView;
 use SystemAnnouncementManager;
 use UserManager;
-use CourseManager;
-use ChamiloSession as Session;
-use Display;
-use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Class PageController
- * Controller for pages presentation in general
+ * Controller for pages presentation in general.
+ *
  * @package chamilo.page.controller
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  *
  * @todo move functions in the Template class, remove this class.
@@ -25,10 +26,10 @@ class PageController
 {
     public $maxPerPage = 5;
 
-
     /**
      * Returns an online help block read from the home/home_menu_[lang].html
-     * file
+     * file.
+     *
      * @return string HTML block
      */
     public function returnHelp()
@@ -41,7 +42,7 @@ class PageController
         if (!isset($user_selected_language)) {
             $user_selected_language = $platformLanguage;
         }
-        $home_menu = @(string)file_get_contents($sys_path.$home.'home_menu_'.$user_selected_language.'.html');
+        $home_menu = @(string) file_get_contents($sys_path.$home.'home_menu_'.$user_selected_language.'.html');
         if (!empty($home_menu)) {
             $home_menu_content = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
             $this->show_right_block(
@@ -54,23 +55,24 @@ class PageController
     }
 
     /**
-     * Returns an HTML block with links to the skills tools
+     * Returns an HTML block with links to the skills tools.
+     *
      * @return string HTML <div> block
      */
     public function returnSkillsLinks()
     {
         if (api_get_setting('skill.allow_skills_tool') == 'true') {
-            $content   = [];
+            $content = [];
             $content[] = [
                 'title' => get_lang('MySkills'),
-                'href'  => api_get_path(WEB_CODE_PATH).'social/skills_wheel.php'
+                'href' => api_get_path(WEB_CODE_PATH).'social/skills_wheel.php',
             ];
 
             if (api_get_setting('skill.allow_hr_skills_management') == 'true'
                 || api_is_platform_admin()) {
                 $content[] = [
                     'title' => get_lang('ManageSkills'),
-                    'href'  => api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php'
+                    'href' => api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php',
                 ];
             }
             $this->show_right_block(get_lang("Skills"), $content, 'skill_block');
@@ -79,19 +81,20 @@ class PageController
 
     /**
      * Returns an HTML block with the notice, as found in the
-     * home/home_notice_[lang].html file
+     * home/home_notice_[lang].html file.
+     *
      * @return string HTML <div> block
      */
     public function returnNotice()
     {
-        $sys_path               = api_get_path(SYS_PATH);
+        $sys_path = api_get_path(SYS_PATH);
         $user_selected_language = api_get_language_isocode();
-        $home                   = api_get_home_path();
+        $home = api_get_home_path();
 
         // Notice
-        $home_notice = @(string)file_get_contents($sys_path.$home.'home_notice_'.$user_selected_language.'.html');
+        $home_notice = @(string) file_get_contents($sys_path.$home.'home_notice_'.$user_selected_language.'.html');
         if (empty($home_notice)) {
-            $home_notice = @(string)file_get_contents($sys_path.$home.'home_notice.html');
+            $home_notice = @(string) file_get_contents($sys_path.$home.'home_notice.html');
         }
 
         if (!empty($home_notice)) {
@@ -104,12 +107,15 @@ class PageController
 
     /**
      * Returns the received content packaged in <div> block, with the title as
-     * <h4>
+     * <h4>.
+     *
      * @param string Title to include as h4
      * @param string Longer content to show (usually a <ul> list)
      * @param string ID to be added to the HTML attributes for the block
      * @param array Array of attributes to add to the HTML block
+     *
      * @return string HTML <div> block
+     *
      * @todo use the menu builder
      */
     public function show_right_block($title, $content, $id, $params = null)
@@ -118,20 +124,20 @@ class PageController
             $params['id'] = $id;
         }
         $block_menu = [
-            'id'       => $params['id'],
-            'title'    => $title,
+            'id' => $params['id'],
+            'title' => $title,
             'elements' => $content,
-            'content'  => isset($params['content']) ? $params['content'] : null
+            'content' => isset($params['content']) ? $params['content'] : null,
         ];
 
         //$app['template']->assign($id, $block_menu);
     }
 
-
     /**
      * Returns a content search form in an HTML <div>, pointing at the
      * main/search/ directory. If search_enabled is not set, then it returns
-     * an empty string
+     * an empty string.
+     *
      * @return string HTML <div> block showing the search form, or an empty string if search not enabled
      */
     public function return_search_block()
@@ -139,7 +145,7 @@ class PageController
         $html = '';
         if (api_get_setting('search.search_enabled') == 'true') {
             $html .= '<div class="searchbox">';
-            $search_btn     = get_lang('Search');
+            $search_btn = get_lang('Search');
             $search_content = '<br />
                 <form action="main/search/" method="post">
                 <input type="text" id="query" class="span2" name="query" value="" />
@@ -152,9 +158,11 @@ class PageController
     }
 
     /**
-     * Returns a list of announcements
+     * Returns a list of announcements.
+     *
      * @param int User ID
      * @param bool True: show the announcements as a slider. False: show them as a vertical list
+     *
      * @return string HTML list of announcements
      */
     public function getAnnouncements($user_id = null, $show_slide = true)
@@ -199,18 +207,19 @@ class PageController
     }
 
     /**
-     * Return the homepage, including announcements
+     * Return the homepage, including announcements.
+     *
      * @return string The portal's homepage as an HTML string
      */
     public function returnHomePage()
     {
         // Including the page for the news
-        $html          = null;
-        $home          = api_get_path(SYS_DATA_PATH).api_get_home_path();
+        $html = null;
+        $home = api_get_path(SYS_DATA_PATH).api_get_home_path();
         $home_top_temp = null;
 
         if (!empty($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/', $_GET['include'])) {
-            $open = @(string)file_get_contents(api_get_path(SYS_PATH).$home.$_GET['include']);
+            $open = @(string) file_get_contents(api_get_path(SYS_PATH).$home.$_GET['include']);
             $html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
         } else {
             $user_selected_language = api_get_user_language();
@@ -245,19 +254,20 @@ class PageController
     }
 
     /**
-     * Returns an HTML block with classes (if show_groups_to_users is true)
+     * Returns an HTML block with classes (if show_groups_to_users is true).
+     *
      * @return string A list of links to users classes tools, or an empty string if show_groups_to_users is disabled
      */
     public function return_classes_block()
     {
         $html = '';
         if (api_get_setting('show_groups_to_users') == 'true') {
-            $usergroup      = new Usergroup();
+            $usergroup = new Usergroup();
             $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
-            $classes        = '';
+            $classes = '';
             if (!empty($usergroup_list)) {
                 foreach ($usergroup_list as $group_id) {
-                    $data         = $usergroup->get($group_id);
+                    $data = $usergroup->get($group_id);
                     $data['name'] = Display::url(
                         $data['name'],
                         api_get_path(WEB_CODE_PATH).'user/classes.php?id='.$data['id']
@@ -281,9 +291,9 @@ class PageController
     }
 
     /**
-     * Prepares a block with all the pending exercises in all courses
+     * Prepares a block with all the pending exercises in all courses.
+     *
      * @param array Array of courses (arrays) of the user
-     * @return void Doesn't return anything but prepares and HTML block for use in templates
      */
     public function return_exercise_block($personal_course_list, $tpl)
     {
@@ -291,22 +301,22 @@ class PageController
         if (!empty($personal_course_list)) {
             foreach ($personal_course_list as $course_item) {
                 $course_code = $course_item['c'];
-                $session_id  = $course_item['id_session'];
+                $session_id = $course_item['id_session'];
 
                 $exercises = ExerciseLib::get_exercises_to_be_taken($course_code, $session_id);
 
                 foreach ($exercises as $exercise_item) {
                     $exercise_item['course_code'] = $course_code;
-                    $exercise_item['session_id']  = $session_id;
-                    $exercise_item['tms']         = api_strtotime($exercise_item['end_time'], 'UTC');
+                    $exercise_item['session_id'] = $session_id;
+                    $exercise_item['tms'] = api_strtotime($exercise_item['end_time'], 'UTC');
 
                     $exercise_list[] = $exercise_item;
                 }
             }
             if (!empty($exercise_list)) {
                 $exercise_list = ArrayClass::msort($exercise_list, 'tms');
-                $my_exercise   = $exercise_list[0];
-                $url           = Display::url(
+                $my_exercise = $exercise_list[0];
+                $url = Display::url(
                     $my_exercise['title'],
                     api_get_path(
                         WEB_CODE_PATH
@@ -323,25 +333,26 @@ class PageController
 
     /**
      * Display list of courses in a category.
-     * (for anonymous users)
+     * (for anonymous users).
      *
      * @version 1.1
+     *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University - refactoring and code cleaning
      * @author Julio Montoya <gugli100@gmail.com>, Beeznest template modifs
      */
     public function return_courses_in_categories()
     {
         $result = '';
-        $stok   = Security::get_token();
+        $stok = Security::get_token();
 
         // Initialization.
-        $user_identified                  = (api_get_user_id() > 0 && !api_is_anonymous());
-        $web_course_path                  = api_get_path(WEB_COURSE_PATH);
-        $category                         = Database::escape_string($_GET['category']);
+        $user_identified = (api_get_user_id() > 0 && !api_is_anonymous());
+        $web_course_path = api_get_path(WEB_COURSE_PATH);
+        $category = Database::escape_string($_GET['category']);
         $setting_show_also_closed_courses = api_get_setting('show_closed_courses') == 'true';
 
         // Database table definitions.
-        $main_course_table   = Database :: get_main_table(TABLE_MAIN_COURSE);
+        $main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
         $main_category_table = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 
         // Get list of courses in category $category.
@@ -353,7 +364,7 @@ class PageController
         if (api_is_multiple_url_enabled()) {
             $url_access_id = api_get_current_access_url_id();
             if ($url_access_id != -1) {
-                $tbl_url_rel_course  = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+                $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 $sql_get_course_list = "SELECT * FROM $main_course_table as course INNER JOIN $tbl_url_rel_course as url_rel_course
                         ON (url_rel_course.c_id = course.id)
                         WHERE access_url_id = $url_access_id AND category_code = '".Database::escape_string(
@@ -392,13 +403,12 @@ class PageController
                     WHERE t1.parent_id ".(empty($category) ? "IS NULL" : "='$category'")."
                     GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos, t1.name";
 
-
         // Showing only the category of courses of the current access_url_id
         if (api_is_multiple_url_enabled()) {
             $url_access_id = api_get_current_access_url_id();
             if ($url_access_id != -1) {
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                $sqlGetSubCatList   = "
+                $sqlGetSubCatList = "
                     SELECT t1.name,t1.code,t1.parent_id,t1.children_count,COUNT(DISTINCT t3.code) AS nbCourse
                     FROM $main_category_table t1
                     LEFT JOIN $main_category_table t2 ON t1.code=t2.parent_id
@@ -410,7 +420,7 @@ class PageController
             }
         }
 
-        $resCats       = Database::query($sqlGetSubCatList);
+        $resCats = Database::query($sqlGetSubCatList);
         $thereIsSubCat = false;
         if (Database::num_rows($resCats) > 0) {
             $htmlListCat = Display::page_header(get_lang('CatList'));
@@ -471,9 +481,9 @@ class PageController
         while ($categoryName = Database::fetch_array($resCats)) {
             $result .= '<h3>'.$categoryName['name']."</h3>\n";
         }
-        $numrows             = Database::num_rows($sql_result_courses);
+        $numrows = Database::num_rows($sql_result_courses);
         $courses_list_string = '';
-        $courses_shown       = 0;
+        $courses_shown = 0;
         if ($numrows > 0) {
             $courses_list_string .= Display::page_header(get_lang('CourseList'));
             $courses_list_string .= "<ul>";
@@ -604,9 +614,9 @@ class PageController
     }
 
     /**
-     * @param int $user_id
+     * @param int    $user_id
      * @param string $filter
-     * @param int $page
+     * @param int    $page
      *
      * @return bool
      */
@@ -616,9 +626,9 @@ class PageController
             return false;
         }
         $loadDirs = api_get_setting('document.show_documents_preview') == 'true' ? true : false;
-        $start    = ($page - 1) * $this->maxPerPage;
+        $start = ($page - 1) * $this->maxPerPage;
 
-        $nbResults = (int)CourseManager::displayPersonalCourseCategories($user_id, $filter, $loadDirs, true);
+        $nbResults = (int) CourseManager::displayPersonalCourseCategories($user_id, $filter, $loadDirs, true);
 
         $html = CourseManager::displayPersonalCourseCategories(
             $user_id,
@@ -629,16 +639,16 @@ class PageController
             $this->maxPerPage
         );
 
-        $adapter    = new FixedAdapter($nbResults, []);
+        $adapter = new FixedAdapter($nbResults, []);
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
         $pagerfanta->setCurrentPage($page); // 1 by default
 
-        $this->app['pagerfanta.view.router.name']   = 'userportal';
+        $this->app['pagerfanta.view.router.name'] = 'userportal';
         $this->app['pagerfanta.view.router.params'] = [
             'filter' => $filter,
-            'type'   => 'courses',
-            'page'   => $page
+            'type' => 'courses',
+            'page' => $page,
         ];
         $this->app['template']->assign('pagination', $pagerfanta);
 
@@ -652,21 +662,21 @@ class PageController
         }
 
         $loadDirs = api_get_setting('document.show_documents_preview') == 'true' ? true : false;
-        $start    = ($page - 1) * $this->maxPerPage;
+        $start = ($page - 1) * $this->maxPerPage;
 
         $nbResults = CourseManager::displaySpecialCourses($user_id, $filter, $loadDirs, true);
 
         $html = CourseManager::displaySpecialCourses($user_id, $filter, $loadDirs, false, $start, $this->maxPerPage);
         if (!empty($html)) {
-            $adapter    = new FixedAdapter($nbResults, []);
+            $adapter = new FixedAdapter($nbResults, []);
             $pagerfanta = new Pagerfanta($adapter);
             $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
             $pagerfanta->setCurrentPage($page); // 1 by default
-            $this->app['pagerfanta.view.router.name']   = 'userportal';
+            $this->app['pagerfanta.view.router.name'] = 'userportal';
             $this->app['pagerfanta.view.router.params'] = [
                 'filter' => $filter,
-                'type'   => 'courses',
-                'page'   => $page
+                'type' => 'courses',
+                'page' => $page,
             ];
             $this->app['template']->assign('pagination', $pagerfanta);
         }
@@ -675,14 +685,14 @@ class PageController
     }
 
     /**
-    * The most important function here, prints the session and course list (user_portal.php)
-    *
-    * @param int $user_id
-    * @param string $filter
-    * @param int $page
-    * @return string HTML list of sessions and courses
-    *
-    */
+     * The most important function here, prints the session and course list (user_portal.php).
+     *
+     * @param int    $user_id
+     * @param string $filter
+     * @param int    $page
+     *
+     * @return string HTML list of sessions and courses
+     */
     public function returnCourses($user_id, $filter, $page)
     {
         if (empty($user_id)) {
@@ -691,7 +701,8 @@ class PageController
 
         $loadDirs = api_get_setting('document.show_documents_preview') == 'true' ? true : false;
         $start = ($page - 1) * $this->maxPerPage;
-        return ;
+
+        return;
         $nbResults = CourseManager::displayCourses(
             $user_id,
             $filter,
@@ -772,7 +783,7 @@ class PageController
         }
 
         $load_directories_preview = api_get_setting('document.show_documents_preview') == 'true' ? true : false;
-        $sessions_with_category   = $html;
+        $sessions_with_category = $html;
 
         if (isset($session_categories) && !empty($session_categories)) {
             foreach ($session_categories as $session_category) {
@@ -790,7 +801,7 @@ class PageController
                     }
 
                     $html_courses_session = '';
-                    $count                = 0;
+                    $count = 0;
                     foreach ($session['courses'] as $course) {
                         if (api_get_setting('session.hide_courses_in_sessions') == 'false') {
                             $html_courses_session .= CourseManager::get_logged_user_course_html($course, $session_id);
@@ -809,7 +820,7 @@ class PageController
                         );
 
                         //Default session name
-                        $session_link   = $session['session_name'];
+                        $session_link = $session['session_name'];
                         $params['link'] = null;
 
                         if (api_get_setting('session.session_page_enabled') == 'true' && !api_is_drh()) {
@@ -875,7 +886,7 @@ class PageController
                     }
 
                     $session_category_start_date = $session_category['session_category']['date_start'];
-                    $session_category_end_date   = $session_category['session_category']['date_end'];
+                    $session_category_end_date = $session_category['session_category']['date_end'];
 
                     if (!empty($session_category_start_date) && $session_category_start_date != '0000-00-00' && !empty($session_category_end_date) && $session_category_end_date != '0000-00-00') {
                         $params['subtitle'] = sprintf(
@@ -899,16 +910,16 @@ class PageController
             }
 
             //Pagination
-            $adapter    = new FixedAdapter($nbResults, []);
+            $adapter = new FixedAdapter($nbResults, []);
             $pagerfanta = new Pagerfanta($adapter);
             $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default
             $pagerfanta->setCurrentPage($page); // 1 by default
 
-            $this->app['pagerfanta.view.router.name']   = 'userportal';
+            $this->app['pagerfanta.view.router.name'] = 'userportal';
             $this->app['pagerfanta.view.router.params'] = [
                 'filter' => $filter,
-                'type'   => 'sessioncategories',
-                'page'   => $page
+                'type' => 'sessioncategories',
+                'page' => $page,
             ];
             $this->app['template']->assign('pagination', $pagerfanta);
         }
@@ -917,9 +928,10 @@ class PageController
     }
 
     /**
-     * @param int $user_id
-     * @param string $filter current|history
-     * @param int $page
+     * @param int    $user_id
+     * @param string $filter  current|history
+     * @param int    $page
+     *
      * @return bool|null|string
      */
     public function returnSessions($user_id, $filter, $page)
@@ -978,7 +990,7 @@ class PageController
 
         if ($loadHistory) {
             // Load sessions in category in *history*.
-            $nbResults = (int)UserManager::get_sessions_by_category(
+            $nbResults = (int) UserManager::get_sessions_by_category(
                 $user_id,
                 true,
                 true,
@@ -999,7 +1011,7 @@ class PageController
             );
         } else {
             // Load sessions in category.
-            $nbResults = (int)UserManager::get_sessions_by_category(
+            $nbResults = (int) UserManager::get_sessions_by_category(
                 $user_id,
                 false,
                 true,
@@ -1039,7 +1051,6 @@ class PageController
 
                 // Sessions does not belong to a session category
                 if ($session_category_id == 0) {
-
                     // Independent sessions
                     if (isset($session_category['sessions'])) {
                         foreach ($session_category['sessions'] as $session) {
@@ -1096,7 +1107,7 @@ class PageController
                                 );
                                 $params['is_session'] = true;
                                 //Default session name
-                                $session_link   = $session['session_name'];
+                                $session_link = $session['session_name'];
                                 $params['link'] = null;
 
                                 if (api_get_setting('session.session_page_enabled') == 'true' && !api_is_drh()) {
@@ -1105,7 +1116,7 @@ class PageController
                                         'a',
                                         $session['session_name'],
                                         [
-                                            'href' => api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id
+                                            'href' => api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id,
                                         ]
                                     );
                                     $params['link'] = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id;
@@ -1171,9 +1182,9 @@ class PageController
 
     /**
      * Shows a welcome message when the user doesn't have any content in
-     * the course list
+     * the course list.
+     *
      * @param object A Template object used to declare variables usable in the given template
-     * @return void
      */
     public function return_welcome_to_course_block($tpl)
     {
@@ -1183,7 +1194,7 @@ class PageController
         $count_courses = CourseManager::count_courses();
 
         $course_catalog_url = api_get_path(WEB_CODE_PATH).'auth/courses.php';
-        $course_list_url    = api_get_path(WEB_PATH).'user_portal.php';
+        $course_list_url = api_get_path(WEB_PATH).'user_portal.php';
 
         $tpl->assign('course_catalog_url', $course_catalog_url);
         $tpl->assign('course_list_url', $course_list_url);
@@ -1194,8 +1205,8 @@ class PageController
     }
 
     /**
-    * @param array
-    */
+     * @param array
+     */
     public function returnNavigationLinks($items)
     {
         // Main navigation section.

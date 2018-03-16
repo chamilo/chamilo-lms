@@ -31,9 +31,9 @@ class AttributeValueType extends AbstractResourceType
     protected $attributeRepository;
 
     /**
-     * @param string $dataClass
-     * @param array $validationGroups
-     * @param string $subjectName
+     * @param string           $dataClass
+     * @param array            $validationGroups
+     * @param string           $subjectName
      * @param EntityRepository $attributeRepository
      */
     public function __construct($dataClass, array $validationGroups, $subjectName, EntityRepository $attributeRepository)
@@ -115,7 +115,7 @@ class AttributeValueType extends AbstractResourceType
     }
 
     /**
-     * Get attributes
+     * Get attributes.
      *
      * @param FormBuilderInterface $builder
      *

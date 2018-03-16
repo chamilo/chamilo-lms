@@ -1,18 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use \Skill as SkillManager;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\UserBundle\Entity\User;
+use Skill as SkillManager;
 
 /**
- * Page for assign skills to a user
+ * Page for assign skills to a user.
  *
  * @autor: Jose Loguercio <jose.loguercio@beeznest.com>
+ *
  * @package chamilo.badge
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $userId = isset($_REQUEST['user']) ? (int) $_REQUEST['user'] : 0;
@@ -177,7 +177,7 @@ if (!empty($skillIdFromGet)) {
     foreach ($subSkillList as $subSkillId) {
         $children = $skillManager->getChildren($subSkillId);
 
-        if (isset($subSkillList[$counter-1])) {
+        if (isset($subSkillList[$counter - 1])) {
             $oldSkill = $skillRepo->find($subSkillList[$counter]);
         }
         $skillsOptions = [];
@@ -186,7 +186,7 @@ if (!empty($skillIdFromGet)) {
         }
 
         if ($counter < count($subSkillList) - 1) {
-            $disableList[] =  'sub_skill_id_'.($counter+1);
+            $disableList[] = 'sub_skill_id_'.($counter + 1);
         }
 
         foreach ($children as $child) {
@@ -201,19 +201,19 @@ if (!empty($skillIdFromGet)) {
         }
 
         $form->addSelect(
-            'sub_skill_id_'.($counter+1),
+            'sub_skill_id_'.($counter + 1),
             $levelName,
             $skillsOptions,
             [
-                'id' => 'sub_skill_id_'.($counter+1),
+                'id' => 'sub_skill_id_'.($counter + 1),
                 'class' => 'sub_skill',
             ]
         );
 
-        if (isset($subSkillList[$counter+1])) {
-            $nextSkill = $skillRepo->find($subSkillList[$counter+1]);
+        if (isset($subSkillList[$counter + 1])) {
+            $nextSkill = $skillRepo->find($subSkillList[$counter + 1]);
             if ($nextSkill) {
-                $formDefaultValues['sub_skill_id_'.($counter+1)] = $nextSkill->getId();
+                $formDefaultValues['sub_skill_id_'.($counter + 1)] = $nextSkill->getId();
             }
         }
         $newSubSkillList[] = $subSkillId;
@@ -420,7 +420,7 @@ if ($disableList) {
 $htmlHeadXtra[] = '<script>
 $(document).ready(function() {
     $("#skill").on("change", function() {
-        $(location).attr("href", "'. $url.'&id="+$(this).val());
+        $(location).attr("href", "'.$url.'&id="+$(this).val());
     });
     $(".sub_skill").on("change", function() {
         $(location).attr("href", "'.$url.'&id='.$skillIdFromGet.'&current_value="+$(this).val()+"&current="+$(this).attr("id")+"&sub_skill_list='.$subSkillListToString.',"+$(this).val());

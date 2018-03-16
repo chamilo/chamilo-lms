@@ -3,8 +3,7 @@
 
 /**
  * @package chamilo.admin
-*/
-
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -246,7 +245,7 @@ $form->addElement(
     $status,
     [
         'id' => 'status_select',
-        'onchange' => 'javascript: display_drh_list();'
+        'onchange' => 'javascript: display_drh_list();',
     ]
 );
 
@@ -499,7 +498,7 @@ $actions = [
             ICON_SIZE_MEDIUM
         ),
         api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::getTokenFromSession()
-    )
+    ),
 ];
 
 $content = Display::toolbarAction('toolbar-user-information', [implode(PHP_EOL, $actions)]);

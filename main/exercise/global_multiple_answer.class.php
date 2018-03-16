@@ -4,7 +4,7 @@
 use ChamiloSession as Session;
 
 /**
- * Class GlobalMultipleAnswer
+ * Class GlobalMultipleAnswer.
  */
 class GlobalMultipleAnswer extends Question
 {
@@ -22,7 +22,7 @@ class GlobalMultipleAnswer extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createAnswersForm($form)
     {
@@ -35,13 +35,13 @@ class GlobalMultipleAnswer extends Question
         $html = '<table class="data_table">
                 <tr>
                     <th width="10px">
-                        ' . get_lang('Number').'
+                        '.get_lang('Number').'
                     </th>
                     <th width="10px">
-                        ' . get_lang('True').'
+                        '.get_lang('True').'
                     </th>
                     <th width="50%">
-                        ' . get_lang('Answer').'
+                        '.get_lang('Answer').'
                     </th>';
 
         $html .= '<th>'.get_lang('Comment').'</th>';
@@ -97,7 +97,7 @@ class GlobalMultipleAnswer extends Question
                 $defaults['pts'] = 1;
             }
 
-            $renderer = & $form->defaultRenderer();
+            $renderer = &$form->defaultRenderer();
 
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
@@ -200,7 +200,7 @@ class GlobalMultipleAnswer extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function processAnswersCreation($form, $exercise)
     {
@@ -257,7 +257,7 @@ class GlobalMultipleAnswer extends Question
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function return_header(
         $exercise,
@@ -267,9 +267,9 @@ class GlobalMultipleAnswer extends Question
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">
         <tr>
-            <th>' . get_lang("Choice").'</th>
-            <th>' . get_lang("ExpectedChoice").'</th>
-            <th>' . get_lang("Answer").'</th>';
+            <th>'.get_lang("Choice").'</th>
+            <th>'.get_lang("ExpectedChoice").'</th>
+            <th>'.get_lang("Answer").'</th>';
         $header .= '<th>'.get_lang("Comment").'</th>';
         $header .= '</tr>';
 

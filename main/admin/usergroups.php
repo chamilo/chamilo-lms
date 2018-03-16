@@ -4,7 +4,6 @@
 /**
  *  @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -56,12 +55,12 @@ $columns = [
 
 //Column config
 $column_model = [
-    ['name'=>'name', 'index'=>'name', 'width'=>'35', 'align'=>'left'],
-    ['name'=>'users', 'index'=>'users', 'width'=>'15', 'align'=>'left'],
-    ['name'=>'courses', 'index'=>'courses', 'width'=>'15', 'align'=>'left'],
-    ['name'=>'sessions', 'index'=>'sessions', 'width'=>'15', 'align'=>'left'],
-    ['name'=>'group_type', 'index'=>'group_type', 'width'=>'15', 'align'=>'center'],
-    ['name'=>'actions', 'index'=>'actions', 'width'=>'20', 'align'=>'center', 'sortable'=>'false', 'formatter'=>'action_formatter'],
+    ['name' => 'name', 'index' => 'name', 'width' => '35', 'align' => 'left'],
+    ['name' => 'users', 'index' => 'users', 'width' => '15', 'align' => 'left'],
+    ['name' => 'courses', 'index' => 'courses', 'width' => '15', 'align' => 'left'],
+    ['name' => 'sessions', 'index' => 'sessions', 'width' => '15', 'align' => 'left'],
+    ['name' => 'group_type', 'index' => 'group_type', 'width' => '15', 'align' => 'center'],
+    ['name' => 'actions', 'index' => 'actions', 'width' => '20', 'align' => 'center', 'sortable' => 'false', 'formatter' => 'action_formatter'],
 ];
 
 //Autowidth

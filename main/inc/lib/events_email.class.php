@@ -2,17 +2,18 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class EventsMail
+ * Class EventsMail.
+ *
  * @deprecated to be removed in 2.x
  * manages the e-mail sending action when a event requires it
  */
 class EventsMail
 {
     /**
-     * Sends email according to an event
+     * Sends email according to an event.
      *
      * @param string $event_name the name of the event that was triggered
-     * @param array $event_data what to put in the mail
+     * @param array  $event_data what to put in the mail
      *
      * Possible key :
      * - $event_data["about_user"] (= $user_id)
@@ -29,7 +30,7 @@ class EventsMail
          * 2. we send mail to people that are in the $event_data["send_to"]
          * 2b. if a language was specified, we use that one to send the mail,
          * else we get the user's language, if there isn't any, we get the english one
-         * 3. we do the same with the people associated to the event through the admin panel
+         * 3. we do the same with the people associated to the event through the admin panel.
          */
         global $event_config;
 
@@ -135,9 +136,9 @@ class EventsMail
         // Second, we send to people linked to the event
         // So, we get everyone
         $sql = 'SELECT u.user_id, u.language, u.email, u.firstname, u.lastname
-                FROM ' . Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' ue
+                FROM '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' ue
                 INNER JOIN '.Database::get_main_table(TABLE_MAIN_USER).' u ON u.user_id = ue.user_id
-                WHERE event_type_name = "' . $event_name.'"';
+                WHERE event_type_name = "'.$event_name.'"';
         $result = Database::store_result(Database::query($sql), 'ASSOC');
         // for each of the linked users
         foreach ($result as $key => $value) {
@@ -192,7 +193,8 @@ class EventsMail
      * If yes to three, we can use this class, else we still use api_mail.
      *
      * @param string $event_name
-     * @return boolean
+     *
+     * @return bool
      */
     public static function check_if_using_class($event_name)
     {
@@ -202,11 +204,11 @@ class EventsMail
         $current_language = api_get_interface_language();
 
         $sql = 'SELECT COUNT(*) as total
-                FROM ' . Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE).' em
-                INNER JOIN ' . Database::get_main_table(TABLE_MAIN_LANGUAGE).' l
+                FROM '.Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE).' em
+                INNER JOIN '.Database::get_main_table(TABLE_MAIN_LANGUAGE).' l
                 ON em.language_id = l.id
                 WHERE
-                    em.event_type_name = "' . $event_name.'" and
+                    em.event_type_name = "'.$event_name.'" and
                     l.dokeos_folder = "'.$current_language.'" and
                     em.activated = 1';
 
@@ -219,33 +221,35 @@ class EventsMail
     }
 
     /**
-     * Get the record containing the good message and subject
+     * Get the record containing the good message and subject.
      *
      * @param string $event_name
      * @param string $language
+     *
      * @return array
      */
     private static function getMessage($event_name, $language)
     {
         $sql = 'SELECT message, subject, l.dokeos_folder
-                FROM ' . Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE).' em
-                INNER JOIN ' . Database::get_main_table(TABLE_MAIN_LANGUAGE).' l
+                FROM '.Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE).' em
+                INNER JOIN '.Database::get_main_table(TABLE_MAIN_LANGUAGE).' l
                 ON em.language_id = l.id
                 WHERE
-                    em.event_type_name = "' . $event_name.'" AND
-                    (l.dokeos_folder = "' . $language.'" OR l.dokeos_folder = "english") AND
+                    em.event_type_name = "'.$event_name.'" AND
+                    (l.dokeos_folder = "'.$language.'" OR l.dokeos_folder = "english") AND
                     em.message <> ""
                 ';
+
         return Database::store_result(Database::query($sql), 'ASSOC');
     }
 
     /**
-     * Get the correct message, meaning in the specified language or in english if previous one doesn't exist
+     * Get the correct message, meaning in the specified language or in english if previous one doesn't exist.
      *
      * @param string $message
      * @param string $subject
      * @param string $language
-     * @param array $result
+     * @param array  $result
      */
     private static function getCorrectMessage(&$message, &$subject, $language, $result)
     {
@@ -264,11 +268,11 @@ class EventsMail
     }
 
     /**
-     * Replaces the ((key)) by the good values
+     * Replaces the ((key)) by the good values.
      *
      * @param string $message
      * @param string $subject
-     * @param array $event_config
+     * @param array  $event_config
      * @param string $event_name
      */
     private static function formatMessage(&$message, &$subject, $event_config, $event_name, &$event_data)

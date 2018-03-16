@@ -4,7 +4,6 @@
 /**
  * @package chamilo.admin
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -28,7 +27,7 @@ $errorMsg = '';
 
 $interbreadcrumb[] = [
     'url' => 'session_list.php',
-    'name' => get_lang('SessionList')
+    'name' => get_lang('SessionList'),
 ];
 
 function search_coachs($needle)
@@ -76,7 +75,8 @@ function search_coachs($needle)
             $return .= '<a href="javascript: void(0);" onclick="javascript: fill_coach_field(\''.$user['username'].'\')">'.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')</a><br />';
         }
     }
-    $xajax_response -> addAssign('ajax_list_coachs', 'innerHTML', api_utf8_encode($return));
+    $xajax_response->addAssign('ajax_list_coachs', 'innerHTML', api_utf8_encode($return));
+
     return $xajax_response;
 }
 
@@ -141,7 +141,7 @@ $result = SessionManager::setForm($form);
 $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php';
 $urlAjaxExtraField = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
 
-$htmlHeadXtra[] ="
+$htmlHeadXtra[] = "
 <script>
 $(function() {
     ".$result['js']."

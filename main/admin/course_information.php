@@ -1,8 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * This script gives information about a course
+ * This script gives information about a course.
+ *
  * @author Bart Mollet
+ *
  * @package chamilo.admin
  */
 $cidReset = true;
@@ -24,7 +26,8 @@ $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 
 /**
  * @param array $course
- * @param int $session_id
+ * @param int   $session_id
+ *
  * @return array
  */
 function get_course_usage($course, $session_id = 0)
@@ -62,7 +65,7 @@ function get_course_usage($course, $session_id = 0)
         [
             Database::get_course_table(TABLE_ANNOUNCEMENT),
             get_lang(ucfirst(TOOL_ANNOUNCEMENT)),
-        ]
+        ],
     ];
 
     $usage = [];
@@ -82,7 +85,7 @@ function get_course_usage($course, $session_id = 0)
 
         $usage[] = [
             $title,
-            $row['count']
+            $row['count'],
         ];
     }
 
@@ -117,7 +120,7 @@ $table->set_header(1, get_lang('NumberOfItems'), true);
 $table->display();
 
 /**
- * Show all users subscribed in this course
+ * Show all users subscribed in this course.
  */
 echo Display::page_header(get_lang('Users'));
 
@@ -140,7 +143,7 @@ $is_western_name_order = api_is_western_name_order();
 if (Database::num_rows($res) > 0) {
     $users = [];
     while ($obj = Database::fetch_object($res)) {
-        $user   = [];
+        $user = [];
         $user[] = $obj->official_code;
         if ($is_western_name_order) {
             $user[] = $obj->firstname;

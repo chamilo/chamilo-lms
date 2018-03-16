@@ -47,7 +47,7 @@ if (empty($courseId)) {
         get_lang('Course'),
         null,
         [
-            'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course'
+            'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
         ]
     );
 } else {
@@ -95,7 +95,7 @@ if ($form->validate() && !empty($courseInfo)) {
     $columns = [
         get_lang('FirstName'),
         get_lang('LastName'),
-        get_lang('LoginName')
+        get_lang('LoginName'),
     ];
 
     if (!empty($extraFields) && isset($extraFields['fields'])) {
@@ -201,7 +201,7 @@ if ($form->validate() && !empty($courseInfo)) {
         'align' => 'left',
         'search' => 'false',
         'sortable' => 'false',
-        'hidden' => 'true'
+        'hidden' => 'true',
     ];
 
     $extra_params['autowidth'] = 'true';
@@ -257,7 +257,7 @@ if ($form->validate() && !empty($courseInfo)) {
             
             jQuery("#'.$tableId.'").jqGrid("navButtonAdd","#'.$tableId.'_pager",{       
                caption: "",
-               title:"' . get_lang('ExportExcel').'",
+               title:"'.get_lang('ExportExcel').'",
                onClickButton : function() {
                    jQuery("#'.$tableId.'").jqGrid(
                     "excelExport",{
@@ -272,8 +272,8 @@ if ($form->validate() && !empty($courseInfo)) {
         [
             'url' => '  ',
             'url_attributes' => ['id' => 'excel_export'],
-            'content' => Display::return_icon('export_excel.png', get_lang('ExportExcel'))
-        ]
+            'content' => Display::return_icon('export_excel.png', get_lang('ExportExcel')),
+        ],
     ];
 
     echo Display::actions($items);

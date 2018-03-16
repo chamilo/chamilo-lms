@@ -4,7 +4,8 @@
 use Chamilo\CoreBundle\Framework\Container;
 
 /**
- * Index page of the admin tools
+ * Index page of the admin tools.
+ *
  * @package chamilo.admin
  */
 // Resetting the course id.
@@ -91,7 +92,7 @@ $search_form = '
             <input class="form-control" type="text" name="keyword" value=""
              aria-label="'.get_lang('Search').'">
             <button class="btn btn-default" type="submit">
-                <em class="fa fa-search"></em> ' . get_lang('Search').'
+                <em class="fa fa-search"></em> '.get_lang('Search').'
             </button>
         </div>
     </form>';
@@ -111,7 +112,7 @@ if (api_is_platform_admin()) {
         $items[] = ['url' => 'ldap_users_list.php', 'label' => get_lang('ImportLDAPUsersIntoPlatform')];
     }
     $items[] = ['url' => 'extra_fields.php?type=user', 'label' => get_lang('ManageUserFields')];
-    $items[] = ['url'=>'usergroups.php', 'label' => get_lang('Classes')];
+    $items[] = ['url' => 'usergroups.php', 'label' => get_lang('Classes')];
     if (api_get_configuration_value('show_link_request_hrm_user')) {
         $items[] = ['url' => 'user_linking_requests.php', 'label' => get_lang('UserLinkingRequests')];
     }
@@ -156,7 +157,7 @@ if (api_is_platform_admin()) {
                 <input class="form-control" type="text" name="keyword" value=""
                  aria-label="'.get_lang('Search').'">
                 <button class="btn btn-default" type="submit">
-                    <em class="fa fa-search"></em> ' . get_lang('Search').'
+                    <em class="fa fa-search"></em> '.get_lang('Search').'
                 </button>
             </div>
         </form>';
@@ -217,7 +218,7 @@ if (api_is_platform_admin()) {
                 name="keyword" value=""
                 aria-label="'.get_lang('Search').'" >
                 <button class="btn btn-default" type="submit">
-                    <em class="fa fa-search"></em> ' . get_lang('Search').'
+                    <em class="fa fa-search"></em> '.get_lang('Search').'
                 </button>
             </div>
         </form>';
@@ -233,24 +234,24 @@ if (api_is_platform_admin()) {
     $items[] = ['url' => 'system_announcements.php', 'label' => get_lang('SystemAnnouncements')];
     $items[] = [
         'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=admin',
-        'label' => get_lang('GlobalAgenda')
+        'label' => get_lang('GlobalAgenda'),
     ];
     $items[] = ['url' => 'configure_homepage.php', 'label' => get_lang('ConfigureHomePage')];
     $items[] = ['url' => 'configure_inscription.php', 'label' => get_lang('ConfigureInscription')];
     $items[] = ['url' => 'statistics/index.php', 'label' => get_lang('Statistics')];
     $items[] = [
         'url' => api_get_path(WEB_CODE_PATH).'mySpace/company_reports.php',
-        'label' => get_lang('Reports')
+        'label' => get_lang('Reports'),
     ];
     $items[] = [
         'url' => api_get_path(WEB_CODE_PATH).'admin/teacher_time_report.php',
-        'label' => get_lang('TeacherTimeReport')
+        'label' => get_lang('TeacherTimeReport'),
     ];
 
     if (api_get_configuration_value('chamilo_cms')) {
         $items[] = [
             'url' => api_get_path(WEB_PATH).'web/app_dev.php/administration/dashboard',
-            'label' => get_lang('CMS')
+            'label' => get_lang('CMS'),
         ];
     }
 
@@ -268,7 +269,6 @@ if (api_is_platform_admin()) {
             $items[] = ['url' => 'access_urls.php', 'label' => get_lang('ConfigureMultipleAccessURLs')];
         }
     }
-
 
     if (api_get_setting('allow_terms_conditions') == 'true') {
         $items[] = ['url' => 'legal_add.php', 'label' => get_lang('TermsAndConditions')];
@@ -307,7 +307,7 @@ $search_form = ' <form method="GET" class="form-inline" action="'.$sessionPath.'
                         value=""
                         aria-label="'.get_lang('Search').'">
                         <button class="btn btn-default" type="submit">
-                            <em class="fa fa-search"></em> ' . get_lang('Search').'
+                            <em class="fa fa-search"></em> '.get_lang('Search').'
                         </button>
                     </div>
                 </form>';
@@ -321,7 +321,7 @@ $items[] = ['url' => $sessionPath.'session_import_drh.php', 'label' => get_lang(
 if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
     $items[] = [
         'url' => 'ldap_import_students_to_session.php',
-        'label' => get_lang('ImportLDAPUsersIntoSession')
+        'label' => get_lang('ImportLDAPUsersIntoSession'),
     ];
 }
 $items[] = [
@@ -332,7 +332,7 @@ $items[] = [
 if (api_is_global_platform_admin()) {
     $items[] = [
         'url' => '../coursecopy/copy_course_session.php',
-        'label' => get_lang('CopyFromCourseInSessionToAnotherSession')
+        'label' => get_lang('CopyFromCourseInSessionToAnotherSession'),
     ];
 }
 
@@ -365,38 +365,38 @@ if (api_is_platform_admin()) {
     $items = [];
     $items[] = [
         'url' => 'archive_cleanup.php',
-        'label' => get_lang('ArchiveDirCleanup')
+        'label' => get_lang('ArchiveDirCleanup'),
     ];
 
     $items[] = [
         'url' => 'special_exports.php',
-        'label' => get_lang('SpecialExports')
+        'label' => get_lang('SpecialExports'),
     ];
     $items[] = [
         'url' => 'system_status.php',
-        'label' => get_lang('SystemStatus')
+        'label' => get_lang('SystemStatus'),
     ];
     if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
         $items[] = [
             'url' => 'filler.php',
-            'label' => get_lang('DataFiller')
+            'label' => get_lang('DataFiller'),
         ];
     }
 
     $items[] = [
         'url' => 'resource_sequence.php',
-        'label' => get_lang('ResourcesSequencing')
+        'label' => get_lang('ResourcesSequencing'),
     ];
     if (is_dir(api_get_path(SYS_TEST_PATH))) {
         $items[] = [
             'url' => 'email_tester.php',
-            'label' => get_lang('EMailTester')
+            'label' => get_lang('EMailTester'),
         ];
     }
 
     $items[] = [
         'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
-        'label' => get_lang('TicketSystem')
+        'label' => get_lang('TicketSystem'),
     ];
 
     if (api_get_configuration_value('db_manager_enabled') == true &&
@@ -408,7 +408,7 @@ if (api_is_platform_admin()) {
 
         $items[] = [
             'url' => "db.php?username=$username&db=$databaseName&server=$host",
-            'label' => get_lang('DatabaseManager')
+            'label' => get_lang('DatabaseManager'),
         ];
     }
 
@@ -431,28 +431,28 @@ if (api_is_platform_admin()) {
         $items = [];
         $items[] = [
             'url' => 'skills_wheel.php',
-            'label' => get_lang('SkillsWheel')
+            'label' => get_lang('SkillsWheel'),
         ];
         $items[] = [
             'url' => 'skills_import.php',
-            'label' => get_lang('SkillsImport')
+            'label' => get_lang('SkillsImport'),
         ];
         $items[] = [
             'url' => 'skill_list.php',
-            'label' => get_lang('ManageSkills')
+            'label' => get_lang('ManageSkills'),
         ];
         $items[] = [
             'url' => 'skill.php',
-            'label' => get_lang('ManageSkillsLevels')
+            'label' => get_lang('ManageSkillsLevels'),
         ];
 
         $items[] = [
             'url' => api_get_path(WEB_CODE_PATH).'social/skills_ranking.php',
-            'label' => get_lang('SkillsRanking')
+            'label' => get_lang('SkillsRanking'),
         ];
         $items[] = [
             'url' => 'skills_gradebook.php',
-            'label' => get_lang('SkillsAndGradebooks')
+            'label' => get_lang('SkillsAndGradebooks'),
         ];
         /*$items[] = array(
             'url' => api_get_path(WEB_CODE_PATH).'admin/skill_badge.php',
@@ -478,7 +478,7 @@ if (api_is_platform_admin()) {
         $items = [];
         $items[] = [
             'url' => 'gradebook_list.php',
-            'label' => get_lang('List')
+            'label' => get_lang('List'),
         ];
         $blocks['gradebook']['items'] = $items;
         $blocks['gradebook']['extra'] = null;
@@ -521,7 +521,7 @@ if (api_is_platform_admin()) {
 
                 $items[] = [
                     'url' => $pluginUrl,
-                    'label' => $pluginInfo['title']
+                    'label' => $pluginInfo['title'],
                 ];
             }
 
@@ -554,7 +554,7 @@ if (api_is_platform_admin()) {
     $items[] = ['url' => 'http://www.chamilo.org/extensions', 'label' => get_lang('ChamiloExtensions')];
     $items[] = [
         'url' => 'http://www.chamilo.org/en/providers',
-        'label' => get_lang('ChamiloOfficialServicesProviders')
+        'label' => get_lang('ChamiloOfficialServicesProviders'),
     ];
 
     $blocks['chamilo']['items'] = $items;
@@ -641,7 +641,7 @@ if (api_is_platform_admin()) {
         null,
         [
             'id' => 'block-extra-data',
-            'class' => ''
+            'class' => '',
         ],
         FormValidator::LAYOUT_BOX_NO_LABEL
     );
@@ -688,7 +688,7 @@ if (api_is_platform_admin()) {
         'block',
         null,
         [
-            'id' => 'extra-block'
+            'id' => 'extra-block',
         ]
     );
     $extraContentForm->addButtonExport(

@@ -2,7 +2,7 @@
 /**
  * ShowUserEvent.php
  * avanzu-admin
- * Date: 23.02.14
+ * Date: 23.02.14.
  */
 
 namespace Chamilo\ThemeBundle\Event;
@@ -10,7 +10,8 @@ namespace Chamilo\ThemeBundle\Event;
 use Chamilo\ThemeBundle\Model\UserInterface;
 
 /**
- * Class ShowUserEvent
+ * Class ShowUserEvent.
+ *
  * @package Chamilo\ThemeBundle\Event
  */
 class ShowUserEvent extends ThemeEvent

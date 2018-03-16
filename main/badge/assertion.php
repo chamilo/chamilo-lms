@@ -2,8 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Show information about a new assertion
+ * Show information about a new assertion.
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.badge
  */
 header('Content-Type: application/json');
@@ -43,7 +45,7 @@ $json = [
     'recipient' => [
         'type' => 'email',
         'hashed' => false,
-        'identity' => $user['email']
+        'identity' => $user['email'],
     ],
     'issuedOn' => strtotime($userSkill['acquired_skill_at']),
     'badge' => api_get_path(WEB_CODE_PATH)."badge/class.php?id=$skillId",
@@ -53,9 +55,9 @@ $json = [
             'user' => $userId,
             'skill' => $skillId,
             'course' => $courseId,
-            'session' => $sessionId
-        ])
-    ]
+            'session' => $sessionId,
+        ]),
+    ],
 ];
 
 echo json_encode($json);

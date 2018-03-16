@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CBlogTask
+ * CBlogTask.
  *
  * @ORM\Table(
  *  name="c_blog_task",
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CBlogTask
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -28,21 +28,21 @@ class CBlogTask
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="task_id", type="integer")
      */
     private $taskId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="blog_id", type="integer", nullable=false)
      */
@@ -70,17 +70,17 @@ class CBlogTask
     private $color;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="system_task", type="boolean", nullable=false)
      */
     private $systemTask;
 
-
     /**
-     * Set blogId
+     * Set blogId.
      *
-     * @param integer $blogId
+     * @param int $blogId
+     *
      * @return CBlogTask
      */
     public function setBlogId($blogId)
@@ -91,9 +91,9 @@ class CBlogTask
     }
 
     /**
-     * Get blogId
+     * Get blogId.
      *
-     * @return integer
+     * @return int
      */
     public function getBlogId()
     {
@@ -101,9 +101,10 @@ class CBlogTask
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return CBlogTask
      */
     public function setTitle($title)
@@ -114,7 +115,7 @@ class CBlogTask
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -124,9 +125,10 @@ class CBlogTask
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return CBlogTask
      */
     public function setDescription($description)
@@ -137,7 +139,7 @@ class CBlogTask
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -147,9 +149,10 @@ class CBlogTask
     }
 
     /**
-     * Set color
+     * Set color.
      *
      * @param string $color
+     *
      * @return CBlogTask
      */
     public function setColor($color)
@@ -160,7 +163,7 @@ class CBlogTask
     }
 
     /**
-     * Get color
+     * Get color.
      *
      * @return string
      */
@@ -170,9 +173,10 @@ class CBlogTask
     }
 
     /**
-     * Set systemTask
+     * Set systemTask.
      *
-     * @param boolean $systemTask
+     * @param bool $systemTask
+     *
      * @return CBlogTask
      */
     public function setSystemTask($systemTask)
@@ -183,9 +187,9 @@ class CBlogTask
     }
 
     /**
-     * Get systemTask
+     * Get systemTask.
      *
-     * @return boolean
+     * @return bool
      */
     public function getSystemTask()
     {
@@ -193,9 +197,10 @@ class CBlogTask
     }
 
     /**
-     * Set taskId
+     * Set taskId.
      *
-     * @param integer $taskId
+     * @param int $taskId
+     *
      * @return CBlogTask
      */
     public function setTaskId($taskId)
@@ -206,9 +211,9 @@ class CBlogTask
     }
 
     /**
-     * Get taskId
+     * Get taskId.
      *
-     * @return integer
+     * @return int
      */
     public function getTaskId()
     {
@@ -216,9 +221,10 @@ class CBlogTask
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CBlogTask
      */
     public function setCId($cId)
@@ -229,9 +235,9 @@ class CBlogTask
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {

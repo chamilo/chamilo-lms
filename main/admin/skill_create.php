@@ -2,11 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Create skill form
+ * Create skill form.
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -29,7 +30,7 @@ if ($skillParentId > 0) {
 
     $formDefaultValues = [
         'parent_id' => $skillParentInfo['id'],
-        'gradebook_id' => []
+        'gradebook_id' => [],
     ];
 
     foreach ($skillParentInfo['gradebooks'] as $gradebook) {
@@ -47,7 +48,7 @@ $jquery_ready_content = $returnParams['jquery_ready_content'];
 if (!empty($jquery_ready_content)) {
     $htmlHeadXtra[] = '<script>
     $(document).ready(function(){
-        ' . $jquery_ready_content.'
+        '.$jquery_ready_content.'
     });
     </script>';
 }

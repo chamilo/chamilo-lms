@@ -5,12 +5,12 @@ namespace Chamilo\CoreBundle\Block;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Sonata\BlockBundle\Block\BlockContextInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Sonata\SeoBundle\Block\Breadcrumb\BaseBreadcrumbMenuBlockService;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class BreadcrumbBlockService
+ * Class BreadcrumbBlockService.
+ *
  * @package Chamilo\CoreBundle\Block
  */
 class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
@@ -26,8 +26,8 @@ class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
     }
 
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     public function configureSettings(OptionsResolver $resolver)
     {
         parent::configureSettings($resolver);
@@ -41,7 +41,7 @@ class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
 
     /**
      * @param string $title
-     * @param array $params
+     * @param array  $params
      */
     public function addChild($title, $params = [])
     {

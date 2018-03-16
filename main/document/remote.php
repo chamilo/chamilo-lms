@@ -1,15 +1,19 @@
 <?php
 /* See license terms in /license.txt */
 /**
- * Script that allows download of a specific file from external applications
+ * Script that allows download of a specific file from external applications.
+ *
  * @author Arnaud Ligot <arnaud@cblue.be>, Based on work done for old videoconference application (I have about 30 minutes to write this peace of code so if somebody has more time, feel free to rewrite it...)
+ *
  * @package chamilo.document
  */
 /**
- * Script that allows remote download of a file
+ * Script that allows remote download of a file.
+ *
  * @param string Action parameter (action=...)
  * @param string Course code (cidReq=...)
  * @param string Current working directory (cwd=...)
+ *
  * @return string JSON output
  */
 /* FIX for IE cache when using https */
@@ -69,7 +73,7 @@ if ($action == 'list') {
         if ($f['filetype'] == 'file') {
             $files[$k]['download'] = api_get_path(WEB_COURSE_PATH).$cidReq."/document".$f['path'];
         }
-        print json_encode($files);
+        echo json_encode($files);
         exit;
     }
 }

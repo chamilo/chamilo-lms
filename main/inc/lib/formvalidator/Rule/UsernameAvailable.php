@@ -2,16 +2,19 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * QuickForm rule to check if a username is available
+ * QuickForm rule to check if a username is available.
  */
 class HTML_QuickForm_Rule_UsernameAvailable extends HTML_QuickForm_Rule
 {
     /**
-     * Function to check if a username is available
+     * Function to check if a username is available.
+     *
      * @see HTML_QuickForm_Rule
-     * @param string $username Wanted username
+     *
+     * @param string $username         Wanted username
      * @param string $current_username
-     * @return boolean True if username is available
+     *
+     * @return bool True if username is available
      */
     public function validate($username, $current_username = null)
     {
@@ -25,6 +28,7 @@ class HTML_QuickForm_Rule_UsernameAvailable extends HTML_QuickForm_Rule
         }
         $res = Database::query($sql);
         $number = Database::num_rows($res);
+
         return $number == 0;
     }
 }

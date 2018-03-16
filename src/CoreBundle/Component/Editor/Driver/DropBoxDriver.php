@@ -3,12 +3,14 @@
 
 namespace Chamilo\CoreBundle\Component\Editor\Driver;
 
-use Chamilo\CoreBundle\Entity\CDropboxFile;
 use Chamilo\CoreBundle\Component\Editor\Connector;
+use Chamilo\CoreBundle\Entity\CDropboxFile;
 
 /**
- * Class DropBoxDriver
+ * Class DropBoxDriver.
+ *
  * @todo finish implementation
+ *
  * @package Chamilo\CoreBundle\Component\Editor\Driver
  */
 class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
@@ -27,18 +29,17 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
         parent::__construct();
     }
 
+    public function setup()
+    {
+    }
 
     public function allow()
     {
     }
 
-    public function setup()
-    {
-    }
-
-
     /**
      * Gets driver name.
+     *
      * @return string
      */
     public function getName()
@@ -48,6 +49,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
 
     /**
      * Gets driver name.
+     *
      * @param string
      */
     public function setName($name)
@@ -56,7 +58,8 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
     }
 
     /**
-     * Set connector
+     * Set connector.
+     *
      * @param Connector $connector
      */
     public function setConnector(Connector $connector)
@@ -95,31 +98,41 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
             $userId = $this->connector->user->getUserId();
             if (!empty($userId)) {
                 return [
-                    'driver'     => 'DropBoxDriver',
-                    'path'       => '1',
+                    'driver' => 'DropBoxDriver',
+                    'path' => '1',
                     'alias' => 'dropbox',
                     'tmpPath' => $this->connector->paths['path.temp'],
                     //'alias' => $courseInfo['code'].' personal documents',
                     //'URL' => $this->getCourseDocumentRelativeWebPath().$path,
-                    'accessControl' => 'access'
+                    'accessControl' => 'access',
                 ];
             }
             //}
         }
     }
 
+    /**
+     * Close connection.
+     *
+     * @author Dmitry (dio) Levashov
+     */
+    public function umount()
+    {
+        return true;
+    }
+
     protected function init()
     {
         $this->updateCache($this->options['path'], $this->_stat($this->options['path']));
+
         return true;
     }
 
     /**
-     * Set tmp path
+     * Set tmp path.
      *
-     * @return void
      * @author Dmitry (dio) Levashov
-     **/
+     */
     protected function configure()
     {
         parent::configure();
@@ -141,27 +154,15 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
         $this->mimeDetect = 'internal';
     }
 
-
-
-    /**
-     * Close connection
-     *
-     * @return void
-     * @author Dmitry (dio) Levashov
-     **/
-    public function umount()
-    {
-        return true;
-    }
-
     /* FS API */
+
     /**
-     * Cache dir contents
+     * Cache dir contents.
      *
-     * @param  string  $path  dir path
-     * @return void
+     * @param string $path dir path
+     *
      * @author Dmitry Levashov
-     **/
+     */
     protected function cacheDir($path)
     {
         $this->setConnectorFromPlugin();
@@ -179,12 +180,15 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
                     $this->dirsCache[$path][] = $id;
                 }
             }
+
             return $this->dirsCache[$path];
         }
+
         return $this->dirsCache[$path];
     }
 
-    /***************** file stat ********************/
+    /* file stat */
+
     /**
      * Return stat for given path.
      * Stat contains following fields:
@@ -196,14 +200,16 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
      * - (bool)   locked  is object locked. optionally
      * - (bool)   hidden  is object hidden. optionally
      * - (string) alias   for symlinks - link target path relative to root path. optionally
-     * - (string) target  for symlinks - link target path. optionally
+     * - (string) target  for symlinks - link target path. optionally.
      *
      * If file does not exists - returns empty array or false.
      *
-     * @param  string  $path    file path
+     * @param string $path file path
+     *
      * @return array|false
+     *
      * @author Dmitry (dio) Levashov
-     **/
+     */
     protected function _stat($path)
     {
         $this->setConnectorFromPlugin();
@@ -223,72 +229,22 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
 
         if ($file) {
             $stat = $this->transformFileInStat($file);
+
             return $stat;
         }
+
         return [];
     }
 
     /**
-     * @return array
-     */
-    private function returnDirectory()
-    {
-        return [
-            //'id' => $file->getId().$file->getCId(),
-            'name' => 'Dropbox',
-            //'ts' => $file->getUploadDate(),
-            'mime' => 'directory',
-            'read' => true,
-            'write' => true,
-            'locked' => false,
-            'hidden' => false,
-            'dirs' => 0
-        ];
-    }
-
-    /**
-     * @param CDropboxFile $file
-     * @return array
-     */
-    private function transformFileInStat(CDropboxFile $file)
-    {
-        $stat = [
-            'id' => $file->getId().$file->getCId(),
-            'name' => $file->getFilename(),
-            'ts' => $file->getUploadDate(),
-            'mime' => 'directory',
-            'read' => true,
-            'write' => false,
-            'locked' => false,
-            'hidden' => false,
-            'width' => 100,
-            'height' => 100,
-            'dirs' => 0
-        ];
-        return $stat;
-
-        /*
-        if ($stat['parent_id']) {
-            $stat['phash'] = $this->encode($stat['parent_id']);
-        }
-        if ($stat['mime'] == 'directory') {
-            unset($stat['width']);
-            unset($stat['height']);
-        } else {
-            unset($stat['dirs']);
-        }
-        unset($stat['id']);
-        unset($stat['parent_id']);
-        */
-    }
-
-    /**
-     * Return array of parents paths (ids)
+     * Return array of parents paths (ids).
      *
-     * @param  int   $path  file path (id)
+     * @param int $path file path (id)
+     *
      * @return array
+     *
      * @author Dmitry (dio) Levashov
-     **/
+     */
     protected function getParents($path)
     {
         $parents = [];
@@ -302,108 +258,126 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
         if (count($parents)) {
             array_pop($parents);
         }
+
         return $parents;
     }
 
     /**
-     * Return correct file path for LOAD_FILE method
+     * Return correct file path for LOAD_FILE method.
      *
-     * @param  string $path  file path (id)
+     * @param string $path file path (id)
+     *
      * @return string
+     *
      * @author Troex Nevelin
-     **/
+     */
     protected function loadFilePath($path)
     {
         $realPath = realpath($path);
         if (DIRECTORY_SEPARATOR == '\\') { // windows
             $realPath = str_replace('\\', '\\\\', $realPath);
         }
+
         return $this->db->real_escape_string($realPath);
     }
 
     /**
-     * Recursive files search
+     * Recursive files search.
      *
-     * @param  string  $path   dir path
-     * @param  string  $q      search string
-     * @param  array   $mimes
+     * @param string $path  dir path
+     * @param string $q     search string
+     * @param array  $mimes
+     *
      * @return array
+     *
      * @author Dmitry (dio) Levashov
-     **/
+     */
     protected function doSearch($path, $q, $mimes)
     {
         return [];
     }
 
-    /*********************** paths/urls *************************/
+    /* paths/urls */
 
     /**
-     * Return parent directory path
+     * Return parent directory path.
      *
-     * @param  string  $path  file path
+     * @param string $path file path
+     *
      * @return string
+     *
      * @author Dmitry (dio) Levashov
-     **/
+     */
     protected function _dirname($path)
     {
         return ($stat = $this->stat($path)) ? ($stat['phash'] ? $this->decode($stat['phash']) : $this->root) : false;
     }
 
     /**
-     * Return file name
+     * Return file name.
      *
-     * @param  string  $path  file path
+     * @param string $path file path
+     *
      * @return string
+     *
      * @author Dmitry (dio) Levashov
-     **/
+     */
     protected function _basename($path)
     {
         return ($stat = $this->stat($path)) ? $stat['name'] : false;
     }
 
     /**
-     * Return normalized path, this works the same as os.path.normpath() in Python
+     * Return normalized path, this works the same as os.path.normpath() in Python.
      *
-     * @param  string $path path
+     * @param string $path path
+     *
      * @return string
+     *
      * @author Troex Nevelin
-     **/
+     */
     protected function _normpath($path)
     {
         return $path;
     }
 
     /**
-     * Return file path related to root dir
+     * Return file path related to root dir.
      *
-     * @param  string $path file path
+     * @param string $path file path
+     *
      * @return string
+     *
      * @author Dmitry (dio) Levashov
-     **/
+     */
     protected function _relpath($path)
     {
         return $path;
     }
 
     /**
-     * Convert path related to root dir into real path
+     * Convert path related to root dir into real path.
      *
-     * @param  string  $path  file path
+     * @param string $path file path
+     *
      * @return string
+     *
      * @author Dmitry (dio) Levashov
-     **/
+     */
     protected function _abspath($path)
     {
         return $path;
     }
 
     /**
-     * Return fake path started from root dir
+     * Return fake path started from root dir.
      *
-     * @param  string  $path  file path
+     * @param string $path file path
+     *
      * @return string
+     *
      * @author Dmitry (dio) Levashov
-     **/
+     */
     protected function _path($path)
     {
         if (($file = $this->stat($path)) == false) {
@@ -416,17 +390,20 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
             $dir = $this->stat($id);
             $path .= $dir['name'].$this->separator;
         }
+
         return $path.$file['name'];
     }
 
     /**
-     * Return true if $path is children of $parent
+     * Return true if $path is children of $parent.
      *
-     * @param  string  $path    path to check
-     * @param  string  $parent  parent path
+     * @param string $path   path to check
+     * @param string $parent parent path
+     *
      * @return bool
+     *
      * @author Dmitry (dio) Levashov
-     **/
+     */
     protected function _inpath($path, $parent)
     {
         return $path == $parent
@@ -435,12 +412,14 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
     }
 
     /**
-     * Return true if path is dir and has at least one childs directory
+     * Return true if path is dir and has at least one childs directory.
      *
-     * @param  string  $path  dir path
+     * @param string $path dir path
+     *
      * @return bool
+     *
      * @author Dmitry (dio) Levashov
-     **/
+     */
     protected function _subdirs($path)
     {
         return ($stat = $this->stat($path)) && isset($stat['dirs']) ? $stat['dirs'] : false;
@@ -450,25 +429,29 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
      * Return object width and height
      * Usualy used for images, but can be realize for video etc...
      *
-     * @param  string  $path  file path
-     * @param  string  $mime  file mime type
+     * @param string $path file path
+     * @param string $mime file mime type
+     *
      * @return string
+     *
      * @author Dmitry (dio) Levashov
-     **/
+     */
     protected function _dimensions($path, $mime)
     {
         return ($stat = $this->stat($path)) && isset($stat['width']) && isset($stat['height']) ? $stat['width'].'x'.$stat['height'] : '';
     }
 
-    /******************** file/dir content *********************/
+    /* file/dir content */
 
     /**
      * Return files list in directory.
      *
-     * @param  string  $path  dir path
+     * @param string $path dir path
+     *
      * @return array
+     *
      * @author Dmitry (dio) Levashov
-     **/
+     */
     protected function _scandir($path)
     {
         return isset($this->dirsCache[$path])
@@ -477,13 +460,15 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
     }
 
     /**
-     * Open file and return file pointer
+     * Open file and return file pointer.
      *
-     * @param  string  $path  file path
-     * @param  string  $mode  open file mode (ignored in this driver)
+     * @param string $path file path
+     * @param string $mode open file mode (ignored in this driver)
+     *
      * @return resource|false
+     *
      * @author Dmitry (dio) Levashov
-     **/
+     */
     protected function _fopen($path, $mode = 'rb')
     {
         $fp = $this->tmbPath
@@ -495,6 +480,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
                 && ($r = $res->fetch_assoc())) {
                 fwrite($fp, $r['content']);
                 rewind($fp);
+
                 return $fp;
             } else {
                 $this->_fclose($fp, $path);
@@ -505,12 +491,14 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
     }
 
     /**
-     * Close opened file
+     * Close opened file.
      *
-     * @param  resource  $fp  file pointer
+     * @param resource $fp file pointer
+     *
      * @return bool
+     *
      * @author Dmitry (dio) Levashov
-     **/
+     */
     protected function _fclose($fp, $path = '')
     {
         @fclose($fp);
@@ -519,16 +507,18 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
         }
     }
 
-    /********************  file/dir manipulations *************************/
+    /*  file/dir manipulations */
 
     /**
-     * Create dir and return created dir path or false on failed
+     * Create dir and return created dir path or false on failed.
      *
-     * @param  string  $path  parent dir path
-     * @param string  $name  new directory name
+     * @param string $path parent dir path
+     * @param string $name new directory name
+     *
      * @return string|bool
+     *
      * @author Dmitry (dio) Levashov
-     **/
+     */
     protected function _mkdir($path, $name)
     {
         return $this->make($path, $name, 'directory') ? $this->_joinPath($path, $name) : false;
@@ -567,37 +557,42 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
     }
 
     /**
-     * Remove file
+     * Remove file.
      *
-     * @param  string  $path  file path
+     * @param string $path file path
+     *
      * @return bool
+     *
      * @author Dmitry (dio) Levashov
-     **/
+     */
     protected function _unlink($path)
     {
         return false;
+
         return $this->query(sprintf('DELETE FROM %s WHERE id=%d AND mime!="directory" LIMIT 1', $this->tbf, $path)) && $this->db->affected_rows;
     }
 
     /**
-     * Remove dir
+     * Remove dir.
      *
-     * @param  string  $path  dir path
+     * @param string $path dir path
+     *
      * @return bool
+     *
      * @author Dmitry (dio) Levashov
-     **/
+     */
     protected function _rmdir($path)
     {
         return false;
+
         return $this->query(sprintf('DELETE FROM %s WHERE id=%d AND mime="directory" LIMIT 1', $this->tbf, $path)) && $this->db->affected_rows;
     }
 
     /**
-     * undocumented function
+     * undocumented function.
      *
-     * @return void
      * @author Dmitry Levashov
-     **/
+     */
     protected function _setContent($path, $fp)
     {
         rewind($fp);
@@ -623,13 +618,15 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
     }
 
     /**
-     * Write a string to a file
+     * Write a string to a file.
      *
-     * @param  string  $path     file path
-     * @param  string  $content  new file content
+     * @param string $path    file path
+     * @param string $content new file content
+     *
      * @return bool
+     *
      * @author Dmitry (dio) Levashov
-     **/
+     */
     protected function _filePutContents($path, $content)
     {
         return false;
@@ -641,7 +638,6 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
      */
     protected function _checkArchivers()
     {
-        return;
     }
 
     /**
@@ -649,7 +645,6 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
      */
     protected function _unpack($path, $arc)
     {
-        return;
     }
 
     /**
@@ -674,5 +669,61 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements DriverInterface
     protected function _archive($dir, $files, $name, $arc)
     {
         return false;
+    }
+
+    /**
+     * @return array
+     */
+    private function returnDirectory()
+    {
+        return [
+            //'id' => $file->getId().$file->getCId(),
+            'name' => 'Dropbox',
+            //'ts' => $file->getUploadDate(),
+            'mime' => 'directory',
+            'read' => true,
+            'write' => true,
+            'locked' => false,
+            'hidden' => false,
+            'dirs' => 0,
+        ];
+    }
+
+    /**
+     * @param CDropboxFile $file
+     *
+     * @return array
+     */
+    private function transformFileInStat(CDropboxFile $file)
+    {
+        $stat = [
+            'id' => $file->getId().$file->getCId(),
+            'name' => $file->getFilename(),
+            'ts' => $file->getUploadDate(),
+            'mime' => 'directory',
+            'read' => true,
+            'write' => false,
+            'locked' => false,
+            'hidden' => false,
+            'width' => 100,
+            'height' => 100,
+            'dirs' => 0,
+        ];
+
+        return $stat;
+
+        /*
+        if ($stat['parent_id']) {
+            $stat['phash'] = $this->encode($stat['parent_id']);
+        }
+        if ($stat['mime'] == 'directory') {
+            unset($stat['width']);
+            unset($stat['height']);
+        } else {
+            unset($stat['dirs']);
+        }
+        unset($stat['id']);
+        unset($stat['parent_id']);
+        */
     }
 }

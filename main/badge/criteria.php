@@ -2,8 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Show information about OpenBadge criteria
+ * Show information about OpenBadge criteria.
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.badge
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -25,7 +27,7 @@ $skillInfo = [
     'short_code' => $skill->getShortCode(),
     'description' => $skill->getDescription(),
     'criteria' => $skill->getCriteria(),
-    'badge_image' => $skill->getWebIconPath()
+    'badge_image' => $skill->getWebIconPath(),
 ];
 
 $template = new Template();

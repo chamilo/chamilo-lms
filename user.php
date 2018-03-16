@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *  Clean URls for the Social Network
+ *  Clean URls for the Social Network.
  *
  *  The idea is to access to the user info more easily:
  *  http://campus.chamilo.org/admin instead of
@@ -10,19 +10,19 @@
  *  virtualhost configuration
  *
  *  More improvements will come in next versions of Chamilo maybe in the 1.8.8
+ *
  *  @package chamilo.main
  */
-
 $cidReset = true;
 require_once 'main/inc/global.inc.php';
 
 /**
- * Access permissions check
+ * Access permissions check.
  */
 //api_block_anonymous_users();
 
 /**
- * Treat URL arguments
+ * Treat URL arguments.
  */
 $array_keys = array_keys($_GET);
 

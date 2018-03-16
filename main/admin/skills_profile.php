@@ -6,7 +6,6 @@ use ChamiloSession as Session;
 /**
  *  @package chamilo.admin
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -28,7 +27,7 @@ $tpl = new Template(get_lang('Skills'));
 $form = new FormValidator('profile_search');
 
 $form->addElement('header', get_lang('SearchSkills'));
-$form->addElement('select', 'skills', null, null, ['id'=>'skills']);
+$form->addElement('select', 'skills', null, null, ['id' => 'skills']);
 $form->addButtonSearch(get_lang('Search'));
 
 $profiles = $skill_profile->get_all();

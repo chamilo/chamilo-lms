@@ -6,7 +6,6 @@ use ChamiloSession as Session;
 /**
  * @package chamilo.tracking
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
@@ -107,15 +106,15 @@ $sessionId = api_get_session_id();
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
     $interbreadcrumb[] = [
         'url' => '../admin/index.php',
-        'name' => get_lang('PlatformAdmin')
+        'name' => get_lang('PlatformAdmin'),
     ];
     $interbreadcrumb[] = [
         'url' => '../session/session_list.php',
-        'name' => get_lang('SessionList')
+        'name' => get_lang('SessionList'),
     ];
     $interbreadcrumb[] = [
         'url' => '../session/resume_session.php?id_session='.$sessionId,
-        'name' => get_lang('SessionOverview')
+        'name' => get_lang('SessionOverview'),
     ];
 }
 
@@ -324,11 +323,9 @@ if (count($a_students) > 0) {
         Display::return_icon('info3.gif', get_lang('CourseTimeInfo'), ['align' => 'absmiddle', 'hspace' => '3px']), false, ['style' => 'width:110px;']);
     $headers['training_time'] = get_lang('TrainingTime');
 
-
     $table->set_header(5, get_lang('TotalLPTime').'&nbsp;'.
         Display::return_icon('info3.gif', get_lang('TotalLPTime'), ['align' => 'absmiddle', 'hspace' => '3px']), false, ['style' => 'width:110px;']);
     $headers['total_time_lp'] = get_lang('TotalLPTime');
-
 
     $table->set_header(6, get_lang('FirstLoginInCourse'), false);
     $headers['first_login'] = get_lang('FirstLoginInCourse');

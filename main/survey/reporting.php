@@ -3,13 +3,14 @@
 
 /**
  * @package chamilo.survey
+ *
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
+ *
  * @version $Id: reporting.php 21652 2009-06-27 17:07:35Z herodoto $
  *
  * @todo The question has to be more clearly indicated (same style as when filling the survey)
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
@@ -109,11 +110,11 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 // Breadcrumbs
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
-    'name' => get_lang('SurveyList')
+    'name' => get_lang('SurveyList'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
-    'name' => $urlname
+    'name' => $urlname,
 ];
 
 if ($action == 'overview') {
@@ -121,7 +122,7 @@ if ($action == 'overview') {
 } else {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$survey_id,
-        'name' => get_lang('Reporting')
+        'name' => get_lang('Reporting'),
     ];
     switch ($action) {
         case 'questionreport':

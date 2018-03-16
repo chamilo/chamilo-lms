@@ -6,7 +6,8 @@ namespace Chamilo\ClassificationBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * Class ChamiloClassificationBundle
+ * Class ChamiloClassificationBundle.
+ *
  * @package Chamilo\ClassificationBundle
  */
 class ChamiloClassificationBundle extends Bundle

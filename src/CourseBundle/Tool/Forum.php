@@ -4,7 +4,8 @@
 namespace Chamilo\CourseBundle\Tool;
 
 /**
- * Class Forum
+ * Class Forum.
+ *
  * @package Chamilo\CourseBundle\Tool
  */
 class Forum extends BaseTool

@@ -5,7 +5,9 @@
  * The client part is located in lp_api.php or other api's.
  * This is a first attempt at using xajax and AJAX in general,
  * so the code might be a bit unsettling.
+ *
  * @package chamilo.learnpath
+ *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
@@ -14,11 +16,12 @@ $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 /**
- * Writes an item's new values into the database and returns the operation result
- * @param   integer Learnpath ID
- * @param   integer User ID
- * @param   integer View ID
- * @param   integer Item ID
+ * Writes an item's new values into the database and returns the operation result.
+ *
+ * @param   int Learnpath ID
+ * @param   int User ID
+ * @param   int View ID
+ * @param   int Item ID
  * @param   array   Objectives array
  */
 function save_objectives($lp_id, $user_id, $view_id, $item_id, $objectives = [])
@@ -29,7 +32,7 @@ function save_objectives($lp_id, $user_id, $view_id, $item_id, $objectives = [])
         error_log('In xajax_save_objectives('.$lp_id.','.$user_id.','.$view_id.','.$item_id.',"'.(count($objectives) > 0 ? count($objectives) : '').'")', 0);
     }
     $mylp = learnpath::getLpFromSession(api_get_course_id(), $lp_id, $user_id);
-    $mylpi = & $mylp->items[$item_id];
+    $mylpi = &$mylp->items[$item_id];
     if (is_array($objectives) && count($objectives) > 0) {
         foreach ($objectives as $index => $objective) {
             $mylpi->add_objective($index, $objectives[$index]);

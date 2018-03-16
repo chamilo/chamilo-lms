@@ -1,14 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\TicketBundle\Entity\MessageAttachment;
+use Chamilo\TicketBundle\Entity\Priority;
 use Chamilo\TicketBundle\Entity\Project;
 use Chamilo\TicketBundle\Entity\Status;
-use Chamilo\TicketBundle\Entity\Priority;
 use Chamilo\TicketBundle\Entity\Ticket;
-use Chamilo\TicketBundle\Entity\MessageAttachment;
 
 /**
- * Class TicketManager
+ * Class TicketManager.
+ *
  * @package chamilo.plugin.ticket
  */
 class TicketManager
@@ -29,16 +30,16 @@ class TicketManager
     const STATUS_FORWARDED = 'REE';
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
     }
 
     /**
-     * Get categories of tickets
+     * Get categories of tickets.
      *
-     * @param int $projectId
+     * @param int    $projectId
      * @param string $order
      *
      * @return array
@@ -76,6 +77,7 @@ class TicketManager
      * @param $numberItems
      * @param $column
      * @param $direction
+     *
      * @return array
      */
     public static function getCategories($from, $numberItems, $column, $direction)
@@ -105,6 +107,7 @@ class TicketManager
 
     /**
      * @param int $id
+     *
      * @return array|mixed
      */
     public static function getCategory($id)
@@ -137,7 +140,7 @@ class TicketManager
     }
 
     /**
-     * @param int $id
+     * @param int   $id
      * @param array $params
      */
     public static function updateCategory($id, $params)
@@ -180,7 +183,7 @@ class TicketManager
     }
 
     /**
-     * @param int $categoryId
+     * @param int   $categoryId
      * @param array $users
      *
      * @return bool
@@ -196,7 +199,7 @@ class TicketManager
             if (self::userIsAssignedToCategory($userId, $categoryId) == false) {
                 $params = [
                     'category_id' => $categoryId,
-                    'user_id' => $userId
+                    'user_id' => $userId,
                 ];
                 Database::insert($table, $params);
             }
@@ -250,7 +253,8 @@ class TicketManager
     }
 
     /**
-     * Get all possible tickets statuses
+     * Get all possible tickets statuses.
+     *
      * @return array
      */
     public static function get_all_tickets_status()
@@ -267,20 +271,21 @@ class TicketManager
     }
 
     /**
-     * Inserts a new ticket in the corresponding tables
-     * @param int $category_id
-     * @param int $course_id
-     * @param int $sessionId
-     * @param int $project_id
+     * Inserts a new ticket in the corresponding tables.
+     *
+     * @param int    $category_id
+     * @param int    $course_id
+     * @param int    $sessionId
+     * @param int    $project_id
      * @param string $other_area
      * @param string $subject
      * @param string $content
      * @param string $personalEmail
-     * @param array $fileAttachments
+     * @param array  $fileAttachments
      * @param string $source
      * @param string $priority
      * @param string $status
-     * @param int $assignedUserId
+     * @param int    $assignedUserId
      *
      * @return bool
      */
@@ -356,7 +361,7 @@ class TicketManager
             'source' => $source,
             'assigned_last_user' => $assignedUserId,
             'subject' => $subject,
-            'message' => $content
+            'message' => $content,
         ];
 
         if (!empty($course_id)) {
@@ -567,7 +572,7 @@ class TicketManager
     }
 
     /**
-     * Assign ticket to admin
+     * Assign ticket to admin.
      *
      * @param int $ticketId
      * @param int $userId
@@ -599,7 +604,7 @@ class TicketManager
                 'ticket_id' => $ticketId,
                 'user_id' => $userId,
                 'sys_insert_user_id' => api_get_user_id(),
-                'assigned_date' => api_get_utc_datetime()
+                'assigned_date' => api_get_utc_datetime(),
             ];
             Database::insert($table, $params);
 
@@ -610,14 +615,15 @@ class TicketManager
     }
 
     /**
-     * Insert message between Users and Admins
-     * @param int $ticketId
+     * Insert message between Users and Admins.
+     *
+     * @param int    $ticketId
      * @param string $subject
      * @param string $content
-     * @param array $fileAttachments
-     * @param int $userId
+     * @param array  $fileAttachments
+     * @param int    $userId
      * @param string $status
-     * @param bool $sendConfirmation
+     * @param bool   $sendConfirmation
      *
      * @return bool
      */
@@ -636,9 +642,9 @@ class TicketManager
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         if ($sendConfirmation) {
             $form = '<form action="ticket_details.php?ticket_id='.$ticketId.'" id="confirmticket" method="POST" >
-                         <p>' . get_lang('TicketWasThisAnswerSatisfying').'</p>
-                         <button class="btn btn-primary responseyes" name="response" id="responseyes" value="1">' . get_lang('Yes').'</button>
-                         <button class="btn btn-danger responseno" name="response" id="responseno" value="0">' . get_lang('No').'</button>
+                         <p>'.get_lang('TicketWasThisAnswerSatisfying').'</p>
+                         <button class="btn btn-primary responseyes" name="response" id="responseyes" value="1">'.get_lang('Yes').'</button>
+                         <button class="btn btn-danger responseno" name="response" id="responseno" value="0">'.get_lang('No').'</button>
                      </form>';
             $content .= $form;
         }
@@ -654,7 +660,7 @@ class TicketManager
             'sys_insert_datetime' => $now,
             'sys_lastedit_user_id' => $userId,
             'sys_lastedit_datetime' => $now,
-            'status' => $status
+            'status' => $status,
         ];
         $messageId = Database::insert($table_support_messages, $params);
         if ($messageId) {
@@ -692,10 +698,12 @@ class TicketManager
     }
 
     /**
-     * Attachment files when a message is sent
+     * Attachment files when a message is sent.
+     *
      * @param $file_attach
      * @param $ticketId
      * @param $message_id
+     *
      * @return array
      */
     public static function saveMessageAttachmentFile(
@@ -751,12 +759,14 @@ class TicketManager
     }
 
     /**
-     * Get tickets by userId
+     * Get tickets by userId.
+     *
      * @param int $from
-     * @param int  $number_of_items
+     * @param int $number_of_items
      * @param $column
      * @param $direction
      * @param int $userId
+     *
      * @return array
      */
     public static function get_tickets_by_user_id(
@@ -864,7 +874,7 @@ class TicketManager
             'keyword_assigned_to' => 'ticket.assigned_last_user',
             'keyword_source' => 'ticket.source ',
             'keyword_status' => 'ticket.status_id',
-            'keyword_priority' => 'ticket.priority_id'
+            'keyword_priority' => 'ticket.priority_id',
         ];
 
         foreach ($keywords as $keyword => $label) {
@@ -962,7 +972,7 @@ class TicketManager
                     $row['category_name'],
                     $name,
                     $row['assigned_last_user'],
-                    $row['total_messages']
+                    $row['total_messages'],
                 ];
             } else {
                 $ticket = [
@@ -970,13 +980,13 @@ class TicketManager
                     $row['status_name'],
                     $row['start_date'],
                     $row['sys_lastedit_datetime'],
-                    $row['category_name']
+                    $row['category_name'],
                 ];
             }
             if ($isAdmin) {
                 $ticket['0'] .= '&nbsp;&nbsp;<a  href="javascript:void(0)" onclick="load_history_ticket(\'div_'.$row['ticket_id'].'\','.$row['ticket_id'].')">
-					<img onclick="load_course_list(\'div_' . $row['ticket_id'].'\','.$row['ticket_id'].')" onmouseover="clear_course_list (\'div_'.$row['ticket_id'].'\')" src="'.Display::returnIconPath('history.gif').'" title="'.get_lang('Historial').'" alt="'.get_lang('Historial').'"/>
-					<div class="blackboard_hide" id="div_' . $row['ticket_id'].'">&nbsp;&nbsp;</div>
+					<img onclick="load_course_list(\'div_'.$row['ticket_id'].'\','.$row['ticket_id'].')" onmouseover="clear_course_list (\'div_'.$row['ticket_id'].'\')" src="'.Display::returnIconPath('history.gif').'" title="'.get_lang('Historial').'" alt="'.get_lang('Historial').'"/>
+					<div class="blackboard_hide" id="div_'.$row['ticket_id'].'">&nbsp;&nbsp;</div>
 					</a>&nbsp;&nbsp;';
             }
             $tickets[] = $ticket;
@@ -987,6 +997,7 @@ class TicketManager
 
     /**
      * @param int $userId
+     *
      * @return int
      */
     public static function get_total_tickets_by_user_id($userId = 0)
@@ -1051,7 +1062,7 @@ class TicketManager
             'keyword_assigned_to' => 'ticket.assigned_last_user',
             'keyword_source' => 'ticket.source',
             'keyword_status' => 'ticket.status_id',
-            'keyword_priority' => 'ticket.priority_id'
+            'keyword_priority' => 'ticket.priority_id',
         ];
 
         foreach ($keywords as $keyword => $sqlLabel) {
@@ -1090,11 +1101,12 @@ class TicketManager
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
 
-        return (int)$obj->total;
+        return (int) $obj->total;
     }
 
     /**
      * @param int $id
+     *
      * @return MessageAttachment
      */
     public static function getTicketMessageAttachment($id)
@@ -1112,6 +1124,7 @@ class TicketManager
 
     /**
      * @param int $id
+     *
      * @return array
      */
     public static function getTicketMessageAttachmentsByTicketId($id)
@@ -1128,6 +1141,7 @@ class TicketManager
 
     /**
      * @param int $ticketId
+     *
      * @return array
      */
     public static function get_ticket_detail_by_id($ticketId)
@@ -1192,7 +1206,7 @@ class TicketManager
 
                 $userInfo = api_get_user_info($row['sys_insert_user_id']);
                 $row['user_url'] = '<a href="'.api_get_path(WEB_PATH).'main/admin/user_information.php?user_id='.$userInfo['user_id'].'">
-                ' . $userInfo['complete_name'].'</a>';
+                '.$userInfo['complete_name'].'</a>';
                 $ticket['usuario'] = $userInfo;
                 $ticket['ticket'] = $row;
             }
@@ -1233,6 +1247,7 @@ class TicketManager
     /**
      * @param int $ticketId
      * @param int $userId
+     *
      * @return bool
      */
     public static function update_message_status($ticketId, $userId)
@@ -1248,7 +1263,7 @@ class TicketManager
                 SET
                     status = 'LEI',
                     sys_lastedit_user_id ='".api_get_user_id()."',
-                    sys_lastedit_datetime ='" . $now."'
+                    sys_lastedit_datetime ='".$now."'
                 WHERE ticket_id ='$ticketId' ";
 
         if (api_is_platform_admin()) {
@@ -1263,6 +1278,7 @@ class TicketManager
                     status_id = '".self::STATUS_PENDING."'
                  WHERE id ='$ticketId' AND status_id = '".self::STATUS_NEW."'"
             );
+
             return true;
         } else {
             return false;
@@ -1270,11 +1286,12 @@ class TicketManager
     }
 
     /**
-     * Send notification to a user through the internal messaging system
-     * @param int $ticketId
+     * Send notification to a user through the internal messaging system.
+     *
+     * @param int    $ticketId
      * @param string $title
      * @param string $message
-     * @param int $onlyToUserId
+     * @param int    $onlyToUserId
      *
      * @return bool
      */
@@ -1323,7 +1340,7 @@ class TicketManager
                         ),
                         'size' => $attachment->getSize(),
                         'name' => $attachment->getFilename(),
-                        'error' => 0
+                        'error' => 0,
                     ];
                 }
             }
@@ -1381,8 +1398,8 @@ class TicketManager
 
     /**
      * @param array $params
-     * @param int $ticketId
-     * @param int $userId
+     * @param int   $ticketId
+     * @param int   $userId
      *
      * @return bool
      */
@@ -1408,6 +1425,7 @@ class TicketManager
      * @param int $status_id
      * @param int $ticketId
      * @param int $userId
+     *
      * @return bool
      */
     public static function update_ticket_status(
@@ -1436,6 +1454,7 @@ class TicketManager
                 get_lang('TicketUpdated'),
                 get_lang('TicketUpdated')
             );
+
             return true;
         } else {
             return false;
@@ -1547,6 +1566,7 @@ class TicketManager
 
     /**
      * @param int $ticketId
+     *
      * @return array
      */
     public static function get_assign_log($ticketId)
@@ -1574,6 +1594,7 @@ class TicketManager
                 $insertuser['username'].'</a>';
             $history[] = $row;
         }
+
         return $history;
     }
 
@@ -1583,6 +1604,7 @@ class TicketManager
      * @param $column
      * @param $direction
      * @param null $userId
+     *
      * @return array
      */
     public static function export_tickets_by_user_id(
@@ -1790,7 +1812,7 @@ class TicketManager
 
     /**
      * @param string $url
-     * @param int $projectId
+     * @param int    $projectId
      *
      * @return FormValidator
      */
@@ -1839,6 +1861,7 @@ class TicketManager
 
     /**
      * @param string $code
+     *
      * @return int
      */
     public static function getStatusIdFromCode($code)
@@ -1855,8 +1878,8 @@ class TicketManager
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public static function getPriorityList()
     {
         $projects = Database::getManager()->getRepository('ChamiloTicketBundle:Priority')->findAll();
@@ -1885,7 +1908,7 @@ class TicketManager
                 '0' => $row->getId(),
                 '1' => $row->getName(),
                 '2' => $row->getDescription(),
-                '3' => $row->getId()
+                '3' => $row->getId(),
             ];
         }
 
@@ -1909,7 +1932,7 @@ class TicketManager
                     $row->getName(),
                     api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$row->getId()
                 ),
-                '2' => $row->getDescription()
+                '2' => $row->getDescription(),
             ];
         }
 
@@ -1944,6 +1967,7 @@ class TicketManager
 
     /**
      * @param $id
+     *
      * @return Project
      */
     public static function getProject($id)
@@ -1952,7 +1976,7 @@ class TicketManager
     }
 
     /**
-     * @param int $id
+     * @param int   $id
      * @param array $params
      */
     public static function updateProject($id, $params)
@@ -1981,6 +2005,7 @@ class TicketManager
 
     /**
      * @param string $url
+     *
      * @return FormValidator
      */
     public static function getProjectForm($url)
@@ -2009,7 +2034,7 @@ class TicketManager
                 '0' => $row->getId(),
                 '1' => $row->getName(),
                 '2' => $row->getDescription(),
-                '3' => $row->getId()
+                '3' => $row->getId(),
             ];
         }
 
@@ -2030,7 +2055,7 @@ class TicketManager
                 'id' => $row->getId(),
                 '0' => $row->getId(),
                 '1' => Display::url($row->getName()),
-                '2' => $row->getDescription()
+                '2' => $row->getDescription(),
             ];
         }
 
@@ -2066,6 +2091,7 @@ class TicketManager
 
     /**
      * @param $id
+     *
      * @return Project
      */
     public static function getStatus($id)
@@ -2074,7 +2100,7 @@ class TicketManager
     }
 
     /**
-     * @param int $id
+     * @param int   $id
      * @param array $params
      */
     public static function updateStatus($id, $params)
@@ -2101,6 +2127,7 @@ class TicketManager
 
     /**
      * @param string $url
+     *
      * @return FormValidator
      */
     public static function getStatusForm($url)
@@ -2129,7 +2156,7 @@ class TicketManager
                 '0' => $row->getId(),
                 '1' => $row->getName(),
                 '2' => $row->getDescription(),
-                '3' => $row->getId()
+                '3' => $row->getId(),
             ];
         }
 
@@ -2150,7 +2177,7 @@ class TicketManager
                 'id' => $row->getId(),
                 '0' => $row->getId(),
                 '1' => Display::url($row->getName()),
-                '2' => $row->getDescription()
+                '2' => $row->getDescription(),
             ];
         }
 
@@ -2191,6 +2218,7 @@ class TicketManager
 
     /**
      * @param $id
+     *
      * @return Priority
      */
     public static function getPriority($id)
@@ -2199,7 +2227,7 @@ class TicketManager
     }
 
     /**
-     * @param int $id
+     * @param int   $id
      * @param array $params
      */
     public static function updatePriority($id, $params)
@@ -2226,6 +2254,7 @@ class TicketManager
 
     /**
      * @param string $url
+     *
      * @return FormValidator
      */
     public static function getPriorityForm($url)
@@ -2239,8 +2268,10 @@ class TicketManager
     }
 
     /**
-     * Returns a list of menu elements for the tickets system's configuration
+     * Returns a list of menu elements for the tickets system's configuration.
+     *
      * @param string $exclude The element to exclude from the list
+     *
      * @return array
      */
     public static function getSettingsMenuItems($exclude = null)
@@ -2249,17 +2280,17 @@ class TicketManager
         $project = [
             'icon' => 'project.png',
             'url' => 'projects.php',
-            'content' => get_lang('Projects')
+            'content' => get_lang('Projects'),
         ];
         $status = [
             'icon' => 'check-circle.png',
             'url' => 'status.php',
-            'content' => get_lang('Status')
+            'content' => get_lang('Status'),
         ];
         $priority = [
             'icon' => 'tickets_urgent.png',
             'url' => 'priorities.php',
-            'content' => get_lang('Priority')
+            'content' => get_lang('Priority'),
         ];
         switch ($exclude) {
             case 'project':
@@ -2280,7 +2311,8 @@ class TicketManager
     }
 
     /**
-     * Returns a list of strings representing the default statuses
+     * Returns a list of strings representing the default statuses.
+     *
      * @return array
      */
     public static function getDefaultStatusList()
@@ -2290,7 +2322,7 @@ class TicketManager
             self::STATUS_PENDING,
             self::STATUS_UNCONFIRMED,
             self::STATUS_CLOSE,
-            self::STATUS_FORWARDED
+            self::STATUS_FORWARDED,
         ];
     }
 
@@ -2304,12 +2336,13 @@ class TicketManager
             self::PRIORITY_HIGH,
             self::PRIORITY_LOW,
             self::STATUS_CLOSE,
-            self::STATUS_FORWARDED
+            self::STATUS_FORWARDED,
         ];
     }
 
     /**
-     * Deletes the user from all the ticket system
+     * Deletes the user from all the ticket system.
+     *
      * @param int $userId
      */
     public static function deleteUserFromTicketSystem($userId)
@@ -2384,7 +2417,7 @@ class TicketManager
 
     /**
      * @param array $userInfo
-     * @param int $projectId
+     * @param int   $projectId
      *
      * @return bool
      */
@@ -2408,7 +2441,9 @@ class TicketManager
 
     /**
      * @param int $projectId
+     *
      * @todo load from database instead of configuration.php setting
+     *
      * @return array
      */
     public static function getAllowedRolesFromProject($projectId)

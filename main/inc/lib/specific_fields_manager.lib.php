@@ -1,7 +1,9 @@
 <?php
 /**
- * Manage specific tools
+ * Manage specific tools.
+ *
  * @todo convert into a class
+ *
  * @package chamilo.library
  */
 
@@ -10,7 +12,8 @@ $table_sf = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
 $table_sf_val = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
 
 /**
- * Add a specific field
+ * Add a specific field.
+ *
  * @param string $name specific field name
  */
 function add_specific_field($name)
@@ -37,7 +40,8 @@ function add_specific_field($name)
 }
 
 /**
- * Delete a specific field
+ * Delete a specific field.
+ *
  * @param int $id specific field id
  */
 function delete_specific_field($id)
@@ -54,8 +58,9 @@ function delete_specific_field($id)
 }
 
 /**
- * Edit a specific field
- * @param int $id specific field id
+ * Edit a specific field.
+ *
+ * @param int    $id   specific field id
  * @param string $name new field name
  */
 function edit_specific_field($id, $name)
@@ -72,7 +77,8 @@ function edit_specific_field($id, $name)
 
 /**
  * @param array $conditions a list of condition (exemple : status=>STUDENT)
- * @param array $order_by a list of fields on which to sort
+ * @param array $order_by   a list of fields on which to sort
+ *
  * @return array An array with all specific fields, at platform level
  */
 function get_specific_field_list($conditions = [], $order_by = [])
@@ -101,8 +107,9 @@ function get_specific_field_list($conditions = [], $order_by = [])
 
 /**
  * @param array $conditions a list of condition (exemple : status=>STUDENT)
- * @param array $order_by a list of fields on which sort
- * @return array An array with all users of the platform.
+ * @param array $order_by   a list of fields on which sort
+ *
+ * @return array an array with all users of the platform
  */
 function get_specific_field_values_list(
     $conditions = [],
@@ -143,10 +150,11 @@ function get_specific_field_values_list(
 }
 
 /**
- * @param char $prefix xapian prefix
+ * @param char   $prefix      xapian prefix
  * @param string $course_code
- * @param string $tool_id Constant from mainapi.lib.php
- * @param int $ref_id representative id inside one tool item
+ * @param string $tool_id     Constant from mainapi.lib.php
+ * @param int    $ref_id      representative id inside one tool item
+ *
  * @return array
  */
 function get_specific_field_values_list_by_prefix(
@@ -177,12 +185,13 @@ function get_specific_field_values_list_by_prefix(
 }
 
 /**
- * Add a specific field value
- * @param int $id_specific_field specific field id
- * @param string $course_id course code
- * @param string $tool_id tool id, from main.api.lib
- * @param int $ref_id intern id inside specific tool table
- * @param string $value specific field value
+ * Add a specific field value.
+ *
+ * @param int    $id_specific_field specific field id
+ * @param string $course_id         course code
+ * @param string $tool_id           tool id, from main.api.lib
+ * @param int    $ref_id            intern id inside specific tool table
+ * @param string $value             specific field value
  */
 function add_specific_field_value(
     $id_specific_field,
@@ -217,11 +226,12 @@ function add_specific_field_value(
 }
 
 /**
- * Delete all values from a specific field id, course_id, ref_id and tool
- * @param string $course_id course code
- * @param int $id_specific_field specific field id
- * @param string $tool_id tool id, from main.api.lib
- * @param int $ref_id intern id inside specific tool table
+ * Delete all values from a specific field id, course_id, ref_id and tool.
+ *
+ * @param string $course_id         course code
+ * @param int    $id_specific_field specific field id
+ * @param string $tool_id           tool id, from main.api.lib
+ * @param int    $ref_id            intern id inside specific tool table
  */
 function delete_all_specific_field_value($course_id, $id_specific_field, $tool_id, $ref_id)
 {
@@ -233,7 +243,8 @@ function delete_all_specific_field_value($course_id, $id_specific_field, $tool_i
 
 /**
  * Delete all values from a specific item (course_id, tool_id and ref_id).
- * To be used when deleting such item from Dokeos
+ * To be used when deleting such item from Dokeos.
+ *
  * @param   string  Course code
  * @param   string  Tool ID
  * @param   int     Internal ID used in specific tool table
@@ -249,9 +260,11 @@ function delete_all_values_for_item($course_id, $tool_id, $ref_id)
 /**
  * Generates a code (one-letter string) for a given field name
  * Defaults to the first letter of the name, otherwise iterate through available
- * letters
+ * letters.
+ *
  * @param   string  Name
- * @return  string  One-letter code, upper-case
+ *
+ * @return string One-letter code, upper-case
  */
 function get_specific_field_code_from_name($name)
 {

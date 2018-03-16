@@ -8,7 +8,8 @@ use Symfony\Bundle\TwigBundle\Controller\ExceptionController as BaseExceptionCon
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class ExceptionController
+ * Class ExceptionController.
+ *
  * @package Chamilo\ThemeBundle\Controller
  */
 class ExceptionController extends BaseExceptionController

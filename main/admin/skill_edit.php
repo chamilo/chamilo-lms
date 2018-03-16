@@ -2,11 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Skill edit form
+ * Skill edit form.
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -35,7 +36,7 @@ $skillDefaultInfo = [
     'description' => $skillInfo['description'],
     'parent_id' => $skillInfo['extra']['parent_id'],
     'criteria' => $skillInfo['criteria'],
-    'gradebook_id' => []
+    'gradebook_id' => [],
 ];
 
 foreach ($skillInfo['gradebooks'] as $gradebook) {
@@ -59,7 +60,7 @@ $jquery_ready_content = $returnParams['jquery_ready_content'];
 if (!empty($jquery_ready_content)) {
     $htmlHeadXtra[] = '<script>
     $(document).ready(function(){
-        ' . $jquery_ready_content.'
+        '.$jquery_ready_content.'
     });
     </script>';
 }

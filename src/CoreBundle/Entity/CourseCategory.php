@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CourseCategory
+ * CourseCategory.
  *
  * @ORM\Table(
  *  name="course_category",
@@ -24,7 +24,11 @@ use Doctrine\ORM\Mapping as ORM;
 class CourseCategory
 {
     /**
-     * @var integer
+     * @ORM\OneToMany(targetEntity="CourseCategory", mappedBy="parent")
+     */
+    protected $children;
+    /**
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -47,25 +51,20 @@ class CourseCategory
     private $code;
 
     /**
-     * @ORM\OneToMany(targetEntity="CourseCategory", mappedBy="parent")
-     */
-    protected $children;
-
-    /**
      * @ORM\ManyToOne(targetEntity="CourseCategory", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
     private $parent;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="tree_pos", type="integer", nullable=true)
      */
     private $treePos;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="children_count", type="smallint", nullable=true)
      */
@@ -86,7 +85,7 @@ class CourseCategory
     private $authCatChild;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -95,9 +94,19 @@ class CourseCategory
     }
 
     /**
-     * Get id
+     * @return string
+     */
+    public function __toString()
+    {
+        $name = strip_tags($this->name);
+
+        return "$name ({$this->code})";
+    }
+
+    /**
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -138,9 +147,10 @@ class CourseCategory
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return CourseCategory
      */
     public function setName($name)
@@ -151,7 +161,7 @@ class CourseCategory
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -161,9 +171,10 @@ class CourseCategory
     }
 
     /**
-     * Set code
+     * Set code.
      *
      * @param string $code
+     *
      * @return CourseCategory
      */
     public function setCode($code)
@@ -174,7 +185,7 @@ class CourseCategory
     }
 
     /**
-     * Get code
+     * Get code.
      *
      * @return string
      */
@@ -184,9 +195,10 @@ class CourseCategory
     }
 
     /**
-     * Set parentId
+     * Set parentId.
      *
      * @param string $parentId
+     *
      * @return CourseCategory
      */
     public function setParentId($parentId)
@@ -197,7 +209,7 @@ class CourseCategory
     }
 
     /**
-     * Get parentId
+     * Get parentId.
      *
      * @return string
      */
@@ -207,9 +219,10 @@ class CourseCategory
     }
 
     /**
-     * Set treePos
+     * Set treePos.
      *
-     * @param integer $treePos
+     * @param int $treePos
+     *
      * @return CourseCategory
      */
     public function setTreePos($treePos)
@@ -220,9 +233,9 @@ class CourseCategory
     }
 
     /**
-     * Get treePos
+     * Get treePos.
      *
-     * @return integer
+     * @return int
      */
     public function getTreePos()
     {
@@ -230,9 +243,10 @@ class CourseCategory
     }
 
     /**
-     * Set childrenCount
+     * Set childrenCount.
      *
-     * @param integer $childrenCount
+     * @param int $childrenCount
+     *
      * @return CourseCategory
      */
     public function setChildrenCount($childrenCount)
@@ -243,9 +257,9 @@ class CourseCategory
     }
 
     /**
-     * Get childrenCount
+     * Get childrenCount.
      *
-     * @return integer
+     * @return int
      */
     public function getChildrenCount()
     {
@@ -253,9 +267,10 @@ class CourseCategory
     }
 
     /**
-     * Set authCourseChild
+     * Set authCourseChild.
      *
      * @param string $authCourseChild
+     *
      * @return CourseCategory
      */
     public function setAuthCourseChild($authCourseChild)
@@ -266,7 +281,7 @@ class CourseCategory
     }
 
     /**
-     * Get authCourseChild
+     * Get authCourseChild.
      *
      * @return string
      */
@@ -276,9 +291,10 @@ class CourseCategory
     }
 
     /**
-     * Set authCatChild
+     * Set authCatChild.
      *
      * @param string $authCatChild
+     *
      * @return CourseCategory
      */
     public function setAuthCatChild($authCatChild)
@@ -289,22 +305,12 @@ class CourseCategory
     }
 
     /**
-     * Get authCatChild
+     * Get authCatChild.
      *
      * @return string
      */
     public function getAuthCatChild()
     {
         return $this->authCatChild;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        $name = strip_tags($this->name);
-
-        return "$name ({$this->code})";
     }
 }

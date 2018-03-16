@@ -1,23 +1,27 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 namespace Chamilo\CoreBundle\Entity\Repository;
 
-use Doctrine\ORM\EntityRepository;
 use Chamilo\CoreBundle\Entity\ExtraField;
-use \Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
- * ExtraFieldRelTagRepository
+ * ExtraFieldRelTagRepository.
  *
  * @package Chamilo\CoreBundle\Entity\Repository
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 class ExtraFieldRelTagRepository extends EntityRepository
 {
     /**
-     * Get the tags for a item
+     * Get the tags for a item.
+     *
      * @param ExtraField $extraField The extrafield
-     * @param int $itemId The item ID
+     * @param int        $itemId     The item ID
+     *
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getTags(ExtraField $extraField, $itemId)

@@ -7,6 +7,7 @@ use Chamilo\CourseBundle\Entity\CForumPost;
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Julio Montoya <gugli100@gmail.com> UI Improvements + lots of bugfixes
  * @copyright Ghent University
+ *
  * @package chamilo.forum
  */
 
@@ -88,7 +89,7 @@ foreach ($posts as $post) {
             $name,
             [
                 'title' => api_htmlentities($username, ENT_QUOTES),
-                'class' => 'lead'
+                'class' => 'lead',
             ]
         );
     }
@@ -128,8 +129,8 @@ foreach ($posts as $post) {
             $editUrl .= "&forum=$clean_forum_id&thread=$clean_thread_id&post={$post['post_id']}&id_attach=$id_attach";
 
             $iconEdit .= "<a href='".$editUrl."'>"
-                . Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL)
-                . "</a>";
+                .Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL)
+                ."</a>";
 
             $editButton = Display::toolbarButton(
                 get_lang('Edit'),
@@ -150,16 +151,16 @@ foreach ($posts as $post) {
                 'thread' => $clean_thread_id,
                 'action' => 'delete',
                 'content' => 'post',
-                'id' => $post['post_id']
+                'id' => $post['post_id'],
             ]);
             $iconEdit .= Display::url(
                 Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL),
                 $deleteUrl,
                 [
                     'onclick' => "javascript:if(!confirm('"
-                        . addslashes(api_htmlentities(get_lang('DeletePost'), ENT_QUOTES))
-                        . "')) return false;",
-                    'id' => "delete-post-{$post['post_id']}"
+                        .addslashes(api_htmlentities(get_lang('DeletePost'), ENT_QUOTES))
+                        ."')) return false;",
+                    'id' => "delete-post-{$post['post_id']}",
                 ]
             );
         }
@@ -177,14 +178,14 @@ foreach ($posts as $post) {
             $post['visible'],
             [
                 'forum' => $clean_forum_id,
-                'thread' => $clean_thread_id
+                'thread' => $clean_thread_id,
             ]
         );
 
         if ($count > 0) {
             $iconEdit .= "<a href=\"viewthread.php?".api_get_cidreq()
-                . "&forum=$clean_forum_id&thread=$clean_thread_id&action=move&post={$post['post_id']}"
-                . "\">".Display::return_icon('move.png', get_lang('MovePost'), [], ICON_SIZE_SMALL)."</a>";
+                ."&forum=$clean_forum_id&thread=$clean_thread_id&action=move&post={$post['post_id']}"
+                ."\">".Display::return_icon('move.png', get_lang('MovePost'), [], ICON_SIZE_SMALL)."</a>";
         }
     }
 
@@ -206,10 +207,10 @@ foreach ($posts as $post) {
             );
             if ($locked == false) {
                 $iconEdit .= "<a href=\"forumqualify.php?".api_get_cidreq()
-                    . "&forum=$clean_forum_id&thread=$clean_thread_id&action=list&post={$post['post_id']}"
-                    . "&user={$post['user_id']}&user_id={$post['user_id']}"
-                    . "&idtextqualify=$current_qualify_thread"
-                    . "\" >".Display::return_icon('quiz.png', get_lang('Qualify'))."</a>";
+                    ."&forum=$clean_forum_id&thread=$clean_thread_id&action=list&post={$post['post_id']}"
+                    ."&user={$post['user_id']}&user_id={$post['user_id']}"
+                    ."&idtextqualify=$current_qualify_thread"
+                    ."\" >".Display::return_icon('quiz.png', get_lang('Qualify'))."</a>";
             }
         }
     }
@@ -238,7 +239,7 @@ foreach ($posts as $post) {
                         'forum' => $clean_forum_id,
                         'thread' => $clean_thread_id,
                         'post' => $post['post_id'],
-                        'action' => 'replymessage'
+                        'action' => 'replymessage',
                     ]),
                     'reply',
                     'primary',
@@ -251,7 +252,7 @@ foreach ($posts as $post) {
                         'forum' => $clean_forum_id,
                         'thread' => $clean_thread_id,
                         'post' => $post['post_id'],
-                        'action' => 'quote'
+                        'action' => 'quote',
                     ]),
                     'quote-left',
                     'success',
@@ -338,10 +339,10 @@ foreach ($posts as $post) {
                 (api_is_allowed_to_edit(false, true) && !(api_is_session_general_coach() && $current_forum['session_id'] != $sessionId))
             ) {
                 $html .= '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_attach&id_attach='
-                    . $attachment['iid'].'&forum='.$clean_forum_id.'&thread='.$clean_thread_id
-                    . '" onclick="javascript:if(!confirm(\''
-                    . addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'
-                    . Display::return_icon('delete.gif', get_lang('Delete')).'</a><br />';
+                    .$attachment['iid'].'&forum='.$clean_forum_id.'&thread='.$clean_thread_id
+                    .'" onclick="javascript:if(!confirm(\''
+                    .addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'
+                    .Display::return_icon('delete.gif', get_lang('Delete')).'</a><br />';
             }
         }
     }

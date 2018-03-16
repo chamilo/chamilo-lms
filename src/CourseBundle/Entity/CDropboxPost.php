@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CDropboxPost
+ * CDropboxPost.
  *
  * @ORM\Table(
  *  name="c_dropbox_post",
@@ -21,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CDropboxPost
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -44,45 +44,45 @@ class CDropboxPost
     private $feedback;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="cat_id", type="integer", nullable=false)
      */
     private $catId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
     private $cId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="file_id", type="integer")
      */
     private $fileId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="dest_user_id", type="integer")
      */
     private $destUserId;
 
-
     /**
-     * Set feedbackDate
+     * Set feedbackDate.
      *
      * @param \DateTime $feedbackDate
+     *
      * @return CDropboxPost
      */
     public function setFeedbackDate($feedbackDate)
@@ -93,7 +93,7 @@ class CDropboxPost
     }
 
     /**
-     * Get feedbackDate
+     * Get feedbackDate.
      *
      * @return \DateTime
      */
@@ -103,9 +103,10 @@ class CDropboxPost
     }
 
     /**
-     * Set feedback
+     * Set feedback.
      *
      * @param string $feedback
+     *
      * @return CDropboxPost
      */
     public function setFeedback($feedback)
@@ -116,7 +117,7 @@ class CDropboxPost
     }
 
     /**
-     * Get feedback
+     * Get feedback.
      *
      * @return string
      */
@@ -126,9 +127,10 @@ class CDropboxPost
     }
 
     /**
-     * Set catId
+     * Set catId.
      *
-     * @param integer $catId
+     * @param int $catId
+     *
      * @return CDropboxPost
      */
     public function setCatId($catId)
@@ -139,9 +141,9 @@ class CDropboxPost
     }
 
     /**
-     * Get catId
+     * Get catId.
      *
-     * @return integer
+     * @return int
      */
     public function getCatId()
     {
@@ -149,9 +151,10 @@ class CDropboxPost
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return CDropboxPost
      */
     public function setSessionId($sessionId)
@@ -162,9 +165,9 @@ class CDropboxPost
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -172,9 +175,10 @@ class CDropboxPost
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CDropboxPost
      */
     public function setCId($cId)
@@ -185,9 +189,9 @@ class CDropboxPost
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -195,9 +199,10 @@ class CDropboxPost
     }
 
     /**
-     * Set fileId
+     * Set fileId.
      *
-     * @param integer $fileId
+     * @param int $fileId
+     *
      * @return CDropboxPost
      */
     public function setFileId($fileId)
@@ -208,9 +213,9 @@ class CDropboxPost
     }
 
     /**
-     * Get fileId
+     * Get fileId.
      *
-     * @return integer
+     * @return int
      */
     public function getFileId()
     {
@@ -218,9 +223,10 @@ class CDropboxPost
     }
 
     /**
-     * Set destUserId
+     * Set destUserId.
      *
-     * @param integer $destUserId
+     * @param int $destUserId
+     *
      * @return CDropboxPost
      */
     public function setDestUserId($destUserId)
@@ -231,9 +237,9 @@ class CDropboxPost
     }
 
     /**
-     * Get destUserId
+     * Get destUserId.
      *
-     * @return integer
+     * @return int
      */
     public function getDestUserId()
     {

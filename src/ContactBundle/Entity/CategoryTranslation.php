@@ -4,11 +4,10 @@
 namespace Chamilo\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
- * Class CategoryTranslation
+ * Class CategoryTranslation.
  *
  * @ORM\Entity
  * @ORM\Table(name="contact_category_translation")
@@ -21,7 +20,6 @@ class CategoryTranslation
     use ORMBehaviors\Translatable\Translation;
 
     /**
-     *
      * @ORM\Column(type="string", length=255, nullable=false)
      */
     protected $name;

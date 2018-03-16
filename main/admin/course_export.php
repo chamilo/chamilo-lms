@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This tool allows platform admins to export courses to CSV file
+ * This tool allows platform admins to export courses to CSV file.
+ *
  * @package chamilo.admin
  */
-
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -53,7 +53,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             'Teacher',
             'Language',
             'Users',
-            'OtherTeachers'
+            'OtherTeachers',
         ];
 
         $dataToExport = [];

@@ -5,8 +5,10 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use ChamiloSession as Session;
 
 /**
- * Code
+ * Code.
+ *
  * @todo use globals or parameters or add this file in the template
+ *
  * @package chamilo.include
  */
 
@@ -15,8 +17,10 @@ use ChamiloSession as Session;
  * This function is used when creating the tabs in the third header line and
  * all the sections that do not appear there (as determined by the
  * platform admin on the Dokeos configuration settings page)
- * will appear in the right hand menu that appears on several other pages
+ * will appear in the right hand menu that appears on several other pages.
+ *
  * @return array containing all the possible tabs
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
 function get_tabs($courseId = null)
@@ -145,7 +149,7 @@ function get_tabs($courseId = null)
 }
 
 /**
- * This function returns the custom tabs
+ * This function returns the custom tabs.
  *
  * @return array
  */
@@ -176,8 +180,10 @@ function getCustomTabs()
 }
 
 /**
- * Return the active logo of the portal, based on a series of settings
+ * Return the active logo of the portal, based on a series of settings.
+ *
  * @param string $theme The name of the theme folder from web/css/themes/
+ *
  * @return string HTML string with logo as an HTML element
  */
 function return_logo($theme = '')
@@ -195,7 +201,8 @@ function return_logo($theme = '')
 }
 
 /**
- * Return HTML string of a list as <li> items
+ * Return HTML string of a list as <li> items.
+ *
  * @return string
  */
 function returnNotificationMenu()
@@ -255,7 +262,8 @@ function returnNotificationMenu()
 }
 
 /**
- * Return an array with different navigation mennu elements
+ * Return an array with different navigation mennu elements.
+ *
  * @return array [menu_navigation[], navigation[], possible_tabs[]]
  */
 function return_navigation_array()
@@ -416,7 +424,8 @@ function return_navigation_array()
 }
 
 /**
- * Return the navigation menu elements as a flat array
+ * Return the navigation menu elements as a flat array.
+ *
  * @return array
  */
 function menuArray()
@@ -561,10 +570,12 @@ function menuArray()
 }
 
 /**
- * Return the breadcrumb menu elements as an array of <li> items
- * @param array $interbreadcrumb The elements to add to the breadcrumb
- * @param string $language_file Deprecated
- * @param string $nameTools The name of the current tool (not linked)
+ * Return the breadcrumb menu elements as an array of <li> items.
+ *
+ * @param array  $interbreadcrumb The elements to add to the breadcrumb
+ * @param string $language_file   Deprecated
+ * @param string $nameTools       The name of the current tool (not linked)
+ *
  * @return string HTML string of <li> items
  */
 function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
@@ -650,7 +661,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
          */
         $navigation[] = [
             'url' => $web_course_path.$courseInfo['path'].'/index.php?id_session='.$sessionId,
-            'title' => $itemTitle
+            'title' => $itemTitle,
         ];
     }
 
@@ -815,8 +826,9 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 }
 
 /**
- * Helper function to get the number of users online, using cache if available
- * @return  int     The number of users currently online
+ * Helper function to get the number of users online, using cache if available.
+ *
+ * @return int The number of users currently online
  */
 function getOnlineUsersCount()
 {
@@ -838,10 +850,12 @@ function getOnlineUsersCount()
 }
 
 /**
- * Helper function to get the number of users online in a course, using cache if available
- * @param   int $userId The user ID
- * @param   array $courseInfo The course details
- * @return  int     The number of users currently online
+ * Helper function to get the number of users online in a course, using cache if available.
+ *
+ * @param int   $userId     The user ID
+ * @param array $courseInfo The course details
+ *
+ * @return int The number of users currently online
  */
 function getOnlineUsersInCourseCount($userId, $courseInfo)
 {
@@ -877,8 +891,10 @@ function getOnlineUsersInCourseCount($userId, $courseInfo)
 }
 
 /**
- * Helper function to get the number of users online in a session, using cache if available
+ * Helper function to get the number of users online in a session, using cache if available.
+ *
  * @param int $sessionId The session ID
+ *
  * @return int The number of users currently online
  */
 function getOnlineUsersInSessionCount($sessionId)

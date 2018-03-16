@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CCalendarEvent
+ * CCalendarEvent.
  *
  * @ORM\Table(
  *  name="c_calendar_event",
@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CCalendarEvent
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
@@ -29,14 +29,14 @@ class CCalendarEvent
     private $iid;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=true)
      */
     private $id;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="c_id", type="integer")
      */
@@ -71,21 +71,21 @@ class CCalendarEvent
     private $endDate;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="parent_event_id", type="integer", nullable=true)
      */
     private $parentEventId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="session_id", type="integer", nullable=false)
      */
     private $sessionId;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="all_day", type="integer", nullable=false)
      */
@@ -110,13 +110,14 @@ class CCalendarEvent
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Room")
      * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
-     **/
+     */
     private $room;
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return CCalendarEvent
      */
     public function setTitle($title)
@@ -127,7 +128,7 @@ class CCalendarEvent
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -137,9 +138,10 @@ class CCalendarEvent
     }
 
     /**
-     * Set content
+     * Set content.
      *
      * @param string $content
+     *
      * @return CCalendarEvent
      */
     public function setContent($content)
@@ -150,7 +152,7 @@ class CCalendarEvent
     }
 
     /**
-     * Get content
+     * Get content.
      *
      * @return string
      */
@@ -160,9 +162,10 @@ class CCalendarEvent
     }
 
     /**
-     * Set startDate
+     * Set startDate.
      *
      * @param \DateTime $startDate
+     *
      * @return CCalendarEvent
      */
     public function setStartDate($startDate)
@@ -173,7 +176,7 @@ class CCalendarEvent
     }
 
     /**
-     * Get startDate
+     * Get startDate.
      *
      * @return \DateTime
      */
@@ -183,9 +186,10 @@ class CCalendarEvent
     }
 
     /**
-     * Set endDate
+     * Set endDate.
      *
      * @param \DateTime $endDate
+     *
      * @return CCalendarEvent
      */
     public function setEndDate($endDate)
@@ -196,7 +200,7 @@ class CCalendarEvent
     }
 
     /**
-     * Get endDate
+     * Get endDate.
      *
      * @return \DateTime
      */
@@ -206,9 +210,10 @@ class CCalendarEvent
     }
 
     /**
-     * Set parentEventId
+     * Set parentEventId.
      *
-     * @param integer $parentEventId
+     * @param int $parentEventId
+     *
      * @return CCalendarEvent
      */
     public function setParentEventId($parentEventId)
@@ -219,9 +224,9 @@ class CCalendarEvent
     }
 
     /**
-     * Get parentEventId
+     * Get parentEventId.
      *
-     * @return integer
+     * @return int
      */
     public function getParentEventId()
     {
@@ -229,9 +234,10 @@ class CCalendarEvent
     }
 
     /**
-     * Set sessionId
+     * Set sessionId.
      *
-     * @param integer $sessionId
+     * @param int $sessionId
+     *
      * @return CCalendarEvent
      */
     public function setSessionId($sessionId)
@@ -242,9 +248,9 @@ class CCalendarEvent
     }
 
     /**
-     * Get sessionId
+     * Get sessionId.
      *
-     * @return integer
+     * @return int
      */
     public function getSessionId()
     {
@@ -252,9 +258,10 @@ class CCalendarEvent
     }
 
     /**
-     * Set allDay
+     * Set allDay.
      *
-     * @param integer $allDay
+     * @param int $allDay
+     *
      * @return CCalendarEvent
      */
     public function setAllDay($allDay)
@@ -265,9 +272,9 @@ class CCalendarEvent
     }
 
     /**
-     * Get allDay
+     * Get allDay.
      *
-     * @return integer
+     * @return int
      */
     public function getAllDay()
     {
@@ -275,9 +282,10 @@ class CCalendarEvent
     }
 
     /**
-     * Set id
+     * Set id.
      *
-     * @param integer $id
+     * @param int $id
+     *
      * @return CCalendarEvent
      */
     public function setId($id)
@@ -288,9 +296,9 @@ class CCalendarEvent
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -298,9 +306,10 @@ class CCalendarEvent
     }
 
     /**
-     * Set cId
+     * Set cId.
      *
-     * @param integer $cId
+     * @param int $cId
+     *
      * @return CCalendarEvent
      */
     public function setCId($cId)
@@ -311,9 +320,9 @@ class CCalendarEvent
     }
 
     /**
-     * Get cId
+     * Get cId.
      *
-     * @return integer
+     * @return int
      */
     public function getCId()
     {
@@ -350,6 +359,7 @@ class CCalendarEvent
 
     /**
      * @param Room $room
+     *
      * @return $this
      */
     public function setRoom($room)

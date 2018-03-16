@@ -6,7 +6,9 @@
  *
  * @author various contributors
  * @author Roan Embrechts (VUB), partial code cleanup, initial virtual course support
+ *
  * @package chamilo.group
+ *
  * @todo course admin functionality to create groups based on who is in which course (or class).
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -56,7 +58,7 @@ $group = [
     $form->createElement('radio', 'max_member_no_limit', get_lang('GroupLimit'), get_lang('NoLimit'), GroupManager::MEMBER_PER_GROUP_NO_LIMIT),
     $form->createElement('radio', 'max_member_no_limit', null, get_lang('MaximumOfParticipants'), 1, ['id' => 'max_member_selected']),
     $form->createElement('text', 'max_member', null, ['class' => 'span1', 'id' => 'max_member']),
-    $form->createElement('static', null, null, ' '.get_lang('GroupPlacesThis'))
+    $form->createElement('static', null, null, ' '.get_lang('GroupPlacesThis')),
 ];
 $form->addGroup($group, 'max_member_group', get_lang('GroupLimit'), null, false);
 $form->addRule('max_member_group', get_lang('InvalidMaxNumberOfMembers'), 'callback', 'check_max_number_of_members');
@@ -77,7 +79,7 @@ $form->addElement('html', '<div class="col-md-6">');
 // Self registration
 $group = [
     $form->createElement('checkbox', 'self_registration_allowed', get_lang('GroupSelfRegistration'), get_lang('GroupAllowStudentRegistration'), 1),
-    $form->createElement('checkbox', 'self_unregistration_allowed', null, get_lang('GroupAllowStudentUnregistration'), 1)
+    $form->createElement('checkbox', 'self_unregistration_allowed', null, get_lang('GroupAllowStudentUnregistration'), 1),
 ];
 $form->addGroup(
     $group,
@@ -91,7 +93,7 @@ $form->addGroup(
 $group = [
     $form->createElement('radio', 'doc_state', get_lang('GroupDocument'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'doc_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
-    $form->createElement('radio', 'doc_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE)
+    $form->createElement('radio', 'doc_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
 ];
 $form->addGroup(
     $group,
@@ -105,7 +107,7 @@ $form->addGroup(
 $group = [
     $form->createElement('radio', 'work_state', get_lang('GroupWork'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'work_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
-    $form->createElement('radio', 'work_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE)
+    $form->createElement('radio', 'work_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
 ];
 $form->addGroup(
     $group,
@@ -119,7 +121,7 @@ $form->addGroup(
 $group = [
     $form->createElement('radio', 'calendar_state', get_lang('GroupCalendar'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'calendar_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
-    $form->createElement('radio', 'calendar_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE)
+    $form->createElement('radio', 'calendar_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
 ];
 $form->addGroup(
     $group,
@@ -136,7 +138,7 @@ $form->addElement('html', '<div class="col-md-6">');
 $group = [
     $form->createElement('radio', 'announcements_state', get_lang('GroupAnnouncements'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'announcements_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
-    $form->createElement('radio', 'announcements_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE)
+    $form->createElement('radio', 'announcements_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
 ];
 $form->addGroup(
     $group,
@@ -150,7 +152,7 @@ $form->addGroup(
 $group = [
     $form->createElement('radio', 'forum_state', get_lang('GroupForum'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'forum_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
-    $form->createElement('radio', 'forum_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE)
+    $form->createElement('radio', 'forum_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
 ];
 $form->addGroup(
     $group,
@@ -164,7 +166,7 @@ $form->addGroup(
 $group = [
     $form->createElement('radio', 'wiki_state', get_lang('GroupWiki'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'wiki_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
-    $form->createElement('radio', 'wiki_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE)
+    $form->createElement('radio', 'wiki_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
 ];
 $form->addGroup(
     $group,
@@ -178,7 +180,7 @@ $form->addGroup(
 $group = [
     $form->createElement('radio', 'chat_state', get_lang('Chat'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'chat_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
-    $form->createElement('radio', 'chat_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE)
+    $form->createElement('radio', 'chat_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
 ];
 $form->addGroup(
     $group,
@@ -201,7 +203,7 @@ if ($form->validate()) {
     } else {
         $max_member = $values['max_member'];
     }
-    $self_registration_allowed   = isset($values['self_registration_allowed']) ? 1 : 0;
+    $self_registration_allowed = isset($values['self_registration_allowed']) ? 1 : 0;
     $self_unregistration_allowed = isset($values['self_unregistration_allowed']) ? 1 : 0;
     $categoryId = isset($values['category_id']) ? $values['category_id'] : null;
 

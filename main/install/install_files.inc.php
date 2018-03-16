@@ -3,7 +3,7 @@
 
 /**
  * Install the Chamilo files
- * Notice : This script has to be included by install/index.php
+ * Notice : This script has to be included by install/index.php.
  *
  * The script creates two files:
  * - configuration.php, the file that contains very important info for Chamilo
@@ -13,9 +13,7 @@
  *
  * @package chamilo.install
  */
-
 if (defined('SYSTEM_INSTALLATION')) {
-
     // Write the system config file
     write_system_config_file(api_get_path(CONFIGURATION_PATH).'configuration.php');
 

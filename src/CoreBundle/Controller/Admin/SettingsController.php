@@ -3,18 +3,17 @@
 
 namespace Chamilo\CoreBundle\Controller\Admin;
 
+use Chamilo\SettingsBundle\Manager\SettingsManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sylius\Bundle\SettingsBundle\Controller\SettingsController as SyliusSettingsController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Exception\ValidatorException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Chamilo\SettingsBundle\Manager\SettingsManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
- * Class SettingsController
+ * Class SettingsController.
+ *
  * @package Chamilo\SettingsBundle\Controller
  */
 class SettingsController extends SyliusSettingsController
@@ -33,13 +32,14 @@ class SettingsController extends SyliusSettingsController
         return $this->render(
             '@ChamiloCore/Admin/Settings/index.html.twig',
             [
-                'schemas' => $schemas
+                'schemas' => $schemas,
             ]
         );
     }
 
     /**
      * Edit configuration with given namespace.
+     *
      * @Security("has_role('ROLE_ADMIN')")
      *
      * @Route("/settings/search_settings", name="chamilo_platform_settings_search")
@@ -107,12 +107,13 @@ class SettingsController extends SyliusSettingsController
 
     /**
      * Edit configuration with given namespace.
+     *
      * @Security("has_role('ROLE_ADMIN')")
      *
      * @Route("/settings/{namespace}", name="chamilo_platform_settings")
      *
      * @param Request $request
-     * @param string $namespace
+     * @param string  $namespace
      *
      * @return Response
      */
@@ -193,9 +194,9 @@ class SettingsController extends SyliusSettingsController
         );
     }
 
-
     /**
-     * Sync settings from classes with the database
+     * Sync settings from classes with the database.
+     *
      * @param Request $request
      */
     public function syncSettings(Request $request)
@@ -209,6 +210,14 @@ class SettingsController extends SyliusSettingsController
     }
 
     /**
+     * @return SettingsManager
+     */
+    protected function getSettingsManager()
+    {
+        return $this->get('chamilo.settings.manager');
+    }
+
+    /**
      * @return \Symfony\Component\Form\FormInterface
      */
     private function getSearchForm()
@@ -219,13 +228,5 @@ class SettingsController extends SyliusSettingsController
         $searchForm = $builder->getForm();
 
         return $searchForm;
-    }
-
-    /**
-     * @return SettingsManager
-     */
-    protected function getSettingsManager()
-    {
-        return $this->get('chamilo.settings.manager');
     }
 }

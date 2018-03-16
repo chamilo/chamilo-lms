@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with chamilo-pens.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 /**
- * Plugin definition file
+ * Plugin definition file.
  *
  * @author Guillaume Viguier-Just <guillaume@viguierjust.com>
  * @licence http://www.gnu.org/licenses/gpl.txt

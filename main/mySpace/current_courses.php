@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Report for current courses followed by the user
+ * Report for current courses followed by the user.
+ *
  * @package chamilo.reporting
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_TRACKING;
@@ -92,7 +92,7 @@ if (!empty($my_courses)) {
 
                 if (!empty($students)) {
                     foreach ($students  as $student_id) {
-                        $avg_student_progress   = Tracking::get_avg_student_progress($student_id, $course_code, [$lp_id], $session_id);
+                        $avg_student_progress = Tracking::get_avg_student_progress($student_id, $course_code, [$lp_id], $session_id);
                         $myavg_temp = Tracking::get_avg_student_score($student_id, $course_code, [$lp_id], $session_id);
                         $avg_progress_in_course = Tracking::get_avg_student_progress($student_id, $course_code, [$lp_id], $session_id);
 
@@ -174,7 +174,7 @@ if (!empty($my_courses)) {
                     $array[$i]['count_students_accessing_percentage'] = round($count_students_accessing / $student_count * 100, 0);
                     $array[$i]['count_students_complete_all_activities_at_50'] = $count_students_complete_all_activities;
                     $array[$i]['count_students_complete_all_activities'] = round($count_students_complete_all_activities / $student_count * 100, 0);
-                    ;
+
                     $array[$i]['average_percentage_activities_completed_per_student'] = round($count_students_complete_all_activities / $student_count * 100, 2);
                     $array[$i]['total_time_spent'] = 0;
                     $array[$i]['average_time_spent_per_student'] = 0;

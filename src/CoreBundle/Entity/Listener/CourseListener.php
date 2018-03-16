@@ -5,16 +5,16 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CourseBundle\ToolChain;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Chamilo\CoreBundle\Entity\Course;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class CourseListener
  * Course entity listener, when a course is created/edited and when the tool chain is loaded.
+ *
  * @package Chamilo\CoreBundle\EventListener
  */
 class CourseListener
@@ -38,7 +38,7 @@ class CourseListener
      * This function add the course tools to the current course entity
      * thanks to the tool chain see src/Chamilo/CourseBundle/ToolChain.php
      *
-     * @param Course $course
+     * @param Course             $course
      * @param LifecycleEventArgs $args
      *
      * @throws \Exception
@@ -63,10 +63,11 @@ class CourseListener
     }
 
     /**
-     * This code is executed when a course is updated
+     * This code is executed when a course is updated.
      *
-     * @param Course $course
+     * @param Course             $course
      * @param LifecycleEventArgs $args
+     *
      * @throws \Exception
      */
     public function preUpdate(Course $course, LifecycleEventArgs $args)
@@ -86,8 +87,9 @@ class CourseListener
 
     /**
      * @param CourseRepository $repo
-     * @param Course $course
-     * @param AccessUrl $url
+     * @param Course           $course
+     * @param AccessUrl        $url
+     *
      * @throws \Exception
      */
     private function checkLimit($repo, Course $course, AccessUrl $url)

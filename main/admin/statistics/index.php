@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This tool show global Statistics on general platform events
+ * This tool show global Statistics on general platform events.
+ *
  * @package chamilo.Statistics
  */
 $cidReset = true;
@@ -20,7 +21,7 @@ if ($report) {
         <script>
             $(document).ready(function() {
                 $.ajax({
-                    url: "'. api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=recentlogins",
+                    url: "'.api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=recentlogins",
                     type: "POST",
                     success: function(data) {
                         Chart.defaults.global.responsive = true;
@@ -107,7 +108,7 @@ switch ($report) {
             get_lang('NumberOfUsers'),
             [
                 get_lang('Teachers') => Statistics::countUsers(COURSEMANAGER, null, $countInvisible),
-                get_lang('Students') => Statistics::countUsers(STUDENT, null, $countInvisible)
+                get_lang('Students') => Statistics::countUsers(STUDENT, null, $countInvisible),
             ]
         );
         foreach ($course_categories as $code => $name) {

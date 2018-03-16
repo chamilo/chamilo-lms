@@ -11,5 +11,5 @@ $strings['DownloadOnlyAnswer'] = "Télécharger les réponses";
 $strings['DownloadAll'] = "Tout télécharger";
 $strings['PluginDisabledFromAdminPanel'] = "Le plugin a été désactivé depuis la page d'administration";
 $strings['AnswersColumn'] = "Réponses: ";
-$strings['Statement']= "Énoncé";
-$strings['PageX']= "Page %s";
+$strings['Statement'] = "Énoncé";
+$strings['PageX'] = "Page %s";

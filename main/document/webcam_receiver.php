@@ -10,7 +10,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_course_script();
 api_block_anonymous_users();
 ///
-# Save the audio to a URL-accessible directory for playback.
+// Save the audio to a URL-accessible directory for playback.
 parse_str($_SERVER['QUERY_STRING'], $params);
 
 if (isset($params['webcamname']) && isset($params['webcamdir']) && isset($params['webcamuserid'])) {
@@ -26,7 +26,6 @@ if ($webcamuserid != api_get_user_id() || api_get_user_id() == 0 || $webcamuseri
     api_not_allowed();
     die();
 }
-
 
 //clean
 $webcamname = Security::remove_XSS($webcamname);
@@ -72,7 +71,7 @@ $documentPath = $saveDir.'/'.$webcamname_to_save;
 //Change to move_uploaded_file() function instead file_get_contents() to adapt the new lib
 $content = move_uploaded_file($_FILES['webcam']['tmp_name'], $documentPath);
 if (!$content) {
-    print "PHP ERROR: Failed to read data\n";
+    echo "PHP ERROR: Failed to read data\n";
     exit();
 }
 
@@ -98,4 +97,4 @@ api_item_property_update(
 );
 ///
 $url = 'http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']).'/'.$documentPath;
-print get_lang('ClipSent');
+echo get_lang('ClipSent');

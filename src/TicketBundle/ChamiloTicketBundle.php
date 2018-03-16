@@ -3,11 +3,11 @@
 
 namespace Chamilo\TicketBundle;
 
-use Chamilo\ThemeBundle\DependencyInjection\AssetsCompilerPass;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * Class ChamiloTicketBundle
+ * Class ChamiloTicketBundle.
+ *
  * @package Chamilo\ThemeBundle
  */
 class ChamiloTicketBundle extends Bundle

@@ -6,21 +6,13 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * AccessUrlRelUser
+ * AccessUrlRelUser.
  *
  * @ORM\Table(name="access_url_rel_user", indexes={@ORM\Index(name="idx_access_url_rel_user_user", columns={"user_id"}), @ORM\Index(name="idx_access_url_rel_user_access_url", columns={"access_url_id"}), @ORM\Index(name="idx_access_url_rel_user_access_url_user", columns={"user_id", "access_url_id"})})
  * @ORM\Entity
  */
 class AccessUrlRelUser
 {
-    /**
-     * @var integer
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(name="id", type="integer")
-     */
-    private $id;
-
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
@@ -32,6 +24,13 @@ class AccessUrlRelUser
      * @ORM\JoinColumn(name="access_url_id", referencedColumnName="id")
      */
     protected $portal;
+    /**
+     * @var int
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(name="id", type="integer")
+     */
+    private $id;
 
     /**
      * @return string

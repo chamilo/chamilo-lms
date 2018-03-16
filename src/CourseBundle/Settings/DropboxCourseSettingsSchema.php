@@ -8,7 +8,8 @@ use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class DropboxCourseSettingsSchema
+ * Class DropboxCourseSettingsSchema.
+ *
  * @package Chamilo\CourseBundle\Settings
  */
 class DropboxCourseSettingsSchema extends AbstractSettingsSchema
@@ -21,7 +22,7 @@ class DropboxCourseSettingsSchema extends AbstractSettingsSchema
         $builder
             ->setDefaults([
                 'enabled' => '',
-                'email_alert_on_new_doc_dropbox' => ''
+                'email_alert_on_new_doc_dropbox' => '',
             ])
         ;
 

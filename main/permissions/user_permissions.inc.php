@@ -2,15 +2,14 @@
 /**
  * @package chamilo.permissions
  */
-
 $user_id = $userIdViewed;
 if ($mainUserInfo['status'] == 1) {
     $course_admin = 1;
 }
-include_once('permissions_functions.inc.php');
-include_once('all_permissions.inc.php');
-include_once(api_get_library_path()."/groupmanager.lib.php");
-include_once(api_get_library_path()."/blog.lib.php");
+include_once 'permissions_functions.inc.php';
+include_once 'all_permissions.inc.php';
+include_once api_get_library_path()."/groupmanager.lib.php";
+include_once api_get_library_path()."/blog.lib.php";
 // 			ACTIONS
 if ($_POST['StoreUserPermissions'] and $setting_visualisation == 'checkbox') {
     $result_message = store_permissions('user', $user_id);
@@ -37,7 +36,6 @@ if (isset($result_message)) {
 $current_user_permissions = [];
 $current_user_permissions = get_permissions('user', $user_id);
 
-
 //   INHERITED PERMISSIONS (group permissions, user roles, group roles)
 
 // 			RETRIEVING THE PERMISSIONS OF THE GROUPS OF THE USER
@@ -45,7 +43,7 @@ $groups_of_user = [];
 $groups_of_user = GroupManager::get_group_ids($_course['real_id'], $user_id);
 foreach ($groups_of_user as $group) {
     $this_group_permissions = get_permissions('group', $group);
-    foreach ($this_group_permissions as $tool=>$permissions) {
+    foreach ($this_group_permissions as $tool => $permissions) {
         foreach ($permissions as $permission) {
             $inherited_group_permissions[$tool][] = $permission;
         }
@@ -110,7 +108,7 @@ echo "<table class=\"data_table\">\n";
 // the header
 echo "\t<tr>\n";
 echo "\t\t<th>".get_lang('Module')."</th>\n";
-foreach ($header_array as $header_key=>$header_value) {
+foreach ($header_array as $header_key => $header_value) {
     echo "\t\t<th>".get_lang($header_value)."</th>\n";
 }
 echo "\t</tr>\n";

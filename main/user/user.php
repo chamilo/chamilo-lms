@@ -9,9 +9,9 @@
  *
  * @author Roan Embrechts
  * @author Julio Montoya, Several fixes
+ *
  * @package chamilo.user
  */
-
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_USER;
@@ -131,7 +131,7 @@ if (api_is_allowed_to_edit(null, true)) {
                             get_lang('Email'),
                             get_lang('Phone'),
                             get_lang('OfficialCode'),
-                            get_lang('Active')
+                            get_lang('Active'),
                         ];
                     } else {
                         $a_users[0] = [
@@ -142,7 +142,7 @@ if (api_is_allowed_to_edit(null, true)) {
                             get_lang('Email'),
                             get_lang('Phone'),
                             get_lang('OfficialCode'),
-                            get_lang('Active')
+                            get_lang('Active'),
                         ];
                     }
                 } else {
@@ -154,7 +154,7 @@ if (api_is_allowed_to_edit(null, true)) {
                             get_lang('Username'),
                             get_lang('Phone'),
                             get_lang('OfficialCode'),
-                            get_lang('Active')
+                            get_lang('Active'),
                         ];
                     } else {
                         $a_users[0] = [
@@ -164,7 +164,7 @@ if (api_is_allowed_to_edit(null, true)) {
                             get_lang('Username'),
                             get_lang('Phone'),
                             get_lang('OfficialCode'),
-                            get_lang('Active')
+                            get_lang('Active'),
                         ];
                     }
                 }
@@ -185,7 +185,7 @@ if (api_is_allowed_to_edit(null, true)) {
                             get_lang('OfficialCode'),
                             get_lang('FirstName').', '.get_lang('LastName'),
                             get_lang('Email'),
-                            get_lang('Phone')
+                            get_lang('Phone'),
                         ];
                     } else {
                         $a_users[0] = [
@@ -194,7 +194,7 @@ if (api_is_allowed_to_edit(null, true)) {
                             get_lang('OfficialCode'),
                             get_lang('LastName').', '.get_lang('FirstName'),
                             get_lang('Email'),
-                            get_lang('Phone')
+                            get_lang('Phone'),
                         ];
                     }
                 }
@@ -270,7 +270,7 @@ if (api_is_allowed_to_edit(null, true)) {
                                     $user['official_code'],
                                     $user['firstname'].', '.$user['lastname'],
                                     $user['email'],
-                                    $user['phone']
+                                    $user['phone'],
                                 ];
                             } else {
                                 $user_pdf = [
@@ -279,7 +279,7 @@ if (api_is_allowed_to_edit(null, true)) {
                                     $user['official_code'],
                                     $user['lastname'].', '.$user['firstname'],
                                     $user['email'],
-                                    $user['phone']
+                                    $user['phone'],
                                 ];
                             }
 
@@ -358,7 +358,7 @@ if (api_is_allowed_to_edit(null, true)) {
                                     $user['official_code'],
                                     $user['firstname'].', '.$user['lastname'],
                                     $user['email'],
-                                    $user['phone']
+                                    $user['phone'],
                                 ];
                             } else {
                                 $user_pdf = [
@@ -367,7 +367,7 @@ if (api_is_allowed_to_edit(null, true)) {
                                     $user['official_code'],
                                     $user['lastname'].', '.$user['firstname'],
                                     $user['email'],
-                                    $user['phone']
+                                    $user['phone'],
                                 ];
                             }
 
@@ -400,12 +400,12 @@ if (api_is_allowed_to_edit(null, true)) {
                             ['style' => 'width:10px'],
                             ['style' => 'width:30px'],
                             ['style' => 'width:50px'],
-                            ['style' => 'width:500px']
+                            ['style' => 'width:500px'],
                         ];
                         $params = [
                             'filename' => $fileName,
                             'pdf_title' => $pdfTitle,
-                            'header_attributes' => $header_attributes
+                            'header_attributes' => $header_attributes,
                         ];
 
                         Export::export_table_pdf($a_users, $params);
@@ -732,6 +732,7 @@ function get_number_of_users()
  * @param string $username
  * @param string $official_code
  * @param $keyword
+ *
  * @return bool
  */
 function searchUserKeyword($firstname, $lastname, $username, $official_code, $keyword)
@@ -749,11 +750,13 @@ function searchUserKeyword($firstname, $lastname, $username, $official_code, $ke
 
 /**
  * Get the users to display on the current page.
- * @param   int $from Offset
- * @param   int $number_of_items
- * @param   int $column The column on which to sort
- * @param   string $direction ASC or DESC, for the sort order of the query results
- * @return  array
+ *
+ * @param int    $from            Offset
+ * @param int    $number_of_items
+ * @param int    $column          The column on which to sort
+ * @param string $direction       ASC or DESC, for the sort order of the query results
+ *
+ * @return array
  */
 function get_user_data($from, $number_of_items, $column, $direction)
 {
@@ -936,12 +939,13 @@ function get_user_data($from, $number_of_items, $column, $direction)
     return $a_users;
 }
 
-
 /**
  * Build the active-column of the table to lock or unlock a certain user
- * lock = the user can no longer use this account
+ * lock = the user can no longer use this account.
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @param int $active the current state of the account
+ *
+ * @param int    $active    the current state of the account
  * @param string $urlParams
  *
  * @return string Some HTML-code with the lock/unlock button
@@ -963,7 +967,7 @@ function active_filter($active, $urlParams, $row)
 
     /* you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is
         locked out and nobody can change it anymore.*/
-    if ($row[0] <> $userId) {
+    if ($row[0] != $userId) {
         $result = '<center><img src="'.Display::returnIconPath($image.'.png', 16).'" border="0" alt="'.get_lang(ucfirst($action)).'" title="'.get_lang(ucfirst($action)).'"/></center>';
     }
 
@@ -971,8 +975,10 @@ function active_filter($active, $urlParams, $row)
 }
 
 /**
- * Build the modify-column of the table
+ * Build the modify-column of the table.
+ *
  * @param int $user_id The user id
+ *
  * @return string Some HTML-code
  */
 function modify_filter($user_id, $row, $data)

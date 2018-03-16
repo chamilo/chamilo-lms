@@ -3,11 +3,11 @@
 
 namespace Chamilo\CoreBundle\Form;
 
+use DOctrine\ORM\EntityRepository;
+use Entity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use DOctrine\ORM\EntityRepository;
-use Entity;
 
 class JuryType extends AbstractType
 {
@@ -36,13 +36,12 @@ class JuryType extends AbstractType
             [
                 'class' => 'Entity\BranchSync',
                 'property' => 'branchName',
-                'query_builder' =>
-                    function (EntityRepository $er) {
-                        return $er->createQueryBuilder('u')
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
                             //->where('u.role LIKE :role')
                             //->setParameter(':role', 'ROLE_JURY%')
                             ->orderBy('u.branchName', 'DESC');
-                    },
+                },
             ]
         );
 

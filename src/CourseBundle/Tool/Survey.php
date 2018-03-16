@@ -4,7 +4,8 @@
 namespace Chamilo\CourseBundle\Tool;
 
 /**
- * Class Survey
+ * Class Survey.
+ *
  * @package Chamilo\CourseBundle\Tool
  */
 class Survey extends BaseTool

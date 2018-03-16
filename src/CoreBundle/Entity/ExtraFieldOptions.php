@@ -4,10 +4,9 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Class ExtraField
+ * Class ExtraField.
  *
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Entity\Repository\ExtraFieldOptionsRepository")
  * @ORM\Table(name="extra_field_options")
@@ -17,7 +16,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class ExtraFieldOptions
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false, unique=false)
      * @ORM\Id
@@ -60,7 +59,7 @@ class ExtraFieldOptions
     protected $priorityMessage;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="option_order", type="integer", nullable=true)
      */
@@ -136,6 +135,7 @@ class ExtraFieldOptions
 
     /**
      * @param bool $translated Optional. Whether translate the display text
+     *
      * @return string
      */
     public function getDisplayText($translated = true)

@@ -10,7 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class ProfileSettingsSchema
+ * Class ProfileSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class ProfileSettingsSchema extends AbstractSettingsSchema
@@ -34,7 +35,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                     'profiling_filter_adding_users' => '',
                     'enable_profile_user_address_geolocalization' => '',
                     'allow_show_skype_account' => '',
-                    'allow_show_linkedin_url' => ''
+                    'allow_show_linkedin_url' => '',
                 ]
             )
             ->setTransformer(
@@ -78,7 +79,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
             ->add(
                 'extended_profile',
                 YesNoType::class,
-                ['label' => 'ExtendedProfileTitle', 'help_block'=> 'ExtendedProfileComment']
+                ['label' => 'ExtendedProfileTitle', 'help_block' => 'ExtendedProfileComment']
             )
             ->add('account_valid_duration')
             ->add('split_users_upload_directory', YesNoType::class)
@@ -90,7 +91,6 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
             ->add('enable_profile_user_address_geolocalization', YesNoType::class)
             ->add('allow_show_skype_account', YesNoType::class)
             ->add('allow_show_linkedin_url', YesNoType::class)
-
 
         ;
     }

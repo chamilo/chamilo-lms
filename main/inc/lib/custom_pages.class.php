@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *  Used to implement the loading of custom pages
+ *  Used to implement the loading of custom pages.
  *
  * @license see /license.txt
  * @author 2011, Jean-Karim Bockstael <jeankarim@cblue.be>
@@ -19,6 +19,7 @@ class CustomPages
 
     /**
      * Returns true if custom pages are enabled. False otherwise.
+     *
      * @return bool
      */
     public static function enabled()
@@ -42,7 +43,8 @@ class CustomPages
      * If enabled display a custom page and exist. Otherwise log error and returns.
      *
      * @param string $pageName
-     * @param array $content used to pass data to the custom page
+     * @param array  $content  used to pass data to the custom page
+     *
      * @return bool False if custom pages is not enabled or file could not be found. Void otherwise.
      */
     public static function display($pageName, $content = [])
@@ -54,14 +56,15 @@ class CustomPages
         $file = self::path($pageName.'.php');
         // Only include file if it exists, otherwise do nothing
         if (file_exists($file)) {
-            include($file);
+            include $file;
             exit; //finish the execution here - do not return
         }
+
         return false;
     }
 
     /**
-     * Does not look like this function is being used is being used
+     * Does not look like this function is being used is being used.
      *
      * @param int $url_id
      *
@@ -85,9 +88,11 @@ class CustomPages
     }
 
     /**
-     * Check if exists the file for custom page
+     * Check if exists the file for custom page.
+     *
      * @param string $pageName The name of custom page
-     * @return boolean
+     *
+     * @return bool
      */
     public static function exists($pageName)
     {

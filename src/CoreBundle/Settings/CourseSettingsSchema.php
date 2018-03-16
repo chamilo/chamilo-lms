@@ -3,21 +3,20 @@
 
 namespace Chamilo\CoreBundle\Settings;
 
-use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Manager\CourseManager;
-use Chamilo\CoreBundle\Entity\Repository\CourseRepository;
+use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Chamilo\CourseBundle\Tool\BaseTool;
 use Chamilo\CourseBundle\ToolChain;
-use Sylius\Bundle\ResourceBundle\Form\DataTransformer\ResourceToIdentifierTransformer;
-use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
-use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
-use Symfony\Component\Form\FormBuilderInterface;
 use Chamilo\SettingsBundle\Transformer\ArrayToIdentifierTransformer;
+use Sylius\Bundle\ResourceBundle\Form\DataTransformer\ResourceToIdentifierTransformer;
+use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class CourseSettingsSchema
+ * Class CourseSettingsSchema.
+ *
  * @package Chamilo\CoreBundle\Settings
  */
 class CourseSettingsSchema extends AbstractSettingsSchema
@@ -107,7 +106,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'teacher_can_select_course_template' => 'true',
                     'show_toolshortcuts' => '',
                     'enable_record_audio' => 'false',
-                    'lp_show_reduced_report' => 'false'
+                    'lp_show_reduced_report' => 'false',
                 ]
             )
             ->setTransformer(
@@ -179,7 +178,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                         'No' => 'false',
                         'IconsOnly' => 'icons',
                         'TextOnly' => 'text',
-                        'IconsText' => 'iconstext'
+                        'IconsText' => 'iconstext',
                     ],
                 ]
             )
@@ -222,7 +221,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                         'Public' => '3',
                         'Open' => '2',
                         'Private' => '1',
-                        'Closed' => '0'
+                        'Closed' => '0',
                     ],
                 ]
             )
@@ -235,7 +234,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     //'choices' => $courses,
                     'class' => 'Chamilo\CoreBundle\Entity\Course',
                     'placeholder' => 'Choose ...',
-                    'empty_data'  => null
+                    'empty_data' => null,
                 ]
             )
             ->add('hide_scorm_export_link', YesNoType::class)

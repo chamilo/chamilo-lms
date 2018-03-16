@@ -2,14 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script to draw the results from a query
+ * Script to draw the results from a query.
+ *
  * @package chamilo.learnpath
+ *
  * @author Diego Escalante Urrelo <diegoe@gmail.com>
  * @author Marco Antonio Villegas Vega <marvil07@gmail.com>
  * @author Julio Montoya <gugli100@gmail.com> bug fixing
- *
  */
-
 require api_get_path(LIBRARY_PATH).'search/search_widget.php';
 require api_get_path(LIBRARY_PATH).'search/ChamiloQuery.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -19,7 +19,7 @@ Event::event_access_tool(TOOL_SEARCH);
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook')
+        'name' => get_lang('ToolGradebook'),
     ];
 }
 
@@ -144,8 +144,7 @@ if ($count > 0) {
 
         if ($mode == 'gallery') {
             $title = $a_prefix.str_replace('_', ' ', $result['title']).$a_suffix;
-            $blocks[] = [1 =>
-                $a_prefix.'<img src="'.$result['thumbnail'].'" />'.$a_suffix.'<br />'.$title.'<br />'.$result['author'],
+            $blocks[] = [1 => $a_prefix.'<img src="'.$result['thumbnail'].'" />'.$a_suffix.'<br />'.$title.'<br />'.$result['author'],
             ];
         } else {
             $title = '<div style="text-align:left;">'.$a_prefix.$result['title'].$a_suffix.(!empty($result['author']) ? ' '.$result['author'] : '').'<div>';

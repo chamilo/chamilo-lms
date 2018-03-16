@@ -3,9 +3,11 @@
 
 /**
  * Class ScoreDisplayForm
- * Form for the score display dialog
+ * Form for the score display dialog.
+ *
  * @author Stijn Konings
  * @author Bert Steppé
+ *
  * @package chamilo.gradebook
  */
 class ScoreDisplayForm extends FormValidator
@@ -22,7 +24,7 @@ class ScoreDisplayForm extends FormValidator
 
         $nr_items = (count($customdisplays) != '0') ? count($customdisplays) : '1';
         $this->setDefaults([
-            'scorecolpercent' => $displayscore->get_color_split_value()
+            'scorecolpercent' => $displayscore->get_color_split_value(),
         ]);
 
         $this->addElement('hidden', 'maxvalue', '100');
@@ -35,7 +37,7 @@ class ScoreDisplayForm extends FormValidator
             foreach ($customdisplays as $customdisplay) {
                 $this->setDefaults([
                     'endscore['.$counter.']' => $customdisplay['score'],
-                    'displaytext['.$counter.']' => $customdisplay['display']
+                    'displaytext['.$counter.']' => $customdisplay['display'],
                 ]);
                 $counter++;
             }
@@ -73,17 +75,17 @@ class ScoreDisplayForm extends FormValidator
             $this->addElement('html', '<br /><b>'.get_lang('ScoringSystem').'</b>');
             $this->addElement('static', null, null, get_lang('ScoreInfo'));
             $this->setDefaults([
-                'beginscore' => '0'
+                'beginscore' => '0',
             ]);
             $this->addElement('text', 'beginscore', [get_lang('Between'), null, '%'], [
                 'size' => 5,
                 'maxlength' => 5,
                 'disabled' => 'disabled',
-                'input-size' => 2
+                'input-size' => 2,
             ]);
 
             for ($counter = 1; $counter <= 20; $counter++) {
-                $renderer = & $this->defaultRenderer();
+                $renderer = &$this->defaultRenderer();
                 $elementTemplateTwoLabel =
                 '<div id='.$counter.' style="display: '.(($counter <= $nr_items) ? 'inline' : 'none').';">
     
@@ -117,9 +119,9 @@ class ScoreDisplayForm extends FormValidator
                     {element}
                 </div>
                 <div class="col-sm-1">
-                    <a href="javascript:plusItem(' . ($counter + 1).')">
+                    <a href="javascript:plusItem('.($counter + 1).')">
                     <img style="display: '.(($counter >= $nr_items) ? 'inline' : 'none').';" id="plus-'.($counter + 1).'" src="'.Display::returnIconPath('add.png').'" alt="'.get_lang('Add').'" title="'.get_lang('Add').'"></a>
-                    <a href="javascript:minItem(' . ($counter).')">
+                    <a href="javascript:minItem('.($counter).')">
                     <img style="display: '.(($counter >= $nr_items && $counter != 1) ? 'inline' : 'none').';" id="min-'.$counter.'" src="'.Display::returnIconPath('delete.png').'" alt="'.get_lang('Delete').'" title="'.get_lang('Delete').'"></a>
                 </div>
                 </div>
@@ -130,7 +132,7 @@ class ScoreDisplayForm extends FormValidator
                     'size' => 5,
                     'maxlength' => 5,
                     'id' => 'txta-'.$counter,
-                    'input-size' => 2
+                    'input-size' => 2,
                 ]);
 
                 $this->addElement(

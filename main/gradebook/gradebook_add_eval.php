@@ -2,7 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script
+ * Script.
+ *
  * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -86,7 +87,7 @@ if ($form->validate()) {
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$select_cat,
-    'name' => get_lang('Gradebook')]
+    'name' => get_lang('Gradebook'), ]
 ;
 $this_section = SECTION_COURSES;
 
@@ -96,7 +97,7 @@ $(document).ready( function() {
        $("#hid_category_id option:selected").each(function () {
            var cat_id = $(this).val();
             $.ajax({
-                url: "' . api_get_path(WEB_AJAX_PATH).'gradebook.ajax.php?a=get_gradebook_weight",
+                url: "'.api_get_path(WEB_AJAX_PATH).'gradebook.ajax.php?a=get_gradebook_weight",
                 data: "cat_id="+cat_id,
                 success: function(return_value) {
                     if (return_value != 0 ) {

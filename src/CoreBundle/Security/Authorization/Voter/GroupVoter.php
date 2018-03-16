@@ -3,11 +3,9 @@
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CoreBundle\Entity\Manager\CourseManager;
+use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Entity\Manager\GroupManager;
-use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -16,7 +14,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Class GroupVoter
+ * Class GroupVoter.
+ *
  * @package Chamilo\CoreBundle\Security\Authorization\Voter
  */
 class GroupVoter extends Voter
@@ -31,9 +30,9 @@ class GroupVoter extends Voter
     private $container;
 
     /**
-     * @param EntityManager $entityManager
-     * @param CourseManager $courseManager
-     * @param GroupManager $groupManager ,
+     * @param EntityManager      $entityManager
+     * @param CourseManager      $courseManager
+     * @param GroupManager       $groupManager  ,
      * @param ContainerInterface $container
      */
     public function __construct(
@@ -73,14 +72,14 @@ class GroupVoter extends Voter
     }
 
     /**
-    * @inheritdoc
-    */
+     * {@inheritdoc}
+     */
     protected function supports($attribute, $subject)
     {
         $options = [
             self::VIEW,
             self::EDIT,
-            self::DELETE
+            self::DELETE,
         ];
 
         // if the attribute isn't one we support, return false
@@ -97,8 +96,8 @@ class GroupVoter extends Voter
     }
 
     /**
-    * @inheritdoc
-    */
+     * {@inheritdoc}
+     */
     protected function voteOnAttribute($attribute, $group, TokenInterface $token)
     {
         $user = $token->getUser();
@@ -127,7 +126,6 @@ class GroupVoter extends Voter
 
         // Legacy
         return \GroupManager::userHasAccessToBrowse($user->getId(), $groupInfo);
-
 
         switch ($attribute) {
             case self::VIEW:

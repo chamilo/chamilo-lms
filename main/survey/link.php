@@ -35,7 +35,7 @@ if ($hashIsValid && $courseInfo) {
         'user' => $invitation_code,
         'survey_code' => $survey_data['code'],
         'invitation_code' => $invitation_code,
-        'invitation_date' => api_get_utc_datetime()
+        'invitation_date' => api_get_utc_datetime(),
     ];
     $invitation_id = SurveyUtil::save_invitation($params);
 

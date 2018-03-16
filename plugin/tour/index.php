@@ -1,8 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Config the plugin
+ * Config the plugin.
+ *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ *
  * @package chamilo.plugin.tour
  */
 require_once __DIR__.'/config.php';
@@ -22,7 +24,7 @@ if ($showTour) {
     foreach ($config as $pageContent) {
         $pages[] = [
             'pageClass' => $pageContent['pageClass'],
-            'show' => $tourPlugin->checkTourForUser($pageContent['pageClass'], $userId)
+            'show' => $tourPlugin->checkTourForUser($pageContent['pageClass'], $userId),
         ];
     }
 
@@ -37,7 +39,7 @@ if ($showTour) {
         'intro_theme_css' => null,
         'intro_js' => "{$pluginWebPath}intro.js/intro.min.js",
         'steps_ajax' => "{$pluginWebPath}ajax/steps.ajax.php",
-        'save_ajax' => "{$pluginWebPath}ajax/save.ajax.php"
+        'save_ajax' => "{$pluginWebPath}ajax/save.ajax.php",
     ];
 
     if (file_exists("{$pluginPath}intro.js/introjs-$theme.css")) {

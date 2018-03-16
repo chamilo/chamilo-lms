@@ -6,9 +6,9 @@ use ChamiloSession as Session;
 /**
  * @author Bart Mollet
  * @author Julio Montoya <gugli100@gmail.com> BeezNest 2011
+ *
  * @package chamilo.admin
-*/
-
+ */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -154,10 +154,10 @@ function clear_session_list(div_session) {
 function display_advanced_search_form () {
     if ($("#advanced_search_form").css("display") == "none") {
         $("#advanced_search_form").css("display","block");
-        $("#img_plus_and_minus").html(\'&nbsp;'. Display::returnFontAwesomeIcon('arrow-down').' '.get_lang('AdvancedSearch').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-down').' '.get_lang('AdvancedSearch').'\');
     } else {
         $("#advanced_search_form").css("display","none");
-        $("#img_plus_and_minus").html(\'&nbsp;'. Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'\');
     }
 }
 
@@ -184,7 +184,7 @@ function load_calendar(user_id, month, year) {
 $this_section = SECTION_PLATFORM_ADMIN;
 
 /**
- * Trim variable values to avoid trailing spaces
+ * Trim variable values to avoid trailing spaces.
  */
 function trimVariables()
 {
@@ -208,7 +208,8 @@ function trimVariables()
  * Prepares the shared SQL query for the user table.
  * See get_user_data() and get_number_of_users().
  *
- * @param boolean $is_count Whether to count, or get data
+ * @param bool $is_count Whether to count, or get data
+ *
  * @return string SQL query
  */
 function prepare_user_sql_query($is_count)
@@ -255,7 +256,7 @@ function prepare_user_sql_query($is_count)
         'keyword_status',
         'keyword_active',
         'keyword_inactive',
-        'check_easy_passwords'
+        'check_easy_passwords',
     ];
 
     $keywordListValues = [];
@@ -317,9 +318,9 @@ function prepare_user_sql_query($is_count)
         $sql .= " $query_admin_table
             WHERE (
                 u.firstname LIKE '".Database::escape_string("%".$keywordListValues['keyword_firstname']."%")."' AND
-                u.lastname LIKE '". Database::escape_string("%".$keywordListValues['keyword_lastname']."%")."' AND
-                u.username LIKE '". Database::escape_string("%".$keywordListValues['keyword_username']."%")."' AND
-                u.email LIKE '". Database::escape_string("%".$keywordListValues['keyword_email']."%")."' AND
+                u.lastname LIKE '".Database::escape_string("%".$keywordListValues['keyword_lastname']."%")."' AND
+                u.username LIKE '".Database::escape_string("%".$keywordListValues['keyword_username']."%")."' AND
+                u.email LIKE '".Database::escape_string("%".$keywordListValues['keyword_email']."%")."' AND
                 u.status LIKE '".Database::escape_string($keywordListValues['keyword_status'])."' ";
         if (!empty($keywordListValues['keyword_officialcode'])) {
             $sql .= " AND u.official_code LIKE '".Database::escape_string("%".$keywordListValues['keyword_officialcode']."%")."' ";
@@ -412,7 +413,8 @@ function prepare_user_sql_query($is_count)
 }
 
 /**
- * Get the total number of users on the platform
+ * Get the total number of users on the platform.
+ *
  * @see SortableTable#get_total_number_of_items()
  */
 function get_number_of_users()
@@ -425,11 +427,13 @@ function get_number_of_users()
 }
 
 /**
- * Get the users to display on the current page (fill the sortable-table)
+ * Get the users to display on the current page (fill the sortable-table).
+ *
  * @param   int     offset of first user to recover
  * @param   int     Number of users to get
  * @param   int     Column to sort on
  * @param   string  Order (ASC,DESC)
+ *
  * @see SortableTable#get_table_data($from)
  */
 function get_user_data($from, $number_of_items, $column, $direction)
@@ -485,7 +489,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             $user[6],
             $user[7],
             api_get_local_time($user[9]),
-            $user[0]
+            $user[0],
         ];
     }
 
@@ -493,30 +497,36 @@ function get_user_data($from, $number_of_items, $column, $direction)
 }
 
 /**
-* Returns a mailto-link
-* @param string $email An email-address
-* @return string HTML-code with a mailto-link
-*/
+ * Returns a mailto-link.
+ *
+ * @param string $email An email-address
+ *
+ * @return string HTML-code with a mailto-link
+ */
 function email_filter($email)
 {
     return Display :: encrypted_mailto_link($email, $email);
 }
 
 /**
-* Returns a mailto-link
-* @param string $email An email-address
-* @return string HTML-code with a mailto-link
-*/
+ * Returns a mailto-link.
+ *
+ * @param string $email An email-address
+ *
+ * @return string HTML-code with a mailto-link
+ */
 function user_filter($name, $params, $row)
 {
     return '<a href="'.api_get_path(WEB_PATH).'whoisonline.php?origin=user_list&id='.$row[0].'">'.$name.'</a>';
 }
 
 /**
- * Build the modify-column of the table
+ * Build the modify-column of the table.
+ *
  * @param   int     The user id
  * @param   string  URL params to add to table links
  * @param   array   Row of elements to alter
+ *
  * @return string Some HTML-code with modify-buttons
  */
 function modify_filter($user_id, $url_params, $row)
@@ -747,11 +757,14 @@ function modify_filter($user_id, $url_params, $row)
 
 /**
  * Build the active-column of the table to lock or unlock a certain user
- * lock = the user can no longer use this account
+ * lock = the user can no longer use this account.
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @param int $active the current state of the account
+ *
+ * @param int    $active the current state of the account
  * @param string $params
- * @param array $row
+ * @param array  $row
+ *
  * @return string Some HTML-code with the lock/unlock button
  */
 function active_filter($active, $params, $row)
@@ -778,7 +791,7 @@ function active_filter($active, $params, $row)
             [],
             16
         );
-    } elseif ($row['0'] <> $_user['user_id']) {
+    } elseif ($row['0'] != $_user['user_id']) {
         // you cannot lock yourself out otherwise you could disable all the
         // accounts including your own => everybody is locked out and nobody
         // can change it anymore.
@@ -794,17 +807,20 @@ function active_filter($active, $params, $row)
 }
 
 /**
- * Instead of displaying the integer of the status, we give a translation for the status
+ * Instead of displaying the integer of the status, we give a translation for the status.
  *
- * @param integer $status
+ * @param int $status
+ *
  * @return string translation
  *
  * @version march 2008
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  */
 function status_filter($status)
 {
     $statusname = api_get_status_langvars();
+
     return $statusname[$status];
 }
 
@@ -906,7 +922,7 @@ $form->addText(
     get_lang('Search'),
     false,
     [
-        'aria-label' => get_lang("SearchUsers")
+        'aria-label' => get_lang("SearchUsers"),
     ]
 );
 $form->addButtonSearch(get_lang('Search'));
@@ -915,12 +931,12 @@ $searchAdvanced = '
 <a id="advanced_params" href="javascript://" 
     class="btn btn-default advanced_options" onclick="display_advanced_search_form();">
     <span id="img_plus_and_minus">&nbsp;
-    '. Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'
+    '.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'
     </span>
 </a>';
 $actionsLeft = '';
 $actionsCenter = '';
-$actionsRight  = '';
+$actionsRight = '';
 if (api_is_platform_admin()) {
     $actionsRight .= '<a class="pull-right" href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
          Display::return_icon('new_user.png', get_lang('AddUsers'), '', ICON_SIZE_MEDIUM).'</a>';

@@ -4,7 +4,6 @@
 namespace Chamilo\CourseBundle;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\ToolResourceRights;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
@@ -13,7 +12,7 @@ use Chamilo\CourseBundle\Tool\BaseTool;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
- * Class ToolChain
+ * Class ToolChain.
  *
  * The course tools classes (agenda, blog, etc) are located in:
  *
@@ -49,7 +48,7 @@ class ToolChain
     protected $tools;
 
     /**
-     * Construct
+     * Construct.
      */
     public function __construct()
     {
@@ -106,6 +105,7 @@ class ToolChain
 
     /**
      * @param Course $course
+     *
      * @return Course
      */
     public function addToolsInCourse(Course $course)
@@ -132,6 +132,7 @@ class ToolChain
 
     /**
      * @param string $name
+     *
      * @return BaseTool
      */
     public function getToolFromName($name)

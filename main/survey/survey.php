@@ -5,11 +5,11 @@ use ChamiloSession as Session;
 
 /**
  * @package chamilo.survey
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University:
  * cleanup, refactoring and rewriting large parts of the code
  * @author Julio Montoya
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;

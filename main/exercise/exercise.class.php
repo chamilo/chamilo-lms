@@ -6058,6 +6058,9 @@ class Exercise
             $question = $item['question'];
             $file = $item['generated_oral_file'];
             $answer = $item['answer'];
+            if ($answer == 0) {
+                $answer = '';
+            }
             $answer_type = $item['answer_type'];
             if (!empty($question) && (!empty($answer) || !empty($file)) && $answer_type == ORAL_EXPRESSION) {
                 if (!empty($file)) {
